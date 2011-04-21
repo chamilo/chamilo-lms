@@ -118,6 +118,17 @@ $form = new FormValidator('update_course');
 
 // COURSE SETTINGS
 $form->addElement('html', '<div class="sectiontitle"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="coursesettings" id="coursesettings"></a>'.Display::return_icon('settings.png', get_lang('CourseSettings'),'','22').' '.get_lang('CourseSettings').'</div>');
+
+$image_html = '';
+// display course picture
+$course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository;   // course path
+if (file_exists($course_path.'/course-pic85x85.png')) {
+    $course_web_path = api_get_path(WEB_COURSE_PATH).$currentCourseRepository;   // course web path
+    $course_medium_image = $course_web_path.'/course-pic85x85.png'; // redimensioned image 85x85
+    $image_html =  '<div class="row"><div class="formw"><img src="'.$course_medium_image.'" /></div></div>';
+}
+$form->addElement('html', $image_html);
+
 $visual_code=$form->addElement('text', 'visual_code', get_lang('Code'));
 $visual_code->freeze();
 $form->applyFilter('visual_code', 'strtoupper');
@@ -326,8 +337,8 @@ $values['enable_lp_auto_launch']                    = api_get_course_setting('en
 
 $values['pdf_export_watermark_text']                = api_get_course_setting('pdf_export_watermark_text');
 
-
 $form->setDefaults($values);
+
 // Validate form
 if ($form->validate() && is_settings_editable()) {
 	$update_values = $form->exportValues();
@@ -409,14 +420,6 @@ if (api_get_setting('allow_course_theme') == 'true') {
 }
 echo '<a href="#thematicadvance">'.Display::return_icon('course_progress.png', get_lang('ThematicAdvanceConfiguration'),'','32').'</a>';
 echo '</div>';
-
-// display course picture
-$course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository;   // course path
-if (file_exists($course_path.'/course-pic85x85.png')) {
-    $course_web_path = api_get_path(WEB_COURSE_PATH).$currentCourseRepository;   // course web path
-    $course_medium_image = $course_web_path.'/course-pic85x85.png'; // redimensioned image 85x85
-    echo '<div id="course-picture"><img src="'.$course_medium_image.'" /></div>';
-}
 
 // Display the form
 $form->display();

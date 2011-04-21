@@ -5,6 +5,10 @@
 * @package chamilo.announcements
 */
 
+/**
+ * @author jmontoya
+ *
+ */
 class AnnouncementManager  {
 	
 	private function __construct() {
@@ -100,51 +104,88 @@ class AnnouncementManager  {
 	
 		$tbl_announcement 	= Database::get_course_table(TABLE_ANNOUNCEMENT);
 		$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-	
-		if (api_get_user_id() != 0) {
-			$sql_query = "	SELECT announcement.*, toolitemproperties.*
-							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-							WHERE announcement.id = toolitemproperties.ref
-							AND announcement.id = '$announcement_id'
-							AND toolitemproperties.tool='announcement'
-							AND (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id='0')
-							AND toolitemproperties.visibility='1'
-							ORDER BY display_order DESC";
-	
+	    
+		if (api_is_allowed_to_edit(false,true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+            $sql_query = "  SELECT announcement.*, toolitemproperties.*
+                            FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+                            WHERE announcement.id = toolitemproperties.ref
+                            AND announcement.id = '$announcement_id'
+                            AND toolitemproperties.tool='announcement'                                                        
+                            ORDER BY display_order DESC";   
 		} else {
-			$sql_query = "	SELECT announcement.*, toolitemproperties.*
-							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-							WHERE announcement.id = toolitemproperties.ref
-							AND announcement.id = '$announcement_id'
-							AND toolitemproperties.tool='announcement'
-							AND toolitemproperties.to_group_id='0'
-							AND toolitemproperties.visibility='1'";
-		}
+    		if (api_get_user_id() != 0) {
+    			$sql_query = "	SELECT announcement.*, toolitemproperties.*
+    							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+    							WHERE announcement.id = toolitemproperties.ref
+    							AND announcement.id = '$announcement_id'
+    							AND toolitemproperties.tool='announcement'
+    							AND (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id='0')
+    							AND toolitemproperties.visibility='1'
+    							ORDER BY display_order DESC";
+    	
+    		} else {
+    			$sql_query = "	SELECT announcement.*, toolitemproperties.*
+    							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+    							WHERE announcement.id = toolitemproperties.ref
+    							AND announcement.id = '$announcement_id'
+    							AND toolitemproperties.tool='announcement'
+    							AND toolitemproperties.to_group_id='0'
+    							AND toolitemproperties.visibility='1'";
+    		}
+		}		
 		$sql_result = Database::query($sql_query);
 		if (Database::num_rows($sql_result) > 0 ) {
-    		$result		= Database::fetch_array($sql_result);
+    		$result		= Database::fetch_array($sql_result, 'ASSOC');    		
     	
-    		if ($result !== false) { // A sanity check.
-    			$title		 = $result['title'];
-    			$content	 = $result['content'];
-    			$content     = make_clickable($content);
-    			$content     = text_filter($content);
-    			$last_post_datetime = $result['insert_date'];// post time format  datetime de mysql
-    			list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
-    		}
-    	
-    		echo "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">";
-    		echo "<tr class=\"data\"><td><h2>" . $title . "</h2></td></tr>";
-    		    		
-    		echo "<tr class=\"text\"><td>$content</td></tr>";
+			$title		 = $result['title'];
+			$content	 = $result['content'];
+			$content     = make_clickable($content);
+			$content     = text_filter($content);			    			
+		    	
+    		echo "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
+    		echo "<tr><td><h2>".$title."</h2></td></tr>";   		
     		
-    		echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_convert_and_format_date($result['end_date'], DATE_FORMAT_LONG) . "</td></tr>";
-            echo "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " . api_convert_and_format_date($last_post_datetime, DATE_TIME_FORMAT_LONG) . "</td></tr>";
+    		
+    		if (api_is_allowed_to_edit(false,true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+    		    $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$announcement_id."\">".Display::return_icon('edit.png', get_lang('Edit'),'',22)."</a>";
+                if ($myrow['visibility']==1) {
+                    $image_visibility="visible";
+                    $alt_visibility=get_lang('Hide');
+                } else {
+                    $image_visibility="invisible";
+                    $alt_visibility=get_lang('Visible');
+                }
+                global $stok;
+                
+    		    $modify_icons .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin'])?Security::remove_XSS($_GET['origin']):'')."&action=showhide&id=".$announcement_id."&sec_token=".$stok."\">".
+                            Display::return_icon($image_visibility.'.png', $alt_visibility,'',22)."</a>";    		    		
+                    
+                if (api_is_allowed_to_edit(false,true)) {
+                    $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$announcement_id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".
+                        Display::return_icon('delete.png', get_lang('Delete'),'',22).
+                        "</a>";
+                }                            
+                echo "<tr><th style='text-align:right'>$modify_icons</th></tr>";
+    		}
+    		
+    		echo "<tr><td>$content</td></tr>";       		
+    		//echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " .api_convert_and_format_date($result['end_date'], DATE_FORMAT_LONG). "</td></tr>";
+            echo "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " .api_convert_and_format_date($result['insert_date'], DATE_TIME_FORMAT_LONG). "</td></tr>";
             
-    		echo "<tr><td>";
-    	    $attachment_list = AnnouncementManager::get_attachment($announcement_id);
+            // User or group icon
+            $sent_to_icon = '';            
+            if ($result['to_group_id']!== '0' and $result['to_group_id']!== 'NULL') {
+                $sent_to_icon = Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'));
+            }            
+            $sent_to        = self::sent_to('announcement', $announcement_id);            
+            $sent_to_form   = self::sent_to_form($sent_to);
+            echo Display::tag('td', get_lang('SentTo').' : '.$sent_to_form, array('class'=>'announcements_datum'));            
+            
+    		
+    	    $attachment_list = self::get_attachment($announcement_id);
         
             if (count($attachment_list)>0) {
+                echo "<tr><td>";
                 $realname=$attachment_list['path'];
                 $user_filename=$attachment_list['filename'];
                 $full_file_name = 'download.php?file='.$realname;
@@ -152,9 +193,8 @@ class AnnouncementManager  {
                 echo Display::return_icon('attachment.gif',get_lang('Attachment'));
                 echo '<a href="'.$full_file_name.' "> '.$user_filename.' </a>';
                 echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
-            }
-            echo '</td></tr>';
-                        
+                echo '</td></tr>';
+            }           
     		echo "</table>";
 		} else {
 		    api_not_allowed();
@@ -182,9 +222,9 @@ class AnnouncementManager  {
 		$emailTitle = Database::escape_string($emailTitle);
 		$newContent = Database::escape_string($newContent);
 		$order = intval($order);
-	
+	    $now = api_get_utc_datetime();
 		// store in the table announcement
-		$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".api_get_session_id();
+		$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = '$now', display_order ='$order', session_id=".api_get_session_id();
 		$result = Database::query($sql);
 		if ($result === false) {
 			return false;
@@ -234,9 +274,11 @@ class AnnouncementManager  {
 		$emailTitle = Database::escape_string($emailTitle);
 		$newContent = Database::escape_string($newContent);
 		$order = intval($order);
+		
+		$now = api_get_utc_datetime();
 	
 		// store in the table announcement
-		$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".api_get_session_id();
+		$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = '$now', display_order ='$order', session_id=".api_get_session_id();
 		$result = Database::query($sql);
 		if ($result === false) {
 			return false;
@@ -873,14 +915,13 @@ class AnnouncementManager  {
 		$total_numbers = $number_users + $number_groups;
 	
 		// starting the form if there is more than one user/group
-		
-		if ($total_numbers > 1 ) {
-			$output="<select name=\"sent to\">";
-			$output.="<option>".get_lang("SentTo")."</option>";
+		$output = array();
+		if ($total_numbers > 1 ) {			
+			//$output.="<option>".get_lang("SentTo")."</option>";
 			// outputting the name of the groups
 			if (is_array($sent_to_array['groups'])) {
 				foreach ($sent_to_array['groups'] as $group_id) {
-					$output.="<option value=\"\">G: ".$group_names[$group_id]['name']."</option>";
+					$output[] = $group_names[$group_id]['name'];
 				}
 			}
 	
@@ -888,29 +929,32 @@ class AnnouncementManager  {
 				if (is_array($sent_to_array['users'])) {
 					foreach ($sent_to_array['users'] as $user_id) {
 						$user_info = api_get_user_info($user_id);
-						$output.="<option value=\"\">".api_get_person_name($user_info['firstname'], $user_info['lastname'])."</option>";
+						$output[] = api_get_person_name($user_info['firstname'], $user_info['lastname']);
 					}
 				}
-			}
-			// ending the form
-			$output.="</select>";
+			}			
 		} else {
 			// there is only one user/group
 			if (isset($sent_to_array['users']) and is_array($sent_to_array['users'])) {
 				$user_info = api_get_user_info($sent_to_array['users'][0]);
-				$output = api_get_person_name($user_info['firstname'], $user_info['lastname']);
+				$output[]= api_get_person_name($user_info['firstname'], $user_info['lastname']);
 			}
 			if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and isset($sent_to_array['groups'][0]) and $sent_to_array['groups'][0]!==0) {
 				$group_id=$sent_to_array['groups'][0];
-				$output .= "&nbsp;".$group_names[$group_id]['name'];
+				$output[]= "&nbsp;".$group_names[$group_id]['name'];
 			}
 			if (empty($sent_to_array['groups']) and empty($sent_to_array['users'])) {
-				$output .= "&nbsp;".get_lang('Everybody');
+				$output[]= "&nbsp;".get_lang('Everybody');
 			}
-		}	
-		if (!empty($output)) {
-			return $output;
 		}
+		
+	    if (!empty($output)) {        
+            $output = array_filter($output);        
+            if (count($output) > 0) {
+                $output = implode(', ', $output);
+            }
+            return $output;
+        }   
 	}
 	
 	
@@ -959,20 +1003,18 @@ class AnnouncementManager  {
 		global $tbl_item_property;
 	
 		$tool 	= Database::escape_string($tool);
-		$id 	= Database::escape_string($id);
+		$id 	= intval($id);
 	
 		$sent_to_group = array();
 		$sent_to = array();
 	
-		$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='".$id."'";
-		$result = Database::query($sql);
+		$sql="SELECT to_group_id, to_user_id FROM $tbl_item_property WHERE tool = '$tool' AND ref=".$id;
+		$result = Database::query($sql);	
 	
-	
-		while ($row=Database::fetch_array($result)) {
+		while ($row = Database::fetch_array($result)) {
 			// if to_group_id is null then it is sent to a specific user
 			// if to_group_id = 0 then it is sent to everybody
-			if ($row['to_group_id'] != 0)
-			{
+			if ($row['to_group_id'] != 0) {
 				$sent_to_group[]=$row['to_group_id'];
 			}
 			// if to_user_id <> 0 then it is sent to a specific user

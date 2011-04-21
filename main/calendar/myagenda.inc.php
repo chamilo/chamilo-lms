@@ -213,24 +213,25 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
                         if (!empty($value['end_date']) && $value['end_date'] != '0000-00-00 00:00:00') {
                            $end_time    = '-&nbsp;<i>'.api_convert_and_format_date($value['end_date'], DATE_TIME_FORMAT_LONG);
                         }       
-                        $time = '<i>'.$start_time.'</i>&nbsp;'.$end_time;                        
-                        switch($value['calendar_type']) {
+                        $time = '<i>'.$start_time.'</i>&nbsp;'.$end_time;  
+
+				        switch($value['calendar_type']) {
                             case 'personal':
-                                $bg_color = '#D0E7F4';
-                                $subtitle = get_lang('MyAgenda');                                
+                                $bg_color = '#D0E7F4';                                          
+                                $subtitle = Display::return_icon('user.png', get_lang('MyAgenda'), array(), 22);
                                 break;
                             case 'global':
                                 $bg_color = '#FFBC89';
-                                $subtitle = get_lang('GlobalEvent');
+                                $subtitle = Display::return_icon('view_remove.png', get_lang('GlobalEvent'), array(), 22);
                                 break;
                             case 'course':
-                                $bg_color = '#CAFFAA';
-                                $subtitle = get_lang('Course').' '.$value['url'];                                
-                                break;
+                                $bg_color = '#CAFFAA'; 
+                                $subtitle = Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$value['url'];                                                                                  
+                                break;              
                             default:
                                 //$time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
                                 break;                          
-                        }				       
+                        }                        		       
 				        $result = '<div class="rounded_div_agenda" style="background-color:'.$bg_color.';">';
                                                                     
                         $value['title'] = Display::tag('strong', $value['title']);                                  

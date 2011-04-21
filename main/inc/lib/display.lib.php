@@ -431,16 +431,16 @@ class Display {
         switch($type) {
             case 'warning':
                $class = 'warning-message';
+               break;
             case 'error':
                $class = 'error-message';
-            case 'normal':
-                $class = '';
-            case 'confirmation-message':
-                $class = '';
+               break;
+            case 'normal':                                
+            case 'confirmation-message':                
             default:
-                $class = 'normal-message';
-            return self::div($message, array('class'=>$class));
-       }
+                $class = 'normal-message';            
+        }
+        return self::div($message, array('class'=>$class));
     }
 
     /**

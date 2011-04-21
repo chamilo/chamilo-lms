@@ -68,7 +68,7 @@ input.maininput:focus {
 
 /* Big icons course home page styles */ 
 .big_icon {
-	width:205px;
+	/*width:205px; */
 	padding:10px;
 }
 

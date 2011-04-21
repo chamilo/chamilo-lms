@@ -8,15 +8,14 @@
 * Calculates the time spent on the course
 * @param integer $user_id the user id
 * @param string $course_code the course code
-* @author Mario per testare cose
 * @author Julio Montoya <gugli100@gmail.com>
+* @author Jorge Frisancho Jibaja - select between dates
 * 
 */
 
 // name of the language file that needs to be included
 $language_file = array ('registration', 'index', 'tracking');
 
-// including the global Dokeos file
 require_once '../inc/global.inc.php';
 
 // including additional libraries
@@ -29,164 +28,138 @@ require_once 'myspace.lib.php';
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 
-
 /* MAIN */
 $user_id = intval($_REQUEST['student']);
 $session_id = intval($_GET['id_session']);
+$type = Security::remove_XSS($_REQUEST['type']);
 $course_code = Security::remove_XSS($_REQUEST['course']);
 $connections = MySpace::get_connections_to_course($user_id, $course_code, $session_id);
 
+$quote_simple = "'";
 
-if (api_is_xml_http_request()) {
-	$type  = Security::remove_XSS($_GET['type']);
-	$main_year = $main_month_year = $main_day = array();
-	// get last 8 days/months
-	$last_days = 8;
-	$last_months = 5;
-	for ($i = $last_days; $i >= 0; $i--) {
-		$main_day[date ('d-m-Y', mktime () - $i * 3600 * 24)] = 0;
-	}
-	for ($i = $last_months; $i >= 0; $i--) {
-		$main_month_year[date ('m-Y', mktime () - $i * 30 * 3600 * 24)] = 0;
-	}
+$htmlHeadXtra[] = api_get_jquery_ui_js();
 
-	$i = 0;
-	if (is_array($connections) && count($connections) > 0) {
-		foreach ($connections as $key => $data) {
-			//creating the main array
-			$main_month_year[date('m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
-			$main_day[date('d-m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
-			if ($i > 500) {
-				break;
-			}
-			$i++;
-		}
-
-		switch ($type) {
-			case 'day':
-				$main_date = $main_day;
-				break;
-			case 'month':
-				$main_date = $main_month_year;
-				break;
-			case 'year':
-				$main_date = $main_year;
-				break;
-		}
-
-		// the nice graphics :D
-		$labels = array_keys($main_date);
-		if (count($main_date) == 1) {
-			$labels = $labels[0];
-			$main_date = $main_date[$labels];
-		}
-
-		$data_set = new pData;
-		$data_set->AddPoint($main_date, 'Q');
-		if (count($main_date)!= 1) {
-			$data_set->AddPoint($labels, 'Date');
-		}
-		$data_set->AddAllSeries();
-		$data_set->RemoveSerie('Date');
-		$data_set->SetAbsciseLabelSerie('Date');
-		$data_set->SetYAxisName(get_lang('Minutes', ''));
-		$graph_id = api_get_user_id().'AccessDetails'.api_get_course_id();
-		$data_set->AddAllSeries();
-
-		$cache = new pCache();
-		// the graph id
-		$data = $data_set->GetData();
-
-		if ($cache->IsInCache($graph_id, $data_set->GetData())) {
-		//if (0) {
-			//if we already created the img
-			//	echo 'in cache';
-			$img_file = $cache->GetHash($graph_id, $data_set->GetData());
-		} else {
-			// if the image does not exist in the archive/ folder
-			// Initialise the graph
-			$test = new pChart(760, 230);
-
-			//which schema of color will be used
-			$quant_resources = count($data[0]) - 1;
-			// Adding the color schemma
-			$test->loadColorPalette(api_get_path(LIBRARY_PATH).'pchart/palette/default.txt');
-
-			$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
-			$test->setGraphArea(70, 30, 680, 200);
-			$test->drawFilledRoundedRectangle(7, 7, 693, 223, 5, 240, 240, 240);
-			$test->drawRoundedRectangle(5, 5, 695, 225, 5, 230, 230, 230);
-			$test->drawGraphArea(255, 255, 255, TRUE);
-			$test->drawScale($data_set->GetData(), $data_set->GetDataDescription(), SCALE_START0, 150, 150, 150, TRUE, 0, 0);
-			$test->drawGrid(4, TRUE, 230, 230, 230, 50);
-			$test->setLineStyle(2);
-			// Draw the 0 line
-			$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 6);
-			$test->drawTreshold(0, 143, 55, 72, TRUE, TRUE);
-
-			if (count($main_date) == 1) {
-				//Draw a graph
-				echo '<strong>'.$labels.'</strong><br/>';
-				$test->drawBarGraph($data_set->GetData(), $data_set->GetDataDescription(), TRUE);
-			} else {
-				//Draw the line graph
-				//$test->drawLineGraph($data_set->GetData(), $data_set->GetDataDescription());
-				//$test->drawCubicCurve($data_set->GetData(), $data_set->GetDataDescription());
-				//$test->drawFilledLineGraph($data_set->GetData(), $data_set->GetDataDescription());
-				$test->drawFilledCubicCurve($data_set->GetData(), $data_set->GetDataDescription(),.2,50);
-				$test->drawPlotGraph($data_set->GetData(), $data_set->GetDataDescription(), 3, 2, 255, 255, 255);
-			}
-
-			// Finish the graph
-			$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
-
-			$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 10);
-			$test->drawTitle(60, 22, get_lang('AccessDetails', ''), 50, 50, 50, 585);
-
-			//------------------
-			//echo 'not in cache';
-			$cache->WriteToCache($graph_id, $data_set->GetData(), $test);
-			ob_start();
-			$test->Stroke();
-			ob_end_clean();
-			$img_file = $cache->GetHash($graph_id, $data_set->GetData());
-		}
-		echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
-	} else {
-		Display::display_warning_message(api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8'));
-	}
-	exit;
-}
-
-$nameTools = get_lang('AccessDetails');
-
-//StudentDetails
-if (isset($_GET['origin']) && strcmp($_GET['origin'], 'tracking_course') === 0) {
-	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".Security::remove_XSS($_GET['course'])."&amp;studentlist=true&id_session=".api_get_session_id(), "name" => get_lang("Tracking"));
-	$interbreadcrumb[] = array ("url" => "myStudents.php?student=".Security::remove_XSS($_GET['student'])."&details=true&origin=".Security::remove_XSS($_GET['origin'])."&amp;course=".Security::remove_XSS($_GET['course']).'&amp;cidReq='.Security::remove_XSS($_GET['course']), "name" => get_lang('DetailsStudentInCourse'));
-	$interbreadcrumb[] = array ("url" => "javascript: void(0);", "name" => get_lang("Details"));
-} elseif (isset($_GET['origin']) && strcmp($_GET['origin'], 'user_course') === 0) {
-	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".Security::remove_XSS($_GET['course']), "name" => get_lang("Users"));
-	$interbreadcrumb[] = array ("url" => "myStudents.php?student=".Security::remove_XSS($_GET['student'])."&details=true&origin=".Security::remove_XSS($_GET['origin'])."&amp;course=".Security::remove_XSS($_GET['course']).'&amp;cidReq='.Security::remove_XSS($_GET['course']), "name" => get_lang('DetailsStudentInCourse'));
-	$interbreadcrumb[] = array ("url" => "javascript: void(0);", "name" => get_lang("Details"));
-}
+$htmlHeadXtra[] = '<script src="slider.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="slider.css" />';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
-function load_results(type) {
-        $.ajax({
-            type: "GET",
-            url: "access_details.php?course='.$course_code.'&student='.$user_id.'",
-            data: "type=" + type,
-            success: function(data) {
-                    $("#show").html(data);
-            }        
-        });
-}
-//By default we load the load graph      
-$(document).ready(function() {
-    load_results(\'day\');            
-});  
+$(function() {
+    var dates = $( "#date_from, #date_to" ).datepicker({
+        dateFormat: '.$quote_simple.'yy-mm-dd'.$quote_simple.',
+        changeMonth: true,
+    changeYear: true,
+        onSelect: function( selectedDate ) {
+            var foo = areBothFilled();
+            var option = this.id == "date_from" ? "minDate" : "maxDate",
+                instance = $( this ).data( "datepicker" );
+                date = $.datepicker.parseDate(
+                    instance.settings.dateFormat ||
+                    $.datepicker._defaults.dateFormat,
+                    selectedDate, instance.settings );
+            dates.not( this ).datepicker( "option", option, date );
+            
+            if (foo){
+                var start_date  = document.getElementById("date_from").value;
+                var end_date    = document.getElementById("date_to").value;
+                changeHREF(start_date,end_date);
+                var foo_student = '.$user_id.';
+                var foo_course  = "'.$course_code.'";
+                var graph_type  = "'.$type.'";
+                var foo_slider_state = getSliderState();
+
+                if (foo_slider_state == "open"){
+                    sliderAction();
+                }
+                $.post("'.api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail_by_date", {startDate: start_date, endDate: end_date, course: foo_course, student: foo_student, type: graph_type}, function(db)
+                {
+                    if (!db.is_empty){
+                        // Display confirmation message to the user
+                        $("#messages").html(db.result).stop().css("opacity", 1).fadeIn(30);
+                        $("#cev_cont_stats").html(db.stats);
+                        $( "#ui-tabs-1" ).empty();
+                        $( "#ui-tabs-2" ).empty();
+                        $( "#ui-tabs-1" ).html(db.graph_result);
+                        $( "#ui-tabs-2" ).html(db.graph_result);
+                    }
+                    else{
+                        $("#messages").text("No existen registros para este rango");
+                        $("#messages").addClass("warning-message");
+                        $("#cev_cont_stats").html(db.stats);
+                        $( "#ui-tabs-1" ).empty();
+                        $( "#ui-tabs-1" ).html(db.graph_result);
+                        controlSliderMenu(foo_height);
+                    }
+                    var foo_height = sliderGetHeight("#messages");
+                    sliderSetHeight(".slider",foo_height);
+                    controlSliderMenu(foo_height);
+                    //$("#messages").css("height", foo_height);
+                    // Hide confirmation message and enable stars for "Rate this" control, after 2 sec...
+                    /*setTimeout(function(){
+                            $("#messages").fadeOut(1000, function(){ui.enable()})
+                    }, 2000);*/
+                }, "json");
+                
+                $( "#cev_slider" ).empty();
+                // Create element to use for confirmation messages
+                $('.$quote_simple .'<div id="messages"/>'.$quote_simple .').appendTo("#cev_slider");
+                
+            }
+        }
+     });
+    if (areBothFilled()){
+        runEffect();        
+    }
+});
+
 </script>';
+
+
+$htmlHeadXtra[] = '<script type="text/javascript">
+
+function changeHREF(sd,ed) {
+    var i       = 0;
+    var href    = "";
+    var href1   = "";
+    $('.$quote_simple .'#container-9 a'.$quote_simple .').each(function() {
+        href = $.data(this, '.$quote_simple .'href.tabs'.$quote_simple .');
+        href1= href+"&sd="+sd+"&ed="+ed+"&range=1";
+        $("#container-9").tabs("url", i, href1);
+        var href1 = $.data(this, '.$quote_simple .'href.tabs'.$quote_simple .');
+        i++
+    })
+}
+
+function runEffect(){
+    //most effect types need no options passed by default
+    var options = {};
+     //run the effect
+    $("#cev_button").show('.$quote_simple .'slide'.$quote_simple .',options,500,cev_effect());
+}
+
+//callback function to bring a hidden box back
+function cev_effect(){
+    setTimeout(function(){
+        $("#cev_button:visible").removeAttr('.$quote_simple .'style'.$quote_simple .').hide().fadeOut();
+    }, 1000);
+}
+
+function areBothFilled() {
+        var returnValue = false;
+        if ((document.getElementById("date_from").value != "") && (document.getElementById("date_to").value != "")){
+            returnValue = true;
+        }
+        return returnValue;
+}
+</script>';
+
+$htmlHeadXtra[] = '<script type="text/javascript">
+$(function() {
+        $("#cev_button").hide();
+    $("#container-9").tabs({remote: true});
+});
+</script>';
+
+//Changes END
 
 Display :: display_header('');
 $tbl_userinfo_def = Database :: get_course_table(TABLE_USER_INFO);
@@ -194,34 +167,72 @@ $main_user_info = api_get_user_info($user_id);
 
 $result_to_print = '';
 $main_date_array = array();
-$session_name = api_get_session_name(api_get_session_id());
-if (!empty($session_name)) {
-    $session_name = get_lang('Session').' '.$session_name.' | ';
-}
-echo '<h2>'.get_lang('Course').': '.$course_code.' | '.(empty($session_name)?'':$session_name).' '.get_lang('User').': '.api_get_person_name($main_user_info['firstName'], $main_user_info['lastName']).'</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong></h2>';
+
+$sql_result      = MySpace::get_connections_to_course($user_id, $course_code);
+$result_to_print = convert_to_string($sql_result);
 
 api_display_tool_title(get_lang('DetailsStudentInCourse'));
-    
-if (!empty($connections)) {
-    foreach ($connections as $key => $data) {
-	   $result_to_print .= '&nbsp;&nbsp;'.date('d-m-Y (H:i:s)', $data['login']).' - '.api_time_to_hms($data['logout'] - $data['login']).'<br />'."\n";
-    }
+?>
+<div id="cev_results_header" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+<div id="cev_cont" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+<?php echo '<strong>'.get_lang('User').': '.api_get_person_name($main_user_info['firstName'], $main_user_info['lastName']).'</strong> <br /> <strong>'.get_lang('Course').': </strong>'.$course_code; ?></div>
+<br />
+<form action="javascript:get(document.getElementById('myform'));" name="myform" id="myform">
+<div id="cev_cont_header">
+    <p><?php echo get_lang('SelectADateRange')?></p>
+    <label for="to"><?php echo get_lang('From')?></label>
+    <input type="text" id="date_from" name="from"/>
+    <label for="to"><?php echo get_lang('Until')?></label>
+    <input type="text" id="date_to" name="to"/>
+</div><br /><br />
+</form>
+<input id="cev_button" type=button class="ui-state-default ui-corner-all" value="Resetear Fechas" onClick="javascript:window.location='access_details.php?course=<?php echo $course_code?>&student=<?php echo $user_id?>&cidReq=<?php echo $course_code ?>';" >
+</div><br />
 
-    echo '<div class="actions">';
-    echo '<ul>';
-    echo '<li><a href=# onclick="load_results(\'day\')"><span>'.api_ucfirst(get_lang('Day')).'</span></a></li>';
-    echo '<li><a href=# onclick="load_results(\'month\')"><span>'.api_ucfirst(get_lang('MinMonth')).'</span></a></li>';
-    echo '</ul>';
-    echo '</div>';
-    
-    echo '<div id="show"></div>'; 
-    
+<div id="cev_results" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+    <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"><?php echo get_lang('Statistics'); ?></div><br />
+    <div id="cev_cont_stats">
+        <?php
+        if ($result_to_print != "")  {
+            $rst                = get_stats($user_id, $course_code);            
+            $foo_stats           = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
+            $foo_stats          .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
+            $foo_stats          .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';            
+            echo $foo_stats;
+        } else {
+            echo Display::display_warning_message(get_lang('NoDataAvailable'));
+        }
+        ?>
+    </div><br />
+</div><br />
 
-    echo '<div id="graph"></div><br />';
-    echo '<div class="actions"><strong>', get_lang('DateAndTimeOfAccess'), ' - ', get_lang('Duration'), '</strong></div><br />';
-    echo $result_to_print;
-} else {
-    Display::display_warning_message(get_lang('GraphicNotAvailable'));	
-}
+<div id="container-9">
+    <ul>
+        <li><a href="<?php echo api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail&type=day&course='.$course_code.'&student='.$user_id?>"><span> <?php echo api_ucfirst(get_lang('Day')); ?></span></a></li>
+        <li><a href="<?php echo api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail&type=month&course='.$course_code.'&student='.$user_id?>"><span> <?php echo api_ucfirst(get_lang('MinMonth')); ?></span></a></li>        
+    </ul>
+</div>
 
+
+<div id="cev_results" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+    <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"><?php echo get_lang('DateAndTimeOfAccess'),' - ', get_lang('Duration') ?></div><br />
+    <div id="cev_cont_results" >
+    <div id="cev_slider" class="slider">
+        <?php
+        if ($result_to_print != "")  {
+            echo $result_to_print;
+        } else {
+            Display::display_warning_message(get_lang('NoDataAvailable'));
+        }        
+        ?>
+    </div>
+    <?php
+    if ($result_to_print != "")  {
+        echo ('<br /><div class="slider_menu">
+        <a href="#" onclick="return sliderAction();">'.get_lang('More').'</a>
+        </div><br />');
+    }?>
+    </div>
+</div><br />
+<?php
 Display:: display_footer();

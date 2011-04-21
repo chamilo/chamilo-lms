@@ -814,6 +814,12 @@ if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_e
 	   echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'','32')."</a>";
 	}
 	$show_actions = true;
+} else {
+    if (in_array($_GET['action'], array('view'))) {
+        echo '<div class="actions">';
+        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('back.png',get_lang('Back'),'','32')."</a>";    
+        echo '</div>';
+    }
 }
 
 if (api_is_allowed_to_edit() && $announcement_number > 1) {
@@ -1082,14 +1088,14 @@ if ($display_announcement_list && !$surveyid) {
 
 	$group_memberships = GroupManager::get_group_ids($_course['dbName'],api_get_user_id());
 
-	if (api_is_allowed_to_edit(false,true)) {
+	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 		// A.1. you are a course admin with a USER filter
 		// => see only the messages of this specific user + the messages of the group (s)he is member of.
 		if (!empty($_SESSION['user'])) {
 
 			if (is_array($group_memberships) && count($group_memberships)>0) {
 				$sql="SELECT
-					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
+					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
 					WHERE announcement.id = ip.ref
 					AND ip.tool='announcement'
@@ -1099,7 +1105,7 @@ if ($display_announcement_list && !$surveyid) {
 
 			} else {
 				$sql="SELECT
-					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
+					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
 					WHERE announcement.id = ip.ref
 					AND ip.tool='announcement'
@@ -1113,7 +1119,7 @@ if ($display_announcement_list && !$surveyid) {
 			// A.2. you are a course admin with a GROUP filter
 			// => see only the messages of this specific group
 			$sql="SELECT
-				announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
+				announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 				FROM $tbl_announcement announcement, $tbl_item_property ip
 				WHERE announcement.id = ip.ref
 				AND ip.tool='announcement'
@@ -1129,7 +1135,7 @@ if ($display_announcement_list && !$surveyid) {
 
 			if (isset($isStudentView) and $isStudentView=="true") {
 				$sql="SELECT
-					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
+					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
 					WHERE announcement.id = ip.ref
 					AND ip.tool='announcement'
@@ -1141,7 +1147,7 @@ if ($display_announcement_list && !$surveyid) {
 				// A.3.a you are a course admin without user or group filter and WTIHOUT studentview (= the normal course admin view)
 				// => see all the messages of all the users and groups with editing possibilities
 				$sql="SELECT
-					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
+					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
 					WHERE announcement.id = ip.ref
 					AND ip.tool='announcement'
@@ -1175,16 +1181,14 @@ if ($display_announcement_list && !$surveyid) {
 					}
 				}
 
-				$sql="SELECT
-					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-					FROM $tbl_announcement announcement, $tbl_item_property ip
-					WHERE announcement.id = ip.ref
-					AND ip.tool='announcement'
-					$cond_user_id
-					$condition_session
-					AND ip.visibility='1'
-					ORDER BY display_order DESC";
-
+				$sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
+        				FROM $tbl_announcement announcement, $tbl_item_property ip
+        				WHERE announcement.id = ip.ref
+        				AND ip.tool='announcement'
+        				$cond_user_id
+        				$condition_session
+        				AND ip.visibility='1'
+        				ORDER BY display_order DESC";
 			} else {
 				if ($_user['user_id']) {
 					if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
@@ -1239,21 +1243,28 @@ if ($display_announcement_list && !$surveyid) {
     	echo '<table width="100%" class="data_table">';
     	
         $ths = Display::tag('th', get_lang('Title'));
-        //$ths .= Display::tag('th', get_lang('Content'));
-        $ths .= Display::tag('th', get_lang('SentTo') );
+        //$ths .= Display::tag('th', get_lang('Content'));        
         $ths .= Display::tag('th', get_lang('By') );
-        $ths .= Display::tag('th', get_lang('AnnouncementPublishedOn') );    
-        if (api_is_allowed_to_edit() OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id'])) 
+        //$ths .= Display::tag('th', get_lang('AnnouncementPublishedOn') );    
+        $ths .= Display::tag('th', get_lang('LastUpdateDate') );
+        if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id']))         
                  OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+                //$ths .= Display::tag('th', get_lang('SentTo'));
                 $ths .= Display::tag('th', get_lang('Modify'));
         }
         
     	echo Display::tag('tr', $ths);    
     	$displayed = array();    
     	
-    	while ($myrow = Database::fetch_array($result)) {    
+    	while ($myrow = Database::fetch_array($result, 'ASSOC')) {    
     		if (!in_array($myrow['id'], $displayed)) {
-    			$title		 = $myrow['title'];
+    		    $sent_to_icon = '';
+		       // the email icon
+                if ($myrow['email_sent'] == '1') {
+                    $sent_to_icon = ' '.Display::return_icon('email.gif', get_lang('AnnounceSentByEmail'));
+                }
+                
+    			$title		 = $myrow['title'].$sent_to_icon;
     			$content	 = $myrow['content'];
     
     			$content     = make_clickable($content);
@@ -1279,44 +1290,19 @@ if ($display_announcement_list && !$surveyid) {
                 $attachment = '';
                 $attachment_icon = '';
                 if (count($attachment_list)>0) {
-                    $attachment_icon = ' '.Display::return_icon('attachment.gif',get_lang('Attachment'));
-                    /*
-                    $realname=$attachment_list['path'];
-                    $user_filename=$attachment_list['filename'];
-                    $full_file_name = 'download.php?file='.$realname;
-                         
-                    $attachment .= Display::return_icon('attachment.gif',get_lang('Attachment'));
-                    $attachment .= '<a href="'.$full_file_name.'"> '.$user_filename.' </a>';
-                    $attachment .= '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
-    
-                    if (api_is_allowed_to_edit()) {
-                        $attachment .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a><br />';
-                    }*/
+                    $attachment_icon = ' '.Display::return_icon('attachment.gif',get_lang('Attachment'));                    
                 }
+                
                 /* TITLE */
     		    $title = Display::url($title.$attachment_icon, '?action=view&id='.$myrow['id']);
                 echo Display::tag('td', Security::remove_XSS($title), array('class' => $style));
                 
                 //echo Display::tag('td', Security::remove_XSS($content).$attachment);
     			
-                 // User or group icon
-                $sent_to_icon = '';
-                if ($myrow['to_group_id']!== '0' and $myrow['to_group_id']!== 'NULL') {
-                    $sent_to_icon = Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'));
-                }
-                // the email icon
-                if ($myrow['email_sent'] == '1') {
-                    $sent_to_icon .= Display::return_icon('email.gif', get_lang('AnnounceSentByEmail'));
-                }
-    
-    			$sent_to		= AnnouncementManager::sent_to('announcement', $myrow['id']);
-    			$sent_to_form	= AnnouncementManager::sent_to_form($sent_to);
-    			$user_info		= api_get_user_info($myrow['insert_user_id']);
-    			
-    			echo Display::tag('td', $sent_to_icon.$sent_to_form);			
-    			echo Display::tag('td', api_get_person_name($user_info['firstName'], $user_info['lastName']));			
-                echo Display::tag('td', api_convert_and_format_date($myrow['end_date'], DATE_FORMAT_LONG));
+                $user_info		= api_get_user_info($myrow['insert_user_id']);
     						
+    			echo Display::tag('td', api_get_person_name($user_info['firstName'], $user_info['lastName']));			
+                echo Display::tag('td', api_convert_and_format_date($myrow['insert_date'], DATE_TIME_FORMAT_LONG));                			
     
     			/* RESOURCES */
     
@@ -1329,40 +1315,39 @@ if ($display_announcement_list && !$surveyid) {
     			*/
     			// we can edit if : we are the teacher OR the element belongs to the session we are coaching OR the option to allow users to edit is on
     			$modify_icons = '';
-    			if (api_is_allowed_to_edit() OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id'])) 
+    			if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $myrow['id'])) 
     			     OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
     
-    				/* SHOW MOD/DEL/VIS FUNCTIONS */
-    				$modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">".
-    						Display::return_icon('edit.png', get_lang('Edit'),'',22).
-    						"</a>";
+    				$modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">".Display::return_icon('edit.png', get_lang('Edit'),'',22)."</a>";
     				if ($myrow['visibility']==1) {
     					$image_visibility="visible";
     					$alt_visibility=get_lang('Hide');
     				} else {
     					$image_visibility="invisible";
     					$alt_visibility=get_lang('Visible');
-    				}
-    
-    				$modify_icons .=  	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin'])?Security::remove_XSS($_GET['origin']):'')."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
+    				}    
+    				$modify_icons .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin'])?Security::remove_XSS($_GET['origin']):'')."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
     						Display::return_icon($image_visibility.'.png', $alt_visibility,'',22)."</a>";
     
     				// DISPLAY MOVE UP COMMAND only if it is not the top announcement
     				if ($iterator != 1) {
     					$modify_icons .= 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&up=".$myrow["id"]."&sec_token=".$stok."\">".Display::return_icon('up.gif', get_lang('Up'))."</a>";
-    				}
-    
+    				} else {
+    				    $modify_icons .=    Display::return_icon('up_na.gif', get_lang('Up'));
+    				}    
     				if ($iterator < $bottomAnnouncement) {
     					$modify_icons .= 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&down=".$myrow["id"]."&sec_token=".$stok."\">".Display::return_icon('down.gif', get_lang('Down'))."</a>";
+    				} else {
+    				    $modify_icons .=    Display::return_icon('down_na.gif', get_lang('Down'));
     				}
-    
-    			     if (api_is_allowed_to_edit(false,true)) {
+    				    
+    			    if (api_is_allowed_to_edit(false,true)) {
                         $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".
                             Display::return_icon('delete.png', get_lang('Delete'),'',22).
                             "</a>";
-                    }                    
-                    echo Display::tag('td', $modify_icons);    
+                    }    	 
     				$iterator ++;
+    				echo Display::tag('td', $modify_icons);
     			}
     			echo "</tr>";
     		}

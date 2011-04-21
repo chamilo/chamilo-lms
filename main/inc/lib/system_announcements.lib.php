@@ -146,8 +146,7 @@ class SystemAnnouncementManager
 		}
 	}
 
-	public static function display_arrow($user_id)
-	{
+	public static function display_arrow($user_id) {
 		$start = (int)$_GET['start'];
 		$nb_announcement = SystemAnnouncementManager :: count_nb_announcement($start,$user_id);
 		$next = ((int)$_GET['start']+19);
@@ -159,27 +158,20 @@ class SystemAnnouncementManager
 			}
 		} else {
 			echo '<a href="news_list.php?start='.$prev.'"> << '.get_lang('Prev').'</a>';
-
-			if($nb_announcement > 20) {
+			if ($nb_announcement > 20) {
 				echo '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
-
 		}
-
 	}
 
-	public static function count_nb_announcement($start = 0,$user_id = '')
-	{
+	public static function count_nb_announcement($start = 0, $user_id = '') {
 		$start = intval($start);
 		$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
 		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-		$sql = 'SELECT id
-				FROM '.$db_table.'
-				WHERE (lang="'.$user_selected_language.'" OR lang IS NULL) ';
+		$sql = 'SELECT id FROM '.$db_table.' WHERE (lang="'.$user_selected_language.'" OR lang IS NULL) ';
 		if (isset($user_id)) {
-			switch ($visibility)
-			{
+			switch ($visibility) {
 				case VISIBLE_GUEST :
 					$sql .= " AND visible_guest = 1 ";
 					break;
@@ -203,8 +195,7 @@ class SystemAnnouncementManager
 		$sql .= 'LIMIT '.$start.',21';
 		$announcements = Database::query($sql);
 		$i = 0;
-		while($rows = Database::fetch_array($announcements))
-		{
+		while($rows = Database::fetch_array($announcements)) {
 			$i++;
 		}
 		return $i;
@@ -237,6 +228,7 @@ class SystemAnnouncementManager
 		}
 		return $all_announcements;
 	}
+	
 	/**
 	 * Adds an announcement to the database
 	 * @param string Title of the announcement

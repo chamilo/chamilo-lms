@@ -1817,60 +1817,46 @@ class MySpace {
 		xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
 		xml_parser_free($parser);
 		return $users;
-	}
-	
-	
-	
-
-	
-	
-	
-	
+	}	
 }
 
-
-
-
     
-function cev_get_stats($user_id, $course_code, $start_date = null, $end_date = null) {
+function get_stats($user_id, $course_code, $start_date = null, $end_date = null) {
     // Database table definitions
     $tbl_track_course   = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    $tbl_main       = Database :: get_main_table(TABLE_MAIN_COURSE);
+    $tbl_main           = Database :: get_main_table(TABLE_MAIN_COURSE);
 
-    $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database::escape_string($course_code).'";';
-    $result = Database::query($sql_query, __FILE__, __LINE__);
-    $row_query = Database::fetch_array($result, 'ASSOC');
-    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
-    $COMILLA_SIMPLE = "'";
-    $strg_sd    = "";
-    $strg_ed    = "";
-    if ($start_date != null && $end_date != null){
-        $end_date = cev_add_day_to( $end_date );
-        $strg_sd = 'AND login_course_date BETWEEN ' . $COMILLA_SIMPLE . $start_date  . $COMILLA_SIMPLE . ' AND '  . $COMILLA_SIMPLE . $end_date . $COMILLA_SIMPLE;
-        $strg_ed = 'AND logout_course_date BETWEEN ' . $COMILLA_SIMPLE . $start_date  . $COMILLA_SIMPLE . ' AND '  . $COMILLA_SIMPLE . $end_date . $COMILLA_SIMPLE;
-    }    
-    $sql = 'SELECT SEC_TO_TIME(avg(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
-        SEC_TO_TIME(sum(time_to_sec(timediff(logout_course_date,login_course_date)))) as total,
-        count(user_id) as times
-        FROM ' . $tbl_track_course . '
-        WHERE user_id = ' . intval($user_id) . '
-        AND course_code = "' . Database::escape_string($course_true) . '" '.$strg_sd.' '.$strg_ed.' '.'
-        ORDER BY login_course_date ASC';
-
-    $rs = Database::query($sql, __FILE__, __LINE__);
-    $result = array();
-
-    if ($row = Database::fetch_array($rs)) {
-
-        $foo_avg    = $row['avrg'];
-        $foo_total  = $row['total'];
-        $foo_times  = $row['times'];
-        $result = array('avg' => $foo_avg, 'total' => $foo_total, 'times' => $foo_times);
+    $course_info = api_get_course_info($course_code);
+    if (!empty($course_info)) {        
+        $strg_sd    = "";
+        $strg_ed    = "";        
+        if ($start_date != null && $end_date != null){
+            $end_date = add_day_to( $end_date );
+            $strg_sd = "AND login_course_date BETWEEN '$start_date' AND '$end_date'";
+            $strg_ed = "AND logout_course_date BETWEEN '$start_date' AND '$end_date'";
+        }    
+        $sql = 'SELECT SEC_TO_TIME(avg(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
+            SEC_TO_TIME(sum(time_to_sec(timediff(logout_course_date,login_course_date)))) as total,
+            count(user_id) as times
+            FROM ' . $tbl_track_course . '
+            WHERE user_id = ' . intval($user_id) . '
+            AND course_code = "' . Database::escape_string($course_code) . '" '.$strg_sd.' '.$strg_ed.' '.'
+            ORDER BY login_course_date ASC';
+    
+        $rs = Database::query($sql);
+        $result = array();
+    
+        if ($row = Database::fetch_array($rs)) {    
+            $foo_avg    = $row['avrg'];
+            $foo_total  = $row['total'];
+            $foo_times  = $row['times'];
+            $result = array('avg' => $foo_avg, 'total' => $foo_total, 'times' => $foo_times);
+        }
     }
     return $result;
 }
 
-function cev_add_day_to( $end_date ){
+function add_day_to($end_date) {
     $foo_date = strtotime( $end_date );
     $foo_date = strtotime(" +1 day", $foo_date);
     $foo_date = date("Y-m-d", $foo_date);
@@ -1881,56 +1867,51 @@ function cev_add_day_to( $end_date ){
 /**
  * Gets the connections to a course as an array of login and logout time
  *
- * @param unknown_type $user_id
- * @param unknown_type $course_code
- * @author Jorge Frisancho Jibaja
- * @version CEV OCT-22- 2010
- * @return unknown
+ * @param   int       $user_id
+ * @param   string    $course_code
+ * @author  Jorge Frisancho Jibaja
+ * @author  Julio Montoya <gugli100@gmail.com> fixing the function
+ * @version OCT-22- 2010
+ * @return  array
  */
 function get_connections_to_course_by_date($user_id, $course_code, $start_date, $end_date) {
     // Database table definitions
     $tbl_track_course   = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    $tbl_main       = Database :: get_main_table(TABLE_MAIN_COURSE);
-
-    $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database::escape_string($course_code).'";';
-    $result = Database::query($sql_query, __FILE__, __LINE__);
-    $row_query = Database::fetch_array($result, 'ASSOC');
-    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
-    $COMILLA_SIMPLE = "'";
-
-    $end_date = cev_add_day_to( $end_date );
-    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
-        WHERE user_id = ' . intval($user_id) . '
-        AND course_code = "' . Database::escape_string($course_true) . '"
-        AND login_course_date BETWEEN ' . $COMILLA_SIMPLE . $start_date  . $COMILLA_SIMPLE . ' AND '  . $COMILLA_SIMPLE . $end_date . $COMILLA_SIMPLE . '
-        AND logout_course_date BETWEEN ' . $COMILLA_SIMPLE . $start_date  . $COMILLA_SIMPLE . ' AND '  . $COMILLA_SIMPLE . $end_date  . $COMILLA_SIMPLE . '
-        ORDER BY login_course_date ASC';
-
-    $rs = Database::query($sql, __FILE__, __LINE__);
-    $connections = array();
-
-    while ($row = Database::fetch_array($rs)) {
-
-        $login_date = $row['login_course_date'];
-        $logout_date = $row['logout_course_date'];
-
-        $timestamp_login_date = strtotime($login_date);
-        $timestamp_logout_date = strtotime($logout_date);
-
-        $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
+    $tbl_main           = Database :: get_main_table(TABLE_MAIN_COURSE);
+    
+    $course_info = api_get_course_info($course_code);
+    $user_id = intval($user_id);
+    if (!empty($course_info)) {
+        $end_date = add_day_to($end_date);
+        $sql = "SELECT login_course_date, logout_course_date FROM $tbl_track_course 
+            WHERE user_id = $user_id
+            AND course_code = '$course_code' 
+            AND login_course_date BETWEEN '$start_date' AND '$end_date'
+            AND logout_course_date BETWEEN '$start_date' AND '$end_date'
+            ORDER BY login_course_date ASC";    
+        $rs = Database::query($sql);
+        $connections = array();
+    
+        while ($row = Database::fetch_array($rs)) {    
+            $login_date = $row['login_course_date'];
+            $logout_date = $row['logout_course_date'];    
+            $timestamp_login_date = strtotime($login_date);
+            $timestamp_logout_date = strtotime($logout_date);    
+            $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
+        }
     }
     return $connections;
 }
 
 /**
- * conver an sql result to an array
+ * 
  *
- * @param unknown_type $sql_result
+ * @param array     
  * @author Jorge Frisancho Jibaja
- * @version CEV OCT-22- 2010
+ * @version OCT-22- 2010
  * @return array
  */
-function cev_convert_to_array($sql_result){
+function convert_to_array($sql_result){
     $result_to_print = '<table>';
     foreach ($sql_result as $key => $data) {
             $result_to_print .= '<tr><td>'.date('d-m-Y (H:i:s)', $data['login']).'</td><td>'.api_time_to_hms($data['logout'] - $data['login']).'</tr></td>'."\n";
@@ -1940,15 +1921,16 @@ function cev_convert_to_array($sql_result){
     return $result_to_print;
 }
 
+
 /**
- * converter an array to a table in html
+ * Converte an array to a table in html
  *
  * @param array $sql_result
  * @author Jorge Frisancho Jibaja
- * @version CEV OCT-22- 2010
+ * @version OCT-22- 2010
  * @return string
  */
-function cev_convert_to_string($sql_result){
+function convert_to_string($sql_result){
     $result_to_print = '<table>';
     if (!empty($sql_result)) {
         foreach ($sql_result as $key => $data) {
@@ -1968,10 +1950,10 @@ function cev_convert_to_string($sql_result){
  * @param string $end_date
  * @param string $type
  * @author Jorge Frisancho Jibaja
- * @version CEV OCT-22- 2010
+ * @version OCT-22- 2010
  * @return string
  */
-function cev_grapher($sql_result, $start_date, $end_date, $type = "") {
+function grapher($sql_result, $start_date, $end_date, $type = "") {
     require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
     require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
     require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
@@ -2076,9 +2058,8 @@ function cev_grapher($sql_result, $start_date, $end_date, $type = "") {
 
             // Finish the graph
             $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
-
-            $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 10);
-            $test->drawTitle(60, 22, get_lang('AccessDetails', ''), 50, 50, 50, 585);
+            $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 10);            
+            $test->drawTitle(60, 22, get_lang('AccessDetails'), 50, 50, 50, 585);
 
             //------------------
             //echo 'not in cache';

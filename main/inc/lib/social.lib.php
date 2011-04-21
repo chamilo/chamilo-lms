@@ -756,10 +756,10 @@ class SocialManager extends UserManager {
 				$my_announcement_by_user_id= intval($user_id);
 				$announcements = array();
 		    	foreach ($course_list_code as $course) {
-	    			$content = AnnouncementManager::get_all_annoucement_by_user_course($course['dbName'],$my_announcement_by_user_id);
+	    			$content = AnnouncementManager::get_all_annoucement_by_user_course($course['dbName'], $my_announcement_by_user_id);	    			
 	    			$course_info=api_get_course_info($course['code']);
 	    	  		if (!empty($content)) {
-	    				$announcements[] = '<li><a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$course['code'].'"'.Display::return_icon('announcement.png',get_lang('Announcements'),array('hspace'=>'6')).'<span class="social-menu-text4">'.$course_info['name'].' ('.$content['count'].')</span></a></li>';
+	    				$announcements[] = '<li><a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$course['code'].'"'.Display::return_icon('announcement.png',get_lang('Announcements'),array('hspace'=>'6')).$course_info['name'].' ('.$content['count'].')</a></li>';
 	    	  		}
 	    	  	}
 	    	  	if (!empty($announcements)) {

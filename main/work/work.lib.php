@@ -203,12 +203,12 @@ function display_studentsdelete_form() {
 *
 * @see this is the same function as in the new forum, so this probably has to move to a user library.
 *
-* @todo move this function to the user library
+* @todo move this function to the user library (remove duplicate in dropbox_functions.inc.php)
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function display_user_link_work($user_id, $name = '') {
+function display_user_link_work($user_id, $name = '', $gradebook='') {
 	global $_otherusers;
 	$user_id = intval($user_id);
 
@@ -828,7 +828,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 				$row[] = '<a href="download.php?file='.$url.'">'.build_document_icon_tag('file', substr(basename($work->url), 13)).'</a>';
 				$row[] = '<a href="download.php?file='.$url.'"'.$class.'>'.Display::return_icon('save.png', get_lang('Save'),array('style' => 'float:right;'), 22).' '.$work->title.'</a><br />'.$work->description;
-				$row[] = display_user_link_work($row2['insert_user_id'], $work->author); // $work->author;
+				$row[] = display_user_link_work($row2['insert_user_id'], $work->author, $gradebook); // $work->author;
 				$row[] = $qualification_string;
 			
 				$work_sent_date_local = api_get_local_time($work->sent_date);				

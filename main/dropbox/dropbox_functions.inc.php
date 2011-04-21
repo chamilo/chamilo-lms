@@ -911,7 +911,7 @@ function store_add_dropbox() {
 *
 * @see this is the same function as in the new forum, so this probably has to move to a user library.
 *
-* @todo move this function to the user library
+* @todo move this function to the user library (there is a duplicate in work.lib.php)
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006

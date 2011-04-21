@@ -1768,11 +1768,11 @@ function showhide_agenda_item($id) {
 /**
 * Displays all the agenda items
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @author Yannick Warnier <yannick.warnier@dokeos.com> - cleanup
+* @author Yannick Warnier <yannick.warnier@beeznest.com> - cleanup
 * @author Julio Montoya <gugli100@gmail.com> - Refactoring
 */
 function display_agenda_items($agenda_items, $day = false) {
-    
+    global $charset;
     if (isset($day) && $day) {
         $new_items = array();
         foreach($agenda_items as $item) {
@@ -1815,15 +1815,15 @@ function display_agenda_items($agenda_items, $day = false) {
         $th .= Display::tag('th', Display::url(get_lang('EndTimeWindow'), $url.'&sort='.$sort_inverse.'&col=end'));
         
         if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {
-            if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id']))) {
+//            if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id']))) {
                 // a coach can only delete an element belonging to his session
                 //$th .= Display::tag('th', get_lang('SentTo'));
                 $th .= Display::tag('th', get_lang('Modify'));
-            }
+//            }
         }
        
         echo Display::tag('tr', $th); 
-        
+        $counter = 0;
        	foreach ($agenda_items as $myrow) {       	    
         	$is_repeated = !empty($myrow['parent_event_id']);	      
             // Make the month bar appear only once.        

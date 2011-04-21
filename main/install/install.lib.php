@@ -1848,7 +1848,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
       <td><input type="hidden" name="allowSelfReg" value="<?php echo $allowSelfReg; ?>" /><?php echo $allowSelfReg ? get_lang('Yes') : get_lang('No'); ?></td>
       <?php else: ?>
       <td>
-        <input class="checkbox" type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" <?php echo $allowSelfReg ? 'checked="checked" ' : ''; ?>/> <label for="allowSelfReg1"><?php echo get_lang('Yes').' '.get_lang('Recommended'); ?></label>
+        <input class="checkbox" type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" <?php echo $allowSelfReg ? 'checked="checked" ' : ''; ?>/> <label for="allowSelfReg1"><?php echo get_lang('Yes'); ?></label>
         <input class="checkbox" type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" <?php echo $allowSelfReg ? '' : 'checked="checked" '; ?>/> <label for="allowSelfReg0"><?php echo get_lang('No'); ?></label>
       </td>
       <?php endif; ?>

@@ -270,7 +270,7 @@ class Display {
      *
      * @author Julio Montoya
      */
-    public static function display_sortable_config_table($header, $content, $sorting_options = array(), $paging_options = array(), $query_vars = null, $column_show = array(), $column_order = array(), $form_actions = array()) {
+    public static function display_sortable_config_table($table_name, $header, $content, $sorting_options = array(), $paging_options = array(), $query_vars = null, $column_show = array(), $column_order = array(), $form_actions = array()) {
         if (!class_exists('SortableTable')) {
             require_once 'sortabletable.class.php';
         }
@@ -278,7 +278,7 @@ class Display {
         $column = isset($sorting_options['column']) ? $sorting_options['column'] : 0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
 
-        $table = new SortableTableFromArrayConfig($content, $column, $default_items_per_page, 'tablename', $column_show, $column_order);
+        $table = new SortableTableFromArrayConfig($content, $column, $default_items_per_page, $table_name, $column_show, $column_order);
 
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);

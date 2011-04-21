@@ -873,7 +873,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 	}
 	$my_params['origin'] = $origin;
 
-	Display::display_sortable_config_table($table_header, $table_data, $sorting_options, $paging_options, $my_params, $column_show, $column_order);
+	Display::display_sortable_config_table('work', $table_header, $table_data, $sorting_options, $paging_options, $my_params, $column_show, $column_order);
 }
 
 /**
@@ -1569,7 +1569,7 @@ function display_list_users_without_publication($task_id) {
 	$column_show[] = 1;
 	$column_show[] = 1;
 	$column_show[] = 1;
-	Display::display_sortable_config_table($table_header, $table_data, $sorting_options, $paging_options, $my_params, $column_show);
+	Display::display_sortable_config_table('work', $table_header, $table_data, $sorting_options, $paging_options, $my_params, $column_show);
 }
 
 /**

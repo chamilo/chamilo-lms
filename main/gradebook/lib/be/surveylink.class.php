@@ -91,7 +91,7 @@ class SurveyLink extends AbstractLink
     /**
      * Has anyone done this survey yet?
      */
-    public function has_results() {
+    public function has_results($stud_id=null) {
     	$course_info = Database :: get_course_info($this->get_course_code());
 		$database_name = (empty($course_info['db_name'])) ? $course_info['dbName'] : $course_info['db_name'];
 

@@ -1,4 +1,4 @@
-<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
+<?php
 /* For licensing terms, see /license.txt */
 
 /**
@@ -715,10 +715,12 @@ class Blog {
 		$result = Database::query($sql);
 
 		// Display
-		if(Database::num_rows($result) > 0)
-		{
-			while($blog_post = Database::fetch_array($result))
-			{
+		if(Database::num_rows($result) > 0) {
+		    $limit = api_get_setting('read_more_limit'); //nmbr of words in introduction text
+		    if (empty($limit)) {
+		        $limit = 200;
+		    }		    
+			while($blog_post = Database::fetch_array($result)) {
 				// Get number of comments
 				$sql = "SELECT COUNT(1) as number_of_comments FROM $tbl_blogs_comments WHERE blog_id = '".(int)$blog_id."' AND post_id = '" . (int)$blog_post['post_id']."'";
 				$tmp = Database::query($sql);
@@ -730,44 +732,32 @@ class Blog {
 				$blog_post_date = api_convert_and_format_date($blog_post['date_creation'], null, date_default_timezone_get());
 
 				// Create an introduction text (but keep FULL sentences)
-				$limit = api_get_setting('read_more_limit'); //nmbr of words in introduction text
+				
 				$introduction_text = "";
 				$words = 0;
-				$tok = strtok(make_clickable(stripslashes($blog_post['full_text'])), " ");
-				//original
-				//$tok = strtok(make_clickable(stripslashes(strip_tags($blog_post['full_text'],"<br><p><ol><ul><li><img>"))), " ");
-				while($tok)
-				{
-					$introduction_text .= " $tok";
-					$words++;
-					// check if the number of words is larger than our limit AND if this token ends with a ! . or ? (meaning end of sentance).
-					if(($words >= $limit) && ((api_substr($tok, -1) == "!")||(api_substr($tok, -1) == ".")||(api_substr($tok, -1) == "?")))
-					{
-						break;
-					}
-					$tok = strtok(" ");
-				}
+				$blog_post_text_cut = cut($blog_post_text, $limit) ;				
+				$words = strlen($blog_post_text);
 
-				if($words >= $limit)
-				{
-					$readMoreLink = ' <span class="link" onclick="document.getElementById(\'blogpost_text_' . $blog_post_id . '\').style.display=\'block\'; document.getElementById(\'blogpost_introduction_' . $blog_post_id . '\').style.display=\'none\'">' . get_lang('ReadMore') . '</span>';
-				}
-				else
-				{
+				if ($words >= $limit) {
+					$readMoreLink = ' <div class="link" onclick="document.getElementById(\'blogpost_text_' . $blog_post_id . '\').style.display=\'block\'; document.getElementById(\'blogpost_introduction_' . $blog_post_id . '\').style.display=\'none\'">' . get_lang('ReadMore') . '</div>';
+					$introduction_text = $blog_post_text_cut;
+				} else {
+				    $introduction_text = $blog_post_text;
 					$readMoreLink = '';
 				}
 
-				$introduction_text=stripslashes($introduction_text);
+				$introduction_text = stripslashes($introduction_text);
 
-				echo '<div class="blogpost">'."\n";
-				echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>'."\n";
-				echo '<span class="blogpost_date"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . $blog_post_date . '</a></span>'."\n";
-				echo '<span class="blogpost_introduction" id="blogpost_introduction_' . $blog_post_id . '">' . $introduction_text . $readMoreLink . '</span>'."\n";
-				echo '<span class="blogpost_text" id="blogpost_text_' . $blog_post_id . '" style="display: none">' . $blog_post_text . '</span>'."\n";
+				echo '<div class="blogpost">';
+				echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
+				echo '<span class="blogpost_date"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . $blog_post_date . '</a></span>';
+				echo '<div class="blogpost_introduction" id="blogpost_introduction_'.$blog_post_id.'">' . $introduction_text.$readMoreLink.'</div>';
+				echo '<div class="blogpost_text" id="blogpost_text_' . $blog_post_id . '" style="display: none">' . $blog_post_text . '</div>';
+				
+				
 				$file_name_array=get_blog_attachment($blog_id,$blog_post_id,0);
 
-				if (!empty($file_name_array))
-				{
+				if (!empty($file_name_array)) {
 					echo '<br /><br />';
 					echo Display::return_icon('attachment.gif',get_lang('Attachment'));
 					echo '<a href="download.php?file=';
@@ -776,17 +766,12 @@ class Blog {
 					echo '</span>';
 				}
 				echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . api_get_person_name($blog_post['firstname'], $blog_post['lastname']) . ' - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
-				echo '</div>'."\n";
+				echo '</div>';
 			}
-		}
-		else
-		{
-			if($filter == '1=1')
-			{
+		} else {
+			if($filter == '1=1') {
 				echo get_lang('NoArticles');
-			}
-			else
-			{
+			} else {
 				echo get_lang('NoArticleMatches');
 			}
 		}
@@ -803,8 +788,7 @@ class Blog {
 		$query_string = Database::escape_string($query_string);
 		$query_string_parts = explode(' ',$query_string);
 		$query_string = array();
-		foreach ($query_string_parts as $query_part)
-		{
+		foreach ($query_string_parts as $query_part) {
 			$query_string[] = " full_text LIKE '%" . $query_part."%' OR title LIKE '%" . $query_part."%' ";
 		}
 		$query_string = '('.implode('OR',$query_string) . ')';
@@ -824,7 +808,7 @@ class Blog {
 		// Init
 		$date_output = $query_string;
 		$date = explode('-',$query_string);
-		$query_string = ' DAYOFMONTH(date_creation) =' . $date[2] . ' AND MONTH(date_creation) =' . $date[1] . ' AND YEAR(date_creation) =' . $date[0];
+		$query_string = ' DAYOFMONTH(date_creation) =' . intval($date[2]) . ' AND MONTH(date_creation) =' . intval($date[1]) . ' AND YEAR(date_creation) =' . intval($date[0]);
 
 		// Put date in correct output format
 		$date_output = api_format_date($date_output, DATE_FORMAT_LONG);

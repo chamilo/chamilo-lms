@@ -144,6 +144,7 @@ class SimpleTestCompatibility {
                     }
                 }
             }
+            $is_a = null;
             eval("\$is_a = \$object instanceof $class;");
             return $is_a;
         }

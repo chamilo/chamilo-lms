@@ -47,7 +47,7 @@ class WSSession extends WS {
 			$ed_element = intval($ed_element);
 		}
 		// Try to create the session
-		$session_id = SessionManager::create_session($name, $start_date_array[0], $start_date_array[1], $start_date_array[2], $end_date_array[0], $end_date_array[1], $end_date_array[2], (int)$nb_days_acess_before, (int)$nb_days_acess_after, (int)$nolimit, $user_id, 0, (int)$visibility);
+		$session_id = SessionManager::create_session($name, $start_date_array[0], $start_date_array[1], $start_date_array[2], $end_date_array[0], $end_date_array[1], $end_date_array[2], (int)$nb_days_access_before, (int)$nb_days_access_after, (int)$nolimit, $user_id, 0, (int)$visibility);
 		if(!is_int($session_id)) {
 			return new WSError(301, 'Could not create the session');
 		} else {
@@ -172,7 +172,7 @@ class WSSession extends WS {
 			foreach($end_date_array as &$ed_element) {
 				$ed_element = intval($ed_element);
 			}
-			$result_id = SessionManager::edit_session($session_id, $name, $start_date_array[0], $start_date_array[1], $start_date_array[2], $end_date_array[0], $end_date_array[1], $end_date_array[2], (int)$nb_days_acess_before, (int)$nb_days_acess_after, (int)$nolimit, $user_id, 0, (int)$visibility);
+			$result_id = SessionManager::edit_session($session_id, $name, $start_date_array[0], $start_date_array[1], $start_date_array[2], $end_date_array[0], $end_date_array[1], $end_date_array[2], (int)$nb_days_access_before, (int)$nb_days_access_after, (int)$nolimit, $user_id, 0, (int)$visibility);
 			if(!is_int($result_id)) {
 				return new WSError(302, 'Could not edit the session');
 			} else {
@@ -215,7 +215,7 @@ class WSSession extends WS {
 			$this->handleError($verifKey);
 		} else {
 			$result = $this->editSessionHelper($name, $start_date, $end_date, $nb_days_access_before, $nb_days_access_after, $nolimit, $visibility, $user_id_field_name, $user_id_value, $session_id_field_name, $session_id_value, $extras);
-			if($session_id instanceof WSError) {
+			if($session_id_value instanceof WSError) {
 				$this->handleError($result);
 			}
 		}
@@ -326,10 +326,9 @@ class WSSession extends WS {
 						return new WSError(304, 'Error unsubscribing course from session');
 					}
 				}
-				return true;
 			}
 		}
-	}
+    }
 
 	/**
 	 * Subscribe course to session

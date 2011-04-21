@@ -175,7 +175,7 @@ echo '<div align="center">';
 
 Display::display_icon('microphone.png', get_lang('PressRecordButton'),'','128');
 echo '<br/>';
-echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar" code="gong.NanoGong" width="210" height="40" ALIGN="middle">';
+echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="40" ALIGN="middle">';
 	//echo '<param name="ShowRecordButton" value="false" />'; // default true
 	// echo '<param name="ShowSaveButton" value="false" />'; //you can save in local computer | (default true)
 	//echo '<param name="ShowSpeedButton" value="false" />'; // default true
@@ -194,11 +194,11 @@ echo '</applet>';
 $array_browser=api_browser_support('check_browser');
 
 if ($array_browser[0]=="Internet Explorer") {	
-	echo '<div style="width:210px; background-color:#FFEFA7">'.get_lang('BrowserNotSupportNanogongSend').'</div>';	
+	echo '<div style="width:250px; background-color:#FFEFA7">'.get_lang('BrowserNotSupportNanogongSend').'</div>';	
 } else {   
 	echo '<form name="form_nanogong">';	
 		echo '<input type="text" id="audio_title">';
-		echo '<input type="button" value="'.get_lang('Save').'" onClick="submitVoice()" />';
+		echo '<button class="upload" type="submit" value="'.get_lang('Send').'" onClick="submitVoice()" />'.get_lang('Send').'</button>';
 	echo '</form>';
 }
 echo '</div>';

@@ -160,7 +160,7 @@ class TestTracking extends UnitTestCase {
 	 	$this->tracking = new Tracking();
 	 	$res = $this->tracking->get_avg_student_progress($_user['user_id'], $_course['cidReq']);
 		$this->assertWithinMargin(0,100,$res);
-	 	$res = $this->tracking->get_avg_student_progress($_user['user_id'], $_course['cidReq'], $_session['id_session']);
+	 	$res = $this->tracking->get_avg_student_progress($_user['user_id'], $_course['cidReq'], $_SESSION['id_session']);
 		$this->assertWithinMargin(0,100,$res);
 	 	$res = $this->tracking->get_avg_student_progress(null, $_course['cidReq']);
 		$this->assertNull($res);

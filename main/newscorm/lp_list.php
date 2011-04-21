@@ -198,10 +198,10 @@ if (is_array($flat_list)) {
             $start_time =  $end_time = '';         
         } else {
             if (!empty($details['publicated_on'])) {
-                $start_time = api_get_local_time($details['publicated_on']);
+                $start_time = api_convert_and_format_date($details['publicated_on'], DATE_TIME_FORMAT_LONG);
             }
             if (!empty($details['expired_on'])) {                
-                $end_time   = api_get_local_time($details['expired_on']);   
+                $end_time   = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_LONG);   
             }
         } 
           

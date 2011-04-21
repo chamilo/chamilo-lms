@@ -4843,7 +4843,7 @@ function WSUpdateUserApiKey($params) {
       // Save new fieldlabel into user_field table.
       $field_id = UserManager::create_extra_field($params['original_user_id_name'], 1, $params['original_user_id_name'], '');
       // Save the external system's id into user_field_value table.
-      $res = UserManager::update_extra_field_value($return, $params['original_user_id_name'], $params['original_user_id_value']);
+      $res = UserManager::update_extra_field_value($user_id, $params['original_user_id_name'], $params['original_user_id_value']);
     }
     else {
       return 0;

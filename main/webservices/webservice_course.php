@@ -65,7 +65,7 @@ class WSCourse extends WS {
 			$this->handleError($verifKey);
 		} else {
 			$results = array();
-			foreach($users as $user) {
+			foreach($courses as $course) {
 				$result_tmp = array();
 				$result_op = $this->deleteCourseHelper($course['course_id_field_name'], $course['course_id_value']);
 				$result_tmp['course_id_value'] = $course['course_id_value'];
@@ -299,18 +299,18 @@ class WSCourse extends WS {
 		if($verifKey instanceof WSError) {
 			$this->handleError($verifKey);
 		} else {
-                        $visibilities = split(',',$visibility);
-                        $vis = array('public' => '3', 'public-registered' => '2', 'private' => '1', 'closed' => '0');
-                        foreach ($visibilities as $p => $visibility) {
-                            $visibilities[$p] = $vis[$visibility];
-                        }
+            $visibilities = split(',',$visibility);
+            $vis = array('public' => '3', 'public-registered' => '2', 'private' => '1', 'closed' => '0');
+            foreach ($visibilities as $p => $visibility) {
+                $visibilities[$p] = $vis[$visibility];
+            }
 			$courses_result = array();
 			$category_names = array();
 
 			$courses = CourseManager::get_courses_list();
 			foreach($courses as $course) {
-                                //skip elements that do not match required visibility
-                                if (!in_array($course['visibility'],$visibilities)) { continue; }
+                //skip elements that do not match required visibility
+                if (!in_array($course['visibility'],$visibilities)) { continue; }
 				$course_tmp = array();
 				$course_tmp['id'] = $course['id'];
 				$course_tmp['code'] = $course['code'];
@@ -331,8 +331,8 @@ class WSCourse extends WS {
 				$user_list = CourseManager::get_user_list_from_course_code($course['code'], false);
 				$course_tmp['number_students'] = count($user_list);
 
-				// Determining external course id
-				$course_tmp['external_course_id'] = CourseManager::get_course_extra_field_value($course_field_name, $course['code']);
+				// Determining external course id - this code misses the external course id field name
+				// $course_tmp['external_course_id'] = CourseManager::get_course_extra_field_value($course_field_name, $course['code']);
 
 
 				$courses_result[] = $course_tmp;

@@ -432,6 +432,7 @@ class SimpleLexer {
      *    @access private
      */
     function _reduce($raw) {
+        $match = array();
         if ($action = $this->_regexes[$this->_mode->getCurrent()]->match($raw, $match)) {
             $unparsed_character_count = strpos($raw, $match);
             $unparsed = substr($raw, 0, $unparsed_character_count);

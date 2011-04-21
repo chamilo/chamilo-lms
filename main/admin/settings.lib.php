@@ -518,9 +518,11 @@ function handle_search() {
     if (is_array($values)) {
         foreach ($values as $key => $value) {
             $element = & $form->createElement('radio', 'search_enabled', '', get_lang($value['display_text']), $value['value']);
+            /* $hide_element is not defined
             if ($hide_element) {
                 $element->freeze();
             }
+            */
             $group[] = $element;
         }
     }
@@ -649,7 +651,7 @@ function handle_search() {
             $list_of_programs = array('pdftotext','ps2pdf', 'catdoc','html2text','unrtf', 'catppt', 'xls2csv');
             
             foreach($list_of_programs as $program) {
-                $output = null;
+                $output = $ret_val = null;
                 exec("which $program", $output, $ret_val);
                 $icon = Display::return_icon('bullet_red.gif', get_lang('NotInstalled'));
                 if (!empty($output[0])) {

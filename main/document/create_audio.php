@@ -382,6 +382,7 @@ function downloadMP3_google($filepath, $dir){
 	if(!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
 		return;	
 	}
+    global $_course, $_user;
 	
 	$clean_title=trim($_POST['title']);
 	$clean_text=trim($_POST['text']);
@@ -438,6 +439,7 @@ function downloadMP3_pediaphone($filepath, $dir){
 	if(!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
 		return;	
 	}
+    global $_course, $_user;
 	$clean_title=trim($_POST['title']);
 	$clean_text=trim($_POST['text']);
 	if(empty($clean_title) || empty($clean_text)){ 
@@ -484,7 +486,7 @@ function downloadMP3_pediaphone($filepath, $dir){
 			$url_pediaphon='http://www.pediaphon.org/~bischoff/radiopedia/sprich_multivoice_fr.cgi';
 		}
 	
-		file_put_contents($documentPath, file_get_contents($url_pediaphon."?stimme=".$clean_voice."&inputtext=".urlencode($clean_text)."&speed=".$clean_speed."&go=Sprich"));///speed
+		file_put_contents($documentPath, file_get_contents($url_pediaphon."?stimme=".$clean_voices."&inputtext=".urlencode($clean_text)."&speed=".$clean_speed."&go=Sprich"));///speed
 		//add document to database
 		$current_session_id = api_get_session_id();
 		$groupId=$_SESSION['_gid'];

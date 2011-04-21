@@ -57,8 +57,9 @@ function resize_image($image, $target_width, $target_height, $slideshow = 0) {
 		$result[] = $new_sizes['height'];
 		$result[] = $new_sizes['width'];
 	} else {
-		$result[] = $image_height;
-		$result[] = $image_width;
+        $size = api_getimagesize($image);
+		$result[] = $size[1];
+		$result[] = $size[0];
 	}
 	return $result;
 }

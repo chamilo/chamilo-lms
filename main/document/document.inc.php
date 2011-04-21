@@ -110,7 +110,7 @@ function create_document_link($document_data, $show_as_icon = false) {
     $use_document_title = api_get_setting('use_document_title');
     
     // Get the title or the basename depending on what we're using
-    if ($use_document_title == 'true' && $id['title'] != '') {
+    if ($use_document_title == 'true' && $document_data['title'] != '') {
         $title = $document_data['title'];
     } else {
         $title = basename($document_data['title']);
@@ -170,7 +170,7 @@ function create_document_link($document_data, $show_as_icon = false) {
     if ($path == '/shared_folder') {
         $tooltip_title_alt = get_lang('UserFolders');
     } elseif(strstr($path, 'shared_folder_session_')) {
-        $tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name($current_session_id).')';
+        $tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name().')';
     } elseif(strstr($tooltip_title, 'sf_user_')) {
         $userinfo = Database::get_user_info_from_id(substr($tooltip_title, 8));
         $tooltip_title_alt = get_lang('UserFolder').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
@@ -409,27 +409,29 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
         $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),array(), 22);
     } else {        
         if ($is_certificate_mode) {
-            $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&curdirpath=/certificates&selectcat='.$gradebook_category.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';            
+            // gradebook category doesn't seem to be taken into account
+            //$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&curdirpath=/certificates&selectcat='.$gradebook_category.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';            
+            $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&amp;id='.$document_id.$req_gid.'&curdirpath=/certificates">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';            
         } else {
             if (api_get_session_id()) {
                 if ($document_data['session_id'] == api_get_session_id()) {  
                     if ($extension=='svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
-                        $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
+                        $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&amp;id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
                     } elseif($extension=='png' || $extension=='jpg' || $extension=='jpeg' || $extension=='bmp' || $extension=='gif' ||$extension=='pxd' && api_get_setting('enabled_support_pixlr') == 'true'){
-                        $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';       
+                        $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&amp;id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';       
                     } else {
-                        $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
+                        $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&amp;id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
                     }
                 } else {
                     $modify_icons .= '&nbsp;'.Display::return_icon('edit_na.png', get_lang('Edit'),array(), 22).'</a>';                    
                 }
             } else {
                 if ($extension=='svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
-                    $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
+                    $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&amp;id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
                 } elseif($extension=='png' || $extension=='jpg' || $extension=='jpeg' || $extension=='bmp' || $extension=='gif' ||$extension=='pxd' && api_get_setting('enabled_support_pixlr') == 'true'){
-                    $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';       
+                    $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&amp;id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';       
                 } else {
-                    $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
+                    $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&amp;id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
                 }
             }
         }
@@ -441,12 +443,12 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
         } else {
             if (api_get_session_id()) {
                 if ($document_data['session_id'] == api_get_session_id()) {                       
-                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'&amp;move='.$document_id.$req_gid.'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
+                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$parent_id.'&amp;move='.$document_id.$req_gid.'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
                 } else {
                     $modify_icons .= '&nbsp;'.Display::return_icon('move_na.png', get_lang('Move'),array(), 22).'</a>';                        
                 }    
             } else {
-                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'&amp;move='.$document_id.$req_gid.'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
+                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$parent_id.'&amp;move='.$document_id.$req_gid.'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
             }
             if (api_is_allowed_to_edit() || api_is_platform_admin()) {
 				if ($visibility_icon=='invisible'){					
@@ -454,7 +456,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
 				}else{
 					$tip_visibility=get_lang('Hide');
 				}
-                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'&'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'">'.Display::return_icon($visibility_icon.'.png', $tip_visibility,'',22).'</a>';
+                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$parent_id.'&amp;'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'">'.Display::return_icon($visibility_icon.'.png', $tip_visibility,'',22).'</a>';
 
             }
         }        
@@ -462,19 +464,21 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
             $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'),array(), 22);
         } else {
             if (isset($_GET['curdirpath']) && $_GET['curdirpath']=='/certificates' && DocumentManager::get_default_certificate_id(api_get_course_id())==$id) {                
-                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'delete_certificate_id='.$id.'&selectcat='.$gradebook_category.' " onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
+                //$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'delete_certificate_id='.$id.'&selectcat='.$gradebook_category.' " onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
+                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'delete_certificate_id='.$id.'" onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
             } else {
                 if ($is_certificate_mode) {
-                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'&selectcat='.$gradebook_category.'" onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
+                    //$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'&selectcat='.$gradebook_category.'" onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
+                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
                 } else {
                     if (api_get_session_id()) {
                         if ($document_data['session_id'] == api_get_session_id()) {                        
-                            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
+                            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
                         } else {
                             $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'),array(), 22);                            
                         }
                     } else {                
-                        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
+                        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
                     }
                 }
             }

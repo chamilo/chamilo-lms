@@ -198,9 +198,9 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 			}
 			if (($curday > 0) && ($curday <= $numberofdays[$month])) {
 				$bgcolor = $class = 'class="days_week"';
-				$dayheader = "<b>$curday</b><br />";
+				$dayheader = Display::div($curday, array('class'=>'agenda_day'));
 				if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
-					$dayheader = "<b>$curday</b><br />";
+					
 					$class = "class=\"days_today\" style=\"width:10%;\"";
 				}
 				echo "<td ".$class.">".$dayheader;
@@ -213,7 +213,8 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
                         if (!empty($value['end_date']) && $value['end_date'] != '0000-00-00 00:00:00') {
                            $end_time    = '-&nbsp;<i>'.api_convert_and_format_date($value['end_date'], DATE_TIME_FORMAT_LONG);
                         }       
-                        $time = '<i>'.$start_time.'</i>&nbsp;'.$end_time;  
+                        //$time = '<i>'.$start_time.'</i>&nbsp;'.$end_time;  
+                        $time = '<i>'.$start_time.'</i>';
 
 				        switch($value['calendar_type']) {
                             case 'personal':
@@ -235,12 +236,10 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 				        $result = '<div class="rounded_div_agenda" style="background-color:'.$bg_color.';">';
                                                                     
                         $value['title'] = Display::tag('strong', $value['title']);                                  
-                        $result .= $time.' - '.$subtitle.'<br />'.$value['title'];                        
+                        $result .= $time.' '.$subtitle.' '.$value['title'];                        
                         $result .= '</div>';
                         echo $result;
 				   }
-				
-	         
 				}
 				echo "</td>";
 				$curday ++;

@@ -484,9 +484,9 @@ function display_monthcalendar($month, $year, $agenda_items) {
 				if (($curday>0) && ($curday<=$numberofdays[$month])) {
 
 					$bgcolor = $ii<5 ? 'class="row_odd"' : 'class="row_even"';
-					$dayheader = "$curday";
+					$dayheader = Display::div($curday, array('class'=>'agenda_day'));
 
-					if (key_exists($curday, $agenda_items)) {					    
+					if (key_exists($curday, $agenda_items)) {				    
 					    $dayheader = Display::div($curday, array('class'=>'agenda_day'));
 						foreach ($agenda_items[$curday] as $value) {
     							$some_content = false;				
@@ -501,7 +501,8 @@ function display_monthcalendar($month, $year, $agenda_items) {
     								if (!empty($value['end_date']) && $value['end_date'] != '0000-00-00 00:00:00') {
     								   $end_time 	= '-&nbsp;<i>'.api_convert_and_format_date($value['end_date'],DATE_TIME_FORMAT_LONG);
     								}		
-    								$time = '<i>'.$start_time.'</i>&nbsp;'.$end_time;
+    								//$time = '<i>'.$start_time.'</i>&nbsp;'.$end_time;
+    								$time = '<i>'.$start_time.'</i>';
     												
     								switch($value['calendar_type']) {
     								    case 'personal':
@@ -524,13 +525,13 @@ function display_monthcalendar($month, $year, $agenda_items) {
     								$dayheader.= '<div class="rounded_div_agenda" style="background-color:'.$bg_color.';">';
     							                                                    
     								$value['title'] = Display::tag('strong', $value['title']);									
-    								$dayheader .= $time.' '.$subtitle.'<br />'.$value['title'];
+    								$dayheader .= $time.' '.$subtitle.' '.$value['title'];
     								$dayheader .= '</div>';
     							}
     							
     							//Do not show links with no content
     							if (!$some_content) {
-    								$dayheader = $curday;
+    								$dayheader = Display::div($curday, array('class'=>'agenda_day'));
     							}						    
 						}
 					}

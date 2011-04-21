@@ -271,15 +271,15 @@ padding-top:10px;
 .rounded_div_agenda {
 	background: none repeat scroll 0 0 #FFFFFF;
         
-    -webkit-border-radius: 11px;
-    -opera-border-radius: 11px;
-    -moz-border-radius: 11px;
-    border-radius: 11px;
+    -webkit-border-radius: 6px;
+    -opera-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
         
-    -webkit-box-shadow: 0 4px 18px #C8C8C8;
-    -opera-box-shadow: 0 4px 18px #C8C8C8;
-    -moz-box-shadow: 0 4px 18px #C8C8C8;
-    box-shadow: 0 4px 18px #C8C8C8;
+    -webkit-box-shadow: 0 2px 5px #C8C8C8;
+    -opera-box-shadow: 0 2px 5px #C8C8C8;
+    -moz-box-shadow: 0 2px 5px #C8C8C8;
+    box-shadow: 0 2px 5px #C8C8C8;
     
     float: left;
     height: auto;
@@ -290,10 +290,24 @@ padding-top:10px;
 
 .agenda_day {
 	float:left;
-	margin:5px 5px 10px 5px;    
-	width:100%;
+	    
+	width:100%;	
+    background-color: #F8F9FF;    
+    color: #666666;
+    line-height: 16px;
+    overflow: hidden;    
+	margin-bottom:5px;
 }
-
+.days_today .agenda_day {
+    float:left;      
+	  
+    width:100%; 
+    background-color: #FAD163;    
+    color: #666666;
+    line-height: 16px;
+    overflow: hidden;    
+    margin-bottom:5px;    
+}
 
 a.tag {
     background-color: #E0EAF1;

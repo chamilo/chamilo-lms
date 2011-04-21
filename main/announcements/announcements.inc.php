@@ -101,7 +101,7 @@ class AnnouncementManager  {
 	*/
 	public static function display_announcement($announcement_id) {	
 		if ($announcement_id != strval(intval($announcement_id))) { return false; } // potencial sql injection
-	
+        global $charset;
 		$tbl_announcement 	= Database::get_course_table(TABLE_ANNOUNCEMENT);
 		$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 	    

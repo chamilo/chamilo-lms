@@ -1517,6 +1517,7 @@ class UserManager
 						$row_df = Database::fetch_array($res_df);
 						$fval = $row_df['fval_df'];
 					}
+                    // We get here (and fill the $extra_data array) even if there is no user with data (we fill it with default values)
 					if ($prefix) {
 						if ($row['type'] ==  USER_FIELD_TYPE_RADIO) {
 							$extra_data['extra_'.$row['fvar']]['extra_'.$row['fvar']] = $fval;

@@ -1,0 +1,76 @@
+wirisimageservicehost = services.wiris.net
+//wirisimageservicehost = localhost
+wirisimageserviceport = 80
+wirisimageservicepath = /demo/formula/render
+//wirisimageservicepath = /chamilo/main/inc/lib/fckeditor/editor/plugins/fckeditor_wiris/cache
+wirisimageserviceversion = 2.0
+
+wiristransparency = true
+#wirisimagebgcolor = #ffffff
+#wirisimagefontsize = 16
+#wirisimageidentcolor = #000000
+#wirisimagenumbercolor = #000000
+#wirisimagesymbolcolor = #000000
+#wirisimageidentmathvariant = italic-sans-serif
+#wirisimagenumbermathvariant = sans-serif
+#wirisimagefontident = Courier
+#wirisimagefontnumber = Dialog
+#wirisimagefontranges = font1, font2
+#font1 = x3b1-x3ff;DialogInput,105
+#font2 = x41-x5A;FreeSans
+
+wirisformulaeditorcodebase = http://services.wiris.net/demo/formula/codebase/
+//wirisformulaeditorcodebase = http://localhost/chamilo/main/inc/lib/fckeditor/editor/plugins/fckeditor_wiris/
+wirisformulaeditorarchive = wiriseditor.jar
+wirisformulaeditorcode = WirisFormulaEditor
+wirisformulaeditorlang = en
+
+//////
+
+wiriscascodebase = http://www.wiris.net/demo/wiris/wiris-codebase
+//wiriscascodebase = http://www.juntadeandalucia.es/averroes/wiris/wiris-codebase
+//wiriscascodebase = http://herramientas.educa.madrid.org/wiris/wiris-codebase
+//wiriscascodebase = http://nea.educastur.princast.es/wiris/wiris-codebase
+//wiriscascodebase = http://www.educa.jcyl.es/wiris/wiris-codebase
+//wiriscascodebase = http://calculadora.edu365.cat/wiris/wiris-codebase
+//wiriscascodebase = http://www.wiris.ee/wiris/wiris-codebase
+//wiriscascodebase = http://users.wirisonline.net/applet
+//wiriscascodebase = http://wiris.schule.at/wiris-codebase
+
+
+wiriscasarchive = wrs_net_%LANG.jar
+//wiriscasarchive = wrs_andalucia_es.jar
+//wiriscasarchive = wrs_cam_es.jar
+//wiriscasarchive = wrs_asturias_es.jar
+//wiriscasarchive = wrs_castleon_es.jar
+//wiriscasarchive = wrs_edu365_ca.jar
+//wiriscasarchive = wrs_estonia_et.jar
+//wiriscasarchive = wrs_wnl_nl.jar
+//wiriscasarchive = wrs_austria_de_en.jar
+
+
+wiriscasclass = WirisApplet_net_%LANG
+//wiriscasclass = WirisApplet_andalucia_es
+//wiriscasclass = WirisApplet_cam_es
+//wiriscasclass = WirisApplet_asturias_es
+//wiriscasclass = WirisApplet_castleon_es
+//wiriscasclass = WirisApplet_edu365_ca
+//wiriscasclass = WirisApplet_estonia_et
+//wiriscasclass = WirisApplet_wnl_nl
+//wiriscasclass = WirisApplet_austria_de_en
+
+
+wiriscaslanguages = en, es, fr, it, nl, et, ca, eu, pt, de
+CAS_width = 450
+CAS_height = 400
+wirisproxy = false
+wirisproxy_host =
+wirisproxy_port =
+
+//////
+
+// Place to store the cached images.
+//wiriscachedirectory = /var/cache
+
+// Place to store the formulas.
+//wirisformuladirectory = /var/formulas

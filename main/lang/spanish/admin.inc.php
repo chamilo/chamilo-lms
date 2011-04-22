@@ -1289,7 +1289,7 @@ $SSOServerUnAuthURIComment = "Dirección de la página del servidor que desconec
 $SSOServerProtocolTitle = "Protocolo del servidor Single Sign On";
 $SSOServerProtocolComment = "Prefijo que indica el protocolo del dominio del servidor de Single Sign On (si su servidor lo permite, recomendamos https:// pues protocolos no seguros son un peligro para un sistema de autentificación)";
 $EnabledWirisTitle = "Editor matemático WIRIS";
-$EnabledWirisComment = "Habilitar el editor matemático WIRIS";
+$EnabledWirisComment = "Activar el editor matemático WIRIS. Instalando este plugin obtendrá WIRIS editor y WIRIS CAS. <br/>La activación no se realiza completamente si previamente no ha descargado el <a href=\"http://www.wiris.com/plugins/editors/download?filter=fckeditor\" target=\"_blank\">PHP plugin for FCKeditor de WIRIS</a> y descomprimido su contenido en el directorio de Chamilo main/inc/lib/fckeditor/editor/plugins/fckeditor_wiris/ <br/>Esto es necesario debido a que Wiris es un software propietario y los servicios de Wiris son <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">comerciales</a>. Para realizar ajustes en el plugin edite el archivo configuration.ini o sustituya su contenido por el de configuration.ini.default que acompaña a Chamilo.";
 $AllowSpellCheckTitle = "Corrector ortográfico";
 $AllowSpellCheckComment = "Activar el corrector ortográfico";
 $EnabledSVGTitle = "Creación y edición de archivos SVG";

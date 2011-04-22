@@ -29,6 +29,8 @@ parent._wrs_conf_createimagePath = FCKConfig.PluginsPath + 'fckeditor_wiris/inte
 parent._wrs_conf_createcasimagePath = FCKConfig.PluginsPath + 'fckeditor_wiris/integration/createcasimage.php';	// Specifies where is createcasimage script
 //parent._wrs_conf_getmathmlPath = FCKConfig.PluginsPath + 'fckeditor_wiris/integration/getmathml.php';				// Specifies where is getmathml script
 
+var _wrs_conf_saveMode = 'tags';		// this value can be 'tags', 'xml' or 'safeXml'.
+
 /* Vars */
 parent._wrs_int_editorIcon = FCKConfig.PluginsPath + 'fckeditor_wiris/core/wiris-formula.gif';
 parent._wrs_int_CASIcon = FCKConfig.PluginsPath + 'fckeditor_wiris/core/wiris-cas.gif';
@@ -94,15 +96,15 @@ if (parent._wrs_conf_editorEnabled) {
 	FCKCommands.RegisterCommand(
 		'fckeditor_wiris_openFormulaEditor_aux',
 		new FCKDialogCommand(
-			'WIRIS Formula Editor',
-			'WIRIS Formula Editor',
+			'WIRIS editor',
+			'WIRIS editor',
 			parent._wrs_conf_editorPath,
 			500,
 			400
 		)
 	);
 	
-	var formulaItem = new FCKToolbarButton('fckeditor_wiris_openFormulaEditor', 'WIRIS Formula Editor');
+	var formulaItem = new FCKToolbarButton('fckeditor_wiris_openFormulaEditor', 'WIRIS editor');
 	formulaItem.IconPath = parent._wrs_int_editorIcon;
 
 	FCKToolbarItems.RegisterItem(
@@ -154,7 +156,7 @@ function wrs_int_openNewFormulaEditor(iframe) {
 		}
 	}
 	else {
-		FCKDialog.OpenDialog('WIRIS Formula Editor', 'WIRIS Formula Editor', parent._wrs_conf_editorPath, parent._wrs_conf_editorWidth, parent._wrs_conf_editorHeight);
+		FCKDialog.OpenDialog('WIRIS editor', 'WIRIS editor', parent._wrs_conf_editorPath, parent._wrs_conf_editorWidth, parent._wrs_conf_editorHeight);
 		wrs_int_hidePopUpButtons();
 	}
 }
@@ -177,7 +179,7 @@ function wrs_int_openNewCAS(iframe) {
 		}
 	}
 	else {
-		FCKDialog.OpenDialog('WIRIS Formula Editor', 'WIRIS Formula Editor', parent._wrs_conf_CASPath, parent._wrs_conf_CASWidth, parent._wrs_conf_CASHeight);
+		FCKDialog.OpenDialog('WIRIS CAS', 'WIRIS CAS', parent._wrs_conf_CASPath, parent._wrs_conf_CASWidth, parent._wrs_conf_CASHeight);
 		wrs_int_hidePopUpButtons();
 	}
 }
@@ -232,7 +234,7 @@ function wrs_int_openExistingFormulaEditor(iframe) {
 		parent._wrs_int_window = window.open(parent._wrs_conf_editorPath, 'WIRISFormulaEditor', parent._wrs_conf_editorAttributes);
 	}
 	else {
-		FCKDialog.OpenDialog('WIRIS Formula Editor', 'WIRIS Formula Editor', parent._wrs_conf_editorPath, parent._wrs_conf_editorWidth, parent._wrs_conf_editorHeight);	
+		FCKDialog.OpenDialog('WIRIS editor', 'WIRIS editor', parent._wrs_conf_editorPath, parent._wrs_conf_editorWidth, parent._wrs_conf_editorHeight);	
 		wrs_int_hidePopUpButtons();
 	}
 }
@@ -250,7 +252,7 @@ function wrs_int_openExistingCAS(iframe) {
 		parent._wrs_int_window = window.open(parent._wrs_conf_CASPath, 'WIRISCAS', parent._wrs_conf_CASAttributes);
 	}
 	else {
-		FCKDialog.OpenDialog('WIRIS Formula Editor', 'WIRIS Formula Editor', parent._wrs_conf_CASPath, parent._wrs_conf_CASWidth, parent._wrs_conf_CASHeight);
+		FCKDialog.OpenDialog('WIRIS CAS', 'WIRIS CAS', parent._wrs_conf_CASPath, parent._wrs_conf_CASWidth, parent._wrs_conf_CASHeight);
 		wrs_int_hidePopUpButtons();
 	}
 }

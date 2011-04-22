@@ -60,8 +60,8 @@ else {
 						<td>Width</td>
 						<td><input name="width" type="text" value="<?php echo $config['CAS_width']; ?>"/></td>					
 						<td><input name="executeonload" type="checkbox"/> Calculate on load</td>
-						<td><input name="toolbar" type="checkbox"/> Show toolbar</td><!--Chamilo delete default checked -->
-						<!-- -->
+						<td><input name="toolbar" type="checkbox" checked /> Show toolbar</td>
+						
 						<td>
 							Language
 							

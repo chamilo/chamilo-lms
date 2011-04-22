@@ -83,7 +83,7 @@ function wrs_secureStripslashes($element) {
 	return stripslashes($element);
 }
 
-set_magic_quotes_runtime(0);
+@set_magic_quotes_runtime(0);
 
 if (get_magic_quotes_gpc() == 1) {
 	$_REQUEST = array_map('wrs_secureStripslashes', $_REQUEST);

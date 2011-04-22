@@ -3115,6 +3115,7 @@ function rmdirr($dirname) {
  * @param copied_files the returned array of copied files
  */
 function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
+    if (empty($dest)) { return false; }
     // Simple copy for a file
     if (is_file($source)) {
         $path_info = pathinfo($source);

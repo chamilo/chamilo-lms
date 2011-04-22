@@ -583,11 +583,11 @@ class TestMainApi extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testCopyr(){
-		$source = api_get_path(SYS_CODE_PATH).'app_share/DokeosAppShare.exe';
+	function testCopyr_file_to_nothing(){
+		$source = api_get_path(SYS_CODE_PATH).'admin/add_users_to_session.php';
 		$dest = '';
 		$res = copyr($source, $dest, $exclude=array(), $copied_files=array());
-		$this->assertTrue(is_null($res));
+		$this->assertFalse($res,'Function coyr() should have not proceeeded because of empty destination');
 		//var_dump($res);
 	}
 

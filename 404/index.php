@@ -6,7 +6,8 @@
 $language_file = array('document', 'index');
 require_once('../main/inc/global.inc.php');
 
-Display::display_header("File not found");
-echo '<p>'.get_lang('FileNotFound').'</p>';
+$msg = get_lang('FileNotFound');
+Display::display_header($msg);
+Display::display_error_message($msg);
 Display::display_footer();
 ?>

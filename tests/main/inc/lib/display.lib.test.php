@@ -62,27 +62,6 @@ class TestDisplay extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testdisplay_complex_table_row() {
-		$properties='';
-		$table_row='';
-		ob_start();
-		$res=Display::display_complex_table_row($properties, $table_row);
-		ob_end_clean();
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
-	/**
-	*	display html footer of table
-	*/
-	public function testdisplay_table_footer() {
-		ob_start();
-		$res=Display::display_table_footer();
-		ob_end_clean();
-		$this->assertNull($res);
-		//var_dump($res);
-	}
-
 	public function testdisplay_sortable_table() {
 		$header='';
 		$content='';

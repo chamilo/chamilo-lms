@@ -30,4 +30,5 @@ $SessionName = "Session name";
 $SessionCategory = "Sessions categories";
 $SessionData = "Session's data";
 $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "The learning path auto-launch setting is ON. When students enter this course, they will be automatically redirected to the learning path marked as auto-launch.";
+$ToolSearch = "Search";
 ?>

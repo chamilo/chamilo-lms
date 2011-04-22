@@ -264,4 +264,5 @@ $Pediaphon = "Usa il servizio audio Pediaphon";
 $HelpPediaphon = "I testi immessi possono avere la dimensione di svariate migliaia di caratteri e le voci prodotte possono essere maschile o femminile (a seconda della lingua). I file audio saranno salvati automaticamente nella cartella attuale.";
 $FirstSelectALanguage = "Seleziona prima una lingua";
 $RenameAndComment = "Cambia nome e commenta";
+$YouAreCurrentlyUsingXOfYourX = "Stai usando %s MB (%s) degli %s MB a disposizione.";
 ?>

@@ -1041,4 +1041,6 @@ $PressRecordButton = "To start recording press the red button";
 $VoiceRecord = "Voice record";
 $BrowserNotSupportNanogongSend = "Your browser does not send your recording to the platform, although you can save on your computer disk and send it later. To have all the features, we recommend using advanced browsers such as Firefox or Chrome.";
 $FileExistRename = "Already exist a file with the same name.  Please, rename the file.";
+$GradebookAndAttendances = "Gradebook and attendances";
+$SelectADateRange = "Select a date range";
 ?>

@@ -1382,4 +1382,21 @@ $NeverConnected = "Nunca conectou";
 $EnableAccessibilityFontResizeTitle = "Recurso de acessibilidade de redimensionar fonte";
 $EnableAccessibilityFontResizeComment = "Habilite esta opção para mostrar uma definido de opções de fontes de redimensionamento no canto superior direito do seu campus. Isso permitirá a deficientes visuais ler o conteúdo do seu curso com mais facilidade.";
 $GlobalEvent = "Eventos da plataforma";
+$SearchEnabledTitle = "Busca por texto completo";
+$SearchEnabledComment = "Esta funcionalidade permite indexar a maior parte dos documentos enviados ao portal, em seguida, fornecer um recurso de pesquisa para os usuários.
+Este recurso não indexará documentos que já foram enviados, por isso é importante permitir  (se quiser) desde o início de sua implementação.
+Uma vez habilitado, uma caixa de busca irá aparecer na lista de cursos de cada usuário. Procurando por um termo específico trará uma lista de documentos correspondentes, exercícios ou tópicos do fórum, filtrado em função da disponibilidade desses conteúdos para o usuário.";
+$SpecificSearchFieldsAvailable = "Disponibilizar campos de busca personalizados";
+$XapianModuleInstalled = "Módulo Xampian instalado";
+$ProgramsNeededToConvertFiles = "Programas necessários para converter os arquivos";
+$YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool = "Você está usando Chamilo em uma plataforma Windows, infelizmente não é possível converter os documentos, a fim de pesquisar o conteúdo utilizando esta ferramenta";
+$HideCoursesInSessionsTitle = "Ocultar lista de cursos nas sessões";
+$HideCoursesInSessionsComment = "Ao mostrar o bloco de sessão em sua página de cursos, ocultar a lista de cursos dentro dessa sessão (apenas mostrá-los dentro da sessão específica).";
+$ShowGroupsToUsersTitle = "Exibir as turmas aos usuários";
+$ShowGroupsToUsersComment = "Mostrar as turmas de usuários. As turmas são uma característica que lhe permitem registrar/desregistrar grupos de usuários em uma sessão ou de um curso diretamente, reduzindo a inconveniência administrativa. Quando você escolhe esta opção, os alunos serão capazes de ver em qual classe eles são através de sua interface de rede social.";
+$HomepageViewActivityBig = "Visualização grande de atividade (estilo iPad)";
+$EnableQuizScenarioTitle = "Habilitar Cenário Quiz";
+$EnableQuizScenarioComment = "Ativar o cenário do quiz";
+$EnableNanogongTitle = "Ativar o gravador - player de voz Nanogong";
+$EnableNanogongComment = "Nanongong é um gravador - o player de voz permite gravar sua voz e enviá-la para a plataforma ou baixá-lo em seu disco rígido. Ele também permite que você toque o que gravou. Os alunos precisam apenas de um microfone e alto-falantes, e aceitar o carregamento do applet. É muito útil para aprendizes da língua para ouvir a sua voz depois de ouvir a pronúncia correta proposta pela professora em outro arquivo de voz wav ou mp3.";
 ?>

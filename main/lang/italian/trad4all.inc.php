@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $DeleteAllAttendances = "Elimina tutte le presenze registrate";
+$SearchXapianModuleNotInstalled = "Il modulo Xapian non è installato";
 $Title = "Titolo";
 $By = "Da";
 $UsersOnline = "Utenti collegati";
@@ -1011,6 +1012,7 @@ $ContactInformationHasNotBeenSent = "Le tue informazioni di contatto non possono
 $FileDeleted = "File eliminato";
 $MyClasses = "Le mie classi";
 $PublicationDate = "Data di pubblicazione";
+$CorrectAndRate = "Correggi e valuta";
 $ItemAdded = "Elemento aggiunto";
 $ItemDeleted = "Elemento eliminato";
 $ItemUpdated = "Elemento modificato";
@@ -1019,4 +1021,30 @@ $MyStatistics = "Statistiche";
 $FromDateXToDateY = "Dal %s al %s";
 $CourseThematicAdvance = "Avanzamento nel modulo";
 $Clean = "Pulire";
+$MailNotifyInvitation = "Notifica via email gli inviti ricevuti";
+$MailNotifyMessage = "Notifica per email i nuovi messaggi personali";
+$MailNotifyGroupMessage = "Notifica per email i nuovi messaggi al gruppo";
+$ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField = "Clicca nel riquadro per selezionare i file nel tuo computer (puoi usare CTRL+Click! per selezioni multiple) o trascina e rilascia i files dal computer al riquadro.";
+$Simple = "Semplice";
+$Multiple = "Multipla";
+$UploadFiles = "Fai Click! o trascina e rilascia qui i file per caricarli";
+$SupportedFormatsForIndex = "Formati consentiti per l'indicizzazione";
+$Installed = "Installato";
+$NotInstalled = "Non installato";
+$Settings = "Configurazione";
+$OnlyLettersAndNumbers = "Solo lettere (a-z) e numeri (0-9)";
+$CheckFilePermissions = "Verifica i permessi del file";
+$AddedToALP = "Aggiunto ad un modulo";
+$NotAvailable = "Non disponibile";
+$NanogongNoApplet = "Non trovo l'applet Nanogong";
+$NanogongRecordBeforeSave = "Prima di inviare un file devi registrarlo";
+$NanogongGiveTitle = "Non hai dato un nome al file";
+$NanogongFailledToSubmit = "Impossibile caricare il file audio";
+$NanogongSubmitted = "File audio caricato";
+$RecordMyVoice = "Registra la voce";
+$PressRecordButton = "Per registrare clicca sul pulsante rosso";
+$VoiceRecord = "Registratore audio";
+$BrowserNotSupportNanogongSend = "Il browser non permette l'invio diretto alla piattaforma: salva il file e caricalo successivamente. Sei puoi usa Firefox o Chrome.";
+$FileExistRename = "Un file con lo stesso nome è già presente, dài un nome diverso";
+$GradebookAndAttendances = "Registro e presenze";
 ?>

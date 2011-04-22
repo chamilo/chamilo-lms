@@ -375,7 +375,15 @@ $MultipleAnswerCombinationTrueFalse = "Combinazione V/F/Non So";
 $DontKnow = "Non so";
 $False = "Falso";
 $DoubtScore = "Non so";
+$HotSpotDelineation = "Individuazione di aree calde";
 $PropagateNegativeResults = "Distribuisci i risultati negativi tra i quesiti";
 $InsertALinkToThisQuestionInTheExercise = "Usa il quesito come collegamento (non copiarlo nel Test)";
 $OnlyShowScore = "Mostra solo il punteggio";
+$ImportExcelQuiz = "Importa un esercizio da MS Excel";
+$DownloadExcelTemplate = "Scarica il modello xls";
+$ExerciseWillBeActivatedFromXToY = "Esercizio aperto dal %s al %s";
+$EnableStartTime = "Attiva il tempo iniziale";
+$EnableEndTime = "Attiva il tempo di conclusione";
+$ExerciseAvailableFromX = "Esercizio aperto dal %s";
+$ExerciseAvailableUntilX = "Esercizio aperto fino al %s";
 ?>

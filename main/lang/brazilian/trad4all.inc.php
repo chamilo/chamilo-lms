@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $DeleteAllAttendances = "Apagar todas as presenças criadas";
+$SearchXapianModuleNotInstalled = "O módulo de busca Xampian não está instalado";
 $Title = "Título";
 $By = "Por";
 $UsersOnline = "Usuários online";
@@ -934,7 +935,7 @@ Ao saber um pouco mais sobre você, um de nossos mais importantes usuários, que
 <br />
 Ao preencher este formulários, você aceita que a Associação Chamilo ou seus membros ou a comunidade possam lhe enviar email sobre eventos ou atualizações importantes no software Chamilo. Isto ajudará a comunidade a crescer como uma entidade organizada onde informação flua, com respeito permanente de seu tempo e de sua privacidade.<br />
 <br />
-Por favor, note que você <b>não é obrigado</b> a preencher este formulário. Se você quer permanecer anónimo, nós vamos perder a oportunidade de oferecer-lhe todos os privilégios de ser um administrador de um portal registrado, mas nós respeitaremos sua decisão. Deixe simplesmente este formulário vazio e clique \\"Próximo\\".<br /><br />";
+Por favor, note que você <b>não é obrigado</b> a preencher este formulário. Se você quer permanecer anónimo, nós vamos perder a oportunidade de oferecer-lhe todos os privilégios de ser um administrador de um portal registrado, mas nós respeitaremos sua decisão. Deixe simplesmente este formulário vazio e clique \"Próximo\".<br /><br />";
 $CompanyActivity = "Atividade de sua companhia";
 $DateUnLock = "Data de desbloqueio";
 $DateLock = "Data de bloqueio";
@@ -1018,4 +1019,27 @@ $Clean = "Limpar";
 $MailNotifyInvitation = "Notifique por email para novos convites recebidos";
 $MailNotifyMessage = "Notifique por email para novas mensagens pessoais recebidas";
 $MailNotifyGroupMessage = "Notifique por email para novas mensagens recebidas no grupo";
+$ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField = "Clique na caixa abaixo para selecionar arquivos de seu computador (você pode usar CTRL + clique para selecionar vários arquivos de uma vez) ou arraste e solte alguns arquivos do seu desktop diretamente sobre a caixa abaixo. O sistema vai lidar com o resto!";
+$Simple = "Simples";
+$Multiple = "Múltiplo";
+$UploadFiles = "Clique ou arraste e solte arquivos aqui para carregá-los";
+$SupportedFormatsForIndex = "Os formatos suportados para o índice";
+$Installed = "Instalado";
+$NotInstalled = "Não instalado";
+$Settings = "Configurações";
+$OnlyLettersAndNumbers = "Somente letras (a-z) e números (0-9)";
+$CheckFilePermissions = "Verifique as permissões do arquivo";
+$AddedToALP = "Adicionado a uma Rota de Aprendizagem";
+$NotAvailable = "Não está disponível";
+$NanogongNoApplet = "Não foi possível encontrar a applet Nanogong";
+$NanogongRecordBeforeSave = "Antes de tentar enviar um arquivo você deve fazer uma gravação";
+$NanogongGiveTitle = "Você não deu um nome ao arquivo";
+$NanogongFailledToSubmit = "Falha ao enviar a gravação de voz";
+$NanogongSubmitted = "A gravação de voz foi enviada";
+$RecordMyVoice = "Gravar a minha voz";
+$PressRecordButton = "Para iniciar a gravação pressione o botão vermelho";
+$VoiceRecord = "Gravação de voz";
+$BrowserNotSupportNanogongSend = "Seu navegador não enviou a gravação para a plataforma, entretanto é possível salvar a gravação no disco de seu computador e enviar posteriormente. Para ter todos os recursos do sistema recomendamos que utilize um navegador avançado como Firefox ou Chrome.";
+$FileExistRename = "Já existe um arquivo com o mesmo nome. Por favor, renomeie o arquivo.";
+$GradebookAndAttendances = "Avaliações e Frequências";
 ?>

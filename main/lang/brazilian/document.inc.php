@@ -266,4 +266,5 @@ $Pediaphon = "Usar o serviço de áudio da Pediaphon";
 $HelpPediaphon = "Suporta o texto com milhares de caracteres em vários tipos de vozes masculinas e femininas (dependendo do idioma). Os arquivos de áudio serão gerados e salvos automaticamente para o diretório Chamilo em que você está.";
 $FirstSelectALanguage = "Por favor, selecione um idioma";
 $RenameAndComment = "Renomear e comentar";
+$YouAreCurrentlyUsingXOfYourX = "Você está usando %s MB (%s) de seus %s MB.";
 ?>

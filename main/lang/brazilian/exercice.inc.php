@@ -375,7 +375,15 @@ $MultipleAnswerCombinationTrueFalse = "Combinação verdadeira/falsa/não sei";
 $DontKnow = "Não sei";
 $False = "Falso";
 $DoubtScore = "Não sei";
+$HotSpotDelineation = "Delineamento Hotspot";
 $PropagateNegativeResults = "Propagar resultados negativos entre as questões";
 $InsertALinkToThisQuestionInTheExercise = "Use esta questão no teste como um link (não uma cópia)";
 $OnlyShowScore = "Mostrar apenas a pontuação";
+$ImportExcelQuiz = "Importar exercícios do Excel";
+$DownloadExcelTemplate = "Baixe o Modelo do Excel";
+$ExerciseWillBeActivatedFromXToY = "O exercício será ativado a partir de %s até %s";
+$EnableStartTime = "Ativar a hora de início";
+$EnableEndTime = "Ativar o tempo final";
+$ExerciseAvailableFromX = "Exercício disponível a partir de %s";
+$ExerciseAvailableUntilX = "Exercício disponível até %s";
 ?>

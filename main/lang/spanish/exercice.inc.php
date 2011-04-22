@@ -381,4 +381,9 @@ $InsertALinkToThisQuestionInTheExercise = "Insertar esta pregunta en el ejercici
 $OnlyShowScore = "Mostrar solo el resultado";
 $ImportExcelQuiz = "Importar ejercicio via Excel";
 $DownloadExcelTemplate = "Descargar plantilla Excel";
+$ExerciseWillBeActivatedFromXToY = "El ejercicio estará visible del %s al %s";
+$EnableStartTime = "Usar tiempo de publicación";
+$EnableEndTime = "Usar tiempo de fin de publicación";
+$ExerciseAvailableFromX = "Ejercicio disponible desde el %s";
+$ExerciseAvailableUntilX = "Ejercicio disponible hasta el %s";
 ?>

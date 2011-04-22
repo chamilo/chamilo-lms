@@ -294,4 +294,7 @@ $ExerciseStartDate = "Data di pubblicazione";
 $OnlyBestResultsPerStudent = "In caso di tentativi multipli mostra solo il risultato migliore di ogni corsista";
 $BestAttempt = "Miglior risultato";
 $ExercisesInTimeProgressChart = "Avanzamento progressivo dei propri risultati nei test rispetto alla media dei corsisti";
+$AverageIsCalculatedBasedInAllAttempts = "La media è calcolata su tutti i tentativi effettuati";
+$AverageIsCalculatedBasedInTheLatestAttempts = "La media è calcolata sugli ultimi tentativi effettuati";
+$LatestAttemptAverageScore = "Punteggio medio degli ultimi tentativi";
 ?>

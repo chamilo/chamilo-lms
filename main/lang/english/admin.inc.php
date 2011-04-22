@@ -1396,6 +1396,9 @@ $HideCoursesInSessionsComment = "When showing the session block in your courses 
 $ShowGroupsToUsersTitle = "Show classes to users";
 $ShowGroupsToUsersComment = "Show the classes to users. Classes are a feature that allow you to register/unregister groups of users into a session or a course directly, reducing the administrative hassle. When you pick this option, learners will be able to see in which class they are through their social network interface.";
 $HomepageViewActivityBig = "Big activity view (Ipad style)";
+$EnableQuizScenarioTitle = "Enable Quiz scenario";
+$EnableQuizScenarioComment = "From here you will be able to create exercises that propose different questions depending in the user's answers.";
 $EnableNanogongTitle = "Activate recorder - voice player Nanogong";
 $EnableNanogongComment = "Nanongong is a recorder - voice player that allows you to record your voice and send it to the platform or download it into your hard drive. It also lets you play what you recorded. The students only need a microphone and speakers, and accept the load applet when first loaded. It is very useful for language learners to hear his voice after listening the correct pronunciation proposed by teacher in another wav or mp3 voice file.";
+$ExerciseAndLPsAreInvisibleInTheNewCourse = "Exercises and learning paths are invisible in the new course";
 ?>

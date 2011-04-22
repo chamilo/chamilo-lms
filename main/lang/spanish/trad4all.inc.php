@@ -1043,4 +1043,6 @@ $PressRecordButton = "Para iniciar la grabación pulse el botón rojo";
 $VoiceRecord = "Grabación de voz";
 $BrowserNotSupportNanogongSend = "Su navegador no permite enviar su grabación a la plataforma, aunque sí podrá guardarla el el disco de su ordenador y enviarla más tarde. Para tener todas las prestaciones, le recomendamos usar navegadores avanzados como Firefox o Chrome.";
 $FileExistRename = "Ya existe un archivo con el mismo nombre. Por favor, de un nuevo nombre al archivo.";
+$GradebookAndAttendances = "Evaluaciones y asistencias";
+$SelectADateRange = "Escojer un rango de fechas";
 ?>

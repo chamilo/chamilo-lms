@@ -30,4 +30,5 @@ $SessionName = "Nome da sessao";
 $SessionCategory = "Categorias das sessões";
 $SessionData = "Dados da sessão";
 $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "Configura o auto-iniciar da Rota de Aprendizagem para ON . Quando os estudantes acessarem um curso, eles serão automaticamente redirecionados para a Rota de Aprendizagem marcada como inicialização automática.";
+$ToolSearch = "Ferramenta de busca";
 ?>

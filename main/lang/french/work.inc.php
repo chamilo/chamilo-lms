@@ -90,5 +90,5 @@ $ViewUsersWithoutTask = "Travaux manquants";
 $HomeworkCreated = "Une tâche a été ajoutée";
 $HomeworkHasBeenCreatedForTheCourse = "Une tâche a été ajoutée dans le cours";
 $PleaseCheckHomeworkPage = "Veuillez vérifier la page des tâches";
-$IncludedInEvaluation = "Inclus dans l'évaluation";
+$IncludedInEvaluation = "Inclus dans le cahier de notes";
 ?>

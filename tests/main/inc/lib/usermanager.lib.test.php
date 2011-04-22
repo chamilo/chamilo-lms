@@ -168,7 +168,8 @@ class TestUserManager extends UnitTestCase {
 
 	function testGetExtraUserData() {
 		$res=UserManager::get_extra_user_data(1, null,null,null);
-		$this->assertFalse($res);
+		$this->assertTrue(is_array($res),'Somehow there were no visible fields for user 1');
+        //since Chamilo 1.8.8 we always have 3 visible fields for notifications
 	}
 
 	function testGetExtraUserDataByField() {

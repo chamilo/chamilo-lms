@@ -228,6 +228,24 @@ class TestDocumentManager extends UnitTestCase {
 													  );
 		$this->assertTrue(is_bool($res));
 	}
+    function testdocuments_total_space() {
+        $to_group_id='0';
+        $res= DocumentManager::documents_total_space($to_group_id);
+        if(!is_null($res)):
+        $this->assertTrue(is_numeric($res));
+        endif;
+        //var_dump($res);
+    }
+
+    function testenough_space() {
+        $file_size='';
+        $max_dir_space='';
+        $res= DocumentManager::enough_space($file_size, $max_dir_space);
+        $this->assertTrue(is_bool($res));
+        //var_dump($res);
+    }
+
+    
  //The following function throws exceptions because of SimpleTest, because
  // it declares uncapturable headers
 /*	function teststring_send_for_download() {

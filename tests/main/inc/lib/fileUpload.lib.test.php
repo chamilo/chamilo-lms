@@ -117,32 +117,6 @@ class TestFileUpload extends UnitTestCase {
 
 		//space
 
-		function testdocuments_total_space() {
-			$to_group_id='0';
-			$res= documents_total_space($to_group_id);
-			if(!is_null($res)):
-			$this->assertTrue(is_numeric($res));
-			endif;
-			//var_dump($res);
-		}
-
-		function testenough_size() {
-			$fileSize='';
-			$dir='';
-			$maxDirSpace='';
-			$res= enough_size($fileSize, $dir, $maxDirSpace);
-			$this->assertTrue(is_bool($res));
-			//var_dump($res);
-		}
-
-		function testenough_space() {
-			$file_size='';
-			$max_dir_space='';
-			$res= enough_space($file_size, $max_dir_space);
-			$this->assertTrue(is_bool($res));
-			//var_dump($res);
-		}
-
 		function testDirTotalSpace() {
 			$dirPath= api_get_path(SYS_COURSE_PATH).'document/';
 			$res= dir_total_space($dirPath);

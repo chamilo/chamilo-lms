@@ -357,52 +357,50 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$
 /**
  * This function creates an empty Exercise in STATISTIC_TRACK_E_EXERCICES table.
  * After that in exercise_result.php we call the update_event_exercice() to update the exercise
- * @return $id the last id registered
+ * @return $id the last id registered, or false on error
  * @author Julio Montoya <gugli100@gmail.com>
  * @desc Record result of user when an exercice was done
 */
 function create_event_exercice($exo_id) {	
-	global $_user, $_configuration;
-    error_log('create_event_exercice');
-	$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-	$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-	$reallyNow = time();
-	if (isset($_user['user_id']) && $_user['user_id']!='') {
-		$user_id = "'".$_user['user_id']."'";
-	} else {
-		// anonymous
-		$user_id = "0";
-	}
-    //@todo who did this? should be remove, need other function instead
-	if(defined('ENABLED_LIVE_EXERCISE_TRACKING')){
-		$condition = ' WHERE ' .
-				'exe_exo_id =   '."'".Database::escape_string($exo_id)."'".' AND ' .
-				'exe_user_id =  '."'".api_get_user_id()."'".' AND ' .
-				'exe_cours_id = '."'".api_get_course_id()."'".' AND ' .
-				'status = '."'incomplete'".' AND '.
-				'session_id = '."'".api_get_session_id()."'";
-		$sql = Database::query('SELECT exe_id FROM '.$TABLETRACK_EXERCICES.$condition);
-		$row = Database::fetch_array($sql);
-		return $row['exe_id'];
-	}
-	// get exercise id
-	$sql_exe_id='SELECT exercises.id FROM '.$TBL_EXERCICES.' as exercises, '.$TABLETRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($exo_id).'"';
-	$res_exe_id=Database::query($sql_exe_id);
-	$row_exe_id=Database::fetch_row($res_exe_id);
-	$exercise_id = intval($row_exe_id[0]);
+    if (empty($exo_id) or (intval($exo_id)!=$exo_id)) { return false; }
+    //error_log('create_event_exercice');
+	$tbl_track_exe = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$tbl_exe = Database::get_course_table(TABLE_QUIZ_TEST);
+	$now = api_get_utc_datetime();
+	$uid = api_get_user_id();
 
-	// get expired_date
+    // First, check the exercise exists
+    $sql_exe_id="SELECT exercises.id FROM $tbl_exe as exercises WHERE exercises.id=$exo_id";
+    $res_exe_id=Database::query($sql_exe_id);
+    if ($res_exe_id === false) { return false; } //sql error
+    if (Database::num_rows($res_exe_id)<1) { return false;} //exe not found
+    $row_exe_id=Database::fetch_row($res_exe_id);
+    $exercise_id = intval($row_exe_id[0]);
+    // Second, check if the record exists in the database (looking for incomplete records)
+    $sql = "SELECT exe_id FROM $tbl_track_exe ";
+    $condition = " WHERE exe_exo_id =   $exo_id AND " .
+				"exe_user_id =  $uid AND " .
+				"exe_cours_id = '".api_get_course_id()."' AND " .
+				"status = 'incomplete' AND ".
+				"session_id = ".api_get_session_id();
+    $res = Database::query($sql.$condition);
+    if ($res === false) {return false;}
+    if (Database::num_rows($res) > 0) {
+        $row = Database::fetch_array($res);
+        return $row['exe_id'];
+    }
+
+	// No record was found, so create one
+	// get expire time to insert into the tracking record
 	require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 	$current_expired_time_key = get_time_control_key($exercise_id);
-
     if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
     	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
     } else {
     	$expired_date = '0000-00-00 00:00:00';
     }
-
-	$sql = "INSERT INTO $TABLETRACK_EXERCICES ( exe_user_id, exe_cours_id, expired_time_control, exe_exo_id, session_id)
-			VALUES (  ".$user_id.",  '".api_get_course_id()."' ,'".$expired_date."','".$exo_id."','".api_get_session_id()."')";
+	$sql = "INSERT INTO $tbl_track_exe ( exe_user_id, exe_cours_id, expired_time_control, exe_exo_id, session_id)
+			VALUES (  $uid,  '".api_get_course_id()."' ,'$expired_date','$exo_id','".api_get_session_id()."')";
 	$res = Database::query($sql);
 	$id= Database::insert_id();
 	return $id;

@@ -7,13 +7,21 @@ class TestEvents extends UnitTestCase {
         $this->UnitTestCase('Events library - main/inc/events.lib.inc.test.php');
     }
 
-	function testCreateEventExercice() {
+	function testCreateEventExerciceEmptyExoId() {
 		global $_user, $_cid, $_configuration;
 		$exo_id='';
 		$res=create_event_exercice($exo_id);
-		$this->assertTrue(is_numeric($res));
+		$this->assertFalse($res);
 		//var_dump($res);
 	}
+
+    function testCreateEventExerciceUnexistingExoId() {
+        global $_user, $_cid, $_configuration;
+        $exo_id=3589534; //unexisting exe ID
+        $res=create_event_exercice($exo_id);
+        $this->assertFalse($res);
+        //var_dump($res);
+    }
 
 	function testEventAccessCourse() {
 		global $_configuration;

@@ -32,10 +32,10 @@ class TestUrlManager extends UnitTestCase {
 	}
 
 	function testadd_session_to_url() {
-		$session_id=1;
+		$session_id=1; //arbitrary session name - isn't checked in the function anyway
 		$res=UrlManager::add_session_to_url($session_id, $url_id=1);
-		$this->assertTrue(is_bool($res));
-        //var_dump($res);
+		$this->assertTrue($res);
+        UrlManager::delete_url_rel_session($session_id,$url_id);
 	}
 
 	function testadd_user_to_url() {

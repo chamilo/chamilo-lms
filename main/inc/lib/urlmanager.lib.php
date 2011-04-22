@@ -423,12 +423,17 @@ class UrlManager
 		return $result;
 	}
 
-
+    /**
+     * Inserts a session to a URL (access_url_rel_session table)
+     * @param   int     Session ID
+     * @param   int     URL ID
+     * @return  bool    True on success, false session already exists or insert failed
+     */
 	public static function add_session_to_url($session_id, $url_id = 1)
 	{
 		$table_url_rel_session= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 		if (empty($url_id)) $url_id=1;
-		
+		$return = false;
 		$count = UrlManager::relation_url_session_exist($session_id,$url_id);
 		$session_id	= intval($session_id);
 		if (empty($count) && !empty($session_id)) {			

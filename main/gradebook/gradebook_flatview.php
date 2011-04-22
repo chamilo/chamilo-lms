@@ -283,7 +283,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
 	if (strlen($my_info_path_img[5]) == 32) {
 		echo '<img  src="'.$image_file.'">';
 	}
-	$flatviewtable->display();
+    $flatviewtable->display();
 	$flatviewtable->display_graph_by_resource();
 	echo '</div>';
 }

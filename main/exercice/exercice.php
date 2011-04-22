@@ -654,7 +654,7 @@ if ($show == 'test') {
 
 if ($show == 'test') {
     ?>    
-    <script>
+    <script type="text/javascript">
     $(function() {
         /*
                 
@@ -665,7 +665,7 @@ if ($show == 'test') {
         */
     });
     </script>
-    <style>
+    <style type="text/css">
         /*
         New interface not yet ready for 1.8.8
          Vertical Tabs 
@@ -895,6 +895,7 @@ if ($show == 'test') {
                     }      
                                         
                     //This query might be improved later on by ordering by the new "tms" field rather than by exe_id
+                    //Don't remove this marker: note-query-exe-results
                     $qry = "SELECT * FROM $TBL_TRACK_EXERCICES
                             WHERE exe_exo_id = ".$row['id']." AND exe_user_id = " . api_get_user_id() . " AND exe_cours_id = '" . api_get_course_id() . "' AND status <>'incomplete' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '" . api_get_session_id() . "'
                             ORDER BY exe_id DESC";

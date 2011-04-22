@@ -857,11 +857,12 @@ if ($category != '0') {
 			//Do not remove this the gradebook/lib/fe/gradebooktable.class.php file load this variable as a global 		
 			$my_score_in_gradebook =  round($scoretotal[0],2);
 			
-			//Show certificate			
-			$certificate_min_score=$cats[0]->get_certificate_min_score();	
+			//Show certificate
+			$certificate_min_score=$cats[0]->get_certificate_min_score();
 			$scoredisplay = ScoreDisplay :: instance();
-			$scoretotal_display = $scoredisplay->display_score($scoretotal,SCORE_DIV_PERCENT);
-			if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
+			$scoretotal_display = $scoredisplay->display_score($scoretotal,SCORE_DIV_PERCENT); //a student always sees only the teacher's repartition
+            //$score_compare = ($scoretotal[0] / $scoretotal[1]) * 100; //build the total percentage obtained in order to compare it to the minimum certification percentage
+			if (isset($certificate_min_score) && $item_value >= $certificate_min_score) {
 				$url  = api_get_path(WEB_CODE_PATH) .'gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=yes&cat_id='.$cats[0]->get_id();
 				//$certificates.= '<img src="'.api_get_path(WEB_CODE_PATH) . 'img/logo.gif" />'.get_lang('Certificates').'</a>&nbsp;<strong>'.get_lang('Total').': '.$scoretotal_display.'</strong>';
 				$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 48), $url, array('target'=>'_blank'));

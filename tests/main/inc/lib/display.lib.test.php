@@ -25,14 +25,6 @@ class TestDisplay extends UnitTestCase {
 		//var_dump($full_file_name);
 	}
 
-	public function testdisplay_table_header() {
-		ob_start();
-		$res = Display::display_table_header();
-		ob_end_clean();
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
 		/**
 	*	Display html header of table with several options.
 	*

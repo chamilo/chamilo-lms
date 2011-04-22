@@ -360,6 +360,7 @@ function update_Db_course($course_db_name) {
     $TBL_ATTENDANCE_SHEET       = $course_db_name . 'attendance_sheet';
     $TBL_ATTENDANCE_CALENDAR    = $course_db_name . 'attendance_calendar';
     $TBL_ATTENDANCE_RESULT      = $course_db_name . 'attendance_result';
+    $TBL_ATTENDANCE_SHEET_LOG   = $course_db_name . 'attendance_sheet_log';
 
     // Thematic
     $TBL_THEMATIC               = $course_db_name . 'thematic';
@@ -1740,7 +1741,8 @@ function update_Db_course($course_db_name) {
             attendance_qualify_title varchar(255) NULL,
             attendance_qualify_max int NOT NULL default 0,
             attendance_weight float(6,2) NOT NULL default '0.0',
-            session_id int NOT NULL default 0
+            session_id int NOT NULL default 0,
+            locked int NOT NULL default 0
         )" . $charset_clause;
     $result = Database::query($sql);
 
@@ -1795,10 +1797,22 @@ function update_Db_course($course_db_name) {
 
     $sql    = "ALTER TABLE `".$TBL_ATTENDANCE_RESULT."` ADD INDEX (user_id)";
     Database::query($sql);
+    
+    // attendance sheet log table
+    $sql = "CREATE TABLE `".$TBL_ATTENDANCE_SHEET_LOG."` (
+                  id int  NOT NULL auto_increment,
+                  attendance_id int  NOT NULL DEFAULT 0,
+                  lastedit_date datetime  NOT NULL DEFAULT '0000-00-00 00:00:00',
+                  lastedit_type varchar(200)  NOT NULL,
+                  lastedit_user_id int  NOT NULL DEFAULT 0,
+                  calendar_date_value datetime NULL,
+                  PRIMARY KEY (id)
+                )" . $charset_clause;
+    $result = Database::query($sql) or die(Database::error());
+    
 
     // Thematic table
-    $sql = "
-            CREATE TABLE `".$TBL_THEMATIC."` (
+    $sql = "CREATE TABLE `".$TBL_THEMATIC."` (
                 id int NOT NULL auto_increment PRIMARY KEY,
                 title varchar(255) NOT NULL,
                 content text NULL,

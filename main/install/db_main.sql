@@ -822,7 +822,7 @@ VALUES
 ('hide_courses_in_sessions',NULL,'radio', 'Platform','false','HideCoursesInSessionsTitle',	'HideCoursesInSessionsComment','platform',NULL, 1),
 ('enable_quiz_scenario',  NULL,'radio','Course','false','EnableQuizScenarioTitle','EnableQuizScenarioComment',NULL,NULL, 1),
 ('enable_nanogong',NULL,'radio','Tools','false','EnableNanogongTitle','EnableNanogongComment',NULL,NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.14358','DokeosDatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.14518','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1254,6 +1254,7 @@ CREATE TABLE gradebook_evaluation (
   max float unsigned NOT NULL,
   visible tinyint NOT NULL,
   type varchar(40) NOT NULL default 'evaluation',
+  locked int NOT NULL DEFAULT 0,
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_link;

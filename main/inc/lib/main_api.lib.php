@@ -3073,7 +3073,7 @@ function rmdirr($dirname) {
     if (is_file($dirname) || is_link($dirname)) {
         $res = unlink($dirname);
         if ($res === false) {
-            error_log(__FILE__.' line '.__LINE__.': '.((bool)ini_get('track_errors') ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
+            error_log(__FILE__.' line '.__LINE__.': '.((bool)ini_get('track_errors') ? $php_errormsg : 'Error not recorded because track_errors is off in your php.ini'), 0);
         }
         return $res;
     }

@@ -4,7 +4,8 @@
 // 2011, Jean-Karim Bockstael, CBlue <jeankarim@cblue.be>
 
 // This requires the Chamilo system to be initialized
-require_once('/main/inc/global.inc.php');
+// (note that it's easier to do the following include in the parent page)
+// require_once('path/to/main/inc/global.inc.php');
 
 // Returns the best match between available languages and visitor preferences
 // return the best match as 2-chars code, null when none match

@@ -256,6 +256,7 @@ class SubLanguageManager {
 		$tbl_admin_languages= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 		$sql_make_unavailable = "UPDATE $tbl_admin_languages SET available='0' WHERE id='".Database::escape_string($language_id)."'";
 		$result = Database::query($sql_make_unavailable);
+        return $result !== false; //only return false on sql error
 	}
 	/**
 	 * Make available the language
@@ -266,6 +267,7 @@ class SubLanguageManager {
 	 	$tbl_admin_languages= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 	 	$sql_make_available = "UPDATE $tbl_admin_languages SET available='1' WHERE id='".Database::escape_string($language_id)."'";
 		$result = Database::query($sql_make_available);
+        return $result !== false; //only return false on sql error
 	}
 	/**
 	 * Set platform language

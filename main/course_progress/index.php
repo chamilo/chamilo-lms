@@ -89,7 +89,7 @@ $htmlHeadXtra[] = '<script language="javascript">
 				beforeSend: function(objeto) {},
 				type: "POST",
 				url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=get_datetime_by_attendance",
-				data: "attendance_id="+selected_value,
+				data: "attendance_id="+selected_value+"&thematic_advance_id='.$thematic_id.'",
 				success: function(datos) {
 				 $("#div_datetime_attendance").html(datos);
 				}
@@ -190,6 +190,8 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewThematicAdvance'));
 }
 
+
+        
 // distpacher actions to controller
 switch ($action) {
 	case 'thematic_add'				:

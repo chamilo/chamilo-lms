@@ -172,7 +172,29 @@
 		}
 		$this->attendance_list();	
 	}
-									
+
+        /**
+         * Lock or unlock an attendance
+         * render to attendance_list view
+         * @param string  action (lock_attendance or unlock_attendance)
+         * @param int     attendance id
+         * render to attendance_list view
+         */
+        public function lock_attendance($action, $attendance_id) {
+            $attendance = new Attendance();
+            $attendance_id = intval($attendance_id);
+
+            if ($action == 'lock_attendance') {
+                $result = $attendance->lock_attendance($attendance_id);
+            } else {
+                $result = $attendance->lock_attendance($attendance_id, false);
+            }
+            if ($affected_rows) {
+		$message['message_locked_attendance'] = true;
+            }
+            $this->attendance_list();
+        }
+
 	/**
 	 * It's used for controlling attendace sheet (list, add),
 	 * render to attendance_sheet view
@@ -226,7 +248,7 @@
 		} else {
 			$data['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id,$filter_type);
 		}
-		
+		$data['is_locked_attendance'] = $attendance->is_locked_attendance($attendance_id);
 		$this->view->set_data($data);
 		$this->view->set_layout('layout'); 
 		$this->view->set_template('attendance_sheet');		       
@@ -318,7 +340,8 @@
 		}
 
 		$data['action'] = $action;				
-		$data['attendance_calendar'] = $attendance->get_attendance_calendar($attendance_id);					
+		$data['attendance_calendar'] = $attendance->get_attendance_calendar($attendance_id);
+        $data['is_locked_attendance'] = $attendance->is_locked_attendance($attendance_id);
 		// render to the view
 		$this->view->set_data($data);
 		$this->view->set_layout('layout'); 

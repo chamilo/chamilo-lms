@@ -22,6 +22,10 @@ class Attendance
 	private $attendance_qualify_title;
 	private $attendance_weight;
 
+        // constants
+	const DONE_ATTENDANCE_LOG_TYPE = 'done_attendance_sheet';
+    CONST UPDATED_ATTENDANCE_LOG_TYPE = 'updated_attendance_sheet';
+        const LOCKED_ATTENDANCE_LOG_TYPE = 'locked_attendance_sheet';
 
 	public function __construct() {}
 
@@ -79,20 +83,21 @@ class Attendance
 	 * @see SortableTable#get_table_data($from)
 	 */
 	function get_attendance_data($from, $number_of_items, $column, $direction) {
-		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
-		$session_id = api_get_session_id();
-		$condition_session = api_get_session_condition($session_id);
-	    $column = intval($column);
-	    $from = intval($from);
-	    $number_of_items = intval($number_of_items);
-		if (!in_array($direction, array('ASC','DESC'))) {
-	    	$direction = 'ASC';
-	    }
+                $tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
+                $session_id = api_get_session_id();
+                $condition_session = api_get_session_condition($session_id);
+                $column = intval($column);
+                $from = intval($from);
+                $number_of_items = intval($number_of_items);
+                    if (!in_array($direction, array('ASC','DESC'))) {
+                    $direction = 'ASC';
+                }
 		$sql = "SELECT
 				att.id AS col0,
 				att.name AS col1,
 				att.description AS col2,
-				att.attendance_qualify_max AS col3
+				att.attendance_qualify_max AS col3,
+                                att.locked AS col4
 				FROM $tbl_attendance att
 				WHERE att.active = 1 $condition_session
 				ORDER BY col$column $direction LIMIT $from,$number_of_items ";
@@ -115,8 +120,44 @@ class Attendance
 			$attendance[3] = '<center>'.$attendance[3].'</center>';
 			if (api_is_allowed_to_edit(null, true)) {
 				$actions  = '';
-				$actions .= '<center><a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
-				$actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a></center>';
+				$actions .= '<center>';
+
+                if (api_is_platform_admin()) {
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>&nbsp;';
+                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
+                } else {
+                    $is_locked_attendance = self::is_locked_attendance($attendance[0]);
+                    if ($is_locked_attendance) {
+                        $actions .= Display::return_icon('edit_na.gif',get_lang('Edit')).'&nbsp;';
+                        $actions .= Display::return_icon('delete_na.gif',get_lang('Delete'));
+                    } else {
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>&nbsp;';
+                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
+                    }
+                }
+
+                // display lock/unlock icon
+                $is_done_all_calendar = self::is_all_attendance_calendar_done($attendance[0]);
+
+                if ($is_done_all_calendar) {
+                    $locked   = $attendance[4];
+                    if ($locked == 0) {
+                        if (api_is_platform_admin()) {
+                            $message_alert = get_lang('AreYouSureToLockTheAttendance');
+                        } else {
+                            $message_alert = get_lang('UnlockMessageInformation');
+                        }
+                        $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;" href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('unlock.png',get_lang('LockAttendance')).'</a>';
+                    } else {                                        
+                        if (api_is_platform_admin()) {
+                            $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToUnlockTheAttendance').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('locked.png',get_lang('UnlockAttendance')).'</a>';
+                        } else {
+                            $actions .= '&nbsp;'.Display::return_icon('locked_na.png',get_lang('LockedAttendance'));
+                        }
+                    }
+                } 
+                $actions .= '</center>';
+
 				$attendances[] = array($attendance[0], $attendance[1], $attendance[2], $attendance[3],$actions);
 			} else {
 				$attendance[0] = '&nbsp;';
@@ -267,6 +308,28 @@ class Attendance
 		return $affected_rows;
 	}
 
+        /**
+         * Lock or unlock an attendance
+         * @param   int     attendance id
+         * @param   bool    True to lock or false otherwise
+         */
+        public function lock_attendance($attendance_id, $lock = true) {
+            $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
+            $attendance_id = intval($attendance_id);
+            $locked = ($lock)?1:0;
+            $upd = "UPDATE $tbl_attendance SET locked = $locked WHERE id = $attendance_id";
+            Database::query($upd);
+            $affected_rows = Database::affected_rows();
+            if ($affected_rows && $lock) {
+                //save attendance sheet log
+                $lastedit_date = Date('Y-m-d H:i:s');
+                $lastedit_type = self::LOCKED_ATTENDANCE_LOG_TYPE;
+                $lastedit_user_id = api_get_user_id();
+                $save_attendance_log = $this->save_attendance_sheet_log($attendance_id, $lastedit_date, $lastedit_type, $lastedit_user_id);
+            }
+            return $affected_rows;
+        }
+
 	/**
 	 * Get registered users inside current course
 	 * @param 	int	   attendance id for showing attendance result field (optional)
@@ -339,6 +402,13 @@ class Attendance
 		$users_absent = array_diff($user_ids,$users_present);
 		$affected_rows = 0;
 
+                // get last edit type
+                $calendar_data = $this->get_attendance_calendar_by_id($calendar_id);
+                $lastedit_type = self::DONE_ATTENDANCE_LOG_TYPE;
+                if ($calendar_data['done_attendance']) {
+                    $lastedit_type = self::UPDATED_ATTENDANCE_LOG_TYPE;
+                }
+
 		// save users present in class
 		foreach ($users_present as $user_present) {
 			$uid = intval($user_present);
@@ -348,11 +418,11 @@ class Attendance
 			if (Database::num_rows($rs) == 0) {
 				$sql = "INSERT INTO $tbl_attendance_sheet SET user_id ='$uid', attendance_calendar_id = '$calendar_id', presence = 1";
 				Database::query($sql);
-				$affected_rows = Database::affected_rows();
+				$affected_rows += Database::affected_rows();
 			} else {
 				$sql = "UPDATE $tbl_attendance_sheet SET presence = 1 WHERE user_id ='$uid' AND attendance_calendar_id = '$calendar_id'";
 				Database::query($sql);
-				$affected_rows = Database::affected_rows();
+				$affected_rows += Database::affected_rows();
 			}
 		}
 
@@ -365,11 +435,11 @@ class Attendance
 			if (Database::num_rows($rs) == 0) {
 				$sql = "INSERT INTO $tbl_attendance_sheet SET user_id ='$uid', attendance_calendar_id = '$calendar_id', presence = 0";
 				Database::query($sql);
-				$affected_rows = Database::affected_rows();
+				$affected_rows += Database::affected_rows();
 			} else {
 				$sql = "UPDATE $tbl_attendance_sheet SET presence = 0 WHERE user_id ='$uid' AND attendance_calendar_id = '$calendar_id'";
 				Database::query($sql);
-				$affected_rows = Database::affected_rows();
+				$affected_rows += Database::affected_rows();
 			}
 		}
 
@@ -379,6 +449,14 @@ class Attendance
 
 		// save users' results
 		$this->update_users_results($user_ids, $attendance_id);
+
+                if ($affected_rows) {
+                    //save attendance sheet log
+                    $lastedit_date = Date('Y-m-d H:i:s');                    
+                    $lastedit_user_id = api_get_user_id();                                        
+                    $calendar_date_value = $calendar_data['date_time'];
+                    $save_attendance_log = $this->save_attendance_sheet_log($attendance_id, $lastedit_date, $lastedit_type, $lastedit_user_id, $calendar_date_value);
+                }
 
 		return $affected_rows;
 	}
@@ -433,6 +511,44 @@ class Attendance
 		Database::query($sql);
 	}
 
+
+        /**
+         * update attendance_sheet_log table, is used as history of an attendance sheet
+         * @param   int     Attendance id
+         * @param   string  Last edit datetime
+         * @param   string  Event type ('locked_attendance', 'done_attendance_sheet' ...)
+         * @param   int     Last edit user id
+         * @param   string  Calendar datetime value (optional, when event type is 'done_attendance_sheet')
+         * @return  int     Affected rows
+         */
+        public function save_attendance_sheet_log($attendance_id, $lastedit_date, $lastedit_type, $lastedit_user_id, $calendar_date_value = null) {
+
+            // define table
+            $tbl_attendance_sheet_log = Database::get_course_table(TABLE_ATTENDANCE_SHEET_LOG);
+
+            // protect data
+            $attendance_id = intval($attendance_id);
+            $lastedit_date = Database::escape_string($lastedit_date);
+            $lastedit_type = Database::escape_string($lastedit_type);
+            $lastedit_user_id = intval($lastedit_user_id);
+            
+            if (isset($calendar_date_value)) {
+                $calendar_date_value = Database::escape_string($calendar_date_value);
+            } else {
+                $calendar_date_value = '';
+            }
+
+            // save data
+            $ins = "INSERT INTO $tbl_attendance_sheet_log(attendance_id, lastedit_date, lastedit_type, lastedit_user_id, calendar_date_value)
+                    VALUES($attendance_id, '$lastedit_date', '$lastedit_type', $lastedit_user_id, '$calendar_date_value')";
+
+            Database::query($ins);
+
+            return Database::affected_rows();
+            
+        }
+
+
 	/**
 	 * Get number of done attendances inside current sheet
 	 * @param	int	   attendance id
@@ -461,16 +577,25 @@ class Attendance
 		$user_id 		= intval($user_id);
 		$attendance_id 	= intval($attendance_id);
 		$results = array();
-		$attendance_data 		= $this->get_attendance_by_id($attendance_id);
+		$attendance_data 	= $this->get_attendance_by_id($attendance_id);
+		
+		$calendar_count 	= $this->get_number_of_attendance_calendar($attendance_id);
+		
 		$total_done_attendance 	= $attendance_data['attendance_qualify_max'];
+		
 		$attendance_user_score  = $this->get_user_score($user_id, $attendance_id);
+		
+		//This is the main change of the BT#1381
+		//$total_done_attendance = $calendar_count;
 
 		// calculate results
-		$faults = $total_done_attendance-$attendance_user_score;
+		$faults = $total_done_attendance - $attendance_user_score;
+		
+		
 		$faults = $faults > 0 ? $faults:0;
-		$faults_porcent = $total_done_attendance > 0 ?round(($faults*100)/$total_done_attendance,0):0;
+		$faults_porcent = $calendar_count > 0 ?round(($faults*100)/$calendar_count,0):0;
 		$results['faults'] 			= $faults;
-		$results['total']			= $total_done_attendance;
+		$results['total']			= $calendar_count;
 		$results['faults_porcent'] 	= $faults_porcent;
 		$color_bar = '';
 
@@ -746,6 +871,84 @@ class Attendance
 		}
 		return $data;
 	}
+	
+
+        /**
+	 * Get number of attendance calendar inside current attendance
+	 * @param	int	attendance id
+	 * @return	int     number of dates in attendance calendar
+	 */
+	public function get_number_of_attendance_calendar($attendance_id) {
+		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+		$attendance_id = intval($attendance_id);
+		$sql = "SELECT count(id) FROM $tbl_attendance_calendar WHERE attendance_id = '$attendance_id'";
+		$rs = Database::query($sql);
+                $row = Database::fetch_row($rs);
+		$count = $row[0];
+		return $count;
+	}
+
+        /**
+	 * Get count dates inside attendance calendar by attendance id
+	 * @param	int	attendance id
+	 * @return	int     count of dates
+	 */
+	public function get_count_dates_inside_attendance_calendar($attendance_id) {
+		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+		$attendance_id = intval($attendance_id);
+		$sql = "SELECT count(id) FROM $tbl_attendance_calendar WHERE attendance_id = '$attendance_id'";
+		$rs = Database::query($sql);
+		$count = 0;
+		if (Database::num_rows($rs) > 0) {
+                    $row = Database::fetch_row($rs);
+                    $count = $row[0];
+		}
+		return $count;
+	}
+
+
+        /**
+         * check if all calendar of an attendance is done
+         * @param   int     attendance id
+         * @return  bool    True if all calendar is done, otherwise false
+         */
+
+        public function is_all_attendance_calendar_done($attendance_id) {
+
+            $attendance_id = intval($attendance_id);
+            $done_calendar = self::get_done_attendance_calendar($attendance_id);
+            $count_dates_in_calendar = self::get_count_dates_inside_attendance_calendar($attendance_id);
+            $number_of_dates = self::get_number_of_attendance_calendar($attendance_id);
+
+            $result = false;
+            if ($number_of_dates && (intval($count_dates_in_calendar) == intval($done_calendar))) {
+                $result = true;
+            }
+
+            return $result;
+
+        }
+
+
+        /**
+         * check if an attendance is locked
+         * @param   int   attendance id
+         * @param   bool
+         */
+        public function is_locked_attendance($attendance_id) {
+
+            $attendance_id = intval($attendance_id);
+            $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
+
+            $sql = "SELECT id FROM $tbl_attendance WHERE id = $attendance_id AND locked = 1";
+            $rs  = Database::query($sql);
+            $result = false;
+
+            if (Database::num_rows($rs) > 0) {
+                $result = true;
+            }
+            return $result;
+        }       
 
 	/**
 	 * Add new datetime inside attendance calendar table
@@ -764,6 +967,15 @@ class Attendance
 			Database::query($sql);
 			$affected_rows = Database::affected_rows();
 		}
+
+        // update locked attendance
+        $is_all_calendar_done = self::is_all_attendance_calendar_done($attendance_id);
+        if (!$is_all_calendar_done) {
+            $unlock = self::lock_attendance($attendance_id, false);
+        } else {
+            $unlock = self::lock_attendance($attendance_id);
+        }
+
 		return $affected_rows;
 	}
 
@@ -881,6 +1093,15 @@ class Attendance
 			Database::query($sql);
 			$affected_rows = Database::affected_rows();
 		}
+
+                // update locked attendance
+                $is_all_calendar_done = self::is_all_attendance_calendar_done($attendance_id);
+                if (!$is_all_calendar_done) {
+                    $unlock = self::lock_attendance($attendance_id, false);
+                } else {
+                    $unlock = self::lock_attendance($attendance_id);
+                }
+                
 		return $affected_rows;
 	}
 
@@ -925,7 +1146,8 @@ class Attendance
 
 		$affected_rows = Database::affected_rows();
 		// update users' results
-		$this->update_users_results($user_ids, $attendance_id);
+		$this->update_users_results($user_ids, $attendance_id);                
+
 		return $affected_rows;
 	}
 

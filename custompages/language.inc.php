@@ -47,6 +47,9 @@ function cp_get_lang($variable) {
 // Also note that this is an example matchin array, not all languages are present.
 $chamilo_langs = array(null => 'english', 'en' => 'english', 'fr' => 'french', 'es' => 'spanish');
 
+// Which of these can we actually pick from ?
+$available_langs = array('en','fr');
+
 // Which language files will we need ?
 $language_file = array('courses', 'index', 'registration', 'admin','userInfo');
 

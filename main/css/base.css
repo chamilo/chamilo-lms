@@ -385,3 +385,19 @@ div.lp_resource {
 .doc_resource {
 	margin:5px;
 }
+
+
+div.lp_tree {
+    height: 100%;
+    overflow: auto;
+    padding: 3px 10px 3px 0;
+    width: 230px;
+}
+
+table.lp_build td.tree {
+	border:none;
+}
+
+#resource_tab {
+	min-height:380px;
+}

@@ -3068,7 +3068,7 @@ function rmdirr($dirname) {
     if (!file_exists($dirname)) {
         return false;
     }
-
+    $php_errormsg = '';
     // Simple delete for a file.
     if (is_file($dirname) || is_link($dirname)) {
         $res = unlink($dirname);
@@ -3300,6 +3300,7 @@ function parse_info_file($filename) {
           ([^\r\n]*?)                   # Non-quoted string
         )\s*$                           # Stop at the next end of a line, ignoring trailing whitespace
         @msx', $data, $matches, PREG_SET_ORDER)) {
+        $key = $value1 = $value2 = $value3 = '';
         foreach ($matches as $match) {
             // Fetch the key and value string.
             $i = 0;

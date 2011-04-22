@@ -16,7 +16,7 @@ define('EXERCISE_FEEDBACK_TYPE_END',0);
 define('EXERCISE_FEEDBACK_TYPE_DIRECT',1);
 define('EXERCISE_FEEDBACK_TYPE_EXAM',2);
 
-$debug = 1; //All exercise scripts should depend in this debug variable
+$debug = 0; //All exercise scripts should depend in this debug variable
 
 require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
 

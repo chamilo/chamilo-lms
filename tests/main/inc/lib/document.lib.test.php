@@ -234,7 +234,6 @@ class TestDocumentManager extends UnitTestCase {
         if(!is_null($res)):
         $this->assertTrue(is_numeric($res));
         endif;
-        //var_dump($res);
     }
 
     function testenough_space() {
@@ -242,7 +241,6 @@ class TestDocumentManager extends UnitTestCase {
         $max_dir_space='';
         $res= DocumentManager::enough_space($file_size, $max_dir_space);
         $this->assertTrue(is_bool($res));
-        //var_dump($res);
     }
 
     

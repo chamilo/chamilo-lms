@@ -3121,7 +3121,10 @@ function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
         if (!in_array($path_info['filename'], $exclude)) {
             copy($source, $dest);
         }
-        return;
+        return true;
+    } elseif (!is_dir($source)) {
+    	//then source is not a dir nor a file, return
+        return false;
     }
 
     // Make destination directory.
@@ -3144,7 +3147,7 @@ function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
     }
     // Clean up.
     $dir->close();
-    return $files;
+    return true;
 }
 
 // TODO: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach. Documentation header to be added here.

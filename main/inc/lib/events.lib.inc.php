@@ -312,7 +312,8 @@ function event_link($link_id) {
  * @desc Record result of user when an exercice was done 
 */
 function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$learnpath_id=0, $learnpath_item_id=0, $learnpath_item_view_id = 0, $duration) {
-	if ($exeid!='') {        
+	require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+    if ($exeid!='') {
 		// Validation in case of fraud with actived control time
 		if (!exercise_time_control_is_valid($exo_id)) {
 			$score = 0;		
@@ -417,6 +418,7 @@ function create_event_exercice($exo_id) {
  */
 function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0) {
 	global $_configuration;
+    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 	$score 	= Database::escape_string($score);
 	$answer = Database::escape_string($answer);
 	$quesId = Database::escape_string($quesId);
@@ -453,7 +455,7 @@ function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0
 			   '".$j."',
 			   '".$reallyNow."'
 			  )";
-    error_log($sql);
+    //error_log($sql);
 	if (!empty($quesId) && !empty($exeId) && !empty($user_id)) {
 		$res = Database::query($sql);		
 		if (defined('ENABLED_LIVE_EXERCISE_TRACKING')){
@@ -478,6 +480,7 @@ function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0
  * @uses Course code and user_id from global scope $_cid and $_user
  */
 function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $coords, $exerciseId = 0) {
+    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 	//Validation in case of fraud  with actived control time
     if (!exercise_time_control_is_valid($exerciseId)) {	
 	    $correct = 0;	    

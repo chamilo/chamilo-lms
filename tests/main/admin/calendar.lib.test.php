@@ -38,7 +38,8 @@ class TestCalendar extends UnitTestCase {
 		$db_start_date='07/11/2009';
 		$db_end_date='07/20/2009';
 		$res = agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date, $to=array(), $parent_id=null);
-		$this->assertTrue(is_numeric($res));
+		$this->assertTrue($res>0,'Global agenda item could not be inserted');
+        delete_agenda_item($res);
 		//var_dump($res);
 	}
 

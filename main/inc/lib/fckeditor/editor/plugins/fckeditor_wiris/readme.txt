@@ -1,0 +1,3 @@
+Installing this plugin you get WIRIS editor and WIRIS CAS.
+This activation is not fully realized unless it has been previously downloaded the PHP plugin for FCKeditor WIRIS (http://www.wiris.com/plugins/editors/download?filter=fckeditor) and unzipped its contents in the Chamilo's directory main/inc/lib/fckeditor/editor/plugins/fckeditor_wiris/
+This is necessary because Wiris is proprietary software and his services are commercial (http://www.wiris.com/store/who-pays). To make adjustments to the plugin, edit configuration.ini file or replace his content by configuration.ini.default Chamilo file.

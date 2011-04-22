@@ -25,7 +25,7 @@ wirisformulaeditorarchive = wiriseditor.jar
 wirisformulaeditorcode = WirisFormulaEditor
 wirisformulaeditorlang = en
 
-////////////////////////////////
+//////
 
 wiriscascodebase = http://www.wiris.net/demo/wiris/wiris-codebase
 //wiriscascodebase = http://www.juntadeandalucia.es/averroes/wiris/wiris-codebase
@@ -66,3 +66,11 @@ CAS_height = 400
 wirisproxy = false
 wirisproxy_host =
 wirisproxy_port =
+
+//////
+
+// Place to store the cached images.
+//wiriscachedirectory = /var/cache
+
+// Place to store the formulas.
+//wirisformuladirectory = /var/formulas

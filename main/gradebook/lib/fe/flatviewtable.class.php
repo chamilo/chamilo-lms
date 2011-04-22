@@ -149,26 +149,27 @@ class FlatViewTable extends SortableTable
 		//return '<div id="imageloaded" style="float:center;"><img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file_generated_name.'" ></div>';
 	}
 
-	function display_graph_by_resource()
-	{
-		include_once(api_get_path(LIBRARY_PATH).'pchart/pData.class.php');
-		include_once(api_get_path(LIBRARY_PATH).'pchart/pChart.class.php');
-		include_once(api_get_path(LIBRARY_PATH).'pchart/pCache.class.php');
+	function display_graph_by_resource() {
+		require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
+		require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
+		require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 
 		$header_name = $this->datagen->get_header_names();
 		$total_users = $this->datagen->get_total_users_count();
 		$img_file = '';
 
-		if ($this->datagen->get_total_items_count()>0 && $total_users > 0 ) {
-            //remove lastname and firstname columns (which are meant for the table, not the graph)
+		if ($this->datagen->get_total_items_count() > 0 && $total_users > 0 ) {
+            //Removing first name
 			array_shift($header_name);
+			//Removing last name
 			array_shift($header_name);
-
+            
 			$displayscore= ScoreDisplay :: instance();
 			$customdisplays = $displayscore->get_custom_score_display_settings();
+			
 			if (is_array($customdisplays) && count(($customdisplays))) {
 
-				$user_results = ($this->datagen->get_data_to_graph2());
+				$user_results = $this->datagen->get_data_to_graph2();
 				$pre_result = $new_result = array();
 				$DataSet = new pData;
 				//filling the Dataset
@@ -188,45 +189,53 @@ class FlatViewTable extends SortableTable
 				$show_draw = false;
 				$resource_list = array();
 				$pre_result2 = array();
-				//print_r($pre_result); exit;
 
 				foreach($pre_result as $key=>$res_array) {
 					rsort($res_array);
 					$pre_result2[] = $res_array;
 				}
-				//print_r($pre_result2);
-
-				if ($total_users>0) {
+				
+				if ($total_users > 0) {
 					foreach($pre_result2 as $key=>$res_array) {
-						//$resource_list
-						//$total =  $res / ($total_users*100);
-						// mayor a menor
 						$key_list = array();
 						foreach($res_array as $user_result) {
-							$resource_list[$key][$user_result[1]]+=1;
+							$resource_list[$key][$user_result[1]] += 1;
 							$key_list[] = $user_result[1];
 						}
 						//@todo when a display custom does not exist the order of the color does not match
 						//filling all the answer that are not responded with 0
-						foreach($customdisplays as $display) {
+						rsort($customdisplays);
+						foreach ($customdisplays as $display) {
 							if (!in_array($display['display'], $key_list))
-								$resource_list[$key][$display['display']]=0;
+								$resource_list[$key][$display['display']] = 0;
 						}
 						$i++;
 					}
+				}				
+				
+				//fixing $resource_list		
+				$max = 0;		
+				$new_list = array();
+				foreach($resource_list as $key=>$value) {
+				    $new_value = array();
+				    foreach($customdisplays as $item) {				        
+				        if ($value[$item['display']] > $max) {
+				            $max = $value[$item['display']];
+				        }
+				        $new_value[$item['display']] = $value[$item['display']];				        
+				    }
+				    $new_list[] = $new_value;
 				}
-				//print_r($customdisplays);
-				//print_r($resource_list); exit;
+				$resource_list = $new_list;
+				
+				
 				$i = 1;
 				$j = 0;
-				// here-----------------------------------
-				//print_r($resource_list);
-				foreach($resource_list as $key=>$resource) {
+
+				foreach ($resource_list as $key=>$resource) {
 					$new_resource_list = $new_resource_list_name = array();
-					$DataSet = new pData;
-					foreach($resource as $name=>$cant) {
-						//$new_resource_list[]=$cant;
-						//$new_resource_list_name[]=$name;
+					$DataSet = new pData();
+					foreach ($resource as $name=>$cant) {
 						$DataSet->AddPoint($cant,"Serie".$j);
 						$DataSet->SetSerieName(strip_tags($name),"Serie".$j);
 						$j++;
@@ -242,11 +251,11 @@ class FlatViewTable extends SortableTable
 					$Cache = new pCache();
 					// the graph id
 					$gradebook_id = intval($_GET['selectcat']);
-					$graph_id = api_get_user_id().'ByResource'.$gradebook_id.api_get_course_id();
+					$graph_id = api_get_user_id().'ByResource'.$gradebook_id.api_get_course_id().api_get_session_id();
 
 					if ($show_draw) {
-						if ($Cache->IsInCache($graph_id, $DataSet->GetData())) {
-						//if (0) {
+						//if ($Cache->IsInCache($graph_id, $DataSet->GetData())) {
+						if (0) {
 							//if we already created the img we get the img file id
 							//echo 'in cache';
 							$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());
@@ -256,10 +265,10 @@ class FlatViewTable extends SortableTable
 							$chart_size_w= 480;
 							$chart_size_h= 250;
 
-							$Test = new pChart($chart_size_w,$chart_size_h);
+							$Test = new pChart($chart_size_w, $chart_size_h);
 
 							// Adding the color schemma
-							$Test->loadColorPalette(api_get_path(LIBRARY_PATH)."pchart/palette/hard_blue.txt");
+							$Test->loadColorPalette(api_get_path(LIBRARY_PATH)."pchart/palette/pastel.txt");
 
 							// set font of the axes
 							$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",8);
@@ -271,11 +280,16 @@ class FlatViewTable extends SortableTable
 
 							//background color area & stripe or not
 							$Test->drawGraphArea(255,255,255,TRUE);
-							//print_r($DataSet->GetData());
-							$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(),SCALE_START0,150,150,150,TRUE,0,1, FALSE);
+							
+							//Setting max height by default see #3296
+						    if (!empty($max)) {
+                                $Test->setFixedScale(0, $max);    
+						    }
+							
+							$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(), SCALE_ADDALLSTART0, 150,150,150, TRUE, 0, 0, FALSE);
 
 							//background grid
-							$Test->drawGrid(4,TRUE,230,230,230,50);
+							$Test->drawGrid(4, TRUE,230,230,230,50);
 
 							// Draw the 0 line
 							//$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",6);
@@ -286,7 +300,7 @@ class FlatViewTable extends SortableTable
 
 							//Set legend properties: width, height and text color and font
 							$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",9);
-							$Test->drawLegend($area_graph_w+10, 70,$DataSet->GetDataDescription(),255,255,255);
+							$Test->drawLegend($area_graph_w+10, 50,$DataSet->GetDataDescription(),255,255,255);
 
 							//Set title properties
 							$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",10);
@@ -302,7 +316,7 @@ class FlatViewTable extends SortableTable
 						}
 						echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'" >';
 						if ($i % 2 == 0 && $i!=0) {
-							echo '<br>';
+							echo '<br />';
 						}
 						$i++;
 					}

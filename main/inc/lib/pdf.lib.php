@@ -50,6 +50,7 @@ class PDF {
             //Converting the string into an array
             $html_file_array = array($html_file_array);
         }
+        
         $course_data = array();
         if (!empty($course_code)) {
         	$course_data = api_get_course_info($course_code);
@@ -65,98 +66,97 @@ class PDF {
         //Formatting the pdf
         self::format_pdf($course_data);
                
-        foreach ($html_file_array as $html_file) {
+        foreach ($html_file_array as $file) {
             $html_title = '';
             //if the array provided contained subarrays with 'title' entry,
             // then print the title in the PDF
-            if (is_array($html_file) && isset($html_file['title'])) {
-            	$html_title = $html_file['title'];
-                $html_file  = $html_file['path'];
+            if (is_array($file) && isset($file['title'])) {
+            	$html_title = $file['title'];
+                $file  = $file['path'];
             } else {
                 //we suppose we've only been sent a file path
-            	$html_title = basename($html_file);
+            	$html_title = basename($file);
             }
-            if (empty($html_file) && !empty($html_title)) {
+            if (empty($file) && !empty($html_title)) {
             	//this is a chapter, print title & skip the rest
                 if ($print_title) {
-                    $this->pdf->WriteHTML('<html><body><h1>'.$html_title.'</h1></body></html>',2);
+                    $this->pdf->WriteHTML('<html><body><h3>'.$html_title.'</h3></body></html>',2);
                 }
                 continue;
             } 
           
-            if (!file_exists($html_file)) {
+            if (!file_exists($file)) {
                 //the file doesn't exist, skip
             	continue;
             }
        
             //it's not a chapter but the file exists, print its title
             if ($print_title) {
-                $this->pdf->WriteHTML('<html><body><h2>'.$html_title.'</h2></body></html>',2);
+                $this->pdf->WriteHTML('<html><body><h3>'.$html_title.'</h3></body></html>',2);
             }
             
-            $file_info = pathinfo($html_file);
-            $dirname = str_replace("\\", '/', $file_info['dirname']);
-            $filename = $file_info['basename'];
-            $filename =str_replace('_',' ',$filename);
-            $extension = $file_info['extension'];        
-            if (!($extension == 'html' || $extension == 'htm')) {
-                continue;
-            }        
-            if ($extension == 'html') {
-                $filename =basename($filename,'.html');
-            } elseif($extension == 'htm'){
-                $filename =basename($filename,'.htm');
-            }          
+            $file_info = pathinfo($file);
+            $extension = $file_info['extension'];
             
-            $document_html = @file_get_contents($html_file);
-            $document_html = preg_replace($clean_search, '', $document_html);   
+            if (in_array($extension, array('html', 'htm'))) {
             
-            //absolute path for frames.css //TODO: necessary?
-            $absolute_css_path=api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css';
-            $document_html=str_replace('href="./css/frames.css"',$absolute_css_path, $document_html);
-            
-            //$document_html=str_replace('<link rel="stylesheet" http://my.chamilo.net/main/css/chamilo/frames.css type="text/css" />','', $document_html);
-            
-            if (!empty($course_data['path'])) {
-                $document_html= str_replace('../','',$document_html);            
-                $document_path = api_get_path(WEB_COURSE_PATH).$course_data['path'].'/document/';
-                           
-                $doc = new DOMDocument();           
-                $result = @$doc->loadHTML($document_html);
-                                     
-                //Fixing only images @todo do the same thing with other elements
-                $elements = $doc->getElementsByTagName('img');
-                $replace_img_elements = array();
-                if (!empty($elements)) {
-                    foreach($elements as $item) {                    
-                        $old_src = $item->getAttribute('src');
-                        //$old_src= str_replace('../','',$old_src);
-                        if (strpos($old_src, 'http') === false) {
-                            if (strpos($old_src, '/main/default_course_document') === false) {
-                                $document_html= str_replace($old_src, $document_path.$old_src, $document_html);                            
-                            }                                                       	
-                        }                                    
+                $dirname = str_replace("\\", '/', $file_info['dirname']);
+                $filename = $file_info['basename'];
+                $filename = str_replace('_',' ',$filename);
+                
+                if ($extension == 'html') {
+                    $filename =basename($filename,'.html');
+                } elseif($extension == 'htm'){
+                    $filename =basename($filename,'.htm');
+                }          
+                
+                $document_html = @file_get_contents($file);
+                $document_html = preg_replace($clean_search, '', $document_html);   
+                
+                //absolute path for frames.css //TODO: necessary?
+                $absolute_css_path = api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css';
+                $document_html = str_replace('href="./css/frames.css"',$absolute_css_path, $document_html);
+                
+                //$document_html=str_replace('<link rel="stylesheet" http://my.chamilo.net/main/css/chamilo/frames.css type="text/css" />','', $document_html);
+                
+                if (!empty($course_data['path'])) {
+                    $document_html= str_replace('../','',$document_html);            
+                    $document_path = api_get_path(WEB_COURSE_PATH).$course_data['path'].'/document/';
+                               
+                    $doc = new DOMDocument();           
+                    $result = @$doc->loadHTML($document_html);
+                                         
+                    //Fixing only images @todo do the same thing with other elements
+                    $elements = $doc->getElementsByTagName('img');
+                    $replace_img_elements = array();
+                    if (!empty($elements)) {
+                        foreach($elements as $item) {                    
+                            $old_src = $item->getAttribute('src');
+                            //$old_src= str_replace('../','',$old_src);
+                            if (strpos($old_src, 'http') === false) {
+                                if (strpos($old_src, '/main/default_course_document') === false) {
+                                    $document_html= str_replace($old_src, $document_path.$old_src, $document_html);                            
+                                }                                                       	
+                            }                                    
+                        }
                     }
                 }
-            }
-            //replace relative path by absolute path for resources
-            //$document_html= str_replace('src="/chamilo/main/default_course_document/', 'temp_template_path', $document_html);// before save src templates not apply
-            //$document_html= str_replace('src="/', 'temp_template_path', $document_html);// before save src templates not apply
-            //$document_html= str_replace('src="/chamilo/main/default_course_document/', 'temp_template_path', $document_html);// before save src templates not apply
-            
-            //$src_http_www= 'src="'.api_get_path(WEB_COURSE_PATH).$course_data['path'].'/document/';
-            //$document_html= str_replace('src="',$src_http_www, $document_html);
-            //$document_html= str_replace('temp_template_path', 'src="/main/default_course_document/', $document_html);// restore src templates
-            
-            api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.        
-            $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
-                                                                            // $_GET[] too, as it is done with file name.
-                                                                            // At the moment the title is retrieved from the html document itself.
-            if (empty($title)) {
-                $title = $filename; // Here file name is expected to contain ASCII symbols only.
-            }
-
-            $this->pdf->WriteHTML($document_html,2);
+                api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.        
+                $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
+                                                                                // $_GET[] too, as it is done with file name.
+                                                                                // At the moment the title is retrieved from the html document itself.
+                if (empty($title)) {
+                    $title = $filename; // Here file name is expected to contain ASCII symbols only.
+                }
+                
+                if (!empty($document_html)) {
+                    $this->pdf->WriteHTML($document_html,2);
+                }
+            } elseif (in_array($extension, array('jpg','jpeg','png','gif'))) {
+                //Images
+                $image = Display::img($file);
+                $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>',2);
+            } 
         }
         
         if (empty($pdf_name)) {

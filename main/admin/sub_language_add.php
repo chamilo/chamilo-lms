@@ -145,44 +145,6 @@ function ckeck_if_is_parent_of_sub_language ($parent_id) {
 function allow_get_all_information_of_sub_language ($parent_id,$sub_language_id) {
 	return SubLanguageManager::get_all_information_of_sub_language($parent_id,$sub_language_id);
 }
-
-/**
- * Add directory for sub-language
- * @param   string  Path of new sub-language
- * @return
- */
-function add_directory_of_sub_language ($path_sub_language) {
-	return SubLanguageManager::add_directory_of_sub_language($path_sub_language);
-}
-/**
- * Remove directory of sub-language
- * @param   string  Path of new sub_language
- * @return  bool    True on success, false otherwise
- */
-function remove_directory_of_sub_language ($path) {
-	$content = SubLanguageManager::get_all_data_of_dokeos_folder($path);
-
-	if (count($content)>0) {
-		foreach ($content as $value_content) {
-			$path_file = $path.'/'.$value_content;
-			unlink($path_file);
-		}
-		$rs = @rmdir($path);
-		if ($rs === true) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		$rs = @rmdir($path);
-		if ($rs === true) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-}
 /*end declare functions*/
 
 //add data
@@ -266,9 +228,8 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
             
 			$isocode=str_replace(' ','_',$isocode);
 			$str_info='<br/>'.get_lang('OriginalName').' : '.$original_name.'<br/>'.get_lang('EnglishName').' : '.$english_name.'<br/>'.get_lang('PlatformCharsetTitle').' : '.$isocode;
-			$path=api_get_path(SYS_LANG_PATH).$english_name;
 
-			$mkdir_result=add_directory_of_sub_language($path);
+			$mkdir_result=SubLanguageManager::add_language_directory($english_name);
 			if ($mkdir_result) {
 			  	add_sub_language($original_name,$english_name,$isocode,$sublanguage_available,$parent_id);
 			  	$link = '<br /><br /><a href="languages.php">'.get_lang('ReturnToLanguagesList').'</a>';
@@ -287,14 +248,11 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
 	}
 }
 if (isset($_POST['SubmitAddDeleteLanguage'])) {
-	$path=api_get_path(SYS_LANG_PATH).$english_name;
-	if (is_dir($path)) {
-		$rs=remove_directory_of_sub_language($path);
-		if ($rs===true) {
-			SubLanguageManager::removed_sub_language($parent_id,$sub_language_id);
-			Display::display_confirmation_message(get_lang('TheSubLanguageHasBeenRemoved'));
-		}
-
+	$rs = SubLanguageManager::remove_sub_language($english_name);
+	if ($rs===true) {
+		Display::display_confirmation_message(get_lang('TheSubLanguageHasBeenRemoved'));
+	} else {
+		Display::display_error_message(get_lang('TheSubLanguageHasNotBeenRemoved'));
 	}
 }
 // ckeck_if_is_parent_of_sub_language($parent_id)===false

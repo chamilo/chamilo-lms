@@ -16,16 +16,16 @@ class SubLanguageManager {
     	//void
     }
     /**
-     * Get all data of dokeos folder (forum.inc.php,gradebook.inc.php,notebook.inc.php)
-     * @param String The dokeos path folder  (/var/www/my_dokeos/main/lang/spanish)
+     * Get all data of lang folder (forum.inc.php,gradebook.inc.php,notebook.inc.php)
+     * @param String The lang path folder  (/var/www/my_lms/main/lang/spanish)
      * @param bool true if we only want the "subname" trad4all instead of  trad4all.inc.php
-     * @return Array All file of dokeos folder
+     * @return Array All file of lang folder
      *
      */
-    public static function get_all_data_of_dokeos_folder ($dokeos_path_folder,$only_main_name=false) {
+    public static function get_lang_folder_files_list ($path,$only_main_name=false) {
 	   $content_dir=array();
-	    if (is_dir($dokeos_path_folder)) {
-		    if ($dh = opendir($dokeos_path_folder)) {
+	    if (is_dir($path)) {
+		    if ($dh = opendir($path)) {
 		        while (($file = readdir($dh)) !== false) {
 		           if ($file[0]<>'.' && substr($file,-4,strlen($file))=='.php') {
 		           		if ($only_main_name) {
@@ -111,9 +111,9 @@ class SubLanguageManager {
      * @param String The language variable
      * @return void()
      */
-    public static function write_data_in_file($path_file, $new_sub_language, $variable_sub_language) {
+    public static function write_data_in_file($path_file, $new_term, $new_variable) {
         $return_value = false;
-   		$new_data=$variable_sub_language.'='.$new_sub_language;
+   		$new_data=$new_variable.'='.$new_term;
    		$resource = @fopen($path_file, "a");
    		if (file_exists($path_file) && $resource) {
    		    if (fwrite($resource, $new_data.PHP_EOL) === false) {
@@ -128,23 +128,57 @@ class SubLanguageManager {
    }
      /**
      * Add directory for sub-language
-     * @param String The sub-language path directory ( /var/www/chamilo/main/lang/spanish_corporate )
-     * @return boolean
+     * @param String The sub-language directory ( e.g. 'spanish_corporate' )
+     * @return boolean  True on success, false on failure
      */
-   public static function add_directory_of_sub_language($path_sub_language) {
-   		//return @mkdir($path_sub_language, 0777) !== false;
-   		return @mkdir($path_sub_language, api_get_permissions_for_new_directories()) !== false;
+   public static function add_language_directory($sub_language_dir) {
+        if (empty($sub_language_dir)) { return false; }
+        $dir = api_get_path(SYS_LANG_PATH).$sub_language_dir;
+        if (is_dir($dir)) { return true; } //even if the dir already exists, we reach the objective of having the directory there
+   		return @mkdir($dir, api_get_permissions_for_new_directories());
    }
 	 /**
-	 * Delete sub-language
+	 * Delete sub-language.
+     * In order to avoid deletion of main laguages, we check the existence of a parent
 	 * @param Integer The parent id
-	 * @return void()
+	 * @return bool    True on success, false on error
 	 */
-   public static function removed_sub_language ($parent_id,$sub_language_id) {
+   public static function remove_sub_language ($parent_id,$sub_language_id) {
+        if (empty($parent_id) or (intval($parent_id)!=$parent_id) or empty($sub_language_id) or (intval($sub_language_id) != $sub_language_id)) { return false; }
    		$tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-		$sql = 'DELETE FROM '.$tbl_admin_languages.' WHERE parent_id="'.Database::escape_string($parent_id).'" AND id="'.Database::escape_string($sub_language_id).'" ';
-    	Database::query($sql);
+        $sql = 'SELECT dokeos_folder FROM '.$tbl_admin_languages.' WHERE parent_id = '.$parent_id.' and id= '.$sub_language_id;
+        $res = Database::query($sql);
+        if ($res === false or Database::num_rows($res)<1) { return false; }
+        $row = Database::fetch_assoc($res);
+        $res = SubLanguageManager::remove_language_directory($row['dokeos_folder']);
+        if ($res === false) { return false; } //can't delete dir, so do not delete language record
+		$sql = 'DELETE FROM '.$tbl_admin_languages.' WHERE id="'.Database::escape_string($sub_language_id).'" ';
+    	$res = Database::query($sql);
+        return $res;
    }
+
+    /**
+     * Remove directory for sub-language
+     * @param String The sub-language path directory ( e.g. 'spanish_corporate'' )
+     * @return boolean  True on success, false on failure
+     */
+    public static function remove_language_directory($sub_language_dir) {
+        if (empty($sub_language_dir)) { return false; }
+        $dir = api_get_path(SYS_LANG_PATH).$sub_language_dir;
+        if (!is_dir($dir)) { return true; } //even if the dir does not exist, we reach the objective of not having the directory there
+        $content = SubLanguageManager::get_lang_folder_files_list($dir);
+    
+        if (count($content)>0) {
+            foreach ($content as $value_content) {
+                $path_file = $dir.'/'.$value_content;
+                unlink($path_file);
+            }
+            return @rmdir($dir);
+        } else {
+            return @rmdir($dir);
+        }
+    }
+
    	/**
 	 * check if language exist by id
 	 * @param Integer The language id
@@ -239,6 +273,7 @@ class SubLanguageManager {
 	 * @return void()
 	 */
     public static function set_platform_language ($language_id) {
+        if (empty($language_id) or (intval($language_id)!=$language_id)) { return false; }
 		$tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 		$tbl_settings_current 	= Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 		$sql_update = "SELECT english_name FROM ". $tbl_admin_languages." WHERE id='".Database::escape_string($language_id)."'";
@@ -248,6 +283,19 @@ class SubLanguageManager {
 		$result_2 = Database::query($sql_update_2);
     }
 	/**
+	 * Get platform language ID
+	 * @return     int     The platform language ID
+	 */
+    public static function get_platform_language_id () {
+        $name = api_get_setting('platformLanguage');
+        $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $sql = "SELECT id FROM ". $tbl_admin_languages." WHERE englsh_name ='$name'";
+        $res = Database::query($sql);
+        if (Database::num_rows($res)<1) { return false;}
+        $row = Database::fetch_array($res);
+        return $row['id'];
+    }
+    /*
 	 * Get parent language path (or null if no parent)
 	 * @param    string  Children language path
 	 * @return   string  Parent language path or null

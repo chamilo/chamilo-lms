@@ -411,11 +411,18 @@ class PDF {
         if (!empty($course_data['code'])) {
             $teacher_list = CourseManager::get_teacher_list_from_course_code($course_data['code']);
             $teachers = '';
-            foreach($teacher_list as $teacher) {
-                $teachers .=$teacher['firstname'].' '.$teacher['lastname'];
-            }            
-            //$my_header = self::get_header($course_code);        
-            
+            if (!empty($teacher_list)) {                
+                foreach($teacher_list as $teacher) {
+                    //$teachers[]= api_get_person_name($teacher['firstname'], $teacher['lastname']);
+                    $teachers[]= $teacher['firstname'].' '.$teacher['lastname'];
+                }
+                if (count($teachers) > 1) {
+                    $teachers = get_lang('Teachers').': '.implode(', ', $teachers);
+                } else {
+                    $teachers = get_lang('Teacher').': '.implode('', $teachers);
+                }
+            }
+           
             $left_content    = '';
             $center_content  = '';
             $right_content   = $teachers;

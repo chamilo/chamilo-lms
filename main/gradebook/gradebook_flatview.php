@@ -275,15 +275,16 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
 	echo '</div>';*/
 
 	// main graph
-	//@todo load images with jquery
-	echo '<div id="contentArea" style="text-align:center;" >';
+	$flatviewtable->display();
+	
 	$image_file = $flatviewtable->display_graph();
 	$my_info_path_img = array();
 	$my_info_path_img = explode('/', $image_file);
 	if (strlen($my_info_path_img[5]) == 32) {
 		echo '<img  src="'.$image_file.'">';
-	}
-    $flatviewtable->display();
+	}    
+    //@todo load images with jquery
+    echo '<div id="contentArea" style="text-align:center;" >';    
 	$flatviewtable->display_graph_by_resource();
 	echo '</div>';
 }

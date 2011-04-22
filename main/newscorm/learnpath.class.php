@@ -7237,14 +7237,11 @@ class learnpath {
     public function display_item_prerequisites_form($item_id) {
         global $charset;
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-
+        $item_id = intval($item_id);
         /* Current prerequisite */
-        $sql = "
-                    SELECT *
-                    FROM " . $tbl_lp_item . "
-                    WHERE id = " . $item_id;
+        $sql = "SELECT * FROM $tbl_lp_item WHERE id = " . $item_id;
         $result = Database::query($sql);
-        $row = Database :: fetch_array($result);
+        $row    = Database::fetch_array($result);
 
         $preq_id = $row['prerequisite'];
         //$preq_mastery = $row['mastery_score'];
@@ -7254,22 +7251,21 @@ class learnpath {
         $return = '	<div class="row">
                                 <div class="form_header">';
         $return .= get_lang('AddEditPrerequisites');
-        $return .= '</div> 	</div>';
+        $return .= '</div></div>';
         $return .= '<div class="sectioncomment">';
         $return .= '<form method="POST">';
-        $return .= '<table class="lp_prerequisites" style="border-collapse:collapse;">';
-        $return .= '<tr style="border-collapse:collapse;">';
-        $return .= '<th height="24" style="border:1px solid gray; background-color:#F0F0F0;">' . get_lang('Prerequisites') . '</th>';
-        $return .= '<th width="70" height="24" style="border:1px solid gray; background-color:#F0F0F0;">' . get_lang('Minimum') . '</th>';
-        $return .= '<th width="70" height="24" style="border:1px solid gray; background-color:#F0F0F0;">' . get_lang('Maximum') . '</th>';
+        $return .= '<table class="data_table" style="width:650px">';
+        $return .= '<tr>';
+        $return .= '<th height="24">' . get_lang('Prerequisites') . '</th>';
+        $return .= '<th width="70" height="24">' . get_lang('Minimum') . '</th>';
+        $return .= '<th width="70" height="24">' . get_lang('Maximum') . '</th>';
         $return .= '</tr>';
 
         // Adding the none option to the prerequisites see http://www.chamilo.org/es/node/146
         $return .= '<tr >';
-        $return .= '<td colspan="3" class="radio" style="border:1px solid gray;border-collapse:collapse;">';
-        $return .= '<input checked="checked" id="idNone" name="prerequisites" style="margin-left:0; margin-right:10px;" type="radio" />';
+        $return .= '<td colspan="3" class="radio">';
+        $return .= '<input checked="checked" id="idNone" name="prerequisites"  style="margin-left:0px; margin-right:10px;" type="radio" />';
         $return .= '<label for="idNone">' . get_lang('None') . '</label>';
-        $return .= '</td><td />';
         $return .= '</tr>';
 
         $sql 	= "SELECT * FROM " . $tbl_lp_item . " WHERE lp_id = " . $this->lp_id;
@@ -7304,8 +7300,8 @@ class learnpath {
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['id'] == $item_id)
                 break;
-            $return .= '<tr >';
-            $return .= '<td style="border:1px solid #B0B0B0; border-collapse:collapse; height:25px; padding: 3px 5px 3px 3px;" class="radio"' . (($arrLP[$i]['item_type'] != TOOL_QUIZ && $arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
+            $return .= '<tr>';
+            $return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_QUIZ && $arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
             $return .= '<input' . (($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '') . (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ') . 'id="id' . $arrLP[$i]['id'] . '" name="prerequisites" style="margin-left:' . $arrLP[$i]['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $arrLP[$i]['id'] . '" />';
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
@@ -7321,26 +7317,24 @@ class learnpath {
             //$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . ' />';
 
             if ($arrLP[$i]['item_type'] == TOOL_QUIZ) {
-                $return .= '<td class="exercise" style="border:1px solid #B0B0B0;">';
+                $return .= '<td class="exercise" style="border:1px solid #ccc;">';
                 $return .= '<center><input size="4" maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_mastery : 0) . '" /></center>';
                 $return .= '</td>';
-                $return .= '<td class="exercise" style="border:1px solid #B0B0B0;">';
+                $return .= '<td class="exercise" style="border:1px solid #ccc;">';
                 $return .= '<center><input size="4" maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" /></center>';
                 $return .= '</td>';
             }
             if ($arrLP[$i]['item_type'] == TOOL_HOTPOTATOES) {
-                $return .= '<td class="exercise" style="border:1px solid #B0B0B0;">';
+                $return .= '<td class="exercise" style="border:1px solid #ccc;">';
                 $return .= '<center><input size="4" maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_mastery : 0) . '" /></center>';
                 $return .= '</td>';
-                $return .= '<td class="exercise" style="border:1px solid #B0B0B0;">';
+                $return .= '<td class="exercise" style="border:1px solid #ccc;">';
                 $return .= '<center><input size="4" maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" /></center>';
                 $return .= '</td>';
             }
             $return .= '</tr>';
         }
-        $return .= '<tr>';
-        $return .= '<td colspan="3">';
-        $return .= '</td>';
+        $return .= '<tr>';        
         $return .= '</tr>';
         $return .= '</table>';
         $return .= '<div style="padding-top:3px;">';

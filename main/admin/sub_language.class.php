@@ -283,6 +283,7 @@ class SubLanguageManager {
 		$lang=Database::fetch_array($result);
 		$sql_update_2 = "UPDATE ".$tbl_settings_current." SET selected_value='".$lang['english_name']."' WHERE variable='platformLanguage'";
 		$result_2 = Database::query($sql_update_2);
+        return $result_2 !== false;
     }
 	/**
 	 * Get platform language ID

@@ -61,7 +61,7 @@ class TestSubLanguageManager extends UnitTestCase {
     public function testadd_language_directory() {
         $res = SubLanguageManager :: add_language_directory('test');
         $this->assertTrue($res);
-        $res = SubLangageManager :: remove_language_directory('test');
+        $res = SubLanguageManager :: remove_language_directory('test');
     }
 
 	/**

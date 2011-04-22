@@ -100,7 +100,7 @@ class TestFileUpload extends UnitTestCase {
 		function testBuildMissingFilesForm() {
 			global	$_course;
 			$missing_files = array();
-			$upload_path=api_get_path(SYS_COURSE_PATH).'document/image';
+			$upload_path=api_get_path(SYS_CODE_PATH).'default_course_document/images';
 			$file_name = 'board.jpg';
 			$res=build_missing_files_form($missing_files,$upload_path,$file_name);
 			$this->assertTrue(is_string($res));
@@ -118,11 +118,9 @@ class TestFileUpload extends UnitTestCase {
 		//space
 
 		function testDirTotalSpace() {
-			$dirPath= api_get_path(SYS_COURSE_PATH).'document/';
+			$dirPath= api_get_path(SYS_CODE_PATH).'default_course_document/images';
 			$res= dir_total_space($dirPath);
-			if(!is_string($res)) {
-			$this->assertTrue(is_numeric($res));
-			}
+			$this->assertTrue($res>0,'The default_course_document/images dir should be larger than 0 bytes');
 		}
 
 		//filter

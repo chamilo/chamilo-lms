@@ -87,6 +87,9 @@ class GradebookTable extends SortableTable
 	 * Function used by SortableTable to generate the data to display
 	 */
 	function get_table_data($from = 1) {
+        //variables load in index.php
+        global $my_score_in_gradebook, $certificate_min_score;
+        $scoretotal = 0;
 		// determine sorting type
 		$col_adjust = (api_is_allowed_to_create_course() ? 1 : 0);
 		switch ($this->column) {
@@ -112,7 +115,7 @@ class GradebookTable extends SortableTable
 		} else {
 			$sorting |= GradebookDataGenerator :: GDG_SORT_ASC;
 		}
-		//status de user in course
+		//status of user in course
 	    $user_id=api_get_user_id();
 		$course_code=api_get_course_id();
 		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
@@ -123,10 +126,13 @@ class GradebookTable extends SortableTable
 		$weight_total_links = 0;
 
 		foreach ($data_array as $data) {
+            // list of items inside the gradebook (exercises, lps, fora, etc)
 			$row = array ();
 			$item = $data[0];
 			$id = $item->get_id();
-			if (empty($_GET['selectcat']) ) {
+            //the following condition seems strange to me - YW 20110421
+            //GET['selectcat'] is the main gradebook. When defined, it means we are looking at the whole stuff instead of one sub-element (or something like that?)
+			if (empty($_GET['selectcat']) ) { //if not particular gradebook item was selected, take the certificate score for the current item
 				$certificate_min_score = $this->build_certificate_min_score($item);
 			}
 			//if the item is invisible, wrap it in a span with class invisible
@@ -146,7 +152,7 @@ class GradebookTable extends SortableTable
 			} else {
 
 				if (empty($_GET['selectcat'])) {
-				// generating the total score for a course
+				    // generating the total score for a course
 				    $stud_id= api_get_user_id();
 					$cats_course = Category :: load ($id, null, null, null, null, null, false);
 					$alleval_course= $cats_course[0]->get_evaluations($stud_id,true);
@@ -163,16 +169,18 @@ class GradebookTable extends SortableTable
 								$item_total+=$item->get_weight();
 					}
 					$item_value = number_format($item_value, 2, '.', ' ');
-					$cattotal = Category :: load($id);
-					$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
-					$scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).' ('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');
+                    $cattotal = Category :: load($id);
+                    $scoretotal= $cattotal[0]->calc_score(api_get_user_id());
+                    $scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).' ('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');
 					$row[] = $item_value;
 
 				} else {
+                    $cattotal = Category :: load($_GET['selectcat']);
+                    $scoretotal= $cattotal[0]->calc_score(api_get_user_id());
 			   		$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
 			   	}
 			}
-				$row[] = $invisibility_span_open . str_replace(' ','&nbsp;',$data[4]) . $invisibility_span_close;
+    		$row[] = $invisibility_span_open . str_replace(' ','&nbsp;',$data[4]) . $invisibility_span_close;
 
 			//admins get an edit column
 			if (api_is_allowed_to_edit(null, true)) {
@@ -189,11 +197,10 @@ class GradebookTable extends SortableTable
 						$row[] = $value_data;
 					}
 				}
-				//variables load in index.php
-				global $my_score_in_gradebook, $certificate_min_score, $item_value, $certificate_min_score;
 
 				if (empty($_GET['selectcat'])) {
-					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
+                    //$certification_score = ($scoretotal[0]/$scoretotal[1])*100;
+					if (isset($certificate_min_score) && $item_value >= $certificate_min_score) {
 						$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.$_SESSION['gradebook_dest'].'?export_certificate=yes&cat_id='.$id.'" target="_blank">
 										 <img src="'.api_get_path(WEB_CODE_PATH) . 'img/logo.gif" /></a>&nbsp;'.$scoretotal_display;
 
@@ -213,7 +220,8 @@ class GradebookTable extends SortableTable
 					}
 					$row[] = $certificates;
 				} else {
-					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
+                    //$certification_score = ($scoretotal[0]/$scoretotal[1])*100;
+					if (isset($certificate_min_score) && $item_value >= $certificate_min_score) {
 						//register gradebook certificate
 						$current_user_id=api_get_user_id();
 						register_user_info_about_certificate($_GET['selectcat'],$current_user_id,$my_score_in_gradebook,api_get_utc_datetime());

@@ -92,8 +92,8 @@ class ExerciseLink extends AbstractLink
     public function calc_score($stud_id = null) {
     	$tbl_stats = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     	$tbl_stats_e_attempt_recording = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-
-		$sql = 'SELECT * FROM '.$tbl_stats.' WHERE exe_exo_id = '.(int)$this->get_ref_id().' AND orig_lp_id = 0 AND orig_lp_item_id = 0';
+        //the following query should be similar (in conditions) to the one used in exercice/exercice.php, look for note-query-exe-results marker
+		$sql = 'SELECT * FROM '.$tbl_stats.' WHERE exe_exo_id = '.(int)$this->get_ref_id().' AND orig_lp_id = 0 AND orig_lp_item_id = 0  AND status <>\'incomplete\'';
 
 		if (isset($stud_id)){
 
@@ -102,8 +102,8 @@ class ExerciseLink extends AbstractLink
     		$course_code_exe = $this->get_course_code();
     		$sql .= ' AND exe_cours_id="'.$course_code_exe.'" AND exe_user_id = '."'".$stud_id."'";
     	}
-		$sql .= ' ORDER BY exe_id DESC';		
-		$scores = Database::query($sql);
+		$sql .= ' ORDER BY exe_id DESC';
+        $scores = Database::query($sql);
     	if (isset($stud_id)) {
     		// for 1 student
     		if ($data=Database::fetch_array($scores)) {

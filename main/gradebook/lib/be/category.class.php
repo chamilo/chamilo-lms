@@ -415,7 +415,8 @@ class Category implements GradebookItem
 	 */
 	public function is_certificate_available($user_id) {
 		$score = $this->calc_score($user_id);
-		if($score >= $this->certificate_min_score) {
+        $certification_score = ($score[0]/$score[1])*100; //get a percentage score to compare to minimum certificate score
+		if($certification_score >= $this->certificate_min_score) {
 			return true;
 		}
 		return false;

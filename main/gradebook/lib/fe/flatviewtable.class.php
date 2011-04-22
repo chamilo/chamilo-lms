@@ -160,6 +160,7 @@ class FlatViewTable extends SortableTable
 		$img_file = '';
 
 		if ($this->datagen->get_total_items_count()>0 && $total_users > 0 ) {
+            //remove lastname and firstname columns (which are meant for the table, not the graph)
 			array_shift($header_name);
 			array_shift($header_name);
 

@@ -2562,6 +2562,37 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 }
 
 /**
+ * Gets item property by tool
+ * @param string    course code
+ * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
+ * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
+ */
+function api_get_item_property_by_tool($tool, $course_code, $session_id = null) {
+
+    $course_info    = api_get_course_info($course_code);
+    $tool           = Database::escape_string($tool);
+    $ref            = intval($ref);
+
+    // Definition of tables.
+    $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
+    $session_condition = '';
+    $session_id = intval($session_id);
+    if (!empty($session_id)) {
+        $session_condition = ' AND id_session = '.$session_id;
+    }
+    $sql = "SELECT * FROM $item_property_table WHERE tool = '$tool'  $session_condition ";
+    $rs  = Database::query($sql);
+    $item_property_id = '';
+    $list = array();
+    if (Database::num_rows($rs) > 0) {        
+        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            $list[] = $row;
+        }        
+    }
+    return $list;
+}
+
+/**
  * Gets item property id from tool of a course
  * @param string    course code
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
@@ -2583,6 +2614,46 @@ function api_get_item_property_id($course_code, $tool, $ref) {
         $item_property_id = $row['id'];
     }
     return $item_property_id;
+}
+
+
+/**
+ *
+ * Inserts a record in the track_e_item_property table (No update)
+ * 
+ */
+   
+function api_track_item_property_update($tool, $ref, $title, $content, $progress) {
+        $tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+        $course_id = api_get_real_course_id(); //numeric
+        $course_code = api_get_course_id(); //alphanumeric
+        $item_property_id = api_get_item_property_id($course_code, $tool, $ref);
+        if (!empty($item_property_id)) {
+            $sql = "INSERT IGNORE INTO $tbl_stats_item_property SET
+                    course_id           = '$course_id',
+                    item_property_id    = '$item_property_id',
+                    title               = '".Database::escape_string($title)."',
+                    content             = '".Database::escape_string($content)."',
+                    progress            = '".intval($progress)."',
+                    lastedit_date       = '".api_get_utc_datetime()."',
+                    lastedit_user_id    = '".api_get_user_id()."',
+                    session_id          = '".api_get_session_id()."'";
+            Database::query($sql);
+            $affected_rows = Database::affected_rows();
+            return $affected_rows;
+        }
+        return false;
+}
+
+function api_get_track_item_property_history($tool, $ref) {
+    $tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+    $course_id = api_get_real_course_id(); //numeric
+    $course_code = api_get_course_id(); //alphanumeric
+    $item_property_id = api_get_item_property_id($course_code, $tool, $ref);
+    $sql = "SELECT * FROM $tbl_stats_item_property WHERE item_property_id = $item_property_id AND course_id = $course_id ORDER BY lastedit_date DESC";
+    $result = Database::query($sql);
+    $result = Database::store_result($result,'ASSOC');
+    return $result;
 }
 
 /**

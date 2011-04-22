@@ -189,7 +189,9 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_nanogong', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_nanogong', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.8.8.14358' WHERE variable = 'chamilo_database_version';
+ALTER TABLE gradebook_evaluation ADD COLUMN locked int NOT NULL DEFAULT 0;
+
+UPDATE settings_current SET selected_value = '1.8.8.14518' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
@@ -224,4 +226,7 @@ INSERT INTO course_setting(variable,value,category) VALUES ('pdf_export_watermar
 
 ALTER TABLE quiz ADD COLUMN propagate_neg INT NOT NULL DEFAULT 0;
 ALTER TABLE quiz_answer MODIFY COLUMN hotspot_type ENUM('square','circle','poly','delineation','oar');
+
+ALTER TABLE attendance ADD COLUMN locked int NOT NULL default 0;
+CREATE TABLE attendance_sheet_log (id INT  NOT NULL AUTO_INCREMENT, attendance_id INT  NOT NULL DEFAULT 0, lastedit_date DATETIME  NOT NULL DEFAULT '0000-00-00 00:00:00', lastedit_type VARCHAR(200)  NOT NULL, lastedit_user_id INT  NOT NULL DEFAULT 0, calendar_date_value DATETIME NULL, PRIMARY KEY (id));
 

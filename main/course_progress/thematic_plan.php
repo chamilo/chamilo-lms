@@ -8,49 +8,78 @@
 */
 
 // actions menu
-$categories = array ();
-foreach ($default_thematic_plan_title as $id => $title) {
-	$categories[$id] = $title;
+$new_thematic_plan_data = array();
+if (!empty($thematic_plan_data))
+foreach($thematic_plan_data as $thematic_item) {    
+    $thematic_simple_list[] = $thematic_item['description_type'];
+    $new_thematic_plan_data[$thematic_item['description_type']] = $thematic_item;       
 }
-$categories[ADD_THEMATIC_PLAN] = get_lang('NewBloc');
+
+$new_id = ADD_THEMATIC_PLAN;
+if (!empty($thematic_simple_list))
+foreach($thematic_simple_list as $item) {    
+    if ($item >= ADD_THEMATIC_PLAN) {        
+    	$new_id = $item + 1;
+        $default_thematic_plan_title[$item] = $new_thematic_plan_data[$item]['title'];               
+    }
+}
 
 $i=1;
+
+echo '<h2>'.$thematic_data['title'].'</h2>';
+echo $thematic_data['content'];
+
 echo '<div class="actions" style="margin-bottom:30px">';
-ksort($categories);
-foreach ($categories as $id => $title) {
-	if ($i == ADD_THEMATIC_PLAN) {
-		echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_add&thematic_id='.$thematic_id.'&description_type='.$next_description_type.'">'.Display::return_icon($default_thematic_plan_icon[$id], $title,'','32').'</a>';
-		break;
-	} else {
-		echo '<a href="index.php?action=thematic_plan_edit&'.api_get_cidreq().'&description_type='.$id.'&thematic_id='.$thematic_id.'">'.Display::return_icon($default_thematic_plan_icon[$id], $title,'','32').'</a>';
-		$i++;
-	}
+
+if ($action == 'thematic_plan_edit') {
+    echo '<a href="index.php?action=thematic_plan_list&'.api_get_cidreq().'&thematic_id='.$thematic_id.'">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>&nbsp;&nbsp;';
+} else {    
+    echo '<a href="index.php?action=thematic_plan_list&'.api_get_cidreq().'&action=thematic_details&'.api_get_cidreq().'">'.Display::return_icon('back.png', $title, array('height'=>'32')).'</a>&nbsp;&nbsp;';
+    echo '<a href="index.php?action=thematic_plan_edit&'.api_get_cidreq().'&description_type='.$new_id.'&thematic_id='.$thematic_id.'">'.Display::return_icon('new_document.png', get_lang('NewBloc'), array(), 32).'</a>';    
 }
 echo '</div>';
 
-if ($action == 'thematic_plan_list') {
+if ($message == 'ok') {
+        Display::display_normal_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'));    
+}
+if ($action == 'thematic_plan_list') {    
+            
+        $form = new FormValidator('thematic_plan_add','POST','index.php?action=thematic_plan_list&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');                
+        $form->addElement('hidden', 'action', $action);
+        $form->addElement('hidden', 'thematic_plan_token', $token);
+        $form->addElement('hidden', 'thematic_id', $thematic_id);   
+                    
+        //var_dump($default_thematic_plan_title);
+        //var_dump($thematic_simple_list);
+        
+        foreach ($default_thematic_plan_title as $id => $title) {
+        //foreach ($thematic_simple_list as $id) {
+            //$title = $default_thematic_plan_title[$id];
+            $form->addElement('hidden', 'description_type['.$id.']', $id);
+            $form->add_textfield('title['.$id.']', get_lang('Title'), true, array('size'=>'50'));
+            $form->add_html_editor('description['.$id.']', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));   
+            $form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
+              
+            if (!empty($thematic_simple_list) && in_array($id, $thematic_simple_list)) {
+                $thematic_plan = $new_thematic_plan_data[$id];           
+      
+                // set default values
+                $default['title['.$id.']']       = $thematic_plan['title'];
+                $default['description['.$id.']'] = $thematic_plan['description'];                
+                $thematic_plan = null;
 
-	if (isset($thematic_plan_data) && count($thematic_plan_data) > 0) {
-		foreach ($thematic_plan_data as $thematic_plan) {	
-			echo '<div class="sectiontitle" >';			
-				//delete
-				echo '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&thematic_id='.$thematic_plan['thematic_id'].'&action=thematic_plan_delete&description_type='.$thematic_plan['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
-				echo Display::return_icon('delete.png', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'),22);
-				echo '</a> ';								
-				//edit
-				echo '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&thematic_id='.$thematic_plan['thematic_id'].'&action=thematic_plan_edit&description_type='.$thematic_plan['description_type'].'">';
-				echo Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'),22);
-				echo '</a> ';
-				echo Security::remove_XSS($thematic_plan['title'], STUDENT);	
-			echo '</div>';
-			echo '<div class="sectioncomment">';
-			echo text_filter($thematic_plan['description']);
-			echo '</div>';
-		}
-	} else {
-		echo '<em>'.get_lang('ThisCourseDescriptionIsEmpty').'</em>';
-	}
-	
+            } else {
+                $thematic_plan = null;               
+                $default['title['.$id.']']       = $title;
+                $default['description['.$id.']']= '';                    
+            }            
+            
+            $form->setDefaults($default);            
+		}        
+        
+        $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');        
+        $form->display();
+        	
 } else if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
 
 	if ($description_type >= ADD_THEMATIC_PLAN) {
@@ -64,8 +93,8 @@ if ($action == 'thematic_plan_list') {
 	}
 
 	// display form
-	$form = new FormValidator('thematic_plan_add','POST','index.php?action=thematic_plan_list&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
-	$form->addElement('header', '', $header_form);
+	$form = new FormValidator('thematic_plan_add','POST','index.php?action=thematic_plan_edit&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
+	//$form->addElement('header', '', $header_form);
 	$form->addElement('hidden', 'action', $action);
 	$form->addElement('hidden', 'thematic_plan_token', $token);
 	

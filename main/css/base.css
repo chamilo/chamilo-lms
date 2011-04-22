@@ -355,9 +355,33 @@ button:hover {
 }
 
 div.lp_resource {
-    background:#FAFAFA;
-    border:1px solid #ccc;    
+     /*background:#FAFAFA; 
+    border:1px solid #ccc;    */
     padding:5px 10px;
     width:450px;
-	font
+	
+	list-style-type: none;
+    margin: 0;
+    padding: 0;    
+	
+}
+
+.lp_resource_element, .lp_resource_element_no_link {
+	 /*background: -moz-linear-gradient(center top , #FEFEFE, #EEEEEE) repeat scroll 0 0 #EEEEEE;
+	 background: -webkit-linear-gradient(center top , #FEFEFE, #EEEEEE) repeat scroll 0 0 #EEEEEE;*/
+	background-image:-moz-linear-gradient(top,#fefefe,#eee);
+    background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fdfdfd),color-stop(1,#eee));	 
+	 
+    border: 1px solid #CCCCCC;
+    color: #444444;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    text-shadow: 0 1px 1px #F6F6F6;
+	margin:5px;
+	padding:5px;
 }	
+
+.doc_resource {
+	margin:5px;
+}

@@ -223,6 +223,16 @@ Display::display_header(null, 'Path');
 $suredel = trim(get_lang('AreYouSureToDelete'));
 //$suredelstep = trim(get_lang('AreYouSureToDeleteSteps'));
 ?>
+
+
+    <style>
+    #feedback { font-size: 1.4em; }
+    #resExercise .ui-selecting { background: #FECA40; }
+    #resExercise .ui-selected { background: #F39814; color: white; }
+    #resExercise { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+    #resExercise li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+    </style>
+    
 <script type='text/javascript'>
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');
@@ -239,9 +249,20 @@ function confirmation(name) {
         return false;
     }
 }
-$(function() {;
-    $('#resource_tab').tabs();
+$(function() {  
+    $("#resource_tab").tabs();
+
+    $('.lp_resource_element').click(function() {
+        window.location.href = $('a', this).attr('href');
+    });
+    
 });
+
+
+
+
+
+
 </script>
 <?php
 
@@ -347,7 +368,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
                     echo $_SESSION['oLP']->display_student_publication_form('add', 0, $_GET['file']);
                     break;
                 case 'step':
-                    echo $_SESSION['oLP']->display_resources();
+                    $_SESSION['oLP']->display_resources();
                     break;
             }
         }
@@ -356,5 +377,4 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 echo '</table>';
 
 /* FOOTER */
-
 Display::display_footer();

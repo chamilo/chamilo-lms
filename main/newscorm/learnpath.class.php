@@ -5101,7 +5101,7 @@ class learnpath {
         /*$return .= '<div class="sectiontitle">' . get_lang('CreateNewStep') . '</div>';
         $return .= '<div class="sectioncomment"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">' . '<img title="Nuevo documento" src="../img/new_doc.gif" alt="Nuevo documento"/> ' . get_lang('NewDocument') . '</a></div>';
         $return .= '<div class="sectiontitle">' . get_lang('UseAnExistingResource') . '</div>';*/
-        
+       
         $new_document = Display::return_message(Display::url(get_lang('NewDocument') , api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id));
 
         //Get all the docs
@@ -6860,17 +6860,17 @@ class learnpath {
         $return .= '	</div>
                                 </div>';
         $return .= '<div class="sectioncomment">';
-        $return .= '<form method="POST">' . "\n";
-        $return .= "\t" . '<table class="lp_form">' . "\n";
+        $return .= '<form method="POST">';
+        $return .= '<table class="lp_form">';
         if ($action != 'move') {
-            $return .= "\t\t" . '<tr>' . "\n";
-            $return .= "\t\t\t" . '<td class="label"><label for="idTitle">' . get_lang('Title') . '</label></td>' . "\n";
-            $return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" size="44" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>' . "\n";
-            $return .= "\t\t" . '</tr>' . "\n";
+            $return .= "\t\t" . '<tr>';
+            $return .= "\t\t\t" . '<td class="label"><label for="idTitle">' . get_lang('Title') . '</label></td>';
+            $return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" size="44" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>';
+            $return .= "\t\t" . '</tr>';
         }
-        $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>' . "\n";
-        $return .= "\t\t\t" . '<td class="input">' . "\n";
+        $return .= "\t\t" . '<tr>';
+        $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>';
+        $return .= "\t\t\t" . '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="idParent" name="parent" style="width:100%;" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
         //$parent_item_id = $_SESSION['parent_item_id'];
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
@@ -6895,11 +6895,11 @@ class learnpath {
             reset($arrLP);
         }
         $return .= "\t\t\t\t" . '</select>';
-        $return .= "\t\t\t" . '</td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
-        $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '</label></td>' . "\n";
-        $return .= "\t\t\t" . '<td class="input">' . "\n";
+        $return .= "\t\t\t" . '</td>';
+        $return .= "\t\t" . '</tr>';
+        $return .= "\t\t" . '<tr>';
+        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '</label></td>';
+        $return .= "\t\t\t" . '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="idPosition" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -6914,8 +6914,8 @@ class learnpath {
             }
         }
         $return .= "\t\t\t\t" . '</select>';
-        $return .= "\t\t\t" . '</td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
+        $return .= "\t\t\t" . '</td>';
+        $return .= "\t\t" . '</tr>';
         if ($action != 'move') {
             $id_prerequisite = 0;
             if (is_array($arrLP)) {
@@ -6939,8 +6939,8 @@ class learnpath {
 
             // Commented the prerequisites, only visible in edit (work).
             /*
-                    $return .= "\t\t" . '<tr>' . "\n";
-                    $return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>' . "\n";
+                    $return .= "\t\t" . '<tr>';
+                    $return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>';
                     $return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang('NoPrerequisites').'</option>';
 
                     foreach($arrHide as $key => $value) {
@@ -6957,40 +6957,39 @@ class learnpath {
 
                     $return .= "</select></td>";
             */
-            $return .= "\t\t" . '</tr>' . "\n";
-
+            $return .= "\t\t" . '</tr>';
         }
 
-        $return .= "\t\t" . '<tr>' . "\n";
+        $return .= "\t\t" . '<tr>';
         if ($action == 'add') {
             $return .= '<td>&nbsp</td><td><button class="save" name="submit_button" type="submit">' . get_lang('AddAssignmentToCourse') . '</button></td>';
         } else {
             $return .= '<td>&nbsp</td><td><button class="save" name="submit_button" type="submit">' . get_lang('EditCurrentStudentPublication') . '</button></td>';
         }
-        $return .= "\t\t" . '</tr>' . "\n";
+        $return .= "\t\t" . '</tr>';
 
-        $return .= "\t" . '</table>' . "\n";
+        $return .= "\t" . '</table>';
 
         if ($action == 'move') {
-            $return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />' . "\n";
-            $return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />' . "\n";
+            $return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />';
+            $return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />';
         }
 
         if (is_numeric($extra_info)) {
-            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />' . "\n";
+            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />';
         } elseif (is_array($extra_info)) {
-            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />' . "\n";
+            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />';
         }
-        $return .= "\t" . '<input name="type" type="hidden" value="' . TOOL_STUDENTPUBLICATION . '" />' . "\n";
-        $return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />' . "\n";
-        $return .= '</form>' . "\n";
-        $return .= '</div>' . "\n";
+        $return .= "\t" . '<input name="type" type="hidden" value="' . TOOL_STUDENTPUBLICATION . '" />';
+        $return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />';
+        $return .= '</form>';
+        $return .= '</div>';
         return $return;
     }
 
     /**
      * Displays the menu for manipulating a step
-     * @return unknown
+     * @return string html 
      */
     public function display_manipulate($item_id, $item_type = TOOL_DOCUMENT) {
         global $charset, $_course;
@@ -7028,18 +7027,11 @@ class learnpath {
             case TOOL_STUDENTPUBLICATION :
                 // Commented the message cause should not show it.
                 //$lang = get_lang('TitleManipulateStudentPublication');
-
                 break;
         }
 
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $sql = "
-                    SELECT
-                         *
-                    FROM " . $tbl_lp_item . " as lp
-                    WHERE
-                        lp.id = " . $item_id;
-
+        $sql    = "SELECT * FROM " . $tbl_lp_item . " as lp WHERE lp.id = " . $item_id;
         $result = Database::query($sql);
 
         $row = Database::fetch_assoc($result);
@@ -7058,18 +7050,16 @@ class learnpath {
         }
         // Commented ":" for message in step.
         //$return .= $lang.': ';
-
-        $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '&path_item=' . $row['path'] . '" title="' . get_lang('Edit') . '"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="' . get_lang('Edit') . '" /> ' . get_lang('Edit') . '</a>';
-        $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="' . get_lang('Move') . '" /> ' . get_lang('Move') . '</a>';
+        $url = api_get_self() . '?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
+         
+        $return .= Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), 22), $url.'&action=edit_item&path_item=' . $row['path']);
+        $return .= Display::url(Display::return_icon('move.png', get_lang('Move'), array(), 22), $url.'&action=move_item');
+        
         // Commented for now as prerequisites cannot be added to chapters.
         if ($item_type != 'dokeos_chapter' && $item_type != 'chapter') {
-            $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="' . get_lang('Prerequisites') . '"><img align="absbottom" alt="' . get_lang('Prerequisites') . '" src="../img/right.gif" title="' . get_lang('Prerequisites') . '" /> ' . get_lang('Prerequisites') . '</a>';
+            $return .= Display::url(Display::return_icon('accept.png', get_lang('Prerequisites'), array(), 22), $url.'&action=edit_item_prereq');
         }
-        $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($s_title) . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="' . get_lang('Delete') . '" /> ' . get_lang('Delete') . '</a>';
-
-        //$return .= '<br /><br /><p class="lp_text">' . ((trim($s_description) == '') ? ''.get_lang('NoDescription').'' : stripslashes(nl2br($s_description))) . '</p>';
-
-        //$return.="</td><td valign='top'>";
+        $return .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), 22), $url.'&action=delete_item');
 
         // Get the audiorecorder. Use of ob_* functions since there are echos in the file.
         ob_start();
@@ -7080,10 +7070,8 @@ class learnpath {
         }
         $return .= ob_get_contents();
         ob_end_clean();
-        // End of audiorecorder include.
-
+        // End of audiorecorder include
         $return .= '</div>';
-
         return $return;
     }
 
@@ -7217,25 +7205,25 @@ class learnpath {
     public function display_item_small_form($item_type, $title = '', $data) {
         global $charset;
 
-        $return .= '<div class="lp_small_form">' . "\n";
+        $return .= '<div class="lp_small_form">';
         $return .= '<p class="lp_title">' . $title . '</p>';
-        $return .= '<form method="post">' . "\n";
+        $return .= '<form method="post">';
         $return .= '<table cellpadding="0" cellspacing="0" class="lp_form">';
-        $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td class="label"><label for="idTitle">Title&nbsp;:</label></td>' . "\n";
-        $return .= "\t\t\t" . '<td class="input"><input class="small_form" id="idTitle" name="title" type="text" value="' . api_html_entity_decode($data['title'], ENT_QUOTES) . '" /></td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
+        $return .= "\t\t" . '<tr>';
+        $return .= "\t\t\t" . '<td class="label"><label for="idTitle">Title&nbsp;:</label></td>';
+        $return .= "\t\t\t" . '<td class="input"><input class="small_form" id="idTitle" name="title" type="text" value="' . api_html_entity_decode($data['title'], ENT_QUOTES) . '" /></td>';
+        $return .= "\t\t" . '</tr>';
         // It said these lines of code - see SVN#11724 and SVN#10770
-        //$return .= "\t\t" . '<tr>' . "\n";
-        //$return .= "\t\t\t" . '<td class="label"><label for="idDescription">Description&nbsp;:</label></td>' . "\n";
-        //$return .= "\t\t\t" . '<td class="input"><textarea class="small_form" id="idDescription" name="description" rows="4">' . $data['description'] . '</textarea></td>' . "\n";
-        //$return .= "\t\t" . '</tr>' . "\n";
-        $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td colspan="2"><button class="save" name="submit_button" type="submit">' . get_lang('Save') . '</button></td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
-        $return .= "\t\t" . '</table>' . "\n";
-        $return .= "\t" . '<input name="parent" type="hidden" value="' . $data['parent_item_id'] . '"/>' . "\n";
-        $return .= "\t" . '<input name="previous" type="hidden" value="' . $data['previous_item_id'] . '"/>' . "\n";
+        //$return .= "\t\t" . '<tr>';
+        //$return .= "\t\t\t" . '<td class="label"><label for="idDescription">Description&nbsp;:</label></td>';
+        //$return .= "\t\t\t" . '<td class="input"><textarea class="small_form" id="idDescription" name="description" rows="4">' . $data['description'] . '</textarea></td>';
+        //$return .= "\t\t" . '</tr>';
+        $return .= "\t\t" . '<tr>';
+        $return .= "\t\t\t" . '<td colspan="2"><button class="save" name="submit_button" type="submit">' . get_lang('Save') . '</button></td>';
+        $return .= "\t\t" . '</tr>';
+        $return .= "\t\t" . '</table>';
+        $return .= "\t" . '<input name="parent" type="hidden" value="' . $data['parent_item_id'] . '"/>';
+        $return .= "\t" . '<input name="previous" type="hidden" value="' . $data['previous_item_id'] . '"/>';
         $return .= '</form>';
         $return .= '</div>';
         return $return;
@@ -7356,7 +7344,7 @@ class learnpath {
         $return .= '</tr>';
         $return .= '</table>';
         $return .= '<div style="padding-top:3px;">';
-        $return .= '<button class="save" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . ' </button></td>' . "\n";
+        $return .= '<button class="save" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . ' </button></td>';
         $return .= '</div>';
         $return .= '</form>';
         $return .= '</div>';
@@ -7425,7 +7413,7 @@ class learnpath {
         $res_doc = Database::query($sql_doc);
 
         //$return = '<div class="lp_resource_header"' ." onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . '>'.Display::return_icon('folder_document.gif',get_lang('Documents'),array('style'=>'margin-right:5px;', 'height' => '16px')).' '. get_lang('Documents') . '</div>';
-        $return = '<div class="lp_resource" id="resDoc">';
+        $return = '<div class="lp_resource">';
         $resources = Database::store_result($res_doc);
         $resources_sorted = array();
 
@@ -7447,12 +7435,12 @@ class learnpath {
             if ($is_file) {
                 //eval ('$resources_sorted' . $path_to_eval . '[' . $resource['id'] . '] = "' . $last_path . '";');
                 //for backward compatibility
-                 if (empty($resource['title'])) {
+                if (empty($resource['title'])) {
                     $resource['title'] = basename($resource['path']);
-                 }
-                eval ('$resources_sorted' . $path_to_eval . '[' . $resource['id'] . '] = "' .$resource['title']."/". $last_path. '";');
-            } else {
-                eval ('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["id"]=' . $resource['id'] . ';');
+                }                
+                eval ('$resources_sorted' . $path_to_eval . '[' . $resource['id'] . '] = "' .$resource['title']."/". $last_path. '";');                
+            } else {                
+                eval ('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["id"]=' . $resource['id'] . ';');                
             }
         }
         $return .= $this->write_resources_tree($resources_sorted);
@@ -7481,32 +7469,28 @@ class learnpath {
                     //hide some folders
                     if (in_array($key, array('shared_folder','chat_files', 'HotPotatoes_files', 'css', 'certificates'))){
                         continue;
-                    }elseif(preg_match('/_groupdocs/', $key)){
+                    } elseif(preg_match('/_groupdocs/', $key)){
                         continue;
-                    }elseif(preg_match('/sf_user_/', $key)){
+                    } elseif(preg_match('/sf_user_/', $key)){
                         continue;
-                    }elseif(preg_match('/shared_folder_session_/', $key)){
+                    } elseif(preg_match('/shared_folder_session_/', $key)){
                         continue;
                     }
 
                     //trad some titles
-                    if ($key=='images'){
+                    if ($key=='images') {
                         $key=get_lang('Images');
-                    }
-                    elseif($key=='gallery'){
+                    } elseif($key=='gallery') {
                         $key=get_lang('Gallery');
-                    }
-                    elseif($key=='flash'){
+                    } elseif($key=='flash') {
                         $key=get_lang('Flash');
-                    }
-                    elseif($key=='audio'){
+                    } elseif($key=='audio'){
                         $key=get_lang('Audio');
-                    }
-                    elseif($key=='video'){
+                    } elseif($key=='video') {
                         $key=get_lang('Video');
                     }
 
-                    $return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '" onClick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;<span onClick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')" style="cursor: pointer;" >' . $key . '</span></div><div style="display: none;" id="' . $resource['id'] . '">';
+                    $return .= '<div class="doc_resource"><div style="margin-left:' . ($num * 18) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '" onClick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;<span onClick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')" style="cursor: pointer;" >' . $key . '</span></div><div style="display: none;" id="' . $resource['id'] . '">';
                     $return .= $this->write_resources_tree($resource['files'], $num +1);
                     $return .= '</div></div>';
                 } else {
@@ -7520,7 +7504,7 @@ class learnpath {
                           $my_file_name  = $file_info[1];
                         //$return .= '<div><div style="margin-left:' . (($num +1) * 15) . 'px;margin-right:5px;"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $this->lp_id . '"><img alt="" src="../img/' . $icon . '" title="" />&nbsp;' . $resource .'</a></div></div>';
                         // Show the "image name" not the filename of the image.
-                          $return .= '<div><div style="margin-left:' . (($num +1) * 15) . 'px;margin-right:5px;"><a href="' . api_get_self() . '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $this->lp_id . '"><img alt="" src="../img/' . $icon . '" title="" />&nbsp;' . $my_file_title . "</a></div></div>\r\n";		}
+                          $return .= '<div class="doc_resource"><div style="margin-left:' . (($num +1) * 18) . 'px;margin-right:5px;"><a href="' . api_get_self() . '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $this->lp_id . '"><img alt="" src="../img/' . $icon . '" title="" />&nbsp;' . $my_file_title . "</a></div></div>\r\n";		}
                 }
             }
         }
@@ -7540,14 +7524,20 @@ class learnpath {
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
 
-        $sql_quiz = "SELECT * FROM " . $tbl_quiz . " WHERE active<>'-1' $condition_session ORDER BY title ASC";
-        $sql_hot = "SELECT * FROM $tbl_doc WHERE path LIKE '" . $uploadPath . "/%/%htm%'  $condition_session ORDER BY id ASC";
+        $sql_quiz = "SELECT * FROM $tbl_quiz WHERE active<>'-1' $condition_session ORDER BY title ASC";
+        $sql_hot  = "SELECT * FROM $tbl_doc  WHERE path LIKE '" . $uploadPath . "/%/%htm%'  $condition_session ORDER BY id ASC";
 
         $res_quiz = Database::query($sql_quiz);
-        $res_hot = Database::query($sql_hot);
+        $res_hot  = Database::query($sql_hot);
 
         //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' ><img align="left" alt="" src="../img/lp_' . TOOL_QUIZ . '.gif" style="margin-right:5px;" title="" />' . get_lang('Quiz') . '</div>';
-        $return .= '<div class="lp_resource" id="resExercise">';
+        $return .= '<div class="lp_resource">';
+        
+        $return .= '<div class="lp_resource_element">';
+        $return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
+        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'exercice/exercise_admin.php">' . get_lang('NewExercise') . '</a>';
+        $return .= '</div>';
+        
 
         while ($row_hot = Database :: fetch_array($res_hot)) {
             $return .= '<div class="lp_resource_element">';
@@ -7569,10 +7559,7 @@ class learnpath {
         if (Database :: num_rows($res_quiz) == 0) {
             $return .= '<div class="lp_resource_element">' . get_lang('NoExercisesAvailable') . '</div>';
         }
-        $return .= '<div class="lp_resource_element">';
-        $return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'exercice/exercise_admin.php">' . get_lang('NewExercise') . '</a>';
-        $return .= '</div>';
+  
         $return .= '</div>';
         return $return;
     }
@@ -7591,7 +7578,12 @@ class learnpath {
         $res_link = Database::query($sql_link);
 
         //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_LINK . '.gif" style="margin-right:5px;" title="" />' . get_lang('Links') . '</div>';
-        $return .= '<div class="lp_resource" id="resLink">';
+        $return .= '<div class="lp_resource">';
+        
+        $return .= '<div class="lp_resource_element">';
+        $return .= '<img alt="" src="../img/linksnew.gif" style="margin-right:5px;width:16px" title="" />';
+        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'link/link.php?' . api_get_cidreq() . '&action=addlink" title="' . get_lang('LinkAdd') . '">' . get_lang('LinkAdd') . '</a>';
+        $return .= '</div>';
 
         while ($row_link = Database :: fetch_array($res_link)) {
             $return .= '<div class="lp_resource_element">';
@@ -7600,11 +7592,7 @@ class learnpath {
             $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
 
             $return .= '</div>';
-        }
-        $return .= '<div class="lp_resource_element">';
-        $return .= '<img alt="" src="../img/linksnew.gif" style="margin-right:5px;width:16px" title="" />';
-        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'link/link.php?' . api_get_cidreq() . '&action=addlink" title="' . get_lang('LinkAdd') . '">' . get_lang('LinkAdd') . '</a>';
-        $return .= '</div>';
+        }     
 
         if (Database :: num_rows($res_link) == 0)
             $return .= '<div class="lp_resource_element">' . get_lang('NoLinksAvailable') . '</div>';
@@ -7625,7 +7613,7 @@ class learnpath {
         $sql_student = "SELECT * FROM $tbl_student  $condition_session ORDER BY title ASC";
         $res_student = Database::query($sql_student);
         //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.gif" style="margin-right:5px;" title="" />' . get_lang('Student_publication') . '</div>';
-        $return .= '<div class="lp_resource" id="resStudent">';
+        $return .= '<div class="lp_resource" >';
         $return .= '<div class="lp_resource_element">';
         $return .= '<img align="left" alt="" src="../img/works_small.gif" style="margin-right:5px;" title="" />';
         $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
@@ -7650,10 +7638,15 @@ class learnpath {
         $a_forums = get_forums();
 
         //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('forums').style.display == 'block') {document.getElementById('forums').style.display = 'none';} else {document.getElementById('forums').style.display = 'block';}\"" . '><img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />' . get_lang('Forums') . '</div>';
-        $return .= '<div class="lp_resource" id="forums">';
+        $return .= '<div class="lp_resource">';
+        
+        $return .= '<div class="lp_resource_element">';
+        $return .= '<img alt="" src="../img/forum_new_small.gif" style="margin-right:5px;" title="" />';
+        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'forum/index.php?' . api_get_cidreq() . '&action=add&amp;content=forum" title="' . get_lang('CreateANewForum') . '">' . get_lang('CreateANewForum') . '</a>';
+        $return .= '</div>';
 
         foreach ($a_forums as $forum) {
-            $return .= '<div class="lp_resource_element">';
+            $return .= '<div class="lp_resource_element_no_link">';
             $return .= '<script type="text/javascript">
                                     function toggle_forum(forum_id){
                                         if(document.getElementById("forum_"+forum_id+"_content").style.display == "none"){
@@ -7670,7 +7663,7 @@ class learnpath {
             if (!empty($forum['forum_id'])) {
             $return .= '<img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
             $return .= '<a style="cursor:hand" onclick="javascript: toggle_forum(' . $forum['forum_id'] . ')" style="vertical-align:middle"><img src="' . api_get_path(WEB_IMG_PATH) . 'add.gif" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" /></a>
-                                    <a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . Security :: remove_XSS($forum['forum_title']) . '</a><ul style="display:none" id="forum_' . $forum['forum_id'] . '_content">';
+                        <a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . Security :: remove_XSS($forum['forum_title']) . '</a><ul style="display:none" id="forum_' . $forum['forum_id'] . '_content">';
             }
 
             $a_threads = get_threads($forum['forum_id']);
@@ -7681,12 +7674,6 @@ class learnpath {
             }
             $return .= '</ul></div>';
         }
-
-        $return .= '<div class="lp_resource_element">';
-        $return .= '<img alt="" src="../img/forum_new_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'forum/index.php?' . api_get_cidreq() . '&action=add&amp;content=forum" title="' . get_lang('CreateANewForum') . '">' . get_lang('CreateANewForum') . '</a>';
-        $return .= '</div>';
-
         return $return;
     }
 

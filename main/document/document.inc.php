@@ -173,7 +173,7 @@ function create_document_link($document_data, $show_as_icon = false) {
     if ($path == '/shared_folder') {
         $tooltip_title_alt = get_lang('UserFolders');
     } elseif(strstr($path, 'shared_folder_session_')) {
-        $tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name().')';
+        $tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name(api_get_session_id()).')';
     } elseif(strstr($tooltip_title, 'sf_user_')) {
         $userinfo = Database::get_user_info_from_id(substr($tooltip_title, 8));
         $tooltip_title_alt = get_lang('UserFolder').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);

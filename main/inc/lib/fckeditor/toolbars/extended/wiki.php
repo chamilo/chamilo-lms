@@ -23,7 +23,7 @@ else{
 $config['ToolbarSets']['Normal'] = array(
 	array('Save','NewPage','Templates','-','PasteText'),
 	array('Undo','Redo'),
-	array('Wikilink','Link','Image','EmbedMovies','Flash','MP3','TableOC','mimetex','asciimath','asciisvg'),
+	array('Wikilink','Link','Image','flvPlayer','Flash','MP3','TableOC','mimetex','asciimath','asciisvg'),
 	array('UnorderedList','OrderedList','Rule'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
 	array('FontFormat','FontName','FontSize','Bold','Italic','Underline','TextColor','BGColor','Source'),

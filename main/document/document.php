@@ -61,9 +61,16 @@ $htmlHeadXtra[] = api_get_js('yoxview/yoxview-init.js');
 $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';   
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'yoxview/yoxview.css" type="text/css">';
 $mediaplayer_path= api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
+
+//automatic loading the course language for yoxview
+$yoxview_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
+$lang_yoxview  = api_get_language_isocode();
+$lang_yoxview = isset($yoxview_code_translation_table[$lang_yoxview]) ? $yoxview_code_translation_table[$lang_yoxview] : $lang_yoxview;
+
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {    
     $(".yoxview").yoxview({
+		lang: "'.$lang_yoxview.'",
 		flashVideoPlayerPath: "'.$mediaplayer_path.'",	  
         skin: "top_menu",
         titleAttribute:"alt"   

@@ -281,6 +281,25 @@ if (isset ($_GET['visibleeval'])) {
 		$filter_confirm_msg = false;
 	}
 }
+//parameters for evaluations
+if (isset($_GET['lockedeval'])) {
+	block_students();
+	$locked = Security::remove_XSS($_GET['lockedeval']);
+	if (isset($_GET['typelocked']) && api_is_platform_admin()){
+		$type_locked = 0;
+		$confirmation_message = get_lang('EvaluationHasBeenUnLocked');
+	} else {
+		$type_locked = 1;
+		$confirmation_message = get_lang('EvaluationHasBeenLocked');
+	}
+	$eval= Evaluation :: load($locked);
+	if ($eval[0] != null) {
+		$eval[0]->locked_evaluation($locked, $type_locked);
+	}
+	
+	$filter_confirm_msg = false;	
+
+}
 if (isset ($_GET['deleteeval'])) {
 	block_students();
 	$eval= Evaluation :: load($_GET['deleteeval']);
@@ -525,8 +544,8 @@ if (isset ($move_form)){
 
 // LOAD DATA & DISPLAY TABLE
 
-$is_platform_admin= api_is_platform_admin();
-$is_course_admin= api_is_allowed_to_create_course();
+$is_platform_admin  = api_is_platform_admin();
+$is_course_admin    = api_is_allowed_to_create_course();
 
 //load data for category, evaluation and links
 if (empty ($_GET['selectcat'])) {
@@ -682,25 +701,6 @@ if (isset ($_GET['studentoverview'])) {
 				Display :: display_warning_message(get_lang('NoCertificateAvailable'));
 			}
 		}
-
-		/*$pdf= new Cezpdf('a4','landscape');
-		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
-		$pdf->ezSetMargins(30, 30, 50, 50);
-		//line Y coordinates in landscape mode are upside down (500 is on top, 10 is on the bottom)
-		$pdf->line(50,50,790,50);
-		$pdf->line(50,550,790,550);
-		$pdf->ezSetY(450);
-		$pdf->ezImage(api_get_path(SYS_CODE_PATH).'img/dokeos_logo_certif.png',1,400,'','center','');
-		$pdf->ezSetY(480);
-		$pdf->ezText($certif_text,28,array('justification'=>'center'));
-		//$pdf->ezSetY(750);
-		$pdf->ezSetY(50);
-		$pdf->ezText($date,18,array('justification'=>'center'));
-		$pdf->ezSetY(580);
-		$pdf->ezText($organization_name,22,array('justification'=>'left'));
-		$pdf->ezSetY(580);
-		$pdf->ezText($portal_name,22,array('justification'=>'right'));
-		$pdf->ezStream();*/
 	}
 	exit;
 } else {

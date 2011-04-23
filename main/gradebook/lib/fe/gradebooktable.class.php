@@ -56,7 +56,7 @@ class GradebookTable extends SortableTable
 		}
 		//admins get an edit column
 		if (api_is_allowed_to_edit(null, true)) {
-			$this->set_header($column++, get_lang('Modify'), false, 'width="100"');
+			$this->set_header($column++, get_lang('Modify'), false, 'width="120px"');
 			//actions on multiple selected documents
 			$this->set_form_actions(array (
 				'deleted' => get_lang('DeleteSelected'),
@@ -184,10 +184,10 @@ class GradebookTable extends SortableTable
 
 			//admins get an edit column
 			if (api_is_allowed_to_edit(null, true)) {
-				$cat=new Category();
-				$show_message=$cat->show_message_resource_delete($item->get_course_code());
+				$cat = new Category();
+				$show_message = $cat->show_message_resource_delete($item->get_course_code());
 				if ($show_message===false) {
-					$row[] = $this->build_edit_column ($item); 
+					$row[] = $this->build_edit_column($item); 
 				}
 			} else {
 				//students get the results and certificates columns
@@ -431,7 +431,8 @@ private function build_id_column ($item) {
 				return $text;
 		}
 	}
-	private function build_edit_column ($item) {
+	
+	private function build_edit_column($item) {
 		switch ($item->get_item_type()) {
 			// category
 			case 'C' :

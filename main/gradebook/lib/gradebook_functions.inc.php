@@ -218,7 +218,8 @@ function build_edit_icons_cat($cat, $selectcat) {
  * @param int $selectcat id of selected category
  */
 function build_edit_icons_eval($eval, $selectcat) {
-	$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
+	$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
+	$locked_status = $eval->get_locked();
 	$eval->get_course_code();
 	$cat=new Category();
 	$message_eval=$cat->show_message_resource_delete($eval->get_course_code());
@@ -233,7 +234,16 @@ function build_edit_icons_eval($eval, $selectcat) {
 		if (api_is_allowed_to_edit(null, true)){
 			$modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code().'">'.Display::return_icon('history.png', get_lang('GradebookQualifyLog'),'','22').'</a>';			
 		}
-        $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deleteeval=' . $eval->get_id() . '&selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('Delete'),'','22').'</a>';
+		if ($locked_status == 0){
+			$modify_icons .= "&nbsp;<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureToLockedTheEvaluation'))."')) { location.href='".api_get_self().'?lockedeval=' . $eval->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code()."'; }\">".Display::return_icon('unlock.png',get_lang('LockEvaluation'), array(), 22)."</a>";
+		} else {
+			if (api_is_platform_admin()){
+				$modify_icons .= "&nbsp;<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureToUnLockedTheEvaluation'))."')) { location.href='".api_get_self().'?lockedeval=' . $eval->get_id() . '&amp;typelocked=&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code()."'; }\">".Display::return_icon('lock.png',get_lang('UnLockEvaluation'), array(), 22)."</a>";
+			} else {
+				$modify_icons .= '&nbsp;<img src="../img/locked_na.png" border="0" title="' . get_lang('TheEvaluationIsLocked') . '" alt="" />';
+			}
+		}
+		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deleteeval=' . $eval->get_id() . '&selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('Delete'),'','22').'</a>';
 		return $modify_icons;
 	}
 }

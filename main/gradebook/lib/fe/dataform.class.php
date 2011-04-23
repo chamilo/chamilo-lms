@@ -27,14 +27,18 @@ class DataForm extends FormValidator {
 	 * @param method
 	 * @param action
 	 */
-	function DataForm($form_type, $form_name, $method = 'post', $action = null,$target='') {
+	function DataForm($form_type, $form_name, $method = 'post', $action = null,$target='', $locked_status) {
 		parent :: __construct($form_name, $method, $action,$target);
 		$this->form_type = $form_type;
 		if ($this->form_type == self :: TYPE_IMPORT) {
 			$this->build_import_form();
 		}
 		elseif ($this->form_type == self :: TYPE_EXPORT) {
-			$this->build_export_form();
+			if ($locked_status == 0) {
+				$this->build_export_form_option(false);
+			} else {
+				$this->build_export_form();
+			}			
 		}
 		elseif ($this->form_type == self :: TYPE_EXPORT_PDF) {
 			$this->build_pdf_export_form();
@@ -61,6 +65,17 @@ class DataForm extends FormValidator {
 		$this->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV (Comma-Separated Values)', 'csv');
 		$this->addElement('radio', 'file_type', null, 'XML (Extensible Markup Language)', 'xml');
 		$this->addElement('radio', 'file_type', null, 'PDF (Portable Document Format)', 'pdf');
+		$this->addElement('style_submit_button', 'submit', get_lang('Export'), 'class="upload"');
+		$this->setDefaults(array (
+			'file_type' => 'csv'
+		));
+	}
+
+	protected function build_export_form_option($show_pdf=true) {
+		$this->addElement('header','label',get_lang('ChooseFormat'));
+		$this->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV (Comma-Separated Values)', 'csv');
+		$this->addElement('radio', 'file_type', null, 'XML (Extensible Markup Language)', 'xml');
+		$this->addElement('radio', 'file_type', Display::return_icon('info3.gif',get_lang('ToExportMustLockEvaluation')), 'PDF (Portable Document Format)', 'pdf', array('disabled'));			
 		$this->addElement('style_submit_button', 'submit', get_lang('Export'), 'class="upload"');
 		$this->setDefaults(array (
 			'file_type' => 'csv'

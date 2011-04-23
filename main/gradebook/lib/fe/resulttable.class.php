@@ -136,7 +136,8 @@ class ResultTable extends SortableTable
     
 	private function build_edit_column ($item) { 
 		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
-		if (api_is_allowed_to_edit(null, true)) {//api_is_course_admin()
+		$locked_status = $this->evaluation->get_locked();
+		if (api_is_allowed_to_edit(null, true) && $locked_status == 0) {//api_is_course_admin()
 			$edit_column = '<a href="' . api_get_self() . '?editres=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '">'.Display::return_icon('edit.png', get_lang('Modify'),'','22').'</a>';
 			$edit_column .= ' <a href="' . api_get_self() . '?delete_mark=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '">'.Display::return_icon('delete.png', get_lang('Delete'),'','22').'</a>';
 		}

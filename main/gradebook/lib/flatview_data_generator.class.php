@@ -157,7 +157,14 @@ class FlatViewDataGenerator
 				$item_value+=round($score[0]/$divide*$item->get_weight(),2);
 				$item_total+=$item->get_weight();
 				if (!$show_all) {
-					$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
+					//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
+					if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, LINK_LEARNPATH,LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {																		
+						$row[] = $score[0];
+                        //$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);	
+					} else {
+						//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
+                        $row[] = $score[0];                        
+					}					
 				} else {
 					$row[] = $scoredisplay->display_score($score, SCORE_DECIMAL);
 					$row[] = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);

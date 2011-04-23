@@ -105,7 +105,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
     <form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_gradebook.$param_filter ?>&attendance_id=<?php echo $attendance_id?>" >
     
-    <div class="attendance-sheet-content" style="width:100%;background-color:#E1E1E1;border:1px solid gray;margin-top:20px;">
+    <div class="attendance-sheet-content" style="width:100%;background-color:#E1E1E1;margin-top:20px;">
         <div class="divTableWithFloatingHeader attendance-users-table" style="width:45%;float:left;margin:0px;padding:0px;">
             <table class="tableWithFloatingHeader data_table" width="100%">
                 <thead>

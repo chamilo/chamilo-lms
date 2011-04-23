@@ -26,9 +26,6 @@ foreach($thematic_simple_list as $item) {
 
 $i=1;
 
-echo '<h2>'.$thematic_data['title'].'</h2>';
-echo $thematic_data['content'];
-
 echo '<div class="actions" style="margin-bottom:30px">';
 
 if ($action == 'thematic_plan_edit') {
@@ -38,6 +35,10 @@ if ($action == 'thematic_plan_edit') {
     echo '<a href="index.php?action=thematic_plan_edit&'.api_get_cidreq().'&description_type='.$new_id.'&thematic_id='.$thematic_id.'">'.Display::return_icon('new_document.png', get_lang('NewBloc'), array(), 32).'</a>';    
 }
 echo '</div>';
+
+echo Display::tag('h2', $thematic_data['title']);
+echo $thematic_data['content'];
+
 
 if ($message == 'ok') {
         Display::display_normal_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'));    

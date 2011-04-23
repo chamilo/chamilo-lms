@@ -22,10 +22,10 @@ class Attendance
 	private $attendance_qualify_title;
 	private $attendance_weight;
 
-        // constants
+    // constants
 	const DONE_ATTENDANCE_LOG_TYPE = 'done_attendance_sheet';
-    CONST UPDATED_ATTENDANCE_LOG_TYPE = 'updated_attendance_sheet';
-        const LOCKED_ATTENDANCE_LOG_TYPE = 'locked_attendance_sheet';
+    const UPDATED_ATTENDANCE_LOG_TYPE = 'updated_attendance_sheet';
+    const LOCKED_ATTENDANCE_LOG_TYPE = 'locked_attendance_sheet';
 
 	public function __construct() {}
 
@@ -123,16 +123,16 @@ class Attendance
 				$actions .= '<center>';
 
                 if (api_is_platform_admin()) {
-                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>&nbsp;';
-                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'), array(), 22).'</a>&nbsp;';
+                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), 22).'</a>';
                 } else {
                     $is_locked_attendance = self::is_locked_attendance($attendance[0]);
                     if ($is_locked_attendance) {
                         $actions .= Display::return_icon('edit_na.gif',get_lang('Edit')).'&nbsp;';
                         $actions .= Display::return_icon('delete_na.gif',get_lang('Delete'));
                     } else {
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>&nbsp;';
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'), array(), 22).'</a>&nbsp;';
+                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), 22).'</a>';
                     }
                 }
 
@@ -402,12 +402,12 @@ class Attendance
 		$users_absent = array_diff($user_ids,$users_present);
 		$affected_rows = 0;
 
-                // get last edit type
-                $calendar_data = $this->get_attendance_calendar_by_id($calendar_id);
-                $lastedit_type = self::DONE_ATTENDANCE_LOG_TYPE;
-                if ($calendar_data['done_attendance']) {
-                    $lastedit_type = self::UPDATED_ATTENDANCE_LOG_TYPE;
-                }
+            // get last edit type
+            $calendar_data = $this->get_attendance_calendar_by_id($calendar_id);
+            $lastedit_type = self::DONE_ATTENDANCE_LOG_TYPE;
+            if ($calendar_data['done_attendance']) {
+                $lastedit_type = self::UPDATED_ATTENDANCE_LOG_TYPE;
+            }
 
 		// save users present in class
 		foreach ($users_present as $user_present) {

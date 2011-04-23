@@ -30,8 +30,4 @@ if (api_is_allowed_to_edit(null, true)) {
 	$table->set_header(4, get_lang('Actions'), false,array('style'=>'text-align:center'));
 	$table->set_form_actions(array ('attendance_delete_select' => get_lang('DeleteAllAttendances')));	
 }
-
 $table->display();
-
-
-?>

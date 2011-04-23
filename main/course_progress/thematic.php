@@ -91,7 +91,7 @@ if ($action == 'thematic_list') {
 			echo '<tr>';
 			
 			// display thematic title		
-			echo '<td><div id="titlethematic" ><strong>'.Security::remove_XSS($thematic['title'], STUDENT).'</strong></div><div>'.Security::remove_XSS($thematic['content'], STUDENT).'</div></td>';
+			echo '<td><h2>'.Security::remove_XSS($thematic['title'], STUDENT).'</h2><div>'.Security::remove_XSS($thematic['content'], STUDENT).'</div></td>';
 			
 			// display thematic plan data
 			echo '<td>';					
@@ -115,19 +115,24 @@ if ($action == 'thematic_list') {
                     $default_thematic_plan_title[$item] = $new_thematic_plan_data[$item]['title'];               
                 }
             }
+            $no_data = true; 
 			if (!empty($default_thematic_plan_title)) {
 				foreach ($default_thematic_plan_title as $id=>$title) { 
                     //avoid others  
-                    if ($title == 'Others' && empty($thematic_plan_data[$thematic['id']][$id]['description'])) { continue;}     
-                    if(isset($thematic_plan_data[$thematic['id']][$id]['title'])) {
-					   echo '<div id="titlethematic" ><strong>'.Security::remove_XSS($thematic_plan_data[$thematic['id']][$id]['title'], STUDENT).'</strong></div><div>'.Security::remove_XSS($thematic_plan_data[$thematic['id']][$id]['description'], STUDENT).'</div>';
+                    if ($title == 'Others' && empty($thematic_plan_data[$thematic['id']][$id]['description'])) { continue; }     
+                    if (!empty($thematic_plan_data[$thematic['id']][$id]['title']) && !empty($thematic_plan_data[$thematic['id']][$id]['description'])) {                       
+					   echo '<h3>'.Security::remove_XSS($thematic_plan_data[$thematic['id']][$id]['title'], STUDENT).'</h3><div>';
+					   echo Security::remove_XSS($thematic_plan_data[$thematic['id']][$id]['description'], STUDENT).'</div>';
+					   $no_data  = false;					   
                     } else {
-                    	echo '<div id="titlethematic" ><strong>'.$title.'</strong></div><br />';
+                    	//echo '<h3>'.$title.'</strong></h3><br />';
                     }                             
 				}
-			} else {
-				echo '<div><em>'.get_lang('StillDoNotHaveAThematicPlan').'</em></div>';
-			}				
+			}
+			
+			if ($no_data) {
+                echo '<div><em>'.get_lang('StillDoNotHaveAThematicPlan').'</em></div>';
+			}		
 			echo '</td>';
 			
 			// display thematic advance data
@@ -135,10 +140,10 @@ if ($action == 'thematic_list') {
 			if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {
 				echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_advance_list&thematic_id='.$thematic['id'].'">'.Display::return_icon('lp_quiz.png',get_lang('EditThematicAdvance'),array('style'=>'vertical-align:middle')).'</a></div><br />';
 			}					
-			echo '<table width="100%">';
+			
 			//if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {
 			if (!empty($thematic_advance_data[$thematic['id']])) {
-                
+			    echo '<table width="100%">';                
 				foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
 					$thematic_advance['start_date'] = api_get_local_time($thematic_advance['start_date']);
 					$thematic_advance['start_date'] = api_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG);
@@ -169,14 +174,13 @@ if ($action == 'thematic_list') {
     							echo '<td><center>-</center></td>';
     						}									
     					}
-					}
-					
+					}					
 					echo '</tr>';							 
 				}
+				echo '</table>';
 			} else {
-				echo '<tr><td width="90%"><div><em>'.get_lang('ThereIsNoAThematicAdvance').'</em></div></td><td>&nbsp;</td>';
-			}									
-			echo '</table>';							
+				echo '<div><em>'.get_lang('ThereIsNoAThematicAdvance').'</em></div>';
+			}							
 			echo '</td>';				
 			echo '</tr>';				
        } //End for

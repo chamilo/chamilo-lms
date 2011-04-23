@@ -54,30 +54,30 @@ if (isset($action) && $action == 'calendar_add') {
 		$form->addElement('datepicker', 'date_time', '', array('form_name'=>'attendance_calendar_add'), 5);
 		$defaults['date_time'] = date('Y-m-d H:i',api_strtotime(api_get_local_time()));
 
-                $form->addElement('html','<br /><br />');
+        $form->addElement('html','<br /><br />');
 
-                $form->addElement('html', '<div id="repeat_check">&nbsp;'. get_lang('RepeatDate').'<input type="checkbox" name="repeat" '.($repeat?'checked="checked"':'').' onclick="javascript: if(this.checked){document.getElementById(\'repeat-date-attendance\').style.display=\'block\';}else{document.getElementById(\'repeat-date-attendance\').style.display=\'none\';}"/>');
-                if ($repeat) {
-                    $form->addElement('html', '<div id="repeat-date-attendance" style="display:block">');
-                } else {
-                    $form->addElement('html', '<div id="repeat-date-attendance" style="display:none">');
-                }
-                $form->addElement('html', '<table>');
-                $a_repeat_type = array('daily'=>get_lang('RepeatDaily'), 'weekly'=>get_lang('RepeatWeekly'), 'monthlyByDate'=>get_lang('RepeatMonthlyByDate'));
-                $form->addElement('html', '<tr><td>'.get_lang('RepeatType').'</td><td>');
-                $form->addElement('select', 'repeat_type', '', $a_repeat_type);
-                $form->addElement('html', '</td></tr>');
+        $form->addElement('html', '<div id="repeat_check">&nbsp;'. get_lang('RepeatDate').'<input type="checkbox" name="repeat" '.($repeat?'checked="checked"':'').' onclick="javascript: if(this.checked){document.getElementById(\'repeat-date-attendance\').style.display=\'block\';}else{document.getElementById(\'repeat-date-attendance\').style.display=\'none\';}"/>');
+        if ($repeat) {
+            $form->addElement('html', '<div id="repeat-date-attendance" style="display:block">');
+        } else {
+            $form->addElement('html', '<div id="repeat-date-attendance" style="display:none">');
+        }
+        $form->addElement('html', '<table>');
+        $a_repeat_type = array('daily'=>get_lang('RepeatDaily'), 'weekly'=>get_lang('RepeatWeekly'), 'monthlyByDate'=>get_lang('RepeatMonthlyByDate'));
+        $form->addElement('html', '<tr><td>'.get_lang('RepeatType').'</td><td>');
+        $form->addElement('select', 'repeat_type', '', $a_repeat_type);
+        $form->addElement('html', '</td></tr>');
 
-                $form->addElement('html', '<tr><td>'.get_lang('RepeatEnd').'</td><td>');
-                $form->addElement('datepickerdate', 'end_date_time', '', array('form_name'=>'attendance_calendar_add'));
-                $defaults['end_date_time'] = date('Y-m-d 12:00:00');
-                $form->addElement('html', '</td></tr>');
-                $form->addElement('html', '</table>');
-                
-                
-                $form->addElement('html', '</div>');
-                $form->addElement('html', '</div>');
-                $form->addElement('html','<br /><br />');
+        $form->addElement('html', '<tr><td>'.get_lang('RepeatEnd').'</td><td>');
+        $form->addElement('datepickerdate', 'end_date_time', '', array('form_name'=>'attendance_calendar_add'));
+        $defaults['end_date_time'] = date('Y-m-d 12:00:00');
+        $form->addElement('html', '</td></tr>');
+        $form->addElement('html', '</table>');
+        
+        
+        $form->addElement('html', '</div>');
+        $form->addElement('html', '</div>');
+        $form->addElement('html','<br /><br />');
 
 		$form->addElement('html','<div class="clear"></div>');
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
@@ -106,8 +106,8 @@ if (isset($action) && $action == 'calendar_add') {
 					echo Display::return_icon('lp_calendar_event.png',get_lang('DateTime')).' '.$calendar['date_time'].'&nbsp;';
 					if (!$is_locked_attendance || api_is_platform_admin()) {
                         echo '<span style="margin-left:20px;">';
-                        echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('style'=>'vertical-align:middle')).'</a>&nbsp;';
-                        echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().$param_gradebook.'&action=calendar_delete&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.Display::return_icon('delete.gif', get_lang('Delete'), array('style'=>'vertical-align:middle')).'</a>';
+                        echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('edit.png', get_lang('Edit'), array('style'=>'vertical-align:middle'), 22).'</a>&nbsp;';
+                        echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().$param_gradebook.'&action=calendar_delete&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.Display::return_icon('delete.png', get_lang('Delete'), array('style'=>'vertical-align:middle'), 22).'</a>';
                         echo '</span>';
                     }
 				}	

@@ -151,7 +151,8 @@ function create_document_link($document_data, $show_as_icon = false) {
             //$new_path = '?id='.$document_data['id'];
             $url = $www.$path;
         }
-        $path = str_replace('%2F', '/',$url_path).'?'.api_get_cidreq();
+        //$path = str_replace('%2F', '/',$url_path).'?'.api_get_cidreq();
+        $path = str_replace('%2F', '/',$url_path); //yox view hack otherwise the image can't be well read 
         $url = $www.$path;
         
         // Disabled fragment of code, there is a special icon for opening in a new window.
@@ -167,7 +168,9 @@ function create_document_link($document_data, $show_as_icon = false) {
     // The little download icon
     //$tooltip_title = str_replace('?cidReq='.$_GET['cidReq'], '', basename($path));
     $tooltip_title = explode('?', basename($path));
-    $tooltip_title = $tooltip_title[0];
+    //$tooltip_title = $tooltip_title[0];
+    $tooltip_title = $title;
+    
 
     $tooltip_title_alt = $tooltip_title;
     if ($path == '/shared_folder') {

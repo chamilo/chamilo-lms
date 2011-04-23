@@ -64,7 +64,9 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'yoxview/yoxview.css"
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {    
     $(".yoxview").yoxview({
-        skin: "top_menu"                    
+        skin: "top_menu",
+        titleAttribute:"alt"
+                         
     });
     for (i=0;i<$(".actions").length;i++) {
         if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {

@@ -228,9 +228,9 @@ function create_document_link($document_data, $show_as_icon = false) {
         }
         //target="'.$target.'"
         if ($filetype == 'file') {
-            return '<a href="'.$url.'" class="yoxviewLink" title="'.$tooltip_title_alt.'" target="yoxview" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;            
+            return '<a href="'.$url.'" class="yoxviewLink" title="'.$tooltip_title_alt.'" target="yoxview" style="float:left" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;            
         } else {
-            return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="yoxview" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+            return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
         }
         //end copy files to users myfiles
     } else {

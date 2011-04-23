@@ -4860,11 +4860,17 @@ function api_check_browscap(){
     }
 }
 
+
+function api_get_js($file) {    
+    return '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'" type="text/javascript" language="javascript"></script>';
+}
+
+
 /**
  * Returns the js header to include the jquery library
  */
 function api_get_jquery_js() {
-	return '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.4.4.min.js" type="text/javascript" language="javascript"></script>';
+    return api_get_js('jquery-1.4.4.min.js');	
 }
 
 
@@ -4904,7 +4910,7 @@ function api_get_jquery_libraries_js($libraries, $include_jquery = true) {
         //Jquery ui
         $theme = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
         $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.css" type="text/css">';
-        $js .= '<script src="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.min.js" type="text/javascript" language="javascript"></script>';
+        $js .= api_get_js('jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.min.js');
     }
     
     //jqgrid js and css
@@ -4918,16 +4924,15 @@ function api_get_jquery_libraries_js($libraries, $include_jquery = true) {
         if (in_array($platform_isocode, $jqgrid_langs)) {
             $languaje = $platform_isocode;
         }    
-    
         $js .= '<link rel="stylesheet" href="'.$js_path.'jqgrid/css/ui.jqgrid.css" type="text/css">';
-        $js .= '<script src="'.$js_path.'jqgrid/js/i18n/grid.locale-'.$languaje.'.js" type="text/javascript" language="javascript"></script>'; 
-        $js .= '<script src="'.$js_path.'jqgrid/js/jquery.jqGrid.min.js" type="text/javascript" language="javascript"></script>';
+        $js .= api_get_js('jqgrid/js/i18n/grid.locale-'.$languaje.'.js');
+        $js .= api_get_js('jqgrid/js/jquery.jqGrid.min.js');
     }
     
     //Document multiple upload funcionality
     if (in_array('jquery-upload',$libraries)) {
-        $js .= '<script src="'.$js_path.'jquery-upload/jquery.fileupload.js" type="text/javascript" language="javascript"></script>'; 
-        $js .= '<script src="'.$js_path.'jquery-upload/jquery.fileupload-ui.js" type="text/javascript" language="javascript"></script>';
+        $js .= api_get_js('jquery-upload/jquery.fileupload.js'); 
+        $js .= api_get_js('jquery-upload/jquery.fileupload-ui.js');
         $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-upload/jquery.fileupload-ui.css" type="text/css">';        
     }
     

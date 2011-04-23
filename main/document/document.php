@@ -54,15 +54,26 @@ unset($_SESSION['paint_dir']);
 
 //jquery thickbox already called from main/inc/header.inc.php
 
+$htmlHeadXtra[] = api_get_jquery_js();
+$htmlHeadXtra[] = api_get_jquery_ui_js();
+//$htmlHeadXtra[] = api_get_js('yoxview/yox.js');
+$htmlHeadXtra[] = api_get_js('yoxview/yoxview-init.js');
+$js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';   
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'yoxview/yoxview.css" type="text/css">';
+ 
 $htmlHeadXtra[] = '<script type="text/javascript">
-$(document).ready( function() {
+$(document).ready( function() {    
+    $(".yoxview").yoxview({
+        skin: "top_menu"                    
+    });
     for (i=0;i<$(".actions").length;i++) {
         if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
             $(".actions:eq("+i+")").hide();
         }
     }
- } );
- </script>';
+});
+</script>';
+
 // Session
 /*
 if (isset($_GET['id_session'])) {
@@ -1080,7 +1091,9 @@ if (count($docs_and_folders) > 1) {
         $table->set_form_actions($form_action, 'path');        
     }    
 }
+echo '<div class="thumbnails yoxview">';
 $table->display();
+echo '</div>';
 
 if (count($docs_and_folders) > 1) {
     if ($is_allowed_to_edit || $group_member_with_upload_rights) {

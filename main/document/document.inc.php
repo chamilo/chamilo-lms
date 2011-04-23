@@ -127,7 +127,7 @@ function create_document_link($document_data, $show_as_icon = false) {
 
     if (!$show_as_icon) {
         // Build download link (icon)
-        $forcedownload_link = ($filetype == 'folder') ? api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&amp;path='.$url_path.$req_gid : api_get_self().'?'.api_get_cidreq().'&amp;action=download&amp;id='.$url_path.$req_gid;
+        $forcedownload_link = ($filetype == 'folder') ? api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&path='.$url_path.$req_gid : api_get_self().'?'.api_get_cidreq().'&amp;action=download&amp;id='.$url_path.$req_gid;
         // Folder download or file download?
         $forcedownload_icon = ($filetype == 'folder') ? 'save_pack.png' : 'save.png';
         // Prevent multiple clicks on zipped folder download
@@ -144,13 +144,16 @@ function create_document_link($document_data, $show_as_icon = false) {
         $is_browser_viewable_file = is_browser_viewable($ext);
         if ($is_browser_viewable_file) {
             //$url = 'showinframes.php?'.api_get_cidreq().'&amp;file='.$url_path.$req_gid;
-            $url = 'showinframes.php?'.api_get_cidreq().'&amp;id='.$document_data['id'].$req_gid;
+            $url = 'showinframes.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
         } else {
             // url-encode for problematic characters (we may not call them dangerous characters...)
             $path = str_replace('%2F', '/',$url_path).'?'.api_get_cidreq();
             //$new_path = '?id='.$document_data['id'];
             $url = $www.$path;
         }
+        $path = str_replace('%2F', '/',$url_path).'?'.api_get_cidreq();
+        $url = $www.$path;
+        
         // Disabled fragment of code, there is a special icon for opening in a new window.
         //// Files that we want opened in a new window
         //if ($ext == 'txt' || $ext == 'log' || $ext == 'css' || $ext == 'js') { // Add here
@@ -158,7 +161,7 @@ function create_document_link($document_data, $show_as_icon = false) {
         //}
     } else {
         //$url = api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$url_path.$req_gid;
-        $url = api_get_self().'?'.api_get_cidreq().'&amp;id='.$document_data['id'].$req_gid;
+        $url = api_get_self().'?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
     }
 
     // The little download icon
@@ -223,8 +226,12 @@ function create_document_link($document_data, $show_as_icon = false) {
         if ($is_browser_viewable_file) {
             $open_in_new_window_link = '<a href="'.$www.str_replace('%2F', '/',$url_path).'?'.api_get_cidreq().'" style="float:right"'.$prevent_multiple_click.' target="_blank">'.Display::return_icon('open_in_new_window.png', get_lang('OpenInANewWindow'), array(),22).'&nbsp;&nbsp;</a>';
         }
-
-        return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+        //target="'.$target.'"
+        if ($filetype == 'file') {
+            return '<a href="'.$url.'" class="yoxviewLink" title="'.$tooltip_title_alt.'" target="yoxview" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;            
+        } else {
+            return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="yoxview" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+        }
         //end copy files to users myfiles
     } else {
         if(preg_match('/shared_folder/', urldecode($url)) && preg_match('/shared_folder$/', urldecode($url))==false && preg_match('/shared_folder_session_'.$current_session_id.'$/', urldecode($url))==false){

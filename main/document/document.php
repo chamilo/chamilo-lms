@@ -60,13 +60,13 @@ $htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = api_get_js('yoxview/yoxview-init.js');
 $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';   
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'yoxview/yoxview.css" type="text/css">';
- 
+$mediaplayer_path= api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {    
     $(".yoxview").yoxview({
+		flashVideoPlayerPath: "'.$mediaplayer_path.'",	  
         skin: "top_menu",
-        titleAttribute:"alt"
-                         
+        titleAttribute:"alt"   
     });
     for (i=0;i<$(".actions").length;i++) {
         if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {

@@ -231,7 +231,7 @@ function create_document_link($document_data, $show_as_icon = false) {
         }
         //target="'.$target.'"
         if ($filetype == 'file') {
-			if(preg_match('/swf$/', urldecode($url)) || (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')){
+			if(preg_match('/swf$/', urldecode($url)) || preg_match('/html$/', urldecode($url)) || preg_match('/htm$/', urldecode($url)) || (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')){
 				$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
 				return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview" style="float:left" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
 			}else{			
@@ -247,7 +247,7 @@ function create_document_link($document_data, $show_as_icon = false) {
             return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';
         } else {
 			if($filetype == 'file') {
-				if(preg_match('/swf$/', urldecode($url)) || (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')){
+				if(preg_match('/swf$/', urldecode($url)) || preg_match('/html$/', urldecode($url)) || preg_match('/htm$/', urldecode($url)) || (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')){
 					$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
 					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).'</a>';
 				}else{			

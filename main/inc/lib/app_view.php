@@ -75,13 +75,14 @@ class View {
 	}
     
     /**
-   	 * It's used into render method for rendering data the template and layout views   
+   	 * It's used into render method for rendering data in the template and layout views
+     * @return  String  Rendered template (as HTML, most of the time)   
    	 */   
 	private function render_template() {		
 		$target = $this->tool_path.$this->template.'.php';
 		if (file_exists($target)) {           
 			ob_start();
-			@extract($this->data, EXTR_OVERWRITE);
+			@extract($this->data, EXTR_OVERWRITE); //pass the $this->data array into local scope
 			require_once $target;
 			$content = ob_get_clean();
 			return $content;

@@ -28,7 +28,7 @@ $stok = Security::get_token();
     <?php } ?>
 
         <span id="categories-search">
-            <form class="course_list" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&hidden_links=<?php echo $hidden_links; ?>">
+            <form class="course_list" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=<?php echo $hidden_links; ?>">
             <label for="search_term"><?php echo get_lang('SearchCourse'); ?></label>
                 <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                 <input type="hidden" name="search_course" value="1" />
@@ -59,7 +59,7 @@ $stok = Security::get_token();
                         if ($code == $category_code) {
                             $category_link = '<strong>'.$category_name.' ('.$count_courses_lv1.')</strong>';
                         } else {
-                            $category_link = '<a href="'. api_get_self().'?action=display_courses&category_code='.$category_code.'&hidden_links='.$hidden_links.'">'.$category_name.'</a> ('.$count_courses_lv1.')';
+                            $category_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$category_code.'&amp;hidden_links='.$hidden_links.'">'.$category_name.'</a> ('.$count_courses_lv1.')';
                         }
 
                         echo '<div>'.$category_link.'</div>';
@@ -72,7 +72,7 @@ $stok = Security::get_token();
                                 if ($code == $subcategory1_code) {
                                     $subcategory1_link = '<strong>'.$subcategory1_name.' ('.$count_courses_lv2.')</strong>';
                                 } else {
-                                    $subcategory1_link = '<a href="'. api_get_self().'?action=display_courses&category_code='.$subcategory1_code.'&hidden_links='.$hidden_links.'">'.$subcategory1_name.'</a> ('.$count_courses_lv2.')';
+                                    $subcategory1_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory1_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory1_name.'</a> ('.$count_courses_lv2.')';
                                 }
                                 echo '<div style="margin-left:20px;">'.$subcategory1_link.'</div>';
                             }
@@ -85,7 +85,7 @@ $stok = Security::get_token();
                                     if ($code == $subcategory2_code) {
                                         $subcategory2_link = '<strong>'.$subcategory2_name.' ('.$count_courses_lv3.')</strong>';
                                     } else {
-                                        $subcategory2_link = '<a href="'. api_get_self().'?action=display_courses&category_code='.$subcategory2_code.'&hidden_links='.$hidden_links.'">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
+                                        $subcategory2_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory2_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
                                     }
                                     echo '<div style="margin-left:40px;">'.$subcategory2_link.'</div>';
                                 }
@@ -148,11 +148,11 @@ $stok = Security::get_token();
                         // we display the icon to subscribe or the text already subscribed
                         if (!in_array($course['code'], $user_coursecodes)) {
                             if ($course['subscribe'] == SUBSCRIBE_ALLOWED) {
-                                    echo '<span class="course-link-desc"><a href="'. api_get_self().'?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">'.get_lang('Subscribe').'</a></span>';
+                                    echo '<span class="course-link-desc"><a href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a></span>';
                             }
                         }
                         if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                            echo '<span class="course-link-desc"><a href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">'.get_lang('CourseDetails').'</a></span>';
+                            echo '<span class="course-link-desc"><a href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">'.get_lang('CourseDetails').'</a></span>';
                         }
 
                      echo  '</div>

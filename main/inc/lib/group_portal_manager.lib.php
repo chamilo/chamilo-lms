@@ -565,7 +565,6 @@ class GroupPortalManager
 		//@todo implement visibility
 
 		if (isset ($keyword)) {
-			$keyword = Database::escape_string($keyword);
 			$sql .= " WHERE (g.name LIKE '%".$keyword."%' OR g.description LIKE '%".$keyword."%'  OR  g.url LIKE '%".$keyword."%' )";
 		}
 

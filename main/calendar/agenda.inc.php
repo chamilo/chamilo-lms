@@ -282,7 +282,7 @@ function get_calendar_items($select_month, $select_year, $select_day = false) {
             if (!empty($row['start_date']) && $row['start_date'] != '0000-00-00 00:00:00')
             $row['start_date_tms'] = api_strtotime($row['start_date']);
             if (!empty($row['end_date']) && $row['end_date'] != '0000-00-00 00:00:00')
-            $row['end_date_tms']   = api_strtotime($row['end_date']);
+            $row['end_date_tms']   = api_strtotime($row['end_date']);            
             $my_events[] = $row;
             $avoid_doubles[] = $row['id'];
         }
@@ -514,8 +514,8 @@ function display_monthcalendar($month, $year, $agenda_items) {
                                             $subtitle = Display::return_icon('view_remove.png', get_lang('GlobalEvent'), array(), 22);
                                             break;
     								    case 'course':
-                                            $bg_color = '#CAFFAA'; 
-                                            $subtitle = Display::return_icon('course.png', get_lang('Course'), array(), 22);                                                                                  
+                                            $bg_color = '#CAFFAA';
+                                            $subtitle = Display::url(Display::return_icon('course.png', $value['course_name'].' '.get_lang('Course'), array(), 22), $value['url']);                                                                            
                                             break;              
     								    default:
     								        //$time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
@@ -525,7 +525,7 @@ function display_monthcalendar($month, $year, $agenda_items) {
     								$dayheader.= '<div class="rounded_div_agenda" style="background-color:'.$bg_color.';">';
     							                                                    
     								$value['title'] = Display::tag('strong', $value['title']);									
-    								$dayheader .= $time.' '.$subtitle.' '.$value['title'];
+    								$dayheader .= $time.' '.Display::div($subtitle,array('style'=>'float:right')).' '.Display::div($value['title']);
     								$dayheader .= '</div>';
     							}
     							

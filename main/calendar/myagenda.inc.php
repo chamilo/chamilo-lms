@@ -107,9 +107,10 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 			$agendaday = date("j",strtotime($item['start_date']));
 			
 			$url  = api_get_path(WEB_CODE_PATH)."calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&day=$agendaday&month=$month&year=$year#$agendaday";
-		    $url  = Display::url($array_course_info["title"], $url);
+		    //$url  = Display::url($array_course_info["title"], $url);
 			
-			$item['url'] = $url;			
+			$item['url'] = $url;
+			$item['course_name'] = $array_course_info['title'];	
 			$item['calendar_type'] = 'course';
 			$my_list[$agendaday][] = $item;
 			/*
@@ -226,8 +227,8 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
                                 $subtitle = Display::return_icon('view_remove.png', get_lang('GlobalEvent'), array(), 22);
                                 break;
                             case 'course':
-                                $bg_color = '#CAFFAA'; 
-                                $subtitle = Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$value['url'];                                                                                  
+                                $bg_color = '#CAFFAA';
+                                $subtitle = Display::url(Display::return_icon('course.png', $value['course_name'].' '.get_lang('Course'), array(), 22), $value['url']);                                                                                  
                                 break;              
                             default:
                                 //$time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
@@ -236,7 +237,7 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 				        $result = '<div class="rounded_div_agenda" style="background-color:'.$bg_color.';">';
                                                                     
                         $value['title'] = Display::tag('strong', $value['title']);                                  
-                        $result .= $time.' '.$subtitle.' '.$value['title'];                        
+                        $result .= $time.' '.Display::div($subtitle,array('style'=>'float:right')).' '.Display::div($value['title']);                        
                         $result .= '</div>';
                         echo $result;
 				   }

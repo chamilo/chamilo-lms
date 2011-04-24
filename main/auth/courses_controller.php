@@ -141,7 +141,7 @@ class CoursesController { // extends Controller {
         $data['browse_courses_in_category'] = $this->model->search_courses($search_term);
         $data['browse_course_categories']   = $browse_course_categories;
 
-        $data['search_term'] = $search_term;
+        $data['search_term'] = Security::remove_XSS($search_term); //filter before showing in template
 
         // getting all the courses to which the user is subscribed to
         $curr_user_id = api_get_user_id();

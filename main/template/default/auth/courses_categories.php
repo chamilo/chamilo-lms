@@ -28,7 +28,7 @@ $stok = Security::get_token();
     <?php } ?>
 
         <span id="categories-search">
-            <form class="course_list" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=<?php echo $hidden_links; ?>">
+            <form class="course_list" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">
             <label for="search_term"><?php echo get_lang('SearchCourse'); ?></label>
                 <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                 <input type="hidden" name="search_course" value="1" />

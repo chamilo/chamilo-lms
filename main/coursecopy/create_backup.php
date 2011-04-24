@@ -70,7 +70,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 } elseif (isset($_POST['backup_option']) && $_POST['backup_option'] == 'select_items') {
 	$cb = new CourseBuilder('partial');
 	$course = $cb->build();
-	Display::display_normal_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
+	
 	CourseSelectForm :: display_form($course);
 } else {
 	$cb = new CourseBuilder();

@@ -49,11 +49,6 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 	$cr->restore($_POST['destination_course']);
 	Display::display_normal_message(get_lang('CopyFinished'));
 } elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
-	// Else, if a CourseSelectForm is requested, show it
-	Display::display_normal_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
-	if (api_get_setting('show_glossary_in_documents') != 'none') {
-		Display::display_normal_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'));
-	}
 	$cb = new CourseBuilder();
 	$course = $cb->build();
 	//echo get_lang('SelectItemsToCopy');

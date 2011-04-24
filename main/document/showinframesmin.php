@@ -160,5 +160,5 @@ if ($pathinfo['extension']=='wav' && api_get_setting('enable_nanogong') == 'true
 }
 else{
 	if ($pathinfo['extension']=='swf'){ $widht='83%'; $height='83%';}else{$widht='100%'; $height='100%';}
-	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$widht.'; height:'.$height.';"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'"></iframe>';
+	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$widht.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'"></iframe>';
 }

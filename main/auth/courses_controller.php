@@ -100,7 +100,7 @@ class CoursesController { // extends Controller {
 
             $data['browse_courses_in_category'] = $this->model->browse_courses_in_category($category_code);
             $data['browse_course_categories'] = $browse_course_categories;
-            $data['code'] = $category_code;
+            $data['code'] = Security::remove_XSS($category_code);
 
             // getting all the courses to which the user is subscribed to
             $curr_user_id = api_get_user_id();

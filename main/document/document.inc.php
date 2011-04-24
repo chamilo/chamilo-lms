@@ -241,11 +241,24 @@ function create_document_link($document_data, $show_as_icon = false) {
             return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
         }
         //end copy files to users myfiles
-    } else {
+    }
+	else {
 		//icons colum
         if(preg_match('/shared_folder/', urldecode($url)) && preg_match('/shared_folder$/', urldecode($url))==false && preg_match('/shared_folder_session_'.$current_session_id.'$/', urldecode($url))==false){
-            return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';
-        } else {
+			if($filetype == 'file') {
+				if(preg_match('/swf$/', urldecode($url)) || preg_match('/html$/', urldecode($url)) || preg_match('/htm$/', urldecode($url)) || (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')){
+					$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
+					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';
+				}else{			
+					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';
+				}          
+        	}
+			else {			
+            	return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';
+			}			
+			
+        } 
+		else{
 			if($filetype == 'file') {
 				if(preg_match('/swf$/', urldecode($url)) || preg_match('/html$/', urldecode($url)) || preg_match('/htm$/', urldecode($url)) || (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')){
 					$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;

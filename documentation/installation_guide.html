@@ -16,7 +16,7 @@
 <body>
 
 <div id="header1">
-    <h1>Chamilo 1.8.7.1 : Installation Guide</h1>
+    <h1>Chamilo 1.8.8 : Installation Guide</h1>
 </div>
 
 <a href="index.html">Documentation</a> &gt; Installation Guide
@@ -24,7 +24,7 @@
 <div id="main">
 <p></p>
 
-<p>Thank you for downloading Chamilo 1.8.7.1.</p>
+<p>Thank you for downloading Chamilo 1.8.8.</p>
 <ul>
   <li>Test Chamilo on <a href="http://campus.chamilo.org">Free Campus</a></li>
 </ul>
@@ -39,13 +39,15 @@
 
   <li><a href="#1._Pre-requisites">Pre-requisites</a></li>
   <li><a href="#2._Installation_of_Chamilo_LMS">Installation of Chamilo LMS</a></li>
-  <li><a href="#3._Upgrade_from_a_previous_version_of">Upgrade from a previous version of Chamilo/Dokeos</a></li>
+  <li><a href="#3._Upgrade_from_a_previous_version_of">Upgrade from a previous version of Chamilo/Dok€os</a></li>
   <li><a href="#4._Troubleshooting">Troubleshooting</a></li>
   <li><a href="#5._Administration_section">Administration section</a></li>
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
   <li><a href="#7._Mathematical_formulas">Mathematical formulas with LaTeX</a></li>
   <li><a href="#8._ASCIIMathML_mathematical_formulas">Mathematical formulas with ASCIIMathML</a></li>
   <li><a href="#9._WIRIS_mathematical_formulas">Mathematical formulas with WIRIS</a></li>
+  <li><a href="#10._Xapian_fulltext_indexing">Full-text indexation with Xapian</a></li>
+  <li><a href="#11._Chamilo_rapid_ppt_conversion">Chamilo Rapid - PPT conversion system</a></li>
 </ol>
 
 <br />
@@ -131,6 +133,12 @@ enable CSS styles package upload and sub-language definition:
   <li>[chamilo]/main/css/</li>
   <li>[chamilo]/main/lang/</li>
 </ul>
+Since Chamilo 1.8.8, you can also enable full-text indexing features which 
+require the php5-xapian PHP's extension module to be installed. If you do use 
+it, you will need to allow your system to write into the sarchdb directory:
+<ul>
+  <li>[chamilo]/searchdb</li>
+</ul> 
 
 <p>On Linux, Mac OS X and BSD operating systems you can use the CHMOD
 0777 command for this (although we recommend you seek advice from an
@@ -139,12 +147,12 @@ On Windows, you may need to check the properties of the folders (by
 right-clicking on them).</p>
 
 <p>
-2.5. The following files need to be readable and writeable for the web browser,
+2.5. The following directory needs to be readable and writeable for the web browser,
 only during the installation process:</p>
 
 <ul>
 
-  <li>chamilo/main/inc/conf/configuration.php (if present)</li>
+  <li>chamilo/main/inc/conf/ (if present)</li>
 </ul>
 
 
@@ -163,8 +171,9 @@ folders (by right-clicking on them).</p>
 Do not modify the home_*.html files directly. Instead,
 choose "Configure the homepage" in the Chamilo administration section.</p>
 
-<p><span style="font-weight: bold;">Windows</span> : with combination packages like XAMPP, out of the box, login and password
-   for MySQL should probably remain empty.</p>
+<p><span style="font-weight: bold;">Windows</span> : with all-in-one packages 
+like XAMPP, you can install Chamilo easily. In this case (and unless you use it
+in production), the login and password for MySQL will probably remain empty.</p>
 
 <p></p>
 
@@ -174,7 +183,8 @@ choose "Configure the homepage" in the Chamilo administration section.</p>
 <ul>
 
   <li><strong>Protect your configuration file: </strong>
-make sure no one can overwrite it. You can find the config file in <em>(chamilo folder)</em>/main/inc/conf/configuration.php.
+make sure no one can overwrite it. You can find the config file in 
+<em>(chamilo folder)</em>/main/inc/conf/configuration.php.
 Make it read-only (windows/xwindows: right-click the file to edit the
 properties. linux/bsd/macosx: use the chmod 444 command). The config
 file is created by Apache so you may need to be root user to change its
@@ -202,6 +212,8 @@ in the administration section of Chamilo, you can use the Chamilo Config Setting
 most of Chamilo uses the mail settings from the php.ini file. However,
 the announcements tool uses phpMailer (another free software project)
 and the settings for this tool can be adjusted in <em>(chamilo folder)</em>/main/inc/conf/mail.conf.php.</li>
+
+  <li>Check our new <a href="./security.html">security guide</a> for more</li>
 </ul>
 
 <br />
@@ -214,28 +226,27 @@ To get the best of Chamilo, you need to finetune PHP settings. Consider : <br />
 
 <ul>
 
-  <li>Editing php.ini file (on windows can be located at <span style="font-weight: bold;">C:\xampp\php\php.ini</span>, on Ubuntu Linux : <span style="font-weight: bold;">/etc/php5/apache2/php.ini</span></li>
-
+  <li>Editing php.ini file (on windows can be located at 
+  <span style="font-weight: bold;">C:\xampp\php\php.ini</span>, 
+  on Ubuntu Linux : 
+  <span style="font-weight: bold;">/etc/php5/apache2/php.ini</span></li>
   <li>search the word "max" and increase values to optimise the server</li>
-
-  <li>you may want to end up&nbsp;with the following values : </li>
+  <li>we recommend the following values : </li>
 </ul>
 
-
-
 <div class="code">
-      max_execution_time = 300&nbsp;&nbsp;&nbsp; ; Maximum execution time of each script, in seconds<br />
-      max_input_time = 600 ; Maximum amount of time each script may spend parsing request data<br />
-      memory_limit = 256M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; Maximum amount of memory a script may consume (128MB)<br />
-      post_max_size = 64M<br />
-      upload_max_filesize = 100M
+      max_execution_time = 300; Maximum execution time of each script, in seconds<br />
+      max_input_time = 600; Maximum amount of time each script may spend parsing request data<br />
+      memory_limit = 256M; Maximum amount of memory a script may consume (128MB)<br />
+      post_max_size = 64M;<br />
+      upload_max_filesize = 100M;<br />
 </div>
 
 <p>Some users could meet problems if their PHP settings don't fit
 these ones:</p>
 
 <ul>
-  <li>short_open_tag       = On</li>
+  <li>short_open_tag       = Off</li>
   <li>safe_mode            = Off</li>
   <li>magic_quotes_gpc     = On</li>
   <li>magic_quotes_runtime = Off</li>
@@ -243,16 +254,20 @@ these ones:</p>
 
 <p>
 Past Chamilo versions required register_globals to be set to On. This is
-no longer necessary, this can be set to Off and Chamilo will work fine.</p>
+no longer necessary, this can be set to Off and Chamilo will work fine. 
+It is considered a bad choice in terms of security to set register_globals to On.</p>
 
-<p><strong>Note:</strong> if you are using PHP 5.3 or higher, you need to set your <em>date.timezone</em> setting to whatever your server's timezone is.
-For example, if your server is in the 'America/New_York' timezone, set this in your php.ini:</p>
+<p><strong>Note:</strong> if you are using PHP 5.3 or higher, you need to set 
+your <em>date.timezone</em> setting to whatever your server's timezone is.
+For example, if your server is in the 'America/New_York' timezone, set this 
+in your php.ini:</p>
 
 <div class="code">
 date.timezone = 'America/New_York'
 </div>
 
-<p><strong>BSD users:</strong> these php libraries have to be included during php installation:</p>
+<p><strong>BSD users:</strong> these php libraries have to be included during
+ php installation:</p>
 
 <ul>
   <li>php-mysql The mysql shared extension for php</li>
@@ -274,34 +289,37 @@ date.timezone = 'America/New_York'
 
 
 <hr />
-<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Upgrade from a previous version of Chamilo/Dokeos</h2>
+<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Upgrade from a 
+previous version of Chamilo or Dok€os (versions <2.0)</h2>
 Before upgrading we <b>heavily</b> recommend you do a full backup of the previous
-Chamilo/Dokeos directories and databases. If you are unsure how to achieve this
+Chamilo or Dok€os directories and databases. If you are unsure how to achieve this
 please ask your hosting provider for advice.<br />
+<br />
+<em> NOTE: </em> This version of Chamilo can only be used to upgrade from 
+smaller versions of Chamilo or Dok€os. For example, you cannot use the normal 
+upgrade scripts Chamilo 1.8.8 to upgrade from Dok€os 2.0. If you need this, 
+please contact one of the Chamilo Association's official providers.
 
 <p></p>
 
-<h3>3.1 Upgrading from Chamilo 1.8.7</h3>
+<h3>3.1 Upgrading from Chamilo 1.8.x</h3>
 <ul>
   <li> check that you haven't left any customised stylesheet or image*</li>
-  <li> download the Chamilo 1.8.7.1 Palmas install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
-  <li> unzip the new files of Chamilo 1.8.7.1 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
-  <li> update $_configuration['system_version'] to '1.8.7.1' in the main/inc/conf/configuration.php file</li>
-  <li> that's it! You are now using Chamilo 1.8.7.1</li>
+  <li> download the Chamilo 1.8.8 <i>Miraflores</i> install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> unzip the new files of Chamilo 1.8.8 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
+  <li> update $_configuration['system_version'] to '1.8.8' in the main/inc/conf/configuration.php file</li>
+  <li> that's it! You are now using Chamilo 1.8.8</li>
 </ul>
 
 <br />
 
+<h3>3.2 Upgrading from Dok€os 1.8.x</h3>
 
-
-<h3>3.2 Upgrading from Dokeos 1.8.x</h3>
-
-
-<em>If you upgrade from Dokeos 1.8.x</em> :&nbsp;
+<em>If you upgrade from Dok€os 1.8.x</em> :&nbsp;
 <ul>
   <li> check that you haven't left any customised stylesheet or image*</li>
-  <li> download the Chamilo 1.8.7.1 Palmas install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
-  <li> unzip the new files of Chamilo 1.8.7.1 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
+  <li> download the Chamilo 1.8.8 <i>Miraflores</i> install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> unzip the new files of Chamilo 1.8.8 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
   <li> point your browser on your portal URL + main/install/</li>
   <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.8.x</span></li>
 </ul>
@@ -314,7 +332,7 @@ directories. You can still recover them from your backup if you have made it.
  overwritten by the next step. To avoid loosing your customisations, always
  ensure you copy the styles/images under a new name and use and modify the
  copy, not the original. The original will always be overwritten by newer
- versions. In Dokeos 1.8.5, we have changed the name of several CSS themes.
+ versions. In Dok€os 1.8.5, we have changed the name of several CSS themes.
  Backwards compatibility is ensured by the fact that an upgrade only adds the
 new themes, but you should try and use these new themes rather than sticking
 to the old ones which will be deprecated shortly (not maintained).</font>
@@ -322,14 +340,14 @@ to the old ones which will be deprecated shortly (not maintained).</font>
 
 <p></p>
 
-<h3>3.3 Upgrading from Dokeos 1.6.x</h3>
+<h3>3.3 Upgrading from Dok€os 1.6.x</h3>
 
 
-<em>If you upgrade from a lower version of Dokeos (1.6.x)</em>, the first
+<em>If you upgrade from a lower version of Dok€os (1.6.x)</em>, the first
 and most important thing to do is to *move* your current directory to another
 place.<br />
 An easy way to do that is to create a subdirectory called "old_version"
-in your current Chamilo/Dokeos directory and move everything in there using a
+in your current Chamilo/Dok€os directory and move everything in there using a
 simple "move" command (i.e. under Linux: mkdir old_version; mv *
 old_verion/), then make the old_version/ directory writeable by the web
 server so that courses/ and upload/ directories can be moved from the
@@ -337,15 +355,15 @@ old to the new installation.<br />
 <br />
 The complete process is as follow:
 <ul>
-  <li> move the current Dokeos directory contents to a subdirectory called
+  <li> move the current Dok€os directory contents to a subdirectory called
     <em>old_version</em> and make it writeable by the web server. This
 is important to allow the move of the courses/ and upload/ directories
 to the new install</li>
-  <li> download the Chamilo 1.8.7.1 install package from the
+  <li> download the Chamilo 1.8.8 install package from the
     <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
-  <li> unzip the new files of Chamilo 1.8.7.1 in the main Chamilo/Dokeos directory. The
+  <li> unzip the new files of Chamilo 1.8.8 in the main Chamilo/Dok€os directory. The
 new directory <em>main</em> should be located directly inside your
-Chamilo/Dokeos root folder</li>
+Chamilo/Dok€os root folder</li>
   <li> point your browser on your portal URL</li>
   <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.6.x</span> and confirm the
 current directory of the old version</li>
@@ -366,7 +384,7 @@ all the 1.8.x versions
 <p>
 <b>WARNING:</b><br />
 
-Do not delete the previous Chamilo/Dokeos installation directory before installing
+Do not delete the previous Chamilo/Dok€os installation directory before installing
 the new one. When the update is successfully finished, you can remove
 the old path.</p>
 
@@ -416,16 +434,16 @@ On the command-line, type:
   <li>mkdir /var/www/chamilo/old_version</li>
   <li>mv /var/www/chamilo/* /var/www/chamilo/old_version/</li>
   <li>chmod -R 0777 /var/www/chamilo/old_version/</li>
-  <li>wget http://www.chamilo.org/files/chamilo-1.8.7.1.tar.gz</li>
-  <li>tar zxvf chamilo-1.8.7.1.tar.gz</li>
-  <li>sudo cp -ra chamilo-1.8.7.1/* /var/www/chamilo/</li>
-  <li>rm chamilo-1.8.7.1.tar.gz</li>
-  <li>sudo rm -r chamilo-1.8.7.1/</li>
+  <li>wget http://chamilo.googlecode.com/files/chamilo-1.8.8.tar.gz</li>
+  <li>tar zxvf chamilo-1.8.8.tar.gz</li>
+  <li>sudo cp -ra chamilo-1.8.8/* /var/www/chamilo/</li>
+  <li>rm chamilo-1.8.8.tar.gz</li>
+  <li>sudo rm -r chamilo-1.8.8/</li>
 </ul>
 
 <br />
 
-Then (for cases other than from 1.8.7):
+Then:
 <ul>
   <li>Direct your browser to http://www.portalurl.com/main/install/</li>
   <li>Proceed with the installation</li>
@@ -692,6 +710,38 @@ You may need to alter the setting to be for example:</p>
 <h2><a name="9._WIRIS_mathematical_formulas"></a>9. Mathematical formulas with WIRIS</h2>
 <p>Installing this plugin you get WIRIS editor and WIRIS CAS. <br/>
 This activation is not fully realized unless it has been previously downloaded the <a href="http://www.wiris.com/plugins/editors/download?filter=fckeditor" target="_blank">PHP plugin for FCKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/fckeditor/editor/plugins/fckeditor_wiris/ <br/>This is necessary because Wiris is proprietary software and his services are <a href="http://www.wiris.com/store/who-pays" target="_blank">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by configuration.ini.default Chamilo file.</p>
+
+<hr style="width: 100%; height: 2px;" />
+<h2><a name="10._Xapian_fulltext_indexing"></a>Full-text indexation with Xapian</h2>
+<p>
+<em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
+On Debian or Ubuntu 10.04 and superior, you will simply need to install the php5-xapian package and restart your web server:
+<pre>
+sudo apt-get install php5-xapian
+sudo /etc/init.d/apache2 restart
+</pre>
+
+Then go to your administration page -&gt; Configuration settings -&gt; Search 
+and enable the search tool. Follow the recommendations on the page to get the 
+complete indexing suite installed. Once you're done, all documents you import 
+into your Chamilo portal in a recognized format will be indexed and searchable.
+Chamilo Administrators training (which you can ask any Chamilo's Official 
+Provider for) include a full review of the full-text search feature.
+</p>
+
+<hr style="width: 100%; height: 2px;" />
+<h2><a name="11._Chamilo_rapid_ppt_conversion"></a>Chamilo Rapid - PPT conversion system</h2>
+<p>
+<em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
+On Debian or Ubuntu 10.04 and superior, install OpenOffice.org v3 (this might work with LibreOffice) and start it as a headless server:
+<pre>
+sudo apt-get install openoffice.org
+sudo soffice -nologo -nofirststartwizard -headless -norestore -invisible "-accept=socket,host=localhost,port=2002,tcpNoDelay=1;urp;"
+</pre>
+Then go to your administration page -&gt; <i>Chamilo Rapid</i> and set the host to "localhost" and the port to "2002". Save. Go to your course, learning path tool and see the new icon appeared. Import your PPT. This should work.
+<em>Note</em>: Sometimes, this doesn't work out so easily. You can probably ask for the assistance of any system administrator around with a bit of Java and PHP experience, or you can always ask one of the Chamilo's Official Providers for assistance (ask for a guaranteed commercial contract).
+</p>
+
 <hr style="width: 100%; height: 2px;" />
 <p>
   <br />
@@ -710,4 +760,5 @@ This activation is not fully realized unless it has been previously downloaded t
     <a href="http://jigsaw.w3.org/css-validator/">
         <img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
     </a>
-</body></html>
+</body>
+</html>

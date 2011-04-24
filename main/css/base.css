@@ -354,6 +354,8 @@ button:hover {
     padding: 6px 0px 6px 5px ;
 }
 
+/* New LP add item */
+
 div.lp_resource {
      /*background:#FAFAFA; 
     border:1px solid #ccc;    */
@@ -386,7 +388,6 @@ div.lp_resource {
 	margin:5px;
 }
 
-
 div.lp_tree {
     height: 100%;
     overflow: auto;
@@ -401,3 +402,9 @@ table.lp_build td.tree {
 #resource_tab {
 	min-height:380px;
 }
+
+/* Calendar */
+#agenda_list .days_week {
+    height: 100px;
+}
+	

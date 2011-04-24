@@ -98,9 +98,8 @@ class CourseSelectForm
 			echo '<input type="hidden" name="destination_session" 	value="'.$hidden_fields['destination_session'].'"/>';
 			echo '<input type="hidden" name="origin_session" 		value="'.$hidden_fields['origin_session'].'"/>';
 		}
-
 		foreach ($course->resources as $type => $resources) {
-			if (count($resources) > 0) {
+			if (count($resources) > 0) {			    
 				switch ($type) {
 					case RESOURCE_LINKCATEGORY :
 					case RESOURCE_FORUMCATEGORY :
@@ -109,16 +108,25 @@ class CourseSelectForm
 					case RESOURCE_QUIZQUESTION:
 					case RESOURCE_SURVEYQUESTION:
 					case RESOURCE_SURVEYINVITATION:
-					case RESOURCE_SCORM:
-						break;
-					default :
-						echo '<img id="img_'.$type.'" src="../img/1.gif" onclick="javascript: exp('."'$type'".');" />';
-						echo '<b  onclick="javascript:exp('."'$type'".');" >'.$resource_titles[$type].'</b><br />';
+					case RESOURCE_SCORM:					    
+						break;		    
+                    default :
+						echo '<img id="img_'.$type.'" src="../img/1.gif" onclick="javascript:exp('."'$type'".');" />&nbsp;';
+						echo '<b onclick="javascript:exp('."'$type'".');" >'.$resource_titles[$type].'</b><br />';
 						echo '<div id="div_'.$type.'">';
+						if ($type == RESOURCE_LEARNPATH) {
+    						Display::display_warning_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
+    						Display::display_warning_message(get_lang('IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments'));
+						}
+						if ($type == RESOURCE_DOCUMENT) {                        
+                            if (api_get_setting('show_glossary_in_documents') != 'none') {
+                                Display::display_warning_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'));
+                            }
+						}
+                        
 						echo '<blockquote>';
 						echo "[<a href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a> | <a href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>]";
 						echo '<br />';
-
 						foreach ($resources as $id => $resource) {
 							echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
 							echo ' <label for="resource['.$type.']['.$id.']">';

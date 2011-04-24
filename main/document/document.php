@@ -73,6 +73,7 @@ $(document).ready( function() {
 		lang: "'.$lang_yoxview.'",
 		flashVideoPlayerPath: "'.$mediaplayer_path.'",	  
         renderMenu: "false",
+		defaultDimensions: { iframe: { width: 800 }},
         titleAttribute:"alt"   
     });
     for (i=0;i<$(".actions").length;i++) {

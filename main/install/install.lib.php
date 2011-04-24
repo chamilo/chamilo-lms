@@ -1020,6 +1020,10 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 
     echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
     echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />'."\n";
+    
+    if ($installType == 'update')  {
+        echo get_lang('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />'."\n";
+    }
 
     //	SERVER REQUIREMENTS
     echo '<div class="RequirementHeading"><h1>'.get_lang('ServerRequirements').'</h1>';

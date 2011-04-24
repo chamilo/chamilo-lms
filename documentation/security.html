@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Chamilo 1.8.8 Optimization Guide</title><link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
+	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+	<style type="text/css">
+	<!--
+		page { width: 21cm; height: 29.7cm; margin: 2cm }
+		pre { font-family: "Courier New", monospace }
+		p { margin-bottom: 0.21cm }
+		.code {margin: 1em 1em 1em 2em; padding: 0.5em; background-color: rgb(229, 229, 229); vertical-align: top; border: 1px solid #999999;}
+	-->
+	</style>
+	</head>
+<body>
+
+<div id="header1">
+	<h1>Chamilo 1.8.8 : Security Guide</h1>
+</div>
+
+<a href="index.html">Documentation</a> &gt; Security Guide
+<div id="outerframe">
+<div id="main">
+<p></p>
+
+<p>We recommend you don't take security issues too lightly. Chamilo is security-audited at least once a year, but you're never too sure. This list is a work in progress. Feel free to recommend additional measures by sending us an e-mail at info@chamilo.org.</p>
+
+
+<h2><b>Contents</b></h2>
+
+<ol>
+
+  <li><a href="#1.Disclosing-server-info">Disclosing server info</a></li>
+  <li><a href="#2.Keeping-up-to-date">Keeping up to date</a></li>
+</ol>
+
+<h2><a name="1.Disclosing-server-info"></a>Disclosing server info</h2>
+<p>
+It is considered a safer behaviour not to disclose server information from your Chamilo page. In order to avoid both web server and PHP information disclosure, you might want to take the following actions:
+<ul>
+<li>Locate the <i>ServerTokens</i> setting inside your Apache configuration and set it to "Prod"</li>
+<li>Locate the <i>ServerSignature</i> setting inside your Apache configuration and set it to "Off"</li>
+<li>Locate the <i>expose_php</i> setting inside your PHP configuration and set it to "Off"</li>
+<li>Reload Apache</li>
+</ul>
+</p>
+
+<h2><a name="4.Keeping-up-to-date"></a>4. Keeping up to date</h2>
+<p>
+Make sure you check <a href="http://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a> from time to time.
+Subscribe to our free security alerts mailing-list: <a href="http://lists.chamilo.org/listinfo/security">http://lists.chamilo.org/listinfo/security</a> or that you follow our security Twitter feed: <a href="http://twitter.com/chamilosecurity">http://twitter.com/chamilosecurity</a>.
+</p>
+
+<hr />
+<h2>Authors</h2>
+<ul>
+<li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL, <a href="mailto:ywarnier@beeznest.net">ywarnier@beeznest.net</a></li>
+</ul>
+</body></html>

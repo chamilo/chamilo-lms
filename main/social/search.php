@@ -28,15 +28,14 @@ echo '<div id="social-content">';
 	echo '</div>';
 	echo '<div id="social-content-right">';
 		
-		$query = $_GET['q'];
-		echo UserManager::get_search_form($query);
+		echo UserManager::get_search_form($_GET['q']);
 			
 		//I'm searching something
-		if ($query != '') {
-			if (isset($query) && $query!='') {		
+		if ($_GET['q'] != '') {
+			if (isset($_GET['q']) && $_GET['q']!='') {		
 				//get users from tags
-				$users  = UserManager::get_all_user_tags($query, 0, 0, 5);
-				$groups = GroupPortalManager::get_all_group_tags($query);
+				$users  = UserManager::get_all_user_tags($_GET['q'], 0, 0, 5);
+				$groups = GroupPortalManager::get_all_group_tags($_GET['q']);
 				
 				if (empty($users) && empty($groups)) {
 					echo get_lang('SorryNoResults');	

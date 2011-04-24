@@ -72,7 +72,7 @@ $(document).ready( function() {
     $(".yoxview").yoxview({
 		lang: "'.$lang_yoxview.'",
 		flashVideoPlayerPath: "'.$mediaplayer_path.'",	  
-        skin: "top_menu",
+        renderMenu: "false",
         titleAttribute:"alt"   
     });
     for (i=0;i<$(".actions").length;i++) {
@@ -1100,9 +1100,9 @@ if (count($docs_and_folders) > 1) {
         $table->set_form_actions($form_action, 'path');        
     }    
 }
-echo '<div class="thumbnails yoxview">';
+//echo '<div class="thumbnails yoxview">';
 $table->display();
-echo '</div>';
+//echo '</div>';
 
 if (count($docs_and_folders) > 1) {
     if ($is_allowed_to_edit || $group_member_with_upload_rights) {

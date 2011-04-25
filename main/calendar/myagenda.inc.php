@@ -212,10 +212,11 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 				   $items =  $agendaitems[$curday];
 				   
 				   foreach($items  as $value) {
+				        $value['title'] = Security::remove_XSS($value['title']);
                         $start_time = api_convert_and_format_date($value['start_date'], TIME_NO_SEC_FORMAT);
                         $end_time = '';
                         if (!empty($value['end_date']) && $value['end_date'] != '0000-00-00 00:00:00') {
-                           $end_time    = '-&nbsp;<i>'.api_convert_and_format_date($value['end_date'], DATE_TIME_FORMAT_LONG);
+                           $end_time    = '-&nbsp;<i>'.api_convert_and_format_date($value['end_date'], DATE_TIME_FORMAT_LONG).'</i>';
                         }       
                         $complete_time = '<i>'.api_convert_and_format_date($value['start_date'], DATE_TIME_FORMAT_LONG).'</i>&nbsp;'.$end_time;  
                         $time = '<i>'.$start_time.'</i>';
@@ -244,14 +245,13 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
                         $url = Display::url($value['title'], '#', array('id'=>$value['calendar_type'].'_'.$value['id'],'class'=>'opener'));                                 
                         $result .= $time.' '.$icon.' '.Display::div($url);
                         
-                        //Hidden content
-                        $content = Display::div($icon.Display::tag('h2', $value['title']).$complete_time.$value['content']);
-                        
                         //Main div
-                        $result .= Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog', 'style' => 'display:none'));
-                        
-                        $result .= '</div>';
+                        $result .= '</div>';                                                
                         echo $result;
+                        
+                        //Hidden content
+                        $content = Display::div($icon.Display::tag('h2', $value['title']).$complete_time.Security::remove_XSS($value['content']));                        
+                        echo Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog'));
 				   }
 				}
 				echo "</td>";

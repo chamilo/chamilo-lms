@@ -478,7 +478,7 @@ function display_monthcalendar($month, $year, $agenda_items) {
     							$start_time = api_convert_and_format_date($value['start_date'], TIME_NO_SEC_FORMAT);
     							$end_time = '';
     							if (!empty($value['end_date']) && $value['end_date'] != '0000-00-00 00:00:00') {
-    							   $end_time 	= '-&nbsp;<i>'.api_convert_and_format_date($value['end_date'],DATE_TIME_FORMAT_LONG);
+    							   $end_time 	= '-&nbsp;<i>'.api_convert_and_format_date($value['end_date'],DATE_TIME_FORMAT_LONG).'</i>';
     							}		
     							$complete_time = '<i>'.api_convert_and_format_date($value['start_date'], DATE_TIME_FORMAT_LONG).'</i>&nbsp;'.$end_time;
     							$time = '<i>'.$start_time.'</i>';

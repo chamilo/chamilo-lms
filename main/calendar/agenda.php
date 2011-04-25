@@ -95,8 +95,11 @@ if (!empty($_GET['isStudentView']) and $_GET['isStudentView']=="false") {
 	api_session_unregister("group");
 }*/
 
+$htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = to_javascript();
 $htmlHeadXtra[] = user_group_filter_javascript();
+
+
 // this loads the javascript that is needed for the date popup selection
 $htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
 
@@ -113,8 +116,8 @@ if (isset($_GET['toolgroup']) && $_GET['toolgroup']==strval(intval($_GET['toolgr
 	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".Security::remove_XSS($_GET['toolgroup']), "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 	Display::display_header($nameTools,'Agenda');
 
-} elseif (empty($_GET['origin']) or $_GET['origin'] != 'learnpath') {
-	Display::display_header($nameTools,'Agenda');
+} elseif (empty($_GET['origin']) or $_GET['origin'] != 'learnpath') {	
+    Display::display_header($nameTools,'Agenda');
 } else {
 	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".$clarolineRepositoryWeb."css/default.css\"/>";
 }

@@ -2,26 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
+    @author: Julio Montoya <gugli100@gmail.com> BeezNest 2011  - Lots of fixes - UI improvements, security fixes,
 	@author: Patrick Cool, patrick.cool@UGent.be
-	@author: Julio Montoya Lots of fixes - UI improvements
-	@version: 1.1
-	@todo: synchronisation with the function in myagenda.php (for instance: using one function for the mini_calendar
-
-	Large parts of the code are recycled from the old agenda tool, but I
-	reworked it and cleaned the code to make it more readable. The code for
-	the small calender on the left is taken from the My Agenda tool.
-
-	Reabability is also the reason why I use the if ($is_allowed_to_edit)
-	check for each part of the code. I'm aware that is duplication, but
-	it makes the code much easier to read.
-
-	@todo this code should be clean as well as the myagenda.inc.php
+	@todo this code should be clean as well as the myagenda.inc.php - jmontoya
 
 */
 
-/*
-	Constants and variables
-*/
 // the variables for the days and the months
 // Defining the shorts for the days
 $DaysShort = api_get_week_days_short();
@@ -30,23 +16,15 @@ $DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months
 $MonthsLong = api_get_months_long();
 
-/*
-	Javascript
-*/
-
 $htmlHeadXtra[] = to_javascript();
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#agenda_title").focus();
+    $("#agenda_title").focus();
 }
 $(document).ready(function () {
-  setFocus();
+    setFocus();
 });
 </script>';
-
-/*
-		FUNCTIONS
-*/
 
 /**
 * Retrieves all the agenda items from the table
@@ -489,50 +467,59 @@ function display_monthcalendar($month, $year, $agenda_items) {
 					if (key_exists($curday, $agenda_items)) {				    
 					    $dayheader = Display::div($curday, array('class'=>'agenda_day'));
 						foreach ($agenda_items[$curday] as $value) {
-    							$some_content = false;				
-    							$month_start_date = (int)substr($value['start_date'],5,2);    							
-    							$start_time = api_convert_and_format_date($value['start_date']);
-    							    
-    							if ($month == $month_start_date) {
-    								$some_content = true;
+						    
+    						$some_content = false;				
+    						$month_start_date = (int)substr($value['start_date'],5,2);    							
+    						$start_time = api_convert_and_format_date($value['start_date']);
+    						    
+    						if ($month == $month_start_date) {
+    							$some_content = true;
     
-    								$start_time = api_convert_and_format_date($value['start_date'], TIME_NO_SEC_FORMAT);
-    								$end_time = '';
-    								if (!empty($value['end_date']) && $value['end_date'] != '0000-00-00 00:00:00') {
-    								   $end_time 	= '-&nbsp;<i>'.api_convert_and_format_date($value['end_date'],DATE_TIME_FORMAT_LONG);
-    								}		
-    								//$time = '<i>'.$start_time.'</i>&nbsp;'.$end_time;
-    								$time = '<i>'.$start_time.'</i>';
-    												
-    								switch($value['calendar_type']) {
-    								    case 'personal':
-    								        $bg_color = '#D0E7F4';									       	
-                                            $subtitle = Display::return_icon('user.png', get_lang('MyAgenda'), array(), 22);
-                    					    break;
-    								    case 'global':
-                                            $bg_color = '#FFBC89';
-                                            $subtitle = Display::return_icon('view_remove.png', get_lang('GlobalEvent'), array(), 22);
-                                            break;
-    								    case 'course':
-                                            $bg_color = '#CAFFAA';
-                                            $subtitle = Display::url(Display::return_icon('course.png', $value['course_name'].' '.get_lang('Course'), array(), 22), $value['url']);                                                                            
-                                            break;              
-    								    default:
-    								        //$time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
-    								        break;				            
-    								}
-    								//Setting a personal event to green
-    								$dayheader.= '<div class="rounded_div_agenda" style="background-color:'.$bg_color.';">';
-    							                                                    
-    								$value['title'] = Display::tag('strong', $value['title']);									
-    								$dayheader .= $time.' '.Display::div($subtitle,array('style'=>'float:right')).' '.Display::div($value['title']);
-    								$dayheader .= '</div>';
+    							$start_time = api_convert_and_format_date($value['start_date'], TIME_NO_SEC_FORMAT);
+    							$end_time = '';
+    							if (!empty($value['end_date']) && $value['end_date'] != '0000-00-00 00:00:00') {
+    							   $end_time 	= '-&nbsp;<i>'.api_convert_and_format_date($value['end_date'],DATE_TIME_FORMAT_LONG);
+    							}		
+    							$complete_time = '<i>'.api_convert_and_format_date($value['start_date'], DATE_TIME_FORMAT_LONG).'</i>&nbsp;'.$end_time;
+    							$time = '<i>'.$start_time.'</i>';
+    											
+    							switch($value['calendar_type']) {
+    							    case 'personal':
+    							        $bg_color = '#D0E7F4';									       	
+                                        $icon = Display::return_icon('user.png', get_lang('MyAgenda'), array(), 22);
+                					    break;
+    							    case 'global':
+                                        $bg_color = '#FFBC89';
+                                        $icon = Display::return_icon('view_remove.png', get_lang('GlobalEvent'), array(), 22);
+                                        break;
+    							    case 'course':
+                                        $bg_color = '#CAFFAA';
+                                        $icon = Display::url(Display::return_icon('course.png', $value['course_name'].' '.get_lang('Course'), array(), 22), $value['url']);                                                                            
+                                        break;              
+    							    default:
+    							        break;				            
     							}
+    							$icon = Display::div($icon, array('style'=>'float:right'));
+    							//Setting a personal event to green
+    							$dayheader.= '<div class="rounded_div_agenda" style="background-color:'.$bg_color.';">';
     							
-    							//Do not show links with no content
-    							if (!$some_content) {
-    								$dayheader = Display::div($curday, array('class'=>'agenda_day'));
-    							}						    
+    						    //Link to buble                                                
+    							$url = Display::url($value['title'], '#', array('id'=>$value['calendar_type'].'_'.$value['id'],'class'=>'opener'));									
+    							$dayheader .= $time.' '.$icon.' '.Display::div($url);
+    							
+    							//Hidden content
+    							$content = Display::div($icon.Display::tag('h2', $value['title']).$complete_time.$value['content']);
+    							
+    							//Main div
+    							$dayheader .= Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog', 'style' => 'display:none'));
+    							
+    							$dayheader .= '</div>';
+    						}
+    						
+    						//Do not show links with no content
+    						if (!$some_content) {
+    							$dayheader = Display::div($curday, array('class'=>'agenda_day'));
+    						}						    
 						}
 					}
 					if (($curday==$today['mday']) && ($year ==$today['year'])&&($month == $today['mon'])) {
@@ -560,7 +547,27 @@ function display_monthcalendar($month, $year, $agenda_items) {
 */
 function to_javascript() {
     $Send2All=get_lang("Send2All");
-return "<script type=\"text/javascript\" language=\"JavaScript\">
+return "<script type=\"text/javascript\" language=\"javascript\">
+
+
+$(function() {  
+    //js used when generating images on the fly see function Tracking::show_course_detail()
+    $(\".dialog\").dialog(\"destroy\");        
+    $(\".dialog\").dialog({
+            autoOpen: false,
+            show: \"blind\",                
+            resizable: false,
+            height:300,
+            width:550,
+            modal: true
+     });
+    $(\".opener\").click(function() {
+        var my_id = $(this).attr('id');
+        var big_image = '#main_' + my_id;
+        $( big_image ).dialog(\"open\");
+        return false;
+    });
+});
 
 <!-- Begin javascript menu swapper
 

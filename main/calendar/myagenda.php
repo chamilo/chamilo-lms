@@ -5,7 +5,7 @@
 $language_file = 'agenda';
 // we are not inside a course, so we reset the course id
 $cidReset = true;
-// setting the global file that gets the general configuration, the databases, the languages, ...
+// setting the global file that gets the general configuration, the databases, the languages
 require_once '../inc/global.inc.php';
 $this_section = SECTION_MYAGENDA;
 unset($_SESSION['this_section']);//for hmtl editor repository
@@ -30,6 +30,29 @@ if (!empty ($course_path)) {
 }
 // this loads the javascript that is needed for the date popup selection
 $htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
+$htmlHeadXtra[] = api_get_jquery_ui_js();
+
+$htmlHeadXtra[] = "<script>
+$(function() {  
+    $(\".dialog\").dialog(\"destroy\");        
+    $(\".dialog\").dialog({
+            autoOpen: false,
+            show: \"blind\",                
+            resizable: false,
+            height:300,
+            width:550,
+            modal: true
+     });
+    $(\".opener\").click(function() {
+        var my_id = $(this).attr('id');
+        var big_image = '#main_' + my_id;
+        $( big_image ).dialog(\"open\");
+        return false;
+    });
+});
+</script>
+";
+
 // showing the header
 Display::display_header(get_lang('MyAgenda'));
 

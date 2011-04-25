@@ -1,15 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
+    @author: Julio Montoya <gugli100@gmail.com> BeezNest 2011
 	@author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	@author: Toon Van Hoecke <toon.vanhoecke@ugent.be>, Ghent University
-	@author: Eric Remy (initial version)
-	@version: 2.2 alpha
+	@author: Eric Remy (initial version)	
+	@version: 3
 	@description: 	this file generates a general agenda of all items of the
 					courses the user is registered for
 
 	version info:
-	-------------
+	-> version 3: Julio Montoya - removing a lot of useless code, cleaning the UI to 
+	be more intuitive, adding "jquery popups" and showing agenda types, etc.    
+	
 	-> version 2.2 : Patrick Cool, patrick.cool@ugent.be, november 2004
 	Personal Agenda added. The user can add personal agenda items. The items
 	are stored in a chamilo_user database because it is not course or platform
@@ -214,30 +217,39 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
                         if (!empty($value['end_date']) && $value['end_date'] != '0000-00-00 00:00:00') {
                            $end_time    = '-&nbsp;<i>'.api_convert_and_format_date($value['end_date'], DATE_TIME_FORMAT_LONG);
                         }       
-                        //$time = '<i>'.$start_time.'</i>&nbsp;'.$end_time;  
+                        $complete_time = '<i>'.api_convert_and_format_date($value['start_date'], DATE_TIME_FORMAT_LONG).'</i>&nbsp;'.$end_time;  
                         $time = '<i>'.$start_time.'</i>';
 
 				        switch($value['calendar_type']) {
                             case 'personal':
                                 $bg_color = '#D0E7F4';                                          
-                                $subtitle = Display::return_icon('user.png', get_lang('MyAgenda'), array(), 22);
+                                $icon = Display::return_icon('user.png', get_lang('MyAgenda'), array(), 22);
                                 break;
                             case 'global':
                                 $bg_color = '#FFBC89';
-                                $subtitle = Display::return_icon('view_remove.png', get_lang('GlobalEvent'), array(), 22);
+                                $icon = Display::return_icon('view_remove.png', get_lang('GlobalEvent'), array(), 22);
                                 break;
                             case 'course':
                                 $bg_color = '#CAFFAA';
-                                $subtitle = Display::url(Display::return_icon('course.png', $value['course_name'].' '.get_lang('Course'), array(), 22), $value['url']);                                                                                  
+                                $icon = Display::url(Display::return_icon('course.png', $value['course_name'].' '.get_lang('Course'), array(), 22), $value['url']);                                                                                  
                                 break;              
                             default:
-                                //$time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
                                 break;                          
                         }                        		       
-				        $result = '<div class="rounded_div_agenda" style="background-color:'.$bg_color.';">';
-                                                                    
-                        $value['title'] = Display::tag('strong', $value['title']);                                  
-                        $result .= $time.' '.Display::div($subtitle,array('style'=>'float:right')).' '.Display::div($value['title']);                        
+				        $icon = Display::div($icon, array('style'=>'float:right'));
+                        //Setting a personal event to green
+                        $result = '<div class="rounded_div_agenda" style="background-color:'.$bg_color.';">';
+                        
+                        //Link to buble                                                
+                        $url = Display::url($value['title'], '#', array('id'=>$value['calendar_type'].'_'.$value['id'],'class'=>'opener'));                                 
+                        $result .= $time.' '.$icon.' '.Display::div($url);
+                        
+                        //Hidden content
+                        $content = Display::div($icon.Display::tag('h2', $value['title']).$complete_time.$value['content']);
+                        
+                        //Main div
+                        $result .= Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog', 'style' => 'display:none'));
+                        
                         $result .= '</div>';
                         echo $result;
 				   }

@@ -3,7 +3,7 @@
 /**
 *   Session view
 *   @package chamilo.session
-*   @author Julio Montoya <gugli100@gmail.com>
+*   @author Julio Montoya <gugli100@gmail.com>  Beeznest
 */
 
 // Language files that should be included.

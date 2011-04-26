@@ -48,6 +48,7 @@
   <li><a href="#9._WIRIS_mathematical_formulas">Mathematical formulas with WIRIS</a></li>
   <li><a href="#10._Xapian_fulltext_indexing">Full-text indexation with Xapian</a></li>
   <li><a href="#11._Chamilo_rapid_ppt_conversion">Chamilo Rapid - PPT conversion system</a></li>
+  <li><a href="#12._Setting_cron_up">Setting chronological tasks</a></li>
 </ol>
 
 <br />
@@ -740,6 +741,27 @@ sudo soffice -nologo -nofirststartwizard -headless -norestore -invisible "-accep
 </pre>
 Then go to your administration page -&gt; <i>Chamilo Rapid</i> and set the host to "localhost" and the port to "2002". Save. Go to your course, learning path tool and see the new icon appeared. Import your PPT. This should work.
 <em>Note</em>: Sometimes, this doesn't work out so easily. You can probably ask for the assistance of any system administrator around with a bit of Java and PHP experience, or you can always ask one of the Chamilo's Official Providers for assistance (ask for a guaranteed commercial contract).
+</p>
+
+<hr style="width: 100%; height: 2px;" />
+<h2><a name="12._Setting_cron_up"></a>Setting chronological tasks</h2>
+<p>
+Since Chamilo 1.8.8, a few tasks need to be executed regularly in order to get 
+the best out of your server resources. One of such tasks (and the only one 
+around at the time of Chamilo 1.8.8) is the sending of internal messaging 
+notifications by e-mail, i.e. when you receive an e-mail from another person or
+from a group inside the internal messaging system of Chamilo, if all e-mails are
+sent immediately, then you might not have the chance to receive them at your 
+pace, once a day or even once a week. For cases like this you, as a Chamilo 
+administrator, should setup a cron process on the server to check the queue of
+e-mails and send is timely.</p>
+<p>
+Setting up a cron task is easy and there are several ways to do it. We recommend
+you have a look at the <a href="http://drupal.org/cron">Drupal documentation 
+for setting up cron</a> and define your own cron process as:
+<pre>
+35 * * * * wget -O - -q -t 1 http://campus.example.com/main/cron/notification.php
+</pre> 
 </p>
 
 <hr style="width: 100%; height: 2px;" />

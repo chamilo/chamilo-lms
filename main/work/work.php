@@ -915,7 +915,7 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 			$filesize = filesize($_FILES['file']['tmp_name']);
 			
 			if (empty($filesize)) { 
-			    Display :: display_error_message(get_lang('UplUploadFailed'));
+			    Display :: display_error_message(get_lang('UplUploadFailedSizeIsZero'));
                 $succeed = false;
 		    } elseif (!filter_extension($new_file_name)) {
                 //filter extension

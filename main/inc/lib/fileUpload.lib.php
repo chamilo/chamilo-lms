@@ -128,7 +128,7 @@ function process_uploaded_file($uploaded_file, $show_output = true) {
         if (empty($filesize)) {
             // No file was uploaded.
             if ($show_output) {
-                Display::display_error_message(get_lang('UplUploadFailed'));
+                Display::display_error_message(get_lang('UplUploadFailedSizeIsZero'));
             }
             return false;
         }        

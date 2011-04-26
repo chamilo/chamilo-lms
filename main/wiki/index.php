@@ -339,9 +339,9 @@ document.getElementById("menuwiki").style.border=b+"px solid #cccccc";
 
 echo '<div id="menuwiki">';
 
-echo '&nbsp;<a href="javascript:void(0)" onClick="menu_wiki()">'.Display::return_icon('menu.png',get_lang('Menu'),'','32').'</a>&nbsp;';
-echo '<a href="index.php?cidReq='.$_course['id'].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('show').'>'.Display::return_icon('wiki.png',get_lang('HomeWiki'),'','32').'</a>';//
+echo '&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('show').'>'.Display::return_icon('wiki.png',get_lang('HomeWiki'),'','32').'</a>&nbsp;';
 
+echo '&nbsp;<a href="javascript:void(0)" onClick="menu_wiki()">'.Display::return_icon('menu.png',get_lang('Menu'),'','22').'</a>';
 ///menu home
 echo '<ul>';
 if ( api_is_allowed_to_session_edit(false,true) ) {
@@ -352,10 +352,10 @@ if ( api_is_allowed_to_session_edit(false,true) ) {
 if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
     // page action: enable or disable the adding of new pages
     if (check_addnewpagelock()==0) {
-        $protect_addnewpage= '<img src="../img/on.png" title="'.get_lang('AddOptionProtected').'" alt="'.get_lang('AddOptionProtected').'" width="8" height="8" />';
+        $protect_addnewpage= '<img src="../img/off.png" title="'.get_lang('AddOptionProtected').'" alt="'.get_lang('AddOptionProtected').'" width="8" height="8" />';
         $lock_unlock_addnew='unlockaddnew';
     } else {
-        $protect_addnewpage= '<img src="../img/off.png" title="'.get_lang('AddOptionUnprotected').'" alt="'.get_lang('AddOptionUnprotected').'" width="8" height="8" />';
+        $protect_addnewpage= '<img src="../img/on.png" title="'.get_lang('AddOptionUnprotected').'" alt="'.get_lang('AddOptionUnprotected').'" width="8" height="8" />';
         $lock_unlock_addnew='lockaddnew';
     }
 }

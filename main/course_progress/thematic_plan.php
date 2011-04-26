@@ -31,7 +31,7 @@ echo '<div class="actions" style="margin-bottom:30px">';
 if ($action == 'thematic_plan_edit') {
     echo '<a href="index.php?action=thematic_plan_list&'.api_get_cidreq().'&thematic_id='.$thematic_id.'">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>&nbsp;&nbsp;';
 } else {    
-    echo '<a href="index.php?action=thematic_plan_list&'.api_get_cidreq().'&action=thematic_details&'.api_get_cidreq().'">'.Display::return_icon('back.png', $title, array(), 32).'</a>&nbsp;&nbsp;';
+    echo '<a href="index.php?action=thematic_plan_list&'.api_get_cidreq().'&action=thematic_details&'.api_get_cidreq().'">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>&nbsp;&nbsp;';
     echo '<a href="index.php?action=thematic_plan_edit&'.api_get_cidreq().'&description_type='.$new_id.'&thematic_id='.$thematic_id.'">'.Display::return_icon('new_document.png', get_lang('NewBloc'), array(), 32).'</a>';    
 }
 echo '</div>';

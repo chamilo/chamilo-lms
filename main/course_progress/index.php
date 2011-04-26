@@ -83,69 +83,69 @@ $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
 
 $htmlHeadXtra[] = '<script language="javascript">
 
-		function datetime_by_attendance(selected_value) {
-			$.ajax({
-				contentType: "application/x-www-form-urlencoded",
-				beforeSend: function(objeto) {},
-				type: "POST",
-				url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=get_datetime_by_attendance",
-				data: "attendance_id="+selected_value+"&thematic_advance_id='.$thematic_id.'",
-				success: function(datos) {
-				 $("#div_datetime_attendance").html(datos);
-				}
-			});
+function datetime_by_attendance(selected_value) {
+	$.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {},
+		type: "POST",
+		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=get_datetime_by_attendance",
+		data: "attendance_id="+selected_value+"&thematic_advance_id='.$thematic_id.'",
+		success: function(datos) {
+		 $("#div_datetime_attendance").html(datos);
 		}
+	});
+}
 
-		function update_done_thematic_advance(selected_value) {
-			$.ajax({
-				contentType: "application/x-www-form-urlencoded",
-				beforeSend: function(objeto) {},
-				type: "GET",
-				url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=update_done_thematic_advance&thematic_advance_id="+selected_value,
-				data: "thematic_advance_id="+selected_value,
-				success: function(datos) {
-				 $("#div_result").html(datos);
-				}
-			});
-
-			// clean all radios
-			for (var i=0; i<$("input[@name=\'done_thematic\']").length;i++) {
-				var id_radio_thematic = $("input[@name=\'done_thematic\']").get(i).id;
-				$("#td_"+id_radio_thematic).css({"background-color":"#FFF"});
-			}
-
-			// set background to previous radios
-			for (var i=0; i<$("input[@name=\'done_thematic\']").length;i++) {
-				var id_radio_thematic = $("input[@name=\'done_thematic\']").get(i).id;
-				$("#td_"+id_radio_thematic).css({"background-color":"#E5EDF9"});
-				if ($("input[@name=\'done_thematic\']").get(i).value == selected_value) {
-					break;
-				}
-			}
-
+function update_done_thematic_advance(selected_value) {
+	$.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {},
+		type: "GET",
+		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=update_done_thematic_advance&thematic_advance_id="+selected_value,
+		data: "thematic_advance_id="+selected_value,
+		success: function(datos) {
+		 $("#div_result").html(datos);
 		}
+	});
 
-		function check_per_attendance(obj) {
-			if (obj.checked) {
-				document.getElementById(\'div_datetime_by_attendance\').style.display=\'block\';
-				document.getElementById(\'div_custom_datetime\').style.display=\'none\';
-			} else {
-				document.getElementById(\'div_datetime_by_attendance\').style.display=\'none\';
-				document.getElementById(\'div_custom_datetime\').style.display=\'block\';
-			}
+	// clean all radios
+	for (var i=0; i<$("input[@name=\'done_thematic\']").length;i++) {
+		var id_radio_thematic = $("input[@name=\'done_thematic\']").get(i).id;
+		$("#td_"+id_radio_thematic).css({"background-color":"#FFF"});
+	}
+
+	// set background to previous radios
+	for (var i=0; i<$("input[@name=\'done_thematic\']").length;i++) {
+		var id_radio_thematic = $("input[@name=\'done_thematic\']").get(i).id;
+		$("#td_"+id_radio_thematic).css({"background-color":"#E5EDF9"});
+		if ($("input[@name=\'done_thematic\']").get(i).value == selected_value) {
+			break;
 		}
+	}
 
-		function check_per_custom_date(obj) {
-			if (obj.checked) {
-				document.getElementById(\'div_custom_datetime\').style.display=\'block\';
-				document.getElementById(\'div_datetime_by_attendance\').style.display=\'none\';
-			} else {
-				document.getElementById(\'div_custom_datetime\').style.display=\'none\';
-				document.getElementById(\'div_datetime_by_attendance\').style.display=\'block\';
-			}
-		}
+}
 
-		</script>';
+function check_per_attendance(obj) {
+	if (obj.checked) {
+		document.getElementById(\'div_datetime_by_attendance\').style.display=\'block\';
+		document.getElementById(\'div_custom_datetime\').style.display=\'none\';
+	} else {
+		document.getElementById(\'div_datetime_by_attendance\').style.display=\'none\';
+		document.getElementById(\'div_custom_datetime\').style.display=\'block\';
+	}
+}
+
+function check_per_custom_date(obj) {
+	if (obj.checked) {
+		document.getElementById(\'div_custom_datetime\').style.display=\'block\';
+		document.getElementById(\'div_datetime_by_attendance\').style.display=\'none\';
+	} else {
+		document.getElementById(\'div_custom_datetime\').style.display=\'none\';
+		document.getElementById(\'div_datetime_by_attendance\').style.display=\'block\';
+	}
+}
+
+</script>';
 
 
 // interbreadcrumbs

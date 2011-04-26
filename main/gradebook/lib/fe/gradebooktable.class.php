@@ -153,8 +153,8 @@ class GradebookTable extends SortableTable
 				$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
 				$weight_total_links += intval($data[3]);
 			} else {
-                    // $_GET['selectcat'] is never empty
-				//if (empty($_GET['selectcat'])) {
+                 // is never empty
+				/*if (empty($_GET['selectcat'])) {
 				    // generating the total score for a course
 				    $stud_id= api_get_user_id();
 					$cats_course = Category::load($id, null, null, null, null, null, false);
@@ -175,15 +175,14 @@ class GradebookTable extends SortableTable
                     $cattotal = Category :: load($id);
                     $scoretotal= $cattotal[0]->calc_score(api_get_user_id());
                     $scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).' ('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');
-					$row[] = $item_value;
-                /*
-				} else {
+					$row[] = $item_value;                
+				} else {*/
                     $cattotal   = Category :: load($_GET['selectcat']);
                     $scoretotal = $cattotal[0]->calc_score(api_get_user_id());
                     $item_value = $scoretotal[0]; 
                     $item_value = number_format($item_value, 2, '.', ' ');
 			   		$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
-			   	}*/
+			   //}
 			   	
 			}
     		$row[] = $invisibility_span_open . str_replace(' ','&nbsp;',$data[4]) . $invisibility_span_close;
@@ -224,8 +223,7 @@ class GradebookTable extends SortableTable
 							$row[4] = api_convert_and_format_date($get_date);
 					}
 					$row[] = $certificates;
-				} else {*/
-				    
+				} else {*/				    
 					if (isset($certificate_min_score) && $item_value >= $certificate_min_score) {
 						//register gradebook certificate
 						$current_user_id=api_get_user_id();

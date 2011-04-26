@@ -11,6 +11,9 @@
 //ini_set('max_execution_time',300); //authorize execution for up to 5 minutes
 //ini_set('memory_limit','100M'); //authorize script to use up to 100M RAM 
 /**
- * Included cron-ed tasks
+ * Included cron-ed tasks. You might want to turn error-logging off by 
+ * commenting the first and last line of this section.
  */
+error_log('[chamilo][cronjob] Starting cron jobs as process '.getmypid());
 require_once 'notification.php';
+error_log('[chamilo][cronjob] Ending cron jobs of process '.getmypid());

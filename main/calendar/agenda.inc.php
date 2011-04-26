@@ -753,13 +753,15 @@ function selectAll(cbList,bSelect,showwarning)
 			msg_err4.innerHTML=\"".get_lang('FieldRequired')."\";
 			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";
 		} else {
-			if (cbList.length <	1) {
-				if (!confirm(\"".get_lang('Send2All')."\")) {
-					return false;
-				}
+            if (cbList) { 
+    			if (cbList.length <	1) {
+    				if (!confirm(\"".get_lang('Send2All')."\")) {
+    					return false;
+    				}
+    			}
+    			for	(var i=0; i<cbList.length; i++)
+    			cbList[i].selected = cbList[i].checked = bSelect;
 			}
-			for	(var i=0; i<cbList.length; i++)
-			cbList[i].selected = cbList[i].checked = bSelect;
 			document.new_calendar_item.submit();
 		}
 

@@ -753,13 +753,15 @@ function selectAll(cbList,bSelect,showwarning)
 			msg_err4.innerHTML=\"".get_lang('FieldRequired')."\";
 			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";
 		} else {
-			if (cbList.length <	1) {
-				if (!confirm(\"".get_lang('Send2All')."\")) {
-					return false;
-				}
+            if (cbList) { 
+    			if (cbList.length <	1) {
+    				if (!confirm(\"".get_lang('Send2All')."\")) {
+    					return false;
+    				}
+    			}
+    			for	(var i=0; i<cbList.length; i++)
+    			cbList[i].selected = cbList[i].checked = bSelect;
 			}
-			for	(var i=0; i<cbList.length; i++)
-			cbList[i].selected = cbList[i].checked = bSelect;
 			document.new_calendar_item.submit();
 		}
 
@@ -1238,32 +1240,27 @@ function separate_users_groups($to) {
 */
 function sent_to($tool, $id) {
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	$tool=Database::escape_string($tool);
-	$id=Database::escape_string($id);
+	$tool  = Database::escape_string($tool);
+	$id    = Database::escape_string($id);
 
-	$sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".$tool."' AND ref='".$id."'";
+	$sql   = "SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".$tool."' AND ref='".$id."'";
 	$result=Database::query($sql);
-	while ($row=Database::fetch_array($result))
-	{
+	while ($row=Database::fetch_array($result)) {
 		// if to_group_id is null then it is sent to a specific user
 		// if to_group_id = 0 then it is sent to everybody
-		if (!is_null($row['to_group_id']) )
-		{
+		if (!is_null($row['to_group_id']) ) {
 			$sent_to_group[]=$row['to_group_id'];
 			//echo $row['to_group_id'];
 		}
 		// if to_user_id <> 0 then it is sent to a specific user
-		if ($row['to_user_id']<>0)
-		{
+		if ($row['to_user_id']<>0) {
 			$sent_to_user[]=$row['to_user_id'];
 		}
 	}
-	if (isset($sent_to_group))
-	{
+	if (isset($sent_to_group)) {
 		$sent_to['groups']=$sent_to_group;
 	}
-	if (isset($sent_to_user))
-	{
+	if (isset($sent_to_user)) {
 		$sent_to['users']=$sent_to_user;
 	}
 	return $sent_to;
@@ -2009,7 +2006,7 @@ function display_one_agenda_item($agenda_id) {
 	$group_names = get_course_groups();
 	
 	$agenda_id = intval($agenda_id);
-    if (! (api_is_allowed_to_edit(false,true) || (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {        
+    if (!(api_is_allowed_to_edit(false,true) || (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {        
         $visibility_condition = " AND ip.visibility='1' ";                
     }
         
@@ -2048,7 +2045,7 @@ function display_one_agenda_item($agenda_id) {
 
 	// highlight: if a date in the small calendar is clicked we highlight the relevant items
 	$db_date = (int)api_format_date($myrow["start_date"], "%d").intval(api_format_date($myrow["start_date"], "%m")).api_format_date($myrow["start_date"], "%Y");
-    if ($_GET["day"].$_GET["month"].$_GET["year"] <>$db_date) {
+    if ($_GET["day"].$_GET["month"].$_GET["year"] <> $db_date) {
 		if ($myrow['visibility']=='0') {
 			$style="data_hidden";
 			$stylenotbold="datanotbold_hidden";
@@ -2063,20 +2060,7 @@ function display_one_agenda_item($agenda_id) {
 		$stylenotbold="datanotboldnow";
 		$text_style="textnow";
 	}
-	echo "<h2>";
-
-	// adding an internal anchor
-	//echo "<a name=\"".(int)api_format_date($myrow["start_date"], "%d")."\"></a>";
-
-	// the icons. If the message is sent to one or more specific users/groups
-	// we add the groups icon
-	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
-	echo Display::return_icon('agenda.png','&nbsp;','',22);
-	if ($myrow['to_group_id']!=='0') {
-		echo Display::return_icon('group.png','&nbsp;','',22);
-	}
-	echo ' '.$myrow['title'];
-	echo "</h2>";	
+	echo Display::tag('h2', $myrow['title']);	
 	echo "<tr>";
 		
 	if (api_is_allowed_to_edit(false,true)) {
@@ -2121,7 +2105,7 @@ function display_one_agenda_item($agenda_id) {
         }
 	}
 	
-	/*-DISPLAY: the title */
+	// title
 	echo "<tr class='row_odd'>";
 	echo '<td colspan="2">'.get_lang("StartTime").": ";
 	echo api_format_date($myrow['start_date']);
@@ -2134,22 +2118,17 @@ function display_one_agenda_item($agenda_id) {
 
 
     
-	/*--------------------------------------------------
-	 			DISPLAY: the content
-	  --------------------------------------------------*/
-
+	// Content
 	$content = $myrow['content'];
 	$content = make_clickable($content);
 	$content = text_filter($content);
-	//echo "<tr><td class=\"".$text_style."\" colspan='2'>";
-	//echo $content;
-	//echo "</td></tr>";
-    echo "<tr class='row_even'>";
+
+    echo '<tr class="row_even">';
     echo '<td '.(api_is_allowed_to_edit()?'colspan="3"':'colspan="2"'). '>';
     echo $content;
     echo '</td></tr>';
     
-    
+    //Attachments
     $attachment_list = get_attachment($agenda_id);
     
     if (!empty($attachment_list)) {
@@ -2165,9 +2144,7 @@ function display_one_agenda_item($agenda_id) {
         echo '<br /><span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
         echo '</td></tr>';           
     }
-    
-    
-    
+            
     // the message has been sent to
     echo '<tr>';
     echo "<td class='announcements_datum'>".get_lang("SentTo").": ";
@@ -2185,12 +2162,11 @@ function display_one_agenda_item($agenda_id) {
     }   
     
 
-	/* DISPLAY: the added resources */
+	/* Added resources */
 	if (check_added_resources("Agenda", $myrow["id"])) {
 		echo "<tr><td colspan='3'>";
 		echo "<i>".get_lang("AddedResources")."</i><br/>";
-		if ($myrow['visibility']==0)
-		{
+		if ($myrow['visibility'] == 0 ) {
 			$addedresource_style="invisible";
 		}
 		display_added_resources("Agenda", $myrow["id"], $addedresource_style);

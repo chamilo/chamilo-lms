@@ -204,8 +204,10 @@ class SortableTable extends HTML_Table {
 	 * Displays the table, complete with navigation buttons to browse through
 	 * the data-pages.
 	 */
-	public function display () {
+	public function display() {
 		$empty_table = false;
+		$content = $this->get_table_html();
+		
 		if ($this->get_total_number_of_items() == 0) {
 			$cols = $this->getColCount();
 			$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
@@ -253,7 +255,9 @@ class SortableTable extends HTML_Table {
 				$html .= '<form method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
 			}
 		}
-		$html .= $this->get_table_html();
+		
+		$html .= $content;
+		
 		if (!$empty_table) {
 			$html .= '<table style="width:100%;">';
 			$html .= '<tr>';

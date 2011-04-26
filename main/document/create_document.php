@@ -167,26 +167,27 @@ $nameTools = get_lang('CreateDocument');
 
 /*	Constants and variables */
 
-//$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
 $document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id());    
 if (empty($document_data)) {
-    $dir = '/';
-    $folder_id = 0;
+    if (api_is_in_group()) {
+        $group_properties   = GroupManager::get_group_properties(api_get_group_id());        
+        $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
+        $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+        
+        $dir                = $document_data['path'];
+        $folder_id          = $document_data['id'];
+    } else {
+        $dir = '/';
+        $folder_id = 0;
+    }
 } else {
     $folder_id = $document_data['id'];
-    $dir = $document_data['path'];
+    $dir       = $document_data['path'];
 }
-
-//$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
 
 /*	MAIN CODE */
 
-if (api_is_in_group()) {
-	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
-}
-
 // Please, do not modify this dirname formatting
-
 if (strstr($dir, '..')) {
 	$dir = '/';
 }
@@ -204,16 +205,22 @@ if ($dir[strlen($dir) - 1] != '/') {
 }
 
 // Configuration for the FCKEDITOR
-$doc_tree= explode('/', $dir);
+$doc_tree  = explode('/', $dir);
 $count_dir = count($doc_tree) -2; // "2" because at the begin and end there are 2 "/"
-// Level correction for group documents.
-if (!empty($group_properties['directory'])) {
-	$count_dir = $count_dir > 0 ? $count_dir - 1 : 0;
+
+if (api_is_in_group()) {
+    $group_properties = GroupManager::get_group_properties(api_get_group_id()); 
+        
+    // Level correction for group documents.
+    if (!empty($group_properties['directory'])) {
+    	$count_dir = $count_dir > 0 ? $count_dir - 1 : 0;
+    }
 }
 $relative_url = '';
 for ($i = 0; $i < ($count_dir); $i++) {
 	$relative_url .= '../';
 }
+
 // We do this in order to avoid the condition in html_editor.php ==> if ($this -> fck_editor->Config['CreateDocumentWebDir']=='' || $this -> fck_editor->Config['CreateDocumentDir']== '')
 if ($relative_url== '') {
 	$relative_url = '/';
@@ -222,24 +229,25 @@ if ($relative_url== '') {
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $html_editor_config = array(
-	'ToolbarSet' => ($is_allowed_to_edit ? 'Documents' :'DocumentsStudent'),
-	'Width' => '100%',
-	'Height' => '600',
-	'FullPage' => true,
-	'InDocument' => true,
-	'CreateDocumentDir' => $relative_url,
+	'ToolbarSet'           => ($is_allowed_to_edit ? 'Documents' :'DocumentsStudent'),
+	'Width'                => '100%',
+	'Height'               => '600',
+	'FullPage'             => true,
+	'InDocument'           => true,
+	'CreateDocumentDir'    => $relative_url,
 	'CreateDocumentWebDir' => (empty($group_properties['directory']))
-		? api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/'
-		: api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/',
-	'BaseHref' => api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir
+                        		? api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/'
+                        		: api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/',
+	'BaseHref'             => api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir
 );
 
 $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
-
+        
 if (!is_dir($filepath)) {
 	$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
 	$dir = '/';
 }
+
 
 //I'm in the certification module?
 $is_certificate_mode = false;
@@ -251,14 +259,13 @@ if ($is_certificate_array[0]=='certificates') {
 $to_group_id = 0;
 
 if (!$is_certificate_mode) {
-	if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
-		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-		$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
+	if (api_is_in_group()) {
+		$req_gid = '&amp;gidReq='.api_get_group_id();
+		$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".api_get_group_id(), "name" => get_lang('GroupSpace'));
 		$noPHP_SELF = true;
-		$to_group_id = $_SESSION['_gid'];
-		$group = GroupManager :: get_group_properties($to_group_id);
-		$path = explode('/', $dir);
-		if ('/'.$path[1] != $group['directory']) {
+		$to_group_id = api_get_group_id();		
+		$path = explode('/', $dir);				
+		if ('/'.$path[1] != $group_properties['directory']) {
 			api_not_allowed(true);
 		}
 	}
@@ -278,7 +285,7 @@ if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_
 
 event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;
-if (isset ($group)) {
+if (isset ($group_properties)) {
 	$display_dir = explode('/', $dir);
 	unset ($display_dir[0]);
 	unset ($display_dir[1]);

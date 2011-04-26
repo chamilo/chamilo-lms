@@ -30,8 +30,16 @@ if (api_get_setting('enabled_support_paint') == 'false') {
 }
 
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
+if (empty($document_data)) {
+    if (api_is_in_group()) {
+        $group_properties   = GroupManager::get_group_properties(api_get_group_id());        
+        $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
+        $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+    }
+}
+
 $document_id = $document_data['id'];
-$dir = $document_data['path'];
+$dir         = $document_data['path'];
 
 //$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);

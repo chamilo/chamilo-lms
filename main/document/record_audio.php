@@ -29,6 +29,14 @@ api_protect_course_script();
 api_block_anonymous_users();
 
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
+if (empty($document_data)) {
+    if (api_is_in_group()) {
+        $group_properties   = GroupManager::get_group_properties(api_get_group_id());        
+        $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
+        $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+    }
+}
+
 $document_id = $document_data['id'];
 $dir = $document_data['path'];
 

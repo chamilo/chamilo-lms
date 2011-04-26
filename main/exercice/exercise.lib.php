@@ -1141,7 +1141,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                 }
             }
         }
-    }    
+    }
     return $list_info;
 }
 

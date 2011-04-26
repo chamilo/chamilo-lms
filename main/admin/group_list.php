@@ -1,21 +1,19 @@
-<?php // $Id: user_list.php 22292 2009-07-22 18:32:32Z herodoto $
+<?php
 /* For licensing terms, see /dokeos_license.txt */
 /**
-==============================================================================
 	@author Bart Mollet
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
+
 */
 
 // name of the language file that needs to be included
 $language_file = array ('registration','admin','userInfo');
 $cidReset = true;
-require ('../inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'security.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -185,8 +183,8 @@ function modify_filter($group_id,$url_params,$row)
 	global $_admins_list;
 	if (api_is_platform_admin()) {
 		$result .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_users_to_group.php?id='.$group_id.'">'.Display::return_icon('subscribe_users_social_network.png',get_lang('AddUsersToGroup'),'','22').'</a>';
-		$result .= '<a href="group_edit.php?id='.$group_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
-		$result .= '<a href="group_list.php?action=delete_group&amp;group_id='.$group_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+		$result .= '<a href="group_edit.php?id='.$group_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), 22).'</a>&nbsp;&nbsp;';
+		$result .= '<a href="group_list.php?action=delete_group&amp;group_id='.$group_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), 22).'</a>';
 	}
 	return $result;
 }
@@ -265,18 +263,12 @@ function lock_unlock_user($status,$user_id)
  * @version march 2008
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  */
-function status_filter($status)
-{
+function status_filter($status) {
 	$statusname = api_get_status_langvars();
 	return $statusname[$status];
 }
 
-
-/**
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+// INIT SECTION
 $action = $_GET["action"];
 
 if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
@@ -422,10 +414,4 @@ else
 		$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
 	$table->display();
 }
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display :: display_footer();
-?>

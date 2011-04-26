@@ -356,7 +356,7 @@ if (!$_GET['action'] || $_GET['action']=="view") {
             }
 		}
 	} else {
-		display_one_agenda_item((int)$_GET['agenda_id']);
+		display_one_agenda_item($_GET['agenda_id']);
 	}
 }
 echo '&nbsp;</td></tr></table>';

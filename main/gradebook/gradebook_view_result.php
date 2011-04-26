@@ -84,11 +84,8 @@ if (isset ($_GET['editres'])) {
 	}
 }
 if (isset ($_GET['import'])) {
-	$interbreadcrumb[]= array (
-		'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),
-		'name' => get_lang('ViewResult'
-	));
-	$import_result_form = new DataForm(DataForm :: TYPE_IMPORT, 'import_result_form', null, api_get_self() . '?import=&selecteval=' . Security::remove_XSS($_GET['selecteval']));
+	$interbreadcrumb[]= array ('url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']), 'name' => get_lang('ViewResult'));
+	$import_result_form = new DataForm(DataForm :: TYPE_IMPORT, 'import_result_form', null, api_get_self() . '?import=&selecteval=' . Security::remove_XSS($_GET['selecteval']), '_blank', '');
 	if (!$import_result_form->validate()) {
 		Display :: display_header(get_lang('Import'));
 	}
@@ -177,8 +174,8 @@ if (isset ($_GET['import'])) {
 }
 if (isset ($_GET['export'])) {
     $interbreadcrumb[]= array ('url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),'name' => get_lang('ViewResult'));
-    
-    $export_result_form= new DataForm(DataForm :: TYPE_EXPORT, 'export_result_form', null, api_get_self() . '?export=&selecteval=' . $_GET['selecteval'], '_blank');
+    $locked_status = $eval[0]->get_locked();
+    $export_result_form= new DataForm(DataForm :: TYPE_EXPORT, 'export_result_form', null, api_get_self() . '?export=&selecteval=' . $_GET['selecteval'], '_blank', $locked_status);
     if (!$export_result_form->validate()) {
     	Display :: display_header(get_lang('Export'));
     }

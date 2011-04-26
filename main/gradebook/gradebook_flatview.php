@@ -94,7 +94,7 @@ if (isset ($_GET['exportpdf']))	{
 		'name' => get_lang('FlatView')
 	);
 
-	$export_pdf_form = new DataForm(DataForm :: TYPE_EXPORT_PDF, 'export_pdf_form', null, api_get_self().'?exportpdf=&offset='.$_GET['offset'].'&selectcat='.$_GET['selectcat'], '_blank');
+	$export_pdf_form = new DataForm(DataForm::TYPE_EXPORT_PDF, 'export_pdf_form', null, api_get_self().'?exportpdf=&offset='.intval($_GET['offset']).'&selectcat='.intval($_GET['selectcat']), '_blank', '');
 
 	if ($export_pdf_form->validate()) {
 

@@ -125,6 +125,7 @@ function find_students($mask= '') {
 /**
  * Get user information from a given id
  * @param int $userid The userid
+ * @deprecated replace this function with the api_get_user_info()
  * @return array All user information as an associative array
  */
 function get_user_info_from_id($userid) {

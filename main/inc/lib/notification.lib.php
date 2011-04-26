@@ -14,17 +14,20 @@ require_once 'usermanager.lib.php';
 //mail_notify_message ("At once", "Daily", "No")
 define('NOTIFY_MESSAGE_AT_ONCE',	'1');
 define('NOTIFY_MESSAGE_DAILY',		'8');
+define('NOTIFY_MESSAGE_WEEKLY',    '12');
 define('NOTIFY_MESSAGE_NO',			'0');
 
 //mail_notify_invitation ("At once", "Daily", "No")
 
 define('NOTIFY_INVITATION_AT_ONCE',	'1');
 define('NOTIFY_INVITATION_DAILY',	'8');
+define('NOTIFY_INVITATION_WEEKLY', '12');
 define('NOTIFY_INVITATION_NO',		'0');
 
 // mail_notify_group_message ("At once", "Daily", "No")
 define('NOTIFY_GROUP_AT_ONCE',		'1');
 define('NOTIFY_GROUP_DAILY',		'8');
+define('NOTIFY_GROUP_WEEKLY',      '12');
 define('NOTIFY_GROUP_NO',			'0');
 
 class Notification extends Model {

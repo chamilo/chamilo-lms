@@ -18,6 +18,8 @@ body {
     background-color: #fff;
     height: 100%; /* stick */
 }
+
+
 /* Sticky footer*/
 #wrapper {
     min-height: 100%;
@@ -57,6 +59,7 @@ body {
     -moz-border-radius:5px;
     border:1px solid #E1E1E0;
 }
+
 
 
 /*
@@ -4468,4 +4471,11 @@ span.form_required  {
 
 .progresstext {
     text-align:center;
+}
+
+/* tips Abbr-plugin for FCKeditor */
+abbr {
+      border-bottom: 1px dotted rgb(102, 102, 102);
+	  background-color:#F00;
+      cursor: help;
 }

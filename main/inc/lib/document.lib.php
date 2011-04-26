@@ -463,8 +463,8 @@ class DocumentManager {
      */
     public static function get_all_document_data($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false, $search =false) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-        $TABLE_COURSE = Database::get_main_table(TABLE_MAIN_COURSE);
+        $TABLE_DOCUMENT     = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+        $TABLE_COURSE       = Database::get_main_table(TABLE_MAIN_COURSE);
 
         //if to_user_id = NULL -> change query (IS NULL)
         //$to_user_id = (is_null($to_user_id)) ? 'IS NULL' : '= '.$to_user_id;
@@ -516,7 +516,7 @@ class DocumentManager {
                         AND docs.path NOT LIKE '".$path.$added_slash."%/%'
                         AND last.tool = '".TOOL_DOCUMENT."'
                         AND ".$to_field." = ".$to_value."
-                        AND last.visibility".$visibility_bit . $condition_session;
+                        AND last.visibility".$visibility_bit.$condition_session;
         }
 
 
@@ -630,16 +630,9 @@ class DocumentManager {
      */
     public static function get_all_document_folders ($_course, $to_group_id = '0', $can_see_invisible = false) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-        /*if(empty($doc_url)){
-            $to_group_id = '0';
-        } else {
-            $to_group_id = Database::escape_string($to_group_id);
-        }*/
+        $TABLE_DOCUMENT     = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);        
 
-        if (!empty($to_group_id)) {
-           $to_group_id = intval($to_group_id);
-        }
+        $to_group_id = intval($to_group_id);
 
         if ($can_see_invisible) {
             //condition for the session
@@ -727,7 +720,6 @@ class DocumentManager {
             elseif (is_array($visiblefolders)) {
                 //sort($visiblefolders);
                 natsort($visiblefolders);
-
                 return $visiblefolders;
             }
             //no visible folders found
@@ -760,7 +752,7 @@ class DocumentManager {
                 if (!empty($file)) {
                     $path = Database::escape_string($file);
                     $what_to_check_sql = "SELECT td.id, readonly, tp.insert_user_id FROM ".$TABLE_DOCUMENT." td , $TABLE_PROPERTY tp
-                                    WHERE tp.ref= td.id and (path='".$path."' OR path LIKE BINARY '".$path."/%' ) ";
+                                          WHERE tp.ref= td.id and (path='".$path."' OR path LIKE BINARY '".$path."/%' ) ";
                     //get all id's of documents that are deleted
                     $what_to_check_result = Database::query($what_to_check_sql);
 

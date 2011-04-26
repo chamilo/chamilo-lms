@@ -39,7 +39,7 @@ class ThematicController
 		$msg_add = false;
 		
 		// insert or update a thematic		
-		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {															
+		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
 			if (isset($_POST['action']) && ($_POST['action'] == 'thematic_add' || $_POST['action'] == 'thematic_edit')) {				
 				if (trim($_POST['title']) !== '') {
 		    		if ($_POST['thematic_token'] == $_SESSION['thematic_token']) {
@@ -49,7 +49,7 @@ class ThematicController
     		    			$content       = $_POST['content'];
     		    			$session_id    = api_get_session_id();
     		    			$thematic->set_thematic_attributes($id, $title, $content, $session_id);	    			
-    						$last_id       = $thematic->thematic_save();						
+    						$last_id       = $thematic->thematic_save();
     						if ($_POST['action'] == 'thematic_add') {
     							$action = 'thematic_details';
     							if ($last_id) {

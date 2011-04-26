@@ -191,12 +191,13 @@ if ($action == 'thematic_list') {
 } else if ($action == 'thematic_add' || $action == 'thematic_edit') {
 
 	if (!$error) {
+	    //@todo why the heck you create your token? use Security::get_token()! jm
 		$token = md5(uniqid(rand(),TRUE));
 		$_SESSION['thematic_token'] = $token;
 	}
 		
-	// display form
-	$form = new FormValidator('thematic_add','POST','index.php?action=thematic_details&'.api_get_cidreq(),'style="width: 100%;"');
+	// Display form
+	$form = new FormValidator('thematic_add','POST','index.php?action=thematic_add&'.api_get_cidreq());
 	
 	if ($action == 'thematic_edit') {
 		$form->addElement('header', '', get_lang('EditThematicSection'));	

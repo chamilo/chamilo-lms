@@ -41,10 +41,9 @@ if ($error_repeat_date) {
 }
 
 if ($error_checkdate) {
-    $message = get_lang('EndDateIsNotValid');
+    $message = get_lang('InvalidDate');
     Display::display_error_message($message, false);
 }
-
 
 if (isset($action) && $action == 'calendar_add') {
 	// calendar add form

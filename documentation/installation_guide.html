@@ -760,8 +760,10 @@ Setting up a cron task is easy and there are several ways to do it. We recommend
 you have a look at the <a href="http://drupal.org/cron">Drupal documentation 
 for setting up cron</a> and define your own cron process as:
 <pre>
-35 * * * * wget -O - -q -t 1 http://campus.example.com/main/cron/notification.php
-</pre> 
+35 * * * * wget -O - -q -t 1 http://campus.example.com/main/cron/run.php
+</pre>
+Make sure you have a look into run.php as maybe you want to change a few 
+settings there.
 </p>
 
 <hr style="width: 100%; height: 2px;" />

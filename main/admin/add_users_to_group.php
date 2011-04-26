@@ -1,4 +1,4 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 *	@package chamilo.admin
@@ -19,6 +19,7 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
+global $_configuration;
 // Access restrictions
 api_protect_admin_script(true);
 
@@ -30,6 +31,7 @@ $interbreadcrumb[]=array('url' => 'group_list.php','name' => get_lang('GroupList
 $tbl_group			= Database::get_main_table(TABLE_MAIN_GROUP);
 $tbl_user			= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
+$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToGroup');
@@ -43,8 +45,8 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 //checking for extra field with filter on
 $xajax = new xajax();
 $xajax->registerFunction('search_users');
-function search_users($needle,$type,$relation_type) {
-	global $tbl_user,$tbl_group_rel_user,$group_id,$_configuration;
+function search_users($needle,$type,$relation_type) {    
+	global $tbl_user,$tbl_user_rel_access_url, $tbl_group_rel_user,$group_id,$_configuration;
 	$xajax_response = new XajaxResponse();
 	$return = $return_origin = $return_destination = '';
 	$without_user_id = $without_user_id = $condition_relation = '';
@@ -53,7 +55,7 @@ function search_users($needle,$type,$relation_type) {
 		$group_id = intval($group_id);
 		$relation_type = intval($relation_type);
 		// get user_id from relation type and group id
-		$sql = "SELECT user_id FROM $tbl_group_rel_user
+	    $sql = "SELECT user_id FROM $tbl_group_rel_user
 				WHERE group_id = '$group_id'
 				AND relation_type IN (".GROUP_USER_PERMISSION_ADMIN.",".GROUP_USER_PERMISSION_READER.",".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_MODERATOR.") ";
 		$res = Database::query($sql);
@@ -62,10 +64,10 @@ function search_users($needle,$type,$relation_type) {
 			while ($row = Database::fetch_row($res)) {
 				$user_ids[] = $row[0];
 			}
-			$without_user_id = " AND user_id NOT IN(".implode(',',$user_ids).") ";
+			$without_user_id = " AND user.user_id NOT IN(".implode(',',$user_ids).") ";
 		}
 
-		if ($relation_type==GROUP_USER_PERMISSION_PENDING_INVITATION) {
+		if ($relation_type == GROUP_USER_PERMISSION_PENDING_INVITATION) {
 			$condition_relation = " AND groups.relation_type IN (".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_READER.") ";
 		} else {
 			$condition_relation = " AND groups.relation_type = '$relation_type' ";
@@ -88,6 +90,7 @@ function search_users($needle,$type,$relation_type) {
 		} else {
 			$return_destination .= '<select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:360px;"></select>';
 		}
+		
 		$xajax_response -> addAssign('ajax_destination_list','innerHTML',api_utf8_encode($return_destination));
 
 	} else {
@@ -110,7 +113,7 @@ function search_users($needle,$type,$relation_type) {
 		$needle = Database::escape_string($needle);
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		$user_anonymous=api_get_anonymous_id();
-		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		
 
 		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 		if ($type == 'single') {
@@ -148,8 +151,8 @@ function search_users($needle,$type,$relation_type) {
 		} else {
 			// multiple
 			if (!empty($group_id) && !empty($relation_type)) {
-				$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
-					WHERE ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND user_id<>'$user_anonymous' $without_user_id $order_clause ";
+				$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user 
+				        WHERE ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND user_id<>'$user_anonymous' $without_user_id $order_clause ";
 				if ($_configuration['multiple_access_urls']) {
 					$access_url_id = api_get_current_access_url_id();
 					if ($access_url_id != -1) {
@@ -160,6 +163,7 @@ function search_users($needle,$type,$relation_type) {
 								AND user.user_id<>'$user_anonymous' $without_user_id $order_clause ";
 					}
 				}
+				
 				$rs_multiple = Database::query($sql);
 				$return_origin .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
 				while ($user = Database :: fetch_array($rs_multiple)) {
@@ -225,7 +229,7 @@ $group_name = $group_info['name'];
 
 Display::display_header($group_name);
 
-if($_POST['form_sent']) {
+if ($_POST['form_sent']) {
 
 	$form_sent			= $_POST['form_sent'];
 	$firstLetterUser	= $_POST['firstLetterUser'];
@@ -290,6 +294,7 @@ if ($ajax_search) {
 	$many_users = false;
 	$sql = "SELECT count(user_id) FROM $tbl_user user
 			WHERE ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND user_id<>'$user_anonymous' $without_user_id ";
+
 	if ($_configuration['multiple_access_urls']) {
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {
@@ -301,18 +306,22 @@ if ($ajax_search) {
 		}
 	}
 	$rs_count  = Database::query($sql);
-	$row_count = Database::fetch_row($rs_count);
+	$row_count = 0;
+	if (Database::num_rows($rs_count)) {
+	   $row_count = Database::fetch_row($rs_count);
+	   $row_count = $row_count[0];
+	}	
 	if ($row_count > 2) $many_users = true;
 
 	// data for origin list
-	if (isset($_POST['id']) && isset($_POST['firstLetterUser'])) {
-		$id = intval($_POST['id']);
+	if (isset($_GET['id'])) {
+		$id = intval($_GET['id']);
 		$needle = Database::escape_string($_POST['firstLetterUser']);
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		$user_anonymous=api_get_anonymous_id();
 		// get user_id from relation type and group id
 		$sql = "SELECT user_id FROM $tbl_group_rel_user
-				WHERE group_id = '$id'
+				WHERE group_id = $id
 				AND relation_type IN (".GROUP_USER_PERMISSION_ADMIN.",".GROUP_USER_PERMISSION_READER.",".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_MODERATOR.") ";
 		$res = Database::query($sql);
 		$user_ids = array();
@@ -320,7 +329,7 @@ if ($ajax_search) {
 			while ($row = Database::fetch_row($res)) {
 				$user_ids[] = $row[0];
 			}
-			$without_user_id = " AND user_id NOT IN(".implode(',',$user_ids).") ";
+			$without_user_id = " AND user.user_id NOT IN(".implode(',',$user_ids).") ";
 		}
 
 		$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
@@ -388,7 +397,7 @@ if ($add_type == 'multiple') {
 <?php } else { ?>
 <select name="relation" id="relation" onchange="xajax_search_users(document.getElementById('user_to_add').value,'single',this.value);">
 <?php } ?>
-<option value=""><?php echo get_lang('ChooseRelationType')?></option>
+<option value=""><?php echo get_lang('SelectARelationType')?></option>
 <option value="<?php echo GROUP_USER_PERMISSION_ADMIN ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_ADMIN)?'selected=selected':'') ?> > <?php echo get_lang('Admin') ?></option>
 <option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_PENDING_INVITATION)?'selected=selected':'') ?> > <?php echo get_lang('Reader') ?></option>
 <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_MODERATOR)?'selected=selected':'') ?> > <?php echo get_lang('Moderator') ?></option>
@@ -439,7 +448,7 @@ if(!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('UserListInPlatform') ?> :</b>
   </td>
   <td>&nbsp;</td>
-  <td align="center"><b><?php echo get_lang('UserListInGroup') ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('UsersInGroup') ?> :</b></td>
 </tr>
 
 <?php if ($add_type=='multiple') { ?>

@@ -4,7 +4,9 @@
 /**
  * This file contains class used like library, provides functions for thematic option inside attendance tool. It's also used like model to thematic_controller (MVC pattern)
  * @author Christian Fasanando <christian1827@gmail.com>
- * @author Julio Montoya 	<gugli100@gmail.com> SQL fixes + improvements
+ * @author Julio Montoya <gugli100@gmail.com> SQL fixes, 
+ * By the way there are 3 tables that are mixed,
+ * there should be 3 different classes Thematic, ThematicAdvanced and Thematic plan and a controller
  * @package chamilo.course_progress
  */
 
@@ -87,20 +89,30 @@ class Thematic
 		while ($thematic = Database::fetch_row($res)) {
 		    $session_star = '';
             if (api_get_session_id() == $thematic[3]) {
-                $session_star = api_get_session_image(api_get_session_id(),$user_info['status']);
+                $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
             }  
 			$thematic[1] = '<a href="index.php?'.api_get_cidreq().'&action=thematic_details&thematic_id='.$thematic[0].$param_gradebook.'">'.Security::remove_XSS($thematic[1], STUDENT).$session_star.'</a>';			
 			if (api_is_allowed_to_edit(null, true)) {
 				$actions  = '';
-				$actions .= '<center><a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('lesson_plan.png',get_lang('ThematicPlan'),'','22').'</a>&nbsp;';
-				$actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('lesson_plan_calendar.png',get_lang('ThematicAdvance'),'','22').'</a>&nbsp;';
-			
+				
 			    if (api_get_session_id()) {                    
-                    if (api_get_session_id() == $thematic[3]) {                        
+                    if (api_get_session_id() == $thematic[3]) {
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('lesson_plan.png',get_lang('ThematicPlan'),'','22').'</a>&nbsp;';
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('lesson_plan_calendar.png',get_lang('ThematicAdvance'),'','22').'</a>&nbsp;';
+                                    
                         $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';                        
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a></center>';	
+                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a>';	
+                    } else {
+                        $actions .= Display::return_icon('lesson_plan_na.png',get_lang('ThematicPlan'),'',22).'&nbsp;';
+                        $actions .= Display::return_icon('lesson_plan_calendar_na.png',get_lang('ThematicAdvance'),'',22).'&nbsp;';
+                        $actions .= Display::return_icon('edit_na.png',get_lang('Edit'),'',22);
+                        $actions .= Display::return_icon('delete_na.png',get_lang('Delete'),'',22).'&nbsp;';
+                        $actions .= Display::url(Display::return_icon('cd.gif', get_lang('Copy')), 'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$thematic[0].$param_gradebook);    
                     }                    
                 } else {	
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('lesson_plan.png',get_lang('ThematicPlan'),'','22').'</a>&nbsp;';
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('lesson_plan_calendar.png',get_lang('ThematicAdvance'),'','22').'</a>&nbsp;';
+                                               
 					if ($thematic[2] > 1) {
 						$actions .= '<a href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('up.png', get_lang('Up'),'',22).'</a>';
 					} else {
@@ -112,7 +124,9 @@ class Thematic
 						$actions .= Display::return_icon('down_na.png','&nbsp;','',22);
 					}
 					$actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
-					$actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a></center>';
+					$actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a>';
+					
+				
 				}
 				$thematics[] = array($thematic[0], $thematic[1], $actions);
 			}
@@ -318,6 +332,32 @@ class Thematic
 			}
 		}
 		return $affected_rows;
+	}
+	
+	public function copy($thematic_id) {
+	    $thematic = self::get_thematic_list($thematic_id, api_get_course_id(), 0);	    
+	    $thematic_copy = new Thematic();
+	    $thematic_copy->set_thematic_attributes('', $thematic['title'].' - '.get_lang('Copy'), $thematic['content'], api_get_session_id());
+	    
+	    $new_thematic_id = $thematic_copy->thematic_save();
+	    if (!empty($new_thematic_id)) {
+            $thematic_advanced = self::get_thematic_advance_by_thematic_id($thematic_id);
+            if(!empty($thematic_advanced)) {
+                foreach($thematic_advanced as $item) {    
+                    $thematic = new Thematic();    
+                    $thematic->set_thematic_advance_attributes(0, $new_thematic_id,  0, $item['content'], $item['start_date'], $item['duration']);                                                          
+                    $thematic->thematic_advance_save();        
+                }
+            }
+            $thematic_plan = self::get_thematic_plan_data($thematic_id);            
+            if (!empty($thematic_plan)) {
+                foreach ($thematic_plan as $item) {                    
+                    $thematic = new Thematic();    
+                    $thematic->set_thematic_plan_attributes($new_thematic_id, $item['title'], $item['description'], $item['description_type']);                                                          
+                    $thematic->thematic_plan_save();                
+                }
+            }
+	    }	    
 	}
 
 	/**
@@ -687,7 +727,6 @@ class Thematic
 		$affected_rows = 0;
         $user_id = api_get_user_id();
         
-        
         $all = array();
         
         if (!empty($thematic_data)) {
@@ -739,10 +778,10 @@ class Thematic
                     $ref = $row_thematic_done['ref'];
                     if (in_array($ref, $a_thematic_advance_ids)) { continue; }
                     // update items
-                    Database::query("UPDATE $tbl_item_property SET lastedit_date='".date('Y-m-d H:i:s', time())."', lastedit_type='ThematicAdvanceUpdated', lastedit_user_id = $user_id WHERE tool='thematic_advance' AND ref=$ref");
+                    Database::query("UPDATE $tbl_item_property SET lastedit_date='".api_get_utc_datetime()."', lastedit_type='ThematicAdvanceUpdated', lastedit_user_id = $user_id WHERE tool='thematic_advance' AND ref=$ref");
                 }
             }
-		}
+		}		
 		return $affected_rows;
 
 	}
@@ -818,6 +857,16 @@ class Thematic
 	public function get_total_average_of_thematic_advances($course_code = null, $session_id = null) {
 
 		$thematic_data = $this->get_thematic_list(null, $course_code, $session_id);
+		$new_thematic_data = array();
+		if (!empty($thematic_data)) {
+    		foreach ($thematic_data as $item) {
+    		    if ($item['session_id'] == api_get_session_id()) {
+                    $new_thematic_data[] = $item;
+    		    }
+    		}
+    		$thematic_data = $new_thematic_data;
+		}		
+		
 		$thematic_advance_data = $this->get_thematic_advance_list(null, $course_code);
 		$a_average_of_advances_by_thematic = array();
 		$total_average = 0;
@@ -834,9 +883,7 @@ class Thematic
 			$score = array_sum($a_average_of_advances_by_thematic);
 			$total_average = round(($score*100)/($count_tematics*100));
 		}
-
 		return $total_average;
-
 	}
 
 

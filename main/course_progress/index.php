@@ -34,7 +34,7 @@ api_protect_course_script(true);
 define('ADD_THEMATIC_PLAN', 6);
 
 // get actions
-$actions = array('thematic_details', 'thematic_list', 'thematic_add', 'thematic_edit', 'thematic_delete', 'moveup', 'movedown',
+$actions = array('thematic_details', 'thematic_list', 'thematic_add', 'thematic_edit', 'thematic_copy', 'thematic_delete', 'moveup', 'movedown',
 				 'thematic_plan_list', 'thematic_plan_add', 'thematic_plan_edit', 'thematic_plan_delete',
 				 'thematic_advance_list', 'thematic_advance_add', 'thematic_advance_edit', 'thematic_advance_delete');
 
@@ -197,9 +197,11 @@ switch ($action) {
 	case 'thematic_add'				:
 	case 'thematic_edit'			:
 	case 'thematic_delete'			:
-	case 'thematic_delete_select'	:	
+	case 'thematic_delete_select'	:
+    case 'thematic_copy'            :	
 	case 'moveup'					:
 	case 'movedown'					:
+    
         if (!api_is_allowed_to_edit(null,true)) {
         	api_not_allowed();
         }
@@ -209,7 +211,7 @@ switch ($action) {
 		break;	
 	case 'thematic_plan_add'		:
 	case 'thematic_plan_edit'		:
-	case 'thematic_plan_delete'		:
+	case 'thematic_plan_delete'		:	
         if (!api_is_allowed_to_edit(null,true)) {
             api_not_allowed();
         }	

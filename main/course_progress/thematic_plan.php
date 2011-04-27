@@ -41,7 +41,7 @@ echo $thematic_data['content'];
 
 
 if ($message == 'ok') {
-        Display::display_normal_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'));    
+    Display::display_normal_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'));    
 }
 if ($action == 'thematic_plan_list') {    
             

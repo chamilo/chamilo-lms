@@ -64,7 +64,7 @@ if ($action == 'thematic_list') {
 
 	// display title
 	if (!empty($thematic_id)) {
-		echo '<div><strong>'.Security::remove_XSS($thematic_data[$thematic_id]['title'], STUDENT).': '.get_lang('Details').'</strong></div><br />';							
+		//echo '<div><strong>'.Security::remove_XSS($thematic_data[$thematic_id]['title'], STUDENT).': '.get_lang('Details').'</strong></div><br />';							
 	} else {
 		//echo '<div><strong>'.get_lang('ThematicDetails').'</strong></div><br />';	
 		// display information
@@ -78,20 +78,22 @@ if ($action == 'thematic_list') {
 	if (!empty($thematic_data)) {
 		
 		// display progress
-		if (!empty($thematic_id)) {
-			echo '<div style="text-align:right;">'.get_lang('Progress').': <strong>'.$total_average_of_advances.'</strong>%</div><br />';
-		} else {
-			echo '<div style="text-align:right;">'.get_lang('Progress').': <strong><span id="div_result">'.$total_average_of_advances.'</span></strong>%</div><br />';
-		}
+		echo '<div style="text-align:right;"><h2>'.get_lang('Progress').': <span id="div_result">'.$total_average_of_advances.'</span> %</h2></div>';
 		
 		echo '<table width="100%" class="data_table">';	
 		echo '<tr><th width="33%">'.get_lang('Thematic').'</th><th>'.get_lang('ThematicPlan').'</th><th width="33%">'.get_lang('ThematicAdvance').'</th></tr>';
 	   
 		foreach ($thematic_data as $thematic) {
+		    $session_star = '';
+		    if (api_get_session_id() == $thematic['session_id']) {
+                $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
+            }  else { 
+                continue;
+            }            
 			echo '<tr>';
 			
 			// display thematic title		
-			echo '<td><h2>'.Security::remove_XSS($thematic['title'], STUDENT).'</h2><div>'.Security::remove_XSS($thematic['content'], STUDENT).'</div></td>';
+			echo '<td><h2>'.Security::remove_XSS($thematic['title'], STUDENT).$session_star.'</h2><div>'.Security::remove_XSS($thematic['content'], STUDENT).'</div></td>';
 			
 			// display thematic plan data
 			echo '<td>';					

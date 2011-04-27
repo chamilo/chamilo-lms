@@ -73,6 +73,12 @@ class ThematicController
 					$this->view->render();					    						    									
 				}
 			}				    		
+		}
+		
+		//Copy a thematic to a session
+		if ($action == 'thematic_copy') {
+		    $thematic->copy($_REQUEST['thematic_id']);
+		    $action = 'thematic_list';
 		}								
 
 		// delete many thematics

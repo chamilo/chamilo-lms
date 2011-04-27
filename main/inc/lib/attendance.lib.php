@@ -97,7 +97,8 @@ class Attendance
 				att.name AS col1,
 				att.description AS col2,
 				att.attendance_qualify_max AS col3,
-                                att.locked AS col4
+                att.locked AS col4,
+                att.session_id
 				FROM $tbl_attendance att
 				WHERE att.active = 1 $condition_session
 				ORDER BY col$column $direction LIMIT $from,$number_of_items ";
@@ -110,13 +111,18 @@ class Attendance
 		}
 
 		while ($attendance = Database::fetch_row($res)) {
-
+		    
 			$student_param = '';
 			if (api_is_drh() && ($_GET['student_id'])) {
 				$student_param = '&student_id='.Security::remove_XSS($_GET['student_id']);
 			}
-
-			$attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>';
+			
+            $session_star = '';
+            
+            if (api_get_session_id() == $attendance[5]) {
+                $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
+            }
+			$attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
 			$attendance[3] = '<center>'.$attendance[3].'</center>';
 			if (api_is_allowed_to_edit(null, true)) {
 				$actions  = '';

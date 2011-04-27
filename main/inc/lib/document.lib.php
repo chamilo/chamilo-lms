@@ -638,7 +638,7 @@ class DocumentManager {
             //condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
-            $sql = "SELECT path FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
+            $sql = "SELECT DISTINCT path FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
                                 WHERE docs.id = last.ref
                                 AND docs.filetype = 'folder'
                                 AND last.tool = '".TOOL_DOCUMENT."'
@@ -666,7 +666,7 @@ class DocumentManager {
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
             //get visible folders
-            $visible_sql = "SELECT path
+            $visible_sql = "SELECT DISTINCT path
                         FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
                         WHERE docs.id = last.ref
                         AND docs.filetype = 'folder'
@@ -681,7 +681,7 @@ class DocumentManager {
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
             //get invisible folders
-            $invisible_sql = "SELECT path
+            $invisible_sql = "SELECT DISTINCT path
                         FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
                         WHERE docs.id = last.ref
                         AND docs.filetype = 'folder'
@@ -694,7 +694,7 @@ class DocumentManager {
                 $session_id = api_get_session_id();
                 $condition_session = api_get_session_condition($session_id);
                 //get visible folders in the invisible ones -> they are invisible too
-                $folder_in_invisible_sql = "SELECT path
+                $folder_in_invisible_sql = "SELECT DISTINCT path
                                 FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
                                 WHERE docs.id = last.ref
                                 AND docs.path LIKE '".Database::escape_string($invisible_folders['path'])."/%'

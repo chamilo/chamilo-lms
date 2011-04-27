@@ -558,6 +558,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
 }
 
 function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = '') {
+    
     $form = '<form name="move_to" action="'.api_get_self().'" method="post">';
     $form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />';
     
@@ -604,6 +605,9 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
                     // If document title is used, we have to display titles instead of real paths...
                     if (api_get_setting('use_document_title')) {
                         $path_displayed = get_titles_of_path($folder);
+                    }
+                    if (empty($path_displayed)) {
+                        $path_displayed = get_lang('Untitled');
                     }
                     $form .= '<option value="'.$folder.'">'.$path_displayed.'</option>';
                 }

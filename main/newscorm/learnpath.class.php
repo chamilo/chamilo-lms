@@ -4743,7 +4743,7 @@ class learnpath {
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 
         $sql = " SELECT id, title, description, item_type, path, parent_item_id, previous_item_id, next_item_id, max_score, min_score, mastery_score, display_order
-                 FROM " . $tbl_lp_item . "
+                 FROM $tbl_lp_item
                  WHERE lp_id = " . Database :: escape_string($this->lp_id);
         $result = Database::query($sql);
         $arrLP = array ();

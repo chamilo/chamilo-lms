@@ -133,7 +133,7 @@ if ($user_data !== false) {
 /*
  * Initialize the form.
  */
-$form = new FormValidator('profile', 'post', api_get_self()."?".str_replace('&fe=1', '', $_SERVER['QUERY_STRING']), null, array('style' => 'width: 75%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
+$form = new FormValidator('profile', 'post', api_get_self()."?".str_replace('&fe=1', '', $_SERVER['QUERY_STRING']), null, array('style' => 'width: 70%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
 
 /* Make sure this is the first submit on the form, even though it is hidden!
  * Otherwise, if a user has productions and presses ENTER to submit, he will
@@ -257,11 +257,11 @@ if (api_get_setting('extended_profile') == 'true') {
 		//$form->addElement('html', '<a href="javascript: void(0);" onclick="javascript: show_extend();"> show_extend_profile</a>');
 		$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
 		//	MY COMPETENCES
-		$form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '550', 'Height' => '130'));
+		$form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '580', 'Height' => '130'));
 		//	MY DIPLOMAS
-		$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '550', 'Height' => '130'));
+		$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '580', 'Height' => '130'));
 		//	WHAT I AM ABLE TO TEACH
-		$form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '550', 'Height' => '130'));
+		$form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '580', 'Height' => '130'));
 
 		//	MY PRODUCTIONS
 		$form->addElement('file', 'production', get_lang('MyProductions'));
@@ -269,7 +269,7 @@ if (api_get_setting('extended_profile') == 'true') {
 			$form->addElement('static', 'productions_list', null, $production_list);
 		}
 		//	MY PERSONAL OPEN AREA
-		$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '550', 'Height' => '350'));
+		$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '580', 'Height' => '350'));
 		$form->applyFilter(array('competences', 'diplomas', 'teach', 'openarea'), 'stripslashes');
 		$form->applyFilter(array('competences', 'diplomas', 'teach'), 'trim'); // openarea is untrimmed for maximum openness
 	}
@@ -769,9 +769,9 @@ if (api_get_setting('allow_social_tool') != 'true') {
 		$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
 
 		if (isset($_GET['type']) && $_GET['type'] == 'extended') {
-			echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
+			echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.png', get_lang('EditNormalProfile'),'',16).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
 		} else {
-			echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
+			echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.png', get_lang('EditExtendProfile'),'',16).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
 		}
 
 		echo '</div>';
@@ -845,9 +845,9 @@ if (api_get_setting('allow_social_tool') == 'true') {
 					if (api_get_setting('extended_profile') == 'true') {
 						$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
 						if (isset($_GET['type']) && $_GET['type'] == 'reduced') {
-							echo '<a href="profile.php?type=extended '.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</span></a>';
+							echo '<a href="profile.php?type=extended '.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.png', get_lang('EditExtendProfile'),'',16).'&nbsp;'.get_lang('EditExtendProfile').'</span></a>';
 						} else {
-							echo '<a href="profile.php?type=reduced'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</span></a>';
+							echo '<a href="profile.php?type=reduced'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.png', get_lang('EditNormalProfile'),'',16).'&nbsp;'.get_lang('EditNormalProfile').'</span></a>';
 						}
 					}
 				echo '</div>';				

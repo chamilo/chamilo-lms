@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--
+ * FCKeditor - The text editor for internet
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * 
+ * Licensed under the terms of the GNU Lesser General Public License:
+ *    http://www.opensource.org/licenses/lgpl-license.php
+ * 
+ * For further information visit:
+ *    http://www.fckeditor.net/
+ * 
+ * File Name: fck_abbr.html
+ *  Plugin to insert abbr-title TAGs which let a text-info pop up while mousecursor moves over this text.
+ * 
+ * File Authors:
+ *  SNOOPY-0815  
+ *   [based upon plugin infopup by Thomas Goerldt]
+ *	further developed by:
+ *  kwillems (kwillems-at-zonnet.nl 02-14-2007)
+
+-->
+<html>
+<head>
+<title>Abbr</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta content="noindex, nofollow" name="robots">
+<script language="javascript">
+
+var oEditor	= window.parent.InnerDialogLoaded() ;
+var FCKLang	= oEditor.FCKLang ;
+var FCKAbbr	= oEditor.FCKAbbr ;
+
+window.onload = function () {
+	// First of all, translate the dialog box texts
+	oEditor.FCKLanguageManager.TranslatePage( document );
+	
+	var oLink = getoLink();
+	var oSelection = checkSelection ();
+
+	// display an alert-message when no selection is made if we want to make a abbr
+	// and also the cursor is not placed in a abbr
+	if(oSelection == '' && !oLink) {
+		document.getElementById('message').style.display = 'block';
+	}
+	// the cursor is placed in a abbr, so we have one!
+	// we want to display the inputfield and the checknbox to remove the abbr
+	else if (oLink) {
+		document.getElementById('inputfield').style.display = 'block';
+		document.getElementById('checkbox').style.display = 'block';
+		oEditor.FCK.Selection.SelectNode( oLink );
+		document.getElementById("infotext").value = oLink.title;
+		document.getElementById('infotext').focus();
+	}
+	// we want to insert a abbr
+	else {
+		document.getElementById('inputfield').style.display = 'block';
+	}
+
+	// Show the "Ok" button?
+	if(oSelection != '' || oLink) {
+		window.parent.SetOkButton( true ) ;
+		document.getElementById('infotext').focus();
+	}
+}
+
+function Ok() {
+	if(document.getElementById("remove") && document.getElementById("remove").checked && oLink) {	// remove ABBR
+		if( oEditor.FCKBrowserInfo.IsIE) {															// IE-only
+			oLink.removeNode(false);
+		}
+		else {																						// Gecko
+			var e = oEditor.FCK.EditorDocument.createElement( 'SPAN' );
+			for ( var i = 0 ; i < oLink.childNodes.length ; i++ ) {
+				e.appendChild( oLink.childNodes[i].cloneNode(true) );
+			}
+			oEditor.FCK.InsertHtml( e.innerHTML ) ;
+		}
+	}
+	else {
+		if (oLink && document.getElementById("infotext").value != '') {								// if abbr already exists, insert or replace title
+			oLink.title=document.getElementById("infotext").value;
+		}
+		else if(oLink && oLink.title && document.getElementById("infotext").value == '') {			// title should me removed
+			oLink.removeAttribute('title');
+		}
+		else {																						// otherwise, make a new abbr, with or without title
+			FCKAbbr.Insert(document.getElementById("infotext").value);
+		}
+	}
+	return true;
+}
+
+function checkSelection () {
+	if (document.selection) {													// IE
+		oSelection = oEditor.FCK.EditorDocument.selection.createRange().text;
+	}
+	else if (window.getSelection) {												// Mozilla, Safari (ok, I know: Safari ain't supported yet!
+		oSelection = oEditor.FCK.EditorWindow.getSelection();
+	}
+	else if (document.getSelection) {
+		oSelection = oEditor.FCK.EditorDocument.getSelection();					// Mozilla, Netscape, Opera
+	}
+	return oSelection;
+
+}
+
+function getoLink () {
+	if( oEditor.FCKBrowserInfo.IsIE) {
+		oLink = oEditor.FCK.Selection.MoveToAncestorNode( 'abbr' );				// lower-case!!!!!!! I don't know why, but it's working!!!
+	}
+	else {
+		oLink = oEditor.FCK.Selection.MoveToAncestorNode( 'ABBR' );
+	}
+	return oLink;		
+}
+</script>
+
+<style type="text/css">
+#message, #inputfield, #checkbox { display: none; }
+abbr { border-bottom: 1px dotted rgb(102, 102, 102); background-color:#F00; cursor: help; }
+</style>
+
+</head>
+<body scroll="no" style="OVERFLOW: hidden">
+<table height="100%" cellSpacing="0" cellPadding="0" width="100%" border="0">
+<tr>
+<td>
+<table cellSpacing="0" cellPadding="0" align="center" border="0">
+<tr>
+<td><span style="font-family:Verdana, Arial, sans-serif;font-size:9px; color:#444;"></span>
+<span id="message" fckLang="AbbrDlgSelectFirst">select</span>
+<div id="inputfield"><span fckLang="AbbrDlgName">Info-Text</span><br>&nbsp;&nbsp;&nbsp;<span fckLang="AbbrDlgTxt">Info-Text2</span><br><br><textarea style="width:300px;height:50px;" name="infotext" id="infotext"></textarea><br><br></div>
+<div id="checkbox"><input id="remove" type="checkbox">&nbsp;&nbsp;&nbsp;<label for="remove"><span fckLang="AbbrDlgRemove">Remove abbreviation:</span></label></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>

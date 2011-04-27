@@ -4504,4 +4504,11 @@ span.form_required  {
 .decrease_font:hover {
     border: 1px solid black;
     cursor: pointer;
-} 
+}
+
+/* tips Abbr-plugin for FCKeditor */
+abbr {
+      border-bottom: 1px dotted rgb(102, 102, 102);
+	  background-color:#F00;
+      cursor: help;
+}

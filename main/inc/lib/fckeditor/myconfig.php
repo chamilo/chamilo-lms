@@ -266,6 +266,10 @@ if ((api_get_setting('enabled_insertHtml') == 'true')) {
     $config['insertHtml_dialogHeight'] = 475;
 }
 
+// Abbr : Insert, change or delete Abbr-Title-TAG
+
+$config['LoadPlugin'][] = 'Abbr';
+
 /*
  * File manager.
  */

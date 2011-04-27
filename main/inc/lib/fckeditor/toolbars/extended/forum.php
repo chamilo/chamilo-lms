@@ -25,6 +25,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('Undo','Redo'),
 	array('Link','Image','flvPlayer','Flash','MP3','TableOC','mimetex','asciimath','asciisvg'),
 	array('UnorderedList','OrderedList','Rule'),
+	array('Abbr'),
 	array('JustifyLeft','JustifyCenter','JustifyFull'),
 	array('FontFormat','FontName','FontSize','Bold','Italic','Underline','TextColor','BGColor','Source'),
 	array('FitWindow')
@@ -44,6 +45,7 @@ $config['ToolbarSets']['Maximized'] = array(
 	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),	
 	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript','-','TextColor','BGColor'),
+	array('Abbr'),
 	array($VSpellCheck),	
 	array('Style','FontFormat','FontName','FontSize'),	
 	array('PageBreak','ShowBlocks','Source'),

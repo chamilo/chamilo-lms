@@ -4067,3 +4067,10 @@ span.form_required  {
 .online_grid_element_1, .online_grid_element_2 {    
     font-size:10px;
 }
+
+/* tips Abbr-plugin for FCKeditor */
+abbr {
+      border-bottom: 1px dotted rgb(102, 102, 102);
+	  background-color:#F00;
+      cursor: help;
+}

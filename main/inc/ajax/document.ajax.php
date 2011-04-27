@@ -4,9 +4,9 @@
  * Responses to AJAX calls for the document upload 
  */
 require_once '../global.inc.php';
-if (api_is_anonymous()) {
-    exit;
-}
+
+api_protect_course_script(true);
+
 if(!empty($_FILES)) {
     require_once api_get_path(LIBRARY_PATH).'document.lib.php';
     require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';

@@ -4,9 +4,8 @@
  * Responses to AJAX calls
  */
 require_once '../global.inc.php';
-if (api_is_anonymous()) {
-    exit;
-}
+
+api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
 

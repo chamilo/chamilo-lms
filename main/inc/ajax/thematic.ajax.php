@@ -8,6 +8,8 @@ require_once '../global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
+api_protect_course_script(true);
+
 $action = $_GET['a'];
 
 switch ($action) {	

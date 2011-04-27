@@ -204,106 +204,103 @@ $htmlHeadXtra[] = ' <script type="text/javascript">
 	}		
 	</script>';
 Display::display_header($nameTools,'Exercise');
-echo '<h3>'.$nameTools.'</h3>';
+
+// Menu 
 echo '<div class="actions">';
 if (isset($type)) {
 	$url = api_get_self().'?type=1';
 } else {
 	$url = api_get_self();
 }
-echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:inline;">';
-     
-    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
-    /*if(!empty($fromExercise)) {
-    	echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';
-    } else {
-    	echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes">'.Display::return_icon('more.png'),get_lang('NewQu').'</a>';
-    }*/
-	 
-    if (isset($type)) {
-    	echo '<input type="hidden" name="type" value="1">';
-    }    
-    //echo '<input type="hidden" name="cidReq" value="'.api_get_cidreq().'">';
-    echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
+echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+echo '</div>';
+
+//Title
+echo '<h2>'.$nameTools.'</h2>';
+
+//Form
+echo '<form name="question_pool" method="GET" action="'.$url.'">';	 
+if (isset($type)) {
+	echo '<input type="hidden" name="type" value="1">';
+}    
+echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
+
+//Session list  
+$session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
+$session_select_list = array();
+foreach($session_list as $item) {
+    $session_select_list[$item['id']] = $item['name'];
+}
+$select_session_html =  Display::select('session_id', $session_select_list, $session_id, array('onchange'=>'submit_form(this);'));
+echo Display::form_row(get_lang('Session'), $select_session_html);
+
+//Course list
+if (!empty($session_id) && $session_id != '-1') {
+    $course_list = SessionManager::get_course_list_by_session_id($session_id);
+} else {        
+    $course_list = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());        
+}    
+
+$course_select_list = array();
+foreach ($course_list as $item) {
+	$course_select_list[$item['id']] = $item['title'];
+}    
+
+$select_course_html =  Display::select('selected_course', $course_select_list, $selected_course, array('onchange'=>'submit_form(this);'));
+echo Display::form_row(get_lang('Course'), $select_course_html);    
+
+if (empty($selected_course) || $selected_course == '-1') {
+    $course_info = api_get_course_info();
+    $db_name = $course_info['db_name'];
+} else {        
+	$course_info = CourseManager::get_course_information_by_id($selected_course);                
+    $db_name = $course_info['db_name'];
+}
+
+//Redefining table calls
+$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION,   $db_name);
+$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST,            $db_name);
+$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION,        $db_name);
+$TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER,          $db_name);
+
+$exercise_list         = get_all_exercises($course_info, $session_id);
+
+echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
+
+//Exercise List
+$my_exercise_list = array();
+$my_exercise_list['0']  = get_lang('AllExercises');
+$my_exercise_list['-1'] = get_lang('OrphanQuestions'); 
     
-    //Session list  
-    $session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
-    $session_select_list = array();
-    foreach($session_list as $item) {
-        $session_select_list[$item['id']] = $item['name'];
-    }
-    echo get_lang('Session').'  ';
-    echo Display::select('session_id', $session_select_list, $session_id, array('onchange'=>'submit_form(this);'));
-    
-    //Course list
-    if (!empty($session_id) && $session_id != '-1') {
-        $course_list = SessionManager::get_course_list_by_session_id($session_id);
-    } else {        
-        $course_list = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());        
-    }    
-    
-    $course_select_list = array();
-    foreach ($course_list as $item) {
-    	$course_select_list[$item['id']] = $item['title'];
-    }    
-    
-    echo ' '.get_lang('Course').' ';
-    echo Display::select('selected_course', $course_select_list, $selected_course, array('onchange'=>'submit_form(this);'));    
-    
-    if (empty($selected_course) || $selected_course == '-1') {
-        $course_info = api_get_course_info();
-        $db_name = $course_info['db_name'];
-    } else {        
-    	$course_info = CourseManager::get_course_information_by_id($selected_course);                
-        $db_name = $course_info['db_name'];
-    }
-    
-    //Redefining table calls
-    $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION,   $db_name);
-    $TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST,            $db_name);
-    $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION,        $db_name);
-    $TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER,          $db_name);
-    
-    $exercise_list         = get_all_exercises($course_info, $session_id);
-    
-    echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
-	
-    echo '<br/>';
-	
-    //Exercise List
-    echo ' '.get_lang('Exercice').' ';
-    
-    $my_exercise_list = array();
-    $my_exercise_list['0']  = get_lang('AllExercises');
-    $my_exercise_list['-1'] = get_lang('OrphanQuestions'); 
-        
-    if (is_array($exercise_list)) {
-        foreach($exercise_list as $row) {        
-            if ($row['id'] !=  $fromExercise) {       
-                $my_exercise_list[$row['id']] = $row['title'];
-            }
+if (is_array($exercise_list)) {
+    foreach($exercise_list as $row) {        
+        if ($row['id'] !=  $fromExercise) {       
+            $my_exercise_list[$row['id']] = $row['title'];
         }
-    }    
-    
-    echo Display::select('exerciseId', $my_exercise_list, $exerciseId, array('onchange'=>'submit_form(this);'), false);
-    
-    echo ' '.get_lang('Difficulty').' ';    	
-    
-    //Difficulty list (only from 1 to 5)                
-    echo Display::select('exerciseLevel', array(0=>0, 1=>1,2=>2,3=>3,4=>4,5=>5), $exerciseLevel, array('onchange'=>'submit_form(this);'));
-    
-    $question_list = Question::get_types_information();
-    $new_question_list = array();
-    foreach($question_list as $key=>$item) {
-    	$new_question_list[$key] = get_lang($item[1]);
     }
-    //Answer type list
-    echo ' '.get_lang('AnswerType').' ';
-    echo Display::select('answerType', $new_question_list, $answerType, array('onchange'=>'submit_form(this);'));
-    ?>
-    <button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Filter') ?></button>
-    </form>
-</div>
+}    
+
+$select_exercise_html =  Display::select('exerciseId', $my_exercise_list, $exerciseId, array('onchange'=>'submit_form(this);'), false);
+echo Display::form_row(get_lang('Exercise'), $select_exercise_html);
+
+//Difficulty list (only from 0 to 5)                
+$select_difficulty_html = Display::select('exerciseLevel', array(0=>0, 1=>1,2=>2,3=>3,4=>4,5=>5), $exerciseLevel, array('onchange'=>'submit_form(this);'));
+echo Display::form_row(get_lang('Difficulty'), $select_difficulty_html);
+
+$question_list = Question::get_types_information();
+$new_question_list = array();
+foreach($question_list as $key=>$item) {
+	$new_question_list[$key] = get_lang($item[1]);
+}
+
+//Answer type list
+$select_answer_html = Display::select('answerType', $new_question_list, $answerType, array('onchange'=>'submit_form(this);'));
+echo Display::form_row(get_lang('AnswerType'), $select_answer_html);
+$button = '<button class="save" type="submit" name="name" value="'.get_lang('Filter').'">'.get_lang('Filter').'</button>'; 
+echo Display::form_row('', $button);
+?>
+</form>
+<div class="clear"></div>
 <form method="post" action="<?php echo $url.'?'.api_get_cidreq().'&fromExercise='.$fromExercise; ?>" >
 
 <?php
@@ -335,8 +332,6 @@ if ($exerciseId > 0) {
     while($row = Database::fetch_array($result, 'ASSOC')) {
     	$main_question_list[] = $row;
     }    
-
-
 } elseif($exerciseId == -1) {
 
 	// if we have selected the option 'Orphan questions' in the list-box 'Filter'

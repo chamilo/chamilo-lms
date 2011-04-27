@@ -845,6 +845,12 @@ class Display {
         $table .= self::tag('div','',array('id'=>$div_id.'_pager'));
         return $table;
     }
+    
+    public static function form_row($label, $form_item) {
+        $label = self::div($label, array('class' =>'label'));
+        $form_item = self::div($form_item, array('class' =>'formw'));
+        return self::div($label.$form_item, array('class'=>'row'));
+    }
 
     /**
      * This is a wrapper to use the jqgrid in Chamilo. For the other jqgrid options visit http://www.trirand.com/jqgridwiki/doku.php?id=wiki:options

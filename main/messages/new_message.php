@@ -57,11 +57,39 @@ $(document).ready(function () {
         complete_text:"'.get_lang('StartToType').'",
     	firstselected: true,
         //onremove: "testme",
-    	//onselect: "testme",
+    	onselect:"check_users",
         filter_selected: true,
         newel: true
     });
 });
+
+function check_users() {
+    //selecting only selected users
+    $("#users option:selected").each(function() {
+        var user_id = $(this).val();        
+        if (user_id != "" ) {            
+            $.ajax({ 
+                url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_id_exists", 
+                data: "user_id="+user_id,
+                success: function(return_value) {
+                    if (return_value == 0 ) {
+                        alert("'.get_lang('UserDoesNotExist').'");
+                                                
+                        //Deleting select option tag
+                        $("#users option[value="+user_id+"]").remove();
+                        
+                        //Deleting holder
+                        $(".holder li").each(function () {
+                            if ($(this).attr("rel") == user_id) {
+                                $(this).remove();
+                            }
+                        });                        
+                    }                    
+                },            
+            });                
+        }        
+    });
+}
 
 var counter_image = 1;
 /*

@@ -9,6 +9,16 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 $action = $_GET['a'];
 
 switch ($action) {	
+    case 'user_id_exists':
+        if (api_is_anonymous()) {
+            echo '';    
+        } else {   
+            if (UserManager::is_user_id_valid($_GET['user_id'])) {
+                echo 1;
+            }
+            echo 0;
+        }
+        break;        
 	case 'search_tags':
 		if (api_is_anonymous()) {
 			echo '';	

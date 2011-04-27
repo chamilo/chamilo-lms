@@ -290,7 +290,7 @@ echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:i
     echo ' '.get_lang('Difficulty').' ';    	
     
     //Difficulty list (only from 1 to 5)                
-    echo Display::select('exerciseLevel', array(1=>1,2=>2,3=>3,4=>4,5=>5), $exerciseLevel, array('onchange'=>'submit_form(this);'));
+    echo Display::select('exerciseLevel', array(0=>0, 1=>1,2=>2,3=>3,4=>4,5=>5), $exerciseLevel, array('onchange'=>'submit_form(this);'));
     
     $question_list = Question::get_types_information();
     $new_question_list = array();
@@ -385,6 +385,11 @@ if ($exerciseId > 0) {
 			ON exercice_id=exercices.id
 			WHERE '.$answer_where.' '.$level_where.' (quizz_questions.exercice_id IS NULL OR exercices.active = -1 )  '.$type_where.'
 			LIMIT '.$from.', '.($limitQuestPage + 1);
+    $result = Database::query($sql);
+    
+    while($row = Database::fetch_array($result, 'ASSOC')) {
+        $main_question_list[] = $row;
+    }
 
 } else {
 	// if we have not selected any option in the list-box 'Filter'
@@ -413,12 +418,9 @@ if ($exerciseId > 0) {
                 if ($selected_course != $course_item['id']) {                
                 	continue;
                 }
-            }
-            
-      
+            }        
             $exercise_list = get_all_exercises($course_item, $session_id);
-            //var_dump($exercise_list );
-            
+
             if (!empty($exercise_list)) {        
                 foreach ($exercise_list as $exercise) {                    
                     $my_exercise = new Exercise($course_item['id']);
@@ -451,15 +453,12 @@ if ($exerciseId > 0) {
     } else {
         //By default
     	$sql="SELECT qu.id, question, qu.type, level, q.session_id FROM $TBL_QUESTIONS as qu, $TBL_EXERCICE_QUESTION as qt, $TBL_EXERCICES as q
-          WHERE q.id=qt.exercice_id AND qu.id=qt.question_id AND qt.exercice_id<>".$fromExercise." $filter ORDER BY session_id ASC LIMIT $from, $new_limit_page";
+              WHERE q.id=qt.exercice_id AND qu.id=qt.question_id AND qt.exercice_id<>".$fromExercise." $filter ORDER BY session_id ASC LIMIT $from, $new_limit_page";
     }
 	// forces the value to 0
-	//echo $sql;
 	$exerciseId=0;
 }
-
 $result=Database::query($sql);
-//$nbrQuestions=Database::num_rows($result);
 $nbrQuestions=count($main_question_list);
 
 echo '<tr>',

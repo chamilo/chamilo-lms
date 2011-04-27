@@ -567,7 +567,9 @@ input[text] {
 	padding: 4px;
 	margin-bottom: 2px;
 	padding-left: 22px;
-	float: left;
+
+    float:left;
+    width:100%;
 	clear:right;
 }
 #header4 a {

@@ -445,6 +445,8 @@ input[text] {
 	border-bottom: 1px solid #4171b5;
 	height:auto;
 	margin-bottom: 1px;
+	float:left;
+    width:100%;
 }
 #header3 a {
 	PADDING-RIGHT: 15px;
@@ -548,7 +550,8 @@ input[text] {
 	padding: 4px;
 	padding-left: 21px;
 	margin-bottom: 2px;
-	float: left;
+    float:left;
+    width:100%;
 	clear:right;
 }
 #header4 a {

@@ -412,6 +412,8 @@ ul#navigation .help a{
 	background-position: 0px 0px;
 	background-repeat: repeat-x;/*border: 1px solid green;*/
 	height:41px;
+	float:left;
+    width:100%;
 }
 #header3 a {
 	DISPLAY: block;
@@ -501,6 +503,8 @@ ul#navigation .help a{
 	padding-left: 21px;
 	margin-bottom: 2px;
 	clear:right;
+    float:left;
+    width:100%;
 }
 #header4 a {
 	color: #fff;

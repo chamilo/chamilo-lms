@@ -128,6 +128,8 @@ input[type=button], input[type=submit] {
 	height:25px;
 	margin-bottom: 1px;
 	background-image: url(images/fondoHeader3.jpg);
+	float:left;
+    width:100%;
 }
 #header3 a {
 	padding: 10px 0px 20px 0px;
@@ -188,8 +190,9 @@ input[type=button], input[type=submit] {
 	margin-top: 0px;
 	margin-left: 18px;
 	position:relative;
-	float: left;
 	clear:left;
+    float:left;
+    width:100%;
 }
 #header4 a {
 	color: #7171b7;

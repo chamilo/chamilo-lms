@@ -106,6 +106,8 @@ input[type=button], input[type=submit] {
 	font-weight: bold;
 	margin: 0;
 	padding: 0;
+	float:left;
+    width:100%;
 }
 #header3 ul {
 	list-style:none;
@@ -168,6 +170,8 @@ input[type=button], input[type=submit] {
 #header4 {
 	background-color: #fff;
 	height: 21px;
+	float:left;
+    width:100%;
 }
 a.breadcrumb {
 	height: 21px;

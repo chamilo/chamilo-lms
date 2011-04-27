@@ -113,6 +113,8 @@ input[type=button], input[type=submit] {
 	font-weight: bold;
 	margin: 0;
 	padding: 0;
+	float:left;
+    width:100%;
 }
 
 #header3 UL {
@@ -178,6 +180,8 @@ input[type=button], input[type=submit] {
 
 /* header 4 styles */
 #header4 {
+	float:left;
+    width:100%;
 	background-color: #fff;
 	height: 21px;
 }

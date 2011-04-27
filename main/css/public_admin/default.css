@@ -481,6 +481,8 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
     height:25px;
     margin-bottom: 1px;
     background-image: url(images/fondoHeader3.jpg);
+	float:left;
+    width:100%;
 }
 #header3 A {
     PADDING-RIGHT: 15px;
@@ -569,7 +571,9 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
     padding: 4px;
     padding-left: 20px;
     margin-bottom: 2px;
-    float: left;
+
+    float:left;
+    width:100%;
     clear:right;
 }
 #header4 a {

@@ -285,6 +285,8 @@ input[text] {font-size: 12px; }
     height:25px;
     margin-bottom: 1px;
     background-image: url(Images/fondoHeader3.jpg);
+	float:left;
+    width:100%;
 
 }
 #header3 A {

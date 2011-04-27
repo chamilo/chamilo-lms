@@ -108,6 +108,8 @@ input[type=button], input[type=submit] {
 	color: #333;
 	height:auto;
 	font-weight: bold;
+	float:left;
+    width:100%;
 }
 
 
@@ -192,6 +194,8 @@ input[type=button], input[type=submit] {
 #header4 {
 	margin-left: 5px;
 	height: 21px;
+    float:left;
+    width:100%;
 }
 a.breadcrumb {
 	height: 21px;

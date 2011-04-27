@@ -279,7 +279,7 @@ function get_calendar_items($select_month, $select_year, $select_day = false) {
             if (!empty($row['start_date']) && $row['start_date'] != '0000-00-00 00:00:00')
             $row['start_date_tms'] = api_strtotime($row['start_date']);
             if (!empty($row['end_date']) && $row['end_date'] != '0000-00-00 00:00:00')
-            $row['end_date_tms'] = api_strtotime($row['end_date']);
+            $row['end_date_tms'] = api_strtotime($row['end_date']);            
             $my_events[] = $row;
         }
     }
@@ -1923,13 +1923,12 @@ function display_agenda_items($agenda_items, $day = false) {
     		    echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('printer.png', get_lang('Print'),'',22).'</a>&nbsp;';
     		    echo '</td>';    		      
     		} else {    		    
-                if ($is_repeated && (api_is_allowed_to_edit(false,true)) || (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) ) {
-                    echo '<td align="center">';
+                if ($is_repeated && (api_is_allowed_to_edit(false,true) || api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() ))  {                    
+                    echo '<td align="center">';                    
                     echo get_lang('RepeatedEvent'),' <a href="',api_get_self(),'?',api_get_cidreq(),'&agenda_id=',$myrow['parent_event_id'],'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a>';
                     echo '</td>';                  
-                }    
-                 
-                if ( (api_is_allowed_to_edit(false,true) || (api_get_course_setting('allow_user_edit_agenda')&& !api_is_anonymous()) ) && ($myrow['calendar_type'] == 'personal' OR $myrow['calendar_type'] == 'global') ) {
+                }                     
+                if ((api_is_allowed_to_edit(false,true) || (api_get_course_setting('allow_user_edit_agenda')&& !api_is_anonymous()) ) && ($myrow['calendar_type'] == 'personal' OR $myrow['calendar_type'] == 'global') ) {
                     echo '<td align="center">';
                     echo '</td>';
                 }               

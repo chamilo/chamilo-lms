@@ -59,8 +59,6 @@ if (!empty($gradebook) && $gradebook == 'view') {
             'name' => get_lang('ToolGradebook')
         );
 }
-
-$header_hide_main_div = true;
 if ($show_link) {
     $interbreadcrumb[] = array('url' => './lp_controller.php?action=list', 'name' => get_lang(ucfirst(TOOL_LEARNPATH)));
 }

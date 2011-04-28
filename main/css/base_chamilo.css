@@ -1,0 +1,47 @@
+/*
+ * CSS that only will be called in chamilo_XXX themes
+ */
+#header3 {
+    background:none;                    
+    //padding:2px;
+    border-bottom:1px solid #ccc;
+    width: 92%;
+    margin-bottom:0px;
+    padding:0px;
+}
+
+#header2 {
+ min-height: 28px;
+}
+
+#current {
+    margin-right: 2px;
+}
+
+#current #tab_active {
+    //background:none;
+}                
+#header3 a {
+    //background:none;
+}
+
+#header3 li { 
+    //background:none;            
+    //background-color: #CCCCCC;                    
+    //border-radius:5px;
+    //margin:0px 1px 0px 1px;
+}
+
+#header3 li a span { 
+    //background:none;
+}
+#header4 {  
+    height:26px;
+    padding:0px;
+    background:none;                    
+    width: 92%;
+}
+
+div.admin_section {
+  width: 44%;	
+}

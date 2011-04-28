@@ -12,13 +12,10 @@ api_block_anonymous_users();
 
 
 // Header
-Display :: display_header('');
-
+Display::display_header('');
 
 // Display
 echo $content;
 
 // Footer
-Display :: display_footer();
-
-?>
+Display::display_footer();

@@ -118,7 +118,7 @@ input.maininput:focus {
 
 #categories-content-first {
     width:290px;
-    padding:5px;
+    //padding:5px;
     float:left;
 }
 
@@ -149,7 +149,7 @@ input.maininput:focus {
 
 #categories-content-second {
     margin-left: 315px;
-    padding:5px;
+    //padding:5px;
     margin-top:5px;
 }
 

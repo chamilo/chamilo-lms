@@ -95,10 +95,16 @@ if ($show_learn_path) {
     $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="dtree.css" />'; //will be moved
     $htmlHeadXtra[] = '<script src="dtree.js" type="text/javascript"></script>'; //will be moved
 }
-
+//Default CSS
 echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css";';
+//Course CSS
 echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/course.css";';
+//Global CSS
 echo '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
+//Global chamilo CSS
+if (in_array(api_get_visual_theme(), array('chamilo','chamilo_red','chamilo_blue','chamilo_orange','chamilo_green','chamilo_electric_blue'))) {
+    echo '@import "'.api_get_path(WEB_CSS_PATH).'base_chamilo.css";';
+}
 
 if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
     echo 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } ';
@@ -183,7 +189,7 @@ echo $favico;
 ?>
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>" <?php
- if (defined('CHAMILO_HOMEPAGE') && CHAMILO_HOMEPAGE)
+if (defined('CHAMILO_HOMEPAGE') && CHAMILO_HOMEPAGE)
  echo 'onload="javascript: if(document.formLogin) { document.formLogin.login.focus(); }"'; ?>>
 <div class="skip">
 <ul>

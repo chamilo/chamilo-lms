@@ -44,20 +44,25 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 /* End hide from IE5-mac */
 
-#main {
-/*
-    -moz-border-image:url(images/bg-main.png) 5 5 5 5;
-    -webkit-border-image:url(images/bg-main.png) 5 5 5 5;
-    -o-border-image:url(images/bg-main.png) 5 5 5 5;
-    -xv-border-image:url(images/bg-main.png) 5 5 5 5;
-*/
-    border:2px solid #ddd;
+#main {    
     position: relative; /* to avoid the IE peekabo bug*/
     margin: 0px auto;
     width: 92%;
-    min-height: 320px;
-    padding:0px;
+}
+#submain {
+    padding:10px;   
+    border:1px solid #ddd;
+    position: relative; /* to avoid the IE peekabo bug*/
+    margin: 0px auto;
 
+    min-height: 320px;
+    //padding:18px;
+    
+    -moz-border-radius:0px 0px 10px 10px;
+    border-radius:0px 0px 10px 10px;
+    
+    box-shadow: 3px 3px 10px #ddd;
+    -moz-box-shadow: 3px 3px 10px #ddd; 
 }
 .item {
     -moz-border-radius-bottomleft:5px;
@@ -459,7 +464,7 @@ input[text] {
  *  HEADER 2: Users online, help, student/teacher view	*
  ********************************************************/
 #header2 {
-    width:90%;
+    width:92%;
     margin-left:auto;
     margin-right:auto;
     position: relative; /* to avoid the IE peekabo bug*/

@@ -23,7 +23,8 @@ if (api_get_setting('show_navigation_menu') != 'false') {
 }
 
 ?>
- <div class="clear">&nbsp;</div> <!-- 'clearing' div to make sure that footer stays below the main and right column sections -->
+<div class="clear">&nbsp;</div> <!-- 'clearing' div to make sure that footer stays below the main and right column sections -->
+</div> <!-- end of #main" started at the end of banner.inc.php -->
 </div> <!-- end of #main" started at the end of banner.inc.php -->
 
 <div class="push"></div>
@@ -117,6 +118,7 @@ if (api_get_setting('show_teacher_data') == 'true') {
 	}
 }
 echo '</div>';
+
 echo '</div> <!-- end of #footer -->';
 
 // Test server mode indicator and information for testing purposes.

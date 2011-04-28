@@ -431,7 +431,6 @@ table.lp_build td.tree {
     padding: 0 15px 0 9px;
 }
 
-
 .bread a {
     display: block;
 	font-size:11px;    
@@ -448,12 +447,10 @@ table.lp_build td.tree {
 
 .bread li a {    
 	background: url("crumbs.gif") no-repeat scroll right center transparent;
-    display: block;
-    
+    display: block;    
     background-repeat:no-repeat; 
     background-position:right;
 }
-
 
 .bread .home {
 	padding:5px 15px 4px 8px;
@@ -463,4 +460,16 @@ table.lp_build td.tree {
     height:85px;
     overflow:hidden;
     margin-left:4%;
+}
+
+#document_quota {
+	margin:15px;
+	font-weight:bold;
+	color:#006633; 
+	text-align:center;
+}
+
+/* fixes bug in ie7 */
+#menu {
+	width:180px;
 }

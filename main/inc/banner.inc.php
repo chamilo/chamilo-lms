@@ -35,9 +35,10 @@ function show_header_1($language_file, $nameTools) {
     $_course = api_get_course_info();        
     echo '<div id="header1">';
         echo '<div id="top_corner"></div>';        
-            $logo = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
+            $logo = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';            
             $site_name = api_get_setting('siteName');
             if (file_exists($logo)) {
+                $site_name = api_get_setting('Institution').' - '.$site_name;
                 echo '<div id="logo">';
                     $image_url = api_get_path(WEB_CSS_PATH).api_get_visual_theme().'/images/header-logo.png';           
                     $logo = Display::img($image_url, $site_name, array('title'=>$site_name));
@@ -513,7 +514,7 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
                     //background:none;
                 }
                 
-                 #header3 li { 
+                #header3 li { 
                     //background:none;            
                     //background-color: #CCCCCC;                    
                     //border-radius:5px;
@@ -529,10 +530,7 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
                     background:none;                    
                     width: 92%;
                 }                
-                #main {
-                    border : 1px solid #ddd;
-                }
-            }</style>';
+        }</style>';
         echo $style;        
         if (!empty($final_navigation)) {
             echo '<div id="header4">';
@@ -601,7 +599,8 @@ global $header_hide_main_div;
 if (!empty($header_hide_main_div) && $header_hide_main_div === true) {
     //do nothing
 } else {    
-    echo '<div id="main">'; //<!-- start of #main wrapper for #content and #menu divs --> 
+    echo '<div id="main">'; //<!-- start of #main wrapper for #content and #menu divs -->
+    echo '<div id="submain">'; 
 }
 
 /*  "call for chat" module section */

@@ -49,6 +49,7 @@ if (isset($httpHeadXtra) && $httpHeadXtra) {
 $document_language = api_get_language_isocode();
 
 $course_title = $_course['name'];
+$title_list[] = api_get_setting('Institution');
 $title_list[] = api_get_setting('siteName');
 if (!empty($course_title)) {
     $title_list[] = $course_title;
@@ -56,12 +57,13 @@ if (!empty($course_title)) {
 if ($nameTools != '') {
     $title_list[] = $nameTools;
 }
-
 $title_string = '';
 for($i=0; $i<count($title_list);$i++) {
     $title_string .=$title_list[$i];
     if (isset($title_list[$i+1])) {
-        $title_string .=' - ';
+        $item = trim($title_list[$i+1]);
+        if (!empty($item))
+            $title_string .=' - ';
     }    
 }
 

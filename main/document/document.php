@@ -1099,7 +1099,7 @@ if (count($docs_and_folders) > 1) {
         // Calculating the total space
         $already_consumed_space = DocumentManager::documents_total_space($_course);
         
-        // Displaying the quota
+        // Displaying the quota        
         DocumentManager::display_simple_quota($course_quota, $already_consumed_space);       
     }
 }

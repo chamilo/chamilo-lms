@@ -54,9 +54,9 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
     border:2px solid #ddd;
     position: relative; /* to avoid the IE peekabo bug*/
     margin: 0px auto;
-    width: 90%;
+    width: 92%;
     min-height: 320px;
-    padding:12px;
+    padding:0px;
 
 }
 .item {

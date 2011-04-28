@@ -43,16 +43,15 @@ body {
     border:2px solid #ddd;
     position: relative; /* to avoid the IE peekabo bug*/
     margin: 0px auto;
-    width: 90%;
+    width: 92%;
     min-height: 320px;
-    padding:13px;
+    padding:0px;
 	
 	-moz-border-radius:0px 0px 10px 10px;
 	border-radius:0px 0px 10px 10px;
 	
     box-shadow: 3px 3px 10px #ddd;
-	-moz-box-shadow: 3px 3px 10px #ddd;
-	
+	-moz-box-shadow: 3px 3px 10px #ddd;	
 
 }
 .item {

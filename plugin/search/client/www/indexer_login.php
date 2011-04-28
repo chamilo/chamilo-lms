@@ -40,7 +40,7 @@ if($_SERVER['REMOTE_ADDR']==$ip_address_of_search_server
   //now login the user to the platform (put everything needed inside the
   // session) and then redirect the search engine to the courses list
   $_SESSION['_user']['user_id'] = $id;
-  define('DOKEOS_HOMEPAGE', true);
+  define('CHAMILO_HOMEPAGE', true);
   require('main/inc/global.inc.php');
   require('user_portal.php');
 }

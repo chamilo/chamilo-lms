@@ -11,7 +11,7 @@
 // Only this script should have this constant defined. This is used to activate the javascript that
 // gives the login name automatic focus in header.inc.html.
 /** @todo Couldn't this be done using the $HtmlHeadXtra array? */
-define('DOKEOS_HOMEPAGE', true);
+define('CHAMILO_HOMEPAGE', true);
 
 $language_file = array('courses', 'index');
 
@@ -125,12 +125,12 @@ else {
 }
 
 // The header.
-$header_title = get_lang('Homepage');
-$sitename = api_get_setting('siteName');
-if (!empty($sitename)) {
+/*$header_title = get_lang('Homepage');
+//$sitename = api_get_setting('siteName');
+if (!api_get_user_id()) { 
     $header_title = null;
-}
-Display::display_header($header_title);
+}*/
+Display::display_header(" ");
 
 /* MAIN CODE */
 

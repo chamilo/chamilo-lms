@@ -184,8 +184,5 @@ class Login
 		} else {
 			return get_lang('NotAllowed');
 		}
-	}
-	
-	
+	}	
 }
-?>

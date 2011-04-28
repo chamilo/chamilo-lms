@@ -32,27 +32,21 @@ $tool_name 		= get_lang('LostPass');
 if (api_get_setting('allow_lostpassword') == 'false') {
 	api_not_allowed();
 }
-
-echo '<div class="actions-title">';
-echo $tool_name;
-echo '</div>';
+echo Display::tag('h1', $tool_name);
 
 if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 	$msg = Login::reset_password($_GET["reset"], $_GET["id"], true);
-	$msg1= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
+	$msg1= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';	
 	echo '<br /><br /><div class="actions" >'.$msg1.'</div>';
-
 } else {
-
 	$form = new FormValidator('lost_password');
 	$form->addElement('text', 'user', get_lang('LoginOrEmailAddress'), array('size'=>'40'));
-	//$form->addElement('text', 'email', get_lang('Email'), array('size'=>'40'));
 
 	//$form->applyFilter('email','strtolower');
 	$form->addElement('style_submit_button', 'submit', get_lang('Send'),'class="save"');
 
 	// setting the rules
-	$form->addRule('user', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('user', '<div class="required">'.get_lang('ThisFieldIsRequired').'</div>', 'required');
 
 	if ($form->validate()) {
 		$values = $form->exportValues();
@@ -84,7 +78,6 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 
 		if ($result && $num_rows > 0) {
             $by_username = true;
-//            $user = Database::fetch_array($result);
             $users = Database::store_result($result);
             foreach( $users as $user ) {
                 if ($userPasswordCrypted != 'none') {
@@ -94,17 +87,15 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
                 }
             }
 		} else {
-			Display::display_error_message(get_lang('NoUserAccountWithThisEmailAddress'));
+			Display::display_error_message(get_lang('NoUserAccountWithThisEmailAddress'));			
 		}
+		//$msg .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
+		//echo '<br /><br /><div class="actions" >'.$msg.'</div>';
 
-		$msg .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
-		echo '<br /><br /><div class="actions" >'.$msg.'</div>';
-
-	} else {
-		echo '<p>';
+	} else {		
 		echo get_lang('EnterEmailUserAndWellSendYouPassword');
-		echo '</p>';
+		echo '<br /><br />';				
 		$form->display();
 	}
 }
-Display :: display_footer();
+Display::display_footer();

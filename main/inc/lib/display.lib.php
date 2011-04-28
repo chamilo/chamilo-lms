@@ -413,12 +413,7 @@ class Display {
                         /*]]>*/
                         </style>'; // TODO: There is no "default.css" file in this location.
         }
-        echo '<div class="error-message">';
-        //Display :: display_icon('message_error.png', get_lang('ErrorMessage'), array ('style' => 'float:left; margin-right:10px;'));
-        /*
-        get_lang('ErrorMessage', array ('style' => 'float:left; margin-right:10px;'));
-        */
-        echo $message.'</div>';
+        echo '<div class="error-message">'.$message.'</div>';
     }
 
     /**

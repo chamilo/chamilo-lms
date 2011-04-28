@@ -4,6 +4,7 @@
 /**
  *  This script contains the actual html code to display the "header"
  *  or "banner" on top of every Chamilo page.
+ *  @todo this should be remove we should only use header.inc.php
  *
  *  @package chamilo.include
  */
@@ -93,14 +94,14 @@ function show_header_1($language_file, $nameTools) {
     } elseif (isset($nameTools) && $language_file != 'course_home') {
         //Put the name of the user-tools in the header
         if (!isset($_user['user_id'])) {
-            echo '<div id="my_courses"></div>';
+            //echo '<div id="my_courses"></div>';
         } elseif (!$noPHP_SELF) {
             echo '<div id="my_courses"><a href="'.api_get_self().'?'.api_get_cidreq(), '" target="_top">'.$nameTools.'</a></div>';
         } else {
             echo '<div id="my_courses">'.$nameTools.'</div>';
         }   
     } else {        
-        echo '<div id="my_courses"></div>';
+        //echo '<div id="my_courses"></div>';
     }
     
     echo '<div id="plugin-header">';
@@ -123,28 +124,29 @@ function show_header_2($help) {
     echo '<ul>';
     
     if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)) {
-        $number = who_is_online_count(api_get_setting('time_limit_whosonline'));    
+        $number = who_is_online_count(api_get_setting('time_limit_whosonline'));            
         
         $number_online_in_course = 0;
         if(!empty($_course['id'])) {
             $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
         }       
         echo '<li>';
+        
         // Display the who's online of the platform
-        if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id)) {
-            //echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" ><img width="12px" src="'.api_get_path(WEB_IMG_PATH).'online.png" title="'.get_lang('UsersOnline').'"> '.get_lang('OnLine').' '.$number.'</a>';
-            echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" ><img width="13px" src="'.api_get_path(WEB_IMG_PATH).'members.gif" title="'.get_lang('UsersOnline').'"> '.$number.'</a></li>';
+        if ($number) {
+            if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id)) {
+                echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" ><img width="13px" src="'.api_get_path(WEB_IMG_PATH).'members.gif" title="'.get_lang('UsersOnline').'"> '.$number.'</a></li>';
+            }
         }
     
         // Display the who's online for the course
-        if (is_array($_course) AND api_get_setting('showonline', 'course') == 'true' AND isset($_course['sysCode'])) {
-            //echo '(<a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.$number_online_in_course.' '.get_lang('InThisCourse').'</a>)';
-            echo '<li>| <a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.Display::return_icon('course.gif', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array('width'=>'13px')).' '.$number_online_in_course.' </a></li>';
+        if ($number_online_in_course) {
+            if (is_array($_course) AND api_get_setting('showonline', 'course') == 'true' AND isset($_course['sysCode'])) {
+                echo '<li>| <a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.Display::return_icon('course.gif', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array('width'=>'13px')).' '.$number_online_in_course.' </a></li>';
+            }
         }
         
         // Display the who's online for the session 
-        //if (api_get_setting('use_session_mode') == 'true' && isset($user_id) && api_is_coach()) {
-        
         if (api_get_setting('use_session_mode') == 'true' && isset($user_id) && api_get_session_id() != 0) {
             //echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';        
             echo '<li>| <a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array('width'=>'13px')).' </a></li>';
@@ -170,6 +172,7 @@ function show_header_2($help) {
             echo "</li>";       
         }
     }
+    
     if (api_get_setting('accessibility_font_resize') == 'true') {
         echo '<li class="resize_font">';
         echo '<span class="decrease_font" title="'.get_lang('DecreaseFontSize').'">A</span> <span class="reset_font" title="'.get_lang('ResetFontSize').'">A</span> <span class="increase_font" title="'.get_lang('IncreaseFontSize').'">A</span>';
@@ -182,31 +185,10 @@ function show_header_2($help) {
 
 
 function show_header_3() {
-    echo '<div id="header3">'; 
-    
-    // Logout    
-    if (api_get_user_id()) {
-        $login = '';
-        if (api_is_anonymous()) {
-            $login = get_lang('Anonymous');
-        } else {
-            $uinfo = api_get_user_info(api_get_user_id());
-            $login = $uinfo['username'];
-        }
-        
-        //start user section line with name, my course, my profile, scorm info, etc            
-        echo '<ul id="logout">';
-            //echo '<li><span>'.get_lang('LoggedInAsX').' '.$login.'</span></li>';
-            //echo '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php" target="_top"><span>'.get_lang('Profile').'</span></a></li>';
-            echo '<li><a href="'.api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id().'" target="_top"><span>'.get_lang('Logout').' ('.$login.')</span></a></li>';
-        echo '</ul>';    
-    }   
-    
-    echo '<ul>';
     
     $navigation = $menu_navigation = array();
     $possible_tabs = get_tabs();
-    
+        
     // Campus Homepage
     if (api_get_setting('show_tabs', 'campus_homepage') == 'true') {
         $navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
@@ -287,15 +269,8 @@ function show_header_3() {
             }
         }
     }
+    
     // Displaying the tabs
-    foreach ($navigation as $section => $navigation_info) {
-        if (isset($GLOBALS['this_section'])) {
-            $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
-        } else {
-            $current = '';
-        }
-        echo '<li'.$current.'><a  href="'.$navigation_info['url'].'" target="_top"><span id="tab_active">'.$navigation_info['title'].'</span></a></li>'."\n";
-    }
     
     $lang = ''; //el for "Edit Language"
     if (!empty($_SESSION['user_language_choice'])) {
@@ -316,7 +291,7 @@ function show_header_3() {
             $clean_url = replace_dangerous_char($url);
             $clean_url = str_replace('/', '-', $clean_url);
             $clean_url .= '/';
-            $homep            = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path               
+            $homep     = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path               
             //we create the new dir for the new sites
             if (!is_dir($homep)) {
                 mkdir($homep, api_get_permissions_for_new_directories());
@@ -336,14 +311,17 @@ function show_header_3() {
     } else {
         $errorMsg = get_lang('HomePageFilesNotReadable');
     }
-    
+        
     $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
     
-    if (api_get_self() != '/main/admin/configure_homepage.php') {
+    if (api_get_self() != '/main/admin/configure_homepage.php') {        
         $open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-        echo $open;
-    } else {
+        if (!empty($open)) {
+            $lis .= Display::tag('li', $open);
+            $show_bar = true;
+        }
+    } else {        
         $home_menu = '';
         if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
             $home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
@@ -359,28 +337,70 @@ function show_header_3() {
             $home_menu = explode("\n", $home_menu);
         }
         $tab_counter = 0;
+        if (!empty($home_menu)) {
+            $show_bar = true;    
+        }        
         foreach ($home_menu as $enreg) {
             $enreg = trim($enreg);
             if (!empty($enreg)) {
                 $edit_link = '<a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
                 $delete_link = '<a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
-                $tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'), $enreg);
-                echo $tab_string;
+                $tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'), $enreg);                
+                $lis .= $tab_string;
                 $tab_counter++;
             }
         }
-        echo '<li id="insert-link"> <a href="'.api_get_self().'?action=insert_tabs" style="padding-right:0px;"><span>'. Display::return_icon('addd.gif', get_lang('InsertLink'), array('style' => 'vertical-align:middle')).' '.get_lang('InsertLink').'</span></a></li>';
+        $lis .= '<li id="insert-link"><a href="'.api_get_self().'?action=insert_tabs" style="padding-right:0px;"><span>'. Display::return_icon('addd.gif', get_lang('InsertLink'), array('style' => 'vertical-align:middle')).' '.get_lang('InsertLink').'</span></a></li>';
+    }
+    
+    if (count($navigation) > 1 || !empty($lis)) {        
+        $pre_lis = '';
+        foreach ($navigation as $section => $navigation_info) {
+            if (isset($GLOBALS['this_section'])) {
+                $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
+            } else {
+                $current = '';
+            }
+            $pre_lis .= '<li'.$current.'><a  href="'.$navigation_info['url'].'" target="_top"><span id="tab_active">'.$navigation_info['title'].'</span></a></li>';
+        }
+        $lis = $pre_lis.$lis;
+        $show_bar = true;
+    }
+    
+    
+    // Logout    
+    if ($show_bar) {
+        echo '<div id="header3">';
+    
+        if (api_get_user_id()) {
+            $login = '';
+            if (api_is_anonymous()) {
+                $login = get_lang('Anonymous');
+            } else {
+                $uinfo = api_get_user_info(api_get_user_id());
+                $login = $uinfo['username'];
+            }
+            
+            //start user section line with name, my course, my profile, scorm info, etc            
+            echo '<ul id="logout">';
+                //echo '<li><span>'.get_lang('LoggedInAsX').' '.$login.'</span></li>';
+                //echo '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php" target="_top"><span>'.get_lang('Profile').'</span></a></li>';
+                echo '<li><a href="'.api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id().'" target="_top"><span>'.get_lang('Logout').' ('.$login.')</span></a></li>';
+            echo '</ul>';    
+        }   
+      
+        echo '<ul>';
+        echo $lis;
+        echo '</ul>';
+        echo '</div>';
     }    
-    echo '</ul>';
-    echo '</div>';
 }
 
 //Header 4
 function show_header_4($interbreadcrumb, $language_file, $nameTools) {   
     $session_id     = api_get_session_id();
     $session_name   = api_get_session_name($session_id);
-    $_course        = api_get_course_info();
-    
+    $_course        = api_get_course_info();    
     
     /*  Plugins for banner section */
     $web_course_path = api_get_path(WEB_COURSE_PATH);
@@ -457,7 +477,11 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
     $counter = 0;
     foreach ($navigation as $index => $navigation_info) {
         if (!empty($navigation_info['title'])) {
-            $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="breadcrumb breadcrumb'.$index.'" target="_top"><span>'.$navigation_info['title'].'</span></a>';
+            if ($navigation_info['url'] == '#') {
+                $final_navigation[$index] = '<span>'.$navigation_info['title'].'</span>';
+            } else {
+                $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="breadcrumb breadcrumb'.$index.'" target="_top"><span>'.$navigation_info['title'].'</span></a>';
+            }
             $counter++;
         }
     }
@@ -500,23 +524,22 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
                     //background:none;
                 }
                 #header4 {  
-                    height:2.3em;
+                    height:26px;
                     padding:0px;
                     background:none;                    
                     width: 92%;
-                }
-                
+                }                
                 #main {
                     border : 1px solid #ddd;
                 }
             }</style>';
-        echo $style;
-        
+        echo $style;        
         if (!empty($final_navigation)) {
             echo '<div id="header4">';
             $lis = '';
-            $i = 0;        
-            foreach($final_navigation as $bread) {       
+            $i = 0;
+            $lis.= Display::tag('li', Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home')));        
+            foreach ($final_navigation as $bread) {       
                 $lis.= Display::tag('li', $bread);
                 $i++;
             }
@@ -553,9 +576,11 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
     }
 }
 
+
 show_header_1($language_file, $nameTools);
 show_header_2($help);
 show_header_3();
+
 show_header_4($interbreadcrumb, $language_file, $nameTools);
 
 if (isset($database_connection)) {

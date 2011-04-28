@@ -181,7 +181,7 @@ echo $favico;
 ?>
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>" <?php
- if (defined('DOKEOS_HOMEPAGE') && DOKEOS_HOMEPAGE)
+ if (defined('CHAMILO_HOMEPAGE') && CHAMILO_HOMEPAGE)
  echo 'onload="javascript: if(document.formLogin) { document.formLogin.login.focus(); }"'; ?>>
 <div class="skip">
 <ul>

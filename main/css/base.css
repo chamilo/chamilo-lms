@@ -411,25 +411,30 @@ table.lp_build td.tree {
 
 /* Breadcrumb */
 
-
 .bread {
     //border: 1px solid #DEDEDE;
     height: 25px;
     margin: 0px;	
-	padding:0px 0px 0px 12px; 
+	padding:0px; 
 }
 
 .bread li {
     color: #777777;
     float: left;
     line-height: 25px;
-    padding-left: 0.75em;
+    
 }
+
+.bread span {
+    display: block;
+    font-size:11px;
+    padding: 0 15px 0 9px;
+}
+
 
 .bread a {
     display: block;
-	font-size:11px;
-    padding: 0 15px 0 10px;
+	font-size:11px;    
 }
 
 .bread a:hover {
@@ -437,12 +442,22 @@ table.lp_build td.tree {
 }
 
 .bread li {    
+    display: block;
+    
+}
+
+.bread li a {    
 	background: url("crumbs.gif") no-repeat scroll right center transparent;
     display: block;
-    padding: 0 15px 0 0;	
+    
     background-repeat:no-repeat; 
     background-position:right;
 }
+
+
+.bread .home {
+	padding:5px 15px 4px 8px;
+}    
 
 #logo {    
     height:85px;

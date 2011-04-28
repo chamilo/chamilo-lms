@@ -250,7 +250,7 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
                         echo $result;
                         
                         //Hidden content
-                        $content = Display::div($icon.Display::tag('h2', $value['title']).$complete_time.Security::remove_XSS($value['content']));                        
+                        $content = Display::div($icon.Display::tag('h2', $value['title']).$complete_time.Security::remove_XSS($value['content']));
                         echo Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog'));
 				   }
 				}
@@ -631,8 +631,7 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 		// in sql statements you have to use year-month-day for date calculations
 		$start_filter = $start_year."-".$start_month."-".$start_day." 00:00:00";
 		$end_filter = $end_year."-".$end_month."-".$end_day." 23:59:59";
-		$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE user='".api_get_user_id()."'
-								AND date>='".$start_filter."' AND date<='".$end_filter."'";
+		$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE user='".api_get_user_id()."' AND date>='".$start_filter."' AND date<='".$end_filter."'";
 	}
 	// 3. creating the SQL statement for getting the personal agenda items in DAY view
 	if ($type == "day_view") // we are in day view
@@ -645,6 +644,7 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 
 	$result = Database::query($sql);
 	while ($item = Database::fetch_array($result)) {
+	    $item['content'] = $item['text'];
 		// we break the date field in the database into a date and a time part
 		$agenda_db_date = explode(" ", $item['date']);
 		$date = $agenda_db_date[0];

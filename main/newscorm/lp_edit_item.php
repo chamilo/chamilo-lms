@@ -90,19 +90,6 @@ $tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
 $submit			= $_POST['submit_button'];
-/*
-$chapter_id     = $_GET['chapter_id'];
-$title          = $_POST['title'];
-$description   = $_POST['description'];
-$Submititem     = $_POST['Submititem'];
-$action         = $_REQUEST['action'];
-$id             = (int) $_REQUEST['id'];
-$type           = $_REQUEST['type'];
-$direction      = $_REQUEST['direction'];
-$moduleid       = $_REQUEST['moduleid'];
-$prereq         = $_REQUEST['prereq'];
-$type           = $_REQUEST['type'];
-*/
 
 /* MAIN CODE */
 
@@ -120,7 +107,6 @@ $sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
 $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);
 
-//$admin_output = '';
 /*
     Course admin section
     - all the functions not available for students - always available in this case (page only shown to admin)
@@ -146,10 +132,8 @@ $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
 Display::display_header(null,'Path');
-//api_display_tool_title($therow['name']);
-
 $suredel = trim(get_lang('AreYouSureToDelete'));
-//$suredelstep = trim(get_lang('AreYouSureToDeleteSteps'));
+
 ?>
 <script type='text/javascript'>
 /* <![CDATA[ */
@@ -160,22 +144,17 @@ function stripslashes(str) {
     str=str.replace(/\\0/g,'\0');
     return str;
 }
-function confirmation(name)
-{
+function confirmation(name) {
     name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?"))
-    {
+    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 </script>
 <?php
 
-//echo $admin_output;
 
 /* DISPLAY SECTION */
 

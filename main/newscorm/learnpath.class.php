@@ -5015,11 +5015,10 @@ class learnpath {
         $return = '';
         if (is_numeric($item_id)) {
             $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT *
-                                FROM " . $tbl_lp_item . "
-                                WHERE id = " . Database :: escape_string($item_id);
+            $sql = "SELECT * FROM $tbl_lp_item WHERE id = " . Database :: escape_string($item_id);
             $res = Database::query($sql);
-            $row = Database :: fetch_array($res);
+            $row = Database::fetch_array($res);
+            
             switch ($row['item_type']) {
                 case 'dokeos_chapter' :
                 case 'dir' :
@@ -5035,9 +5034,9 @@ class learnpath {
                 case TOOL_DOCUMENT :
                     $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
                     $sql_step = " SELECT lp.*, doc.path as dir
-                                                    FROM " . $tbl_lp_item . " as lp
-                                                    LEFT JOIN " . $tbl_doc . " as doc ON doc.id = lp.path
-                                                    WHERE lp.id = " . Database :: escape_string($item_id);
+                                    FROM " . $tbl_lp_item . " as lp
+                                    LEFT JOIN " . $tbl_doc . " as doc ON doc.id = lp.path
+                                    WHERE lp.id = " . Database :: escape_string($item_id);
                     $res_step = Database::query($sql_step);
                     $row_step = Database :: fetch_array($res_step);
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
@@ -5415,17 +5414,16 @@ class learnpath {
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
-        }
-        elseif (is_numeric($extra_info)) {
+        } elseif (is_numeric($extra_info)) {
             $TBL_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
-
+            
             $sql_hot = "SELECT * FROM " . $TBL_DOCUMENT . "
                         WHERE path LIKE '" . $uploadPath . "/%/%htm%'
                         AND id = " . (int) $extra_info . " ORDER BY id ASC";
 
             $res_hot = Database::query($sql_hot);
 
-            $row = Database :: fetch_array($res_hot);
+            $row = Database::fetch_array($res_hot);
 
             $item_title = $row['title'];
             $item_description = $row['description'];
@@ -5445,16 +5443,9 @@ class learnpath {
         else
             $parent = 0;
 
-        $sql = "
-                        SELECT *
-                        FROM " . $tbl_lp_item . "
-                        WHERE
-                            lp_id = " . $this->lp_id;
-
+        $sql = "SELECT * FROM $tbl_lp_item WHERE lp_id = " . $this->lp_id;
         $result = Database::query($sql);
-
         $arrLP = array ();
-
         while ($row = Database :: fetch_array($result)) {
             $arrLP[] = array (
                 'id' => $row['id'],
@@ -5472,13 +5463,11 @@ class learnpath {
                 'prerequisite' => $row['prerequisite'],
                 'max_time_allowed' => $row['max_time_allowed']
             );
-        }
-
+        }        
+/*
         $this->tree_array($arrLP);
-
         $arrLP = $this->arrMenu;
-
-        unset ($this->arrMenu);
+        unset ($this->arrMenu);*/
 
         if ($action == 'add')
             $return .= '<p class="lp_title">' . get_lang('CreateTheExercise') . '&nbsp;:</p>' . "\n";
@@ -5541,6 +5530,7 @@ class learnpath {
         $return .= "\t\t\t\t" . '</select>';
         $return .= "\t\t\t" . '</td>' . "\n";
         $return .= "\t\t" . '</tr>' . "\n";
+        
         if ($action != 'move') {
             $return .= "\t\t" . '<tr>' . "\n";
             $return .= "\t\t\t" . '<td class="label"><label for="idTitle">' . get_lang('Title') . ' :</label></td>' . "\n";
@@ -5571,7 +5561,7 @@ class learnpath {
 
             //$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').' :</label></td>' . "\n";
             //$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites"><option value="0">'.get_lang('NoPrerequisites').'</option>';
-
+/*
             foreach ($arrHide as $key => $value) {
                 if ($key == $s_selected_position && $action == 'add') {
                     $return .= '<option value="' . $key . '" selected="selected">' . $value['value'] . '</option>';
@@ -5582,8 +5572,8 @@ class learnpath {
                     $return .= '<option value="' . $key . '">' . $value['value'] . '</option>';
                 }
             }
-
-            $return .= "</select></td>";
+*/
+            //$return .= "</select></td>";
             $return .= "\t\t" . '</tr>' . "\n";
             $return .= "\t\t" . '<tr>' . "\n";
             $return .= "\t\t" . '</tr>' . "\n";

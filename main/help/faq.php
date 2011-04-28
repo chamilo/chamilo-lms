@@ -10,8 +10,8 @@
 // Language file that needs to be included
 $language_file = 'help';
 
-require '../inc/global.inc.php';
-include_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $help_name = Security::remove_XSS($_GET['open']);
 

@@ -9,9 +9,7 @@
 
 // Language file that needs to be included
 $language_file = 'help';
-
-require '../inc/global.inc.php';
-
+require_once '../inc/global.inc.php';
 $help_name = Security::remove_XSS($_GET['open']);
 
 header('Content-Type: text/html; charset='. api_get_system_encoding());
@@ -44,7 +42,6 @@ if (api_get_setting('stylesheets') != '') {
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>">
 <div style="margin:10px;">
-<div style="text-align:right;"><a href="javascript: window.close();"><?php echo get_lang('Close'); ?></a></div>
 <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/faq.php"><?php echo get_lang('AccessToFaq') ?></a>
 <h4>
 <?php echo get_lang('H'.$help_name); ?>
@@ -52,7 +49,6 @@ if (api_get_setting('stylesheets') != '') {
 <?php echo get_lang($help_name.'Content'); ?>
 <br /><br />
 <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/faq.php"><?php echo get_lang('AccessToFaq'); ?></a>
-<div style="text-align:right;"><a href="javascript: window.close();"><?php echo get_lang('Close'); ?></a></div>
 </div>
 </body>
 </html>

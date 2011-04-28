@@ -74,7 +74,7 @@
     clear:both
 }
 #search-results-container {
-    width: 940px;
+    width: 100%;
     border: 1px solid #979797;
     position: relative;
     background-image: url('/main/img/search_background_bar.jpg');

@@ -470,10 +470,14 @@ class Auth
 
         $result = Database::query($sql);
         $courses = array();
-        while ($row = Database::fetch_array($result)) {
+        while ($row = Database::fetch_array($result)) {            
                 $row['registration_code'] = !empty($row['registration_code']);
                 $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
                 $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time()-(30*86400)));
+                
+                if ($row['tutor_name'] == '0') {
+                    $row['tutor_name'] = get_lang('NoManager');
+                }
                 $courses[] = array(
                                     'code' => $row['code'],
                                     'directory' => $row['directory'],

@@ -5,6 +5,7 @@
 * {
     outline :none;
 }
+
 input {
     -moz-border-radius:5px;    
     -webkit-border-radius:5px;  
@@ -140,17 +141,21 @@ input.maininput:focus {
     box-shadow: 0 -1px 10px 2px #CCCCCC;
     border:1px solid #CCCCCC;
     float:left;
-    margin:10px;
+    margin:8px;
     width:240px;
     min-height:132px;
-    padding:25px;
+    padding:18px;
     font-size:11pt;
 }
 
 #categories-content-second {
-    margin-left: 315px;
+    margin-left: 308px;
     //padding:5px;
     margin-top:5px;
+}
+
+.course-block-main-item {
+	height:32px;
 }
 
 .categories-block-course {
@@ -166,8 +171,8 @@ input.maininput:focus {
     border:1px solid #CCCCCC;
     float:left;
     margin:10px;
-    padding:9px;
-    width:220px;
+    padding:12px;
+    width:240px;
     min-height:180px;
     color: #BBBBBB;
 }
@@ -212,12 +217,14 @@ input.maininput:focus {
     font-style: italic;
     text-align: right;
     color: #444444;
+	line-height: 10px;
 }
 .categories-course-description .course-block-date {
     font-size: large;
     font-style: italic;
     text-align: right;
     color: #444444;
+	line-height: 10px;
 }
 .course-block-popularity {
     width: 90px;
@@ -247,16 +254,18 @@ input.maininput:focus {
 }
 
 .categories-course-links {
-    margin-top:5px;
-    height: 25px;
+    margin-top:20px;
+    height:16px;
+	padding:2px;
 }
 
-.course-link-desc a {
-text-decoration:underline;
+.course-link-desc {
+    //padding:10px 10px 0px;
+    float:left;
 }
 
 .course-link-desc span {
-padding-top:10px;
+
 }
 
 .attendance-users-table td {
@@ -472,4 +481,107 @@ table.lp_build td.tree {
 /* fixes bug in ie7 */
 #menu {
 	width:180px;
+}
+
+/* Nice buttons*/
+
+.left {
+	float:left;
+}
+
+.right {
+    float:right; 
+}
+
+.a_button {
+    display: inline-block;
+    zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
+    display: inline;
+    vertical-align: baseline;
+    margin: 0 2px;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font: 14px/100% Arial, Helvetica, sans-serif;
+    padding: .5em 2em .55em;
+    text-shadow: 0 1px 1px rgba(0,0,0,.3);
+    -webkit-border-radius: .5em; 
+    -moz-border-radius: .5em;
+    border-radius: .5em;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+.a_button:hover {
+    text-decoration: none;
+}
+.a_button:active {
+    position: relative;
+    top: 1px;
+}
+
+.bigrounded {
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+}
+.medium {
+    font-size: 12px;
+    padding: .4em 1.5em .42em;
+}
+.small {
+    font-size: 11px;
+    padding: .2em 1em .275em;
+}
+
+/* white */
+
+.a_button .white {
+	color: #606060;
+}
+.white {
+    color: #606060 !important;
+    border: solid 1px #b7b7b7;
+    background: #fff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+    background: -moz-linear-gradient(top,  #fff,  #ededed);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed');
+}
+.white:hover {
+	color: #606060;
+    background: #ededed;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dcdcdc));
+    background: -moz-linear-gradient(top,  #fff,  #dcdcdc);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dcdcdc');
+}
+.white:active {	
+    color: #999;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff));
+    background: -moz-linear-gradient(top,  #ededed,  #fff);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff');
+}
+
+
+/* orange */
+.orange {
+    color: #fef4e9 !important;
+    border: solid 1px #da7c0c;
+    background: #f78d1d;
+    background: -webkit-gradient(linear, left top, left bottom, from(#faa51a), to(#f47a20));
+    background: -moz-linear-gradient(top,  #faa51a,  #f47a20);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
+}
+.orange:hover {
+	color: #fef4e9;
+    background: #f47c20;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f88e11), to(#f06015));
+    background: -moz-linear-gradient(top,  #f88e11,  #f06015);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
+}
+.orange:active {
+    color: #fcd3a5;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f47a20), to(#faa51a));
+    background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
 }

@@ -89,15 +89,12 @@ class CoursesController { // extends Controller {
      * @param string    Category code (optional)
      */
     public function courses_categories($action, $category_code = null, $message = '', $error = '') {
-
             $data = array();
-
             $browse_course_categories = $this->model->browse_course_categories();
 
             if (!isset($category_code)) {
                 $category_code = $browse_course_categories[0][1]['code']; // by default first category
-            } 
-
+            }
             $data['browse_courses_in_category'] = $this->model->browse_courses_in_category($category_code);
             $data['browse_course_categories'] = $browse_course_categories;
             $data['code'] = Security::remove_XSS($category_code);
@@ -126,11 +123,10 @@ class CoursesController { // extends Controller {
             $this->view->set_layout('layout');
             $this->view->set_template('courses_categories');
             $this->view->render();
-
     }
 
     /**
-     *
+     * Search courses
      */
     public function search_courses($search_term, $message = '', $error = '') {
 

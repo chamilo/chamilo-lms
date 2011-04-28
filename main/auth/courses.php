@@ -24,6 +24,7 @@ require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
+
 	// additional html (javascript and style css)
 	$htmlHeadXtra[] = '<script type="text/javascript">' .
 				  	  'var GB_ROOT_DIR = "'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/"' .
@@ -34,6 +35,7 @@ if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
 
 	$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/gb_styles.css" rel="stylesheet" type="text/css" />';
 }
+
 
 // Section for the tabs.
 $this_section = SECTION_COURSES;

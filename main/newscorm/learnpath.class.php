@@ -1678,7 +1678,7 @@ class learnpath {
             '      </div>' . "\n" .
             '    </td>' . "\n" .
             '  </tr>' . "\n" .
-            '</table>' . "\n";
+            '</table>';
 
         } else {
             $navbar = '<table cellpadding="0" cellspacing="0" align="left">' . "\n" .
@@ -1692,7 +1692,7 @@ class learnpath {
             '      </div>' . "\n" .
             '    </td>' . "\n" .
             '  </tr>' . "\n" .
-            '</table>' . "\n";
+            '</table>';
         }
         return $navbar;
     }
@@ -3180,7 +3180,7 @@ class learnpath {
             error_log('New LP - In learnpath::log()', 0);
         }
         // TODO
-        $this->error .= $msg . "\n";
+        $this->error .= $msg;
         return true;
     }
 
@@ -4575,14 +4575,14 @@ class learnpath {
             $return .= '<form action="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=' . Security :: remove_XSS($_GET['action']) . '&amp;lp_id=' . Security :: remove_XSS($_GET['lp_id']) . '" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
             $return .= Display :: display_warning_message(get_lang('LeaveEmptyToKeepCurrentFile'));
         }
-        $return .= '<table class="data_table">' . "\n";
-        $return .= "\t" . '<tr>' . "\n";
-        $return .= "\t" . '<th width="60%">' . get_lang('Title') . '</th>' . "\n";
-        //$return .= "\t" . '<th>'.get_lang('Description').'</th>' . "\n";
-        $return .= "\t" . '<th>' . get_lang('Audio') . '</th>' . "\n";
-        $return .= "\t" . '<th>' . get_lang('Move') . '</th>' . "\n";
-        $return .= "\t" . '<th>' . get_lang('Actions') . '</th>' . "\n";
-        $return .= "\t" . '</tr>' . "\n";
+        $return .= '<table class="data_table">';
+        $return .= "\t" . '<tr>';
+        $return .= "\t" . '<th width="60%">' . get_lang('Title') . '</th>';
+        //$return .= "\t" . '<th>'.get_lang('Description').'</th>';
+        $return .= "\t" . '<th>' . get_lang('Audio') . '</th>';
+        $return .= "\t" . '<th>' . get_lang('Move') . '</th>';
+        $return .= "\t" . '<th>' . get_lang('Actions') . '</th>';
+        $return .= "\t" . '</tr>';
 
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = $arrLP[$i]['title'];
@@ -4595,20 +4595,20 @@ class learnpath {
                 $oddclass = 'row_even';
             }
 
-            $return .= "\t" . '<tr class="' . $oddclass . '">' . "\n";
+            $return .= "\t" . '<tr class="' . $oddclass . '">';
 
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
-                $return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $icon_name . '.png" style="margin-right:3px;" />' . $title . '</td>' . "\n";
+                $return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $icon_name . '.png" style="margin-right:3px;" />' . $title . '</td>';
             } else {
                 if (file_exists('../img/lp_' . $icon_name . '.gif')) {
-                    $return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $icon_name . '.gif" style="margin-right:3px;" />' . $title . '</td>' . "\n";
+                    $return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $icon_name . '.gif" style="margin-right:3px;" />' . $title . '</td>';
                 } else {
-                    //$return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;">' . Display::display_icon('folder_document.gif','',array('style'=>'margin-right:3px;')) . $title . '</td>' . "\n";
-                    $return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/folder_document.gif" style="margin-right:3px;" />' . $title . '</td>' . "\n";
+                    //$return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;">' . Display::display_icon('folder_document.gif','',array('style'=>'margin-right:3px;')) . $title . '</td>';
+                    $return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/folder_document.gif" style="margin-right:3px;" />' . $title . '</td>';
                 }
             }
-            //$return .= "\t\t" . '<td>' . stripslashes($arrLP[$i]['description']) . '</td>' . "\n";
+            //$return .= "\t\t" . '<td>' . stripslashes($arrLP[$i]['description']) . '</td>';
 
             // The audio column.
             $return .= "\t\t" . '<td align="center">';
@@ -4663,16 +4663,16 @@ class learnpath {
                 if ($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module') {
                     $return .= "\t\t\t" . '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;view=build&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
                     $return .= '<img style="margin:1px;" alt="" src="../img/edit.gif" title="' . get_lang('_edit_learnpath_module') . '" />';
-                    $return .= '</a>' . "\n";
+                    $return .= '</a>';
                 } else {
                     $return .= "\t\t\t" . '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
                     $return .= '<img style="margin:1px;" alt="" src="../img/edit.gif" title="' . get_lang('_edit_learnpath_module') . '" />';
-                    $return .= '</a>' . "\n";
+                    $return .= '</a>';
                 }
 
                 $return .= "\t\t\t" . '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($title) . '\');">';
                 $return .= '<img style="margin:1px;" alt="" src="../img/delete.gif" title="' . get_lang('_delete_learnpath_module') . '" />';
-                $return .= '</a>' . "\n";
+                $return .= '</a>';
 
                 $return .= '</td>';
             }
@@ -4681,11 +4681,11 @@ class learnpath {
         }
 
         if (count($arrLP) == 0) {
-            $return .= "\t" . '<tr>' . "\n";
-            $return .= "\t\t" . '<td colspan="4">' . get_lang('NoItemsInLp') . '</td>' . "\n";
-            $return .= "\t" . '</tr>' . "\n";
+            $return .= "\t" . '<tr>';
+            $return .= "\t\t" . '<td colspan="4">' . get_lang('NoItemsInLp') . '</td>';
+            $return .= "\t" . '</tr>';
         }
-        $return .= '</table>' . "\n";
+        $return .= '</table>';
         // We need to close the form when we are updating the mp3 files.
 
         if ($_GET['updateaudio'] == 'true') {
@@ -5241,10 +5241,10 @@ class learnpath {
         unset ($this->arrMenu);
 
         if ($action == 'add')
-            $return .= get_lang('CreateTheExercise') . '&nbsp;:' . "\n";
-        elseif ($action == 'move') $return .= get_lang('MoveTheCurrentExercise') . '&nbsp;:' . "\n";
+            $return .= get_lang('CreateTheExercise') . '&nbsp;:';
+        elseif ($action == 'move') $return .= get_lang('MoveTheCurrentExercise') . '&nbsp;:';
         else
-            $return .= get_lang('EditCurrentExecice') . '&nbsp;:' . "\n";
+            $return .= get_lang('EditCurrentExecice') . '&nbsp;:';
 
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
             $return .= Display :: return_warning_message('<p class="lp_title">' . get_lang('Warning') . ' !</p>' . get_lang('WarningEditingDocument'));
@@ -5253,20 +5253,20 @@ class learnpath {
                                 </div>';
         $return .= '<div class="sectioncomment">';
 
-        $return .= '<form method="POST">' . "\n";
-        $return .= "\t" . '<table class="lp_form">' . "\n";
+        $return .= '<form method="POST">';
+        $return .= "\t" . '<table class="lp_form">';
 
         if ($action != 'move') {
-            $return .= "\t\t" . '<tr>' . "\n";
-            $return .= "\t\t\t" . '<td class="label"><label for="idTitle">' . get_lang('Title') . '</label></td>' . "\n";
-            $return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" size="44" type="text" class="learnpath_item_form" value="' . $item_title . '" /></td>' . "\n";
-            $return .= "\t\t" . '</tr>' . "\n";
+            $return .= "\t\t" . '<tr>';
+            $return .= "\t\t\t" . '<td class="label"><label for="idTitle">' . get_lang('Title') . '</label></td>';
+            $return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" size="44" type="text" class="learnpath_item_form" value="' . $item_title . '" /></td>';
+            $return .= "\t\t" . '</tr>';
         }
 
-        $return .= "\t\t" . '<tr>' . "\n";
+        $return .= "\t\t" . '<tr>';
 
-        $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>' . "\n";
-        $return .= "\t\t\t" . '<td class="input">' . "\n";
+        $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>';
+        $return .= "\t\t\t" . '<td class="input">';
 
         $return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
 
@@ -5297,8 +5297,8 @@ class learnpath {
         $return .= '</tr>';
         $return .= '<tr>';
 
-        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '</label></td>' . "\n";
-        $return .= "\t\t\t" . '<td class="input">' . "\n";
+        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '</label></td>';
+        $return .= "\t\t\t" . '<td class="input">';
 
         $return .= "\t\t\t\t" . '<select class="learnpath_item_form" style="width:100%;" id="idPosition" name="previous" size="1">';
 
@@ -5317,8 +5317,8 @@ class learnpath {
         }
 
         $return .= "\t\t\t\t" . '</select>';
-        $return .= "\t\t\t" . '</td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
+        $return .= "\t\t\t" . '</td>';
+        $return .= "\t\t" . '</tr>';
         if ($action != 'move') {
             $id_prerequisite = 0;
             if (is_array($arrLP)) {
@@ -5339,8 +5339,8 @@ class learnpath {
                 }
             }
             /*// Commented the prerequisites, only visible in edit (exercise).
-            $return .= "\t\t" . '<tr>' . "\n";
-            $return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>' . "\n";
+            $return .= "\t\t" . '<tr>';
+            $return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>';
             $return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang('NoPrerequisites').'</option>';
 
                 foreach($arrHide as $key => $value){
@@ -5357,45 +5357,45 @@ class learnpath {
 
             $return .= "</select></td>";
             */
-            $return .= "\t\t" . '</tr>' . "\n";
-            /*$return .= "\t\t" . '<tr>' . "\n";
-            $return .= "\t\t\t" . '<td class="label"><label for="maxTimeAllowed">' . get_lang('MaxTimeAllowed') . '</label></td>' . "\n";
+            $return .= "\t\t" . '</tr>';
+            /*$return .= "\t\t" . '<tr>';
+            $return .= "\t\t\t" . '<td class="label"><label for="maxTimeAllowed">' . get_lang('MaxTimeAllowed') . '</label></td>';
             $return .= "\t\t\t" . '<td class="input"><input name="maxTimeAllowed" style="width:98%;" id="maxTimeAllowed" value="' . $extra_info['max_time_allowed'] . '" /></td>';
 
             // Remove temporarily the test description.
-            //$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang('Description').' :</label></td>' . "\n";
-            //$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
+            //$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang('Description').' :</label></td>';
+            //$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>';
 
-            $return .= "\t\t" . '</tr>' . "\n"; */
+            $return .= "\t\t" . '</tr>'; */
         }
 
-        $return .= "\t\t" . '<tr>' . "\n";
+        $return .= "\t\t" . '<tr>';
         if ($action == 'add') {
             $return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">' . get_lang('AddExercise') . '</button></td>';
         } else {
             $return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">' . get_lang('EditCurrentExecice') . '</button></td>';
         }
 
-        $return .= "\t\t" . '</tr>' . "\n";
-        $return .= "\t" . '</table>' . "\n";
+        $return .= "\t\t" . '</tr>';
+        $return .= "\t" . '</table>';
 
         if ($action == 'move') {
-            $return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />' . "\n";
-            $return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />' . "\n";
+            $return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />';
+            $return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />';
         }
 
         if (is_numeric($extra_info)) {
-            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />' . "\n";
+            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />';
         }
         elseif (is_array($extra_info)) {
-            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />' . "\n";
+            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />';
         }
 
-        $return .= "\t" . '<input name="type" type="hidden" value="' . TOOL_QUIZ . '" />' . "\n";
-        $return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />' . "\n";
+        $return .= "\t" . '<input name="type" type="hidden" value="' . TOOL_QUIZ . '" />';
+        $return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />';
 
-        $return .= '</form>' . "\n";
-        $return .= '</div>' . "\n";
+        $return .= '</form>';
+        $return .= '</div>';
         return $return;
     }
 
@@ -5470,19 +5470,19 @@ class learnpath {
         unset ($this->arrMenu);*/
 
         if ($action == 'add')
-            $return .= '<p class="lp_title">' . get_lang('CreateTheExercise') . '&nbsp;:</p>' . "\n";
-        elseif ($action == 'move') $return .= '<p class="lp_title">' . get_lang('MoveTheCurrentExercise') . '&nbsp;:</p>' . "\n";
+            $return .= '<p class="lp_title">' . get_lang('CreateTheExercise') . '&nbsp;:</p>';
+        elseif ($action == 'move') $return .= '<p class="lp_title">' . get_lang('MoveTheCurrentExercise') . '&nbsp;:</p>';
         else
-            $return .= '<p class="lp_title">' . get_lang('EditCurrentExecice') . '&nbsp;:</p>' . "\n";
+            $return .= '<p class="lp_title">' . get_lang('EditCurrentExecice') . '&nbsp;:</p>';
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
             $return .= Display :: return_warning_message('<p class="lp_title">' . get_lang('Warning') . ' !</p>' . get_lang('WarningEditingDocument'));
         }
 
-        $return .= '<form method="POST">' . "\n";
-        $return .= "\t" . '<table cellpadding="0" cellspacing="0" class="lp_form">' . "\n";
-        $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . ' :</label></td>' . "\n";
-        $return .= "\t\t\t" . '<td class="input">' . "\n";
+        $return .= '<form method="POST">';
+        $return .= "\t" . '<table cellpadding="0" cellspacing="0" class="lp_form">';
+        $return .= "\t\t" . '<tr>';
+        $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . ' :</label></td>';
+        $return .= "\t\t\t" . '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="idParent" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
@@ -5507,11 +5507,11 @@ class learnpath {
         }
 
         $return .= "\t\t\t\t" . '</select>';
-        $return .= "\t\t\t" . '</td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
-        $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . ' :</label></td>' . "\n";
-        $return .= "\t\t\t" . '<td class="input">' . "\n";
+        $return .= "\t\t\t" . '</td>';
+        $return .= "\t\t" . '</tr>';
+        $return .= "\t\t" . '<tr>';
+        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . ' :</label></td>';
+        $return .= "\t\t\t" . '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
 
@@ -5528,14 +5528,14 @@ class learnpath {
         }
 
         $return .= "\t\t\t\t" . '</select>';
-        $return .= "\t\t\t" . '</td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
+        $return .= "\t\t\t" . '</td>';
+        $return .= "\t\t" . '</tr>';
         
         if ($action != 'move') {
-            $return .= "\t\t" . '<tr>' . "\n";
-            $return .= "\t\t\t" . '<td class="label"><label for="idTitle">' . get_lang('Title') . ' :</label></td>' . "\n";
-            $return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
-            $return .= "\t\t" . '</tr>' . "\n";
+            $return .= "\t\t" . '<tr>';
+            $return .= "\t\t\t" . '<td class="label"><label for="idTitle">' . get_lang('Title') . ' :</label></td>';
+            $return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>';
+            $return .= "\t\t" . '</tr>';
             $id_prerequisite = 0;
             if (is_array($arrLP) && count($arrLP) > 0) {
                 foreach ($arrLP as $key => $value) {
@@ -5557,9 +5557,9 @@ class learnpath {
                 }
             }
 
-            $return .= "\t\t" . '<tr>' . "\n";
+            $return .= "\t\t" . '<tr>';
 
-            //$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').' :</label></td>' . "\n";
+            //$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').' :</label></td>';
             //$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites"><option value="0">'.get_lang('NoPrerequisites').'</option>';
 /*
             foreach ($arrHide as $key => $value) {
@@ -5574,34 +5574,34 @@ class learnpath {
             }
 */
             //$return .= "</select></td>";
-            $return .= "\t\t" . '</tr>' . "\n";
-            $return .= "\t\t" . '<tr>' . "\n";
-            $return .= "\t\t" . '</tr>' . "\n";
+            $return .= "\t\t" . '</tr>';
+            $return .= "\t\t" . '<tr>';
+            $return .= "\t\t" . '</tr>';
         }
 
-        $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td>&nbsp; </td><td><button class="save" name="submit_button" action="edit" type="submit">' . get_lang('SaveHotpotatoes') . '</button></td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
-        $return .= "\t" . '</table>' . "\n";
+        $return .= "\t\t" . '<tr>';
+        $return .= "\t\t\t" . '<td>&nbsp; </td><td><button class="save" name="submit_button" action="edit" type="submit">' . get_lang('SaveHotpotatoes') . '</button></td>';
+        $return .= "\t\t" . '</tr>';
+        $return .= "\t" . '</table>';
 
         if ($action == 'move') {
-            $return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />' . "\n";
-            $return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />' . "\n";
+            $return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />';
+            $return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />';
         }
 
         if (is_numeric($extra_info)) {
-            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />' . "\n";
+            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />';
         }
         elseif (is_array($extra_info)) {
-            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />' . "\n";
+            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />';
         }
 
-        $return .= "\t" . '<input name="type" type="hidden" value="' . TOOL_HOTPOTATOES . '" />' . "\n";
-        $return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />' . "\n";
+        $return .= "\t" . '<input name="type" type="hidden" value="' . TOOL_HOTPOTATOES . '" />';
+        $return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />';
 
-        $return .= '</form>' . "\n";
+        $return .= '</form>';
 
-        $return .= '</div>' . "\n";
+        $return .= '</div>';
         return $return;
     }
 
@@ -5679,27 +5679,27 @@ class learnpath {
         unset ($this->arrMenu);
 
         if ($action == 'add')
-            $return .= get_lang('CreateTheForum') . '&nbsp;:' . "\n";
-        elseif ($action == 'move') $return .= get_lang('MoveTheCurrentForum') . '&nbsp;:' . "\n";
+            $return .= get_lang('CreateTheForum') . '&nbsp;:';
+        elseif ($action == 'move') $return .= get_lang('MoveTheCurrentForum') . '&nbsp;:';
         else
-            $return .= get_lang('EditCurrentForum') . '&nbsp;:' . "\n";
+            $return .= get_lang('EditCurrentForum') . '&nbsp;:';
 
         $return .= '	</div>
                                 </div>';
         $return .= '<div class="sectioncomment">';
-        $return .= '<form method="POST">' . "\n";
-        $return .= "\t" . '<table class="lp_form">' . "\n";
+        $return .= '<form method="POST">';
+        $return .= "\t" . '<table class="lp_form">';
 
         if ($action != 'move') {
-            $return .= "\t\t" . '<tr>' . "\n";
-            $return .= "\t\t\t" . '<td class="label"><label for="idTitle">' . get_lang('Title') . '</label></td>' . "\n";
-            $return .= "\t\t\t" . '<td class="input"><input id="idTitle" size="44" name="title" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>' . "\n";
-            $return .= "\t\t" . '</tr>' . "\n";
+            $return .= "\t\t" . '<tr>';
+            $return .= "\t\t\t" . '<td class="label"><label for="idTitle">' . get_lang('Title') . '</label></td>';
+            $return .= "\t\t\t" . '<td class="input"><input id="idTitle" size="44" name="title" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>';
+            $return .= "\t\t" . '</tr>';
         }
 
-        $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>' . "\n";
-        $return .= "\t\t\t" . '<td class="input">' . "\n";
+        $return .= "\t\t" . '<tr>';
+        $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>';
+        $return .= "\t\t\t" . '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
@@ -5724,11 +5724,11 @@ class learnpath {
         }
 
         $return .= "\t\t\t\t" . '</select>';
-        $return .= "\t\t\t" . '</td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
-        $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '</label></td>' . "\n";
-        $return .= "\t\t\t" . '<td class="input">' . "\n";
+        $return .= "\t\t\t" . '</td>';
+        $return .= "\t\t" . '</tr>';
+        $return .= "\t\t" . '<tr>';
+        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '</label></td>';
+        $return .= "\t\t\t" . '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="idPosition" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
 
@@ -5745,11 +5745,11 @@ class learnpath {
         }
 
         $return .= "\t\t\t\t" . '</select>';
-        $return .= "\t\t\t" . '</td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
+        $return .= "\t\t\t" . '</td>';
+        $return .= "\t\t" . '</tr>';
         if ($action != 'move') {
-            $return .= "\t\t" . '<tr>' . "\n";
-            $return .= "\t\t" . '</tr>' . "\n";
+            $return .= "\t\t" . '<tr>';
+            $return .= "\t\t" . '</tr>';
             $id_prerequisite = 0;
             if (is_array($arrLP)) {
                 foreach ($arrLP as $key => $value) {
@@ -5769,33 +5769,33 @@ class learnpath {
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                 }
             }
-            $return .= "\t\t" . '</tr>' . "\n";
+            $return .= "\t\t" . '</tr>';
         }
-        $return .= "\t\t" . '<tr>' . "\n";
+        $return .= "\t\t" . '<tr>';
 
         if ($action == 'add') {
             $return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit"> ' . get_lang('AddForumToCourse') . ' </button></td>';
         } else {
             $return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit"> ' . get_lang('EditCurrentForum') . ' </button></td>';
         }
-        $return .= "\t\t" . '</tr>' . "\n";
-        $return .= "\t" . '</table>' . "\n";
+        $return .= "\t\t" . '</tr>';
+        $return .= "\t" . '</table>';
 
         if ($action == 'move') {
-            $return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />' . "\n";
-            $return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />' . "\n";
+            $return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />';
+            $return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />';
         }
 
         if (is_numeric($extra_info)) {
-            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />' . "\n";
+            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />';
         }
         elseif (is_array($extra_info)) {
-            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />' . "\n";
+            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />';
         }
-        $return .= "\t" . '<input name="type" type="hidden" value="' . TOOL_FORUM . '" />' . "\n";
-        $return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />' . "\n";
-        $return .= '</form>' . "\n";
-        $return .= '</div>' . "\n";
+        $return .= "\t" . '<input name="type" type="hidden" value="' . TOOL_FORUM . '" />';
+        $return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />';
+        $return .= '</form>';
+        $return .= '</div>';
         return $return;
     }
 
@@ -5885,16 +5885,16 @@ class learnpath {
         unset ($this->arrMenu);
 
         if ($action == 'add')
-            $return .= '<p class="lp_title">' . get_lang('CreateTheForum') . '&nbsp;:</p>' . "\n";
-        elseif ($action == 'move') $return .= '<p class="lp_title">' . get_lang('MoveTheCurrentForum') . '&nbsp;:</p>' . "\n";
+            $return .= '<p class="lp_title">' . get_lang('CreateTheForum') . '&nbsp;:</p>';
+        elseif ($action == 'move') $return .= '<p class="lp_title">' . get_lang('MoveTheCurrentForum') . '&nbsp;:</p>';
         else
-            $return .= '<p class="lp_title">' . get_lang('EditCurrentForum') . '&nbsp;:</p>' . "\n";
+            $return .= '<p class="lp_title">' . get_lang('EditCurrentForum') . '&nbsp;:</p>';
 
-        $return .= '<form method="POST">' . "\n";
-        $return .= "\t" . '<table cellpadding="0" cellspacing="0" class="lp_form">' . "\n";
-        $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '&nbsp;:</label></td>' . "\n";
-        $return .= "\t\t\t" . '<td class="input">' . "\n";
+        $return .= '<form method="POST">';
+        $return .= "\t" . '<table cellpadding="0" cellspacing="0" class="lp_form">';
+        $return .= "\t\t" . '<tr>';
+        $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '&nbsp;:</label></td>';
+        $return .= "\t\t\t" . '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="idParent" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
@@ -5918,11 +5918,11 @@ class learnpath {
         }
 
         $return .= "\t\t\t\t" . '</select>';
-        $return .= "\t\t\t" . '</td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
-        $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '&nbsp;:</label></td>' . "\n";
-        $return .= "\t\t\t" . '<td class="input">' . "\n";
+        $return .= "\t\t\t" . '</td>';
+        $return .= "\t\t" . '</tr>';
+        $return .= "\t\t" . '<tr>';
+        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '&nbsp;:</label></td>';
+        $return .= "\t\t\t" . '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -5937,15 +5937,15 @@ class learnpath {
             }
         }
         $return .= "\t\t\t\t" . '</select>';
-        $return .= "\t\t\t" . '</td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
+        $return .= "\t\t\t" . '</td>';
+        $return .= "\t\t" . '</tr>';
         if ($action != 'move') {
-            $return .= "\t\t" . '<tr>' . "\n";
-            $return .= "\t\t\t" . '<td class="label"><label for="idTitle">' . get_lang('Title') . '&nbsp;:</label></td>' . "\n";
-            $return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
-            $return .= "\t\t" . '</tr>' . "\n";
-            $return .= "\t\t" . '<tr>' . "\n";
-            $return .= "\t\t" . '</tr>' . "\n";
+            $return .= "\t\t" . '<tr>';
+            $return .= "\t\t\t" . '<td class="label"><label for="idTitle">' . get_lang('Title') . '&nbsp;:</label></td>';
+            $return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>';
+            $return .= "\t\t" . '</tr>';
+            $return .= "\t\t" . '<tr>';
+            $return .= "\t\t" . '</tr>';
 
             $id_prerequisite = 0;
             if ($arrLP != null) {
@@ -5968,8 +5968,8 @@ class learnpath {
                 }
             }
 
-            $return .= "\t\t" . '<tr>' . "\n";
-            $return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">' . get_lang('Prerequisites') . '&nbsp;:</label></td>' . "\n";
+            $return .= "\t\t" . '<tr>';
+            $return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">' . get_lang('Prerequisites') . '&nbsp;:</label></td>';
             $return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites"><option value="0">' . get_lang('NoPrerequisites') . '</option>';
 
             foreach ($arrHide as $key => $value) {
@@ -5984,31 +5984,31 @@ class learnpath {
             }
 
             $return .= "</select></td>";
-            $return .= "\t\t" . '</tr>' . "\n";
+            $return .= "\t\t" . '</tr>';
 
         }
-        $return .= "\t\t" . '<tr>' . "\n";
+        $return .= "\t\t" . '<tr>';
         $return .= "\t\t\t" . '<td colspan="2">
-                    <button class="save" name="submit_button" type="submit" value="'.get_lang('Ok').'" />'.get_lang('Ok').'</button></td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
-        $return .= "\t" . '</table>' . "\n";
+                    <button class="save" name="submit_button" type="submit" value="'.get_lang('Ok').'" />'.get_lang('Ok').'</button></td>';
+        $return .= "\t\t" . '</tr>';
+        $return .= "\t" . '</table>';
 
         if ($action == 'move') {
-            $return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />' . "\n";
-            $return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />' . "\n";
+            $return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />';
+            $return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />';
         }
 
         if (is_numeric($extra_info)) {
-            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />' . "\n";
+            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />';
         }
         elseif (is_array($extra_info)) {
-            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />' . "\n";
+            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />';
         }
 
-        $return .= "\t" . '<input name="type" type="hidden" value="' . TOOL_THREAD . '" />' . "\n";
-        $return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />' . "\n";
-        $return .= '</form>' . "\n";
-        $return .= '</div>' . "\n";
+        $return .= "\t" . '<input name="type" type="hidden" value="' . TOOL_THREAD . '" />';
+        $return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />';
+        $return .= '</form>';
+        $return .= '</div>';
         return $return;
     }
 
@@ -6077,7 +6077,7 @@ class learnpath {
         $arrLP = $this->arrMenu;
         unset ($this->arrMenu);
 
-        $return .= $title . "\n";
+        $return .= $title;
         $return .= '	</div>
                             </div>';
 
@@ -6296,12 +6296,12 @@ class learnpath {
         unset ($this->arrMenu);
 
         if ($action == 'add') {
-            $return .= get_lang('CreateTheDocument') . "\n";
+            $return .= get_lang('CreateTheDocument');
         }
         elseif ($action == 'move') {
-            $return .= get_lang('MoveTheCurrentDocument') . "\n";
+            $return .= get_lang('MoveTheCurrentDocument');
         } else {
-            $return .= get_lang('EditTheCurrentDocument') . "\n";
+            $return .= get_lang('EditTheCurrentDocument');
         }
 
         $return .= '</div>
@@ -6625,27 +6625,27 @@ class learnpath {
         unset ($this->arrMenu);
 
         if ($action == 'add')
-            $return .= get_lang('CreateTheLink') . '&nbsp;:' . "\n";
-        elseif ($action == 'move') $return .= get_lang('MoveCurrentLink') . '&nbsp;:' . "\n";
+            $return .= get_lang('CreateTheLink') . '&nbsp;:';
+        elseif ($action == 'move') $return .= get_lang('MoveCurrentLink') . '&nbsp;:';
         else
-            $return .= get_lang('EditCurrentLink') . '&nbsp;:' . "\n";
+            $return .= get_lang('EditCurrentLink') . '&nbsp;:';
 
         $return .= '	</div>
                                 </div>';
         $return .= '<div class="sectioncomment">';
-        $return .= '<form method="POST">' . "\n";
-        $return .= "\t" . '<table>' . "\n";
+        $return .= '<form method="POST">';
+        $return .= "\t" . '<table>';
 
         if ($action != 'move') {
-            $return .= "\t\t" . '<tr>' . "\n";
-            $return .= "\t\t\t" . '<td class="label"><label for="idTitle">' . get_lang('Title') . '</label></td>' . "\n";
-            $return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" size="44" type="text" value="' . $item_title . '" class="learnpath_item_form"/></td>' . "\n";
-            $return .= "\t\t" . '</tr>' . "\n";
+            $return .= "\t\t" . '<tr>';
+            $return .= "\t\t\t" . '<td class="label"><label for="idTitle">' . get_lang('Title') . '</label></td>';
+            $return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" size="44" type="text" value="' . $item_title . '" class="learnpath_item_form"/></td>';
+            $return .= "\t\t" . '</tr>';
         }
 
-        $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>' . "\n";
-        $return .= "\t\t\t" . '<td class="input">' . "\n";
+        $return .= "\t\t" . '<tr>';
+        $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>';
+        $return .= "\t\t\t" . '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
@@ -6672,11 +6672,11 @@ class learnpath {
         }
 
         $return .= "\t\t\t\t" . '</select>';
-        $return .= "\t\t\t" . '</td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
-        $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '</label></td>' . "\n";
-        $return .= "\t\t\t" . '<td class="input">' . "\n";
+        $return .= "\t\t\t" . '</td>';
+        $return .= "\t\t" . '</tr>';
+        $return .= "\t\t" . '<tr>';
+        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '</label></td>';
+        $return .= "\t\t\t" . '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="idPosition" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -6691,14 +6691,14 @@ class learnpath {
             }
         }
         $return .= "\t\t\t\t" . '</select>';
-        $return .= "\t\t\t" . '</td>' . "\n";
-        $return .= "\t\t" . '</tr>' . "\n";
+        $return .= "\t\t\t" . '</td>';
+        $return .= "\t\t" . '</tr>';
 
         if ($action != 'move') {
-            $return .= "\t\t" . '<tr>' . "\n";
-            $return .= "\t\t\t" . '<td class="label"><label for="idURL">' . get_lang('Url') . '</label></td>' . "\n";
-            $return .= "\t\t\t" . '<td class="input"><input' . (is_numeric($extra_info) ? ' disabled="disabled"' : '') . ' id="idURL" name="url" style="width:99%;" type="text" value="' . $item_url . '" class="learnpath_item_form" /></td>' . "\n";
-            $return .= "\t\t" . '</tr>' . "\n";
+            $return .= "\t\t" . '<tr>';
+            $return .= "\t\t\t" . '<td class="label"><label for="idURL">' . get_lang('Url') . '</label></td>';
+            $return .= "\t\t\t" . '<td class="input"><input' . (is_numeric($extra_info) ? ' disabled="disabled"' : '') . ' id="idURL" name="url" style="width:99%;" type="text" value="' . $item_url . '" class="learnpath_item_form" /></td>';
+            $return .= "\t\t" . '</tr>';
             $id_prerequisite = 0;
             if (is_array($arrLP)) {
                 foreach ($arrLP as $key => $value) {
@@ -6721,8 +6721,8 @@ class learnpath {
             }
 
             /*// Commented the prerequisites, only visible in edit (link).
-                    $return .= "\t\t" . '<tr>' . "\n";
-                $return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>' . "\n";
+                    $return .= "\t\t" . '<tr>';
+                $return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>';
                 $return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang('NoPrerequisites').'</option>';
 
                 foreach($arrHide as $key => $value) {
@@ -6739,33 +6739,33 @@ class learnpath {
 
                 $return .= "</select></td>";
             */
-            $return .= "\t\t" . '</tr>' . "\n";
+            $return .= "\t\t" . '</tr>';
 
         }
 
-        $return .= "\t\t" . '<tr>' . "\n";
+        $return .= "\t\t" . '<tr>';
         if ($action == 'add') {
             $return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">' . get_lang('AddLinkToCourse') . '</button></td>';
         } else {
             $return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">' . get_lang('EditCurrentLink') . '</button></td>';
         }
-        $return .= "\t\t" . '</tr>' . "\n";
-        $return .= "\t" . '</table>' . "\n";
+        $return .= "\t\t" . '</tr>';
+        $return .= "\t" . '</table>';
         if ($action == 'move') {
-            $return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />' . "\n";
-            $return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />' . "\n";
+            $return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />';
+            $return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />';
         }
 
         if (is_numeric($extra_info)) {
-            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />' . "\n";
+            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />';
         }
         elseif (is_array($extra_info)) {
-            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />' . "\n";
+            $return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />';
         }
-        $return .= "\t" . '<input name="type" type="hidden" value="' . TOOL_LINK . '" />' . "\n";
-        $return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />' . "\n";
-        $return .= '</form>' . "\n";
-        $return .= '</div>' . "\n";
+        $return .= "\t" . '<input name="type" type="hidden" value="' . TOOL_LINK . '" />';
+        $return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />';
+        $return .= '</form>';
+        $return .= '</div>';
         return $return;
     }
 

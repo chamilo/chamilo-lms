@@ -62,6 +62,11 @@ if (isset($_REQUEST['language']) && !empty($_REQUEST['language']) && in_array($_
 	$lang_match = $_REQUEST['language'];
 }
 
+// Maybe a language had already been selected, we should honor this
+if (isset($_SESSION['user_language_choice']) && in_array($_SESSION['user_language_choice'], $chamilo_langs)) {
+	$lang_match = $_SESSION['user_language_choice'];
+}
+
 // We need to set the relevant session variables to the best match, to use Chamilo's i18n lib.
 $_user['language'] = $lang_match;
 $_SESSION['user_language_choice'] = $lang_match;

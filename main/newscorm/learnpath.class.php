@@ -5435,9 +5435,7 @@ class learnpath {
             $item_title = '';
             $item_description = '';
         }
-
-        $return = '<div style="margin:3px 12px;">';
-
+        
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
         else
@@ -5470,10 +5468,11 @@ class learnpath {
         unset ($this->arrMenu);*/
 
         if ($action == 'add')
-            $return .= '<p class="lp_title">' . get_lang('CreateTheExercise') . '&nbsp;:</p>';
+            $return .= '<div class="row"><div class="form_header">' . get_lang('CreateTheExercise') . '&nbsp;:</div></div>';
         elseif ($action == 'move') $return .= '<p class="lp_title">' . get_lang('MoveTheCurrentExercise') . '&nbsp;:</p>';
         else
-            $return .= '<p class="lp_title">' . get_lang('EditCurrentExecice') . '&nbsp;:</p>';
+            //$return .= '<p class="form_header">' . get_lang('EditCurrentExecice') . '&nbsp;:</p>';
+            $return .= '<div class="row"><div class="form_header">' . get_lang('EditCurrentExecice') . '&nbsp;:</div></div>';
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
             $return .= Display :: return_warning_message('<p class="lp_title">' . get_lang('Warning') . ' !</p>' . get_lang('WarningEditingDocument'));
         }
@@ -5600,8 +5599,7 @@ class learnpath {
         $return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />';
 
         $return .= '</form>';
-
-        $return .= '</div>';
+        
         return $return;
     }
 
@@ -7021,6 +7019,7 @@ class learnpath {
         }
 
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $item_id = intval($item_id);
         $sql    = "SELECT * FROM " . $tbl_lp_item . " as lp WHERE lp.id = " . $item_id;
         $result = Database::query($sql);
 

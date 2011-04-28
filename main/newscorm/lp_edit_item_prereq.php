@@ -149,6 +149,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
                 echo get_lang("PrerequisitesAdded");
                 echo '</div>';
             } else {
+                echo $_SESSION['oLP']->display_manipulate($_GET['id'], null);
                 echo $_SESSION['oLP']->display_item_prerequisites_form($_GET['id']);
             }
         echo '</td>';

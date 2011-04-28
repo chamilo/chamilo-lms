@@ -3212,7 +3212,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
 			$agendaday_string = api_convert_and_format_date($item['start_date'], "%d", date_default_timezone_get());
 			$agendaday = intval($agendaday_string);
 			$start_time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT);
-			$end_time    = api_convert_and_format_date($item['end_date'], TIME_NO_SEC_FORMAT);
+			$end_time    = api_convert_and_format_date($item['end_date'], DATE_TIME_FORMAT_LONG);
 
 			if ($setting_agenda_link == 'coursecode') {
 				$title=$array_course_info['title'];
@@ -3223,8 +3223,10 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
 
 			$URL = api_get_path(WEB_CODE_PATH)."calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&day=$agendaday&month=$month&year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			//Display the events in agenda
-			$items[$agendaday][$item['start_date']] .= "<i>$start_time - $end_time</i> <a href=\"$URL\" title=\"".$array_course_info["title"]."\">".$agenda_link."</a>";
-			$items[$agendaday][$item['start_date']] .= "<div>".$item['title']."</div><br>";
+			$content  = "<i>$start_time - $end_time</i> <a href=\"$URL\" title=\"".$array_course_info["title"]."\"> <br />".$agenda_link."</a>";
+			$content .= "<div>".$item['title']."</div><br>";
+			//$items[$agendaday][$item['start_date']] .= Display::div($content, array('class'=>'rounded_div_agenda'));
+			$items[$agendaday][$item['start_date']] .= $content;
 		}
 	}
 
@@ -4432,9 +4434,9 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 			if (!is_array($agendaitems[$halfhour]))
 	        	$content = $agendaitems[$halfhour];
 			    $agendaitems[$halfhour] = $content."<div><i>$hour:$minute</i> <b>".get_lang('GlobalEvent'). ":  </b>".$item['title']."</div>";
+			    
 		}
 	}
-	//print_r($agendaitems);
 	return $agendaitems;
 }
 

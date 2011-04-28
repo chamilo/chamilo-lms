@@ -198,7 +198,7 @@ if (isset($_user['user_id'])) {
 	    echo "</td>";
     	// the divider
     	// OlivierB : the image has a white background, which causes trouble if the portal has another background color. Image should be transparent. ----> echo "<td width=\"20\" background=\"../img/verticalruler.gif\">&nbsp;</td>";
-    	echo "<td width=\"20\">&nbsp;</td>";
+    	echo "<td width=\"8\">&nbsp;</td>";
     	// the main area: day, week, month view
     	echo "<td valign=\"top\">";   
 	}

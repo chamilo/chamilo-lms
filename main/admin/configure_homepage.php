@@ -779,7 +779,7 @@ switch ($action) {
 		?>
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 		<tr>
-		  <td width="80%" colspan="2" valign="top">
+		  <td width="70%" valign="top">
 		  	<div class="actions">
 			<a href="<?php echo api_get_self(); ?>?action=edit_top"><?php Display::display_icon('edit.gif', get_lang('EditHomePage')); ?></a>
 			<a href="<?php echo api_get_self(); ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
@@ -853,27 +853,66 @@ switch ($action) {
 			  </td>-->
 			</tr>
 			</table>
+			<?php 
+			
+			// Add new page
+			
+			$home_menu = '';
+            if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
+                $home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
+            } else {
+                $home_menu = @file($homep.$menutabs.$ext);
+            }
+            if (empty($home_menu)) {
+                $home_menu = array();
+            }
+            if (!empty($home_menu)) {
+                $home_menu = implode("\n", $home_menu);
+                $home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+                $home_menu = explode("\n", $home_menu);
+            }
+            $lis = '';
+            $tab_counter = 0;            
+            foreach ($home_menu as $enreg) {
+                $enreg = trim($enreg);
+                if (!empty($enreg)) {
+                    $edit_link   = ' <a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
+                    $delete_link = ' <a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
+                    $tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'), $enreg);
+                    $tab_string = str_replace(array('<li>', '</li>'), '', $tab_string );                
+                    $lis .= Display::tag('tr', Display::tag('td', $tab_string));
+                    $tab_counter++;
+                }
+            }            
+            ?>
+            <div class="actions">
+                <a href="<?php echo api_get_self(); ?>?action=insert_tabs"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); echo get_lang('InsertLink'); ?></a>
+            </div>
+            <?php 
+            
+            echo '<table class="data_table">';            
+            echo $lis;			
+            echo '</table>';
+            
+			?>
 		  </td>
+		  <td width="10%" valign="top"></td>
 		  <td width="20%" rowspan="3" valign="top">
-			<div class="menu" style="width: 100%;">
+		    <div id="menu-wrapper">
+			<div id="menu" class="menu" style="width: 100%;">
 			<?php
 			api_display_language_form();
 			?>
-			<form id="loginform">
-				<table cellpadding="0">
-					<tr>
-						<td><label><?php echo get_lang('LoginName'); ?></label></td>
-						<td><input type="text" id="login" size="15" value="" disabled="disabled" /></td>
-					</tr>
-					<tr>
-						<td><label><?php echo get_lang('UserPassword'); ?></label></td>
-						<td><input type="password" id="password" size="15" disabled="disabled" /></td>
-					</tr>
-				</table>
-				<button class="login" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button>
+			<form id="formLogin">
+				<div><label><?php echo get_lang('LoginName'); ?></label></div>
+				<div><input type="text" id="login" size="15" value="" disabled="disabled" /></div>
+			    <div><label><?php echo get_lang('UserPassword'); ?></label></div>
+				<div><input type="password" id="password" size="15" value="" disabled="disabled" /></div>
+				<div><button class="login" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button></div>
 			</form>
+			<div class="clear"> &nbsp; </div>
 			<div class="menusection">
-				<span class="menusectioncaption"><?php echo get_lang('User'); ?></span>
+				<span class="menusectioncaption"><?php echo get_lang('MenuUser'); ?></span>
 				<ul class="menulist">
 				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('Registration')); ?></span></li>
 				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('LostPassword')); ?></span></li>
@@ -931,10 +970,11 @@ switch ($action) {
 				$home_notice = @(string)file_get_contents($homep.$noticef.$ext);
 			}
 			$home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
-			echo $home_notice;
+			echo $home_notice;			
 			?>
 			</div>
 			</div>
+			</div> <!-- menu wrapper -->
 		  </td>
 		</tr>
 		</table>

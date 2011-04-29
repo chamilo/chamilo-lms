@@ -42,7 +42,7 @@
       $('#learning_path_left_zone').hide(50);
       $('#learning_path_right_zone').css('marginLeft','10px');
       $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
-      $('#learning_path_main  #control .buttons').css({width: "120px", height: "32px", opacity: "0.4", zindex: "-1", position: "absolute", top: "0px", left:"15px"});
+      $('#learning_path_main  #control').css({width: "120px", height: "32px", opacity: "0.4", position: "absolute", top: "0px", left:"15px"});
       $('#learning_path_main  #control').draggable({ iframeFix: true, stack: "#learning_path_right_zone" });
     },function(){
       $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');

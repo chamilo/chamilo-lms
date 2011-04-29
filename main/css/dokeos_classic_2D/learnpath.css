@@ -82,7 +82,7 @@ div.lp_tree {
 	padding:3px 10px 3px 0;
 	overflow-x : auto;
 	overflow-y : scroll;
-	width:230px;
+	width:190px;
 }
 hr {
 	background:#999999;
@@ -123,7 +123,7 @@ table.lp_build td {
 }
 table.lp_build td.tree {
 	border-right:1px solid #999999;
-	width:240px;
+	width:205px;
 }
 table.lp_build td.workspace {
 	padding: 0px;

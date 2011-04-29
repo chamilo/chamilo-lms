@@ -2398,11 +2398,12 @@ class learnpath {
      * @param	integer	Item View ID
      * @return	integer	Number of interactions
      */
-    public function get_interactions_count_from_db($lp_iv_id = 0) {
+    public function get_interactions_count_from_db($lp_iv_id = 0, $course_code = null) {
         if (empty ($lp_iv_id)) {
             return -1;
         }
-        $table = Database :: get_course_table(TABLE_LP_IV_INTERACTION);
+        $course_info = api_get_course_info($course_code);
+        $table = Database :: get_course_table(TABLE_LP_IV_INTERACTION, $course_info['db_name']);
         $sql = "SELECT count(*) FROM $table WHERE lp_iv_id = $lp_iv_id";
         $res = Database::query($sql);
         $row = Database :: fetch_array($res);
@@ -2458,11 +2459,12 @@ class learnpath {
      * @param	integer	Item View ID
      * @return	integer	Number of objectives
      */
-    public function get_objectives_count_from_db($lp_iv_id = 0) {
+    public function get_objectives_count_from_db($lp_iv_id = 0, $course_code = null) {
         if (empty ($lp_iv_id)) {
             return -1;
         }
-        $table = Database :: get_course_table(TABLE_LP_IV_OBJECTIVE);
+        $course_info = api_get_course_info($course_code);
+        $table = Database :: get_course_table(TABLE_LP_IV_OBJECTIVE, $course_info['db_name']);
         $sql = "SELECT count(*) FROM $table WHERE lp_iv_id = $lp_iv_id";
         $res = Database::query($sql);
         $row = Database :: fetch_array($res);

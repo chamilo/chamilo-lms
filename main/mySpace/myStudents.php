@@ -383,11 +383,13 @@ if (!empty ($_GET['student'])) {
     //$table_title = ($session_name? get_lang('Session').' : '.ucfirst($session_name).' | ':'').get_lang('Course').' : '.$info_course['title'].($coachs_name?'&nbsp;|&nbsp;'.get_lang('Tutor').' : '.stripslashes($coachs_name):'');
     //Hiding coach name
      
-    //$table_title = ($session_name? get_lang('Session').' : '.ucfirst($session_name).' | ':'').get_lang('Course').' : '.$info_course['title'].' | '.api_get_person_name($info_user['lastname'], $info_user['firstname']);
+    //$table_title = ($session_name? get_lang('Session').' : '.ucfirst($session_name).' | ':'').get_lang('Course').' : '.$info_course['title'].' | '.api_get_person_name($info_user['firstname'], $info_user['lastname']);
     
     $info_course = CourseManager :: get_course_information($get_course_code);
     $session_name = api_get_session_name($session_id);    
-    $table_title = ($session_name? get_lang('Session').' : '.$session_name.' | ':'').($info_course ?get_lang('Course').' : '.$info_course['title'].' | ':'').api_get_person_name($info_user['lastname'], $info_user['firstname']);
+    $table_title  = ($session_name? Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.$session_name.' ':'').
+    $table_title .= ($info_course ? Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$info_course['title'].'  ':'');
+    $table_title .= Display::return_icon('user.png', get_lang('User'), array(), 22).api_get_person_name($info_user['firstname'], $info_user['lastname']);
     
     echo '<h2>'.$table_title.'</h2>';
 
@@ -407,7 +409,7 @@ if (!empty ($_GET['student'])) {
 	$big_image_height = $big_image_size[1];
 	$url_big_image = $big_image . '?rnd=' . time();
 	$img_attributes = 'src="' . $image_file . '?rand=' . time() . '" ' .
-	'alt="' . api_get_person_name($info_user['lastname'], $info_user['firstname']) . '" ' .
+	'alt="' . api_get_person_name($info_user['firstname'], $info_user['lastname']) . '" ' .
 	'style="float:' . ($text_dir == 'rtl' ? 'left' : 'right') . '; padding:5px;" ';
 
 	if ($image_array['file'] == 'unknown.jpg') {
@@ -426,7 +428,7 @@ if (!empty ($_GET['student'])) {
 						<td>
 				<?php
 						echo get_lang('Name') . ' : ';
-						echo $info_user['name'];
+						echo api_get_person_name($info_user['firstname'], $info_user['lastname']);
 				?>
 						</td>
 					</tr>

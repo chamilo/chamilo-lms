@@ -7,8 +7,6 @@
  */
 
 $language_file = array ('registration', 'index', 'tracking', 'exercice', 'scorm', 'learnpath');
-//$cidReset = true;
-
 require_once '../inc/global.inc.php';
 
 $from_myspace = false;
@@ -19,12 +17,12 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 } else {
 	$this_section = SECTION_COURSES;
 }
-include_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-include_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-include_once api_get_path(LIBRARY_PATH).'course.lib.php';
-include_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-include_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-include_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
+require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
@@ -55,7 +53,7 @@ if (!empty($course_exits)) {
 	api_not_allowed();
 }
 
-$_course['dbNameGlu'] = $_configuration['table_prefix'] . $_course['db_name'] . $_configuration['db_glue'];
+//$_course['dbNameGlu'] = $_configuration['table_prefix'] . $_course['db_name'] . $_configuration['db_glue'];
 
 if (!empty($_GET['origin']) && $_GET['origin'] == 'user_course') {
 	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$_course['directory'], 'name' => $_course['title']);
@@ -71,6 +69,7 @@ if (!empty($_GET['origin']) && $_GET['origin'] == 'user_course') {
 }
 
 $interbreadcrumb[] = array("url" => "myStudents.php?student=".Security::remove_XSS($_GET['student_id'])."&course=".$cidReq."&details=true&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("DetailsStudentInCourse"));
+
 $nameTools = get_lang('LearningPathDetails');
 
 $htmlHeadXtra[] = '
@@ -97,8 +96,6 @@ $lp_id = intval($_GET['lp_id']);
 $sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN, $_course['db_name']).'	WHERE id='.$lp_id;
 $rs  = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
-
-
 echo '<div class ="actions">';
 echo '<a href="javascript:window.back();">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">
@@ -110,18 +107,20 @@ echo '</div>';
 echo '<div class="clear"></div>';
 
 $session_name = api_get_session_name(api_get_session_id());
-$table_title = ($session_name? get_lang('Session').' : '.$session_name.' | ':'').get_lang('Course').' : '.$_course['title'].' | '.$name;
+$table_title = ($session_name? Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.$session_name.' ':' ').
+                Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$_course['title'].' '.
+                Display::return_icon('user.png', get_lang('User'), array(), 22).' '.$name;
 echo '<h2>'.$table_title.'</h2>';
-echo '<h3>'.get_lang('ToolLearnpath').' : '.$lp_title.'</h3>';
+echo '<h3>'.Display::return_icon('learnpath.png', get_lang('ToolLearnpath'), array(), 22).' '.$lp_title.'</h3>';
     
-$list = learnpath :: get_flat_ordered_items_list($lp_id);
+$list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $_course['db_name']);
 $origin = 'tracking';
 if ($export_csv) {
-	include_once api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';
+	require_once api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';
 	//Export :: export_table_csv($csv_content, 'reporting_student');
 } else {
 	ob_start();
-	include_once  api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';
+	require_once  api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';
 	$tracking_content = ob_get_contents();
 	ob_end_clean();
 	echo api_utf8_decode($tracking_content, $charset);

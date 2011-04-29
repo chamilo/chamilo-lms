@@ -100,9 +100,9 @@ function ProtectTags ( html ) {											// copied from _source/internals/fck.j
 FCK.ContextMenu.RegisterListener( {
 	AddItems : function( menu, tag, tagName ) {
 		// when the option is displayed, show a separator then the command
-		menu.AddSeparator() ;
+			//menu.AddSeparator() ;//Disabled by Chamilo. TODO:config by toolbar name teacher on/ student off
 		// the command needs the registered command name, the title for the context menu, and the icon path
-		menu.AddItem( 'Abbr', FCKLang.Abbr, oAbbrItem.IconPath ) ;
+			//menu.AddItem( 'Abbr', FCKLang.Abbr, oAbbrItem.IconPath ) ;//Disabled by Chamilo. TODO:config by toolbar name teacher on/ student off
 	}
 }
 );

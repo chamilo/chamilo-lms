@@ -1947,25 +1947,21 @@ class Tracking {
                 $course_in_session[$row['session_id']][$row['course_code']] = CourseManager::get_course_information($row['course_code']);
             }
 
-            $html  = '';
+            $html = '';
+            
             //Courses list
             if ($show_courses) {
                 if (!empty($courses)) {
-                    $html .= '<table class="data_table" width="100%">';
-                    $html .= '<tr class="tableName">
-                            <td colspan="6">
-                                '.Display::tag('h1', get_lang('MyCourses')).'
-                            </td>
-                        </tr>';
-                    $html .= '
-                <tr>                  
-                  '.Display::tag('th', get_lang('Course'),          array('width'=>'300px')).'
-                  '.Display::tag('th', get_lang('Time'),            array('class'=>'head')).'
-                  '.Display::tag('th', get_lang('Progress'),        array('class'=>'head')).'
-                  '.Display::tag('th', get_lang('Score').Display :: return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')),array('class'=>'head')).'
-                  '.Display::tag('th', get_lang('LastConnexion'),   array('class'=>'head')).'      
-                  '.Display::tag('th', get_lang('Details'),         array('class'=>'head')).'
-                </tr>';
+                    $html .= Display::tag('h1', Display::return_icon('course.png', get_lang('MyCourses'), array(), 22).' '.get_lang('MyCourses'));                
+                    $html .= '<table class="data_table" width="100%">';                    
+                    $html .= '<tr>                  
+                              '.Display::tag('th', get_lang('Course'),          array('width'=>'300px')).'
+                              '.Display::tag('th', get_lang('Time'),            array('class'=>'head')).'
+                              '.Display::tag('th', get_lang('Progress'),        array('class'=>'head')).'
+                              '.Display::tag('th', get_lang('Score').Display :: return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')),array('class'=>'head')).'
+                              '.Display::tag('th', get_lang('LastConnexion'),   array('class'=>'head')).'      
+                              '.Display::tag('th', get_lang('Details'),         array('class'=>'head')).'
+                            </tr>';
 
                     foreach ($courses as $enreg) {
                         $weighting = 0;
@@ -2010,11 +2006,10 @@ class Tracking {
                     $html .= '</table>';
                 }
             }
-
+            
             //Session
-            if (!empty($course_in_session)) {
-                $html .= '<br />';
-                $html .= Display::tag('h1',get_lang('Sessions'));
+            if (!empty($course_in_session)) {                
+                $html .= Display::tag('h1',Display::return_icon('session.png', get_lang('Sessions'), array(), 22).' '.get_lang('Sessions'));
 
                 $exercise_graph_list = array();
                 $exercise_graph_name_list = array();
@@ -2025,7 +2020,7 @@ class Tracking {
                     $user_count = count(SessionManager::get_users_by_session($session_id));
 
                     foreach ($course_list as $course_data) {
-                        $exercise_list          = get_all_exercises($course_data, $my_session_id);
+                        $exercise_list = get_all_exercises($course_data, $my_session_id);
 
                         foreach($exercise_list as $exercise_data) {
                             if (!empty($exercise_data['start_time']) && $exercise_data['start_time'] != '0000-00-00 00:00:00') {
@@ -2193,11 +2188,11 @@ class Tracking {
                     
                     if (!empty($session_graph[$key])) {
                         $html .= Display::div($session_graph[$my_session_id], array('id'=>'session_graph_'.$key,'class'=>'chart-session', 'style'=>'position:relative; text-align: center;') );
-                    }     
-                    
-                    
+                    }
                 }
-            }            
+            }       
+            $html = Display::div($html, array('class'=>'rounded_div', 'style'=>'position:relative; float:none; width:95%'));
+  
             return $html;
         }
 
@@ -2230,11 +2225,8 @@ class Tracking {
                 $tbl_course_quiz            = Database :: get_course_table(TABLE_QUIZ_TEST, $course_info['db_name']);
 
                 $session_name = api_get_session_name($session_id);
-
-                $html .='<table class="data_table" width="100%">
-                         <tr class="tableName">
-                            <td colspan="4">'.Display::tag('h3', $course_info['title']).'</td>
-                         </tr><tr>';
+                $html .= Display::tag('h2', $course_info['title']);
+                $html .='<table class="data_table" width="100%">';
                 $html .= Display::tag('th', get_lang('Learnpaths'),     array('class'=>'head', 'style'=>'color:#000'));
                 $html .= Display::tag('th', get_lang('Time'),          array('class'=>'head', 'style'=>'color:#000'));
                 $html .= Display::tag('th', get_lang('Progress'),      array('class'=>'head', 'style'=>'color:#000'));
@@ -2276,7 +2268,6 @@ class Tracking {
 							</td>
 						  </tr>';
                 }
-
                 $html .='</table><br />
                          <table class="data_table" width="100%">';
 
@@ -2382,6 +2373,9 @@ class Tracking {
                     $html .= '<tr><td colspan="5" align="center">'.get_lang('NoEx').'</td></tr>';
                 }
                 $html .= '</table>';
+            }
+            if (!empty($html)) {
+                $html = Display::div($html, array('class'=>'rounded_div', 'style'=>'position:relative; float:none; width:95%'));
             }
             return $html;
         }

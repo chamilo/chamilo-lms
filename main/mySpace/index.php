@@ -185,7 +185,6 @@ if ($is_platform_admin &&  $_GET['display'] != 'yourstudents') {
 		$menu_items[] = get_lang('AdminInterface');
 		$title = get_lang('CoachList');
         $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'tracking/exams.php">'.get_lang('ExamTracking').'</a>';
-		//$menu_items[] = $title;
 	} else {
 		$menu_items[] = '<a href="'.api_get_self().'?view=admin">'.get_lang('AdminInterface').'</a>';
         $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'tracking/exams.php">'.get_lang('ExamTracking').'</a>';

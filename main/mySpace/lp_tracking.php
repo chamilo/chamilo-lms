@@ -47,19 +47,17 @@ if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher($_user['
 
 $course_exits = CourseManager::course_exists($cidReq);
 
-if (!empty($course_exits)) {
-	$_course = CourseManager :: get_course_information($cidReq);
+if (!empty($course_exits)) {	
+	$course_info = api_get_course_info($cidReq);
 } else {
 	api_not_allowed();
 }
 
-//$_course['dbNameGlu'] = $_configuration['table_prefix'] . $_course['db_name'] . $_configuration['db_glue'];
-
 if (!empty($_GET['origin']) && $_GET['origin'] == 'user_course') {
-	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$_course['directory'], 'name' => $_course['title']);
+	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['name']);
 	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$cidReq, "name" => get_lang("Users"));
 } else if(!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
-	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$_course['directory'], 'name' => $_course['title']);
+	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['name']);
 	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$cidReq.'&studentlist=true&id_session='.$_SESSION['id_session'], "name" => get_lang("Tracking"));
 } else {
 	$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
@@ -93,7 +91,7 @@ Display :: display_header($nameTools);
 
 $lp_id = intval($_GET['lp_id']);
 
-$sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN, $_course['db_name']).'	WHERE id='.$lp_id;
+$sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN, $course_info['db_name']).'	WHERE id='.$lp_id;
 $rs  = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
 echo '<div class ="actions">';
@@ -108,12 +106,12 @@ echo '<div class="clear"></div>';
 
 $session_name = api_get_session_name(api_get_session_id());
 $table_title = ($session_name? Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.$session_name.' ':' ').
-                Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$_course['title'].' '.
+                Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_info['name'].' '.
                 Display::return_icon('user.png', get_lang('User'), array(), 22).' '.$name;
 echo '<h2>'.$table_title.'</h2>';
 echo '<h3>'.Display::return_icon('learnpath.png', get_lang('ToolLearnpath'), array(), 22).' '.$lp_title.'</h3>';
     
-$list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $_course['db_name']);
+$list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $course_info['db_name']);
 $origin = 'tracking';
 if ($export_csv) {
 	require_once api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';

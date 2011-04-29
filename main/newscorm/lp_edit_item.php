@@ -35,49 +35,19 @@ $language_file = 'learnpath';
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 
-function FCKeditor_OnComplete( editorInstance )
-{
+function FCKeditor_OnComplete( editorInstance ) {
     document.getElementById(\'frmModel\').innerHTML = "<iframe height=890px; width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
 }
 
-function InnerDialogLoaded()
-{
-    if (document.all)
-    {
+function InnerDialogLoaded() {
+    if (document.all) {
         // if is iexplorer
         var B=new window.frames.content_lp___Frame.FCKToolbarButton(\'Templates\',window.content_lp___Frame.FCKLang.Templates);
-    }
-    else
-    {
+    } else {
         var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
     }
     return B.ClickFrame();
-$};'."\n".
-
-$_SESSION['oLP']->get_js_dropdown_array() .
-
-'function load_cbo(id){' ."\n" .
-  'if (!id) {return false;}'.
-  'var cbo = document.getElementById(\'idPosition\');' .
-  'for(var i = cbo.length - 1; i > 0; i--) {' .
-    'cbo.options[i] = null;' .
-  '}' ."\n" .
-  'var k=0;' .
-  'for(var i = 1; i <= child_name[id].length; i++){' ."\n" .
-  '  cbo.options[i] = new Option(child_name[id][i-1], child_value[id][i-1]);' ."\n" .
-  '  k=i;' ."\n" .
-  '}' ."\n" .
-  //'if( typeof cbo != "undefined" ) {'."\n" .
-  'cbo.options[k].selected = true;'."\n" .
-   //'}'."\n" .
-'}'."\n" .
-'$().ready(function() {'."\n" .
-  'if ($(\'#idPosition\')) {'."\n" .
-    'if(\'parent is\'+$(\'#idParent\').val()) {'.
-      'load_cbo($(\'#idParent\').val());'."\n" .
-  '}}'."\n" .
-'});'."\n" .
-'</script>';
+$};'.$_SESSION['oLP']->get_js_dropdown_array().'</script>';
 
 /* Constants and variables */
 

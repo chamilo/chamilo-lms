@@ -5297,10 +5297,10 @@ class learnpath {
         $return .= '</tr>';
         $return .= '<tr>';
 
-        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '</label></td>';
+        $return .= "\t\t\t" . '<td class="label"><label for="previous">' . get_lang('Position') . '</label></td>';
         $return .= "\t\t\t" . '<td class="input">';
 
-        $return .= "\t\t\t\t" . '<select class="learnpath_item_form" style="width:100%;" id="idPosition" name="previous" size="1">';
+        $return .= "\t\t\t\t" . '<select class="learnpath_item_form" style="width:100%;" id="previous" name="previous" size="1">';
 
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
 
@@ -5509,9 +5509,9 @@ class learnpath {
         $return .= "\t\t\t" . '</td>';
         $return .= "\t\t" . '</tr>';
         $return .= "\t\t" . '<tr>';
-        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . ' :</label></td>';
+        $return .= "\t\t\t" . '<td class="label"><label for="previous">' . get_lang('Position') . ' :</label></td>';
         $return .= "\t\t\t" . '<td class="input">';
-        $return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
+        $return .= "\t\t\t\t" . '<select id="previous" name="previous" size="1">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
 
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -5556,7 +5556,7 @@ class learnpath {
                 }
             }
 
-            $return .= "\t\t" . '<tr>';
+            //$return .= "\t\t" . '<tr>';
 
             //$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').' :</label></td>';
             //$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites"><option value="0">'.get_lang('NoPrerequisites').'</option>';
@@ -5573,9 +5573,9 @@ class learnpath {
             }
 */
             //$return .= "</select></td>";
-            $return .= "\t\t" . '</tr>';
-            $return .= "\t\t" . '<tr>';
-            $return .= "\t\t" . '</tr>';
+            //$return .= "\t\t" . '</tr>';
+            //$return .= "\t\t" . '<tr>';
+            //$return .= "\t\t" . '</tr>';
         }
 
         $return .= "\t\t" . '<tr>';
@@ -5725,9 +5725,9 @@ class learnpath {
         $return .= "\t\t\t" . '</td>';
         $return .= "\t\t" . '</tr>';
         $return .= "\t\t" . '<tr>';
-        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '</label></td>';
+        $return .= "\t\t\t" . '<td class="label"><label for="previous">' . get_lang('Position') . '</label></td>';
         $return .= "\t\t\t" . '<td class="input">';
-        $return .= "\t\t\t\t" . '<select id="idPosition" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
+        $return .= "\t\t\t\t" . '<select id="previous" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
 
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -5919,9 +5919,9 @@ class learnpath {
         $return .= "\t\t\t" . '</td>';
         $return .= "\t\t" . '</tr>';
         $return .= "\t\t" . '<tr>';
-        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '&nbsp;:</label></td>';
+        $return .= "\t\t\t" . '<td class="label"><label for="previous">' . get_lang('Position') . '&nbsp;:</label></td>';
         $return .= "\t\t\t" . '<td class="input">';
-        $return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
+        $return .= "\t\t\t\t" . '<select id="previous" name="previous" size="1">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
@@ -6145,7 +6145,7 @@ class learnpath {
             }
         }
 
-        $position = & $form->addElement('select', 'previous', get_lang('Position'), '', 'id="idPosition" class="learnpath_chapter_form" style="width:37%;"');
+        $position = & $form->addElement('select', 'previous', get_lang('Position'), '', 'id="previous" class="learnpath_chapter_form" style="width:37%;"');
 
         $position->addOption(get_lang('FirstPosition'), 0, 'style="padding-left:' . $value['padding'] . 'px;"');
 
@@ -6266,7 +6266,7 @@ class learnpath {
             $parent = $extra_info['parent_item_id'];
         else
             $parent = 0;
-
+        
         $sql = "SELECT * FROM " . $tbl_lp_item . "
                 WHERE lp_id = " . $this->lp_id;
         $result = Database::query($sql);
@@ -6360,14 +6360,12 @@ class learnpath {
             $my_count++;
         }
 
-        if (!empty ($id)) {
+        if (!empty($id)) {            
             $parent_select->setSelected($parent);
         } else {
             $parent_item_id = $_SESSION['parent_item_id'];
             $parent_select->setSelected($parent_item_id);
         }
-
-
 
         if (is_array($arrLP)) {
             reset($arrLP);
@@ -6381,19 +6379,18 @@ class learnpath {
                 if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
                     $s_selected_position = $arrLP[$i]['id'];
                 elseif ($action == 'add') $s_selected_position = $arrLP[$i]['id'];
-
                 $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After') . ' "' . $arrLP[$i]['title'] . '"';
-
             }
         }
 
-        $position = & $form->addElement('select', 'previous', get_lang('Position'), '', 'id="idPosition" class="learnpath_item_form" style="width:40%;"');
+        $position = & $form->addElement('select', 'previous', get_lang('Position'), '', 'id="previous" class="learnpath_item_form" style="width:40%;"');
         $position->addOption(get_lang('FirstPosition'), 0);
 
         foreach ($arrHide as $key => $value) {
             $position->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
         }
         $position->setSelected($s_selected_position);
+
         if (is_array($arrLP)) {
             reset($arrLP);
         }
@@ -6673,19 +6670,21 @@ class learnpath {
         $return .= "\t\t\t" . '</td>';
         $return .= "\t\t" . '</tr>';
         $return .= "\t\t" . '<tr>';
-        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '</label></td>';
+        $return .= "\t\t\t" . '<td class="label"><label for="previous">' . get_lang('Position') . '</label></td>';
         $return .= "\t\t\t" . '<td class="input">';
-        $return .= "\t\t\t\t" . '<select id="idPosition" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
+        
+        $return .= "\t\t\t\t" . '<select id="previous" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent_item_id && $arrLP[$i]['id'] != $id) {
                 if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
                     $selected = 'selected="selected" ';
-                elseif ($action == 'add') $selected = 'selected="selected" ';
+                elseif ($action == 'add') 
+                    $selected = 'selected="selected" ';
                 else
                     $selected = '';
 
-                $return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
+                $return .= '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
             }
         }
         $return .= "\t\t\t\t" . '</select>';
@@ -6886,9 +6885,9 @@ class learnpath {
         $return .= "\t\t\t" . '</td>';
         $return .= "\t\t" . '</tr>';
         $return .= "\t\t" . '<tr>';
-        $return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '</label></td>';
+        $return .= "\t\t\t" . '<td class="label"><label for="previous">' . get_lang('Position') . '</label></td>';
         $return .= "\t\t\t" . '<td class="input">';
-        $return .= "\t\t\t\t" . '<select id="idPosition" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
+        $return .= "\t\t\t\t" . '<select id="previous" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {

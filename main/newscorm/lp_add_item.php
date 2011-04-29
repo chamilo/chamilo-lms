@@ -117,7 +117,7 @@ $_SESSION['oLP']->get_js_dropdown_array() .
 
 'function load_cbo(id){' ."\n" .
   'if (!id) {return false;}'.
-  'var cbo = document.getElementById(\'idPosition\');' .
+  'var cbo = document.getElementById(\'previous\');' .
   'for(var i = cbo.length - 1; i > 0; i--) {' .
     'cbo.options[i] = null;' .
   '}' ."\n" .
@@ -131,7 +131,7 @@ $_SESSION['oLP']->get_js_dropdown_array() .
    //'}'."\n" .
 '}'."\n" .
 '$().ready(function() {'."\n" .
-  'if ($(\'#idPosition\')) {'."\n" .
+  'if ($(\'#previous\')) {'."\n" .
     'if(\'parent is\'+$(\'#idParent\').val()) {'.
       'load_cbo($(\'#idParent\').val());'."\n" .
   '}}'."\n" .

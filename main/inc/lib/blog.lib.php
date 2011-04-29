@@ -1196,14 +1196,7 @@ class Blog {
 			echo '<div class="row"><div class="form_header">' . get_lang('NewPost') . '</div></div>';
 
 			// article title
-			echo '<div class="row">
-						<div class="label" >
-							<span class="form_required">*</span>'.get_lang('Title') . '
-						</div>
-						<div class="formw">
-							<input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" />
-						</div>
-					</div>';
+			echo '<div><span class="form_required">*</span>'.get_lang('Title') . ': <input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" /></div></br>';
 
 			// article text
 			$oFCKeditor = new FCKeditor('post_full_text') ;
@@ -1216,14 +1209,9 @@ class Blog {
 			}
 			$oFCKeditor->Value = isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
 
-			echo '<div class="row">
-						<div class="label">
-							' . get_lang('PostFullText') . '
-						</div>
-						<div class="formw">';
+			echo '<div class="formw">';
 			$oFCKeditor->Create();
-			echo '		</div>
-					</div>';
+			echo '</div>';
 
 			// attachment
 			echo '<div class="row">
@@ -1294,14 +1282,7 @@ class Blog {
 		echo '<div class="row"><div class="form_header">' . get_lang('EditPost') . '</div></div>';
 
 		// article title
-		echo '	<div class="row">
-					<div class="label">
-						<span class="form_required">*</span>' . get_lang('Title') . '
-					</div>
-					<div class="formw">
-						<input name="post_title" id="post_title" type="text" size="60" value="'.stripslashes($blog_post['title']) . '" />
-					</div>
-				</div>';
+		echo '<div><span class="form_required">*</span>' . get_lang('Title') . ': <input name="post_title" id="post_title" type="text" size="60" value="'.stripslashes($blog_post['title']) . '" /></br></div>';
 
 		// article text
 								$oFCKeditor = new FCKeditor('post_full_text') ;
@@ -1318,14 +1299,9 @@ class Blog {
 									$oFCKeditor->ToolbarSet = 'Project';
 								}
 								$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):$blog_post_text;
-		echo '	<div class="row">
-					<div class="label">
-						' . get_lang('PostFullText') . '
-					</div>
-					<div class="formw">';
+		echo '<div class="formw">';
 		echo $oFCKeditor->Create();
-		echo '		</div>
-				</div>';
+		echo '</div>';
 
 
 		// submit
@@ -2390,14 +2366,7 @@ class Blog {
 		echo '</div></div>';
 
 		// comment title
-		echo '	<div class="row">
-					<div class="label">
-						<span class="form_required">*</span>' . get_lang('Title') . '
-					</div>
-					<div class="formw">
-						<input name="comment_title" id="comment_title" type="text" size="60" value="Re: '.stripslashes($title) . '" />
-					</div>
-				</div>';
+		echo '<div><span class="form_required">*</span>' . get_lang('Title') . ': <input name="comment_title" id="comment_title" type="text" size="60" value="Re: '.stripslashes($title) . '" /></div></br>';
 
 		// comment text
 		$oFCKeditor = new FCKeditor('comment_text') ;
@@ -2412,13 +2381,9 @@ class Blog {
 			$oFCKeditor->ToolbarSet = 'ProjectComment';
 		}
 		$oFCKeditor->Value		= isset($_POST['comment_text'])?stripslashes($_POST['comment_text']):'';
-		echo '	<div class="row">
-					<div class="label">
-						' . get_lang('Comment') . '
-					</div>
-					<div class="formw">';
+		echo '<div class="formw">';
 		echo $oFCKeditor->Create() ;
-		echo '		</div>
+		echo '
 				</div>';
 
 		// attachment

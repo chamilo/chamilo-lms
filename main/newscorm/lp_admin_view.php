@@ -88,9 +88,13 @@ if (!empty($gradebook) && $gradebook == 'view') {
         );
 }
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('_learning_path'));
-
-$interbreadcrumb[] = array('url' => api_get_self()."?action=admin_view&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
+$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
+$interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
+if (isset($_REQUEST['updateaudio'])) {
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UpdateAllAudioFragments'));
+} else {
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('BasicOverview'));
+}
 
 // Theme calls.
 $show_learn_path = true;
@@ -129,21 +133,16 @@ function confirmation(name)
 
 switch ($_GET['action']) {
     case 'edit_item':
-
         if (isset($is_success) && $is_success === true) {
             Display::display_confirmation_message(get_lang('_learnpath_item_edited'));
         } else {
             echo $_SESSION['oLP']->display_edit_item($_GET['id']);
         }
-
         break;
-
     case 'delete_item':
-
         if (isset($is_success) && $is_success === true) {
             Display::display_confirmation_message(get_lang('_learnpath_item_deleted'));
         }
-
         break;
 }
 
@@ -166,9 +165,7 @@ if (isset($_POST['save_audio'])) {
     if (count($lp_items_to_remove_audio)>0) {
         $sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE id IN (".$in.")";
         $result = Database::query($sql);
-    }
-    
-                
+    }           
 
     // Uploading the audio files.
     foreach ($_FILES as $key => $value) {

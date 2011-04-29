@@ -107,13 +107,13 @@ if (!empty($gradebook) && $gradebook == 'view') {
         'name' => get_lang('ToolGradebook')
     );
 }
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('_learning_path'));
+$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
 
 // Theme calls.
 $lp_theme_css=$_SESSION['oLP']->get_theme();
 $show_learn_path = true;
-Display::display_header(get_lang('LearningPath'), 'Path');
+Display::display_header('', 'Path');
 
 //api_display_tool_title($therow['name']);
 

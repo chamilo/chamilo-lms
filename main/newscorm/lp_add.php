@@ -101,10 +101,9 @@ if (!empty($gradebook) && $gradebook=='view') {
         );
 }
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('_learning_path'));
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('_add_learnpath'));
+$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 
-Display::display_header(null, 'Path');
+Display::display_header(get_lang('_add_learnpath'), 'Path');
 
 echo '<div class="actions">';
 echo '<a href="lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('back.png', get_lang('ReturnToLearningPaths'),'','32').'</a>';

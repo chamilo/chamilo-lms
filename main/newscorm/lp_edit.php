@@ -28,11 +28,10 @@ if (!empty($gradebook) && $gradebook == 'view') {
             'name' => get_lang('ToolGradebook')
         );
 }
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('_learning_path'));
+$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=admin_view&lp_id=$learnpath_id", 'name' => $_SESSION['oLP']->get_name());
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-        
+$htmlHeadXtra[] = '<script type="text/javascript">        
     function timelimit() {
         if(document.getElementById(\'options2\').style.display == \'none\')
         {
@@ -40,12 +39,11 @@ $htmlHeadXtra[] = '<script type="text/javascript">
         } else {
             document.getElementById(\'options2\').style.display = \'none\';
         }
-    }
-     
+    }     
 </script>';
 
 
-Display::display_header(null, 'Path');
+Display::display_header(get_lang('CourseSettings'), 'Path');
 
 // Action links
 echo '<div class="actions">';
@@ -60,9 +58,10 @@ echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']
 echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=chapter&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('NewChapter').'">
 '.Display::return_icon('add_learnpath_section.png', get_lang('NewChapter'),'','32').'</a>';
 
-echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('scorms.png',get_lang('ReturnToLearningPaths'),'','32').'</a>';
-
 echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.Display::return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'','32').'</a>';
+
+echo Display::url(Display::return_icon('settings_na.png', get_lang('CourseSettings'),'','32'), '#');
+//echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('scorms_na.png',get_lang('ReturnToLearningPaths'),'','32').'</a>';
 
 echo '</div>';
 

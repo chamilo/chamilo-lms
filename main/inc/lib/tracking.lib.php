@@ -1982,7 +1982,7 @@ class Tracking {
                             $html .= '<tr class="row_even">';
                         }
                         $url = api_get_course_url($enreg['code'], $session_id);
-                        $course_url = Display::url($enreg['title'], $url, array('target'=>'_blank'));
+                        $course_url = Display::url($enreg['title'], $url);
                         $html .= '<td>'.$course_url.'</td>';
 
                         $html .= '<td align="center">'.$time.'</td>';

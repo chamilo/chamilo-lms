@@ -261,4 +261,5 @@ $HelpPediaphon = "Podpira besedilo do nekaj 1000 znakov in različne vrste mošk
 $FirstSelectALanguage = "Izberite jezik";
 $RenameAndComment = "Preimenuj in komentiraj";
 $YouAreCurrentlyUsingXOfYourX = "Trenutno uporabljate %s (%s) od vaših (%s).";
+$UplUploadFailedSizeIsZero = "Prenos datoteke dolžine 0 zlogov ni možen.";
 ?>

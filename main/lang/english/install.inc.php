@@ -118,4 +118,5 @@ $UpgradeFromDokeos16x = "Upgrade from Chamilo 1.6.x";
 $UpgradeFromDokeos18x = "Upgrade from Chamilo 1.8.x";
 $SuggestionOnlyToEnableCSSUploadFeature = "Suggestion only if you want to enable the CSS upload feature";
 $SuggestionOnlyToEnableSubLanguageFeature = "Suggestion only if you want to enable the sub-language feature";
+$IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "If you plan to upgrade from an older version of Chamilo, you might want to <a href=\"../../documentation/changelog.html\" target=\"_blank\">have a look at the changelog</a> to know what's new and what has been changed";
 ?>

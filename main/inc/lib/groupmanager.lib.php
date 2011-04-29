@@ -1520,5 +1520,77 @@ class GroupManager {
 	    }
 	    return $groups;
 	}
+	
+    /**
+     *   fill_groups_list
+     *
+     * see : fill_groups
+     *       Fill the groups with students.
+     *
+     * note : 
+     *        optimize fill_groups_list <--> fill_groups
+     * 
+     */
+    public static function fill_groups_list ($group_ids) {
+        $group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
+        $group_ids = array_map('intval',$group_ids);
+
+        if (api_is_course_coach()) {
+            for($i=0 ; $i<count($group_ids) ; $i++) {
+                if(!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i])) {
+                    array_splice($group_ids,$i,1);
+                    $i--;
+                }
+            }
+            if (count($group_ids)==0){
+                return false;}
+        }
+
+        global $_course;
+        $category = self :: get_category_from_group($group_ids[0]);
+        $groups_per_user = $category['groups_per_user'];
+        $course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+        $group_table = Database :: get_course_table(TABLE_GROUP);
+        $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
+        $session_id = api_get_session_id();
+        $complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['sysCode'], true, $session_id);
+        $number_groups_per_user = ($groups_per_user == GROUP_PER_MEMBER_NO_LIMIT ? INFINITE : $groups_per_user);
+        /*
+         * Retrieve all the groups where enrollment is still allowed
+         * (reverse) ordered by the number of place available
+         */
+        $sql = "SELECT g.id gid, g.max_student-count(ug.user_id) nbPlaces, g.max_student
+                FROM ".$group_table." g
+                LEFT JOIN  ".$group_user_table." ug
+                ON    g.id = ug.group_id
+                WHERE g.id IN (".implode(',', $group_ids).")
+                GROUP BY (g.id)
+                HAVING (nbPlaces > 0 OR g.max_student = ".MEMBER_PER_GROUP_NO_LIMIT.")
+                ORDER BY nbPlaces DESC";
+        $sql_result = Database::query($sql);
+        $group_available_place = array ();
+        while ($group = Database::fetch_array($sql_result, 'ASSOC'))
+        {
+            $group_available_place[$group['gid']] = $group['nbPlaces'];
+        }
+        /*
+         * Retrieve course users (reverse) ordered by the number
+         * of group they are already enrolled
+         */
+        for ($i = 0; $i < count($complete_user_list); $i ++)
+        {
+
+            //find # of groups the user is enrolled in
+            $number_of_groups = self :: user_in_number_of_groups($complete_user_list[$i]["user_id"],$category['id']);
+            //add # of groups to user list
+            $complete_user_list[$i]['number_groups_left'] = $number_groups_per_user - $number_of_groups;
+        }
+        //first sort by user_id to filter out duplicates
+        $complete_user_list = TableSort :: sort_table($complete_user_list, 'user_id');
+        $complete_user_list = self :: filter_duplicates($complete_user_list, 'user_id');
+        $complete_user_list = self :: filter_only_students($complete_user_list);
+        //now sort by # of group left
+        $complete_user_list = TableSort :: sort_table($complete_user_list, 'number_groups_left', SORT_DESC);           
+        return $complete_user_list;
+    }		
 }
-?>

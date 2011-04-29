@@ -450,9 +450,10 @@ if ($_GET['studentlist'] == 'false') {
     $course_name = get_lang('Course').' '.$course_info['name'];
     
     if (api_get_session_id()) {
-        echo '<h2>'.get_lang('Session').' '.api_get_session_name(api_get_session_id()).' | '.$course_name.'</h2>';
+        echo '<h2>'.Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.api_get_session_name(api_get_session_id()).' '.
+                    Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_name.'</h2>';
     } else {
-        echo '<h2>'.get_lang('Course').' '.$course_info['name'].'</h2>';
+        echo '<h2>'.Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_info['name'].'</h2>';
     }    
     $extra_field_select = TrackingCourseLog::display_additional_profile_fields();
     

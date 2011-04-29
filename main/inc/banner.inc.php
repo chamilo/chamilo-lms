@@ -46,18 +46,6 @@ if (isset($database_connection)) {
     Database::select_db($_configuration['main_database'], $database_connection);
 }
 echo '</div>'; // <!-- end of the whole #header section -->
-
-//to mask the main div, set $header_hide_main_div to true in any script just before calling Display::display_header();
-/*
- * this is replaced by the reduce header used when loading LPs
-global $header_hide_main_div; 
-if (!empty($header_hide_main_div) && $header_hide_main_div === true) {
-    //do nothing
-} else {    
-    echo '<div id="main">'; //<!-- start of #main wrapper for #content and #menu divs -->
-    echo '<div id="submain">'; 
-}*/
-
 echo '<div id="main">';
 echo '<div id="submain">';  
 

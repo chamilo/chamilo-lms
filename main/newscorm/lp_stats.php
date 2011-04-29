@@ -16,21 +16,18 @@ require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once '../exercice/exercise.lib.php';
 
-if (empty($_SESSION['_course']['id']) && isset($_GET['course'])) {
-    $course_code = Security::remove_XSS($_GET['course']);
+$course_id = api_get_course_id();
+if (empty($course_id ) && isset($_GET['course'])) {
+    $course_code = Security::remove_XSS($_GET['course']);    
 } else {
-    $course_code = $_SESSION['_course']['id'];
+    $course_code = $course_id;
 }
 
 if (isset($_GET['student_id'])) {
     $student_id = intval($_GET['student_id']);
 }
-$session_id = api_get_session_id();
+$session_id        = api_get_session_id();
 $session_condition = api_get_session_condition($session_id);
-//The two following variables have to be declared by the includer script
-//$lp_id = $_SESSION['oLP']->get_id();
-//$list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
-//$user_id = $_user['user_id'];
 
 //When origin is not set that means that the lp_stats are viewed from the "man running" icon
 if (!isset($origin))
@@ -84,12 +81,16 @@ $output .= '<tr><td>&nbsp;</td></tr><tr><td><table border="0" class="data_table"
 // Going through the items using the $items[] array instead of the database order ensures
 // we get them in the same order as in the imsmanifest file, which is rather random when using
 // the database table.
-$TBL_LP_ITEM = Database :: get_course_table(TABLE_LP_ITEM);
-$TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
-$TBL_LP_VIEW = Database :: get_course_table(TABLE_LP_VIEW);
-$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-$tbl_quiz_questions= Database :: get_course_table(TABLE_QUIZ_QUESTION);
+
+$course_info            = api_get_course_info($course_code);
+$TBL_LP_ITEM            = Database :: get_course_table(TABLE_LP_ITEM, $course_info['db_name']);
+$TBL_LP_ITEM_VIEW       = Database :: get_course_table(TABLE_LP_ITEM_VIEW, $course_info['db_name']);
+$TBL_LP_VIEW            = Database :: get_course_table(TABLE_LP_VIEW, $course_info['db_name']);
+$tbl_quiz_questions     = Database :: get_course_table(TABLE_QUIZ_QUESTION, $course_info['db_name']);
+$TBL_QUIZ               = Database :: get_course_table(TABLE_QUIZ_TEST, $course_info['db_name']);
+$tbl_stats_exercices    = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$tbl_stats_attempts     = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
 $sql = "SELECT max(view_count) FROM $TBL_LP_VIEW WHERE lp_id = $lp_id AND user_id = '" . $user_id . "' $session_condition";
 $res = Database::query($sql);
 $view = '';
@@ -133,7 +134,7 @@ if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
     }
 }
 
-$TBL_QUIZ = Database :: get_course_table(TABLE_QUIZ_TEST);
+
 
 if (is_array($list) && count($list) > 0) {
     foreach ($list as $my_item_id) {
@@ -389,8 +390,8 @@ if (is_array($list) && count($list) > 0) {
             // Check if there are interactions below.
             $extend_attempt_link = '';
             $extend_this_attempt = 0;
-            $inter_num = learnpath :: get_interactions_count_from_db($row['iv_id']);
-            $objec_num = learnpath :: get_objectives_count_from_db($row['iv_id']);
+            $inter_num = learnpath::get_interactions_count_from_db($row['iv_id']);
+            $objec_num = learnpath::get_objectives_count_from_db($row['iv_id']);
             if (($inter_num > 0 || $objec_num > 0) && !$extend_all) {
                 if (!empty ($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
                     // The extend button for this attempt has been clicked.
@@ -486,9 +487,7 @@ if (is_array($list) && count($list) > 0) {
                 }
             }
             $time_for_total = $subtotal_time;
-            //$subtotal_time.' - ';
             $time = learnpathItem :: get_scorm_time('js', $subtotal_time);
-            //var_dump($time );
             if (empty ($title)) {
                 $title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
             }
@@ -696,7 +695,6 @@ if (is_array($list) && count($list) > 0) {
         }
     }
 }
-//var_dump($a_my_id);
 //NOT Extend all "left green cross"
 if (!empty($a_my_id)) {    
     $my_studen_id = 0;

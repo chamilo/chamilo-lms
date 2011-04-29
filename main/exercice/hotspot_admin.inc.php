@@ -1,16 +1,13 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
-//error_log(__FILE__);
+/* For licensing terms, see /license.txt */
 /**
 *	This script allows to manage answers. It is included from the script admin.php
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Toon Keppens
-* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
-if(!defined('ALLOWED_TO_INCLUDE')) {
+if (!defined('ALLOWED_TO_INCLUDE')) {
 	exit();
 }
 $modifyAnswers = intval($_GET['hotspotadmin']);
@@ -24,13 +21,13 @@ $answerType     = $objQuestion->selectType();
 $pictureName    = $objQuestion->selectPicture();
 $debug = 0; // debug variable to get where we are
 
-$okPicture=empty($pictureName)?false:true;
+$okPicture = empty($pictureName)?false:true;
 
 // if we come from the warning box "this question is used in serveral exercises"
-if($modifyIn) {
+if ($modifyIn) {    
     if($debug>0){echo '$modifyIn was set'."<br />\n";}
     // if the user has chosed to modify the question only in the current exercise
-    if($modifyIn == 'thisExercise') {
+    if ($modifyIn == 'thisExercise') {
         // duplicates the question
         $questionId=$objQuestion->duplicate();
 
@@ -108,7 +105,7 @@ if ($submitAnswers || $buttonBack) {
 	    }  // end for()
 	
 	
-	    if(empty($msgErr)) {
+	    if (empty($msgErr)) {
 	    	for($i=1;$i <= $nbrAnswers;$i++) {
 	            if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is HOT_SPOT'."<br />\n";}
 	            $reponse[$i]=trim($reponse[$i]);
@@ -283,6 +280,7 @@ if ($submitAnswers || $buttonBack) {
 	
 	        $editQuestion=$questionId;
 	        unset($modifyAnswers);
+	        
 	        echo '<script type="text/javascript">window.location.href="'.$hotspot_admin_url.'"</script>';
 	    }
 	    
@@ -300,7 +298,7 @@ if ($modifyAnswers) {
 	if($debug>0){echo str_repeat('&nbsp;',2).'$answerType is HOT_SPOT'."<br />\n";}
 	$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 	
-	if ($answerType==HOT_SPOT_DELINEATION) {
+	if ($answerType == HOT_SPOT_DELINEATION) {
 		$try=$_POST['try'];
 		
 		for($i=1;$i <= $nbrAnswers;$i++) {
@@ -426,7 +424,7 @@ if ($modifyAnswers) {
 		}
     }
 
-    if($moreAnswers) {
+    if ($moreAnswers) {
     	if ($nbrAnswers < 12) {
             $nbrAnswers++;
 
@@ -460,31 +458,31 @@ if ($modifyAnswers) {
     	}
     }
 
-        if($debug>0){echo str_repeat('&nbsp;',2).'$usedInSeveralExercises is untrue'."<br />\n";}
-        if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is HOT_SPOT'."<br />\n";}
-        if 	($answerType==HOT_SPOT_DELINEATION) {        	        	        	        	
-    	    $hotspot_colors = array("", "#4271B5", "#FE8E16", "#45C7F0", "#BCD631", "#D63173", "#D7D7D7", "#90AFDD", "#AF8640", "#4F9242", "#F4EB24", "#ED2024", "#3B3B3B");        	        		
-	    } else {
-            $hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
-            						"#4271B5",
-    								"#FE8E16",
-    								"#45C7F0",
-    								"#BCD631",
-    								"#D63173",
-    								"#D7D7D7",
-    								"#90AFDD",
-    								"#AF8640",
-    								"#4F9242",
-    								"#F4EB24",
-    								"#ED2024",
-    								"#3B3B3B",
-    								"#F7BDE2");
-		}
+    if($debug>0){echo str_repeat('&nbsp;',2).'$usedInSeveralExercises is untrue'."<br />\n";}
+    if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is HOT_SPOT'."<br />\n";}
+    if 	($answerType==HOT_SPOT_DELINEATION) {        	        	        	        	
+	    $hotspot_colors = array("", "#4271B5", "#FE8E16", "#45C7F0", "#BCD631", "#D63173", "#D7D7D7", "#90AFDD", "#AF8640", "#4F9242", "#F4EB24", "#ED2024", "#3B3B3B");        	        		
+    } else {
+        $hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
+        						"#4271B5",
+								"#FE8E16",
+								"#45C7F0",
+								"#BCD631",
+								"#D63173",
+								"#D7D7D7",
+								"#90AFDD",
+								"#AF8640",
+								"#4F9242",
+								"#F4EB24",
+								"#ED2024",
+								"#3B3B3B",
+								"#F7BDE2");
+	}
                                 
-Display::tag('h3',get_lang('Question').": ".$questionName.' <img src="../img/info3.gif" title="'.strip_tags(get_lang('HotspotChoose')).'" alt="'.strip_tags(get_lang('HotspotChoose')).'" />');
-if(!empty($msgErr)) {
-    Display::display_normal_message($msgErr); //main API
-}
+    Display::tag('h3',get_lang('Question').": ".$questionName.' <img src="../img/info3.gif" title="'.strip_tags(get_lang('HotspotChoose')).'" alt="'.strip_tags(get_lang('HotspotChoose')).'" />');
+    if(!empty($msgErr)) {
+        Display::display_normal_message($msgErr); //main API
+    }
 ?>
 
 <form method="post" action="<?php echo $hotspot_admin_url; ?>" id="frm_exercise" name="frm_exercise">
@@ -523,7 +521,7 @@ if(!empty($msgErr)) {
 		</td>
 	</tr>
 	<tr>
-		<td valign="top" style="border:1px solid #4271b5;border-top:none;border-bottom:none;border-right:none;" >			
+		<td valign="top">			
 				<input type="hidden" name="formSent" value="1" />
 				<input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>" />
 				<table class="data_table">
@@ -686,11 +684,8 @@ if(!empty($msgErr)) {
 									</td>
 							  	<?php } else {?>
 							  		<td> &nbsp;</td>	
-							  	<?php } ?>		
-
-							<?php
-					  		}
-					  		//					  		
+							  	<?php } 
+					  		}							  		
 					  		//elseif ($_SESSION['tmp_answers']['hotspot_type'][$i]=='noerror' || $_SESSION['tmp_answers']['answer'][$i]=='noerror')
 					  		elseif (false)
 							{ 
@@ -847,10 +842,8 @@ if(!empty($msgErr)) {
 						<input type="hidden" name="weighting[<?php echo $i; ?>]" size="3" value="0" />
 					<?php } else { ?>
 						<input type="text" name="weighting[<?php echo $i; ?>]" size="3" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
-					<?php }
-				
-				}	
-						
+					<?php }				
+				}							
 				if ($answerType==HOT_SPOT) {
 				?>
 			  		<input type="text" name="weighting[<?php echo $i; ?>]" size="3" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
@@ -860,11 +853,10 @@ if(!empty($msgErr)) {
 				}								
 				?>
 			  </td>				  	
-			</tr>
-					
+			</tr>					
 				<?php					  		
 			}			
-			require_once('../newscorm/learnpathList.class.php');
+			require_once '../newscorm/learnpathList.class.php';
 			//require_once(api_get_path(LIBRARY_PATH).'text.lib.php');												
 			$list = new LearnpathList(api_get_user_id());
 			$flat_list = $list->get_flat_list();
@@ -996,9 +988,6 @@ if(!empty($msgErr)) {
 	</tr>
 </table>
 </form>
-
 <?php
-
     if($debug>0){echo str_repeat('&nbsp;',0).'$modifyAnswers was set - end'."<br />\n";}
 }
-?>

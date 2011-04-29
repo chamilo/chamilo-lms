@@ -384,14 +384,16 @@ function show_header_3() {
         
     $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
     
-    if (api_get_self() != '/main/admin/configure_homepage.php') {        
-        $open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
-        $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-        if (!empty($open)) {
-            $lis .= Display::tag('li', $open);
-            $show_bar = true;
-        }
-    } else {        
+    //if (api_get_self() != '/main/admin/configure_homepage.php') {        
+    $open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
+    $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+    if (!empty($open)) {
+        $lis .= Display::tag('li', $open);
+        $show_bar = true;
+    }
+    //} else {     
+    //This code was moved in the admin/configure_homepage.php file  
+        /*  
         $home_menu = '';
         if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
             $home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
@@ -421,7 +423,8 @@ function show_header_3() {
             }
         }
         $lis .= '<li id="insert-link"><a href="'.api_get_self().'?action=insert_tabs" style="padding-right:0px;"><span>'. Display::return_icon('addd.gif', get_lang('InsertLink'), array('style' => 'vertical-align:middle')).' '.get_lang('InsertLink').'</span></a></li>';
-    }
+        */
+    //}
     
     if (count($navigation) > 1 || !empty($lis)) {        
         $pre_lis = '';
@@ -505,10 +508,14 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
         $navigation[] = $navigation_item;
     }
     // part 2: Interbreadcrumbs. If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb (which is the tool itself)
-    if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
+    if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {        
         foreach ($interbreadcrumb as $breadcrumb_step) {
-            $sep = (strrchr($breadcrumb_step['url'], '?') ? '&amp;' : '?');
-            $navigation_item['url'] = $breadcrumb_step['url'].$sep.api_get_cidreq();
+            if ($breadcrumb_step['url'] != '#') {                
+                $sep = (strrchr($breadcrumb_step['url'], '?') ? '&amp;' : '?');
+                $navigation_item['url'] = $breadcrumb_step['url'].$sep.api_get_cidreq();
+            } else {
+                $navigation_item['url'] = '#';
+            }                        
             $navigation_item['title'] = $breadcrumb_step['name'];
             // titles for shared folders
             if ($breadcrumb_step['name'] == 'shared_folder') {
@@ -535,6 +542,7 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
         }
     }
     
+    
     // part 3: The tool itself. If we are on the course homepage we do not want to display the title of the course because this
     // is the same as the first part of the breadcrumbs (see part 1)
     if (isset($nameTools) && $language_file != 'course_home') { // TODO: This condition $language_file != 'course_home' might bring surprises.
@@ -545,6 +553,7 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
     
     $final_navigation = array();
     $counter = 0;
+    
     foreach ($navigation as $index => $navigation_info) {
         if (!empty($navigation_info['title'])) {
             if ($navigation_info['url'] == '#') {

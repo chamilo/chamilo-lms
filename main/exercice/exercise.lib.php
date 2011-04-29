@@ -640,9 +640,9 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
 						// Check to see if the version meets the requirements for playback
 						if (hasReqestedVersion) {  // if we\'ve detected an acceptable version
-						    var oeTags = \'<object type="application/x-shockwave-flash" data="../plugin/hotspot/'.$swf_file.'?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" width="600" height="'.$swf_height.'">\'
+						    var oeTags = \'<object type="application/x-shockwave-flash" data="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" width="600" height="'.$swf_height.'">\'
 						    			+ \'<param name="wmode" value="transparent">\'
-										+ \'<param name="movie" value="../plugin/hotspot/'.$swf_file.'?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" />\'
+										+ \'<param name="movie" value="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" />\'
 										+ \'<\/object>\';
 						    document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
 						} else {  // flash is too old or we can\'t detect the plugin

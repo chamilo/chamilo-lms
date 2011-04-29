@@ -158,7 +158,7 @@ if (api_is_allowed_to_create_course() && $_GET['display'] != 'yourstudents') {
 		} else {
 			if (!empty($session_id)) {
 				$session_name = api_get_session_name($session_id);
-				$title = get_lang('Session').' '.$session_name;
+				$title = Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.$session_name;
 			}            
 			$menu_items[] = '<a href="'.api_get_self().'?view=teacher">'.get_lang('TeacherInterface').'</a>';            
 		}
@@ -185,7 +185,6 @@ if ($is_platform_admin &&  $_GET['display'] != 'yourstudents') {
 		$menu_items[] = get_lang('AdminInterface');
 		$title = get_lang('CoachList');
         $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'tracking/exams.php">'.get_lang('ExamTracking').'</a>';
-		//$menu_items[] = $title;
 	} else {
 		$menu_items[] = '<a href="'.api_get_self().'?view=admin">'.get_lang('AdminInterface').'</a>';
         $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'tracking/exams.php">'.get_lang('ExamTracking').'</a>';

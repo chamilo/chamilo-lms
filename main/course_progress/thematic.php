@@ -99,7 +99,7 @@ if ($action == 'thematic_list') {
 			echo '<td>';					
             
 			if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {
-				echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_plan_list&thematic_id='.$thematic['id'].'">'.Display::return_icon('lp_quiz.png',get_lang('EditThematicPlan'),array('style'=>'vertical-align:middle')).'</a></div><br />';
+				echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_plan_list&thematic_id='.$thematic['id'].'">'.Display::return_icon('edit.png',get_lang('EditThematicPlan'),array('style'=>'vertical-align:middle'),22).'</a></div><br />';
 			}  
                     
             $new_thematic_plan_data = array();
@@ -140,7 +140,7 @@ if ($action == 'thematic_list') {
 			// display thematic advance data
 			echo '<td>';					
 			if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {
-				echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_advance_list&thematic_id='.$thematic['id'].'">'.Display::return_icon('lp_quiz.png',get_lang('EditThematicAdvance'),array('style'=>'vertical-align:middle')).'</a></div><br />';
+				echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_advance_list&thematic_id='.$thematic['id'].'">'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array('style'=>'vertical-align:middle'),22).'</a></div><br />';
 			}					
 			
 			//if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {

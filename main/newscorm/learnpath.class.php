@@ -3876,6 +3876,10 @@ class learnpath {
     public function set_terms_by_prefix($terms_string, $prefix) {
         if (api_get_setting('search_enabled') !== 'true')
             return false;
+            
+        if (!extension_loaded('xapian')) {
+            return false;
+        }
 
         $terms_string = trim($terms_string);
         $terms = explode(',', $terms_string);
@@ -4572,15 +4576,15 @@ class learnpath {
             if ($_GET['updateaudio'] == 'true') {            
                 $return .= Display::url(Display :: return_icon('upload_audio_na.png', get_lang('UpdateAllAudioFragments'),'','32'),'#');
             } else {
-                $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=' . Security :: remove_XSS($_GET['action']) . '&amp;lp_id=' . Security :: remove_XSS($_GET['lp_id']) . '&amp;updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'','32').'</a>';
+                $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=' . Security :: remove_XSS($_GET['action']) . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '&amp;updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'','32').'</a>';
             }
-            $return .= '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit&amp;lp_id=' . Security :: remove_XSS($_GET['lp_id']) . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'','32').'</a>';
+            $return .= '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'','32').'</a>';
             $return .= '</div>';
         }
 
         // we need to start a form when we want to update all the mp3 files
         if ($_GET['updateaudio'] == 'true' AND count($arrLP) <> 0) {
-            $return .= '<form action="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=' . Security :: remove_XSS($_GET['action']) . '&amp;lp_id=' . Security :: remove_XSS($_GET['lp_id']) . '" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
+            $return .= '<form action="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=' . Security :: remove_XSS($_GET['action']) . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
             $return .= Display::return_message(get_lang('LeaveEmptyToKeepCurrentFile'), 'warning');
         }
         $return .= '<table class="data_table">';
@@ -4726,8 +4730,8 @@ class learnpath {
         echo '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewStep') . '">' . Display :: return_icon('new_learnigpath_object.png', get_lang('NewStep'),'','32').'</a>';
         
 		echo '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewChapter') . '">' . Display :: return_icon('add_learnpath_section.png', get_lang('NewChapter'),'','32').'</a>';
-        echo '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=admin_view&amp;lp_id=' . Security :: remove_XSS($_GET['lp_id']) . '&amp;updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'','32').'</a>';
-        echo '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit&amp;lp_id=' . Security :: remove_XSS($_GET['lp_id']) . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'','32').'</a>';
+        echo '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '&amp;updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'','32').'</a>';
+        echo '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'','32').'</a>';
         echo '</div>';
     }
 

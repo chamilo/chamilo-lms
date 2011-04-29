@@ -44,14 +44,11 @@ if (!api_is_allowed_to_edit(false,true)) {
  *  List all users registered to the course
  */
 function search_members_keyword($firstname, $lastname, $username, $official_code, $keyword) {
-	if (api_strripos($firstname, $keyword) !== false || api_strripos($lastname, $keyword) !== false || api_strripos($username, $keyword) !== false || api_strripos($official_code, $keyword) !== false) {
-		var_dump($firstname);
-		echo 'aaaaa111111';
+	if (api_strripos($firstname, $keyword) !== false || api_strripos($lastname, $keyword) !== false || api_strripos($username, $keyword) !== false || api_strripos($official_code, $keyword) !== false) {		
 		return true;
 	} else {
 		return false;
-	}
-	
+	}	
 }
 
 
@@ -189,10 +186,11 @@ $form->addElement('radio', 'chat_state', null, get_lang('Private'), TOOL_PRIVATE
 //$form = new FormValidator('search_member', 'get', 'group_edit', '', null, false);
 //$renderer = & $form->defaultRenderer();
 //$renderer->setElementTemplate('<span>{element}</span> ');
-$form->add_textfield('keyword', get_lang('SearchMembersOfGroup'), false);
-$form->addElement('style_submit_button', 'submit', get_lang('SearchButton'), 'class="search"');
+//$form->add_textfield('keyword', get_lang('GroupMembers'), false);
+//$form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
 
 // Getting all the users
+/*
 if (isset($_SESSION['id_session'])) {
 	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session']);
 	$complete_user_list2 = CourseManager :: get_coach_list_from_course_code($_course['id'], $_SESSION['id_session']);
@@ -218,13 +216,12 @@ foreach ($complete_user_list as $user_id => $o_course_user) {
 				$temp[] = implode(', ', $groups_name); //Group
 				$temp[] = $o_course_user['official_code'];
 	}
-}
-
+}*/
+$complete_user_list = GroupManager :: fill_groups_list($current_group['id']);
 usort($complete_user_list, 'sort_users');
-
 $possible_users = array();
 foreach ($complete_user_list as $index => $user) {
-	$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
 }
 
 // Group tutors
@@ -236,7 +233,7 @@ foreach ($group_tutor_list as $index => $user) {
 	$selected_tutors[] = $user['user_id'];
 }
 
-$group_tutors_element = $form->addElement('advmultiselect', 'group_tutors', get_lang('GroupTutors'), $possible_users, 'style="width: 225px;"');
+$group_tutors_element = $form->addElement('advmultiselect', 'group_tutors', get_lang('GroupTutors'), $possible_users, 'style="width: 280px;"');
 $group_tutors_element->setElementTemplate('
 {javascript}
 <table{class}>
@@ -257,10 +254,20 @@ $group_tutors_element->setButtonAttributes('remove', array('class' => 'arrowl'))
 $group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
 $selected_users = array ();
 foreach ($group_member_list as $index => $user) {
-	//$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
-	$selected_users[] = $user['user_id'];
+    //$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
+    
+    $selected_users[] = $user['user_id'];
 }
-$group_members_element = $form->addElement('advmultiselect', 'group_members', get_lang('GroupMembers'), $possible_users, 'style="width: 225px;"');
+
+
+// possible : number_groups_left > 0 and is group member
+$possible_users = array();
+foreach ($complete_user_list as $index => $user) {
+     if( $user['number_groups_left'] >0 || in_array($user['user_id'],$selected_users) ) 
+    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+}
+
+$group_members_element = $form->addElement('advmultiselect', 'group_members', get_lang('GroupMembers'), $possible_users, 'style="width: 280px;"');
 
 $group_members_element->setElementTemplate('
 {javascript}

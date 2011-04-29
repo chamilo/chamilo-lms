@@ -44,14 +44,11 @@ if (!api_is_allowed_to_edit(false,true)) {
  *  List all users registered to the course
  */
 function search_members_keyword($firstname, $lastname, $username, $official_code, $keyword) {
-	if (api_strripos($firstname, $keyword) !== false || api_strripos($lastname, $keyword) !== false || api_strripos($username, $keyword) !== false || api_strripos($official_code, $keyword) !== false) {
-		var_dump($firstname);
-		echo 'aaaaa111111';
+	if (api_strripos($firstname, $keyword) !== false || api_strripos($lastname, $keyword) !== false || api_strripos($username, $keyword) !== false || api_strripos($official_code, $keyword) !== false) {		
 		return true;
 	} else {
 		return false;
-	}
-	
+	}	
 }
 
 
@@ -189,8 +186,8 @@ $form->addElement('radio', 'chat_state', null, get_lang('Private'), TOOL_PRIVATE
 //$form = new FormValidator('search_member', 'get', 'group_edit', '', null, false);
 //$renderer = & $form->defaultRenderer();
 //$renderer->setElementTemplate('<span>{element}</span> ');
-$form->add_textfield('keyword', get_lang('SearchMembersOfGroup'), false);
-$form->addElement('style_submit_button', 'submit', get_lang('SearchButton'), 'class="search"');
+//$form->add_textfield('keyword', get_lang('GroupMembers'), false);
+//$form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
 
 // Getting all the users
 if (isset($_SESSION['id_session'])) {

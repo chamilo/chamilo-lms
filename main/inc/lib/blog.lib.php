@@ -1196,7 +1196,7 @@ class Blog {
 			echo '<div class="row"><div class="form_header">' . get_lang('NewPost') . '</div></div>';
 
 			// article title
-			echo '<div><span class="form_required">*</span>'.get_lang('Title') . ': <input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" /></div></br>';
+			echo '<div><span class="form_required">*</span>'.get_lang('Title') . ': <input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" /></div><br />';
 
 			// article text
 			$oFCKeditor = new FCKeditor('post_full_text') ;
@@ -1282,7 +1282,7 @@ class Blog {
 		echo '<div class="row"><div class="form_header">' . get_lang('EditPost') . '</div></div>';
 
 		// article title
-		echo '<div><span class="form_required">*</span>' . get_lang('Title') . ': <input name="post_title" id="post_title" type="text" size="60" value="'.stripslashes($blog_post['title']) . '" /></br></div>';
+		echo '<div><span class="form_required">*</span>' . get_lang('Title') . ': <input name="post_title" id="post_title" type="text" size="60" value="'.stripslashes($blog_post['title']) . '" /><br /></div>';
 
 		// article text
 								$oFCKeditor = new FCKeditor('post_full_text') ;
@@ -2366,7 +2366,7 @@ class Blog {
 		echo '</div></div>';
 
 		// comment title
-		echo '<div><span class="form_required">*</span>' . get_lang('Title') . ': <input name="comment_title" id="comment_title" type="text" size="60" value="Re: '.stripslashes($title) . '" /></div></br>';
+		echo '<div><span class="form_required">*</span>' . get_lang('Title') . ': <input name="comment_title" id="comment_title" type="text" size="60" value="Re: '.stripslashes($title) . '" /></div><br />';
 
 		// comment text
 		$oFCKeditor = new FCKeditor('comment_text') ;

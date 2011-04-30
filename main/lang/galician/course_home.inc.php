@@ -30,4 +30,5 @@ $SessionName = "Nome da sesión";
 $SessionCategory = "Categoría da sesión";
 $SessionData = "Datos da sesión";
 $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "A configuración para o despregue automático de leccións está activada. Cando os alumnos entren no curso, serán redirixidos á lección seleccionada para que se despregue automaticamente.";
+$ToolSearch = "Procura";
 ?>

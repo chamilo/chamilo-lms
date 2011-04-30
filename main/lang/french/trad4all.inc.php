@@ -1041,4 +1041,6 @@ $BrowserNotSupportNanogongSend = "Votre navigateur n'envoie pas l'enregistrement
 $FileExistRename = "Un fichier du même nom existe déjà. Veuillez choisir un autre nom.";
 $GradebookAndAttendances = "Cahier de notes et feuilles de présences";
 $SelectADateRange = "Sélectionnez une période";
+$AllDone = "Toutes les clôturées";
+$AllNotDone = "Toutes les non-clôturées";
 ?>

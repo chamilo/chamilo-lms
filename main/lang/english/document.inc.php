@@ -270,4 +270,5 @@ $HelpPediaphon = "Supports text with several thousands characters, in various ty
 $FirstSelectALanguage = "Please select a language";
 $RenameAndComment = "Rename and comment";
 $YouAreCurrentlyUsingXOfYourX = "You are currently using %s MB (%s) of your %s MB.";
+$UplUploadFailedSizeIsZero = "There was a problem uploading your document: the received file had a 0 bytes size on the server. Please, review your local file for any corruption or damage, then try again.";
 ?>

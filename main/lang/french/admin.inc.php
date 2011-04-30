@@ -1403,4 +1403,6 @@ $EnableQuizScenarioComment = "Activer les tests scénarisés vous permettra de c
 $EnableNanogongTitle = "Reproducteur audio Nanogong";
 $EnableNanogongComment = "Nanogong est un enregistreur qui vous permet d'enregistrer votre voix et de l'envoyer à la plateforme ou de la télécharger sur votre disque dur. Il vous permet aussi de rejouer ce que vous avez enregistré. Les utilisateurs nécessitent seulement un micro et des écouteurs, et doivent accepter l'applet lorsqu'ils le démarrent pour la première fois. C'est un outil utile pour les étudiants de langue, qui pourront ainsi écouter leur propre voix après avoir écouté la prononciation correcte proposée para l'enseignant dans un autre fichier audio au format WAV ou MP3.";
 $ExerciseAndLPsAreInvisibleInTheNewCourse = "Veuillez noter que les exercices et les parcours des nouveaux cours créés ont été mis à invisible pour vous permettre de les rendre visible quand vous le désirerez";
+$YouMustChooseARelationType = "Veuillez sélectionner un type de relation";
+$SelectARelationType = "Sélection de type de relation";
 ?>

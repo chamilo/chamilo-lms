@@ -392,7 +392,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 	$table_header[] = array(get_lang('Date'), true, 'style="width:70px"');
 
 	if ($origin != 'learnpath') {
-		$table_header[] = array(get_lang('Actions'), false, 'style="width:40px"');
+		$table_header[] = array(get_lang('Actions'), false, 'style="width:80px"');
 		$table_header[] = array('RealDate', true);
 	}
 

@@ -283,4 +283,5 @@ wiki_assignment			modif nuvola
 star				crystal			
 star_green			modif crystal
 menu				nuvola
-starthere (=info.png 64 px)	crystal 
+starthere (=info.png 64 px)	crystal
+copy				crystal 

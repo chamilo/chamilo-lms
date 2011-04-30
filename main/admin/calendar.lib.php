@@ -1279,7 +1279,7 @@ function show_add_form($id = '')
 	<!-- START date and time -->
 <tr>
 <div>
-<table border="0" width="80%">
+<table border="0" width="100%">
 				<tr><td colspan="4">
 					<div id="err_date" style="display:none;color:red"></div>
 					<div id="err_start_date" style="display:none;color:red"></div>

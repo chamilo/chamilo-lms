@@ -25,7 +25,8 @@ class sso {
         $this->domain     = api_get_setting('sso_authentication_domain');
         $this->auth_uri   = api_get_setting('sso_authentication_auth_uri');
         $this->deauth_uri = api_get_setting('sso_authentication_unauth_uri');
-        $this->referer    = $this->protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        //cut the string to avoid recursive URL construction in case of failure
+        $this->referer    = $this->protocol.$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'],0,strpos($_SERVER['REQUEST_URI'],'sso'));
         $this->deauth_url = $this->protocol.$this->domain.$this->deauth_uri;
         $this->master_url = $this->protocol.$this->domain.$this->auth_uri;
         $this->target     = api_get_path(WEB_PATH);
@@ -154,12 +155,14 @@ class sso {
                                 api_session_register('_user');
                                 event_login();
                                 // Redirect to homepage
+                                /* Login was successfull, stay on Chamilo 
                                 $protocol = api_get_setting('sso_authentication_protocol');
                                 $master_url = api_get_setting('sso_authentication_domain');
                                 $target = $protocol.$master_url;
                                 $sso_target = isset($target) ? $target : api_get_path(WEB_PATH) .'.index.php';
                                 header('Location: '. $sso_target);
                                 exit;
+                                */
                             }
                         } else {
                             // user account expired

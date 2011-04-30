@@ -29,7 +29,7 @@ certificate_na		modif gnome
 new_recording		exquisite + nuvola
 microphone		exquisite
 --
-info			nuvola
+info	(except 64 px)  nuvola
 wizard			nuvola
 strategy		nuvola
 objective		nuvola
@@ -37,7 +37,7 @@ laptop			nuvola
 teacher			nuvola
 assessment		nuvola
 --
-link			nuvola
+link	(=links 64px)	nuvola
 new_link		modif nuvola
 view_tree		nuvola
 view_none		nuvola
@@ -113,7 +113,7 @@ calendar_inverse	modif crystal (only 32 px)
 --
 forum				nuvola
 group				nuvola
-user				modif nuvola
+user	(=members 64 px)	modif nuvola
 new_user			modif nuvola
 new_group			modif nuvola
 new_forum			modif nuvola
@@ -283,3 +283,4 @@ wiki_assignment			modif nuvola
 star				crystal			
 star_green			modif crystal
 menu				nuvola
+starthere (=info.png 64 px)	crystal 

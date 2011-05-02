@@ -287,15 +287,15 @@ echo '<style>
 </style>';
 $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php';
 $multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'<br />';
-$multiple_form .=  '<form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
+$multiple_form .=  '<center><form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="curdirpath" value="'.$path.'" />    
     <input type="file" name="file" multiple>
     <button>Upload</button>
     <div>'.get_lang('UploadFiles').'</div>
-</form>';
+</center></form>';
 $multiple_form  .='<table class="files"></table>';
-$headers = array(get_lang('Simple') , get_lang('Multiple'));
-echo Display::tabs($headers, array($simple_form, $multiple_form ),'tabs');
+$headers = array(get_lang('Multiple') , get_lang('Simple'));
+echo Display::tabs($headers, array($multiple_form, $simple_form ),'tabs');
 
 // Footer
 Display::display_footer();

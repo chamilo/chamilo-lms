@@ -809,7 +809,7 @@ class UserManager
 		if (empty($source_file)) {
 			$source_file = $file;
 		}
-
+        
 		// Configuration options about user photos.
 		require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 
@@ -870,14 +870,13 @@ class UserManager
 			$filename = $user_id.'_'.$filename;
 		}
 
-		// Storing the new photos in 4 versions with various sizes.
-
-		$picture_info = @getimagesize($source_file);
+		// Storing the new photos in 4 versions with various sizes.        
+		$picture_info = @getimagesize($source_file);		
 		$type = $picture_info[2];
-		$small = self::resize_picture($source_file, 22);
+		$small  = self::resize_picture($source_file, 22);		
 		$medium = self::resize_picture($source_file, 85);
 		$normal = self::resize_picture($source_file, 200);
-		$big = new image($source_file); // This is the original picture.
+		$big    = new image($source_file); // This is the original picture.
 
 		$ok = false;
 		$detected = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG');
@@ -886,7 +885,7 @@ class UserManager
 				&& $medium->send_image($detected[$type], $path.'medium_'.$filename)
 				&& $normal->send_image($detected[$type], $path.$filename)
 				&& $big->send_image($detected[$type], $path.'big_'.$filename);
-		}
+		}		
 		return $ok ? $filename : false;
 	}
 
@@ -2280,27 +2279,25 @@ class UserManager
      * @return obj image object
      */
     public static function resize_picture($file, $max_size_for_picture) {
-      if (!class_exists('image')) {
-        require_once api_get_path(LIBRARY_PATH).'image.lib.php';
-      }
-      $temp = new image($file);
-      $picture_infos = api_getimagesize($file);
-      list($width, $height) = api_getimagesize($file);
-      if ($width >= $height) {
-        if ($width >= $max_size_for_picture) {
-          // scale height
-          $new_height = round($height * ($max_size_for_picture / $width));
-          $temp->resize($max_size_for_picture, $new_height, 0);
+        if (!class_exists('image')) {
+            require_once api_get_path(LIBRARY_PATH).'image.lib.php';
         }
-      }
-      else { // height > $width
-        if ($height >= $max_size_for_picture) {
-          // scale width
-          $new_width = round($width * ($max_size_for_picture / $height));
-          $temp->resize($new_width, $max_size_for_picture, 0);
-        }
-      }
-      return $temp;
+        $temp = new image($file);        
+        list($width, $height) = api_getimagesize($file);          
+        if ($width >= $height) {
+            if ($width >= $max_size_for_picture) {
+              // scale height
+              $new_height = round($height * ($max_size_for_picture / $width));
+              $temp->resize($max_size_for_picture, $new_height, 0);
+            }
+        } else { // height > $width            
+            if ($height >= $max_size_for_picture) {
+                // scale width
+                $new_width = round($width * ($max_size_for_picture / $height));
+                $temp->resize($new_width, $max_size_for_picture, 0);
+            }
+        }   
+        return $temp;
     }
 
     /**

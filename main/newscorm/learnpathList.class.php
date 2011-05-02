@@ -54,7 +54,6 @@ class learnpathList {
             $order =  Database::parse_conditions(array('order'=>$order_by));            
         }
         $sql = "SELECT * FROM $lp_table $condition_session $order";
-        error_log($sql);
         $res = Database::query($sql);
         $names = array();
         while ($row = Database::fetch_array($res,'ASSOC')) {

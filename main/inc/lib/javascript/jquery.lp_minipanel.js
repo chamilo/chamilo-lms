@@ -72,11 +72,12 @@
           paddingTop: "8px",
           paddingBottom: "8px",
           borderRadius: "4px 4px 4px 4px",
-          opacity: "0.8"
+          opacity: "0.8",
+          cursor: "move"
         }
        );
       $('#learning_path_main  #control table').attr('align','center');
-      $('#learning_path_main  #control').draggable({ iframeFix: true, stack: "#learning_path_right_zone" });
+      $('#learning_path_main  #control').draggable({ iframeFix: true, stack: "#learning_path_right_zone", cursor: "move" });
       $('#learning_path_main #control .buttons img').click(function(){
         $('#learning_path_main #control tr:eq(1)').remove();
         minipb();

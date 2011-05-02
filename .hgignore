@@ -104,7 +104,7 @@ main/upload/users/*
 #!plugin/search
 
 #PHP Storm settings directory
-.idea
+.idea/*
 
 
 syntax: regexp

@@ -6573,21 +6573,11 @@ class learnpath {
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
             $item_url = stripslashes($extra_info['url']);
-        }
-        elseif (is_numeric($extra_info)) {
-            $sql_link = "
-                            SELECT
-                                title,
-                                description,
-                                url
-                            FROM " . $tbl_link . "
-                            WHERE id = " . $extra_info;
-
+        } elseif (is_numeric($extra_info)) {
+            $sql_link = "SELECT title, description, url FROM " . $tbl_link . " WHERE id = " . $extra_info;
             $result = Database::query($sql_link);
             $row = Database :: fetch_array($result);
-
-            $item_title = $row['title'];
-
+            $item_title       = $row['title'];
             $item_description = $row['description'];
             $item_url = $row['url'];
         } else {
@@ -6604,12 +6594,7 @@ class learnpath {
         else
             $parent = 0;
 
-        $sql = "
-                        SELECT *
-                        FROM " . $tbl_lp_item . "
-                        WHERE
-                            lp_id = " . $this->lp_id;
-
+        $sql = "SELECT * FROM " . $tbl_lp_item . " WHERE lp_id = " . $this->lp_id;
         $result = Database::query($sql);
         $arrLP = array ();
 
@@ -6657,8 +6642,8 @@ class learnpath {
         $return .= '<tr>';
         $return .= '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>';
         $return .= '<td class="input">';
-        $return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
-        $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
+        $return .= '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
+        $return .= '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
             $id
         );
@@ -6703,7 +6688,7 @@ class learnpath {
                 $return .= '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
             }
         }
-        $return .= "\t\t\t\t" . '</select>';
+        $return .= '</select>';
         $return .= '</td>';
         $return .= '</tr>';
 
@@ -7442,9 +7427,9 @@ class learnpath {
             }
         }
         $return .= $this->write_resources_tree($resources_sorted);
-        if (Database :: num_rows($res_doc) == 0) {
+        /*if (Database :: num_rows($res_doc) == 0) {
             $return .= '<div class="lp_resource_element">' . get_lang('NoDocuments') . '</div>';
-        }
+        }*/
         $return .= '</div>';
         return $return;
     }
@@ -7554,9 +7539,9 @@ class learnpath {
             $return .= '</div>';
         }
 
-        if (Database :: num_rows($res_quiz) == 0) {
+        /*if (Database :: num_rows($res_quiz) == 0) {
             $return .= '<div class="lp_resource_element">' . get_lang('NoExercisesAvailable') . '</div>';
-        }
+        }*/
   
         $return .= '</div>';
         return $return;
@@ -7592,9 +7577,9 @@ class learnpath {
             $return .= '</div>';
         }     
 
-        if (Database :: num_rows($res_link) == 0)
+        /*if (Database :: num_rows($res_link) == 0)
             $return .= '<div class="lp_resource_element">' . get_lang('NoLinksAvailable') . '</div>';
-
+        */
         $return .= '</div>';
 
         return $return;

@@ -1335,6 +1335,7 @@ span.radio {
 	margin-bottom: 10px;
 	padding: 10px;
 	background-color: white;
+	z-index: -1;
 }
 .blogpost_comment_title {
 	display: block;
@@ -1368,6 +1369,7 @@ span.radio {
 	margin-top: 10px;
 	padding: 10px;
 	background-color: #F4F4F4;
+	margin-left:50px;
 }
 /* tabbed menu */
 #tabbed_menu {

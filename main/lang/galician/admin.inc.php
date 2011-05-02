@@ -1381,4 +1381,24 @@ $NeverConnected = "Nunca conectados";
 $EnableAccessibilityFontResizeTitle = "Funcionalidade de redimensionamento de fontes";
 $EnableAccessibilityFontResizeComment = "Activar esta opción amosará unha serie de opcións de redimensionamento de fontes na parte de arriba á dereita do seu campus. Isto vai permitir ás persoas con problemas de vista ler máis facilmente os contidos dos seus cursos.";
 $GlobalEvent = "Evento da plataforma";
+$SearchEnabledTitle = "Búsqueda de texto completo";
+$SearchEnabledComment = "Esta funcionalidade permite a indexación da maioría dos documentos subidos ao seu portal, e a través disto provee a funcionalidade de búsqueda para os usuarios.
+Esta funcionalidade non indexa documentos que xa foran subidos con anterioridade, polo que é importante(se o desexa) activala ao inicio da implementación.
+Unha vez activada, unha caixa de búsqueda aparecerá na lista de cursos de cada usuario. Buscar un termo específico trae unha lista de documentos, exercicios e temas de foro correspondentes, filtrados dependendo da súa dispoñibilidade para o usuario.";
+$SpecificSearchFieldsAvailable = "Campos de búsqueda personalizados dispoñibles";
+$XapianModuleInstalled = "Módulo Xapian instalado";
+$ProgramsNeededToConvertFiles = "Programas necesarios para indexar arquivos de formatos alleos";
+$YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool = "Esta usando Chamilo nunha plataforma Windows. Lamentablemente, no pode convertir os documentos para indexalos usando esta ferramenta.";
+$HideCoursesInSessionsTitle = "Esconder cursos na lista de sesións";
+$HideCoursesInSessionsComment = "Cando amose os bloques de sesións na páxina de cursos, esconder a lista de cursos dentro da sesión (só amosalos na páxina específica de sesión).";
+$ShowGroupsToUsersTitle = "Mostrar as clases aos usuarios";
+$ShowGroupsToUsersComment = "Amosar as clases aos usuarios. As clases son unha funcionalidade que permite subscribir/desuscribir grupos de usuarios dentro dunha sesión ou un curso directamente, reducindo o traballo administrativo.
+Cando activa esta opción,os alumnos poden ver de que clase forman parte, a través do seu interface de rede social.";
+$HomepageViewActivityBig = "Grande vista actividade (estilo IPad)";
+$EnableQuizScenarioTitle = "Permitir escenario de exercicios";
+$EnableQuizScenarioComment = "Ao activar esta funcionalidade, fará dispoñible os exercicios de tipo escenario, que propoñen novas preguntas ao alumno en función das súas respostas. O docente deseñará o escenario completo da proba, con todas as súas posibilidades, a través dunha interface sinxela pero extendida.";
+$EnableNanogongTitle = "Activar o grabador-reproductor de voz Nanogong";
+$EnableNanogongComment = "Nanogong é un grabador-reproductor de voz que lle permite grabar a súa voz e enviala á plataforma ao descargala no seu disco duro. Tamén permite reproducir a grabación. Os estudantes só necesitan un micrófono e uns altavoces, e aceptar a carga do applet cando se carga por primeira vez. É moi útil para que os estudantes de idiomas podan oír a súa voz despois de escoitar a correcta pronunciación proposta polo profesor noutro arquivo wav ou mp3.";
+$ExerciseAndLPsAreInvisibleInTheNewCourse = "Os exercicios e leccions foron marcador como invisibles nos novos cursos creados. O docente terá que aprobar a súa prublicación primeiro.";
+$YouMustChooseARelationType = "Debes escoller o tipo de relación";
 ?>

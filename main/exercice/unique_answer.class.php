@@ -84,7 +84,7 @@ class UniqueAnswer extends Question {
 						<th width="10px" >
 							'.get_lang('True').'
 						</th>
-						<th width="45%">
+						<th width="38%">
 							'.get_lang('Answer').'
 						</th>
 							'.$comment_title.'

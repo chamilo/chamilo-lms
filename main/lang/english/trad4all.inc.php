@@ -666,7 +666,7 @@ $SearchPrefilterPrefix = "Specific Field for prefilter";
 $SearchPrefilterPrefixComment = "This option let you choose the Specific field to use on prefilter search type.";
 $MaxTimeAllowed = "Max. time (minutes)";
 $Class = "Class";
-$Select = "Validate";
+$Select = "Select";
 $Booking = "Booking";
 $ManageReservations = "Booking";
 $DestinationUsers = "Destination users";
@@ -1043,4 +1043,6 @@ $BrowserNotSupportNanogongSend = "Your browser does not send your recording to t
 $FileExistRename = "Already exist a file with the same name.  Please, rename the file.";
 $GradebookAndAttendances = "Gradebook and attendances";
 $SelectADateRange = "Select a date range";
+$AllDone = "All done";
+$AllNotDone = "All not done";
 ?>

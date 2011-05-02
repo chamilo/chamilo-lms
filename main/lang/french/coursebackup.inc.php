@@ -48,4 +48,5 @@ $DocumentsWillBeAddedToo = "Les documents seront également ajoutés";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si vous désirez exporter un cours contenant des tests, il est nécessaire d'inclure ces tests dans l'export en les sélectionnant dans la liste des tests.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Le répertoire d'archives, utilisé par cet outil, ne dispose pas des accès en écriture attendus. Veuillez contacter l'administrateur de la plateforme à ce sujet.";
 $DestinationCourse = "Cours de destination";
+$IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Si votre parcours inclut des fichiers audio, vous devriez les sélectionner dans les documents.";
 ?>

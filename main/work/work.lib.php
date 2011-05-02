@@ -389,10 +389,10 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 		$table_header[] = array(get_lang('Qualification'), true);
 	}
 
-	$table_header[] = array(get_lang('Date'), true);
+	$table_header[] = array(get_lang('Date'), true, 'style="width:70px"');
 
 	if ($origin != 'learnpath') {
-		$table_header[] = array(get_lang('Actions'), false);
+		$table_header[] = array(get_lang('Actions'), false, 'style="width:80px"');
 		$table_header[] = array('RealDate', true);
 	}
 
@@ -488,8 +488,8 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					$defaults = array('my_group[dir_name]' => html_entity_decode($dir), 'description' => api_html_entity_decode($row['description']));
 
 					//$form_folder-> addElement('textarea', 'description', get_lang('Description'), array('rows' => 5, 'cols' => 50));
-					$form_folder->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'profile', 'Width' => '100%', 'Height' => '200'));
-
+					$form_folder->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'work', 'Width' => '100%', 'Height' => '200'));
+					
 					$qualification_input[] = FormValidator :: createElement('text','qualification');
 					$form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'), 'size="10"');
 

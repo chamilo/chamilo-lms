@@ -9,6 +9,7 @@
 
 require_once 'model.lib.php';
 require_once 'career.lib.php';
+require_once 'fckeditor/fckeditor.php';
 
 define ('PROMOTION_STATUS_ACTIVE',  1);
 define ('PROMOTION_STATUS_INACTIVE',0);   
@@ -74,7 +75,15 @@ class Promotion extends Model {
      */
      
     function return_form($url, $action = 'add') {
-    	$form = new FormValidator('promotion', 'post', $url);
+    	
+		$oFCKeditor = new FCKeditor('description') ;
+				$oFCKeditor->ToolbarSet = 'careers';
+				$oFCKeditor->Width		= '100%';
+				$oFCKeditor->Height		= '200';
+				$oFCKeditor->Value		= $message;
+				$oFCKeditor->CreateHtml();		
+		
+		$form = new FormValidator('promotion', 'post', $url);
         // Settting the form elements
         $header = get_lang('Add');
         if ($action == 'edit') {
@@ -83,7 +92,7 @@ class Promotion extends Model {
         $form->addElement('header', '', $header);
         $form->addElement('hidden', 'id', intval($_GET['id']));
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '70','id' => 'name'));        
-        $form->add_html_editor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));       
+        $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));       
         $career = new Career();
         $careers = $career->get_all();
         $career_list = array();    

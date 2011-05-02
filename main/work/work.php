@@ -1381,9 +1381,9 @@ if ($is_course_member) {
 								<div class="formw">';
 
 				$oFCKeditor = new FCKeditor('description') ;
-				$oFCKeditor->ToolbarSet = 'profile';
-				$oFCKeditor->Width		= '80%';
-				$oFCKeditor->Height		= '130';
+				$oFCKeditor->ToolbarSet = 'work';
+				$oFCKeditor->Width		= '100%';
+				$oFCKeditor->Height		= '200';
 				$oFCKeditor->Value		= $message;
 				$return =	$oFCKeditor->CreateHtml();
 				$new_folder_text .= $return;

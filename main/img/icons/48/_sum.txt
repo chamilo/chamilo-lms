@@ -29,7 +29,7 @@ certificate_na		modif gnome
 new_recording		exquisite + nuvola
 microphone		exquisite
 --
-info			nuvola
+info	(except 64 px)  nuvola
 wizard			nuvola
 strategy		nuvola
 objective		nuvola
@@ -37,7 +37,7 @@ laptop			nuvola
 teacher			nuvola
 assessment		nuvola
 --
-link			nuvola
+link	(=links 64px)	nuvola
 new_link		modif nuvola
 view_tree		nuvola
 view_none		nuvola
@@ -113,7 +113,7 @@ calendar_inverse	modif crystal (only 32 px)
 --
 forum				nuvola
 group				nuvola
-user				modif nuvola
+user	(=members 64 px)	modif nuvola
 new_user			modif nuvola
 new_group			modif nuvola
 new_forum			modif nuvola
@@ -169,7 +169,8 @@ blog_admin_users		modif nuvola
 blog_admin			modif nuvola (and 22 px gif version for home page)
 blog_admin_na			modif nuvola (and 22 px gif version for home page)
 --
-course_progress			modif mix gnome crystal
+course_progress	(=lessons_plans)gnome
+course_progress_na		modif gnome
 --
 mail				crystal
 --
@@ -179,7 +180,7 @@ notes_order_by_date_modif	modif crystal (only 32 px)
 notes_order_by_date_new	modif 	modif crystal (only 32 px)
 notes_order_by_title		modif crystal (only 32 px)
 --
-attendance			modif mix nuvola crystal
+attendance			modif crystal
 new_attendance_list		modif crystal
 attendance_list			modif crystal
 attendance_calendar		modif crystal (only 32 px)
@@ -187,10 +188,9 @@ add_calendar			modif crystal (only 32 px)
 add_event_calendar		modif crystal (only 32 px)
 clean_calendar			modif mix crystal tango (only 32 px)
 --
-lessons_plans			modif mix crystal gnome
-lesson_plan			modif mix crystal gnome
+lesson_plan			modif mix gnome crystal
 new_lesson_plan			modif mix nuvola gnome
-calendar_lesson_plans		modif mix crystal gnome (only 32 px)
+lesson_plan_calendar		modif mix gnome crystal
 skills				nuvola
 --
 new_user_event			modif crystal nuvola
@@ -283,3 +283,5 @@ wiki_assignment			modif nuvola
 star				crystal			
 star_green			modif crystal
 menu				nuvola
+starthere (=info.png 64 px)	crystal
+copy				crystal 

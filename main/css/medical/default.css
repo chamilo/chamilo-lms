@@ -1817,6 +1817,7 @@ div.blogpost_comment {
 	margin-bottom: 10px;
 	padding: 10px;
 	background-color: white;
+	z-index: -1;
 }
 span.blogpost_comment_title {
 	display: block;
@@ -1851,6 +1852,7 @@ div.comments {
 	margin-top: 10px;
 	padding: 10px;
 	background-color: #F4F4F4;
+	margin-left:50px;
 }
 .attachment_comment {
 	color: #737780;

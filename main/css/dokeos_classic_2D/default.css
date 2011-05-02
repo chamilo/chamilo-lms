@@ -1843,6 +1843,7 @@ div.blogpost_comment {
 	border: 1px dashed #dddddd;
 	margin-bottom: 10px;
 	padding: 10px;
+	z-index: -1;
 }
 span.blogpost_comment_title {
 	color: #1657A9;
@@ -1877,6 +1878,7 @@ div.comments {
 	margin-bottom: 10px;
 	margin-top: 10px;
 	padding: 10px;
+	margin-left:50px;
 }
 .link {
 	color : #1657A9;

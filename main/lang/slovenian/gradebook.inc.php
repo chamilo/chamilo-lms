@@ -191,4 +191,8 @@ $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "Minimalen rezultat za 
 $LinkMod = "Shrani";
 $EditLink = "Uredi povezavo";
 $CategoryDeleted = "Kategorija je bila odstranjena";
+$AreYouSureToLockedTheEvaluation = "Ste prepričani, da želite zakleniti ocenjevanje?";
+$AreYouSureToUnLockedTheEvaluation = "Ste prepričani, da želite odkleniti ocenjevanje?";
+$EvaluationHasBeenUnLocked = "Ocenjevanje je odklenjeno";
+$EvaluationHasBeenLocked = "Ocenjevanje je zaklenjeno";
 ?>

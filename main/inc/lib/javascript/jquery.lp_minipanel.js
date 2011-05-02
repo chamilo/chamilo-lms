@@ -36,14 +36,51 @@
     $('#hide_bar table').toggle(function(){
 
       var panel = $('#lp_navigation_elem div:first').clone();
+
+      function minipb(){
+        $('#learning_path_main #control  tr').after('<tr></tr>');
+        $('#learning_path_main #control tr:eq(1)').append($('#progress_bar').html());
+        $('#learning_path_main #control tr:eq(1) #progress_img_limit_left').attr('height','5');
+        $('#learning_path_main #control tr:eq(1) #progress_img_full').attr('height','5');
+        $('#learning_path_main #control tr:eq(1) #progress_img_limit_middle').attr('height','5');
+        $('#learning_path_main #control tr:eq(1) #progress_img_empty').attr('height','5');
+        $('#learning_path_main #control tr:eq(1) #progress_bar_img_limit_right').attr('height','5');
+        $('#learning_path_main #control tr:eq(1) #progress_text').remove();
+        $('#learning_path_main #control tr:eq(1) div').css('width','');
+      }
+
       $(panel).attr('id','control');
+
       $('#learning_path_main').append(panel);
+      minipb();
+
+      $('#learning_path_main #control .buttons').attr('align','center');
 
       $('#learning_path_left_zone').hide(50);
       $('#learning_path_right_zone').css('marginLeft','10px');
       $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
-      $('#learning_path_main  #control').css({width: "120px", height: "32px", opacity: "0.4", position: "absolute", top: "0px", left:"15px"});
+
+      $('#learning_path_main  #control').css(
+        { margin: "auto",
+          width: "132px",
+          height: "34px",
+          position: "absolute",
+          top: "5px",
+          left:"15px",
+          backgroundColor: "white",
+          backgroundImage: "url(../img/minipanelback.png)",
+          paddingTop: "8px",
+          paddingBottom: "8px",
+          borderRadius: "4px 4px 4px 4px",
+          opacity: "0.8"
+        }
+       );
+      $('#learning_path_main  #control table').attr('align','center');
       $('#learning_path_main  #control').draggable({ iframeFix: true, stack: "#learning_path_right_zone" });
+      $('#learning_path_main #control .buttons img').click(function(){
+        $('#learning_path_main #control tr:eq(1)').remove();
+        minipb();
+      });
     },function(){
       $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
       $('#learning_path_right_zone').css('marginLeft','290px');

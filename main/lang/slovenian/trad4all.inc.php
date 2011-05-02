@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $DeleteAllAttendances = "Odstrani vso obstoječo prisotnost";
+$SearchXapianModuleNotInstalled = "Xapian iskalni modul ni nameščen";
 $Title = "Naslov";
 $By = "Objavil";
 $UsersOnline = "Aktivnih uporabnikov";
@@ -1015,4 +1016,33 @@ $MyStatistics = "Moja statistika";
 $FromDateXToDateY = "Od %s do %s";
 $CourseThematicAdvance = "Napredovanje tečaja";
 $Clean = "Počisti";
+$MailNotifyInvitation = "Obvesti preko e-pošte o novem prejetem povabilu";
+$MailNotifyMessage = "Obvesti preko e-pošte o novem prejetem osebnem sporočilu";
+$MailNotifyGroupMessage = "Obvesti preko e-pošte o novem sporočilu, prejetem v skupini";
+$ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField = "Kliknite na področje spodaj za izbiro datotek z lokalnega rač. sistema (uporabite lahko CTRL+klik za hkratno izbiro večih) ali uporabite povleci in izpusti iz lokalnega računalnika v področje spodaj. Za ostalo bo poskrbel sistem sam.";
+$Simple = "Enostavno";
+$Multiple = "Večkratno";
+$UploadFiles = "Za nalaganje klini ali povleci in izputi tule";
+$SupportedFormatsForIndex = "Podprti formati za indeksiranje";
+$Installed = "Nameščen";
+$NotInstalled = "Ni nameščen";
+$Settings = "Nastavitve";
+$OnlyLettersAndNumbers = "Zgolj črke (a-z) in številke (0-9)";
+$CheckFilePermissions = "Preverite dovoljenja za datoteke";
+$AddedToALP = "Dodano k učni poti";
+$NotAvailable = "Ni na voljo";
+$NanogongNoApplet = "Ne najdem Nanogong apleta";
+$NanogongRecordBeforeSave = "Pred pošiljanje datoteke morate izvesti snemanje";
+$NanogongGiveTitle = "Niste podali imena datoteke";
+$NanogongFailledToSubmit = "Nasneti zvok ni bil odposlan";
+$NanogongSubmitted = "Snemanje zvoka je bilo shranjeno";
+$RecordMyVoice = "Posnemi moj glas";
+$PressRecordButton = "Za začetek snemanja kliknite rdeč gumb";
+$VoiceRecord = "Snemanje zvoka";
+$BrowserNotSupportNanogongSend = "Vaš brskalnik ne pošilja rezultatov snemanja platformi; še vedno lahko nasneto shranite na lokalni rač. sistem in ga naložite na platformo kasneje. Da bi zagotovili vse zmožnosti, vam priporočamo, da uporabite napreden brskalnik, kot sta Firefox in Chrome.";
+$FileExistRename = "Datoteka s tem imenom že obstaja. Izberite drugo ime.";
+$GradebookAndAttendances = "Redovalnica in prisotnost";
+$SelectADateRange = "Izberite območje datuma";
+$AllDone = "Vse je bilo izvršeno";
+$AllNotDone = "Ni bilo vse izvršeno";
 ?>

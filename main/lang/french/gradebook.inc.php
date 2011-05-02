@@ -191,4 +191,8 @@ $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "Un score minimum de ce
 $LinkMod = "Enregistrer";
 $EditLink = "Editer le lien";
 $CategoryDeleted = "La catégorie a été supprimée.";
+$AreYouSureToLockedTheEvaluation = "Êtes-vous certain de vouloir bloquer cette évaluation?";
+$AreYouSureToUnLockedTheEvaluation = "Êtes-vous certain de vouloir débloquer cette évaluation?";
+$EvaluationHasBeenUnLocked = "L'évaluation a été débloquée.";
+$EvaluationHasBeenLocked = "L'évaluation a été bloquée.";
 ?>

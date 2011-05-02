@@ -294,7 +294,7 @@ $multiple_form .=  '<center><form id="file_upload" action="'.$url.'" method="POS
     <div>'.get_lang('UploadFiles').'</div>
 </center></form>';
 $multiple_form  .='<table class="files"></table>';
-$headers = array(get_lang('Multiple') , get_lang('Simple'));
+$headers = array(get_lang('Send') , get_lang('Send').' ('.get_lang('Simple').')');
 echo Display::tabs($headers, array($multiple_form, $simple_form ),'tabs');
 
 // Footer

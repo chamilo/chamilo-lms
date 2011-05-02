@@ -472,8 +472,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         }
 
         if (!$is_allowed_to_edit) {
-            if (DocumentManager::check_readonly($_course, api_get_user_id(), $my_get_move)) {
-                
+            if (DocumentManager::check_readonly($_course, api_get_user_id(), $my_get_move)) {                
                 api_not_allowed();
             }
         }
@@ -525,6 +524,9 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         // Security fix: make sure they can't move files that are not in the document table
         if (!empty($document_to_move)) {
             if (move($base_work_dir.$document_to_move['path'], $base_work_dir.$_POST['move_to'])) {
+            //if (1) {
+            //$contents = DocumentManager::replace_urls_inside_content_html_when_moving_file(basename($document_to_move['path']), $base_work_dir.dirname($document_to_move['path']), $base_work_dir.$_POST['move_to']);
+            //exit;
                 update_db_info('update', $document_to_move['path'], $_POST['move_to'].'/'.basename($document_to_move['path']));
                 // Set the current path
                 $curdirpath = $_POST['move_to'];

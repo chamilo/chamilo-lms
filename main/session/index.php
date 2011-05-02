@@ -84,8 +84,9 @@ if (!empty($new_session_list)) {
             
             //Get all courses by session where I'm subscribed
             $my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id);            
-            $course = array();        
+                   
             foreach ($my_course_list as $my_course) {
+                $course = array();
             
                 $course_info   = api_get_course_info($my_course['code']);
                 //Getting all exercises from the current course            

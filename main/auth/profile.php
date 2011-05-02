@@ -607,9 +607,8 @@ if ($form->validate()) {
 			$user_data['picture_uri'] = $new_picture;
 			$_SESSION['image_uploaded'] = 'success';			
 		}
-	}
-	// remove existing picture if asked
-	elseif (!empty($user_data['remove_picture'])) {
+	} elseif (!empty($user_data['remove_picture'])) {
+	    // remove existing picture if asked
 		UserManager::delete_user_picture(api_get_user_id());
 		$user_data['picture_uri'] = '';
 	}
@@ -657,15 +656,15 @@ if ($form->validate()) {
     }
     
 	//Only update values that are request by the "profile" setting
-	$profile_list = api_get_setting('profile');
-		
+	$profile_list = api_get_setting('profile');		
 	$available_values_to_modify = array();
-	
 	foreach($profile_list as $key => $status) {	    
 	    if ($status == 'true') {
             if ($key == 'name') {
                $available_values_to_modify[] = 'firstname';
                $available_values_to_modify[] = 'lastname'; 
+            } elseif ($key == 'picture') {
+               $available_values_to_modify[] = 'picture_uri';               
             } else {
     	       $available_values_to_modify[] = $key;
     	    } 

@@ -8,6 +8,8 @@
  *    @author Julio Montoya <gugli100@gmail.com> (Score average fixes)
  */
 
+define('SESSION_LINK_TARGET','_self');
+
 class Tracking {
 
     /**
@@ -1978,7 +1980,7 @@ class Tracking {
                             $html .= '<tr class="row_even">';
                         }
                         $url = api_get_course_url($enreg['code'], $session_id);
-                        $course_url = Display::url($enreg['title'], $url);
+                        $course_url = Display::url($enreg['title'], $url, array('target'=>SESSION_LINK_TARGET));
                         $html .= '<td>'.$course_url.'</td>';
 
                         $html .= '<td align="center">'.$time.'</td>';
@@ -2151,7 +2153,7 @@ class Tracking {
                         }
     
                         $url        = api_get_course_url($enreg['code'], $key);
-                        $course_url = Display::url($enreg['title'], $url, array('target'=>'_blank'));
+                        $course_url = Display::url($enreg['title'], $url, array('target'=>SESSION_LINK_TARGET));
     
                         $html .= Display::tag('td', $course_url);
                         $html .= Display::tag('td', $stats_array[$enreg['code']]['exercises']);
@@ -2308,7 +2310,7 @@ class Tracking {
 
                         $html .= '<tr class="row_even">';
                         $url = api_get_path(WEB_CODE_PATH)."exercice/exercice_submit.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
-                        $exercices['title'] = Display::url($exercices['title'], $url, array('target'=>'_blank'));
+                        $exercices['title'] = Display::url($exercices['title'], $url, array('target'=>SESSION_LINK_TARGET));
                         $html .= Display::tag('td', $exercices['title']);
 
                         //Exercise configuration show results show results or show only score

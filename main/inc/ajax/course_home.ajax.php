@@ -147,7 +147,7 @@ switch ($action) {
             $flat_list          = $list->get_flat_list(); 
             $lps[$item['code']] = $flat_list;
             $course_url         = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
-            $item['title']      = Display::url($item['title'], $course_url, array('target'=>'_blank'));
+            $item['title']      = Display::url($item['title'], $course_url, array('target'=>SESSION_LINK_TARGET));
             foreach($flat_list as $lp_id => $lp_item) {                                                    
                 $temp[$count]['id']= $lp_id;                
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
@@ -184,7 +184,7 @@ switch ($action) {
                     }
                 }
                 
-                $temp[$count]['cell']=array($date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>'_blank')));
+                $temp[$count]['cell']=array($date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>SESSION_LINK_TARGET)));
                 $count++;     
             }              
         } 
@@ -269,7 +269,7 @@ switch ($action) {
             $list               = new LearnpathList(api_get_user_id(),$item['code'], $session_id, 'publicated_on DESC');
             $flat_list          = $list->get_flat_list();    
             $lps[$item['code']] = $flat_list;
-            $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,array('target'=>'_blank'));
+            $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,array('target'=>SESSION_LINK_TARGET));
             
             foreach($flat_list as $lp_id => $lp_item) {                                                    
                 $temp[$count]['id']= $lp_id;
@@ -311,7 +311,7 @@ switch ($action) {
                     }
                 }
             
-                $temp[$count]['cell'] = array($week_data, $date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>'_blank')));
+                $temp[$count]['cell'] = array($week_data, $date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>SESSION_LINK_TARGET)));
                 $count++;     
             }              
         }     
@@ -395,7 +395,7 @@ switch ($action) {
             $list               = new LearnpathList(api_get_user_id(),$item['code'],$session_id);
             $flat_list          = $list->get_flat_list();    
             $lps[$item['code']] = $flat_list;
-            $item['title']      = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id, array('target'=>'_blank'));
+            $item['title']      = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id, array('target'=>SESSION_LINK_TARGET));
             foreach($flat_list as $lp_id => $lp_item) {                                                    
                 $temp[$count]['id']= $lp_id;
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
@@ -423,15 +423,13 @@ switch ($action) {
                     if ($now < api_strtotime($lp_item['publicated_on'])) {                        
                         continue;
                     }
-                }
-                
+                }                
                 if (!empty($lp_item['expired_on']) && $lp_item['expired_on'] != '0000-00-00 00:00:00') {
                     if ($now > api_strtotime($lp_item['expired_on'])) {
                         continue;
                     }
-                }
-                
-                $temp[$count]['cell']=array($date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>'_blank')));
+                }                
+                $temp[$count]['cell']=array($date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>SESSION_LINK_TARGET)));
                 $count++;     
             }              
         } 

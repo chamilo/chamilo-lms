@@ -11,6 +11,7 @@ $language_file = array('courses', 'index','tracking','exercice', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
+
 require_once $libpath.'course.lib.php';
 //require_once $libpath.'usermanager.lib.php';
 require_once $libpath.'sessionmanager.lib.php';
@@ -185,7 +186,7 @@ foreach($final_array as $session_data) {
                                   continue;
                             }
                         }
-                        $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/exercice_submit.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id", array('target'=>'_blank'));
+                        $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/exercice_submit.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id", array('target'=>SESSION_LINK_TARGET));
                         $new_exercises[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']), 
                        							'status'      => Display::return_icon('star.png', get_lang('New'), array('width'=>'22')),
                     							'date'        => $start_date,

@@ -602,7 +602,7 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
     echo '<div class="clear"></div>';
     if (api_get_setting('show_toolshortcuts') == 'true') {
         echo '<div id="toolshortcuts">';
-        require_once 'tool_navigation_menu.inc.php';
+        require_once api_get_path(INCLUDE_PATH).'tool_navigation_menu.inc.php';
         show_navigation_tool_shortcuts();
         echo '</div>';
     }

@@ -130,7 +130,11 @@ else {
 if (!api_get_user_id()) { 
     $header_title = null;
 }*/
-Display::display_header(" ");
+$header_title = null;
+if (!api_is_anonymous()) {
+    $header_title = " ";
+}
+Display::display_header($header_title);
 
 /* MAIN CODE */
 

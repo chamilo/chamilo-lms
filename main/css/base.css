@@ -497,7 +497,7 @@ button:hover {
     zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
     display: inline;
     vertical-align: baseline;
-    margin: 0 2px;
+    /* margin: 0 2px; */
     outline: none;
     cursor: pointer;
     text-align: center;
@@ -583,4 +583,20 @@ button:hover {
     background: -webkit-gradient(linear, left top, left bottom, from(#f47a20), to(#faa51a));
     background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
+}
+
+.menulist li {
+	margin-top: 10px;
+}
+
+#social_widget {
+    margin-bottom: 0px;
+}
+
+.menusection {
+    margin: 15px 0 0 6px;
+}
+
+.menusectioncaption {
+	
 }

@@ -7525,7 +7525,7 @@ class learnpath {
         
         $return .= '<div class="lp_resource_element">';
         $return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'exercice/exercise_admin.php">' . get_lang('NewExercise') . '</a>';
+        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'exercice/exercise_admin.php&amp;origin=learnpath">' . get_lang('NewExercise') . '</a>';
         $return .= '</div>';
         
 
@@ -7572,7 +7572,7 @@ class learnpath {
         
         $return .= '<div class="lp_resource_element">';
         $return .= '<img alt="" src="../img/linksnew.gif" style="margin-right:5px;width:16px" title="" />';
-        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'link/link.php?' . api_get_cidreq() . '&action=addlink" title="' . get_lang('LinkAdd') . '">' . get_lang('LinkAdd') . '</a>';
+        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'link/link.php?' . api_get_cidreq() . '&action=addlink&amp;origin=learnpath" title="' . get_lang('LinkAdd') . '">' . get_lang('LinkAdd') . '</a>';
         $return .= '</div>';
 
         while ($row_link = Database :: fetch_array($res_link)) {
@@ -7632,7 +7632,7 @@ class learnpath {
         
         $return .= '<div class="lp_resource_element">';
         $return .= '<img alt="" src="../img/forum_new_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'forum/index.php?' . api_get_cidreq() . '&action=add&amp;content=forum" title="' . get_lang('CreateANewForum') . '">' . get_lang('CreateANewForum') . '</a>';
+        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'forum/index.php?' . api_get_cidreq() . '&action=add&amp;content=forum&amp;origin=learnpath" title="' . get_lang('CreateANewForum') . '">' . get_lang('CreateANewForum') . '</a>';
         $return .= '</div>';
 
         foreach ($a_forums as $forum) {

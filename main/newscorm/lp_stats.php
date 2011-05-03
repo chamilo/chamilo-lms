@@ -70,7 +70,7 @@ if (!empty ($_GET['extend_all'])) {
 if ($origin != 'tracking') {
     $output .= "<tr><td><h2>" . get_lang('ScormMystatus') . "</h2></td></tr>";
 }
-$output .= '<tr><td>&nbsp;</td></tr><tr><td><table border="0" class="data_table"><tr>'.
+$output .= '<tr><td><table border="0" class="data_table"><tr>'.
             '<th width="16">' . $extend_all_link . '</td>' .
             '<th colspan="4" class="title"><div class="mystatusfirstrow">' . get_lang('ScormLessonTitle') . "</div></td>" .
             '<th colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormStatus') . "</div></td>" .

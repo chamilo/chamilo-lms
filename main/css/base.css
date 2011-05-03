@@ -597,6 +597,11 @@ button:hover {
     margin: 15px 0 0 6px;
 }
 
-.menusectioncaption {
-	
+.maincontent {
+    margin-top: 5px;
+}
+
+#menu {
+    margin-top: 8px;
+	margin-bottom: 10px;
 }

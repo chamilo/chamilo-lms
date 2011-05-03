@@ -61,6 +61,7 @@ body {
 }
 .item {
     -moz-border-radius:5px;
+	border-radius:5px;
     border:1px solid #E1E1E0;
 }
 
@@ -745,10 +746,11 @@ may be inherited in some browsers from other 'a' element styles (if any) on the 
     float: right;
 }
 
-#menu {
-    -moz-border-radius: 10px; border: 1px solid #e1e1e0;
-    -webkit-border-radius: 10px; border: 1px solid #e1e1e0;
-    -opera-border-radius: 10px; border: 1px solid #e1e1e0;
+#menu {    
+	border: 1px solid #e1e1e0;
+    -moz-border-radius: 10px; 
+    -webkit-border-radius: 10px;
+	border-radius:10px;
 
     margin-top:20px;
     margin-right:10px;
@@ -1015,10 +1017,8 @@ input.liteoption {
 }
 .everybodyview {
     position: relative; /* to avoid the IE peekabo bug ?*/
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
+    -moz-border-radius:5px;
+    border-radius:5px;
     border:1px solid #E1E1E0;
     width: 80%;
     margin: 10px auto;
@@ -1029,12 +1029,9 @@ input.liteoption {
     width: 80%;
     margin: 25px auto 10px;
     padding: 10px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
+    -moz-border-radius:5px;
+	border-radius:5px;
     border:1px solid #E1E1E0;
-
 }
 .viewcaption {
     position: relative;
@@ -1648,11 +1645,9 @@ form br {
     font-weight: bold;
 }
 /* Admin section */
-div.admin_section {
-    -moz-border-radius-bottomleft:10px;
-    -moz-border-radius-bottomright:10px;
-    -moz-border-radius-topleft:10px;
-    -moz-border-radius-topright:10px;
+div.admin_section {    
+    -moz-border-radius:10px;
+	border-radius:10px;
     border:1px solid #E1E1E0;
     width: 40%;
     float: left;

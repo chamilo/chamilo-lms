@@ -1045,4 +1045,6 @@ $BrowserNotSupportNanogongSend = "Su navegador no permite enviar su grabación a
 $FileExistRename = "Ya existe un archivo con el mismo nombre. Por favor, de un nuevo nombre al archivo.";
 $GradebookAndAttendances = "Evaluaciones y asistencias";
 $SelectADateRange = "Escoger un rango de fechas";
+$AllDone = "Días comprobados";
+$AllNotDone = "Días sin comprobar";
 ?>

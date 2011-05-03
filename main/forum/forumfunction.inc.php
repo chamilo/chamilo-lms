@@ -48,16 +48,19 @@ $(document).ready(function () {
  * @return void
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version february 2006, dokeos 1.8
+ * 
+ * Juan Carlos Raña Trabado (return to lp_id)
+ *
+ * @version may 2011, Chamilo 1.8.8
  */
-function handle_forum_and_forumcategories() {
+function handle_forum_and_forumcategories($lp_id) {
     $action_forum_cat = isset($_GET['action']) ? $_GET['action'] : '';
     $post_submit_cat = isset($_POST['SubmitForumCategory']) ?  true : false;
     $post_submit_forum = isset($_POST['SubmitForum']) ? true : false;
     $get_id = isset($_GET['id']) ? $_GET['id'] : '';
     // Adding a forum category.
     if (($action_forum_cat == 'add' && $_GET['content'] == 'forumcategory') || $post_submit_cat) {
-        show_add_forumcategory_form();
+        show_add_forumcategory_form($inputvalues, $lp_id);//$lp_id when is called from learning path
     }
     // Adding a forum.
     if ((($action_forum_cat == 'add' || $action_forum_cat == 'edit') && $_GET['content'] == 'forum') || $post_submit_forum) {
@@ -66,7 +69,7 @@ function handle_forum_and_forumcategories() {
         } else {
             $inputvalues = array();
         }
-        show_add_forum_form($inputvalues);
+        show_add_forum_form($inputvalues,$lp_id);
     }
     // Edit a forum category.
     if (($action_forum_cat == 'edit' && $_GET['content'] == 'forumcategory' && isset($_GET['id'])) || (isset($_POST['SubmitEditForumCategory'])) ? true : false ) {
@@ -116,14 +119,18 @@ function handle_forum_and_forumcategories() {
  * @return void HTML
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version february 2006, dokeos 1.8
+ *
+ * Juan Carlos Raña Trabado (return to lp_id)
+ *
+ * @version may 2011, Chamilo 1.8.8
  */
-function show_add_forumcategory_form($inputvalues = array()) {
+function show_add_forumcategory_form($inputvalues = array(),$lp_id) {
     $gradebook = Security::remove_XSS($_GET['gradebook']);
 
     // Initialize the object.
     $form = new FormValidator('forumcategory', 'post', 'index.php?&amp;gradebook='.$gradebook.'');
-
+   	// hidden field if from learning path
+	$form->addElement('hidden', 'lp_id', $lp_id);
     // Settting the form elements.
     $form->addElement('header', '', get_lang('AddForumCategory'));
     $form->addElement('text', 'forum_category_title', get_lang('Title'), 'class="input_titles" id="category_title"');
@@ -160,9 +167,12 @@ function show_add_forumcategory_form($inputvalues = array()) {
  * @return void HTML
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version february 2006, dokeos 1.8
+ *
+ * Juan Carlos Raña Trabado (return to lp_id)
+ *
+ * @version may 2011, Chamilo 1.8.8
  */
-function show_add_forum_form($inputvalues = array()) {
+function show_add_forum_form($inputvalues = array(),$lp_id) {
     global $_course;
 
     $gradebook = Security::remove_XSS($_GET['gradebook']);
@@ -171,7 +181,7 @@ function show_add_forum_form($inputvalues = array()) {
 
     // The header for the form
     if (!empty($inputvalues)) {
-        $form_title = get_lang('EditForum');
+        $form_title = get_lang('EditForum');	
     } else {
         $form_title = get_lang('AddForum');
     }
@@ -183,7 +193,10 @@ function show_add_forum_form($inputvalues = array()) {
         $my_forum_id = isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
         $form->addElement('hidden', 'forum_id', $my_forum_id);
     }
-    // The title of the forum
+   	// hidden field if from learning path
+	$form->addElement('hidden', 'lp_id', $lp_id);
+	
+	// The title of the forum
     $form->addElement('text', 'forum_title', get_lang('Title'),'class="input_titles" id="forum_title"');
 
     //$form->applyFilter('forum_title', 'html_filter');

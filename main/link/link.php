@@ -159,7 +159,21 @@ Display::display_introduction_section(TOOL_LINK);
 
 if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 	echo '<div class="actions">';
-	echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png', get_lang('BackToLinksOverview'),'','32').'</a>';
+	if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){		
+		if (!empty($_POST['lp_id'])){			
+			$lp_id=Security::remove_XSS($_POST['lp_id']);
+		}
+		else{
+			$lp_id=Security::remove_XSS($_GET['lp_id']);
+		}
+		
+		echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-3\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'','32')."</a>";		
+	}	
+	else{
+		echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png', get_lang('BackToLinksOverview'),'','32').'</a>';
+	}
+	
+	
 	echo '</div>';
 		
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing
@@ -300,8 +314,10 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 				
 				echo sprintf($sf_textbox, $specific_field['name'], $specific_field['code'], $default_values);
 			}
-		}		
-		echo '	<div class="row">
+		}
+		//echo '<input type="hidden" name="origin"  value="' . Security::remove_XSS($_GET['origin']) . '" />';
+		echo '<input type="hidden" name="lp_id"  value="' . Security::remove_XSS($_GET['lp_id']) . '" />';
+		echo '<div class="row">
 					<div class="label">
 					</div>
 					<div class="formw">

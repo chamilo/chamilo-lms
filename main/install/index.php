@@ -308,6 +308,8 @@ if ($encryptPassForm == '1') {
 	<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
 		@import "../css/<?php echo api_get_visual_theme(); ?>/default.css";
+        @import "../css/base_chamilo.css";
+        @import "../css/base.css";
 		/*]]>*/
 	</style>
 	<script type="text/javascript" src="../inc/lib/javascript/jquery.js"></script>

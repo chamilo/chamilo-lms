@@ -37,6 +37,7 @@ function storage_get($sv_user, $sv_course, $sv_sco, $sv_key) {
 }
 
 function storage_set($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
+	$sv_value = mysql_real_escape_string($sv_value);
 	$mainDB = Database::get_main_database();
 	$sql = "replace into $mainDB.stored_values
 		(user_id, sco_id, course_id, sv_key, sv_value)

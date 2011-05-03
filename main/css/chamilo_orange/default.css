@@ -26,13 +26,6 @@ body {
     margin: 0 auto -9em; /* Do not change this value */
 }
 
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #f4b0b2;
-}
 #outerframe {
     position: relative;  /* do not remove, fixes a bug in IE */
     background-color: #fff;
@@ -49,33 +42,15 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
     margin: 0px auto;
     width: 92%;
 }
-#submain {
-    padding:10px;   
-    border:1px solid #ddd;
-    position: relative; /* to avoid the IE peekabo bug*/
-    margin: 0px auto;
 
-    min-height: 320px;
-    //padding:18px;
-    
-    -moz-border-radius:0px 0px 10px 10px;
-    border-radius:0px 0px 10px 10px;
-    
-    box-shadow: 3px 3px 10px #ddd;
-    -moz-box-shadow: 3px 3px 10px #ddd; 
-}
 .item {
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #f4b0b2;
+    -moz-border-radius:5px;
+	border-radius:5px;
+    border:1px solid #E1E1E0;
 }
 
 /*
------------------------------------------------------------------------------
 Side-Menu Slider (JQuery) see banner.inc.php
------------------------------------------------------------------------------
 */
 ul#navigation {
     position: fixed;
@@ -175,7 +150,7 @@ ul#navigation .user-online a {
 }
 
 /* Other colors for other tabs in the earth tones */
-    ul#navigation .user-connect a {
+ul#navigation .user-connect a {
     -moz-border-radius:8px 0 0 8px;
     -moz-box-shadow:0 2px 2px #000000;
     background-color:#fac97a ;
@@ -204,7 +179,6 @@ ul#navigation .student-connect a {
     width:65px;
     padding: 6px 0 8px 6px;
 }
-
 
 /* for content section in main index.php file */
 /*
@@ -239,9 +213,10 @@ ul#navigation .student-connect a {
 .invisible {
     color: #999;
 }
-.courseadminview table td a {
-    color: #F88017;
+.courseadminview table td a, .Authoringview table td a {
     font-weight: bold;
+    font-size:13px;
+    margin-left:2px;
 }
 
 
@@ -343,36 +318,6 @@ a:active {
     font-family:Tahoma, Geneva, sans-serif;
     text-decoration: none;
     color : #F88017;
-
-}
-select, textarea {
-    color : #000;
-    border: 1px solid #000;
-}
-input.checkbox {
-    border-width: 0;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #f4b0b2;
-}
-select, input[type=checkbox], input[type=radio], input[type=button], input[type=submit] {
-    cursor:	pointer;
-    font-size: 12px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #f4b0b2;
-}
-input[text] {
-    font-size: 12px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #f4b0b2;
 }
 /* user_portal course status icon */
 .coursestatusicons {
@@ -453,7 +398,6 @@ input[text] {
     overflow:hidden;
     margin-left:4%;
     margin-top:1%;
-    background-position:left bottom;
 }
 #my_courses {
     float:right;
@@ -532,7 +476,7 @@ input[text] {
 }
 
 #header3 li {
-float:left; /* important for ieX*/
+    float:left; /* important for ieX*/
 }
 #header3 li a span:hover {
     color:#fffc00;
@@ -730,7 +674,7 @@ margin-top:0;
 }
 #footer .copyright {
     float: right;
-    padding-top:53px;
+    padding-top:60px;
     margin-right:5%;
     background-color: #F88017;
     background-image: url(images/bg-footer.gif);
@@ -756,7 +700,6 @@ margin-top:0;
 }
 #footer a {
     color:#fff;
-    font-weight:bold;
 }
 #bottom_corner {
 }
@@ -769,10 +712,16 @@ margin-top:0;
 ==============================================================================
 */
 
+
+#menu-wrapper {
+    width:200px;
+    float: right;
+}
+
 #menu {
-    -moz-border-radius: 10px; border: 1px solid #f4b0b2;
-    -webkit-border-radius: 10px; border: 1px solid #f4b0b2;
-    -opera-border-radius: 10px; border: 1px solid #f4b0b2;
+    -moz-border-radius: 10px; border: 1px solid #e1e1e0;
+    -webkit-border-radius: 10px; border: 1px solid #e1e1e0;
+    -opera-border-radius: 10px; border: 1px solid #e1e1e0;
 
     margin-top:20px;
     margin-right:10px;
@@ -781,11 +730,13 @@ margin-top:0;
     padding-left:10px;
     padding-right:10px;
     padding-top:5px;
-    padding-bottom:0px;
+    padding-bottom:30px;
 
     width:200px;
     float: right;
-    min-height: 150px;
+    min-height: 80px;	
+    border:1px solid #E1E1E0;    
+    padding:5px 10px 0;
 }
 
 .menucaption {
@@ -978,7 +929,7 @@ this lets the navigation menu appear to the left:
 #formLogin input {
     font-size: 13px;
     margin: 4px 6px;
-    padding-left:5px;
+    padding:6px;
     -moz-border-radius-bottomleft:5px;
     -moz-border-radius-bottomright:5px;
     -moz-border-radius-topleft:5px;
@@ -1026,22 +977,20 @@ input.liteoption {
 #courseintro {
     clear: both;
     width: 80%;
-    /* margin: 10px auto; */
+    margin: 10px auto;
     padding: 10px;
     border-bottom: 1px solid #dcdcdc;
 }
 #courseintro_icons {
     clear: both;
     width: 80%;
-    margin: 10px auto;
+    /* margin: 10px auto; */
 }
 .everybodyview {
     position: relative; /* to avoid the IE peekabo bug ?*/
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #f4b0b2;
+    -moz-border-radius:5px;
+    border-radius:5px;
+    border:1px solid #E1E1E0;
     width: 80%;
     margin: 10px auto;
     padding: 10px;
@@ -1051,12 +1000,9 @@ input.liteoption {
     width: 80%;
     margin: 25px auto 10px;
     padding: 10px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #f4b0b2;
-
+    -moz-border-radius:5px;
+	border-radius:5px;
+    border:1px solid #E1E1E0;
 }
 .viewcaption {
     position: relative;
@@ -1148,7 +1094,7 @@ input.liteoption {
     text-align: center;
 }
 /* The cells with the name of the days of the weeks (mon->sun)*/
-#agenda_list .weekdays {
+#agenda_list .weekdays, .data_table .weekdays {
     background-color: #dcdcdc;
     text-align: center;
     font-weight: bold;
@@ -1195,6 +1141,13 @@ input.liteoption {
     color: #CC3300;
     font-weight: bold;
 }
+
+#agenda_list th {
+    background-color:#E5EDF9;
+    border:1px solid gray;
+    padding-right:12px;
+}
+
 /* text in the cells: display of agenda items (visible)*/
 #agenda_list .data {
     background-color: #eee;
@@ -1332,64 +1285,38 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 /*****************************************************
  *  DISPLAY MESSAGES	                             *
  *****************************************************/
-/* normal and erro message-box */
-.normal-message {
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    min-height: 30px;
-    border-width: 1px;
-    border-style: solid;
-    border: 1px solid #4171B5;
-    -moz-border-radius: 10px;
-    padding: 6px;
-    color: #00407F;
-    background-color: #EFEFEF;
+.normal-message {    
+    color: #00407F;	
+    border: 1px solid #CDE6F5;	
+    background: url("images/background_message.png") repeat-x scroll 0 0 #EAF8FE;
 }
-.warning-message {
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-width: 1px;
-    border-style: solid;
-    padding: 6px;
+.warning-message {    
     border: 1px solid #FFB30F;
-    -moz-border-radius: 10px;
-    color: #000;
-    background-color: #FFEFA7;
-    min-height: 30px;
+    color: #000;    
+	background: url("images/background_message.png") repeat-x scroll 0 0 #FFEFA7;
 }
 .confirmation-message {
-    background-color:#CAF0C7;
-    border-color:#1F8323;
+	border: 1px solid #1F8323;
     color:#1F8323;
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-width: 1px;
-    border-style: solid;
-    -moz-border-radius: 10px;
-    padding:6px;
-    min-height: 30px;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #CAF0C7;
 }
-.error-message {
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-width: 1px;
-    border-style: solid;
-    -moz-border-radius: 10px;
-    padding: 6px;
-    border: 1px solid #F88017;
+.error-message {        
+    border: 1px solid #FF0000;
     color: #440000;
-    background-color: #FFD1D1;
-    min-height: 30px;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #FFD1D1;
 }
-.confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link {
-    position: absolute;
-    bottom: 0.2em;
-    right: 0.5em;
+.confirmation-message, .error-message, .normal-message, .warning-message {
+	min-height: 30px;
+	position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;	
+    -moz-border-radius: 10px;
+    border-radius: 10px;    
+	border-width: 1px;
+    border-style: solid;
+	padding:6px;	
 }
+
 /* New training */
 .bottom-link {
     border: 2px outset;
@@ -1528,7 +1455,7 @@ a.nobold:hover {
  *****************************************************/
 div.row {
     clear: both;
-    padding-top: 5px;
+    padding-top: 10px;
 }
 div.row div.form_header {
     white-space: nowrap;
@@ -1538,11 +1465,11 @@ div.row div.form_header {
 }
 div.row div.label {
     float: left;
-    width: 18%;
+    width: 22%;
     text-align: right;
 }
 div.row div.formw {
-    width: 80%;
+    width: 76%;
     float:left;
 
 }
@@ -1689,20 +1616,19 @@ form br {
 }
 /* Admin section */
 div.admin_section {
-    -moz-border-radius-bottomleft:10px;
-    -moz-border-radius-bottomright:10px;
-    -moz-border-radius-topleft:10px;
-    -moz-border-radius-topright:10px;
-    border:1px solid #f4b0b2;
+   -moz-border-radius:10px;
+	border-radius:10px;
+    border:1px solid #E1E1E0;
     width: 40%;
     float: left;
     padding: 5px;
     margin: 10px 20px;
-    min-height:200px;
+    min-height:234px;
 }
 
 div.admin_section h4 {
-    margin: 0;
+    margin: 5px 0px 5px 5px;
+	padding: 0px 0px 5px 0px;
     border-bottom: 1px solid #f4b0b2;
     width: 100%;
 }
@@ -1772,6 +1698,10 @@ div.admin_section h4 {
     margin-bottom: 10px;
     background-color:#F9F9F9;
 }
+.session_box_title {
+    margin-bottom: 10px;
+    background-color:#F9F9F9;
+}
 
 .admin_section {
 }
@@ -1786,19 +1716,19 @@ div.admin_section h4 {
     font-weight: bold;
     color: #666666;
     list-style-type: none;
-    margin: 5px;
+    margin: 5px 5px 5px 0px;
     padding: 5px;
-    font-size: 11px;
+    font-size: 14px;
 }
 .sectioncomment {
     color: #000000;
-    margin: 5px;
+    margin: 5px 5px 5px 0px;
     padding: 5px;
     font-size: 11px;
 }
 .sectionvalue {
     list-style-type: none;
-    margin: 5px;
+    margin: 5px 5px 5px 0px;
     padding: 5px;
 }
 /*****************************************************
@@ -1952,6 +1882,10 @@ a.forum_group_link {
 .forum_description {
     color: #000;
     font-weight: normal;
+    font-size: 11px;
+}
+.forum_description p{
+    font-size: 11px;
 }
 .forum_title {
     color: #000;
@@ -2867,7 +2801,6 @@ button.minus {
 button.next {
     background-image:url(images/button_next.gif);
 }
-/*including "next" image*/
 /*including "back" image*/
 button.back {
     background-image:url(images/button_back.gif);
@@ -2925,7 +2858,7 @@ button.upload {
     border-style: solid;
     border-width : 1px 2px 2px 1px;
     text-decoration : none;
-    padding : 4px;
+    /*padding : 4px; */
     border-color : #69f #00f #00f #69f;
 }
 .fake_button_back:hover {
@@ -2958,10 +2891,9 @@ div#friend-container {
 }
 div.image_friend_network {
     float:left;
-    border:1px solid #CCCCCC;
+    /* border:1px solid #CCCCCC; */
     margin:2px;
     padding:4px;
-
     height:125px;
     width:82px;
     z-index:5;
@@ -3098,36 +3030,14 @@ input.arrowl {
 
 
 /* UI improvements for 1.8.6.2 this should be move to the chamilo theme and reproduce in all CSS*/
-
-* {
-    outline :none;
-}
-input, select, textarea {
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    -x-system-font:none;
-    border:1px solid #CCCCCC;
-    color:#666666;
-    font-family:Arial,Helvetica,sans-serif;
-    font-size:120%;
-    font-size-adjust:none;
-    font-stretch:normal;
-    font-style:normal;
-    font-variant:normal;
-    font-weight:normal;
-    line-height:normal;
-    padding:5px;
-}
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-    background-image:url(images/shadow.gif);
-}
 .independent_course_item a {
     font-size:135%;
 }
 .session_course_item a {
-    /*font-size:135%;*/
+     /* font-size:135%;*/ 
+}
+.session_course_item .item_closed, .userportal-course-item-title .item_closed {
+     font-size:80%; 
 }
 #maincontent .courseslist li {
     margin-bottom:8px;
@@ -3201,68 +3111,6 @@ a.read {
 .groups_grid_element_1 { width:100px; float:left; text-align:left;	margin-bottom:5px;}
 .groups_grid_element_2 { width:150px; float:left;}
 
-/*POPULAR GROUP*/
-
-.popular_grid_item {
-	background: none repeat scroll 0 0 #FFFFFF;
-	border: 1px solid #E5E5E5;
-	border-radius: 11px 11px 11px 11px;
-	
-	-webkit-border-radius: 11px 11px 11px 11px;
-	-opera-border-radius: 11px 11px 11px 11px;
-	-moz-border-radius: 11px 11px 11px 11px;
-	
-	box-shadow: 0 4px 18px #C8C8C8;
-	-webkit-box-shadow: 0 4px 18px #C8C8C8;
-	-opera-box-shadow: 0 4px 18px #C8C8C8;
-	-moz-box-shadow: 0 4px 18px #C8C8C8;
-	
-	float: left;
-	height: auto;
-	margin: 0 8px 15px 15px;
-	padding: 16px 12px 5px;
-	width:90%;
-}
-
-.popular_grid_element_0 {
-	width:600px;
-    height:98px;
-    padding-left:10px;
-    padding-right:10px;
-    overflow:hidden;
-}
-
-/*NEWEST GROUP*/
-
-.newest_grid_item {
-	background: none repeat scroll 0 0 #FFFFFF;
-	border: 1px solid #E5E5E5;
-	border-radius: 11px 11px 11px 11px;
-	
-	-webkit-border-radius: 11px 11px 11px 11px;
-	-opera-border-radius: 11px 11px 11px 11px;
-	-moz-border-radius: 11px 11px 11px 11px;
-	
-	box-shadow: 0 4px 18px #C8C8C8;
-	-webkit-box-shadow: 0 4px 18px #C8C8C8;
-	-opera-box-shadow: 0 4px 18px #C8C8C8;
-	-moz-box-shadow: 0 4px 18px #C8C8C8;
-	
-	float: left;
-	height: auto;
-	margin: 0 8px 15px 15px;
-	padding: 16px 12px 5px;
-    width:90%;
-}
-
-.newest_grid_element_1 {
-    width:600px;
-    height:98x;
-    padding-left:10px;
-    padding-right:10px;
-    overflow:hidden;
-}
-
 /*MY GROUPS*/
 
 .mygroups_grid_item {
@@ -3279,11 +3127,11 @@ a.read {
 	-opera-box-shadow: 0 4px 18px #C8C8C8;
 	-moz-box-shadow: 0 4px 18px #C8C8C8;
 	
-    float: left;
-    height: 88px;
-    margin: 0 8px 15px 15px;
-    padding: 16px 12px 5px;
-    width:600px;
+	float: left;
+	height: 88px;
+	margin: 0 8px 15px 15px;
+	padding: 16px 12px 5px;
+	width:600px;
 }
 
 .box_description_group_member {
@@ -3293,7 +3141,7 @@ a.read {
 
 .mygroups_grid_element_1 {
     width:600px;
-    height:100px;
+    height:100px;    
     overflow:hidden;
 }
 
@@ -3302,11 +3150,12 @@ a.read {
 }
 
 .box_description_group_title {
-    float:right;width:80%;
+    float:right;
+	width:530px;
 }
 .box_description_group_content {
     float:right;
-    width:80%;
+    width:530px;
     margin-top:5px;
     /* height:45px;*/
     font-family:Verdana, Geneva, sans-serif;
@@ -3315,7 +3164,7 @@ a.read {
 }
 .box_description_group_actions {
     float:right;
-    width:80%;
+    width:530px;
     text-align:right;
     margin-top:4px;
     margin-right:4px;
@@ -3362,7 +3211,7 @@ a.read {
 /* home group boxes */
 
 .home_group_grid_container {
-    margin-bottom:60px;
+    margin-bottom:70px;
 }
 
 .home_group_grid_element_1 {
@@ -3459,25 +3308,6 @@ a.read {
     overflow:hidden;
 }
 
-#menu {
-    -moz-border-radius: 10px; border: 1px solid #f4b0b2;
-    -webkit-border-radius: 10px; border: 1px solid #f4b0b2;
-    -opera-border-radius: 10px; border: 1px solid #f4b0b2;
-
-    margin-top:20px;
-    margin-right:10px;
-    margin-bottom:0px;
-
-    padding-left:10px;
-    padding-right:10px;
-    padding-top:5px;
-    padding-bottom:0px;
-
-    width:200px;
-    float: right;
-    min-height: 150px;
-}
-
 /* INVITATIONS */
 
 .invitation_confirm {
@@ -3492,7 +3322,7 @@ a.read {
  *  MESSAGE TOOL                           *
  **********************************************/
 
- #inbox-wrapper {
+#inbox-wrapper {
     width:100%;
 }
 #inbox {
@@ -4027,16 +3857,17 @@ div.image-social-content center.friend {
     overflow:hidden;
 }
 .social-box-left {
-    width:345px;
+    width:340px;
     float:left;
     height:auto;
     margin:0px;
 }
+
 .social-box-right {
-    width:300px;
+    width:280px;
     float:left;
     height:auto;
-    margin-left:10px;
+    margin-left:18px;
     overflow:hidden;
 }
 .social-box-container1 {
@@ -4059,7 +3890,7 @@ div.image-social-content center.friend {
     width:700px;
 }
 .social-box-container2 {
-    width:700px;
+    //width:648px;
     height:auto;
     overflow:hidden;
     margin-bottom:20px;
@@ -4342,14 +4173,14 @@ span.form_required  {
     -moz-border-radius:5px 5px 5px 5px;
     border:1px solid #E1E1E0;
     float:left;
-    margin:10px 20px 10px 10px;
+    margin:0px 20px 10px 2px;
     padding:11px;
-    width:210px;
+    width:220px;
     height:330px;
 }
 
 .courseadminview-activity-3col ul {
-    padding:10px 20px 10px 20px;
+    padding:0px 20px 10px 4px;
     list-style-type:none;
     height:240px;
     margin-left:0px;
@@ -4458,6 +4289,30 @@ span.form_required  {
 
 #plugin-footer {
     padding:0px;
+}
+
+
+.attendance-users-table td {
+    /* height:66px;*/
+}
+
+.attendance-calendar-table td {
+    /*height:66px;*/
+}
+
+#contact_registration .label{
+    width:205px;
+
+}
+
+#contact_registration .formw{
+    width:344px;
+    float:left;
+    margin-left:20px;
+}
+
+#id_contact_form .normal-message{
+    padding:20px;
 }
 
 /*	New forum table */

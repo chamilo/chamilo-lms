@@ -18,8 +18,6 @@ body {
     background-color: #fff;
     height: 100%; /* stick */
 }
-
-
 /* Sticky footer*/
 #wrapper {
     min-height: 100%;
@@ -44,28 +42,12 @@ body {
     margin: 0px auto;
     width: 92%;
 }
-#submain {
-	padding:10px;	
-    border:1px solid #ddd;
-    position: relative; /* to avoid the IE peekabo bug*/
-    margin: 0px auto;
 
-    min-height: 320px;
-    //padding:18px;
-    
-    -moz-border-radius:0px 0px 10px 10px;
-    border-radius:0px 0px 10px 10px;
-    
-    box-shadow: 3px 3px 10px #ddd;
-    -moz-box-shadow: 3px 3px 10px #ddd;	
-}
 .item {
     -moz-border-radius:5px;
 	border-radius:5px;
     border:1px solid #E1E1E0;
 }
-
-
 
 /*
 Side-Menu Slider (JQuery) see banner.inc.php

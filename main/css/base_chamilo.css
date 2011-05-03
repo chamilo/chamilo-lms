@@ -1,6 +1,23 @@
 /*
  * CSS that only will be called in chamilo_XXX themes
  */
+ 
+#submain {
+    padding:10px;   
+    border:1px solid #ddd;
+    position: relative; /* to avoid the IE peekabo bug*/
+    margin: 0px auto;
+
+    min-height: 320px;
+    //padding:18px;
+    
+    -moz-border-radius:0px 0px 10px 10px;
+    border-radius:0px 0px 10px 10px;
+    
+    box-shadow: 3px 3px 10px #ddd;
+    -moz-box-shadow: 3px 3px 10px #ddd; 
+}
+ 
 #header3 {
     background:none;                    
     //padding:2px;
@@ -11,7 +28,7 @@
 }
 
 #header2 {
- min-height: 28px;
+    min-height: 18px;
 }
 
 #current {
@@ -20,7 +37,12 @@
 
 #current #tab_active {
     //background:none;
-}                
+}       
+
+#header1 {
+	padding:0px;
+}
+         
 #header3 a {
     //background:none;
 }
@@ -41,6 +63,8 @@
     background:none;                    
     width: 92%;
 }
+
+
 
 div.admin_section {
   width: 44%;	

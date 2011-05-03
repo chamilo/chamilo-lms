@@ -398,7 +398,8 @@ table.lp_build td.tree {
     //border: 1px solid #DEDEDE;
     height: 25px;
     margin: 0px;	
-	padding:0px; 
+	padding:0px;
+	 
 }
 
 .bread li {
@@ -440,9 +441,11 @@ table.lp_build td.tree {
 }    
 
 #logo {    
-    height:85px;
+    /* height:85px; */
+	padding-top: 4px;
     overflow:hidden;
     margin-left:4%;
+	float:left;
 }
 
 #document_quota {

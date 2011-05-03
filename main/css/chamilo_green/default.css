@@ -26,13 +26,6 @@ body {
     margin: 0 auto -9em; /* Do not change this value */
 }
 
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
 #outerframe {
     position: relative;  /* do not remove, fixes a bug in IE */
     background-color: #fff;
@@ -49,33 +42,15 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
     margin: 0px auto;
     width: 92%;
 }
-#submain {
-    padding:10px;   
-    border:1px solid #ddd;
-    position: relative; /* to avoid the IE peekabo bug*/
-    margin: 0px auto;
 
-    min-height: 320px;
-    //padding:18px;
-    
-    -moz-border-radius:0px 0px 10px 10px;
-    border-radius:0px 0px 10px 10px;
-    
-    box-shadow: 3px 3px 10px #ddd;
-    -moz-box-shadow: 3px 3px 10px #ddd; 
-}
 .item {
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
+    -moz-border-radius:5px;
+	border-radius:5px;
     border:1px solid #E1E1E0;
 }
 
 /*
------------------------------------------------------------------------------
 Side-Menu Slider (JQuery) see banner.inc.php
------------------------------------------------------------------------------
 */
 ul#navigation {
     position: fixed;
@@ -175,7 +150,7 @@ ul#navigation .user-online a {
 }
 
 /* Other colors for other tabs in the earth tones */
-    ul#navigation .user-connect a {
+ul#navigation .user-connect a {
     -moz-border-radius:8px 0 0 8px;
     -moz-box-shadow:0 2px 2px #000000;
     background-color:#fac97a ;
@@ -204,7 +179,6 @@ ul#navigation .student-connect a {
     width:65px;
     padding: 6px 0 8px 6px;
 }
-
 
 /* for content section in main index.php file */
 /*
@@ -242,8 +216,9 @@ ul#navigation .student-connect a {
 .courseadminview table td a {
     color: #699030;
     font-weight: bold;
+    font-size:13px;
+    margin-left:2px;
 }
-
 
 .Authoringview, .courseadminview, .platformadminview {
     position: relative;
@@ -303,7 +278,6 @@ img {
 }
 p, blockquote, ol, ul {
     font-size: 12px;
-
 }
 
 h1 {
@@ -343,37 +317,8 @@ a:active {
     font-family:Tahoma, Geneva, sans-serif;
     text-decoration: none;
     color : #01933e;
+}
 
-}
-select, textarea {
-    color : #000;
-    border: 1px solid #000;
-}
-input.checkbox {
-    border-width: 0;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
-select, input[type=checkbox], input[type=radio], input[type=button], input[type=submit] {
-    cursor:	pointer;
-    font-size: 12px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
-input[text] {
-    font-size: 12px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
 /* user_portal course status icon */
 .coursestatusicons {
     border: 0px solid #000;
@@ -396,10 +341,7 @@ input[text] {
     /* padding: 0px; */
     margin: 0px;
     margin-bottom:15px;
-	font-size:135%; 
-}
-.session_course_item .item_closed, .userportal-course-item-title .item_closed {
-     font-size:80%; 
+    font-size:135%;
 }
 
 /*****************************************************
@@ -456,7 +398,6 @@ input[text] {
     overflow:hidden;
     margin-left:4%;
     margin-top:1%;
-    background-position:left bottom;
 }
 #my_courses {
     float:right;
@@ -531,11 +472,10 @@ input[text] {
 
 #header3 a:hover {
     color:#fffc00D;
-
 }
 
 #header3 li {
-float:left; /* important for ieX*/
+    float:left; /* important for ieX*/
 }
 #header3 li a span:hover {
     color:#fffc00;
@@ -548,9 +488,6 @@ float:left; /* important for ieX*/
     margin-left:0px;
     margin: 11px 0px 0px 0px ;
 }
-
-
-
 
 #header3  a {
     -moz-background-clip:border;
@@ -579,14 +516,14 @@ float:left; /* important for ieX*/
 }
 
 #current a {
-background:transparent url(images/tab_left-active.gif) no-repeat scroll left top;
-color:#FFFFFF;
-cursor:pointer;
-float:left;
-height:25px;
-padding-left:9px;
-padding-right:2px;
-text-decoration:none;
+	background:transparent url(images/tab_left-active.gif) no-repeat scroll left top;
+	color:#FFFFFF;
+	cursor:pointer;
+	float:left;
+	height:25px;
+	padding-left:9px;
+	padding-right:2px;
+	text-decoration:none;
 }
 
 #header3 li {
@@ -594,16 +531,16 @@ float:left;
 }
 
 #current {
-background:transparent url(images/tab_center-active.gif) no-repeat scroll right top;;
-color:#FFFFFF;
-cursor:pointer;
-display:block;
-float:left;
-height:20px;
-overflow:hidden;
-padding-bottom:6px;
-margin-right:-3px;
-margin-right:3px;
+	background:transparent url(images/tab_center-active.gif) no-repeat scroll right top;;
+	color:#FFFFFF;
+	cursor:pointer;
+	display:block;
+	float:left;
+	height:20px;
+	overflow:hidden;
+	padding-bottom:6px;
+	margin-right:-3px;
+	margin-right:3px;
 }
 
 #current #tab_active {
@@ -736,7 +673,7 @@ margin-top:0;
 }
 #footer .copyright {
     float: right;
-    padding-top:53px;
+    padding-top:60px;
     margin-right:5%;
     background-color: #79aa0b;
     background-image: url(images/bg-footer.gif);
@@ -797,7 +734,8 @@ margin-top:0;
 
     width:200px;
     float: right;
-    min-height: 150px;
+    min-height: 80px;
+    padding:5px 10px 0;
 }
 
 .menucaption {
@@ -848,11 +786,11 @@ margin-top:0;
     padding: 10px 0 40px 0;
 }
 #toolnav {
+    float:right;
     margin:-7px 0 0 -5%;
     overflow:hidden;
     padding:0;
     width:180px;
-    float:right;
 }
 #toolnav img {
     float: left;
@@ -990,7 +928,7 @@ this lets the navigation menu appear to the left:
 #formLogin input {
     font-size: 13px;
     margin: 4px 6px;
-    padding-left:5px;
+    padding:6px;
     -moz-border-radius-bottomleft:5px;
     -moz-border-radius-bottomright:5px;
     -moz-border-radius-topleft:5px;
@@ -1038,7 +976,7 @@ input.liteoption {
 #courseintro {
     clear: both;
     width: 80%;
-    /* margin: 10px auto; */
+    margin: 10px auto;
     padding: 10px;
     border-bottom: 1px solid #dcdcdc;
 }
@@ -1049,10 +987,8 @@ input.liteoption {
 }
 .everybodyview {
     position: relative; /* to avoid the IE peekabo bug ?*/
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
+    -moz-border-radius:5px;
+    border-radius:5px;
     border:1px solid #E1E1E0;
     width: 80%;
     margin: 10px auto;
@@ -1063,10 +999,8 @@ input.liteoption {
     width: 80%;
     margin: 25px auto 10px;
     padding: 10px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
+    -moz-border-radius:5px;
+	border-radius:5px;
     border:1px solid #E1E1E0;
 
 }
@@ -1160,7 +1094,7 @@ input.liteoption {
     text-align: center;
 }
 /* The cells with the name of the days of the weeks (mon->sun)*/
-#agenda_list .weekdays {
+#agenda_list .weekdays, .data_table .weekdays {
     background-color: #dcdcdc;
     text-align: center;
     font-weight: bold;
@@ -1349,64 +1283,38 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 /*****************************************************
  *  DISPLAY MESSAGES	                             *
  *****************************************************/
-/* normal and erro message-box */
-.normal-message {
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    min-height: 30px;
-    border-width: 1px;
-    border-style: solid;
-    border: 1px solid #4171B5;
-    -moz-border-radius: 10px;
-    padding: 6px;
-    color: #00407F;
-    background-color: #EFEFEF;
+.normal-message {    
+    color: #00407F;	
+    border: 1px solid #CDE6F5;	
+    background: url("images/background_message.png") repeat-x scroll 0 0 #EAF8FE;
 }
-.warning-message {
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-width: 1px;
-    border-style: solid;
-    padding: 6px;
+.warning-message {    
     border: 1px solid #FFB30F;
-    -moz-border-radius: 10px;
-    color: #000;
-    background-color: #FFEFA7;
-    min-height: 30px;
+    color: #000;    
+	background: url("images/background_message.png") repeat-x scroll 0 0 #FFEFA7;
 }
 .confirmation-message {
-    background-color:#CAF0C7;
-    border-color:#1F8323;
+	border: 1px solid #1F8323;
     color:#1F8323;
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-width: 1px;
-    border-style: solid;
-    -moz-border-radius: 10px;
-    padding:6px;
-    min-height: 30px;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #CAF0C7;
 }
-.error-message {
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-width: 1px;
-    border-style: solid;
-    -moz-border-radius: 10px;
-    padding: 6px;
+.error-message {        
     border: 1px solid #FF0000;
     color: #440000;
-    background-color: #FFD1D1;
-    min-height: 30px;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #FFD1D1;
 }
-.confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link {
-    position: absolute;
-    bottom: 0.2em;
-    right: 0.5em;
+.confirmation-message, .error-message, .normal-message, .warning-message {
+	min-height: 30px;
+	position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;	
+    -moz-border-radius: 10px;
+    border-radius: 10px;    
+	border-width: 1px;
+    border-style: solid;
+	padding:6px;	
 }
+
 /* New training */
 .bottom-link {
     border: 2px outset;
@@ -1555,11 +1463,11 @@ div.row div.form_header {
 }
 div.row div.label {
     float: left;
-    width: 18%;
+    width: 22%;
     text-align: right;
 }
 div.row div.formw {
-    width: 80%;
+    width: 76%;
     float:left;
 
 }
@@ -1705,21 +1613,20 @@ form br {
     font-weight: bold;
 }
 /* Admin section */
-div.admin_section {
-    -moz-border-radius-bottomleft:10px;
-    -moz-border-radius-bottomright:10px;
-    -moz-border-radius-topleft:10px;
-    -moz-border-radius-topright:10px;
+div.admin_section {    
+    -moz-border-radius:10px;
+	border-radius:10px;
     border:1px solid #E1E1E0;
     width: 40%;
     float: left;
     padding: 5px;
     margin: 10px 20px;
-    min-height:200px;
+    min-height:234px;
 }
 
 div.admin_section h4 {
-    margin: 0;
+    margin: 5px 0px 5px 5px;
+	padding: 0px 0px 5px 0px;
     border-bottom: 1px solid #E1E1E0;
     width: 100%;
 }
@@ -1974,6 +1881,10 @@ a.forum_group_link {
 .forum_description {
     color: #000;
     font-weight: normal;
+    font-size: 11px;
+}
+.forum_description p{
+    font-size: 11px;
 }
 .forum_title {
     color: #000;
@@ -2595,12 +2506,6 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
     width: 75%;
     float:left;
 }
-
-#label_result {
-    float: left;
-    text-align: right;
-    margin-right: 10px;
-}
 /* actions */
 .actions_lp {
     background:#F8F8F8;
@@ -2986,7 +2891,7 @@ div#friend-container {
 }
 div.image_friend_network {
     float:left;
-    border:1px solid #CCCCCC;
+    /*border:1px solid #CCCCCC;*/
     margin:2px;
     padding:4px;
 
@@ -3056,6 +2961,10 @@ button.arrowl {
     background-image:url(images/2leftarrow.gif);
     background-repeat:no-repeat;
 }
+.u-m-answer {
+    float:left;
+    width:100%;
+}
 /* input >> */
 input.arrowr {
     -moz-border-radius-topleft : 5px;
@@ -3096,10 +3005,6 @@ input.arrowl {
     background-image:url(images/2leftarrow.gif);
     background-repeat:no-repeat;
 }
-.u-m-answer {
-    float:left;
-    width:100%;
-}
 .u-m-answer p {
     margin:4px;
 }
@@ -3126,36 +3031,14 @@ input.arrowl {
 
 
 /* UI improvements for 1.8.6.2 this should be move to the chamilo theme and reproduce in all CSS*/
-
-* {
-    outline :none;
-}
-input, select, textarea {
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    -x-system-font:none;
-    border:1px solid #CCCCCC;
-    color:#666666;
-    font-family:Arial,Helvetica,sans-serif;
-    font-size:120%;
-    font-size-adjust:none;
-    font-stretch:normal;
-    font-style:normal;
-    font-variant:normal;
-    font-weight:normal;
-    line-height:normal;
-    padding:5px;
-}
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-    background-image:url(images/shadow.gif);
-}
 .independent_course_item a {
     font-size:135%;
 }
 .session_course_item a {
-    /*font-size:135%;*/
+     /* font-size:135%;*/ 
+}
+.session_course_item .item_closed, .userportal-course-item-title .item_closed {
+     font-size:80%; 
 }
 #maincontent .courseslist li {
     margin-bottom:8px;
@@ -3229,68 +3112,6 @@ a.read {
 .groups_grid_element_1 { width:100px; float:left; text-align:left;	margin-bottom:5px;}
 .groups_grid_element_2 { width:150px; float:left;}
 
-/*POPULAR GROUP*/
-
-.popular_grid_item {
-	background: none repeat scroll 0 0 #FFFFFF;
-	border: 1px solid #E5E5E5;
-	border-radius: 11px 11px 11px 11px;
-	
-	-webkit-border-radius: 11px 11px 11px 11px;
-	-opera-border-radius: 11px 11px 11px 11px;
-	-moz-border-radius: 11px 11px 11px 11px;
-	
-	box-shadow: 0 4px 18px #C8C8C8;
-	-webkit-box-shadow: 0 4px 18px #C8C8C8;
-	-opera-box-shadow: 0 4px 18px #C8C8C8;
-	-moz-box-shadow: 0 4px 18px #C8C8C8;
-	
-	float: left;
-	height: auto;
-	margin: 0 8px 15px 15px;
-	padding: 16px 12px 5px;
-	width:90%;
-}
-
-.popular_grid_element_0 {
-	width:600px;
-    height:98px;
-    padding-left:10px;
-    padding-right:10px;
-    overflow:hidden;
-}
-
-/*NEWEST GROUP*/
-
-.newest_grid_item {
-	background: none repeat scroll 0 0 #FFFFFF;
-	border: 1px solid #E5E5E5;
-	border-radius: 11px 11px 11px 11px;
-	
-	-webkit-border-radius: 11px 11px 11px 11px;
-	-opera-border-radius: 11px 11px 11px 11px;
-	-moz-border-radius: 11px 11px 11px 11px;
-	
-	box-shadow: 0 4px 18px #C8C8C8;
-	-webkit-box-shadow: 0 4px 18px #C8C8C8;
-	-opera-box-shadow: 0 4px 18px #C8C8C8;
-	-moz-box-shadow: 0 4px 18px #C8C8C8;
-	
-	float: left;
-	height: auto;
-	margin: 0 8px 15px 15px;
-	padding: 16px 12px 5px;
-    width:90%;
-}
-
-.newest_grid_element_1 {
-    width:600px;
-    height:98x;
-    padding-left:10px;
-    padding-right:10px;
-    overflow:hidden;
-}
-
 /*MY GROUPS*/
 
 .mygroups_grid_item {
@@ -3307,11 +3128,11 @@ a.read {
 	-opera-box-shadow: 0 4px 18px #C8C8C8;
 	-moz-box-shadow: 0 4px 18px #C8C8C8;
 	
-    float: left;
-    height: 88px;
-    margin: 0 8px 15px 15px;
-    padding: 16px 12px 5px;
-    width:600px;
+	float: left;
+	height: 88px;
+	margin: 0 8px 15px 15px;
+	padding: 16px 12px 5px;
+	width:600px;
 }
 
 .box_description_group_member {
@@ -3321,7 +3142,7 @@ a.read {
 
 .mygroups_grid_element_1 {
     width:600px;
-    height:100px;
+    height:100px;    
     overflow:hidden;
 }
 
@@ -3390,7 +3211,7 @@ a.read {
 /* home group boxes */
 
 .home_group_grid_container {
-    margin-bottom:60px;
+    margin-bottom:70px;
 }
 
 .home_group_grid_element_1 {
@@ -3485,25 +3306,6 @@ a.read {
     background-image:url(../../img/boxmygroupscontent.jpg);
     background-repeat:repeat-y;
     overflow:hidden;
-}
-
-#menu {
-    -moz-border-radius: 10px; border: 1px solid #e1e1e0;
-    -webkit-border-radius: 10px; border: 1px solid #e1e1e0;
-    -opera-border-radius: 10px; border: 1px solid #e1e1e0;
-
-    margin-top:20px;
-    margin-right:10px;
-    margin-bottom:0px;
-
-    padding-left:10px;
-    padding-right:10px;
-    padding-top:5px;
-    padding-bottom:0px;
-
-    width:200px;
-    float: right;
-    min-height: 150px;
 }
 
 /* INVITATIONS */
@@ -3783,7 +3585,7 @@ a.unread {
 
 div.image-social-content {
     float:left;
-    border:1px dotted #ccc;
+    /*border:1px dotted #ccc;*/
     margin:2px;
     padding: 8px 4px 4px 4px;
     background: #ffffff;
@@ -4088,7 +3890,7 @@ div.image-social-content center.friend {
     width:700px;
 }
 .social-box-container2 {
-    width:700px;
+    //width:700px;
     height:auto;
     overflow:hidden;
     margin-bottom:20px;
@@ -4372,9 +4174,9 @@ span.form_required  {
     -moz-border-radius:5px 5px 5px 5px;
     border:1px solid #E1E1E0;
     float:left;
-    margin:10px 20px 10px 10px;
+    margin:0px 20px 10px 2px;
     padding:11px;
-    width:210px;
+    width:220px;
     height:330px;
 }
 
@@ -4490,6 +4292,30 @@ span.form_required  {
     padding:0px;
 }
 
+
+.attendance-users-table td {
+    /* height:66px;*/
+}
+
+.attendance-calendar-table td {
+    /*height:66px;*/
+}
+
+#contact_registration .label{
+    width:205px;
+
+}
+
+#contact_registration .formw{
+    width:344px;
+    float:left;
+    margin-left:20px;
+}
+
+#id_contact_form .normal-message{
+    padding:20px;
+}
+
 /*	New forum table */
 
 
@@ -4551,6 +4377,7 @@ span.form_required  {
     border: 1px solid gray;
     margin-bottom:5px;
 }
+
 /* Text resize icons in header */
 .resize_font { /* the canvas */
     margin: 0 5px 0 5px;

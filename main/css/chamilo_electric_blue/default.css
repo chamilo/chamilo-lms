@@ -180,7 +180,6 @@ ul#navigation .student-connect a {
     padding: 6px 0 8px 6px;
 }
 
-
 /* for content section in main index.php file */
 /*
 |----------------------------------------------------------------------------
@@ -278,7 +277,6 @@ img {
 }
 p, blockquote, ol, ul {
     font-size: 12px;
-
 }
 
 h1 {
@@ -342,9 +340,8 @@ a:active {
     /* padding: 0px; */
     margin: 0px;
     margin-bottom:15px;
-	font-size:135%; 
+    font-size:135%;
 }
-
 
 /*****************************************************
  *  HEADER STYLES                                    *
@@ -477,7 +474,7 @@ a:active {
 }
 
 #header3 li {
-float:left; /* important for ieX*/
+    float:left; /* important for ieX*/
 }
 #header3 li a span:hover {
     color:#fffc00;
@@ -655,6 +652,7 @@ margin-top:0;
     text-align:right;
     width:92%;
 }
+
 /**********************************************************
 * MENU SLIDER BAR                   *
 **********************************************************/
@@ -730,7 +728,7 @@ may be inherited in some browsers from other 'a' element styles (if any) on the 
     float: right;
 }
 
-#menu {
+#menu {    
 	border: 1px solid #e1e1e0;
     -moz-border-radius: 10px; 
     -webkit-border-radius: 10px;
@@ -1016,7 +1014,6 @@ input.liteoption {
     -moz-border-radius:5px;
 	border-radius:5px;
     border:1px solid #E1E1E0;
-
 }
 .viewcaption {
     position: relative;
@@ -1135,7 +1132,6 @@ input.liteoption {
     background-color: #f5f5f5;
 }
 
-
 #agenda_list .days_weekend {
     height: 40px;
     width: 12%;
@@ -1153,9 +1149,14 @@ input.liteoption {
     border: 1px solid #264269;
     border-collapse: collapse;
     background-color: #FFCA8D;
-    color: #CC3300;
-    font-weight: bold;
 }
+
+#agenda_list th {
+    background-color:#E5EDF9;
+    border:1px solid gray;
+    padding-right:12px;
+}
+
 /* text in the cells: display of agenda items (visible)*/
 #agenda_list .data {
     background-color: #eee;
@@ -1468,9 +1469,12 @@ div.row {
 div.row div.form_header {
     white-space: nowrap;
     padding: 2px;
+    margin : 0px 0px 10px 0px;
     background-color: #E5EDF9;
     border: 1px solid #bbb;
+    font-size:20px;
 }
+
 div.row div.label {
     float: left;
     width: 22%;
@@ -1505,8 +1509,7 @@ span.form_error {
     font-weight:bold;
     text-align:left;
     padding-left:5px;
-}   
-
+}
 
 /* header cell in data table in tools */
 .data_table {
@@ -1631,7 +1634,7 @@ div.admin_section {
     float: left;
     padding: 5px;
     margin: 10px 20px;
-    min-height:200px;
+    min-height:234px;
 }
 
 div.admin_section h4 {
@@ -1657,7 +1660,6 @@ div.admin_section h4 {
     -moz-border-radius-topleft:5px;
     -moz-border-radius-topright:5px;
     border:1px solid #E1E1E0;
-
 }
 
 .user_course_category {
@@ -1759,6 +1761,7 @@ div.system_announcement {
 }
 .system_announcement {
     font: bold 100% arial, sans-serif, sans;
+
 }
 .system_announcement_content {
     font: normal 100% 'Lucida Grande', verdana, Arial, sans-serif, sans;
@@ -1893,7 +1896,6 @@ a.forum_group_link {
 .forum_description p{
     font-size: 11px;
 }
-
 .forum_title {
     color: #000;
     font-size: 14px;
@@ -2841,6 +2843,7 @@ button.upload {
   background-color: #fff;
   border: 1px solid #ccc;
 }
+
 #expire_session div {
     float:left;
     padding-left:15px;
@@ -2901,7 +2904,6 @@ div.image_friend_network {
     /* border:1px solid #CCCCCC; */
     margin:2px;
     padding:4px;
-
     height:125px;
     width:82px;
     z-index:5;
@@ -3664,7 +3666,6 @@ div.image-social-content center.friend {
 	 width:700px;
 }
 
-
 .social-content-image {
     margin-bottom:10px;
     margin-top:2px;
@@ -3680,6 +3681,7 @@ div.image-social-content center.friend {
     overflow:hidden;
     width:175px;
 }
+
 
 .social-content-description {
     background:#ECE9D8;
@@ -3867,17 +3869,17 @@ div.image-social-content center.friend {
     overflow:hidden;
 }
 .social-box-left {
-    width:345px;
+    width:340px;
     float:left;
     height:auto;
     margin:0px;
 }
 
 .social-box-right {
-    width:300px;
+    width:280px;
     float:left;
     height:auto;
-    margin-left:10px;
+    margin-left:18px;
     overflow:hidden;
 }
 .social-box-container1 {
@@ -3900,7 +3902,7 @@ div.image-social-content center.friend {
     width:700px;
 }
 .social-box-container2 {
-    width:700px;
+    //width:648px;
     height:auto;
     overflow:hidden;
     margin-bottom:20px;
@@ -4004,7 +4006,7 @@ div.image-social-content center.friend {
 .social-background-content {
     z-index:5;
     position:relative;
-    /*border:1px dotted #DDDDDD;*/
+    /* border:1px dotted #DDDDDD; */
     width:170px;
     overflow:hidden;
 }
@@ -4114,7 +4116,6 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
     padding:2px;
     font-size:120%;
     font-weight: bold;
-    /* margin:5px; */
     padding:5px;
 }
 
@@ -4180,6 +4181,7 @@ span.form_required  {
     height:40px;
     margin:5px;
 }
+
 .userportal-course-item-title {
     font-size:135%;
 }
@@ -4391,6 +4393,7 @@ span.form_required  {
     border: 1px solid gray;
     margin-bottom:5px;
 }
+
 /* Text resize icons in header */
 .resize_font { /* the canvas */
     margin: 0 5px 0 5px;
@@ -4445,6 +4448,7 @@ span.form_required  {
 .online_grid_element_1, .online_grid_element_2 {    
     font-size:10px;
 }
+
 .progresstext {
     text-align:center;
 }

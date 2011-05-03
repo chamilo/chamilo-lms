@@ -1,5 +1,5 @@
 /*****************************************************
- *  MAIN  - CAHMILO RED CSS
+ *  MAIN  - CHAMILO RED CSS
  *****************************************************/
 
 /* the sticky effect */
@@ -277,7 +277,6 @@ img {
 }
 p, blockquote, ol, ul {
     font-size: 12px;
-
 }
 
 h1 {
@@ -471,7 +470,6 @@ a:active {
 
 #header3 a:hover {
     color:#fffc00D;
-
 }
 
 #header3 li {
@@ -653,17 +651,6 @@ margin-top:0;
     text-align:right;
     width:92%;
 }
-/**********************************************************
-* MENU SLIDER BAR                   *
-**********************************************************/
-/*Menu Links*/
-
-/*NOTE: anything not specified for the #(menu id's) a selector and its pseudo classes
-may be inherited in some browsers from other 'a' element styles (if any) on the page*/
-
-
-/*End Menu Links*/
-
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
@@ -680,7 +667,7 @@ may be inherited in some browsers from other 'a' element styles (if any) on the 
 }
 /* Sticky footer*/
 .push {
-    height: 9em; /* Do not change this value */
+    height: 9em; /* Very important */
 }
 #footer .copyright {
     float: right;
@@ -693,11 +680,11 @@ may be inherited in some browsers from other 'a' element styles (if any) on the 
 
 .footer_emails{
     float: left;
+    padding-top:60px;
     margin-right:5%;
     background-color: #a90a0e;
     background-image: url(images/bg-footer.gif);
     background-repeat:repeat-x;
-    padding-top:60px;
 }
 
 #footer #platformmanager {
@@ -710,7 +697,6 @@ may be inherited in some browsers from other 'a' element styles (if any) on the 
 }
 #footer a {
     color:#fff;
-    font-weight:bold;
 }
 #bottom_corner {
 }
@@ -729,12 +715,12 @@ may be inherited in some browsers from other 'a' element styles (if any) on the 
     float: right;
 }
 
-#menu {
+#menu {    
 	border: 1px solid #e1e1e0;
     -moz-border-radius: 10px; 
     -webkit-border-radius: 10px;
 	border-radius:10px;
-	
+
     margin-top:20px;
     margin-right:10px;
     margin-bottom:0px;
@@ -941,7 +927,7 @@ this lets the navigation menu appear to the left:
 #formLogin input {
     font-size: 13px;
     margin: 4px 6px;
-    padding-left:5px;
+    padding:6px;
     -moz-border-radius-bottomleft:5px;
     -moz-border-radius-bottomright:5px;
     -moz-border-radius-topleft:5px;
@@ -989,14 +975,14 @@ input.liteoption {
 #courseintro {
     clear: both;
     width: 80%;
-    /* margin: 10px auto; */
+    margin: 10px auto;
     padding: 10px;
     border-bottom: 1px solid #dcdcdc;
 }
 #courseintro_icons {
     clear: both;
     width: 80%;
-    margin: 10px auto;
+    /* margin: 10px auto; */
 }
 .everybodyview {
     position: relative; /* to avoid the IE peekabo bug ?*/
@@ -1326,6 +1312,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     border-style: solid;
 	padding:6px;	
 }
+
 /* New training */
 .bottom-link {
     border: 2px outset;
@@ -1464,14 +1451,17 @@ a.nobold:hover {
  *****************************************************/
 div.row {
     clear: both;
-    padding-top: 5px;
+    padding-top: 10px;
 }
 div.row div.form_header {
     white-space: nowrap;
     padding: 2px;
+    margin : 0px 0px 10px 0px;
     background-color: #E1E1E1;
     border: 1px solid #bbb;
+    font-size:20px;
 }
+
 div.row div.label {
     float: left;
     width: 22%;
@@ -1506,8 +1496,7 @@ span.form_error {
     font-weight:bold;
     text-align:left;
     padding-left:5px;
-}   
-
+}
 
 /* header cell in data table in tools */
 .data_table {
@@ -1625,20 +1614,19 @@ form br {
 }
 /* Admin section */
 div.admin_section {
-    -moz-border-radius-bottomleft:10px;
-    -moz-border-radius-bottomright:10px;
-    -moz-border-radius-topleft:10px;
-    -moz-border-radius-topright:10px;
+    -moz-border-radius:10px;
+	border-radius:10px;
     border:1px solid #f4b0b2;
     width: 40%;
     float: left;
     padding: 5px;
     margin: 10px 20px;
-    min-height:200px;
+    min-height:234px;
 }
 
 div.admin_section h4 {
-    margin: 0;
+    margin: 5px 0px 5px 5px;
+	padding: 0px 0px 5px 0px;
     border-bottom: 1px solid #f4b0b2;
     width: 100%;
 }
@@ -1690,7 +1678,6 @@ div.admin_section h4 {
     -moz-border-radius: 10px;
     border-radius: 10px;
 }
-
 .sub_session_box {
      border: 1px solid #DCE5F3;
     /* font-weight: bold; */
@@ -1703,7 +1690,6 @@ div.admin_section h4 {
     -moz-border-radius: 10px;
     border-radius: 10px;
 }
-
 .sub_session_box_title {
     margin-bottom: 10px;
     background-color:#F9F9F9;
@@ -1726,19 +1712,19 @@ div.admin_section h4 {
     font-weight: bold;
     color: #666666;
     list-style-type: none;
-    margin: 5px;
+    margin: 5px 5px 5px 0px;
     padding: 5px;
-    font-size: 11px;
+    font-size: 14px;
 }
 .sectioncomment {
     color: #000000;
-    margin: 5px;
+    margin: 5px 5px 5px 0px;
     padding: 5px;
     font-size: 11px;
 }
 .sectionvalue {
     list-style-type: none;
-    margin: 5px;
+    margin: 5px 5px 5px 0px;
     padding: 5px;
 }
 /*****************************************************
@@ -1763,6 +1749,7 @@ div.system_announcement {
 }
 .system_announcement {
     font: bold 100% arial, sans-serif, sans;
+
 }
 .system_announcement_content {
     font: normal 100% 'Lucida Grande', verdana, Arial, sans-serif, sans;
@@ -1990,7 +1977,7 @@ table.new_comment {
     margin-top: 10px;
     padding: 10px;
     background-color: #F4F4F4;
-	}
+}
 div.blogpost_comment {
     border-top: 1px dashed #dddddd;
     border-right: 1px dashed #dddddd;
@@ -2811,7 +2798,6 @@ button.minus {
 button.next {
     background-image:url(images/button_next.gif);
 }
-/*including "next" image*/
 /*including "back" image*/
 button.back {
     background-image:url(images/button_back.gif);
@@ -2824,6 +2810,7 @@ button.refresh {
 button.upload {
     background-image:url(images/button_upload.gif);
 }
+
 .icon_image_content {
     width:70px;
     cursor:hand;
@@ -2844,6 +2831,7 @@ button.upload {
   background-color: #fff;
   border: 1px solid #ccc;
 }
+
 #expire_session div {
     float:left;
     padding-left:15px;
@@ -2868,7 +2856,7 @@ button.upload {
     border-style: solid;
     border-width : 1px 2px 2px 1px;
     text-decoration : none;
-    padding : 4px;
+    /*padding : 4px; */
     border-color : #69f #00f #00f #69f;
 }
 .fake_button_back:hover {
@@ -2901,10 +2889,9 @@ div#friend-container {
 }
 div.image_friend_network {
     float:left;
-    border:1px solid #CCCCCC;
+    /* border:1px solid #CCCCCC; */
     margin:2px;
     padding:4px;
-
     height:125px;
     width:82px;
     z-index:5;
@@ -3151,7 +3138,7 @@ a.read {
 
 .mygroups_grid_element_1 {
     width:600px;
-    height:100px;
+    height:100px;    
     overflow:hidden;
 }
 
@@ -3595,7 +3582,7 @@ a.unread {
 
 div.image-social-content {
     float:left;
-    border:1px dotted #ccc;
+    /*border:1px dotted #ccc;*/
     margin:2px;
     padding: 8px 4px 4px 4px;
     background: #ffffff;
@@ -3659,11 +3646,12 @@ div.image-social-content center.friend {
     margin-left:auto;
     margin-right:auto;
 }
+
 #social-content-right {
     height:auto;
     overflow:hidden;
     float:left;
-	width:700px;
+	 width:700px;
 }
 
 .social-content-image {
@@ -3681,6 +3669,8 @@ div.image-social-content center.friend {
     overflow:hidden;
     width:175px;
 }
+
+
 .social-content-description {
     background:#ECE9D8;
 }
@@ -3811,6 +3801,7 @@ div.image-social-content center.friend {
     background-color:#32578b;
     margin-bottom:10px;
 }
+
 
 /* BOX SHARED PROFILE */
 
@@ -4000,11 +3991,10 @@ div.image-social-content center.friend {
     padding:2px 0px 2px 0px;
 }
 
-
 .social-background-content {
     z-index:5;
     position:relative;
-    /*border:1px dotted #DDDDDD;*/
+    /* border:1px dotted #DDDDDD; */
     width:170px;
     overflow:hidden;
 }
@@ -4026,6 +4016,7 @@ div.image-social-content center.friend {
     color:#fff;
     /* text-decoration: underline; */
 }
+
 
 #social-forum-main-title {
     font-size:130%;
@@ -4064,6 +4055,8 @@ div.image-social-content center.friend {
     padding:12px;
 }
 
+
+
 /* THEMATIC ADVANCE */
 .thematic-postit {
   width:250px;
@@ -4080,10 +4073,12 @@ div.image-social-content center.friend {
  padding-bottom:10px;
  padding-top: 5px;
 }
+
 #titlethematic{
     text-transform: uppercase;
     color: red;
 }
+
 /* ATTENDANCE */
 
 div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.row div.formw  {
@@ -4174,6 +4169,7 @@ span.form_required  {
     height:40px;
     margin:5px;
 }
+
 .userportal-course-item-title {
     font-size:135%;
 }
@@ -4182,14 +4178,14 @@ span.form_required  {
     -moz-border-radius:5px 5px 5px 5px;
     border:1px solid #E1E1E0;
     float:left;
-    margin:10px 20px 10px 10px;
+    margin:0px 20px 10px 2px;
     padding:11px;
-    width:210px;
+    width:220px;
     height:330px;
 }
 
 .courseadminview-activity-3col ul {
-    padding:10px 20px 10px 20px;
+    padding:0px 20px 10px 4px;
     list-style-type:none;
     height:240px;
     margin-left:0px;
@@ -4385,6 +4381,7 @@ span.form_required  {
     border: 1px solid gray;
     margin-bottom:5px;
 }
+
 /* Text resize icons in header */
 .resize_font { /* the canvas */
     margin: 0 5px 0 5px;
@@ -4419,7 +4416,6 @@ span.form_required  {
     border: 1px solid black;
     cursor: pointer;
 }
-
 
 .online_grid_item {
     float:left;

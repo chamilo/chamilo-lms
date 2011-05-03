@@ -213,7 +213,7 @@ ul#navigation .student-connect a {
 .invisible {
     color: #999;
 }
-.courseadminview table td a {
+.courseadminview table td a, .Authoringview table td a {
     color: #699030;
     font-weight: bold;
     font-size:13px;
@@ -682,11 +682,11 @@ margin-top:0;
 
 .footer_emails{
     float: left;
+    padding-top:60px;
     margin-right:5%;
     background-color: #79aa0b;
     background-image: url(images/bg-footer.gif);
     background-repeat:repeat-x;
-    padding-top:60px;
 }
 
 #footer #platformmanager {
@@ -699,7 +699,6 @@ margin-top:0;
 }
 #footer a {
     color:#fff;
-    font-weight:bold;
 }
 #bottom_corner {
 }
@@ -718,10 +717,11 @@ margin-top:0;
     float: right;
 }
 
-#menu {
-    -moz-border-radius: 10px; border: 1px solid #e1e1e0;
-    -webkit-border-radius: 10px; border: 1px solid #e1e1e0;
-    -opera-border-radius: 10px; border: 1px solid #e1e1e0;
+#menu {    
+	border: 1px solid #e1e1e0;
+    -moz-border-radius: 10px; 
+    -webkit-border-radius: 10px;
+	border-radius:10px;
 
     margin-top:20px;
     margin-right:10px;
@@ -734,7 +734,8 @@ margin-top:0;
 
     width:200px;
     float: right;
-    min-height: 80px;
+    min-height: 80px;	
+    border:1px solid #E1E1E0;    
     padding:5px 10px 0;
 }
 
@@ -983,7 +984,7 @@ input.liteoption {
 #courseintro_icons {
     clear: both;
     width: 80%;
-    margin: 10px auto;
+    /* margin: 10px auto; */
 }
 .everybodyview {
     position: relative; /* to avoid the IE peekabo bug ?*/
@@ -1002,7 +1003,6 @@ input.liteoption {
     -moz-border-radius:5px;
 	border-radius:5px;
     border:1px solid #E1E1E0;
-
 }
 .viewcaption {
     position: relative;
@@ -1453,13 +1453,15 @@ a.nobold:hover {
  *****************************************************/
 div.row {
     clear: both;
-    padding-top: 5px;
+    padding-top: 10px;
 }
 div.row div.form_header {
     white-space: nowrap;
     padding: 2px;
+    margin : 0px 0px 10px 0px;    
     background-color: #E1E1E1;
     border: 1px solid #bbb;
+    font-size:20px;
 }
 div.row div.label {
     float: left;
@@ -1695,8 +1697,6 @@ div.admin_section h4 {
     margin-bottom: 10px;
     background-color:#F9F9F9;
 }
-
-
 .session_box_title {
     margin-bottom: 10px;
     background-color:#F9F9F9;
@@ -1715,19 +1715,19 @@ div.admin_section h4 {
     font-weight: bold;
     color: #666666;
     list-style-type: none;
-    margin: 5px;
+    margin: 5px 5px 5px 0px;
     padding: 5px;
-    font-size: 11px;
+    font-size: 14px;
 }
 .sectioncomment {
     color: #000000;
-    margin: 5px;
+    margin: 5px 5px 5px 0px;
     padding: 5px;
     font-size: 11px;
 }
 .sectionvalue {
     list-style-type: none;
-    margin: 5px;
+    margin: 5px 5px 5px 0px;
     padding: 5px;
 }
 /*****************************************************
@@ -1748,7 +1748,7 @@ div.system_announcement {
     -moz-border-radius-topleft : 5px;
     -moz-border-radius-bottomright : 5px;
     -moz-border-radius-bottomleft : 5px;
-   min-height:20px;
+    min-height:20px;
 }
 .system_announcement {
     font: bold 100% arial, sans-serif, sans;
@@ -2495,7 +2495,6 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
     border: 1px solid rgb(153, 153, 153);
     background: rgb(255, 255, 255) none repeat scroll 0% 0%;
 }
-
 .label_result {
     float: left;
     width: 25%;
@@ -2834,6 +2833,7 @@ button.upload {
   background-color: #fff;
   border: 1px solid #ccc;
 }
+
 #expire_session div {
     float:left;
     padding-left:15px;
@@ -2858,7 +2858,7 @@ button.upload {
     border-style: solid;
     border-width : 1px 2px 2px 1px;
     text-decoration : none;
-    padding : 4px;
+    /*padding : 4px; */
     border-color : #69f #00f #00f #69f;
 }
 .fake_button_back:hover {
@@ -2891,7 +2891,7 @@ div#friend-container {
 }
 div.image_friend_network {
     float:left;
-    /*border:1px solid #CCCCCC;*/
+    /* border:1px solid #CCCCCC; */
     margin:2px;
     padding:4px;
 
@@ -3151,11 +3151,12 @@ a.read {
 }
 
 .box_description_group_title {
-    float:right;width:80%;
+    float:right;
+	width:530px;
 }
 .box_description_group_content {
     float:right;
-    width:80%;
+    width:530px;
     margin-top:5px;
     /* height:45px;*/
     font-family:Verdana, Geneva, sans-serif;
@@ -3164,7 +3165,7 @@ a.read {
 }
 .box_description_group_actions {
     float:right;
-    width:80%;
+    width:530px;
     text-align:right;
     margin-top:4px;
     margin-right:4px;
@@ -3322,7 +3323,7 @@ a.read {
  *  MESSAGE TOOL                           *
  **********************************************/
 
- #inbox-wrapper {
+#inbox-wrapper {
     width:100%;
 }
 #inbox {
@@ -3649,11 +3650,12 @@ div.image-social-content center.friend {
     margin-left:auto;
     margin-right:auto;
 }
+
 #social-content-right {
     height:auto;
     overflow:hidden;
     float:left;
-	width:700px;
+	 width:700px;
 }
 
 .social-content-image {
@@ -3804,6 +3806,7 @@ div.image-social-content center.friend {
     margin-bottom:10px;
 }
 
+
 /* BOX SHARED PROFILE */
 
 .social-friend-container {
@@ -3858,16 +3861,17 @@ div.image-social-content center.friend {
     overflow:hidden;
 }
 .social-box-left {
-    width:345px;
+    width:340px;
     float:left;
     height:auto;
     margin:0px;
 }
+
 .social-box-right {
-    width:300px;
+    width:280px;
     float:left;
     height:auto;
-    margin-left:10px;
+    margin-left:18px;
     overflow:hidden;
 }
 .social-box-container1 {
@@ -3890,7 +3894,7 @@ div.image-social-content center.friend {
     width:700px;
 }
 .social-box-container2 {
-    //width:700px;
+    //width:648px;
     height:auto;
     overflow:hidden;
     margin-bottom:20px;
@@ -3991,7 +3995,6 @@ div.image-social-content center.friend {
     padding:2px 0px 2px 0px;
 }
 
-
 .social-background-content {
     z-index:5;
     position:relative;
@@ -4017,6 +4020,7 @@ div.image-social-content center.friend {
     color:#fff;
     /* text-decoration: underline; */
 }
+
 
 #social-forum-main-title {
     font-size:130%;
@@ -4056,6 +4060,7 @@ div.image-social-content center.friend {
 }
 
 
+
 /* THEMATIC ADVANCE */
 .thematic-postit {
   width:250px;
@@ -4072,6 +4077,7 @@ div.image-social-content center.friend {
  padding-bottom:10px;
  padding-top: 5px;
 }
+
 #titlethematic{
     text-transform: uppercase;
     color: green;
@@ -4166,6 +4172,7 @@ span.form_required  {
     height:40px;
     margin:5px;
 }
+
 .userportal-course-item-title {
     font-size:135%;
 }
@@ -4181,7 +4188,7 @@ span.form_required  {
 }
 
 .courseadminview-activity-3col ul {
-    padding:10px 20px 10px 20px;
+    padding:0px 20px 10px 4px;
     list-style-type:none;
     height:240px;
     margin-left:0px;
@@ -4413,7 +4420,6 @@ span.form_required  {
     cursor: pointer;
 }
 
-
 .online_grid_item {
     float:left;
     margin:10px;
@@ -4433,6 +4439,7 @@ span.form_required  {
 .online_grid_element_1, .online_grid_element_2 {    
     font-size:10px;
 }
+
 .progresstext {
     text-align:center;
 }

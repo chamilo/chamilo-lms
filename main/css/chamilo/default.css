@@ -652,18 +652,6 @@ margin-top:0;
     text-align:right;
     width:92%;
 }
-
-/**********************************************************
-* MENU SLIDER BAR                   *
-**********************************************************/
-/*Menu Links*/
-
-/*NOTE: anything not specified for the #(menu id's) a selector and its pseudo classes
-may be inherited in some browsers from other 'a' element styles (if any) on the page*/
-
-
-/*End Menu Links*/
-
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
@@ -1473,7 +1461,6 @@ div.row div.form_header {
     background-color: #E5EDF9;
     border: 1px solid #E5EDF9;
     font-size:20px;
-
 }
 
 div.row div.label {
@@ -4187,7 +4174,6 @@ span.form_required  {
     font-size:135%;
 }
 
-
 .courseadminview-activity-3col, .platformadminview-activity-3col {
     -moz-border-radius:5px 5px 5px 5px;
     border:1px solid #E1E1E0;
@@ -4461,4 +4447,3 @@ abbr {
 	  background-color:#F00;
       cursor: help;
 }
-

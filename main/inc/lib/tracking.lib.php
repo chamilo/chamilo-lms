@@ -2193,8 +2193,9 @@ class Tracking {
                     }
                 }
             }       
-            $html = Display::div($html, array('class'=>'rounded_div', 'style'=>'position:relative; float:none; width:95%'));
-  
+            if (!empty($html)) {
+                $html = Display::div($html, array('class'=>'rounded_div', 'style'=>'position:relative; float:none; width:95%'));
+            }         
             return $html;
         }
 

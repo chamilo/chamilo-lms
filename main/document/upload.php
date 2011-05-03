@@ -287,7 +287,9 @@ echo '<style>
 </style>';
 $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php';
 $multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'<br />';
-$multiple_form .=  '<center><form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
+//Adding icon replace the  <div>'.get_lang('UploadFiles').'</div> with this:
+//<div style="width:50%;margin:0 auto;"> '.Display::div(Display::return_icon('folder_document.png', '', array(), 64), array('style'=>'float:left')).' '.get_lang('UploadFiles').'</div>
+$multiple_form .=  '<center><form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">    
     <input type="hidden" name="curdirpath" value="'.$path.'" />    
     <input type="file" name="file" multiple>
     <button>Upload</button>

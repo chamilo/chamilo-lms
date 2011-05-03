@@ -5117,8 +5117,7 @@ class learnpath {
         $return .= '<div class="sectioncomment"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">' . '<img title="Nuevo documento" src="../img/new_doc.gif" alt="Nuevo documento"/> ' . get_lang('NewDocument') . '</a></div>';
         $return .= '<div class="sectiontitle">' . get_lang('UseAnExistingResource') . '</div>';*/
        
-        $new_document = Display::return_message(Display::url(get_lang('NewDocument') , api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id));
-
+     
         //Get all the docs
         $documents = $this->get_documents();
 
@@ -5134,15 +5133,14 @@ class learnpath {
         //Get al the forums
         $forums = $this->get_forums();
 
-        $headers = array( Display::return_icon('new_doc.png', get_lang('NewDocument'), array(), 64),
-                                Display::return_icon('folder_document.png', get_lang('Documents'), array(), 64), 
-                                Display::return_icon('quiz.png', get_lang('Exercises'), array(), 64),
-                                Display::return_icon('links.png', get_lang('Links'), array(), 64),
-                                Display::return_icon('works.png', get_lang('Works'), array(), 64),
-                                Display::return_icon('forum.png', get_lang('Forums'), array(), 64),
-                                );
+        $headers = array(   Display::return_icon('folder_document.png', get_lang('Documents'), array(), 64), 
+                            Display::return_icon('quiz.png', get_lang('Exercises'), array(), 64),
+                            Display::return_icon('links.png', get_lang('Links'), array(), 64),
+                            Display::return_icon('works.png', get_lang('Works'), array(), 64),
+                            Display::return_icon('forum.png', get_lang('Forums'), array(), 64),
+                        );
         
-        echo Display::tabs($headers, array($new_document, $documents, $exercises, $links, $works, $forums), 'resource_tab');
+        echo Display::tabs($headers, array($documents, $exercises, $links, $works, $forums), 'resource_tab');
         return true;
     }
 
@@ -7400,6 +7398,12 @@ class learnpath {
         $resources = Database::store_result($res_doc);
         $resources_sorted = array();
 
+        
+        $return .= '<div class="lp_resource_element">';
+        $return .= Display::return_icon('new_doc.gif', '', array(), 22);
+        $return .= Display::url(get_lang('NewDocument') , api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id);
+        $return .= '</div>';
+            
         // If you want to debug it, I advise you to do "echo" on the eval statements.
 
         foreach ($resources as $resource) {
@@ -7413,6 +7417,7 @@ class learnpath {
                 } else
                     if (strpos($resource_path, '.') !== false)
                         $is_file = true;
+                        
                 $last_path = $resource_path;
             }
             if ($is_file) {
@@ -7426,7 +7431,9 @@ class learnpath {
                 eval ('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["id"]=' . $resource['id'] . ';');                
             }
         }
-        $return .= $this->write_resources_tree($resources_sorted);
+        $label = get_lang('Documents');
+        $new_array[$label] = array('id' => 0, 'files'=>$resources_sorted);
+        $return .= $this->write_resources_tree($new_array);
         /*if (Database :: num_rows($res_doc) == 0) {
             $return .= '<div class="lp_resource_element">' . get_lang('NoDocuments') . '</div>';
         }*/

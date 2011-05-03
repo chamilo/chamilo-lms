@@ -251,22 +251,13 @@ function confirmation(name) {
 }
 $(function() {  
     $("#resource_tab").tabs();
-
     $('.lp_resource_element').click(function() {
         window.location.href = $('a', this).attr('href');
-    });
-    
+    });    
 });
-
-
-
-
-
 
 </script>
 <?php
-
-//echo $admin_output;
 
 /* DISPLAY SECTION */
 
@@ -315,11 +306,9 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
                     Display::display_confirmation_message(get_lang('NewModuleCreated'));
                     break;
                 case TOOL_QUIZ:
-
                     echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
                     Display::display_confirmation_message(get_lang('NewExerciseCreated'));
                     break;
-
                 case TOOL_DOCUMENT:
                     Display::display_confirmation_message(get_lang('NewDocumentCreated'));
                     echo $_SESSION['oLP']->display_item($new_item_id, true, $msg);

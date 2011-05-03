@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$language_file = array('admin', 'accessibility');
+$language_file = array('index','admin', 'accessibility');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 

@@ -9,6 +9,7 @@ lms_storage_setValue = function(sv_key, sv_value) {
 	var result;
 	$.ajax({
 		async: false,
+		type: "POST",
 		url: "storageapi.php",
 		data: {
 			action: "set",
@@ -29,6 +30,7 @@ lms_storage_getValue = function(sv_key) {
 	var result;
 	$.ajax({
 		async: false,
+		type: "POST",
 		url: "storageapi.php",
 		data: {
 			action: "get",
@@ -48,6 +50,7 @@ lms_storage_getAll = function() {
 	var result;
 	$.ajax({
 		async: false,
+		type: "POST",
 		url: "storageapi.php",
 		data: {
 			action: "getall",

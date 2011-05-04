@@ -40,8 +40,8 @@
 	if(empty($_course['path']))
 	{
 		define('CONFIG_OPTIONS_DELETE', true);
-		define('CONFIG_OPTIONS_CUT', true);
-		define('CONFIG_OPTIONS_COPY', true);
+		define('CONFIG_OPTIONS_CUT', false);
+		define('CONFIG_OPTIONS_COPY', false);
 		define('CONFIG_OPTIONS_NEWFOLDER', true);
 		define('CONFIG_OPTIONS_RENAME', true);
 		define('CONFIG_OPTIONS_UPLOAD', true);
@@ -53,8 +53,8 @@
 		{
 		//api_is_allowed_to_edit() from Chamilo
 			define('CONFIG_OPTIONS_DELETE', true);
-			define('CONFIG_OPTIONS_CUT', true);
-			define('CONFIG_OPTIONS_COPY', true);
+			define('CONFIG_OPTIONS_CUT', false);
+			define('CONFIG_OPTIONS_COPY', false);
 			define('CONFIG_OPTIONS_NEWFOLDER', true);
 			define('CONFIG_OPTIONS_RENAME', false);
 			define('CONFIG_OPTIONS_UPLOAD', true);

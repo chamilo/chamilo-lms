@@ -89,12 +89,62 @@
 								$tem['mtime'] = date(DATE_TIME_FORMAT, $tem['mtime']);
 								$tem['flag'] = 'noFlag';
 								$tem['url'] = getFileUrl($doc);
-		
+
+								/**
+								* Bridge to Chamilo documents tool
+								* @author Juan Carlos Raña Trabado
+								*/
+
+								if(!empty($_course['path']))
+								{
+									$manager->getFolderInfo();
+									$mainPath= getParentFolderPath($folderInfo['path']);// from ajaxfilemanager sample ../../../../../../../courses/TEST/document/
+									$fullPath=$tem['final_path'];// from ajaxfilemanager sample ../../../../../../../courses/TEST/document/icons/book_highlight.jpg
+									$chamiloFolder = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);
+									$chamiloFile = $tem['name'];	//get ajaxmanager
+									$chamiloFileSize = $tem['size'];//get ajaxmanager
+									if(!empty($group_properties['directory'])) //get Chamilo
+									{
+										$chamiloFolder=$group_properties['directory'].$chamiloFolder;//get Chamilo
+									}
+									//cut and paste or copy and paste
+									if($sessionAction->getAction() == "cut"){ //from ajaxmanager								
+										$full_old_Path=$doc;// get from ajaxfilemanager sample ../../../../../../../courses/TEST/document/book_highlight.jpg
+										$old_path = substr($full_old_Path, strlen($mainPath)-strlen($full_old_Path)-1);	
+										$new_path = $chamiloFolder;
+										$dbTable = Database::get_course_table(TABLE_DOCUMENT);//From Chamilo
+										update_db_info('update',$old_path,$new_path);//Update Chamilo database
+										//
+										/*
+										//TODO:This code doesnt run ok, doenst return the correct doc_id
+										$curdirpath=substr($new_path, 0, -strlen($tem['name'])-1);	 										
+										if ($curdirpath==''){$curdirpath="/";}
+										$doc_id = DocumentManager::get_document_id($_course, $curdirpath);
+										if (!$doc_id) {    
+											$doc_id = DocumentManager::get_document_id(api_get_course_info(), $curdirpath);
+										}
+									
+										$current_session_id = api_get_session_id();
+										api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentUpdated', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Chamilo
+										*/
+									}
+									else{
+										$doc_id = add_document($_course, $chamiloFolder,'file', $chamiloFileSize , $chamiloFile); //get Chamilo							
+										$current_session_id = api_get_session_id();
+										api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Chamilo		
+									}			
+
+								}		
+								//end bridge
+								
 								$manager = null;
 								if($sessionAction->getAction() == "cut")
 								{
 									$file->delete($doc);
 								}
+								
+								
+								
 								$fileMoved[sizeof($fileMoved)] = $tem;
 								$tem = null;
 							}							

@@ -65,14 +65,14 @@
 								
 								/**
 								* Bridge to Chamilo documents tool
-								* @author Juan Carlos Ra�a Trabado
+								* @author Juan Carlos Raña Trabado
 								*/
 
 								if(!empty($_course['path']))
 								{
-									//only inside courses
-									$folderInfo = $manager->getFolderInfo(); //get	ajaxmanager
+									//only inside courses									
 									$fullPath= $upload->getFilePath();		//get	ajaxmanager. Sample ../../../../../../../courses/TEST/document/Grupo_1_groupdocs/image.jpg
+									$folderInfo = $manager->getFolderInfo(); //get	ajaxmanager
 									$mainPath= getParentFolderPath($folderInfo['path']);//get	ajaxmanager. Sample ../../../../../../../courses/TEST/document/Grupo_1_groupdocs/
 									$chamiloFolder = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);
 									$chamiloFile = $tem['name'];	//get	ajaxmanager

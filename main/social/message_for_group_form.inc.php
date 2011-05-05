@@ -3,6 +3,12 @@
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
 require_once '../inc/global.inc.php';
+
+api_block_anonymous_users();
+if (api_get_setting('allow_social_tool') !='true') {
+    api_not_allowed();
+}
+
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
@@ -10,14 +16,6 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php';
 
 $tok = Security::get_token();
-
-if (api_is_anonymous()) {
-	api_not_allowed();
-}
-
-if (api_get_setting('allow_message_tool') != 'true' && api_get_setting('allow_social_tool') != 'true') {
-	api_not_allowed();
-}
 
 if ( isset($_REQUEST['user_friend']) ) {
 	$info_user_friend=array();

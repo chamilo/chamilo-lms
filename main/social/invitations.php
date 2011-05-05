@@ -7,6 +7,12 @@
 $language_file = array('messages','userInfo');
 $cidReset=true;
 require '../inc/global.inc.php';
+
+api_block_anonymous_users();
+if (api_get_setting('allow_social_tool') !='true') {
+    api_not_allowed();
+}
+
 require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';

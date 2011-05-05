@@ -8,7 +8,13 @@
 // Language files that should be included
 $language_file = array('userInfo');
 $cidReset = true;
-include '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
+
+api_block_anonymous_users();
+if (api_get_setting('allow_social_tool') !='true') {
+    api_not_allowed();
+}
+
 $this_section = SECTION_SOCIAL;
 
 $libpath = api_get_path(LIBRARY_PATH);

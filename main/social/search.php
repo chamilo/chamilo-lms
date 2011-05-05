@@ -14,6 +14,9 @@ require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 api_block_anonymous_users();
+if (api_get_setting('allow_social_tool') !='true') {
+    api_not_allowed();
+}
 
 $this_section = SECTION_SOCIAL;
 $tool_name = get_lang('Search');

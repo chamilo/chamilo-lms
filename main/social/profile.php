@@ -15,6 +15,11 @@ require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 require_once api_get_path(LIBRARY_PATH).'array.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
+if (api_get_setting('allow_social_tool') !='true') {
+    api_not_allowed();
+}
+
+
 $user_id = api_get_user_id();
 
 $show_full_profile = true;

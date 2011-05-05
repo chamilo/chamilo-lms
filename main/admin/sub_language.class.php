@@ -76,7 +76,7 @@ class SubLanguageManager {
      * @param String The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
      * @return Array Contains all information of chamilo file
      */
-   public static function get_all_language_variable_in_file ($system_path_file) {
+   public static function get_all_language_variable_in_file ($system_path_file,$get_as_string_index=false) {
    		$res_list = array();
    		if (!is_readable($system_path_file)) {
    			return $res_list;
@@ -86,6 +86,9 @@ class SubLanguageManager {
 	        if (substr($line,0,1)!='$') { continue; }
 	    	list($var,$val) = split('=',$line,2);
 	        $var = trim($var); $val = trim($val);
+            if ($get_as_string_index) {
+            	$var = "'".substr($var,1)."'";
+            }
 	        $res_list[$var] = $val;
 	    }
         return $res_list;

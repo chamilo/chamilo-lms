@@ -52,6 +52,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$theme = 'chamilo/';
 	$css_path = 'main/css/';
 	$css_file = $css_path.$theme.'default.css';
+		
 
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
 	$root_rel = htmlentities($_SERVER['PHP_SELF']);
@@ -152,7 +153,9 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
 	$global_error_message['encoding'] = 'UTF-8';
 	$global_error_message['css'] = $css_def;
+	
 
+// {ORGANISATION}	moved from the header
 	$global_error_message_page =
 <<<EOM
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -168,15 +171,11 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		</head>
 		<body>
 		<div id="wrapper">
-
 			<div id="header">
-				<div id="header1">
-					<div id="institution">
-						{ORGANISATION}
-					</div>
+				<div id="header1">	
 				</div>
 				<div class="clear"></div>
-				<div id="header2">&nbsp;</div>
+				<div id="header2"></div>
 				<div id="header3">
 					<ul>
 						<li id="current"><a href="#"><span id="tab_active">{SECTION}</span></a></li>
@@ -189,7 +188,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
 			<div id="main">
 				<div style="text-align: center;">
-						<br /><br />{DESCRIPTION}<br /><br />
+						<div class="warning-message">{DESCRIPTION}</div>
 						{CODE}
 				</div>
 			</div>
@@ -198,17 +197,15 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		</div>
 
 		<div id="footer">
-			<div class="copyright">{POWERED_BY}</div>
+			<div class="copyright">&nbsp;<br />{POWERED_BY}</div>
 			&nbsp;
 		</div>
 		</body>
 </html>
 EOM;
-
 	foreach ($global_error_message as $key => $value) {
 		$global_error_message_page = str_replace('{'.strtoupper($key).'}', $value, $global_error_message_page);
 	}
-
 	header('Content-Type: text/html; charset='.$global_error_message['encoding']);
 	die($global_error_message_page);
 }

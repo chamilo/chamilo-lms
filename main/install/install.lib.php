@@ -56,7 +56,7 @@ function is_already_installed_system() {
  * @param	string	Text to show when extension is available (defaults to 'No')
  * @param	boolean	Whether this extension is optional (in this case show unavailable text in orange rather than red)
  * @return	string	HTML string reporting the status of this extension. Language-aware.
- * @author 	Christophe Gesché
+ * @author 	Christophe Gesch??
  * @author 	Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author	Yannick Warnier <yannick.warnier@dokeos.com>
  * @version Dokeos 1.8.1, May 2007
@@ -104,7 +104,7 @@ function get_php_setting($val) {
  *
  * @param integer  $var  The variable to present as text
  * @return  string  the string "true" or "false"
- * @author Christophe Gesché
+ * @author Christophe Gesch??
  */
 function true_false($var) {
     return $var ? 'true' : 'false';
@@ -992,7 +992,7 @@ function display_language_selection_box($name = 'language_list', $default_langua
  * can be done in the language of the user
  */
 function display_language_selection() { ?>
-    <h1><?php get_lang('WelcomeToTheDokeosInstaller'); ?></h1>
+    <h2><?php get_lang('WelcomeToTheDokeosInstaller'); ?></h2>
     <h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage'); ?></h2>
     <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
     <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
@@ -1026,7 +1026,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     }
 
     //	SERVER REQUIREMENTS
-    echo '<div class="RequirementHeading"><h1>'.get_lang('ServerRequirements').'</h1>';
+    echo '<div class="RequirementHeading"><h2>'.get_lang('ServerRequirements').'</h2>';
     echo '<div class="RequirementText">'.get_lang('ServerRequirementsInfo').'</div>';
     echo '<div class="RequirementContent">';
     echo '<table class="requirements">
@@ -1096,7 +1096,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     // RECOMMENDED SETTINGS
     // Note: these are the settings for Joomla, does this also apply for Chamilo?
     // Note: also add upload_max_filesize here so that large uploads are possible
-    echo '<div class="RequirementHeading"><h1>'.get_lang('RecommendedSettings').'</h1>';
+    echo '<div class="RequirementHeading"><h2>'.get_lang('RecommendedSettings').'</h2>';
     echo '<div class="RequirementText">'.get_lang('RecommendedSettingsInfo').'</div>';
     echo '<div class="RequirementContent">';
     echo '<table class="requirements">
@@ -1165,7 +1165,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     echo '</div>';
 
     // DIRECTORY AND FILE PERMISSIONS
-    echo '<div class="RequirementHeading"><h1>'.get_lang('DirectoryAndFilePermissions').'</h1>';
+    echo '<div class="RequirementHeading"><h2>'.get_lang('DirectoryAndFilePermissions').'</h2>';
     echo '<div class="RequirementText">'.get_lang('DirectoryAndFilePermissionsInfo').'</div>';
     echo '<div class="RequirementContent">';
     echo '<table class="requirements">
@@ -1483,19 +1483,19 @@ function get_contact_registration_form() {
             <div class="label">'.get_lang('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</div>
             <div class="formw">
                     <select id="language" name="language">
-                            <option value="bulgarian">Български</option>
+                            <option value="bulgarian">??????????????????</option>
                             <option value="indonesian">Bahasa Indonesia</option>
                             <option value="bosnian">Bosanski</option>
                             <option value="german">Deutsch</option>
                             <option selected="selected" value="english">English</option>
                             <option value="spanish">Spanish</option>
-                            <option value="french">Français</option>
+                            <option value="french">Fran??ais</option>
                             <option value="italian">Italian</option>
                             <option value="hungarian">Magyar</option>
                             <option value="dutch">Nederlands</option>
-                            <option value="brazilian">Português do Brasil</option>
-                            <option value="portuguese">Português europeu</option>
-                            <option value="slovenian">Slovenščina</option>
+                            <option value="brazilian">Portugu??s do Brasil</option>
+                            <option value="portuguese">Portugu??s europeu</option>
+                            <option value="slovenian">Sloven????ina</option>
                     </select>
             </div>
     </div>

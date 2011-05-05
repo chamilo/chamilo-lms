@@ -431,12 +431,11 @@ if ($encryptPassForm == '1') {
 
 <div id="header">
 	<div id="header1">
-	<div id="institution">
-		<?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?>
-        <?php if ($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); elseif ($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : ''); ?>
-	</div>
-	</div>
-	<div id="header2" style="height:50px">&nbsp;</div>
+	
+	<div id="logo">	   
+        <img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />        
+	</div>	
+	</div>	
 	<div id="header3">
 		<ul>
 			<li id="current"><a href="#"><span id="tab_active"><?php echo get_lang('Installation'); ?></span></a></li>
@@ -446,8 +445,7 @@ if ($encryptPassForm == '1') {
 
 <div id="main">
 <form style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
-<div id="installation_steps" style="width:220px">
-	<!-- <img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo logo" /> -->
+<div id="installation_steps" style="width:220px">	
 	<br />
 	<ol>
 		<li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
@@ -470,6 +468,17 @@ if ($encryptPassForm == '1') {
 </tr>
 <tr>
   <td>
+    <?php     
+    echo '<h1>';
+    echo get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version; 
+    echo '</h1>';
+    echo '<h2>';
+    if ($installType == 'new') 
+        echo get_lang('NewInstallation'); 
+    elseif ($installType == 'update') 
+        echo get_lang('UpdateFromDokeosVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : ''); 
+    echo '</h2><hr />';    
+    ?>
 	<input type="hidden" name="updatePath"           value="<?php if (!$badUpdatePath) echo api_htmlentities($proposedUpdatePath, ENT_QUOTES); ?>" />
 	<input type="hidden" name="urlAppendPath"        value="<?php echo api_htmlentities($urlAppendPath, ENT_QUOTES); ?>" />
 	<input type="hidden" name="pathForm"             value="<?php echo api_htmlentities($pathForm, ENT_QUOTES); ?>" />

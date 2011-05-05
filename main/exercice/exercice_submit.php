@@ -653,7 +653,7 @@ if ($objExercise->type == ONE_PER_PAGE) {
   	if (empty($exercise_stat_info)) {
         $total_weight = 0; 	    
   	    foreach($questionList as $question_id) {
-  	        $objQuestionTmp = Question::read($questionId);  	        
+  	        $objQuestionTmp = Question::read($question_id);  	        
   	        $total_weight += floatval($objQuestionTmp->weighting);
   	    }
   		$objExercise->save_stat_track_exercise_info($clock_expired_time, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $questionList, $total_weight);

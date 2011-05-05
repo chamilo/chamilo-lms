@@ -14,9 +14,7 @@ require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 $session_id     = api_get_session_id();
 $session_name   = api_get_session_name($my_session_id);
 echo '<div id="wrapper">';
-?>
-<ul id="navigation">
-<?php  
+echo '<ul id="navigation">';
 if (!empty($help)) { 
 ?>
     <li class="help"><a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600" class="thickbox" title="<?php echo get_lang('Help'); ?>"><img src="<?php echo api_get_path(WEB_IMG_PATH);?>help.large.png" alt="<?php echo get_lang('Help');?>" title="<?php echo get_lang('Help');?>" /></a> </li>
@@ -24,11 +22,13 @@ if (!empty($help)) {
 }
 if (api_get_setting('show_link_bug_notification') == 'true') { 
 ?>
-    <li class="report"><a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank"><img src="<?php echo api_get_path(WEB_IMG_PATH) ?>bug.large.png" style="vertical-align: middle;" alt="<?php echo get_lang('ReportABug') ?>" title="<?php echo get_lang('ReportABug');?>"/></a></li>
-    </ul>
+    <li class="report">
+        <a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
+        <img src="<?php echo api_get_path(WEB_IMG_PATH) ?>bug.large.png" style="vertical-align: middle;" alt="<?php echo get_lang('ReportABug') ?>" title="<?php echo get_lang('ReportABug');?>"/></a>
+    </li>
 <?php
 }
-
+echo'</ul>';
 echo '<div id="header">';
 
 show_header_1($language_file, $nameTools);

@@ -63,8 +63,6 @@ if (!empty($_GET['message'])) {
 $id_session='';
 if (isset($_GET["id_session"]) && $_GET["id_session"] != "") {
  	$id_session = Security::remove_XSS($_GET["id_session"]);
-	//$interbreadcrumb[] = array ("url" => "session.php", "name" => get_lang('Sessions'));
-	//$interbreadcrumb[] = array ("url" => "course.php?id_session=".$_GET["id_session"]."", "name" => get_lang('Cours'));
 }
 
 $interbreadcrumb[] = array ('url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin'));

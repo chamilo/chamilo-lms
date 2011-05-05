@@ -21,7 +21,6 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
-
 $this_section=SECTION_COURSES;
 
 $is_allowedToEdit=api_is_allowed_to_edit(null,true);
@@ -48,7 +47,6 @@ $page = 0;
 if(!empty($_GET['page'])){
 	$page = intval($_GET['page']);
 }
-
 $copy_question = 0;
 if(!empty($_GET['copy_question'])){
 	$copy_question = intval($_GET['copy_question']);
@@ -67,19 +65,19 @@ $selected_course = intval($_GET['selected_course']);
 $limitQuestPage=50;
 
 // document path
-$documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 // picture path
-$picturePath=$documentPath.'/images';
-
+$picturePath = $documentPath.'/images';
 
 if(!($objExcercise instanceOf Exercise) && !empty($fromExercise)) {
     $objExercise = new Exercise();    
     $objExercise->read($fromExercise);
 }
-if(!($objExcercise instanceOf Exercise) && !empty($exerciseId)) {
-    $objExercise = new Exercise();
-    $objExercise->read($exerciseId);
-}
+
+$nameTools = get_lang('QuestionPool');
+$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+$interbreadcrumb[]=array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->exercise);
+
 
 if ($is_allowedToEdit) {
 	
@@ -89,7 +87,7 @@ if ($is_allowedToEdit) {
         $origin_course_id   = intval($_GET['course_id']);
         $origin_course_info = api_get_course_info_by_id($origin_course_id);
         $current_course     = api_get_course_info();     
-        $old_question_id = $copy_question;       
+        $old_question_id    = $copy_question;       
         
         //Reading the source question
 		$old_question_obj = Question::read($old_question_id, $origin_course_id);
@@ -113,7 +111,7 @@ if ($is_allowedToEdit) {
 		unset($new_question_obj);
 		unset($old_question_obj);
 
-        if(!$objExcercise instanceOf Exercise) {
+        if (!$objExcercise instanceOf Exercise) {
         	$objExercise = new Exercise();
             $objExercise->read($fromExercise);
         }
@@ -150,7 +148,7 @@ if ($is_allowedToEdit) {
 		// destruction of the Question object
 		unset($objQuestionTmp);
 
-        if(!$objExcercise instanceOf Exercise) {
+        if (!$objExcercise instanceOf Exercise) {
         	$objExercise = new Exercise();
             $objExercise->read($fromExercise);
         }
@@ -191,8 +189,8 @@ if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array ('url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('ToolGradebook'));
 }
 
-$nameTools=get_lang('QuestionPool');
-$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+
+
 // if admin of course
 if (!$is_allowedToEdit) {
     api_not_allowed(true);
@@ -443,8 +441,7 @@ if ($exerciseId > 0) {
                     }                    
                 }
             }           	
-        }    
-      
+        }      
     } else {
         //By default
     	$sql="SELECT qu.id, question, qu.type, level, q.session_id FROM $TBL_QUESTIONS as qu, $TBL_EXERCICE_QUESTION as qt, $TBL_EXERCICES as q
@@ -453,8 +450,7 @@ if ($exerciseId > 0) {
 	// forces the value to 0
 	$exerciseId=0;
 }
-$result=Database::query($sql);
-$nbrQuestions=count($main_question_list);
+$nbrQuestions = count($main_question_list);
 
 echo '<tr>',
   '<td colspan="',($fromExercise?4:4),'">',
@@ -508,19 +504,11 @@ $i=1;
 $session_id  = api_get_session_id();
 if (!empty($main_question_list))
 foreach ($main_question_list as $row) {
-    
-	
 	// if we come from the exercise administration to get a question,
     // don't show the questions already used by that exercise
 
-    /*if (!$fromExercise) {echo '1'; }
-    if (!isset($objExercise)){echo '2';}
-    if (!($objExercise instanceOf Exercise)){echo '3';}
-    if (!$objExercise->isInList($row['id'])) {echo '4';}
-    */
-
     // original recipe -
-  //if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (!$objExercise->isInList($row['id'])))
+    //if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (!$objExercise->isInList($row['id'])))
 	if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (is_array($objExercise->questionList)) ) {
         echo '<tr ',($i%2==0?'class="row_odd"':'class="row_even"'),'>';
         if (api_get_session_id() == 0 ){
@@ -535,39 +523,38 @@ foreach ($main_question_list as $row) {
                 '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&delete=',$row['id'],'" onclick="javascript:if(!confirm(\'',addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)),'\')) return false;"><img src="../img/delete.gif" border="0" alt="',get_lang('Delete'),'"></a>';
                 //'<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&delete=',$row['id'],'" onclick="javascript:if(!confirm(\'',addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)),'\')) return false;"><img src="../img/delete.gif" border="0" alt="',get_lang('Delete'),'"></a>';
 		} else {
-				echo $row['level'],'</td>',
-					 '<td align="center">';
-				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;copy_question='.$row['id'].'&course_id='.$selected_course.'&fromExercise=',$fromExercise,'">';                
-                echo ' '.Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest'));
-                echo '</a> ';
-				if ($row['session_id'] == $session_id) {
-				    if ($selected_course == api_get_course_int_id()) {
-					    echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" title="'.get_lang('InsertALinkToThisQuestionInTheExercise').'" alt="'.get_lang('InsertALinkToThisQuestionInTheExercise').'"></a>';
-				    }
-				}                							
-				
+			echo $row['level'],'</td>',
+				 '<td align="center">';
+			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;copy_question='.$row['id'].'&course_id='.$selected_course.'&fromExercise=',$fromExercise,'">';                
+            echo ' '.Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest'));
+            echo '</a> ';
+			if ($row['session_id'] == $session_id) {
+			    if ($selected_course == api_get_course_int_id()) {
+				    echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" title="'.get_lang('InsertALinkToThisQuestionInTheExercise').'" alt="'.get_lang('InsertALinkToThisQuestionInTheExercise').'"></a>';
+			    }
 			}
-            echo '</td>';
-            echo '</tr>';
-
-			// skips the last question, that is only used to know if we have or not to create a link "Next page"
-			if($i == $limitQuestPage) {
-				break;
-			}
-			$i++;
 		}
-	}
+        echo '</td>';
+        echo '</tr>';
 
-	if (!$nbrQuestions) {
-        echo '<tr>',
-            '<td colspan="',($fromExercise?4:4),'">',get_lang('NoQuestion'),'</td>',
-            '</tr>';
+		// skips the last question, that is only used to know if we have or not to create a link "Next page"
+		if($i == $limitQuestPage) {
+			break;
+		}
+		$i++;
 	}
-    echo '</table>';
-    
-    if (api_get_session_id() == 0 ){
-    	echo '<div style="width:100%; border-top:1px dotted #4171B5;">
-    		  <button class="save" type="submit">'.get_lang('Reuse').'</button>
-    	  	</div></form>';
-    }
-	Display::display_footer();
+}
+
+if (!$nbrQuestions) {
+    echo '<tr>',
+        '<td colspan="',($fromExercise?4:4),'">',get_lang('NoQuestion'),'</td>',
+        '</tr>';
+}
+echo '</table>';
+
+if (api_get_session_id() == 0 ){
+	echo '<div style="width:100%; border-top:1px dotted #4171B5;">
+		  <button class="save" type="submit">'.get_lang('Reuse').'</button>
+	  	</div></form>';
+}
+Display::display_footer();

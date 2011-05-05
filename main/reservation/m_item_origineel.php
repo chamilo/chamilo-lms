@@ -281,7 +281,7 @@ switch ($_GET['action']) {
 			case 'delete' :
 				Rsys :: delete_item_right($_GET['item_id'], $_GET['class_id']);
 				ob_start();
-				Display :: display_normal_message(get_lang('itemRightDeleted'),false);
+				Display :: display_normal_message(get_lang('ItemRightDeleted'),false);
 				$msg = ob_get_contents();
 				ob_end_clean();
 			case 'switch' :
@@ -394,7 +394,7 @@ switch ($_GET['action']) {
 		$msg = ob_get_contents();
 		ob_end_clean();
 	default :
-		$NoSearchResults = get_lang('noItems');
+		$NoSearchResults = get_lang('NoItem');
 		Display :: display_header($tool_name);
 		api_display_tool_title($tool_name);
 

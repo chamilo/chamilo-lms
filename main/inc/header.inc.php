@@ -104,6 +104,8 @@ echo '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
 //Global chamilo CSS
 if (in_array(api_get_visual_theme(), array('chamilo','chamilo_red','chamilo_blue','chamilo_orange','chamilo_green','chamilo_electric_blue'))) {
     echo '@import "'.api_get_path(WEB_CSS_PATH).'base_chamilo.css";';
+} else {
+    echo '@import "'.api_get_path(WEB_CSS_PATH).'base_classic.css";';
 }
 
 if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {

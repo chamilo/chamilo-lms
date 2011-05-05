@@ -488,7 +488,7 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
     PADDING-RIGHT: 15px;
     DISPLAY: block;
     PADDING-LEFT: 6px;
-    BACKGROUND:  url(images/tab_right.gif) no-repeat right top;
+    /* BACKGROUND:  url(images/tab_right.gif) no-repeat right top; */
     PADDING-BOTTOM: 0px;
     COLOR: #fff;
     PADDING-TOP: 5px;

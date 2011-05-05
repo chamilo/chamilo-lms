@@ -220,7 +220,7 @@ if ($add) {
                     case 'Drop':
                         //$addedresource_item = 'Dropbox';
                         $addedresource_item = TOOL_DROPBOX;
-                        $title = get_lang('dropbox');
+                        $title = get_lang('Dropbox');
                         break;
                     case 'Intro':
                         $addedresource_item = 'Introduction_text';

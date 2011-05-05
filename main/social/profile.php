@@ -180,7 +180,7 @@ function register_friend(element_input) {
 }
 
 </script>';
-$nametool = get_lang('Social');
+$nametool = get_lang('ViewMySharedProfile');
 if (isset($_GET['shared'])) {
 	$my_link='../social/profile.php';
 	$link_shared='shared='.Security::remove_XSS($_GET['shared']);
@@ -189,18 +189,17 @@ if (isset($_GET['shared'])) {
 	$link_shared='';
 }
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social') );
-$interbreadcrumb[]= array ('url' => 'profile.php?u='.api_get_user_id(), 'name' => get_lang('ViewMySharedProfile'));
 
 if (isset($_GET['u']) && is_numeric($_GET['u']) && $_GET['u'] != api_get_user_id()) {
-	$info_user=api_get_user_info($_GET['u']);
+	$info_user =   api_get_user_info($_GET['u']);
 	$interbreadcrumb[]= array ('url' => '#','name' => api_get_person_name($info_user['firstName'], $info_user['lastName']));
 	$nametool = '';
 }
 if (isset($_GET['u'])) {
 	$param_user='u='.Security::remove_XSS($_GET['u']);
 }else {
-	$info_user=api_get_user_info(api_get_user_id());
-	$param_user='';
+	$info_user = api_get_user_info(api_get_user_id());
+	$param_user = '';
 }
 $_SESSION['social_user_id'] = intval($user_id);
 

@@ -1,22 +1,19 @@
-<?php
-/* For licensing terms, see /license.txt */
+<?php /* For licensing terms, see /license.txt */
 /**
-==================================================================================
-	@author Isaac flores paz <florespaz@bidsoftperu.com> - Added 9 july of 2009
-==================================================================================
-*/
-/*
-==============================================================================
-		Class SubLanguageManager
-==============================================================================
-*/
+ * SubLanguageManager class definition file
+ * @package chamilo.admin.sublanguage 
+ */
+/**
+ * SubLanguageManager class manages the edition
+ * @class SubLanguageManager
+ */
 class SubLanguageManager {
 
     private function __construct() {
     	//void
     }
     /**
-     * Get all data of lang folder (forum.inc.php,gradebook.inc.php,notebook.inc.php)
+     * Get all files of lang folder (forum.inc.php,gradebook.inc.php,notebook.inc.php)
      * @param String The lang path folder  (/var/www/my_lms/main/lang/spanish)
      * @param bool true if we only want the "subname" trad4all instead of  trad4all.inc.php
      * @return Array All file of lang folder
@@ -79,7 +76,7 @@ class SubLanguageManager {
      * @param String The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
      * @return Array Contains all information of chamilo file
      */
-   public static function get_all_language_variable_in_file ($system_path_file) {
+   public static function get_all_language_variable_in_file ($system_path_file,$get_as_string_index=false) {
    		$res_list = array();
    		if (!is_readable($system_path_file)) {
    			return $res_list;
@@ -89,6 +86,9 @@ class SubLanguageManager {
 	        if (substr($line,0,1)!='$') { continue; }
 	    	list($var,$val) = split('=',$line,2);
 	        $var = trim($var); $val = trim($val);
+            if ($get_as_string_index) { //remove the prefix $
+            	$var = substr($var,1);
+            }
 	        $res_list[$var] = $val;
 	    }
         return $res_list;

@@ -19,7 +19,6 @@ $show_full_profile = true;
 //social tab
 $this_section = SECTION_SOCIAL;
 unset($_SESSION['this_section']);//for hmtl editor repository
-$interbreadcrumb[]= array ('url' => 'home.php','name' => get_lang('Social'));
 
 api_block_anonymous_users();
 //jquery thickbox already called from main/inc/header.inc.php
@@ -65,7 +64,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
 	}
 }
 
-Display :: display_header(get_lang('SocialNetwork'));
+Display :: display_header(get_lang('Social'));
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
 $user_online_list = who_is_online(api_get_setting('time_limit_whosonline'),true);
 $user_online_count = count($user_online_list);

@@ -54,7 +54,7 @@ class Diagnoser
         echo $html;
         $table = new SortableTableFromArray($data, 1, 100);
 
-        $table->set_header(0,get_lang(''), false);
+        $table->set_header(0,'', false);
         $table->set_header(1,get_lang('Section'), false);
         $table->set_header(2,get_lang('Setting'), false);
         $table->set_header(3,get_lang('Current'), false);

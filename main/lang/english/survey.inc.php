@@ -204,4 +204,12 @@ $PleaseFillSurvey = "Please fill survey";
 $ReportingOverview = "Reporting overview";
 $ThereAreNotQuestionsForthisSurvey = "There are not questions for this survey";
 $Multipleresponse = "Multiple answer";
+$ErrorSurveyTypeUnknown = "Survey type unknown";
+$SurveyUndetermined = "Survey undefined";
+$QuestionComment = "Question comment";
+$UnknowQuestion = "Unknown question";
+$Lastname = "Lastname";
+$Firstname = "Firstname";
+$DeleteSurveyGroup = "Delete a survey group";
+$ErrorOccurred = "An error occurred.";
 ?>

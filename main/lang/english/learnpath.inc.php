@@ -257,4 +257,6 @@ $EnableLPAutoLaunch = "Enable learning path auto-launch";
 $DisableLPAutoLaunch = "Disable learning path auto-launch";
 $ViewModeEmbedFrame = "Current view mode: external embed. Use only for embedding in external sites.";
 $LPNotVisibleToStudent = "Students cannot see this learning path";
+$EditCurrentModule = "Edit current module";
+$SearchFeatureTerms = "Terms for the search feature";
 ?>

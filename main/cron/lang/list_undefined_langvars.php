@@ -6,7 +6,7 @@
 /**
  * Includes and declarations
  */
-if (PHP_SAPI!='cli') { die('Run this script through the command line or comment this line in the code'); }
+//if (PHP_SAPI!='cli') { die('Run this script through the command line or comment this line in the code'); }
 require_once '../../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
 $path = api_get_path(SYS_LANG_PATH).'english';
@@ -49,10 +49,11 @@ foreach ($files as $file) {
     flush();
 }
 //$undefined_terms = array_flip($undefined_terms);
-if (count($undefined_terms)<1) { die("No missing terms<br />\n"); } else { echo "The following terms were nowhere to be found: <br />\n"; }
+if (count($undefined_terms)<1) { die("No missing terms<br />\n"); } else { echo "The following terms were nowhere to be found: <br />\n<table>"; }
 foreach ($undefined_terms as $term => $file) {
-	echo "$term\t in $file<br />\n";
+	echo "<tr><td>$term</td><td>in $file</td></tr>\n";
 }
+echo "</table>\n";
 
 
 function get_all_php_files($base_path) {

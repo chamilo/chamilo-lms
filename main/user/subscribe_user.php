@@ -81,7 +81,7 @@ if (isset ($_REQUEST['register'])) {
 				if ($result_simple_sub)	{
 					Display::display_confirmation_message($_SESSION['session_user_name'][$j].' '.get_lang('langAddedToCourse'));
 				} else {
-					Display::display_error_message($_SESSION['session_user_name'][$j].' '.get_lang('langNotAddedToCourse'));
+					Display::display_error_message($_SESSION['session_user_name'][$j].' '.get_lang('NotAddedToCourse'));
 
 				}
 			}

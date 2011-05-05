@@ -1,22 +1,19 @@
-<?php
-/* For licensing terms, see /license.txt */
+<?php /* For licensing terms, see /license.txt */
 /**
-==================================================================================
-	@author Isaac flores paz <florespaz@bidsoftperu.com> - Added 9 july of 2009
-==================================================================================
-*/
-/*
-==============================================================================
-		Class SubLanguageManager
-==============================================================================
-*/
+ * SubLanguageManager class definition file
+ * @package chamilo.admin.sublanguage 
+ */
+/**
+ * SubLanguageManager class manages the edition
+ * @class SubLanguageManager
+ */
 class SubLanguageManager {
 
     private function __construct() {
     	//void
     }
     /**
-     * Get all data of lang folder (forum.inc.php,gradebook.inc.php,notebook.inc.php)
+     * Get all files of lang folder (forum.inc.php,gradebook.inc.php,notebook.inc.php)
      * @param String The lang path folder  (/var/www/my_lms/main/lang/spanish)
      * @param bool true if we only want the "subname" trad4all instead of  trad4all.inc.php
      * @return Array All file of lang folder

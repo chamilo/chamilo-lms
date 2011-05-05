@@ -475,7 +475,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
                             $result_items2 = Database::query($sql_items2);
                             $number_items2 = Database::num_rows($result_items2);
                             if ($number_items2 == 0) {
-                                echo get_lang('prereq_deleted_error');
+                                echo get_lang('PrerequisiteDeletedError');
                             }
                             $row_items2 = Database::fetch_array($result_items2);
                             display_addedresource_link_in_learnpath($row_items2['item_type'], $row_items2['ref'], '', $row_items2['id'], 'builder', '', 0);

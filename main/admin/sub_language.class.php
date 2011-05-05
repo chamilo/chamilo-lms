@@ -86,8 +86,8 @@ class SubLanguageManager {
 	        if (substr($line,0,1)!='$') { continue; }
 	    	list($var,$val) = split('=',$line,2);
 	        $var = trim($var); $val = trim($val);
-            if ($get_as_string_index) {
-            	$var = "'".substr($var,1)."'";
+            if ($get_as_string_index) { //remove the prefix $
+            	$var = substr($var,1);
             }
 	        $res_list[$var] = $val;
 	    }

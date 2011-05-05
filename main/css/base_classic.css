@@ -1,0 +1,27 @@
+/*
+ * CSS that only will be called in classic chamilo themes (everything except the chamilo_XXX themes)
+ */
+ 
+#Header2Right ul {
+	 /*width: 80% */
+}
+
+#header2 {
+    min-height: 15px;
+} 
+
+#header3 {
+    width: 100%;	
+	padding-left:0px;
+    padding-right:0px;  
+	float:left;
+}
+
+#header4 {
+    width: 100%;
+	float:left;
+	color:#aaa;	
+	padding-left:0px;
+    padding-right:0px;	
+}
+

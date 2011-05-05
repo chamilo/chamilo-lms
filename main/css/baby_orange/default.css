@@ -1579,7 +1579,7 @@ div.system_announcement {
 .menusectioncaption {
 	position: relative;
 	top: -9px;
-	background-color: #E5EDF9;
+	/* background-color: #E5EDF9; */
 	font-size: 12px;
 	padding: 0 8px 0 4px;
 }

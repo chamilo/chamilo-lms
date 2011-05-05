@@ -20,7 +20,7 @@ require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (api_get_setting('allow_message_tool')!='true'){
+if (api_get_setting('allow_message_tool') !='true' ){
 	api_not_allowed();
 }
 
@@ -288,15 +288,14 @@ function manage_form ($default, $select_from_user_list = null) {
 /* MAIN SECTION */
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
-	$interbreadcrumb[]= array ('url' => '#','name' => $nameTools);
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));	
 } else {
 	$this_section = SECTION_MYPROFILE;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
-	$interbreadcrumb[]= array ('url' => 'inbox.php','name' => get_lang('Inbox'));
+	//$interbreadcrumb[]= array ('url' => '#','name' => get_lang('ComposeMessage'));
 }
 
-Display::display_header('');
+Display::display_header(get_lang('ComposeMessage'));
 
 $group_id = intval($_REQUEST['group_id']);
 
@@ -315,9 +314,12 @@ if ($group_id != 0) {
 			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
 		}
 		if (api_get_setting('allow_message_tool') == 'true') {
-			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
+			// echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';			
+			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>';
+			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>';
+            echo '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>';		    
 		}
-		echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?type=reduced">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
+		//echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?type=reduced">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
 		echo '</div>';
 	}
 }
@@ -327,13 +329,13 @@ echo '<div id="social-content">';
 	//LEFT COLUMN
 	if (api_get_setting('allow_social_tool') != 'true') {
 		$id_content_right = 'inbox';
-		echo '<div id="inbox-menu" class="actions">';
+	/*	echo '<div id="inbox-menu" class="actions">';
 		echo '<ul>';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>'.'</li>';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';			
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
 		echo '</ul>';
-		echo '</div>';
+		echo '</div>';*/
 	} else {
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 		echo '<div id="social-content-left">';

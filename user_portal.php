@@ -560,7 +560,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 $profile_content .= ' </div></div>';
 
 //  @todo Add a platform setting to add the user image.
-if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+if (api_get_setting('allow_message_tool') == 'true') {
 
     require_once api_get_path(LIBRARY_PATH).'message.lib.php';
     require_once api_get_path(LIBRARY_PATH).'social.lib.php';
@@ -583,19 +583,20 @@ if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_mes
     $profile_content .= '<div class="clear"></div>';
     $profile_content .= '<div class="message-content"><ul class="menulist">';
     $link = '';
-    if (api_get_setting('show_tabs', 'social') == 'true') {
+    if (api_get_setting('allow_social_tool') == 'true') {
         $link = '?f=social';
     }
     $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'" class="message-body">'.get_lang('Inbox').$cant_msg.' </a></li>';
     $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'" class="message-body">'.get_lang('Compose').' </a></li>';
     
-    if ($total_invitations == 0) {
-        $total_invitations = '';
-    } else {
-       $total_invitations = ' ('.$total_invitations.')';
+    if (api_get_setting('allow_social_tool') == 'true') {
+        if ($total_invitations == 0) {
+            $total_invitations = '';
+        } else {
+           $total_invitations = ' ('.$total_invitations.')';
+        }
+        $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' '.$total_invitations.' </a></li>';
     }
-    $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' '.$total_invitations.' </a></li>';
-
     $profile_content .= '</ul>';
     $profile_content .= '</div>';      
 }

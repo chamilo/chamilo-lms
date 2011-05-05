@@ -72,7 +72,7 @@ function show_icon_edit(element_html) {
 }       
 </script>';
 
-$interbreadcrumb[] = array('url' => '../auth/profile.php', 'name' => get_lang('ModifyProfile'));
+//$interbreadcrumb[] = array('url' => '../auth/profile.php', 'name' => get_lang('ModifyProfile'));
 if (!empty ($_GET['coursePath'])) {
 	$course_url = api_get_path(WEB_COURSE_PATH).htmlentities(strip_tags($_GET['coursePath'])).'/index.php';
 	$interbreadcrumb[] = array('url' => $course_url, 'name' => Security::remove_XSS($_GET['courseCode']));
@@ -741,14 +741,6 @@ if ($form->validate()) {
 	exit;
 }
 
-
-//if (isset($_GET['show'])) {
-	//if ((api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') || (api_get_setting('allow_social_tool') == 'true')) {
-		//$interbreadcrumb[] = array ('url' => 'javascript: void(0);', 'name' => get_lang('SocialNetwork'));
-	//} elseif ((api_get_setting('allow_social_tool') == 'false' && api_get_setting('allow_message_tool') == 'true')) {
-		//$interbreadcrumb[] = array('url' => 'javascript: void(0);', 'name' => get_lang('MessageTool'));
-	//}
-//}
 
 /*  		MAIN DISPLAY SECTION  */
 // the header

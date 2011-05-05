@@ -21,7 +21,10 @@ $this_section = SECTION_SOCIAL;
 unset($_SESSION['this_section']);//for hmtl editor repository
 
 api_block_anonymous_users();
-//jquery thickbox already called from main/inc/header.inc.php
+
+if (api_get_setting('allow_social_tool') !='true' ){
+    api_not_allowed();
+}
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 

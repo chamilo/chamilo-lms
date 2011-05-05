@@ -37,7 +37,7 @@ class SocialManager extends UserManager {
 		}
 		$count_list=count($friend_relation_list);
 		if ($count_list==0) {
-			$friend_relation_list[]=get_lang('UnkNow');
+			$friend_relation_list[]=get_lang('Unknown');
 		} else {
 			return $friend_relation_list;
 		}

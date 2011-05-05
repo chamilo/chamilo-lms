@@ -147,7 +147,7 @@ switch ($_GET['action']) {
 		$table->set_header(4, get_lang('SubscribedEndDate'), false);
 		$table->set_header(5, get_lang('Accept'), false, array ('style' => 'width:30px;'));
 		$table->set_header(6, get_lang('Delete'), false, array ('style' => 'width:30px;'));
-		$table->set_form_actions(array ('accept_users' => get_lang('AcceptUsers'), 'unaccept_users' => get_lang('UnacceptedUsers'), 'delete_subscriptions' => get_lang('Delete_subscriptions')), 'accepting');
+		$table->set_form_actions(array ('accept_users' => get_lang('AcceptUsers'), 'unaccept_users' => get_lang('UnacceptedUsers'), 'delete_subscriptions' => get_lang('DeleteSubscriptions')), 'accepting');
 		//$table->set_form_actions(array ('accept_users' => get_lang('AcceptUsers'), 'unaccept_users' => get_lang('UnacceptedUsers')), 'accepting');
 		$table->display();
 		break;

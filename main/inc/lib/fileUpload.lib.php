@@ -813,9 +813,12 @@ function filter_extension(&$filename) {
  * @return id if inserted document
  */
 function add_document($_course, $path, $filetype, $filesize, $title, $comment = null, $readonly = 0) {
-	$session_id = api_get_session_id();
-	$readonly = intval($readonly);
-	$comment = Database::escape_string($comment);
+	$session_id    = api_get_session_id();
+	$readonly      = intval($readonly);
+	$comment       = Database::escape_string($comment);
+	$path          = Database::escape_string($path);
+	$filetype      = Database::escape_string($filetype);
+	$filesize      = intval($filesize);
 	
 	$table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 	$sql = "INSERT INTO $table_document (path, filetype, size, title, comment, readonly, session_id)
@@ -866,6 +869,8 @@ function item_property_update_on_folder($_course, $path, $user_id) {
 	if ($path == '/') {
 		return;
 	}
+	
+	$user_id = intval($user_id);
 
 	// If the given path ends with a / we remove it
 	$endchar = substr($path, strlen($path) - 1, 1);

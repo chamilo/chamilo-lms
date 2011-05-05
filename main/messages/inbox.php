@@ -95,10 +95,10 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 		for ($i=1;$i<=$count_delete;$i++) {
 			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $info_delete[$i]);
 		}
-			$message_box=get_lang('SelectedMessagesDeleted');
-			Display::display_normal_message(api_xml_http_response_encode($message_box),false);
-		   	inbox_display();
-		    exit;
+		$message_box=get_lang('SelectedMessagesDeleted');
+		Display::display_normal_message(api_xml_http_response_encode($message_box),false);
+	   	inbox_display();
+	    exit;
 	}
 }
 
@@ -115,7 +115,7 @@ if ($_GET['f']=='social') {
 } else {
 	$this_section = SECTION_MYPROFILE;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
-	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));
+	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Inbox'));
 }
 
 Display::display_header('');
@@ -130,27 +130,24 @@ if ($_GET['f']=='social' || api_get_setting('allow_social_tool') == 'true') {
 	if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
 		echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
 	}
+	
 	if (api_get_setting('allow_message_tool') == 'true') {
-		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
+		//echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';		
+		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>';
+		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>';
+        echo '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>';
+
+            
 	}	
-	echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?type=reduced">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
+	//echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?type=reduced">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
 	echo '</div>';
-
-
 }
 
 echo '<div id="social-content">';
 	$id_content_right = '';
 	//LEFT CONTENT			
 	if (api_get_setting('allow_social_tool') != 'true') { 
-		$id_content_right = 'inbox';
-		echo '<div id="inbox-menu" class="actions">';
-		echo '<ul>';
-			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>'.'</li>';
-			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';			
-			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
-		echo '</ul>';
-		echo '</div>';		
+		$id_content_right = 'inbox';		
 	} else {
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 		$id_content_right = 'social-content-right';
@@ -160,10 +157,8 @@ echo '<div id="social-content">';
 		echo '</div>';		
 	}
 
-	echo '<div id="'.$id_content_right.'">';
-    
-    if (api_get_setting('allow_social_tool') == 'true') {
-        
+	echo '<div id="'.$id_content_right.'">';    
+    if (api_get_setting('allow_social_tool') == 'true') {        
     	echo '<div class="social-box-container2">';				
     	echo '<div class="actions">';				
     		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array(), 32).'</a>';

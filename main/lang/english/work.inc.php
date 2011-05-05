@@ -91,4 +91,6 @@ $HomeworkCreated = "An assignment was created";
 $HomeworkHasBeenCreatedForTheCourse = "An assignment was created for the course";
 $PleaseCheckHomeworkPage = "Please check the assignments page.";
 $IncludedInEvaluation = "Included in the evaluation";
+$DateExpiredNotBeLessDeadLine = "The expiration date cannot be smaller than the deadline.";
+$NotRevised = "Not reviewed";
 ?>

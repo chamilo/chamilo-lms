@@ -296,4 +296,6 @@ $ExercisesInTimeProgressChart = "Progress of own exercises results over time, ag
 $AverageIsCalculatedBasedInAllAttempts = "Average is calculated based on all test attempts";
 $AverageIsCalculatedBasedInTheLatestAttempts = "Average is calculated based on the latest attempts";
 $LatestAttemptAverageScore = "Latest attempt average score";
+$Untitled = "Untitled";
+$Quantity = "Quantity";
 ?>

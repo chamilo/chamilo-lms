@@ -125,4 +125,7 @@ $ErrorNoFilesInFolder = "This folder is empty";
 $AddComment = "Save feedback";
 $SentCatgoryDeleted = "The folder has been deleted";
 $ReceivedCatgoryDeleted = "The folder has been deleted";
+$InvalideUserDetected = "Invalid user detected.";
+$InvalideGroupDetected = "Invalid group detected.";
+$OverviewOfFilesInThisZip = "Overview of diles in this Zip";
 ?>

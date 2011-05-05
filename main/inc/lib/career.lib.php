@@ -81,7 +81,7 @@ class Career extends Model {
 		
         $form = new FormValidator('career', 'post', $url);
         // Settting the form elements
-        $header = get_lang('add');
+        $header = get_lang('Add');
         if ($action == 'edit') {
             $header = get_lang('Modify');
         }

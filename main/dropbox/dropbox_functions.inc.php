@@ -795,7 +795,7 @@ function store_add_dropbox() {
 	// we are doing a just upload but an additional recipient is selected.
 	// note: why can't this be valid? It is like sending a document to yourself AND to a different person (I do this quite often with my e-mails)
 	if ($thisIsJustUpload && (count($_POST['recipients']) != 1)) {
-		return get_lang('mailingJustUploadSelectNoOther');
+		return get_lang('MailingJustUploadSelectNoOther');
 	}
 
 	if (empty($_FILES['file']['name'])) {

@@ -361,7 +361,11 @@ $image_files_only = '';
 if ($is_certificate_mode) {
     $interbreadcrumb[]= array('url' => '../gradebook/index.php', 'name' => get_lang('Gradebook'));
 } else {
-    $interbreadcrumb[]= array('url' => '', 'name' => get_lang('Documents'));
+    if ( (isset($_GET['id']) && $_GET['id'] != 0) || isset($_GET['curdirpath'])) {
+        $interbreadcrumb[]= array('url' => 'document.php', 'name' => get_lang('Documents'));
+    } else {
+        $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('Documents'));
+    }
 }
 
 // Interbreadcrumb for the current directory root path
@@ -390,6 +394,9 @@ for ($i = 0; $i < $array_len; $i++) {
     if ($is_certificate_mode) {
         $interbreadcrumb[] = array('url' => $url_dir.'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => $url_to_who);
     } else {
+        if( $i == $array_len - 1 && !isset($_GET['createdir']) ) {
+            $url_dir = '#';
+        }
         $interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
     }
     //does not repeat the name group in the url
@@ -400,7 +407,7 @@ for ($i = 0; $i < $array_len; $i++) {
 }
 
 if (isset($_GET['createdir'])) {
-    $interbreadcrumb[] = array('url' => '', 'name' => get_lang('CreateDir'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('CreateDir'));
 }
 
 Display::display_header('','Doc');

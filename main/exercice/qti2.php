@@ -28,7 +28,7 @@ if (!api_is_allowed_to_edit(null, true)) {
 }
 
 // the breadcrumbs
-$interbreadcrumb[]= array ("url"=>"./exercice.php", "name"=> get_lang('Exercices'));
+$interbreadcrumb[]= array ("url"=>"exercice.php", "name"=> get_lang('Exercices'));
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 /**
@@ -91,7 +91,7 @@ if ((api_is_allowed_to_edit(null, true))) {
 }
 
 // display header
-Display::display_header($name_tools, get_lang('Exercise'));
+Display::display_header(get_lang('ImportQtiQuiz'), 'Exercises');
 
 // display qti form
 ch_qti2_display_form();

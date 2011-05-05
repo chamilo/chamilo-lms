@@ -41,10 +41,12 @@ $htmlHeadXtra[] = "<script type='text/javascript'>
 // Action handling
 lp_upload_quiz_action_handling();
 
+$interbreadcrumb[]= array ("url"=>"exercice.php", "name"=> get_lang('Exercices'));
+
 // Display the header
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool
-    Display :: display_header($nameTools, get_lang('Exercise'));
+    Display :: display_header(get_lang('ImportExcelQuiz'), 'Exercises');
     if (isset ($_GET['message'])) {
         if (in_array($_GET['message'], array ('ExerciseEdited'))) {
             Display :: display_confirmation_message(get_lang($_GET['message']));

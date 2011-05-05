@@ -135,8 +135,8 @@ $stok = Security::get_token();
                                 <div class="course-block-main-item"><div class="left">'.get_lang('Teacher').'</div><div class="course-block-teacher right">'.$tutor_name.'</div></div>
                                 <div class="course-block-main-item"><div class="left">'.get_lang('CreationDate').'</div><div class="course-block-date">'.api_format_date($creation_date,DATE_FORMAT_SHORT).'</div></div>
                             </div>
-                            <div class="categories-course-picture">
-                                <img src="'.$course_medium_image.'" />
+                            <div class="categories-course-picture"><center>
+                                <img src="'.$course_medium_image.'" /></center>
                             </div>
                             <div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>';
                 echo '</div>';

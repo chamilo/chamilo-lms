@@ -135,7 +135,9 @@ if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 	}
 } else {
 	$interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));
-	$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('GroupList'));
+	if (!isset($_GET['id'])) {
+        $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('GroupList'));
+	}
 }
 
 Display :: display_header($tool_name, 'Groups');
@@ -184,7 +186,6 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 				@api_mail_html($recipient_name, $recipient_email, stripslashes($subject), $message, $sender_name, $sender_email);
 			}
 		}
-
 		Security::clear_token();
 	}
 }
@@ -204,7 +205,6 @@ if ($group_id != 0 ) {
 		if (api_get_user_id() == $user_leaved) {
 			GroupPortalManager::delete_user_rel_group($user_leaved, $group_id);
 			$user_leave_message = true;
-
 		}
 	}
 	// add a user to a group if its open

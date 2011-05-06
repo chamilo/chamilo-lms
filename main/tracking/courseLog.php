@@ -132,6 +132,7 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
 /* MAIN CODE */
 
 echo '<div class="actions">';
+
 if ($_GET['studentlist'] == 'false') {
     echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a> | ';
     echo get_lang('CourseTracking').' | ';
@@ -145,18 +146,9 @@ if ($_GET['studentlist'] == 'false') {
     if (empty($session_id))
         echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';
 
-} elseif($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
-    if (!empty($_GET['from'])) {    
-        echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'','32').'</a>';
-    }
-    
-    /*
-    echo get_lang('StudentsTracking').' | ';
-    echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a> | ';
-    echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
-    if (empty($session_id))
-        echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';*/
 }
+
+echo '<span style="float:right; padding-top:7px;">';
 
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'','32').'</a>';
 
@@ -175,6 +167,25 @@ if ($_GET['studentlist'] == 'false') {
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
 	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a>';
 }
+
+echo '</span>';
+
+
+if($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {    
+    
+    // Create a search-box.
+    $form_search = new FormValidator('search_simple', 'get', api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&studentlist=true', '', 'width=200px', false);
+    $renderer =& $form_search->defaultRenderer();
+    $renderer->setElementTemplate('<span>{element}</span>');
+    $form_search->addElement('hidden', 'studentlist', 'true');
+    $form_search->addElement('hidden', 'from', Security::remove_XSS($_GET['from']));
+    $form_search->addElement('hidden', 'session_id', api_get_session_id());
+    $form_search->addElement('text', 'user_keyword');
+    $form_search->addElement('style_submit_button', 'submit', get_lang('SearchUsers'), 'class="search"');
+    
+    $form_search->display();
+}
+
 echo '</div>';
 
 if ($_GET['studentlist'] == 'false') {
@@ -420,8 +431,6 @@ if ($_GET['studentlist'] == 'false') {
         exit;
     }
 } elseif ($_GET['studentlist'] == 'true' or $_GET['studentlist'] == '') {
-// else display student list with all the informations
-
     // BEGIN : form to remind inactives susers
     $form = new FormValidator('reminder_form', 'get', api_get_path(REL_CODE_PATH).'announcements/announcements.php');
 
@@ -454,8 +463,10 @@ if ($_GET['studentlist'] == 'false') {
                     Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_name.'</h2>';
     } else {
         echo '<h2>'.Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_info['name'].'</h2>';
-    }    
+    }
+    
     $extra_field_select = TrackingCourseLog::display_additional_profile_fields();
+    
     
     if (!empty($extra_field_select)) {
         echo $extra_field_select;

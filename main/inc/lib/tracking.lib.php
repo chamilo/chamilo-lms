@@ -3187,6 +3187,11 @@ class TrackingCourseLog {
         } else {
             $condition_user = " WHERE user.user_id = $user_ids ";
         }
+                 
+        if (!empty($_GET['user_keyword'])) {
+            $keyword = trim(Database::escape_string($_GET['user_keyword']));
+            $condition_user .=  " AND  (user.firstname LIKE '%".$keyword."%' OR user.lastname LIKE '%".$keyword."%'  OR user.username LIKE '%".$keyword."%'  OR user.email LIKE '%".$keyword."%' ) ";
+        }            
 
         if ($_configuration['multiple_access_urls']) {
             $url_table = ", ".$tbl_url_rel_user."as url_users";
@@ -3226,10 +3231,7 @@ class TrackingCourseLog {
                     }
                     $row[3] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user[0], $course_code, $session_id));
 
-                    $avg_student_score = Tracking::get_avg_student_score($user[0], $course_code, array(), $session_id);
-                    
-                    
-                                
+                    $avg_student_score = Tracking::get_avg_student_score($user[0], $course_code, array(), $session_id);                                
                     $avg_student_progress = Tracking::get_avg_student_progress($user[0], $course_code, array(), $session_id);
                     if (empty($avg_student_progress)) {$avg_student_progress=0;}
                     $row[4] = $avg_student_progress.'%';

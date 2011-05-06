@@ -837,17 +837,18 @@ class SocialManager extends UserManager {
 	 */
 	public static function display_individual_user($user_id) {
 		global $interbreadcrumb;
-		$safe_user_id = Database::escape_string($user_id);
+		$safe_user_id = intval($user_id);
 
-		// to prevent a hacking attempt: http://www.dokeos.com/forum/viewtopic.php?t=5363
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
-		$sql = "SELECT * FROM $user_table WHERE user_id='".intval($safe_user_id)."'";
+		$sql = "SELECT * FROM $user_table WHERE user_id = ".$safe_user_id;
 		$result = Database::query($sql);
 		if (Database::num_rows($result) == 1) {
 			$user_object = Database::fetch_object($result);
 			$name = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;<strong>('.get_lang('Me').')</strong>' : '' );
-			$alt = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
-			$status = ($user_object->status == COURSEMANAGER ? get_lang('Teacher') : get_lang('Student'));
+			$alt  = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
+
+			$status = get_status_from_code($user_object->status);
+			
 			$interbreadcrumb[] = array('url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList'));
 			Display::display_header($alt);
 			echo '<div class="actions-title">';
@@ -880,12 +881,13 @@ class SocialManager extends UserManager {
 					echo Display::return_icon('unknown.jpg', get_lang('Unknown'));
 					echo '<br />';
 				}
-				echo '<div style="text-align:center;padding-top:5px;">'.$status.'</div>';
+				
+				if (!empty($status)) {
+				    echo '<div style="text-align:center;padding-top:5px;">'.$status.'</div>';
+				}
 				echo '</div>';
 
 				echo '<div id="whoisonline-user-info" style="float:left; padding-left:15px;">';
-
-
 
 				global $user_anonymous;
 				if (api_get_setting('allow_social_tool') == 'true' && api_get_user_id() <> $user_anonymous && api_get_user_id() <> 0) {

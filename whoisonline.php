@@ -168,7 +168,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 			}			
 		} else {
 			//individual user information - also displays header info
-			SocialManager::display_individual_user(Security::remove_XSS($_GET['id']));
+			SocialManager::display_individual_user($_GET['id']);
 		}
 	} elseif (isset($_GET['id'])) {
 		Display::display_header(get_lang('UsersOnLineList'));

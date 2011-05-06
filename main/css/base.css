@@ -614,3 +614,43 @@ button:hover {
 	width:auto;	
 }
 
+
+.group_social_item {
+	float:left;
+	width:600px;
+	background-color: #E9F4FA;
+    background-repeat: repeat-x;
+    
+	margin: 8px;
+	padding:5px;
+}
+
+.message-group-author {
+	float:left;
+	width:30px;
+}
+
+.message-group-content {
+	float:right;
+	width:560px;
+	line-height: 100%;
+}
+
+.message-group-date  {
+	font-style:italic;
+	text-align:left;
+	margin-top:4px;
+}
+.message-reply-link {
+	float:right;
+}
+
+.group_social_main_item  {
+	float:left;
+    width:600px;
+    background-color: #fff;
+    background-repeat: repeat-x;
+    
+    margin: 8px;
+    padding:5px;
+}

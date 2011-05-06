@@ -425,7 +425,7 @@ class SortableTable extends HTML_Table {
 	 * @param bool	 	sort data optionally
 	 * @return string	grid html
 	 */
-	public function display_simple_grid($visibility_options, $hide_navigation = true, $per_page = 20, $sort_data = true) {
+	public function display_simple_grid($visibility_options, $hide_navigation = true, $per_page = 20, $sort_data = true, $grid_class = array()) {
 
 		$empty_table = false;
 		if ($this->get_total_number_of_items() == 0) {
@@ -477,8 +477,7 @@ class SortableTable extends HTML_Table {
 			$items = $this->table_data; // This is a faster way to get what we want
 		} else {
 			// The normal way
-			$items = $this->get_clean_html($sort_data); // Getting the items of the table
-			
+			$items = $this->get_clean_html($sort_data); // Getting the items of the table			
 		}
 
 
@@ -491,11 +490,17 @@ class SortableTable extends HTML_Table {
 		} else {
 			$filter = $visibility_options !== false;
 		}
+		
+		$grid_style = $item_style = '';
+		if (!empty($grid_class)) {
+		    $grid_style = $grid_class['grid_class'];
+		    $item_style = $grid_class['item_class'];
+		}
 
-		$html .= '<div class="'.$this->table_name.'_grid_container">';
+		$html .= '<div class="'.$grid_style.' '.$this->table_name.'_grid_container">';
 		if (is_array($items) && count($items) > 0) {
 			foreach ($items as & $row) {
-				$html .= '<div class="'.$this->table_name.'_grid_item">';
+				$html .= '<div class="'.$item_style.' '.$this->table_name.'_grid_item">';
 				$i = 0;
 				foreach ($row as & $element) {
 					if ($filter || $visibility_options[$i]) {

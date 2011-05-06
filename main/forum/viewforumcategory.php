@@ -52,8 +52,8 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // Including additional library scripts.
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 $nameTools=get_lang('ToolForum');
 
 // Including necessary files
@@ -80,7 +80,6 @@ $current_forum_category = get_forum_categories($_GET['forumcategory']);
 $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),'name' => $nameTools);
 $interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),'name' => prepare4display($current_forum_category['cat_title']));
 
-
 if (!empty($_GET['action']) && !empty($_GET['content'])) {
     if ($_GET['action']=='add' && $_GET['content']=='forum' ) {
         $interbreadcrumb[] = array ('url' => api_get_self().'?'.api_get_cidreq().'&amp;action=add&amp;content=forum', 'name' => get_lang('AddForum'));
@@ -94,7 +93,7 @@ if (isset($_GET['origin'])) {
 }
 
 if ($origin=='learnpath') {
-    include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+    require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 } else {
     Display :: display_header(null);
     //api_display_tool_title($nameTools);
@@ -348,13 +347,10 @@ if ($action_forums != 'add') {
     if (count($forum_list) == 0) {
         echo '<tr><td>'.get_lang('NoForumInThisCategory').'</td></tr>';
     }
-
     echo '</table>';
 }
 
 /* FOOTER */
-
 if ($origin != 'learnpath') {
     Display :: display_footer();
 }
-

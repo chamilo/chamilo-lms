@@ -53,10 +53,10 @@ $(document).ready(function () {
  *
  * @version may 2011, Chamilo 1.8.8
  */
-function handle_forum_and_forumcategories($lp_id) {
-    $action_forum_cat = isset($_GET['action']) ? $_GET['action'] : '';
-    $post_submit_cat = isset($_POST['SubmitForumCategory']) ?  true : false;
-    $post_submit_forum = isset($_POST['SubmitForum']) ? true : false;
+function handle_forum_and_forumcategories($lp_id = null) {
+    $action_forum_cat   = isset($_GET['action']) ? $_GET['action'] : '';
+    $post_submit_cat    = isset($_POST['SubmitForumCategory']) ?  true : false;
+    $post_submit_forum  = isset($_POST['SubmitForum']) ? true : false;
     $get_id = isset($_GET['id']) ? $_GET['id'] : '';
     // Adding a forum category.
     if (($action_forum_cat == 'add' && $_GET['content'] == 'forumcategory') || $post_submit_cat) {
@@ -130,6 +130,7 @@ function show_add_forumcategory_form($inputvalues = array(),$lp_id) {
     // Initialize the object.
     $form = new FormValidator('forumcategory', 'post', 'index.php?&amp;gradebook='.$gradebook.'');
    	// hidden field if from learning path
+   	
 	$form->addElement('hidden', 'lp_id', $lp_id);
     // Settting the form elements.
     $form->addElement('header', '', get_lang('AddForumCategory'));
@@ -172,7 +173,7 @@ function show_add_forumcategory_form($inputvalues = array(),$lp_id) {
  *
  * @version may 2011, Chamilo 1.8.8
  */
-function show_add_forum_form($inputvalues = array(),$lp_id) {
+function show_add_forum_form($inputvalues = array(), $lp_id) {
     global $_course;
 
     $gradebook = Security::remove_XSS($_GET['gradebook']);
@@ -193,6 +194,7 @@ function show_add_forum_form($inputvalues = array(),$lp_id) {
         $my_forum_id = isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
         $form->addElement('hidden', 'forum_id', $my_forum_id);
     }
+    $lp_id = intval($lp_id);
    	// hidden field if from learning path
 	$form->addElement('hidden', 'lp_id', $lp_id);
 	

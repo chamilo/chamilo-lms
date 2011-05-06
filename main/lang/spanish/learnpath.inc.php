@@ -257,4 +257,6 @@ $EnableLPAutoLaunch = "Activar el despliegue automático";
 $DisableLPAutoLaunch = "Desactivar el despliegue automático";
 $ViewModeEmbedFrame = "Vista actual: incrustado externo. Solo para uso desde otros sitios.";
 $LPNotVisibleToStudent = "Los alumnos no pueden ver esta lección";
+$EditCurrentModule = "Editar módulo actual";
+$SearchFeatureTerms = "Términos para la búsqueda";
 ?>

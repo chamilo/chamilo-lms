@@ -297,4 +297,6 @@ $ExercisesInTimeProgressChart = "Progreso de resultados de ejercicios propios en
 $AverageIsCalculatedBasedInAllAttempts = "El promedio se basa en todos los intentos realizados";
 $AverageIsCalculatedBasedInTheLatestAttempts = "El promedio se basa en los últimos intentos realizados";
 $LatestAttemptAverageScore = "Promedio de los últimos resultados";
+$Untitled = "Sin título";
+$Quantity = "Cantidad";
 ?>

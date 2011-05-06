@@ -125,4 +125,7 @@ $ErrorNoFilesInFolder = "Aucun fichier dans ce répertoire";
 $AddComment = "Enregistrer le commentaire";
 $SentCatgoryDeleted = "Le dossier a été supprimé";
 $ReceivedCatgoryDeleted = "Le dossier a été supprimé";
+$InvalideUserDetected = "Utilisateur non valide détecté.";
+$InvalideGroupDetected = "Groupe non valide détecté.";
+$OverviewOfFilesInThisZip = "Vue globale des fichiers de ce Zip";
 ?>

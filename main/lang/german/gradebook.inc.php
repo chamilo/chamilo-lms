@@ -103,4 +103,6 @@ $TotalUser = "Gesamtsumme für Benutzer";
 $AverageTotal = "Gesamtzahl für Durchschnitt";
 $Evaluation = "Bewertung";
 $EvaluationAverage = "Durchschnitt für Bewertung";
+$ViewEvaluations = "Bewertungen sehen";
+$Evaluations = "Bewertungen";
 ?>

@@ -733,6 +733,10 @@ $langNameOfLang['swahili'] = "suaheli";
 $langNameOfLang['trad_chinese'] = "chinesisch traditionell";
 $langNameOfLang['ukrainian'] = "ukrainisch";
 $langNameOfLang['yoruba'] = "yoruba";
+$SeeMore = "mehr";
 $TitleColumnGradebook = "Spaltenüberschrift im Kompetenz-Report";
 $QualifyWeight = "Gewichtung im Report";
+$TabsDashboard = "Control Panel";
+$Dashboard = "Control Panel";
+$Homepage = "Startseite";
 ?>

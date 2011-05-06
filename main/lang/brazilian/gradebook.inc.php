@@ -191,4 +191,8 @@ $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "Pontuação mínima pa
 $LinkMod = "Salvar";
 $EditLink = "Editar link";
 $CategoryDeleted = "A categoria foi excluída";
+$AreYouSureToLockedTheEvaluation = "Você está realmente certo em bloquear a avaliação?";
+$AreYouSureToUnLockedTheEvaluation = "Você está realmente certo em desbloquear a avaliação?";
+$EvaluationHasBeenUnLocked = "A avaliação foi desbloqueada";
+$EvaluationHasBeenLocked = "A avaliação foi bloqueada";
 ?>

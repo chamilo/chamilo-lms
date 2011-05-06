@@ -957,16 +957,14 @@ if ($modifyAnswers) {
 		</td>	
 	</tr>
 	<tr>
-		<td colspan="2" valign="top" style="border:1px solid #ccc;border-top:none">
+		<td colspan="2" valign="top" style="border-top:none">
 			<script type="text/javascript">
 				<!--
 				// Version check based upon the values entered above in "Globals"
 				var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
-
 				<?php
 					$swf_loaded = $answerType==HOT_SPOT_DELINEATION ? 'hotspot_delineation_admin' : 'hotspot_admin';
-					$height = 450;
-								
+					$height = 450;								
 				?>
 				// Check to see if the version meets the requirements for playback
 				if (hasReqestedVersion) {  // if we've detected an acceptable version

@@ -1,13 +1,12 @@
-<?php // $Id: question.class.php 22257 2009-07-20 17:50:09Z juliomontoya $
+<?php
 /* For licensing terms, see /license.txt */
 
 /**
 *	File containing the Question class.
 *	@package chamilo.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 22257 2009-07-20 17:50:09Z juliomontoya $
+*   @author Julio Montoya <gugli100@gmail.com> lot of bug fixes
 */
-
 
 if(!class_exists('Question')):
 
@@ -356,22 +355,20 @@ abstract class Question
 		}
 
 		// if the question has got an ID
-		if($this->id) {
-			$extension = pathinfo($PictureName, PATHINFO_EXTENSION);
-			$this->picture='quiz-'.$this->id.'.jpg';
-			if($extension == 'gif' || $extension == 'png') {
-				$o_img = new image($Picture);
-				$o_img->send_image('JPG',$picturePath.'/'.$this->picture);
-				$document_id = add_document($this->course, '/images/'.$this->picture, 'file', filesize($picturePath.'/'.$this->picture),$this->picture);
-			}
-			else
-			{
-				move_uploaded_file($Picture,$picturePath.'/'.$this->picture)?true:false;
-			}
-			$document_id = add_document($this->course, '/images/'.$this->picture, 'file', filesize($picturePath.'/'.$this->picture),$this->picture);
-			if($document_id) {
-				return api_item_property_update($this->course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id);
-			}
+		if ($this->id) {
+			$extension = pathinfo($PictureName, PATHINFO_EXTENSION);						
+			$this->picture ='quiz-'.$this->id.'.jpg';			
+			require_once api_get_path(LIBRARY_PATH).'image.lib.php';
+			$detected = array('GIF','JPEG','JPG','PNG');
+            if (in_array($extension, $detected)) {    			
+    			$o_img = new image($Picture);
+    			$o_img->send_image('JPG',$picturePath.'/'.$this->picture);
+    			$document_id = add_document($this->course, '/images/'.$this->picture, 'file', filesize($picturePath.'/'.$this->picture),$this->picture);
+    	
+    			if ($document_id) {
+    				return api_item_property_update($this->course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id);
+    			}
+            }
 		}
 
 		return false;

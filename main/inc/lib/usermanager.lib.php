@@ -2276,6 +2276,7 @@ class UserManager
      *
      * @param  string file picture
      * @param  int size in pixels
+     * @todo move this function somewhere else image.lib?
      * @return obj image object
      */
     public static function resize_picture($file, $max_size_for_picture) {

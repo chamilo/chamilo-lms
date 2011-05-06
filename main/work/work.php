@@ -141,7 +141,7 @@ $id = isset($_REQUEST['id']) ? strval(intval($_REQUEST['id'])) : '';
 // get data for publication assignment
 $has_expired = false;
 $has_ended = false;
-$curdirpath = isset($_GET['curdirpath']) ? Database::escape_string($_GET['curdirpath']) : '';
+$curdirpath = isset($_REQUEST['curdirpath']) ? Database::escape_string($_REQUEST['curdirpath']) : '';
 
 //This means that we are in a folder assignment
 $sql_select ='SELECT id, description FROM '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE filetype = '."'folder'".' and has_properties != '."''".' and url = '."'/".$curdirpath."'".' LIMIT 1';
@@ -160,16 +160,17 @@ $cur_dir_path = '';
 if (isset ($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
 	//$cur_dir_path = preg_replace('#[\.]+/#','',$_GET['curdirpath']); //escape '..' hack attempts
 	//now using common security approach with security lib
-	$in_course = Security :: check_abs_path($base_work_dir . '/' . $_GET['curdirpath'], $base_work_dir);
+	$in_course = Security :: check_abs_path($base_work_dir . '/' . $_GET['curdirpath'], $base_work_dir);	
 	if (!$in_course) {
 		$cur_dir_path = "/";
 	} else {
 		$cur_dir_path = $_GET['curdirpath'];
-	}
+	}	
 } elseif (isset ($_POST['curdirpath']) && $_POST['curdirpath'] != '') {
 	//$cur_dir_path = preg_replace('#[\.]+/#','/',$_POST['curdirpath']); //escape '..' hack attempts
 	//now using common security approach with security lib
 	$in_course = Security :: check_abs_path($base_work_dir . '/' . $_POST['curdirpath'], $base_work_dir);
+	echo '2';
 	if (!$in_course) {
 		$cur_dir_path = "/";
 	} else {
@@ -264,11 +265,8 @@ if (!empty($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
 	$gradebook = '';
 }
 
-if (!empty($gradebook) && $gradebook == 'view') {
-	$interbreadcrumb[] = array (
-		'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
-		'name' => get_lang('ToolGradebook')
-	);
+if (!empty($gradebook) && $gradebook == 'view') {    
+    $interbreadcrumb[] = array ('url' => '../gradebook/' . $_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));    
 }
 
 if (!empty($_SESSION['toolgroup'])) {
@@ -278,36 +276,22 @@ if (!empty($_SESSION['toolgroup'])) {
 	$interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$_SESSION['toolgroup'], 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 
 	$url_dir ='';
-	$interbreadcrumb[] = array ('url' => $url_dir,'name' => get_lang('StudentPublications'));
+	$interbreadcrumb[] = array ('url' =>'#','name' => get_lang('StudentPublications'));
 
-	//if (!$display_tool_options  && !$display_upload_form)
-	//{
-		// interbreadcrumb for the current directory root path
-		$dir_array = explode('/', $cur_dir_path);
-		$array_len = count($dir_array);
-		/*
-		if ($array_len > 0) {
-			$url_dir = 'work.php?&curdirpath=/';
-			$interbreadcrumb[] = array (
-				'url' => $url_dir,
-				'name' => get_lang('HomeDirectory'));
-		}*/
 
-		$dir_acum = '';
-		for ($i = 0; $i < $array_len; $i++) {
-			$url_dir = 'work.php?&curdirpath=' . $dir_acum . $dir_array[$i];
-			$interbreadcrumb[] = array (
-				'url' => $url_dir,
-				'name' => $dir_array[$i]
-			);
-			$dir_acum .= $dir_array[$i] . '/';
-		}
-	//}
+	$dir_array = explode('/', $cur_dir_path);
+	$array_len = count($dir_array);
+
+	$dir_acum = '';
+	for ($i = 0; $i < $array_len; $i++) {
+		$url_dir = 'work.php?&curdirpath=' . $dir_acum . $dir_array[$i];
+		$interbreadcrumb[] = array ('url' => $url_dir,'name' => $dir_array[$i]);
+		$dir_acum .= $dir_array[$i] . '/';
+	}
+
 
 	if ($display_upload_form) {
-		$interbreadcrumb[] = array (
-			'url' => 'work.php',
-			'name' => get_lang('UploadADocument'));
+		$interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('UploadADocument'));
 	}
 
 	if ($display_tool_options) {
@@ -317,58 +301,43 @@ if (!empty($_SESSION['toolgroup'])) {
 	}
 
 	if ($_GET['createdir'] == 1) {
-		$interbreadcrumb[] = array (
-			'url' => 'work.php',
-			'name' => get_lang('CreateFolder'));
+		$interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('CreateFolder'));
 	}
-
 	Display :: display_header(null);
-
-} else {
-
+} else { 
 	if (isset($origin) && $origin != 'learnpath') {
 		$url_dir = '';
-		$interbreadcrumb[] = array ('url' => $url_dir.'?gradebook='.$gradebook, 'name' => get_lang('StudentPublications'));
-		//if (!$display_tool_options  && !$display_upload_form)
-		//{
-		//------interbreadcrumb for the current directory root path
+
+	    if (isset($_GET['curdirpath']) && $_GET['curdirpath'] != '.' || $display_upload_form || $display_tool_options || $_GET['createdir'] == 1) {
+            $interbreadcrumb[] = array ('url' => 'work.php', 'name' => get_lang('StudentPublications'));            
+        } else {
+            $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('StudentPublications'));
+        }        
+
 		$dir_array = explode('/', $cur_dir_path);
 		$array_len = count($dir_array);
-
-		/*if ($array_len > 0) {
-			$url_dir = 'work.php?gradebook='.$gradebook.'&curdirpath=/';
-			$interbreadcrumb[] = array (
-				'url' => $url_dir,
-				'name' => get_lang('HomeDirectory'));
-		}*/
 
 		$dir_acum = '';
 		for ($i = 0; $i < $array_len; $i++) {
 			$url_dir = 'work.php?gradebook='.$gradebook.'&amp;curdirpath=' . $dir_acum . $dir_array[$i];
-			$interbreadcrumb[] = array (
-				'url' => $url_dir,
-				'name' => $dir_array[$i]
-			);
+            if (isset($_REQUEST['curdirpath']) && $_REQUEST['curdirpath'] != '.' || $display_upload_form || $display_tool_options || $_GET['createdir'] == 1) {
+                $interbreadcrumb[] = array ('url' => $url_dir ,'name' => $dir_array[$i]);
+			} else {
+			    $interbreadcrumb[] = array ('url' => '#','name' => $dir_array[$i]);
+			}
 			$dir_acum .= $dir_array[$i] . '/';
 		}
-		//	}
-
+		
 		if ($display_upload_form) {
-			$interbreadcrumb[] = array (
-				'url' => 'work.php?gradebook='.$gradebook,
-				'name' => get_lang('UploadADocument'));
+			$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('UploadADocument'));
 		}
 
 		if ($display_tool_options) {
-			$interbreadcrumb[] = array (
-				'url' => 'work.php?gradebook='.$gradebook,
-				'name' => get_lang('EditToolOptions'));
+			$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditToolOptions'));
 		}
 		if ($_GET['createdir'] == 1) {
-			$interbreadcrumb[] = array (
-				'url' => 'work.php?gradebook='.$gradebook,
-				'name' => get_lang('CreateDir'));
-		}
+			$interbreadcrumb[] = array ('url' => '#','name' => get_lang('CreateDir'));
+		}		
 
 		Display :: display_header(null);
 
@@ -716,11 +685,11 @@ if (isset ($_POST['move_to']) && isset ($_POST['move_file'])) {
 
 			update_work_url($move_file_id, 'work' . $move_to_path, $move_to);
 			//set the current path
-			$cur_dir_path = $move_to_path;
-			$cur_dir_path_url = urlencode($move_to_path);
+			//$cur_dir_path = $move_to_path;
+			//$cur_dir_path_url = urlencode($move_to_path);
 
 			// update all the parents in the table item propery
-			$list_id = get_parent_directories($cur_dir_path);
+			$list_id = get_parent_directories($move_to_path);
 			for ($i = 0; $i < count($list_id); $i++) {
 				api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);
 			}
@@ -1312,7 +1281,7 @@ if ($is_course_member) {
 			$row = Database::fetch_array($result);
 			$qualification_over = $row['qualification'];
 			$form->addElement('text', 'qualification', get_lang('Qualification'), 'size="10"');
-			$form->addElement('html', '<div style="margin-left:20%">'.get_lang('QualificationNumeric').'&nbsp;:&nbsp;'.$qualification_over.'</div>');
+			$form->addElement('html', '<div class="row"><div class="formw">'.get_lang('QualificationNumeric').'&nbsp;:&nbsp;'.$qualification_over.'</div></div>');
 			$form->addElement('hidden', 'qualification_over', $qualification_over);
 		}
 
@@ -1457,7 +1426,6 @@ if ($display_tool_options) {
 }
 
 /*	Display list of student publications */
-
 if ($cur_dir_path == '/') {
 	$my_cur_dir_path = '';
 } else {
@@ -1500,7 +1468,7 @@ if (!$display_upload_form && !$display_tool_options) {
 			}
 		}
 		$cidreq = isset($_GET['cidreq']) ? Security::remove_XSS($_GET['cidreq']) : '';
-		$curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : '';
+		$curdirpath = isset($_REQUEST['curdirpath']) ? Security::remove_XSS($_REQUEST['curdirpath']) : '';
 		$filter = isset($_REQUEST['filter']) ? (int)$_REQUEST['filter'] : '';
 
 		if ($origin != 'learnpath') {
@@ -1518,12 +1486,9 @@ if (!$display_upload_form && !$display_tool_options) {
 	if ($display_list_users_without_publication) {
 		display_list_users_without_publication($publication['id']);
 	} else {
-		//var_dump($add_query);
 		display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_query);
 	}
 }
-
-/*	Footer */
 
 if ($origin != 'learnpath') {
 	//we are not in the learning path tool

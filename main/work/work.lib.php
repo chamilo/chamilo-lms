@@ -28,31 +28,28 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	$origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 	$curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : empty($curdirpath);
 
-	///why is that here?
-	//$origin = api_get_tools_lists($origin);
-	echo '<div class="actions">';
-
 	if (strlen($cur_dir_path) > 0 && $cur_dir_path != '/') {
 		$parent_dir = dirname($cur_dir_path);
 		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$parent_dir.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'','32').'</a>';
 	} else {
 		if ($_GET['display_tool_options'] == 'true' OR $_GET['display_upload_form'] == 'true') {
 			if ($origin != 'learnpath') {
-				echo '<a href="work.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'','32').'</a>';
+				//$display_output .= '<a href="work.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'','32').'</a>';
 			}
 		}
 	}
-	if (!$always_show_tool_options && api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
-		
+	if (!$always_show_tool_options && api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {		
 		if (empty($curdirpath)) {
-			$display_output .= '<a href="work.php?">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'','32').'</a>';
+			//$display_output .= '<a href="work.php?">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'','32').'</a>';
 		}
 		// Create dir
 		if ($cur_dir_path == '/') {
 			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('new_work.png', get_lang('CreateAssignment'),'','32').'</a>';
 		}
-		// Options
-		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;display_tool_options=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('settings.png', get_lang('EditToolOptions'),'','32').'</a>';
+		if (empty($curdirpath) || $curdirpath == '.') {		    
+    		// Options
+            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;display_tool_options=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('settings.png', get_lang('EditToolOptions'),'','32').'</a>';
+		}
 	}
 
 	if (!$always_show_upload_form && api_is_allowed_to_session_edit(false, true) && (isset($_GET['curdirpath']) && (!empty($_GET['curdirpath']) && $_GET['curdirpath'] != '.') )) {
@@ -68,10 +65,10 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		}
 
 		if (empty($curdirpath) or $curdirpath != '.') {
-			$display_output .= '<a href="#">'.Display::return_icon('delete_na.png', get_lang('Delete'),'','32').'</a>';
+			//$display_output .= '<a href="#">'.Display::return_icon('delete_na.png', get_lang('Delete'),'','32').'</a>';
 		} else {
-			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;delete=all" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities($message, ENT_QUOTES)).'\')) return false;">'.
-				Display::return_icon('delete.png', get_lang('Delete'),'','32').'</a>';
+			/*$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;delete=all" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities($message, ENT_QUOTES)).'\')) return false;">'.
+				Display::return_icon('delete.png', get_lang('Delete'),'','32').'</a>';*/
 		}
 		// make all files visible or invisible
 		$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -80,16 +77,19 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 
 		if ($sql_result) {
 			$columnStatus = Database::fetch_array($sql_result);
-
-			if ($columnStatus['Default'] == 1) {
-				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;make_invisible=all&amp;curdirpath='.$cur_dir_path.'">'.
-					Display::return_icon('visible.png', get_lang('MakeAllPapersInvisible'),'','32')."</a>\n";
-			} else {
-				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;make_visible=all&amp;curdirpath='.$cur_dir_path.'">'.
-					Display::return_icon('invisible.png', get_lang('MakeAllPapersVisible'),'','32')."</a>\n";
-			}
+			/*
+            if (empty($curdirpath) || $curdirpath == '.') {              
+    			if ($columnStatus['Default'] == 1) {
+    				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;make_invisible=all&amp;curdirpath='.$cur_dir_path.'">'.
+    					Display::return_icon('visible.png', get_lang('MakeAllPapersInvisible'),'','32')."</a>\n";
+    			} else {
+    				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;make_visible=all&amp;curdirpath='.$cur_dir_path.'">'.
+    					Display::return_icon('invisible.png', get_lang('MakeAllPapersVisible'),'','32')."</a>\n";
+    			}
+		    }*/
 		}
 	}
+	
 	if (api_is_allowed_to_edit(null, true)) {
 		global $publication;
 		if (empty($curdirpath) or $curdirpath != '.' or $cur_dir_path != '/') {
@@ -106,10 +106,12 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 			}
 		}
 	}
+	
 	if ($display_output != '') {
+	    echo '<div class="actions">';
 		echo $display_output;
-	}
-	echo '</div>';
+		echo '</div>';	
+	}	
 }
 
 /**
@@ -341,19 +343,16 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 	//Get list from database
 	if ($is_allowed_to_edit) {
-		$sql_get_publications_list = 	"SELECT * " .
-										"FROM  ".$work_table." " .
-										"WHERE url LIKE BINARY '$sub_course_dir%' " .
-										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.
-												 $condition_session.
-		                 				" ORDER BY sent_date DESC";
+	   $sql_get_publications_list = "SELECT *  FROM  ".$work_table." " .
+									"WHERE url LIKE BINARY '$sub_course_dir%' " .
+									"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.$condition_session.
+	                 				" ORDER BY sent_date DESC";
 
-		$sql_get_publications_num = 	"SELECT count(*) " .
-										"FROM  ".$work_table." " .
-										"WHERE url LIKE BINARY '$sub_course_dir%' " .
-										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.
-										 $condition_session.
-		                 				" ORDER BY id";
+		$sql_get_publications_num = "SELECT count(*) FROM  ".$work_table." " .
+									"WHERE url LIKE BINARY '$sub_course_dir%' " .
+									"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.
+									 $condition_session.
+	                 				" ORDER BY id";
 
 	} else {
 		if (!empty($_SESSION['toolgroup'])) {
@@ -365,15 +364,13 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 		}
 
 	   	$sql_get_publications_list = "SELECT * FROM  $work_table $group_query $subdirs_query ".$add_in_where_query."  $condition_session ORDER BY id";
-		$sql_get_publications_num = "SELECT count(url) " .
-										"FROM  ".$work_table." " .
-										"WHERE url LIKE BINARY '$sub_course_dir%' " .
-										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.
-										 $condition_session.
-		                 				" ORDER BY id";
+		$sql_get_publications_num  = "SELECT count(url) FROM  ".$work_table." " .
+								    "WHERE url LIKE BINARY '$sub_course_dir%' AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.
+								    $condition_session.
+		                 			" ORDER BY id";
 
 	}
-//	echo $sql_get_publications_list;
+    //echo $sql_get_publications_list;
 
 	$sql_result = Database::query($sql_get_publications_list);
 	$sql_result_num = Database::query($sql_get_publications_num);
@@ -389,10 +386,10 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 		$table_header[] = array(get_lang('Qualification'), true);
 	}
 
-	$table_header[] = array(get_lang('Date'), true, 'style="width:70px"');
+	$table_header[] = array(get_lang('Date'), true, 'style="width:160px"');
 
 	if ($origin != 'learnpath') {
-		$table_header[] = array(get_lang('Actions'), false, 'style="width:80px"');
+		$table_header[] = array(get_lang('Actions'), false, 'style="width:90px"');
 		$table_header[] = array('RealDate', true);
 	}
 
@@ -418,8 +415,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 	foreach($table_header as $item) {
 		$column_order[$i] = $i;
 		$i++;
-	}
-	
+	}	
     
 	if ($count_files != 0) {
         if ($sub_course_dir == '/work') {
@@ -722,18 +718,12 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 			$icon = Display::return_icon('work.png', get_lang('Assignment'),array(), 22);
 			
 			if (!empty($display_edit_form) && isset($clean_edit_dir) && $clean_edit_dir == $mydir) {
-				$row[] = $icon;
+			    $row[] = $icon;
 				$row[] = '<span class="invisible" style="display:none">'.$dir.'</span>'.$form_folder->toHtml(); // form to edit the directory's name
 			} else {
 				$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$mydir.'">'.$icon.'</a>';
 				
 				$add_to_name = '';
-				/*
-				$tbl_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-				$sql = "SELECT weight FROM ". $tbl_gradebook_link ." WHERE type='3' AND ref_id= '".$id2."'";				
-                $result = Database::query($sql);
-                $count = Database::num_rows($result);
-                */
 			    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
                 $link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $id2 , api_get_session_id());
                 $count  = 0;
@@ -836,16 +826,16 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 				if ($is_allowed_to_edit) {
 					$action = '';	
-					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('rate_work.png', get_lang('CorrectAndRate'),array(), 22).'</a>';					
-					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'" >'.Display::return_icon('delete.png', get_lang('WorkDelete'),'',22).'</a>';
+					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('rate_work.png', get_lang('CorrectAndRate'),array(), 22).'</a>';
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;move='.$work->id.'" title="'.get_lang('Move').'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
 					if ($work->accepted == '1') {
 						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;make_invisible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Invisible').'" >'.Display::return_icon('visible.png', get_lang('Invisible'),array(), 22).'</a>';
 					} else {
-						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;make_visible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Visible').'" >'.Display::return_icon('invisible.png', get_lang('Visible'),array(), 22).'</a>';
+						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;make_visible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Visible').'" >'.Display::return_icon('invisible.png', get_lang('Visible'),array(), 22).'</a> ';
 					}
+                    $action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'" >'.Display::return_icon('delete.png', get_lang('WorkDelete'),'',22).'</a>';
 					$row[] = $action;
-				// the user that is not course admin can only edit/delete own document
+				    // the user that is not course admin can only edit/delete own document
 				} elseif ($row2['insert_user_id'] == $_user['user_id']) {
 					$action = '';					
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), 22).'</a>';					
@@ -962,7 +952,6 @@ function build_work_directory_selector($folders, $curdirpath, $group_dir = '') {
  * @return string html form
  */
 function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_dir = '') {
-	//gets file title
 
 	$move_file	= intval($move_file);
 	$tbl_work	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -971,20 +960,20 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
 	$title = Database::fetch_row($result);
 	global $gradebook;
 
-	$form = '<form name="move_to" action="'.api_get_self().'?gradebook='.$gradebook.'" method="POST">'."\n";
-	$form .= '<div class="row"><div class="form_header">'.get_lang('MoveFile').'</div></div>';
-	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />'."\n";
+	$form = '<form name="move_to" action="'.api_get_self().'?gradebook='.$gradebook.'&curdirpath='.Security::remove_XSS($curdirpath).'" method="POST">';
+	$form .= '<div class="row"><div class="form_header">'.get_lang('MoveFile').' - '.Security::remove_XSS($title[0]).'</div></div>';
+	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />';	
 	$form .= '<div class="row">
 				<div class="label">
-					<span class="form_required">*</span>'.sprintf(get_lang('MoveXTo'), $title[0]).'
+					<span class="form_required">*</span>'.get_lang('Select').'
 				</div>
 				<div class="formw">';
-	$form .= ' <select name="move_to">'."\n";
+	$form .= ' <select name="move_to">';
 
 	//group documents cannot be uploaded in the root
 	if ($group_dir == '') {
 		if ($curdirpath != '/') {
-			$form .= '<option value="0">/ ('.get_lang('Root').')</option>';
+			//$form .= '<option value="0">/ ('.get_lang('Root').')</option>';
 		}
 		if (is_array($folders)) {
 			foreach ($folders as $fid => $folder) {
@@ -993,7 +982,7 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
 				//2. inside the folder you want to move
 				//3. inside a subfolder of the folder you want to move
 				if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) {
-					$form .= '<option value="'.$fid.'">'.$folder.'</option>'."\n";
+					$form .= '<option value="'.$fid.'">'.$folder.'</option>';
 				}
 			}
 		}
@@ -1011,19 +1000,17 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
 		}
 	}
 
-	$form .= '</select>'."\n";
+	$form .= '</select>';
 	$form .= '	</div>
 			</div>';
 	$form .= '<div class="row">
-					<div class="label">
-											</div>
+					<div class="label"></div>
 					<div class="formw">
 						<button type="submit" class="save" name="move_file_submit">'.get_lang('MoveFile').'</button>
 					</div>
 				</div>';
 	$form .= '</form>';
 	$form .= '<div style="clear: both; margin-bottom: 10px;"></div>';
-
 	return $form;
 }
 

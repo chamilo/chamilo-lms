@@ -19,7 +19,6 @@ require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
-
 $this_section = SECTION_SOCIAL;
 
 //jquery thickbox already called from main/inc/header.inc.php
@@ -93,12 +92,10 @@ jQuery(document).ready(function() {
     });
 	$("#tabs").tabs();
 	$("#tab_browse").tabs();
-	
 
+    var valor = "'.$anchor.'";
 
-   var valor = "'.$anchor.'";
-
-   $(".head").click(function() {
+    $(".head").click(function() {
 				$(this).next().next().slideToggle("fast");
 				image_clicked = $("#" + this.id + " img").attr("src");
 				image_clicked_info = image_clicked.split("/");
@@ -265,7 +262,7 @@ if ($group_id != 0 ) {
 	echo '<div class="head_group">';    
 		echo '<div id="social-group-details">';
 				//Group's title
-				echo '<h2><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h2>';
+				echo '<h1><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h1>';
 				//Group's description
 				echo '<div class="social-group-details-info">'.$group_info['description'].'</div>';
 				echo '<div class="social-group-details-info"><a target="_blank" href="'.$group_info['url'].'">'.$group_info['url'].'</a></div>';
@@ -279,10 +276,11 @@ if ($group_id != 0 ) {
 					}
 				echo '</div>';
 				if (!empty($relation_group_title)) {
+				    /*
 					echo '<div class="social-group-details-info">';
 					echo '<span>'.get_lang('StatusInThisGroup').' : </span>';
 					echo $relation_group_title;
-					echo '</div>';
+					echo '</div>';*/
 				}
 				//Group's tags
 				if (!empty($tags)) {
@@ -334,11 +332,7 @@ if ($group_id != 0 ) {
 						$member_content .= '</div>';
 						$i++;
 					}					 	
-				}
-				//if (count($members) > $min_count_members) {
-					//More link					
-				//}   
-				//$member_content .= '</div>';						
+				}					
     		}		
     		$headers = array(get_lang('Messages'), get_lang('Members'));
 			echo Display::tabs($headers, array($content, $member_content),'tabs');

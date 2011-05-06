@@ -226,7 +226,7 @@ class MessageManager
 		}
 
 		// validating fields
-		if (empty($subject)) {
+		if (empty($subject) && empty($group_id) ) {
 			return get_lang('YouShouldWriteASubject');
 		} else if ($total_filesize > intval(api_get_setting('message_max_upload_filesize'))) {
 			return sprintf(get_lang("FilesSizeExceedsX"),format_file_size(api_get_setting('message_max_upload_filesize')));
@@ -239,9 +239,10 @@ class MessageManager
 	        $content = Database::escape_string($content);
 
 			//message in inbox for user friend
-            //@todo is possible to edit a message??????????
+            //@todo it's possible to edit a message? yes, only for groups 
 			if ($edit_message_id) {
-				$query = " UPDATE $table_message SET update_date = '".api_get_utc_datetime()."', title = '$subject', content = '$content' WHERE id = '$edit_message_id' ";                
+			    //title = '$subject', 
+				$query = " UPDATE $table_message SET update_date = '".api_get_utc_datetime()."', content = '$content' WHERE id = '$edit_message_id' ";                
 				$result = Database::query($query);
 				$inbox_last_id = $edit_message_id;
 			} else {
@@ -855,13 +856,12 @@ class MessageManager
 	 */
 	public static function display_messages_for_group($group_id) {
 		global $my_group_role;
-		$rows = self::get_messages_by_group($group_id);
-		 
+		$rows = self::get_messages_by_group($group_id);		 
 		$rows = self::calculate_children($rows);
 		$group_info = GroupPortalManager::get_group_data($group_id);
 		$current_user_id = api_get_user_id();
-		$topics_per_page = 5;
-		$items_per_page = 3;
+		$topics_per_page  = 5;
+		$items_per_page   = 10;
 		$count_items = 0;
 		$html_messages = '';
 		$query_vars = array('id'=>$group_id,'topics_page_nr'=>0);
@@ -893,15 +893,18 @@ class MessageManager
 
 				$html .= '<div class="rounded_div" style="width:620px">';				
 					
-						$html .= '<a href="#" class="head" id="head_'.$topic['id'].'">';
+						/*$html .= '<a href="#" class="head" id="head_'.$topic['id'].'">';
 						$html .= '<span class="message-group-title-topic">'.(((isset($_GET['anchor_topic']) && $_GET['anchor_topic'] == 'topic_'.$topic['id']) || in_array('items_'.$topic['id'].'_page_nr',$param_names))?Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align: middle')):
 									Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align: middle'))).'
 									'.Security::remove_XSS($topic['title']).'</span>';
-						$html .= '</a>';
+						$html .= '</a>';*/
+				
+				        
+                        $html .= '<h2>'.Security::remove_XSS($topic['title']).'</h2>';                        
 
 						if ($topic['send_date']!=$topic['update_date']) {
 							if (!empty($topic['update_date']) && $topic['update_date'] != '0000-00-00 00:00:00' ) {
-								$html .= '<span class="message-group-date" > ('.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).')</span>';
+								$html .= '<span class="message-group-date" > <i>'.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</i></span>';
 							}
 						} else {
                             $html .= '<span class="message-group-date"> <i>'.get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</i></span>';
@@ -909,7 +912,7 @@ class MessageManager
 
 						$html .= '<div id="topic_'.$topic['id'].'" >';
 							$html .= '<a name="topic_'.$topic['id'].'"></a>';
-							$html.= '<div style="margin-bottom:10px">';
+							$html.= '<div style="border:1px solid #ccc; padding:5px; margin-bottom:10px">';
 								$html.= '<div id="message-reply-link" style="margin-right:10px">
 										 <a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($_GET['items_page_nr']).'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
 

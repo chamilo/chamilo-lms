@@ -12,7 +12,7 @@ if (!defined('ALLOWED_TO_INCLUDE')) {
 }
 $modifyAnswers = intval($_GET['hotspotadmin']);
 
-if(!is_object($objQuestion)) {
+if (!is_object($objQuestion)) {
 	$objQuestion = Question :: read($modifyAnswers);
 }
 
@@ -126,7 +126,7 @@ if ($submitAnswers || $buttonBack) {
 	
 	        $editQuestion=$questionId;
 	        unset($modifyAnswers);
-	        echo '<script type="text/javascript">window.location.href="'.$hotspot_admin_url.'"</script>';
+	        echo '<script type="text/javascript">window.location.href="'.$hotspot_admin_url.'&message=ItemUpdated"</script>';
 	
 	    }
 	    if($debug>0){echo '$modifyIn was set - end'."<br />\n";}
@@ -281,10 +281,8 @@ if ($submitAnswers || $buttonBack) {
 	        $editQuestion=$questionId;
 	        unset($modifyAnswers);
 	        
-	        echo '<script type="text/javascript">window.location.href="'.$hotspot_admin_url.'"</script>';
+	        echo '<script type="text/javascript">window.location.href="'.$hotspot_admin_url.'&message=ItemUpdated"</script>';
 	    }
-	    
-	    if($debug>0){echo '$modifyIn was set - end'."<br />\n";} 
 	}
 }
 
@@ -491,6 +489,12 @@ if ($modifyAnswers) {
 		<td colspan="2" valign="bottom">
 		<?php
 			$navigator_info = api_get_navigator();
+			
+//cancel button
+/* 
+ * <input type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" >
+ * <button type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" ><?php echo get_lang('Cancel'); ?></button> 
+ * */
 			//ie6 fix
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 		?>
@@ -500,20 +504,18 @@ if ($modifyAnswers) {
 			<?php } else { ?>
 				<input type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" >
 				<input type="submit" class="plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" />			
-			<?php } ?>
-			<input type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" >
+			<?php } ?>			
 			<input type="submit" class="save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />			 
 		<?php
-			} else {			
-		?>
-			<?php if ($answerType==HOT_SPOT_DELINEATION) {?>		
+			} else {
+			    			
+		      if ($answerType==HOT_SPOT_DELINEATION) {?>		
 				<button type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessOAR'); ?>" ><?php echo get_lang('LessOAR'); ?></button>
 				<button type="submit" class="plus" name="moreOARAnswers" value="<?php echo get_lang('MoreOAR'); ?>" /><?php echo get_lang('MoreOAR'); ?></button>
 			<?php } else { ?>
 				<button type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" ><?php echo get_lang('LessHotspots'); ?></button>
 				<button type="submit" class="plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" /><?php echo get_lang('MoreHotspots'); ?></button>			
-			<?php } ?>			
-			<button type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" ><?php echo get_lang('Cancel'); ?></button>
+			<?php } ?>
 			<button type="submit" class="save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" /><?php echo get_lang('AddQuestionToExercise'); ?></button>
 		<?php
 			}

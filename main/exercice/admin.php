@@ -118,10 +118,10 @@ $objQuestion = $_SESSION['objQuestion'];
 $objAnswer   = $_SESSION['objAnswer'];
 
 // document path
-$documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 // picture path
-$picturePath=$documentPath.'/images';
+$picturePath = $documentPath.'/images';
 
 // audio path
 $audioPath=$documentPath.'/audio';
@@ -136,7 +136,7 @@ $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $TBL_DOCUMENT          = Database::get_course_table(TABLE_DOCUMENT);
 
-if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
+if ($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
 	require_once('export/qti2/qti2_export.php');
 	$export = export_question((int)$_GET['questionId'],true);
 	$qid = (int)$_GET['questionId'];
@@ -161,7 +161,7 @@ if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
 }
 
 // intializes the Exercise object
-if(!is_object($objExercise)) {
+if (!is_object($objExercise)) {
 	// construction of the Exercise object
 	$objExercise=new Exercise();
 
@@ -182,17 +182,18 @@ if(!$fromExercise) {
 	}
 }
 
-$nbrQuestions=$objExercise->selectNbrQuestions();
+$nbrQuestions = $objExercise->selectNbrQuestions();
 
 // intializes the Question object
-if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
-	if($editQuestion || $newQuestion) {
+if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
+	if ($editQuestion || $newQuestion) {
 
 		// reads question data
-		if($editQuestion) {
+		if ($editQuestion) {
 			// question not found
-			if(!$objQuestion = Question::read($editQuestion)) {
-				die(get_lang('QuestionNotFound'));
+			if (!$objQuestion = Question::read($editQuestion)) {
+				//die(get_lang('QuestionNotFound'));
+				api_not_allowed();
 			}
 			// saves the object into the session
 			api_session_register('objQuestion');
@@ -207,7 +208,7 @@ if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 }
 
 // if cancelling an exercise
-if($cancelExercise) {
+if ($cancelExercise) {
 	// existing exercise
 	if($exerciseId) {
 		unset($modifyExercise);
@@ -243,7 +244,7 @@ if($cancelAnswers) {
 
 // modifies the query string that is used in the link of tool name
 if($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
-	$nameTools=get_lang('QuestionManagement');
+	$nameTools = get_lang('QuestionManagement');
 }
 
 if (isset($_SESSION['gradebook'])){
@@ -439,34 +440,31 @@ if ($show_quiz_edition) {
 
 echo '</div>';
 
-if(isset($_GET['message'])) {
-	if (in_array($_GET['message'], array('ExerciseStored'))) {
+if (isset($_GET['message'])) {
+	if (in_array($_GET['message'], array('ExerciseStored', 'ItemUpdated'))) {
 		Display::display_confirmation_message(get_lang($_GET['message']));
 	}
 }
-
-/*
-$description = $objExercise->selectDescription();
-echo '<div class="sectiontitle">'.$objExercise->selectTitle().'</div>';
-if(!empty($description))
-{
-	echo '<div class="sectioncomment">'.stripslashes($description).'</div>';
-}
-*/
 
 if ($newQuestion || $editQuestion) {
 	// statement management
 	$type = $_REQUEST['answerType'];    
 	?><input type="hidden" name="Type" value="<?php echo $type; ?>" />
-	<?php
-	
+	<?php	
    require 'question_admin.inc.php';
 }
 
 if (isset($_GET['hotspotadmin'])) {
+    
+    if (!is_object($objQuestion)) {
+        $objQuestion = Question :: read($_GET['hotspotadmin']);
+    }
+    if (!$objQuestion) {
+        api_not_allowed();
+    }    
 	require 'hotspot_admin.inc.php';
 }
-if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
+if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
 	// question list management
 	require 'question_list_admin.inc.php';
 }

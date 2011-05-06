@@ -37,7 +37,7 @@ Display::display_header($nameTools);
 
 if (api_is_platform_admin()) {
     if (is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php')) {
-        Display::display_normal_message(get_lang('InstallDirAccessibleSecurityThreat'));
+        Display::display_warning_message(get_lang('InstallDirAccessibleSecurityThreat'));
     }
 
     /* ACTION HANDLING */

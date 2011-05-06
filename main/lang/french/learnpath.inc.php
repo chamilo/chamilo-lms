@@ -257,4 +257,6 @@ $EnableLPAutoLaunch = "Activer lancement automatique du parcours";
 $DisableLPAutoLaunch = "Désactiver lancement automatique du parcours";
 $ViewModeEmbedFrame = "Vue actuelle: embarquée. Uniquement pour inclusion sur sites externes.";
 $LPNotVisibleToStudent = "Les apprenants ne voient pas ce parcours";
+$EditCurrentModule = "Éditer le chapitre actuel";
+$SearchFeatureTerms = "Termes pour la fonctionnalité de recherche";
 ?>

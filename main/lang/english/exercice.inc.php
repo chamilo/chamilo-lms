@@ -396,7 +396,7 @@ $Random = "Random";
 $ExerciseTimerControlMinutes = "Enable exercise timer controller.";
 $Numeric = "Numerical";
 $Acceptable = "Acceptable";
-$Hotspot = "Zones sur image";
+$Hotspot = "Hotspot";
 $ChangeTheVisibilityOfTheCurrentImage = "Change the visibility of the current image";
 $Steps = "Steps";
 $OriginalValue = "Original value";
@@ -406,7 +406,7 @@ $MultipleChoiceMultipleAnswers = "Multiple choice, multiple answers";
 $MultipleChoiceUniqueAnswer = "Multiple choice, unique answer";
 $HotPotatoesFiles = "HotPotatoes files";
 $HotPotatoes = "HotPotatoes";
-$OAR = "Zones at risk";
+$OAR = "Area to avoid";
 $TotalScoreTooBig = "Total score is too big";
 $InvalidQuestionType = "Invalid question type";
 ?>

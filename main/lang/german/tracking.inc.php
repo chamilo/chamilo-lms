@@ -240,4 +240,6 @@ $AvgAllUsersInAllCourses = "Durschnitt aller Lernenden für alle Kurse in dieser
 $AvgExercisesScore = "Test Wertung";
 $TrainingTime = "Zeit";
 $CourseProgress = "Fortschritt";
+$DashboardBlocks = "Control Panel Einheiten";
+$TimeSpentLastWeek = "Aktivität der letzten Woche";
 ?>

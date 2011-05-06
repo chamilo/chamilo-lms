@@ -204,4 +204,12 @@ $PleaseFillSurvey = "Veuillez compléter l'enquête";
 $ReportingOverview = "Vue globale du suivi";
 $ThereAreNotQuestionsForthisSurvey = "Il n'y a pas de questions dans cette enquête";
 $Multipleresponse = "Réponse multiple";
+$ErrorSurveyTypeUnknown = "Type d'enquête inconnu";
+$SurveyUndetermined = "Enquête non définie";
+$QuestionComment = "Commentaire de question";
+$UnknowQuestion = "Question inconnue";
+$Lastname = "Nom de famille";
+$Firstname = "Prénom";
+$DeleteSurveyGroup = "Supprimer un groupe d'enquêtes";
+$ErrorOccurred = "Une erreur est survenue.";
 ?>

@@ -1399,4 +1399,7 @@ $EnableQuizScenarioTitle = "Habilitar Cenário Quiz";
 $EnableQuizScenarioComment = "Ativar o cenário do quiz";
 $EnableNanogongTitle = "Ativar o gravador - player de voz Nanogong";
 $EnableNanogongComment = "Nanongong é um gravador - o player de voz permite gravar sua voz e enviá-la para a plataforma ou baixá-lo em seu disco rígido. Ele também permite que você toque o que gravou. Os alunos precisam apenas de um microfone e alto-falantes, e aceitar o carregamento do applet. É muito útil para aprendizes da língua para ouvir a sua voz depois de ouvir a pronúncia correta proposta pela professora em outro arquivo de voz wav ou mp3.";
+$ExerciseAndLPsAreInvisibleInTheNewCourse = "Exercícios e Rotas de Aprendizagem estão invisíveis no novo curso";
+$YouMustChooseARelationType = "Você tem que escolher um tipo de relação";
+$SelectARelationType = "Seleção de tipo de relação";
 ?>

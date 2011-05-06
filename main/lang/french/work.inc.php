@@ -91,4 +91,6 @@ $HomeworkCreated = "Une tâche a été ajoutée";
 $HomeworkHasBeenCreatedForTheCourse = "Une tâche a été ajoutée dans le cours";
 $PleaseCheckHomeworkPage = "Veuillez vérifier la page des tâches";
 $IncludedInEvaluation = "Inclus dans le cahier de notes";
+$DateExpiredNotBeLessDeadLine = "La date d'expiration ne peut pas être antérieure à la date de fin.";
+$NotRevised = "Non cotés";
 ?>

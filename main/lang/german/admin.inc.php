@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $AdminBy = "Verwaltet von";
-$AdministrationTools = "Administration";
+$AdministrationTools = "Verwaltung";
 $State = "Status des Systems";
 $Statistiques = "Statistik";
 $VisioHostLocal = "Videokonferenz Host";
@@ -652,7 +652,7 @@ $DefaultForumViewComment = "Welche Ansicht sollte bei der Erstellung eines Forum
 $TabsMyCourses = "Tab \"Meine Kurse\"";
 $TabsCampusHomepage = "Tab \"Campus Homepage\"";
 $TabsReporting = "Tab \"Berichte\"";
-$TabsPlatformAdministration = "Tab \"Plattform Administration\"";
+$TabsPlatformAdministration = "Tab \"Verwaltung\"";
 $NoCoursesForThisSession = "Keine Kurse für diese Session";
 $NoUsersForThisSession = "Keine Benutzer für diese Session";
 $LastNameMandatory = "Nachname kann nicht leer sein";
@@ -1000,4 +1000,17 @@ $SilverLine = "Silver line";
 $SoberBrown = "Sober brown";
 $SteelGrey = "Steel grey";
 $TastyOlive = "tasty olive";
+$SessionsInformation = "Sitzungsberichte";
+$YourSessionsList = "Ihre Sitzungen";
+$TeachersInformationsList = "Dozenten- Bericht";
+$YourTeachers = "Ihre Dozenten";
+$StudentsInformationsList = "Bericht Lernende";
+$YourStudents = "Ihre Lernenden";
+$TeachersInformationsGraph = "Grafik Dozenten- Bericht";
+$TimeSpentOnThePlatformLastWeekByDay = "Verbindungszeiten der letzten Woche / pro Tag";
+$AttendancesFaults = "Abwesenheiten";
+$EvaluationsGraph = "Auswertungsgrafiken";
+$CoursesInformation = "Kursberichte";
+$ConfigureDashboardPlugin = "Plugin des Control Panels konfigurieren";
+$EditBlocks = "Einheiten bearbeiten";
 ?>

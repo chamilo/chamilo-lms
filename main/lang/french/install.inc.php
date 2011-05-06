@@ -119,4 +119,9 @@ $UpgradeFromDokeos18x = "Mettre à jour depuis Chamilo 1.8.x";
 $SuggestionOnlyToEnableCSSUploadFeature = "Suggestion, uniquement nécessaire pour activer l'upload de CSS";
 $SuggestionOnlyToEnableSubLanguageFeature = "Suggestion, uniquement nécessaire pour activer la fonctionnalité de sous-langage";
 $IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Si vous planifiez une mise à jour depuis une version antérieure de Chamilo, nous vous suggérons de consulter <a href=\"../../documentation/changelog.html\" target=\"_blank\">le journal des modifications</a> pour savoir ce qui est nouveau et ce qui a changé.";
+$WelcomeToTheDokeosInstaller = "Bienvenue dans l'installateur de Chamilo";
+$PHPVersionError = "Votre version de PHP ne suffit pas pour les pré-requis d'installation de ce logiciel. Veuillez vérifier que vous disposez d'une version égale ou supérieure à celle indiquée, puis essayez à nouveau.";
+$ExtensionSessionsNotAvailable = "Extension de sessions non disponible";
+$ExtensionZlibNotAvailable = "Extension Zlib non disponible";
+$ExtensionPCRENotAvailable = "Extension PCRE non disponible";
 ?>

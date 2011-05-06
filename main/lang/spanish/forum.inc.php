@@ -144,4 +144,8 @@ $PreviewImage = "Imagen previa";
 $UpdateImage = "Actualizar imagen";
 $EnableTimeLimits = "Activar limites de tiempo";
 $RemoveSearchResults = "Limpiar los resultados de la búsqueda";
+$InsertQualificationCorrespondingToMaxScore = "Ingrese una puntuación que corresponda a la calificación máxima";
+$ThreadMoved = "Tema movido";
+$MigrateForum = "Migrar foro";
+$YouWillBeNotified = "Ud. será notificado";
 ?>

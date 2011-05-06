@@ -1042,4 +1042,7 @@ $VoiceRecord = "Gravação de voz";
 $BrowserNotSupportNanogongSend = "Seu navegador não enviou a gravação para a plataforma, entretanto é possível salvar a gravação no disco de seu computador e enviar posteriormente. Para ter todos os recursos do sistema recomendamos que utilize um navegador avançado como Firefox ou Chrome.";
 $FileExistRename = "Já existe um arquivo com o mesmo nome. Por favor, renomeie o arquivo.";
 $GradebookAndAttendances = "Avaliações e Frequências";
+$SelectADateRange = "Selecione um intervalo de datas";
+$AllDone = "Feito!";
+$AllNotDone = "Nenhuma operação foi realizada";
 ?>

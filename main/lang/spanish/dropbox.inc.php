@@ -125,4 +125,7 @@ $ErrorNoFilesInFolder = "Este directorio está vacío";
 $AddComment = "Añadir comentario";
 $SentCatgoryDeleted = "La carpeta ha sido eliminada";
 $ReceivedCatgoryDeleted = "La carpeta ha sido eliminada";
+$InvalideUserDetected = "Usuario no válido detectado.";
+$InvalideGroupDetected = "Grupo no válido detectado";
+$OverviewOfFilesInThisZip = "Listado de archivos en este Zip";
 ?>

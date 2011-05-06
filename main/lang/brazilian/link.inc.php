@@ -40,7 +40,7 @@ $langCsvLinesNew = "novo(s) link(s) criado(s).";
 $langCsvExplain = "O arquivo deve se parecer com isso: <blockquote><pre> <b>URL</b>;categoria;<b>título</b>;descrição; <b>http://www.aaa.org/...</b>;Links importantes;<b>Nome 1</b>;Descrição 1; <b>http://www.bbb.net/...</b>;;<b>Nome 2</b>;\"Descrição 2\"; </pre></blockquote> Se a URL e a categoria forem iguais aos de um link já existente, seu título e descrição serão atualizados. Em todos os outros casos um novo link será criado.<br><br> Negrito = obrigatório. Os campos podem estar em qualquer ordem, nomes em letras minúsculas ou maiúsculas. Campos adicionais são adicionados a descrição. Separador: vírgula ou barra. Os valores podem estar entre aspas, mas não os nomes dos campos. Algumas [b]tags HTML[/b] podem ser importadas para o campo descrição.";
 $langLinkUpdated = "Link atualizado com sucesso";
 $langAll_Link_Deleted = "Link apagado com sucesso";
-$langOnHomepage = "Na homepage";
+$langOnHomepage = "Fixar link na homepage do curso?";
 $langShowLinkOnHomepage = "Mostrar esse link como um ícone na homepage do curso";
 $General = "geral";
 $SearchFeatureDoIndexLink = "Indexar o título e a descrição do link?";

@@ -262,4 +262,5 @@ $FirstSelectALanguage = "Sélectionnez d'abord une langue";
 $RenameAndComment = "Renommer et commenter";
 $YouAreCurrentlyUsingXOfYourX = "Vous utilisez actuellement %s Mo (%s) de votre espace de %s Mo.";
 $UplUploadFailedSizeIsZero = "Un problème est survenu durant l'envoi du fichier: le fichier reçu par le serveur a une taille de 0 octets. Veuillez vérifier l'état du fichier sur votre ordinateur et à nouveau.";
+$NewImage = "Nouvelle image";
 ?>

@@ -49,7 +49,7 @@ $(document).ready(function () {
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * 
- * Juan Carlos Raña Trabado (return to lp_id)
+ * Juan Carlos RaÃ±a Trabado (return to lp_id)
  *
  * @version may 2011, Chamilo 1.8.8
  */
@@ -120,7 +120,7 @@ function handle_forum_and_forumcategories($lp_id) {
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
- * Juan Carlos Raña Trabado (return to lp_id)
+ * Juan Carlos RaÃ±a Trabado (return to lp_id)
  *
  * @version may 2011, Chamilo 1.8.8
  */
@@ -168,7 +168,7 @@ function show_add_forumcategory_form($inputvalues = array(),$lp_id) {
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
- * Juan Carlos Raña Trabado (return to lp_id)
+ * Juan Carlos RaÃ±a Trabado (return to lp_id)
  *
  * @version may 2011, Chamilo 1.8.8
  */
@@ -1638,9 +1638,9 @@ function get_thread_users_qualify($thread_id, $db_name = null) {
                                      $orderby ";
     }
     $result = Database::query($sql);
-    return $result;
+    return $result; 
 }
-
+ 
 /**
  * This function retrieves forum thread users not qualify
  * @param 	int Thread ID
@@ -3008,17 +3008,17 @@ function move_thread_form() {
     global $origin;
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     // Initialize the object.
-    $form = new FormValidator('movepost', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;origin='.$origin);
+    $form = new FormValidator('movepost', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($_GET['thread']).'&action='.Security::remove_XSS($_GET['action']).'&origin='.$origin);
     // The header for the form
     $form->addElement('header', '', get_lang('MoveThread'));
     // Invisible form: the thread_id
-    $form->addElement('hidden', 'thread_id', strval(intval($_GET['thread']))); // Note: This has to be cleaned first.
+    $form->addElement('hidden', 'thread_id', intval($_GET['thread'])); // Note: This has to be cleaned first.
 
     // the fora
     $forum_categories = get_forum_categories();
     $forums = get_forums();
 
-    $htmlcontent .= '	<div class="row">
+    $htmlcontent .= '<div class="row">
         <div class="label">
             <span class="form_required">*</span>'.get_lang('MoveTo').'
         </div>
@@ -3064,7 +3064,7 @@ function move_post_form() {
     global $origin;
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     // initiate the object
-    $form = new FormValidator('movepost', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;post='.Security::remove_XSS($_GET['post']).'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;post='.Security::remove_XSS($_GET['post']));
+    $form = new FormValidator('movepost', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&origin='.$origin.'&gradebook='.$gradebook.'&post='.Security::remove_XSS($_GET['post']).'&action='.Security::remove_XSS($_GET['action']).'&post='.Security::remove_XSS($_GET['post']));
     // The header for the form
     $form->addElement('header', '', get_lang('MovePost'));
 
@@ -3110,7 +3110,7 @@ function store_move_post($values) {
     $table_forums 			= Database :: get_course_table(TABLE_FORUM);
     $table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
-
+    
     if ($values['thread'] == '0') {
         $current_post = get_post_information($values['post_id']);
 
@@ -3131,37 +3131,75 @@ function store_move_post($values) {
         // Moving the post to the newly created thread.
         $sql = "UPDATE $table_posts SET thread_id='".Database::escape_string($new_thread_id)."', post_parent_id='0' WHERE post_id='".Database::escape_string($values['post_id'])."'";
         $result = Database::query($sql);
-        //echo $sql.'<br />';
 
         // Resetting the parent_id of the thread to 0 for all those who had this moved post as parent.
         $sql = "UPDATE $table_posts SET post_parent_id='0' WHERE post_parent_id='".Database::escape_string($values['post_id'])."'";
         $result = Database::query($sql);
-        //echo $sql.'<br />';
 
         // Updating updating the number of threads in the forum.
         $sql = "UPDATE $table_forums SET forum_threads=forum_threads+1 WHERE forum_id='".Database::escape_string($current_post['forum_id'])."'";
         $result = Database::query($sql);
-        //echo $sql.'<br />';
 
         // Resetting the last post of the old thread and decreasing the number of replies and the thread.
         $sql = "SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($current_post['thread_id'])."' ORDER BY post_id DESC";
-        //echo $sql.'<br />';
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
-        //my_print_r($row);
         $sql = "UPDATE $table_threads SET thread_last_post='".$row['post_id']."', thread_replies=thread_replies-1 WHERE thread_id='".Database::escape_string($current_post['thread_id'])."'";
         $result = Database::query($sql);
-        //echo $sql.'<br />';
+
     } else {
         // Moving to the chosen thread.
-        $sql = "UPDATE $table_posts SET thread_id='".Database::escape_string($_POST['thread'])."', post_parent_id='0' WHERE post_id='".Database::escape_string($values['post_id'])."'";
-        $result = Database::query($sql);
-
+        
+        //Old code
+        //$sql = "UPDATE $table_posts SET thread_id='".Database::escape_string($_POST['thread'])."', post_parent_id='0' WHERE post_id='".Database::escape_string($values['post_id'])."'";
+        //$result = Database::query($sql);
+        
         // Resetting the parent_id of the thread to 0 for all those who had this moved post as parent.
-        $sql = "UPDATE $table_posts SET post_parent_id='0' WHERE post_parent_id='".Database::escape_string($values['post_id'])."'";
+        //$sql = "UPDATE $table_posts SET post_parent_id='0' WHERE post_parent_id='".Database::escape_string($values['post_id'])."'";
+        //$result = Database::query($sql);
+        
+        // If this post is the last post of the thread we must update the thread_last_post with a new post_id
+        // Search for the original thread_id
+        
+        $sql = "SELECT thread_id FROM ".$table_posts." WHERE post_id = '".$values['post_id']."' ";
         $result = Database::query($sql);
-    }
+        $row = Database::fetch_array($result);
+        
+        $original_thread_id = $row['thread_id'];
+          
+        $sql = "SELECT thread_last_post FROM ".$table_threads." WHERE thread_id = '".$original_thread_id."' ";
+          
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+        $thread_is_last_post = $row['thread_last_post'];
+        // If is this thread, update the thread_last_post with the last one.
 
+        if ($thread_is_last_post == $values['post_id']) {
+            $sql = "SELECT post_id FROM ".$table_posts." WHERE thread_id = '".$original_thread_id."' AND post_id <> '".$values['post_id']."' ORDER BY post_date DESC LIMIT 1";
+            $result= Database::query($sql);
+
+            $row=Database::fetch_array($result);
+            $thread_new_last_post = $row['post_id'];
+
+            $sql = "UPDATE ".$table_threads." SET thread_last_post = '".$thread_new_last_post."' WHERE thread_id = '".$original_thread_id."' ";
+            $result= Database::query($sql);
+        }
+
+        $sql="UPDATE $table_threads SET thread_replies=thread_replies-1 WHERE thread_id='".$original_thread_id."'";
+        $result = Database::query($sql);
+
+        // moving to the chosen thread
+        $sql="UPDATE $table_posts SET thread_id='".intval($_POST['thread'])."', post_parent_id='0' WHERE post_id='".intval($values['post_id'])."'";
+        $result = Database::query($sql);
+
+        // resetting the parent_id of the thread to 0 for all those who had this moved post as parent
+        $sql="UPDATE $table_posts SET post_parent_id='0' WHERE post_parent_id='".intval($values['post_id'])."'";
+        $result = Database::query($sql);
+
+        $sql="UPDATE $table_threads SET thread_replies=thread_replies+1 WHERE thread_id='".intval($_POST['thread'])."'";
+        $result = Database::query($sql);
+        
+    }
     return get_lang('ThreadMoved');
 }
 

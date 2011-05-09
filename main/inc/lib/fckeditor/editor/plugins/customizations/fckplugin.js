@@ -2233,7 +2233,8 @@ FCKEvents.prototype.FireEvent = function( eventName, params )
 }
 
 // See http://dev.ckeditor.com/ticket/6322
-if (parseInt( navigator.userAgent.toLowerCase().match( /msie (\d+)/ )[1], 10 ) >= 9) {
+if (navigator.userAgent.toLowerCase().match( /msie (\d+)/ )
+        && parseInt( navigator.userAgent.toLowerCase().match( /msie (\d+)/ )[1], 10 ) >= 9) {
     // For IE9 or higher.
     FCKTools.RegisterDollarFunction = function( targetWindow )
     {

@@ -359,8 +359,8 @@ abstract class Question
 			$extension = pathinfo($PictureName, PATHINFO_EXTENSION);						
 			$this->picture ='quiz-'.$this->id.'.jpg';			
 			require_once api_get_path(LIBRARY_PATH).'image.lib.php';
-			$detected = array('GIF','JPEG','JPG','PNG');
-            if (in_array($extension, $detected)) {    			
+			$detected = array('gif','jpeg','jpg','png');			
+            if (in_array(strtolower($extension), $detected)) {    			
     			$o_img = new image($Picture);
     			$o_img->send_image('JPG',$picturePath.'/'.$this->picture);
     			$document_id = add_document($this->course, '/images/'.$this->picture, 'file', filesize($picturePath.'/'.$this->picture),$this->picture);

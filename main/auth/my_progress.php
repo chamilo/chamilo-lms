@@ -49,8 +49,15 @@ $tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
 
 
-echo Tracking::show_user_progress(api_get_user_id());
-echo '<br /><br />';
-echo Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
+$user_progress = Tracking::show_user_progress(api_get_user_id());
+if (!empty($user_progress)) {
+    $user_progress .= '<br /><br />';
+}
+$user_progress .= Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
+if (!empty($user_progress)) {
+    echo $user_progress;
+} else {
+    Display::display_warning_message(get_lang('NoDataAvailable'));
+}
     
 Display :: display_footer();

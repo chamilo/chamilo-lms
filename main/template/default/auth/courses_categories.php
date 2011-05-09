@@ -59,7 +59,11 @@ $stok = Security::get_token();
                         if ($code == $category_code) {
                             $category_link = '<strong>'.$category_name.' ('.$count_courses_lv1.')</strong>';
                         } else {
-                            $category_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$category_code.'&amp;hidden_links='.$hidden_links.'">'.$category_name.'</a> ('.$count_courses_lv1.')';
+                            if (!empty($count_courses_lv1)) {
+                                $category_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$category_code.'&amp;hidden_links='.$hidden_links.'">'.$category_name.'</a> ('.$count_courses_lv1.')';
+                            } else {
+                                $category_link = '<strong>'.$category_name.' ('.$count_courses_lv1.')</strong>';    
+                            }
                         }
 
                         echo '<div>'.$category_link.'</div>';

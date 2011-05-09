@@ -241,8 +241,8 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
                         //Setting a personal event to green
                         $result = '<div class="rounded_div_agenda" style="background-color:'.$bg_color.';">';
                         
-                        //Link to buble                                                
-                        $url = Display::url($value['title'], '#', array('id'=>$value['calendar_type'].'_'.$value['id'],'class'=>'opener'));                                 
+                        //Link to bubble                                                
+                        $url = Display::url(cut($value['title'], 40), '#', array('id'=>$value['calendar_type'].'_'.$value['id'],'class'=>'opener'));                                 
                         $result .= $time.' '.$icon.' '.Display::div($url);
                         
                         //Main div
@@ -250,7 +250,7 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
                         echo $result;
                         
                         //Hidden content
-                        $content = Display::div($icon.Display::tag('h2', $value['title']).$complete_time.Security::remove_XSS($value['content']));
+                        $content = Display::div($icon.Display::tag('h1', $value['title']).$complete_time.Security::remove_XSS($value['content']));
                         echo Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog'));
 				   }
 				}

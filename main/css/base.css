@@ -587,6 +587,9 @@ button:hover {
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
 }
 
+
+/* Message and Social changes */
+
 .menulist li {
 	margin-top: 10px;
 }
@@ -609,10 +612,8 @@ button:hover {
 }
 
 .social-background-content {
-    margin-left: -15px;
 	width:auto;	
 }
-
 
 .group_social_item {
 	float:left;
@@ -692,4 +693,6 @@ button:hover {
 	float:left;
 }
 
-  
+div.system_announcement {
+	background-color: #EEEEEE;
+}

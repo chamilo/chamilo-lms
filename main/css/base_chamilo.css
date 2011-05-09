@@ -7,10 +7,7 @@
     border:1px solid #ddd;
     position: relative; /* to avoid the IE peekabo bug*/
     margin: 0px auto;
-
-    min-height: 320px;
-    //padding:18px;
-    
+    min-height: 320px;   
     -moz-border-radius:0px 0px 10px 10px;
     border-radius:0px 0px 10px 10px;
     
@@ -20,7 +17,6 @@
  
 #header3 {
     background:none;                    
-    //padding:2px;
     border-bottom:1px solid #ccc;
     width: 92%;
     margin-bottom:0px;
@@ -35,27 +31,20 @@
     margin-right: 2px;
 }
 
-#current #tab_active {
-    //background:none;
+#current #tab_active {    
 }       
 
 #header1 {
 	padding:0px;
 }
          
-#header3 a {
-    //background:none;
+#header3 a {    
 }
 
-#header3 li { 
-    //background:none;            
-    //background-color: #CCCCCC;                    
-    //border-radius:5px;
-    //margin:0px 1px 0px 1px;
+#header3 li {
 }
 
 #header3 li a span { 
-    //background:none;
 }
 #header4 {  
     height:26px;
@@ -63,9 +52,6 @@
     background:none;                    
     width: 92%;
 }
-
-
-
 div.admin_section {
   width: 44%;	
 }

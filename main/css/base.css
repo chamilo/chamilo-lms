@@ -124,7 +124,6 @@ input.maininput:focus {
 
 #categories-content-first {
     width:290px;
-    //padding:5px;
     float:left;
 }
 
@@ -154,8 +153,7 @@ input.maininput:focus {
 }
 
 #categories-content-second {
-    margin-left: 308px;
-    //padding:5px;
+    margin-left: 308px;    
     margin-top:5px;
 }
 
@@ -264,8 +262,7 @@ input.maininput:focus {
 	padding:2px;
 }
 
-.course-link-desc {
-    //padding:10px 10px 0px;
+.course-link-desc {    
     float:left;
 }
 
@@ -400,18 +397,15 @@ table.lp_build td.tree {
 /* Breadcrumb */
 
 .bread {
-    //border: 1px solid #DEDEDE;
     height: 25px;
     margin: 0px;	
-	padding:0px;
-	 
+	padding:0px;	 
 }
 
 .bread li {
     color: #777777;
     float: left;
-    line-height: 25px;
-    
+    line-height: 25px;    
 }
 
 .bread span {

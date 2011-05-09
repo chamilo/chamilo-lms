@@ -976,7 +976,7 @@ class MessageManager
      * Displays messages of a group with nested view
      * @param int group id
      */
-    public static function display_message_for_group($group_id, $message_id) {
+    public static function display_message_for_group($group_id, $message_id, $is_member) {
         global $my_group_role;
         
         $main_message = self::get_message_by_id($message_id);
@@ -1005,11 +1005,10 @@ class MessageManager
         $name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
             
         $links.= '<div id="message-reply-link">';
-        $links.= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$main_message['id'].'&action=reply_message_group&anchor_topic=topic_'.$main_message['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($items_page_nr).'&topic_id='.$main_message['id'].'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
-
         if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $main_message['user_sender_id'] == $current_user_id) {
-            $links.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$main_message['id'].'&action=edit_message_group&anchor_topic=topic_'.$main_message['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($items_page_nr).'&topic_id='.$main_message['id'].'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
+            $links.= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$main_message['id'].'&action=edit_message_group&anchor_topic=topic_'.$main_message['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($items_page_nr).'&topic_id='.$main_message['id'].'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.png', get_lang('Edit'), array(), 22).'</a>';
         }
+        $links.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$main_message['id'].'&action=reply_message_group&anchor_topic=topic_'.$main_message['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($items_page_nr).'&topic_id='.$main_message['id'].'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
         $links.= '</div>';
                                 
         $image_path = UserManager::get_user_picture_path_by_id($main_message['user_sender_id'], 'web', false, true);                                
@@ -1051,12 +1050,11 @@ class MessageManager
                 $files_attachments = self::get_links_message_attachment_files($topic['id']);
                 $name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
                     
-                $links.= '<div id="message-reply-link">';
-                $links.= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($items_page_nr).'&topic_id='.$topic_id.'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
-
+                $links.= '<div id="message-reply-link">';                
                 if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $topic['user_sender_id'] == $current_user_id) {
-                    $links.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($items_page_nr).'&topic_id='.$topic_id.'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
+                    $links.= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($items_page_nr).'&topic_id='.$topic_id.'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.png', get_lang('Edit'), array(), 22).'</a>';
                 }
+                $links.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($items_page_nr).'&topic_id='.$topic_id.'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
                 $links.= '</div>';
                                         
                 $image_path = UserManager::get_user_picture_path_by_id($topic['user_sender_id'], 'web', false, true);                                

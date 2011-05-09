@@ -51,13 +51,14 @@ if (empty($group_id)) {
     if (empty($group_info)) {
         api_not_allowed(true);
     }
-    $user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);
-    if (!in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR, GROUP_USER_PERMISSION_READER))) {
-        api_not_allowed(true);      
+    $is_member = GroupPortalManager::is_group_member($group_id);
+    
+    if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member ) {
+        api_not_allowed(true);        
     }
 }
 
-Display :: display_header($tool_name, 'Groups');
+Display::display_header($tool_name, 'Groups');
 
 // save message group
 if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
@@ -75,6 +76,9 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
             $edit_message_id =  intval($_POST['message_id']);
             $res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, $edit_message_id);
         } else {
+            if ($_POST['action'] == 'add_message_group' && !$is_member) {
+                api_not_allowed();
+            }            
             $res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id);
         }
 
@@ -121,7 +125,7 @@ echo '<div id="social-content">';
         if (!empty($show_message)){
             Display::display_confirmation_message($show_message);
         }
-        $content = MessageManager::display_message_for_group($group_id, $topic_id);
+        $content = MessageManager::display_message_for_group($group_id, $topic_id, $is_member);
         echo $content;
     echo '</div>';
 echo '</div>';

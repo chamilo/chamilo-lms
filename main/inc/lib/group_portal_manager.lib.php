@@ -405,8 +405,7 @@ class GroupPortalManager
 	 * @param  url_id
 	 * @return boolean true if success
 	 * */
-	public static function add_user_to_group($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
-	{
+	public static function add_user_to_group($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER) {
 		$table_url_rel_group = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		if (!empty($user_id) && !empty($group_id)) {
 			$role = self::get_user_group_role($user_id,$group_id);
@@ -414,7 +413,7 @@ class GroupPortalManager
 				$sql = "INSERT INTO $table_url_rel_group
            				SET user_id = ".intval($user_id).", group_id = ".intval($group_id).", relation_type = ".intval($relation_type);
 				$result = Database::query($sql);
-			} elseif($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
+			} elseif ($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
 				//if somebody already invited me I can be added
 				self::update_user_role($user_id, $group_id, GROUP_USER_PERMISSION_READER);
 			}

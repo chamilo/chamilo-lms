@@ -17,20 +17,21 @@ require_once api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php';
 
 $tok = Security::get_token();
 
-if ( isset($_REQUEST['user_friend']) ) {
+if (isset($_REQUEST['user_friend'])) {
 	$info_user_friend=array();
 	$info_path_friend=array();
  	$userfriend_id=Security::remove_XSS($_REQUEST['user_friend']);
  	// panel=1  send message
  	// panel=2  send invitation
  	$panel=Security::remove_XSS($_REQUEST['view_panel']);
- 	$info_user_friend=api_get_user_info($userfriend_id);
- 	$info_path_friend=UserManager::get_user_picture_path_by_id($userfriend_id,'web',false,true);
+ 	$info_user_friend = api_get_user_info($userfriend_id);
+ 	$info_path_friend = UserManager::get_user_picture_path_by_id($userfriend_id,'web',false,true);
 }
 
 $group_id = intval($_GET['group_id']);
+
 $message_id = intval($_GET['message_id']);
-$actions = array('add_message_group','edit_message_group','reply_message_group');
+$actions = array('add_message_group', 'edit_message_group', 'reply_message_group');
 
 $allowed_action = (isset($_GET['action']) && in_array($_GET['action'],$actions))?Security::remove_XSS($_GET['action']):'';
 
@@ -39,6 +40,12 @@ $subject = '';
 $message = '';
 if (!empty($group_id) && $allowed_action) {
 	$group_info = GroupPortalManager::get_group_data($group_id);
+	$is_member = GroupPortalManager::is_group_member($group_id);
+	
+    if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member) {
+        api_not_allowed(true);        
+    }
+
 	$to_group   = $group_info['name'];
 	if (!empty($message_id)) {
 		$message_info = MessageManager::get_message_by_id($message_id);

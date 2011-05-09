@@ -149,6 +149,7 @@ $my_group_role = 0;
 if ($group_id != 0 ) {
 	$user_leave_message = false;
 	$user_added_group_message = false;
+	$user_invitation_sent = false;
 	$group_info = GroupPortalManager::get_group_data($group_id);
 
 	if (isset($_GET['action']) && $_GET['action']=='leave') {
@@ -169,7 +170,7 @@ if ($group_id != 0 ) {
 				$user_added_group_message = true;
 			} else {
 				GroupPortalManager::add_user_to_group($user_join, $group_id, GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER);
-				$user_added_group_message = true;
+				$user_invitation_sent = true;
 			}
 		}
 	}
@@ -207,6 +208,12 @@ if ($group_id != 0 ) {
 	if ($user_added_group_message) {
 		Display::display_confirmation_message(get_lang('UserIsSubscribedToThisGroup'), false);
 	}
+	
+    if ($user_invitation_sent) {
+        Display::display_confirmation_message(get_lang('InvitationSent'), false);
+    }
+    
+    $is_group_member = GroupPortalManager::is_group_member($group_id);    
 
 	// details about the current group
 	echo '<div class="head_group">';    
@@ -216,15 +223,26 @@ if ($group_id != 0 ) {
 				//Group's description
 				echo '<div class="social-group-details-info">'.$group_info['description'].'</div>';
 				echo '<div class="social-group-details-info"><a target="_blank" href="'.$group_info['url'].'">'.$group_info['url'].'</a></div>';
+				
 				//Privacy
-				echo '<div class="social-group-details-info">';
-					echo '<span>'.get_lang('Privacy').' : </span>';
-					if ($group_info['visibility']== GROUP_PERMISSION_OPEN) {
-						echo get_lang('ThisIsAnOpenGroup');
-					} elseif ($group_info['visibility']== GROUP_PERMISSION_CLOSED) {
-						echo get_lang('ThisIsACloseGroup');
-					}
-				echo '</div>';
+				if (!$is_group_member) {
+    				echo '<div class="social-group-details-info">';
+    					echo '<span>'.get_lang('Privacy').' : </span>';
+    					if ($group_info['visibility']== GROUP_PERMISSION_OPEN) {
+    						echo get_lang('ThisIsAnOpenGroup');
+    					} elseif ($group_info['visibility']== GROUP_PERMISSION_CLOSED) {
+    						echo get_lang('ThisIsACloseGroup');
+    					}
+    				echo '</div>';
+				}
+				
+				if (!$is_group_member && $group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
+				    $role = GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);				    
+				    if ($role == GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER) {
+				        echo Display::display_normal_message(get_lang('YouAlreadySentAnInvitation'));
+				    }
+				}
+				 
 				if (!empty($relation_group_title)) {
 				    /*
 					echo '<div class="social-group-details-info">';
@@ -241,23 +259,36 @@ if ($group_id != 0 ) {
 	echo '<div class="clear"></div>';
 
 	//-- Show message groups
-	echo '<div class="messages" style="width:700px">';
-		if (GroupPortalManager::is_group_member($group_id)) {
+	echo '<div class="messages" style="width:700px">';	    
+	     
+		if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
+		    if (!$is_group_member) {		        
+    		    if (!in_array($my_group_role, array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION))) {
+                    echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('YouShouldJoinTheGroup'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('YouShouldJoinTheGroup').'</a></span>';
+                } elseif ($my_group_role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
+                    echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('YouHaveBeenInvitedJoinNow'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('YouHaveBeenInvitedJoinNow').'</span></a>';
+                }
+                echo '<br /><br />';
+		    }            
 			
 			$content = MessageManager::display_messages_for_group($group_id);
-			if (empty($content)) {			
-				$content =  '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('compose_message.png', get_lang('NewTopic'), array('hspace'=>'6')).get_lang('YouShouldCreateATopic').'</a></li>';
-			} else {
-			    $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('compose_message.png', get_lang('NewTopic'), array('hspace'=>'6')).get_lang('NewTopic').'</a>';
-			    $content = $create_thread_link.$content; 			    
-			}			
+			if ($is_group_member) {
+    			if (empty($content)) {		
+    				$content =  '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('compose_message.png', get_lang('NewTopic'), array('hspace'=>'6')).get_lang('YouShouldCreateATopic').'</a></li>';
+    			} else {
+    			    $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('compose_message.png', get_lang('NewTopic'), array('hspace'=>'6')).get_lang('NewTopic').'</a>';
+    			    $content = $create_thread_link.$content; 			    
+    			}			
+			}
 			$members		= GroupPortalManager::get_users_by_group($group_id);
             $member_content = '';
     		//Members
     		if (count($members) > 0) {
 				$min_count_members = 4;
 				$i = 1;
-				$member_content .= Display::url(Display::return_icon('edit.gif', get_lang('EditMembersList')).' '.get_lang('EditMembersList'), 'group_members.php?id='.$group_id);
+				if ($my_group_role == GROUP_USER_PERMISSION_ADMIN) {
+				    $member_content .= Display::url(Display::return_icon('edit.gif', get_lang('EditMembersList')).' '.get_lang('EditMembersList'), 'group_members.php?id='.$group_id);
+				}
 				
 				foreach($members as $member) {				    
 					if ($i > $min_count_members) break;

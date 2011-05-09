@@ -320,14 +320,13 @@ class SocialManager extends UserManager {
 			$count_number_is_true=0;
 			if (isset($userfriend_id) && $userfriend_id>0) {
 				$message_title = get_lang('Invitation');
-				$count_is_true = self::send_invitation_friend(api_get_user_id(),$userfriend_id, $message_title, $content_message);
+				$count_is_true = self::send_invitation_friend(api_get_user_id(), $userfriend_id, $message_title, $content_message);
 
 				if ($count_is_true) {
 					echo Display::display_normal_message(api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES,$charset),false);
-				}else {
+				} else {
 					echo Display::display_error_message(api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES,$charset),false);
 				}
-
 			}
 		}
 	}

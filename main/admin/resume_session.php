@@ -99,7 +99,7 @@ if (!empty($_GET['warn'])) {
 }
 
 
-echo Display::tag('h2', $session['name']);
+echo Display::tag('h1', $session['name']);
 echo Display::tag('h3', $tool_name);
 ?>
 <!-- General properties -->

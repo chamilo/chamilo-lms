@@ -337,7 +337,7 @@ if ($group_id != 0 ) {
 				$url_open  = '<a href="groups.php?id='.$id.'">';
 				$url_close = '</a>';
 
-				$name = cut($result['name'],140,true);
+				$name = cut($result['name'], GROUP_TITLE_LENGTH, true);
 				if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
 					$name .= ' '.Display::return_icon('social_group_admin.png', get_lang('Admin'), array('style'=>'vertical-align:middle'));
 				} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
@@ -388,7 +388,7 @@ if ($group_id != 0 ) {
 				$count_users_group = $count_users_group.' '.get_lang('Members');
 			}
 
-			$name = cut($result['name'],30,true);
+			$name = cut($result['name'],GROUP_TITLE_LENGTH,true);
 			$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
 			$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 			
@@ -432,7 +432,7 @@ if ($group_id != 0 ) {
 					$count_users_group = $count_users_group.' '.get_lang('Members');
 				}
 
-				$name = cut($result['name'],30,true);
+				$name = cut($result['name'],GROUP_TITLE_LENGTH,true);
 				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
 				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 				

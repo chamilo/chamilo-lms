@@ -446,7 +446,7 @@ class SortableTable extends HTML_Table {
     				}
     				$nav = $this->get_navigation_html();
     				// This also must be moved
-    				$html = '<div class="sub-header" >';
+    				$html = '<div class="sub-header">';
     				$html .= '<div class="grid_selectbox">'.$form.'</div>';
     				$html .= '<div class="grid_title">'.$this->get_table_title().'</div>';
     				$html .= '<div class="grid_nav">'.$nav.'</div>';
@@ -480,7 +480,6 @@ class SortableTable extends HTML_Table {
 			$items = $this->get_clean_html($sort_data); // Getting the items of the table			
 		}
 
-
 		// Generation of style classes must be improved. Maybe we need a a table name to create style on the fly:
 		// i.e: .whoisonline_table_grid_container instead of  .grid_container
 		// where whoisonline is the table's name like drupal's template engine
@@ -491,27 +490,30 @@ class SortableTable extends HTML_Table {
 			$filter = $visibility_options !== false;
 		}
 		
-		$grid_style = $item_style = '';
 		if (!empty($grid_class)) {
-		    $grid_style = $grid_class['grid_class'];
-		    $item_style = $grid_class['item_class'];
-		}
+		    $grid_css_class = $grid_class['main']['class'];
+		    $item_css_class = $grid_class['item']['class'];
 
-		$html .= '<div class="'.$grid_style.' '.$this->table_name.'_grid_container">';
+		    $grid_css_style = $grid_class['main']['style'];
+            $item_css_style = $grid_class['item']['style'];		    
+		}
+		
+		$div = '';		
 		if (is_array($items) && count($items) > 0) {
-			foreach ($items as & $row) {
-				$html .= '<div class="'.$item_style.' '.$this->table_name.'_grid_item">';
+			foreach ($items as & $row) {				
 				$i = 0;
+				$rows = '';
 				foreach ($row as & $element) {
 					if ($filter || $visibility_options[$i]) {
-						$html.='<div class="'.$this->table_name.'_grid_element_'.$i.'">'.$element.'</div>';
+						$rows .= '<div class="'.$this->table_name.'_grid_element_'.$i.'">'.$element.'</div>';
 					}
 					$i++;
 				}
-				$html .= '</div>';
+				$div .= Display::div($rows, array('class'=>$item_css_class.' '.$this->table_name.'_grid_item', 'style' => $item_css_style));				
 			}
-		}
-		$html .= '</div>';
+		}	
+		
+		$html .= Display::div($div, array('class'=>$grid_css_class.' '.$this->table_name.'_grid_container', 'style' => $grid_css_style));
 		$html .= '<div class="clear"></div>';
 		return $html;
 	}

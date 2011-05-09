@@ -21,8 +21,6 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 $this_section = SECTION_SOCIAL;
 
-//jquery thickbox already called from main/inc/header.inc.php
-
 // prepare anchor for message group topic
 $anchor = '';
 if (isset($_GET['anchor_topic'])) {
@@ -144,54 +142,6 @@ if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 
 Display :: display_header($tool_name, 'Groups');
 
-// save message group
-if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
-
-	if (isset($_POST['action'])) {
-		$title = $_POST['title'];
-		$content = $_POST['content'];
-		$group_id = intval($_POST['group_id']);
-		$parent_id = intval($_POST['parent_id']);
-		
-		if ($_POST['action'] == 'reply_message_group') {
-		    $title = cut($content, 50);
-		}
-		if ($_POST['action'] == 'edit_message_group') {
-			$edit_message_id = 	intval($_POST['message_id']);
-			$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, $edit_message_id);
-		} else {
-			$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id);
-		}
-
-		// display error messages
-		if (is_string($res)) {
-			Display::display_error_message($res);
-		}
-
-		if ($res === true) {
-			$groups_user = 	GroupPortalManager::get_users_by_group($group_id);
-			$group_info = GroupPortalManager::get_group_data($group_id);
-			$admin_user_info = api_get_user_info(1);
-			$sender_name = api_get_person_name($admin_user_info['firstName'], $admin_user_info['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
-			$sender_email = $admin_user_info['mail'];
-			$subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'),$group_info['name']);
-			$link = api_get_path(WEB_PATH).'main/social/groups.php?'.$_SERVER['QUERY_STRING'];
-			$text_link = '<a href="'.$link.'">'.get_lang('ClickHereToSeeMessageGroup')."</a><br />\r\n<br />\r\n".get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$link;
-
-			$message = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'),$group_info['name'])."<br />$text_link";
-
-			foreach ($groups_user as $group_user) {
-				if ($group_user == $current_user) continue;
-				$group_user_info = api_get_user_info($group_user['user_id']);
-				$recipient_name = api_get_person_name($group_user_info['firstName'], $group_user_info['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
-				$recipient_email = $group_user_info['mail'];
-				@api_mail_html($recipient_name, $recipient_email, stripslashes($subject), $message, $sender_name, $sender_email);
-			}
-		}
-		Security::clear_token();
-	}
-}
-
 // getting group information
 $group_id	= intval($_GET['id']);
 $relation_group_title = '';
@@ -292,7 +242,7 @@ if ($group_id != 0 ) {
 
 	//-- Show message groups
 	echo '<div class="messages" style="width:700px">';
-		if (GroupPortalManager::is_group_member($group_id)) {	
+		if (GroupPortalManager::is_group_member($group_id)) {
 			
 			$content = MessageManager::display_messages_for_group($group_id);
 			if (empty($content)) {			
@@ -300,15 +250,13 @@ if ($group_id != 0 ) {
 			} else {
 			    $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('compose_message.png', get_lang('NewTopic'), array('hspace'=>'6')).get_lang('NewTopic').'</a>';
 			    $content = $create_thread_link.$content; 			    
-			}
-			
+			}			
 			$members		= GroupPortalManager::get_users_by_group($group_id);
             $member_content = '';
     		//Members
     		if (count($members) > 0) {
 				$min_count_members = 4;
 				$i = 1;
-				//$member_content .= '<div width="100%">';
 				$member_content .= Display::url(Display::return_icon('edit.gif', get_lang('EditMembersList')).' '.get_lang('EditMembersList'), 'group_members.php?id='.$group_id);
 				
 				foreach($members as $member) {				    
@@ -335,8 +283,7 @@ if ($group_id != 0 ) {
 				}					
     		}		
     		$headers = array(get_lang('Messages'), get_lang('Members'));
-			echo Display::tabs($headers, array($content, $member_content),'tabs');
-			
+			echo Display::tabs($headers, array($content, $member_content),'tabs');			
 		} else {
 			// if I already sent an invitation message
 			if (!in_array($my_group_role, array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION))) {

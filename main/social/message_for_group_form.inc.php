@@ -52,12 +52,12 @@ if (!empty($group_id) && $allowed_action) {
 }
 
 $page_item = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1;
-
 $param_item_page = isset($_GET['items_page_nr']) && isset($_GET['topic_id'])?('&items_'.intval($_GET['topic_id']).'_page_nr='.(!empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1)):'';
+$param_item_page .= '&topic_id='.intval($_GET['topic_id']);
 $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1;
 ?>
 
-<form name="form" action="groups.php?id=<?php echo $group_id ?>&anchor_topic=<?php echo Security::remove_XSS($_GET['anchor_topic']) ?>&topics_page_nr=<?php echo $page_topic ?><?php echo $param_item_page ?>" method="POST" enctype="multipart/form-data">
+<form name="form" action="group_topics.php?id=<?php echo $group_id ?>&anchor_topic=<?php echo Security::remove_XSS($_GET['anchor_topic']) ?>&topics_page_nr=<?php echo $page_topic ?><?php echo $param_item_page ?>" method="POST" enctype="multipart/form-data">
 <input type="hidden" name="action" value="<?php echo $allowed_action ?>" />
 <input type="hidden" name="group_id" value="<?php echo $group_id ?>" />
 <input type="hidden" name="parent_id" value="<?php echo $message_id ?>" />

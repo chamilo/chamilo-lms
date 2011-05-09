@@ -6,6 +6,11 @@
     outline :none;
 }
 
+h2 {
+	margin:0px;
+	padding:0px;
+}
+
 input {
     -moz-border-radius:5px;    
     -webkit-border-radius:5px;  
@@ -617,22 +622,29 @@ button:hover {
 
 .group_social_item {
 	float:left;
-	width:600px;
-	background-color: #E9F4FA;
+	width:95%;	
+}
+
+.group_social_sub_item {
+	float:left;
+    /* width:600px; */
+    background-color: #E9F4FA;
     background-repeat: repeat-x;
     
-	margin: 8px;
-	padding:5px;
+    margin: 8px;
+    padding:5px;
+	width:100%;
 }
 
 .message-group-author {
 	float:left;
 	width:30px;
+	margin:5px;
 }
 
 .message-group-content {
 	float:right;
-	width:560px;
+	width:90%;
 	line-height: 100%;
 }
 
@@ -654,3 +666,36 @@ button:hover {
     margin: 8px;
     padding:5px;
 }
+
+
+.group_discussions_replies  {
+	background-color: #E9F4FA;    
+    background-repeat: repeat-x;
+    border: 1px solid #D0E2EC;
+    border-radius: 3px 3px 3px 3px;
+    color: #999999;
+    float: left;
+    font-size: 0.8em;
+    margin-right: 10px;
+    overflow: hidden;
+    padding: 7px 10px;
+    text-align: center;
+    width: 40px;
+	margin-bottom: 65px;
+}
+
+.group_discussions_replies span {
+    display: block;
+    font-size: 2em;
+}
+
+.group_social_grid {
+	float:left;
+	width:100%;
+}
+
+.message-attach {
+	float:left;
+}
+
+  

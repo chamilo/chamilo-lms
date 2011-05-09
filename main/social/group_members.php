@@ -7,7 +7,7 @@
  
 $language_file = array('userInfo');
 $cidReset = true;
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
 if (api_get_setting('allow_social_tool') !='true') {
@@ -98,7 +98,7 @@ echo '<div id="social-content">';
 	echo '</div>';
 	echo '<div id="social-content-right">';
 	
-	     echo '<h2><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h2>';
+	     echo '<h1><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h1>';
 	 
 		echo '<div class="rounded_div" style="width:90%">';
 			
@@ -112,7 +112,7 @@ echo '<div id="social-content">';
 					break;
 					case  GROUP_USER_PERMISSION_READER:
 						if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
-						$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete">'.Display::return_icon('user_delete.png', get_lang('DeleteFromGroup')).'</a>'.
+						$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete">'.Display::return_icon('delete.png', get_lang('DeleteFromGroup')).'</a>'.
 										'<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.Display::return_icon('social_moderator_add.png', get_lang('AddModerator')).'</a>';
 						}
 					break;		

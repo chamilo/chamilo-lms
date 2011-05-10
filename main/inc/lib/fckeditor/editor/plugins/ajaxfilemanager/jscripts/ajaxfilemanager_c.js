@@ -338,7 +338,8 @@ io.style.position='absolute';io.style.top='-1000px';io.style.left='-1000px';io.s
 {$(linkElem).attr('href',url);var t=linkElem.title||linkElem.name||null;var a=linkElem.href||linkElem.alt;var g=linkElem.rel||false;tb_show(t,a,g);linkElem.blur();return false;};function uploadFileWin(linkElem)
 {showThickBox(linkElem,appendQueryString('#TB_inline','height=200'+'&width=450'+'&inlineId=winUpload&modal=true'));if($('#fileUploadBody tr').length<=1){addMoreFile();}
 return false;};function newFolderWin(linkElem)
-{showThickBox(linkElem,appendQueryString('#TB_inline','height=100'+'&width=250'+'&inlineId=winNewFolder&modal=true'));$('#new_folder').val('');return false;};function doCreateFolder()
+{showThickBox(linkElem,appendQueryString('#TB_inline','height=115'+'&width=250'+'&inlineId=winNewFolder&modal=true'));//Chamilo change height size 100 by 115 dialog for new folder
+$('#new_folder').val('');return false;};function doCreateFolder()
 {$('div#TB_window  #currentNewfolderPath').val(currentFolder.path);var pattern=/^[A-Za-z0-9_ \-]+$/i;var folder=$('div#TB_window #new_folder');if(!pattern.test($(folder).val()))
 {alert(msgInvalidFolderName);}else
 {var options={dataType:'json',url:getUrl('create_folder'),error:function(data,status,e)

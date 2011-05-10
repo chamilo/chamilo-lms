@@ -530,17 +530,48 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         $dbTable = Database::get_course_table(TABLE_DOCUMENT);
         // Security fix: make sure they can't move files that are not in the document table
         if (!empty($document_to_move)) {
+			
+			$real_path_target = $base_work_dir.$_POST['move_to'].'/'.basename($document_to_move['path']);
+			$fileExist=false;
+			if(file_exists($real_path_target)){
+				$fileExist=true;
+			}			
+			
             if (move($base_work_dir.$document_to_move['path'], $base_work_dir.$_POST['move_to'])) {
             //if (1) {
             //$contents = DocumentManager::replace_urls_inside_content_html_when_moving_file(basename($document_to_move['path']), $base_work_dir.dirname($document_to_move['path']), $base_work_dir.$_POST['move_to']);
             //exit;
                 update_db_info('update', $document_to_move['path'], $_POST['move_to'].'/'.basename($document_to_move['path']));
-                // Set the current path
+               
+			   //update database item property
+			   $doc_id=$_POST['move_file'];
+			   $current_session_id = api_get_session_id();			   
+
+			   if(is_dir($real_path_target)){
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderMoved', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);
+					Display::display_confirmation_message(get_lang('DirMv'));
+			   }
+			   elseif(is_file($real_path_target)){
+				   api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentMoved', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);
+				   Display::display_confirmation_message(get_lang('DocMv'));
+			   }		   
+
+				// Set the current path
                 $curdirpath = $_POST['move_to'];
                 $curdirpathurl = urlencode($_POST['move_to']);
-                Display::display_confirmation_message(get_lang('DirMv'));
+                
             } else {
-                Display::display_error_message(get_lang('Impossible'));
+				if($fileExist){
+					if(is_dir($real_path_target)){
+						Display::display_error_message(get_lang('DirExists'));
+					}
+					elseif(is_file($real_path_target)){
+                		Display::display_error_message(get_lang('FileExists'));
+					}
+				}
+				else{
+					Display::display_error_message(get_lang('Impossible'));
+				}
             }
         } else {
             Display::display_error_message(get_lang('Impossible'));

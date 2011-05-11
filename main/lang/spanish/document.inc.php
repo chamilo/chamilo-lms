@@ -273,4 +273,6 @@ $RenameAndComment = "Cambiar de nombre y comentar";
 $YouAreCurrentlyUsingXOfYourX = "Está utilizando %s MB (%s) de su total disponible de %s MB.";
 $UplUploadFailedSizeIsZero = "Hubo un problema al subir su documento: el archivo recibido presentó un tamaño de 0 bytes en el servidor. Por favor verifique que su archivo local no esté dañado (trata de abrirlo con el software correspondiente) y pruebe nuevamente.";
 $NewImage = "Nueva imagen";
+$DirExists = "Operación imposible, ya existe un directorio con el mismo nombre.";
+$DocMv = "Documento movido";
 ?>

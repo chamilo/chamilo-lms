@@ -125,4 +125,7 @@ $ErrorNoFilesInFolder = "Seleziona almeno un file";
 $AddComment = "Aggiungi commento";
 $SentCatgoryDeleted = "La cartella è stata eliminata";
 $ReceivedCatgoryDeleted = "La cartella è stata eliminata";
+$InvalideUserDetected = "Utente non valido";
+$InvalideGroupDetected = "Gruppo non valido";
+$OverviewOfFilesInThisZip = "Elenco del contenuto del file zip";
 ?>

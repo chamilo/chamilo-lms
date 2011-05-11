@@ -132,4 +132,5 @@ $Step1SelectResourceType = "Passo 1: seleziona il tipo di risorsa";
 $Step2SelectResource = "Passo 2: seleziona la risorsa";
 $Step3SelectBookingPeriod = "Passo 3: indica il periodo di prenotazione";
 $NoReservations = "Nessuna prenotazione";
+$ItemRightDeleted = "Permesso rimosso";
 ?>

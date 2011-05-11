@@ -48,4 +48,5 @@ $DocumentsWillBeAddedToo = "Saranno aggiunti anche i documenti";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Seleziona i test in elenco per includerli nella esportazione del modulo didattico";
 $ArchivesDirectoryNotWriteableContactAdmin = "La directory di archiviazione, usata dalla funzione, non è scrivibile. Se necessario, contatta l'amministratore di sistema.";
 $DestinationCourse = "Corso di destinazione";
+$IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Se i moduli didattici contengono file audio, questi ultimi devono essere sezionati dalla sezione Documenti";
 ?>

@@ -265,4 +265,6 @@ $HelpPediaphon = "I testi immessi possono avere la dimensione di svariate miglia
 $FirstSelectALanguage = "Seleziona prima una lingua";
 $RenameAndComment = "Cambia nome e commenta";
 $YouAreCurrentlyUsingXOfYourX = "Stai usando %s MB (%s) degli %s MB a disposizione.";
+$UplUploadFailedSizeIsZero = "Ci sono stati problemi nel caricamento del file (segnalati 0 byte); controlla se il file di origine sia integro e riprova";
+$NewImage = "Nuova immagine";
 ?>

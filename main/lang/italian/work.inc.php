@@ -91,4 +91,6 @@ $HomeworkCreated = "E' stato assegnato un nuovo compito";
 $HomeworkHasBeenCreatedForTheCourse = "E' stato assegnato un nuovo compito per il corso";
 $PleaseCheckHomeworkPage = "Ti prego di controllare la pagina degli Elaborati";
 $IncludedInEvaluation = "Incluso nella valutazione";
+$DateExpiredNotBeLessDeadLine = "La data di chiusura non può precedere quella di scadenza";
+$NotRevised = "Non controllato";
 ?>

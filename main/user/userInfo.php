@@ -237,20 +237,20 @@ if (api_is_allowed_to_edit(null, true)) {
 	
 	if (!is_numeric($_GET['editMainUserInfo'])) {
 		if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-                    echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;editMainUserInfo='.$userIdViewed.'">'.Display::return_icon('edit.gif',get_lang('EditUser')).get_lang('EditUser').'</a>';
+                    echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;editMainUserInfo='.$userIdViewed.'">'.Display::return_icon('edit.png',get_lang('EditUser'),'',32).'</a>';
                 }
 	} else {
                 if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-                    echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$userIdViewed.'">'.Display::return_icon('members.gif',get_lang('ViewUser')).get_lang('ViewUser').'</a>';
+                    echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$userIdViewed.'">'.Display::return_icon('user.png',get_lang('ViewUser'),'',32).'</a>';
                 }
 	}	
-	echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&amp;origin=user_course&amp;student='.$userIdViewed.'&amp;details=true&amp;course='.$_course['id'].'">'.Display::return_icon('statistics.gif',get_lang('UserStatistics')).get_lang('UserStatistics').'</a>';
+	echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&amp;origin=user_course&amp;student='.$userIdViewed.'&amp;details=true&amp;course='.$_course['id'].'">'.Display::return_icon('stats.png',get_lang('UserStatistics'),'',32).'</a>';
 	echo '</div>';
 } else {
 	if ($tool_info['visibility'] == 1 ) {
 		echo '<div class="actions">';
 		if($origin=='users'){
-			echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';
+			echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser'),'',32).'</a>';
 		}
 		else{
 			echo '<a href="javascript:history.back(1)">'.Display::return_icon('back.png',get_lang('Back'),'',32).'</a>';
@@ -481,11 +481,10 @@ elseif ($displayMode == "viewContentEdit") {
                                         echo "<td>".get_lang('CourseManager')."</td>\n";
                                     }
                                 }
-
-		echo            ($allowedToEditDef && api_get_setting('allow_user_course_subscription_by_course_admin') == 'true'?"<td>".get_lang('Edit')."</td>\n":""),
-                                ($is_allowedToTrack?"<td>".get_lang('Tracking')."</td>\n":""),
-				"</tr>\n",
-
+		//echo ($allowedToEditDef && api_get_setting('allow_user_course_subscription_by_course_admin') == 'true'?"<td>".get_lang('Edit')."</td>\n":"");
+		//echo ($is_allowedToTrack?"<td>".get_lang('Tracking')."</td>\n":"");		
+		
+		echo    "</tr>\n",
 				"<tr align=\"center\">\n",
 
 				"<td  align=\"left\"><b>".$online.' '.htmlize(api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName']))."</b></td>\n",
@@ -518,19 +517,15 @@ elseif ($displayMode == "viewContentEdit") {
                                 }
 
 				if ($allowedToEditDef && api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-					echo	"<td>",
-							"<a href=\"".api_get_self()."?".api_get_cidreq()."&editMainUserInfo=$userIdViewed\">",
-							"<img border=\"0\" alt=\"\" src=\"../img/edit.gif\" />",
-							"</a>",
-							"</td>";
+					//echo	"<td>";
+					//echo	"<a href=\"".api_get_self()."?".api_get_cidreq()."&editMainUserInfo=$userIdViewed\"><img border=\"0\" alt=\"\" src=\"../img/edit.gif\" /></a>";
+					//echo	"</td>";
 				}
-                                if ($is_allowedToTrack) {
-                                   echo	"<td>",
-							"<a href=\"../mySpace/myStudents.php?".api_get_cidreq()."&origin=user_course&student=$userIdViewed&details=true&course=".$_course['id']."\">",
-							"<img border=\"0\" alt=\"".get_lang('Tracking')." : $userIdViewed\" src=\"../img/statistics.gif\" />",
-							"</a>",
-							"</td>";
-                                }
+				if ($is_allowedToTrack) {
+					//echo "<td>";
+					//echo "<a href=\"../mySpace/myStudents.php?".api_get_cidreq()."&origin=user_course&student=$userIdViewed&details=true&course=".$_course['id']."\"><img border=\"0\" alt=\"".get_lang('Tracking')." : $userIdViewed\" src=\"../img/statistics.gif\" /></a>";
+					//echo "</td>";
+				}
 				echo "</tr>",
 				"</table>";
 				//"<p><a href=\"mailto:",$mainUserInfo['email'],"\">",$mainUserInfo['email'],"</a>",

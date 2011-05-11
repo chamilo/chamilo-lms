@@ -833,16 +833,23 @@ class Attendance
 	 * @param	int	attendance id
 	 * @return	array attendance calendar data
 	 */
-	public function get_attendance_calendar($attendance_id, $type = 'all') {
+	public function get_attendance_calendar($attendance_id, $type = 'all', $calendar_id = null) {
 		global $dateFormatShort, $timeNoSecFormat;
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$attendance_id = intval($attendance_id);		
 		$sql = "SELECT * FROM $tbl_attendance_calendar WHERE attendance_id = '$attendance_id' ";		
 		$filter_where = '';
-		if (!in_array($type, array('today', 'all', 'all_done', 'all_not_done'))) {
+		if (!in_array($type, array('today', 'all', 'all_done', 'all_not_done','calendar_id'))) {
 			$type = 'all';
 		}		
-		switch ($type ) {
+		
+		switch ($type) {
+		    case 'calendar_id':
+		        $calendar_id = intval($calendar_id);		        
+		        if (!empty($calendar_id)) {
+		            $sql.= " AND id = $calendar_id";
+		        }
+		        break;
 			case 'today':
 				//$sql .= ' AND DATE_FORMAT(date_time,"%d-%m-%Y") = DATE_FORMAT("'.api_get_utc_datetime().'", "%d-%m-%Y" )';
 				break;				

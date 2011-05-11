@@ -445,7 +445,7 @@ p.pagination{
 #pagination_parent_link
 {
     background: url(../images/go_parent.png) no-repeat 100% 50%;
-    padding: 2px 30px 2px 370px;	
+    padding: 2px 30px 2px 500px;	
 }
 a.pagination_first,
 a.pagination_previous,

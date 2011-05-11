@@ -303,22 +303,22 @@ if ((api_get_setting('advanced_filemanager') == 'true')) {
 
     // Dialog/window size for browsing:
     // any type of files;
-    $config['LinkBrowserWindowWidth']	= 800 ;
+    $config['LinkBrowserWindowWidth']	= 930 ;
     $config['LinkBrowserWindowHeight']	= 580 ;
     // images;
-    $config['ImageBrowserWindowWidth']	= 800 ;
+    $config['ImageBrowserWindowWidth']	= 930 ;
     $config['ImageBrowserWindowHeight']	= 580 ;
     // flash objects;
-    $config['FlashBrowserWindowWidth']	= 800 ;
+    $config['FlashBrowserWindowWidth']	= 930 ;
     $config['FlashBrowserWindowHeight']	= 580 ;
     // audio files;
-    $config['MP3BrowserWindowWidth']	= 800 ;
+    $config['MP3BrowserWindowWidth']	= 930 ;
     $config['MP3BrowserWindowHeight']	= 580 ;
     // video files;
-    $config['VideoBrowserWindowWidth']	= 800 ;
+    $config['VideoBrowserWindowWidth']	= 930 ;
     $config['VideoBrowserWindowHeight']	= 580 ;
     // video (flv) files.
-    $config['MediaBrowserWindowWidth']	= 800 ;
+    $config['MediaBrowserWindowWidth']	= 930 ;
     $config['MediaBrowserWindowHeight']	= 580 ;
 
     // Set true/false to enable/disable the quick-upload tabs for different resource types:

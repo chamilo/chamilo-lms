@@ -241,7 +241,9 @@ return 0;};function enableContextMenu(jquerySelectors)
 {var num=(getNum($(t).attr('id')));$('#playGround').html('<a id="playGround'+num+'" href="'+files[num].path+'"><div id="player"> this is mine</div></a> ');$('#playGround'+num).html('');$('#playGround'+num).media({width:255,height:210,autoplay:true});showThickBox($('#a'+num).get(0),appendQueryString('#TB_inline','height=250'+'&width=258'+'&inlineId=winPlay&modal=true'));},'menuPreview':function(t)
 {var num=(getNum($(t).attr('id')));$('#a'+num).click();},'menuDownload':function(t)
 {var num=(getNum($(t).attr('id')));generateDownloadIframe(appendQueryString(getUrl('download',false,false),'path='+files[num].path,['path']));},'menuRename':function(t)
-{var num=(getNum($(t).attr('id')));showThickBox($('#a'+num).get(0),appendQueryString('#TB_inline','height=100'+'&width=350'+'&inlineId=winRename&modal=true'));$('div#TB_window #renameName').val(files[num].name);$('div#TB_window #original_path').val(files[num].path);$('div#TB_window #renameNum').val(num);},'menuEdit':function(t)
+{var num=(getNum($(t).attr('id')));showThickBox($('#a'+num).get(0),appendQueryString('#TB_inline','height=120'+'&width=350'+'&inlineId=winRename&modal=true'));//Chamilo change height size 100 by 120 dialog for rename
+
+$('div#TB_window #renameName').val(files[num].name);$('div#TB_window #original_path').val(files[num].path);$('div#TB_window #renameNum').val(num);},'menuEdit':function(t)
 {var num=(getNum($(t).attr('id')));var url='';switch(files[num].cssClass)
 {case'filePicture':url=getUrl('image_editor');break;default:url=getUrl('text_editor');}
 var param="status=yes,menubar=no,resizable=yes,scrollbars=yes,location=no,toolbar=no";param+=",height="+screen.height+",width="+screen.width;if(typeof(window.screenX)!='undefined')

@@ -99,10 +99,10 @@
 								{
 									
 									$mainPath= getParentFolderPath($folderInfo['path']);// from ajaxfilemanager sample ../../../../../../../courses/TEST/document/
-									$fullPath=$tem['final_path'];// from ajaxfilemanager sample ../../../../../../../courses/TEST/document/icons/book_highlight.jpg
+									$fullPath=$tem['final_path'];// from ajaxfilemanager sample ../../../../../../../courses/TEST/document/icons/book_highlight.jpg									
 									$chamiloFolder = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1); // sample /icons/book_highlight.jpg or /icons
 									$chamiloFile = $tem['name'];	//get ajaxmanager
-									$chamiloFileSize = $tem['size'];//get ajaxmanager //TODO:change by filesize($tem)?
+									$chamiloFileSize = filesize($fullPath);//get ajaxmanager
 									if(!empty($group_properties['directory'])){
 										$chamiloFolder=$group_properties['directory'].$chamiloFolder;//get Chamilo
 									}

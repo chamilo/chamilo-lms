@@ -76,7 +76,7 @@
 									$mainPath= getParentFolderPath($folderInfo['path']);//get	ajaxmanager. Sample ../../../../../../../courses/TEST/document/Grupo_1_groupdocs/
 									$chamiloFolder = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);
 									$chamiloFile = $tem['name'];	//get	ajaxmanager
-									$chamiloFileSize = $tem['size'];//get ajaxmanager
+									$chamiloFileSize = filesize($fullPath); //get ajaxmanager
 									if(!empty($group_properties['directory'])) //get Chamilo
 									{
 										$chamiloFolder=$group_properties['directory'].$chamiloFolder;//get Chamilo

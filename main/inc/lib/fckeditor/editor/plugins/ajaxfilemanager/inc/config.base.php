@@ -53,8 +53,8 @@
 		{
 		//api_is_allowed_to_edit() from Chamilo
 			define('CONFIG_OPTIONS_DELETE', true);
-			define('CONFIG_OPTIONS_CUT', false);
-			define('CONFIG_OPTIONS_COPY', false);
+			define('CONFIG_OPTIONS_CUT', true);
+			define('CONFIG_OPTIONS_COPY', true);
 			define('CONFIG_OPTIONS_NEWFOLDER', true);
 			define('CONFIG_OPTIONS_RENAME', false);
 			define('CONFIG_OPTIONS_UPLOAD', true);
@@ -64,8 +64,8 @@
 		else
 		{
 			define('CONFIG_OPTIONS_DELETE', true);
-			define('CONFIG_OPTIONS_CUT', false);
-			define('CONFIG_OPTIONS_COPY', false);
+			define('CONFIG_OPTIONS_CUT', true);
+			define('CONFIG_OPTIONS_COPY', true);
 			define('CONFIG_OPTIONS_NEWFOLDER', true);
 			define('CONFIG_OPTIONS_RENAME', false);
 			define('CONFIG_OPTIONS_UPLOAD', true);
@@ -135,7 +135,7 @@
 	define('CONFIG_SYS_FOLDER_SHOWN_ON_TOP', true); //show your folders on the top of list if true or order by name
 
 
-	define("CONFIG_SYS_DIR_SESSION_PATH", session_save_path()); // Hack by Juan Carlos Ra�a
+	define("CONFIG_SYS_DIR_SESSION_PATH", session_save_path()); // Hack by Juan Carlos Raña
 
 
 	define("CONFIG_SYS_PATTERN_FORMAT", 'list'); //three options: reg ,csv, list, this option define the parttern format for the following patterns

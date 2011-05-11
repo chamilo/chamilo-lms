@@ -1590,22 +1590,30 @@ function send_reminder_users_without_publication($task_id) {
  * @param string course_id
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ * @author Julio Montoya <gugli100@gmail.com> Adding session support - 2011 
  */
 function send_email_on_homework_creation($course_id) {
 	require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 	// Get the students of the course
-	$students = CourseManager::get_student_list_from_course_code($course_id);
+	$session_id = api_get_session_id();
+	if (empty($session_id)) {
+	   $students = CourseManager::get_student_list_from_course_code($course_id);
+	} else {
+	   $students = CourseManager::get_student_list_from_course_code($course_id, true, $session_id); 
+	}
 	$emailsubject = '[' . api_get_setting('siteName') . '] '.get_lang('HomeworkCreated');
 	$currentUser = api_get_user_info(api_get_user_id());
-	foreach($students as $student) {
-		$user_info = api_get_user_info($student["user_id"]);
-		if(!empty($user_info["mail"])) {
-			$name_user = api_get_person_name($user_info["firstname"], $user_info["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
-			$emailbody = get_lang('Dear')." ".$name_user.",\n\n";
-			$emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$course_id.". "."\n\n".get_lang('PleaseCheckHomeworkPage');
-			$emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
-			@api_mail($name_user, $user_info["mail"], $emailsubject, $emailbody, api_get_person_name($currentUser["firstname"], $currentUser["lastname"], null, PERSON_NAME_EMAIL_ADDRESS), $currentUser["mail"]);
-		}
+	if (!empty($students)) {
+    	foreach($students as $student) {
+    		$user_info = api_get_user_info($student["user_id"]);
+    		if(!empty($user_info["mail"])) {
+    			$name_user = api_get_person_name($user_info["firstname"], $user_info["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
+    			$emailbody = get_lang('Dear')." ".$name_user.",\n\n";
+    			$emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$course_id.". "."\n\n".get_lang('PleaseCheckHomeworkPage');
+    			$emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
+    			@api_mail($name_user, $user_info["mail"], $emailsubject, $emailbody, api_get_person_name($currentUser["firstname"], $currentUser["lastname"], null, PERSON_NAME_EMAIL_ADDRESS), $currentUser["mail"]);
+    		}
+    	}
 	}
 }
 

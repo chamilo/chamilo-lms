@@ -901,6 +901,8 @@ class SortableTableFromArrayConfig extends SortableTable {
 	 * The array containing all data for this table
 	 */
 	private $table_data;
+	
+	private $doc_filter;
 
 	/**
 	 * Constructor
@@ -910,10 +912,12 @@ class SortableTableFromArrayConfig extends SortableTable {
 	 * @param int $tablename Name of the table
 	 * @param array $column_show An array with binary values 1: we show the column 2: we don't show it
 	 * @param array $column_order An array of integers that let us decide how the columns are going to be sort.
+	 * @param bool special modification to fix the document name order 
 	 */
-	public function __construct ($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename', $column_show = null, $column_order = null, $direction = 'ASC') {
-		$this->column_show = $column_show;
+	public function __construct ($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename', $column_show = null, $column_order = null, $direction = 'ASC', $doc_filter = false) {
+		$this->column_show  = $column_show;
 		$this->column_order = $column_order;
+		$this->doc_filter   = $doc_filter;
 		parent :: __construct ($tablename, null, null, $default_column, $default_items_per_page, $direction);
 		$this->table_data = $table_data;
 	}
@@ -923,7 +927,7 @@ class SortableTableFromArrayConfig extends SortableTable {
 	 * @see SortableTable#get_table_data
 	 */
 	public function get_table_data($from = 1) {
-		$content = TableSort :: sort_table_config($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC, $this->column_show, $this->column_order);
+		$content = TableSort :: sort_table_config($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC, $this->column_show, $this->column_order, SORT_REGULAR, $this->doc_filter);
 		return array_slice($content, $from, $this->per_page);
 	}
 
@@ -931,7 +935,7 @@ class SortableTableFromArrayConfig extends SortableTable {
 	 * Get total number of items
 	 * @see SortableTable#get_total_number_of_items
 	 */
-	public function get_total_number_of_items () {
+	public function get_total_number_of_items() {
 		return count($this->table_data);
 	}
 }

@@ -81,7 +81,7 @@ class TableSort {
 	 * @return array The sorted dataset
 	 * @author bart.mollet@hogent.be
 	 */
-	public function sort_table_config($data, $column = 0, $direction = SORT_ASC, $column_show = null, $column_order = null, $type = SORT_REGULAR) {
+	public function sort_table_config($data, $column = 0, $direction = SORT_ASC, $column_show = null, $column_order = null, $type = SORT_REGULAR, $doc_filter = false) {
 
 		if (!is_array($data) || empty($data)) {
 			return array();
@@ -112,26 +112,56 @@ class TableSort {
 				$type = SORT_STRING;
 			}
 		}
-
-		$compare_operator = $direction == SORT_ASC ? '>' : '<=';
-		switch ($type) {
-			case SORT_NUMERIC:
-				$compare_function = 'return strip_tags($a['.$column.']) '.$compare_operator.' strip_tags($b['.$column.']);';
-				break;
-			case SORT_IMAGE:
-				$compare_function = 'return api_strnatcmp(api_strtolower(strip_tags($a['.$column.'], "<img>")), api_strtolower(strip_tags($b['.$column.'], "<img>"))) '.$compare_operator.' 0;';
-				break;
-			case SORT_DATE:
-				$compare_function = 'return strtotime(strip_tags($a['.$column.'])) '.$compare_operator.' strtotime(strip_tags($b['.$column.']));';
-				break;
-			case SORT_STRING:
-			default:
-				$compare_function = 'return api_strnatcmp(api_strtolower(strip_tags($a['.$column.'])), api_strtolower(strip_tags($b['.$column.']))) '.$compare_operator.' 0;';
-				break;
+		
+		//This fixs only works in the document tool when ordering by name
+		if ($doc_filter && in_array($type, array(SORT_STRING))) {
+    		$data_to_sort = $folder_to_sort = array();
+    		$new_data = array();
+    		if (!empty($data)) {
+        		foreach ($data as $document) {
+        		    if ($document['type'] == 'folder') {
+        		      $docs_to_sort[$document['id']]   = api_strtolower($document['name']);
+        		    } else {
+        		      $folder_to_sort[$document['id']] = api_strtolower($document['name']);  
+        		    }
+        		    $new_data[$document['id']] = $document;    		        		     
+        		}   
+                if ($direction == SORT_ASC) {
+                    api_natrsort($docs_to_sort);
+                    api_natrsort($folder_to_sort);                
+                } else {
+                    api_natsort($docs_to_sort);
+                    api_natsort($folder_to_sort);
+                }
+                $new_data_order = array();
+                foreach($docs_to_sort as $id => $document) {
+                    $new_data_order[] = $new_data[$id];
+                }            
+                foreach($folder_to_sort as $id => $document) {
+                    $new_data_order[] = $new_data[$id];
+                }
+                $data = $new_data_order; 		
+    		}              
+		} else {		
+    		$compare_operator = $direction == SORT_ASC ? '>' : '<=';    		
+    		switch ($type) {
+    			case SORT_NUMERIC:
+    				$compare_function = 'return strip_tags($a['.$column.']) '.$compare_operator.' strip_tags($b['.$column.']);';
+    				break;
+    			case SORT_IMAGE:
+    				$compare_function = 'return api_strnatcmp(api_strtolower(strip_tags($a['.$column.'], "<img>")), api_strtolower(strip_tags($b['.$column.'], "<img>"))) '.$compare_operator.' 0;';
+    				break;
+    			case SORT_DATE:
+    				$compare_function = 'return strtotime(strip_tags($a['.$column.'])) '.$compare_operator.' strtotime(strip_tags($b['.$column.']));';
+    				break;
+    			case SORT_STRING:
+    			default:
+    			    $compare_function = 'return api_strnatcmp(api_strtolower(strip_tags($a['.$column.'])), api_strtolower(strip_tags($b['.$column.']))) '.$compare_operator.' 0;';
+    				break;
+    		}		
+        	// Sort the content
+    		usort($data, create_function('$a, $b', $compare_function));
 		}
-
-		// Sort the content
-		usort($data, create_function('$a, $b', $compare_function));
 
 		if (is_array($column_show)) {
 			// We show only the columns data that were set up on the $column_show array

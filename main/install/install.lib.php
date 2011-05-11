@@ -993,13 +993,15 @@ function display_language_selection_box($name = 'language_list', $default_langua
  */
 function display_language_selection() { ?>
     <h2><?php get_lang('WelcomeToTheDokeosInstaller'); ?></h2>
-    <h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage'); ?></h2>
-    <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
+    <div class="RequirementHeading">
+        <h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage'); ?></h2>
+        <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
     <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
 <?php display_language_selection_box('language_list', api_get_interface_language()); ?>
     <button type="submit" name="step1" class="next" value="<?php get_lang('Next'); ?> &gt;"><?php echo get_lang('Next'); ?></button>
     <input type="hidden" name="is_executable" id="is_executable" value="-" />
     </form>
+    </div>
 <?php
 }
 
@@ -1016,14 +1018,16 @@ function display_language_selection() { ?>
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function display_requirements($installType, $badUpdatePath, $updatePath = '', $update_from_version_8 = array(), $update_from_version_6 = array()) {
-    echo '<h2>'.display_step_sequence().get_lang('Requirements')."</h2>\n";
+    echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
 
+    echo '<div class="RequirementText">';
     echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
     echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />'."\n";
     
     if ($installType == 'update')  {
         echo get_lang('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />'."\n";
     }
+    echo '</div>';
 
     //	SERVER REQUIREMENTS
     echo '<div class="RequirementHeading"><h2>'.get_lang('ServerRequirements').'</h2>';
@@ -1347,9 +1351,10 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
  */
 
 function display_license_agreement() {
-    echo '<h2>'.display_step_sequence().get_lang('Licence').'</h2>';
+    echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Licence').'</h2>';
     echo '<p>'.get_lang('DokeosLicenseInfo').'</p>';
     echo '<p><a href="../../documentation/license.html" target="_blank">'.get_lang('PrintVers').'</a></p>';
+    echo '</div>';
     ?>
     <table>
         <tr><td>
@@ -1593,20 +1598,21 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         if (empty($dbUserForm)) {
             $dbUserForm = $singleDbForm ? $dbNameForm : $dbPrefixForm.'chamilo_user';
         }
-        echo '<h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2>';
+        echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2></div>';
+        echo '<div class="RequirementContent">';
         echo get_lang('DBSettingUpgradeIntro');
-
+        echo '</div>';
     } else {
-
         if (empty($dbPrefixForm)) { //make sure there is a default value for db prefix
             $dbPrefixForm = 'chamilo_';
         }
-        echo '<h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2>';
+        echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2>';
+        echo '</div>';
+        echo '<div class="RequirementContent">';
         echo get_lang('DBSettingIntro');
+        echo '</div>';                
     }
-
-    ?>
-    <br /><br />
+    ?>    
     </td>
     </tr>
     <tr>
@@ -1744,9 +1750,12 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
     if ($installType != 'update' && empty($languageForm)) {
         $languageForm = $_SESSION['install_language'];
     }
-
+    echo '<div class="RequirementHeading">';
     echo "<h2>" . display_step_sequence() . get_lang("CfgSetting") . "</h2>";
+    echo '</div>';
+    echo '<div class="RequirementContent">';
     echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>main/inc/conf/configuration.php</strong></p>';
+    echo '</div>';
 
     echo "</td></tr>\n<tr><td>";
     echo "<table width=\"100%\">";
@@ -1884,14 +1893,16 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
  */
 function display_after_install_message($installType, $nbr_courses) {
     ?>
+    <div class="RequirementHeading">
     <h2><?php echo display_step_sequence() . get_lang('CfgSetting'); ?></h2>
-
+    </div>
+    
+    <div class="RequirementContent">
     <?php echo get_lang('FirstUseTip'); ?>
+    </div>
 
-    <br /><br />
     <?php
     echo '<div class="warning-message">';
-    //echo '<img src="../img/message_warning.png" style="float:left; margin-right:10px;" alt="'.get_lang('Warning').'"/>';
     echo '<strong>'.get_lang('SecurityAdvice').'</strong>';
     echo ': ';
     printf(get_lang('ToProtectYourSiteMakeXAndYReadOnly'), 'main/inc/conf/configuration.php', 'main/install/index.php');

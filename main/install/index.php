@@ -605,11 +605,12 @@ if ($_POST['step2']) {
 
 	//STEP 6 : LAST CHECK BEFORE INSTALL
 ?>
-
+    <div class="RequirementHeading">
 	<h2><?php echo display_step_sequence().get_lang('LastCheck'); ?></h2>
-
+	</div>
+    <div class="RequirementContent">
 	<?php echo get_lang('HereAreTheValuesYouEntered'); ?>
-	<br />
+	</div>
 	<strong><?php echo get_lang('PrintThisPageToRememberPassAndOthers'); ?></strong>
 
 	<blockquote>
@@ -620,7 +621,8 @@ if ($_POST['step2']) {
 	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
 	<?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
 	<?php if (!empty($dbPrefixForm)) echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
-	<?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><?php if ($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br />
+	<?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong>
+	<?php if ($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br />
 	<?php
 	if (!$singleDbForm) {
 		echo get_lang('StatDB').' : <strong>'.$dbStatsForm.'</strong>';

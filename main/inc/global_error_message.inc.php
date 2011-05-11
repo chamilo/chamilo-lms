@@ -52,7 +52,9 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$theme = 'chamilo/';
 	$css_path = 'main/css/';
 	$css_file = $css_path.$theme.'default.css';
-		
+	
+	$css_base_file         = $css_path.'base.css';
+	$css_base_chamilo_file = $css_path.'base_chamilo.css';		
 
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
 	$root_rel = htmlentities($_SERVER['PHP_SELF']);
@@ -83,6 +85,17 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	} else {
 		$css_def = '';
 	}
+	
+	$css_base_chamilo_file = $root_sys.$css_base_chamilo_file;
+    if (file_exists($css_base_chamilo_file)) {
+        $css_def .= @file_get_contents($css_base_chamilo_file);
+    }    
+	$css_base_file = $root_sys.$css_base_file;
+    if (file_exists($css_base_file)) {
+        $css_def .= @file_get_contents($css_base_file);
+    }
+    
+
 
 	$css_def = str_replace('behavior:url("/main/css/csshover3.htc");', '', $css_def);
 	$css_def = str_replace('main/', $root_rel.'main/', $css_def);
@@ -92,7 +105,6 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$global_error_message = array();
 
 	switch ($global_error_code) {
-
 		case 1:
 			$global_error_message['section'] = $SectionSystemRequirementsProblem;
 			$global_error_message['title'] = $IncorrectPhpVersionTitle;
@@ -109,7 +121,6 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			}
 			$global_error_message['description'] = $IncorrectPhpVersionDescription;
 			break;
-
 		case 2:
 			$global_error_message['section'] = $SectionInstallation;
 			$global_error_message['title'] = $InstallationTitle;
@@ -122,7 +133,6 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 					<a href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>';
 			$global_error_message['description'] = $InstallationDescription;
 			break;
-
 		case 3:
 		case 4:
 		case 5:
@@ -153,7 +163,8 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
 	$global_error_message['encoding'] = 'UTF-8';
 	$global_error_message['css'] = $css_def;
-	
+	$global_error_message['chamilo_logo'] = $root_rel.$css_path.$theme.'images/header-logo.png';
+		
 
 // {ORGANISATION}	moved from the header
 	$global_error_message_page =
@@ -173,6 +184,9 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		<div id="wrapper">
 			<div id="header">
 				<div id="header1">	
+				    <div id="logo">    
+                        <img vspace="10" hspace="10" alt="Chamilo" src="{CHAMILO_LOGO}">        
+                    </div>
 				</div>
 				<div class="clear"></div>
 				<div id="header2"></div>
@@ -188,7 +202,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
 			<div id="main">
 				<div style="text-align: center;">
-						<div class="warning-message">{DESCRIPTION}</div>
+						{DESCRIPTION}
 						{CODE}
 				</div>
 			</div>

@@ -225,7 +225,7 @@
 			$data['user_id'] = $user_id;			
 		}
 				
-		$data['next_attendance_calendar_id'] = $attendance->get_next_attendance_calendar_id($attendance_id);
+		$data['next_attendance_calendar_id']       = $attendance->get_next_attendance_calendar_id($attendance_id);
 		$data['next_attendance_calendar_datetime'] = $attendance->get_next_attendance_calendar_datetime($attendance_id);
 		
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {	
@@ -241,11 +241,20 @@
 			}
 
 			$data['users_in_course'] 			 = $attendance->get_users_rel_course($attendance_id);
-			$data['attendant_calendar'] 		 = $attendance->get_attendance_calendar($attendance_id, $filter_type);
-			$data['users_presence'] 			 = $attendance->get_users_attendance_sheet($attendance_id);
-			$data['next_attendance_calendar_id'] = $attendance->get_next_attendance_calendar_id($attendance_id);			
+			$my_calendar_id = null;
+			
+			if (is_numeric($filter_type)) {			    
+			    $my_calendar_id = $filter_type;
+			    $filter_type = 'calendar_id';
+			}
+			$data['attendant_calendar'] 		       = $attendance->get_attendance_calendar($attendance_id, $filter_type, $my_calendar_id);
+			$data['attendant_calendar_all']            = $attendance->get_attendance_calendar($attendance_id);
+			$data['users_presence'] 			       = $attendance->get_users_attendance_sheet($attendance_id);
+			$data['next_attendance_calendar_id']       = $attendance->get_next_attendance_calendar_id($attendance_id);			
 			$data['next_attendance_calendar_datetime'] = $attendance->get_next_attendance_calendar_datetime($attendance_id);			
 		} else {
+		    $data['attendant_calendar_all']       = $attendance->get_attendance_calendar($attendance_id);
+		    
 			$data['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id,$filter_type);
 		}
 		$data['is_locked_attendance'] = $attendance->is_locked_attendance($attendance_id);

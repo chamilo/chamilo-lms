@@ -608,6 +608,7 @@ if (!empty($_REQUEST['new_dir'])) {
 	}
 }
 
+
 /*	Delete dir command */
 
 if (!empty($_REQUEST['delete_dir'])) {

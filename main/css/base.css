@@ -696,3 +696,7 @@ button:hover {
 div.system_announcement {
 	background-color: #EEEEEE;
 }
+
+.RequirementHeading, .RequirementText, .RequirementContent  {
+    margin-top:12px;
+}

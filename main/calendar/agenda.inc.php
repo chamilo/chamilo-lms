@@ -834,8 +834,7 @@ function user_group_filter_javascript() {
 * @return array: associative array where the key is the id of the user and the value is an array containing
 			the first name, the last name, the user id
 */
-function get_course_users()
-{
+function get_course_users() {
 	global $_cid;
 
 	$tbl_user       		= Database::get_main_table(TABLE_MAIN_USER);
@@ -849,20 +848,21 @@ function get_course_users()
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
 	$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstname firstName
 			FROM $tbl_user as u, $tbl_courseUser as cu
-			WHERE cu.course_code = '".$_cid."'
+			WHERE cu.course_code = '".api_get_course_id()."'
 			AND cu.user_id = u.user_id $courseadmin_filter".$order_clause;
 	$result = Database::query($sql);
 	while($user=Database::fetch_array($result)){
 		$users[$user[0]] = $user;
 	}
-
-	if(!empty($_SESSION['id_session'])){
+	
+    $session_id = api_get_session_id();
+	if (!empty($session_id)) {
+	    $users = array();
 		$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstName firstName
 				FROM $tbl_session_course_user AS session_course_user
-				INNER JOIN $tbl_user u
-					ON u.user_id = session_course_user.id_user
-				WHERE id_session='".intval($_SESSION['id_session'])."'
-				AND course_code='$_cid'";
+				INNER JOIN $tbl_user u ON u.user_id = session_course_user.id_user
+				WHERE id_session = ".$session_id."
+				AND course_code  = '".api_get_course_id()."'";
 
 		$result = Database::query($sql);
 		while($user=Database::fetch_array($result)){
@@ -894,15 +894,15 @@ function get_course_groups()
 */
 function show_to_form($to_already_selected)
 {
-	$user_list=get_course_users();
-	$group_list=get_course_groups();
+	$user_list     = get_course_users();
+	$group_list    = get_course_groups();
 
 	echo "<table id=\"recipient_list\" style=\"display: none;\">";
 		echo "<tr>";
 		// the form containing all the groups and all the users of the course
 		echo "<td>";
 		echo "<strong>".get_lang('Users')."</strong><br />";
-			construct_not_selected_select_form($group_list,$user_list,$to_already_selected);
+			construct_not_selected_select_form($group_list, $user_list, $to_already_selected);
 		echo "</td>";
 		// the buttons for adding or removing groups/users
 		echo "<td valign=\"middle\">";

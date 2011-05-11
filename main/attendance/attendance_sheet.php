@@ -34,13 +34,26 @@ if (api_is_allowed_to_edit(null, true)) {
     
     $form = new FormValidator('filter', 'post', 'index.php?action=attendance_sheet_add&'.api_get_cidreq().$param_gradebook.'&attendance_id='.$attendance_id);
     
-    $values = array('all'=>get_lang('All'), 'today'=>get_lang('Today'),'all_done'=>get_lang('AllDone'), 'all_not_done'=>get_lang('AllNotDone'));
-    $form->addElement('select', 'filter', 'Filter', $values);   
+    $values = array('all'           => get_lang('All'), 
+                    'today'         => get_lang('Today'),
+                    'all_done'      => get_lang('AllDone'), 
+                    'all_not_done'  => get_lang('AllNotDone')
+                    );
+                    
+    
+    
+    if (!empty($attendant_calendar_all)) {
+        $values[''] = '---------------';
+        foreach($attendant_calendar_all as $attendance_date) {            
+            $values[$attendance_date['id']] = $attendance_date['date_time'];
+        }
+    }
+    
+    $form->addElement('select', 'filter', get_lang('Filter'), $values);   
     $form->addElement('style_submit_button', null, get_lang('Filter'), 'class="filter"');
     
-    if (isset($_REQUEST['filter'])) {
-        
-        if (in_array($_REQUEST['filter'],array_keys($values))) {
+    if (isset($_REQUEST['filter'])) {        
+        if (in_array($_REQUEST['filter'], array_keys($values))) {
             $default_filter = $_REQUEST['filter'];
         }       
     } else {
@@ -101,7 +114,6 @@ if (api_is_allowed_to_edit(null, true)) {
         $(window).resize(UpdateTableHeaders);
     });
 </script>
-
 
     <form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_gradebook.$param_filter ?>&attendance_id=<?php echo $attendance_id?>" >
     

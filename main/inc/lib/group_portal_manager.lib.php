@@ -24,6 +24,8 @@ define('GROUP_IMAGE_SIZE_BIG', 		2);
 define('GROUP_IMAGE_SIZE_MEDIUM', 	3);
 define('GROUP_IMAGE_SIZE_SMALL', 	4);
 
+define('GROUP_TITLE_LENGTH',       50);
+
 class GroupPortalManager
 {
 	/**
@@ -958,7 +960,7 @@ class GroupPortalManager
 		}
 
 		if (!empty($links)) {
-			echo '<div align="center" class="social-menu-title"><span class="social-menu-text1">'.cut($group_info['name'],40,true).'</span></div>';
+			echo '<div align="center" class="social-menu-title"><span class="social-menu-text1">'.cut($group_info['name'], GROUP_TITLE_LENGTH, true).'</span></div>';
 			echo '<ul class="social-menu-groups">';
 			echo $links;
 			echo '</ul>';

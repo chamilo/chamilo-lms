@@ -92,14 +92,12 @@ if($_GET['action'] == 'delete') {
 	}
 }
 
-
 Display::display_header($tool_name);
 if (!empty($_GET['warn'])) {
     Display::display_warning_message(urldecode($_GET['warn']));
 }
 
-
-echo Display::tag('h1', $session['name']);
+echo Display::tag('h1', Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
 echo Display::tag('h3', $tool_name);
 ?>
 <!-- General properties -->

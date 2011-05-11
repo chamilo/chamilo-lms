@@ -119,7 +119,6 @@ $curdirpathurl = urlencode($curdirpath);
 // If the path is not found (no document id), set the path to /
 $document_id = DocumentManager::get_document_id($_course, $curdirpath);
 
-
 if (!$document_id) {    
     $document_id = DocumentManager::get_document_id(api_get_course_info(), $curdirpath);
 }
@@ -169,7 +168,6 @@ $tool_visibility = $tool_row['visibility'];
 if ($tool_visibility == '0' && $to_group_id == '0' && !($is_allowed_to_edit || $group_member_with_upload_rights)) {
     api_not_allowed(true);
 }
-
 
 $htmlHeadXtra[] =
 "<script type=\"text/javascript\">
@@ -361,7 +359,7 @@ $image_files_only = '';
 if ($is_certificate_mode) {
     $interbreadcrumb[]= array('url' => '../gradebook/index.php', 'name' => get_lang('Gradebook'));
 } else {
-    if ( (isset($_GET['id']) && $_GET['id'] != 0) || isset($_GET['curdirpath'])) {
+    if ((isset($_GET['id']) && $_GET['id'] != 0) || isset($_GET['curdirpath'])) {
         $interbreadcrumb[]= array('url' => 'document.php', 'name' => get_lang('Documents'));
     } else {
         $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('Documents'));
@@ -714,7 +712,7 @@ if ($is_allowed_to_edit) {
 
 /*	TEMPLATE ACTION */
 //Only teacher and all users into their group
-if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)){
+if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)){
     if (isset($_GET['add_as_template']) && !isset($_POST['create_template'])) {
 
         $document_id_for_template = intval($_GET['add_as_template']);
@@ -816,13 +814,13 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
     }
 }
 
-
 /*	GET ALL DOCUMENT DATA FOR CURDIRPATH */
 if(isset($_GET['keyword']) && !empty($_GET['keyword'])) {
-    $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, $search=true);    
+    $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, true);    
 } else {
-    $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, $search=false);
+    $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
 }
+
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
 if ($folders === false) {
     $folders = array();
@@ -869,7 +867,9 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
 
     //while (list($key, $id) = each($docs_and_folders)) {
     foreach ($docs_and_folders as $key => $document_data) {
-        $row = array();
+        $row = array();        
+        $row['id']   = $document_data['id'];
+        $row['type'] = $document_data['filetype'];        
 
         // If the item is invisible, wrap it in a span with class invisible
         $invisibility_span_open  = ($document_data['visibility'] == 0) ? '<span class="invisible">' : '';
@@ -883,6 +883,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         } else {
             $document_name = basename($document_data['path']);
         }
+        $row['name'] = $document_name;
         // Data for checkbox
         if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
             $row[] = $document_data['path'];
@@ -951,6 +952,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         }
         $row[] = $last_edit_date;
         $row[] = $size;
+        $row[] = $document_name;
         $total_size = $total_size + $size;
 
         if ((isset($_GET['keyword']) && search_keyword($document_name, $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {            
@@ -1074,22 +1076,29 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     $column_show[] = 1;
 }
 $column_show[] = 0;
+$column_show[] = 0;
 
 $column_order = array();
 
-if (count($row) == 8) {
+if (count($row) == 12) {
+    //teacher
+    $column_order[2] = 8; //name
     $column_order[3] = 7;
     $column_order[4] = 6;
-} elseif (count($row) == 6) {
+} elseif (count($row) == 10) {
+    //student
+    $column_order[1] = 6;
     $column_order[2] = 5;
     $column_order[3] = 4;
 }
 
 $default_column = $is_allowed_to_edit ? 2 : 1;
 $tablename = $is_allowed_to_edit ? 'teacher_table' : 'student_table';
-$table = new SortableTableFromArrayConfig($sortable_data, $default_column, 20, $tablename, $column_show, $column_order, 'ASC');
 
-if(isset($_GET['keyword'])){
+//var_dump($column_show,$column_order);
+$table = new SortableTableFromArrayConfig($sortable_data, $default_column, 20, $tablename, $column_show, $column_order, 'ASC', true);
+
+if(isset($_GET['keyword'])) {
     $query_vars['keyword'] = Security::remove_XSS($_GET['keyword']);
 }else{
     $query_vars['curdirpath'] = $curdirpath;
@@ -1104,17 +1113,15 @@ $table->set_additional_parameters($query_vars);
 $column = 0;
 
 if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
-    $table->set_header($column++, '', false,array ('style' => 'width:30px;'));
+    $table->set_header($column++, '', false, array('style' => 'width:30px;'));
 }
-$table->set_header($column++, get_lang('Type'),true,array ('style' => 'width:30px;'));
+$table->set_header($column++, get_lang('Type'),true, array('style' => 'width:30px;'));
 $table->set_header($column++, get_lang('Name'));
-
-//$column_header[] = array(get_lang('Comment'), true); // Display comment under the document name
-$table->set_header($column++, get_lang('Size'),true,array ('style' => 'width:50px;'));
-$table->set_header($column++, get_lang('Date'),true,array ('style' => 'width:150px;'));
+$table->set_header($column++, get_lang('Size'),true, array('style' => 'width:50px;'));
+$table->set_header($column++, get_lang('Date'),true, array('style' => 'width:150px;'));
 // Admins get an edit column
 if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)) {
-    $table->set_header($column++, get_lang('Actions'), false,array ('style' => 'width:180px;'));
+    $table->set_header($column++, get_lang('Actions'), false, array ('style' => 'width:180px;'));
 }
 
 // Actions on multiple selected documents
@@ -1127,9 +1134,7 @@ if (count($docs_and_folders) > 1) {
         $table->set_form_actions($form_action, 'path');        
     }    
 }
-//echo '<div class="thumbnails yoxview">';
 $table->display();
-//echo '</div>';
 
 if (count($docs_and_folders) > 1) {
     if ($is_allowed_to_edit || $group_member_with_upload_rights) {

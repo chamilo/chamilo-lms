@@ -40,13 +40,21 @@ if (api_is_allowed_to_edit(null, true)) {
                     'all_not_done'  => get_lang('AllNotDone')
                     );
                     
-    
+    $today = api_convert_and_format_date(null, DATE_FORMAT_SHORT);
+    $exists_attendance_today = false;
     
     if (!empty($attendant_calendar_all)) {
         $values[''] = '---------------';
-        foreach($attendant_calendar_all as $attendance_date) {            
+        foreach($attendant_calendar_all as $attendance_date) {
+            if ($today == $attendance_date['date']) {
+                $exists_attendance_today = true; 
+            }                        
             $values[$attendance_date['id']] = $attendance_date['date_time'];
         }
+    }
+    
+    if (!$exists_attendance_today) {
+        Display::display_warning_message('ThereIsNoClassScheduledTodayTryPickingAnotherDay');
     }
     
     $form->addElement('select', 'filter', get_lang('Filter'), $values);   
@@ -61,7 +69,9 @@ if (api_is_allowed_to_edit(null, true)) {
     }   
     $form->setDefaults(array('filter'=>$default_filter));
     $param_filter = '&filter='.Security::remove_XSS($default_filter);
-
+    
+    
+    
     if (count($users_in_course) > 0) { 
         $form->display();  
     ?>

@@ -163,11 +163,11 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 		Display::display_footer();
 	}
 } else if ($_REQUEST['format'] == 'csv') {
-	$nfields = mysql_num_fields($result);
+	$nfields = multiquery_num_fields($result);
 	$columns = array();	
 	$columns_islink = array();
 	for ($i=0; $i < $nfields; $i++)	{
-		$columns[$i] = mysql_field_name($result, $i);
+		$columns[$i] = multiquery_field_name($result, $i);
 		if (substr($columns[$i], -5, 5) != '_link') {
 			$column_islink[$i] = false;
 			echo $columns[$i].',';
@@ -176,7 +176,7 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 	}
 
 	echo "\n";
-	while ($row = Database::fetch_row($result)) {
+	while ($row = multiquery_fetch_row($result)) {
 		for ($i = 0; $i<$nfields; $i++)
 			if (!$columns_islink[$i]) // ignore links
 				echo $row[$i].',';  // fixme

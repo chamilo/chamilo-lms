@@ -170,7 +170,7 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 		$columns[$i] = multiquery_field_name($result, $i);
 		if (substr($columns[$i], -5, 5) != '_link') {
 			$column_islink[$i] = false;
-			echo $columns[$i].',';
+			echo csv_escaping($columns[$i]).',';
 		} else 
 			$columns_islink[$i] = true;
 	}
@@ -179,9 +179,16 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 	while ($row = multiquery_fetch_row($result)) {
 		for ($i = 0; $i<$nfields; $i++)
 			if (!$columns_islink[$i]) // ignore links
-				echo $row[$i].',';  // fixme
+				echo csv_escaping($row[$i]).',';  // fixme
 		echo "\n";
 	}
 } else die(get_lang('UnknownFormat'));
 
+function csv_escaping($value, $csv_separator = ',') {
+	$value = str_replace('"','""',$value);
+	if (strpos($value, '""') or strpos($value, $csv_separator) or $value != trim($value) ) {
+		$value = '"'.$value.'"';
+	}
+	return $value;
+}
 ?>

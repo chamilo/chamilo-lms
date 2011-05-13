@@ -738,9 +738,10 @@ class Database {
      * @param resource		The result from a call to sql_query (e.g. Database::query)
      * @param string		Optional: "ASSOC","NUM" or "BOTH", as the constant used in mysql_fetch_array.
      * @return array		Array of results as returned by php
-     * @author Yannick Warnier <yannick.warnier@dokeos.com>
+     * @author Yannick Warnier <yannick.warnier@beeznest.com>
      */
     public static function fetch_array($result, $option = 'BOTH') {
+	if ($result === false) { return array(); }
         return $option == 'ASSOC' ? mysql_fetch_array($result, MYSQL_ASSOC) : ($option == 'NUM' ? mysql_fetch_array($result, MYSQL_NUM) : mysql_fetch_array($result));
     }
 

@@ -49,7 +49,6 @@ api_block_anonymous_users(); // only users who are logged in can proceed
 
 //$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>';
 //$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.toggle.js" type="text/javascript" language="javascript"></script>';
-print_r($_SESSION);
 /*
 	Table definitions
 */

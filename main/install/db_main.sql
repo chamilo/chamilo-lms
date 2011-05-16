@@ -2536,3 +2536,15 @@ CREATE TABLE stored_values (
 );
 ALTER TABLE stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
 ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
+
+DROP TABLE IF EXISTS stored_value_stack;
+CREATE TABLE stored_values_stack (
+	user_id INT NOT NULL,
+	sco_id INT NOT NULL,
+	stack_order INT NOT NULL,
+	course_id CHAR(40) NOT NULL,
+	sv_key CHAR(64) NOT NULL,
+	sv_value TEXT NOT NULL
+);
+ALTER TABLE stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
+ALTER TABLE stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);

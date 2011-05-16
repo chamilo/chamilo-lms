@@ -134,6 +134,15 @@ CREATE TABLE `event_type_message` (`id` int(11) NOT NULL AUTO_INCREMENT, `event_
 CREATE TABLE `user_rel_event_type` (`id` int(11) NOT NULL AUTO_INCREMENT, `user_id` int(11) NOT NULL, `event_type_id` int(11) NOT NULL, PRIMARY KEY (`id`));
 INSERT INTO `event_type` VALUES (1, 'course_deleted','courseDeletedTitle','courseDeletedComment'),(2,'course_created','courseCreatedTitle','courseCreatedComment'),(3,'user_deleted','userDeletedTitle','userDeletedComment'),(4,'user_created','userCreatedTitle','userCreatedComment'), (5, 'session_created','sessionCreatedTitle','sessionCreatedComment'), (6,'session_deleted','sessionDeletedTitle','sessionDeletedComment'), (7,'session_category_created','sessionCategoryCreatedTitle','sessionCategoryCreatedComment'),(8,'session_category_deleted','sessionCategoryDeletedTitle','sessionCategoryDeletedComment'),(9,'settings_changed','settingsChangedTitle','settingsChangedComment'),(10,'user_subscribed','userSubscribedTitle','userSubscribedComment'), (11,'user_unsubscribed','userUnsubscribedTitle','userUnsubscribedComment');
 INSERT INTO `event_type_message` (`id`,`event_type_id`, `language_id`, `message`,`subject`) VALUES (1,4,10,'Bonjour, \r\n\r\nL\'utilisateur %username% (%firstname% %lastname%) a été créé.\r\nEmail : %mail%\r\n\r\nBien à vous.',''),(2,1,10,'Delete formation',''),(3,2,10,'Create formation',''),(4,3,10,'Bonjour, \r\n\r\nL\'utilisateur %username% (%firstname% %lastname%) a été supprimé.\r\n\r\nBien à vous.',''),(6,5,10,'Create session test',''),(7,6,10,'Delete session',''),(8,7,10,'Create category session',''),(9,8,10,'Delete category session',''),(10,9,10,'Change setting',''),(11,10,10,'Subscribe',''),(12,11,10,'Unsubscribe','');
+-- 
+-- Table structure for LP custom storage API
+--
+CREATE TABLE stored_values (user_id INT NOT NULL, sco_id INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL );
+ALTER TABLE stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
+ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
+CREATE TABLE stored_values_stack (user_id INT NOT NULL, sco_id INT NOT NULL, stack_order INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL );
+ALTER TABLE stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
+ALTER TABLE stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
 
 -- xxSTATSxx
 CREATE TABLE track_e_item_property(id int NOT NULL auto_increment PRIMARY KEY, course_id int NOT NULL, item_property_id int NOT NULL, title varchar(255), content text, progress int NOT NULL default 0, lastedit_date datetime NOT NULL default '0000-00-00 00:00:00', lastedit_user_id int  NOT NULL, session_id int NOT NULL default 0);
@@ -198,10 +207,3 @@ INSERT INTO course_setting(variable,value,category) VALUES ('email_alert_student
 ALTER TABLE lp ADD COLUMN hide_toc_frame TINYINT NOT NULL DEFAULT 0;
 
 alter table lp_item_view modify column suspend_data longtext;
-
--- 
--- Table structure for LP custom storage API
---
-CREATE TABLE stored_values (user_id INT NOT NULL, sco_id INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL );
-ALTER TABLE stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
-ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);

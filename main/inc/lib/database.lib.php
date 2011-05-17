@@ -43,6 +43,8 @@ define('TABLE_MAIN_SYSTEM_TEMPLATE', 		'system_template');
 define('TABLE_MAIN_OPENID_ASSOCIATION', 	'openid_association');
 define('TABLE_MAIN_REPORTS_KEYS',			'reports_keys');
 define('TABLE_MAIN_REPORTS_VALUES', 			'reports_values');
+define('TABLE_MAIN_STORED_VALUES',			'stored_values');
+define('TABLE_MAIN_STORED_VALUES_STACK',	'stored_values_stack');
 
 // Gradebook
 define('TABLE_MAIN_GRADEBOOK_CATEGORY', 	'gradebook_category');

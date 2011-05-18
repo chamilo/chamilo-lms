@@ -306,10 +306,21 @@ if ($display_all_form) {
                 if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
                 break;
             case USER_FIELD_TYPE_SELECT:
+                $get_lang_variables = false;
+                if (in_array($field_details[1], array('mail_notify_message','mail_notify_invitation', 'mail_notify_group_message'))) {
+                    $get_lang_variables = true;
+                }                
                 $options = array();
                 foreach($field_details[9] as $option_id => $option_details) {
-                    $options[$option_details[1]] = $option_details[2];
+                    //$options[$option_details[1]] = $option_details[2];
+                    if ($get_lang_variables) {
+                        $options[$option_details[1]] = get_lang($option_details[2]);
+                    }
                 }
+                if ($get_lang_variables) {
+                    $field_details[3] = get_lang($field_details[3]);
+                }
+                
                 $form->addElement('select','extra_'.$field_details[1], $field_details[3], $options, '');
                 if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
                 break;

@@ -323,8 +323,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 					<div class="formw">
 						<button class="save" type="Submit" name="submitLink" value="OK">'.get_lang('SaveLink').'</button>
 					</div>
-				</div>';
-		echo '</div>';
+				</div>';		
 		echo '</form>';
 		
 	} elseif(($_GET['action'] == 'addcategory' || $_GET['action'] == 'editcategory') && !$submit_category) {

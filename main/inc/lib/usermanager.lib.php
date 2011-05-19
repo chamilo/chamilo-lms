@@ -880,8 +880,7 @@ class UserManager
 		$big    = new image($source_file); // This is the original picture.
 
 		$ok = false;
-		$detected = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG');
-		var_dump($type);exit;
+		$detected = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG');		
 		if (in_array($type, array_keys($detected))) {
 			$ok = $small->send_image($detected[$type], $path.'small_'.$filename)
 				&& $medium->send_image($detected[$type], $path.'medium_'.$filename)

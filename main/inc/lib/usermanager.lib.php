@@ -871,7 +871,8 @@ class UserManager
 		}
 
 		// Storing the new photos in 4 versions with various sizes.        
-		$picture_info = @getimagesize($source_file);		
+		$picture_info = api_getimagesize($source_file);		
+		
 		$type = $picture_info[2];
 		$small  = self::resize_picture($source_file, 22);		
 		$medium = self::resize_picture($source_file, 85);
@@ -880,6 +881,7 @@ class UserManager
 
 		$ok = false;
 		$detected = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG');
+		var_dump($type);exit;
 		if (in_array($type, array_keys($detected))) {
 			$ok = $small->send_image($detected[$type], $path.'small_'.$filename)
 				&& $medium->send_image($detected[$type], $path.'medium_'.$filename)
@@ -2283,21 +2285,24 @@ class UserManager
         if (!class_exists('image')) {
             require_once api_get_path(LIBRARY_PATH).'image.lib.php';
         }
-        $temp = new image($file);        
-        list($width, $height) = api_getimagesize($file);          
-        if ($width >= $height) {
-            if ($width >= $max_size_for_picture) {
-              // scale height
-              $new_height = round($height * ($max_size_for_picture / $width));
-              $temp->resize($max_size_for_picture, $new_height, 0);
-            }
-        } else { // height > $width            
-            if ($height >= $max_size_for_picture) {
-                // scale width
-                $new_width = round($width * ($max_size_for_picture / $height));
-                $temp->resize($new_width, $max_size_for_picture, 0);
-            }
-        }   
+        $temp = null;
+        if (file_exists($file)) {
+            $temp = new image($file);        
+            list($width, $height) = api_getimagesize($file);          
+            if ($width >= $height) {
+                if ($width >= $max_size_for_picture) {
+                  // scale height
+                  $new_height = round($height * ($max_size_for_picture / $width));
+                  $temp->resize($max_size_for_picture, $new_height, 0);
+                }
+            } else { // height > $width            
+                if ($height >= $max_size_for_picture) {
+                    // scale width
+                    $new_width = round($width * ($max_size_for_picture / $height));
+                    $temp->resize($new_width, $max_size_for_picture, 0);
+                }
+            }   
+        }
         return $temp;
     }
 

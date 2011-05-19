@@ -36,22 +36,22 @@ function addlinkcategory($type) {
 	if ($type == 'link') {
 		$tbl_link = Database :: get_course_table(TABLE_LINK);
 
-		$title = Security :: remove_XSS(stripslashes($_POST['title']));
-		$urllink = Security :: remove_XSS($_POST['urllink']);
-		$description = Security :: remove_XSS(stripslashes($_POST['description']));
-		$selectcategory = Security :: remove_XSS($_POST['selectcategory']);
+		$title            = Security :: remove_XSS(stripslashes($_POST['title']));
+		$urllink          = Security :: remove_XSS($_POST['urllink']);
+		$description      = Security :: remove_XSS($_POST['description']);
+		$selectcategory   = Security :: remove_XSS($_POST['selectcategory']);
 
 		if ($_POST['onhomepage'] == '') {
 			$onhomepage = 0;
 			$target = '_self'; // Default target.
 		} else {
-			$onhomepage = Security :: remove_XSS($_POST['onhomepage']);
-			$target = Security :: remove_XSS($_POST['target_link']);
+			$onhomepage  = Security :: remove_XSS($_POST['onhomepage']);
+			$target      = Security :: remove_XSS($_POST['target_link']);
 		}
 
-		$urllink = trim($urllink);
-		$title = trim($title);
-		$description = trim($description);
+		$urllink      = trim($urllink);
+		$title        = trim($title);
+		$description  = trim($description);
 
 		// We ensure URL to be absolute.
 		if (strpos($urllink, '://') === false) {
@@ -73,14 +73,14 @@ function addlinkcategory($type) {
 			$ok = false;
 		} else {
 			// Looking for the largest order number for this category.
-			$result = Database :: query("SELECT MAX(display_order) FROM  " . $tbl_link . " WHERE category_id='" . Database :: escape_string($_POST['selectcategory']) . "'");
+			$result = Database :: query("SELECT MAX(display_order) FROM  " . $tbl_link . " WHERE category_id = '" . intval($_POST['selectcategory']) . "'");
 			list ($orderMax) = Database :: fetch_row($result);
 			$order = $orderMax +1;
 
 			$session_id = api_get_session_id();
 
 			$sql = "INSERT INTO " . $tbl_link . " (url, title, description, category_id, display_order, on_homepage, target, session_id)
-			                VALUES ('" . Database :: escape_string($urllink) . "','" . Database :: escape_string($title) . "','" . Database :: escape_string($description) . "','" .
+			        VALUES ('" . Database :: escape_string($urllink) . "','" . Database :: escape_string($title) . "','" . Database :: escape_string($description) . "','" .
 			Database :: escape_string($selectcategory) . "','" . Database :: escape_string($order) . "', '" . Database :: escape_string($onhomepage) . "','" .
 			Database :: escape_string($target) . "','" . Database :: escape_string($session_id) . "')";
 			$catlinkstatus = get_lang('LinkAdded');
@@ -157,19 +157,16 @@ function addlinkcategory($type) {
 					Database :: query($sql);
 				}
 			}
-
 			unset ($urllink, $title, $description, $selectcategory);
-
 			Display :: display_confirmation_message(get_lang('LinkAdded'));
 		}
-	}
-	elseif ($type == 'category') {
+	} elseif ($type == 'category') {
 		$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
 
 		$category_title = trim($_POST['category_title']);
-		$description = trim($_POST['description']);
+		$description    = trim($_POST['description']);
 
-		if (empty ($category_title)) {
+		if (empty($category_title)) {
 			$msgErr = get_lang('GiveCategoryName');
 			Display :: display_error_message(get_lang('GiveCategoryName'));
 			$ok = false;
@@ -178,10 +175,10 @@ function addlinkcategory($type) {
 			$result = Database :: query("SELECT MAX(display_order) FROM  " . $tbl_categories);
 			list ($orderMax) = Database :: fetch_row($result);
 			$order = $orderMax +1;
-
+			$order = intval($order);
 			$session_id = api_get_session_id();
-
-			$sql = "INSERT INTO " . $tbl_categories . " (category_title, description, display_order, session_id) VALUES ('" . Security :: remove_XSS($category_title) . "','" . Security :: remove_XSS($description) . "', '$order', '$session_id')";
+			$sql = "INSERT INTO ".$tbl_categories." (category_title, description, display_order, session_id) 
+			        VALUES ('" .Database::escape_string($category_title) . "', '" . Database::escape_string($description) . "', '$order', '$session_id')";
 			Database :: query($sql);
 
 			$catlinkstatus = get_lang('CategoryAdded');
@@ -195,10 +192,8 @@ function addlinkcategory($type) {
 		global $_user;
 		global $_course;
 		global $nameTools;
-
 		api_item_property_update($_course, TOOL_LINK, $link_id, 'LinkAdded', $_user['user_id']);
 	}
-
 	return $ok;
 }
 
@@ -207,25 +202,22 @@ function addlinkcategory($type) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function deletelinkcategory($type) {
-
 	global $catlinkstatus;
-	global $_course;
-	global $_user;
+	global $_course;	
 	$tbl_link = Database :: get_course_table(TABLE_LINK);
 	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
 	$TABLE_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 	if ($type == 'link') {
-
 		global $id;
 		// -> Items are no longer fysically deleted, but the visibility is set to 2 (in item_property).
 		// This will make a restore function possible for the platform administrator.
 		if (isset ($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
-			$sql = "UPDATE $tbl_link SET on_homepage='0' WHERE id='" . Database :: escape_string($_GET['id']) . "'";
+			$sql = "UPDATE $tbl_link SET on_homepage='0' WHERE id='" . intval($_GET['id']) . "'";
 			Database :: query($sql);
 		}
 
-		api_item_property_update($_course, TOOL_LINK, $id, 'delete', $_user['user_id']);
+		api_item_property_update($_course, TOOL_LINK, $id, 'delete', api_get_user_id());
 		delete_link_from_search_engine(api_get_course_id(), $id);
 		$catlinkstatus = get_lang('LinkDeleted');
 		unset ($id);
@@ -243,7 +235,6 @@ function deletelinkcategory($type) {
 			$catlinkstatus = get_lang('CategoryDeleted');
 			unset ($id);
 			Database :: query($sql);
-
 			Display :: display_confirmation_message(get_lang('CategoryDeleted'));
 		}
 	}
@@ -330,11 +321,11 @@ function editlinkcategory($type) {
 		if ($_POST['submitLink']) {
 
 			// Ivan, 13-OCT-2010: It is a litle bit messy code below, just in case I added some extra-security checks here.
-			$_POST['urllink'] = trim(Security :: remove_XSS($_POST['urllink']));
-			$_POST['title'] = trim(Security :: remove_XSS(stripslashes($_POST['title'])));
-			$_POST['description'] = trim(Security :: remove_XSS(stripslashes($_POST['description'])));
+			$_POST['urllink']        = trim(Security :: remove_XSS($_POST['urllink']));
+			$_POST['title']          = trim(Security :: remove_XSS($_POST['title']));
+			$_POST['description']    = trim(Security :: remove_XSS($_POST['description']));
 			$_POST['selectcategory'] = intval($_POST['selectcategory']);
-			$_POST['id'] = intval($_POST['id']);
+			$_POST['id']             = intval($_POST['id']);
 
 			// We ensure URL to be absolute.
 			if (strpos($_POST['urllink'], '://') === false) {
@@ -355,8 +346,8 @@ function editlinkcategory($type) {
 				return false;
 			}
 
-			$onhomepage = Security :: remove_XSS($_POST['onhomepage']);
-			$target = Security :: remove_XSS($_POST['target_link']);
+			$onhomepage  = Security :: remove_XSS($_POST['onhomepage']);
+			$target      = Database::escape_string($_POST['target_link']);
 			if (empty ($mytarget)) {
 				$mytarget = '_self';
 			}
@@ -384,7 +375,7 @@ function editlinkcategory($type) {
 			"category_id='" . Database :: escape_string($_POST['selectcategory']) . "', " .
 			"display_order='" . $max_display_order . "', " .
 			"on_homepage='" . Database :: escape_string($onhomepage) . " ' $mytarget " .
-			" WHERE id='" . Database :: escape_string($_POST['id']) . "'";
+			" WHERE id='" . intval($_POST['id']) . "'";
 			Database :: query($sql);
 
 			// Update search enchine and its values table if enabled.
@@ -470,16 +461,14 @@ function editlinkcategory($type) {
 						$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
 						Database :: query($sql);
 						$sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
-						                            VALUES (NULL , \'%s\', \'%s\', %s, %s)';
+						        VALUES (NULL , \'%s\', \'%s\', %s, %s)';
 						$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id, $did);
 						Database :: query($sql);
 					}
 				}
 			}
-
 			// "WHAT'S NEW" notification: update table last_toolEdit.
 			api_item_property_update($_course, TOOL_LINK, $_POST['id'], 'LinkUpdated', $_user['user_id']);
-
 			Display :: display_confirmation_message(get_lang('LinkModded'));
 		}
 	}
@@ -546,6 +535,7 @@ function showlinksofcategory($catid) {
 	// Condition for the session.
 	$session_id = api_get_session_id();
 	$condition_session = api_get_session_condition($session_id, true, true);
+	$catid = intval($catid);
 
 	$sqlLinks = "SELECT * FROM " . $tbl_link . " link, " . $TABLE_ITEM_PROPERTY . " itemproperties WHERE itemproperties.tool='" . TOOL_LINK . "' AND link.id=itemproperties.ref AND link.category_id='" . $catid . "' AND (itemproperties.visibility='0' OR itemproperties.visibility='1') $condition_session ORDER BY link.display_order DESC";
 	$result = Database :: query($sqlLinks);
@@ -671,7 +661,7 @@ function movecatlink($catlinkid) {
 	}
 
 	// This code is copied and modified from announcements.php.
-	if (!empty ($sortDirection)) {
+	if (!empty($sortDirection)) {
 		if (!in_array(trim(strtoupper($sortDirection)), array (
 				'ASC',
 				'DESC'
@@ -701,7 +691,6 @@ function movecatlink($catlinkid) {
 
 				break;
 			}
-
 			if ($sortrow['id'] == $thiscatlinkId) {
 				$thislinkOrdre = $sortrow['display_order'];
 				$thislinkFound = true;
@@ -719,14 +708,14 @@ function movecatlink($catlinkid) {
 function get_cat($catname) {
 	// Get category id (existing or make new).
 	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
-	$result = Database :: query("SELECT id FROM " . $tbl_categories . " WHERE category_title='" . addslashes($catname) . "'");
+	$result = Database :: query("SELECT id FROM " . $tbl_categories . " WHERE category_title='" . Database::escape_string($catname) . "'");
 	if (Database :: num_rows($result) >= 1 && ($row = Database :: fetch_array($result))) {
 		return $row['id']; // Several categories with same name: take the first.
 	}
 
 	$result = Database :: query("SELECT MAX(display_order) FROM " . $tbl_categories);
 	list ($max_order) = Database :: fetch_row($result);
-	Database :: query("INSERT INTO " . $tbl_categories . " (category_title, description, display_order) VALUES ('" . addslashes($catname) . "','','" . ($max_order +1) . "')");
+	Database :: query("INSERT INTO " . $tbl_categories . " (category_title, description, display_order) VALUES ('" . Database::escape_string($catname) . "','','" . ($max_order +1) . "')");
 	return Database :: insert_id();
 }
 

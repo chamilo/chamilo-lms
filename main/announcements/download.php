@@ -34,6 +34,10 @@ $doc_url = str_replace('///', '&', $doc_url);
 $doc_url = str_replace(' ', '+', $doc_url);
 $doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
 
+if (strpos($doc_url,'../') OR strpos($doc_url,'/..')) {
+   $doc_url = '';
+}
+
 if (!isset($_course)) {
 	api_not_allowed(true);
 }

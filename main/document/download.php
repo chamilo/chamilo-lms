@@ -37,6 +37,10 @@ $doc_url = str_replace(' ', '+', $doc_url);
 
 $doc_url = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''), $doc_url); //echo $doc_url;
 
+if (strpos($doc_url,'../') OR strpos($doc_url,'/..')) {
+   $doc_url = '';
+}
+
 // Dealing with image included into survey: when users receive a link towards a
 // survey while not being authenticated on the plateform.
 // The administrator should probably be able to disable this code through admin

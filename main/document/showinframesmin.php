@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@author Juan Carlos Raña Trabado (herodoto@telefonica.net)
+ *	@author Juan Carlos Raï¿½a Trabado (herodoto@telefonica.net)
  *  
  *	@package chamilo.document
  */
@@ -83,13 +83,12 @@ header('Cache-Control: no-cache, must-revalidate');
 header('Pragma: no-cache');
 $browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' - '.$file;
 
-
 $js_glossary_in_documents = '';
 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
     $js_glossary_in_documents = '	//	    $(document).ready(function() {
                                     $.frameReady(function() {
                                        //  $("<div>I am a div courses</div>").prependTo("body");
-                                      }, "top.mainFrame",
+                                      }, "mainFrame",
                                       { load: [
                                               {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
                                             {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
@@ -103,7 +102,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                       $.frameReady(function(){
                                        //  $("<div>I am a div courses</div>").prependTo("body");
 
-                                      }, "top.mainFrame",
+                                      }, "mainFrame",
                                       { load: [
                                               {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
                                             {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
@@ -113,7 +112,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                       );
                                 //   });';
 }
-
+$htmlHeadXtra[] = api_get_js('jquery.js');
 $htmlHeadXtra[] = '<script type="text/javascript">
 <!--
     var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js\';
@@ -129,20 +128,20 @@ $htmlHeadXtra[] = '
         //HeaderHeight = document.getElementById("header").offsetHeight;
         //FooterHeight = document.getElementById("footer").offsetHeight;
         //document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))+60)+"px";
-        my_iframe = document.getElementById("mainFrame");
-        new_height = my_iframe.contentWindow.document.body.scrollHeight;
-        my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
+        my_iframe           = document.getElementById("mainFrame");
+        new_height          = my_iframe.contentWindow.document.body.scrollHeight;
+        my_iframe.height    = my_iframe.contentWindow.document.body.scrollHeight + "px";        
     };
 
     // Fixes the content height of the frame
     window.onload = function() {
-        updateContentHeight();
+         updateContentHeight();    
         '.$js_glossary_in_documents.'
     }
 -->
 </script>';
 
-////
+Display::display_reduced_header();
 echo "<div align=\"center\">";
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
 
@@ -157,8 +156,7 @@ if ($pathinfo['extension']=='wav' && api_get_setting('enable_nanogong') == 'true
 			echo '<param name="ShowRecordButton" value="false" />';
 		echo '</applet>';
 	echo '</div>';
-}
-else{
-	if ($pathinfo['extension']=='swf'){ $widht='83%'; $height='83%';}else{$widht='100%'; $height='100%';}
-	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$widht.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'"></iframe>';
+} else {
+	if ($pathinfo['extension']=='swf'){ $width='83%'; $height='83%';} else {$width='100%'; $height='';}
+	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$width.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'"></iframe>';
 }

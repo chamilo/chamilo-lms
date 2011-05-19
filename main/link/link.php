@@ -87,7 +87,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'editlink') {
 }
 
 // Database Table definitions
-$tbl_link = Database::get_course_table(TABLE_LINK);
+$tbl_link       = Database::get_course_table(TABLE_LINK);
 $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 
 // Statistics
@@ -415,12 +415,14 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 	$sqlcategories = "SELECT * FROM ".$tbl_categories." $condition_session ORDER BY display_order DESC";
 	$resultcategories = Database::query($sqlcategories);
 
-	echo '<table class="data_table">';
+	
 	// Displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
 	$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE category_id=0 OR category_id IS NULL";
 	$result = Database::query($sqlLinks);
 	$numberofzerocategory = Database::num_rows($result);
-	if ($numberofzerocategory !== 0) {
+	echo '<table class="data_table">';
+	
+	if ($numberofzerocategory !== 0) {	    
 		echo '<tr><th style="font-weight: bold; text-align:left;padding-left: 10px;"><i>'.get_lang('General').'</i></th></tr>';
 		echo '</table>';
 		showlinksofcategory(0);

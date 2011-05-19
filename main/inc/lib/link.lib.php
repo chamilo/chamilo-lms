@@ -540,60 +540,61 @@ function showlinksofcategory($catid) {
 	$sqlLinks = "SELECT * FROM " . $tbl_link . " link, " . $TABLE_ITEM_PROPERTY . " itemproperties WHERE itemproperties.tool='" . TOOL_LINK . "' AND link.id=itemproperties.ref AND link.category_id='" . $catid . "' AND (itemproperties.visibility='0' OR itemproperties.visibility='1') $condition_session ORDER BY link.display_order DESC";
 	$result = Database :: query($sqlLinks);
 	$numberoflinks = Database :: num_rows($result);
-
-	echo '<table class="data_table" width="100%">';
-	$i = 1;
-	while ($myrow = Database :: fetch_array($result)) {
-
-		// Validacion when belongs to a session.
-		$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
-
-		$css_class = $i % 2 == 0 ? $css_class = 'row_odd' : $css_class = 'row_even';
-
-		$myrow[3] = text_filter($myrow[3]);
-		if ($myrow['visibility'] == '1') {
-			echo '<tr class="', $css_class, '"><td align="center" valign="middle" width="15"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="_blank"><img src="../../main/img/link.gif" border="0" alt="', get_lang('Link'), '"/></a></td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="', $myrow['target'], '">', Security :: remove_XSS($myrow[2]), '</a>', $session_img, '<br />', $myrow[3];
-		} else {
-			if (api_is_allowed_to_edit(null, true)) {
-				echo '<tr class="', $css_class, '"><td align="center" valign="middle" width="15"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], "&amp;link_url=", urlencode($myrow[1]), '" target="_blank" class="invisible">', Display :: return_icon('link_na.gif', get_lang('Link')), '</a></td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="', $myrow['target'], '"  class="invisible">', Security :: remove_XSS($myrow[2]), "</a>\n", $session_img, '<br />', $myrow[3];
-			}
-		}
-
-		echo '<td style="text-align:center;">';
-		if (api_is_allowed_to_edit(null, true)) {
-			if ($session_id == $myrow['session_id']) {
-
-				echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;action=editlink&amp;category=' . (!empty ($category) ? $category : '') . '&amp;id=' . $myrow[0] . '&amp;urlview=' . $urlview . '" title="' . get_lang('Modify') . '">' . Display :: return_icon('edit.png', get_lang('Modify'), array (), 22) . '</a>';
-				// DISPLAY MOVE UP COMMAND only if it is not the top link.
-				if ($i != 1) {
-					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;urlview=' . $urlview . '&amp;up=', $myrow[0], '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), 22) . '', "</a>\n";
-				} else {
-					echo Display :: return_icon('up.png', get_lang('Up'), array (), 22) . '</a>';
-				}
-
-				// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
-				if ($i < $numberoflinks) {
-					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;urlview=' . $urlview . '&amp;down=' . $myrow[0] . '" title="' . get_lang('Down') . '">' . Display :: return_icon('down.png', get_lang('Down'), array (), 22) . '', "</a>\n";
-				} else {
-					echo Display :: return_icon('down_na.png', get_lang('Down'), array (), 22) . '', "</a>\n";
-				}
-
-				if ($myrow['visibility'] == '1') {
-					echo '<a href="link.php?' . api_get_cidreq() . '&amp;action=invisible&amp;id=' . $myrow[0] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Hide') . '">' . Display :: return_icon('visible.png', get_lang('Hide'), array (), 22) . '</a>';
-				}
-				if ($myrow['visibility'] == '0') {
-					echo ' <a href="link.php?' . api_get_cidreq() . '&amp;action=visible&amp;id=' . $myrow[0] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Show') . '">' . Display :: return_icon('invisible.png', get_lang('Show'), array (), 22) . '</a>';
-				}
-				echo ' <a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;action=deletelink&amp;id=', $myrow[0], '&amp;urlview=', $urlview, "\" onclick=\"javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "')) return false;\" title=\"" . get_lang('Delete') . '">' . Display :: return_icon('delete.png', get_lang('Delete'), array (), 22) . '</a>';
-
-			} else {
-				echo get_lang('EditionNotAvailableFromSession');
-			}
-		}
-		echo '</td></tr>';
-		$i++;
+	if ($numberoflinks > 0) {
+    	echo '<table class="data_table" width="100%">';
+    	$i = 1;
+    	while ($myrow = Database :: fetch_array($result)) {
+    
+    		// Validacion when belongs to a session.
+    		$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
+    
+    		$css_class = $i % 2 == 0 ? $css_class = 'row_odd' : $css_class = 'row_even';
+    
+    		$myrow[3] = text_filter($myrow[3]);
+    		if ($myrow['visibility'] == '1') {
+    			echo '<tr class="', $css_class, '"><td align="center" valign="middle" width="15"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="_blank"><img src="../../main/img/link.gif" border="0" alt="', get_lang('Link'), '"/></a></td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="', $myrow['target'], '">', Security :: remove_XSS($myrow[2]), '</a>', $session_img, '<br />', $myrow[3];
+    		} else {
+    			if (api_is_allowed_to_edit(null, true)) {
+    				echo '<tr class="', $css_class, '"><td align="center" valign="middle" width="15"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], "&amp;link_url=", urlencode($myrow[1]), '" target="_blank" class="invisible">', Display :: return_icon('link_na.gif', get_lang('Link')), '</a></td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="', $myrow['target'], '"  class="invisible">', Security :: remove_XSS($myrow[2]), "</a>\n", $session_img, '<br />', $myrow[3];
+    			}
+    		}
+    
+    		echo '<td style="text-align:center;">';
+    		if (api_is_allowed_to_edit(null, true)) {
+    			if ($session_id == $myrow['session_id']) {
+    
+    				echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;action=editlink&amp;category=' . (!empty ($category) ? $category : '') . '&amp;id=' . $myrow[0] . '&amp;urlview=' . $urlview . '" title="' . get_lang('Modify') . '">' . Display :: return_icon('edit.png', get_lang('Modify'), array (), 22) . '</a>';
+    				// DISPLAY MOVE UP COMMAND only if it is not the top link.
+    				if ($i != 1) {
+    					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;urlview=' . $urlview . '&amp;up=', $myrow[0], '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), 22) . '', "</a>\n";
+    				} else {
+    					echo Display :: return_icon('up.png', get_lang('Up'), array (), 22) . '</a>';
+    				}
+    
+    				// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
+    				if ($i < $numberoflinks) {
+    					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;urlview=' . $urlview . '&amp;down=' . $myrow[0] . '" title="' . get_lang('Down') . '">' . Display :: return_icon('down.png', get_lang('Down'), array (), 22) . '', "</a>\n";
+    				} else {
+    					echo Display :: return_icon('down_na.png', get_lang('Down'), array (), 22) . '', "</a>\n";
+    				}
+    
+    				if ($myrow['visibility'] == '1') {
+    					echo '<a href="link.php?' . api_get_cidreq() . '&amp;action=invisible&amp;id=' . $myrow[0] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Hide') . '">' . Display :: return_icon('visible.png', get_lang('Hide'), array (), 22) . '</a>';
+    				}
+    				if ($myrow['visibility'] == '0') {
+    					echo ' <a href="link.php?' . api_get_cidreq() . '&amp;action=visible&amp;id=' . $myrow[0] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Show') . '">' . Display :: return_icon('invisible.png', get_lang('Show'), array (), 22) . '</a>';
+    				}
+    				echo ' <a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;action=deletelink&amp;id=', $myrow[0], '&amp;urlview=', $urlview, "\" onclick=\"javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "')) return false;\" title=\"" . get_lang('Delete') . '">' . Display :: return_icon('delete.png', get_lang('Delete'), array (), 22) . '</a>';
+    
+    			} else {
+    				echo get_lang('EditionNotAvailableFromSession');
+    			}
+    		}
+    		echo '</td></tr>';
+    		$i++;
+    	}
+    	echo '</table>';
 	}
-	echo '</table>';
 }
 
 /**

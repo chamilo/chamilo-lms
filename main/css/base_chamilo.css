@@ -55,3 +55,7 @@
 div.admin_section {
   width: 44%;	
 }
+
+#Header2Right ul {
+	width:50%;
+}

@@ -87,21 +87,15 @@ $(document).ready( function() {
 });
 </script>';
 
-// Session
-/*
-if (isset($_GET['id_session'])) {
-    $_SESSION['id_session'] = intval($_GET['id_session']);
-}*/
 // Create directory certificates
 DocumentManager::create_directory_certificate_in_course(api_get_course_id());
 
 //Hack in order to use document.php?id=X 
-if (isset($_GET['id'])) {
-    $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
+if (isset($_REQUEST['id'])) {
+    $document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id());
     //@todo replace all 
     $_GET['curdirpath'] = $document_data['path'];    
 }
-
 
 // What's the current path?
 // We will verify this a bit further down
@@ -359,7 +353,7 @@ $image_files_only = '';
 if ($is_certificate_mode) {
     $interbreadcrumb[]= array('url' => '../gradebook/index.php', 'name' => get_lang('Gradebook'));
 } else {
-    if ((isset($_GET['id']) && $_GET['id'] != 0) || isset($_GET['curdirpath'])) {
+    if ((isset($_GET['id']) && $_GET['id'] != 0) || isset($_GET['curdirpath']) || isset($_GET['createdir'])) {
         $interbreadcrumb[]= array('url' => 'document.php', 'name' => get_lang('Documents'));
     } else {
         $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('Documents'));
@@ -400,7 +394,7 @@ for ($i = 0; $i < $array_len; $i++) {
     //does not repeat the name group in the url
     if (!empty($_SESSION['_gid'])) {
         unset($dir_array[1]);
-        }
+    }
     $dir_acum .= $dir_array[$i].'/';
 }
 
@@ -673,7 +667,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folde
 
     // Show them the form for the directory name
     if (isset($_GET['createdir'])) {
-        echo create_dir_form();
+        echo create_dir_form($document_id);
     }
 }
 

@@ -701,10 +701,11 @@ function display_user_link_document($user_id, $name) {
  * Creates form that asks for the directory name.
  * @return string	html-output text for the form
  */
-function create_dir_form() {
+function create_dir_form($current_dir_id) {
     global $document_id;
     $new_folder_text = '<form action="'.api_get_self().'" method="post">';
-    $new_folder_text .= '<input type="hidden" name="dir_id" value="'.$document_id.'" />';
+    $new_folder_text .= '<input type="hidden" name="dir_id" value="'.intval($document_id).'" />';
+    $new_folder_text .= '<input type="hidden" name="id" value="'.intval($current_dir_id).'" />';
 
     // Form title
     $new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateDir').'</div></div>';

@@ -179,26 +179,27 @@ class Evaluation implements GradebookItem
 		return $alleval;
 	}
 
-    private function create_evaluation_objects_from_sql_result($result)
-    {
+    private function create_evaluation_objects_from_sql_result($result) {
     	$alleval=array();
-		while ($data=Database::fetch_array($result)) {
-			$eval= new Evaluation();
-			$eval->set_id($data['id']);
-			$eval->set_name($data['name']);
-			$eval->set_description($data['description']);
-			$eval->set_user_id($data['user_id']);
-			$eval->set_course_code($data['course_code']);
-			$eval->set_category_id($data['category_id']);
-			$eval->set_date(api_get_local_time($data['created_at']));
-			$eval->set_weight($data['weight']);
-			$eval->set_max($data['max']);
-			$eval->set_visible($data['visible']);
-			$eval->set_type($data['type']);
-			$eval->set_locked($data['locked']);
-			
-			$alleval[]=$eval;
-		}
+    	if (Database::num_rows($result)) {
+    		while ($data = Database::fetch_array($result)) {
+    			$eval= new Evaluation();
+    			$eval->set_id($data['id']);
+    			$eval->set_name($data['name']);
+    			$eval->set_description($data['description']);
+    			$eval->set_user_id($data['user_id']);
+    			$eval->set_course_code($data['course_code']);
+    			$eval->set_category_id($data['category_id']);
+    			$eval->set_date(api_get_local_time($data['created_at']));
+    			$eval->set_weight($data['weight']);
+    			$eval->set_max($data['max']);
+    			$eval->set_visible($data['visible']);
+    			$eval->set_type($data['type']);
+    			$eval->set_locked($data['locked']);
+    			
+    			$alleval[]=$eval;
+    		}
+    	}
 		return $alleval;
     }
 

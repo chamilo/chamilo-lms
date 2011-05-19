@@ -62,4 +62,9 @@ div.admin_section {
 	width:50%;
 }
 
+#toolshortcuts_horizontal {
+	border-top:1px solid #ccc; 
+	width:92%;
+	padding: 8px 0px 2px 0; 
+}
 

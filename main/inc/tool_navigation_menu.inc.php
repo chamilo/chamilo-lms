@@ -205,22 +205,31 @@ function show_navigation_menu() {
  * Show a toolbar with shortcuts to the course tool
  */
 function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL) {
-	$navigation_items = get_navigation_items(false);
-	foreach ($navigation_items as $key => $navigation_item) {
-		if (strpos($navigation_item['link'],'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
-		  	echo '<a href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
-	    } else {
-		  	echo '<a href="'.$navigation_item['link'].'"';
-	    }
-
-		if (strpos(api_get_self(), $navigation_item['link']) !== false) {
-			echo ' id="here"';
-		}
-		echo ' target="_top" title="'.$navigation_item['name'].'">';
-		echo '<img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/>';
-		echo '</a>';
-		if ($orientation == SHORTCUTS_VERTICAL) {
-			echo '<br />';
-		}
-	}
+	$navigation_items = get_navigation_items(false);	
+    if (!empty($navigation_items)) {
+        if ($orientation == SHORTCUTS_HORIZONTAL)
+            $style_id = "toolshortcuts_horizontal";
+        else {
+            $style_id = "toolshortcuts_vertical";
+        }
+        echo '<div id="'.$style_id.'">';
+    
+    	foreach ($navigation_items as $key => $navigation_item) {
+    		if (strpos($navigation_item['link'],'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
+    		  	echo '<a href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
+    	    } else {
+    		  	echo '<a href="'.$navigation_item['link'].'"';
+    	    }    
+    		if (strpos(api_get_self(), $navigation_item['link']) !== false) {
+    			echo ' id="here"';
+    		}
+    		echo ' target="_top" title="'.$navigation_item['name'].'">';
+    		echo '<img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/>';
+    		echo '</a> ';
+    		if ($orientation == SHORTCUTS_VERTICAL) {
+    			echo '<br />';
+    		}
+    	}
+    	echo '</div>';
+    }
 }

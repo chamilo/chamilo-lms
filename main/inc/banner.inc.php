@@ -40,8 +40,10 @@ echo '<div id="header">';
 show_header_1($language_file, $nameTools);
 show_header_2();
 show_header_3();
+
 show_header_4($interbreadcrumb, $language_file, $nameTools);
 
+    
 if (isset($database_connection)) {
     // connect to the main database.
     // if single database, don't pefix table names with the main database name in SQL queries
@@ -52,8 +54,15 @@ if (isset($database_connection)) {
     Database::select_db($_configuration['main_database'], $database_connection);
 }
 echo '</div>'; // <!-- end of the whole #header section -->
+  
+if (api_get_setting('show_toolshortcuts') == 'true') {        
+    require_once api_get_path(INCLUDE_PATH).'tool_navigation_menu.inc.php';
+    show_navigation_tool_shortcuts();        
+}
+
 echo '<div id="main">';
-echo '<div id="submain">';  
+echo '<div id="submain">';
+
 
 /*  "call for chat" module section */
 

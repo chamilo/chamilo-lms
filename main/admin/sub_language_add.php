@@ -85,7 +85,7 @@ function check_if_language_exist ($original_name, $english_name, $isocode, $subl
 		$message_information['english_name']=true;
 	}
 	
-	$iso_list = api_get_platform_isocodes();
+	$iso_list = api_get_platform_isocodes();	
 	$iso_list = array_values($iso_list);
 	
 	if (!in_array($isocode, $iso_list)) {
@@ -266,8 +266,10 @@ if (isset($_GET['action']) && $_GET['action']=='definenewsublanguage') {
 	$form->addRule('original_name', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addElement('text', 'english_name', get_lang('EnglishName'),'class="input_titles"');
 	$form->addRule('english_name', get_lang('ThisFieldIsRequired'), 'required');
-	$form->addElement('text', 'isocode', get_lang('ISOCode'),'class="input_titles"');
+	$form->addElement('text', 'isocode', get_lang('ISOCode'), 'class="input_titles"');
+	
 	$form->addRule('isocode', get_lang('ThisFieldIsRequired'), 'required');
+	$form->addElement('static', null, '&nbsp;', '<i>en, es, fr</i>');
 	$form->addElement('checkbox', 'sub_language_is_visible', '', get_lang('Visibility'));
 	$form->addElement('style_submit_button', 'SubmitAddNewLanguage', get_lang('CreateSubLanguage'), 'class="'.$class.'"');
 	$form->display();

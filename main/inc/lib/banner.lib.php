@@ -184,7 +184,7 @@ function show_header_1($language_file, $nameTools) {
     echo '</div>';
 }
 
-function show_header_2($help) {
+function show_header_2() {
     $_course    = api_get_course_info(); 
     $course_id  = api_get_course_id();
     $user_id    = api_get_user_id();
@@ -230,17 +230,6 @@ function show_header_2($help) {
             echo '<li>&nbsp;|&nbsp;';
             api_display_tool_view_option();
             echo '</li>';
-        }
-    }   
-    
-    if (api_is_allowed_to_edit()) {
-            if (!empty($help)) {            
-            echo '<li>';
-            // Show help
-            if (api_get_setting('show_link_bug_notification') != 'true') {
-                echo '|';   
-            }     
-            echo "</li>";       
         }
     }
     

@@ -14,10 +14,16 @@ require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 $session_id     = api_get_session_id();
 $session_name   = api_get_session_name($my_session_id);
 echo '<div id="wrapper">';
+
 echo '<ul id="navigation">';
 if (!empty($help)) { 
+    $help = Security::remove_XSS($help);
 ?>
-    <li class="help"><a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600" class="thickbox" title="<?php echo get_lang('Help'); ?>"><img src="<?php echo api_get_path(WEB_IMG_PATH);?>help.large.png" alt="<?php echo get_lang('Help');?>" title="<?php echo get_lang('Help');?>" /></a> </li>
+    <li class="help">                   
+        <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=<?php echo $help; ?>&height=400&width=600" class="thickbox" title="<?php echo get_lang('Help'); ?>">
+        <img src="<?php echo api_get_path(WEB_IMG_PATH);?>help.large.png" alt="<?php echo get_lang('Help');?>" title="<?php echo get_lang('Help');?>" />
+        </a>
+    </li>
 <?php 
 }
 if (api_get_setting('show_link_bug_notification') == 'true') { 
@@ -32,7 +38,7 @@ echo'</ul>';
 echo '<div id="header">';
 
 show_header_1($language_file, $nameTools);
-show_header_2($help);
+show_header_2();
 show_header_3();
 show_header_4($interbreadcrumb, $language_file, $nameTools);
 

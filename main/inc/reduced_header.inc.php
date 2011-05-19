@@ -93,7 +93,18 @@ if ($my_style != '') {
 ?>
 <style type="text/css" media="screen, projection">
 /*<![CDATA[*/
-@import "<?php echo api_get_path(WEB_CSS_PATH), $my_style; ?>/default.css";
+<?php 
+//Default CSS
+echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css";';
+//Global CSS
+echo '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
+//Global chamilo CSS
+if (in_array(api_get_visual_theme(), array('chamilo','chamilo_red','chamilo_blue','chamilo_orange','chamilo_green','chamilo_electric_blue'))) {
+    echo '@import "'.api_get_path(WEB_CSS_PATH).'base_chamilo.css";';
+} else {
+    echo '@import "'.api_get_path(WEB_CSS_PATH).'base_classic.css";';
+}
+?>
 /*]]>*/
 </style>
 <?php
@@ -135,7 +146,6 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
 }
 //]]>
 </script>
-
 <?php
 if (isset($htmlHeadXtra) && $htmlHeadXtra) {
     foreach ($htmlHeadXtra as & $this_html_head) {

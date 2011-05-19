@@ -700,3 +700,11 @@ div.system_announcement {
 .RequirementHeading, .RequirementText, .RequirementContent  {
     margin-top:12px;
 }
+
+#formLogin {
+    height:160px;
+}
+
+#social_widget {
+	float:none;
+}

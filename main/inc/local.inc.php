@@ -128,12 +128,12 @@ The course id is stored in $_cid session variable.
         variables should be initialised here
 */
 
-require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 // verified if exists the username and password in session current
 if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
-    require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-    require_once (api_get_path(LIBRARY_PATH).'legal.lib.php');
+    require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+    require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 }
 // parameters passed via GET
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
@@ -186,7 +186,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 
             //verify type of terms and conditions
             $info_legal = explode(':',$_POST['legal_info']);
-            $legal_type=LegalManager::get_type_of_terms_and_conditions($info_legal[0],$info_legal[1]);
+            $legal_type = LegalManager::get_type_of_terms_and_conditions($info_legal[0],$info_legal[1]);
 
             //is necessary verify check
             if ($legal_type==1) {
@@ -215,9 +215,9 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
     }
 
     if ((isset($_POST['login']) && isset($_POST['password']))) {
-        // $login && $password are given to log in
-        $login = $_POST['login'];
-        $password = $_POST['password'];
+        // $login and $password are given to log in
+        $login      = $_POST['login'];
+        $password   = $_POST['password'];
 
         //lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -471,7 +471,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
         }//end logout
     } elseif (api_get_setting('openid_authentication')=='true') {
         if (!empty($_POST['openid_url'])) {
-            include('main/auth/openid/login.php');
+            include 'main/auth/openid/login.php';
             openid_begin(trim($_POST['openid_url']),api_get_path(WEB_PATH).'index.php');
             //this last function should trigger a redirect, so we can die here safely
             die('Openid login redirection should be in progress');
@@ -602,20 +602,20 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 
             $uData = Database::fetch_array($result);
 
-            $_user ['firstName']         = $uData ['firstname' ];
-            $_user ['lastName' ]         = $uData ['lastname'  ];
-            $_user ['mail'     ]         = $uData ['email'     ];
-            $_user ['lastLogin']         = $uData ['login_date'];
+            $_user ['firstName']        = $uData ['firstname' ];
+            $_user ['lastName' ]        = $uData ['lastname'  ];
+            $_user ['mail'     ]        = $uData ['email'     ];
+            $_user ['lastLogin']        = $uData ['login_date'];
             $_user ['official_code']    = $uData ['official_code'];
-            $_user ['picture_uri']         = $uData ['picture_uri'];
-            $_user ['user_id']             = $uData ['user_id'];
-            $_user ['language']            = $uData ['language'];
-            $_user ['auth_source']         = $uData ['auth_source'];
+            $_user ['picture_uri']      = $uData ['picture_uri'];
+            $_user ['user_id']          = $uData ['user_id'];
+            $_user ['language']         = $uData ['language'];
+            $_user ['auth_source']      = $uData ['auth_source'];
             $_user ['theme']            = $uData ['theme'];
-            $_user ['status']            = $uData ['status'];
+            $_user ['status']           = $uData ['status'];
 
-            $is_platformAdmin        = (bool) (! is_null( $uData['is_admin']));
-            $is_allowedCreateCourse  = (bool) (($uData ['status'] == 1) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == 4));
+            $is_platformAdmin           = (bool) (! is_null( $uData['is_admin']));
+            $is_allowedCreateCourse     = (bool) (($uData ['status'] == 1) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == 4));
 
             api_session_register('_user');
         } else {
@@ -738,16 +738,16 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 } else { // continue with the previous values
     if (empty($_SESSION['_course']) OR empty($_SESSION['_cid'])) { //no previous values...
         $_cid         = -1;        //set default values that will be caracteristic of being unset
-        $_course     = -1;
+        $_course      = -1;
     } else {
         $_cid         = $_SESSION['_cid'   ];
-           $_course    = $_SESSION['_course'];
+           $_course   = $_SESSION['_course'];
 
            // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
            // Moreover, if we want to track a course with another session it can be usefull        
         if (!empty($_GET['id_session'])) {
             $tbl_session                 = Database::get_main_table(TABLE_MAIN_SESSION);
-            $_SESSION['id_session']        = intval($_GET['id_session']);
+            $_SESSION['id_session']      = intval($_GET['id_session']);
             $sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']). '"';
             $rs = Database::query($sql);
             list($_SESSION['session_name']) = Database::fetch_array($rs);
@@ -760,7 +760,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
                    $session_lifetime    = $_configuration['session_lifetime'];
             } else {
                 $session_lifetime    = 3600;
-              }
+            }
 
             $course_code=$_course['sysCode'];
             $time = api_get_datetime();
@@ -789,7 +789,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
                 //error_log($sql);
                 Database::query($sql);
             }
-            }
+        }
     }
 }
 
@@ -1013,7 +1013,7 @@ if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // ses
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
             $gpData = Database::fetch_array($result);
-            $_gid                   = $gpData ['id'             ];
+            $_gid = $gpData ['id'];
             api_session_register('_gid');
         } else {
             exit("WARNING UNDEFINED GID !! ");
@@ -1058,4 +1058,3 @@ if (isset($_cid)) {
     $sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";
     Database::query($sql);
 }
-

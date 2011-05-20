@@ -266,7 +266,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
         Database::query($sql_update_score);
 		if ($origin == 'tracking_course') {
 			//Redirect to the course detail in lp
-            header('location: exercise.php?course=' . Security :: remove_XSS($_GET['course']));            
+            header('location: exercice.php?course=' . Security :: remove_XSS($_GET['course']));            
 			exit;
 		} else {
 			//Redirect to the reporting

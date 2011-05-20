@@ -327,10 +327,11 @@ if ($encryptPassForm == '1') {
 					$('#dbStatsForm').attr('value','chamilo_main');
 					$('#dbUserForm').attr('value','chamilo_main');
 			}
-		//Allow Chamilo install in IE
-		$("button").click(function() {
-			$("#is_executable").attr("value",$(this).attr("name"));
-		});
+			
+    		//Allow Chamilo install in IE
+    		$("button").click(function() {
+    			$("#is_executable").attr("value",$(this).attr("name"));
+    		});
 
 	 	} );
 	</script>
@@ -338,13 +339,13 @@ if ($encryptPassForm == '1') {
 
 		function show_hide_tracking_and_user_db (my_option) {
 			if (my_option=='singleDb1') {
-				$('#dbStatsForm').attr('disabled','true');
-				$('#dbUserForm').attr('disabled','true');
+				$('#optional_param2').hide();
+				$('#optional_param4').hide();				
 				$('#dbStatsForm').attr('value','chamilo_main');
 				$('#dbUserForm').attr('value','chamilo_main');
 			} else if (my_option=='singleDb0') {
-				$('#dbStatsForm').removeAttr('disabled');
-				$('#dbUserForm').removeAttr('disabled');
+				$('#optional_param2').show();
+				$('#optional_param4').show();
 				$('#dbStatsForm').attr('value','chamilo_main');
 				$('#dbUserForm').attr('value','chamilo_main');
 			}
@@ -640,7 +641,6 @@ if ($_POST['step2']) {
 	?>
 	<?php //echo get_lang('EnableTracking').' : '.($enableTrackingForm ? get_lang('Yes') : get_lang('No')); ?>
 	<?php echo get_lang('SingleDb').' : '.($singleDbForm ? get_lang('One') : get_lang('Several')); ?><br /><br />
-
 	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />
 	<?php echo get_lang('EncryptMethodUserPass').' : ';
   	echo $encryptPassForm;

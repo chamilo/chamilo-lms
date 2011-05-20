@@ -293,29 +293,29 @@ function write_system_config_file($path) {
     $root_sys = api_add_trailing_slash(str_replace('\\', '/', realpath($pathForm)));
     $content = file_get_contents(dirname(__FILE__).'/'.SYSTEM_CONFIG_FILENAME);
 
-    $config['{DATE_GENERATED}'] = date('r');
-    $config['{DATABASE_HOST}'] = $dbHostForm;
-    $config['{DATABASE_USER}'] = $dbUsernameForm;
-    $config['{DATABASE_PASSWORD}'] = $dbPassForm;
-    $config['TRACKING_ENABLED'] = true_false($enableTrackingForm);
-    $config['SINGLE_DATABASE'] = true_false($singleDbForm);
-    $config['{COURSE_TABLE_PREFIX}'] = ($singleDbForm ? 'crs_' : '');
-    $config['{DATABASE_GLUE}'] = ($singleDbForm ? '_' : '`.`');
-    $config['{DATABASE_PREFIX}'] = $dbPrefixForm;
-    $config['{DATABASE_MAIN}'] = $dbNameForm;
-    $config['{DATABASE_STATS}'] = (($singleDbForm && empty($dbStatsForm)) ? $dbNameForm : $dbStatsForm);
-    $config['{DATABASE_SCORM}'] = (($singleDbForm && empty($dbScormForm)) ? $dbNameForm : $dbScormForm);
-    $config['{DATABASE_PERSONAL}'] =(($singleDbForm && empty($dbUserForm)) ?  $dbNameForm : $dbUserForm);
-    $config['{ROOT_WEB}'] = $urlForm;
-    $config['{ROOT_SYS}'] = $root_sys;
-    $config['{URL_APPEND_PATH}'] = $urlAppendPath;
-    $config['{PLATFORM_LANGUAGE}'] = $languageForm;
-    $config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
-    $config['{ENCRYPT_PASSWORD}'] = $encryptPassForm;
+    $config['{DATE_GENERATED}']         = date('r');
+    $config['{DATABASE_HOST}']          = $dbHostForm;
+    $config['{DATABASE_USER}']          = $dbUsernameForm;
+    $config['{DATABASE_PASSWORD}']      = $dbPassForm;
+    $config['TRACKING_ENABLED']         = true_false($enableTrackingForm);
+    $config['SINGLE_DATABASE']          = true_false($singleDbForm);
+    $config['{COURSE_TABLE_PREFIX}']    = ($singleDbForm ? 'crs_' : '');    
+    $config['{DATABASE_GLUE}']          = ($singleDbForm ? '_' : '`.`');  
+    $config['{DATABASE_PREFIX}']        = $dbPrefixForm;
+    $config['{DATABASE_MAIN}']          = $dbNameForm;
+    $config['{DATABASE_STATS}']         = (($singleDbForm && empty($dbStatsForm)) ? $dbNameForm : $dbStatsForm);
+    $config['{DATABASE_SCORM}']         = (($singleDbForm && empty($dbScormForm)) ? $dbNameForm : $dbScormForm);
+    $config['{DATABASE_PERSONAL}']      = (($singleDbForm && empty($dbUserForm)) ?  $dbNameForm : $dbUserForm);
+    $config['{ROOT_WEB}']               = $urlForm;
+    $config['{ROOT_SYS}']               = $root_sys;
+    $config['{URL_APPEND_PATH}']        = $urlAppendPath;
+    $config['{PLATFORM_LANGUAGE}']      = $languageForm;
+    $config['{SECURITY_KEY}']           = md5(uniqid(rand().time()));
+    $config['{ENCRYPT_PASSWORD}']       = $encryptPassForm;
 
-    $config['SESSION_LIFETIME'] = $session_lifetime;
-    $config['{NEW_VERSION}'] = $new_version;
-    $config['NEW_VERSION_STABLE'] = true_false($new_version_stable);
+    $config['SESSION_LIFETIME']         = $session_lifetime;
+    $config['{NEW_VERSION}']            = $new_version;
+    $config['NEW_VERSION_STABLE']       = true_false($new_version_stable);
 
     foreach ($config as $key => $value) {
         $content = str_replace($key, $value, $content);
@@ -337,7 +337,7 @@ function write_system_config_file($path) {
                         Please go back to step 5.
                         <p><input type="submit" name="step5" value="&lt; Back" /></p>
                         </td></tr></table></form></body></html>';
-        exit ();
+        exit;
     }
 
     fwrite($fp, $content);
@@ -1616,11 +1616,10 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     </td>
     </tr>
     <tr>
-    <td>
+    <td>    
     <table width="100%">
     <tr>
       <td width="40%"><?php echo get_lang('DBHost'); ?> </td>
-
       <?php if ($installType == 'update'): ?>
       <td width="30%"><input type="hidden" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" /><?php echo $dbHostForm; ?></td>
       <td width="30%">&nbsp;</td>
@@ -1628,7 +1627,6 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
       <td width="30%"><input type="text" size="25" maxlength="50" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" /></td>
       <td width="30%"><?php echo get_lang('EG').' localhost'; ?></td>
       <?php endif; ?>
-
     </tr>
     <?php
 
@@ -1645,6 +1643,24 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 
     //fields for the four standard Chamilo databases
     echo '<tr><td colspan="3"><a href="" onclick="javascript: show_hide_option();return false;" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters', '').'</a></td></tr>';
+    ?>    
+    <input type="hidden" name="enableTrackingForm" value="1" />
+    <tr id="optional_param6" style="display:none;">
+      <td><?php echo get_lang('SingleDb'); ?> </td>
+
+      <?php if ($installType == 'update'): ?>
+      <td><input type="hidden" name="singleDbForm" value="<?php echo $singleDbForm; ?>" /><?php echo $singleDbForm ? get_lang('One') : get_lang('Several'); ?></td>
+      <?php else: ?>
+      <td>
+        <input class="checkbox" type="radio" name="singleDbForm" value="1" id="singleDb1" <?php echo $singleDbForm ? 'checked="checked" ' : ''; ?> onclick="javascript: show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb1"><?php echo get_lang('One'); ?></label>
+        <input class="checkbox" type="radio" name="singleDbForm" value="0" id="singleDb0" <?php echo $singleDbForm ? '' : 'checked="checked" '; ?> onclick="javascript: show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb0"><?php echo get_lang('Several'); ?></label>
+      </td>
+      <?php endif; ?>
+
+      <td>&nbsp;</td>
+    </tr>
+    </div>    
+    <?php    
     display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;', null, 'id="optional_param1" style="display:none;"');
     display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" style="display:none;"');
     if ($installType == 'update' && in_array($_POST['old_version'], $update_from_version_6)) {
@@ -1669,22 +1685,6 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
       <td>&nbsp;</td>
     </tr>	*/
     ?>
-    <input type="hidden" name="enableTrackingForm" value="1" />
-    <tr id="optional_param6" style="display:none;">
-      <td><?php echo get_lang('SingleDb'); ?> </td>
-
-      <?php if ($installType == 'update'): ?>
-      <td><input type="hidden" name="singleDbForm" value="<?php echo $singleDbForm; ?>" /><?php echo $singleDbForm ? get_lang('One') : get_lang('Several'); ?></td>
-      <?php else: ?>
-      <td>
-        <input class="checkbox" type="radio" name="singleDbForm" value="1" id="singleDb1" <?php echo $singleDbForm ? 'checked="checked" ' : ''; ?> onclick="javascript: show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb1"><?php echo get_lang('One'); ?></label>
-        <input class="checkbox" type="radio" name="singleDbForm" value="0" id="singleDb0" <?php echo $singleDbForm ? '' : 'checked="checked" '; ?> onclick="javascript: show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb0"><?php echo get_lang('Several'); ?></label>
-      </td>
-      <?php endif; ?>
-
-      <td>&nbsp;</td>
-    </tr>
-    </div>
     <tr>
         <td><button type="submit" class="login" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" ><?php echo get_lang('CheckDatabaseConnection'); ?></button></td>
         <?php

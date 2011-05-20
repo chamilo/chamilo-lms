@@ -40,7 +40,7 @@ $nameTools = get_lang('ImportExercise');
 
 //bredcrump
 
-$interbredcrump[]= array ('url' => '../exercise.php','name' => get_lang('Exercises'));
+$interbredcrump[]= array ('url' => '../exercice.php','name' => get_lang('Exercises'));
 
 //----------------------------------
 // EXECUTE COMMAND

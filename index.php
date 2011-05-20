@@ -295,12 +295,9 @@ if (!api_is_anonymous()) {
     echo show_right_block(get_lang('Profile'), $profile_content);
 }
 
-
-
 // Display right menu: language form, login section + useful weblinks.
-echo '<div class="menu" id="menu">';
+
 display_anonymous_right_menu();
-echo '</div>';
 
 echo '</div>';
 
@@ -425,10 +422,13 @@ function display_dashboard_link() {
  * @todo does $_plugins need to be global?
  */
 function display_anonymous_right_menu() {
-    global $loginFailed, $_plugins, $_user, $menu_navigation;
+    global $loginFailed, $_plugins, $_user, $menu_navigation, $home, $home_old;
 
-    $platformLanguage = api_get_setting('platformLanguage');
-    $sys_path = api_get_path(SYS_PATH);
+    $platformLanguage       = api_get_setting('platformLanguage');
+    $sys_path               = api_get_path(SYS_PATH);
+    $user_selected_language = api_get_interface_language();
+    
+    echo '<div class="menu" id="menu">';
 
     if (!($_user['user_id']) || api_is_anonymous($_user['user_id']) ) { // Only display if the user isn't logged in.
         api_display_language_form(true);
@@ -498,68 +498,62 @@ function display_anonymous_right_menu() {
             }
             echo '</ul></div>';
         }
-
-        // Deleting the myprofile link.
-        if (api_get_setting('allow_social_tool') == 'true') {
-            unset($menu_navigation['myprofile']);
-        }
-
-        if (!empty($menu_navigation)) {
-            echo '<div class="menusection">';
-            echo '<span class="menusectioncaption">'.get_lang('MainNavigation').'</span>';
-            echo '<ul class="menulist">';
-            foreach ($menu_navigation as $section => $navigation_info) {
-                $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
-                echo '<li'.$current.'><a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a></li>', "\n";
-            }
-            echo '</ul></div>';
-        }
-    }
-
-    // Help section.
-    /* Hide right menu "general" and other parts on anonymous right menu. */
-
-    $user_selected_language = api_get_interface_language();
-    global $home, $home_old;
-    if (!isset($user_selected_language)) {
-        $user_selected_language = $platformLanguage;
-    }
+    }    
+    echo '</div>';
     
-    $home_menu = @(string)file_get_contents($sys_path.$home.'home_menu_'.$user_selected_language.'.html');    
-    /*if (empty($home_menu)) {
-        $home_menu = @(string)file_get_contents($sys_path.$home_old.'home_menu_'.$user_selected_language.'.html');
-    }
-    if (empty($home_menu)) {
-        $home_menu = @(string)file_get_contents($sys_path.$home.'home_menu.html');
-    }
-    if (empty($home_menu)) {
-        $home_menu = @(string)file_get_contents($sys_path.$home_old.'home_menu.html');
-    }*/
-    if (!empty($home_menu)) {
-        echo '<div class="menusection">', '<span class="menusectioncaption">'.get_lang('MenuGeneral').'</span>';
-         echo '<ul class="menulist">';
-         $home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
-         echo $home_menu;
-        echo '</ul></div>';
-    }
-
-    if ($_user['user_id'] && api_number_of_plugins('campushomepage_menu') > 0) {
-        echo '<div class="note" style="background: none">';
-        api_plugin('campushomepage_menu');
-        echo '</div>';
-    }
-
-    // Includes for any files to be displayed below anonymous right menu.
+    // Notice
 
     $home_notice = @(string)file_get_contents($sys_path.$home.'home_notice_'.$user_selected_language.'.html');
     if (empty($home_notice)) {
         $home_notice = @(string)file_get_contents($sys_path.$home.'home_notice.html');
     }
-    if (!empty($home_notice)) {
-        echo '<div class="note">';
-        $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
-         echo $home_notice;
-        echo '</div>';
+    
+    if (!empty($home_notice)) {        
+        $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));        
+        echo show_right_block('', $home_notice, 'note');
+    }
+    
+    
+    
+    if (isset($_SESSION['_user']['user_id']) && $_SESSION['_user']['user_id'] != 0) {
+            // Deleting the myprofile link.
+        if (api_get_setting('allow_social_tool') == 'true') {
+            unset($menu_navigation['myprofile']);
+        }
+
+        if (!empty($menu_navigation)) {            
+            $content = '<ul class="menulist">';
+            foreach ($menu_navigation as $section => $navigation_info) {
+                $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
+                $content .='<li'.$current.'><a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a></li>';
+            }
+            $content .= '</ul>';
+            echo show_right_block(get_lang('MainNavigation'), $content);
+        }
+    }      
+
+    // Help section.
+    /* Hide right menu "general" and other parts on anonymous right menu. */
+    
+    if (!isset($user_selected_language)) {
+        $user_selected_language = $platformLanguage;
+    }
+    
+    $home_menu = @(string)file_get_contents($sys_path.$home.'home_menu_'.$user_selected_language.'.html');    
+    if (!empty($home_menu)) {        
+        $home_menu_content .= '<ul class="menulist">';
+        $home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));         
+        $home_menu_content .= '</ul>';        
+        echo show_right_block(get_lang('MenuGeneral'), $home_menu_content);
+    }
+    //Plugin 
+    
+    if ($_user['user_id'] && api_number_of_plugins('campushomepage_menu') > 0) {
+        ob_start();
+        api_plugin('campushomepage_menu');
+        $plugin_content = ob_get_contents();
+        ob_end_clean();
+        echo show_right_block('', $plugin_content);
     }
 }
 
@@ -908,17 +902,15 @@ function get_courses_of_user($user_id) {
 }
 
 
-function show_right_block($title, $content) {    
-    $html = '';
-  
+function show_right_block($title, $content, $class = '') {    
+    $html = '';  
         $html.= '<div id="menu" class="menu">';    
-            $html.= '<div class="menusection">';
-                $html.= '<span class="menusectioncaption">'.$title.'</span>';        
+            $html.= '<div class="menusection '.$class.' ">';
+                if (!empty($title)) {
+                    $html.= '<span class="menusectioncaption">'.$title.'</span>';
+                }        
                 $html.= $content;
             $html.= '</div>';        
-        $html.= '</div>';
-   
+        $html.= '</div>';   
     return $html;
 }
-
-

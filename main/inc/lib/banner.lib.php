@@ -456,6 +456,7 @@ function show_header_3() {
         echo '</ul>';
         echo '</div>';
     }    
+    return $menu_navigation;
 }
 
 //Header 4
@@ -589,4 +590,9 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
         }        
     }    
     echo '<div class="clear"></div>';
+}
+
+
+function load_navigation_menu() {
+    
 }

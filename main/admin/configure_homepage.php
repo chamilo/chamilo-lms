@@ -899,7 +899,7 @@ switch ($action) {
 		  <td width="10%" valign="top"></td>
 		  <td width="20%" rowspan="3" valign="top">
 		    <div id="menu-wrapper">
-			<div id="menu" class="menu" style="width: 100%;">
+			<div id="menu" class="menu">
 			<?php
 			api_display_language_form();
 			?>
@@ -911,6 +911,8 @@ switch ($action) {
 				<div><button class="login" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button></div>
 			</form>
 			<div class="clear"> &nbsp; </div>
+			
+			
 			<div class="menusection">
 				<span class="menusectioncaption"><?php echo get_lang('MenuUser'); ?></span>
 				<ul class="menulist">
@@ -918,62 +920,70 @@ switch ($action) {
 				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('LostPassword')); ?></span></li>
 				</ul>
 			</div>
-
-
-			<br />
-			<a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); ?></a>
-			<a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
-
-			<div class="menusection">
-				<span class="menusectioncaption"><?php echo api_ucfirst(get_lang('General')); ?></span>
-				<ul class="menulist">
-
-				<?php
-					$home_menu = '';
-					if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
-						$home_menu = @file($homep.$menuf.'_'.$lang.$ext);
-					} else {
-						$home_menu = @file($homep.$menuf.$ext);
-					}
-					if (empty($home_menu)) {
-						$home_menu = array();
-					}
-					if (!empty($home_menu)) {
-						$home_menu = implode("\n", $home_menu);
-						$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
-						$home_menu = explode("\n", $home_menu);
-					}
-					$i = 0;
-					foreach ($home_menu as $enreg) {
-						$enreg = trim($enreg);
-						if (!empty($enreg)) {
-							$edit_link = '<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$i.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-							$delete_link = '<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$i.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-							echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', '<br />'.$edit_link.' '.$delete_link.'</li>'), $enreg);
-							$i++;
-						}
-					}
-				?>
-				</ul>
+			
+			</div>
+			
+			<div id="menu" class="menu">
+            <br />                    
+            <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php echo get_lang('EditNotice'); ?></a>
+            
+            <div class="menusection note">
+                    
+            <?php
+            $home_notice = '';
+            if (file_exists($homep.$noticef.'_'.$lang.$ext)) {
+                $home_notice = @(string)file_get_contents($homep.$noticef.'_'.$lang.$ext);
+            } else {
+                $home_notice = @(string)file_get_contents($homep.$noticef.$ext);
+            }
+            $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
+            echo $home_notice;          
+            ?>
+            </div>
+            <br />
+            </div>
+            
+			
+            <div id="menu" class="menu">
+                <br />
+                <a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); ?></a>
+                <a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
+                
+    			<div class="menusection">
+    				<span class="menusectioncaption"><?php echo api_ucfirst(get_lang('General')); ?></span>
+    				<ul class="menulist">
+    				<?php
+    					$home_menu = '';
+    					if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
+    						$home_menu = @file($homep.$menuf.'_'.$lang.$ext);
+    					} else {
+    						$home_menu = @file($homep.$menuf.$ext);
+    					}
+    					if (empty($home_menu)) {
+    						$home_menu = array();
+    					}
+    					if (!empty($home_menu)) {
+    						$home_menu = implode("\n", $home_menu);
+    						$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+    						$home_menu = explode("\n", $home_menu);
+    					}
+    					$i = 0;
+    					foreach ($home_menu as $enreg) {
+    						$enreg = trim($enreg);
+    						if (!empty($enreg)) {
+    							$edit_link = '<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$i.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+    							$delete_link = '<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$i.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+    							echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', '<br />'.$edit_link.' '.$delete_link.'</li>'), $enreg);
+    							$i++;
+    						}
+    					}
+    				?>
+    				</ul>
+			     </div>
 			</div>
 
-			<br />
-			&nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php echo get_lang('EditNotice'); ?></a>
 
-			<div class="note">
-
-			<?php
-			$home_notice = '';
-			if (file_exists($homep.$noticef.'_'.$lang.$ext)) {
-				$home_notice = @(string)file_get_contents($homep.$noticef.'_'.$lang.$ext);
-			} else {
-				$home_notice = @(string)file_get_contents($homep.$noticef.$ext);
-			}
-			$home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
-			echo $home_notice;			
-			?>
-			</div>
-			</div>
+			
 			</div> <!-- menu wrapper -->
 		  </td>
 		</tr>

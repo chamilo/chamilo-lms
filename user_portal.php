@@ -641,7 +641,8 @@ if (api_get_setting('allow_social_tool') == 'true') {
 // Main navigation section.
 // Tabs that are deactivated are added here.
 if (!empty($menu_navigation)) {    
-    $main_navigation_content .= '<ul class="menulist">';    
+    $main_navigation_content .= '<ul class="menulist">';
+        
     foreach ($menu_navigation as $section => $navigation_info) {
         $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
         $main_navigation_content .= '<li'.$current.'>';

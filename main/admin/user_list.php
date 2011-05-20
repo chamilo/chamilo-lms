@@ -730,8 +730,7 @@ $action = $_GET["action"];
 $login_as_user_id = $_GET["user_id"];
 
 // Login as ...
-if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
-{
+if ($_GET['action'] == "login_as" && isset ($login_as_user_id)) {
 	login_user($login_as_user_id);
 }
 
@@ -739,14 +738,14 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 //{}
 //else
 //{
-        if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
-            $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-            $interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
-            $tool_name = get_lang('SearchUsers');
-        } else {
-            $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-            $tool_name = get_lang('UserList');
-        }
+if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
+    $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+    $interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
+    $tool_name = get_lang('SearchUsers');
+} else {
+    $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+    $tool_name = get_lang('UserList');
+}
 
 
 	Display :: display_header($tool_name, "");

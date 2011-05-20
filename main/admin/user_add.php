@@ -25,8 +25,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 // Database table definitions
-$table_admin 	= Database :: get_main_table(TABLE_MAIN_ADMIN);
-$table_user 	= Database :: get_main_table(TABLE_MAIN_USER);
+$table_admin 	= Database::get_main_table(TABLE_MAIN_ADMIN);
+$table_user 	= Database::get_main_table(TABLE_MAIN_USER);
 $database 		= Database::get_main_database();
 
 $htmlHeadXtra[] = '
@@ -72,6 +72,7 @@ if (!empty($_GET['message'])) {
 }
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
 $tool_name = get_lang('AddUsers');
 
 // Create the form

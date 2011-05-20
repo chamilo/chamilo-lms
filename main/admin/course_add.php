@@ -23,6 +23,7 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name = get_lang('AddCourse');
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
 
 /* MAIN CODE */
 
@@ -148,6 +149,7 @@ if ($form->validate()) {
         $current_course_code = $keys['currentCourseCode'];
         $current_course_id = $keys['currentCourseId'];
         $current_course_db_name = $keys['currentCourseDbName'];
+        
         $current_course_repository = $keys['currentCourseRepository'];
         $expiration_date = time() + $firstExpirationDelay;
         prepare_course_repository($current_course_repository, $current_course_id);

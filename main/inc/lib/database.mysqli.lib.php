@@ -127,6 +127,14 @@ define('TABLE_STATISTIC_TRACK_E_DEFAULT', 		'track_e_default');
 define('TABLE_STATISTIC_TRACK_E_UPLOADS', 		'track_e_uploads');
 define('TABLE_STATISTIC_TRACK_E_HOTSPOT', 		'track_e_hotspot');
 define('TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY', 'track_e_item_property');
+define('TABLE_STATISTIC_TRACK_E_OPEN',          'track_e_open');
+
+define('TABLE_STATISTIC_TRACK_C_BROWSERS',          'track_c_browsers');
+define('TABLE_STATISTIC_TRACK_C_COUNTRIES',         'track_c_countries');
+define('TABLE_STATISTIC_TRACK_C_OS',                'track_c_os');
+define('TABLE_STATISTIC_TRACK_C_PROVIDERS',         'track_c_providers');
+define('TABLE_STATISTIC_TRACK_C_REFERERS',          'track_c_referers');
+
 
 // SCORM database tables
 define('TABLE_SCORM_MAIN', 'scorm_main');

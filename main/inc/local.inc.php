@@ -583,14 +583,15 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 
     if (isset($_user['user_id']) && $_user['user_id']) // a uid is given (log in succeeded)
     {
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
+        $user_table     = Database::get_main_table(TABLE_MAIN_USER);
+        $admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);
+        $track_e_login  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
        
         $sql = "SELECT user.*, a.user_id is_admin, UNIX_TIMESTAMP(login.login_date) login_date
                  FROM $user_table
                  LEFT JOIN $admin_table a
                  ON user.user_id = a.user_id
-                 LEFT JOIN ".$_configuration['statistics_database'].".track_e_login login
+                 LEFT JOIN $track_e_login login
                  ON user.user_id  = login.login_user_id
                  WHERE user.user_id = '".$_user['user_id']."'
                  ORDER BY login.login_date DESC LIMIT 1";    

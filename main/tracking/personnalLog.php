@@ -12,9 +12,7 @@
 // TODO: Is this file deprecated?
 
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -46,21 +44,20 @@ td {border-bottom: thin dashed gray;}
 $view = preg_replace('/[^01]/','',$_REQUEST['view']);
 
 $TABLECOURSUSER			= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLETRACK_ACCESS 		= $_configuration['statistics_database'].".track_e_access";
-$TABLETRACK_LINKS 		= $_configuration['statistics_database'].".track_e_links";
-$TABLETRACK_DOWNLOADS 	= $_configuration['statistics_database'].".track_e_downloads";
-$TABLETRACK_LOGIN 		= $_configuration['statistics_database'].".track_e_login";
-$TABLETRACK_EXERCICES   = $_configuration['statistics_database'].".track_e_exercices";
+$TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+$TABLETRACK_LINKS 		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
+$TABLETRACK_DOWNLOADS 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+$TABLETRACK_LOGIN 		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+$TABLETRACK_EXERCICES   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
 
 $limitOfDisplayedLogins = 25; // number of logins to display
 include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 
-////////////// OUTPUT //////////////////////
 Display::display_header($nameTools,"Tracking");
 api_display_tool_title($nameTools);
 
-/*		MAIN SECTION */
+//		MAIN SECTION
 
 // show all : view must be equal to the sum of all view values (1024+512+...+64)
 // show none : 0

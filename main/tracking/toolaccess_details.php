@@ -74,7 +74,7 @@ $reqdate=$_REQUEST['reqdate'];
 <?php
 
 
-    $TABLETRACK_ACCESS = $_configuration['statistics_database'].".track_e_access";
+    $TABLETRACK_ACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
     if(isset($_cid)) //stats for the current course
     {

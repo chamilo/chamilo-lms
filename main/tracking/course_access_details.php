@@ -14,12 +14,12 @@
 /*
 		INIT SECTION
 */
-$reqdate = $_REQUEST['reqdate'];
-$period = $_REQUEST['period'];
-$displayType = $_REQUEST['displayType'];
+$reqdate        = $_REQUEST['reqdate'];
+$period         = $_REQUEST['period'];
+$displayType    = $_REQUEST['displayType'];
 // name of the language file that needs to be included
 $language_file = "tracking";
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 $interbreadcrumb[]= array ("url"=>"courseLog.php", "name"=> get_lang('ToolName'));
 
@@ -38,9 +38,9 @@ td {border-bottom: thin dashed gray;}
 /*]]>*/
 </style>";
 //@todo use Database library
-$TABLETRACK_ACCESS = $_configuration['statistics_database'].".track_e_access";
+$TABLETRACK_ACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 Display::display_header($nameTools,"Tracking");
-include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
+require_once api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php";
 
 // the variables for the days and the months
 // Defining the shorts for the days

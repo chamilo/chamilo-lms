@@ -3,28 +3,28 @@
 /**
 * EVENTS LIBRARY
 *
-* This is the events library for Dokeos.
+* This is the events library for Chamilo.
 * Include/require it in your code to use its functionality.
 * Functions of this library are used to record informations when some kind
 * of event occur. Each event has his own types of informations then each event
 * use its own function.
 *
-* @package dokeos.library
-* @todo convert queries to use Database API
+* @package chamilo.library
 */
 /*	   INIT SECTION */
 
-// REGROUP TABLE NAMES FOR MAINTENANCE PURPOSE
-$TABLETRACK_LOGIN 		= $_configuration['statistics_database'].".track_e_login";
-$TABLETRACK_OPEN 		= $_configuration['statistics_database'].".track_e_open";
-$TABLETRACK_ACCESS 		= $_configuration['statistics_database'].".track_e_access";
-$TABLETRACK_DOWNLOADS	= $_configuration['statistics_database'].".track_e_downloads";
-$TABLETRACK_UPLOADS 	= $_configuration['statistics_database'].".track_e_uploads";
-$TABLETRACK_LINKS 		= $_configuration['statistics_database'].".track_e_links";
-$TABLETRACK_EXERCICES 	= $_configuration['statistics_database'].".track_e_exercices";
-$TABLETRACK_SUBSCRIPTIONS = $_configuration['statistics_database'].".track_e_subscriptions";
-$TABLETRACK_LASTACCESS 	= $_configuration['statistics_database'].".track_e_lastaccess"; //for "what's new" notification
-$TABLETRACK_DEFAULT 	= $_configuration['statistics_database'].".track_e_default";
+
+
+$TABLETRACK_LOGIN           = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+$TABLETRACK_OPEN 		    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_OPEN);
+$TABLETRACK_ACCESS          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+$TABLETRACK_DOWNLOADS	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+$TABLETRACK_UPLOADS 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
+$TABLETRACK_LINKS 		    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
+$TABLETRACK_EXERCICES 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+//$TABLETRACK_SUBSCRIPTIONS   = $_configuration['statistics_database'].".track_e_subscriptions"; // this table is never use
+$TABLETRACK_LASTACCESS 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS); //for "what's new" notification
+$TABLETRACK_DEFAULT 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 
 /* FUNCTIONS */
 /**

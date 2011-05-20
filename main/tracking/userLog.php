@@ -74,19 +74,7 @@ $TABLECOURSUSER	        	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLEUSER	        		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
-
-$TABLETRACK_ACCESS      	= $_configuration['statistics_database'].".track_e_access";
-$TABLETRACK_LINKS       	= $_configuration['statistics_database'].".track_e_links";
-$TABLETRACK_LOGIN       	= $_configuration['statistics_database'].".track_e_login";
-$TABLETRACK_DOWNLOADS   	= $_configuration['statistics_database'].".track_e_downloads";
-$TABLETRACK_UPLOADS     	= $_configuration['statistics_database'].".track_e_uploads";
-$TABLETRACK_EXERCICES   	= $_configuration['statistics_database'].".track_e_exercices";
-
-$TABLECOURSE_LINKS			= Database::get_course_table(TABLE_LINK);
-$TABLECOURSE_WORK       	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 $TABLECOURSE_GROUPSUSER 	= Database::get_course_table(TABLE_GROUP_USER);
-$TABLECOURSE_EXERCICES  	= Database::get_course_table(TABLE_QUIZ_TEST);
-$TBL_TRACK_HOTPOTATOES  	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 
 if(api_get_setting('use_session_mode') == "true") {
     $sql = "SELECT 1

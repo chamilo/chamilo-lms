@@ -337,7 +337,7 @@ function logout() {
         $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id='$i_id_last_connection'";
         Database::query($s_sql_update_logout_date);
     }
-    LoginDelete($uid, $_configuration['statistics_database']); // From inc/lib/online.inc.php - removes the "online" status.
+    LoginDelete($uid); // From inc/lib/online.inc.php - removes the "online" status.
 
     // The following code enables the use of an external logout function.
     // Example: define a $extAuthSource['ldap']['logout'] = 'file.php' in configuration.php.

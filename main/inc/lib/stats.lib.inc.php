@@ -8,7 +8,6 @@
 *	@author Sebastien Piraux
 *	@package chamilo.library
 *
-* 	@todo use the Database libraries
 */
 
 /*
@@ -43,19 +42,17 @@
 */
 
 // regroup table names for maintenance purpose
-$TABLETRACK_OPEN        = $_configuration['statistics_database'].".track_e_open";
+//we can use the database class: this file is only called in the /index.php file before the global.inc.php
 
-$TABLESTATS_PROVIDERS   = $_configuration['statistics_database'].".track_c_providers";
-$TABLESTATS_COUNTRIES   = $_configuration['statistics_database'].".track_c_countries";
-$TABLESTATS_BROWSERS    = $_configuration['statistics_database'].".track_c_browsers";
-$TABLESTATS_OS          = $_configuration['statistics_database'].".track_c_os";
-$TABLESTATS_REFERERS    = $_configuration['statistics_database'].".track_c_referers";
-
-
+$TABLETRACK_OPEN            = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_OPEN);
+$TABLESTATS_PROVIDERS       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_C_PROVIDERS);
+$TABLESTATS_COUNTRIES       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_C_COUNTRIES);
+$TABLESTATS_BROWSERS        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_C_BROWSERS);
+$TABLESTATS_OS              = Database::get_statistic_table(TABLE_STATISTIC_TRACK_C_OS);
+$TABLESTATS_REFERERS        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_C_REFERERS);
 /*
-==============================================================================
+
 	   Main : decodeOpenInfos launch all processes
-==============================================================================
 */
 
 

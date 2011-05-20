@@ -16,6 +16,8 @@
 
 /*	CONSTANTS */
 
+//@todo move this variables in a database_table.lib.php file to avoid repetition with the mysqli lib 
+
 // Main database tables
 define('TABLE_MAIN_COURSE', 				'course');
 define('TABLE_MAIN_USER', 					'user');
@@ -109,22 +111,31 @@ define('TABLE_MAIN_LEGAL', 'legal');
 // Dashboard blocks plugin
 define('TABLE_MAIN_BLOCK', 'block');
 
-// Statistic database tables
-define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 	'track_e_lastaccess');
-define('TABLE_STATISTIC_TRACK_E_ACCESS', 		'track_e_access');
-define('TABLE_STATISTIC_TRACK_E_LOGIN', 		'track_e_login');
-define('TABLE_STATISTIC_TRACK_E_DOWNLOADS', 	'track_e_downloads');
-define('TABLE_STATISTIC_TRACK_E_LINKS', 		'track_e_links');
-define('TABLE_STATISTIC_TRACK_E_ONLINE', 		'track_e_online');
-define('TABLE_STATISTIC_TRACK_E_HOTPOTATOES', 	'track_e_hotpotatoes');
-define('TABLE_STATISTIC_TRACK_E_COURSE_ACCESS', 'track_e_course_access');
-define('TABLE_STATISTIC_TRACK_E_EXERCICES', 	'track_e_exercices');
-define('TABLE_STATISTIC_TRACK_E_ATTEMPT', 		'track_e_attempt');
+// Statistic database tables 
+define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 	    'track_e_lastaccess');
+define('TABLE_STATISTIC_TRACK_E_ACCESS', 		    'track_e_access');
+define('TABLE_STATISTIC_TRACK_E_LOGIN', 		    'track_e_login');
+define('TABLE_STATISTIC_TRACK_E_DOWNLOADS', 	    'track_e_downloads');
+define('TABLE_STATISTIC_TRACK_E_LINKS', 		    'track_e_links');
+define('TABLE_STATISTIC_TRACK_E_ONLINE', 		    'track_e_online');
+define('TABLE_STATISTIC_TRACK_E_HOTPOTATOES', 	    'track_e_hotpotatoes');
+define('TABLE_STATISTIC_TRACK_E_COURSE_ACCESS',     'track_e_course_access');
+define('TABLE_STATISTIC_TRACK_E_EXERCICES', 	    'track_e_exercices');
+define('TABLE_STATISTIC_TRACK_E_ATTEMPT', 		    'track_e_attempt');
 define('TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING', 'track_e_attempt_recording');
-define('TABLE_STATISTIC_TRACK_E_DEFAULT', 		'track_e_default');
-define('TABLE_STATISTIC_TRACK_E_UPLOADS', 		'track_e_uploads');
-define('TABLE_STATISTIC_TRACK_E_HOTSPOT', 		'track_e_hotspot');
-define('TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY', 'track_e_item_property');
+define('TABLE_STATISTIC_TRACK_E_DEFAULT', 		    'track_e_default');
+define('TABLE_STATISTIC_TRACK_E_UPLOADS', 		    'track_e_uploads');
+define('TABLE_STATISTIC_TRACK_E_HOTSPOT', 		    'track_e_hotspot');
+define('TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY',     'track_e_item_property');
+define('TABLE_STATISTIC_TRACK_E_OPEN',              'track_e_open');
+
+define('TABLE_STATISTIC_TRACK_C_BROWSERS',          'track_c_browsers');
+define('TABLE_STATISTIC_TRACK_C_COUNTRIES',         'track_c_countries');
+define('TABLE_STATISTIC_TRACK_C_OS',                'track_c_os');
+define('TABLE_STATISTIC_TRACK_C_PROVIDERS',         'track_c_providers');
+define('TABLE_STATISTIC_TRACK_C_REFERERS',          'track_c_referers');
+
+
 
 // SCORM database tables
 define('TABLE_SCORM_MAIN', 'scorm_main');

@@ -272,7 +272,7 @@ require $includePath.'/local.inc.php';
 require_once $lib_path.'online.inc.php';
 // check and modify the date of user in the track.e.online table
 if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
-    LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '', $_configuration['statistics_database']);
+    LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
 }
 
 // ===== end "who is logged in?" module section =====

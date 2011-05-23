@@ -87,6 +87,8 @@ function build_directory_selector($folders, $curdirpath, $group_dir = '', $chang
     return $form;
 }
 
+
+
 /**
  * Create a html hyperlink depending on if it's a folder or a file
  *

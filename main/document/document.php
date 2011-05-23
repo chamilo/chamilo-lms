@@ -55,38 +55,6 @@ api_protect_course_script(true);
 unset($_SESSION['draw_dir']);
 unset($_SESSION['paint_dir']);
 
-//jquery thickbox already called from main/inc/header.inc.php
-
-$htmlHeadXtra[] = api_get_jquery_js();
-$htmlHeadXtra[] = api_get_jquery_ui_js();
-//$htmlHeadXtra[] = api_get_js('yoxview/yox.js');
-$htmlHeadXtra[] = api_get_js('yoxview/yoxview-init.js');
-$js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';   
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'yoxview/yoxview.css" type="text/css">';
-$mediaplayer_path= api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
-
-//automatic loading the course language for yoxview
-$yoxview_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
-$lang_yoxview  = api_get_language_isocode();
-$lang_yoxview = isset($yoxview_code_translation_table[$lang_yoxview]) ? $yoxview_code_translation_table[$lang_yoxview] : $lang_yoxview;
-
-$htmlHeadXtra[] = '<script type="text/javascript">
-$(document).ready( function() {    
-    $(".yoxview").yoxview({
-		lang: "'.$lang_yoxview.'",
-		flashVideoPlayerPath: "'.$mediaplayer_path.'",	  
-        renderMenu: "false",
-		defaultDimensions: { iframe: { width: 800 }},
-        titleAttribute:"alt"   
-    });
-    for (i=0;i<$(".actions").length;i++) {
-        if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
-            $(".actions:eq("+i+")").hide();
-        }
-    }
-});
-</script>';
-
 // Create directory certificates
 DocumentManager::create_directory_certificate_in_course(api_get_course_id());
 
@@ -119,9 +87,11 @@ if (!$document_id) {
 
 $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
 $parent_id     = DocumentManager::get_document_id(api_get_course_info(), dirname($document_data['path']));
+
 if (!$parent_id) {
     $parent_id = 0; 
 }    
+
 $current_folder_id = $document_id;
 
 
@@ -152,13 +122,14 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
     }
 }
 
+
 // Is the document tool visible?
 // Check whether the tool is actually visible
-$table_course_tool = Database::get_course_table(TABLE_TOOL_LIST, $_course['dbName']);
-$tool_sql = 'SELECT visibility FROM ' . $table_course_tool . ' WHERE name = "'. TOOL_DOCUMENT .'" LIMIT 1';
-$tool_result = Database::query($tool_sql);
-$tool_row = Database::fetch_array($tool_result);
-$tool_visibility = $tool_row['visibility'];
+$table_course_tool  = Database::get_course_table(TABLE_TOOL_LIST, $_course['dbName']);
+$tool_sql           = 'SELECT visibility FROM ' . $table_course_tool . ' WHERE name = "'. TOOL_DOCUMENT .'" LIMIT 1';
+$tool_result        = Database::query($tool_sql);
+$tool_row           = Database::fetch_array($tool_result);
+$tool_visibility    = $tool_row['visibility'];
 if ($tool_visibility == '0' && $to_group_id == '0' && !($is_allowed_to_edit || $group_member_with_upload_rights)) {
     api_not_allowed(true);
 }
@@ -402,8 +373,86 @@ if (isset($_GET['createdir'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('CreateDir'));
 }
 
-Display::display_header('','Doc');
 
+//jquery thickbox already called from main/inc/header.inc.php
+
+$htmlHeadXtra[] = api_get_jquery_js();
+$htmlHeadXtra[] = api_get_jquery_ui_js();
+
+$htmlHeadXtra[] = api_get_js('yoxview/yoxview-init.js');
+$js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';   
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'yoxview/yoxview.css" type="text/css">';
+
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/blue/jplayer.blue.monday.css" type="text/css">';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
+
+$mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
+
+//automatic loading the course language for yoxview
+$yoxview_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
+$lang_yoxview  = api_get_language_isocode();
+$lang_yoxview = isset($yoxview_code_translation_table[$lang_yoxview]) ? $yoxview_code_translation_table[$lang_yoxview] : $lang_yoxview;
+
+$docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
+
+$file_list = $format_list = '';
+$count = 1;
+foreach ($docs_and_folders  as $file) {    
+    if ($file['filetype'] == 'file') {
+        $path_info = pathinfo($file['path']);   
+             
+        if (in_array($path_info['extension'], array('ogg', 'mp3', 'wav'))) {
+            $document_data = DocumentManager::get_document_data_by_id($file['id'], api_get_course_id());
+            if ($path_info['extension'] == 'ogg') {
+                $path_info['extension'] = 'oga';
+            }            
+            $jquery .= ' $("#jquery_jplayer_'.$count.'").jPlayer({                                
+                                ready: function() {                    
+                                    $(this).jPlayer("setMedia", {                                        
+                                        '.$path_info['extension'].' : "'.$document_data['direct_url'].'"  
+                                    });
+                                },
+                                swfPath: "'.$js_path.'jquery-jplayer",
+                                supplied: "mp3, m4a, oga, ogv, wav",          
+                                solution: "flash, html",  // Do not change this setting otherwise 
+                                cssSelectorAncestor: "#jp_interface_'.$count.'", 
+                            });'."\n\n";
+            $count++;      
+        }        
+    }
+}
+
+ 
+$htmlHeadXtra[] = '<script type="text/javascript">
+$(document).ready( function() {    
+    $(".yoxview").yoxview({
+        lang: "'.$lang_yoxview.'",
+        flashVideoPlayerPath: "'.$mediaplayer_path.'",    
+        renderMenu: "false",
+        defaultDimensions: { iframe: { width: 800 }},
+        titleAttribute:"alt"   
+    });
+        
+    //Experimental changes to preview mp3, ogg files        
+     '.$jquery.'   
+           
+    //Keep this down otherwise the jquery player will not work
+    for (i=0;i<$(".actions").length;i++) {
+        if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
+            $(".actions:eq("+i+")").hide();
+        }
+    }
+
+});
+</script>';
+
+
+
+Display::display_header('','Doc');
+?>
+
+  
+<?php 
 // Lib for event log, stats & tracking & record of the access
 event_access_tool(TOOL_DOCUMENT);
 
@@ -627,7 +676,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folde
 
 /*	CREATE DIRECTORY */
 //Only teacher and all users into their group and any user into his/her shared folder
-if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)) {
+if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)) {
     // Create directory with $_POST data
     if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
         // Needed for directory creation
@@ -801,15 +850,15 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 // Attach certificate in the gradebook
 if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isset($_GET['set_certificate']) && $_GET['set_certificate'] == strval(intval($_GET['set_certificate']))) {
     if (isset($_GET['cidReq'])) {
-        $course_id = Security::remove_XSS($_GET['cidReq']); // course id
-        $document_id = Security::remove_XSS($_GET['set_certificate']); // document id
+        $course_id      = Security::remove_XSS($_GET['cidReq']); // course id
+        $document_id    = Security::remove_XSS($_GET['set_certificate']); // document id
         DocumentManager::attach_gradebook_certificate ($course_id,$document_id);
         Display::display_normal_message(get_lang('IsDefaultCertificate'));
     }
 }
 
 /*	GET ALL DOCUMENT DATA FOR CURDIRPATH */
-if(isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
     $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, true);    
 } else {
     $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
@@ -859,7 +908,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
     // Create a sortable table with our data
     $sortable_data = array();
 
-    //while (list($key, $id) = each($docs_and_folders)) {
+    $count = 1;
     foreach ($docs_and_folders as $key => $document_data) {
         $row = array();        
         $row['id']   = $document_data['id'];
@@ -920,9 +969,20 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         // Validacion when belongs to a session
         $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
 
+        
+        $path_info = pathinfo($document_data['path']);
+        
+        if (in_array($path_info['extension'], array('ogg', 'mp3','wav'))) {            
+            $sound_preview = DocumentManager::generate_mp3_preview($count);
+            $count ++;
+        } else {
+            $sound_preview  = '';
+        }
+        
+        
         // Document title with hyperlink        
-        $row[] = create_document_link($document_data).$session_img.'<br />'.$invisibility_span_open.'<i>'.nl2br(htmlspecialchars($document_data['comment'],ENT_QUOTES,$charset)).'</i>'.$invisibility_span_close.$user_link;
-
+        $row[] = create_document_link($document_data).$session_img.'<br />'.$invisibility_span_open.'<i>'.nl2br(htmlspecialchars($document_data['comment'],ENT_QUOTES,$charset)).'</i>'.$invisibility_span_close.$user_link.$sound_preview;
+    
         // Comments => display comment under the document name
         $display_size = format_file_size($size);
         $row[] = '<span style="display:none;">'.$size.'</span>'.$invisibility_span_open.$display_size.$invisibility_span_close;
@@ -1107,15 +1167,15 @@ $table->set_additional_parameters($query_vars);
 $column = 0;
 
 if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
-    $table->set_header($column++, '', false, array('style' => 'width:30px;'));
+    $table->set_header($column++, '', false, array('style' => 'width:12px;'));
 }
 $table->set_header($column++, get_lang('Type'),true, array('style' => 'width:30px;'));
 $table->set_header($column++, get_lang('Name'));
 $table->set_header($column++, get_lang('Size'),true, array('style' => 'width:50px;'));
-$table->set_header($column++, get_lang('Date'),true, array('style' => 'width:150px;'));
+$table->set_header($column++, get_lang('Date'),true, array('style' => 'width:105px;'));
 // Admins get an edit column
 if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)) {
-    $table->set_header($column++, get_lang('Actions'), false, array ('style' => 'width:180px;'));
+    $table->set_header($column++, get_lang('Actions'), false, array ('style' => 'width:160px;'));
 }
 
 // Actions on multiple selected documents

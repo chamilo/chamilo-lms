@@ -30,21 +30,23 @@ class DocumentManager {
      * @todo eliminate globals
      */
     public static function get_course_quota() {
-        global $_course, $maxFilledSpace;
+        global $_course;
         if (empty($_course['sysCode'])) { return DEFAULT_DOCUMENT_QUOTA; }
-        $course_code = Database::escape_string($_course['sysCode']);
+        $course_code  = Database::escape_string($_course['sysCode']);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
-        $sql_query = "SELECT ".DISK_QUOTA_FIELD." FROM $course_table WHERE code = '$course_code'";
-        $sql_result = Database::query($sql_query);
-        $result = Database::fetch_array($sql_result);
-        $course_quota = $result[DISK_QUOTA_FIELD];
+        $sql_query      = "SELECT ".DISK_QUOTA_FIELD." FROM $course_table WHERE code = '$course_code'";
+        $sql_result     = Database::query($sql_query);
+        $course_quota = null;
+        if (Database::num_rows($sql_result)) {
+            $result         = Database::fetch_array($sql_result);
+            $course_quota   = $result[DISK_QUOTA_FIELD];
+        }
 
         if (is_null($course_quota)) {
             // Course table entry for quota was null, then use default value
             $course_quota = DEFAULT_DOCUMENT_QUOTA;
         }
-
         return $course_quota;
     }
 

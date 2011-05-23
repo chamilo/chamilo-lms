@@ -83,9 +83,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
         // This should be updated to "upload" here and on the button, and it would be better to
         // check something else than a string displayd on a button.
         if (strcmp($_POST['submit'], get_lang('Send')) === 0) {
-
-            //@todo: this value should be moved to the platform admin section
-            $maxFilledSpace = 100000000;
+            $max_filled_space = DocumentManager::get_course_quota();
 
             //initialise $finish
             if (!isset($finish)) { $finish = 0; }
@@ -121,9 +119,9 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     $filename = $_FILES['userFile']['name'];
                 }
 
-                /*if (treat_uploaded_file($_FILES['userFile'], $document_sys_path, $uploadPath."/".$fld, $maxFilledSpace, $unzip))*/
+                /*if (treat_uploaded_file($_FILES['userFile'], $document_sys_path, $uploadPath."/".$fld, $max_filled_space, $unzip))*/
                 $allow_output_on_success = false;
-                if (handle_uploaded_document($_course, $_FILES['userFile'], $document_sys_path, $uploadPath.'/'.$fld, api_get_user_id(), null, null, $maxFilledSpace, $unzip, '', $allow_output_on_success)) {
+                if (handle_uploaded_document($_course, $_FILES['userFile'], $document_sys_path, $uploadPath.'/'.$fld, api_get_user_id(), null, null, $max_filled_space, $unzip, '', $allow_output_on_success)) {
 
                     if ($finish == 2) {
                         $imgparams = $_POST['imgparams'];

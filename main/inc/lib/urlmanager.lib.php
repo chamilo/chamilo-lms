@@ -70,7 +70,7 @@ class UrlManager
 	{
 		$id = intval($id);
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$sql= "DELETE FROM $table_access_url WHERE id = ".Database::escape_string($id);
+		$sql= "DELETE FROM $table_access_url WHERE id = ".$id;
 		$result = Database::query($sql);
 		return $result;
 	}

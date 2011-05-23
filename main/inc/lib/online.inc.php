@@ -110,8 +110,8 @@ function online_logout() {
  */
 function LoginDelete($user_id) {
 	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-    $user_id = (int) $user_id;
-	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".Database::escape_string($user_id)."'";
+    $user_id = intval($user_id);
+	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".$user_id."'";
 	@Database::query($query);
 }
 

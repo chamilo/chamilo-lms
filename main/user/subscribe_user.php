@@ -1,4 +1,4 @@
-<?php // $Id: subscribe_user.php 20412 2009-05-08 16:09:34Z herodoto $
+<?php
 /* For licensing terms, see /license.txt*/
 
 /**
@@ -50,9 +50,7 @@ Display :: display_header($tool_name, "User");
 // api_display_tool_title($tool_name);
 
 /*
-==============================================================================
 		MAIN SECTION
-==============================================================================
 */
 
 $current_session_id = api_get_session_id();
@@ -164,11 +162,7 @@ if (!empty($_SESSION['session_user_name'])) {
 	unset($_SESSION['session_user_name']);
 }
 
-/*
------------------------------------------------------------
-		SHOW LIST OF USERS
------------------------------------------------------------
-*/
+/*		SHOW LIST OF USERS  */
 
 /**
  *  * Get the users to display on the current page.

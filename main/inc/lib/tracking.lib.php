@@ -3183,8 +3183,10 @@ class TrackingCourseLog {
         // get all users data from a course for sortable with limit
         $condition_user = "";
         if (is_array($user_ids)) {
+            $user_ids = array_map('intval', $user_ids);
             $condition_user = " WHERE user.user_id IN (".implode(',',$user_ids).") ";
         } else {
+            $user_ids = intval($user_ids);
             $condition_user = " WHERE user.user_id = $user_ids ";
         }
                  
@@ -3198,18 +3200,27 @@ class TrackingCourseLog {
             $url_condition = " AND user.user_id = url_users.user_id AND access_url_id='$access_url_id'";
         }
 
-        $sql = "SELECT user.user_id as col0,
-                user.official_code as col1,
-                user.lastname as col2,
-                user.firstname as col3
+        $sql = "SELECT user.user_id as user_id,
+                user.official_code  as col0,
+                user.lastname       as col1,
+                user.firstname      as col2
                 FROM $tbl_user as user $url_table
                 $condition_user $url_condition";
 
                 if (!in_array($direction, array('ASC','DESC'))) {
                     $direction = 'ASC';
                 }
-
-                $column          = intval($column);
+                $column = intval($column);
+                
+                if ($is_western_name_order) {     
+                    $original_column = $column;                
+                    if ($original_column == 1) {
+                        $column = 2;
+                    }
+                    if ($original_column == 2) {
+                         $column = 1;
+                    }                 
+                }
                 $from            = intval($from);
                 $number_of_items = intval($number_of_items);
                 
@@ -3220,50 +3231,62 @@ class TrackingCourseLog {
                 $users = array ();
                 $t = time();
                 $row = array();
-                while ($user = Database::fetch_row($res)) {
-                    $row[0] = $user[1];
-                    if ($is_western_name_order) {
-                        $row[1] = $user[3];
-                        $row[2] = $user[2];
-                    } else {
-                        $row[1] = $user[2];
-                        $row[2] = $user[3];
-                    }
-                    $row[3] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user[0], $course_code, $session_id));
+                while ($user = Database::fetch_array($res, 'ASSOC')) {
+                    //$user['user_id'] = $user['user_id']
+                    $user['official_code']  = $user['col0'];
+                    if ($is_western_name_order) {                        
+                        $user['lastname']       = $user['col2'];
+                        $user['firstname']      = $user['col1'];                     
+                    } else {                        
+                        $user['lastname']       = $user['col1'];
+                        $user['firstname']      = $user['col2'];
+                    }           
+                    $user['time'] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, $session_id));
 
-                    $avg_student_score = Tracking::get_avg_student_score($user[0], $course_code, array(), $session_id);                                
-                    $avg_student_progress = Tracking::get_avg_student_progress($user[0], $course_code, array(), $session_id);
-                    if (empty($avg_student_progress)) {$avg_student_progress=0;}
-                    $row[4] = $avg_student_progress.'%';
+                    $avg_student_score      = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), $session_id);                                
+                    $avg_student_progress   = Tracking::get_avg_student_progress($user['user_id'], $course_code, array(), $session_id);
+                    if (empty($avg_student_progress)) { $avg_student_progress=0; }
+                    $user['average_progress'] = $avg_student_progress.'%';
 
-                    if(is_numeric($avg_student_score)) {
-                        $row[5] = $avg_student_score.'%';
+                    if (is_numeric($avg_student_score)) {
+                        $user['student_score'] = $avg_student_score.'%';
                     } else {
-                        $row[5] = $avg_student_score;
+                        $user['student_score'] = $avg_student_score;
                     }
-                    $row[6] = Tracking::count_student_assignments($user[0], $course_code, $session_id);
-                    $row[7] = Tracking::count_student_messages($user[0], $course_code, $session_id);
-                    $row[8] = Tracking::get_first_connection_date_on_the_course($user[0], $course_code, $session_id);
-                    $row[9] = Tracking::get_last_connection_date_on_the_course($user[0], $course_code, $session_id);
+                    $user['count_assignments']  = Tracking::count_student_assignments($user['user_id'], $course_code, $session_id);
+                    $user['count_messages']     = Tracking::count_student_messages($user['user_id'], $course_code, $session_id);
+                    $user['first_connection']   = Tracking::get_first_connection_date_on_the_course($user['user_id'], $course_code, $session_id);
+                    $user['last_connection']    = Tracking::get_last_connection_date_on_the_course($user['user_id'], $course_code, $session_id);
 
                     // we need to display an additional profile field
                     if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-                        if (is_array($additional_user_profile_info[$user[0]])) {
-                            $row[10]=implode(', ', $additional_user_profile_info[$user[0]]);
+                        if (is_array($additional_user_profile_info[$user['user_id']])) {
+                            $row['additional']=implode(', ', $additional_user_profile_info[$user['user_id']]);
                         } else {
-                            $row[10]='&nbsp;';
+                            $row['additional']='&nbsp;';
                         }
                     }
-                    $row[11] = '<center><a href="../mySpace/myStudents.php?student='.$user[0].'&details=true&course='.$course_code.'&origin=tracking_course&id_session='.$session_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
-                    if ($export_csv) {
-                        $row[8] = strip_tags($row[8]);
-                        $row[9] = strip_tags($row[9]);
-                        unset($row[10]);
-                        unset($row[11]);
-                        $csv_content[] = $row;
-                    }
-                    // store columns in array $users
-                    $users[] = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9],$row[10],$row[11]);
+                    $user['link'] = '<center><a href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&course='.$course_code.'&origin=tracking_course&id_session='.$session_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
+                    
+                     // store columns in array $users
+                    $user_row = array($user['official_code'],  
+                                     $user['lastname'], 
+                                     $user['firstname'], 
+                                     $user['time'],
+                                     $user['average_progress'],
+                                     $user['student_score'],
+                                     $user['count_assignments'],
+                                     $user['count_messages'],
+                                     $user['first_connection'],
+                                     $user['last_connection'],
+                                     $user['additional'],
+                                     $user['link']);
+                    $users[] = $user_row;
+                    if ($export_csv) {                        
+                        unset($user_row[11]);
+                        unset($user_row[12]);
+                        $csv_content[] = $user_row;
+                    }                                       
                 }
                 return $users;
     }

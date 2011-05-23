@@ -506,13 +506,13 @@ if ($_GET['studentlist'] == 'false') {
 
         $table->set_additional_parameters($parameters);
 
-        $table->set_header(0, get_lang('OfficialCode'), false, 'align="center"');
+        $table->set_header(0, get_lang('OfficialCode'), true, 'align="center"');
         if ($is_western_name_order) {
-            $table->set_header(1, get_lang('FirstName'), false, 'align="center"');
-            $table->set_header(2, get_lang('LastName'), false, 'align="center"');
+            $table->set_header(1, get_lang('FirstName'), true, 'align="center"');
+            $table->set_header(2, get_lang('LastName'),  true, 'align="center"');
         } else {
-            $table->set_header(1, get_lang('LastName'), false, 'align="center"');
-            $table->set_header(2, get_lang('FirstName'), false, 'align="center"');
+            $table->set_header(1, get_lang('LastName'),  true, 'align="center"');
+            $table->set_header(2, get_lang('FirstName'), true, 'align="center"');
         }
         $table->set_header(3, get_lang('TrainingTime'), false);
         $table->set_header(4, get_lang('CourseProgress').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));

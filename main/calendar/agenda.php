@@ -347,7 +347,7 @@ if (!$_GET['action'] || $_GET['action']=="view") {
 		if ($_SESSION['view'] == 'month') {
 		    display_monthcalendar($select_month, $select_year, $agenda_items);            
 		} else {
-		  if(!empty($_GET['agenda_id'])) {
+		  if (!empty($_GET['agenda_id'])) {
                 display_one_agenda_item($_GET['agenda_id']);
             } else {
                 $month_name = $MonthsLong[$select_month -1];               

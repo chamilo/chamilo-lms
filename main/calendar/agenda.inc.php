@@ -71,7 +71,7 @@ function get_calendar_items($select_month, $select_year, $select_day = false) {
 	$user_id = api_get_user_id();
 	if ($_SESSION['user']!==null) {
 		$user_id = intval($_SESSION['user']);
-	}
+	}	
 	if ($_SESSION['group']!==null) {
 		$group_id  = intval($_SESSION['group']);
 	}
@@ -111,11 +111,11 @@ function get_calendar_items($select_month, $select_year, $select_day = false) {
                     $session_condition";
             } else {
                 //AND ( ip.to_user_id=$user_id OR ip.to_group_id='0')
-                    $sql="SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+                $sql="SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
                     FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
                     WHERE agenda.id = ip.ref   ".$show_all_current."
                     AND ip.tool='".TOOL_CALENDAR_EVENT."'
-                    AND ( ip.to_user_id = $user_id)
+                    AND ( ip.to_user_id = $user_id )
                     AND ip.visibility='1'
                     $session_condition";
             }
@@ -1348,8 +1348,7 @@ function show_group_filter_form()
 
 	echo "<select name=\"select\" onchange=\"javascript: MM_jumpMenu('parent',this,0)\">";
 	echo "<option value=\"agenda.php?group=none\">show all groups</option>";
-	foreach($group_list as $this_group)
-	{
+	foreach($group_list as $this_group) {
 		// echo "<option value=\"agenda.php?isStudentView=true&amp;group=".$this_group['id']."\">".$this_group['name']."</option>";
 		echo "<option value=\"agenda.php?group=".$this_group['id']."\" ";
 		echo ($this_group['id']==$_SESSION['group'])? " selected":"" ;
@@ -1386,18 +1385,18 @@ function show_user_filter_form()
 * This function displays a dropdown list that allows the course administrator do view the calendar items of one specific group
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function show_user_group_filter_form()
-{
-	echo "<select name=\"select\" onchange=\"javascript: MM_jumpMenu('parent',this,0)\">";
-
+function show_user_group_filter_form() {
+    
+	echo "<select name=\"select\" onchange=\"javascript: MM_jumpMenu('parent',this,0)\">";	
+    echo "<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
 	// Groups
-	$option = "<optgroup label=\"".get_lang("Groups")."\">";
-	$group_list=get_course_groups();
-	//echo "<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
+	
+	$group_list = get_course_groups();
 
 	$group_available_to_access =array();
-
-	if(!empty($group_list)){
+    $option = '';
+	if (!empty($group_list)) {	    
+	    $option = "<optgroup label=\"".get_lang("Groups")."\">";
 		foreach($group_list as $this_group) {
 			// echo "<option value=\"agenda.php?isStudentView=true&amp;group=".$this_group['id']."\">".$this_group['name']."</option>";
 			$has_access = GroupManager::user_has_access(api_get_user_id(),$this_group['id'],GROUP_TOOL_CALENDAR);
@@ -1414,22 +1413,23 @@ function show_user_group_filter_form()
 				$option.=  ">".$this_group['name']."</option>";
 			}
 		}
+		$option.= "</optgroup>";
 	}
-
-	$all =  "<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
-	$option = $all.$option;
-
-	$option.= "</optgroup>";
+	
 	echo $option;
+	
 	// Users
-	echo "<optgroup label=\"".get_lang("Users")."\">";
-	$user_list=get_course_users();
-	foreach($user_list as $this_user) {
-		echo "<option value=\"agenda.php?user=".$this_user['uid']."\" ";
-		echo ($this_user['uid']==$_SESSION['user'])? " selected":"" ;
-		echo ">".api_get_person_name($this_user['firstName'], $this_user['lastName'])."</option>";
-	}
-	echo "</optgroup>";
+	
+	$user_list = get_course_users();
+	if (!empty($user_list)) {
+	    echo "<optgroup label=\"".get_lang("Users")."\">";	
+    	foreach($user_list as $this_user) {
+    		echo "<option value=\"agenda.php?user=".$this_user['uid']."\" ";
+    		echo ($this_user['uid']==$_SESSION['user'])? " selected":"" ;
+    		echo ">".api_get_person_name($this_user['firstName'], $this_user['lastName'])."</option>";
+    	}
+    	echo "</optgroup>";
+	}	
 	echo "</select>";
 }
 
@@ -1506,7 +1506,8 @@ function display_courseadmin_links() {
 	  echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'),'','32')."</a>";
 		echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=importical&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'),'','32')."</a>";
 	if (empty ($_SESSION['toolgroup'])) {
-		echo get_lang('UserGroupFilter');
+		//echo get_lang('UserGroupFilter');
+		echo get_lang('SentTo');
 		echo "&nbsp;&nbsp;<form name=\"filter\" style=\"display:inline;\">";
 		show_user_group_filter_form();
 		echo "</form> ";

@@ -118,8 +118,6 @@ if ($is_allowedToEdit) {
 		// adds the question ID represented by $recup into the list of questions for the current exercise
 		//$objExercise->addToList($new_id);
 		api_session_register('objExercise');
-        
-		
 		header("Location: admin.php?".api_get_cidreq()."&exerciseId=$fromExercise");
 		exit();	
 	}
@@ -189,8 +187,6 @@ if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array ('url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('ToolGradebook'));
 }
 
-
-
 // if admin of course
 if (!$is_allowedToEdit) {
     api_not_allowed(true);
@@ -225,6 +221,7 @@ echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 
 //Session list  
 $session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
+
 $session_select_list = array();
 foreach($session_list as $item) {
     $session_select_list[$item['id']] = $item['name'];
@@ -277,18 +274,31 @@ if (is_array($exercise_list)) {
         }
     }
 }    
-
 $select_exercise_html =  Display::select('exerciseId', $my_exercise_list, $exerciseId, array('onchange'=>'submit_form(this);'), false);
 echo Display::form_row(get_lang('Exercise'), $select_exercise_html);
 
-//Difficulty list (only from 0 to 5)                
+//Difficulty list (only from 0 to 5)
+                
 $select_difficulty_html = Display::select('exerciseLevel', array(0=>0, 1=>1,2=>2,3=>3,4=>4,5=>5), $exerciseLevel, array('onchange'=>'submit_form(this);'));
 echo Display::form_row(get_lang('Difficulty'), $select_difficulty_html);
 
+//Answer type
+
 $question_list = Question::get_types_information();
 $new_question_list = array();
-foreach($question_list as $key=>$item) {
-	$new_question_list[$key] = get_lang($item[1]);
+$objExercise->feedbacktype;
+foreach ($question_list as $key=>$item) {
+    if ($objExercise->feedbacktype == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+        if (!in_array($key, array(HOT_SPOT_DELINEATION, UNIQUE_ANSWER))) {
+            continue;
+        }
+        $new_question_list[$key] = get_lang($item[1]);
+    } else {
+        if ($key == HOT_SPOT_DELINEATION) {
+            continue;
+        }
+        $new_question_list[$key] = get_lang($item[1]);
+    }
 }
 
 //Answer type list
@@ -368,7 +378,7 @@ if ($exerciseId > 0) {
 	}
 
 	$answer_where = '';
-	if (isset($answerType) && $answerType!= -1 ) {
+	if (isset($answerType) && $answerType != -1 ) {
 		$answer_where = ' questions.type='.$answerType.' AND ';
 	}
 
@@ -401,8 +411,13 @@ if ($exerciseId > 0) {
 	if (isset($answerType) && $answerType != -1) {
 		$filter .= ' AND qu.type='.$answerType.' ';
 	}
+	
+    if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+        $filter .= ' AND qu.type <> '.HOT_SPOT_DELINEATION.' ';
+    }
+    
 	$new_limit_page = $limitQuestPage + 1;
-    if ($session_id != 0) {        
+    if ($session_id != 0) {       
 
         $main_question_list = array();
         if (!empty($course_list))
@@ -432,7 +447,12 @@ if ($exerciseId > 0) {
                                 if ($answerType != '-1')
                                 if ($answerType != $question_obj->type) {
                                 	continue;
-                                }                        
+                                }
+                                if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                                     if ($question_obj->type == HOT_SPOT_DELINEATION)  {
+                                         continue;
+                                     }
+                                }                    
                                 $question_row       = array('id'=>$question_obj->id, 'question'=>$question_obj->question, 'type'=>$question_obj->type, 'level'=>$question_obj->level, 'exercise_id'=>$exercise['id']);
                                                             
                                 $main_question_list[]    = $question_row;                        
@@ -486,7 +506,7 @@ echo '</td>
 </tr>
 <tr bgcolor="#e6e6e6">';
 
-if(!empty($fromExercise)) {
+if (!empty($fromExercise)) {
 	if (api_get_session_id() == 0 ){
     	echo '<th width="4%"> </th>';
 	}

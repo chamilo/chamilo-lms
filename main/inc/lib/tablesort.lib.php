@@ -127,18 +127,30 @@ class TableSort {
         		    $new_data[$document['id']] = $document;    		        		     
         		}   
                 if ($direction == SORT_ASC) {
-                    api_natrsort($docs_to_sort);
-                    api_natrsort($folder_to_sort);                
+                    if (!empty($docs_to_sort)) {
+                        api_natrsort($docs_to_sort);
+                    }
+                    if (!empty($folder_to_sort)) {
+                        api_natrsort($folder_to_sort);
+                    }                
                 } else {
-                    api_natsort($docs_to_sort);
-                    api_natsort($folder_to_sort);
+                    if (!empty($docs_to_sort)) {
+                        api_natsort($docs_to_sort);
+                    }
+                    if (!empty($folder_to_sort)) {
+                        api_natsort($folder_to_sort);
+                    }
                 }
                 $new_data_order = array();
-                foreach($docs_to_sort as $id => $document) {
-                    $new_data_order[] = $new_data[$id];
-                }            
-                foreach($folder_to_sort as $id => $document) {
-                    $new_data_order[] = $new_data[$id];
+                if (!empty($docs_to_sort)) {
+                    foreach($docs_to_sort as $id => $document) {
+                        $new_data_order[] = $new_data[$id];
+                    }
+                }
+                if (!empty($folder_to_sort)) {
+                    foreach($folder_to_sort as $id => $document) {
+                        $new_data_order[] = $new_data[$id];
+                    }
                 }
                 $data = $new_data_order; 		
     		}              

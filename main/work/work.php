@@ -169,8 +169,7 @@ if (isset ($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
 } elseif (isset ($_POST['curdirpath']) && $_POST['curdirpath'] != '') {
 	//$cur_dir_path = preg_replace('#[\.]+/#','/',$_POST['curdirpath']); //escape '..' hack attempts
 	//now using common security approach with security lib
-	$in_course = Security :: check_abs_path($base_work_dir . '/' . $_POST['curdirpath'], $base_work_dir);
-	echo '2';
+	$in_course = Security :: check_abs_path($base_work_dir . '/' . $_POST['curdirpath'], $base_work_dir);	
 	if (!$in_course) {
 		$cur_dir_path = "/";
 	} else {
@@ -1342,14 +1341,11 @@ if ($is_course_member) {
 		//$new_folder_text .= '<button type="button" name="create_dir" class="add" onClick="validate();" value="' . get_lang('Ok') . '"/>'.get_lang('CreateDirectory').'</button>';
 
 		//new additional fields inside the "if condition" just to agroup
-		if(true):
-
 		$new_folder_text .= '<div class="row">
 								<div class="label">
 									'.get_lang('Description').'
 								</div>
 								<div class="formw">';
-
 				$oFCKeditor = new FCKeditor('description') ;
 				$oFCKeditor->ToolbarSet = 'work';
 				$oFCKeditor->Width		= '100%';
@@ -1357,7 +1353,6 @@ if ($is_course_member) {
 				$oFCKeditor->Value		= $message;
 				$return =	$oFCKeditor->CreateHtml();
 				$new_folder_text .= $return;
-
 		$new_folder_text .= '</div>
 							</div>';
 
@@ -1399,8 +1394,6 @@ if ($is_course_member) {
 								</div>
 							</div>';
 
-
-		endif;
 
 		$new_folder_text .= '<div class="row">
 								<div class="label">

@@ -597,27 +597,50 @@ function database_server_connect() {
     @Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
 }
 
+function database_exists($database_name) {
+    $result = @Database::query("SHOW DATABASES LIKE '".Database::escape_string($database_name)."' ");
+    if (Database::num_rows($result)) {
+        return true;
+    }
+    return false;
+}
+
 /**
  * In step 3. Tests establishing connection to the database server. 
- * Tests also the possibility for multiple databases configuration.
+ * If it's a single database environment the function checks if the database exist. 
+ * If the database doesn't exist we check the creation permissions. 
+ * 
  * @return int		1 when there is no problem;
  * 					0 when a new database is impossible to be created, then the single/multiple database configuration is impossible too
  * 				   -1 when there is no connection established.
  */
-function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm) {
+function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm) {
     $dbConnect = -1;
+    //Checking user credentials
     if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
-        @Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
-        $multipleDbCheck = @Database::query("CREATE DATABASE ".$dbPrefixForm."test_chamilo_connection");
-        if ($multipleDbCheck !== false) {
-            $multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_chamilo_connection");
+        $check_user_can_create_databases = true;
+        //Checking if single database exist 
+        if ($singleDbForm) {            
+            if (database_exists($dbPrefixForm.$dbNameForm)) {                        
+                $check_user_can_create_databases = false;                
+                $dbConnect = 1;    
+            }            
+        } 
+        
+        //Checking database creation
+        if ($check_user_can_create_databases) {
+            @Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)        
+            $multipleDbCheck = @Database::query("CREATE DATABASE ".$dbPrefixForm."test_chamilo_connection");
             if ($multipleDbCheck !== false) {
-                $dbConnect = 1;
+                $multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_chamilo_connection");
+                if ($multipleDbCheck !== false) {
+                    $dbConnect = 1;
+                } else {
+                    $dbConnect = 0;
+                }
             } else {
                 $dbConnect = 0;
             }
-        } else {
-            $dbConnect = 0;
         }
     } else {
         $dbConnect = -1;
@@ -1596,8 +1619,9 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         echo get_lang('DBSettingUpgradeIntro');
         echo '</div>';
     } else {
+        
         if (empty($dbPrefixForm)) { //make sure there is a default value for db prefix
-            $dbPrefixForm = 'chamilo_';
+            //$dbPrefixForm = 'chamilo_';
         }
         echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2>';
         echo '</div>';
@@ -1681,7 +1705,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     <tr>
         <td><button type="submit" class="login" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" ><?php echo get_lang('CheckDatabaseConnection'); ?></button></td>
         <?php
-        $dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm);
+        $dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm);
         if ($dbConnect == 1): ?>
         <td colspan="2">
             <div class="confirmation-message">

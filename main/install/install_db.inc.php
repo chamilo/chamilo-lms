@@ -62,7 +62,7 @@ if (empty($mysqlUserDb) || $mysqlUserDb == 'mysql' || $mysqlUserDb == $dbPrefixF
 }
 
 //This parameter is needed to run a command line to install Chamilo using BNPanel + ISPConfig see #1799
-if(!defined('CLI_INSTALLATION')) {
+if (!defined('CLI_INSTALLATION')) {
 
 	$result = Database::query("SHOW VARIABLES LIKE 'datadir'") or die(Database::error());
 	
@@ -72,7 +72,18 @@ if(!defined('CLI_INSTALLATION')) {
 	if (!$singleDbForm) {
 		Database::query("DROP DATABASE IF EXISTS `$mysqlMainDb`") or die(Database::error());
 	}
-	Database::query("CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`") or die(Database::error());
+	
+	$create_database = true;	
+	if ($singleDbForm) {
+        if (database_exists($mysqlMainDb)) {
+	       $create_database = false;
+        }
+	}
+	
+	if ($create_database) {
+	   Database::query("CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`") or die(Database::error());
+	}
+	
 }
 
 /**

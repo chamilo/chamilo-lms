@@ -77,7 +77,8 @@
         minipb();
       });
       // Hiding navigation left zone
-      $('#learning_path_left_zone').hide(50).css('marginLeft','10px');
+      $('#learning_path_left_zone').hide(50);
+      $('#learning_path_right_zone').css('margin-left','10px');
       $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
 
     },function(){

@@ -598,38 +598,31 @@ function database_server_connect() {
 }
 
 /**
- * In step 3. Tests establishing connection to the database server. Tests also the possibility for multiple databases configuration.
+ * In step 3. Tests establishing connection to the database server. 
+ * Tests also the possibility for multiple databases configuration.
  * @return int		1 when there is no problem;
- * 					0 when a new database is impossible to be created, then the multiple databases configuration is impossible too;
- * 					-1 when there is no connection established.
+ * 					0 when a new database is impossible to be created, then the single/multiple database configuration is impossible too
+ * 				   -1 when there is no connection established.
  */
 function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm) {
     $dbConnect = -1;
-    if ($singleDbForm == 1) {
-        if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
-            $dbConnect = 1;
-        } else {
-            $dbConnect = -1;
-        }
-    } elseif ($singleDbForm == 0) {
-        if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
-            @Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
-            $multipleDbCheck = @Database::query("CREATE DATABASE ".$dbPrefixForm."test_chamilo_connection");
+    if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
+        @Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+        $multipleDbCheck = @Database::query("CREATE DATABASE ".$dbPrefixForm."test_chamilo_connection");
+        if ($multipleDbCheck !== false) {
+            $multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_chamilo_connection");
             if ($multipleDbCheck !== false) {
-                $multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_chamilo_connection");
-                if ($multipleDbCheck !== false) {
-                    $dbConnect = 1;
-                } else {
-                    $dbConnect = 0;
-                }
+                $dbConnect = 1;
             } else {
                 $dbConnect = 0;
             }
         } else {
-            $dbConnect = -1;
+            $dbConnect = 0;
         }
-    }
-    return $dbConnect; //return "1"if no problems, "0" if, in case of multiDB we can't create a new DB and "-1" if there is no connection.
+    } else {
+        $dbConnect = -1;
+    }    
+    return $dbConnect; //return "1"if no problems, "0" if, in case we can't create a new DB and "-1" if there is no connection.
 }
 
 /**

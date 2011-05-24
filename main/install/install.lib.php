@@ -1654,7 +1654,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     </tr>
     </div>    
     <?php    
-    display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;', null, 'id="optional_param1" style="display:none;"');
+    display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm',  $dbNameForm,  '&nbsp;', null, 'id="optional_param1" style="display:none;"');
     display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" style="display:none;"');
     if ($installType == 'update' && in_array($_POST['old_version'], $update_from_version_6)) {
         display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" style="display:none;"');

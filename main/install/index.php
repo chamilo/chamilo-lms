@@ -17,11 +17,11 @@
 
 /*		CONSTANTS */
 
-define('SYSTEM_INSTALLATION', 1);
-define('INSTALL_TYPE_UPDATE', 'update');
-define('FORM_FIELD_DISPLAY_LENGTH', 40);
-define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
-define('MAX_FORM_FIELD_LENGTH', 80);
+define('SYSTEM_INSTALLATION',                   1);
+define('INSTALL_TYPE_UPDATE',                   'update');
+define('FORM_FIELD_DISPLAY_LENGTH',             40);
+define('DATABASE_FORM_FIELD_DISPLAY_LENGTH',    25);
+define('MAX_FORM_FIELD_LENGTH',                 80);
 
 /*		PHP VERSION CHECK */
 
@@ -317,13 +317,13 @@ if ($encryptPassForm == '1') {
 		$(document).ready( function() {
 			 //checked
 			if ($('#singleDb1').attr('checked')==false) {
-					$('#dbStatsForm').removeAttr('disabled');
-					$('#dbUserForm').removeAttr('disabled');
+					//$('#dbStatsForm').removeAttr('disabled');
+					//$('#dbUserForm').removeAttr('disabled');
 					$('#dbStatsForm').attr('value','chamilo_main');
-					$('#dbUserForm').attr('value','chamilo_main');
+				    $('#dbUserForm').attr('value','chamilo_main');
 			} else if($('#singleDb1').attr('checked')==true){
-					$('#dbStatsForm').attr('disabled','disabled');
-					$('#dbUserForm').attr('disabled','disabled');
+			        //$('#dbStatsForm').attr('disabled','disabled');
+					//$('#dbUserForm').attr('disabled','disabled');
 					$('#dbStatsForm').attr('value','chamilo_main');
 					$('#dbUserForm').attr('value','chamilo_main');
 			}
@@ -341,11 +341,13 @@ if ($encryptPassForm == '1') {
 			if (my_option=='singleDb1') {
 				$('#optional_param2').hide();
 				$('#optional_param4').hide();				
+				
 				$('#dbStatsForm').attr('value','chamilo_main');
 				$('#dbUserForm').attr('value','chamilo_main');
 			} else if (my_option=='singleDb0') {
 				$('#optional_param2').show();
 				$('#optional_param4').show();
+				
 				$('#dbStatsForm').attr('value','chamilo_main');
 				$('#dbUserForm').attr('value','chamilo_main');
 			}
@@ -353,14 +355,21 @@ if ($encryptPassForm == '1') {
 	</script>
 	<script language="javascript">
 		init_visibility=0;
-		function show_hide_option() {
-			if(init_visibility == 0) {
-				document.getElementById('optional_param1').style.display = '';
-				document.getElementById('optional_param2').style.display = '';
-				if(document.getElementById('optional_param3')) {
+		function show_hide_option() {			
+			if (init_visibility == 0) {
+				$('#optional_param1').show();			
+				if ($('#singleDb1').attr("checked") == true) {										
+					$('#optional_param2').hide();
+					$('#optional_param4').hide();
+				} else {					
+					$('#optional_param2').show();
+					$('#optional_param4').show();  					
+                }	
+				//document.getElementById('optional_param2').style.display = '';
+				if (document.getElementById('optional_param3')) {
 					document.getElementById('optional_param3').style.display = '';
 				}
-				document.getElementById('optional_param4').style.display = '';
+				
 				//document.getElementById('optional_param5').style.display = '';
 				document.getElementById('optional_param6').style.display = '';
 				init_visibility = 1;
@@ -368,7 +377,7 @@ if ($encryptPassForm == '1') {
 			} else {
 				document.getElementById('optional_param1').style.display = 'none';
 				document.getElementById('optional_param2').style.display = 'none';
-				if(document.getElementById('optional_param3')) {
+				if (document.getElementById('optional_param3')) {
 					document.getElementById('optional_param3').style.display = 'none';
 				}
 				document.getElementById('optional_param4').style.display = 'none';

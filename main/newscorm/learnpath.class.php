@@ -5134,7 +5134,7 @@ class learnpath {
         $forums = $this->get_forums();
 
         $headers = array(   Display::return_icon('folder_document.png', get_lang('Documents'), array(), 64), 
-                            Display::return_icon('quiz.png', get_lang('Exercises'), array(), 64),
+                            Display::return_icon('quiz.png',  get_lang('Quiz'), array(), 64),
                             Display::return_icon('links.png', get_lang('Links'), array(), 64),
                             Display::return_icon('works.png', get_lang('Works'), array(), 64),
                             Display::return_icon('forum.png', get_lang('Forums'), array(), 64),

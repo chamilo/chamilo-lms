@@ -1106,4 +1106,6 @@ $NotAddedToCourse = "Not added to course";
 $UsersNotRegistered = "Users who did not register.";
 $ClearFilterResults = "Clear filter results";
 $SelectFilter = "Select filter";
+$ThereIsNoClassScheduledTodayTryPickingAnotherDay = "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons.";
+$AddToCalendar = "Add to calendar";
 ?>

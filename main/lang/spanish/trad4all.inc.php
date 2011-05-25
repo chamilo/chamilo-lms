@@ -1109,4 +1109,5 @@ $NotAddedToCourse = "No agregado al curso";
 $UsersNotRegistered = "Usuarios que no se registraron.";
 $ClearFilterResults = "Limpiar resultados";
 $SelectFilter = "Selecionar filtro";
+$ThereIsNoClassScheduledTodayTryPickingAnotherDay = "Intente otra fecha o añadir una hoja de asistencia hoy usando los iconos de acción.";
 ?>

@@ -10,20 +10,20 @@
  *   of older versions before upgrading.
  */
 
-/*		CONSTANTS */
+/*      CONSTANTS */
 
 define('SYSTEM_MAIN_DATABASE_FILE', 'db_main.sql');
-define('COUNTRY_DATA_FILENAME', 	'country_data.csv');
+define('COUNTRY_DATA_FILENAME',     'country_data.csv');
 define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
-define('SYSTEM_CONFIG_FILENAME', 	'configuration.dist.php');
+define('SYSTEM_CONFIG_FILENAME',    'configuration.dist.php');
 
-/*		COMMON PURPOSE FUNCTIONS 	*/
+/*      COMMON PURPOSE FUNCTIONS    */
 
 /**
  * This function detects whether the system has been already installed.
  * It should be used for prevention from second running the installation
  * script and as a result - destroying a production system.
- * @return bool		The detected result;
+ * @return bool     The detected result;
  * @author Ivan Tcholakov, 2010;
  */
 function is_already_installed_system() {
@@ -51,14 +51,14 @@ function is_already_installed_system() {
 /**
  * This function checks if a php extension exists or not and returns an HTML status string.
  *
- * @param 	string  Name of the PHP extension to be checked
- * @param 	string  Text to show when extension is available (defaults to 'Yes')
- * @param	string	Text to show when extension is available (defaults to 'No')
- * @param	boolean	Whether this extension is optional (in this case show unavailable text in orange rather than red)
- * @return	string	HTML string reporting the status of this extension. Language-aware.
- * @author 	Christophe Gesch??
- * @author 	Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @author	Yannick Warnier <yannick.warnier@dokeos.com>
+ * @param   string  Name of the PHP extension to be checked
+ * @param   string  Text to show when extension is available (defaults to 'Yes')
+ * @param   string  Text to show when extension is available (defaults to 'No')
+ * @param   boolean Whether this extension is optional (in this case show unavailable text in orange rather than red)
+ * @return  string  HTML string reporting the status of this extension. Language-aware.
+ * @author  Christophe Gesch??
+ * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @author  Yannick Warnier <yannick.warnier@dokeos.com>
  * @version Dokeos 1.8.1, May 2007
  */
 function check_extension($extension_name, $return_success = 'Yes', $return_failure = 'No', $optional = false) {
@@ -124,7 +124,7 @@ function remove_memory_and_time_limits() {
 
 /**
  * Detects browser's language.
- * @return string		Returns a language identificator, i.e. 'english', 'spanish', ...
+ * @return string       Returns a language identificator, i.e. 'english', 'spanish', ...
  * @author Ivan Tcholakov, 2010
  */
 function detect_browser_language() {
@@ -209,7 +209,7 @@ function detect_browser_language() {
 }
 
 
-/*		FILESYSTEM RELATED FUNCTIONS */
+/*      FILESYSTEM RELATED FUNCTIONS */
 
 /**
  * This function checks if the given folder is writable
@@ -229,8 +229,8 @@ function check_writable($folder, $suggestion = false) {
 /**
  * This function is similar to the core file() function, except that it
  * works with line endings in Windows (which is not the case of file())
- * @param	string	File path
- * @return	array	The lines of the file returned as an array
+ * @param   string  File path
+ * @return  array   The lines of the file returned as an array
  */
 function file_to_array($filename) {
     $fp = fopen($filename, 'rb');
@@ -396,8 +396,8 @@ function my_directory_to_array($directory) {
  * WARNING - this function relies heavily on global variables $updateFromConfigFile
  * and $configFile, and also changes these globals. This can be rewritten.
  *
- * @param 	string  $param  the parameter of which the value is returned
- * @param	string	If we want to give the path rather than take it from POST
+ * @param   string  $param  the parameter of which the value is returned
+ * @param   string  If we want to give the path rather than take it from POST
  * @return  string  the value of the parameter
  * @author Olivier Brouckaert
  * @author Reworked by Ivan Tcholakov, 2010
@@ -549,16 +549,16 @@ function get_config_param($param, $updatePath = '') {
     }
 }
 
-/*		DATABASE RELATED FUNCTIONS */
+/*      DATABASE RELATED FUNCTIONS */
 
 /**
  * Gets a configuration parameter from the database. Returns returns null on failure.
- * @param	string	DB Host
- * @param	string	DB login
- * @param	string	DB pass
- * @param	string	DB name
- * @param	string 	Name of param we want
- * @return	mixed	The parameter value or null if not found
+ * @param   string  DB Host
+ * @param   string  DB login
+ * @param   string  DB pass
+ * @param   string  DB name
+ * @param   string  Name of param we want
+ * @return  mixed   The parameter value or null if not found
  */
 function get_config_param_from_db($host, $login, $pass, $db_name, $param = '') {
 
@@ -610,9 +610,9 @@ function database_exists($database_name) {
  * If it's a single database environment the function checks if the database exist. 
  * If the database doesn't exist we check the creation permissions. 
  * 
- * @return int		1 when there is no problem;
- * 					0 when a new database is impossible to be created, then the single/multiple database configuration is impossible too
- * 				   -1 when there is no connection established.
+ * @return int      1 when there is no problem;
+ *                  0 when a new database is impossible to be created, then the single/multiple database configuration is impossible too
+ *                 -1 when there is no connection established.
  */
 function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm) {
     $dbConnect = -1;
@@ -697,7 +697,7 @@ function load_main_database($installation_settings, $db_script = '') {
 
 /**
  * Creates the structure of the stats database
- * @param	string	Name of the file containing the SQL script inside the install directory
+ * @param   string  Name of the file containing the SQL script inside the install directory
  */
 function load_database_script($db_script) {
     $db_script = api_get_path(SYS_CODE_PATH).'install/'.$db_script;
@@ -842,9 +842,9 @@ function split_sql_file(&$ret, $sql) {
  * the install/upgrade procedure:
  * Lines starting with "--" are comments (but need to be taken into account as they also hold sections names)
  * Other lines are considered to be one-line-per-query lines (this is checked quickly by this function)
- * @param	string	File to parse (in the current directory)
- * @param	string	Section to return
- * @param	boolean	Print (true) or hide (false) error texts when they occur
+ * @param   string  File to parse (in the current directory)
+ * @param   string  Section to return
+ * @param   boolean Print (true) or hide (false) error texts when they occur
  */
 function get_sql_file_contents($file, $section, $print_errors = true) {
     //check given parameters
@@ -880,7 +880,7 @@ function get_sql_file_contents($file, $section, $print_errors = true) {
         if (substr($line, 0, 2) == '--') {
             //This is a comment. Check if section name, otherwise ignore
             $result = array();
-            if (preg_match('/^-- xx([A-Z]*)xx/', $line, $result)) {	//we got a section name here
+            if (preg_match('/^-- xx([A-Z]*)xx/', $line, $result)) { //we got a section name here
                 if ($result[1] == strtoupper($section)) {
                     //we have the section we are looking for, start recording
                     $record = true;
@@ -929,7 +929,7 @@ function add_document_180($_course, $path, $filetype, $filesize, $title, $commen
     }
 }
 
-/*		DISPLAY FUNCTIONS */
+/*      DISPLAY FUNCTIONS */
 
 /**
  * This function prints class=active_step $current_step=$param
@@ -944,7 +944,7 @@ function step_active($param) {
 
 /**
  * This function displays the Step X of Y -
- * @return	string	String that says 'Step X of Y' with the right values
+ * @return  string  String that says 'Step X of Y' with the right values
  */
 function display_step_sequence() {
     global $current_step;
@@ -1028,7 +1028,7 @@ function display_language_selection() { ?>
  * @param boolean $badUpdatePath
  * @param string The updatePath given (if given)
  * @param array $update_from_version_8 The different subversions from version 1.8
- * @param array	$update_from_version_6 The different subversions from version 1.6
+ * @param array $update_from_version_6 The different subversions from version 1.6
  *
  * @author unknow
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1045,7 +1045,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     }
     echo '</div>';
 
-    //	SERVER REQUIREMENTS
+    //  SERVER REQUIREMENTS
     echo '<div class="RequirementHeading"><h2>'.get_lang('ServerRequirements').'</h2>';
     echo '<div class="RequirementText">'.get_lang('ServerRequirementsInfo').'</div>';
     echo '<div class="RequirementContent">';
@@ -1058,7 +1058,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     } else {
         echo '<strong><font color="green">'.get_lang('PHPVersionOK'). ' '.phpversion().'</font></strong>';
     }
-    echo '		</td>
+    echo '      </td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang('support').'</td>
@@ -1110,7 +1110,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             </tr>
 
           </table>';
-    echo '	</div>';
+    echo '  </div>';
     echo '</div>';
 
     // RECOMMENDED SETTINGS
@@ -1181,7 +1181,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-value">'.ini_get('post_max_size').'</td>
             </tr>
           </table>';
-    echo '	</div>';
+    echo '  </div>';
     echo '</div>';
 
     // DIRECTORY AND FILE PERMISSIONS
@@ -1228,12 +1228,12 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             //'<tr>
             //    <td class="requirements-item">'.session_save_path().'</td>
             //    <td class="requirements-value">'.(is_writable(session_save_path())
-            //		? '<strong><font color="green">'.get_lang('Writable').'</font></strong>'
-            //		: '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>').'</td>
+            //      ? '<strong><font color="green">'.get_lang('Writable').'</font></strong>'
+            //      : '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>').'</td>
             //</tr>'.
             '';
     echo '    </table>';
-    echo '	</div>';
+    echo '  </div>';
     echo '</div>';
 
     if ($installType == 'update' && (empty($updatePath) || $badUpdatePath)) {
@@ -1542,14 +1542,14 @@ return $html;
 /**
  * Displays a parameter in a table row.
  * Used by the display_database_settings_form function.
- * @param	string	Type of install
- * @param	string	Name of parameter
- * @param	string	Field name (in the HTML form)
- * @param	string	Field value
- * @param	string	Extra notice (to show on the right side)
- * @param	boolean	Whether to display in update mode
- * @param	string	Additional attribute for the <tr> element
- * @return	void	Direct output
+ * @param   string  Type of install
+ * @param   string  Name of parameter
+ * @param   string  Field name (in the HTML form)
+ * @param   string  Field value
+ * @param   string  Extra notice (to show on the right side)
+ * @param   boolean Whether to display in update mode
+ * @param   string  Additional attribute for the <tr> element
+ * @return  void    Direct output
  */
 function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = true, $tr_attribute = '') {
     echo "<tr ".$tr_attribute.">\n";
@@ -1561,8 +1561,15 @@ function display_database_parameter($install_type, $parameter_name, $form_field_
 
         //Slightly limit the length of the database prefix to avoid having to cut down the databases names later on
         $maxlength = $form_field_name == 'dbPrefixForm' ? '15' : MAX_FORM_FIELD_LENGTH;
-        echo '<td><input type="'.$inputtype.'" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxlength.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'."</td>\n";
-        echo "<td>$extra_notice</td>\n";
+        if ($install_type == INSTALL_TYPE_UPDATE) {
+            echo '<input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />';
+            echo '<td>'.api_htmlentities($parameter_value)."</td>";
+            //echo "<td>$extra_notice</td>\n";
+        } else {
+            echo '<td><input type="'.$inputtype.'" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxlength.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'."</td>\n";
+            echo "<td>$extra_notice</td>\n";
+        }
+        
     }
     echo "</tr>\n";
 }
@@ -1578,29 +1585,29 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         global $_configuration, $update_from_version_6;
 
         if (in_array($_POST['old_version'], $update_from_version_6)) {
-            $dbHostForm		= get_config_param('dbHost');
-            $dbUsernameForm	= get_config_param('dbLogin');
-            $dbPassForm		= get_config_param('dbPass');
-            $dbPrefixForm	= get_config_param('dbNamePrefix');
-            $enableTrackingForm	= get_config_param('is_trackingEnabled');
-            $singleDbForm	= get_config_param('singleDbEnabled');
-            $dbNameForm		= get_config_param('mainDbName');
-            $dbStatsForm	= get_config_param('statsDbName');
-            $dbScormForm	= get_config_param('scormDbName');
-            $dbUserForm		= get_config_param('user_personal_database');
-            $dbScormExists	= true;
+            $dbHostForm     = get_config_param('dbHost');
+            $dbUsernameForm = get_config_param('dbLogin');
+            $dbPassForm     = get_config_param('dbPass');
+            $dbPrefixForm   = get_config_param('dbNamePrefix');
+            $enableTrackingForm = get_config_param('is_trackingEnabled');
+            $singleDbForm   = get_config_param('singleDbEnabled');
+            $dbNameForm     = get_config_param('mainDbName');
+            $dbStatsForm    = get_config_param('statsDbName');
+            $dbScormForm    = get_config_param('scormDbName');
+            $dbUserForm     = get_config_param('user_personal_database');
+            $dbScormExists  = true;
         } else {
-            $dbHostForm		= $_configuration['db_host'];
-            $dbUsernameForm	= $_configuration['db_user'];
-            $dbPassForm		= $_configuration['db_password'];
-            $dbPrefixForm	= $_configuration['db_prefix'];
-            $enableTrackingForm	= $_configuration['tracking_enabled'];
-            $singleDbForm	= $_configuration['single_database'];
-            $dbNameForm		= $_configuration['main_database'];
-            $dbStatsForm	= $_configuration['statistics_database'];
-            $dbScormForm	= $_configuration['scorm_database'];
-            $dbUserForm		= $_configuration['user_personal_database'];
-            $dbScormExists	= true;
+            $dbHostForm     = $_configuration['db_host'];
+            $dbUsernameForm = $_configuration['db_user'];
+            $dbPassForm     = $_configuration['db_password'];
+            $dbPrefixForm   = $_configuration['db_prefix'];
+            $enableTrackingForm = $_configuration['tracking_enabled'];
+            $singleDbForm   = $_configuration['single_database'];
+            $dbNameForm     = $_configuration['main_database'];
+            $dbStatsForm    = $_configuration['statistics_database'];
+            $dbScormForm    = $_configuration['scorm_database'];
+            $dbUserForm     = $_configuration['user_personal_database'];
+            $dbScormExists  = true;
         }
 
         if (empty($dbScormForm)) {
@@ -1659,13 +1666,18 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, get_lang('DbPrefixCom'));
 
     //fields for the four standard Chamilo databases
-    echo '<tr><td colspan="3"><a href="" onclick="javascript: show_hide_option();return false;" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters', '').'</a></td></tr>';
+    
+    if ($installType != INSTALL_TYPE_UPDATE) {        
+        echo '<tr><td colspan="3">';
+        echo '<a href="" onclick="javascript: show_hide_option();return false;" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters', '').'</a>';
+        echo '</td></tr>';
+    }
     ?>    
     <input type="hidden" name="enableTrackingForm" value="1" />
     <tr id="optional_param6" style="display:none;">
       <td><?php echo get_lang('SingleDb'); ?> </td>
 
-      <?php if ($installType == 'update'): ?>
+      <?php if ($installType == INSTALL_TYPE_UPDATE): ?>
       <td><input type="hidden" name="singleDbForm" value="<?php echo $singleDbForm; ?>" /><?php echo $singleDbForm ? get_lang('One') : get_lang('Several'); ?></td>
       <?php else: ?>
       <td>
@@ -1677,15 +1689,20 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
       <td>&nbsp;</td>
     </tr>
     </div>    
-    <?php    
-    display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm',  $dbNameForm,  '&nbsp;', null, 'id="optional_param1" style="display:none;"');
-    display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" style="display:none;"');
-    if ($installType == 'update' && in_array($_POST['old_version'], $update_from_version_6)) {
-        display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" style="display:none;"');
+    <?php   
+    $style = 'style="display:none;"';
+    if ($installType == INSTALL_TYPE_UPDATE) {
+        $style = '';
+    }    
+    display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm',  $dbNameForm,  '&nbsp;', null, 'id="optional_param1" '.$style);
+    display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" '.$style);    
+    
+    if ($installType == INSTALL_TYPE_UPDATE && in_array($_POST['old_version'], $update_from_version_6)) {
+        display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" '.$style);
     }
-    display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" style="display:none;"');
+    display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" '.$style);
 
-    /*	Tracking is always available see #2066
+    /*  Tracking is always available see #2066
      *
     <tr id="optional_param5" style="display:none;">
       <td><?php echo get_lang('EnableTracking'); ?> </td>
@@ -1700,7 +1717,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
       <?php endif; ?>
 
       <td>&nbsp;</td>
-    </tr>	*/
+    </tr>   */
     ?>
     <tr>
         <td><button type="submit" class="login" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" ><?php echo get_lang('CheckDatabaseConnection'); ?></button></td>

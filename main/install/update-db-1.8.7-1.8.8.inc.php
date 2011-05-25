@@ -334,8 +334,18 @@ if (defined('SYSTEM_INSTALLATION')) {
             $result = Database::query($sql);
             $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '0', 'No',3) ";
             $result = Database::query($sql);
-
-
+                     
+            //Fixing table access_url_rel_course if the platform have courses that were created in Dok€os 1.8.5
+              
+            if (!isset($_configuration['multiple_access_urls']) || $_configuration['multiple_access_urls'] == false) {
+                $sql = "SELECT code FROM $dbNameForm.course";
+                $result = Database::query($sql);
+                while ($row = Database::fetch_array($result)) {
+                    //Adding course to default URL just in case
+                    $sql = "INSERT INTO $dbNameForm.access_url_rel_course SET course_code = '".Database::escape_string($row['code'])."', access_url_id = '1' ";  
+                    Database::query($sql);
+                }                
+            }
         }
     }
     

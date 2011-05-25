@@ -359,7 +359,7 @@ if ($form->validate() && is_settings_editable()) {
     //Variables that will be saved in the TABLE_MAIN_COURSE table
     $update_in_course_table = array('title','visual_code', 'course_language','category_code','department_name', 'department_url','visibility',  'subscribe', 'unsubscribe','tutor_name','course_registration_password');
 
-	foreach ($update_values as $index => & $value) {
+	foreach ($update_values as $index =>$value) {
 		$update_values[$index] = Database::escape_string($value);
 	}
     
@@ -386,7 +386,6 @@ if ($form->validate() && is_settings_editable()) {
     foreach($update_values as $key =>$value) {
         //We do not update variables that were already saved in the TABLE_MAIN_COURSE table
         if (!in_array($key, $update_in_course_table)) {            
-        	//$sql = "UPDATE $table_course_setting SET value = ".." WHERE variable = '$key' ";            
             Database::update($table_course_setting, array('value' => $update_values[$key]), array('variable = ? ' =>$key));
         }    	
     }

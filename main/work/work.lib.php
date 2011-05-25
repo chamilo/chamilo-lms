@@ -1062,7 +1062,7 @@ function create_unexisting_work_directory($base_work_dir, $desired_dir_name) {
 
 /**
  * Delete a work-tool directory
- * @param	string	Base "work" directory for this course as /var/www/dokeos/courses/ABCD/work/
+ * @param	string	Base "work" directory for this course as /var/www/chamilo/courses/ABCD/work/
  * @param	string	The directory name as the bit after "work/", without trailing slash
  * @return	integer	-1 on error
  */
@@ -1076,21 +1076,27 @@ function del_dir($base_work_dir, $dir, $id) {
 		return -1;
 	}
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "DELETE FROM $table WHERE url LIKE BINARY 'work/".$dir."/%'";
-	$res = Database::query($sql);
-
-	//delete from DB the directories
-	$sql = "DELETE FROM $table WHERE filetype = 'folder' AND url LIKE BINARY '/".$dir."%'";
-	$res = Database::query($sql);
-
-	require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-	$new_dir = $dir.'_DELETED_'.$id;
-	if (api_get_setting('permanently_remove_deleted_files') == 'true'){
-		my_delete($base_work_dir.$dir);
-	} else {
-		if (file_exists($base_work_dir.$dir)) {
-			rename($base_work_dir.$dir, $base_work_dir.$new_dir);
-		}
+	
+	//Deleting the folder
+	$url_path = get_work_path($id);
+	if (!empty($url_path) && $url_path != -1) {
+	    
+	    //Deleting all contents inside the folder
+        $sql = "DELETE FROM $table WHERE url LIKE BINARY 'work/".$dir."/%'";
+        $res = Database::query($sql);
+        
+    	$sql = "DELETE FROM $table WHERE filetype = 'folder' AND id = $id";
+    	$res = Database::query($sql);
+    
+    	require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+    	$new_dir = $dir.'_DELETED_'.$id;
+    	if (api_get_setting('permanently_remove_deleted_files') == 'true'){
+    		my_delete($base_work_dir.$dir);
+    	} else {
+    		if (file_exists($base_work_dir.$dir)) {
+    			rename($base_work_dir.$dir, $base_work_dir.$new_dir);
+    		}
+    	}
 	}
 }
 
@@ -1103,12 +1109,11 @@ function get_work_path($id) {
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = 'SELECT url FROM '.$table.' WHERE id='.intval($id);
 	$res = Database::query($sql);
-	if (Database::num_rows($res) != 1) {
-		return -1;
-	} else {
-		$row = Database::fetch_array($res);
-		return $row['url'];
+	if (Database::num_rows($res)) {
+        $row = Database::fetch_array($res);
+        return $row['url'];
 	}
+	return -1;	
 }
 
 /**

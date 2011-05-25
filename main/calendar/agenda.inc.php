@@ -2503,7 +2503,7 @@ function show_add_form($id = '') {
 
 
 	// the main area of the agenda item: the wysiwyg editor
-	echo '	<div class="row">
+	echo '	<div><br />	
 				<div class="label">
 					<span class="form_required">*</span>'.get_lang('Description').'
 				</div>
@@ -2549,7 +2549,7 @@ function show_add_form($id = '') {
 			*/
 
 	// File attachment
-	echo '	<div class="row">
+	echo '	<div>
 				<div class="label">					
 				</div>
 				<div class="formw">
@@ -2558,7 +2558,7 @@ function show_add_form($id = '') {
 						<td colspan="2">
 					        <label for="file_name">'.get_lang('AddAnAttachment').'&nbsp;</label>
 					        <input type="file" name="user_upload"/>					        
-					         '.get_lang('FileComment').' <input name="file_comment" type="text" size="20" />
+					         '.get_lang('Comment').' <input name="file_comment" type="text" size="20" />
 					    </td>
 					 </tr>			
 			    </table>

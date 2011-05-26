@@ -53,8 +53,8 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$css_path = 'main/css/';
 	$css_file = $css_path.$theme.'default.css';
 	
-	$css_base_file         = $css_path.'base.css';
-	$css_base_chamilo_file = $css_path.'base_chamilo.css';		
+	$css_base_file         = $css_path.'fix.css';
+	$css_base_chamilo_file = $css_path.'fix_chamilo.css';		
 
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
 	$root_rel = htmlentities($_SERVER['PHP_SELF']);

@@ -340,13 +340,29 @@ if ($formSent && isset($_POST)) {
     // if all questions on one page OR if it is the last question (only for an exercise with one question per page)
 
     if ($exerciseType == ALL_ON_ONE_PAGE || $questionNum >= $nbrQuestions) {        
-        if ( api_is_allowed_to_session_edit() ) {
+        if (api_is_allowed_to_session_edit()) {
             // goes to the script that will show the result of the exercise
             if ($exerciseType == ALL_ON_ONE_PAGE) {
-            if ($debug) { error_log('Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php'); }             
+                if ($debug) { error_log('Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php'); }
+                
+                //We check if the user attempts before sending to the exercise_result.php                
+                if ($objExercise->selectAttempts() > 0) {
+                    $attempt_count = get_attempt_count(api_get_user_id(), $exerciseId, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);                
+                    if ($attempt_count >= $objExercise->selectAttempts()) {
+                        Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);                        
+                        if ($origin != 'learnpath') {
+                            //so we are not in learnpath tool
+                            echo '</div>'; //End glossary div
+                            Display :: display_footer();
+                        } else {
+                            echo '</body></html>';
+                        }                        
+                    }
+                }             
                 header("Location: exercise_result.php?exerciseType=$exerciseType&origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
                 exit;
             } else {
+                //Time control is only enabled for ONE PER PAGE
                 if (!empty($exe_id) && is_numeric($exe_id)) {
                     //Verify if the current test is fraudulent
                     if (exercise_time_control_is_valid($exerciseId)) {
@@ -356,8 +372,7 @@ if ($formSent && isset($_POST)) {
                     	$sql_exe_result = ", exe_result = 0";
                         if ($debug) { error_log('exercise_time_control_is_valid is NOT valid then exe_result = 0 '); }
                     }
-                    //Clean incomplete - @todo why setting to blank the data_tracking?
-                    //$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . api_get_utc_datetime() . "' $sql_exe_result " . ' WHERE exe_id = ' . Database::escape_string($exe_id);
+                    //Clean incomplete - @todo why setting to blank the status?                  
                     $update_query = "UPDATE $stat_table SET  status = '', exe_date = '".api_get_utc_datetime() ."' , orig_lp_item_view_id = '$safe_lp_item_view_id' $sql_exe_result  WHERE exe_id = ".$exe_id;
                     
                     if ($debug) { error_log('Updating track_e_exercises '.$update_query); }                    
@@ -376,10 +391,10 @@ if ($formSent && isset($_POST)) {
     if ($debug > 0) { error_log('$formSent was set - end'); }
 }
 
-$exerciseTitle 		= $objExercise->selectTitle();
-$exerciseDescription= $objExercise->selectDescription();
-$exerciseSound 		= $objExercise->selectSound();
-$exerciseType 		= $objExercise->selectType();
+$exerciseTitle 		   = $objExercise->selectTitle();
+$exerciseDescription   = $objExercise->selectDescription();
+$exerciseSound 		   = $objExercise->selectSound();
+$exerciseType 		   = $objExercise->selectType();
 
 //if (!isset($_SESSION['questionList']) || $origin == 'learnpath') {
 //in LP's is enabled the "remember question" feature?
@@ -463,17 +478,22 @@ $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {	
 	$attempt_count = get_attempt_count($user_id, $exerciseId, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);
+	
     if ($attempt_count >= $objExercise->selectAttempts()) {
     	$show_clock = false;
         if (!api_is_allowed_to_edit(null,true)) {
             
             if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
+                
                 //Showing latest attempt according with task BT#1628
-                $exercise_stat_info = get_all_exercise_results_by_user(api_get_user_id(), $exerciseId, api_get_course_id(), api_get_session_id());
+                $exercise_stat_info = get_all_exercise_results_by_user($user_id, $exerciseId, api_get_course_id(), api_get_session_id());
+                
                 if (!empty($exercise_stat_info)) {               
                     $max_exe_id = max(array_keys($exercise_stat_info));
                     $last_attempt_info = $exercise_stat_info[$max_exe_id];
-                    echo Display::div(get_lang('Date').': '.api_get_local_time($last_attempt_info['exe_date']), array('id'=>'')).'<br />';
+                    echo Display::div(get_lang('Date').': '.api_get_local_time($last_attempt_info['exe_date']), array('id'=>''));
+                    
+                    Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);                    
                     
                     if (!empty($last_attempt_info['question_list'])) {               
                         foreach($last_attempt_info['question_list'] as $question_data) {
@@ -489,17 +509,17 @@ if ($objExercise->selectAttempts() > 0) {
                     echo Display::div(get_lang('YourTotalScore').' '.$score, array('id'=>'question_score'));
                     
                     
+                    
                 } else {
                     Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);	
                 }
             } else {
                 Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);
-            }
-            
+            }            
             if ($origin != 'learnpath')
                 Display :: display_footer();
             exit;
-        } else {
+        } else {            
             Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttemptsAdmin'), $exerciseTitle, $objExercise->selectAttempts()), false);
         }
     }

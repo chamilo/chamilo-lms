@@ -84,16 +84,16 @@ $arrans  = array();
 
 // set admin name as person who sends the results e-mail (lacks policy about whom should really send the results)
 
-$query = "SELECT user_id FROM $main_admin_table LIMIT 1"; //get all admins from admin table
-$admin_id = Database::result(Database::query($query),0,"user_id");
-$uinfo = api_get_user_info($admin_id);
-$from = $uinfo['mail'];
-$from_name = api_get_person_name($uinfo['firstname'], $uinfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-$str = $_SERVER['REQUEST_URI'];
-$url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
+$query      = "SELECT user_id FROM $main_admin_table LIMIT 1"; //get all admins from admin table
+$admin_id   = Database::result(Database::query($query),0,"user_id");
+$uinfo      = api_get_user_info($admin_id);
+$from       = $uinfo['mail'];
+$from_name  = api_get_person_name($uinfo['firstname'], $uinfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+$str        = $_SERVER['REQUEST_URI'];
+$url        = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
 
- // if the above variables are empty or incorrect, we don't have any result to show, so stop the script
-if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise)) {
+// if the above variables are empty or incorrect, we don't have any result to show, so stop the script
+if (!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise)) {
     if ($debug) {error_log('Exit exercise result'); error_log('$exerciseResult: '.print_r($exerciseResult,1)); error_log('$questionList:'.print_r($questionList,1));error_log('$objExercise:'.print_r($objExercise,1));}
 	header('Location: exercice.php');
 	exit();
@@ -166,12 +166,30 @@ if($origin == 'learnpath') { ?>
     <input type="hidden" name="learnpath_item_view_id" value="<?php echo $learnpath_item_view_id; ?>" />
 <?php
 }
-$i=$totalScore=$totalWeighting=0;
-if($debug>0){error_log ("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
+$i = $totalScore = $totalWeighting=0;
+if ($debug>0){error_log ("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
+
+
+$safe_lp_id             = $learnpath_id==''?0:(int)$learnpath_id;
+$safe_lp_item_id        = $learnpath_item_id==''?0:(int)$learnpath_item_id;
+$safe_lp_item_view_id   = $learnpath_item_view_id==''?0:(int)$learnpath_item_view_id;
+
+//We check if the user attempts before sending to the exercise_result.php                
+if ($objExercise->selectAttempts() > 0) {
+    $attempt_count = get_attempt_count(api_get_user_id(), $objExercise->id, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);                
+    if ($attempt_count >= $objExercise->selectAttempts()) {        
+        Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);
+        if ($origin != 'learnpath') {
+            //we are not in learnpath tool
+            Display::display_footer();
+        }                                      
+        exit;
+    }
+}
 
 // Create an empty exercise
 if (api_is_allowed_to_session_edit()) {
-    $exeId= create_event_exercice($objExercise->selectId());
+    $exeId = create_event_exercice($objExercise->selectId());
 }
 $counter=0;
 
@@ -253,12 +271,11 @@ if ($origin != 'learnpath') {
 // Tracking of results
 
 //	Updates the empty exercise
-$safe_lp_id = $learnpath_id==''?0:(int)$learnpath_id;
-$safe_lp_item_id = $learnpath_item_id==''?0:(int)$learnpath_item_id;
-$safe_lp_item_view_id = $learnpath_item_view_id==''?0:(int)$learnpath_item_view_id;
+
 $quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
+
 if (api_is_allowed_to_session_edit() ) {
-	update_event_exercice($exeId, $objExercise->selectId(), $totalScore, $totalWeighting, api_get_session_id(),$safe_lp_id,$safe_lp_item_id,$safe_lp_item_view_id, $quizDuration);
+	update_event_exercice($exeId, $objExercise->selectId(), $totalScore, $totalWeighting, api_get_session_id(), $safe_lp_id,$safe_lp_item_id,$safe_lp_item_view_id, $quizDuration);
 }
 
 if ($origin != 'learnpath') {
@@ -299,12 +316,12 @@ if(api_get_setting('use_session_mode')=='true' && !empty($_SESSION['id_session']
 }
 
 $num = count($teachers);
-if($num>1) {
+if ($num>1) {
 	$to = array();
 	foreach($teachers as $teacher) {
 		$to[] = $teacher['email'];
 	}
-}elseif($num>0){
+} elseif($num>0) {
 	foreach($teachers as $teacher) {
 		$to = $teacher['email'];
 	}

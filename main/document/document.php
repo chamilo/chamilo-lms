@@ -397,6 +397,7 @@ $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath
 
 $file_list = $format_list = '';
 $count = 1;
+if (!empty($docs_and_folders))
 foreach ($docs_and_folders  as $file) {    
     if ($file['filetype'] == 'file') {
         $path_info = pathinfo($file['path']);   

@@ -497,12 +497,12 @@ function parse_xml_data($file) {
   * @param int The user id
   * @return Datetime The date when you obtained the certificate
   */
-  function get_certificate_date_by_user_id ($cat_id,$user_id) {
+  function get_certificate_by_user_id ($cat_id,$user_id) {
     	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-    	$sql_get_date='SELECT created_at FROM '.$table_certificate.' WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'"';
+    	$sql_get_date='SELECT * FROM '.$table_certificate.' WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'"';
     	$rs_get_date=Database::query($sql_get_date);
-    	$row_get_date=Database::fetch_array($rs_get_date,'ASSOC');
-    	return $row_get_date['created_at'];
+    	$row =Database::fetch_array($rs_get_date,'ASSOC');
+    	return $row;
   }
 
   /**
@@ -554,13 +554,14 @@ function parse_xml_data($file) {
   * @param int The user id
   * @return boolean
   */
-  function delete_certificate ($cat_id,$user_id) {
+  function delete_certificate($cat_id,$user_id) {
 
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
   	$sql_verified='SELECT count(*) AS count,path_certificate as path,user_id FROM '.$table_certificate.' gc WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" GROUP BY user_id,cat_id';
   	$rs_verified=Database::query($sql_verified);
   	$path=Database::result($rs_verified,0,'path');
   	$user_id=Database::result($rs_verified,0,'user_id');
+  	
   	if (!is_null($path) || $path!='' || strlen($path)) {
   			$path_info= UserManager::get_user_picture_path_by_id($user_id,'system',true);
 			$path_directory_user_certificate=$path_info['dir'].'certificate'.$path;

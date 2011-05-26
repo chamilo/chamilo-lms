@@ -3211,9 +3211,9 @@ class UserManager
    */
 	public function is_user_certified($cat_id,$user_id) {
 		$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-		$sql='SELECT path_certificate FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
-		$rs=Database::query($sql);
-		$row=Database::fetch_array($rs);
+		$sql  = 'SELECT path_certificate FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
+		$rs   = Database::query($sql);
+		$row  = Database::fetch_array($rs);		
 		if ($row['path_certificate']=='' || is_null($row['path_certificate'])) {
 			return false;
 		} else {

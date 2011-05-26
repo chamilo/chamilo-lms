@@ -588,7 +588,6 @@ if (isset ($_GET['studentoverview'])) {
 		$header_names = array(get_lang('Name'),get_lang('Description'),get_lang('Weight'),get_lang('Date'),get_lang('Results'));
 		$data_array = $datagen->get_data(GradebookDataGenerator :: GDG_SORT_NAME,0,null,true);
 		$newarray = array();
-
 		foreach ($data_array as $data) {
 			$newarray[] = array_slice($data, 1);
 		}
@@ -604,102 +603,122 @@ if (isset ($_GET['studentoverview'])) {
 		$pdf->ezStream();
 		exit;
 		}
-} elseif (!empty($_GET['export_certificate'])) {
+} elseif (!empty($_GET['export_certificate'])) {        
     
-    $user_id = strval(intval($_GET['user']));
     if (!api_is_allowed_to_edit(true,true)) {
-      $user_id = api_get_user_id();
+        $user_id = api_get_user_id();
+    } else {
+        $user_id = strval(intval($_GET['user']));    
+    }    
+    if (empty($user_id)) {
+        api_not_allowed();
     }
-
-    $category = Category :: load($category); //hack replace $category = Category :: load ($_GET['cat_id']); to get de course name in certificates
-
-	if ($category[0]->is_certificate_available($user_id)) {
-		$user= get_user_info_from_id($user_id);
-		$scoredisplay = ScoreDisplay :: instance();
-		$scorecourse = $category[0]->calc_score($user_id);
-		$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
-
-		$cattotal = Category :: load($_GET['cat_id']);
-		$scoretotal= $cattotal[0]->calc_score($user_id);
-		$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
-
-		global $charset;
-		//prepare all necessary variables:
-		$organization_name = api_get_setting('Institution');
-		$portal_name = api_get_setting('siteName');
-		$stud_fn = $user['firstname'];
-		$stud_ln = $user['lastname'];
-		$certif_text = sprintf(get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'),$organization_name,$stud_fn.' '.$stud_ln,$category[0]->get_name(),$scorecourse_display);
-		$certif_text = str_replace("\\n","\n",$certif_text);
-		$date = date('d/m/Y',time());
-
-		$path_info= UserManager::get_user_picture_path_by_id($user_id,'system',true);
-
-		$path_directory_user_certificate=$path_info['dir'].'certificate/';
-
-		if (!is_dir($path_info['dir'])) {
-			mkdir($path_info['dir'],0777);
-		}
-		if (!is_dir($path_directory_user_certificate)) {
-			mkdir($path_directory_user_certificate,0777);
-		}
-		if (is_dir($path_directory_user_certificate)) {
-			$user_id = api_get_user_id();
-			$cat_id  = intval($_GET['cat_id']);
-			$name=md5($user_id.$cat_id);
-
-			//generate document HTML
-			$course_id = api_get_course_id();
-			$content_html = DocumentManager::replace_user_info_into_html($course_id);
-			$new_content=explode('</head>',$content_html);
-
-			if ($new_content[0]!='') {
-
-				$new_content_html=$new_content[1];
-				$my_path_certificate=$path_directory_user_certificate.$name.'.html';
-
-
-				$path_image=api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';
-				$new_content_html=str_replace('../images/gallery',$path_image,$new_content_html);
-
-				$path_image_in_default_course=api_get_path(WEB_CODE_PATH).'default_course_document';
-				$new_content_html=str_replace('/main/default_course_document',$path_image_in_default_course,$new_content_html);
-
-				$new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
-
-				//add print header
-				$print= '
-				<style media="print" type="text/css">
-					#imprimir {
-					visibility:hidden;
-					}
-				</style>';
-				$print .='<a href="javascript:window.print();" style="float:right; padding:4px;" id="imprimir"><img src="'.api_get_path(WEB_CODE_PATH).'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
-
-				//add header
-				$new_content_html=$new_content[0].$print.'</head>'.$new_content_html;
-
-				if ($cat_id=strval(intval($cat_id))) {
-					if (UserManager::is_user_certified($cat_id,$user_id)===true){
-						header('Content-Type: text/html; charset='. $charset);
-						echo $new_content_html;
-
-						exit;
-					} else {
-						$my_new_content_html=$new_content_html;
-						$my_new_content_html=mb_convert_encoding($my_new_content_html,'UTF-8',$charset);
-						file_put_contents($my_path_certificate,$my_new_content_html);
-						header('Content-Type: text/html; charset='. $charset);
-						echo $new_content_html;
-					}
-					$path_certificate='/'.$name.'.html';
-					update_user_info_about_certificate($cat_id,$user_id,$path_certificate);
-					exit;
-				}
-			} else {
-				Display :: display_reduced_header();
-				Display :: display_warning_message(get_lang('NoCertificateAvailable'));
-			}
+    $my_category = Category :: load($category); //hack replace $category = Category :: load ($_GET['cat_id']); to get de course name in certificates
+    global $charset;
+    
+	if ($my_category[0]->is_certificate_available($user_id)) {
+	    
+	    $path_info = UserManager::get_user_picture_path_by_id($user_id,'system',true);	        
+        $path_directory_user_certificate = $path_info['dir'].'certificate/'; 
+            
+        $data = get_certificate_by_user_id($category, $user_id);        
+	    if (api_is_allowed_to_edit(true, true)) {
+	        
+	        if (!empty($data['path_certificate'])) {
+                $user_certificate = $path_directory_user_certificate.basename($data['path_certificate']);                                   
+                if (file_exists($user_certificate)) {
+                    header('Content-Type: text/html; charset='. $charset);
+                    echo @file_get_contents($user_certificate);
+                    exit;                    
+                }  
+	        }	 
+	        Display :: display_reduced_header();
+            Display :: display_warning_message(get_lang('NoCertificateAvailable'));       
+	        exit;
+	    } else {
+    		$user= get_user_info_from_id($user_id);
+    		$scoredisplay = ScoreDisplay :: instance();
+    		$scorecourse = $my_category[0]->calc_score($user_id);
+    		
+    		$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
+    
+    		$cattotal = Category :: load($_GET['cat_id']);
+    		$scoretotal= $cattotal[0]->calc_score($user_id);
+    		$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
+    
+    		
+    		//prepare all necessary variables:
+    		$organization_name = api_get_setting('Institution');
+    		$portal_name = api_get_setting('siteName');
+    		$stud_fn = $user['firstname'];
+    		$stud_ln = $user['lastname'];
+    		$certif_text = sprintf(get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'),$organization_name,$stud_fn.' '.$stud_ln,$my_category[0]->get_name(),$scorecourse_display);
+    		$certif_text = str_replace("\\n","\n",$certif_text);
+    	   	$date = date('d/m/Y',time());    		
+    
+    		if (!is_dir($path_info['dir'])) {
+    			mkdir($path_info['dir'],0777);
+    		}
+    		
+    		if (!is_dir($path_directory_user_certificate)) {
+    			mkdir($path_directory_user_certificate, 0777);
+    		}
+    		    		
+    		if (is_dir($path_directory_user_certificate)) {
+    			$user_id = api_get_user_id();
+    			$cat_id  = intval($_GET['cat_id']);
+    			$name    = $data['path_certificate'];
+    
+    			//generate document HTML
+    			$course_id = api_get_course_id();
+    			$content_html = DocumentManager::replace_user_info_into_html($course_id);
+    			$new_content=explode('</head>',$content_html);
+    
+    			if ($new_content[0]!=''  && !empty($data)) {
+    
+    				$new_content_html = $new_content[1];    				
+    				$path_image=api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';
+    				$new_content_html=str_replace('../images/gallery',$path_image,$new_content_html);
+    
+    				$path_image_in_default_course=api_get_path(WEB_CODE_PATH).'default_course_document';
+    				$new_content_html=str_replace('/main/default_course_document',$path_image_in_default_course,$new_content_html);
+    
+    				$new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
+    
+    				//add print header
+    				$print  = '<style media="print" type="text/css">#imprimir {visibility:hidden;}</style>';
+    				$print .='<a href="javascript:window.print();" style="float:right; padding:4px;" id="imprimir"><img src="'.api_get_path(WEB_CODE_PATH).'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
+    
+    				//add header
+    				$new_content_html=$new_content[0].$print.'</head>'.$new_content_html;
+    				    
+    				if ($cat_id = strval(intval($cat_id))) {    				    
+    				    $my_path_certificate = $path_directory_user_certificate.$name;
+    					if (file_exists($my_path_certificate) && !empty($name)&& !is_dir($my_path_certificate) ) {    					        					    
+    						header('Content-Type: text/html; charset='. $charset);    						
+    						echo $new_content_html;
+    					} else {
+    						$my_new_content_html=$new_content_html;
+    						$my_new_content_html=mb_convert_encoding($my_new_content_html,'UTF-8',$charset);
+    						//Creating new name
+                            $user_id = api_get_user_id();
+                            $name    = md5($user_id.$category_id).'.html';
+    						$my_path_certificate = $path_directory_user_certificate.$name;
+    						    						
+    						file_put_contents($my_path_certificate, $my_new_content_html);
+    						header('Content-Type: text/html; charset='. $charset);
+    						echo $new_content_html;    						
+    						
+                            $path_certificate='/'.$name;
+                            update_user_info_about_certificate($cat_id, $user_id, $path_certificate);
+    					}
+    					exit;    					
+    				}
+    			} else {
+    				Display :: display_reduced_header();
+    				Display :: display_warning_message(get_lang('NoCertificateAvailable'));
+    			}
+    		}
 		}
 	}
 	exit;
@@ -800,18 +819,16 @@ if (( count($allcat) == 0) && ( count($alleval) == 0 ) && ( count($alllink) == 0
 }
 //here we are in a sub category
 if ($category != '0') {
-	$cat=new Category();
-	//$dblib=new Database();
-
-	$category_id = intval($_GET['selectcat']);
-	$course_id=Database::get_course_by_category($category_id);
+	$cat = new Category();
+	$category_id   = intval($_GET['selectcat']);
+	$course_id     = Database::get_course_by_category($category_id);
 	$show_message=$cat->show_message_resource_delete($course_id);
 	if ($show_message=='') {
 
 		//hack for inside courses menu cat
 		if (api_is_allowed_to_edit()) {
 
-			$op_cat_weight= '<strong>'.get_lang('Weight').'</strong>'.': '.((intval($cats[0]->get_weight())>0) ? $cats[0]->get_weight() : 0);
+			$op_cat_weight= '<strong>'.get_lang('TotalWeight').'</strong>'.': '.((intval($cats[0]->get_weight())>0) ? $cats[0]->get_weight() : 0);
 			$opt_cat_cert_min= '<strong>'.get_lang('CertificateMinScore').'</strong>'.': '.(intval($cats[0]->get_certificate_min_score()>0) ? $cats[0]->get_certificate_min_score() : 0);
 			$opt_cat_descrip= '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.(($cats[0]->get_description() == "" || is_null($cats[0]->get_description())) ? get_lang('None') : $cats[0]->get_description());
 
@@ -821,16 +838,17 @@ if ($category != '0') {
 			$modify_icons= '<a  href="gradebook_edit_cat.php?editcat=' . $cats[0]->get_id() . ' &amp;cidReq='.$cats[0]->get_course_code().'">'.Display::return_icon('edit.png', get_lang('EditCategory'),'','22').'</a>';
 			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $cats[0]->get_id() . '&amp;selectcat=0&amp;cidReq='.$cats[0]->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'','22').'</a>';
 			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $cats[0]->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'','22').'</a>';
-					$opt_cat_descrip1 = strip_tags($opt_cat_descrip);
-			echo '<div  align="left" style="float:left">'.Display::return_icon('info.png', $opt_cat_descrip1,'','22').'</a>'.$op_cat_weight.' '.'&nbsp;&nbsp;'.$opt_cat_cert_min.'&nbsp;&nbsp;'.$opt_cat_descrip.'</div>';
+			$opt_cat_descrip1 = strip_tags($opt_cat_descrip);
+			echo '<div  align="left" style="float:left">'.Display::return_icon('info.png', $opt_cat_descrip1,'','22').'</a>';
+			echo $op_cat_weight.' '.'&nbsp;&nbsp;'.$opt_cat_cert_min.'&nbsp;&nbsp;'.$opt_cat_descrip.'</div>';
 			echo $modify_icons;
 			echo '</div>';
 		} else	{
 			// generating the total score for a course
 			$stud_id= api_get_user_id();
-			$cats_course = Category :: load ($category_id, null, null, null, null, null, false);
-			$alleval_course= $cats_course[0]->get_evaluations($stud_id,true);
-			$alllink_course= $cats_course[0]->get_links($stud_id,true);
+			$cats_course     = Category :: load ($category_id, null, null, null, null, null, false);
+			$alleval_course  = $cats_course[0]->get_evaluations($stud_id,true);
+			$alllink_course  = $cats_course[0]->get_links($stud_id,true);
 			
 			$evals_links = array_merge($alleval_course, $alllink_course);
 			$item_value=0;
@@ -839,7 +857,7 @@ if ($category != '0') {
 			for ($count=0; $count < count($evals_links); $count++) {
 				$item = $evals_links[$count];
 				$score = $item->calc_score($stud_id);
-
+				
 				$score_denom=($score[1]==0) ? 1 : $score[1];
 				$item_value+=$score[0]/$score_denom*$item->get_weight();
 				$item_total+=$item->get_weight();
@@ -866,6 +884,7 @@ if ($category != '0') {
 				$url  = api_get_path(WEB_CODE_PATH) .'gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=yes&cat_id='.$cats[0]->get_id();
 				//$certificates.= '<img src="'.api_get_path(WEB_CODE_PATH) . 'img/logo.gif" />'.get_lang('Certificates').'</a>&nbsp;<strong>'.get_lang('Total').': '.$scoretotal_display.'</strong>';
 				$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 48), $url, array('target'=>'_blank'));
+				
 				echo '<div class="actions" align="right">';
 				echo $certificates;
 				echo '</div>';
@@ -889,11 +908,11 @@ if (api_is_allowed_to_edit(null, true)) {
 	if ( (isset ($_GET['selectcat']) && $_GET['selectcat']<>0) ) {
 	//
 	} else {
-			if ( ((isset ($_GET['selectcat']) && $_GET['selectcat']==0) || ((isset($_GET['cidReq']) && $_GET['cidReq']!==''))) || isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {
-				$cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
-				if(!$first_time=1) {
-					DisplayGradebook :: display_reduce_header_gradebook($cats[0],$is_course_admin, $is_platform_admin, $simple_search_form, false, false);
-				}
+        if (((isset ($_GET['selectcat']) && $_GET['selectcat']==0) || ((isset($_GET['cidReq']) && $_GET['cidReq']!==''))) || isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {
+            $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
+			if (!$first_time=1) {
+                DisplayGradebook :: display_reduce_header_gradebook($cats[0],$is_course_admin, $is_platform_admin, $simple_search_form, false, false);
+            }
 		}
 	}
 }

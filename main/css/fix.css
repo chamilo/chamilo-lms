@@ -166,7 +166,8 @@ input.maininput:focus {
 }
 
 .course-block-main-item {
-	height:32px;
+	height:  32px;
+	padding: 3px 0px 3px 0px;
 }
 
 .categories-block-course {
@@ -184,8 +185,8 @@ input.maininput:focus {
     margin:10px;
     padding:12px;
     width:240px;
-    min-height:180px;
-    color: #BBBBBB;
+    min-height:294px;
+    color: #BBBBBB;	
 }
 
 .categories-course-picture {
@@ -222,6 +223,7 @@ input.maininput:focus {
     font-size: large;
     margin-bottom: 10px;
     color: #222222;
+	min-height:60px;
 }
 .categories-course-description .course-block-teacher {
     font-size: large;

@@ -135,12 +135,21 @@ $stok = Security::get_token();
                 echo '<div class="categories-block-course">
                         <div class="categories-content-course">
                             <div class="categories-course-description">
-                                <div class="course-block-title">'.strtoupper($title).'</div>
+                                <div class="course-block-title">'.$title.'</div>
                                 <div class="course-block-main-item"><div class="left">'.get_lang('Teacher').'</div><div class="course-block-teacher right">'.$tutor_name.'</div></div>
                                 <div class="course-block-main-item"><div class="left">'.get_lang('CreationDate').'</div><div class="course-block-date">'.api_format_date($creation_date,DATE_FORMAT_SHORT).'</div></div>
-                            </div>
-                            <div class="categories-course-picture"><center>
-                                <img src="'.$course_medium_image.'" /></center>
+                            </div>';
+                
+                echo '<div class="categories-course-picture"><center>';
+                if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
+                    echo '<a href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">'; 
+                    echo '<img src="'.$course_medium_image.'" />';
+                    echo '</a>';
+                } else {
+                    echo '<img src="'.$course_medium_image.'" />';
+                }
+                
+                echo '</center>
                             </div>
                             <div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>';
                 echo '</div>';
@@ -153,7 +162,7 @@ $stok = Security::get_token();
                         }
                     }
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                        echo '<div class="course-link-desc right"><a class="a_button white small"  href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">'.get_lang('CourseDetails').'</a></div>';
+                        echo '<div class="course-link-desc right"><a class="a_button white small" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">'.get_lang('Description').'</a></div>';
                     }
                 echo  '</div>';
                 echo '</div>';

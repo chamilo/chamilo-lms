@@ -131,24 +131,31 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
 
 /* MAIN CODE */
 
-echo '<div class="actions">';
+echo '<div class="actions" style="height:32px">';
 
-if ($_GET['studentlist'] == 'false') {
-    echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a> | ';
-    echo get_lang('CourseTracking').' | ';
-    echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
-    if (empty($session_id))
-        echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a> ';
-} elseif($_GET['studentlist'] == 'resources') {
-    echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a> | ';
-    echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a> | ';
-    echo get_lang('ResourcesTracking');
-    if (empty($session_id))
-        echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';
-
+if (empty($_GET['studentlist'])) {
+    $_GET['studentlist'] = 'true';
+}
+switch($_GET['studentlist']) {
+    case 'true':
+        echo Display::return_icon('user_na.png', get_lang('StudentsTracking'), array(), 32);        
+        echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq().'&studentlist=false');     
+        echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32).'</a>';
+        break;
+    case 'false':
+        echo Display::url(Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq().'&studentlist=true');        
+        echo Display::return_icon('course_na.png', get_lang('CourseTracking'), array(), 32);
+        echo Display::url(Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq().'&studentlist=resources');
+        break;
+    case 'resources':        
+        echo Display::url(Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq().'&studentlist=true');  
+        echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq().'&studentlist=false');
+        echo Display::return_icon('tools_na.png', get_lang('ResourcesTracking'), array(), 32);
+        break;            
 }
 
-echo '<span style="float:right; padding-top:7px;">';
+
+echo '<span style="float:right; padding-top:0px;">';
 
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'','32').'</a>';
 
@@ -170,8 +177,12 @@ if ($_GET['studentlist'] == 'false') {
 
 echo '</span>';
 
+echo '</div>';
 
-if($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {    
+
+
+if ($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
+    echo '<div class="actions">';    
     
     // Create a search-box.
     $form_search = new FormValidator('search_simple', 'get', api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&studentlist=true', '', 'width=200px', false);
@@ -181,12 +192,16 @@ if($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
     $form_search->addElement('hidden', 'from', Security::remove_XSS($_GET['from']));
     $form_search->addElement('hidden', 'session_id', api_get_session_id());
     $form_search->addElement('text', 'user_keyword');
-    $form_search->addElement('style_submit_button', 'submit', get_lang('SearchUsers'), 'class="search"');
-    
+    $form_search->addElement('style_submit_button', 'submit', get_lang('SearchUsers'), 'class="search"');    
     $form_search->display();
+    echo '</div>';
 }
 
-echo '</div>';
+
+/*if (empty($session_id))
+    echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';
+*/
+
 
 if ($_GET['studentlist'] == 'false') {
     $course_code = api_get_course_id();
@@ -195,7 +210,7 @@ if ($_GET['studentlist'] == 'false') {
 
     // learning path tracking
      echo '<div class="report_section">
-            <h4>'.Display::return_icon('scormbuilder.gif',get_lang('AverageProgressInLearnpath')).get_lang('AverageProgressInLearnpath').'</h4>
+            <h2>'.Display::return_icon('scorms.gif',get_lang('AverageProgressInLearnpath')).get_lang('AverageProgressInLearnpath').'</h2>
             <table class="data_table">';
 
     $list = new LearnpathList($student, $course_code, $session_id);
@@ -243,7 +258,7 @@ if ($_GET['studentlist'] == 'false') {
 
      // Exercices tracking.
      echo '<div class="report_section">
-                <h4>'.Display::return_icon('quiz.gif',get_lang('AverageResultsToTheExercices')).get_lang('AverageResultsToTheExercices').'&nbsp;-&nbsp;<a href="../exercice/exercice.php?'.api_get_cidreq().'&show=result">'.get_lang('SeeDetail').'</a></h4>
+                <h2>'.Display::return_icon('quiz.gif',get_lang('AverageResultsToTheExercices')).get_lang('AverageResultsToTheExercices').'&nbsp;-&nbsp;<a href="../exercice/exercice.php?'.api_get_cidreq().'&show=result">'.get_lang('SeeDetail').'</a></h2>
             <table class="data_table">';
 
     $sql = "SELECT id, title
@@ -287,7 +302,7 @@ if ($_GET['studentlist'] == 'false') {
 
     // Forums tracking.
     echo '<div class="report_section">
-            <h4>'.Display::return_icon('forum.gif', get_lang('Forum')).get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?cidReq='.$_course['id'].'">'.get_lang('SeeDetail').'</a></h4>
+            <h2>'.Display::return_icon('forum.gif', get_lang('Forum')).get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?cidReq='.$_course['id'].'">'.get_lang('SeeDetail').'</a></h2>
             <table class="data_table">';
     $count_number_of_posts_by_course    = Tracking :: count_number_of_posts_by_course($course_code, $session_id);
     $count_number_of_forums_by_course   = Tracking :: count_number_of_forums_by_course($course_code, $session_id);
@@ -307,7 +322,7 @@ if ($_GET['studentlist'] == 'false') {
     // Chat tracking.
 
     echo '<div class="report_section">
-            <h4>'.Display::return_icon('chat.gif',get_lang('Chat')).get_lang('Chat').'</h4>
+            <h2>'.Display::return_icon('chat.gif',get_lang('Chat')).get_lang('Chat').'</h2>
             <table class="data_table">';
     $chat_connections_during_last_x_days_by_course = Tracking::chat_connections_during_last_x_days_by_course($course_code, 7, $session_id);
     if ($export_csv) {
@@ -321,7 +336,7 @@ if ($_GET['studentlist'] == 'false') {
 
     // Tools tracking.
     echo '<div class="report_section">
-                <h4>'.Display::return_icon('acces_tool.gif', get_lang('ToolsMostUsed')).get_lang('ToolsMostUsed').'</h4>
+                <h2>'.Display::return_icon('acces_tool.gif', get_lang('ToolsMostUsed')).get_lang('ToolsMostUsed').'</h2>
             <table class="data_table">';
 
     $tools_most_used = Tracking::get_tools_most_used_by_course($course_code, $session_id);
@@ -357,7 +372,7 @@ if ($_GET['studentlist'] == 'false') {
     }
 
      echo '<a name="documents_tracking" id="a"></a><div class="report_section">
-                <h4>'.Display::return_icon('documents.gif',get_lang('DocumentsMostDownloaded')).'&nbsp;'.get_lang('DocumentsMostDownloaded').$link.'</h4>
+                <h2>'.Display::return_icon('documents.gif',get_lang('DocumentsMostDownloaded')).'&nbsp;'.get_lang('DocumentsMostDownloaded').$link.'</h2>
             <table class="data_table">';
 
     $documents_most_downloaded = Tracking::get_documents_most_downloaded_by_course($course_code, $session_id, $num);
@@ -392,7 +407,7 @@ if ($_GET['studentlist'] == 'false') {
 
     // links tracking
      echo '<div class="report_section">
-                <h4>'.Display::return_icon('link.gif',get_lang('LinksMostClicked')).'&nbsp;'.get_lang('LinksMostClicked').'</h4>
+                <h2>'.Display::return_icon('link.gif',get_lang('LinksMostClicked')).'&nbsp;'.get_lang('LinksMostClicked').'</h2>
             <table class="data_table">';
 
     $links_most_visited = Tracking::get_links_most_visited_by_course($course_code, $session_id);
@@ -575,7 +590,7 @@ if ($_GET['studentlist'] == 'false') {
     $renderer->setElementTemplate('<span>{element}</span>');
     $form->addElement('hidden', 'studentlist', 'resources');
     $form->addElement('text', 'keyword', get_lang('keyword'));
-    $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
+    $form->addElement('style_submit_button', 'submit', get_lang('SearchUsers'), 'class="search"');
     echo '<div class="actions">';
     $form->display();
     echo '</div>';

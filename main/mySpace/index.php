@@ -206,11 +206,14 @@ if ($nb_teacher_courses > 0 ) {
 	echo '<div id="actions" class="actions">';
                
     if (isset($_GET['display']) && ($_GET['display'] == 'useroverview' || $_GET['display'] == 'sessionoverview' || $_GET['display'] == 'courseoverview')) {
-        echo '<a href="'.api_get_self().'?display='.$_GET['display'].'&export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+        echo '<a href="'.api_get_self().'?display='.$_GET['display'].'&export=csv&view='.$view.'">';
+        echo Display::return_icon("export_csv.png", get_lang('ExportAsCSV'),array(), 32);
+        echo '</a>';
     }
 
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
-	Display::return_icon('stats.png', get_lang('MyStats'),'','32').'</a>';	
+	Display::return_icon('stats.png', get_lang('MyStats'),'','32');
+	echo '</a>';	
     echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
 	Display::return_icon('printer.png', get_lang('Print'),'','32').'</a>';
 

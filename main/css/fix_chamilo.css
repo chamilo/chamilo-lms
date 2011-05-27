@@ -10,7 +10,6 @@
     min-height: 320px;   
     -moz-border-radius:0px 0px 10px 10px;
     border-radius:0px 0px 10px 10px;
-    
     box-shadow: 3px 3px 10px #ddd;
     -moz-box-shadow: 3px 3px 10px #ddd; 
 }
@@ -66,5 +65,13 @@ div.admin_section {
 	border-top:1px solid #ccc; 
 	width:92%;
 	padding: 8px 0px 2px 0; 
+}
+
+.actions a img {
+	padding-right:0px;
+}
+
+.actions img {
+    padding-right:10px;
 }
 

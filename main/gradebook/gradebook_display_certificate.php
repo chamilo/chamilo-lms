@@ -81,7 +81,7 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
             }
         }        
         if ($total_resource_weight != $total_weight) {
-            Display::display_warning_message(get_lang('TheActivitiesWeightMustBeEqualTheTotalWeight'));
+            Display::display_warning_message(get_lang('SumOfActivitiesWeightMustBeEqualToTotalWeight'));
         }
     }	 
 	$certificate_list = get_list_users_certificates($cat_id);

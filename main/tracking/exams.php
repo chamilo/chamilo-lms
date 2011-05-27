@@ -74,9 +74,17 @@ $form->setDefaults(array('score'=>$filter_score));
 if (!$export_to_xls) {
 	Display :: display_header(get_lang('Reporting'));
 	echo '<div class="actions">';
-	if ($global) {		
+	if ($global) {
+	    		
+	    echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
+        Display::return_icon('stats.png', get_lang('MyStats'),'','32');
+        echo '</a>';
+        
+        echo '<span style="float:right">';
         echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">
 		'.Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'','32').'</a>';
+        echo '</span>';
+        
         echo '<a href="javascript: void(0);" onclick="javascript: window.print()">
 		'.Display::return_icon('printer.png',get_lang('Print'),'','32').'</a>';
 	

@@ -28,7 +28,7 @@ $CourseIndependentEvaluation = "Evaluación independiente de un curso";
 $EvaluationName = "Componente de evaluación";
 $Max = "Maximum";
 $DateEval = "Fecha de evaluación";
-$AddUserToEval = "Añadir alumnos a la evaluación";
+$AddUserToEval = "Añadir estudiantes a la evaluación";
 $NewSubCategory = "Nueva subcalificación";
 $MakeLink = "Crear un componente de evaluación en línea";
 $DeleteSelected = "Eliminar selección";
@@ -219,4 +219,7 @@ $LockEvaluation = "Bloquear evaluación";
 $UnLockEvaluation = "Desbloquear evaluación.";
 $TheEvaluationIsLocked = "La evaluación está bloqueada.";
 $BackToEvaluation = "Regresar a la evaluación.";
+$TotalWeight = "Peso total";
+$SumOfActivitiesWeightMustBeEqualToTotalWeight = "La suma de pesos de todas las actividades tiene que ser igual al peso total definido en la configuración de esta evaluación, sino los alumnos no podrán alcanzar el puntaje mínimo requerido para obtener su certificado.";
+$TotalSumOfWeights = "La suma de pesos de todos los componentes de esta evaluación tiene que ser igual a este número.";
 ?>

@@ -219,4 +219,7 @@ $LockEvaluation = "Bloquer l'évaluation";
 $UnLockEvaluation = "Débloquer l'évaluation";
 $TheEvaluationIsLocked = "L'évaluation est bloquée.";
 $BackToEvaluation = "Retour à l'évaluation.";
+$TotalWeight = "Poids total";
+$SumOfActivitiesWeightMustBeEqualToTotalWeight = "La somme des poids de toutes les activités doit être égale au poids total défini dans la configuration du cahier de note, sans quoi aucun étudiant ne pourra atteindre un score suffisant pour obtenir leur certification.";
+$TotalSumOfWeights = "La somme des poids de toutes les évaluations de ce cahier de notes doit être égale à ce nombre.";
 ?>

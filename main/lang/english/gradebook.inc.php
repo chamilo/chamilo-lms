@@ -219,4 +219,7 @@ $LockEvaluation = "Lock evaluation";
 $UnLockEvaluation = "Unlock evaluation.";
 $TheEvaluationIsLocked = "The evaluation is locked.";
 $BackToEvaluation = "Back to evaluation.";
+$TotalWeight = "Total weight";
+$SumOfActivitiesWeightMustBeEqualToTotalWeight = "The sum of all activity weights must be equal to the total weight indicated in your assessment settings, otherwise the students will not be able to reach the sufficient score to achieve their certification.";
+$TotalSumOfWeights = "The sum of all weights of activities inside this assessment has to be equivalent to this number.";
 ?>

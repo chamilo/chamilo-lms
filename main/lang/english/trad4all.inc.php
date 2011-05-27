@@ -1108,4 +1108,5 @@ $ClearFilterResults = "Clear filter results";
 $SelectFilter = "Select filter";
 $ThereIsNoClassScheduledTodayTryPickingAnotherDay = "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons.";
 $AddToCalendar = "Add to calendar";
+$RandomPick = "Random pick";
 ?>

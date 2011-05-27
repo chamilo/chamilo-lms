@@ -378,7 +378,7 @@ $DoubtScore = "Don't know";
 $HotSpotDelineation = "Hotspot delineation";
 $PropagateNegativeResults = "Propagate negative results between questions";
 $InsertALinkToThisQuestionInTheExercise = "Use this question in the test as a link (not a copy)";
-$OnlyShowScore = "Show the score only";
+$OnlyShowScore = "Practice mode: Show score only";
 $ImportExcelQuiz = "Import quiz from Excel";
 $DownloadExcelTemplate = "Download the Excel Template";
 $ExerciseWillBeActivatedFromXToY = "Exercise will be activated from %s to %s";
@@ -409,4 +409,6 @@ $HotPotatoes = "HotPotatoes";
 $OAR = "Area to avoid";
 $TotalScoreTooBig = "Total score is too big";
 $InvalidQuestionType = "Invalid question type";
+$ShowScoreAndRightAnswer = "Auto-evaluation mode: show score and expected answers";
+$DoNotShowScoreNorRightAnswer = "Exam mode: Do not show score nor answers";
 ?>

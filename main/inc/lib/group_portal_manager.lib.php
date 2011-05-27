@@ -270,7 +270,7 @@ class GroupPortalManager
         $cond_part .= " LEFT JOIN $t_rel_group rg$i on rg$rg_number.group_id = rg$i.subgroup_id ";
       }
     }
-    $sql = $select_part.' '. $cond_part . "WHERE rg0.group_id='$group_id'";
+    $sql = $select_part.' '. $cond_part . "WHERE rg0.subgroup_id='$group_id'";
     $res = Database::query($sql);
     $temp_arr = Database::fetch_array($res, 'NUM');
     $toreturn = array();

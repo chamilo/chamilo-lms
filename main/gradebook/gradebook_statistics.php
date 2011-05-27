@@ -27,12 +27,14 @@ if (api_is_allowed_to_create_course()){
 	'name' => get_lang('ViewResult'
 	));
 }
-$displayscore= ScoreDisplay :: instance();
+$displayscore = ScoreDisplay :: instance();
 
 Display::display_header(get_lang('EvaluationStatistics'));
 DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 0, 'statistics');
 if (!$displayscore->is_custom()) {
-	Display :: display_error_message(get_lang('PleaseEnableScoringSystem'),false);
+    if (api_is_platform_admin() || api_is_course_admin()) {
+	   Display :: display_error_message(get_lang('PleaseEnableScoringSystem'),false);
+    }
 } else {
 	$displays= $displayscore->get_custom_score_display_settings();
 	$allresults = Result :: load(null,null,$eval[0]->get_id());

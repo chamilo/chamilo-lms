@@ -932,10 +932,10 @@ class Exercise {
 			}
 
 			$radios_results_disabled = array();
-			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('Yes'), '0', array('id'=>'result_disabled_0'));
-			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('No'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
+			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
+			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
 			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2',array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
-			$form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'));
+			$form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'<br />');
 
 			$random = array();
 			$option=array();

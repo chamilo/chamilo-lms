@@ -123,7 +123,7 @@ class CatForm extends FormValidator {
 		$this->add_textfield('name', get_lang('CategoryName'),true,array('size'=>'54','maxlength'=>'50'));
 		
 		$this->add_textfield('weight', get_lang('TotalWeight'),true,array('size'=>'4','maxlength'=>'5'));
-		$this->addElement('static', null, null, '<i>'.get_lang('TotalSumOfWeight').'</i>');
+		$this->addElement('static', null, null, '<i>'.get_lang('TotalSumOfWeights').'</i>');
 		
 		$this->add_textfield('certif_min_score', get_lang('CertificateMinScore'),false,array('size'=>'4','maxlength'=>'5'));
    		$this->addElement('hidden','hid_user_id');

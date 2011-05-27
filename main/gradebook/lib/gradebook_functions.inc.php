@@ -454,136 +454,164 @@ function parse_xml_data($file) {
 	xml_parser_free($parser);
 	return $users;
 }
+
 /**
-  * update user info about certificate
-  * @param int The category id
-  * @param int The user id
-  * @param string the path name of the certificate
-  * @return void()
-  */
-  function update_user_info_about_certificate ($cat_id,$user_id,$path_certificate) {
-  	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-  	if (!UserManager::is_user_certified($cat_id,$user_id)) {
-  		$sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"
-			 WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
-		$rs=Database::query($sql);
-  	}
-  }
+* update user info about certificate
+* @param int The category id
+* @param int The user id
+* @param string the path name of the certificate
+* @return void()
+*/
+function update_user_info_about_certificate ($cat_id,$user_id,$path_certificate) {
+    $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+    if (!UserManager::is_user_certified($cat_id,$user_id)) {
+    	$sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"
+    		 WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
+    	$rs=Database::query($sql);
+    }
+}
 
-  /**
-  * register user info about certificate
-  * @param int The category id
-  * @param int The user id
-  * @param float The score obtained for certified
-  * @param Datetime The date when you obtained the certificate
-  * @return void()
-  */
-  function register_user_info_about_certificate ($cat_id,$user_id,$score_certificate, $date_certificate) {
-  	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-  	$sql_exist='SELECT COUNT(*) as count FROM '.$table_certificate.' gc
-				WHERE gc.cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
-	$rs_exist=Database::query($sql_exist);
-	$row=Database::fetch_array($rs_exist);
-	if ($row['count']==0) {
-		$sql='INSERT INTO '.$table_certificate.' (cat_id,user_id,score_certificate,created_at)
-			  VALUES("'.intval($cat_id).'","'.intval($user_id).'","'.Database::escape_string($score_certificate).'","'.Database::escape_string($date_certificate).'")';
-		$rs=Database::query($sql);
-	}
+/**
+* register user info about certificate
+* @param int The category id
+* @param int The user id
+* @param float The score obtained for certified
+* @param Datetime The date when you obtained the certificate
+* @return void()
+*/
+function register_user_info_about_certificate ($cat_id,$user_id,$score_certificate, $date_certificate) {
+    $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+    $sql_exist='SELECT COUNT(*) as count FROM '.$table_certificate.' gc
+    			WHERE gc.cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
+    $rs_exist=Database::query($sql_exist);
+    $row=Database::fetch_array($rs_exist);
+    if ($row['count']==0) {
+    	$sql='INSERT INTO '.$table_certificate.' (cat_id,user_id,score_certificate,created_at)
+    		  VALUES("'.intval($cat_id).'","'.intval($user_id).'","'.Database::escape_string($score_certificate).'","'.Database::escape_string($date_certificate).'")';
+    	$rs=Database::query($sql);
+    }
+}
 
-  }
-  /**
-  * Get date of user certificate
-  * @param int The category id
-  * @param int The user id
-  * @return Datetime The date when you obtained the certificate
-  */
-  function get_certificate_by_user_id ($cat_id,$user_id) {
-    	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-    	$sql_get_date='SELECT * FROM '.$table_certificate.' WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'"';
-    	$rs_get_date=Database::query($sql_get_date);
-    	$row =Database::fetch_array($rs_get_date,'ASSOC');
-    	return $row;
-  }
+/**
+* Get date of user certificate
+* @param int The category id
+* @param int The user id
+* @return Datetime The date when you obtained the certificate
+*/
+function get_certificate_by_user_id ($cat_id,$user_id) {
+	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+	$sql_get_date='SELECT * FROM '.$table_certificate.' WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'"';
+	$rs_get_date=Database::query($sql_get_date);
+	$row =Database::fetch_array($rs_get_date,'ASSOC');
+	return $row;
+}
 
-  /**
-  * Get list of users certificates
-  * @param int The category id
-  * @return array
-  */
-  function get_list_users_certificates ($cat_id=null) {
+/**
+* Get list of users certificates
+* @param int The category id
+* @return array
+*/
+function get_list_users_certificates ($cat_id=null) {
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
-  	$sql='SELECT DISTINCT u.user_id,u.lastname,u.firstname,u.username FROM '.$table_user.' u INNER JOIN '.$table_certificate.' gc
-			ON u.user_id=gc.user_id ';
-	if (!is_null($cat_id) && $cat_id>0) {
-  		$sql.=' WHERE cat_id='.Database::escape_string($cat_id);
-  	}
-  	$sql.=' ORDER BY u.firstname';
-	$rs=Database::query($sql);
-	$list_users=array();
-	while ($row=Database::fetch_array($rs)) {
-		$list_users[]=$row;
-	}
-	return $list_users;
-  }
+    $sql='SELECT DISTINCT u.user_id,u.lastname,u.firstname,u.username FROM '.$table_user.' u INNER JOIN '.$table_certificate.' gc
+    		ON u.user_id=gc.user_id ';
+    if (!is_null($cat_id) && $cat_id>0) {
+    	$sql.=' WHERE cat_id='.Database::escape_string($cat_id);
+    }
+    $sql.=' ORDER BY u.firstname';
+    $rs=Database::query($sql);
+    $list_users=array();
+    while ($row=Database::fetch_array($rs)) {
+    	$list_users[]=$row;
+    }
+    return $list_users;
+}
 
-  /**
-  *Gets the certificate list by user id
-  *@param int The user id
-  *@param int The category id
-  *@retun array
-  */
-  function get_list_gradebook_certificates_by_user_id ($user_id,$cat_id=null) {
-  	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-  	$sql='SELECT gc.score_certificate,gc.created_at,gc.path_certificate,gc.cat_id,gc.user_id FROM  '.$table_certificate.' gc
-		  WHERE gc.user_id="'.Database::escape_string($user_id).'" ';
-	if (!is_null($cat_id) && $cat_id>0) {
-  		$sql.=' AND cat_id='.Database::escape_string($cat_id);
-  	}
-
-  	$rs = Database::query($sql);
-  	$list_certificate=array();
-  	while ($row=Database::fetch_array($rs)) {
-  		$list_certificate[]=$row;
-  	}
-  	return $list_certificate;
-  }
-  /**
-  * Deletes a certificate
-  * @param int The category id
-  * @param int The user id
-  * @return boolean
-  */
-  function delete_certificate($cat_id,$user_id) {
-
+/**
+*Gets the certificate list by user id
+*@param int The user id
+*@param int The category id
+*@retun array
+*/
+function get_list_gradebook_certificates_by_user_id ($user_id,$cat_id=null) {
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-  	$sql_verified='SELECT count(*) AS count,path_certificate as path,user_id FROM '.$table_certificate.' gc WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" GROUP BY user_id,cat_id';
-  	$rs_verified=Database::query($sql_verified);
-  	$path=Database::result($rs_verified,0,'path');
-  	$user_id=Database::result($rs_verified,0,'user_id');
-  	
-  	if (!is_null($path) || $path!='' || strlen($path)) {
-  			$path_info= UserManager::get_user_picture_path_by_id($user_id,'system',true);
-			$path_directory_user_certificate=$path_info['dir'].'certificate'.$path;
-			if (is_file($path_directory_user_certificate)) {
-				@unlink($path_directory_user_certificate);
-				if (is_file($path_directory_user_certificate)===false) {
-					$delete_db=true;
-				} else {
-					$delete_db=false;
-				}
+    $sql='SELECT gc.score_certificate,gc.created_at,gc.path_certificate,gc.cat_id,gc.user_id FROM  '.$table_certificate.' gc
+    	  WHERE gc.user_id="'.Database::escape_string($user_id).'" ';
+    if (!is_null($cat_id) && $cat_id>0) {
+    	$sql.=' AND cat_id='.Database::escape_string($cat_id);
+    }
+    
+    $rs = Database::query($sql);
+    $list_certificate=array();
+    while ($row=Database::fetch_array($rs)) {
+    	$list_certificate[]=$row;
+    }
+    return $list_certificate;
+}
+
+/**
+* Deletes a certificate
+* @param int The category id
+* @param int The user id
+* @return boolean
+*/
+function delete_certificate($cat_id, $user_id) {
+    $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+    $sql_verified='SELECT count(*) AS count,path_certificate as path,user_id FROM '.$table_certificate.' gc WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" GROUP BY user_id,cat_id';
+    $rs_verified=Database::query($sql_verified);
+    $path=Database::result($rs_verified,0,'path');
+    $user_id=Database::result($rs_verified,0,'user_id');
+    
+    if (!is_null($path) || $path!='' || strlen($path)) {
+		$path_info= UserManager::get_user_picture_path_by_id($user_id,'system',true);
+		$path_directory_user_certificate=$path_info['dir'].'certificate'.$path;
+		if (is_file($path_directory_user_certificate)) {
+			@unlink($path_directory_user_certificate);
+			if (is_file($path_directory_user_certificate)===false) {
+				$delete_db=true;
+			} else {
+				$delete_db=false;
 			}
-	  	if (Database::result($rs_verified,0,'count')==1 && $delete_db===true) {
-	  		$sql_delete='DELETE FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
-	  		$rs_delete=Database::query($sql_delete);
-	  		return true;
-	  	} else {
-	  		return false;
-	  	}
-  	} else {
-  		//path is not generate delete only the DB record
-  		$sql_delete='DELETE FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
-	  	$rs_delete=Database::query($sql_delete);
-	  	return true;
-  	}
-  }
+		}
+      	if (Database::result($rs_verified,0,'count')==1 && $delete_db===true) {
+      		$sql_delete='DELETE FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
+      		$rs_delete=Database::query($sql_delete);
+      		return true;
+      	} else {
+      		return false;
+      	}
+    } else {
+    	//path is not generate delete only the DB record
+    	$sql_delete='DELETE FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
+      	$rs_delete=Database::query($sql_delete);
+      	return true;
+    }
+}
+
+function get_user_certificate_content($user_id, $is_preview = false) {
+    //generate document HTML
+    $course_id          = api_get_course_id();
+    $content_html       = DocumentManager::replace_user_info_into_html($user_id, $course_id, $is_preview);
+        
+    $new_content        = explode('</head>', $content_html);    
+    $new_content_html   = $new_content[1];                    
+    $path_image         = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';
+    $new_content_html   = str_replace('../images/gallery',$path_image,$new_content_html);
+    
+    $path_image_in_default_course = api_get_path(WEB_CODE_PATH).'default_course_document';
+    $new_content_html = str_replace('/main/default_course_document',$path_image_in_default_course,$new_content_html);    
+    $new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
+    
+    //add print header
+    $print  = '<style media="print" type="text/css">#print_div {visibility:hidden;}</style>';
+    $print .= '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div"><img src="'.api_get_path(WEB_CODE_PATH).'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
+    
+    //add header
+    $new_content_html = $new_content[0].$print.'</head>'.$new_content_html;
+    return $new_content_html;
+}
+    
+    
+
+

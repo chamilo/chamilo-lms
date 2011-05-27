@@ -248,7 +248,7 @@ class GradebookTable extends SortableTable
 					Display::display_warning_message($warning_message,false);
 				}
 
-				$content_html=DocumentManager::replace_user_info_into_html($course_code);
+				$content_html=DocumentManager::replace_user_info_into_html(api_get_user_id(), $course_code);
 
 				$new_content=explode('</head>',$content_html);
 

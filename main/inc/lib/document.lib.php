@@ -1195,7 +1195,8 @@ return 'application/octet-stream';
      * @param string The course id
      * @return string The html content of the certificate
      */
-    function replace_user_info_into_html($course_id, $is_preview = false) {
+    function replace_user_info_into_html($user_id, $course_id, $is_preview = false) {
+        $user_id = intval($user_id);
         $course_info = api_get_course_info($course_id);
         $tbl_document=Database::get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
         $document_id=self::get_default_certificate_id($course_id);
@@ -1211,7 +1212,7 @@ return 'application/octet-stream';
             if (is_file($filepath)) {
                 $my_content_html=file_get_contents($filepath);
             }
-            $all_user_info=self::get_all_info_to_certificate($is_preview);
+            $all_user_info=self::get_all_info_to_certificate($user_id, $is_preview);
             $info_to_be_replaced_in_content_html=$all_user_info[0];
             $info_to_replace_in_content_html=$all_user_info[1];
             $new_content=str_replace($info_to_be_replaced_in_content_html,$info_to_replace_in_content_html, $my_content_html);
@@ -1222,9 +1223,9 @@ return 'application/octet-stream';
     /**
      * return all content to replace and all content to be replace
      */
-    function get_all_info_to_certificate($is_preview = false) {
+    function get_all_info_to_certificate($user_id, $is_preview = false) {
         $info_list	= array();
-        $user_id	= api_get_user_id();
+        $user_id	= intval($user_id);
         $course_id	= api_get_course_id();
 
         //info portal

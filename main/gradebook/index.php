@@ -623,22 +623,27 @@ if (isset ($_GET['studentoverview'])) {
             
         $data = get_certificate_by_user_id($category, $user_id);        
 	    if (api_is_allowed_to_edit(true, true)) {
-	        
+	        //Read file or preview file     
 	        if (!empty($data['path_certificate'])) {
                 $user_certificate = $path_directory_user_certificate.basename($data['path_certificate']);                                   
                 if (file_exists($user_certificate)) {
                     header('Content-Type: text/html; charset='. $charset);
-                    echo @file_get_contents($user_certificate);
-                    exit;                    
+                    echo @file_get_contents($user_certificate);                    
                 }  
-	        }	 
-	        Display :: display_reduced_header();
-            Display :: display_warning_message(get_lang('NoCertificateAvailable'));       
+	        } else {
+	            $new_content_html = get_user_certificate_content($user_id, true);
+	            if (empty($new_content_html)) {
+	                Display :: display_reduced_header();
+                    Display :: display_warning_message(get_lang('NoCertificateAvailable'));	                
+	            } else {
+	                echo $new_content_html ;
+	            }            
+	        }	        
 	        exit;
 	    } else {
-    		$user= get_user_info_from_id($user_id);
+    		$user         = get_user_info_from_id($user_id);
     		$scoredisplay = ScoreDisplay :: instance();
-    		$scorecourse = $my_category[0]->calc_score($user_id);
+    		$scorecourse  = $my_category[0]->calc_score($user_id);
     		
     		$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
     
@@ -669,28 +674,8 @@ if (isset ($_GET['studentoverview'])) {
     			$cat_id  = intval($_GET['cat_id']);
     			$name    = $data['path_certificate'];
     
-    			//generate document HTML
-    			$course_id = api_get_course_id();
-    			$content_html = DocumentManager::replace_user_info_into_html($course_id);
-    			$new_content=explode('</head>',$content_html);
-    
-    			if ($new_content[0]!=''  && !empty($data)) {
-    
-    				$new_content_html = $new_content[1];    				
-    				$path_image=api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';
-    				$new_content_html=str_replace('../images/gallery',$path_image,$new_content_html);
-    
-    				$path_image_in_default_course=api_get_path(WEB_CODE_PATH).'default_course_document';
-    				$new_content_html=str_replace('/main/default_course_document',$path_image_in_default_course,$new_content_html);
-    
-    				$new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
-    
-    				//add print header
-    				$print  = '<style media="print" type="text/css">#imprimir {visibility:hidden;}</style>';
-    				$print .='<a href="javascript:window.print();" style="float:right; padding:4px;" id="imprimir"><img src="'.api_get_path(WEB_CODE_PATH).'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
-    
-    				//add header
-    				$new_content_html=$new_content[0].$print.'</head>'.$new_content_html;
+    			if (!empty($data)) {
+    			    $new_content_html = get_user_certificate_content($user_id, false);
     				    
     				if ($cat_id = strval(intval($cat_id))) {    				    
     				    $my_path_certificate = $path_directory_user_certificate.$name;
@@ -700,12 +685,12 @@ if (isset ($_GET['studentoverview'])) {
     					} else {
     						$my_new_content_html=$new_content_html;
     						$my_new_content_html=mb_convert_encoding($my_new_content_html,'UTF-8',$charset);
-    						//Creating new name
-                            $user_id = api_get_user_id();
+    						
+    						//Creating new name                            
                             $name    = md5($user_id.$category_id).'.html';
     						$my_path_certificate = $path_directory_user_certificate.$name;
     						    						
-    						file_put_contents($my_path_certificate, $my_new_content_html);
+    						@file_put_contents($my_path_certificate, $my_new_content_html);
     						header('Content-Type: text/html; charset='. $charset);
     						echo $new_content_html;    						
     						

@@ -88,9 +88,9 @@ class Exercise {
     	$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST,$this->course['db_name']);
 	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION,$this->course['db_name']);
     	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
-
-		$sql="SELECT * FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
-		$result=Database::query($sql);
+        $id  = intval($id);
+		$sql = "SELECT * FROM $TBL_EXERCICES WHERE id = ".$id;
+		$result = Database::query($sql);
 
 		// if the exercise has been found
 		if ($object=Database::fetch_object($result)) {
@@ -117,7 +117,7 @@ class Exercise {
       		
 			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
 			
-			$result=Database::query($sql);
+			$result = Database::query($sql);
 
 			// fills the array with the question ID for this exercise
 			// the key of the array is the question position
@@ -275,9 +275,22 @@ class Exercise {
 	 * @author - Olivier Brouckaert
 	 * @return - array - question ID list
 	 */
-	function selectQuestionList() {
+	function selectQuestionList($from_db = false) {
+	    if ($from_db && !empty($this->id)) {
+	        $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION, $this->course['db_name']);	        
+            $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION, $this->course['db_name']);        
+                
+            $sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS WHERE question_id = id AND exercice_id='".$this->id."' ORDER BY question_order";        
+            $result = Database::query($sql);
+            $question_list = array();
+            while ($new_object = Database::fetch_object($result)) {
+                $question_list[$new_object->question_order]=  $new_object->question_id;
+            }
+            return $question_list;             
+	    }
 		return $this->questionList;
-	}
+	}    
+
 
 	/**
 	 * returns the number of questions in this exercise
@@ -506,9 +519,9 @@ class Exercise {
 	 */
 	function save($type_e='') {
 		global $_course;
-		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+		$TBL_EXERCICES      = Database::get_course_table(TABLE_QUIZ_TEST);
+        $TBL_QUESTIONS      = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $TBL_QUIZ_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
 
 		$id 			= $this->id;
@@ -536,25 +549,25 @@ class Exercise {
         $end_time 	= Database::escape_string(api_get_utc_datetime($this->end_time));
 
 		// Exercise already exists
-		if($id) {
+		if ($id) {
 			$sql="UPDATE $TBL_EXERCICES SET
-						title='".Database::escape_string($exercise)."',
-						description='".Database::escape_string($description)."'";
+				    title='".Database::escape_string($exercise)."',
+					description='".Database::escape_string($description)."'";
 
-				if ($type_e != 'simple') {
-						$sql .= ", sound='".Database::escape_string($sound)."',
-						type='".Database::escape_string($type)."',
-						random='".Database::escape_string($random)."',
-						random_answers='".Database::escape_string($random_answers)."',
-						active='".Database::escape_string($active)."',
-						feedback_type='".Database::escape_string($feedbacktype)."',
-						start_time    = '$start_time',
-						end_time      = '$end_time',
-						max_attempt='".Database::escape_string($attempts)."',
-            			expired_time='".Database::escape_string($expired_time)."',
-            			propagate_neg='".Database::escape_string($propagate_neg)."',
-						results_disabled='".Database::escape_string($results_disabled)."'";
-				}
+			if ($type_e != 'simple') {
+					$sql .= ",sound='".Database::escape_string($sound)."',
+					type           ='".Database::escape_string($type)."',
+					random         ='".Database::escape_string($random)."',
+					random_answers ='".Database::escape_string($random_answers)."',
+					active         ='".Database::escape_string($active)."',
+					feedback_type  ='".Database::escape_string($feedbacktype)."',
+					start_time     = '$start_time',
+					end_time       = '$end_time',
+					max_attempt    ='".Database::escape_string($attempts)."',
+        			expired_time   ='".Database::escape_string($expired_time)."',
+        			propagate_neg  ='".Database::escape_string($propagate_neg)."',
+					results_disabled='".Database::escape_string($results_disabled)."'";
+			}
 			$sql .= " WHERE id='".Database::escape_string($id)."'";
 
 			Database::query($sql);
@@ -565,19 +578,8 @@ class Exercise {
             if (api_get_setting('search_enabled')=='true') {
                 $this->search_engine_edit();
             }
-
-		} else {// creates a new exercise
-		//add condition by anonymous user
-
-		/*if (!api_is_anonymous()) {
-			//is course manager
-			$cond1=Database::escape_string($exercise);
-			$cond2=Database::escape_string($description);
-		} else {
-			//is anonymous user
-			$cond1=Database::escape_string(Security::remove_XSS($exercise));
-			$cond2=Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY));
-		}*/
+		} else {		     
+		    // creates a new exercise
 			$sql="INSERT INTO $TBL_EXERCICES (start_time, end_time, title, description, sound, type, random, random_answers,active, results_disabled, max_attempt, feedback_type, expired_time, session_id)
 					VALUES(
 						'$start_time','$end_time',
@@ -602,23 +604,27 @@ class Exercise {
 			if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {			    
                 $this->search_engine_save();
 			}
-		}
-
+		}	
+       
 		// updates the question position
         $this->update_question_positions();
 	}
-
+	
+    /* Updates question position */
     function update_question_positions() {
-    	// updates the question position
-        $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        foreach($this->questionList as $position=>$questionId) {
-            //$sql="UPDATE $TBL_QUESTIONS SET position='".Database::escape_string($position)."' WHERE id='".Database::escape_string($questionId)."'";
-            $sql="UPDATE $TBL_QUIZ_QUESTION SET question_order='".Database::escape_string($position)."' " .
-                 "WHERE question_id='".Database::escape_string($questionId)."' and exercice_id=".Database::escape_string($this->id)."";
-            Database::query($sql);
-
+        
+        $quiz_question_table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        //Fixes #3483 when updating order
+        $question_list = $this->selectQuestionList(true);
+        if (!empty($question_list)) {        
+            foreach ($question_list as $position => $questionId) {
+                $sql="UPDATE $quiz_question_table SET question_order ='".intval($position)."'".
+                     "WHERE question_id = ".intval($questionId)." AND exercice_id=".intval($this->id);                
+                Database::query($sql);
+            }
         }
-    }
+    }    
+    
 
 	/**
 	 * moves a question up in the list
@@ -1024,6 +1030,7 @@ class Exercise {
                 $form->addElement ('html','</div><div class="sub-form">');
 
                 $specific_fields = get_specific_field_list();
+                
                 foreach ($specific_fields as $specific_field) {
                     $form->addElement ('text', $specific_field['code'], $specific_field['name']);
                     $filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $this->id, 'tool_id' => '\''. TOOL_QUIZ .'\'');

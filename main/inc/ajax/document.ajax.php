@@ -7,7 +7,7 @@ require_once '../global.inc.php';
 
 api_protect_course_script(true);
 
-if(!empty($_FILES)) {
+if (!empty($_FILES)) {
     require_once api_get_path(LIBRARY_PATH).'document.lib.php';
     require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
     $result = DocumentManager::upload_document($_FILES, $_POST['curdirpath'], '', '', 0, 'overwrite', false, false);

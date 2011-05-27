@@ -15,7 +15,6 @@ $cidReset = true; // Flag forcing the 'current course' reset
 
 // including files
 require_once '../inc/global.inc.php';
-
 require_once api_get_path(LIBRARY_PATH).'auth.lib.php'; 
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'courses_controller.php';
@@ -50,7 +49,7 @@ if (!(api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_crea
 }
 
 // filter actions
-$actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'unsubscribe', 'display_courses');
+$actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'unsubscribe', 'display_courses','display_random_courses');
 $action = 'subscribe';
 $nameTools = get_lang('SortMyCourses');
 
@@ -147,17 +146,18 @@ if (isset($_GET['subscribe_course'])) {
 }
 
 switch ($action) {
-    case 'createcoursecategory' :
+    case 'createcoursecategory':
         $courses_controller->categories_list($action);
         break;
-    case 'deletecoursecategory' :
-    case 'sortmycourses'        :
+    case 'deletecoursecategory':
+    case 'sortmycourses':
         $courses_controller->courses_list($action);
         break;
-    case 'subscribe'            :
+    case 'subscribe':
+    case 'display_random_courses':
         $courses_controller->courses_categories($action);
         break;
-    case 'display_courses'      :
+    case 'display_courses':
         $courses_controller->courses_categories($action, $_GET['category_code']);
         break;
 }

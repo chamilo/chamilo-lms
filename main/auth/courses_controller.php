@@ -65,11 +65,8 @@ class CoursesController { // extends Controller {
      * @param string    error message(optional)
      */
     public function categories_list($action, $message='', $error='') {
-
-            $data = array();
-            
+            $data = array();            
             $data['user_course_categories'] = $this->model->get_user_course_categories();
-
             $data['action'] = $action;
             $data['message'] = $message;
             $data['error'] = $error;
@@ -79,7 +76,6 @@ class CoursesController { // extends Controller {
             $this->view->set_layout('layout');
             $this->view->set_template('categories_list');
             $this->view->render();
-
     }
 
     /**
@@ -91,32 +87,33 @@ class CoursesController { // extends Controller {
     public function courses_categories($action, $category_code = null, $message = '', $error = '') {
             $data = array();
             $browse_course_categories = $this->model->browse_course_categories();
-
-            if (!isset($category_code)) {
-                $category_code = $browse_course_categories[0][1]['code']; // by default first category
+            
+            if ($action == 'display_random_courses') {
+                $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 20);
+            } else {
+                if (!isset($category_code)) {
+                    $category_code = $browse_course_categories[0][1]['code']; // by default first category
+                }            
+                $data['browse_courses_in_category'] = $this->model->browse_courses_in_category($category_code);
             }
-            $data['browse_courses_in_category'] = $this->model->browse_courses_in_category($category_code);
             $data['browse_course_categories'] = $browse_course_categories;
             $data['code'] = Security::remove_XSS($category_code);
 
             // getting all the courses to which the user is subscribed to
             $curr_user_id = api_get_user_id();
-            $user_courses = $this->model->get_courses_of_user($curr_user_id);
+            $user_courses = $this->model->get_courses_of_user($curr_user_id);            
             $user_coursecodes = array();
 
             // we need only the course codes as these will be used to match against the courses of the category
             if ($user_courses != '') {
-                foreach ($user_courses as $key => $value) {
-                        $user_coursecodes[] = $value['code'];
+                foreach($user_courses as $key => $value) {
+                    $user_coursecodes[] = $value['code'];
                 }
             }
-
             $data['user_coursecodes'] = $user_coursecodes;
-
-
-            $data['action'] = $action;
-            $data['message'] = $message;
-            $data['error'] = $error;
+            $data['action']           = $action;
+            $data['message']          = $message;
+            $data['error']            = $error;
 
             // render to the view
             $this->view->set_data($data);
@@ -283,7 +280,4 @@ class CoursesController { // extends Controller {
         $action = 'sortmycourses';
         $this->courses_list($action, $message);
     }
-
-
 }
-?>

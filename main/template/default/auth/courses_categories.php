@@ -49,7 +49,12 @@ $stok = Security::get_token();
         <div id="categories-list">
 
             <?php if (!empty($browse_course_categories)) {
-
+                    if ($_GET['action'] == 'display_random_courses') { 
+                        echo '<strong>'.get_lang('RandomPick').'</strong>';
+                        $code = '';
+                    } else {
+                        echo '<a href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a>';
+                    }
                     // level 1
                     foreach ($browse_course_categories[0] as $category) {
                         $category_name = $category['name'];
@@ -62,10 +67,9 @@ $stok = Security::get_token();
                             if (!empty($count_courses_lv1)) {
                                 $category_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$category_code.'&amp;hidden_links='.$hidden_links.'">'.$category_name.'</a> ('.$count_courses_lv1.')';
                             } else {
-                                $category_link = '<strong>'.$category_name.' ('.$count_courses_lv1.')</strong>';    
+                                $category_link = '<a href="#">'.$category_name.' ('.$count_courses_lv1.')</a>';    
                             }
-                        }
-
+                        }                        
                         echo '<div>'.$category_link.'</div>';
                         // level 2
                         if (!empty($browse_course_categories[$category_code])) {

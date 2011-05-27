@@ -1005,8 +1005,8 @@ abstract class Question
 	 */
 	function createForm (&$form,$fck_config=0) {
 		echo '	<style>
-					div.row div.label{ width: 5%; }
-					div.row div.formw{ width: 92%; }
+					div.row div.label{ width: 8%; }
+					div.row div.formw{ width: 88%; }
 					.media { display:none;}
 				</style>';
 

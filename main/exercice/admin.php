@@ -163,13 +163,12 @@ if ($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
 // intializes the Exercise object
 if (!is_object($objExercise)) {
 	// construction of the Exercise object
-	$objExercise=new Exercise();
+	$objExercise = new Exercise();
 
 	// creation of a new exercise if wrong or not specified exercise ID
-	if($exerciseId) {
+	if ($exerciseId) {
 	    $objExercise->read($exerciseId);
 	}
-
 	// saves the object into the session
 	api_session_register('objExercise');
 }
@@ -431,7 +430,7 @@ if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['
 if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['myid']) &&  !isset($_GET['editQuestion'])) {
     echo '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
 }
-echo '<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.Display::return_icon('preview_view.png', get_lang('Preview'),'','32').'</a>';
+echo '<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&preview=1">'.Display::return_icon('preview_view.png', get_lang('Preview'),'','32').'</a>';
 if ($show_quiz_edition) {
     echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'),'','32').'</a>';
 } else {

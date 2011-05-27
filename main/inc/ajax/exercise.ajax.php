@@ -4,11 +4,8 @@
  * Responses to AJAX calls
  */
 
-require_once '../../exercice/exercise.class.php';
 require_once '../global.inc.php';
-
 api_protect_course_script(true);
-
 $action = $_REQUEST['a'];
 
 switch ($action) {    
@@ -20,16 +17,6 @@ switch ($action) {
             foreach ($new_question_list as $new_order_id) {            
                 Database::update($TBL_QUESTIONS, array('question_order'=>$counter), array('question_id = ? '=>intval($new_order_id)));
                 $counter++;
-            }      
-            
-            //Updating question list array from DB
-            $objExercise = $_SESSION['objExercise'];  
-            if (is_object($objExercise) && !empty($objExercise)) {            
-                $fresh_question_list = $objExercise->selectQuestionList(true);
-                if (!empty($fresh_question_list)) {
-                    $objExercise->questionList = $fresh_question_list;
-                    api_session_register('objExercise');
-                }                        
             }
             Display::display_confirmation_message(get_lang('Saved'));
         }

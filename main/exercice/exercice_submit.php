@@ -117,12 +117,19 @@ $safe_lp_id             = ($learnpath_id == '')             ? 0 : $learnpath_id;
 $safe_lp_item_id        = ($learnpath_item_id == '')        ? 0 : $learnpath_item_id;
 $safe_lp_item_view_id   = ($learnpath_item_view_id == '')   ? 0 : $learnpath_item_view_id;
 
-// Loading the $objExercise variable
 
-//if (!isset($_SESSION['objExercise']) || $origin == 'learnpath' || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {
+/*
+ * Teacher takes an exam and want to see a preview, we delete the objExercise from the session in order to get the latest changes
+    in the exercise 
+*/
+if (api_is_allowed_to_edit(null,true) && $_GET['preview'] == 1 ) {
+    api_session_unregister('objExercise');
+}
+
+// Loading the $objExercise variable
 if (!isset ($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {    
     // Construction of Exercise
-    $objExercise = new Exercise();
+    $objExercise = new Exercise();   
     if ($debug) {error_log('Setting the $objExercise variable'); };
     unset($_SESSION['questionList']);
 
@@ -135,12 +142,13 @@ if (!isset ($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUE
         // saves the object into the session
         api_session_register('objExercise');
         if ($debug) {error_log('$_SESSION[objExercise] was unset - set now - end'); };        
-    }
+    }    
 }
 
 if (!isset ($objExercise) && isset($_SESSION['objExercise'])) {
 	if ($debug) {error_log('Loading $objExercise from session'); };
-    $objExercise = $_SESSION['objExercise'];
+	 
+    $objExercise = $_SESSION['objExercise'];        
 }
 
 if (!is_object($objExercise)) {

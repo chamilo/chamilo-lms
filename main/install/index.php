@@ -121,7 +121,7 @@ if (!empty($_POST['old_version'])) {
 
 $new_version = '1.8.8.2';
 $new_version_stable = true;
-$new_version_major = true;
+$new_version_major = false;
 $software_name = 'Chamilo';
 $software_url = 'http://www.chamilo.org/';
 

@@ -110,13 +110,8 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
         $new_content_html = str_replace('/main/default_course_document', $path_image_in_default_course, $new_content_html);
 
         $new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
-        echo '
-        <style media="print" type="text/css">
-            #imprimir {
-            visibility:hidden;
-            }
-        </style>';
-        echo '<a href="javascript:window.print();" style="float:right; padding:4px;" id="imprimir"><img src="../img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
+        echo '<style media="print" type="text/css"> #print_div { visibility:hidden; } </style>';
+        echo '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div"><img src="../img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
         print_r($new_content_html);
         exit;
     }
@@ -383,7 +378,7 @@ $htmlHeadXtra[] = api_get_js('yoxview/yoxview-init.js');
 $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';   
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'yoxview/yoxview.css" type="text/css">';
 
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/blue/jplayer.blue.monday.css" type="text/css">';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/chamilo/jplayer.blue.monday.css" type="text/css">';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
 
 $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
@@ -401,18 +396,19 @@ if (!empty($docs_and_folders))
 foreach ($docs_and_folders  as $file) {    
     if ($file['filetype'] == 'file') {
         $path_info = pathinfo($file['path']);   
-             
+        //@todo use a js loop to autogenerate this code
         if (in_array($path_info['extension'], array('ogg', 'mp3', 'wav'))) {
             $document_data = DocumentManager::get_document_data_by_id($file['id'], api_get_course_id());
+            
             if ($path_info['extension'] == 'ogg') {
                 $path_info['extension'] = 'oga';
             }            
             $jquery .= ' $("#jquery_jplayer_'.$count.'").jPlayer({                                
                                 ready: function() {                    
                                     $(this).jPlayer("setMedia", {                                        
-                                        '.$path_info['extension'].' : "'.$document_data['direct_url'].'"  
+                                        '.$path_info['extension'].' : "'.$document_data['direct_url'].'"                                                                                  
                                     });
-                                },
+                                },                                
                                 swfPath: "'.$js_path.'jquery-jplayer",
                                 supplied: "mp3, m4a, oga, ogv, wav",          
                                 solution: "flash, html",  // Do not change this setting otherwise 
@@ -435,8 +431,7 @@ $(document).ready( function() {
     });
         
     //Experimental changes to preview mp3, ogg files        
-     '.$jquery.'   
-           
+     '.$jquery.'              
     //Keep this down otherwise the jquery player will not work
     for (i=0;i<$(".actions").length;i++) {
         if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
@@ -965,24 +960,18 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         }
 
         // Icons (clickable)
-        $row[] = create_document_link($document_data,  true);
+        $row[] = create_document_link($document_data,  true, $count);
+        $path_info = pathinfo($document_data['path']);
+                
+        if (in_array($path_info['extension'], array('ogg', 'mp3','wav'))) {
+            $count ++;
+        }
 
         // Validacion when belongs to a session
         $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
-
-        
-        $path_info = pathinfo($document_data['path']);
-        
-        if (in_array($path_info['extension'], array('ogg', 'mp3','wav'))) {            
-            $sound_preview = DocumentManager::generate_mp3_preview($count);
-            $count ++;
-        } else {
-            $sound_preview  = '';
-        }
-        
-        
+                
         // Document title with hyperlink        
-        $row[] = create_document_link($document_data).$session_img.'<br />'.$invisibility_span_open.'<i>'.nl2br(htmlspecialchars($document_data['comment'],ENT_QUOTES,$charset)).'</i>'.$invisibility_span_close.$user_link.$sound_preview;
+        $row[] = create_document_link($document_data).$session_img.'<br />'.$invisibility_span_open.'<i>'.nl2br(htmlspecialchars($document_data['comment'],ENT_QUOTES,$charset)).'</i>'.$invisibility_span_close.$user_link;
     
         // Comments => display comment under the document name
         $display_size = format_file_size($size);

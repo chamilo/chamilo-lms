@@ -19,6 +19,63 @@
 <div id="outerframe">
 <div id="main">
 
+<h1>Chamilo 1.8.8.2 - Bellavista, May 2011</h1>
+<h3>Release notes - summary</h3>
+<p>Chamilo 1.8.8.2 is a minor corrective stable version for version 1.8.8 to enable easier install on shared hosting.</p>
+
+<h3>New Features</h3>
+<ul>
+  <li>Improved certificates interface with explicit configuration requirements messages (#3503)</li>
+  <li>New block in control panel (#3235)</li>
+  <li>Improved exercises construction with better messages and allowing to show score without the right answers (#2539)</li>
+</ul>
+<h3>Debugging</h3>
+<ul>
+  <li>Thematic progress do not show on course homepage anymore (#3505)</li>
+  <li>Scoring users contribution in forum broken (#3504)</li>
+  <li>Can't add hotpotatoes to a course anymore (#3469)</li>
+  <li>Promotions copy replicates sessions several times (#3465)</li>
+  <li>Glossary broken with new yoxview (#3464)</li>
+  <li>Courses missing from user_portal.php after upgrade (#3419)</li>
+  <li>Learning path icon does not appear in iPad view (#3413)</li>
+  <li>Sorry, you are not allowed on admin settings (#3265)</li>
+  <li>Learning path mini panel does not show progress in IE7 (#3116)</li>
+  <li>Series of little visualisation bugs (#2493)</li>
+  <li>For other changes see 1.8.8 changelog below</li>
+</ul>
+<h3>Security</h3>
+<ul>
+  <li>Fixed several limited-risk potential XSS.</li>
+  <li>For other changes see 1.8.8 changelog below</li>
+</ul>
+<h3>Known issues</h3>
+<ul>
+  <li>Groups (admin only): When a user is subscribed in a Course through a Group and he's also subscribed in the same Course (tradional way), when removing the user from the Group, the user will be also removed from the Course in both levels.</li>
+  <li>Changed "givenname" for "cn" in LDAP queries. This might break some of the previous implementations of this plugin</li>
+  <li>If you used split users directories before v1.8.8 in combination with the "My files" feature (if it existed at all at that point), you will probably have a problem now, as the code in the previous version was wrong and was saving the personal portfolio file in another directory than the user's. Sorry about that. If you need professional assistance, see the http://www.chamilo.org/ website under support -> professional support for official providers who could help you. And don't forget to keep a backup. If you don't understand a thing about what I'm talking about, you are probable not concerned by this bug, so don't worry too much.</li>
+  <li>Document tool: when moving an HTML file using the "move" funcionality, images, videos and any incrusted file in that HTML will not be moved automatically see #1278 </li>
+</ul>
+
+<h3>Deprecated features</h3>
+<ul>
+  <li>For other changes see 1.8.8 changelog below</li>
+</ul>
+
+<h3>Deprecated files</h3>
+<ul>
+  <li>For other changes see 1.8.8 changelog below</li>
+</ul>
+
+<h3>CSS changes</h3>
+<ul>
+  <li>For other changes see 1.8.8 changelog below</li>
+</ul>
+<h3>Language changes</h3>
+<ul>
+  <li>Changed "alumno" to "estudiante" globally for Spanish language (#2235)</li>
+</ul>
+
+
 <h1>Chamilo 1.8.8 - Miraflores, May 2011</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.8.8 is a major stable version. Altough it doesn't come with a strong redesign, it provides a large number of small improvements to the teacher's toolset and the user's using pleasure. Audio recording, schema drawing, certification generating, better administration features, plugin for videoconference with BigBlueButton and e-commerce with PrestaShop are only a few of the improvements that you will find in this version.</p>
@@ -117,9 +174,6 @@
   <li>Added support for .docx</li>
   <li>Improve group homepage (#2077)</li>
   <li>Added support for global announcement by URL (#1763)</li>
-  <li></li>
-  <li></li>
-  <li></li>
 </li>
   
 </ul>

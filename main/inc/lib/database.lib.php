@@ -26,6 +26,7 @@ define('TABLE_MAIN_CLASS_USER', 			'class_user');
 define('TABLE_MAIN_CATEGORY', 				'course_category');
 define('TABLE_MAIN_COURSE_MODULE', 			'course_module');
 define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS',	'sys_announcement');
+define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS', 					'announcement_rel_group');
 define('TABLE_MAIN_LANGUAGE', 				'language');
 define('TABLE_MAIN_SETTINGS_OPTIONS', 		'settings_options');
 define('TABLE_MAIN_SETTINGS_CURRENT', 		'settings_current');

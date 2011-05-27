@@ -77,4 +77,6 @@ $IsNotiCalFormatFile = "Ce fichier n'est pas au format iCal";
 $RepeatEvent = "Évènement répétitif";
 $RepeatDate = "Répéter la date";
 $EndDateMustBeMoreThanStartDate = "La date de fin doit être supérieure à la date de début";
+$AnnouncementForGroup = "Seulement visible pour le groupe";
+$AllGroups = "Tous les groupes";
 ?>

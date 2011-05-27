@@ -2431,6 +2431,12 @@ CREATE TABLE group_rel_group (
 ALTER TABLE group_rel_group ADD INDEX ( group_id );
 ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
 ALTER TABLE group_rel_group ADD INDEX ( relation_type );
+
+CREATE TABLE announcement_rel_group (
+	group_id int NOT NULL,
+	announcement_id int NOT NULL,
+	PRIMARY KEY (group_id, announcement_id)
+);
 --
 -- Table structure for table message attachment
 --

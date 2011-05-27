@@ -1841,6 +1841,15 @@ function api_is_drh() {
     return $_user['status'] == DRH;
 }
 
+/*
+ * @todo finish this function ...
+function api_is_student() {
+    if (!api_is_platform_admin() && !api_is_session_admin() && !api_is_coach()) {
+        return true;
+    }
+    return false;
+}*/
+
 /**
  * This function checks whether a session is assigned into a category
  * @param int       - session id

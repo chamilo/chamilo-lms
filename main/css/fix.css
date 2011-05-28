@@ -80,18 +80,21 @@ input.maininput:focus {
 	
 }
 
-.big_icon img {
-     margin:0 auto 0 auto;
-	 box-shadow: 0 0 5px #C9D2D9;
-	 -moz-border-radius:5px;
-	 -border-radius:5px;
-	 -webkit-border-radius:5px;
-	 border-radius:5px;
+.big_icon img {     
+	 padding:5px;	 
+	 -moz-border-radius:10px;
+	 -border-radius:10px;
+	 -webkit-border-radius:10px;
+	 border-radius:10px;	 
+	 -webkit-box-shadow: 0 4px 8px #C8C8C8;
+   	 -opera-box-shadow: 0 4px 8px #C8C8C8;
+     -moz-box-shadow: 0 4px 8px #C8C8C8;
+	 box-shadow: 0 4px 8px #C8C8C8;
 	 
 }
 
 .courseadminview .big_icon a {
-	font-size:12px; 
+	font-size:12px;
 }
 
 /* Fixes the administration block section */

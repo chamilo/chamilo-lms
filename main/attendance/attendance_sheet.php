@@ -54,7 +54,7 @@ if (api_is_allowed_to_edit(null, true)) {
     }
     
     if (!$exists_attendance_today) {
-        Display::display_warning_message('ThereIsNoClassScheduledTodayTryPickingAnotherDay');
+        Display::display_warning_message(get_lang('ThereIsNoClassScheduledTodayTryPickingAnotherDay'));
     }
     
     $form->addElement('select', 'filter', get_lang('Filter'), $values);   

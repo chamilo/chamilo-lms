@@ -1,11 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
+/* @todo move this file in the inc/ajax/ folder */
+
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 
 // Including additional libraries.
-require_once(api_get_path(LIBRARY_PATH).'glossary.lib.php');
+require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
 
 /*
  * Search a term and return description from a glossary.

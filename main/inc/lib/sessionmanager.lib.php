@@ -1349,6 +1349,50 @@ class SessionManager {
         return Database::select('*', $session_table, array('where'=>array('id_coach = ?'=>$user_id)));    	
     }
     
+    /*
+    public static function get_coaches_by_session($session_id, $course_code) {
+        $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);
+        
+        $sql = "SELECT user.user_id
+                FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
+                WHERE session_rcru.id_user = user.user_id AND 
+                session_rcru.id_session = '".intval($session_id)."' AND 
+                session_rcru.course_code ='".Database::escape_string($course_code)."' AND 
+                session_rcru.status = 2 ";
+        $result = Database::query($sql);
+        while ($row = Database::fetch_array($result,'ASSOC')) {
+            $return_array[] = $row;
+        }
+        return $return_array;
+    }*/
+    
+    /**
+     * Gets user status within a session 
+     * @param $user_id
+     * @param $course_code
+     * @param $session_id
+     * @return unknown_type
+     */
+    public function get_user_status_in_session($user_id, $course_code, $session_id) {
+        $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);        
+        $sql = "SELECT session_rcru.status
+                FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
+                WHERE session_rcru.id_user = user.user_id AND 
+                session_rcru.id_session = '".intval($session_id)."' AND 
+                session_rcru.course_code ='".Database::escape_string($course_code)."' AND 
+                user.user_id = ".intval($user_id);        
+        $result = Database::query($sql);
+        $status = false;
+        if (Database::num_rows($result)) {
+            $status = Database::fetch_row($result);
+            $status = $status['0'];
+        }
+        return $status;
+    }
+        
+    
     public static function get_session_by_user($coach_id, $user_id) {
     	
     }

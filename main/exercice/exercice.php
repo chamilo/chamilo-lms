@@ -205,7 +205,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 		$tot += $row['marks'];
 	}
 	
-	$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".floatval($tot)."' WHERE exe_id=".$id;
+	$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".floatval($tot)."' WHERE exe_id = ".$id;
     Database::query($totquery);
     
     //@todo move this somewhere else
@@ -263,7 +263,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
     
     //Updating LP score here    
 	if (in_array($origin, array ('tracking_course','user_course','correct_exercise_in_lp'))) {   
-        $sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . intval($tot) . "' WHERE id = " .$lp_item_view_id;
+        $sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . floatval($tot) . "' WHERE id = " .$lp_item_view_id;
         Database::query($sql_update_score);
 		if ($origin == 'tracking_course') {
 			//Redirect to the course detail in lp

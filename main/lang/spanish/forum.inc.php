@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $ForumDeleted = "Foro eliminado";
 $ForumCategoryDeleted = "Categoría de foro eliminada";
 $ForumLocked = "Foro cerrado";
@@ -110,12 +107,12 @@ $WhoChanged = "Quien hizo el cambio";
 $NoteChanged = "Nota cambiada";
 $DateChanged = "Fecha del cambio";
 $ViewComentPost = "Ver comentarios en los mensajes";
-$AllStudents = "Todos los alumnos";
-$StudentsQualified = "Alumnos calificados";
-$StudentsNotQualified = "Alumnos sin calificar";
+$AllStudents = "Todos los estudiantes";
+$StudentsQualified = "Estudiantes calificados";
+$StudentsNotQualified = "Estudiantes sin calificar";
 $NamesAndLastNames = "Nombres y apellidos";
-$MaxScore = "Puntuación máxima";
-$QualificationCanNotBeGreaterThanMaxScore = "La calificación no puede ser superior a la puntuación máxima.";
+$MaxScore = "Puntaje máximo";
+$QualificationCanNotBeGreaterThanMaxScore = "La calificación no puede ser superior al puntaje máximo.";
 $ThreadStatistics = "Estadísticas del tema";
 $Thread = "Tema";
 $NotifyMe = "Notificarme";
@@ -144,7 +141,7 @@ $PreviewImage = "Imagen previa";
 $UpdateImage = "Actualizar imagen";
 $EnableTimeLimits = "Activar limites de tiempo";
 $RemoveSearchResults = "Limpiar los resultados de la búsqueda";
-$InsertQualificationCorrespondingToMaxScore = "Ingrese una puntuación que corresponda a la calificación máxima";
+$InsertQualificationCorrespondingToMaxScore = "Ingrese un puntaje que corresponda a la calificación máxima";
 $ThreadMoved = "Tema movido";
 $MigrateForum = "Migrar foro";
 $YouWillBeNotified = "Ud. será notificado";

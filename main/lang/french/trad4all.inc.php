@@ -1104,4 +1104,7 @@ $NotAddedToCourse = "Non ajouté au cours";
 $UsersNotRegistered = "Utilisateurs qui ne se sont pas inscrits";
 $ClearFilterResults = "Nettoyer le filtre de résultats";
 $SelectFilter = "Sélectionner le filtre";
+$ThereIsNoClassScheduledTodayTryPickingAnotherDay = "Aucune classe n'a été programmée aujourd'hui. Choisissez un autre you ou ajoutez votre classe vous-même en utilisant les icônes d'action.";
+$AddToCalendar = "Ajouter au calendrier";
+$RandomPick = "Sélection aléatoire";
 ?>

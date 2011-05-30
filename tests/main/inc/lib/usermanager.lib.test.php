@@ -287,11 +287,11 @@ class TestUserManager extends UnitTestCase {
 	 	$this->assertFalse($res);
 	 }
 
-	function testResizePicture() {
+	function testResizePictureEmptyPicture() {
 		$file='';
 		$max_size_for_picture='';
 		$res=UserManager::resize_picture($file, $max_size_for_picture);
-	 	$this->assertTrue($res instanceof image);
+	 	$this->assertNull($res);
 	}
 
 	function testSaveExtraFieldChanges() {

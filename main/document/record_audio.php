@@ -192,7 +192,7 @@ echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/
 	//echo '<param name="Color" value="#C0E0FF" />'; // default #FFFFFF
 	//echo '<param name="StartTime" value="10.5" />';
 	//echo '<param name="EndTime" value="65" />';	
-	//echo '<param name="AudioFormat" value="ImaADPCM" />';// ImaADPCM (more speed), Speex (more compression)|(default Speex)
+	echo '<param name="AudioFormat" value="ImaADPCM" />';// ImaADPCM (more speed), Speex (more compression)|(default Speex)
 	//echo '<param name="SamplingRate" value="32000" />';//Quality for ImaADPCM (low 8000, medium 11025, normal 22050, hight 44100) OR Quality for Speex (low 8000, medium 16000, normal 32000, hight 44100) | (default 44100)
 	//echo '<param name="MaxDuration" value="60" />';
 	//echo '<param name="SoundFileURL" value="http://somewhere.com/mysoundfile.wav" />';//load a file |(default "")

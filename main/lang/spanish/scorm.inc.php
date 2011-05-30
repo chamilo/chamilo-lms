@@ -1,14 +1,11 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langScormVersion = "versión";
 $langScormRestarted = "Ningún objeto de aprendizaje ha sido completado.";
 $langScormNoNext = "Este es el último objeto de aprendizaje.";
 $langScormNoPrev = "Este es el primer objeto de aprendizaje.";
 $langScormTime = "Tiempo";
 $langScormNoOrder = "No hay un orden preestablecido, puedes hacer clic en cualquier lección.";
-$langScormScore = "Puntuación";
+$langScormScore = "Puntaje";
 $langScormLessonTitle = "Título del apartado";
 $langScormStatus = "Estado";
 $langScormToEnter = "Para entrar en";

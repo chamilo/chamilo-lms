@@ -122,11 +122,11 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 		
 		function check_direct_feedback() {
 			document.getElementById(\'option_page_one\').checked = true;
-		}
+			document.getElementById(\'result_disabled_0\').checked = true;			
+	    }
 		
 		function check_results_disabled() {		
-			document.getElementById(\'exerciseType_2\').checked = true;			
-			
+			document.getElementById(\'exerciseType_2\').checked = true;
 		}
                    
 		</script>';

@@ -342,6 +342,9 @@ class Attendance
 	 * @return 	array  users data
 	 */
 	public function get_users_rel_course($attendance_id = 0) {
+	    
+	    require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+	    
 		$current_session_id = api_get_session_id();
 		$current_course_id  = api_get_course_id();
 		if (!empty($current_session_id)) {
@@ -352,13 +355,21 @@ class Attendance
 		// get registered users inside current course
 		$a_users = array();
 		foreach ($a_course_users as $key =>$user_data) {
-			$value	= array();
+			$value	= array();			
 			$uid 	= $user_data['user_id'];
 			$status = $user_data['status'];
-			$user_status_in_course = CourseManager::get_user_in_course_status($uid, $current_course_id);
+			
+			$user_status_in_session = null;
+			$user_status_in_course  = null;
+			
+			if (api_get_session_id()) {
+                $user_status_in_session = SessionManager::get_user_status_in_session($uid, $current_course_id, $current_session_id);                
+			} else {
+			    $user_status_in_course = CourseManager::get_user_in_course_status($uid, $current_course_id);
+			}
 
 			//Not taking into account DRH or COURSEMANAGER
-			if ($uid <= 1 || $status == DRH || $user_status_in_course == COURSEMANAGER) continue;
+			if ($uid <= 1 || $status == DRH || $user_status_in_course == COURSEMANAGER || $user_status_in_session == 2) continue;
 
 			if (!empty($attendance_id)) {
 				$user_faults = $this->get_faults_of_user($uid, $attendance_id);
@@ -377,10 +388,10 @@ class Attendance
 				$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></center>';
 			}
 
-			$value['photo'] 	= $photo;
-			$value['firstname']     = $user_data['firstname'];
-			$value['lastname']	= $user_data['lastname'];
-                        $value['user_id']       = $uid;
+			$value['photo']      = $photo;
+			$value['firstname']  = $user_data['firstname'];
+			$value['lastname']	 = $user_data['lastname'];
+            $value['user_id']    = $uid;
 
 			//Sending only 5 items in the array instead of 60
 			$a_users[$key] = $value;

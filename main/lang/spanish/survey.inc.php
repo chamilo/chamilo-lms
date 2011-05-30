@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $PublishSurvey = "Publicar encuesta";
 $CompareQuestions = "Comparar preguntas";
 $InformationUpdated = "Información actualizada";
@@ -44,8 +41,8 @@ $UpdateQuestionType = "Actualizar el tipo de pregunta:";
 $AddAnotherQuestion = "Añadir una nueva pregunta";
 $IsShareSurvey = "Compartir la encuesta con otros";
 $Proceed = "Proceder";
-$PleaseFillNumber = "Por favor, rellene los valores numéricos para las puntuaciones.";
-$PleaseFillAllPoints = "Por favor, rellene las puntuaciones de 1-5";
+$PleaseFillNumber = "Por favor, rellene los valores numéricos para los puntajes.";
+$PleaseFillAllPoints = "Por favor, rellene los puntajes de 1-5";
 $PleasFillAllAnswer = "Por favor, rellene  todos los campos de las respuestas.";
 $PleaseSelectFourTrue = "Por favor, seleccione al menos cuatro respuestas verdaderas.";
 $PleaseSelectFourDefault = "Por favor, seleccione al menos cuatro respuestas por defecto.";
@@ -138,10 +135,10 @@ $DetailedReportByUserDetail = "En este informe puede ver todas las respuestas de
 $DetailedReportByQuestionDetail = "En este informe se ven los resultados pregunta a pregunta. Proporciona un análisis estadístico básico y gráficos.";
 $ReminderResendToAllUsers = "Enviar a todos los usuarios seleccionados. Si no marca esta casilla, sólamente recibirán el correo electrónico los usuarios adicionales que haya añadido.";
 $Multiplechoice = "Elección multiple";
-$Score = "Puntuación";
+$Score = "Puntaje";
 $Shared = "Compartido";
 $Invite = "Invitados";
-$MaximumScore = "Puntuación máxima";
+$MaximumScore = "Puntaje máximo";
 $ViewInvited = "Ver invitados";
 $ViewAnswered = "Ver las personas que han respondido";
 $ViewUnanswered = "Ver las personas que no han respondido";

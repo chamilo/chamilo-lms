@@ -65,12 +65,12 @@ $picturePath  = $documentPath . '/images';
 $audioPath    = $documentPath . '/audio';
 
 // hotpotatoes
-$uploadPath = DIR_HOTPOTATOES; //defined in main_api
-$exercicePath = api_get_self();
-$exfile = explode('/', $exercicePath);
-$exfile = strtolower($exfile[sizeof($exfile) - 1]);
-$exercicePath = substr($exercicePath, 0, strpos($exercicePath, $exfile));
-$exercicePath = $exercicePath . "exercice.php";
+$uploadPath     = DIR_HOTPOTATOES; //defined in main_api
+$exercicePath   = api_get_self();
+$exfile         = explode('/', $exercicePath);
+$exfile         = strtolower($exfile[sizeof($exfile) - 1]);
+$exercicePath   = substr($exercicePath, 0, strpos($exercicePath, $exfile));
+$exercicePath   = $exercicePath . "exercice.php";
 
 if ($show == 'result') {    
     if (empty($_GET['exerciseId']) && empty($_GET['path']) ) {
@@ -114,6 +114,7 @@ if (empty ($file)) {
 $learnpath_id       = intval($_REQUEST['learnpath_id']);
 $learnpath_item_id  = intval($_REQUEST['learnpath_item_id']);
 $page               = intval($_REQUEST['page']);
+
 if ($page < 0) {
     $page = 1;
 }
@@ -197,14 +198,14 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 		Database::query($recording_changes);
 	}
 	
-	$qry = 'SELECT DISTINCT question_id, marks FROM ' . $TBL_TRACK_ATTEMPT . ' where exe_id = ' . $id . ' GROUP BY question_id';
+	$qry = 'SELECT DISTINCT question_id, marks FROM ' . $TBL_TRACK_ATTEMPT . ' where exe_id = '.$id .' GROUP BY question_id';
 	$res = Database::query($qry);
 	$tot = 0;
 	while ($row = Database :: fetch_array($res, 'ASSOC')) {
 		$tot += $row['marks'];
 	}
 	
-	$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '" . floatval($tot) . "' WHERE exe_id=" . $id;
+	$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".floatval($tot)."' WHERE exe_id = ".$id;
     Database::query($totquery);
     
     //@todo move this somewhere else
@@ -262,7 +263,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
     
     //Updating LP score here    
 	if (in_array($origin, array ('tracking_course','user_course','correct_exercise_in_lp'))) {   
-        $sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . intval($tot) . "' WHERE id = " .$lp_item_view_id;
+        $sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . floatval($tot) . "' WHERE id = " .$lp_item_view_id;
         Database::query($sql_update_score);
 		if ($origin == 'tracking_course') {
 			//Redirect to the course detail in lp
@@ -561,7 +562,8 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 				$alt = get_lang('ExportWithoutUserFields');
 				$extra_user_fields = '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
 			}
-			echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+			
+			echo '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
 			echo '<a href="javascript: void(0);" onclick="javascript: document.form1a.submit();">'.Display::return_icon('export_csv.png',get_lang('ExportAsCSV'),'','32').'</a>';
 			echo '<a href="javascript: void(0);" onclick="javascript: document.form1b.submit();">' . Display :: return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a>';
 			echo '<form id="form1a" name="form1a" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '" style="display:inline">';

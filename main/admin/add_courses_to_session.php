@@ -18,6 +18,7 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'add_courses_to_session_functions.lib.php';
 
+$id_session = intval($_GET['id_session']);
 
 $xajax = new xajax();
 //$xajax->debugOn();
@@ -32,6 +33,7 @@ api_protect_admin_script(true);
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -42,7 +44,6 @@ $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 
 // setting the name of the tool
 $tool_name= get_lang('SubscribeCoursesToSession');
-$id_session=intval($_GET['id_session']);
 
 $add_type = 'multiple';
 if(isset($_GET['add_type']) && $_GET['add_type']!=''){
@@ -319,7 +320,7 @@ else
 {
 	?>
 	<div id="ajax_list_courses_multiple">
-	<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:320px;"> <?php
+	<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:360px;"> <?php
 	foreach($nosessionCourses as $enreg)
 	{
 		?>
@@ -350,17 +351,14 @@ unset($nosessionCourses);
   ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
-	if(isset($_GET['add']))
-	{
+	if(isset($_GET['add'])) {
 		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('NextStep').'</button>';
-	}
-	else
-	{
+	} else {
 		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeCoursesToSession').'</button>';
 	}
 	?>
   </td>
-  <td width="45%" align="center"><select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:320px;">
+  <td width="45%" align="center"><select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:360px;">
 
 <?php
 foreach($sessionCourses as $enreg)

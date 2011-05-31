@@ -92,33 +92,33 @@ function display_form() {
 	$html .= '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
 	$html .= '</div>';
 
-	//$html .= '<div class="row"><div class="form_header">'.get_lang('CopyCourse').'</div></div>';
+    $html .= Display::return_message(get_lang('CopyCourseFromSessionToSessionExplanation'));
+    
 	$html .= '<form name="formulaire" method="post" action="'.api_get_self().'" >';
 
 	$html .= '<table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">';
-
+    
+	//left
 	$html .= '<tr><td width="30%" align="center"><b>'.get_lang('OriginCoursesFromSession').':</b></td>';
 	$html .= '<td >&nbsp;</td><td align="center" width="30%"><b>'.get_lang('DestinationCoursesFromSession').':</b></td></tr>';
 	$html .= '<tr><td width="30%" align="center">'.make_select_session_list('sessions_list_origin', $sessions, array('onchange' => 'javascript: xajax_search_courses(this.value,\'origin\');')).'</td>';
 	$html .= '<td>&nbsp;</td><td width="30%" align="center"><div id="ajax_sessions_list_destination">';
 	$html .= '<select name="sessions_list_destination" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
 	$html .= '<option value = "0">'.get_lang('ThereIsNotStillASession').'</option></select ></div></td></tr>';
-
 	$html .= '<tr><td width="30%" align="center"><div id="ajax_list_courses_origin">';
 	$html .= '<select id="origin" name="SessionCoursesListOrigin[]" multiple="multiple" size="20" style="width:320px;"></select></div></td>';
 
-	// Options configuration
-	//$html .= '<td align="top"><div class="sectiontitle">'.get_lang('CopyCourse').'</div>';
-	$html .= '<td align="top">';
-	$introduction = get_lang('CopyCourseFromSessionToSessionExplanation');
-	$html .= '<div class="normal-message">'.$introduction.'</div>';
-	$html .= '<div style="height:150px;padding-top:10px;padding-bottom:50px"><h3>'.get_lang('TypeOfCopy').'</h3>';
+	// Center
+	$html .= '<td width="30%" align="center">';	
+	$html .= '<div style="width:150px;"><h3>'.get_lang('TypeOfCopy').'</h3>';
 	$html .= '<input type="radio" class="checkbox" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
 	$html .= '<label for="copy_option_1">'.get_lang('FullCopy').'</label><br/>';
 	$html .= '<input type="radio" class="checkbox" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
 	$html .= '<label for="copy_option_2"><span id="title_option2" style="color:#aaa">'.get_lang('LetMeSelectItems').'</span></label><br/><br/>';
 	$html .= '<button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.get_lang('CopyCourse').'</button></div>';
-
+	
+	
+    //Right
 	$html .= '</td><td width="30%" align="center">';
 	$html .= '<div id="ajax_list_courses_destination">';
 	$html .= '<select id="destination" name="SessionCoursesListDestination[]" multiple="multiple" size="20" style="width:320px;" ></select></div></td>';
@@ -400,7 +400,6 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		Display::display_error_message(get_lang('You must select a course from original session and select a destination session'));
 		display_form();
 	}
-
 } else {
 	display_form();
 }

@@ -20,15 +20,15 @@ $formSent=0;
 $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-
-$result=Database::query("SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility FROM $tbl_session WHERE id= $id");
+$sql = "SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility FROM $tbl_session WHERE id = $id";
+$result = Database::query($sql);
 
 if (!$infos=Database::fetch_array($result)) {
     header('Location: session_list.php');
     exit();
 }
 
-if (!api_is_platform_admin() && $infos['session_admin_id']!=api_get_user_id()) {
+if (!api_is_platform_admin() && $infos['session_admin_id'] != api_get_user_id()) {
     api_not_allowed(true);
 }
 
@@ -36,6 +36,7 @@ $tool_name = get_lang('EditSession');
 
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
+$interbreadcrumb[]=array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
 
 list($year_start,$month_start,$day_start)   = explode('-',$infos['date_start']);
 list($year_end,$month_end,$day_end)         = explode('-',$infos['date_end']);
@@ -114,7 +115,7 @@ if (!empty($return)) {
 </tr>
 <tr>
   <td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
-  <td width="70%"><select name="id_coach" style="width:250px;">
+  <td width="70%"><select name="id_coach" style="width:380px;">
 	<option value="">----- <?php echo get_lang('Choose') ?> -----</option>
 <?php
 foreach($Coaches as $enreg) {
@@ -130,7 +131,7 @@ $Categories = SessionManager::get_all_session_category();
 <tr>
   <td width="30%"><?php echo get_lang('SessionCategory') ?></td>
   <td width="70%">
-  	<select name="session_category" value="true" style="width:250px;">
+  	<select name="session_category" style="width:380px;">
 		<option value="0"><?php get_lang('None'); ?></option>
 		<?php
 		  if (!empty($Categories)) { 

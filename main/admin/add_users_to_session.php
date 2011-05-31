@@ -1,4 +1,4 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 *	@package chamilo.admin
@@ -8,7 +8,7 @@
 $language_file=array('admin','registration');
 
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 // including some necessary files
 require_once '../inc/global.inc.php';
@@ -24,9 +24,12 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // Access restrictions
 api_protect_admin_script(true);
 
+$id_session = intval($_GET['id_session']);
+
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
 
 // Database Table Definitions
 $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -41,8 +44,6 @@ $tbl_class_user						= Database::get_main_table(TABLE_MAIN_CLASS_USER);
 
 // setting the name of the tool
 $tool_name=get_lang('SubscribeUsersToSession');
-
-$id_session=intval($_GET['id_session']);
 
 $add_type = 'multiple';
 if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
@@ -71,8 +72,7 @@ if (is_array($extra_field_list)) {
 	}
 }
 
-function search_users($needle,$type)
-{
+function search_users($needle, $type) {
 	global $tbl_user,$tbl_session_rel_user,$id_session;
 	$xajax_response = new XajaxResponse();
 	$return = '';
@@ -194,8 +194,7 @@ function add_user_to_session (code, content) {
 	sortOptions(destination.options);
 
 }
-function remove_item(origin)
-{
+function remove_item(origin) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
 			origin.options[i]=null;
@@ -205,15 +204,10 @@ function remove_item(origin)
 }
 
 function validate_filter() {
-
 		document.formulaire.add_type.value = \''.$add_type.'\';
 		document.formulaire.form_sent.value=0;
 		document.formulaire.submit();
-
 }
-
-
-
 </script>';
 
 
@@ -512,7 +506,7 @@ if(!empty($errorMsg)) {
   	  } else {
   	  ?>
   	  <div id="ajax_list_users_multiple">
-	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">
+	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
 		<?php
 		foreach($nosessionUsersList as $enreg) {
 		?>
@@ -545,16 +539,14 @@ if(!empty($errorMsg)) {
 	<br /><br /><br /><br /><br /><br />
   </td>
   <td align="center">
-  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:360px;">
+  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
 
 <?php
 foreach($sessionUsersList as $enreg) {
 ?>
-	<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['firstname'].' '.$enreg['lastname'].' ('.$enreg['username'].')'; ?></option>
-
+	<option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 <?php
 }
-
 unset($sessionUsersList);
 ?>
 
@@ -666,13 +658,7 @@ function makepost(select){
 
 }
 -->
-
 </script>
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*		FOOTER */
 Display::display_footer();
-?>

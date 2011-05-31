@@ -111,7 +111,7 @@ api_display_tool_title($tool_name);
 <form method="post" action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo Security::remove_XSS($_GET['page']) ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
 
-<table border="0" cellpadding="5" cellspacing="0" width="550">
+<table border="0" cellpadding="5" cellspacing="0" width="600px">
 
 <?php
 if(!empty($errorMsg)) {
@@ -129,7 +129,7 @@ if(!empty($errorMsg)) {
 
 <tr>
   <td width="25%" valign = "top"><?php echo get_lang("CoachName") ?>&nbsp;&nbsp;</td>
-  <td width="70%"><select name="id_coach[]" style="width:300px;" multiple="multiple" size="7">
+  <td width="70%"><select name="id_coach[]" style="width:450px;" multiple="multiple" size="7">
 	<option value="0">----- <?php echo get_lang("Choose") ?> -----</option>
 	<option value="0" <?php if(count($arr_infos) == 0) echo 'selected="selected"'; ?>><?php echo get_lang('None') ?></option>
 <?php

@@ -7,6 +7,20 @@ require_once '../global.inc.php';
 
 api_protect_course_script(true);
 
+//User access same as upload.php
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+
+// This needs cleaning!
+if (api_get_group_id()) {   
+    if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())) { // Only courseadmin or group members allowed        
+    } else {
+        exit;
+    }
+} elseif ($is_allowed_to_edit || is_my_shared_folder(api_get_user_id(), $_POST['curdirpath'], api_get_session_id())) {
+} else { // No course admin and no group member...
+    exit;
+}
+
 if (!empty($_FILES)) {
     require_once api_get_path(LIBRARY_PATH).'document.lib.php';
     require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';

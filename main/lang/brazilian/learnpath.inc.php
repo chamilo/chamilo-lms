@@ -261,4 +261,6 @@ $EnableLPAutoLaunch = "Ativar o início automático de rota de aprendizagem";
 $DisableLPAutoLaunch = "Desativar o início automático de Rota de Aprendizagem";
 $ViewModeEmbedFrame = "Modo de exibição atual: Embed externo. Use somente para incorporação em sites externos.";
 $LPNotVisibleToStudent = "Estudantes não podem visualizar estar rota de aprendizagem";
+$EditCurrentModule = "Editar o módulo atual";
+$SearchFeatureTerms = "Condições para a ferramenta de pesquisa";
 ?>

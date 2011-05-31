@@ -204,4 +204,12 @@ $PleaseFillSurvey = "Por favor, preencha o questionário";
 $ReportingOverview = "Visualizar relatório";
 $ThereAreNotQuestionsForthisSurvey = "Não existem perguntas para esta enquete";
 $Multipleresponse = "Múltiplas alternativas";
+$ErrorSurveyTypeUnknown = "Tipo de enquete desconhecida";
+$SurveyUndetermined = "Enquete indefinida";
+$QuestionComment = "Comentário da questão";
+$UnknowQuestion = "Questão desconhecida";
+$Lastname = "Último nome";
+$Firstname = "Primeiro nome";
+$DeleteSurveyGroup = "Excluir um grupo de enquete";
+$ErrorOccurred = "Ocorreu um erro.";
 ?>

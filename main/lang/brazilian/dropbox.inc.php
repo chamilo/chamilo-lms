@@ -125,4 +125,7 @@ $ErrorNoFilesInFolder = "Esta pasta está vazia";
 $AddComment = "Salvar feedback";
 $SentCatgoryDeleted = "A pasta foi excluida";
 $ReceivedCatgoryDeleted = "A pasta foi excluida";
+$InvalideUserDetected = "Usuário inválido detectado.";
+$InvalideGroupDetected = "Grupo inválido detectado.";
+$OverviewOfFilesInThisZip = "Resumo dos arquivos neste Zip";
 ?>

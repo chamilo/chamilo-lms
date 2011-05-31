@@ -91,4 +91,6 @@ $HomeworkCreated = "Uma atividade foi criada";
 $HomeworkHasBeenCreatedForTheCourse = "Uma atividade foi criada para o curso";
 $PleaseCheckHomeworkPage = "Por favor, verifique a página de tarefas/trabalhos";
 $IncludedInEvaluation = "Incluídos na avaliação";
+$DateExpiredNotBeLessDeadLine = "A data de expiração não pode ser inferior que a data de devolução";
+$NotRevised = "Não revisado";
 ?>

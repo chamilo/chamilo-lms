@@ -77,4 +77,6 @@ $IsNotiCalFormatFile = "Este arquivo não está em formato iCal";
 $RepeatEvent = "Repetir evento";
 $RepeatDate = "Repetir a data";
 $EndDateMustBeMoreThanStartDate = "Data final dever ser posterior a data de início";
+$SelectACourse = "Selecione um curso";
+$PleaseSelectACourseOrASessionInTheLeftColumn = "Por favor, selecione um curso ou uma sessão na barra lateral.";
 ?>

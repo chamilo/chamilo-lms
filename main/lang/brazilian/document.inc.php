@@ -268,4 +268,7 @@ $FirstSelectALanguage = "Por favor, selecione um idioma";
 $RenameAndComment = "Renomear e comentar";
 $YouAreCurrentlyUsingXOfYourX = "Você está usando %s MB (%s) de seus %s MB.";
 $UplUploadFailedSizeIsZero = "Houve um problema ao carregar o documento: o arquivo recebido tinha um tamanho de 0 bytes no servidor. Por favor, reveja o arquivo local e caso constate qualquer tipo de corrupção ou danos, tente novamente.";
+$NewImage = "Nova imagem";
+$DirExists = "Esta operação não é permitida, uma pasta já existe com este nome.";
+$DocMv = "Documento movido.";
 ?>

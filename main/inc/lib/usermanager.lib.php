@@ -2915,6 +2915,7 @@ class UserManager
 	 * Gives a list of course auto-register (field special_course)
 	 * @return array  list of course
 	 * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>
+	 * @deprecated this function is never use in chamilo, use CourseManager::get_special_course_list
 	 * @since Dokeos 1.8.6.2
 	 */
 	public static function get_special_course_list() {

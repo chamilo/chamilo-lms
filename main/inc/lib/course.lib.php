@@ -1795,6 +1795,38 @@ class CourseManager {
             @api_mail($recipient_name, $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
         }
     }
+    
+    public static function get_special_course_list() {
+        $tbl_course_field           = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
+        $tbl_course_field_value     = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+        
+          //we filter the courses from the URL
+        $join_access_url = $where_access_url='';
+        global $_configuration;
+        if ($_configuration['multiple_access_urls']) {
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $join_access_url= "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.course_code= tcfv.course_code ";
+                $where_access_url =" AND access_url_id = $access_url_id ";
+            }
+        }
+        
+        // get course list auto-register
+        $sql = "SELECT DISTINCT(tcfv.course_code) FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf 
+                ON tcfv.field_id =  tcf.id $join_access_url 
+                WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1  $where_access_url";
+        $special_course_result = Database::query($sql);
+        $special_course_list = array();
+        
+        if (Database::num_rows($special_course_result)>0) {
+            $special_course_list = array();
+            while ($result_row = Database::fetch_array($special_course_result)) {
+                $special_course_list[] = $result_row['course_code'];
+            }
+        }
+        return $special_course_list;        
+    }
 
     /**
      * Get list of courses for a given user
@@ -1807,40 +1839,29 @@ class CourseManager {
         $user_id = intval($user_id);
         $course_list = array();
         $codes = array();
-
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_course_field 			= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $tbl_course_field_value		= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $tbl_user_course_category   = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-
-        // get course list auto-register
-        $sql = "SELECT DISTINCT(course_code) FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
-                " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
-
-        $special_course_result = Database::query($sql);
-        if(Database::num_rows($special_course_result)>0) {
-            $special_course_list = array();
-            while ($result_row = Database::fetch_array($special_course_result)) {
-                $special_course_list[] = '"'.$result_row['course_code'].'"';
-            }
-        }
+        $tbl_course                 = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_user_course_category   = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+                
+        
+        $special_course_list = self::get_special_course_list();
+        
         $with_special_courses = $without_special_courses = '';
-        if (!empty($special_course_list)) {
-            $with_special_courses = ' course.code IN ('.implode(',',$special_course_list).')';
-            $without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';
+        if (!empty($special_course_list)) {            
+            $with_special_courses = ' course.code IN ("'.implode(',"', $special_course_list).'")';
+            $without_special_courses = ' AND course.code NOT IN ("'.implode(',"',$special_course_list).'")';
         }
-
+        
         if (!empty($with_special_courses)) {
             $sql = "SELECT DISTINCT(course.code), course.db_name db_name, course.title
-                                                FROM    ".$tbl_course_user." course_rel_user
-                                                LEFT JOIN ".$tbl_course." course
-                                                ON course.code = course_rel_user.course_code
-                                                LEFT JOIN ".$tbl_user_course_category." user_course_category
-                                                ON course_rel_user.user_course_cat = user_course_category.id
-                                                WHERE  $with_special_courses
-                                                GROUP BY course.code
-                                                ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
+                        FROM    ".$tbl_course_user." course_rel_user
+                        LEFT JOIN ".$tbl_course." course
+                        ON course.code = course_rel_user.course_code
+                        LEFT JOIN ".$tbl_user_course_category." user_course_category
+                        ON course_rel_user.user_course_cat = user_course_category.id
+                        WHERE  $with_special_courses
+                        GROUP BY course.code
+                        ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
             $rs_special_course = Database::query($sql);
             if (Database::num_rows($rs_special_course) > 0) {
                 while ($result_row = Database::fetch_array($rs_special_course)) {
@@ -2506,28 +2527,16 @@ class CourseManager {
 
         $user_id = intval($user_id);
         $user_info = api_get_user_info($user_id);
-        $special_course_list = array();
-
+        
         $tbl_course                 = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_course_field           = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $tbl_course_field_value     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+        $tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);        
         $tbl_user_course_category   = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 
-        // get course list auto-register
-        $sql = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
-                " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
-
-        $special_course_result = Database::query($sql);
-        if (Database::num_rows($special_course_result) > 0) {
-            $special_course_list = array();
-            while ($result_row = Database::fetch_array($special_course_result)) {
-                $special_course_list[] = '"'.$result_row['course_code'].'"';
-            }
-        }
+        $special_course_list        = self::get_special_course_list();
+        
         $with_special_courses = $without_special_courses = '';
         if (!empty($special_course_list)) {
-            $with_special_courses = ' course.code IN ('.implode(',',$special_course_list).')';
+            $with_special_courses = ' course.code IN ("'.implode(',"',$special_course_list).'")';
         }
 
         if (!empty($with_special_courses)) {
@@ -2654,27 +2663,17 @@ class CourseManager {
         global $_user, $_configuration;
         // Table definitions
         $TABLECOURS                  = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $TABLECOURSUSER              = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $TABLE_COURSE_FIELD          = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $TABLE_COURSE_FIELD_VALUE    = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+        $TABLECOURSUSER              = Database :: get_main_table(TABLE_MAIN_COURSE_USER);                
         $TABLE_ACCESS_URL_REL_COURSE = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $TABLE_USER_COURSE_CATEGORY  = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
         $current_url_id = api_get_current_access_url_id();
     
         // Get course list auto-register
-        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON " .
-                " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
-    
-        $special_course_result = Database::query($sql);
-        if (Database::num_rows($special_course_result) > 0) {
-            $special_course_list = array();
-            while ($result_row = Database::fetch_array($special_course_result)) {
-                $special_course_list[] = '"'.$result_row['course_code'].'"';
-            }
-        }
+        $special_course_list        = self::get_special_course_list();
+        
         $without_special_courses = '';
         if (!empty($special_course_list)) {
-            $without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';
+            $without_special_courses = ' AND course.code NOT IN ("'.implode(',"',$special_course_list).'")';
         }
     
         $sql_select_courses = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,

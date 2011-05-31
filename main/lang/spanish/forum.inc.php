@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Foro eliminado";
 $ForumCategoryDeleted = "Categoría de foro eliminada";
 $ForumLocked = "Foro cerrado";
@@ -111,8 +114,8 @@ $AllStudents = "Todos los estudiantes";
 $StudentsQualified = "Estudiantes calificados";
 $StudentsNotQualified = "Estudiantes sin calificar";
 $NamesAndLastNames = "Nombres y apellidos";
-$MaxScore = "Puntaje máximo";
-$QualificationCanNotBeGreaterThanMaxScore = "La calificación no puede ser superior al puntaje máximo.";
+$MaxScore = "Puntuación máxima";
+$QualificationCanNotBeGreaterThanMaxScore = "La calificación no puede ser superior a la puntuación máxima.";
 $ThreadStatistics = "Estadísticas del tema";
 $Thread = "Tema";
 $NotifyMe = "Notificarme";

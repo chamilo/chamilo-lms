@@ -248,9 +248,39 @@ function api_is_translated($variable, $language = null) {
  * @param bool $purified (optional)	When it is true, a purified (refined) language value will be returned, for example 'french' instead of 'french_unicode'.
  * @return string					The current language of the interface.
  */
-function api_get_interface_language($purified = false) {
+function api_get_interface_language($purified = false, $check_sub_language = false) {
     global $language_interface;
-    return empty($language_interface) ? 'english' : ($purified ? api_purify_language_id($language_interface) : $language_interface);
+    
+    if (empty($language_interface)) {
+        return 'english';
+    }    
+        
+    //1. Checking if current language is supported
+    $language_is_supported = api_is_language_supported($language_interface);   
+     
+    if ($check_sub_language && !$language_is_supported) {
+        static $parent_language_name = null;
+        
+        if (!isset($parent_language_name)) {
+            //2. The current language is a sub language so we grab the father's setting according to the internalization_database/name_order_convetions.php file
+            $language_id   = api_get_language_id($language_interface);            
+            $language_info = api_get_language_info($language_id);            
+            if (!empty($language_id) && !empty($language_info)) {
+                $language_info = api_get_language_info($language_info['parent_id']);
+                $parent_language_name = $language_info['english_name'];
+                if (!empty($parent_language_name)) {
+                    return $parent_language_name;
+                }
+            }
+            return 'english';
+        } else {
+            return $parent_language_name;
+        }        
+    } else {
+        //2. Normal way 
+        $interface_language = $purified ? api_purify_language_id($language_interface) : $language_interface;
+    }
+    return $interface_language;
 }
 
 /**
@@ -260,7 +290,7 @@ function api_get_interface_language($purified = false) {
  */
 function api_is_language_supported($language) {
     static $supported = array();
-    if (!isset($supported[$language])) {
+    if (!isset($supported[$language])) {               
         $supported[$language] = in_array(api_purify_language_id($language), array_keys(_api_non_utf8_encodings()));
     }
     return $supported[$language];
@@ -333,6 +363,7 @@ function api_get_language_isocode($language = null, $default_code = 'en') {
     }
     return $iso_code[$language];
 }
+
 
 /**
  * Gets language isocode column from the language table
@@ -888,9 +919,11 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
     if (empty($format)) {
         $format = PERSON_NAME_COMMON_CONVENTION;
     }
+    
     if (empty($language)) {
-        $language = api_get_interface_language();
+        $language = api_get_interface_language(false, true);
     }
+    
     if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
     }

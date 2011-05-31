@@ -2803,16 +2803,30 @@ function api_get_languages() {
 
 /**
  * Returns the id (the database id) of a language
- * @param string language name (the corresponding name of the language-folder in the filesystem)
- * @return int id of the language
+ * @param   string  language name (the corresponding name of the language-folder in the filesystem)
+ * @return  int     id of the language
  */
 function api_get_language_id($language) {
     $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+    if (empty($language)) {
+        return null;
+    }
     $language = Database::escape_string($language);
-    $sql = "SELECT id FROM $tbl_language WHERE available='1' AND dokeos_folder = '$language' ORDER BY dokeos_folder ASC";
+    $sql = "SELECT id FROM $tbl_language WHERE available='1' AND dokeos_folder = '$language' LIMIT 1";
     $result = Database::query($sql);
-    $row = Database::fetch_array($result);
+    $row = Database::fetch_array($result);    
     return $row['id'];
+}
+
+function api_get_language_info($language_id) {
+    $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+    $sql = 'SELECT * FROM '.$tbl_admin_languages.' WHERE id = "'.intval($language_id).'"';
+    $rs = Database::query($sql);
+    $language_info = array();
+    if (Database::num_rows($rs)) {
+        $language_info = Database::fetch_array($rs,'ASSOC');
+    }     
+    return $language_info;    
 }
 
 /**

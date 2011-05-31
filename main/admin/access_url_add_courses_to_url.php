@@ -135,8 +135,8 @@ unset($result);
 		?>
     </select>
    </td>
-   <td width="20%" valign="middle" align="center">
-    <input type="submit" value="<?php echo get_lang('AddCoursesToThatURL'); ?> &gt;&gt;"/>
+   <td width="20%" valign="middle" align="center">    
+    <button type="submit" class="add"> <?php echo get_lang('AddCoursesToThatURL'); ?> </button>
    </td>
    <td width="40%" align="center">
     <select name="url_list[]" multiple="multiple" size="20" style="width:230px;">

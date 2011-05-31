@@ -46,7 +46,7 @@ $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('Mult
 Display :: display_header($tool_name);
 
 echo '<div class="actions" style="height:22px;">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">'.Display::return_icon('edit.gif',get_lang('EditUsersToURL'),'').get_lang('EditUsersToURL').'</a>';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">'.Display::return_icon('edit.gif',get_lang('EditUsersToURL'),'').' '.get_lang('EditUsersToURL').'</a>';
 echo '</div>';
 
 api_display_tool_title($tool_name);
@@ -139,7 +139,7 @@ unset($result);
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
-    <input type="submit" value="<?php echo get_lang('AddToThatURL'); ?> &gt;&gt;"/>
+    <button type="submit" class="add"> <?php echo get_lang('AddToThatURL'); ?> </button>
    </td>
    <td width="40%" align="center">
     <select name="url_list[]" multiple="multiple" size="20" style="width:230px;">

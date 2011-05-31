@@ -26,7 +26,7 @@ require_once 'classes/CourseSelectForm.class.php';
 
 
 $xajax = new xajax();
-$xajax -> registerFunction('search_courses');
+$xajax->registerFunction('search_courses');
 
 if (!api_is_allowed_to_edit() && !api_is_session_admin()) {
 	api_not_allowed(true);
@@ -127,8 +127,7 @@ function display_form() {
 	echo $html;
 }
 
-function search_courses($id_session, $type) {
-	
+function search_courses($id_session, $type) {	
 	global $tbl_course, $tbl_session_rel_course, $course_list;
 
 	$xajax_response = new XajaxResponse();
@@ -139,44 +138,35 @@ function search_courses($id_session, $type) {
 		$id_session = intval($id_session);
 
 		if ($type == 'origin') {
-
-			// Search courses by id_session for origin list
-			$sql = "SELECT c.code, c.visual_code, c.title, src.id_session
-					FROM $tbl_course c, $tbl_session_rel_course src
-					WHERE src.course_code = c.code
-					AND src.id_session = '".$id_session."'";
-			$rs = Database::query($sql);
-
-			$course_list = array();
-
+		    
+            $course_list = SessionManager::get_course_list_by_session_id($id_session);
+     
+			$temp_course_list = array();
 			$return .= '<select id="origin" name="SessionCoursesListOrigin[]" multiple="multiple" size="20" style="width:320px;" onclick="javascript: checkSelected(this.id,\'copy_option_2\',\'title_option2\',\'destination\');">';
-			while ($course = Database :: fetch_array($rs)) {
-				$course_list[] = "'{$course['code']}'";
+			
+			foreach ($course_list as $course) {			    
+				$temp_course_list[] = "'{$course['code']}'";
 				$course_title=str_replace("'","\'",$course_title);
-
 				$return .= '<option value="'.$course['code'].'" title="'.@htmlspecialchars($course['title'].' ('.$course['visual_code'].')', ENT_QUOTES, api_get_system_encoding()).'">'.$course['title'].' ('.$course['visual_code'].')</option>';
 			}
 
 			$return .= '</select>';
-			$_SESSION['course_list'] = $course_list;
-			$_SESSION['session_origin'] = $id_session;
+			$_SESSION['course_list']     = $temp_course_list;
+			$_SESSION['session_origin']  = $id_session;
 
 			// Build select for destination sessions where is not included current session from select origin
 			if (!empty($id_session)) {
-				$session_table =Database::get_main_table(TABLE_MAIN_SESSION);
-				$session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-
-				$sql = " 	SELECT s.id, s.name, sc.name as category_name
-							FROM $session_table s , $session_category_table sc
-							WHERE s.session_category_id = sc.id AND s.id NOT IN('$id_session')";
-
-				$rs_select_destination = Database::query($sql);
+			    
+			    $sessions = SessionManager::get_sessions_list();
 
 				$select_destination .= '<select name="sessions_list_destination" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
-				$select_destination .= '<option value = "0">'.get_lang('SelectASession').'</option>';
-				while($session = Database :: fetch_array($rs_select_destination)) {
-
-					$select_destination .= '<option value="'.$session['id'].'">'.$session['name'].' ('.$session['category_name'].')</option>';
+				$select_destination .= '<option value = "0">-- '.get_lang('SelectASession').' --</option>';
+				foreach ($sessions as $session) {
+				    if ($id_session == $session['id']) { continue; };
+				    if (!empty($session['category_name'])) {
+				        $session['category_name'] = ' ('.$session['category_name'].') '; 
+				    }
+					$select_destination .= '<option value="'.$session['id'].'">'.$session['name'].' '.$session['category_name'].'</option>';
 				}
 				$select_destination .= '</select>';
 				$xajax_response -> addAssign('ajax_sessions_list_destination', 'innerHTML', api_utf8_encode($select_destination));
@@ -193,7 +183,6 @@ function search_courses($id_session, $type) {
 			// Send response by ajax
 			$xajax_response -> addAssign('ajax_list_courses_origin', 'innerHTML', api_utf8_encode($return));
 			$xajax_response -> addAssign('ajax_list_courses_destination', 'innerHTML', api_utf8_encode($select_multiple_empty));
-
 		} else {
 			//Left Select - Destination
 			
@@ -403,8 +392,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		$hidden_fields['destination_course'] 	= $arr_course_destination[0];
 		$hidden_fields['origin_course'] 		= $arr_course_origin[0];
 		$hidden_fields['destination_session'] 	= $destination_session;
-		$hidden_fields['origin_session'] 		= $origin_session;
-		//echo '<pre>'; print_r($course);		
+		$hidden_fields['origin_session'] 		= $origin_session;				
 				
 		CourseSelectForm :: display_form($course, $hidden_fields, true);
 		echo '<div style="float:right"><a href="javascript:window.back();">'.Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin'), array('style' => 'vertical-align:middle')).get_lang('Back').'</a></div>';

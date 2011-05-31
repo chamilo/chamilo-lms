@@ -75,7 +75,7 @@ class CourseSelectForm
 		<?php
 
 		//get destination course title
-		if(!empty($hidden_fields['destination_course'])) {
+		if (!empty($hidden_fields['destination_course'])) {
 			require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 			$course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
@@ -97,9 +97,11 @@ class CourseSelectForm
 			echo '<input type="hidden" name="origin_course" 		value="'.$hidden_fields['origin_course'].'"/>';
 			echo '<input type="hidden" name="destination_session" 	value="'.$hidden_fields['destination_session'].'"/>';
 			echo '<input type="hidden" name="origin_session" 		value="'.$hidden_fields['origin_session'].'"/>';
-		}
-		foreach ($course->resources as $type => $resources) {
-			if (count($resources) > 0) {			    
+		}		
+		
+		$element_count = 0;		
+        foreach ($course->resources as $type => $resources) {		    
+            if (count($resources) > 0) {                    			    
 				switch ($type) {
 					case RESOURCE_LINKCATEGORY :
 					case RESOURCE_FORUMCATEGORY :
@@ -137,12 +139,14 @@ class CourseSelectForm
 						echo '</blockquote>';
 						echo '</div>';
 						echo '<script language="javascript">exp('."'$type'".')</script>';
-				}
+						$element_count++;
+                }
 			}
 		}
 
 		if ($avoid_serialize) {
-			//Documents are avoided due the huge amount of memory that the serialize php function "eats" (when there are directories with hundred/thousand of files)
+			/*Documents are avoided due the huge amount of memory that the serialize php function "eats" 
+			(when there are directories with hundred/thousand of files) */
 			// this is a known issue of serialize
 			$course->resources['document']= null;
 		}
@@ -154,11 +158,15 @@ class CourseSelectForm
 				echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
 			}
 		}
-
-		if (!empty($hidden_fields['destination_session'])) {
-			echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES, $charset))."'".')) return false;" >'.get_lang('Ok').'</button>';
+		
+		if (empty($element_count)) {
+		    Display::display_warning_message(get_lang('NoDataAvailable'));
 		} else {
-			echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.get_lang('Ok').'</button>';
+    		if (!empty($hidden_fields['destination_session'])) {
+    			echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES, $charset))."'".')) return false;" >'.get_lang('Ok').'</button>';
+    		} else {
+    			echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.get_lang('Ok').'</button>';
+    		}
 		}
 
 		CourseSelectForm :: display_hidden_quiz_questions($course);

@@ -4241,7 +4241,7 @@ function api_create_include_path_setting() {
  */
 function api_get_current_access_url_id() {
     $access_url_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-    $path = api_get_path(WEB_PATH);
+    $path = Database::escape_string(api_get_path(WEB_PATH));
     $sql = "SELECT id FROM $access_url_table WHERE url = '".$path."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {

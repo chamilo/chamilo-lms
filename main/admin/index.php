@@ -177,8 +177,8 @@ if (api_get_setting('use_session_mode') == 'true') { ?>
     </div>
     <ul>        
         <li><a href="session_list.php"><?php echo get_lang('ListSession'); ?></a></li>
-        <li><a href="session_category_list.php"><?php echo get_lang('ListSessionCategory'); ?></a></li>
         <li><a href="session_add.php"><?php echo get_lang('AddSession'); ?></a></li>
+        <li><a href="session_category_list.php"><?php echo get_lang('ListSessionCategory'); ?></a></li>        
         <li><a href="session_import.php"><?php echo get_lang('ImportSessionListXMLCSV'); ?></a></li>
     <?php if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) { ?>
         <li><a href="ldap_import_students_to_session.php"><?php echo get_lang('ImportLDAPUsersIntoSession'); ?></a></li>

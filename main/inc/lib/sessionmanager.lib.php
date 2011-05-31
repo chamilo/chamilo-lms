@@ -1041,19 +1041,24 @@ class SessionManager {
 	*/
 	public static function get_sessions_list($conditions = array(), $order_by = array()) {
 
-		$session_table =Database::get_main_table(TABLE_MAIN_SESSION);
-		$session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-		$user_table = Database::get_main_table(TABLE_MAIN_USER);
+		$session_table                = Database::get_main_table(TABLE_MAIN_SESSION);
+		$session_category_table       = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+		$user_table                   = Database::get_main_table(TABLE_MAIN_USER);
+		$table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+		
+		$access_url_id = api_get_current_access_url_id();
+		  
+        $return_array = array();
 
-		$return_array = array();
-
-		$sql_query = " SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name, s.promotion_id
+		$sql_query = " SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname, sc.name as category_name, s.promotion_id
 				FROM $session_table s
 				INNER JOIN $user_table u ON s.id_coach = u.user_id
-				LEFT JOIN  $session_category_table sc ON s.session_category_id = sc.id ";
-
+				INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
+				LEFT JOIN  $session_category_table sc ON s.session_category_id = sc.id
+				WHERE ar.access_url_id = $access_url_id ";
+        
 		if (count($conditions)>0) {
-			$sql_query .= ' WHERE ';
+			$sql_query .= ' AND ';
 			foreach ($conditions as $field=>$value) {
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
@@ -1278,15 +1283,17 @@ class SessionManager {
 	}
 
 	/**
-	 * Gets the list of courses by session
+	 * Gets the list of courses by session filtered by access_url
 	 * @param int session id
 	 * @return array list of courses
 	 */
 	public static function get_course_list_by_session_id ($session_id) {
 		$tbl_course				= Database::get_main_table(TABLE_MAIN_COURSE);
 		$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        
 		// select the courses
-		$sql = "SELECT * FROM $tbl_course c INNER JOIN $tbl_session_rel_course src ON c.code = src.course_code WHERE src.id_session = '$session_id' ORDER BY title;";
+		$sql = "SELECT * FROM $tbl_course c INNER JOIN $tbl_session_rel_course src ON c.code = src.course_code 
+		        WHERE src.id_session = '$session_id' ORDER BY title;";
 		$result 	= Database::query($sql);
 		$num_rows 	= Database::num_rows($result);
 		$courses = array();

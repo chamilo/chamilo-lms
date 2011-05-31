@@ -219,7 +219,7 @@ if(!empty($errorMsg)) {
 		<?php
   	  } else {
   	  ?>
-	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:300px;">
+	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
 		<?php
 		foreach($nosessionUsersList as $enreg) {
 		?>
@@ -280,7 +280,7 @@ function remove_item(origin)
 	<br /><br /><br /><br /><br /><br />
   </td>
   <td align="center">
-  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:300px;">
+  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
 
 <?php
 foreach($sessionUsersList as $enreg) {

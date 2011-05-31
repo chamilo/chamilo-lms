@@ -12,7 +12,7 @@ $language_file='admin';
 // resetting the course id
 $cidReset=true;
 
-// including some necessary dokeos files
+// including some necessary chamilo files
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'access_url_edit_sessions_to_url_functions.lib.php';
@@ -224,7 +224,7 @@ if(!empty($errorMsg)) {
 		<?php
   	  } else {
   	  ?>
-	  <select id="origin_users" name="no_session_list[]" multiple="multiple" size="15" style="width:300px;">
+	  <select id="origin_users" name="no_session_list[]" multiple="multiple" size="15" style="width:380px;">
 		<?php
 		foreach($no_session_list as $no_session) {
 		?>
@@ -285,7 +285,7 @@ function remove_item(origin)
 	<br /><br /><br /><br /><br /><br />
   </td>
   <td align="center">
-  <select id="destination_users" name="session_list[]" multiple="multiple" size="15" style="width:300px;">
+  <select id="destination_users" name="session_list[]" multiple="multiple" size="15" style="width:380px;">
 
 <?php
 

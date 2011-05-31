@@ -167,4 +167,3 @@ function url_count_mask() {
 
 /*		FOOTER	*/
 Display :: display_footer();
-?>

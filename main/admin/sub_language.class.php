@@ -2,11 +2,9 @@
 /**
  * SubLanguageManager class definition file
  * @package chamilo.admin.sublanguage 
+ * @todo clean this lib and move to main/inc/lib
  */
-/**
- * SubLanguageManager class manages the edition
- * @class SubLanguageManager
- */
+
 class SubLanguageManager {
 
     private function __construct() {
@@ -63,7 +61,7 @@ class SubLanguageManager {
      */
    public static function get_all_information_of_language ($parent_id) {
  		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-		$sql='SELECT * FROM '.$tbl_admin_languages.' WHERE id="'.Database::escape_string($parent_id).'"';
+		$sql='SELECT * FROM '.$tbl_admin_languages.' WHERE id="'.intval($parent_id).'"';
 		$rs=Database::query($sql);
 		$all_information=array();
 		while ($row=Database::fetch_array($rs,'ASSOC')) {
@@ -76,7 +74,7 @@ class SubLanguageManager {
      * @param String The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
      * @return Array Contains all information of chamilo file
      */
-   public static function get_all_language_variable_in_file ($system_path_file,$get_as_string_index=false) {
+   public static function get_all_language_variable_in_file($system_path_file, $get_as_string_index=false) {
    		$res_list = array();
    		if (!is_readable($system_path_file)) {
    			return $res_list;
@@ -146,7 +144,7 @@ class SubLanguageManager {
    public static function remove_sub_language ($parent_id,$sub_language_id) {
         if (empty($parent_id) or (intval($parent_id)!=$parent_id) or empty($sub_language_id) or (intval($sub_language_id) != $sub_language_id)) { return false; }
    		$tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = 'SELECT dokeos_folder FROM '.$tbl_admin_languages.' WHERE parent_id = '.$parent_id.' and id= '.$sub_language_id;
+        $sql = 'SELECT dokeos_folder FROM '.$tbl_admin_languages.' WHERE parent_id = '.$parent_id.' and id = '.$sub_language_id;
         $res = Database::query($sql);
         if ($res === false or Database::num_rows($res)<1) { return false; }
         $row = Database::fetch_assoc($res);
@@ -186,7 +184,7 @@ class SubLanguageManager {
 	 */
 	public static function check_if_exist_language_by_id ($language_id) {
 		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-		$sql='SELECT count(*) as count FROM '.$tbl_admin_languages.' WHERE id="'.Database::escape_string($language_id).'"';
+		$sql='SELECT count(*) as count FROM '.$tbl_admin_languages.' WHERE id="'.intval($language_id).'"';
 		$rs=Database::query($sql);
 		if (Database::num_rows($rs)>0) {
 			if (Database::result($rs,0,'count') ==1) {

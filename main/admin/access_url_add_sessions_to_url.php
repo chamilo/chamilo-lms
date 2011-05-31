@@ -128,7 +128,7 @@ unset($result);
    </tr>
    <tr>
     <td width="40%" align="center">
-     <select name="session_list[]" multiple="multiple" size="20" style="width:230px;">
+     <select name="session_list[]" multiple="multiple" size="20" style="width:380px;">
 		<?php
 
 		foreach ($db_sessions as $session) {

@@ -125,7 +125,7 @@ unset($result);
    </tr>
    <tr>
     <td width="40%" align="center">
-     <select name="course_list[]" multiple="multiple" size="20" style="width:230px;">
+     <select name="course_list[]" multiple="multiple" size="20" style="width:400px;">
 		<?php
 		foreach ($db_courses as $course) {
 			?>
@@ -139,7 +139,7 @@ unset($result);
     <button type="submit" class="add"> <?php echo get_lang('AddCoursesToThatURL'); ?> </button>
    </td>
    <td width="40%" align="center">
-    <select name="url_list[]" multiple="multiple" size="20" style="width:230px;">
+    <select name="url_list[]" multiple="multiple" size="20" style="width:300px;">
 		<?php
 		foreach ($db_urls as $url_obj) {
 			?>

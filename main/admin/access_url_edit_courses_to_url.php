@@ -222,7 +222,7 @@ if(!empty($errorMsg)) {
 		<?php
   	  } else {
   	  ?>
-	  <select id="origin_users" name="no_course_list[]" multiple="multiple" size="15" style="width:300px;">
+	  <select id="origin_users" name="no_course_list[]" multiple="multiple" size="15" style="width:380px;">
 		<?php
 		foreach($no_course_list as $no_course) {
 		?>
@@ -283,7 +283,7 @@ function remove_item(origin)
 	<br /><br /><br /><br /><br /><br />
   </td>
   <td align="center">
-  <select id="destination_users" name="course_list[]" multiple="multiple" size="15" style="width:300px;">
+  <select id="destination_users" name="course_list[]" multiple="multiple" size="15" style="width:380px;">
 
 <?php
 

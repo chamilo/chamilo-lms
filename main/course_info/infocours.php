@@ -133,7 +133,7 @@ $visual_code=$form->addElement('text', 'visual_code', get_lang('Code'));
 $visual_code->freeze();
 $form->applyFilter('visual_code', 'strtoupper');
 //$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
-$prof = &$form->addElement('select', 'tutor_name', get_lang('Professors'), $a_profs);
+$prof = &$form->addElement('select', 'tutor_name', get_lang('Professors'), $a_profs, array('style'=>'width:350px'));
 $form->applyFilter('tutor_name', 'html_filter');
 
 $prof -> setSelected($s_selected_tutor);
@@ -141,7 +141,7 @@ $form->add_textfield('title', get_lang('Title'), true, array('size' => '60'));
 //$form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
-$form->addElement('select', 'category_code', get_lang('Fac'), $categories);
+$form->addElement('select', 'category_code', get_lang('Fac'), $categories, array('style'=>'width:350px'));
 $form->add_textfield('department_name', get_lang('Department'), false, array('size' => '60'));
 //$form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');

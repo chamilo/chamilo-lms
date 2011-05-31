@@ -1,5 +1,5 @@
-<?php // $Id: course_edit.php 20441 2009-05-10 07:39:15Z ivantcholakov $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
 *	@package chamilo.admin
 */
@@ -7,20 +7,21 @@
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-include ('../inc/global.inc.php');
-$this_section=SECTION_PLATFORM_ADMIN;
+require_once '../inc/global.inc.php';
+$this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-include (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $course_code = isset($_GET['course_code']) ? $_GET['course_code'] : $_POST['code'];
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyCourseInfo');
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ("url" => "course_list.php", "name" => get_lang('AdminCourses'));
+$interbreadcrumb[] = array ("url" => 'index.php',       "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => "course_list.php", "name" => get_lang('CourseList'));
 
 define('USER_FIELD_TYPE_CHECKBOX', 10);
 
@@ -99,14 +100,14 @@ $form->add_textfield('visual_code', get_lang('CourseCode'));
 $form->applyFilter('visual_code','strtoupper');
 $form->applyFilter('visual_code','html_filter');
 //$form->add_textfield('tutor_name', get_lang('CourseTitular'));
-$form->addElement('select', 'tutor_name', get_lang('CourseTitular'), $platform_teachers);
+$form->addElement('select', 'tutor_name', get_lang('CourseTitular'), $platform_teachers, array('style'=>'width:350px'));
 $form->applyFilter('tutor_name','html_filter');
 
 //$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple size="4" style="width: 150px;"');
 
 $group=array();
-$group[] = FormValidator::createElement('select', 'platform_teachers', '', $teachers, 'id="platform_teachers" multiple=multiple size="4" style="width: 150px;"');
-$group[] = FormValidator::createElement('select', 'course_teachers', '', $course_teachers, 'id="course_teachers" multiple=multiple size="4" style="width: 150px;"');
+$group[] = FormValidator::createElement('select', 'platform_teachers', '', $teachers,        'id="platform_teachers" multiple=multiple size="4" style="width:280px;"');
+$group[] = FormValidator::createElement('select', 'course_teachers', '',   $course_teachers, 'id="course_teachers" multiple=multiple size="4" style="width:280px;"');
 
 $element_template = <<<EOT
 	<div class="row">
@@ -130,7 +131,7 @@ $form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="80"
 		'<input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" ></td><td>');
 
 
-$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories);
+$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories , array('style'=>'width:350px'));
 CourseManager::select_and_sort_categories($categories_select);
 
 $form->add_textfield( 'department_name', get_lang('CourseDepartment'), false,array ('size' => '60'));

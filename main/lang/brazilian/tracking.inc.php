@@ -296,4 +296,6 @@ $ExercisesInTimeProgressChart = "Progresso dos seus próprios resultados ao long
 $AverageIsCalculatedBasedInAllAttempts = "Média é calculada com base em todas as tentativas de teste";
 $AverageIsCalculatedBasedInTheLatestAttempts = "Média é calculada com base nas últimas tentativas";
 $LatestAttemptAverageScore = "Pontuação média da última tentativa";
+$Untitled = "Sem título";
+$Quantity = "Quantidade";
 ?>

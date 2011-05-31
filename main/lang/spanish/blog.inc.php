@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Mis tareas";
 $FavoriteBlogs = "Mis blogs favoritos";
 $Navigation = "Navegación";
@@ -27,7 +30,7 @@ $Tasks = "Tareas";
 $Member = "Usuario";
 $Members = "Usuarios";
 $Role = "Perfil";
-$Rate = "Puntaje";
+$Rate = "Puntuación";
 $Roles = "Perfiles";
 $AddTask = "Nueva tarea";
 $AddTasks = "Añadir nuevas tareas";
@@ -52,7 +55,7 @@ $EditThisPost = "Editar este artículo";
 $DeleteThisComment = "Borrar este comentario";
 $NoArticles = "No hay ningún artículo en el blog. Si Ud. es un autor en este blog, haga clic sobre el enlace 'nuevo artículo' para escribir uno.";
 $NoTasks = "Sin tareas";
-$Rating = "Puntaje";
+$Rating = "Puntuación";
 $RateThis = "Puntuar este artículo";
 $SelectTaskArticle = "Seleccionar un artículo para esta tarea";
 $ExecuteThisTask = "Ejecutar la tarea";

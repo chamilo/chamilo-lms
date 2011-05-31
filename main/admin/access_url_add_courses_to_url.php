@@ -36,25 +36,17 @@ $tbl_access_url 			= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 $tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $tbl_course					= Database :: get_main_table(TABLE_MAIN_COURSE);
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
+/*	Header   */
 $tool_name = get_lang('AddCoursesToURL');
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
-/*
-		MAIN CODE
-*/
+/*		MAIN CODE   */
 
 Display :: display_header($tool_name);
 
 echo '<div class="actions" style="height:22px;">';
-echo '<div style="float:right;">
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php">'.Display::return_icon('edit.gif',get_lang('AddUserToURL'),'').get_lang('EditCoursesToURL').'</a>
-	  </div><br />';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php">'.Display::return_icon('edit.gif',get_lang('AddUserToURL'),'').' '.get_lang('EditCoursesToURL').'</a>';
 echo '</div>';
 
 api_display_tool_title($tool_name);

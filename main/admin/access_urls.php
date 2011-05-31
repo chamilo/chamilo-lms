@@ -106,13 +106,11 @@ if ($current_access_url_id==-1) {
 }
 
 // action menu
-echo '<div class="actions" style="height:22px;">';
-echo '<div style="float:right;">
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddUrl'),'').get_lang('AddUrl').'</a>&nbsp;&nbsp;
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">'.Display::return_icon('members.gif',get_lang('ManageUsers'),'').get_lang('ManageUsers').'</a>
-	    <a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php">'.Display::return_icon('courses.gif',get_lang('ManageCourses'),'').get_lang('ManageCourses').'</a>
-	    <a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_sessions_to_url.php">'.Display::return_icon('sessions.gif',get_lang('ManageSessions'),'').get_lang('ManageSessions').'</a>
-	  </div><br />';
+echo '<div class="actions">';
+echo Display::url(Display::return_icon('new_link.png',  get_lang('AddUrl'), array(), 32),          api_get_path(WEB_CODE_PATH).'admin/access_url_edit.php');
+echo Display::url(Display::return_icon('user.png',      get_lang('ManageUsers'), array(), 32),     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php');
+echo Display::url(Display::return_icon('course.png',    get_lang('ManageCourses'), array(), 32),   api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php');
+echo Display::url(Display::return_icon('session.png',   get_lang('ManageSessions'), array(), 32),          api_get_path(WEB_CODE_PATH).'admin/access_url_edit_sessions_to_url.php');
 echo '</div>';
 
 $table = new SortableTable('urls', 'url_count_mask', 'get_url_data_mask',2);
@@ -133,9 +131,9 @@ $table->display();
 function modify_filter($active, $url_params, $row) {
 	global $charset;
 	$url_id = $row['0'];
-	$result .= '<a href="access_url_edit.php?url_id='.$url_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;';
+	$result .= '<a href="access_url_edit.php?url_id='.$url_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), 22).'</a>&nbsp;';
 	if ($url_id != '1') {
-		$result .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'&amp;sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+		$result .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'&amp;sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), 22).'</a>';
 	}
 	return $result;
 }

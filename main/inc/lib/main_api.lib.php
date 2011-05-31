@@ -4869,7 +4869,7 @@ function api_browser_support($format="") {
 	}
 	elseif($format=='wav'){
 		//native wav support
-		if(($current_browser == 'Firefox' && $current_majorver >= 4) || ($current_browser == 'Safari' && $current_majorver >= 5) || ($current_browser == 'Opera' && $current_majorver >= 11)|| ($current_browser == 'Internet Explorer' && $current_majorver >= 9)){
+		if(($current_browser == 'Firefox' && $current_majorver >= 4) || ($current_browser == 'Safari' && $current_majorver >= 5) || ($current_browser == 'Opera' && $current_majorver >= 11) || ($current_browser == 'Internet Explorer' && $current_majorver >= 9)|| ($current_browser == 'Chrome' && $current_majorver > 8)){
 			return true;
 		}
 		else{

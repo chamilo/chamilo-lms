@@ -430,24 +430,34 @@ class Auth
         $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
         // get course list auto-register
-        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON " .
-                        " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
+        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id = tcf.id 
+                WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
 
         $special_course_result = Database::query($sql);
         if (Database::num_rows($special_course_result)>0) {
-                $special_course_list = array();
-                while ($result_row = Database::fetch_array($special_course_result)) {
-                        $special_course_list[] = '"'.$result_row['course_code'].'"';
-                }
+            $special_course_list = array();
+            while ($result_row = Database::fetch_array($special_course_result)) {
+                $special_course_list[] = '"'.$result_row['course_code'].'"';
+            }
         }
+        
         $without_special_courses = '';
         if (!empty($special_course_list)) {
-                $without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';
+            $without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';
         }
         
         if (!empty($random_value)) {
             $random_value = intval($random_value);
             $sql = "SELECT * FROM $tbl_course WHERE 1 $without_special_courses ORDER BY RAND() LIMIT $random_value";
+        
+            if ($_configuration['multiple_access_urls']) {
+                $url_access_id = api_get_current_access_url_id();                
+                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.course_code=course.code)
+                        WHERE access_url_id = $url_access_id $without_special_courses ORDER BY RAND() LIMIT $random_value";
+            }
+            
             /*SELECT * FROM $tbl_course, (SELECT CEIL(MAX($tbl_course.id) * RAND()) AS randId FROM $tbl_course) AS someRandId 
             WHERE $tbl_course.id >= someRandId.randId  LIMIT 10
             */
@@ -455,18 +465,18 @@ class Auth
             $category_code = Database::escape_string($category_code);
             //$my_category = (empty($category) ? " IS NULL" : "='".$category."'");
             $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title, visual_code";
+            
+            //showing only the courses of the current Chamilo access_url_id
+            if ($_configuration['multiple_access_urls']) {
+                $url_access_id = api_get_current_access_url_id();                
+                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.course_code=course.code)
+                        WHERE access_url_id = $url_access_id AND category_code='$category_code' $without_special_courses ORDER BY title, visual_code";                
+            }            
         }
 
-        //showing only the courses of the current Dokeos access_url_id
-        if ($_configuration['multiple_access_urls']) {
-                $url_access_id = api_get_current_access_url_id();
-                if ($url_access_id != -1) {
-                        $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                        $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
-                                        ON (url_rel_course.course_code=course.code)
-                                        WHERE access_url_id = $url_access_id AND category_code='$category_code' $without_special_courses ORDER BY title, visual_code";
-                }
-        }
+    
 
         $result = Database::query($sql);
         $courses = array();

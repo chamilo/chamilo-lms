@@ -1709,11 +1709,12 @@ class CourseManager {
      * @param string $padding the indent param (you shouldn't indicate something here)
      */
     public static function select_and_sort_categories($select_element, $category_selected_code = '', $parent_code = null , $padding = '') {
-
-        $res = Database::query("SELECT code, name, auth_course_child, auth_cat_child
+        
+        $sql = "SELECT code, name, auth_course_child, auth_cat_child
                 FROM ".Database::get_main_table(TABLE_MAIN_CATEGORY)."
                 WHERE parent_id ".(is_null($parent_code) ? "IS NULL" : "='".Database::escape_string($parent_code)."'")."
-                ORDER BY code");
+                ORDER BY code";
+        $res = Database::query($sql);
 
         while ($cat = Database::fetch_array($res)) {
             $params = $cat['auth_course_child'] == 'TRUE' ? '' : 'disabled';

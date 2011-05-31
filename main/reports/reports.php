@@ -31,6 +31,9 @@ $tool_name=get_lang('Reports');
 // loading templates
 reports_loadTemplates();
 
+// random suffix for div id (to enable multiple report per page)
+$idsuffix = rand();
+
 // "Link" type
 if ($_REQUEST['format'] == 'link') {
 	// converting post vars to get uri
@@ -48,7 +51,22 @@ if ($_REQUEST['format'] == 'directlink') {
 		$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$js.'" type="text/javascript" language="javascript"></script>'."\n";
 
 	$htmlCSSXtra[] = 'dataTable.css';
+
+?>
+    <script type="text/javascript">
+		function setSubDataUri(elem, uri) {
+			$.ajax({
+				url: uri,
+				success: function(data) {
+					elem.closest('.result').nextAll().html('');
+					elem.closest('.result').next().html(data);
+				}
+			});
+		}
+    </script>
+<?php
 	Display::display_header($tool_name);
+	echo '<div id="result" class="result">';
 }
 
 // outputing a link to csv file instead of outputing csv data directly
@@ -100,7 +118,7 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 	echo '<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 
-				$("#reportsData").dataTable({
+				$("#reportsData'.$idsuffix.'").dataTable({
 					"oLanguage":
 						{
 							"sProcessing":   "Traitement en cours...",
@@ -122,7 +140,7 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 				});
 			} );
 		</script>';
-	echo '<table id="reportsData" class="display">'; // FIXME style
+	echo '<table id="reportsData'.$idsuffix.'" class="display">'; // FIXME style
 
 	// counting fields
 	$nfields = multiquery_num_fields($result);
@@ -160,7 +178,16 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 	}
 	echo '</tbody></table>';
 	if ($_REQUEST['format'] == 'directlink') {
+		echo '</div>
+		<div id="result2" class="result" style="margin: 50px;">
+		</div>
+		<div id="result3" class="result" style="margin: 100px;">
+		</div>
+		<div id="result4" class="result" style="margin: 150px;">
+		</div>';
+
 		Display::display_footer();
+		
 	}
 } else if ($_REQUEST['format'] == 'csv') {
 	$nfields = multiquery_num_fields($result);

@@ -79,7 +79,7 @@ if ($_POST['form_sent']) {
 /*	Display GUI	*/
 
 
-if(empty($first_letter_user)) {
+if (empty($first_letter_user)) {
 	$sql = "SELECT count(*) as nb_users FROM $tbl_user";
 	$result = Database::query($sql);
 	$num_row = Database::fetch_array($result);
@@ -92,13 +92,13 @@ if(empty($first_letter_user)) {
 }
 $first_letter_user = Database::escape_string($first_letter_user);
 
-//$target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
+$target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $target_name = 'lastname';
 $sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user
 	    WHERE ".$target_name." LIKE '".$first_letter_user."%' OR ".$target_name." LIKE '".api_strtolower($first_letter_user)."%'
 		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
-$result = Database::query($sql);
-$db_users = Database::store_result($result);
+$result     = Database::query($sql);
+$db_users   = Database::store_result($result);
 unset($result);
 
 $sql = "SELECT id, url FROM $tbl_access_url  WHERE active=1 ORDER BY url";
@@ -114,7 +114,7 @@ unset($result);
     <td width="40%" align="center">
      <b><?php echo get_lang('UserList'); ?></b>
      <br/><br/>
-     <?php echo get_lang('FirstLetterUser'); ?> :
+     <?php echo get_lang('Select').' ' ; echo $target_name == 'firstname'? get_lang('FirstName') : get_lang('LastName'); ?> 
      <select name="first_letter_user" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
       <option value="">--</option>
       <?php

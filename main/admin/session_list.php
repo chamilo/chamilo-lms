@@ -89,13 +89,13 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	//Prevent hacking keyword
 	if ( isset ($_GET['keyword'])) {
 		$keyword = Database::escape_string(trim($_GET['keyword']));
-		} else if (isset ($_GET['keyword_name'])) {
-			$keyword_name = Database::escape_string(trim($_GET['keyword_name']));
-			$keyword_category = Database::escape_string(trim($_GET['keyword_category']));
-			$keyword_visibility = Database::escape_string(trim($_GET['keyword_visibility']));
-			$keyword_firstname = Database::escape_string(trim($_GET['keyword_firstname']));
-			$keyword_lastname = Database::escape_string(trim($_GET['keyword_lastname']));
-			}
+    } else if (isset ($_GET['keyword_name'])) {
+        $keyword_name = Database::escape_string(trim($_GET['keyword_name']));
+        $keyword_category = Database::escape_string(trim($_GET['keyword_category']));
+        $keyword_visibility = Database::escape_string(trim($_GET['keyword_visibility']));
+        $keyword_firstname = Database::escape_string(trim($_GET['keyword_firstname']));
+        $keyword_lastname = Database::escape_string(trim($_GET['keyword_lastname']));
+    }
 
 	//Process for the search advanced
 	if (!empty($_REQUEST['keyword_name'])) {
@@ -208,7 +208,6 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		if (!isset($_GET['id_category'])) {
 			echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'','32').'</a>';
 		}
-
 		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php?id_category='.intval($_GET['id_category']).'">'.Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'','32').'</a>';
 		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_list.php">'.Display::return_icon('folder.png',get_lang('ListSessionCategory'),'','32').'</a>';
 	echo '</div>';
@@ -257,14 +256,14 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		<table class="data_table" width="100%">
 		<tr>
 		  <th>&nbsp;</th>
-		  <th><a href="<?php echo api_get_self(); ?>?sort=name"><?php echo get_lang('NameOfTheSession'); ?></a></th>
+		  <th><a href="<?php echo api_get_self(); ?>?sort=name"><?php echo get_lang('Name'); ?></a></th>
 		  <th><a href="<?php echo api_get_self(); ?>?sort=nbr_courses"><?php echo get_lang('NumberOfCourses'); ?></a></th>
 		  <th><a href="<?php echo api_get_self(); ?>?sort=name_category<?php echo $cond_url; ?>"><?php echo get_lang('SessionCategoryName'); ?></a></th>
 		  <th><a href="<?php echo api_get_self(); ?>?sort=date_start"><?php echo get_lang('StartDate'); ?></a></th>
 		  <th><a href="<?php echo api_get_self(); ?>?sort=date_end"><?php echo get_lang('EndDate'); ?></a></th>
 		  <th><a href="<?php echo api_get_self(); ?>?sort=coach_name"><?php echo get_lang('Coach'); ?></a></th>
 		  <th><a href="<?php echo api_get_self(); ?>?sort=visibility<?php echo $cond_url; ?>"><?php echo get_lang('Visibility'); ?></a></th>
-		  <th><?php echo get_lang('Actions'); ?></th>
+		  <th width="120px"><?php echo get_lang('Actions'); ?></th>
 		</tr>
 
 		<?php

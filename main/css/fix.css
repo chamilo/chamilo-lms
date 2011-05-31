@@ -751,3 +751,15 @@ div.system_announcement {
 .note {
     background-color: #FFFF96;
 }
+
+div.admin_section {
+	 min-height: 260px;
+}
+.admin_section li {
+    padding: 2px 0px 2px;	
+}
+
+div.admin_section h4 {
+	font-size:16px;
+	letter-spacing:-1px;	
+}

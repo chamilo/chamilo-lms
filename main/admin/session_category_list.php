@@ -12,9 +12,7 @@ api_protect_admin_script(true);
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
 $htmlHeadXtra[] = '<script language="javascript">
-
 				function selectAll(idCheck,numRows,action) {
-
 					for(i=0;i<numRows;i++) {
 						idcheck = document.getElementById(idCheck+"_"+i);
 						if (action == "true"){
@@ -23,7 +21,6 @@ $htmlHeadXtra[] = '<script language="javascript">
 							idcheck.checked = false;
 						}
 					}
-
 				}
 				</script>';
 
@@ -174,8 +171,12 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		  <td><?php echo api_htmlentities($enreg['date_start'],ENT_QUOTES,$charset); ?></td>
 		  <td><?php echo api_htmlentities($enreg['date_end'],ENT_QUOTES,$charset); ?></td>
 		  <td>
-			<a href="session_category_edit.php?&id=<?php echo $enreg['id']; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a>
-			<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete_off_session&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('delete.gif', get_lang('Delete')); ?></a>
+			<a href="session_category_edit.php?&id=<?php echo $enreg['id']; ?>">
+                <?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?>
+			</a>
+			<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete_off_session&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
+			 <?php Display::display_icon('delete.png', get_lang('Delete'), array(), 22); ?>
+			</a>
 		  </td>
 		</tr>
 		<?php

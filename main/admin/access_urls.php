@@ -113,57 +113,48 @@ echo Display::url(Display::return_icon('course.png',    get_lang('ManageCourses'
 echo Display::url(Display::return_icon('session.png',   get_lang('ManageSessions'), array(), 32),          api_get_path(WEB_CODE_PATH).'admin/access_url_edit_sessions_to_url.php');
 echo '</div>';
 
-$table = new SortableTable('urls', 'url_count_mask', 'get_url_data_mask',2);
+//$table = new SortableTable('urls', 'url_count_mask', 'get_url_data_mask',2);
+$sortable_data = UrlManager::get_url_data();
+$urls = array();
+foreach($sortable_data as $row)  {
+    //title
+    $url = Display::url($row['url'], $row['url'], array('target'=>'_blank'));    
+    $description = $row['description'];
+    
+    //Status
+    $active = $row['active'];
+    if ($active=='1') {
+        $action='lock';
+        $image='right';
+    }
+    if ($active=='0') {
+        $action='unlock';
+        $image='wrong';
+    }
+    // you cannot lock the default
+    if ($row['id']=='1') {
+        $status = Display::return_icon($image.'.gif', get_lang(ucfirst($action)));
+    } else {
+        $status = '<a href="access_urls.php?action='.$action.'&amp;url_id='.$row['id'].'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon($image.'.gif', get_lang(ucfirst($action))).'</a>';
+    }    
+    //Actions
+    $url_id = $row['id'];
+    $actions = '<a href="access_url_edit.php?url_id='.$url_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), 22).'</a>&nbsp;';
+    if ($url_id != '1') {
+        $actions = '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'&amp;sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), 22).'</a>';
+    }    
+    $urls[] = array($url, $description, $status, $actions);
+}
+
+$table = new SortableTableFromArrayConfig($urls, 2, 50, 'urls');
 $table->set_additional_parameters($parameters);
-$table->set_header(0, '', false);
 
-$table->set_header(1, get_lang('URL'));
-$table->set_header(2, get_lang('Description'));
-$table->set_header(3, get_lang('Active'));
-$table->set_header(4, get_lang('Modify'));
-
-$table->set_column_filter(3, 'active_filter');
-$table->set_column_filter(4, 'modify_filter');
-
-
+//$table->set_header(0, '');
+$table->set_header(0, get_lang('URL'));
+$table->set_header(1, get_lang('Description'));
+$table->set_header(2, get_lang('Active'));
+$table->set_header(3, get_lang('Modify'), false);
 $table->display();
-
-function modify_filter($active, $url_params, $row) {
-	global $charset;
-	$url_id = $row['0'];
-	$result .= '<a href="access_url_edit.php?url_id='.$url_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), 22).'</a>&nbsp;';
-	if ($url_id != '1') {
-		$result .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'&amp;sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), 22).'</a>';
-	}
-	return $result;
-}
-
-function active_filter($active, $url_params, $row) {
-	$active = $row['3'];
-	if ($active=='1') {
-		$action='lock';
-		$image='right';
-	}
-	if ($active=='0') {
-		$action='unlock';
-		$image='wrong';
-	}
-	// you cannot lock the default
-	if ($row['0']=='1') {
-		$result = Display::return_icon($image.'.gif', get_lang(ucfirst($action)));
-	} else {
-		$result = '<a href="access_urls.php?action='.$action.'&amp;url_id='.$row['0'].'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon($image.'.gif', get_lang(ucfirst($action))).'</a>';
-	}
-	return $result;
-}
-
-// this 2 "mask" function are here just because the SortableTable
-function get_url_data_mask($id, $url_params=null, $row=null) {
-	return UrlManager::get_url_data();
-}
-function url_count_mask() {
-	return UrlManager::url_count();
-}
 
 /*		FOOTER	*/
 Display :: display_footer();

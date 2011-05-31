@@ -122,7 +122,7 @@ class UrlManager
 	public static function get_url_data()
 	{
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$sql = "SELECT id, url, description, active  FROM $table_access_url";
+		$sql = "SELECT id, url, description, active FROM $table_access_url ORDER BY id";
 		$res = Database::query($sql);
 		$urls = array ();
 		while ($url = Database::fetch_array($res)) {

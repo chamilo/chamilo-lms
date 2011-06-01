@@ -883,7 +883,13 @@ if ($show == 'test') {
                     //This query might be improved later on by ordering by the new "tms" field rather than by exe_id
                     //Don't remove this marker: note-query-exe-results
                     $qry = "SELECT * FROM $TBL_TRACK_EXERCICES
-                            WHERE exe_exo_id = ".$row['id']." AND exe_user_id = " . api_get_user_id() . " AND exe_cours_id = '" . api_get_course_id() . "' AND status <>'incomplete' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '" . api_get_session_id() . "'
+                            WHERE   exe_exo_id      = ".$row['id']." AND 
+                                    exe_user_id     = ".api_get_user_id()." AND 
+                                    exe_cours_id    = '".api_get_course_id()."' AND 
+                                    status         <> 'incomplete' AND 
+                                    orig_lp_id      = 0 AND 
+                                    orig_lp_item_id = 0 AND 
+                                    session_id      =  '" . api_get_session_id() . "'
                             ORDER BY exe_id DESC";
                     $qryres = Database::query($qry);
                     $num    = Database :: num_rows($qryres);
@@ -894,29 +900,23 @@ if ($show == 'test') {
                     //Time limits are on    
                     if ($time_limits) {
                         // Examn is ready to be taken    
-                        if ($is_actived_time) {                     
-                            if ($my_result_disabled == 0) {                   
+                        if ($is_actived_time) {
+                            //Show results                    
+                            if ($my_result_disabled == 0 || $my_result_disabled == 2) {
+                                //More than one attempt
                                 if ($num > 0) {
                                     $row_track = Database :: fetch_array($qryres);                                
                                     $attempt_text =  get_lang('LatestAttempt') . ' : ';                                
                                     $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
                                 } else {
-                                    if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
-                                        $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
-                                    } else {
-                                        if ($row['start_time'] != '0000-00-00 00:00:00') { 
-                                            $attempt_text = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($row['start_time']));
-                                        }
-                                        if ($row['end_time'] != '0000-00-00 00:00:00') {
-                                            $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));     
-                                        } 
-                                    }
+                                    //No attempts
+                                    $attempt_text =  get_lang('NotAttempted');    
                                 }                           
                             } else {
                                 $attempt_text =  get_lang('CantShowResults');
                             }
                         } else {
-                            //Quiz not ready
+                            //Quiz not ready due to time limits
                             if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
                                 $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
                             } else {
@@ -926,14 +926,13 @@ if ($show == 'test') {
                                 }
                                 if ($row['end_time'] != '0000-00-00 00:00:00') {
                                     $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));     
-                                } 
-                                
+                                }                                
                             }
                         }
                     } else {
                         //Normal behaviour
                         //Show results
-                        if ($my_result_disabled == 0) {                         
+                        if ($my_result_disabled == 0 || $my_result_disabled == 2) {                         
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);                                
                                 $attempt_text =  get_lang('LatestAttempt') . ' : ';                                
@@ -957,7 +956,7 @@ if ($show == 'test') {
                     }*/
                     
                     if (empty($num)) {
-                            $num = '';
+                        $num = '';
                     }
                         
                     $item .=  Display::tag('td', $attempt_text);

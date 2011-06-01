@@ -2106,15 +2106,12 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
     border:1px solid #E1E1E0;
 }
 .small {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 11px
 }
 .xsmall {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 11px
+    font-size: 10px
 }
 .xxsmall {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 9px
 }
 #glossary_menu li {

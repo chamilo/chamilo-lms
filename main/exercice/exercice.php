@@ -293,15 +293,12 @@ if ($show != 'result') {
 	$nameTools = get_lang('Exercices');
 } else {
 	if ($is_allowedToEdit || $is_tutor) {
-		$nameTools = get_lang('StudentScore');
-				
+		$nameTools = get_lang('StudentScore');				
 		$interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
 	    $objExerciseTmp = new Exercise();        
         if ($objExerciseTmp->read($exerciseId)) {
             $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exerciseId, "name" => cut($objExerciseTmp->exercise, EXERCISE_MAX_NAME_BREADCRUMB));    
         }
-        
-		
 	} else {
 		$nameTools = get_lang('YourScore');
 		$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
@@ -719,15 +716,20 @@ if ($show == 'test') {
             $i=1;
             
             if ($is_allowedToEdit) {
-                $headers = array(get_lang('ExerciseName'), get_lang('QuantityQuestions'), get_lang('Actions'));
+                $headers = array(array('name' => get_lang('ExerciseName')), 
+                                 array('name' => get_lang('QuantityQuestions'), 'params' => array('width'=>'80px')), 
+                                 array('name' => get_lang('Actions'), 'params' => array('width'=>'180px')));
             } else {
-            	$headers = array(get_lang('ExerciseName'), get_lang('Status'), get_lang('Results'));
+            	$headers = array(array('name' => get_lang('ExerciseName')), 
+                                 array('name' => get_lang('Status')), 
+                                 array('name' => get_lang('Results')));
             }
+            
             $header_list = '';
-            foreach($headers as $header) {
-                $header_list .= Display::tag('th',$header);	
+            foreach($headers as $header) {                
+                $header_list .= Display::tag('th', $header['name'], $header['params']);	
             }
-            echo Display::tag('tr',$header_list);
+            echo Display::tag('tr', $header_list);
             
             $count = 0;
             if (!empty($exercise_list))

@@ -2093,7 +2093,7 @@ class Exercise {
                             $str = str_replace('\r\n', '', $str);
                             $choice = $arr[1];
     
-                            $tmp = strrpos($choice[$j],' / ');
+                            $tmp = api_strrpos($choice[$j],' / ');
                             $choice[$j] = api_substr($choice[$j],0,$tmp);
                             $choice[$j] = trim($choice[$j]);
     

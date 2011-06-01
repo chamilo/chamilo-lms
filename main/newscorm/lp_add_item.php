@@ -85,8 +85,7 @@ function check_for_title() {
             // Compose title if there is none
             contentTextArray = contentText.split(\' \') ;
             var x=0;
-            for(x=0; (x<5 && x<contentTextArray.length); x++)
-            {
+            for(x=0; (x<5 && x<contentTextArray.length); x++) {
                 if(x < 4)
                 {
                     bestandsnaamNieuw += contentTextArray[x] + \' \';
@@ -96,8 +95,6 @@ function check_for_title() {
                     bestandsnaamNieuw += contentTextArray[x];
                 }
             }
-
-
         }
         temp=true;
     }
@@ -129,14 +126,23 @@ $_SESSION['oLP']->get_js_dropdown_array() .
   //'if( typeof cbo != "undefined" ) {'."\n" .
   'cbo.options[k].selected = true;'."\n" .
    //'}'."\n" .
-'}'."\n" .
-'$().ready(function() {'."\n" .
-  'if ($(\'#previous\')) {'."\n" .
-    'if(\'parent is\'+$(\'#idParent\').val()) {'.
-      'load_cbo($(\'#idParent\').val());'."\n" .
-  '}}'."\n" .
-'});'."\n" .
-'</script>';
+'}
+
+$(function() {
+
+    if ($(\'#previous\')) {
+        if(\'parent is\'+$(\'#idParent\').val()) {
+            load_cbo($(\'#idParent\').val());
+        }
+    }
+    //Loads LP item tabs
+    
+    $("#resource_tab").tabs();
+    $(\'.lp_resource_element\').click(function() {
+        window.location.href = $(\'a\', this).attr(\'href\');
+    });        
+});
+</script>';
         
 $htmlHeadXtra[] =  api_get_jquery_ui_js(); //jQuery
 
@@ -221,17 +227,15 @@ Display::display_header(null, 'Path');
 //api_display_tool_title($therow['name']);
 
 $suredel = trim(get_lang('AreYouSureToDelete'));
-//$suredelstep = trim(get_lang('AreYouSureToDeleteSteps'));
+//@todo move this somewhere else css/fix.css
 ?>
-
-
-    <style>
+<style>
     #feedback { font-size: 1.4em; }
     #resExercise .ui-selecting { background: #FECA40; }
     #resExercise .ui-selected { background: #F39814; color: white; }
     #resExercise { list-style-type: none; margin: 0; padding: 0; width: 60%; }
     #resExercise li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
-    </style>
+</style>
     
 <script type='text/javascript'>
 function stripslashes(str) {
@@ -249,13 +253,6 @@ function confirmation(name) {
         return false;
     }
 }
-$(function() {  
-    $("#resource_tab").tabs();
-    $('.lp_resource_element').click(function() {
-        window.location.href = $('a', this).attr('href');
-    });    
-});
-
 </script>
 <?php
 

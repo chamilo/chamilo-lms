@@ -16,6 +16,8 @@ define('EXERCISE_FEEDBACK_TYPE_END',        0);
 define('EXERCISE_FEEDBACK_TYPE_DIRECT',     1);
 define('EXERCISE_FEEDBACK_TYPE_EXAM',       2);
 
+define('EXERCISE_MAX_NAME_BREADCRUMB',     60);
+
 $debug = 0; //All exercise scripts should depend in this debug variable
 
 require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
@@ -855,7 +857,7 @@ class Exercise {
 		}
 		$form->addElement('header', '', $form_title);
 		// title
-		$form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'),'class="input_titles" id="exercise_title"');
+		$form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'), ' size="60" id="exercise_title"');
 		//$form->applyFilter('exerciseTitle','html_filter');
 
 		$form->addElement('html','<div class="row">

@@ -257,8 +257,12 @@ if (!empty($gradebook) && $gradebook=='view') {
 		);
 }
 
-$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
-$interbreadcrumb[]=array("url" => "admin.php?exerciseId=".$objExercise->id,"name" => $objExercise->exercise);
+$interbreadcrumb[] = array("url" => "exercice.php","name" => get_lang('Exercices'));
+if (isset($_GET['newQuestion']) || isset($_GET['editQuestion']) ) {
+    $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => cut($objExercise->exercise, EXERCISE_MAX_NAME_BREADCRUMB));
+} else {
+    $interbreadcrumb[] = array("url" => "#", "name" => cut($objExercise->exercise, EXERCISE_MAX_NAME_BREADCRUMB));
+}
 
 // shows a link to go back to the question pool
 if(!$exerciseId && $nameTools != get_lang('ExerciseManagement')){

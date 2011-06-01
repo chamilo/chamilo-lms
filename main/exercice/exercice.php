@@ -294,7 +294,14 @@ if ($show != 'result') {
 } else {
 	if ($is_allowedToEdit || $is_tutor) {
 		$nameTools = get_lang('StudentScore');
-		$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
+				
+		$interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
+	    $objExerciseTmp = new Exercise();        
+        if ($objExerciseTmp->read($exerciseId)) {
+            $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exerciseId, "name" => cut($objExerciseTmp->exercise, EXERCISE_MAX_NAME_BREADCRUMB));    
+        }
+        
+		
 	} else {
 		$nameTools = get_lang('YourScore');
 		$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
@@ -302,7 +309,7 @@ if ($show != 'result') {
 }
 
 // need functions of statsutils lib to display previous exercices scores
-require_once (api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php');
+require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
 
 if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 	require_once 'export/qti2/qti2_export.php';
@@ -347,7 +354,7 @@ if (!empty ($_POST['export_report']) && $_POST['export_report'] == 'export_repor
 		if (!$is_allowedToEdit and !$is_tutor) {
 			$user_id = api_get_user_id();
 		}
-		require_once ('exercise_result.class.php');
+		require_once 'exercise_result.class.php';
 		switch ($_POST['export_format']) {
 			case 'xls' :
 				$export = new ExerciseResult();               
@@ -388,7 +395,7 @@ HotPotGCt($documentPath, 1, api_get_user_id() );
 // only for administrator
 
 if ($is_allowedToEdit) {
-	if (!empty ($choice)) {
+	if (!empty($choice)) {
 		// construction of Exercise
 
 		$objExerciseTmp = new Exercise();
@@ -443,8 +450,8 @@ if ($is_allowedToEdit) {
 		Security::clear_token();
 	}
 
-	if (!empty ($hpchoice)) {
-		switch ($hpchoice) {
+	if (!empty($hpchoice)) {
+		switch($hpchoice) {
 			case 'delete' : // deletes an exercise
 				$imgparams = array ();
 				$imgcount = 0;
@@ -784,7 +791,7 @@ if ($show == 'test') {
                     }                    
                                     
                     //Showing exercise title
-                    $row['title']= text_filter($row['title']);
+                    $row['title'] = text_filter($row['title']);
                     //echo Display::tag('h1',$row['title']);                             
                      
                     if ($session_id == $row['session_id']) {

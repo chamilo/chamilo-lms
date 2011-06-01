@@ -178,8 +178,10 @@ if ($form->validate()) {
 	if (!empty($gradebook) && $gradebook=='view') {
 		$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));
 	}
-	$nameTools=get_lang('ExerciseManagement');
-	$interbreadcrumb[] = array ("url"=>'exercice.php', 'name'=> get_lang('Exercices'));
+	$nameTools = get_lang('ExerciseManagement');
+	$interbreadcrumb[] = array("url"=>'exercice.php', 'name'=> get_lang('Exercices'));
+    $interbreadcrumb[] = array("url"=>"admin.php?exerciseId=".$objExercise->id, "name" => cut($objExercise->exercise, EXERCISE_MAX_NAME_BREADCRUMB));
+	
 	Display::display_header($nameTools,get_lang('Exercise'));
 	
 	echo '<div class="actions">';

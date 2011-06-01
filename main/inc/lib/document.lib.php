@@ -16,8 +16,14 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 /* CONSTANTS */
 
 define('DISK_QUOTA_FIELD', 'disk_quota'); //name of the database field
-/** default quota for the course documents folder */
-define('DEFAULT_DOCUMENT_QUOTA', api_get_setting('default_document_quotum'));
+
+//Default quota for the course documents folder
+$default_quota = api_get_setting('default_document_quotum');
+//Just in case the setting is not correctly set 
+if (empty($default_quota)) {
+    $default_quota = 100000000;
+}
+define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
 class DocumentManager {
 
@@ -30,22 +36,24 @@ class DocumentManager {
      * @todo eliminate globals
      */
     public static function get_course_quota() {
-        global $_course;
-        if (empty($_course['sysCode'])) { return DEFAULT_DOCUMENT_QUOTA; }
-        $course_code  = Database::escape_string($_course['sysCode']);
+        $course_info = api_get_course_info();
+        if (empty($course_info)) {
+            return DEFAULT_DOCUMENT_QUOTA;
+        }
+        $course_code  = Database::escape_string($course_info['code']);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
         $sql_query      = "SELECT ".DISK_QUOTA_FIELD." FROM $course_table WHERE code = '$course_code'";
         $sql_result     = Database::query($sql_query);
-        $course_quota = null;
+        $course_quota   = null;
         if (Database::num_rows($sql_result)) {
             $result         = Database::fetch_array($sql_result);
             $course_quota   = $result[DISK_QUOTA_FIELD];
         }
 
-        if (is_null($course_quota)) {
+        if (is_null($course_quota) || empty($course_quota)) {
             // Course table entry for quota was null, then use default value
-            $course_quota = DEFAULT_DOCUMENT_QUOTA;
+            $course_quota = DEFAULT_DOCUMENT_QUOTA;            
         }
         return $course_quota;
     }

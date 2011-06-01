@@ -75,10 +75,9 @@ if(!($objExcercise instanceOf Exercise) && !empty($fromExercise)) {
 }
 
 $nameTools = get_lang('QuestionPool');
-$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
-$interbreadcrumb[]=array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->exercise);
-
-
+$interbreadcrumb[] = array("url" => "exercice.php","name" => get_lang('Exercices'));
+$interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => cut($objExercise->exercise, EXERCISE_MAX_NAME_BREADCRUMB));
+    
 if ($is_allowedToEdit) {
 	
 	//Duplicating a Question

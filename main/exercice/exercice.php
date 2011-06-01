@@ -293,8 +293,12 @@ if ($show != 'result') {
 	$nameTools = get_lang('Exercices');
 } else {
 	if ($is_allowedToEdit || $is_tutor) {
-		$nameTools = get_lang('StudentScore');
-		$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
+		$nameTools = get_lang('StudentScore');				
+		$interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
+	    $objExerciseTmp = new Exercise();        
+        if ($objExerciseTmp->read($exerciseId)) {
+            $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exerciseId, "name" => cut($objExerciseTmp->exercise, EXERCISE_MAX_NAME_BREADCRUMB));    
+        }
 	} else {
 		$nameTools = get_lang('YourScore');
 		$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
@@ -302,7 +306,7 @@ if ($show != 'result') {
 }
 
 // need functions of statsutils lib to display previous exercices scores
-require_once (api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php');
+require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
 
 if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 	require_once 'export/qti2/qti2_export.php';
@@ -347,7 +351,7 @@ if (!empty ($_POST['export_report']) && $_POST['export_report'] == 'export_repor
 		if (!$is_allowedToEdit and !$is_tutor) {
 			$user_id = api_get_user_id();
 		}
-		require_once ('exercise_result.class.php');
+		require_once 'exercise_result.class.php';
 		switch ($_POST['export_format']) {
 			case 'xls' :
 				$export = new ExerciseResult();               
@@ -388,7 +392,7 @@ HotPotGCt($documentPath, 1, api_get_user_id() );
 // only for administrator
 
 if ($is_allowedToEdit) {
-	if (!empty ($choice)) {
+	if (!empty($choice)) {
 		// construction of Exercise
 
 		$objExerciseTmp = new Exercise();
@@ -443,8 +447,8 @@ if ($is_allowedToEdit) {
 		Security::clear_token();
 	}
 
-	if (!empty ($hpchoice)) {
-		switch ($hpchoice) {
+	if (!empty($hpchoice)) {
+		switch($hpchoice) {
 			case 'delete' : // deletes an exercise
 				$imgparams = array ();
 				$imgcount = 0;
@@ -712,15 +716,20 @@ if ($show == 'test') {
             $i=1;
             
             if ($is_allowedToEdit) {
-                $headers = array(get_lang('ExerciseName'), get_lang('QuantityQuestions'), get_lang('Actions'));
+                $headers = array(array('name' => get_lang('ExerciseName')), 
+                                 array('name' => get_lang('QuantityQuestions'), 'params' => array('width'=>'80px')), 
+                                 array('name' => get_lang('Actions'), 'params' => array('width'=>'180px')));
             } else {
-            	$headers = array(get_lang('ExerciseName'), get_lang('Status'), get_lang('Results'));
+            	$headers = array(array('name' => get_lang('ExerciseName')), 
+                                 array('name' => get_lang('Status')), 
+                                 array('name' => get_lang('Results')));
             }
+            
             $header_list = '';
-            foreach($headers as $header) {
-                $header_list .= Display::tag('th',$header);	
+            foreach($headers as $header) {                
+                $header_list .= Display::tag('th', $header['name'], $header['params']);	
             }
-            echo Display::tag('tr',$header_list);
+            echo Display::tag('tr', $header_list);
             
             $count = 0;
             if (!empty($exercise_list))
@@ -784,7 +793,7 @@ if ($show == 'test') {
                     }                    
                                     
                     //Showing exercise title
-                    $row['title']= text_filter($row['title']);
+                    $row['title'] = text_filter($row['title']);
                     //echo Display::tag('h1',$row['title']);                             
                      
                     if ($session_id == $row['session_id']) {
@@ -883,7 +892,13 @@ if ($show == 'test') {
                     //This query might be improved later on by ordering by the new "tms" field rather than by exe_id
                     //Don't remove this marker: note-query-exe-results
                     $qry = "SELECT * FROM $TBL_TRACK_EXERCICES
-                            WHERE exe_exo_id = ".$row['id']." AND exe_user_id = " . api_get_user_id() . " AND exe_cours_id = '" . api_get_course_id() . "' AND status <>'incomplete' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '" . api_get_session_id() . "'
+                            WHERE   exe_exo_id      = ".$row['id']." AND 
+                                    exe_user_id     = ".api_get_user_id()." AND 
+                                    exe_cours_id    = '".api_get_course_id()."' AND 
+                                    status         <> 'incomplete' AND 
+                                    orig_lp_id      = 0 AND 
+                                    orig_lp_item_id = 0 AND 
+                                    session_id      =  '" . api_get_session_id() . "'
                             ORDER BY exe_id DESC";
                     $qryres = Database::query($qry);
                     $num    = Database :: num_rows($qryres);
@@ -894,29 +909,23 @@ if ($show == 'test') {
                     //Time limits are on    
                     if ($time_limits) {
                         // Examn is ready to be taken    
-                        if ($is_actived_time) {                     
-                            if ($my_result_disabled == 0) {                   
+                        if ($is_actived_time) {
+                            //Show results                    
+                            if ($my_result_disabled == 0 || $my_result_disabled == 2) {
+                                //More than one attempt
                                 if ($num > 0) {
                                     $row_track = Database :: fetch_array($qryres);                                
                                     $attempt_text =  get_lang('LatestAttempt') . ' : ';                                
                                     $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
                                 } else {
-                                    if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
-                                        $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
-                                    } else {
-                                        if ($row['start_time'] != '0000-00-00 00:00:00') { 
-                                            $attempt_text = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($row['start_time']));
-                                        }
-                                        if ($row['end_time'] != '0000-00-00 00:00:00') {
-                                            $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));     
-                                        } 
-                                    }
+                                    //No attempts
+                                    $attempt_text =  get_lang('NotAttempted');    
                                 }                           
                             } else {
                                 $attempt_text =  get_lang('CantShowResults');
                             }
                         } else {
-                            //Quiz not ready
+                            //Quiz not ready due to time limits
                             if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
                                 $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
                             } else {
@@ -926,14 +935,13 @@ if ($show == 'test') {
                                 }
                                 if ($row['end_time'] != '0000-00-00 00:00:00') {
                                     $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));     
-                                } 
-                                
+                                }                                
                             }
                         }
                     } else {
                         //Normal behaviour
                         //Show results
-                        if ($my_result_disabled == 0) {                         
+                        if ($my_result_disabled == 0 || $my_result_disabled == 2) {                         
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);                                
                                 $attempt_text =  get_lang('LatestAttempt') . ' : ';                                
@@ -957,7 +965,7 @@ if ($show == 'test') {
                     }*/
                     
                     if (empty($num)) {
-                            $num = '';
+                        $num = '';
                     }
                         
                     $item .=  Display::tag('td', $attempt_text);

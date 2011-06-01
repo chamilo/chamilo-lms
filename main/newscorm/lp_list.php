@@ -125,17 +125,17 @@ if (!empty($curDirPath)) {
 
 /* CURRENT DIRECTORY */
 
-echo	'<tr>';
-echo	'<th width="50%">'.get_lang('Title').'</th>';
-        
+echo '<tr>';
+       
 if ($is_allowed_to_edit) {
-    echo    '<th>'.get_lang('PublicationDate').'</th>';
-    echo    '<th>'.get_lang('ExpirationDate').'</th>';
-}
-echo '<th>'.get_lang('Progress')."</th>";
-
-if ($is_allowed_to_edit) {
-    echo    '<th>'.get_lang('AuthoringOptions')."</th>";
+    echo '<th width="30%">'.get_lang('Title').'</th>';
+    echo '<th>'.get_lang('PublicationDate').'</th>';
+    echo '<th>'.get_lang('ExpirationDate').'</th>';
+    echo '<th>'.get_lang('Progress')."</th>";
+    echo '<th width="240px">'.get_lang('AuthoringOptions')."</th>";
+} else {
+    echo '<th width="50%">'.get_lang('Title').'</th>';
+    echo '<th>'.get_lang('Progress')."</th>";
 }
 echo '</tr>';
 
@@ -203,8 +203,7 @@ if (is_array($flat_list)) {
             if (!empty($details['expired_on'])) {                
                 $end_time   = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_LONG);   
             }
-        } 
-          
+        }           
             
         $counter++;
         if (($counter % 2) == 0) { $oddclass = 'row_odd'; } else { $oddclass = 'row_even'; }
@@ -254,8 +253,12 @@ if (is_array($flat_list)) {
 
         $lp_theme_css = $mystyle;
 
-        if ($display_progress_bar) {            
-            $dsp_progress = '<td><div style="width:125px">'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</div></td>';
+        if ($display_progress_bar) {
+            if ($is_allowed_to_edit) {            
+                $dsp_progress = '<td>'.learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id()).'</td>';
+            } else {
+                $dsp_progress = '<td><div style="width:125px">'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</div></td>';
+            }
         } else {
             $dsp_progress = '<td style="padding-top:1em;"><div style="width:125px">'.learnpath::get_db_progress($id, api_get_user_id(), 'both','',false, api_get_session_id()).'</div></td>';
         }   
@@ -324,11 +327,11 @@ if (is_array($flat_list)) {
 
             // Session test not necessary if we want to show base course learning paths inside the session (see http://support.chamilo.org/projects/chamilo-18/wiki/Tools_and_sessions).
             //if ($current_session == $details['lp_session']) {
-                if ($details['lp_visibility'] == 0) {
-                    $dsp_visible =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=1\">".Display::return_icon('invisible.png', get_lang('Show'),'','22')."</a>";                        
-                } else {
-                    $dsp_visible =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=0'>" .Display::return_icon('visible.png', get_lang('Hide'),'','22')."</a>";
-                }
+            if ($details['lp_visibility'] == 0) {
+                $dsp_visible =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=1\">".Display::return_icon('invisible.png', get_lang('Show'),'','22')."</a>";                        
+            } else {
+                $dsp_visible =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=0'>" .Display::return_icon('visible.png', get_lang('Hide'),'','22')."</a>";
+            }
             //} else {
             //	$dsp_visible = '<img src="../img/invisible.gif" border="0" title="'.get_lang('Show').'" />';
             //}
@@ -483,8 +486,8 @@ if (is_array($flat_list)) {
                 }
             }
             if ($is_allowed_to_edit) {
-                $start_time = Display::tag('td', $start_time);                
-                $end_time   = Display::tag('td', $end_time);            
+                $start_time = Display::tag('td', Display::div($start_time, array('class'=>'small')));                
+                $end_time   = Display::tag('td', Display::div($end_time,   array('class'=>'small')));
             } else {                  
                 $start_time  = $end_time= '';                
             }            

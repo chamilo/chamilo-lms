@@ -16,6 +16,8 @@ define('EXERCISE_FEEDBACK_TYPE_END',        0);
 define('EXERCISE_FEEDBACK_TYPE_DIRECT',     1);
 define('EXERCISE_FEEDBACK_TYPE_EXAM',       2);
 
+define('EXERCISE_MAX_NAME_BREADCRUMB',     60);
+
 $debug = 0; //All exercise scripts should depend in this debug variable
 
 require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
@@ -855,7 +857,7 @@ class Exercise {
 		}
 		$form->addElement('header', '', $form_title);
 		// title
-		$form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'),'class="input_titles" id="exercise_title"');
+		$form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'), ' size="60" id="exercise_title"');
 		//$form->applyFilter('exerciseTitle','html_filter');
 
 		$form->addElement('html','<div class="row">
@@ -1821,7 +1823,7 @@ class Exercise {
         $user_answer = '';       
                 
         // Get answer list for matching
-        $sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.$questionId.'" ';
+        $sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id = "'.$questionId.'" ';
         $res_answer = Database::query($sql_answer);
         $answer_matching =array();
         while ($real_answer = Database::fetch_array($res_answer)) {
@@ -2057,9 +2059,7 @@ class Exercise {
                     $answer = '';
                     $j = 0;
                     //initialise answer tags
-                    $user_tags = array ();
-                    $correct_tags = array ();
-                    $real_text = array ();
+                    $user_tags = $correct_tags = $real_text = array ();                    
                     // the loop will stop at the end of the text
                     while (1) {
                         // quits the loop if there are no more blanks (detect '[')
@@ -2087,7 +2087,7 @@ class Exercise {
                             break;
                         }                        
                         if ($from_database) {
-                            $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($exeId)."' AND question_id= '".Database::escape_string($questionId)."'";
+                            $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".Database::escape_string($questionId)."'";
                             $resfill = Database::query($queryfill);
                             $str = Database::result($resfill,0,'answer');
                             
@@ -2095,9 +2095,9 @@ class Exercise {
                             $str = str_replace('\r\n', '', $str);
                             $choice = $arr[1];
     
-                            $tmp=strrpos($choice[$j],' / ');
-                            $choice[$j]=api_substr($choice[$j],0,$tmp);
-                            $choice[$j]=trim($choice[$j]);
+                            $tmp = api_strrpos($choice[$j],' / ');
+                            $choice[$j] = api_substr($choice[$j],0,$tmp);
+                            $choice[$j] = trim($choice[$j]);
     
                             //Needed to let characters ' and " to work as part of an answer
                             $choice[$j] = stripslashes($choice[$j]);
@@ -2105,12 +2105,11 @@ class Exercise {
                             $choice[$j] = trim($choice[$j]);	
                         }                       
                         
-                        $user_tags[] = api_strtolower($choice[$j]);
+                        $user_tags[] = api_strtolower($choice[$j]);                        
                         //put the contents of the [] answer tag into correct_tags[]
-                        $correct_tags[] = api_strtolower(api_substr($temp, 0, $pos));
+                        $correct_tags[] = api_strtolower(api_substr($temp, 0, $pos));                        
                         $j++;
                         $temp = api_substr($temp, $pos +1);
-                        //$answer .= ']';
                     }
                     $answer = '';
                     $real_correct_tags = $correct_tags;

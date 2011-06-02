@@ -149,7 +149,7 @@ if ($intro_cmdEdit || $intro_cmdAdd) {
 if ($intro_dispForm) {
 	$default['intro_content'] = $intro_content;
 	$form->setDefaults($default);
-	echo '<div id="courseintro" style="width: 100%">';
+	echo '<div id="courseintro" style="width: 98%">';
 	$form->display();
 	echo '</div>';
 }
@@ -225,23 +225,25 @@ if ($intro_dispDefault) {
 	}
 }
 
-if ($intro_dispCommand) {
-
+if ($intro_dispCommand) {    
 	if (empty($intro_content)) {
-
 		// Displays "Add intro" commands
-		echo "<div id=\"courseintro\"><p>\n";
-		if (!empty ($GLOBALS['_cid'])) {
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdAdd=1\">\n".get_lang('AddIntro')."</a>\n";
+		echo "<div id=\"courseintro_empty\">";
+		if (!empty ($GLOBALS['_cid'])) {			
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdAdd=1\">";
+			echo Display::return_icon('introduction_add.gif', get_lang('AddIntro')).' ';
+			echo get_lang('AddIntro');
+			
+			echo "</a>";
 		} else {
-			echo "<a href=\"".api_get_self()."?intro_cmdAdd=1\">\n".get_lang('AddIntro')."</a>\n";
+			echo "<a href=\"".api_get_self()."?intro_cmdAdd=1\">\n".get_lang('AddIntro')."</a>";
 		}
-		echo "</p>\n</div>";
+		echo "</div>";
 
 	} else {
 
 		// Displays "edit intro && delete intro" commands
-		echo "<div id=\"courseintro_icons\"><p>\n";
+		echo "<div id=\"courseintro_icons\"><p>";
 		if (!empty ($GLOBALS['_cid'])) {
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdEdit=1\">".Display::return_icon('edit.png',get_lang('Modify'),'',22)."</a>";			
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'),'',22)."</a>";
@@ -249,10 +251,8 @@ if ($intro_dispCommand) {
 			echo "<a href=\"".api_get_self()."?intro_cmdEdit=1\">".Display::return_icon('edit.png',get_lang('Modify'),'',22)."</a>";			
 			echo "<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'),'',22)."</a>";
 		}
-		echo "</p>\n</div>";
-
+		echo "</p></div>";
 	}
-
 }
 echo '</div>';
 echo $thematic_description_html;

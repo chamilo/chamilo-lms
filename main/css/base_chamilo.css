@@ -220,12 +220,24 @@ ul#navigation .student-connect a {
     margin-left:2px;
 }
 
-.Authoringview, .courseadminview, .platformadminview {
+/* Student view */
+.Authoringview {
     position: relative;
     width: 80%;
     margin: 25px auto 10px;
-    padding: 10px;
+    padding: 10px;    
 }
+/* Teacher view*/
+.courseadminview, .platformadminview {
+	position: relative;
+    width: 80%;
+    margin: 25px auto 10px;
+    padding: 10px;
+    -moz-border-radius:5px;
+    border-radius:5px;
+    border:1px solid #E1E1E0;
+}
+
 
 .Authoringview table td a {
     font-weight: bold;
@@ -797,12 +809,13 @@ input.liteoption {
     padding: 10px;
     border: 2px solid #f00;
 }
+
+
 #courseintro {
     clear: both;
     width: 80%;
     margin: 10px auto;
-    padding: 10px;
-    border-bottom: 1px solid #dcdcdc;
+    padding: 10px;    
 }
 #courseintro_icons {
     clear: both;
@@ -818,15 +831,7 @@ input.liteoption {
     margin: 10px auto;
     padding: 10px;
 }
-.courseadminview, .platformadminview {
-    position: relative;
-    width: 80%;
-    margin: 25px auto 10px;
-    padding: 10px;
-    -moz-border-radius:5px;
-    border-radius:5px;
-    border:1px solid #E1E1E0;
-}
+
 .viewcaption {
     position: relative;
     top: -20px;

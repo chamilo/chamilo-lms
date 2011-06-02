@@ -1893,3 +1893,9 @@ div.admin_section h4 {
 .actions span {
     margin-right:0px;
 }
+
+#courseintro_empty {
+    float: right;
+    margin: 2px auto;
+    padding: 0;
+}

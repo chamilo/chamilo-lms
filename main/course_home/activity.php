@@ -88,7 +88,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	}
 
 ?>
-	<div class="courseadminview" style="border:0px; margin-top: 0px;padding:5px 0px;">
+	<div class="courseadminview" style="border:0px; margin-top: 0px;padding:0px;">
 		<div class="normal-message" id="id_normal_message" style="display:none">
 <?php
 			echo '<img src="'.$server_protocol.$current_host.'/'.$path_work.'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';

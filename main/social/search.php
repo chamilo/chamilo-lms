@@ -149,17 +149,9 @@ echo '<div id="social-content">';
 						//$grid_groups[]= array('', $data);									
 					}		
 				}
-				    //echo '<div class="social-box-container2">';									
-						Display::display_sortable_grid('mygroups', array(), $grid_groups, array('hide_navigation'=>true, 'per_page' => 5), $query_vars,  false, array(true,true,true,true,true));		
-					//echo '</div>';
-				
+				Display::display_sortable_grid('mygroups', array(), $grid_groups, array('hide_navigation'=>true, 'per_page' => 5), $query_vars,  false, array(true,true,true,true,true));
 			}		
-		} else {
-			//we should show something
-		}
-					
+		}					
 	echo '</div>';
 echo '</div>';
-
 Display :: display_footer();
-?>

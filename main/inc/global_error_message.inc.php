@@ -53,8 +53,8 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$css_path = 'main/css/';
 	$css_file = $css_path.$theme.'default.css';
 	
-	$css_base_file         = $css_path.'fix.css';
-	$css_base_chamilo_file = $css_path.'fix_chamilo.css';		
+	$css_base_file         = $css_path.'base.css';	
+	$css_base_chamilo_file = $css_path.'base_chamilo.css';		
 
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
 	$root_rel = htmlentities($_SERVER['PHP_SELF']);
@@ -78,24 +78,21 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	}
 
 	$installation_guide_url = $root_rel.'documentation/installation_guide.html';
-
-	$css_file = $root_sys.$css_file;
-	if (file_exists($css_file)) {
-		$css_def = @file_get_contents($css_file);
-	} else {
-		$css_def = '';
-	}
 	
+	$css_def = '';
 	$css_base_chamilo_file = $root_sys.$css_base_chamilo_file;
     if (file_exists($css_base_chamilo_file)) {
         $css_def .= @file_get_contents($css_base_chamilo_file);
     }    
-	$css_base_file = $root_sys.$css_base_file;
+    $css_base_file = $root_sys.$css_base_file;
     if (file_exists($css_base_file)) {
         $css_def .= @file_get_contents($css_base_file);
     }
-    
 
+	$css_file = $root_sys.$css_file;
+	if (file_exists($css_file)) {
+		$css_def .= @file_get_contents($css_file);
+	}
 
 	$css_def = str_replace('behavior:url("/main/css/csshover3.htc");', '', $css_def);
 	$css_def = str_replace('main/', $root_rel.'main/', $css_def);

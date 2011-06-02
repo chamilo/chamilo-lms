@@ -212,7 +212,6 @@ switch ($action) {
 
         if ($debug > 0) error_log('New LP - add item action triggered', 0);
 
-
         if (!$lp_found) {
             //check if the learnpath ID was defined, otherwise send back to list
             if ($debug > 0) error_log('New LP - No learnpath given for add item', 0);
@@ -227,13 +226,11 @@ switch ($action) {
                 $_SESSION['oLP']->set_modified_on();
 
                 if (isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time']) {
-
                     // Check post_time to ensure ??? (counter-hacking measure?)
                     require 'lp_add_item.php';
                 } else {
-
+                    
                     $_SESSION['post_time'] = $_POST['post_time'];
-
                     if ($_POST['type'] == TOOL_DOCUMENT) {
                         if (isset($_POST['path']) && $_GET['edit'] != 'true') {
                             $document_id = $_POST['path'];

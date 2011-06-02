@@ -328,7 +328,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
                     echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang('EnterDataNewModule'));
                     break;
                 case 'document':
-                    if(isset($_GET['file']) && is_numeric($_GET['file'])) {
+                    if (isset($_GET['file']) && is_numeric($_GET['file'])) {
                         echo $_SESSION['oLP']->display_document_form('add', 0, $_GET['file']);
                     } else {
                         echo $_SESSION['oLP']->display_document_form('add', 0);

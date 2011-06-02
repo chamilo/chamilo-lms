@@ -4827,11 +4827,45 @@ class learnpath {
             $dir = '/' . $dir;
         if ($dir[strlen($dir) - 1] != '/')
             $dir .= '/';
+        
         $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $dir;
+        
+        if (empty($_POST['dir']) && empty($_GET['dir'])) {
+            
+            //Creating learning_path folder
+            $dir = '/learning_path';
+            $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document';
+            $folder = null;
+            if (!is_dir($filepath.'/'.$dir)) {
+                $folder = create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), 0, 0, $filepath, $dir , get_lang('LearningPaths'));                 
+            } else {
+                $folder = true;
+            }            
+            
+            $dir = '/learning_path/';
+            //Creating LP folder
+            if ($folder) {                                
+                $title = replace_dangerous_char($this->name);
+                $dir   = $dir.$title;
+                $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document';
+                if (!is_dir($filepath.'/'.$dir)) {
+                    $folder = create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), 0, 0, $filepath, $dir , $this->name);    
+                } else {
+                    $folder = true;
+                }                    
+                $dir = $dir.'/';
+                if ($folder) {                    
+                    $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document'.$dir;
+                }
+            }          
+        }
+                
         if (!is_dir($filepath)) {
             $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
             $dir = '/';
         }
+        
+      
         // stripslashes() before calling replace_dangerous_char() because $_POST['title']
         // is already escaped twice when it gets here.
         $title = replace_dangerous_char(stripslashes($_POST['title']));
@@ -4885,14 +4919,10 @@ class learnpath {
                         if ($new_title)
                             $ct .= ", title='" . Database :: escape_string(htmlspecialchars($new_title, ENT_QUOTES, $charset)) . ".html	'";
 
-                        $sql_update = "
-                                                    UPDATE " . $tbl_doc . "
-                                                    SET " . substr($ct, 1) . "
-                                                    WHERE id = " . $document_id;
+                        $sql_update = "UPDATE " . $tbl_doc ." SET " . substr($ct, 1)." WHERE id = " . $document_id;
                         Database::query($sql_update);
                     }
                 }
-
                 return $document_id;
             }
         }
@@ -6309,8 +6339,7 @@ class learnpath {
 
         if ($action == 'add') {
             $return .= get_lang('CreateTheDocument');
-        }
-        elseif ($action == 'move') {
+        } elseif ($action == 'move') {
             $return .= get_lang('MoveTheCurrentDocument');
         } else {
             $return .= get_lang('EditTheCurrentDocument');

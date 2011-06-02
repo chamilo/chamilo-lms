@@ -355,6 +355,9 @@ for ($i = 0; $i < $array_len; $i++) {
         if( $i == $array_len - 1 && !isset($_GET['createdir']) ) {
             $url_dir = '#';
         }
+        if ($url_to_who == 'learning_path') {
+            $url_to_who = get_lang('LearningPaths');
+        }
         $interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
     }
     //does not repeat the name group in the url
@@ -1182,6 +1185,7 @@ $table->display();
 
 if (count($docs_and_folders) > 1) {
     if ($is_allowed_to_edit || $group_member_with_upload_rights) {
+        
         // Getting the course quota
         $course_quota = DocumentManager::get_course_quota();
                 

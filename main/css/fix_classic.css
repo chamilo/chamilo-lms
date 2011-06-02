@@ -2,10 +2,6 @@
  * Fix all Chamilo classic themes (Public admin, Baby orange, etc) 
  */
  
-#Header2Right ul {
-	 /*width: 80% */
-}
-
 #header2 {
     min-height: 25px;
 } 

@@ -1,3 +1,672 @@
 /**
  * Common CSS for all themes
  */
+
+* {
+    outline :none;
+}
+
+img {
+    border: none;
+}
+p, blockquote, ol, ul {
+    font-size: 12px;
+}
+
+h1 {
+    font-size: 24px;
+}
+h2 {
+    font-size: 18px;	
+}
+h3 {
+    font-size: 15px;    
+}
+h4 {
+    font-size: 12px;
+}
+
+h5{
+}
+
+h6 {
+}
+
+
+
+
+/*****************************************************
+ *              AGENDA                               *
+ *****************************************************/
+#agenda {
+    width: 100%;
+    margin: 0 auto;
+    border: 1px solid #bbb;
+    border-collapse: collapse;
+}
+.agenda_month_divider {
+    background-color: #dcdcdc;
+    font-weight: bold;
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+}
+#agenda .title a {
+    color: #fff;
+}
+#agenda .agendaitem {
+    font-size: 12px;
+}
+#smallcalendar .title {
+    background-color: #dcdcdc;
+    font-weight: bold;
+    padding: 5px;
+    color: #666;
+    text-align: center;
+    font-size: 11px;
+}
+#smallcalendar .title a {
+    color: #666;
+}
+#agenda_select {
+    list-style: none;
+    border: 0px solid green;
+    margin: 30px 0 0 0;
+    padding: 0 0 0 10px;
+}
+
+
+/* ---------------------------------------------------
+    styles for the agenda (day, week, month view)
+-----------------------------------------------------*/
+#agenda_list {
+    width: 100%;
+    margin: 0 auto;
+    border: 1px solid #fff;
+    border-collapse: collapse;
+}
+/*The caption of the calendar (displays the month and the << and >> links*/
+#agenda_list .title {
+    background-color: #dcdcdc;
+    font-weight: bold;
+    font-size: 12px;
+    color: #666;
+    text-align: left;
+    padding: 2px 10px;
+    text-align: center;
+    border: 1px solid #bbb;
+}
+#agenda_list .title a:link, #agenda_list #title a:visited {
+    background-color: #dcdcdc;
+    font-weight: bold;
+    font-size: 11px;
+    color: #666;
+    padding: 2px 10px;
+    text-align: center;
+}
+#agenda_list .title a:hover {
+    background-color: #dcdcdc;
+    font-weight: bold;
+    font-size: 11px;
+    color: #f3840d;
+    padding: 2px 10px;
+    text-align: center;
+}
+/* The cells with the name of the days of the weeks (mon->sun)*/
+#agenda_list .weekdays, .data_table .weekdays {
+    background-color: #dcdcdc;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #264269;
+    border-collapse: collapse;
+}
+/* The cells for the days (1->31) */
+#agenda_list .days_week {
+    height: 40px;
+    width: 12%;
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+#agenda_list .days_week_selected {
+    height: 40px;
+    width: 12%;
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    background-color: #f5f5f5;
+}
+
+#agenda_list .days_weekend {
+    height: 40px;
+    width: 12%;
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    background-color: #e6e6e6;
+}
+#agenda_list .days_today {
+    height: 40px;
+    width: 12%;
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    background-color: #FFFFC0;
+}
+
+#agenda_list th {
+    background-color:#E5EDF9;
+    border:1px solid gray;
+    padding-right:12px;
+}
+
+/* text in the cells: display of agenda items (visible)*/
+#agenda_list .data {
+    background-color: #eee;
+    text-align: left;
+    padding: 2px 10px;
+    font-weight: bold;
+    border: 0px solid #dcdcdc;
+    border-collapse: collapse;
+}
+#agenda_list .datanotbold {
+    background-color: #eee;
+    text-align: left;
+    padding: 2px 10px;
+    font-weight: normal;
+    border: 0px solid #dcdcdc;
+    border-collapse: collapse;
+}
+#agenda_list .text {
+    background-color: #fff;
+    text-align: left;
+    padding: 2px 10px;
+    font-weight: normal;
+    border: 0px solid #dcdcdc;
+    border-collapse: collapse;
+}
+/*text in the cells: display of agenda items (invisible)*/
+#agenda_list .data_hidden {
+    background-color: #eee;
+    text-align: left;
+    padding: 2px 10px;
+    font-weight: bold;
+    border: 0px solid #dcdcdc;
+    border-collapse: collapse;
+    color: #999999;
+}
+#agenda_list .datanotbold_hidden {
+    background-color: #eee;
+    text-align: left;
+    padding: 2px 10px;
+    font-weight: normal;
+    border: 0px solid #dcdcdc;
+    border-collapse: collapse;
+    color: #999999;
+}
+#agenda_list .text_hidden {
+    background-color: #fff;
+    text-align: left;
+    padding: 2px 10px;
+    font-weight: normal;
+    border: 0px solid #dcdcdc;
+    border-collapse: collapse;
+    color: #999999;
+}
+/*text in the cells: display of agenda items (highlighted)*/
+#agenda_list .datanow {
+    background-color: #FFCC00;
+    text-align: left;
+    padding: 2px 10px;
+    font-weight: bold;
+    border: 0px solid #dcdcdc;
+    border-collapse: collapse;
+}
+#agenda_list .datanotboldnow {
+    background-color: #FFCC00;
+    text-align: left;
+    padding: 2px 10px;
+    font-weight: normal;
+    border: 0px solid #dcdcdc;
+    border-collapse: collapse;
+}
+#agenda_list .textnow {
+    background-color: #fff;
+    text-align: left;
+    padding: 2px 10px;
+    font-weight: normal;
+    border: 0px solid #dcdcdc;
+    border-collapse: collapse;
+}
+/* ---------------------------------------------------
+    styles for the mini agenda
+-----------------------------------------------------*/
+#smallcalendar {
+    width: 100%;
+    margin: 0 auto;
+    border: 1px solid #fff;
+    border-collapse: collapse;
+}
+#smallcalendar .weekdays {
+    background-color: #dcdcdc;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    border: 1px solid #fff;
+    border-collapse: collapse;
+}
+#smallcalendar .days_week {
+    background-color: #f5f5f5;
+    text-align: center;
+    font-size: 11px;
+    border-collapse: collapse;
+}
+#smallcalendar .days_weekend {
+    background-color: #e6e6e6;
+    text-align: center;
+    font-size: 11px;
+    border: 1px solid #fff;
+    border-collapse: collapse;
+}
+#smallcalendar .days_today {
+    width: 12%;
+    text-align: center;
+    font-size: 11px;
+    border: 1px solid #FA8500;
+    border-collapse: collapse;
+    background-color: #FFCA8D;
+}
+
+/* ---------------------------------------------------
+    styles for the personal agenda
+-----------------------------------------------------*/
+.personal_agenda {
+    color: #008000;
+}
+.personal_agenda a:link, .personal_agenda a:visited {
+    color: #008000;
+}
+a.personal_agenda:link, a.personal_agenda:visited {
+    color: #008000;
+}
+.personal_agenda a:hover, .personal_agenda a:hover {
+    color: #666666;
+}
+a.personal_agenda:hover, a.personal_agenda:hover {
+    color: #666666;
+}
+
+.myagendatoday {
+    background-color: #FFCA8D;
+    border-collapse: collapse;
+    font-family: verdana, arial, helvetica, sans-serif;
+    color: #CC3300;
+    font-weight: bold;
+}
+
+.rounded_div_agenda {
+    background: none repeat scroll 0 0 #FFFFFF;
+        
+    -webkit-border-radius: 6px;
+    -opera-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+        
+    -webkit-box-shadow: 0 2px 5px #C8C8C8;
+    -opera-box-shadow: 0 2px 5px #C8C8C8;
+    -moz-box-shadow: 0 2px 5px #C8C8C8;
+    box-shadow: 0 2px 5px #C8C8C8;
+    
+    float: left;
+    height: auto;
+    margin: 2px 4px 15px;
+    padding: 8px;
+    width: 85%;
+}
+
+.agenda_day {
+    float:left;
+        
+    width:100%; 
+    background-color: #F8F9FF;    
+    color: #666666;
+    line-height: 16px;
+    overflow: hidden;    
+    margin-bottom:5px;
+}
+.days_today .agenda_day {
+    float:left;      
+      
+    width:100%; 
+    background-color: #FAD163;    
+    color: #666666;
+    line-height: 16px;
+    overflow: hidden;    
+    margin-bottom:5px;    
+}
+
+#agenda_list th {
+    background-color: #F2F2F2;
+}
+
+#agenda_list .days_week {
+    height: 100px;
+}
+
+
+/* -------------- DOCUMENT --------------*/
+
+#document_quota {
+    margin:15px;
+    font-weight:bold;
+    color:#006633; 
+    text-align:center;
+}
+
+
+
+
+/* Message and Social  */
+
+.menulist li {
+    margin-top: 10px;
+}
+
+#social_widget {
+    margin-bottom: 0px;
+}
+
+.menusection {
+    margin: 15px 0 0 6px;
+}
+
+.maincontent {
+    margin-top: 5px;
+}
+
+#menu {
+    margin-top: 8px;
+    margin-bottom: 10px;
+}
+
+.social-background-content {
+    width:auto; 
+}
+
+.group_social_item {
+    float:left;
+    width:95%;  
+}
+
+.group_social_sub_item {
+    float:left;
+    /* width:600px; */
+    background-color: #E9F4FA;
+    background-repeat: repeat-x;
+    
+    margin: 8px;
+    padding:5px;
+    width:100%;
+}
+
+.message-group-author {
+    float:left;
+    width:30px;
+    margin:5px;
+}
+
+.message-group-content {
+    float:right;
+    width:90%;
+    line-height: 100%;
+}
+
+.message-group-date  {
+    font-style:italic;
+    text-align:left;
+    margin-top:4px;
+}
+.message-reply-link {
+    float:right;
+}
+
+.group_social_main_item  {
+    float:left;
+    width:600px;
+    background-color: #fff;
+    background-repeat: repeat-x;
+    
+    margin: 8px;
+    padding:5px;
+}
+
+
+.group_discussions_replies  {
+    background-color: #E9F4FA;    
+    background-repeat: repeat-x;
+    border: 1px solid #D0E2EC;
+    border-radius: 3px 3px 3px 3px;
+    color: #999999;
+    float: left;
+    font-size: 0.8em;
+    margin-right: 10px;
+    overflow: hidden;
+    padding: 7px 10px;
+    text-align: center;
+    width: 40px;
+    margin-bottom: 65px;
+}
+
+.group_discussions_replies span {
+    display: block;
+    font-size: 2em;
+}
+
+.group_social_grid {
+    float:left;
+    width:100%;
+}
+
+.message-attach {
+    float:left;
+}
+
+ 
+/** BUTTONS **/
+
+.left {
+    float:left;
+}
+
+.right {
+    float:right; 
+}
+
+/* New button style experimental */ 
+button {
+    border:1px solid #ccc;
+    
+    -opera-border-radius: 8px;
+    -webkit-border-radius: 8px; 
+    border-radius: 8px;
+    
+    -opera-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);    
+    -webkit-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
+    
+    font-weight:bold;
+    font-size: 105%;    
+}
+
+button:hover {
+    color:#000;
+    border-style: inset;
+    background-color:#eee;
+    border:1px solid #ccc;  
+}
+
+/* Nice buttons v2 */
+
+.a_button {
+    display: inline-block;
+    zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
+    display: inline;
+    vertical-align: baseline;
+    /* margin: 0 2px; */
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font: 14px/100% Arial, Helvetica, sans-serif;
+    padding: .5em 2em .55em;
+    text-shadow: 0 1px 1px rgba(0,0,0,.3);
+    -webkit-border-radius: .5em; 
+    -moz-border-radius: .5em;
+    border-radius: .5em;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+.a_button:hover {
+    text-decoration: none;
+}
+.a_button:active {
+    position: relative;
+    top: 1px;
+}
+
+.bigrounded {
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+}
+.medium {
+    font-size: 12px;
+    padding: .4em 1.5em .42em;
+}
+.small {
+    font-size: 11px;
+    padding: .2em 1em .275em;
+}
+
+/* white */
+
+.a_button .white {
+    color: #606060;
+}
+.white {
+    color: #606060 !important;
+    border: solid 1px #b7b7b7;
+    background: #fff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+    background: -moz-linear-gradient(top,  #fff,  #ededed);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed');
+}
+.white:hover {
+    color: #606060;
+    background: #ededed;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dcdcdc));
+    background: -moz-linear-gradient(top,  #fff,  #dcdcdc);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dcdcdc');
+}
+.white:active { 
+    color: #999;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff));
+    background: -moz-linear-gradient(top,  #ededed,  #fff);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff');
+}
+
+
+/* orange */
+.orange {
+    color: #fef4e9 !important;
+    border: solid 1px #da7c0c;
+    background: #f78d1d;
+    background: -webkit-gradient(linear, left top, left bottom, from(#faa51a), to(#f47a20));
+    background: -moz-linear-gradient(top,  #faa51a,  #f47a20);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
+}
+.orange:hover {
+    color: #fef4e9;
+    background: #f47c20;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f88e11), to(#f06015));
+    background: -moz-linear-gradient(top,  #f88e11,  #f06015);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
+}
+.orange:active {
+    color: #fcd3a5;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f47a20), to(#faa51a));
+    background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
+}
+
+
+
+
+
+
+/* Note */
+.note {
+    margin: 6px;
+    font-size: 12px;
+    line-height: 14px;
+    font-family: verdana, arial, helvetica, sans-serif;
+    background-color: #FFFF96;
+    color: #666666;
+    border: 1px solid #bbb;
+    padding: 10px 10px 10px 10px;
+}
+.note b {
+    margin: 10px 10px 5px 0px;
+}
+
+
+/* Breadcrumb */
+
+.bread {
+    height: 25px;
+    margin: 0px;    
+    padding:0px;     
+}
+
+.bread li {
+    color: #777777;
+    float: left;
+    line-height: 25px;    
+}
+
+.bread span {
+    display: block;
+    font-size:11px;
+    padding: 0 15px 0 9px;
+}
+
+.bread a {
+    display: block;
+    font-size:11px;    
+}
+
+.bread a:hover {
+    color:#35acc5;
+}
+
+.bread li {    
+    display: block;
+    
+}
+
+.bread li a {    
+    background: url("crumbs.gif") no-repeat scroll right center transparent;
+    display: block;    
+    background-repeat:no-repeat; 
+    background-position:right;
+}
+
+.bread .home {
+    padding:5px 15px 4px 8px;
+}    

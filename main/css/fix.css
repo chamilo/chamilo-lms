@@ -2,15 +2,6 @@
  * Fix all themes
  */
 
-* {
-    outline :none;
-}
-
-h2 {
-	margin:0px;
-	padding:0px;
-}
-
 input {
     -moz-border-radius:5px;    
     -webkit-border-radius:5px;  
@@ -75,9 +66,7 @@ input.maininput:focus {
 /* Big icons course home page styles */ 
 .big_icon {
 	/*width:205px; */
-	padding:10px;
-
-	
+	padding:10px;	
 }
 
 .big_icon img {     
@@ -296,49 +285,6 @@ input.maininput:focus {
     height:66px;
 }
 
-/* Agenda */
-
-.rounded_div_agenda {
-	background: none repeat scroll 0 0 #FFFFFF;
-        
-    -webkit-border-radius: 6px;
-    -opera-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-        
-    -webkit-box-shadow: 0 2px 5px #C8C8C8;
-    -opera-box-shadow: 0 2px 5px #C8C8C8;
-    -moz-box-shadow: 0 2px 5px #C8C8C8;
-    box-shadow: 0 2px 5px #C8C8C8;
-    
-    float: left;
-    height: auto;
-    margin: 2px 4px 15px;
-    padding: 8px;
-	width: 85%;
-}
-
-.agenda_day {
-	float:left;
-	    
-	width:100%;	
-    background-color: #F8F9FF;    
-    color: #666666;
-    line-height: 16px;
-    overflow: hidden;    
-	margin-bottom:5px;
-}
-.days_today .agenda_day {
-    float:left;      
-	  
-    width:100%; 
-    background-color: #FAD163;    
-    color: #666666;
-    line-height: 16px;
-    overflow: hidden;    
-    margin-bottom:5px;    
-}
-
 a.tag {
     background-color: #E0EAF1;
     border-bottom: 1px solid #3E6D8E;
@@ -352,17 +298,11 @@ a.tag {
     white-space: nowrap;
 }
 
-#agenda_list th {
-    background-color: #F2F2F2;
-}
 
-#agenda_list .days_week {
-    height: 100px;
-}
 
 
 /* Makes the course elements more readable */ 
-.userportal-course-item{
+.userportal-course-item {
 	padding:15px;
 }
 
@@ -414,50 +354,6 @@ table.lp_build td.tree {
 	min-height:380px;
 }
 
-/* Breadcrumb */
-
-.bread {
-    height: 25px;
-    margin: 0px;	
-	padding:0px;	 
-}
-
-.bread li {
-    color: #777777;
-    float: left;
-    line-height: 25px;    
-}
-
-.bread span {
-    display: block;
-    font-size:11px;
-    padding: 0 15px 0 9px;
-}
-
-.bread a {
-    display: block;
-	font-size:11px;    
-}
-
-.bread a:hover {
-    color:#35acc5;
-}
-
-.bread li {    
-    display: block;
-    
-}
-
-.bread li a {    
-	background: url("crumbs.gif") no-repeat scroll right center transparent;
-    display: block;    
-    background-repeat:no-repeat; 
-    background-position:right;
-}
-
-.bread .home {
-	padding:5px 15px 4px 8px;
-}    
 
 #logo {    
     /* height:85px; */
@@ -467,250 +363,10 @@ table.lp_build td.tree {
 	float:left;
 }
 
-#document_quota {
-	margin:15px;
-	font-weight:bold;
-	color:#006633; 
-	text-align:center;
-}
 
 /* fixes bug in ie7 */
 #menu {
 	width:180px;
-}
-
-/* Nice buttons*/
-
-.left {
-	float:left;
-}
-
-.right {
-    float:right; 
-}
-
-/* New button style experimental */ 
-button {
-    border:1px solid #ccc;
-    
-    -opera-border-radius: 8px;
-    -webkit-border-radius: 8px; 
-    border-radius: 8px;
-    
-    -opera-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);    
-    -webkit-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
-    box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
-    
-    font-weight:bold;
-    font-size: 105%;    
-}
-
-button:hover {
-    color:#000;
-    border-style: inset;
-    background-color:#eee;
-    border:1px solid #ccc;  
-}
-
-/* Nice buttons v2 */
-
-.a_button {
-    display: inline-block;
-    zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
-    display: inline;
-    vertical-align: baseline;
-    /* margin: 0 2px; */
-    outline: none;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    font: 14px/100% Arial, Helvetica, sans-serif;
-    padding: .5em 2em .55em;
-    text-shadow: 0 1px 1px rgba(0,0,0,.3);
-    -webkit-border-radius: .5em; 
-    -moz-border-radius: .5em;
-    border-radius: .5em;
-    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
-    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
-    box-shadow: 0 1px 2px rgba(0,0,0,.2);
-}
-.a_button:hover {
-    text-decoration: none;
-}
-.a_button:active {
-    position: relative;
-    top: 1px;
-}
-
-.bigrounded {
-    -webkit-border-radius: 2em;
-    -moz-border-radius: 2em;
-    border-radius: 2em;
-}
-.medium {
-    font-size: 12px;
-    padding: .4em 1.5em .42em;
-}
-.small {
-    font-size: 11px;
-    padding: .2em 1em .275em;
-}
-
-/* white */
-
-.a_button .white {
-	color: #606060;
-}
-.white {
-    color: #606060 !important;
-    border: solid 1px #b7b7b7;
-    background: #fff;
-    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
-    background: -moz-linear-gradient(top,  #fff,  #ededed);
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed');
-}
-.white:hover {
-	color: #606060;
-    background: #ededed;
-    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dcdcdc));
-    background: -moz-linear-gradient(top,  #fff,  #dcdcdc);
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dcdcdc');
-}
-.white:active {	
-    color: #999;
-    background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff));
-    background: -moz-linear-gradient(top,  #ededed,  #fff);
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff');
-}
-
-
-/* orange */
-.orange {
-    color: #fef4e9 !important;
-    border: solid 1px #da7c0c;
-    background: #f78d1d;
-    background: -webkit-gradient(linear, left top, left bottom, from(#faa51a), to(#f47a20));
-    background: -moz-linear-gradient(top,  #faa51a,  #f47a20);
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
-}
-.orange:hover {
-	color: #fef4e9;
-    background: #f47c20;
-    background: -webkit-gradient(linear, left top, left bottom, from(#f88e11), to(#f06015));
-    background: -moz-linear-gradient(top,  #f88e11,  #f06015);
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
-}
-.orange:active {
-    color: #fcd3a5;
-    background: -webkit-gradient(linear, left top, left bottom, from(#f47a20), to(#faa51a));
-    background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
-}
-
-
-/* Message and Social changes */
-
-.menulist li {
-	margin-top: 10px;
-}
-
-#social_widget {
-    margin-bottom: 0px;
-}
-
-.menusection {
-    margin: 15px 0 0 6px;
-}
-
-.maincontent {
-    margin-top: 5px;
-}
-
-#menu {
-    margin-top: 8px;
-	margin-bottom: 10px;
-}
-
-.social-background-content {
-	width:auto;	
-}
-
-.group_social_item {
-	float:left;
-	width:95%;	
-}
-
-.group_social_sub_item {
-	float:left;
-    /* width:600px; */
-    background-color: #E9F4FA;
-    background-repeat: repeat-x;
-    
-    margin: 8px;
-    padding:5px;
-	width:100%;
-}
-
-.message-group-author {
-	float:left;
-	width:30px;
-	margin:5px;
-}
-
-.message-group-content {
-	float:right;
-	width:90%;
-	line-height: 100%;
-}
-
-.message-group-date  {
-	font-style:italic;
-	text-align:left;
-	margin-top:4px;
-}
-.message-reply-link {
-	float:right;
-}
-
-.group_social_main_item  {
-	float:left;
-    width:600px;
-    background-color: #fff;
-    background-repeat: repeat-x;
-    
-    margin: 8px;
-    padding:5px;
-}
-
-
-.group_discussions_replies  {
-	background-color: #E9F4FA;    
-    background-repeat: repeat-x;
-    border: 1px solid #D0E2EC;
-    border-radius: 3px 3px 3px 3px;
-    color: #999999;
-    float: left;
-    font-size: 0.8em;
-    margin-right: 10px;
-    overflow: hidden;
-    padding: 7px 10px;
-    text-align: center;
-    width: 40px;
-	margin-bottom: 65px;
-}
-
-.group_discussions_replies span {
-    display: block;
-    font-size: 2em;
-}
-
-.group_social_grid {
-	float:left;
-	width:100%;
-}
-
-.message-attach {
-	float:left;
 }
 
 div.system_announcement {
@@ -723,10 +379,6 @@ div.system_announcement {
 
 #formLogin {
     height:160px;
-}
-
-#social_widget {
-	float:none;
 }
 
 
@@ -748,9 +400,6 @@ div.system_announcement {
     width: 98%;
 }
 
-.note {
-    background-color: #FFFF96;
-}
 
 div.admin_section {
 	 min-height: 260px;
@@ -762,4 +411,8 @@ div.admin_section {
 div.admin_section h4 {
 	font-size:16px;
 	letter-spacing:-1px;	
+}
+
+.actions span {
+	margin-right:0px;
 }

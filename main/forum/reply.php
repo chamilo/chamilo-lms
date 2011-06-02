@@ -115,7 +115,6 @@ if ($origin == 'learnpath') {
 } else {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give an empty string.
     Display :: display_header('');
-    api_display_tool_title($nameTools);
 }
 
 /* Is the user allowed here? */

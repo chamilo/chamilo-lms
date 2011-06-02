@@ -75,7 +75,8 @@ if ($origin == 'group') {
     $interbreadcrumb[] = array('url' => 'forumsearch.php','name' => get_lang('ForumSearch'));
 } else {
     $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'', 'name' => $nameTools);
-    $interbreadcrumb[] = array('url' => 'forumsearch.php', 'name' => get_lang('ForumSearch'));
+    //$interbreadcrumb[] = array('url' => 'forumsearch.php', 'name' => );
+    $nameTools = get_lang('ForumSearch');
 }
 
 // Display the header.

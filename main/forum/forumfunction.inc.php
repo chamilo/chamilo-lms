@@ -3398,7 +3398,9 @@ function search_link() {
     $return = '';
 
     if ($origin != 'learnpath') {
-        $return = '<a href="forumsearch.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;action=search&amp;origin='.$origin.'"> '.Display::return_icon('search.png', get_lang('Search'),'','32').'</a>';
+        $return = '<a href="forumsearch.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;action=search&amp;origin='.$origin.'"> '; 
+        $return .= Display::return_icon('search.png', get_lang('Search'),'','32').'</a>';
+        
         if (!empty($_GET['search'])) {
             $return .= ': '.Security::remove_XSS($_GET['search']).' ';
             $url = api_get_self().'?';

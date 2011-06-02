@@ -30,16 +30,9 @@ if (isset($current_thread['thread_id'])){
             $messageclass='forum_message_post_text';
             $leftclass='forum_message_left';
         }
-
-       echo '<thead>';
-       echo '<tr>';
-       echo '<th class="forum_head" colspan="2">'.prepare4display($row['post_title'])."</th>";
-       echo '</tr>';
-       echo '</thead>';
-
         echo "<tr>";
-        //echo "<td rowspan=\"3\" class=\"$leftclass\">";
-        echo "<td rowspan=\"2\" class=\"$leftclass\">";
+        echo "<td rowspan=\"3\" class=\"$leftclass\">";
+        
         if ($row['user_id']=='0') {
             $name=prepare4display($row['poster_name']);
         } else {
@@ -123,9 +116,15 @@ if (isset($current_thread['thread_id'])){
         // The post title
 
         echo "</tr>";
-
+        
+        //  The post title
+        echo "<tr>";
+        echo Display::tag('td', prepare4display($row['post_title']), array('class'=>'forum_message_post_title'));
+        echo "</tr>";
+        
         // The post message
         echo "<tr>";
+        
         // see comments inside forumfunction.inc.php to lower filtering and allow more visual changes
         echo "<td class=\"$messageclass\">".prepare4display($row['post_text'])."</td>";
         echo "</tr>";

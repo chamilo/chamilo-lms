@@ -80,19 +80,23 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 $search_forum = isset($_GET['search']) ? Security::remove_XSS($_GET['search']) : '';
-$interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.$search_forum, 'name' => $nameTools);
+
 
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
     switch ($_GET['content']) {
         case 'forum':
+            $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.$search_forum, 'name' => $nameTools);
             $interbreadcrumb[] = array('url' => api_get_self().'?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=add&amp;content=forum', 'name' => get_lang('AddForum'));
             break;
         case 'forumcategory':
+            $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.$search_forum, 'name' => $nameTools);
             $interbreadcrumb[] = array('url' => api_get_self().'?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=add&amp;content=forumcategory', 'name' => get_lang('AddForumCategory'));
             break;
-        default:
+        default:            
             break;
     }
+} else {
+    $interbreadcrumb[] = array('url' => '#', 'name' => $nameTools);    
 }
 
 Display::display_header('');
@@ -182,13 +186,15 @@ echo '<div class="actions">';
 if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){	
 echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-5\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'','32')."</a>";
 }
-echo '<span>'.search_link().'</span>';
+if (!empty($forum_list)) {
+    echo search_link();
+}
+
 if (api_is_allowed_to_edit(false, true)) {
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=add&amp;content=forumcategory&amp;lp_id='.$lp_id.'"> '.Display::return_icon('new_folder.png', get_lang('AddForumCategory'),'','32').'</a>';
     if (is_array($forum_categories_list) and !empty($forum_categories_list)) {
         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=add&amp;content=forum&amp;lp_id='.$lp_id.'"> '.Display::return_icon('new_forum.png', get_lang('AddForum'),'','32').'</a>';
     }
-    //echo ' | <a href="forum_migration.php">'.get_lang('MigrateForum').'</a>';
 }
 echo '</div>';
 

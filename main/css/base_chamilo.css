@@ -810,7 +810,6 @@ input.liteoption {
     border: 2px solid #f00;
 }
 
-
 #courseintro {
     clear: both;
     width: 80%;
@@ -1310,6 +1309,7 @@ tr.forum_threadheader td {
     font-weight: bold;
     background-color: #F7F7F7;
     height: 20px;
+    font-size:20px;
 }
 .forum_message_post_title_2_be_approved {
     /*border-bottom: 1px solid #666666;*/
@@ -2877,9 +2877,9 @@ span.form_required  {
     border-collapse: collapse;
     width: 100%;
     padding: 5px;
-    border-left: 1px solid gray;
-    border-top: 1px solid gray;
-    border-right: 1px solid gray;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
     padding:5px;
 }
 
@@ -2894,7 +2894,7 @@ span.form_required  {
     border-collapse: collapse;
     width: 100%;
     padding: 5px;
-    border: 1px solid gray;
+    border: 1px solid #ccc;
     margin-bottom:15px;
 }
 
@@ -2902,12 +2902,10 @@ span.form_required  {
     padding:5px;
     text-align: left;
     font-size:14px;
-
 }
 
 .forum_table th {
     padding-right: 12px;
-    /*border: 1px solid gray;*/
     background-color: #E5EDF9;
 }
 .forum_table tr.row_odd {
@@ -2922,13 +2920,14 @@ span.form_required  {
 .forum_table td {
     padding: 5px;
     vertical-align: top;
-    border-bottom: 1px solid #b0b0b0;
+    border-bottom: 1px solid #ccc;
     border-right: 1px dotted #e1e1e1;
     border-left: 1px dotted #e1e1e1;
+    border-top: 1px solid #ccc;
 }
 
 .post {
-    border: 1px solid gray;
+    border: 1px solid #ccc;
     margin-bottom:5px;
 }
 

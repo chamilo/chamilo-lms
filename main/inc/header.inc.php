@@ -110,16 +110,6 @@ echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css";';
 //Course CSS
 echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/course.css";';
 
-//Fix CSS
-echo '@import "'.api_get_path(WEB_CSS_PATH).'fix.css";';
-
-//Fix chamilo CSS
-if (in_array(api_get_visual_theme(), array('chamilo','chamilo_red','chamilo_blue','chamilo_orange','chamilo_green','chamilo_electric_blue'))) {
-    echo '@import "'.api_get_path(WEB_CSS_PATH).'fix_chamilo.css";';
-} else {
-    echo '@import "'.api_get_path(WEB_CSS_PATH).'fix_classic.css";';
-}
-
 if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
     echo 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } ';
 }

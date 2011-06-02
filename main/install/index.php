@@ -307,9 +307,9 @@ if ($encryptPassForm == '1') {
 	<title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
 	<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
-		@import "../css/<?php echo api_get_visual_theme(); ?>/default.css";
-        @import "../css/fix_chamilo.css";
-        @import "../css/fix.css";
+		@import "../css/base.css";
+		@import "../css/base_chamilo.css";        
+		@import "../css/<?php echo api_get_visual_theme(); ?>/default.css";        
 		/*]]>*/
 	</style>
 	<script type="text/javascript" src="../inc/lib/javascript/jquery.js"></script>

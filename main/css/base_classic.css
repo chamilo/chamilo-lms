@@ -1,3 +1,26 @@
 /*
  * Base CSS for classic chamilo themes 
  */
+
+#header2 {
+    min-height: 25px;
+} 
+
+#header3 {
+    width: 100%;    
+    padding-left:0px;
+    padding-right:0px;  
+    float:left;
+}
+
+#header4 {
+    width: 98%;
+    float:left; 
+    padding-left:20px;
+    padding-right:0px;  
+}
+
+.menu , #menu {
+    min-height: 90px;
+}
+ 

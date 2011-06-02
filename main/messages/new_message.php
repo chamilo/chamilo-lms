@@ -348,13 +348,10 @@ echo '<div id="social-content">';
 	echo '<div id="'.$id_content_right.'">';
 	
 		//MAIN CONTENT
-		if (api_get_setting('allow_social_tool') == 'true'){
-			echo '<div class="social-box-container2">';			
+		if (api_get_setting('allow_social_tool') == 'true') {			
             echo '<div class="actions">';              
             echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
             echo '</div>';
-			//echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('ComposeMessage')).'</div>';
-			//echo '<div id="div_content_table" class="social-box-content2">';
 		}
 		if (!isset($_POST['compose'])) {
 			if(isset($_GET['re_id'])) {
@@ -365,7 +362,6 @@ echo '<div id="social-content">';
 				show_compose_to_any($_user['user_id']);
 		  	}
 		} else {
-
 			$restrict = false;
 			if (isset($_POST['users'])) {
 				$restrict = true;
@@ -397,9 +393,6 @@ echo '<div id="social-content">';
 					Display::display_error_message(get_lang('ErrorSendingMessage'));
 				}
 			}
-		}
-		if (api_get_setting('allow_social_tool') == 'true'){
-            echo '</div>';		    
 		}
 	echo '</div>';
 echo '</div>';

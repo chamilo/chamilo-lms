@@ -62,14 +62,7 @@ echo '<div id="social-content">';
 	$id_content_right = '';
 	//LEFT COLUMN
 	if (api_get_setting('allow_social_tool') != 'true') { 
-		$id_content_right = 'inbox';
-		/*echo '<div id="inbox-menu" class="actions">';
-		echo '<ul>';
-			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>'.'</li>';
-			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';			
-			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
-		echo '</ul>';
-		echo '</div>';*/
+		$id_content_right = 'inbox';	
 	} else {
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 		$id_content_right = 'social-content-right';
@@ -79,24 +72,15 @@ echo '<div id="social-content">';
 		echo '</div>';				
 	}
 
-	echo '<div id="'.$id_content_right.'">';
-	if (api_get_setting('allow_social_tool') == 'true'){
-		echo '<div class="social-box-container2">';				
-		//echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('View')).'</div>';
-		//echo '<div id="div_content_table" class="social-box-content2">';
+	echo '<div id="'.$id_content_right.'">';	
+	//MAIN CONTENT
+	$message = MessageManager::show_message_box($id_message,$source);
+	
+	if (!empty($message)) {
+		echo $message;
+	} else {
+		api_not_allowed();
 	}	
-		//MAIN CONTENT
-		$message = MessageManager::show_message_box($id_message,$source);
-		
-		if (!empty($message)) {
-			echo $message;
-		} else {
-			api_not_allowed();
-		}
-	if (api_get_setting('allow_social_tool') == 'true'){
-		echo '</div>';
-		//echo '</div>';
-	}
 	echo '</div>';
 echo '</div>';
 

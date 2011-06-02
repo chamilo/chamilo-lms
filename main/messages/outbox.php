@@ -141,8 +141,7 @@ echo '<div id="social-content">';
 	}
 	
 	echo '<div id="'.$id_content_right.'">';
-			if (api_get_setting('allow_social_tool') == 'true') {
-				echo '<div class="social-box-container2">';         
+			if (api_get_setting('allow_social_tool') == 'true') {				    
                 echo '<div class="actions">';              
                 echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
                 echo '</div>';
@@ -168,12 +167,8 @@ echo '<div id="social-content">';
 				MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
 				$delete_list_id=array();
 				outbox_display();
-			}else {
+			} else {
 				outbox_display();
-			}
-			if (api_get_setting('allow_social_tool') == 'true'){
-				echo '</div>';
-				//echo '</div>';
 			}
 	echo '</div>';
 echo '</div>';

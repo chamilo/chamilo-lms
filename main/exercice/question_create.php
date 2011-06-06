@@ -10,6 +10,7 @@ require_once '../inc/global.inc.php';
 // including additional libraries
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once 'question.class.php';
+require_once 'exercise.class.php';
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
@@ -28,16 +29,6 @@ $form = new FormValidator('add_question','post',api_get_self().'?'.api_get_cidre
 // form title
 $form->addElement('header','',get_lang('AddQuestionToExercise'));
 
-// the question types (normal form element)
-/*
-foreach (Question::$questionTypes as $key=>$value)
-{
-	$question_types[] = get_lang($value[1]);
-}
-$form->addElement('select', 'question_type', get_lang('QuestionType'), $question_types);
-*/
-
-
 // the question types (jquery form element)
 $form->addElement('hidden', 'question_type_hidden', get_lang('QuestionType'), array('id'=>'question_type_hidden'));
 $form->addElement('static','','<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.customselect.js" type="text/javascript"></script>');
@@ -52,7 +43,7 @@ $sql = "SELECT id,title,type,description, results_disabled FROM $tbl_exercices W
 $result = Database::query($sql);
 $exercises['-'] = '-'.get_lang('SelectExercice').'-';
 while ($row = Database :: fetch_array($result)) {
-	$exercises[$row['id']] = $row['title'];
+	$exercises[$row['id']] = cut($row['title'], EXERCISE_MAX_NAME_BREADCRUMB);
 }
 $form->addElement('select', 'exercice', get_lang('Exercice'), $exercises);
 
@@ -110,7 +101,7 @@ if ($form->validate()) {
 }
 ?>
 <script>
-var ddlObj1=$("#questiontypes").finalselect({id:"test",viewWidth:'260px', viewHeight:'150px', selectText:'<?php echo Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle; cursor:hand'))."&nbsp;&nbsp;<a href=\"#\"> ".get_lang('SelectQuestionType'); echo "</a>"; ?>',selectImage:'<?php echo api_get_path(WEB_IMG_PATH); ?>select.png', viewMouseoverColor: '#EFEFEF'});
+var ddlObj1=$("#questiontypes").finalselect({id:"test",viewWidth:'260px', viewHeight:'150px', selectText:'<?php echo Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle; cursor:hand'))."&nbsp;&nbsp;<a href=\"#\"> ".get_lang('SelectQuestionType'); echo "</a>"; ?>', viewMouseoverColor: '#EFEFEF'});
 $("#test-select").bind('click',function(){
 	$("#question_type_hidden").val(ddlObj1.getText());
 });

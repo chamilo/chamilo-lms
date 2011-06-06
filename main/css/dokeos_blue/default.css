@@ -36,7 +36,7 @@ body {
 	position: relative; /* to avoid the IE peekabo bug*/
 	margin: 0px auto;
 	margin-top: 10px;
-	width: 98%;
+	width: 96%;
 	padding: 0px 10px 10px 10px;
 	min-height: 320px;
 }
@@ -514,10 +514,10 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	height: 15px;
 	background-color: #4171B5;
 	color: #fff;
-	padding: 4px;
-	padding-left: 21px;
-	margin-bottom: 2px;
-	clear:right;
+	padding: 4px 0px 4px 10px;	
+	margin-bottom: 2px;	
+	width:99%;
+	float:left;
 }
 #header4 a {
 	color: #fff;

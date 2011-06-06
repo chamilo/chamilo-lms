@@ -198,8 +198,7 @@ a.invisible:link, a.invisible:visited {
 }
 .clear {
 	clear: both;
-	line-height:
- 0px;
+	line-height:0px;
 	height: 0;
 }
 
@@ -514,9 +513,9 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	height: 15px;
 	background-color: #975b5b;
 	color: #fff;
-	padding: 4px 0px 4px 21px;	
+	padding: 4px 0px 4px 10px;	
 	margin-bottom: 2px;	
-	width:98%;
+	width:99%;
 	float:left;
 }
 #header4 a {
@@ -571,7 +570,6 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	float: left;
 	margin-left:10px;
 }
-
 #footer a {
 	/*color:#fff;*/
 }

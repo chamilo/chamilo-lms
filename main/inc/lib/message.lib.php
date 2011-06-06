@@ -921,46 +921,35 @@ class MessageManager
 
 				$html .= '<div class="rounded_div" style="width:620px">';
 				    $items = count($topic['items']);
-				    $reply_label = ($items == 1) ? get_lang('Reply'): get_lang('Replies'); 
+				    $reply_label = ($items == 1) ? get_lang('Reply'): get_lang('Replies');
+				    $html .= '<table width="100%"><tr><td width="20px" valign="top">'; 
 				    $html .= Display::div(Display::tag('span', $items).$reply_label, array('class' =>'group_discussions_replies'));
-				        $topic['title'] = trim($topic['title']);
-				        
-				        if (empty($topic['title'])) {
-				            $topic['title'] = get_lang('Untitled');
-				        } 				
-				        $title = Display::url('<h2>'.Security::remove_XSS($topic['title']).'</h2>', 'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']);
-                                                
-                        $date = '';
-                        $link = '';
-						if ($topic['send_date']!=$topic['update_date']) {
-							if (!empty($topic['update_date']) && $topic['update_date'] != '0000-00-00 00:00:00' ) {
-								$date .= '<div class="message-group-date" > <i>'.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</i></div>';
-							}
-						} else {
-                            $date .= '<div class="message-group-date"> <i>'.get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</i></div>';
+				    $html .= '</td><td valign="top">';
+				    
+			        $topic['title'] = trim($topic['title']);
+			        
+			        if (empty($topic['title'])) {
+			            $topic['title'] = get_lang('Untitled');
+			        } 				
+			        $title = Display::url('<h2>'.Security::remove_XSS($topic['title']).'</h2>', 'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']);
+                                            
+                    $date = '';
+                    $link = '';
+					if ($topic['send_date']!=$topic['update_date']) {
+						if (!empty($topic['update_date']) && $topic['update_date'] != '0000-00-00 00:00:00' ) {
+							$date .= '<div class="message-group-date" > <i>'.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</i></div>';
 						}
-							
-						/*$link = '<div id="message-reply-link" style="margin-right:10px">
-								 <a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($_GET['items_page_nr']).'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
-
-						if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $topic['user_sender_id'] == $current_user_id) {
-							$link.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($_GET['items_page_nr']).'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
-						}
-						$link.=	'</div>';	
-						*/							
-						$image_path = UserManager::get_user_picture_path_by_id($topic['user_sender_id'], 'web', false, true);							
-						$image_repository = $image_path['dir'];
-						$existing_image = $image_path['file'];
-						$user_image = '<div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
-						$user = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a>';
-						
-						//$html.= '<div class="message-group-content">'.$user.$date.$topic['content'].$link.'</div>';
-						 
-						$html .= Display::div($title.cut($topic['content'], 350).$user_image.$user.$date.$link, array('class'=>'group_discussions_info'));
-						
-						//$html.= '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';
-					
-				
+					} else {
+                        $date .= '<div class="message-group-date"> <i>'.get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</i></div>';
+					}					
+					$image_path = UserManager::get_user_picture_path_by_id($topic['user_sender_id'], 'web', false, true);							
+					$image_repository = $image_path['dir'];
+					$existing_image = $image_path['file'];
+					$user = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a>';
+					$user_image = '<div class="clear"></div><div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
+					$user = '<div class="message-group-author">'.$user.'</div>';								 
+					$html .= Display::div($title.cut($topic['content'], 350).$user_image.$user.$date.$link, array('class'=>'group_discussions_info')).'</td></table>';						
+		
 				$html .= '</div>'; //rounded_div
 				
 				$array_html[] = array($html);

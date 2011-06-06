@@ -50,6 +50,11 @@ h5{
 h6 {
 }
 
+h1,h2,h3,h4,h5,h6 {
+	margin:0px;
+	padding:0px;
+}
+
 /* User portal */
 
 
@@ -463,7 +468,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 
 
 
-
 /* Message and Social  */
 
 .menulist li {
@@ -501,12 +505,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     margin: 8px;
     padding:5px;
     width:100%;
-}
-
-.message-group-author {
-    float:left;
-    width:30px;
-    margin:5px;
 }
 
 .message-group-content {
@@ -554,6 +552,10 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 .group_discussions_replies span {
     display: block;
     font-size: 2em;
+}
+
+.group_discussions_info {
+	width:100%;
 }
 
 .group_social_grid {
@@ -1047,11 +1049,12 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 .message-group-title {
     font-size:120%;
 }
-.message-group-author {
-    margin:5px 0px 5px 0px;
+.message-group-author {	
+    margin:5px 5px 5px 0px;    
+    float:left;
 }
+
 .message-group-content {
-    line-height:150%;
     margin: 5px 0px 8px 0px;
 }
 .message-group-date {
@@ -1569,7 +1572,7 @@ div.image-social-content center.friend {
     color:#666666;
 }
 .social-groups-image {
-    border: 2px solid #cac9c9;
+    /* border: 2px solid #cac9c9; */
 }
 .social-groups-home-title {
     border-bottom:1pt dotted #000;
@@ -1624,12 +1627,10 @@ div.image-social-content center.friend {
     /* text-decoration: underline; */
 }
 
-
 #social-forum-main-title {
     font-size:130%;
     font-weight:bold;
     padding: 0px 8px 0px 8px;
-
 }
 
 #social-forum-title {
@@ -1651,7 +1652,6 @@ div.image-social-content center.friend {
     font-weight:bold;
 }
 
-
 #social-post {
     -moz-border-radius-bottomleft:5px;
     -moz-border-radius-bottomright:5px;
@@ -1663,7 +1663,113 @@ div.image-social-content center.friend {
 }
 
 
+/* GROUP TOOL */
 
+#group_description {
+    margin: 10px 0px 10px 0px;
+}
+
+#group_privacy {
+    margin: 10px 0px 10px 0px;
+}
+
+#group_permissions {
+    -moz-background-clip:border;
+    -moz-background-inline-policy:continuous;
+    -moz-background-origin:padding;
+    -moz-border-radius-bottomleft:8px;
+    -moz-border-radius-bottomright:8px;
+    -moz-border-radius-topleft:8px;
+    -moz-border-radius-topright:8px;
+    background:#EEE none repeat scroll 0 0;
+    margin: 20px 0px 20px 0px;
+}
+
+#group_permissions ul {
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+    margin:0;
+    padding:0;
+}
+
+#group_permissions ul li {
+    margin: 10px 0px 10px 5px;
+}
+
+/* Groups boxes */
+
+.groups_grid_container {
+    width:100%;
+}
+.groups_grid_item {
+    width:80px;
+    float:left;
+    margin:5px;
+}
+.groups_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.groups_grid_element_1 { width:100px; float:left; text-align:left;  margin-bottom:5px;}
+.groups_grid_element_2 { width:150px; float:left;}
+
+/*MY GROUPS*/
+
+.mygroups_grid_item {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 11px 11px 11px 11px;
+    
+    -webkit-border-radius: 11px 11px 11px 11px;
+    -opera-border-radius: 11px 11px 11px 11px;
+    -moz-border-radius: 11px 11px 11px 11px;
+    
+    box-shadow: 0 4px 18px #C8C8C8;
+    -webkit-box-shadow: 0 4px 18px #C8C8C8;
+    -opera-box-shadow: 0 4px 18px #C8C8C8;
+    -moz-box-shadow: 0 4px 18px #C8C8C8;
+    
+    float: left;
+    height: 120px;
+    margin: 0 8px 15px 15px;
+    padding: 16px 12px 5px;
+    width:600px;
+}
+
+.box_description_group_member {
+    color: #999999;
+    font-size: 10px;
+}
+
+.mygroups_grid_element_1 {
+    width:600px;
+    height:100px;    
+    overflow:hidden;
+}
+
+.box_description_group_title h2 {
+    margin-bottom:4px;
+    margin-top: 0px;
+}
+
+.box_description_group_title {
+    float:right;
+    width:530px;
+}
+.box_description_group_content {
+    float:right;
+    width:530px;
+    margin-top:5px;
+    /* height:45px;*/
+    font-family:Verdana, Geneva, sans-serif;
+    font-size:12px;
+    color:#666666;
+}
+.box_description_group_actions {
+    float:right;
+    width:530px;
+    text-align:right;
+    margin-top:4px;
+    margin-right:4px;
+}
 
 input {
     -moz-border-radius:5px;    

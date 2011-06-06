@@ -252,8 +252,6 @@ class learnpath {
                         $oItem->set_prevent_reinit($this->prevent_reinit);
                         // Don't use reference here as the next loop will make the pointed object change.
 
-                        error_log('my_item_id->'.$my_item_id);
-
                         $this->items[$my_item_id] = $oItem;
                         $this->refs_list[$oItem->ref] = $my_item_id;
                         if ($this->debug > 2) {

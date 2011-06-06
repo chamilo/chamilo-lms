@@ -210,12 +210,15 @@ class GlossaryManager {
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 		$t_item_propery = Database :: get_course_table(TABLE_ITEM_PROPERTY);
         if (empty($glossary_id)) { return false; }
-		$sql = "SELECT 	g.glossary_id 		AS glossary_id,
-						g.name 				AS glossary_title,
-						g.description 		AS glossary_comment,
-						g.display_order		AS glossary_display_order, session_id 
-				   FROM $t_glossary g
-				   WHERE g.glossary_id = '".intval($glossary_id)."' ";
+		$sql = "SELECT 	g.glossary_id 		as glossary_id,
+						g.name 				as glossary_title,
+						g.description 		as glossary_comment,
+						g.display_order		as glossary_display_order,
+						ip.insert_date      as insert_date,
+                        ip.lastedit_date    as update_date,						 
+						g.session_id 
+				   FROM $t_glossary g, $t_item_propery ip
+                   WHERE g.glossary_id = ip.ref AND tool = '".TOOL_GLOSSARY."' AND g.glossary_id = '".intval($glossary_id)."' ";
 		$result = Database::query($sql);
 		if ($result === false || Database::num_rows($result) != 1) {
 			return false;
@@ -277,14 +280,15 @@ class GlossaryManager {
 		echo '</div>';
 		if (!$_SESSION['glossary_view'] OR $_SESSION['glossary_view'] == 'table') {
 			$table = new SortableTable('glossary', array('GlossaryManager','get_number_glossary_terms'), array('GlossaryManager','get_glossary_data'),0);
-			$table->set_header(0, get_lang('DisplayOrder'), true);
-			$table->set_header(1, get_lang('TermName'), true);
-			$table->set_header(2, get_lang('TermDefinition'), true);
-			$table->set_header(3, get_lang('CreationDate'), false);
-			$table->set_header(4, get_lang('UpdateDate'), false);
+			//$table->set_header(0, '', false);
+			$table->set_header(0, get_lang('TermName'), true);
+			$table->set_header(1, get_lang('TermDefinition'), true);			
 			if (api_is_allowed_to_edit(null,true)) {
-				$table->set_header(5, get_lang('Actions'), false, 'width=90px');
-				$table->set_column_filter(5, array('GlossaryManager','actions_filter'));
+			    
+			    /*$table->set_header(2, get_lang('CreationDate'), false);
+                $table->set_header(3, get_lang('UpdateDate'), false);*/            
+				$table->set_header(2, get_lang('Actions'), false, 'width=90px');
+				$table->set_column_filter(2, array('GlossaryManager','actions_filter'));
 			}
 			$table->display();
 		}
@@ -300,12 +304,13 @@ class GlossaryManager {
 	 * @version januari 2009, dokeos 1.8.6
 	 */
 	function display_glossary_list() {
-		$glossary_data = GlossaryManager::get_glossary_data(0,1000,0,ASC);
+		$glossary_data = self::get_glossary_data(0,1000,0,ASC);
 		foreach($glossary_data as $key=>$glossary_item) {
-			echo '<div class="sectiontitle">'.$glossary_item[1].'</div>';
-			echo '<div class="sectioncomment">'.$glossary_item[2].'</div>';
+		    
+			echo '<div class="sectiontitle">'.$glossary_item[0].'</div>';
+			echo '<div class="sectioncomment">'.$glossary_item[1].'</div>';
 			if (api_is_allowed_to_edit(null,true)) {
-				echo '<div>'.GlossaryManager::actions_filter($glossary_item[5], '',$glossary_item).'</div>';
+				echo '<div>'.self::actions_filter($glossary_item[2], '',$glossary_item).'</div>';
 			}
 		}
 		return true;
@@ -324,8 +329,7 @@ class GlossaryManager {
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 		$session_id = intval($session_id);
 		$sql_filter = api_get_session_condition($session_id, true, true);
-		$sql = "SELECT count(glossary_id) as total FROM $t_glossary ".
-		          " WHERE 1=1 $sql_filter";
+		$sql = "SELECT count(glossary_id) as total FROM $t_glossary WHERE 1=1 $sql_filter";
 		$res = Database::query($sql);
 		if ($res === false) { return 0; }
 		$obj = Database::fetch_object($res);
@@ -352,9 +356,9 @@ class GlossaryManager {
 		$t_item_propery = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 		if (api_is_allowed_to_edit(null,true)) {
-			$col5 = ", glossary.glossary_id	as col5";
+			$col2 = " glossary.glossary_id	as col2, ";
 		} else {
-			$col5 = " ";
+			$col2 = " ";
 		}
 
 		//condition for the session
@@ -367,52 +371,42 @@ class GlossaryManager {
         $from               = intval($from);
         $number_of_items    = intval($number_of_items);
         
-		$sql = "SELECT
-					glossary.display_order 	as col0,
-					glossary.name 			as col1,
-					glossary.description 	as col2,
-					ip.insert_date			as col3,
-					ip.lastedit_date		as col4
-					$col5,
-					glossary.session_id as session_id
+		$sql = "SELECT glossary.name 			as col0,
+					   glossary.description 	as col1,				
+					   $col2
+					   glossary.session_id as session_id
 				FROM $t_glossary glossary, $t_item_propery ip
 				WHERE glossary.glossary_id = ip.ref
-				AND tool = '".TOOL_GLOSSARY."' $condition_session";
-		$sql .= " ORDER BY col$column $direction ";
-		$sql .= " LIMIT $from,$number_of_items";
-        
-		$res = Database::query($sql);
+				AND tool = '".TOOL_GLOSSARY."' $condition_session
+		        ORDER BY col$column $direction 
+		        LIMIT $from,$number_of_items";
+        $res = Database::query($sql);
 
 		$return = array();
 		$array = array();
 		while ($data = Database::fetch_array($res)) {
-
-			$array[0] = $data[0];
-
 			//validacion when belongs to a session
 			$session_img = api_get_session_image($data['session_id'], $_user['status']);
-			$array[1] = $data[1] . $session_img;
+			$array[0] = $data[0] . $session_img;
 
 			if (!$_SESSION['glossary_view'] || $_SESSION['glossary_view'] == 'table') {
-				$array[2] = str_replace(array('<p>','</p>'),array('','<br />'),$data[2]);
+				$array[1] = str_replace(array('<p>','</p>'),array('','<br />'),$data[1]);
 			} else {
+				$array[1] = $data[1];
+			}
+
+			if (api_is_allowed_to_edit(null,true)) {			    	    
+			    // Date treatment for timezones
+			    /*if (!empty($data[2])  && $data[2] != '0000-00-00 00:00:00:') {
+                    $array[2] = api_get_local_time($data[2], null, date_default_timezone_get());
+			    }
+			    if (!empty($data[3])  && $data[3] != '0000-00-00 00:00:00:') {
+                    $array[3] = api_get_local_time($data[3], null, date_default_timezone_get());
+			    }*/           
 				$array[2] = $data[2];
 			}
-
-			$array[3] = $data[3];
-			$array[4] = $data[4];
-
-			if (api_is_allowed_to_edit(null,true)) {
-				$array[5] = $data[5];
-			}
-
-			// Date treatment for timezones
-			$array[3] = api_get_local_time($array[3], null, date_default_timezone_get());
-			$array[4] = api_get_local_time($array[4], null, date_default_timezone_get());
-
 			$return[] = $array;
 		}
-
 		return $return;
 	}
 
@@ -428,6 +422,7 @@ class GlossaryManager {
 	 * @version januari 2009, dokeos 1.8.6
 	 */
 	function actions_filter($glossary_id, $url_params, $row) {
+        /*	    
 		if (!$_SESSION['max_glossary_display'] OR $_SESSION['max_glossary_display'] == '') {
 			$_SESSION['max_glossary_display'] = GlossaryManager::get_max_glossary_item();
 		}
@@ -437,20 +432,19 @@ class GlossaryManager {
 				$return .= '<a href="'.api_get_self().'?action=moveup&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'">'.Display::return_icon('up.png', get_lang('Up'),'',22).'</a>';
 			} else {
 				$return .= Display::return_icon('up_na.png','&nbsp;','',22);
-			}
-			
+			}			
 			if ($row[0] < $_SESSION['max_glossary_display']) {
 				$return .= '<a href="'.api_get_self().'?action=movedown&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'">'.Display::return_icon('down.png',get_lang('Down'),'',22).'</a>';
 			} else {
 				$return .= Display::return_icon('down_na.png','&nbsp;','',22);
-
 			}
-		}
-		$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'&msg=edit">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
-		$glossary_data = GlossaryManager::get_glossary_information($row[5]);		
+		}*/
+		$glossary_id = $row[2];
+		$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$glossary_id.'&'.api_get_cidreq().'&msg=edit">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
+		$glossary_data = GlossaryManager::get_glossary_information($glossary_id);		
 		$glossary_term = $glossary_data['glossary_title'];
 
-		$return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>';
+		$return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>';
 		
 		if (api_is_allowed_to_edit(null, true)) {
 		    if ($glossary_data['session_id'] != api_get_session_id()) {

@@ -96,11 +96,35 @@ if (api_is_allowed_to_edit(null, true)) {
         $form->addElement('text', 'glossary_title', get_lang('TermName'),array('size'=>'100'));
         //$form->applyFilter('glossary_title', 'html_filter');
         $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '100%', 'Height' => '300'));
+        
+        
+        
+        $element = $form->addElement('text', 'insert_date', get_lang('CreationDate'),array('size'=>'100'));
+        $element ->freeze();        
+        $element = $form->addElement('text', 'update_date', get_lang('UpdateDate'),array('size'=>'100'));
+        $element ->freeze();
+       
         $form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermUpdateButton'), 'class="save"');
+        
+        
 
         // setting the defaults
-        $defaults = GlossaryManager::get_glossary_information(Security::remove_XSS($_GET['glossary_id']));
-        $form->setDefaults($defaults);
+        $glossary_data = GlossaryManager::get_glossary_information($_GET['glossary_id']);
+        
+        // Date treatment for timezones
+        if (!empty($glossary_data['insert_date'])  && $glossary_data['insert_date'] != '0000-00-00 00:00:00:') {
+            $glossary_data['insert_date'] = api_get_local_time($glossary_data['insert_date'] , null, date_default_timezone_get());
+        } else {
+            $glossary_data['insert_date']  = '';
+        }
+        
+        if (!empty($glossary_data['update_date'])  && $glossary_data['update_date'] != '0000-00-00 00:00:00:') {
+            $glossary_data['update_date'] = api_get_local_time($glossary_data['update_date'] , null, date_default_timezone_get());
+        } else {
+            $glossary_data['update_date']  = '';
+        }
+        
+        $form->setDefaults($glossary_data);
 
         // setting the rules
         $form->addRule('glossary_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
@@ -109,8 +133,8 @@ if (api_is_allowed_to_edit(null, true)) {
         if ($form->validate()) {
             $check = Security::check_token('post');
             if ($check) {
-                   $values = $form->exportValues();
-                   GlossaryManager::update_glossary($values);
+               $values = $form->exportValues();
+               GlossaryManager::update_glossary($values);
             }
             Security::clear_token();
             GlossaryManager::display_glossary();

@@ -1224,6 +1224,27 @@ a.unread {
 
 /*SOCIAL TOOL*/
 
+.clip-wrapper {
+	position:relative;
+	width:100px;
+	height:100px;
+	top:-1px;
+	left:-1px;
+}
+.clip_vertical {
+	position:absolute;
+	clip:rect(0px 218px 155px 0px);
+	top:-42px;
+	left:-32px;
+}
+
+.clip_horizontal {
+    position:absolute;
+    clip:rect(0px 218px 155px 0px);
+    top:-25px;
+    left:-48px;
+}
+
 .social-plugin-item {
     float:left;
     width:50%;
@@ -1314,7 +1335,7 @@ div.image-social-content center.friend {
     height:auto;
     overflow:hidden;
     float:left;
-     width:700px;
+    width:700px;
 }
 
 .social-content-image {
@@ -1333,7 +1354,6 @@ div.image-social-content center.friend {
     width:175px;
 }
 
-
 .social-content-description {
     background:#ECE9D8;
 }
@@ -1346,19 +1366,22 @@ div.image-social-content center.friend {
     border-right:1px #9DACBF solid;
     border-bottom:1px #9DACBF solid;
 }
+.social-profile-info {
+	width:100%;
+}
 .social-profile-info dt {
     text-align:left;
     clear:left;
     float:left;
-    width:80px;
+    width:120px;
 }
 .social-profile-info dd {
     padding:1px 0px 3px 0px;
     float:left;
     margin:0;
     display : block;
-    padding-left:10px;
-    width:200px;
+    padding-left:5px;
+    width:150px;
 }
 
 /* general layout of the profile page */
@@ -1617,13 +1640,13 @@ div.image-social-content center.friend {
 }
 
 .hidden_message {
-    background-color:#5A5A5A;
+    background-color:#5A5A5A;    
     padding:2px;
     margin:0px;
 }
 
 .hidden_message a {
-    color:#fff;
+    color:#fff !important;
     /* text-decoration: underline; */
 }
 

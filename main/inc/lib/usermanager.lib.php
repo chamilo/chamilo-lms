@@ -2351,7 +2351,9 @@ class UserManager
 				$dimension = api_getimagesize($picture['file']);
 				$margin = (($height - $dimension[1]) / 2);
 				//@ todo the padding-top should not be here
-				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension[0].'px; height:'.$dimension[1].'px;" ';
+				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension[0].'px; height:'.$dimension[1].'px;" ';				
+				$picture['original_height'] = $dimension[0];
+				$picture['original_width']  = $dimension[1];
 			}
 		} else {
 			//$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;

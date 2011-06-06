@@ -2873,8 +2873,7 @@ span.form_required  {
 /* input values to crop the image: top, right, bottom, left */
 
 .online_grid_element_0 img{
-     width: 200px;
-     margin: -10px 0 0 -50px;
+     /* width: 200px; */     
       /* height: 150px; */ 
 }
 

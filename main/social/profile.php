@@ -442,7 +442,7 @@ if ($show_full_profile) {
 			$url_open  = '<a href="groups.php?id='.$id.'">';
 			$url_close = '</a>';
 			$icon = '';
-			$name = cut($result['name'],20,true);
+			$name = cut($result['name'],CUT_GROUP_NAME,true);
 			if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
 				$icon = Display::return_icon('social_group_admin.png', get_lang('Admin'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
 			} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {

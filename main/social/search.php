@@ -48,18 +48,25 @@ echo '<div id="social-content">';
 				if (is_array($users) && count($users)> 0) {					
 					echo '<h2>'.get_lang('Users').'</h2>';			
 					foreach($users as $user) {
+                        $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
 					    
 					    if (empty($user['picture_uri'])) {
-                            $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg'; 
+                            $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
+                            $img = Display::url('<img title class="social-home-anonymous-online" src="'.$picture['file'].'">', $url); 
                         } else {
-                            $picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'], 80, USER_IMAGE_SIZE_ORIGINAL );    
-                        }
-						//$picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'],'', USER_IMAGE_SIZE_ORIGINAL);
-						$url_open = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'].'">';
-						$url_close ='</a>';
-						$img = $url_open.'<img src="'.$picture['file'].'" />'.$url_close;
-						$user['firstname'] = $url_open.$user['firstname'].$url_close;
-						$user['lastname'] = $url_open.$user['lastname']. $url_close;						
+                            $picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'], 80, USER_IMAGE_SIZE_ORIGINAL );
+                            
+                            $img = '<img src="'.$picture['file'].'">';                        
+                            $clip = 'clip_vertical';                    
+                            if ($picture['original_height'] > $picture['original_width']) {
+                                $clip = 'clip_horizontal';    
+                            }                    
+                            $img = Display::url(Display::div(Display::div($img, array('class'=>$clip)), array('class'=>'clip-wrapper')) , $url);
+                        }                           
+              
+						$user['firstname'] = Display::url($user['firstname'], $url);
+						$user['lastname'] = Display::url($user['lastname'], $url);
+										
 						$results[] = array($img, $user['firstname'], $user['lastname'], $user['tag']);			
 					}					
 					
@@ -140,16 +147,13 @@ echo '<div id="social-content">';
         				}
 						$item_4 = '<div class="box_description_group_tags" >'.$tags.'</div>';	
         				$item_5 = '<div class="box_description_group_actions" >'.$url_open.get_lang('SeeMore').$url_close.'</div>';			
-					
-
-                        /*$join_url = '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('JoinGroup'), array('hspace'=>'6')).''.get_lang('JoinGroup').'</a> ';                
-        				$item_4 = '<div class="box_description_group_actions" >'.$join_url. $url_open.get_lang('SeeMore').$url_close.'</div>';*/				
+				
         				$grid_item_2 = $item_0.$item_1.$item_2.$item_3.$item_4.$item_5;
-        				$grid_groups[]= array('',$grid_item_2);			
-						//$grid_groups[]= array('', $data);									
+        				$grid_groups[]= array('',$grid_item_2);
 					}		
 				}
-				Display::display_sortable_grid('mygroups', array(), $grid_groups, array('hide_navigation'=>true, 'per_page' => 5), $query_vars,  false, array(true,true,true,true,true));
+				$visibility = array(true,true,true,true,true);
+				Display::display_sortable_grid('mygroups', array(), $grid_groups, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false, $visibility);
 			}		
 		}					
 	echo '</div>';

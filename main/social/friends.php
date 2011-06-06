@@ -61,7 +61,7 @@ function show_icon_delete(element_html) {
 	elem_id=$(element_html).attr("id");
 	id_elem=elem_id.split("_");
 	ident="#img_"+id_elem[1];
-	$(ident).attr("src","../img/delete.gif");
+	$(ident).attr("src","../img/delete.png");
 	$(ident).attr("alt","'.get_lang('Delete', '').'");
 	$(ident).attr("title","'.get_lang('Delete', '').'");
 }
@@ -155,7 +155,7 @@ if (count($friends) == 0 ) {
 								$user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
 								$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92);
 								$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
-								$friend_html.='<span><a href="profile.php?u='.$friend['friend_user_id'].'"><center><img src="'.$friends_profile['file'].'" style="height:60px;border:3pt solid #eee" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" /></center></a></span>';
+								$friend_html.='<span><a href="profile.php?u='.$friend['friend_user_id'].'"><center><img src="'.$friends_profile['file'].'" style="height:60px;" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" /></center></a></span>';
 								$friend_html.='<img onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].' src="../img/blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';				
 							}
 							$j++;

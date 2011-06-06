@@ -45,8 +45,10 @@ class SystemAnnouncementManager
 				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}
-    $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group "
-            ." WHERE group_id in $groups_string) ";
+    if (count($groups) > 0 ) {
+      $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group "
+        ." WHERE group_id in $groups_string) ";
+    }
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
 		
 		$announcements = Database::query($sql);

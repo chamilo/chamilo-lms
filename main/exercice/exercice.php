@@ -807,7 +807,7 @@ if ($show == 'test') {
                     } else {
                         $title = $row['title'];
                     }
-                    $url = '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>'.$lp_blocked;                    
+                    $url = '<a href="exercise_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>'.$lp_blocked;                    
                     $item =  Display::tag('td', $url.' '.$session_img);  
                     $exid = $row['id'];
     
@@ -866,12 +866,12 @@ if ($show == 'test') {
                     // if time is actived show link to exercise
                     if ($time_limits) {                 
                         if ($is_actived_time) {
-                            $url =  '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';
+                            $url =  '<a href="exercise_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';
                         } else {
                             $url = $row['title'];                            
                         }                       
                     } else {
-                        $url = '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';                       
+                        $url = '<a href="exercise_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';                       
                     }                   
                     
                     //Link of the exercise             

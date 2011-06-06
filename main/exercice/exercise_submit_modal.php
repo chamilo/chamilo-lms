@@ -510,7 +510,7 @@ echo '<script>
 		  		self.parent.window.location.href = "exercise_result.php?take_session=1&exerciseId='.$exerciseId.'&questionNum="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'"; 
 		   		self.parent.tb_remove();  	
 		  	} else {
-		  		self.parent.window.location.href = "exercice_submit.php?tryagain=1&exerciseId='.$exerciseId.'&questionNum="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'"; 
+		  		self.parent.window.location.href = "exercise_submit.php?tryagain=1&exerciseId='.$exerciseId.'&questionNum="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'"; 
 		   		self.parent.tb_remove();
 		  	}
 		}
@@ -568,7 +568,7 @@ if ($links!='') {
 } else {
 	$questionNum++;
 	echo '<script>
-			self.parent.window.location.href = "exercice_submit.php?exerciseId='.$exerciseId.'&questionNum='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'";	  		 	
+			self.parent.window.location.href = "exercise_submit.php?exerciseId='.$exerciseId.'&questionNum='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'";	  		 	
    			//self.parent.tb_remove();	  	
  	 	</script>';	
 }

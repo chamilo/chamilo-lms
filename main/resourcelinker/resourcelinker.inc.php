@@ -270,7 +270,7 @@ function display_addedresource_link($type, $id, $style='')
 			$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['dbName']);
 			$result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE id=$id");
 			$myrow = Database::fetch_array($result);
-			echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercice_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
+			echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case 'Forum':
 			$TBL_FORUMS = Database::get_course_table(TABLE_FORUM,$_course['dbName']);
@@ -569,7 +569,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			}
 			else
 			{
-				echo "<a href=\"../exercice/exercice_submit.php?origin=$origin&exerciseId=".$myrow["id"]."\" class='$completed' target='_blank'>".shorten($myrow["title"],($length-3*$level))."</a>";
+				echo "<a href=\"../exercice/exercise_submit.php?origin=$origin&exerciseId=".$myrow["id"]."\" class='$completed' target='_blank'>".shorten($myrow["title"],($length-3*$level))."</a>";
 			}
 			break;
 
@@ -1200,7 +1200,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			}
 			else
 			{
-				$link .= "../exercice/exercice_submit.php?origin=$origin&exerciseId=".$myrow["id"];
+				$link .= "../exercice/exercise_submit.php?origin=$origin&exerciseId=".$myrow["id"];
 			}
 			break;
 

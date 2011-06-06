@@ -236,7 +236,7 @@ function display_addedresource_link($type, $id, $style = '') {
             $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['dbName']);
             $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE id=$id");
             $myrow = Database::fetch_array($result);
-            echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercice_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
+            echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
             break;
         case 'Forum':
             //incredibly deprecated (2011-02-09)
@@ -515,7 +515,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                     }
                 }
             } else {
-                echo "<a href=\"../exercice/exercice_submit.php?origin=$origin&exerciseId=".$myrow['id']."\" class='$completed' target='_blank'>".shorten($myrow['title'], ($length-3*$level))."</a>";
+                echo "<a href=\"../exercice/exercise_submit.php?origin=$origin&exerciseId=".$myrow['id']."\" class='$completed' target='_blank'>".shorten($myrow['title'], ($length-3*$level))."</a>";
             }
             break;
 
@@ -1092,7 +1092,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
             if ($builder != 'builder') {
                 $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Exercise&origin=$origin&exerciseId=".$myrow["id"]."#$id_in_path";
             } else {
-                $link .= "../exercice/exercice_submit.php?origin=$origin&exerciseId=".$myrow["id"];
+                $link .= "../exercice/exercise_submit.php?origin=$origin&exerciseId=".$myrow["id"];
             }
             break;
 
@@ -1511,7 +1511,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
             $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['database']);
             $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE id=$id");
             $myrow = Database::fetch_array($result);
-            $output = '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercice_submit.php?exerciseId='.$myrow['id'].'"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
+            $output = '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
             break;
         case TOOL_FORUM:
             $TBL_FORUMS = Database::get_course_table(TABLE_FORUM,$_course['database']);
@@ -1625,7 +1625,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
                 $myrow=Database::fetch_array($result);
 
                 if ($row_item['title'] != '') { $myrow['title'] = $row_item['title']; }
-                $link .= $main_dir_path.'exercice/exercice_submit.php?lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
+                $link .= $main_dir_path.'exercice/exercise_submit.php?lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
             }
             break;
 

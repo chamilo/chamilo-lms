@@ -97,14 +97,6 @@ if ($show_learn_path) {
 }
 //Base CSS
 echo '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
-
-//Base chamilo CSS
-if (in_array(api_get_visual_theme(), array('chamilo','chamilo_red','chamilo_blue','chamilo_orange','chamilo_green','chamilo_electric_blue'))) {
-    echo '@import "'.api_get_path(WEB_CSS_PATH).'base_chamilo.css";';
-} else {
-    echo '@import "'.api_get_path(WEB_CSS_PATH).'base_classic.css";';
-}
-
 //Default CSS
 echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css";';
 //Course CSS

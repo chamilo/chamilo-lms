@@ -1,6 +1,9 @@
 /*****************************************************
  *  MAIN  - CHAMILO CSS
  *****************************************************/
+ 
+/* Adding default style for the chamilo_X themes */
+@import url('../base_chamilo.css');
 
 /* the following for regular <a> elements */
 a:link {

@@ -67,7 +67,12 @@ if (!empty($group_id)) {
 }
 
 $chat_size_old = intval($_POST['chat_size_old']);
-$chat_size_new = filesize($chat_path.$basename_chat.'.log.html');
+
+$file = $chat_path.$basename_chat.'.log.html';
+$chat_size_new = 0;
+if (file_exists($file)) {
+    $chat_size_new = filesize($file);
+}
 
 $sql = "SELECT user_id FROM $tbl_chat_connected WHERE user_id='".$_user['user_id']."' $extra_condition";
 $result = Database::query($sql);

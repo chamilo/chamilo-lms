@@ -78,10 +78,10 @@ class Diagnoser
             $status = $writable ? self :: STATUS_OK : self :: STATUS_ERROR;
             $array[] = $this->build_setting($status, '[FILES]', get_lang('IsWritable') . ': ' . $folder, 'http://be2.php.net/manual/en/function.is-writable.php', $writable, 1, 'yes_no', get_lang('DirectoryMustBeWritable'));
         }
-
-        $exists = ! file_exists(api_get_path(SYS_PATH) . '/install');
-        $status = $exists ? self :: STATUS_WARNING : self :: STATUS_OK;
-        $array[] = $this->build_setting($status, '[FILES]', get_lang('DirectoryExists') . ': /install', 'http://be2.php.net/file_exists', $writable, 0, 'yes_no', get_lang('DirectoryShouldBeRemoved'));
+        
+        $exists = file_exists(api_get_path(SYS_CODE_PATH).'install');        
+        $status = $exists ? self :: STATUS_WARNING : self :: STATUS_OK;         
+        $array[] = $this->build_setting($status, '[FILES]', get_lang('DirectoryExists') . ': /install', 'http://be2.php.net/file_exists', $exists, 0, 'yes_no', get_lang('DirectoryShouldBeRemoved'));
 
         return $array;
     }
@@ -125,7 +125,7 @@ class Diagnoser
         $array[] = $this->build_setting($status, '[INI]', 'register_globals', 'http://www.php.net/manual/en/ini.core.php#ini.register-globals', $setting, $req_setting, 'on_off', get_lang('RegisterGlobalsInfo'));
 
         $setting = ini_get('short_open_tag');
-        $req_setting = 1;
+        $req_setting = 0;
         $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
         $array[] = $this->build_setting($status, '[INI]', 'short_open_tag', 'http://www.php.net/manual/en/ini.core.php#ini.short-open-tag', $setting, $req_setting, 'on_off', get_lang('ShortOpenTagInfo'));
 

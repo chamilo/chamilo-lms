@@ -297,7 +297,7 @@ if ($show != 'result') {
 		$interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
 	    $objExerciseTmp = new Exercise();        
         if ($objExerciseTmp->read($exerciseId)) {
-            $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exerciseId, "name" => cut($objExerciseTmp->exercise, EXERCISE_MAX_NAME_BREADCRUMB));    
+            $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exerciseId, "name" => $objExerciseTmp->name);    
         }
 	} else {
 		$nameTools = get_lang('YourScore');
@@ -792,9 +792,8 @@ if ($show == 'test') {
                         $lp_blocked = Display::tag('font', '<i>'.get_lang('AddedToALP').'</i>', array('style'=>'color:grey'));
                     }                    
                                     
-                    //Showing exercise title
-                    $row['title'] = text_filter($row['title']);
-                    //echo Display::tag('h1',$row['title']);                             
+                    //Showing exercise title                    
+                    $row['title'] = text_filter(cut($row['title'], EXERCISE_MAX_NAME_SIZE));
                      
                     if ($session_id == $row['session_id']) {
                         //Settings                                                                
@@ -861,7 +860,7 @@ if ($show == 'test') {
                         
                 } else {                     
                     // --- Student only
-                    $row['title'] = text_filter($row['title']);    
+                    $row['title'] = text_filter(cut($row['title'], EXERCISE_MAX_NAME_SIZE));  
                     
                     // if time is actived show link to exercise
                     if ($time_limits) {                 
@@ -966,8 +965,7 @@ if ($show == 'test') {
                     
                     if (empty($num)) {
                         $num = '';
-                    }
-                        
+                    }                        
                     $item .=  Display::tag('td', $attempt_text);
                                      
                     //See results
@@ -1010,7 +1008,7 @@ if ($show == 'test') {
     
     $nbrActiveTests = 0;
     if (is_array($attribute['path'])) {
-        while (list ($key, $path) = each($attribute['path'])) {
+        while (list($key, $path) = each($attribute['path'])) {
             $item = '';
             list ($a, $vis) = each($attribute['visibility']);
             if (strcmp($vis, "1") == 0) {

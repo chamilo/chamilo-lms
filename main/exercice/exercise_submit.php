@@ -444,7 +444,7 @@ if (!empty ($gradebook) && $gradebook == 'view') {
 }
 
 $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook",	"name" => get_lang('Exercices'));
-$interbreadcrumb[] = array ("url" => "#","name" => cut($objExercise->selectTitle(), EXERCISE_MAX_NAME_BREADCRUMB));
+$interbreadcrumb[] = array ("url" => "#","name" => $objExercise->name);
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     //$htmlHeadXtra[] = $objExercise->show_lp_javascript();    

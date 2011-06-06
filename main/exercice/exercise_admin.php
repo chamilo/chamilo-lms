@@ -180,7 +180,7 @@ if ($form->validate()) {
 	}
 	$nameTools = get_lang('ExerciseManagement');
 	$interbreadcrumb[] = array("url"=>'exercice.php', 'name'=> get_lang('Exercices'));
-    $interbreadcrumb[] = array("url"=>"admin.php?exerciseId=".$objExercise->id, "name" => cut($objExercise->exercise, EXERCISE_MAX_NAME_BREADCRUMB));
+    $interbreadcrumb[] = array("url"=>"admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
 	
 	Display::display_header($nameTools,get_lang('Exercise'));
 	

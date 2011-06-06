@@ -43,7 +43,7 @@ $sql = "SELECT id,title,type,description, results_disabled FROM $tbl_exercices W
 $result = Database::query($sql);
 $exercises['-'] = '-'.get_lang('SelectExercice').'-';
 while ($row = Database :: fetch_array($result)) {
-	$exercises[$row['id']] = cut($row['title'], EXERCISE_MAX_NAME_BREADCRUMB);
+	$exercises[$row['id']] = cut($row['title'], EXERCISE_MAX_NAME_SIZE);
 }
 $form->addElement('select', 'exercice', get_lang('Exercice'), $exercises);
 

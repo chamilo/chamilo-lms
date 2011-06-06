@@ -259,9 +259,9 @@ if (!empty($gradebook) && $gradebook=='view') {
 
 $interbreadcrumb[] = array("url" => "exercice.php","name" => get_lang('Exercices'));
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion']) ) {
-    $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => cut($objExercise->exercise, EXERCISE_MAX_NAME_BREADCRUMB));
+    $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
 } else {
-    $interbreadcrumb[] = array("url" => "#", "name" => cut($objExercise->exercise, EXERCISE_MAX_NAME_BREADCRUMB));
+    $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 }
 
 // shows a link to go back to the question pool

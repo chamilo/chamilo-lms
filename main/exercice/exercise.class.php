@@ -16,7 +16,7 @@ define('EXERCISE_FEEDBACK_TYPE_END',        0);
 define('EXERCISE_FEEDBACK_TYPE_DIRECT',     1);
 define('EXERCISE_FEEDBACK_TYPE_EXAM',       2);
 
-define('EXERCISE_MAX_NAME_BREADCRUMB',     60);
+define('EXERCISE_MAX_NAME_SIZE',            80);
 
 $debug = 0; //All exercise scripts should depend in this debug variable
 
@@ -98,6 +98,7 @@ class Exercise {
 		if ($object=Database::fetch_object($result)) {
 			$this->id				= $id;
 			$this->exercise			= $object->title;
+			$this->name             = cut($object->title, EXERCISE_MAX_NAME_SIZE);
 			$this->description		= $object->description;
 			$this->sound			= $object->sound;
 			$this->type				= $object->type;

@@ -2977,11 +2977,17 @@ span.form_required  {
     overflow: hidden;
 }
 /* input values to crop the image: top, right, bottom, left */
-.online_grid_element_0 img{
+.social-home-users-online {
+     width: 200px;
+     margin: -28px 0 0 -50px;
+      /* height: 150px; */ 
+}
+.social-home-anonymous-online {
      width: 200px;
      margin: -10px 0 0 -50px;
       /* height: 150px; */ 
 }
+
 .online_grid_element_1, .online_grid_element_2 {    
     font-size:10px;
 }

@@ -407,7 +407,8 @@ input[text] {
 	padding-bottom: 0.2em;
 	background: #4271b5;
 	color: #fff;
-	border-bottom: 1px solid #666;
+	height:20px;
+	/*border-bottom: 1px solid #666; */
 }
 #header2 a {
 	color: #fff;

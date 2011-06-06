@@ -386,7 +386,8 @@ ul#navigation .student-connect a {
 	font-weight: normal;
 	padding:  0.2em 0.5em;
 	padding-bottom: 0.2em;
-	position: relative; /* to avoid the IE peekabo bug*/
+    height:20px;
+	position: relative; /* to avoid the IE peekabo bug*/	
 }
 #header2 a {
 	color: #fff;

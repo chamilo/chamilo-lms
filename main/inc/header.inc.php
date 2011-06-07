@@ -14,6 +14,7 @@
 // Server mode indicator.
 if (api_is_platform_admin()) {
     if (api_get_setting('server_type') == 'test') {
+        error_reporting(E_ALL);
         $mtime = microtime();
         $mtime = explode(" ",$mtime);
         $mtime = $mtime[1] + $mtime[0];

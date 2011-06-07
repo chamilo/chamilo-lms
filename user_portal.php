@@ -545,7 +545,7 @@ if ($img_array['file'] == 'unknown.jpg') {
 }
 $img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
 
-$profile_content .='<div id="social_widget">';
+$profile_content = '<div id="social_widget">';
 
 $profile_content .= '<div id="social_widget_image">';
 if (api_get_setting('allow_social_tool') == 'true') {
@@ -607,7 +607,7 @@ echo show_right_block(get_lang('Profile'), $profile_content);
 
 // My account section.
 if ($show_menu) {
-    $my_account_content .= '<ul class="menulist">';
+    $my_account_content = '<ul class="menulist">';
     if ($show_create_link) {
         $my_account_content .= '<li><a href="main/create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
     }

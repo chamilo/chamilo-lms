@@ -108,11 +108,11 @@ define('VISIBLE_NO_SUBSCRIPTION_ALLOWED', 3);
  * Variables
  */
 
-$TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
-$TABLECOURSDOMAIN = Database::get_main_table(TABLE_MAIN_CATEGORY);
-$TABLEUSER = Database::get_main_table(TABLE_MAIN_USER);
-$TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLEANNOUNCEMENTS = 'announcement';
+$TABLECOURSE         = Database::get_main_table(TABLE_MAIN_COURSE);
+$TABLECOURSDOMAIN    = Database::get_main_table(TABLE_MAIN_CATEGORY);
+$TABLEUSER           = Database::get_main_table(TABLE_MAIN_USER);
+$TABLECOURSUSER      = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$TABLEANNOUNCEMENTS  = 'announcement';
 $coursesRepositories = $_configuration['root_sys'];
 
 /**
@@ -317,7 +317,6 @@ class CourseManager {
                     Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
                                      WHERE id_session ='".$session_id."' AND id_user='$uid' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."");
                 }
-
             }
 
             // Update the table session
@@ -333,7 +332,6 @@ class CourseManager {
             $result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." SET nbr_users = '$count' WHERE id_session = '$session_id' AND course_code = '$course_code' ");
 
         } else {
-
             Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                     WHERE user_id IN (".$user_ids.") AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '".$course_code."'");
 
@@ -434,9 +432,9 @@ class CourseManager {
             $course_sort = self::userCourseSort($user_id, $course_code);
             $result = @Database::query("INSERT INTO ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                     SET course_code = '$course_code',
-                    user_id = '$user_id',
-                    status = '".$status."',
-                    sort = '". ($course_sort)."'");
+                        user_id     = '$user_id',
+                        status      = '".$status."',
+                        sort        = '". ($course_sort)."'");
 
             // Add event to the system log.
             $time = time();
@@ -474,7 +472,8 @@ class CourseManager {
      */
     public static function get_course_code_from_course_id($id) {
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT code FROM course WHERE id = '$id';";
+        $id = intval($id);
+        $sql = "SELECT code FROM $table WHERE id = '$id' ";
         $res = Database::query($sql);
         $row = Database::fetch_object($res);
         if ($row) {
@@ -496,9 +495,9 @@ class CourseManager {
      * @return boolean true if subscription succeeds, boolean false otherwise.
      */
     public static function add_user_to_course($user_id, $course_code, $status = STUDENT) {
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $user_table         = Database::get_main_table(TABLE_MAIN_USER);
+        $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
+        $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;
         if (empty($user_id) || empty($course_code) || ($user_id != strval(intval($user_id)))) {
@@ -626,7 +625,7 @@ class CourseManager {
         }
 
         // Definitions database tables and variables
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_course      = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $user_id = intval($user_id);
         $data = array();
@@ -848,10 +847,8 @@ class CourseManager {
         return $result['target_course_code'];
     }
 
-    /*
-    ==============================================================================
+    /*    
         USER FUNCTIONS
-    ==============================================================================
     */
 
     /**
@@ -3085,7 +3082,7 @@ class CourseManager {
             $result .= '</ul>';
         }
         $result .= '</li>';
-    
+        $session_category_id = null;
         if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
             $session = '';
             $active = false;
@@ -3122,7 +3119,11 @@ class CourseManager {
                     $active = ($date_start <= $now && $date_end >= $now);
                 }
             }
-            $output = array ($my_course['user_course_cat'], $result, $my_course['id_session'], $session, 'active' => $active, 'session_category_id' => $session_category_id);
+            $user_course_category = '';
+            if (isset($my_course['user_course_cat'])) {
+                 $user_course_category = $my_course['user_course_cat'];
+            }
+            $output = array ($user_course_category, $result, $my_course['id_session'], $session, 'active' => $active, 'session_category_id' => $session_category_id);
         } else {
             $output = array ($my_course['user_course_cat'], $result);
         }

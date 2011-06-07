@@ -7,11 +7,6 @@
  * @package chamilo.auth
  */
 
-/**
- * Controller script. Prepares the common background variables to give to the scripts corresponding to
- * the requested action
- * @package chamilo.auth
- */
 class CoursesController { // extends Controller {
 
     private $toolname;

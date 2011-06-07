@@ -8,11 +8,6 @@
 */
 
 $stok = Security::get_token();
-/*
-  <?php if ($action != 'createcoursecategory') { ?>
-	&nbsp;<a href="<?php echo api_get_self(); ?>?action=createcoursecategory"><?php echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'),'','32'); ?></a>
-    <?php } ?>
-    */
 ?>
 <!-- Actions: The menu with the different options in cathe course management -->
 
@@ -102,12 +97,8 @@ $stok = Security::get_token();
                     }
             } 
             ?>
-
-
         </div>
-
     </div>
-
     <div id="categories-content-second">
 
         <?php 
@@ -121,7 +112,7 @@ $stok = Security::get_token();
         if (!empty($browse_courses_in_category)) {
 
             foreach ($browse_courses_in_category as $course) {
-                $title      = $course['title'];
+                $title      = cut($course['title'], 70);
                 $tutor_name = $course['tutor'];
                          
                 $creation_date = substr($course['creation_date'],0,10);
@@ -146,7 +137,7 @@ $stok = Security::get_token();
                 
                 echo '<div class="categories-course-picture"><center>';
                 if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                    echo '<a href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">'; 
+                    echo '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">'; 
                     echo '<img src="'.$course_medium_image.'" />';
                     echo '</a>';
                 } else {
@@ -166,7 +157,7 @@ $stok = Security::get_token();
                         }
                     }
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                        echo '<div class="course-link-desc right"><a class="a_button white small" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">'.get_lang('Description').'</a></div>';
+                        echo '<div class="course-link-desc right"><a class="ajax a_button white small" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" class="thickbox">'.get_lang('Description').'</a></div>';
                     }
                 echo  '</div>';
                 echo '</div>';

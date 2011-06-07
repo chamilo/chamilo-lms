@@ -24,15 +24,30 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
 
-	// additional html (javascript and style css)
-	$htmlHeadXtra[] = '<script type="text/javascript">' .
-				  	  'var GB_ROOT_DIR = "'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/"' .
-				  	  '</script>';
-	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/AJS.js" type="text/javascript" language="javascript"></script>';
-	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/AJS_fx.js" type="text/javascript" language="javascript"></script>';
-	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/gb_scripts.js" type="text/javascript" language="javascript"></script>';
-
-	$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/gb_styles.css" rel="stylesheet" type="text/css" />';
+	$htmlHeadXtra[] = api_get_jquery_ui_js();
+    $htmlHeadXtra[] = '
+    <script language="javascript">
+        $(\'a.ajax\').live(\'click\', function() {
+            var url     = this.href;
+            var dialog  = $("#dialog");
+            if ($("#dialog").length == 0) {
+                dialog  = $(\'<div id="dialog" style="display:hidden"></div>\').appendTo(\'body\');
+            }
+                                
+            $("#dialog").dialog({modal :true, width:540, height:400});
+            
+            // load remote content
+            dialog.load(
+                    url,                    
+                    {},
+                    function(responseText, textStatus, XMLHttpRequest) {
+                        dialog.dialog();
+                    }
+                );
+            //prevent the browser to follow the link
+            return false;
+        });
+    </script>';
 }
 
 

@@ -459,12 +459,12 @@ class Auth
             }
             
             $sql = "SELECT * FROM $tbl_course, (SELECT CEIL(MAX($tbl_course.id) * RAND()) AS randId FROM $tbl_course) AS someRandId 
-                    WHERE $tbl_course.id >= someRandId.randId  LIMIT 10";
+                    WHERE $tbl_course.id >= someRandId.randId ";
             
         } else {
             $category_code = Database::escape_string($category_code);
             //$my_category = (empty($category) ? " IS NULL" : "='".$category."'");
-            $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title LIMIT 10";
+            $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title ";
             
             //showing only the courses of the current Chamilo access_url_id
             if ($_configuration['multiple_access_urls']) {

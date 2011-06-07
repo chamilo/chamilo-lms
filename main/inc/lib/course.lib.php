@@ -1032,9 +1032,9 @@ class CourseManager {
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
         }        
         $sql .= ' '.$order_by.' '.$limit;
-        echo $sql;
+        
         $rs = Database::query($sql);
-        $users          = array();
+        $users = array();
         
         if (Database::num_rows($rs)) {
             while ($user = Database::fetch_array($rs)) {
@@ -1301,9 +1301,6 @@ class CourseManager {
                 $session_condition
                 GROUP BY g.id
                 ORDER BY g.name";
-
-                //var_dump($sql);
-                //exit();
         $result = Database::query($sql);
 
         while ($group_data = Database::fetch_array($result)) {

@@ -58,8 +58,8 @@ if ($_REQUEST['format'] == 'directlink') {
 			$.ajax({
 				url: uri,
 				success: function(data) {
-					elem.closest('.result').nextAll().html('');
-					elem.closest('.result').next().html(data);
+					$(elem).closest('.result').nextAll().html('');
+					$(elem).closest('.result').next().html(data);
 				}
 			});
 		}

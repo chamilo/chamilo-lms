@@ -209,8 +209,8 @@ foreach($reports_template as $key => $value)
 			$.ajax({
 				url: uri,
 				success: function(data) {
-					elem.closest('.result').nextAll().html('');
-					elem.closest('.result').next().html(data);
+					$(elem).closest('.result').nextAll().html('');
+					$(elem).closest('.result').next().html(data);
 				}
 			});
 		}

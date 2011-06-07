@@ -458,13 +458,13 @@ class Auth
                         WHERE access_url_id = $url_access_id $without_special_courses ORDER BY RAND() LIMIT $random_value";
             }
             
-            /*SELECT * FROM $tbl_course, (SELECT CEIL(MAX($tbl_course.id) * RAND()) AS randId FROM $tbl_course) AS someRandId 
-            WHERE $tbl_course.id >= someRandId.randId  LIMIT 10
-            */
+            $sql = "SELECT * FROM $tbl_course, (SELECT CEIL(MAX($tbl_course.id) * RAND()) AS randId FROM $tbl_course) AS someRandId 
+                    WHERE $tbl_course.id >= someRandId.randId  LIMIT 10";
+            
         } else {
             $category_code = Database::escape_string($category_code);
             //$my_category = (empty($category) ? " IS NULL" : "='".$category."'");
-            $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title, visual_code";
+            $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title LIMIT 10";
             
             //showing only the courses of the current Chamilo access_url_id
             if ($_configuration['multiple_access_urls']) {
@@ -472,17 +472,15 @@ class Auth
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.course_code=course.code)
-                        WHERE access_url_id = $url_access_id AND category_code='$category_code' $without_special_courses ORDER BY title, visual_code";                
+                        WHERE access_url_id = $url_access_id AND category_code='$category_code' $without_special_courses ORDER BY title";                
             }            
         }
-
-    
 
         $result = Database::query($sql);
         $courses = array();
         while ($row = Database::fetch_array($result)) {            
                 $row['registration_code'] = !empty($row['registration_code']);
-                $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
+                $count_users = CourseManager::get_users_count_in_course($row['code']);                
                 $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time()-(30*86400)));
                 
                 if ($row['tutor_name'] == '0') {

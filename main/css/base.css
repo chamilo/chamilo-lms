@@ -571,11 +571,11 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 /** BUTTONS **/
 
 .left {
-    float:left;
+    float:left !important;
 }
 
 .right {
-    float:right; 
+    float:right !important; 
 }
 
 /* New button style experimental */ 

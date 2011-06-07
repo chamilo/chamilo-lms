@@ -490,6 +490,7 @@ class SortableTable extends HTML_Table {
 			$filter = $visibility_options !== false;
 		}
 		
+		$item_css_class = $item_css_style = $grid_css_class = $grid_css_style = '';
 		if (!empty($grid_class)) {
 		    $grid_css_class = $grid_class['main']['class'];
 		    $item_css_class = $grid_class['item']['class'];

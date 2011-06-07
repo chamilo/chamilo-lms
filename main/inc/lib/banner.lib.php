@@ -360,9 +360,9 @@ function show_header_3() {
         $homep = api_get_path(SYS_PATH).'home/';
     }
     
-    $ext = '.html';
+    $ext      = '.html';
     $menutabs = 'home_tabs';
-    
+    $home_top = '';
     if (is_file($homep.$menutabs.'_'.$lang.$ext) && is_readable($homep.$menutabs.'_'.$lang.$ext)) {
         $home_top = @(string)file_get_contents($homep.$menutabs.'_'.$lang.$ext);    
     } elseif (is_file($homep.$menutabs.$lang.$ext) && is_readable($homep.$menutabs.$lang.$ext)) {
@@ -376,6 +376,8 @@ function show_header_3() {
     //if (api_get_self() != '/main/admin/configure_homepage.php') {        
     $open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
     $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+    
+    $lis = '';
     if (!empty($open)) {
         $lis .= Display::tag('li', $open);
         $show_bar = true;

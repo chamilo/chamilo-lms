@@ -311,9 +311,9 @@ class GroupPortalManager
 		}		
 		
 		$limit_text = '';		
-		if ($empty != '' && $limit != '') {
-		    $from                 = intval($from);
-            $limit                = intval($limit);        
+		if (isset($from) && isset($limit)) {
+		    $from     = intval($from);
+            $limit    = intval($limit);        
 		    $limit_text = "LIMIT $from, $limit";
 		}        
 

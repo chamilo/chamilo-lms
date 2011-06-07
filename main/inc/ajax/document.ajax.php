@@ -27,7 +27,7 @@ if (!empty($_FILES)) {
     $result = DocumentManager::upload_document($_FILES, $_POST['curdirpath'], '', '', 0, 'overwrite', false, false);
     $file = $_FILES['file'];    
     $json = array();
-    $json['name'] = Display::url(api_htmlentities($file['name']), $result['url'], array('target'=>'_blank'));
+    $json['name'] = Display::url(api_htmlentities($file['name']), api_htmlentities($result['url']), array('target'=>'_blank'));
     $json['type'] = api_htmlentities($file['type']);
     $json['size'] = format_file_size($file['size']);    
     if (!empty($result) && is_array($result)) {

@@ -522,7 +522,7 @@ class MessageManager
 		$rs = Database::query($query);
 		$data = array();
 		if (Database::num_rows($rs) > 0) {
-			while ($row = Database::fetch_array($rs)) {
+			while ($row = Database::fetch_array($rs,'ASSOC')) {
 				$data[] = $row;
 			}
 		}
@@ -885,7 +885,7 @@ class MessageManager
 	public static function display_messages_for_group($group_id) {
 		global $my_group_role;
 		$rows = self::get_messages_by_group($group_id);		 
-		//$rows = self::calculate_children($rows);
+		//$rows = self::calculate_children($rows, 1);
 		$group_info = GroupPortalManager::get_group_data($group_id);
 		$current_user_id = api_get_user_id();
 		$topics_per_page  = 10;
@@ -894,33 +894,46 @@ class MessageManager
 		$html_messages = '';
 		$query_vars = array('id'=>$group_id, 'topics_page_nr'=>0);
 
-		if (is_array($rows) && count($rows)> 0) {
-
+		if (is_array($rows) && count($rows) > 0) {
+   
 			// prepare array for topics with its items
 			$topics = array();
 			$x = 0;
-			foreach ($rows as $index=>$value) {
+            $my_items = array();
+			foreach($rows as $index => $value) {			         			    
 				if (empty($value['parent_id'])) {
-					$x = $index;
-					$topics[$x] = $value;
-				} else {
-					$topics[$x]['items'][] = $value;
+					$topics[$value['id']] = $value;
 				}
 			}
-			uasort($topics,array('MessageManager','order_desc_date'));
-
+			
+			$new_topics = array();
+						
+			foreach($topics as $id => $value) {
+			    $rows = null;
+                $rows = self::get_messages_by_group_by_message($group_id, $value['id']);
+                if (!empty($rows)) {            
+                    $count = self::calculate_children($rows, $value['id']);
+                } else {
+                    $count = 0;
+                }
+                $value['count'] = count($count);
+                $new_topics[$id] = $value;        
+			}			
+			//$new_topics = sort_column($new_topics,'count');
 			$param_names = array_keys($_GET);
 			$array_html = array();
-			foreach ($topics as $index => $topic) {
+
+			foreach ($new_topics as $index => $topic) {
 				$html = '';
 				// topics
 				$indent	= 0;
-				$user_sender_info = UserManager::get_user_info_by_id($topic['user_sender_id']);
-				$files_attachments = self::get_links_message_attachment_files($topic['id']);
+				$user_sender_info   = UserManager::get_user_info_by_id($topic['user_sender_id']);
+				$files_attachments  = self::get_links_message_attachment_files($topic['id']);
 				$name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
 
 				$html .= '<div class="rounded_div" style="width:620px">';
-				    $items = count($topic['items']);
+				
+				    $items = $topic['count'];				    
 				    $reply_label = ($items == 1) ? get_lang('Reply'): get_lang('Replies');
 				    $html .= '<table width="100%"><tr><td width="20px" valign="top">'; 
 				    $html .= Display::div(Display::tag('span', $items).$reply_label, array('class' =>'group_discussions_replies'));
@@ -961,7 +974,7 @@ class MessageManager
 	}
 	
 	
-/**
+    /**
      * Displays messages of a group with nested view
      * @param int group id
      */

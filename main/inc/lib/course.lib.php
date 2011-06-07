@@ -1254,7 +1254,7 @@ class CourseManager {
      *
      *	@return array of course info arrays
      */
-    public static function get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code) {
+    public static function get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $course_code) {
         $result_array = array();
 
         if ($user_id != strval(intval($user_id))) {
@@ -1266,7 +1266,7 @@ class CourseManager {
                 FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course
                 LEFT JOIN ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." course_user
                 ON course.code = course_user.course_code
-                WHERE course.target_course_code = '$real_course_code' AND course_user.user_id = '$user_id' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+                WHERE course.target_course_code = '$course_code' AND course_user.user_id = '$user_id' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
         $sql_result = Database::query($sql);
 
         while ($result = Database::fetch_array($sql_result)) {
@@ -1277,9 +1277,7 @@ class CourseManager {
     }
 
     /*
-    ==============================================================================
         GROUP FUNCTIONS
-    ==============================================================================
     */
 
     /**

@@ -4788,9 +4788,8 @@ function WSListCourses($params) {
         }
 
         // Determining number of students registered in course
-        $user_list = CourseManager::get_user_list_from_course_code($course['code'], false);
-        $course_tmp['number_students'] = count($user_list);
-
+        $course_tmp['number_students'] = CourseManager::get_users_count_in_course($course['code']);
+        
         // Determining external course id
         $course_tmp['external_course_id'] = CourseManager::get_course_extra_field_value($course_field_name, $course['code']);
 

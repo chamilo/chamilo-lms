@@ -1008,18 +1008,13 @@ class CourseManager {
             : 'SELECT DISTINCT user.user_id, session_course_user.status as status_session, user.*  ';
         $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
 
-
-        if (api_get_setting('use_session_mode')=='true' && $with_session) {
+        if (!empty($session_id)) {
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
-                        ON user.user_id = session_course_user.id_user
-                        AND session_course_user.course_code="'.$course_code.'"';
-            if ($session_id != 0) {
-                $sql .= ' AND session_course_user.id_session = '.$session_id;
-            }
+                      ON user.user_id = session_course_user.id_user
+                      AND session_course_user.course_code="'.$course_code.'"            
+                      AND session_course_user.id_session = '.$session_id;            
             $where[] = ' session_course_user.course_code IS NOT NULL ';
-        }
-
-        if ($session_id == 0) {
+        } else {        
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
                         ON user.user_id = course_rel_user.user_id AND course_rel_user.relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
                         AND course_rel_user.course_code="'.$course_code.'"';
@@ -1037,7 +1032,7 @@ class CourseManager {
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
         }        
         $sql .= ' '.$order_by.' '.$limit;
-
+        echo $sql;
         $rs = Database::query($sql);
         $users          = array();
         
@@ -1060,9 +1055,57 @@ class CourseManager {
     
                 $users[$user['user_id']] = $user_info;
             }
+        }        
+        return $users;
+    }
+    
+    /**
+     * Gets subscribed users in a course or in a course/session 
+     * 
+     * @param   string    $course_code
+     * @param   int       $session_id
+     * @return  int
+     */
+    public static function get_users_count_in_course($course_code, $session_id = 0) {
+        global $_configuration;
+        // variable initialisation
+        $session_id     = intval($session_id);        
+        $course_code    = Database::escape_string($course_code);
+
+        $sql .= 'SELECT DISTINCT count(*) as count  FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
+        $where = array();
+        if (!empty($session_id)) {
+            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
+                      ON user.user_id = session_course_user.id_user
+                      AND session_course_user.course_code = "'.$course_code.'"
+                      AND session_course_user.id_session  = '.$session_id;
+            
+            $where[] = ' session_course_user.course_code IS NOT NULL ';
+        } else {        
+            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
+                        ON user.user_id = course_rel_user.user_id AND course_rel_user.relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
+                        AND course_rel_user.course_code="'.$course_code.'"';
+            $where[] = ' course_rel_user.course_code IS NOT NULL ';
         }
         
-        return $users;
+        if ($_configuration['multiple_access_urls']) {
+            $sql  .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).'  au ON (au.user_id = user.user_id) ';
+        }
+
+        $sql .= ' WHERE '.implode(' OR ', $where);
+
+        if ($_configuration['multiple_access_urls']) {
+            $current_access_url_id = api_get_current_access_url_id();
+            $sql .= " AND (access_url_id =  $current_access_url_id ) ";
+        }
+        $rs = Database::query($sql);
+        $users = array();        
+        $count = 0;
+        if (Database::num_rows($rs)) {
+            $user = Database::fetch_array($rs);
+            $count = $user['count'];            
+        }        
+        return $count;
     }
 
     /**

@@ -571,11 +571,11 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 /** BUTTONS **/
 
 .left {
-    float:left;
+    float:left !important;
 }
 
 .right {
-    float:right; 
+    float:right !important; 
 }
 
 /* New button style experimental */ 
@@ -828,9 +828,14 @@ button:hover {
     float:left;
     margin:10px;
     padding:12px;
-    width:240px;
+    width:250px;
     min-height:294px;
     color: #BBBBBB; 
+}
+
+.categories-content-course {
+	float:left;
+	width:100%;
 }
 
 .categories-course-picture {
@@ -873,8 +878,10 @@ button:hover {
     font-size: large;
     font-style: italic;
     text-align: right;
-    color: #444444;
-    line-height: 10px;
+    color: #444444;    
+    float: right;
+    text-align: right;
+    width: 197px;    
 }
 .categories-course-description .course-block-date {
     font-size: large;
@@ -885,19 +892,22 @@ button:hover {
 }
 .course-block-popularity {
     width: 90px;
-    margin-left:120px;
+    float: right;
     font-size: x-small;
     font-style: italic;
     text-align: right;
     background-color: #eeeeee;
     min-height:95px;
     padding-right: 5px;
+    
     -moz-border-radius-topleft:4px;
     -moz-border-radius-topright:4px;
-    -webkit-border-top-left-radius: 4px;
+    -webkit-border-top-left-radius: 4px;    
     -webkit-border-top-right-radius: 4px;
+    
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
+    
     -moz-box-shadow:0 -1px 5px 2px #CCCCCC;
     -Webkit-box-shadow: 0 -1px 5px 2px  #CCCCCC;
     box-shadow: 0 -1px 5px 2px #CCCCCC;
@@ -911,9 +921,11 @@ button:hover {
 }
 
 .categories-course-links {
+    float:left;
     margin-top:20px;
     height:16px;
     padding:2px;
+    width:100%;
 }
 
 .course-link-desc {    

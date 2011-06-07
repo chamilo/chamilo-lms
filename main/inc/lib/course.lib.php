@@ -1848,9 +1848,10 @@ class CourseManager {
         $special_course_list = self::get_special_course_list();
         
         $with_special_courses = $without_special_courses = '';
-        if (!empty($special_course_list)) {            
-            $with_special_courses = ' course.code IN ("'.implode(',"', $special_course_list).'")';
-            $without_special_courses = ' AND course.code NOT IN ("'.implode(',"',$special_course_list).'")';
+        if (!empty($special_course_list)) {
+            $sc_string = '"'.implode('","',$special_course_list).'"';
+            $with_special_courses = ' course.code IN ('.$sc_string.')';
+            $without_special_courses = ' AND course.code NOT IN ('.$sc_string.')';
         }
         
         if (!empty($with_special_courses)) {
@@ -2537,7 +2538,7 @@ class CourseManager {
         
         $with_special_courses = $without_special_courses = '';
         if (!empty($special_course_list)) {
-            $with_special_courses = ' course.code IN ("'.implode(',"',$special_course_list).'")';
+            $with_special_courses = ' course.code IN ("'.implode('","',$special_course_list).'")';
         }
 
         if (!empty($with_special_courses)) {
@@ -2674,7 +2675,7 @@ class CourseManager {
         
         $without_special_courses = '';
         if (!empty($special_course_list)) {
-            $without_special_courses = ' AND course.code NOT IN ("'.implode(',"',$special_course_list).'")';
+            $without_special_courses = ' AND course.code NOT IN ("'.implode('","',$special_course_list).'")';
         }
     
         $sql_select_courses = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,

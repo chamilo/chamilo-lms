@@ -187,8 +187,7 @@ class GroupPortalManager
 	 * @return array   Database::store_result of the result
 	 * @author Julio Montoya
 	 * */
-	public static function get_groups_by_user($user_id='', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false)
-	{
+	public static function get_groups_by_user($user_id = '', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false) {
 		$where = '';
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);
@@ -210,12 +209,12 @@ class GroupPortalManager
 		$array = array();
 		if (Database::num_rows($result) > 0) {
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
-					if ($with_image) {
-						$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
-						$img = '<img src="'.$picture['file'].'" />';
-						$row['picture_uri'] = $img;
-					}
-					$array[$row['id']] = $row;
+				if ($with_image) {
+					$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
+					$img = '<img src="'.$picture['file'].'" />';
+					$row['picture_uri'] = $img;
+				}
+				$array[$row['id']] = $row;
 			}
 		}
 		return $array;
@@ -227,8 +226,7 @@ class GroupPortalManager
 	 * @return array  with group content
 	 * @author Julio Montoya
 	 * */
-	public static function get_groups_by_popularity($num = 6, $with_image = true)
-	{
+	public static function get_groups_by_popularity($num = 6, $with_image = true) {
 		$where = '';
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);
@@ -239,10 +237,10 @@ class GroupPortalManager
 		}
 		// only show admins and readers
 		$where_relation_condition = " WHERE  gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."') ";
-		$sql = "SELECT count(user_id) as count, g.picture_uri, g.name, g.description, g.id
+		$sql = "SELECT DISTINCT count(user_id) as count, g.picture_uri, g.name, g.description, g.id
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
-				ON gu.group_id = g.id $where_relation_condition GROUP BY g.id ORDER BY count DESC LIMIT $num";
+				ON gu.group_id = g.id $where_relation_condition ORDER BY count DESC LIMIT $num";
 
 		$result=Database::query($sql);
 		$array = array();
@@ -263,8 +261,7 @@ class GroupPortalManager
 	 * @return array  with group content
 	 * @author Julio Montoya
 	 * */
-	public static function get_groups_by_age($num = 6, $with_image = true)
-	{
+	public static function get_groups_by_age($num = 6, $with_image = true) {
 		$where = '';
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);
@@ -273,11 +270,13 @@ class GroupPortalManager
 			$num = 6;
 		} else {
 			$num = intval($num);
-		}
-		$sql = "SELECT g.picture_uri, g.name, g.description, g.id
+		}		
+		$where_relation_condition = " WHERE gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."') ";
+		$sql = "SELECT DISTINCT count(user_id) as count, g.picture_uri, g.name, g.description, g.id
 				FROM $tbl_group g
-				ORDER BY created_on desc LIMIT $num ";
-
+				INNER JOIN $table_group_rel_user gu
+				ON gu.group_id = g.id $where_relation_condition ORDER BY created_on desc LIMIT $num ";
+        
 		$result=Database::query($sql);
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -301,25 +300,22 @@ class GroupPortalManager
 	 * @param array image configuration, i.e array('height'=>'20px', 'size'=> '20px')
 	 * @return array list of users in a group
 	 */
-	public static function get_users_by_group($group_id, $with_image = false, $relation_type = array(), $from = 0, $limit = 15, $image_conf = array('size'=>USER_IMAGE_SIZE_MEDIUM,'height'=>80))
-	{
+	public static function get_users_by_group($group_id, $with_image = false, $relation_type = array(), $from = null, $limit = null, $image_conf = array('size'=>USER_IMAGE_SIZE_MEDIUM,'height'=>80)) {
 		$where = '';
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_user				= Database::get_main_table(TABLE_MAIN_USER);
 		$group_id 				= intval($group_id);
-		$from					= intval($from);
-		$limit 					= intval($limit);
-
+		
 		if (empty($group_id)){
 			return array();
-		}
-
-		if (empty($limit)) {
-			$limit = 15;
-		}
-		if (empty($from)) {
-			$from = 0;
-		}
+		}		
+		
+		$limit_text = '';		
+		if ($empty != '' && $limit != '') {
+		    $from                 = intval($from);
+            $limit                = intval($limit);        
+		    $limit_text = "LIMIT $from, $limit";
+		}        
 
 		if (count($relation_type) == 0) {
 			$where_relation_condition = '';
@@ -334,16 +330,18 @@ class GroupPortalManager
 				$where_relation_condition = "AND gu.relation_type IN ($relation_type) ";
 		}
 
-		$sql="SELECT picture_uri as image, u.user_id, u.firstname, u.lastname, relation_type FROM $tbl_user u
-			INNER JOIN $table_group_rel_user gu
-			ON (gu.user_id = u.user_id) WHERE gu.group_id= $group_id $where_relation_condition ORDER BY relation_type, firstname LIMIT $from, $limit";
+		$sql = "SELECT picture_uri as image, u.user_id, u.firstname, u.lastname, relation_type 
+    		    FROM $tbl_user u INNER JOIN $table_group_rel_user gu
+    			ON (gu.user_id = u.user_id) 
+    			WHERE gu.group_id= $group_id $where_relation_condition 
+    			ORDER BY relation_type, firstname $limit_text";
 
-		$result=Database::query($sql);
-		$array = array();
+		$result = Database::query($sql);
+		$array  = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 			if ($with_image) {
-				$image_path = UserManager::get_user_picture_path_by_id($row['user_id'], 'web', false, true);
-				$picture = UserManager::get_picture_user($row['user_id'], $image_path['file'],$image_conf['height'],$image_conf['size']);
+				$image_path   = UserManager::get_user_picture_path_by_id($row['user_id'], 'web', false, true);
+				$picture      = UserManager::get_picture_user($row['user_id'], $image_path['file'], $image_conf['height'], $image_conf['size']);
 				$row['image'] = '<img src="'.$picture['file'].'"  '.$picture['style'].'  />';
 			}
 			$array[$row['user_id']] = $row;
@@ -482,8 +480,7 @@ class GroupPortalManager
 	* @param  int url id
 	* @return boolean true if success
 	* */
-	public static function delete_user_rel_group($user_id, $group_id)
-	{
+	public static function delete_user_rel_group($user_id, $group_id) {
 		$table = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$sql= "DELETE FROM $table WHERE user_id = ".intval($user_id)." AND group_id=".intval($group_id)."  ";
 		$result = Database::query($sql);

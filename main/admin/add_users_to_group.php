@@ -243,9 +243,9 @@ if ($_POST['form_sent']) {
 	if ($form_sent == 1) {
 		if ($relation_type == GROUP_USER_PERMISSION_PENDING_INVITATION) {
 			$relations = array(GROUP_USER_PERMISSION_PENDING_INVITATION,GROUP_USER_PERMISSION_READER);
-			$users_by_group = GroupPortalManager::get_users_by_group($group_id,null,$relations);
-			$user_id_relation = array_keys($users_by_group);
-			$user_relation_diff = array_diff($user_id_relation,$UserList);
+			$users_by_group      = GroupPortalManager::get_users_by_group($group_id,null,$relations);
+			$user_id_relation    = array_keys($users_by_group);
+			$user_relation_diff  = array_diff($user_id_relation,$UserList);
 			foreach ($user_relation_diff as $user_id) {
 				GroupPortalManager::delete_user_rel_group($user_id,$group_id);
 			}

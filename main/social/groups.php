@@ -284,16 +284,13 @@ if ($group_id != 0 ) {
 			}
 			$members		= GroupPortalManager::get_users_by_group($group_id);
             $member_content = '';
+            
     		//Members
     		if (count($members) > 0) {
-				$min_count_members = 4;
-				$i = 1;
 				if ($my_group_role == GROUP_USER_PERMISSION_ADMIN) {
 				    $member_content .= Display::url(Display::return_icon('edit.gif', get_lang('EditMembersList')).' '.get_lang('EditMembersList'), 'group_members.php?id='.$group_id);
-				}
-				
-				foreach($members as $member) {				    
-					if ($i > $min_count_members) break;
+				}				
+				foreach($members as $member) {	
 					// if is a member
 					if (in_array($member['relation_type'] , array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) {
 						//add icons
@@ -311,7 +308,7 @@ if ($group_id != 0 ) {
 						$member_name = Display::url(api_get_person_name(cut($member['firstname'],15),cut($member['lastname'],15)).'&nbsp;'.$icon, 'profile.php?u='.$member['user_id']);
 						$member_content .= Display::div('<img height="44" border="2" align="middle" vspace="10" class="social-groups-image" src="'.$picture['file'].'"/>&nbsp'.$member_name);						
 						$member_content .= '</div>';
-						$i++;
+					
 					}					 	
 				}					
     		}		

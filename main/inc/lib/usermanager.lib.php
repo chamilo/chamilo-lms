@@ -207,13 +207,13 @@ class UserManager
 		if (!self::can_delete_user($user_id)) {
 			return false;
 		}
-		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-		$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
-		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-		$table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
-		$table_session_user = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
-		$table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$table_user                   = Database :: get_main_table(TABLE_MAIN_USER);
+		$table_course_user            = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$table_class_user             = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
+		$table_course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
+		$table_admin                  = Database :: get_main_table(TABLE_MAIN_ADMIN);
+		$table_session_user           = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
+		$table_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 		// Unsubscribe the user from all groups in all his courses
 		$sql = "SELECT * FROM $table_course c, $table_course_user cu WHERE cu.user_id = '".$user_id."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND c.code = cu.course_code";
@@ -289,11 +289,19 @@ class UserManager
 		}
 
 		if (api_get_setting('allow_social_tool')=='true' ) {
+			
+			require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
+			//Delete user from portal groups
+			$group_list = GroupPortalManager::get_groups_by_user($user_id);
+			if (!empty($group_list)) {
+			    foreach($group_list as $group_id => $data) {
+                    GroupPortalManager::delete_user_rel_group($user_id, $group_id);
+			    }
+			}
+			
 			require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-			//@todo Delete user from groups
-
-			//Delete from user friend lists
-			SocialManager::remove_user_rel_user($user_id,true);
+			//Delete user from friend lists
+			SocialManager::remove_user_rel_user($user_id, true);
 		}
 		// add event to system log
 		$time = time();

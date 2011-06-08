@@ -546,7 +546,7 @@ if ($show == 'test') {
 }
 
 if ($is_allowedToEdit && $origin != 'learnpath') {
-	if ($_GET['show'] != 'result') {
+	if ($show != 'result') {
 		echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_exercice.png', get_lang('NewEx'),'','32').'</a>';
 		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_question.png', get_lang('AddQ'),'','32').'</a>';
 		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'),'','32').'</a>';
@@ -711,7 +711,7 @@ if ($show == 'test') {
             $myorigin     = (empty ($origin)              ? '' : '&origin=' . $origin);
             $mylpid       = (empty ($learnpath_id)        ? '' : '&learnpath_id=' . $learnpath_id);
             $mylpitemid   = (empty ($learnpath_item_id)   ? '' : '&learnpath_item_id=' . $learnpath_item_id);
-    
+            
             $token = Security::get_token();
             $i=1;
             
@@ -727,7 +727,8 @@ if ($show == 'test') {
             
             $header_list = '';
             foreach($headers as $header) {                
-                $header_list .= Display::tag('th', $header['name'], $header['params']);	
+                $params = isset($header['params'])? $header['params'] : null;
+                $header_list .= Display::tag('th', $header['name'], $params);	
             }
             echo Display::tag('tr', $header_list);
             
@@ -806,7 +807,7 @@ if ($show == 'test') {
                     } else {
                         $title = $row['title'];
                     }
-                    $url = '<a href="exercise_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>'.$lp_blocked;                    
+                    $url = '<a href="exercise_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>'.$lp_blocked;                    
                     $item =  Display::tag('td', $url.' '.$session_img);  
                     $exid = $row['id'];
     
@@ -865,12 +866,12 @@ if ($show == 'test') {
                     // if time is actived show link to exercise
                     if ($time_limits) {                 
                         if ($is_actived_time) {
-                            $url =  '<a href="exercise_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';
+                            $url =  '<a href="exercise_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';
                         } else {
                             $url = $row['title'];                            
                         }                       
                     } else {
-                        $url = '<a href="exercise_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';                       
+                        $url = '<a href="exercise_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';                       
                     }                   
                     
                     //Link of the exercise             
@@ -1007,7 +1008,7 @@ if ($show == 'test') {
     }
     
     $nbrActiveTests = 0;
-    if (is_array($attribute['path'])) {
+    if (isset($attribute['path']) && is_array($attribute['path'])) {
         while (list($key, $path) = each($attribute['path'])) {
             $item = '';
             list ($a, $vis) = each($attribute['visibility']);

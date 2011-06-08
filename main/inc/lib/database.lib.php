@@ -1124,7 +1124,7 @@ class Database {
         if (empty($conditions)) {
             return '';
         }
-        $return_value = '';    
+        $return_value = $where_return = '';    
         foreach ($conditions as $type_condition => $condition_data) {       
             if ($condition_data == false) {
                 continue;

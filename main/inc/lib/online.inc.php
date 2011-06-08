@@ -213,7 +213,7 @@ function who_is_online_count($valid, $friends = false) {
 	}
 
 	global $_configuration;
-	if ($_configuration['multiple_access_urls']) {
+	if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {

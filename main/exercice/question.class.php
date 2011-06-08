@@ -82,7 +82,10 @@ abstract class Question
 	}
 
 	public function getIsContent() {
-		$isContent = intval($_REQUEST['isContent']);
+	    $isContent = null;
+	    if (isset($_REQUEST['isContent'])) {
+		    $isContent = intval($_REQUEST['isContent']);
+	    }
 		return $this->isContent = $isContent;
 	}
 

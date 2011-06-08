@@ -169,21 +169,19 @@ if ($nbrQuestions) {
     //forces the query to the database
     $my_exercise->read($_GET['exerciseId']);
 	$questionList=$my_exercise->selectQuestionList();    
-    
-	$i=1;
-    
-	if (is_array($questionList)) {
         
-        echo '<div id="question_list">';
-        		
+	if (is_array($questionList)) {      
+	      
+        echo '<div id="question_list">';        		
 		foreach($questionList as $id) {
 			//To avoid warning messages
 			if (!is_numeric($id)) {
 				continue;
 			}	
 			$objQuestionTmp = Question :: read($id);
-            $question_class = get_class($objQuestionTmp);            
-            $label          = $question_class->$explanationLangVar;            
+            $question_class = get_class($objQuestionTmp);
+            //$label          = $question_class->$explanationLangVar;
+            
             
             $edit_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'.Display::return_icon('edit.gif',get_lang('Modify')).'</a>';          
             // this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
@@ -207,9 +205,9 @@ if ($nbrQuestions) {
                 echo '</div>';
             
                 echo '<div class="question-list-description-block">';
-                    echo '<p>';
-                        //echo $actions;
-                        echo get_lang($question_class.$label);
+                    echo '<p>';                        
+                        //echo get_lang($question_class.$label);
+                        echo get_lang($question_class);
                         echo '<br />';
                         //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
                         echo '<br />';
@@ -225,16 +223,7 @@ if ($nbrQuestions) {
         echo '</div>';
 	}
 }
-?>
-</table></div>
-<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
-<?php
-if(!$i) {
-	?>
-	<tr>
-  	<td><?php echo get_lang('NoQuestion'); ?></td>
-	</tr>
-<?php
+echo '</table></div>';
+if(!$nbrQuestions) {	
+  	echo Display::display_warning_message(get_lang('NoQuestion'));
 }
-?>
-</table>

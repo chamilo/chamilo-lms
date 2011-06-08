@@ -7,9 +7,6 @@
  */
 
 /*  HEADERS SECTION */
-/*
- * HTTP HEADER
- */
 
 // Server mode indicator.
 if (api_is_platform_admin()) {
@@ -167,7 +164,7 @@ if (isset($htmlIncHeadXtra) && $htmlIncHeadXtra) {
 include api_get_path(LIBRARY_PATH).'javascript/email_links.lib.js.php';
 
 $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
-if ($_configuration['multiple_access_urls']) {
+if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1) {
         $url_info = api_get_access_url($access_url_id);

@@ -134,8 +134,10 @@ class Exercise {
             //this is needed only is there is no questions
             //
             // @todo not sure were in the code this is used somebody mess with the exercise tool
+            // @todo don't know who add that config and why $_configuration['live_exercise_tracking'] 
             global $_configuration, $questionList;
-            if ($this->type == ONE_PER_PAGE && $_configuration['live_exercise_tracking'] && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED')) {
+            if ($this->type == ONE_PER_PAGE && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED') && 
+                isset($_configuration['live_exercise_tracking']) && $_configuration['live_exercise_tracking']) {
             	//if(empty($_SESSION['questionList']))
             	$this->questionList = $questionList;
             }
@@ -1541,7 +1543,7 @@ class Exercise {
 	    $html =  '<div style="margin-top:-10px;">';	
 	    $confirmation_alert = $this->type == 1? " onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\" ":"";	    
 	    $submit_btn = '<button class="next" type="submit" name="submit" name="submit_save" id="submit_save" '.$confirmation_alert.' >';
-		$hotspot_get = $_POST['hotspot'];
+		$hotspot_get = isset($_POST['hotspot'])?Security::remove_XSS($_POST['hotspot']):null;
 				
 	    if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {
 	        $submit_btn = '';

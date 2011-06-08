@@ -424,6 +424,7 @@ echo '</div>';
 $form->display();
 
 // @todo this code is out dated should
+/*
 
 if ($showDiskQuota && $currentCourseDiskQuota != '') {
 
@@ -509,5 +510,6 @@ if ($showDiskQuota && $currentCourseDiskQuota != '') {
 </table>
 <?php
 }
-/*		FOOTER	*/
+*/
+
 Display::display_footer();

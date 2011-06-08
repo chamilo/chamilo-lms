@@ -476,7 +476,7 @@ class Tracking {
                 if ($count_lp>0 && !empty($student_id)) {
                     $condition_user = "";
                     if (is_array($student_id)) {
-                        $$r = array_walk($student_id,'intval');
+                        array_walk($student_id,'intval');
                         $condition_user = " lp_view.user_id IN (".implode(',',$student_id).") AND ";
                     } else {
                         $student_id = intval($student_id);

@@ -509,8 +509,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 /*	MOVE FILE OR DIRECTORY */
 //Only teacher and all users into their group and each user into his/her shared folder
 if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id) || is_my_shared_folder(api_get_user_id(), Security::remove_XSS($_POST['move_to']), $current_session_id)) {
-    $my_get_move = intval($_REQUEST['move']);
+    
     if (isset($_GET['move']) && $_GET['move'] != '') {
+        $my_get_move = intval($_REQUEST['move']);
 
         if (api_is_coach()) {
             if (!DocumentManager::is_visible_by_id($my_get_move, api_get_course_info(), api_get_session_id())) {                    
@@ -896,6 +897,8 @@ if ($is_certificate_mode && $curdirpath != '/certificates') {
 <?php
 }
 $table_footer = '';
+$total_size = 0;
+
 if (isset($docs_and_folders) && is_array($docs_and_folders)) {
     //echo('<pre>');
     //print_r($docs_and_folders);
@@ -966,7 +969,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $row[] = create_document_link($document_data,  true, $count);
         $path_info = pathinfo($document_data['path']);
                 
-        if (in_array($path_info['extension'], array('ogg', 'mp3','wav'))) {
+        if (isset($path_info['extension']) && in_array($path_info['extension'], array('ogg', 'mp3','wav'))) {
             $count ++;
         }
 
@@ -987,9 +990,10 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $display_date = date_to_str_ago($last_edit_date);
         $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
         // Admins get an edit column
+        
         if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)) {
-            $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
-            // If readonly, check if it the owner of the file or if the user is an admin
+            $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;            
+            // If readonly, check if it the owner of the file or if the user is an admin            
             if ($document_data['insert_user_id'] == api_get_user_id() || api_is_platform_admin()) {                
                 $edit_icons = build_edit_icons($document_data, $key, $is_template, 0);
             } else {          

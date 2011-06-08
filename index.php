@@ -236,7 +236,7 @@ if (!api_is_anonymous()) {
     }
     $img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
     
-    $profile_content .='<div id="social_widget">';
+    $profile_content ='<div id="social_widget">';
     
     $profile_content .= '<div id="social_widget_image">';
     if (api_get_setting('allow_social_tool') == 'true') {

@@ -522,7 +522,7 @@ class SocialManager extends UserManager {
 					}
 					$active = ($date_start <= $now && $date_end >= $now)?true:false;
 				}
-			}
+			}			
 			$output = array ($my_course['user_course_cat'], $result, $my_course['id_session'], $session, 'active'=>$active);
 		} else {
 			$output = array ($my_course['user_course_cat'], $result);

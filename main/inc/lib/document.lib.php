@@ -512,14 +512,14 @@ return 'application/octet-stream';
 
         //condition for search (get ALL folders and documents)
         if ($search) {
-            $sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.id_session item_property_session_id, last.lastedit_date, last.visibility
+            $sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.id_session item_property_session_id, last.lastedit_date, last.visibility, last.insert_user_id
                         FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
                         WHERE docs.id = last.ref
                         AND last.tool = '".TOOL_DOCUMENT."'
                         AND ".$to_field." = ".$to_value."
                         AND last.visibility".$visibility_bit . $condition_session;
         } else {
-            $sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.id_session item_property_session_id, last.lastedit_date, last.visibility
+            $sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.id_session item_property_session_id, last.lastedit_date, last.visibility, last.insert_user_id
                         FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
                         WHERE docs.id = last.ref
                         AND docs.path LIKE '".$path.$added_slash."%'
@@ -620,9 +620,6 @@ return 'application/octet-stream';
                     }
                 }
             }
-
-
-
             return $document_data;
         } else {
             //display_error("Error getting document info from database (".Database::error().")!");

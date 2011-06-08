@@ -647,6 +647,7 @@ class CourseHome {
                         $link['cmd'] = 'restore=yes';
                         $lnk[] = $link;
                     }
+                    $item['extra'] = null;
                     if (!empty($tool['adminlink'])) {
                         $item['extra'] = '<a href="'.$tool['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
                     }
@@ -658,8 +659,10 @@ class CourseHome {
                         $link['cmd'] = 'hide=yes';
                     }
                 }
-
-                if (isset($lnk) && is_array($lnk)) {
+                
+                $item['visibility'] = null;
+                
+                if (isset($lnk) && is_array($lnk)) {                    
                     foreach ($lnk as $this_link) {
                         if (empty($tool['adminlink'])) {
                             $item['visibility'] .=  '<a class="make_visible_and_invisible"  href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';

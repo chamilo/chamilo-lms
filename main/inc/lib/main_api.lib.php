@@ -856,14 +856,17 @@ function _api_format_user($user) {
     } else {
         $result['mail'] = $user['mail'];
     }
-    $result['picture_uri'] = $user['picture_uri'];
-    $result['user_id'] = intval($user['user_id']);
-    $result['official_code'] = $user['official_code'];
-    $result['status'] = $user['status'];
-    $result['auth_source'] = $user['auth_source'];
-    $result['username'] = $user['username'];
-    $result['theme'] = $user['theme'];
-    $result['language'] = $user['language'];
+    
+    $result['picture_uri']      = $user['picture_uri'];
+    $result['user_id']          = intval($user['user_id']);
+    $result['official_code']    = $user['official_code'];
+    $result['status']           = $user['status'];
+    $result['auth_source']      = $user['auth_source'];
+    if (isset($user['username'])) {
+        $result['username']         = $user['username'];
+    }
+    $result['theme']            = $user['theme'];
+    $result['language']         = $user['language'];
     if (!isset($user['lastLogin']) && !isset($user['last_login'])) {
         require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
         $timestamp = Tracking::get_last_connection_date($result['user_id'], false, true);

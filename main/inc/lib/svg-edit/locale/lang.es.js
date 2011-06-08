@@ -191,7 +191,7 @@ svgEditor.readLang({
 		"arrow": "Flechas",
 		"flowchart": "Diagrama de flujo",
 		"animal": "Animales",
-		"game": "Cartas & Ajedred",
+		"game": "Cartas & Ajedrez",
 		"dialog_balloon": "Bocadillos de diálogo",
 		"electronics": "Electrónica",
 		"math": "Matemáticas",

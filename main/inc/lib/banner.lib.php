@@ -341,8 +341,8 @@ function show_header_3() {
     }
     
     //Preparing home folder for multiple urls
-    global $_configuration;    
-    if ($_configuration['multiple_access_urls']) {
+    
+    if (api_get_multiple_access_url()) {
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
             $url_info = api_get_access_url($access_url_id);

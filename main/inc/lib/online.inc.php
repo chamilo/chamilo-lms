@@ -28,7 +28,7 @@ function LoginCheck($uid) {
 		$reallyNow = time();
 		$login_date = date("Y-m-d H:i:s",$reallyNow);
 		$access_url_id = 1;
-		if (!empty($_configuration['multiple_access_urls']) && api_get_current_access_url_id()!=-1) {
+		if (api_get_multiple_access_url() && api_get_current_access_url_id()!=-1) {
 			$access_url_id = api_get_current_access_url_id();
 		}
 		$session_id = api_get_session_id();
@@ -139,8 +139,7 @@ function who_is_online($valid, $friends = false) {
 		$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." e INNER JOIN ".$table_user ." u ON (u.user_id=e.login_user_id)  WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' ORDER BY picture_uri DESC";
 	}
 	
-	global $_configuration;
-	if ($_configuration['multiple_access_urls']) {
+	if (api_get_multiple_access_url()) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {
@@ -211,9 +210,8 @@ function who_is_online_count($valid, $friends = false) {
 		// all users online
 		$query = "SELECT count(login_id) as count  FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  "; //WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'
 	}
-
-	global $_configuration;
-	if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
+	
+	if (api_get_multiple_access_url()) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {

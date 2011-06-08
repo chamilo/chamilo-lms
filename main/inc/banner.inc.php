@@ -11,6 +11,7 @@
 
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 
+global $my_session_id;
 $session_id     = api_get_session_id();
 $session_name   = api_get_session_name($my_session_id);
 echo '<div id="wrapper">';

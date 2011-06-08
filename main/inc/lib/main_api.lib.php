@@ -5026,4 +5026,18 @@ function api_get_course_url($course_code = null, $session_id = null) {
         return api_get_path(WEB_COURSE_PATH).$course_info['path'].'/'.$session_url;
     }
     return null;
-} 
+}
+
+/**
+ * 
+ * Check if the current portal has the $_configuration['multiple_access_urls'] parameter on
+ * @return bool	true if multi site is enabled
+ * 
+ * */
+function api_get_multiple_access_url() { 
+    global $_configuration;
+    if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
+        return true;
+    }
+    return false;    
+}

@@ -617,9 +617,7 @@ class CourseManager {
      *	@return an array with the course info of all the courses (real and virtual) of which
      *	the current user is course admin
      */
-    public static function get_course_list_of_user_as_course_admin($user_id) {
-        global $_configuration;
-
+    public static function get_course_list_of_user_as_course_admin($user_id) {        
         if ($user_id != strval(intval($user_id))) {
             return array();
         }
@@ -637,7 +635,7 @@ class CourseManager {
             WHERE course_rel_user.user_id='$user_id' AND course_rel_user.status='1'
             ORDER BY course.title";
 
-        if ($_configuration['multiple_access_urls']) {
+        if (api_get_multiple_access_url()) {
             $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
@@ -984,8 +982,7 @@ class CourseManager {
      * @param string $order_by the field to order the users by. Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement that starts with ORDER BY ...
      *  @return array
      */
-    public static function get_user_list_from_course_code($course_code, $with_session = true, $session_id = 0, $limit = '', $order_by = '') {
-        global $_configuration;
+    public static function get_user_list_from_course_code($course_code, $with_session = true, $session_id = 0, $limit = '', $order_by = '') {        
         // variable initialisation
         $session_id 	= intval($session_id);        
         $course_code 	= Database::escape_string($course_code);
@@ -1017,14 +1014,14 @@ class CourseManager {
                         AND course_rel_user.course_code="'.$course_code.'"';
             $where[] = ' course_rel_user.course_code IS NOT NULL ';
         }
-
-        if ($_configuration['multiple_access_urls']) {
+        $multiple_access_url = api_get_multiple_access_url();
+        if ($multiple_access_url) {
             $sql  .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).'  au ON (au.user_id = user.user_id) ';
         }
 
         $sql .= ' WHERE '.implode(' OR ', $where);
 
-        if ($_configuration['multiple_access_urls']) {
+        if ($multiple_access_url) {
             $current_access_url_id = api_get_current_access_url_id();
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
         }        
@@ -1063,8 +1060,7 @@ class CourseManager {
      * @param   int       $session_id
      * @return  int
      */
-    public static function get_users_count_in_course($course_code, $session_id = 0) {
-        global $_configuration;
+    public static function get_users_count_in_course($course_code, $session_id = 0) {        
         // variable initialisation
         $session_id     = intval($session_id);        
         $course_code    = Database::escape_string($course_code);
@@ -1085,13 +1081,14 @@ class CourseManager {
             $where[] = ' course_rel_user.course_code IS NOT NULL ';
         }
         
-        if ($_configuration['multiple_access_urls']) {
+        $multiple_access_url = api_get_multiple_access_url();
+        if ($multiple_access_url) {
             $sql  .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).'  au ON (au.user_id = user.user_id) ';
         }
 
         $sql .= ' WHERE '.implode(' OR ', $where);
 
-        if ($_configuration['multiple_access_urls']) {
+        if ($multiple_access_url) {
             $current_access_url_id = api_get_current_access_url_id();
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
         }
@@ -1837,9 +1834,8 @@ class CourseManager {
         $tbl_course_field_value     = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
         
           //we filter the courses from the URL
-        $join_access_url = $where_access_url='';
-        global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
+        $join_access_url = $where_access_url='';        
+        if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -2436,8 +2432,7 @@ class CourseManager {
      * @param int 		human resources manager id
      * @return array	courses
      */
-    public static function get_courses_followed_by_drh($hr_dept_id) {
-        global $_configuration;
+    public static function get_courses_followed_by_drh($hr_dept_id) {        
         // Database Table Definitions
         $tbl_course 			= 	Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_rel_user 	= 	Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -2446,7 +2441,7 @@ class CourseManager {
         $hr_dept_id = intval($hr_dept_id);
         $assigned_courses_to_hrm = array();
 
-        if ($_configuration['multiple_access_urls']) {
+        if (api_get_multiple_access_url()) {
            $sql = "SELECT * FROM $tbl_course c
                     INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code) LEFT JOIN $tbl_course_rel_access_url a  ON (a.course_code = c.code) WHERE cru.user_id = '$hr_dept_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' AND access_url_id = ".api_get_current_access_url_id()."";
         } else {
@@ -2697,7 +2692,7 @@ class CourseManager {
      */
     function display_courses_in_category($user_category_id) {
     
-        global $_user, $_configuration;
+        global $_user;
         // Table definitions
         $TABLECOURS                  = Database :: get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER              = Database :: get_main_table(TABLE_MAIN_COURSE_USER);                
@@ -2724,7 +2719,7 @@ class CourseManager {
                                         AND course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses ";
         // If multiple URL access mode is enabled, only fetch courses
         // corresponding to the current URL.
-        if ($_configuration['multiple_access_urls'] && $current_url_id != -1){
+        if (api_get_multiple_access_url() && $current_url_id != -1){
             $sql_select_courses .= " AND url.course_code=course.code AND access_url_id='".$current_url_id."'";
         }
         // Use user's classification for courses (if any).

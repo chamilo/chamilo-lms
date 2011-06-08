@@ -235,27 +235,50 @@ class GroupPortalManager
     $toreturn = array();
 
     while ($item = Database::fetch_assoc($res)) { 
-      echo "<pre>";
-        print_r($item);
-      echo "</pre>";
-      
       foreach ($item as $key => $value ){
         if ($key == 'id_1') {
           $toreturn[$value]['name'] = $item['name_1'];
         } else {
           $temp =  explode('_',$key);
-          echo "ppp : $index_key - $string_key ppp";
           $index_key = $temp[1];
           $string_key = $temp[0];
           $previous_key = $string_key.'_'.$index_key-1;
           if ( $string_key == 'id' && isset($item[$key]) ) {
-            echo $previous_key;
             $toreturn[$item[$previous_key]]['hrms'][$index_key]['name'] = $item['name_'.$index_id];
           }
         }
       }
     }
       return $toreturn;
+  }
+  public static function get_parent_groups($group_id){
+    $t_rel_group = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
+    $max_level = 10;
+    $select_part = "SELECT ";
+    $cond_part='';
+    for ($i=1; $i <= $max_level; $i++) {
+      $g_number=$i;
+      $rg_number=$i-1;
+      if ( $i == $max_level) {
+        $select_part .= "rg$rg_number.group_id as id_$rg_number ";
+      } else {
+        $select_part .="rg$rg_number.group_id as id_$rg_number, ";
+      }
+      if ($i == 1){
+        $cond_part .= "FROM $t_rel_group rg0 LEFT JOIN $t_rel_group rg$i on rg$rg_number.group_id = rg$i.subgroup_id ";
+      }else {
+        $cond_part .= " LEFT JOIN $t_rel_group rg$i on rg$rg_number.group_id = rg$i.subgroup_id ";
+      }
+    }
+    $sql = $select_part.' '. $cond_part . "WHERE rg0.subgroup_id='$group_id'";
+    $res = Database::query($sql);
+    $temp_arr = Database::fetch_array($res, 'NUM');
+    $toreturn = array();
+    foreach ($temp_arr as $elt) {
+      if (isset($elt))
+        $toreturn[] = $elt;
+    }
+    return $toreturn;
   }
 
 	/**

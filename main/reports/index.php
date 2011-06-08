@@ -102,8 +102,17 @@ $htmlHeadXtra[] = '    <style type="text/css">
 				overflow : auto;
 				display: none;
 			}
-			#result {
+			.result {
 				padding-top: 15px;
+			}
+			#result2 {
+				margin: 50px;
+			}
+			#result3 {
+				margin: 100px;
+			}
+			#result4 {
+				margin: 150px;
 			}
 			select.link, select.link:hover {
 				color: black;
@@ -164,7 +173,13 @@ foreach($reports_template as $key => $value)
 		</div>
 
 
-		<div id="result">
+		<div id="result" class="result">
+		</div>
+		<div id="result2" class="result">
+		</div>
+		<div id="result3" class="result">
+		</div>
+		<div id="result4" class="result">
 		</div>
     <script type="text/javascript">
 			$(function(){
@@ -181,7 +196,8 @@ foreach($reports_template as $key => $value)
 						success: function(data){
 		                                        $("#wizardContent").hide();
                 		                        $("#wizardShowButton").show();
-							$("#result").html(data); 
+							$(".result").html('');
+							$("#result").html(data);
 						},
 						beforeSubmit: function(data){$("#data").html("data sent to the server: " + $.param(data));},
 						resetForm: false
@@ -189,6 +205,15 @@ foreach($reports_template as $key => $value)
 				 }
 				);
   		});
+		function setSubDataUri(elem, uri) {
+			$.ajax({
+				url: uri,
+				success: function(data) {
+					elem.closest('.result').nextAll().html('');
+					elem.closest('.result').next().html(data);
+				}
+			});
+		}
     </script>
 
 <?

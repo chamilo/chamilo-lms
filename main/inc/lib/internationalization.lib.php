@@ -343,7 +343,7 @@ function api_purify_language_id($language) {
 function api_get_language_isocode($language = null, $default_code = 'en') {
     static $iso_code = array();
     if (empty($language)) {
-        $language = api_get_interface_language();
+        $language = api_get_interface_language(false, true);
     }
     if (!isset($iso_code[$language])) {
         if (!class_exists('Database')) {
@@ -391,9 +391,12 @@ function api_get_platform_isocodes() {
  */
 function api_get_text_direction($language = null) {
     static $text_direction = array();
-    if (empty($language)) {
-        $language = api_get_interface_language();
+    
+    $language_is_supported = api_is_language_supported($language);   
+    if (!$language_is_supported || empty($language)) {
+        $language = api_get_interface_language(false, true);        
     }
+    
     if (!isset($text_direction[$language])) {
         $text_direction[$language] = in_array(api_purify_language_id($language),
             array(
@@ -919,10 +922,11 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
     if (empty($format)) {
         $format = PERSON_NAME_COMMON_CONVENTION;
     }
-    
-    if (empty($language)) {
-        $language = api_get_interface_language(false, true);
-    }
+    //We check if the language is supported, otherwise we check the interface language of the parent language of sublanguage
+    $language_is_supported = api_is_language_supported($language);   
+    if (!$language_is_supported || empty($language)) {
+        $language = api_get_interface_language(false, true);        
+    }    
     
     if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
@@ -971,8 +975,10 @@ function api_is_western_name_order($format = null, $language = null) {
     if (empty($format)) {
         $format = PERSON_NAME_COMMON_CONVENTION;
     }
-    if (empty($language)) {
-        $language = api_get_interface_language();
+    
+    $language_is_supported = api_is_language_supported($language);   
+    if (!$language_is_supported || empty($language)) {
+        $language = api_get_interface_language(false, true);        
     }
     if (!isset($order[$format][$language])) {
         $test_name = api_get_person_name('%f', '%l', '%t', $format, $language);
@@ -992,8 +998,10 @@ function api_is_western_name_order($format = null, $language = null) {
  */
 function api_sort_by_first_name($language = null) {
     static $sort_by_first_name = array();
-    if (empty($language)) {
-        $language = api_get_interface_language();
+    
+    $language_is_supported = api_is_language_supported($language);   
+    if (!$language_is_supported || empty($language)) {
+        $language = api_get_interface_language(false, true);        
     }
     if (!isset($sort_by_first_name[$language])) {
         $sort_by_first_name[$language] = _api_get_person_name_convention($language, 'sort_by');
@@ -3482,9 +3490,12 @@ function api_is_encoding_supported($encoding) {
  * if you wish to revise the leading non-UTF-8 encoding for your language.
  */
 function api_get_non_utf8_encoding($language = null) {
-    if (empty($language)) {
-        $language = api_get_interface_language();
+       
+    $language_is_supported = api_is_language_supported($language);   
+    if (!$language_is_supported || empty($language)) {
+        $language = api_get_interface_language(false, true);        
     }
+        
     $language = api_purify_language_id($language);
     $encodings = & _api_non_utf8_encodings();
     if (is_array($encodings[$language])) {

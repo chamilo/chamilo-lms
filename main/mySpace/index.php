@@ -9,7 +9,6 @@ $language_file = array('registration', 'index', 'tracking');
 // resetting the course id
 $cidReset = true;
 
-// including the global Dokeos file
 require_once '../inc/global.inc.php';
 
 // including additional libraries
@@ -127,10 +126,11 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 
 $menu_items = array();
 $nb_teacher_courses = 0;
+$title = null;
 global $_configuration;
 
 // interbreadcrumbs
-if (api_is_allowed_to_create_course() && $_GET['display'] != 'yourstudents') {
+if (api_is_allowed_to_create_course() && isset($_GET['display']) && $_GET['display'] != 'yourstudents') {
 
 	$session_id = intval($_GET['session_id']);
 	if (!empty($session_id)) {
@@ -177,7 +177,7 @@ if ($is_coach && $_GET['display'] != 'yourstudents') {
 	}
 }
 
-if ($is_platform_admin &&  $_GET['display'] != 'yourstudents') {
+if ($is_platform_admin && isset($_GET['display']) && $_GET['display'] != 'yourstudents') {
 	if ($nb_teacher_courses == 0 && $nb_sessions == 0) {
 		$view = 'admin';
 	}
@@ -191,7 +191,7 @@ if ($is_platform_admin &&  $_GET['display'] != 'yourstudents') {
 	}
 }
 
-if ($is_drh || $_GET['display'] == 'yourstudents') {
+if ($is_drh || (isset($_GET['display']) && $_GET['display'] == 'yourstudents')) {
 	$view = 'drh';
 	$menu_items[] = get_lang('Students');
 	$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
@@ -244,7 +244,7 @@ if ($nb_teacher_courses > 0 ) {
 
 echo '<h2>'.$title.'</h2>';
 
-if (($is_drh && $view == 'drh') || $_GET['display'] == 'yourstudents') {
+if (($is_drh && $view == 'drh') || (isset($_GET['display']) && $_GET['display'] == 'yourstudents')) {
 	// get data for human resources manager
 	$students = array_keys(UserManager::get_users_followed_by_drh($_user['user_id'], STUDENT));
 	$courses_of_the_platform = CourseManager :: get_real_course_list();
@@ -413,6 +413,7 @@ if ($view == 'coach' || $view == 'drh') {
 	}
 }
 
+$nb_sessions = 0;
 if ($view == 'coach') {
 	/**
 	 * Infos about sessions of the coach

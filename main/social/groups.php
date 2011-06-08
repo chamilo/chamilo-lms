@@ -145,7 +145,7 @@ if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 Display :: display_header($tool_name, 'Groups');
 
 // getting group information
-$group_id	= intval($_GET['id']);
+$group_id	= isset($_GET['id']) ? intval($_GET['id']) : null;
 $relation_group_title = '';
 $my_group_role = 0;
 if ($group_id != 0 ) {
@@ -351,7 +351,6 @@ if ($group_id != 0 ) {
 
 				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
 				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
-				//$grid_item_1 = Display::return_icon('boxmygroups.jpg',get_lang('MyGroups'));
 				$item_0  = Display::div($result['picture_uri'], array('class'=>'box_description_group_image'));
 				$members = Display::span($count_users_group, array('class'=>'box_description_group_member'));
 				$item_1  = Display::div(Display::tag('h2', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
@@ -368,7 +367,7 @@ if ($group_id != 0 ) {
                 /*$join_url = '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('JoinGroup'), array('hspace'=>'6')).''.get_lang('JoinGroup').'</a> ';                
 				$item_4 = '<div class="box_description_group_actions" >'.$join_url. $url_open.get_lang('SeeMore').$url_close.'</div>';*/				
 				$grid_item_2 = $item_0.$item_1.$item_2.$item_3.$item_4;
-				$grid_my_groups[]= array($grid_item_1,$grid_item_2);
+				$grid_my_groups[]= array($grid_item_2);
 			}
 		}
 
@@ -411,7 +410,7 @@ if ($group_id != 0 ) {
 			$item_4 = '<div class="box_description_group_actions" >'.$join_url.'</div>';
 			$grid_item_2 = $item_0.$item_1.$item_2.$item_3.$item_4;
 
-			$grid_newest_groups[]= array($grid_item_1,$grid_item_2);
+			$grid_newest_groups[]= array($grid_item_2);
 		}
 
 		// Pop groups
@@ -458,7 +457,7 @@ if ($group_id != 0 ) {
 		}
 
 		// Display groups (newest, mygroups, pop)
-	
+        $query_vars = array();	
 		
 	   	if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 	   		$view_group = $_GET['view'];
@@ -500,6 +499,7 @@ if ($group_id != 0 ) {
 	        		break;
 	   		}
 	   	} else {	   	    
+	   	    $my_group_content = null;
 	        if (count($grid_my_groups) > 0) {
 	        	$my_group_content = Display::return_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));           
 	        }
@@ -509,7 +509,7 @@ if ($group_id != 0 ) {
             } else {
                 if (api_is_allowed_to_edit(null,true)) {
                     $create_group_item =  '<a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).get_lang('CreateASocialGroup').'</a>';
-                    $my_group_content = $create_group_item. $my_group_content;
+                    $my_group_content  = $create_group_item. $my_group_content;
                 }
             }
 			if (count($grid_newest_groups) > 0) {

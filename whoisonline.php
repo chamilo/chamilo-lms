@@ -158,7 +158,8 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 				echo '<div id="social-content-right">';			
 				//this include the social menu div
 				if (!api_is_anonymous()) {
-					echo UserManager::get_search_form($_GET['q']);
+				    $query = isset($_GET['q']) ? $_GET['q']: null;				    
+					echo UserManager::get_search_form($query);
 				}
 			}
 			echo Display::tag('h2', get_lang('UsersOnLineList'));

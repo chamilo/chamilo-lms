@@ -10,13 +10,17 @@ switch ($_REQUEST['action']) {
 		print storage_get($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
 		break;
 	case "set":
-		print storage_set($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey'], $_REQUEST['svvalue']);
+		if (storage_can_set($_REQUEST['svuser'])) {
+			print storage_set($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey'], $_REQUEST['svvalue']);
+		}
 		break;
 	case "getall":
 		print storage_getall($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco']);
 		break;
 	case "stackpush":
-		print storage_stack_push($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey'], $_REQUEST['svvalue']);
+		if (storage_can_set($_REQUEST['svuser'])) {
+			print storage_stack_push($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey'], $_REQUEST['svvalue']);
+		}
 		break;
 	case "stackpop":
 		print storage_stack_pop($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
@@ -25,13 +29,24 @@ switch ($_REQUEST['action']) {
 		print storage_stack_length($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
 		break;
 	case "stackclear":
-		print storage_stack_clear($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
+		if (storage_can_set($_REQUEST['svuser'])) {
+			print storage_stack_clear($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
+		}
 		break;
 	case "stackgetall":
 		print storage_stack_getall($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
 		break;
 	default:
 		// Do nothing
+}
+
+function storage_can_set($sv_user) {
+	// platform admin can change any user's stored values, other users can only change their own values
+	$allowed = ((api_is_platform_admin()) || ($sv_user == api_get_user_id()));
+	if (!$allowed) {
+		print "ERROR : Not allowed";
+	}
+	return $allowed;
 }
 
 function storage_get($sv_user, $sv_course, $sv_sco, $sv_key) {

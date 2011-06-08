@@ -2,6 +2,7 @@
 // JavaScript API
 // CBlue SPRL, Jean-Karim Bockstael <jeankarim@cblue.be>
 
+
 lms_storage_testCall = function(content) {
 	alert(content);
 }
@@ -166,3 +167,21 @@ lms_storage_stack_getAll = function(sv_key) {
 	});
 	return result;
 }
+
+// STORAGEAPI OBJECT
+function STORAGEAPIobject() {
+  this.testCall = lms_storage_testCall ;
+  this.setValue = lms_storage_setValue;
+  this.getValue = lms_storage_getValue;
+  this.getAll = lms_storage_getAll;
+  this.stack_push = lms_storage_stack_push;
+  this.stack_pop = lms_storage_stack_pop;
+  this.stack_length = lms_storage_stack_length;
+  this.stack_clear = lms_storage_stack_clear;
+  this.stack_getAll = lms_storage_stack_getAll;
+  this.sv_user = sv_user;
+  this.sv_course = sv_course;
+  this.sv_sco = sv_sco;
+}
+var STORAGEAPI = new STORAGEAPIobject();
+var STAPI = STORAGEAPI;

@@ -1308,4 +1308,14 @@ $GroupParentship = 'Groupe parent';
 $NoParentship = 'Aucun groupe parent';
 $HumanResourcesManager = "Gestionnaire des ressources humaines";
 $IamAHRM = "Je suis un gestionnaire des ressources humaines";
+$UserLanguage  = 'Langue du profil utilisateur';
+$UserSelectedLanguage  = 'Langue sélectionnée par l\'utilisateur lors du login';
+$LanguagePriority1Title = 'Langue à choisir en première priorité';
+$LanguagePriority2Title = 'Langue à choisir en deuxième priorité';
+$LanguagePriority3Title = 'Langue à choisir en troisième priorité';
+$LanguagePriority4Title = 'Langue à choisir en quatrième priorité';
+$LanguagePriority1Comment = '';
+$LanguagePriority2Comment = '';
+$LanguagePriority3Comment = '';
+$LanguagePriority4Comment = '';
 ?>

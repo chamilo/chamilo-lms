@@ -791,6 +791,10 @@ VALUES
 ('custom_tab_2_url', NULL, 'textfield', 'Platform', '', 'CustomTab2URLTitle', 'CustomTab2URLComment', NULL, NULL, 0),
 ('custom_tab_3_name', NULL, 'textfield', 'Platform', '', 'CustomTab3NameTitle', 'CustomTab3NameComment', NULL, NULL, 0),
 ('custom_tab_3_url', NULL, 'textfield', 'Platform', '', 'CustomTab3URLTitle', 'CustomTab3URLComment', NULL, NULL, 0);
+('languagePriority1', NULL, 'radio', 'Languages', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0); 
+('languagePriority2', NULL, 'radio', 'Languages', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0); 
+('languagePriority3', NULL, 'radio', 'Languages', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0); 
+('languagePriority4', NULL, 'radio', 'Languages', 'LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0); 
 
 
 UNLOCK TABLES;
@@ -1013,7 +1017,23 @@ VALUES
 ('cas_add_user_activate', 'true', 'Yes'),
 ('cas_add_user_activate', 'false', 'No'),
 ('use_custom_pages','true','Yes'),
-('use_custom_pages','false','No');
+('use_custom_pages','false','No'),
+('languagePriority1','platform_lang','PlatformLanguage'),
+('languagePriority1','user_profil_lang','UserLanguage'),
+('languagePriority1','user_selected_lang','UserSelectedLanguage'),
+('languagePriority1','course_lang','CourseLanguage'),
+('languagePriority2','platform_lang','PlatformLanguage'),
+('languagePriority2','user_profil_lang','UserLanguage'),
+('languagePriority2','user_selected_lang','UserSelectedLanguage'),
+('languagePriority2','course_lang','CourseLanguage'),
+('languagePriority3','platform_lang','PlatformLanguage'),
+('languagePriority3','user_profil_lang','UserLanguage'),
+('languagePriority3','user_selected_lang','UserSelectedLanguage'),
+('languagePriority3','course_lang','CourseLanguage'),
+('languagePriority4','platform_lang','PlatformLanguage'),
+('languagePriority4','user_profil_lang','UserLanguage'),
+('languagePriority4','user_selected_lang','UserSelectedLanguage'),
+('languagePriority4','course_lang','CourseLanguage');
 
 
 UNLOCK TABLES;

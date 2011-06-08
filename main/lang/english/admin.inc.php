@@ -1331,4 +1331,14 @@ $GroupParentship = 'Parent group';
 $NoParentship = 'No parent group';
 $HumanResourcesManager = "Human resources manager";
 $IamAHRM = "I am a human resources manager";
+$UserLanguage  = 'User profile language';
+$UserSelectedLanguage  = 'Language chosen by the user at login';
+$LanguagePriority1Title = 'First priority language';
+$LanguagePriority2Title = 'Second priority language';
+$LanguagePriority3Title = 'Third priority language';
+$LanguagePriority4Title = 'Fourth priority language';
+$LanguagePriority1Comment = '';
+$LanguagePriority2Comment = '';
+$LanguagePriority3Comment = '';
+$LanguagePriority4Comment = '';
 ?>

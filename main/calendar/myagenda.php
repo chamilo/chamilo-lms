@@ -144,7 +144,6 @@ if (isset($_user['user_id'])) {
 	//$courses_dbs = get_all_courses_of_user();
 	$my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id(), true);
 	
-	print_r($course_list);
 	if (!is_array($my_course_list)) {
 		// this is for the special case if the user has no courses (otherwise you get an error)
 		$my_course_list = array();

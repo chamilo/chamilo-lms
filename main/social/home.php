@@ -81,11 +81,11 @@ echo '<div id="social-content">';
 	echo '<div id="social-content-right">';
 		echo '<div class="social-box-main1">';
 			echo '<div class="rounded_div" style="width:280px">';
-			   // information current user
-		       echo	'<div>'.$image.'</div>';
+			
+			   // information current user		       
                echo '<div><p><strong>'.get_lang('Name').'</strong><br /><span class="social-groups-text4">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</span></p></div>
                         <div><p><strong>'.get_lang('Email').'</strong><br /><span class="social-groups-text4">'.($user_info['email']?$user_info['email']:'').'</span></p></div>
-                        <div class="box_description_group_actions" ><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.Display::return_icon('profile_edit.png', get_lang('EditProfile'), array('hspace'=>'6')).get_lang('EditProfile').$url_close.'</a></div>';
+                        <div class="box_description_group_actions" ><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.Display::return_icon('profile_edit.png', get_lang('EditProfile'), array('hspace'=>'6')).get_lang('EditProfile').'</a></div>';
                 echo '</div>';
                 /*
 			echo '<div class="rounded_div" style="width:280px">';
@@ -100,7 +100,7 @@ echo '<div id="social-content">';
             //Search box
 			echo '<div class="social-box-right">';
 			echo '<br />';
-			echo UserManager::get_search_form($query);
+			echo UserManager::get_search_form('');
 			echo '<br />';
 
 			
@@ -145,12 +145,12 @@ echo '<div id="social-content">';
 
 			if (count($groups_newest) > 0) {
 				echo '<div class="social-groups-home-title">'.get_lang('Newest').'</div>';
-				Display::display_sortable_grid('home_group', array(), $groups_newest, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));				
+				Display::display_sortable_grid('home_group', array(), $groups_newest, array('hide_navigation'=>true, 'per_page' => 100), array(), false, array(true, true, true,false));				
 			}
 
 			if (count($groups_pop) > 0) {
 				echo '<div class="social-groups-home-title">'.get_lang('Popular').'</div>';
-				Display::display_sortable_grid('home_group', array(), $groups_pop, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
+				Display::display_sortable_grid('home_group', array(), $groups_pop, array('hide_navigation'=>true, 'per_page' => 100), array(), false, array(true, true, true,true,true));
 			}
 
 			echo '</div>';

@@ -1207,18 +1207,9 @@ class MessageManager
 
 function inbox_display() {
 	global $charset;
-//	$charset = api_get_system_encoding();
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
-	//$request=api_is_xml_http_request();
-	if ($_SESSION['social_exist']===true) {
-		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
-			$success= get_lang('SelectedMessagesDeleted');
-		} else {
-			$success= get_lang('SelectedMessagesDeleted');
-		}
-	} else {
-		$success= get_lang('SelectedMessagesDeleted');
-	}
+    $success = get_lang('SelectedMessagesDeleted');
+    
 	if (isset ($_REQUEST['action'])) {
 		switch ($_REQUEST['action']) {
 			case 'delete' :
@@ -1275,15 +1266,8 @@ function outbox_display() {
 	if ($_REQUEST['f']=='social') {
 		$social_link ='f=social';
 	}
-	if ($_SESSION['social_exist']===true) {
-		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
-			$success= get_lang('SelectedMessagesDeleted')."&nbsp<br><a href=\""."../social/index.php?$social_link\">".get_lang('BackToOutbox')."</a>";
-		}else {
-			$success=get_lang('SelectedMessagesDeleted')."&nbsp<br><a href=\""."../social/index.php?$social_link\">".get_lang('BackToOutbox')."</a>";
-		}
-	} else {
-		$success= get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php?'.$social_link.'">'.get_lang('BackToOutbox').'</a>';
-	}
+	$success= get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php?'.$social_link.'">'.get_lang('BackToOutbox').'</a>';
+	
 	if (isset ($_REQUEST['action'])) {
 		switch ($_REQUEST['action']) {
 			case 'delete' :

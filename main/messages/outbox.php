@@ -116,7 +116,12 @@ if( trim($info_delete_outbox[0])=='delete' ) {
 
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 
-$user_sender_id=api_get_user_id();
+$user_sender_id = api_get_user_id();
+
+$action = null;
+if (isset($_REQUEST['action'])) {
+    $action = $_REQUEST['action'];
+}
 
 echo '<div id="social-content">';
 	$id_content_right = '';
@@ -147,7 +152,7 @@ echo '<div id="social-content">';
                 echo '</div>';
 			}	
 			//MAIN CONTENT
-			if ($_REQUEST['action']=='delete') {
+			if ($action == 'delete') {
 				$delete_list_id=array();
 				if (isset($_POST['out'])) {
 					$delete_list_id=$_POST['out'];
@@ -161,7 +166,7 @@ echo '<div id="social-content">';
 				$delete_list_id=array();
 				outbox_display();
 				
-			} elseif ($_REQUEST['action']=='deleteone') {
+			} elseif($action =='deleteone') {
 				$delete_list_id=array();
 				$id=Security::remove_XSS($_GET['id']);
 				MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);

@@ -602,7 +602,7 @@ class SocialManager extends UserManager {
 	  	} else {
 	  		$img_array = UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
 			$big_image = UserManager::get_picture_user($user_id, $img_array['file'],'', USER_IMAGE_SIZE_BIG);
-			$big_image = $big_image['file'].$big_image['dir'];
+			$big_image = $big_image['file'];
 
 	  		//--- User image
 			echo '<div class="social-content-image">';

@@ -28,6 +28,11 @@ class SystemAnnouncementManager
       $groups = array_merge($groups, array($user_group['id']));
       $groups = array_merge($groups, GroupPortalManager::get_parent_groups($user_group['id']));
     }
+    //checks if tables exists to not break platform not updated
+    $ann_group_db_ok =false;
+    if( Database::num_rows(Database::query("SHOW TABLES LIKE 'announcement_rel_group'")) > 0)
+       $ann_group_db_ok =true;
+
     $groups_string = '('.implode($groups,',').')';
     $sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date" 
       ." FROM  $db_table"
@@ -45,7 +50,7 @@ class SystemAnnouncementManager
 				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}
-    if (count($groups) > 0 ) {
+    if (count($groups) > 0 and $ann_group_db_ok ) {
       $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group "
         ." WHERE group_id in $groups_string) ";
     }

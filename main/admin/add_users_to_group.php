@@ -5,7 +5,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file=array('admin','registration');
+$language_file=array('admin','registration','userInfo');
 
 // resetting the course id
 $cidReset=true;

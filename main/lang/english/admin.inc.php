@@ -1341,4 +1341,6 @@ $LanguagePriority1Comment = '';
 $LanguagePriority2Comment = '';
 $LanguagePriority3Comment = '';
 $LanguagePriority4Comment = '';
+$ChooseRelationType = 'Choose a relation type';
+$UserListInGroup = 'Users subscribed to this group';
 ?>

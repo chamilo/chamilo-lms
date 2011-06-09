@@ -1318,4 +1318,6 @@ $LanguagePriority1Comment = '';
 $LanguagePriority2Comment = '';
 $LanguagePriority3Comment = '';
 $LanguagePriority4Comment = '';
+$ChooseRelationType = 'Choisir un type de relation';
+$UserListInGroup = 'Utilisateurs inscrits au groupe';
 ?>

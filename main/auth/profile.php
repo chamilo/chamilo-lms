@@ -652,7 +652,6 @@ if ($form->validate()) {
 	$profile_list = api_get_setting('profile');
 	//Adding missing variables		
 	
-	var_dump($profile_list);
 	$available_values_to_modify = array();
 	foreach($profile_list as $key => $status) {	    
 	    if ($status == 'true') {
@@ -667,7 +666,7 @@ if ($form->validate()) {
 	    }
 	}	
 	//Fixing missing variables
-    $available_values_to_modify = array_merge($available_values_to_modify, array('competences', 'diplomas', 'openarea', 'teach', 'teach', 'openid'));
+    $available_values_to_modify = array_merge($available_values_to_modify, array('competences', 'diplomas', 'openarea', 'teach', 'openid'));
     
 	// build SQL query
 	$sql = "UPDATE $table_user SET";

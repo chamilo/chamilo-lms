@@ -791,7 +791,8 @@ class UserManager
 		}
 		if (empty($picture_filename) && $anonymous) {
 			return array('dir' => $base.'img/', 'file' => 'unknown.jpg');
-		}
+		}		
+		
 		return array('dir' => $dir, 'file' => $picture_filename);
 	}
 
@@ -2353,10 +2354,11 @@ class UserManager
 			if ($height > 0) {
 				$dimension = api_getimagesize($picture['file']);
 				$margin = (($height - $dimension['width']) / 2);
+				
 				//@ todo the padding-top should not be here
 				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension['width'].'px; height:'.$dimension['height'].'px;" ';				
-				$picture['original_height'] = $dimension[0];
-				$picture['original_width']  = $dimension[1];
+				$picture['original_height'] = $dimension['width'];
+				$picture['original_width']  = $dimension['height'];
 			}
 		} else {
 			//$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;

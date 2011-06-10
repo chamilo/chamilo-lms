@@ -558,18 +558,7 @@ class SocialManager extends UserManager {
 		$group_pending_invitations = count($group_pending_invitations);
 		$total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
 		$total_invitations = (!empty($total_invitations)?' ('.$total_invitations.')':'');
-
-		// Everybody can create groups
-		/*
-		if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
-			$create_group_item =  '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).'<span class="'.($show=='group_add'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('CreateASocialGroup').'</span></a></li>';
-		} else {
-			// Only admins and teachers can create groups
-			if (api_is_allowed_to_edit(null,true)) {
-				$create_group_item =  '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).'<span class="'.($show=='group_add'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('CreateASocialGroup').'</span></a></li>';
-			}
-		}*/
-
+		
 		echo '<div class="social-menu">';
 		
 	    echo '<script type="text/javascript">      
@@ -601,20 +590,23 @@ class SocialManager extends UserManager {
 		  	echo '</div>';
 	  	} else {
 	  		$img_array = UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
+	  		
 			$big_image = UserManager::get_picture_user($user_id, $img_array['file'],'', USER_IMAGE_SIZE_BIG);
-			$big_image = $big_image['file'];
+			$big_image = $big_image['file'].'?'.uniqid();
+			$normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();
 
 	  		//--- User image
 			echo '<div class="social-content-image">';
 				echo '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()"><center>';
 
 					if ($img_array['file'] != 'unknown.jpg') {
-		    	  		echo '<a class="thickbox" href="'.$big_image.'"><img src='.$img_array['dir'].$img_array['file'].' /> </a>';
+		    	  		echo '<a class="thickbox" href="'.$big_image.'"><img src='.$normal_image.' /> </a>';
 					} else {
-						echo '<img src='.$img_array['dir'].$img_array['file'].' width="110px" />';
+						echo '<img src='.$normal_image.' width="110px" />';
 					}
 					if (api_get_user_id() == $user_id) {
-						echo '<div id="edit_image" class="hidden_message" style="display:none"><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></div>';
+						echo '<div id="edit_image" class="hidden_message" style="display:none">';
+						echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></div>';
 					}
 
 	    	  	echo '</center></div>';
@@ -630,14 +622,6 @@ class SocialManager extends UserManager {
 	        	                	
             echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.png',get_lang('Home'),array('hspace'=>'6')).'<span class="'.($show=='home'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Home').'</span></a></li>';
             echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('instant_message.png',get_lang('Messages'),array('hspace'=>'6')).'<span class="'.($show=='messages'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Messages').$count_unread_message.'</span></a></li>';
-            
-		    if (in_array($show, $show_messages)) {
-				/*echo '<li><ul>';
-					echo '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array('hspace'=>'6','style'=>'float:left')).'<span class="'.($show=='messages_compose'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('ComposeMessage').'</span></a></li>';
-					echo '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png', get_lang('Inbox'), array('hspace'=>'6')).'<span class="'.($show=='messages_inbox'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Inbox').'</span></a></li>';						
-					echo '<li class="social-menu-sub-level" style="background:none;padding:0px"><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array('hspace'=>'6')).'<span class="'.($show=='messages_outbox'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Outbox').'</span></a></li>';
-				echo '</ul></li>';*/
-			}
 
 	        //Invitations
 	        echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitation.png',get_lang('Invitations'),array('hspace'=>'6')).'<span class="'.($show=='invitations'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Invitations').$total_invitations.'</span></a></li>';
@@ -646,27 +630,7 @@ class SocialManager extends UserManager {
 	        echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('my_shared_profile.png',get_lang('ViewMySharedProfile'),array('hspace'=>'6')).'<span class="'.($show=='shared_profile'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('ViewMySharedProfile').'</span></a></li>
 	        	  <li><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('friend.png',get_lang('Friends'),array('hspace'=>'6')).'<span class="'.($show=='friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Friends').'</span></a></li>
 	              <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.png',get_lang('SocialGroups'),array('hspace'=>'6')).'<span class="'.($show=='browse_groups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('SocialGroups').'</span></a></li>';
-			
-			//Show groups
-/*	        if (in_array($show,$show_groups)) {					
-    			echo $create_group_item;
-                if (api_get_setting('allow_students_to_create_groups_in_social') == 'true' || api_is_platform_admin()) {                        
-                    echo '<li><ul>';    
-                    echo '<li class="social-menu-sub-level" style="background:none;padding:0px"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php?view=mygroups">'.Display::return_icon('group.png',get_lang('MySocialGroups'),array('hspace'=>'6')).'<span class="'.($show=='mygroups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MySocialGroups').'</span></a></li>';
-                    echo '</ul></li>';
-                }
-			}*/
-			
-			//Groups
-			/*
-			if (api_get_setting('show_groups_to_users') == 'true') {
-    			$group_class = 'social-menu-text4';
-    			if ($show == 'classes') {
-    			    $group_class = 'social-menu-text-active';     
-    			}
-                echo Display::tag('li', Display::return_icon('group.png',get_lang('MyGroups'),array('hspace'=>'6')).Display::url(Display::tag('span',get_lang('MyGroups'),array('class'=>$group_class)),api_get_path(WEB_PATH).'main/social/usergroups.php'));
-			}            
-			*/
+
 			//Search users
 	        echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('zoom.png',get_lang('Search'),array('hspace'=>'6')).'<span class="'.($show=='search'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Search').'</span></a></li>';
             		
@@ -809,19 +773,26 @@ class SocialManager extends UserManager {
 				// reduce image
                 $name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
                 
-                if ($image_array['file'] == 'unknown.jpg') {
+                if ($image_array['file'] == 'unknown.jpg' || !file_exists($image_array['dir'].$image_array['file'])) {
                     $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg'; 
                     $table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" class="social-home-anonymous-online" alt="'.$name.'" src="'.$friends_profile['file'].'"></a>';
                 } else {
-                    $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL );
+                    $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);
+                    
                     
                     $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
                     
                     $clip = 'clip_vertical';                    
                     if ($friends_profile['original_height'] > $friends_profile['original_width']) {
                         $clip = 'clip_horizontal';    
-                    }                    
-                    $table_row[] = Display::url(Display::div(Display::div($img, array('class'=>$clip)), array('class'=>'clip-wrapper')) , $url);    
+                    }
+                    
+                    //A really tiny image                    
+                    if ($friends_profile['original_height'] < 50 || $friends_profile['original_height']< 50) {
+                        $clip = '';   
+                    }
+                    $table_row[] = Display::url(Display::div(Display::div($img, array('class'=>$clip)), array('class'=>'clip-wrapper')) , $url);
+                        
                 }				
 				$table_row[] = '<a href="'.$url.'">'.(cut($user_info['firstName'],16)).'<br />'.cut($user_info['lastName'],18).'</a>';
 				

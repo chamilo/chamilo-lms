@@ -1248,6 +1248,10 @@ a.unread {
 	clip:rect(0px 218px 155px 0px);
 	top:-42px;
 	left:-32px;
+	
+	 -webkit-transform: scale(0.6);
+    -moz-transform: scale(0.6);
+    -o-transform: scale(0.6);   
 }
 
 .clip_horizontal {
@@ -1255,6 +1259,10 @@ a.unread {
     clip:rect(0px 218px 155px 0px);
     top:-25px;
     left:-48px;
+    
+    -webkit-transform: scale(0.6);
+    -moz-transform: scale(0.6);
+    -o-transform: scale(0.6);
 }
 
 .social-plugin-item {

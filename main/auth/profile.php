@@ -94,14 +94,10 @@ if (api_get_setting('allow_message_tool') == 'true') {
 EOF;
 }
 
-/*
-	Configuration file
-*/
+//	Configuration file
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 
-/*
-	Libraries
-*/
+// Libraries
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
@@ -110,9 +106,7 @@ require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 $tool_name = is_profile_editable() ? get_lang('ModifProfile') : get_lang('ViewProfile');
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
-/*
-	Form
-*/
+/*	Form	*/
 
 /*
  * Get initial values for all fields.
@@ -655,7 +649,10 @@ if ($form->validate()) {
     }
     
 	//Only update values that are request by the "profile" setting
-	$profile_list = api_get_setting('profile');		
+	$profile_list = api_get_setting('profile');
+	//Adding missing variables		
+	
+	var_dump($profile_list);
 	$available_values_to_modify = array();
 	foreach($profile_list as $key => $status) {	    
 	    if ($status == 'true') {
@@ -668,9 +665,10 @@ if ($form->validate()) {
     	       $available_values_to_modify[] = $key;
     	    } 
 	    }
-	}
-	
-
+	}	
+	//Fixing missing variables
+    $available_values_to_modify = array_merge($available_values_to_modify, array('competences', 'diplomas', 'openarea', 'teach', 'teach', 'openid'));
+    
 	// build SQL query
 	$sql = "UPDATE $table_user SET";
 	unset($user_data['api_key_generate']);

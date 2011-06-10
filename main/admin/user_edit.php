@@ -60,7 +60,6 @@ require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
 require_once $libpath.'usermanager.lib.php';
 require_once $libpath.'formvalidator/FormValidator.class.php';
-require_once $libpath.'image.lib.php';
 require_once $libpath.'mail.lib.inc.php';
 
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
@@ -447,15 +446,15 @@ $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
 	.'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
 	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
 
-if ($image_size[0] > 300) { //limit display width to 300px
+if ($image_size['width'] > 300) { //limit display width to 300px
 	$img_attributes .= 'width="300" ';
 }
 
 // get the path,width and height from original picture
 $big_image = $image_dir.'big_'.$image;
 $big_image_size = api_getimagesize($big_image);
-$big_image_width = $big_image_size[0];
-$big_image_height = $big_image_size[1];
+$big_image_width = $big_image_size['width'];
+$big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
 
 if ($image == '') {

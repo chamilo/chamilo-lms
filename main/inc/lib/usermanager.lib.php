@@ -799,17 +799,17 @@ class UserManager
 	/**
 	 * Creates new user pfotos in various sizes of a user, or deletes user pfotos.
 	 * Note: This method relies on configuration setting from dokeos/main/inc/conf/profile.conf.php
-	 * @param int $user_id			The user internal identitfication number.
-	 * @param string $file			The common file name for the newly created pfotos. It will be checked and modified for compatibility with the file system.
-	 * If full name is provided, path component is ignored.
-	 * If an empty name is provided, then old user photos are deleted only, @see UserManager::delete_user_picture() as the prefered way for deletion.
-	 * @param string $source_file	The full system name of the image from which user photos will be created.
-	 * @return string/bool			Returns the resulting common file name of created images which usually should be stored in database.
+	 * @param 	int $user_id		The user internal identitfication number.
+	 * @param 	string $file		The common file name for the newly created pfotos. 
+	 * 								It will be checked and modified for compatibility with the file system.
+	 * 								If full name is provided, path component is ignored.
+	 * 								If an empty name is provided, then old user photos are deleted only, 
+	 * @see 	UserManager::delete_user_picture() as the prefered way for deletion.
+	 * @param 	string $source_file	The full system name of the image from which user photos will be created.
+	 * @return 	string/bool			Returns the resulting common file name of created images which usually should be stored in database.
 	 * When deletion is recuested returns empty string. In case of internal error or negative validation returns FALSE.
 	 */
 	public static function update_user_picture($user_id, $file = null, $source_file = null) {
-
-		// Validation 1.
 		if (empty($user_id)) {
 			return false;
 		}
@@ -878,23 +878,19 @@ class UserManager
 			$filename = $user_id.'_'.$filename;
 		}
 
-		// Storing the new photos in 4 versions with various sizes.        
-		$picture_info = api_getimagesize($source_file);		
-		
-		$type = $picture_info[2];
-		$small  = self::resize_picture($source_file, 22);		
-		$medium = self::resize_picture($source_file, 85);
+		// Storing the new photos in 4 versions with various sizes.		
+
+		$small  = self::resize_picture($source_file, 22);
+		$medium = self::resize_picture($source_file, 85);		
 		$normal = self::resize_picture($source_file, 200);
-		$big    = new image($source_file); // This is the original picture.
+		
+		$big    = new Image($source_file); // This is the original picture.
 
 		$ok = false;
-		$detected = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG');		
-		if (in_array($type, array_keys($detected))) {
-			$ok = $small->send_image($detected[$type], $path.'small_'.$filename)
-				&& $medium->send_image($detected[$type], $path.'medium_'.$filename)
-				&& $normal->send_image($detected[$type], $path.$filename)
-				&& $big->send_image($detected[$type], $path.'big_'.$filename);
-		}		
+		$ok = $small->send_image($path.'small_'.$filename) && 
+		      $medium->send_image($path.'medium_'.$filename) && 
+		      $normal->send_image($path.$filename) && 
+		      $big->send_image( $path.'big_'.$filename);
 		return $ok ? $filename : false;
 	}
 
@@ -2288,14 +2284,13 @@ class UserManager
      * @todo move this function somewhere else image.lib?
      * @return obj image object
      */
-    public static function resize_picture($file, $max_size_for_picture) {
-        if (!class_exists('image')) {
-            require_once api_get_path(LIBRARY_PATH).'image.lib.php';
-        }
+    public static function resize_picture($file, $max_size_for_picture) {        
         $temp = null;
         if (file_exists($file)) {
-            $temp = new image($file);        
-            list($width, $height) = api_getimagesize($file);          
+            $temp = new Image($file);        
+            $image_size =  $temp->get_image_size($file);
+            $width  = $image_size['width'];
+            $height = $image_size['height'];
             if ($width >= $height) {
                 if ($width >= $max_size_for_picture) {
                   // scale height
@@ -2357,9 +2352,9 @@ class UserManager
 			$picture['style'] = '';
 			if ($height > 0) {
 				$dimension = api_getimagesize($picture['file']);
-				$margin = (($height - $dimension[1]) / 2);
+				$margin = (($height - $dimension['width']) / 2);
 				//@ todo the padding-top should not be here
-				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension[0].'px; height:'.$dimension[1].'px;" ';				
+				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension['width'].'px; height:'.$dimension['height'].'px;" ';				
 				$picture['original_height'] = $dimension[0];
 				$picture['original_width']  = $dimension[1];
 			}

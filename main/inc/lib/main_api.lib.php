@@ -28,6 +28,8 @@ define('ANONYMOUS', 6);
  * the teacher through HTMLPurifier */
 define('COURSEMANAGERLOWSECURITY', 10);
 
+
+
 // Table of status
 $_status_list[COURSEMANAGER] = 'teacher'; // 1
 $_status_list[SESSIONADMIN] = 'session_admin'; // 3
@@ -4471,7 +4473,8 @@ if (!function_exists('json_encode')) {
  * @link http://www.dokeos.com/forum/viewtopic.php?t=16355
  */
 function api_getimagesize($path) {
-    return @getimagesize(preg_match(VALID_WEB_PATH, $path) ? (api_is_internal_path($path) ? api_get_path(TO_SYS, $path) : $path) : $path);
+    $image = new Image($path);    
+    return $image->get_image_size();
 }
 
 /**
@@ -4483,10 +4486,8 @@ function api_getimagesize($path) {
  * @return array                Calculated new width and height
  */
 function api_resize_image($image, $target_width, $target_height) {
-    $image_properties = api_getimagesize($image);
-    $image_width = $image_properties[0];
-    $image_height = $image_properties[1];
-    return api_calculate_image_size($image_width, $image_height, $target_width, $target_height);
+    $image_properties = api_getimagesize($image);    
+    return api_calculate_image_size($image_properties['width'], $image_properties['height'], $target_width, $target_height);
 }
 
 /**

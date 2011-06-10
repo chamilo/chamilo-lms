@@ -294,7 +294,9 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
             $img_width = $img_width[1];
             if (!$defined_width) {
 
-                list($img_width, $img_height, $type) = api_getimagesize($this->base_work_dir.$this->created_dir.'/'.$image);
+                $image_size = api_getimagesize($this->base_work_dir.$this->created_dir.'/'.$image);
+                $img_width  = $image_size['width']; 
+                $img_height = $image_size['height'];
 
                 $new_width = $max_width - 10;
                 if ($img_width > $new_width) {

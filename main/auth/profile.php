@@ -104,7 +104,6 @@ require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 */
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 
@@ -546,12 +545,12 @@ function check_user_email($email){
 }
 
 /*		MAIN CODE */
-$filtered_extension = false;
-$update_success = false;
-$upload_picture_success = false;
-$upload_production_success = false;
-$msg_fail_changue_email = false;
-$msg_is_not_password = false;
+$filtered_extension         = false;
+$update_success             = false;
+$upload_picture_success     = false;
+$upload_production_success  = false;
+$msg_fail_changue_email     = false;
+$msg_is_not_password        = false;
 
 if (!empty($_SESSION['change_email'])) {
 	$msg_fail_changue_email= ($_SESSION['change_email'] == 'success');
@@ -601,7 +600,7 @@ if ($form->validate()) {
 		$_SESSION['change_email'] = 'success';
 	}
 
-	// upload picture if a new one is provided
+	// Upload picture if a new one is provided
 	if ($_FILES['picture']['size']) {	 
 		if ($new_picture = UserManager::update_user_picture(api_get_user_id(), $_FILES['picture']['name'], $_FILES['picture']['tmp_name'])) {
 			$user_data['picture_uri'] = $new_picture;
@@ -800,7 +799,7 @@ if (!empty($msg_is_not_password)){
 $image_syspath = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system', false, true);
 $image_syspath['dir'].$image_syspath['file'];
 
-$image_size = @getimagesize($image_syspath['dir'].$image_syspath['file']);
+$image_size = api_getimagesize($image_syspath['dir'].$image_syspath['file']);
 
 //Web path
 $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', false, true);
@@ -810,7 +809,7 @@ $image_file = $image_dir.$image;
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
 	.'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
 	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; margin-top:0px;padding:5px;" ';
-if ($image_size[0] > 300) {
+if ($image_size['width'] > 300) {
 	//limit display width to 300px
 	$img_attributes .= 'width="300" ';
 }
@@ -818,10 +817,10 @@ if ($image_size[0] > 300) {
 // get the path,width and height from original picture
 $big_image = $image_dir.'big_'.$image;
 
-$big_image_size = api_getimagesize($big_image);
-$big_image_width = $big_image_size[0];
-$big_image_height = $big_image_size[1];
-$url_big_image = $big_image.'?rnd='.time();
+$big_image_size     = api_getimagesize($big_image);
+$big_image_width    = $big_image_size['width'];
+$big_image_height   = $big_image_size['height'];
+$url_big_image      = $big_image.'?rnd='.time();
 
 if (api_get_setting('allow_social_tool') == 'true') {
 	echo '<div id="social-content">';
@@ -829,9 +828,10 @@ if (api_get_setting('allow_social_tool') == 'true') {
 		SocialManager::show_social_menu('home', null, $user_id, $show_full_profile);
 		echo '</div>';
 
-		echo '<div id="social-content-right">';					
-			
+		echo '<div id="social-content-right">';
 			echo '<table><tr><td>';
+			//Useless link
+			/*
 				echo '<div id="social-content-online">';
 					if (api_get_setting('extended_profile') == 'true') {
 						$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
@@ -841,8 +841,8 @@ if (api_get_setting('allow_social_tool') == 'true') {
 							echo '<a href="profile.php?type=reduced'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.png', get_lang('EditNormalProfile'),'',16).'&nbsp;'.get_lang('EditNormalProfile').'</span></a>';
 						}
 					}
-				echo '</div>';				
-				$form->display();
+				echo '</div>';*/				
+            $form->display();
 			echo '</td></tr></table>';		
 	echo '</div>';
 } else {

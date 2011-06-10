@@ -702,10 +702,7 @@ if ($_POST['step2']) {
 	if ($installType == 'update') {
 
 		require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-		require_once api_get_path(LIBRARY_PATH).'image.lib.php';
-
 		remove_memory_and_time_limits();
-
 		database_server_connect();
 		// Initialization of the database connection encoding intentionaly is not done.
 		// This is the old style for connecting to the database server, that is implemented here.

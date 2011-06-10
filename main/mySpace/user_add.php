@@ -12,7 +12,6 @@ require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
 require_once $libpath.'usermanager.lib.php';
 require_once $libpath.'formvalidator/FormValidator.class.php';
-require_once $libpath.'image.lib.php';
 require_once $libpath.'mail.lib.inc.php';
 
 // user permissions

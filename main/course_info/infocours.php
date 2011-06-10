@@ -32,20 +32,21 @@ require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 /*	Constants and variables */
 define('MODULE_HELP_NAME', 'Settings');
 define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
+
 $TABLECOURSE 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $TABLEFACULTY 				= Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $TABLECOURSEHOME 			= Database :: get_course_table(TABLE_TOOL_LIST);
 $TABLELANGUAGES 			= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 $TABLEBBCONFIG 				= Database :: get_course_table(TOOL_FORUM_CONFIG_TABLE);
 $currentCourseID 			= $_course['sysCode'];
-$currentCourseRepository                = $_course['path'];
+$currentCourseRepository    = $_course['path'];
 $is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
 $course_setting_table 		= Database::get_course_table(TABLE_COURSE_SETTING);
 
 $course_code = $_course['sysCode'];
 $course_access_settings = CourseManager :: get_access_settings($course_code);
 
-/*		LOGIC FUNCTIONS */
+//LOGIC FUNCTIONS
 function is_settings_editable() {
 	return $GLOBALS['course_info_is_editable'];
 }
@@ -60,17 +61,14 @@ $show_delete_watermark_text_message = false;
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     if (isset($_GET['delete_watermark'])) {
         PDF::delete_watermark($course_code);
-        $show_delete_watermark_text_message = true;
-        
+        $show_delete_watermark_text_message = true;        
     }
 }
-
-
 $table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
-$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-$tbl_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
-$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+$tbl_user              = Database :: get_main_table(TABLE_MAIN_USER);
+$tbl_admin             = Database :: get_main_table(TABLE_MAIN_ADMIN);
+$tbl_course_user       = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_course            = Database :: get_main_table(TABLE_MAIN_COURSE);
 
 // Get all course categories
 $sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE'  OR code = '".Database::escape_string($_course['categoryCode'])."'  ORDER BY tree_pos";
@@ -110,7 +108,6 @@ while ($cat = Database::fetch_array($res)) {
 	ksort($categories);
 }
 
-
 $linebreak = '<div class="row"><div class="label"></div><div class="formw" style="border-bottom:1px dashed grey"></div></div>';
 
 // Build the form
@@ -120,11 +117,21 @@ $form = new FormValidator('update_course');
 $form->addElement('html', '<div class="sectiontitle"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="coursesettings" id="coursesettings"></a>'.Display::return_icon('settings.png', get_lang('CourseSettings'),'','22').' '.get_lang('CourseSettings').'</div>');
 
 $image_html = '';
-// display course picture
+
+// Sending image
+if ($form->validate() && is_settings_editable()) {	
+    // update course picture
+    $picture = $_FILES['picture'];
+    if (!empty($picture['name'])) {
+        $picture_uri = CourseManager::update_course_picture($course_code, $picture['name'], $picture['tmp_name']);
+    }
+}
+    
+// Display course picture
 $course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository;   // course path
 if (file_exists($course_path.'/course-pic85x85.png')) {
     $course_web_path = api_get_path(WEB_COURSE_PATH).$currentCourseRepository;   // course web path
-    $course_medium_image = $course_web_path.'/course-pic85x85.png'; // redimensioned image 85x85
+    $course_medium_image = $course_web_path.'/course-pic85x85.png?'.rand(1,1000); // redimensioned image 85x85
     $image_html =  '<div class="row"><div class="formw"><img src="'.$course_medium_image.'" /></div></div>';
 }
 $form->addElement('html', $image_html);
@@ -165,8 +172,7 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     if ($url != false) {        
         $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
         $form->addElement('html', '<div class="row"><div class="formw"><a href="'.$url.'">'.$url.' '.$delete_url.'</a></div></div>');
-    }   
-    $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+    }
     $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);    
 }
 
@@ -220,8 +226,6 @@ $form->addElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('Qu
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
-
-
 // USER RIGHTS
 $form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="userrights" id="userrights"></a>'.Display::return_icon('user.png', get_lang('UserRights'),'','22').' '.get_lang('UserRights').'</div>');
 $form->addElement('radio', 'allow_user_edit_agenda', get_lang('AllowUserEditAgenda'), get_lang('AllowUserEditAgendaActivate'), 1);
@@ -245,7 +249,6 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 $form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="chatsettings" id="chatsettings"></a>'.Display::return_icon('chat.png', get_lang('ConfigChat'),'','22').' '.get_lang('ConfigChat').'</div>');
 $form->addElement('radio', 'allow_open_chat_window', get_lang('AllowOpenchatWindow'), get_lang('AllowOpenChatWindowActivate'), 1);
 $form->addElement('radio', 'allow_open_chat_window', null, get_lang('AllowOpenChatWindowDeactivate'), 0);
-
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
@@ -282,7 +285,6 @@ $form->addElement('radio', 'display_info_advance_inside_homecourse', get_lang('I
 $form->addElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDone'), 2);
 $form->addElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance'), 3);
 $form->addElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DoNotDisplayAnyAdvance'), 0);
-
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
@@ -342,12 +344,12 @@ $form->setDefaults($values);
 // Validate form
 if ($form->validate() && is_settings_editable()) {
 	$update_values = $form->exportValues();
-
+/*
     // update course picture
     $picture = $_FILES['picture'];
     if (!empty($picture['name'])) {
         $picture_uri = CourseManager::update_course_picture($course_code, $picture['name'], $picture['tmp_name']);
-    }
+    }*/
     
     $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
     

@@ -803,32 +803,20 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                 $upload_dir = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/';
 
                 // Resize image to max default and end upload
-                require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
-                $temp = new image($_FILES['template_image']['tmp_name']);
-                $picture_infos = @getimagesize($_FILES['template_image']['tmp_name']);
+                $temp = new Image($_FILES['template_image']['tmp_name']);
+                $picture_info = $temp->get_image_info();
 
                 $max_width_for_picture = 100;
 
-                if ($picture_infos[0] > $max_width_for_picture) {
+                if ($picture_info['width'] > $max_width_for_picture) {
                     $thumbwidth = $max_width_for_picture;
                     if (empty($thumbwidth) || $thumbwidth == 0) {
                         $thumbwidth = $max_width_for_picture;
                     }
-                    $new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
-
+                    $new_height = round(($thumbwidth/$picture_info['width'])*$picture_info['height']);
                     $temp->resize($thumbwidth, $new_height, 0);
                 }
-
-                $type = $picture_infos[2];
-
-                switch (!empty($type)) {
-                    case 2 : $temp->send_image('JPG', $upload_dir.$new_file_name);
-                            break;
-                    case 3 : $temp->send_image('PNG', $upload_dir.$new_file_name);
-                            break;
-                    case 1 : $temp->send_image('GIF', $upload_dir.$new_file_name);
-                            break;
-                }
+                $temp->send_image($upload_dir.$new_file_name);
             }
         }
 

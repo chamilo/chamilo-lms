@@ -272,7 +272,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                         if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
                             global $_configuration;
 
-                            if ($_configuration['multiple_access_urls']) {
+                            if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
                                 $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 
                                 //Check if user is an admin

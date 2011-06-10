@@ -326,30 +326,12 @@ class PDF {
         $course_image = $store_path.'/'.api_get_current_access_url_id().'_pdf_watermark.png';
         $extension = strtolower(substr(strrchr($filename, '.'), 1));
         $result = false;
-        $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-        if (in_array($extension, $allowed_picture_types)) {
-            if (file_exists($course_image)) {
-                @unlink($course_image);
-            }            
-            if ($extension != 'png') {
-                // convert image to png extension
-                if ($extension == 'jpg' || $extension == 'jpeg') {
-                    $image = imagecreatefromjpeg($source_file);
-                } else {
-                    $image = imagecreatefromgif($source_file);
-                }
-                ob_start();
-                imagepng($image);
-                $imagevariable = ob_get_contents();
-                ob_end_clean();
-                // save picture
-                if (@file_put_contents($course_image, $imagevariable)) {
-                    $result = true;
-                }
-            } else {
-                $result = move_uploaded_file($source_file, $course_image);                
-            }
+        
+        if (file_exists($course_image)) {
+            @unlink($course_image);
         }
+        $my_image = new Image($source_file);
+        $result = $my_image->send_image($course_image, -1, 'png');        
         if ($result) {
         	$result = $web_path;
         }

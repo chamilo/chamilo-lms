@@ -1,14 +1,13 @@
-<?php // $Id: user_edit.php 22233 2009-07-20 09:54:05Z ivantcholakov $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
+
 */
 // Language files that should be included
 $language_file = array('admin','userInfo');
 $cidReset = true;
-include '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
@@ -17,7 +16,6 @@ require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
 require_once $libpath.'group_portal_manager.lib.php';
 require_once $libpath.'formvalidator/FormValidator.class.php';
-require_once $libpath.'image.lib.php';
 require_once $libpath.'mail.lib.inc.php';
 
 $group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);
@@ -131,15 +129,15 @@ $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
 	.'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
 	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
 
-if ($image_size[0] > 300) { //limit display width to 300px
+if ($image_size['width'] > 300) { //limit display width to 300px
 	$img_attributes .= 'width="300" ';
 }
 
 // get the path,width and height from original picture
 $big_image = $image_dir.'big_'.$image;
 $big_image_size = api_getimagesize($big_image);
-$big_image_width = $big_image_size[0];
-$big_image_height = $big_image_size[1];
+$big_image_width = $big_image_size['width'];
+$big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
 
 if ($image == '') {

@@ -674,23 +674,16 @@ class GroupPortalManager
 
 		// Storing the new photos in 4 versions with various sizes.
 
-		$picture_info = @getimagesize($source_file);
-		$type = $picture_info[2];
-
-		$small = self::resize_picture($source_file, 22);
+		$small  = self::resize_picture($source_file, 22);
 		$medium = self::resize_picture($source_file, 85);
 		$normal = self::resize_picture($source_file, 200);
 
-		$big = new image($source_file); // This is the original picture.
+		$big = new Image($source_file); // This is the original picture.
 		$ok = false;
-		$detected = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG');
-
-		if (in_array($type, array_keys($detected))) {
-			$ok = $small->send_image($detected[$type], $path.'small_'.$filename)
-				&& $medium->send_image($detected[$type], $path.'medium_'.$filename)
-				&& $normal->send_image($detected[$type], $path.'big_'.$filename)
-				&& $big->send_image($detected[$type], $path.$filename);
-		}
+		$ok = $small->send_image($path.'small_'.$filename)
+				&& $medium->send_image($path.'medium_'.$filename)
+				&& $normal->send_image($path.'big_'.$filename)
+				&& $big->send_image($path.$filename);		
 		return $ok ? $filename : false;
 	}
 
@@ -764,18 +757,15 @@ class GroupPortalManager
 	 * @param  int size in pixels
 	 * @return obj image object
 	 */
-	public static function resize_picture($file, $max_size_for_picture) {
-		if (!class_exists('image')) {
-			require_once api_get_path(LIBRARY_PATH).'image.lib.php';
-		}
+	public static function resize_picture($file, $max_size_for_picture) {		
 	 	$temp = new image($file);
 	 	$picture_infos = api_getimagesize($file);
-		if ($picture_infos[0] > $max_size_for_picture) {
+		if ($picture_infos['width'] > $max_size_for_picture) {
 			$thumbwidth = $max_size_for_picture;
 			if (empty($thumbwidth) or $thumbwidth == 0) {
 				$thumbwidth = $max_size_for_picture;
 			}
-			$new_height = round(($thumbwidth / $picture_infos[0]) * $picture_infos[1]);
+			$new_height = round(($thumbwidth / $picture_infos['width']) * $picture_infos['height']);
 			if ($new_height > $max_size_for_picture)
 			$new_height = $thumbwidth;
 			$temp->resize($thumbwidth, $new_height, 0);
@@ -826,9 +816,9 @@ class GroupPortalManager
 			$picture['style'] = '';
 			if ($height > 0) {
 				$dimension = api_getimagesize($picture['file']);
-				$margin = (($height - $dimension[1]) / 2);
+				$margin = (($height - $dimension['width']) / 2);
 				//@ todo the padding-top should not be here
-				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension[0].'px; height:'.$dimension[1].';" ';
+				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension['width'].'px; height:'.$dimension['height'].';" ';
 			}
 		} else {
 			//$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;

@@ -16,7 +16,7 @@ class TestImage extends UnitTestCase {
 		$this->timage = null;
 	}
 
-	public function testAddBackGround() {
+	/*public function testAddBackGround() {
 			$bgfile='';
 			$res = image::addbackground($bgfile);
 			$this->assertTrue(is_null($res));
@@ -67,7 +67,7 @@ class TestImage extends UnitTestCase {
 	 		$res = image::mergelogo($x,$y);
 			$this->assertTrue(is_bool($res));
 			//var_dump($res);
-	}
+	}*/
 
 	public function testresize() {
 			$thumbw='';
@@ -85,13 +85,13 @@ class TestImage extends UnitTestCase {
 			//var_dump($res);
 	}
 
-
+/*
 	public function testsetfont() {
 			$fontfile=$this->fontfile;
 			$res = image::setfont($fontfile);
 			$this->assertTrue(is_null($res));
 			//var_dump($res);
-	}
+	}*/
 /*
 	public function TestDeleteCourse(){				
 		$code = 'COURSETEST';				
@@ -110,4 +110,3 @@ class TestImage extends UnitTestCase {
 	}
 */
 }
-?>

@@ -349,8 +349,8 @@ elseif ($displayMode == "viewContentEdit") {
 		// get the path,width and height from original picture
 		$big_image = $image_array['dir'].'big_'.$image_array['file'];
 		$big_image_size = api_getimagesize($big_image);
-		$big_image_width= $big_image_size[0];
-		$big_image_height= $big_image_size[1];
+		$big_image_width= $big_image_size['width'];
+		$big_image_height= $big_image_size['height'];
 		$url_big_image = $big_image.'?rnd='.time();
 
 		if ($image_array['file']=='unknown.jpg') {
@@ -438,8 +438,8 @@ elseif ($displayMode == "viewContentEdit") {
 		// get the path,width and height from original picture
 		$big_image = $image_array['dir'].'big_'.$image_array['file'];
 		$big_image_size = api_getimagesize($big_image);
-		$big_image_width= $big_image_size[0];
-		$big_image_height= $big_image_size[1];
+		$big_image_width= $big_image_size['width'];
+		$big_image_height= $big_image_size['height'];
 		$url_big_image = $big_image.'?rnd='.time();
 
 		if ($image_array['file']=='unknown.jpg') {

@@ -3,23 +3,9 @@
 
 /**
  *	@author Patrick Cool
- *	@package ghamilo.document
+ *	@package chamilo.document
  *	@todo convert comments to be understandable to phpDocumentor
  */
-
-/*
-Developped by Patrick Cool
-patrick.cool@UGent.be
-Ghent University
-Mai 2004
-http://icto.UGent.be
-
-Please bear in mind that this is only an alpha release.
-I wrote this quite quick and didn't think too much about it in advance.
-It is not perfect at all but it is workable and usefull (I think)
-Do not consider this as a powerpoint replacement, although it has
-the same starting point.
-*/
 
 /*
 Description:
@@ -58,8 +44,8 @@ function resize_image($image, $target_width, $target_height, $slideshow = 0) {
 		$result[] = $new_sizes['width'];
 	} else {
         $size = api_getimagesize($image);
-		$result[] = $size[1];
-		$result[] = $size[0];
+		$result[] = $size['height'];
+		$result[] = $size['width'];
 	}
 	return $result;
 }

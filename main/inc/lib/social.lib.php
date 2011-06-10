@@ -878,8 +878,8 @@ class SocialManager extends UserManager {
 					// get the path,width and height from original picture
 					$big_image = $webdir.'big_'.$user_object->picture_uri;
 					$big_image_size = api_getimagesize($big_image);
-					$big_image_width = $big_image_size[0];
-					$big_image_height = $big_image_size[1];
+					$big_image_width = $big_image_size['width'];
+					$big_image_height = $big_image_size['height'];
 					$url_big_image = $big_image.'?rnd='.time();
 					echo '<input type="image" src="'.$fullurl.'" alt="'.$alt.'" onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/><br />';
 				} else {

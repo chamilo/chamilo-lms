@@ -360,17 +360,12 @@ abstract class Question
 		// if the question has got an ID
 		if ($this->id) {
 			$extension = pathinfo($PictureName, PATHINFO_EXTENSION);						
-			$this->picture ='quiz-'.$this->id.'.jpg';			
-			require_once api_get_path(LIBRARY_PATH).'image.lib.php';
-			$detected = array('gif','jpeg','jpg','png');			
-            if (in_array(strtolower($extension), $detected)) {    			
-    			$o_img = new image($Picture);
-    			$o_img->send_image('JPG',$picturePath.'/'.$this->picture);
-    			$document_id = add_document($this->course, '/images/'.$this->picture, 'file', filesize($picturePath.'/'.$this->picture),$this->picture);
-    	
-    			if ($document_id) {
-    				return api_item_property_update($this->course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id);
-    			}
+			$this->picture = 'quiz-'.$this->id.'.jpg';						    			
+    		$o_img = new Image($Picture);
+    		$o_img->send_image($picturePath.'/'.$this->picture, -1, 'jpg');
+            $document_id = add_document($this->course, '/images/'.$this->picture, 'file', filesize($picturePath.'/'.$this->picture),$this->picture);
+    	    if ($document_id) {
+                return api_item_property_update($this->course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id);    			
             }
 		}
 
@@ -391,36 +386,33 @@ abstract class Question
 		// if the question has an ID
 		if($this->id) {
 	  		// Get dimensions from current image.
-	  		$current_img = imagecreatefromjpeg($picturePath.'/'.$this->picture);
+	  		$my_image = new Image($picturePath.'/'.$this->picture);
+	  		
+	  		$current_image_size = $my_image->get_image_size();
+	  		$current_width      = $current_image_size['width'];
+	  		$current_height     = $current_image_size['height'];		
 
-	  		$current_image_size = getimagesize($picturePath.'/'.$this->picture);
-	  		$current_height = imagesy($current_img);
-			$current_width = imagesx($current_img);
-
-			if($current_image_size[0] < $Max && $current_image_size[1] <$Max)
+			if($current_width < $Max && $current_height <$Max)
 				return true;
 			elseif($current_height == "")
 				return false;
 
 			// Resize according to height.
-			if ($Dimension == "height")
-			{
+			if ($Dimension == "height") {
 				$resize_scale = $current_height / $Max;
 				$new_height = $Max;
 				$new_width = ceil($current_width / $resize_scale);
 			}
 
 			// Resize according to width
-			if ($Dimension == "width")
-			{
+			if ($Dimension == "width") {
 				$resize_scale = $current_width / $Max;
 				$new_width = $Max;
 				$new_height = ceil($current_height / $resize_scale);
 			}
 
 			// Resize according to height or width, both should not be larger than $Max after resizing.
-			if ($Dimension == "any")
-			{
+			if ($Dimension == "any") {
 				if ($current_height > $current_width || $current_height == $current_width)
 				{
 					$resize_scale = $current_height / $Max;
@@ -434,28 +426,13 @@ abstract class Question
 					$new_height = ceil($current_height / $resize_scale);
 				}
 			}
-
-			// Create new image
-		    $new_img = imagecreatetruecolor($new_width, $new_height);
-			$bgColor = imagecolorallocate($new_img, 255,255,255);
-			imagefill($new_img , 0,0 , $bgColor);
-
-			// Resize image
-			imagecopyresized($new_img, $current_img, 0, 0, 0, 0, $new_width, $new_height, $current_width, $current_height);
-
-			// Write image to file
-		    $result = imagejpeg($new_img, $picturePath.'/'.$this->picture, 100);
-
-		    // Delete temperory images, clear memory
-			imagedestroy($current_img);
-			imagedestroy($new_img);
-
-			if ($result)
-			{
+			
+            $my_image->resize($new_width, $new_height);
+            $result = $my_image->send_image($picturePath.'/'.$this->picture);
+            
+			if ($result) {
 				return true;
-			}
-			else
-			{
+			} else {
 				return false;
 			}
 		}

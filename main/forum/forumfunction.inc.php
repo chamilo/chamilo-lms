@@ -306,7 +306,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
 
         $img_attributes = '';
         if (!empty($image_size)) {
-            if ($image_size[0] > 100 || $image_size[1] > 100) {
+            if ($image_size['width'] > 100 || $image_size['height'] > 100) {
                 //limit display width and height to 100px
                 $img_attributes = 'width="100" height="100"';
             }

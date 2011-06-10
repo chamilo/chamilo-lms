@@ -405,8 +405,8 @@ if (!empty ($_GET['student'])) {
 	$image_file = $image_array['dir'] . $image_array['file'];
 	$big_image = $image_array['dir'] . 'big_' . $image_array['file'];
 	$big_image_size = api_getimagesize($big_image);
-	$big_image_width = $big_image_size[0];
-	$big_image_height = $big_image_size[1];
+	$big_image_width = $big_image_size['width'];
+	$big_image_height = $big_image_size['height'];
 	$url_big_image = $big_image . '?rnd=' . time();
 	$img_attributes = 'src="' . $image_file . '?rand=' . time() . '" ' .
 	'alt="' . api_get_person_name($info_user['firstname'], $info_user['lastname']) . '" ' .

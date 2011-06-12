@@ -237,15 +237,15 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
         //target="'.$target.'"
         if ($filetype == 'file') {
             //Sound preview with jplayer
-			if ( preg_match('/mp3$/i',  urldecode($url))  ||
-			     preg_match('/wav$/i',  urldecode($url))  ||
-			     preg_match('/ogg$/i',  urldecode($url))) {			         
+			if ( preg_match('/mp3$/',  urldecode($url))  ||
+			     preg_match('/wav$/',  urldecode($url))  ||
+			     preg_match('/ogg$/',  urldecode($url))) {			         
 			     return '<span style="float:left" '.$visibility_class.' style="float:left">'.$title.'</span>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
             } elseif (
                 //Show preview sith yoxview
-                 preg_match('/swf$/i',  urldecode($url))  || 
-			     preg_match('/html$/i', urldecode($url))  || 
-			     preg_match('/htm$/i',  urldecode($url))  //|| (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
+                 preg_match('/swf$/',  urldecode($url))  || 
+			     preg_match('/html$/', urldecode($url))  || 
+			     preg_match('/htm$/',  urldecode($url))  //|| (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
             ) {
 				$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
 				return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview" style="float:left" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
@@ -262,16 +262,16 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
         if (preg_match('/shared_folder/', urldecode($url)) && preg_match('/shared_folder$/', urldecode($url))==false && preg_match('/shared_folder_session_'.$current_session_id.'$/', urldecode($url))==false){
 			if ($filetype == 'file') {
                 //Sound preview with jplayer
-                if ( preg_match('/mp3$/i',  urldecode($url))  ||
-                     preg_match('/wav$/i',  urldecode($url))  ||
-                     preg_match('/ogg$/i',  urldecode($url))) {                   
+                if ( preg_match('/mp3$/',  urldecode($url))  ||
+                     preg_match('/wav$/',  urldecode($url))  ||
+                     preg_match('/ogg$/',  urldecode($url))) {                   
                      $sound_preview = DocumentManager::generate_mp3_preview($counter);
                      return $sound_preview ;
                 } elseif (
                     //Show preview sith yoxview
-                     preg_match('/swf$/i',  urldecode($url))  || 
-                     preg_match('/html$/i', urldecode($url))  || 
-                     preg_match('/htm$/i',  urldecode($url))  //|| (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
+                     preg_match('/swf$/',  urldecode($url))  || 
+                     preg_match('/html$/', urldecode($url))  || 
+                     preg_match('/htm$/',  urldecode($url))  //|| (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
                 ) {
 					$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
 					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';

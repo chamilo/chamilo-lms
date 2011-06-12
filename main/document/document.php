@@ -888,9 +888,6 @@ $table_footer = '';
 $total_size = 0;
 
 if (isset($docs_and_folders) && is_array($docs_and_folders)) {
-    //echo('<pre>');
-    //print_r($docs_and_folders);
-    //echo('</pre>');
 
     // Do we need the title field for the document name or not?
     // We get the setting here, so we only have to do it once
@@ -957,7 +954,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $row[] = create_document_link($document_data,  true, $count);
         $path_info = pathinfo($document_data['path']);
                 
-        if (isset($path_info['extension']) && in_array($path_info['extension'], array('ogg', 'mp3','wav'))) {
+        if (isset($path_info['extension']) && in_array(strtolower($path_info['extension']), array('ogg', 'mp3','wav'))) {
             $count ++;
         }
 

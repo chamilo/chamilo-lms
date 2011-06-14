@@ -92,7 +92,7 @@ function choose_image($file_name)
     /* FUNCTION CORE */
     $extension = array();
     if (!is_array($file_name)) {
-        if (ereg('\.([[:alnum:]]+)(\?|$)', $file_name, $extension)) {
+        if (preg_match('/\.([[:alnum:]]+)(\?|$)/', $file_name, $extension)) {
             $extension[1] = strtolower($extension[1]);
 
             foreach ($type as $generic_type => $extension_list)

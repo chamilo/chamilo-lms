@@ -70,25 +70,19 @@ class OpenofficePresentation extends OpenofficeDocument {
             $pattern = '/(\w+)\.png$/';
             $replacement = '${1}_thumb.png';
             $thumb_name = preg_replace($pattern, $replacement, $file_name);
+            
             // Calculate thumbnail size.
-            list($width, $height) = getimagesize($image);
+            $image_size = api_getimagesize($image);
+            $width  = $image_size['width'];
+            $height = $image_size['height'];
+            
             $thumb_width = 300;
             $thumb_height = floor($height * ($thumb_width / $width));
-            // Load.
-            $thumb = imagecreatetruecolor($thumb_width, $thumb_height);
-            $source = imagecreatefrompng($image);
-            // Resize.
-            imagecopyresized($thumb, $source, 0, 0, 0, 0, $thumb_width, $thumb_height, $width, $height);
-            // Output.
-            imagepng($thumb, $this->base_work_dir.$this->created_dir .'/'. $thumb_name);
-            /*
-            // New resizing method using imagemagick.
-            $im = new Imagick($image);
-            $im->thumbnailImage($thumb_width, $thumb_height);
-            //file_put_contents($this->base_work_dir.$this->created_dir .'/'. $thumb_name, $im);
-            $im->writeImage($this->base_work_dir.$this->created_dir .'/'. $thumb_name);
-             */
-
+  
+            $my_new_image = Image($image);
+            $my_new_image->resize($thumb_width, $thumb_height);
+            $my_new_image->send_image($this->base_work_dir.$this->created_dir .'/'. $thumb_name, -1, 'png');
+  
             // Adding the thumbnail to documents.
             $document_id_thumb = add_document($_course, $this->created_dir.'/'.urlencode($thumb_name), 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$thumb_name), $slide_name);
             api_item_property_update($_course, TOOL_THUMBNAIL, $document_id_thumb, 'DocumentAdded', api_get_user_id(), 0, 0);

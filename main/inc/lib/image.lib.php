@@ -85,7 +85,7 @@ class ImagickWrapper extends ImageWrapper {
             if ($this->image) {                
                 $this->fill_image_info(); //Fills height, width and type    
             }            
-            if ($debug) error_log('set_image_wrapper loaded');             
+            if ($this->debug) error_log('set_image_wrapper loaded');             
         } catch(ImagickException $e) {             
             if ($this->debug) error_log($e->getMessage());           
         } 

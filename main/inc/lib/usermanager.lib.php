@@ -133,14 +133,10 @@ class UserManager
 		if ($result) {
 			//echo "id returned";
 			$return = Database::insert_id();
-			global $_configuration;
+			
 			require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-			if ($_configuration['multiple_access_urls']) {
-				if (api_get_current_access_url_id() != -1) {
-					UrlManager::add_user_to_url($return, api_get_current_access_url_id());
-				} else {
-					UrlManager::add_user_to_url($return, 1);
-				}
+			if (api_get_multiple_access_url()) {		
+				UrlManager::add_user_to_url($return, api_get_current_access_url_id());				
 			} else {
 				//we are adding by default the access_url_user table with access_url_id = 1
 				UrlManager::add_user_to_url($return, 1);
@@ -199,8 +195,7 @@ class UserManager
 	 * @return boolean true if user is succesfully deleted, false otherwise
 	 */
 	public static function delete_user($user_id) {
-		global $_configuration;
-
+		
 		if ($user_id != strval(intval($user_id))) return false;
 		if ($user_id === false) return false;
 
@@ -277,11 +272,8 @@ class UserManager
 		$resv = Database::query($sqlv);
 
 		require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-		if ($_configuration['multiple_access_urls']) {
-			$url_id = 1;
-			if (api_get_current_access_url_id() != -1) {
-				$url_id = api_get_current_access_url_id();
-			}
+		if (api_get_multiple_access_url()) {			
+			$url_id = api_get_current_access_url_id();			
 			UrlManager::delete_url_rel_user($user_id, $url_id);
 		} else {
 			//we delete the user from the url_id =1
@@ -1827,7 +1819,6 @@ class UserManager
 	 * @return array  list of statuses (session_id-course_code => status)
 	 */
 	public static function get_personal_session_course_list($user_id) {
-		global $_configuration;
 		// Database Table Definitions
 		$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1843,7 +1834,7 @@ class UserManager
 		//we filter the courses from the URL
 		$join_access_url = $where_access_url = '';
 
-		if ($_configuration['multiple_access_urls']) {
+		if (api_get_multiple_access_url()) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
 				$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -2019,8 +2010,8 @@ class UserManager
 		$session_id = intval($session_id);
 		//we filter the courses from the URL
 		$join_access_url=$where_access_url='';
-		global $_configuration;
-		if ($_configuration['multiple_access_urls']) {
+		
+		if (api_get_multiple_access_url()) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
 				$tbl_url_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -2766,9 +2757,9 @@ class UserManager
 
 		$keyword = $tag;
 		$sql = "SELECT u.user_id, u.username, firstname, lastname, email, picture_uri FROM $user_table u";
-		global $_configuration;
-		if ($_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
-			$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		
+		if (api_get_multiple_access_url()) {
+			$access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
 		}
 
@@ -2787,7 +2778,7 @@ class UserManager
 		$sql .= " AND u.status <> 6 ";
 
 	    // adding the filter to see the user's only of the current access_url
-		if ($_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
+		if (api_get_multiple_access_url() && api_get_current_access_url_id()!=-1) {
 	    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
 	    }
 		$direction = 'ASC';
@@ -2853,9 +2844,8 @@ class UserManager
 		                 ", u.expiration_date      AS exp ".
 		            " FROM $user_table u ";
 
-		    // adding the filter to see the user's only of the current access_url
-		    global $_configuration;
-		    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
+		    // adding the filter to see the user's only of the current access_url		    
+		    if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
 		    	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		    	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
 		    }
@@ -2872,7 +2862,7 @@ class UserManager
 			}
 
 		    // adding the filter to see the user's only of the current access_url
-			if ($_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
+			if (api_get_multiple_access_url()) {
 		    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
 		    }
 
@@ -2935,14 +2925,14 @@ class UserManager
 
 		//we filter the courses from the URL
 		$join_access_url=$where_access_url='';
-		global $_configuration;
-		if ($_configuration['multiple_access_urls']) {
+		
+		if (api_get_multiple_access_url()) {
 			$access_url_id = api_get_current_access_url_id();
-			if($access_url_id!=-1) {
-				$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-				$join_access_url= "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.course_code= course.code";
-				$where_access_url=" AND access_url_id = $access_url_id ";
-			}
+			
+			$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+			$join_access_url= "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.course_code= course.code";
+			$where_access_url=" AND access_url_id = $access_url_id ";
+		
 		}
 
 		// Filter special courses
@@ -3075,8 +3065,7 @@ class UserManager
 	 * @param int		user status (optional)
 	 * @return array 	users
 	 */
-	public static function get_users_followed_by_drh($hr_dept_id, $user_status = 0) {
-        global $_configuration;  
+	public static function get_users_followed_by_drh($hr_dept_id, $user_status = 0) {        
 		// Database Table Definitions
 		$tbl_user 			= 	Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_user_rel_user 	= 	Database::get_main_table(TABLE_MAIN_USER_REL_USER);
@@ -3090,7 +3079,7 @@ class UserManager
 			$status = intval($status);
 			$condition_status = ' AND u.status = '.$user_status;
 		}
-        if ($_configuration['multiple_access_urls']) {
+        if (api_get_multiple_access_url()) {
             $sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
 				 INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id) LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.user_id) WHERE friend_user_id = '$hr_dept_id' AND relation_type = '".USER_RELATION_TYPE_RRHH."' $condition_status AND access_url_id = ".api_get_current_access_url_id()."";
         } else {
@@ -3115,8 +3104,7 @@ class UserManager
 	  * @param	int			affected rows
 	  **/
 	public static function suscribe_users_to_hr_manager($hr_dept_id, $users_id) {
-
-	    global $_configuration;
+	    
         // Database Table Definitions
         $tbl_user           =   Database::get_main_table(TABLE_MAIN_USER);
         $tbl_user_rel_user  =   Database::get_main_table(TABLE_MAIN_USER_REL_USER);
@@ -3125,7 +3113,7 @@ class UserManager
         $hr_dept_id = intval($hr_dept_id);
         $affected_rows = 0;
         
-        if ($_configuration['multiple_access_urls']) {  
+        if (api_get_multiple_access_url()) {  
             //Deleting assigned users to hrm_id
             $sql = "SELECT s.user_id FROM $tbl_user_rel_user s INNER JOIN $tbl_user_rel_access_url a ON (a.user_id = s.user_id)  WHERE friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."'  AND access_url_id = ".api_get_current_access_url_id()."";            
         } else {

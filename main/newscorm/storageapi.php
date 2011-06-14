@@ -23,7 +23,9 @@ switch ($_REQUEST['action']) {
 		}
 		break;
 	case "stackpop":
-		print storage_stack_pop($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
+		if (storage_can_set($_REQUEST['svuser'])) {
+			print storage_stack_pop($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
+		}
 		break;
 	case "stacklength":
 		print storage_stack_length($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
@@ -35,6 +37,9 @@ switch ($_REQUEST['action']) {
 		break;
 	case "stackgetall":
 		print storage_stack_getall($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
+		break;
+	case "usersgetall":
+		print storage_get_all_users();
 		break;
 	default:
 		// Do nothing
@@ -179,6 +184,18 @@ function storage_stack_getall($sv_user, $sv_course, $sv_sco, $sv_key) {
 		and sco_id='$sv_sco'
 		and course_id='$sv_course'
 		and sv_key='$sv_key'";
+	$res = Database::query($sql);
+	$results = array();
+	while ($row = Database::fetch_assoc($res)) {
+		$results[] = $row;
+	}
+	return json_encode($results);
+}
+
+function storage_get_all_users() {
+	$sql = "select user_id, username, firstname, lastname
+		from ".Database::get_main_table(TABLE_MAIN_USER)."
+		order by user_id asc";
 	$res = Database::query($sql);
 	$results = array();
 	while ($row = Database::fetch_assoc($res)) {

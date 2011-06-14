@@ -91,7 +91,7 @@ class SocialManager extends UserManager {
 	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code, function renamed, $load_extra_info option added
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
 	 */
-	public static function get_friends($user_id, $id_group=null, $search_name=null, $load_extra_info = true) {
+	public static function get_friends($user_id, $id_group = null, $search_name = null, $load_extra_info = true) {
 		$list_ids_friends=array();
 		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
 		$tbl_my_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -99,10 +99,9 @@ class SocialManager extends UserManager {
 		if (isset($id_group) && $id_group>0) {
 			$sql.=' AND relation_type='.$id_group;
 		}
-		if (isset($search_name) && is_string($search_name)===true) {
+		if (isset($search_name)) {
 			$search_name = trim($search_name);
 			$search_name = str_replace(' ', '', $search_name);
-			//$sql.=' AND friend_user_id IN (SELECT user_id FROM '.$tbl_my_user.' WHERE '.(api_is_western_name_order() ? 'concat(firstName, lastName)' : 'concat(lastName, firstName)').' like concat("%","'.Database::escape_string($search_name).'","%"));';
 			$sql.=' AND friend_user_id IN (SELECT user_id FROM '.$tbl_my_user.' WHERE firstName LIKE "%'.Database::escape_string($search_name).'%" OR lastName LIKE "%'.Database::escape_string($search_name).'%"   OR    '.(api_is_western_name_order() ? 'concat(firstName, lastName)' : 'concat(lastName, firstName)').' like concat("%","'.Database::escape_string($search_name).'","%")    ) ';
 		}
 
@@ -145,7 +144,8 @@ class SocialManager extends UserManager {
 
 	/**
 	 * get web path of user invitate
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author isaac flores paz
+	 * @author Julio Montoya setting variable array
 	 * @param int user id
 	 * @return array
 	 */
@@ -153,6 +153,7 @@ class SocialManager extends UserManager {
 		$list_paths=array();
 		$list_path_friend=array();
 		$list_ids = self::get_list_invitation_of_friends_by_user_id((int)$user_id);
+		$list_path_image_friend = array();
 		foreach ($list_ids as $values_ids) {
 			$list_path_image_friend[] = UserManager::get_user_picture_path_by_id($values_ids['user_sender_id'],'web',false,true);
 		}
@@ -453,7 +454,7 @@ class SocialManager extends UserManager {
 		}
 		$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
 		// display the what's new icons
-		if ((CONFVAL_showExtractInfo == SCRIPTVAL_InCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both) && $nbDigestEntries > 0) {
+		if ($nbDigestEntries > 0) {
 			reset($digest);
 			$result .= '<ul>';
 			while (list ($key2) = each($digest[$thisCourseSysCode])) {
@@ -672,7 +673,7 @@ class SocialManager extends UserManager {
 	  		//check if I already sent an invitation message
 	  		$invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(api_get_user_id());
 
-	  		if (isset($invitation_sent_list) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) > 0 ) {
+	  		if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) > 0 ) {
 	  			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitation.png',get_lang('YouAlreadySentAnInvitation')).'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
 	  		} else {
 	  			if (!$show_full_profile) {

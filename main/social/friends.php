@@ -100,8 +100,8 @@ $language_variable	= api_xml_http_response_encode(get_lang('Contacts'));
 $user_id	= api_get_user_id();
 
 $list_path_friends	= array();
-$user_id	= api_get_user_id();
-$name_search= Security::remove_XSS($_POST['search_name_q']);
+$user_id	    = api_get_user_id();
+$name_search = isset($_POST['search_name_q']) ? $_POST['search_name_q']: null;
 $number_friends = 0;
 
 if (isset($name_search) && $name_search!='undefined') {

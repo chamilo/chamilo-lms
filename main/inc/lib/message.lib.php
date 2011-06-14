@@ -912,11 +912,11 @@ class MessageManager
 			    $rows = null;
                 $rows = self::get_messages_by_group_by_message($group_id, $value['id']);
                 if (!empty($rows)) {            
-                    $count = self::calculate_children($rows, $value['id']);
+                    $count = count(self::calculate_children($rows, $value['id']));
                 } else {
                     $count = 0;
                 }
-                $value['count'] = count($count);
+                $value['count'] = $count;
                 $new_topics[$id] = $value;        
 			}			
 			//$new_topics = sort_column($new_topics,'count');
@@ -1108,12 +1108,13 @@ class MessageManager
 	 * @return array new list adding the item children
 	 */
 	public static function calculate_children($rows, $first_seed) {
+	    $rows_with_children = array();
 		foreach($rows as $row) {
 			$rows_with_children[$row["id"]]=$row;
 			$rows_with_children[$row["parent_id"]]["children"][]=$row["id"];
 		}	    
-		$rows=$rows_with_children;		
-		$sorted_rows=array(0=>array());					
+		$rows = $rows_with_children;		
+		$sorted_rows = array(0=>array());					
 		self::message_recursive_sort($rows, $sorted_rows, $first_seed);		
 		unset($sorted_rows[0]);
 		return $sorted_rows;
@@ -1128,7 +1129,7 @@ class MessageManager
 	 * @return void
 	 */
 	public static function message_recursive_sort($rows, &$messages, $seed=0, $indent=0) {
-		if ($seed > 0) {		    
+		if ($seed > 0 && isset($rows[$seed]["id"])) {		    
 			$messages[$rows[$seed]["id"]]=$rows[$seed];
 			$messages[$rows[$seed]["id"]]["indent_cnt"]=$indent;
 			$indent++;

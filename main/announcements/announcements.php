@@ -238,6 +238,7 @@ if (!empty($_SESSION['toolgroup'])){
 // include the stylesheet, which is normally done in the header
 //$display_specific_announcement = true;
 $announcement_id = intval($_GET['id']);
+$message = null;
 
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 	//we are not in the learning path
@@ -305,7 +306,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	}
 	
     //delete attachment file
-    if ($_GET['action'] == 'delete') {
+    if (isset($_GET['action']) && $_GET['action'] == 'delete') {
         $id = $_GET['id_attach'];
         AnnouncementManager::delete_announcement_attachment_file($id);
     }    
@@ -369,7 +370,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		Move announcement up/down
 	*/
 
-	if ($ctok == $_GET['sec_token']) {
+	if (isset($_GET['sec_token']) && $ctok == $_GET['sec_token']) {
 		if (!empty($_GET['down'])) {
 			$thisAnnouncementId = intval($_GET['down']);
 			$sortDirection = "DESC";
@@ -808,7 +809,7 @@ $announcement_number = Database::num_rows($result);
 $show_actions = false;
 if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
 	echo '<div class="actions">';
-	if (in_array($_GET['action'], array('add', 'modify','view'))) {
+	if (isset($_GET['action']) && in_array($_GET['action'], array('add', 'modify','view'))) {
         echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('back.png',get_lang('Back'),'','32')."</a>";
 	} else {
 	   echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'','32')."</a>";
@@ -1070,8 +1071,8 @@ if ($display_form) {
 /*
 		DISPLAY ANNOUNCEMENT LIST
 */
-
-if ($display_announcement_list && !$surveyid) {
+//if ($display_announcement_list && !$surveyid) {
+if ($display_announcement_list) {
 	// by default we use the id of the current user. The course administrator can see the announcement of other users by using the user / group filter
 	//$user_id=$_user['user_id'];
 	if (isset($_SESSION['user'])) {

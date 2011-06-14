@@ -79,12 +79,12 @@ $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1
 		if (api_get_setting('allow_message_tool')=='true') {	
             //normal message
 	   		$user_info=api_get_user_info($userfriend_id);
-	  		echo api_xml_http_response_encode(get_lang('To')).":&nbsp;&nbsp;".api_xml_http_response_encode($to_group); 
+	  		//echo api_xml_http_response_encode(get_lang('To')).":&nbsp;&nbsp;".api_xml_http_response_encode($to_group); 
 	  		if ($allowed_action == 'add_message_group') {
-	  		    echo '<br /><br /><span style="color:red">*</span> '.api_xml_http_response_encode(get_lang('Subject')).' :<br />';
-	  		    echo '<input id="txt_subject_id" name="title" type="text" style="width:450px;" value="'.$subject.'"><br />';		 	 
+	  		    echo '<span style="color:red">*</span> '.api_xml_http_response_encode(get_lang('Subject')).' :<br />';
+	  		    echo '<input id="txt_subject_id" name="title" type="text" style="width:450px;" value="'.$subject.'"><br /><br /><br />';		 	 
 	  		}
-	  		echo '<br /><br />'.api_xml_http_response_encode(get_lang('Message')).' :<br />';		   		
+	  		echo api_xml_http_response_encode(get_lang('Message')).' :<br />';		   		
 	   		
 			$oFCKeditor = new FCKeditor('content') ;
 			$oFCKeditor->ToolbarSet = 'messages';
@@ -93,14 +93,15 @@ $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1
 			$oFCKeditor->Value		= $message;					
 			$return =	$oFCKeditor->CreateHtml();	
 			echo $return;
-	   		?>		   		
+	   		?>
+	   		<div><span style="color:red"> * </span><?php echo get_lang('FieldRequired') ?></div>		   		
 	   		<br /><?php echo api_xml_http_response_encode(get_lang('AttachmentFiles')); ?> :<br />
 			<span id="filepaths"><div id="filepath_1"><input type="file" name="attach_1" size="20" /></div></span>
 			<div id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">
 			<?php echo get_lang('AddOneMoreFile') ?></a>&nbsp;(<?php echo api_xml_http_response_encode(sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize')))) ?>)</div>		   				   				   		
 	   		<br />
 	   		<button class="save" onclick="if(validate_text_empty(this.form.title.value,'<?php echo get_lang('YouShouldWriteASubject')?>')){return false;}" type="submit" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
-	   		<div><span style="color:red">*</span><?php echo get_lang('FieldRequired') ?></div>
+	   		
 	<?php } ?>
 	</dl>
 </td>

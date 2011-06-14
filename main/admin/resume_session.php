@@ -170,8 +170,8 @@ echo Display::tag('h3', $tool_name);
 
 <?php 
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-global $_configuration;
-if ($_configuration['multiple_access_urls']) {
+
+if (api_get_multiple_access_url()) {
     echo '<tr><td>';   
     echo get_lang('URL');    
     echo '</td>';

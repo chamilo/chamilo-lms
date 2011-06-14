@@ -8,7 +8,7 @@
 // name of the language file that needs to be included
 $language_file='admin';
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'add_many_session_to_category_functions.lib.php';
@@ -125,7 +125,6 @@ if(isset($_GET['msg']) && $_GET['msg']=='ok'){
 
 // display the dokeos header
 Display::display_header($tool_name);
-
 echo '<div class="row"><div class="form_header">'.$tool_name.' </div></div><br />';
 
 $where ='';
@@ -139,6 +138,11 @@ if((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GE
 }
 
 $rows_session_category = SessionManager::get_all_session_category();
+if (empty($rows_session_category)) {
+    Display::display_warning_message(get_lang('YouNeedToAddASessionCategoryFirst'));
+    Display::display_footer();
+    exit;
+}
 
 $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
 $result=Database::query($sql);

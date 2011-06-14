@@ -40,7 +40,7 @@ if ($action == 'delete_on_session' || $action == 'delete_off_session') {
 	exit();
 }
 
-$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array("url" => "index.php","name" => get_lang('PlatformAdmin'));
 
 if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$interbreadcrumb[] = array ("url" => 'session_category_list.php', "name" => get_lang('ListSessionCategory'));

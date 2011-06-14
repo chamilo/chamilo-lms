@@ -1100,8 +1100,7 @@ class SessionManager {
 	 * Get all session categories (filter by access_url_id)
 	 * @return mixed false if the session category does not exist, array if the session category exists
 	 */
-	public static function get_all_session_category() {
-		$id = intval($id);
+	public static function get_all_session_category() {		
 		$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 		$id = api_get_current_access_url_id();
 		$sql = 'SELECT * FROM '.$tbl_session_category.' WHERE access_url_id ="'.$id.'" ORDER BY name ASC';

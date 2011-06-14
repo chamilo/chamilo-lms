@@ -52,6 +52,8 @@ if ($action == 'delete') {
 
 $interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'));
 
+$keyword_name = isset($_GET['keyword_name']) ? Security::remove_XSS($_GET['keyword_name']) : null;
+
 //table for the search
 if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
@@ -207,13 +209,15 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	echo '<div style="float:right;">';
 		if (!isset($_GET['id_category'])) {
 			echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'','32').'</a>';
-		}
-		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php?id_category='.intval($_GET['id_category']).'">'.Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'','32').'</a>';
+		} 
+		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'','32').'</a>';
+		
+		
 		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_list.php">'.Display::return_icon('folder.png',get_lang('ListSessionCategory'),'','32').'</a>';
 	echo '</div>';
 	?>
 	<form method="POST" action="session_list.php">
-		<input type="text" name="keyword_name" value="<?php echo Security::remove_XSS($_GET['keyword_name']); ?>"/>
+		<input type="text" name="keyword_name" value="<?php echo $keyword_name; ?>"/>
 		<button class="search" type="submit" name="name" value="<?php echo get_lang('Search') ?>"><?php echo get_lang('Search') ?></button>
 		<a href="session_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a>
 		</form>

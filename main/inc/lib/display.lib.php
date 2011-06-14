@@ -464,6 +464,7 @@ class Display {
             $hmail .= '&#'.ord($email {
             $i }).';';
         }
+        $hclickable_text = null;
         // Encrypt clickable text if @ is present
         if (strpos($clickable_text, '@')) {
             for ($i = 0; $i < strlen($clickable_text); $i ++) {

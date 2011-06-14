@@ -254,7 +254,6 @@ if ($current_session_id == 0) {
     }
 }
 
-
 /*	MAIN SECTION */
 
 if (isset($_GET['action']) && $_GET['action'] == 'download') {
@@ -371,7 +370,6 @@ if (isset($_GET['createdir'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('CreateDir'));
 }
 
-
 //jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = api_get_jquery_js();
@@ -395,21 +393,23 @@ $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath
 
 $file_list = $format_list = '';
 $count = 1;
+
 if (!empty($docs_and_folders))
 foreach ($docs_and_folders  as $file) {    
     if ($file['filetype'] == 'file') {
-        $path_info = pathinfo($file['path']);   
+        $path_info = pathinfo($file['path']);  
+        $extension = strtolower($path_info['extension']);
         //@todo use a js loop to autogenerate this code
-        if (in_array($path_info['extension'], array('ogg', 'mp3', 'wav'))) {
+        if (in_array($extension, array('ogg', 'mp3', 'wav'))) {
             $document_data = DocumentManager::get_document_data_by_id($file['id'], api_get_course_id());
             
-            if ($path_info['extension'] == 'ogg') {
-                $path_info['extension'] = 'oga';
+            if ($extension == 'ogg') {
+                $extension = 'oga';
             }            
             $jquery .= ' $("#jquery_jplayer_'.$count.'").jPlayer({                                
                                 ready: function() {                    
                                     $(this).jPlayer("setMedia", {                                        
-                                        '.$path_info['extension'].' : "'.$document_data['direct_url'].'"                                                                                  
+                                        '.$extension.' : "'.$document_data['direct_url'].'"                                                                                  
                                     });
                                 },                                
                                 swfPath: "'.$js_path.'jquery-jplayer",
@@ -421,7 +421,6 @@ foreach ($docs_and_folders  as $file) {
         }        
     }
 }
-
  
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {    
@@ -441,17 +440,11 @@ $(document).ready( function() {
             $(".actions:eq("+i+")").hide();
         }
     }
-
 });
 </script>';
 
-
-
 Display::display_header('','Doc');
-?>
 
-  
-<?php 
 // Lib for event log, stats & tracking & record of the access
 event_access_tool(TOOL_DOCUMENT);
 

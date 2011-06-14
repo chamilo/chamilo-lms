@@ -398,7 +398,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             if ($pdf_export_watermark_path_result) {
                 $message['confirmation'][] = get_lang('UplUploadSucceeded');
             } else {                
-                $message['warning'][] = get_lang('UplUnableToSaveFile').' '.get_lang('Folder').': '.api_get_path(SYS_CODE_PATH).'default_course_document';
+                $message['warning'][] = get_lang('UplUnableToSaveFile').' '.get_lang('Folder').': '.api_get_path(SYS_CODE_PATH).'default_course_document/images';
             }
             unset($update_values['pdf_export_watermark_path']);
         }

@@ -280,9 +280,9 @@ class PDF {
                 $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';                 
             }
         } else {
-            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
+            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
             if (file_exists($store_path))                   
-                $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/'.api_get_current_access_url_id().'_pdf_watermark.png';
+                $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
         }
         return $web_path;        
     }
@@ -320,8 +320,8 @@ class PDF {
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'];   // course path
             $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';
         } else {
-            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document';   // course path	
-            $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/'.api_get_current_access_url_id().'_pdf_watermark.png';
+            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images';   // course path	
+            $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
         }        
         $course_image = $store_path.'/'.api_get_current_access_url_id().'_pdf_watermark.png';
         $extension = strtolower(substr(strrchr($filename, '.'), 1));

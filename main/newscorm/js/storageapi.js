@@ -216,3 +216,30 @@ lms_storage_stack_getAll = function(sv_key) {
 	return lms_storage_stack_getAll_user(sv_key, sv_user);
 }
 
+
+// Accessor object
+function STORAGEAPIobject() {
+	this.testCall = lms_storage_testCall;
+	this.setValue = lms_storage_setValue;
+	this.setValue_user = lms_storage_setValue_user;
+	this.getValue = lms_storage_getValue;
+	this.getValue_user = lms_storage_getValue_user;
+	this.getAll = lms_storage_getAll;
+	this.getAll_user = lms_storage_getAll_user;
+	this.stack_push = lms_storage_stack_push;
+	this.stack_push_user = lms_storage_stack_push_user;
+	this.stack_pop = lms_storage_stack_pop;
+	this.stack_pop_user = lms_storage_stack_pop_user;
+	this.stack_length = lms_storage_stack_length;
+	this.stack_length_user = lms_storage_stack_length_user;
+	this.stack_clear = lms_storage_stack_clear;
+	this.stack_clear_user = lms_storage_stack_clear_user;
+	this.stack_getAll = lms_storage_stack_getAll;
+	this.stack_getAll_user = lms_storage_stack_getAll_user;
+	this.getAllUsers = lms_storage_getAllusers;
+	this.sv_user = sv_user;
+	this.sv_course = sv_course;
+	this.sv_sco = sv_sco;
+}
+var STORAGEAPI = new STORAGEAPIobject();
+var STAPI = STORAGEAPI;

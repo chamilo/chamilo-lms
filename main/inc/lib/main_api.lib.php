@@ -3767,7 +3767,8 @@ function & api_get_settings_categories($exceptions = array(), $access_url = 1) {
     if ($list != "'',''" and $list != "''" and !empty($list)) {
         $sql .= " WHERE category NOT IN ($list)";
     }
-    return Database::store_result(Database::query($sql));
+    $result = Database::store_result(Database::query($sql));
+    return $result;
 }
 
 /**

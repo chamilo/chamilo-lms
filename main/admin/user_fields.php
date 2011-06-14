@@ -1,9 +1,7 @@
-<?php // $Id: $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
 */
 // name of the language file that needs to be included
 $language_file = array('admin', 'registration');

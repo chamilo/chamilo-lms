@@ -634,7 +634,8 @@ class CourseHome {
                 // This part displays the links to hide or remove a tool.
                 // These links are only visible by the course manager.
                 unset($lnk);
-
+                
+                $item['extra'] = null;
                 if ($is_allowed_to_edit && !api_is_coach()) {
 
                     if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
@@ -646,8 +647,7 @@ class CourseHome {
                         $link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']));
                         $link['cmd'] = 'restore=yes';
                         $lnk[] = $link;
-                    }
-                    $item['extra'] = null;
+                    }                    
                     if (!empty($tool['adminlink'])) {
                         $item['extra'] = '<a href="'.$tool['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
                     }

@@ -236,7 +236,7 @@ function STORAGEAPIobject() {
 	this.stack_clear_user = lms_storage_stack_clear_user;
 	this.stack_getAll = lms_storage_stack_getAll;
 	this.stack_getAll_user = lms_storage_stack_getAll_user;
-	this.getAllUsers = lms_storage_getAllusers;
+	this.getAllUsers = lms_storage_getAllUsers;
 	this.sv_user = sv_user;
 	this.sv_course = sv_course;
 	this.sv_sco = sv_sco;

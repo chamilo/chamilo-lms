@@ -5,9 +5,9 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
  
-$language_file = array('userInfo');
+$language_file = array('userInfo', 'forum');
 $cidReset = true;
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
 if (api_get_setting('allow_social_tool') !='true') {
@@ -19,8 +19,44 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 
-//jquery thickbox already called from main/inc/header.inc.php
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script type="text/javascript"> 
+
+var counter_image = 1;
+function remove_image_form(id_elem1) {
+	var elem1 = document.getElementById(id_elem1);
+	elem1.parentNode.removeChild(elem1);
+	counter_image--;
+	var filepaths = document.getElementById("filepaths");
+	if (filepaths.childNodes.length < 3) {
+		var link_attach = document.getElementById("link-more-attach");
+		if (link_attach) {
+			link_attach.innerHTML=\'<a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>\';
+		}
+	}
+}
+
+function add_image_form() {
+	// Multiple filepaths for image form
+	var filepaths = document.getElementById("filepaths");
+	if (document.getElementById("filepath_"+counter_image)) {
+		counter_image = counter_image + 1;
+	}  else {
+		counter_image = counter_image;
+	}
+	var elem1 = document.createElement("div");
+	elem1.setAttribute("id","filepath_"+counter_image);
+	filepaths.appendChild(elem1);
+	id_elem1 = "filepath_"+counter_image;
+	id_elem1 = "\'"+id_elem1+"\'";
+	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"'.api_get_path(WEB_CODE_PATH).'img/delete.gif\"></a>";
+
+	if (filepaths.childNodes.length == 3) {
+		var link_attach = document.getElementById("link-more-attach");
+		if (link_attach) {
+			link_attach.innerHTML="";
+		}
+	}
+}
         
 function show_icon_edit(element_html) { 
     ident="#edit_image";
@@ -37,7 +73,7 @@ function hide_icon_edit(element_html)  {
 $this_section = SECTION_SOCIAL;
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 $interbreadcrumb[] = array('url' => 'groups.php','name' => get_lang('Groups'));
-$interbreadcrumb[] = array('url' => '#','name' => get_lang('MemberList'));
+$interbreadcrumb[] = array('url' => '#','name' => get_lang('Thread'));
 api_block_anonymous_users();
 
 $group_id   = intval($_GET['id']);
@@ -121,7 +157,7 @@ echo '<div id="social-content">';
     SocialManager::show_social_menu('member_list', $group_id);
     echo '</div>';
     echo '<div id="social-content-right">';    
-         echo '<h1><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h1>';            
+         //echo '<h4><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h4>';            
         if (!empty($show_message)){
             Display::display_confirmation_message($show_message);
         }

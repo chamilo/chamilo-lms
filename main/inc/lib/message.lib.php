@@ -769,7 +769,7 @@ class MessageManager
 		        </table>		        
 		        <br />
 		        <hr style="color:#ddd" />
-		        <table height=209 width="100%">
+		        <table height="209px" width="100%">
 		            <tr>
 		              <td valign=top class="view-message-content">'.str_replace("\\","",$row[6]).'</td>
 		            </tr>
@@ -847,14 +847,14 @@ class MessageManager
 		            </TR>
 		        </TABLE>
 		        <br />
-		        <TABLE height=209 width="100%" bgColor=#ffffff>
+		        <TABLE height="209px" width="100%" bgColor=#ffffff>
 		          <TBODY>
 		            <TR>
 		              <TD vAlign=top>'.str_replace("\\","",api_xml_http_response_encode($row[6])).'</TD>
 		            </TR>
 		          </TBODY>
 		        </TABLE>
-		        <div id="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>
+		        <div id="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>
 		        <DIV class=HT style="PADDING-BOTTOM: 5px"> </DIV></TD>
 		      <TD width=10>&nbsp;</TD>
 		    </TR>
@@ -960,8 +960,9 @@ class MessageManager
 					$existing_image = $image_path['file'];
 					$user = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a>';
 					$user_image = '<div class="clear"></div><div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
-					$user = '<div class="message-group-author">'.$user.'</div>';								 
-					$html .= Display::div($title.cut($topic['content'], 350).$user_image.$user.$date.$link, array('class'=>'group_discussions_info')).'</td></table>';						
+					$user = '<div class="message-group-author">'.$user.'</div>';
+					//$date.								 
+					$html .= Display::div($title.cut($topic['content'], 350).$user_image.$user.$link, array('class'=>'group_discussions_info')).'</td></table>';						
 		
 				$html .= '</div>'; //rounded_div
 				
@@ -987,7 +988,7 @@ class MessageManager
         $rows = self::get_messages_by_group_by_message($group_id, $message_id);            
         $rows = self::calculate_children($rows, $message_id);                
         
-        $current_user_id = api_get_user_id();
+        $current_user_id  = api_get_user_id();
         $topics_per_page  = 5;
         $items_per_page   = 100;
         $count_items = 0;
@@ -1001,7 +1002,7 @@ class MessageManager
         $links = '';
         $main_content  = '';
         
-        echo Display::tag('h2', $main_message['title']);
+        echo Display::tag('h1', $main_message['title']);
         $user_sender_info = UserManager::get_user_info_by_id($main_message['user_sender_id']);
         $files_attachments = self::get_links_message_attachment_files($main_message['id']);
         $name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
@@ -1027,7 +1028,7 @@ class MessageManager
         } else {
             $date = '<div class="message-group-date"> '.get_lang('Created').' '.date_to_str_ago($main_message['send_date']).'</div>';
         }
-        $attachment = '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';                
+        $attachment = '<div class="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>';                
         $main_content.= '<div class="message-group-content">'.$links.$user_link.' '.$date.$main_message['content'].$attachment.'</div>';          
 
         $html = '';   
@@ -1073,17 +1074,17 @@ class MessageManager
                 } else {
                     $date = '<div class="message-group-date"> '.get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</div>';
                 }
-                $attachment = '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';                
+                $attachment = '<div class="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>';                
                 $html_items.= '<div class="message-group-content">'.$links.$user_link.' '.$date.$topic['content'].$attachment.'</div>';                          
                       
+                $base_padding = 20;
                 
-                if ($topic['indent_cnt'] == 0 || $topic['indent_cnt'] == 1) { 
-                    $indent = 0;
+                if ($topic['indent_cnt'] == 0) {
+                    $indent = $base_padding;                
                 } else {
-                    $indent = intval($topic['indent_cnt'])*20;
+                    $indent = intval($topic['indent_cnt'])*$base_padding + $base_padding;
                 }
                 
-                //var_dump($topic); 'style'=>'margin-left:'.$indent.'px'
                 $html_items = Display::div($html_items, array('class' => 'group_social_sub_item'));
                 $html_items = Display::div($html_items, array('class' => '', 'style'=>'margin-left:'.$indent.'px'));            
                 $array_html_items[] = array($html_items);
@@ -1171,7 +1172,7 @@ class MessageManager
 
 			$rs_file = Database::query($sql);
 			if (Database::num_rows($rs_file) > 0) {
-				$attach_icon = Display::return_icon('attachment.gif');
+				$attach_icon = Display::return_icon('attachment.gif', '');
 				$archiveURL=api_get_path(WEB_CODE_PATH).'messages/download.php?type='.$type.'&file=';
 				while ($row_file = Database::fetch_array($rs_file)) {
 					$archiveFile= $row_file['path'];

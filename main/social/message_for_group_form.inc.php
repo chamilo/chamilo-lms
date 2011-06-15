@@ -76,29 +76,38 @@ $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1
 <div id="id_content_panel_init">
 	<dl>
 	<?php
-		if (api_get_setting('allow_message_tool')=='true') {	
+		if (api_get_setting('allow_message_tool')=='true') {
             //normal message
-	   		$user_info=api_get_user_info($userfriend_id);
+	   		$user_info = api_get_user_info($userfriend_id);
 	  		//echo api_xml_http_response_encode(get_lang('To')).":&nbsp;&nbsp;".api_xml_http_response_encode($to_group); 
+	  		$height = 180;
 	  		if ($allowed_action == 'add_message_group') {
-	  		    echo '<span style="color:red">*</span> '.api_xml_http_response_encode(get_lang('Subject')).' :<br />';
-	  		    echo '<input id="txt_subject_id" name="title" type="text" style="width:450px;" value="'.$subject.'"><br /><br /><br />';		 	 
+	  		    $height = 140;
+	  		    echo '<span style="color:red">*</span> '.api_xml_http_response_encode(get_lang('Title')).' :<br />';
+	  		    echo '<input id="txt_subject_id" name="title" type="text" style="width:450px;" value="'.$subject.'"><br /><br />';		 	 
 	  		}
-	  		echo api_xml_http_response_encode(get_lang('Message')).' :<br />';		   		
+	  		//echo api_xml_http_response_encode(get_lang('Description')).' :<br />';		   		
 	   		
 			$oFCKeditor = new FCKeditor('content') ;
 			$oFCKeditor->ToolbarSet = 'messages';
 			$oFCKeditor->Width		= '100%';
-			$oFCKeditor->Height		= '130';
+			$oFCKeditor->Height		= $height;
 			$oFCKeditor->Value		= $message;					
 			$return =	$oFCKeditor->CreateHtml();	
 			echo $return;
-	   		?>
-	   		<div><span style="color:red"> * </span><?php echo get_lang('FieldRequired') ?></div>		   		
-	   		<br /><?php echo api_xml_http_response_encode(get_lang('AttachmentFiles')); ?> :<br />
+			if ($allowed_action == 'add_message_group') {
+			    echo '<div><span style="color:red"> * </span>'.get_lang('FieldRequired').'</div>';    
+			}
+	   		?>	   				   		
+	   		<br /><br />
+	   		<?php echo api_xml_http_response_encode(get_lang('AttachmentFiles')); ?> :<br />
 			<span id="filepaths"><div id="filepath_1"><input type="file" name="attach_1" size="20" /></div></span>
-			<div id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">
-			<?php echo get_lang('AddOneMoreFile') ?></a>&nbsp;(<?php echo api_xml_http_response_encode(sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize')))) ?>)</div>		   				   				   		
+			<div id="link-more-attach">
+				<a href="javascript://" onclick="return add_image_form()">
+			    <?php echo get_lang('AddOneMoreFile') ?></a>
+			</div>
+			(<?php echo api_xml_http_response_encode(sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize')))) ?>)		   				   				   		
+	   		<br />
 	   		<br />
 	   		<button class="save" onclick="if(validate_text_empty(this.form.title.value,'<?php echo get_lang('YouShouldWriteASubject')?>')){return false;}" type="submit" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
 	   		

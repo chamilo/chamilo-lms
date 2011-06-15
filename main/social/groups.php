@@ -47,7 +47,7 @@ function remove_image_form(id_elem1) {
 	if (filepaths.childNodes.length < 3) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
-			link_attach.innerHTML=\'<a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>&nbsp;('.get_lang('MaximunFileSizeXMB').')\';
+			link_attach.innerHTML=\'<a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>\';
 		}
 	}
 }

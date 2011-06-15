@@ -1070,9 +1070,9 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
     margin: 5px 0px 8px 0px;
 }
 .message-group-date {
-    color:#666;
+    color:#999;
     width:100%;
-    text-align:right;
+    font-size:98%;
 }
 .view-message-content {
     line-height:150%;

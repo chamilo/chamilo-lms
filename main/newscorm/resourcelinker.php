@@ -480,55 +480,50 @@ while ($row=Database::fetch_array($result_select_active)) {
           <td width="26%"><b><?php echo get_lang('CourseResources'); ?></b></td>
         </tr>
         <?php
-        if (is_allowed_to_edit() || in_array(TOOL_DOCUMENT, $active_modules)) {
+        if (api_is_allowed_to_edit() || in_array(TOOL_DOCUMENT, $active_modules)) {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Document&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Documents')."</a>"; ?></td>
         </tr>
         <?php
         }
-        if (is_allowed_to_edit() || in_array(TOOL_CALENDAR_EVENT, $active_modules)) {
+        if (api_is_allowed_to_edit() || in_array(TOOL_CALENDAR_EVENT, $active_modules)) {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Agenda&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Agenda')."</a>"; ?></td>
         </tr>
         <?php
         }
-        if (is_allowed_to_edit() || in_array(TOOL_ANNOUNCEMENT, $active_modules)) {
+        if (api_is_allowed_to_edit() || in_array(TOOL_ANNOUNCEMENT, $active_modules)) {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Ad_Valvas&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('AdValvas')."</a>"; ?></td>
         </tr>
         <?php
         }
-        if (is_allowed_to_edit() || in_array(TOOL_BB_FORUM, $active_modules)) {
+        if (api_is_allowed_to_edit() || in_array(TOOL_BB_FORUM, $active_modules)) {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Forum&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Forum')."</a>"; ?></td>
         </tr>
         <?php
         }
-        if (is_allowed_to_edit() || in_array(TOOL_LINK, $active_modules)) {
+        if (api_is_allowed_to_edit() || in_array(TOOL_LINK, $active_modules)) {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Link&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Links')."</a>"; ?></td>
         </tr>
         <?php
         }
-        if (is_allowed_to_edit() || in_array(TOOL_QUIZ, $active_modules)) {
+        if (api_is_allowed_to_edit() || in_array(TOOL_QUIZ, $active_modules)) {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Exercise&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Exercise')."</a>"; ?></td>
         </tr>
-
         <?php
         }
-
 } else {
 ?>
-
-
-
         <!--tr>
           <td width="26%"><b><?php echo get_lang('ExportableCourseResources'); ?></b></td>
         </tr-->
@@ -686,7 +681,7 @@ if ($content == 'chapter') {
 // 2. we come to the resource linker for the first time (documents = default). In this case it can only be shown if
 //  			a. one is a teacher (documents can be shown even if the tool is inactive)
 //				b. one is a student AND the documents tool is active. Student cannot add documents if the documents tool is inactive (teacher can do this)
-if ($content == 'Document' || (empty($content) && (is_allowed_to_edit() || in_array(TOOL_DOCUMENT, $active_modules))) && !$_GET['showresources']) {
+if ($content == 'Document' || (empty($content) && (api_is_allowed_to_edit() || in_array(TOOL_DOCUMENT, $active_modules))) && !$_GET['showresources']) {
     // setting variables for file locations
     $baseServDir = $_configuration['root_sys'];
     $courseDir = $_course['path'].'/document';

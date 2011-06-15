@@ -72,7 +72,7 @@ function show_documents($folder)
 
 	// documents are a special case: the teacher can add an invisible document (it will be viewable by the user)
 	// other tools do not have this feature. This only counts
-	if (is_allowed_to_edit())
+	if (api_is_allowed_to_edit())
 	{
 		$visibility="ip.visibility<>'2'";
 	}

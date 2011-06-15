@@ -409,7 +409,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
                 echo ">".$row['prerequisite']."</td>\n";
 
                 // Showing the edit, delete and move icons.
-                if (is_allowed_to_edit()) {
+                if (api_is_allowed_to_edit()) {
                     $myaction = 'move_item';
                     if ($i < $num_modules) {
                         // If we are still under the number of chapters in this section, show "move down".
@@ -464,7 +464,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
                     echo "<td>";
                 }
 
-                if (is_allowed_to_edit()) {
+                if (api_is_allowed_to_edit()) {
 
                     if ($row_items['prerequisite'] != '') {
                         $prereq = $row_items['prerequisite'];
@@ -552,7 +552,7 @@ function display_all_learnpath() {
         echo "</b><br /><i><div class=text align=justify>{$row['learnpath_description']}</div></i></td>";
 
         // Showing the edit, delete and publish icons.
-        if (is_allowed_to_edit()) {
+        if (api_is_allowed_to_edit()) {
             echo "<td bgcolor=\"$color2\" align=center><a href='learnpath_handler.php?lp_id={$row['lp_id']}&action=add&type=learnpathcategory'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src='../img/0.gif' width='13' height='13' border='0' title='$lang_add_learnpath_chapter_to_path'></a></td>";
             echo "<td bgcolor=\"$color2\" align=center><a href='".api_get_self()."?action=editpath&id=".$row['lp_id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/edit.gif\" border=\"0\" title=\"$lang_edit_learnpath\"></a></td>";
             echo "<td bgcolor=\"$color2\" align=center><a href='".api_get_self()."?action=deletepath&id=".$row['lp_id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath\" onclick=\"javascript: return confirmation('".$row['learnpath_name']."');\"></a></td>";
@@ -590,7 +590,7 @@ function display_learnpath_items($categoryid) {
     $result_items = Database::query($sql_items);
     $number_items = Database::num_rows($result_items);
     $i = 1;
-    error_log('Selected item under '.$categoryid, 0);
+    //error_log('Selected item under '.$categoryid, 0);
 
     while ($row_items = Database::fetch_array($result_items)) {
         echo "<tr><td colspan='2' valign='top'>";
@@ -605,8 +605,8 @@ function display_learnpath_items($categoryid) {
             echo "<td>";
         }
 
-        if (is_allowed_to_edit()) {
-            error_log('Is allowed to edit item'.$row_items['id'], 0);
+        if (api_is_allowed_to_edit()) {
+            //error_log('Is allowed to edit item'.$row_items['id'], 0);
             // TODO: Fix by adding true prerequisites parsing (and cycle through).
             // Over simplification here, we transform prereq_id field into prerequisite field.
             if ($row_items['prerequisite'] != '') {

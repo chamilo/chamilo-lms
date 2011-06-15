@@ -435,7 +435,7 @@ while ($row=Database::fetch_array($result_select_active))
           <td width="26%"><b><?php echo get_lang('CourseResources'); ?></b></td>
         </tr>
         <?php
-        if (is_allowed_to_edit() OR in_array(TOOL_DOCUMENT,$active_modules))
+        if (api_is_allowed_to_edit() OR in_array(TOOL_DOCUMENT,$active_modules))
         {
         ?>
         <tr>
@@ -443,7 +443,7 @@ while ($row=Database::fetch_array($result_select_active))
         </tr>
         <?php
         }
-        if (is_allowed_to_edit() OR in_array(TOOL_CALENDAR_EVENT,$active_modules))
+        if (api_is_allowed_to_edit() OR in_array(TOOL_CALENDAR_EVENT,$active_modules))
         {
         ?>
         <tr>
@@ -451,7 +451,7 @@ while ($row=Database::fetch_array($result_select_active))
         </tr>
         <?php
         }
-        if (is_allowed_to_edit() OR in_array(TOOL_ANNOUNCEMENT,$active_modules))
+        if (api_is_allowed_to_edit() OR in_array(TOOL_ANNOUNCEMENT,$active_modules))
         {
         ?>
         <tr>
@@ -459,7 +459,7 @@ while ($row=Database::fetch_array($result_select_active))
         </tr>
         <?php
         }
-        if (is_allowed_to_edit() OR in_array(TOOL_BB_FORUM,$active_modules))
+        if (api_is_allowed_to_edit() OR in_array(TOOL_BB_FORUM,$active_modules))
         {
         ?>
         <tr>
@@ -467,7 +467,7 @@ while ($row=Database::fetch_array($result_select_active))
         </tr>
         <?php
         }
-        if (is_allowed_to_edit() OR in_array(TOOL_LINK,$active_modules))
+        if (api_is_allowed_to_edit() OR in_array(TOOL_LINK,$active_modules))
         {
         ?>
         <tr>
@@ -475,7 +475,7 @@ while ($row=Database::fetch_array($result_select_active))
         </tr>
         <?php
         }
-        if (is_allowed_to_edit() OR in_array(TOOL_QUIZ,$active_modules))
+        if (api_is_allowed_to_edit() OR in_array(TOOL_QUIZ,$active_modules))
         {
         ?>
         <tr>
@@ -665,7 +665,7 @@ if ($content == "chapter")
 // 2. we come to the resource linker for the first time (documents = default). In this case it can only be shown if
 //  			a. one is a teacher (documents can be shown even if the tool is inactive)
 //				b. one is a student AND the documents tool is active. Student cannot add documents if the documents tool is inactive (teacher can do this)
-if ($content == "Document" OR (empty($content) AND (is_allowed_to_edit() OR in_array(TOOL_DOCUMENT,$active_modules))) AND !$_GET['showresources'])
+if ($content == "Document" OR (empty($content) AND (api_is_allowed_to_edit() OR in_array(TOOL_DOCUMENT,$active_modules))) AND !$_GET['showresources'])
 {
 	// setting variables for file locations
 	$baseServDir = $_configuration['root_sys'];

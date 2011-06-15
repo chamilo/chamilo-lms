@@ -140,7 +140,7 @@ $tbl_groupUser  		= Database::get_course_table(TABLE_GROUP_USER);
   			ACCESS RIGHTS
 */
 // permission stuff - also used by loading from global in agenda.inc.php
-$is_allowed_to_edit = is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());
+$is_allowed_to_edit = api_is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());
 
 // insert an anchor (top) so one can jump back to the top of the page
 echo "<a name=\"top\"></a>";
@@ -230,7 +230,7 @@ if (api_is_allowed_to_edit(false,true)) {
 			$id=(int)$_GET['id'];
 			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
 			{ // a coach can only delete an element belonging to his session
-				if (is_allowed_to_edit()  && !api_is_anonymous()) {
+				if (api_is_allowed_to_edit()  && !api_is_anonymous()) {
 					if (!empty($id)) {
 						$res_del = delete_agenda_item($id);
 						if ($res_del) {

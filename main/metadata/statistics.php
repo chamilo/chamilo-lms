@@ -33,7 +33,7 @@ $nameTools = get_lang('Tool');
 
 $_course = api_get_course_info(); isset($_course) or give_up(get_lang('Sorry'));
 
-$is_allowed_to_edit = isset($_user['user_id']) && $is_courseMember && is_allowed_to_edit();
+$is_allowed_to_edit = isset($_user['user_id']) && $is_courseMember && api_is_allowed_to_edit();
 if (!$is_allowed_to_edit) give_up(get_lang('Denied'));
 
 $mdStore = new mdstore(FALSE);  // no create from statistics

@@ -1304,7 +1304,7 @@ function get_forums($id='', $course_db_name = '') {
     if ($id == '') {
         if (is_array($forum_list)) {
             foreach ($forum_list as $key => $value) {
-                $last_post_info_of_forum = get_last_post_information($key, is_allowed_to_edit(), $course_db_name);
+                $last_post_info_of_forum = get_last_post_information($key, api_is_allowed_to_edit(), $course_db_name);
                 $forum_list[$key]['last_post_id'] = $last_post_info_of_forum['last_post_id'];
                 $forum_list[$key]['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
                 $forum_list[$key]['last_post_date'] = $last_post_info_of_forum['last_post_date'];
@@ -1316,7 +1316,7 @@ function get_forums($id='', $course_db_name = '') {
             $forum_list = array();
         }
     } else {
-        $last_post_info_of_forum = get_last_post_information($id, is_allowed_to_edit(), $course_db_name);
+        $last_post_info_of_forum = get_last_post_information($id, api_is_allowed_to_edit(), $course_db_name);
         $forum_list['last_post_id'] = $last_post_info_of_forum['last_post_id'];
         $forum_list['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
         $forum_list['last_post_date'] = $last_post_info_of_forum['last_post_date'];

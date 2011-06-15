@@ -608,7 +608,7 @@ function showhide_agenda_item($id) {
 	  ==================================================*/
 	//  and $_GET['isStudentView']<>"false" is added to prevent that the visibility is changed after you do the following:
 	// change visibility -> studentview -> course manager view
-	if ((is_allowed_to_edit() && !api_is_anonymous()) and $_GET['isStudentView']<>"false")
+	if ((api_is_allowed_to_edit() && !api_is_anonymous()) and $_GET['isStudentView']<>"false")
 	{
 		if (isset($_GET['id'])&&$_GET['id']&&isset($_GET['action'])&&$_GET['action']=="showhide")
 		{
@@ -672,7 +672,7 @@ function display_agenda_items() {
 
     $repeats = array(); //placeholder for repeated events
 
-	if (is_allowed_to_edit() && !api_is_anonymous()) {
+	if (api_is_allowed_to_edit() && !api_is_anonymous()) {
 		$sql="SELECT * FROM ".$TABLEAGENDA;
 
 		global $_configuration;
@@ -2853,7 +2853,7 @@ function agenda_add_item($title, $content, $db_start_date, $db_end_date) {
     }
     $repeats = array();
     $data=array();
-	if (is_allowed_to_edit()) {
+	if (api_is_allowed_to_edit()) {
 		$sql="SELECT DISTINCT *
 			FROM ".$TABLEAGENDA." agenda
 			WHERE MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'";

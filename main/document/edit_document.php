@@ -144,7 +144,7 @@ $html_editor_config = array(
 	'BaseHref' =>  api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir
 );
 
-$is_allowed_to_edit = is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
 
 $use_document_title = api_get_setting('use_document_title') == 'true';
 $noPHP_SELF = true;

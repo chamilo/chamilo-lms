@@ -53,7 +53,7 @@ $prop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 //normal users get only visible files that are in visible folders
 
 //admins are allowed to download invisible files
-if (is_allowed_to_edit()) {
+if (api_is_allowed_to_edit()) {
 	//folder we want to zip --> no longer used, deleted files are included too like this
  	//$what_to_zip = $sys_course_path.$_course['path']."/document".$path;
  	//creation of the zipped folder

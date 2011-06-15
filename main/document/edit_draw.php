@@ -94,7 +94,7 @@ if (!$is_certificate_mode)
 else
 	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 
-$is_allowedToEdit = is_allowed_to_edit() || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
 
 if (!$is_allowedToEdit) {
 	api_not_allowed(true);

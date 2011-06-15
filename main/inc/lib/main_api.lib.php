@@ -1174,9 +1174,35 @@ function api_session_start($already_installed = true) {
         $session_handler = new session_handler();
         @session_set_save_handler(array(& $session_handler, 'open'), array(& $session_handler, 'close'), array(& $session_handler, 'read'), array(& $session_handler, 'write'), array(& $session_handler, 'destroy'), array(& $session_handler, 'garbage'));
     }
-    session_name('ch_sid');
+    
+    /* 
+     * Prevent Session fixation bug fixes  
+     * See http://support.chamilo.org/issues/3600
+     * http://php.net/manual/en/session.configuration.php
+     * @todo use session_set_cookie_params with some custom admin parameters
+     */
+        
+    //session.cookie_lifetime
+    
+    //the session ID is only accepted from a cookie
+    ini_set('session.use_only_cookies', 1);
+    
+    //HTTPS only if possible 
+    //ini_set('session.cookie_secure', 1);
+    
+    //session ID in the cookie is only readable by the server 
+    ini_set('session.cookie_httponly', 1);
+    
+    //Use entropy file    
+    //session.entropy_file
+    //ini_set('session.entropy_length', 128);
+    
+    //Do not to include the identifier in the URL, and not to read the URL for identifiers.
+    ini_set('session.use_trans_sid', 0);    
+   
+    session_name('ch_sid');    
     session_start();
-
+    
     if (!isset($_SESSION['starttime'])) {
         $_SESSION['starttime'] = time();
     }
@@ -1231,8 +1257,8 @@ function api_session_unregister($variable) {
  */
 function api_session_clear() {
     session_regenerate_id();
-    session_unset();
-    $_SESSION = array ();
+    session_unset();    
+    $_SESSION = array();
 }
 
 /**

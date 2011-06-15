@@ -261,8 +261,9 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                 if ($password == $uData['password'] AND (trim($login) == $uData['username'])) {
                     // Check if the account is active (not locked)
                     if ($uData['active']=='1') {
+                        
                         // Check if the expiration date has not been reached
-                        if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
+                        if ($uData['expiration_date'] > date('Y-m-d H:i:s') OR $uData['expiration_date'] == '0000-00-00 00:00:00') {
                             global $_configuration;
 
                             if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
@@ -291,6 +292,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                         // the user have the permissions to enter at this site
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             $_user['user_id'] = $uData['user_id'];
+                                            session_regenerate_id();
                                             api_session_register('_user');
                                             event_login();
                                         } else {
@@ -309,12 +311,14 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                     //var_dump($current_access_url_id, $my_url_list); exit;
                                     if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
                                         $_user['user_id'] = $uData['user_id'];
+                                        session_regenerate_id();
                                         api_session_register('_user');
                                         event_login();
                                     } else {
                                         //This means a secondary admin wants to login so we check as he's a normal user
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             $_user['user_id'] = $uData['user_id'];
+                                            session_regenerate_id();
                                             api_session_register('_user');
                                             event_login();
                                         } else {
@@ -325,10 +329,11 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                         }
                                     }
                                 }
-                            } else {
-                                $_user['user_id'] = $uData['user_id'];
+                            } else {                                
+                                $_user['user_id'] = $uData['user_id'];                                
+                                session_regenerate_id();                                
                                 api_session_register('_user');
-                                event_login();
+                                event_login();                                
                             }
                         } else {
                             $loginFailed = true;
@@ -496,6 +501,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                 // check if the expiration date has not been reached
                                 if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
                                     $_user['user_id'] = $uData['user_id'];
+                                    session_regenerate_id();
                                     api_session_register('_user');
                                     event_login();
                                 } else {
@@ -572,10 +578,11 @@ if ($gidReq && $gidReq != $gid) {
 /* USER INIT */
 
 if (isset($uidReset) && $uidReset) {    // session data refresh requested
-    $is_platformAdmin = false; $is_allowedCreateCourse = false;
+    $is_platformAdmin       = false; 
+    $is_allowedCreateCourse = false;
 
-    if (isset($_user['user_id']) && $_user['user_id']) // a uid is given (log in succeeded)
-    {
+    if (isset($_user['user_id']) && $_user['user_id']) {
+        // a uid is given (log in succeeded)
         $user_table     = Database::get_main_table(TABLE_MAIN_USER);
         $admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);
         $track_e_login  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
@@ -610,7 +617,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 
             $is_platformAdmin           = (bool) (! is_null( $uData['is_admin']));
             $is_allowedCreateCourse     = (bool) (($uData ['status'] == 1) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == 4));
-
+            session_regenerate_id(); 
             api_session_register('_user');
         } else {
             header('location:'.api_get_path(WEB_PATH));
@@ -618,15 +625,15 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
         }
     } else { // no uid => logout or Anonymous
         api_session_unregister('_user');
-        api_session_unregister('_uid');
+        api_session_unregister('_uid');        
     }
-
+    
     api_session_register('is_platformAdmin');
     api_session_register('is_allowedCreateCourse');
 } else { // continue with the previous values
-    $_user = $_SESSION['_user'];
-    $is_platformAdmin = $_SESSION['is_platformAdmin'];
-    $is_allowedCreateCourse = $_SESSION['is_allowedCreateCourse'];
+    $_user                    = $_SESSION['_user'];
+    $is_platformAdmin         = $_SESSION['is_platformAdmin'];
+    $is_allowedCreateCourse   = $_SESSION['is_allowedCreateCourse'];
 }
 
 /*  COURSE INIT */

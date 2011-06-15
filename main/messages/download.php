@@ -33,18 +33,19 @@ $file_url = str_replace('/..', '', $file_url); //echo $doc_url;
 $tbl_messsage = Database::get_main_table(TABLE_MESSAGE);
 $tbl_messsage_attachment = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
-$sql= "SELECT filename,message_id FROM $tbl_messsage_attachment WHERE path LIKE BINARY '$file_url'";
+$file_url = Database::escape_string($file_url);
+$sql= "SELECT filename, message_id FROM $tbl_messsage_attachment WHERE path LIKE BINARY '$file_url'";
 
-$result= Database::query($sql);
-$row= Database::fetch_array($result, 'ASSOC');
-$title = str_replace(' ','_', $row['filename']);
+$result     = Database::query($sql);
+$row        = Database::fetch_array($result, 'ASSOC');
+$title      = str_replace(' ','_', $row['filename']);
 $message_id = $row['message_id'];
 
 // allow download only for user sender and user receiver
 $sql = "SELECT user_sender_id, user_receiver_id, group_id FROM $tbl_messsage WHERE id = '$message_id'";
-$rs= Database::query($sql);
-$row_users= Database::fetch_array($rs, 'ASSOC');
-$current_uid = api_get_user_id();
+$rs           = Database::query($sql);
+$row_users    = Database::fetch_array($rs, 'ASSOC');
+$current_uid  = api_get_user_id();
 
 // get message user id for inbox/outbox
 $message_uid = '';

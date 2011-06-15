@@ -42,6 +42,7 @@ $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION)
 // launch event
 event_download($doc_url);
 
+$doc_url = Database::escape_string($doc_url);
 $sql = 'SELECT title FROM '.$tbl_student_publication.'WHERE url LIKE BINARY "'.$doc_url.'"';
 
 $result = Database::query($sql);

@@ -208,7 +208,6 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                     $time = time();
                     $condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
                     UserManager::update_extra_field_value($user_id,'legal_accept',$condition_to_save);
-
                 }
             }
         }
@@ -232,17 +231,12 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
                 //the authentification of this user is managed by Chamilo itself
                 $password = trim(stripslashes($password));
-                // determine if the password needs to be encrypted before checking
-                // $userPasswordCrypted is set in an external configuration file
 
-                /*if ($userPasswordCrypted) {
-                    $password = md5($password);
-                } */
                 if (api_get_setting('allow_terms_conditions')=='true') {
                     if (isset($_POST['password']) && isset($_SESSION['info_current_user'][2]) && $_POST['password']==$_SESSION['info_current_user'][2]) {
                         $password=$_POST['password'];
                     } else {
-                           $password = api_get_encrypted_password($password);
+                        $password = api_get_encrypted_password($password);
                     }
                 } else {
                     $password = api_get_encrypted_password($password);
@@ -260,7 +254,6 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                             unset($_SESSION['update_term_and_condition']);
                             unset($_SESSION['info_current_user']);
                         }
-
                     }
                 }
 

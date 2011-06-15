@@ -327,21 +327,20 @@ else
 		<option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
 		<?php
 	}
-	?>  </select></div> <?php
+	?></select>
+	</div>
+	<?php
 }
 unset($nosessionCourses);
 ?>
-
-  </select></td>
-  <td width="10%" valign="middle" align="center">
+	</td>
+	<td width="10%" valign="middle" align="center">
   <?php
   if ($ajax_search) {
   ?>
   	<button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
   <?php
-  }
-  else
-  {
+  } else {
   ?>
   	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
 	<br /><br />

@@ -194,17 +194,14 @@ function event_access_tool($tool, $id_session=0) {
  * and later again.
  * Doing this twice causes an error, I remove one of them.
  */
-function event_download($doc_url) {
-	global $_user, $_cid;
+function event_download($doc_url) {	
 	$tbl_stats_downloads = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);	
     $doc_url = Database::escape_string($doc_url);
 
 	$reallyNow = api_get_utc_datetime();
-	if ($_user['user_id']) {
-		$user_id = "'".$_user['user_id']."'";
-	} else {
-		$user_id = "0";
-	}
+	$user_id = "'".api_get_user_id()."'";
+	$_cid = api_get_course_id();
+	
 	$sql = "INSERT INTO $tbl_stats_downloads (
 				 down_user_id,
 				 down_cours_id,

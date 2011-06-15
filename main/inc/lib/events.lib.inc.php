@@ -70,8 +70,7 @@ function event_open() {
  * @desc Record information for login event
  * (when an user identifies himself with username & password)
  */
-function event_login() {
-	global $_configuration;
+function event_login() {	
 	global $_user;
 	global $TABLETRACK_LOGIN;
 
@@ -91,7 +90,6 @@ function event_login() {
  * @desc Record information for access event for courses
  */
 function event_access_course() {
-	global $_configuration;
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_ACCESS;
@@ -138,8 +136,7 @@ function event_access_tool($tool, $id_session=0) {
 	global $_configuration;
 	global $_user;
 	global $_cid;
-	global $TABLETRACK_ACCESS;
-	global $_configuration;
+	global $TABLETRACK_ACCESS;	
 	global $_course;
 	global $TABLETRACK_LASTACCESS; //for "what's new" notification
 	
@@ -198,7 +195,7 @@ function event_access_tool($tool, $id_session=0) {
  * Doing this twice causes an error, I remove one of them.
  */
 function event_download($doc_url) {
-	global $_configuration, $_user, $_cid;
+	global $_user, $_cid;
 	$tbl_stats_downloads = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);	
     $doc_url = Database::escape_string($doc_url);
 
@@ -233,8 +230,7 @@ function event_download($doc_url) {
  * used in the works tool to record informations when
  * an user upload 1 work
  */
-function event_upload($doc_id) {
-	global $_configuration;
+function event_upload($doc_id) {	
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_UPLOADS;
@@ -270,7 +266,7 @@ function event_upload($doc_id) {
  * it will be used in a redirection page
 */
 function event_link($link_id) {
-	global $_configuration, $_user, $TABLETRACK_LINKS;
+	global $_user, $TABLETRACK_LINKS;
 	$reallyNow = api_get_utc_datetime();
 	if (isset($_user['user_id']) && $_user['user_id']!='') {
 		$user_id = "'".Database::escape_string($_user['user_id'])."'";
@@ -416,8 +412,7 @@ function create_event_exercice($exo_id) {
  * @param	integer	Position
  * @return	boolean	Result of the insert query
  */
-function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0) {
-	global $_configuration;
+function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0) {	
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 	$score 	= Database::escape_string($score);
 	$answer = Database::escape_string($answer);
@@ -508,17 +503,16 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
  * @param	integer	User ID (defaults to null)
  * @param	string	Course code (defaults to null)
  */
-function event_system($event_type, $event_value_type, $event_value, $timestamp = null, $user_id=null, $course_code=null) {
-	global $_configuration;
+function event_system($event_type, $event_value_type, $event_value, $timestamp = null, $user_id=null, $course_code=null) {	
 	global $_user;
 	global $TABLETRACK_DEFAULT;
 
-	$event_type = Database::escape_string($event_type);
-	$event_value_type = Database::escape_string($event_value_type);
-	$event_value = Database::escape_string($event_value);
-	$timestamp = Database::escape_string($timestamp);
-	$user_id = Database::escape_string($user_id);
-	$course_code = Database::escape_string($course_code);
+	$event_type         = Database::escape_string($event_type);
+	$event_value_type   = Database::escape_string($event_value_type);
+	$event_value        = Database::escape_string($event_value);
+	$timestamp          = Database::escape_string($timestamp);
+	$user_id            = Database::escape_string($user_id);
+	$course_code        = Database::escape_string($course_code);
     
 	if(!isset($timestamp)) {
 		$timestamp = api_get_utc_datetime();

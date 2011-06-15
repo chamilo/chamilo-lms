@@ -309,9 +309,9 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		  }
 		  ?></td>
 		  <td>
+		  	<a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a>
 			<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('user_subscribe_session.png', get_lang('SubscribeUsersToSession'),'','22'); ?></a>
-			<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('courses_to_session.png', get_lang('SubscribeCoursesToSession'),'','22'); ?></a>
-			<a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a>
+			<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('courses_to_session.png', get_lang('SubscribeCoursesToSession'),'','22'); ?></a>			
             <a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=copy&idChecked=<?php echo $enreg['id'];?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('copy.gif', get_lang('Copy'), array(), 22); ?></a>
             <a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('delete.png', get_lang('Delete'), array(), 22); ?></a>
 		  </td>
@@ -327,42 +327,35 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		<div align="left">
 		<?php
 
-		if($num>$limit) {
-		if($page) {
-			?>
-			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
-			<?php
-			} else {
-				echo get_lang('Previous');
-			}
-			?>
-			|
-
-			<?php
-			if($nbr_results > $limit) {
-			?>
-
-			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
-
-			<?php
-			}
-			else
-			{
-				echo get_lang('Next');
-			}
-		}
+		if ($num>$limit) {
+    		if ($page) {
+    			?>
+    			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
+    			<?php
+    			} else {
+    				echo get_lang('Previous');
+    			}
+    			?>
+    			|    
+    			<?php
+    			if($nbr_results > $limit) {
+    			?>    
+    				<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>    
+    			<?php
+    			} else {
+    				echo get_lang('Next');
+    			}
+    		}
 		?>
 		</div>
 
-		<br />
 		<a href="javascript: void(0);" onclick="javascript: selectAll('idChecked',<?php echo $x; ?>,'true');return false;"><?php echo get_lang('SelectAll') ?></a>&nbsp;-&nbsp;
 		<a href="javascript: void(0);" onclick="javascript: selectAll('idChecked',<?php echo $x; ?>,'false');return false;"><?php echo get_lang('UnSelectAll') ?></a>
 		<select name="action">
 		<option value="delete"><?php echo get_lang('DeleteSelectedSessions'); ?></option>
 		</select>
 		<button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Ok') ?></button>
-		<?php } ?>
-	</table>
-<?php
+<?php 
+	}
 }
 Display::display_footer();

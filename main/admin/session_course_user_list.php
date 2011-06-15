@@ -169,8 +169,6 @@ if($nbr_results > $limit) {
 <option value="delete"><?php echo get_lang('UnsubscribeSelectedUsersFromSession');?></option>
 </select>
 <button class="save" type="submit"> <?php echo get_lang('Ok'); ?></button>
-</table>
 </form>
 <?php
 Display::display_footer();
-?>

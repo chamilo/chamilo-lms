@@ -10,7 +10,7 @@
 $language_file='admin';
 
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
@@ -26,7 +26,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
 api_protect_global_admin_script();
-if (!$_configuration['multiple_access_urls']) {
+if (!api_get_multiple_access_url()) {
 	header('Location: index.php');
 	exit;
 }
@@ -224,35 +224,7 @@ if(!empty($errorMsg)) {
 		foreach($nosessionUsersList as $enreg) {
 		?>
 			<option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
-
-$xajax -> processRequests();
-
-$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
-function add_user_to_url (code, content) {
-
-	document.getElementById("user_to_add").value = "";
-	document.getElementById("ajax_list_users").innerHTML = "";
-
-	destination = document.getElementById("destination_users");
-	destination.options[destination.length] = new Option(content,code);
-
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
-
-}
-function remove_item(origin)
-{
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
-}
-</script>';
-		<?php
+			<?php
 		}
 		unset($nosessionUsersList);
 		?>
@@ -405,10 +377,4 @@ function makepost(select){
 
 </script>
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display::display_footer();
-?>

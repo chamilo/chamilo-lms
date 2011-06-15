@@ -769,5 +769,4 @@ function display_extra_profile_fields_filter()
 	echo   '<select name="subscribe_user_filter_value" id="subscribe_user_filter_value">'.$return.'</select>';
 	echo   '<button type="submit" name="submit_filter" id="submit_filter" value="" class="search">'.get_lang('Filter').'</button>';
 	echo '</form>';
-
 }

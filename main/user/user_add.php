@@ -9,7 +9,6 @@
 // name of the language file that needs to be included
 $language_file="registration";
 
-
 include("../inc/global.inc.php");
 require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 $this_section=SECTION_COURSES;
@@ -368,4 +367,3 @@ else
 }
 
 Display::display_footer();
-?>

@@ -7,10 +7,10 @@
 
 
 // name of the language file that needs to be included
-$language_file='admin';
+$language_file = 'admin';
 
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
@@ -24,7 +24,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
 api_protect_global_admin_script();
-if (!$_configuration['multiple_access_urls']) {
+if (!api_get_multiple_access_url()) {
 	header('Location: index.php');
 	exit;
 }
@@ -172,7 +172,7 @@ $url_list = UrlManager::get_url_data();
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?> >
 <?php echo get_lang('SelectUrl').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
-<option value="0"> <?php echo get_lang('SelectUrl')?></option>
+<option value="0">-- <?php echo get_lang('SelectUrl')?> -- </option>
 	<?php
 	$url_selected='';
 	foreach ($url_list as $url_obj) {
@@ -227,39 +227,10 @@ if(!empty($errorMsg)) {
 		foreach($no_course_list as $no_course) {
 		?>
 			<option value="<?php echo $no_course['code']; ?>"><?php echo $no_course['title'].' ('.$no_course['code'].')'; ?></option>
-
-$xajax -> processRequests();
-
-$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
-function add_user_to_url (code, content) {
-
-	document.getElementById("course_to_add").value = "";
-	document.getElementById("ajax_list_courses").innerHTML = "";
-
-	destination = document.getElementById("destination_users");
-	destination.options[destination.length] = new Option(content,code);
-
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
-
-}
-function remove_item(origin)
-{
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
-}
-</script>';
 		<?php
 		}
 		unset($no_course_list);
 		?>
-
 	  </select>
 	<?php
   	  }
@@ -286,11 +257,9 @@ function remove_item(origin)
   <select id="destination_users" name="course_list[]" multiple="multiple" size="15" style="width:380px;">
 
 <?php
-
 foreach($course_list as $course) {
 ?>
 	<option value="<?php echo $course['course_code']; ?>"><?php echo $course['title'].' ('.$course['course_code'].')'; ?></option>
-
 <?php
 }
 unset($course_list);
@@ -298,7 +267,6 @@ unset($course_list);
 
   </select></td>
 </tr>
-
 <tr>
 	<td colspan="3" align="center">
 		<br />
@@ -310,13 +278,9 @@ unset($course_list);
 		?>
 	</td>
 </tr>
-
-
-
-
 </table>
-
 </form>
+
 <script type="text/javascript">
 <!--
 function moveItem(origin , destination) {
@@ -407,13 +371,6 @@ function makepost(select){
 
 }
 -->
-
 </script>
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display::display_footer();
-?>

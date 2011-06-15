@@ -12,7 +12,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 //api_protect_admin_script();
 api_protect_global_admin_script();
-if (!$_configuration['multiple_access_urls']) {
+if (!api_get_multiple_access_url()) {
 	header('Location: index.php');
 	exit;
 }

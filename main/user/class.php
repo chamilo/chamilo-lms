@@ -1,37 +1,10 @@
 <?php
-//  $Id: class.php 9119 2006-08-18 07:10:23Z bmol $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2005 Dokeos S.A.
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	This							 script allows teachers to manage subscribed
-*classes in their course.
-*	@package dokeos.user
-==============================================================================
+*	@package chamilo.user
 */
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 // name of the language file that needs to be included
 $language_file = array('registration','admin');
@@ -43,39 +16,25 @@ require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
 require_once (api_get_path(LIBRARY_PATH).'classmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+/*		MAIN CODE	*/
 
 api_protect_course_script();
 
-if(api_get_setting('use_session_mode')=='true')
-{
+if (api_get_setting('use_session_mode')=='true') {
 	api_not_allowed();
 }
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
 $tool_name = get_lang("Classes");
 //extra entries in breadcrumb
 $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("ToolUser"));
 Display :: display_header($tool_name, "User");
 
 api_display_tool_title($tool_name);
-if (api_is_allowed_to_edit())
-{
+if (api_is_allowed_to_edit()) {
 	echo '<a href="subscribe_class.php?'.api_get_cidreq().'">'.get_lang("AddClassesToACourse").'</a><br /><br />';
 }
-/*
-==============================================================================
-		MAIN SECTION
-==============================================================================
-*/
+
+/*		MAIN SECTION*/
 
 if(api_is_allowed_to_edit())
 {
@@ -102,9 +61,7 @@ if(api_is_allowed_to_edit())
 	}
 }
 /*
------------------------------------------------------------
 		SHOW LIST OF CLASSES
------------------------------------------------------------
 */
 
 /**
@@ -196,10 +153,5 @@ if (api_is_allowed_to_edit())
 $form->display();
 echo '<br />';
 $table->display();
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+
 Display :: display_footer();
-?>

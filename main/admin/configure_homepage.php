@@ -632,7 +632,7 @@ switch ($action) {
 		</tr>
 		<tr>
 		  <td>&nbsp;</td>
-		  <td><button class="save" type="submit" value="<?php echo get_lang('Ok'); ?>"/><?php echo get_lang('Ok'); ?></button></td>
+		  <td><button class="save" type="submit" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Ok'); ?></button></td>
 		</tr>
 		</table>
 		</form>
@@ -947,7 +947,7 @@ switch ($action) {
             <div id="menu" class="menu">
                 <br />
                 <a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); ?></a>
-                <a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
+                <a href="<?php echo api_get_self(); ?>?action=insert_link"><?php echo get_lang('InsertLink'); ?></a>
                 
     			<div class="menusection">
     				<span class="menusectioncaption"><?php echo api_ucfirst(get_lang('General')); ?></span>

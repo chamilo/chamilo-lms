@@ -16,7 +16,7 @@ $this_section=SECTION_PLATFORM_ADMIN;
 
 require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 api_protect_global_admin_script();
-if (!$_configuration['multiple_access_urls']) {
+if (!api_get_multiple_access_url()) {
 	header('Location: index.php');
 	exit;
 }

@@ -1,24 +1,15 @@
 <?php
-//  $Id: subscribe_class.php 8213 2006-03-15 15:52:12Z turboke $
-/* For licensing terms, see /license.txt	*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	This script allows teachers to subscribe existing classes to their course.
-*	@package dokeos.user
-==============================================================================
+*	@package chamilo.user
 */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+
 // name of the language file that needs to be included
 $language_file = array('registration','admin');
 include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
 if (!api_is_allowed_to_edit()) api_not_allowed(true);
-if(api_get_setting('use_session_mode')=='true')
-{
+if(api_get_setting('use_session_mode')=='true') {
 	api_not_allowed(true);
 }
 
@@ -28,16 +19,7 @@ require_once (api_get_path(LIBRARY_PATH).'classmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 /*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
-
-
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
+	MAIN CODE
 */
 $tool_name = get_lang("AddClassesToACourse");
 //extra entries in breadcrumb
@@ -48,9 +30,7 @@ Display :: display_header($tool_name, "User");
 api_display_tool_title($tool_name);
 
 /*
-==============================================================================
 		MAIN SECTION
-==============================================================================
 */
 
 if (!api_is_allowed_to_edit())
@@ -83,9 +63,7 @@ if (isset ($_POST['action']))
 }
 
 /*
------------------------------------------------------------
 		SHOW LIST OF USERS
------------------------------------------------------------
 */
 
 /**
@@ -193,10 +171,5 @@ $table->set_form_actions(array ('subscribe' => get_lang('reg')), 'class');
 $form->display();
 echo '<br />';
 $table->display();
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+
 Display :: display_footer();
-?>

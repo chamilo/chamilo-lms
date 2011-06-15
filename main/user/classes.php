@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * @package chamilo.classes
  * @author Julio Montoya <gugli100@gmail.com>

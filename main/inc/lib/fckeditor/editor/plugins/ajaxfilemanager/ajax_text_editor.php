@@ -96,7 +96,7 @@
 	<textarea name="content" id="content" style="height:500px; width: 97%;"><?php echo getFileContent($path); ?></textarea>
 </div>
 <div id="windowProcessing" class="jqmWindow" style="display:none">
-	<form name="frmProcessing" id="frmProcessing" method="POST" action="<?php echo appendQueryString(CONFIG_URL_SAVE_TEXT, makeQueryString(array('path')));?>">
+	<form name="frmProcessing" id="frmProcessing" method="post" action="<?php echo appendQueryString(CONFIG_URL_SAVE_TEXT, makeQueryString(array('path')));?>">
 		<input type="hidden" name="folder" id="folder" value="<?php echo dirname($path); ?>" />
 		<input type="hidden" name="name" id="name" value="<?php echo basename($path); ?>" />	
 		<input type="hidden" name="save_as_request" id="save_as_request" value="0" />

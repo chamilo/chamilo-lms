@@ -1,15 +1,10 @@
 <?php
-/* For licensing terms, see /license.txt	*/
+/* For licensing terms, see /license.txt*/
 /**
-==============================================================================
-*	@package dokeos.user
-==============================================================================
+*	@package chamilo.user
 */
 
-
-/*----------------------------------------
-     CATEGORIES DEFINITION TREATMENT
- --------------------------------------*/
+/*     CATEGORIES DEFINITION TREATMENT */
 /**
  * create a new category definition for the user information
  *

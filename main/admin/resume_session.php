@@ -104,7 +104,7 @@ echo Display::tag('h3', $tool_name);
 <table class="data_table" width="100%">
 <tr>
   <th colspan="2"><?php echo get_lang('GeneralProperties'); ?>
-  	<a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a></th>
+  	<a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a>
   </th>
 </tr>
 <tr>

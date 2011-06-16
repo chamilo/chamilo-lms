@@ -1997,10 +1997,7 @@ return 'application/octet-stream';
      */
     public function upload_document($files, $path, $title = '', $comment = '', $unzip = 0, $if_exists = '', $index_document = false, $show_output = false) {
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-        //If we want to unzip a file, we need the library
-        if (isset($unzip) && intval($unzip) == 1) {
-            require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
-        }
+
         $max_filled_space = self::get_course_quota();
         $course_info      = api_get_course_info();
         $course_dir       = $course_info['path'].'/document';

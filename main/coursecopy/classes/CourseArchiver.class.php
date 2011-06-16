@@ -36,19 +36,19 @@ class CourseArchiver
 	 * Write a course and all its resources to a zip-file.
 	 * @return string A pointer to the zip-file
 	 */
-	function write_course($course)
-	{
+	function write_course($course) {
 		$perm_dirs = api_get_permissions_for_new_directories();
 
 		CourseArchiver::clean_backup_dir();
 		// Create a temp directory
-		$tmp_dir_name = 'CourseArchiver_'.uniqid('');
-		$backup_dir = api_get_path(SYS_ARCHIVE_PATH).''.$tmp_dir_name.'/';
+		$tmp_dir_name = 'CourseArchiver_'.api_get_unique_id();
+		$backup_dir   = api_get_path(SYS_ARCHIVE_PATH).$tmp_dir_name.'/';
+
 		// All course-information will be stored in course_info.dat
 		$course_info_file = $backup_dir.'course_info.dat';
-		$zip_dir = api_get_path(SYS_ARCHIVE_PATH).'';
+		$zip_dir = api_get_path(SYS_ARCHIVE_PATH);
 		$user = api_get_user_info();
-		$zip_file = $user['user_id'].'_'.$course->code.'_'.date("YmdHis").'.zip';
+		$zip_file = $user['user_id'].'_'.$course->code.'_'.date("Ymd-His").'.zip';
 		$php_errormsg = '';
 		$res = @mkdir($backup_dir, $perm_dirs);
 		if ($res === false)
@@ -92,13 +92,7 @@ class CourseArchiver
 		if (is_array($course->resources[RESOURCE_SCORM])) {
 			foreach ($course->resources[RESOURCE_SCORM] as $id => $document) {
 				$doc_dir = dirname($backup_dir.$document->path);
-//				error_log($doc_dir);
-				
-
 				@mkdir($doc_dir, $perm_dirs, true);
-				//error_log($course->path.$document->path);
-				//error_log('----------');
-
 				copyDirTo($course->path.$document->path, $doc_dir, false);
 			}
 		}
@@ -111,11 +105,10 @@ class CourseArchiver
 			copyDirTo($course->path.'upload/calendar/', $doc_dir, false);
 		}		
 		
-		//Copy learningpath author image
-		
+		//Copy learningpath author image		
 		if (is_array($course->resources[RESOURCE_LEARNPATH])) {
 			$doc_dir = dirname($backup_dir.'/upload/learning_path/');
-			@mkdir($doc_dir, $perm_dirs, true);		
+			@mkdir($doc_dir, $perm_dirs, true);
 			copyDirTo($course->path.'upload/learning_path/', $doc_dir, false);
 		}
 		
@@ -221,4 +214,3 @@ class CourseArchiver
 		return $course;
 	}
 }
-?>

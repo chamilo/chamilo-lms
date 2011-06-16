@@ -54,9 +54,10 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		$cb = new CourseBuilder();
 		$course = $cb->build();
 	}
-	$zip_file = CourseArchiver :: write_course($course);
-	Display::display_confirmation_message(get_lang('BackupCreated').str_repeat('<br />', 3).'<a class="bottom-link" href="../course_info/download.php?archive='.$zip_file.'">'.$zip_file.'</a>', false);
-	echo '<div style="width:200px"><a class="bottom-link" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php" >'.get_lang('CourseHomepage').'</a></div>';
+	$zip_file = CourseArchiver :: write_course($course); 
+	Display::display_confirmation_message(get_lang('BackupCreated'));
+	echo '<br /><a class="a_button orange medium" href="../course_info/download.php?archive='.$zip_file.'">'.get_lang('Download').'</a>';
+	
 ?>
 	<!-- Manual download <script language="JavaScript">
 	 setTimeout('download_backup()',2000);

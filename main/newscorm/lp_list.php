@@ -417,22 +417,12 @@ if (is_array($flat_list)) {
              /* Export */
 
             if ($details['lp_type'] == 1) {
-                $dsp_disk =
-                    "<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
-                    "<img src=\"../img/icons/22/export_scorm.png\" border=\"0\" title=\"".get_lang('Export')."\">" .
-                    "</a>" .
-                    "";
+                $dsp_disk = Display::url(Display::return_icon('cd.gif', get_lang('Export'), array(), 22), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id");
+                
             } elseif ($details['lp_type'] == 2) {
-                $dsp_disk =
-                    "<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name, 'strict').".zip'>" .
-                    "<img src=\"../img/icons/22/export_scorm.png\" border=\"0\" title=\"".get_lang('Export')."\">" .
-                    "</a>" .
-                    "";
+                $dsp_disk = Display::url(Display::return_icon('cd.gif', get_lang('Export'), array(), 22), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name, 'strict').".zip");                
             } else {
-                $dsp_disk =
-                    //"<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
-                    "<img src=\"../img/cd_gray.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .                    //"</a>" .
-                    "";
+                $dsp_disk = Display::return_icon('cd_gray.gif', get_lang('Export'), array(), 22);                
             }
             
             /* Auto Lunch LP code*/

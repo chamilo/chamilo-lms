@@ -468,7 +468,6 @@ class scorm extends learnpath {
         if ($this->debug > 0) { error_log('In scorm::import_package('.print_r($zip_file_info,true).',"'.$current_dir.'") method', 0); }
         require_once api_get_path(LIBRARY_PATH).'document.lib.php';
         $maxFilledSpace = DocumentManager :: get_course_quota();
-        //$maxFilledSpace = 1000000000;
 
         $zip_file_path = $zip_file_info['tmp_name'];
         $zip_file_name = $zip_file_info['name'];

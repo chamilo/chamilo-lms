@@ -83,9 +83,6 @@ function handle_multiple_actions() {
         }
 
 		foreach ($checked_file_ids as $key => $value) {
-			//var_dump($value);
-			//var_dump($to_cat_id);
-			//var_dump($part);
 			store_move($value, $to_cat_id, $part);
 		}
 		return get_lang('FilesMoved');
@@ -1030,66 +1027,57 @@ function store_feedback() {
 function zip_download($array) {
 	global $_course;
 	global $dropbox_cnf;
-	global $_user;
 	global $files;
-
+	
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);
 
 	// zip library for creation of the zipfile
 	require api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 
 	// place to temporarily stash the zipfiles
-	$temp_zip_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/';
-
-	// create the directory if it does not exist yet.
-	if (!is_dir($temp_zip_dir)) {
-		mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
-	}
-
-	cleanup_temp_dropbox();
-
-	$files = '';
+	$temp_zip_dir = api_get_path(SYS_COURSE_PATH);
+	
+	array_map('intval', $array);
 
 	// note: we also have to add the check if the user has received or sent this file.
 	$sql = "SELECT distinct file.filename, file.title, file.author, file.description
 			FROM ".$dropbox_cnf['tbl_file']." file, ".$dropbox_cnf['tbl_person']." person
 			WHERE file.id IN (".implode(', ',$array).")
 			AND file.id=person.file_id
-			AND person.user_id='".$_user['user_id']."'";
+			AND person.user_id='".api_get_user_id()."'";
 	$result = Database::query($sql);
+	$files = array();
 	while ($row = Database::fetch_array($result)) {
 		$files[$row['filename']] = array('filename' => $row['filename'],'title' => $row['title'], 'author' => $row['author'], 'description' => $row['description']);
 	}
 
-	//$alternative is a variable that uses an alternative method to create the zip
-	// because the renaming of the files inside the zip causes error on php5 (unexpected end of archive)
-	$alternative = true;
-	if ($alternative) {
-		zip_download_alternative($files);
-		exit;
+	// Step 3: create the zip file and add all the files to it
+	$temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";	
+	$zip_folder = new PclZip($temp_zip_file);	
+	foreach ($files as $key => $value) {	    
+		$zip_folder->add(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$value['filename'], PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
 	}
-
-	// create the zip file
-    $name = 'dropboxdownload-'.api_get_user_id().'-'.mktime().'.zip';
-	$temp_zip_file = $temp_zip_dir.'/'.$name;
-	$zip_folder = new PclZip($temp_zip_file);
-
-	foreach ($files as $key => $value) {
-		// met hernoemen van de files in de zip
-		$zip_folder->add(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$value['filename'], PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox', PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
-		// zonder hernoemen van de files in de zip
-		//$zip_folder->add(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$value['filename'],PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox');
-	}
-
-	// create the overview file
+	
+	/* 
+	 * @todo if you want the overview code fix it by yourself
+	 * 
+	// Step 1: create the overview file and add it to the zip
 	$overview_file_content = generate_html_overview($files, array('filename'), array('title'));
-	$overview_file = $temp_zip_dir.'/overview.html';
+	$overview_file = $temp_zip_dir.'overview'.replace_dangerous_char(api_is_western_name_order() ? $_user['firstname'].' '.$_user['lastname'] : $_user['lastname'].' '.$_user['firstname'], 'strict').'.html';
 	$handle = fopen($overview_file, 'w');
 	fwrite($handle, $overview_file_content);
+	// todo: find a different solution for this because even 2 seconds is no guarantee.
+	sleep(2);*/
 
-	// send the zip file
+	// Step 4: we add the overview file
+	//$zip_folder->add($overview_file, PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp');
+
+	// Step 5: send the file for download;
+	
+	$name = 'dropbox-'.api_get_utc_datetime().'.zip';
 	DocumentManager::file_send_for_download($temp_zip_file, true, $name);
-	exit;
+	@unlink($temp_zip_file);
+	exit;		
 }
 
 /**
@@ -1106,114 +1094,6 @@ function my_pre_add_callback($p_event, &$p_header) {
 	return 1;
 }
 
-/**
-* This function is an alternative zip download. It was added because PCLZip causes problems on PHP5 when using PCLZIP_CB_PRE_ADD and a callback function to rename
-* the files inside the zip file (dropbox scrambles the files to prevent
-* @todo consider using a htaccess that denies direct access to the file but only allows the php file to access it. This would remove the scrambling requirement
-*		but it would require additional checks to see if the filename of the uploaded file is not used yet.
-* @param $files is an associative array that contains the files that the user wants to download (check to see if the user is allowed to download these files already
-*		 happened so the array is clean!!. The key is the filename on the filesystem. The value is an array that contains both the filename on the filesystem and
-*		 the original filename (that will be used in the zip file)
-* @todo when we copy the files there might be two files with the same name. We need a function that (recursively) checks this and changes the name
-*
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version march 2006
-*/
-function zip_download_alternative($files)
-{
-	global $_course;
-	global $_user;
-
-	$temp_zip_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/';
-
-	// Step 2: we copy all the original dropbox files to the temp folder and change their name into the original name
-	foreach ($files as $key => $value) {
-		$value['title'] = check_file_name(api_strtolower($value['title']));
-		$files[$value['filename']]['title'] = $value['title'];
-		copy(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$value['filename'], api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/'.$value['title']);
-	}
-
-	// Step 3: create the zip file and add all the files to it
-	$temp_zip_file = $temp_zip_dir.'/dropboxdownload-'.api_get_user_id().'-'.mktime().'.zip';
-	$zip_folder = new PclZip($temp_zip_file);
-	foreach ($files as $key => $value) {
-		$zip_folder->add(api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/'.$value['title'], PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp');
-	}
-
-	// Step 1: create the overview file and add it to the zip
-	$overview_file_content = generate_html_overview($files, array('filename'), array('title'));
-	$overview_file = $temp_zip_dir.'overview'.replace_dangerous_char(api_is_western_name_order() ? $_user['firstname'].' '.$_user['lastname'] : $_user['lastname'].' '.$_user['firstname'], 'strict').'.html';
-	$handle = fopen($overview_file, 'w');
-	fwrite($handle, $overview_file_content);
-	// todo: find a different solution for this because even 2 seconds is no guarantee.
-	sleep(2);
-
-	// Step 4: we add the overview file
-	$zip_folder->add($overview_file, PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp');
-
-	// Step 5: send the file for download;
-	DocumentManager::file_send_for_download($temp_zip_file, true);
-
-	// Step 6: remove the files in the temp dir
-	foreach ($files as $key => $value) {
-		unlink(api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/'.$value['title']);
-	}
-	//unlink($overview_file);
-
-	exit;
-}
-
-/**
-* @desc This function checks if the real filename of the dropbox files doesn't already exist in the temp folder. If this is the case then
-*		it will generate a different filename;
-*
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version march 2006
-*/
-function check_file_name($file_name_2_check, $counter = 0) {
-	global $_course;
-
-	$new_file_name = $file_name_2_check;
-	if ($counter != 0) {
-		$new_file_name = $counter.$new_file_name;
-	}
-
-	if (!file_exists(api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/'.$new_file_name)) {
-		return $new_file_name;
-	} else {
-		$counter++;
-		$new_file_name = check_file_name($file_name_2_check, $counter);
-		return $new_file_name;
-	}
-}
-
-
-/**
-* @desc Cleans the temp zip files that were created when users download several files or a whole folder at once.
-*		T
-* @return true
-* @todo
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version march 2006
-*/
-
-function cleanup_temp_dropbox() {
-	global $_course;
-	$handle = opendir(api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp');
-	while (false !== ($file = readdir($handle))) {
-		if ($file != '.' OR $file != '..') {
-			$name = str_replace('.zip', '', $file);
-			$name_part = explode('-', $name);
-			$timestamp_of_file = $name_part[count($name_part) - 1];
-			// if it is a dropboxdownloadfile and the file is older than one day then we delete it
-			if (strstr($file, 'dropboxdownload') AND $timestamp_of_file < (mktime() - 86400)) {
-				unlink(api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/'.$file);
-			}
-		}
-	}
-	closedir($handle);
-	return true;
-}
 
 /**
  * @desc Generates the contents of a html file that gives an overview of all the files in the zip file.

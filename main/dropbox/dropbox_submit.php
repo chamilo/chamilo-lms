@@ -227,9 +227,12 @@ if (isset($_POST['submitWork'])) {
 
 /**
  * EXAMINE OR SEND MAILING (NEW)
+ * @deprecated The $_GET[mailingIndex] is never called
  */
 
-if (isset($_GET['mailingIndex'])) { // examine or send
+/*
+if (isset($_GET['mailingIndex'])) {
+    // examine or send
     $dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 	if (isset($_SESSION['sentOrder'])) {
 		$dropbox_person->orderSentWork($_SESSION['sentOrder']);
@@ -251,54 +254,8 @@ if (isset($_GET['mailingIndex'])) { // examine or send
 				ON cu.user_id = u.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND cu.course_code = '".$_course['sysCode']."'";
 		$sel .= " WHERE u.".dropbox_cnf("mailingWhere".$var)." = '";
 
-        function getUser($thisRecip) {
-			// string result = error message, array result = [user_id, lastname, firstname]
-
-	    	global $var, $sel;
-            if (isset($students)) {
-                unset($students);
-            }
-
-	        $result = Database::query($sel . $thisRecip . "'");
-	        while ( ($res = Database::fetch_array($result))) {$students[] = $res;}
-	        Database::free_result($result);
-
-	    	if (count($students) == 1) {
-		    	return($students[0]);
-	    	} elseif (count($students) > 1) {
-	        	return ' <'.get_lang('MailingFileRecipDup', '').$var."= $thisRecip>";
-	    	} else {
-	        	return ' <'.get_lang('MailingFileRecipNotFound', '').$var."= $thisRecip>";
-	    	}
-        }
-
 		$preFix = $nameParts[1]; $postFix = $nameParts[3];
 		$preLen = api_strlen($preFix); $postLen = api_strlen($postFix);
-
-		function findRecipient($thisFile) {
-			// string result = error message, array result = [user_id, lastname, firstname, status]
-
-			global $nameParts, $preFix, $preLen, $postFix, $postLen;
-
-            if (preg_match(dropbox_cnf('mailingFileRegexp'), $thisFile, $matches)) {
-	            $thisName = $matches[1];
-	            if (api_substr($thisName, 0, $preLen) == $preFix) {
-		            if ($postLen == 0 || api_substr($thisName, -$postLen) == $postFix) {
-			            $thisRecip = api_substr($thisName, $preLen, api_strlen($thisName) - $preLen - $postLen);
-			            if ($thisRecip) {
-			            	return getUser($thisRecip);
-			            }
-			            return ' <'.get_lang('MailingFileNoRecip', '').'>';
-		            } else {
-			            return ' <'.get_lang('MailingFileNoPostfix', '').$postFix.'>';
-		            }
-	            } else {
-		            return ' <'.get_lang('MailingFileNoPrefix', '').$preFix.'>';
-	            }
-            } else {
-	            return ' <'.get_lang('MailingFileFunny', '').'>';
-            }
-        }
 
 	    require api_get_path(LIBRARY_PATH) . 'pclzip/pclzip.lib.php';
 
@@ -407,9 +364,8 @@ if (isset($_GET['mailingIndex'])) { // examine or send
     }
 
 
-    /**
-     * EXAMINE OR SEND MAILING RESULTMESSAGE
-     */
+    //EXAMINE OR SEND MAILING RESULTMESSAGE
+
 
     if ($error) {
         ?>
@@ -422,6 +378,51 @@ if (isset($_GET['mailingIndex'])) { // examine or send
 		<a href="index.php<?php echo "?origin=$origin"; ?>"><?php echo get_lang('BackList'); ?></a><br />
 		<?php
     }
+}
+*/
+
+function findRecipient($thisFile) {
+	// string result = error message, array result = [user_id, lastname, firstname, status]
+	global $nameParts, $preFix, $preLen, $postFix, $postLen;
+    if (preg_match(dropbox_cnf('mailingFileRegexp'), $thisFile, $matches)) {
+        $thisName = $matches[1];
+        if (api_substr($thisName, 0, $preLen) == $preFix) {
+            if ($postLen == 0 || api_substr($thisName, -$postLen) == $postFix) {
+	            $thisRecip = api_substr($thisName, $preLen, api_strlen($thisName) - $preLen - $postLen);
+	            if ($thisRecip) {
+	            	return getUser($thisRecip);
+	            }
+	            return ' <'.get_lang('MailingFileNoRecip', '').'>';
+            } else {
+	            return ' <'.get_lang('MailingFileNoPostfix', '').$postFix.'>';
+            }
+        } else {
+            return ' <'.get_lang('MailingFileNoPrefix', '').$preFix.'>';
+        }
+    } else {
+        return ' <'.get_lang('MailingFileFunny', '').'>';
+    }
+}
+
+function getUser($thisRecip) {
+	// string result = error message, array result = [user_id, lastname, firstname]
+
+	global $var, $sel;
+    if (isset($students)) {
+        unset($students);
+    }
+
+    $result = Database::query($sel . $thisRecip . "'");
+    while ( ($res = Database::fetch_array($result))) {$students[] = $res;}
+    Database::free_result($result);
+
+	if (count($students) == 1) {
+    	return($students[0]);
+	} elseif (count($students) > 1) {
+    	return ' <'.get_lang('MailingFileRecipDup', '').$var."= $thisRecip>";
+	} else {
+    	return ' <'.get_lang('MailingFileRecipNotFound', '').$var."= $thisRecip>";
+	}
 }
 
 

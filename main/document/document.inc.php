@@ -129,7 +129,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 
     if (!$show_as_icon) {
         // Build download link (icon)
-        $forcedownload_link = ($filetype == 'folder') ? api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&path='.$url_path.$req_gid : api_get_self().'?'.api_get_cidreq().'&amp;action=download&amp;id='.$url_path.$req_gid;
+        $forcedownload_link = ($filetype == 'folder') ? api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&id='.$document_data['id'] : api_get_self().'?'.api_get_cidreq().'&amp;action=download&amp;id='.$document_data['id'];
         // Folder download or file download?
         $forcedownload_icon = ($filetype == 'folder') ? 'save_pack.png' : 'save.png';
         // Prevent multiple clicks on zipped folder download

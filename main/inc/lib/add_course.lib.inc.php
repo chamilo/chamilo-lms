@@ -2624,6 +2624,7 @@ function checkArchive($path_to_archive) {
 /**
  * Extract properties of the files from a ZIP package, write them to disk and
  * return them as an array.
+ * @todo this function seems not to be used
  * @param string        Absolute path to the ZIP file
  * @param bool          Whether the ZIP file is compressed (not implemented). Defaults to TRUE.
  * @return array        List of files properties from the ZIP package

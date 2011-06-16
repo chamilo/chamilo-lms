@@ -1,17 +1,18 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * Special exports
  *
- * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>
+ * @author Jhon Hinojosa 
+ * @author Julio Montoya Fixing pclzip folder + some clean <gugli100@gmail.com>
  * @package special.export
  */
 
 // name of the language file that needs to be included
-$language_file = array ('admin');
+$language_file = array('admin');
 // including the global file
 $cidReset = true;
-include ('../inc/global.inc.php');
+require_once  '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 // setting breadcrumbs
@@ -23,11 +24,11 @@ $nameTools = get_lang('SpecialExports');
 // include additional libraries
 require_once '../document/document.inc.php';
 // include additional libraries
-include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
-require_once ('../coursecopy/classes/CourseBuilder.class.php');
-require_once ('../coursecopy/classes/CourseArchiver.class.php');
-require_once ('../coursecopy/classes/CourseRestorer.class.php');
-require_once ('../coursecopy/classes/CourseSelectForm.class.php');
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once '../coursecopy/classes/CourseBuilder.class.php';
+require_once '../coursecopy/classes/CourseArchiver.class.php';
+require_once '../coursecopy/classes/CourseRestorer.class.php';
+require_once '../coursecopy/classes/CourseSelectForm.class.php';
 
 if(function_exists('ini_set')) {
 	ini_set('memory_limit','256M');
@@ -124,9 +125,9 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 }
 
 if ($export && $name) {
-	Display::display_confirmation_message(get_lang('BackupCreated').'<br /><br /><a class="bottom-link" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.urlencode($name).'&session=true">'.$name.'</a>', false);
-	echo '<p><a class="bottom-link"  href="'.api_get_path(WEB_CODE_PATH).'admin/index.php">&nbsp;'.get_lang('MainMenu').'</a></p>';
-} else{
+	Display::display_confirmation_message(get_lang('BackupCreated')); 
+	echo '<br /><a class="a_button orange medium" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.urlencode($name).'&session=true">'.get_lang('Download').'</a>';	
+} else {
 	// Display forms especial export
 	if (isset ($_POST['backup_option']) && $_POST['backup_option'] == 'select_items') {
 		$cb = new CourseBuilder();
@@ -183,9 +184,6 @@ function create_zip(){
         closedir($handle);
     }
     $temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";  //create zipfile of given directory
-
-
-
     return array('PATH' => $path,
                  'PATH_TEMP_ARCHIVE' => $temp_zip_dir,
                  'PATH_COURSE' => $sys_course_path,

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 //session_cache_limiter('public');
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
@@ -20,7 +20,7 @@ $archive_file = str_replace(array('..', '/', '\\'), '', $archive_file);
 list($extension) = getextension($archive_file);
 
 if (empty($extension) || !file_exists($archive_path.$archive_file)) {
-	exit();
+	exit;
 }
 
 $extension = strtolower($extension); 
@@ -47,5 +47,5 @@ if (Security::check_abs_path($archive_path.$archive_file, $archive_path)) {
     header('Content-Disposition: attachment; filename='.$archive_file);
     readfile($archive_path.$archive_file);
 } else {
-    exit;	
+    api_not_allowed(true);
 }

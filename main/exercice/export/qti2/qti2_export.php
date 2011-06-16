@@ -475,7 +475,4 @@ function export_question($questionId, $standalone=true)
     $ims = new ImsAssessmentItem($question);
 
     return $ims->export($standalone);
-
 }
-
-?>

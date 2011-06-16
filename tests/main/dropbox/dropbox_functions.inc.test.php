@@ -416,30 +416,6 @@ class TestDropboxFunctions extends UnitTestCase {
 	*/
 
 	/**
-	* This function is an alternative zip download. It was added because PCLZip causes problems on PHP5 when using PCLZIP_CB_PRE_ADD and a callback function to rename
-	* the files inside the zip file (dropbox scrambles the files to prevent
-	* @todo consider using a htaccess that denies direct access to the file but only allows the php file to access it. This would remove the scrambling requirement
-	*		but it would require additional checks to see if the filename of the uploaded file is not used yet.
-	* @param $files is an associative array that contains the files that the user wants to download (check to see if the user is allowed to download these files already
-	*		 happened so the array is clean!!. The key is the filename on the filesystem. The value is an array that contains both the filename on the filesystem and
-	*		 the original filename (that will be used in the zip file)
-	* @todo when we copy the files there might be two files with the same name. We need a function that (recursively) checks this and changes the name
-	*/
-/*
-	function testzip_download_alternative() {
-		global $_course;
-		global $_user;
-		$files = 'test';
-		$res= zip_download_alternative($files);
-		if(!is_null($res)){
-		$this->assertTrue(is_string($res));
-		}
-        //var_dump($res);
-	}
-*/
-
-
-	/**
 	* Function that finds a given config setting
 	*/
 

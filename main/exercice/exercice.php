@@ -314,11 +314,11 @@ if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 
 	require_once api_get_path(LIBRARY_PATH) . 'pclzip/pclzip.lib.php';
 	$archive_path = api_get_path(SYS_ARCHIVE_PATH);
-	$temp_dir_short = uniqid();
+	$temp_dir_short = api_get_unique_id();
 	$temp_zip_dir = $archive_path . "/" . $temp_dir_short;
 	if (!is_dir($temp_zip_dir))
 		mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
-	$temp_zip_file = $temp_zip_dir . "/" . md5(time()) . ".zip";
+	$temp_zip_file = $temp_zip_dir . "/" . api_get_unique_id() . ".zip";
 	$temp_xml_file = $temp_zip_dir . "/qti2export_" . $exerciseId . '.xml';
 	file_put_contents($temp_xml_file, $export);
 	$zip_folder = new PclZip($temp_zip_file);
@@ -330,7 +330,7 @@ if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 	unlink($temp_zip_file);
 	unlink($temp_xml_file);
 	rmdir($temp_zip_dir);
-	exit (); //otherwise following clicks may become buggy
+	exit; //otherwise following clicks may become buggy
 }
 if (!empty ($_POST['export_user_fields'])) {
 	switch ($_POST['export_user_fields']) {

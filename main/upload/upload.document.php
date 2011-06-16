@@ -3,6 +3,8 @@
 /**
  * Process part of the document sub-process for upload. This script MUST BE included by upload/index.php
  * as it prepares most of the variables needed here.
+ * 
+ * @todo check if this file is deprecated ... jmontoya
  * @package chamilo.upload
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -16,22 +18,10 @@
 
 //many useful functions in main_api.lib.php, by default included
 if(!function_exists('api_get_path')){header('location: upload.php');die;}
-require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
-require_once('../document/document.inc.php');
+require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
+require_once '../document/document.inc.php';
 
-//REMOVE
-// If we want to unzip a file, we need the library
-if (isset($_POST['unzip']) && $_POST['unzip'] == 1)
-{
-	require_once(api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php');
-}
-/*
------------------------------------------------------------
-	Variables
-	- some need defining before inclusion of libraries
------------------------------------------------------------
-*/
 $courseDir   = $_course['path']."/document";
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
@@ -64,15 +54,9 @@ api_display_tool_title($nameTools.$add_group_to_title);
  */
 
 //user has submitted a file
-if(isset($_FILES['user_upload']))
-{
-	//echo("<pre>");
-	//print_r($_FILES['user_upload']);
-	//echo("</pre>");
-
+if(isset($_FILES['user_upload'])) {
 	$upload_ok = process_uploaded_file($_FILES['user_upload']);
-	if($upload_ok)
-	{
+	if($upload_ok) {
 		//file got on the server without problems, now process it
 		$new_path = handle_uploaded_document($_course, $_FILES['user_upload'],$base_work_dir,$_POST['curdirpath'],$_user['user_id'],$to_group_id,$to_user_id,$max_filled_space,$_POST['unzip'],$_POST['if_exists']);
     	$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
@@ -132,17 +116,6 @@ if(isset($_POST['create_dir']) && $_POST['dirname']!='')
 		display_error(get_lang('CannotCreateDir'));
 	}
 }
-
-//tracking not needed here?
-//event_access_tool(TOOL_DOCUMENT);
-
-/*============================================================================*/
-?>
-
-<?php
-//=======================================//
-//they want to create a new directory//
-//=======================================//
 
 if(isset($_GET['createdir']))
 {
@@ -220,10 +193,6 @@ if(api_get_setting('use_document_title')=='true')
 
  <!-- so they can get back to the documents   -->
  <p><?php echo (get_lang('Back'));?> <?php echo (get_lang('To'));?> <a href="document.php?curdirpath=<?php echo $path; ?>"><?php echo (get_lang('DocumentsOverview'));?></a></p>
-
 <?php
-/*
-		FOOTER
-*/
+
 Display::display_footer();
-?>

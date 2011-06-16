@@ -41,9 +41,6 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
 		// upload failed
 		return false;
 	}
-
-	//1- Unzip folder in a new repository
-	require_once api_get_path(LIBRARY_PATH) . 'pclzip/pclzip.lib.php';
 	$max_filled_space = DocumentManager::get_course_quota();
 	
 	if (preg_match('/.zip$/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, $max_filled_space , 1)) {

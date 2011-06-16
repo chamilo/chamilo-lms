@@ -1888,6 +1888,7 @@ function deldir($dir) {
 
 /**
  * This functions exports the given path. This is the opener function, which is called first
+ * @deprecated this function is only called in the newscorm/scorm_admin.php which is deprecated
  * @param	integer 	The path id
  * @return	resource	A zip file, containing a hopefully Scorm compliant course made from the LP. This might happen when we don't actually exit the function first :-)
  */
@@ -1985,6 +1986,7 @@ function exportpath($learnpath_id) {
 
     // 8. Put the files in the exportdir into a zip and force download.
     include_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
+    
     // Create zipfile of given directory.
     $zip_folder = new PclZip(api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/".$LPnamesafe.".zip");
 
@@ -2018,6 +2020,8 @@ function exportpath($learnpath_id) {
  *
  * Basically, all this function does is put the scorm directory back into a zip file (like the one
  * that was most probably used to import the course at first)
+ * @deprecated this function is only called in the newscorm/scorm_admin.php which is deprecated
+ * 
  * @param	string	Name of the SCORM path (or the directory under which it resides)
  * @param	array		Not used right now. Should replace the use of global $_course
  * @return	void

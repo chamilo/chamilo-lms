@@ -257,10 +257,10 @@ if ($current_session_id == 0) {
 /*	MAIN SECTION */
 
 if (isset($_GET['action']) && $_GET['action'] == 'download') {
-    $my_get_id = Security::remove_XSS($_GET['id']);
-
+    $my_get_id = intval($_GET['id']);
+    $document_data = DocumentManager::get_document_data_by_id($my_get_id, api_get_course_id());
     // Check whether the document is in the database
-    if (!DocumentManager::get_document_id($_course, $my_get_id)) {
+    if (empty($document_data)) {
         // File not found!
         header('HTTP/1.0 404 Not Found');
         $error404 = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">';
@@ -274,17 +274,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'download') {
         echo $error404;
         exit;
     }
-
     // Launch event
-    event_download($my_get_id);
-
+    event_download($document_data['url']);
     // Check visibility of document and paths
-    if (!($is_allowed_to_edit || $group_member_with_upload_rights) && !DocumentManager::is_visible($my_get_id, $_course, api_get_session_id())) {
+    if (!($is_allowed_to_edit || $group_member_with_upload_rights) && !DocumentManager::is_visible_by_id($my_get_id, $_course, api_get_session_id(), 'file' )) {
         api_not_allowed(true);
     }
-
-    $doc_url = $my_get_id;
-    $full_file_name = $base_work_dir.$doc_url;
+    $full_file_name = $base_work_dir.$document_data['path'];
     if (Security::check_abs_path($full_file_name, $base_work_dir.'/')) {
         DocumentManager::file_send_for_download($full_file_name, true);
     }
@@ -1076,7 +1072,7 @@ if (!is_null($docs_and_folders)) {
 
         //for student does not show icon into other shared folder, and does not show into main path (root)
         if (is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id) && $curdirpath!='/' || api_is_allowed_to_edit() || api_is_platform_admin()) {
-            echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=downloadfolder&amp;path='.$curdirpathurl.'">'.Display::return_icon('save_pack.png', get_lang('Save').' (ZIP)','','32').'</a>';
+            echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=downloadfolder&amp;id='.$document_id.'">'.Display::return_icon('save_pack.png', get_lang('Save').' (ZIP)','','32').'</a>';
         }
     }
 }

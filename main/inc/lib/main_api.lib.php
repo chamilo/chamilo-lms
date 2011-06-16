@@ -5069,3 +5069,13 @@ function api_get_multiple_access_url() {
     }
     return false;    
 }
+
+/*
+ * Returns a md5 unique id
+ * @todo add more parameters 
+ */
+
+function api_get_unique_id() {    
+    $id = md5(time().uniqid().api_get_user_id().api_get_course_id().api_get_session_id());    
+    return $id;
+}

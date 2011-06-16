@@ -577,10 +577,8 @@ class CourseBuilder {
 			$table_main 	= Database::get_course_table(TABLE_LP_MAIN);
 			$table_item 	= Database::get_course_table(TABLE_LP_ITEM);
 			$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST);
-
 			$sql = 'SELECT * FROM '.$table_main.' WHERE session_id = 0';
-		}
-        error_log($sql);
+		}        
 		$db_result = Database::query($sql);
 
 		while ($obj = Database::fetch_object($db_result)) {

@@ -137,15 +137,15 @@ $TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $TBL_DOCUMENT          = Database::get_course_table(TABLE_DOCUMENT);
 
 if ($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
-	require_once('export/qti2/qti2_export.php');
-	$export = export_question((int)$_GET['questionId'],true);
+	require_once 'export/qti2/qti2_export.php';
+	$export = export_question($_GET['questionId'],true);
 	$qid = (int)$_GET['questionId'];
 	require_once(api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php');
 	$archive_path = api_get_path(SYS_ARCHIVE_PATH);
 	$temp_dir_short = uniqid();
 	$temp_zip_dir = $archive_path."/".$temp_dir_short;
 	if(!is_dir($temp_zip_dir)) mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
-	$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
+	$temp_zip_file = $temp_zip_dir."/".api_get_unique_id().".zip";
 	$temp_xml_file = $temp_zip_dir."/qti2export_".$qid.'.xml';
 	file_put_contents($temp_xml_file,$export);
 	$zip_folder=new PclZip($temp_zip_file);
@@ -157,7 +157,7 @@ if ($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
 	unlink($temp_xml_file);
 	rmdir($temp_zip_dir);
 	//DocumentManager::string_send_for_download($export,true,'qti2export_q'.$_GET['questionId'].'.xml');
-	exit(); //otherwise following clicks may become buggy
+	exit; //otherwise following clicks may become buggy
 }
 
 // intializes the Exercise object

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 // This file is probably deprecated - 2009-05-14 - ywarnier
+// No calls found in Chamilo file is deprecated. Adding an exit - 2011-06 jmontoya
 /**
 * This script handles SCO administration features
 * @package chamilo.learnpath.scorm
@@ -10,6 +11,8 @@
 * @author Roan Embrechts, code improvements and refactoring
 * @author Yannick Warnier, complete refactoring <ywarnier@beeznest.org>
 */
+
+exit;
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;

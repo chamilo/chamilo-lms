@@ -624,7 +624,6 @@ foreach ($questionList as $questionId) {
         //echo get_lang('Score')." : ".show_score($my_total_score, $total_weighting, false);
 		echo '</div>';
     }
-
 	unset($objAnswerTmp);
 	$i++;
 
@@ -679,7 +678,7 @@ if ($origin =='student_progress') {?>
 	<button type="button" class="save" onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id()?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>
 <?php
 }
-
+   
 if ($origin != 'learnpath') {
 	//we are not in learnpath tool
 	Display::display_footer();
@@ -694,18 +693,13 @@ if ($origin != 'learnpath') {
 		echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
 		echo '</body></html>';
 	} else {
-		if (!$is_allowedToEdit) {
-			$objExercise->send_notification($arrques, $arrans);
-		}
 		Display::display_normal_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'));
         echo '<br />';
 	}
 }
 
-if (!$is_allowedToEdit) {
-	if ($origin != 'learnpath') {
- 		$objExercise->send_notification($arrques, $arrans);
-	}
+if (!$is_allowedToEdit) {	
+    $objExercise->send_notification($arrques, $arrans, $origin);	
 }
 
 //destroying the session

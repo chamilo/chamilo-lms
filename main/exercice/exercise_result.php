@@ -197,7 +197,7 @@ $user_info   = api_get_user_info(api_get_user_id());
 if ($show_results || $show_only_score) {
     echo $exercise_header = $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']));
 }
-	     
+
 // Loop over all question to show results for each of them, one by one
 foreach ($questionList as $questionId) {
     // destruction of the Question object
@@ -297,146 +297,7 @@ if ($origin != 'learnpath') {
 	Display::display_footer();
 }
 
-// Email configuration settings
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-$user_info	= UserManager::get_user_info_by_id(api_get_user_id());
-
-$firstName 	= $user_info['firstname'];
-$lastName 	= $user_info['lastname'];
-$mail 		= $user_info['email'];
-$coursecode = api_get_course_id();
-$courseName = $_SESSION['_course']['name'];
-
-$to = '';
-$teachers = array();
-if(api_get_setting('use_session_mode')=='true' && !empty($_SESSION['id_session'])) {
-	$teachers = CourseManager::get_coach_list_from_course_code($coursecode,$_SESSION['id_session']);
-} else {
-	$teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
-}
-
-$num = count($teachers);
-if ($num>1) {
-	$to = array();
-	foreach($teachers as $teacher) {
-		$to[] = $teacher['email'];
-	}
-} elseif($num>0) {
-	foreach($teachers as $teacher) {
-		$to = $teacher['email'];
-	}
-} else {
-	//this is a problem (it means that there is no admin for this course)
-}
-
-// we are able to send emails to the teachers?
-if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) {
-	// only for "simple tests"
-	if ($origin != 'learnpath') {
-		//has a unique answer?
-		$mycharset = api_get_system_encoding();
-		$msg = '<html><head>
-			<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
-			<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type"></head>';
-
-		if (count($arrques)>0) {
-			$msg .= '
-			<body><br />
-			<p>'.get_lang('OpenQuestionsAttempted').' :
-			</p>
-			<p>'.get_lang('AttemptDetails').' : <br />
-			</p>
-			<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
-								<tr>
-			    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
-			    <td width="469" valign="top"><h2>#course#</h2></td>
-			  </tr>
-			  <tr>
-			    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
-			    <td width="469" valign="top" class="outerframe">#exercise#</td>
-			  </tr>
-			  <tr>
-			    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
-			    '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
-			  </tr>
-			  <tr>
-			    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
-			    <td valign="top"> #mail#</td>
-			</tr></table>
-			<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
-			 <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
-
-			for($i=0;$i<sizeof($arrques);$i++) {
-				  $msg.='
-					<tr>
-				    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
-				    <td width="473" valign="top" bgcolor="#F3F3F3"><span class="style16"> #questionName#</span></td>
-				  	</tr>
-				  	<tr>
-				    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
-				    <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
-				  	</tr>';
-					$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
-					$msg= str_replace("#firstName#",$firstName,$msg1);
-					$msg1= str_replace("#lastName#",$lastName,$msg);
-					$msg= str_replace("#mail#",$mail,$msg1);
-					$msg1= str_replace("#questionName#",$arrques[$i],$msg);
-					$msg= str_replace("#answer#",$arrans[$i],$msg1);
-					$msg1= str_replace("#i#",$i,$msg);
-					$msg= str_replace("#course#",$courseName,$msg1);
-			}
-			$msg.='</table><br>
-		 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-					<a href="#url#">#url#</a></span></body></html>';
-
-			$msg1= str_replace("#url#",$url,$msg);
-			$mail_content = $msg1;
-
-			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-			$email_admin = api_get_setting('emailAdministrator');
-
-			$subject = get_lang('OpenQuestionsAttempted');
-			$result = @api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
-		} else {
-			$msg .= '<body>
-			<p>'.get_lang('ExerciseAttempted').' <br />
-	    	</p>
-			<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
-				<tr>
-			    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
-			    <td width="469" valign="top"><h2>#course#</h2></td>
-			  </tr>
-			  <tr>
-			    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
-			    <td width="469" valign="top" class="outerframe">#exercise#</td>
-			  </tr>
-			  <tr>
-			    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
-			    '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
-			  </tr>
-			  <tr>
-			    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
-			    <td valign="top"> #mail#</td>
-			</tr></table>';
-
-			$msg= str_replace("#exercise#",$exerciseTitle,$msg);
-			$msg= str_replace("#firstName#",$firstName,$msg);
-			$msg= str_replace("#lastName#",$lastName,$msg);
-			$msg= str_replace("#mail#",$mail,$msg);
-			$msg= str_replace("#course#",$courseName,$msg);
-
-			$msg.='<br />
-		 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-					<a href="#url#">#url#</a></span></body></html>';
-
-			$msg= str_replace("#url#",$url,$msg);
-			$mail_content = $msg;
-
-			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-			$email_admin = api_get_setting('emailAdministrator');
-
-			$subject = get_lang('ExerciseAttempted');
-			$result = @api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
-		}
-	}
+// Send notification..
+if (!api_is_allowed_to_edit(null,true)) {	
+    $objExercise->send_notification($arrques, $arrans, $origin);	
 }

@@ -154,7 +154,8 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	$student_email 	   = $user_info['mail'];    
 	$from 		       = $teacher_info['mail'];
 	$from_name         = api_get_person_name($teacher_info['firstname'], $teacher_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-	$url		       = api_get_path(WEB_CODE_PATH) . 'exercice/exercice.php?' . api_get_cidreq() . '&show=result';	
+	
+	$url		       = api_get_path(WEB_CODE_PATH) . 'exercice/exercice.php?' . api_get_cidreq() . '&id_session='.$session_id.'&show=result&exerciseId='.$exerciseId;	
 
 	$my_post_info      = array();
 	$post_content_id   = array();
@@ -171,9 +172,9 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	$loop_in_track=($comments_exist===true) ? (count($_POST)/2) : count($_POST);
 	$array_content_id_exe=array();
 	if ($comments_exist===true) {
-		$array_content_id_exe=array_slice($post_content_id,$loop_in_track);
+		$array_content_id_exe = array_slice($post_content_id,$loop_in_track);
 	} else {
-		$array_content_id_exe=$post_content_id;
+		$array_content_id_exe = $post_content_id;
 	}
 	
 	for ($i=0;$i<$loop_in_track;$i++) {
@@ -209,58 +210,25 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
     Database::query($totquery);
     
     //@todo move this somewhere else
-	$subject = get_lang('ExamSheetVCC');
-	$htmlmessage = '<html>' .
-	'<head>' .
-	'<style type="text/css">' .
-	'<!--' .
-	'.body{' .
-	'font-family: Verdana, Arial, Helvetica, sans-serif;' .
-	'font-weight: Normal;' .
-	'color: #000000;' .
-	'}' .
-	'.style8 {font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold; color: #006699; }' .
-	'.style10 {' .
-	'	font-family: Verdana, Arial, Helvetica, sans-serif;' .
-	'	font-size: 12px;' .
-	'	font-weight: bold;' .
-	'}' .
-	'.style16 {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; }' .
-	'-->' .
-	'</style>' .
-	'</head>' .
-	'<body>' .
-	'<div>' .
-	'  <p>' . get_lang('DearStudentEmailIntroduction') . '</p>' .
-	'  <p class="style10"> ' . get_lang('AttemptVCC') . ' </p>' .
-	'  <table width="417">' .
-	'    <tr>' .
-	'      <td width="229" valign="top" bgcolor="E5EDF8">&nbsp;&nbsp;<span class="style10">' . get_lang('Question') . '</span></td>' .
-	'      <td width="469" valign="top" bgcolor="#F3F3F3"><span class="style16">#ques_name#</span></td>' .
-	'    </tr>' .
-	'    <tr>' .
-	'      <td width="229" valign="top" bgcolor="E5EDF8">&nbsp;&nbsp;<span class="style10">' . get_lang('Exercice') . '</span></td>' .
-	'       <td width="469" valign="top" bgcolor="#F3F3F3"><span class="style16">#test#</span></td>' .
-	'    </tr>' .
-	'  </table>' .
-	'  <p>' . get_lang('ClickLinkToViewComment') . ' <a href="#url#">#url#</a><br />' .
-	'    <br />' .
-	'  ' . get_lang('Regards') . ' </p>' .
-	'  </div>' .
-	'  </body>' .
-	'  </html>';
-	$message = '<p>' . sprintf(get_lang('AttemptVCCLong'), Security::remove_XSS($test)) . ' <A href="#url#">#url#</A></p><br />';
-	$mess = str_replace("#test#", Security::remove_XSS($test), $message);
-	//$message= str_replace("#ques_name#",$ques_name,$mess);
-	$message = str_replace("#url#", $url, $mess);
-	$mess = $message;
-	$headers = " MIME-Version: 1.0 \r\n";
-	$headers .= "User-Agent: Chamilo/1.8";
-	$headers .= "Content-Transfer-Encoding: 7bit";
-	$headers .= 'From: ' . $from_name . ' <' . $from . '>' . "\r\n";
-	$headers = "From:$from_name\r\nReply-to: $to";
-	@api_mail_html($student_email, $student_email, $subject, $mess, $from_name, $from);
-    
+	$subject = get_lang('ExamSheetVCC');	
+	$course_info = api_get_course_info();
+	$message  = '<p>'.get_lang('DearStudentEmailIntroduction') . '</p><p>'.get_lang('AttemptVCC');
+	$message .= '<h3>'.get_lang('CourseName'). '</h3><p>'.Security::remove_XSS($course_info['name']).'';
+	$message .= '<h3>'.get_lang('Exercise') . '</h3><p>'.Security::remove_XSS($test);
+	
+	//Only for exercises not in a LP
+	if ($lp_id == 0) {	
+	    $message .= '<p>'.get_lang('ClickLinkToViewComment') . ' <a href="#url#">#url#</a><br />';
+	}
+		
+	$message .= '<p>'.get_lang('Regards') . ' </p>';
+	$message .= $from_name;	
+	
+	$message = str_replace("#test#", Security::remove_XSS($test), $message);
+	$message = str_replace("#url#", $url, $message);
+	
+	@api_mail_html($student_email, $student_email, $subject, $message, $from_name, $from, array('charset'=>api_get_system_encoding()));
+	    
     //Updating LP score here    
 	if (in_array($origin, array ('tracking_course','user_course','correct_exercise_in_lp'))) {   
         $sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . floatval($tot) . "' WHERE id = " .$lp_item_view_id;

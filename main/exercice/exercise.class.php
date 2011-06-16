@@ -1956,8 +1956,7 @@ class Exercise {
                             } else {
                                 $real_answers[$answerId] = true;
                             }
-                        }
-                                  
+                        }                                  
                     } else {                        
                         $studentChoice=$choice[$numAnswer];
                           if ($answerCorrect == 1) {
@@ -1984,7 +1983,7 @@ class Exercise {
                             }
                         }
                     }                    
-                break;
+                    break;
                 case MULTIPLE_ANSWER_COMBINATION:                
                     if ($from_database) {
                         $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
@@ -2260,8 +2259,7 @@ class Exercise {
                         break;
                     }
                 // for hotspot with no order
-                case HOT_SPOT :     
-                                
+                case HOT_SPOT :
                     if ($from_database) {                     
                         if ($show_result) {
                             $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
@@ -2744,7 +2742,7 @@ class Exercise {
           	              	    
         		$my_exe_id = 0;
         		$from_database = 0;
-        		if ($answerType == HOT_SPOT_DELINEATION) {          		   
+        		if ($answerType == HOT_SPOT_DELINEATION) {        		   
         			if (0) {
         				if ($overlap_color) {
         					$overlap_color='green';
@@ -2854,31 +2852,14 @@ class Exercise {
         					}
         				}
         			}
-        			$my_exe_id = $exeId;
-        			
-        		}
-        		
-        		// We made an extra table for the answers
-        		if($origin != 'learnpath') {
-        			echo "</table></td></tr>";	//echo Security::remove_XSS($questionId);								
-        		?>		
-        		<tr>
-        			<td colspan="2">
-        				<i><?php echo get_lang('Hotspot'); ?></i><br /><br />
-        				<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo Security::remove_XSS($questionId); ?>&exe_id=<?php echo $my_exe_id; ?>&from_db=<?php echo $from_database; ?>" width="552" height="352">
-        					<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo Security::remove_XSS($questionId); ?>&exe_id=<?php echo $my_exe_id; ?>&from_db=<?php echo $from_database; ?>" />
-        				</object>
-        			</td>
-        		</tr>
-        		<?php 
+        			$my_exe_id = $exeId;        			
         		}
         	}
             	
             if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
                 // We made an extra table for the answers
                  if ($show_result) {
-                    if ($origin != 'learnpath') {
-                                          
+                    if ($origin != 'learnpath') {                                          
                         echo '</table></td></tr>';
                         echo '<tr>
                             <td colspan="2">';
@@ -2987,7 +2968,7 @@ class Exercise {
         return $return_array;
 	} //End function
         
-    function send_notification($arrques, $arrans) {
+    function send_notification($arrques, $arrans, $origin) {
         
         // Email configuration settings
         $coursecode     = api_get_course_id();
@@ -3000,7 +2981,7 @@ class Exercise {
             $teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
         }        
         $num = count($teachers);
-        if($num>1) {
+        if ($num > 1) {
             $to = array();
             foreach($teachers as $teacher) {
                 $to[] = $teacher['email'];
@@ -3011,22 +2992,23 @@ class Exercise {
             }
         } else {
             //this is a problem (it means that there is no admin for this course)
-        }
-                
-                
-        global $courseName, $exerciseTitle, $url_email;
+        }                
+        
+        $url_email = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&show=result&exerciseId='.$this->id;
+        
         require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
         $user_info = UserManager::get_user_info_by_id(api_get_user_id());
 
         if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
             return '';
-        }
+        }        
 
         $mycharset = api_get_system_encoding();
         $msg = '<html><head>
                 <link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
                 <meta content="text/html; charset='.$mycharset.'" http-equiv="content-type"></head>';
-        if(count($arrques)>0) {
+        
+        if (count($arrques) > 0) {
             $msg .= '<body>
             <p>'.get_lang('OpenQuestionsAttempted').' :
             </p>
@@ -3053,46 +3035,47 @@ class Exercise {
              <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
 
             for($i=0;$i<sizeof($arrques);$i++) {
-                      $msg.='
-                            <tr>
-                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
-                        <td width="473" valign="top" bgcolor="#F3F3F3"><span class="style16"> #questionName#</span></td>
-                            </tr>
-                            <tr>
-                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
-                        <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
-                            </tr>';
+                  $msg.='
+                        <tr>
+                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
+                            <td width="473" valign="top" bgcolor="#F3F3F3"><span class="style16"> #questionName#</span></td>
+                        </tr>
+                        <tr>
+                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
+                            <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
+                        </tr>';
 
-                            $msg1= str_replace("#exercise#",$exerciseTitle,$msg);
-                            $msg= str_replace("#firstName#",$user_info['firstname'],$msg1);
-                            $msg1= str_replace("#lastName#",$user_info['lastname'],$msg);
-                            $msg= str_replace("#mail#",$user_info['email'],$msg1);
-                            $msg1= str_replace("#questionName#",$arrques[$i],$msg);
-                            $msg= str_replace("#answer#",$arrans[$i],$msg1);
-                            $msg1= str_replace("#i#",$i,$msg);
-                            $msg= str_replace("#course#",$courseName,$msg1);
+                        $msg1   = str_replace("#exercise#",    $this->exercise, $msg);
+                        $msg    = str_replace("#firstName#",   $user_info['firstname'],$msg1);
+                        $msg1   = str_replace("#lastName#",    $user_info['lastname'],$msg);
+                        $msg    = str_replace("#mail#",        $user_info['email'],$msg1);
+                        $msg1   = str_replace("#questionName#",$arrques[$i],$msg);
+                        $msg    = str_replace("#answer#",      $arrans[$i],$msg1);
+                        $msg1   = str_replace("#i#",           $i,$msg);
+                        $msg    = str_replace("#course#",      $course_info['name'],$msg1);
             }
-            $msg.='</table><br>
-                            <span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-                            <a href="#url#">#url#</a></span></body></html>';
+            
+            $msg.='</table><br />';
+            if ($origin != 'learnpath') {
+                $msg.= '<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
+                	            <a href="#url#">#url#</a></span>';
+            }
+            $msg.= '</body></html>';
 
-            $msg1= str_replace("#url#",$url_email,$msg);
+            $msg1 = str_replace("#url#", $url_email, $msg);
             $mail_content = $msg1;
 
             $subject = get_lang('OpenQuestionsAttempted');
 
-
             $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-            $email_admin = api_get_setting('emailAdministrator');
+            $email_admin = api_get_setting('emailAdministrator');            
             $result = @api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
         } else {
-
             $msg .= '<body>
-            <p>'.get_lang('ExerciseAttempted').' <br />
-            </p>
+            <p>'.get_lang('ExerciseAttempted').'</p>
             <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
                 <tr>
-                <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
+                <td width="229" valign="top"><h2>'.get_lang('CourseName').'</h2></td>
                 <td width="469" valign="top"><h2>#course#</h2></td>
               </tr>
               <tr>
@@ -3108,17 +3091,21 @@ class Exercise {
                 <td valign="top"> #mail#</td>
             </tr></table>';
 
-            $msg= str_replace("#exercise#",$exerciseTitle,$msg);
-            $msg= str_replace("#firstName#",$user_info['firstname'],$msg);
-            $msg= str_replace("#lastName#",$user_info['lastname'],$msg);
-            $msg= str_replace("#mail#",$user_info['email'],$msg);
-            $msg= str_replace("#course#",$courseName,$msg);
+            $msg= str_replace("#exercise#",  $this->exercise,$msg);
+            $msg= str_replace("#firstName#", $user_info['firstname'],    $msg);
+            $msg= str_replace("#lastName#",  $user_info['lastname'],     $msg);
+            $msg= str_replace("#mail#",      $user_info['email'],        $msg);
+            $msg= str_replace("#course#",    $course_info['name'],                $msg);
 
-            $msg.='<br />
-                    <span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-                    <a href="#url#">#url#</a></span></body></html>';
+            if ($origin != 'learnpath') {                
+                
+                $msg.='<br />
+                        <span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
+                        <a href="#url#">#url#</a></span>';                
+            }            
+            $msg .= '</body></html>';
 
-            $msg= str_replace("#url#",$url_email,$msg);
+            $msg = str_replace("#url#",$url_email,$msg);
             $mail_content = $msg;
 
             $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);

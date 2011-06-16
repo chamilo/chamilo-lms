@@ -121,7 +121,9 @@ class ExerciseShowFunctions {
 			</td>
 			<td width="50px" style="padding-right:15px" valign="top" align="left">
 				<?php
-				$my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $my_choice; ?>
+				$my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); 
+				echo $my_choice;
+				?>
 			</td>
 
 
@@ -139,7 +141,6 @@ class ExerciseShowFunctions {
 			<?php } else { ?>
 				<td>&nbsp;</td>
 			<?php } ?>
-
 		</tr>
 		<?php
 	}

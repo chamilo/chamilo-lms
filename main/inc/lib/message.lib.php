@@ -287,16 +287,17 @@ class MessageManager
 			//Load user settings
 			require_once api_get_path(LIBRARY_PATH).'notification.lib.php';
 			$notification = new Notification();			    
-		    if (empty($group_id)) {
-                $user_id = $receiver_user_id;
-                $notification->save_message_notifications(array($user_id), $subject,$content);                
+		    if (empty($group_id)) {                
+		        $sender_info = api_get_user_info($user_sender_id);
+                $notification->save_message_notifications(array($receiver_user_id), $subject, $content, $sender_info);                
 		    } else {
+		        $group_info = GroupPortalManager::get_group_data($group_id);		        
 		        $user_list = GroupPortalManager::get_users_by_group($group_id, false, array(),0, 1000);
 		        $new_user_list = array();		   
                 foreach($user_list as $user_data) {
                     $new_user_list[]= $user_data['user_id'];
                 }
-                $notification->save_group_notifications($new_user_list, $subject,$content);                     		
+                $notification->save_group_notifications($new_user_list, $subject, $content, $group_info);                     		
 		    }
 			return $inbox_last_id;
         } else {

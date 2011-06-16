@@ -129,19 +129,35 @@ else {
 $user_status = (isset($_SESSION['_user']['user_id'])) ? $_user['status'] : null;
 
 if ( $user_status == STUDENT && !api_get_setting('student_page_after_login') == '' ){
-    header('Location: '.html_entity_decode(api_get_setting('student_page_after_login')));
+	$redirect_url = html_entity_decode(api_get_setting('student_page_after_login'));
+	if ($redirect_url[0] == "/") {
+		$redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
+	}
+    header('Location: '.$redirect_url);
       exit();
 }
 if ( $user_status == COURSEMANAGER && !api_get_setting('teacher_page_after_login') == '' ){
-    header('Location: '.html_entity_decode(api_get_setting('teacher_page_after_login')));
+	$redirect_url = html_entity_decode(api_get_setting('teacher_page_after_login'));
+	if ($redirect_url[0] == "/") {
+		$redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
+	}
+    header('Location: '.$redirect_url);
       exit();
 }
 if ( $user_status == DRH && !api_get_setting('DRH_page_after_login') == '' ){
-    header('Location: '.html_entity_decode(api_get_setting('DRH_page_after_login')));
+	$redirect_url = html_entity_decode(api_get_setting('DRH_page_after_login'));
+	if ($redirect_url[0] == "/") {
+		$redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
+	}
+    header('Location: '.$redirect_url);
       exit();
 }
 if ( $user_status == SESSIONADMIN && !api_get_setting('sessionadmin_page_after_login') == '' ){
-    header('Location: '.html_entity_decode(api_get_setting('sessionadmin_page_after_login')));
+	$redirect_url = html_entity_decode(api_get_setting('sessionadmin_page_after_login'));
+	if ($redirect_url[0] == "/") {
+		$redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
+	}
+    header('Location: '.$redirect_url);
       exit();
 }
 

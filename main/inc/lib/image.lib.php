@@ -56,7 +56,7 @@ abstract class ImageWrapper {
     abstract function fill_image_info();    
     abstract function get_image_size();
     abstract function resize($thumbw, $thumbh, $border, $specific_size = false);
-    abstract function send_image($file = '', $compress = -1, $convert_file_to);
+    abstract function send_image($file = '', $compress = -1, $convert_file_to = null);
     public function get_image_info() {
         return array('width' => $this->width,
         			'height' => $this->height,
@@ -127,7 +127,7 @@ class ImagickWrapper extends ImageWrapper {
 		$this->height = $thumbh;	
 	}
 	
-    public function send_image($file = '', $compress = -1, $convert_file_to) {
+    public function send_image($file = '', $compress = -1, $convert_file_to = null) {
         if (!$this->image_validated) return false;
         $type = $this->type;
         if (!empty($convert_file_to) && in_array($convert_file_to, $this->allowed_extensions)) {

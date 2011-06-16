@@ -2287,11 +2287,9 @@ function api_not_allowed($print_headers = false) {
     global $this_section;
 
     $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
-
     if ($origin == 'learnpath') {
-        echo '
-                <style type="text/css" media="screen, projection">
-                /*<![CDATA[*/
+        echo '<style type="text/css" media="screen, projection">
+				/*<![CDATA[*/
                 @import "'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css";
                 /*]]>*/
                 </style>';
@@ -2356,12 +2354,12 @@ function api_not_allowed($print_headers = false) {
         echo '</div>';
         if ($print_headers && $origin != 'learnpath') {Display::display_footer();}
         die();
-    }
+    }    
     //if no course ID was included in the requested URL, redirect to homepage
     if ($print_headers && $origin != 'learnpath') { Display::display_header(''); }
     echo '<div align="center">';
     Display::display_error_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', false);
-    echo '</div>';
+    echo '</div>';    
     if ($print_headers && $origin != 'learnpath') { Display::display_footer(); }
     die();
 }

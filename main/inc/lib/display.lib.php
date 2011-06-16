@@ -314,19 +314,7 @@ class Display {
             // Filter message
             $message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
         }
-        if (!headers_sent()) {
-            echo '
-                        <style type="text/css" media="screen, projection">
-                        /*<![CDATA[*/
-                        @import "'.api_get_path(WEB_CODE_PATH).'css/default.css";
-                        /*]]>*/
-                        </style>'; // TODO: There is no "default.css" file in this location.
-        }
-        echo '<div class="normal-message">';
-        //Display :: display_icon('message_normal.gif', get_lang('InfoMessage'), array ('style' => 'float:left; margin-right:10px;'));
-        /*
-        get_lang('InfoMessage', array ('style' => 'float:left; margin-right:10px;'));
-        */
+        echo '<div class="normal-message">';        
         echo $message.'</div>';
     }
 
@@ -344,19 +332,7 @@ class Display {
             // Filter message
             $message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
         }
-        if (!headers_sent()) {
-            echo '
-                        <style type="text/css" media="screen, projection">
-                        /*<![CDATA[*/
-                        @import "'.api_get_path(WEB_CODE_PATH).'css/default.css";
-                        /*]]>*/
-                        </style>'; // TODO: There is no "default.css" file in this location.
-        }
         echo '<div class="warning-message">';
-        //Display :: display_icon('message_warning.png', get_lang('WarningMessage'), array ('style' => 'float:left; margin-right:10px;'));
-        /*
-        get_lang('WarningMessage', array ('style' => 'float:left; margin-right:10px;'));
-        */
         echo $message.'</div>';
     }
 
@@ -373,19 +349,7 @@ class Display {
             // Filter message
             $message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
         }
-        if (!headers_sent()) {
-            echo '
-                        <style type="text/css" media="screen, projection">
-                        /*<![CDATA[*/
-                        @import "'.api_get_path(WEB_CODE_PATH).'css/default.css";
-                        /*]]>*/
-                        </style>'; // TODO: There is no "default.css" file in this location.
-        }
         echo '<div class="confirmation-message">';
-        //Display :: display_icon('message_confirmation.gif', get_lang('ConfirmationMessage'), array ('style' => 'float:left; margin-right:10px;margin-left:5px;'));
-        /*
-        get_lang('ConfirmationMessage', array ('style' => 'float:left; margin-right:10px;margin-left:5px;'));
-        */
         echo $message.'</div>';
     }
 
@@ -404,14 +368,6 @@ class Display {
         if($filter){
             // Filter message
             $message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
-        }
-        if (!headers_sent()) {
-            echo '
-                        <style type="text/css" media="screen, projection">
-                        /*<![CDATA[*/
-                        @import "'.api_get_path(WEB_CODE_PATH).'css/default.css";
-                        /*]]>*/
-                        </style>'; // TODO: There is no "default.css" file in this location.
         }
         echo '<div class="error-message">'.$message.'</div>';
     }

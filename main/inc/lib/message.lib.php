@@ -289,7 +289,7 @@ class MessageManager
 			$notification = new Notification();			    
 		    if (empty($group_id)) {                
 		        $sender_info = api_get_user_info($user_sender_id);
-                $notification->save_message_notifications(array($receiver_user_id), $subject, $content, $sender_info);                
+                $notification->save_notification(NOTIFICATION_TYPE_MESSAGE, array($receiver_user_id), $subject, $content, $sender_info);                
 		    } else {
 		        $group_info = GroupPortalManager::get_group_data($group_id);		        
 		        $user_list = GroupPortalManager::get_users_by_group($group_id, false, array(),0, 1000);
@@ -297,7 +297,7 @@ class MessageManager
                 foreach($user_list as $user_data) {
                     $new_user_list[]= $user_data['user_id'];
                 }
-                $notification->save_group_notifications($new_user_list, $subject, $content, $group_info);                     		
+                $notification->save_notification(NOTIFICATION_TYPE_GROUP, $new_user_list, $subject, $content, $group_info);                     		
 		    }
 			return $inbox_last_id;
         } else {

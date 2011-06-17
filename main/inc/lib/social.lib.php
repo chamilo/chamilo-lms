@@ -191,7 +191,7 @@ class SocialManager extends UserManager {
 			require_once api_get_path(LIBRARY_PATH).'notification.lib.php';
 			$sender_info = api_get_user_info($user_id);
 			$notification = new Notification(); 
-		    $notification->save_invitation_notifications(array($friend_id), $message_title, $message_content, $sender_info);    		
+		    $notification->save_notification(NOTIFICATION_TYPE_INVITATION, array($friend_id), $message_title, $message_content, $sender_info);    		
 		    	
 			return true;
 		} else {

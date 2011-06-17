@@ -1109,4 +1109,6 @@ $SelectFilter = "Select filter";
 $ThereIsNoClassScheduledTodayTryPickingAnotherDay = "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons.";
 $AddToCalendar = "Add to calendar";
 $RandomPick = "Random pick";
+$YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX = "You have received this notification because you have either subscribed to it, or are involved in it.
+To change your notification preferences, please click here: %s";
 ?>

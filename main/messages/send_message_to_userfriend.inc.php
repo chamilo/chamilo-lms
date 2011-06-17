@@ -4,7 +4,7 @@
 *	@package chamilo.messages
 */
 $language_file = array('registration','messages','userInfo','admin');
-$cidReset=true;
+$cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
@@ -18,10 +18,10 @@ if (api_get_setting('allow_message_tool') != 'true' && api_get_setting('allow_so
 }
 if (isset($_REQUEST['user_friend']) ) {
 	$info_user_friend=array();	
- 	$userfriend_id=Security::remove_XSS($_REQUEST['user_friend']);
+ 	$userfriend_id=intval($_REQUEST['user_friend']);
  	// panel=1  send message
  	// panel=2  send invitation
- 	$panel=Security::remove_XSS($_REQUEST['view_panel']);
+ 	$panel=intval($_REQUEST['view_panel']);
  	$info_user_friend=api_get_user_info($userfriend_id);
  	
 }

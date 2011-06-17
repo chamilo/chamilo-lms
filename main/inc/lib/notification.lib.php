@@ -56,7 +56,7 @@ class Notification extends Model {
 	  
     /**
      *  Send the notifications
-     * @param int notification frecuency 
+     *  @param int notification frecuency 
      */	
     public function send($frec = NOTIFY_MESSAGE_DAILY) {
         $notifications = $this->find('all',array('where'=>array('sent_at IS NULL AND send_freq = ?'=>$frec)));
@@ -81,7 +81,7 @@ class Notification extends Model {
      * @param	array	user list of ids
      * @param	string	title
      * @param	string	content of the message
-     * @param	array	sender info (return of the api_get_user_info() function )
+     * @param	array	result of api_get_user_info() or GroupPortalManager:get_group_data()
      */
     public function save_notification($type, $user_list, $title, $content, $sender_info = array()) {
         $this->type = intval($type);
@@ -142,8 +142,10 @@ class Notification extends Model {
         }
     }    
    
-    /*
+    /**
      * Formats the content in order to add the welcome message, the notification preference, etc
+     * @param	string 	the content
+     * @param	array	result of api_get_user_info() or GroupPortalManager:get_group_data()
      * */
     public function format_content($content, $sender_info) {
         $new_message_text = $link_to_new_message = '';        

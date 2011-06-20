@@ -173,7 +173,12 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 		for ($i = 0; $i<$nfields; $i++)
 			if (!$columns_islink[$i]){ // ignore links
 				if ($columns_link[$i] != '') // link is defined
-					echo '<td><a href="'.$row[$columns_link[$i]].'">'.$row[$i].'</a></td>'; 
+					if (substr($columns_link[$i],0,10) == 'javascript') {
+						echo '<td><a href="#" onclick="'.$row[$columns_link[$i]].'">'.$row[$i].'</a></td>'; 
+					}
+					else {
+						echo '<td><a href="'.$row[$columns_link[$i]].'">'.$row[$i].'</a></td>'; 
+					}
 				else
 					echo '<td>'.$row[$i].'</td>';
 			}

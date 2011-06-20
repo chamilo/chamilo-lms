@@ -115,8 +115,8 @@ if (is_array($reports_template[$_REQUEST['type']])) {
 }
 
 if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
-	if (isset($reports_template[$_REQUEST['type']['html_header']])) {
-		echo $reports_template[$_REQUEST['type']['html_header']];
+	if (isset($reports_template[$_REQUEST['type']]['html_header'])) {
+		echo $reports_template[$_REQUEST['type']]['html_header'];
 	}
 	echo '<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {

@@ -43,9 +43,10 @@ $langBackup = "Veidot rezerves kopiju";
 $langImportBackupInfo = "Rezerves kopijas importēšana. Jums būs iespēja augšupielādēt rezerves kopijas failu no vietējā datora, vai būs iespēja izmantot failu, kas atrodas uz servera.";
 $langCreateBackupInfo = "Izveidot rezerves kopiju šim kursam. Jūs varat izvēlēties kursa sastāvdaļas, kuras ir jāintegrē rezerves kopijā.";
 $ToolIntro = "Apgūt rīku izmantošanas iespējas";
-$UploadError = "Augšupielāde apturēta, lūdzu pārbaudiet failu atbilstību izmēru ierobežojumiem un mapju viedošanas noteikumus.";
+$UploadError = "Augšupielāde apturēta. Lūdzu pārbaudiet failu atbilstību izmēru ierobežojumiem un mapju veidošanas noteikumus.";
 $DocumentsWillBeAddedToo = "Dokumenti arī tiks pievienoti";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Ja vēlaties eksportēt kursu, kurš satur testus, Jums jāpārliecinās, ka kursam atbilstošie testi ir iekļauti eksportā. Atbilstošos atzīmējiet testu sarakstā.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Lietojot šo instrumentu arhīvu direktorija nav lasāma. Lūdzu sazinieties ar platformas administratoru.";
 $DestinationCourse = "Mērķa Kurss";
+$IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Ja jūsu mācību kursa saturā ir ietverti audio faili, Jums tie ir jāizvēlas no dokumentiem";
 ?>

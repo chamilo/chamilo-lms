@@ -296,4 +296,6 @@ $ExercisesInTimeProgressChart = "Uzdevumu rezultātu attīstība laikā, salīdz
 $AverageIsCalculatedBasedInAllAttempts = "Vidējais aprēķinātais, pamatojoties uz visiem testa mēģinājumiem";
 $AverageIsCalculatedBasedInTheLatestAttempts = "Vidējais aprēķinātais, pamatojoties uz pēdējiem mēģinājumiem";
 $LatestAttemptAverageScore = "Vidējais rezultāts pēdējos mēģinājumos";
+$Untitled = "Nenosaukts";
+$Quantity = "Daudzums";
 ?>

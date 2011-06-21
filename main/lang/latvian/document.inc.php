@@ -27,7 +27,7 @@ $langZipNoPhp = "ZIP failā nedrīkst būt iekļauti .PHP faili";
 $langUncompress = "atarhivēt ZIP failu";
 $langDownloadAndZipEnd = "ZIP fails augšuplādēts un atarhivēts";
 $langRoot = "pamatdirektorija";
-$langCreateDoc = "Izveidot dokumentu";
+$langCreateDoc = "Izveidot jaunu mājas lapu / mācību lapas šablonu";
 $langDown = "Zemāk";
 $langFileError = "Augšupielādējamā faila formāts nav derīgs";
 $langMaxFileSize = "Maksimāli pieļaujamais faila izmērs ir";
@@ -255,4 +255,8 @@ $HelpPediaphon = "Atbalsta tekstu ar vairākiem tūkstošiem burtu veidu. <br>At
 $FirstSelectALanguage = "Lūdzu izvēlēties valodu.";
 $RenameAndComment = "Pārsauciet un nokomentējiet.";
 $YouAreCurrentlyUsingXOfYourX = "Patreiz Jūs izmantojat %s MB (%s) no Jūsu %s MB";
+$UplUploadFailedSizeIsZero = "Radās problēma, augšupielādējot jūsu dokumentu: saņemto failu izmērs uz servera ir 0 baitu. Lūdzu, pārskatiet savu augšupielādējamo failu, vai tas nav bojāts un tad, lūdzu, mēģiniet vēlreiz.";
+$NewImage = "Jauns attēls";
+$DirExists = "Darbība nav iespējama, jo direktorija ar šādu nosaukumu jau eksistē";
+$DocMv = "Dokuments ir pārvietots";
 ?>

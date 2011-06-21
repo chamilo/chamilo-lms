@@ -1107,4 +1107,12 @@ $SelectFilter = "Sélectionner le filtre";
 $ThereIsNoClassScheduledTodayTryPickingAnotherDay = "Aucune classe n'a été programmée aujourd'hui. Choisissez un autre you ou ajoutez votre classe vous-même en utilisant les icônes d'action.";
 $AddToCalendar = "Ajouter au calendrier";
 $RandomPick = "Sélection aléatoire";
+$YouHaveANewInvitationFromX = "Vous avez une nouvelle invitation de %s";
+$YouHaveANewMessageFromGroupX = "Vous avez un nouveau message de groupe %s";
+$YouHaveANewMessageFromX = "Vous avez un nouveau message de %s";
+$SeeMessage = "Voir le message";
+$SeeInvitation = "Voir l'invitation";
+$YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX = "Vous avez reçu cette notification car vous êtes abonné ou impliqués, pour modifier vos préférences de notification cliquer ici: %s";
+$Replies = "Réponses";
+$Reply = "Réponse";
 ?>

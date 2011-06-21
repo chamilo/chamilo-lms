@@ -125,4 +125,7 @@ $ErrorNoFilesInFolder = "Mape ir tukša";
 $AddComment = "Saglabāt atgriezenisko saiti";
 $SentCatgoryDeleted = "Mape ir izdzēsta";
 $ReceivedCatgoryDeleted = "Mape ir izdzēsta";
+$InvalideUserDetected = "Konstatēts nederīgs lietotājs";
+$InvalideGroupDetected = "Konstatēta nederīga grupa";
+$OverviewOfFilesInThisZip = "Pārskats par failiem šajā Zip";
 ?>

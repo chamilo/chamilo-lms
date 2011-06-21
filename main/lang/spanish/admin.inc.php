@@ -1457,4 +1457,5 @@ $DestinySession = "Sesión de destino";
 $CourseDoesNotExistInThisSession = "El curso no existe en esta sesión. La copia funcionará solo desde un curso en una sesión hacia el mismo curso en otra sesión.";
 $UserNotRegistered = "Usuario no registrado.";
 $ViewStats = "Ver estadísticas";
+$YouNeedToAddASessionCategoryFirst = "Necesita agregar una categoría de sesión";
 ?>

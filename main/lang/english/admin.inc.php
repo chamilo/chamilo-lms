@@ -1455,4 +1455,5 @@ $DestinySession = "Destination session";
 $CourseDoesNotExistInThisSession = "The course does not exist in this session. The copy will work only from one course in one session to the same course in another session.";
 $UserNotRegistered = "User not registered.";
 $ViewStats = "View stats";
+$YouNeedToAddASessionCategoryFirst = "You need to add a session category first";
 ?>

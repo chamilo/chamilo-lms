@@ -204,4 +204,12 @@ $PleaseFillSurvey = "Lūdzu aizpildiet aptauju";
 $ReportingOverview = "Pārskats par atskaitēm";
 $ThereAreNotQuestionsForthisSurvey = "Šeit nav jautājumu šai aptaujai";
 $Multipleresponse = "Vairākkārtīgas atbildes";
+$ErrorSurveyTypeUnknown = "Aptaujas veids nav zināms";
+$SurveyUndetermined = "Nenoteikta aptauja";
+$QuestionComment = "Jautājuma komentārs";
+$UnknowQuestion = "Nezināms jautājums";
+$Lastname = "Uzvārds";
+$Firstname = "Vārds";
+$DeleteSurveyGroup = "Dzēst aptaujas grupu";
+$ErrorOccurred = "Sistēmas kļūda";
 ?>

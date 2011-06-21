@@ -1109,6 +1109,10 @@ $SelectFilter = "Select filter";
 $ThereIsNoClassScheduledTodayTryPickingAnotherDay = "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons.";
 $AddToCalendar = "Add to calendar";
 $RandomPick = "Random pick";
-$YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX = "You have received this notification because you have either subscribed to it, or are involved in it.
-To change your notification preferences, please click here: %s";
+$YouHaveANewInvitationFromX = "You have a new invitation from %s";
+$YouHaveANewMessageFromGroupX = "You have a new message from group %s";
+$YouHaveANewMessageFromX = "You have a new message from %s";
+$SeeMessage = "See message";
+$SeeInvitation = "See invitation";
+$YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX = "You have received this notification because you are subscribed or involved in it to change your notification preferences please click here: %s";
 ?>

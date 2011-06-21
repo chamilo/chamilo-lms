@@ -8,10 +8,9 @@
 */
 
 $stok = Security::get_token();
-?>
-<!-- Actions: The menu with the different options in cathe course management -->
+// Actions: The menu with the different options in cathe course management 
 
-<?php if(intval($_GET['hidden_links']) != 1) { ?>
+if (intval($_GET['hidden_links']) != 1) { ?>
 
 <div id="actions" class="actions">
     <?php if ($action != 'subscribe') { ?>
@@ -32,69 +31,68 @@ $stok = Security::get_token();
             </form>
         </span>
 </div>
-
 <?php 
     $hidden_links = 0;
 } else { 
     $hidden_links = 1; 
-} ?>
-
+} 
+?>
 <div id="categories-content" >
     <div id="categories-content-first">
         <div id="categories-list">
+            <?php 
+            if (!empty($browse_course_categories)) {
+                if ($action == 'display_random_courses') { 
+                    echo '<strong>'.get_lang('RandomPick').'</strong>';
+                    $code = '';
+                } else {
+                    echo '<a href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a>';
+                }
+                // level 1
+                foreach ($browse_course_categories[0] as $category) {
+                    $category_name = $category['name'];
+                    $category_code = $category['code'];
+                    $count_courses_lv1 = $category['count_courses'];
 
-            <?php if (!empty($browse_course_categories)) {
-                    if ($_GET['action'] == 'display_random_courses') { 
-                        echo '<strong>'.get_lang('RandomPick').'</strong>';
-                        $code = '';
+                    if ($code == $category_code) {
+                        $category_link = '<strong>'.$category_name.' ('.$count_courses_lv1.')</strong>';
                     } else {
-                        echo '<a href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a>';
-                    }
-                    // level 1
-                    foreach ($browse_course_categories[0] as $category) {
-                        $category_name = $category['name'];
-                        $category_code = $category['code'];
-                        $count_courses_lv1 = $category['count_courses'];
-
-                        if ($code == $category_code) {
-                            $category_link = '<strong>'.$category_name.' ('.$count_courses_lv1.')</strong>';
+                        if (!empty($count_courses_lv1)) {
+                            $category_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$category_code.'&amp;hidden_links='.$hidden_links.'">'.$category_name.'</a> ('.$count_courses_lv1.')';
                         } else {
-                            if (!empty($count_courses_lv1)) {
-                                $category_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$category_code.'&amp;hidden_links='.$hidden_links.'">'.$category_name.'</a> ('.$count_courses_lv1.')';
+                            $category_link = '<a href="#">'.$category_name.' ('.$count_courses_lv1.')</a>';    
+                        }
+                    }                        
+                    echo '<div>'.$category_link.'</div>';
+                    // level 2
+                    if (!empty($browse_course_categories[$category_code])) {
+                        foreach ($browse_course_categories[$category_code] as $subcategory1) {
+                            $subcategory1_name = $subcategory1['name'];
+                            $subcategory1_code = $subcategory1['code'];
+                            $count_courses_lv2 = $subcategory1['count_courses'];
+                            if ($code == $subcategory1_code) {
+                                $subcategory1_link = '<strong>'.$subcategory1_name.' ('.$count_courses_lv2.')</strong>';
                             } else {
-                                $category_link = '<a href="#">'.$category_name.' ('.$count_courses_lv1.')</a>';    
+                                $subcategory1_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory1_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory1_name.'</a> ('.$count_courses_lv2.')';
                             }
-                        }                        
-                        echo '<div>'.$category_link.'</div>';
-                        // level 2
-                        if (!empty($browse_course_categories[$category_code])) {
-                            foreach ($browse_course_categories[$category_code] as $subcategory1) {
-                                $subcategory1_name = $subcategory1['name'];
-                                $subcategory1_code = $subcategory1['code'];
-                                $count_courses_lv2 = $subcategory1['count_courses'];
-                                if ($code == $subcategory1_code) {
-                                    $subcategory1_link = '<strong>'.$subcategory1_name.' ('.$count_courses_lv2.')</strong>';
+                            echo '<div style="margin-left:20px;">'.$subcategory1_link.'</div>';
+                        }
+                        // level 3
+                        if (!empty($browse_course_categories[$subcategory1_code])) {
+                            foreach ($browse_course_categories[$subcategory1_code] as $subcategory2) {
+                                $subcategory2_name = $subcategory2['name'];
+                                $subcategory2_code = $subcategory2['code'];
+                                $count_courses_lv3 = $subcategory2['count_courses'];
+                                if ($code == $subcategory2_code) {
+                                    $subcategory2_link = '<strong>'.$subcategory2_name.' ('.$count_courses_lv3.')</strong>';
                                 } else {
-                                    $subcategory1_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory1_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory1_name.'</a> ('.$count_courses_lv2.')';
+                                    $subcategory2_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory2_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
                                 }
-                                echo '<div style="margin-left:20px;">'.$subcategory1_link.'</div>';
-                            }
-                            // level 3
-                            if (!empty($browse_course_categories[$subcategory1_code])) {
-                                foreach ($browse_course_categories[$subcategory1_code] as $subcategory2) {
-                                    $subcategory2_name = $subcategory2['name'];
-                                    $subcategory2_code = $subcategory2['code'];
-                                    $count_courses_lv3 = $subcategory2['count_courses'];
-                                    if ($code == $subcategory2_code) {
-                                        $subcategory2_link = '<strong>'.$subcategory2_name.' ('.$count_courses_lv3.')</strong>';
-                                    } else {
-                                        $subcategory2_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory2_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
-                                    }
-                                    echo '<div style="margin-left:40px;">'.$subcategory2_link.'</div>';
-                                }
+                                echo '<div style="margin-left:40px;">'.$subcategory2_link.'</div>';
                             }
                         }
                     }
+                }
             } 
             ?>
         </div>

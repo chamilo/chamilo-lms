@@ -809,9 +809,9 @@ button:hover {
     margin-top:5px;
 }
 
-.course-block-main-item {
-    height:  32px;
-    padding: 3px 0px 3px 0px;
+.course-block-main-item {    
+    height: 45px;
+    padding: 5px 0px;    
 }
 
 .categories-block-course {

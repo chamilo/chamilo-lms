@@ -65,7 +65,7 @@ if (!(api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_crea
 
 // filter actions
 $actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'unsubscribe', 'display_courses','display_random_courses');
-$action = 'subscribe';
+$action = 'display_random_courses';
 $nameTools = get_lang('SortMyCourses');
 
 if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {
@@ -85,7 +85,7 @@ if (empty($nameTools)) {
 	$nameTools = get_lang('CourseManagement');
 } else {
 	$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'auth/courses.php', 'name' => get_lang('CourseManagement'));
-        $interbreadcrumb[] = array('url' => '#', 'name' => $nameTools);
+    $interbreadcrumb[] = array('url' => '#', 'name' => $nameTools);
 }
 
 

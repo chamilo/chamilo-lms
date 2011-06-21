@@ -12,7 +12,8 @@ require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
 /*
  * Search a term and return description from a glossary.
  */
-global $charset;
+$charset = api_get_system_encoding();
+
 //replace image path
 $path_image=api_get_path(WEB_COURSE_PATH).api_get_course_path();
 $path_image_search='../../courses/'.api_get_course_path();

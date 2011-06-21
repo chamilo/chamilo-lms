@@ -19,8 +19,7 @@ class GlossaryManager {
 		$glossary_table = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = intval($session_id);
         $sql_filter = api_get_session_condition($session_id);
-		$sql = 'SELECT glossary_id as id,name,description '.
-		          ' FROM '.$glossary_table.' WHERE 1=1 '.$sql_filter;
+		$sql = 'SELECT glossary_id as id, name, description FROM '.$glossary_table.' WHERE 1=1 '.$sql_filter;
 		$rs = Database::query($sql);
 		while ($row = Database::fetch_array($rs)) {
 			$glossary_data[] = $row;
@@ -39,13 +38,14 @@ class GlossaryManager {
 		$sql='SELECT description FROM '.$glossary_table.' WHERE glossary_id="'.Database::escape_string($glossary_id).'"';
 		$rs=Database::query($sql);
         if (Database::num_rows($rs) > 0) {
-          $row=Database::fetch_array($rs);
+            $row = Database::fetch_array($rs);
             return $row['description'];
         } else {
             return '';
         }
-			}
-	/**
+    }
+    
+    /**
 	 * Get glossary term by glossary id
 	 * @author Isaac Flores <florespaz_isaac@hotmail.com>
 	 * @param String The glossary term name
@@ -56,12 +56,10 @@ class GlossaryManager {
 		$glossary_table  = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = intval($session_id);
         $sql_filter = api_get_session_condition($session_id);
-		$sql='SELECT description FROM '.$glossary_table.' '.
-		 ' WHERE name like trim("'.Database::escape_string($glossary_name).'")'.
-		 $sql_filter;
-		$rs=Database::query($sql);
+		$sql = 'SELECT description FROM '.$glossary_table.' WHERE name like trim("'.Database::escape_string($glossary_name).'")'.$sql_filter;
+		$rs = Database::query($sql);
 		if (Database::num_rows($rs) > 0) {
-		  $row=Database::fetch_array($rs);
+		     $row = Database::fetch_array($rs);
             return $row['description'];
 		} else {
 			return '';

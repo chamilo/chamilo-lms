@@ -1823,8 +1823,8 @@ function attach_glossary_into_scorm(type) {
                                 type: "POST",
                                 url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
                                 data: "glossary_id="+my_glossary_id,
-                                success: function(datas) {
-                                    $("iframe").contents().find("div#"+div_content_id).html(datas);
+                                success: function(data) {
+                                    $("iframe").contents().find("div#"+div_content_id).html(data);
                                 }
                             });
                       });
@@ -1842,32 +1842,33 @@ function attach_glossary_into_scorm(type) {
     } else {
          if ('manual') {
 
-               $("iframe").contents().find("body .glossary").mouseover(function(){
-                is_glossary_name=$(this).html();
-                random_id=Math.round(Math.random()*100);
+			$("iframe").contents().find("body .glossary").mouseover(function(){
+				is_glossary_name = $(this).html();
+				random_id = Math.round(Math.random()*100);
                 div_show_id="div_show_id"+random_id;
                 div_content_id="div_content_id"+random_id;
-                 $(this).append("<div id="+div_show_id+" ><div id="+div_content_id+">&nbsp;</div></div>");
-                  $("iframe").contents().find("div#"+div_show_id).attr("style","display:inline;float:left;position:absolute;background-color:#F2F2F2;border-bottom: 1px solid #2E2E2E;border-right: 1px solid #2E2E2E;border-left: 1px solid #2E2E2E;border-top: 1px solid #2E2E2E;color:#305582;margin-left:5px;margin-right:5px;");
-                  $("iframe").contents().find("div#"+div_content_id).attr("style","background-color:#F2F2F2;color:#0B3861;margin-left:8px;margin-right:8px;margin-top:5px;margin-bottom:5px;");
+                //Fixes bug "No result found" message #3620
+				//$(this).append("<div id="+div_show_id+" ><div id="+div_content_id+">&nbsp;</div></div>");
+				$("iframe").contents().find("div#"+div_show_id).attr("style","display:inline;float:left;position:absolute;background-color:#F2F2F2;border-bottom: 1px solid #2E2E2E;border-right: 1px solid #2E2E2E;border-left: 1px solid #2E2E2E;border-top: 1px solid #2E2E2E;color:#305582;margin-left:5px;margin-right:5px;");
+				$("iframe").contents().find("div#"+div_content_id).attr("style","background-color:#F2F2F2;color:#0B3861;margin-left:8px;margin-right:8px;margin-top:5px;margin-bottom:5px;");
 
-               $.ajax({
+                $.ajax({
                     contentType: "application/x-www-form-urlencoded",
                     beforeSend: function(objeto) {
                      $("iframe").contents().find("div#"+div_content_id).html("<img src="+my_protocol+"//"+location.host+work_path+"/main/inc/lib/javascript/indicator.gif />"); },
                     type: "POST",
                     url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
                     data: "glossary_name="+is_glossary_name,
-                    success: function(datos) {
-                         $("iframe").contents().find("div#"+div_content_id).html(datos);
+                    success: function(data) {
+                         $("iframe").contents().find("div#"+div_content_id).html(data);
                     }
-                });
-            });
-             $("iframe").contents().find("body .glossary").mouseout(function(){
-                current_element=$(this);
-                div_show_id=current_element.find("div").attr("id");
-                 $("iframe").contents().find("div#"+div_show_id).remove();
-            });
+                	});
+				});
+				$("iframe").contents().find("body .glossary").mouseout(function(){
+                    current_element=$(this);
+                    div_show_id=current_element.find("div").attr("id");
+    				$("iframe").contents().find("div#"+div_show_id).remove();
+				});
         }
     }
 }

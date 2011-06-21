@@ -7,6 +7,7 @@
   <style type="text/css">
     <!--
         @page { size: 21cm 29.7cm; margin: 2cm }
+        #main h1 {padding-bottom:10px; margin-top:20px; border-bottom: 2px solid #999;}
         pre { font-family: "Courier New", monospace }
         p { margin-bottom: 0.21cm }
         .code {margin: 1em 1em 1em 2em; padding: 0.5em; background-color: rgb(229, 229, 229); vertical-align: top; border: 1px solid #999999;}
@@ -20,9 +21,11 @@
 <div id="main">
 
 
-<h1>Chamilo 1.8.8.3 - ?, June 2011</h1>
+<h1>Chamilo 1.8.8.4 - La Molina, June 2011</h1>
+
+
 <h3>Release notes - summary</h3>
-<p>Chamilo 1.8.8.3 is a minor corrective stable version for version 1.8.8</p>
+<p>Chamilo 1.8.8.4 is a minor corrective stable version for version 1.8.8.2</p>
 <h3>New Features</h3>
 <ul>  
   <li>This version contains only fixes for Chamilo 1.8.8.2 </li>
@@ -31,9 +34,10 @@
 <ul>
     <li>Documents
 	    <ul>
-		    <li>Fixed preview bug when using a course in Dutch</li>
-		    <li>Fixed mp3 previews </li>
-	    </ul>
+		    <li>"Document preview" bug fixed when using a course in Dutch (yoxview bad translate file)</li>
+		    <li>Bug fixed when using glossary terms in a document</li>
+		    <li>Bug fixed when reading MP3 files using the jplayer plugin #3593</li>
+        </ul>
     </li>    
 	<li>Exercises
         <ul>
@@ -43,40 +47,51 @@
     <li>Glossary
         <ul>
             <li>Order arrows are removed #3123 </li>
+            <li>Fixed problem when adding a document in a learning path with glossary terms #3620</li>
             <li>Fixed mp3 previews </li>
         </ul>
     </li>  
     <li>Portal administration
         <ul>
-            <li>System information fixes (php_tag) #3552</li>
-            <li>Sub language fixes(parse error) #2910</li>        
+            <li>System information fixes #3552</li>
+            <li>Sub language fixes(parse error) #2910</li>
+            <li>Bug fixed when enabling BBB plugin #3637</li>
+            <li>Improving Notification class: adding footer and introduction message </li>
         </ul>
     </li>
     <li>User portal/ My courses
         <ul>            
-            <li>Improving Course Ccatalog load time </li>        
+            <li>Improving Course Catalog load time </li>
+            <li>Course catalog view is random by default</li>              
         </ul>
     </li>
     
+    <li>Social Network / Groups
+        <ul>
+            <li>Reply counter fixed in group topics and improving UI</li>
+        </ul>
+    </li>       
     <li>Style changes
         <ul>
             <li>Fixed who is online user images </li>                
             <li>CSS styles: fix.css and fix_chamilo.css were deleted, there are only base.css and base_chamilo.css calls are added directly in the CSS file</li>
             <li>All CSS were reduced and improved in order to use the base.css and base_chamilo.css styles</li>
         </ul>
-    </li>  
+    </li>      
 </ul>
 <h3>Security</h3>
 <ul>
   <li>Fixed several limited-risk potential XSS.</li>
+  <li>Adding session fixation #3600</li>
+  <li>Fixed several potential SQL injections</li>
 </ul>
 <h3>Known issues</h3>
 <ul>  
-  <li>Watermark portal images are now saved in the main/default_course_document/images folder </li>
+  <li>Watermark portal images are now saved in the main/default_course_document/images/ folder </li>
 </ul>
 
-
 <h1>Chamilo 1.8.8.2 - Bellavista, May 2011</h1>
+
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.8.8.2 is a minor corrective stable version for version 1.8.8 to enable easier install on shared hosting.</p>
 
@@ -133,8 +148,8 @@
   <li>Changed "alumno" to "estudiante" globally for Spanish language (#2235)</li>
 </ul>
 
-
 <h1>Chamilo 1.8.8 - Miraflores, May 2011</h1>
+
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.8.8 is a major stable version. Altough it doesn't come with a strong redesign, it provides a large number of small improvements to the teacher's toolset and the user's using pleasure. Audio recording, schema drawing, certification generating, better administration features, plugin for videoconference with BigBlueButton and e-commerce with PrestaShop are only a few of the improvements that you will find in this version.</p>
 
@@ -395,8 +410,8 @@ providers (see our website, <i>Support</i> tab).
 
 
 
-
 <h1>Chamilo 1.8.7.1 - Palmas</h1>
+
 
 <h3>New Features</h3>
 <ul>
@@ -496,6 +511,8 @@ providers (see our website, <i>Support</i> tab).
 </ul>
 
 <h1>Chamilo 1.8.7 - Istanbul</h1>
+
+
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.8.7 is a major&nbsp;release including a lot of new features, mostly focused on social network, the handling of sessions (which will help many educational institutions, public or private, to manage their contents in a more flexible way) and visual style, and a few important bugfixes. It lays the first stable stone in the Chamilo software project. This version is the first one to <b>highly recommend PHP 5.2</b> or superior, and <b>require PHP 5.1</b> or higher.<br />Also, this version of Chamilo will automatically convert all your data to UTF-8, which will make it more difficult to migrate from Dokeos versions higher than 1.8.6.1</p>
 
@@ -597,6 +614,7 @@ providers (see our website, <i>Support</i> tab).
 <br />
 
 <h1>Chamilo 1.8.6.2  <span style="font-style: italic;">Salto</span> - January 2010</h1>
+
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.8.6.2 is a intermediate&nbsp;release including a lot of new features, mostly focused on social network, the handling of sessions (which will help many educational institutions, public or private, to manage their contents in a more flexible way) and visual style, and a few important bugfixes. It lays the first stable stone in the Chamilo software project.</p>
 <h3>New Features</h3>
@@ -692,6 +710,7 @@ providers (see our website, <i>Support</i> tab).
 
 <br />
 <h1>Dokeos 1.8.6.1 - August 2009</h1>
+
 <h3>Release notes - summary</h3>
 <p>Dokeos 1.8.6.1 is a minor&nbsp;release including just a few new features, mostly focused on internationalization, and several bugfixes.</p>
 <h3>New Features</h3>
@@ -740,6 +759,7 @@ providers (see our website, <i>Support</i> tab).
 </ul>
 <br />
 <h1>Dokeos 1.8.6 <span style="font-style: italic;">Svalbard</span> - June 2009</h1>
+
 <h3>Release notes - summary</h3>
 <p>Dokeos 1.8.6 Svalbard is a major&nbsp;release including new features.&nbsp;</p>
 <h3>New Features</h3>
@@ -963,6 +983,7 @@ if you are willing to keep that change.</li>
 </ul>
 <br />
 <h1>Dokeos 1.8.5 <span style="font-style: italic;">Valparaiso</span>, June 2008</h1>
+
 <h3>Release notes - summary</h3>
 <p>Dokeos 1.8.5 is a major debugging release but includes interesting new features as well.&nbsp;</p>
 <h3>New Features</h3>
@@ -1080,9 +1101,9 @@ back to the document directory, so the page shouldn't be changed too
 quickly after recording a sound track</li>
     <li>When migrating from 1.6 to 1.8, some SCORM learning paths might need to be re-imported, which means their tracking is lost</li>
 </ul>
-<hr style="width: 100%; height: 2px;" />
 
 <h1>Dokeos 1.8.4 - September 2007</h1>
+
 <h3>Release notes - summary</h3>
 <p>Dokeos
 1.8.4 is both a features and debuggingmajor release.&nbsp;</p>
@@ -1175,16 +1196,9 @@ UTF-8 and russian and asian fonts)</li>
 
 </ul>
 
-<h1></h1>
-
-<hr style="width: 100%; height: 2px;" />
 <h1>Dokeos 1.8 - May 2007</h1>
 
-
-
 <h3>Release notes - summary</h3>
-
-
 
 <p>Dokeos 1.8 is a major release. The software becomes a complete suite
 including not only a learning management system and a learners
@@ -1255,13 +1269,7 @@ a simple videoconferencing interface.</p>
 </ul>
 
 
-
-<h1></h1>
-
-<hr style="width: 100%; height: 2px;" />
 <h1>Dokeos 1.6.5 - July 2006 </h1>
-
-
 
 <h3>Release notes - summary</h3>
 

@@ -16,7 +16,7 @@
 <body>
 
 <div id="header1">
-    <h1>Chamilo 1.8.8.2 : Installation Guide</h1>
+    <h1>Chamilo 1.8.8.4 : Installation Guide</h1>
 </div>
 
 <a href="index.html">Documentation</a> &gt; Installation Guide
@@ -24,7 +24,7 @@
 <div id="main">
 <p></p>
 
-<p>Thank you for downloading Chamilo 1.8.8.2.</p>
+<p>Thank you for downloading Chamilo 1.8.8.4</p>
 <ul>
   <li>Test Chamilo on <a href="http://campus.chamilo.org">Free Campus</a></li>
 </ul>
@@ -298,7 +298,7 @@ please ask your hosting provider for advice.<br />
 <br />
 <em> NOTE: </em> This version of Chamilo can only be used to upgrade from 
 smaller versions of Chamilo or Dok€os. For example, you cannot use the normal 
-upgrade scripts from Chamilo 1.8.8.2 to upgrade from Dok€os 2.0. If you need this, 
+upgrade scripts from Chamilo 1.8.8.4 to upgrade from Dok€os 2.0. If you need this, 
 please contact one of the Chamilo Association's official providers.
 
 <p></p>
@@ -306,17 +306,17 @@ please contact one of the Chamilo Association's official providers.
 <h3>3.1 Upgrading from Chamilo 1.8.8 </h3>
 <ul>
   <li> check that you haven't left any customised stylesheet or image*</li>
-  <li> download the Chamilo 1.8.8.2 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
-  <li> unzip the new files of Chamilo 1.8.8.2 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
-  <li> update $_configuration['system_version'] to '1.8.8.2' in the main/inc/conf/configuration.php file</li>
-  <li> that's it! You are now using Chamilo 1.8.8.2</li>
+  <li> download the Chamilo 1.8.8.4 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> unzip the new files of Chamilo 1.8.8.4 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
+  <li> update $_configuration['system_version'] to '1.8.8.4' in the main/inc/conf/configuration.php file</li>
+  <li> that's it! You are now using Chamilo 1.8.8.4</li>
 </ul>
 
 <h3>3.1 Upgrading from Chamilo 1.8.x</h3>
 <ul>
   <li> check that you haven't left any customised stylesheet or image*</li>
-  <li> download the Chamilo 1.8.8.2 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
-  <li> unzip the new files of Chamilo 1.8.8.2 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
+  <li> download the Chamilo 1.8.8.4 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> unzip the new files of Chamilo 1.8.8.4 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
   <li> point your browser on your portal URL + main/install/</li>
   <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.8.x</span></li>
 </ul>
@@ -328,8 +328,8 @@ please contact one of the Chamilo Association's official providers.
 <em>If you upgrade from Dok€os 1.8.x</em> :&nbsp;
 <ul>
   <li> check that you haven't left any customised stylesheet or image*</li>
-  <li> download the Chamilo 1.8.8.2 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
-  <li> unzip the new files of Chamilo 1.8.8.2 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
+  <li> download the Chamilo 1.8.8.4 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> unzip the new files of Chamilo 1.8.8.4 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
   <li> point your browser on your portal URL + main/install/</li>
   <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.8.x</span></li>
 </ul>
@@ -369,9 +369,9 @@ The complete process is as follow:
     <em>old_version</em> and make it writeable by the web server. This
 is important to allow the move of the courses/ and upload/ directories
 to the new install</li>
-  <li> download the Chamilo 1.8.8.2 install package from the
+  <li> download the Chamilo 1.8.8.4 install package from the
     <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
-  <li> unzip the new files of Chamilo 1.8.8.2 in the main Chamilo/Dok€os directory. The
+  <li> unzip the new files of Chamilo 1.8.8.4 in the main Chamilo/Dok€os directory. The
 new directory <em>main</em> should be located directly inside your
 Chamilo/Dok€os root folder</li>
   <li> point your browser on your portal URL</li>
@@ -444,11 +444,11 @@ On the command-line, type:
   <li>mkdir /var/www/chamilo/old_version</li>
   <li>mv /var/www/chamilo/* /var/www/chamilo/old_version/</li>
   <li>chmod -R 0777 /var/www/chamilo/old_version/</li>
-  <li>wget http://chamilo.googlecode.com/files/chamilo-1.8.8.2.tar.gz</li>
-  <li>tar zxvf chamilo-1.8.8.2.tar.gz</li>
-  <li>sudo cp -ra chamilo-1.8.8.2/* /var/www/chamilo/</li>
-  <li>rm chamilo-1.8.8.2.tar.gz</li>
-  <li>sudo rm -r chamilo-1.8.8.2/</li>
+  <li>wget http://chamilo.googlecode.com/files/chamilo-1.8.8.4.tar.gz</li>
+  <li>tar zxvf chamilo-1.8.8.4.tar.gz</li>
+  <li>sudo cp -ra chamilo-1.8.8.4/* /var/www/chamilo/</li>
+  <li>rm chamilo-1.8.8.4.tar.gz</li>
+  <li>sudo rm -r chamilo-1.8.8.4/</li>
 </ul>
 
 <br />

@@ -4,7 +4,7 @@
  * includes things to execute in the main database (settings_current table)
  */
 $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-$t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
+$t_options  = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
 $sql = "INSERT INTO $t_settings
     (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) 
     VALUES
@@ -43,15 +43,40 @@ $sql = "SELECT id, code, db_name FROM $t_courses ORDER BY id";
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
     $t_course = Database::get_course_table(TABLE_COURSE_SETTING,$row['db_name']);
-    $sql_course = "INSERT INTO $t_course (variable,value,category) VALUES ('big_blue_button_meeting_name','','plugins')";
-    $r = Database::query($sql_course);
-    $sql_course = "INSERT INTO $t_course (variable,value,category) VALUES ('big_blue_button_attendee_password','','plugins')";
-    $r = Database::query($sql_course);
-    $sql_course = "INSERT INTO $t_course (variable,value,category) VALUES ('big_blue_button_moderator_password','','plugins')";
-    $r = Database::query($sql_course);
-    $sql_course = "INSERT INTO $t_course (variable,value,category) VALUES ('big_blue_button_welcome_message','','plugins')";
-    $r = Database::query($sql_course);
+    
+    $sql = "SELECT value FROM $t_course WHERE variable = 'big_blue_button_meeting_name' ";
+    $result = Database::query($sql);
+    if (!Database::num_rows($result)) {    
+        $sql_course = "INSERT INTO $t_course (variable,value,category) VALUES ('big_blue_button_meeting_name','','plugins')";
+        $r = Database::query($sql_course);
+    }
+    
+    $sql = "SELECT value FROM $t_course WHERE variable = 'big_blue_button_attendee_password' ";
+    $result = Database::query($sql);    
+    if (!Database::num_rows($result)) {    
+        $sql_course = "INSERT INTO $t_course (variable, value, category) VALUES ('big_blue_button_attendee_password','','plugins')";
+        $r = Database::query($sql_course);
+    }
+    
+    $sql = "SELECT value FROM $t_course WHERE variable = 'big_blue_button_moderator_password' ";
+    $result = Database::query($sql);
+    if (!Database::num_rows($result)) {
+        $sql_course = "INSERT INTO $t_course (variable, value, category) VALUES ('big_blue_button_moderator_password','','plugins')";
+        $r = Database::query($sql_course);    
+    }    
+    
+    $sql = "SELECT value FROM $t_course WHERE variable = 'big_blue_button_welcome_message' ";
+    $result = Database::query($sql);
+    if (!Database::num_rows($result)) {
+        $sql_course = "INSERT INTO $t_course (variable,value,category) VALUES ('big_blue_button_welcome_message','','plugins')";
+        $r = Database::query($sql_course);
+    }    
+    
     $t_tool = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
-    $sql_course = "INSERT INTO $t_tool VALUES (NULL, 'videoconference','../../plugin/bbb/start.php','visio.gif','".string2binary(api_get_setting('course_create_active_tools', 'videoconference'))."','0','squaregrey.gif','NO','_blank','plugin','0')";
-    $r = Database::query($sql_course);
+    $sql = "SELECT name FROM $t_tool WHERE name = 'videoconference' ";
+    $result = Database::query($sql);
+    if (!Database::num_rows($result)) {
+        $sql_course = "INSERT INTO $t_tool VALUES (NULL, 'videoconference','../../plugin/bbb/start.php','visio.gif','".string2binary(api_get_setting('course_create_active_tools', 'videoconference'))."','0','squaregrey.gif','NO','_blank','plugin','0')";
+        $r = Database::query($sql_course);    
+    }    
 }

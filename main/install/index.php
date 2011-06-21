@@ -119,7 +119,7 @@ if (!empty($_POST['old_version'])) {
 	$my_old_version = $dokeos_version;
 }
 
-$new_version = '1.8.8.2';
+$new_version = '1.8.8.4';
 $new_version_stable = true;
 $new_version_major = false;
 $software_name = 'Chamilo';
@@ -778,7 +778,7 @@ if ($_POST['step2']) {
                 include 'update-db-1.8.7-1.8.8.inc.php';
                 include 'update-files-1.8.7-1.8.8.inc.php';
             case '1.8.8':
-                break; //Chamilo 1.8.8.2 doesn't bring any file or db change
+                break; //Chamilo 1.8.8.2/1.8.8.4 doesn't bring any file or db change
             default:
 				break;
 		}

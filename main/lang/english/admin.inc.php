@@ -1343,4 +1343,6 @@ $LanguagePriority3Comment = '';
 $LanguagePriority4Comment = '';
 $ChooseRelationType = 'Choose a relation type';
 $UserListInGroup = 'Users subscribed to this group';
+$ActivateSendEventByMailTitle='Activates the send events by mail feature';
+$ActivateSendEventByMailComment = '';
 ?>

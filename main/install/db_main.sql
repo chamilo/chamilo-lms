@@ -790,11 +790,13 @@ VALUES
 ('custom_tab_2_name', NULL, 'textfield', 'Platform', '', 'CustomTab2NameTitle', 'CustomTab2NameComment', NULL, NULL, 0),
 ('custom_tab_2_url', NULL, 'textfield', 'Platform', '', 'CustomTab2URLTitle', 'CustomTab2URLComment', NULL, NULL, 0),
 ('custom_tab_3_name', NULL, 'textfield', 'Platform', '', 'CustomTab3NameTitle', 'CustomTab3NameComment', NULL, NULL, 0),
-('custom_tab_3_url', NULL, 'textfield', 'Platform', '', 'CustomTab3URLTitle', 'CustomTab3URLComment', NULL, NULL, 0);
-('languagePriority1', NULL, 'radio', 'Languages', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0); 
-('languagePriority2', NULL, 'radio', 'Languages', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0); 
-('languagePriority3', NULL, 'radio', 'Languages', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0); 
-('languagePriority4', NULL, 'radio', 'Languages', 'LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0); 
+('custom_tab_3_url', NULL, 'textfield', 'Platform', '', 'CustomTab3URLTitle', 'CustomTab3URLComment', NULL, NULL, 0),
+('languagePriority1', NULL, 'radio', 'Languages', '', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0),
+('languagePriority2', NULL, 'radio', 'Languages','', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0), 
+('languagePriority3', NULL, 'radio', 'Languages','', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0), 
+('languagePriority4', NULL, 'radio', 'Languages', '','LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0),
+('activate_send_event_by_mail', NULL, 'radio', 'Platform', 'false', 'ActivateSendEventByMailTitle', 'ActivateSendEventByMailComment', NULL, NULL, 0);
+
 
 
 UNLOCK TABLES;
@@ -1033,7 +1035,10 @@ VALUES
 ('languagePriority4','platform_lang','PlatformLanguage'),
 ('languagePriority4','user_profil_lang','UserLanguage'),
 ('languagePriority4','user_selected_lang','UserSelectedLanguage'),
-('languagePriority4','course_lang','CourseLanguage');
+('languagePriority4','course_lang','CourseLanguage'),
+('activate_send_event_by_mail', 'true', 'Yes'),
+('activate_send_event_by_mail', 'false', 'No');
+
 
 
 UNLOCK TABLES;

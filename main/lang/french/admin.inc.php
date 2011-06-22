@@ -1320,4 +1320,6 @@ $LanguagePriority3Comment = '';
 $LanguagePriority4Comment = '';
 $ChooseRelationType = 'Choisir un type de relation';
 $UserListInGroup = 'Utilisateurs inscrits au groupe';
+$ActivateSendEventByMailTitle='Activer les envois d\'évènements par email';
+$ActivateSendEventByMailComment = '';
 ?>

@@ -27,15 +27,16 @@ api_block_anonymous_users(); // Only users who are logged in can proceed.
 
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jquery_ui_js(true);
-//$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('Course'));
 
 Display::display_header(get_lang('Session'));
 
-$session_id = intval($_GET['session_id']);
-$course_id  = intval($_GET['course_id']);
-if (empty($session_id)) {
+if (empty($_GET['session_id'])) {
 	api_not_allowed();
 }
+
+$session_id = intval($_GET['session_id']);
+$course_id  = intval($_GET['course_id']);
+$_SESSION['id_session'] = $session_id;
 
 $session_info   = SessionManager::fetch($session_id);
 $session_list   = SessionManager::get_sessions_by_coach(api_get_user_id());
@@ -119,14 +120,16 @@ if (!empty($new_session_list)) {
 }
 //echo '<pre>';print_r($final_array);
 //If the requested session does not exist in my list we stop the script
-if (!api_is_platform_admin()) {    
+if (!api_is_platform_admin()) {        
     if (!in_array($session_id, $my_session_list)) {
         api_not_allowed();
     }
 }
+//If session is not active we stop de script
+if (!api_is_allowed_to_session_edit()) {
+    api_not_allowed();
+}
 
-//require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php';
-//$html = '';
 //Final data to be show
 $my_real_array = $new_exercises = array();
 $now = time();

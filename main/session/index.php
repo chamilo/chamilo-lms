@@ -264,7 +264,8 @@ $column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'150
 //Per course grid settings
 $url_by_course = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_course&session_id='.$session_id.'&course_id='.$course_id;
 $extra_params_course['grouping'] = 'true';
-$extra_params_course['groupingView'] = array('groupField'       => array('course'),
+$extra_params_course['groupingView'] = array('groupCollapse'    => true,
+											 'groupField'       => array('course'),
                                              'groupColumnShow'  => array('false'),
                                              'groupText'        => array('<b>'.get_lang('Course').' {0}</b>'));
 //$extra_params_course['autowidth'] = 'true'; //use the width of the parent                                          
@@ -280,10 +281,11 @@ $column_week_model  = array (
                           
 $extra_params_week['grouping'] = 'true';
 //For more details see http://www.trirand.com/jqgridwiki/doku.php?id=wiki:grouping
-$extra_params_week['groupingView'] = array('groupDataSorted' =>true,
-										   'groupField'=>array('week'),
-                                           'groupColumnShow'=>'false',
-                                           'groupText' => array('<b>'.get_lang('PeriodWeek').' {0}</b>'));
+$extra_params_week['groupingView'] = array('groupCollapse'     => true,
+										   'groupDataSorted'   => true,
+										   'groupField'        => array('week'),
+                                           'groupColumnShow'   => 'false',
+                                           'groupText'         => array('<b>'.get_lang('PeriodWeek').' {0}</b>'));
 //$extra_params_week['autowidth'] = 'true'; //use the width of the parent
 
 //MyQCM grid

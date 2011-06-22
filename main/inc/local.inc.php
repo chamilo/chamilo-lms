@@ -437,6 +437,9 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
           }
         }
       } //end if is_array($extAuthSource)
+      if ($loginFailed) { //If we are here username given is wrong
+          header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
+      }
     } //end else login failed
   } elseif (api_get_setting('sso_authentication')==='true' &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
 		/**

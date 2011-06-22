@@ -247,9 +247,9 @@ if (!empty($course_list)) {
 
 //All Learnpaths grid settings (First tab, first subtab)
 $columns_courses        = array(get_lang('Title'));
-$column_model_courses   = array(array('name'=>'title',  'index'=>'title',   'width'=>'150',  'align'=>'left',  'sortable'=>'false'),                               
-                                );
-$extra_params_courses['autowidth'] = 'true'; //use the width of the parent                             
+$column_model_courses   = array(array('name'=>'title',  'index'=>'title',   'width'=>'880px',  'align'=>'left',  'sortable'=>'false'));
+
+$extra_params_courses['autowidth'] = 'false'; //use the width of the parent                             
                         
 $url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id.'&course_id='.$course_id;
 $columns        = array(get_lang('PublicationDate'),get_lang('Course'), get_lang('LearningPath'));
@@ -342,11 +342,11 @@ $(function() {
 <?php 
 
      //Displays js code to use a jqgrid
-     echo Display::grid_js('courses',       '',             $columns_courses,$column_model_courses,$extra_params_courses,$new_course_list);
-     echo Display::grid_js('list_default',  $url,           $columns,        $column_model,$extra_params,array(), '');
-     echo Display::grid_js('list_course',   $url_by_course, $columns,        $column_model,$extra_params_course,array(),'');
-     echo Display::grid_js('list_week',     $url_week,      $column_week,    $column_week_model, $extra_params_week,array(),'');     
-     echo Display::grid_js('exercises',      '',            $column_exercise,$column_exercise_model, $extra_params_exercise, $my_real_array);        
+     echo Display::grid_js('courses',       '',             $columns_courses, $column_model_courses, $extra_params_courses, $new_course_list);
+     echo Display::grid_js('list_default',  $url,           $columns,         $column_model,$extra_params,array(), '');
+     echo Display::grid_js('list_course',   $url_by_course, $columns,         $column_model,$extra_params_course,array(),'');
+     echo Display::grid_js('list_week',     $url_week,      $column_week,     $column_week_model, $extra_params_week,array(),'');     
+     echo Display::grid_js('exercises',      '',            $column_exercise, $column_exercise_model, $extra_params_exercise, $my_real_array);        
 ?>
 
 });

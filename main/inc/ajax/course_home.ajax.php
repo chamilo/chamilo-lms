@@ -196,12 +196,14 @@ switch ($action) {
         
         $i =0;
         $response = new stdClass(); 
-        foreach($temp as $key=>$row) {   
-            $row = $row['cell'];            
-            if ($key >= $start  && $key < ($start + $limit)) {                 
-                $response->rows[$i]['id']= $key;
-                $response->rows[$i]['cell']=array($row[0], $row[1], $row[2]);
-                $i++;                
+        foreach($temp as $key=>$row) {
+            $row = $row['cell'];
+            if (!empty($row)) {            
+                if ($key >= $start  && $key < ($start + $limit)) {                 
+                    $response->rows[$i]['id']= $key;
+                    $response->rows[$i]['cell']=array($row[0], $row[1], $row[2]);
+                    $i++;                
+                }
             }
         }        
         
@@ -214,7 +216,7 @@ switch ($action) {
         if ($page > $total_pages) { 
             $response->page= $total_pages;
         } else {
-            $response->page     = $page;	
+            $response->page = $page;	
         }        
         $response->records = $count;    
         echo json_encode($response);        
@@ -301,6 +303,7 @@ switch ($action) {
                 }
                 
                  //Checking LP publicated and expired_on dates
+                
                 if (!empty($lp_item['publicated_on']) && $lp_item['publicated_on'] != '0000-00-00 00:00:00') {
                     $week_data = date('Y', api_strtotime($lp_item['publicated_on'])).' - '.get_week_from_day($lp_item['publicated_on']);                   
                     if ($now < api_strtotime($lp_item['publicated_on'])) {                        
@@ -324,11 +327,13 @@ switch ($action) {
         $response = new stdClass(); 
         $i =0;        
         foreach($temp as $key=>$row) {   
-            $row = $row['cell'];            
-            if ($key >= $start  && $key < ($start + $limit)) {                 
-                $response->rows[$i]['id']= $key;
-                $response->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
-                $i++;                
+            $row = $row['cell'];     
+            if (!empty($row)) {    
+                if ($key >= $start  && $key < ($start + $limit)) {                 
+                    $response->rows[$i]['id']= $key;
+                    $response->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
+                    $i++;                
+                }
             }
         }
         
@@ -339,9 +344,9 @@ switch ($action) {
         }         
         $response->total    = $total_pages;         
         if ($page > $total_pages) { 
-            $response->page= $total_pages;
+            $response->page = $total_pages;
         } else {
-            $response->page     = $page;    
+            $response->page = $page;    
         }        
         $response->records = $count;    
         echo json_encode($response); 
@@ -386,7 +391,7 @@ switch ($action) {
         
         $start = $limit*$page - $limit; 
         
-        $course_list    = SessionManager::get_course_list_by_session_id($session_id);
+        $course_list = SessionManager::get_course_list_by_session_id($session_id);
                         
         $count = 0;
         
@@ -441,11 +446,13 @@ switch ($action) {
         $response = new stdClass(); 
         $i =0;
         foreach($temp as $key=>$row) {   
-            $row = $row['cell'];            
-            if ($key >= $start  && $key < ($start + $limit)) {                 
-                $response->rows[$i]['id']= $key;
-                $response->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
-                $i++;                
+            $row = $row['cell'];   
+            if (!empty($row)) {           
+                if ($key >= $start  && $key < ($start + $limit)) {                 
+                    $response->rows[$i]['id']= $key;
+                    $response->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
+                    $i++;                
+                }
             }
         }
         
@@ -458,7 +465,7 @@ switch ($action) {
         if ($page > $total_pages) { 
             $response->page= $total_pages;
         } else {
-            $response->page     = $page;    
+            $response->page = $page;    
         }        
         $response->records = $count; 
         

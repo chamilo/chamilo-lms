@@ -774,11 +774,14 @@ if ($_POST['step2']) {
                 Database::query("SET NAMES 'utf8';");
 
             case '1.8.7':
-            case '1.8.7.1':
+            case '1.8.7.1': 
                 include 'update-db-1.8.7-1.8.8.inc.php';
-                include 'update-files-1.8.7-1.8.8.inc.php';
+                include 'update-files-1.8.7-1.8.8.inc.php';                                            
             case '1.8.8':
-                break; //Chamilo 1.8.8.2/1.8.8.4 doesn't bring any file or db change
+            case '1.8.8.2':
+                //Only updates the configuration.inc.php with the new version 
+                include 'update-configuration.inc.php';
+                break;
             default:
 				break;
 		}

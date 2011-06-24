@@ -3,14 +3,14 @@
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: code cleaning
- * @author Julio Montoya <gugli100@gmail.com>, MORE code cleaning
+ * @author Julio Montoya <gugli100@gmail.com>, MORE code cleaning 2011
  *
  * @abstract The task of the internship was to integrate the 'send messages to specific users' with the
  *			 Announcements tool and also add the resource linker here. The database also needed refactoring
  *			 as there was no title field (the title was merged into the content field)
  * @package chamilo.announcements
  * @todo make AWACS out of the configuration settings
- * @todo this file is 1200+ lines without any functions -> needs to be split into
+ * @todo this file is 1300+ lines without any functions -> needs to be split into
  * multiple functions
 */
 /*
@@ -461,7 +461,6 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 					if (!empty($_SESSION['toolgroup'])) {
 						$insert_id = AnnouncementManager::add_group_announcement($safe_emailTitle,$safe_newContent,$order,array('GROUP:'.$_SESSION['toolgroup']),$_POST['selectedform'],$file,$file_comment);
 					} else {
-
 						$insert_id = AnnouncementManager::add_announcement($safe_emailTitle, $safe_newContent, $order, $_POST['selectedform'], $file, $file_comment);
 					}
 				    //store_resources($_SESSION['source_type'],$insert_id);
@@ -570,7 +569,6 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 										ON $tbl_user.user_id = $tbl_session_course_user.id_user
 										AND $tbl_session_course_user.course_code = '".$_course['id']."'
 										AND $tbl_session_course_user.id_session = ".api_get_session_id();
-
 			    		}
 			    	}
 
@@ -602,7 +600,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                                 $mail_body = api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS)."<br />\n".stripslashes($emailTitle)."<br />";
 
 	                            // Main part of the email
-	                            $mail_body .= trim(stripslashes($newContent));
+	                            $mail_body .= trim(stripslashes(AnnouncementManager::parse_content($newContent)));
                                 // Signature of email: sender name and course URL after -- line
 	                            $mail_body .= "<br />-- <br />";
 	                            $mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)." \n";
@@ -620,12 +618,11 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                                 $sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.' WHERE announcement_id = "'.$insert_id.'"';
                                 $rs_attach = Database::query($sql);
                                 if (Database::num_rows($rs_attach) > 0) {
-                                        $row_attach  = Database::fetch_array($rs_attach);
-                                        $path_attach = api_get_path(SYS_COURSE_PATH).$_course['path'].'/upload/announcements/'.$row_attach['path'];
-                                        $filename_attach = $row_attach['filename'];
-                                        $data_file = array('path' => $path_attach,'filename' => $filename_attach);
+                                    $row_attach  = Database::fetch_array($rs_attach);
+                                    $path_attach = api_get_path(SYS_COURSE_PATH).$_course['path'].'/upload/announcements/'.$row_attach['path'];
+                                    $filename_attach = $row_attach['filename'];
+                                    $data_file = array('path' => $path_attach,'filename' => $filename_attach);
                                 }
-
                                 @api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file, true);
 	                        //}
 
@@ -803,7 +800,7 @@ $result = Database::query($sql);
 $announcement_number = Database::num_rows($result);
 
 /*
-		ADD ANNOUNCEMENT / DELETE ALL
+	ADD ANNOUNCEMENT / DELETE ALL
 */
 
 $show_actions = false;
@@ -1000,12 +997,6 @@ if ($display_form) {
 
 	echo '<input type="hidden" name="id" value="'.$announcement_to_modify.'" />';
 
-	/*if ($surveyid) {
-	$content_to_modify='<br /><a href="'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name">'.get_lang('ClickHereToOpenSurvey').'</a><br />
-									'.get_lang('OrCopyPasteUrl').' <br />
-									'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name&nbsp;';
-	}*/
-
     $oFCKeditor = new FCKeditor('newContent') ;
 	$oFCKeditor->Width		= '100%';
 	$oFCKeditor->Height		= '300';
@@ -1020,6 +1011,8 @@ if ($display_form) {
 
 	echo '<div class="row"><div class="formw">';
 	
+	echo Display::display_normal_message(get_lang('Tags').' <br /><br />'.implode('<br />', AnnouncementManager::get_tags()), false);
+			
 	echo $oFCKeditor->CreateHtml();
 	echo '</div></div>';
 

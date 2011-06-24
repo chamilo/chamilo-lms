@@ -3,6 +3,7 @@
 /**
 * Include file with functions for the announcements module.
 * @package chamilo.announcements
+* @todo use OOP
 */
 
 /**
@@ -10,9 +11,39 @@
  *
  */
 class AnnouncementManager  {
-	
-	private function __construct() {
+    
+    
+	public function __construct() {
 	}	
+	
+	public function get_tags() {
+	    return array('((user_name))','((teacher_name))','((teacher_email))','((course_title))', '((course_link))');
+	}
+	
+	public function parse_content($content, $course_code) {
+    	$reader_info  = api_get_user_info(api_get_user_id());
+		$course_info  = api_get_course_info($course_code);
+	    $teacher_list = Coursemanager::get_teacher_list_from_course_code($course_info['code']);
+	    
+	    $teacher_name = '';
+	    if (!empty($teacher_list)) {
+	        foreach($teacher_list as $teacher_data) {    	  
+	            $teacher_name  = api_get_person_name($teacher_data['firstname'], $teacher_data['lastname']);
+	            $teacher_email = $teacher_data['email'];
+	            break;
+	        }
+	    }    	    
+		$course_link = api_get_course_url();
+		
+		$data['username']        = $reader_info['username'];    		
+		$data['teacher_name']    = $teacher_name;
+		$data['teacher_email']   = $teacher_email;    		
+		$data['course_title']    = $course_info['name'];
+		$data['course_link']     = Display::url($course_link, $course_link);
+	
+        $content = str_replace(self::get_tags(), $data, $content);
+        return $content;	    
+	}
 		
 	/**
 	 * Gets all announcements from a course 
@@ -149,11 +180,11 @@ class AnnouncementManager  {
     		if (api_is_allowed_to_edit(false,true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
     		    $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$announcement_id."\">".Display::return_icon('edit.png', get_lang('Edit'),'',22)."</a>";
                 if ($result['visibility'] == 1) {
-                    $image_visibility="visible";
-                    $alt_visibility=get_lang('Hide');
+                    $image_visibility = "visible";
+                    $alt_visibility = get_lang('Hide');
                 } else {
                     $image_visibility="invisible";
-                    $alt_visibility=get_lang('Visible');
+                    $alt_visibility = get_lang('Visible');
                 }
                 global $stok;
                 
@@ -167,9 +198,11 @@ class AnnouncementManager  {
                 }                            
                 echo "<tr><th style='text-align:right'>$modify_icons</th></tr>";
     		}
+    		    		
+    		$content = self::parse_content($content, api_get_course_id());
     		
     		echo "<tr><td>$content</td></tr>";       		
-    		//echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " .api_convert_and_format_date($result['end_date'], DATE_FORMAT_LONG). "</td></tr>";
+
             echo "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " .api_convert_and_format_date($result['insert_date'], DATE_TIME_FORMAT_LONG). "</td></tr>";
             
             // User or group icon
@@ -179,15 +212,14 @@ class AnnouncementManager  {
             }            
             $sent_to        = self::sent_to('announcement', $announcement_id);            
             $sent_to_form   = self::sent_to_form($sent_to);
-            echo Display::tag('td', get_lang('SentTo').' : '.$sent_to_form, array('class'=>'announcements_datum'));            
-            
-    		
+            echo Display::tag('td', get_lang('SentTo').' : '.$sent_to_form, array('class'=>'announcements_datum'));     
+                		
     	    $attachment_list = self::get_attachment($announcement_id);
         
             if (count($attachment_list)>0) {
                 echo "<tr><td>";
-                $realname=$attachment_list['path'];
-                $user_filename=$attachment_list['filename'];
+                $realname = $attachment_list['path'];
+                $user_filename = $attachment_list['filename'];
                 $full_file_name = 'download.php?file='.$realname;
                 echo '<br/>';                
                 echo Display::return_icon('attachment.gif',get_lang('Attachment'));

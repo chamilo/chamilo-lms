@@ -1,7 +1,8 @@
-<?php // $Id: user_list.php 22292 2009-07-22 18:32:32Z herodoto $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 	@author Bart Mollet
+	@author Julio Montoya <gugli100@gmail.com> BeezNest 2011
 *	@package chamilo.admin
 */
 
@@ -21,6 +22,8 @@ $delete_user_available = true;
 if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete_users']) {
 	$delete_user_available = false;
 }
+
+$htmlHeadXtra[] = api_get_jquery_ui_js();
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 function load_course_list (div_course,my_user_id) {
@@ -103,7 +106,35 @@ $(document).ready(function() {
             document.getElementById(\'extra_data_text\').style.display="none";
         }
     }
+    
+    
+    $(".agenda_opener").live("click", function() {
+        var url = this.href;
+        var dialog = $("#dialog");
+                
+        if ($("#dialog").length == 0) {
+            dialog = $(\'<div id="dialog" style="display:hidden"></div> \').appendTo(\'body\');
+        }     
+        // load remote content
+        dialog.load(
+                url,
+                {},
+                function(responseText, textStatus, XMLHttpRequest) {
+                    dialog.dialog({width:720, height:550, modal:true});
+                }
+            );
+        //prevent the browser to follow the link
+        return false;
+    });    
 });
+
+//Load user calendar
+function load_calendar(user_id, month, year) {  
+ 	var url = "'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id=" +user_id + "&month="+month+"&year="+year;
+	$("#dialog").load( url    	 	
+	);    	
+}
+    
 
 </script>';
 $htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
@@ -623,6 +654,9 @@ function modify_filter($user_id,$url_params,$row) {
 	}
 	
     if (api_is_platform_admin()) {
+        
+        $result .= ' <a href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id='.$user_id.'" class="agenda_opener">'.Display::return_icon('month.png', get_lang('Calendar'), array(), 22).'</a>';
+        
        if ($delete_user_available) {
             if ($row[0] != $_user['user_id'] && !$user_is_anonymous) {
                 // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
@@ -630,7 +664,7 @@ function modify_filter($user_id,$url_params,$row) {
             } else {
                 $result .= Display::return_icon('delete_na.png', get_lang('Delete'), array(), 22);
             }
-        }
+        }       
     }
     
 

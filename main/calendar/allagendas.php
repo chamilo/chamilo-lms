@@ -387,41 +387,8 @@ if (isset ($_user['user_id'])) {
 			} else {
 				Display::display_warning_message(get_lang('PleaseSelectACourseOrASessionInTheLeftColumn'));
 			}
-			
-/*			$agendaitems = get_allagendaitems($grado2, $month, $year);
-			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
-			display_mymonthcalendar_2($agendaitems, $month, $year, array(), $monthName, $gradoo);
-
-			
-			$agendaitems = get_allagendaitems($grado3, $month, $year);
-			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
-			display_mymonthcalendar_2($agendaitems, $month, $year, array(), $monthName, $gradoo);			
-*/
 			break;
-			/*
-		case "week_view" :
-			$agendaitems = get_week_agendaitems($courses_dbs, $month, $year, $week);
-			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
-			if (api_get_setting("allow_personal_agenda") == "true")
-			{
-				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
-			}
-			display_weekcalendar($agendaitems, $month, $year, array(), $monthName);
-			break;
-		case "day_view" :
-			$agendaitems = get_day_agendaitems($courses_dbs, $month, $year, $day);
-			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");
-			if (api_get_setting("allow_personal_agenda") == "true")
-			{
-				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");
-			}
-			display_daycalendar($agendaitems, $day, $month, $year, array(), $monthName);
-			break;
-		case "personal_view" :
-			show_personal_agenda();
-			break;*/
 	}
 }
 echo "</td></tr></table>";
 Display :: display_footer();
-?>

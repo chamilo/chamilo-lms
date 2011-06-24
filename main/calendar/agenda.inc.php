@@ -26,6 +26,9 @@ $(document).ready(function () {
 });
 </script>';
 
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+
+
 /**
 * Retrieves all the agenda items from the table
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -4339,8 +4342,7 @@ function agenda_import_ical($course_info,$file) {
  * @return 	array	The results of the database query, or null if not found
  */
 function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "", $week = "", $type) {
-	$tbl_global_agenda= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-
+	$tbl_global_agenda= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);    
 	$month = Database::escape_string($month);
 	$year  = Database::escape_string($year);
 	$week  = Database::escape_string($week);

@@ -549,13 +549,33 @@ function showlinksofcategory($catid) {
     		$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
     
     		$css_class = $i % 2 == 0 ? $css_class = 'row_odd' : $css_class = 'row_even';
+    		
+    		$link_validator = '';
+			if (api_is_allowed_to_edit(null, true)) {
+			    $link_validator  = ''.Display::url(Display::return_icon('preview_view.png', get_lang('CheckURL'), array(), 16), '#', array('onclick'=>"check_url('".$myrow['id']."', '".addslashes($myrow['url'])."');"));    			
+			    $link_validator .= Display::span('', array('id'=>'url_id_'.$myrow['id']));
+			}
     
-    		$myrow[3] = text_filter($myrow[3]);
     		if ($myrow['visibility'] == '1') {
-    			echo '<tr class="', $css_class, '"><td align="center" valign="middle" width="15"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="_blank"><img src="../../main/img/link.gif" border="0" alt="', get_lang('Link'), '"/></a></td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="', $myrow['target'], '">', Security :: remove_XSS($myrow[2]), '</a>', $session_img, '<br />', $myrow[3];
+    			echo '<tr class="'.$css_class.'">';
+    			echo '<td align="center" valign="middle" width="15">';
+    			echo '<a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="_blank"><img src="../../main/img/link.gif" border="0" alt="', get_lang('Link'), '"/></a></td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="', $myrow['target'], '">';
+    			echo Security :: remove_XSS($myrow[2]);
+    			echo '</a>';    			
+    			echo $link_validator;   			
+    		
+    			echo $session_img;
+    			echo '<br />', $myrow[3];
     		} else {
     			if (api_is_allowed_to_edit(null, true)) {
-    				echo '<tr class="', $css_class, '"><td align="center" valign="middle" width="15"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], "&amp;link_url=", urlencode($myrow[1]), '" target="_blank" class="invisible">', Display :: return_icon('link_na.gif', get_lang('Link')), '</a></td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="', $myrow['target'], '"  class="invisible">', Security :: remove_XSS($myrow[2]), "</a>\n", $session_img, '<br />', $myrow[3];
+    				echo '<tr class="'.$css_class.'">';
+    				echo '<td align="center" valign="middle" width="15"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], "&amp;link_url=", urlencode($myrow[1]), '" target="_blank" class="invisible">';
+    				echo Display :: return_icon('link_na.gif', get_lang('Link')), '</a>';
+    				echo '</td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]),'" target="', $myrow['target'], '"  class="invisible">';
+    				echo Security :: remove_XSS($myrow[2]);
+    				echo "</a>";
+    			    echo $link_validator;	
+    				echo $session_img, '<br />', $myrow[3];
     			}
     		}
     

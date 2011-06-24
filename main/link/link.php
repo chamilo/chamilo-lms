@@ -38,7 +38,14 @@ $htmlHeadXtra[] = '<script type="text/javascript">
     			$(".actions:eq("+i+")").hide();
     		}
     	}
-     } );
+     });
+     
+     function check_url(id, url) {
+     	var url = "'.api_get_path(WEB_AJAX_PATH).'link.ajax.php?a=check_url&url=" +url;
+     	var loading = " '.addslashes(Display::return_icon('loading1.gif')).'";
+     	$("#url_id_"+id).html(loading);  
+    	$("#url_id_"+id).load(url);    
+     }
  </script>';
 
 // @todo change the $_REQUEST into $_POST or $_GET

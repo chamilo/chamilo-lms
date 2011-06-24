@@ -116,10 +116,10 @@ class GradebookTable extends SortableTable
 			$sorting |= GradebookDataGenerator :: GDG_SORT_ASC;
 		}
 		//status of user in course
-	    $user_id=api_get_user_id();
-		$course_code=api_get_course_id();
-		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
-		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
+	    $user_id     = api_get_user_id();
+		$course_code = api_get_course_id();
+		$status_user = api_get_status_of_user_in_course ($user_id,$course_code);
+		$data_array  = $this->datagen->get_data($sorting, $from, $this->per_page);
 
 		// generate the data to display
 		$sortable_data = array();
@@ -248,7 +248,7 @@ class GradebookTable extends SortableTable
 					Display::display_warning_message($warning_message,false);
 				}
 
-				$content_html=DocumentManager::replace_user_info_into_html(api_get_user_id(), $course_code);
+				$content_html = DocumentManager::replace_user_info_into_html(api_get_user_id(), $course_code);
 
 				$new_content=explode('</head>',$content_html);
 

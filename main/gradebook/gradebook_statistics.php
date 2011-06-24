@@ -1,8 +1,11 @@
-<?php // $Id: $
+<?php
 /* For licensing terms, see /license.txt */
+
 $language_file= 'gradebook';
 //$cidReset= true;
+
 require_once '../inc/global.inc.php';
+
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/dataform.class.php';
@@ -10,7 +13,7 @@ require_once 'lib/scoredisplay.class.php';
 require_once 'lib/fe/displaygradebook.php';
 api_block_anonymous_users();
 $eval= Evaluation :: load($_GET['selecteval']);
-if ($eval[0]->get_category_id() < 0) {
+if ($eval[0]->get_category_id() < 0) { 
 	// if category id is negative, then the evaluation's origin is a link
 	$link= LinkFactory :: get_evaluation_link($eval[0]->get_id());
 	$currentcat= Category :: load($link->get_category_id());
@@ -57,9 +60,9 @@ if (!$displayscore->is_custom()) {
 	// find the region with the most scores, this is 100% of the bar
 
 	$highest_ratio = 0;
-	foreach ($keys as $key) {
-		if ($nr_items[$key] > $highest_ratio){
-		$highest_ratio = $nr_items[$key];
+	foreach($keys as $key) {
+		if ($nr_items[$key] > $highest_ratio) {
+		    $highest_ratio = $nr_items[$key];
 		}
 	}
 

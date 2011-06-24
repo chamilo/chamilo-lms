@@ -3231,12 +3231,27 @@ class UserManager
 	  	if (empty($session_id)) {
 	  	    $session_condition = ' AND (session_id = "" OR session_id = 0 OR session_id IS NULL )';
 	  	} else {
-	  	    $session_condition = " AND session_id = $session_condition";
+	  	    $session_condition = " AND session_id = $session_id";
 	  	}	  	
-	  	$sql='SELECT * FROM '.$tbl_grade_certificate.' WHERE cat_id= (SELECT id FROM '.$tbl_grade_category.' WHERE course_code = "'.Database::escape_string($course_code).'" '.$session_condition.' LIMIT 1 ) AND user_id='.Database::escape_string($user_id);
-	  	$rs = Database::query($sql);	  		  		  	
+	  	//Getting gradebook score
+	  	require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
+	  	require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
+	  
+	  	$sql = 'SELECT * FROM '.$tbl_grade_certificate.' WHERE cat_id = (SELECT id FROM '.$tbl_grade_category.' WHERE course_code = "'.Database::escape_string($course_code).'" '.$session_condition.' LIMIT 1 ) AND user_id='.Database::escape_string($user_id);
+	  		
+	  	$rs  = Database::query($sql);	  		  		  	
 	  	if (Database::num_rows($rs) > 0) {
 	  	    $row = Database::fetch_array($rs,'ASSOC');	  	
+	  	    $score = $row['score_certificate'];
+	  	    $category_id = $row['cat_id'];
+	  	    $eval         = Evaluation::load(null, null, $course_code, $category_id);	  		  	
+	  	    $displayscore = ScoreDisplay::instance();
+	  	
+	  	    $grade = '';
+	  	    if (isset($eval) && $displayscore->is_custom()) {
+                $grade = $displayscore->display_score(array($score, $eval[0]->get_max()), SCORE_DIV | SCORE_IGNORE_SPLIT, SCORE_ONLY_CUSTOM);			
+    	  	}
+	  	    $row['grade'] = $grade;
 	  		return $row;
         }
 	  	return false;

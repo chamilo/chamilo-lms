@@ -1203,8 +1203,8 @@ return 'application/octet-stream';
     function replace_user_info_into_html($user_id, $course_id, $is_preview = false) {
         $user_id = intval($user_id);
         $course_info = api_get_course_info($course_id);
-        $tbl_document=Database::get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
-        $document_id=self::get_default_certificate_id($course_id);
+        $tbl_document = Database::get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
+        $document_id = self::get_default_certificate_id($course_id);
 
         $sql = 'SELECT path FROM '.$tbl_document.' WHERE id="'.Database::escape_string($document_id).'" ';
 
@@ -1217,7 +1217,7 @@ return 'application/octet-stream';
             if (is_file($filepath)) {
                 $my_content_html=file_get_contents($filepath);
             }
-            $all_user_info=self::get_all_info_to_certificate($user_id, $is_preview);
+            $all_user_info = self::get_all_info_to_certificate($user_id, $is_preview);
             $info_to_be_replaced_in_content_html=$all_user_info[0];
             $info_to_replace_in_content_html=$all_user_info[1];
             $new_content=str_replace($info_to_be_replaced_in_content_html,$info_to_replace_in_content_html, $my_content_html);
@@ -1232,6 +1232,8 @@ return 'application/octet-stream';
         $info_list	= array();
         $user_id	= intval($user_id);
         $course_id	= api_get_course_id();
+        
+        $course_info = api_get_course_info($course_id);
 
         //info portal
         $organization_name = api_get_setting('Institution');
@@ -1254,7 +1256,7 @@ return 'application/octet-stream';
 
         // info gradebook certificate
         $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_id, $user_id);
-
+    
         $date_certificate = $info_grade_certificate['created_at'];
         $date_long_certificate = '';
         if (!empty($date_certificate)) {
@@ -1266,9 +1268,31 @@ return 'application/octet-stream';
         }
 
         //replace content
-        $info_to_replace_in_content_html = array($first_name,$last_name,$organization_name,$portal_name,$teacher_first_name,$teacher_last_name, $official_code, $date_long_certificate);
-        $info_to_be_replaced_in_content_html= array('((user_firstname))','((user_lastname))','((gradebook_institution))',
-                                                    '((gradebook_sitename))','((teacher_firstname))','((teacher_lastname))','((official_code))','((date_certificate))');
+        $info_to_replace_in_content_html     = array($first_name, 
+                                                     $last_name,
+                                                     $organization_name,
+                                                     $portal_name, 
+                                                     $teacher_first_name, 
+                                                     $teacher_last_name, 
+                                                     $official_code, 
+                                                     $date_long_certificate,
+                                                     $course_id,
+                                                     $course_info['name'],
+                                                     $info_grade_certificate['grade'], 
+                                                    );
+        $info_to_be_replaced_in_content_html = array('((user_firstname))',
+        											 '((user_lastname))',
+        											 '((gradebook_institution))',
+                                                     '((gradebook_sitename))',
+                                                     '((teacher_firstname))',
+                                                     '((teacher_lastname))',
+                                                     '((official_code))',
+                                                     '((date_certificate))',
+        											 '((course_code))',
+                									 '((course_title))',
+        											 '((gradebook_grade))',
+                                            );
+                                            
         if (!empty($extra_user_info_data)) {
             foreach ($extra_user_info_data as $key_extra=>$value_extra) {
                 $info_to_be_replaced_in_content_html[]='(('.strtolower($key_extra).'))';

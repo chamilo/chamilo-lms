@@ -88,9 +88,9 @@ function search_users($needle, $type) {
 		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 		$cond_user_id = '';
 		if (!empty($id_session)) {
-		$id_session = Database::escape_string($id_session);
+		    $id_session = intval($id_session);
 			// check id_user from session_rel_user table
-			$sql = 'SELECT id_user FROM '.$tbl_session_rel_user.' WHERE id_session ="'.(int)$id_session.'" AND relation_type<>'.SESSION_RELATION_TYPE_RRHH.' ';
+			$sql = 'SELECT id_user FROM '.$tbl_session_rel_user.' WHERE id_session ="'.$id_session.'" AND relation_type<>'.SESSION_RELATION_TYPE_RRHH.' ';
 			$res = Database::query($sql);
 			$user_ids = array();
 			if (Database::num_rows($res) > 0) {
@@ -229,7 +229,7 @@ if($_POST['form_sent']) {
 
 	if ($form_sent == 1) {
 		//added a parameter to send emails when registering a user
-		SessionManager::suscribe_users_to_session($id_session,$UserList,true,true);
+		SessionManager::suscribe_users_to_session($id_session, $UserList, null, true);
 
 		//adding the session to the access_url_rel_session table
 

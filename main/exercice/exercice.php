@@ -585,7 +585,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
             	$filter = 2;
             } 
             
-			echo '<a id="export_opener" href="'.api_get_self().'?export_report=1&show=result&export_filter='.$filter.'&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval($_GET['exerciseId']).'" >'.Display::return_icon('save.png',   get_lang('ExportAsCSV'),'',32).'</a>';
+			echo '<a id="export_opener" href="'.api_get_self().'?export_report=1&show=result&export_filter='.$filter.'&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval($_GET['exerciseId']).'" >'.Display::return_icon('save.png',   get_lang('Export'),'',32).'</a>';
 			/*
 			echo '<a href="javascript: void(0);" onclick="javascript: document.form1b.submit();">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a>';			
 			echo '<form id="form1a" name="form1a" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '" style="display:inline">';

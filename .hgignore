@@ -105,7 +105,8 @@ main/upload/users/*
 
 #PHP Storm settings directory
 .idea/*
-
+.idea/cssxfire.xml
+.idea
 
 syntax: regexp
 ^main/upload/users$

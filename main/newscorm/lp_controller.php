@@ -475,13 +475,15 @@ switch ($action) {
         }
         break;
     case 'export_to_pdf':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
+        
+        if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->lp_id, api_get_user_id())) {
+            api_not_allowed();
         }
+                
         if ($debug > 0) error_log('New LP - export action triggered', 0);
-        if (!$lp_found) { error_log('New LP - No learnpath given for export_to_pdf', 0); require 'lp_list.php'; }
-        else {
-            $result = $_SESSION['oLP']->scorm_export_to_pdf($_GET['lp_id']);
+        if (!$lp_found) { error_log('New LP - No learnpath given for export_to_pdf', 0); require 'lp_list.php'; 
+        } else {
+            $result = $_SESSION['oLP']->scorm_export_to_pdf($_GET['lp_id']);            
             if (!$result) {
                 require 'lp_list.php';
             }

@@ -136,6 +136,7 @@ if ($is_allowed_to_edit) {
 } else {
     echo '<th width="50%">'.get_lang('Title').'</th>';
     echo '<th>'.get_lang('Progress')."</th>";
+    echo '<th>'.get_lang('Actions')."</th>";
 }
 echo '</tr>';
 
@@ -215,7 +216,7 @@ if (is_array($flat_list)) {
             $extra = '<br /><font color="#999"><i>'.$dsp_desc .'</i></font>';
         }
         
-        $image='<img src="../img/icons/22/learnpath.png" border="0" align="absmiddle" alt="' . $name . '">';
+        $image = '<img src="../img/icons/22/learnpath.png" border="0" align="absmiddle" alt="' . $name . '">';
         
         $my_title = $name;
         if ($details['lp_visibility'] == 0 ) {
@@ -257,12 +258,16 @@ if (is_array($flat_list)) {
             if ($is_allowed_to_edit) {            
                 $dsp_progress = '<td>'.learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id()).'</td>';
             } else {
-                $dsp_progress = '<td><div style="width:125px">'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</div></td>';
+                $dsp_progress = '<td><div style="width:125px;">'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</div></td>';
             }
         } else {
             $dsp_progress = '<td style="padding-top:1em;"><div style="width:125px">'.learnpath::get_db_progress($id, api_get_user_id(), 'both','',false, api_get_session_id()).'</div></td>';
         }   
-
+        
+        
+        $dsp_edit = '<td align="center">';
+        $dsp_edit_close = '</td>';
+        
         if ($is_allowed_to_edit) {
 
             /*
@@ -300,11 +305,7 @@ if (is_array($flat_list)) {
                     //"</a>";
             }*/
 
-            /* Edit title and description */
-
-            $dsp_edit = '<td align="center">';
-            $dsp_edit_close = '</td>';
-
+  
             // EDIT LP
             if ($current_session == $details['lp_session']) {
                 $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">'.Display::return_icon('settings.png', get_lang('CourseSettings'),'','22').'</a>';				
@@ -438,10 +439,10 @@ if (is_array($flat_list)) {
                 }   
             }
             
-            if (api_get_setting('pdf_export_watermark_enable') == 'true') {
+            //if (api_get_setting('pdf_export_watermark_enable') == 'true') {
             	  $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">
 				  '.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'','22').'</a>';
-            }
+            //}
             
             /* DELETE COMMAND */
 
@@ -481,9 +482,13 @@ if (is_array($flat_list)) {
             } else {                  
                 $start_time  = $end_time= '';                
             }            
-        } // end if ($is_allowedToEdit)
+        } else { // end if ($is_allowedToEdit)
+            //Student
+            $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'','22').'</a>'; 
+        } 
         
-        echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_disk.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
+        echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$dsp_reinit.
+             $dsp_default_view.$dsp_debug.$dsp_disk.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
 
         echo "</tr>";
         $current ++; //counter for number of elements treated

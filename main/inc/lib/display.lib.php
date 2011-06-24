@@ -579,8 +579,10 @@ class Display {
      * @version Feb 2011
     */
     public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size=null) {
-        $code_path = api_get_path(SYS_CODE_PATH);
+        $code_path   = api_get_path(SYS_CODE_PATH);
         $w_code_path = api_get_path(WEB_CODE_PATH);
+        
+        $image = trim($image);
 
         $theme = 'css/'.api_get_visual_theme().'/icons/';
         $icon = '';

@@ -20,6 +20,8 @@ require_once '../gradebook/lib/be.inc.php';
 // Setting the tabs
 $this_section = SECTION_COURSES;
 
+$htmlHeadXtra[] = api_get_jquery_ui_js();
+
 // Access control
 api_protect_course_script(true);
 
@@ -300,36 +302,35 @@ if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 	rmdir($temp_zip_dir);
 	exit; //otherwise following clicks may become buggy
 }
-if (!empty ($_POST['export_user_fields'])) {
-	switch ($_POST['export_user_fields']) {
-		case 'export_user_fields' :
+if (!empty ($_GET['extra_data'])) {
+	switch ($_GET['extra_data']) {
+		case 'on' :
 			$_SESSION['export_user_fields'] = true;
-			break;
-		case 'do_not_export_user_fields' :
+			break;		
 		default :
 			$_SESSION['export_user_fields'] = false;
 			break;
 	}
 }
-if (!empty ($_POST['export_report']) && $_POST['export_report'] == 'export_report') {
+if (!empty($_GET['export_report']) && $_GET['export_report'] == '1') {
 	if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
 		$user_id = null;
-		if (empty ($_SESSION['export_user_fields']))
+		if (empty($_SESSION['export_user_fields']))
 			$_SESSION['export_user_fields'] = false;
 		if (!$is_allowedToEdit and !$is_tutor) {
 			$user_id = api_get_user_id();
 		}
 		require_once 'exercise_result.class.php';
-		switch ($_POST['export_format']) {
+		switch ($_GET['export_format']) {
 			case 'xls' :
 				$export = new ExerciseResult();               
-				$export->exportCompleteReportXLS($documentPath, $user_id, $_SESSION['export_user_fields'], $_POST['export_filter'],$_POST['exerciseId'], $_POST['hotpotato_name']);
+				$export->exportCompleteReportXLS($documentPath, $user_id, $_SESSION['export_user_fields'], $_GET['export_filter'], $_GET['exerciseId'], $_GET['hotpotato_name']);
 				exit;
 				break;
 			case 'csv' :
 			default :
 				$export = new ExerciseResult();
-				$export->exportCompleteReportCSV($documentPath, $user_id, $_SESSION['export_user_fields'], $_POST['export_filter'],$_POST['exerciseId'], $_POST['hotpotato_name']);
+				$export->exportCompleteReportCSV($documentPath, $user_id, $_SESSION['export_user_fields'], $_GET['export_filter'], $_GET['exerciseId'], $_GET['hotpotato_name']);
 				exit;
 				break;
 		}
@@ -533,22 +534,67 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 			} else {
 				$alt = get_lang('ExportWithoutUserFields');
 				$extra_user_fields = '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
-			}
-			
-			echo '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
-			echo '<a href="javascript: void(0);" onclick="javascript: document.form1a.submit();">'.Display::return_icon('export_csv.png',get_lang('ExportAsCSV'),'','32').'</a>';
-			echo '<a href="javascript: void(0);" onclick="javascript: document.form1b.submit();">' . Display :: return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a>';
+			}			
+			echo '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';			
+            	
+            echo '<script type="text/javascript">		
+            $(document).ready(function() {
+            			    
+             	$( "#dialog:ui-dialog" ).dialog( "destroy" );
+                    
+                $( "#dialog-confirm" ).dialog({
+                        autoOpen: false,
+                        show: "blind",                
+                        resizable: false,
+                        height:250,
+                        modal: true
+                 });
+            
+                $("#export_opener").click(function() {                
+                    var targetUrl = $(this).attr("href");        
+                    $( "#dialog-confirm" ).dialog({
+                        buttons: {
+                            "'.addslashes(get_lang('Download')).'": function() {
+                            	var export_format = $("input[name=export_format]:checked").val();
+                            	var extra_data  = $("input[name=load_extra_data]:checked").val();                	         
+                                location.href = targetUrl+"&export_format="+export_format+"&extra_data="+extra_data;                
+                                $( this ).dialog( "close" );                    
+                            },                
+                        }
+                    });        
+                    $( "#dialog-confirm" ).dialog("open");
+                    return false;
+                }); 
+                
+            });
+            </script>';
+            
+            echo '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';    
+                //echo Display::tag('p', get_lang("CSVOrExcel"));
+                //Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32')
+                echo Display::tag('p', Display::input('radio', 'export_format', 'csv', array('checked'=>'1', 'id'=>'export_format_csv_label')). Display::tag('label', get_lang('ExportAsCSV'), array('for'=>'export_format_csv_label')));
+                echo Display::tag('p', Display::input('radio', 'export_format', 'xls', array('id'=>'export_format_xls_label')). Display::tag('label', get_lang('ExportAsXLS'), array('for'=>'export_format_xls_label')));   
+                echo Display::tag('p', Display::input('checkbox', 'load_extra_data',  '0',array('id'=>'load_extra_data_id')). Display::tag('label', get_lang('LoadExtraData'), array('for'=>'load_extra_data_id')));
+            echo '</div>';
+
+    
+    //onclick="javascript: document.form1a.submit();
+            if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
+                $filter = 1;
+            } else {
+            	$filter = 2;
+            } 
+            
+			echo '<a id="export_opener" href="'.api_get_self().'?export_report=1&show=result&export_filter='.$filter.'&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval($_GET['exerciseId']).'" >'.Display::return_icon('save.png',   get_lang('ExportAsCSV'),'',32).'</a>';
+			/*
+			echo '<a href="javascript: void(0);" onclick="javascript: document.form1b.submit();">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a>';			
 			echo '<form id="form1a" name="form1a" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '" style="display:inline">';
 			echo '<input type="hidden" name="export_report" value="export_report">';
 			echo '<input type="hidden" name="export_format" value="csv">';
             echo '<input type="hidden" name="exerciseId" value="'.intval($_GET['exerciseId']).'">';
             echo '<input type="hidden" name="hotpotato_name" value="'.Security::remove_XSS($_GET['path']).'">';            
             
-            if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
-                $filter = 1;
-            } else {
-            	$filter = 2;
-            }            
+                    
             echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';
 			echo '</form>';
 			echo '<form id="form1b" name="form1b" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '" style="display:inline">';
@@ -557,7 +603,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 			echo '<input type="hidden" name="hotpotato_name" value="'.Security::remove_XSS($_GET['path']).'">';			
 			echo '<input type="hidden" name="export_format" value="xls">';
             echo '<input type="hidden" name="exerciseId" value="'.intval($_GET['exerciseId']).'">';
-			echo '</form>';
+			echo '</form>';*/
 		}
 	}
 } else {

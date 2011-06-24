@@ -1145,7 +1145,7 @@ class UserManager
 	 */
 	public static function get_extra_fields($from = 0, $number_of_items = 0, $column = 5, $direction = 'ASC', $all_visibility = true, $field_filter = null) {
 		$fields = array();
-		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
+		$t_uf  = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 		$columns = array('id', 'field_variable', 'field_type', 'field_display_text', 'field_default_value', 'field_order', 'field_filter', 'tms');
 		$column = intval($column);
@@ -1153,14 +1153,13 @@ class UserManager
 		if (in_array(strtoupper($direction), array('ASC', 'DESC'))) {
 			$sort_direction = strtoupper($direction);
 		}
-		$sqlf = "SELECT * FROM $t_uf ";
+		$sqlf = "SELECT * FROM $t_uf WHERE 1 = 1  ";
 		if (!$all_visibility) {
-			$sqlf .= " WHERE field_visible = 1 ";
-		}
-		
+			$sqlf .= " AND field_visible = 1 ";
+		}		
 		if (!is_null($field_filter)) {
 		    $field_filter = intval($field_filter);
-            $sqlf .= " WHERE field_filter = $field_filter ";
+            $sqlf .= " AND field_filter = $field_filter ";
 		}
 		$sqlf .= " ORDER BY ".$columns[$column]." $sort_direction " ;
 		if ($number_of_items != 0) {
@@ -1468,34 +1467,32 @@ class UserManager
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		$user_id = Database::escape_string($user_id);
 		$sql = "SELECT f.id as id, f.field_variable as fvar, f.field_type as type FROM $t_uf f ";
-                $filter_cond = '';
+        $filter_cond = '';
 
-                if (!$all_visibility) {
-                        if (isset($field_filter)) {
-                            $field_filter = intval($field_filter);
-                            $filter_cond .= " AND field_filter = $field_filter ";
-                        }
+        if (!$all_visibility) {
+            if (isset($field_filter)) {
+                $field_filter = intval($field_filter);
+                $filter_cond .= " AND field_filter = $field_filter ";
+            }
 			$sql .= " WHERE f.field_visible = 1 $filter_cond ";
 		} else {
-                    if (isset($field_filter)) {
-                        $field_filter = intval($field_filter);
-                        $sql .= " WHERE field_filter = $field_filter ";
-                    }
-                }
+            if (isset($field_filter)) {
+                $field_filter = intval($field_filter);
+                $sql .= " WHERE field_filter = $field_filter ";
+            }
+        }
+        
 
 		$sql .= " ORDER BY f.field_order";
+		
 		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
 			while ($row = Database::fetch_array($res)) {
 				if ($row['type'] == USER_FIELD_TYPE_TAG) {
 					$tags = self::get_user_tags_to_string($user_id,$row['id'],false);
 					$extra_data['extra_'.$row['fvar']] = $tags;
-
 				} else {
-					$sqlu = "SELECT field_value as fval " .
-							" FROM $t_ufv " .
-							" WHERE field_id=".$row['id']."" .
-							" AND user_id=".$user_id;
+					$sqlu = "SELECT field_value as fval FROM $t_ufv WHERE field_id=".$row['id']." AND user_id = ".$user_id;
 					$resu = Database::query($sqlu);
 					$fval = '';
 					// get default value

@@ -239,6 +239,11 @@ if (api_is_platform_admin()) {
     <ul>
         <li><a href="http://www.chamilo.org/" target="_blank"><?php echo get_lang('ChamiloHomepage'); ?></a></li>
         <li><a href="http://www.chamilo.org/forum" target="_blank"><?php echo get_lang('ChamiloForum'); ?></a></li>
+        <li><a href="../../documentation/installation_guide.html" target="_blank"><?php echo get_lang('InstallationGuide'); ?></a></li>
+        <li><a href="../../documentation/changelog.html" target="_blank"><?php echo get_lang('ChangesInLastVersion'); ?></a></li>
+        <li><a href="../../documentation/credits.html" target="_blank"><?php echo get_lang('ContributorsList'); ?></a></li>
+        <li><a href="../../documentation/security.html" target="_blank"><?php echo get_lang('SecurityGuide'); ?></a></li>
+        <li><a href="../../documentation/optimization.html" target="_blank"><?php echo get_lang('OptimizationGuide'); ?></a></li>
         <li><a href="http://www.chamilo.org/extensions" target="_blank"><?php echo get_lang('ChamiloExtensions'); ?></a></li>
 <?php
     // Try to display a maximum before we check the chamilo version and all that.

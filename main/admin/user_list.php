@@ -655,7 +655,7 @@ function modify_filter($user_id,$url_params,$row) {
 	
     if (api_is_platform_admin()) {
         
-        $result .= ' <a href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id='.$user_id.'" class="agenda_opener">'.Display::return_icon('month.png', get_lang('Calendar'), array(), 22).'</a>';
+        $result .= ' <a href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&amp;user_id='.$user_id.'" class="agenda_opener">'.Display::return_icon('month.png', get_lang('FreeBusyCalendar'), array(), 22).'</a>';
         
        if ($delete_user_available) {
             if ($row[0] != $_user['user_id'] && !$user_is_anonymous) {

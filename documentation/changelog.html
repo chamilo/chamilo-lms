@@ -27,15 +27,22 @@
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.8.8.4 is a minor corrective stable version for version 1.8.8.2</p>
 <h3>New Features</h3>
-<ul>  
-  <li>This version contains only fixes for Chamilo 1.8.8.2 </li>
+
+This version of Chamilo only includes a few minor new features:
+<ul>
+  <li>Training planning through users free/busy calendar (only admin for now) (changeset fefa973c92f3 and a873df3067d3)</li>
+  <li>Links checker in links tool (changeset 95cfbc1ac887)</li>
+  <li>Restored extra fields export in exercises (changeset 01dcb74cfdfc)</li>
+  <li>Added tokens to announcements (changeset 66d9c5e10b42)</li>
+  <li>Students can download learning paths as PDF (changeset 3bd77279faee)</li>
+  <li>Added tokens to certificates generation (changeset c2201eee3558)</li>
 </ul>
 <h3>Debugging</h3>
 <ul>
     <li>Documents
 	    <ul>
-		    <li>"Document preview" bug fixed when using a course in Dutch (yoxview bad translate file)</li>
-		    <li>Bug fixed when using glossary terms in a document</li>
+		    <li>"Document preview" bug fixed when using a course in Dutch (yoxview bad translate file) (changeset e205fe6d94fe)</li>
+		    <li>Bug fixed when using glossary terms in a document #3620</li>
 		    <li>Bug fixed when reading MP3 files using the jplayer plugin #3593</li>
         </ul>
     </li>    
@@ -73,7 +80,7 @@
     </li>       
     <li>Style changes
         <ul>
-            <li>Fixed who is online user images </li>                
+            <li>Fixed who is online user images (changeset 61945685bcff)</li>                
             <li>CSS styles: fix.css and fix_chamilo.css were deleted, there are only base.css and base_chamilo.css calls are added directly in the CSS file</li>
             <li>All CSS were reduced and improved in order to use the base.css and base_chamilo.css styles</li>
         </ul>
@@ -81,13 +88,13 @@
 </ul>
 <h3>Security</h3>
 <ul>
-  <li>Fixed several limited-risk potential XSS.</li>
+  <li>Fixed several limited-risk potential XSS</li>
   <li>Adding session fixation #3600</li>
-  <li>Fixed several potential SQL injections</li>
+  <li>Fixed several potential SQL injections #3601</li>
 </ul>
 <h3>Known issues</h3>
 <ul>  
-  <li>Watermark portal images are now saved in the main/default_course_document/images/ folder </li>
+  <li>Watermark portal images are now saved in the main/default_course_document/images/ folder. If you used portal-wide watermarks before, you might need to upload the watermark image again.</li>
 </ul>
 
 <h1>Chamilo 1.8.8.2 - Bellavista, May 2011</h1>

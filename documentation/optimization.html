@@ -22,7 +22,6 @@
 <a href="index.html">Documentation</a> &gt; Optimization Guide
 <div id="outerframe">
 <div id="main">
-<p></p>
 
 <p>In seldom cases, you will need to start looking into efficiency issues with Chamilo. This guide is a work in progress intended to help administrators optimize their Chamilo installation.</p>
 
@@ -99,13 +98,7 @@ php_admin_value session.save_path 1;/var/www/test.chamilo.org/sessions/
 <h2><a name="5.Users-upload-directories"></a>5. Users upload directories</h2>
 Create 10 directories inside the main/upload/users directory (from 0 to 9) and update your admin settings. This has to be done at install &amp; configuration time, otherwise you might loose user data (or have to write a script for data distribution).
 <hr />
-Don't have time or resources to optimize your Chamilo installation yourself? Hire an <a href="http://www.chamilo.org/en/providers">official Chamilo provider</a> and get it sorted out professionally by specialists.
-    <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
-	<a href="http://jigsaw.w3.org/css-validator/">
-		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
-	</a>
-<hr />
-<h2><a name="#6.Zlib-compression"></a>Zlib compressed output</h2>
+<h2><a name="6.Zlib-compression"></a>6. Zlib compressed output</h2>
 Although this will not make your server faster, compressing the pages you are sending to the users will definitely make them feel like your website's responses are a lot faster, and thus increase their well-being when using Chamilo.<br /><br />
 Zlib output compression has to be set at two levels: PHP configuration for PHP pages and Apache for images and CSS.<br /><br />
 To update the PHP configuration (either in php.ini or in your VirtualHost), use the <a href="http://php.net/manual/en/zlib.configuration.php">zlib.output_compression</a>. If you set this inside your Apache's VirtualHost, you should use the following syntax.
@@ -147,6 +140,12 @@ SetEnvIfNoCase Request_URI \
 Header append Vary User-Agent env=!dont-vary
 </Location> 
 </pre>
+<hr />
+Don't have time or resources to optimize your Chamilo installation yourself? Hire an <a href="http://www.chamilo.org/en/providers">official Chamilo provider</a> and get it sorted out professionally by specialists.
+    <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
+	<a href="http://jigsaw.w3.org/css-validator/">
+		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
+	</a>
 <hr />
 <h2>Authors</h2>
 <ul>

@@ -1458,4 +1458,9 @@ $CourseDoesNotExistInThisSession = "El curso no existe en esta sesión. La copia
 $UserNotRegistered = "Usuario no registrado.";
 $ViewStats = "Ver estadísticas";
 $YouNeedToAddASessionCategoryFirst = "Necesita agregar una categoría de sesión";
+$InstallationGuide = "Guía de instalación";
+$ChangesInLastVersion = "Cambios en la última versión";
+$ContributorsList = "Lista de contribuidores";
+$SecurityGuide = "Guía de seguridad";
+$OptimizationGuide = "Guía de optimización";
 ?>

@@ -259,4 +259,5 @@ $ViewModeEmbedFrame = "Current view mode: external embed. Use only for embedding
 $LPNotVisibleToStudent = "Students cannot see this learning path";
 $EditCurrentModule = "Edit current module";
 $SearchFeatureTerms = "Terms for the search feature";
+$PrerequisiteDeletedError = "Error: the element defined as prerequisite has been deleted.";
 ?>

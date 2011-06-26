@@ -177,4 +177,17 @@ $EveryMonth = "Every month";
 $ReservationForDenied = "Booking denied";
 $BookingPeriodTooSmall = "The booking period is too small.";
 $BookingPeriodTooBig = "Booking period too long.";
+$PermissionsStored = "Permissions stored";
+$PermissionGranted = "Permission granted";
+$PermissionRevoked = "Permission revoked";
+$RoleGranted = "Role granted";
+$RoleRevoked = "Role revoked";
+$ErrorPleaseGiveRoleName = "Please give this role a name";
+$RoleDeleted = "Role deleted";
+$AddRole = "Add role";
+$RoleComment = "The role is the item which will allow you to assign rights to a person or group of people.";
+$DefaultRole = "Default role";
+$PermissionsOfRole = "Permissions of role";
+$IsPlatformRoleNotEditable = "Is the platform role not editable?";
+$UserPermissions = "User's permissions";
 ?>

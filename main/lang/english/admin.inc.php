@@ -1456,4 +1456,10 @@ $CourseDoesNotExistInThisSession = "The course does not exist in this session. T
 $UserNotRegistered = "User not registered.";
 $ViewStats = "View stats";
 $YouNeedToAddASessionCategoryFirst = "You need to add a session category first";
+$InstallationGuide = "Installation guide";
+$ChangesInLastVersion = "Changes in last version";
+$ContributorsList = "Contributors list";
+$SecurityGuide = "Security guide";
+$OptimizationGuide = "Optimization guide";
+$FreeBusyCalendar = "Free/Busy calendar";
 ?>

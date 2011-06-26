@@ -1115,4 +1115,9 @@ $YouHaveANewMessageFromX = "You have a new message from %s";
 $SeeMessage = "See message";
 $SeeInvitation = "See invitation";
 $YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX = "You have received this notification because you are subscribed or involved in it to change your notification preferences please click here: %s";
+$Replies = "Replies";
+$Reply = "Reply";
+$Broken = "Broken";
+$CheckURL = "Check link";
+$NoItem = "No item yet";
 ?>

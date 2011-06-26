@@ -557,40 +557,21 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
         }
     }
     
-    if (in_array(api_get_visual_theme(), array('chamilo','chamilo_red','chamilo_blue','chamilo_orange','chamilo_green','chamilo_electric_blue'))) {                
-        if (!empty($final_navigation)) {
-            echo '<div id="header4">';
-            $lis = '';
-            $i = 0;
-            $lis.= Display::tag('li', Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home')));        
-            foreach ($final_navigation as $bread) {       
-                $lis.= Display::tag('li', $bread);
-                $i++;
-            }
-            echo Display::tag('ul',$lis, array('class'=>'bread'));
-            echo '</div>';        
-        } else {
-            echo '<div id="header4">';
-            echo '</div>';
-        } 
-    } else {        
-        if (!empty($final_navigation)) {            
-            echo '<div id="header4">';            
-            $i = 0;
-            $count = count($final_navigation);
-            foreach($final_navigation as $bread) {   
-                if ($i < $count -1 && $count != 1) {
-                    $bread .=' > ';
-                }                    
-                echo $bread;             
-                $i++;                
-            }            
-            echo '</div>';        
-        } else {
-            echo '<div id="header4">';
-            echo '</div>';
-        }        
-    }    
+    if (!empty($final_navigation)) {
+        echo '<div id="header4">';
+        $lis = '';
+        $i = 0;
+        $lis.= Display::tag('li', Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home')));        
+        foreach ($final_navigation as $bread) {       
+            $lis.= Display::tag('li', $bread);
+            $i++;
+        }
+        echo Display::tag('ul',$lis, array('class'=>'bread'));
+        echo '</div>';        
+    } else {
+        echo '<div id="header4">';
+        echo '</div>';
+    } 
     echo '<div class="clear"></div>';
 }
 

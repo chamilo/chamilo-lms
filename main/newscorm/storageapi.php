@@ -64,7 +64,7 @@ function storage_get($sv_user, $sv_course, $sv_sco, $sv_key) {
 	$res = Database::query($sql);
 	if (mysql_num_rows($res) > 0) {
 		$row = Database::fetch_assoc($res);
-		return $row['sv_value'];
+		return stripslashes($row['sv_value']);
 	}
 	else {
 		return null;
@@ -90,6 +90,7 @@ function storage_getall($sv_user, $sv_course, $sv_sco) {
 	$res = Database::query($sql);
 	$data = array();
 	while ($row = Database::fetch_assoc($res)) {
+		$row['sv_value'] = stripslashes($row['sv_value']);
 		$data[] = $row;
 	}
 	return json_encode($data);
@@ -146,7 +147,7 @@ function storage_stack_pop($sv_user, $sv_course, $sv_sco, $sv_key) {
 	$resdelete = Database::query($sqldelete);
 	if ($resselect && $resdelete) {
 		Database::query("commit");
-		return $rowselect['sv_value'];
+		return stripslashes($rowselect['sv_value']);
 	}
 	else {
 		Database::query("rollback");
@@ -187,6 +188,7 @@ function storage_stack_getall($sv_user, $sv_course, $sv_sco, $sv_key) {
 	$res = Database::query($sql);
 	$results = array();
 	while ($row = Database::fetch_assoc($res)) {
+		$row['value'] = stripslashes($row['value']);
 		$results[] = $row;
 	}
 	return json_encode($results);

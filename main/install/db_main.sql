@@ -791,10 +791,10 @@ VALUES
 ('custom_tab_2_url', NULL, 'textfield', 'Platform', '', 'CustomTab2URLTitle', 'CustomTab2URLComment', NULL, NULL, 0),
 ('custom_tab_3_name', NULL, 'textfield', 'Platform', '', 'CustomTab3NameTitle', 'CustomTab3NameComment', NULL, NULL, 0),
 ('custom_tab_3_url', NULL, 'textfield', 'Platform', '', 'CustomTab3URLTitle', 'CustomTab3URLComment', NULL, NULL, 0),
-('languagePriority1', NULL, 'radio', 'Languages', '', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0),
-('languagePriority2', NULL, 'radio', 'Languages','', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0), 
-('languagePriority3', NULL, 'radio', 'Languages','', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0), 
-('languagePriority4', NULL, 'radio', 'Languages', '','LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0),
+('languagePriority1', NULL, 'radio', 'Languages', 'course_lang', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0),
+('languagePriority2', NULL, 'radio', 'Languages','user_profil_lang', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0), 
+('languagePriority3', NULL, 'radio', 'Languages','user_selected_lang', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0), 
+('languagePriority4', NULL, 'radio', 'Languages', 'platform_lang','LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0),
 ('activate_send_event_by_mail', NULL, 'radio', 'Platform', 'false', 'ActivateSendEventByMailTitle', 'ActivateSendEventByMailComment', NULL, NULL, 0);
 
 

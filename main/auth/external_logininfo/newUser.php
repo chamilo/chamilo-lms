@@ -84,6 +84,7 @@ if ($user !== false && ($chamilo_uid = external_add_user($user)) !== false) {
     $uidReset = true;
     $_user['user_id'] = $chamilo_uid;
     api_session_register('_uid');
+    event_login();
 } else {
 	$loginFailed = true;
 	unset($_user['user_id']);

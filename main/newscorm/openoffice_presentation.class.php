@@ -79,7 +79,7 @@ class OpenofficePresentation extends OpenofficeDocument {
             $thumb_width = 300;
             $thumb_height = floor($height * ($thumb_width / $width));
   
-            $my_new_image = Image($image);
+            $my_new_image = new Image($image);
             $my_new_image->resize($thumb_width, $thumb_height);
             $my_new_image->send_image($this->base_work_dir.$this->created_dir .'/'. $thumb_name, -1, 'png');
   

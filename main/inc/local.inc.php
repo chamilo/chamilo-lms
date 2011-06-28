@@ -792,6 +792,7 @@ if (isset($uidReset) && $uidReset) {	// session data refresh requested
             ConditionalLogin::check_conditions($uData);
 
             api_session_register('_user');
+            UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
         } else {
         	header('location:'.api_get_path(WEB_PATH));
             //exit("WARNING UNDEFINED UID !! ");

@@ -2324,6 +2324,7 @@ CREATE TABLE legal (
 );
 
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'legal_accept','Legal',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'already_logged_in','Already logged in',0,0);
 
 --
 -- Table structure for certificate with gradebook

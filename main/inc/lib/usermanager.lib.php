@@ -162,6 +162,7 @@ class UserManager
 				$res = $res && self::update_extra_field_value($return, $fname, $fvalue);
 			}
 		}
+    self::update_extra_field_value($return, 'already_logged_in', 'false');
 		return $return;
 	}
 

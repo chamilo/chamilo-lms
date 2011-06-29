@@ -303,7 +303,15 @@ class GradeBookResult
         //$docx->addTable($data, $params);
         $docx->addList($values, $params);
         //$docx->addFooter('', $paramsHeader);
-        $docx->createDocx($filepath);
+        $paramsPage = array(
+        //    'titlePage' => 1,
+            'orient' => 'landscape',
+        //    'top' => 4000,
+        //    'bottom' => 4000,
+        //    'right' => 4000,
+        //    'left' => 4000
+        );
+        $docx->createDocx($filepath,$paramsPage);
         //output the results
         $data = file_get_contents($filepath.'.docx');
         $len = strlen($data);

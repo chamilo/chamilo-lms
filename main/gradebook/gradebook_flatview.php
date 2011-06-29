@@ -236,6 +236,11 @@ if (!empty($_POST['export_report']) && $_POST['export_report'] == 'export_report
 				$export->exportCompleteReportXLS($printable_data);
 				exit;
 				break;
+			case 'doc':
+				$export = new GradeBookResult();
+				$export->exportCompleteReportDOC($printable_data);
+                exit;
+				break;
 			case 'csv':
 			default:
 				$export = new GradeBookResult();

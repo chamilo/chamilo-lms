@@ -270,7 +270,53 @@ class GradeBookResult
 		$workbook->close();
 		return true;
 	}
+	/**
+	 * Exports the complete report as a DOCX file
+	 * @return	boolean		False on error
+	 */
+	public function exportCompleteReportDOC($data) {
+        global $_course;
+        $filename = 'gb_results_'.$_course['code'].'_'.gmdate('YmdGis');
+        $filepath = api_get_path(SYS_ARCHIVE_PATH).$filename;
+        //build the results
+        $inc = api_get_path(LIBRARY_PATH).'phpdocx/classes/CreateDocx.inc';
+        require_once api_get_path(LIBRARY_PATH).'phpdocx/classes/CreateDocx.inc';
+        $docx = new CreateDocx();
+        $paramsHeader = array(
+            'font' => 'Courrier',
+            'jc' => 'left',
+            'textWrap' => 5,
+        );
+        $docx->addHeader(get_lang('FlatView'), $paramsHeader);
+        $params = array(
+            'font' => 'Courrier',
+            'border' => 'single',
+            'border_sz' => 20
+        );
+        $lines = 0;
+        $values[] = implode("\t",$data[0]);
+        foreach ($data[1] as $line) {
+            $values[] = implode("\t",$line);
+            $lines++;
+        }
+        //$data = array();
+        //$docx->addTable($data, $params);
+        $docx->addList($values, $params);
+        //$docx->addFooter('', $paramsHeader);
+        $docx->createDocx($filepath);
+        //output the results
+        $data = file_get_contents($filepath.'.docx');
+        $len = strlen($data);
+        //header("Content-type: application/vnd.ms-word");
+        header('Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        //header('Content-Type: application/force-download');
+        header('Content-length: '.$len);
+        header("Content-Disposition: attachment; filename=\"$filename.docx\"");
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0,pre-check=0');
+        header('Pragma: public');
+        echo $data;
+        return true;
+    }
 }
-
 endif;
-?>

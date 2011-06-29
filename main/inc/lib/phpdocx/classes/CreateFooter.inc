@@ -121,6 +121,7 @@ class CreateFooter extends CreateElement
     protected function generateFTR()
     {
         $this->_xml = '__GENERATEFTR____GENERATEIMGFTR__';
+        $this->_xml = '';
     }
 
     /**

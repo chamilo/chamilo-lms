@@ -129,12 +129,24 @@ The course id is stored in $_cid session variable.
 */
 
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'conditionallogin.lib.php');
 
 // verified if exists the username and password in session current
 if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
 	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 	require_once (api_get_path(LIBRARY_PATH).'legal.lib.php');
 }
+//Conditional login
+if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login']['can_login']=== true){
+	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+  $uData = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
+  ConditionalLogin::check_conditions($uData);
+  $_user['user_id'] = $_SESSION['conditional_login']['uid'];
+  api_session_register('_user');
+  api_session_unregister('conditional_login');
+  $uidReset=true;
+  event_login();
+} 
 // parameters passed via GET
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
 $gidReq = isset($_GET["gidReq"]) ? Database::escape_string($_GET["gidReq"]) : '';
@@ -243,7 +255,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
     $result = Database::query($sql);
 
     if (Database::num_rows($result) > 0) {
-      $uData = Database::fetch_array($result);
+       $uData = Database::fetch_array($result);
 
       if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
         //the authentification of this user is managed by Chamilo itself
@@ -313,6 +325,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                   if (is_array($my_url_list) && count($my_url_list)>0 ){
                     // the user have the permissions to enter at this site
                     if (in_array($current_access_url_id, $my_url_list)) {
+                      ConditionalLogin::check_conditions($uData);
                       $_user['user_id'] = $uData['user_id'];
                       api_session_register('_user');
                       event_login();
@@ -331,6 +344,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                 } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want
                   //var_dump($current_access_url_id, $my_url_list); exit;
                   if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
+                    ConditionalLogin::check_conditions($uData);
                     $_user['user_id'] = $uData['user_id'];
                     api_session_register('_user');
                     event_login();
@@ -349,6 +363,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                   }
                 }
               } else {
+                ConditionalLogin::check_conditions($uData);
                 $_user['user_id'] = $uData['user_id'];
                 api_session_register('_user');
                 event_login();
@@ -774,8 +789,10 @@ if (isset($uidReset) && $uidReset) {	// session data refresh requested
 
             $is_platformAdmin        = (bool) (! is_null( $uData['is_admin']));
             $is_allowedCreateCourse  = (bool) (($uData ['status'] == 1) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == 4));
+            ConditionalLogin::check_conditions($uData);
 
             api_session_register('_user');
+            UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
         } else {
         	header('location:'.api_get_path(WEB_PATH));
             //exit("WARNING UNDEFINED UID !! ");

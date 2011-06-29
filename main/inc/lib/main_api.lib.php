@@ -2657,6 +2657,7 @@ function api_get_language_id($language) {
  **/
 function api_get_language_from_type($lang_type){
   global $_user;
+  global $_course;
   $toreturn = false;
   switch ($lang_type) {
   case 'platform_lang' : 
@@ -2665,16 +2666,16 @@ function api_get_language_from_type($lang_type){
       $toreturn = $temp_lang;
     break;
   case 'user_profil_lang' : 
-    if (isset($_user['language'])) 
+    if (isset($_user['language']) && !empty($_user['language']) ) 
       $toreturn = $_user['language'];
     break;
   case 'user_selected_lang' : 
-    if (isset($_SESSION['user_language_choice'])) 
+    if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice']) ) 
       $toreturn = ($_SESSION['user_language_choice']);
     break;
   case 'course_lang' : 
-    if ($_course['language']) 
-      $language_interface = $_course['language'];
+    if ($_course['language'] && !empty($_course['language']) )  
+      $toreturn = $_course['language'];
     break;
   default : 
     $toreturn = false;

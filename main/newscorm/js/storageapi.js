@@ -175,7 +175,7 @@ lms_storage_getAllUsers = function() {
 		type: "POST",
 		url: "storageapi.php",
 		data: {
-			action: "usersgetall",
+			action: "usersgetall"
 		},
 		success: function(data) {
 			result = eval(data);

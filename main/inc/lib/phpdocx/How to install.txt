@@ -1,0 +1,17 @@
+====PHPocX 2.2 by 2mdc.com====
+http://www.phpdocx.com/
+
+====Requisites====
+Phpdocx needs ZipArchive and XSLT on PHP5. If you are not sure if is installed in your server, contact with your Hosting provider.
+
+====How to Install====
+Use your favorite FTP client to connect to your server.
+
+- Create a folder anywhere called phpdocx (or other name) accessible from the web server.
+
+- Drag and drop all the documents inside the folder you created in your server.
+
+You don't need special permissions for Phpdocx. If you need to check if PHPDocX is working, point your web brownser to one of files of the folder Examples included.
+
+There are also several examples you could check on our blog
+http://www.phpdocx.com/blog-news

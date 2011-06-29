@@ -762,8 +762,6 @@ class CreateDocx
     public function addFooter($dat = '', $paramsFooter = '')
     {
         $footer = CreateFooter::getInstance();
-        $dat .= ' This document was created with free version of PHPdocx.
-                Pro version available.';
         $footer->createFooter($dat, $paramsFooter);
         $this->_wordFooterC .= (string) $footer;
         $this->generateOVERRIDE(
@@ -1295,8 +1293,6 @@ class CreateDocx
     public function fAddFooter($dat = '', $paramsFooter = '')
     {
         $footer = CreateFooter::getInstance();
-        $dat .= ' This document was created with free version of PHPdocx.
-                Pro version available.';
         $footer->createFooter($dat, $paramsFooter);
         $this->_wordFooterC .= (string) $footer;
         $this->generateOVERRIDE(

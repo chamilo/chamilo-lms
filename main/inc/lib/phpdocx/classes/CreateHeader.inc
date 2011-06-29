@@ -101,7 +101,8 @@ class CreateHeader extends CreateElement
      */
     protected function generateHDR()
     {
-        $this->_xml = '__GENERATEHDR____GENERATEHDRIMG__';
+        //$this->_xml = '__GENERATEHDR____GENERATEHDRIMG__';
+        $this->_xml = '__GENERATEHDR__';
     }
 
     /**
@@ -120,7 +121,8 @@ class CreateHeader extends CreateElement
         $text->createText($args[0], $args[1]);
         $this->generateHDR();
         $this->_xml = str_replace(
-            '__GENERATEHDR__', (string) $text . '__GENERATEHDR__',
+//            '__GENERATEHDR__', (string) $text . '__GENERATEHDR__',
+            '__GENERATEHDR__', (string) $text,
             $this->_xml
         );
     }

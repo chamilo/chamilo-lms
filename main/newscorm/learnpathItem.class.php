@@ -1656,6 +1656,10 @@ class learnpathItem {
     public function restart()
     {
 		if(self::debug>0){error_log('New LP - In learnpathItem::restart()',0);}
+      if ($this->type == 'sco') { //If this is a sco, chamilo can't update the time without explicit scorm call
+        $this->current_start_time = 0;
+        $this->curtrent_stop_time = 0; //Those 0 value have this effect
+      }
 		$this->save();
 		$allowed = $this->is_restart_allowed();
 		if($allowed === -1){

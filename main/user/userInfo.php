@@ -372,7 +372,7 @@ elseif ($displayMode == "viewContentEdit") {
                     }
                 } else {
                     if ($user_info_viewed['status'] == STUDENT) {
-                        echo "<td>", get_lang('Tutor'), "</td>\n";
+                        echo "<td>", get_lang('CourseAssistant'), "</td>\n";
                     } else {
                         echo "<td>", get_lang('CourseManager'), "</td>\n";
                     }

@@ -108,8 +108,10 @@ if (is_array($reports_template[$_REQUEST['type']])) {
 
 	// check number of result
 	$numberOfResult = multiquery_num_rows($result);
-	if ($numberOfResult == 0) 
-		die(get_lang('NoDataAvailable'));
+	if ($numberOfResult == 0) {
+		// This case should be taken care of by the display template itself, we should let the script run
+		//die(get_lang('NoDataAvailable'));
+	}
 } else {
 	die('<b>'.get_lang('ErrorWhileBuildingReport').'</b>');
 }

@@ -55,6 +55,8 @@ class learnpathItem {
 	public $title;
 	public $type; // this attribute can contain chapter|link|student_publication|module|quiz|document|forum|thread
 	public $view_id;
+  //var used if absolute session time mode is used
+  private $last_scorm_session_time =0;
 
 	const debug = 0; //logging param
     /**
@@ -1148,6 +1150,16 @@ class learnpathItem {
      */
     public function get_total_time() {
     	if (self::debug>0){error_log('New LP - In learnpathItem::get_total_time()',0);}
+
+        if ($this->type=='sco'){ //SCO HACK
+          if (api_get_setting('scorm_absolute_session_time') == 'true'){
+            if ($this->session_time > 0) {
+              return $this->session_time;
+            } else {
+              return $this->session_time + $this->total_time;
+            }
+          }
+        }
     	if ($this->current_start_time == 0){ //shouldn't be necessary thanks to the open() method
     		$this->current_start_time = time();
     	}
@@ -1690,8 +1702,9 @@ class learnpathItem {
     {
 		if(self::debug>0){error_log('New LP - In learnpathItem::restart()',0);}
        if ($this->type == 'sco') { //If this is a sco, chamilo can't update the time without explicit scorm call
-        $this->current_start_time = 0;
-        $this->curtrent_stop_time = 0; //Those 0 value have this effect
+         $this->current_start_time = 0;
+         $this->curtrent_stop_time = 0; //Those 0 value have this effect
+         $this->last_scorm_session_time = 0;
       }
 		$this->save();
     //SPECIAL KTM  : We reuse same attempt_id
@@ -2117,10 +2130,10 @@ class learnpathItem {
 					$sec = $res[3];
 					//getting total number of seconds spent
 		     		$total_sec = $hour*3600 + $min*60 + $sec;
-		     		$this->update_time($total_sec);
+		     		$this->scorm_update_time($total_sec);
 		     	}
      		}elseif($format == 'int'){
-     			$this->update_time($scorm_time);
+     			$this->scorm_update_time($scorm_time);
      		}
      	}
     }
@@ -2205,6 +2218,36 @@ class learnpathItem {
 		 		//}
 	 		}*/
     	}
+    }
+    /**
+     * Special scorm update time function. This function will update time directly into db for scorm objects
+     **/
+    public function scorm_update_time($total_sec=0){
+      //Step 1 : get actual total time stored in db
+   		$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+      $get_view_sql='SELECT total_time FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+      $result=Database::query($get_view_sql);
+      $row=Database::fetch_array($result);
+      if (!isset($row['total_time'])) {
+        $total_time = 0;
+      }
+      else { 
+        $total_time = $row['total_time'];
+      }
+      
+      //Step 2.1 : if normal mode total_time = total_time + total_sec
+      if (api_get_setting('scorm_cumulative_session_time') != 'false'){
+        $total_time +=$total_sec;
+        //$this->last_scorm_session_time = $total_sec;
+      }
+      //Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec 
+      else{
+        $total_time = $total_time - $this->last_scorm_session_time + $total_sec;
+        $this->last_scorm_session_time = $total_sec;
+      }
+      //Step 3 update db
+      $update_view_sql='UPDATE '.$item_view_table." SET total_time =$total_time".' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+      $result=Database::query($update_view_sql);
     }
     /**
      * Write objectives to DB. This method is separate from write_to_db() because otherwise
@@ -2484,7 +2527,20 @@ class learnpathItem {
 	     				}*/
 
 	     			}
-
+            
+            if ($this->type == 'sco'){ //IF scorm scorm_update_time has already updated total_tim in db
+			     	$sql = "UPDATE $item_view_table " .
+			     			" SET start_time = ".$this->get_current_start_time().", " . //FIXME CBLUE check current sart time
+			     			" score = ".$this->get_score().", " .
+			     			$my_status.
+			     			" max_score = '".$this->get_max()."'," .
+			     			" suspend_data = '".Database::escape_string($this->current_data)."'," .
+			     			//" max_time_allowed = '".$this->get_max_time_allowed()."'," .
+			     			" lesson_location = '".$this->lesson_location."' " .
+			     			"WHERE lp_item_id = ".$this->db_id." " .
+			     			"AND lp_view_id = ".$this->view_id." " .
+			     			"AND view_count = ".$this->attempt_id;
+            } else {
 			     	$sql = "UPDATE $item_view_table " .
 			     			"SET " .$total_time.
 			     			" start_time = ".$this->get_current_start_time().", " .
@@ -2497,6 +2553,7 @@ class learnpathItem {
 			     			"WHERE lp_item_id = ".$this->db_id." " .
 			     			"AND lp_view_id = ".$this->view_id." " .
 			     			"AND view_count = ".$this->attempt_id;
+            }
 
 			     			$this->current_start_time = time();
 	     		}

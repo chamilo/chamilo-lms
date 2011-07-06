@@ -1322,4 +1322,6 @@ $ChooseRelationType = 'Choisir un type de relation';
 $UserListInGroup = 'Utilisateurs inscrits au groupe';
 $ActivateSendEventByMailTitle='Activer les envois d\'évènements par email';
 $ActivateSendEventByMailComment = '';
+$ScormCumulativeSessionTimeTitle = 'La valeur session_time est incrémentée de manière cumulative dans les contenus scorm';
+$ScormCumulativeSessionTimeComment = ''
 ?>

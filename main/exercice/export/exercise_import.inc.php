@@ -192,7 +192,7 @@ function parse_file($exercisePath, $file, $questionFile) {
 	}
 
 	//parse XML question file
-	$data = str_replace(array('<p>', '</p>'), '', $data);
+	$data = str_replace(array('<p>', '</p>','<front>','</front>'), '', $data);
 	
 	//used global variable start values declaration :
 

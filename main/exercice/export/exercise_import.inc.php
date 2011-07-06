@@ -1,17 +1,19 @@
 <?php
-// $Id:  $
-if (count(get_included_files()) == 1)
-	die('---');
 /**
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
  *
  * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
  *
- * @package dokeos.exercise
+ * @package chamilo.exercise
  *
  * @author claro team <cvs@claroline.net>
  * @author Guillaume Lederer <guillaume@claroline.net>
  */
+/**
+ * Security check
+ */
+if (count(get_included_files()) == 1)
+	die('---');
 
 /**
  * function to create a temporary directory (SAME AS IN MODULE ADMIN)

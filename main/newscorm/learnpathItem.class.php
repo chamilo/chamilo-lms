@@ -669,10 +669,10 @@ class learnpathItem {
               return false;
             }else{
               $row = Database::fetch_array($res);
-              $this->seriousgame_mode = $row['seriousgame_mode'];
+              $this->seriousgame_mode = isset($row['seriousgame_mode'])? $row['serioudsgame_mode'] : 0;
             }
           }else{
-            $this->seriousgame_mode = 0; //KTM mode is always off by default
+            $this->seriousgame_mode = 0; //SeriousGame mode is always off by default
           }
         }
       if(self::debug>2){error_log('New LP - End of learnpathItem::get_seriousgame_mode() - Returned '.$this->seriousgame_mode,0);}
@@ -1151,15 +1151,6 @@ class learnpathItem {
     public function get_total_time() {
     	if (self::debug>0){error_log('New LP - In learnpathItem::get_total_time()',0);}
 
-        if ($this->type=='sco'){ //SCO HACK
-          if (api_get_setting('scorm_absolute_session_time') == 'true'){
-            if ($this->session_time > 0) {
-              return $this->session_time;
-            } else {
-              return $this->session_time + $this->total_time;
-            }
-          }
-        }
     	if ($this->current_start_time == 0){ //shouldn't be necessary thanks to the open() method
     		$this->current_start_time = time();
     	}
@@ -1233,7 +1224,7 @@ class learnpathItem {
 			//if status is not attempted or incomplete, authorize retaking (of the same) anyway. Otherwise:
 			if($mystatus != $this->possible_status[0] AND $mystatus != $this->possible_status[1]){
 				$restart = -1;
-			}else{
+			}else{ //status incompleted or not attempted
 				$restart = 0;
 			}
 		}else{
@@ -1701,13 +1692,13 @@ class learnpathItem {
     public function restart()
     {
 		if(self::debug>0){error_log('New LP - In learnpathItem::restart()',0);}
-       if ($this->type == 'sco') { //If this is a sco, chamilo can't update the time without explicit scorm call
-         $this->current_start_time = 0;
-         $this->curtrent_stop_time = 0; //Those 0 value have this effect
-         $this->last_scorm_session_time = 0;
+      if ($this->type == 'sco') { //If this is a sco, chamilo can't update the time without explicit scorm call
+        $this->current_start_time = 0;
+        $this->current_stop_time = 0; //Those 0 value have this effect
+        $this->last_scorm_session_time = 0;
       }
 		$this->save();
-    //SPECIAL KTM  : We reuse same attempt_id
+    //For serious game  : We reuse same attempt_id
     if ($this->get_seriousgame_mode() == 1 && $this->type == 'sco') {
 			$this->current_start_time = 0;
 			$this->current_stop_time = 0;
@@ -1740,7 +1731,9 @@ class learnpathItem {
 			$this->current_stop_time = 0;
 			$this->current_data = '';
 			$this->status = $this->possible_status[0];
-            $this->interactions_count = $this->get_interactions_count(true);
+      $this->interactions_count = $this->get_interactions_count(true);
+      if ($this->type == 'sco') 
+        $this->scorm_init_time();
 		}
     	return true;
     }
@@ -2225,7 +2218,7 @@ class learnpathItem {
     public function scorm_update_time($total_sec=0){
       //Step 1 : get actual total time stored in db
    		$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-      $get_view_sql='SELECT total_time FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+      $get_view_sql='SELECT total_time, status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
       $result=Database::query($get_view_sql);
       $row=Database::fetch_array($result);
       if (!isset($row['total_time'])) {
@@ -2245,8 +2238,19 @@ class learnpathItem {
         $total_time = $total_time - $this->last_scorm_session_time + $total_sec;
         $this->last_scorm_session_time = $total_sec;
       }
-      //Step 3 update db
-      $update_view_sql='UPDATE '.$item_view_table." SET total_time =$total_time".' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+      //Step 3 update db only if status != completed, passed, browsed or seriousgamemode not activated
+      $case_completed=array('completed','passed','browsed'); //TODO COMPLETE
+      if ($this->seriousgame_mode!=1 || !in_array($row['status'], $case_completed)){
+        $update_view_sql='UPDATE '.$item_view_table." SET total_time =$total_time".' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+        $result=Database::query($update_view_sql);
+      }
+    }
+    /**
+    * Set the total_time to 0 into db
+    **/
+    public function scorm_init_time(){
+      $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+      $update_view_sql='UPDATE '.$item_view_table.' SET total_time = 0, start_time='.time().' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
       $result=Database::query($update_view_sql);
     }
     /**
@@ -2530,7 +2534,7 @@ class learnpathItem {
             
             if ($this->type == 'sco'){ //IF scorm scorm_update_time has already updated total_tim in db
 			     	$sql = "UPDATE $item_view_table " .
-			     			" SET start_time = ".$this->get_current_start_time().", " . //FIXME CBLUE check current sart time
+			     			" SET ".//start_time = ".$this->get_current_start_time().", " . //scorm_init_time does it
 			     			" score = ".$this->get_score().", " .
 			     			$my_status.
 			     			" max_score = '".$this->get_max()."'," .

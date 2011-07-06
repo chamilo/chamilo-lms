@@ -341,23 +341,28 @@ if (is_array($flat_list)) {
 			}
 
 
-			/*  MULTIPLE ATTEMPTS    */
-			if ($current_session == $details['lp_session']) {
-				if($details['lp_prevent_reinit']==1){
-					$dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_reinit&lp_id='.$id.'">' .
-							'<img src="../img/kaboodleloop_gray.gif" border="0" alt="Allow reinit" title="'.get_lang("AllowMultipleAttempts").'"/>' .
-							'</a>&nbsp;';
-				}else{
-					$dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_reinit&lp_id='.$id.'">' .
-							'<img src="../img/kaboodleloop.gif" border="0" alt="Prevent reinit" title="'.get_lang("PreventMultipleAttempts").'"/>' .
-							'</a>&nbsp;';
-				}
+			/*  MULTIPLE ATTEMPTS OR SERIOUS GAME MODE */
+
+      if ($current_session == $details['lp_session']) {
+        if ($details['seriousgame_mode'] == 1 && $details['lp_prevent_reinit'] == 1) { //seriousgame mode | next = single
+          dir('serious');
+          $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .
+            '<img src="../img/gamepad.gif" border="0" alt="Prevent reinit" title="'.get_lang("PreventMultipleAttempts").'"/>' .
+            '</a>&nbsp;';
+        }
+        if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 1) { //single mode | next = multiple
+          $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .
+            '<img src="../img/kaboodleloop_gray.gif" border="0" alt="Allow reinit" title="'.get_lang("AllowMultipleAttempts").'"/>' .
+            '</a>&nbsp;';
+        }
+        if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 0) { //multiple mode | next = seriousgame
+          $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .
+            '<img src="../img/kaboodleloop.gif" border="0" alt="Serious game mode" title="'.get_lang("SeriousGameMode").'"/>' .
+            '</a>&nbsp;';
+        }
 			} else {
-					$dsp_reinit = '<img src="../img/kaboodleloop_gray.gif" border="0" alt="Allow reinit" title="'.get_lang("AllowMultipleAttempts").'"/>';
+					$dsp_reinit .= '<img src="../img/kaboodleloop_gray.gif" border="0" alt="" title="'.get_lang("AllowMultipleAttempts").'"/>';
 			}
-
-
-
 
 			/* FUll screen VIEW */
 

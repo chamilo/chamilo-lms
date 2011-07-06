@@ -47,6 +47,7 @@ class learnpathItem {
 	public $prereqs = array();
 	public $previous;
 	public $prevent_reinit = 1; // 0 =  multiple attempts   1 = one attempt
+	public $seriousgame_mode;
 	public $ref;
 	public $save_on_close = true;
     public $search_did = NULL;
@@ -101,6 +102,7 @@ class learnpathItem {
     	}
 		$this->save_on_close = true;
 		$this->db_id = $id;
+    $this->seriousgame_mode = $this->get_seriousgame_mode();
 
         // get search_did
         if (api_get_setting('search_enabled')=='true') {
@@ -644,6 +646,37 @@ class learnpathItem {
 		if(self::debug>2){error_log('New LP - End of learnpathItem::get_prevent_reinit() - Returned '.$this->prevent_reinit,0);}
     	return $this->prevent_reinit;
     }
+    /**
+     * Returns 1 if seriousgame_mode is activated, 0 otherwise
+     *
+     * @return int (0 or 1)
+     * @author ndiechburg <noel@cblue.be>
+     **/
+    public function get_seriousgame_mode()
+    {
+      if(self::debug>2){error_log('New LP - In learnpathItem::get_seriousgame_mode()',0);}
+        if(!isset($this->seriousgame_mode)){
+          if(!empty($this->lp_id)){
+            $db = Database::get_course_table(TABLE_LP_MAIN);
+            $sql = "SELECT * FROM $db WHERE id = ".$this->lp_id;
+            $res = @Database::query($sql);
+            if(Database::num_rows($res)<1)
+            {
+              $this->error = "Could not find parent learnpath in learnpath table";
+              if(self::debug>2){error_log('New LP - End of learnpathItem::get_seriousgame_mode() - Returning false',0);}
+              return false;
+            }else{
+              $row = Database::fetch_array($res);
+              $this->seriousgame_mode = $row['seriousgame_mode'];
+            }
+          }else{
+            $this->seriousgame_mode = 0; //KTM mode is always off by default
+          }
+        }
+      if(self::debug>2){error_log('New LP - End of learnpathItem::get_seriousgame_mode() - Returned '.$this->seriousgame_mode,0);}
+        return $this->seriousgame_mode;
+    }
+
     /**
      * Gets the item's reference column
      * @return string	The item's reference field (generally used for SCORM identifiers)
@@ -1656,17 +1689,23 @@ class learnpathItem {
     public function restart()
     {
 		if(self::debug>0){error_log('New LP - In learnpathItem::restart()',0);}
-      if ($this->type == 'sco') { //If this is a sco, chamilo can't update the time without explicit scorm call
+       if ($this->type == 'sco') { //If this is a sco, chamilo can't update the time without explicit scorm call
         $this->current_start_time = 0;
         $this->curtrent_stop_time = 0; //Those 0 value have this effect
       }
 		$this->save();
+    //SPECIAL KTM  : We reuse same attempt_id
+    if ($this->get_seriousgame_mode() == 1 && $this->type == 'sco') {
+			$this->current_start_time = 0;
+			$this->current_stop_time = 0;
+      return true;
+    }
 		$allowed = $this->is_restart_allowed();
 		if($allowed === -1){
 			//nothing allowed, do nothing
 		}elseif($allowed === 1){
 			//restart as new attempt is allowed, record a new attempt
-	    	$this->attempt_id = $this->attempt_id + 1; //simply reuse the previous attempt_id
+      $this->attempt_id = $this->attempt_id + 1; //simply reuse the previous attempt_id
 			$this->current_score = 0;
 			$this->current_start_time = 0;
 			$this->current_stop_time = 0;
@@ -2255,7 +2294,7 @@ class learnpathItem {
    			$save=true;
    		}
 
-   		if (($save===false && $this->type == 'sco') ||(($this->type == 'sco') && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse')))
+   		if ((($save===false && $this->type == 'sco') ||(($this->type == 'sco') && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse'))) && ($this->seriousgame_mode!=1 && $this->type == 'sco'))
    		{
    			//this info shouldn't be saved as the credit or lesson mode info prevent it
    			if(self::debug>1){error_log('New LP - In learnpathItem::write_to_db() - credit('.$credit.') or lesson_mode('.$mode.') prevent recording!',0);}
@@ -2379,7 +2418,10 @@ class learnpathItem {
 	     				$case_completed=array('completed','passed','browsed');
 
 	     				//is not multiple attempts
-	     				if ($this->get_prevent_reinit()==1) {
+              if ($this->seriousgame_mode==1 && $this->type=='sco') {
+                $total_time =" total_time = total_time +".$this->get_total_time().", ";
+                $my_status = " status = '".$this->get_status(false)."' ,";
+              } elseif ($this->get_prevent_reinit()==1) {
 			  		     	// process of status verified into data base
 
 		     				$sql_verified='SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';

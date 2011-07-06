@@ -1208,7 +1208,8 @@ function update_Db_course($courseDbName, $language = null)
 		"author 		varchar(255)    not null default '', " . //stores the theme of the LP
 		"session_id  	int	unsigned not null  default 0, " . //the session_id
 		"prerequisite  	int	unsigned not null  default 0," . // pre requisite for next lp
-    "hide_toc_frame tinyint NOT NULL DEFAULT 0".
+    "hide_toc_frame tinyint NOT NULL DEFAULT 0,".
+    "seriousgame_mode tinyint NOT NULL DEFAULT 0".
 		")" . $charset_clause;
 	if(!Database::query($sql))
 	{

@@ -669,7 +669,7 @@ class learnpathItem {
               return false;
             }else{
               $row = Database::fetch_array($res);
-              $this->seriousgame_mode = isset($row['seriousgame_mode'])? $row['serioudsgame_mode'] : 0;
+              $this->seriousgame_mode = isset($row['seriousgame_mode'])? $row['seriousgame_mode'] : 0;
             }
           }else{
             $this->seriousgame_mode = 0; //SeriousGame mode is always off by default

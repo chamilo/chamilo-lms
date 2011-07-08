@@ -51,12 +51,16 @@ class Tracking {
             $i_timestamp_login_date = strtotime($s_login_date);
             $i_timestamp_logout_date = strtotime($s_logout_date);
 
-            if($i_timestamp_logout_date>0)
-            {
-                $nb_seconds += ($i_timestamp_logout_date - $i_timestamp_login_date);
-            }
-            else
-            { // there are wrong datas in db, then we can't give a wrong time
+            if ($i_timestamp_logout_date > 0) {
+                // @TODO YW 20110708: for some reason the result here is often 
+                // negative, resulting in a negative time total. Considering the
+                // logout_date is > 0, this can only mean that the database 
+                // contains items where the login_date is higher (=later) than 
+                // the logout date for a specific connexion. This has to be 
+                // analyzed and fixed. Also see the get_time_spent_on_the_course
+                // for SQL summing.
+                $nb_seconds += abs($i_timestamp_logout_date - $i_timestamp_login_date);
+            } else { // there are wrong datas in db, then we can't give a wrong time
                 $wrong_logout_dates = true;
             }
 

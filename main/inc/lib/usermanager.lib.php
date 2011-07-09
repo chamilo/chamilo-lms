@@ -1726,7 +1726,7 @@ class UserManager
 	 * @return array  list of statuses [session_category][session_id]
 	 * @todo ensure multiple access urls are managed correctly
 	 */
-	public static function get_sessions_by_category ($user_id, $fill_first = false, $is_time_over = false) {
+	public static function get_sessions_by_category ($user_id, $fill_first = false, $is_time_over = false, $sort_by_session_name = false) {
 		// Database Table Definitions
 		$tbl_session_user			= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_session				= Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -1735,22 +1735,10 @@ class UserManager
 		if ($user_id != strval(intval($user_id))) return array();
 
 		$categories = array();
+        $names = array();
 		if ($fill_first) {
 			$categories[0] = array();
 		}
-		/*
-		//we filter the courses from the URL
-		$join_access_url=$where_access_url='';
-		global $_configuration;
-		if ($_configuration['multiple_access_urls']) {
-			$access_url_id = api_get_current_access_url_id();
-			if($access_url_id!=-1) {
-				$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-				$join_access_url= "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.course_code= course.code";
-				$where_access_url=" AND access_url_id = $access_url_id ";
-			}
-		}
-		*/
 		// get the list of sessions where the user is subscribed as student
 
 		$condition_date_end = "";
@@ -1760,53 +1748,66 @@ class UserManager
 			$condition_date_end = " AND (date_end >= CURDATE() OR date_end = '0000-00-00') ";
 		}
 
-		$sessions_sql = "SELECT DISTINCT id, session_category_id
-								FROM $tbl_session_user, $tbl_session
-								WHERE id_session=id AND id_user=$user_id AND relation_type<>".SESSION_RELATION_TYPE_RRHH." $condition_date_end
-								ORDER BY session_category_id, date_start, date_end";
+		$sessions_sql = "SELECT DISTINCT id, session_category_id, session.name "
+                        ." FROM $tbl_session_user, $tbl_session "
+                        ." WHERE id_session=id AND id_user=$user_id " 
+                        ." AND relation_type<>".SESSION_RELATION_TYPE_RRHH." $condition_date_end "
+                        ." ORDER BY session_category_id, date_start, date_end";
+        $result = Database::query($sessions_sql);
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result)) {
+                $categories[$row['session_category_id']][] = $row['id'];
+                $names[$row['id']] = $row['name'];
+            }
+        }
 
-		$result = Database::query($sessions_sql);
-		if (Database::num_rows($result) > 0) {
-			while ($row = Database::fetch_array($result)) {
-				$categories[$row['session_category_id']][] = $row['id'];
-			}
-		}
+		// get the list of sessions where the user is subscribed as coach in a 
+        // course, from table session_rel_course_rel_user
 
-		// get the list of sessions where the user is subscribed as coach in a course $tbl_session_course_user
-		/*$sessions_sql = "SELECT DISTINCT id, session_category_id
-								FROM $tbl_session as session
-								INNER JOIN $tbl_session_course as session_rel_course
-									ON session_rel_course.id_session = session.id
-									AND session_rel_course.id_coach = $user_id
-								ORDER BY session_category_id, date_start, date_end";*/
+		$sessions_sql = "SELECT DISTINCT id, session_category_id, session.name "
+                        ." FROM $tbl_session as session "
+                        ." INNER JOIN $tbl_session_course_user as session_rel_course_user "
+                          ." ON session_rel_course_user.id_session = session.id "
+                          ." AND session_rel_course_user.id_user = $user_id "
+                          ." AND session_rel_course_user.status = 2	$condition_date_end "
+                        ." ORDER BY session_category_id, date_start, date_end";
 
-		$sessions_sql = "SELECT DISTINCT id, session_category_id
-								FROM $tbl_session as session
-								INNER JOIN $tbl_session_course_user as session_rel_course_user
-									ON session_rel_course_user.id_session = session.id
-									AND session_rel_course_user.id_user = $user_id
-									AND session_rel_course_user.status = 2	$condition_date_end
-								ORDER BY session_category_id, date_start, date_end";
+        $result = Database::query($sessions_sql);
+        if (Database::num_rows($result)>0) {
+            while ($row = Database::fetch_array($result)) {
+                $categories[$row['session_category_id']][] = $row['id'];
+                $names[$row['id']] = $row['name'];
+            }
+        }
 
-		$result = Database::query($sessions_sql);
-		if (Database::num_rows($result)>0) {
-			while ($row = Database::fetch_array($result)) {
-				$categories[$row['session_category_id']][] = $row['id'];
-			}
-		}
-
-		// get the list of sessions where the user is subscribed as coach
-		$sessions_sql = "SELECT DISTINCT id, session_category_id
-								FROM $tbl_session as session
-								WHERE session.id_coach = $user_id $condition_date_end
-								ORDER BY session_category_id, date_start, date_end";
+        // get the list of sessions where the user is subscribed as session coach
+        $sessions_sql = "SELECT DISTINCT id, session_category_id, session.name "
+                        ." FROM $tbl_session as session "
+                        ." WHERE session.id_coach = $user_id $condition_date_end "
+                        ." ORDER BY session_category_id, date_start, date_end";
 
 		$result = Database::query($sessions_sql);
 		if (Database::num_rows($result)>0) {
 			while ($row = Database::fetch_array($result)) {
 				$categories[$row['session_category_id']][] = $row['id'];
+                $names[$row['id']] = $row['name'];
 			}
 		}
+        if ($sort_by_session_name) {
+            // reorder sessions alphabetically inside categories
+            foreach ($categories as $cat_id => $category) {
+                // inside each category, prepare a new empty array to sort sessions
+                $new_cat = array();
+                if (is_array($category)) {
+            	    foreach ($category as $session) {
+            	       $new_cat[$names[$session]] = $session;
+            	    }
+                }
+                uksort($new_cat, 'strnatcmp');
+                
+                $categories[$cat_id] = $new_cat;
+            }
+        }
 		return $categories;
 	}
 

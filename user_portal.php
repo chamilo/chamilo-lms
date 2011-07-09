@@ -240,9 +240,9 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
     // for the current user.
 
     if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-        $courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, true);
+        $courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, true, true);
     } else {
-        $courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true);
+        $courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, null, true);
     }
     foreach ($courses_tree as $cat => $sessions) {
         $courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);
@@ -363,7 +363,8 @@ if (is_array($courses_tree)) {
     foreach ($courses_tree as $key => $category) {
         if ($key == 0) {
             // Sessions and courses that are not in a session category.
-            if (!isset($_GET['history'])) { // Check if it's not history trainnign session list.
+            if (!isset($_GET['history'])) { 
+               // If we're not in the history view...
                 CourseManager :: display_special_courses(api_get_user_id());
                 CourseManager :: display_courses(api_get_user_id());
             }

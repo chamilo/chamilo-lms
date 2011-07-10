@@ -204,4 +204,12 @@ $PleaseFillSurvey = "Prosim, izpolnite vprašalnik";
 $ReportingOverview = "Poročila - pregled";
 $ThereAreNotQuestionsForthisSurvey = "V tem vprašalniku trenutno ni vprašanj";
 $Multipleresponse = "Večkraten odgovor";
+$ErrorSurveyTypeUnknown = "Neznan tip vprašalnika";
+$SurveyUndetermined = "Nedefiniran vprašalnik";
+$QuestionComment = "Komentar vprašanja";
+$UnknowQuestion = "Neznano vprašanje";
+$Lastname = "Priimek";
+$Firstname = "Ime";
+$DeleteSurveyGroup = "Odstrani skupino vprašalnika";
+$ErrorOccurred = "Pojavila se je napaka.";
 ?>

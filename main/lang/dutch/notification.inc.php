@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_new_item = "nieuw item toegevoegd";
 $lang_title_notification = "Sinds uw vorig bezoek";
 $lang_update_agenda = "bestaand agenda-item aangepast";
@@ -30,5 +33,4 @@ $SurveyAdded = "Enquête toegevoegd";
 $NotebookAdded = "Notitie toegevoegd";
 $NotebookUpdated = "Notitie aangepast";
 $NotebookDeleted = "Notitie verwijderd";
-$LearnpathUpdated = "Leerpad bijgewerkt";
 ?>

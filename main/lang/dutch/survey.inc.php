@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$PublishSurvey = "Publiceer enquete";
+$CompareQuestions = "Vergelijk vragen";
+$InformationUpdated = "Informatie geupdate";
 $SurveyTitle = "Titel enquete";
 $SurveyIntroduction = "Inleiding enquete";
 $CreateNewSurvey = "Nieuwe enquete aanmaken";

@@ -23,8 +23,8 @@ $langAdminPass = "Mot de passe de l'administrateur (<font color=\"red\">en chois
 $langEducationManager = "Responsable du contenu";
 $langCampusName = "Nom du campus";
 $langDBSettingIntro = "Le script d'installation créera les bases de données principales de Chamilo. Veuillez prendre en compte que Chamilo devra créer plusieurs bases de données. Si vous êtes restreint à une seule base de données par votre hébergeur, Chamilo ne fonctionnera pas, à moins que vous ne choisissiez l'option \"Une seule base de données\".";
-$langStep1 = "Bienvenue dans l'assistant de création de questions à choix multiples";
-$langStep2 = "Veuillez ajouter/modifier le titre et la description de l'exercice";
+$langStep1 = "Étape 1 sur 6";
+$langStep2 = "Étape 2 sur 6";
 $langStep3 = "Étape 3 sur 6";
 $langStep4 = "Étape 4 sur 6";
 $langStep5 = "Étape 5 sur 6";

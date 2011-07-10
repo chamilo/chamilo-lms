@@ -1120,4 +1120,9 @@ $SeeInvitation = "Ver solicitud";
 $YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX = "Usted ha recibido esta notificación porque estás suscrito o participa en ella, para cambiar sus preferencias de notificación por favor haga click aquí: %s";
 $Replies = "Respuestas";
 $Reply = "Respuesta";
+$Broken = "Roto";
+$CheckURL = "Verificar enlace";
+$NoItem = "Todavía ningun elemento";
+$LoadExtraData = "Cargar los datos de campos usuario adicionales (estos tienen que ser marcados como 'Filtro' para que aparezcan).";
+$CourseAssistant = "Asistente";
 ?>

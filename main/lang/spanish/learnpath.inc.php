@@ -259,4 +259,5 @@ $ViewModeEmbedFrame = "Vista actual: incrustado externo. Solo para uso desde otr
 $LPNotVisibleToStudent = "Los estudiantes no pueden ver esta lección";
 $EditCurrentModule = "Editar módulo actual";
 $SearchFeatureTerms = "Términos para la búsqueda";
+$PrerequisiteDeletedError = "Error: el elemento definido como prerequisito ha sido eliminado.";
 ?>

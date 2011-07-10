@@ -411,4 +411,5 @@ $TotalScoreTooBig = "Le score total est trop grand";
 $InvalidQuestionType = "Type de question non valide";
 $ShowScoreAndRightAnswer = "Mode auto-évaluation: afficher le score et les réponses attendues sur la page finale";
 $DoNotShowScoreNorRightAnswer = "Mode examen: ne rien divulguer (ni score, ni réponses)";
+$LoadUsersExtraData = "Charger les données de profil des utilisateurs";
 ?>

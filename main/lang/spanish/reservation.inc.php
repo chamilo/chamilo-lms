@@ -177,4 +177,17 @@ $EveryMonth = "Cada mes";
 $ReservationForDenied = "Reserva rechazada";
 $BookingPeriodTooSmall = "El periodo de reserva es demasiado corto.";
 $BookingPeriodTooBig = "El periodo de reserva es demasiado largo.";
+$PermissionsStored = "Permiso registrado";
+$PermissionGranted = "Permiso otorgado";
+$PermissionRevoked = "Permiso quitado";
+$RoleGranted = "Rol otorgado";
+$RoleRevoked = "Rol eliminado";
+$ErrorPleaseGiveRoleName = "Por favor dele un nombre a este rol";
+$RoleDeleted = "Rol eliminado";
+$AddRole = "Añadir rol";
+$RoleComment = "El rol es el elemento que le permitirá asignar permisos a personas como a grupos de personas.";
+$DefaultRole = "Rol por omisión";
+$PermissionsOfRole = "Permisos del rol";
+$IsPlatformRoleNotEditable = "El rol de plataforma no es editable?";
+$UserPermissions = "Permisos de usuario";
 ?>

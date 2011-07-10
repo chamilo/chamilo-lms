@@ -144,4 +144,8 @@ $PreviewImage = "Predogled slike";
 $UpdateImage = "Ažuriraj sliko";
 $EnableTimeLimits = "Omogoči časovno omejitev";
 $RemoveSearchResults = "Počisti rezultate iskanja";
+$InsertQualificationCorrespondingToMaxScore = "Vstavi kvalifikacije v korelaciji z največjim rezultatom";
+$ThreadMoved = "Nit je bila prestavljena";
+$MigrateForum = "Migriraj forum";
+$YouWillBeNotified = "Obveščanje je aktivirano";
 ?>

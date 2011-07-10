@@ -1463,4 +1463,5 @@ $ChangesInLastVersion = "Cambios en la última versión";
 $ContributorsList = "Lista de contribuidores";
 $SecurityGuide = "Guía de seguridad";
 $OptimizationGuide = "Guía de optimización";
+$FreeBusyCalendar = "Calendario libre/ocupado";
 ?>

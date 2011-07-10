@@ -259,4 +259,5 @@ $ViewModeEmbedFrame = "Trenuten način pogleda: zunanji vključen. Uporabite zgo
 $LPNotVisibleToStudent = "Tečajniki ne vidijo te učne poti";
 $EditCurrentModule = "Uredi trenuten modul";
 $SearchFeatureTerms = "Izrazi za iskalnik";
+$PrerequisiteDeletedError = "Napaka: element, definiran kot predzahteva, je bil odstranjen.";
 ?>

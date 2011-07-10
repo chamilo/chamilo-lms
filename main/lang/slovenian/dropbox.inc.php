@@ -125,4 +125,7 @@ $ErrorNoFilesInFolder = "Ta mapa je prazna";
 $AddComment = "Dodaj komentar";
 $SentCatgoryDeleted = "Mapa je bila odstranjena";
 $ReceivedCatgoryDeleted = "Mapa je bila odstranjena";
+$InvalideUserDetected = "Ugotovljen neustrezen uporabnik.";
+$InvalideGroupDetected = "Ugotovljena neustrezna skupina.";
+$OverviewOfFilesInThisZip = "Predogled datotek v tej ZIP datoteki";
 ?>

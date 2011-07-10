@@ -1120,4 +1120,6 @@ $Reply = "Reply";
 $Broken = "Broken";
 $CheckURL = "Check link";
 $NoItem = "No item yet";
+$LoadExtraData = "Load extra user fields data (have to be marked as 'Filter' to appear).";
+$CourseAssistant = "Assistant";
 ?>

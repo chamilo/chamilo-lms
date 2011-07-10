@@ -191,4 +191,5 @@ $BestScoredPages = "Páginas con mejor puntuación";
 $MProgressPages = "Páginas con mayor progreso";
 $MostDiscussUsers = "Usuarios más discutidos";
 $RandomPage = "Página aleatoria";
+$ProtectedPages = "Páginas protegidas";
 ?>

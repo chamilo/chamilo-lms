@@ -259,4 +259,5 @@ $ViewModeEmbedFrame = "Vue actuelle: embarquée. Uniquement pour inclusion sur s
 $LPNotVisibleToStudent = "Les apprenants ne voient pas ce parcours";
 $EditCurrentModule = "Éditer le chapitre actuel";
 $SearchFeatureTerms = "Termes pour la fonctionnalité de recherche";
+$PrerequisiteDeletedError = "Erreur: l'élément défini comme un pré-requis a été effacé.";
 ?>

@@ -296,4 +296,6 @@ $ExercisesInTimeProgressChart = "Napredek v rezultatih vaj/testov preko časa pr
 $AverageIsCalculatedBasedInAllAttempts = "Povprečje je izračunano glede na vse poskuse vseh testov";
 $AverageIsCalculatedBasedInTheLatestAttempts = "Povprečje je izračunano glede na zadnje poskuse";
 $LatestAttemptAverageScore = "Povpr. rezultat zadnjih poskusov";
+$Untitled = "Nepoimenovano";
+$Quantity = "Količina";
 ?>

@@ -91,4 +91,6 @@ $HomeworkCreated = "Zadolžitev/naloga je bila ustvarjena";
 $HomeworkHasBeenCreatedForTheCourse = "Ustvarjena je bila zadolžitev/naloga za tečaj";
 $PleaseCheckHomeworkPage = "Prosim, preverite stran nalog/zadolžitev";
 $IncludedInEvaluation = "Vključeno v ocenjevanje";
+$DateExpiredNotBeLessDeadLine = "Datum poteka ne more manjši od končnega datuma";
+$NotRevised = "Nepregledano";
 ?>

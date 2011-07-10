@@ -76,4 +76,17 @@ $MakeAllPapersInvisible = "Maak alle documenten onzichtbaar";
 $MakeAllPapersVisible = "Maak alle documenten zichtbaar";
 $TheDocumentHasBeenDeleted = "Het bestand is verwijderd.";
 $YouAreNotAllowedToDeleteThisDocument = "U hebt onvoldoende rechten om dit document te verwijderen";
+$StudentAllowedToDeleteOwnPublication = "Toestaan dat studenten hun eigen werk verwijderen";
+$ConfirmYourChoiceDeleteAllfiles = "Bevestig uw keuze. Alle bestanden zullen permanent worden verwijderd.";
+$WorkName = "Naam van de opdracht";
+$ReminderToSubmitPendingTask = "Onthoud dat je nog een opdracht moet versturen";
+$MessageConfirmSendingOfTask = "Dit bericht bevestigt dat de opdracht is ontvangen";
+$DataSent = "Gegevens verstuurd";
+$DownloadLink = "Download link";
+$ViewUsersWithTask = "Ontvangen opgaven";
+$ReminderMessage = "Stuur een herinnering";
+$DateSent = "Verzenddatum";
+$ViewUsersWithoutTask = "Toon ontbrekende opgaven";
+$HomeworkCreated = "Een opgave is aangemaakt";
+$HomeworkHasBeenCreatedForTheCourse = "Een opgave voor de cursus is aangemaakt";
 ?>

@@ -92,15 +92,16 @@ class GradebookDataGenerator
 			$row[] = $item->get_description();
 			$row[] = $item->get_weight();
 			if (api_is_allowed_to_edit(null, true)) {
-				$row[] = $this->build_date_column ($item);
+				$row[] = $this->build_date_column($item);
 			}
-			if(count($this->evals_links)>0)
-				if (!api_is_allowed_to_create_course() || $status_user!=1)
-
-					$row[] = $this->build_result_column ($item, $ignore_score_color);
-					//$row[] = $this->get_certificate_link ($item);
-					$data[] = $row;
-				 }
+			
+			if (count($this->evals_links)>0) {
+				if (!api_is_allowed_to_create_course() || $status_user != 1 ) {
+					$row[] = $this->build_result_column($item, $ignore_score_color);
+				}
+			}
+		    $data[] = $row;
+        }
 
 		return $data;
 
@@ -172,34 +173,36 @@ class GradebookDataGenerator
 	}
 
 
-// Other functions
+    //  Other functions
 
-	private function build_result_column ($item, $ignore_score_color)
-	{
+	private function build_result_column ($item, $ignore_score_color) {
 		$scoredisplay = ScoreDisplay :: instance();
 		$score = $item->calc_score(api_get_user_id());
-
-		switch ($item->get_item_type()) {
-			// category
-			case 'C' :
-				if ($score != null) {
-					$displaytype = SCORE_PERCENT;
-					if ($ignore_score_color) {
-						$displaytype |= SCORE_IGNORE_SPLIT;
-					}
-						return get_lang('Total') . ' : '. $scoredisplay->display_score($score,$displaytype);
-				} else {
-					return '';
-				}
-			// evaluation and link
-			case 'E' :
-			case 'L' :
-				$displaytype = SCORE_DIV_PERCENT;
-				if ($ignore_score_color) {
-					$displaytype |= SCORE_IGNORE_SPLIT;
-				}
-				return $scoredisplay->display_score($score,$displaytype);
-		}
+		
+        if (!empty($score)) {
+    		switch ($item->get_item_type()) {
+    			// category
+    			case 'C' :
+    				if ($score != null) {
+    					$displaytype = SCORE_PERCENT;
+    					if ($ignore_score_color) {
+    						$displaytype |= SCORE_IGNORE_SPLIT;
+    					}
+    					return get_lang('Total') . ' : '. $scoredisplay->display_score($score,$displaytype);
+    				} else {
+    					return '';
+    				}
+    			// evaluation and link
+    			case 'E' :
+    			case 'L' :
+    				$displaytype = SCORE_DIV_PERCENT;
+    				if ($ignore_score_color) {
+    					$displaytype |= SCORE_IGNORE_SPLIT;
+    				}
+    				return $scoredisplay->display_score($score,$displaytype);
+    		}
+        }
+        return null;
 	}
 
 	private function build_date_column ($item) {

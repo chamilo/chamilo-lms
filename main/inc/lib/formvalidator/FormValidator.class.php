@@ -229,7 +229,7 @@ EOT;
 
 	/**
 	 * Uses new functions (php 5.2) for displaying real upload progress.
-	 * @param string $upload_id							The value of the field UPLOAD_IDENTIFIER
+	 * @param string $upload_id							The value of the field UPLOAD_IDENTIFIER, the second parameter (XXX) of the $form->addElement('file', XXX) sentence
 	 * @param string $element_after						The first element of the form (to place at first UPLOAD_IDENTIFIER)
 	 * @param int $delay (optional)						The frequency of the xajax call
 	 * @param bool $wait_after_upload (optional)
@@ -237,6 +237,7 @@ EOT;
 	function add_real_progress_bar($upload_id, $element_after, $delay = 2, $wait_after_upload = false) {
 
 		if (!function_exists('uploadprogress_get_info')) {
+		    
 			$this -> add_progress_bar($delay);
 			return;
 		}
@@ -257,12 +258,12 @@ EOT;
 
 		// Add div-element where the progress bar is to be displayed
 		$this->addElement('html','
-		<div id="dynamic_div_container" style="display:none">
-			<div id="dynamic_div_label">'.get_lang('UploadFile').'</div>
-			<div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey; background-image:url('.api_get_path(WEB_IMG_PATH).'real_upload_frame.gif);">
-				<div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url('.api_get_path(WEB_IMG_PATH).'real_upload_step.gif);background-repeat:repeat-x;background-position:center;"></div>
-			</div>
-		</div>');
+                		<div id="dynamic_div_container" style="display:none">
+                			<div id="dynamic_div_label">'.get_lang('UploadFile').'</div>
+                			<div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey; background-image:url('.api_get_path(WEB_IMG_PATH).'real_upload_frame.gif);">
+                				<div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url('.api_get_path(WEB_IMG_PATH).'real_upload_step.gif);background-repeat:repeat-x;background-position:center;"></div>
+                			</div>
+                		</div>');
 
 		if ($wait_after_upload) {
 			$this->addElement('html','
@@ -279,7 +280,7 @@ EOT;
 		}
 
 		// Get the xajax code
-		$this->addElement('html', $xajax_upload -> getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax'));
+		$this->addElement('html', $xajax_upload->getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax'));
 
 		// Get the upload code
 		$this->addElement('html', '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/upload.js" type="text/javascript"></script>');

@@ -267,7 +267,7 @@ $form -> addElement('html', '</div>');
 
 // Button upload document
 $form->addElement('style_submit_button', 'submitDocument', get_lang('SendDocument'), 'class="upload"');
-$form->add_real_progress_bar('DocumentUpload', 'user_upload');
+$form->add_real_progress_bar('DocumentUpload', 'file');
 
 $defaults = array('index_document' => 'checked="checked"');
 

@@ -853,7 +853,6 @@ class Attendance
 		if (!in_array($type, array('today', 'all', 'all_done', 'all_not_done','calendar_id'))) {
 			$type = 'all';
 		}		
-		
 		switch ($type) {
 		    case 'calendar_id':
 		        $calendar_id = intval($calendar_id);		        
@@ -885,7 +884,7 @@ class Attendance
                 $row['date']            = api_format_date($row['date_time'], DATE_FORMAT_SHORT);
                 $row['time']            = api_format_date($row['date_time'], TIME_NO_SEC_FORMAT);              
                 if ($type == 'today') {
-                    if (date('d-m-Y', api_strtotime($row['date_time'])) == api_strtotime(api_get_local_time())) {
+                    if (date('d-m-Y', api_strtotime($row['date_time'])) == date('d-m-Y', api_strtotime(api_get_local_time()))) {
                         $data[] = $row;                        
                     }                
                 } else {

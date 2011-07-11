@@ -295,11 +295,11 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	$ext_import_file = substr($_FILES['import_file']['name'],(strrpos($_FILES['import_file']['name'],'.')+1));
 
 	if (in_array($ext_import_file,$allowed_file_mimetype)) {
-		if (strcmp($file_type, 'csv') === 0 && $ext_import_file==$allowed_file_mimetype[0]) {
+		if (strcmp($file_type, 'csv') === 0 && $ext_import_file == $allowed_file_mimetype[0]) {
 			$users	= parse_csv_data($_FILES['import_file']['tmp_name']);
 			$errors = validate_data($users);
 			$error_kind_file = false;
-		} elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file==$allowed_file_mimetype[1]) {
+		} elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
 			$users = parse_xml_data($_FILES['import_file']['tmp_name']);
 			$errors = validate_data($users);
 			$error_kind_file = false;
@@ -311,12 +311,13 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	}
 
 	// List user id whith error.
-	$user_id_error = array();
+	$users_to_insert = $user_id_error = array();
 	if (is_array($errors)) {
 		foreach ($errors as $my_errors) {
 			$user_id_error[] = $my_errors['UserName'];
 		}
 	}
+	
 	if (is_array($users)) {
 		foreach ($users as $my_user) {
 			if (!in_array($my_user['UserName'], $user_id_error)) {
@@ -325,12 +326,10 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 		}
 	}
 
-	$inserted_in_course = array();
-	// this replace if (strcmp($_FILES['import_file']['type'], 'text/'.$file_type.'') === 0)
-	if (strcmp($file_type, 'csv') === 0) {
-
+	$inserted_in_course = array();	
+	if (strcmp($file_type, 'csv') === 0) {	 
 		save_data($users_to_insert);
-	} elseif (strcmp($file_type, 'xml') === 0) {
+	} elseif (strcmp($file_type, 'xml') === 0) {   
 		save_data($users_to_insert);
 	} else {
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
@@ -387,14 +386,14 @@ $form = new FormValidator('user_import','post','user_import.php');
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
-$form->addElement('radio', 'file_type', get_lang('FileType'), 'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
-$form->addElement('radio', 'file_type', null, 'CSV (<a href="example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
+$form->addElement('radio', 'file_type', get_lang('FileType'), 'CSV (<a href="example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
+$form->addElement('radio', 'file_type', null, 'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
 $form->addElement('radio', 'sendMail', get_lang('SendMailToUsers'), get_lang('Yes'), 1);
 $form->addElement('radio', 'sendMail', null, get_lang('No'), 0);
 $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
 $defaults['formSent'] = 1;
 $defaults['sendMail'] = 0;
-$defaults['file_type'] = 'xml';
+$defaults['file_type'] = 'csv';
 $form->setDefaults($defaults);
 $form->display();
 
@@ -447,7 +446,5 @@ if ($count_fields > 0) {
 &lt;/Contacts&gt;
 </pre>
 </blockquote>
-
 <?php
 Display :: display_footer();
-?>

@@ -1,5 +1,6 @@
-<?php // $Id: $
+<?php
 /* For licensing terms, see /license.txt */
+
 $language_file= 'gradebook';
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
@@ -9,12 +10,6 @@ require_once '../inc/global.inc.php';
 $course_code = api_get_course_id();
 //make sure the destination for scripts is index.php instead of gradebook.php
 $_SESSION['gradebook_dest'] = 'index.php';
-
-/*if (isset($_GET['cidReq'])) {
-	$this_section = SECTION_COURSES;
-} else {
-	$this_section = SECTION_MYGRADEBOOK;
-}*/
 
 $this_section = SECTION_COURSES;
 
@@ -39,16 +34,16 @@ $(document).ready( function() {
 			$(".actions:eq("+i+")").hide();
 		}
 	}
- } );
- </script>';
+});
+</script>';
 api_block_anonymous_users();
 $htmlHeadXtra[]= '<script type="text/javascript">
-function confirmation ()
-{
-	if (confirm("' . get_lang('DeleteAll') . '?"))
-		{return true;}
-	else
-		{return false;}
+function confirmation() {
+	if (confirm("' . get_lang('DeleteAll') . '?")) {
+		return true;
+	} else {
+		return false;
+	}
 }
 </script>';
 
@@ -602,7 +597,7 @@ if (isset ($_GET['studentoverview'])) {
 		$pdf->ezTable($newarray,$header_names,'',array('showHeadings'=>1,'shaded'=>1,'showLines'=>1,'rowGap'=>3,'width'=> 500));
 		$pdf->ezStream();
 		exit;
-		}
+    }
 } elseif (!empty($_GET['export_certificate'])) {        
     
     if (!api_is_allowed_to_edit(true,true)) {
@@ -901,7 +896,7 @@ if (api_is_allowed_to_edit(null, true)) {
 		}
 	}
 }
-if($first_time==1 && api_is_allowed_to_edit(null,true)) {
+if ($first_time==1 && api_is_allowed_to_edit(null,true)) {
 	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
 } else {
 	$gradebooktable->display();

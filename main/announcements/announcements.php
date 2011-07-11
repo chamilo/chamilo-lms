@@ -1160,7 +1160,7 @@ if ($display_announcement_list) {
 					if (api_get_group_id() == 0) {
 						//No group
 						$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".$_user['user_id']."'" .
-										"OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
+										" OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
 					} else {
 						$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."'
 						OR ip.to_group_id IN (0, ".api_get_group_id()."))";
@@ -1175,7 +1175,7 @@ if ($display_announcement_list) {
 					}
 				}
 
-				$sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
+				$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
         				FROM $tbl_announcement announcement, $tbl_item_property ip
         				WHERE announcement.id = ip.ref
         				AND ip.tool='announcement'
@@ -1191,16 +1191,15 @@ if ($display_announcement_list) {
 						$cond_user_id = " AND (ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0') ";
 					}
 
-					$sql="SELECT
-						announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-						FROM $tbl_announcement announcement, $tbl_item_property ip
-						WHERE announcement.id = ip.ref
-						AND ip.tool='announcement'
-						$cond_user_id
-						$condition_session
-						AND ip.visibility='1'
-						AND announcement.session_id IN(0,".api_get_session_id().")
-						ORDER BY display_order DESC";
+					$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
+							FROM $tbl_announcement announcement, $tbl_item_property ip
+    						WHERE announcement.id = ip.ref
+    						AND ip.tool='announcement'
+    						$cond_user_id
+    						$condition_session
+    						AND ip.visibility='1'
+    						AND announcement.session_id IN(0,".api_get_session_id().")
+    						ORDER BY display_order DESC";
 				} else {
 
 					if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
@@ -1209,15 +1208,14 @@ if ($display_announcement_list) {
 						$cond_user_id = " AND ip.to_group_id='0' ";
 					}
 
-					$sql="SELECT
-						announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-						FROM $tbl_announcement announcement, $tbl_item_property ip
-						WHERE announcement.id = ip.ref
-						AND ip.tool='announcement'
-						$cond_user_id
-						$condition_session
-						AND ip.visibility='1'
-						AND announcement.session_id IN(0,".api_get_session_id().")";
+					$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
+    						FROM $tbl_announcement announcement, $tbl_item_property ip
+    						WHERE announcement.id = ip.ref
+    						AND ip.tool='announcement'
+    						$cond_user_id
+    						$condition_session
+    						AND ip.visibility='1'
+    						AND announcement.session_id IN(0,".api_get_session_id().")";
 				}
 			}
 	}
@@ -1243,8 +1241,8 @@ if ($display_announcement_list) {
         $ths .= Display::tag('th', get_lang('LastUpdateDate') );
         if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id']))         
                  OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-                //$ths .= Display::tag('th', get_lang('SentTo'));
-                $ths .= Display::tag('th', get_lang('Modify'));
+            //$ths .= Display::tag('th', get_lang('SentTo'));
+            $ths .= Display::tag('th', get_lang('Modify'));
         }
         
     	echo Display::tag('tr', $ths);    
@@ -1268,7 +1266,7 @@ if ($display_announcement_list) {
     			$last_post_datetime = $myrow['end_date'];    
     		
     			// the styles
-    			if ($myrow['visibility']=='0') {
+    			if ($myrow['visibility'] == '0') {
     				$style='invisible';
     			} else {
     				$style = '';
@@ -1295,7 +1293,8 @@ if ($display_announcement_list) {
     			
                 $user_info		= api_get_user_info($myrow['insert_user_id']);
     						
-    			echo Display::tag('td', api_get_person_name($user_info['firstName'], $user_info['lastName']));			
+    			echo Display::tag('td', api_get_person_name($user_info['firstName'], $user_info['lastName']));		
+    				
                 echo Display::tag('td', api_convert_and_format_date($myrow['insert_date'], DATE_TIME_FORMAT_LONG));                			
     
     			/* RESOURCES */

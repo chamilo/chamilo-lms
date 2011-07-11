@@ -54,10 +54,10 @@ if (api_is_platform_admin()) {
 	// visibility 0,1->2
 	if (!empty($_GET['askDelete'])) {
 ?>
-			<div id="toolhide"><?php echo get_lang('DelLk'); ?><br />&nbsp;&nbsp;&nbsp;
-			<a href="<?php echo api_get_self(); ?>"><?php echo get_lang('No'); ?></a>&nbsp;|&nbsp;
-			<a href="<?php echo api_get_self(); ?>?delete=yes&id=<?php echo Security::remove_XSS($_GET['id']); ?>"><?php echo get_lang('Yes'); ?></a>
-			</div>
+	<div id="toolhide"><?php echo get_lang('DelLk'); ?><br />&nbsp;&nbsp;&nbsp;
+	<a href="<?php echo api_get_self(); ?>"><?php echo get_lang('No'); ?></a>&nbsp;|&nbsp;
+	<a href="<?php echo api_get_self(); ?>?delete=yes&id=<?php echo Security::remove_XSS($_GET['id']); ?>"><?php echo get_lang('Yes'); ?></a>
+	</div>
 <?php
 	}
 	/*

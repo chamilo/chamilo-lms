@@ -7,6 +7,7 @@
  * !!! WARNING !!! : ALL DATES IN THIS MODULE ARE STORED IN UTC ! DO NOT CONVERT DURING THE TRANSITION FROM CHAMILO 1.8.x TO 2.0
  * 
  * @author Christian Fasanando <christian1827@gmail.com>
+ * @author Julio Montoya <gugli100@gmail.com> lot of bugfixes + improvements
  * @package chamilo.attendance
  */
 
@@ -173,27 +174,27 @@
 		$this->attendance_list();	
 	}
 
-        /**
-         * Lock or unlock an attendance
-         * render to attendance_list view
-         * @param string  action (lock_attendance or unlock_attendance)
-         * @param int     attendance id
-         * render to attendance_list view
-         */
-        public function lock_attendance($action, $attendance_id) {
-            $attendance = new Attendance();
-            $attendance_id = intval($attendance_id);
+    /**
+     * Lock or unlock an attendance
+     * render to attendance_list view
+     * @param string  action (lock_attendance or unlock_attendance)
+     * @param int     attendance id
+     * render to attendance_list view
+     */
+    public function lock_attendance($action, $attendance_id) {
+        $attendance = new Attendance();
+        $attendance_id = intval($attendance_id);
 
-            if ($action == 'lock_attendance') {
-                $result = $attendance->lock_attendance($attendance_id);
-            } else {
-                $result = $attendance->lock_attendance($attendance_id, false);
-            }
-            if ($affected_rows) {
-		$message['message_locked_attendance'] = true;
-            }
-            $this->attendance_list();
+        if ($action == 'lock_attendance') {
+            $result = $attendance->lock_attendance($attendance_id);
+        } else {
+            $result = $attendance->lock_attendance($attendance_id, false);
         }
+        if ($affected_rows) {
+	        $message['message_locked_attendance'] = true;
+        }
+        $this->attendance_list();
+    }
 
 	/**
 	 * It's used for controlling attendace sheet (list, add),
@@ -228,7 +229,7 @@
 		$data['next_attendance_calendar_id']       = $attendance->get_next_attendance_calendar_id($attendance_id);
 		$data['next_attendance_calendar_datetime'] = $attendance->get_next_attendance_calendar_datetime($attendance_id);
 		
-		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {	
+		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
 
 			if (isset($_POST['hidden_input'])) {
 				foreach ($_POST['hidden_input'] as $cal_id) {
@@ -252,10 +253,9 @@
 			$data['users_presence'] 			       = $attendance->get_users_attendance_sheet($attendance_id);
 			$data['next_attendance_calendar_id']       = $attendance->get_next_attendance_calendar_id($attendance_id);			
 			$data['next_attendance_calendar_datetime'] = $attendance->get_next_attendance_calendar_datetime($attendance_id);			
-		} else {
-		    $data['attendant_calendar_all']       = $attendance->get_attendance_calendar($attendance_id);
-		    
-			$data['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id,$filter_type);
+		} else {		    
+		    $data['attendant_calendar_all']            = $attendance->get_attendance_calendar($attendance_id);		    
+			$data['attendant_calendar']                = $attendance->get_attendance_calendar($attendance_id, $filter_type);
 		}
 		$data['is_locked_attendance'] = $attendance->is_locked_attendance($attendance_id);
 		$this->view->set_data($data);

@@ -45,7 +45,7 @@ function addlinkcategory($type) {
 			$onhomepage = 0;
 			$target = '_self'; // Default target.
 		} else {
-			$onhomepage  = Security :: remove_XSS($_POST['onhomepage']);
+			$onhomepage  = Security :: remove_XSS($_POST['onhomepage']);			
 			$target      = Security :: remove_XSS($_POST['target_link']);
 		}
 
@@ -321,7 +321,7 @@ function editlinkcategory($type) {
 		if ($_POST['submitLink']) {
 
 			// Ivan, 13-OCT-2010: It is a litle bit messy code below, just in case I added some extra-security checks here.
-			$_POST['urllink']        = trim(Security :: remove_XSS($_POST['urllink']));
+			$_POST['urllink']        = trim($_POST['urllink']);
 			$_POST['title']          = trim(Security :: remove_XSS($_POST['title']));
 			$_POST['description']    = trim(Security :: remove_XSS($_POST['description']));
 			$_POST['selectcategory'] = intval($_POST['selectcategory']);

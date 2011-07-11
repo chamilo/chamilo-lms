@@ -74,7 +74,7 @@ class CourseHome {
                                     WHERE tl.on_homepage='1' AND tip.visibility = 1";
             }
             $result_links = Database::query($sql_links);
-            while ($links_row = Database::fetch_array($result_links)) {
+            while ($links_row = Database::fetch_array($result_links)) { 
                 $properties = array();
                 $properties['name'] = $links_row['title'];
                 $properties['link'] = $links_row['url'];
@@ -532,18 +532,18 @@ class CourseHome {
         // Edited by Kevin Van Den Haute (kevin@develop-it.be) for integrating Smartblogs
         if ($sql_links != null) {
             $result_links = Database::query($sql_links);
-            $properties = array();
+            
             if (Database::num_rows($result_links) > 0) {
-                while ($links_row = Database::fetch_array($result_links)) {
-                    unset($properties);
-                    $properties['name'] = $links_row['title'];
-                    $properties['session_id'] = $links_row['session_id'];
-                    $properties['link'] = $links_row['url'];
-                    $properties['visibility'] = $links_row['visibility'];
-                    $properties['image'] = ($links_row['visibility'] == '0') ? 'file_html.gif' : 'file_html.gif';
-                    $properties['adminlink'] = api_get_path(WEB_CODE_PATH).'link/link.php?action=editlink&id='.$links_row['id'];
-                    $properties['target'] = $links_row['target'];
-                    $tmp_all_tools_list[] = $properties;
+                while ($links_row = Database::fetch_array($result_links, 'ASSOC')) {
+                    $properties = array();
+                    $properties['name']         = $links_row['title'];
+                    $properties['session_id']   = $links_row['session_id'];
+                    $properties['link']         = $links_row['url'];
+                    $properties['visibility']   = $links_row['visibility'];
+                    $properties['image']        = ($links_row['visibility'] == '0') ? 'file_html.gif' : 'file_html.gif';
+                    $properties['adminlink']    = api_get_path(WEB_CODE_PATH).'link/link.php?action=editlink&id='.$links_row['id'];
+                    $properties['target']       = $links_row['target'];
+                    $tmp_all_tools_list[]       = $properties;
                 }
             }
         }

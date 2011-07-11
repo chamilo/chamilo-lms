@@ -169,17 +169,13 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 	if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){		
 		if (!empty($_POST['lp_id'])){			
 			$lp_id=Security::remove_XSS($_POST['lp_id']);
-		}
-		else{
+		} else {
 			$lp_id=Security::remove_XSS($_GET['lp_id']);
-		}
-		
+		}		
 		echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-3\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'','32')."</a>";		
-	}	
-	else{
+	} else {
 		echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png', get_lang('BackToLinksOverview'),'','32').'</a>';
-	}
-	
+	}	
 	
 	echo '</div>';
 		
@@ -264,7 +260,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						'.get_lang('OnHomepage').'?
 					</div>
 					<div class="formw">
-						<input id="id_check_target" class="checkbox" type="checkbox" name="onhomepage" id="onhomepage" value="1"'.$onhomepage.'><label for="onhomepage"> '.get_lang('Yes').'</label>
+						<input class="checkbox" type="checkbox" name="onhomepage" id="onhomepage" value="1"'.$onhomepage.'><label for="onhomepage"> '.get_lang('Yes').'</label>
 					</div>
 				</div>';
 		echo '	<div class="row" id="div_target">

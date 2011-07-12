@@ -148,8 +148,8 @@ class UserGroup extends Model {
                 $params = array('session_id'=>$session_id, 'usergroup_id'=>$usergroup_id);
                 Database::insert($this->usergroup_rel_session_table, $params); 
             
-                if (!empty($user_list)) {               
-                    SessionManager::suscribe_users_to_session($session_id, $user_list);
+                if (!empty($user_list)) {
+                    SessionManager::suscribe_users_to_session($session_id, $user_list, null, false);
                 }
                 /*
                 $course_list = SessionManager::get_course_list_by_session_id($id);
@@ -229,56 +229,54 @@ class UserGroup extends Model {
         $session_list = self::get_sessions_by_usergroup($usergroup_id);
         
         $delete_items = $new_items = array();
-        if (!empty($list)) {                
+        if (!empty($list)) {
             foreach ($list as $user_id) {
                 if (!in_array($user_id, $current_list)) {
                 	$new_items[] = $user_id;
                 }           	
             }
-        }            
-        if (!empty($current_list)) {  
+        }
+        if (!empty($current_list)) {
             foreach($current_list as $user_id) {
         	   if (!in_array($user_id, $list)) {
                     $delete_items[] = $user_id;
                 }  
             }
         }
-        
+
         //Deleting items
         if (!empty($delete_items)) {
-         
             foreach($delete_items as $user_id) {
                 //Removing courses
                 if (!empty($course_list)) {
-                    foreach($course_list as $course_id) { 
-                        $course_info = api_get_course_info_by_id($course_id);                                  
+                    foreach($course_list as $course_id) {
+                        $course_info = api_get_course_info_by_id($course_id);
                         CourseManager::unsubscribe_user($user_id, $course_info['code']);                    
                     }
                 }
                 //Removing sessions
                 if (!empty($session_list)) {
-                    foreach($session_list as $session_id) { 
-                        SessionManager::unsubscribe_user_from_session($session_id, $user_id);                   
+                    foreach($session_list as $session_id) {
+                        SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                     }
                 }
-            
                 Database::delete($this->usergroup_rel_user_table, array('usergroup_id = ? AND user_id = ?'=>array($usergroup_id, $user_id)));
             }
         }
-        
+
         //Addding new relationships
         if (!empty($new_items)) {
              //Adding sessions
             if (!empty($session_list)) {
-                foreach($session_list as $session_id) { 
-                    SessionManager::suscribe_users_to_session($session_id, $new_items);                   
+                foreach($session_list as $session_id) {
+                    SessionManager::suscribe_users_to_session($session_id, $new_items, null, false);
                 }
             }
-            foreach($new_items as $user_id) {     
-                //Adding courses    
-                if (!empty($course_list)) { 
-                    foreach($course_list as $course_id) {    
-                        $course_info = api_get_course_info_by_id($course_id);        
+            foreach($new_items as $user_id) {
+                //Adding courses
+                if (!empty($course_list)) {
+                    foreach($course_list as $course_id) {
+                        $course_info = api_get_course_info_by_id($course_id);
                         CourseManager::subscribe_user($user_id, $course_info['code']);
                     }
                 }
@@ -287,5 +285,4 @@ class UserGroup extends Model {
             }
         }
     }
-    
 }

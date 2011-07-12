@@ -108,5 +108,9 @@ main/upload/users/*
 .idea/cssxfire.xml
 .idea
 
+# Xapian indexes directory
+searchdb/*
+!searchdb/index.html
+
 syntax: regexp
 ^main/upload/users$

@@ -276,9 +276,17 @@ class ScoreDisplay
 			case SCORE_DECIMAL :                        // 0.50  (X/Y)
 				return $this->display_as_decimal($score);				
 		    case SCORE_DIV_PERCENT_WITH_CUSTOM :        // X / Y (XX %) - Good!
-				return $this->display_as_div($score).' (' . $this->display_as_percent($score) . ') - '.$this->display_custom($score);
-		    case SCORE_DIV_SIMPLE_WITH_CUSTOM :
-		        return $this->display_simple_score($score).' - '.$this->display_custom($score);
+		        $custom = $this->display_custom($score);
+		        if (!empty($custom)) {
+		            $custom .= ' - '.$custom;
+		        }
+				return $this->display_as_div($score).' (' . $this->display_as_percent($score) . ')'.$custom;
+		    case SCORE_DIV_SIMPLE_WITH_CUSTOM :         // X - Good!
+                $custom = $this->display_custom($score);
+		        if (!empty($custom)) {
+		            $custom .= ' - '.$custom;
+		        }
+		        return $this->display_simple_score($score).$custom;
 		    case SCORE_CUSTOM:                          // Good!
 		        return $this->display_custom($score);
 

@@ -119,8 +119,8 @@ class GradebookDataGenerator
 		}
 		return '';
 	}
-// Sort functions
-// Make sure to only use functions as defined in the GradebookItem interface !
+    // Sort functions
+    // Make sure to only use functions as defined in the GradebookItem interface !
 
 	function sort_by_name($item1, $item2) {
 		return api_strnatcmp($item1->get_name(), $item2->get_name());

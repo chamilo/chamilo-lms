@@ -350,7 +350,6 @@ if (!empty($_SESSION['toolgroup'])) {
 event_access_tool(TOOL_STUDENTPUBLICATION);
 
 $is_allowed_to_edit = api_is_allowed_to_edit(); //has to come after display_tool_view_option();
-//api_display_tool_title($tool_name);
 
 /*		MAIN CODE */
 
@@ -914,7 +913,7 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 				}
 				$current_date = api_get_utc_datetime();
 				$parent_id = '';
-				$active = '';
+				$active = '1';
 				$user_id = api_get_user_id();
 
 				$sql = Database::query('SELECT id FROM '.Database::get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE url = '."'/".Database::escape_string($_GET['curdirpath'])."' AND filetype='folder' LIMIT 1");
@@ -928,7 +927,7 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 							                   description = '" . Database::escape_string($description) . "',
 							                   author      = '" . Database::escape_string($authors) . "',
 											   active		= '" . $active . "',
-											   accepted		= '" . (api_is_allowed_to_edit(null,true)?$uploadvisibledisabled:(!$uploadvisibledisabled)) . "',
+											   accepted		= '1',
 											   post_group_id = '" . $post_group_id . "',
 											   sent_date	=  '".$current_date ."',
 											   parent_id 	=  '".$parent_id ."' ,
@@ -976,7 +975,7 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 					            title       	= '" . Database::escape_string($title) . "',
 					            description 	= '" . Database::escape_string($description) . "',
 					            author      	= '" . Database::escape_string($authors) . "',
-							    post_group_id = '".$post_group_id."',
+							    post_group_id   = '".$post_group_id."',
 					            sent_date    	= '".$current_date."',
 					            session_id = '".intval($id_session)."',
 					            user_id = '".$user_id."'";
@@ -1120,8 +1119,9 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 		}
 	}
 	$message = get_lang('DocAdd');
+	
 	if ($uploadvisibledisabled && !$is_allowed_to_edit) {
-		$message .= "<br />" . get_lang('_doc_unvisible') . "<br />";
+		//$message .= "<br />" . get_lang('_doc_unvisible') . "<br />";
 	}
 
 	//stats
@@ -1480,7 +1480,7 @@ if (!$display_upload_form && !$display_tool_options) {
 	if ($display_list_users_without_publication) {
 		display_list_users_without_publication($publication['id']);
 	} else {
-		display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_query);
+		display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin, $add_query);
 	}
 }
 

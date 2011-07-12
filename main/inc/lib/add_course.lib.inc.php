@@ -2523,8 +2523,8 @@ function register_course($course_sys_code, $course_screen_code, $course_reposito
 
     if ($ok_to_register_course) {
         $titular = addslashes($titular);
-
-        // Here we must add 2 fields.
+    
+       // Here we must add 2 fields.
        $sql = "INSERT INTO ".$TABLECOURSE . " SET
                     code = '".Database :: escape_string($course_sys_code) . "',
                     db_name = '".Database :: escape_string($course_db_name) . "',
@@ -2534,7 +2534,7 @@ function register_course($course_sys_code, $course_screen_code, $course_reposito
                     description = '".lang2db(get_lang('CourseDescription')) . "',
                     category_code = '".Database :: escape_string($category) . "',
                     visibility = '".$visibility . "',
-                    show_score = '',
+                    show_score = '1',
                     disk_quota = '".api_get_setting('default_document_quotum') . "',
                     creation_date = now(),
                     expiration_date = ".$expiration_date . ",

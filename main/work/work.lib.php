@@ -15,6 +15,8 @@
  */
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
  * @param	string	Current dir
@@ -306,9 +308,10 @@ function create_group_date_select($prefix = '') {
 function display_student_publications_list($work_dir, $sub_course_dir, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin, $add_in_where_query = '') {
 	global $timeNoSecFormat, $dateFormatShort, $gradebook, $_user;
 	// Database table names
-	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	$work_assigment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+	$work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+	$iprop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	$work_assigment  = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+	
 	$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 	$user_id = api_get_user_id();
 	$publications_list = array();
@@ -326,9 +329,9 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 	if (isset($_GET['direction'])) {
 		$sort_params[] = 'direction='.Security::remove_XSS($_GET['direction']);
 	}
-	$sort_params = implode('&amp;', $sort_params);
-	$my_params = $sort_params;
-	$origin = Security::remove_XSS($origin);
+	$sort_params   = implode('&amp;', $sort_params);
+	$my_params     = $sort_params;
+	$origin        = Security::remove_XSS($origin);
 
 	if (substr($sub_course_dir, -1, 1) != '/' && !empty($sub_course_dir)) {
 		$sub_course_dir = $sub_course_dir.'/';
@@ -433,6 +436,8 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 	$my_sub_dir = str_replace('work/', '', $sub_course_dir);
 	
+	$course_info = CourseManager::get_course_information(api_get_course_id());
+	
 	// @todo Since "works" cant have sub works this foreach is useless when selecting the list of works 
 	
 	// List of all folders	
@@ -450,7 +455,8 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 			} else {
 				$sql_select_directory .= " work.post_group_id = '0' ";
 			}
-			$sql_select_directory .= " AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $condition_session";			
+			$sql_select_directory .= " AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $condition_session";
+						
 			$result = Database::query($sql_select_directory);
 			$row = Database::fetch_array($result);
 
@@ -458,12 +464,12 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				 // the folder belongs to another session
 		         continue;
 			}
-			$direc_date = $row['lastedit_date']; //directory's date
-			$author = $row['author']; //directory's author
+			$direc_date      = $row['lastedit_date']; //directory's date
+			$author          = $row['author']; //directory's author
 			$view_properties = $row['view_properties'];
-			$is_assignment = $row['has_properties'];
-			$id2 = $row['id'];
-			$mydir = $my_sub_dir.$dir;
+			$is_assignment   = $row['has_properties'];
+			$id2             = $row['id'];
+			$mydir           = $my_sub_dir.$dir;
 
 			if ($is_allowed_to_edit) {
 				isset($_GET['edit_dir']) ? $clean_edit_dir = Security :: remove_XSS($_GET['edit_dir']) : $clean_edit_dir = '';
@@ -578,7 +584,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					$form_folder -> setDefaults($defaults);
 					$display_edit_form = true;
 
-					if ($form_folder -> validate()) {
+					if ($form_folder->validate()) {
 						$values = $form_folder -> exportValues();
 						$values = $values['my_group'];
 						$dir_name = replace_dangerous_char($values['dir_name']);
@@ -672,13 +678,14 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 			//$a_count_directory = count_dir($work_dir.'/'.$dir, false);
 
 			$cant_files = 0;
-			$cant_dir = 0;
+			$cant_dir   = 0;
+			
 			if (api_is_allowed_to_edit()) {
 				$sql_document = "SELECT count(*) FROM $work_table WHERE  url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
 			} else {
 				// gets admin_course
 				$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-				$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+				$table_user        = Database :: get_main_table(TABLE_MAIN_USER);
 				$sql = "SELECT course_user.user_id FROM $table_user user, $table_course_user course_user
 						  WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
 				$res = Database::query($sql);
@@ -686,12 +693,20 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				while($row_admin = Database::fetch_row($res)) {
 					$admin_course .= '\''.$row_admin[0].'\',';
 				}
-				$sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p WHERE s.id = p.ref AND p.tool='work' AND s.accepted='1' AND url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
+				if ($course_info['show_score'] == 1) {
+				    $sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p 
+									 WHERE s.id = p.ref AND p.tool='work' AND s.accepted='1' AND user_id = ".api_get_user_id()." AND url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
+                } else {
+                    $sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p 
+									 WHERE s.id = p.ref AND p.tool='work' AND s.accepted='1' AND url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
+                }
 			}
+			
 			//count documents
 			$res_document = Database::query($sql_document);
 			$count_document = Database::fetch_row($res_document);
 			$cant_files = $count_document[0];
+			
 			//count directories
 			$sql_directory   = "SELECT count(*) FROM $work_table s WHERE  url NOT LIKE '/".$mydir."/%/%' AND url LIKE '/".$mydir."/%'";
 			$res_directory   = Database::query($sql_directory);

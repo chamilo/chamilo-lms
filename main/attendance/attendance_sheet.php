@@ -193,7 +193,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             if (!empty($calendar['done_attendance'])){
                                 $datetime = '<font color="blue">'.$date.'<br />'.$time.'</font>';
                             }
-                            $disabled_check = 'disabled';
+                            $disabled_check = 'disabled = "true"';
                             $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="" disabled />';                        
                             if ($next_attendance_calendar_id == $calendar['id']) {
                                 $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="'.$calendar['id'].'" />';
@@ -204,7 +204,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             $result .= '<th height="65px" width="500px" style="padding:1px 5px;" >';
                             $result .= '<center><div style="font-size:10px;width:80px;">'.$datetime.'&nbsp;';
                             $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin()?$img_lock:'').'</span>';
-                            $result .= '<br /><input type="checkbox" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked />'.$input_hidden.'</div></center></th>';
+                            $result .= '<br /><input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />'.$input_hidden.'</div></center></th>';
                          }                  
                     } else { 
                         $result = '<th height="65px" width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">';

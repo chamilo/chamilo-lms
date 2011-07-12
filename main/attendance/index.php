@@ -75,69 +75,78 @@ if (!empty($attendance_id)) {
 
 $htmlHeadXtra[] = '<script language="javascript">
 		
-			$(function() {										
-				$("table th img").click(function() {					
-					var col_id = this.id;
-					var col_split = col_id.split("_");							
-					var calendar_id = col_split[2];
-					var class_img = $(this).attr("class");					
-					if (class_img == "img_unlock") {
-						$("#checkbox_head_"+calendar_id).attr("disabled",true);
-						$(".row_odd  td.checkboxes_col_"+calendar_id).css({"background-color":"#F9F9F9", "border-left":"none","border-right":"none"});
-						$(".row_even td.checkboxes_col_"+calendar_id).css({"background-color":"#FFF", "border-left":"none","border-right":"none"});
-						$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);							 						
-						$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/lock.gif"); 
-						$(this).attr("title","'.get_lang('DateUnLock').'");
-						$(this).attr("alt","'.get_lang('DateUnLock').'");
-						$(this).attr("class","img_lock");
-						$("#hidden_input_"+calendar_id).attr("value","");
-						$("#hidden_input_"+calendar_id).attr("disabled",true);
-						return false;
-					} else {
-						$("#checkbox_head_"+calendar_id).attr("disabled",false);
-						$(".checkboxes_col_"+calendar_id).css({"background-color":"#e1e1e1", "border-left":"1px #CCC solid", "border-right":"1px #CCC solid" });
-						$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);						
-						$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/unlock.gif");
-						$(this).attr("title","'.get_lang('DateLock').'");
-						$(this).attr("alt","'.get_lang('DateLock').'");
-						$(this).attr("class","img_unlock");												
-						$("#hidden_input_"+calendar_id).attr("disabled",false);
-						$("#hidden_input_"+calendar_id).attr("value",calendar_id);						
-						return false;
-					}						
-				});					
-				$("table th input:checkbox").click(function() {
-					var col_id = this.id;
-					var col_split = col_id.split("_");							
-					var calendar_id = col_split[2];
-					if ($("#"+col_id).is(":checked")) {
-						$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("checked",true);
-					} else {						
-						$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("checked",false);
-					}
-				});					
-				
-				$(".attendance-sheet-content .row_odd, .attendance-sheet-content .row_even").mouseover(function() {
-					$(".row_odd").css({"background-color":"#F9F9F9"});
-					$(".row_even").css({"background-color":"#FFF"});
-				});	
-				$(".attendance-sheet-content .row_odd, .attendance-sheet-content .row_even").mouseout(function() {
-					$(".row_odd").css({"background-color":"#F9F9F9"});
-					$(".row_even").css({"background-color":"#FFF"});
-				});				
-											
-				$(".advanced_parameters").click(function() {				
-					if ($("#id_qualify").css("display") == "none") {
-						$("#id_qualify").css("display","block");
-						$("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\');
-					} else {
-						$("#id_qualify").css("display","none");
-						$("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\');
-					}	
-				});																							
-			});		
+$(function() {										
+	$("table th img").click(function() {					
+		var col_id = this.id;
+		var col_split = col_id.split("_");							
+		var calendar_id = col_split[2];					
+		var class_img = $(this).attr("class");
+							
+		if (class_img == "img_unlock") {
+			//lock 
+			$(".checkbox_head_"+calendar_id).attr("disabled", true);						
+			
+			$(".row_odd  td.checkboxes_col_"+calendar_id).css({"background-color":"#F9F9F9", "border-left":"none","border-right":"none"});
+			$(".row_even td.checkboxes_col_"+calendar_id).css({"background-color":"#FFF", "border-left":"none","border-right":"none"});
+			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);							 						
+			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/lock.gif"); 
+			$(this).attr("title","'.get_lang('DateUnLock').'");
+			$(this).attr("alt","'.get_lang('DateUnLock').'");
+			$(this).attr("class","img_lock");
+			$("#hidden_input_"+calendar_id).attr("value","");
+			$("#hidden_input_"+calendar_id).attr("disabled",true);
+			return false;
+		} else {
+			//unlock
+			$(".checkbox_head_"+calendar_id).attr("disabled", false);
+			$(".checkbox_head_"+calendar_id).removeAttr("disabled");
+			
+			
+			$(".checkboxes_col_"+calendar_id).css({"background-color":"#e1e1e1", "border-left":"1px #CCC solid", "border-right":"1px #CCC solid" });
+			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);						
+			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/unlock.gif");
+			$(this).attr("title","'.get_lang('DateLock').'");
+			$(this).attr("alt","'.get_lang('DateLock').'");
+			$(this).attr("class","img_unlock");												
+			$("#hidden_input_"+calendar_id).attr("disabled",false);
+			$("#hidden_input_"+calendar_id).attr("value",calendar_id);						
+			return false;
+		}						
+	});				
+		
+	$("table th input:checkbox").click(function() {
+		var col_id = this.id;
+		var col_split = col_id.split("_");							
+		var calendar_id = col_split[2];
+		
+		if (this.checked) {
+			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("checked",true);			
+		} else {
+			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("checked",false);
+		}
+	});					
+	
+	$(".attendance-sheet-content .row_odd, .attendance-sheet-content .row_even").mouseover(function() {
+		$(".row_odd").css({"background-color":"#F9F9F9"});
+		$(".row_even").css({"background-color":"#FFF"});
+	});	
+	$(".attendance-sheet-content .row_odd, .attendance-sheet-content .row_even").mouseout(function() {
+		$(".row_odd").css({"background-color":"#F9F9F9"});
+		$(".row_even").css({"background-color":"#FFF"});
+	});				
+								
+	$(".advanced_parameters").click(function() {				
+		if ($("#id_qualify").css("display") == "none") {
+			$("#id_qualify").css("display","block");
+			$("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\');
+		} else {
+			$("#id_qualify").css("display","none");
+			$("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\');
+		}	
+	});																							
+});		
 
-		</script>';
+</script>';
 
 // interbreadcrumbs
 if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {

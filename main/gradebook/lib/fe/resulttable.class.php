@@ -108,7 +108,7 @@ class ResultTable extends SortableTable
 
 
 		// generate the data to display
-		$sortable_data = array();
+		$sortable_data = array();		
 		foreach ($data_array as $item) {
 			$row = array ();
 			if ($this->iscourse == '1') {

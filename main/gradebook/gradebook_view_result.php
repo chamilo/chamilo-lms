@@ -1,8 +1,10 @@
-<?php // $Id: $
+<?php
 /* For licensing terms, see /license.txt */
+
 $language_file[] = 'gradebook';
-//$cidReset= true;
+
 require_once '../inc/global.inc.php';
+
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/displaygradebook.php';
@@ -22,7 +24,7 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.
 api_block_anonymous_users();
 block_students();
 
-if(!api_is_drh()){
+if (!api_is_drh()){
     block_students();
 }
 
@@ -370,20 +372,20 @@ if (isset ($_GET['print'])) {
 	$resulttable= new ResultTable($eval[0], $allresults, $iscourse, $addparams);
 }
 	$htmlHeadXtra[]= '<script type="text/javascript">
-function confirmationuser ()
-{
-if (confirm("' . get_lang('DeleteUser') . '?"))
-	{return true;}
-else
-	{return false;}
+	
+function confirmationuser() {
+    if (confirm("' . get_lang('DeleteUser') . '?"))
+    	{return true;}
+    else
+    	{return false;}
 }
-function confirmationall ()
-{
-if (confirm("' . get_lang('DeleteAll') . '?"))
-	{return true;}
-else
-	{return false;}
-}
+
+function confirmationall () {
+    if (confirm("' . get_lang('DeleteAll') . '?"))
+    	{return true;}
+    else
+    	{return false;}
+    }
 </script>';
 if (isset ($_GET['deleteall'])) {
 	$eval[0]->delete_results();
@@ -460,9 +462,7 @@ if (isset ($_GET['import_score_error'])) {
 }
 if ($file_type == null) { //show the result header
     if (isset ($export_result_form) && !(isset ($edit_res_form))) {
-    	//echo '<div class ="normal-message">';
     	echo $export_result_form->display();
-    	//echo '</div>';
     	DisplayGradebook :: display_header_result($eval[0], $currentcat[0]->get_id(), 1);
     } else {
     	if (isset ($import_result_form)){

@@ -3241,13 +3241,13 @@ class UserManager
 	  	if (Database::num_rows($rs) > 0) {
 	  	    $row = Database::fetch_array($rs,'ASSOC');	  	
 	  	    $score = $row['score_certificate'];
-	  	    $category_id = $row['cat_id'];
+	  	    $category_id  = $row['cat_id'];
 	  	    $eval         = Evaluation::load(null, null, $course_code, $category_id);	  		  	
 	  	    $displayscore = ScoreDisplay::instance();
 	  	
 	  	    $grade = '';
 	  	    if (isset($eval) && $displayscore->is_custom()) {
-                $grade = $displayscore->display_score(array($score, $eval[0]->get_max()), SCORE_DIV | SCORE_IGNORE_SPLIT, SCORE_ONLY_CUSTOM);			
+                $grade = $displayscore->display_score(array($score, $eval[0]->get_max()), SCORE_DIV_PERCENT_WITH_CUSTOM);			
     	  	}
 	  	    $row['grade'] = $grade;
 	  		return $row;

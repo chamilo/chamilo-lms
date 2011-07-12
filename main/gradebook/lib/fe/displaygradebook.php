@@ -47,9 +47,10 @@ class DisplayGradebook
 		$scoredisplay = ScoreDisplay :: instance();
 		if (($evalobj->has_results())){ // TODO this check needed ?
 
-			$score= $evalobj->calc_score();
+			$score = $evalobj->calc_score();
+			
 			if ($score != null)
-				$average= get_lang('Average') . ' :<b> ' .$scoredisplay->display_score($score,SCORE_AVERAGE) . '</b>';
+				$average= get_lang('Average') . ' :<b> ' .$scoredisplay->display_score($score, SCORE_AVERAGE) . '</b>';
 		}
 		if (!$evalobj->get_description() == '') {
 			$description= get_lang('Description') . ' :<b> ' . $evalobj->get_description() . '</b><br>';
@@ -61,7 +62,9 @@ class DisplayGradebook
 		}
     
 		$evalinfo= '<table width="100%" border="0"><tr><td>';
-		$evalinfo .= get_lang('EvaluationName') . ' :<b> ' . $evalobj->get_name() . ' </b>(' . api_format_date($evalobj->get_date()).' )<br />' . get_lang('Course') . ' :<b> ' . $course . '</b><br>' . get_lang('Weight') . ' :<b> ' . $evalobj->get_weight() . '</b><br>' . get_lang('QualificationNumeric') . ' :<b> ' . $evalobj->get_max() . '</b><br>' . $description . get_lang('Visible') . ' :<b> ' . $visible . '</b><br>' . $average;
+		$evalinfo .= get_lang('EvaluationName') . ' :<b> ' . $evalobj->get_name() . ' </b>(' . api_format_date($evalobj->get_date()).' )<br />' . get_lang('Course') . ' :<b> ' . $course . '</b><br />';
+		//'<br>' . get_lang('Weight') . ' :<b> ' . $evalobj->get_weight() . '</b><br>' . get_lang('Visible') . ' :<b> ' . $visible . '</b>
+        $evalinfo .=  get_lang('QualificationNumeric') . ' :<b> ' . $evalobj->get_max() . '</b><br>' . $description .$average;
 		if (!$evalobj->has_results()) {
 			$evalinfo .= '<br /><i>' . get_lang('NoResultsInEvaluation') . '</i>';
 		} elseif ($scoredisplay->is_custom() && api_get_self() != '/dokeos/main/gradebook/gradebook_statistics.php') {
@@ -192,8 +195,8 @@ class DisplayGradebook
 	 */
 	function display_header_gradebook($catobj, $showtree, $selectcat, $is_course_admin, $is_platform_admin, $simple_search_form, $show_add_qualification = true, $show_add_link = true) {
 		//student
-		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
-		$objcat=new Category();
+		$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
+		$objcat = new Category();
 		//$objdat=new Database();
 		$course_id=Database::get_course_by_category($selectcat);
 		$message_resource=$objcat->show_message_resource_delete($course_id);
@@ -222,15 +225,14 @@ class DisplayGradebook
 			}
 			$item_value = number_format($item_value, 2, '.', ' ');
 			$total_score=array($item_value,$item_total);
-			$scorecourse_display = $scoredisplay->display_score($total_score,SCORE_DIV_PERCENT);
-			//----------------------
-			//$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
+			$scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
+
 			$cattotal = Category :: load(0);
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
 			$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
 			$scoreinfo = get_lang('StatsStudent') . ' :<b> '.api_get_person_name($user['firstname'], $user['lastname']).'</b><br />';
 			if ((!$catobj->get_id() == '0') && (!isset ($_GET['studentoverview'])) && (!isset ($_GET['search']))) {
-				$scoreinfo.= '<br />'.get_lang('Total') . ' : <b>' . $scorecourse_display . '</b>';
+				$scoreinfo.= '<h2>'.get_lang('Total') . ' : ' . $scorecourse_display . '</h2>';
 			}
 			//$scoreinfo.= '<br />'.get_lang('Total') . ' : <b>' . $scoretotal_display . '</b>';
 			Display :: display_normal_message($scoreinfo,false);
@@ -239,13 +241,10 @@ class DisplayGradebook
 		$header='';
 		$header .= '<div class="actions"><table border=0 >';
 		if (($showtree == '1') || (isset ($_GET['studentoverview']))) {
-
 			$header .= '<tr>';
-
 			if (!$selectcat == '0') {
 				$header .= '<td style=" "><a href="' . api_get_self() . '?selectcat=' . $catobj->get_parent_id() . '">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('RootCat'),'','32').'</a></td>';
 			}
-
 			$header .= '<td style=" ">' . get_lang('CurrentCategory') . '</td>' .
 					'<td style=" "><form name="selector"><select name="selectcat" onchange="document.selector.submit()">';
 			$cats= Category :: load();
@@ -332,7 +331,6 @@ class DisplayGradebook
 						$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats.png', get_lang('FlatView'),'','32').'</a>';
 						$header .= '<td style="vertical-align: top;"><a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('certificate.png', get_lang('AttachCertificate'),'','32').'</a>';
 						$header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?'.$my_api_cidreq.'&amp;cat_id='.(int)$_GET['selectcat'].'">'.Display::return_icon('certificate_list.png', get_lang('GradebookSeeListOfStudentsCertificates'),'','32').'</a>';
-
 					}
                 }
 			}

@@ -636,11 +636,13 @@ if (isset ($_GET['studentoverview'])) {
 	        }	        
 	        exit;
 	    } else {
+	        //student
     		$user         = get_user_info_from_id($user_id);
     		$scoredisplay = ScoreDisplay :: instance();
     		$scorecourse  = $my_category[0]->calc_score($user_id);
     		
     		$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
+    		
     
     		$cattotal = Category :: load($_GET['cat_id']);
     		$scoretotal= $cattotal[0]->calc_score($user_id);
@@ -652,9 +654,12 @@ if (isset ($_GET['studentoverview'])) {
     		$portal_name = api_get_setting('siteName');
     		$stud_fn = $user['firstname'];
     		$stud_ln = $user['lastname'];
-    		$certif_text = sprintf(get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'),$organization_name,$stud_fn.' '.$stud_ln,$my_category[0]->get_name(),$scorecourse_display);
-    		$certif_text = str_replace("\\n","\n",$certif_text);
-    	   	$date = date('d/m/Y',time());    		
+    		
+    		//@todo this code is not needed
+    		$certif_text = sprintf(get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'), $organization_name, $stud_fn.' '.$stud_ln, $my_category[0]->get_name(), $scorecourse_display);
+    		$certif_text = str_replace("\\n","\n", $certif_text);
+    		
+    	   	$date = date('d/m/Y', time() );    		
     
     		if (!is_dir($path_info['dir'])) {
     			mkdir($path_info['dir'],0777);
@@ -878,10 +883,6 @@ if ($category != '0') {
 }
 
 if (api_is_allowed_to_edit(null, true)) {
-/*
-	Introduction section (teacher edit)
-*/
-
 	// Tool introduction
 	Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));
 

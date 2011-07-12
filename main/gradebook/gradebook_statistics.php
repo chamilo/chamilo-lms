@@ -2,23 +2,23 @@
 /* For licensing terms, see /license.txt */
 
 $language_file= 'gradebook';
-//$cidReset= true;
 
 require_once '../inc/global.inc.php';
-
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/dataform.class.php';
 require_once 'lib/scoredisplay.class.php';
 require_once 'lib/fe/displaygradebook.php';
+
 api_block_anonymous_users();
+
 $eval= Evaluation :: load($_GET['selecteval']);
 if ($eval[0]->get_category_id() < 0) { 
 	// if category id is negative, then the evaluation's origin is a link
 	$link= LinkFactory :: get_evaluation_link($eval[0]->get_id());
-	$currentcat= Category :: load($link->get_category_id());
+	$currentcat = Category :: load($link->get_category_id());
 } else {
-	$currentcat= Category :: load($eval[0]->get_category_id());
+	$currentcat = Category :: load($eval[0]->get_category_id());
 }
 
 $interbreadcrumb[]= array (
@@ -39,19 +39,23 @@ if (!$displayscore->is_custom()) {
 	   Display :: display_error_message(get_lang('PleaseEnableScoringSystem'),false);
     }
 } else {
-	$displays= $displayscore->get_custom_score_display_settings();
-	$allresults = Result :: load(null,null,$eval[0]->get_id());
+    //Bad, Regular, Good  - User definitions
+	$displays = $displayscore->get_custom_score_display_settings();
+	
+	$allresults = Result::load(null,null,$eval[0]->get_id());
+	
 	$nr_items = array();
 	foreach ($displays as $itemsdisplay) {
 		$nr_items[$itemsdisplay['display']] = 0;
 	}
+	
 	$resultcount = 0;
 	foreach ($allresults as $result) {
-		$score = $result->get_score();
-		if (isset($score)) {
-			$display = $displayscore->display_score(array($score, $eval[0]->get_max()),SCORE_DIV | SCORE_IGNORE_SPLIT, SCORE_ONLY_CUSTOM);
-			$nr_items[$display] ++;
-			$resultcount ++;
+		$score = $result->get_score();		
+		if (isset($score)) {		    
+			$display = $displayscore->display_score(array($score, $eval[0]->get_max()), SCORE_CUSTOM, SCORE_ONLY_CUSTOM, true);			
+			$nr_items[$display]++;
+			$resultcount++;
 		}
 	}
 

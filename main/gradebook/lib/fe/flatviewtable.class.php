@@ -35,47 +35,52 @@ class FlatViewTable extends SortableTable
 	/**
 	 * Display the graph of the total results of all students
 	 * */
-	function display_graph()
-	{
-		include_once(api_get_path(LIBRARY_PATH).'pchart/pData.class.php');
-		include_once(api_get_path(LIBRARY_PATH).'pchart/pChart.class.php');
-		include_once(api_get_path(LIBRARY_PATH).'pchart/pCache.class.php');
+	function display_graph() {
+		include_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
+		include_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
+		include_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 
-		//echo '<pre>';
 		$header_name = $this->datagen->get_header_names();
 		$total_users = $this->datagen->get_total_users_count();
+		
 		$img_file = '';
-
+		
 		if ($this->datagen->get_total_items_count()>0 && $total_users > 0 ) {
+		    //Removing user names and total
 			array_shift($header_name);
 			array_shift($header_name);
 			array_pop($header_name);
-			$user_results = ($this->datagen->get_data_to_graph());
+			
+			$user_results = $this->datagen->get_data_to_graph();
+						
 			$pre_result = $new_result = array();
-			$DataSet = new pData;
+			$DataSet = new pData();
+			
+			//$pre_result total score of students
 			//filling the Dataset
 			foreach($user_results as $result) {
-				for($i=0; $i< count($header_name); $i++) {
-					$pre_result[$i+3]+=$result[$i+1];
+				for($i=0; $i < count($header_name); $i++) {
+					$pre_result[$i+3]+= $result[$i+1];
 				}
 			}
-
-			$i=1;
+			$i = 1;
 			$show_draw = false;
-			if ($total_users>0) {
+			if ($total_users >0 ) {			    
 				foreach($pre_result as $res) {
-					$total =  $res / ($total_users*100);
-					if ($total != 0)
+					$total =  $res / ($total_users);
+										
+					if ($total != 0) {
 						$show_draw  = true;
-					$DataSet->AddPoint($total,"Serie".$i);
+					}
+					$DataSet->AddPoint($total, "Serie".$i);
 					$DataSet->SetSerieName($header_name[$i-1],"Serie".$i);
+					
 					// Dataset definition
 					$DataSet->AddAllSeries();
 					$DataSet->SetAbsciseLabelSerie();
 					$i++;
 				}
 			}
-			//print_r($pre_result); print_r($header_name);
 
 			// Cache definition
 			$Cache = new pCache();
@@ -83,8 +88,7 @@ class FlatViewTable extends SortableTable
 			$gradebook_id = intval($_GET['selectcat']);
 			$graph_id = api_get_user_id().'AverageResultsVsResource'.$gradebook_id.api_get_course_id();
 			$data = $DataSet->GetData();
-
-
+			
 			if ($show_draw) {
 				if ($Cache->IsInCache($graph_id, $DataSet->GetData())) {
 				//if (0) {
@@ -95,7 +99,7 @@ class FlatViewTable extends SortableTable
 					// if the image does not exist in the archive/ folder
 
 					// Initialise the graph
-					$Test = new pChart(760,360);
+					$Test = new pChart(760, 360);
 
 					//which schema of color will be used
 					$quant_resources = count($data[0])-1;
@@ -115,8 +119,8 @@ class FlatViewTable extends SortableTable
 
 					//background color area & stripe or not
 					$Test->drawGraphArea(255,255,255,TRUE);
-					$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(),SCALE_START0,150,150,150,TRUE,0,1, FALSE);
-
+					$Test->drawScale($DataSet->GetData(), $DataSet->GetDataDescription(), SCALE_START0 ,150,150,150,TRUE,0,1, FALSE);
+					
 					//background grid
 					$Test->drawGrid(4,TRUE,230,230,230,50);
 
@@ -146,7 +150,6 @@ class FlatViewTable extends SortableTable
 			}
 		}
 		return api_get_path(WEB_ARCHIVE_PATH).$img_file;
-		//return '<div id="imageloaded" style="float:center;"><img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file_generated_name.'" ></div>';
 	}
 
 	function display_graph_by_resource() {
@@ -164,27 +167,24 @@ class FlatViewTable extends SortableTable
 			//Removing last name
 			array_shift($header_name);
             
-			$displayscore= ScoreDisplay :: instance();
+			$displayscore = ScoreDisplay :: instance();
 			$customdisplays = $displayscore->get_custom_score_display_settings();
+		
 			
 			if (is_array($customdisplays) && count(($customdisplays))) {
-
-				$user_results = $this->datagen->get_data_to_graph2();
+			    
+				$user_results = $this->datagen->get_data_to_graph2();				
 				$pre_result = $new_result = array();
-				$DataSet = new pData;
+				$DataSet = new pData();
 				//filling the Dataset
 				foreach($user_results as $result) {
 					//print_r($result);
 					for($i=0; $i< count($header_name); $i++) {
-						$pre_result[$i+3][]=$result[$i+1];
-						$pre_result_pie[$i+3][] = $result[$i+1][0];
+						$pre_result[$i+3][]= $result[$i+1];
+						//$pre_result_pie[$i+3][] = $result[$i+1][0];
 					}
 				}
-				/*$display_list = array();
-				foreach( $customdisplays as $display) {
-					$display_list[] = $display['display'];
-				}	*/
-
+	
 				$i=0;
 				$show_draw = false;
 				$resource_list = array();
@@ -195,6 +195,10 @@ class FlatViewTable extends SortableTable
 					$pre_result2[] = $res_array;
 				}
 				
+				//@todo when a display custom does not exist the order of the color does not match
+				//filling all the answer that are not responded with 0
+				rsort($customdisplays);
+				
 				if ($total_users > 0) {
 					foreach($pre_result2 as $key=>$res_array) {
 						$key_list = array();
@@ -202,9 +206,7 @@ class FlatViewTable extends SortableTable
 							$resource_list[$key][$user_result[1]] += 1;
 							$key_list[] = $user_result[1];
 						}
-						//@todo when a display custom does not exist the order of the color does not match
-						//filling all the answer that are not responded with 0
-						rsort($customdisplays);
+				
 						foreach ($customdisplays as $display) {
 							if (!in_array($display['display'], $key_list))
 								$resource_list[$key][$display['display']] = 0;
@@ -218,6 +220,7 @@ class FlatViewTable extends SortableTable
 				$new_list = array();
 				foreach($resource_list as $key=>$value) {
 				    $new_value = array();
+				    
 				    foreach($customdisplays as $item) {				        
 				        if ($value[$item['display']] > $max) {
 				            $max = $value[$item['display']];
@@ -232,7 +235,7 @@ class FlatViewTable extends SortableTable
 				$i = 1;
 				$j = 0;
 
-				foreach ($resource_list as $key=>$resource) {
+				foreach($resource_list as $key=>$resource) {
 					$new_resource_list = $new_resource_list_name = array();
 					$DataSet = new pData();
 					foreach ($resource as $name=>$cant) {

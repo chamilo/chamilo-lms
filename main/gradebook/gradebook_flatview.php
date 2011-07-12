@@ -275,21 +275,17 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
 	$flatviewtable->display();
 } elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] == 'teacherview')) {
 	DisplayGradebook :: display_header_reduce_flatview($cat[0], $showeval, $showlink, $simple_search_form);
-	/*echo '<div id="contentLoading" class="contentLoading">';
-	echo Display::display_icon('loader.gif');
-	echo '</div>';*/
-
+	
 	// main graph
 	$flatviewtable->display();
 	
-	$image_file = $flatviewtable->display_graph();
-	$my_info_path_img = array();
-	$my_info_path_img = explode('/', $image_file);
-	if (strlen($my_info_path_img[5]) == 32) {
-		echo '<img  src="'.$image_file.'">';
-	}    
-    //@todo load images with jquery
-    echo '<div id="contentArea" style="text-align:center;" >';    
+	// @todo this needs a fix
+	//$image_file = $flatviewtable->display_graph();
+	//@todo load images with jquery
+    echo '<div id="contentArea" style="text-align: center;" >';        		
+	if (!empty($image_file)) {
+		echo '<img src="'.$image_file.'">';
+	}        
 	$flatviewtable->display_graph_by_resource();
 	echo '</div>';
 }

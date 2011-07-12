@@ -600,8 +600,8 @@ function get_user_certificate_content($user_id, $is_preview = false) {
     $new_content_html   = str_replace('../images/gallery',$path_image,$new_content_html);
     
     $path_image_in_default_course = api_get_path(WEB_CODE_PATH).'default_course_document';
-    $new_content_html = str_replace('/main/default_course_document',$path_image_in_default_course,$new_content_html);    
-    $new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
+    $new_content_html   = str_replace('/main/default_course_document',$path_image_in_default_course,$new_content_html);    
+    $new_content_html   = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
     
     //add print header
     $print  = '<style media="print" type="text/css">#print_div {visibility:hidden;}</style>';
@@ -611,7 +611,3 @@ function get_user_certificate_content($user_id, $is_preview = false) {
     $new_content_html = $new_content[0].$print.'</head>'.$new_content_html;
     return $new_content_html;
 }
-    
-    
-
-

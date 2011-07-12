@@ -76,7 +76,7 @@ class ResultsDataGenerator
 			$user['result_id'] = $result->get_id();
 			$user['lastname'] = $info['lastname'];
 			$user['firstname'] = $info['firstname'];
-			if ($pdf){
+			if ($pdf) {
 				$user['score'] = $result->get_score();
 			} else {
 				$user['score'] = $this->get_score_display($result->get_score(),true, $ignore_score_color);
@@ -84,8 +84,9 @@ class ResultsDataGenerator
 			if ($pdf && $number_decimals == null){
 				$user['scoreletter'] = $result->get_score();
 			}
-			if ($scoredisplay->is_custom())
-				$user['display'] = $this->get_score_display($result->get_score(),false, $ignore_score_color);;
+			if ($scoredisplay->is_custom()) {
+				$user['display'] = $this->get_score_display($result->get_score(), false, $ignore_score_color);				
+			}
 			$table[] = $user;
 		}
 
@@ -109,19 +110,14 @@ class ResultsDataGenerator
 
 	private function get_score_display ($score, $realscore, $ignore_score_color) {
 		if ($score != null) {
-			$display_type = SCORE_DIV_PERCENT;
-			if ($ignore_score_color) {
-				$display_type |= SCORE_IGNORE_SPLIT;
-			}
 			$scoredisplay = ScoreDisplay :: instance();
-			return $scoredisplay->display_score
-					(array($score,$this->evaluation->get_max()),
-					 $display_type,
-					 $realscore ? SCORE_ONLY_DEFAULT : SCORE_ONLY_CUSTOM);
-			}
-			else {
-				return '';
-		  }
+			$type = SCORE_CUSTOM;
+			if ($realscore === true) {
+			    $type = SCORE_DIV_PERCENT ; 
+			}			
+			return $scoredisplay->display_score(array($score, $this->evaluation->get_max()), $type );
+        }
+        return '';		
 	}
 
 	// Sort functions - used internally

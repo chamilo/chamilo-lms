@@ -2,16 +2,23 @@
 /* For licensing terms, see /license.txt */
 
 // Score display types constants
-define('SCORE_DIV',1);
-define('SCORE_PERCENT',2);
-define('SCORE_DIV_PERCENT',3);
-define('SCORE_AVERAGE',4);
+define('SCORE_DIV',                      1);    // X / Y
+define('SCORE_PERCENT',                  2);    // XX %
+define('SCORE_DIV_PERCENT',              3);    // X / Y (XX %)
+define('SCORE_AVERAGE',                  4);    // XX %
+define('SCORE_DECIMAL',                  5);    // 0.50  (X/Y)
+//@todo where is number 6?
+define('SCORE_IGNORE_SPLIT',             8);    //  ??
 
-define('SCORE_DECIMAL',5);
-define('SCORE_IGNORE_SPLIT', 8);
+define('SCORE_DIV_PERCENT_WITH_CUSTOM',  9);    // X / Y (XX %) - Good!
+define('SCORE_CUSTOM',                  10);    // Good!
+define('SCORE_DIV_SIMPLE_WITH_CUSTOM',  11);    // X - Good!
+
 define('SCORE_BOTH',1);
 define('SCORE_ONLY_DEFAULT',2);
 define('SCORE_ONLY_CUSTOM',3);
+
+
 
 
 /**
@@ -231,84 +238,93 @@ class ScoreDisplay
 	/**
 	 * Display a score according to the current settings
 	 * @param array $score score data structure, as returned by the calc_score functions
-	 * @param int $type one of the following constants: SCORE_DIV, SCORE_PERCENT, SCORE_DIV_PERCENT, SCORE_AVERAGE
-	 * (ignored for student's view if custom score display is enabled)
-	 * @param int $what one of the following constants: SCORE_BOTH, SCORE_ONLY_DEFAULT, SCORE_ONLY_CUSTOM (default: SCORE_BOTH)
-	 * (only taken into account if custom score display is enabled and for course/platform admin)
+	 * @param int 	$type one of the following constants: SCORE_DIV, SCORE_PERCENT, SCORE_DIV_PERCENT, SCORE_AVERAGE
+	 * 				(ignored for student's view if custom score display is enabled)
+	 * @param int 	$what one of the following constants: SCORE_BOTH, SCORE_ONLY_DEFAULT, SCORE_ONLY_CUSTOM (default: SCORE_BOTH)
+	 * 				(only taken into account if custom score display is enabled and for course/platform admin)
 	 */
-	public function display_score($score,$type, $what = SCORE_BOTH) {
-
-		$type2 = $type & 7;	// removes the 'SCORE_IGNORE_SPLIT' bit
-		$split_enabled = ($type2 == $type);
-
-		$my_score=($score==0) ? 1 : $score;
-
-		if ($this->custom_enabled && isset($this->custom_display_conv)) {
-				// students only see the custom display
-				if (!api_is_allowed_to_create_course()) {
-					$display = $this->display_custom($my_score);
-				}
-				// course/platform admins
-				elseif ($what == SCORE_ONLY_DEFAULT) {
-					$display = $this->display_default ($my_score, $type2);
-				}
-				elseif ($what == SCORE_ONLY_CUSTOM) {
-					$display = $this->display_custom ($my_score);
-				} else {
-					$display = $this->display_default ($my_score, $type2);
-					if ($this->display_custom ($my_score)!='')
-						$display.= ' ('.$this->display_custom ($my_score).')';
-			}
-
+	public function display_score($score, $type = SCORE_DIV_PERCENT, $what = SCORE_BOTH, $no_color = false) {	  
+		$my_score = ($score==0) ? 1 : $score;
+		
+		if ($this->custom_enabled && isset($this->custom_display_conv)) {		    
+	        $display = $this->display_default($my_score, $type);	        
 		} else {
 			// if no custom display set, use default display
-			$display = $this->display_default ($my_score, $type2);
+			$display = $this->display_default($my_score, $type);
 		}
-		return (($split_enabled ? $this->get_color_display_start_tag($my_score) : '')
-				. $display
-				. ($split_enabled ? $this->get_color_display_end_tag($my_score) : ''));
+		
+		if ($this->coloring_enabled && $no_color == false) {
+		    $my_score_denom = ($score[1]==0)?1:$score[1];		
+		    if (($score[0] / $my_score_denom) < ($this->color_split_value / 100)) {
+		        $display = Display::tag('font', $display, array('color'=>'red'));
+		    }		    
+		}
+		return $display;
 	}
 	
     // Internal functions
 	private function display_default ($score, $type) {
 		switch ($type) {
-			case SCORE_DIV :			// X / Y
+			case SCORE_DIV :			                // X / Y
 				return $this->display_as_div($score);
-
-			case SCORE_PERCENT :		// XX %
+			case SCORE_PERCENT :		                // XX %
 				return $this->display_as_percent($score);
-
-			case SCORE_DIV_PERCENT :	// X / Y (XX %)
-				return $this->display_as_div($score)
-							. ' (' . $this->display_as_percent($score) . ')';
-
-			case SCORE_AVERAGE :		// XX %
+			case SCORE_DIV_PERCENT :	                // X / Y (XX %)
+				return $this->display_as_div($score).' (' . $this->display_as_percent($score) . ')';
+			case SCORE_AVERAGE :		                // XX %
 				return $this->display_as_percent($score);
-
-			case SCORE_DECIMAL :       // 0.50  (X/Y)
-				return $this->display_as_decimal($score);
+			case SCORE_DECIMAL :                        // 0.50  (X/Y)
+				return $this->display_as_decimal($score);				
+		    case SCORE_DIV_PERCENT_WITH_CUSTOM :        // X / Y (XX %) - Good!
+				return $this->display_as_div($score).' (' . $this->display_as_percent($score) . ') - '.$this->display_custom($score);
+		    case SCORE_DIV_SIMPLE_WITH_CUSTOM :
+		        return $this->display_simple_score($score).' - '.$this->display_custom($score);
+		    case SCORE_CUSTOM:                          // Good!
+		        return $this->display_custom($score);
 
 		}
 	}
-
+	
+	private function display_simple_score($score) {
+	    if (isset($score[0])) {
+	        return $score[0];
+	    }
+	    return '';
+	}
+	
+    /**
+     * Returns "1" for array("100", "100");
+     */
 	private function display_as_decimal($score) {
-		$score_denom=($score[1]==0) ? 1 : $score[1];
+		$score_denom = ($score[1]==0) ? 1 : $score[1];
 		return round(($score[0]/ $score_denom),2);
 	}
-	private function display_as_percent ($score) {
+	
+	/**
+	 * Returns "100 %" for array("100", "100");
+	 */
+	private function display_as_percent($score) {
 		$score_denom=($score[1]==0) ? 1 : $score[1];
 		return round(($score[0] / $score_denom) * 100,2) . ' %';
 	}
-
-	private function display_as_div ($score) {
-		if ($score==1) {
+	
+    /**
+     * 
+     * Returns 10.00 / 10.00 for array("100", "100");
+     * @param array $score
+     */	
+    private function display_as_div($score) {
+		if ($score == 1) {
 			return '0/0';
 		} else {
 			return  $score[0] . ' / ' . $score[1];
 		}
-
 	}
-
+    /**
+     * 
+     * Depends in the user selections [0 50] Bad  [50:100] Good 
+     * @param array $score
+     */	
 	private function display_custom ($score) {
 		$my_score_denom= ($score[1]==0)?1:$score[1];
 		$scaledscore = $score[0] / $my_score_denom;
@@ -333,15 +349,14 @@ class ScoreDisplay
 
 	private function load_int_setting ($property, $default = 0) {
     	$tbl_setting = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-
-		$sql = "SELECT selected_value FROM ".$tbl_setting
-				." WHERE category = 'Gradebook' AND variable = '".$property."'";
+        $property    = Database::escape_string($property);
+        $default     = Database::escape_string($default);
+		$sql = "SELECT selected_value FROM $tbl_setting WHERE category = 'Gradebook' AND variable = '".$property."'";
 		$result = Database::query($sql);
 
 		if ($data = Database::fetch_row($result)) {
 			return $data[0];
-		}
-		else {
+		} else {
 			// if not present, add default setting into table...
 			$sql = "INSERT INTO ".$tbl_setting
 					." (variable, selected_value, category)"
@@ -367,8 +382,8 @@ class ScoreDisplay
             $category_id = $this->get_current_gradebook_category_id();
         }
 
-    $sql = 'SELECT score_color_percent FROM '.$tbl_display.' WHERE category_id = '.$category_id.' LIMIT 1';
-    $result = Database::query($sql);
+        $sql = 'SELECT score_color_percent FROM '.$tbl_display.' WHERE category_id = '.$category_id.' LIMIT 1';
+        $result = Database::query($sql);
         $score = 0;
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_row($result);
@@ -381,11 +396,13 @@ class ScoreDisplay
 
 
 	private function save_bool_setting ($property, $value) {
-		$this->save_int_setting ($property, ($value ? 'true' : 'false') );
+		$this->save_int_setting($property, ($value ? 'true' : 'false') );
 	}
 
 	private function save_int_setting ($property, $value) {
     	$tbl_setting = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    	$property    = Database::escape_string($property);
+    	$value       = Database::escape_string($value);
 		$sql = 'UPDATE '.$tbl_setting
 				." SET selected_value = '".$value."' "
 				." WHERE variable = '".$property."' AND category='Gradebook'";
@@ -449,24 +466,6 @@ class ScoreDisplay
 			return 0;
 		} else {
 			return ($item1['score'] < $item2['score'] ? -1 : 1);
-		}
-	}
-
-	private function get_color_display_start_tag($score) {
-		$my_score_denom=($score[1]==0)?1:$score[1];
-		if ($this->coloring_enabled && ($score[0]/$my_score_denom) < ($this->color_split_value / 100)) {
-			return '<font color="red">';
-		} else {
-			return '';
-		}
-	}
-
-	private function get_color_display_end_tag($score) {
-		$my_score_denom=($score[1]==0)?1:$score[1];
-		if ($this->coloring_enabled && ($score[0]/$my_score_denom) < ($this->color_split_value / 100)) {
-			return '</font>';
-		} else {
-			return '';
 		}
 	}
 }

@@ -171,12 +171,12 @@ class FlatViewDataGenerator
 				}
 			}
 
-			$total_score=array($item_value,$item_total);
+			$total_score = array($item_value,$item_total);
 			if (!$show_all) {
-				$row[] = $scoredisplay->display_score($total_score,SCORE_DIV_PERCENT);
+				$row[] = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT_WITH_CUSTOM);
 			} else {
-				$row[] = $scoredisplay->display_score($total_score,SCORE_DECIMAL);
-				$row[] = $scoredisplay->display_score($total_score,SCORE_DIV_PERCENT);
+				$row[] = $scoredisplay->display_score($total_score, SCORE_DECIMAL);
+				$row[] = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 			}
 			unset($score);
 			$data[] = $row;
@@ -246,29 +246,31 @@ class FlatViewDataGenerator
 		// sort users array
 		usort($usertable, array ('FlatViewDataGenerator','sort_by_first_name'));
 
-		// generate actual data array
-		$scoredisplay = ScoreDisplay :: instance();
-		$data= array ();
-		$displaytype = SCORE_DIV;
+		$data = array ();
+		
 		$selected_users = $usertable;
 		foreach ($selected_users as $user) {
 			$row = array ();
 			$row[] = $user[0];	// user id
-			$item_value=0;
-			$item_total=0;
+			$item_value = 0;
+			$item_total = 0;
 
 			for ($count=0;$count < count($this->evals_links); $count++) {
-				$item = $this->evals_links [$count];
+				$item = $this->evals_links[$count];
 				$score = $item->calc_score($user[0]);
-				$divide=( ($score[1])==0 ) ? 1 : $score[1];
-				$item_value+=round($score[0]/$divide*$item->get_weight(),2);
-				$item_total+=$item->get_weight();
-				$score_denom=($score[1]==0) ? 1 : $score[1];
+			
+				$divide =( ($score[1])==0 ) ? 1 : $score[1];
+                $item_value += round($score[0]/$divide*$item->get_weight(),2);
+				$item_total += $item->get_weight();
+				
+				
+				$score_denom = ($score[1]==0) ? 1 : $score[1];
 				$score_final = round(($score[0] / $score_denom) * 100,2);
 				$row[] = $score_final;
 			}
-			$total_score=array($item_value,$item_total);
+			$total_score = array($item_value, $item_total);
 			$score_final = round(($item_value / $item_total) * 100,2);
+			
 			$row[] = $score_final;
 			$data[] = $row;
 		}
@@ -303,17 +305,13 @@ class FlatViewDataGenerator
 				$item_total+=$item->get_weight();
 				$score_denom=($score[1]==0) ? 1 : $score[1];
 				$score_final = round(($score[0] / $score_denom) * 100,2);
-				$row[] = array ($score_final, strip_tags($scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_CUSTOM)));
+				$row[] = array ($score_final, trim($scoredisplay->display_score($score, SCORE_CUSTOM,null, true)));
 
 			}
-				$total_score=array($item_value,$item_total);
-				$score_final = round(($item_value / $item_total) * 100,2);
-				$row[] =array ($score_final, strip_tags($scoredisplay->display_score($total_score,SCORE_DIV_PERCENT, SCORE_ONLY_CUSTOM)));
-			//$total_score=array($item_value,$item_total);
-			//$score_final = round(($item_value / $item_total) * 100,2);
-			//$row[] = $score_final;
-			//var_dump($score_final);
-			//var_dump($row);
+			$total_score=array($item_value,$item_total);
+			$score_final = round(($item_value / $item_total) * 100,2);
+			$row[] =array ($score_final, trim($scoredisplay->display_score($total_score, SCORE_CUSTOM, null, true)));
+
 			$data[] = $row;
 		}
 		return $data;

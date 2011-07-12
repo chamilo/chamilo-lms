@@ -125,9 +125,9 @@ class GradebookTable extends SortableTable
 
 		foreach ($data_array as $data) {
             // list of items inside the gradebook (exercises, lps, fora, etc)
-			$row = array ();
+			$row  = array ();
 			$item = $data[0];
-			$id = $item->get_id();
+			$id   = $item->get_id();
             //the following condition seems strange to me - YW 20110421
             //GET['selectcat'] is the main gradebook. When defined, it means we are looking at the whole stuff instead of one sub-element (or something like that?)
             
@@ -137,16 +137,16 @@ class GradebookTable extends SortableTable
 			//$_GET['selectcat'] is never empty jm 20110426
 			
 			//if the item is invisible, wrap it in a span with class invisible
-			$invisibility_span_open = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
+			$invisibility_span_open  = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
 			$invisibility_span_close = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '</span>' : '';
 
 			if (api_is_allowed_to_edit(null, true)) {
-				$row[] = $this->build_id_column ($item);
+				$row[] = $this->build_id_column($item);
 			}
 
-			$row[] = $this->build_type_column ($item);
-			$row[] = $invisibility_span_open . $this->build_name_link ($item) . $invisibility_span_close;
-			$row[] = $invisibility_span_open . $data[2] . $invisibility_span_close;
+			$row[] = $this->build_type_column($item);
+			$row[] = $invisibility_span_open.$this->build_name_link ($item) . $invisibility_span_close;
+			$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;
 			if (api_is_allowed_to_edit(null, true)) {
 				$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
 				$weight_total_links += intval($data[3]);
@@ -181,9 +181,8 @@ class GradebookTable extends SortableTable
                     $item_value = number_format($item_value, 2, '.', ' ');
 			   		$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
 			   //}			   	
-			}
-			
-    		$row[] = $invisibility_span_open . str_replace(' ','&nbsp;', $data[4]) . $invisibility_span_close;
+			}			
+    		$row[] = $invisibility_span_open.$data[4].$invisibility_span_close;
 
 			//admins get an edit column
 			if (api_is_allowed_to_edit(null, true)) {
@@ -224,7 +223,7 @@ class GradebookTable extends SortableTable
 				} else {*/				    
 					if (isset($certificate_min_score) && $item_value >= $certificate_min_score) {
 						//register gradebook certificate
-						$current_user_id=api_get_user_id();
+						$current_user_id = api_get_user_id();
 						register_user_info_about_certificate($_GET['selectcat'], $current_user_id, $my_score_in_gradebook, api_get_utc_datetime());
 					}					
 				//}
@@ -288,18 +287,14 @@ class GradebookTable extends SortableTable
 						if (empty($certificate_min_score) || ($certificate_min_score > $weight_category)) {
 							$warning_message .= $course_code .'&nbsp;-&nbsp;'.get_lang('CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan').'&nbsp;'.$weight_category.'<br />';
 						}
-
 					}
 
 					if (!empty($warning_message)) {
 						Display::display_warning_message($warning_message,false);
 					}
-
-
 				}
 			}
 		}
-
 		return $sortable_data;
 	}
 

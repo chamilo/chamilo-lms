@@ -163,7 +163,7 @@ if (api_is_allowed_to_edit(null, true)) {
                     <td><?php echo $data['lastname'] ?></td>
                     <td><?php echo $data['firstname'] ?></td>
                     <td>
-                        <div style="height:56px">
+                        <div style="height:28px">
                         <center>
                         <div class="attendance-faults-bar" style="background-color:<?php echo (!empty($data['result_color_bar'])?$data['result_color_bar']:'none') ?>">
                         <?php echo $data['attendance_result'] ?></div>
@@ -255,7 +255,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                 }
                     ?>
                             <td style="<?php echo $style_td ?>" class="checkboxes_col_<?php echo $calendar['id'] ?>">
-                                <div style="height:56px">
+                                <div style="height:20px">
                                  <center>
                                     <?php if (!$is_locked_attendance || api_is_platform_admin()) { ?>
                                         <input type="checkbox" name="check_presence[<?php echo $calendar['id'] ?>][]" value="<?php echo $user['user_id'] ?>"  <?php echo $disabled.' '.$checked ?> /><span class="<?php echo 'anchor_'.$calendar['id'] ?>"></span>
@@ -269,7 +269,7 @@ if (api_is_allowed_to_edit(null, true)) {
                     <?php   } 
                         } else { ?>
                             <td class="checkboxes_col_<?php echo $calendar['id'] ?>">
-                                <div style="height:56px">
+                                <div style="height:20px">
                                     <center>&nbsp;</center>
                                </div>
                             </td>

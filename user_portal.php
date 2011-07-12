@@ -636,7 +636,9 @@ if ($show_menu) {
     $my_account_content .= '</ul>';
 }
 
-echo show_right_block(get_lang('MenuUser'), $my_account_content);
+if (!empty($my_account_content)) {
+    echo show_right_block(get_lang('MenuUser'), $my_account_content);
+}
 
 // Deleting the myprofile link.
 if (api_get_setting('allow_social_tool') == 'true') {

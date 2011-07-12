@@ -428,9 +428,48 @@ function display_anonymous_right_menu() {
     $sys_path               = api_get_path(SYS_PATH);
     $user_selected_language = api_get_interface_language();
     
-    echo '<div class="menu" id="menu">';
+    $display_add_course_link= api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');
+    
+    $current_user_id        = api_get_user_id();
+    
+   if (!empty($current_user_id)) {
+        // tabs that are deactivated are added here
 
-    if (!($_user['user_id']) || api_is_anonymous($_user['user_id']) ) { // Only display if the user isn't logged in.
+        $show_menu = false;
+        $show_create_link = false;
+        $show_course_link = false;       
+
+        if ($display_add_course_link) {
+            //display_create_course_link();
+            $show_menu = true;
+            $show_create_link = true;
+        }
+
+        if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
+            $show_menu = true;
+            $show_course_link = true;
+        } else {
+            if (api_get_setting('allow_students_to_browse_courses') == 'true') {
+                $show_menu = true;
+                $show_course_link = true;
+            }
+        }
+        
+        if ($show_menu && ($show_create_link || $show_course_link )) {
+            $show_menu = true;
+        } else {
+            $show_menu = false;
+        }
+    }
+    
+    if (!($current_user_id) || api_is_anonymous($current_user_id) || $show_menu) {
+        echo '<div class="menu" id="menu">';
+    }  
+    
+
+    if (!($current_user_id) || api_is_anonymous($current_user_id) ) {
+         
+        // Only display if the user isn't logged in.
         api_display_language_form(true);
         echo '<br />';
         display_login_form();
@@ -457,49 +496,27 @@ function display_anonymous_right_menu() {
     }
 
     // My Account section.
-    if (isset($_SESSION['_user']['user_id']) && $_SESSION['_user']['user_id'] != 0) {
-        // tabs that are deactivated are added here
+ 
 
-        $show_menu = false;
-        $show_create_link = false;
-        $show_course_link = false;
-
-        $display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');
-
-        if ($display_add_course_link) {
-            //display_create_course_link();
-            $show_menu = true;
-            $show_create_link = true;
+    if ($show_menu) {
+        echo '<div class="menusection">';
+        echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
+        echo '<ul class="menulist">';
+        if ($show_create_link) {
+            display_create_course_link();
         }
-
-        if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
-            $show_menu = true;
-            $show_course_link = true;
-        } else {
-            if (api_get_setting('allow_students_to_browse_courses') == 'true') {
-                $show_menu = true;
-                $show_course_link = true;
+        if ($show_course_link) {
+            if (!api_is_drh() && !api_is_session_admin()) {
+                display_edit_course_list_links();
+            } else {
+                display_dashboard_link();
             }
         }
-
-        if ($show_menu) {
-            echo '<div class="menusection">';
-            echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
-            echo '<ul class="menulist">';
-            if ($show_create_link) {
-                display_create_course_link();
-            }
-            if ($show_course_link) {
-                if (!api_is_drh() && !api_is_session_admin()) {
-                    display_edit_course_list_links();
-                } else {
-                    display_dashboard_link();
-                }
-            }
-            echo '</ul></div>';
-        }
-    }    
-    echo '</div>';
+        echo '</ul></div>';
+    }
+    if (!($current_user_id) || api_is_anonymous($current_user_id) || $show_menu) {
+        echo '</div>';
+    }
     
     // Notice
 

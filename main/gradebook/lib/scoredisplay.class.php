@@ -7,18 +7,20 @@ define('SCORE_PERCENT',                  2);    // XX %
 define('SCORE_DIV_PERCENT',              3);    // X / Y (XX %)
 define('SCORE_AVERAGE',                  4);    // XX %
 define('SCORE_DECIMAL',                  5);    // 0.50  (X/Y)
+
 //@todo where is number 6?
+
 define('SCORE_IGNORE_SPLIT',             8);    //  ??
 
 define('SCORE_DIV_PERCENT_WITH_CUSTOM',  9);    // X / Y (XX %) - Good!
 define('SCORE_CUSTOM',                  10);    // Good!
 define('SCORE_DIV_SIMPLE_WITH_CUSTOM',  11);    // X - Good!
 
+
+
 define('SCORE_BOTH',1);
 define('SCORE_ONLY_DEFAULT',2);
 define('SCORE_ONLY_CUSTOM',3);
-
-
 
 
 /**
@@ -67,8 +69,6 @@ class ScoreDisplay
 		}
 	}
 	
-    // As object
-
 	private $coloring_enabled;
 	private $color_split_value;
 	private $custom_enabled;
@@ -278,18 +278,17 @@ class ScoreDisplay
 		    case SCORE_DIV_PERCENT_WITH_CUSTOM :        // X / Y (XX %) - Good!
 		        $custom = $this->display_custom($score);
 		        if (!empty($custom)) {
-		            $custom .= ' - '.$custom;
+		            $custom = ' - '.$custom;
 		        }
 				return $this->display_as_div($score).' (' . $this->display_as_percent($score) . ')'.$custom;
 		    case SCORE_DIV_SIMPLE_WITH_CUSTOM :         // X - Good!
                 $custom = $this->display_custom($score);
 		        if (!empty($custom)) {
-		            $custom .= ' - '.$custom;
+		            $custom = ' - '.$custom;
 		        }
-		        return $this->display_simple_score($score).$custom;
+		        return $this->display_simple_score($score).$custom;		        
 		    case SCORE_CUSTOM:                          // Good!
 		        return $this->display_custom($score);
-
 		}
 	}
 	

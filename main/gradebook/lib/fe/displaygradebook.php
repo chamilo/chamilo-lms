@@ -198,7 +198,7 @@ class DisplayGradebook
 		$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		$objcat = new Category();
 		//$objdat=new Database();
-		$course_id=Database::get_course_by_category($selectcat);
+		$course_id = Database::get_course_by_category($selectcat);
 		$message_resource=$objcat->show_message_resource_delete($course_id);
 
 		if (!$is_course_admin && $status<>1 && $selectcat<>0) {
@@ -229,13 +229,13 @@ class DisplayGradebook
 
 			$cattotal = Category :: load(0);
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
-			$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
+			$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal, SCORE_PERCENT) : get_lang('NoResultsAvailable'));
 			$scoreinfo = get_lang('StatsStudent') . ' :<b> '.api_get_person_name($user['firstname'], $user['lastname']).'</b><br />';
 			if ((!$catobj->get_id() == '0') && (!isset ($_GET['studentoverview'])) && (!isset ($_GET['search']))) {
 				$scoreinfo.= '<h2>'.get_lang('Total') . ' : ' . $scorecourse_display . '</h2>';
 			}
-			//$scoreinfo.= '<br />'.get_lang('Total') . ' : <b>' . $scoretotal_display . '</b>';
-			Display :: display_normal_message($scoreinfo,false);
+			//$scoreinfo.= '<br />'.get_lang('Total') . ' : <b>' . $scoretotal_display . '</b>';			
+			Display :: display_normal_message($scoreinfo, false);
 		}
 		// show navigation tree and buttons?
 		$header='';

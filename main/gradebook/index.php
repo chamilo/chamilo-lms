@@ -50,7 +50,7 @@ function confirmation() {
 $tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
 $tbl_attendance   = Database :: get_course_table(TABLE_ATTENDANCE);
 $tbl_grade_links  = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
+$status           = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
 
@@ -540,7 +540,7 @@ if (isset ($move_form)){
 // LOAD DATA & DISPLAY TABLE
 
 $is_platform_admin  = api_is_platform_admin();
-$is_course_admin    = api_is_allowed_to_create_course();
+$is_course_admin    = api_is_allowed_to_edit(null, true);// api_is_allowed_to_create_course();
 
 //load data for category, evaluation and links
 if (empty ($_GET['selectcat'])) {
@@ -799,15 +799,16 @@ $no_qualification = false;
 if (( count($allcat) == 0) && ( count($alleval) == 0 ) && ( count($alllink) == 0 )) {
     $no_qualification = true;
     if ((($is_course_admin) && (!isset ($_GET['selectcat']))) && api_is_course_tutor()) {
-	   Display :: display_normal_message(get_lang('GradebookWelcomeMessage') . '<br /><br /><form name="createcat" method="post" action="' . api_get_self() . '?createallcategories=1"><input type="submit" value="' . get_lang('CreateAllCat') . '"></form>',false);
+        Display :: display_normal_message(get_lang('GradebookWelcomeMessage') . '<br /><br /><form name="createcat" method="post" action="' . api_get_self() . '?createallcategories=1"><input type="submit" value="' . get_lang('CreateAllCat') . '"></form>',false);
     }
 }
+
 //here we are in a sub category
 if ($category != '0') {
 	$cat = new Category();
 	$category_id   = intval($_GET['selectcat']);
 	$course_id     = Database::get_course_by_category($category_id);
-	$show_message=$cat->show_message_resource_delete($course_id);
+	$show_message  = $cat->show_message_resource_delete($course_id);
 	if ($show_message=='') {
 
 		//hack for inside courses menu cat
@@ -830,7 +831,7 @@ if ($category != '0') {
 			echo '</div>';
 		} else	{
 			// generating the total score for a course
-			$stud_id= api_get_user_id();
+			$stud_id         = api_get_user_id();
 			$cats_course     = Category :: load ($category_id, null, null, null, null, null, false);
 			$alleval_course  = $cats_course[0]->get_evaluations($stud_id,true);
 			$alllink_course  = $cats_course[0]->get_links($stud_id,true);
@@ -851,6 +852,7 @@ if ($category != '0') {
 			
 			$cattotal = Category :: load($category_id);
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
+			
 			/*
 			//Overwritten the old total with the real total of the gradebook if the line below is deleted, then when a user doesn't finish a test the total will be different from the real total 
 			$scoretotal[1] = $item_total;					
@@ -861,13 +863,13 @@ if ($category != '0') {
 			$my_score_in_gradebook =  round($scoretotal[0],2);
 			
 			//Show certificate
-			$certificate_min_score=$cats[0]->get_certificate_min_score();
+			$certificate_min_score = $cats[0]->get_certificate_min_score();
 			$scoredisplay = ScoreDisplay :: instance();
 			$scoretotal_display = $scoredisplay->display_score($scoretotal,SCORE_DIV_PERCENT); //a student always sees only the teacher's repartition
             //$score_compare = ($scoretotal[0] / $scoretotal[1]) * 100; //build the total percentage obtained in order to compare it to the minimum certification percentage
 			if (isset($certificate_min_score) && $item_value >= $certificate_min_score) {
 				$url  = api_get_path(WEB_CODE_PATH) .'gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=yes&cat_id='.$cats[0]->get_id();
-				//$certificates.= '<img src="'.api_get_path(WEB_CODE_PATH) . 'img/logo.gif" />'.get_lang('Certificates').'</a>&nbsp;<strong>'.get_lang('Total').': '.$scoretotal_display.'</strong>';
+
 				$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 48), $url, array('target'=>'_blank'));
 				
 				echo '<div class="actions" align="right">';
@@ -875,10 +877,11 @@ if ($category != '0') {
 				echo '</div>';
 			}
 		} //end hack
+		
 		DisplayGradebook::display_header_gradebook($cats[0], 0, $category_id, $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
 	}
-} else {
-//this is the root category
+} else {    
+    //this is the root category
 	//DisplayGradebook :: display_header_gradebook($cats[0], 0, 0, $is_course_admin, $is_platform_admin, $simple_search_form, false, false);
 }
 
@@ -886,9 +889,10 @@ if (api_is_allowed_to_edit(null, true)) {
 	// Tool introduction
 	Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));
 
-	if ( (isset ($_GET['selectcat']) && $_GET['selectcat']<>0) ) {
+	if ( (isset ($_GET['selectcat']) && $_GET['selectcat']<>0) ) {	    
 	//
 	} else {
+	    
         if (((isset ($_GET['selectcat']) && $_GET['selectcat']==0) || ((isset($_GET['cidReq']) && $_GET['cidReq']!==''))) || isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {
             $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
 			if (!$first_time=1) {

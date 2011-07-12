@@ -181,7 +181,7 @@ class GradebookTable extends SortableTable
                     $item_value = number_format($item_value, 2, '.', ' ');
 			   		$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
 			   //}			   	
-			}			
+			}
     		$row[] = $invisibility_span_open.$data[4].$invisibility_span_close;
 
 			//admins get an edit column

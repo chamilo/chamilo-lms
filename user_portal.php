@@ -619,7 +619,7 @@ if ($show_menu) {
     if ($show_course_link) {
         if (!api_is_drh()) {
             $my_account_content .=  '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
-               if (api_get_setting('use_session_mode') == 'true') {
+            if (api_get_setting('use_session_mode') == 'true') {
                 if (isset($_GET['history']) && intval($_GET['history']) == 1) {
                     $my_account_content .=  '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
                 } else {

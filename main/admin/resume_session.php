@@ -98,7 +98,7 @@ if (!empty($_GET['warn'])) {
 }
 
 echo Display::tag('h1', Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
-echo Display::tag('h3', $tool_name);
+//echo Display::tag('h3', $tool_name);
 ?>
 <!-- General properties -->
 <table class="data_table" width="100%">

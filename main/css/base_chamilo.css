@@ -1989,7 +1989,7 @@ padding-top: 0px;   padding-right: 0px; padding-bottom: 0px;    padding-left: 0p
     border-top:1px dotted #999999;
     /*height:35px;*/
     padding:2px;
-    margin-bottom: 5px;
+     margin-bottom: 5px;
     vertical-align:middle;
 }
 .actions a img {
@@ -2005,7 +2005,7 @@ padding-top: 0px;   padding-right: 0px; padding-bottom: 0px;    padding-left: 0p
     border: none;
     text-decoration: none;
     /*background-color: #E5EDF9;*/
-    padding-right: 5px;
+    /* padding-right: 5px; */
     vertical-align:middle;
 }
 .actions a {

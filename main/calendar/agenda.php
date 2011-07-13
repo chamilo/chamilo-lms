@@ -359,11 +359,9 @@ if (!$_GET['action'] || $_GET['action']=="view") {
 		display_one_agenda_item($_GET['agenda_id']);
 	}
 }
-echo '&nbsp;</td></tr></table>';
+echo '</td></tr></table>';
 
-/*
-		FOOTER
-*/
+/*		FOOTER */
 // The footer is displayed only if we are not in the learnpath
 if ($_GET['origin'] != 'learnpath') {
 	Display::display_footer();

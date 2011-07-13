@@ -1,44 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-    @author: Julio Montoya <gugli100@gmail.com> BeezNest 2011
+    @author: Julio Montoya <gugli100@gmail.com> BeezNest 2011 Bugfixes
+    
+    //Original code found in Dok€os
 	@author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	@author: Toon Van Hoecke <toon.vanhoecke@ugent.be>, Ghent University
-	@author: Eric Remy (initial version)	
-	@version: 3
-	@description: 	this file generates a general agenda of all items of the
-					courses the user is registered for
-
-	version info:
-	-> version 3: Julio Montoya - removing a lot of useless code, cleaning the UI to 
-	be more intuitive, adding "jquery popups" and showing agenda types, etc.    
+	@author: Eric Remy (initial version)
 	
-	-> version 2.2 : Patrick Cool, patrick.cool@ugent.be, november 2004
-	Personal Agenda added. The user can add personal agenda items. The items
-	are stored in a chamilo_user database because it is not course or platform
-	based. A personal agenda view was also added. This lists all the personal
-	agenda items of that user.
-
-	-> version 2.1 : Patrick Cool, patrick.cool@ugent.be, , oktober 2004
-	This is the version that works with the Group based Agenda tool.
-
-	-> version 2.0 (alpha): Patrick Cool, patrick.cool@ugent.be, , oktober 2004
-	The 2.0 version introduces besides the month view also a week- and day view.
-	In the 2.5 (final) version it will be possible for the student to add his/her
-	own agenda items. The platform administrator can however decide if the students
-	are allowed to do this or not.
-	The alpha version only contains the three views. The personal agenda feature is
-	not yet completely finished. There are however already some parts of the code
-	for adding a personal agenda item present.
-	this code was not released in an official dokeos but was only used in the offical
-	server of the Ghent University where it underwent serious testing
-
-	-> version 1.5: Toon Van Hoecke, toon.vanhoecke@ugent.be, december 2003
-
-	-> version 1.0: Eric Remy, eremy@rmwc.edu, 6 Oct 2003
-	The tool was initially called master-calendar as it collects all the calendar
-	items of all the courses one is subscribed to. It was very soon integrated in
-	Dokeos as this was a really basic and very usefull tool.
+	@todo create a class and merge with the agenda.inc.php
 */
 
 /**
@@ -114,11 +84,10 @@ function get_myagendaitems($user_id, $courses_dbs, $month, $year) {
 			$agendaday = date("j",strtotime($item['start_date']));
 			
 			$url  = api_get_path(WEB_CODE_PATH)."calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&day=$agendaday&month=$month&year=$year#$agendaday";
-		    //$url  = Display::url($array_course_info["title"], $url);
 			
 			$item['url'] = $url;
 			$item['course_name'] = $array_course_info['title'];	
-			$item['calendar_type'] = 'course';
+			$item['calendar_type'] = 'course';			
 			$my_list[$agendaday][] = $item;					
 		}
 	}
@@ -188,6 +157,7 @@ function display_mymonthcalendar($user_id, $agendaitems, $month, $year, $weekday
 		echo '<td class="weekdays">'.$DaysShort[$ii % 7].'</td>';
 	}
 	echo '</tr>';
+	
 	$curday = -1;
 	$today = getdate();
 	while ($curday <= $numberofdays[$month]) {
@@ -199,11 +169,12 @@ function display_mymonthcalendar($user_id, $agendaitems, $month, $year, $weekday
 			if (($curday > 0) && ($curday <= $numberofdays[$month])) {
 				$bgcolor = $class = 'class="days_week"';
 				$dayheader = Display::div($curday, array('class'=>'agenda_day'));
-				if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
-					
+				if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {					
 					$class = "class=\"days_today\" style=\"width:10%;\"";
 				}
+				
 				echo "<td ".$class.">".$dayheader;
+				
 				if (!empty($agendaitems[$curday])) {			        
 				   $items =  $agendaitems[$curday];
 				   
@@ -211,6 +182,7 @@ function display_mymonthcalendar($user_id, $agendaitems, $month, $year, $weekday
 				        $value['title'] = Security::remove_XSS($value['title']);
                         $start_time = api_convert_and_format_date($value['start_date'], TIME_NO_SEC_FORMAT);
                         $end_time = '';
+                        
                         if (!empty($value['end_date']) && $value['end_date'] != '0000-00-00 00:00:00') {
                            $end_time    = '-&nbsp;<i>'.api_convert_and_format_date($value['end_date'], DATE_TIME_FORMAT_LONG).'</i>';
                         }       
@@ -220,7 +192,7 @@ function display_mymonthcalendar($user_id, $agendaitems, $month, $year, $weekday
 				        switch($value['calendar_type']) {
                             case 'personal':
                                 $bg_color = '#D0E7F4';                                          
-                                $icon = Display::return_icon('user.png', get_lang('MyAgenda'), array(), 22);
+                                $icon = Display::return_icon('user.png', get_lang('MyAgenda'), array(), 22);          
                                 break;
                             case 'global':
                                 $bg_color = '#FFBC89';
@@ -246,21 +218,23 @@ function display_mymonthcalendar($user_id, $agendaitems, $month, $year, $weekday
                             $icon = Display::div($icon, array('style'=>'float:right'));                            
                             
                             //Link to bubble                                                
-                            $url = Display::url(cut($value['title'], 40), '#', array('id'=>$value['calendar_type'].'_'.$value['id'],'class'=>'opener'));                                 
+                            $url = Display::url(cut($value['title'], 40), '#', array('id'=>$value['calendar_type'].'_'.$value['id'], 'class'=>'opener'));                                 
                             $result .= $time.' '.$icon.' '.Display::div($url);
-                            
-                            //Main div
-                            $result .= '</div>';                        
-                            echo $result;
                             
                             //Hidden content
                             $content = Display::div($icon.Display::tag('h1', $value['title']).$complete_time.Security::remove_XSS($value['content']));
+                            
+                            //Main div
+                            $result .= Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog', 'style' => 'display:none'));
+                            $result .= '</div>';                        
+                            echo $result;
+                            
+                            
                             
                             //echo Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog'));
                         } else {
                             echo $result .= $icon;
                         }
-                        
 				   }
 				}
 				echo "</td>";
@@ -674,6 +648,7 @@ function get_personal_agenda_items($user_id, $agendaitems, $day = "", $month = "
 		        
         if ($type == 'month_view') {
             $item['calendar_type'] = 'personal';
+            $item['start_date'] = $item['date'] ;
             $agendaitems[$day][] = $item;
             continue;
         } 
@@ -1021,4 +996,3 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 	}
 	return $items;
 }
-

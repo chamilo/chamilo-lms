@@ -62,7 +62,7 @@ function get_calendar_items($select_month, $select_year, $select_day = false) {
     }   
 
 	// database variables
-	$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
+	$TABLEAGENDA         = Database::get_course_table(TABLE_AGENDA);
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	
 	$group_memberships = GroupManager::get_group_ids($course_info['dbName'], api_get_user_id());
@@ -276,8 +276,7 @@ function get_calendar_items($select_month, $select_year, $select_day = false) {
         $sql = "SELECT id, title, text as content , date as start_date, enddate as end_date, parent_event_id FROM ".$tbl_personal_agenda."
                 WHERE user='".api_get_user_id()."' ".$show_all_current_personal;
         $result = Database::query($sql);
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            //$datum_item=intval(substr($row["start_date"],8,2));
+        while ($row = Database::fetch_array($result, 'ASSOC')) {           
             $row['calendar_type'] = 'personal';
             if (!empty($row['start_date']) && $row['start_date'] != '0000-00-00 00:00:00')
             $row['start_date_tms'] = api_strtotime($row['start_date']);
@@ -287,8 +286,8 @@ function get_calendar_items($select_month, $select_year, $select_day = false) {
         }
     }
     
+    //Check global agenda events
     if (empty($_SESSION['user']) && empty($_SESSION['group'])) {
-        //Check global agenda events
         $table_agenda_system = Database :: get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
         $current_access_url_id = api_get_current_access_url_id();
         
@@ -503,11 +502,12 @@ function display_monthcalendar($month, $year, $agenda_items) {
     							        break;				            
     							}
     							$icon = Display::div($icon, array('style'=>'float:right'));
+    							
     							//Setting a personal event to green
     							$dayheader.= '<div class="rounded_div_agenda" style="background-color:'.$bg_color.';">';
     							
     						    //Link to bubble                                                
-    							$url = Display::url(cut($value['title'], 40), '#', array('id'=>$value['calendar_type'].'_'.$value['id'],'class'=>'opener'));									
+    							$url = Display::url(cut($value['title'], 40), '#', array('id'=>$value['calendar_type'].'_'.$value['id'], 'class'=>'opener'));									
     							$dayheader .= $time.' '.$icon.' '.Display::div($url);
     							
     							//Hidden content
@@ -548,11 +548,8 @@ function display_monthcalendar($month, $year, $agenda_items) {
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return javascript code
 */
-function to_javascript() {
-    $Send2All=get_lang("Send2All");
+function to_javascript() {    
 return "<script type=\"text/javascript\" language=\"javascript\">
-
-
 $(function() {  
     //js used when generating images on the fly see function Tracking::show_course_detail()
     $(\".dialog\").dialog(\"destroy\");        

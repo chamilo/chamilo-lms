@@ -238,8 +238,8 @@ class DisplayGradebook
 			Display :: display_normal_message($scoreinfo, false);
 		}
 		// show navigation tree and buttons?
-		$header='';
-		$header .= '<div class="actions"><table border=0 >';
+		
+		$header = '<div class="actions"><table border=0>';
 		if (($showtree == '1') || (isset ($_GET['studentoverview']))) {
 			$header .= '<tr>';
 			if (!$selectcat == '0') {
@@ -251,6 +251,7 @@ class DisplayGradebook
 
 			$tree= $cats[0]->get_tree();
 			unset ($cats);
+			
 			foreach ($tree as $cat) {
 				for ($i= 0; $i < $cat[2]; $i++) {
 					$line .= '&mdash;';
@@ -287,10 +288,12 @@ class DisplayGradebook
 
 		// for course admin & platform admin add item buttons are added to the header
 		$header .= '<div class="actions">';
-		$my_category=$catobj->shows_all_information_an_category($catobj->get_id());
-		$user_id=api_get_user_id();
-		$course_code=$my_category['course_code'];
-		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
+		
+		$my_category = $catobj->shows_all_information_an_category($catobj->get_id());
+		$user_id     = api_get_user_id();
+		$course_code = $my_category['course_code'];
+		$status_user = api_get_status_of_user_in_course ($user_id,$course_code);
+		
 		if (api_is_allowed_to_edit(null, true)) {
 			if ($selectcat == '0') {
                 if ($show_add_qualification === true) {
@@ -327,10 +330,20 @@ class DisplayGradebook
                 	$my_file= substr($_SESSION['gradebook_dest'],0,5);
 
 					if (api_is_allowed_to_edit(null, true)) {
-                		$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('settings.png', get_lang('ScoreEdit'),'','32').'</a>';
+                		
 						$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats.png', get_lang('FlatView'),'','32').'</a>';
 						$header .= '<td style="vertical-align: top;"><a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('certificate.png', get_lang('AttachCertificate'),'','32').'</a>';
 						$header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?'.$my_api_cidreq.'&amp;cat_id='.(int)$_GET['selectcat'].'">'.Display::return_icon('certificate_list.png', get_lang('GradebookSeeListOfStudentsCertificates'),'','32').'</a>';
+						
+						$visibility_icon    = ($catobj->is_visible() == 0) ? 'invisible' : 'visible';
+			            $visibility_command = ($catobj->is_visible() == 0) ? 'set_visible' : 'set_invisible';
+			
+            			$modify_icons  = '<a href="gradebook_edit_cat.php?editcat=' . $catobj->get_id() . ' &amp;cidReq='.$catobj->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Edit'),'','32').'</a>';
+            			$modify_icons .= '<a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('ranking.png', get_lang('ScoreEdit'),'','32').'</a>';
+            			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $catobj->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'','32').'</a>';
+            			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $catobj->get_id() . '&amp;selectcat=0&amp;cidReq='.$catobj->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'','32').'</a>';
+            			
+            			$header .= Display::div($modify_icons, array('class'=>'right'));
 					}
                 }
 			}
@@ -339,6 +352,20 @@ class DisplayGradebook
 		}
 		$header .= '</div>';
 		echo $header;
+		
+		if (api_is_allowed_to_edit(null, true)) {
+            $weight = ((intval($catobj->get_weight())>0) ? $catobj->get_weight() : 0);                        			
+    		$weight            = Display::tag('h3', get_lang('TotalWeight').' : '.$weight);    		
+    		
+    		$min_certification = (intval($catobj->get_certificate_min_score()>0) ? $catobj->get_certificate_min_score() : 0);
+    		$min_certification = Display::tag('h3', get_lang('CertificateMinScore').' : '.$min_certification);
+    		//@todo show description
+    		$description       = (($catobj->get_description() == "" || is_null($catobj->get_description())) ? '' : '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.$catobj->get_description());    				
+    		Display::display_normal_message($weight.$min_certification, false);
+    		if (!empty($description)) {
+    		    echo Display::div($description, array());
+    		}
+		}		
 	}
 
 	function display_reduce_header_gradebook($catobj,$is_course_admin, $is_platform_admin, $simple_search_form, $show_add_qualification = true, $show_add_link = true) {

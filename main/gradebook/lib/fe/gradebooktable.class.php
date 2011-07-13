@@ -244,6 +244,11 @@ class GradebookTable extends SortableTable
 					$warning_message = get_lang('TotalWeightMustNotBeMoreThan').'&nbsp;'.$weight_category;
 					Display::display_warning_message($warning_message,false);
 				}
+				
+				if ($weight_total_links < $weight_category) {
+					$warning_message = sprintf(get_lang('TotalWeightMustBeX'), $weight_category);
+					Display::display_warning_message($warning_message,false);
+				}
 
 				$content_html = DocumentManager::replace_user_info_into_html(api_get_user_id(), $course_code);
 

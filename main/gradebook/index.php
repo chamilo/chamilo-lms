@@ -811,25 +811,9 @@ if ($category != '0') {
 	$show_message  = $cat->show_message_resource_delete($course_id);
 	if ($show_message=='') {
 
-		//hack for inside courses menu cat
-		if (api_is_allowed_to_edit()) {
+		//student
+		if (!api_is_allowed_to_edit()) {
 
-			$op_cat_weight= '<strong>'.get_lang('TotalWeight').'</strong>'.': '.((intval($cats[0]->get_weight())>0) ? $cats[0]->get_weight() : 0);
-			$opt_cat_cert_min= '<strong>'.get_lang('CertificateMinScore').'</strong>'.': '.(intval($cats[0]->get_certificate_min_score()>0) ? $cats[0]->get_certificate_min_score() : 0);
-			$opt_cat_descrip= '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.(($cats[0]->get_description() == "" || is_null($cats[0]->get_description())) ? get_lang('None') : $cats[0]->get_description());
-
-			$visibility_icon= ($cats[0]->is_visible() == 0) ? 'invisible' : 'visible';
-			$visibility_command= ($cats[0]->is_visible() == 0) ? 'set_visible' : 'set_invisible';
-			echo '<div class="actions" align="right">';
-			$modify_icons= '<a  href="gradebook_edit_cat.php?editcat=' . $cats[0]->get_id() . ' &amp;cidReq='.$cats[0]->get_course_code().'">'.Display::return_icon('edit.png', get_lang('EditCategory'),'','22').'</a>';
-			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $cats[0]->get_id() . '&amp;selectcat=0&amp;cidReq='.$cats[0]->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'','22').'</a>';
-			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $cats[0]->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'','22').'</a>';
-			$opt_cat_descrip1 = strip_tags($opt_cat_descrip);
-			echo '<div  align="left" style="float:left">'.Display::return_icon('info.png', $opt_cat_descrip1,'','22').'</a>';
-			echo $op_cat_weight.' '.'&nbsp;&nbsp;'.$opt_cat_cert_min.'&nbsp;&nbsp;'.$opt_cat_descrip.'</div>';
-			echo $modify_icons;
-			echo '</div>';
-		} else	{
 			// generating the total score for a course
 			$stud_id         = api_get_user_id();
 			$cats_course     = Category :: load ($category_id, null, null, null, null, null, false);
@@ -852,13 +836,7 @@ if ($category != '0') {
 			
 			$cattotal = Category :: load($category_id);
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
-			
-			/*
-			//Overwritten the old total with the real total of the gradebook if the line below is deleted, then when a user doesn't finish a test the total will be different from the real total 
-			$scoretotal[1] = $item_total;					
-			//$scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).' ('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');			
-			*/
-			
+					
 			//Do not remove this the gradebook/lib/fe/gradebooktable.class.php file load this variable as a global 		
 			$my_score_in_gradebook =  round($scoretotal[0],2);
 			

@@ -479,8 +479,16 @@ class UserManager
 			$language = api_get_interface_language();
 		}
 		$firstname = substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($firstname, '', $encoding)), 0, 1); // The first letter only.
+		
+		//Looking for a space in the lastname
+		$pos = strpos($lastname, ' ');
+        if ($pos !== false ) {
+            $lastname = substr($lastname, 0, strpos($lastname, ' '));
+        }
+               
 		$lastname = preg_replace(USERNAME_PURIFIER, '', api_transliterate($lastname, '', $encoding));
-		$username = api_is_western_name_order(null, $language) ? $firstname.$lastname : $lastname.$firstname;
+		//$username = api_is_western_name_order(null, $language) ? $firstname.$lastname : $lastname.$firstname;
+		$username = $firstname.$lastname;
 		if (empty($username)) {
 			$username = 'user';
 		}

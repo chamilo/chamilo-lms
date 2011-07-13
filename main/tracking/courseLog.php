@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -19,8 +18,6 @@ $language_file[] = 'scorm';
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 
-// The section (for the tabs).
-//$this_section = "session_my_space";
 $from_myspace = false;
 if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
     $from_myspace = true;
@@ -30,9 +27,9 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 }
 
 // Access restrictions.
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin || api_is_drh() || api_is_course_tutor();
+$is_allowedToTrack = $is_courseAdmin || api_is_platform_admin() || $is_courseCoach || api_is_session_admin() || api_is_drh() || api_is_course_tutor() || api_is_coach();
 
-if (!$is_allowedToTrack && !api_is_session_admin()) {
+if (!$is_allowedToTrack) {
     Display :: display_header(null);
     api_not_allowed();
     Display :: display_footer();
@@ -97,7 +94,7 @@ $tbl_learnpath_item_view= Database::get_course_table(TABLE_LP_ITEM_VIEW);
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
     $interbreadcrumb[] = array('url' => '../admin/index.php','name' => get_lang('PlatformAdmin'));
     $interbreadcrumb[] = array('url' => '../admin/session_list.php','name' => get_lang('SessionList'));
-    $interbreadcrumb[] = array('url' => '../admin/resume_session.php?id_session='.$_SESSION['id_session'], 'name' => get_lang('SessionOverview'));
+    $interbreadcrumb[] = array('url' => '../admin/resume_session.php?id_session='.api_get_session_id(), 'name' => get_lang('SessionOverview'));
 }
 
 $view = (isset($_REQUEST['view']) ? $_REQUEST['view'] : '');
@@ -109,10 +106,10 @@ Display::display_header($nameTools, 'Tracking');
 // getting all the students of the course
 if (!empty($_SESSION['id_session'])) {
     // Registered students in session.
-    $a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, $_SESSION['id_session']);
+    $a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), true, api_get_session_id());
 } else {
     // Registered students in a course outside session.
-    $a_students = CourseManager :: get_student_list_from_course_code($_course['id']);
+    $a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id());
 }
 
 $nbStudents = count($a_students);

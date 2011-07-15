@@ -146,27 +146,13 @@ $image = $image_path['file'];
 $image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown_group.jpg');
 $image_size = api_getimagesize($image_file);
 
-$img_attributes = 'src="'.$image_file.'?rand='.time().'" '
-	.'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
-	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
-
-if ($image_size['width'] > 300) { //limit display width to 300px
-	$img_attributes .= 'width="300" ';
-}
-
 // get the path,width and height from original picture
 $big_image = $image_dir.'big_'.$image;
 $big_image_size = api_getimagesize($big_image);
 $big_image_width = $big_image_size['width'];
 $big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
-/*
-if ($image == '') {
-	echo '<img '.$img_attributes.' />';
-} else {
-	echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
-}
-*/
+
 //Shows left column
 //echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
 

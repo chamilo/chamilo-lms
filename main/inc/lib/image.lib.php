@@ -201,8 +201,12 @@ class GDWrapper extends ImageWrapper {
         }           
     }
     	
-    public function get_image_size() {	    
-	    return $return_array = array('width'=>$this->width,'height'=>$this->height);
+    public function get_image_size() {
+        $return_array = array('width'=>0,'height'=>0);        
+        if ($this->image_validated) {	    
+	        $return_array = array('width'=>$this->width,'height'=>$this->height);
+        }
+        return $return_array;
 	}
 	
     public function fill_image_info() {        

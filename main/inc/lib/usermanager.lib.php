@@ -478,12 +478,12 @@ class UserManager
 		if (is_null($language)) {
 			$language = api_get_interface_language();
 		}
-		$firstname = substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($firstname, '', $encoding)), 0, 1); // The first letter only.
+		$firstname = api_substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($firstname, '', $encoding)), 0, 1); // The first letter only.
 		
 		//Looking for a space in the lastname
-		$pos = strpos($lastname, ' ');
+		$pos = api_strpos($lastname, ' ');
         if ($pos !== false ) {
-            $lastname = substr($lastname, 0, strpos($lastname, ' '));
+            $lastname = api_substr($lastname, 0, $pos);
         }
                
 		$lastname = preg_replace(USERNAME_PURIFIER, '', api_transliterate($lastname, '', $encoding));

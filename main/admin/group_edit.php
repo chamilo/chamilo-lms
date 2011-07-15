@@ -78,12 +78,18 @@ if (strlen($group_data['picture_uri']) > 0) {
 	$form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
 }
 
+//Group Parentship
+$groups = array();
+$groups = GroupPortalManager::get_groups_list($group_id);
+$groups[0] = get_lang('NoParentship');
+$group_data['parent_group'] = GroupPortalManager::get_parent_group($group_id);
+$form->addElement('select', 'parent_group', get_lang('GroupParentship'), $groups, array());
+
 
 // Status
 $status = array();
 $status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
 $status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
-
 $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status, array());
 
 // Submit button
@@ -111,8 +117,11 @@ if ( $form->validate()) {
 	$description	= $group['description'];
 	$url 			= $group['url'];
 	$status 		= intval($group['visibility']);
+  $parent_group_id = intval($group['parent_group']); 
 
 	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);
+  GroupPortalManager::set_parent_group($group_id,$parent_group_id);
+
 	$tok = Security::get_token();
 	header('Location: group_list.php?action=show_message&message='.urlencode(get_lang('GroupUpdated')).'&sec_token='.$tok);
 	exit();

@@ -141,6 +141,7 @@ class learnpath {
                 $this->path             = $row['path'];
                 $this->preview_image    = $row['preview_image'];
                 $this->author           = $row['author'];
+          $this->hide_toc_frame = $row['hide_toc_frame'];
                 $this->lp_session_id    = $row['session_id'];
                 $this->use_max_score    = $row['use_max_score'];                
 
@@ -2218,6 +2219,20 @@ class learnpath {
             return '';
         }
     }
+	/**
+	 * Gets the learnpath author
+	 * @return	string	LP's author
+	 */
+	public function get_hide_toc_frame() {
+		if ($this->debug > 0) {
+			error_log('New LP - In learnpath::get_author()', 0);
+		}
+		if (!empty ($this->hide_toc_frame)) {
+			return $this->hide_toc_frame;
+		} else {
+			return '';
+		}
+	}
 
     /**
      * Generate a new prerequisites string for a given item. If this item was a sco and
@@ -4009,6 +4024,30 @@ class learnpath {
         }
         $res = Database::query($sql);
         return true;
+	}
+	/**
+	* Sets the hide_toc_frame parameter of a LP (and save)
+	* @param	int	1 if frame is hiddent 0 thenelse
+	* @return   bool    Returns true if author's name is not empty
+	*/
+	public function set_hide_toc_frame($hide) {
+		if ($this->debug > 0) {
+			error_log('New LP - In learnpath::set_hide_toc_frame()', 0);
+		}
+    if (intval($hide) == $hide){
+      $this->hide_toc_frame = $hide;
+      $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+      $lp_id = $this->get_id();
+      $sql = "UPDATE $lp_table SET hide_toc_frame = '" . $this->hide_toc_frame . "' WHERE id = '$lp_id'";
+      if ($this->debug > 2) {
+        error_log('New LP - lp updated with new preview hide_toc_frame : ' . $this->author, 0);
+      }
+      $res = Database::query($sql);
+      return true;
+    }
+    else {
+      return false;
+    }
     }
 
     /**

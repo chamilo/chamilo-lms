@@ -94,6 +94,19 @@ function get_tabs() {
 			$navigation['dashboard']['title'] = get_lang('Dashboard');
 	}
 
+	// Reports
+	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
+			$navigation['reports']['url'] = api_get_path(WEB_CODE_PATH).'reports/index.php';
+			$navigation['reports']['title'] = get_lang('Reports');
+	}
+
+	// Custom tabs
+	for ($i = 1; $i<=3; $i++) 
+		if (api_get_setting('custom_tab_'.$i.'_name') && api_get_setting('custom_tab_'.$i.'_url')) {
+			$navigation['custom_tab_'.$i]['url'] = api_get_setting('custom_tab_'.$i.'_url');
+			$navigation['custom_tab_'.$i]['title'] = api_get_setting('custom_tab_'.$i.'_name');
+		}
+
 	// Platform administration
 	if (api_is_platform_admin(true)) {
 		//$navigation['platform_admin']['url'] = $rootAdminWeb;

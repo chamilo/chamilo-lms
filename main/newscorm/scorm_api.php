@@ -1091,7 +1091,6 @@ function logit_scorm(message,priority) {
         if($("#lp_log_name") && $("#log_content")){
             $("#log_content").append("SCORM: " + message + "<br/>");
         }
-    }
     params = {
         msg: "SCORM: " + message,
         debug: scorm_logs
@@ -1104,6 +1103,7 @@ function logit_scorm(message,priority) {
         async: true
     });
 
+    }
 }
 /**
  * Logs information about LMS activity into the log frame
@@ -1114,7 +1114,6 @@ function logit_lms(message,priority){
     if(lms_logs>=priority){
     if ($("#lp_log_name") && $("#log_content")) {
         $("#log_content").append("LMS: " + message + "<br />");
-    }
     }
     params = {
     msg: "LMS: " + message,
@@ -1127,6 +1126,7 @@ function logit_lms(message,priority){
         dataType: "script",
         async: true
     });
+    }
 }
 /**
  * Update the Table Of Contents frame, by changing CSS styles, mostly

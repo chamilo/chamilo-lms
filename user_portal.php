@@ -53,7 +53,6 @@ require_once $libpath.'sessionmanager.lib.php';
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
 //$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.toggle.js" type="text/javascript" language="javascript"></script>';
-
 /* Table definitions */
 
 // Database table definitions.

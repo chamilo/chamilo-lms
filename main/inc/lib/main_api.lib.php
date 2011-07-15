@@ -111,6 +111,7 @@ define('SECTION_MYGRADEBOOK', 'mygradebook');
 define('SECTION_TRACKING','session_my_space');
 define('SECTION_SOCIAL', 'social');
 define('SECTION_DASHBOARD', 'dashboard');
+define('SECTION_REPORTS', 'reports');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');
@@ -2816,6 +2817,43 @@ function api_get_language_id($language) {
     $result = Database::query($sql);
     $row = Database::fetch_array($result);    
     return $row['id'];
+}
+/**
+ * Gets language of the requested type for the current user. Types are : 
+ * user_profil_lang : profile language of current user
+ * user_select_lang : language selected by user at login
+ * course_lang : language of the current course
+ * platform_lang : default platform language
+ * @param string lang_type
+ * @param return language of the requested type or false if the language is not available
+ **/
+function api_get_language_from_type($lang_type){
+  global $_user;
+  global $_course;
+  $toreturn = false;
+  switch ($lang_type) {
+  case 'platform_lang' : 
+    $temp_lang = api_get_setting('platformLanguage');
+    if (!empty($temp_lang))
+      $toreturn = $temp_lang;
+    break;
+  case 'user_profil_lang' : 
+    if (isset($_user['language']) && !empty($_user['language']) ) 
+      $toreturn = $_user['language'];
+    break;
+  case 'user_selected_lang' : 
+    if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice']) ) 
+      $toreturn = ($_SESSION['user_language_choice']);
+    break;
+  case 'course_lang' : 
+    if ($_course['language'] && !empty($_course['language']) )  
+      $toreturn = $_course['language'];
+    break;
+  default : 
+    $toreturn = false;
+    break;
+  }
+  return $toreturn;
 }
 
 function api_get_language_info($language_id) {

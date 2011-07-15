@@ -17,6 +17,16 @@
 /*	CONSTANTS */
 
 require_once 'database.constants.inc.php';
+define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS', 					'announcement_rel_group');
+define('TABLE_MAIN_REPORTS_KEYS',			'reports_keys');
+define('TABLE_MAIN_REPORTS_VALUES', 			'reports_values');
+define('TABLE_MAIN_STORED_VALUES',			'stored_values');
+define('TABLE_MAIN_STORED_VALUES_STACK',	'stored_values_stack');
+define('TABLE_MAIN_GROUP_REL_GROUP',		'group_rel_group');
+define('TABLE_MAIN_EVENT_TYPE','event_type');
+define('TABLE_MAIN_EVENT_TYPE_MESSAGE','event_type_message');
+define('TABLE_MAIN_EVENT_TYPE_REL_USER','user_rel_event_type');
+
 
 /*		DATABASE CLASS
         The class and its methods
@@ -737,6 +747,10 @@ class Database {
                 echo $info;
             }
         }
+		if(mysql_error()) {
+			error_log($query."\n".mysql_error());
+		}
+		// error_log($query);
         return $result;
     }
 

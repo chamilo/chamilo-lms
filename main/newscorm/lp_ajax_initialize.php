@@ -106,6 +106,19 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
     if (!empty($myistring)) {
         $myistring = substr($myistring, 1);
     }
+	// Obtention des donnees d'objectifs
+	$phpobjectives = array();
+	$mycoursedb = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
+	$mylp_iv_id = $mylpi->db_item_view_id;
+	$sql = "SELECT objective_id, status, score_raw, score_max, score_min
+		FROM ".$mycoursedb."
+		WHERE lp_iv_id = ".$mylp_iv_id."
+		ORDER BY id ASC;";
+	$res = mysql_query($sql);
+	while ($row = mysql_fetch_row($res)) {
+		$phpobjectives[] = $row;	
+	}
+	$myobjectives = json_encode($phpobjectives);
     $return .=
             "olms.score=".$myscore.";" .
             "olms.max=".$mymax.";" .
@@ -119,8 +132,9 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
             "olms.max_time_allowed = '".$mymax_time_allowed."';" .
             "olms.launch_data = '".$mylaunch_data."';" .
             "olms.interactions = new Array(".$myistring.");" .
-            "olms.item_objectives = new Array();" .
-            "olms.G_lastError = 0;" .
+            //"olms.item_objectives = new Array();" .
+            "olms.item_objectives = ".$myobjectives.";" .
+	    "olms.G_lastError = 0;" .
             "olms.G_LastErrorMessage = 'No error';" ;
     /*
      * and re-initialise the rest (proper to the LMS)

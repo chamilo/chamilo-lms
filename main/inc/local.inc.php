@@ -129,12 +129,24 @@ The course id is stored in $_cid session variable.
 */
 
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once (api_get_path(LIBRARY_PATH).'conditionallogin.lib.php');
 
 // verified if exists the username and password in session current
 if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
     require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
     require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 }
+//Conditional login
+if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login']['can_login']=== true){
+	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+  $uData = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
+  ConditionalLogin::check_conditions($uData);
+  $_user['user_id'] = $_SESSION['conditional_login']['uid'];
+  api_session_register('_user');
+  api_session_unregister('conditional_login');
+  $uidReset=true;
+  event_login();
+} 
 // parameters passed via GET
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
 $gidReq = isset($_GET["gidReq"]) ? Database::escape_string($_GET["gidReq"]) : '';
@@ -214,10 +226,26 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
         }
     }
 
-    if ((isset($_POST['login']) && isset($_POST['password']))) {
-        // $login and $password are given to log in
+	//IF cas is activated and user isn't logged in	
+	if (api_get_setting('cas_activate') == 'true') { 
+		$cas_activated = true;
+	} else {
+		$cas_activated = false;
+	}
+
+	$cas_login=false;
+	if ($cas_activated  AND !isset($_user['user_id']) and !isset($_POST['login'])  && !$logout) { 
+		require_once(api_get_path(SYS_PATH).'main/auth/cas/authcas.php');
+		$cas_login = cas_is_authenticated();
+	}
+  if ( ( isset($_POST['login']) AND  isset($_POST['password']) ) OR ($cas_login) )  {
+    // $login && $password are given to log in
+    if ( $cas_login  && empty($_POST['login']) ) {
+      $login = $cas_login;
+    } else {
         $login      = $_POST['login'];
         $password   = $_POST['password'];
+    }
 
         //lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -248,7 +276,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                     $password = api_get_encrypted_password($password);
                 }
                 if (api_get_setting('allow_terms_conditions')=='true') {
-                   if ($password == $uData['password'] AND (trim($login) == $uData['username'])) {
+          if ($password == $uData['password'] AND (trim($login) == $uData['username']) OR $cas_login ) {
                         $temp_user_id = $uData['user_id'];
                         $term_and_condition_status=api_check_term_condition($temp_user_id);//false or true
                         if ($term_and_condition_status===false) {
@@ -265,7 +293,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                 }
 
                // Check the user's password
-                if ($password == $uData['password'] AND (trim($login) == $uData['username'])) {
+        if ( ($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {
                     // Check if the account is active (not locked)
                     if ($uData['active']=='1') {
                         // Check if the expiration date has not been reached
@@ -292,11 +320,13 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                 //Getting the current access_url_id of the platform
                                 $current_access_url_id = api_get_current_access_url_id();
 
+
                                 if ($my_user_is_admin === false) {
 
                                     if (is_array($my_url_list) && count($my_url_list)>0 ){
                                         // the user have the permissions to enter at this site
                                         if (in_array($current_access_url_id, $my_url_list)) {
+                      ConditionalLogin::check_conditions($uData);
                                             $_user['user_id'] = $uData['user_id'];
                                             api_session_register('_user');
                                             event_login();
@@ -315,6 +345,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                 } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want
                                     //var_dump($current_access_url_id, $my_url_list); exit;
                                     if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
+                    ConditionalLogin::check_conditions($uData);
                                         $_user['user_id'] = $uData['user_id'];
                                         api_session_register('_user');
                                         event_login();
@@ -333,6 +364,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                     }
                                 }
                             } else {
+                ConditionalLogin::check_conditions($uData);
                                 $_user['user_id'] = $uData['user_id'];
                                 api_session_register('_user');
                                 event_login();
@@ -421,6 +453,9 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                     }
                 }
             } //end if is_array($extAuthSource)
+      if ($loginFailed) { //If we are here username given is wrong
+          header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
+      }
         } //end else login failed
     } elseif (api_get_setting('sso_authentication')==='true' &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
         /**
@@ -617,8 +652,10 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 
             $is_platformAdmin           = (bool) (! is_null( $uData['is_admin']));
             $is_allowedCreateCourse     = (bool) (($uData ['status'] == 1) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == 4));
+            ConditionalLogin::check_conditions($uData);
 
             api_session_register('_user');
+            UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
         } else {
             header('location:'.api_get_path(WEB_PATH));
             //exit("WARNING UNDEFINED UID !! ");

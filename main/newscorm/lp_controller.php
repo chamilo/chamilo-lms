@@ -54,6 +54,13 @@ $(window).load(function () {
 });
 </script>';
 
+// Storage API
+$htmlHeadXtra[] = '<script type="text/javascript">
+var sv_user = \''.api_get_user_id().'\';
+var sv_course = \''.api_get_course_id().'\';
+var sv_sco = \''.$_REQUEST['lp_id'].'\';
+</script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
@@ -598,6 +605,7 @@ switch ($action) {
             $_SESSION['oLP']->set_maker($_REQUEST['lp_maker']);
             $_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);
             $_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
+			$_SESSION['oLP']->set_hide_toc_frame($_REQUEST['hide_toc_frame']);
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
 

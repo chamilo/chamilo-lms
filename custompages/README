@@ -1,0 +1,13 @@
+CustomPages looks for alternatives in this directory, and displays them if present. The user-provided custom pages must exactly be named as such :
+
+- index-logged.php for the general landing page before login
+- index-unlogged.php for the general landing page when already logged-in
+- registration.php for the registration form
+- registration-feedback.php for the registration success feedback
+- lostpassword.php for the password recovery form
+- lostpassword-feedback.php for the password recovery feedback page
+
+Important note :
+If you pull this feature from a repo, not through an upgrade or install process, you have to exectute the following SQL statements in the main database or this option won't appear in the admin interface :
+	INSERT INTO settings_options (variable, value, display_text) VALUES ('use_custom_pages', 'true', 'Yes'), ('use_custom_pages', 'false', 'No');
+	INSERT INTO settings_current (variable, type, category, selected_value, title, comment, scope) VALUES ('use_custom_pages','radio','Platform','false','UseCustomPages','UseCustomPagesComment', 'platform');

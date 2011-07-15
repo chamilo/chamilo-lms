@@ -76,6 +76,13 @@ $form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 
+//Group Parentship
+$groups = array();
+$groups[0] = get_lang('NoParentship');
+$groups = $groups + GroupPortalManager::get_groups_list($group_id);
+$group_data['parent_group'] = GroupPortalManager::get_parent_group($group_id);
+$form->addElement('select', 'parent_group', get_lang('GroupParentship'), $groups, array());
+
 // Status
 $status = array();
 $status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
@@ -105,8 +112,11 @@ if( $form->validate()) {
 		$url 			= $values['url'];
 		$status 		= intval($values['visibility']);
 		$picture 		= $_FILES['picture'];
+    $parent_group_id = intval($values['parent_group']); 
 
 		$group_id = GroupPortalManager::add($name, $description, $url, $status);
+    GroupPortalManager::set_parent_group($group_id,$parent_group_id);
+
 
 		if (!empty($picture['name'])) {
 			$picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);

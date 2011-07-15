@@ -77,6 +77,9 @@ $IsNotiCalFormatFile = "This file is not in iCal format";
 $RepeatEvent = "Repeat event";
 $RepeatDate = "Repeat date";
 $EndDateMustBeMoreThanStartDate = "End date must be more than the start date";
-$SelectACourse = "Select a course";
+$AnnouncementForGroup = "Only for group";
+$AllGroups = "All the groups";
+
+?>$SelectACourse = "Select a course";
 $PleaseSelectACourseOrASessionInTheLeftColumn = "Please select a course or a session in the sidebar.";
 ?>

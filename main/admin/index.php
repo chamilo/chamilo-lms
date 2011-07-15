@@ -159,6 +159,9 @@ if (api_is_platform_admin()) { ?>
         }       
         
     ?>
+    <?php if (api_get_setting('activate_send_event_by_mail') === 'true'): ?>
+	    <li><a href="event_type.php"><?php print  get_lang('events_title'); ?></a></li>
+    <?php endif ?>
     </ul>
 </div>
 

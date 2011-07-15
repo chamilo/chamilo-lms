@@ -130,9 +130,6 @@ if ($action == 'thematic_plan_list') {
 	// error messages
 	if ($error) { 	
 		Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);	
-	}
-	
+	}	
 	$form->display();		
 }
-
-?>

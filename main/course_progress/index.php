@@ -4,6 +4,7 @@
 /**
 * Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action
 * @author Christian Fasanando <christian1827@gmail.com>
+* @author Julio Montoya <gugli100@gmail.com> Bugfixes session support
 * @package chamilo.course_progress
 */
 
@@ -15,7 +16,6 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
-//require_once 'attendance_controller.php';
 require_once 'thematic_controller.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
@@ -28,7 +28,6 @@ $this_section = SECTION_COURSES;
 
 // protect a course script
 api_protect_course_script(true);
-
 
 // defining constants
 define('ADD_THEMATIC_PLAN', 6);
@@ -101,10 +100,10 @@ function update_done_thematic_advance(selected_value) {
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {},
 		type: "GET",
-		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=update_done_thematic_advance&thematic_advance_id="+selected_value,
+		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=update_done_thematic_advance",
 		data: "thematic_advance_id="+selected_value,
-		success: function(datos) {
-		 $("#div_result").html(datos);
+		success: function(data) {
+			$("#div_result").html(data);
 		}
 	});
 
@@ -147,12 +146,6 @@ function check_per_custom_date(obj) {
 
 </script>';
 
-
-// interbreadcrumbs
-//$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=thematic_details'.$param_gradebook.$student_param, 'name' => get_lang('ToolAttendance'));
-//if ($action == 'attendance_add') {
-	//$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('CreateANewAttendance'));
-//}
 if ($action == 'thematic_list') {
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicControl'));
 }
@@ -169,11 +162,11 @@ if ($action == 'thematic_details') {
 }
 if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => '#', 'name' => $thematic_data['title'].':'.get_lang('ThematicPlan'));
+	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicPlan').' ('.$thematic_data['title'].') ');	
 }
 if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => $thematic_data['title'].':'.get_lang('ThematicPlan'));
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicPlan').' ('.$thematic_data['title'].')');
 	if ($description_type >= ADD_THEMATIC_PLAN) {
 		$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewBloc'));
 	} else {
@@ -182,17 +175,16 @@ if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
 }
 if ($action == 'thematic_advance_list' || $action == 'thematic_advance_delete') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => '#', 'name' => $thematic_data['title'].':'.get_lang('ThematicAdvance'));
+	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicAdvance').' ('.$thematic_data['title'].')');
+	
 }
 if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic_id, 'name' => $thematic_data['title'].':'.get_lang('ThematicAdvance'));
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicAdvance').' ('.$thematic_data['title'].')');
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewThematicAdvance'));
 }
 
-
-        
-// distpacher actions to controller
+// Distpacher actions to controller
 switch ($action) {
 	case 'thematic_add'				:
 	case 'thematic_edit'			:
@@ -200,8 +192,7 @@ switch ($action) {
 	case 'thematic_delete_select'	:
     case 'thematic_copy'            :	
 	case 'moveup'					:
-	case 'movedown'					:
-    
+	case 'movedown'					:    
         if (!api_is_allowed_to_edit(null,true)) {
         	api_not_allowed();
         }

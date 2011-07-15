@@ -2615,9 +2615,8 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null) 
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
     $session_condition = '';
     $session_id = intval($session_id);
-    if (!empty($session_id)) {
-        $session_condition = ' AND id_session = '.$session_id;
-    }
+    $session_condition = ' AND id_session = '.$session_id;
+    
     $sql = "SELECT * FROM $item_property_table WHERE tool = '$tool'  $session_condition ";
     $rs  = Database::query($sql);
     $item_property_id = '';
@@ -2640,11 +2639,11 @@ function api_get_item_property_id($course_code, $tool, $ref) {
 
     $course_info    = api_get_course_info($course_code);
     $tool           = Database::escape_string($tool);
-    $ref            = intval($ref);
+    $ref            = intval($ref);  
 
     // Definition of tables.
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
-    $sql = "SELECT id FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = '$ref' ";
+    $sql = "SELECT id FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = '$ref'";
     $rs  = Database::query($sql);
     $item_property_id = '';
     if (Database::num_rows($rs) > 0) {

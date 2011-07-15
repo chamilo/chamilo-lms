@@ -4,13 +4,14 @@
 /**
 * View (MVC patter) for thematic advance 
 * @author Christian Fasanando <christian1827@gmail.com>
+* @author Julio Montoya <gugli100@gmail.com> BeezNest 2011 Bug fixing
 * @package chamilo.course_progress
 */
 
 // protect a course script
 api_protect_course_script(true);
 
-if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
+if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {    
 
 	$header_form = get_lang('NewThematicAdvance');
 	if ($action == 'thematic_advance_edit') {
@@ -129,9 +130,6 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	
 	if (api_is_allowed_to_edit(null, true)) {
 		$table->set_header(4, get_lang('Actions'), false,array('style'=>'text-align:center'));	
-	}
-	
+	}	
 	$table->display();	
 }
-
-?>

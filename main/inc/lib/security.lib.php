@@ -104,8 +104,13 @@ class Security {
      * @param	string	The array in which to get the token ('get' or 'post')
      * @return	bool	True if it's the right token, false otherwise
      */
-    public static function check_token($array = 'post') {
-        switch ($array) {
+    public static function check_token($request_type = 'post') {
+        switch ($request_type) {
+            case 'request':
+                if (isset($_SESSION['sec_token']) && isset($_REQUEST['sec_token']) && $_SESSION['sec_token'] === $_REQUEST['sec_token']) {
+                    return true;
+                }
+                return false;
             case 'get':
                 if (isset($_SESSION['sec_token']) && isset($_GET['sec_token']) && $_SESSION['sec_token'] === $_GET['sec_token']) {
                     return true;
@@ -117,7 +122,7 @@ class Security {
                 }
                 return false;
             default:
-                if (isset($_SESSION['sec_token']) && isset($array) && $_SESSION['sec_token'] === $array) {
+                if (isset($_SESSION['sec_token']) && isset($request_type) && $_SESSION['sec_token'] === $request_type) {
                     return true;
                 }
                 return false;

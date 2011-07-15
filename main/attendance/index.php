@@ -4,7 +4,6 @@
 /**
 * Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action  
 * @author Christian Fasanando <christian1827@gmail.com>
-* @author Carlos Vargas (link to attendance tool )<litox84@gmail.com> 
 * @author Julio Montoya <gugli100@gmail.com> Bug fixing, sql improvements
 * 
 * @package chamilo.attendance

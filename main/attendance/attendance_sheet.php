@@ -94,7 +94,9 @@ if (api_is_allowed_to_edit(null, true)) {
 
                 // Copy row width from whole table
                 floatingHeaderRow.css("width", $(this).css("width")); 
-                floatingHeaderRow.css("visibility", "visible");                  
+                floatingHeaderRow.css("visibility", "visible");
+                floatingHeaderRow.css("z-index", "1000");
+                originalHeaderRow.css("height", "80px");                  
             } else {
                 floatingHeaderRow.css("visibility", "hidden");
                 floatingHeaderRow.css("top", "0px");
@@ -103,21 +105,21 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 
     $(document).ready(function() {
-     $("table.tableWithFloatingHeader").each(function() {
-                $(this).wrap("<div class=\"divTableWithFloatingHeader\" style=\"position:relative\"></div>");
-
-                var originalHeaderRow = $("tr:first", this)
-                originalHeaderRow.before(originalHeaderRow.clone());
-                var clonedHeaderRow = $("tr:first", this)
-
-                clonedHeaderRow.addClass("tableFloatingHeader");
-                clonedHeaderRow.css("position", "absolute");
-                clonedHeaderRow.css("top", "0px");
-                clonedHeaderRow.css("left", $(this).css("margin-left"));
-                clonedHeaderRow.css("visibility", "hidden");
-
-                originalHeaderRow.addClass("tableFloatingHeaderOriginal");
-            });
+		$("table.tableWithFloatingHeader").each(function() {
+            $(this).wrap("<div class=\"divTableWithFloatingHeader\" style=\"position:relative\"></div>");
+    
+            var originalHeaderRow = $("tr:first", this)
+            originalHeaderRow.before(originalHeaderRow.clone());
+            var clonedHeaderRow = $("tr:first", this)
+    
+            clonedHeaderRow.addClass("tableFloatingHeader");
+            clonedHeaderRow.css("position", "absolute");
+            clonedHeaderRow.css("top", "0px");
+            clonedHeaderRow.css("left", $(this).css("margin-left"));
+            clonedHeaderRow.css("visibility", "hidden");
+    
+            originalHeaderRow.addClass("tableFloatingHeaderOriginal");
+        });
     
         UpdateTableHeaders();
         $(window).scroll(UpdateTableHeaders);
@@ -132,7 +134,7 @@ if (api_is_allowed_to_edit(null, true)) {
             <table class="tableWithFloatingHeader data_table" width="100%">
                 <thead>
                 <tr class="tableFloatingHeader" style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px" >   
-                    <th height="65px" width="10px"><?php echo '#'; ?></th>
+                    <th width="10px"><?php echo '#'; ?></th>
                     <th width="10px"><?php echo get_lang('Photo')?></th>
                     <th width="100px"><?php echo get_lang('LastName')?></th>
                     <th width="100px"><?php echo get_lang('FirstName')?></th>
@@ -201,13 +203,13 @@ if (api_is_allowed_to_edit(null, true)) {
                                 $img_lock = Display::return_icon('unlock.gif',get_lang('DateLock'),array('class'=>'img_unlock','id'=>'datetime_column_'.$calendar['id']));
                             }                                   
                                                 
-                            $result .= '<th height="65px" width="500px" style="padding:1px 5px;" >';
+                            $result .= '<th height="80px" width="800px">';
                             $result .= '<center><div style="font-size:10px;width:80px;">'.$datetime.'&nbsp;';
                             $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin()?$img_lock:'').'</span>';
                             $result .= '<br /><input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />'.$input_hidden.'</div></center></th>';
                          }                  
                     } else { 
-                        $result = '<th height="65px" width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">';
+                        $result = '<th width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">';
                         $result .=Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'','32').' '.get_lang('GoToAttendanceCalendar').'</a></span></th>';
                     }
                     ?>
@@ -250,7 +252,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                 $disabled = 'disabled';
                                 $style_td = '';
                                 if ($next_attendance_calendar_id == $calendar['id']) {
-                                    $style_td = 'background-color:#e1e1e1';
+                                    $style_td = 'background-color:#F6F38C;opacity:0.4';
                                     $disabled = '';
                                 }
                     ?>

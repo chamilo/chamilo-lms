@@ -2188,3 +2188,8 @@ div.admin_section h4 {
     background-repeat:repeat-y;
     overflow:hidden;
 }
+
+
+.tableFloatingHeaderOriginal th, .tableWithFloatingHeader th{
+	height:80px;
+}

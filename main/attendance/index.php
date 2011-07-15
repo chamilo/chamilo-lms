@@ -74,7 +74,10 @@ if (!empty($attendance_id)) {
 
 $htmlHeadXtra[] = '<script language="javascript">
 		
-$(function() {										
+$(function() {
+	
+	
+											
 	$("table th img").click(function() {					
 		var col_id = this.id;
 		var col_split = col_id.split("_");							
@@ -85,8 +88,8 @@ $(function() {
 			//lock 
 			$(".checkbox_head_"+calendar_id).attr("disabled", true);						
 			
-			$(".row_odd  td.checkboxes_col_"+calendar_id).css({"background-color":"#F9F9F9", "border-left":"none","border-right":"none"});
-			$(".row_even td.checkboxes_col_"+calendar_id).css({"background-color":"#FFF", "border-left":"none","border-right":"none"});
+			$(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F9F9F9",   "border-left":"none","border-right":"none"});
+			$(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	 "border-left":"none","border-right":"none"});
 			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);							 						
 			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/lock.gif"); 
 			$(this).attr("title","'.get_lang('DateUnLock').'");
@@ -95,13 +98,26 @@ $(function() {
 			$("#hidden_input_"+calendar_id).attr("value","");
 			$("#hidden_input_"+calendar_id).attr("disabled",true);
 			return false;
+			
 		} else {
-			//unlock
+			//Unlock
 			$(".checkbox_head_"+calendar_id).attr("disabled", false);
 			$(".checkbox_head_"+calendar_id).removeAttr("disabled");
 			
+			$(".checkboxes_col_"+calendar_id).css({"opacity":"0.4","background-color":"#F6F38C", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid", "z-index":"1" });
 			
-			$(".checkboxes_col_"+calendar_id).css({"background-color":"#e1e1e1", "border-left":"1px #CCC solid", "border-right":"1px #CCC solid" });
+			
+			$(".checkboxes_col_"+calendar_id).mouseover(function() {	
+				//$(".checkbox_head_"+calendar_id).removeAttr("opacity");		
+				//$(".checkboxes_col_"+calendar_id).css({"opacity":"0.7","background-color":"#F6F38C", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" });
+			});
+			
+			$(".checkboxes_col_"+calendar_id).mouseout(function() {
+				//$(".checkboxes_col_"+calendar_id).css({"opacity":"0.4","background-color":"#F6F38C", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" });			
+			});
+			
+			
+				
 			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);						
 			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/unlock.gif");
 			$(this).attr("title","'.get_lang('DateLock').'");

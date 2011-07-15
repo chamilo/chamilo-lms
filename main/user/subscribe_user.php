@@ -294,7 +294,7 @@ function get_number_of_users() {
 			$users_of_course[] = $course_user['user_id'];
 	    }
 	}
-
+    $sql .=" AND u.status <> ".ANONYMOUS." "; 
 	$res = Database::query($sql);	
 	while ($user = Database::fetch_row($res)) {
 		$users[] = $user[0];
@@ -340,7 +340,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					u.active 	AS col5,
 					u.user_id   AS col6
 					FROM $user_table u
-					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."' ";
+					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user AND course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."' ";
 
 			// applying the filter of the additional user profile fields
 			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
@@ -533,11 +533,13 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
 		} else {
 			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
-	}
+	    }
 		foreach ($a_course_users as $user_id=>$course_user) {
 			$users_of_course[] = $course_user['user_id'];
 		}
 	}
+	
+	$sql .=" AND u.status != ".ANONYMOUS." "; 
 
 	// Sorting and pagination (used by the sortable table)
 	$sql .= " ORDER BY col$column $direction ";

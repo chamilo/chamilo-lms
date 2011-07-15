@@ -436,10 +436,11 @@ class Thematic
 	 * @return	array	data
 	 */
 	 public function get_thematic_advance_by_thematic_id($thematic_id, $course_code = null) {
-
+        
+	    $course_info = api_get_course_info($course_code);
+	    
 	 	// set current course
-	 	if (isset($course_code)) {
-	 		$course_info = api_get_course_info($course_code);
+	 	if (isset($course_code)) {	 		
 	 		$tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE, $course_info['dbName']);
 	 	} else {
 	 		$tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);

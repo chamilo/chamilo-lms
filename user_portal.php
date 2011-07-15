@@ -241,19 +241,27 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 
     if (isset($_GET['history']) && intval($_GET['history']) == 1) {
         $courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, true, true);
-    } else {
-        $courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, null, true);
-    }
-    foreach ($courses_tree as $cat => $sessions) {
-        $courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);
-        if ($cat == 0) {
-            $courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id(api_get_user_id(), false);
+        if (empty($courses_tree[0]) && count($courses_tree) == 1) {
+            $courses_tree = null;
         }
-        $courses_tree[$cat]['sessions'] = array_flip(array_flip($sessions));
-        if (count($courses_tree[$cat]['sessions']) > 0) {
-            foreach ($courses_tree[$cat]['sessions'] as $k => $s_id) {
-                $courses_tree[$cat]['sessions'][$k] = array('details' => SessionManager::fetch($s_id));
-                $courses_tree[$cat]['sessions'][$k]['courses'] = UserManager::get_courses_list_by_session(api_get_user_id(), $s_id);
+    } else {
+        $courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, false, true);
+    }    
+    
+  
+    
+    if (!empty($courses_tree)) {
+        foreach ($courses_tree as $cat => $sessions) {
+            $courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);
+            if ($cat == 0) {
+                $courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id(api_get_user_id(), false);
+            }
+            $courses_tree[$cat]['sessions'] = array_flip(array_flip($sessions));
+            if (count($courses_tree[$cat]['sessions']) > 0) {
+                foreach ($courses_tree[$cat]['sessions'] as $k => $s_id) {
+                    $courses_tree[$cat]['sessions'][$k] = array('details' => SessionManager::fetch($s_id));
+                    $courses_tree[$cat]['sessions'][$k]['courses'] = UserManager::get_courses_list_by_session(api_get_user_id(), $s_id);
+                }
             }
         }
     }
@@ -353,8 +361,9 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 }
 
 if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-    echo '<h3>'.get_lang('HistoryTrainingSession').'</h3>';
-    if (empty($courses_tree[0]['sessions'])){
+    echo Display::tag('h2', get_lang('HistoryTrainingSession'));    
+    //if (empty($courses_tree[0]['sessions'])){    
+    if (empty($courses_tree)){
         echo get_lang('YouDoNotHaveAnySessionInItsHistory');
     }
 }

@@ -1803,19 +1803,22 @@ class UserManager
 		}
         if ($sort_by_session_name) {
             // reorder sessions alphabetically inside categories
-            foreach ($categories as $cat_id => $category) {
-                // inside each category, prepare a new empty array to sort sessions
-                $new_cat = array();
-                if (is_array($category)) {
-            	    foreach ($category as $session) {
-            	       $new_cat[$names[$session]] = $session;
-            	    }
+            if (!empty($categories)) {
+                foreach ($categories as $cat_id => $category) {
+                    // inside each category, prepare a new empty array to sort sessions
+                    $new_cat = array();
+                    
+                    if (is_array($category) && !empty($category)) {
+                	    foreach ($category as $session) {
+                	       $new_cat[$names[$session]] = $session;
+                	    }
+                	    uksort($new_cat, 'strnatcmp');                    
+                        $categories[$cat_id] = $new_cat;
+                    }                    
                 }
-                uksort($new_cat, 'strnatcmp');
-                
-                $categories[$cat_id] = $new_cat;
             }
         }
+        
 		return $categories;
 	}
 

@@ -1197,7 +1197,7 @@ function api_session_start($already_installed = true) {
     //session.entropy_file
     //ini_set('session.entropy_length', 128);
     
-    //Do not to include the identifier in the URL, and not to read the URL for identifiers.
+    //Do not include the identifier in the URL, and not to read the URL for identifiers.
     ini_set('session.use_trans_sid', 0);    
    
     session_name('ch_sid');    
@@ -2609,8 +2609,7 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null) 
 
     $course_info    = api_get_course_info($course_code);
     $tool           = Database::escape_string($tool);
-    $ref            = intval($ref);
-
+    
     // Definition of tables.
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
     $session_condition = '';

@@ -9,7 +9,7 @@ foreach($list as $item) {
 	$stat = @stat($a_dir.'/'.$item);
 	if ($stat === false) { error_log('Cron task cannot stat '.$a_dir.'/'.$item); continue; }
 	if ($stat['mtime'] > $t) { //if the file is older than one week, delete
-		recursiveDelete($a_dir.'/'.$item);
+		recursive_delete($a_dir.'/'.$item);
 	}
 }
 
@@ -18,14 +18,14 @@ foreach($list as $item) {
  *
  * @param string $str Path to file or directory
  */
-function recursiveDelete($str){
+function recursive_delete($str){
 	if(is_file($str)){
 		return @unlink($str);
 	}
 	elseif(is_dir($str)){
 		$scan = glob(rtrim($str,'/').'/*');
 		foreach($scan as $index=>$path){
-			recursiveDelete($path);
+			recursive_delete($path);
 		}
 		return @rmdir($str);
 	}

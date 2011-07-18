@@ -5,6 +5,8 @@
 *	@author Julio Montoya <gugli100@gmail.com>
 */
 
+//Removing funcionality due #3733
+exit;
 
 // name of the language file that needs to be included
 $language_file='admin';

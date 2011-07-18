@@ -23,7 +23,6 @@
 
 <h1>Chamilo 1.8.8.4 - La Molina, June 2011</h1>
 
-
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.8.8.4 is a minor corrective stable version for version 1.8.8.2</p>
 <h3>New Features</h3>
@@ -36,19 +35,48 @@ This version of Chamilo only includes a few minor new features:
   <li>Added tokens to announcements (changeset 66d9c5e10b42)</li>
   <li>Students can download learning paths as PDF (changeset 3bd77279faee)</li>
   <li>Added tokens to certificates generation (changeset c2201eee3558)</li>
+  <li>Attendances session support </li> 
 </ul>
 <h3>Debugging</h3>
 <ul>
+    <li>
+        Agenda
+        <ul>            
+            <li>Improving UI + fixes in previews</li>
+        </ul>
+    </li>
+    <li>
+        Announcements
+        <ul>            
+            <li>Fixing announcements listing BT#2751 </li>
+        </ul>
+    </li>    
+    <li>
+        Attendances
+        <ul>            
+            <li>Improving UI</li>
+            <li>Fixed bug when clicking in the "Today" filter BT#2663</li>
+        </ul>
+    </li>
     <li>Documents
 	    <ul>
 		    <li>"Document preview" bug fixed when using a course in Dutch (yoxview bad translate file) (changeset e205fe6d94fe)</li>
 		    <li>Bug fixed when using glossary terms in a document #3620</li>
 		    <li>Bug fixed when reading MP3 files using the jplayer plugin #3593</li>
+		    <li>Bug fixed when hiding a course document in a session </li>  
+		    <li>Bug fixed when using the simple upload form</li>
         </ul>
     </li>    
 	<li>Exercises
         <ul>
-	       <li>Fixed question matching when using french accents </li>    
+	       <li>Fixed question matching when using french/spanish accents </li> 
+	       <li>Exercise results: Fixing and improving export to CSV using jquery BT#2722</li>
+        </ul>
+    </li>
+    <li>Gradebook
+        <ul>
+            <li>Several fixes including, better session integration and some warning messages added when total score is not correct </li>
+            <li> Adding 2 new tags in the certification: course title and gradebook result </li>                        
         </ul>
     </li>    
     <li>Glossary
@@ -57,19 +85,32 @@ This version of Chamilo only includes a few minor new features:
             <li>Fixed problem when adding a document in a learning path with glossary terms #3620</li>
             <li>Fixed mp3 previews </li>
         </ul>
+    </li>
+    <li>Links
+        <ul>
+        <li>URL fixed when adding the link in the course homepage  BT#2751</li>
+        </ul>
     </li>  
+     
     <li>Portal administration
         <ul>
-            <li>System information fixes #3552</li>
-            <li>Sub language fixes(parse error) #2910</li>
+            <li>System information fixed #3552</li>
+            <li>Sub language fixed (parse error) #2910</li>
             <li>Bug fixed when enabling BBB plugin #3637</li>
-            <li>Improving Notification class: adding footer and introduction message </li>
+            <li>Improving Notification class: adding a footer and an introduction message </li>
+            <li>New way to generate usernames when importing users using CSV or XML file </li>
+            <li>Activities stats date fixed</li>
         </ul>
     </li>
     <li>User portal/ My courses
         <ul>            
             <li>Improving Course Catalog load time </li>
-            <li>Course catalog view is random by default</li>              
+            <li>Course catalog view is random by default</li>      
+        </ul>
+    </li>
+    <li>Sessions
+        <ul>
+            <li>A Session doesn't exist in 2 URLs at the same time  #3733 </li>
         </ul>
     </li>
     

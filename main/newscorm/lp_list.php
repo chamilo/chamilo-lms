@@ -128,7 +128,7 @@ if (!empty($curDirPath)) {
 echo '<tr>';
        
 if ($is_allowed_to_edit) {
-    echo '<th width="30%">'.get_lang('Title').'</th>';
+    echo '<th width="50%">'.get_lang('Title').'</th>';
     echo '<th>'.get_lang('PublicationDate').'</th>';
     echo '<th>'.get_lang('ExpirationDate').'</th>';
     echo '<th>'.get_lang('Progress')."</th>";
@@ -216,17 +216,16 @@ if (is_array($flat_list)) {
             $extra = '<br /><font color="#999"><i>'.$dsp_desc .'</i></font>';
         }
         
-        $image = '<img src="../img/icons/22/learnpath.png" border="0" align="absmiddle" alt="' . $name . '">';
-        
+        /*$image = '<img src="../img/icons/22/learnpath.png" border="0" align="absmiddle" alt="' . $name . '">';
+        <div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_lp.'">' .
+                $image . '</a></div>*/
         $my_title = $name;
         if ($details['lp_visibility'] == 0 ) {
             $my_title = Display::tag('font', $name, array('style'=>'color:grey'));
         }
         $dsp_line =	'<tr align="center" class="'.$oddclass.'">'.
-            '<td align="left" valign="top">' .
-            '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_lp.'">' .
-        $image . '</a></div><a href="'.$url_start_lp.'">' . $my_title . '</a>' . $session_img .$extra.
-            "</td>";
+            		'<td align="left" valign="top"><a href="'.$url_start_lp.'">' . $my_title . '</a>' . $session_img .$extra."</td>";
+        
         //$dsp_desc='<td>'.$details['lp_desc'].'</td>'."\n";
         $dsp_desc = '';
         $dsp_export = '';

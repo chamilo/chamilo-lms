@@ -368,7 +368,8 @@ class FCKeditor
             require api_get_path(LIBRARY_PATH).'fckeditor/myconfig.php';
         }
         $toolbar_dir = isset($config['ToolbarSets']['Directory']) ? $config['ToolbarSets']['Directory'] : 'default';
-        return array_merge($config, $this->get_custom_toolbar_configuration($toolbar_dir));
+        $return = array_merge($config, $this->get_custom_toolbar_configuration($toolbar_dir));
+        return $return; 
     }
 
     /**
@@ -412,7 +413,7 @@ class FCKeditor
      * @return array
      */
     private function & get_default_configuration() {
-        return array_merge(
+        $return_value = array_merge(
             self::get_javascript_custom_configuration_file(),
             self::get_css_configuration(),
             self::get_editor_language(),
@@ -421,6 +422,7 @@ class FCKeditor
             self::get_user_configuration_data(),
             $this->get_mimetex_plugin_configuration()
         );
+        return $return_value;
     }
 
     /**
@@ -428,7 +430,8 @@ class FCKeditor
      * @return array
      */
     private function & get_javascript_custom_configuration_file() {
-        return array('CustomConfigurationsPath' => api_get_path(REL_PATH).'main/inc/lib/fckeditor/myconfig.js');
+        $return_value = array('CustomConfigurationsPath' => api_get_path(REL_PATH).'main/inc/lib/fckeditor/myconfig.js');
+        return $return_value;
     }
 
     /**

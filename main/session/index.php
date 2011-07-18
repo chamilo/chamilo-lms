@@ -34,8 +34,9 @@ if (empty($_GET['session_id'])) {
 	api_not_allowed();
 }
 
-$session_id = intval($_GET['session_id']);
-$course_id  = intval($_GET['course_id']);
+$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): null;
+$course_id  = isset($_GET['course_id'])  ? intval($_GET['course_id']) : null;
+
 $_SESSION['id_session'] = $session_id;
 
 $session_info   = SessionManager::fetch($session_id);
@@ -79,7 +80,7 @@ $final_array = array();
 
 if (!empty($new_session_list)) {
     foreach($new_session_list as $item) {
-        $my_session_id = $item['id_session'];    
+        $my_session_id = isset($item['id_session']) ? $item['id_session'] : null;    
         if (isset($my_session_id) && !in_array($my_session_id, $my_session_list) && $session_id == $my_session_id) {
         	$final_array[$my_session_id]['name'] = $item['session_name'];
             
@@ -134,7 +135,7 @@ if (!api_is_allowed_to_session_edit()) {
 $my_real_array = $new_exercises = array();
 $now = time();
 foreach($final_array as $session_data) {
-    $my_course_list = $session_data['data'];    
+    $my_course_list = isset($session_data['data']) ? $session_data['data']: array();    
     if (!empty($my_course_list))     
     foreach ($my_course_list as $my_course_code=>$course_data) {
         //echo '<pre>';        print_r($course_data);
@@ -217,7 +218,8 @@ if (!empty($course_id)) {
     $back_url = Display::url(Display::return_icon('back.png',get_lang('back.png')), api_get_path(WEB_CODE_PATH).'session/?session_id='.$session_id);
 }
 
-$start = $end = '';
+$start = $end = $start_only = $end_only ='';
+
 if (!empty($session_info['date_start']) && $session_info['date_start'] != '0000-00-00') {
     $start = api_convert_and_format_date($session_info['date_start'], DATE_FORMAT_SHORT);    
     $start_only = get_lang('From').' '.$session_info['date_start'];
@@ -256,7 +258,7 @@ $columns        = array(get_lang('PublicationDate'),get_lang('Course'), get_lang
 $column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'150',  'align'=>'left',  'sortable'=>'false'),
                         array('name'=>'course', 'index'=>'course', 'width'=>'400', 'align'=>'left',  'sortable'=>'false'),
                         array('name'=>'lp',     'index'=>'lp',     'width'=>'200', 'align'=>'center','sortable'=>'false'));
-                        
+$extra_params = array();                        
 //$extra_params['autowidth'] = 'true'; //use the width of the parent
 //$extra_params['forceFit'] = 'true'; //use the width of the parent
 //$extra_params['altRows'] = 'true'; //zebra style
@@ -350,7 +352,6 @@ $(function() {
      echo Display::grid_js('list_week',     $url_week,      $column_week,     $column_week_model, $extra_params_week,array(),'');     
      echo Display::grid_js('exercises',      '',            $column_exercise, $column_exercise_model, $extra_params_exercise, $my_real_array);        
 ?>
-
 });
 </script>
 

@@ -252,7 +252,10 @@ if (api_is_allowed_to_edit(null, true)) {
                                 $disabled = 'disabled';
                                 $style_td = '';
                                 if ($next_attendance_calendar_id == $calendar['id']) {
-                                    $style_td = 'background-color:#F6F38C;opacity:0.4';
+                                	if ($i%2==0)
+                                    	$style_td = 'background-color:#eee;';
+                                	else 
+                                		$style_td = 'background-color:#dcdcdc;';
                                     $disabled = '';
                                 }
                     ?>

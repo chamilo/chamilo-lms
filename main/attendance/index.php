@@ -104,16 +104,20 @@ $(function() {
 			$(".checkbox_head_"+calendar_id).attr("disabled", false);
 			$(".checkbox_head_"+calendar_id).removeAttr("disabled");
 			
-			$(".checkboxes_col_"+calendar_id).css({"opacity":"0.4","background-color":"#F6F38C", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid", "z-index":"1" });
+			$(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#dcdcdc", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
+			$(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#eee", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
 			
 			
 			$(".checkboxes_col_"+calendar_id).mouseover(function() {	
-				$(".checkbox_head_"+calendar_id).removeAttr("opacity");		
-				$(".checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F6F38C", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" });
+				//$(".checkbox_head_"+calendar_id).removeAttr("opacity");		
+				//$("row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"red", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
+				//$("row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	  "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
 			});
 			
 			$(".checkboxes_col_"+calendar_id).mouseout(function() {
-				$(".checkboxes_col_"+calendar_id).css({"opacity":"0.4","background-color":"#F6F38C", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" });			
+			//	$("row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F9F9F9", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
+			//	$("row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	  "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
+							
 			});
 			
 			

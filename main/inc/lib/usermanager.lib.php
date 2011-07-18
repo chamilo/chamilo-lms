@@ -2792,7 +2792,7 @@ class UserManager
 	    	$direction = 'ASC';
 	    }
 
-	    $column = intval($column);
+	    //$column = intval($column);
 	    $from = intval($from);
 	    $number_of_items = intval($number_of_items);
 

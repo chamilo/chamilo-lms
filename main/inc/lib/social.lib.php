@@ -350,8 +350,9 @@ class SocialManager extends UserManager {
 	    $feeds = array();
 	    $feed = UserManager::get_extra_user_data_by_field($user,'rssfeeds');
 	    if(empty($feed)) { return ''; }
-	    $feeds = split(';',$feed['rssfeeds']);
+	    $feeds = explode(';',$feed['rssfeeds']);
 	    if (count($feeds)==0) { return ''; }
+	    $res = '';
 	    foreach ($feeds as $url) {
 			if (empty($url)) { continue; }
 	        $rss = @fetch_rss($url);

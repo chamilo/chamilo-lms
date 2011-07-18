@@ -106,6 +106,7 @@ echo '<div id="social-content">';
 			
 			//Group box by age
 			$results = GroupPortalManager::get_groups_by_age(1,false);
+			
 			$groups_newest = array();
 			if (!empty($results)) {
     			foreach ($results as $result) {

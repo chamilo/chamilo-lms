@@ -250,6 +250,9 @@ class GroupPortalManager
 				$img = '<img src="'.$picture['file'].'" />';
 				$row['picture_uri'] = $img;
 			}
+			if (empty($row['id'])) {
+				continue;
+			}
 			$array[$row['id']] = $row;
 		}
 		return $array;
@@ -273,9 +276,9 @@ class GroupPortalManager
 		}		
 		$where_relation_condition = " WHERE gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."') ";
 		$sql = "SELECT DISTINCT count(user_id) as count, g.picture_uri, g.name, g.description, g.id
-				FROM $tbl_group g
-				INNER JOIN $table_group_rel_user gu
-				ON gu.group_id = g.id $where_relation_condition ORDER BY created_on desc LIMIT $num ";
+					 FROM $tbl_group g INNER JOIN $table_group_rel_user gu ON gu.group_id = g.id 
+					 $where_relation_condition
+					 ORDER BY created_on desc LIMIT $num ";
         
 		$result=Database::query($sql);
 		$array = array();
@@ -284,6 +287,9 @@ class GroupPortalManager
 				$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
 				$img = '<img src="'.$picture['file'].'" />';
 				$row['picture_uri'] = $img;
+			}
+			if (empty($row['id'])) {
+				continue;
 			}
 			$array[$row['id']] = $row;
 		}
@@ -343,7 +349,7 @@ class GroupPortalManager
 				$image_path   = UserManager::get_user_picture_path_by_id($row['user_id'], 'web', false, true);
 				$picture      = UserManager::get_picture_user($row['user_id'], $image_path['file'], $image_conf['height'], $image_conf['size']);
 				$row['image'] = '<img src="'.$picture['file'].'"  '.$picture['style'].'  />';
-			}
+			}			
 			$array[$row['user_id']] = $row;
 		}
 		return $array;
@@ -571,7 +577,7 @@ class GroupPortalManager
 	    	$direction = 'ASC';
 	    }
 
-	    $column = intval($column);
+	    //$column = intval($column);
 	    $from = intval($from);
 	    $number_of_items = intval($number_of_items);
 

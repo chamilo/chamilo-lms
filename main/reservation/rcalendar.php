@@ -1,30 +1,7 @@
-<?php // $Id: rcalendar.php,v 1.50 2006/05/12 07:33:26 sjacobs Exp $
-/*
-==============================================================================
-    Dokeos - elearning and course management software
-
-    Copyright (c) 2004-2008 Dokeos SPRL
-    Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
-    Copyright (c) Kristof Van Steenkiste
-
-    For a full list of contributors, see "credits.txt".
-    The full license can be read in "license.txt".
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-
-    See the GNU General Public License for more details.
-
-    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-    Mail: info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /license.txt */
 /**
-    --------------
     The rCalendar
-    --------------
  */
 $DaysShort = api_get_week_days_short();
 $DaysLong = api_get_week_days_long();
@@ -472,4 +449,3 @@ class rCalendar {
         	$GLOBALS['weekend']=date('d/m/Y',$day_start_dates[7]);
 	}
 }
-?>

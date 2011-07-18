@@ -1,35 +1,12 @@
-<?php // $Id: mysubscriptions.php,v 1.3 2006/04/27 14:14:03 kvansteenkiste Exp $
-/*
-==============================================================================
-    Dokeos - elearning and course management software
+<?php
+/* For licensing terms, see /license.txt */
 
-    Copyright (c) 2004-2008 Dokeos S.
-    Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
-    Copyright (c) Kristof Van Steenkiste
-    Copyright (c) Julio Montoya Armas
-
-    For a full list of contributors, see "credits.txt".
-    The full license can be read in "license.txt".
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-
-    See the GNU General Public License for more details.
-
-    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-    Mail: info@dokeos.com
-==============================================================================
-*/
 /**
-    ---------------------------------------------------------------------
         An overview with a list of upcoming reservations where
         the user has subscribed to (may also be viewable in the agenda)
 
         Later: links to m_item & m_reservation for every item your group (class) owns and
         the possibility (links) for adding new items or reservations
-    ---------------------------------------------------------------------
  */
 require_once('rsys.php');
 
@@ -37,19 +14,11 @@ Rsys::protect_script('mysubscriptions');
 $tool_name = get_lang('Booking');
 
 /**
-    ---------------------------------------------------------------------
- */
-
-/**
  *  Filter to display the modify-buttons
  */
 function modify_filter($id){
      return ' <a href="mysubscriptions.php?action=delete&amp;reservation_id='.substr($id,0,strpos($id,'-')).'&amp;dummy='.substr($id,strrpos($id,'-')+1).'" title="'.get_lang("DeleteSubscription").'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmDeleteSubscription")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
 }
-
-/**
-    ---------------------------------------------------------------------
- */
 
 switch ($_GET['action']) {
     case 'delete' :

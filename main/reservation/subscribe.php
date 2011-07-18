@@ -1,37 +1,11 @@
 <?php
-// $Id: subscribe.php,v 1.9 2006/05/11 14:36:10 kvansteenkiste Exp $
-/*
-==============================================================================
-    Dokeos - elearning and course management software
-
-    Copyright (c) 2004-2008 Dokeos SPRL
-    Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
-    Copyright (c) Kristof Van Steenkiste
-    Copyright (c) Julio Montoya Armas
-
-    For a full list of contributors, see "credits.txt".
-    The full license can be read in "license.txt".
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-
-    See the GNU General Public License for more details.
-
-    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-    Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-    ---------------------------------------------------------------------
-                Reservation-manager (add, edit & delete)
-    ---------------------------------------------------------------------
- */
+	Reservation-manager (add, edit & delete)
+*/
 
 require_once('rsys.php');
 Rsys :: protect_script('reservation');
-
 
 if (!empty($_GET['cat']) && !empty($_GET['item'] )) {
 	$cat = (int)$_GET['cat'];
@@ -173,7 +147,4 @@ if ($reservation[0][9] < $reservation[0][4]) {
 } else {
 	Display :: display_normal_message(Rsys :: get_return_msg2(get_lang('ReservationTresspassing'), "javascript:history.go(-2)", get_lang('BookingView')),false);
 }
-
-
 Display :: display_footer();
-?>

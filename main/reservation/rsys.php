@@ -1,32 +1,7 @@
 <?php
-// $Id: rsys.php,v 1.80 2006/05/12 08:48:49 sjacobs Exp $
-/*
-==============================================================================
-    Dokeos - elearning and course management software
-
-    Copyright (c) 2004-2008 Dokeos SPRL
-    Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
-    Copyright (c) Kristof Van Steenkiste
-    Copyright (c) Julio Montoya Armas
-
-    For a full list of contributors, see "credits.txt".
-    The full license can be read in "license.txt".
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-
-    See the GNU General Public License for more details.
-
-    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-    Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-    ---------------------------------------------------------------------
     The class-library with all reservation-system specific functionality
-    ---------------------------------------------------------------------
  */
 class Rsys {
 	/**
@@ -150,11 +125,7 @@ class Rsys {
 		return $user_info['status'];
 	}
 	/*
-	 ============================================================================================
-
 	                                    CATEGORIES
-
-	 ============================================================================================
 	*/
 
 	/**
@@ -1774,5 +1745,3 @@ require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 Rsys :: init();
 require_once 'rcalendar.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-
-?>

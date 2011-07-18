@@ -1,42 +1,13 @@
 <?php
-// $Id: m_item.php,v 1.13 2006/05/11 14:29:52 sjacobs Exp $
-/*
-==============================================================================
-    Dokeos - elearning and course management software
-
-    Copyright (c) 2004-2008 Dokeos SPRL
-    Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
-    Copyright (c) Kristof Van Steenkiste
-    Copyright (c) Julio Montoya Armas
-
-    For a full list of contributors, see "credits.txt".
-    The full license can be read in "license.txt".
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-
-    See the GNU General Public License for more details.
-
-    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-    Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-    ---------------------------------------------------------------------
                 Item-manager (add, edit & delete)
-    ---------------------------------------------------------------------
  */
 require_once('rsys.php');
 
 Rsys :: protect_script('m_item');
 $tool_name = get_lang('ItemManagerHeader');
 //$interbreadcrumb[] = array ("url" => "../admin/index.php", "name" => get_lang('PlatformAdmin'));
-
-/**
-    ---------------------------------------------------------------------
- */
 
 /**
  *  Filter to display the modify-buttons
@@ -66,10 +37,6 @@ function modify_filter($id) {
 function modify_rights_filter($id) {
 	return ' <a href="m_item.php?action=m_rights&amp;subaction=delete&amp;item_id='.substr($id, 0, strpos($id, '-')).'&amp;class_id='.substr($id, strrpos($id, '-') + 1).'" title="'.get_lang("RemoveClassRights").'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmDeleteItem"), ENT_QUOTES, api_get_system_encoding()))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
 }
-
-/**
-    ---------------------------------------------------------------------
- */
 
 if (isset ($_POST['action'])) {
 	switch ($_POST['action']) {

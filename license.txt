@@ -9,6 +9,7 @@ Copyright (c) 2003-2008 Vrije Universiteit Brussel (VUB)
 Copyright (c) 2004-2008 Hoogeschool Gent (HoGent)
 Copyright (c) Bart Mollet, Hogeschool Gent
 Copyright (c) Facultad de Matematicas, UADY (México) (Message plugin)
+Copyright (c) Kristof Van Steenkiste & Sebastien Jacobs (Reservation plugin) 
 	
 For a full list of contributors detaining copyrights over parts of
 the Chamilo software, see "documentation/credits.html".

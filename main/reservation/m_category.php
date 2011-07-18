@@ -1,39 +1,14 @@
 <?php
-// $Id: m_category.php,v 1.2 2006/05/09 08:51:14 kvansteenkiste Exp $
-/*
-==============================================================================
-    Dokeos - elearning and course management software
-
-    Copyright (c) 2004-2008 Dokeos SPRL
-    Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
-    Copyright (c) Kristof Van Steenkiste
-    Copyright (c) Julio Montoya Armas
-
-    For a full list of contributors, see "credits.txt".
-    The full license can be read in "license.txt".
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-
-    See the GNU General Public License for more details.
-
-    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-    Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-    ---------------------------------------------------------------------
                 Category-manager (add, edit & delete)
-    ---------------------------------------------------------------------
  */
 require_once 'rsys.php';
 
 // TODO: The global initialization scripts loads once again here. To be checked.
 $language_file = 'admin';
 $cidReset = true;
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 //
 
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -45,10 +20,6 @@ $tool_name = get_lang('BookingSystem');
 $interbreadcrumb[] = array ('url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin'));
 
 /**
-    ---------------------------------------------------------------------
- */
-
-/**
  *  Filter to display the modify-buttons
  *
  *  @param - int $id The ResourceType-id
@@ -56,10 +27,6 @@ $interbreadcrumb[] = array ('url' => '../admin/index.php', 'name' => get_lang('P
 function modify_filter($id) {
 	return '<a href="m_category.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditResourceType").'"><img alt="" src="../img/edit.gif" /></a>'.' <a href="m_category.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteResourceType").'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmDeleteResourceType")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
 }
-
-/**
-    ---------------------------------------------------------------------
- */
 
 switch ($_GET['action']) {
 	case 'add' :

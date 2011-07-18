@@ -13,13 +13,18 @@ define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
 class Image {
 	var $image_wrapper = null;
 
-	function __construct($path) {
-	    $path = preg_match(VALID_WEB_PATH, $path) ? (api_is_internal_path($path) ? api_get_path(TO_SYS, $path) : $path) : $path;	    
+	function __construct($path) {		
+	    $path = preg_match(VALID_WEB_PATH, $path) ? (api_is_internal_path($path) ? api_get_path(TO_SYS, $path) : $path) : $path;
 	    if (IMAGE_PROCESSOR == 'gd') {
 	        $this->image_wrapper = new GDWrapper($path);	        
 	    } else {
-	        $this->image_wrapper = new ImagickWrapper($path);
-	    }	    
+	    	if (class_exists('Imagick')) {
+	        	$this->image_wrapper = new ImagickWrapper($path);
+	    	} else {
+	    		Display::display_warning_message('Class Imagick not found');
+	    		exit;	    			    		
+	    	}	        
+	    }	    	    
 	}
 	public function resize($thumbw, $thumbh, $border = 0, $specific_size = false) {
         $this->image_wrapper->resize($thumbw, $thumbh, $border, $specific_size );
@@ -78,17 +83,22 @@ class ImagickWrapper extends ImageWrapper {
     public function __construct($path) {   
           parent::__construct($path);
     }    
-    public function set_image_wrapper() {        
+    public function set_image_wrapper() {
+    	if ($this->debug) error_log('Image::set_image_wrapper loaded');
         try {            
-            $this->image     = new Imagick($this->path);
-            
-            if ($this->image) {                
-                $this->fill_image_info(); //Fills height, width and type    
-            }            
-            if ($this->debug) error_log('set_image_wrapper loaded');             
+        	if (file_exists($this->path)) {
+	            $this->image     = new Imagick($this->path);
+	            
+	            if ($this->image) {                
+	                $this->fill_image_info(); //Fills height, width and type    
+	            }	            
+        	} else {
+        		if ($this->debug) error_log('Image::image does not exist');
+        	}        
         } catch(ImagickException $e) {             
             if ($this->debug) error_log($e->getMessage());           
         } 
+		
     }
     
     public function fill_image_info() {        
@@ -104,10 +114,12 @@ class ImagickWrapper extends ImageWrapper {
         }        
     }
     
-	public function get_image_size() {	
+	public function get_image_size() {
+		$imagesize = array('width'=>0,'height'=>0);
 	    if ($this->image_validated) {
-            return $imagesize = $this->image->getImageGeometry();             
+            $imagesize = $this->image->getImageGeometry();             
 	    }
+	    return $imagesize;
 	}
 	
 	//@todo implement border logic case for Imagick	
@@ -181,6 +193,9 @@ class GDWrapper extends ImageWrapper {
         $handler = null;
         $this->fill_image_info();     
         switch ($this->type) {
+        	case 0:
+        		$handler = false;
+        		break;
 		    case 1 : 
                 $handler = @imagecreatefromgif($this->path);
                 $this->type = 'gif'; 
@@ -209,11 +224,17 @@ class GDWrapper extends ImageWrapper {
         return $return_array;
 	}
 	
-    public function fill_image_info() {        
-        $image_info     = getimagesize($this->path);
-		$this->width    = $image_info[0];
-		$this->height   = $image_info[1];
-		$this->type     = $image_info[2];	
+    public function fill_image_info() { 
+    	if (file_exists($this->path)) {   
+	        $image_info     = getimagesize($this->path);
+			$this->width    = $image_info[0];
+			$this->height   = $image_info[1];
+			$this->type     = $image_info[2];	
+    	} else {
+    		$this->width    = 0;
+    		$this->height   = 0;
+    		$this->type     = 0;
+    	}
     }
     
     public function resize($thumbw, $thumbh, $border, $specific_size = false) {

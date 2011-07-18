@@ -230,23 +230,18 @@ function type_filter($type)
 function order_filter($field_order,$url_params,$row)
 {
 	global $number_of_extra_fields;
-
+	$return = '';
 	// the up icon only has to appear when the row can be moved up (all but the first row)
-	if ($row[5]<>1)
-	{
+	if ($row[5]<>1) {
 		$return .= '<a href="'.api_get_self().'?action=moveup&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('up.gif', get_lang('Up')).'</a>';
-	}
-	else
-	{
+	} else {
 		$return .= Display::return_icon('blank.gif','',array('width'=>'21px'));
 	}
 
 	// the down icon only has to appear when the row can be moved down (all but the last row)
-	if ($row[5]<>$number_of_extra_fields)
-	{
+	if ($row[5]<>$number_of_extra_fields) {
 		$return .= '<a href="'.api_get_self().'?action=movedown&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('down.gif', get_lang('Down')).'</a>';
 	}
-
 	return $return;
 }
 /**

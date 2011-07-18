@@ -822,7 +822,7 @@ $url_big_image      = $big_image.'?rnd='.time();
 if (api_get_setting('allow_social_tool') == 'true') {
 	echo '<div id="social-content">';
 		echo '<div id="social-content-left">';
-		SocialManager::show_social_menu('home', null, $user_id, $show_full_profile);
+		SocialManager::show_social_menu('home', null, api_get_user_id(), false);
 		echo '</div>';
 
 		echo '<div id="social-content-right">';

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 $language_file = 'gradebook';
-//$cidReset = true;
+
 require_once '../inc/global.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/be.inc.php';
@@ -49,6 +49,7 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
 
 	//@todo replace all this code with something like get_total_weight()
     $cats = Category :: load ($cat_id, null, null, null, null, null, false);
+    
     if (!empty($cats)) {
         
         //with this fix the teacher only can view 1 gradebook
@@ -61,11 +62,12 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
         
         $total_weight = $cats[0]->get_weight();
         
-        $allcat  = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
+        $allcat  = $cats[0]->get_subcategories($stud_id, api_get_course_id(), api_get_session_id());
         $alleval = $cats[0]->get_evaluations($stud_id);
         $alllink = $cats[0]->get_links($stud_id);
         
         $datagen = new GradebookDataGenerator ($allcat,$alleval, $alllink);
+        
         $total_resource_weight = 0;
         if (!empty($datagen)) {    
             $data_array = $datagen->get_data(GradebookDataGenerator :: GDG_SORT_NAME,0,null,true);
@@ -83,11 +85,13 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
         if ($total_resource_weight != $total_weight) {
             Display::display_warning_message(get_lang('SumOfActivitiesWeightMustBeEqualToTotalWeight'));
         }
-    }	 
+    }
+    
 	$certificate_list = get_list_users_certificates($cat_id);
 	
+	
 	if (count($certificate_list)==0) {
-		echo get_lang('NoResultsAvailable');
+		echo Display::display_warning_message(get_lang('NoResultsAvailable'));
 	} else {
 		foreach ($certificate_list as $index=>$value) {
 	?>

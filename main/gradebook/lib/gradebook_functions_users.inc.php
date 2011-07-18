@@ -132,6 +132,6 @@ function get_user_info_from_id($userid) {
 	$user_table= Database :: get_main_table(TABLE_MAIN_USER);
 	$sql= 'SELECT * FROM ' . $user_table . ' WHERE user_id=' . intval($userid);
 	$res= Database::query($sql);
-	$user= Database::fetch_array($res,ASSOC);
+	$user= Database::fetch_array($res, 'ASSOC');
 	return $user;
 }

@@ -664,8 +664,9 @@ if ($form->validate()) {
 	//api_display_tool_title($nameTools);
 	// actions
 	if (isset($_REQUEST['certificate'])) {
-		$all_information_by_create_certificate=DocumentManager::get_all_info_to_certificate(api_get_user_id());
-		$str_info='';
+		$all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(api_get_user_id());
+		
+		$str_info = '';
 		foreach ($all_information_by_create_certificate[0] as $info_value) {
 			$str_info.=$info_value.'<br/>';
 		}

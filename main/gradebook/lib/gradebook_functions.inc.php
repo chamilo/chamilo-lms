@@ -514,14 +514,14 @@ function get_certificate_by_user_id ($cat_id,$user_id) {
 function get_list_users_certificates ($cat_id=null) {
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $sql='SELECT DISTINCT u.user_id,u.lastname,u.firstname,u.username FROM '.$table_user.' u INNER JOIN '.$table_certificate.' gc
-    		ON u.user_id=gc.user_id ';
+    $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username 
+    		FROM '.$table_user.' u INNER JOIN '.$table_certificate.' gc ON u.user_id=gc.user_id ';
     if (!is_null($cat_id) && $cat_id>0) {
     	$sql.=' WHERE cat_id='.Database::escape_string($cat_id);
     }
     $sql.=' ORDER BY u.firstname';
-    $rs=Database::query($sql);
-    $list_users=array();
+    $rs = Database::query($sql);
+    $list_users = array();
     while ($row=Database::fetch_array($rs)) {
     	$list_users[]=$row;
     }

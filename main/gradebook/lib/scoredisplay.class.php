@@ -342,9 +342,11 @@ class ScoreDisplay
 				}
 			}
 		} else {
-			foreach ($this->custom_display_conv as $displayitem) {
-				if ($scaledscore < $displayitem['score'] || $displayitem['score'] == 1) {
-					return $displayitem['display'];
+			if (!empty($this->custom_display_conv)) {
+				foreach ($this->custom_display_conv as $displayitem) {
+					if ($scaledscore < $displayitem['score'] || $displayitem['score'] == 1) {
+						return $displayitem['display'];
+					}
 				}
 			}
 		}

@@ -3330,10 +3330,13 @@ class UserManager
 			$url = $url2;
 			if (empty($url)) {
 				$url = api_get_access_url(api_get_current_access_url_id());
+				$url = $url[0];				
 			}
 		}
-		$pieces = parse_url($url);
-		$icon_link = $pieces['scheme'].'://'.$pieces['host'].'/favicon.ico';
+		if (!empty($url)) {
+			$pieces = parse_url($url);
+			$icon_link = $pieces['scheme'].'://'.$pieces['host'].'/favicon.ico';
+		}
 		return $icon_link;
 	}
 	

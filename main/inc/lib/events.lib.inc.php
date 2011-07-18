@@ -500,19 +500,19 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
  * @param	integer	User ID (defaults to null)
  * @param	string	Course code (defaults to null)
  */
-function event_system($event_type, $event_value_type, $event_value, $timestamp = null, $user_id=null, $course_code=null) {	
+function event_system($event_type, $event_value_type, $event_value, $datetime = null, $user_id=null, $course_code=null) {	
 	global $_user;
 	global $TABLETRACK_DEFAULT;
 
 	$event_type         = Database::escape_string($event_type);
 	$event_value_type   = Database::escape_string($event_value_type);
 	$event_value        = Database::escape_string($event_value);
-	$timestamp          = Database::escape_string($timestamp);
+	$datetime           = Database::escape_string($datetime);
 	$user_id            = Database::escape_string($user_id);
 	$course_code        = Database::escape_string($course_code);
     
-	if(!isset($timestamp)) {
-		$timestamp = api_get_utc_datetime();
+	if(!isset($datetime)) {
+		$datetime = api_get_utc_datetime();
 	}
 	if(!isset($user_id)) {
 		$user_id = 0;
@@ -531,7 +531,7 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 				 VALUES
 					('$user_id.',
 					'$course_code',
-					'$timestamp',
+					'$datetime',
 					'$event_type',
 					'$event_value_type',
 					'$event_value')";

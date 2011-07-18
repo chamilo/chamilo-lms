@@ -506,17 +506,16 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         }
         */
 
-        // Add event configuration settings category to the system log.
-        $time = time();
+        // Add event configuration settings category to the system log.        
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
+        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
 
 
         // Add event configuration settings variable to the system log.
         if (is_array($keys) && count($keys) > 0) {
             foreach ($keys as $variable) {
-                event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_VARIABLE, $variable, $time, $user_id);
+                event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_VARIABLE, $variable, api_get_utc_datetime(), $user_id);
             }
         }
         //header('Location: settings.php?action=stored&category='.Security::remove_XSS($_GET['category']).'&message='.$message);
@@ -591,11 +590,10 @@ if (!empty($_GET['category'])) {
             if (isset($_POST['submit_dashboard_plugins'])) {
                 $affected_rows = DashboardManager::store_dashboard_plugins($_POST);
                 if ($affected_rows) {
-                    // add event to system log
-                    $time = time();
+                    // add event to system log                    
                     $user_id = api_get_user_id();
                     $category = $_GET['category'];
-                    event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
+                    event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
                     Display :: display_confirmation_message(get_lang('DashboardPluginsHaveBeenUpdatedSucesslly'));
                 }
             }

@@ -142,10 +142,9 @@ class UserManager
 				UrlManager::add_user_to_url($return, 1);
 			}
 
-			// add event to system log
-			$time = time();
+			// Add event to system log			
 			$user_id_manager = api_get_user_id();
-			event_system(LOG_USER_CREATE, LOG_USER_ID, $return, $time, $user_id_manager);
+			event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
 
 		} else {
 			//echo "false - failed" ;
@@ -295,11 +294,9 @@ class UserManager
 			//Delete user from friend lists
 			SocialManager::remove_user_rel_user($user_id, true);
 		}
-		// add event to system log
-		$time = time();
+		// Add event to system log		
 		$user_id_manager = api_get_user_id();
-		event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, $time, $user_id_manager);
-
+		event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager);
 		return true;
 	}
 

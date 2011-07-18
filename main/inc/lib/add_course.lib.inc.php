@@ -2586,10 +2586,9 @@ function register_course($course_sys_code, $course_screen_code, $course_reposito
             UrlManager::add_course_to_url($course_sys_code, 1);
         }
 
-        // Add event to the system log.
-        $time = time();
+        // Add event to the system log.        
         $user_id = api_get_user_id();
-        event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $course_sys_code, $time, $user_id, $course_sys_code);
+        event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $course_sys_code, api_get_utc_datetime(), $user_id, $course_sys_code);
 
         $send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
 

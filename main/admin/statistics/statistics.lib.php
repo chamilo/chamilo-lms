@@ -114,18 +114,18 @@ class Statistics {
      */
     function get_activities_data($from, $number_of_items, $column, $direction) {
         global $dateTimeFormatLong, $_configuration;
-        $track_e_default     = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $current_url_id = api_get_current_access_url_id();
+        $track_e_default    		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $table_user 				= Database::get_main_table(TABLE_MAIN_USER);
+        $table_course 				= Database::get_main_table(TABLE_MAIN_COURSE);
+        $access_url_rel_user_table	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $current_url_id 			= api_get_current_access_url_id();
 
         $column          = intval($column);
-        $from              = intval($from);
+        $from            = intval($from);
         $number_of_items = intval($number_of_items);
 
         if (!in_array($direction, array('ASC','DESC'))) {
-                       $direction = 'DESC';
+			$direction = 'DESC';
         }
         if ($_configuration['multiple_access_urls']) {
             $sql = "SELECT ".
@@ -153,16 +153,20 @@ class Statistics {
         }
 
         if (!empty($column) && !empty($direction)) {
-            $sql .=    " ORDER BY col$column $direction";
+            $sql .= " ORDER BY col$column $direction";
         } else {
-            $sql .=    " ORDER BY col4 DESC ";
+            $sql .= " ORDER BY col4 DESC ";
         }
         $sql .=    " LIMIT $from,$number_of_items ";
 
         $res = Database::query($sql);
         $activities = array ();
-        while ($row = Database::fetch_row($res)) {
-            $row[4] = api_get_local_time($row[4], null, date_default_timezone_get());
+        while ($row = Database::fetch_row($res)) {        	
+        	if (!empty($row[4]) && $row[4] != '0000-00-00 00:00:00') {        	
+            	$row[4] = api_get_local_time($row[4]);
+        	} else {
+        		$row[4] = '-';
+        	}
             $activities[] = $row;
         }
         return $activities;
@@ -449,7 +453,7 @@ class Statistics {
         $form->addElement('hidden','activities_direction','DESC');
         $form->addElement('hidden','activities_column','4');
         $form->addElement('text','keyword',get_lang('keyword'));
-        $form->addElement('style_submit_button', 'submit', get_lang('SearchActivities'),'class="search"');
+        $form->addElement('style_submit_button', 'submit', get_lang('Search'),'class="search"');
         echo '<div class="actions">';
             $form->display();
         echo '</div>';

@@ -335,10 +335,9 @@ class CourseManager {
             Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                     WHERE user_id IN (".$user_ids.") AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '".$course_code."'");
 
-            // add event to system log
-            $time = time();
+            // add event to system log            
             $user_id = api_get_user_id();
-            event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_COURSE_CODE, $course_code, $time, $user_id);
+            event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_COURSE_CODE, $course_code, api_get_utc_datetime(), $user_id);
         }
     }
 
@@ -436,10 +435,9 @@ class CourseManager {
                         status      = '".$status."',
                         sort        = '". ($course_sort)."'");
 
-            // Add event to the system log.
-            $time = time();
+            // Add event to the system log            
             $user_id = api_get_user_id();
-            event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_COURSE_CODE, $course_code, $time, $user_id);
+            event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_COURSE_CODE, $course_code, api_get_utc_datetime(), $user_id);
         }
         return (bool)$result;
     }
@@ -1613,10 +1611,9 @@ class CourseManager {
             }
         }
 
-        // add event to system log
-        $time = time();
+        // Add event to system log        
         $user_id = api_get_user_id();
-        event_system(LOG_COURSE_DELETE, LOG_COURSE_CODE, $code, $time, $user_id, $code);
+        event_system(LOG_COURSE_DELETE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
 
     }
 

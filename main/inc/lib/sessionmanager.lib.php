@@ -142,10 +142,9 @@ class SessionManager {
                 $access_url_id = api_get_current_access_url_id();
                 UrlManager::add_session_to_url($session_id,$access_url_id);            
 
-				// add event to system log
-				$time = time();
+				// add event to system log				
 				$user_id = api_get_user_id();
-				event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, $time, $user_id);
+				event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), $user_id);
 
 				return $session_id;
 			}
@@ -385,11 +384,9 @@ class SessionManager {
 			}
 		}
 		*/
-		// add event to system log
-		$time = time();
+		// Add event to system log		
 		$user_id = api_get_user_id();
-		event_system(LOG_SESSION_DELETE, LOG_SESSION_ID, $id_checked, $time, $user_id);
-
+		event_system(LOG_SESSION_DELETE, LOG_SESSION_ID, $id_checked, api_get_utc_datetime(), $user_id);
 	}
 
 
@@ -908,11 +905,10 @@ class SessionManager {
         $sql = "INSERT INTO $tbl_session_category (name, date_start, date_end, access_url_id)
         		VALUES('".Database::escape_string($name)."','$date_start','$date_end', '$access_url_id')";
         Database::query($sql);
-        $id_session=Database::insert_id();
-        // add event to system log
-        $time = time();
+        $id_session = Database::insert_id();
+        // Add event to system log        
         $user_id = api_get_user_id();
-        event_system(LOG_SESSION_CATEGORY_CREATE, LOG_SESSION_CATEGORY_ID, $id_session, $time, $user_id);
+        event_system(LOG_SESSION_CATEGORY_CREATE, LOG_SESSION_CATEGORY_ID, $id_session, api_get_utc_datetime(), $user_id);
         return $id_session;
 	}
 
@@ -1003,10 +999,9 @@ class SessionManager {
 		$rs = @Database::query($sql);
 		$result = Database::affected_rows();
 
-		// add event to system log
-		$time = time();
+		// Add event to system log		
 		$user_id = api_get_user_id();
-		event_system(LOG_SESSION_CATEGORY_DELETE, LOG_SESSION_CATEGORY_ID, $id_checked, $time, $user_id);
+		event_system(LOG_SESSION_CATEGORY_DELETE, LOG_SESSION_CATEGORY_ID, $id_checked, api_get_utc_datetime(), $user_id);
 
 
 		// delete extra session fields where field variable is "PERIODO"

@@ -38,11 +38,10 @@ function handle_plugins() {
 
     if (isset($_POST['submit_plugins'])) {
         store_plugins();
-        // Add event to the system log.
-        $time = time();
+        // Add event to the system log.        
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
+        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
         Display :: display_confirmation_message(get_lang('SettingsStored'));
     }
 
@@ -207,10 +206,9 @@ function handle_stylesheets() {
         upload_stylesheet($values, $picture);
 
         // Add event to the system log.
-        $time = time();
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
+        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
 
         Display::display_confirmation_message(get_lang('StylesheetAdded'));
     } else {
@@ -689,20 +687,18 @@ function handle_templates() {
         add_edit_template();
 
         // Add event to the system log.
-        $time = time();
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
+        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
 
     } else {
         if ($_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
             delete_template($_GET['id']);
 
-            // Add event to the system log
-            $time = time();
+            // Add event to the system log            
             $user_id = api_get_user_id();
             $category = $_GET['category'];
-            event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
+            event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
         }
         display_templates();
     }

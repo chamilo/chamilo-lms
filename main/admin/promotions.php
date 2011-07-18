@@ -78,9 +78,6 @@ $(function() {
 });
 </script>   
 <?php
-// Tool introduction
-Display::display_introduction_section(get_lang('Promotions'));
-
 $promotion = new Promotion();
 
 // Action handling: Adding a note

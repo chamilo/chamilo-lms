@@ -74,9 +74,6 @@ $(function() {
 });
 </script>
 <?php
-// Tool introduction
-Display::display_introduction_section(get_lang('Careers'));
-
 $career = new Career();
 
 // Action handling: Add

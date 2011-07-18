@@ -834,6 +834,8 @@ class Display {
         $obj->pager         = $div_id.'_pager';
 
         $obj->datatype  = 'json';
+        
+        $json = '';
         if (!empty($extra_params['datatype'])) {
             $obj->datatype  = $extra_params['datatype'];
         }

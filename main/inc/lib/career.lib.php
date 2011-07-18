@@ -72,12 +72,11 @@ class Career extends Model {
     public function return_form($url, $action) {
 		
 		$oFCKeditor = new FCKeditor('description') ;
-				$oFCKeditor->ToolbarSet = 'careers';
-				$oFCKeditor->Width		= '100%';
-				$oFCKeditor->Height		= '200';
-				$oFCKeditor->Value		= $message;
-				$oFCKeditor->CreateHtml();	
-		
+		$oFCKeditor->ToolbarSet = 'careers';
+		$oFCKeditor->Width		= '100%';
+		$oFCKeditor->Height		= '200';
+		$oFCKeditor->Value		= '';
+		$oFCKeditor->CreateHtml();
 		
         $form = new FormValidator('career', 'post', $url);
         // Settting the form elements
@@ -87,10 +86,12 @@ class Career extends Model {
         }
         
         $form->addElement('header', '', $header);
-        $form->addElement('hidden', 'id',intval($_GET['id']));
+        $id = isset($_GET['id']) ? intval($_GET['id']) : '';
+        $form->addElement('hidden', 'id', $id);
+        
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
         $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));	   
-	   $status_list = $this->get_status_list();         
+	    $status_list = $this->get_status_list();         
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {
             $form->addElement('text', 'created_at', get_lang('CreatedAt'));
@@ -100,21 +101,21 @@ class Career extends Model {
         $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
     
         // Setting the defaults
-        $defaults = $this->get($_GET['id']);
+        $defaults = $this->get($id);
         
-        $defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
-        $defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
+        if (!empty($defaults['created_at'])) {
+        	$defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
+        }
+        if (!empty($defaults['updated_at'])) {
+        	$defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
+        }
         $form->setDefaults($defaults);
     
         // Setting the rules
-        $form->addRule('name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
-               
-                                
-        return $form;
-        
-
-                                
+        $form->addRule('name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');               
+		return $form;                                
     }
+    
     /**
      * Copies the career to a new one
      * @param   integer     Career ID

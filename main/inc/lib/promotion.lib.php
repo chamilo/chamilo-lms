@@ -80,7 +80,7 @@ class Promotion extends Model {
 				$oFCKeditor->ToolbarSet = 'careers';
 				$oFCKeditor->Width		= '100%';
 				$oFCKeditor->Height		= '200';
-				$oFCKeditor->Value		= $message;
+				$oFCKeditor->Value		= '';
 				$oFCKeditor->CreateHtml();		
 		
 		$form = new FormValidator('promotion', 'post', $url);
@@ -89,8 +89,10 @@ class Promotion extends Model {
         if ($action == 'edit') {
         	$header = get_lang('Modify');
         }
+        $id = isset($_GET['id']) ? intval($_GET['id']) : '';
+        
         $form->addElement('header', '', $header);
-        $form->addElement('hidden', 'id', intval($_GET['id']));
+        $form->addElement('hidden', 'id', $id);
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '70','id' => 'name'));        
         $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));       
         $career = new Career();
@@ -110,9 +112,13 @@ class Promotion extends Model {
         $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
     
         // Setting the defaults
-        $defaults = $this->get($_GET['id']);
-        $defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
-        $defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);            
+        $defaults = $this->get($id);
+        if (!empty($defaults['created_at'])) {
+        	$defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
+        }
+        if (!empty($defaults['updated_at'])) {
+        	$defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
+        }            
         $form->setDefaults($defaults);
     
         // Setting the rules

@@ -4923,20 +4923,25 @@ function api_browser_support($format="") {
 
 /**
  * This function checks if exist path and file browscap.ini
+ * In order for this to work, your browscap configuration setting in php.ini must point to the correct location of the browscap.ini file on your system
+ * http://php.net/manual/en/function.get-browser.php
+ * 
  * @return bool
  *
  * @author Juan Carlos Raña Trabado
  */
-function api_check_browscap(){
+function api_check_browscap() {
     $setting = ini_get('browscap');
-    $browser = get_browser($_SERVER['HTTP_USER_AGENT'], true);
-
-    if (strpos($setting, 'browscap.ini') && !empty($browser)){
-        return true;
-    } else {
-        return false;
+    
+    if ($setting) {
+        $browser = get_browser($_SERVER['HTTP_USER_AGENT'], true);
+	    if (strpos($setting, 'browscap.ini') && !empty($browser)) {
+	        return true;
+	    }
     }
+    return false;	    
 }
+
 
 
 function api_get_js($file) {    

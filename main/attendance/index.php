@@ -108,12 +108,12 @@ $(function() {
 			
 			
 			$(".checkboxes_col_"+calendar_id).mouseover(function() {	
-				//$(".checkbox_head_"+calendar_id).removeAttr("opacity");		
-				//$(".checkboxes_col_"+calendar_id).css({"opacity":"0.7","background-color":"#F6F38C", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" });
+				$(".checkbox_head_"+calendar_id).removeAttr("opacity");		
+				$(".checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F6F38C", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" });
 			});
 			
 			$(".checkboxes_col_"+calendar_id).mouseout(function() {
-				//$(".checkboxes_col_"+calendar_id).css({"opacity":"0.4","background-color":"#F6F38C", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" });			
+				$(".checkboxes_col_"+calendar_id).css({"opacity":"0.4","background-color":"#F6F38C", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" });			
 			});
 			
 			

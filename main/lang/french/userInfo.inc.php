@@ -174,7 +174,6 @@ $UserIsNotSubscribedToThisGroup = "L'utilisateur n'est pas inscrit à ce groupe"
 $InvitationReceived = "Invitation reçue";
 $InvitationSent = "Invitation envoyée";
 $YouAlreadySentAnInvitation = "Vous avez déjà envoyé une invitation";
-$AllowSendMessageToAllPlatformUsersTitle = "Autoriser l'envoi de messages à tous les utilisateurs";
 $UserAdded = "L'utilisateur a été ajouté";
 $FilesSizeExceedsX = "La taille du fichier dépasse";
 $YouShouldWriteASubject = "Vous devriez indiquer un sujet";

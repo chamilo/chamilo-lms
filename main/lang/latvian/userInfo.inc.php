@@ -174,7 +174,6 @@ $UserIsNotSubscribedToThisGroup = "Lietotājs nav pierakstīts šajā grupā";
 $InvitationReceived = "Ielūgums saņemts";
 $InvitationSent = "Ielūgums nosūtīts";
 $YouAlreadySentAnInvitation = "Jūs jau nosūtījāt ielūgumu";
-$AllowSendMessageToAllPlatformUsersTitle = "Ļauj nosūtīt ziņu visiem platformas lietotājiem";
 $UserAdded = "Lietotājs ir pievienots";
 $FilesSizeExceedsX = "Failu lielums pārsniegts";
 $YouShouldWriteASubject = "Jums ir jāieraksta vēstules virsraksts";

@@ -174,7 +174,6 @@ $UserIsNotSubscribedToThisGroup = "L'usuariu nun ta apuntáu a esti grupu";
 $InvitationReceived = "Invitación aceptada";
 $InvitationSent = "Invitación unviada";
 $YouAlreadySentAnInvitation = "Usté yá unvió una invitación";
-$AllowSendMessageToAllPlatformUsersTitle = "Permitir l'unvíu de mensaxes a tolos usuarios de la plataforma";
 $UserAdded = "Añadióse l'usuariu";
 $FilesSizeExceedsX = "Tamañu del archivu pergrande";
 $YouShouldWriteASubject = "Tienes qu'escribir l'asuntu";

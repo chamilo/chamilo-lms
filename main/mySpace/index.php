@@ -291,10 +291,10 @@ if ($view == 'coach' || $view == 'drh') {
 		foreach ($courses as $course_code) {
 			if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
 				$nb_courses_student++;
-				$nb_posts += Tracking :: count_student_messages($student_id, $course_code);
-				$nb_assignments += Tracking :: count_student_assignments($student_id, $course_code);
-				$avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);
-				$myavg_temp = Tracking :: get_avg_student_score($student_id, $course_code);
+				$nb_posts 			   += Tracking :: count_student_messages($student_id, $course_code);
+				$nb_assignments 	   += Tracking :: count_student_assignments($student_id, $course_code);
+				$avg_student_progress  += Tracking :: get_avg_student_progress($student_id, $course_code);
+				$myavg_temp 			= Tracking :: get_avg_student_score($student_id, $course_code);
 
 				 if (is_numeric($myavg_temp))
 				 	$avg_student_score += $myavg_temp;

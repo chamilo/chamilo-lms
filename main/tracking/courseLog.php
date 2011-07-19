@@ -218,13 +218,14 @@ if ($_GET['studentlist'] == 'false') {
         $csv_content[] = array('', '');
         $csv_content[] = $temp;
     }
-
+    
     if (count($flat_list) > 0) {
         foreach ($flat_list as $lp_id => $lp) {
             $lp_avg_progress = 0;
             foreach ($a_students as $student_id => $student) {
                 // get the progress in learning pathes
                 $lp_avg_progress += Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
+                
             }
             if ($nbStudents > 0) {
                 $lp_avg_progress = $lp_avg_progress / $nbStudents;
@@ -275,7 +276,7 @@ if ($_GET['studentlist'] == 'false') {
             $quiz_avg_score = 0;
             if ($count_students > 0) {
                 foreach ($student_ids as $student_id) {
-                    $avg_student_score = Tracking::get_avg_student_exercise_score($student_id, $course_code, $quiz['id'], $session_id);
+                    $avg_student_score = Tracking::get_avg_student_exercise_score($student_id, $course_code, $quiz['id'], $session_id);                    
                     $quiz_avg_score += $avg_student_score;
                 }
             }

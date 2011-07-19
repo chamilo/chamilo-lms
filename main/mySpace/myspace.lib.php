@@ -8,8 +8,6 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 class MySpace {
 
-	/* For licensing terms, see /dokeos_license.txt */
-
 	/**
 	 * This function serves exporting data in CSV format.
 	 * @param array $header			The header labels.
@@ -1277,7 +1275,7 @@ class MySpace {
 				$avg_progress_in_course     = Tracking::get_avg_student_progress($users, $course_code, array(), $session_id);
 				$avg_score_in_course        = Tracking::get_avg_student_score($users, $course_code, array(), $session_id);
 				$avg_score_in_exercise      = Tracking::get_avg_student_exercise_score($users, $course_code, 0, $session_id);
-                
+				                
 				$avg_time_spent_in_course   = Tracking::get_time_spent_on_the_course($users, $course_code, $session_id);
 
 				$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);

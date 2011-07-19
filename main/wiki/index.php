@@ -31,7 +31,6 @@ require_once 'wiki.inc.php';
 $htmlHeadXtra[] ='<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'wiki/css/default.css"/>';
 
 // javascript for advanced parameters menu
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.4.4.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 function advanced_parameters() {
     if(document.getElementById(\'options\').style.display == \'none\') {

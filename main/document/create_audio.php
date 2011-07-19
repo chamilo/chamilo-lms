@@ -39,9 +39,6 @@ if (empty($document_data)) {
 }
 $document_id = $document_data['id'];
 $dir = $document_data['path'];
-
-//javascript jquery
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery-1.4.4.min.js" type="text/javascript"></script>';
 //jquery textareaCounter
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/textareacounter/jquery.textareaCounter.plugin.js" type="text/javascript"></script>';
 //need jquery for hide menus

@@ -2747,7 +2747,7 @@ function api_get_languages_combo($name = 'language') {
     $languages = $language_list['name'];
     $folder = $language_list['folder'];
 
-    $ret .= '<select name="'.$name.'">';
+    $ret .= '<select name="'.$name.'"  class="chzn-select" >';
     foreach ($languages as $key => $value) {
         if ($folder[$key] == $default) {
             $selected = ' selected="selected"';
@@ -2795,7 +2795,8 @@ function api_display_language_form($hide_if_no_choice = false) {
     //-->
     </script>
 <?php
-    echo '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">', "<select name=\"language_list\" onchange=\"javascript: jumpMenu('parent',this,0);\">";
+    echo '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
+    echo "<select class=\"chzn-select\" name=\"language_list\" onchange=\"javascript: jumpMenu('parent',this,0);\">";
     foreach ($original_languages as $key => $value) {
         if ($folder[$key] == $user_selected_language) {
             $option_end = ' selected="selected" >';
@@ -4953,7 +4954,7 @@ function api_get_js($file) {
  * Returns the js header to include the jquery library
  */
 function api_get_jquery_js() {
-    return api_get_js('jquery-1.4.4.min.js');	
+    return api_get_js('jquery.min.js');	
 }
 
 

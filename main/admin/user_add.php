@@ -7,7 +7,6 @@
 // Language files that should be included
 $language_file = array('admin', 'registration');
 $cidReset = true;
-
 // Including necessary libraries.
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
@@ -145,8 +144,8 @@ $status[STUDENT] = get_lang('Learner');
 $status[DRH] = get_lang('Drh');
 $status[SESSIONADMIN] = get_lang('SessionsAdmin');
 
-$form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();'));
-$form->addElement('select_language', 'language', get_lang('Language'));
+$form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'class'=>'chzn-select', 'onchange' => 'javascript: display_drh_list();'));
+$form->addElement('select_language', 'language', get_lang('Language'), null);
 //drh list (display only if student)
 $display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'block' : 'none';
 

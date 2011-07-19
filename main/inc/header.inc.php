@@ -114,9 +114,17 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 ?>
 /*]]>*/
 </style>
-<script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/jquery.js" type="text/javascript" ></script>
+<script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/jquery.min.js" type="text/javascript" ></script>
+<script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/chosen/chosen.jquery.min.js" type="text/javascript" ></script>
+
 <script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/thickbox.js" type="text/javascript" ></script>
 <link rel="stylesheet" href="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/thickbox.css" type="text/css" media="projection, screen" />
+
+<link rel="stylesheet" href="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/chosen/chosen.css" type="text/css" media="projection, screen" />
+
+
+
+
 <link rel="top" href="<?php echo api_get_path(WEB_PATH); ?>index.php" title="" />
 <link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/courses.php" title="<?php echo api_htmlentities(get_lang('OtherCourses'), ENT_QUOTES); ?>" />
 <link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/profile.php" title="<?php echo api_htmlentities(get_lang('ModifyProfile'), ENT_QUOTES); ?>" />

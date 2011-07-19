@@ -984,7 +984,7 @@ class Exercise {
 			$option = range(0,$max);
 			$option[0]=get_lang('No');
 
-			$random[] = FormValidator :: createElement ('select', 'randomQuestions',null,$option);
+			$random[] = FormValidator :: createElement ('select', 'randomQuestions',null,$option, array('class'=>'chzn-select'));
 			$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');
 			//$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
 			$form->addGroup($random,null,get_lang('RandomQuestions'),'<br />');

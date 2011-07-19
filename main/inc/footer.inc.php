@@ -162,5 +162,6 @@ if (api_is_platform_admin()) {
 	}
 }
 ?>
+<script> $(".chzn-select").chosen(); </script>
 </body>
 </html>

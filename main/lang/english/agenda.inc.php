@@ -79,7 +79,6 @@ $RepeatDate = "Repeat date";
 $EndDateMustBeMoreThanStartDate = "End date must be more than the start date";
 $AnnouncementForGroup = "Only for group";
 $AllGroups = "All the groups";
-
-?>$SelectACourse = "Select a course";
+$SelectACourse = "Select a course";
 $PleaseSelectACourseOrASessionInTheLeftColumn = "Please select a course or a session in the sidebar.";
 ?>

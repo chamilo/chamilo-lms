@@ -304,7 +304,7 @@ class SocialManager extends UserManager {
 	 * @param void
 	 * @return string message invitation
 	 */
-	public static function send_invitation_friend_user ($userfriend_id,$subject_message='',$content_message='') {
+	public static function send_invitation_friend_user ($userfriend_id, $subject_message='', $content_message='') {
 		global $charset;
 		//$id_user_friend=array();
 		$user_info = array();
@@ -312,7 +312,7 @@ class SocialManager extends UserManager {
 		$succes = get_lang('MessageSentTo');
 		$succes.= ' : '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
 		if (isset($subject_message) && isset($content_message) && isset($userfriend_id)) {
-			$send_message = MessageManager::send_message($userfriend_id, $subject_message, $content_message);
+			$send_message = MessageManager::send_message($userfriend_id, $subject_message, $content_message); 
 			if ($send_message) {
 				echo Display::display_confirmation_message($succes,true);
 			} else {

@@ -1,4 +1,4 @@
-<?php // $Id: group.php 22201 2009-07-17 19:57:03Z cfasanando $
+<?php
 /* For licensing terms, see /license.txt */
 
 /**

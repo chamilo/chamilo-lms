@@ -1,15 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
-*	This is the group library for Dokeos.
-*	Include/require it in your code to use its functionality.
-*
-*	@author various authors
-*	@author Roan Embrechts (Vrije Universiteit Brussel), virtual courses support + some cleaning
-*   @author Bart Mollet (HoGent), all functions in class GroupManager
-*   @author Julio Montoya (Dokeos), LOTS of database::escape_string added
-*	@package dokeos.library
-*/
+
 require_once 'database.lib.php';
 require_once 'course.lib.php';
 require_once 'tablesort.lib.php';
@@ -802,25 +793,26 @@ class GroupManager {
 
 		if (api_is_course_coach()) {
 			for($i=0 ; $i<count($group_ids) ; $i++) {
-				if(!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i]))
-				{
+				if (!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i])){
 					array_splice($group_ids,$i,1);
 					$i--;
 				}
 			}
-			if(count($group_ids)==0){
+			if (count($group_ids)==0) {
 				return false;}
 		}
 
 		global $_course;
 		$category = self :: get_category_from_group($group_ids[0]);
-		$groups_per_user = $category['groups_per_user'];
-		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		$group_table = Database :: get_course_table(TABLE_GROUP);
-		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
-		$session_id = api_get_session_id();
-		$complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['sysCode'], true, $session_id);
+		$groups_per_user 	= $category['groups_per_user'];
+		$course_user_table 	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$group_table 		= Database :: get_course_table(TABLE_GROUP);
+		$group_user_table 	= Database :: get_course_table(TABLE_GROUP_USER);
+		$session_id 		= api_get_session_id();
+		
+		$complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['code'], true, $session_id);		
         $number_groups_per_user = ($groups_per_user == GROUP_PER_MEMBER_NO_LIMIT ? INFINITE : $groups_per_user);
+        
 		/*
 		 * Retrieve all the groups where enrollment is still allowed
 		 * (reverse) ordered by the number of place available
@@ -835,61 +827,58 @@ class GroupManager {
 				ORDER BY nbPlaces DESC";
 		$sql_result = Database::query($sql);
 		$group_available_place = array ();
-		while ($group = Database::fetch_array($sql_result, 'ASSOC'))
-		{
+		while ($group = Database::fetch_array($sql_result, 'ASSOC')) {
 			$group_available_place[$group['gid']] = $group['nbPlaces'];
 		}
+		
 		/*
 		 * Retrieve course users (reverse) ordered by the number
 		 * of group they are already enrolled
 		 */
-		for ($i = 0; $i < count($complete_user_list); $i ++)
-		{
+		for ($i = 0; $i < count($complete_user_list); $i ++) {
 
 			//find # of groups the user is enrolled in
 			$number_of_groups = self :: user_in_number_of_groups($complete_user_list[$i]["user_id"],$category['id']);
 			//add # of groups to user list
 			$complete_user_list[$i]['number_groups_left'] = $number_groups_per_user - $number_of_groups;
 		}
+		
 		//first sort by user_id to filter out duplicates
 		$complete_user_list = TableSort :: sort_table($complete_user_list, 'user_id');
-		$complete_user_list = self :: filter_duplicates($complete_user_list, 'user_id');
+		
+		$complete_user_list = self :: filter_duplicates($complete_user_list, 'user_id');		
 		$complete_user_list = self :: filter_only_students($complete_user_list);
+				
 		//now sort by # of group left
 		$complete_user_list = TableSort :: sort_table($complete_user_list, 'number_groups_left', SORT_DESC);
 		$userToken = array ();
-		foreach ($complete_user_list as $this_user)
-		{
+		foreach ($complete_user_list as $this_user) {
 
-			if ($this_user['number_groups_left'] > 0)
-			{
+			if ($this_user['number_groups_left'] > 0) {
 				$userToken[$this_user['user_id']] = $this_user['number_groups_left'];
 			}
 		}
+		
 		/*
 		 * Retrieve the present state of the users repartion in groups
 		 */
 		$sql = "SELECT user_id uid, group_id gid FROM ".$group_user_table;
 		$result = Database::query($sql);
-		while ($member = Database::fetch_array($result, 'ASSOC'))
-		{
+		while ($member = Database::fetch_array($result, 'ASSOC')) {
 			$groupUser[$member['gid']][] = $member['uid'];
 		}
+		
 		$changed = true;
-		while ($changed)
-		{
+		while ($changed) {
 
 			$changed = false;
 			reset($group_available_place);
 			arsort($group_available_place);
 			reset($userToken);
 			arsort($userToken);
-			foreach ($group_available_place as $group_id => $place)
-			{
-				foreach ($userToken as $user_id => $places)
-				{
-					if (self :: can_user_subscribe($user_id, $group_id))
-					{
+			foreach ($group_available_place as $group_id => $place) {
+				foreach ($userToken as $user_id => $places) {					
+					if (self :: can_user_subscribe($user_id, $group_id)) {
 
 						self :: subscribe_users($user_id, $group_id);
 						$group_available_place[$group_id]--;
@@ -898,8 +887,7 @@ class GroupManager {
 						break;
 					}
 				}
-				if ($changed)
-				{
+				if ($changed) {
 					break;
 				}
 			}
@@ -1392,7 +1380,7 @@ class GroupManager {
 			//filter out duplicates, based on field "user_id"
 			$complete_user_list = self :: filter_duplicates($complete_user_list, "user_id");
 			$complete_user_list = self :: filter_users_already_in_group($complete_user_list, $group_id);
-			//$complete_user_list = self :: filter_only_students($complete_user_list);
+
 		}
 		return $complete_user_list;
 	}
@@ -1431,15 +1419,23 @@ class GroupManager {
 		}
 		return $user_array_out;
 	}
+	
 	/**
 	* Remove all users that are not students and all users who have tutor status
 	* from  the list.
 	*/
-	public static function filter_only_students ($user_array_in) {
-		$user_array_out = array ();
-		foreach ($user_array_in as $this_user) {		    
-			if ($this_user['status_rel'] == STUDENT && $this_user['tutor_id'] == 0) {
-				$user_array_out[] = $this_user;
+	public static function filter_only_students($user_array_in) {
+		$user_array_out = array ();		
+		foreach ($user_array_in as $this_user) {			    
+			//if ($this_user['status_rel'] == STUDENT && $this_user['tutor_id'] == 0) {
+			if (api_get_session_id()) {
+				if ($this_user['status_session'] == 0) {
+					$user_array_out[] = $this_user;
+				}
+			} else {
+				if ($this_user['status_rel'] == STUDENT) {
+					$user_array_out[] = $this_user;
+				}
 			}
 		}
 		return $user_array_out;

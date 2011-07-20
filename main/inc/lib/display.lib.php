@@ -374,6 +374,10 @@ class Display {
 
     /**
      * Returns a div html string with
+     * @param   string  The message
+     * @param   string  The message type (confirm,normal,warning,error)
+     * @param   bool    Whether to XSS-filter or not
+     * @return  string  Message wrapped into an HTML div
      */
     public function return_message($message, $type='normal', $filter = true) {
         if ($filter) {
@@ -386,10 +390,12 @@ class Display {
             case 'error':
                $class = 'error-message';
                break;
-            case 'normal':                                
-            case 'confirmation-message':                
+            case 'confirm':
+                $class = 'confirmation-message';
+               break;
+            case 'normal':
             default:
-                $class = 'normal-message';            
+                $class = 'normal-message';
         }
         return self::div($message, array('class'=>$class));
     }

@@ -422,8 +422,6 @@ class Database {
         if (!isset($parameters['client_flags'])) {
             $parameters['client_flags'] = 0;
         }
-        print_r($parameters);
-        die('toto');
         return $parameters['persistent']
             ? mysql_pconnect($parameters['server'], $parameters['username'], $parameters['password'], $parameters['client_flags'])
             : mysql_connect($parameters['server'], $parameters['username'], $parameters['password'], $parameters['new_link'], $parameters['client_flags']);

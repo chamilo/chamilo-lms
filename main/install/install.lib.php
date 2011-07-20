@@ -948,7 +948,6 @@ function step_active($param) {
  */
 function display_step_sequence() {
     global $current_step;
-    global $total_steps;
     return get_lang('Step'.$current_step).' &ndash; ';
 }
 

@@ -799,21 +799,21 @@ if ($_POST['step2']) {
 
 		include 'install_db.inc.php';
 		include 'install_files.inc.php';
-	}
-
-	display_after_install_message($installType, $nbr_courses);
+        }
+        $current_step = 7;
+        display_after_install_message($installType, $nbr_courses);
 
 } elseif ($_POST['step1'] || $badUpdatePath) {
 
-	//STEP 1 : REQUIREMENTS
-	//make sure that proposed path is set, shouldn't be necessary but...
-	if (empty($proposedUpdatePath)) { $proposedUpdatePath = $_POST['updatePath']; }
-	display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8, $update_from_version_6);
+        //STEP 1 : REQUIREMENTS
+        //make sure that proposed path is set, shouldn't be necessary but...
+        if (empty($proposedUpdatePath)) { $proposedUpdatePath = $_POST['updatePath']; }
+        display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8, $update_from_version_6);
 
 } else {
 
-	// This is the start screen.
-	display_language_selection();
+        // This is the start screen.
+        display_language_selection();
 }
 ?>
   </td>

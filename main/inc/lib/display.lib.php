@@ -403,10 +403,10 @@ class Display {
     /**
      * Returns an encrypted mailto hyperlink
      *
-     * @param - $email (string) - e-mail
-     * @param - $text (string) - clickable text
-     * @param - $style_class (string) - optional, class from stylesheet
-     * @return - encrypted mailto hyperlink
+     * @param string  e-mail
+     * @param string  clickable text
+     * @param string  optional, class from stylesheet
+     * @return string encrypted mailto hyperlink
      */
     public static function encrypted_mailto_link ($email, $clickable_text = null, $style_class = '') {
         if (is_null($clickable_text)) {
@@ -501,6 +501,13 @@ class Display {
         return $result;
     }
 
+    /**
+     * Get the options withing a select box within the given values
+     * @param int   Min value
+     * @param int   Max value
+     * @param int   Default value
+     * @return string HTML select options
+     */
     public static function get_numeric_options($min, $max, $selected_num = 0) {
         $result = '';
         for ($i = $min; $i <= $max; $i ++) {

@@ -92,9 +92,13 @@ Display :: display_header($language_name);
 echo '<div class="actions-message" >';
 echo $language_name;
 echo '</div>';
-echo '<br />';
 
-
+if (!empty($_SESSION['msg'])) {
+    echo $_SESSION['msg'];
+    unset($_SESSION['msg']);
+} else {
+    echo '<br />';
+}
 
 $txt_search_word = Security::remove_XSS($_REQUEST['txt_search_word']);
 $html.='<div style="float:left" class="actions">';

@@ -140,7 +140,7 @@ $visual_code=$form->addElement('text', 'visual_code', get_lang('Code'));
 $visual_code->freeze();
 $form->applyFilter('visual_code', 'strtoupper');
 //$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
-$prof = &$form->addElement('select', 'tutor_name', get_lang('Professors'), $a_profs, array('style'=>'width:350px'));
+$prof = &$form->addElement('select', 'tutor_name', get_lang('Teacher'), $a_profs, array('style'=>'width:350px'));
 $form->applyFilter('tutor_name', 'html_filter');
 
 $prof -> setSelected($s_selected_tutor);

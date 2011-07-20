@@ -112,7 +112,9 @@ class Notification extends Model {
                         continue;
                     }  
                 }
-                switch ($setting_to_check) {
+                $user_setting = $extra_data[$setting_to_check];                
+                $user_info = api_get_user_info($user_id);
+                switch ($user_setting) {
                     //No notifications                   
                     case NOTIFY_MESSAGE_NO:
                     case NOTIFY_INVITATION_NO:
@@ -128,15 +130,14 @@ class Notification extends Model {
                         }
                         $params['sent_at']       = api_get_utc_datetime();
                     //Saving the notification to be sent some day 
-                    default:                    
-                        $user_info               = api_get_user_info($user_id);			    
+                    default:	    
                 	    $params['dest_user_id']  = $user_id;
                 	    $params['dest_mail']     = $user_info['mail'];
                 	    $params['title']         = $title;
                 	    $params['content']       = cut($content, $this->max_content_length);
-                	    $params['send_freq']     = $extra_data[$setting_to_check];    			 
+                	    $params['send_freq']     = $user_setting;    			 
                 	    $this->save($params);
-                	    break;	   
+                	    break;
                 }                   
             }
         }
@@ -179,12 +180,12 @@ class Notification extends Model {
         
         // You have received a new message text
         if (!empty($new_message_text)) {
-            $content = $new_message_text.'<br /><hr>'.$content;
+            $content = $new_message_text.'<br /><hr><br />'.$content;
         }     
         
         // See message with link text
         if (!empty($link_to_new_message)) {
-            $content = $content.'<br />'.$link_to_new_message;
+            $content = $content.'<br /><br />'.$link_to_new_message;
         }
               
         // You have received this message because you are subscribed text

@@ -107,15 +107,8 @@ require_once $lib_path.'usermanager.lib.php';
 
 // @todo: this shouldn't be done here. It should be stored correctly during installation.
 if (empty($_configuration['statistics_database']) && $already_installed) {
-
-
-/*  DATABASE CONNECTION  */
-
-// @todo: this shouldn't be done here. It should be stored correctly during installation.
-if (empty($_configuration['statistics_database']) && $already_installed) {
     $_configuration['statistics_database'] = $_configuration['main_database'];
 }
-
 global $database_connection;
 // Connect to the server database and select the main chamilo database.
 if (!($conn_return = @Database::connect(
@@ -175,17 +168,6 @@ while ($row = @Database::fetch_array($result)) {
 if (empty($charset)) {
     $charset = 'UTF-8';
 }
-$charset_initial_value = $charset;
-
-// Initialization of the internationalization library.
-api_initialize_internationalization();
-// Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
-api_set_internationalization_default_encoding($charset);
-
-// Initialization of the database encoding to be used.
-Database::query("SET SESSION character_set_server='utf8';");
-Database::query("SET SESSION collation_server='utf8_general_ci';");
-}
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
 
@@ -206,6 +188,7 @@ if (api_is_utf8($charset)) {
 
 // Start session after the internationalization library has been initialized.
 api_session_start($already_installed);
+
 
 // access_url == 1 is the default chamilo location
 if ($_configuration['access_url'] != 1) {

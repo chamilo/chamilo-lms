@@ -121,24 +121,32 @@ define('PLATFORM_AUTH_SOURCE', 'platform');
 define('DIR_HOTPOTATOES','/HotPotatoes_files');
 
 // event logs types
-define('LOG_COURSE_DELETE', 'course_deleted');
-define('LOG_COURSE_CREATE', 'course_created');
-define('LOG_USER_DELETE', 'user_deleted');
-define('LOG_USER_CREATE', 'user_created');
-define('LOG_SESSION_CREATE', 'session_created');
-define('LOG_SESSION_DELETE', 'session_deleted');
-define('LOG_SESSION_CATEGORY_CREATE', 'session_category_created');
-define('LOG_SESSION_CATEGORY_DELETE', 'session_category_deleted');
+define('LOG_COURSE_DELETE', 				'course_deleted');
+define('LOG_COURSE_CREATE', 				'course_created');
+define('LOG_USER_DELETE', 					'user_deleted');
+define('LOG_USER_CREATE', 					'user_created');
+define('LOG_SESSION_CREATE', 				'session_created');
+define('LOG_SESSION_DELETE', 				'session_deleted');
+define('LOG_SESSION_CATEGORY_CREATE', 		'session_category_created');
+define('LOG_SESSION_CATEGORY_DELETE', 		'session_category_deleted');
 define('LOG_CONFIGURATION_SETTINGS_CHANGE', 'settings_changed');
-define('LOG_SUBSCRIBE_USER_TO_COURSE', 'user_subscribed');
-define('LOG_UNSUBSCRIBE_USER_FROM_COURSE', 'user_unsubscribed');
+define('LOG_SUBSCRIBE_USER_TO_COURSE', 		'user_subscribed');
+define('LOG_UNSUBSCRIBE_USER_FROM_COURSE', 	'user_unsubscribed');
+
+define('LOG_PROMOTION_CREATE', 	'promotion_created');
+define('LOG_PROMOTION_DELETE', 	'promotion_deleted');
+define('LOG_CAREER_CREATE', 	'career_created');
+define('LOG_CAREER_DELETE', 	'career_deleted');
+
 // event logs data types
-define('LOG_COURSE_CODE', 'course_code');
-define('LOG_USER_ID', 'user_id');
-define('LOG_SESSION_ID', 'session_id');
-define('LOG_SESSION_CATEGORY_ID', 'session_category_id');
+define('LOG_COURSE_CODE', 					  'course_code');
+define('LOG_USER_ID', 						  'user_id');
+define('LOG_SESSION_ID', 					  'session_id');
+define('LOG_SESSION_CATEGORY_ID', 			  'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY', 'settings_category');
 define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
+define('LOG_CAREER_ID', 					  'career_id');
+define('LOG_PROMOTION_ID', 					  'promotion_id');
 
 // Specification for usernames:
 // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.

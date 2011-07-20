@@ -23,6 +23,68 @@ class Promotion extends Model {
         $this->table =  Database::get_main_table(TABLE_PROMOTION);
 	}
     
+	
+	/**
+	* Copies the promotion to a new one
+	* @param   integer     Promotion ID
+	* @param   integer     Career ID, in case we want to change it
+	* @param   boolean     Whether or not to copy the sessions inside
+	* @return  integer     New promotion ID on success, false on failure
+	*/
+	public function copy($id, $career_id = null, $copy_sessions = false) {
+		$promotion = $this->get($id);
+		$new = array();
+		foreach ($promotion as $key => $val) {
+			switch ($key) {
+				case 'id':
+				case 'updated_at':
+					break;
+				case 'name':
+					$val .= ' '.get_lang('Copy');
+					$new[$key] = $val;
+					break;
+				case 'created_at':
+					$val = api_get_utc_datetime();
+					$new[$key] = $val;
+					break;
+				case 'career_id':
+					if (!empty($career_id)) {
+						$val = (int)$career_id;
+					}
+					$new[$key] = $val;
+				default:
+					$new[$key] = $val;
+				break;
+			}
+		}
+		$pid = false;
+		if ($copy_sessions) {
+			/**
+			 * When copying a session we do:
+			 * 1. Copy a new session from the source
+			 * 2. Copy all courses from the session (no user data, no user list)
+			 * 3. Create the promotion
+			 */
+			require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+			$session_list   = SessionManager::get_all_sessions_by_promotion($id);
+	
+			if (!empty($session_list)) {
+				$pid = $this->save($new);
+				if (!empty($pid)) {
+					foreach($session_list as $item) {
+						$sid = SessionManager::copy_session($item['id'], true, false, true, true);
+						if ($sid != 0) {
+							SessionManager::suscribe_sessions_to_promotion($pid, array($sid));
+						}
+					}
+				}
+			}
+		} else {
+			$pid = $this->save($new);
+		}
+		return $pid;
+	}
+	
     /**
      * Gets all promotions by career id
      * @param   int     career id
@@ -109,7 +171,11 @@ class Promotion extends Model {
             $form->addElement('text', 'created_at', get_lang('CreatedAt'));
             $form->freeze('created_at');
         }         
-        $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+      	if ($action == 'edit') {
+        	$form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+        } else {
+        	$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
+        }
     
         // Setting the defaults
         $defaults = $this->get($id);
@@ -126,64 +192,18 @@ class Promotion extends Model {
         
         return $form;
     }
-    /**
-     * Copies the promotion to a new one
-     * @param   integer     Promotion ID
-     * @param   integer     Career ID, in case we want to change it
-     * @param   boolean     Whether or not to copy the sessions inside 
-     * @return  integer     New promotion ID on success, false on failure
-     */
-    public function copy($id, $career_id = null, $copy_sessions = false) {
-        $promotion = $this->get($id);
-        $new = array();
-        foreach ($promotion as $key => $val) {
-            switch ($key) {
-            	case 'id':
-                case 'updated_at':
-                    break;
-                case 'name':
-                    $val .= ' '.get_lang('Copy');
-                    $new[$key] = $val;
-                    break;
-                case 'created_at':
-                    $val = api_get_utc_datetime();
-                    $new[$key] = $val;
-                    break;
-                case 'career_id':
-                    if (!empty($career_id)) {
-                    	$val = (int)$career_id;
-                    }
-                    $new[$key] = $val;
-                default:
-                    $new[$key] = $val;
-                    break;
-            }
-        }     
-        $pid = false;   
-        if ($copy_sessions) {
-            /**
-             * When copying a session we do:
-             * 1. Copy a new session from the source
-             * 2. Copy all courses from the session (no user data, no user list) 
-             * 3. Create the promotion           
-             */
-            require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-            $session_list   = SessionManager::get_all_sessions_by_promotion($id); 
-        
-            if (!empty($session_list)) {
-                $pid = $this->save($new);
-                if (!empty($pid)) {
-                    foreach($session_list as $item) {
-                        $sid = SessionManager::copy_session($item['id'], true, false, true, true);                    
-                        if ($sid != 0) {                        
-                            SessionManager::suscribe_sessions_to_promotion($pid, array($sid));
-                        }
-                    }
-                }
-            }
-        } else {
-            $pid = $this->save($new);
-        }        
-    	return $pid;
+    
+    public function save($params) {
+    	$id = parent::save($params);
+    	if (!empty($id)) {
+    		event_system(LOG_PROMOTION_CREATE, LOG_PROMOTION_ID, $id, api_get_utc_datetime(), api_get_user_id());
+    	}    	
     }
+    
+    public function delete($id) {
+    	parent::delete($id);
+    	event_system(LOG_PROMOTION_DELETE, LOG_PROMOTION_ID, $id, api_get_utc_datetime(), api_get_user_id());    	
+    }
+   
+    
 }

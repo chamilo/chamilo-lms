@@ -80,7 +80,7 @@ class Career extends Model {
 		
         $form = new FormValidator('career', 'post', $url);
         // Settting the form elements
-        $header = get_lang('Add');
+        $header = get_lang('Add');        
         if ($action == 'edit') {
             $header = get_lang('Modify');
         }
@@ -96,9 +96,13 @@ class Career extends Model {
         if ($action == 'edit') {
             $form->addElement('text', 'created_at', get_lang('CreatedAt'));
             $form->freeze('created_at');
-        }        
-        
-        $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+        }
+                
+        if ($action == 'edit') {
+        	$form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+        } else {
+        	$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
+        }
     
         // Setting the defaults
         $defaults = $this->get($id);
@@ -156,4 +160,18 @@ class Career extends Model {
         }
         return $cid;
     }    
+    
+    
+    public function save($params) {
+	    $id = parent::save($params);
+	    if (!empty($id)) {
+	    	event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+   		}
+    }
+    
+    public function delete($id) {
+	    parent::delete($id);
+	    event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+    }
+    
 }

@@ -107,16 +107,6 @@ function check_if_language_exist ($original_name, $english_name, $isocode, $subl
 }
 
 /**
- * Get the name of a language by id. This is just a wrapper for the
- * SubLanguageManager::get_name_of_language_by_id() method and should not exist
- * @param   int     Language ID
- * @return  string  Language name
- * @todo    deprecate this function and use the static method directly
- */
-function get_name_of_language_by_id ($language_id) {
-	return SubLanguageManager::get_name_of_language_by_id($language_id);
-}
-/**
  * Check if language exist, given its ID. This is just a wrapper for the
  * SubLanguageManager::check_if_exist_language_by_id() method and should not exist
  * @param   int     Language ID
@@ -154,7 +144,7 @@ function allow_get_all_information_of_sub_language ($parent_id,$sub_language_id)
 //add data
 
 if (isset($_GET['sub_language_id']) && $_GET['sub_language_id']==strval(intval($_GET['sub_language_id']))) {
-	$language_name=get_name_of_language_by_id($_GET['sub_language_id']);
+	$language_name=SubLanguageManager::get_name_of_language_by_id($_GET['sub_language_id']);
 		if (check_if_exist_language_by_id ($_GET['sub_language_id'])===true) {
 			$sub_language_id=$_GET['sub_language_id'];
 			$sub_language_id_exist=true;
@@ -165,7 +155,7 @@ if (isset($_GET['sub_language_id']) && $_GET['sub_language_id']==strval(intval($
 }
 
 if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
-	$language_name=get_name_of_language_by_id($_GET['id']);
+	$language_name=SubLanguageManager::get_name_of_language_by_id($_GET['id']);
 		if (check_if_exist_language_by_id ($_GET['id'])===true) {
 			$parent_id=$_GET['id'];
 			$language_id_exist=true;
@@ -289,6 +279,8 @@ if (isset($_GET['action']) && $_GET['action']=='definenewsublanguage') {
 	$form->addElement('static', null, '&nbsp;', '<i>en, es, fr</i>');
 	$form->addElement('checkbox', 'sub_language_is_visible', '', get_lang('Visibility'));
 	$form->addElement('style_submit_button', 'SubmitAddNewLanguage', get_lang('CreateSubLanguage'), 'class="'.$class.'"');
+        $values['isocode'] = 'es';
+        $form->setDefaults($values);
 	$form->display();
 } else {
 	if (isset($_GET['action']) && $_GET['action']=='deletesublanguage') {

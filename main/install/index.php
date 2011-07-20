@@ -209,13 +209,13 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
 if (!isset($_GET['running'])) {
 
 	$dbHostForm		= 'localhost';
-	$dbUsernameForm	= 'root';
+	$dbUsernameForm         = 'root';
 	$dbPassForm		= '';
- 	$dbPrefixForm	= '';
+ 	$dbPrefixForm           = '';
 	$dbNameForm		= 'chamilo_main';
-	$dbStatsForm	= 'chamilo_stats';
-	$dbScormForm	= 'chamilo_scorm';
-	$dbUserForm		= 'chamilo_user';
+	$dbStatsForm            = 'chamilo_main';
+	$dbScormForm            = 'chamilo_main';
+	$dbUserForm		= 'chamilo_main';
 
 	// Extract the path to append to the url if Chamilo is not installed on the web root directory.
 	$urlAppendPath = api_remove_trailing_slash(api_get_path(REL_PATH));

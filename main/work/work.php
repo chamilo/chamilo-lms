@@ -496,22 +496,23 @@ if (!empty($_REQUEST['new_dir'])) {
 
 			// Insert into agenda
 			$agenda_id = 0;
+			$end_date = '';
 			if (isset($_POST['add_to_calendar']) && $_POST['add_to_calendar'] == 1) {
 				require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
 				require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 				$course = isset($course_info) ? $course_info : null;
-				$date = time();
-				$title = Security::remove_XSS($_POST['new_dir']);
+				$date = time();				
+				$title = sprintf(get_lang('HandingOverOfTaskX'), $_POST['new_dir']);
 				if (!empty($_POST['type1'])) {
-					$date = get_date_from_select('expires');
-					$title = sprintf(get_lang('HandingOverOfTaskX'),Security::remove_XSS($_POST['new_dir']));
-				}
-				$content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.substr(Security::remove_XSS($dir_name_sql), 1).'" >'.Security::remove_XSS($_POST['new_dir']).'</a> - '.Security::remove_XSS($_POST['description']);
+					$end_date = get_date_from_select('expires');					
+				}				
+				$description = isset($_POST['description']) ? $_POST['description'] : '';
+				$content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.api_substr($dir_name_sql, 1).'" >'.$_POST['new_dir'].'</a>'.$description;
 				
-				$agenda_id = agenda_add_item($course, $title, $content, $date, '', array('GROUP:'.$toolgroup), 0);
+				$agenda_id = agenda_add_item($course, $title, $content, $date, $end_date, array('GROUP:'.$toolgroup), 0);
 			}
-			$sql_add_publication = "INSERT INTO " . $work_table . " SET " .
-									   "url         = '".Database::escape_string($dir_name_sql)."',
+			$sql_add_publication = "INSERT INTO " . $work_table . " SET 
+									   url         = '".Database::escape_string($dir_name_sql)."',
 								       title        = '',
 					                   description 	= '".Database::escape_string($_POST['description'])."',
 					                   author      	= '',
@@ -547,18 +548,16 @@ if (!empty($_REQUEST['new_dir'])) {
 
 				$enable_calification = isset($_POST['enable_calification']) ? (int)$_POST['enable_calification'] : null;
 				$sql_add_homework = "INSERT INTO $TSTDPUBASG SET
-    								    expires_on         = '".((isset($_POST['type1']) && $_POST['type1']==1) ? api_get_utc_datetime(get_date_from_select('expires')) : '0000-00-00 00:00:00'). "',
-    							        ends_on        = '".((isset($_POST['type2']) && $_POST['type2']==1) ? api_get_utc_datetime(get_date_from_select('ends')) : '0000-00-00 00:00:00')."',
-    				                    add_to_calendar  = '$agenda_id',
-    				                    enable_qualification = '".$enable_calification."',
-    				                    publication_id = '".$id."'";
+    								    expires_on       		= '".((isset($_POST['type1']) && $_POST['type1']==1) ? api_get_utc_datetime(get_date_from_select('expires')) : '0000-00-00 00:00:00'). "',
+    							        ends_on        	 		= '".((isset($_POST['type2']) && $_POST['type2']==1) ? api_get_utc_datetime(get_date_from_select('ends')) : '0000-00-00 00:00:00')."',
+    				                    add_to_calendar  		= '$agenda_id',
+    				                    enable_qualification 	= '".$enable_calification."',
+    				                    publication_id 			= '".$id."'";
 				Database::query($sql_add_homework);
 
 				$sql_add_publication = "UPDATE ".$work_table." SET "."has_properties  = ".Database::insert_id().", view_properties = 1 ".' where id = '.$id;
 				Database::query($sql_add_publication);
-
 			} else {
-
 				$sql_add_homework = "INSERT INTO $TSTDPUBASG SET 
     								    expires_on     = '0000-00-00 00:00:00',
     							        ends_on        = '0000-00-00 00:00:00',

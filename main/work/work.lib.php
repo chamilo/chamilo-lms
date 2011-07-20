@@ -492,79 +492,86 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					//$form_folder-> addElement('textarea', 'description', get_lang('Description'), array('rows' => 5, 'cols' => 50));
 					$form_folder->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'work', 'Width' => '100%', 'Height' => '200'));
 					
-					$qualification_input[] = FormValidator :: createElement('text','qualification');
-					$form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'), 'size="10"');
+					
+					
 
 					if ($row['weight'] > 0) {
-						$weight_input[] = FormValidator :: createElement('text', 'weight');
-						$form_folder -> addGroup($weight_input, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
+						
 					}
 
 					$there_is_a_end_date = false;
+					
+					$form_folder -> addElement('html', '<div class="row">
+							 	                         <div class="label">&nbsp;</div>
+						 	  	                         <div class="formw">
+						 	  	                                 <a href="javascript://" onclick="javascript: return plus();" ><span id="plus">&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
+						 	  	                         </div>
+							  	                         </div>	');
+					$form_folder->addElement('html', '<div id="options" style="display: none;">');
+					
+					if (empty($default)) {
+						$default = api_get_local_time();
+					}
+					
+					$parts = split(' ', $default);
+					
+					list($d_year, $d_month, $d_day) = split('-', $parts[0]);
+					list($d_hour, $d_minute) = split(':', $parts[1]);
+					
 
-					if ($row['view_properties'] == '1') {
-						if ($homework['expires_on'] != '0000-00-00 00:00:00') {
-							$homework['expires_on'] = api_get_local_time($homework['expires_on']);
-							$there_is_a_expire_date = true;
-							$form_folder -> addGroup(create_group_date_select(), 'expires', get_lang('ExpiresAt'));
-						}
-						if ($homework['ends_on'] != '0000-00-00 00:00:00') {
-							$homework['ends_on'] = api_get_local_time($homework['ends_on']);
-							$there_is_a_end_date = true;
-							$form_folder -> addGroup(create_group_date_select(), 'ends', get_lang('EndsAt'));
-						}
-
-						if ($there_is_a_expire_date && $there_is_a_end_date) {
-							$form_folder -> addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
-						}
-
+					//if ($row['view_properties'] == '1') {
+					
+					$qualification_input[] = FormValidator :: createElement('text','qualification');
+					$form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'), 'size="10"');					
+					
+					if ((int)$row['weight'] == 0) {
+						
+						$form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
+						$form_folder -> addElement('html', '<div id=\'option3\' style="display:none">');
+						$weight_input2[] = FormValidator :: createElement('text', 'weight');
+						$form_folder -> addGroup($weight_input2, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
+						$form_folder -> addElement('html', '</div>');
+					} else {						
+						$weight_input[] = FormValidator :: createElement('text', 'weight');
+						$form_folder -> addGroup($weight_input, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
+						//$form_folder->freeze();
+					}
+					
+					
+					if ($homework['expires_on'] != '0000-00-00 00:00:00') {
+						$homework['expires_on'] = api_get_local_time($homework['expires_on']);
+						$there_is_a_expire_date = true;
+						$form_folder -> addGroup(create_group_date_select(), 'expires', get_lang('ExpiresAt'));
 					} else {
-						$form_folder -> addElement('html', '<div class="row">
-		 	                         <div class="label">&nbsp;</div>
-	 	  	                         <div class="formw">
-	 	  	                                 <a href="javascript://" onclick="javascript: return plus();" ><span id="plus">&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
-	 	  	                         </div>
-		  	                         </div>	');
-
-		  	            $form_folder -> addElement('html', '<div id="options" style="display: none;">');
-		  	            
-						if (empty($default)) {
-							$default = api_get_local_time();
-						}
-
-						$parts = split(' ', $default);
-						
-						list($d_year, $d_month, $d_day) = split('-', $parts[0]);
-						list($d_hour, $d_minute) = split(':', $parts[1]);
-						
-						if ((int)$row['weight'] == 0) {
-							$form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
-							$form_folder -> addElement('html', '<div id=\'option3\' style="display:none">');
-							$weight_input2[] = FormValidator :: createElement('text', 'weight');
-							$form_folder -> addGroup($weight_input2, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
-							$form_folder -> addElement('html', '</div>');
-						}
-
-						if ($homework['expires_on'] == '0000-00-00 00:00:00') {
-							$homework['expires_on'] = api_get_local_time();
-							$there_is_a_expire_date = true;
-							$form_folder -> addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
-							$form_folder -> addElement('html', '<div id=\'option1\' style="display:none">');
-							$form_folder -> addGroup(create_group_date_select(), 'expires', get_lang('ExpiresAt'));
-							$form_folder -> addElement('html', '</div>');
-						}
-						if ($homework['ends_on'] == '0000-00-00 00:00:00') {
-							$homework['ends_on'] = api_get_local_time();
-							$there_is_a_end_date = true;
-							$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
-							$form_folder -> addElement('html', '<div id=\'option2\' style="display:none">');
-							$form_folder -> addGroup(create_group_date_select(), 'ends', get_lang('EndsAt'));
-							$form_folder -> addElement('html', '</div>');
-						}
-
-						$form_folder -> addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
+						$homework['expires_on'] = api_get_local_time();
+						$there_is_a_expire_date = true;
+						$form_folder -> addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
+						$form_folder -> addElement('html', '<div id=\'option1\' style="display:none">');
+						$form_folder -> addGroup(create_group_date_select(), 'expires', get_lang('ExpiresAt'));
 						$form_folder -> addElement('html', '</div>');
 					}
+					
+					if ($homework['ends_on'] != '0000-00-00 00:00:00') {
+						$homework['ends_on'] = api_get_local_time($homework['ends_on']);
+						$there_is_a_end_date = true;
+						$form_folder -> addGroup(create_group_date_select(), 'ends', get_lang('EndsAt'));
+					} else {
+						$homework['ends_on'] = api_get_local_time();
+						$there_is_a_end_date = true;
+						$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
+						$form_folder -> addElement('html', '<div id=\'option2\' style="display:none">');
+						$form_folder -> addGroup(create_group_date_select(), 'ends', get_lang('EndsAt'));
+						$form_folder -> addElement('html', '</div>');
+						$form_folder -> addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
+					}
+
+					if ($there_is_a_expire_date && $there_is_a_end_date) {
+						$form_folder -> addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
+					}				
+					
+					$form_folder -> addElement('html', '</div>');
+					
+					
 
 					$form_folder -> addElement('style_submit_button', 'submit', get_lang('ModifyDirectory'), 'class="save"');
 					if ($there_is_a_end_date) {						
@@ -655,12 +662,20 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 							$sql = "SELECT add_to_calendar FROM $work_assigment WHERE publication_id ='".$row['id']."'";
 							$res = Database::query($sql);
 							$calendar_id = Database::fetch_row($res);
+							$dir_name = sprintf(get_lang('HandingOverOfTaskX'), $dir_name);
+							
+							$end_date = "0000-00-00 00:00:00:";
+							 
+							if ($_POST['enableExpiryDate'] == '1') {
+								$end_date = get_date_from_group('ends');
+							}
+														
 							// update from agenda if it exists
 							if (!empty($calendar_id[0])) {
 								$sql = "UPDATE ".$TABLEAGENDA."
 										SET title='".$dir_name."',
-											content = '".$dir_name."',
-											end_date='".get_date_from_group('ends')."'
+											content  = '".Database::escape_string($_POST['description'])."',
+											end_date = '".$end_date."'
 										WHERE id='".$calendar_id[0]."'";
 								Database::query($sql);
 							}

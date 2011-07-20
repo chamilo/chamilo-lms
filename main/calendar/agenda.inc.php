@@ -735,24 +735,47 @@ function selectAll(cbList,bSelect,showwarning)
 		msg_err2 = document.getElementById(\"err_start_date\");
 		msg_err3 = document.getElementById(\"err_end_date\");
 		msg_err4 = document.getElementById(\"err_title\");
+		
+		
+		var error = false;
 
 		if (start_date > ends_date) {
-			msg_err1.style.display =\"block\";
-			msg_err1.innerHTML=\"".get_lang('EndDateCannotBeBeforeTheStartDate')."\";
-			msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";
-		} else if (!checkDate(start_month,start_day,start_year)) {
+			if ($('#empty_end_date').is(':checked')) {
+				msg_err1.innerHTML=\"\";
+				msg_err2.innerHTML=\"\";
+				msg_err3.innerHTML=\"\";
+				
+			} else {
+				error = true; 
+				msg_err1.style.display =\"block\";
+				msg_err1.innerHTML=\"".get_lang('EndDateCannotBeBeforeTheStartDate')."\";
+				msg_err2.innerHTML=\"\";
+				msg_err3.innerHTML=\"\";
+			}
+		} 
+		
+		if (!checkDate(start_month,start_day,start_year)) {
 			msg_err2.style.display =\"block\";
 			msg_err2.innerHTML=\"".get_lang('InvalidDate')."\";
-			msg_err1.innerHTML=\"\";msg_err3.innerHTML=\"\";
-		} else if (!checkDate(ends_month,ends_day,ends_year)) {
+			msg_err1.innerHTML=\"\";
+			msg_err3.innerHTML=\"\";
+			error = true;
+		} 
+		
+		if (!checkDate(ends_month,ends_day,ends_year)) {
 			msg_err3.style.display =\"block\";
 			msg_err3.innerHTML=\"".get_lang('InvalidDate')."\";
 			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";
-		} else if (document.new_calendar_item.title.value == '') {
+			error = true;
+		} 
+		
+		if (document.new_calendar_item.title.value == '') {
 			msg_err4.style.display =\"block\";
 			msg_err4.innerHTML=\"".get_lang('FieldRequired')."\";
 			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";
-		} else {
+			error = true;
+		} 
+		if (error == false) {
             if (cbList) { 
     			if (cbList.length <	1) {
     				if (!confirm(\"".get_lang('Send2All')."\")) {
@@ -764,6 +787,8 @@ function selectAll(cbList,bSelect,showwarning)
 			}
 			document.new_calendar_item.submit();
 		}
+		
+		
 
 }
 
@@ -1068,16 +1093,21 @@ function store_new_agenda_item() {
     $t_agenda_repeat = Database::get_course_Table(TABLE_AGENDA_REPEAT);
 
 	// some filtering of the input data
-	$title=strip_tags(trim($_POST['title'])); // no html allowed in the title
-	$content=trim($_POST['content']);
-	$start_date=(int)$_POST['fyear']."-".(int)$_POST['fmonth']."-".(int)$_POST['fday']." ".(int)$_POST['fhour'].":".(int)$_POST['fminute'].":00";
-	$end_date=(int)$_POST['end_fyear']."-".(int)$_POST['end_fmonth']."-".(int)$_POST['end_fday']." ".(int)$_POST['end_fhour'].":".(int)$_POST['end_fminute'].":00";
-
+	$title		= strip_tags(trim($_POST['title'])); // no html allowed in the title
+	$content	= trim($_POST['content']);
+	$start_date	= (int)$_POST['fyear']."-".(int)$_POST['fmonth']."-".(int)$_POST['fday']." ".(int)$_POST['fhour'].":".(int)$_POST['fminute'].":00";
+	$end_date	= (int)$_POST['end_fyear']."-".(int)$_POST['end_fmonth']."-".(int)$_POST['end_fday']." ".(int)$_POST['end_fhour'].":".(int)$_POST['end_fminute'].":00";
+	
+	
 	$title		= Database::escape_string($title);
 	$content 	= Database::escape_string($content);
 	$start_date = Database::escape_string($start_date);
 	$end_date   = Database::escape_string($end_date);
-
+	
+	
+	if ($_POST['empty_end_date'] == 1) {
+		$end_date = "0000-00-00 00:00:00";
+	}
 
 	// store in the table calendar_event
 	$sql = "INSERT INTO ".$TABLEAGENDA." (title,content, start_date, end_date)
@@ -1627,6 +1657,10 @@ function store_edited_agenda_item($id_attach,$file_comment) {
 	
 	$start_date    = api_get_utc_datetime($start_date);
 	$end_date      = api_get_utc_datetime($end_date);
+	
+	if ($_POST['empty_end_date'] == 1) {
+		$end_date = "0000-00-00 00:00:00";
+	}
 	
 	// 1.b. the actual saving in calendar_event table
 	$edit_result  = save_edit_agenda_item($id, $title, $content, $start_date, $end_date);
@@ -2253,21 +2287,28 @@ function show_add_form($id = '') {
 	if (is_int($id)) {
 		//echo "before get_agenda_item".$_SESSION['allow_individual_calendar'];
 		$item_2_edit=get_agenda_item($id);
+		
 
 		$title	= $item_2_edit['title'];
 		$content= $item_2_edit['content'];
 
 		// start date
-		$item_2_edit['start_date'] = api_get_local_time($item_2_edit['start_date']);
-		list($datepart, $timepart) = split(" ", $item_2_edit['start_date']);
-		list($year, $month, $day)  = explode("-", $datepart);
-		list($hours, $minutes, $seconds) = explode(":", $timepart);
+		if ($item_2_edit['start_date'] != '0000-00-00 00:00:00') {
+			$item_2_edit['start_date'] = api_get_local_time($item_2_edit['start_date']);
+			list($datepart, $timepart) = split(" ", $item_2_edit['start_date']);
+			list($year, $month, $day)  = explode("-", $datepart);
+			list($hours, $minutes, $seconds) = explode(":", $timepart);
+		}
 
 		// end date
-		$item_2_edit['end_date'] = api_get_local_time($item_2_edit['end_date']);
-		list($datepart, $timepart) = split(" ", $item_2_edit['end_date']);
-		list($end_year, $end_month, $end_day) = explode("-", $datepart);
-		list($end_hours, $end_minutes, $end_seconds) = explode(":", $timepart);
+		if ($item_2_edit['end_date'] != '0000-00-00 00:00:00') {
+			$item_2_edit['end_date'] = api_get_local_time($item_2_edit['end_date']);
+		
+			list($datepart, $timepart) = split(" ", $item_2_edit['end_date']);
+			list($end_year, $end_month, $end_day) = explode("-", $datepart);
+			
+			list($end_hours, $end_minutes, $end_seconds) = explode(":", $timepart);
+		}
 
 		// attachments
 		edit_added_resources("Agenda", $id);
@@ -2299,13 +2340,13 @@ function show_add_form($id = '') {
 		$form_title = get_lang('AddCalendarItem');
 	}
 	echo '<div class="row"><div class="form_header">'.$form_title.'</div></div>';
-
+	
 	// selecting the users / groups
 	if (isset ($_SESSION['toolgroup'])) {
 		echo '<input type="hidden" name="selectedform[0]" value="GROUP:'.intval($_SESSION['toolgroup']).'"/>' ;
 		echo '<input type="hidden" name="To" value="true"/>' ;
 	} else {
-		echo '	<div class="row">
+		echo '<div class="row">
 					<div class="label">
 						<a href="javascript: void(0);" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.Display::return_icon('group.png', get_lang('SentTo'), array ('align' => 'absmiddle'),22).' '.get_lang('SentTo').'</a>
 					</div>
@@ -2317,20 +2358,22 @@ function show_add_form($id = '') {
 		if (isset($_GET['id']) && $to!='everyone') {
 			echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
 		}
-		echo '		</div>
+		echo '</div>
 				</div>';
-
 	}
 
+
+		
+		
 	// start date and time
-	echo 	'<div class="row">
-				<div class="label">
+	echo '<div class="row">';
+				echo '<div class="label">
 					'.get_lang('StartDate').'
 				</div>
 				<div class="formw">
 					<div id="err_date" style="display:none;color:red"></div>
 					<div id="err_start_date" style="display:none;color:red"></div>';
-	?>
+	?>		
 				<select name="fday" onchange="javascript:document.new_calendar_item.end_fday.value=this.value;">
 				<?php
 				// small loop for filling all the dates
@@ -2374,7 +2417,10 @@ function show_add_form($id = '') {
 							} ?>
 				</select>
 
-				<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
+				<a href="javascript:openCalendar('new_calendar_item', 'f')">
+					<?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?>
+				</a>
+				
 				&nbsp;<?php echo get_lang('StartTime').": "; ?>&nbsp;
 					<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
 						<!-- <option value="--">--</option> -->
@@ -2407,16 +2453,42 @@ function show_add_form($id = '') {
 	<?php
 	echo 	'	</div>
 			</div>';
+	
+	echo 	'<div class="row">
+	<div class="label">
+	</div><div class="formw">';
+	
+	echo Display::input('checkbox', 'empty_end_date', 1, array('id'=>'empty_end_date', 'checked'=>"checked")).' '.get_lang('NoEndDate');
+	
+	echo 	'</div></div>';
+	echo '<script>
+				$(function() {				
+					$("#empty_end_date").click(function(){
+						if ($("#empty_end_date").is(":checked")) {
+							$("#end_date_span").hide();
+						} else {
+							$("#end_date_span").show();
+						}
+					});';						
+	if ($item_2_edit['end_date'] == '0000-00-00 00:00:00') {
+		echo '$("#end_date_span").hide();';
+	}
+	echo '
+		});
+		</script>';
+	
 
 	// end date and time
+	echo '<span id="end_date_span">';
 	echo 	'<div class="row">
 				<div class="label">
 					'.get_lang('EndDate').'
 				</div>
 				<div class="formw">
 					<div id="err_end_date" style="display:none;color:red"></div>';
-	?>
-						<select name="end_fday">
+	?>	
+	
+						<select id="end_fday" name="end_fday">
 							<?php
 								// small loop for filling all the dates
 								// 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
@@ -2432,7 +2504,7 @@ function show_add_form($id = '') {
 									}?>
 						</select>
 							<!-- month: january -> december -->
-						<select name="end_fmonth">
+						<select id="end_fmonth" name="end_fmonth">
 								<?php
 								foreach (range(1, 12) as $i) {
 									// values have to have double digits
@@ -2443,7 +2515,7 @@ function show_add_form($id = '') {
 										{ echo "<option value=\"".$value."\">".$MonthsLong[$i-1]."</option>"; }
 									}?>
 						</select>
-						<select name="end_fyear">
+						<select  id="end_fyear" name="end_fyear">
 								<option value="<?php echo ($end_year-1) ?>"><?php echo ($end_year-1) ?></option>
 								<option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
 								<?php
@@ -2452,10 +2524,12 @@ function show_add_form($id = '') {
 									echo "<option value=\"$value\">$value</option>";
 								} ?>
 						</select>
-					<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
+					<a href="javascript:openCalendar('new_calendar_item', 'end_f')">
+						<?php echo Display::span(Display::return_icon('calendar_select.gif', get_lang('Select'), array('style' => 'vertical-align: middle;')), array ('id'=>'end_date_calendar_icon')); ?>
+					</a>
 					&nbsp;<?php echo get_lang('EndTime').": "; ?>&nbsp;
 
-						<select name="end_fhour">
+						<select id="end_fhour" name="end_fhour">
 							<!-- <option value="--">--</option> -->
 							<?php
 								foreach (range(0, 23) as $i) {
@@ -2469,7 +2543,7 @@ function show_add_form($id = '') {
 								} ?>
 						</select>
 
-						<select name="end_fminute">
+						<select id="end_fminute" name="end_fminute">
 							<!-- <option value="<?php echo $end_minutes; ?>"><?php echo $end_minutes; ?></option> -->
 							<!-- <option value="--">--</option> -->
 							<?php
@@ -2484,9 +2558,10 @@ function show_add_form($id = '') {
 									}
 								} ?>
 						</select>
+					
 	<?php
 	echo 	'	</div>
-			</div>';
+			</div>	</span>';
 
 	// the title of the agenda item
 	echo 	' 	<div class="row">
@@ -2641,8 +2716,10 @@ function show_add_form($id = '') {
 			                        echo "<option value=\"$value\">$value</option>";
 			                    } ?>
 			            </select>
-			            		<a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
-								    </td>
+						<a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')">
+							<?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?>
+						</a>
+						</td>
 				    </tr>
 			    </table>
 <?php
@@ -3980,7 +4057,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 
     // check if exists in calendar_event table and if it is not deleted!
     $sql = "SELECT * FROM $t_agenda agenda, $item_property item_property
-    			WHERE agenda.title   ='$title'
+    			WHERE agenda.title  		 = '$title'
     			AND agenda.content           = '$content'
     			AND agenda.start_date        = '$start_date'
     			AND agenda.end_date          = '$end_date' ".(!empty($parent_id)? "
@@ -4008,7 +4085,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     $done = false;
     if ((!is_null($to))or (!empty($_SESSION['toolgroup']))) {
         // !is_null($to): when no user is selected we send it to everyone
-        $send_to=separate_users_groups($to);
+        $send_to = separate_users_groups($to);
         // storing the selected groups
         if (is_array($send_to['groups'])) {
             foreach ($send_to['groups'] as $group) {

@@ -192,7 +192,7 @@ if (intval($count_users)<50) {
 	$result=Database::query($sql);
 	$Coaches=Database::store_result($result);
 	?>
-	<select name="coach_username" value="true" style="width:350px;">
+	<select id="coach_username" class="chzn-select" name="coach_username" value="true" style="width:350px;">
 		<option value="0"><?php get_lang('None'); ?></option>
 		<?php foreach($Coaches as $enreg): ?>
 		<option value="<?php echo $enreg['username']; ?>" <?php if($sent && $enreg['user_id'] == $id_coach) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
@@ -212,7 +212,7 @@ $Categories = SessionManager::get_all_session_category();
 <tr>
   <td width="40%"><?php echo get_lang('SessionCategory') ?></td>
   <td width="60%">
-  	<select name="session_category" value="true" style="width:350px;">
+  	<select id="session_category" class="chzn-select" name="session_category" value="true" style="width:350px;">
 		<option value="0"><?php get_lang('None'); ?></option>		
 		<?php 
 		  if (!empty($Categories)) {

@@ -2193,3 +2193,8 @@ div.admin_section h4 {
 .tableFloatingHeaderOriginal th, .tableWithFloatingHeader th{
 	height:80px;
 }
+
+/* chosen javascript checkbox select width fix */
+.chzn-select {
+    width: 200px;	
+}

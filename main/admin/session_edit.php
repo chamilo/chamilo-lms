@@ -115,7 +115,7 @@ if (!empty($return)) {
 </tr>
 <tr>
   <td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
-  <td width="70%"><select name="id_coach" style="width:380px;">
+  <td width="70%"><select class="chzn-select" name="id_coach" style="width:380px;">
 	<option value="">----- <?php echo get_lang('Choose') ?> -----</option>
 <?php
 foreach($Coaches as $enreg) {
@@ -131,7 +131,7 @@ $Categories = SessionManager::get_all_session_category();
 <tr>
   <td width="30%"><?php echo get_lang('SessionCategory') ?></td>
   <td width="70%">
-  	<select name="session_category" style="width:380px;">
+  	<select class="chzn-select" id="session_category" name="session_category" style="width:380px;">
 		<option value="0"><?php get_lang('None'); ?></option>
 		<?php
 		  if (!empty($Categories)) { 

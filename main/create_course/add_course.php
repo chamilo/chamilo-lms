@@ -100,7 +100,7 @@ $form->addElement('static', null, null, get_lang('Ex'));
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
 // Course category.
-$categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), array(), array('style'=>'width:350px'));
+$categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), array(), array('id'=> 'category_code','class'=>'chzn-select', 'style'=>'width:350px'));
 $form->applyFilter('category_code', 'html_filter');
 CourseManager::select_and_sort_categories($categories_select);
 $form->addElement('static', null, null, get_lang('TargetFac'));

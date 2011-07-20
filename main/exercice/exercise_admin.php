@@ -142,7 +142,7 @@ $(document).ready(function () {
 
 // INIT EXERCISE
 
-require_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 $objExercise = new Exercise();
 
 //INIT FORM

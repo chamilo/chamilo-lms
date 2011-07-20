@@ -2725,9 +2725,7 @@ function api_get_item_property_info($course_id, $tool, $ref) {
  */
 
 function api_get_languages_combo($name = 'language') {
-
     $ret = '';
-
     $platformLanguage = api_get_setting('platformLanguage');
 
     // Retrieve a complete list of all the languages.
@@ -2744,20 +2742,19 @@ function api_get_languages_combo($name = 'language') {
         $default = $platformLanguage;
     }
 
-    $languages = $language_list['name'];
-    $folder = $language_list['folder'];
+    $languages  = $language_list['name'];
+    $folder		= $language_list['folder'];
 
-    $ret .= '<select name="'.$name.'"  class="chzn-select" >';
+    $ret .= '<select name="'.$name.'" id="language_chosen" class="chzn-select" >';
     foreach ($languages as $key => $value) {
         if ($folder[$key] == $default) {
             $selected = ' selected="selected"';
         } else {
             $selected = '';
         }
-        $ret .= sprintf('<option value=%s" %s>%s</option>'."\n", $folder[$key], $selected, $value);
+        $ret .= sprintf('<option value=%s" %s>%s</option>', $folder[$key], $selected, $value);
     }
     $ret .= '</select>';
-
     return $ret;
 }
 

@@ -153,18 +153,18 @@ if (isset($_GET['sub_language_id']) && $_GET['sub_language_id']==strval(intval($
 		}
 
 }
-
+$language_details = array();
+$language_name='';
 if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
-	$language_name=SubLanguageManager::get_name_of_language_by_id($_GET['id']);
-		if (check_if_exist_language_by_id ($_GET['id'])===true) {
-			$parent_id=$_GET['id'];
-			$language_id_exist=true;
-		} else {
-			$language_id_exist=false;
-		}
-
+        $language_details = SubLanguageManager::get_all_information_of_language($_GET['id']);
+	$language_name = $language_details['original_name'];
+        if (check_if_exist_language_by_id ($_GET['id'])===true) {
+            $parent_id=$_GET['id'];
+            $language_id_exist=true;
+        } else {
+            $language_id_exist=false;
+        }
 } else {
-	$language_name='';
 	$language_id_exist=false;
 }
 
@@ -274,12 +274,13 @@ if (isset($_GET['action']) && $_GET['action']=='definenewsublanguage') {
 	$form->addElement('text', 'english_name', get_lang('EnglishName'),'class="input_titles"');
 	$form->addRule('english_name', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addElement('text', 'isocode', get_lang('ISOCode'), 'class="input_titles"');
-	
 	$form->addRule('isocode', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addElement('static', null, '&nbsp;', '<i>en, es, fr</i>');
 	$form->addElement('checkbox', 'sub_language_is_visible', '', get_lang('Visibility'));
 	$form->addElement('style_submit_button', 'SubmitAddNewLanguage', get_lang('CreateSubLanguage'), 'class="'.$class.'"');
-        $values['isocode'] = 'es';
+        //$values['original_name'] = $language_details['original_name'].'...'; -> cannot be used because of quickform filtering (freeze)
+        $values['english_name'] = $language_details['english_name'].'2';
+        $values['isocode'] = $language_details['isocode'];
         $form->setDefaults($values);
 	$form->display();
 } else {

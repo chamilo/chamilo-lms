@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langCourseProgram = "Description";
-$langThisCourseDescriptionIsEmpty = "There is no training description so far.";
+$langThisCourseDescriptionIsEmpty = "There is no course description so far.";
 $langEditCourseProgram = "Create or edit a description.";
 $QuestionPlan = "Help";
 $langInfo2Say = "Information to give to users";

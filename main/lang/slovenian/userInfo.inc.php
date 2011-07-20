@@ -174,7 +174,6 @@ $UserIsNotSubscribedToThisGroup = "Uporabnik ni vpisan v to skupino";
 $InvitationReceived = "Povabilo je dospelo";
 $InvitationSent = "Povabilo je bilo poslano";
 $YouAlreadySentAnInvitation = "Povabilo ste predhodno že odposlali";
-$AllowSendMessageToAllPlatformUsersTitle = "Dovoli pošiljanje sporočil vsem uporabnikom platforme";
 $UserAdded = "Uporabnik je bil dodan";
 $FilesSizeExceedsX = "Velikost datotek je presegla";
 $YouShouldWriteASubject = "Vnesti morate predmet/zadevo sporočila";

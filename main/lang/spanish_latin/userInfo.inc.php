@@ -32,5 +32,4 @@ $langAddAUser = "Añadir usuarios";
 $InvitationReceived = "Invitación recibida";
 $InvitationSent = "Invitación envida";
 $YouAlreadySentAnInvitation = "Ud. ya ha enviado una invitación";
-$AllowSendMessageToAllPlatformUsersTitle = "Permitir enviar mensajes a todos los usuarios de la plataforma";
 ?>

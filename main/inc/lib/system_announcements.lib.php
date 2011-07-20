@@ -53,6 +53,12 @@ class SystemAnnouncementManager
       $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group "
         ." WHERE group_id in $groups_string) ";
     }
+		global $_configuration;
+		$current_access_url_id = 1;
+		if ($_configuration['multiple_access_urls']) {
+			$current_access_url_id = api_get_current_access_url_id();
+		}
+		$sql .= " AND access_url_id = '$current_access_url_id' ";		
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
 		
 		$announcements = Database::query($sql);
@@ -96,6 +102,19 @@ class SystemAnnouncementManager
 		$user_selected_language = api_get_interface_language();
 		$start	= intval($start);				
 
+    $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+    $temp_user_groups = GroupPortalManager::get_groups_by_user(api_get_user_id(),0);
+    $groups =array();
+    foreach ($temp_user_groups as $user_group) {
+      $groups = array_merge($groups, array($user_group['id']));
+      $groups = array_merge($groups, GroupPortalManager::get_parent_groups($user_group['id']));
+    }
+    //checks if tables exists to not break platform not updated
+    $ann_group_db_ok =false;
+    if( Database::num_rows(Database::query("SHOW TABLES LIKE 'announcement_rel_group'")) > 0)
+       $ann_group_db_ok =true;
+    $groups_string = '('.implode($groups,',').')';
+
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date FROM ".$db_table."
 				WHERE (lang='$user_selected_language' OR lang IS NULL) AND ((NOW() BETWEEN date_start AND date_end)	OR date_end='0000-00-00')";
@@ -111,6 +130,10 @@ class SystemAnnouncementManager
 				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}
+    if (count($groups) > 0 and $ann_group_db_ok ) {
+      $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group "
+        ." WHERE group_id in $groups_string) ";
+    }
 		
 		global $_configuration;
 		$current_access_url_id = 1;

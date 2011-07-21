@@ -119,10 +119,7 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 
 <script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/thickbox.js" type="text/javascript" ></script>
 <link rel="stylesheet" href="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/thickbox.css" type="text/css" media="projection, screen" />
-
 <link rel="stylesheet" href="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/chosen/chosen.css" type="text/css" media="projection, screen" />
-
-
 
 
 <link rel="top" href="<?php echo api_get_path(WEB_PATH); ?>index.php" title="" />

@@ -22,6 +22,8 @@
  * @package chamilo.library
  */
 
+define('MAX_LENGTH_BREADCRUMB', 100);
+
 class Display {
 
     private function __construct() {

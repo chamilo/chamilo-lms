@@ -530,6 +530,11 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
             } elseif($breadcrumb_step['name'] == 'gallery') {           
                 $navigation_item['title'] = get_lang('Gallery');
             }
+            //Fixes breadcrumb title now we applied the Security::remove_XSS and we cut the string depending of the MAX_LENGTH_BREADCRUMB value
+            if (api_strlen($navigation_item['title']) > MAX_LENGTH_BREADCRUMB) {
+            	$navigation_item['title'] = api_substr($navigation_item['title'], 0, MAX_LENGTH_BREADCRUMB).' ...';
+            }
+            $navigation_item['title'] = Security::remove_XSS($navigation_item['title']);
             $navigation[] = $navigation_item;
         }
     }

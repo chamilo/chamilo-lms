@@ -689,7 +689,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 
 //condition for the session
 $session_id = api_get_session_id();
-$condition_session = api_get_session_condition($session_id);
+$condition_session = api_get_session_condition($session_id,true,true);
 
 if(api_is_allowed_to_edit(false,true))  {
  	// check teacher status

@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 $language_file= 'gradebook';
-//$cidReset= true;
+
 require_once '../inc/global.inc.php';
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
@@ -10,9 +11,12 @@ require_once 'lib/user_data_generator.class.php';
 require_once 'lib/fe/usertable.class.php';
 require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/scoredisplay.class.php';
+
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+
 api_block_anonymous_users();
 block_students();
+
 $interbreadcrumb[]= array (
 	'url' => $_SESSION['gradebook_dest'],
 	'name' => get_lang('Gradebook'
@@ -101,7 +105,7 @@ $actions.= '<a href="' . api_get_self() . '?exportpdf=&userid='.Security::remove
 $actions.='</div>';
 
 Display :: display_header(get_lang('ResultsPerUser'));
-DisplayGradebook :: display_header_user(Security::remove_XSS($_GET['userid']));
+DisplayGradebook :: display_header_user($_GET['userid']);
 echo $actions;
 $user_table->display();
 Display :: display_footer();

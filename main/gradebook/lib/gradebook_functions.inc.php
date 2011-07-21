@@ -35,7 +35,7 @@ function add_resource_to_course_gradebook($course_code, $resource_type, $resourc
     */
     $category = 0;
     require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
-    $link= LinkFactory :: create($resource_type);
+    $link = LinkFactory :: create($resource_type);
     $link->set_user_id(api_get_user_id());
     $link->set_course_code($course_code);
     // TODO find the corresponding category (the first one for this course, ordered by ID)
@@ -50,8 +50,7 @@ function add_resource_to_course_gradebook($course_code, $resource_type, $resourc
     $res = Database::query($sql);
     if (Database::num_rows($res)<1){
         //there is no unique category for this course+session combination,
-        // => create one
-        $cat= new Category();
+        $cat = new Category();
         if (!empty($session_id)) {
         	$my_session_id=api_get_session_id();
             $s_name = api_get_session_name($my_session_id);
@@ -255,8 +254,8 @@ function build_edit_icons_eval($eval, $selectcat) {
 function build_edit_icons_link($link, $selectcat) {
 
 	$link->get_course_code();
-	$cat=new Category();
-	$message_link=$cat->show_message_resource_delete($link->get_course_code());
+	$cat = new Category();
+	$message_link = $cat->show_message_resource_delete($link->get_course_code());
 	if ($message_link===false) {
 		$visibility_icon= ($link->is_visible() == 0) ? 'invisible' : 'visible';
 		$visibility_command= ($link->is_visible() == 0) ? 'set_visible' : 'set_invisible';
@@ -265,10 +264,17 @@ function build_edit_icons_link($link, $selectcat) {
 		//$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movelink=' . $link->get_id() . '&selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblelink=' . $link->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'','22').'</a>';
 		$modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink=' . $link->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq='.$link->get_course_code().'">'.Display::return_icon('history.png', get_lang('GradebookQualifyLog'),'','22').'</a>';
-			//if (api_is_course_admin()) {
-			//$modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . '">'.Display::return_icon('history.png', get_lang('GradebookQualifyLog'),'','22').'</a>';
-		//}
-        $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletelink=' . $link->get_id() . '&selectcat=' . $selectcat . ' &amp;cidReq='.$link->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('Delete'),'','22').'</a>';
+		
+		//If a work is added in a gradebook you can only delete the link in the work tool 
+		$show_delete = true;
+		if ($link->get_type() == 3) {
+			$show_delete = false;
+		}
+		if ($show_delete) {
+        	$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletelink=' . $link->get_id() . '&selectcat=' . $selectcat . ' &amp;cidReq='.$link->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('Delete'),'','22').'</a>';
+		} else {
+			$modify_icons .= '&nbsp;.'.Display::return_icon('delete_na.png', get_lang('Delete'),'','22');
+		}
 		return $modify_icons;
 	}
 }

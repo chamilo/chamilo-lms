@@ -232,12 +232,12 @@ class UserDataGenerator
 	}
 
 
-	private function build_average_column ($item, $ignore_score_color) {
+	private function build_average_column ($item, $ignore_score_color) {		
 		if (isset($this->avgcache)) {
 			$avgscore = $this->avgcache[$item->get_item_type() . $item->get_id()];
 		} else {
 			$avgscore = $item->calc_score();
-		}
+		}		
 		$scoredisplay = ScoreDisplay :: instance();
 		$displaytype = SCORE_AVERAGE;
 		if ($ignore_score_color)
@@ -246,7 +246,7 @@ class UserDataGenerator
 	}
 
 	private function build_result_column ($item, $ignore_score_color) {
-		$studscore = $this->scorecache[$item->get_item_type() . $item->get_id()];
+		$studscore = $this->scorecache[$item->get_item_type() . $item->get_id()];		
 		$scoredisplay = ScoreDisplay :: instance();
 		$displaytype = SCORE_DIV_PERCENT;
 		if ($ignore_score_color) {

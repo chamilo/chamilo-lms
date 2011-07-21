@@ -14,11 +14,11 @@
 $language_file = 'survey';
 
 // Including the global initialization file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 require_once 'survey.lib.php';
 $this_section = SECTION_COURSES;
 
-$survey_id = Security::remove_XSS($_GET['survey_id']);
+$survey_id = intval($_GET['survey_id']);
 
 // Export
 /**
@@ -36,6 +36,7 @@ if ($_POST['export_report']) {
 		default:
 			$survey_data = survey_manager::get_survey($survey_id);
 			$data = SurveyUtil::export_complete_report($_GET['user_id']);
+			
 			//$filename = 'fileexport.csv';
 			$filename = 'survey_results_'.$survey_id.'.csv';
 
@@ -61,7 +62,6 @@ if ($_POST['export_report']) {
 }
 
 // Including additional libraries
-//require_once api_get_path(LIBRARY_PATH).'survey.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 // Checking the parameters
@@ -129,7 +129,7 @@ SurveyUtil::handle_reporting_actions();
 
 // Actions bar
 echo '<div class="actions">';
-echo '<a href="survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png', get_lang('BackToSurvey'),'','32').'</a>';
+echo '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('back.png', get_lang('BackToSurvey'),'','32').'</a>';
 echo '</div>';
 
 // Content

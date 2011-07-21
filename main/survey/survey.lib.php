@@ -2731,6 +2731,7 @@ class SurveyUtil {
 		echo '<input type="hidden" name="export_report" value="export_report">';
 		echo '<input type="hidden" name="export_format" value="xls">';
 		echo '</form>';
+		
 		echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'">';
 
 		// The table
@@ -2739,15 +2740,15 @@ class SurveyUtil {
 		echo '	<tr>';
 		echo '		<th>';
 		if ($_POST['submit_question_filter'] || $_POST['export_report']) {
-			echo '			<button class="cancel" type="submit" name="reset_question_filter" value="'.get_lang('ResetQuestionFilter').'">'.get_lang('ResetQuestionFilter').'</button>';
+			echo '<button class="cancel" type="submit" name="reset_question_filter" value="'.get_lang('ResetQuestionFilter').'">'.get_lang('ResetQuestionFilter').'</button>';
 		}
-		echo '			<button class="save" type="submit" name="submit_question_filter" value="'.get_lang('SubmitQuestionFilter').'">'.get_lang('SubmitQuestionFilter').'</button>';
+		echo '<button class="save" type="submit" name="submit_question_filter" value="'.get_lang('SubmitQuestionFilter').'">'.get_lang('SubmitQuestionFilter').'</button>';
 		echo '</th>';
 
 		$display_extra_user_fields = false;
 		if (!($_POST['submit_question_filter'] || $_POST['export_report']) || !empty($_POST['fields_filter'])) {
 			// Show user fields section with a big th colspan that spans over all fields
-			$extra_user_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false);
+			$extra_user_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false, true);
 			$num = count($extra_user_fields);
 			if ($num > 0 ) {
 				echo '<th '.($num>0?' colspan="'.$num.'"':'').'>';
@@ -2920,7 +2921,7 @@ class SurveyUtil {
 
 		if ($display_extra_user_fields) {
 			// Show user fields data, if any, for this user
-			$user_fields_values = UserManager::get_extra_user_data(intval($user), false, false);
+			$user_fields_values = UserManager::get_extra_user_data(intval($user), false, false, false, true);
 			foreach ($user_fields_values as & $value) {
 				echo '<td align="center">'.$value.'</td>';
 			}
@@ -2979,14 +2980,14 @@ class SurveyUtil {
 		$return = ';';
 
 		// Show extra fields blank space (enough for extra fields on next line)
-		$display_extra_user_fields = false;
-		if (!($_POST['submit_question_filter'] || $_POST['export_report']) || !empty($_POST['fields_filter'])) {
+			
+		//if (!empty($_REQUEST['fields_filter'])) {
 			//show user fields section with a big th colspan that spans over all fields
-			$extra_user_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false);
+			$extra_user_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false, true);
+			
 			$num = count($extra_user_fields);
-			$return .= str_repeat(';', $num);
-			$display_extra_user_fields = true;
-		}
+			$return .= str_repeat(';', $num);			
+		//}
 
 
 		$sql = "SELECT questions.question_id, questions.type, questions.survey_question, count(options.question_option_id) as number_of_options
@@ -3019,12 +3020,14 @@ class SurveyUtil {
 		$return .= ';';
 
 		// Show extra field values
-		if (!($_POST['submit_question_filter'] || $_POST['export_report']) || !empty($_POST['fields_filter'])) {
+		//if (!($_POST['submit_question_filter'] || $_POST['export_report']) || !empty($_POST['fields_filter'])) {
 			// Show the fields names for user fields
-			foreach ($extra_user_fields as & $field) {
-				$return .= '"'.str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES)).'";';
+			if (!empty($extra_user_fields)) {			
+				foreach ($extra_user_fields as & $field) {
+					$return .= '"'.str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES)).'";';
+				}
 			}
-		}
+		//}
 
 		$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type,
 						survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
@@ -3065,7 +3068,7 @@ class SurveyUtil {
 		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			if ($old_user != $row['user'] && $old_user != '') {
-				$return .= SurveyUtil::export_complete_report_row($possible_answers, $answers_of_user, $old_user, $display_extra_user_fields);
+				$return .= SurveyUtil::export_complete_report_row($possible_answers, $answers_of_user, $old_user, true);
 				$answers_of_user=array();
 			}
 			if($possible_answers_type[$row['question_id']] == 'open') {
@@ -3077,7 +3080,7 @@ class SurveyUtil {
 			}
 			$old_user = $row['user'];
 		}
-		$return .= SurveyUtil::export_complete_report_row($possible_answers, $answers_of_user, $old_user, $display_extra_user_fields); // This is to display the last user
+		$return .= SurveyUtil::export_complete_report_row($possible_answers, $answers_of_user, $old_user, true); // This is to display the last user
 		return $return;
 	}
 
@@ -3105,10 +3108,8 @@ class SurveyUtil {
 				} else {
 					$user_displayed = '-';
 				}
-				//echo '		<th><a href="'.api_get_self().'?action=userreport&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user='.$user.'">'.$user_displayed.'</a></th>'; // the user column
 				$return .= $user_displayed.';';
 			} else {
-				//echo '		<th>'.$user.'</th>'; // The user column
 				$return .= $user.';';
 			}
 		} else {
@@ -3117,7 +3118,7 @@ class SurveyUtil {
 
 		if ($display_extra_user_fields) {
 			// Show user fields data, if any, for this user
-			$user_fields_values = UserManager::get_extra_user_data(intval($user),false,false);
+			$user_fields_values = UserManager::get_extra_user_data($user,false,false, false, true);			
 			foreach ($user_fields_values as & $value) {
 				$return .= '"'.str_replace('"', '""', api_html_entity_decode(strip_tags($value), ENT_QUOTES)).'";';
 			}
@@ -3170,16 +3171,16 @@ class SurveyUtil {
 
 		// Show extra fields blank space (enough for extra fields on next line)
 		$display_extra_user_fields = false;
-		if (!($_POST['submit_question_filter'] || $_POST['export_report']) || !empty($_POST['fields_filter'])) {
+		//if (!empty($_REQUEST['fields_filter'])) {
 			// Show user fields section with a big th colspan that spans over all fields
-			$extra_user_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false);
+			$extra_user_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false, true);
 			$num = count($extra_user_fields);
 			for ($i = 0; $i < $num; $i++) {
 				$worksheet->write($line, $column, '');
 				$column++;
 			}
 			$display_extra_user_fields = true;
-		}
+		//}
 
 		// Database table definitions
 		$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -3267,7 +3268,7 @@ class SurveyUtil {
 		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			if ($old_user != $row['user'] && $old_user != '') {
-				$return = SurveyUtil::export_complete_report_row_xls($possible_answers, $answers_of_user, $old_user, $display_extra_user_fields);
+				$return = SurveyUtil::export_complete_report_row_xls($possible_answers, $answers_of_user, $old_user, true);
 				foreach ($return as $elem) {
 					$worksheet->write($line, $column, $elem);
 					$column++;
@@ -3285,7 +3286,7 @@ class SurveyUtil {
 			}
 			$old_user = $row['user'];
 		}
-		$return = SurveyUtil::export_complete_report_row_xls($possible_answers, $answers_of_user, $old_user); // this is to display the last user
+		$return = SurveyUtil::export_complete_report_row_xls($possible_answers, $answers_of_user, $old_user, true); // this is to display the last user
 		foreach ($return as $elem) {
 			$worksheet->write($line, $column, $elem);
 			$column++;
@@ -3326,12 +3327,10 @@ class SurveyUtil {
 			$return[] = '-'; // The user column
 		}
 
-		if ($display_extra_user_fields)
-		{
+		if ($display_extra_user_fields) {
 			//show user fields data, if any, for this user
-			$user_fields_values = UserManager::get_extra_user_data(intval($user),false,false);
-			foreach($user_fields_values as $value)
-			{
+			$user_fields_values = UserManager::get_extra_user_data(intval($user),false,false, false, true);
+			foreach($user_fields_values as $value) {
 				$return[] = api_html_entity_decode(strip_tags($value), ENT_QUOTES);
 			}
 		}

@@ -96,42 +96,57 @@ if (api_is_allowed_to_edit(null, true)) {
 				
 				if ($_configuration['multiple_access_urls']) {				
 					$current_access_url_id = api_get_current_access_url_id();
-				}	
+				}
+					
+				$session_id = api_get_session_id();	
 				
+				$extra_fields = UserManager::get_extra_user_data(api_get_user_id(), false, false, false, true);
+				$extra_fields = array_keys($extra_fields);
+				if ($sort_by_first_name) {
+					$a_users[0] = array(get_lang('FirstName'), get_lang('LastName'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
+				} else {
+					$a_users[0] = array(get_lang('LastName'), get_lang('FirstName'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
+				}
+				$a_users[0] = array_merge($a_users[0],$extra_fields);
+								
 				// users subscribed to the course through a session
 				if (api_get_setting('use_session_mode') == 'true') {
-					
-					$session_id = intval($_SESSION['id_session']);
-					$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-					$sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").", user.email, user.official_code
-								  FROM $table_session_course_user as session_course_user, $table_users as user ";
-					if ($_configuration['multiple_access_urls']) {
-						$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
-					}
-					$sql_query .="WHERE course_code = '$currentCourseID' AND session_course_user.id_user = user.user_id ";
-
-					if ($session_id != 0) {
-						$sql_query .= ' AND id_session = '.$session_id;
-					}	
-					
-					if ($_configuration['multiple_access_urls']) {				
-						$sql_query .= " AND user.user_id = au.user_id AND access_url_id =  $current_access_url_id  ";
-					}					
-					
-					$sql_query .= $sort_by_first_name ? ' ORDER BY user.firstname, user.lastname' : ' ORDER BY user.lastname, user.firstname';
-					$rs = Database::query($sql_query);
-					
-					while ($user = Database:: fetch_array($rs, 'ASSOC')) {
-						$data[] = $user;
-						//$user_infos = Database :: get_user_info_from_id($user['user_id']);
-						$a_users[$user['user_id']] = $user;
+					if (api_get_session_id()) {						
+						$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+						$sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").", user.email, phone, user.official_code, active
+									  FROM $table_session_course_user as session_course_user, $table_users as user ";
+						if ($_configuration['multiple_access_urls']) {
+							$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
+						}
+						$sql_query .="WHERE course_code = '$currentCourseID' AND session_course_user.id_user = user.user_id ";
+						$sql_query .= ' AND id_session = '.$session_id;							
+						
+						if ($_configuration['multiple_access_urls']) {				
+							$sql_query .= " AND user.user_id = au.user_id AND access_url_id =  $current_access_url_id  ";
+						}					
+						
+						$sql_query .= $sort_by_first_name ? ' ORDER BY user.firstname, user.lastname' : ' ORDER BY user.lastname, user.firstname';
+						
+						$rs = Database::query($sql_query);
+						
+						while ($user = Database:: fetch_array($rs, 'ASSOC')) {
+							$extra_fields = UserManager::get_extra_user_data($user['user_id'], false, false, false, true);
+							if (!empty($extra_fields)) {
+								foreach($extra_fields as $key => $extra_value) {
+									$user[$key] = $extra_value;
+								}
+							}
+							unset($user['user_id']);
+							$data[] = $user;							
+							$a_users[] = $user;
+						}
 					}
 				}
 
 				if ($session_id == 0) {
 					// users directly subscribed to the course
 					$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-					$sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").", user.email, user.official_code
+					$sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").", user.email, phone, user.official_code, active
 								  FROM $table_course_user as course_user, $table_users as user";
 					if ($_configuration['multiple_access_urls']) {
 						$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
@@ -145,11 +160,18 @@ if (api_is_allowed_to_edit(null, true)) {
 					
 					$rs = Database::query($sql_query);
 					while ($user = Database::fetch_array($rs, 'ASSOC')) {
-						$data[] = $user;
-						$a_users[$user['user_id']] = $user;
-					}
-				}
-
+						$extra_fields = UserManager::get_extra_user_data($user['user_id'], false, false, false, true);
+						if (!empty($extra_fields)) {						
+							foreach($extra_fields as $key => $extra_value) {
+								$user[$key] = $extra_value;
+							}
+						}
+						unset($user['user_id']);						
+						$data[] = $user;						
+						$a_users[] = $user;
+					}										
+				}		
+				
 				switch ($_GET['type']) {
 					case 'csv' :
 						Export::export_table_csv($a_users);
@@ -463,12 +485,11 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		if ((isset ($_GET['keyword']) && search_keyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
 
 			$groups_name = GroupManager :: get_user_group_name($user_id);
-                        $temp = array();
-			if (api_is_allowed_to_edit(null, true)) {
-				
-                                if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-                                    $temp[] = $user_id;
-                                }
+			$temp = array();
+			if (api_is_allowed_to_edit(null, true)) {				
+				if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+                	$temp[] = $user_id;
+                }
 				$image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
 				$user_profile = UserManager::get_picture_user($user_id, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
 				if (!api_is_anonymous()) {
@@ -486,7 +507,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					$temp[] = $o_course_user['firstname'];
 				}
 
-				$temp[] = $o_course_user['role'];
+				$temp[] = isset($o_course_user['role']) ? $o_course_user['role'] : null;
 				$temp[] = implode(', ', $groups_name); //Group
 				$temp[] = $o_course_user['official_code'];
 

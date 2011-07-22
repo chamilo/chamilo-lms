@@ -70,9 +70,9 @@ $extra_params['height'] = 'auto';
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
                     return \''
-                    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToGroup').'"></a>'
-                    .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/course_to_class.png" title="'.get_lang('SubscribeCoursesToGroup').'"></a>'
-                    .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/sessions_to_class.png" title="'.get_lang('SubscribeSessionsToGroup').'"></a>'
+                    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
+                    .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/course_to_class.png" title="'.get_lang('SubscribeClassToCourses').'"></a>'
+                    .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/sessions_to_class.png" title="'.get_lang('SubscribeClassToSessions').'"></a>'
                     .' <a href="?action=edit&id=\'+options.rowId+\'"><img width="20px" src="../img/edit.png" title="'.get_lang('Edit').'" ></a>'                                       
                     .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\'; 
                  }';

@@ -24,12 +24,12 @@ api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Groups'));
+$interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Classes'));
 
 // Database Table Definitions
 
 // setting the name of the tool
-$tool_name=get_lang('SubscribeUsersToGroup');
+$tool_name=get_lang('SubscribeUsersToClass');
 
 $add_type = 'multiple';
 if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
@@ -185,7 +185,7 @@ echo '<div class="actions">';
 echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'), array(), 32).'</a>';       
 echo '</div>';
 
-echo '<div class="row"><div class="form_header">'.$tool_name.' '.$data['name'].'</div></div><br/>'; ?>
+echo '<div class="row"><div class="form_header">'.$data['name'].': '.$tool_name.'</div></div><br/>'; ?>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
 
@@ -279,7 +279,7 @@ if(!empty($errorMsg)) {
     <td colspan="3" align="center">
         <br />
         <?php
-        echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToGroup').'</button>';
+        echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToClass').'</button>';
         ?>
     </td>
 </tr>

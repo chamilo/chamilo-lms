@@ -213,7 +213,7 @@ class Diagnoser
         );
 
         foreach ($extensions as $extension => $data) {
-        	$url  	  		= $data['url'];
+        	$url  	  		= $data['link'];
         	$expected_value = $data['expected'];
         	$comment 		= $data['comment'];
         	

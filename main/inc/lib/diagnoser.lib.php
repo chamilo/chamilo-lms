@@ -2,14 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * $Id: diagnoser.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
+ * 
+ * * Class that is responsible for generating diagnostic information about the system
+ * 
  *
  * @package chamilo.diagnoser
  * @author Ivan Tcholakov, 2008, initiall proposal and sample code.
  * @author spou595, 2009, implementation for Chamilo 2.x
- * @author Julio Montoya <gugli100@gmail.com>, 2010, port to chamilo 1.8.7
- *
- * Class that is responsible for generating diagnostic information about the system
+ * @author Julio Montoya <gugli100@gmail.com>, 2010, port to chamilo 1.8.7, Some fixes
+ * 
  */
 
 class Diagnoser
@@ -17,10 +18,10 @@ class Diagnoser
     /**
      * The status's
      */
-    const STATUS_OK = 1;
-    const STATUS_WARNING = 2;
-    const STATUS_ERROR = 3;
-    const STATUS_INFORMATION = 4;
+    const STATUS_OK 			= 1;
+    const STATUS_WARNING 		= 2;
+    const STATUS_ERROR 			= 3;
+    const STATUS_INFORMATION 	= 4;
 
     function __construct() {
     }
@@ -202,12 +203,23 @@ class Diagnoser
         $array[] = $this->build_setting($status, '[INI]', 'browscap', 'http://www.php.net/manual/en/misc.configuration.php#ini.browscap', $setting, $req_setting, 'on_off', get_lang('BrowscapInfo'));
 
         //Extensions
-        $extensions = array('gd' => 'http://www.php.net/gd', 'mysql' => 'http://www.php.net/mysql', 'pcre' => 'http://www.php.net/pcre', 'session' => 'http://www.php.net/session', 'standard' => 'http://www.php.net/spl', 'zlib' => 'http://www.php.net/zlib', 'xsl' => 'http://be2.php.net/xsl');
+        $extensions = array('gd' 		=> array('link'=>'http://www.php.net/gd', 		'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')), 
+        					'mysql' 	=> array('link'=>'http://www.php.net/mysql', 	'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
+        					'pcre' 		=> array('link'=>'http://www.php.net/pcre', 	'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
+        					'session' 	=> array('link'=>'http://www.php.net/session', 	'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
+        					'standard' 	=> array('link'=>'http://www.php.net/spl', 		'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
+        					'zlib' 		=> array('link'=>'http://www.php.net/zlib', 	'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
+        					'xsl' 		=> array('link'=>'http://be2.php.net/xsl', 		'expected' => 2, 'comment' => get_lang('ExtensionCouldBeLoaded')),
+        );
 
-        foreach ($extensions as $extension => $url) {
+        foreach ($extensions as $extension => $data) {
+        	$url  	  		= $data['url'];
+        	$expected_value = $data['expected'];
+        	$comment 		= $data['comment'];
+        	
             $loaded = extension_loaded($extension);
             $status = $loaded ? self :: STATUS_OK : self :: STATUS_ERROR;
-            $array[] = $this->build_setting($status, '[EXTENSION]', get_lang('LoadedExtension') . ': ' . $extension, $url, $loaded, 1, 'yes_no', get_lang('ExtensionMustBeLoaded'));
+            $array[] = $this->build_setting($status, '[EXTENSION]', get_lang('LoadedExtension') . ': ' . $extension, $url, $loaded, $expected_value, 'yes_no_optional', $comment);
         }
 
         return $array;
@@ -314,6 +326,23 @@ class Diagnoser
         return '<a href="' . $url . '" target="about:bank">' . $title . '</a>';
     }
 
+    function format_yes_no_optional($value) {
+    	$return = '';
+    	switch($value) {
+     		case 0:
+     			$return = get_lang('No');
+     			break;
+     		case 1:
+     			$return = get_lang('Yes');
+     			break;
+			case 2:
+				$return = get_lang('Optional');
+				break;     			
+    	}
+    	return $return;
+    	
+    }
+    
     function format_yes_no($value) {
         return $value ? get_lang('Yes') : get_lang('No');
     }

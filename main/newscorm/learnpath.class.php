@@ -4721,7 +4721,9 @@ class learnpath {
             	$row = Display::span($title.$icon).Display::span($audio, array('class'=>'button_actions'));            	
             }           
             $parent_id = $arrLP[$i]['parent_item_id'];
+            
             $default_data[$arrLP[$i]['id']] = $row;
+            $default_content[$arrLP[$i]['id']] = $arrLP[$i];
             
             if (empty($parent_id)) {
             	$elements[$arrLP[$i]['id']]['data'] = $row;
@@ -4775,13 +4777,15 @@ class learnpath {
 	            	$elements[$parent_id]['children'][$arrLP[$i]['id']]['type'] = $arrLP[$i]['item_type'];
             	}
             }            
-        }      
-        
-        function print_recursive($elements, $default_data) {
+        } 
+             
+        //@todo move this somewhere else
+        function print_recursive($elements, $default_data, $default_content) {
         	$return = '';
         	foreach($elements as $key => $item) {
         		if (isset($item['load_data']) || empty($item['data'])) {
-        			$item['data'] = $default_data[$item['load_data']];
+        			$item['data'] = $default_data[$item['load_data']];        			
+        			$item['type'] = $default_content[$item['load_data']]['item_type'];
         		}      	        		
 	        	$sub_list = '';
 	        	if (isset($item['type']) && $item['type'] == 'dokeos_chapter') {
@@ -4793,12 +4797,12 @@ class learnpath {
 	        	} else {
 	        		//sections	  
 	        		if (isset($item['children'])) {	        			
-	        			$data = print_recursive($item['children'], $default_data);
+	        			$data = print_recursive($item['children'], $default_data, $default_content);
 	        		}
 	        		/*foreach($item['children'] as $my_key => $sub_item) {
 	        			$sub_list .= Display::tag('li', $sub_item['data'], array('id'=>$my_key,'class'=>'record item'));
 	        		}*/
-	        		$sub_list = Display::tag('ul', $data, array('id'=>'UL_'.$key, 'class'=>'record container'));
+	        		$sub_list = Display::tag('ul', $sub_list.$data, array('id'=>'UL_'.$key, 'class'=>'record container'));
 	        		$return .= Display::tag('li', Display::div($item['data'], array('class'=>'item_data')).$sub_list, array('id'=>$key, 'class'=>'record container'));
 	        	}	        
         	}
@@ -4806,7 +4810,7 @@ class learnpath {
         }
         
         $return .= '<div style="width:90%;"><ul id="lp_item_list">';
-        $return .= print_recursive($elements,$default_data);
+        $return .= print_recursive($elements, $default_data, $default_content);
         $return .='</ul></div>';
         
         if ($update_audio != 'true') {

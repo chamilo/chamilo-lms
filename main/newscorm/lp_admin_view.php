@@ -39,19 +39,6 @@ $tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
 $submit			= $_POST['submit_button'];
-/*
-$chapter_id     = $_GET['chapter_id'];
-$title          = $_POST['title'];
-$description   = $_POST['description'];
-$Submititem     = $_POST['Submititem'];
-$action         = $_REQUEST['action'];
-$id             = (int) $_REQUEST['id'];
-$type           = $_REQUEST['type'];
-$direction      = $_REQUEST['direction'];
-$moduleid       = $_REQUEST['moduleid'];
-$prereq         = $_REQUEST['prereq'];
-$type           = $_REQUEST['type'];
-*/
 
 /* MAIN CODE */
 
@@ -89,7 +76,6 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
-
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
 if (isset($_REQUEST['updateaudio'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UpdateAllAudioFragments'));
@@ -100,6 +86,9 @@ if (isset($_REQUEST['updateaudio'])) {
 // Theme calls.
 $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
+
+$htmlHeadXtra[] = api_get_jquery_ui_js();
+
 Display::display_header(null, 'Path');
 //api_display_tool_title($therow['name']);
 
@@ -107,6 +96,97 @@ $suredel = trim(get_lang('AreYouSureToDelete'));
 //$suredelstep = trim(get_lang('AreYouSureToDeleteSteps'));
 ?>
 <script type='text/javascript'>
+
+var newOrderData= "";
+//source code found in http://www.swartzfager.org/blog/dspNestedList.cfm
+
+$(function() {
+    <?php
+    if (!isset($_REQUEST['updateaudio'])) { 
+    ?>
+	$("#lp_item_list").sortable({ 
+		items: "li",
+		handle: ".moved", //only the class "moved" 
+		cursor: "move",  
+		placeholder: "ui-state-highlight", //defines the yellow highlight			   
+	});	
+
+	$("#listSubmit").click(function () {
+		//Disable the submit button to prevent a double-click
+		$(this).attr("disabled","disabled");
+		//Initialize the variable that will contain the data to submit to the form
+		newOrderData= "";
+		//All direct descendants of the lp_item_list will have a parentId of 0
+		var parentId= 0;
+		
+		//Walk through the direct descendants of the lp_item_list <ul>
+		$("#lp_item_list").children().each(function () {
+			
+			/*Only process elements with an id attribute (in order to skip the blank,
+			unmovable <li> elements.*/
+			
+			if ($(this).attr("id")) {
+					/*Build a string of data with the child's ID and parent ID, 
+					 using the "|" as a delimiter between the two IDs and the "^" 
+					 as a record delimiter (these delimiters were chosen in case the data
+					 involved includes more common delimiters like commas within the content)
+					*/
+					newOrderData= newOrderData + $(this).attr("id") + "|" + "0" + "^";
+					
+					//Determine if this child is a containter
+					if ($(this).is(".container")) {
+						  //Process the child elements of the container
+						  processChildren($(this).attr("id"));
+						}
+				}
+			
+		}); //end of lp_item_list children loop
+		
+		//Write the newOrderData string out to the listResults form element
+		//$("#listResults").val(newOrderData);
+		var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
+		$.post("<?php echo api_get_path(WEB_AJAX_PATH)?>lp.ajax.php", order, function(reponse){
+            $("#message").html(reponse);
+        }); 
+
+		 setTimeout(function() {
+		        $("#message").html('');
+		    }, 3000);
+						
+		return false;
+		
+	}); //end of lp_item_list event assignment
+	
+	<?php } ?>
+	function processChildren(parentId) {
+		//Loop through the children of the UL element defined by the parentId
+		var ulParentID= "UL_" + parentId;
+		$("#" + ulParentID).children().each(function () {
+			
+			/*Only process elements with an id attribute (in order to skip the blank,
+				unmovable <li> elements.*/
+				
+			if ($(this).attr("id"))
+				{
+					/*Build a string of data with the child's ID and parent ID, 
+					 using the "|" as a delimiter between the two IDs and the "^" 
+					 as a record delimiter (these delimiters were chosen in case the data
+					 involved includes more common delimiters like commas within the content)
+					*/
+					newOrderData= newOrderData + $(this).attr("id") + "|" + parentId + "^";
+					
+					//Determine if this child is a containter
+					if ($(this).is(".container"))
+						{
+						  //Process the child elements of the container
+						  processChildren($(this).attr("id"));
+						}
+				}
+				
+		});  //end of children loop		
+	} //end of processChildren function	
+});
+
 /* <![CDATA[ */
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');
@@ -115,15 +195,12 @@ function stripslashes(str) {
     str=str.replace(/\\0/g,'\0');
     return str;
 }
-function confirmation(name)
-{
+
+function confirmation(name) {
     name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?"))
-    {
+    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
@@ -151,8 +228,7 @@ switch ($_GET['action']) {
 if (isset($_POST['save_audio'])) {
     
     //Updating the lp.modified_on
-    $_SESSION['oLP']->set_modified_on();
-                
+    $_SESSION['oLP']->set_modified_on();                
                 
     // Deleting the audio fragments.
     foreach ($_POST as $key => $value) {
@@ -220,15 +296,11 @@ if (isset($_POST['save_audio'])) {
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
             $sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' WHERE id = '".Database::escape_string($lp_item_id)."'";
             Database::query($sql_insert_audio);
-
         }
     }
-
     Display::display_confirmation_message(get_lang('ChangesStored'));
 }
-
 echo $_SESSION['oLP']->overview();
 
 /* FOOTER */
-
 Display::display_footer();

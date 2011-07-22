@@ -2198,3 +2198,31 @@ div.admin_section h4 {
 .chzn-select {
     width: 200px;	
 }
+#lp_item_list {
+	width:90%;
+	
+}
+#lp_item_list, #lp_item_list li {
+    list-style-type: none;
+}
+
+#lp_item_list ul, #lp_item_list li{
+	float:left;
+	width:100%;
+}
+
+#lp_item_list .item {
+	border:none;	
+}
+
+#lp_item_list .empty {
+	height:20px;
+}
+#lp_item_list .button_actions {
+    position: absolute;
+    right: 20px;
+}
+
+.ui-state-highlight {
+	height:25px;
+}

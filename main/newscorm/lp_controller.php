@@ -33,8 +33,6 @@ $language_file[] = 'registration';
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 
-$htmlHeadXtra[] =  api_get_jquery_js();
-
 if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
     $htmlHeadXtra[] = '<script type="text/javascript">
 <!--

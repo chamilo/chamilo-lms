@@ -90,25 +90,25 @@ if (!empty($scorm_css_header)) {
 
 
 if ($my_style != '') {
-?>
-<style type="text/css" media="screen, projection">
-/*<![CDATA[*/
-<?php 
-//Base CSS
-echo '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
-
-//Default CSS
-echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css";';
-?>
-/*]]>*/
-</style>
-<?php
+	?>
+	<style type="text/css" media="screen, projection">
+	/*<![CDATA[*/
+	<?php 
+	//Base CSS
+	echo '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
+	
+	//Default CSS
+	echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css";';
+	?>
+	/*]]>*/
+	</style>
+	<?php
 }
 ?>
-
+<script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/jquery.min.js" type="text/javascript" ></script>
 <link rel="top" href="<?php echo api_get_path(WEB_PATH); ?>index.php" title="" />
 <link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/courses.php" title="<?php echo api_htmlentities(get_lang('OtherCourses'),ENT_QUOTES,$charset); ?>" />
-<link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/profile.php" title="<?php echo api_htmlentities(get_lang('ModifyProfile'),ENT_QUOTES,$charset); ?>" />
+<link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/profile.php"  title="<?php echo api_htmlentities(get_lang('ModifyProfile'),ENT_QUOTES,$charset); ?>" />
 <link href="http://www.chamilo.org/documentation.php" rel="Help" />
 <link href="http://www.chamilo.org/team.php" rel="Author" />
 <link href="http://www.chamilo.org" rel="Copyright" />

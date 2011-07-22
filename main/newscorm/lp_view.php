@@ -53,7 +53,7 @@ $htmlHeadXtra[] = '<script  src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jq
 if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
     $htmlHeadXtra[] = '<script type="text/javascript">
 <!--
-    var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js\';
+    var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
 -->
 </script>';
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
@@ -440,7 +440,7 @@ if ($_SESSION['oLP']->mode == 'embedframe') {
                    //  $("<div>I am a div courses</div>").prependTo("body");
          }, "top.content_name",
           { load: [
-                  {type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+                  {type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.min.js"},
                   {type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
                   {type:"script", id:"_fr3", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
           ] }
@@ -452,7 +452,7 @@ if ($_SESSION['oLP']->mode == 'embedframe') {
         //  $("<div>I am a div courses</div>").prependTo("body");
       }, "top.content_name",
       { load: [
-              {type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+              {type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.min.js"},
               {type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
               {type:"script", id:"_fr3", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
           ] }

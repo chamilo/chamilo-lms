@@ -90,7 +90,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                        //  $("<div>I am a div courses</div>").prependTo("body");
                                       }, "mainFrame",
                                       { load: [
-                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
+                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
                                             {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
                                             {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
                                            ]
@@ -104,7 +104,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 
                                       }, "mainFrame",
                                       { load: [
-                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
+                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
                                             {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
                                             {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
                                            ]
@@ -112,10 +112,9 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                       );
                                 //   });';
 }
-$htmlHeadXtra[] = api_get_js('jquery.js');
 $htmlHeadXtra[] = '<script type="text/javascript">
 <!--
-    var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js\';
+    var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
 -->
 </script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
@@ -145,7 +144,7 @@ Display::display_reduced_header();
 echo "<div align=\"center\">";
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
 
-$pathinfo =pathinfo($header_file);
+$pathinfo = pathinfo($header_file);
 if ($pathinfo['extension']=='wav' && api_get_setting('enable_nanogong') == 'true'){
 	echo '<div align="center">';
 		echo '<br/>';
@@ -158,5 +157,6 @@ if ($pathinfo['extension']=='wav' && api_get_setting('enable_nanogong') == 'true
 	echo '</div>';
 } else {
 	if ($pathinfo['extension']=='swf'){ $width='83%'; $height='83%';} else {$width='100%'; $height='';}
+	
 	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$width.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'"></iframe>';
 }

@@ -10,10 +10,10 @@ $language_file = array('admin', 'registration');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-$this_section = SECTION_PLATFORM_ADMIN;
 require_once api_get_path(LIBRARY_PATH).'diagnoser.lib.php';
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 
+$this_section = SECTION_PLATFORM_ADMIN;
 // User permissions
 api_protect_admin_script();
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
@@ -22,9 +22,6 @@ Display :: display_header(get_lang('SystemStatus'));
 /* @todo this will be moved to default.css */
 ?>
 <style>
-/*****************************************************
- *  SEMANTIC TABBES PANE STYLES                      *
- *****************************************************/
 .tabbed-pane {
 	clear: both;
 }

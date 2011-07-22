@@ -317,7 +317,7 @@ $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor);
 
 // Tool introduction
 Display::display_introduction_section(TOOL_USER, 'left');
-
+$actions = '';
 if ( api_is_allowed_to_edit(null, true)) {
 	echo "<div class=\"actions\">";
 
@@ -363,12 +363,14 @@ if (1) // platform setting api_get_setting('subscribe_user_by_coach') {
 	--> code for > 50 users should take this into account
 	(Roan, Feb 2004)
 */
+/*
+ * @todo seems not to affect anything in the code
 if (CourseManager::has_virtual_courses_from_code($course_id, $user_id)) {
 	$real_course_code = $_course['sysCode'];
 	$real_course_info = Database::get_course_info($real_course_code);
 	$message = get_lang("RegisteredInRealCourse")." ".$real_course_info["title"]."&nbsp;&nbsp;(".$real_course_info["official_code"].")";
 	echo "<h4>".$message."</h4>";
-}
+}*/
 
 /*
 		DISPLAY LIST OF USERS
@@ -548,6 +550,7 @@ function active_filter($active, $url_params, $row) {
 		$action='AccountInactive';
 		$image='wrong';
 	}
+	$result = '';
 	if ($row[count($row)-1]<>$_user['user_id']) {  // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 		$result = '<center><img src="../img/'.$image.'.gif" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
 	}
@@ -566,7 +569,7 @@ function modify_filter($user_id) {
 	$result="<div style='text-align: center'>";
 
 	if ($is_allowed_to_track) {
-		$result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course&amp;id_session='.$_SESSION["id_session"].'" title="'.get_lang('Tracking').'"  ><img border="0" alt="'.get_lang('Tracking').'" src="../img/icons/22/stats.png" /></a>';
+		$result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course&amp;id_session='.api_get_session_id().'" title="'.get_lang('Tracking').'"  ><img border="0" alt="'.get_lang('Tracking').'" src="../img/icons/22/stats.png" /></a>';
 	}
 
 	if (api_is_allowed_to_edit(null, true)) {
@@ -589,7 +592,7 @@ $default_column = ($is_western_name_order xor $sort_by_first_name) ? 3 : 2;
 $default_column = api_is_allowed_to_edit() ? 2 : 1;
 
 $table = new SortableTable('user_list', 'get_number_of_users', 'get_user_data', $default_column);
-$parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
+$parameters['keyword'] = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $table->set_additional_parameters($parameters);
 $header_nr = 0;
 

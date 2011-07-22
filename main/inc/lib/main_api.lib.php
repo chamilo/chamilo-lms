@@ -4974,7 +4974,7 @@ function api_get_jquery_ui_js($include_jqgrid = false) {
 	if ($include_jqgrid) {
 	   $libraries[]='jqgrid';	
 	}
-    return api_get_jquery_libraries_js($libraries, true);
+    return api_get_jquery_libraries_js($libraries);
 }
 
 /**
@@ -4985,14 +4985,9 @@ function api_get_jquery_ui_js($include_jqgrid = false) {
  * @return  string  html tags
  * 
  */
-function api_get_jquery_libraries_js($libraries, $include_jquery = true) {
+function api_get_jquery_libraries_js($libraries) {
     $js = '';
     $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';    
-
-    if ($include_jquery) {
-        //Jquery
-        $js .= api_get_jquery_js();
-    }
     
     //jquery-ui js and css
     if (in_array('jquery-ui', $libraries)) {

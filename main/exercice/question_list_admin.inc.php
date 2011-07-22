@@ -109,8 +109,7 @@ $(function() {
             event.preventDefault();
             stop = false;
         }
-    });
-    
+    });    
     
     var icons = {
             header: "ui-icon-circle-arrow-e",

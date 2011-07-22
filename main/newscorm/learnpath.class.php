@@ -7,7 +7,7 @@
  *
  * @package chamilo.learnpath
  * @author	Yannick Warnier <ywarnier@beeznest.org>
- * @author	Julio Montoya   <gugli100@gmail.com> Improvements
+ * @author	Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
  */
 
 /**
@@ -2654,8 +2654,6 @@ class learnpath {
         // Build, display.
         if ($is_allowed_to_edit) {
             $gradebook = Security :: remove_XSS($_GET['gradebook']);
-
-            //var_dump($this->get_lp_session_id());
             if ($this->get_lp_session_id() == api_get_session_id()) {
                 $html .= '<div id="actions_lp" class="actions_lp">';
                 if ($display_action_links_with_icons) {
@@ -2858,7 +2856,6 @@ class learnpath {
         $res = Database::query($sel);
         if (Database :: num_rows($res) > 0) {
             $row = Database :: fetch_array($res);
-            //var_dump($row);
             $lp_type = $row['ltype'];
             $lp_path = $row['lpath'];
             $lp_item_type = $row['litype'];
@@ -3886,8 +3883,6 @@ class learnpath {
         array_walk($terms, 'trim_value');
 
         $stored_terms = $this->get_common_index_terms_by_prefix($prefix);
-        //var_dump($stored_terms);
-        //var_dump($terms);
 
         // Don't do anything if no change, verify only at DB, not the search engine.
         if ((count(array_diff($terms, $stored_terms)) == 0) && (count(array_diff($stored_terms, $terms)) == 0))
@@ -4462,6 +4457,7 @@ class learnpath {
                         $depth++;
                     }
                     $preq = (empty($array[$i]['prerequisite']) ? '' : $array[$i]['prerequisite']);
+                    $audio = isset($array[$i]['audio']) ? $array[$i]['audio'] : null;
                     $this->arrMenu[] = array (
                         'id' => $array[$i]['id'],
                         'item_type' => $array[$i]['item_type'],
@@ -4477,7 +4473,7 @@ class learnpath {
                         'display_order' => $array[$i]['display_order'],
                         'prerequisite' => $preq,
                         'depth' => $depth,
-                        'audio' => $array[$i]['audio']
+                        'audio' => $audio
                     );
 
                     $this->create_tree_array($array, $array[$i]['id'], $depth, $tmp);
@@ -4520,7 +4516,7 @@ class learnpath {
             error_log('New LP - In learnpath::overview()', 0);
         }
         global $charset, $_course;
-        $_SESSION['gradebook'] = Security :: remove_XSS($_GET['gradebook']);
+        $_SESSION['gradebook'] = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
         $return = '';
 
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
@@ -4554,14 +4550,14 @@ class learnpath {
         $this->tree_array($arrLP);
         $arrLP = $this->arrMenu;
         unset ($this->arrMenu);
-
+        $update_audio = isset($_GET['updateaudio']) ? $_GET['updateaudio'] : null; 
         if ($is_allowed_to_edit) {
             $token = Security::get_token();
 
-            $gradebook = Security :: remove_XSS($_GET['gradebook']);
+            $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
             $return .= '<div class="actions">';
             $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=build&amp;lp_id=' . $this->lp_id . '" title="' . get_lang('Build') . '">' . Display :: return_icon('build_learnpath.png', get_lang('Build'),'','32').'</a>';
-            if ($_GET['updateaudio'] == 'true') {
+            if ($update_audio == 'true') {
                 $return .='<a href="lp_controller.php?cidReq='.Security::remove_XSS($_GET['cidReq']) .'&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang('BasicOverview').'">'.Display::return_icon('move_learnpath.png', get_lang('BasicOverview'),'','32').'</a>';
             } else {
                 $return .= '<span>' . Display :: return_icon('move_learnpath_na.png', get_lang('BasicOverview'),'','32').'</span>';
@@ -4573,7 +4569,7 @@ class learnpath {
 			 '. Display :: return_icon('new_learnigpath_object.png', get_lang('NewStep'),'','32').'</a>';
             $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewChapter') . '">
 			'. Display :: return_icon('add_learnpath_section.png', get_lang('NewChapter'),'','32').'</a>';
-            if ($_GET['updateaudio'] == 'true') {            
+            if ($update_audio == 'true') {            
                 $return .= Display::url(Display :: return_icon('upload_audio_na.png', get_lang('UpdateAllAudioFragments'),'','32'),'#');
             } else {
                 $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=' . Security :: remove_XSS($_GET['action']) . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '&amp;updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'','32').'</a>';
@@ -4583,35 +4579,53 @@ class learnpath {
         }
 
         // we need to start a form when we want to update all the mp3 files
-        if ($_GET['updateaudio'] == 'true' AND count($arrLP) <> 0) {
+        if ($update_audio == 'true' AND count($arrLP) <> 0) {
             $return .= '<form action="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=' . Security :: remove_XSS($_GET['action']) . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
             $return .= Display::return_message(get_lang('LeaveEmptyToKeepCurrentFile'), 'warning');
         }
+        $return .= '<div id="message"></div>';
+        
+        
+        
+      
+        
+        /*
         $return .= '<table class="data_table">';
         $return .= '<tr>';
         $return .= '<th width="60%">' . get_lang('Title') . '</th>';
         //$return .= '<th>'.get_lang('Description').'</th>';
         $return .= '<th>' . get_lang('Audio') . '</th>';
+        
         if (!$_GET['updateaudio'] OR $_GET['updateaudio'] <> 'true') {
             $return .= '<th>' . get_lang('Move') . '</th>';
         }
         $return .= '<th>' . get_lang('Actions') . '</th>';
-        $return .= '</tr>';
-
+        $return .= '</tr>';*/
+		$start_chapter = false;
+		$elements = array();
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = $arrLP[$i]['title'];
-            if ($arrLP[$i]['description'] == '')
-                $arrLP[$i]['description'] = '&nbsp;';
-
-            if (($i % 2) == 0) {
+            
+            
+            /*if (($i % 2) == 0) {
                 $oddclass = 'row_odd';
             } else {
                 $oddclass = 'row_even';
+            }*/
+            $oddclass = 'row_even';
+            if ($arrLP[$i]['item_type'] == 'dokeos_chapter') {
+            	$oddclass = 'row_odd';
+            	$start_chapter = true;
+            } else {
+            	$start_chapter = false;
             }
-
-            $return .= '<tr class="' . $oddclass . '">';
+            
+            // "lp_item_'.$i.' is important for the drag and drop otherwise the LP will not work
+            
+            //$return .= '<tr id ="lp_item_'.$arrLP[$i]['id'] .'" class="' . $oddclass . '">';            
 
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
+            /*
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
                 $return .= '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $icon_name . '.png" style="margin-right:3px;" />' . $title . '</td>';
             } else {
@@ -4621,39 +4635,54 @@ class learnpath {
                     //$return .= '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;">' . Display::display_icon('folder_document.gif','',array('style'=>'margin-right:3px;')) . $title . '</td>';
                     $return .= '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/folder_document.gif" style="margin-right:3px;" />' . $title . '</td>';
                 }
+            }*/
+            $icon = '';
+            if (file_exists('../img/lp_' . $icon_name . '.png')) {
+            	$icon = '<img align="left" src="../img/lp_' . $icon_name . '.png" style="margin-right:3px;" />';
+            } else {
+            	if (file_exists('../img/lp_' . $icon_name . '.gif')) {
+            		$icon = '<img align="left" src="../img/lp_' . $icon_name . '.gif" style="margin-right:3px;" />';
+            	} else {
+            		$icon = '<img align="left" src="../img/folder_document.gif" style="margin-right:3px;" />';
+            	}
             }
-            //$return .= '<td>' . stripslashes($arrLP[$i]['description']) . '</td>';
 
             // The audio column.
-            $return .= '<td align="center">';
-            if (!$_GET['updateaudio'] OR $_GET['updateaudio'] <> 'true') {
+            //$return .= '<td align="center">';
+            $audio = '';
+            if (!$update_audio OR $update_audio <> 'true') {
                 if (!empty ($arrLP[$i]['audio'])) {
-                    $return .= '<span id="container' . $i . '"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</span>';
-                    $return .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
-                    $return .= '<script type="text/javascript">
+                    $audio .= '<span id="container' . $i . '"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</span>';
+                    $audio .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
+                    $audio .= '<script type="text/javascript">
                                                                 var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
                                                                 s1.addParam("allowscriptaccess","always");
                                                                 s1.addParam("flashvars","file=../../courses/' . $_course['path'] . '/document/audio/' . $arrLP[$i]['audio'] . '");
                                                                 s1.write("container' . $i . '");
                                                             </script>';
                 } else {
-                    $return .= ' - ';
+                    $audio .= '';
                 }
             } else {
                 if ($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module' && $arrLP[$i]['item_type'] != 'dir') {
-
-                    $return .= ' <input type="file" name="mp3file' . $arrLP[$i]['id'] . '" id="mp3file" />';
+                    $audio .= '<input type="file" name="mp3file' . $arrLP[$i]['id'] . '" id="mp3file" />';
                     if (!empty ($arrLP[$i]['audio'])) {
-                        $return .= '<br />'.Security::remove_XSS($arrLP[$i]['audio']).'<input type="checkbox" name="removemp3' . $arrLP[$i]['id'] . '" id="checkbox' . $arrLP[$i]['id'] . '" />' . get_lang('RemoveAudio');
+                        $audio .= '<br />'.Security::remove_XSS($arrLP[$i]['audio']).'<input type="checkbox" name="removemp3' . $arrLP[$i]['id'] . '" id="checkbox' . $arrLP[$i]['id'] . '" />' . get_lang('RemoveAudio');
                     }
                 }
             }
-            $return .= '</td>';
-
+            
+            //$return .= '</td>';
+			$move_icon = '';
+			$edit_icon = '';
+			$delete_icon = '';
             if ($is_allowed_to_edit) {
-                if (!$_GET['updateaudio'] OR $_GET['updateaudio'] <> 'true') {
-                    $return .= '<td align="center">';
-                    
+                if (!$update_audio OR $update_audio <> 'true') {
+					
+                    $move_icon .= '<a class="moved" href="#">';
+					$move_icon .= Display::return_icon('move.png', get_lang('Move'), array(), 24);
+                    $move_icon .= '</a>';                    
+                    /*
                     if ($arrLP[$i]['previous_item_id'] != 0) {
                         $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=move_item&amp;direction=up&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;sec_token='.$token.'">';
                         $return .= '<img style="margin:1px;" alt="" src="../img/arrow_up_' . ($arrLP[$i]['depth'] % 3) . '.gif" title="' . get_lang('MoveUp') . '"/>';
@@ -4669,46 +4698,137 @@ class learnpath {
                         $return .= '</a>';
                     } else
                         $return .= '<img alt="" src="../img/blanco.png" title="" />';
-    
-                    $return .= '</td>';
+    				*/                    
                 }
-
-                $return .= '<td align="center">';
-
+				
                 if ($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module') {
-                    $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;view=build&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
-                    $return .= '<img style="margin:1px;" alt="" src="../img/edit.png" title="' . get_lang('_edit_learnpath_module') . '" />';
-                    $return .= '</a>';
+                    $edit_icon .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;view=build&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
+                    $edit_icon .= '<img style="margin:1px;" alt="" src="../img/edit.png" title="' . get_lang('_edit_learnpath_module') . '" />';
+                    $edit_icon .= '</a>';
                 } else {
-                    $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
-                    $return .= '<img style="margin:1px;" alt="" src="../img/edit.png" title="' . get_lang('_edit_learnpath_module') . '" />';
-                    $return .= '</a>';
+                    $edit_icon .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
+                    $edit_icon .= '<img style="margin:1px;" alt="" src="../img/edit.png" title="' . get_lang('_edit_learnpath_module') . '" />';
+                    $edit_icon .= '</a>';
                 }
 
-                $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($title) . '\');">';
-                $return .= '<img style="margin:1px;" alt="" src="../img/delete.png" title="' . get_lang('_delete_learnpath_module') . '" />';
-                $return .= '</a>';
-
-                $return .= '</td>';
+                $delete_icon .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($title) . '\');">';
+                $delete_icon .= '<img style="margin:1px;" alt="" src="../img/delete.png" title="' . get_lang('_delete_learnpath_module') . '" />';
+                $delete_icon .= '</a>';
             }
-
-            $return .= '</tr>';
+            if ($update_audio != 'true') {
+            	$row = $move_icon.Display::span($title.$icon).Display::span($audio.$edit_icon.$delete_icon, array('class'=>'button_actions'));
+            } else {
+            	$row = Display::span($title.$icon).Display::span($audio, array('class'=>'button_actions'));            	
+            }           
+            $parent_id = $arrLP[$i]['parent_item_id'];
+            $default_data[$arrLP[$i]['id']] = $row;
+            
+            if (empty($parent_id)) {
+            	$elements[$arrLP[$i]['id']]['data'] = $row;
+            	$elements[$arrLP[$i]['id']]['type'] = $arrLP[$i]['item_type'];
+            } else {            
+            	$parent_arrays = array();	
+            	if ($arrLP[$i]['depth'] > 1) {            		
+            		//Getting list of parents
+            		for($j = 0; $j < $arrLP[$i]['depth']; $j++) {            			            			
+            			foreach($arrLP as $item) {            				
+            				if ($item['id'] == $parent_id) {
+            					
+            					if ($item['parent_item_id'] == 0) {
+            						$parent_id = $item['id'];
+            						//$parent_arrays[] = $parent_id;
+            						break;
+            					} else {
+            						$parent_id = $item['parent_item_id'];
+            						if (empty($parent_arrays)) {
+            							$parent_arrays[] = $item['id'];
+            						}
+            						$parent_arrays[] = $parent_id;            						
+            						break;
+            					} 
+            				}            				
+            			}	            		
+            		}
+            	}
+            	if (!empty($parent_arrays)) {
+	            	$parent_arrays = array_reverse($parent_arrays);            	
+	            	$value_to_insert = array();
+	            	$val = '$elements';
+	            	$x = 0;	            	
+	            	foreach($parent_arrays as $item) {
+	            		if ($x != count($parent_arrays) -1) {
+	            			$val .= '["'.$item.'"]["children"]';
+	            		} else {
+	            			$val .= '["'.$item.'"]["children"]';
+	            		}
+	            		$x++;
+	            	}
+	            	$val .= "";
+	            	$generated_array = null;
+	            	//".$row."	            	
+	            	$code_str = $val."[".$arrLP[$i]['id']."][\"load_data\"] = '".$arrLP[$i]['id']."' ; ";            	
+	            	//var_dump($code_str);
+	            	eval($code_str);	            
+            	} else {            	            	
+	            	//var_dump($parent_arrays);
+	            	$elements[$parent_id]['children'][$arrLP[$i]['id']]['data'] = $row;            	
+	            	$elements[$parent_id]['children'][$arrLP[$i]['id']]['type'] = $arrLP[$i]['item_type'];
+            	}
+            }            
+        }      
+        
+        function print_recursive($elements, $default_data) {
+        	$return = '';
+        	foreach($elements as $key => $item) {
+        		if (isset($item['load_data']) || empty($item['data'])) {
+        			$item['data'] = $default_data[$item['load_data']];
+        		}      	        		
+	        	$sub_list = '';
+	        	if (isset($item['type']) && $item['type'] == 'dokeos_chapter') {
+	        		$sub_list = Display::tag('li', '', array('class'=>'sub_item empty')); // empty value
+	        	}	        	 
+	        	if (empty($item['children'])) {
+	        		$sub_list = Display::tag('ul', $sub_list, array('id'=>'UL_'.$key, 'class'=>'record container'));
+	        		$return  .= Display::tag('li', Display::div($item['data'], array('class'=>'item_data')).$sub_list, array('id'=>$key, 'class'=>'record container'));
+	        	} else {
+	        		//sections	  
+	        		if (isset($item['children'])) {	        			
+	        			$data = print_recursive($item['children'], $default_data);
+	        		}
+	        		/*foreach($item['children'] as $my_key => $sub_item) {
+	        			$sub_list .= Display::tag('li', $sub_item['data'], array('id'=>$my_key,'class'=>'record item'));
+	        		}*/
+	        		$sub_list = Display::tag('ul', $data, array('id'=>'UL_'.$key, 'class'=>'record container'));
+	        		$return .= Display::tag('li', Display::div($item['data'], array('class'=>'item_data')).$sub_list, array('id'=>$key, 'class'=>'record container'));
+	        	}	        
+        	}
+        	return $return;
         }
-
+        
+        $return .= '<div style="width:90%;"><ul id="lp_item_list">';
+        $return .= print_recursive($elements,$default_data);
+        $return .='</ul></div>';
+        
+        if ($update_audio != 'true') {
+        	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'a_button orange medium')), array('style'=>'float:left; width:100%'));
+        }
+        
+/*
         if (count($arrLP) == 0) {
             $return .= '<tr>';
             $return .= '<td colspan="4">' . get_lang('NoItemsInLp') . '</td>';
             $return .= '</tr>';
-        }
-        $return .= '</table>';
+        }*/
+        
+        
         // We need to close the form when we are updating the mp3 files.
 
-        if ($_GET['updateaudio'] == 'true') {
+        if ($update_audio == 'true') {
             $return .= '<div style="margin:40px 0; float:right;"><button class="save" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
         }
 
         // We need to close the form when we are updating the mp3 files.
-        if ($_GET['updateaudio'] == 'true' && count($arrLP) != 0) {
+        if ($update_audio == 'true' && count($arrLP) != 0) {
             $return .= '</form>';
         }
 
@@ -4720,7 +4840,7 @@ class learnpath {
      * @return void
      */
     public function build_action_menu() {
-        $gradebook = Security :: remove_XSS($_GET['gradebook']);
+        $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
         echo '<div class="actions">';
         //echo '<span>'.Display::return_icon('build_learnpath.png','-','','32').' '.get_lang('Build').'</span>';
         echo '<span>' . Display :: return_icon('build_learnpath_na.png', get_lang('Build'),'','32').'</span>';
@@ -6168,7 +6288,9 @@ class learnpath {
             foreach ($arrHide as $key => $value) {
                 $parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
             }
-            $parent_select->setSelected($s_selected_parent);
+            if (!empty($s_selected_parent)) {
+            	$parent_select->setSelected($s_selected_parent);
+            }
         }
         if (is_array($arrLP)) {
             reset($arrLP);
@@ -6188,11 +6310,13 @@ class learnpath {
         }
 
         $position = & $form->addElement('select', 'previous', get_lang('Position'), '', 'id="previous" class="learnpath_chapter_form" style="width:37%;"');
+        
+        $padding = isset($value['padding']) ? $value['padding'] : 0;
 
-        $position->addOption(get_lang('FirstPosition'), 0, 'style="padding-left:' . $value['padding'] . 'px;"');
+        $position->addOption(get_lang('FirstPosition'), 0, 'style="padding-left:' . $padding . 'px;"');
 
         foreach ($arrHide as $key => $value) {
-            $position->addOption($value['value'] . '"', $key, 'style="padding-left:' . $value['padding'] . 'px;"');
+            $position->addOption($value['value'] . '"', $key, 'style="padding-left:' . $padding . 'px;"');
         }
 
         if (!empty ($s_selected_position)) {
@@ -6209,7 +6333,10 @@ class learnpath {
             $form->addElement('hidden', 'parent', '0');
         }
 
-        $extension = pathinfo($item_path, PATHINFO_EXTENSION);
+        $extension = null;
+        if (!empty($item_path)) {
+        	$extension = pathinfo($item_path, PATHINFO_EXTENSION);
+        }
         if (($item_type == 'asset' || $item_type == 'sco') && ($extension == 'html' || $extension == 'htm')) {
             if ($item_type == 'sco') {
                 $form->addElement('html', '<script type="text/javascript">alert("' . get_lang('WarningWhenEditingScorm') . '")</script>');
@@ -6428,7 +6555,8 @@ class learnpath {
         $position->addOption(get_lang('FirstPosition'), 0);
 
         foreach ($arrHide as $key => $value) {
-            $position->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
+        	$padding = isset($value['padding']) ? $value['padding']: 0;
+            $position->addOption($value['value'], $key, 'style="padding-left:' . $padding . 'px;"');
         }
         $position->setSelected($s_selected_position);
 
@@ -7219,7 +7347,7 @@ class learnpath {
     public function display_item_small_form($item_type, $title = '', $data) {
         global $charset;
 
-        $return .= '<div class="lp_small_form">';
+        $return = '<div class="lp_small_form">';
         $return .= '<p class="lp_title">' . $title . '</p>';
         $return .= '<form method="post">';
         $return .= '<table cellpadding="0" cellspacing="0" class="lp_form">';
@@ -7409,7 +7537,7 @@ class learnpath {
 
         //condition for the session
         $current_session_id = api_get_session_id(); 
-        $condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '{$_course[id]}')))";
+        $condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '".$_course['code']."' )))";
 
         $sql_doc = "SELECT docs.*
                         FROM  $tbl_item_prop AS last, $tbl_doc  AS docs
@@ -7477,11 +7605,11 @@ class learnpath {
      * @return	string	The HTML list
      */
     public function write_resources_tree($resources_sorted, $num = 0) {
-
         require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
+        $return = '';
         if (count($resources_sorted) > 0) {
             foreach ($resources_sorted as $key => $resource) {
-                if (is_int($resource['id'])) {
+                if (isset($resource['id']) && is_int($resource['id'])) {
                  // It's a folder.
                     //hide some folders
                     if (in_array($key, array('shared_folder','chat_files', 'HotPotatoes_files', 'css', 'certificates'))){
@@ -7507,8 +7635,11 @@ class learnpath {
                         $key=get_lang('Video');
                     }
 
-                    $return .= '<div class="doc_resource"><div style="margin-left:' . ($num * 18) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '" onClick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;<span onClick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')" style="cursor: pointer;" >' . $key . '</span></div><div style="display: none;" id="' . $resource['id'] . '">';
-                    $return .= $this->write_resources_tree($resource['files'], $num +1);
+                    $return .= '<div class="doc_resource">';
+                    $return .= '<div style="margin-left:' . ($num * 18) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '" onClick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;<span onClick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')" style="cursor: pointer;" >' . $key . '</span></div><div style="display: none;" id="' . $resource['id'] . '">';
+                    if (isset($resource['files'])) {
+                    	$return .= $this->write_resources_tree($resource['files'], $num +1);
+                    }
                     $return .= '</div></div>';
                 } else {
                     if (!is_array($resource)) {
@@ -7548,7 +7679,7 @@ class learnpath {
         $res_hot  = Database::query($sql_hot);
 
         //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' ><img align="left" alt="" src="../img/lp_' . TOOL_QUIZ . '.gif" style="margin-right:5px;" title="" />' . get_lang('Quiz') . '</div>';
-        $return .= '<div class="lp_resource">';
+        $return = '<div class="lp_resource">';
         
         $return .= '<div class="lp_resource_element">';
         $return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
@@ -7595,7 +7726,7 @@ class learnpath {
         $res_link = Database::query($sql_link);
 
         //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_LINK . '.gif" style="margin-right:5px;" title="" />' . get_lang('Links') . '</div>';
-        $return .= '<div class="lp_resource">';
+        $return = '<div class="lp_resource">';
         
         $return .= '<div class="lp_resource_element">';
         $return .= '<img alt="" src="../img/linksnew.gif" style="margin-right:5px;width:16px" title="" />';
@@ -7630,7 +7761,7 @@ class learnpath {
         $sql_student = "SELECT * FROM $tbl_student  $condition_session ORDER BY title ASC";
         $res_student = Database::query($sql_student);
         //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.gif" style="margin-right:5px;" title="" />' . get_lang('Student_publication') . '</div>';
-        $return .= '<div class="lp_resource" >';
+        $return = '<div class="lp_resource" >';
         $return .= '<div class="lp_resource_element">';
         $return .= '<img align="left" alt="" src="../img/works_small.gif" style="margin-right:5px;" title="" />';
         $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
@@ -7655,7 +7786,7 @@ class learnpath {
         $a_forums = get_forums();
 
         //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('forums').style.display == 'block') {document.getElementById('forums').style.display = 'none';} else {document.getElementById('forums').style.display = 'block';}\"" . '><img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />' . get_lang('Forums') . '</div>';
-        $return .= '<div class="lp_resource">';
+        $return = '<div class="lp_resource">';
         
         $return .= '<div class="lp_resource_element">';
         $return .= '<img alt="" src="../img/forum_new_small.gif" style="margin-right:5px;" title="" />';

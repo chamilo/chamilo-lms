@@ -898,8 +898,7 @@ function display_wiki_entry($newtitle)
             echo '<span style="float:right;">';
             echo '<form name="form_export2DOC" method="post" action="index.php" >';
             echo '<input type=hidden name="export2DOC" value="export2doc">';
-            echo '<input type=hidden name="titleDOC" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
-            echo '<input type=hidden name="contentDOC" value="'.api_htmlentities($content, ENT_QUOTES, $charset).'">';
+            echo '<input type=hidden name="doc_id" value="'.$row['id'].'">';            
             echo '<input type="image" src="../img/icons/22/export_to_documents.png" border ="0" title="'.get_lang('ExportToDocArea').'" alt="'.get_lang('ExportToDocArea').'" style=" border:none; margin-top: -6px">';
             echo '</form>';
             echo '</span>';
@@ -1690,10 +1689,17 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
  * Function export last wiki page version to document area
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
-function export2doc($wikiTitle, $wikiContents, $groupId)
-{
-    global $_course;
-    $session_id=api_get_session_id();
+function export2doc($doc_id) {
+	global $_course;
+	$groupId 	= api_get_group_id();
+    $session_id	= api_get_session_id();
+    
+    $data       	= get_wiki_data($doc_id);
+    if (empty($data)) {
+    	return false;
+    }    
+    $wikiTitle 		= $data['title'];
+    $wikiContents 	= $data['content'];    
 
     $template =
         '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -1734,14 +1740,11 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
         array(api_get_language_isocode(), api_get_system_encoding(), api_get_text_direction(), $wikiTitle, $css, $asciimathmal_script),
         $template);
 
-    if (0 != $groupId)
-    {
+    if (0 != $groupId) {
         $groupPart = '_group' . $groupId; // and add groupId to put the same document title in different groups
         $group_properties  = GroupManager :: get_group_properties($groupId);
         $groupPath = $group_properties['directory'];
-    }
-    else
-    {
+    } else {
         $groupPart = '';
         $groupPath ='';
     }
@@ -1751,7 +1754,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 
     $clean_wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
 	$array_clean_wikiContents= explode('|', $clean_wikiContents);
-    $wikiContents= $array_clean_wikiContents[1];
+    //$wikiContents= $array_clean_wikiContents[1];
 
     $wikiContents = str_replace('{CONTENT}', $wikiContents, $template);
 
@@ -1765,7 +1768,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
     $i = 1;
     while ( file_exists($exportDir . '/' .$exportFile.'_'.$i.'.html') ) $i++; //only export last version, but in new export new version in document area
     $wikiFileName = $exportFile . '_' . $i . '.html';
-    $exportPath = $exportDir . '/' . $wikiFileName;
+    $exportPath = $exportDir . '/' . $wikiFileName;    
     file_put_contents( $exportPath, $wikiContents );
     $doc_id = add_document($_course, $groupPath.'/'.$wikiFileName, 'file', filesize($exportPath), $wikiTitle);
     api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $groupId);

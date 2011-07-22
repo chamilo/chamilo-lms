@@ -415,15 +415,10 @@ if (isset($_POST['SaveWikiNew'])) {
     display_wiki_entry($_POST['reflink']);
 }
 
-/////////////////////// more options /////////////////////// Juan Carlos Raña Trabado
-
-//more for export to course document area. See display_wiki_entry
+//More for export to course document area. See display_wiki_entry
 if ($_POST['export2DOC']) {
-    $titleDOC=$_POST['titleDOC'];
-    $contentDOC=$_POST['contentDOC'];
-    $groupIdDOC=(int)$_SESSION['_gid'];
-    $export2doc = export2doc($titleDOC,$contentDOC,$groupIdDOC);
-
+    $doc_id = $_POST['doc_id'];
+    $export2doc = export2doc($doc_id);
     if ($export2doc) {
         Display::display_confirmation_message(get_lang('ThePageHasBeenExportedToDocArea'));
     }

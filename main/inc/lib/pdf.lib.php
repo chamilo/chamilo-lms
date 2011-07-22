@@ -262,7 +262,8 @@ class PDF {
             $pdf_name = replace_dangerous_char($pdf_name);
             $output_file = $pdf_name.'.pdf';
         }
-        $result = $this->pdf->Output($output_file, 'D');       /// F to save the pdf in a file              
+        $result = $this->pdf->Output($output_file, 'D');       /// F to save the pdf in a file
+                      
         exit;
     }
     

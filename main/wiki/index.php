@@ -15,7 +15,7 @@ $language_file = 'wiki';
 require_once '../inc/global.inc.php';
 
 // section (for the tabs)
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 // including additional library scripts
 
@@ -115,8 +115,9 @@ if ($_SESSION['_gid'] OR $_GET['group_id']) {
 }
 
 
-if ($_POST['action']=='export_to_pdf' && isset($_POST['wiki_id']) && api_get_setting('students_export2pdf') == 'true') {
+if ($_POST['action']=='export_to_pdf' && isset($_POST['wiki_id']) && api_get_setting('students_export2pdf') == 'true') {	
     export_to_pdf($_POST['wiki_id'], api_get_course_id());
+    exit;
 }
 
 

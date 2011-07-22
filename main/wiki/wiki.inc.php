@@ -1775,21 +1775,17 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 }
 
 function export_to_pdf($id, $course_code) {
-
-    require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
-
-    $data        = get_wiki_data($id);
-	
-	
+    $data        = get_wiki_data($id);	
     $content_pdf = api_html_entity_decode($data['content'], ENT_QUOTES, api_get_system_encoding());
 	
 	//clean wiki links
-	$clean_pdf_content=trim(preg_replace("/\[\[|\]\]/", " ", $content_pdf));
-    $array_clean_pdf_content= explode('|', $clean_pdf_content);
-    $content_pdf= $array_clean_pdf_content[1];
-		
+	$clean_pdf_content = trim(preg_replace("/\[\[|\]\]/", " ", $content_pdf));
+	
+	//@todo this line breaks the pdf export	
+    //$array_clean_pdf_content= explode('|', $clean_pdf_content);
+        
+    $content_pdf= $clean_pdf_content;		
     $title_pdf   = api_html_entity_decode($data['title'], ENT_QUOTES, api_get_system_encoding());
-
     $title_pdf   = api_utf8_encode($title_pdf, api_get_system_encoding());
     $content_pdf = api_utf8_encode($content_pdf, api_get_system_encoding());
 
@@ -1806,6 +1802,7 @@ function export_to_pdf($id, $course_code) {
     <setpagefooter name="odds" page="O" value="on" />
 
     mpdf-->'.$content_pdf;
+    
 
     $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
     if (file_exists($css_file)) {
@@ -1813,6 +1810,7 @@ function export_to_pdf($id, $course_code) {
     } else {
         $css = '';
     }
+    require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
     $pdf = new PDF();
     $pdf->content_to_pdf($html, $css, $title_pdf, $course_code);
     exit;

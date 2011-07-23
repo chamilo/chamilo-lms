@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * This file contains a class used like library provides functions for auth tool. It's also used like model to courses_controller (MVC pattern)
  * @author Christian Fasanando <christian1827@gmail.com>
  * @package chamilo.auth
  */
-
+/**
+ * Code
+ */
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
 /**

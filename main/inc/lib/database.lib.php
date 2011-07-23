@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	This is the main database library for Chamilo.
  *	Include/require it in your code to use its functionality.
@@ -13,7 +12,9 @@
  * 	@todo the table constants have all to start with TABLE_
  * 		  This is because of the analogy with the tool constants TOOL_
  */
-
+/**
+ * Code
+ */
 /*	CONSTANTS */
 
 require_once 'database.constants.inc.php';

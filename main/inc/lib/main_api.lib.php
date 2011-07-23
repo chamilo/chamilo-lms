@@ -266,7 +266,7 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  * It has not been identified as needed yet.
  * 4. Also, resolving the meta-symbols "." and ".." withiin paths has not been implemented, it is to be identified as needed.
  *
- * @example
+ * Example:
  * Assume that your server root is /var/www/ , Chamilo is installed in a subfolder chamilo/ and the URL of your campus is http://www.mychamilo.org
  * The other configuration paramaters have not been changed.
  *
@@ -802,7 +802,7 @@ function api_is_self_registration_allowed() {
 /**
  * This function returns the id of the user which is stored in the $_user array.
  *
- * @example The function can be used to check if a user is logged in
+ * example: The function can be used to check if a user is logged in
  *          if (api_get_user_id())
  * @return integer the id of the current user, 0 if is empty
  */
@@ -1445,7 +1445,7 @@ $api_failureList = array();
  *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param  string $failure_type - the type of failure
- * @global array $api_failureList
+ * global: array $api_failureList
  * @return bolean false to stay consistent with the main script
  */
 function api_set_failure($failure_type) {
@@ -1820,8 +1820,8 @@ function api_is_course_tutor() {
 
 /**
  * Checks whether the current user is a course or session coach
- * @params int - optional, session id
- * @params string - optional, course code
+ * @param int - optional, session id
+ * @param string - optional, course code
  * @return boolean True if current user is a course or session coach
  */
 function api_is_coach($session_id = 0, $course_code = '') {
@@ -3396,6 +3396,7 @@ function api_chmod_R($path, $filemode) {
  * - package: The name of the package of modules this module belongs to.
  *
  * Example of .info file:
+ * <code>
  * @verbatim
  *   name = Forum
  *   description = Enables threaded discussions about general topics.
@@ -3404,7 +3405,7 @@ function api_chmod_R($path, $filemode) {
  *   package = Core - optional
  *   version = VERSION
  * @endverbatim
- *
+ * </code>
  * @param $filename
  *   The file we are parsing. Accepts file with relative or absolute path.
  * @return
@@ -4658,14 +4659,14 @@ function get_setting($variable, $key = NULL) {
 }
 
 /**
- * @deprecated, use api_is_allowed_to_edit() instead
+ * deprecated: use api_is_allowed_to_edit() instead
  */
 function is_allowed_to_edit() {
     return api_is_allowed_to_edit();
 }
 
 /**
- * @deprecated 19-SEP-2009: Use api_get_path(TO_SYS, $url) instead.
+ * deprecated: 19-SEP-2009: Use api_get_path(TO_SYS, $url) instead.
  */
 function api_url_to_local_path($url) {
     return api_get_path(TO_SYS, $url);

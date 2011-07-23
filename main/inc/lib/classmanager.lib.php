@@ -4,6 +4,9 @@
 *	This is the class library for Dokeos.
 *	@package	 chamilo.library
 */
+/**
+ * Code
+ */
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 /**
  * This library contains some functions for class-management.

@@ -17,7 +17,7 @@
  * @package chamilo.library
  */
 
-/*
+/**
     DOCUMENTATION
     (list not up to date, you can auto generate documentation with phpDocumentor)
 
@@ -3153,7 +3153,7 @@ class CourseManager {
      * Creates a new course code based in given code
      * 
      * @param string	wanted code
-     * @example	$wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3
+     * <code>	$wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3</code>
      * if the course code doest not exist in the DB the same course code will be returned
      * @return string	wanted unused code
      */

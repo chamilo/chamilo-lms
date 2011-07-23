@@ -19,10 +19,11 @@
 require_once 'database.constants.inc.php';
 
 
-/*		DATABASE CLASS
-        The class and its methods
-*/
-
+/**
+ * DATABASE CLASS
+ *      The class and its methods
+ *	@package chamilo.library
+ */
 class Database {
 
     /*

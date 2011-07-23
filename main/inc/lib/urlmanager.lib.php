@@ -6,6 +6,9 @@
 *
 *	@package chamilo.library
 */
+/**
+ * @package chamilo.library
+ */
 class UrlManager
 {
 	/**
@@ -147,7 +150,7 @@ class UrlManager
 
 	/** Gets the inner join of users and urls table
 	 * @author Julio Montoya
-	 * @return int  access url id
+	 * @param int  access url id
 	 * @return array   Database::store_result of the result
 	 * */
 	public static function get_url_rel_user_data($access_url_id='')
@@ -172,7 +175,7 @@ class UrlManager
 
 	 /** Gets the inner join of access_url and the course table
 	 * @author Julio Montoya
-	 * @return int  access url id
+	 * @param int  access url id
 	 * @return array   Database::store_result of the result
 	 * */
 	public static function get_url_rel_course_data($access_url_id='')
@@ -198,7 +201,7 @@ class UrlManager
 
 	/** Gets the inner join of access_url and the session table
 	 * @author Julio Montoya
-	 * @return int  access url id
+	 * @param int  access url id
 	 * @return array   Database::store_result of the result
 	 * */
 	public static function get_url_rel_session_data($access_url_id='')
@@ -633,4 +636,3 @@ class UrlManager
 		return $access_url_id;
 	}
 }
-?>

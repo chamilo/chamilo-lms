@@ -13,7 +13,10 @@
  *
  * @package chamilo.library
  */
-
+/**
+ * Code
+ */
+define('MAX_LENGTH_BREADCRUMB', 100);
 /**
  * Display class
  * contains several public functions dealing with the display of
@@ -21,8 +24,6 @@
  *
  * @package chamilo.library
  */
-
-define('MAX_LENGTH_BREADCRUMB', 100);
 
 class Display {
 
@@ -36,7 +37,7 @@ class Display {
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @param string $tool These are the constants that are used for indicating the tools.
      * @param array $editor_config Optional configuration settings for the online editor.
-     * @return $tool return a string array list with the "define" in main_api.lib
+     * return: $tool return a string array list with the "define" in main_api.lib
      * @return html code for adding an introduction
      */
     public static function display_introduction_section($tool, $editor_config = null) {

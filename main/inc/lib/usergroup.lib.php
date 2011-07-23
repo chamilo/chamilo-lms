@@ -1,15 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
-*	This class provides methods for the UserGroup management.
-*	Include/require it in your code to use its features.
-*	@package chamilo.library
-*/
-
+ * This class provides methods for the UserGroup management.
+ * Include/require it in your code to use its features.
+ * @package chamilo.library
+ */
+/**
+ * Code
+ */
 require_once 'model.lib.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-
+/**
+ * Class
+ * @package chamilo.library
+ */
 class UserGroup extends Model {
 
     var $columns = array('id', 'name','description');

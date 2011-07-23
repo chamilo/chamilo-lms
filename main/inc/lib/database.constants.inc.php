@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	This is the database constants definition for Chamilo
  *  This file is called by database.lib.php and database.mysqli.lib.php  
@@ -11,7 +10,9 @@
  *	@package chamilo.library 
  */
 
-/*	CONSTANTS */
+/**
+ * CONSTANTS 
+ */
 
 // Main database tables
 define('TABLE_MAIN_COURSE',                 'course');

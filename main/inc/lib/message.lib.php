@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	This class provides methods for messages management.
 *	Include/require it in your code to use its features.
 *
 *	@package chamilo.library
 */
-
+/**
+ * Code
+ */
 require_once api_get_path(LIBRARY_PATH).'online.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
@@ -26,7 +27,10 @@ define('MESSAGE_STATUS_OUTBOX',				'4');
 define('MESSAGE_STATUS_INVITATION_PENDING',	'5');
 define('MESSAGE_STATUS_INVITATION_ACCEPTED','6');
 define('MESSAGE_STATUS_INVITATION_DENIED',	'7');
-
+/**
+ * Class
+ * @package chamilo.library
+ */
 class MessageManager
 {
 	public static function get_online_user_list($current_user_id) {

@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *
  * @package chamilo.include.search
  */
 /**
@@ -12,6 +11,7 @@ require_once dirname(__FILE__) . '/../IndexableChunk.class.php';
 
 /**
  * Abstract helper class
+ * @package chamilo.include.search
  */
 abstract class XapianIndexer {
     /* XapianWritableDatabase */

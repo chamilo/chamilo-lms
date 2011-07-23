@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	ExerciseResult class: This class allows to instantiate an object of type ExerciseResult
-*	which allows you to export exercises results in multiple presentation forms
-*	@package chamilo.exercise
-* 	@author Yannick Warnier
-* 	@version $Id: $
-*/
+ * ExerciseResult class: This class allows to instantiate an object 
+ * of type ExerciseResult
+ * which allows you to export exercises results in multiple presentation forms
+ * @package chamilo.exercise
+ * @author Yannick Warnier
+ * @version $Id: $
+ */
 /**
  * Code
  */

@@ -2,7 +2,7 @@
 /* For licensing terms, see /dokeos_license.txt */
 /*
  * Script defining generic functions against a search engine api. Just only if one day the search engine changes
- * @package: chamilo.include.search
+ * @package chamilo.include.search
  */
 /**
  * Code

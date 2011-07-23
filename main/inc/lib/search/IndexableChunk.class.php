@@ -93,6 +93,7 @@ abstract class _IndexableChunk
 
 /**
  * Extension of the _IndexableChunk class to make IndexableChunk extensible.
+ * @package chamilo.include.search
  */
 class IndexableChunk extends _IndexableChunk
 {
@@ -111,5 +112,3 @@ class IndexableChunk extends _IndexableChunk
   }
 
 }
-
-?>

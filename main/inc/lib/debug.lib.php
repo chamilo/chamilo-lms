@@ -14,7 +14,7 @@ class Debug {
 	/**
 	 * This function displays the contend of a variable, array or object in a nicely formatted way.
 	 * @param	Mixed	A variable, array or object
-	 * @return 	void	Prints <pre> HTML block to output
+	 * @return 	void	Prints \<pre\> HTML block to output
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version November 2006
 	 */

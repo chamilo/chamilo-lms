@@ -37,7 +37,7 @@ class PDF {
      * @param   mixed   could be an html file path or an array with paths example: /var/www/myfile.html or array('/myfile.html','myotherfile.html') or even an indexed array with both 'title' and 'path' indexes for each element like array(0=>array('title'=>'Hello','path'=>'file.html'),1=>array('title'=>'Bye','path'=>'file2.html'));
      * @param   string  pdf name   
      * @param   string  course code (if you are using html that are located in the document tool you must provide this) 
-     * @return  
+     * @return void
      */    
     public function html_to_pdf($html_file_array, $pdf_name = '', $course_code = null, $print_title = false) {
         

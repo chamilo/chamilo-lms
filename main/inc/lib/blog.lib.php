@@ -616,8 +616,7 @@ class Blog {
 	/**
 	 * Get personal task list
 	 * @author Toon Keppens
-	 *
-	 * @return Returns an unsorted list (<ul>) with the users' tasks
+	 * @return Returns an unsorted list (<ul></ul>) with the users' tasks
 	 */
 	public static function get_personal_task_list () {
 		global $_user;

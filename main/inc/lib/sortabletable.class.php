@@ -761,7 +761,7 @@ class SortableTable extends HTML_Table {
 
 	/**
 	 * Define a list of additional parameters to use in the generated URLs
-	 * @example $parameters['action'] = 'test'; will be convert in <input type="hidden" name="action" value="test">
+	 * <code>$parameters['action'] = 'test'; will be convert in <input type="hidden" name="action" value="test"></code>
 	 * @param array $parameters
 	 */
 	public function set_additional_parameters ($parameters) {

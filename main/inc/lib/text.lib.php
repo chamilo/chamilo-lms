@@ -420,9 +420,9 @@ function make_clickable($string) {
  * @desc This function does some parsing on the text that gets inputted. This parsing can be of any kind
  *       LaTeX notation, Word Censoring, Glossary Terminology (extension will available soon), Musical Notations, ...
  *       The inspiration for this filter function came from Moodle an phpBB who both use a similar approach.
+ * <code>[tex]\sqrt(2)[/tex]</code>
  * @param $input string. some text
  * @return $output string. some text that contains the parsed elements.
- * @example [tex]\sqrt(2)[/tex]
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version March 2OO6
  */

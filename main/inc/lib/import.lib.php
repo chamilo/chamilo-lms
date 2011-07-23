@@ -1,12 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * This class provides some functions which can be used when importing data from
  * external files into Chamilo.
  * @package	 chamilo.library
  */
-
+/**
+ * Class
+ * @package	 chamilo.library
+ */
 class Import {
 
 	/**

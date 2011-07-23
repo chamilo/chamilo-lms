@@ -1,6 +1,6 @@
 <?php
 /**
- * @chamilo.library
+ * @package chamilo.library
  */
 /**
  * Code

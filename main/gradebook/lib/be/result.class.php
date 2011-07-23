@@ -5,6 +5,10 @@
  * @author Bert Steppé, Stijn Konings
  * @package chamilo.gradebook
  */
+/**
+ * Class
+ * @package chamilo.gradebook
+ */
 class Result
 {
 

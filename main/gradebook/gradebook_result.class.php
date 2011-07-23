@@ -9,7 +9,10 @@
 
 
 if(!class_exists('GradeBookResult')):
-
+/**
+ * Gradebook results class
+ * @package chamilo.gradebook
+ */
 class GradeBookResult
 {
 	private $gradebook_list = array(); //stores the list of exercises

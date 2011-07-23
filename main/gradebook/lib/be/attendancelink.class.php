@@ -5,6 +5,10 @@
  * @author Christian Fasanando (christian1827@gmail.com)
  * @package chamilo.gradebook
  */
+/**
+ * Class
+ * @package chamilo.gradebook
+ */
 class AttendanceLink extends AbstractLink
 {
 

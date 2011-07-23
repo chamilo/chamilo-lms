@@ -4,6 +4,10 @@
  * Defines a gradebook Evaluation object
  * @package chamilo.gradebook
  */
+/**
+ * Class
+ * @package chamilo.gradebook
+ */
 class Evaluation implements GradebookItem
 {
 

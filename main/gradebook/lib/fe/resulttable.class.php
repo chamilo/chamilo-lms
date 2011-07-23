@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Script
+ * @package chamilo.gradebook
+ */
+/**
+ * Init
+ */
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
 
@@ -7,6 +14,7 @@ require_once dirname(__FILE__).'/../be.inc.php';
  * Table to display results for an evaluation
  * @author Stijn Konings
  * @author Bert Steppé
+ * @package chamilo.gradebook
  */
 class ResultTable extends SortableTable
 {

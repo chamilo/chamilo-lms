@@ -1,5 +1,12 @@
 <?php // $Id: $
 /* For licensing terms, see /license.txt */
+/**
+ * Script
+ * @package chamilo.gradebook
+ */
+/**
+ * Init
+ */
 
 $language_file = 'gradebook';
 //$cidReset = true;

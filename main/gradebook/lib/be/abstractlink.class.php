@@ -9,6 +9,10 @@
  * @author Julio Montoya <gugli100@gmail.com> security improvements
  * @package chamilo.gradebook
  */
+/**
+ * Class
+ * @package chamilo.gradebook
+ */
 abstract class AbstractLink implements GradebookItem {
 	// PROPERTIES
 

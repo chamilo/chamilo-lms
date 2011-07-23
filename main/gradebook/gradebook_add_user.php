@@ -1,6 +1,13 @@
 <?php //$Id: gradebook_add_user.php 21153 2009-06-01 01:51:43Z yannoo $
 
 /* For licensing terms, see /license.txt */
+/**
+ * Script
+ * @package chamilo.gradebook
+ */
+/**
+ * Init
+ */
 
 //Disabling code when course code is null (gradebook as a tab) see issue #2705
 exit;

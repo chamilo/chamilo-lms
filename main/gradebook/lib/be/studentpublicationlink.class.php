@@ -5,6 +5,10 @@
  * @author Bert Steppé
  * @package chamilo.gradebook
  */
+/**
+ * Class
+ * @package chamilo.gradebook
+ */
 class StudentPublicationLink extends AbstractLink
 {
 

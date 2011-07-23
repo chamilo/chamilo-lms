@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Script
+ * @package chamilo.gradebook
+ */
+/**
+ * Init
+ */
 
 // Score display types constants
 define('SCORE_DIV',                      1);    // X / Y
@@ -27,7 +34,7 @@ define('SCORE_ONLY_CUSTOM',3);
  * Class to display scores according to the settings made by the platform admin.
  * This class works as a singleton: call instance() to retrieve an object.
  * @author Bert Steppé
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class ScoreDisplay
 {

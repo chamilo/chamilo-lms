@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Script
+ * @package chamilo.gradebook
+ */
+/**
+ * Init
+ */
 $language_file = array('gradebook','link');
 //$cidReset = true;
 require_once '../inc/global.inc.php';

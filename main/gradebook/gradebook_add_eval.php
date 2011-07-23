@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Script
+ * @package chamilo.gradebook
+ */
+/**
+ * Init
+ */
 $language_file = 'gradebook';
 require_once '../inc/global.inc.php';
 require_once 'lib/be.inc.php';

@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Script
+ * @package chamilo.gradebook
+ */
+/**
+ * Init
+ */
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
 
@@ -7,6 +14,7 @@ require_once dirname(__FILE__).'/../be.inc.php';
  * Table to display flat view of a student's evaluations and links
  * @author Stijn Konings
  * @author Bert Steppé (refactored, optimised, use of caching, datagenerator class)
+ * @package chamilo.gradebook
  */
 class UserTable extends SortableTable
 {

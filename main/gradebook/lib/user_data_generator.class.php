@@ -1,9 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
+ * Script
+ * @package chamilo.gradebook
+ */
+/**
  * Class to select, sort and transform object data into array data,
  * used for a student's general view
  * @author Bert Steppé
+ * @package chamilo.gradebook
  */
 class UserDataGenerator
 {

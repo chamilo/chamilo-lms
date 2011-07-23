@@ -5,6 +5,10 @@
  * used for the teacher's flat view
  * @author Bert Steppé
  */
+/**
+ * Class
+ * @package chamilo.gradebook
+ */
 class FlatViewDataGenerator
 {
 

@@ -7,6 +7,10 @@
  * @package chamilo.gradebook
  */
 
+/**
+ * Class
+ * @package chamilo.gradebook
+ */
 class SurveyLink extends AbstractLink
 {
     private $survey_table = null;

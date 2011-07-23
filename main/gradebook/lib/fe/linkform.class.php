@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Script
+ * @package chamilo.gradebook
+ */
+/**
+ * Init
+ */
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
 require_once dirname(__FILE__).'/../gradebook_functions.inc.php';
@@ -10,7 +17,7 @@ require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php
  * Forms related to links
  * @author Stijn Konings
  * @author Bert Steppé (made more generic)
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class LinkForm extends FormValidator
 {

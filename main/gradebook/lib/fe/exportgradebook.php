@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
+ * Script
+ * @package chamilo.gradebook
+ */
+/**
  * Prints an HTML page with a table containing the gradebook data
  * @param	array 	Array containing the data to be printed in the table
  * @param	array	Table headers

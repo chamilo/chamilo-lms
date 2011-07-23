@@ -4,7 +4,10 @@
  * Defines a gradebook Category object
  * @package chamilo.gradebook
  */
- 
+/**
+ * Class
+ * @package chamilo.gradebook
+ */
 class Category implements GradebookItem
 {
 

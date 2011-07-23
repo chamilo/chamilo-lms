@@ -6,6 +6,10 @@
  * @author Bert Steppé
  * @package chamilo.gradebook
  */
+/**
+ * Class
+ * @package chamilo.gradebook
+ */
 class LearnpathLink extends AbstractLink
 {
 // INTERNAL VARIABLES

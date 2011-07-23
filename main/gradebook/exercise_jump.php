@@ -7,6 +7,10 @@
  * variables.
  * Most code here is ripped from /main/course_home/course_home.php
  * @author Bert Steppé
+ * @package chamilo.gradebook
+ */
+/**
+ * Init
  */
 
 require_once '../inc/global.inc.php';

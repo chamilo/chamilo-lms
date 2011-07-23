@@ -5,6 +5,10 @@
  * @author Bert Steppé
  * @package chamilo.gradebook
  */
+/**
+ * Interface
+ * @package chamilo.gradebook
+ */
 interface GradebookItem
 {
 	public function get_item_type();

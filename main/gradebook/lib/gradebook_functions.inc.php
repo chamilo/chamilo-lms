@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Script
+ * @package chamilo.gradebook
+ */
 /**
 * These are functions used in gradebook
 *

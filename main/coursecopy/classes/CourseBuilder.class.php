@@ -23,9 +23,9 @@ require_once 'CourseSession.class.php';
 require_once 'wiki.class.php';
 
 /**
- * Class which can build a course-object from a Dokeos-course.
+ * Class which can build a course-object from a Chamilo-course.
  * @author Bart Mollet <bart.mollet@hogent.be>
- * @package dokeos.backup
+ * @package chamilo.backup
  */
 class CourseBuilder {
 	/**

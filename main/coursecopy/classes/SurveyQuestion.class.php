@@ -1,12 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-require_once 'Resource.class.php';
-
 /**
- * An QuizQuestion
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
- * @package dokeos.backup
+ * Survey questions backup script
+ * @package chamilo.backup
+ */
+require_once 'Resource.class.php';
+/**
+ * A SurveyQuestion
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ * @package chamilo.backup
  */
 class SurveyQuestion extends Resource
 {

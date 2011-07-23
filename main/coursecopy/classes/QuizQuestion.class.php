@@ -1,5 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Exercises questions backup script
+ * @package chamilo.backup
+ */
 
 require_once 'Resource.class.php';
 

@@ -1,12 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Survey invitations backup script
+ * @package chamilo.backup
+ */
 require_once 'Resource.class.php';
 
 /**
  * An SurveyInvitation
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
- * @package dokeos.backup
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ * @package chamilo.backup
  */
 class SurveyInvitation extends Resource
 {

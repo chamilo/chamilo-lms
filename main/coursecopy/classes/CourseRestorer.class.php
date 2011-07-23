@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Course Restorer script
+ * @package chamilo.backup
+ */
 require_once 'Course.class.php';
 require_once 'Event.class.php';
 require_once 'Link.class.php';
@@ -27,7 +30,7 @@ define('FILE_SKIP', 1);
 define('FILE_RENAME', 2);
 define('FILE_OVERWRITE', 3);
 /**
- * Class to restore items from a course object to a Dokeos-course
+ * Class to restore items from a course object to a Chamilo-course
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @author Julio Montoya <gugli100@gmail.com> Several fixes/improvements
  * @package chamilo.backup
@@ -1408,7 +1411,7 @@ class CourseRestorer
 					}
 					*/
 					/*
-					//Get the new ref ID for all items that are not sco (dokeos quizzes, documents, etc)
+					//Get the new ref ID for all items that are not sco (chamilo quizzes, documents, etc)
 					$ref = '';
 					if(!empty($item['ref']) && $lp->lp_type!='2'){
 						$ref = $this->get_new_id($item['item_type'],$item['ref']);

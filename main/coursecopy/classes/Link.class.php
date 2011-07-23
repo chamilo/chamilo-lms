@@ -1,10 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Link backup script
+ * @package chamilo.backup
+ */
 require_once 'Resource.class.php';
 
 /**
- * A WWW-link from the Links-module in a Dokeos-course.
+ * A WWW-link from the Links-module in a Chamilo-course.
  * @author Bart Mollet <bart.mollet@hogent.be>
  */
 class Link extends Resource
@@ -31,7 +34,7 @@ class Link extends Resource
 	var $on_homepage;
 	/**
 	 * Create a new Link
-	 * @param int $id The id of this link in the Dokeos-course
+	 * @param int $id The id of this link in the Chamilo-course
 	 * @param string $title
 	 * @param string $url
 	 * @param string $description

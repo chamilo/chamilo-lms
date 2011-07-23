@@ -1,7 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 require_once('Resource.class.php');
-
+/**
+ * Wiki backup script
+ * @package chamilo.backup
+ */
 /**
  * Class for migrating the wiki
  *

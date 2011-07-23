@@ -1,12 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Glossary backup script
+ * @package chamilo.backup
+ */
 require_once 'Resource.class.php';
 
 /**
  * Add resource glossary
  * @author Isaac flores <florespaz@bidsoftperu.com>
- * @package dokeos.backup
+ * @package chamilo.backup
  */
 class Glossary extends Resource
 {

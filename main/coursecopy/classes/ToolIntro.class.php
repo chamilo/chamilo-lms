@@ -1,10 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Tool intro backup script
+ * @package chamilo.backup
+ */
 require_once 'Resource.class.php';
 
 /**
- * A WWW-link from the Links-module in a Dokeos-course.
+ * A WWW-link from the Links-module in a Chamilo-course.
  * @author Bart Mollet <bart.mollet@hogent.be>
  */
 class ToolIntro extends Resource
@@ -18,7 +21,7 @@ class ToolIntro extends Resource
 
 	/**
 	 * Create a new text introduction
-	 * @param int $id The id of this tool introduction in the Dokeos-course
+	 * @param int $id The id of this tool introduction in the Chamilo-course
 	 * @param string $intro_text
 	 */
 	function ToolIntro($id, $intro_text)

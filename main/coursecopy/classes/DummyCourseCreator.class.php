@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Dummy course creator
+ * @package chamilo.backup
+ */
 require_once 'Course.class.php';
 require_once 'Document.class.php';
 require_once 'Event.class.php';
@@ -204,7 +207,7 @@ class DummyCourseCreator
 		{
 			$topic_id = rand(1, $number_of_topics);
 			$last_topic_post[$topic_id] = $post_id;
-			$post = new ForumPost($post_id, $this->get_dummy_content('title'), $this->get_dummy_content('text'), date('Y-m-d H:i:s'), 1, 'Dokeos Administrator', 0, 0, $topic_id, 0, 1);
+			$post = new ForumPost($post_id, $this->get_dummy_content('title'), $this->get_dummy_content('text'), date('Y-m-d H:i:s'), 1, 'Portal Administrator', 0, 0, $topic_id, 0, 1);
 			$this->course->add_resource($post);
 		}
 		// create topics
@@ -212,7 +215,7 @@ class DummyCourseCreator
 		{
 			$forum_id = rand(1, $number_of_forums);
 			$last_forum_post[$forum_id] = $last_topic_post[$topic_id];
-			$topic = new ForumTopic($topic_id, $this->get_dummy_content('title'), '2005-03-31 12:10:00', 'Dokeos', 'Administrator', 0, $forum_id, $last_topic_post[$topic_id]);
+			$topic = new ForumTopic($topic_id, $this->get_dummy_content('title'), '2011-03-31 12:10:00', 'Chamilo', 'Administrator', 0, $forum_id, $last_topic_post[$topic_id]);
 			$this->course->add_resource($topic);
 		}
 		// create forums

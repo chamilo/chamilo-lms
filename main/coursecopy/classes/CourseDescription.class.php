@@ -6,6 +6,7 @@ require_once 'Resource.class.php';
 /**
  * A course description
  * @author Bart Mollet <bart.mollet@hogent.be>
+ * @package chamilo.backup
  */
 class CourseDescription extends Resource
 {

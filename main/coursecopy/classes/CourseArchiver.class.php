@@ -8,9 +8,9 @@ require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
  * Some functions to write a course-object to a zip-file and to read a course-
  * object from such a zip-file.
  * @author Bart Mollet <bart.mollet@hogent.be>
- * @package dokeos.backup
+ * @package chamilo.backup
  *
- * @todo Use archive-folder of Dokeos?
+ * @todo Use archive-folder of Chamilo?
  */
 class CourseArchiver
 {
@@ -175,7 +175,7 @@ class CourseArchiver
 	 * Read a course-object from a zip-file
 	 * @return course The course
 	 * @param boolean $delete Delete the file after reading the course?
-	 * @todo Check if the archive is a correct Dokeos-export
+	 * @todo Check if the archive is a correct Chamilo-export
 	 */
 	function read_course($filename,$delete = false)
 	{

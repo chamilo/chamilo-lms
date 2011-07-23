@@ -1,12 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Exercises backup script
+ * @package chamilo.backup
+ */
 
 require_once 'Resource.class.php';
 
 /**
  * An Quiz
  * @author Bart Mollet <bart.mollet@hogent.be>
- * @package dokeos.backup
+ * @package chamilo.backup
  */
 class Quiz extends Resource
 {

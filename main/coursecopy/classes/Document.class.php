@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Document class file
+ * @package chamilo.backup
+ */
 require_once 'Resource.class.php';
 
 define('DOCUMENT','file');
@@ -9,7 +12,7 @@ define('FOLDER','folder');
 /**
  * An document
  * @author Bart Mollet <bart.mollet@hogent.be>
- * @package dokeos.backup
+ * @package chamilo.backup
  */
 class Document extends Resource
 {

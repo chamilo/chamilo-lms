@@ -4,9 +4,9 @@
 require_once 'Course.class.php';
 
 /**
- * Class to delete items from a Dokeos-course
+ * Class to delete items from a Chamilo-course
  * @author Bart Mollet <bart.mollet@hogent.be>
- * @package dokeos.backup
+ * @package chamilo.backup
  */
 class CourseRecycler
 {
@@ -25,7 +25,7 @@ class CourseRecycler
     }
     /**
      * Delete all items from the course.
-     * This deletes all items in the course-object from the current Dokeos-
+     * This deletes all items in the course-object from the current Chamilo-
      * course
      */
     function recycle()

@@ -6,7 +6,7 @@ require_once 'Resource.class.php';
 /**
  * An announcement
  * @author Bart Mollet <bart.mollet@hogent.be>
- * @package dokeos.backup
+ * @package chamilo.backup
  */
 class Announcement extends Resource
 {

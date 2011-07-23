@@ -8,7 +8,7 @@ require_once 'Event.class.php';
 /**
  * A course-object to use in Export/Import/Backup/Copy
  * @author Bart Mollet <bart.mollet@hogent.be>
- * @package dokeos.backup
+ * @package chamilo.backup
  */
 class Course
 {

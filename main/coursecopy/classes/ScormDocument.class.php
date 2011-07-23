@@ -1,12 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * SCORM document backup script
+ * @package chamilo.backup
+ */
 require_once 'Resource.class.php';
 
 /**
  * ScormDocument class
  * @author Olivier Brouckaert <oli.brouckaert@dokeos.com>
- * @package dokeos.backup
+ * @package chamilo.backup
  */
 class ScormDocument extends Resource
 {

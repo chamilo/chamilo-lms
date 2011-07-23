@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Forum topic backup script
+ * @package chamilo.backup
+ */
 require_once 'Resource.class.php';
 
 /**

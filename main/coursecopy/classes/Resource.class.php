@@ -1,7 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * All possible resource-types
+ * General resources backup script
+ * @package chamilo.backup
+ */
+/**
+ * Definition of all possible resource-types
  */
 define('RESOURCE_DOCUMENT', 'document');
 define('RESOURCE_GLOSSARY', 'glossary');
@@ -25,11 +29,11 @@ define('RESOURCE_SURVEYINVITATION','survey_invitation');
 define('RESOURCE_WIKI','wiki');
 
 /**
- * Representation of a resource in a Dokeos-course.
+ * Representation of a resource in a Chamilo-course.
  * This is a base class of which real resource-classes (for Links,
  * Documents,...) should be derived.
  * @author Bart Mollet <bart.mollet@hogent.be>s
- * @package  dokeos.backup
+ * @package  chamilo.backup
  * @todo Use the gloabaly defined constants voor tools and remove the RESOURCE_*
  * constants
  */

@@ -1,10 +1,11 @@
 <?php 
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 require_once('Resource.class.php');
 
 /*
  * A course session
- *  @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>
+ *  @author Jhon Hinojosa <jhon.hinojosa@beeznest.com>
+ * @package chamilo.backup
  **/
 class CourseSession extends Resource {
 	var $title; // The title session

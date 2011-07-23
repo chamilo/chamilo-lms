@@ -7,6 +7,7 @@
  */
 /**
  *	Chamilo Metadata: class mdobject for Link-type objects
+ * @package chamilo.metadata
  */
 class mdobject {
 

@@ -8,10 +8,9 @@
 *
 *	@package chamilo.calendar
 */
-
-/*
-		MAIN CODE
-*/
+/**
+ *		MAIN CODE
+ */
 
 session_cache_limiter('public');
 

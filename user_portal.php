@@ -18,7 +18,9 @@
  * @todo display_digest, shouldn't this be removed and be made into an extension?
  */
 
-/* INIT SECTION    */
+/**
+ * INIT SECTION
+ */
 
 // Don't change these settings
 define('SCRIPTVAL_No', 0);

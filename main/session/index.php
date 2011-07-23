@@ -5,7 +5,9 @@
 *   @package chamilo.session
 *   @author Julio Montoya <gugli100@gmail.com>  Beeznest
 */
-
+/**
+ * Code
+ */
 // Language files that should be included.
 $language_file = array('courses', 'index','tracking','exercice', 'admin');
 $cidReset = true;

@@ -1,17 +1,14 @@
-<?php /*                                        <!-- testXht.php, 2005/03/16 -->
-                                     <!-- for XML HTML Templates, 2005/03/16 -->
-
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be                              -->
-
-*/
-
+<?php 
 /**
-==============================================================================
-*	Dokeos Metadata: XHT test and demo
-*
-*	@package dokeos.metadata
-==============================================================================
-*/
+ * testXht.php, 
+ * @date 2005/03/16
+ * @date for XML HTML Templates, 2005/03/16
+ * @copyright 2005 rene.haentjens@UGent.be                              -->
+ * @package chamilo.metadata
+ */
+/**
+ * Chamilo Metadata: XHT test and demo
+ */
 
 require('../../inc/lib/xmd.lib.php');
 require('../../inc/lib/xht.lib.php');

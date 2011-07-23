@@ -1,9 +1,13 @@
 <?php
-
-//English messages for PhpDig
-//Antoine Bajolet - fr - bajolet@toiletoine.net
-//Corrections by Brien Louque
-
+/**
+ * English messages for PhpDig
+ * @author Antoine Bajolet - fr - bajolet@toiletoine.net
+ * @author Corrections by Brien Louque
+ * @package chamilo.metadata
+*/
+/**
+ * Definitions
+ */
 //'keyword' => 'translation'
 $phpdig_mess = array (
 'one_per_line' =>'Enter one link per line',

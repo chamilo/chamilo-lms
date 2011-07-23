@@ -1,25 +1,19 @@
-<?php /*                                      <!-- Dokeos metadata/index.php -->
-                                                             <!-- 2005/05/19 -->
-
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
-*/
-
+<?php
 /**
-==============================================================================
-*	Dokeos Metadata: view/edit metadata of a Dokeos course object
-*
-*   URL parameters:
-*   - eid=  entry-id = object-id = type.identifier, e.g. 'Document.12';
-*   - lfn=  filename of a language file, default= 'md_' + type, e.g. 'md_doc';
-*   - htt=  HTML template file (same dir as script), default= same as lfn;
-*   - dbg=  debuginfo start number, e.g. 10000
-*
-*	@package dokeos.metadata
-==============================================================================
-*/
-
-
+ * Chamilo metadata/index.php
+ * @date 2005/05/19
+ * @copyright 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+ * @package chamilo.metadata
+ */
+/**
+ * Chamilo Metadata: view/edit metadata of a Chamilo course object
+ * URL parameters:
+ *   - eid=  entry-id = object-id = type.identifier, e.g. 'Document.12';
+ *   - lfn=  filename of a language file, default= 'md_' + type, e.g. 'md_doc';
+ *   - htt=  HTML template file (same dir as script), default= same as lfn;
+ *   - dbg=  debuginfo start number, e.g. 10000
+ *
+ */
 // PRELIMS -------------------------------------------------------------------->
 
 require_once '../inc/global.inc.php';

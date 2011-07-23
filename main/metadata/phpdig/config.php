@@ -14,7 +14,13 @@ Do NOT edit or remove this copyright or licence information upon redistribution.
 If you modify code and redistribute, you may ADD your copyright to this notice.
 ----------------------------------------------------------------------------------
 */
-
+/**
+ * phpDig config file
+ * @package chamilo.metadata
+ */ 
+/**
+ * Init
+ */
 //---------DEFAULT VALUES
 
 // error_reporting(E_ALL);

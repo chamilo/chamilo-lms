@@ -1,24 +1,17 @@
-<?php /*                                     <!-- Dokeos metadata/search.php -->
-                                                             <!-- 2005/09/20 -->
-
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
-*/
-
+<?php
 /**
-==============================================================================
-*	Dokeos Metadata: search Dokeos course objects via their metadata
-*
-*   URL parameters:
-*   - type= type, must be 'Mix' (currently: Document + Scorm + Link)
-*   - lfn=  filename of a language file, e.g. 'md_doc', default= 'md_' + type;
-*   - htt=  HTML template file (same dir as script), default= 'mds_' + type.
-*
-*	@package dokeos.metadata
-==============================================================================
-*/
-
-
+ * Chamilo metadata/search.php
+ * @date 2005/09/20
+ * @copyright 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+ * @package dokeos.metadata
+ */
+/**
+ *	Chamilo Metadata: search Chamilo course objects via their metadata
+ *   URL parameters:
+ *   - type= type, must be 'Mix' (currently: Document + Scorm + Link)
+ *   - lfn=  filename of a language file, e.g. 'md_doc', default= 'md_' + type;
+ *   - htt=  HTML template file (same dir as script), default= 'mds_' + type.
+ */
 // PRELIMS -------------------------------------------------------------------->
 
 require("md_funcs.php");

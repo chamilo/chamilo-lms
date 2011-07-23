@@ -1,20 +1,14 @@
-<?php /*                                                  <!-- mdApiTest.php -->
-                                                             <!-- 2004/09/30 -->
-
-<!-- Copyright (C) 2004 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
-*/
-
+<?php
 /**
-==============================================================================
-*	Dokeos Metadata: MD API test and demo
-*
+ * mdApiTest.php
+ * @date 2004/09/30
+ * @copyright 2004 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+ * @package chamilo.metadata
+ */
+/**
+*	Chamilo Metadata: MD API test and demo
 *   The API allows other Dokeos scripts to define & manipulate metadata
-*
 *   In this example, MD is defined for 'Document.1001', 1002, 1003
-*
-*	@package dokeos.metadata
-==============================================================================
 */
 
 require("../md_funcs.php");

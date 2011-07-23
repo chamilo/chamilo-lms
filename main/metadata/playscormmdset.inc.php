@@ -1,22 +1,15 @@
-<?php /*                         <!-- Dokeos metadata/playscormmdset.inc.php -->
-                                                             <!-- 2005/11/16 -->
-
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
-*/
-
+<?php 
+/** 
+ * Chamilo metadata/playscormmdset.inc.php
+ * @date 2005/11/16
+ * Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+ * @package chamilo.metadata
+ */
 /**
-==============================================================================
-*	Dokeos Metadata: include file for accessing Scorm metadata
-*
-*   This script is to be included from /coursedir/scorm/dir.../index.php,
-*   after setting $scormid (Dokeos document root).
-*
-*	@package dokeos.metadata
-==============================================================================
-*/
-
-
+ * Chamilo Metadata: include file for accessing Scorm metadata
+ * This script is to be included from /coursedir/scorm/dir.../index.php,
+ * after setting $scormid (Chamilo document root).
+ */
 // PRELIMS -------------------------------------------------------------------->
 
 if (!isset($scormid)) exit();

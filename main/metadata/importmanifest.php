@@ -1,19 +1,13 @@
-<?php /*                             <!-- Dokeos metadata/importmanifest.php -->
-                                                             <!-- 2006/12/15 -->
-
-<!-- Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
-*/
-
+<?php 
+/** 
+ * Chamilo metadata/importmanifest.php
+ * @date 2006/12/15
+ * Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+ * @package chamilo.metadata
+ */
 /**
-==============================================================================
-*	Dokeos Metadata: create and manage table entries for SCORM package
-*
-*	@package dokeos.metadata
-==============================================================================
-*/
-
-
+ *	Chamilo Metadata: create and manage table entries for SCORM package
+ */
 // PRELIMS -------------------------------------------------------------------->
 
 $getpostvars = array('sdisub','workWith','sdi','smo'); require('md_funcs.php');

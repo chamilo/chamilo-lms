@@ -1,19 +1,13 @@
-<?php /*                                 <!-- Dokeos metadata/statistics.php -->
-                                                             <!-- 2005/02/02 -->
-
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
-*/
-
+<?php 
 /**
-==============================================================================
-*	Dokeos Metadata: statistics about metadata
-*
-*	@package dokeos.metadata
-==============================================================================
-*/
-
-
+ * Chamilo metadata/statistics.php
+ * @date 2005/02/02
+ * @copyright 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+ * @package chamilo.metadata
+ */
+/**
+ *	Chamilo Metadata: statistics about metadata
+ */
 // PRELIMS -------------------------------------------------------------------->
 
 require('md_funcs.php');

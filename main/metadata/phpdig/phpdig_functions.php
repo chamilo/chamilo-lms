@@ -14,7 +14,13 @@ Do NOT edit or remove this copyright or licence information upon redistribution.
 If you modify code and redistribute, you may ADD your copyright to this notice.
 ----------------------------------------------------------------------------------
 */
-
+/**
+ * PhpDig
+ * @package chamilo.metadata
+ */
+/**
+ * init
+ */
 define('CONFIG_CHECK','check'); // do not edit this line
 
 //-------------UTILS FUNCTIONS

@@ -1,34 +1,32 @@
-<?php /*                                  <!-- Dokeos metadata/md_phpdig.php -->
-                                                             <!-- 2005/03/24 -->
-
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
-*/
-
+<?php
 /**
-==============================================================================
-*	Dokeos Metadata: PhpDig connection
-*
-*   If PhpDig 1.8.3 is installed in a Dokeos course site, then MD items
-*   can be indexed for search (via PhpDig's search screen search.php).
-*
-*   The functions below inject the words of metadata/indexabletext directly
-*   into PhpDig's tables. Affected tables:
-*
-*   keywords: key_id, twoletters, keyword (lowercase, accents removed)
-*
-*   sites:    site_id, site_url (e.g. http://xx.yy.zz/), upddate, ...
-*
-*   spider:   spider_id, site_id, upddate, num_words, first_words,
-*                   path (e.g. uu/vv/ww/), file (e.g. index.php?sid=xxx), ...
-*
-*   engine:   spider_id, key_id, weight
-*
-*   Most of the function code is a simplified version of real PhpDig code
-*   released under the GNU GPL V2, see www.phpdig.net.
-*
-*	@package dokeos.metadata
-==============================================================================
+ * Chamilo metadata/md_phpdig.php
+ * @date 2005/03/24
+ * @copyright 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+ * @package chamilo.metadata
+ *
+ */
+/**
+ *	Chamilo Metadata: PhpDig connection
+ *
+ *   If PhpDig 1.8.3 is installed in a Chamilo course site, then MD items
+ *   can be indexed for search (via PhpDig's search screen search.php).
+ *
+ *   The functions below inject the words of metadata/indexabletext directly
+ *   into PhpDig's tables. Affected tables:
+ *
+ *   keywords: key_id, twoletters, keyword (lowercase, accents removed)
+ *
+ *   sites:    site_id, site_url (e.g. http://xx.yy.zz/), upddate, ...
+ *
+ *   spider:   spider_id, site_id, upddate, num_words, first_words,
+ *                   path (e.g. uu/vv/ww/), file (e.g. index.php?sid=xxx), ...
+ *
+ *   engine:   spider_id, key_id, weight
+ *
+ *   Most of the function code is a simplified version of real PhpDig code
+ *   released under the GNU GPL V2, see www.phpdig.net.
+ *
 */
 
 

@@ -14,10 +14,14 @@ Do NOT edit or remove this copyright or licence information upon redistribution.
 If you modify code and redistribute, you may ADD your copyright to this notice.
 ----------------------------------------------------------------------------------
 */
-
-//===============================================
-// do the search and display the results
-// can be called in any page
+/**
+ * phpDig search functions
+ * @package chamilo.metadata
+ */
+/**
+ * do the search and display the results
+ * can be called in any page
+ */
 function phpdigSearch($id_connect, $query_string, $option='start', $refine=0,
                        $refine_url='', $lim_start=0, $limite=10, $browse=0,
                        $site=0, $path='', $relative_script_path = '.', $template='', $adlog_flag=0, $rssdf='', $template_demo='')

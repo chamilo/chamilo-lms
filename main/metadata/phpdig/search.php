@@ -1,8 +1,11 @@
-<?php /*                                       <!-- Dokeos phpdig/search.php -->
-                                                             <!-- 2006/12/14 -->
-
-<!-- Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
+<?php 
+/**
+ * Chamilo phpdig/search.php
+ * @date 2006/12/14
+ * @copyright  2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+ * @package chamilo.metadata
+ */
+/*
 --------------------------------------------------------------------------------
 PhpDig Version 1.8.6 is provided WITHOUT warranty under the GNU/GPL license.
 See the LICENSE file for more information about the GNU/GPL license.
@@ -16,15 +19,9 @@ Do NOT edit or remove this copyright or licence information upon redistribution.
 If you modify code and redistribute, you may ADD your copyright to this notice.
 --------------------------------------------------------------------------------
 */
-
 /**
-==============================================================================
-*   Dokeos Metadata: search Dokeos course objects via PhpDig 1.8.6
-*
-*   customized search.php 1.8.6 for Dokeos 1.6 assumes $template == "array"
-*
-*   @package dokeos.metadata
-==============================================================================
+*   Chamilo Metadata: search Chamilo course objects via PhpDig 1.8.6
+*   customized search.php 1.8.6 for Chamilo 1.6 assumes $template == "array"
 */
 
 // name of the language file that needs to be included

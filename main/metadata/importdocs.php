@@ -1,21 +1,14 @@
-<?php /*                                 <!-- Dokeos metadata/importdocs.php -->
-                                                             <!-- 2005/09/20 -->
-
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
-*/
-
+<?php 
 /**
-==============================================================================
-*	Dokeos Metadata: index all course documents with PhpDig
-*
-*	@package dokeos.metadata
-==============================================================================
-*/
-
-
+ * Chamilo metadata/importdocs.php
+ * 2005/09/20
+ * Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+ * @package chamilo.metadata
+ */
+/**
+ * Chamilo Metadata: index all course documents with PhpDig
+ */
 // PRELIMS -------------------------------------------------------------------->
-
 $getpostvars = array('dmo'); require('md_funcs.php');
 
 define('EID_TYPE', 'Document'); define('AFTER_DOT', strlen(EID_TYPE) + 1);

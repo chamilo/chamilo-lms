@@ -1,20 +1,14 @@
-<?php /*                                    <!-- testMiniDom.php, 2005/03/16 -->
-                                            <!-- for XML MiniDom, 2005/03/16 -->
-
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be                              -->
-
-*/
-
+<?php
 /**
-==============================================================================
-*	Dokeos Metadata: XMD test and demo
-*
-*	@package dokeos.metadata
-==============================================================================
-*/
-
-
-
+ * testMiniDom.php
+ * @date 2005/03/16
+ * @date for XML MiniDom, 2005/03/16
+ * @copyright (C) 2005 rene.haentjens@UGent.be
+ *	@package chamilo.metadata
+ */
+/**
+ *	Chamilo Metadata: XMD test and demo
+ */
 function file_get_contents_n($filename)  // normalize \r and \r\n to \n
 {
     $fp = fopen($filename, 'rb');

@@ -1,15 +1,14 @@
-<?php /*                                   <!-- Dokeos metadata/md_funcs.php -->
-                                                             <!-- 2006/12/15 -->
-
-<!-- Copyright (C) 2006 rene.haentjens@UGent.be - see note at end of text    -->
-
-*/
-
+<?php 
 /**
-==============================================================================
-*   Dokeos Metadata: common functions and mdstore class
+ * Chamilo metadata/md_funcs.php -->
+ * 2006/12/15
+ * Copyright (C) 2006 rene.haentjens@UGent.be - see note at end of text    -->
+ * @package chamilo.metadata
+ */
+/**
+*   Chamilo Metadata: common functions and mdstore class
 *
-*   This script requires xmd.lib.php and xht.lib.php (Dokeos inc/lib).
+*   This script requires xmd.lib.php and xht.lib.php (Chamilo inc/lib).
 *
 *   Note on the funny characters used in mds_update_xml_and_mdt:
 *
@@ -25,11 +24,7 @@
 *   path1,path2,...;subpath=value   for all elements in path1, path2, ...
 *                   assign value to subpath (see also xmd_update_many)
 *
-*   @package dokeos.metadata
-==============================================================================
 */
-
-
 // FETCH GET/POST-DATA; GENERAL FUNCTIONS ------------------------------------->
 
 if (isset($getpostvars) && is_array($getpostvars))

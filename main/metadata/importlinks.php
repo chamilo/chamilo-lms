@@ -1,16 +1,12 @@
-<?php /*                                <!-- Dokeos metadata/importlinks.php -->
-                                                             <!-- 2006/12/15 -->
-
-<!-- Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
-*/
-
+<?php
+/** 
+ * Chamilo metadata/importlinks.php
+ * @date 2006/12/15
+ * Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+ * @package chamilo.metadata
+ */
 /**
-==============================================================================
-*	Dokeos Metadata: create table entries for a category of Link-type items
-*
-*	@package dokeos.metadata
-==============================================================================
+*	Chamilo Metadata: create table entries for a category of Link-type items
 */
 
 

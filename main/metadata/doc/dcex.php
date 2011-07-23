@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Test file for metadata
+ * @package chamilo.metadata
+ */
+/**
+ * Init
+ */
 require_once api_get_path(SYS_CODE_PATH).'metadata/md_funcs.php'; $mdStore = new mdstore(TRUE);
 require_once api_get_path(LIBRARY_PATH) . 'xmd.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'xht.lib.php';

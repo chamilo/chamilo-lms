@@ -1,19 +1,13 @@
-<?php /*                        <!-- Dokeos metadata/udate_indexableText.php -->
-                                                             <!-- 2005/03/16 -->
-
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
-*/
-
+<?php
 /**
-==============================================================================
-*	Dokeos Metadata: update indexabletext for all eid_type records
-*
-*	@package dokeos.metadata
-==============================================================================
-*/
-
-
+ * Chamilo metadata/udate_indexableText.php
+ * @date 2005/03/16
+ * @copyright 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+ */
+/**
+ * Chamilo Metadata: update indexabletext for all eid_type records
+ * @package chamilo.metadata
+ */
 // PRELIMS -------------------------------------------------------------------->
 
 require('md_funcs.php');

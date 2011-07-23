@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This script should be called by a properly set cron process on your server.
  * For more information, check the installation guide in the documentation 
  * folder. 

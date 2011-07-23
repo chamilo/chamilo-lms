@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	This class allows to manage the session. Session is stored in the database.
  *
  *	@package chamilo.library
  */
-
+/**
+ *	@package chamilo.library
+ */
 class session_handler {
 
 	// TODO: Hm, these variables are public.

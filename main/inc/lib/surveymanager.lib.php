@@ -484,7 +484,7 @@ class SurveyManager {
 /**
  *
  * Manage the "versioning" of a conditional survey
- *
+ * @package chamilo.survey
  * */
 class SurveyTree {
 	public $surveylist;

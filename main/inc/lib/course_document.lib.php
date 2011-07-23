@@ -1,7 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-
+/**
+ * @package chamilo.include
+ */
+/**
+ * Code
+ */
 function getlist ($directory) {
 	//global $delim, $win;
 	if ($d = @opendir($directory)) {

@@ -7,7 +7,10 @@
 * @author Julio Montoya		<gugli100@gmail.com>
 * @package chamilo.login
 */
-
+/**
+ * Class
+ * @package chamilo.login
+ */
 class Login 
 {
 	/**

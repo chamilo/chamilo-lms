@@ -11,7 +11,10 @@
 * @package chamilo.library
 * @todo convert queries to use Database API
 */
-
+/**
+ * Class
+ * @package chamilo.library
+ */
 class ExerciseShowFunctions {
 
 	/**

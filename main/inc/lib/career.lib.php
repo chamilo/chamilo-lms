@@ -1,20 +1,22 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	This class provides methods for the notebook management.
 *	Include/require it in your code to use its features.
 *	@package chamilo.library
 */
-
+/**
+ * Code
+ */
 require_once 'model.lib.php';
 require_once 'promotion.lib.php';
 require_once 'fckeditor/fckeditor.php';
 
 define ('CAREER_STATUS_ACTIVE',  1);
 define ('CAREER_STATUS_INACTIVE',0);
-
-
+/**
+ * @package chamilo.library
+ */
 class Career extends Model {
     
     var $table;

@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * 
  * * Class that is responsible for generating diagnostic information about the system
@@ -12,7 +11,10 @@
  * @author Julio Montoya <gugli100@gmail.com>, 2010, port to chamilo 1.8.7, Some fixes
  * 
  */
-
+/**
+ * Diagnoser class
+ * @package chamilo.diagnoser
+ */
 class Diagnoser
 {
     /**

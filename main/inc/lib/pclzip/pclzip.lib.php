@@ -193,22 +193,22 @@ if (!function_exists('gzopen') && function_exists('gzopen64')) {
   define( 'PCLZIP_CB_POST_DELETE', 78008 );
   */
 
-  // --------------------------------------------------------------------------------
-  // Class : PclZip
-  // Description :
-  //   PclZip is the class that represent a Zip archive.
-  //   The public methods allow the manipulation of the archive.
-  // Attributes :
-  //   Attributes must not be accessed directly.
-  // Methods :
-  //   PclZip() : Object creator
-  //   create() : Creates the Zip archive
-  //   listContent() : List the content of the Zip archive
-  //   extract() : Extract the content of the archive
-  //   properties() : List the properties of the archive
-  // --------------------------------------------------------------------------------
-  class PclZip
-  {
+/**
+ * Class : PclZip
+ * Description :
+ *   PclZip is the class that represent a Zip archive.
+ *   The public methods allow the manipulation of the archive.
+ * Attributes :
+ *   Attributes must not be accessed directly.
+ * Methods :
+ *   PclZip() : Object creator
+ *   create() : Creates the Zip archive
+ *   listContent() : List the content of the Zip archive
+ *   extract() : Extract the content of the archive
+ *   properties() : List the properties of the archive
+ * @package chamilo.include.pclzip
+ */
+class PclZip {
     // ----- Filename of the zip file
     var $zipname = '';
 

@@ -1,5 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * @package chamilo.library
+ */
+/**
+ * Code
+ */
 define('VISIBLE_GUEST', 1);
 define('VISIBLE_STUDENT', 2);
 define('VISIBLE_TEACHER', 3);
@@ -8,9 +14,7 @@ define('VISIBLE_TEACHER', 3);
 *
 *	@package chamilo.library
 */
-
-class SystemAnnouncementManager
-{
+class SystemAnnouncementManager {
 	/**
 	 * Displays all announcements
 	 * @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER

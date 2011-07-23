@@ -9,8 +9,9 @@
 define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
 require_once _MPDF_PATH.'mpdf.php';
 /**
-*   @package chamilo.library
-*/
+ * Class
+ * @package chamilo.library
+ */
 class PDF {
     
     var $pdf;    
@@ -181,7 +182,7 @@ class PDF {
      * @param   string  valid html 
      * @param   string  pdf name   
      * @param   string  course code (if you are using html that are located in the document tool you must provide this) 
-     * @return  
+     * @return  string Web path
      */    
     public function content_to_pdf($document_html, $css = '', $pdf_name = '', $course_code = null) {
         

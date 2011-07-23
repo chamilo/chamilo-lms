@@ -1330,7 +1330,7 @@ class CourseManager {
      * Users of this library should consider this function private,
      * please call attempt_create_virtual_course instead of this one.
      *
-     * @note The virtual course 'owner' id (the first course admin) is set to the CURRENT user id.
+     * note: The virtual course 'owner' id (the first course admin) is set to the CURRENT user id.
      * @param  string  Course code
      * @param  string  Course title
      * @param  string  Wanted course code

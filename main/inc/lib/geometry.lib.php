@@ -13,7 +13,6 @@ DEFINE('DEBUG', false);
  * @param max[x]    X resolution
  * @param max[y]    Y resolution
  * @returns an array such as: for all i in [0..max[x][ : for all j in [0..max[y][ : array[i][j] = FALSE
- * @package chamilo.include.geometry
  */
 function poly_init($max) {
     return array_fill(0, $max["x"]-1, 

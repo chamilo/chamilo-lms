@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Suggest words to search
  * @package chamilo.search
  */
@@ -103,4 +103,3 @@ $q = strtolower($_GET["q"]);
 if (!$q) return;
 //echo $q . "| value\n";
 get_suggestions_from_search_engine($q);
-?>

@@ -5,16 +5,14 @@
 *	@author Denes Nagy - further improvements for learning path builder
 *	@author Roan Embrechts - refactoring to improve code organisation
 *	@package chamilo.resourcelinker
-*   @todo use the constants for the tools
+*       @todo use the constants for the tools
 * 	@todo use Database API instead of creating table names locally.
-* 
-*   @todo This class is used?
-
+*       @todo This class is used?
 */
 
-/*
-		INIT SECTION
-*/
+/**
+ * INIT SECTION
+ */
 
 // name of the language file that needs to be included
 //$language_file = "resourcelinker";// TODO: Repeated deleting and moving the rest of this lang file to trad4all
@@ -24,12 +22,11 @@
 include_once(api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
 include(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 
-/*
-		FUNCTIONS
+/**
+ * FUNCTIONS
 */
 
-function unset_session_resources()
-{
+function unset_session_resources() {
 	$_SESSION['addedresource']='';
 	$_SESSION['addedresourceid']='';
 	api_session_unregister('addedresource');
@@ -188,7 +185,7 @@ function show_documents($folder)
  * Checks wether something is a file or a folder
  * 0 means file, 1 means folder
  * @param $filefolder
- * @todo: use true and false instead of 1 and 0.
+ * @todo use true and false instead of 1 and 0.
  */
 function file_or_folder($filefolder)
 {

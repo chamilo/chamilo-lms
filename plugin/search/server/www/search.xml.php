@@ -1,4 +1,11 @@
 <?php
+/**
+ * Template file for Mnogosearch
+ * @package chamilo.plugin.search
+ */
+/**
+ * Redirect if not loaded by expected script
+ */
 if(preg_match('/.*search\.htm/',$_SERVER['PHP_SELF'])){
   header('location:searchit.php');
 }

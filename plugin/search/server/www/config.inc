@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Mnogosearch plugin config file
+ * @package chamilo.plugin.search
+ */
+/**
+ * Settings
+ */
 // maximal page number to view
 $MAX_NP=1;
 

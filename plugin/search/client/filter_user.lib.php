@@ -85,7 +85,7 @@ function access_check($url,$default=true){
  *
  * This function should only be used if needed by a funny course-name rule
  * @param	string	The string to transform
- * @result	string	The transformed string
+ * @return	string	The transformed string
  */
 function subst_course_code($string){
   $matches = array();

@@ -1,6 +1,10 @@
 <?php
 /**
  * This script initiates a videoconference session, calling the BigBlueButton API
+ * @package chamilo.plugin.bigbluebutton
+ */
+/**
+ * Initialization
  */
 require_once '../../main/inc/global.inc.php';
 require_once 'bbb.lib.php';

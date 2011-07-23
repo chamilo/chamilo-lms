@@ -4,8 +4,8 @@
  * represents the list of results to the term searched.
  * It parses the XML document, checks user permissions and displays a set of results in a nice
  * format.
- * @package dokeos.search
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @package chamilo.plugin.search
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 /**
  * Variables
@@ -46,7 +46,8 @@ else
  * @param	string	Result title
  * @param	string	Result URL
  * @param	string	Short excerpt of the result document
- * @param
+ * @param	string  Date
+ * @param	string  Rating
  */
 function result_output($id,$title,$url='',$excerpt='',$date='',$rating=''){
 	if(empty($id) OR empty($title)){return false;}

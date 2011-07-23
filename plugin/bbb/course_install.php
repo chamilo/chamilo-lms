@@ -1,6 +1,10 @@
 <?php
 /**
  * This script should be included by add_course.lib.inc.php when adding a new course
+ * @package chamilo.plugin.bigbluebutton
+ */
+/**
+ * Initialization
  */
 //$cdb is defined inside the fillDbCourse() function which is calling this script
 $t_course = Database::get_course_table(TABLE_COURSE_SETTING,$cdb);

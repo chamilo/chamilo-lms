@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *  Clean URls for the Social Network
  *
@@ -11,7 +10,7 @@
  *  virtualhost configuration
  *
  *  More improvements will come in next versions of Chamilo maybe in the 1.8.8
- *
+ *  @package chamilo.main
  */
 /**
  * Variables definitions and inclusions

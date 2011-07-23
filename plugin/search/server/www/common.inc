@@ -1,6 +1,7 @@
 <?php
 /**
  * Library for the common formatting functions
+ * @package chamilo.plugin.search
  */
 /**
  * Exit, dropping the temporary tables just before that

@@ -1,10 +1,10 @@
 <?php
-
 /**
  * Initialisation code + library of functions to process to the initialisation in
  * a varied set of ways.
  * This script is a modified version that can only be used with the php extension >= 3.2.32
  * and PHP version 4.2 or higher
+ * @package chamilo.plugin.search
  */
 /**
  * Faking the register_globals code - very bad thing - should escape all vars

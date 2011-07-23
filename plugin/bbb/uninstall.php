@@ -3,6 +3,10 @@
  * This script is included by main/admin/settings.lib.php when unselecting a plugin 
  * and is meant to remove things installed by the install.php script in both
  * the global database and the courses tables
+ * @package chamilo.plugin.bigbluebutton
+ */
+/**
+ * Queries
  */
 $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);

@@ -3,6 +3,10 @@
  * This file has to be placed at the root level of your Dokeos portal and has
  * to be referenced inside the indexer.conf file on your indexing server, as the
  * first URL to index on your portal.
+ * @package chamilo.plugin.search
+ */
+/**
+ * Initialization
  */
 //the ip_address_of_search_server is the IP address from which your search
 // (or indexing) server will connect to your portal to index it

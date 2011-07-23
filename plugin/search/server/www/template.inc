@@ -4,6 +4,7 @@
  * The functions declared here mainly read the template and write the
  * result output using this template.
  * Modified version - the PHP extension must be higher than 3.2.32 and PHP must be higher than 4.2
+ * @package chamilo.plugin.search
  */
 /**
  * Initialise arrays

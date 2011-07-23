@@ -1,11 +1,14 @@
 <?php
-
-/*   mnoGoSearch-php v.3.2.10
+/**
+ *   mnoGoSearch-php v.3.2.10
  *   for mnoGoSearch ( formely known as UdmSearch ) free web search engine
  *   (C) 2001 by Sergey Kartashoff <gluke@mail.ru>,
  *               mnoGoSearch Developers Team <devel@mnogosearch.org>
+ *   @package chamilo.plugin.search
  */
-
+/**
+ * Initialization
+ */
 if (!extension_loaded('mnogosearch')) {
 	print "<b>This script requires PHP4.3.0+ with mnoGoSearch extension</b>";
 	exit;

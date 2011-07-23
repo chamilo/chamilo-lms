@@ -2,9 +2,16 @@
 /**
  * This script is included by main/admin/settings.lib.php and generally 
  * includes things to execute in the main database (settings_current table)
+ * @package chamilo.plugin.bigbluebutton
+ */
+/**
+ * Initialization
  */
 $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 $t_options  = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
+/**
+ * Queries
+ */
 $sql = "INSERT INTO $t_settings
     (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) 
     VALUES

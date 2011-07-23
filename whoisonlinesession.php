@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /dokeos_license.txt */
-
+/**
+ * Shows who is online in a specific session
+ * @package chamilo.main
+ */
+/**
+ * Initialization
+ */
 // name of the language file that needs to be included
 $language_file = array ('index', 'chat', 'tracking');
 
@@ -11,12 +17,10 @@ $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-/*
------------------------------------------------------------
-	Header
-	include the HTTP, HTML headers plus the top banner
------------------------------------------------------------
-*/
+/**
+ * Header
+ * include the HTTP, HTML headers plus the top banner
+ */
 
 Display::display_header(get_lang('UserOnlineListSession'));
 ?>

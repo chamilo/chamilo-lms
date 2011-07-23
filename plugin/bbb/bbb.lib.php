@@ -4,6 +4,7 @@
  * It is based on code written by Dual Code Inc in GNU/GPLv2
  * Copyright (C) 2010 Dual Code Inc. (www.dualcode.com)
  * Copyright (C) 2010 BeezNest Belgium SPRL (www.beeznest.com) - Yannick Warnier - y@beeznest.com
+ * @package chamilo.plugin.bigbluebutton
 */
 /**
  * Inserts an item into the plugin_bbb table

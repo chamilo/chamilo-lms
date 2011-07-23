@@ -1,4 +1,11 @@
 <?php
+/**
+ * Action script for example date plugin
+ * @package chamilo.plugin.date
+ */
+/**
+ * Initialization
+ */
 $convert_lang_to_code = array(
   "english" => "en_US",
   "french"  => "fr_BE",
@@ -12,4 +19,3 @@ if(!empty($_SESSION['user_language_choice']) && !empty($convert_lang_to_code[$_S
   $locale = setlocale(LC_TIME,$code);
 }
 $date = strftime('%c');
-?>

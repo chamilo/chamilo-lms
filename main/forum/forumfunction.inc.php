@@ -21,7 +21,9 @@
  * @todo displaying icons => display library
  * @todo complete the missing phpdoc the correct order should be
  */
-
+/**
+ * code
+ */
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
@@ -1737,8 +1739,7 @@ function get_forum_information($forum_id) {
  * This function retrieves all the information of a given forumcategory id
  *
  * @param $forum_id integer that indicates the forum
- * @return array returns if there are category
- * @return bool returns if there aren't category
+ * @return array returns if there are category or bool returns if there aren't category
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
@@ -2152,7 +2153,7 @@ function store_theme_qualify($user_id, $thread_id, $thread_qualify = 0, $qualify
  * @param integer contains the information the current user id
  * @param integer contains the information the current thread id
  * @return integer qualify
- * @example $option=1 obtained the qualification of the current thread
+ * <code> $option=1 obtained the qualification of the current thread</code>
  * @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
  * @version October 2008, dokeos  1.8.6
  */
@@ -2213,7 +2214,7 @@ function get_historical_qualify($user_id, $thread_id, $opt) {
  * @param integer contains the information the current thread id
  * @param integer contains the information the current qualify
  * @return void
- * @example $option=1 obtained the qualification of the current thread
+ * <code>$option=1 obtained the qualification of the current thread</code>
  * @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
  * @version October 2008, dokeos  1.8.6
  */
@@ -2639,9 +2640,6 @@ function increase_thread_view($thread_id) {
 /**
  * The relies counter gets increased every time somebody replies to the thread
  *
- * @param
- * @return
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
@@ -2710,9 +2708,6 @@ function get_whats_new() {
 
 /**
  * With this function we find the number of posts and topics in a given forum.
- *
- * @param
- * @return
  *
  * @todo consider to call this function only once and let it return an array where the key is the forum id and the value is an array with number_of_topics and number of post
  * as key of this array and the value as a value. This could reduce the number of queries needed (especially when there are more forums)

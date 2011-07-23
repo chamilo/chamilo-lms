@@ -1,16 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
- *	@package chamilo.survey
- * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
- *	@author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
- * 	@version $Id: survey.lib.php 22296 2009-07-22 22:05:50Z cfasanando $
- *
- * 	@todo move this file to inc/lib
- * 	@todo use consistent naming for the functions (save vs store for instance)
+ * @package chamilo.survey
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
+ * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
+ * @version $Id: survey.lib.php 22296 2009-07-22 22:05:50Z cfasanando $
+ * @todo move this file to inc/lib
+ * @todo use consistent naming for the functions (save vs store for instance)
  */
-
+/**
+ * Code
+ */
 $config['survey']['debug'] = false;
 //require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
@@ -24,8 +24,10 @@ $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 		  setFocus();
 		});
 	</script>';
-
-
+/**
+ * Survey manager class
+ * @package chamilo.survey
+ */
 class survey_manager {
 
 	/***
@@ -39,7 +41,6 @@ class survey_manager {
 	 * @param boolean $shared this parameter determines if we have to get the information of a survey from the central (shared) database or from the
 	 * 		  course database
 	 * @param string course code optional
-	 * @return array
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
@@ -980,7 +981,6 @@ class survey_manager {
 	 * This function stores the options of the questions in the table
 	 *
 	 * @param array $form_content
-	 * @return
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 *
@@ -1027,7 +1027,6 @@ class survey_manager {
 	 * This function stores the options of the questions in the shared table
 	 *
 	 * @param array $form_content
-	 * @return
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007

@@ -15,13 +15,15 @@
  * - new view option: nested view
  * - quoting a message
  *
- * @Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @Copyright Ghent University
- * @Copyright Patrick Cool
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @copyright Ghent University
+ * @copyright Patrick Cool
  *
  * @package chamilo.forum
  */
-
+/**
+ * Code
+ */
 // Name of the language file that needs to be included.
 $language_file = 'forum';
 

@@ -25,7 +25,7 @@ $MonthsLong = api_get_months_long();
 
 /**
 * Retrieves all the agenda items from the table
-* @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @author Yannick Warnier <yannick.warnier@dokeos.com> - cleanup
 * @param integer $month: the integer value of the month we are viewing
 * @param integer $year: the 4-digit year indication e.g. 2005
@@ -34,7 +34,7 @@ $MonthsLong = api_get_months_long();
 
 /**
 * show the mini calender of the given month
-* @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @param array an array containing all the agenda items for the given month
 * @param integer $month: the integer value of the month we are viewing
 * @param integer $year: the 4-digit year indication e.g. 2005
@@ -110,14 +110,14 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName) {
 }
 /**
 * show the calender of the given month
-* @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @param integer $month: the integer value of the month we are viewing
 * @param integer $year: the 4-digit year indication e.g. 2005
 * @return html code
 */
 /**
 * returns all the javascript that is required for easily selecting the target people/groups this goes into the $htmlHeadXtra[] array
-* @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return javascript code
 */
 function to_javascript() {
@@ -284,7 +284,7 @@ function validate_date()
 
 /**
 * returns the javascript for setting a filter. This is a jump menu
-* @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return javascript code
 */
 function user_group_filter_javascript() {
@@ -378,12 +378,12 @@ function display_monthcalendar($month, $year) {
 }
 /**
 * this function shows the form with the user that were not selected
-* @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return html code
 */
 /**
 * This function stores the Agenda Item in the table calendar_event and updates the item_property table also
-* @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return integer the id of the last added agenda item
 */
 function store_new_agenda_item() {
@@ -542,7 +542,7 @@ function store_edited_agenda_item() {
 
 /**
 * This function stores the Agenda Item in the table calendar_event and updates the item_property table also (after an edit)
-* @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
 function save_edit_agenda_item($id, $title, $content, $start_date, $end_date) {
 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);

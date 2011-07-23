@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 * Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action
 * @author Christian Fasanando <christian1827@gmail.com>
 * @author Julio Montoya <gugli100@gmail.com> Bugfixes session support
 * @package chamilo.course_progress
 */
-
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file = array ('course_description', 'pedaSuggest', 'userInfo', 'admin');
 

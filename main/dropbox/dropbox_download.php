@@ -1,6 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * @package chamilo.dropbox
+ */
+/**
+ * Code
+ */
 /*	INIT SECTION */
 
 // We cannot use dropbox_init.inc.php because this one already outputs data.

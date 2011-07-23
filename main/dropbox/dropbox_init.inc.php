@@ -23,7 +23,9 @@
  				extended feedback
  * @package chamilo.dropbox
  */
-
+/**
+ * Code
+ */
 /*	INIT SECTION */
 
 $language_file = 'dropbox';

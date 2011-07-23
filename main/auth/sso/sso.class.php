@@ -207,7 +207,7 @@ class sso {
      * Decode the cookie (this function may vary depending on the
      * Single Sign On implementation
      * @param	string	Encoded cookie
-     * @result  array   Parsed and unencoded cookie
+     * @return  array   Parsed and unencoded cookie
      */
     private function decode_cookie($cookie) {
         return unserialize(base64_decode($cookie));

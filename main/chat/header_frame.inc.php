@@ -1,17 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
- *	Header of each frame of the Chat tool
+ * Header of each frame of the Chat tool
  *
- *	@author Olivier Brouckaert
- *  @modified by Denes Nagy
- *	@package chamilo.chat
+ * @author Olivier Brouckaert
+ * Modified by Denes Nagy
+ * @package chamilo.chat
  */
 /**
  * Code
  */
-
 if (!defined('FRAME')) {
 	exit();
 }

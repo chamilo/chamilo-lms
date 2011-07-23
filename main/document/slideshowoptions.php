@@ -9,7 +9,6 @@
  * It is not perfect at all but it is workable and usefull (I think)
  * Do not consider this as a powerpoint replacement, although it has
  * the same starting point.
- * @description
  *	This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
  * 	files (since these are the files that can be viewed in a browser) and creates
  *	a slideshow with it by allowing to go to the next/previous image.

@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * OpenID utility functions. Taken from Drupal 6 code (from dries)
- * @file openid.lib.php
  * @package chamilo.auth.openid
  */
 /**

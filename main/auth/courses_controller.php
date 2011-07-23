@@ -1,12 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * This file contains class used like controller, it should be included inside a dispatcher file (e.g: index.php)
- * @author Christian Fasanando <christian1827@gmail.com> - Beeznest
+ * @author Christian Fasanando <christian1827@gmail.com> - BeezNest
  * @package chamilo.auth
  */
-
+/**
+ * Code
+ * @package chamilo.auth
+ */
 class CoursesController { // extends Controller {
 
     private $toolname;

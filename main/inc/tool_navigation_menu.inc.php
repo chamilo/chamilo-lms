@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	Navigation menu display code
  *
  *	@package chamilo.include
  */
-
+/**
+ * Code
+ */
 define('SHORTCUTS_HORIZONTAL', 0);
 define('SHORTCUTS_VERTICAL', 1);
 

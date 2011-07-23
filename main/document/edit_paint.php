@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	This file allows creating new svg and png documents with an online editor.
  *
@@ -10,6 +9,9 @@
  * @author Juan Carlos Ra�a Trabado
  * @since 30/january/2011
 */
+/**
+ * Code
+ */
 
 /*	INIT SECTION */
 

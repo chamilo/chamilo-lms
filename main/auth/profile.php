@@ -8,6 +8,9 @@
 *
 * @package chamilo.auth
 */
+/**
+ * Code
+ */
 
 /*  Init section  */
 

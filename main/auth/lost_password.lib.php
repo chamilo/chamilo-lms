@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Code
+ * @package chamilo.auth
+ */
 /**
  * @deprecated by Ivan Tcholakov, 09-OCT-2009.
  * Get email headers
@@ -22,8 +25,7 @@ function get_email_headers() {
 */
 
 /**
- * Enter description here...
- *
+ * Get list of user accounts with a reset link for each
  * @param unknown_type $user
  * @param boolean $reset
  * @param boolean $by_username

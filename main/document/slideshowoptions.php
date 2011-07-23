@@ -1,38 +1,29 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	@author Patrick Cool
  *	@package chamilo.document
+ * @author Patrick Cool, patrick.cool@UGent.be, Ghent University, May 2004, http://icto.UGent.be
+ * Please bear in mind that this is only an beta release.
+ * I wrote this quite quick and didn't think too much about it in advance.
+ * It is not perfect at all but it is workable and usefull (I think)
+ * Do not consider this as a powerpoint replacement, although it has
+ * the same starting point.
+ * @description
+ *	This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
+ * 	files (since these are the files that can be viewed in a browser) and creates
+ *	a slideshow with it by allowing to go to the next/previous image.
+ *	You can also have a quick overview (thumbnail view) of all the images in
+ *	that particular folder.
+ *	Maybe it is important to notice that each slideshow is folder based. Only
+ *	the images of the chosen folder are shown.
+ *
+ *	On this page the options of the slideshow can be set: maintain the original file
+ *	or resize the file to a given width.
  */
-
-/*
-Developped by Patrick Cool
-patrick.cool@UGent.be
-Ghent University
-May 2004
-http://icto.UGent.be
-
-Please bear in mind that this is only an beta release.
-I wrote this quite quick and didn't think too much about it in advance.
-It is not perfect at all but it is workable and usefull (I think)
-Do not consider this as a powerpoint replacement, although it has
-the same starting point.
-*/
-
-/*
-Description:
-	This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
-	files (since these are the files that can be viewed in a browser) and creates
-	a slideshow with it by allowing to go to the next/previous image.
-	You can also have a quick overview (thumbnail view) of all the images in
-	that particular folder.
-	Maybe it is important to notice that each slideshow is folder based. Only
-	the images of the chosen folder are shown.
-
-	On this page the options of the slideshow can be set: maintain the original file
-	or resize the file to a given width.
-*/
+/**
+ * Code
+ */
 
 // Language files that need to be included
 $language_file = array('slideshow', 'document');

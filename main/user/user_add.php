@@ -3,6 +3,9 @@
 /**
 *	@package chamilo.user
 */
+/**
+ * Code
+ */
 
 /* INIT	*/
 

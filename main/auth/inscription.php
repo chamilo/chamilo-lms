@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	This script displays a form for registering new users.
  *	@package	 chamilo.auth
  */
-
+/**
+ * Code
+ */
 $language_file = array('registration', 'admin');
 if (!empty($_POST['language'])) { //quick hack to adapt the registration form result to the selected registration language
     $_GET['language'] = $_POST['language'];

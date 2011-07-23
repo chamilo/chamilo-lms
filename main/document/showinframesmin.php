@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
- *	@author Juan Carlos Ra�a Trabado (herodoto@telefonica.net)
+ *	@author Juan Carlos Raña Trabado (herodoto@telefonica.net)
  *  
  *	@package chamilo.document
  */
-
+/**
+ * Code
+ */
 /*   INITIALIZATION */
 
 $language_file[] = 'document';

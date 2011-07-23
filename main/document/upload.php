@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Main script for the documents tool
  *
@@ -32,7 +31,9 @@
  *
  * @package chamilo.document
  */
-
+/**
+ * Code
+ */
 // Name of the language file that needs to be included
 $language_file = array('document','gradebook');
 

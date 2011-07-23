@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	Shows the list of connected users
  *
  *	@author Olivier Brouckaert
  *	@package chamilo.chat
  */
-
+/**
+ * Code
+ */
 define('FRAME', 'online');
 $language_file = array('chat');
 

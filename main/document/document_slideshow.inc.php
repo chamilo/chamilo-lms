@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
  *	files (since these are the files that can be viewed in a browser) and creates
@@ -19,15 +18,13 @@
  *	@author Roan Embrechts, minor cleanup
  *	@package chamilo.document
  */
-
-/*
-	General code that belongs in document.php
-
-	This code should indeed go in documents.php but since document.php is already a really ugly file with
-	too much things in one file , I decided to put the code for document.php here and to include this
-	file into document.php
-*/
-
+/**
+ *	General code that belongs in document.php
+ *
+ *	This code should indeed go in documents.php but since document.php is already a really ugly file with
+ *	too much things in one file , I decided to put the code for document.php here and to include this
+ *	file into document.php
+ */
 $accepted_extensions = array('.jpg', '.jpeg', '.gif', '.png');
 
 // Resetting the images of the slideshow = destroying the slideshow

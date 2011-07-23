@@ -1,9 +1,13 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * OpenID utility functions. Taken from Drupal 6 code (from dries)
  * @file openid.lib.php
+ * @package chamilo.auth.openid
  */
-
+/**
+ * Code
+ */
 // Diffie-Hellman Key Exchange Default Value.
 define('OPENID_DH_DEFAULT_MOD', '155172898181473697471232257763715539915724801'.
        '966915404479707795314057629378541917580651227423698188993727816152646631'.

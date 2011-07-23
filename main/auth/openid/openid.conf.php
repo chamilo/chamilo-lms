@@ -1,6 +1,11 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * Configuration file for openID authentication
+ * @package chamilo.auth.openid
+ */
+/**
+ * Code
  */
 $langMainInfo = 'You may login to this site using an OpenID. You may add your OpenId URLs below, and also see a list of any OpenIDs which have already been added.';
 $langMainInfoDetail = '<p>OpenID is a secure way to use one user ID and password to log in to many web sites without special software, giving the same password to each site, or losing control over which information is shared with each site that you visit.</p>';

@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	This file allows creating audio files from a text.
  *
@@ -8,8 +7,11 @@
  *
  * @author Juan Carlos Raña Trabado
  * @since 30/January/2011
- * TODO:clean all file
+ * @todo clean all file
 */
+/**
+ * Code
+ */
 
 /*	INIT SECTION */
 $language_file = array('document');

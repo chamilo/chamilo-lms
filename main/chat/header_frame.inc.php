@@ -8,6 +8,9 @@
  *  @modified by Denes Nagy
  *	@package chamilo.chat
  */
+/**
+ * Code
+ */
 
 if (!defined('FRAME')) {
 	exit();

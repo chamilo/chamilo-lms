@@ -7,6 +7,9 @@
  *	@author Olivier Brouckaert
  *	@package chamilo.chat
  */
+/**
+ * Code
+ */
 
 /*		INIT SECTION */
 

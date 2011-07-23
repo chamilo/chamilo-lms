@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Chat tool
+ * @package chamilo.chat
+ */
+/**
+ * Code
+ */
 
 $language_file = array('chat');
 

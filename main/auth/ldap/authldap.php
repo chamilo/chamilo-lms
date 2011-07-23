@@ -50,9 +50,10 @@
     *    @version 3.0
     *    @package chamilo.auth.ldap
 */
-
+/**
+ * Code
+ */
 require('ldap_var.inc.php');
-
 /**
  *    Check login and password with LDAP
  *    @return true when login & password both OK, false otherwise

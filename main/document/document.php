@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Homepage script for the documents tool
  *
@@ -29,6 +28,9 @@
  * @package chamilo.document
  */
 
+/**
+ * Code
+ */
 /*	INIT SECTION */
 
 // Language files that need to be included

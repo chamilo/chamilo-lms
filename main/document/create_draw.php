@@ -6,9 +6,12 @@
  *
  *	@package chamilo.document
  *
- * @author Juan Carlos Ra�a Trabado
+ * @author Juan Carlos Raña Trabado
  * @since 25/september/2010
 */
+/**
+ * Code
+ */
 
 /*	INIT SECTION */
 

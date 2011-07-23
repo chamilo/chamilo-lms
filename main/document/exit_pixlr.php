@@ -9,6 +9,9 @@
  * @author Juan Carlos Ra�a Trabado
  * @since 30/january/2011
 */
+/**
+ * Code
+ */
 
 require_once '../inc/global.inc.php';
 api_protect_course_script();

@@ -9,6 +9,9 @@
  * @author Juan Carlos Ra�a Trabado
  * @since 25/september/2010
 */
+/**
+ * Code
+ */
 
 /*	INIT SECTION */
 

@@ -3,7 +3,9 @@
 /**
 *	@package chamilo.messages
 */
-
+/**
+ * Code
+ */
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
 require_once '../inc/global.inc.php';

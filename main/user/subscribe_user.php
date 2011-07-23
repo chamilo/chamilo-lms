@@ -6,6 +6,9 @@
 *	to their course.
 *	@package chamilo.user
 */
+/**
+ * Code
+ */
 
 /*			INIT SECTION		*/
 // name of the language file that needs to be included

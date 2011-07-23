@@ -1,29 +1,6 @@
 <?php // $Id: ldap_var.inc.php 14966 2008-04-20 23:03:11Z yannoo $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	LDAP settings
 *	In the older code, there was a distinction between
 *	the teacher and student LDAP server. Later I decided not
@@ -40,9 +17,11 @@
 *	variables from the configuration.php to here as well.
 *
 *	@author Roan Embrechts
-*	@package dokeos.auth.ldap
-==============================================================================
+*	@package chamilo.auth.ldap
 */
+/**
+ * Configuration settings
+ */
 // your ldap server
 $ldap_host = api_get_setting('ldap_main_server_address');
 // your ldap server's port number
@@ -65,4 +44,3 @@ $ldap_rdn = api_get_setting('ldap_authentication_login');
 $ldap_pass = api_get_setting('ldap_authentication_password');
 
 $ldap_pass_placeholder = "PLACEHOLDER";
-?>

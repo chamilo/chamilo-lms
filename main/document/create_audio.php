@@ -10,6 +10,9 @@
  * @since 8/January/2011
  * TODO:clean all file
 */
+/**
+ * Code
+ */
 
 /*	INIT SECTION */
 $language_file = array('document');

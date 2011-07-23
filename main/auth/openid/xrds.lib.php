@@ -1,6 +1,11 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * Parsing library for OpenID
+ * @package chamilo.auth.openid
+ */
+/**
+ * Code
  */
 // Global variables to track parsing state
 $xrds_open_elements = array();

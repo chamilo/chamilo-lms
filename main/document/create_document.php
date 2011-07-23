@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	This file allows creating new html documents with an online WYSIWYG html editor.
  *
  *	@package chamilo.document
  */
-
+/**
+ * Code
+ */
 /*	INIT SECTION */
 
 // Name of the language file that needs to be included

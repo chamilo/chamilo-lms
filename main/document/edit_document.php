@@ -24,6 +24,9 @@
  * @todo improve script structure (FormValidator is used to display form, but
  * not for validation at the moment)
  */
+/**
+ * Code
+ */
 
 // Name of the language file that needs to be included
 $language_file = array('document', 'gradebook');

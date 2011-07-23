@@ -1,8 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-/*	EXTRA FUNCTIONS FOR DOCUMENTS TOOL */
-
+/**
+ * EXTRA FUNCTIONS FOR DOCUMENTS TOOL
+ * @package chamilo.document
+ */
 /**
  * Builds the form thats enables the user to
  * select a directory to browse/upload in

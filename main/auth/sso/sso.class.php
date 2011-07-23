@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * This file contains the necessary elements to implement a Single Sign On 
  * mechanism with an arbitrary external web application (given some light 
@@ -6,6 +7,7 @@
  * To develop a new authentication mechanism, please extend this class and
  * overwrite its method, then modify the corresponding calling code in 
  * main/inc/local.inc.php
+ * @package chamilo.auth.sso
  */
 /**
  * The SSO class allows for management or remote Single Sign On resources

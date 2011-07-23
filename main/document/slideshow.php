@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
- *  @author Julio Montoya Lots of improvements, cleaning, adding security
- *	@author Patrick Cool patrick.cool@UGent.be Ghent University Mai 2004
- *	@author Juan Carlos Raña Trabado herodoto@telefonica.net	January 2008
- *	@package chamilo.document
+ * @author Patrick Cool patrick.cool@UGent.be Ghent University Mai 2004
+ * @author Julio Montoya Lots of improvements, cleaning, adding security
+ * @author Juan Carlos Raña Trabado herodoto@telefonica.net	January 2008
+ * @package chamilo.document
  */
-
+/**
+ * Code
+ */
 // Language files that need to be included
 $language_file = array('slideshow', 'document');
 

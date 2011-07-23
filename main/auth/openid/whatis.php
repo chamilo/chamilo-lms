@@ -1,4 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ * OpenID 
+ * @package chamilo.auth.openid
+ */
+/**
+ * Code
+ */
 require('../../inc/global.inc.php');
 Display::display_header('OpenID', NULL);
 ?>

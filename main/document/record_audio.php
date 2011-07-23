@@ -9,6 +9,9 @@
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net
  * @since 5/mar/2011
 */
+/**
+ * Code
+ */
 
 /*	INIT SECTION */
 

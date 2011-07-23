@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	This file will show documents in a separate frame.
  *	We don't like frames, but it was the best of two bad things.
@@ -22,9 +21,9 @@
  *	@author Roan Embrechts (roan.embrechts@vub.ac.be)
  *	@package chamilo.document
  */
-
-/*   INITIALIZATION */
-
+/**
+ * INITIALIZATION
+ */
 $language_file[] = 'document';
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
@@ -109,7 +108,9 @@ $this_section = SECTION_COURSES;
 $_SESSION['whereami'] = 'document/view';
 $nameTools = get_lang('Documents');
 
-/*	Main section */
+/**
+ * Main code section
+ */
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 //header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 header('Last-Modified: Wed, 01 Jan 2100 00:00:00 GMT');

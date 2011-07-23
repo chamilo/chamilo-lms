@@ -11,6 +11,9 @@
  * "Course validation" feature, technical adaptation for Chamilo 1.8.8:
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>
  */
+/**
+ * Code
+ */
 
 // Name of the language file that needs to be included.
 $language_file = 'create_course';

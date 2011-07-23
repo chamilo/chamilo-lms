@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Reporting page on the user's own progress
+ * @package chamilo.tracking
+ */
+/**
+ * Code
+ */
 
 // name of the language file that needs to be included
 $language_file = array('registration', 'tracking', 'exercice', 'admin');

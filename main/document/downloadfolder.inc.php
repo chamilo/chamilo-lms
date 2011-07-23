@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	Functions and main code for the download folder feature
  *
  *	@package chamilo.document
  */
-
+/**
+ * Code
+ */
 set_time_limit(0);
 
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());

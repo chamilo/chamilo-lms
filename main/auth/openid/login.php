@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * OpenID login method
  *
@@ -6,6 +7,7 @@
  * URL that can confirm the identity of a person, thus avoiding the spread
  * use of password transmissions over non-secure lines (for Dokeos, it is a
  * good way of avoiding password theft)
+ * @package chamilo.auth.openid
  */
 /**
  * Initialisation

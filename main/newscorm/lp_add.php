@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
  *
@@ -12,9 +11,9 @@
  * 
  * @package chamilo.learnpath
  */
-
-/* INIT SECTION */
-
+/** 
+ * Code
+ */
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $this_section = SECTION_COURSES;

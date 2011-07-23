@@ -249,7 +249,6 @@ exit;
  * @author René Haentjens <rene.haentjens@UGent.be>, several contributions
  * @author Roan Embrechts, virtual course support
  *
- * @package chamilo.dropbox
  */
 
 //	INITIALISING VARIABLES 

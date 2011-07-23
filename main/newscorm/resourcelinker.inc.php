@@ -161,7 +161,7 @@ function show_documents($folder) {
  * Checks wether something is a file or a folder
  * 0 means file, 1 means folder
  * @param $filefolder
- * @todo: use true and false instead of 1 and 0.
+ * @todo use true and false instead of 1 and 0.
  */
 function file_or_folder($filefolder) {
     global $_course;
@@ -1573,9 +1573,6 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
  * @param	string	Course code
  * @param	integer	The learning path ID (in lp table)
  * @param	integer	The database ID for that item in the lp_item table
- * @param
- * @param	string	Type (as one of the TOOL_ constants declared in main_api.lib.php)
- * @param	integer	ID of the database item to get (from that tool's table)
  * @param id          - that is the correspondent id in the mirror tool (like Agenda item 2)
  * @param id_in_path  - the unique index in the items table
  */

@@ -7,12 +7,14 @@
  * @author	Yannick Warnier	<ywarnier@beeznest.org>
  * @license	GNU/GPL
  */
-
+/**
+ * Code
+ */
+require_once 'learnpathItem.class.php';
 /**
  * This class handles the elements from an AICC Descriptor file.
  * @package	chamilo.learnpath
  */
-require_once 'learnpathItem.class.php';
 class aiccItem extends learnpathItem {
     public $identifier = ''; // AICC AU's system_id
     public $identifierref = '';

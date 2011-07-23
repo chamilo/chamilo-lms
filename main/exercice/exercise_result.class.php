@@ -12,7 +12,7 @@
  * Code
  */
 if(!class_exists('ExerciseResult')):
-/*
+/**
  * Exercise results class
  * @package chamilo.exercise
  */

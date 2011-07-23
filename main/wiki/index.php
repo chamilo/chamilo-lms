@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * 	@author Juan Carlos Raña <herodoto@telefonica.net>
  *
  * 	@package chamilo.wiki
  */
-
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file = 'wiki';
 

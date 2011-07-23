@@ -1,7 +1,5 @@
 <?php // $Id: lib.diff.php,v 1.12 2005/11/18 20:25:11 zefredz Exp $
-
     // vim: expandtab sw=4 ts=4 sts=4:
-
     /**
      * CLAROLINE
      *
@@ -18,7 +16,9 @@
      *
      * @package Wiki
      */
-
+    /**
+     * Code
+     */
     define( "DIFF_EQUAL", "=" );
     define( "DIFF_ADDED", "+" );
     define( "DIFF_DELETED", "-" );

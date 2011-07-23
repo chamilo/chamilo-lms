@@ -7,8 +7,8 @@
  */
 /**
  *	Chamilo Metadata: class mdobject for Document-type items
+ *	@package chamilo.metadata
  */
-
 class mdobject {
 
 var $mdo_course;

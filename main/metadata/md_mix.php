@@ -7,6 +7,7 @@
  */
 /**
  * Chamilo Metadata: reduced class mdobject for Search, for a Mix of objects
+ * @package chamilo.metadata
  */
 class mdobject {
 

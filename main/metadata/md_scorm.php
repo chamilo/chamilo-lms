@@ -7,8 +7,8 @@
  */
 /**
  *	Chamilo Metadata: class mdobject for Scorm-type objects
+ * @package chamilo.metadata
  */
-
 class mdobject
 {
 

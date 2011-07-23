@@ -250,6 +250,7 @@ EOD
 // METADATA STORE ------------------------------------------------------------->
 /**
  * mdstore class
+ * @package chamilo.metadata
  */
 class mdstore
 {

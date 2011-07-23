@@ -3128,7 +3128,7 @@ class CourseManager {
      * @param	string	course title
      * @param	string	source course code
      * @param 	int		source session id
-     * @return 	
+     * @return 	array
      */
     function copy_course_simple($new_title, $source_course_code, $source_session_id = 0, $destination_session_id = 0) {
         $source_course_info = api_get_course_info($source_course_code);

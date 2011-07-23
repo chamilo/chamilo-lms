@@ -11,7 +11,9 @@
  * @package chamilo.learnpath
 */
 
-/* INIT SECTION */
+/**
+ * INIT SECTION 
+ */
 
 $this_section = SECTION_COURSES;
 

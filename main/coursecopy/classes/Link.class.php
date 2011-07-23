@@ -4,11 +4,15 @@
  * Link backup script
  * @package chamilo.backup
  */
+/**
+ * Code
+ */
 require_once 'Resource.class.php';
 
 /**
  * A WWW-link from the Links-module in a Chamilo-course.
  * @author Bart Mollet <bart.mollet@hogent.be>
+ * @package chamilo.backup
  */
 class Link extends Resource
 {

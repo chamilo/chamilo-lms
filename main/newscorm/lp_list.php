@@ -9,7 +9,9 @@
 * @package chamilo.learnpath
 * @author Yannick Warnier <ywarnier@beeznest.org>
 */
-
+/**
+ * Code
+ */
 $this_section = SECTION_COURSES;
 if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
     header('location: lp_controller.php?action=list');

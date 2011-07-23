@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
  *
@@ -10,7 +9,9 @@
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  * @package chamilo.learnpath
  */
-
+/**
+ * Code
+ */
 /* INIT SECTION */
 
 $this_section = SECTION_COURSES;

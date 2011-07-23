@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * This is a learning path creation and player tool in Chamilo - previously
  * learnpath_handler.php
@@ -12,8 +11,9 @@
  * @author Julio Montoya  - Improving the list of templates
  * @package chamilo.learnpath
  */
-
-/* INIT SECTION */
+/**
+ * INIT SECTION
+ */
 
 $this_section = SECTION_COURSES;
 

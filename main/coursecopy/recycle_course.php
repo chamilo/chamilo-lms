@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Delete resources from a course.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-
+/**
+ * Code
+ */
 // Language files that need to be included
 $language_file = array ('exercice', 'admin', 'course_info', 'coursebackup');
 

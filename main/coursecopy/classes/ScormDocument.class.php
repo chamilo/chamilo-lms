@@ -4,8 +4,10 @@
  * SCORM document backup script
  * @package chamilo.backup
  */
+/**
+ * Code
+ */
 require_once 'Resource.class.php';
-
 /**
  * ScormDocument class
  * @author Olivier Brouckaert <oli.brouckaert@dokeos.com>

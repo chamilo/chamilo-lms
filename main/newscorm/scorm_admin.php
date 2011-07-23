@@ -11,7 +11,9 @@
 * @author Roan Embrechts, code improvements and refactoring
 * @author Yannick Warnier, complete refactoring <ywarnier@beeznest.org>
 */
-
+/**
+ * Code (exit)
+ */
 exit;
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.

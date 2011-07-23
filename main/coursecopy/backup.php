@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Create a backup.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-
+/**
+ * Code
+ */
 // Language files that need to be included
 $language_file = array('exercice', 'coursebackup', 'admin');
 

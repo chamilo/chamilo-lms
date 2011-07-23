@@ -10,7 +10,9 @@
 * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
 * @package chamilo.learnpath
 */
-
+/**
+ * Code
+ */
 /* INIT SECTION */
 
 $this_section = SECTION_COURSES;

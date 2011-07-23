@@ -1,6 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * @package chamilo.backup
+ */
+/**
+ * Code
+ */
 // Language files that need to be included
 $language_file = array('exercice', 'coursebackup', 'admin');
 

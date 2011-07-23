@@ -6,7 +6,9 @@
  * @package chamilo.learnpath
  * @author Julio Montoya Armas <gugli100@gmail.com>
  */
-
+/**
+ * Code
+ */
 $use_anonymous = true;
 require_once 'back_compat.inc.php';
 require_once 'learnpath.class.php';

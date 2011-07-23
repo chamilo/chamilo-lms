@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * This class defines the parent attributes and methods for Chamilo learnpaths and SCORM
  * learnpaths. It is used by the scorm class.
@@ -9,12 +8,10 @@
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  * @author	Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
  */
-
 /**
  * Defines the learnpath parent class
  * @package chamilo.learnpath
  */
-
 class learnpath {
 
     public $attempt = 0; // The number for the current ID view.
@@ -3449,8 +3446,7 @@ class learnpath {
      * and the prerequisite string on error.
      * This function is based on the rules for aicc_script language as described in the SCORM 1.2 CAM documentation page 108.
      * @param	integer	Optional item ID. If none given, uses the current open item.
-     * @return	boolean	True if prerequisites are matched, false otherwise
-     * @return	string	Empty string if true returned, prerequisites string otherwise.
+     * @return	boolean	True if prerequisites are matched, false otherwise - Empty string if true returned, prerequisites string otherwise.
      */
     public function prerequisites_match($item = null) {
         if ($this->debug > 0) {

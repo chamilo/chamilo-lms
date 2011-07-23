@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Copy resources from one course in a session to another one.
  *
@@ -8,7 +7,9 @@
  * @author Julio Montoya	<gugli100@gmail.com> Lots of bug fixes/improvements
  * @package chamilo.backup
  */
-
+/**
+ * Code
+ */
 /*  INIT SECTION  */
 
 // Language files that need to be included

@@ -4,9 +4,10 @@
  * Exercises questions backup script
  * @package chamilo.backup
  */
-
+/**
+ * Code
+ */
 require_once 'Resource.class.php';
-
 /**
  * An QuizQuestion
  * @author Bart Mollet <bart.mollet@hogent.be>

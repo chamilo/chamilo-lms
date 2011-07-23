@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Script managing the learnpath upload. To best treat the uploaded file, make sure we can identify it.
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
+/**
+ * Code
+ */
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 require_once 'back_compat.inc.php';

@@ -13,7 +13,9 @@
 * @author Roan Embrechts, code improvements and refactoring
 * @license	GNU/GPL - See Chamilo license directory for details
 */
-
+/**
+ * Code
+ */
 /* INIT SECTION */
 
 $_SESSION['whereami'] = 'lp/view';

@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * This script contains the server part of the xajax interaction process. The client part is located
  * in lp_api.php or other api's.
@@ -8,7 +7,9 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
+/**
+ * Code
+ */
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 

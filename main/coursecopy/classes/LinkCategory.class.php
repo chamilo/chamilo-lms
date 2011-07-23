@@ -4,11 +4,15 @@
  * Link category backup script
  * @package chamilo.backup
  */
+/**
+ * Code
+ */
 require_once 'Resource.class.php';
 
 /**
  * A LinkCategory
  * @author Bart Mollet <bart.mollet@hogent.be>
+ * @package chamilo.backup
  */
 class LinkCategory extends Resource
 {

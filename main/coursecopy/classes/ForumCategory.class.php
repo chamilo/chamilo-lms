@@ -4,11 +4,14 @@
  * Forum category backup class
  * @package chamilo.backup
  */
+/**
+ * Code
+ */
 require_once 'Resource.class.php';
-
 /**
  * A forum-category
  * @author Bart Mollet <bart.mollet@hogent.be>
+ * @package chamilo.backup
  */
 class ForumCategory extends Resource
 {

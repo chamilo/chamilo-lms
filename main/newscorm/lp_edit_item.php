@@ -11,8 +11,9 @@
  * @author Julio Montoya  - Improving the list of templates
  * @package chamilo.learnpath
 */
-
-/* INIT SECTION */
+/**
+ * INIT SECTION 
+ */
 
 $this_section = SECTION_COURSES;
 

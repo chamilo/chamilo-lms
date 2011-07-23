@@ -4,11 +4,14 @@
  * Forum backup script
  * @package chamilo.backup
  */
+/**
+ * Code
+ */
 require_once 'Resource.class.php';
-
 /**
  * A forum
  * @author Bart Mollet <bart.mollet@hogent.be>
+ * @package chamilo.backup
  */
 class Forum extends Resource
 {

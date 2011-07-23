@@ -9,7 +9,9 @@
  *	@todo use the constants for the tools
  *	@todo use Database API instead of creating table names locally.
  */
-
+/**
+ * Code
+ */
 /* INIT SECTION */
 
 //$language_file = 'resourcelinker';

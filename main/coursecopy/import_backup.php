@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Import a backup.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-
+/**
+ * Code
+ */
 /*	INIT SECTION */
 
 // Language files that need to be included

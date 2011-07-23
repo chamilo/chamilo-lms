@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Container script for the messages coming from the learnpath object. Initially, this wasn't supposed to be
  * a separate file but rather some text included in lp_view.php, but SCORM involves loading a script that
@@ -15,7 +14,9 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
+/**
+ * Code
+ */
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 

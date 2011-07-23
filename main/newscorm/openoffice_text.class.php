@@ -12,7 +12,6 @@
 
 /**
  * Defines the "OpenofficeText" child of class "learnpath"
- * @package chamilo.learnpath.OpenofficeDocument
  */
 require_once 'openoffice_document.class.php';
 if (api_get_setting('search_enabled') == 'true') {
@@ -20,7 +19,9 @@ if (api_get_setting('search_enabled') == 'true') {
     require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
     require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 }
-
+/**
+ * @package chamilo.learnpath.OpenofficeDocument
+ */
 class OpenofficeText extends OpenofficeDocument {
 
     public $split_steps;

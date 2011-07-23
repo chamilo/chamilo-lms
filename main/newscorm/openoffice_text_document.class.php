@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Defines the OpenOfficeDocument class, which is meant as a conversion
  * tool from Office text documents (.doc, .sxw, .odt, .docx) to
@@ -9,16 +8,16 @@
  * @author  Eric Marguin <eric.marguin@dokeos.com>
  * @license GNU/GPL
  */
-
 /**
  * Defines the "OpenOfficeTextDocument" child of class "learnpath"
- * @package chamilo.learnpath.openofficedocument
  */
 require_once 'openoffice_document.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
 require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
-
+/**
+ * @package chamilo.learnpath.openofficedocument
+ */
 class OpenOfficeTextDocument extends OpenofficeDocument {
 
     public $split_steps;

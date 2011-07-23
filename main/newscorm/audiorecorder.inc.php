@@ -9,7 +9,9 @@
  * @author Arnaud Ligot <arnaud@cblue.be>
  * @package chamilo.learnpath
  */
-
+/**
+ * Code
+ */
 global $_configuration;
 $web_path = api_get_path(WEB_CODE_PATH);
 $getid3_path = api_get_path(LIBRARY_PATH);

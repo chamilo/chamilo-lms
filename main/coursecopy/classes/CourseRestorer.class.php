@@ -4,6 +4,9 @@
  * Course Restorer script
  * @package chamilo.backup
  */
+/**
+ * Code
+ */
 require_once 'Course.class.php';
 require_once 'Event.class.php';
 require_once 'Link.class.php';

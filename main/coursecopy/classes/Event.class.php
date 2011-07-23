@@ -4,11 +4,14 @@
  * Event backup script
  * @package chamilo.backup
  */
+/**
+ * Code
+ */
 require_once 'Resource.class.php';
-
 /**
  * An event
  * @author Bart Mollet <bart.mollet@hogent.be>
+ * @package chamilo.backup
  */
 class Event extends Resource
 {

@@ -4,6 +4,9 @@
  * Document class file
  * @package chamilo.backup
  */
+/**
+ * Code
+ */
 require_once 'Resource.class.php';
 
 define('DOCUMENT','file');

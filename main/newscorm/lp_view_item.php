@@ -10,7 +10,9 @@
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  * @package chamilo.learnpath
  */
-
+/**
+ * Code
+ */
 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
 if (isset($_GET['src'])) {
     // Including the global initialization file.

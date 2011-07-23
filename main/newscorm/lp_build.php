@@ -11,7 +11,9 @@
  * @package chamilo.learnpath
  */
 
-/* INIT SECTION */
+/**
+ * INIT SECTION 
+*/
 
 $_SESSION['whereami'] = 'lp/build';
 $this_section = SECTION_COURSES;

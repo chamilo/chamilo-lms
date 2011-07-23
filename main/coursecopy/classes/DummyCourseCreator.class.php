@@ -4,6 +4,9 @@
  * Dummy course creator
  * @package chamilo.backup
  */
+/**
+ * Code
+ */
 require_once 'Course.class.php';
 require_once 'Document.class.php';
 require_once 'Event.class.php';
@@ -16,7 +19,10 @@ require_once 'ForumPost.class.php';
 require_once 'CourseDescription.class.php';
 require_once 'CourseCopyLearnpath.class.php';
 require_once 'CourseRestorer.class.php';
-
+/**
+ * Class
+ * @package chamilo.backup
+ */
 class DummyCourseCreator
 {
 	/**

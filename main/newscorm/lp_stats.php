@@ -1,15 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * This script displays statistics on the current learning path (scorm)
- *
  * This script must be included by lp_controller.php to get basic initialisation
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  * @todo clean this file like the exercise files J.M
  */
 
+/**
+ * Code
+ */
 require_once 'learnpath.class.php';
 require_once 'resourcelinker.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';

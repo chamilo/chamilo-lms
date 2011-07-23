@@ -8,7 +8,9 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
+/**
+ * Code
+ */
 // Flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
 

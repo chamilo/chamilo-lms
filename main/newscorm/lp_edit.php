@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Script allowing simple edition of learnpath information (title, description, etc)
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
 */
-
+/**
+ * Code
+ */
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 

@@ -6,7 +6,9 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
+/**
+ * Code
+ */
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 

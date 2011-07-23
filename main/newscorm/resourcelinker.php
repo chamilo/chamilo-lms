@@ -9,7 +9,9 @@
  * @todo reorganise code,
  * use Database API instead of creating table names locally.
  */
-
+/**
+ * Code
+ */
 /* INIT SECTION */
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.

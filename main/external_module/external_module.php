@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This script is used for adding hyperlinks to a course homepage.
 *	It used to be able to link html documents as well,
 *	which it displayed in context, but that was abandoned
@@ -13,9 +12,10 @@
 *
 *	@package chamilo.external_module
 *	@todo this code is useless? 
-==============================================================================
 */
-
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file='external_module';
 

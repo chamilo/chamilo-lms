@@ -10,6 +10,7 @@
 
 /**
  * This class handles the elements from an AICC Descriptor file.
+ * @package	chamilo.learnpath
  */
 require_once 'learnpathItem.class.php';
 class aiccItem extends learnpathItem {

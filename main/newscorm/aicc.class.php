@@ -7,13 +7,18 @@
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  * @license	GNU/GPL
  */
-
+/**
+ * Code
+ */
 require_once 'aiccItem.class.php';
 //require_once 'aiccMetadata.class.php';
 //require_once 'aiccOrganization.class.php';
 require_once 'aiccResource.class.php';
 require_once 'aiccBlock.class.php';
-
+/**
+ * Class
+ * @package chamilo.learnpath
+ */
 class aicc extends learnpath {
 
     public $config = array();

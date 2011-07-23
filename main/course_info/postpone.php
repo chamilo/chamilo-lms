@@ -19,6 +19,9 @@
  *
  * @package chamilo.course_info
  */
+/**
+ * Code
+ */
 
 /*	INIT SECTION */
 

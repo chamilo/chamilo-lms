@@ -4,6 +4,9 @@
 /**
  *	@package chamilo.tracking
  */
+/**
+ * Code
+ */
 
 /* INIT SECTION */
 

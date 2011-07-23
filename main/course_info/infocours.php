@@ -6,13 +6,17 @@
  *	and activate the changes.
  *
  *	See ./inc/conf/course_info.conf.php for settings
- * @todo: Move $canBeEmpty from course_info.conf.php to config-settings
- * @todo: Take those config settings into account in this script
+ * @todo Move $canBeEmpty from course_info.conf.php to config-settings
+ * @todo Take those config settings into account in this script
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @author Roan Embrechts, refactoring
  * and improved course visibility|subscribe|unsubscribe options
  * @package chamilo.course_info
  */
+/**
+ * Code
+ */
+
 
 /*	   INIT SECTION */
 

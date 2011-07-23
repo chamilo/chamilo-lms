@@ -10,6 +10,9 @@
  *
  *	@package chamilo.tracking
  */
+/**
+ * Code
+ */
 
 // TODO: Is this file deprecated?
 

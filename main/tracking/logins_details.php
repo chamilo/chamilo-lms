@@ -6,9 +6,12 @@
 *	@author Christophe Gesche
 *	@author Sebastien Piraux
 *
-*	@package dokeos.tracking
+*	@package chamilo.tracking
 
 */
+/**
+ * Code
+ */
 
 // TODO: Is this file deprecated?
 

@@ -3,15 +3,16 @@
 // TODO: Is this file deprecated?
 
 /**
-==============================================================================
 *	@author Thomas Depraetere
 *	@author Hugues Peeters
 *	@author Christophe Gesche
 *	@author Sebastien Piraux
 *
-*	@package dokeos.tracking
-==============================================================================
+*	@package chamilo.tracking
 */
+/**
+ * Code
+ */
 
 /*
 ==============================================================================

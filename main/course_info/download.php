@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Download script for course info
+ * @package chamilo.course_info
+ */
+/**
+ * Code
+ */
 //session_cache_limiter('public');
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;

@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
- * @package chamilo.glossary
+ * @package chamilo.notebook
  * @author Christian Fasanando, initial version
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium, refactoring and tighter integration
  */
-
+/**
+ * Code
+ */
 // Name of the language file that needs to be included
 $language_file = array('notebook');
 

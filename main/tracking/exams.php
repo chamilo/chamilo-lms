@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Exams script
+ * @package chamilo.tracking
+ */
+/**
+ * Code
+ */
 
 $language_file = array ('registration', 'index', 'tracking', 'exercice','survey');
 

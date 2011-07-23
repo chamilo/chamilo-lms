@@ -3,9 +3,9 @@
 /**
 *	@package chamilo.user
 */
-/*
-		INIT SECTION
-*/
+/**
+ * INIT SECTION
+ */
 // name of the language file that needs to be included
 $language_file = array('registration','admin');
 include ('../inc/global.inc.php');
@@ -16,7 +16,9 @@ require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
 require_once (api_get_path(LIBRARY_PATH).'classmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
-/*		MAIN CODE	*/
+/**
+ * MAIN CODE	
+ */
 
 api_protect_course_script();
 

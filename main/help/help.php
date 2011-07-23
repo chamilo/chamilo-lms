@@ -6,6 +6,9 @@
  *
  *	@package chamilo.help
  */
+/**
+ * Code
+ */
 
 // Language file that needs to be included
 $language_file = 'help';

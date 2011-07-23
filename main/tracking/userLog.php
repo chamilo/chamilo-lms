@@ -7,6 +7,9 @@
  * @package chamilo.tracking
  * @todo clean code - structure is unclear and difficult to modify
  */
+/**
+ * Code
+ */
 
 /* INIT SECTION */
 

@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	This script displays a list of the users of the current course.
 *	Course admins can change user perimssions, subscribe and unsubscribe users...
@@ -20,7 +19,9 @@
 *	@author Julio Montoya Armas, Several fixes
 *	@package chamilo.user
 */
-
+/**
+ * Code
+ */
 
 /*	   INIT SECTION	*/
 // name of the language file that needs to be included

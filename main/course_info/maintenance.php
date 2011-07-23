@@ -1,8 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-/*
- * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
+/**
+ * @author Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
+ * @package chamilo.course_info
+ */
+/**
+ * Code
  */
 
 // Language files that need to be included

@@ -1,12 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	This script is about deleting a course.
  *	It displays a message box ('are you sure you wish to delete this course')
  *	and deletes the course if the user answers affirmatively
  *
  *	@package chamilo.course_info
+ */
+/**
+ * Code
  */
 
 // Language files that need to be included

@@ -4,6 +4,9 @@
  * @package chamilo.classes
  * @author Julio Montoya <gugli100@gmail.com>
  */
+/**
+ * Init
+ */
 
 $language_file = array('userInfo','admin');
 $cidReset=true;

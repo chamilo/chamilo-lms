@@ -5,7 +5,10 @@
  * Exercise results from Learning paths
  * 
  * @todo implement pagination
- * 
+ * @package chamilo.tracking
+ */
+/**
+ * Code
  */
 
 $language_file = array ('registration', 'index', 'tracking', 'exercice','survey');

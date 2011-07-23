@@ -15,7 +15,9 @@
 *	@package chamilo.user
 */
 
-/*	   INIT SECTION		*/
+/**
+ *  INIT SECTION
+ */
 
 // name of the language file that needs to be included
 $language_file = array ('registration', 'userInfo');
@@ -81,11 +83,9 @@ $current_session_id = api_get_session_id();
 //get information about one user
 $userIdViewed = Security::remove_XSS($_REQUEST['uInfo']);
 
-/*
------------------------------------------------------------
-	Connection layer between Dokeos and the current script
------------------------------------------------------------
-*/
+/**
+ * Connection layer between Chamilo and the current scrip:t
+ */
 
 
 $mainDB = $_configuration['main_database'];
@@ -102,7 +102,9 @@ $is_allowedToTrack = api_is_allowed_to_edit(null, true);
 // Library connection
 require_once ("userInfoLib.php");
 
-/* 	   FUNCTIONS */
+/**
+ *  FUNCTIONS 
+ */
 
 /* 	   COMMANDS SECTION */
 

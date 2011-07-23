@@ -1,4 +1,11 @@
 <?php
+/**
+ * Report
+ * @package chamilo.tracking
+ */
+/**
+ * Code
+ */
 $language_file = array ('registration', 'index', 'tracking', 'exercice','survey');
 $cidReset = true;
 require_once '../inc/global.inc.php';

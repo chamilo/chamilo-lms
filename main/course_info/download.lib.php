@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Course info library
+ * @package chamilo.course_info
+ */
+/**
+ * Code
+ */
 
 // TODO: Where this file is used? Is it needed at all?
 

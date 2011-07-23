@@ -4,6 +4,7 @@
  * Class to select, sort and transform object data into array data,
  * used for the teacher's flat view
  * @author Bert Steppé
+ * @package chamilo.gradebook
  */
 /**
  * Class

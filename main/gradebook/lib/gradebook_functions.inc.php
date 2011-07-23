@@ -541,7 +541,7 @@ function get_list_users_certificates ($cat_id=null) {
 *Gets the certificate list by user id
 *@param int The user id
 *@param int The category id
-*@retun array
+*@return array
 */
 function get_list_gradebook_certificates_by_user_id ($user_id,$cat_id=null) {
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);

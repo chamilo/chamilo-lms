@@ -3,6 +3,7 @@
 /**
  * include this file to have access to all backend classes
  * @author Bert Steppé
+ * @package chamilo.gradebook
  */
 /**
  * Code

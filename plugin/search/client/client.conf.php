@@ -1,8 +1,9 @@
-<?php //$id: $
+<?php
+/* See license terms in /license.txt */
 /**
  * This script defines variables in use in the search plugin for this particular host in the client scripts
- * @package dokeos.search
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @package chamilo.search
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 /**
  * Variables

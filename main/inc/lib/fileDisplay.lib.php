@@ -4,13 +4,13 @@
 *	This is the file display library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
-*	@package dokeos.library
+*	@package chamilo.library
 */
-
-
+/**
+ * Code
+ */
 /*	GENERIC FUNCTIONS : FOR OLDER PHP VERSIONS */
-if ( ! function_exists('array_search') )
-{
+if ( ! function_exists('array_search') ) {
     /**
      * Searches haystack for needle and returns the key
      * if it is found in the array, FALSE otherwise.

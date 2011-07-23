@@ -1,10 +1,11 @@
-<?php //$id:$
+<?php
+/* See license terms in /license.txt */
 /**
  * This script declares a set of functions that will enable authorization check
  * for a user's access to a course directory, as well as course name
  * translations for search results display.
- * @package dokeos.search
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @package chamilo.search
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  * @uses The Dokeos database library, to access the tables using its facilities
  * @uses The Dokeos main api library to execute database queries
  */
@@ -13,7 +14,7 @@
  *
  * The function gets the course code from the course directory, then
  * checks in the course_user table if the user has access to that course.
- * @param integer User ID (inside Dokeos)
+ * @param integer User ID (inside Chamilo)
  * @param string  Course directory
  * @return boolean True if user has access, false otherwise
  */

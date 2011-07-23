@@ -1,11 +1,12 @@
-<?php //$id: $
+<?php
+/* See license terms in /license.txt */
 /**
  * This script is a configuration file for the search plugin.
  * You can use it as a master for other plugins.
  * These settings will be used in the administration interface for
  * plugins (Dokeos configuration settings->Plugins)
  * Make sure your read the README.txt file to understand how to use this plugin!
- * @package dokeos.plugin
+ * @package chamilo.plugin
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
  */
 /**

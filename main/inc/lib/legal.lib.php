@@ -4,10 +4,13 @@
  * Legal class
  *
  * @version 1.0
- * @package dokeos.legal
+ * @package chamilo.legal
  *
 */
-
+/**
+ * Class
+ * @package chamilo.legal
+ */
 class LegalManager {
 	private function __construct () {
 		//void

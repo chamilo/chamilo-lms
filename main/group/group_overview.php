@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	Main page for the group module.
  *	This script displays the general group settings,
@@ -11,10 +10,11 @@
  *	@author Patrick Cool, show group comment under the group name
  *	@author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
  *	@author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
- *	@package dokeos.group
+ *	@package chamilo.group
  */
-
-/*	INIT SECTION */
+/**
+ * INIT SECTION
+ */
 
 // Name of the language file that needs to be included
 $language_file = 'group';

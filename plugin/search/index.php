@@ -1,10 +1,11 @@
-<?php //$id: $
+<?php
+/* See license terms in /license.txt */
 /**
  * This script is used as the entrance to the search plugin page. Due to its short form,
- * it can be included as a plugin in the Dokeos menu bar.
+ * it can be included as a plugin in the Chamilo menu bar.
  * No process is operated here. Just displaying the HTML form.
- * @package dokeos.search
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @package chamilo.search
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 /**
  * Variables

@@ -1,9 +1,10 @@
 <?php
+/* See license terms in /license.txt */
 /**
  * Chamilo metadata/search.php
  * 2005/09/20
  * @copyright 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
- * @package dokeos.metadata
+ * @package chamilo.metadata
  */
 /**
  *	Chamilo Metadata: search Chamilo course objects via their metadata
@@ -13,17 +14,12 @@
  *   - htt=  HTML template file (same dir as script), default= 'mds_' + type.
  */
 // PRELIMS -------------------------------------------------------------------->
-
 require("md_funcs.php");
-
 getpar('TYPE', 'e.g. Mix', 'Mix');  // note: only 'Mix' is currently working
 require('md_' . strtolower(TYPE) . '.php');
-
 getpar('LFN', 'LanguageFileName', 'md_' . strtolower(TYPE));
 getpar('HTT', 'HTML Template Text filename', 'mds_' . strtolower(TYPE));
-
 getpar('DBG', 'Debug number', '0');  // set to e.g. 10000 for debuginfo
-
 $urlp =                                           '?type='. urlencode(TYPE);
 if (LFN != 'md_' . strtolower(TYPE))     $urlp .= '&lfn=' . urlencode(LFN);
 if (HTT != 'mds_' . strtolower(TYPE))    $urlp .= '&htt=' . urlencode(HTT);

@@ -1,5 +1,5 @@
 <?php //$id:$
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 *	File containing the HotSpot class.
 *	@package chamilo.exercise

@@ -6,7 +6,9 @@
  *	@package chamilo.exercise
  * 	@author Eric Marguin
  */
-
+/**
+ * Code
+ */
 
 if(!class_exists('UniqueAnswer')):
 
@@ -18,7 +20,7 @@ if(!class_exists('UniqueAnswer')):
  *
  *	@author Eric Marguin
  *  @author Julio Montoya
- *	@package dokeos.exercise
+ *	@package chamilo.exercise
  **/
 
 class UniqueAnswer extends Question {

@@ -4,7 +4,7 @@
 *	Free answer marking script
 * 	This script allows a course tutor to mark a student's free answer.
 *	@package chamilo.exercise
-* 	@author Yannick Warnier <yannick.warnier@dokeos.com>
+* 	@author Yannick Warnier <yannick.warnier@beeznest.com>
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 *
 * 	@todo respect coding guidelines

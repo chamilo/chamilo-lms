@@ -7,6 +7,9 @@
  * 	@author Eric Marguin
  */
 
+/**
+ * Code
+ */
 
 if(!class_exists('UniqueAnswerNoOption')):
 
@@ -397,7 +400,7 @@ class UniqueAnswerNoOption extends Question {
  			How we are going to parse the destination value
 
 			here we parse the destination value which is a string
-		 	1@@3@@2;4;4;@@http://www.dokeos.com
+		 	1@@3@@2;4;4;@@http://www.chamilo.org
 
 		 	where: try_again@@lp_id@@selected_questions@@url
 

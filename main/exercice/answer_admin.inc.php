@@ -3,11 +3,13 @@
 // YW: 20110209: Script depredated? 
 /**
 *	This script allows to manage answers. It is included from the script admin.php
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Olivier Brouckaert
 * 	@version $Id: answer_admin.inc.php 21361 2009-06-11 04:08:58Z ivantcholakov $
 */
-
+/**
+ * Code
+ */
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
 if(!defined('ALLOWED_TO_INCLUDE'))

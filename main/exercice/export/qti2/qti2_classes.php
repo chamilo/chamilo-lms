@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * @author Claro Team <cvs@claroline.net>
- * @author Yannick Warnier <yannick.warnier@dokeos.com> - updated ImsAnswerHotspot to match QTI norms
+ * @author Yannick Warnier <yannick.warnier@beeznest.com> - updated ImsAnswerHotspot to match QTI norms
  * @package chamilo.exercise
  */
 /**

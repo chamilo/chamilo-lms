@@ -5,8 +5,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
  *
  * @author Claro Team <cvs@claroline.net>
- * @package dokeos.exercise
+ * @package chamilo.exercise
  *
+ */
+/**
+ * Redirection
  */
 header("Location: ../../../");
 exit();

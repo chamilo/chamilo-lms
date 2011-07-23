@@ -1,31 +1,12 @@
 <?php
-
-// $Id: class_user_import.php 9018 2006-06-28 15:11:16Z evie_em $
-/*
-==============================================================================
-    Dokeos - elearning and course management software
-
-    Copyright (c) 2005 Bart Mollet <bart.mollet@hogent.be>
-
-    For a full list of contributors, see "credits.txt".
-    The full license can be read in "license.txt".
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-
-    See the GNU General Public License for more details.
-
-    Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
+/* For licensing terms, see /license.txt */
+/**
+*	@package chamilo.admin
 */
 /**
-==============================================================================
+ * Code
 * This tool allows platform admins to update class-user relations by uploading
 * a CSVfile
-* @package dokeos.admin
-==============================================================================
 */
 
 /**

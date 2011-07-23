@@ -3,7 +3,7 @@
 
 /**
  *	File containing the MultipleAnswer class.
- *	@package dokeos.exercise
+ *	@package chamilo.exercise
  * 	@author Eric Marguin
  */
 

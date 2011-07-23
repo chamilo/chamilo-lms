@@ -174,7 +174,7 @@ class ImsSection
  *
  * Every start_*() and corresponding end_*(), as well as export_*() methods return a string.
  *
- * @warning Attached files are NOT exported.
+ * Warning: Attached files are NOT exported.
  * @package chamilo.exercise.qti
  * @author Amand Tihon <amand@alrj.org>
  */

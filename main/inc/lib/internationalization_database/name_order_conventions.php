@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * @package chamilo.include.internationalization
+ */
 /**
  * The following table contains two types of conventions concerning person names:
  *

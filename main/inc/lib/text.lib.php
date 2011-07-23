@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * This is the text library for Chamilo.
  * It is loaded during the global initialization,
@@ -8,10 +7,6 @@
  *
  * @package chamilo.library
  */
-
-
-/* HTML processing functions */
-
 /**
  * This function strips all html-tags found in the input string and outputs a pure text.
  * Mostly, the function is to be used before language or encoding detection of the input string.

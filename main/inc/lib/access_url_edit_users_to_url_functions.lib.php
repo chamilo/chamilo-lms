@@ -9,12 +9,16 @@
  * @author Toon Keppens <toon@vi-host.net>
  * @author Julio Montoya - Cleaning code
  * @author Ricardo Rodriguez - Separated the function and code
- *
+ * @package chamilo.library
  */
-
-
+/**
+ * Code
+ */
 require_once ('xajax/xajax.inc.php');
-
+/**
+ * Class
+ * @package chamilo.library
+ */
 class Accessurledituserstourl{
 
 	function search_users($needle, $id)

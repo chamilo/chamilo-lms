@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * Access_url_edit_session_to_url class
  * Contains several functions dealing with displaying,
@@ -9,11 +9,16 @@
  * @author Toon Keppens <toon@vi-host.net>
  * @author Julio Montoya - Cleaning code
  * @author Ricardo Rodriguez - Separated the function and code
- *
+ * @package chamilo.include
  */
-
+/**
+ * Code
+ */
 require_once ('xajax/xajax.inc.php');
-
+/**
+ * Class
+ * @package chamilo.include
+ */
 class Accessurleditsessionstourl {
 
 	function search_sessions($needle, $id)

@@ -1,9 +1,17 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ *
+ * @package chamilo.include.search
+ */
+/**
+ * Code
+ */
 include_once dirname(__FILE__) . '/../../../global.inc.php';
 require_once dirname(__FILE__) . '/search_processor.class.php';
-
 /**
  * Process documents before pass it to search listing scripts
+ * @package chamilo.include.search
  */
 class document_processor extends search_processor {
 

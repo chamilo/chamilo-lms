@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ *
+ * @package chamilo.library
+ */
+/**
+ * Code
+ */
 require_once 'database.lib.php';
 require_once 'course.lib.php';
 require_once 'tablesort.lib.php';
@@ -52,7 +58,7 @@ define("DEFAULT_GROUP_CATEGORY", 2);
 /**
  * This library contains some functions for group-management.
  * @author Bart Mollet
- * @package dokeos.library
+ * @package chamilo.library
  * @todo Add $course_code parameter to all functions. So this GroupManager can
  * be used outside a session.
  */

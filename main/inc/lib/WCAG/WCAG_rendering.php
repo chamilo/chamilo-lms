@@ -18,16 +18,22 @@
 // +----------------------------------------------------------------------+
 //
 // $Id: wai_rendering.php,v 1.0 2006/10/07 20:12:17 avb Exp $
-
+/**
+ * @package chamilo.include
+ */
+/**
+ * Code
+ */
 include_once ('../inc/global.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 /**
-* helper for WCAG rendering.
-*
-* @author      Patrick Vandermaesen <pvandermaesen@noctis.be>
-* @version     1.0
-*/
+ * helper for WCAG rendering.
+ *
+ * @author      Patrick Vandermaesen <pvandermaesen@noctis.be>
+ * @version     1.0
+ * @package chamilo.include
+ */
 class WCAG_Rendering {
 
 	function editor_header() {

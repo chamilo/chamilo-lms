@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-if(!class_exists('Matching')):
 /**
 	CLASS Matching
  *
@@ -10,7 +9,14 @@ if(!class_exists('Matching')):
  *	@author Eric Marguin
  *	@package chamilo.exercise
  **/
-
+/**
+ * Code
+ */
+if(!class_exists('Matching')):
+/**
+ * Matching questions type class
+ * @package chamilo.exercise
+ */
 class Matching extends Question {
 
 

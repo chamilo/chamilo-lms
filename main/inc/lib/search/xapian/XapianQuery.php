@@ -1,5 +1,11 @@
 <?php
 /* For licensing terms, see /dokeos_license.txt */
+/**
+ * @package chamilo.include.search
+ */
+/**
+ * Code
+ */
 require_once 'xapian.php';
 require_once dirname(__FILE__) . '/../IndexableChunk.class.php';
 //TODO: think another way without including specific fields here

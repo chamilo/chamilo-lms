@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * @chamilo.library
+ */
+/**
+ * Code
+ */
 include(dirname(__FILE__).'/../global.inc.php');
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
 $xajax_upload = new Xajax();

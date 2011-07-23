@@ -1,6 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * @package chamilo.include.internationalization
+ */
+/**
+ * Code
+ */
 // See http://demo.icu-project.org/icu-bin/convexp
 return array(
 

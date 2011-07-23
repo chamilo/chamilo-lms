@@ -1,5 +1,5 @@
 <?php // $Id: $
-if ( count( get_included_files() ) == 1 ) die( '---' );
+/* For licensing terms, see /license.txt */
 /**
  * @copyright (c) 2007 Dokeos
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
@@ -7,9 +7,13 @@ if ( count( get_included_files() ) == 1 ) die( '---' );
  * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
  *
  * @author Claro Team <cvs@claroline.net>
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
- * @package dokeos.exercise
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ * @package chamilo.exercise
  */
+/**
+ * Code
+ */
+if ( count( get_included_files() ) == 1 ) die( '---' );
 require_once('../../exercise.class.php');
 require_once('../../question.class.php');
 require_once('../../answer.class.php');
@@ -32,7 +36,10 @@ define('FIB',				3);
 define('MATCHING',			4);
 define('FREE_ANSWER', 		5);
 define('HOTSPOT',			6);
-
+/**
+ *
+ * @package chamilo.exercise
+ */
 class ImsQuestion extends Question
 {
 	/**
@@ -91,6 +98,10 @@ class ImsQuestion extends Question
     }
 }
 
+/**
+ *
+ * @package chamilo.exercise
+ */
 class ImsAnswerMultipleChoice extends answerMultipleChoice
 {
 	/**
@@ -231,6 +242,10 @@ class ImsAnswerMultipleChoice extends answerMultipleChoice
     }
 }
 
+/**
+ *
+ * @package chamilo.exercise
+ */
 class ImsAnswerTrueFalse extends answerTrueFalse
 {
 	/**
@@ -339,6 +354,10 @@ class ImsAnswerTrueFalse extends answerTrueFalse
      }
 }
 
+/**
+ *
+ * @package chamilo.exercise
+ */
 class ImsAnswerFillInBlanks extends answerFillInBlanks
 {
 	/**
@@ -455,6 +474,10 @@ class ImsAnswerFillInBlanks extends answerFillInBlanks
     }
 }
 
+/**
+ *
+ * @package chamilo.exercise
+ */
 class ImsAnswerMatching extends answerMatching
 {
 	/**

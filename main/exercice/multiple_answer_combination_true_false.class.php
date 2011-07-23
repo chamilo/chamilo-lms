@@ -10,7 +10,7 @@
  * Code
  */
 if(!class_exists('MultipleAnswerCombinationTrueFalse')):
-
+require 'multiple_answer_combination.class.php';
 /**
 	CLASS MultipleAnswer
  *
@@ -18,10 +18,8 @@ if(!class_exists('MultipleAnswerCombinationTrueFalse')):
  *	extending the class question
  *
  *	@author Eric Marguin
- *	@package dokeos.exercise
+ *	@package chamilo.exercise
  **/
-require 'multiple_answer_combination.class.php';
-
 class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination {
 
 	static $typePicture = 'mcmaco.gif';

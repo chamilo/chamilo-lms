@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * This is the course creation library for Chamilo.
  * Include/require it in your code for using its functionality.
@@ -9,7 +8,9 @@
  * @todo Clean up horrible structure, script is unwieldy, for example easier way to deal with
  * different tool visibility settings: ALL_TOOLS_INVISIBLE, ALL_TOOLS_VISIBLE, CORE_TOOLS_VISIBLE...
  */
-
+/**
+ * Code
+ */
 require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 

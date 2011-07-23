@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	This is the file manage library for Chamilo.
  *	Include/require it in your code to use its functionality.
@@ -626,7 +625,7 @@ function mkdirs($path, $mode = '0770') {
  * @param 	sting	$path 		wanted path
  * @param 	boolean	$verbose	fix if comments must be printed
  * @param 	string	$mode		fix if chmod is same of parent or default (Note: This misterious parameter is not used).
- * @global 	string  $langCreatedIn string to say "create in"
+ * Note 	string  $langCreatedIn string used to say "create in"
  */
 function mkpath($path, $verbose = false, $mode = 'herit') {
 	global $langCreatedIn, $_configuration;

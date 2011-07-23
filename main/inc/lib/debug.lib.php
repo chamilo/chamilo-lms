@@ -5,6 +5,11 @@
 * Include/require it in your code to use its functionality.
 * @package chamilo.debug
 */
+/**
+* This is the debug library for Chamilo.
+* Include/require it in your code to use its functionality.
+* @package chamilo.debug
+*/
 class Debug {
 	/**
 	 * This function displays the contend of a variable, array or object in a nicely formatted way.

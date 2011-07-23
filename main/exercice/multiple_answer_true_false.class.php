@@ -1,18 +1,21 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-if(!class_exists('MultipleAnswerTrueFalse')):
-
 /**
-	CLASS MultipleAnswer
+ * CLASS MultipleAnswer
  *
- *	This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
- *	extending the class question
- *
- *	@author Julio Montoya
- *	@package chamilo.exercise
+ * This class allows to instantiate an object of type MULTIPLE_ANSWER
+ * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question
+ * @author Julio Montoya
+ * @package chamilo.exercise
  **/
-
+/**
+ * Code
+ */
+if(!class_exists('MultipleAnswerTrueFalse')):
+/**
+ * Class
+ * @package chamilo.exercise
+ */
 class MultipleAnswerTrueFalse extends Question {
 
 	static $typePicture = 'mcmao.gif';

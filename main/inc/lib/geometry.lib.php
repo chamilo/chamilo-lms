@@ -1,11 +1,14 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 /**
- * Author: Arnaud Ligot (CBlue SPRL) <arnaud@cblue.be>
+ *
+ * @author: Arnaud Ligot (CBlue SPRL) <arnaud@cblue.be>
+ * @package chamilo.include.geometry
  */
-
+/**
+ * Code
+ */
 DEFINE('DEBUG', false);
-
 /**
  * poly_init -    build the array which will store the image of the polygone
  *
@@ -13,6 +16,7 @@ DEFINE('DEBUG', false);
  * @param max[y]    Y resolution
  *
  * @returns an array such as: for all i in [0..max[x][ : for all j in [0..max[y][ : array[i][j] = FALSE
+ * @package chamilo.include.geometry
  */
 function poly_init($max) {
     return array_fill(0, $max["x"]-1, 

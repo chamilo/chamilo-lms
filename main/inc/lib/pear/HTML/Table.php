@@ -1,6 +1,5 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * PEAR::HTML_Table makes the design of HTML tables easy, flexible, reusable and
  * efficient.

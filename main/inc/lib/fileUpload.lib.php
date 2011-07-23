@@ -10,7 +10,9 @@
  *	@package chamilo.library
  *	@todo test and reorganise
  */
-
+/**
+ * Code
+ */
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 /**
@@ -342,7 +344,7 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 /**
  * Checks if there is enough place to add a file on a directory
  * on the base of a maximum directory size allowed
- * @deprecated use enough_space instead!
+ * deprecated: use enough_space instead!
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param  - file_size (int) - size of the file in byte
  * @param  - dir (string) - Path of the directory
@@ -928,7 +930,7 @@ function get_levels($filename) {
  *
  * @author	Olivier Cauberghe <olivier.cauberghe@ugent.be>
  * @param	path,filename
- * @action	Adds an entry to the document table with the default settings.
+ * action:	Adds an entry to the document table with the default settings.
  */
 function set_default_settings($upload_path, $filename, $filetype = 'file') {
 	global $dbTable,$_configuration;

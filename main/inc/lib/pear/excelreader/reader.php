@@ -1,6 +1,5 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
 * A class for reading Microsoft Excel Spreadsheets.
 *
@@ -25,8 +24,9 @@
 * @link       http://pear.php.net/package/Spreadsheet_Excel_Reader
 * @see        OLE, Spreadsheet_Excel_Writer
 */
-
-
+/**
+ * Code
+ */
 //require_once 'PEAR.php';
 require_once 'OLERead.inc';
 //require_once 'OLE.php';

@@ -1,8 +1,11 @@
 <?php
 /**
  * Manage specific tools
+ * @package chamilo.library
  */
-
+/**
+ * Code
+ */
 // Database table definitions
 $table_sf     = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
 $table_sf_val   = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);

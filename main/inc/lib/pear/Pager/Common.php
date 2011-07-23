@@ -1,6 +1,5 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Contains the Pager_Common class
  *

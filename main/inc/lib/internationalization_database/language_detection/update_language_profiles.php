@@ -1,6 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * @package chamilo.include.internationalization
+ */
+/**
+ * Code
+ */
 $_current_dir = str_replace('\\', '/', realpath(dirname(__FILE__))).'/';
 
 $_sys_code_path = str_replace('\\', '/', realpath($_current_dir.'../../../../')).'/';

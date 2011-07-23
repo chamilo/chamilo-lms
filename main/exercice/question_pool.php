@@ -9,7 +9,9 @@
 * 	@author Olivier Brouckaert
 *   @author Julio Montoya adding support to query all questions from all session, courses, exercises  
 */
-
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file='exercice';
 

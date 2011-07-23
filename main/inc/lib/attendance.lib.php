@@ -1,17 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * This file contains class used like library, provides functions for attendance tool. It's also used like model to attendance_controller (MVC pattern)
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> improvements
  * @package chamilo.attendance
  */
-
 /**
  * Attendance can be used to instanciate objects or as a library to manage attendances
+ * @package chamilo.attendance
  */
-
 class Attendance
 {
 	private $session_id;

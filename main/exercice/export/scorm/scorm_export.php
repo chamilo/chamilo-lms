@@ -28,7 +28,8 @@ define(HOT_SPOT_ORDER, 	7);
  *
  * Every start_*() and corresponding end_*(), as well as export_*() methods return a string.
  *
- * @warning Attached files are NOT exported.
+ * Attached files are NOT exported.
+ * @package chamilo.exercise.scorm
  */
 class ScormAssessmentItem
 {
@@ -258,6 +259,7 @@ class ScormAssessmentItem
  *   - max_attempts
  *   - show_answer
  *   - anonymous_attempts
+ * @package chamilo.exercise.scorm
  */
 class ScormSection
 {

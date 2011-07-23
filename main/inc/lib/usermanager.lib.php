@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	This library provides functions for user management.
-*	Include/require it in your code to use its functionality.
-*
-*	@package chamilo.library
-*	@author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
+* This library provides functions for user management.
+* Include/require it in your code to use its functionality.
+* @package chamilo.library
+* @author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
 */
-
+/**
+ * Code
+ */
 // Constants for user extra field types.
 define('USER_FIELD_TYPE_TEXT',		 		1);
 define('USER_FIELD_TYPE_TEXTAREA',			2);
@@ -38,9 +39,11 @@ define('USER_RELATION_TYPE_GOODFRIEND',	4); // should be deprecated is useless
 define('USER_RELATION_TYPE_ENEMY',		5); // should be deprecated is useless
 define('USER_RELATION_TYPE_DELETED',	6);
 define('USER_RELATION_TYPE_RRHH',		7);
-
-class UserManager
-{
+/**
+ * Class
+ * @package chamilo.include.user
+ */
+class UserManager {
 	private function __construct () {
 	}
 
@@ -1341,11 +1344,11 @@ class UserManager
 	  * 	and simply re-add them all then all the user who have already filled this form will loose their selected value.
 	  * 3.	we add the options that are newly added
 	  *
-	  * @example 	current options are a;b;c and the user changes this to a;b;x (removing c and adding x)
+	  * <code> current options are a;b;c and the user changes this to a;b;x (removing c and adding x)
 	  * 			we first remove c (and also the entry in the option_value table for the users who have chosen this)
 	  * 			we then add x
 	  * 			a and b are neither removed nor added
-	  *
+	  * </code>
 	  * @param 	integer $fieldid		the id of the field we are editing
 	  * @param	string	$fieldvarname	the internal variable name of the field
 	  * @param	int		$fieldtype		the type of the field
@@ -2140,7 +2143,7 @@ class UserManager
     /**
      * Gets the API key (or keys) and return them into an array
      * @param   int     Optional user id (defaults to the result of api_get_user_id())
-     * @result  array   Non-indexed array containing the list of API keys for this user, or FALSE on error
+     * @return  array   Non-indexed array containing the list of API keys for this user, or FALSE on error
      */
     public static function get_api_keys($user_id = null, $api_service = 'dokeos') {
     	if ($user_id != strval(intval($user_id))) return false;

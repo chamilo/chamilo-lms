@@ -7,10 +7,14 @@
 * 	@author Yannick Warnier
 * 	@version $Id: $
 */
-
-
+/**
+ * Code
+ */
 if(!class_exists('ExerciseResult')):
-
+/*
+ * Exercise results class
+ * @package chamilo.exercise
+ */
 class ExerciseResult
 {
 	private $exercises_list = array(); //stores the list of exercises

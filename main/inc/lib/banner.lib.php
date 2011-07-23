@@ -1,19 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
-//require_once(api_get_path(SYS_CODE_PATH).'inc/banner.inc.php'); ?? The banner.inc.php calls the banner.lib.php
-
+/**
+ * Code
+ * @package chamilo.include
+ */
 /**
  * Determines the possible tabs (=sections) that are available.
- * This function is used when creating the tabs in the third header line and all the sections
- * that do not appear there (as determined by the platform admin on the Dokeos configuration settings page)
+ * This function is used when creating the tabs in the third header line and 
+ * all the sections that do not appear there (as determined by the 
+ * platform admin on the Dokeos configuration settings page)
  * will appear in the right hand menu that appears on several other pages
- *
  * @return array containing all the possible tabs
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-
-
 function get_tabs() {
 	global $_course;
 

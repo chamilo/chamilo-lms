@@ -14,6 +14,9 @@
 *
 *	@todo	split more code up in functions, move functions to library?
 */
+/**
+ * Code
+ */
 /*	INIT SECTION	*/
 require_once 'exercise.class.php';
 require_once 'exercise.lib.php';

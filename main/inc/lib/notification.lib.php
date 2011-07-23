@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	This class provides methods for the Notification management.
 *	Include/require it in your code to use its features.
 *	@package chamilo.library
 */
-
+/**
+ * Code
+ */
 require_once 'model.lib.php';
 require_once 'usermanager.lib.php';
 
@@ -35,7 +36,10 @@ define('NOTIFY_GROUP_NO',			'0');
 define('NOTIFICATION_TYPE_MESSAGE',       1);
 define('NOTIFICATION_TYPE_INVITATION',    2);
 define('NOTIFICATION_TYPE_GROUP',         3);
-
+/**
+ * Notification class
+ * @package chamilo.library
+ */
 class Notification extends Model {
     
     var $table;

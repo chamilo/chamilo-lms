@@ -8,9 +8,14 @@
 *
 *	@package chamilo.library
 */
-
+/**
+ * Code
+ */
 require_once 'document.lib.php';
-
+/**
+ *
+ * @package chamilo.library
+ */
 class Export {
 
 	private function __construct() {

@@ -1,15 +1,14 @@
 <?php //$id:$
 /* For licensing terms, see /dokeos_license.txt */
-//error_log(__FILE__);
-
 /**
 *	File containing the HotSpot class.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Eric Marguin
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-
-
+/**
+ * Code
+ */
 if(!class_exists('HotSpot')):
 
 /**
@@ -19,7 +18,7 @@ if(!class_exists('HotSpot')):
  *	extending the class question
  *
  *	@author Eric Marguin
- *	@package dokeos.exercise
+ *	@package chamilo.exercise
  **/
 
 class HotSpot extends Question {
@@ -90,7 +89,9 @@ class HotSpot extends Question {
 		// nothing
 	}
 }
-
+/**
+ * @package chamilo.exercise
+ */
 class HotSpotDelineation extends HotSpot {
 
 	static $typePicture = 'hotspot_delineation.gif';

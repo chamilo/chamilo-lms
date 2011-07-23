@@ -3,9 +3,14 @@
 /**
 *   @package chamilo.library
 */
+/**
+ * Code
+ */
 define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
 require_once _MPDF_PATH.'mpdf.php';
-
+/**
+*   @package chamilo.library
+*/
 class PDF {
     
     var $pdf;    

@@ -14,6 +14,7 @@
  * @version   CVS: $Id: Pager_savebc.php,v 1.3 2007/10/28 22:37:01 quipo Exp $
  * @link      http://pear.php.net/package/Pager
  */
-
+/**
+ * Code
+ */
 require_once 'Pager.php';
-?>

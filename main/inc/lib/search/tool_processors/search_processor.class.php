@@ -1,5 +1,8 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * @package chamilo.include.search
+ */
 /**
  * Base class to make tool processors
  *
@@ -10,6 +13,7 @@
  * Classes that extends this one should be named like: TOOL_<toolname> on
  * TOOL_<toolname>.class.php
  * See lp_list_search for an example of calling the process.
+ * @package chamilo.include.search
  */
 abstract class search_processor {
     /**

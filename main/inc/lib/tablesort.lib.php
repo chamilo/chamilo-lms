@@ -1,15 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	This is a library with some functions to sort tabular data
  *
  *	@package chamilo.library
  */
-
+/**
+ * Code
+ */
 define('SORT_DATE', 3);
 define('SORT_IMAGE', 4);
 
+/**
+ *	@package chamilo.library
+ */
 class TableSort {
 
 	/**

@@ -28,7 +28,7 @@ define(HOT_SPOT_ORDER, 	7);
  *
  * Every start_*() and corresponding end_*(), as well as export_*() methods return a string.
  *
- * @note Attached files are NOT exported.
+ * note: Attached files are NOT exported.
  * @package chamilo.exercise
  */
 class ImsAssessmentItem
@@ -302,7 +302,7 @@ class ImsSection
  *
  * Every start_*() and corresponding end_*(), as well as export_*() methods return a string.
  *
- * @warning Attached files are NOT exported.
+ * warning: Attached files are NOT exported.
  * @author Amand Tihon <amand@alrj.org>
  * @package chamilo.exercise
  */

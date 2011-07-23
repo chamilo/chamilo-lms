@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	Exercise class: This class allows to instantiate an object of type Exercise
-*	@package chamilo.exercise
-* 	@author Olivier Brouckaert
-* 	@author Julio Montoya Cleaning exercises
-* 	@version $Id: exercise.class.php 22046 2009-07-14 01:45:19Z ivantcholakov $
+* Exercise class: This class allows to instantiate an object of type Exercise
+* @package chamilo.exercise
+* @author Olivier Brouckaert
+* @author Julio Montoya Cleaning exercises
+* @version $Id: exercise.class.php 22046 2009-07-14 01:45:19Z ivantcholakov $
 */
 /**
  * Code
@@ -24,7 +24,10 @@ $debug = 0; //All exercise scripts should depend in this debug variable
 require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
 
 if(!class_exists('Exercise')):
-
+/**
+ * Exercise class
+ * @package chamilo.exercise
+ */
 class Exercise {
 	
 	public $id;

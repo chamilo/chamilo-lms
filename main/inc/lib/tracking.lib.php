@@ -7,9 +7,14 @@
  *    @package chamilo.library
  *    @author Julio Montoya <gugli100@gmail.com> (Score average fixes)
  */
-
+/**
+ * Code
+ */
 define('SESSION_LINK_TARGET','_self');
-
+/**
+ * Class
+ * @package chamilo.library
+ */
 class Tracking {
 
     /**
@@ -2774,7 +2779,9 @@ class Tracking {
             return $html;
         }
 }
-
+/**
+ * @package chamilo.tracking
+ */
 class TrackingCourseLog {
 
     function count_item_resources() {
@@ -3314,7 +3321,9 @@ class TrackingCourseLog {
                 return $users;
     }
 }
-
+/**
+ * @package chamilo.tracking
+ */
 class TrackingUserLog {
 
     /**
@@ -3685,11 +3694,10 @@ class TrackingUserLog {
             ";
         }
     }
-
-
-
 }
-
+/**
+ * @package chamilo.tracking
+ */
 class TrackingUserLogCSV {
 
     /**

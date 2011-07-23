@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Blog class
  * Contains several functions dealing with displaying,
@@ -11,6 +10,10 @@
  * @author Toon Keppens <toon@vi-host.net>
  * @author Julio Montoya - Cleaning code
  *
+ */
+/**
+ * Class
+ * @package chamilo.blogs
  */
 class Blog {
 	/**

@@ -33,6 +33,7 @@ define('MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE',    12);
  *
  *	@author Olivier Brouckaert, original author
  *	@author Patrick Cool, LaTeX support
+*	@package chamilo.exercise
  */
 abstract class Question
 {

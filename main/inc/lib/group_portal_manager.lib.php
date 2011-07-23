@@ -6,6 +6,9 @@
 *	@author Julio Montoya <gugli100@gmail.com>
 *	@package chamilo.library
 */
+/**
+ * Code
+ */
 // Group permissions
 define('GROUP_PERMISSION_OPEN'	, '1');
 define('GROUP_PERMISSION_CLOSED', '2');
@@ -25,9 +28,11 @@ define('GROUP_IMAGE_SIZE_MEDIUM', 	3);
 define('GROUP_IMAGE_SIZE_SMALL', 	4);
 
 define('GROUP_TITLE_LENGTH',       50);
-
-class GroupPortalManager
-{
+/**
+ * Class
+ * @package chamilo.library
+ */
+class GroupPortalManager {
 	/**
 	  * Creates a new group
 	  *
@@ -183,7 +188,6 @@ class GroupPortalManager
 	}
 
 	/** Gets the inner join from users and group table
-	 * @return int  access url id
 	 * @return array   Database::store_result of the result
 	 * @author Julio Montoya
 	 * */
@@ -221,8 +225,8 @@ class GroupPortalManager
 	}
 
 	/** Gets the inner join of users and group table
-	 * @return int  quantity of records
-	 * @return bool show groups with image or not
+	 * @param int  quantity of records
+	 * @param bool show groups with image or not
 	 * @return array  with group content
 	 * @author Julio Montoya
 	 * */
@@ -259,8 +263,8 @@ class GroupPortalManager
 	}
 
 	/** Gets the last groups created
-	 * @return int  quantity of records
-	 * @return bool show groups with image or not
+	 * @param int  quantity of records
+	 * @param bool show groups with image or not
 	 * @return array  with group content
 	 * @author Julio Montoya
 	 * */

@@ -9,7 +9,9 @@
  *
  *	@package chamilo.library
  */
-
+/**
+ * Code
+ */
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
@@ -24,7 +26,9 @@ if (empty($default_quota)) {
     $default_quota = 100000000;
 }
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
-
+/**
+ *	@package chamilo.library
+ */
 class DocumentManager {
 
     private function __construct() {

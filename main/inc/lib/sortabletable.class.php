@@ -1,10 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * @package chamilo.library
+ */
+/**
+ * Code
+ */
 require_once 'pear/HTML/Table.php';
 require_once 'pear/Pager/Pager.php';
 require_once 'tablesort.lib.php';
-
 /**
  * This class allows you to display a sortable data-table. It is possible to
  * split the data in several pages.
@@ -15,6 +19,7 @@ require_once 'tablesort.lib.php';
  * - click on the table header to sort the data
  * - choose how many items you see per page
  * - navigate through all data-pages
+ * @package chamilo.library
  */
 class SortableTable extends HTML_Table {
 	/**
@@ -837,6 +842,7 @@ class SortableTable extends HTML_Table {
 
 /**
  * Sortable table which can be used for data available in an array
+ * @package chamilo.library
  */
 class SortableTableFromArray extends SortableTable {
 	/**
@@ -886,6 +892,7 @@ class SortableTableFromArray extends SortableTable {
  * $column_order is an array that lets us decide the ordering of the columns
  * i.e: $column_header=array('a','b','c','d','e'); $column_order=array(1,2,5,4,5);
  * These means that the 3th column (letter "c") will be sort like the order we use in the 5th column
+ * @package chamilo.library
  */
 
 class SortableTableFromArrayConfig extends SortableTable {

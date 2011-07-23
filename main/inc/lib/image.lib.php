@@ -1,15 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * This class provides a layer to manage images
  * @author Julio Montoya <gugli100@gmail.com>
+ * @package chamilo.include.image
+ * @todo move in a DB configuration setting
  */
-
-//@todo move in a DB configuration setting
- 
+/**
+ * Code
+ */
 define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
-
+/**
+ * Image class
+ * @package chamilo.include.image
+ */
 class Image {
 	var $image_wrapper = null;
 
@@ -40,6 +44,10 @@ class Image {
 	}
 }
 
+/**
+ * Image wrapper class
+ * @package chamilo.include.image
+ */
 abstract class ImageWrapper {
     var $debug = true;
     var $path;
@@ -75,6 +83,7 @@ abstract class ImageWrapper {
  * 
  * @author jmontoya
  *
+ * @package chamilo.include.image
  */
 class ImagickWrapper extends ImageWrapper {
     var $image;
@@ -178,10 +187,8 @@ class ImagickWrapper extends ImageWrapper {
 
 /**
  * php-gd wrapper
- * 
- *
+ * @package chamilo.include.image
  */
-
 class GDWrapper extends ImageWrapper {
     var $bg;
 	

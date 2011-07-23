@@ -17,9 +17,13 @@
 // +----------------------------------------------------------------------+
 //
 // $Id: Compare.php 6184 2005-09-07 10:08:17Z bmol $
-
+/**
+ * @package chamilo.library
+ */
+/**
+ * Code
+ */
 require_once 'HTML/QuickForm/Rule.php';
-
 /**
  * Rule to compare two form fields
  *

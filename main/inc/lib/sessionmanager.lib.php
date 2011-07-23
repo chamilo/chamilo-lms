@@ -5,7 +5,9 @@
 * All main sessions functions should be placed here.
 * @package chamilo.library
 */
-
+/**
+ * Code
+ */
 /* LIBRARIES */
 require_once 'display.lib.php';
 require_once 'course.lib.php';
@@ -161,8 +163,10 @@ class SessionManager {
      * Creates a new course code based in given code
      * 
      * @param string	wanted code
-     * @example	$wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3
+     * <code>
+     * $wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3
      * if the course code doest not exist in the DB the same course code will be returned
+     * </code>
      * @return string	wanted unused code
      */
 	function generate_nice_next_session_name($session_name) {        

@@ -1,14 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	Code library for HotPotatoes integration.
  *	@package chamilo.exercise
  * 	@author Istvan Mandak
  */
-
-/*	Included libraries */
-
+/**
+ * Included libraries
+ */
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 $time = time();
@@ -16,7 +15,9 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
 
 header('Content-Type: text/html; charset='.api_get_system_encoding());
 
-// Initialization
+/**
+ * Initialization
+ */
 $doc_url = str_replace(array('../', '\\', '\\0', '..'), array('', '', '', ''), urldecode($_GET['file']));
 $cid = api_get_course_id();
 $document_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -26,7 +27,9 @@ $learnpath_id = $_REQUEST['learnpath_id'];
 $learnpath_item_id = $_REQUEST['learnpath_item_id'];
 $time = $_REQUEST['time'];
 
-// Read content
+/**
+ * Read content
+ */
 $full_file_path = $document_path.$doc_url;
 my_delete($full_file_path.$_user['user_id'].'.t.html');
 $content = ReadFileCont($full_file_path.$_user['user_id'].'.t.html');

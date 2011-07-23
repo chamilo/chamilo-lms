@@ -1,11 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	This file generates the ActionScript variables code used by the HotSpot .swf
-*	@package chamilo.exercise
-* 	@author Toon Keppens, Julio Montoya adding hotspot "medical" support
-*/
-
+ * This file generates the ActionScript variables code used by the 
+ * HotSpot .swf
+ * @package chamilo.exercise
+ * @author Toon Keppens, Julio Montoya adding hotspot "medical" support
+ */
+/**
+ * Code
+ */
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');

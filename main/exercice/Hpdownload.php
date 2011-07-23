@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	This script shows the list of exercises for administrators and students.
 *	@package chamilo.exercise
 * 	@author Istvan Mandak
 * 	@version $Id: Hpdownload.php 22201 2009-07-17 19:57:03Z cfasanando $
 */
-
+/**
+ * Code
+ */
 session_cache_limiter('public');
 
 require_once '../inc/global.inc.php';

@@ -1,14 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
-*	Exercise administration
-*	This script allows to manage an exercise. It is included from the script admin.php
-*	@package chamilo.exercise
-* 	@author Olivier Brouckaert
-* 	@version $Id$
+* Exercise administration
+* This script allows to manage an exercise. It is included from 
+* the script admin.php
+* @package chamilo.exercise
+* @author Olivier Brouckaert
 */
-
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file='exercice';
 

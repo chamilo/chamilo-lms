@@ -1,14 +1,14 @@
 <?php // $Id: $
-if ( count( get_included_files() ) == 1 ) die( '---' );
+/* For licensing terms, see /license.txt */
 /**
- * @copyright (c) 2007 Dokeos
- * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
- *
- * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
- *
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@dokeos.com> - updated ImsAnswerHotspot to match QTI norms
+ * @package chamilo.exercise
  */
+/**
+ * Code
+ */
+if ( count( get_included_files() ) == 1 ) die( '---' );
 // answer types
 define('UNIQUE_ANSWER',		1);
 define('MCUA',				1);
@@ -41,7 +41,10 @@ require_once(api_get_path(SYS_CODE_PATH).'/exercice/fill_blanks.class.php');
 //include_once $path . '/../../lib/answer_truefalse.class.php';
 //include_once $path . '/../../lib/answer_fib.class.php';
 //include_once $path . '/../../lib/answer_matching.class.php';
-
+/**
+ *
+ * @package chamilo.exercise
+ */
 class Ims2Question extends Question
 {
     /**
@@ -87,7 +90,10 @@ class Ims2Question extends Question
     	return true;
     }
 }
-
+/**
+ * Class
+ * @package chamilo.exercise
+ */
 class ImsAnswerMultipleChoice extends Answer
 {
     /**
@@ -160,6 +166,10 @@ class ImsAnswerMultipleChoice extends Answer
     }
 }
 
+/**
+ * Class
+ * @package chamilo.exercise
+ */
 class ImsAnswerFillInBlanks extends Answer
 {
     /**
@@ -288,6 +298,10 @@ class ImsAnswerFillInBlanks extends Answer
     }
 }
 
+/**
+ * Class
+ * @package chamilo.exercise
+ */
 class ImsAnswerMatching extends Answer
 {
     /**
@@ -377,6 +391,10 @@ class ImsAnswerMatching extends Answer
 
 }
 
+/**
+ * Class
+ * @package chamilo.exercise
+ */
 class ImsAnswerHotspot extends Answer
 {
     /**
@@ -467,6 +485,10 @@ class ImsAnswerHotspot extends Answer
     }
 }
 
+/**
+ * Class
+ * @package chamilo.exercise
+ */
 class ImsAnswerFree extends Answer
 {
     /**

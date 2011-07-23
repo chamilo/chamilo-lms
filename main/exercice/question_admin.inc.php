@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	Statement (?) administration
 *	This script allows to manage the statements of questions.
@@ -9,8 +8,9 @@
 * 	@author Olivier Brouckaert
 * 	@version $Id: question_admin.inc.php 22126 2009-07-15 22:38:39Z juliomontoya $
 */
-
-/*		INIT SECTION    */
+/**
+ * Code
+ */
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 // ALLOWED_TO_INCLUDE is defined in admin.php

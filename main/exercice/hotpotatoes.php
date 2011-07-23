@@ -1,13 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Code for HotPotatoes integration.
  * @package chamilo.exercise
  * @author Istvan Mandak (original author)
  */
-
-
+/**
+ * Code
+ */
 // Name of the language file that needs to be included.
 $language_file ='exercice';
 

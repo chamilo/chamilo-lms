@@ -1,18 +1,16 @@
 <?php // $Id: $
-if ( count( get_included_files() ) == 1 ) die( '---' );
+/* For licensing terms, see /license.txt */
 /**
- * @copyright (c) 2007 Dokeos
- * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
- *
- * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
- *
  * @author Claro Team <cvs@claroline.net>
  * @author Amand Tihon <amand@alrj.org>
  * @author Sebastien Piraux <pir@cerdecam.be>
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
- *
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ * @package chamilo.exercise.qti
  */
-
+/**
+ * Code
+ */
+if ( count( get_included_files() ) == 1 ) die( '---' );
 include dirname(__FILE__) . '/qti_classes.php';
 /*--------------------------------------------------------
       Classes
@@ -30,6 +28,7 @@ include dirname(__FILE__) . '/qti_classes.php';
  *   - anonymous_attempts
  *
  * @author Amand Tihon <amand@alrj.org>
+ * @package chamilo.exercise.qti
  */
 class ImsSection
 {
@@ -176,6 +175,7 @@ class ImsSection
  * Every start_*() and corresponding end_*(), as well as export_*() methods return a string.
  *
  * @warning Attached files are NOT exported.
+ * @package chamilo.exercise.qti
  * @author Amand Tihon <amand@alrj.org>
  */
 class ImsItem

@@ -6,9 +6,9 @@
 * 	@author
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-/*
-	including the global file
-*/
+/**
+ *	including the global file
+ */
 require_once '../inc/global.inc.php';
 
 /*

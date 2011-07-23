@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	File containing the Question class.
 *	@package chamilo.exercise
 * 	@author Olivier Brouckaert
 *   @author Julio Montoya <gugli100@gmail.com> lot of bug fixes
 */
-
+/**
+ * Code
+ */
 if(!class_exists('Question')):
 
 // answer types

@@ -19,7 +19,9 @@
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added (2008) and Cleaning exercises (2010), Adding hotspot delineation support (2011)
 */
-
+/**
+ * Code
+ */
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';

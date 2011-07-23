@@ -1,12 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	This script allows to manage answers. It is included from the script admin.php
-*	@package chamilo.exercise
-* 	@author Toon Keppens
-*/
-
-// ALLOWED_TO_INCLUDE is defined in admin.php
+ * This script allows to manage answers. It is included from the 
+ * script admin.php
+ * @package chamilo.exercise
+ * @author Toon Keppens
+ */
+/**
+ * Code
+ * ALLOWED_TO_INCLUDE is defined in admin.php
+ */
 if (!defined('ALLOWED_TO_INCLUDE')) {
 	exit();
 }

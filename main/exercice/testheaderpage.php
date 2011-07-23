@@ -2,9 +2,12 @@
 /* For licensing terms, see /license.txt */
 /**
 *	Code library for HotPotatoes integration.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Istvan Mandak
 */
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file='exercice';
 

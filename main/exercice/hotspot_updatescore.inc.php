@@ -1,18 +1,18 @@
 <?php //$id:$
 /* For licensing terms, see /dokeos_license.txt */
-
-//error_log(__FILE__);
 /**
 *	This file saves every click in the hotspot tool into track_e_hotspots
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Toon Keppens
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
-include('../inc/global.inc.php');
+/**
+ * Code
+ */
+include 'exercise.class.php';
+include 'question.class.php';
+include 'answer.class.php';
+include '../inc/global.inc.php';
 
 
 $courseCode   = $_GET['coursecode'];
@@ -21,8 +21,7 @@ $coordinates  = $_GET['coord'];
 $objExcercise = $_SESSION['objExercise'];
 $hotspotId	  = $_GET['hotspotId'];
 $exerciseId   = $objExcercise->selectId();
-if ($_GET['answerId'] == "0") // click is NOT on a hotspot
-{
+if ($_GET['answerId'] == "0") { // click is NOT on a hotspot
 	$hit = 0;
 	$answerId = $hotspotId;
 
@@ -32,9 +31,7 @@ if ($_GET['answerId'] == "0") // click is NOT on a hotspot
 	// Save clicking order
 	//$answerOrderId = count($_SESSION['exerciseResult'][$questionId]['order'])+1;
 	//$_SESSION['exerciseResult'][$questionId]['order'][$answerOrderId] = $answerId;
-}
-else // user clicked ON a hotspot
-{
+} else { // user clicked ON a hotspot
 	$hit = 1;
 	$answerId = $hotspotId;
 

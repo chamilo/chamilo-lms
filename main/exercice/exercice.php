@@ -8,7 +8,9 @@
 *	@author Wolfgang Schneider, code/html cleanup
 *	@author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
 */
-
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file = array('exercice','tracking');
 

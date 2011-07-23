@@ -1,14 +1,12 @@
 <?php // $Id: $
-if ( count( get_included_files() ) == 1 ) die( '---' );
+/* For licensing terms, see /license.txt */
 /**
- * @copyright (c) 2007 Dokeos
- * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
- *
- * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
- *
- * @author Claro Team <cvs@claroline.net>
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @package chamilo.exercise.scorm
  */
+/**
+ * Code
+ */
+if ( count( get_included_files() ) == 1 ) die( '---' );
 
 require dirname(__FILE__) . '/scorm_classes.php';
 

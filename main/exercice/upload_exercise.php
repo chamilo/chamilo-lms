@@ -6,7 +6,9 @@
  *  Encoding fixes Julio Montoya 
  * 	@package chamilo.exercise
  */
-// Language files that should be included
+/**
+ * Language files that should be included
+ */
 $language_file[] = 'learnpath';
 $language_file[] = 'exercice';
 // setting the help

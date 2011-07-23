@@ -6,7 +6,9 @@
 * 	@author Ronny Velasquez
 * 	@version $Id: qti2.php  2010-03-12 12:14:25Z $
 */
-
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file = 'exercice';
 

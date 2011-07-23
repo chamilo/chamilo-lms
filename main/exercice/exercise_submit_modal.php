@@ -4,6 +4,9 @@
 *	@package chamilo.exercise
 * 	@author Julio Montoya <gugli100@gmail.com>
 */
+/**
+ * Code
+ */
 $language_file=array('exercice');
 require_once '../inc/global.inc.php';
 api_protect_course_script(false);

@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Exercise
+ * @package chamilo.exercise
+ */
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file='exercice';
 

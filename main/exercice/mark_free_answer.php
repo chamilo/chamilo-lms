@@ -1,19 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	Free answer marking script
 * 	This script allows a course tutor to mark a student's free answer.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Yannick Warnier <yannick.warnier@dokeos.com>
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 *
 * 	@todo respect coding guidelines
 */
-
-/*
-		INIT SECTION
-*/
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file='exercice';
 

@@ -1,13 +1,14 @@
 <?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
 /* For licensing terms, see /chamilo_license.txt */
-
 /**
 *	File containing the MultipleAnswer class.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Eric Marguin
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-
+/**
+ * Code
+ */
 if(!class_exists('MultipleAnswerCombinationTrueFalse')):
 
 /**

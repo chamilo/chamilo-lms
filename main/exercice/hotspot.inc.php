@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	Hotspot languae conversion
  *	@package chamilo.exercise
  */
-
+/**
+ * Code
+ */
 session_cache_limiter('none');
 
 $language_file = 'hotspot';

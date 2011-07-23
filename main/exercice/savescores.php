@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	Saving the scores.
 *	@package chamilo.exercise
 * 	@author
 * 	@version $Id: savescores.php 15602 2008-06-18 08:52:24Z pcool $
 */
-
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file = 'learnpath';
 

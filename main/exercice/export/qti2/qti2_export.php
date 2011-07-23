@@ -1,20 +1,18 @@
 <?php // $Id: $
-if ( count( get_included_files() ) == 1 ) die( '---' );
+/* For licensing terms, see /license.txt */
 /**
- * @copyright (c) 2007 Dokeos
- * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
- *
- * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
- *
  * @author Claro Team <cvs@claroline.net>
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ * @package chamilo.exercise
  */
-
+/**
+ * Code
+ */
+if ( count( get_included_files() ) == 1 ) die( '---' );
 require dirname(__FILE__) . '/qti2_classes.php';
-
-/*--------------------------------------------------------
-      Classes
-  --------------------------------------------------------*/
+/**
+ * Classes
+*/
 // answer types
 define(UNIQUE_ANSWER,	1);
 define(MULTIPLE_ANSWER,	2);
@@ -30,7 +28,8 @@ define(HOT_SPOT_ORDER, 	7);
  *
  * Every start_*() and corresponding end_*(), as well as export_*() methods return a string.
  *
- * @warning Attached files are NOT exported.
+ * @note Attached files are NOT exported.
+ * @package chamilo.exercise
  */
 class ImsAssessmentItem
 {
@@ -158,6 +157,7 @@ class ImsAssessmentItem
  *   - anonymous_attempts
  *
  * @author Amand Tihon <amand@alrj.org>
+ * @package chamilo.exercise
  */
 class ImsSection
 {
@@ -304,6 +304,7 @@ class ImsSection
  *
  * @warning Attached files are NOT exported.
  * @author Amand Tihon <amand@alrj.org>
+ * @package chamilo.exercise
  */
 class ImsItem
 {

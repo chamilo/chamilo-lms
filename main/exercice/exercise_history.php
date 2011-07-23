@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	Exercise list: This script shows the list of exercises for administrators and students.
 *	@package chamilo.exercise
@@ -8,8 +7,12 @@
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
 */
-
-// name of the language file that needs to be included
+/**
+ * Code
+ */
+/**
+ * name of the language file that needs to be included
+ */
 $language_file='exercice';
 
 require_once '../inc/global.inc.php';
@@ -18,7 +21,9 @@ api_protect_course_script(true);
 
 $show=(isset($_GET['show']) && $_GET['show'] == 'result')?'result':'test'; // moved down to fix bug: http://www.dokeos.com/forum/viewtopic.php?p=18609#18609
 
-/*	Libraries */
+/**
+ * Libraries
+ */
 
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 //include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');

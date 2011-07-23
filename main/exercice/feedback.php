@@ -1,13 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 // Note by Ivan Tcholakov, 14-JUL-2009: I can't see where this file is used. Is it obsolete?
-
 /**
 *	Feedback
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
+/**
+ * Code
+ */
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');

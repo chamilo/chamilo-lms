@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	Exercise administration
 * 	This script allows to manage (create, modify) an exercise and its questions
@@ -44,7 +43,9 @@
 *	@package chamilo.exercise
 * 	@author Olivier Brouckaert
 */
-
+/**
+ * Code
+ */
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';

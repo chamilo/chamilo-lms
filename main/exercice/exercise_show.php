@@ -10,7 +10,9 @@
  * 	@todo remove the debug code and use the general debug library
  * 	@todo small letters for table variables
  * */
-
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file = array('exercice');
 

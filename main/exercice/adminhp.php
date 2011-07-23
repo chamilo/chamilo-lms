@@ -1,33 +1,28 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	HotPotatoes administration.
 *	@package chamilo.exercise
 * 	@author Istvan Mandak
 * 	@version $Id: adminhp.php 20089 2009-04-24 21:12:54Z cvargas1 $
 */
-
-
-
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
-
-include('exercise.lib.php');
-
+/**
+ * Code
+ */
+include 'exercise.class.php';
+include 'question.class.php';
+include 'answer.class.php';
+include 'exercise.lib.php';
 // name of the language file that needs to be included
 $language_file='exercice';
 
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
-if(isset($_REQUEST["cancel"]))
-{
-	if($_REQUEST["cancel"]==get_lang('Cancel'))
-	{
-				header("Location: exercice.php");
-	}
+if (isset($_REQUEST["cancel"])) {
+    if ($_REQUEST["cancel"]==get_lang('Cancel')) {
+        header("Location: exercice.php");
+    }
 }
 
 //$is_courseAdmin = $_SESSION['is_courseAdmin'];
@@ -66,20 +61,19 @@ $TBL_REPONSES				= Database::get_course_table(TABLE_QUIZ_ANSWER);
 $TBL_DOCUMENT				= Database::get_course_table(TABLE_DOCUMENT);
 $dbTable					= $TBL_DOCUMENT;
 
-if(!$is_allowedToEdit)
-{
-	api_not_allowed(true);
+if (!$is_allowedToEdit) {
+    api_not_allowed(true);
 }
 
-if (isset($_SESSION['gradebook'])){
-	$gradebook=	$_SESSION['gradebook'];
+if (isset($_SESSION['gradebook'])) {
+    $gradebook=	$_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook=='view') {
-	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('ToolGradebook')
-		);
+    $interbreadcrumb[]= array (
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
@@ -98,14 +92,12 @@ require_once(api_get_path(SYS_CODE_PATH).'/exercice/hotpotatoes.lib.php');
 </h4>
 
 <?php
-if(isset($newName))
-{
-		if($newName!="")
-		{
-			//alter database record for that test
-			SetComment($hotpotatoesName,$newName);
-			echo "<script language='Javascript' type='text/javascript'> window.location='exercice.php'; </script>";
-		}
+if (isset($newName)) {
+    if ($newName!="") {
+        //alter database record for that test
+        SetComment($hotpotatoesName,$newName);
+        echo "<script language='Javascript' type='text/javascript'> window.location='exercice.php'; </script>";
+    }
 }
 
 echo "<form action=\"".api_get_self()."\" method='post' name='form1'>";
@@ -115,10 +107,12 @@ echo "<input type=\"text\" name=\"newName\" value=\"";
 
 $lstrComment = "";
 $lstrComment = GetComment($hotpotatoesName);
-if($lstrComment=="")
-	$lstrComment = GetQuizName($hotpotatoesName,$documentPath);
-if($lstrComment=="")
-	$lstrComment = basename($hotpotatoesName,$documentPath);
+if ($lstrComment=="") {
+    $lstrComment = GetQuizName($hotpotatoesName,$documentPath);
+}
+if ($lstrComment=="") {
+    $lstrComment = basename($hotpotatoesName,$documentPath);
+}
 
 echo $lstrComment;
 echo "\" size=40>&nbsp;";

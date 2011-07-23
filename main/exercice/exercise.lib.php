@@ -1,16 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
- *	Exercise library
- *  @todo convert this lib into a static class
+ * Exercise library
+ * @todo convert this lib into a static class
  *  
- * 	shows a question and its answers
- *	@package chamilo.exercise
- * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
- * 	@version $Id: exercise.lib.php 22247 2009-07-20 15:57:25Z ivantcholakov $
+ * shows a question and its answers
+ * @package chamilo.exercise
+ * @author Olivier Brouckaert <oli.brouckaert@skynet.be>
+ * @version $Id: exercise.lib.php 22247 2009-07-20 15:57:25Z ivantcholakov $
  */
-
+/**
+ * Code
+ */
 // The initialization class for the online editor is needed here.
 require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
 
@@ -1187,7 +1188,7 @@ function show_score($score, $weight, $show_percentage = true, $use_platform_sett
 /**
  * Converts a numeric value in a percentage example 0.66666 to 66.67 %
  * @param $value
- * @return unknown_type
+ * @return float Converted number
  */
 function convert_to_percentage($value) {
     $return = '-';
@@ -1427,10 +1428,10 @@ function get_best_attempt_by_user($user_id, $exercise_id, $course_code, $session
 
 /**
  * Get average score (NO Exercises in LPs )
- * @param 	int		exercise id
+ * @param 	int	exercise id
  * @param 	string	course code
- * @param 	int		session id
- * @return 
+ * @param 	int	session id
+ * @return 	float	Average score
  */
 function get_average_score($exercise_id, $course_code, $session_id) { 
     $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
@@ -1450,10 +1451,10 @@ function get_average_score($exercise_id, $course_code, $session_id) {
 
 /**
  * Get average score by score (NO Exercises in LPs )
- * @param 	int		exercise id
+ * @param 	int	exercise id
  * @param 	string	course code
- * @param 	int		session id
- * @return 
+ * @param 	int	session id
+ * @return 	float	Average score
  */
 function get_average_score_by_course($course_code, $session_id) { 
     $user_results = get_all_exercise_results_by_course($course_code, $session_id, false);        
@@ -1478,7 +1479,7 @@ function get_average_score_by_course($course_code, $session_id) {
  * @param 	int		exercise id
  * @param 	string	course code
  * @param 	int		session id
- * @return 
+ * @return	float	Best average score
  */
 function get_best_average_score_by_exercise($exercise_id, $course_code, $session_id, $user_count) { 
     $user_results = get_best_exercise_results_by_user($exercise_id, $course_code, $session_id);

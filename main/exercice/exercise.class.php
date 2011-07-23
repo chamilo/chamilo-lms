@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package chamilo.exercise
@@ -8,7 +7,9 @@
 * 	@author Julio Montoya Cleaning exercises
 * 	@version $Id: exercise.class.php 22046 2009-07-14 01:45:19Z ivantcholakov $
 */
-
+/**
+ * Code
+ */
 define('ALL_ON_ONE_PAGE',                   1);
 define('ONE_PER_PAGE',                      2);
 //0=>Feedback , 1=>DirectFeedback, 2=>NoFeedback

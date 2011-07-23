@@ -1,14 +1,14 @@
 <?php // $Id: scorm_classes.php,v 1.2 2006/07/06 18:50:49 moosh Exp $
-if ( count( get_included_files() ) == 1 ) die( '---' );
+/* For licensing terms, see /license.txt */
 /**
- * @copyright (c) 2007 Dokeos
- * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
- *
- * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
- *
  * @author Claro Team <cvs@claroline.net>
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ * @package chamilo.exercise.scorm
  */
+/**
+ * Code
+ */
+if ( count( get_included_files() ) == 1 ) die( '---' );
 require_once(api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'exercice/question.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'exercice/answer.class.php');
@@ -46,6 +46,7 @@ define('MULTIPLE_ANSWER_COMBINATION', 	9);
  * part (the process).
  * The two bits are separate to allow for a one-big-javascript and a one-big-html
  * files to be built. Each export function thus returns an array of HTML+JS
+ * @package chamilo.exercise.scorm
  */
 class ScormQuestion extends Question
 {
@@ -168,6 +169,7 @@ class ScormQuestion extends Question
 /**
  * This class handles the export to SCORM of a multiple choice question
  * (be it single answer or multiple answers)
+ * @package chamilo.exercise.scorm
  */
 class ScormAnswerMultipleChoice extends Answer
 {
@@ -278,6 +280,7 @@ class ScormAnswerMultipleChoice extends Answer
 
 /**
  * This class handles the SCORM export of true/false questions
+ * @package chamilo.exercise.scorm
  */
 class ScormAnswerTrueFalse extends Answer
 {
@@ -335,6 +338,7 @@ class ScormAnswerTrueFalse extends Answer
 
 /**
  * This class handles the SCORM export of fill-in-the-blanks questions
+ * @package chamilo.exercise.scorm
  */
 class ScormAnswerFillInBlanks extends Answer
 {
@@ -407,6 +411,7 @@ class ScormAnswerFillInBlanks extends Answer
 
 /**
  * This class handles the SCORM export of matching questions
+ * @package chamilo.exercise.scorm
  */
 class ScormAnswerMatching extends Answer
 {
@@ -515,6 +520,7 @@ class ScormAnswerMatching extends Answer
 
 /**
  * This class handles the SCORM export of free-answer questions
+ * @package chamilo.exercise.scorm
  */
 class ScormAnswerFree extends Answer
 {
@@ -551,6 +557,7 @@ class ScormAnswerFree extends Answer
 }
 /**
  * This class handles the SCORM export of hotpot questions
+ * @package chamilo.exercise.scorm
  */
 class ScormAnswerHotspot extends Answer
 {

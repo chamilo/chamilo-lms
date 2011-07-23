@@ -1,11 +1,12 @@
 <?php // $Id:  $
+/* For licensing terms, see /license.txt */
 /**
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
- *
- * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
- *
- * @package dokeos.exercise
+ * @package chamilo.exercise
  * @author claro team <cvs@claroline.net>
+ */
+/**
+ * Code
  */
 
 require '../../inc/global.inc.php';

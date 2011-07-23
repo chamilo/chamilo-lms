@@ -1,14 +1,14 @@
 <?php //$id:$
 /* For licensing terms, see /license.txt */
-//error_log(__FILE__);
 /**
 *	Hotspot language conversion
 *	@package chamilo.exercise
 * 	@author
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-
-
+/**
+ * Code
+ */
 include_once('../inc/global.inc.php');
 
 $hotspot_lang_file = api_get_path(SYS_LANG_PATH);

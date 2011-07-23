@@ -2,10 +2,13 @@
 /* For licensing terms, see /license.txt */
 /**
 *	This file generates the ActionScript variables code used by the HotSpot .swf
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Toon Keppens
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
+/**
+ * Code
+ */
 session_cache_limiter("none");
 include('exercise.class.php');
 include('question.class.php');

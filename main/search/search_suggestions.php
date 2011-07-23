@@ -1,6 +1,10 @@
 <?php
 /*
  * Suggest words to search
+ * @package chamilo.search
+ */
+/**
+ * Code
  */
 require_once dirname(__FILE__) . '/../inc/global.inc.php';
 

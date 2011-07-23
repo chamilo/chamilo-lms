@@ -1,11 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-    BLOG HOMEPAGE
-	This file takes care of all blog navigation and displaying.
-	@package chamilo.blogs
+ *    BLOG HOMEPAGE
+ *	This file takes care of all blog navigation and displaying.
+ *	@package chamilo.blogs
 */
-
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file = 'blog';
 

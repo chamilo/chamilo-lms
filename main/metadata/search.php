@@ -1,7 +1,7 @@
 <?php
 /**
  * Chamilo metadata/search.php
- * @date 2005/09/20
+ * 2005/09/20
  * @copyright 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
  * @package dokeos.metadata
  */

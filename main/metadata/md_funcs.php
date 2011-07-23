@@ -248,7 +248,9 @@ EOD
 
 
 // METADATA STORE ------------------------------------------------------------->
-
+/**
+ * mdstore class
+ */
 class mdstore
 {
 

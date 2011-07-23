@@ -1,7 +1,7 @@
 <?php 
 /** 
  * Chamilo metadata/importmanifest.php
- * @date 2006/12/15
+ * 2006/12/15
  * Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php
  * @package chamilo.metadata
  */

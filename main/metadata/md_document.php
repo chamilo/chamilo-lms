@@ -1,20 +1,15 @@
-<?php /*                      <!-- md_document.php for Dokeos metadata/*.php -->
-                                                             <!-- 2005/09/20 -->
-
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
-*/
-
+<?php
 /**
-==============================================================================
-*	Dokeos Metadata: class mdobject for Document-type items
-*
-*	@package dokeos.metadata
-==============================================================================
-*/
+ * md_document.php for Dokeos metadata/*.php
+ * 2005/09/20
+ * Copyright 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
+ *	@package chamilo.metadata
+ */
+/**
+ *	Chamilo Metadata: class mdobject for Document-type items
+ */
 
-class mdobject
-{
+class mdobject {
 
 var $mdo_course;
 var $mdo_type;

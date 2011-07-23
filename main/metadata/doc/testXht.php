@@ -1,8 +1,8 @@
 <?php 
 /**
  * testXht.php, 
- * @date 2005/03/16
- * @date for XML HTML Templates, 2005/03/16
+ * 2005/03/16
+ * for XML HTML Templates, 2005/03/16
  * @copyright 2005 rene.haentjens@UGent.be                              -->
  * @package chamilo.metadata
  */

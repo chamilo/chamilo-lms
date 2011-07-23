@@ -4,15 +4,15 @@
 * @author Patrick Cool, original code
 * @author Denes Nagy - many bugfixes and improvements, adjusted for learning path
 * @author Roan Embrechts - refactoring, code cleaning
-* @package dokeos.resourcelinker
+* @package chamilo.resourcelinker
 * @todo reorganise code - This class is used?
 * use Database API instead of creating table names locally.
 * 
 */
 
-/*
-		INIT SECTION
-*/
+/**
+ * INIT SECTION
+ */
 // name of the language file that needs to be included
 //$language_file = 'resourcelinker';// TODO: Repeated deleting and moving the rest of this lang file to trad4all
 include ('../inc/global.inc.php');

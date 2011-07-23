@@ -1,17 +1,13 @@
-<?php /*                         <!-- md_scorm.php for Dokeos metadata/*.php -->
-                                                             <!-- 2006/12/15 -->
-
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
-*/
-
+<?php
 /**
-==============================================================================
-*	Dokeos Metadata: class mdobject for Scorm-type objects
-*
-*	@package dokeos.metadata
-==============================================================================
-*/
+ * md_scorm.php for Chamilo metadata/*.php
+ * 2006/12/15
+ * @copyright 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+*	@package chamilo.metadata
+ */
+/**
+ *	Chamilo Metadata: class mdobject for Scorm-type objects
+ */
 
 class mdobject
 {

@@ -1,7 +1,7 @@
 <?php
 /**
  * Chamilo metadata/md_phpdig.php
- * @date 2005/03/24
+ * 2005/03/24
  * @copyright 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
  * @package chamilo.metadata
  *

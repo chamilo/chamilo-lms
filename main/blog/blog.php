@@ -1,16 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
-    BLOG HOMEPAGE
-
-	This file takes care of all blog navigation and displaying.
-	@package chamilo.blogs
-*/
-
-/*
-	INIT
-*/
+ * BLOG HOMEPAGE
+ * This file takes care of all blog navigation and displaying.
+ * @package chamilo.blogs
+ */
+/**
+ *	INIT
+ */
 // name of the language file that needs to be included
 $language_file = "blog";
 $blog_id = intval($_GET['blog_id']);

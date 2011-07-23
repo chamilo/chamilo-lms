@@ -9,8 +9,9 @@
 *	@package chamilo.blogs
 */
 
-/*		MAIN CODE   */
-
+/**
+ * MAIN CODE
+ */
 session_cache_limiter('public');
 
 require_once '../inc/global.inc.php';

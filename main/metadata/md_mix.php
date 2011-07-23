@@ -1,20 +1,14 @@
-<?php /*                           <!-- md_mix.php for Dokeos metadata/*.php -->
-                                                             <!-- 2005/09/20 -->
-
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-
-*/
-
+<?php
 /**
-==============================================================================
-*	Dokeos Metadata: reduced class mdobject for Search, for a Mix of objects
-*
-*	@package dokeos.metadata
-==============================================================================
-*/
-
-class mdobject
-{
+ * md_mix.php for Dokeos metadata/*.php
+ * 2005/09/20
+ * @copyright 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+ * @package chamilo.metadata
+ */
+/**
+ * Chamilo Metadata: reduced class mdobject for Search, for a Mix of objects
+ */
+class mdobject {
 
 var $mdo_course;
 var $mdo_type;

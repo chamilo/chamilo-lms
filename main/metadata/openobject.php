@@ -1,7 +1,7 @@
 <?php 
 /** 
  * Chamilo metadata/openobject.php
- * @date 2004/08/27
+ * 2004/08/27
  * Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php
  * @package chamilo.metadata
  */

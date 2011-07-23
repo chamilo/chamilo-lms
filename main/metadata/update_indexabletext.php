@@ -1,12 +1,12 @@
 <?php
 /**
  * Chamilo metadata/udate_indexableText.php
- * @date 2005/03/16
+ * 2005/03/16
  * @copyright 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
+ * @package chamilo.metadata
  */
 /**
  * Chamilo Metadata: update indexabletext for all eid_type records
- * @package chamilo.metadata
  */
 // PRELIMS -------------------------------------------------------------------->
 

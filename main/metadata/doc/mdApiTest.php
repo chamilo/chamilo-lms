@@ -1,7 +1,7 @@
 <?php
 /**
  * mdApiTest.php
- * @date 2004/09/30
+ * 2004/09/30
  * @copyright 2004 rene.haentjens@UGent.be -  see metadata/md_funcs.php
  * @package chamilo.metadata
  */

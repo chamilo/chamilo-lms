@@ -1,7 +1,7 @@
 <?php 
 /** 
  * Chamilo metadata/playscormmdset.inc.php
- * @date 2005/11/16
+ * 2005/11/16
  * Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
  * @package chamilo.metadata
  */

@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Blog calendar
+ * @package chamilo.blogs
+ */
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file = 'agenda';
 

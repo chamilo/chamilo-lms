@@ -1,5 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Helper file for friends and groups profiles
+ * @package chamilo.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+/**
+ * Initialization
+ */
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
 require_once '../inc/global.inc.php';

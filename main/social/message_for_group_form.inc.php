@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Form for group message
+ * @package chamilo.social
+ */
+/**
+ * Initialization
+ */
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
 require_once '../inc/global.inc.php';

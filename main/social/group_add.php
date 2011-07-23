@@ -4,7 +4,9 @@
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
+/**
+ * Initialization
+ */
 $language_file= 'userInfo';
 $cidReset=true;
 require_once '../inc/global.inc.php';

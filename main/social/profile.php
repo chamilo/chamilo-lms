@@ -6,7 +6,9 @@
 * @author Isaac Flores Paz <florespaz_isaac@hotmail.com>
 * @package chamilo.social
 */
-
+/**
+ * Initialization
+ */
 $language_file = array('userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';

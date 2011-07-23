@@ -1,4 +1,12 @@
 <?php
+/**
+ * Automatic cleanup procedure
+ * @package chamilo.cron
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ */
+/**
+ * Initialization
+ */
 if (php_sapi_name() != 'cli') { exit; } //do not run from browser
 $dir = dirname(__FILE__);
 $a_dir = realpath($dir.'/../../archive/');

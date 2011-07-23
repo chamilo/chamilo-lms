@@ -4,6 +4,7 @@
  * For more information, check the installation guide in the documentation 
  * folder. 
  * Add your own executable scripts below the inclusion of notification.php
+ * @package chamilo.cron
  */
 /**
  * Settings that will influence the execution of the cron tasks

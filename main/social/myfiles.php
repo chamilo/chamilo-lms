@@ -2,6 +2,10 @@
 /* For licensing terms, see /license.txt */
 /**
  * @author Juan Carlos Trabado herodoto@telefonica.net
+ * @package chamilo.social
+ */
+/**
+ * Initialization
  */
 $language_file = array('messages','userInfo');
 $cidReset=true;

@@ -4,7 +4,9 @@
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
+/**
+ * Initialization
+ */
 // name of the language file that needs to be included
 $language_file=array('userInfo');
 

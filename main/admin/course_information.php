@@ -1,11 +1,13 @@
-<?php // $Id: course_information.php 18070 2009-01-29 02:01:33Z yannoo $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * This script gives information about a course
  * @author Bart Mollet
- * @package dokeos.admin
+ * @package chamilo.admin
 */
-/*		INIT SECTION */
+/**
+ * INIT SECTION
+ */
 
 // name of the language file that needs to be included
 $language_file = 'admin';

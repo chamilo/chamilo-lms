@@ -1,39 +1,12 @@
-<?php // $Id: course_virtual.php 20441 2009-05-10 07:39:15Z ivantcholakov $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2005 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@author Roan Embrechts - initial admin interface
-*	@package dokeos.admin
-==============================================================================
-*/
-
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+ * @author Roan Embrechts - initial admin interface
+ * @package chamilo.admin
+ */
+/**
+ * INIT SECTION
+ */
 
 // name of the language file that needs to be included
 $language_file = 'admin';

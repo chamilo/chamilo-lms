@@ -15,7 +15,7 @@ require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php
 /**
  * Extends formvalidator with import and export forms
  * @author Stijn Konings
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class UserForm extends FormValidator
 {

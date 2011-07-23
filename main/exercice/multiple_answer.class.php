@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	File containing the MultipleAnswer class.
  *	@package chamilo.exercise
  * 	@author Eric Marguin
  */
-
+/**
+ * Code
+ */
 if(!class_exists('MultipleAnswer')):
 
 /**

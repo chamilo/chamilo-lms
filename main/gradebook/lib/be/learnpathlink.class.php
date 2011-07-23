@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * Defines a gradebook LearnpathLink object.
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  * @author Bert Steppé
  * @package chamilo.gradebook
  */

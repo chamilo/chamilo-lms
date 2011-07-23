@@ -1,13 +1,12 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
-
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * 	This tool allows platform admins to export courses to CSV file
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
 */
-
+/**
+ * Code
+ */
 $language_file = array ('admin', 'registration','create_course', 'document');
 $cidReset = true;
 

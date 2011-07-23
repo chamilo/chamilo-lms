@@ -1,16 +1,11 @@
-<?php // $Id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
- * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
- *
- * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
- *
- * @author Claro Team <cvs@claroline.net>
  * @package chamilo.exercise
- *
+ * @author Claro Team <cvs@claroline.net>
  */
 /**
  * Redirection
  */
 header("Location: ../../../");
 exit();
-?>

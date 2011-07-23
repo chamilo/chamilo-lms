@@ -1,7 +1,6 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * This page allows the platform admin to decide which languages should
 * be available in the language selection menu in the login page. This can be
 * useful for countries with more than one official language (like Belgium:
@@ -11,14 +10,11 @@
 * @author Patrick Cool, main author
 * @author Roan EMbrechts, code cleaning
 * @since Dokeos 1.6
-* @package dokeos.admin
-==============================================================================
+* @package chamilo.admin
 */
-/*
-==============================================================================
-	   INIT SECTION
-==============================================================================
-*/
+/**
+ *	   INIT SECTION
+ */
 // name of the language file that needs to be included
 $language_file = 'admin';
 

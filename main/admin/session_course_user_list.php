@@ -1,11 +1,11 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
 */
-
+/**
+ * Code
+ */
 $language_file='admin';
 $cidReset=true;
 include('../inc/global.inc.php');

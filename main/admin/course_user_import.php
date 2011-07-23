@@ -1,13 +1,10 @@
-<?php // $Id: course_user_import.php 8216 2006-03-15 16:33:13Z turboke $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * This tool allows platform admins to update course-user relations by uploading
 * a CSVfile
-* @package dokeos.admin
-==============================================================================
+* @package chamilo.admin
 */
-
 /**
  * Validates the imported data.
  */

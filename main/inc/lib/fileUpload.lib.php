@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	FILE UPLOAD LIBRARY
  *
@@ -926,7 +925,7 @@ function get_levels($filename) {
 
 /**
  * Adds file to document table in database
- * @deprecated, use file_set_default_settings instead
+ * deprecated: use file_set_default_settings instead
  *
  * @author	Olivier Cauberghe <olivier.cauberghe@ugent.be>
  * @param	path,filename
@@ -1192,7 +1191,7 @@ function api_replace_links_in_html($upload_path, $full_file_name) {
 }
 
 /**
-	@deprecated, use api_replace_parameter instead
+	deprecated: use api_replace_parameter instead
 
 	Parse the buffer string provided as parameter
 	Replace the a href tags so they are displayed correctly.

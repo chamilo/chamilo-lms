@@ -7,7 +7,9 @@
 *
 *	@package chamilo.social
 */
-
+/**
+ * Code
+ */
 //PLUGIN PLACES
 define('SOCIAL_LEFT_PLUGIN',	1);
 define('SOCIAL_CENTER_PLUGIN',	2);
@@ -17,7 +19,10 @@ define('CUT_GROUP_NAME', 50);
 
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
-
+/**
+ *
+*	@package chamilo.social
+ */
 class SocialManager extends UserManager {
 
 	private function __construct() {

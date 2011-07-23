@@ -3,7 +3,6 @@
 /**
  *	This is the file manage library for Chamilo.
  *	Include/require it in your code to use its functionality.
- *
  *	@package chamilo.library
  */
 
@@ -446,6 +445,7 @@ function dirsize($root, $recursive = true) {
 
 	@author Roan Embrechts
 	@version 1.1, July 2004
+ *	@package chamilo.library
 */
 class FileManager
 {
@@ -546,7 +546,7 @@ class FileManager
 	 * @param	path, filename, filetype,
 				$glued_table, default_visibility
 
-	 * @action	Adds an entry to the document table with the default settings.
+	 * action:	Adds an entry to the document table with the default settings.
 	 * @author	Olivier Cauberghe <olivier.cauberghe@ugent.be>
 	 * @author	Roan Embrechts
 	 * @version 1.2

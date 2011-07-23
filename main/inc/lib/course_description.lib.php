@@ -1,10 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
- * This file contains a class used like library provides functions for course description tool. It's also used like model to course_description_controller (MVC pattern)
+ * This file contains a class used like library provides functions for 
+ * course description tool. It's also used like model to 
+ * course_description_controller (MVC pattern)
  * @author Christian Fasanando <christian1827@gmail.com>
  * @package chamilo.course_description
+ */
+/**
+ * Code
  */
 require_once(dirname(__FILE__).'/course.lib.php');
 require_once(dirname(__FILE__).'/database.lib.php');
@@ -470,4 +474,3 @@ class CourseDescription
 	}
 
 }
-?>

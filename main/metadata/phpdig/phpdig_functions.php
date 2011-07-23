@@ -58,8 +58,10 @@ return $httpvars;
 }
 }
 
-//=================================================
-// timer for profiling
+/**
+ * timer for profiling
+ * @package chamilo.metadata
+ */
 class phpdigTimer {
       var $time = 0;
       var $mode = '';

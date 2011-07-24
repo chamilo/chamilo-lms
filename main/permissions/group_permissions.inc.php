@@ -1,4 +1,10 @@
 <?php
+/**
+ * @package chamilo.permissions
+ */
+/** 
+ * Code
+ */
 include_once('permissions_functions.inc.php');
 include_once('all_permissions.inc.php');
 $group_id=$_SESSION['_gid'];

@@ -1,4 +1,10 @@
 <?php
+/**
+ * @package chamilo.permissions
+ */
+/**
+ * Code
+ */
 $user_id=$userIdViewed;
 if ($mainUserInfo['status']==1)
 {

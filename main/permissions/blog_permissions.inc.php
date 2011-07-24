@@ -1,12 +1,14 @@
 <?php
-
 /**
 * smartBlogs add-on: it must be possible to change rights for every single blog
 * in a course.
 *
 * @author Toon Keppens
+* @package chamilo.permissions
 */
-// Init
+/**
+ * Init
+ */
 $rights_full=array("article_add","article_delete","article_edit","article_rate","article_comments_add","article_comments_delete","article_comments_rate","task_management","member_management","role_management");
 $rights_limited=array("Add","Edit","Delete");
 $rights_blog=array("article_add","article_delete","article_edit","article_rate","article_comments_add","article_comments_delete","article_comments_rate","task_management","member_management","role_management");

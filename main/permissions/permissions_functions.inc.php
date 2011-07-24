@@ -1,13 +1,14 @@
 <?php
 /**
 * This files contains the common functions for the permissions
-* @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 *
 * A list of all the functions (in no particular order)
 * ----------------------------------------------------
 * 	store_permissions($content,$id)
 * 	get_permissions($content,$id)
 *	limited_or_full($current_permissions)
+* @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+ * @package chamilo.permissions
 */
 
 

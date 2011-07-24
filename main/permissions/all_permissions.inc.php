@@ -4,8 +4,11 @@
 * This is the start for the Matrix that you'll use to assign rights to
 * a user, group or role
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+* @package chamilo.permissions
 */
-
+/**
+ * Code
+ */
 // possible permissions
 $rights_full=array("View","Add","Edit","Delete","Visibility","Move");
 $rights_limited=array("Add","Edit","Delete");

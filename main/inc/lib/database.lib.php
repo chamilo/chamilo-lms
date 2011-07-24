@@ -629,9 +629,9 @@ class Database {
 
     /**
      * Gets the ID of the last item inserted into the database
+     * This should be updated to use ADODB at some point
      * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
      * @return int								The last ID as returned by the DB function
-     * @comment This should be updated to use ADODB at some point
      */
     public static function insert_id($connection = null) {
         return self::use_default_connection($connection) ? mysql_insert_id() : mysql_insert_id($connection);
@@ -653,7 +653,7 @@ class Database {
      * @param	resource	The database resource to get data from
      * @param	integer		The row number
      * @param	string		Optional field name or number
-     * @result	mixed		One cell of the result, or FALSE on error
+     * @return	mixed		One cell of the result, or FALSE on error
      */
     public static function result($resource, $row, $field = '') {
         return self::num_rows($resource) > 0 ? (!empty($field) ? mysql_result($resource, $row, $field) : mysql_result($resource, $row)) : null;

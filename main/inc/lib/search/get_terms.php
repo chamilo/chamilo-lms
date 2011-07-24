@@ -1,9 +1,12 @@
 <?php
-
+/* For licensing terms, see /dokeos_license.txt */
 /**
- * @file
  * This script retrieves a list of terms that have xapian documents
  * related with the term passed
+ * @package chamilo.include.search
+ */
+/**
+ * Code
  */
 $terms_list = array();
 

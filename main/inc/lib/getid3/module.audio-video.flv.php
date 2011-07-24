@@ -38,11 +38,14 @@
 // +----------------------------------------------------------------------+
 //
 // $Id: module.audio-video.flv.php,v 1.7 2006/11/10 11:20:12 ah Exp $
-
-
-
-class getid3_flv extends getid3_handler
-{
+/**
+ * @package chamilo.include.flv
+ */
+/**
+ * Class
+ * @package chamilo.include.flv
+ */
+class getid3_flv extends getid3_handler {
 
     const TAG_AUDIO    =  8;
     const TAG_VIDEO    =  9;

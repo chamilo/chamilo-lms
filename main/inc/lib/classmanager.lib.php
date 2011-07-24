@@ -11,13 +11,13 @@ require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 /**
  * This library contains some functions for class-management.
  * @author Bart Mollet
- * @package dokeos.library
+ * @package chamilo.library
  */
 class ClassManager
 {
 	/**
 	 * Get class information
-	 * @note This function can't be named get_class() because that's a standard
+	 * note: This function can't be named get_class() because that's a standard
 	 * php-function.
 	 */
 	function get_class_info($class_id)

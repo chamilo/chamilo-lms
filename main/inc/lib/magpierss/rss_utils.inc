@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Project:     MagpieRSS: a simple RSS integration tool
  * File:        rss_utils.inc, utility methods for working with RSS
  * Author:      Kellan Elliott-McCrea <kellan@protest.net>
@@ -12,16 +12,16 @@
  * For questions, help, comments, discussion, etc., please join the
  * Magpie mailing list:
  * magpierss-general@lists.sourceforge.net
+ * @package chamilo.include.rss
  */
 
 
-/*======================================================================*\
-    Function: parse_w3cdtf
-    Purpose:  parse a W3CDTF date into unix epoch
-
-    NOTE: http://www.w3.org/TR/NOTE-datetime
-\*======================================================================*/
-
+/**
+ * Function: parse_w3cdtf
+ * Purpose:  parse a W3CDTF date into unix epoch
+ *
+ * NOTE: http://www.w3.org/TR/NOTE-datetime
+ */
 function parse_w3cdtf ( $date_str ) {
     
     # regex to match wc3dtf

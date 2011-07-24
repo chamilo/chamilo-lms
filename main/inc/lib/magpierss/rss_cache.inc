@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Project:     MagpieRSS: a simple RSS integration tool
  * File:        rss_cache.inc, a simple, rolling(no GC), cache 
  *              for RSS objects, keyed on URL.
@@ -13,9 +13,11 @@
  * For questions, help, comments, discussion, etc., please join the
  * Magpie mailing list:
  * http://lists.sourceforge.net/lists/listinfo/magpierss-general
- *
+ * @package chamilo.include.rss
  */
-
+/**
+ * @package chamilo.include.rss
+ */
 class RSSCache {
     public $BASE_CACHE = './cache';    // where the cache files are stored
     public $MAX_AGE    = 3600;         // when are files stale, default one hour

@@ -1,25 +1,26 @@
 <?php
-
 /**
-* Project:     MagpieRSS: a simple RSS integration tool
-* File:        rss_parse.inc  - parse an RSS or Atom feed
-*               return as a simple object.
-*
-* Handles RSS 0.9x, RSS 2.0, RSS 1.0, and Atom 0.3
-*
-* The lastest version of MagpieRSS can be obtained from:
-* http://magpierss.sourceforge.net
-*
-* For questions, help, comments, discussion, etc., please join the
-* Magpie mailing list:
-* magpierss-general@lists.sourceforge.net
-*
-* @author           Kellan Elliott-McCrea <kellan@protest.net>
-* @version          0.7a
-* @license          GPL
-*
-*/
-
+ * Project:     MagpieRSS: a simple RSS integration tool
+ * File:        rss_parse.inc  - parse an RSS or Atom feed
+ *               return as a simple object.
+ *
+ * Handles RSS 0.9x, RSS 2.0, RSS 1.0, and Atom 0.3
+ *
+ * The lastest version of MagpieRSS can be obtained from:
+ * http://magpierss.sourceforge.net
+ *
+ * For questions, help, comments, discussion, etc., please join the
+ * Magpie mailing list:
+ * magpierss-general@lists.sourceforge.net
+ *
+ * @author           Kellan Elliott-McCrea <kellan@protest.net>
+ * @version          0.7a
+ * @license          GPL
+ * @package chamilo.include.rss
+ */
+/**
+ * Code
+ */
 define('RSS', 'RSS');
 define('ATOM', 'Atom');
 
@@ -30,6 +31,7 @@ require_once (MAGPIE_DIR . 'rss_utils.inc');
 *
 * see: rss_fetch.inc for a simpler interface with integrated caching support
 *
+ * @package chamilo.include.rss
 */
 class MagpieRSS {
     public $parser;

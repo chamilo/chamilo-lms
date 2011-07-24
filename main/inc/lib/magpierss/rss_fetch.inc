@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Project:     MagpieRSS: a simple RSS integration tool
  * File:        rss_fetch.inc, a simple functional interface
                 to fetching and parsing RSS files, via the
@@ -13,9 +13,11 @@
  * For questions, help, comments, discussion, etc., please join the
  * Magpie mailing list:
  * magpierss-general@lists.sourceforge.net
- *
+ * @package chamilo.include.rss
  */
- 
+/**
+ * Code
+ */ 
 // Setup MAGPIE_DIR for use on hosts that don't include
 // the current path in include_path.
 // with thanks to rajiv and smarty

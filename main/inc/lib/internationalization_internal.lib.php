@@ -1,34 +1,25 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * File: internationalization_internal.lib.php
  * Main API extension library for Chamilo 1.8.7 LMS,
  * contains functions for internal use only.
  * License: GNU General Public License Version 3 (Free Software Foundation)
  * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, 2009, 2010
- * @author More authors, mentioned in the correpsonding fragments of this source.
- * @package chamilo.library
+ * @author More authors, mentioned in the correpsonding fragments of this source
  *
  * Note: All functions and data structures here are not to be used directly.
  * See the file internationalization.lib.php which contains the "public" API.
+ * @package chamilo.library
  */
-
-
 /**
  * Global variables used by some callback functions
  */
-
 $_api_encoding = null;
 $_api_collator = null;
-
-
-/**
- * Appendix to "Language support"
- */
-
 /**
  * This function returns an array of those languages that can use Latin 1 encoding.
+ * Appendix to "Language support"
  * @return array	The array of languages that can use Latin 1 encoding (ISO-8859-15, ISO-8859-1, WINDOWS-1252, ...).
  * Note: The returned language identificators are purified, without suffixes.
  */

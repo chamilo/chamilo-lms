@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	This is the class library for Dokeos.
-*	@package	 chamilo.library
+* This is the class library for this application.
+* @package	 chamilo.library
 */
 /**
  * Code

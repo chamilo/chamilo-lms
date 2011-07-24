@@ -28,7 +28,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package xajax
+ * @package chamilo.include.xajax
  * @version $Id: xajaxResponse.inc.php,v 1.1 2006/07/21 15:29:46 elixir_inter Exp $
  * @copyright Copyright (c) 2005-2006  by Jared White & J. Max Wilson
  * @license http://www.gnu.org/copyleft/lesser.html#SEC3 LGPL License
@@ -63,7 +63,7 @@
  * your browser HTML display changing from the request, make sure you're using
  * the right id names in your response.
  *
- * @package xajax
+ * @package chamilo.include.xajax
  */
 class xajaxResponse
 {

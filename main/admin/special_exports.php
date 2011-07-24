@@ -5,7 +5,7 @@
  *
  * @author Jhon Hinojosa 
  * @author Julio Montoya Fixing pclzip folder + some clean <gugli100@gmail.com>
- * @package special.export
+ * @package chamilo.include.export
  */
 
 // name of the language file that needs to be included

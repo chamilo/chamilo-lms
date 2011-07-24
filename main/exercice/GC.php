@@ -1,27 +1,21 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	Code library for HotPotatoes integration.
-*	@package chamilo.exercise
-* 	@author Istvan Mandak
-* 	@version $Id: GC.php 20451 2009-05-10 12:02:22Z ivantcholakov $
-*/
+ *	Code library for HotPotatoes integration.
+ *	@package chamilo.exercise
+ * 	@author Istvan Mandak
+ * 	@version $Id: GC.php 20451 2009-05-10 12:02:22Z ivantcholakov $
+ */
 /**
  * Code
  */
-
 // usage:  HotPotGC($_configuration['root_sys'],$flag);
 // working recursively, flag[0,1] print or delete the HotPotatoes temp files (.t.html)
 
 echo "Garbage Collector<BR>";
 HotPotGC($_configuration['root_sys'],1,1);
-
-
 /**
- * functions
- */
-/**
- * Garbage collector
+ * Garbage collector caller function
  */
 function HotPotGC($root_sys,$flag,$userID) {
 	// flag[0,1] - print or delete the HotPotatoes temp files (.t.html)
@@ -29,7 +23,9 @@ function HotPotGC($root_sys,$flag,$userID) {
 	require_once(api_get_path(LIBRARY_PATH)."fileManage.lib.php");
 	HotPotGCt($documentPath,$flag,$userID);
 }
-
+/**
+ * Garbage collector
+ */
 function HotPotGCt($folder,$flag,$userID) { // Garbage Collector
 	$filelist = array();
 	    if ($dir = @opendir($folder)) {

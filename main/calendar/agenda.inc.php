@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
-    @author: Julio Montoya <gugli100@gmail.com> BeezNest 2011  - Lots of fixes - UI improvements, security fixes,
-	@author: Patrick Cool, patrick.cool@UGent.be
-	@todo this code should be clean as well as the myagenda.inc.php - jmontoya
-
+ *    @author: Julio Montoya <gugli100@gmail.com> BeezNest 2011  - Lots of fixes - UI improvements, security fixes,
+ *	@author: Patrick Cool, patrick.cool@UGent.be
+ *	@todo this code should be clean as well as the myagenda.inc.php - jmontoya
+ * @package chamilo.calendar
 */
-
+/**
+ * Code
+ */
 // the variables for the days and the months
 // Defining the shorts for the days
 $DaysShort = api_get_week_days_short();

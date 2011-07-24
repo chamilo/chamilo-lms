@@ -1,16 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt*/
-
 /**
-*	This script allows teachers to subscribe existing users
-*	to their course.
-*	@package chamilo.user
+* This script allows teachers to subscribe existing users
+* to their course.
+* @package chamilo.user
 */
 /**
  * Code
  */
-
-/*			INIT SECTION		*/
 // name of the language file that needs to be included
 $language_file = array('registration','admin');
 

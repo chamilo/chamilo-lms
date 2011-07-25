@@ -2052,7 +2052,12 @@ class Tracking {
                                 }
                                 //$user_results[] = 100;
                                 $user_results[] = $score;
-                                $exercise_graph_name_list[]= cut($session_name.' - '.$course_data['title'], 25)." \n ".cut($exercise_data['title'], 25);
+                                if (count($exercise_list)<=10) {
+                                    $exercise_graph_name_list[]= cut($course_data['title'], 20)." \n ".cut($exercise_data['title'], 20);
+                                } else {
+                                    // if there are more than 10 results, space becomes difficult to find, so only show the title of the exercise, not the tool 
+                                    $exercise_graph_name_list[]= cut($exercise_data['title'], 20);
+                                }
                             }
                         }
                     }

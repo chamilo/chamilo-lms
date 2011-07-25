@@ -533,7 +533,6 @@ return 'application/octet-stream';
                         AND last.visibility".$visibility_bit.$condition_session;
         }
 
-
         $result = Database::query($sql);
 
         $doc_list = array();

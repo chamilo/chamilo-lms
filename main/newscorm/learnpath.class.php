@@ -4970,6 +4970,7 @@ class learnpath {
         $i = 0;
         while (file_exists($filepath . $tmp_filename . '.html'))
             $tmp_filename = $filename . '_' . ++ $i;
+        
         $filename = $tmp_filename . '.html';
         $content = stripslashes(text_filter($content));
         $content = str_replace(api_get_path(WEB_COURSE_PATH), api_get_path(REL_PATH) . 'courses/', $content);
@@ -4989,13 +4990,10 @@ class learnpath {
                 $file_size = filesize($filepath . $filename);
                 $save_file_path = $dir . $filename;
 
-                $document_id = add_document($_course, $save_file_path, 'file', $file_size, $filename . '.html');
+                $document_id = add_document($_course, $save_file_path, 'file', $file_size, $tmp_filename);
 
                 if ($document_id) {
                     api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id(), null, null, null, null, api_get_session_id());
-
-                    // Update parent folders.
-                    //item_property_update_on_folder($_course, $_GET['dir'], $_user['user_id']);
 
                     $new_comment = (isset($_POST['comment'])) ? trim($_POST['comment']) : '';
                     $new_title = (isset($_POST['title'])) ? trim($_POST['title']) : '';
@@ -5005,10 +5003,10 @@ class learnpath {
                         $ct = '';
 
                         if ($new_comment)
-                            $ct .= ", comment='" . $new_comment . "'";
+                            $ct .= ", comment='" . Database::escape_string($new_comment). "'";
 
                         if ($new_title)
-                            $ct .= ", title='" . Database :: escape_string(htmlspecialchars($new_title, ENT_QUOTES, $charset)) . ".html	'";
+                            $ct .= ", title='" . Database :: escape_string(htmlspecialchars($new_title, ENT_QUOTES, $charset))."' ";
 
                         $sql_update = "UPDATE " . $tbl_doc ." SET " . substr($ct, 1)." WHERE id = " . $document_id;
                         Database::query($sql_update);
@@ -5049,9 +5047,8 @@ class learnpath {
 
         $table_doc = Database :: get_course_table(TABLE_DOCUMENT);
         if (isset($_POST['path']) && !empty($_POST['path'])) {
-            $sql = "SELECT path
-                        FROM " . $table_doc . "
-                        WHERE id = " . Database::escape_string($_POST['path']);
+        	$document_id = intval($_POST['path']);
+            $sql = "SELECT path FROM " . $table_doc . " WHERE id = " . $document_id;
             $res = Database::query($sql);
             $row = Database :: fetch_array($res);
             $content = stripslashes($_POST['content_lp']);
@@ -5069,6 +5066,9 @@ class learnpath {
 
                 fputs($fp, $content);
                 fclose($fp);
+                
+                $sql_update = "UPDATE " . $table_doc ." SET title='".Database::escape_string($_POST['title'])."' WHERE id = " . $document_id;
+                Database::query($sql_update);
             }
         }
     }

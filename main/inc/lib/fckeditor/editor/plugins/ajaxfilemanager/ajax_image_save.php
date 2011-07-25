@@ -50,7 +50,7 @@
 			}
 			
 			include_once(CLASS_IMAGE);
-			$image = new Image();
+			$image = new ImageAjaxFileManager();
 			if($image->loadImage($originalImage))
 			{				
 				

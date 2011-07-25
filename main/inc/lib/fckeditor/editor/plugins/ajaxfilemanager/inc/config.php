@@ -1,6 +1,6 @@
 <?php
 	/**
-	 * sysem  config setting
+	 * system  config setting
 	 * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
 	 * @link www.phpletter.com
 	 * @version 1.0
@@ -8,6 +8,8 @@
 	 *
 	 * Modifications of system config setting for Chamilo
 	 * @author Juan Carlos Raña Trabado
+	 * @author Julio Montoya <gugli100@gmail.com> BeezNest 2011 Fixing bugs
+	 * 
 	 * @since 31/December/2008
 	 */
 
@@ -21,8 +23,7 @@
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.auth.php");
 	define('CONFIG_QUERY_STRING_ENABLE', true); //Enable passed query string to setting the system configuration
 
-	if(!headers_sent())
-	{
+	if(!headers_sent()) {
 		header('Content-Type: text/html; charset=utf-8');
 	}
 
@@ -91,6 +92,7 @@
 		}
 	}
 	addNoCacheHeaders();
+	$web_path = api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/';
 	//URL Declartions
 	define('CONFIG_URL_IMAGE_PREVIEW', 'ajax_image_preview.php');
 	define('CONFIG_URL_CREATE_FOLDER', 'ajax_create_folder.php');
@@ -112,7 +114,7 @@
 	define('CONFIG_URL_GET_FOLDER_LIST', 'ajax_get_folder_listing.php');
 	define('CONFIG_URL_SAVE_TEXT', 'ajax_save_text.php');
 	define('CONFIG_URL_LIST_LISTING', 'ajax_get_file_listing.php');
-	define('CONFIG_URL_IMG_THUMBNAIL', 'ajax_image_thumbnail.php');
+	define('CONFIG_URL_IMG_THUMBNAIL', $web_path.'ajax_image_thumbnail.php');
 	define('CONFIG_URL_FILEnIMAGE_MANAGER', 'ajaxfilemanager.php');
 	define('CONFIG_URL_FILE_PASTE', 'ajax_file_paste.php');
 

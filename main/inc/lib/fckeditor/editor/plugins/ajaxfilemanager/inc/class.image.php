@@ -1,19 +1,16 @@
 <?php
-	/**
-	 * this class provide functions to edit an image, e.g. resize, rotate, flip, crop
-	 * @author Logan Cai cailongqun [at] yahoo [dot] com [dot] cn
-	 * @link  www.phpletter.com
-	 * @version 0.9
-	 * @since 14/May/2007
-	 * @name Image
-	 * 
-	 */
+/**
+ * this class provide functions to edit an image, e.g. resize, rotate, flip, crop
+ * @author Logan Cai cailongqun [at] yahoo [dot] com [dot] cn
+ * @link  www.phpletter.com
+ * @version 0.9
+ * @since 14/May/2007
+ * @name Image
+ * 
+ */
 	
-	
-	
-	
-	class Image
-	{
+class ImageAjaxFileManager
+{
 		var $_debug = false; 
 		var $_errors = array();
 		var $gdInfo = array(); //keep all information of GD extension

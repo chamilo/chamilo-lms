@@ -41,7 +41,7 @@
 		{
 			
 			include_once(CLASS_IMAGE);
-			$image = new Image();
+			$image = new ImageAjaxFileManager();
 			$image->loadImage($_POST['path']);
 			
 			switch($_POST['mode'])

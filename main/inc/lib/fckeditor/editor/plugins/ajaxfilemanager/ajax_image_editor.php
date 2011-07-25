@@ -32,7 +32,7 @@
 			}
 		}
 		require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "class.image.php");
-		$image = new Image();
+		$image = new ImageAjaxFileManager();
 		
 		$imageInfo = $image->getImageInfo($path);
 

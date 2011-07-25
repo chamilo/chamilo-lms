@@ -300,7 +300,7 @@ if (isset($_POST['save_audio'])) {
             Database::query($sql_insert_audio);
         }
     }
-    Display::display_confirmation_message(get_lang('ChangesStored'));
+    Display::display_confirmation_message(get_lang('ItemUpdated'));
 }
 echo $_SESSION['oLP']->overview();
 

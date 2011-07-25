@@ -5,9 +5,7 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
 */
-/**
- * Code
- */
+
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
@@ -96,6 +94,7 @@ foreach ($encodings as $encoding) {
 $form->addElement('hidden', 'lp_encoding');
 
 // Origin
+/*
 $origin_select = &$form->addElement('select', 'lp_maker', get_lang('Origin'));
 $lp_orig = $_SESSION['oLP']->get_maker();
 
@@ -117,7 +116,7 @@ if ($lp_prox != 'local') {
 }
 $content_proximity_select->addOption(get_lang('Local'), 'local');
 $content_proximity_select->addOption(get_lang('Remote'), 'remote');
-
+*/
 if (api_get_setting('allow_course_theme') == 'true') {
     $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
     if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1) {
@@ -170,8 +169,8 @@ if (api_get_setting('search_enabled') === 'true') {
 }
 
 // Default values
-$content_proximity_select -> setSelected($s_selected_proximity);
-$origin_select -> setSelected($s_selected_origin);
+//$content_proximity_select -> setSelected($s_selected_proximity);
+//$origin_select -> setSelected($s_selected_origin);
 
 /* // Chamilo 1.8.8: Deprecated code.
 $encoding_select -> setSelected($s_selected_encoding);

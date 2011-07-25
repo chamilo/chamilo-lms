@@ -2223,6 +2223,10 @@ div.admin_section h4 {
     right: 20px;
 }
 
+#lp_item_list .item_data {
+	padding:5px 0px 5px 0px;
+}
+
 .ui-state-highlight {
 	height:25px;
 }

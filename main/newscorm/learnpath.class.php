@@ -4556,7 +4556,7 @@ class learnpath {
             if ($update_audio == 'true') {
                 $return .='<a href="lp_controller.php?cidReq='.Security::remove_XSS($_GET['cidReq']) .'&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang('BasicOverview').'">'.Display::return_icon('move_learnpath.png', get_lang('BasicOverview'),'','32').'</a>';
             } else {
-                $return .= '<span>' . Display :: return_icon('move_learnpath_na.png', get_lang('BasicOverview'),'','32').'</span>';
+                $return .= Display :: return_icon('move_learnpath_na.png', get_lang('BasicOverview'),'',32);
             }
             
             $return .= '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&action=view&lp_id=' . $this->lp_id . '">' . Display :: return_icon('view_left_right.png', get_lang('Display'),'','32').'</a>';
@@ -4576,50 +4576,35 @@ class learnpath {
 
         // we need to start a form when we want to update all the mp3 files
         if ($update_audio == 'true' AND count($arrLP) <> 0) {
-            $return .= '<form action="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=' . Security :: remove_XSS($_GET['action']) . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
-            $return .= Display::return_message(get_lang('LeaveEmptyToKeepCurrentFile'), 'warning');
+            $return .= '<form action="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;updateaudio=' . Security :: remove_XSS($_GET['updateaudio']) .'&amp;action=' . Security :: remove_XSS($_GET['action']) . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
+            //$return .= Display::return_message(get_lang('LeaveEmptyToKeepCurrentFile'), 'warning');
         }
         $return .= '<div id="message"></div>';
         
         
-        
-      
-        
-        /*
-        $return .= '<table class="data_table">';
-        $return .= '<tr>';
-        $return .= '<th width="60%">' . get_lang('Title') . '</th>';
-        //$return .= '<th>'.get_lang('Description').'</th>';
-        $return .= '<th>' . get_lang('Audio') . '</th>';
-        
-        if (!$_GET['updateaudio'] OR $_GET['updateaudio'] <> 'true') {
-            $return .= '<th>' . get_lang('Move') . '</th>';
-        }
-        $return .= '<th>' . get_lang('Actions') . '</th>';
-        $return .= '</tr>';*/
-		$start_chapter = false;
+	        $return_audio .= '<table class="data_table">';
+	        $return_audio .= '<tr>';
+	        $return_audio .= '<th width="60%">' . get_lang('Title') . '</th>';
+	        $return_audio .= '<th>' . get_lang('Audio') . '</th>';        
+	        //$return_audio .= '<th>' . get_lang('Actions') . '</th>';
+       		$return_audio .= '</tr>';
+      	
+		
 		$elements = array();
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = $arrLP[$i]['title'];
             
             
-            /*if (($i % 2) == 0) {
+            if (($i % 2) == 0) {
                 $oddclass = 'row_odd';
             } else {
                 $oddclass = 'row_even';
-            }*/
-            $oddclass = 'row_even';
-            if ($arrLP[$i]['item_type'] == 'dokeos_chapter') {
-            	$oddclass = 'row_odd';
-            	$start_chapter = true;
-            } else {
-            	$start_chapter = false;
             }
+            $return_audio .= '<tr id ="lp_item_'.$arrLP[$i]['id'] .'" class="' . $oddclass . '">';
+            
             
             // "lp_item_'.$i.' is important for the drag and drop otherwise the LP will not work
-            
-            //$return .= '<tr id ="lp_item_'.$arrLP[$i]['id'] .'" class="' . $oddclass . '">';            
-
+                        
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
             /*
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
@@ -4643,12 +4628,13 @@ class learnpath {
             	}
             }
 
-            // The audio column.
-            //$return .= '<td align="center">';
+            // The audio column.            
+            $return_audio  .= '<td align="center">';
+            
             $audio = '';
             if (!$update_audio OR $update_audio <> 'true') {
                 if (!empty ($arrLP[$i]['audio'])) {
-                    $audio .= '<span id="container' . $i . '"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</span>';
+                    $audio .= '<span id="container'.$i.'"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</span>';
                     $audio .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
                     $audio .= '<script type="text/javascript">
                                                                 var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
@@ -4663,12 +4649,12 @@ class learnpath {
                 if ($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module' && $arrLP[$i]['item_type'] != 'dir') {
                     $audio .= '<input type="file" name="mp3file' . $arrLP[$i]['id'] . '" id="mp3file" />';
                     if (!empty ($arrLP[$i]['audio'])) {
-                        $audio .= '<br />'.Security::remove_XSS($arrLP[$i]['audio']).'<input type="checkbox" name="removemp3' . $arrLP[$i]['id'] . '" id="checkbox' . $arrLP[$i]['id'] . '" />' . get_lang('RemoveAudio');
+                        $audio .= '<br />'.Security::remove_XSS($arrLP[$i]['audio']).'<br /><input type="checkbox" name="removemp3' . $arrLP[$i]['id'] . '" id="checkbox' . $arrLP[$i]['id'] . '" />' . get_lang('RemoveAudio');
                     }
                 }
             }
-            
-            //$return .= '</td>';
+            $return_audio .= Display::span($title.$icon).Display::tag('td', $audio, array('style'=>'text-align:right'));
+            $return_audio .= '</td>';
 			$move_icon = '';
 			$edit_icon = '';
 			$delete_icon = '';
@@ -4677,24 +4663,7 @@ class learnpath {
 					
                     $move_icon .= '<a class="moved" href="#">';
 					$move_icon .= Display::return_icon('move.png', get_lang('Move'), array(), 24);
-                    $move_icon .= '</a>';                    
-                    /*
-                    if ($arrLP[$i]['previous_item_id'] != 0) {
-                        $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=move_item&amp;direction=up&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;sec_token='.$token.'">';
-                        $return .= '<img style="margin:1px;" alt="" src="../img/arrow_up_' . ($arrLP[$i]['depth'] % 3) . '.gif" title="' . get_lang('MoveUp') . '"/>';
-                        $return .= '</a>';
-                    } else {
-                        $return .= '<img alt="" src="../img/blanco.png" title="" />';
-                    }
-    
-                    if ($arrLP[$i]['next_item_id'] != 0) {
-                        $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']). '&amp;action=move_item&amp;direction=down&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;sec_token='.$token.'">';
-                        $return .= '<img style="margin:1px;" src="../img/arrow_down_' . ($arrLP[$i]['depth'] % 3) . '.gif" title="' . get_lang('MoveDown') . '" />';
-    
-                        $return .= '</a>';
-                    } else
-                        $return .= '<img alt="" src="../img/blanco.png" title="" />';
-    				*/                    
+                    $move_icon .= '</a>';
                 }
 				
                 if ($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module') {
@@ -4805,12 +4774,17 @@ class learnpath {
         	return $return;
         }
         
-        $return .= '<div style="width:90%;"><ul id="lp_item_list">';
-        $return .= print_recursive($elements, $default_data, $default_content);
-        $return .='</ul></div>';
+        
         
         if ($update_audio != 'true') {
+        	$return .= '<div style="width:90%;"><ul id="lp_item_list">';
+        	$return .= print_recursive($elements, $default_data, $default_content);
+        	$return .='</ul></div>';
+        	
         	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'a_button orange medium')), array('style'=>'float:left; width:100%'));
+        } else {
+        
+        	$return .= $return_audio.'</table>';
         }
         
 /*
@@ -4842,8 +4816,7 @@ class learnpath {
     public function build_action_menu() {
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
         echo '<div class="actions">';
-        //echo '<span>'.Display::return_icon('build_learnpath.png','-','','32').' '.get_lang('Build').'</span>';
-        echo '<span>' . Display :: return_icon('build_learnpath_na.png', get_lang('Build'),'','32').'</span>';
+        echo Display :: return_icon('build_learnpath_na.png', get_lang('Build'),'','32');
         echo '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('BasicOverview') . '">' . Display :: return_icon('move_learnpath.png', get_lang('BasicOverview'),'','32').'</a>';
         echo '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&action=view&lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('view_left_right.png', get_lang('Display'),'','32').'</a> ';
         Display :: display_icon('i.gif');

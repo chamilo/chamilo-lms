@@ -30,7 +30,9 @@ require_once api_get_path(CONFIGURATION_PATH).'mail.conf.php';
  * @see                     class.phpmailer.php
  */
 function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', $extra_headers = '') {
-
+	if (api_valid_email($recipient_email)) {
+		return 0;
+	}
     //global $regexp_rfc3696; // Deprecated, 13-OCT-2010.
     global $platform_email;
 

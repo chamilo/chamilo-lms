@@ -241,7 +241,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 			if ( preg_match('/mp3$/i',  urldecode($url))  ||
 			     preg_match('/wav$/i',  urldecode($url))  ||
 			     preg_match('/ogg$/i',  urldecode($url))) {			         
-			     return '<span style="float:left" '.$visibility_class.' style="float:left">'.$title.'</span>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+			     return '<span style="float:left" '.$visibility_class.'>'.$title.'</span>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
             } elseif (
                 //Show preview sith yoxview
                  preg_match('/swf$/i',  urldecode($url))  || 
@@ -249,10 +249,10 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 			     preg_match('/htm$/i',  urldecode($url))  //|| (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
             ) {
 				$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
-				return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview" style="float:left" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+				return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview" style="float:left" '.$visibility_class.'>'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
 			} else {
 			    //Show preview sith yoxview			
-            	return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview" style="float:left" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+            	return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview" style="float:left" '.$visibility_class.' >'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
 			}          
         } else {
             return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;

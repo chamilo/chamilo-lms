@@ -148,20 +148,13 @@ if (api_is_platform_admin()) {
 	    echo get_lang('MemoryUsage').': '.number_format((memory_get_usage()/1048576), 3, '.', '') .' Mb' ;
 		echo '<br />';
 		echo get_lang('MemoryUsagePeak').': '.number_format((memory_get_peak_usage()/1048576), 3, '.', '').' Mb';
-
-		/*
-	    global $_user, $_course;
-	    if (!empty($_user)) {
-		    echo "<h2>Current user info</h2>";
-		    var_dump($_user);
-	    }
-	    if (!empty($_course)) {
-	    	echo "<h2>Current course info</h2>";
-	    	var_dump($_course);
-	    }*/
 	}
 }
 ?>
-<script> $(".chzn-select").chosen(); </script>
+<script>
+$(document).ready( function() {
+	$(".chzn-select").chosen();
+});
+</script>
 </body>
 </html>

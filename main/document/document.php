@@ -328,18 +328,6 @@ if ($is_certificate_mode) {
 $dir_array = explode('/', $curdirpath);
 $array_len = count($dir_array);
 
-/*
-TODO:check and delete this code
-if (!$is_certificate_mode) {
-    if ($array_len > 1) {
-        if (empty($_SESSION['_gid'])) {
-            $url_dir = 'document.php?&amp;curdirpath=/';
-            $interbreadcrumb[] = array('url' => $url_dir, 'name' => get_lang('HomeDirectory'));
-        }
-    }
-}
-*/
-
 $dir_acum = '';
 
 for ($i = 0; $i < $array_len; $i++) {
@@ -368,15 +356,12 @@ if (isset($_GET['createdir'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('CreateDir'));
 }
 
-//jquery thickbox already called from main/inc/header.inc.php
-
 $htmlHeadXtra[] = api_get_jquery_js();
 $htmlHeadXtra[] = api_get_jquery_ui_js();
 
 $htmlHeadXtra[] = api_get_js('yoxview/yoxview-init.js');
 $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';   
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'yoxview/yoxview.css" type="text/css">';
-
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/chamilo/jplayer.blue.monday.css" type="text/css">';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
 
@@ -421,13 +406,14 @@ foreach ($docs_and_folders  as $file) {
 }
  
 $htmlHeadXtra[] = '<script type="text/javascript">
-$(document).ready( function() {    
+$(document).ready( function() {  
+	  
     $(".yoxview").yoxview({
         lang: "'.$lang_yoxview.'",
-        flashVideoPlayerPath: "'.$mediaplayer_path.'",    
-        renderMenu: "false",
-        defaultDimensions: { iframe: { width: 800 }},
-        titleAttribute:"alt"   
+        flashVideoPlayerPath: "'.$mediaplayer_path.'",
+        allowInternalLinks:true,
+        defaultDimensions: { iframe: { width: 800}},
+        titleAttribute : "alt"        
     });
         
     //Experimental changes to preview mp3, ogg files        

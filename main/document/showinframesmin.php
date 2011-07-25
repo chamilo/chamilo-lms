@@ -113,15 +113,14 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                       );
                                 //   });';
 }
+
 $htmlHeadXtra[] = '<script type="text/javascript">
 <!--
     var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
 -->
 </script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
-
 $htmlHeadXtra[] = '
-
 <script type="text/javascript">
 <!--
     var updateContentHeight = function() {
@@ -142,7 +141,7 @@ $htmlHeadXtra[] = '
 </script>';
 
 Display::display_reduced_header();
-echo "<div align=\"center\">";
+echo '<div align="center">';
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
 
 $pathinfo = pathinfo($header_file);

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *    @author: Julio Montoya <gugli100@gmail.com> BeezNest 2011  - Lots of fixes - UI improvements, security fixes,
+ *  @author: Julio Montoya <gugli100@gmail.com> BeezNest 2011  - Lots of fixes - UI improvements, security fixes,
  *	@author: Patrick Cool, patrick.cool@UGent.be
  *	@todo this code should be clean as well as the myagenda.inc.php - jmontoya
  * @package chamilo.calendar
@@ -1090,11 +1090,11 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 */
 function store_new_agenda_item() {
 	global $_course;
-	$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
+	$TABLEAGENDA 	 = Database::get_course_table(TABLE_AGENDA);
     $t_agenda_repeat = Database::get_course_Table(TABLE_AGENDA_REPEAT);
 
 	// some filtering of the input data
-	$title		= strip_tags(trim($_POST['title'])); // no html allowed in the title
+	$title		= trim($_POST['title']); // no html allowed in the title
 	$content	= trim($_POST['content']);
 	$start_date	= (int)$_POST['fyear']."-".(int)$_POST['fmonth']."-".(int)$_POST['fday']." ".(int)$_POST['fhour'].":".(int)$_POST['fminute'].":00";
 	$end_date	= (int)$_POST['end_fyear']."-".(int)$_POST['end_fmonth']."-".(int)$_POST['end_fday']." ".(int)$_POST['end_fhour'].":".(int)$_POST['end_fminute'].":00";
@@ -1105,8 +1105,7 @@ function store_new_agenda_item() {
 	$start_date = Database::escape_string($start_date);
 	$end_date   = Database::escape_string($end_date);
 	
-	
-	if ($_POST['empty_end_date'] == 1) {
+	if ($_POST['empty_end_date'] == 'on') {
 		$end_date = "0000-00-00 00:00:00";
 	}
 
@@ -1659,7 +1658,7 @@ function store_edited_agenda_item($id_attach,$file_comment) {
 	$start_date    = api_get_utc_datetime($start_date);
 	$end_date      = api_get_utc_datetime($end_date);
 	
-	if ($_POST['empty_end_date'] == 1) {
+	if ($_POST['empty_end_date'] == 'on') {
 		$end_date = "0000-00-00 00:00:00";
 	}
 	
@@ -1948,8 +1947,7 @@ function display_agenda_items($agenda_items, $day = false) {
     	    		}
         			echo '<a href="'.$mylink.api_get_cidreq().'&toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&action=showhide&next_action='.$next_action.'" title="'.$text_visibility.'">'.Display::return_icon($image_visibility.'.png', $text_visibility,'',22).'</a> ';    			
         			echo "<a href=\"".$mylink.api_get_cidreq()."&toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
-                    echo Display::return_icon('delete.png', get_lang('Delete'),'',22)."&nbsp;</a>";       
-                                                                     
+                    echo Display::return_icon('delete.png', get_lang('Delete'),'',22)."&nbsp;</a>";
     			}
     			    
     	    	$mylink = 'ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'];
@@ -2283,11 +2281,13 @@ function show_add_form($id = '') {
 			$id				= $_POST['id'];
             $repeat         = !empty($_POST['repeat'])?true:false;
 		}
-
+		
+	$default_no_empty_end_date = 0;
+	
 	// if the id is set then we are editing an agenda item
 	if (is_int($id)) {
 		//echo "before get_agenda_item".$_SESSION['allow_individual_calendar'];
-		$item_2_edit=get_agenda_item($id);
+		$item_2_edit = get_agenda_item($id);
 		
 
 		$title	= $item_2_edit['title'];
@@ -2309,8 +2309,9 @@ function show_add_form($id = '') {
 			list($end_year, $end_month, $end_day) = explode("-", $datepart);
 			
 			list($end_hours, $end_minutes, $end_seconds) = explode(":", $timepart);
+		} elseif($item_2_edit['end_date'] == '0000-00-00 00:00:00') {
+			$default_no_empty_end_date = 1;
 		}
-
 		// attachments
 		edit_added_resources("Agenda", $id);
 		$to=$item_2_edit['to'];
@@ -2342,6 +2343,22 @@ function show_add_form($id = '') {
 	}
 	echo '<div class="row"><div class="form_header">'.$form_title.'</div></div>';
 	
+	
+	// the title of the agenda item
+	echo 	' 	<div class="row">
+							<div class="label">
+								<span class="form_required">*</span>'.get_lang('ItemTitle').'
+							</div>
+							<div class="formw">
+								<div id="err_title" style="display:none;color:red"></div>
+								<input type="text" id="agenda_title" size="50" name="title" value="';
+	if (isset($title)) echo $title;
+	echo				'" />
+							</div>
+						</div>';
+	
+	
+	
 	// selecting the users / groups
 	if (isset ($_SESSION['toolgroup'])) {
 		echo '<input type="hidden" name="selectedform[0]" value="GROUP:'.intval($_SESSION['toolgroup']).'"/>' ;
@@ -2362,15 +2379,10 @@ function show_add_form($id = '') {
 		echo '</div>
 				</div>';
 	}
-
-
-		
-		
+	
 	// start date and time
 	echo '<div class="row">';
-				echo '<div class="label">
-					'.get_lang('StartDate').'
-				</div>
+	echo '<div class="label">'.get_lang('StartDate').'</div>
 				<div class="formw">
 					<div id="err_date" style="display:none;color:red"></div>
 					<div id="err_start_date" style="display:none;color:red"></div>';
@@ -2458,8 +2470,12 @@ function show_add_form($id = '') {
 	echo 	'<div class="row">
 	<div class="label">
 	</div><div class="formw">';
-	
-	echo Display::input('checkbox', 'empty_end_date', 1, array('id'=>'empty_end_date', 'checked'=>"checked")).' '.get_lang('NoEndDate');
+	if ($default_no_empty_end_date) {
+		$params = array('id'=>'empty_end_date', 'checked'=>'checked');
+	} else {
+		$params = array('id'=>'empty_end_date');
+	}
+	echo Display::input('checkbox', 'empty_end_date', 0, $params).' '.get_lang('DisableEndDate');
 	
 	echo 	'</div></div>';
 	echo '<script>
@@ -2477,6 +2493,9 @@ function show_add_form($id = '') {
 	echo '
 		});
 		</script>';
+	
+	
+
 	
 
 	// end date and time
@@ -2564,47 +2583,28 @@ function show_add_form($id = '') {
 	echo 	'	</div>
 			</div>	</span>';
 
-	// the title of the agenda item
-	echo 	' 	<div class="row">
-					<div class="label">
-						<span class="form_required">*</span>'.get_lang('ItemTitle').'
-					</div>
-					<div class="formw">
-	<div id="err_title" style="display:none;color:red"></div>
-						<input type="text" id="agenda_title" size="50" name="title" value="';
-						if (isset($title)) echo $title;
-	echo				'" />
-					</div>
-				</div>';
+
 
 
 	// the main area of the agenda item: the wysiwyg editor
-	echo '	<div><br />	
-				<div class="label">
+	echo '	<div>
+				<div class="label" >
 					<span class="form_required">*</span>'.get_lang('Description').'
 				</div>
 				<div class="formw">';
 			require_once api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php";
-
 			$oFCKeditor = new FCKeditor('content') ;
-
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Height		= '200';
-
-			if(!api_is_allowed_to_edit(null,true))
-			{
+			if(!api_is_allowed_to_edit(null,true)) {
 				$oFCKeditor->ToolbarSet = 'AgendaStudent';
-			}
-			else
-			{
+			} else {
 				$oFCKeditor->ToolbarSet = 'Agenda';
 			}
 			$oFCKeditor->Value		= $content;
-
 			$return =	$oFCKeditor->CreateHtml();
-
 			echo $return;
-	echo '		</div>
+	echo '</div>
 			</div>';
 
 	// the added resources

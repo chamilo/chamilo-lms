@@ -216,7 +216,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                 $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
                 $safe_title = Security::remove_XSS($_POST['title']);
                 $safe_file_comment = Security::remove_XSS($_POST['file_comment']);
-
+                
+                if ($_POST['empty_end_date'] == 'on' ) {
+                	$event_stop = '0000-00-00 00:00:00';
+                }
 				$id = agenda_add_item($course_info,$safe_title,$_POST['content'],$event_start,$event_stop,$_POST['selectedform'],false,$safe_file_comment);
                 if (!empty($_POST['repeat'])) {
                 	$end_y = intval($_POST['repeat_end_year']);
@@ -233,7 +236,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 				if ($_POST['submit_event']) {		
 					$my_id_attach = (int)$_REQUEST['id_attach'];
 					$safe_file_comment = Security::remove_XSS($_REQUEST['file_comment']);
-					store_edited_agenda_item($my_id_attach,$safe_file_comment);
+					store_edited_agenda_item($my_id_attach, $safe_file_comment);
 				}
 			}
 			break;

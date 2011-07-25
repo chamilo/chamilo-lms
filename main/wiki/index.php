@@ -326,7 +326,7 @@ function menu_wiki(){
  else{
 	 var w=160;
 	 var b=1;
-	 var h=160;
+	 var h=200;
  }
 
 document.getElementById("menuwiki").style.width=w+"px";

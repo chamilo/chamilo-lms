@@ -13,10 +13,6 @@
  * and improved course visibility|subscribe|unsubscribe options
  * @package chamilo.course_info
  */
-/**
- * Code
- */
-
 
 /*	   INIT SECTION */
 
@@ -144,7 +140,7 @@ $visual_code=$form->addElement('text', 'visual_code', get_lang('Code'));
 $visual_code->freeze();
 $form->applyFilter('visual_code', 'strtoupper');
 //$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
-$prof = &$form->addElement('select', 'tutor_name', get_lang('Teacher'), $a_profs, array('style'=>'width:350px'));
+$prof = &$form->addElement('select', 'tutor_name', get_lang('Teacher'), $a_profs, array('style'=>'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_name'));
 $form->applyFilter('tutor_name', 'html_filter');
 
 $prof -> setSelected($s_selected_tutor);
@@ -152,7 +148,7 @@ $form->add_textfield('title', get_lang('Title'), true, array('size' => '60'));
 //$form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
-$form->addElement('select', 'category_code', get_lang('Fac'), $categories, array('style'=>'width:350px'));
+$form->addElement('select', 'category_code', get_lang('Fac'), $categories, array('style'=>'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
 $form->add_textfield('department_name', get_lang('Department'), false, array('size' => '60'));
 //$form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
@@ -269,7 +265,7 @@ if (api_get_setting('allow_course_theme') == 'true') {
 	$form->addElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
 	$form->addElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
 	
-	$form->addElement('select_theme', 'course_theme', get_lang('Theme'));
+	$form->addElement('select_theme', 'course_theme', get_lang('Theme'), '', array('class'=>'chzn-select', 'id'=>'theme'));
 	$form->applyFilter('course_theme', 'trim');
 }
 

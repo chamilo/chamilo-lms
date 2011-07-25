@@ -43,4 +43,3 @@ switch($_SESSION['my_tool']){
 		require 'upload.document.php';
 		break;
 }
-?>

@@ -27,7 +27,7 @@ if ($error=='not_a_learning_path') {
 	$dialogtype = 'error';
 } else {
 	if (api_get_setting('search_enabled')=='true') {
-          require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+          require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
     	  $specific_fields = get_specific_field_list();
 
     	  foreach ($specific_fields as $specific_field) {

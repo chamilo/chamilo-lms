@@ -54,24 +54,21 @@ $form->addElement('hidden', 'tool', $my_tool);
 
 $form->addElement('file','user_file',get_lang('FileToUpload'));
 
-$select_content_marker = &$form->addElement('select','content_maker',get_lang('ContentMaker'));
-
-
-
-
+/*$select_content_marker = &$form->addElement('select','content_maker',get_lang('ContentMaker'));
 foreach($content_origins as $index => $origin){
 	$select_content_marker->addOption($origin,$origin);
-}
+}*/
+unset($content_origins[0]);
+unset($content_origins[1]);
 
+/*
 $select_content_proximity = &$form->addElement('select','content_proximity',get_lang('ContentProximity'));
-	$select_content_proximity->addOption(get_lang('Local'),"local");
-	$select_content_proximity->addOption(get_lang('Remote'),"remote");
-	$select_content_proximity -> setSelected("local");
-
-if(api_get_setting('search_enabled')=='true')
-{
+$select_content_proximity->addOption(get_lang('Local'),"local");
+$select_content_proximity->addOption(get_lang('Remote'),"remote");
+$select_content_proximity -> setSelected("local");
+*/
+if (api_get_setting('search_enabled')=='true') {
 	$form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
-
 	$specific_fields = get_specific_field_list();
 	foreach ($specific_fields as $specific_field) {
 		$form -> addElement ('text', $specific_field['code'], $specific_field['name'].' : ');
@@ -111,15 +108,12 @@ if(is_dir(api_get_path(PLUGIN_PATH)."/pens")) {
 }
 
 $form->add_real_progress_bar('uploadScorm','user_file');
-
 // the rules for the form
 $form->addRule('user_file', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 // the default values for the form
 $defaults = array('index_document'=>'checked="checked"','use_max_score'=>1);
 $form->setDefaults($defaults);
-$form->display();
-
+$form->display();Display::display_normal_message(Display::tag('strong', get_lang('SupportedScormContentMakers')).': '.implode(', ', $content_origins), false);
 
 // footer
 Display::display_footer();
-?>

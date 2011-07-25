@@ -9,9 +9,6 @@
 * @package chamilo.learnpath
 * @author Yannick Warnier <ywarnier@beeznest.org>
 */
-/**
- * Code
- */
 $this_section = SECTION_COURSES;
 if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
     header('location: lp_controller.php?action=list');
@@ -92,7 +89,6 @@ if ($is_allowed_to_edit) {
         Display::display_normal_message(api_failure::get_last_failure());
     }
 
-    //include 'content_makers.inc.php';
     echo '<div class="actions">';
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.Display::return_icon('new_learnpath.png', get_lang('_add_learnpath'),'','32').'</a>' .
         str_repeat('&nbsp;', 3).
@@ -214,7 +210,8 @@ if (is_array($flat_list)) {
         $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
         $name = Security::remove_XSS($details['lp_name']);
         if ($is_allowed_to_edit) {
-            $dsp_desc = '<em>'.$details['lp_maker'].'</em>  &nbsp;'.$details['lp_proximity'].' '.(learnpath::is_lp_visible_for_student($id, api_get_user_id())?'':' - ('.get_lang('LPNotVisibleToStudent').')');
+        	//&nbsp;'.$details['lp_proximity'].'
+            $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.(learnpath::is_lp_visible_for_student($id, api_get_user_id())?'':' - ('.get_lang('LPNotVisibleToStudent').')');
             $extra = '<br /><font color="#999"><i>'.$dsp_desc .'</i></font>';
         }
         

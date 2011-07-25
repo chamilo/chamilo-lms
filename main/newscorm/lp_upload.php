@@ -47,6 +47,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
     require_once 'learnpath.class.php';
     $type = learnpath::get_package_type($_FILES['user_file']['tmp_name'], $_FILES['user_file']['name']);
     
+    $proximity = 'local';
+    if (!empty($_REQUEST['content_proximity'])) {
+    	$proximity = Database::escape_string($_REQUEST['content_proximity']);
+    }
+    $maker = 'Scorm';
+    if (!empty($_REQUEST['content_maker'])) {
+    	$maker = Database::escape_string($_REQUEST['content_maker']);
+    }
+    
     switch ($type) {
         case 'scorm':
             require_once 'scorm.class.php';
@@ -61,11 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
             } else {
                 // Show error message stored in $oScrom->error_msg.
             }
-
-            $proximity = '';
-            if (!empty($_REQUEST['content_proximity'])) { $proximity = Database::escape_string($_REQUEST['content_proximity']); }
-            $maker = '';
-            if (!empty($_REQUEST['content_maker'])) { $maker = Database::escape_string($_REQUEST['content_maker']); }
             $oScorm->set_proximity($proximity);
             $oScorm->set_maker($maker);
             $oScorm->set_jslib('scorm_api.php');
@@ -78,10 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
                 $oAICC->parse_config_files($config_dir);
                 $oAICC->import_aicc(api_get_course_id());
             }
-            $proximity = '';
-            if (!empty($_REQUEST['content_proximity'])) { $proximity = Database::escape_string($_REQUEST['content_proximity']); }
-            $maker = '';
-            if (!empty($_REQUEST['content_maker'])) { $maker = Database::escape_string($_REQUEST['content_maker']); }
             $oAICC->set_proximity($proximity);
             $oAICC->set_maker($maker);
             $oAICC->set_jslib('aicc_api.php');

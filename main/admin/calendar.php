@@ -215,7 +215,7 @@ if (api_is_allowed_to_edit(false,true)) {
 				if ($_POST['submit_event']) {		
 			        $my_id_attach = (int)$_REQUEST['id_attach'];
 					$my_file_comment = Database::escape_string($_REQUEST['file_comment']);
-					store_edited_agenda_item($my_id_attach,$my_file_comment);
+					store_edited_agenda_item($my_id_attach,$my_file_comment).'hola test';
 					display_agenda_items();
 				} else {
 					$id=(int)$_GET['id'];

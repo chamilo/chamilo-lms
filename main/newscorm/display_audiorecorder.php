@@ -33,13 +33,12 @@ require_once '../inc/reduced_header.inc.php';
 
 echo '<body dir="'.api_get_text_direction().'">';
 
-        echo '<div id="audiorecorder">	';
-        $audio_recorder_studentview = 'true';
-        $audio_recorder_item_id = $_SESSION['oLP']->current;
-        if (api_get_setting('service_visio', 'active') == 'true') {
-            include 'audiorecorder.inc.php';
-        }
-        echo '</div>';
-        // end of audiorecorder include
-
+	echo '<div id="audiorecorder">	';
+    $audio_recorder_studentview = 'true';
+    $audio_recorder_item_id = $_SESSION['oLP']->current;
+    if (api_get_setting('service_visio', 'active') == 'true') {
+    	require_once 'audiorecorder.inc.php';
+	}
+    echo '</div>';
+    // end of audiorecorder include
 echo '</body></html>';

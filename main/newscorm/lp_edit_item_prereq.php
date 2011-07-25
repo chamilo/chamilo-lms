@@ -9,19 +9,12 @@
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  * @package chamilo.learnpath
  */
-/**
- * Code
- */
-/* INIT SECTION */
 
 $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
 /* Libraries */
-
-// The main_api.lib.php, database.lib.php and display.lib.php
-// libraries are included by default.
 
 include 'learnpath_functions.inc.php';
 //include '../resourcelinker/resourcelinker.inc.php';
@@ -41,19 +34,6 @@ $tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
 $submit			= $_POST['submit_button'];
-/*
-$chapter_id     = $_GET['chapter_id'];
-$title          = $_POST['title'];
-$description   = $_POST['description'];
-$Submititem     = $_POST['Submititem'];
-$action         = $_REQUEST['action'];
-$id             = (int) $_REQUEST['id'];
-$type           = $_REQUEST['type'];
-$direction      = $_REQUEST['direction'];
-$moduleid       = $_REQUEST['moduleid'];
-$prereq         = $_REQUEST['prereq'];
-$type           = $_REQUEST['type'];
-*/
 
 /* MAIN CODE */
 
@@ -158,5 +138,4 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 echo '</table>';
 
 /* FOOTER */
-
 Display::display_footer();

@@ -7181,7 +7181,7 @@ class learnpath {
         $audio_recorder_studentview = 'false';
         $audio_recorder_item_id = $item_id;
         if (api_get_setting('service_visio', 'active') == 'true') {
-            include 'audiorecorder.inc.php';
+           require_once 'audiorecorder.inc.php';
         }
         $return .= ob_get_contents();
         ob_end_clean();

@@ -9,9 +9,6 @@
  * @author Arnaud Ligot <arnaud@cblue.be>
  * @package chamilo.learnpath
  */
-/**
- * Code
- */
 global $_configuration;
 $web_path = api_get_path(WEB_CODE_PATH);
 $getid3_path = api_get_path(LIBRARY_PATH);
@@ -66,15 +63,11 @@ if (!empty($path_to_lzx)) {
          "<param name=\"menu\" value=\"false\"></object>", $path_to_lzx, $path_to_lzx);
     if ($audio_recorder_studentview == 'false') {
         echo '<script type="text/javascript">
-
-        function show_audiorecorder()
-        {
+        function show_audiorecorder() {
             document.getElementById("audiorecorder_frame").innerHTML = "'.addslashes($recorder_content).'";
             document.getElementById("show_audiorecorder_div").style.display="none";
         }
-
-        </script>
-        ';
+        </script>';
         // Commented the audio for the version stable.
         //echo '<div id="show_audiorecorder_div"><a style="cursor:pointer" onclick="show_audiorecorder()">'.get_lang('ShowAudioRecorder').'</a></div>';
         //echo '<div id="audiorecorder_frame"></div>';

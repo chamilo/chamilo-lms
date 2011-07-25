@@ -72,7 +72,7 @@ function yox_picasa()
                 {
                     var mediaData = image.media$group.media$content[0];
                     var imageData = {
-                        thumbnailSrc : image.media$group.media$thumbnail[0].url,
+                        thumbnailSrc : image.media$group.media$thumbnail[1].url,
                         link: image.link[1].href,
                         media: {
                             src: mediaData.url,
@@ -152,7 +152,7 @@ function yox_picasa()
 			data: datasourceOptions,
             callbackParameter: "callback",
             success: function(data)
-            {
+            {console.log(data);
                 if (!data.feed.entry || data.feed.entry.length == 0)
                 {
                     if (options.onNoData)

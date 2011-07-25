@@ -1,4 +1,4 @@
-﻿{
+﻿﻿{
     "Direction" : "ltr",
     "Close" : "Sluiten",
     "Help" : "Help",

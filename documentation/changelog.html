@@ -76,7 +76,7 @@ This version of Chamilo only includes a few minor new features:
     <li>Gradebook
         <ul>
             <li>Several fixes including, better session integration and some warning messages added when total score is not correct </li>
-            <li> Adding 2 new tags in the certification: course title and gradebook result </li>                        
+            <li>Adding 2 new tags in the certification: course title and gradebook result </li>                        
         </ul>
     </li>    
     <li>Glossary
@@ -86,9 +86,19 @@ This version of Chamilo only includes a few minor new features:
             <li>Fixed mp3 previews </li>
         </ul>
     </li>
+    
+    <li>Learning path
+        <ul>
+        <li>Drag and drop to order LP items! #3741</li>
+        <li>Bug fixed when editing a document title in a LP but not updated in the Document tool #3714 </li>
+        <li>Fatal error fixed when editing item prerequisites when the videoconference is enabled #3658 </li>
+        </ul>
+    </li>  
+        
     <li>Links
         <ul>
         <li>URL fixed when adding the link in the course homepage  BT#2751</li>
+        <li>Token support added #2477</li>        
         </ul>
     </li>  
      
@@ -100,6 +110,7 @@ This version of Chamilo only includes a few minor new features:
             <li>Improving Notification class: adding a footer and an introduction message </li>
             <li>New way to generate usernames when importing users using CSV or XML file </li>
             <li>Activities stats date fixed</li>
+            <li>When uploading users using a CSV/XML file, the username is generated using the first letter of the first name and the lastname #3686 </li>            
         </ul>
     </li>
     <li>User portal/ My courses
@@ -112,11 +123,15 @@ This version of Chamilo only includes a few minor new features:
         <ul>
             <li>A Session doesn't exist in 2 URLs at the same time  #3733 </li>
         </ul>
-    </li>
-    
+    </li>    
     <li>Social Network / Groups
         <ul>
             <li>Reply counter fixed in group topics and improving UI</li>
+        </ul>
+    </li>
+    <li>Survey
+        <ul>
+            <li>Adding user extra fields in CSV/XLS exports #1647</li>
         </ul>
     </li>       
     <li>Style changes
@@ -124,6 +139,7 @@ This version of Chamilo only includes a few minor new features:
             <li>Fixed who is online user images (changeset 61945685bcff)</li>                
             <li>CSS styles: fix.css and fix_chamilo.css were deleted, there are only base.css and base_chamilo.css calls are added directly in the CSS file</li>
             <li>All CSS were reduced and improved in order to use the base.css and base_chamilo.css styles</li>
+            <li>Chosen library (select tag improved)added #3740</li>
         </ul>
     </li>      
 </ul>

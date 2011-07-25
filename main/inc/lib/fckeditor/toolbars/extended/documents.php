@@ -22,7 +22,7 @@ else{
 $config['ToolbarSets']['Normal'] = array(
     array('Save','NewPage','Templates','-','PasteWord'),
     array('Undo','Redo'),
-    array('Link','Image','flvPlayer','Flash','MP3','TableOC','mimetex','asciimath','asciisvg'),
+    array('Link','Image','flvPlayer','Flash','YouTube','MP3','TableOC','mimetex','asciimath','asciisvg'),
     array('UnorderedList','OrderedList','Rule'),
     array('JustifyLeft','JustifyCenter','JustifyFull'),
 	array('Abbr'),
@@ -37,7 +37,7 @@ $config['ToolbarSets']['Maximized'] = array(
     array('Cut','Copy','Paste','PasteText','PasteWord'),
     array('Undo','Redo','-','SelectAll','Find','-','RemoveFormat'),
     array('Link','Unlink','Anchor','Glossary'),
-    array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','insertHtml','mimetex','asciimath','asciisvg'),
+    array('Image','imgmapPopup','flvPlayer','Flash','YouTube','EmbedMovies','MP3','googlemaps','Smiley','SpecialChar','insertHtml','mimetex','asciimath','asciisvg'),
 '/',
     array('TableOC','Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
     array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),

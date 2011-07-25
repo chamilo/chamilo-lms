@@ -527,7 +527,7 @@ function change_visibility($id, $scope) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function showlinksofcategory($catid) {
-	global $is_allowed, $charset, $urlview, $up, $down, $_user;
+	global $is_allowed, $charset, $urlview, $up, $down, $_user, $token;
 
 	$tbl_link = Database :: get_course_table(TABLE_LINK);
 	$TABLE_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -583,28 +583,29 @@ function showlinksofcategory($catid) {
     		if (api_is_allowed_to_edit(null, true)) {
     			if ($session_id == $myrow['session_id']) {
     
-    				echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;action=editlink&amp;category=' . (!empty ($category) ? $category : '') . '&amp;id=' . $myrow[0] . '&amp;urlview=' . $urlview . '" title="' . get_lang('Modify') . '">' . Display :: return_icon('edit.png', get_lang('Modify'), array (), 22) . '</a>';
+    				echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;sec_token='.$token.'&amp;action=editlink&amp;category=' . (!empty ($category) ? $category : '') . '&amp;id=' . $myrow[0] . '&amp;urlview=' . $urlview . '" title="' . get_lang('Modify') . '">' . 
+    						Display :: return_icon('edit.png', get_lang('Modify'), array (), 22) . '</a>';
     				// DISPLAY MOVE UP COMMAND only if it is not the top link.
     				if ($i != 1) {
-    					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;urlview=' . $urlview . '&amp;up=', $myrow[0], '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), 22) . '', "</a>\n";
+    					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;urlview=' . $urlview . '&amp;up=', $myrow[0], '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), 22) . '', "</a>\n";
     				} else {
-    					echo Display :: return_icon('up.png', get_lang('Up'), array (), 22) . '</a>';
+    					echo Display :: return_icon('up_na.png', get_lang('Up'), array (), 22) . '</a>';
     				}
     
     				// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
     				if ($i < $numberoflinks) {
-    					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;urlview=' . $urlview . '&amp;down=' . $myrow[0] . '" title="' . get_lang('Down') . '">' . Display :: return_icon('down.png', get_lang('Down'), array (), 22) . '', "</a>\n";
+    					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;urlview=' . $urlview . '&amp;down=' . $myrow[0] . '" title="' . get_lang('Down') . '">' . Display :: return_icon('down.png', get_lang('Down'), array (), 22) . '', "</a>\n";
     				} else {
     					echo Display :: return_icon('down_na.png', get_lang('Down'), array (), 22) . '', "</a>\n";
     				}
     
     				if ($myrow['visibility'] == '1') {
-    					echo '<a href="link.php?' . api_get_cidreq() . '&amp;action=invisible&amp;id=' . $myrow[0] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Hide') . '">' . Display :: return_icon('visible.png', get_lang('Hide'), array (), 22) . '</a>';
+    					echo '<a href="link.php?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=invisible&amp;id=' . $myrow[0] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Hide') . '">' . Display :: return_icon('visible.png', get_lang('Hide'), array (), 22) . '</a>';
     				}
     				if ($myrow['visibility'] == '0') {
-    					echo ' <a href="link.php?' . api_get_cidreq() . '&amp;action=visible&amp;id=' . $myrow[0] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Show') . '">' . Display :: return_icon('invisible.png', get_lang('Show'), array (), 22) . '</a>';
+    					echo ' <a href="link.php?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=visible&amp;id=' . $myrow[0] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Show') . '">' . Display :: return_icon('invisible.png', get_lang('Show'), array (), 22) . '</a>';
     				}
-    				echo ' <a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;action=deletelink&amp;id=', $myrow[0], '&amp;urlview=', $urlview, "\" onclick=\"javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "')) return false;\" title=\"" . get_lang('Delete') . '">' . Display :: return_icon('delete.png', get_lang('Delete'), array (), 22) . '</a>';
+    				echo ' <a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=deletelink&amp;id=', $myrow[0], '&amp;urlview=', $urlview, "\" onclick=\"javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "')) return false;\" title=\"" . get_lang('Delete') . '">' . Display :: return_icon('delete.png', get_lang('Delete'), array (), 22) . '</a>';
     
     			} else {
     				echo get_lang('EditionNotAvailableFromSession');
@@ -623,26 +624,27 @@ function showlinksofcategory($catid) {
  */
 function showcategoryadmintools($categoryid) {
 
-	global $urlview;
-	global $aantalcategories;
-	global $catcounter;
-	echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;action=editcategory&amp;id=' . $categoryid . '&amp;urlview=' . $urlview . '" title=' . get_lang('Modify') . '">' . Display :: return_icon('edit.png', get_lang('Modify'), array (), 22) . '</a>';
-	echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;action=deletecategory&amp;id=', $categoryid, "&amp;urlview=$urlview\" onclick=\"javascript: if(!confirm('" . get_lang('CategoryDelconfirm') . "')) return false;\">", Display :: return_icon('delete.png', get_lang('Delete'), array (), 22) . '</a>';
-
+	global $urlview, $aantalcategories, $catcounter, $token;
+	echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=editcategory&amp;id=' . $categoryid . '&amp;urlview=' . $urlview . '" title=' . get_lang('Modify') . '">' . Display :: return_icon('edit.png', get_lang('Modify'), array (), 22) . '</a>';
+	
 	// DISPLAY MOVE UP COMMAND only if it is not the top link.
 	if ($catcounter != 1) {
-		echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;catmove=true&amp;up=', $categoryid, '&amp;urlview=' . $urlview . '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), 22) . '</a>';
+		echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;sec_token='.$token.'&amp;catmove=true&amp;up=', $categoryid, '&amp;urlview=' . $urlview . '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), 22) . '</a>';
 	} else {
 		echo Display :: return_icon('up_na.png', get_lang('Up'), array (), 22) . '</a>';
 	}
-
+	
 	// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
 	if ($catcounter < $aantalcategories) {
-		echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;catmove=true&amp;down=' . $categoryid . '&amp;urlview=' . $urlview . '">
-				' . Display :: return_icon('down.png', get_lang('Down'), array (), 22) . '</a>';
+		echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .'&amp;sec_token='.$token.'&amp;catmove=true&amp;down=' . $categoryid . '&amp;urlview=' . $urlview . '">
+					' . Display :: return_icon('down.png', get_lang('Down'), array (), 22) . '</a>';
 	} else {
 		echo Display :: return_icon('down_na.png', get_lang('Down'), array (), 22) . '</a>';
 	}
+	
+	echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=deletecategory&amp;id=', $categoryid, "&amp;urlview=$urlview\" onclick=\"javascript: if(!confirm('" . get_lang('CategoryDelconfirm') . "')) return false;\">", Display :: return_icon('delete.png', get_lang('Delete'), array (), 22) . '</a>';
+
+
 	$catcounter++;
 }
 

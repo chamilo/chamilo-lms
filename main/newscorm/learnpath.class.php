@@ -4781,7 +4781,7 @@ class learnpath {
         	$return .= print_recursive($elements, $default_data, $default_content);
         	$return .='</ul></div>';
         	
-        	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'a_button orange medium')), array('style'=>'float:left; width:100%'));
+        	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'a_button orange medium')), array('style'=>'float:left; margin-top:15px;width:100%'));
         } else {
         
         	$return .= $return_audio.'</table>';

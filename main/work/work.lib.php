@@ -846,7 +846,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 
 			if ($origin != 'learnpath') {
 				if ($is_allowed_to_edit) {
-					$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir.'">'.Display::return_icon('edit.png', get_lang('Modify'),array(), 22).'</a>';						
+					$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir.'">'.Display::return_icon('edit.png', get_lang('Modify'), array(), 22).'</a>';						
 					$action .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&delete_dir='.$mydir.'&delete2='.$id2.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('DirDelete').'"  >'.Display::return_icon('delete.png',get_lang('DirDelete'),'',22).'</a>';
 					$row[] = $action;
 				} else {
@@ -868,7 +868,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 		while ($work = Database::fetch_object($sql_result)) {
 			//Get the author ID for that document from the item_property table
 			$is_author = false;						
-			$item_property_data = api_get_item_property_info(api_get_course_id(), 'work', $work->id);
+			$item_property_data = api_get_item_property_info(api_get_course_int_id(), 'work', $work->id);
 			if (!$is_allowed_to_edit && $item_property_data['insert_user_id'] == api_get_user_id()) {
 				$is_author = true;
 			}

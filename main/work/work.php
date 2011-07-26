@@ -822,7 +822,7 @@ else {
 $error_message = '';
 $user_id = api_get_user_id();
 
-if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
+if (isset($_POST['sec_token']) && $ctok == $_POST['sec_token']) { //check the token inserted into the form
 	if (!empty($_POST['submitWork']) && !empty($is_course_member)) {
 		if (!empty($_FILES['file']['size'])) {
 			$updir = $currentCourseRepositorySys . 'work/'; //directory path to upload
@@ -946,7 +946,7 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 			//Get the author ID for that document from the item_property table
 			$is_author = false;
 			$item_to_edit_id = intval($_POST['item_to_edit']);
-			$item_to_edit_data = api_get_item_property_info(api_get_course_id(), 'work', $item_to_edit_id);
+			$item_to_edit_data = api_get_item_property_info(api_get_course_int_id(), 'work', $item_to_edit_id);
 			
 			if ($is_allowed_to_edit) {
 				$is_author = true;

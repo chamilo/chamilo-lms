@@ -708,7 +708,7 @@ class Thematic
             $thematic_plan_id = $row_thematic_plan['id'];
             
             //Checking the session
-            $thematic_plan_data = api_get_item_property_info(api_get_course_id(), 'thematic_plan', $thematic_plan_id);
+            $thematic_plan_data = api_get_item_property_info(api_get_course_int_id(), 'thematic_plan', $thematic_plan_id);
             
             $update = false;            
             if (in_array($thematic_plan_id, $elements_to_show)) {
@@ -845,7 +845,7 @@ class Thematic
 				if (!empty($thematic_advance_data[$thematic['id']])) {
 					foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
 						
-						$item_info = api_get_item_property_info(api_get_course_id(), 'thematic_advance', $thematic_advance['id']);
+						$item_info = api_get_item_property_info(api_get_course_int_id(), 'thematic_advance', $thematic_advance['id']);
 						//var_dump($item_info );
 						
 												

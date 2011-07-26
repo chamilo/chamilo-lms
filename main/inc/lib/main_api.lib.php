@@ -948,14 +948,14 @@ function api_get_course_id() {
  * Returns the current course id (integer)
  */
 function api_get_real_course_id() {
-    return $GLOBALS['_real_cid'];
+    return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
 }
 
 /**
  * Returns the current course id (integer)
  */
-function api_get_course_int_id() {
-    return $GLOBALS['_real_cid'];
+function api_get_course_int_id() {	
+    return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
 }
 
 
@@ -1123,6 +1123,7 @@ function api_get_course_info_by_id($id = null) {
             $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
             $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
             $_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
+            $_course['db_name'      ]         = $course_data['db_name'         ];
             $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
             $_course['titular'      ]         = $course_data['tutor_name'     ];
             $_course['language'     ]         = $course_data['course_language'];
@@ -1135,8 +1136,7 @@ function api_get_course_info_by_id($id = null) {
             $_course['subscribe_allowed']     = $course_data['subscribe'       ];
             $_course['unubscribe_allowed']    = $course_data['unsubscribe'     ];
 
-            $_course['real_id'      ]         = $course_data['id'              ];
-            $_course['db_name'      ]         = $course_data['db_name'         ];
+            $_course['real_id'      ]         = $course_data['id'              ];            
             $_course['title'        ]         = $course_data['title'           ];
 
         }

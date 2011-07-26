@@ -170,9 +170,7 @@ class AnnouncementManager  {
     	
 			$title		 = $result['title'];
 			$content	 = $result['content'];
-			$content     = make_clickable($content);
-			$content     = text_filter($content);			    			
-		    	
+				
     		echo "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
     		echo "<tr><td><h2>".$title."</h2></td></tr>";   		
     		

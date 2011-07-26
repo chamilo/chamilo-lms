@@ -72,15 +72,15 @@ if ($origin == 'group') {
     //api_display_tool_title($nameTools);
 
 } else {
-
     $my_search = isset($_GET['search']) ? $_GET['search'] : '';
-
     if ($origin == 'learnpath') {
         require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
-    } else {
+    } else {    	
         $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => $nameTools);
         $interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => Security::remove_XSS($current_forum_category['cat_title']));
         $interbreadcrumb[] = array('url' => 'viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => Security::remove_XSS($current_forum['forum_title']));
+        $interbreadcrumb[] = array('url' => '#', 'name' => Security::remove_XSS($current_thread['thread_title']));
+
         $message = isset($message) ? $message : '';
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
         Display :: display_header('');
@@ -133,13 +133,14 @@ if ($my_message != 'PostDeletedSpecial') {
     echo '<span style="float:right;">'.search_link().'</span>';
     if ($origin != 'learnpath') {
 
-        if ($origin == 'group') {
+        /*if ($origin == 'group') {
             echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('Groups'), '', '32').'</a>';
             echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'&amp;origin='.$origin.'">'.Display::return_icon('forum.png', get_lang('BackToForum'), '', '32').'</a>';
         } else {
             echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', '32').'</a>';
             echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'">'.Display::return_icon('forum.png', get_lang('BackToForum'), '', '32').'</a>';
-        }
+        }*/
+        echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'">'.Display::return_icon('back.png', get_lang('BackToForum'), '', '32').'</a>';
 
     }
     // The reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
@@ -202,7 +203,7 @@ if ($my_message != 'PostDeletedSpecial') {
     // Note pcool: I tried to use only one sql statement (and function) for this,
     // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
 
-    echo '<table class="forum_table_title" width="100%">';
+    /*echo '<table class="forum_table_title" width="100%">';
 
     // The thread
     echo '<tr><th style="padding:5px;" align="left" colspan="6">';
@@ -213,13 +214,19 @@ if ($my_message != 'PostDeletedSpecial') {
         echo '</span>';
     echo '</div>';
 
-
-    if ($origin != 'learnpath') {
-        //echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title']).' ';
-    }
-
     echo '</th></tr>';
-    echo '</table>';
+    echo '</table>';*/
+    
+    if (isset($_GET['msg']) && isset($_GET['type'])) {
+    	switch($_GET['type']) {
+    		case 'error':
+    			Display::display_error_message($_GET['msg']);
+    			break;
+    		case 'confirmation':
+    			Display::display_confirmation_message($_GET['msg']);
+    			break;
+    	}    	
+    }
 
     switch ($viewmode) {
         case 'flat':

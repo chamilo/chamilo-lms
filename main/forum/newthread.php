@@ -55,12 +55,10 @@ if (isset($_GET['origin'])) {
 
 // javascript
 $htmlHeadXtra[] = '<script>
-
         function advanced_parameters() {
-                if(document.getElementById(\'id_qualify\').style.display == \'none\') {
+            if(document.getElementById(\'id_qualify\').style.display == \'none\') {
                 document.getElementById(\'id_qualify\').style.display = \'block\';
                 document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-
             } else {
                 document.getElementById(\'id_qualify\').style.display = \'none\';
                 document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
@@ -105,7 +103,7 @@ if ($origin == 'group') {
     $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook, 'name' => $nameTools);
     $interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'], 'name' => $current_forum_category['cat_title']);
     $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&amp;forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
-    $interbreadcrumb[] = array('url' => 'newthread.php?origin='.$origin.'&amp;forum='.Security::remove_XSS($_GET['forum']), 'name' => get_lang('NewTopic'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewTopic'));
 }
 
 /* Resource Linker */
@@ -170,17 +168,17 @@ handle_forum_and_forumcategories();
 // Action links
 echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
-
+/*
 if ($origin == 'group') {
     echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'','32').'</a>';
 } else {
     echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview'),'','32').'</a>';
-}
-echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;origin=group">'.Display::return_icon('forum.png',get_lang('BackToForum'),'','32').'</a>';
+}*/
+echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'">'.Display::return_icon('back.png',get_lang('BackToForum'),'','32').'</a>';
 echo '</div>';
 
 /* Display Forum Category and the Forum information */
-
+/*
 echo "<table class=\"data_table\" width=\"100%\">\n";
 
 if ($origin != 'learnpath') {
@@ -199,7 +197,7 @@ if ($origin != 'learnpath') {
     echo "</tr>\n";
 }
 echo '</table>';
-
+*/
 $values = show_add_post_form('newthread', '', isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null);
 
 if (!empty($values) && isset($values['SubmitPost'])) {

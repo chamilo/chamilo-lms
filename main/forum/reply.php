@@ -95,7 +95,7 @@ if ($origin == 'group') {
     $interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'], 'name' => $current_forum_category['cat_title']);
     $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&amp;forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
     $interbreadcrumb[] = array('url' => 'viewthread.php?origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']), 'name' => $current_thread['thread_title']);
-    $interbreadcrumb[] = array('url' => 'javascript: void(0);', 'name' => get_lang('Reply'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Reply'));
 }
 
 /* Resource Linker */
@@ -149,23 +149,24 @@ if (!$_user['user_id'] AND $current_forum['allow_anonymous'] == 0) {
 if ($origin != 'learnpath') {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
-    if ($origin == 'group') {
+    /*if ($origin == 'group') {
         echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('Groups'), '', '32').'</a>';
     } else {
         echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', '32').'</a>';
     }
-    echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;origin='.$origin.'">'.Display::return_icon('forum.png', get_lang('BackToForum'), '', '32').'</a>';
-    echo '<a href="viewthread.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;origin='.$origin.'">'.Display::return_icon('thread.png', get_lang('BackToThread'), '', '32').'</a>';
+    echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;origin='.$origin.'">'.Display::return_icon('forum.png', get_lang('BackToForum'), '', '32').'</a>';*/
+    echo '<a href="viewthread.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;origin='.$origin.'">'.Display::return_icon('back.png', get_lang('BackToThread'), '', '32').'</a>';
     echo '</div>';
 } else {
     echo '<div style="height:15px">&nbsp;</div>';
 }
 
 /* Display Forum Category and the Forum information */
-
+/*
 echo "<table class=\"data_table\" width=\"100%\">";
 
 // The forum category
+
 echo "<tr><th style=\"padding-left:5px;\" align=\"left\" colspan=\"2\">";
 echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
 
@@ -175,7 +176,7 @@ if (!empty ($current_forum_category['cat_title'])) {
 echo "</th>";
 echo "</tr>";
 echo '</table>';
-
+*/
 // The form for the reply
 $my_action   = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 $my_post     = isset($_GET['post']) ?   Security::remove_XSS($_GET['post']) : '';
@@ -184,7 +185,15 @@ $my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : ''
 $values      = show_add_post_form($my_action, $my_post, $my_elements); // Note: This has to be cleaned first.
 
 if (!empty($values) AND isset($_POST['SubmitPost'])) {
-    store_reply($values);
+    $result = store_reply($values);
+    //@todo split the show_add_post_form function
+    
+    $url = 'viewthread.php?forum='.$current_thread['forum_id'].'&gradebook='.$gradebook.'&thread='.intval($_GET['thread']).'&gidReq='.api_get_group_id().'&origin='.$origin.'&msg='.$result['msg'].'&type='.$result['type'];
+    echo '
+    <script type="text/javascript">
+    window.location = "'.$url.'";
+    </script>';    
+    //header('Location: );
 }
 
 if ($origin != 'learnpath') {

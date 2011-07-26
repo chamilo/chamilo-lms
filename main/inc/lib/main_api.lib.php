@@ -3185,12 +3185,15 @@ if (!function_exists('sys_get_temp_dir')) {
  * @author      Aidan Lister <aidan@php.net>
  * @version     1.0.3
  * @param       string   $dirname    Directory to delete
+ * @param       bool	 Deletes only the content or not
  * @return      bool     Returns TRUE on success, FALSE on failure
  * @link http://aidanlister.com/2004/04/recursively-deleting-a-folder-in-php/
  * @author      Yannick Warnier, adaptation for the Chamilo LMS, April, 2008
  * @author      Ivan Tcholakov, a sanity check about Directory class creation has been added, September, 2009
  */
-function rmdirr($dirname) {
+function rmdirr($dirname, $delete_only_content = false) {
+	$res = true;
+	
     // A sanity check.
     if (!file_exists($dirname)) {
         return false;
@@ -3225,9 +3228,12 @@ function rmdirr($dirname) {
     if ($is_object_dir) {
         $dir->close();
     }
-    $res = rmdir($dirname);
-    if ($res === false) {
-        error_log(__FILE__.' line '.__LINE__.': '.((bool)ini_get('track_errors') ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
+    
+    if ($delete_only_content == false) {
+	    $res = rmdir($dirname);
+	    if ($res === false) {
+	        error_log(__FILE__.' line '.__LINE__.': '.((bool)ini_get('track_errors') ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
+	    }
     }
     return $res;
 }

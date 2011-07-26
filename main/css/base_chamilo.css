@@ -1080,7 +1080,9 @@ form br {
     color: #f00;
     font-weight: bold;
 }
+
 /* Admin section */
+
 div.admin_section {    
     -moz-border-radius:10px;
     border-radius:10px;
@@ -1089,7 +1091,7 @@ div.admin_section {
     float: left;
     padding: 5px;
     margin: 10px 20px;
-    min-height:234px;
+    min-height:280px;
 }
 
 div.admin_section h4 {

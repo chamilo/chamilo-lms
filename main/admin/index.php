@@ -156,8 +156,11 @@ if (api_is_platform_admin()) { ?>
         if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
             // Do not show on production portals, where the tests directory doesn't exist.
             echo '<li><a href="filler.php">'.get_lang('DataFiller').'</a></li>';
-        }       
+        }
         
+        if (api_is_global_platform_admin()) {
+        	echo '<li><a href="archive_cleanup.php">'.get_lang('ArchiveDirCleanup').'</a></li>';
+        }
     ?>
     </ul>
 </div>

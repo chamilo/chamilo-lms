@@ -1378,11 +1378,7 @@ function show_add_form($id = '')
 								{
 									// values have to have double digits
 									$value = ($i <= 9 ? '0'.$i : $i );
-									if ($minutes == $value) {
-										echo "<option value=\"".$value."\" selected> ".$value." </option>";
-									} else {
-										echo "<option value=\"$value\">$value</option>";
-									}
+									echo "<option value=\"$value\">$value</option>\n";
 								} ?>
 						</select>
 					</td>
@@ -1469,11 +1465,7 @@ function show_add_form($id = '')
 								{
 									// values have to have double digits
 									$value = ($i <= 9 ? '0'.$i : $i );
-									if ($minutes == $value) {
-										echo "<option value=\"".$value."\" selected> ".$value." </option>";
-									} else {
-										echo "<option value=\"$value\">$value</option>";
-									}
+									echo "<option value=\"$value\">$value</option>\n";
 								} ?>
 						</select>
 						<br>

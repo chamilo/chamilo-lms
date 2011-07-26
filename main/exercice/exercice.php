@@ -555,6 +555,8 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
                 $("#export_opener").click(function() {                
                     var targetUrl = $(this).attr("href");        
                     $( "#dialog-confirm" ).dialog({
+                    	width:350,
+                    	height:220,
                         buttons: {
                             "'.addslashes(get_lang('Download')).'": function() {
                             	var export_format = $("input[name=export_format]:checked").val();
@@ -578,34 +580,14 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
                 echo Display::tag('p', Display::input('radio', 'export_format', 'xls', array('id'=>'export_format_xls_label')). Display::tag('label', get_lang('ExportAsXLS'), array('for'=>'export_format_xls_label')));   
                 echo Display::tag('p', Display::input('checkbox', 'load_extra_data',  '0',array('id'=>'load_extra_data_id')). Display::tag('label', get_lang('LoadExtraData'), array('for'=>'load_extra_data_id')));
             echo '</div>';
-
-    
-    //onclick="javascript: document.form1a.submit();
             if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
                 $filter = 1;
             } else {
             	$filter = 2;
             } 
             
-			echo '<a id="export_opener" href="'.api_get_self().'?export_report=1&show=result&export_filter='.$filter.'&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval($_GET['exerciseId']).'" >'.Display::return_icon('save.png',   get_lang('Export'),'',32).'</a>';
-			/*
-			echo '<a href="javascript: void(0);" onclick="javascript: document.form1b.submit();">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a>';			
-			echo '<form id="form1a" name="form1a" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '" style="display:inline">';
-			echo '<input type="hidden" name="export_report" value="export_report">';
-			echo '<input type="hidden" name="export_format" value="csv">';
-            echo '<input type="hidden" name="exerciseId" value="'.intval($_GET['exerciseId']).'">';
-            echo '<input type="hidden" name="hotpotato_name" value="'.Security::remove_XSS($_GET['path']).'">';            
-            
-                    
-            echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';
-			echo '</form>';
-			echo '<form id="form1b" name="form1b" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '" style="display:inline">';
-			echo '<input type="hidden" name="export_report" value="export_report">';
-			echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';			
-			echo '<input type="hidden" name="hotpotato_name" value="'.Security::remove_XSS($_GET['path']).'">';			
-			echo '<input type="hidden" name="export_format" value="xls">';
-            echo '<input type="hidden" name="exerciseId" value="'.intval($_GET['exerciseId']).'">';
-			echo '</form>';*/
+			echo '<a id="export_opener" href="'.api_get_self().'?export_report=1&show=result&export_filter='.$filter.'&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval($_GET['exerciseId']).'" >'.
+				  Display::return_icon('save.png',   get_lang('Export'),'',32).'</a>';			
 		}
 	}
 } else {

@@ -86,14 +86,15 @@ $(function() {
 
     $(".opener").click(function() {                
         var targetUrl = $(this).attr("href");        
-        $( "#dialog-confirm" ).dialog({        
+        $( "#dialog-confirm" ).dialog({     
+        	modal: true,   
             buttons: {
-                "<?php echo get_lang("Ok"); ?>": function() {                    
+                "<?php echo get_lang("Yes"); ?>": function() {                    
                     location.href = targetUrl;                
                     $( this ).dialog( "close" );
                     
                 },
-                "<?php echo get_lang("Cancel"); ?>": function() {
+                "<?php echo get_lang("No"); ?>": function() {
                     $( this ).dialog( "close" );
                 }
             }

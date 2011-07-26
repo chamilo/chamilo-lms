@@ -2293,7 +2293,8 @@ function store_reply($values) {
         $upload_ok = process_uploaded_file($_FILES['user_upload']);
         $has_attachment = true;
     }
-
+    $return = array();
+    
     if ($upload_ok) {
         // We first store an entry in the forum_post table.
         $sql = "INSERT INTO $table_posts (post_title, post_text, thread_id, forum_id, poster_id, post_date, post_notification, post_parent_id, visible)
@@ -2323,7 +2324,8 @@ function store_reply($values) {
             $file_name = $_FILES['user_upload']['name'];
 
             if (!filter_extension($new_file_name)) {
-                Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+            	$return['msg'] = get_lang('UplUnableToSaveFileFilteredExtension');
+            	$return['type'] = 'error';            	
             } else {
                 $new_file_name = uniqid('');
                 $new_path = $updir.'/'.$new_file_name;
@@ -2352,28 +2354,28 @@ function store_reply($values) {
         if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(null, true)) {
             $message .= '<br />'.get_lang('MessageHasToBeApproved').'<br />';
         }
-
-        $message .= '<br />'.get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&amp;forum='.$values['forum_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'">'.get_lang('Forum').'</a><br />';
-        $message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.get_lang('Message').'</a>';
+        //$message .= '<br />'.get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&amp;forum='.$values['forum_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'">'.get_lang('Forum').'</a><br />';
+        //$message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.get_lang('Message').'</a>';
 
         // Setting the notification correctly.
         $my_post_notification = isset($values['post_notification']) ? $values['post_notification'] : null;
         if ($my_post_notification == 1) {
             set_notification('thread', $values['thread_id'], true);
         }
-
         send_notification_mails($values['thread_id'], $values);
-
         session_unregister('formelements');
         session_unregister('origin');
         session_unregister('breadcrumbs');
         session_unregister('addedresource');
         session_unregister('addedresourceid');
-        Display::display_confirmation_message($message,false);
-
+        $return['msg'] = $message;
+        $return['type'] = 'confirmation';
+        
     } else {
-        Display::display_error_message(get_lang('UplNoFileUploaded').' '. get_lang('UplSelectFileFirst'));
+    	$return['msg'] = get_lang('UplNoFileUploaded').' '. get_lang('UplSelectFileFirst');
+    	$return['type'] = 'error';
     }
+    return $return;
 }
 
 /**

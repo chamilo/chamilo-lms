@@ -3191,7 +3191,7 @@ if (!function_exists('sys_get_temp_dir')) {
  * @author      Yannick Warnier, adaptation for the Chamilo LMS, April, 2008
  * @author      Ivan Tcholakov, a sanity check about Directory class creation has been added, September, 2009
  */
-function rmdirr($dirname, $delete_only_content = false) {
+function rmdirr($dirname, $delete_only_content_in_folder = false) {
 	$res = true;
 	
     // A sanity check.
@@ -3229,7 +3229,7 @@ function rmdirr($dirname, $delete_only_content = false) {
         $dir->close();
     }
     
-    if ($delete_only_content == false) {
+    if ($delete_only_content_in_folder == false) {
 	    $res = rmdir($dirname);
 	    if ($res === false) {
 	        error_log(__FILE__.' line '.__LINE__.': '.((bool)ini_get('track_errors') ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);

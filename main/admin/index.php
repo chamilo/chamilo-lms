@@ -52,6 +52,17 @@ if (api_is_platform_admin()) {
     $keyword_url = Security::remove_XSS((empty($_GET['keyword']) ? '' : $_GET['keyword']));
 }
 
+if (isset($_GET['msg']) && isset($_GET['type'])) {
+	if (in_array($_GET['msg'], array('ArchiveDirCleanupSucceeded', 'ArchiveDirCleanupFailed')))
+	switch($_GET['type']) {
+		case 'error':
+			Display::display_error_message(get_lang($_GET['msg']));
+		case 'confirmation':			
+			Display::display_confirmation_message(get_lang($_GET['msg']));
+	}
+	
+}
+
 if (api_is_platform_admin()) {
 ?>
 <div class="admin_section">

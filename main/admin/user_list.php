@@ -862,7 +862,7 @@ if (isset ($_POST['action'])) {
 $form = new FormValidator('search_simple','get','','',null,false);
 $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
-$form->addElement('text','keyword',get_lang('keyword'));
+$form->addElement('text','keyword',get_lang('keyword'), 'size="25"');
 $form->addElement('style_submit_button', 'submit',get_lang('Search'),'class="search"');
 //$form->addElement('static','search_advanced_link',null,'<a href="user_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
 

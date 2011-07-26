@@ -1120,7 +1120,8 @@ function store_new_agenda_item() {
 
 	if ((!is_null($to)) || (!empty($_SESSION['toolgroup']))) // !is_null($to): when no user is selected we send it to everyone
 	{
-		$send_to=separate_users_groups($to);
+		//$send_to=separate_users_groups($to);
+		$send_to=separate_users_groups(explode('|', $to));
 		// storing the selected groups
 		if (is_array($send_to['groups'])) {
 			foreach ($send_to['groups'] as $group) {
@@ -4347,7 +4348,7 @@ function agenda_import_ical($course_info,$file) {
     $return = $ical->parse();
 
     //we need to recover: summary, description, dtstart, dtend, organizer, attendee, location (=course name),
-
+/*
     $ve = $ical->getComponent(VEVENT);
 
     $ttitle	= $ve->getProperty('summary');
@@ -4387,6 +4388,7 @@ function agenda_import_ical($course_info,$file) {
     //insert the event in our database
     //var_dump($title,$desc,$start_date,$end_date);
     $id = agenda_add_item($course_info,$title,$desc,$start_date_string,$end_date_string,$_POST['selectedform']);
+    
 
     $repeat = $ve->getProperty('rrule');
     if(is_array($repeat) && !empty($repeat['FREQ'])) {
@@ -4396,12 +4398,69 @@ function agenda_import_ical($course_info,$file) {
         if(isset($repeat['UNTIL']) && is_array($repeat['UNTIL'])) {
             $until = mktime(23,59,59,$repeat['UNTIL']['month'],$repeat['UNTIL']['day'],$repeat['UNTIL']['year']);
             $res = agenda_add_repeat_item($course_info,$id,$freq,$until,$_POST['selectedform']);
-        }
-        //TODO: deal with count
-        if(!empty($repeat['COUNT'])) {
-            $count = $repeat['COUNT'];
-            $res = agenda_add_repeat_item($course_info,$id,$freq,$count,$_POST['selectedform']);
-        }
+        }*/
+    $eventcount = 0;
+    while (true) {
+    	//we need to recover: summary, description, dtstart, dtend, organizer, attendee, location (=course name),
+    
+    	$ve = $ical->getComponent(VEVENT, $eventcount);
+    	if (!$ve)
+    	break;
+    
+    	$ttitle	= $ve->getProperty('summary');
+    	$title	= api_convert_encoding($ttitle,$charset,'UTF-8');
+    
+    	$tdesc	= $ve->getProperty('description');
+    	$desc	= api_convert_encoding($tdesc,$charset,'UTF-8');
+    
+    	$start_date	= $ve->getProperty('dtstart');
+    	$start_date_string = $start_date['year'].'-'.$start_date['month'].'-'.$start_date['day'].' '.$start_date['hour'].':'.$start_date['min'].':'.$start_date['sec'];
+    
+    
+    	$ts 	 = $ve->getProperty('dtend');
+    	if ($ts) {
+    		$end_date_string = $ts['year'].'-'.$ts['month'].'-'.$ts['day'].' '.$ts['hour'].':'.$ts['min'].':'.$ts['sec'];
+    	} else {
+    		//Check duration if dtend does not exist
+    		$duration 	  = $ve->getProperty('duration');
+    		if ($duration) {
+    			$duration = $ve->getProperty('duration');
+    			$duration_string = $duration['year'].'-'.$duration['month'].'-'.$duration['day'].' '.$duration['hour'].':'.$duration['min'].':'.$duration['sec'];
+    			$start_date_tms = mktime(intval($start_date['hour']), intval($start_date['min']), intval($start_date['sec']), intval($start_date['month']), intval($start_date['day']), intval($start_date['year']));
+    			//$start_date_tms = mktime(($start_date['hour']), ($start_date['min']), ($start_date['sec']), ($start_date['month']), ($start_date['day']), ($start_date['year']));
+    			//echo date('d-m-Y - h:i:s', $start_date_tms);
+    
+    			$end_date_string = mktime(intval($start_date['hour']) +$duration['hour'], intval($start_date['min']) + $duration['min'], intval($start_date['sec']) + $duration['sec'], intval($start_date['month']) + $duration['month'], intval($start_date['day'])+$duration['day'], intval($start_date['year']) + $duration['year']);
+    			$end_date_string = date('Y-m-d H:i:s', $end_date_string);
+    			//echo date('d-m-Y - h:i:s', $end_date_string);
+    		}
+    	}
+    		
+    	//echo $start_date.' - '.$end_date;
+    	$organizer	 = $ve->getProperty('organizer');
+    	$attendee 	 = $ve->getProperty('attendee');
+    	$course_name = $ve->getProperty('location');
+    	//insert the event in our database
+    	//var_dump($title,$desc,$start_date,$end_date);
+    	$id = agenda_add_item($course_info,$title,$desc,$start_date_string,$end_date_string,$attendee);
+    	
+    	$repeat = $ve->getProperty('rrule');
+    	if(is_array($repeat) && !empty($repeat['FREQ'])) {
+		    $trans = array('DAILY'=>'daily','WEEKLY'=>'weekly','MONTHLY'=>'monthlyByDate','YEARLY'=>'yearly');
+			$freq = $trans[$repeat['FREQ']];
+	    	$interval = $repeat['INTERVAL'];
+	    	if (isset($repeat['UNTIL']) && is_array($repeat['UNTIL'])) {
+	    		$until = mktime(23,59,59,$repeat['UNTIL']['month'],$repeat['UNTIL']['day'],$repeat['UNTIL']['year']);
+	    		                $res = agenda_add_repeat_item($course_info,$id,$freq,$until,$attendee);
+	    	}
+	    	
+	    	//TODO: deal with count
+	    	if(!empty($repeat['COUNT'])) {
+	    		$count = $repeat['COUNT'];
+	    		$res = agenda_add_repeat_item($course_info,$id,$freq,$count,$attendee);
+	    	}    		
+	    }
+		$eventcount++;    	
     }
     return true;
 }

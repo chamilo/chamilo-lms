@@ -2346,7 +2346,7 @@ function show_add_form($id = '') {
 	
 	
 	// the title of the agenda item
-	echo 	' 	<div class="row">
+	echo 	'<div class="row">
 							<div class="label">
 								<span class="form_required">*</span>'.get_lang('ItemTitle').'
 							</div>
@@ -2583,10 +2583,87 @@ function show_add_form($id = '') {
 	<?php
 	echo 	'	</div>
 			</div>	</span>';
-
-
-
-
+	
+	
+	// Repeating the calendar item
+	if (empty($id)) {
+		//only show repeat fields when adding, not for editing an calendar item
+		echo '<div class="row">
+					<div class="label">					
+					</div>
+					<div class="formw">
+					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">
+	                       <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('RepeatEvent').'</span>
+	                    </a>';
+		?>
+						<table id="options2" style="display: none;">
+						<tr>
+							<td><label for="repeat"><?php echo get_lang('RepeatEvent');?></label></td>
+							<td><input type="checkbox" name="repeat" <?php echo ($repeat?'checked="checked"':'');?>/></td>
+				    	</tr>
+				    	<tr>
+				    		<td><label for="repeat_type"><?php echo get_lang('RepeatType');?></label></td>
+							<td>
+						        <select name="repeat_type">
+						          <option value="daily"><?php echo get_lang('RepeatDaily');?></option>
+						          <option value="weekly"><?php echo get_lang('RepeatWeekly');?></option>
+						          <option value="monthlyByDate"><?php echo get_lang('RepeatMonthlyByDate');?></option>
+						          <!--option value="monthlyByDay"><?php echo get_lang('RepeatMonthlyByDay');?></option>
+						          <option value="monthlyByDayR"><?php echo get_lang('RepeatMonthlyByDayR');?></option-->
+						          <option value="yearly"><?php echo get_lang('RepeatYearly');?></option>
+						        </select>
+				      </td>
+				    </tr>
+				    <tr>
+						<td><label for="repeat_end_day"><?php echo get_lang('RepeatEnd');?></label></td>
+				        <td>
+				            <select name="repeat_end_day">
+				            <?php
+				                    // small loop for filling all the dates
+				                    // 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
+	
+				                    foreach (range(1, 31) as $i) {
+				                        // values have to have double digits
+				                        $value = ($i <= 9 ? '0'.$i : $i );
+				                        // the current day is indicated with [] around the date
+				                        if ($value==$end_day)
+				                            { echo "<option value=\"".$value."\" selected> ".$i." </option>";}
+				                        else
+				                            { echo "<option value=\"".$value."\">".$i."</option>"; }
+				                        }?>
+				                </select>
+				                <!-- month: january -> december -->
+				                <select name="repeat_end_month">
+				                    <?php
+				                    foreach (range(1, 12) as $i) {
+				                        // values have to have double digits
+				                        $value = ($i <= 9 ? '0'.$i : $i );
+				                        if ($value==$end_month+1)
+				                            { echo '<option value="',$value,'" selected="selected">',$MonthsLong[$i-1],"</option>"; }
+				                        else
+				                            { echo '<option value="',$value,'">',$MonthsLong[$i-1],"</option>"; }
+				                        }?>
+				                </select>
+				                <select name="repeat_end_year">
+				                    <option value="<?php echo ($end_year-1) ?>"><?php echo ($end_year-1) ?></option>
+				                    <option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
+				                    <?php
+				                    for ($i=1; $i<=5; $i++) {
+				                        $value=$end_year+$i;
+				                        echo "<option value=\"$value\">$value</option>";
+				                    } ?>
+				            </select>
+							<a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')">
+								<?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?>
+							</a>
+							</td>
+					    </tr>
+				    </table>
+	<?php
+		echo '		</div>
+				</div>';
+	    }//only show repeat fields if adding, not if editing
+	    
 	// the main area of the agenda item: the wysiwyg editor
 	echo '	<div>
 				<div class="label" >
@@ -2643,91 +2720,7 @@ function show_add_form($id = '') {
 			</div>';
 
 
-	// Repeating the calendar item
-    if(empty($id)) //only show repeat fields when adding, not for editing an calendar item
-    {
-	echo '	<div class="row">
-				<div class="label">
-					
-				</div>
-				<div class="formw">
-				<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">
-                       <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('RepeatEvent').'</span>
-                    </a>
-				
-				';
-?>
-					<table id="options2" style="display: none;">
-					<tr>
-							<td><label for="repeat"><?php echo get_lang('RepeatEvent');?></label></td>
-							<td><input type="checkbox" name="repeat" <?php echo ($repeat?'checked="checked"':'');?>/></td>
-			    </tr>
-			    <tr>
-							<td><label for="repeat_type"><?php echo get_lang('RepeatType');?></label></td>
-							<td>
-			        <select name="repeat_type">
-			          <option value="daily"><?php echo get_lang('RepeatDaily');?></option>
-			          <option value="weekly"><?php echo get_lang('RepeatWeekly');?></option>
-			          <option value="monthlyByDate"><?php echo get_lang('RepeatMonthlyByDate');?></option>
-			          <!--option value="monthlyByDay"><?php echo get_lang('RepeatMonthlyByDay');?></option>
-			          <option value="monthlyByDayR"><?php echo get_lang('RepeatMonthlyByDayR');?></option-->
-			          <option value="yearly"><?php echo get_lang('RepeatYearly');?></option>
-			        </select>
-			      </td>
-			    </tr>
-			    <tr>
-							<td><label for="repeat_end_day"><?php echo get_lang('RepeatEnd');?></label></td>
-			            	<td>
-			            <select name="repeat_end_day">
-			                <?php
-			                    // small loop for filling all the dates
-			                    // 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
-
-			                    foreach (range(1, 31) as $i)
-			                    {
-			                        // values have to have double digits
-			                        $value = ($i <= 9 ? '0'.$i : $i );
-			                        // the current day is indicated with [] around the date
-			                        if ($value==$end_day)
-			                            { echo "<option value=\"".$value."\" selected> ".$i." </option>";}
-			                        else
-			                            { echo "<option value=\"".$value."\">".$i."</option>"; }
-			                        }?>
-			                </select>
-
-			                <!-- month: january -> december -->
-			                <select name="repeat_end_month">
-			                    <?php
-			                    foreach (range(1, 12) as $i)
-			                    {
-			                        // values have to have double digits
-			                        $value = ($i <= 9 ? '0'.$i : $i );
-			                        if ($value==$end_month+1)
-			                            { echo '<option value="',$value,'" selected="selected">',$MonthsLong[$i-1],"</option>"; }
-			                        else
-			                            { echo '<option value="',$value,'">',$MonthsLong[$i-1],"</option>"; }
-			                        }?>
-			                </select>
-
-			                <select name="repeat_end_year">
-			                    <option value="<?php echo ($end_year-1) ?>"><?php echo ($end_year-1) ?></option>
-			                    <option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
-			                    <?php
-			                    for ($i=1; $i<=5; $i++) {
-			                        $value=$end_year+$i;
-			                        echo "<option value=\"$value\">$value</option>";
-			                    } ?>
-			            </select>
-						<a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')">
-							<?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?>
-						</a>
-						</td>
-				    </tr>
-			    </table>
-<?php
-	echo '		</div>
-			</div>';
-    }//only show repeat fields if adding, not if editing
+	
 
 
     // the submit button for storing the calendar item
@@ -4243,18 +4236,16 @@ function edit_agenda_attachment_file($file_comment, $agenda_id, $id_attach) {
  * @param 	string  a comment about a attachment file into agenda
  * @return  boolean False if error, True otherwise
  */
-function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$file_comment='') {
+function agenda_add_repeat_item($course_info, $orig_id, $type, $end, $orig_dest, $file_comment='') {
 	$t_agenda   = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
     $t_agenda_r = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_info['dbName']);
 
-    $sql = 'SELECT title, content, start_date as sd, end_date as ed FROM '. $t_agenda.' WHERE id ="'.Database::escape_string($orig_id).'" ';
+    $sql = 'SELECT title, content, start_date as sd, end_date as ed FROM '. $t_agenda.' WHERE id ="'.intval($orig_id).'" ';
     $res = Database::query($sql);
     if(Database::num_rows($res)!==1){return false;}
     $row = Database::fetch_array($res);
     $orig_start = api_strtotime(api_get_local_time($row['sd']));
-    //$orig_start = mktime(substr($row['sd'],11,2),substr($row['sd'],14,2),substr($row['sd'],17,2),substr($row['sd'],5,2),substr($row['sd'],8,2),substr($row['sd'],0,4));
     $orig_end   = api_strtotime(api_get_local_time($row['ed']));
-    //$orig_end   = mktime(substr($row['ed'],11,2),substr($row['ed'],14,2),substr($row['ed'],17,2),substr($row['ed'],5,2),substr($row['ed'],8,2),substr($row['ed'],0,4));
         
     $diff           = $orig_end - $orig_start;
     $orig_title     = $row['title'];

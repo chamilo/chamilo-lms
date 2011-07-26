@@ -226,7 +226,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                     $end_m = intval($_POST['repeat_end_month']);
                     $end_d = intval($_POST['repeat_end_day']);
                     $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
-                    $res = agenda_add_repeat_item($course_info,$id,Security::remove_XSS($_POST['repeat_type']),$end,Security::remove_XSS($_POST['selectedform']),$safe_file_comment);
+                    $res = agenda_add_repeat_item($course_info,$id, $_POST['repeat_type'], $end,$_POST['selectedform'], $safe_file_comment);
                 }
 			}
 			break;

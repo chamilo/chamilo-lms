@@ -4,9 +4,7 @@
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
-/**
- * Initialization
- */
+
 $cidReset = true;
 $language_file = array('userInfo');
 require_once '../inc/global.inc.php';
@@ -369,7 +367,7 @@ if ($group_id != 0 ) {
 				
                 /*$join_url = '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('JoinGroup'), array('hspace'=>'6')).''.get_lang('JoinGroup').'</a> ';                
 				$item_4 = '<div class="box_description_group_actions" >'.$join_url. $url_open.get_lang('SeeMore').$url_close.'</div>';*/				
-				$grid_item_2 = $item_0.$item_1.$item_2.$item_3.$item_4;
+				$grid_item_2 = $item_0.$item_1.$item_2.$item_3;
 				$grid_my_groups[]= array($grid_item_2);
 			}
 		}

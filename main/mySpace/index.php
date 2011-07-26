@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @todo use constant for $this_section
- */
-// name of the language file that needs to be included
+
 $language_file = array('registration', 'index', 'tracking');
 
 // resetting the course id
@@ -137,7 +134,7 @@ global $_configuration;
 // && isset($_GET['display']) && $_GET['display'] != 'yourstudents'
 
 if (api_is_allowed_to_create_course()) {
-	$session_id = intval($_GET['session_id']);
+	$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): 0;
 	if (!empty($session_id)) {
 		$courses = Tracking::get_courses_followed_by_coach($user_id, $session_id);
 	} else {
@@ -578,7 +575,7 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 			$tracking_column = 0;
 		}
 
-		if ($_GET['tracking_direction'] == 'DESC') {
+		if (isset($_GET['tracking_direction']) &&  $_GET['tracking_direction'] == 'DESC') {
 			usort($all_data, 'rsort_sessions');
 		} else {
 			usort($all_data, 'sort_sessions');

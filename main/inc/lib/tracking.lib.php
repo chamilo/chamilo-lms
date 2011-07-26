@@ -3065,7 +3065,7 @@ class TrackingCourseLog {
         foreach ($extra_fields as $key=>$field) {
             // show only extra fields that are visible + and can be filtered, added by J.Montoya
             if ($field[6]==1 && $field[8] == 1) {
-                if ($field[0] == $_GET['additional_profile_field'] ) {
+                if (isset($_GET['additional_profile_field']) && $field[0] == $_GET['additional_profile_field'] ) {
                     $selected = 'selected="selected"';
                 } else {
                     $selected = '';

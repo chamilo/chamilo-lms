@@ -6,9 +6,7 @@
 * @author Isaac Flores Paz <florespaz_isaac@hotmail.com>
 * @package chamilo.social
 */
-/**
- * Initialization
- */
+
 $language_file = array('userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
@@ -469,7 +467,7 @@ if ($show_full_profile) {
 			if (api_get_user_id() == $user_id) {
 				//$item_actions = '<div class="box_shared_profile_group_actions"><a href="groups.php?id='.$id.'">'.get_lang('SeeMore').$url_close.'</div>';
 			}
-			$grid_my_groups[]= array($item_name,$url_open.$result['picture_uri'].$url_close, $item_description.$item_actions);
+			$grid_my_groups[]= array($item_name,$url_open.$result['picture_uri'].$url_close, $item_actions);
 			$i++;
 		}
 	}

@@ -4,9 +4,6 @@
 /**
  *	@package chamilo.tracking
  */
-/**
- * Code
- */
 
 /* INIT SECTION */
 
@@ -161,13 +158,13 @@ echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Dis
 
 if ($_GET['studentlist'] == 'false') {
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv&studentlist=false">
-	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a>';
-	
+	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a>';	
 } elseif ($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
     $addional_param = '';
     if (isset($_GET['additional_profile_field'])) {
         $addional_param ='additional_profile_field='.intval($_GET['additional_profile_field']);
     }
+    $users_tracking_per_page = '';
     if (isset($_GET['users_tracking_per_page'])) {
         $users_tracking_per_page= '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
     }

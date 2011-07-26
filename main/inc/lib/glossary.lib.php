@@ -367,7 +367,7 @@ class GlossaryManager {
 		$condition_session  = api_get_session_condition($session_id, true, true);
         $column             = intval($column);
         if (!in_array($direction,array('DESC', 'ASC'))) {
-            $direction          = 'DESC';
+            $direction          = 'ASC';
         }        
         $from               = intval($from);
         $number_of_items    = intval($number_of_items);

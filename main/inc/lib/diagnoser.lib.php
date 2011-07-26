@@ -212,6 +212,7 @@ class Diagnoser
         					'standard' 	=> array('link'=>'http://www.php.net/spl', 		'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
         					'zlib' 		=> array('link'=>'http://www.php.net/zlib', 	'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
         					'xsl' 		=> array('link'=>'http://be2.php.net/xsl', 		'expected' => 2, 'comment' => get_lang('ExtensionCouldBeLoaded')),
+        					'curl' 		=> array('link'=>'http://www.php.net/curl', 	'expected' => 2, 'comment' => get_lang('ExtensionCouldBeLoaded')),
         );
 
         foreach ($extensions as $extension => $data) {

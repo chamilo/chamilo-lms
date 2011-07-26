@@ -240,7 +240,7 @@ if ($nb_teacher_courses > 0 ) {
 	echo '<div id="actions" class="actions">';
 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.Display::return_icon('stats.png', get_lang('MyStats'),'','32').'</a>';//
 	echo '</div>';
-	//Display::display_warning_message(get_lang('HaveNoCourse'));
+	Display::display_warning_message(get_lang('HaveNoCourse'));
 }
 
 echo Display::tag('h2', $title);

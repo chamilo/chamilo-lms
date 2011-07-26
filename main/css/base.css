@@ -2230,3 +2230,12 @@ div.admin_section h4 {
 .ui-state-highlight {
 	height:25px;
 }
+
+#question_list .header_operations {
+	height:40px;
+	margin-bottom:5px;
+}
+.question-list-description-block {
+	margin-bottom:10px !important;
+	margin-top: -6px !important;
+}

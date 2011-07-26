@@ -102,6 +102,9 @@ if ( empty ( $modifyQuestion ) ) {
 if ( empty ( $deleteQuestion ) ) {
     $deleteQuestion = $_GET['deleteQuestion'];
 }
+if ( empty ($clone_question) ) {
+	$clone_question = $_GET['clone_question'];
+}
 if ( empty ( $questionId ) ) {
     $questionId = $_SESSION['questionId'];
 }
@@ -177,7 +180,7 @@ if (!is_object($objExercise)) {
 // doesn't select the exercise ID if we come from the question pool
 if(!$fromExercise) {
 	// gets the right exercise ID, and if 0 creates a new exercise
-	if(!$exerciseId=$objExercise->selectId()) {
+	if(!$exerciseId = $objExercise->selectId()) {
 		$modifyExercise='yes';
 	}
 }
@@ -203,9 +206,11 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 	// checks if the object exists
 	if(is_object($objQuestion)) {
 		// gets the question ID
-		$questionId=$objQuestion->selectId();
+		$questionId = $objQuestion->selectId();
 	}
 }
+
+
 
 // if cancelling an exercise
 if ($cancelExercise) {
@@ -233,6 +238,22 @@ if ($cancelQuestion) {
 
 		unset($newQuestion,$modifyQuestion);
 	}
+}
+
+if (isset($clone_question) && !empty($objExercise->id)) {
+	$old_question_obj = Question::read($clone_question);
+	$old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');	
+	
+	$new_id = $old_question_obj->duplicate();
+	$new_question_obj = Question::read($new_id);
+	$new_question_obj->addToList($exerciseId);
+	
+	// This should be moved to the duplicate function
+	$new_answer_obj = new Answer($clone_question);
+	$new_answer_obj->read();
+	$new_answer_obj->duplicate($new_id);
+	header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
+	exit;
 }
 
 // if cancelling answer creation/modification

@@ -179,18 +179,17 @@ if ($nbrQuestions) {
 			}	
 			$objQuestionTmp = Question :: read($id);
             $question_class = get_class($objQuestionTmp);
-            //$label          = $question_class->$explanationLangVar;
             
-            
-            $edit_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'.Display::return_icon('edit.gif',get_lang('Modify')).'</a>';          
+            $clone_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'">'.Display::return_icon('cd.gif',get_lang('Copy'), array(), 22).'</a>';            
+            $edit_link  = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'.Display::return_icon('edit.png',get_lang('Modify'), array(), 22).'</a>';
             // this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
             if ($show_quiz_edition) {
-                 $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
-                 //$delete_link = '<a id="delete_'.$id.'" class="opener" href="#">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';                 
-            }            
-            $edit_link   = Display::tag('div',$edit_link,   array('style'=>'float:left;padding:0px; margin:0px'));
-            $delete_link = Display::tag('div',$delete_link, array('style'=>'float:left;padding:0px; margin:0px'));
-            $actions     = Display::tag('div',$edit_link.$delete_link, array('class'=>'edition','style'=>'width:70px; right:10px;     margin-top: 0px;     position: absolute;     top: 10%;'));
+                 $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.png',get_lang('Delete'), array(), 22).'</a>';
+            }
+            $clone_link  = Display::tag('div',$clone_link,  array('style'=>'float:left; padding:0px; margin:0px'));
+            $edit_link   = Display::tag('div',$edit_link,   array('style'=>'float:left; padding:0px; margin:0px'));
+            $delete_link = Display::tag('div',$delete_link, array('style'=>'float:left; padding:0px; margin:0px'));
+            $actions     = Display::tag('div',$edit_link.$clone_link.$delete_link, array('class'=>'edition','style'=>'width:100px; right:10px;     margin-top: 0px;     position: absolute;     top: 10%;'));
 
             echo '<div id="question_id_list_'.$id.'" >';            
                 echo '<div class="header_operations">';               
@@ -199,7 +198,7 @@ if ($nbrQuestions) {
                     if (!empty($objQuestionTmp->level)) {
                     	$level = '('.get_lang('Difficulty').' '.$objQuestionTmp->level.')';
                     }            
-        		    echo Display::tag('span','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().' '. Display::tag('span',$level.' ['.get_lang('QualificationNumeric').': '.$objQuestionTmp->selectWeighting().']', array('style'=>"right:90px; position: absolute;padding-top: 0.3em;")).'</a>', array('style'=>''));
+        		    echo Display::tag('span','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().' '. Display::tag('span',$level.' ['.get_lang('QualificationNumeric').': '.$objQuestionTmp->selectWeighting().']', array('style'=>"right:110px; position: absolute;padding-top: 0.3em;")).'</a>', array('style'=>''));
                     echo $actions;
                 echo '</div>';
             

@@ -1088,7 +1088,7 @@ abstract class Question
         }
 		$form->addElement('html','</div>');
 		// default values
-		$defaults = array();
+		$defaults = array();		
 		$defaults['questionName']          = $this -> question;
 		$defaults['questionDescription']   = $this -> description;
 		$defaults['questionLevel']         = $this -> level;

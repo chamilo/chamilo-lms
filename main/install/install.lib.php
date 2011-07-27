@@ -1624,10 +1624,9 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingUpgradeIntro');
         echo '</div>';
-    } else {
-        
+    } else {        
         if (empty($dbPrefixForm)) { //make sure there is a default value for db prefix
-            //$dbPrefixForm = 'chamilo_';
+            $dbPrefixForm = 'chamilo_';
         }
         echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2>';
         echo '</div>';
@@ -1664,8 +1663,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     //database prefix
     display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, get_lang('DbPrefixCom'));
 
-    //fields for the four standard Chamilo databases
-    
+    //fields for the four standard Chamilo databases    
     if ($installType != INSTALL_TYPE_UPDATE) {        
         echo '<tr><td colspan="3">';
         echo '<a href="" onclick="javascript: show_hide_option();return false;" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters', '').'</a>';

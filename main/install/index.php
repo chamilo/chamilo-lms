@@ -209,18 +209,18 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
 if (!isset($_GET['running'])) {
 
 	$dbHostForm		= 'localhost';
-	$dbUsernameForm         = 'root';
+	$dbUsernameForm = 'root';
 	$dbPassForm		= '';
- 	$dbPrefixForm           = '';
+ 	$dbPrefixForm   = '';
 	$dbNameForm		= 'chamilo_main';
-	$dbStatsForm            = 'chamilo_main';
-	$dbScormForm            = 'chamilo_main';
+	$dbStatsForm    = 'chamilo_main';
+	$dbScormForm    = 'chamilo_main';
 	$dbUserForm		= 'chamilo_main';
 
 	// Extract the path to append to the url if Chamilo is not installed on the web root directory.
-	$urlAppendPath = api_remove_trailing_slash(api_get_path(REL_PATH));
-  	$urlForm = api_get_path(WEB_PATH);
-	$pathForm = api_get_path(SYS_PATH);
+	$urlAppendPath  = api_remove_trailing_slash(api_get_path(REL_PATH));
+  	$urlForm 		= api_get_path(WEB_PATH);
+	$pathForm 		= api_get_path(SYS_PATH);
 
 	$emailForm = $_SERVER['SERVER_ADMIN'];
 	$email_parts = explode('@', $emailForm);
@@ -536,18 +536,14 @@ if ($encryptPassForm == '1') {
 
 <?php
 if ($_POST['step2']) {
-
 	//STEP 3 : LICENSE
 	display_license_agreement();
-
 } elseif ($_POST['step3']) {
-
-	//STEP 4 : MYSQL DATABASE SETTINGS
+	//STEP 4 : MYSQL DATABASE SETTINGS	
 	display_database_settings_form($installType, $dbHostForm, $dbUsernameForm, $dbPassForm, $dbPrefixForm, $enableTrackingForm, $singleDbForm, $dbNameForm, $dbStatsForm, $dbScormForm, $dbUserForm);
-
 } elseif ($_POST['step4']) {
-
 	//STEP 5 : CONFIGURATION SETTINGS
+	
 	//if update, try getting settings from the database...
 	if ($installType == 'update') {
 		$db_name = $dbNameForm;

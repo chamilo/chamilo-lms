@@ -2423,11 +2423,17 @@ return 'application/octet-stream';
         return true;
     }
     
-    function generate_mp3_preview($i) {
+    /**
+     * 
+     * Shows a play icon next to the document title in the document list
+     * @param int 
+     * @return string	html content 
+     */
+    function generate_media_preview($i) {
         $i = intval($i);      
         
-        //shows all the player
-        $html = '  <div id="jquery_jplayer_'.$i.'" class="jp-jplayer"></div>
+        /*//shows all the player
+        $html = '<div id="jquery_jplayer_'.$i.'" class="jp-jplayer"></div>
                   <div class="jp-audio">
                     <div class="jp-type-single">
                       <div id="jp_interface_'.$i.'" class="jp-interface">
@@ -2450,7 +2456,7 @@ return 'application/octet-stream';
                         <div class="jp-duration"></div>
                       </div>
                     </div>
-                  </div>';
+                  </div>';*/
         
         //Shows only the play button
         $html = '  <div id="jquery_jplayer_'.$i.'" class="jp-jplayer"></div>
@@ -2466,9 +2472,5 @@ return 'application/octet-stream';
                   </div>';
         return $html;
     }
-    
-
-
-
 }
 //end class DocumentManager

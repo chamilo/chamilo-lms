@@ -266,7 +266,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                 if ( preg_match('/mp3$/i',  urldecode($url))  ||
                      preg_match('/wav$/i',  urldecode($url))  ||
                      preg_match('/ogg$/i',  urldecode($url))) {                   
-                     $sound_preview = DocumentManager::generate_mp3_preview($counter);
+                     $sound_preview = DocumentManager::generate_media_preview($counter);
                      return $sound_preview ;
                 } elseif (
                     //Show preview sith yoxview
@@ -288,7 +288,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                 if ( preg_match('/mp3$/i',  urldecode($url))  ||
                      preg_match('/wav$/i',  urldecode($url))  ||
                      preg_match('/ogg$/i',  urldecode($url))) {
-                     $sound_preview = DocumentManager::generate_mp3_preview($counter);
+                     $sound_preview = DocumentManager::generate_media_preview($counter);
                      return $sound_preview ;                     
                 } elseif (
                     //Show preview sith yoxview

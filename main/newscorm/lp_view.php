@@ -16,12 +16,10 @@
 /**
  * Code
  */
-/* INIT SECTION */
-
 $_SESSION['whereami'] = 'lp/view';
 $this_section = SECTION_COURSES;
 
-if ($lp_controller_touched != 1){
+if ($lp_controller_touched != 1) {
     header('location: lp_controller.php?action=view&item_id='.$_REQUEST['item_id']);
     exit;
 }
@@ -29,27 +27,19 @@ if ($lp_controller_touched != 1){
 /* Libraries */
 
 require_once 'back_compat.inc.php';
-//require_once '../learnpath/learnpath_functions.inc.php';
 require_once 'scorm.lib.php';
 require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
-//require_once 'lp_comm.common.php'; //xajax functions
 
 if (!$is_allowed_in_course) api_not_allowed();
+
 $oLearnpath     = false;
 $course_code    = api_get_course_id();
 $user_id        = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Plataform's css.
 $my_style       = $platform_theme;
-// Escape external variables.
 
-/*  Header  */
-
-// Se incluye la libreria en el lp_controller.php
-
-$htmlHeadXtra[] = api_get_jquery_ui_js(); //jQuery-UI
-
-// se incluye la librería para el mini panel
+$htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = '<script  src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
 
 if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
@@ -64,9 +54,9 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setti
 }
 $htmlHeadXtra[] = '<script language="javascript" type="text/javascript">
 $(document).ready(function (){
-    $("div#log_content_cleaner").bind("click", function(){
-      $("div#log_content").empty();
-    });
+	$("div#log_content_cleaner").bind("click", function() {
+    	$("div#log_content").empty();
+	});
 });
 </script>';
 
@@ -107,13 +97,10 @@ if (!api_is_allowed_to_edit(null, true) && intval($visibility) == 0 ) {
      api_not_allowed();
 }
 
-//$lp_item_id = learnpath::escape_string($_GET['item_id']);
-//$_SESSION['oLP']->set_current_item($lp_item_id); // Already done by lp_controller.php.
-
 // Prepare variables for the test tool (just in case) - honestly, this should disappear later on.
 $_SESSION['scorm_view_id'] = $_SESSION['oLP']->get_view_id();
 $_SESSION['scorm_item_id'] = $lp_item_id;
-$_SESSION['lp_mode'] = $_SESSION['oLP']->mode;
+$_SESSION['lp_mode'] 	   = $_SESSION['oLP']->mode;
 
 // Reinit exercises variables to avoid spacename clashes (see exercise tool)
 if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
@@ -125,15 +112,17 @@ unset($_SESSION['questionList']);
 /**
  * Get a link to the corresponding document.
  */
+
 if (!isset($src)) {
-     $src = '';
+    $src = '';
     switch($lp_type) {
         case 1:
             $_SESSION['oLP']->stop_previous_item();
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-            if ($prereq_check === true) {
+            if ($prereq_check === true) {            	
                 $src = $_SESSION['oLP']->get_link('http', $lp_item_id);
+                
                 //Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
                 $file_info = pathinfo($src);
                 if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {
@@ -175,12 +164,6 @@ if (!isset($src)) {
 
 $list = $_SESSION['oLP']->get_toc();
 $type_quiz = false;
-/*
-$current_item = $_SESSION['oLP']->items[$_SESSION['oLP']->get_current_item_id()];
-$attempt_id =  $current_item->get_attempt_id();
-error_log('get attempts'.$current_item->get_attempt_id());
-*/
-
 
 foreach($list as $toc) {
     if ($toc['id'] == $lp_item_id && ($toc['type']=='quiz')) {
@@ -213,10 +196,6 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         $mytime = ((int)$time_exe_date-(int)$time_start_date);
         $score = (float)$row_dates['exe_result'];
         $max_score = (float)$row_dates['exe_weighting'];
-
-        /*$sql_upd_status = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' WHERE lp_item_id = '".(int)$safe_item_id."'
-                 AND lp_view_id = (SELECT lp_view.id FROM $TBL_LP_VIEW lp_view WHERE user_id = '".(int)$_SESSION['oLP']->user_id."' AND lp_id='".(int)$safe_id."')";
-        Database::query($sql_upd_status);*/
 
         $sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE id = '".(int)$safe_item_id."'";
         Database::query($sql_upd_max_score);
@@ -279,16 +258,15 @@ if ($_SESSION['oLP']->mode == 'embedframe') {
 <body dir="<?php echo api_get_text_direction(); ?>">
 <div id="learning_path_main"  style="width:100%;height:100%;" >
     <div id="learning_path_left_zone" style="float:left;width:280px;height:100%<?php echo $display_none;?>">
-
         <!-- header -->
         <div id="header">
             <div id="learning_path_header" style="font-size:14px;">
-                <table >
+                <table>
                     <tr>
-                        <td >
+                        <td>
                             <a href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
                         </td>
-                        <td >
+                        <td>
                             <a class="link" href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();">
                             <?php echo get_lang('CourseHomepageLink'); ?></a>
                         </td>
@@ -407,11 +385,7 @@ if ($_SESSION['oLP']->mode == 'embedframe') {
     </div>
     <!-- end right Zone -->
 </div>
-<script language="JavaScript" type="text/javascript">
-    // Need to be called after the <head> to be sure window.oxajax is defined.
-    //var dokeos_xajax_handler = window.oxajax;
-</script>
-<script language="JavaScript" type="text/javascript">
+<script language="javascript" type="text/javascript">
     // Resize right and left pane to full height (HUB 20-05-2010).
     function updateContentHeight() {
         document.body.style.overflow = 'hidden';
@@ -466,7 +440,6 @@ if ($_SESSION['oLP']->mode == 'embedframe') {
 }
     window.onload = updateContentHeight;
     window.onresize = updateContentHeight;
-
 -->
 </script>
 </body>

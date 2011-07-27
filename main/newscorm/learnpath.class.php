@@ -408,19 +408,12 @@ class learnpath {
                 $display_order = 0;
             } else {
                 $previous = (int) $previous;
-                $sql = "
-                               SELECT
-                                   id,
-                                   previous_item_id,
-                                   next_item_id,
-                                   display_order
-                               FROM " . $tbl_lp_item . "
-                               WHERE
-                                   lp_id = " . $this->get_id() . " AND
-                                   id = " . $previous;
+                $sql = "SELECT id, previous_item_id, next_item_id, display_order
+						FROM " . $tbl_lp_item . "
+                        WHERE lp_id = " . $this->get_id() . " AND id = " . $previous;
 
                 $result = Database::query($sql);
-                $row = Database :: fetch_array($result);
+                $row 	= Database :: fetch_array($result);
 
                 $tmp_previous = $row['id'];
                 $next = $row['next_item_id'];
@@ -438,10 +431,10 @@ class learnpath {
 
         if ($type == 'quiz') {
             $sql = 'SELECT SUM(ponderation)
-                                FROM ' . Database :: get_course_table(TABLE_QUIZ_QUESTION) . ' as quiz_question
-                                INNER JOIN  ' . Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION) . ' as quiz_rel_question
-                                ON quiz_question.id = quiz_rel_question.question_id
-                                AND quiz_rel_question.exercice_id = ' . $id;
+					FROM ' . Database :: get_course_table(TABLE_QUIZ_QUESTION) . ' as quiz_question
+                    INNER JOIN  ' . Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION) . ' as quiz_rel_question
+                    ON quiz_question.id = quiz_rel_question.question_id
+                    AND quiz_rel_question.exercice_id = ' . $id;
             $rsQuiz = Database::query($sql);
             $max_score = Database :: result($rsQuiz, 0, 0);
         } else {
@@ -449,8 +442,7 @@ class learnpath {
         }
 
         if ($prerequisites != 0) {
-            $sql_ins = "
-                            INSERT INTO " . $tbl_lp_item . " ( ".
+            $sql_ins = "INSERT INTO " . $tbl_lp_item . " ( ".
                                 "lp_id, ".
                                 "item_type, ".
                                 "ref, ".
@@ -549,11 +541,9 @@ class learnpath {
             $res_update_previous = Database::query($sql_update_order);
 
             // Update the item that should come after the new item.
-            $sql_update_ref = "
-                            UPDATE " . $tbl_lp_item . "
-                            SET ref = " . $new_item_id . "
-                            WHERE id = " . $new_item_id;
-
+            $sql_update_ref = "UPDATE " . $tbl_lp_item . "
+                               SET ref = " . $new_item_id . "
+                               WHERE id = " . $new_item_id;
             Database::query($sql_update_ref);
 
         }
@@ -4708,7 +4698,7 @@ class learnpath {
             					} else {
             						$parent_id = $item['parent_item_id'];
             						if (empty($parent_arrays)) {
-            							$parent_arrays[] = $item['id'];
+            							$parent_arrays[] = intval($item['id']);
             						}
             						$parent_arrays[] = $parent_id;            						
             						break;
@@ -4731,13 +4721,10 @@ class learnpath {
 	            		$x++;
 	            	}
 	            	$val .= "";
-	            	$generated_array = null;
-	            	//".$row."	            	
-	            	$code_str = $val."[".$arrLP[$i]['id']."][\"load_data\"] = '".$arrLP[$i]['id']."' ; ";            	
-	            	//var_dump($code_str);
+	            	$generated_array = null;            	
+	            	$code_str = $val."[".$arrLP[$i]['id']."][\"load_data\"] = '".$arrLP[$i]['id']."' ; ";
 	            	eval($code_str);	            
             	} else {            	            	
-	            	//var_dump($parent_arrays);
 	            	$elements[$parent_id]['children'][$arrLP[$i]['id']]['data'] = $row;            	
 	            	$elements[$parent_id]['children'][$arrLP[$i]['id']]['type'] = $arrLP[$i]['item_type'];
             	}
@@ -4902,6 +4889,38 @@ class learnpath {
         return $return;
     }
 
+    public function generate_lp_folder($course, $dir) {
+    	$filepath = '';
+    	//Creating learning_path folder
+    	$dir = '/learning_path';
+    	$filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document';
+    	$folder = null;
+    	if (!is_dir($filepath.'/'.$dir)) {
+    		$folder = create_unexisting_directory($course, api_get_user_id(), api_get_session_id(), 0, 0, $filepath, $dir , get_lang('LearningPaths'));
+    	} else {
+    		$folder = true;
+    	}
+    	
+    	$dir = '/learning_path/';
+    	//Creating LP folder
+    	if ($folder) {
+    		//Limits title size
+    		$title = api_substr(replace_dangerous_char($this->name), 0 , 80);
+    		$dir   = $dir.$title;
+    		$filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document';
+    		if (!is_dir($filepath.'/'.$dir)) {
+    			$folder = create_unexisting_directory($course, api_get_user_id(), api_get_session_id(), 0, 0, $filepath, $dir , $this->name);
+    		} else {
+    			$folder = true;
+    		}
+    		$dir = $dir.'/';
+    		if ($folder) {
+    			$filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document'.$dir;
+    		}
+    	}
+    	$array =  array('dir' => $dir, 'filepath' => $filepath);
+    	return $array;
+    }
     /**
      * Create a new document //still needs some finetuning
      * @param array $_course
@@ -4922,43 +4941,19 @@ class learnpath {
         $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $dir;
         
         if (empty($_POST['dir']) && empty($_GET['dir'])) {
-            
-            //Creating learning_path folder
-            $dir = '/learning_path';
-            $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document';
-            $folder = null;
-            if (!is_dir($filepath.'/'.$dir)) {
-                $folder = create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), 0, 0, $filepath, $dir , get_lang('LearningPaths'));                 
-            } else {
-                $folder = true;
-            }            
-            
-            $dir = '/learning_path/';
-            //Creating LP folder
-            if ($folder) {                                
-                $title = replace_dangerous_char($this->name);
-                $dir   = $dir.$title;
-                $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document';
-                if (!is_dir($filepath.'/'.$dir)) {
-                    $folder = create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), 0, 0, $filepath, $dir , $this->name);    
-                } else {
-                    $folder = true;
-                }                    
-                $dir = $dir.'/';
-                if ($folder) {                    
-                    $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document'.$dir;
-                }
-            }          
+            var_dump($dir);
+        	$result = $this->generate_lp_folder($_course, $dir);
+        	$dir 		= $result['dir'];
+        	$filepath 	= $result['filepath'];
         }
                 
         if (!is_dir($filepath)) {
             $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
             $dir = '/';
-        }
-        
+        }        
       
         // stripslashes() before calling replace_dangerous_char() because $_POST['title']
-        // is already escaped twice when it gets here.
+        // is already escaped twice when it gets here.        
         $title = replace_dangerous_char(stripslashes($_POST['title']));
         $title = disable_dangerous_file($title);
 
@@ -4972,10 +4967,14 @@ class learnpath {
             $tmp_filename = $filename . '_' . ++ $i;
         
         $filename = $tmp_filename . '.html';
-        $content = stripslashes(text_filter($content));
-        $content = str_replace(api_get_path(WEB_COURSE_PATH), api_get_path(REL_PATH) . 'courses/', $content);
+        $content = stripslashes($content);
+        
+        $content = str_replace(api_get_path(WEB_COURSE_PATH), api_get_path(REL_PATH).'courses/', $content);
+        
         // Change the path of mp3 to absolute.
+        
         // The first regexp deals with ../../../ urls.
+        
         $content = preg_replace("|(flashvars=\"file=)(\.+/)+|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/', $content);
         // The second regexp deals with audio/ urls.
         $content = preg_replace("|(flashvars=\"file=)([^/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/$2/', $content);
@@ -4988,7 +4987,7 @@ class learnpath {
                 fclose($fp);
 
                 $file_size = filesize($filepath . $filename);
-                $save_file_path = $dir . $filename;
+                $save_file_path = $dir.$filename;
 
                 $document_id = add_document($_course, $save_file_path, 'file', $file_size, $tmp_filename);
 
@@ -5001,10 +5000,8 @@ class learnpath {
                     if ($new_comment || $new_title) {
                         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
                         $ct = '';
-
                         if ($new_comment)
                             $ct .= ", comment='" . Database::escape_string($new_comment). "'";
-
                         if ($new_title)
                             $ct .= ", title='" . Database :: escape_string(htmlspecialchars($new_title, ENT_QUOTES, $charset))."' ";
 
@@ -6336,7 +6333,7 @@ class learnpath {
     public function display_document_form($action = 'add', $id = 0, $extra_info = 'new') {
         global $charset;
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
+        $tbl_doc 	 = Database :: get_course_table(TABLE_DOCUMENT);
 
         $path_parts = pathinfo($extra_info['dir']);
         $no_display_edit_textarea = false;
@@ -6379,7 +6376,7 @@ class learnpath {
                         WHERE id = " . Database :: escape_string($extra_info);
 
             $result = Database::query($sql_doc);
-            $row 	= Database :: fetch_array($result);
+            $row 	= Database::fetch_array($result);
 
             $explode = explode('.', $row['title']);
 
@@ -6395,14 +6392,12 @@ class learnpath {
                 $path_parts = pathinfo($row['path']);
                 $item_title = stripslashes($path_parts['filename']);
             }
-
         } else {
             $item_title = '';
             $item_description = '';
         }
-
-        $return = '	<div class="row">
-                                <div class="form_header">';
+        $return = '<div class="row">
+                    	<div class="form_header">';
 
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
@@ -6547,21 +6542,6 @@ class learnpath {
                     }
                 }
             }
-            // Commented the prerequisites, only visible in edit (new document).
-            //$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites'),null,'id="prerequisites" class="learnpath_item_form" style="width:263px;"');
-            //$select_prerequisites->addOption(get_lang('NoPrerequisites'), 0);
-
-            // Form element for uploading an mp3 file.
-            //$form->addElement('file','mp3',get_lang('UploadMp3audio'),'id="mp3" size="33"');
-            //$form->addRule('file', 'The extension of the Song file should be *.mp3', 'filename', '/^.*\.mp3$/');
-
-            /* Code deprecated - moved to lp level (not lp-item).
-            if (api_get_setting('search_enabled') === 'true') {
-                //add terms field
-                $terms = $form->addElement('text', 'terms', get_lang('SearchFeatureTerms').'&nbsp;:', 'id="idTerms" class="learnpath_item_form"');
-                $terms->setValue($item_terms);
-            }
-            */
 
             $arrHide = array ();
 
@@ -6575,20 +6555,9 @@ class learnpath {
 
                 }
             }
-
-            /*	foreach ($arrHide as $key => $value) {
-                    $select_prerequisites->addOption($value['value'], $key, 'style="padding-left:'.$value['padding'].'px;"');
-                    if ($key == $s_selected_position && $action == 'add') {
-                        $select_prerequisites -> setSelected(0);
-                    }
-                    elseif ($key == $id_prerequisite && $action == 'edit') {
-                        $select_prerequisites -> setSelected($id_prerequisite);
-                    }
-                }
-                */
+            
             if (!$no_display_add) {
                 if (($extra_info == 'new' || $extra_info['item_type'] == TOOL_DOCUMENT || $_GET['edit'] == 'true')) {
-
                     if (isset ($_POST['content']))
                         $content = stripslashes($_POST['content']);
                     elseif (is_array($extra_info)) {
@@ -6596,40 +6565,49 @@ class learnpath {
                         if (!$no_display_edit_textarea) {
                             $content = $this->display_document($extra_info['path'], false, false);
                         }
-                    }
-                    elseif (is_numeric($extra_info)) $content = $this->display_document($extra_info, false, false);
+                    } elseif (is_numeric($extra_info)) 
+                    	$content = $this->display_document($extra_info, false, false);
                     else
                         $content = '';
-
+				
                     if (!$no_display_edit_textarea) {
-                        // We need to claculate here some specific settings for the online editor.
+                        // We need to calculate here some specific settings for the online editor.
                         // The calculated settings work for documents in the Documents tool
                         // (on the root or in subfolders).
                         // For documents in native scorm packages it is unclear whether the
                         // online editor should be activated or not.
-                        $relative_path = $extra_info['dir'];
-                        if ($relative_path == 'n/') {
-                            // A new document, it is in the root of the repository.
-                            $relative_path = '';
-                            $relative_prefix = '';
-                        } else {
+                        
+                    	// A new document, it is in the root of the repository.
+                    	$relative_path 	 = '';
+                    	$relative_prefix = '';
+                    	
+                    	if (is_array($extra_info) && $extra_info != 'new') {                        	                 
                             // The document already exists. Whe have to determine its relative path towards the repository root.
-                            $relative_path = explode('/', $relative_path);
+                            $relative_path = explode('/', $extra_info['dir']);
                             $cnt = count($relative_path) - 2;
                             if ($cnt < 0) {
                                 $cnt = 0;
                             }
                             $relative_prefix = str_repeat('../', $cnt);
-                            $relative_path = array_slice($relative_path, 1, $cnt);
-                            $relative_path = implode('/', $relative_path);
+                            $relative_path 	 = array_slice($relative_path, 1, $cnt);
+                            $relative_path 	 = implode('/', $relative_path);
                             if (strlen($relative_path) > 0) {
                                 $relative_path = $relative_path . '/';
                             }
-                        }
-                        $editor_config = array('ToolbarSet' => 'LearningPathDocuments', 'Width' => '100%', 'Height' => '700', 'FullPage' => true,
-                            'CreateDocumentDir' => $relative_prefix,
-                            'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH) . api_get_course_path() . '/document/',
-                            'BaseHref' => api_get_path(WEB_COURSE_PATH) . api_get_course_path() . '/document/' . $relative_path
+                        } else {
+                        	global $_course;
+							$result = $this->generate_lp_folder($_course, '');
+							$relative_path = api_substr($result['dir'], 1, strlen($result['dir']));
+							$relative_prefix = '../../';
+                        }                        
+                                              
+                        $editor_config = array( 'ToolbarSet' 			=> 'LearningPathDocuments', 
+                        						'Width' 				=> '100%', 
+                        						'Height' 				=> '500', 
+                        						'FullPage' 				=> true,
+                            					'CreateDocumentDir' 	=> $relative_prefix,
+                            					'CreateDocumentWebDir' 	=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/',
+                            					'BaseHref' 				=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/'.$relative_path
                         );
 
                         if ($_GET['action'] == 'add_item') {
@@ -6650,18 +6628,14 @@ class learnpath {
                         $form->addElement('html', '</div>');
                         $defaults['content_lp'] = $content;
                     }
-                }
-
-                elseif (is_numeric($extra_info)) {
-
+                } elseif (is_numeric($extra_info)) {
                     $form->addElement('style_submit_button', 'submit_button', get_lang('SaveDocument'), 'class="save"');
-
                     $return = $this->display_document($extra_info, true, true, true);
                     $form->addElement('html', $return);
                 }
             }
-
         }
+        
         if ($action == 'move') {
             $form->addElement('hidden', 'title', $item_title);
             $form->addElement('hidden', 'description', $item_description);

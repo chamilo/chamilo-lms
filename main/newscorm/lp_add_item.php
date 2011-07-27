@@ -25,15 +25,9 @@ api_protect_course_script();
 // libraries are included by default.
 
 include 'learnpath_functions.inc.php';
-//include '../resourcelinker/resourcelinker.inc.php';
 include 'resourcelinker.inc.php';
-// Rewrite the language file, sadly overwritten by resourcelinker.inc.php.
-// Name of the language file that needs to be included.
+
 $language_file = 'learnpath';
-
-/* Header and action code */
-
-
 
 $htmlHeadXtra[] = '
 <script type="text/javascript">
@@ -150,28 +144,13 @@ $htmlHeadXtra[] =  api_get_jquery_ui_js(); //jQuery
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_lp 	 = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
 $submit			= $_POST['submit_button'];
-/*
-$chapter_id     = $_GET['chapter_id'];
-$title          = $_POST['title'];
-$description   = $_POST['description'];
-$Submititem     = $_POST['Submititem'];
-$action         = $_REQUEST['action'];
-$id             = (int) $_REQUEST['id'];
-$type           = $_REQUEST['type'];
-$direction      = $_REQUEST['direction'];
-$moduleid       = $_REQUEST['moduleid'];
-$prereq         = $_REQUEST['prereq'];
-$type           = $_REQUEST['type'];
-*/
-
-/* MAIN CODE */
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' && $type == 'learnpathitem') {

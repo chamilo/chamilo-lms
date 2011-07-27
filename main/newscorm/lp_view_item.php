@@ -64,21 +64,6 @@ $tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
 $isStudentView  = (empty($_REQUEST['isStudentView']) ? 0 : (int) $_REQUEST['isStudentView']);
 $learnpath_id   = (int) $_REQUEST['lp_id'];
-/*
-$chapter_id     = $_GET['chapter_id'];
-$title          = $_POST['title'];
-$description   = $_POST['description'];
-$Submititem     = $_POST['Submititem'];
-$action         = $_REQUEST['action'];
-$id             = (int) $_REQUEST['id'];
-$type           = $_REQUEST['type'];
-$direction      = $_REQUEST['direction'];
-$moduleid       = $_REQUEST['moduleid'];
-$prereq         = $_REQUEST['prereq'];
-$type           = $_REQUEST['type'];
-*/
-
-/* MAIN CODE */
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' && $type == 'learnpathitem') {
@@ -93,12 +78,6 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 $sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
 $result=Database::query($sql_query);
 $therow=Database::fetch_array($result);
-
-//$admin_output = '';
-/*
-    Course admin section
-    - all the functions not available for students - always available in this case (page only shown to admin)
-*/
 
 /* SHOWING THE ADMIN TOOLS	*/
 
@@ -124,7 +103,6 @@ Display::display_header(null,'Path');
 //api_display_tool_title($therow['name']);
 
 $suredel = trim(get_lang('AreYouSureToDelete'));
-//$suredelstep = trim(get_lang('AreYouSureToDeleteSteps'));
 ?>
 <script type='text/javascript'>
 /* <![CDATA[ */
@@ -165,7 +143,5 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
         echo '</td>';
     echo '</tr>';
 echo '</table>';
-
-/* FOOTER */
 
 Display::display_footer();

@@ -503,8 +503,15 @@ class CourseBuilder {
 		while ($obj = Database::fetch_object($db_result)) {			
 			$sql = 'SELECT path, comment, filename, size  FROM '.$table_attachment.' WHERE announcement_id = '.$obj->id.'';
 			$result = Database::query($sql);
-			$attachment_obj = Database::fetch_object($result);			
-			$announcement = new Announcement($obj->id, $obj->title, $obj->content, $obj->end_date,$obj->display_order,$obj->email_sent, $attachment_obj->path, $attachment_obj->filename, $attachment_obj->size, $attachment_obj->comment);			
+			$attachment_obj = Database::fetch_object($result);
+			$att_path = $att_filename = $att_size = $atth_comment = '';
+			if (!empty($attachment_obj)) {
+				$att_path 		= $attachment_obj->path;
+				$att_filename 	= $attachment_obj->filename;
+				$att_size 		= $attachment_obj->size;
+				$atth_comment 	= $attachment_obj->comment;
+			}			
+			$announcement = new Announcement($obj->id, $obj->title, $obj->content, $obj->end_date,$obj->display_order,$obj->email_sent, $att_path, $att_filename, $att_size, $atth_comment);			
 			$this->course->add_resource($announcement);
 			
 		}
@@ -521,8 +528,17 @@ class CourseBuilder {
 			$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->db_name);
 			$sql = 'SELECT path, comment, filename, size  FROM '.$table_attachment.' WHERE agenda_id = '.$obj->id.'';
 			$result = Database::query($sql);
+			
 			$attachment_obj = Database::fetch_object($result);			
-			$event = new Event($obj->id, $obj->title, $obj->content, $obj->start_date, $obj->end_date, $attachment_obj->path, $attachment_obj->filename, $attachment_obj->size, $attachment_obj->comment);			
+			$att_path = $att_filename = $att_size = $atth_comment = '';
+			if (!empty($attachment_obj)) {
+				$att_path 		= $attachment_obj->path;
+				$att_filename 	= $attachment_obj->filename;
+				$att_size 		= $attachment_obj->size;
+				$atth_comment 	= $attachment_obj->comment;
+			}
+				
+			$event = new Event($obj->id, $obj->title, $obj->content, $obj->start_date, $obj->end_date, $att_path, $att_filename, $att_size, $atth_comment);						
 			$this->course->add_resource($event);
 		}
 		

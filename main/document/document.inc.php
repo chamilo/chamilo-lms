@@ -201,11 +201,14 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
     }
     $current_session_id = api_get_session_id();
     $copy_to_myfiles = $open_in_new_window_link = null;
+    
+    $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
+    
     if (!$show_as_icon) {
         if ($filetype == 'folder') {
             if (api_is_allowed_to_edit() || api_is_platform_admin() || api_get_setting('students_download_folders') == 'true') {
                 //filter when I am into shared folder, I can show for donwload only my shared folder
-                if (isset($_GET['curdirpath']) && is_shared_folder($_GET['curdirpath'], $current_session_id)) {
+                if (is_shared_folder($curdirpath, $current_session_id)) {
                     if (preg_match('/shared_folder\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link))|| preg_match('/shared_folder_session_'.$current_session_id.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) || api_is_allowed_to_edit() || api_is_platform_admin()) {
                         $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array(),22).'</a>';
                     }
@@ -219,7 +222,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 
         //copy files to users myfiles
         if (api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0){
-            $copy_myfiles_link = ($filetype == 'file') ? api_get_self().'?'.api_get_cidreq().'&curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&amp;action=copytomyfiles&amp;id='.$url_path.$req_gid :api_get_self().'?'.api_get_cidreq();
+            $copy_myfiles_link = ($filetype == 'file') ? api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;action=copytomyfiles&amp;id='.$url_path.$req_gid :api_get_self().'?'.api_get_cidreq();
 
             if ($filetype == 'file') {
                 $copy_to_myfiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array(),22).'&nbsp;&nbsp;</a>';

@@ -72,6 +72,7 @@ if ($action == 'add' && $type == 'learnpathitem') {
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_view_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    exit;
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
@@ -93,7 +94,8 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
-$interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
+$interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => $therow['name']);
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Item'));
 
 // Theme calls
 $show_learn_path = true;

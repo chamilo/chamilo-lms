@@ -19,11 +19,6 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
-/* Libraries */
-
-// The main_api.lib.php, database.lib.php and display.lib.php
-// libraries are included by default.
-
 include 'learnpath_functions.inc.php';
 include 'resourcelinker.inc.php';
 
@@ -287,7 +282,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
                     break;
                 case TOOL_DOCUMENT:
                     Display::display_confirmation_message(get_lang('NewDocumentCreated'));
-                    echo $_SESSION['oLP']->display_item($new_item_id, true, $msg);
+                    echo $_SESSION['oLP']->display_item($new_item_id, true);
                     break;
                 case TOOL_FORUM:
                     echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);

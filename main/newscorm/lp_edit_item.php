@@ -97,6 +97,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
 
 // Theme calls.
 $show_learn_path = true;

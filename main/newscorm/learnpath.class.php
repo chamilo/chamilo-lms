@@ -4804,14 +4804,14 @@ class learnpath {
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
         echo '<div class="actions">';
         echo Display :: return_icon('build_learnpath_na.png', get_lang('Build'),'','32');
-        echo '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('BasicOverview') . '">' . Display :: return_icon('move_learnpath.png', get_lang('BasicOverview'),'','32').'</a>';
-        echo '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&action=view&lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('view_left_right.png', get_lang('Display'),'','32').'</a> ';
-        Display :: display_icon('i.gif');
-        echo '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewStep') . '">' . Display :: return_icon('new_learnigpath_object.png', get_lang('NewStep'),'','32').'</a>';
         
-		echo '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewChapter') . '">' . Display :: return_icon('add_learnpath_section.png', get_lang('NewChapter'),'','32').'</a>';
-        echo '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '&amp;updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'','32').'</a>';
-        echo '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'','32').'</a>';
+        echo '<a href="' . api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('BasicOverview') . '">' . Display :: return_icon('move_learnpath.png', get_lang('BasicOverview'),'','32').'</a>';
+        echo '<a href="lp_controller.php?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&action=view&lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('view_left_right.png', get_lang('Display'),'','32').'</a> ';
+        Display :: display_icon('i.gif');
+        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewStep') . '">' . Display :: return_icon('new_learnigpath_object.png', get_lang('NewStep'),'','32').'</a>';        
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewChapter') . '">' . Display :: return_icon('add_learnpath_section.png', get_lang('NewChapter'),'','32').'</a>';
+        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '&amp;updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'','32').'</a>';
+        echo '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=edit&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'','32').'</a>';
         echo '</div>';
     }
 
@@ -6158,26 +6158,27 @@ class learnpath {
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 
         if ($id != 0 && is_array($extra_info)) {
-            $item_title = $extra_info['title'];
-            $item_description = $extra_info['description'];
+            $item_title 		= $extra_info['title'];
+            $item_description 	= $extra_info['description'];
             $item_path = api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/scorm/' . $this->path . '/' . stripslashes($extra_info['path']);
+            $item_path_fck = '/scorm/' . $this->path . '/' . stripslashes($extra_info['path']);
         } else {
             $item_title = '';
             $item_description = '';
+            $item_path_fck = '';
         }
 
-        $return = '	<div class="row">
+        $return = '<div class="row">
                                 <div class="form_header">';
 
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
         else
             $parent = 0;
-
-        $sql = "
-                    SELECT *
-                    FROM " . $tbl_lp_item . "
-                    WHERE lp_id = " . $this->lp_id . " AND id != " . $id . "    ";
+        
+        $id  = intval($id);
+        $sql = "SELECT * FROM " . $tbl_lp_item . "
+                WHERE lp_id = " . $this->lp_id . " AND id != $id";
 
         if ($item_type == 'module')
             $sql .= " AND parent_item_id = 0";
@@ -6208,7 +6209,7 @@ class learnpath {
         unset ($this->arrMenu);
 
         $return .= $title;
-        $return .= '	</div>
+        $return .= '</div>
                             </div>';
 
         require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
@@ -6223,6 +6224,7 @@ class learnpath {
         $arrHide[0]['value'] = Security :: remove_XSS($this->name);
         $arrHide[0]['padding'] = 3;
         $charset = api_get_system_encoding();
+        
         if ($item_type != 'module' && $item_type != 'dokeos_module') {
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($action != 'add') {
@@ -6312,8 +6314,18 @@ class learnpath {
                 $form->addElement('html', '<script type="text/javascript">alert("' . get_lang('WarningWhenEditingScorm') . '")</script>');
             }
             $renderer = $form->defaultRenderer();
-            $renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
-            $form->addElement('html_editor', 'content_lp', '', null, array('ToolbarSet' => 'LearningPathDocuments', 'Width' => '100%', 'Height' => '400', 'FullPage' => true));
+            $renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');        
+                
+            $relative_prefix = '';            
+            $editor_config = array( 'ToolbarSet' 			=> 'LearningPathDocuments',
+                                    'Width' 				=> '100%', 
+                                    'Height' 				=> '500', 
+                                    'FullPage' 				=> true,
+                                    'CreateDocumentDir' 	=> $relative_prefix,
+           							'CreateDocumentWebDir' 	=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/scorm/',
+            						'BaseHref' 				=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().$item_path_fck
+                                    );            
+            $form->addElement('html_editor', 'content_lp', '', null, $editor_config);            
             $defaults['content_lp'] = file_get_contents($item_path);
         }
 
@@ -6362,7 +6374,6 @@ class learnpath {
                 }
             }
         }
-
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);

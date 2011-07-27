@@ -109,16 +109,17 @@ function update_done_thematic_advance(selected_value) {
 	});
 
 	// clean all radios
-	for (var i=0; i<$("input[@name=\'done_thematic\']").length;i++) {
-		var id_radio_thematic = $("input[@name=\'done_thematic\']").get(i).id;
+	
+	for (var i=0; i< $(".done_thematic").length;i++) {
+		var id_radio_thematic = $(".done_thematic").get(i).id;		
 		$("#td_"+id_radio_thematic).css({"background-color":"#FFF"});
 	}
 
 	// set background to previous radios
-	for (var i=0; i<$("input[@name=\'done_thematic\']").length;i++) {
-		var id_radio_thematic = $("input[@name=\'done_thematic\']").get(i).id;
+	for (var i=0; i < $(".done_thematic").length;i++) {
+		var id_radio_thematic = $(".done_thematic").get(i).id;
 		$("#td_"+id_radio_thematic).css({"background-color":"#E5EDF9"});
-		if ($("input[@name=\'done_thematic\']").get(i).value == selected_value) {
+		if ($(".done_thematic").get(i).value == selected_value) {
 			break;
 		}
 	}

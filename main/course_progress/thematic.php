@@ -218,9 +218,9 @@ if ($action == 'thematic_list') {
     							$style = ' style="background-color:#E5EDF9" ';
     						} else {
     							$style = ' style="background-color:#fff" ';
-    						}														
+    						}											 			
     						echo '<td id="td_done_thematic_'.$thematic_advance['id'].'" '.$style.'><center>';
-    						echo '<input type="radio" id="done_thematic_'.$thematic_advance['id'].'" name="done_thematic" value="'.$thematic_advance['id'].'" '.$checked.' onclick="update_done_thematic_advance(this.value)">';
+    						echo '<input type="radio" class="done_thematic" id="done_thematic_'.$thematic_advance['id'].'" name="done_thematic" value="'.$thematic_advance['id'].'" '.$checked.' onclick="update_done_thematic_advance(this.value)">';
     						echo '</center></td>';						
     					} else {
     					    

@@ -232,7 +232,7 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $html_editor_config = array(
 	'ToolbarSet'           => ($is_allowed_to_edit ? 'Documents' :'DocumentsStudent'),
 	'Width'                => '100%',
-	'Height'               => '600',
+	'Height'               => '500',
 	'FullPage'             => true,
 	'InDocument'           => true,
 	'CreateDocumentDir'    => $relative_url,
@@ -410,6 +410,7 @@ $current_session_id = api_get_session_id();
 
 // HTML-editor
 $renderer->setElementTemplate('<div class="row"><div class="label" id="frmModel" style="overflow: visible;"></div><div class="formw">{element}</div></div>', 'content');
+
 $form->add_html_editor('content','', false, false, $html_editor_config);
 // Comment-field
 

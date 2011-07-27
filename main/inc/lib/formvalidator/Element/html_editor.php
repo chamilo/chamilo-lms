@@ -1,28 +1,9 @@
 <?php
-// $Id: html_editor.php 22096 2009-07-15 03:43:25Z ivantcholakov $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+/* For licensing terms, see /license.txt */
 
-	Copyright (c) 2004-2005 Dokeos S.A.
-	Copyright (c) Bart Mollet, Hogeschool Gent
+require_once 'HTML/QuickForm/textarea.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php';
 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
-require_once ('HTML/QuickForm/textarea.php');
-require_once (api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php');
 /**
 * A html editor field to use with QuickForm
 */
@@ -95,25 +76,21 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 	 */
 	function toHtml()
 	{
-		$value = $this->getValue();
-
-		if ($this->fullPage)
-		{
-			if (strlen(trim($value)) == 0)
-			{
+		$value = $this->getValue();		
+		if ($this->fullPage) {
+			
+			if (strlen(trim($value)) == 0) {
 				// TODO: To be considered whether here to be added DOCTYPE, language and character set declarations.
-				$value = '<html><head><title></title><style type="text/css" media="screen, projection">/*<![CDATA[*/body{font-family: arial, verdana, helvetica, sans-serif;font-size: 12px;}/*]]>*/</style></head><body></body></html>';
+				$value = '<html><head><title></title><style type="text/css" media="screen, projection">/*<![CDATA[*/body{font-family: arial, verdana, helvetica, sans-serif;font-size: 12px;}/*]]>*/</style></head><body></body></html>';				
 				$this->setValue($value);
 			}
 		}
-		if ($this->_flagFrozen)
-		{
+		if ($this->_flagFrozen) {
 			return $this->getFrozenHtml();
-		}
-		else
-		{
+		} else {
 			return $this->build_FCKeditor();
 		}
+		
 	}
 	/**
 	 * Returns the htmlarea content in HTML
@@ -133,12 +110,11 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		{
 			return parent::toHTML();
 		}
-		$this -> fck_editor->Value = $this->getValue();
-		$result .= $this->fck_editor->CreateHtml();
+		$this->fck_editor->Value= $this->getValue();
+		$result .= $this->fck_editor->CreateHtml();		
 
 		//Add a link to open the allowed html tags window
 		//$result .= '<small><a href="#" onclick="MyWindow=window.open('."'".api_get_path(WEB_CODE_PATH)."help/allowed_html_tags.php?fullpage=". ($this->fullPage ? '1' : '0')."','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=500,height=600,left=200,top=20'".'); return false;">'.get_lang('AllowedHTMLTags').'</a></small>';
 		return $result;
 	}
 }
-?>

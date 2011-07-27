@@ -154,6 +154,9 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $group_member_with_upload_rights = false;
 
 // If the group id is set, we show them group documents
+$group_properties = array();
+$group_properties['directory'] = null;
+
 if (api_get_group_id()) {
     // Needed for group related stuff
     require_once $lib_path.'groupmanager.lib.php';
@@ -848,7 +851,6 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights){
 }
 
 /* GO TO PARENT DIRECTORY */
-
 if ($curdirpath!= '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'">';
     echo Display::display_icon('folder_up.png', get_lang('Up'),'','32');

@@ -162,14 +162,11 @@ if (isset($_POST['Submit'])) {
 		$_SESSION["image_resizing_height"] = null;
 	}
 }
-
+$target_width = $target_height = null;
 // The target height and width depends if we choose resizing or no resizing
-if ($_SESSION["image_resizing"] == "resizing") {
+if (isset($_SESSION["image_resizing"]) &&  $_SESSION["image_resizing"] == "resizing") {
 	$target_width = $_SESSION["image_resizing_width"];
 	$target_height = $_SESSION["image_resizing_height"];
-} else {
-	$image_width = $source_width;
-	$image_height = $source_height;
 }
 
 /*	THUMBNAIL VIEW */
@@ -229,8 +226,8 @@ if ($slide_id != 'all') {
 
 		$image_height = $image_height_width[0];
 		$image_width = $image_height_width[1];
-
-		if ($_SESSION['image_resizing'] == 'resizing') {
+		$height_width_tags = null;
+		if (isset($_SESSION['image_resizing']) && $_SESSION['image_resizing'] == 'resizing') {
 			$height_width_tags = 'width="'.$image_width.'" height="'.$image_height.'"';
 		}
 

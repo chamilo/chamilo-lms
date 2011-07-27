@@ -49,20 +49,8 @@ $interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname );
 
 Display::display_header($originalToolName, 'Doc');
 
-// can't remember why I put this here. This is probably obsolete code
-// loading the slides from the session
-//$image_files_only = $_SESSION['image_files_only'];
+$image_resizing = isset($_SESSION['image_resizing']) ? $_SESSION['image_resizing'] : null;
 
-// calculating the current slide, next slide, previous slide and the number of slides
-/*if ($slide_id) {
-	$slide = $slide_id;
-} else {
-	$slide = 0;
-}
-$previous_slide = $slide - 1;
-$next_slide = $slide + 1;
-$total_slides = count($image_files_only);
-*/
 ?>
 <style type="text/css">
 <!--
@@ -91,7 +79,7 @@ function disableresizing() { //v2.0
 	document.options.height.className='disabled_input';
 }
 
-window.onload = <?php echo $_SESSION['image_resizing'] == 'resizing' ? 'enableresizing' : 'disableresizing'; ?>;
+window.onload = <?php echo $image_resizing == 'resizing' ? 'enableresizing' : 'disableresizing'; ?>;
 
 //-->
 </script>
@@ -101,6 +89,7 @@ echo '<div class="actions">';
 echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png').get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
 echo '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('images_gallery.gif').get_lang('BackTo').' '.get_lang('SlideShow').'</a>';
 echo '</div>';
+
 ?>
 
 <form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options">
@@ -110,7 +99,6 @@ echo '</div>';
 	<div class="row">
 		<div class="label">
 			<input class="checkbox" name="radio_resizing" type="radio" onClick="disableresizing()" value="noresizing" <?php
-	$image_resizing = $_SESSION['image_resizing'];
 	if ($image_resizing == 'noresizing' || $image_resizing == '') {
 		echo ' checked';
 	}
@@ -123,7 +111,7 @@ echo '</div>';
 	<div class="row">
 		<div class="label">
 			<input class="checkbox" name="radio_resizing" type="radio" onClick="javascript: enableresizing();" value="resizing" <?php
-	$image_resizing = $_SESSION['image_resizing'];
+	
 	if ($image_resizing == 'resizing') {
 		echo ' checked';
 		$width = $_SESSION['image_resizing_width'];

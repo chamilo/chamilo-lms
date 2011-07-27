@@ -73,6 +73,8 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	$form->add_textfield('duration_in_hours', get_lang('DurationInHours'), false, array('size'=>'3'));
 	
 	$form->add_html_editor('content', get_lang('Content'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150'));	
+	//$form->addElement('textarea', 'content', get_lang('Content'));
+	
 	$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
 	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 	

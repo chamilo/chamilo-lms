@@ -148,9 +148,10 @@ function event_access_tool($tool, $id_session=0) {
 	// only if user comes from the course $_cid
 	//if( eregi($_configuration['root_web'].$_cid,$_SERVER['HTTP_REFERER'] ) )
 	//$pos = strpos($_SERVER['HTTP_REFERER'],$_configuration['root_web'].$_cid);
-	$pos = strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower(api_get_path(WEB_COURSE_PATH).$_course['path']));
+	
+	$pos = isset($_SERVER['HTTP_REFERER']) ? strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower(api_get_path(WEB_COURSE_PATH).$_course['path'])) : false;
 	// added for "what's new" notification
-	$pos2 = strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower($_configuration['root_web']."index"));
+	$pos2 = isset($_SERVER['HTTP_REFERER']) ? strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower($_configuration['root_web']."index")) : false;
 	// end "what's new" notification
 	if ($pos !== false || $pos2 !== false) {		
 		$sql = "INSERT INTO ".$TABLETRACK_ACCESS."

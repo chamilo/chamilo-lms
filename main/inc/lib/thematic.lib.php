@@ -467,6 +467,58 @@ class Thematic
 		return $data;
 	 }
 
+	 
+	 public function get_thematic_plan_div($data, $id = false) {
+	 	$final_return = array();
+	
+		foreach ($data as $thematic_id => $thematic_plan_data) {
+			$new_thematic_plan_data = array();
+			foreach($thematic_plan_data as $thematic_item) {
+				$thematic_simple_list[] = $thematic_item['description_type'];
+				$new_thematic_plan_data[$thematic_item['description_type']] = $thematic_item;
+			}			
+				 
+			$new_id = ADD_THEMATIC_PLAN;			
+			if (!empty($thematic_simple_list)) {
+				foreach($thematic_simple_list as $item) {				
+					//if ($item >= ADD_THEMATIC_PLAN) {
+			 			//$new_id = $item + 1;
+			 			$default_thematic_plan_title[$item] = $new_thematic_plan_data[$item]['title'];
+			 		//}
+				}
+			}
+			
+			$no_data = true;
+			$session_star = '';		 
+			$return = '<div id="thematic_plan_'.$thematic_id.'">';
+			if (!empty($default_thematic_plan_title)) {
+				foreach ($default_thematic_plan_title as $id=>$title) {
+					$thematic_plan_data_item = '';
+			 		//avoid others
+			 		if ($title == 'Others' && empty($data[$thematic_id][$id]['description'])) {
+				 		continue; 
+				 	}     
+					if (!empty($data[$thematic_id][$id]['title']) && !empty($data[$thematic_id][$id]['description'])) {
+						if (api_is_allowed_to_edit(null, true)) {
+							if ($data[$thematic_id][$id]['session_id'] !=0) {
+								$session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
+							}
+						}
+				 		$return  .= Display::tag('h3', Security::remove_XSS($data[$thematic_id][$id]['title'], STUDENT).$session_star);
+				 		$return  .= Security::remove_XSS($data[$thematic_id][$id]['description'], STUDENT);
+				 	 	$no_data  = false;
+					}
+				}
+			}							
+			if ($no_data) {
+				$return .= '<div><em>'.get_lang('StillDoNotHaveAThematicPlan').'</em></div>';
+			}
+			$return  .= '</div>';
+			$final_return[$thematic_id] = $return;
+		}
+		return $final_return;
+	}
+	 	
 	 /**
 	 * get thematic advance list
 	 * @param	int		Thematic advance id (optional), get data by thematic advance list

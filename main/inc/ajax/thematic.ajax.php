@@ -13,6 +13,22 @@ api_protect_course_script(true);
 $action = $_GET['a'];
 
 switch ($action) {	
+	case 'save_thematic_plan':
+		$thematic = new Thematic();
+		$title_list         = $_REQUEST['title'];
+		$description_list   = $_REQUEST['description'];
+		$description_type   = $_REQUEST['description_type'];
+		if (api_is_allowed_to_edit(null, true)) {
+			for($i=1;$i<count($title_list)+1; $i++) {
+				$thematic->set_thematic_plan_attributes($_REQUEST['thematic_id'], $title_list[$i], $description_list[$i], $description_type[$i]);
+				$affected_rows = $thematic->thematic_plan_save();
+			}
+		}	
+		$thematic_plan_data = $thematic->get_thematic_plan_data();
+		$return = $thematic->get_thematic_plan_div($thematic_plan_data);
+		echo $return[$_REQUEST['thematic_id']];
+		break;
+		
 	case 'get_datetime_by_attendance':							
 		$attendance_id = intval($_POST['attendance_id']);
         

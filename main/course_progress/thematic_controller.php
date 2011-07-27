@@ -130,16 +130,14 @@ class ThematicController
 
 		if ($action == 'thematic_details') {			
 			if (isset($thematic_id)) {
-				  $thematic_data_result = $thematic->get_thematic_list($thematic_id);
-				  
+				  $thematic_data_result = $thematic->get_thematic_list($thematic_id);				  
 				  if (!empty($thematic_data_result)) {
 				      $thematic_data[$thematic_id] = $thematic_data_result;      
 				  }
 				$data['total_average_of_advances']  = $thematic->get_average_of_advances_by_thematic($thematic_id);				
 			} else {
 				$thematic_data                      = $thematic->get_thematic_list(null, api_get_course_id(), api_get_session_id());	
-				$data['max_thematic_item']          = $thematic->get_max_thematic_item();
-				
+				$data['max_thematic_item']          = $thematic->get_max_thematic_item();				
 				$data['last_done_thematic_advance'] = $thematic->get_last_done_thematic_advance();
 				$data['total_average_of_advances']  = $thematic->get_total_average_of_thematic_advances();
 			}
@@ -149,6 +147,9 @@ class ThematicController
                    
             //Third column
 			$thematic_advance_data           = $thematic->get_thematic_advance_list(null, null, true);
+			
+			$data['thematic_plan_div']       = $thematic->get_thematic_plan_div($thematic_plan_data);
+			
 			
 			$data['thematic_plan_data']      = $thematic_plan_data;			
 			$data['thematic_advance_data']   = $thematic_advance_data;
@@ -173,7 +174,7 @@ class ThematicController
 	public function thematic_plan($action) {
 		$thematic= new Thematic();
 	 
-		$data = array();
+		$data  = array();
 		$error = false;
 	
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
@@ -215,18 +216,7 @@ class ThematicController
             } else if($_POST['action'] == 'thematic_plan_list') {
                 
                 
-                $title_list         = $_POST['title'];
-                $description_list   = $_POST['description'];
-                $description_type   = $_POST['description_type'];
-                if (api_is_allowed_to_edit(null, true)) { 
-                    for($i=1;$i<count($title_list)+1; $i++) {
-                        //if (!empty($description_list[$i])) {
-                            $thematic->set_thematic_plan_attributes($_POST['thematic_id'], $title_list[$i], $description_list[$i], $description_type[$i]);                 
-                            $affected_rows = $thematic->thematic_plan_save();
-                        //}   
-                    }
-                    $data['message'] = 'ok';
-                }
+               
             } 
     	}		
     							
@@ -254,7 +244,6 @@ class ThematicController
     		$data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
     		$data['thematic_id'] = $thematic_id;
     	}
-        
     	              
     	$data['thematic_id'] = $thematic_id;
     	$data['action'] = $action;
@@ -264,10 +253,9 @@ class ThematicController
     	$data['default_thematic_plan_question']   = $thematic->get_default_question();        
         $data['thematic_data']                    = $thematic->get_thematic_list($thematic_id);
         
-    			
-    	// render to the view
+		//render to the view
     	$this->view->set_data($data);
-    	$this->view->set_layout('layout'); 
+    	$this->view->set_layout('layout_headerless'); 
     	$this->view->set_template('thematic_plan');		       
     	$this->view->render();
         exit;

@@ -25,5 +25,3 @@ echo $content;
 
 // Footer
 Display :: display_footer();
-
-?>

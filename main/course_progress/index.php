@@ -79,8 +79,9 @@ if (!empty($thematic_id)) {
 // get default thematic plan title
 $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
 
-//jquery thickbox already called from main/inc/header.inc.php
 
+$htmlHeadXtra[] = api_get_jquery_ui_js(); 
+ 
 $htmlHeadXtra[] = '<script language="javascript">
 
 function datetime_by_attendance(selected_value) {
@@ -95,6 +96,49 @@ function datetime_by_attendance(selected_value) {
 		}
 	});
 }
+
+$(document).ready(function() {
+	
+    $(".thematic_plan_opener").live("click", function() {
+        var url = this.href;
+        var dialog = $("#dialog");
+                
+        if ($("#dialog").length == 0) {
+            dialog = $(\'<div id="dialog" style="display:hidden"></div> \').appendTo(\'body\');
+        }
+        
+        // load remote content
+        dialog.load(
+                url,
+                {},
+                function(responseText, textStatus, XMLHttpRequest) {
+                    dialog.dialog({
+	                    width:	720, 
+	                    height:	550, 
+	                    modal:	true,
+	                    buttons: {
+								'.addslashes(get_lang('Save')).' : function() {
+								var serialize_form_content = $("#thematic_plan_add").serialize();		
+								$.ajax({
+									type: "POST",
+									url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=save_thematic_plan",
+									data: serialize_form_content,
+									success: function(data) {										
+										var thematic_id = $("input[name=\"thematic_id\"]").val();
+										$("#thematic_plan_"+thematic_id ).html(data);
+									}
+								});
+								dialog.dialog("close");
+							}
+						}
+	                });
+				}
+		);
+        //prevent the browser to follow the link
+        return false;
+    }); 
+});    
+
 
 function update_done_thematic_advance(selected_value) {
 	$.ajax({

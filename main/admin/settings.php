@@ -380,6 +380,9 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
             $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);    
         }
+        if ($row['variable'] == 'timezone_value') {
+            $form->addElement('html', sprintf(get_lang('LocalTimeUsingPortalTimezoneXIsY'),$row['selected_value'],api_get_local_time()));
+        }
     }
 
     $form->addElement('html', '<div style="text-align: right; clear: both;">');

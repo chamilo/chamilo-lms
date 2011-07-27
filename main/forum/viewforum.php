@@ -52,7 +52,7 @@ if (isset($_GET['origin'])) {
 require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
-$userid = api_get_user_id();
+$userid  = api_get_user_id();
 $userinf = api_get_user_info($userid);
 
 /* MAIN DISPLAY SECTION */
@@ -106,17 +106,11 @@ if ($origin == 'group') {
     $group_properties = GroupManager :: get_group_properties($_clean['toolgroup']);
     $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array('url'=>'../group/group_space.php?gidReq='.$_SESSION['toolgroup'], 'name'=> get_lang('GroupSpace').' '.$group_properties['name']);
-    //$interbreadcrumb[] = array('url' => 'index.php?search='.Security::remove_XSS($my_search), 'name' => $nameTools);
-    //$interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => prepare4display($current_forum_category['cat_title']));
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Forum').' '.Security::remove_XSS($current_forum['forum_title']));
-
-//viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&amp;search=".Security::remove_XSS(urlencode($my_search)),
-
 } else {
-    $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.Security::remove_XSS($my_search), 'name' => $nameTools);
+    $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.Security::remove_XSS($my_search), 'name' => get_lang('ForumCategories'));
     $interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => prepare4display($current_forum_category['cat_title']));
     $interbreadcrumb[] = array('url' => '#', 'name' => Security::remove_XSS($current_forum['forum_title']));
-    //viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search))
 }
 
 if ($origin == 'learnpath') {

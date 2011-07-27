@@ -25,7 +25,7 @@ require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
-$nameTools = get_lang('ToolForum');
+$nameTools = get_lang('ForumCategories');
 
 // Are we in a lp ?
 $origin = '';
@@ -140,7 +140,7 @@ if ($my_message != 'PostDeletedSpecial') {
             echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', '32').'</a>';
             echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'">'.Display::return_icon('forum.png', get_lang('BackToForum'), '', '32').'</a>';
         }*/
-        echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'">'.Display::return_icon('back.png', get_lang('BackToForum'), '', '32').'</a>';
+        echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'&amp;origin='.$origin.'">'.Display::return_icon('back.png', get_lang('BackToForum'), '', '32').'</a>';
 
     }
     // The reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.

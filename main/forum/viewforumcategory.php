@@ -77,13 +77,16 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 $current_forum_category = get_forum_categories($_GET['forumcategory']);
-$interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),'name' => $nameTools);
-$interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),'name' => prepare4display($current_forum_category['cat_title']));
+$interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),'name' => get_lang('ForumCategories'));
+
 
 if (!empty($_GET['action']) && !empty($_GET['content'])) {
     if ($_GET['action']=='add' && $_GET['content']=='forum' ) {
-        $interbreadcrumb[] = array ('url' => api_get_self().'?'.api_get_cidreq().'&amp;action=add&amp;content=forum', 'name' => get_lang('AddForum'));
+    	$interbreadcrumb[] = array('url' =>'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&amp;origin='.$origin,'name' => $current_forum_category['cat_title']);    	   	 
+        $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('AddForum'));
     }
+} else {
+	$interbreadcrumb[] = array('url' => '#','name' => $current_forum_category['cat_title']);
 }
 
 // Are we in a lp ?
@@ -96,7 +99,6 @@ if ($origin=='learnpath') {
     require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 } else {
     Display :: display_header(null);
-    //api_display_tool_title($nameTools);
 }
 
 /* ACTIONS */
@@ -120,9 +122,7 @@ echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
 echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', '32').'</a>';
 if (api_is_allowed_to_edit(false,true)) {
-    //echo '<a href="'.api_get_self().'?forumcategory='.$_GET['forumcategory'].'&amp;action=add&amp;content=forumcategory">'.get_lang('AddForumCategory').'</a> | ';
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=add&amp;content=forum"> '.Display::return_icon('new_forum.png', get_lang('AddForum'),'','32').'</a>';
-    //echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=add&amp;content=forum">'.Display::return_icon('new_forum.png', get_lang('AddForum'),'','32').'</a>';
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='.$current_forum_category['cat_id'].'&amp;action=add&amp;content=forum"> '.Display::return_icon('new_forum.png', get_lang('AddForum'),'','32').'</a>';
 }
 echo '</div>';
 

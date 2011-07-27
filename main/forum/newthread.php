@@ -31,7 +31,7 @@ require_once '../inc/global.inc.php';
 require_once '../gradebook/lib/gradebook_functions.inc.php';
 
 // The section (tabs).
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 // Notification for unauthorized people.
 api_protect_course_script(true);

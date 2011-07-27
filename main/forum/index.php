@@ -29,12 +29,12 @@ $language_file = 'forum';
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
+
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
     $(document).ready(function(){ $(\'.hide-me\').slideUp() });
     function hidecontent(content){ $(content).slideToggle(\'normal\'); }
     </script>';
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
-
         function advanced_parameters() {
             if(document.getElementById(\'options\').style.display == \'none\') {
                     document.getElementById(\'options\').style.display = \'block\';
@@ -83,22 +83,21 @@ if (!empty($gradebook) && $gradebook == 'view') {
 
 $search_forum = isset($_GET['search']) ? Security::remove_XSS($_GET['search']) : '';
 
-
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
     switch ($_GET['content']) {
         case 'forum':
-            $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.$search_forum, 'name' => $nameTools);
-            $interbreadcrumb[] = array('url' => api_get_self().'?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=add&amp;content=forum', 'name' => get_lang('AddForum'));
+            $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.$search_forum, 'name' => get_lang('ForumCategories'));
+            $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('AddForum'));
             break;
         case 'forumcategory':
-            $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.$search_forum, 'name' => $nameTools);
-            $interbreadcrumb[] = array('url' => api_get_self().'?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=add&amp;content=forumcategory', 'name' => get_lang('AddForumCategory'));
+            $interbreadcrumb[] = array('url' =>'index.php?gradebook='.$gradebook.'&amp;search='.$search_forum, 'name' => get_lang('ForumCategories'));
+            $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('AddForumCategory'));
             break;
         default:            
             break;
     }
 } else {
-    $interbreadcrumb[] = array('url' => '#', 'name' => $nameTools);    
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('ForumCategories'));    
 }
 
 Display::display_header('');

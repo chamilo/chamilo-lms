@@ -190,6 +190,15 @@ if (api_is_utf8($charset)) {
 // Start session after the internationalization library has been initialized.
 api_session_start($already_installed);
 
+// Remove quotes added by PHP  - get_magic_quotes_gpc() is deprecated in PHP 5 see #2970
+ 
+if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {	
+	array_walk_recursive_limited($_GET, 	'stripslashes', true);	
+	array_walk_recursive_limited($_POST, 	'stripslashes', true);
+	array_walk_recursive_limited($_COOKIE,  'stripslashes', true);
+	array_walk_recursive_limited($_REQUEST, 'stripslashes', true);
+}
+
 // access_url == 1 is the default chamilo location
 if ($_configuration['access_url'] != 1) {
     $url_info = api_get_access_url($_configuration['access_url']);

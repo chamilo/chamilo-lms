@@ -98,8 +98,7 @@ function datetime_by_attendance(selected_value) {
 }
 
 $(document).ready(function() {
-	$(".thematic_advance_actions, .thematic_tools ").hide();
-	
+	$(".thematic_advance_actions, .thematic_tools ").hide();	
 	
 	$(".thematic_content").mouseover(function() {
 		var id = parseInt(this.id.split("_")[3]);
@@ -109,8 +108,7 @@ $(document).ready(function() {
 	$(".thematic_content").mouseleave(function() {
 		var id = parseInt(this.id.split("_")[3]);
 		$("#thematic_id_content_"+id ).hide();
-	});
-	
+	});	
 	
 	
 	$(".thematic_advance_content").mouseover(function() {

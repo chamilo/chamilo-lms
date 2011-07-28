@@ -114,11 +114,11 @@ if ($action == 'thematic_list') {
                     $actions_first_col .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$my_thematic_id.$param_gradebook.$url_token.'">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';                        
                     $actions_first_col .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$my_thematic_id.$param_gradebook.$url_token.'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a>';
     			}
+    			
+    			$actions_first_col = Display::div($actions_first_col, array('id'=>'thematic_id_content_'.$thematic['id'], 'class'=>'thematic_tools'));
+    			$actions_first_col = Display::div($actions_first_col, array('style'=>'height:20px'));
 			}
-			
-			$actions_first_col = Display::div($actions_first_col, array('id'=>'thematic_id_content_'.$thematic['id'], 'class'=>'thematic_tools'));
-			$actions_first_col = Display::div($actions_first_col, array('style'=>'height:20px'));
-                        
+			                        
 			echo Display::tag('td', Display::tag('h2', Security::remove_XSS($thematic['title'], STUDENT).$session_star).Security::remove_XSS($thematic['content'], STUDENT).$actions_first_col, array('id'=>'thematic_td_content_'.$thematic['id'], 'class'=>'thematic_content'));
 			
 			// Display 2nd column - thematic plan data
@@ -158,17 +158,20 @@ if ($action == 'thematic_list') {
 					echo '<tr>';
 					echo '<td width="90%" class="thematic_advance_content" id="thematic_advance_content_id_'.$thematic_advance['id'].'">';
 					
-				                            
-					$edit_link  =  '<a class="thematic_advanced_opener" href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'" >'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array(),22).'</a>';
-					$edit_link  .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a></center>';
+					$edit_link = '';
+					if (api_is_allowed_to_edit(null, true)) {
+						$edit_link  =  '<a class="thematic_advanced_opener" href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'" >'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array(),22).'</a>';
+						$edit_link  .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a></center>';
+						
+						//Links
+						$edit_link = Display::div(Display::div($edit_link , array('id'=>'thematic_advance_tools_'.$thematic_advance['id'], 'class'=>'thematic_advance_actions')), array('style'=>'height:20px;'));
+					}
 					
+					$thematic_advance_item =  isset($thematic_advance_div[$thematic['id']][$thematic_advance['id']]) ? $thematic_advance_div[$thematic['id']][$thematic_advance['id']] : null;
 					
-					$thematic_advance_item =  isset($thematic_advance_div[$thematic['id']][$thematic_advance['id']]) ? $thematic_advance_div[$thematic['id']][$thematic_advance['id']] : null;						
 					echo Display::div($thematic_advance_item, array('id'=>'thematic_advance_'.$thematic_advance['id']));
 					
-					//Links
-					echo Display::div(Display::div($edit_link , array('id'=>'thematic_advance_tools_'.$thematic_advance['id'], 'class'=>'thematic_advance_actions')), array('style'=>'height:20px;'));
-					
+					echo $edit_link;						
 						
 					echo '</td>';
 					

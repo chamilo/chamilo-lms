@@ -31,6 +31,12 @@ switch ($action) {
 		break;
 		
 	case 'save_thematic_advance':
+		
+		if (!api_is_allowed_to_edit(null, true)) {
+			echo '';
+			exit;
+		}
+		
 		$thematic = new Thematic();		
 		if (($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) || (!empty($_REQUEST['duration_in_hours']) && !is_numeric($_REQUEST['duration_in_hours'])) ) {	    			
 			if ($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) {

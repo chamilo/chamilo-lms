@@ -500,8 +500,8 @@ class SortableTable extends HTML_Table {
 		    $grid_css_class = $grid_class['main']['class'];
 		    $item_css_class = $grid_class['item']['class'];
 
-		    $grid_css_style = $grid_class['main']['style'];
-            $item_css_style = $grid_class['item']['style'];		    
+		    $grid_css_style = isset($grid_class['main']['style']) ? $grid_class['main']['style'] : null;
+            $item_css_style = isset($grid_class['item']['style']) ? $grid_class['item']['style'] : null;		    
 		}
 		
 		$div = '';		

@@ -4,9 +4,7 @@
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
-/**
- * Initialization
- */
+
 $language_file = array('userInfo', 'forum');
 $cidReset = true;
 require_once '../inc/global.inc.php';
@@ -102,7 +100,7 @@ Display::display_header($tool_name, 'Groups');
 if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 
     if (isset($_POST['action'])) {        
-        $title        = $_POST['title'];
+        $title        = isset($_POST['title']) ? $_POST['title'] : null;
         $content      = $_POST['content'];
         $group_id     = intval($_POST['group_id']);
         $parent_id    = intval($_POST['parent_id']);
@@ -138,7 +136,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
             $message = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $group_info['name'])."<br />$text_link";
 
             foreach ($groups_user as $group_user) {
-                if ($group_user == $current_user) continue;
+                //if ($group_user == $current_user) continue;
                 $group_user_info    = api_get_user_info($group_user['user_id']);
                 $recipient_name     = api_get_person_name($group_user_info['firstName'], $group_user_info['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
                 $recipient_email    = $group_user_info['mail'];

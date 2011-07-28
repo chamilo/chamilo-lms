@@ -146,9 +146,8 @@ switch ($action) {
                 if ($course_id != $item['id']) {
                     continue;
                 }
-            }
-        
-            $list               = new LearnpathList(api_get_user_id(),$item['code'], $session_id);
+            }        
+            $list               = new LearnpathList(api_get_user_id(), $item['code'], $session_id);
             $flat_list          = $list->get_flat_list(); 
             $lps[$item['code']] = $flat_list;
             $course_url         = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;

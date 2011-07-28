@@ -35,9 +35,11 @@ class learnpathList {
         if (!empty($course_code)){
             $course_info = api_get_course_info($course_code);
             $lp_table = Database::get_course_table(TABLE_LP_MAIN, $course_info['db_name']);
+            $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST, $course_info['db_name']);
         } else {
             $course_code = api_get_course_id();
             $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+            $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
         }
         $this->course_code = $course_code;
         $this->user_id = $user_id;
@@ -58,8 +60,7 @@ class learnpathList {
         $names = array();
         while ($row = Database::fetch_array($res,'ASSOC')) {
             // Check if published.
-            $pub = '';
-            $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
+            $pub = '';            
             // Use domesticate here instead of Database::escape_string because
             // it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
             // is done using domesticate()

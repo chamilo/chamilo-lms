@@ -477,6 +477,7 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
     // hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
     $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
     if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
+    	
         $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : ''); 
         switch (api_get_setting('breadcrumbs_course_homepage')) {
             case 'get_lang':
@@ -496,6 +497,12 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
                 }
                 break;
         }
+        /*
+         * @todo could be useful adding the My courses in the breadcrumb
+        $navigation_item_my_courses['title'] = get_lang('MyCourses');
+        $navigation_item_my_courses['url'] = api_get_path(WEB_PATH).'user_portal.php';        
+        $navigation[] = $navigation_item_my_courses;
+        */
         $navigation[] = $navigation_item;
     }
     // part 2: Interbreadcrumbs. If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb (which is the tool itself)

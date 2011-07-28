@@ -2840,7 +2840,7 @@ class TrackingCourseLog {
             $sql .=    " ORDER BY col5 DESC ";
         }
 
-        $sql .=    " LIMIT $from, $number_of_items ";
+        $sql .= " LIMIT $from, $number_of_items ";
 
         $res = Database::query($sql);
         $resources = array ();
@@ -2851,31 +2851,35 @@ class TrackingCourseLog {
             $table_tool = Database :: get_course_table($table_name['table_name']);
 
             $id = $table_name['id_tool'];
-            if ($row['col0'] == 'thematic_plan' || $row['col0'] == 'thematic_advance') {
+            $recorset = false;
+            
+            if (in_array($row['col0'], array('thematic_plan', 'thematic_advance'))) {
                 $tbl_thematic = Database :: get_course_table(TABLE_THEMATIC);
-                $rs_thematic = Database::query("SELECT thematic_id FROM $table_tool WHERE id=$ref");
-                $row_thematic = Database::fetch_array($rs_thematic);
-                $thematic_id = $row_thematic['thematic_id'];
-
-                $query = "SELECT session.id, session.name, user.username FROM $tbl_thematic t, $table_session session, $table_user user" .
-                        " WHERE t.session_id = session.id AND session.id_coach = user.user_id AND t.id = $thematic_id";
-
+                $sql = "SELECT thematic_id FROM $table_tool WHERE id = $ref";
+                $rs_thematic  = Database::query($sql);
+                if (Database::num_rows($rs_thematic)) {
+	                $row_thematic = Database::fetch_array($rs_thematic);
+	                $thematic_id = $row_thematic['thematic_id'];
+	
+	                $query = "SELECT session.id, session.name, user.username FROM $tbl_thematic t, $table_session session, $table_user user" .
+	                        " WHERE t.session_id = session.id AND session.id_coach = user.user_id AND t.id = $thematic_id";
+	                $recorset = Database::query($query);
+                }
             } else {
                 $query = "SELECT session.id, session.name, user.username FROM $table_tool tool, $table_session session, $table_user user" .
                         " WHERE tool.session_id = session.id AND session.id_coach = user.user_id AND tool.$id = $ref";
+                $recorset = Database::query($query);
             }
 
-
-            $recorset = Database::query($query);
-
             if (!empty($recorset)) {
-                $obj = Database::fetch_object($recorset);
+                $obj = Database::fetch_object($recorset);   
+                             
 
                 $name_session = '';
                 $coach_name = '';
                 if (!empty($obj)) {
                     $name_session = $obj->name;
-                    $coach_name = $obj->username;
+                    $coach_name   = $obj->username;
                 }
 
                 $url_tool = api_get_path(WEB_CODE_PATH).$table_name['link_tool'];
@@ -2895,22 +2899,22 @@ class TrackingCourseLog {
 
                         $row[0] = '<a href="'.$url_tool.'?'.api_get_cidreq().'&action=thematic_details">'.get_lang($thematic_tool_title).'</a>';
                     } else {
-                        $row[0] = '<a href="'.$url_tool.'?'.api_get_cidreq().'&'.$obj->id.'">'.get_lang('Tool'.api_ucfirst($row['col0'])).'</a>';
+                        $row[0] = '<a href="'.$url_tool.'?'.api_get_cidreq().'">'.get_lang('Tool'.api_ucfirst($row['col0'])).'</a>';
                     }
                 } else {
                     $row[0] = api_ucfirst($row['col0']);
                 }
                 $row[1] = get_lang($row[1]);
                 $row[5] = api_convert_and_format_date($row['col5'], null, date_default_timezone_get());
-
                 $row[4] = '';
+                //@todo Improve this code please
                 switch ($table_name['table_name']) {
                     case 'document' :
-                        $query_document = "SELECT tool.title as title FROM $table_tool tool" .
-                                            " WHERE id = $ref";
+                        $query_document = "SELECT tool.title as title FROM $table_tool tool WHERE id = $ref";
                         $rs_document = Database::query($query_document);
                         $obj_document = Database::fetch_object($rs_document);
                         $row[4] = $obj_document->title;
+                        
                         break;
                     case 'announcement':
                         $query_document = "SELECT title FROM $table_tool " .
@@ -2980,7 +2984,6 @@ class TrackingCourseLog {
                     $row2 .= '<br />'.get_lang('Coach').': '.$coach_name;
                 }
                 $row[2] = $row2;
-
                 $resources[] = $row;
             }
         }

@@ -19,9 +19,11 @@ $language_file[] = 'scorm';
 require_once '../inc/global.inc.php';
 
 $from_myspace = false;
-if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
+$from = isset($_GET['from']) ? $_GET['from'] : null;
+
+if ($from == 'myspace') {
     $from_myspace = true;
-    $this_section = "session_my_space";
+    $this_section = "session_my_space";    
 } else {
     $this_section = SECTION_COURSES;
 }
@@ -186,19 +188,13 @@ if ($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
     $renderer =& $form_search->defaultRenderer();
     $renderer->setElementTemplate('<span>{element}</span>');
     $form_search->addElement('hidden', 'studentlist', 'true');
-    $form_search->addElement('hidden', 'from', Security::remove_XSS($_GET['from']));
+    $form_search->addElement('hidden', 'from', Security::remove_XSS($from));
     $form_search->addElement('hidden', 'session_id', api_get_session_id());
     $form_search->addElement('text', 'user_keyword');
     $form_search->addElement('style_submit_button', 'submit', get_lang('SearchUsers'), 'class="search"');    
     $form_search->display();
     echo '</div>';
 }
-
-
-/*if (empty($session_id))
-    echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';
-*/
-
 
 if ($_GET['studentlist'] == 'false') {
     $course_code = api_get_course_id();
@@ -210,7 +206,8 @@ if ($_GET['studentlist'] == 'false') {
             <h2>'.Display::return_icon('scorms.gif',get_lang('AverageProgressInLearnpath')).get_lang('AverageProgressInLearnpath').'</h2>
             <table class="data_table">';
 
-    $list = new LearnpathList($student, $course_code, $session_id);
+    $list = new LearnpathList('', $course_code, $session_id);
+    
     $flat_list = $list->get_flat_list();
 
     if ($export_csv) {
@@ -253,10 +250,11 @@ if ($_GET['studentlist'] == 'false') {
     }
     echo '</table></div>';
     echo '<div class="clear"></div>';
-
+    //hiding detail for exercises
+//&nbsp;-&nbsp;<a href="../exercice/exercice.php?'.api_get_cidreq().'&show=result">'.get_lang('SeeDetail').'</a>
      // Exercices tracking.
      echo '<div class="report_section">
-                <h2>'.Display::return_icon('quiz.gif',get_lang('AverageResultsToTheExercices')).get_lang('AverageResultsToTheExercices').'&nbsp;-&nbsp;<a href="../exercice/exercice.php?'.api_get_cidreq().'&show=result">'.get_lang('SeeDetail').'</a></h2>
+                <h2>'.Display::return_icon('quiz.gif',get_lang('AverageResultsToTheExercices')).get_lang('AverageResultsToTheExercices').'</h2>
             <table class="data_table">';
 
     $sql = "SELECT id, title
@@ -338,6 +336,7 @@ if ($_GET['studentlist'] == 'false') {
             <table class="data_table">';
 
     $tools_most_used = Tracking::get_tools_most_used_by_course($course_code, $session_id);
+    
 
     if ($export_csv) {
         $temp = array(get_lang('ToolsMostUsed'), '');
@@ -361,7 +360,7 @@ if ($_GET['studentlist'] == 'false') {
     echo '<div class="clear"></div>';
 
     // Documents tracking.
-    if ($_GET['num'] == 0 or empty($_GET['num'])) {
+    if (!isset($_GET['num']) || empty($_GET['num'])) {
         $num = 3;
         $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&studentlist=false&num=1#documents_tracking">'.get_lang('SeeDetail').'</a>';
     } else {
@@ -515,7 +514,7 @@ if ($_GET['studentlist'] == 'false') {
         $parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);
         $parameters['id_session'] 	= $session_id;
         $parameters['studentlist'] 	= Security::remove_XSS($_GET['studentlist']);
-        $parameters['from'] 		= Security::remove_XSS($_GET['myspace']);
+        $parameters['from'] 		= isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
         $table->set_additional_parameters($parameters);
 

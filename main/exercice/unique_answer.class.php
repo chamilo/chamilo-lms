@@ -147,7 +147,7 @@ class UniqueAnswer extends Question {
 
 			for($i = 1 ; $i <= $nb_answers ; ++$i) {
 				$form -> addElement ('html', '<tr>');                
-				if (is_object($answer)) {
+				if (isset($answer) && is_object($answer)) {
 					if ($answer -> correct[$i]) {
 						$correct = $i;
 					}

@@ -1046,7 +1046,7 @@ abstract class Question
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
 		// default content
-		$isContent = intval($_REQUEST['isContent']);
+		$isContent = isset($_REQUEST['isContent']) ? intval($_REQUEST['isContent']) : null;
 
 		// question type
 		$answerType= intval($_REQUEST['answerType']);

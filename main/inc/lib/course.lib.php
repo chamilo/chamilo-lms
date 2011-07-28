@@ -2677,7 +2677,7 @@ class CourseManager {
             $without_special_courses = ' AND course.code NOT IN ("'.implode('","',$special_course_list).'")';
         }
     
-        $sql_select_courses = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
+        $sql_select_courses = "SELECT course.id, course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
                                         course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
                                         course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course.visibility
                                         FROM    $TABLECOURS       course,
@@ -2715,7 +2715,13 @@ class CourseManager {
             echo '<div class="userportal-course-item">';
     
             if (api_is_platform_admin()) {
-                echo   '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';
+                echo '<div style="float:right;">';
+                
+                echo '<a id="document_preview_'.$course['id'].'" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
+                echo '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';
+                echo '<div class="clear"></div>';
+                echo Display::div('', array('id' => 'document_result_'.$course['id'], 'class'=>'document_preview_container'));
+                
                 if ($course['status'] == COURSEMANAGER) {
                     //echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'), array('style'=>'width: 11px; height: 11px;'));
                 }

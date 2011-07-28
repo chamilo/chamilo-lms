@@ -286,7 +286,7 @@ echo '<style>
     padding: 3px 10px 3px 0;
 }
 </style>';
-$url = api_get_path(WEB_AJAX_PATH).'document.ajax.php';
+$url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=upload_file';
 $multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'<br />';
 //Adding icon replace the  <div>'.get_lang('UploadFiles').'</div> with this:
 //<div style="width:50%;margin:0 auto;"> '.Display::div(Display::return_icon('folder_document.png', '', array(), 64), array('style'=>'float:left')).' '.get_lang('UploadFiles').'</div>

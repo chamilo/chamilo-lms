@@ -193,6 +193,30 @@ if (CONFVAL_showExtractInfo != SCRIPTVAL_UnderCourseList and $orderKey[0] != 'ke
     Header
     Include the HTTP, HTML headers plus the top banner.
 */
+$url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=document_preview';
+
+$htmlHeadXtra[] =  '<script type="text/javascript">
+
+$(document).ready( function() {
+	$(".document_preview").click(function() {
+		var my_id = this.id;
+		course_id = my_id.split("_")[2];
+		
+		 
+		$.ajax({
+			url: "'.$url.'",
+			data: "course_id="+course_id,
+            success: function(return_value) {
+            	$("#document_result_" +course_id).html(return_value);
+            },
+        });
+        
+	});
+});
+
+</script>';
+
+
 Display :: display_header($nameTools);
 
 /* MAIN CODE */
@@ -426,7 +450,8 @@ if (is_array($courses_tree)) {
                         //}
                         echo Display::tag('span',$session_link. ' </span> <span style="padding-left: 10px; font-size: 90%; font-weight: normal;">'.$extra_info);
                         if (api_is_platform_admin()) {
-                            echo '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a></div>';
+                            echo '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.
+                            Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a></div>';
                         }
                         echo '</li>';
                         if (api_get_setting('hide_courses_in_sessions') == 'false') {

@@ -2247,3 +2247,12 @@ div.admin_section h4 {
 .thematic_advance_actions {
 	width:100px;
 }
+
+.document_preview_container {
+	background-color: #ccc;
+	position: absolute;	  
+    z-index: 20;
+    margin:5px;
+    padding:5px;
+    
+}

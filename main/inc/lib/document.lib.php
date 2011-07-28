@@ -2472,5 +2472,162 @@ return 'application/octet-stream';
                   </div>';
         return $html;
     }
+    
+    function get_document_preview($course_info, $lp_id = false) {
+    	
+    	if (!isset($course_info['dbName'])) {
+    		$course_info = api_get_course_info($course_info['code']);
+    	}
+    	
+    	$tbl_course 	= Database::get_main_table(TABLE_MAIN_COURSE);
+    	$tbl_doc 		= Database::get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
+    	$tbl_item_prop 	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_info['dbName']);
+    	
+    	$path = '/';
+    	$path = Database::escape_string(str_replace('_', '\_', $path));
+    	$added_slash = ($path == '/') ? '' : '/';
+    	
+    	//condition for the session
+    	$current_session_id = api_get_session_id();
+    	$condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '".$course_info['code']."' )))";
+    	
+		$sql_doc = "SELECT docs.*
+    				FROM  $tbl_item_prop AS last, $tbl_doc AS docs
+    	            WHERE docs.id = last.ref
+    	            	AND docs.path LIKE '".$path.$added_slash."%'
+    	            	AND docs.path NOT LIKE '%_DELETED_%'
+    	                AND last.tool = '".TOOL_DOCUMENT."' $condition_session ORDER BY docs.path ASC";
+    	
+		$res_doc = Database::query($sql_doc);   	
+
+    	$return = '<div class="lp_resource">';
+    	$resources = Database::store_result($res_doc);
+    	
+    	$resources_sorted = array();
+    	    	
+    	if ($lp_id) {
+	    	$return .= '<div class="lp_resource_element">';    	
+	    	$return .= Display::return_icon('new_doc.gif', '', array(), 22);    	
+	    	$return .= Display::url(get_lang('NewDocument') , api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id);
+	    	$return .= '</div>';
+    	}
+    	
+    	// If you want to debug it, I advise you to do "echo" on the eval statements.
+    	
+    	foreach ($resources as $resource) {
+	    	$resource_paths = explode('/', $resource['path']);
+	    	array_shift($resource_paths);
+	    	$path_to_eval = $last_path = '';
+	    	$is_file = false;
+	    	foreach ($resource_paths as $key => $resource_path) {
+				if (strpos($resource_path, '.') === false && $key != count($resource_paths) - 1) {
+	    		// It's a folder.
+	    		$path_to_eval .= '["' . $resource_path . '"]["files"]';
+	    	} else
+	    		if (strpos($resource_path, '.') !== false)
+	    			$is_file = true;	    	
+	    			$last_path = $resource_path;
+	    	}
+	    	
+	    	if ($is_file) {
+	    		//for backward compatibility
+	    		if (empty($resource['title'])) {
+	    			$resource['title'] = basename($resource['path']);
+	    		}
+	    		eval ('$resources_sorted' . $path_to_eval . '[' . $resource['id'] . '] = "' .$resource['title']."/". $last_path. '";');
+	    	} else {
+	    		eval ('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["id"]=' . $resource['id'] . ';');
+	    	}
+    	}
+    	
+    	$label = get_lang('Documents');
+    	$new_array[$label] = array('id' => 0, 'files' => $resources_sorted);
+    	$return .= self::write_resources_tree($course_info, $new_array, 0, $lp_id);    	    
+    	$return .= '</div>';
+    	return $return;
+    	
+    }
+    
+    /**
+    * Generate and return an HTML list of resources based on a given array.
+    * This list is used to show the course creator a list of available resources to choose from
+    * when creating a learning path.
+    * @param	array	Array of elements to add to the list
+    * @param	integer Enables the tree display by shifting the new elements a certain distance to the right
+    * @return	string	The HTML list
+    */
+    public function write_resources_tree($course_info, $resources_sorted, $num = 0, $lp_id = false) {
+    	require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
+    	$return = '';
+    	if (count($resources_sorted) > 0) {
+    		foreach ($resources_sorted as $key => $resource) {
+    			if (isset($resource['id']) && is_int($resource['id'])) {
+    				// It's a folder.
+    				//hide some folders
+    				if (in_array($key, array('shared_folder','chat_files', 'HotPotatoes_files', 'css', 'certificates'))){
+    					continue;
+    				} elseif(preg_match('/_groupdocs/', $key)){
+    					continue;
+    				} elseif(preg_match('/sf_user_/', $key)){
+    					continue;
+    				} elseif(preg_match('/shared_folder_session_/', $key)){
+    					continue;
+    				}
+    
+    				//trad some titles
+    				if ($key=='images') {
+    					$key=get_lang('Images');
+    				} elseif($key=='gallery') {
+    					$key=get_lang('Gallery');
+    				} elseif($key=='flash') {
+    					$key=get_lang('Flash');
+    				} elseif($key=='audio'){
+    					$key=get_lang('Audio');
+    				} elseif($key=='video') {
+    					$key=get_lang('Video');
+    				}
+    
+    				$return .= '<div class="doc_resource">';
+    				$return .= '<div style="margin-left:' . ($num * 18) . 'px;margin-right:5px;">';
+    				    				
+    				$return .= '<img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '" onclick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;
+    							<span onclick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')" style="cursor: pointer;" >' . $key . '</span>
+    							</div><div style="display: none;" id="' . $resource['id'] . '">';
+    				
+    				if (isset($resource['files'])) {
+    					$return .= self::write_resources_tree($course_info, $resource['files'], $num +1, $lp_id);
+    				}
+    				$return .= '</div></div>';
+    			} else {
+    				if (!is_array($resource)) {
+    					
+    					// It's a file.
+    					$icon		= choose_image($resource);
+    					$position 	= strrpos($icon, '.');
+    					$icon 		= substr($icon, 0, $position) . '_small.gif';
+    					$file_info	= explode('/', $resource);
+    					$my_file_title = $file_info[0];
+    					$my_file_name  = $file_info[1];
+
+    					// Show the "image name" not the filename of the image.
+    					if ($lp_id) {
+    						$lp_id = $this->lp_id;
+    						$url  = api_get_self() . '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' .$lp_id;
+    					} else {
+    						$url  = api_get_path(WEB_CODE_PATH).'document/document.php?cidReq='.$course_info['code'].'&id='.$key;
+    					}	
+    					
+    					$link = Display::url('<img alt="" src="../img/' . $icon . '" title="" />&nbsp;' . $my_file_title, $url);
+    					 
+    					$return .= '<div class="doc_resource"><div style="margin-left:' . (($num +1) * 18) . 'px;margin-right:5px;">';    					
+    					$return .= $link;
+    					$return .= '</div></div>';
+    				}
+    			}
+    		}
+    	}
+    	return $return;
+    }
+    
 }
 //end class DocumentManager

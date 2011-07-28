@@ -90,9 +90,10 @@ global $show_learn_path;
 
 if ($show_learn_path) {
     $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CSS_PATH).$my_style.'/learnpath.css"/>';
-    $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="dtree.css" />'; //will be moved
-    $htmlHeadXtra[] = '<script src="dtree.js" type="text/javascript"></script>'; //will be moved
 }
+$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/dtree/dtree.css" />'; //will be moved
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/dtree/dtree.js" type="text/javascript"></script>'; //will be moved
+
 //Base CSS
 echo '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
 //Default CSS

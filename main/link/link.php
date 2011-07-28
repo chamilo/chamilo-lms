@@ -457,7 +457,7 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 		// - instead of a +, the category is no longer clickable and all the links of this category are displayed
 		$myrow['description'] = text_filter($myrow['description']);
 
-		if ($urlview[$i] == '1') {
+		if (isset($urlview[$i]) && $urlview[$i] == '1') {
 			$newurlview = $urlview;
 			$newurlview[$i] = '0';
 

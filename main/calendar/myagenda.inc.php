@@ -675,7 +675,7 @@ function get_personal_agenda_items($user_id, $agendaitems, $day = "", $month = "
 				$halfhour = $halfhour +1;
 			}
 			//Display events by list
-			$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> $course_link  <a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
+			$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> $course_link <a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
 
 		}
 	}

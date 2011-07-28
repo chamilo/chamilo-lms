@@ -2963,8 +2963,9 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 	// we are loading all the calendar items of all the courses for today
 	echo "<table class=\"data_table\">";
 	// the forward and backwards url
-	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".Security::remove_XSS($_GET['courseCode'])."&action=view&view=day&day=".date("j", $previousday)."&month=".date("n", $previousday)."&year=".date("Y", $previousday);
-	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".Security::remove_XSS($_GET['courseCode'])."&action=view&view=day&day=".date("j", $nextday)."&month=".date("n", $nextday)."&year=".date("Y", $nextday);
+	$course_code = isset($_GET['courseCode']) ? Security::remove_XSS($_GET['courseCode']) : null;
+	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".$course_code."&action=view&view=day&day=".date("j", $previousday)."&month=".date("n", $previousday)."&year=".date("Y", $previousday);
+	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".$course_code."&action=view&view=day&day=".date("j", $nextday)."&month=".date("n", $nextday)."&year=".date("Y", $nextday);
 	// The title row containing the day
 	echo "<tr>", "<th width=\"10%\"><a href=\"", $backwardsURL, "\">".Display::return_icon('action_prev.png',get_lang('Previous'))."</a></th>", "<th>";
 	echo $DaysLong[$day_of_the_week]." ".date("j", $today)." ".$MonthsLong[date("n", $today) - 1]." ".date("Y", $today);
@@ -2987,12 +2988,14 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 			echo ("<td valign=\"top\" width=\"75\">". ((($i) / 2) - (1 / 2))." ".get_lang("HourShort")." 30</td>");
 		}
 		echo "<td $class valign=\"top\" colspan=\"2\">";
-		if (is_array($agendaitems[$i])) {
-			foreach ($agendaitems[$i] as $key => $value) {
-				echo $value;
+		if (isset($agendaitems[$i])) {
+			if (is_array($agendaitems[$i])) {
+				foreach ($agendaitems[$i] as $key => $value) {
+					echo $value;
+				}
+			} else {
+				echo $agendaitems[$i];
 			}
-		} else {
-			echo $agendaitems[$i];
 		}
 		echo "</td>";
 		echo "</tr>";

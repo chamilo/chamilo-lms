@@ -9,7 +9,7 @@
 $language_file = array('registration', 'index', 'tracking', 'exercice', 'admin', 'gradebook');
 
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
@@ -378,16 +378,11 @@ if (!empty ($_GET['student'])) {
         }
         $coachs_name  = $info_course['tutor_name'];
         $session_name = $session_info['name'];
-    } // end if(api_get_setting('use_session_mode')=='true')
-
-    //$table_title = ($session_name? get_lang('Session').' : '.ucfirst($session_name).' | ':'').get_lang('Course').' : '.$info_course['title'].($coachs_name?'&nbsp;|&nbsp;'.get_lang('Tutor').' : '.stripslashes($coachs_name):'');
-    //Hiding coach name
-     
-    //$table_title = ($session_name? get_lang('Session').' : '.ucfirst($session_name).' | ':'').get_lang('Course').' : '.$info_course['title'].' | '.api_get_person_name($info_user['firstname'], $info_user['lastname']);
-    
-    $info_course = CourseManager :: get_course_information($get_course_code);
+    } // end
+ 
+    $info_course = CourseManager :: get_course_information($get_course_code);    
     $session_name = api_get_session_name($session_id);    
-    $table_title  = ($session_name? Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.$session_name.' ':'').
+    $table_title  = ($session_name? Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.$session_name.' ':'');
     $table_title .= ($info_course ? Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$info_course['title'].'  ':'');
     $table_title .= Display::return_icon('user.png', get_lang('User'), array(), 22).api_get_person_name($info_user['firstname'], $info_user['lastname']);
     

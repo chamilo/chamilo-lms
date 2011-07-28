@@ -74,7 +74,6 @@ if ($action == 'thematic_list') {
 		
 		echo '<table width="100%" class="data_table">';	
 		echo '<tr><th width="33%">'.get_lang('Thematic').'</th><th>'.get_lang('ThematicPlan').'</th><th width="33%">'.get_lang('ThematicAdvance').'</th></tr>';
-	   
 		foreach ($thematic_data as $thematic) {
 		    $my_thematic_id = $thematic['id'];
 		    
@@ -116,54 +115,67 @@ if ($action == 'thematic_list') {
                     $actions_first_col .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$my_thematic_id.$param_gradebook.$url_token.'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a>';
     			}
 			}
-                        
-			echo Display::tag('td', Display::tag('h2', Security::remove_XSS($thematic['title'], STUDENT).$session_star).Security::remove_XSS($thematic['content'], STUDENT).$actions_first_col);
 			
-			// display thematic plan data
-			echo '<td>';					
+			$actions_first_col = Display::div($actions_first_col, array('id'=>'thematic_id_content_'.$thematic['id'], 'class'=>'thematic_tools'));
+			$actions_first_col = Display::div($actions_first_col, array('style'=>'height:20px'));
+                        
+			echo Display::tag('td', Display::tag('h2', Security::remove_XSS($thematic['title'], STUDENT).$session_star).Security::remove_XSS($thematic['content'], STUDENT).$actions_first_col, array('id'=>'thematic_td_content_'.$thematic['id'], 'class'=>'thematic_content'));
+			
+			// Display 2nd column - thematic plan data
+			 
+			echo '<td>';	
+							
 			//if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {
 			if (api_is_allowed_to_edit(null, true)) {
 				echo '<div style="text-align:right"><a class="thematic_plan_opener" href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_plan_list&thematic_id='.$thematic['id'].'">'.
-				Display::return_icon('edit.png', get_lang('EditThematicPlan'), array('style'=>'vertical-align:middle'),22).'</a></div><br />';
-			}           
+				Display::return_icon('edit.png', get_lang('EditThematicPlan'), array('style'=>'vertical-align:middle'),32).'</a></div><br />';
+			}			
 			
-			echo $thematic_plan_div[$thematic['id']];
-			
+			if (empty($thematic_plan_div[$thematic['id']])) {
+				echo Display::div('', array('id' => "thematic_plan_".$thematic['id']));
+			} else {
+				echo $thematic_plan_div[$thematic['id']];
+			}
+						
 			echo '</td>';
 			
-			// display thematic advance data
-			echo '<td>';
+			// Display 3rd column - thematic advance data						
+			echo '<td style="vertical-align:top">';
+			
 			//if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {					
 			if (api_is_allowed_to_edit(null, true)) {
-				echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_advance_list&thematic_id='.$thematic['id'].'">'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array('style'=>'vertical-align:middle'),22).'</a></div><br />';
-			}					
+				//echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_advance_list&thematic_id='.$thematic['id'].'">'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array('style'=>'vertical-align:middle'),22).'</a></div><br />';
+				echo '<div style="text-align:right"><a class="thematic_advanced_add_opener" href="index.php?'.api_get_cidreq().'&action=thematic_advance_add&thematic_id='.$thematic['id'].'">'.Display::return_icon('add.png',get_lang('NewThematicAdvance'),'','32').'</a></div>';
+			}						
 			
 			//if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {
 			if (!empty($thematic_advance_data[$thematic['id']])) {
 			    echo '<table width="100%">';                
 				foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
+					
 					$thematic_advance['start_date'] = api_get_local_time($thematic_advance['start_date']);
 					$thematic_advance['start_date'] = api_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG);
 					echo '<tr>';
-					echo '<td width="90%">';
+					echo '<td width="90%" class="thematic_advance_content" id="thematic_advance_content_id_'.$thematic_advance['id'].'">';
 					
-				    $session_star = '';
-			            if (api_is_allowed_to_edit(null, true)) {			            
-                            if ($thematic_advance['session_id'] !=0) {
-                               $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);   
-                            }
-                        }
-						echo '<div><strong>'.$thematic_advance['start_date'].$session_star.'</strong></div>';
-						echo '<div>'.Security::remove_XSS($thematic_advance['content'], STUDENT).'</div>';
-						echo '<div>'.get_lang('DurationInHours').' : '.$thematic_advance['duration'].'</div>';
+				                            
+					$edit_link  =  '<a class="thematic_advanced_opener" href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'" >'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array(),22).'</a>';
+					$edit_link  .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a></center>';
+					
+					
+					$thematic_advance_item =  isset($thematic_advance_div[$thematic['id']][$thematic_advance['id']]) ? $thematic_advance_div[$thematic['id']][$thematic_advance['id']] : null;						
+					echo Display::div($thematic_advance_item, array('id'=>'thematic_advance_'.$thematic_advance['id']));
+					
+					//Links
+					echo Display::div(Display::div($edit_link , array('id'=>'thematic_advance_tools_'.$thematic_advance['id'], 'class'=>'thematic_advance_actions')), array('style'=>'height:20px;'));
+					
+						
 					echo '</td>';
 					
 					//if (api_is_allowed_to_edit(null, true) && api_get_session_id() == $thematic['session_id']) {
-					if (api_is_allowed_to_edit(null, true)) {
-					    
+					if (api_is_allowed_to_edit(null, true)) {					    
     					if (empty($thematic_id)) {
-    						$checked = '';
-    						
+    						$checked = '';    						
     						if ($last_done_thematic_advance == $thematic_advance['id']) {
     							$checked = 'checked';
     						}
@@ -176,8 +188,7 @@ if ($action == 'thematic_list') {
     						echo '<td id="td_done_thematic_'.$thematic_advance['id'].'" '.$style.'><center>';
     						echo '<input type="radio" class="done_thematic" id="done_thematic_'.$thematic_advance['id'].'" name="done_thematic" value="'.$thematic_advance['id'].'" '.$checked.' onclick="update_done_thematic_advance(this.value)">';
     						echo '</center></td>';						
-    					} else {
-    					    
+    					} else {    					    
     						if ($thematic_advance['done_advance'] == 1) {
     							echo '<td><center>'.get_lang('Done').'</center></td>';	
     						} else {
@@ -192,10 +203,8 @@ if ($action == 'thematic_list') {
 				echo '<div><em>'.get_lang('ThereIsNoAThematicAdvance').'</em></div>';
 			}							
 			echo '</td>';				
-			echo '</tr>';				
+			echo '</tr>';
        } //End for
-       
-       
 	   echo '</table>';
     } else {
 	   echo '<div><em>'.get_lang('ThereIsNoAThematicSection').'</em></div>';		
@@ -217,7 +226,7 @@ if ($action == 'thematic_list') {
 	}
 		
 	$form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
-	$form->add_html_editor('content', get_lang('Content'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '250'));	
+	$form->add_html_editor('content', get_lang('Content'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));	
 	$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
 	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 	

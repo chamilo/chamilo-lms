@@ -466,9 +466,32 @@ class Thematic
 		}
 		return $data;
 	 }
-
+	
+	 	
+	public function get_thematic_advance_div($data) {		
+		$return_array = array();
+		
+		foreach ($data as $thematic_id => $thematic_advance_data) {
+			foreach ($thematic_advance_data as $key => $thematic_advance) {
+						
+				$session_star = '';
+				if (api_is_allowed_to_edit(null, true)) {
+					if ($thematic_advance['session_id'] !=0) {
+						$session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
+					}
+				}
+					
+				$thematic_advance_item  = '<div><strong>'.$thematic_advance['start_date'].$session_star.'</strong></div>';
+//				$thematic_advance_item .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance['duration'].'</div>';
+				$thematic_advance_item .= '<div>'.$thematic_advance['duration'].' '.get_lang('HourShort').'</div>';
+				$thematic_advance_item .= '<div>'.Security::remove_XSS($thematic_advance['content'], STUDENT).'</div>';
+				$return_array[$thematic_id][$thematic_advance['id']] = $thematic_advance_item;
+			}
+		}	
+		return $return_array;
+	}
 	 
-	 public function get_thematic_plan_div($data, $id = false) {
+	 public function get_thematic_plan_div($data) {
 	 	$final_return = array();
 	
 		foreach ($data as $thematic_id => $thematic_plan_data) {

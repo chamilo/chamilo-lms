@@ -2239,3 +2239,11 @@ div.admin_section h4 {
 	margin-bottom:10px !important;
 	margin-top: -6px !important;
 }
+
+.thematic_advance_content {
+	padding:10px;
+}
+
+.thematic_advance_actions {
+	width:100px;
+}

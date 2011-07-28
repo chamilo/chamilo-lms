@@ -72,11 +72,11 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 
 	$form->add_textfield('duration_in_hours', get_lang('DurationInHours'), false, array('size'=>'3'));
 	
-	$form->add_html_editor('content', get_lang('Content'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150'));	
+	$form->add_html_editor('content', get_lang('Content'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));	
 	//$form->addElement('textarea', 'content', get_lang('Content'));
 	
 	$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
-	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+	//$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 	
 	$default['start_date_type'] = 1;	
 	$default['custom_start_date'] = date('d-F-Y H:i',api_strtotime(api_get_local_time()));
@@ -115,12 +115,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	$form->display();
 	
 } else if ($action == 'thematic_advance_list') {
-	
-	if (api_is_allowed_to_edit(null, true)) {		
-		echo '<div class="actions" style="margin-bottom:30px">';
-		echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_add&thematic_id='.$thematic_id.'">'.Display::return_icon('add_calendar_event.png',get_lang('NewThematicAdvance'),'','32').'</a>';			
-		echo '</div>';
-	}
+
 	
 	// thematic advance list		
 	$table = new SortableTable('thematic_advance_list', array('Thematic', 'get_number_of_thematic_advances'), array('Thematic', 'get_thematic_advance_data'));

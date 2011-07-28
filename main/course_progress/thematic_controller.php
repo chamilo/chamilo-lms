@@ -150,6 +150,8 @@ class ThematicController
 			
 			$data['thematic_plan_div']       = $thematic->get_thematic_plan_div($thematic_plan_data);
 			
+			$data['thematic_advance_div']    = $thematic->get_thematic_advance_div($thematic_advance_data);
+			
 			
 			$data['thematic_plan_data']      = $thematic_plan_data;			
 			$data['thematic_advance_data']   = $thematic_advance_data;
@@ -213,12 +215,8 @@ class ThematicController
 					$this->view->set_template('thematic_plan');		       
 					$this->view->render();               									    															
     			}	    			
-            } else if($_POST['action'] == 'thematic_plan_list') {
-                
-                
-               
-            } 
-    	}		
+            }
+		}		
     							
         											
     	if ($action == 'thematic_plan_list') {
@@ -255,7 +253,7 @@ class ThematicController
         
 		//render to the view
     	$this->view->set_data($data);
-    	$this->view->set_layout('layout_headerless'); 
+    	$this->view->set_layout('layout_no_header'); 
     	$this->view->set_template('thematic_plan');		       
     	$this->view->render();
         exit;
@@ -279,64 +277,7 @@ class ThematicController
     	foreach ($attendance_list as $attendance_id => $attendance_data) {
     		$attendance_select[$attendance_id] = $attendance_data['name'];
     	}
-    
-    	if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {				
-    		if (isset($_POST['action']) && ($_POST['action'] == 'thematic_advance_add' || $_POST['action'] == 'thematic_advance_edit')) {
-        		if (($_POST['start_date_type'] == 1 && empty($_POST['start_date_by_attendance'])) || (!empty($_POST['duration_in_hours']) && !is_numeric($_POST['duration_in_hours'])) ) {	    			
-        			
-        			if ($_POST['start_date_type'] == 1 && empty($_POST['start_date_by_attendance'])) {
-        				$start_date_error = true;
-    					$data['start_date_error'] = $start_date_error;	
-        			} 
-        			
-        			if (!empty($_POST['duration_in_hours']) && !is_numeric($_POST['duration_in_hours'])) {
-        				$duration_error = true;
-    					$data['duration_error'] = $duration_error;	
-        			}
-    
-    				$data['action'] = $_POST['action'];	
-    				$data['thematic_id'] = $_POST['thematic_id'];				
-    				$data['attendance_select'] = $attendance_select;					
-    				if (isset($_POST['thematic_advance_id'])) {
-    					$data['thematic_advance_id'] = $_POST['thematic_advance_id'];
-    					$thematic_advance_data = $thematic->get_thematic_advance_list($_POST['thematic_advance_id']);
-    					$data['thematic_advance_data'] = $thematic_advance_data;		
-    				}	
-    				// render to the view
-    				$this->view->set_data($data);
-    				$this->view->set_layout('layout'); 
-    				$this->view->set_template('thematic_advance');		       
-    				$this->view->render();	    			
-        		} else {	
-    	    		if ($_POST['thematic_advance_token'] == $_SESSION['thematic_advance_token'] && api_is_allowed_to_edit(null, true)) {						    						    			
-    	    			$thematic_advance_id = $_POST['thematic_advance_id'];
-    	    			$thematic_id 	= $_POST['thematic_id'];	    			
-    	    			$content 		= $_POST['content'];		    			
-    	    			$duration		= $_POST['duration_in_hours'];
-    	    			if (isset($_POST['start_date_type']) && $_POST['start_date_type'] == 2) {
-    	    				$start_date 	= $thematic->build_datetime_from_array($_POST['custom_start_date']);
-    	    				$attendance_id 	= 0;	
-    	    			} else {
-    	    				$start_date 	= $_POST['start_date_by_attendance'];
-    	    				$attendance_id 	= $_POST['attendance_select'];
-    	    			}		    			
-    	    			$thematic->set_thematic_advance_attributes($thematic_advance_id, $thematic_id,  $attendance_id, $content, $start_date, $duration);	    				    								
-    					$affected_rows = $thematic->thematic_advance_save();			        	
-    		        	if ($affected_rows) {
-    		        		// get last done thematic advance before move thematic list
-    						$last_done_thematic_advance = $thematic->get_last_done_thematic_advance();
-    						// update done advances with de current thematic list
-    						if (!empty($last_done_thematic_advance)) {
-    							$update_done_advances = $thematic->update_done_thematic_advances($last_done_thematic_advance);
-    						}
-    		        	}			        	
-    					unset($_SESSION['thematic_advance_token']);	        
-    		        	$action = 'thematic_advance_list';		
-    	    		}
-        		}	    		
-    		}	    		
-    	}		
-		
+
 		$thematic_id = intval($_GET['thematic_id']);
 		$thematic_advance_id = intval($_GET['thematic_advance_id']);
 		$thematic_advance_data = array();
@@ -345,7 +286,9 @@ class ThematicController
                 if (api_is_allowed_to_edit(null, true)) {
 				    $affected_rows = $thematic->thematic_advance_destroy($thematic_advance_id);
                 }
-				$action = 'thematic_advance_list';				
+				$action = 'thematic_list';										
+				header('Location: index.php');
+				exit;	
 			} else {
 				$thematic_advance_data = $thematic->get_thematic_advance_list($thematic_advance_id);	
 			}									
@@ -373,7 +316,7 @@ class ThematicController
 		
 		// render to the view
 		$this->view->set_data($data);
-		$this->view->set_layout('layout'); 
+		$this->view->set_layout('layout_no_header'); 
 		$this->view->set_template('thematic_advance');		       
 		$this->view->render();		
 	}

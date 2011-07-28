@@ -1833,20 +1833,18 @@ class Tracking {
                 $condition_session = ' AND access_session_id = '. $session_id;
             }
             $sql = "SELECT access_tool, COUNT(DISTINCT access_user_id),count( access_tool ) as count_access_tool
-            FROM $TABLETRACK_ACCESS
-            WHERE access_tool IS NOT NULL
-                AND access_cours_code = '$course_code'
-                $condition_session
-            GROUP BY access_tool
-            ORDER BY count_access_tool DESC
-            LIMIT 0, 3";
-                $rs = Database::query($sql);
-                if (Database::num_rows($rs) > 0) {
-                    while ($row = Database::fetch_array($rs)) {
-                        $data[] = $row;
-                    }
-                }
-                return $data;
+	            	FROM $TABLETRACK_ACCESS
+	            	WHERE access_tool IS NOT NULL AND access_tool != '' AND access_cours_code = '$course_code' $condition_session
+	            	GROUP BY access_tool
+	            	ORDER BY count_access_tool DESC
+	            	LIMIT 0, 3";
+			$rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+            	while ($row = Database::fetch_array($rs)) {
+                	$data[] = $row;
+				}
+			}
+            return $data;
         }
 
         /**
@@ -1895,7 +1893,7 @@ class Tracking {
 
             //protect data
             $course_code = Database::escape_string($course_code);
-            $course_info=api_get_course_info($course_code);
+            $course_info = api_get_course_info($course_code);
             $data = array();
 
             $TABLETRACK_LINKS       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
@@ -1908,20 +1906,20 @@ class Tracking {
             }
 
             $sql = "SELECT cl.title, cl.url,count(DISTINCT sl.links_user_id), count(cl.title) as count_visits
-            FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
-            WHERE sl.links_link_id = cl.id
-                AND sl.links_cours_id = '$_cid'
-                $condition_session
-            GROUP BY cl.title, cl.url
-            ORDER BY count_visits DESC
-            LIMIT 0, 3";
-                $rs = Database::query($sql);
-                if (Database::num_rows($rs) > 0) {
-                    while ($row = Database::fetch_array($rs)) {
-                        $data[] = $row;
-                    }
+		            FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
+		            WHERE sl.links_link_id = cl.id
+		                AND sl.links_cours_id = '$course_code'
+		                $condition_session
+		            GROUP BY cl.title, cl.url
+		            ORDER BY count_visits DESC
+		            LIMIT 0, 3";
+			$rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+				while ($row = Database::fetch_array($rs)) {
+					$data[] = $row;
                 }
-                return $data;
+			}
+            return $data;
         }
 
         /**
@@ -3294,11 +3292,10 @@ class TrackingCourseLog {
                     $user['last_connection']    = Tracking::get_last_connection_date_on_the_course($user['user_id'], $course_code, $session_id);
 
                     // we need to display an additional profile field
+                    $user['additional']='';
                     if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-                        if (is_array($additional_user_profile_info[$user['user_id']])) {
-                            $row['additional']=implode(', ', $additional_user_profile_info[$user['user_id']]);
-                        } else {
-                            $row['additional']='&nbsp;';
+                        if (isset($additional_user_profile_info[$user['user_id']]) && is_array($additional_user_profile_info[$user['user_id']])) {
+                            $user['additional'] = implode(', ', $additional_user_profile_info[$user['user_id']]);
                         }
                     }
                     $user['link'] = '<center><a href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&course='.$course_code.'&origin=tracking_course&id_session='.$session_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';

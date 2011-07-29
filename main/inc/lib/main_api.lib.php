@@ -1944,7 +1944,7 @@ function api_display_tool_title($title_element) {
         unset ($title_element);
         $title_element['mainTitle'] = $tit;
     }
-    echo '<h3>';
+    echo '<h2>';
     if (!empty($title_element['supraTitle'])) {
         echo '<small>'.$title_element['supraTitle'].'</small><br />';
     }
@@ -1954,7 +1954,7 @@ function api_display_tool_title($title_element) {
     if (!empty($title_element['subTitle'])) {
         echo '<br /><small>'.$title_element['subTitle'].'</small>';
     }
-    echo '</h3>';
+    echo '</h2>';
 }
 
 /**

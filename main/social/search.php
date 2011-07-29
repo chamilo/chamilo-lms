@@ -81,17 +81,17 @@ echo '<div id="social-content">';
 				echo '</div>';											
 			}
 								
-			//get users from tags
-			if (is_array($results) && count($results) > 0) {
-				foreach ($results as $result) {
+			//Get users from tags
+			if (is_array($results) && count($results) > 0) {				
+				foreach ($results as $result) {					
 					$id = $result['id'];
 					$url_open  = '<a href="groups.php?id='.$id.'">';
 					$url_close = '</a>';
 						
 					$name = api_strtoupper(cut($result['name'],25,true));				
-					if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {		 	
+					if (isset($result['relation_type']) && $result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {		 	
 						$name .= Display::return_icon('social_group_admin.png', get_lang('Admin'), array('style'=>'vertical-align:middle'));
-					} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
+					} elseif (isset($result['relation_type'])  && $result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
 						$name .= Display::return_icon('social_group_moderator.png', get_lang('Moderator'), array('style'=>'vertical-align:middle'));
 					}
 					$count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
@@ -101,7 +101,7 @@ echo '<div id="social-content">';
 						$count_users_group = $count_users_group.' '.get_lang('Members');
 					}					
 					
-					$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);	
+					$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);	
 											
 					$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';			
 					$grid_item_1 = Display::return_icon('boxmygroups.jpg');				

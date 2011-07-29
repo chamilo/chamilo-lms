@@ -182,9 +182,9 @@ function manage_form ($default, $select_from_user_list = null) {
 	global $charset;
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 
-	$group_id 	= intval($_REQUEST['group_id']);
-	$message_id = intval($_GET['message_id']);
-	$param_f = isset($_GET['f'])?Security::remove_XSS($_GET['f']):'';
+	$group_id 		= isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
+	$message_id 	= isset($_GET['message_id'])  ?  intval($_GET['message_id']) : null;	
+	$param_f 		= isset($_GET['f']) ? Security::remove_XSS($_GET['f']):'';
 
 	$form = new FormValidator('compose_message',null,api_get_self().'?f='.$param_f,null,array('enctype'=>'multipart/form-data'));
 	if (empty($group_id)) {
@@ -256,7 +256,6 @@ function manage_form ($default, $select_from_user_list = null) {
 			$file_comments	= $_POST['legend'];
 			$title 			= $values['title'];
 			$content 		= $values['content'];
-
 			$group_id		= $values['group_id'];
 			$parent_id 		= $values['parent_id'];
 	
@@ -297,7 +296,7 @@ if ($_GET['f']=='social') {
 
 Display::display_header(get_lang('ComposeMessage'));
 
-$group_id = intval($_REQUEST['group_id']);
+$group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
 
 if ($group_id != 0) {
 	echo '<div class=actions>';

@@ -37,6 +37,7 @@ class MessageManager
 		$min=30;
 		global $_configuration;
 		$userlist = who_is_online($min, true);
+		$online_user_list = array();
 		foreach($userlist as $row) {
 			$receiver_id = $row[0];
 			$online_user_list[$receiver_id] = GetFullUserName($receiver_id).($current_user_id==$receiver_id?("&nbsp;(".get_lang('Myself').")"):(""));

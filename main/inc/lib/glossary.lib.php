@@ -305,7 +305,7 @@ class GlossaryManager {
 	 * @version januari 2009, dokeos 1.8.6
 	 */
 	function display_glossary_list() {
-		$glossary_data = self::get_glossary_data(0,1000,0,ASC);
+		$glossary_data = self::get_glossary_data(0,1000,0,'ASC');
 		foreach($glossary_data as $key=>$glossary_item) {
 		    
 			echo '<div class="sectiontitle">'.$glossary_item[0].'</div>';
@@ -441,7 +441,7 @@ class GlossaryManager {
 			}
 		}*/
 		$glossary_id = $row[2];
-		$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$glossary_id.'&'.api_get_cidreq().'&msg=edit">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
+		$return = '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$glossary_id.'&'.api_get_cidreq().'&msg=edit">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
 		$glossary_data = GlossaryManager::get_glossary_information($glossary_id);		
 		$glossary_term = $glossary_data['glossary_title'];
 

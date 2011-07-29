@@ -51,7 +51,7 @@ Display::display_header(get_lang(ucfirst($tool)));
 // Tool introduction
 Display::display_introduction_section(TOOL_GLOSSARY);
 
-if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('list','table'))) {
+if (isset($_GET['action']) && $_GET['action'] == 'changeview' AND in_array($_GET['view'],array('list','table'))) {
     $_SESSION['glossary_view'] = $_GET['view'];
 } else {
   if (!isset($_SESSION['glossary_view'])) {

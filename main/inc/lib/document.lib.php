@@ -1146,7 +1146,7 @@ return 'application/octet-stream';
         $is_visible = false;
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result,'ASSOC');
-            if ($row['visibility'] == 1) {
+            if ($row['visibility'] == 1) {            	
                 $is_visible = $_SESSION['is_allowed_in_course'] || api_is_platform_admin();
             }
         }
@@ -2473,10 +2473,48 @@ return 'application/octet-stream';
         return $html;
     }
     
-    function get_document_preview($course_info, $lp_id = false, $target = '') {    	
+    function get_document_preview($course_info, $lp_id = false, $target = '', $session_id = 0) {
+    	
     	if (!isset($course_info['dbName'])) {
     		$course_info = api_get_course_info($course_info['code']);
+    	}  
+    	
+    	if (empty($course_info) || !is_array($course_info)) {
+    		return '';
+    	}    		
+    	$user_id = api_get_user_id();
+    	
+    	$user_in_course = false;
+    	
+    	if (api_is_platform_admin()) {
+    		$user_in_course = true;
     	}
+    	
+    	if (!$user_in_course) {
+    		if (CourseManager::is_course_teacher($user_id, $course_info['code'])) {
+    			$user_in_course = true;
+    		}
+    	}
+    	
+    	//condition for the session
+    	if (isset($session_id) && !empty($session_id)) {
+    		$current_session_id  = intval($session_id);
+    	} else {
+    		$current_session_id = api_get_session_id();
+    	}
+    	
+    	if (!$user_in_course) 
+    	if (empty($current_session_id)) {    		
+    		if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
+    			$user_in_course = true;
+    		}    		
+    	} else {
+    		require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+    		$user_status = SessionManager::get_user_status_in_session($user_id, $course_info['code'], $current_session_id);
+    		if (in_array($user_status, array('0', '6'))) { //user and coach 
+    			$user_in_course = true;
+    		}    		 		
+    	}    	
     	
     	$tbl_course 	= Database::get_main_table(TABLE_MAIN_COURSE);
     	$tbl_doc 		= Database::get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
@@ -2486,19 +2524,21 @@ return 'application/octet-stream';
     	$path = Database::escape_string(str_replace('_', '\_', $path));
     	$added_slash = ($path == '/') ? '' : '/';
     	
-    	//condition for the session
-    	$current_session_id = api_get_session_id();
-    	$condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '".$course_info['code']."' )))";
+
+    	//$condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '".$course_info['code']."' )))";
+    	$condition_session = " AND (id_session = '$current_session_id' OR  id_session = '0' )";
     	
-		$sql_doc = "SELECT docs.*
+		$sql_doc = "SELECT last.visibility, docs.*
     				FROM  $tbl_item_prop AS last, $tbl_doc AS docs
     	            WHERE docs.id = last.ref
     	            	AND docs.path LIKE '".$path.$added_slash."%'
     	            	AND docs.path NOT LIKE '%_DELETED_%'
-    	                AND last.tool = '".TOOL_DOCUMENT."' $condition_session ORDER BY docs.path ASC";
+    	                AND last.tool = '".TOOL_DOCUMENT."' $condition_session 
+    	                AND last.visibility = '1'
+					ORDER BY docs.path ASC";
     	
-		$res_doc = Database::query($sql_doc);
-    	$resources = Database::store_result($res_doc);
+		$res_doc 	= Database::query($sql_doc);
+    	$resources  = Database::store_result($res_doc);
     	
     	$return = '';
     	
@@ -2510,12 +2550,18 @@ return 'application/octet-stream';
 	    	$return .= Display::url(get_lang('NewDocument'), api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id);
 	    	$return .= '</div>';
     	} else {
-    		$return .= Display::div(Display::url(Display::return_icon('delete.png', get_lang('Close'), array(), 22), '#', array('id'=>'close_div_'.$course_info['real_id'],'class' =>'close_div')), array('style' => 'position:absolute;right:10px'));
+    		$return .= Display::div(Display::url(Display::return_icon('delete.png', get_lang('Close'), array(), 22), '#', array('id'=>'close_div_'.$course_info['real_id'].'_'.$session_id,'class' =>'close_div')), array('style' => 'position:absolute;right:10px'));
     	}
     	
     	// If you want to debug it, I advise you to do "echo" on the eval statements.
-    	if (!empty($resources)) {
+    	if (!empty($resources) && $user_in_course) {
 	    	foreach ($resources as $resource) {
+	    		$item_info = api_get_item_property_info($course_info['real_id'], 'document', $resource['id'], $session_id);
+	    		
+	    		if (empty($item_info)) {
+	    			continue;
+	    		}
+	    		
 		    	$resource_paths = explode('/', $resource['path']);
 		    	array_shift($resource_paths);
 		    	$path_to_eval = $last_path = '';
@@ -2545,7 +2591,9 @@ return 'application/octet-stream';
     	$label = get_lang('Documents');
     	$new_array[$label] = array('id' => 0, 'files' => $resources_sorted);
     	
-    	$return .= self::write_resources_tree($course_info, $new_array, 0, $lp_id, $target);    	
+    	$write_result = self::write_resources_tree($course_info, $current_session_id, $new_array, 0, $lp_id, $target);
+    	    	
+    	$return .= $write_result ;
     	
     	$return = Display::div($return, array('class'=>'lp_resource'));    	
     	$img_path = api_get_path(WEB_IMG_PATH);
@@ -2555,8 +2603,8 @@ return 'application/octet-stream';
     		
     		    	$('.doc_folder').mouseover(function() {	
     					var my_id = this.id.split('_')[2];    						
-    					$('#'+my_id).show();    								
-    					$('#img_'+my_id).attr('src', '".$img_path."nolines_minus.gif' );			
+    					$('#'+my_id).show();    					    								
+    					//$('#img_'+my_id).attr('src', '".$img_path."nolines_minus.gif' );			
     				});
     				
     				/*$('.doc_folder').click(function() {
@@ -2565,8 +2613,9 @@ return 'application/octet-stream';
     				});*/
     				
     				$('.close_div').click(function() {
-    					var my_id = this.id.split('_')[2];			
-    					$('#document_result_'+my_id).hide();
+    					var course_id = this.id.split('_')[2];
+    					var session_id = this.id.split('_')[3];			
+    					$('#document_result_'+course_id+'_'+session_id).hide();
     					$('.lp_resource').remove();
     				});
     				</script>";
@@ -2584,7 +2633,9 @@ return 'application/octet-stream';
     		}
     		</script>"; 
     	}
-    		  	
+    	if(!$user_in_course) {
+    		$return = '';
+    	}    		  	
     	return $return;    	
     }
     
@@ -2596,13 +2647,14 @@ return 'application/octet-stream';
     * @param	integer Enables the tree display by shifting the new elements a certain distance to the right
     * @return	string	The HTML list
     */
-    public function write_resources_tree($course_info, $resources_sorted, $num = 0, $lp_id = false, $target = '') {
+    public function write_resources_tree($course_info, $session_id, $resources_sorted, $num = 0, $lp_id = false, $target = '') {
     	require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
     	
     	$img_path = api_get_path(WEB_IMG_PATH);
     	$web_code_path = api_get_path(WEB_CODE_PATH);
     	
     	$return = '';
+    	
     	if (count($resources_sorted) > 0) {
     		foreach ($resources_sorted as $key => $resource) {
     			if (isset($resource['id']) && is_int($resource['id'])) {
@@ -2637,15 +2689,19 @@ return 'application/octet-stream';
     				}    				
     
     				$return .= '<div class="doc_resource">';    				
-    				$return .= '<div class="doc_folder"  id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; margin-right:5px;">';    				    				
-    				$return .= '<img style="cursor: pointer;" src="'.$img_path.'nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '"  '.$onclick.' >';
+    				$return .= '<div class="doc_folder"  id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; margin-right:5px;">';
+    				if ($lp_id) {    				    				
+    					$return .= '<img style="cursor: pointer;" src="'.$img_path.'nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '"  '.$onclick.' >';
+    				} else {
+    					$return .= '<span style="margin-left:16px">&nbsp;</span>';
+    				}
     				$return .= '<img alt="" src="'.$img_path.'lp_folder.gif" title="" align="absmiddle" />&nbsp;';    				
     				$return .= '<span '.$onclick.' style="cursor: pointer;" >'.$key.'</span>';    				
     				$return .= '</div>
     							<div style="display: none;" id="'.$resource['id'].'">';
     				
     				if (isset($resource['files'])) {
-    					$return .= self::write_resources_tree($course_info, $resource['files'], $num +1, $lp_id, $target);
+    					$return .= self::write_resources_tree($course_info, $session_id, $resource['files'], $num +1, $lp_id, $target);
     				}
     				$return .= '</div></div>';
     			} else {
@@ -2666,7 +2722,7 @@ return 'application/octet-stream';
     						$url  = api_get_self() . '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' .$lp_id;
     					} else {
     						//Direct document URL
-    						$url  = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id='.$key;
+    						$url  = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id_session='.$session_id.'&id='.$key;
     					}	
     					$img = $img_path.$icon;
     					$link = Display::url('<img alt="" src="'.$img.'" title="" />&nbsp;' . $my_file_title, $url, array('target' => $target));

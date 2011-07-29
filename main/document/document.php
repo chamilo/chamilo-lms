@@ -60,7 +60,6 @@ unset($_SESSION['paint_dir']);
 // Create directory certificates
 DocumentManager::create_directory_certificate_in_course(api_get_course_id());
 
-
 $course_info = api_get_course_info();
 
 //Hack in order to use document.php?id=X 
@@ -69,8 +68,11 @@ if (isset($_REQUEST['id'])) {
     
     //Redirect to the file path
     if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file') {
-    	$url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$document_data['path'].'?'.api_get_cidreq();    	    	
-    	header("Location: $url");
+    	$visibility = DocumentManager::is_visible_by_id($_REQUEST['id'], $course_info, api_get_session_id(), 'file');
+    	if ($visibility && api_is_allowed_to_session_edit()) {    		
+    		$url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$document_data['path'].'?'.api_get_cidreq();    	    	
+    		header("Location: $url");
+    	}
     	exit;
     }  
     //@todo replace all 

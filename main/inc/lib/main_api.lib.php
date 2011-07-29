@@ -1023,7 +1023,6 @@ function api_get_anonymous_id() {
 function api_get_cidreq() {
     return empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']).(api_get_session_id() == 0 ? '' : '&id_session='.api_get_session_id());
 }
-
 /**
  * Returns the current course info array.
  * Note: this array is only defined if the user is inside a course.
@@ -2706,7 +2705,7 @@ function api_get_track_item_property_history($tool, $ref) {
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
  */
-function api_get_item_property_info($course_id, $tool, $ref) {
+function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0) {
 
     $course_info    = api_get_course_info_by_id($course_id);
     $tool           = Database::escape_string($tool);
@@ -2714,7 +2713,11 @@ function api_get_item_property_info($course_id, $tool, $ref) {
 
     // Definition of tables.
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
-    $sql = "SELECT * FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = $ref ";
+   	$sql = "SELECT * FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = $ref ";
+   	if (!empty($session_id)) {
+   		$session_id = intval($session_id);
+   		$sql .= "AND id_session = $session_id ";
+   	}
     $rs  = Database::query($sql);    
     $row = array();
     if (Database::num_rows($rs) > 0) {

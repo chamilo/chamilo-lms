@@ -2718,15 +2718,23 @@ class CourseManager {
                 echo '<div style="float:right;">';
                 
                 if ($load_dirs) {
-                	echo '<a id="document_preview_'.$course['id'].'" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
+                	echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
                 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';                
-                	echo Display::div('', array('id' => 'document_result_'.$course['id'], 'class'=>'document_preview_container not_active'));
+                	echo Display::div('', array('id' => 'document_result_'.$course['id'].'_0', 'class'=>'document_preview_container'));
                 }
                 
                 if ($course['status'] == COURSEMANAGER) {
                     //echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'), array('style'=>'width: 11px; height: 11px;'));
                 }
                 echo '</div>';
+            } else {
+            	echo '<div style="float:right;">';            	
+            	if ($load_dirs) {
+            		echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
+            		echo Display::div('', array('id' => 'document_result_'.$course['id'].'_0', 'class'=>'document_preview_container'));
+            	}
+            	echo '</div>';
+            	
             }
     
             // Function logic - act on the data (check if the course is virtual, if yes change the link).
@@ -2844,7 +2852,7 @@ class CourseManager {
      * @todo move code for what's new icons to a separate function to clear things up
      * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
      */
-    function get_logged_user_course_html($course, $session_id = 0, $class = 'courses', $session_accessible = true) {
+    function get_logged_user_course_html($course, $session_id = 0, $class = 'courses', $session_accessible = true, $load_dirs = false) {
         global $nosession, $nbDigestEntries, $digest, $thisCourseSysCode, $orderKey;
         $charset = api_get_system_encoding();
     
@@ -2918,7 +2926,7 @@ class CourseManager {
         }
     
         $s_course_status = $my_course['status'];
-        $is_coach = api_is_coach($my_course['id_session'],$course['code']);
+        $is_coach = api_is_coach($my_course['id_session'], $course['code']);
             
         $s_htlm_status_icon = Display::return_icon('blackboard_blue.png', get_lang('Course'), array('width' => '48px'));
         /*
@@ -2965,6 +2973,15 @@ class CourseManager {
         $result .= '<li class="'.$class.'"><div class="coursestatusicons">'.$s_htlm_status_icon.'</div>';
         $result .= $session_title;
         
+        
+        if ($load_dirs) {        	
+        	$result .= '<div style="float:right;">';
+            $result .= '<a id="document_preview_'.$info['real_id'].'_'.$my_course['id_session'].'" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
+            $result .= Display::div('', array('id' => 'document_result_'.$info['real_id'].'_'.$my_course['id_session'], 'class'=>'document_preview_container not_active'));
+			$result .= '</div>';
+        }
+        
+        
         // Show the course_code and teacher if chosen to display this.
         if (api_get_setting('display_coursecode_in_courselist') == 'true' || api_get_setting('display_teacher_in_courselist') == 'true') {
             $result .= '<br />';
@@ -3007,6 +3024,7 @@ class CourseManager {
         }
     
         $result .= isset($course['special_course']) ? ' '.Display::return_icon('klipper.png', get_lang('CourseAutoRegister')) : '';
+
     
         $current_course_settings = CourseManager :: get_access_settings($my_course['k']);
     

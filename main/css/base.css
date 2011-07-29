@@ -2273,3 +2273,8 @@ div.admin_section h4 {
 #course_settings h3 img {
     margin-left: 25px;	
 }
+
+.document_preview_container {
+    font-size: 12px !important;
+    color: #111 ! important;	
+}

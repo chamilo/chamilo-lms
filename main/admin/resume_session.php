@@ -173,7 +173,7 @@ require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 
 if (api_get_multiple_access_url()) {
     echo '<tr><td>';   
-    echo get_lang('URL');    
+    echo 'URL';    
     echo '</td>';
     echo '<td>';
     $url_list = UrlManager::get_access_url_from_session($id_session);

@@ -3,7 +3,7 @@
 
 // name of the language file that needs to be included
 $language_file ='admin';
-$cidReset=true;
+$cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
@@ -23,10 +23,12 @@ $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $sql = "SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility FROM $tbl_session WHERE id = $id";
 $result = Database::query($sql);
 
-if (!$infos=Database::fetch_array($result)) {
+if (!$infos = Database::fetch_array($result)) {
     header('Location: session_list.php');
     exit();
 }
+
+$id_coach   = $infos['id_coach'];
 
 if (!api_is_platform_admin() && $infos['session_admin_id'] != api_get_user_id()) {
     api_not_allowed(true);
@@ -114,24 +116,24 @@ if (!empty($return)) {
   <td width="70%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); else echo api_htmlentities($infos['name'],ENT_QUOTES,$charset); ?>"></td>
 </tr>
 <tr>
-  <td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
-  <td width="70%"><select class="chzn-select" name="id_coach" style="width:380px;">
-	<option value="">----- <?php echo get_lang('Choose') ?> -----</option>
-<?php
-foreach($Coaches as $enreg) {
+	<td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
+	<td width="70%">
+		<select class="chzn-select" name="id_coach" style="width:380px;" title="<?php echo get_lang('Choose'); ?>" >
+			<option value="">----- <?php echo get_lang('None') ?> -----</option>
+			<?php foreach($Coaches as $enreg) { ?>
+			<option value="<?php echo $enreg['user_id']; ?>" <?php if(($enreg['user_id'] == $infos['id_coach']) || ($enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
+			<?php
+			}
+			unset($Coaches);
+			$Categories = SessionManager::get_all_session_category();
 ?>
-	<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && $enreg['user_id'] == $infos['id_coach']) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
-<?php
-}
-unset($Coaches);
-$Categories = SessionManager::get_all_session_category();
-?>
-  </select></td>
+  		</select>
+	</td>
 </tr>
 <tr>
   <td width="30%"><?php echo get_lang('SessionCategory') ?></td>
   <td width="70%">
-  	<select class="chzn-select" id="session_category" name="session_category" style="width:380px;">
+  	<select class="chzn-select" id="session_category" name="session_category" style="width:380px;" title="<?php echo get_lang('Select'); ?>">
 		<option value="0"><?php get_lang('None'); ?></option>
 		<?php
 		  if (!empty($Categories)) { 

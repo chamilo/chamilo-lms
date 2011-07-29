@@ -456,7 +456,8 @@ echo '</div>';
 */
 echo '<script>
 $(function() {
-	$( "#course_settings" ).accordion({
+	$("#course_settings").accordion({
+		autoHeight: false,		
 		header: "div> h3",
 	});
 });

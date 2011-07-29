@@ -178,24 +178,26 @@ $count_users = Database::result($rs, 0, 0);
 
 if (intval($count_users)<50) {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-	$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
+	$sql="SELECT user_id, lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
+	
 	global $_configuration;
 	if ($_configuration['multiple_access_urls']) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1){
-			$sql = 'SELECT username, lastname, firstname FROM '.$tbl_user.' user
+			$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
 			INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 			WHERE access_url_id = '.$access_url_id.'  AND status=1'.$order_clause;
 		}
 	}
-	$result=Database::query($sql);
-	$Coaches=Database::store_result($result);
+	$result = Database::query($sql);
+	$Coaches = Database::store_result($result);
+	
 	?>
-	<select id="coach_username" class="chzn-select" name="coach_username" value="true" style="width:350px;">
+	<select id="coach_username" class="chzn-select" name="coach_username" style="width:350px;" title="<?php echo get_lang('Select'); ?>" >
 		<option value="0"><?php get_lang('None'); ?></option>
 		<?php foreach($Coaches as $enreg): ?>
-		<option value="<?php echo $enreg['username']; ?>" <?php if($sent && $enreg['user_id'] == $id_coach) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
+		<option value="<?php echo $enreg['username']; ?>"> <?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 		<?php endforeach; ?>
 	</select>
 	<?php
@@ -212,13 +214,13 @@ $Categories = SessionManager::get_all_session_category();
 <tr>
   <td width="40%"><?php echo get_lang('SessionCategory') ?></td>
   <td width="60%">
-  	<select id="session_category" class="chzn-select" name="session_category" value="true" style="width:350px;">
+  	<select id="session_category" class="chzn-select" name="session_category" style="width:350px;" title="<?php echo get_lang('Select'); ?>">
 		<option value="0"><?php get_lang('None'); ?></option>		
 		<?php 
 		  if (!empty($Categories)) {
 		      foreach($Categories as $Rows) { ?>
-		<option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $id_session_category) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
-		<?php }
+				<option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $id_session_category) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
+			<?php }
 		  }
 		?>
 	</select>
@@ -244,7 +246,7 @@ $Categories = SessionManager::get_all_session_category();
 
   <td width="40%"></td>
   <td width="60%">
-  <input id="start_limit" type="checkbox" name="start_limit" onchange="disable_starttime(this)" <?php if ($year_start=="0000") echo "checked"; ?>/>
+  <input id="start_limit" type="checkbox" name="start_limit" onchange="disable_starttime(this)" />
     <label for="start_limit">
     <?php echo get_lang('DateStartSession');?>
     </label> 
@@ -316,7 +318,7 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 <tr>
     <td width="40%">&nbsp;&nbsp;</td>
     <td width="60%">
-    <input id="end_limit" type="checkbox" name="end_limit" onchange="disable_endtime(this)" <?php if ($year_end=="0000") echo "checked"; ?>/>
+    <input id="end_limit" type="checkbox" name="end_limit" onchange="disable_endtime(this)" />
     <label for="end_limit">
         <?php echo get_lang('DateEndSession') ?>
     </label>

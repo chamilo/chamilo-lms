@@ -67,13 +67,13 @@ $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 $form->addRule('visual_code', get_lang('Max'), 'maxlength', $maxlength);
 
-$form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers, array('style' => 'width:350px'));
+$form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_id'));
 $form->applyFilter('tutor_id', 'html_filter');
 
-$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'style="width:350px" multiple=multiple size=5');
+$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, ' id="course_teachers" style="width:350px" multiple="multiple" size="5"');
 $form->applyFilter('course_teachers', 'html_filter');
 
-$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories, array('style' => 'width:350px'));
+$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
 $form->applyFilter('category_code', 'html_filter');
 //This function fills the category_code select ...
 CourseManager::select_and_sort_categories($categories_select);

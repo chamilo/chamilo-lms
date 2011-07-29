@@ -53,7 +53,7 @@ $tools[$strSocial]['action=friends'] = get_lang('CountFriends');
 echo '<table><tr>';
 foreach ($tools as $section => $items) {
     echo '<td valign="top">';
-    echo '<b>'.$section.'</b>';
+    echo '<h3>'.$section.'</h3>';
     echo '<ul>';
     foreach ($items as $key => $value) {
         echo '<li><a href="index.php?'.$key.'">'.$value.'</a></li>';
@@ -62,6 +62,7 @@ foreach ($tools as $section => $items) {
     echo '</td>';
 }
 echo '</tr></table>';
+
 $course_categories = statistics::get_course_categories();
 echo '<br/><br/>';
 switch ($_GET['action']) {

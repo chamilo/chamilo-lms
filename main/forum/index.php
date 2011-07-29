@@ -114,15 +114,9 @@ $form_count = 0;
 $get_actions = isset($_GET['action']) ? $_GET['action'] : '';
 if (api_is_allowed_to_edit(false, true)) {
 	
-		//if is called from a learning path lp_id
-		if (!empty($_POST['lp_id'])){			
-			$lp_id=Security::remove_XSS($_POST['lp_id']);
-		}
-		else{
-			$lp_id=Security::remove_XSS($_GET['lp_id']);
-		}	
-		
-	    handle_forum_and_forumcategories($lp_id);
+	//if is called from a learning path lp_id	
+	$lp_id = isset($_REQUEST['lp_id']) ? Security::remove_XSS($_REQUEST['lp_id']): null;		
+	handle_forum_and_forumcategories($lp_id);
 }
 
 // Notification

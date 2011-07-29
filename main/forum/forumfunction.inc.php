@@ -794,7 +794,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     $id = Security::remove_XSS($id);
     if ($current_visibility_status == '1') {
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;';
+        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.api_get_group_id().'&amp;';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
                 echo $key.'='.$value.'&amp;';
@@ -836,7 +836,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
         echo 'action=unlock&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('lock.png', get_lang('Unlock'), array(), 22).'</a>';
     }
     if ($current_lock_status == '0') {
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;';
+        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.api_get_group_id().'&amp;';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
                 echo $key.'='.$value.'&amp;';
@@ -3395,7 +3395,8 @@ function search_link() {
     $return = '';
 
     if ($origin != 'learnpath') {
-        $return = '<a href="forumsearch.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;action=search&amp;origin='.$origin.'"> '; 
+    	
+        $return = '<a href="forumsearch.php?'.api_get_cidreq().'&amp;gidReq='.api_get_group_id().'&amp;action=search&amp;origin='.$origin.'"> '; 
         $return .= Display::return_icon('search.png', get_lang('Search'),'','32').'</a>';
         
         if (!empty($_GET['search'])) {

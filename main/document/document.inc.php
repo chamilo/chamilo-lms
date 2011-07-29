@@ -175,8 +175,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
     //$tooltip_title = str_replace('?cidReq='.$_GET['cidReq'], '', basename($path));
     $tooltip_title = explode('?', basename($path));
     //$tooltip_title = $tooltip_title[0];
-    $tooltip_title = $title;
-    
+    $tooltip_title = $title;   
 
     $tooltip_title_alt = $tooltip_title;
     if ($path == '/shared_folder') {
@@ -247,15 +246,24 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 			     return '<span style="float:left" '.$visibility_class.'>'.$title.'</span>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
             } elseif (
                 //Show preview sith yoxview
-                 preg_match('/swf$/i',  urldecode($url))  || 
-			     preg_match('/html$/i', urldecode($url))  || 
-			     preg_match('/htm$/i',  urldecode($url))  //|| (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
+				preg_match('/swf$/i',  urldecode($url))  ||
+            	preg_match('/png$/i',  urldecode($url))  ||
+            	preg_match('/gif$/i',  urldecode($url))  ||
+            	preg_match('/jpg$/i',  urldecode($url))  ||
+            	preg_match('/jpeg$/i',  urldecode($url))  ||
+            	preg_match('/bmp$/i',  urldecode($url))  ||
+            	preg_match('/svg$/i',  urldecode($url))              
+			     //preg_match('/html$/i', urldecode($url))  || 
+			     //preg_match('/htm$/i',  urldecode($url))  
+			     //|| (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
             ) {
+            	//yox view
 				$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
 				return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview" style="float:left" '.$visibility_class.'>'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
 			} else {
-			    //Show preview sith yoxview			
-            	return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview" style="float:left" '.$visibility_class.' >'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+				$url = 'showinframes.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
+			    //No yoxview			
+            	return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" style="float:left" '.$visibility_class.' >'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
 			}          
         } else {
             return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;

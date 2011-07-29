@@ -2263,7 +2263,10 @@ div.admin_section h4 {
     z-index: 20;
     margin:5px;
     padding:5px;
-    width: 380px;    
+    width: 400px;
+    height:280px;
+    overflow-y: auto;    
+    
 }
 
 

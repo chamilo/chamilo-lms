@@ -2552,11 +2552,17 @@ return 'application/octet-stream';
     	
     	if ($lp_id == false) {
     		$return .= "<script>
+    		
     		    	$('.doc_folder').mouseover(function() {	
-    					var my_id = this.id.split('_')[2];			
+    					var my_id = this.id.split('_')[2];    						
     					$('#'+my_id).show();    								
     					$('#img_'+my_id).attr('src', '".$img_path."nolines_minus.gif' );			
     				});
+    				
+    				/*$('.doc_folder').click(function() {
+    					var my_id = this.id.split('_')[2];    						
+    					$('#'+my_id).toggle();
+    				});*/
     				
     				$('.close_div').click(function() {
     					var my_id = this.id.split('_')[2];			

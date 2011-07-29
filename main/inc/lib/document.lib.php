@@ -2473,8 +2473,7 @@ return 'application/octet-stream';
         return $html;
     }
     
-    function get_document_preview($course_info, $lp_id = false) {
-    	
+    function get_document_preview($course_info, $lp_id = false, $target = '') {    	
     	if (!isset($course_info['dbName'])) {
     		$course_info = api_get_course_info($course_info['code']);
     	}
@@ -2498,54 +2497,89 @@ return 'application/octet-stream';
     	            	AND docs.path NOT LIKE '%_DELETED_%'
     	                AND last.tool = '".TOOL_DOCUMENT."' $condition_session ORDER BY docs.path ASC";
     	
-		$res_doc = Database::query($sql_doc);   	
-
-    	$return = '<div class="lp_resource">';
+		$res_doc = Database::query($sql_doc);
     	$resources = Database::store_result($res_doc);
+    	
+    	$return = '';
     	
     	$resources_sorted = array();
     	    	
     	if ($lp_id) {
 	    	$return .= '<div class="lp_resource_element">';    	
 	    	$return .= Display::return_icon('new_doc.gif', '', array(), 22);    	
-	    	$return .= Display::url(get_lang('NewDocument') , api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id);
+	    	$return .= Display::url(get_lang('NewDocument'), api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id);
 	    	$return .= '</div>';
+    	} else {
+    		$return .= Display::div(Display::url(Display::return_icon('delete.png', get_lang('Close'), array(), 22), '#', array('id'=>'close_div_'.$course_info['real_id'],'class' =>'close_div')), array('style' => 'position:absolute;right:10px'));
     	}
     	
     	// If you want to debug it, I advise you to do "echo" on the eval statements.
-    	
-    	foreach ($resources as $resource) {
-	    	$resource_paths = explode('/', $resource['path']);
-	    	array_shift($resource_paths);
-	    	$path_to_eval = $last_path = '';
-	    	$is_file = false;
-	    	foreach ($resource_paths as $key => $resource_path) {
-				if (strpos($resource_path, '.') === false && $key != count($resource_paths) - 1) {
-	    		// It's a folder.
-	    		$path_to_eval .= '["' . $resource_path . '"]["files"]';
-	    	} else
-	    		if (strpos($resource_path, '.') !== false)
-	    			$is_file = true;	    	
-	    			$last_path = $resource_path;
-	    	}
-	    	
-	    	if ($is_file) {
-	    		//for backward compatibility
-	    		if (empty($resource['title'])) {
-	    			$resource['title'] = basename($resource['path']);
-	    		}
-	    		eval ('$resources_sorted' . $path_to_eval . '[' . $resource['id'] . '] = "' .$resource['title']."/". $last_path. '";');
-	    	} else {
-	    		eval ('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["id"]=' . $resource['id'] . ';');
+    	if (!empty($resources)) {
+	    	foreach ($resources as $resource) {
+		    	$resource_paths = explode('/', $resource['path']);
+		    	array_shift($resource_paths);
+		    	$path_to_eval = $last_path = '';
+		    	$is_file = false;
+		    	foreach ($resource_paths as $key => $resource_path) {
+					if (strpos($resource_path, '.') === false && $key != count($resource_paths) - 1) {
+		    		// It's a folder.
+		    		$path_to_eval .= '["' . $resource_path . '"]["files"]';
+		    	} else
+		    		if (strpos($resource_path, '.') !== false)
+		    			$is_file = true;	    	
+		    			$last_path = $resource_path;
+		    	}
+		    	
+		    	if ($is_file) {
+		    		//for backward compatibility
+		    		if (empty($resource['title'])) {
+		    			$resource['title'] = basename($resource['path']);
+		    		}
+		    		eval ('$resources_sorted'.$path_to_eval.'['.$resource['id'].'] = "'.$resource['title']."/". $last_path.'";');
+		    	} else {
+		    		eval ('$resources_sorted'.$path_to_eval.'["'.$last_path.'"]["id"]='.$resource['id'].';');
+		    	}
 	    	}
     	}
     	
     	$label = get_lang('Documents');
     	$new_array[$label] = array('id' => 0, 'files' => $resources_sorted);
-    	$return .= self::write_resources_tree($course_info, $new_array, 0, $lp_id);    	    
-    	$return .= '</div>';
-    	return $return;
     	
+    	$return .= self::write_resources_tree($course_info, $new_array, 0, $lp_id, $target);    	
+    	
+    	$return = Display::div($return, array('class'=>'lp_resource'));    	
+    	$img_path = api_get_path(WEB_IMG_PATH);
+    	
+    	if ($lp_id == false) {
+    		$return .= "<script>
+    		    	$('.doc_folder').mouseover(function() {	
+    					var my_id = this.id.split('_')[2];			
+    					$('#'+my_id).show();    								
+    					$('#img_'+my_id).attr('src', '".$img_path."nolines_minus.gif' );			
+    				});
+    				
+    				$('.close_div').click(function() {
+    					var my_id = this.id.split('_')[2];			
+    					$('#document_result_'+my_id).hide();
+    					$('.lp_resource').remove();
+    				});
+    				</script>";
+    	} else {    		
+    		$return .=  "<script>
+    		
+    		function testResources(id, img) {
+	    		if (document.getElementById(id).style.display=='block'){
+	    			document.getElementById(id).style.display='none';
+	    			document.getElementById('img_'+id).src='".$img_path."nolines_plus.gif';
+	    		} else {
+	    			document.getElementById(id).style.display='block';
+    				document.getElementById('img_'+id).src='".$img_path."nolines_minus.gif';
+    			}
+    		}
+    		</script>"; 
+    	}
+    		  	
+    	return $return;    	
     }
     
     /**
@@ -2556,8 +2590,12 @@ return 'application/octet-stream';
     * @param	integer Enables the tree display by shifting the new elements a certain distance to the right
     * @return	string	The HTML list
     */
-    public function write_resources_tree($course_info, $resources_sorted, $num = 0, $lp_id = false) {
+    public function write_resources_tree($course_info, $resources_sorted, $num = 0, $lp_id = false, $target = '') {
     	require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
+    	
+    	$img_path = api_get_path(WEB_IMG_PATH);
+    	$web_code_path = api_get_path(WEB_CODE_PATH);
+    	
     	$return = '';
     	if (count($resources_sorted) > 0) {
     		foreach ($resources_sorted as $key => $resource) {
@@ -2586,16 +2624,22 @@ return 'application/octet-stream';
     				} elseif($key=='video') {
     					$key=get_lang('Video');
     				}
+    				
+    				$onclick = '';
+    				if ($lp_id) {
+    					$onclick = 'onclick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"';
+    				}    				
     
-    				$return .= '<div class="doc_resource">';
-    				$return .= '<div style="margin-left:' . ($num * 18) . 'px;margin-right:5px;">';
-    				    				
-    				$return .= '<img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '" onclick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;
-    							<span onclick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')" style="cursor: pointer;" >' . $key . '</span>
-    							</div><div style="display: none;" id="' . $resource['id'] . '">';
+    				$return .= '<div class="doc_resource">';    				
+    				$return .= '<div class="doc_folder"  id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; margin-right:5px;">';    				    				
+    				$return .= '<img style="cursor: pointer;" src="'.$img_path.'nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '"  '.$onclick.' >';
+    				$return .= '<img alt="" src="'.$img_path.'lp_folder.gif" title="" align="absmiddle" />&nbsp;';    				
+    				$return .= '<span '.$onclick.' style="cursor: pointer;" >'.$key.'</span>';    				
+    				$return .= '</div>
+    							<div style="display: none;" id="'.$resource['id'].'">';
     				
     				if (isset($resource['files'])) {
-    					$return .= self::write_resources_tree($course_info, $resource['files'], $num +1, $lp_id);
+    					$return .= self::write_resources_tree($course_info, $resource['files'], $num +1, $lp_id, $target);
     				}
     				$return .= '</div></div>';
     			} else {
@@ -2611,13 +2655,15 @@ return 'application/octet-stream';
 
     					// Show the "image name" not the filename of the image.
     					if ($lp_id) {
+    						//LP URL 
     						$lp_id = $this->lp_id;
     						$url  = api_get_self() . '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' .$lp_id;
     					} else {
-    						$url  = api_get_path(WEB_CODE_PATH).'document/document.php?cidReq='.$course_info['code'].'&id='.$key;
+    						//Direct document URL
+    						$url  = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id='.$key;
     					}	
-    					
-    					$link = Display::url('<img alt="" src="../img/' . $icon . '" title="" />&nbsp;' . $my_file_title, $url);
+    					$img = $img_path.$icon;
+    					$link = Display::url('<img alt="" src="'.$img.'" title="" />&nbsp;' . $my_file_title, $url, array('target' => $target));
     					 
     					$return .= '<div class="doc_resource"><div style="margin-left:' . (($num +1) * 18) . 'px;margin-right:5px;">';    					
     					$return .= $link;

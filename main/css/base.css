@@ -10,7 +10,6 @@
     width:180px;
 }
 
-
 a.tag {
     background-color: #E0EAF1;
     border-bottom: 1px solid #3E6D8E;
@@ -1944,12 +1943,10 @@ input.maininput:focus {
 
 div.lp_resource {
     padding:5px 10px;
-    width:450px;
-    
+    width:380px;    
     list-style-type: none;
     margin: 0;
-    padding: 0;    
-    
+    padding: 0;
 }
 
 .lp_resource_element, .lp_resource_element_no_link {
@@ -1966,7 +1963,7 @@ div.lp_resource {
 }   
 
 .doc_resource {
-    margin:5px;
+    margin:6px;
 }
 
 div.lp_tree {
@@ -2249,10 +2246,22 @@ div.admin_section h4 {
 }
 
 .document_preview_container {
-	background-color: #ccc;
+	
+    -webkit-border-radius: 6px;
+    -opera-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+        
+    -webkit-box-shadow: 0 2px 5px #C8C8C8;
+    -opera-box-shadow: 0 2px 5px #C8C8C8;
+    -moz-box-shadow: 0 2px 5px #C8C8C8;
+    box-shadow: 0 2px 5px #C8C8C8;   
+    
+	background-color: #F9F9F9;
+	
 	position: absolute;	  
     z-index: 20;
     margin:5px;
     padding:5px;
-    
+    width: 380px;    
 }

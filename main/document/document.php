@@ -60,9 +60,19 @@ unset($_SESSION['paint_dir']);
 // Create directory certificates
 DocumentManager::create_directory_certificate_in_course(api_get_course_id());
 
+
+$course_info = api_get_course_info();
+
 //Hack in order to use document.php?id=X 
 if (isset($_REQUEST['id'])) {
     $document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id());
+    
+    //Redirect to the file path
+    if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file') {
+    	$url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$document_data['path'].'?'.api_get_cidreq();    	    	
+    	header("Location: $url");
+    	exit;
+    }  
     //@todo replace all 
     $_GET['curdirpath'] = $document_data['path'];    
 }
@@ -84,11 +94,11 @@ $curdirpathurl = urlencode($curdirpath);
 $document_id = DocumentManager::get_document_id($_course, $curdirpath);
 
 if (!$document_id) {    
-    $document_id = DocumentManager::get_document_id(api_get_course_info(), $curdirpath);
+    $document_id = DocumentManager::get_document_id($course_info, $curdirpath);
 }
 
 $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
-$parent_id     = DocumentManager::get_document_id(api_get_course_info(), dirname($document_data['path']));
+$parent_id     = DocumentManager::get_document_id($course_info, dirname($document_data['path']));
 
 if (!$parent_id) {
     $parent_id = 0; 
@@ -494,7 +504,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         $my_get_move = intval($_REQUEST['move']);
 
         if (api_is_coach()) {
-            if (!DocumentManager::is_visible_by_id($my_get_move, api_get_course_info(), api_get_session_id())) {                    
+            if (!DocumentManager::is_visible_by_id($my_get_move, $course_info, api_get_session_id())) {                    
                 api_not_allowed();
             }
         }

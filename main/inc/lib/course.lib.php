@@ -2621,7 +2621,7 @@ class CourseManager {
      * @param int        user id
      * @return void
      */
-    function display_courses($user_id) {
+    function display_courses($user_id, $load_dirs = false) {
     
         global $_user, $_configuration;
     
@@ -2631,7 +2631,7 @@ class CourseManager {
         $all_user_categories = self :: get_user_course_categories();
     
         // Step 0: We display the course without a user category.
-        self :: display_courses_in_category(0, 'true');
+        self :: display_courses_in_category(0, $load_dirs);
     
         // Step 1: We get all the categories of the user.
         $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
@@ -2648,7 +2648,7 @@ class CourseManager {
                         echo $row['title'];
                         echo '</span>';
                     echo '</li>';
-                    self :: display_courses_in_category($row['id']);
+                    self :: display_courses_in_category($row['id'], $load_dirs);
             echo '</ul>';
             echo '</div>';
         }
@@ -2659,7 +2659,7 @@ class CourseManager {
      *  @param int      User category id
      *  @return void
      */
-    function display_courses_in_category($user_category_id) {
+    function display_courses_in_category($user_category_id, $load_dirs = false) {
     
         global $_user;
         // Table definitions
@@ -2717,10 +2717,11 @@ class CourseManager {
             if (api_is_platform_admin()) {
                 echo '<div style="float:right;">';
                 
-                echo '<a id="document_preview_'.$course['id'].'" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
-                echo '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';
-                echo '<div class="clear"></div>';
-                echo Display::div('', array('id' => 'document_result_'.$course['id'], 'class'=>'document_preview_container'));
+                if ($load_dirs) {
+                	echo '<a id="document_preview_'.$course['id'].'" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
+                	echo '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';                
+                	echo Display::div('', array('id' => 'document_result_'.$course['id'], 'class'=>'document_preview_container not_active'));
+                }
                 
                 if ($course['status'] == COURSEMANAGER) {
                     //echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'), array('style'=>'width: 11px; height: 11px;'));

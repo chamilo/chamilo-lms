@@ -54,8 +54,6 @@ require_once $libpath.'sessionmanager.lib.php';
 
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
-//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.toggle.js" type="text/javascript" language="javascript"></script>';
-
 /* Table definitions */
 
 // Database table definitions.
@@ -91,6 +89,10 @@ define('CONFVAL_dateFormatForInfosFromCourses', get_lang('dateFormatLong'));
 //define("CONFVAL_limitPreviewTo",SCRIPTVAL_NewEntriesOfTheDay);
 //define("CONFVAL_limitPreviewTo",SCRIPTVAL_NoTimeLimit);
 define("CONFVAL_limitPreviewTo", SCRIPTVAL_NewEntriesOfTheDayOfLastLogin);
+
+//$load_dirs = api_get_setting('courses_list_document_dynamic_dropdown');
+$load_dirs = true;
+
 
 // This is the main function to get the course list.
 $personal_course_list = UserManager::get_personal_session_course_list(api_get_user_id());
@@ -135,8 +137,6 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
         header('location:'.$url);            
         exit;
     }
-    
-
    /*
         if (api_get_setting('hide_courses_in_sessions') == 'true') {
             //Check sessions
@@ -150,8 +150,7 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
                 header('Location:'.api_get_path(WEB_CODE_PATH).'session/?session_id='.$session_list[$only_session_id]['id_session']);    
             }
         }
-    */
-    
+    */    
 }
 
 $nosession = false;
@@ -193,28 +192,45 @@ if (CONFVAL_showExtractInfo != SCRIPTVAL_UnderCourseList and $orderKey[0] != 'ke
     Header
     Include the HTTP, HTML headers plus the top banner.
 */
-$url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=document_preview';
 
-$htmlHeadXtra[] =  '<script type="text/javascript">
-
-$(document).ready( function() {
-	$(".document_preview").click(function() {
-		var my_id = this.id;
-		course_id = my_id.split("_")[2];
+if ($load_dirs) {
+	$url 			= api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=document_preview';
+	$folder_icon 	= api_get_path(WEB_IMG_PATH).'icons/22/folder.png';
+	$close_icon 	= api_get_path(WEB_IMG_PATH).'loading1.gif';
+	
+	$htmlHeadXtra[] =  '<script type="text/javascript">
+	
+	$(document).ready( function() {
 		
-		 
-		$.ajax({
-			url: "'.$url.'",
-			data: "course_id="+course_id,
-            success: function(return_value) {
-            	$("#document_result_" +course_id).html(return_value);
-            },
-        });
-        
+		$(".document_preview_container").hide();
+		
+		$(".document_preview").click(function() {
+			var my_id = this.id;
+			course_id = my_id.split("_")[2];
+			
+			//showing div
+			$(".document_preview_container").hide();
+					
+			$("#document_result_" +course_id).show();	
+			
+			//Loading		
+			var image = $("img", this);
+			image.attr("src", "'.$close_icon.'");		
+					
+			$.ajax({
+				url: "'.$url.'",
+				data: "course_id="+course_id,
+	            success: function(return_value) {
+	            	image.attr("src", "'.$folder_icon.'");
+	            	$("#document_result_" +course_id).html(return_value);
+	            	
+	            },
+	        });
+	        
+		});
 	});
-});
-
-</script>';
+	</script>';
+}
 
 
 Display :: display_header($nameTools);
@@ -401,7 +417,7 @@ if (is_array($courses_tree)) {
             if (!isset($_GET['history'])) { 
                // If we're not in the history view...
                 CourseManager :: display_special_courses(api_get_user_id());
-                CourseManager :: display_courses(api_get_user_id());
+                CourseManager :: display_courses(api_get_user_id(), $load_dirs);
             }
             // Independent sessions.
             foreach ($category['sessions'] as $session) {

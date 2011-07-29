@@ -695,13 +695,4 @@ if (!Array.prototype.pop) {
 
 };
 
-function testResources(id,img){
-	if(document.getElementById(id).style.display=='block'){
-		document.getElementById(id).style.display='none';
-		document.getElementById("img_"+id).src='../img/nolines_plus.gif';
-	}
-	else{
-		document.getElementById(id).style.display='block';
-		document.getElementById("img_"+id).src='../img/nolines_minus.gif';
-	}
-}
+

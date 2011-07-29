@@ -34,9 +34,6 @@ $language_file = 'learnpath';
 /* Header and action code */
 
 $currentstyle = api_get_setting('stylesheets');
-//$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/'.$currentstyle.'/learnpath.css"/>';
-//$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="learnpath.css" />'; //will be a merged with original learnpath.css
-$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="dtree.css" />'; //will be moved
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
 $("#learnpath_title").focus();

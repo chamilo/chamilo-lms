@@ -44,7 +44,7 @@ switch($action) {
 		break;
 	case 'document_preview':
 		$course_info = api_get_course_info_by_id($_REQUEST['course_id']);
-		echo DocumentManager::get_document_preview($course_info);
+		echo DocumentManager::get_document_preview($course_info, false, '_blank');
 		break;		
-}	
+}
 exit;

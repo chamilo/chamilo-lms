@@ -141,7 +141,7 @@ function lp_upload_quiz_action_handling() {
     $feedback_false_index = array();
     $number_questions = 0;
     // Reading all the first column items sequencially to create breakpoints
-    for ($i = 1; $i < $data->sheets[0]['numRows']; $i++) {
+    for ($i = 1; $i <= $data->sheets[0]['numRows']; $i++) {
         if ($data->sheets[0]['cells'][$i][1] == 'Quiz' && $i == 1) {
             $quiz_index = $i; // Quiz title position, only occurs once
         } elseif ($data->sheets[0]['cells'][$i][1] == 'Question') {
@@ -152,9 +152,9 @@ function lp_upload_quiz_action_handling() {
             $question_name_index_end[] = $i - 1; // Question name position
             $score_index[] = $i; // Question score position
         } elseif ($data->sheets[0]['cells'][$i][1] == 'FeedbackTrue') {
-            $feedback_true_index[] = $i; // FeedbackTrue position
+            $feedback_true_index[] = $i; // FeedbackTrue position (line)
         } elseif ($data->sheets[0]['cells'][$i][1] == 'FeedbackFalse') {
-            $feedback_false_index[] = $i; // FeedbackFalse position
+            $feedback_false_index[] = $i; // FeedbackFalse position (line)
         }
     }
     // Variables
@@ -170,7 +170,7 @@ function lp_upload_quiz_action_handling() {
     for ($i = 1; $i <= $data->sheets[0]['numRows']; $i++) {
         if (is_array($data->sheets[0]['cells'][$i])) {
             $column_data = $data->sheets[0]['cells'][$i];
-            // Fill all column with data
+            // Fill all column with data to have a full array
             for ($x = 1; $x <= $data->sheets[0]['numCols']; $x++) {
                 if (empty($column_data[$x])) {
                     $data->sheets[0]['cells'][$i][$x] = '';
@@ -185,16 +185,16 @@ function lp_upload_quiz_action_handling() {
         if ($quiz_index == $i) { // The title always in the first position
             $quiz = $column_data;
         } elseif (in_array($i, $question_title_index)) {
-            $question[$k] = $column_data;
+            $question[$k] = $column_data; //a complete line where 1st column is 'Question'
             $k++;
         } elseif (in_array($i, $score_index)) {
-            $score_list[$z] = $column_data;
+            $score_list[$z] = $column_data; //a complete line where 1st column is 'Score'
             $z++;
         } elseif (in_array($i, $feedback_true_index)) {
-            $feedback_true_list[$q] = $column_data;
+            $feedback_true_list[$q] = $column_data;//a complete line where 1st column is 'FeedbackTrue'
             $q++;
         } elseif (in_array($i, $feedback_false_index)) {
-            $feedback_false_list[$l] = $column_data;
+            $feedback_false_list[$l] = $column_data;//a complete line where 1st column is 'FeedbackFalse' for wrong answers
             $l++;
         }
     }
@@ -222,7 +222,9 @@ function lp_upload_quiz_action_handling() {
         // Variables
         $type = 2;
         $random = $active = $results = $max_attempt = $expired_time = 0;
-        $feedback = 3;
+        //make sure feedback is enabled (3 to disable), otherwise the fields
+        // added to the XLS are not shown, which is confusing
+        $feedback = 0; 
         // Quiz object
         $quiz_object = new Exercise();
         
@@ -248,12 +250,17 @@ function lp_upload_quiz_action_handling() {
                     if (strtolower($answer_data[3]) == 'x') {
                         $correct = 1;
                         $score = $score_list[$i][3];
+                        $comment = $feedback_true_list[$i][2];
+                    } else {
+                        $comment = $feedback_false_list[$i][2];                    	
                     }
+/*
                     if ($id == 1) {
                         $comment = $feedback_true_list[$i][2];
                     } elseif ($id == 2) {
                         $comment = $feedback_false_list[$i][2];
                     }
+*/
                     // Create answer
                     $unique_answer->create_answer($id, $question_id, ($answer), ($comment), $score, $correct);
                     $id++;

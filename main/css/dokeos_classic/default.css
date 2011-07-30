@@ -440,7 +440,7 @@ input[text] {
  *****************************************************/
 #header3 {
 	font-size: 1.0em;
-	padding: 0.8em 0.5em 0.4em 0.5em;
+	padding: 0.8em 0.5em 0em 0.5em;
 	background: #E5EDF9;
 	color: #006;
 	border-bottom: 1px solid #4171b5;
@@ -548,7 +548,7 @@ input[text] {
 #header4 {
 	background-color: #fff;
 	color: #009;
-	padding: 4px 0px 4px 21px;	
+	padding: 0;	
 	margin-bottom: 2px;
     float:left;
     width:98%;

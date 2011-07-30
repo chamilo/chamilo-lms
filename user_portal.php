@@ -207,11 +207,12 @@ if ($load_dirs) {
 		$(".document_preview").click(function() {
 			var my_id = this.id;
 			course_id = my_id.split("_")[2];
+            sess_id = my_id.split("_")[3];
 			
 			//showing div
 			$(".document_preview_container").hide();
 					
-			$("#document_result_" +course_id).show();	
+			$("#document_result_" +course_id+"_"+sess_id).show();	
 			
 			//Loading		
 			var image = $("img", this);
@@ -222,7 +223,7 @@ if ($load_dirs) {
 				data: "course_id="+course_id,
 	            success: function(return_value) {
 	            	image.attr("src", "'.$folder_icon.'");
-	            	$("#document_result_" +course_id).html(return_value);
+	            	$("#document_result_" +course_id+"_"+sess_id).html(return_value);
 	            	
 	            },
 	        });

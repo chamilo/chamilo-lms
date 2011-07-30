@@ -91,7 +91,7 @@ define('CONFVAL_dateFormatForInfosFromCourses', get_lang('dateFormatLong'));
 define("CONFVAL_limitPreviewTo", SCRIPTVAL_NewEntriesOfTheDayOfLastLogin);
 
 //$load_dirs = api_get_setting('courses_list_document_dynamic_dropdown');
-$load_dirs = true;
+$load_dirs = false;
 
 
 // This is the main function to get the course list.

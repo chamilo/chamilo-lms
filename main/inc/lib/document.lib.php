@@ -2497,25 +2497,25 @@ return 'application/octet-stream';
     	}
     	
     	//condition for the session
-    	if (isset($session_id) && !empty($session_id)) {
+        $current_session_id = 0;
+    	if (!empty($session_id)) {
     		$current_session_id  = intval($session_id);
-    	} else {
-    		$current_session_id = api_get_session_id();
     	}
     	
-    	if (!$user_in_course) 
-    	if (empty($current_session_id)) {    		
-    		if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
-    			$user_in_course = true;
-    		}    		
-    	} else {
-    		require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-    		$user_status = SessionManager::get_user_status_in_session($user_id, $course_info['code'], $current_session_id);
-    		if (in_array($user_status, array('0', '6'))) { //user and coach 
-    			$user_in_course = true;
-    		}    		 		
-    	}    	
-    	
+    	if (!$user_in_course)  {
+        	if (empty($current_session_id)) {    		
+        		if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
+        			$user_in_course = true;
+        		}    		
+        	} else {
+        		require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+        		$user_status = SessionManager::get_user_status_in_session($user_id, $course_info['code'], $current_session_id);
+        		if (in_array($user_status, array('0', '6'))) { //user and coach 
+        			$user_in_course = true;
+        		}    		 		
+        	}    	
+        }
+            	
     	$tbl_course 	= Database::get_main_table(TABLE_MAIN_COURSE);
     	$tbl_doc 		= Database::get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
     	$tbl_item_prop 	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_info['dbName']);
@@ -2528,18 +2528,16 @@ return 'application/octet-stream';
     	//$condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '".$course_info['code']."' )))";
     	$condition_session = " AND (id_session = '$current_session_id' OR  id_session = '0' )";
     	
-		$sql_doc = "SELECT last.visibility, docs.*
-    				FROM  $tbl_item_prop AS last, $tbl_doc AS docs
-    	            WHERE docs.id = last.ref
-    	            	AND docs.path LIKE '".$path.$added_slash."%'
-    	            	AND docs.path NOT LIKE '%_DELETED_%'
-    	                AND last.tool = '".TOOL_DOCUMENT."' $condition_session 
-    	                AND last.visibility = '1'
-					ORDER BY docs.path ASC";
-    	
-		$res_doc 	= Database::query($sql_doc);
+		$sql_doc = "SELECT last.visibility, docs.* ".
+    				" FROM  $tbl_item_prop AS last, $tbl_doc AS docs ".
+    	            " WHERE docs.id = last.ref ".
+    	            "   AND docs.path LIKE '".$path.$added_slash."%' ".
+    	            "   AND docs.path NOT LIKE '%_DELETED_%' ".
+    	            "   AND last.tool = '".TOOL_DOCUMENT."' $condition_session ". 
+    	            "   AND last.visibility = '1' ".
+					"ORDER BY docs.path ASC";
+    	$res_doc 	= Database::query($sql_doc);
     	$resources  = Database::store_result($res_doc);
-    	
     	$return = '';
     	
     	$resources_sorted = array();
@@ -2556,8 +2554,8 @@ return 'application/octet-stream';
     	
     	// If you want to debug it, I advise you to do "echo" on the eval statements.
     	if (!empty($resources) && $user_in_course) {
-	    	foreach ($resources as $resource) {
-	    		$item_info = api_get_item_property_info($course_info['real_id'], 'document', $resource['id'], $current_session_id);
+            foreach ($resources as $resource) {
+                $item_info = api_get_item_property_info($course_info['real_id'], 'document', $resource['id'], $current_session_id);
 	    		
 	    		if (empty($item_info)) {
 	    			continue;
@@ -2570,7 +2568,7 @@ return 'application/octet-stream';
 		    	foreach ($resource_paths as $key => $resource_path) {
 					if (strpos($resource_path, '.') === false && $key != count($resource_paths) - 1) {
 		    		// It's a folder.
-		    		$path_to_eval .= '["' . $resource_path . '"]["files"]';
+		    		$path_to_eval .= "['$resource_path']['files']";
 		    	} else
 		    		if (strpos($resource_path, '.') !== false)
 		    			$is_file = true;	    	
@@ -2655,7 +2653,6 @@ return 'application/octet-stream';
     	$web_code_path = api_get_path(WEB_CODE_PATH);
     	
     	$return = '';
-    	
     	if (count($resources_sorted) > 0) {
     		foreach ($resources_sorted as $key => $resource) {
     			if (isset($resource['id']) && is_int($resource['id'])) {

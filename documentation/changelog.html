@@ -36,6 +36,7 @@ This version of Chamilo only includes a few minor new features:
   <li>Students can download learning paths as PDF (changeset 3bd77279faee)</li>
   <li>Added tokens to certificates generation (changeset c2201eee3558)</li>
   <li>Attendances session support</li> 
+  <li>Added quick browsing of directories' documents - requires manual activation for now: in user_portal.php, find $load_dirs and set to $load_dirs = true;. Will be setable through admin page in next version (changeset 7f84869233c2)</li>
 </ul>
 <h3>Debugging</h3>
 <ul>
@@ -151,7 +152,7 @@ This version of Chamilo only includes a few minor new features:
             <li>All CSS were reduced and improved in order to use the base.css and base_chamilo.css styles</li>
             <li>Chosen library (select tag improved)added #3740</li>
         </ul>
-    </li>      
+    </li>
 </ul>
 <h3>Security</h3>
 <ul>
@@ -160,7 +161,7 @@ This version of Chamilo only includes a few minor new features:
   <li>Fixed several potential SQL injections #3601</li>
 </ul>
 <h3>Known issues</h3>
-<ul>  
+<ul>
   <li>Watermark portal images are now saved in the main/default_course_document/images/ folder. If you used portal-wide watermarks before, you might need to upload the watermark image again.</li>
   <li>A style-specific switch had been added in 1.8.8.2, which improved the appearance of older style but went against MVC's principles and broke copies of Chamilo-based styles. This switch has been removed, which may lead to the breadcrumb in non-chamilo-based styles to appear as less attractive, but keeps the MVC model safe so anyone can modify the appearance safely from the CSS. This might require very little cosmetic changes from you (in your style's default.css file), but we believe it's for the best.</li>
 </ul>

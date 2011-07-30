@@ -2550,7 +2550,8 @@ return 'application/octet-stream';
 	    	$return .= Display::url(get_lang('NewDocument'), api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id);
 	    	$return .= '</div>';
     	} else {
-    		$return .= Display::div(Display::url(Display::return_icon('delete.png', get_lang('Close'), array(), 22), '#', array('id'=>'close_div_'.$course_info['real_id'].'_'.$current_session_id,'class' =>'close_div')), array('style' => 'position:absolute;right:10px'));
+            $txt_sessid = (empty($session_id)?'0':(string)$session_id);
+    		$return .= Display::div(Display::url(Display::return_icon('delete.png', get_lang('Close'), array(), 22), '#', array('id'=>'close_div_'.$course_info['real_id'].'_'.$txt_sessid,'class' =>'close_div')), array('style' => 'position:absolute;right:10px'));
     	}
     	
     	// If you want to debug it, I advise you to do "echo" on the eval statements.

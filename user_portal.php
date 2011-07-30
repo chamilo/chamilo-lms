@@ -220,7 +220,7 @@ if ($load_dirs) {
 					
 			$.ajax({
 				url: "'.$url.'",
-				data: "course_id="+course_id,
+				data: "course_id="+course_id+"&sessid="+sess_id,
 	            success: function(return_value) {
 	            	image.attr("src", "'.$folder_icon.'");
 	            	$("#document_result_" +course_id+"_"+sess_id).html(return_value);

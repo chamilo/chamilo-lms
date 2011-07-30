@@ -45,7 +45,7 @@ switch($action) {
 	case 'document_preview':
 		$course_info = api_get_course_info_by_id($_REQUEST['course_id']);		
 		if (!empty($course_info) && is_array($course_info)) {
-			echo DocumentManager::get_document_preview($course_info, false, '_blank', $_REQUEST['session_id']);
+			echo DocumentManager::get_document_preview($course_info, false, '_blank', $_REQUEST['sessid']);
 		}
 		break;		
 }

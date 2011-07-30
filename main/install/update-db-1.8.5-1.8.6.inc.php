@@ -100,6 +100,9 @@ if (defined('SYSTEM_INSTALLATION')) {
 			}
 		}
 
+        require_once '../inc/lib/image.lib.php'; //this library has been created
+        // in 1.8.8, which makes this inclusion retroactively necessary in 
+        // updates from 1.8.5
 		// Filling the access_url_rel_user table with access_url_id by default = 1
 		$query = "SELECT user_id FROM $dbNameForm.user";
 
@@ -126,7 +129,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					$picture_location = $dir.$user_id.'/'.$file;
 					$big_picture_location = $dir.$user_id.'/big_'.$file;
 
-					$temp = new image($image_repository);
+					$temp = new Image($image_repository);
 
 					$picture_infos = getimagesize($image_repository);
 

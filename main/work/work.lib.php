@@ -930,7 +930,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
                     $action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'" >'.Display::return_icon('delete.png', get_lang('WorkDelete'),'',22).'</a>';
 					$row[] = $action;
 				    // the user that is not course admin can only edit/delete own document
-				} elseif ($row2['insert_user_id'] == $_user['user_id']) {
+				} elseif ($item_property_data['insert_user_id'] == $_user['user_id']) {
 					$action = '';					
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), 22).'</a>';					
 					if (api_get_course_setting('student_delete_own_publication') == 1) {

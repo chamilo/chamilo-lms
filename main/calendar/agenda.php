@@ -358,7 +358,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 // this is for students and whenever the courseaministrator has not chosen any action. It is in fact the default behaviour
 
-//if ($action == "view") {    
+if ($action == "view" || empty($action)) {    
 	if ($origin != 'learnpath') {	    
 		if ($_SESSION['view'] == 'month') {			
 		    display_monthcalendar($select_month, $select_year, $agenda_items);            
@@ -372,7 +372,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
             }
 		}
 	} 	
-//}	
+}	
 
 echo '</td></tr></table>';
 

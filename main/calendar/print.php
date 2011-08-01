@@ -44,32 +44,23 @@ $result			= Database::query($sql);
 <input type="button" value="<?php echo api_htmlentities(get_lang('Print'),ENT_QUOTES,$charset); ?>" onClick="javascript:window.print();" />
 </center>
 <br /><br />
-
 <?php
-while($row=Database::fetch_array($result))
-{
+while($row=Database::fetch_array($result)) {
 	$row['content'] = $row['content'];
 	$row['content'] = make_clickable($row['content']);
 	$row['content'] = text_filter($row['content']);
 	$row['content'] = str_replace('<a ','<a target="_blank" ',$row['content']);
 
-	if(!empty($row['title']))
-	{
-		echo '<b>'.$row['title'].'</b><br /><br />';
+	if(!empty($row['title'])) {
+		echo '<h2>'.$row['title'].'</h2><br />';
 	}
 
 	echo get_lang('StartTime').' : ';
-
-	echo api_convert_and_format_date($row["start_date"], null, date_default_timezone_get());
-
+	echo api_convert_and_format_date($row["start_date"]);
 	echo '<br />';
-
 	echo get_lang('EndTime').' : ';
-
-	echo api_convert_and_format_date($row["end_date"], null, date_default_timezone_get());
-
+	echo api_convert_and_format_date($row["end_date"]);
 	echo '<br /><br />';
-
 	echo $row['content'].'<hr size="1" noshade="noshade" />';
 }
 ?>

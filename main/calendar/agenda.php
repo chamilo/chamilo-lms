@@ -22,6 +22,9 @@ if(isset($_GET['id_session'])) {
 	$_SESSION['id_session'] = intval($_GET['id_session']);
 }
 
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+$origin = isset($_GET['origin']) ? $_GET['origin'] : null; 
+
 $this_section=SECTION_COURSES;
 
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
@@ -47,6 +50,9 @@ if (!empty($addresources)) {
 if (!empty($_GET['view'])) {
 	$_SESSION['view'] = Security::remove_XSS($_GET['view']);
 }
+
+
+
 
 /*
 	Libraries
@@ -103,7 +109,6 @@ $htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = to_javascript();
 $htmlHeadXtra[] = user_group_filter_javascript();
 
-
 // this loads the javascript that is needed for the date popup selection
 $htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
 
@@ -113,14 +118,14 @@ $nameTools = get_lang('Agenda'); // language variable in trad4all.inc.php
 // showing the header if we are not in the learning path, if we are in
 // the learning path, we do not include the banner so we have to explicitly
 // include the stylesheet, which is normally done in the header
-if (isset($_GET['toolgroup']) && $_GET['toolgroup']==strval(intval($_GET['toolgroup']))  ){
-	$_clean['toolgroup']=(int)$_GET['toolgroup'];
+if (isset($_GET['toolgroup']) && !empty($_GET['toolgroup'])){
+	$_clean['toolgroup']= intval($_GET['toolgroup']);
 	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
 	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".Security::remove_XSS($_GET['toolgroup']), "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 	Display::display_header($nameTools,'Agenda');
 
-} elseif (empty($_GET['origin']) or $_GET['origin'] != 'learnpath') {	
+} elseif (empty($origin) or $origin != 'learnpath') {	
     Display::display_header($nameTools,'Agenda');
 } else {
 	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".$clarolineRepositoryWeb."css/default.css\"/>";
@@ -170,10 +175,12 @@ if(!empty($_GET['month'])) {
 	$select_month = (int)$_GET['month'];
 }
 
+$select_day = '';
+
 if(!empty($_GET['day'])) {
     $select_day = (int)$_GET['day'];
 }
-
+$select_year = '';
 if (empty($select_year)) {
 	$today = getdate();
 	$select_year = $today['year'];	
@@ -192,7 +199,7 @@ display_student_links();
 echo '</div>';
 
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false,true))) {
-	switch ($_GET['action']) {
+	switch($action) {
 		case 'importical':
 			if(isset($_POST['ical_submit'])) {
                 $course_info = api_get_course_info();
@@ -210,12 +217,12 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
             }
             break;
 		case 'add':
-			if ($_POST['submit_event']) {
-		     	$course_info = api_get_course_info();
-			    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
-                $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
-                $safe_title = Security::remove_XSS($_POST['title']);
-                $safe_file_comment = Security::remove_XSS($_POST['file_comment']);
+			if (isset($_POST['submit_event']) && $_POST['submit_event']) {
+		     	$course_info 		= api_get_course_info();
+			    $event_start 		= (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
+                $event_stop   		= (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
+                $safe_title 		= Security::remove_XSS($_POST['title']);
+                $safe_file_comment 	= Security::remove_XSS($_POST['file_comment']);
                 
                 if ($_POST['empty_end_date'] == 'on' ) {
                 	$event_stop = '0000-00-00 00:00:00';
@@ -273,6 +280,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	}
 }
 
+// Getting agenda items
 
 $agenda_items = get_calendar_items($select_month, $select_year);
 
@@ -280,7 +288,7 @@ if ($_SESSION['view'] != 'month') {
     echo '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
     
     // THE LEFT PART
-    if (empty($_GET['origin']) or $_GET['origin']!='learnpath') {
+    if (empty($origin) or $origin !='learnpath') {
     	echo '<td width="220" height="19" valign="top">';
     	// the small calendar    	
     	if (api_get_setting('display_mini_month_calendar') == 'true') {	   
@@ -301,7 +309,7 @@ if ($_SESSION['view'] != 'month') {
 }
 
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false,true) )) {		
-	switch ($_GET['action']) {
+	switch ($action) {
 		case 'importical' :
 			if (isset($_POST['ical_submit'])) {
 		        if (!$is_ical) {
@@ -315,7 +323,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		    }
 		    break;
 		case 'add' :
-			if ($_POST['submit_event']) {
+			if (isset($_POST['submit_event']) && $_POST['submit_event']) {
 				display_agenda_items($agenda_items, $select_day);
 			} else {
 				show_add_form();
@@ -349,9 +357,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 }
 
 // this is for students and whenever the courseaministrator has not chosen any action. It is in fact the default behaviour
-if (!$_GET['action'] || $_GET['action']=="view") {    
-	if ($_GET['origin'] != 'learnpath') {	    
-		if ($_SESSION['view'] == 'month') {
+
+//if ($action == "view") {    
+	if ($origin != 'learnpath') {	    
+		if ($_SESSION['view'] == 'month') {			
 		    display_monthcalendar($select_month, $select_year, $agenda_items);            
 		} else {
 		  if (!empty($_GET['agenda_id'])) {
@@ -362,14 +371,13 @@ if (!$_GET['action'] || $_GET['action']=="view") {
                 display_agenda_items($agenda_items, $select_day);
             }
 		}
-	} else {
-		display_one_agenda_item($_GET['agenda_id']);
-	}
-}
+	} 	
+//}	
+
 echo '</td></tr></table>';
 
 /*		FOOTER */
 // The footer is displayed only if we are not in the learnpath
-if ($_GET['origin'] != 'learnpath') {
+if ($origin != 'learnpath') {
 	Display::display_footer();
 }

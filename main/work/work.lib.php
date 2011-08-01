@@ -429,59 +429,27 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	$row = Database::fetch_array($sql_result_num);
 	$count_files = $row[0];
 	
+    $table_header = array();
+    $table_has_actions_column = false;
 	$table_header[] = array(get_lang('Type'), false, 'style="width:40px"');
 	$table_header[] = array(get_lang('Title'), true);
 	
 	if ($count_files != 0) {
 		$table_header[] = array(get_lang('FirstName'), true);
 		$table_header[] = array(get_lang('LastName'), true);
-		if ($qualification_exists) 
+		if ($qualification_exists) {
 			$table_header[] = array(get_lang('Qualification'), true);
+        }
 	}
 	$table_header[] = array(get_lang('Date'), true, 'style="width:160px"');
 	
 	if ($is_allowed_to_edit) {
 		$table_header[] = array(get_lang('Actions'), false, 'style="width:90px"');
+        $table_has_actions_column = true;
 	}	
-	$table_header[] = array('RealDate', true);	
+    // the following column name seems both undefined and unused
+	//$table_header[] = array('RealDate', true);	
 
-	// An array with the setting of the columns -> 1: columns that we will show, 0:columns that will be hide
-	$column_show = array();
-	
-	$column_show[] = 1; // type
-	$column_show[] = 1; // title
-
-	if ($count_files != 0) {
-		$column_show[] = 1;	 // firstname
-		$column_show[] = 1;	 // lastname
-		if ($qualification_exists) {
-			$column_show[] = 1;	 // qualification
-		}
-	}
-
-	$column_show[] = 1; //date
-	if ($is_allowed_to_edit) {
-		$column_show[] = 1; // modify
-	}
-	$column_show[] = 0;	//real date in correct format	
-
-	// Here we change the way how the colums are going to be sort
-	// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
-	// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
-
-	$column_order = array();
-	$i=0;
-	foreach($table_header as $item) {
-		$column_order[$i] = $i;
-		$i++;
-	}	
-    
-	if ($count_files != 0) {        
-    	$column_order[2] = 2;
-	} else {
-        $column_order[2] = 4;
-	}
-	
 	$table_data = array();
 	$dirs_list = get_subdirs_list($work_dir);
 	
@@ -885,10 +853,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 
 				$qualification_string = '';
 				$add_string = '';
-				
-				
-				
-				
+
 				if ($qualification_exists) {
 					if ($work->qualification == '') {
 						$qualification_string = '<b style="color:orange"> - </b>';
@@ -909,18 +874,18 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				$row[] = $user_info['firstname']; // $work->author;
 				$row[] = $user_info['lastname'];
 				
-				if ($qualification_exists)
+				if ($qualification_exists) {
 					$row[] = $qualification_string;
-			
+                }
 				$work_sent_date_local = api_get_local_time($work->sent_date);				
 				$row[] = date_to_str_ago($work_sent_date_local).$add_string.'<br /><span class="dropbox_date">'.api_format_date($work_sent_date_local).'</span>';
 
 				if ($is_allowed_to_edit) {
 					$action = '';					
-					if ($qualification_exists)
+					if ($qualification_exists) {
 						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  >'.
 									Display::return_icon('rate_work.png', get_lang('CorrectAndRate'),array(), 22).'</a>';
-					
+                    }
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;move='.$work->id.'" title="'.get_lang('Move').'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
 					if ($work->accepted == '1') {
 						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;make_invisible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Invisible').'" >'.Display::return_icon('visible.png', get_lang('Invisible'),array(), 22).'</a>';
@@ -930,7 +895,11 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
                     $action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'" >'.Display::return_icon('delete.png', get_lang('WorkDelete'),'',22).'</a>';
 					$row[] = $action;
 				    // the user that is not course admin can only edit/delete own document
-				} elseif ($item_property_data['insert_user_id'] == $_user['user_id']) {
+				} elseif ($is_author && empty($work->qualification)) {
+                    if (!$table_has_actions_column) {
+                    	$table_header[] = array(get_lang('Actions'), false, 'style="width:90px"');
+                        $table_has_actions_column = true;
+                    }
 					$action = '';					
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), 22).'</a>';					
 					if (api_get_course_setting('student_delete_own_publication') == 1) {
@@ -947,6 +916,43 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	}
 	$sorting_options = array();
 	$sorting_options['column'] = 1;
+
+    // Here we change the way how the colums are going to be sorted
+    // in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
+    // because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
+
+    $column_order = array();
+    $i=0;
+    foreach($table_header as $item) {
+        $column_order[$i] = $i;
+        $i++;
+    }   
+    
+    if ($count_files != 0) {        
+        $column_order[2] = 2;
+    } else {
+        $column_order[2] = 4;
+    }
+
+    // An array with the setting of the columns -> 1: columns that we will show, 0:columns that will be hide
+    $column_show = array();
+    
+    $column_show[] = 1; // type
+    $column_show[] = 1; // title
+
+    if ($count_files != 0) {
+        $column_show[] = 1;  // firstname
+        $column_show[] = 1;  // lastname
+        if ($qualification_exists) {
+            $column_show[] = 1;  // qualification
+        }
+    }
+
+    $column_show[] = 1; //date
+    if ($table_has_actions_column) {
+        $column_show[] = 1; // modify
+    }
+    $column_show[] = 0; //real date in correct format   
 
 	$paging_options = array();
 	if (isset($_GET['curdirpath'])) {

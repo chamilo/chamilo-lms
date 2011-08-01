@@ -65,7 +65,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $default_filter = $_REQUEST['filter'];
         }       
     } else {
-        $default_filter = 'today';      
+        $default_filter = 'all';      
     }   
     $form->setDefaults(array('filter'=>$default_filter));
     $param_filter = '&filter='.Security::remove_XSS($default_filter);

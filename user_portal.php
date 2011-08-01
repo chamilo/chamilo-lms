@@ -206,12 +206,13 @@ if ($load_dirs) {
 		
 		$(".document_preview").click(function() {
 			var my_id = this.id;
-			course_id = my_id.split("_")[2];
+			var course_id  = my_id.split("_")[2];
+			var session_id = my_id.split("_")[3];
 			
 			//showing div
 			$(".document_preview_container").hide();
 					
-			$("#document_result_" +course_id).show();	
+			$("#document_result_" +course_id+"_" + session_id).show();	
 			
 			//Loading		
 			var image = $("img", this);
@@ -219,10 +220,10 @@ if ($load_dirs) {
 					
 			$.ajax({
 				url: "'.$url.'",
-				data: "course_id="+course_id,
+				data: "course_id="+course_id+"&session_id="+session_id,
 	            success: function(return_value) {
 	            	image.attr("src", "'.$folder_icon.'");
-	            	$("#document_result_" +course_id).html(return_value);
+	            	$("#document_result_" +course_id+"_" + session_id).html(return_value);
 	            	
 	            },
 	        });
@@ -444,7 +445,7 @@ if (is_array($courses_tree)) {
                     }
                     if ($session_now > $allowed_time) { //read only and accesible
                         if (api_get_setting('hide_courses_in_sessions') == 'false') {  
-                            $c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',true);
+                            $c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item', true, $load_dirs);
                             //$c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',($session['details']['visibility']==3?false:true));
                             $html_courses_session .= $c[1];
                         }
@@ -531,8 +532,7 @@ if (is_array($courses_tree)) {
 
                     echo '<div class="userportal-session-category-item" id="session_category_'.$category['details']['id'].'">';
                     echo '<div class="session_category_title_box" id="session_category_title_box_'.$category['details']['id'].'" style="color: #555555;">';
-                    //echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'category_img_'.$category['details']['id']));
-
+            
                     echo Display::return_icon('folder_blue.png', get_lang('SessionCategory'), array('width'=>'48px', 'align' => 'absmiddle'));
 
                     if (api_is_platform_admin()) {

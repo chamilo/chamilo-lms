@@ -893,8 +893,13 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $row['type'] = $document_data['filetype'];        
 
         // If the item is invisible, wrap it in a span with class invisible
-        $invisibility_span_open  = ($document_data['visibility'] == 0) ? '<span class="invisible">' : '';
-        $invisibility_span_close = ($document_data['visibility'] == 0) ? '</span>' : '';
+        
+        $is_visible = DocumentManager::is_visible_by_id($document_data['id'], $course_info, api_get_session_id(), api_get_user_id(), false);
+        
+        $invisibility_span_open  = ($is_visible == 0) ? '<span class="invisible">' : '';
+        $invisibility_span_close = ($is_visible == 0) ? '</span>' : '';
+                
+        
         // Size (or total size of a directory)
         $size = $document_data['filetype'] == 'folder' ? get_total_folder_size($document_data['path'], $is_allowed_to_edit) : $document_data['size'];
         
@@ -942,7 +947,8 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         }
 
         // Icons (clickable)
-        $row[] = create_document_link($document_data,  true, $count);
+        $row[] = create_document_link($document_data,  true, $count, $is_visible);
+        
         $path_info = pathinfo($document_data['path']);
                 
         if (isset($path_info['extension']) && in_array($path_info['extension'], array('ogg', 'mp3','wav'))) {
@@ -952,8 +958,8 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         // Validacion when belongs to a session
         $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
                 
-        // Document title with hyperlink        
-        $row[] = create_document_link($document_data).$session_img.'<br />'.$invisibility_span_open.'<i>'.nl2br(htmlspecialchars($document_data['comment'],ENT_QUOTES,$charset)).'</i>'.$invisibility_span_close.$user_link;
+        // Document title with link        
+        $row[] = create_document_link($document_data, false, null, $is_visible).$session_img.'<br />'.$invisibility_span_open.'<i>'.nl2br(htmlspecialchars($document_data['comment'],ENT_QUOTES,$charset)).'</i>'.$invisibility_span_close.$user_link;
     
         // Comments => display comment under the document name
         $display_size = format_file_size($size);
@@ -971,9 +977,9 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
             $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;            
             // If readonly, check if it the owner of the file or if the user is an admin            
             if ($document_data['insert_user_id'] == api_get_user_id() || api_is_platform_admin()) {                
-                $edit_icons = build_edit_icons($document_data, $key, $is_template, 0);
+                $edit_icons = build_edit_icons($document_data, $key, $is_template, 0, $is_visible);
             } else {          
-                $edit_icons = build_edit_icons($document_data, $key, $is_template, $document_data['readonly']);
+                $edit_icons = build_edit_icons($document_data, $key, $is_template, $document_data['readonly'], $is_visible);
             }
             $row[] = $edit_icons;
         }

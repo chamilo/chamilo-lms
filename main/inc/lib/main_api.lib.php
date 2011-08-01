@@ -2712,12 +2712,13 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0) {
     $ref            = intval($ref);
 
     // Definition of tables.
-    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
+    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_info['dbName']);
    	$sql = "SELECT * FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = $ref ";
    	if (!empty($session_id)) {
    		$session_id = intval($session_id);
    		$sql .= "AND id_session = $session_id ";
    	}
+   	
     $rs  = Database::query($sql);    
     $row = array();
     if (Database::num_rows($rs) > 0) {

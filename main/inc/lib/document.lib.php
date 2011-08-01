@@ -1130,11 +1130,11 @@ return 'application/octet-stream';
      * @param   array  	$course the _course array info of the document's course
      * @return  bool	
      */
-    public static function is_visible_by_id($doc_id, $course_info, $session_id, $user_id) {
+    public static function is_visible_by_id($doc_id, $course_info, $session_id, $user_id, $admins_can_see_everything = true) {
     	$is_visible		= false;
     	$user_in_course = false;
     	
-    	//Checking the course array
+    	//1. Checking the course array
     	if (empty($course_info)) {
     		$course_info = api_get_course_info();
     		if (empty($course_info)) {
@@ -1146,9 +1146,10 @@ return 'application/octet-stream';
     	$session_id = intval($session_id);
     	
     	
-    	// Course and session visibility is handle in local.inc.php
+    	//2. Course and Session visibility are handle in local.inc.php/global.inc.php
     	
-    	//Checking if user exist in course/session
+    	//3. Checking if user exist in course/session
+    	
     	if ($session_id == 0 ) {
 			if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
 				$user_in_course = true;
@@ -1156,21 +1157,52 @@ return 'application/octet-stream';
     	} else {
     		$user_status = SessionManager::get_user_status_in_session($user_id, $course_info['code'], $session_id);
     		if (in_array($user_status, array('0', '6'))) {
-    			//student or coach
+    			//is true if is an student or a coach
     			$user_in_course = true;
     		}    		
-    	}    	
+    	}
     	
-    	if ($user_in_course) {
-	    	$item_info = api_get_item_property_info($course['real_id'], 'document', $doc_id, $session_id);
-	    	if (isset($item_info['visibility'])) {
-	    		if (api_is_platform_admin()) {
-	    			return true;
-	    		}
-	    		if ($item_info['visibility'] == 1) {	    	
-	    			return true;
-	    		}
-	    	}
+    	
+    	//4. Checking document visibility (i'm repeating the code in order to be more clear when reading ) - jm 
+    	
+    	if ($user_in_course) {    		
+    		
+    		//4.1 Checking document visibility for a Course
+    		
+    		if ($session_id == 0) {
+    			$item_info 	= api_get_item_property_info($course_info['real_id'], 'document', $doc_id, 0);
+    			
+    			if (isset($item_info['visibility'])) {
+    				// True for admins if document exists
+    				if ($admins_can_see_everything && api_is_platform_admin()) {
+    					return true;
+    				}
+    				if ($item_info['visibility'] == 1) {
+    					return true;
+    				}
+    			}    			
+    		} else {
+    			//4.2 Checking document visibility for a Course in a Session
+    			$item_info 			  = api_get_item_property_info($course_info['real_id'], 'document', $doc_id, 0);
+    			$item_info_in_session = api_get_item_property_info($course_info['real_id'], 'document', $doc_id, $session_id);
+    			
+    			// True for admins if document exists
+    			if (isset($item_info['visibility'])) {
+    				if ($admins_can_see_everything && api_is_platform_admin())
+    					return true;
+    			}
+    					
+    			if (isset($item_info_in_session['visibility'])) {
+    				//if ($doc_id == 85) { var_dump($item_info_in_session);}
+    				if ($item_info_in_session['visibility'] == 1) {
+    					return true;
+    				}	
+    			} else {
+    				if ($item_info['visibility'] == 1) {
+    					return true;
+    				}
+    			}
+    		}
     	}
     	
     	return false;
@@ -2579,7 +2611,7 @@ return 'application/octet-stream';
 					"ORDER BY docs.path ASC";
     	$res_doc 	= Database::query($sql_doc);
     	$resources  = Database::store_result($res_doc);
-    	$return = '';
+    	$return 	= '';
     	
     	$resources_sorted = array();
     	    	
@@ -2589,18 +2621,19 @@ return 'application/octet-stream';
 	    	$return .= Display::url(get_lang('NewDocument'), api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id);
 	    	$return .= '</div>';
     	} else {            
-    		$return .= Display::div(Display::url(Display::return_icon('delete.png', get_lang('Close'), array(), 22), '#', array('id'=>'close_div_'.$course_info['real_id'].'_'.$session_id,'class' =>'close_div')), array('style' => 'position:absolute;right:10px'));
+    		$return .= Display::div(Display::url(Display::return_icon('delete.png', get_lang('Close'), array(), 22), 'javascript:void();', array('id'=>'close_div_'.$course_info['real_id'].'_'.$session_id,'class' =>'close_div')), array('style' => 'position:absolute;right:10px'));
     	}
     	
     	// If you want to debug it, I advise you to do "echo" on the eval statements.
     	if (!empty($resources) && $user_in_course) {
             foreach ($resources as $resource) {
-                $item_info = api_get_item_property_info($course_info['real_id'], 'document', $resource['id'], $session_id);
-	    		
-	    		if (empty($item_info)) {
-	    			continue;
-	    		}
-	    		
+            	
+            	$is_visible = self::is_visible_by_id($resource['id'], $course_info, $session_id, api_get_user_id());
+            	
+            	if (!$is_visible) {
+            		continue;
+            	}
+            	
 		    	$resource_paths = explode('/', $resource['path']);
 		    	array_shift($resource_paths);
 		    	$path_to_eval = $last_path = '';
@@ -2642,14 +2675,8 @@ return 'application/octet-stream';
     		
     		    	$('.doc_folder').mouseover(function() {	
     					var my_id = this.id.split('_')[2];    						
-    					$('#'+my_id).show();    					    								
-    					//$('#img_'+my_id).attr('src', '".$img_path."nolines_minus.gif' );			
-    				});
-    				
-    				/*$('.doc_folder').click(function() {
-    					var my_id = this.id.split('_')[2];    						
-    					$('#'+my_id).toggle();
-    				});*/
+    					$('#'+my_id).show();
+    				});    				
     				
     				$('.close_div').click(function() {
     					var course_id = this.id.split('_')[2];
@@ -2658,7 +2685,8 @@ return 'application/octet-stream';
     					$('.lp_resource').remove();
     				});
     				</script>";
-    	} else {    		
+    	} else {    	
+    		//For LPs	
     		$return .=  "<script>
     		
     		function testResources(id, img) {

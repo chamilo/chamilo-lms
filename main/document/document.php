@@ -68,7 +68,7 @@ if (isset($_REQUEST['id'])) {
     
     //Redirect to the file path
     if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file') {
-    	$visibility = DocumentManager::is_visible_by_id($_REQUEST['id'], $course_info, api_get_session_id(), 'file');
+    	$visibility = DocumentManager::is_visible_by_id($_REQUEST['id'], $course_info, api_get_session_id(), api_get_user_id());
     	if ($visibility && api_is_allowed_to_session_edit()) {    		
     		$url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$document_data['path'].'?'.api_get_cidreq();    	    	
     		header("Location: $url");
@@ -294,7 +294,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'download') {
     // Launch event
     event_download($document_data['url']);
     // Check visibility of document and paths
-    if (!($is_allowed_to_edit || $group_member_with_upload_rights) && !DocumentManager::is_visible_by_id($my_get_id, $_course, api_get_session_id(), 'file' )) {
+    if (!($is_allowed_to_edit || $group_member_with_upload_rights) && !DocumentManager::is_visible_by_id($my_get_id, $_course, api_get_session_id(), api_get_user_id())) {
         api_not_allowed(true);
     }
     $full_file_name = $base_work_dir.$document_data['path'];
@@ -506,7 +506,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         $my_get_move = intval($_REQUEST['move']);
 
         if (api_is_coach()) {
-            if (!DocumentManager::is_visible_by_id($my_get_move, $course_info, api_get_session_id())) {                    
+            if (!DocumentManager::is_visible_by_id($my_get_move, $course_info, api_get_session_id(), api_get_user_id())) {                    
                 api_not_allowed();
             }
         }
@@ -552,7 +552,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         }
 
         if (api_is_coach()) {               
-            if (!DocumentManager::is_visible_by_id($_POST['move_file'], $_course, api_get_session_id())) {                    
+            if (!DocumentManager::is_visible_by_id($_POST['move_file'], $_course, api_get_session_id(), api_get_user_id())) {                    
                 api_not_allowed();
             }
         }
@@ -727,7 +727,7 @@ if ($is_allowed_to_edit) {
         
         if (!$is_allowed_to_edit) {                
             if (api_is_coach()) {                
-                if (!DocumentManager::is_visible_by_id($update_id, $_course, api_get_session_id())) {                    
+                if (!DocumentManager::is_visible_by_id($update_id, $_course, api_get_session_id(), api_get_user_id())) {                    
                     api_not_allowed();
                 }
             }                

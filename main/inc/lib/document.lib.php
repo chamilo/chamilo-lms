@@ -14,6 +14,7 @@
  */
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 /* CONSTANTS */
 
@@ -1122,20 +1123,62 @@ return 'application/octet-stream';
     }
 
     /**
-     * return true if the documentpath have visibility=1 as item_property
+     * Return true if user can see a file
      *
      * @param   int     document id
      * @param   array   course info
-     * @param array  $course the _course array info of the document's course
+     * @param   array  	$course the _course array info of the document's course
+     * @return  bool	
      */
-    public static function is_visible_by_id($id, $course, $session_id = 0, $file_type = 'file') {
-        $docTable  = Database::get_course_table(TABLE_DOCUMENT, $course['dbName']);
-        $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);
-        $id         = intval($id);
-        $session_id = intval($session_id);
-        //$condition  = "AND id_session = $session_id";
+    public static function is_visible_by_id($doc_id, $course_info, $session_id, $user_id) {
+    	$is_visible		= false;
+    	$user_in_course = false;
+    	
+    	//Checking the course array
+    	if (empty($course_info)) {
+    		$course_info = api_get_course_info();
+    		if (empty($course_info)) {
+    			return false;
+    		}    		
+    	}
+    	
+    	$doc_id     = intval($doc_id);
+    	$session_id = intval($session_id);
+    	
+    	
+    	// Course and session visibility is handle in local.inc.php
+    	
+    	//Checking if user exist in course/session
+    	if ($session_id == 0 ) {
+			if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
+				$user_in_course = true;
+    		}
+    	} else {
+    		$user_status = SessionManager::get_user_status_in_session($user_id, $course_info['code'], $session_id);
+    		if (in_array($user_status, array('0', '6'))) {
+    			//student or coach
+    			$user_in_course = true;
+    		}    		
+    	}    	
+    	
+    	if ($user_in_course) {
+	    	$item_info = api_get_item_property_info($course['real_id'], 'document', $doc_id, $session_id);
+	    	if (isset($item_info['visibility'])) {
+	    		if (api_is_platform_admin()) {
+	    			return true;
+	    		}
+	    		if ($item_info['visibility'] == 1) {	    	
+	    			return true;
+	    		}
+	    	}
+    	}
+    	
+    	return false;
+    	
+    	/*
+        $docTable  = Database::get_course_table(TABLE_DOCUMENT, 	 $course['dbName']);
+        $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);        
         $condition = "AND id_session IN  ('$session_id', '0') ";
-
         if (!in_array($file_type, array('file','folder'))) {
             $file_type = 'file';
         }
@@ -1150,9 +1193,11 @@ return 'application/octet-stream';
                 $is_visible = $_SESSION['is_allowed_in_course'] || api_is_platform_admin();
             }
         }
+        
         //improved protection of documents viewable directly through the url: incorporates the same protections of the course at the url of documents:  access allowed for the whole world Open, access allowed for users registered on the platform Private access, document accessible only to course members (see the Users list), Completely closed; the document is only accessible to the course admin and teaching assistants.
         //return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
         return $is_visible;
+        */
     }
 
 
@@ -2496,20 +2541,16 @@ return 'application/octet-stream';
     		}
     	}
     	
-    	//condition for the session
-        $current_session_id = 0;
-    	if (!empty($session_id)) {
-    		$current_session_id  = intval($session_id);
-    	}
+    	//condition for the session        
+    	$session_id  = intval($session_id);    	
     	
     	if (!$user_in_course)  {
-        	if (empty($current_session_id)) {    		
+        	if (empty($session_id)) {    		
         		if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
         			$user_in_course = true;
         		}    		
-        	} else {
-        		require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-        		$user_status = SessionManager::get_user_status_in_session($user_id, $course_info['code'], $current_session_id);
+        	} else {        		
+        		$user_status = SessionManager::get_user_status_in_session($user_id, $course_info['code'], $session_id);
         		if (in_array($user_status, array('0', '6'))) { //user and coach 
         			$user_in_course = true;
         		}    		 		
@@ -2525,8 +2566,8 @@ return 'application/octet-stream';
     	$added_slash = ($path == '/') ? '' : '/';
     	
 
-    	//$condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '".$course_info['code']."' )))";
-    	$condition_session = " AND (id_session = '$current_session_id' OR  id_session = '0' )";
+    	//$condition_session = " AND (id_session = '$session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '".$course_info['code']."' )))";
+    	$condition_session = " AND (id_session = '$session_id' OR  id_session = '0' )";
     	
 		$sql_doc = "SELECT last.visibility, docs.* ".
     				" FROM  $tbl_item_prop AS last, $tbl_doc AS docs ".
@@ -2547,15 +2588,14 @@ return 'application/octet-stream';
 	    	$return .= Display::return_icon('new_doc.gif', '', array(), 22);    	
 	    	$return .= Display::url(get_lang('NewDocument'), api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id);
 	    	$return .= '</div>';
-    	} else {
-            $txt_sessid = (empty($session_id)?'0':(string)$session_id);
-    		$return .= Display::div(Display::url(Display::return_icon('delete.png', get_lang('Close'), array(), 22), '#', array('id'=>'close_div_'.$course_info['real_id'].'_'.$txt_sessid,'class' =>'close_div')), array('style' => 'position:absolute;right:10px'));
+    	} else {            
+    		$return .= Display::div(Display::url(Display::return_icon('delete.png', get_lang('Close'), array(), 22), '#', array('id'=>'close_div_'.$course_info['real_id'].'_'.$session_id,'class' =>'close_div')), array('style' => 'position:absolute;right:10px'));
     	}
     	
     	// If you want to debug it, I advise you to do "echo" on the eval statements.
     	if (!empty($resources) && $user_in_course) {
             foreach ($resources as $resource) {
-                $item_info = api_get_item_property_info($course_info['real_id'], 'document', $resource['id'], $current_session_id);
+                $item_info = api_get_item_property_info($course_info['real_id'], 'document', $resource['id'], $session_id);
 	    		
 	    		if (empty($item_info)) {
 	    			continue;

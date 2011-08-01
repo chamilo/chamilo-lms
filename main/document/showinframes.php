@@ -83,7 +83,7 @@ if ($is_allowed_in_course == false) {
 }
 
 //Check user visibility
-$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id());
+$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
 if (!api_is_allowed_to_edit() && !$is_visible) {
     api_not_allowed(true);
 }

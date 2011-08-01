@@ -282,7 +282,7 @@ if (!empty($_SESSION['toolgroup'])) {
 	}
 
 	if ($_GET['createdir'] == 1) {
-		$interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('CreateFolder'));
+		$interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('CreateAssignment'));
 	}
 	Display :: display_header(null);
 } else { 
@@ -317,7 +317,7 @@ if (!empty($_SESSION['toolgroup'])) {
 			$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditToolOptions'));
 		}
 		if ($_GET['createdir'] == 1) {
-			$interbreadcrumb[] = array ('url' => '#','name' => get_lang('CreateDir'));
+			$interbreadcrumb[] = array ('url' => '#','name' => get_lang('CreateAssignment'));
 		}		
 
 		Display :: display_header(null);

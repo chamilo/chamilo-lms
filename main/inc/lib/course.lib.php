@@ -2522,9 +2522,10 @@ class CourseManager {
      * Special courses are courses that stick on top of the list and are "auto-registerable"
      * in the sense that any user clicking them is registered as a student
      * @param int       User id
+     * @param bool      Whether to show the document quick-loader or not
      * @return void
      */
-    function display_special_courses ($user_id) {
+    function display_special_courses ($user_id, $load_dirs = false) {
 
         $user_id = intval($user_id);
         $user_info = api_get_user_info($user_id);
@@ -2579,12 +2580,32 @@ class CourseManager {
                     echo '<div class="userportal-course-item">';
 
                     if (api_is_platform_admin()) {
-                        echo '<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), 22).'</a>';
+                        echo '<div style="float:right;">';
+                        
+                        if ($load_dirs) {
+                            echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
+                            echo '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';
+                            echo Display::div('', array('id' => 'document_result_'.$course['id'].'_0', 'class'=>'document_preview_container'));
+                        } else {
+                            echo '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';                  
+                        }
+                        
                         if ($course['status'] == COURSEMANAGER) {
-                            //echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px;'));
+                            //echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'), array('style'=>'width: 11px; height: 11px;'));
                         }
                         echo '</div>';
+                    } else {
+                        echo '<div style="float:right;">';              
+                        if ($load_dirs) {
+                            echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
+                            echo Display::div('', array('id' => 'document_result_'.$course['id'].'_0', 'class'=>'document_preview_container'));
+                        }
+                        echo '</div>';
+                        
                     }
+
+
+
                     $course_visibility = $course['visibility'];
                     if ($course_visibility != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
                         $course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0&amp;autoreg=1">'.$course['title'].'</a>';
@@ -2619,6 +2640,7 @@ class CourseManager {
      * of course categories, as class userportal-catalog-item.
      * @uses display_courses_in_category() to display the courses themselves
      * @param int        user id
+     * @param bool      Whether to show the document quick-loader or not
      * @return void
      */
     function display_courses($user_id, $load_dirs = false) {
@@ -2657,6 +2679,7 @@ class CourseManager {
      *  Display courses inside a category (without special courses) as HTML dics of
      *  class userportal-course-item.
      *  @param int      User category id
+     * @param bool      Whether to show the document quick-loader or not
      *  @return void
      */
     function display_courses_in_category($user_category_id, $load_dirs = false) {
@@ -2719,8 +2742,10 @@ class CourseManager {
                 
                 if ($load_dirs) {
                 	echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
-                	echo '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';                
+                	echo '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';
                 	echo Display::div('', array('id' => 'document_result_'.$course['id'].'_0', 'class'=>'document_preview_container'));
+                } else {
+                    echo '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';                	
                 }
                 
                 if ($course['status'] == COURSEMANAGER) {
@@ -2844,6 +2869,7 @@ class CourseManager {
      * @param   integer     Session ID
      * @param   string      CSS class to apply to course entry
      * @param   boolean     Whether the session is supposedly accessible now (not in the case it has passed and is in invisible/unaccessible mode)
+     * @param bool      Whether to show the document quick-loader or not
      * @return  string      The HTML to be printed for the course entry
      *
      * @version 1.0.3

@@ -116,42 +116,43 @@ if (defined('SYSTEM_INSTALLATION')) {
             }
         }
 
-        // Converting dates and times to UTC using the default timezone of PHP
-        // Converting gradebook dates and times
-        $timezone = date_default_timezone_get();
-        // Calculating the offset
-        $dateTimeZoneCurrent = new DateTimeZone($timezone);
-        $dateTimeUTC = new DateTime("now", new DateTimeZone('UTC'));
-        $timeOffsetSeconds = $dateTimeZoneCurrent->getOffset($dateTimeUTC);
-        $timeOffsetHours = $timeOffsetSeconds / 3600;
-        $timeOffsetString = "";
-
-        if($timeOffsetHours < 0) {
-                $timeOffsetString .= "-";
-                $timeOffsetHours = abs($timeOffsetHours);
-        } else {
-                $timeOffsetString .= "+";
+        if (DATE_TIME_INSTALLED) {
+            // Converting dates and times to UTC using the default timezone of PHP
+            // Converting gradebook dates and times
+            $timezone = date_default_timezone_get();
+            // Calculating the offset
+            $dateTimeZoneCurrent = new DateTimeZone($timezone);
+            $dateTimeUTC = new DateTime("now", new DateTimeZone('UTC'));
+            $timeOffsetSeconds = $dateTimeZoneCurrent->getOffset($dateTimeUTC);
+            $timeOffsetHours = $timeOffsetSeconds / 3600;
+            $timeOffsetString = "";
+    
+            if($timeOffsetHours < 0) {
+                    $timeOffsetString .= "-";
+                    $timeOffsetHours = abs($timeOffsetHours);
+            } else {
+                    $timeOffsetString .= "+";
+            }
+    
+            if($timeOffsetHours < 10) {
+                    $timeOffsetString .= "0";
+            }
+    
+            $timeOffsetString .= "$timeOffsetHours";
+            $timeOffsetString .= ":00";
+    
+            // Executing the queries to convert everything
+            $queries[] = "UPDATE gradebook_certificate 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
+            $queries[] = "UPDATE gradebook_evaluation 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
+            $queries[] = "UPDATE gradebook_link 		SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
+            $queries[] = "UPDATE gradebook_linkeval_log SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
+            $queries[] = "UPDATE gradebook_result 		SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
+            $queries[] = "UPDATE gradebook_result_log 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
+    
+            foreach ($queries as $query) {
+                Database::query($query);
+            }
         }
-
-        if($timeOffsetHours < 10) {
-                $timeOffsetString .= "0";
-        }
-
-        $timeOffsetString .= "$timeOffsetHours";
-        $timeOffsetString .= ":00";
-
-	// Executing the queries to convert everything
-        $queries[] = "UPDATE gradebook_certificate 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
-        $queries[] = "UPDATE gradebook_evaluation 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
-        $queries[] = "UPDATE gradebook_link 		SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
-        $queries[] = "UPDATE gradebook_linkeval_log SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
-        $queries[] = "UPDATE gradebook_result 		SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
-        $queries[] = "UPDATE gradebook_result_log 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
-
-        foreach ($queries as $query) {
-            Database::query($query);
-	}
-
         // Moving user followed by a human resource manager from hr_dept_id field to user_rel_user table
         $query = "SELECT user_id, hr_dept_id  FROM $dbNameForm.user";
         $result = Database::query($query);

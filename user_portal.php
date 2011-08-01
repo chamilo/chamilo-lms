@@ -91,7 +91,7 @@ define('CONFVAL_dateFormatForInfosFromCourses', get_lang('dateFormatLong'));
 define("CONFVAL_limitPreviewTo", SCRIPTVAL_NewEntriesOfTheDayOfLastLogin);
 
 //$load_dirs = api_get_setting('courses_list_document_dynamic_dropdown');
-$load_dirs = true;
+$load_dirs = false;
 
 
 // This is the main function to get the course list.
@@ -417,7 +417,7 @@ if (is_array($courses_tree)) {
             // Sessions and courses that are not in a session category.
             if (!isset($_GET['history'])) { 
                // If we're not in the history view...
-                CourseManager :: display_special_courses(api_get_user_id());
+                CourseManager :: display_special_courses(api_get_user_id(), $load_dirs);
                 CourseManager :: display_courses(api_get_user_id(), $load_dirs);
             }
             // Independent sessions.

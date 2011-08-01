@@ -2663,7 +2663,7 @@ return 'application/octet-stream';
     	$label = get_lang('Documents');
     	$new_array[$label] = array('id' => 0, 'files' => $resources_sorted);
     	
-    	$write_result = self::write_resources_tree($course_info, $current_session_id, $new_array, 0, $lp_id, $target);
+    	$write_result = self::write_resources_tree($course_info, $session_id, $new_array, 0, $lp_id, $target);
     	    	
     	$return .= $write_result ;
     	

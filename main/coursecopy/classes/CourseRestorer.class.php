@@ -120,6 +120,7 @@ class CourseRestorer
 			$this->restore_course_descriptions($session_id);
 			$this->restore_wiki($session_id);
 			$this->restore_thematic($session_id);
+			$this->restore_attendance($session_id);
 		} else {
 			$this->restore_links();
 			$this->restore_tool_intro();
@@ -135,6 +136,7 @@ class CourseRestorer
 			$this->restore_glossary();
 			$this->restore_wiki();
 			$this->restore_thematic();
+			$this->restore_attendance();
 		}
 		
 		if ($update_course_settings) {
@@ -1736,9 +1738,9 @@ class CourseRestorer
 	}
 	
 	/**
-	* Restore surveys
+	* Restore Thematics
 	*/
-	function restore_thematic() {
+	function restore_thematic($session_id = 0) {
 		if ($this->course->has_resources(RESOURCE_THEMATIC)) {
 			$table_thematic 		= Database :: get_course_table(TABLE_THEMATIC, $this->course->destination_db);
 			$table_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE, $this->course->destination_db);
@@ -1755,6 +1757,8 @@ class CourseRestorer
 				$last_id = Database::insert($table_thematic, $thematic->params, true);
 				
 				if (is_numeric($last_id)) {
+					api_item_property_update($this->destination_course_info, 'thematic', $last_id,"ThematicAdded", api_get_user_id());
+					
 					foreach($thematic->thematic_advance_list as $thematic_advance) {						
 						unset($thematic_advance['id']);						
 						$thematic_advance['attendance_id'] = 0;
@@ -1779,4 +1783,40 @@ class CourseRestorer
 			}
 		}
 	}
+	
+	/**
+	* Restore Attendance
+	*/
+	
+	function restore_attendance($session_id = 0) {
+		if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
+			$table_attendance 		   = Database :: get_course_table(TABLE_ATTENDANCE, $this->course->destination_db);
+			$table_attendance_calendar = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR, $this->course->destination_db);
+				
+			$resources = $this->course->resources;
+			foreach ($resources[RESOURCE_ATTENDANCE] as $id => $obj) {
+	
+				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				$obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($obj->params['description'], $this->course->code, $this->course->destination_path);
+				$doc = '';
+				$obj->params['id'] = null;
+				$last_id = Database::insert($table_attendance, $obj->params, true);
+	
+				if (is_numeric($last_id)) {
+					api_item_property_update($this->destination_course_info, TOOL_ATTENDANCE, $last_id,"AttendanceAdded", api_get_user_id());
+					
+					foreach($obj->attendance_calendar as $attendance_calendar) {
+						unset($attendance_calendar['id']);						
+						$attendance_calendar['attendance_id'] = $last_id;
+						$my_id = Database::insert($table_attendance_calendar, $attendance_calendar, true);
+	/*
+						if (is_numeric($my_id)) {
+							api_item_property_update($this->destination_course_info, 'thematic_advance', $my_id,"ThematicAdvanceAdded", api_get_user_id());
+						}*/
+					}	
+				}
+			}
+		}
+	}
+	
 }

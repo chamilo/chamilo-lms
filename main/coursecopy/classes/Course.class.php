@@ -193,6 +193,11 @@ class Course
 							$title 			= $resource->title;
 							$description 	= $resource->content;
 							break;
+						case RESOURCE_ATTENDANCE:
+							
+							$title 			= $resource->params['name'];
+							$description 	= $resource->params['description'];
+							break;
 						default:
 							break;
 					}

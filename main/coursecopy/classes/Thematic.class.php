@@ -6,31 +6,7 @@ require_once 'Resource.class.php';
  * @package chamilo.backup
  */
 
-class Thematic extends Resource
-{
-	
-	/**
-	 * The title
-	 */
-	var $title;
-	
-	/**
-	 * The Content
-	 */
-	var $content;
-	
-	/**
-	 * The display order
-	 */
-	var $display_order;
-	
-	/**
-	 * Active
-	 */
-	var $active;
-	
-	var $session_id;
-	
+class Thematic extends Resource {
 	/** All params
 	 * */
 	var $params = array();
@@ -44,20 +20,14 @@ class Thematic extends Resource
 	 * 
 	 * @param array parameters	
 	 */
-	public function __construct($params) {		
-		
-		parent::Resource($params['id'], RESOURCE_THEMATIC);		
-		$this->title 		= $params['title'];
-		$this->content		= $params['content'];
-		$this->author 		= $params['display_order'];
-		$this->active		= $params['active'];
-		$this->session_id	= $params['session_id'];
-		$this->params 		= $params;		
+	public function __construct($params) {
+		parent::Resource($params['id'], RESOURCE_THEMATIC);
+		$this->params 		= $params;
 	}
 
 	public function show() {
 		parent::show();
-		echo $this->title;
+		echo $this->params['title'];
 	}
 	
 	public function add_thematic_advance($data) {		

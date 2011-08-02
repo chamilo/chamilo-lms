@@ -32,6 +32,7 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_GLOSSARY] 			= get_lang('Glossary');
 		$resource_titles[RESOURCE_WIKI]					= get_lang('Wiki');
 		$resource_titles[RESOURCE_THEMATIC]				= get_lang('Thematic');
+		$resource_titles[RESOURCE_ATTENDANCE]			= get_lang('Attendance');
 
 ?>
 		<script language="JavaScript" type="text/javascript">
@@ -100,7 +101,7 @@ class CourseSelectForm
 			echo '<input type="hidden" name="origin_session" 		value="'.$hidden_fields['origin_session'].'"/>';
 		}	
 		
-		$element_count = 0;		
+		$element_count = 0;
         foreach ($course->resources as $type => $resources) {		    
             if (count($resources) > 0) {                    			    
 				switch ($type) {

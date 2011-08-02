@@ -22,6 +22,7 @@ require_once 'Glossary.class.php';
 require_once 'CourseSession.class.php';
 require_once 'wiki.class.php';
 require_once 'Thematic.class.php';
+require_once 'Attendance.class.php';
 
 /**
  * Class which can build a course-object from a Chamilo-course.
@@ -81,8 +82,10 @@ class CourseBuilder {
 			$this->build_learnpaths($session_id, $course_code,$with_base_content);
 			$this->build_links($session_id, $course_code, $with_base_content);
 			$this->build_course_descriptions($session_id, $course_code, $with_base_content);
-			$this->build_wiki($session_id, $course_code, $with_base_content);			
-			$this->build_thematic($session_id, $course_code, $with_base_content);
+			$this->build_wiki($session_id, $course_code, $with_base_content);
+			//$this->build_thematic($session_id, $course_code, $with_base_content);
+			$this->build_thematic();			
+			$this->build_attendance();
 		} else {
 			$table_link = Database :: get_course_table(TABLE_LINKED_RESOURCES);
 			$table_properties = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -99,6 +102,7 @@ class CourseBuilder {
 			$this->build_surveys();
 			$this->build_glossary();
 			$this->build_thematic();
+			$this->build_attendance();
 		}
 
 		//TABLE_LINKED_RESOURCES is the "resource" course table, which is deprecated, apparently
@@ -795,4 +799,26 @@ class CourseBuilder {
 			$this->course->add_resource($thematic);			
 		}		
 	}	
+	
+	/**
+	* Build the Surveys
+	*/
+	function build_attendance() {
+		$table_attendance			= Database :: get_course_table(TABLE_ATTENDANCE);
+		$table_attendance_calendar  = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR);
+		
+		$sql = 'SELECT * FROM '.$table_attendance.' WHERE session_id = 0 ';
+		$db_result = Database::query($sql);
+		while ($row = Database::fetch_array($db_result,'ASSOC')) {
+			$obj = new Attendance($row);
+			$sql = 'SELECT * FROM '.$table_attendance_calendar.' WHERE attendance_id = '.$row['id'];
+				
+			$result = Database::query($sql);
+			while ($sub_row = Database::fetch_array($result,'ASSOC')) {
+				$obj->add_attendance_calendar($sub_row);
+			}
+			$this->course->add_resource($obj);
+		}
+	}
+	
 }

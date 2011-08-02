@@ -213,7 +213,7 @@ if (!isset($_GET['running'])) {
 	$dbUsernameForm = 'root';
 	$dbPassForm		= '';
  	$dbPrefixForm   = '';
-	$dbNameForm		= 'chamilo_main';
+	$dbNameForm		= 'main';
 	$dbStatsForm    = 'chamilo_main';
 	$dbScormForm    = 'chamilo_main';
 	$dbUserForm		= 'chamilo_main';
@@ -251,9 +251,7 @@ if (!isset($_GET['running'])) {
 	$singleDbForm			= 0;
 	$encryptPassForm		= 'sha1';
 	$session_lifetime		= 360000;
-
 } else {
-
 	foreach ($_POST as $key => $val) {
 		$magic_quotes_gpc = ini_get('magic_quotes_gpc');
 		if (is_string($val)) {
@@ -361,14 +359,18 @@ if ($encryptPassForm == '1') {
 		init_visibility=0;
 		function show_hide_option() {			
 			if (init_visibility == 0) {
-				$('#optional_param1').show();			
+				$('#optional_param1').show();
+						
 				if ($('#singleDb1').attr("checked") == true) {										
-					$('#optional_param2').hide();
-					$('#optional_param4').hide();
+					//$('#optional_param2').hide();
+					//$('#optional_param4').hide();
+					$('#optional_param5').hide();
 				} else {					
-					$('#optional_param2').show();
-					$('#optional_param4').show();  					
+					//$('#optional_param2').show();
+					//$('#optional_param4').show();
+					$('#optional_param5').show();  					
                 }	
+                
 				//document.getElementById('optional_param2').style.display = '';
 				if (document.getElementById('optional_param3')) {
 					document.getElementById('optional_param3').style.display = '';
@@ -380,16 +382,18 @@ if ($encryptPassForm == '1') {
 				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters', ''); ?>';
 			} else {
 				document.getElementById('optional_param1').style.display = 'none';
-				document.getElementById('optional_param2').style.display = 'none';
+				/*document.getElementById('optional_param2').style.display = 'none';
 				if (document.getElementById('optional_param3')) {
 					document.getElementById('optional_param3').style.display = 'none';
 				}
 				document.getElementById('optional_param4').style.display = 'none';
-				//document.getElementById('optional_param5').style.display = 'none';
+				*/
+				document.getElementById('optional_param5').style.display = 'none';
 				document.getElementById('optional_param6').style.display = 'none';
 				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters', ''); ?>';
 				init_visibility = 0;
 			}
+			return false;
 		}	
 
             $(document).ready( function() {
@@ -625,26 +629,24 @@ if ($_POST['step2']) {
 	<blockquote>
 
 	<?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
-
 	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
 	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
 	<?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
-	<?php if (!empty($dbPrefixForm)) echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
+	<?php echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
 	<?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong>
 	<?php if ($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br />
 	<?php
 	if (!$singleDbForm) {
-		echo get_lang('StatDB').' : <strong>'.$dbStatsForm.'</strong>';
+		/*echo get_lang('StatDB').' : <strong>'.$dbStatsForm.'</strong>';
 		if ($installType == 'new') {
 			echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
 		}
 		echo '<br />';
-
 		echo get_lang('UserDB').' : <strong>'.$dbUserForm.'</strong>';
 		if ($installType == 'new') {
 			echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
 		}
-		echo '<br />';
+		echo '<br />';*/
 	}
 	?>
 	<?php //echo get_lang('EnableTracking').' : '.($enableTrackingForm ? get_lang('Yes') : get_lang('No')); ?>
@@ -792,7 +794,7 @@ if ($_POST['step2']) {
 		}
 
 	} else {
-
+	
 		set_file_folder_permissions();
 		database_server_connect();
 
@@ -804,19 +806,16 @@ if ($_POST['step2']) {
 
 		include 'install_db.inc.php';
 		include 'install_files.inc.php';
-        }
-        $current_step = 7;
-        display_after_install_message($installType, $nbr_courses);
+	}
+    $current_step = 7;
+    display_after_install_message($installType, $nbr_courses);
 
 } elseif ($_POST['step1'] || $badUpdatePath) {
-
         //STEP 1 : REQUIREMENTS
         //make sure that proposed path is set, shouldn't be necessary but...
         if (empty($proposedUpdatePath)) { $proposedUpdatePath = $_POST['updatePath']; }
         display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8, $update_from_version_6);
-
 } else {
-
         // This is the start screen.
         display_language_selection();
 }

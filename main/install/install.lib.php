@@ -1660,13 +1660,10 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     $example_password = get_lang('EG').' '.api_generate_password();
     display_database_parameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
 
-    //database prefix
-    display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, get_lang('DbPrefixCom'));
-
-    //fields for the four standard Chamilo databases    
+    //Fields for the four standard Chamilo databases    
     if ($installType != INSTALL_TYPE_UPDATE) {        
         echo '<tr><td colspan="3">';
-        echo '<a href="" onclick="javascript: show_hide_option();return false;" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters', '').'</a>';
+        echo '<a href="#;" onclick="javascript:show_hide_option();" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters').'</a>';
         echo '</td></tr>';
     }
     ?>    
@@ -1688,16 +1685,28 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     </div>    
     <?php   
     $style = 'style="display:none;"';
+    
     if ($installType == INSTALL_TYPE_UPDATE) {
         $style = '';
-    }    
+    } 
+       
+    //Database Name
     display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm',  $dbNameForm,  '&nbsp;', null, 'id="optional_param1" '.$style);
-    display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" '.$style);    
     
-    if ($installType == INSTALL_TYPE_UPDATE && in_array($_POST['old_version'], $update_from_version_6)) {
+    //Only for updates we show this options
+    if ($install_type == INSTALL_TYPE_UPDATE) {    
+    	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" '.$style);    
+    
+	    if ($installType == INSTALL_TYPE_UPDATE && in_array($_POST['old_version'], $update_from_version_6)) {
         display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" '.$style);
+    	}    
+    	display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" '.$style);
     }
-    display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" '.$style);
+    
+    //Database Prefix
+    display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, '', null, 'id="optional_param5" '.$style); //get_lang('DbPrefixCom')
+    
+  
 
     /*  Tracking is always available see #2066
      *

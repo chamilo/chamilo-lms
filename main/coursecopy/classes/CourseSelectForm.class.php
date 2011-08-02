@@ -31,6 +31,8 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_SURVEY] 				= get_lang('Survey');
 		$resource_titles[RESOURCE_GLOSSARY] 			= get_lang('Glossary');
 		$resource_titles[RESOURCE_WIKI]					= get_lang('Wiki');
+		$resource_titles[RESOURCE_THEMATIC]				= get_lang('Thematic');
+		$resource_titles[RESOURCE_ATTENDANCE]			= get_lang('Attendance');
 
 ?>
 		<script language="JavaScript" type="text/javascript">
@@ -97,12 +99,13 @@ class CourseSelectForm
 			echo '<input type="hidden" name="origin_course" 		value="'.$hidden_fields['origin_course'].'"/>';
 			echo '<input type="hidden" name="destination_session" 	value="'.$hidden_fields['destination_session'].'"/>';
 			echo '<input type="hidden" name="origin_session" 		value="'.$hidden_fields['origin_session'].'"/>';
-		}		
+		}	
 		
-		$element_count = 0;		
+		$element_count = 0;
         foreach ($course->resources as $type => $resources) {		    
             if (count($resources) > 0) {                    			    
 				switch ($type) {
+					//Resources to avoid
 					case RESOURCE_LINKCATEGORY :
 					case RESOURCE_FORUMCATEGORY :
 					case RESOURCE_FORUMPOST :
@@ -110,7 +113,7 @@ class CourseSelectForm
 					case RESOURCE_QUIZQUESTION:
 					case RESOURCE_SURVEYQUESTION:
 					case RESOURCE_SURVEYINVITATION:
-					case RESOURCE_SCORM:					    
+					case RESOURCE_SCORM:					
 						break;		    
                     default :
 						echo '<img id="img_'.$type.'" src="../img/1.gif" onclick="javascript:exp('."'$type'".');" />&nbsp;';

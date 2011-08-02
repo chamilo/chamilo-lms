@@ -2598,6 +2598,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
     if (Database::affected_rows() == 0) {
         $sql = "INSERT INTO $TABLE_ITEMPROPERTY (tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id,$to_field,  visibility,   start_visible,   end_visible, id_session)
                 VALUES ('$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
+        
         $res = Database::query($sql);
         if (!$res) {
             return false;
@@ -2712,12 +2713,13 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0) {
     $ref            = intval($ref);
 
     // Definition of tables.
-    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
+    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_info['dbName']);
    	$sql = "SELECT * FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = $ref ";
    	if (!empty($session_id)) {
    		$session_id = intval($session_id);
    		$sql .= "AND id_session = $session_id ";
    	}
+   	
     $rs  = Database::query($sql);    
     $row = array();
     if (Database::num_rows($rs) > 0) {

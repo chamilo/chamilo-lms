@@ -8651,7 +8651,32 @@ EOD;
             Database::update($lp_table, $attributes, $where );
         }
     }
-
+    
+    
+    /**
+    * Gets previous_item_id for the next element of the lp_item table
+    * @author Isaac flores paz
+    * @return	integer	Previous item ID
+    */
+    function select_previous_item_id() {
+    	if ($this->debug > 0) {
+    		error_log('New LP - In learnpath::select_previous_item_id()', 0);
+    	}
+    	$table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+    
+    	// Get the max order of the items
+    	$sql_max_order = "SELECT max(display_order) AS display_order FROM $table_lp_item  WHERE lp_id = '" . $this->lp_id . "'";
+    	$rs_max_order = Database::query($sql_max_order);
+    	$row_max_order = Database::fetch_object($rs_max_order);
+    	$max_order = $row_max_order->display_order;
+    	// Get the previous item ID
+    	$sql_max = "SELECT id as previous FROM $table_lp_item WHERE lp_id = '" . $this->lp_id . "' AND display_order = '".$max_order."' ";
+    	$rs_max = Database::query($sql_max, __FILE__, __LINE__);
+    	$row_max = Database::fetch_object($rs_max);
+    
+    	// Return the previous item ID
+    	return $row_max->previous;
+    }
 
 }
 

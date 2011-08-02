@@ -1057,7 +1057,7 @@ class Database {
      * Experimental useful database insert
      * @todo lot of stuff to do here
      */
-    public static function insert($table_name, $attributes) {
+    public static function insert($table_name, $attributes , $show_query = false) {
         if (empty($attributes) || empty($table_name)) {
             return false;
         }
@@ -1070,6 +1070,9 @@ class Database {
         if (!empty($params) && !empty($values)) {
             $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',$params).') VALUES ('.implode(',',$values).')';
             $result = self::query($sql);
+            if ($show_query) {
+            	echo $sql;
+            }
             return  self::get_last_insert_id();
         }
         return false;

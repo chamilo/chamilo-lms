@@ -208,7 +208,7 @@
 		$data['attendance_id'] = $attendance_id;		
 		$data['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
 		
-		$filter_type = 'today';
+		$filter_type = 'all';
 		if (!empty($_REQUEST['filter'])) {
 			$filter_type = $_REQUEST['filter'];
 		}		

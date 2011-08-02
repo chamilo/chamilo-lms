@@ -2525,7 +2525,7 @@ class CourseManager {
      * @param bool      Whether to show the document quick-loader or not
      * @return void
      */
-    function display_special_courses ($user_id, $load_dirs = false) {
+    function display_special_courses($user_id, $load_dirs = false) {
 
         $user_id = intval($user_id);
         $user_info = api_get_user_info($user_id);
@@ -2583,7 +2583,7 @@ class CourseManager {
                         echo '<div style="float:right;">';
                         
                         if ($load_dirs) {
-                            echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
+                            echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="javascript:void();">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
                             echo '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';
                             echo Display::div('', array('id' => 'document_result_'.$course['id'].'_0', 'class'=>'document_preview_container'));
                         } else {
@@ -2597,7 +2597,7 @@ class CourseManager {
                     } else {
                         echo '<div style="float:right;">';              
                         if ($load_dirs) {
-                            echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
+                            echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="javascript:void();">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
                             echo Display::div('', array('id' => 'document_result_'.$course['id'].'_0', 'class'=>'document_preview_container'));
                         }
                         echo '</div>';
@@ -2741,7 +2741,7 @@ class CourseManager {
                 echo '<div style="float:right;">';
                 
                 if ($load_dirs) {
-                	echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
+                	echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="javascript:void();">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
                 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';
                 	echo Display::div('', array('id' => 'document_result_'.$course['id'].'_0', 'class'=>'document_preview_container'));
                 } else {
@@ -2755,7 +2755,7 @@ class CourseManager {
             } else {
             	echo '<div style="float:right;">';            	
             	if ($load_dirs) {
-            		echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
+            		echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="javascript:void();">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
             		echo Display::div('', array('id' => 'document_result_'.$course['id'].'_0', 'class'=>'document_preview_container'));
             	}
             	echo '</div>';
@@ -3002,8 +3002,8 @@ class CourseManager {
         
         if ($load_dirs) {        	
         	$result .= '<div style="float:right;">';
-            $result .= '<a id="document_preview_'.$info['real_id'].'_'.$my_course['id_session'].'" class="document_preview" href="#">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
-            $result .= Display::div('', array('id' => 'document_result_'.$info['real_id'].'_'.$my_course['id_session'], 'class'=>'document_preview_container not_active'));
+            $result .= '<a id="document_preview_'.$info['real_id'].'_'.$my_course['id_session'].'" class="document_preview" href="javascript:void();">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
+            $result .= Display::div('', array('id' => 'document_result_'.$info['real_id'].'_'.$my_course['id_session'], 'class'=>'document_preview_container'));
 			$result .= '</div>';
         }
         

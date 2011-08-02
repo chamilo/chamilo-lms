@@ -159,13 +159,13 @@ foreach($final_array as $session_data) {
                 //Exercise results                              
                 $counter = 1;                    
                 
-                foreach($exercise_data as $exercise_item) { 
+                foreach ($exercise_data as $exercise_item) { 
                     $result_list     = $exercise_item['results'];
                     $exercise_info   = $exercise_item['exercise_data'];                    
                     if ($exercise_info->start_time == '0000-00-00 00:00:00') {
                         $start_date  = '-';
                     } else {
-                        $start_date = api_get_local_time($exercise_info->start_time);
+                        $start_date = $exercise_info->start_time;
                     }                 
                     if (!empty($result_list)) { 
                         foreach ($result_list as $exercise_result) {
@@ -261,10 +261,10 @@ $column_model_courses   = array(array('name'=>'title',  'index'=>'title',   'wid
 $extra_params_courses['autowidth'] = 'false'; //use the width of the parent                             
                         
 $url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id.'&course_id='.$course_id;
-$columns        = array(get_lang('PublicationDate'),get_lang('Course'), get_lang('LearningPath'));
-$column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'150',  'align'=>'left',  'sortable'=>'false'),
-                        array('name'=>'course', 'index'=>'course', 'width'=>'400', 'align'=>'left',  'sortable'=>'false'),
-                        array('name'=>'lp',     'index'=>'lp',     'width'=>'200', 'align'=>'center','sortable'=>'false'));
+$columns        = array(get_lang('PublicationDate'),get_lang('Course'), get_lang('LearningPaths'));
+$column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'120', 'align'=>'left', 'sortable'=>'false'),
+                        array('name'=>'course', 'index'=>'course', 'width'=>'400', 'align'=>'left', 'sortable'=>'false'),
+                        array('name'=>'lp',     'index'=>'lp',     'width'=>'330', 'align'=>'left', 'sortable'=>'false'));
 $extra_params = array();                        
 //$extra_params['autowidth'] = 'true'; //use the width of the parent
 //$extra_params['forceFit'] = 'true'; //use the width of the parent
@@ -281,12 +281,12 @@ $extra_params_course['groupingView'] = array('groupCollapse'    => true,
                               
 //Per Week grid
 $url_week           = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_week&session_id='.$session_id.'&course_id='.$course_id;
-$column_week        = array(get_lang('PeriodWeek'), get_lang('PublicationDate'), get_lang('Course'), get_lang('LearningPath'));
+$column_week        = array(get_lang('PeriodWeek'), get_lang('PublicationDate'), get_lang('Course'), get_lang('LearningPaths'));
 $column_week_model  = array (
-                          array('name'=>'week',     'index'=>'week',    'width'=>'80',  'align'=>'left',  'sortable'=>'false'),       
-                          array('name'=>'date',     'index'=>'date',    'width'=>'150', 'align'=>'left', 'sortable'=>'false'),
-                          array('name'=>'course',   'index'=>'course',  'width'=>'400', 'align'=>'left',  'sortable'=>'false'),
-                          array('name'=>'lp',       'index'=>'lp',      'width'=>'200', 'align'=>'center','sortable'=>'false'));
+                          array('name'=>'week',     'index'=>'week',    'width'=>'50',  'align'=>'left', 'sortable'=>'false'),       
+                          array('name'=>'date',     'index'=>'date',    'width'=>'100', 'align'=>'left', 'sortable'=>'false'),
+                          array('name'=>'course',   'index'=>'course',  'width'=>'400', 'align'=>'left', 'sortable'=>'false'),
+                          array('name'=>'lp',       'index'=>'lp',      'width'=>'300', 'align'=>'left', 'sortable'=>'false'));
                           
 $extra_params_week['grouping'] = 'true';
 //For more details see http://www.trirand.com/jqgridwiki/doku.php?id=wiki:grouping
@@ -300,10 +300,10 @@ $extra_params_week['groupingView'] = array('groupCollapse'     => true,
 //MyQCM grid
 $column_exercise        = array(get_lang('Status'), get_lang('ExerciseStartDate'), get_lang('Course'), get_lang('Exercise'),get_lang('Attempts'), get_lang('Result'), get_lang('BestResultInCourse'), get_lang('Ranking'));
 $column_exercise_model  = array(
-                                array('name'=>'status',     'index'=>'status',     'width'=>'50', 'align'=>'left',   'sortable'=>'true'),
+                                array('name'=>'status',     'index'=>'status',     'width'=>'40', 'align'=>'left',   'sortable'=>'false'),
                                 array('name'=>'date',       'index'=>'date',       'width'=>'130','align'=>'left',   'sortable'=>'true'),
                                 array('name'=>'course',     'index'=>'course',     'width'=>'200','align'=>'left',   'sortable'=>'true'),
-                                array('name'=>'exercise',   'index'=>'exercise',   'width'=>'200','align'=>'left',   'sortable'=>'true'),                                
+                                array('name'=>'exercise',   'index'=>'exercise',   'width'=>'200','align'=>'left',   'sortable'=>'false'),                                
                                 array('name'=>'attempt',    'index'=>'attempt',    'width'=>'60', 'align'=>'center', 'sortable'=>'true'),
                                 array('name'=>'result',     'index'=>'result',     'width'=>'120','align'=>'center', 'sortable'=>'true'),
                                 array('name'=>'best_result','index'=>'best_result','width'=>'140','align'=>'center', 'sortable'=>'true'),

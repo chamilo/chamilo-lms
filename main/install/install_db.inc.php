@@ -81,7 +81,8 @@ if (!defined('CLI_INSTALLATION')) {
 	}
 	
 	if ($create_database) {
-	   Database::query("CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`") or die(Database::error());
+		$sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`";
+		Database::query($sql) or die(Database::error());
 	}
 	
 }

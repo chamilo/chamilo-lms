@@ -60,21 +60,135 @@ unset($_SESSION['paint_dir']);
 // Create directory certificates
 DocumentManager::create_directory_certificate_in_course(api_get_course_id());
 
-$course_info = api_get_course_info();
+$course_info 	 = api_get_course_info();
+$course_dir      = $course_info['path'].'/document';
+$sys_course_path = api_get_path(SYS_COURSE_PATH);
+$base_work_dir   = $sys_course_path.$course_dir;
+$http_www        = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document';
+$dbl_click_id    = 0; // Used for avoiding double-click
 
-//Hack in order to use document.php?id=X 
-if (isset($_REQUEST['id'])) {
-    $document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id());
+/*	Constants and variables */
+$session_id  = api_get_session_id();
+$course_code = api_get_course_id();
+$to_group_id = api_get_group_id();
+
+//Setting group variables 
+if (api_get_group_id()) {
+	// Needed for group related stuff
+	require_once $lib_path.'groupmanager.lib.php';
+	// Get group info
+	$group_properties = GroupManager::get_group_properties(api_get_group_id());
+	$noPHP_SELF = true;
+	// Let's assume the user cannot upload files for the group
+	$group_member_with_upload_rights = false;
+
+	if ($group_properties['doc_state'] == 2) {
+		// Documents are private
+		if ($is_allowed_to_edit || GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id())) {
+			// Only courseadmin or group members (members + tutors) allowed
+			$req_gid = '&amp;gidReq='.api_get_group_id();
+			$interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
+			$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.api_get_group_id(), 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+			//they are allowed to upload
+			$group_member_with_upload_rights = true;
+		} else {
+			$to_group_id = 0;
+			$req_gid = '';
+		}
+	} elseif ($group_properties['doc_state'] == 1) {
+		// Documents are public
+		$to_group_id = api_get_group_id();
+		$req_gid = '&amp;gidReq='.api_get_group_id();
+		$interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
+		$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.api_get_group_id(), 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+		//allowed to upload?
+		if ($is_allowed_to_edit || GroupManager::is_subscribed(api_get_user_id(), api_get_group_id())) {
+			// Only courseadmin or group members can upload
+			$group_member_with_upload_rights = true;
+		}
+	} else { // Documents not active for this group
+		$to_group_id = 0;
+		$req_gid = '';
+	}
+	$_SESSION['group_member_with_upload_rights'] = $group_member_with_upload_rights;
+} else {
+	$_SESSION['group_member_with_upload_rights'] = false;
+	$to_group_id = 0;
+	$req_gid = '';
+}
+
+//Actions
+
+$document_id = intval($_REQUEST['id']);
+
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+ 
+switch ($action) {
+	case 'download':
+		$document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+		// Check whether the document is in the database
+		if (empty($document_data)) {
+			// File not found!
+			header('HTTP/1.0 404 Not Found');
+			$error404 = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">';
+			$error404 .= '<html><head>';
+			$error404 .= '<title>404 Not Found</title>';
+			$error404 .= '</head><body>';
+			$error404 .= '<h1>Not Found</h1>';
+			$error404 .= '<p>The requested URL was not found on this server.</p>';
+			$error404 .= '<hr>';
+			$error404 .= '</body></html>';
+			echo $error404;
+			exit;
+		}
+		// Launch event
+		event_download($document_data['url']);
+		// Check visibility of document and paths
+		if (!($is_allowed_to_edit || $group_member_with_upload_rights) && !DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id())) {
+			api_not_allowed(true);
+		}	
+		$full_file_name = $base_work_dir.$document_data['path'];
+		if (Security::check_abs_path($full_file_name, $base_work_dir.'/')) {
+			DocumentManager::file_send_for_download($full_file_name, true);
+		}
+		exit;
+		break;	
+	case 'downloadfolder' :		
+		if (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin()) {
+			$document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+			
+			//filter when I am into shared folder, I can donwload only my shared folder
+			if (is_any_user_shared_folder($document_data['path'], $session_id)) {								
+				if (is_my_shared_folder(api_get_user_id(), $document_data['path'], $session_id) || api_is_allowed_to_edit() || api_is_platform_admin()){
+					require 'downloadfolder.inc.php';
+				}
+			} else {				
+				require 'downloadfolder.inc.php';
+			}
+			exit;
+		}
+		break;		
+	case 'export_to_pdf' :
+		if (api_get_setting('students_export2pdf') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin()) {
+			DocumentManager::export_to_pdf($document_id, $course_code);			
+		}
+		break;
+}
+
+//If no actions we proceed to show the document (Hack in order to use document.php?id=X) 
+if (isset($document_id)) {
+    $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
     
-    //Redirect to the file path
+    //If the document is not a folder we show the document
     if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file') {
-    	$visibility = DocumentManager::is_visible_by_id($_REQUEST['id'], $course_info, api_get_session_id(), 'file');
+    	$visibility = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
     	if ($visibility && api_is_allowed_to_session_edit()) {    		
     		$url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$document_data['path'].'?'.api_get_cidreq();    	    	
     		header("Location: $url");
     	}
     	exit;
-    }  
+    }
+    
     //@todo replace all 
     $_GET['curdirpath'] = $document_data['path'];    
 }
@@ -93,7 +207,7 @@ $curdirpathurl = urlencode($curdirpath);
 
 // Check the path
 // If the path is not found (no document id), set the path to /
-$document_id = DocumentManager::get_document_id($_course, $curdirpath);
+$document_id = DocumentManager::get_document_id($course_info, $curdirpath);
 
 if (!$document_id) {    
     $document_id = DocumentManager::get_document_id($course_info, $curdirpath);
@@ -156,59 +270,12 @@ function confirmation (name) {
 // I'm in the certification module?
 $is_certificate_mode = DocumentManager::is_certificate_mode($curdirpath);
 
-$course_dir      = $_course['path'].'/document';
-$sys_course_path = api_get_path(SYS_COURSE_PATH);
-$base_work_dir   = $sys_course_path.$course_dir;
-$http_www        = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document';
-$dbl_click_id    = 0; // Used for avoiding double-click
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $group_member_with_upload_rights = false;
 
 // If the group id is set, we show them group documents
 $group_properties = array();
 $group_properties['directory'] = null;
-
-if (api_get_group_id()) {
-    // Needed for group related stuff
-    require_once $lib_path.'groupmanager.lib.php';
-    // Get group info
-    $group_properties = GroupManager::get_group_properties(api_get_group_id());    
-    $noPHP_SELF = true;
-    // Let's assume the user cannot upload files for the group
-    $group_member_with_upload_rights = false;
-
-    if ($group_properties['doc_state'] == 2) { // Documents are private
-        if ($is_allowed_to_edit || GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id())) { // Only courseadmin or group members (members + tutors) allowed
-            $to_group_id = api_get_group_id();
-            $req_gid = '&amp;gidReq='.api_get_group_id();
-            $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
-            $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.api_get_group_id(), 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
-            //they are allowed to upload
-            $group_member_with_upload_rights = true;
-        } else {
-            $to_group_id = 0;
-            $req_gid = '';
-        }
-    } elseif ($group_properties['doc_state'] == 1) {  // Documents are public
-        $to_group_id = api_get_group_id();
-        $req_gid = '&amp;gidReq='.api_get_group_id();
-        $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
-        $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.api_get_group_id(), 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
-        //allowed to upload?
-        if ($is_allowed_to_edit || GroupManager::is_subscribed(api_get_user_id(), api_get_group_id())) { // Only courseadmin or group members can upload
-            $group_member_with_upload_rights = true;
-        }
-    } else { // Documents not active for this group
-        $to_group_id = 0;
-        $req_gid = '';
-    }
-    $_SESSION['group_member_with_upload_rights'] = $group_member_with_upload_rights;
-} else {
-    $_SESSION['group_member_with_upload_rights'] = false;
-    $to_group_id = 0;
-    $req_gid = '';
-}
 
 // For sessions we should check the parameters of visibility
 if (api_get_session_id() != 0) {
@@ -231,11 +298,8 @@ if (!$is_allowed_to_edit && api_is_coach()) {
     }
 }
 
-/*	Constants and variables */
-$current_session_id = api_get_session_id();
-
 /*	Create shared folders */
-if ($current_session_id == 0) {
+if ($session_id == 0) {
     //Create shared folder. Necessary for courses recycled. Allways session_id should be zero. Allway should be created from a base course, never from a session.
     if (!file_exists($base_work_dir.'/shared_folder')) {
         $usf_dir_title = get_lang('UserFolders');
@@ -254,17 +318,17 @@ if ($current_session_id == 0) {
     }
 } else {
     //Create shared folder session
-    if (!file_exists($base_work_dir.'/shared_folder_session_'.$current_session_id)) {
-        $usf_dir_title = get_lang('UserFolders').' ('.api_get_session_name($current_session_id).')';
-        $usf_dir_name = '/shared_folder_session_'.$current_session_id;
+    if (!file_exists($base_work_dir.'/shared_folder_session_'.$session_id)) {
+        $usf_dir_title = get_lang('UserFolders').' ('.api_get_session_name($session_id).')';
+        $usf_dir_name = '/shared_folder_session_'.$session_id;
         $to_group_id = 0;
         $visibility = 0;
         create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
     }
     //Create dynamic user shared folder into a shared folder session
-    if (!file_exists($base_work_dir.'/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id())) {
-        $usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']).' ('.api_get_session_name($current_session_id).')';
-        $usf_dir_name = '/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id();
+    if (!file_exists($base_work_dir.'/shared_folder_session_'.$session_id.'/sf_user_'.api_get_user_id())) {
+        $usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']).' ('.api_get_session_name($session_id).')';
+        $usf_dir_name = '/shared_folder_session_'.$session_id.'/sf_user_'.api_get_user_id();
         $to_group_id = 0;
         $visibility = 1;
         create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
@@ -273,54 +337,6 @@ if ($current_session_id == 0) {
 
 /*	MAIN SECTION */
 
-if (isset($_GET['action']) && $_GET['action'] == 'download') {
-    $my_get_id = intval($_GET['id']);
-    $document_data = DocumentManager::get_document_data_by_id($my_get_id, api_get_course_id());
-    // Check whether the document is in the database
-    if (empty($document_data)) {
-        // File not found!
-        header('HTTP/1.0 404 Not Found');
-        $error404 = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">';
-        $error404 .= '<html><head>';
-        $error404 .= '<title>404 Not Found</title>';
-        $error404 .= '</head><body>';
-        $error404 .= '<h1>Not Found</h1>';
-        $error404 .= '<p>The requested URL was not found on this server.</p>';
-        $error404 .= '<hr>';
-        $error404 .= '</body></html>';
-        echo $error404;
-        exit;
-    }
-    // Launch event
-    event_download($document_data['url']);
-    // Check visibility of document and paths
-    if (!($is_allowed_to_edit || $group_member_with_upload_rights) && !DocumentManager::is_visible_by_id($my_get_id, $_course, api_get_session_id(), 'file' )) {
-        api_not_allowed(true);
-    }
-    $full_file_name = $base_work_dir.$document_data['path'];
-    if (Security::check_abs_path($full_file_name, $base_work_dir.'/')) {
-        DocumentManager::file_send_for_download($full_file_name, true);
-    }
-    exit;
-}
-
-
-// Download a folder
-if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())) {
-    //filter when I am into shared folder, I can donwload only my shared folder
-    if(is_any_user_shared_folder($_GET['path'],$current_session_id)){
-        if(is_my_shared_folder(api_get_user_id(), $_GET['path'], $current_session_id) || api_is_allowed_to_edit() || api_is_platform_admin()){
-            require 'downloadfolder.inc.php';
-        }
-    } else {
-        require 'downloadfolder.inc.php';
-    }
-}
-
-// Export to PDF
-if (isset($_GET['action']) && $_GET['action'] == 'export_to_pdf' && (api_get_setting('students_export2pdf') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())) {
-    DocumentManager::export_to_pdf($_GET['id'],$course_code);
-}
 
 // Slideshow inititalisation
 $_SESSION['image_files_only'] = '';
@@ -500,13 +516,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 
 /*	MOVE FILE OR DIRECTORY */
 //Only teacher and all users into their group and each user into his/her shared folder
-if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id) || is_my_shared_folder(api_get_user_id(), Security::remove_XSS($_POST['move_to']), $current_session_id)) {
+if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id) || is_my_shared_folder(api_get_user_id(), Security::remove_XSS($_POST['move_to']), $session_id)) {
     
     if (isset($_GET['move']) && $_GET['move'] != '') {
         $my_get_move = intval($_REQUEST['move']);
 
         if (api_is_coach()) {
-            if (!DocumentManager::is_visible_by_id($my_get_move, $course_info, api_get_session_id())) {                    
+            if (!DocumentManager::is_visible_by_id($my_get_move, $course_info, api_get_session_id(), api_get_user_id())) {                    
                 api_not_allowed();
             }
         }
@@ -523,7 +539,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
             $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
 
             //filter if is my shared folder. TODO: move this code to build_move_to_selector function
-            if (is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id) && !$is_allowed_to_edit){
+            if (is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id) && !$is_allowed_to_edit){
                 $main_user_shared_folder_main = '/shared_folder/sf_user_'.api_get_user_id();//only main user shared folder
                 $main_user_shared_folder_sub  = '/shared_folder\/sf_user_'.api_get_user_id().'\//';//all subfolders
                 $user_shared_folders=array();
@@ -552,7 +568,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         }
 
         if (api_is_coach()) {               
-            if (!DocumentManager::is_visible_by_id($_POST['move_file'], $_course, api_get_session_id())) {                    
+            if (!DocumentManager::is_visible_by_id($_POST['move_file'], $_course, api_get_session_id(), api_get_user_id())) {                    
                 api_not_allowed();
             }
         }
@@ -578,14 +594,13 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                
 			   //update database item property
 			   $doc_id=$_POST['move_file'];
-			   $current_session_id = api_get_session_id();			   
 
 			   if(is_dir($real_path_target)){
-					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderMoved', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderMoved', api_get_user_id(),$to_group_id,null,null,null,$session_id);
 					Display::display_confirmation_message(get_lang('DirMv'));
 			   }
 			   elseif(is_file($real_path_target)){
-				   api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentMoved', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);
+				   api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentMoved', api_get_user_id(),$to_group_id,null,null,null,$session_id);
 				   Display::display_confirmation_message(get_lang('DocMv'));
 			   }		   
 
@@ -614,7 +629,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 
 /*	DELETE FILE OR DIRECTORY */
 //Only teacher and all users into their group
-if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)){
+if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)){
     if (isset($_GET['delete'])) {
         if (!$is_allowed_to_edit) {
             if (api_is_coach()) {                
@@ -668,7 +683,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folde
 
 /*	CREATE DIRECTORY */
 //Only teacher and all users into their group and any user into his/her shared folder
-if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)) {
+if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
     // Create directory with $_POST data
     if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
         // Needed for directory creation
@@ -727,7 +742,7 @@ if ($is_allowed_to_edit) {
         
         if (!$is_allowed_to_edit) {                
             if (api_is_coach()) {                
-                if (!DocumentManager::is_visible_by_id($update_id, $_course, api_get_session_id())) {                    
+                if (!DocumentManager::is_visible_by_id($update_id, $_course, api_get_session_id(), api_get_user_id())) {                    
                     api_not_allowed();
                 }
             }                
@@ -737,7 +752,7 @@ if ($is_allowed_to_edit) {
         }
 
         // Update item_property to change visibility
-        if (api_item_property_update($_course, TOOL_DOCUMENT, $update_id, $visibility_command, api_get_user_id(), null, null, null, null, $current_session_id)) {
+        if (api_item_property_update($_course, TOOL_DOCUMENT, $update_id, $visibility_command, api_get_user_id(), null, null, null, null, $session_id)) {
             Display::display_confirmation_message(get_lang('VisibilityChanged'));//don't use ViMod because firt is load ViMdod (Gradebook). VisibilityChanged (trad4all)
         } else {
             Display::display_error_message(get_lang('ViModProb'));
@@ -747,7 +762,7 @@ if ($is_allowed_to_edit) {
 
 /*	TEMPLATE ACTION */
 //Only teacher and all users into their group
-if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)){
+if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)){
     if (isset($_GET['add_as_template']) && !isset($_POST['create_template'])) {
 
         $document_id_for_template = intval($_GET['add_as_template']);
@@ -773,8 +788,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         $document_id_for_template = intval(Database::escape_string($_GET['add_as_template']));
 
         $title = Security::remove_XSS($_POST['template_title']);
-        //$description = Security::remove_XSS($_POST['template_description']);
-        $course_code = api_get_course_id();
+        //$description = Security::remove_XSS($_POST['template_description']);        
         $user_id = api_get_user_id();
 
         // Create the template_thumbnails folder in the upload folder (if needed)
@@ -817,8 +831,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     }
 
     if (isset($_GET['remove_as_template'])) {
-        $document_id_for_template = intval($_GET['remove_as_template']);
-        $course_code = api_get_course_id();
+        $document_id_for_template = intval($_GET['remove_as_template']);        
         $user_id = api_get_user_id();
         DocumentManager::unset_document_as_template($document_id_for_template, $course_code, $user_id);
         Display::display_confirmation_message(get_lang('DocumentUnsetAsTemplate'));
@@ -893,8 +906,13 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $row['type'] = $document_data['filetype'];        
 
         // If the item is invisible, wrap it in a span with class invisible
-        $invisibility_span_open  = ($document_data['visibility'] == 0) ? '<span class="invisible">' : '';
-        $invisibility_span_close = ($document_data['visibility'] == 0) ? '</span>' : '';
+        
+        $is_visible = DocumentManager::is_visible_by_id($document_data['id'], $course_info, api_get_session_id(), api_get_user_id(), false);
+        
+        $invisibility_span_open  = ($is_visible == 0) ? '<span class="invisible">' : '';
+        $invisibility_span_close = ($is_visible == 0) ? '</span>' : '';
+                
+        
         // Size (or total size of a directory)
         $size = $document_data['filetype'] == 'folder' ? get_total_folder_size($document_data['path'], $is_allowed_to_edit) : $document_data['size'];
         
@@ -942,7 +960,8 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         }
 
         // Icons (clickable)
-        $row[] = create_document_link($document_data,  true, $count);
+        $row[] = create_document_link($document_data,  true, $count, $is_visible);
+        
         $path_info = pathinfo($document_data['path']);
                 
         if (isset($path_info['extension']) && in_array($path_info['extension'], array('ogg', 'mp3','wav'))) {
@@ -952,8 +971,8 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         // Validacion when belongs to a session
         $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
                 
-        // Document title with hyperlink        
-        $row[] = create_document_link($document_data).$session_img.'<br />'.$invisibility_span_open.'<i>'.nl2br(htmlspecialchars($document_data['comment'],ENT_QUOTES,$charset)).'</i>'.$invisibility_span_close.$user_link;
+        // Document title with link        
+        $row[] = create_document_link($document_data, false, null, $is_visible).$session_img.'<br />'.$invisibility_span_open.'<i>'.nl2br(htmlspecialchars($document_data['comment'],ENT_QUOTES,$charset)).'</i>'.$invisibility_span_close.$user_link;
     
         // Comments => display comment under the document name
         $display_size = format_file_size($size);
@@ -967,13 +986,13 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
         // Admins get an edit column
         
-        if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)) {
+        if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
             $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;            
             // If readonly, check if it the owner of the file or if the user is an admin            
             if ($document_data['insert_user_id'] == api_get_user_id() || api_is_platform_admin()) {                
-                $edit_icons = build_edit_icons($document_data, $key, $is_template, 0);
+                $edit_icons = build_edit_icons($document_data, $key, $is_template, 0, $is_visible);
             } else {          
-                $edit_icons = build_edit_icons($document_data, $key, $is_template, $document_data['readonly']);
+                $edit_icons = build_edit_icons($document_data, $key, $is_template, $document_data['readonly'], $is_visible);
             }
             $row[] = $edit_icons;
         }
@@ -993,7 +1012,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
 
 $column_show = array();
 
-if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)) {
+if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
 
     // TODO:check enable more options for shared folders
     /* CREATE NEW DOCUMENT OR NEW DIRECTORY / GO TO UPLOAD / DOWNLOAD ZIPPED FOLDER */
@@ -1073,7 +1092,7 @@ if (!is_null($docs_and_folders)) {
     if (!$is_certificate_mode && $total_size != 0 && (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())) {
 
         //for student does not show icon into other shared folder, and does not show into main path (root)
-        if (is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id) && $curdirpath!='/' || api_is_allowed_to_edit() || api_is_platform_admin()) {
+        if (is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id) && $curdirpath!='/' || api_is_allowed_to_edit() || api_is_platform_admin()) {
             echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=downloadfolder&amp;id='.$document_id.'">'.Display::return_icon('save_pack.png', get_lang('Save').' (ZIP)','','32').'</a>';
         }
     }
@@ -1099,7 +1118,7 @@ $column_show[] = 1;
 $column_show[] = 1;
 $column_show[] = 1;
 
-if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)) {
+if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
     $column_show[] = 1;
 }
 $column_show[] = 0;
@@ -1147,7 +1166,7 @@ $table->set_header($column++, get_lang('Name'));
 $table->set_header($column++, get_lang('Size'),true, array('style' => 'width:50px;'));
 $table->set_header($column++, get_lang('Date'),true, array('style' => 'width:105px;'));
 // Admins get an edit column
-if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)) {
+if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
     $table->set_header($column++, get_lang('Actions'), false, array ('style' => 'width:160px;'));
 }
 

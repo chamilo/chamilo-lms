@@ -7,8 +7,9 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
+*   @author Julio Montoya <gugli100@gmail.com> BeezNest 2011 LOTS of bug fixes
 *
-* 	@todo refactor more code into functions, use quickforms, coding standards, ...
+* 	@todo refactor more code into functions, use quickforms, coding standards, ... jm
 */
 
 /**
@@ -974,7 +975,7 @@ if (isset($_POST['sec_token']) && $ctok == $_POST['sec_token']) { //check the to
 					        SET	title       = '" . Database::escape_string($title) . "',
 					            description = '" . Database::escape_string($description) . "'
 					            ".$add_to_update."
-					        WHERE id    = $item_to_edit_id";
+					        WHERE id    = $item_to_edit_id";					
 					Database::query($sql);
 				}
 				api_item_property_update($_course, 'work', $item_to_edit_id, 'DocumentUpdated', $user_id);

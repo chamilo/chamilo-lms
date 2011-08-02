@@ -25,6 +25,8 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 //require_once 'rmdirr.php';
 require_once 'Glossary.class.php';
 require_once 'wiki.class.php';
+require_once 'Thematic.class.php';
+
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
@@ -44,6 +46,9 @@ class CourseRestorer
 	 * The course-object
 	 */
 	var $course;
+	
+	var $destination_course_info;
+	
 	/**
 	 * What to do with files with same name (FILE_SKIP, FILE_RENAME or
 	 * FILE_OVERWRITE)
@@ -73,16 +78,18 @@ class CourseRestorer
 	 
 	 */
 	function restore($destination_course_code = '', $session_id = 0, $update_course_settings = false, $respect_base_content = false) {
-		if ($destination_course_code == '') {
+		if ($destination_course_code == '') {			
 			$course_info = api_get_course_info();
+			$this->destination_course_info = $course_info;
 			$this->course->destination_db = $course_info['dbName'];
 			$this->course->destination_path = $course_info['path'];
 		} else {
-			$course_info = Database :: get_course_info($destination_course_code);
-            
-			$this->course->destination_db = $course_info['database'];
-			$this->course->destination_path = $course_info['directory'];
-		}
+			$course_info = api_get_course_info($destination_course_code);
+			$this->destination_course_info = $course_info;
+			
+			$this->course->destination_db = $course_info['dbName'];
+			$this->course->destination_path = $course_info['path'];
+		}		
 
 		// Source platform encoding - reading/detection
 		// The correspondent data field has been added as of version 1.8.6.1.
@@ -112,6 +119,8 @@ class CourseRestorer
 			$this->restore_links($session_id);
 			$this->restore_course_descriptions($session_id);
 			$this->restore_wiki($session_id);
+			$this->restore_thematic($session_id);
+			$this->restore_attendance($session_id);
 		} else {
 			$this->restore_links();
 			$this->restore_tool_intro();
@@ -126,6 +135,8 @@ class CourseRestorer
 			$this->restore_student_publication();
 			$this->restore_glossary();
 			$this->restore_wiki();
+			$this->restore_thematic();
+			$this->restore_attendance();
 		}
 		
 		if ($update_course_settings) {
@@ -1083,6 +1094,7 @@ class CourseRestorer
 		}
 		return $new_id;
 	}
+	
 	/**
 	 * Restore surveys
 	 */
@@ -1724,4 +1736,87 @@ class CourseRestorer
 			}
 		}
 	}
+	
+	/**
+	* Restore Thematics
+	*/
+	function restore_thematic($session_id = 0) {
+		if ($this->course->has_resources(RESOURCE_THEMATIC)) {
+			$table_thematic 		= Database :: get_course_table(TABLE_THEMATIC, $this->course->destination_db);
+			$table_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE, $this->course->destination_db);
+			$table_thematic_plan    = Database :: get_course_table(TABLE_THEMATIC_PLAN, $this->course->destination_db);
+		
+			$resources = $this->course->resources;
+			foreach ($resources[RESOURCE_THEMATIC] as $id => $thematic) {
+	
+				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				$thematic->content 	  = DocumentManager::replace_urls_inside_content_html_from_copy_course($thematic->content, $this->course->code, $this->course->destination_path);
+	
+				$doc = '';
+				$thematic->params['id'] = null;
+				$last_id = Database::insert($table_thematic, $thematic->params, true);
+				
+				if (is_numeric($last_id)) {
+					api_item_property_update($this->destination_course_info, 'thematic', $last_id,"ThematicAdded", api_get_user_id());
+					
+					foreach($thematic->thematic_advance_list as $thematic_advance) {						
+						unset($thematic_advance['id']);						
+						$thematic_advance['attendance_id'] = 0;
+						$thematic_advance['thematic_id'] = $last_id;
+						$my_id = Database::insert($table_thematic_advance, $thematic_advance, true);
+						
+						if (is_numeric($my_id)) {
+							api_item_property_update($this->destination_course_info, 'thematic_advance', $my_id,"ThematicAdvanceAdded", api_get_user_id());
+						}
+					}
+					
+					foreach($thematic->thematic_plan_list as $thematic_plan) {
+						unset($thematic_advance['id']);						
+						$thematic_plan['thematic_id'] = $last_id;
+						$my_id = Database::insert($table_thematic_plan, $thematic_plan, true);
+						if (is_numeric($my_id)) {
+							api_item_property_update($this->destination_course_info, 'thematic_plan', $my_id, "ThematicPlanAdded", api_get_user_id());
+						}
+					}
+					
+				}
+			}
+		}
+	}
+	
+	/**
+	* Restore Attendance
+	*/
+	
+	function restore_attendance($session_id = 0) {
+		if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
+			$table_attendance 		   = Database :: get_course_table(TABLE_ATTENDANCE, $this->course->destination_db);
+			$table_attendance_calendar = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR, $this->course->destination_db);
+				
+			$resources = $this->course->resources;
+			foreach ($resources[RESOURCE_ATTENDANCE] as $id => $obj) {
+	
+				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				$obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($obj->params['description'], $this->course->code, $this->course->destination_path);
+				$doc = '';
+				$obj->params['id'] = null;
+				$last_id = Database::insert($table_attendance, $obj->params);
+	
+				if (is_numeric($last_id)) {
+					api_item_property_update($this->destination_course_info, TOOL_ATTENDANCE, $last_id,"AttendanceAdded", api_get_user_id());
+					
+					foreach($obj->attendance_calendar as $attendance_calendar) {
+						unset($attendance_calendar['id']);						
+						$attendance_calendar['attendance_id'] = $last_id;
+						$my_id = Database::insert($table_attendance_calendar, $attendance_calendar);
+	/*
+						if (is_numeric($my_id)) {
+							api_item_property_update($this->destination_course_info, 'thematic_advance', $my_id,"ThematicAdvanceAdded", api_get_user_id());
+						}*/
+					}	
+				}
+			}
+		}
+	}
+	
 }

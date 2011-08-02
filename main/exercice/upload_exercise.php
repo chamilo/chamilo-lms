@@ -291,6 +291,7 @@ function lp_upload_quiz_action_handling() {
             }
         }
         if (isset($_SESSION['oLP']) && isset($_GET['lp_id'])) {
+        	
             $previous = $_SESSION['oLP']->select_previous_item_id();
             $parent = 0;
             // Add a Quiz as Lp Item

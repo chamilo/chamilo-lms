@@ -38,11 +38,12 @@ $zip_folder     = new PclZip($temp_zip_file);
 $doc_table      = Database::get_course_table(TABLE_DOCUMENT);
 $prop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
+//$to_group_id = api_get_group_id(); variable loaded in document.php
+
 
 // We need this path to clean it out of the zip file
 // I'm not using dirname as it gives too much problems (cfr.)
 $remove_dir = ($path != '/') ? substr($path, 0, strlen($path) - strlen(basename($path))) : '/';
-
 
 // Put the files in the zip
 // 2 possibilities: Admins get all files and folders in the selected folder (except for the deleted ones)
@@ -58,12 +59,13 @@ if (api_is_allowed_to_edit()) {
 	}
 	$querypath = Database::escape_string($querypath);
 	// Search for all files that are not deleted => visibility != 2
-	$query = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props  
-							  WHERE props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$querypath."/%' AND docs.filetype='file' AND props.visibility<>'2' AND props.to_group_id=".$to_group_id."");
+	$sql = "SELECT path FROM $doc_table AS docs,$prop_table AS props  
+			WHERE props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$querypath."/%' AND docs.filetype='file' AND props.visibility<>'2' AND props.to_group_id=".$to_group_id."";
+	$query = Database::query($sql);
 	// Add tem to the zip file
 	while ($not_deleted_file = Database::fetch_assoc($query)) {
-		$zip_folder->add($sys_course_path.$_course['path'].'/document'.$not_deleted_file['path'], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/document'.$remove_dir);
-	}
+		$zip_folder->add($sys_course_path.$_course['path'].'/document'.$not_deleted_file['path'], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/document'.$remove_dir);		
+	}	
 } else {
     // For other users, we need to create a zipfile with only visible files and folders
     
@@ -81,11 +83,8 @@ if (api_is_allowed_to_edit()) {
 	// Add them to an array
 	while ($all_visible_files = Database::fetch_assoc($query)) {
 		$all_visible_files_path[] = $all_visible_files['path'];
-		//echo "visible files: ".$sys_course_path.$_course['path'].'/document'.$all_visible_files['path']."<br>";
 	}
-	//echo('<pre>');
-	//print_r($all_visible_files_path);
-	//echo('</pre>');
+
 	// 2nd: Get all folders that are invisible in the given path
 	$query2 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props 
 							   WHERE props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$querypath."/%' AND props.visibility<>'1' AND docs.filetype='folder'");
@@ -114,7 +113,6 @@ if (api_is_allowed_to_edit()) {
 
 	for ($i = 0; $i < count($files_for_zipfile); $i++) {
 		$zip_folder->add($sys_course_path.$_course['path'].'/document'.$files_for_zipfile[$i], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/document'.$remove_dir);
-		//echo $sys_course_path.$_course['path'].'/document'.$files_for_zipfile[$i].'<br />';
 	}
 } // end for other users
 
@@ -122,14 +120,13 @@ if (api_is_allowed_to_edit()) {
 event_download(($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip (folder)');
 
 // Start download of created file
-//send_file_to_client($temp_zip_file, basename(empty($_GET['id']) ? 'documents' : $_GET['id']).'.zip');
 $name = ($path == '/') ? 'documents.zip' : $document_data['title'].'.zip';
 
-if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
+//if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
     DocumentManager::file_send_for_download($temp_zip_file, true, $name);
     @unlink($temp_zip_file);    
     exit;
-}
+//}
 
 /**
  * Returns the difference between two arrays, as an array of those key/values

@@ -101,7 +101,7 @@ function build_directory_selector($folders, $curdirpath, $group_dir = '', $chang
  * @param int $show_as_icon - if it is true, only a clickable icon will be shown
  * @return string url
  */
-function create_document_link($document_data, $show_as_icon = false, $counter = null) {
+function create_document_link($document_data, $show_as_icon = false, $counter = null, $visibility) {
     global $dbl_click_id;
     if (isset($_SESSION['_gid'])) {
         $req_gid = '&amp;gidReq='.$_SESSION['_gid'];
@@ -120,13 +120,13 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
     }
     
     $filetype = $document_data['filetype'];
-    $size = $filetype == 'folder' ? get_total_folder_size($document_data['path'], api_is_allowed_to_edit(null, true)) : $document_data['size'];
-    $visibility = $document_data['visibility'];
+    $size = $filetype == 'folder' ? get_total_folder_size($document_data['path'], api_is_allowed_to_edit(null, true)) : $document_data['size'];    
     $path = $document_data['path'];
       
     $url_path = urlencode($document_data['path']);
+    
     // Add class="invisible" on invisible files
-    $visibility_class = ($visibility == 0) ? ' class="invisible"' : '';
+    $visibility_class = ($visibility == false) ? ' class="invisible"' : '';
 
     if (!$show_as_icon) {
         // Build download link (icon)
@@ -259,7 +259,11 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
             ) {
             	//yox view
 				$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
-				return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview" style="float:left" '.$visibility_class.'>'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+				$class = 'yoxview';
+				if ($visibility == false) {
+					$class = "yoxview invisible";
+				}								
+				return '<a href="'.$url.'" class="'.$class.'" title="'.$tooltip_title_alt.'" target="yoxview" style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
 			} else {
 				$url = 'showinframes.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
 			    //No yoxview			
@@ -434,8 +438,7 @@ function build_document_icon_tag($type, $path) {
  * @param int $id dbase id of the document
  * @return string html img tags with hyperlinks
  */
-//function build_edit_icons($document_data, $curdirpath, $type, $path, $visibility, $id, $is_template, $is_read_only = 0, $session_id = 0) {
-function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, $session_id = 0) {
+function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, $visibility) {
     if (isset($_SESSION['_gid'])) {
         $req_gid = '&gidReq='.$_SESSION['_gid'];
     } else {
@@ -444,7 +447,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
     $document_id            = $document_data['id'];
     
     $type                   = $document_data['filetype'];
-    $visibility             = $document_data['visibility'];
+    
     $is_read_only           = $document_data['readonly'];
     $path                   = $document_data['path'];
     $parent_id              = DocumentManager::get_document_id(api_get_course_info(), dirname($path));    

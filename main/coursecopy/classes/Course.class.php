@@ -64,10 +64,8 @@ class Course
 	 * given type. If no type is given, check if course has resources of any
 	 * type.
 	 */
-	function has_resources($resource_type = null)
-	{
-		if( $resource_type != null)
-		{
+	function has_resources($resource_type = null) {
+		if( $resource_type != null) {
 			return is_array($this->resources[$resource_type]) && ( count($this->resources[$resource_type]) > 0 );
 		}
 		return (count($this->resources) > 0);
@@ -180,21 +178,26 @@ class Course
 							$title = $resource->title;
 							$description = $resource->subtitle;
 							break;
-
 						case RESOURCE_SURVEYQUESTION:
 							$title = $resource->survey_question;
 							$description = $resource->survey_question_comment;
 							break;
-
 						case RESOURCE_TOOL_INTRO:
 							$description = $resource->intro_text;
 							break;
-
 						case RESOURCE_WIKI:
 							$title = $resource->title;
 							$description = $resource->content;
 							break;
-
+						case RESOURCE_THEMATIC:
+							$title 			= $resource->title;
+							$description 	= $resource->content;
+							break;
+						case RESOURCE_ATTENDANCE:
+							
+							$title 			= $resource->params['name'];
+							$description 	= $resource->params['description'];
+							break;
 						default:
 							break;
 					}

@@ -48,16 +48,15 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 	} else {
 		$cb = new CourseBuilder();
 		$course = $cb->build();
-	}
+	}	
 	$cr = new CourseRestorer($course);
 	$cr->set_file_option($_POST['same_file_name_option']);
 	$cr->restore($_POST['destination_course']);
 	Display::display_normal_message(get_lang('CopyFinished'));
 } elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
 	$cb = new CourseBuilder();
-	$course = $cb->build();
-	//echo get_lang('SelectItemsToCopy');
-	//echo '<br/><br/>';
+	$course = $cb->build();	
+
 	$hidden_fields['same_file_name_option'] = $_POST['same_file_name_option'];
 	$hidden_fields['destination_course'] = $_POST['destination_course'];
 	CourseSelectForm :: display_form($course, $hidden_fields, true);

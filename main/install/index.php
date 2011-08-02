@@ -126,6 +126,7 @@ $software_name = 'Chamilo';
 $software_url = 'http://www.chamilo.org/';
 
 // A protection measure for already installed systems.
+
 if (is_already_installed_system()) {
 	// The system has already been installed, so block re-installation.
 	$global_error_code = 6;
@@ -212,7 +213,7 @@ if (!isset($_GET['running'])) {
 	$dbUsernameForm = 'root';
 	$dbPassForm		= '';
  	$dbPrefixForm   = '';
-	$dbNameForm		= 'chamilo_main';
+	$dbNameForm		= 'main';
 	$dbStatsForm    = 'chamilo_main';
 	$dbScormForm    = 'chamilo_main';
 	$dbUserForm		= 'chamilo_main';
@@ -250,9 +251,7 @@ if (!isset($_GET['running'])) {
 	$singleDbForm			= 0;
 	$encryptPassForm		= 'sha1';
 	$session_lifetime		= 360000;
-
 } else {
-
 	foreach ($_POST as $key => $val) {
 		$magic_quotes_gpc = ini_get('magic_quotes_gpc');
 		if (is_string($val)) {
@@ -312,6 +311,7 @@ if ($encryptPassForm == '1') {
 		/*]]>*/
 	</style>
 	<script type="text/javascript" src="../inc/lib/javascript/jquery.min.js"></script>
+	
 	<script type="text/javascript" >
 		$(document).ready( function() {
 			 //checked
@@ -332,9 +332,13 @@ if ($encryptPassForm == '1') {
     			$("#is_executable").attr("value",$(this).attr("name"));
     		});
 
-	 	} );
-	</script>
-	<script type="text/javascript">
+			//Blocking step6 button
+    		$("#button_step6").click(function() {        		
+            	$("#button_step6").attr('disable', true);
+    			$("#button_step6").html('<?php echo addslashes(get_lang('PleaseWait'));?>');
+    			$("#is_executable").attr("value",'step6');
+        	});    		
+	 	});
 
 		function show_hide_tracking_and_user_db (my_option) {
 			if (my_option=='singleDb1') {
@@ -351,19 +355,22 @@ if ($encryptPassForm == '1') {
 				$('#dbUserForm').attr('value','chamilo_main');
 			}
 		}
-	</script>
-	<script language="javascript">
+
 		init_visibility=0;
 		function show_hide_option() {			
 			if (init_visibility == 0) {
-				$('#optional_param1').show();			
+				$('#optional_param1').show();
+						
 				if ($('#singleDb1').attr("checked") == true) {										
-					$('#optional_param2').hide();
-					$('#optional_param4').hide();
+					//$('#optional_param2').hide();
+					//$('#optional_param4').hide();
+					$('#optional_param5').hide();
 				} else {					
-					$('#optional_param2').show();
-					$('#optional_param4').show();  					
+					//$('#optional_param2').show();
+					//$('#optional_param4').show();
+					$('#optional_param5').show();  					
                 }	
+                
 				//document.getElementById('optional_param2').style.display = '';
 				if (document.getElementById('optional_param3')) {
 					document.getElementById('optional_param3').style.display = '';
@@ -375,19 +382,19 @@ if ($encryptPassForm == '1') {
 				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters', ''); ?>';
 			} else {
 				document.getElementById('optional_param1').style.display = 'none';
-				document.getElementById('optional_param2').style.display = 'none';
+				/*document.getElementById('optional_param2').style.display = 'none';
 				if (document.getElementById('optional_param3')) {
 					document.getElementById('optional_param3').style.display = 'none';
 				}
 				document.getElementById('optional_param4').style.display = 'none';
-				//document.getElementById('optional_param5').style.display = 'none';
+				*/
+				document.getElementById('optional_param5').style.display = 'none';
 				document.getElementById('optional_param6').style.display = 'none';
 				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters', ''); ?>';
 				init_visibility = 0;
 			}
-		}
-	</script>
-        <script language="javascript">
+			return false;
+		}	
 
             $(document).ready( function() {
                 $(".advanced_parameters").click(function() {
@@ -432,6 +439,7 @@ if ($encryptPassForm == '1') {
             }
 
         </script>
+        
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>">
@@ -453,7 +461,7 @@ if ($encryptPassForm == '1') {
 </div>
 
 <div id="main">
-<form style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
+<form id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <div id="installation_steps" style="width:220px">	
 	<br />
 	<ol>
@@ -621,26 +629,24 @@ if ($_POST['step2']) {
 	<blockquote>
 
 	<?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
-
 	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
 	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
 	<?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
-	<?php if (!empty($dbPrefixForm)) echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
+	<?php echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
 	<?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong>
 	<?php if ($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br />
 	<?php
 	if (!$singleDbForm) {
-		echo get_lang('StatDB').' : <strong>'.$dbStatsForm.'</strong>';
+		/*echo get_lang('StatDB').' : <strong>'.$dbStatsForm.'</strong>';
 		if ($installType == 'new') {
 			echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
 		}
 		echo '<br />';
-
 		echo get_lang('UserDB').' : <strong>'.$dbUserForm.'</strong>';
 		if ($installType == 'new') {
 			echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
 		}
-		echo '<br />';
+		echo '<br />';*/
 	}
 	?>
 	<?php //echo get_lang('EnableTracking').' : '.($enableTrackingForm ? get_lang('Yes') : get_lang('No')); ?>
@@ -676,17 +682,22 @@ if ($_POST['step2']) {
 
 	<?php if ($installType == 'new'): ?>
 	<div style="background-color:#FFFFFF">
-	<p align="center"><strong><font color="red">
-	<?php echo get_lang('Warning'); ?> !<br />
+	
+	<div class="warning-message"><center><h2><?php echo get_lang('Warning'); ?> !</h2></center><br />
 	<?php echo get_lang('TheInstallScriptWillEraseAllTables'); ?>
-	</font></strong></p>
+	</div>
+	
 	</div>
 	<?php endif; ?>
 
 	<table width="100%">
 	<tr>
-	  <td><button type="submit" class="back" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" /><?php echo get_lang('Previous'); ?></button></td>
-	  <td align="right"><input type="hidden" name="is_executable" id="is_executable" value="-" /><button class="save" type="submit" name="step6" value="<?php echo get_lang('InstallDokeos'); ?> &gt;" onclick="javascript:if(this.value == '<?php $msg = get_lang('PleaseWait');?>...') return false; else this.value='<?php $msg = get_lang('InstallChamilo');?>...';" ><?php echo $msg; ?></button></td>
+		<td><button type="submit" class="back" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" /><?php echo get_lang('Previous'); ?></button></td>
+	  	<td align="right">
+			<input type="hidden" name="is_executable" id="is_executable" value="-" />
+			<input type="hidden" name="step6" value="1" />
+	  		<button id="button_step6" class="save" type="submit" name="button_step6" value="<?php echo get_lang('InstallChamilo'); ?>"><?php echo get_lang('InstallChamilo'); ?></button>
+		</td>
 	</tr>
 	</table>
 
@@ -783,7 +794,7 @@ if ($_POST['step2']) {
 		}
 
 	} else {
-
+	
 		set_file_folder_permissions();
 		database_server_connect();
 
@@ -795,19 +806,16 @@ if ($_POST['step2']) {
 
 		include 'install_db.inc.php';
 		include 'install_files.inc.php';
-        }
-        $current_step = 7;
-        display_after_install_message($installType, $nbr_courses);
+	}
+    $current_step = 7;
+    display_after_install_message($installType, $nbr_courses);
 
 } elseif ($_POST['step1'] || $badUpdatePath) {
-
         //STEP 1 : REQUIREMENTS
         //make sure that proposed path is set, shouldn't be necessary but...
         if (empty($proposedUpdatePath)) { $proposedUpdatePath = $_POST['updatePath']; }
         display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8, $update_from_version_6);
-
 } else {
-
         // This is the start screen.
         display_language_selection();
 }

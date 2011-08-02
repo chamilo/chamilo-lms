@@ -276,27 +276,21 @@ $form->setDefaults($defaults);
 
 $simple_form = $form->return_form();
 
-echo '<style>
-.files {
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-.files td {
-    padding: 3px 10px 3px 0;
-}
-</style>';
 $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=upload_file';
 $multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'<br />';
 //Adding icon replace the  <div>'.get_lang('UploadFiles').'</div> with this:
 //<div style="width:50%;margin:0 auto;"> '.Display::div(Display::return_icon('folder_document.png', '', array(), 64), array('style'=>'float:left')).' '.get_lang('UploadFiles').'</div>
-$multiple_form .=  '<center><form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">    
-    <input type="hidden" name="curdirpath" value="'.$path.'" />    
-    <input type="file" name="file" multiple>
-    <button>Upload</button>
-    <div>'.get_lang('UploadFiles').'</div>
-</center></form>';
-$multiple_form  .='<table class="files"></table>';
+$multiple_form .=  '
+	<center>
+	<form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">    
+    	<input type="hidden" name="curdirpath" value="'.$path.'" />    
+    	<input type="file" name="file" multiple>
+    	<button type="submit">Upload</button>
+    	'.get_lang('UploadFiles').' 
+	</form>
+	</center>
+	<table class="files"></table>';
+
 $headers = array(get_lang('Send') , get_lang('Send').' ('.get_lang('Simple').')');
 echo Display::tabs($headers, array($multiple_form, $simple_form ),'tabs');
 

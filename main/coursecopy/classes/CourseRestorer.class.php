@@ -1800,7 +1800,7 @@ class CourseRestorer
 				$obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($obj->params['description'], $this->course->code, $this->course->destination_path);
 				$doc = '';
 				$obj->params['id'] = null;
-				$last_id = Database::insert($table_attendance, $obj->params, true);
+				$last_id = Database::insert($table_attendance, $obj->params);
 	
 				if (is_numeric($last_id)) {
 					api_item_property_update($this->destination_course_info, TOOL_ATTENDANCE, $last_id,"AttendanceAdded", api_get_user_id());
@@ -1808,7 +1808,7 @@ class CourseRestorer
 					foreach($obj->attendance_calendar as $attendance_calendar) {
 						unset($attendance_calendar['id']);						
 						$attendance_calendar['attendance_id'] = $last_id;
-						$my_id = Database::insert($table_attendance_calendar, $attendance_calendar, true);
+						$my_id = Database::insert($table_attendance_calendar, $attendance_calendar);
 	/*
 						if (is_numeric($my_id)) {
 							api_item_property_update($this->destination_course_info, 'thematic_advance', $my_id,"ThematicAdvanceAdded", api_get_user_id());

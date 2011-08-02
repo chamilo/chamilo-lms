@@ -1332,9 +1332,9 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 
         // Check wether a Chamilo configuration file already exists.
         elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
-            echo '<div style="color:red; background-color:white; font-weight:bold; text-align:center;">';
+            echo '<div class="warning-message"><h4><center>';
             echo get_lang('WarningExistingDokeosInstallationDetected');
-            echo '</div>';
+            echo '</center></h4></div>';
         }
 
         // And now display the choice buttons (go back or install)

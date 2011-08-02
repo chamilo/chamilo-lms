@@ -126,6 +126,7 @@ $software_name = 'Chamilo';
 $software_url = 'http://www.chamilo.org/';
 
 // A protection measure for already installed systems.
+
 if (is_already_installed_system()) {
 	// The system has already been installed, so block re-installation.
 	$global_error_code = 6;
@@ -312,6 +313,7 @@ if ($encryptPassForm == '1') {
 		/*]]>*/
 	</style>
 	<script type="text/javascript" src="../inc/lib/javascript/jquery.min.js"></script>
+	
 	<script type="text/javascript" >
 		$(document).ready( function() {
 			 //checked
@@ -332,9 +334,13 @@ if ($encryptPassForm == '1') {
     			$("#is_executable").attr("value",$(this).attr("name"));
     		});
 
-	 	} );
-	</script>
-	<script type="text/javascript">
+			//Blocking step6 button
+    		$("#button_step6").click(function() {        		
+            	$("#button_step6").attr('disable', true);
+    			$("#button_step6").html('<?php echo addslashes(get_lang('PleaseWait'));?>');
+    			$("#is_executable").attr("value",'step6');
+        	});    		
+	 	});
 
 		function show_hide_tracking_and_user_db (my_option) {
 			if (my_option=='singleDb1') {
@@ -351,8 +357,7 @@ if ($encryptPassForm == '1') {
 				$('#dbUserForm').attr('value','chamilo_main');
 			}
 		}
-	</script>
-	<script language="javascript">
+
 		init_visibility=0;
 		function show_hide_option() {			
 			if (init_visibility == 0) {
@@ -385,9 +390,7 @@ if ($encryptPassForm == '1') {
 				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters', ''); ?>';
 				init_visibility = 0;
 			}
-		}
-	</script>
-        <script language="javascript">
+		}	
 
             $(document).ready( function() {
                 $(".advanced_parameters").click(function() {
@@ -432,6 +435,7 @@ if ($encryptPassForm == '1') {
             }
 
         </script>
+        
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>">
@@ -453,7 +457,7 @@ if ($encryptPassForm == '1') {
 </div>
 
 <div id="main">
-<form style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
+<form id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <div id="installation_steps" style="width:220px">	
 	<br />
 	<ol>
@@ -676,17 +680,22 @@ if ($_POST['step2']) {
 
 	<?php if ($installType == 'new'): ?>
 	<div style="background-color:#FFFFFF">
-	<p align="center"><strong><font color="red">
-	<?php echo get_lang('Warning'); ?> !<br />
+	
+	<div class="warning-message"><center><h2><?php echo get_lang('Warning'); ?> !</h2></center><br />
 	<?php echo get_lang('TheInstallScriptWillEraseAllTables'); ?>
-	</font></strong></p>
+	</div>
+	
 	</div>
 	<?php endif; ?>
 
 	<table width="100%">
 	<tr>
-	  <td><button type="submit" class="back" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" /><?php echo get_lang('Previous'); ?></button></td>
-	  <td align="right"><input type="hidden" name="is_executable" id="is_executable" value="-" /><button class="save" type="submit" name="step6" value="<?php echo get_lang('InstallDokeos'); ?> &gt;" onclick="javascript:if(this.value == '<?php $msg = get_lang('PleaseWait');?>...') return false; else this.value='<?php $msg = get_lang('InstallChamilo');?>...';" ><?php echo $msg; ?></button></td>
+		<td><button type="submit" class="back" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" /><?php echo get_lang('Previous'); ?></button></td>
+	  	<td align="right">
+			<input type="hidden" name="is_executable" id="is_executable" value="-" />
+			<input type="hidden" name="step6" value="1" />
+	  		<button id="button_step6" class="save" type="submit" name="button_step6" value="<?php echo get_lang('InstallChamilo'); ?>"><?php echo get_lang('InstallChamilo'); ?></button>
+		</td>
 	</tr>
 	</table>
 

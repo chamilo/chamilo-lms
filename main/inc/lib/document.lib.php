@@ -2610,7 +2610,7 @@ return 'application/octet-stream';
     	            "   AND last.visibility = '1' ".
 					"ORDER BY docs.path ASC";
     	$res_doc 	= Database::query($sql_doc);
-    	$resources  = Database::store_result($res_doc);
+    	$resources  = Database::store_result($res_doc, 'ASSOC');
     	$return 	= '';
     	
     	$resources_sorted = array();
@@ -2626,27 +2626,35 @@ return 'application/octet-stream';
     	
     	// If you want to debug it, I advise you to do "echo" on the eval statements.
     	if (!empty($resources) && $user_in_course) {
-            foreach ($resources as $resource) {
-            	
-            	$is_visible = self::is_visible_by_id($resource['id'], $course_info, $session_id, api_get_user_id());
-            	
+             foreach ($resources as $resource) {            	
+            	$is_visible = self::is_visible_by_id($resource['id'], $course_info, $session_id, api_get_user_id());            	
             	if (!$is_visible) {
             		continue;
-            	}
-            	
+            	}            	
 		    	$resource_paths = explode('/', $resource['path']);
 		    	array_shift($resource_paths);
 		    	$path_to_eval = $last_path = '';
 		    	$is_file = false;
-		    	foreach ($resource_paths as $key => $resource_path) {
-					if (strpos($resource_path, '.') === false && $key != count($resource_paths) - 1) {
-		    		// It's a folder.
-		    		$path_to_eval .= "['$resource_path']['files']";
-		    	} else
-		    		if (strpos($resource_path, '.') !== false)
-		    			$is_file = true;	    	
-		    			$last_path = $resource_path;
-		    	}
+		    	
+		    	if ($resource['filetype'] == 'file') {
+		    		foreach ($resource_paths as $key => $resource_path) {
+		    			if ($key != count($resource_paths)-1) {
+		    				// It's a folder.
+		    				$path_to_eval .= "['$resource_path']['files']";
+		    			}	    			
+		    			$is_file = true;
+		    		}	
+		    	} else {
+		    		foreach ($resource_paths as $key => $resource_path) {
+		    			if ($key != count($resource_paths) - 1) {
+		    				// It's a folder.
+		    				$path_to_eval .= "['$resource_path']['files']";
+		    			}
+		    		}
+		    	}	
+		    	
+		    	$last_path = $resource_path;
+		    	
 		    	
 		    	if ($is_file) {
 		    		//for backward compatibility
@@ -2718,6 +2726,7 @@ return 'application/octet-stream';
     	require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
     	
     	$img_path = api_get_path(WEB_IMG_PATH);
+    	$img_sys_path = api_get_path(SYS_CODE_PATH).'img/';
     	$web_code_path = api_get_path(WEB_CODE_PATH);
     	
     	$return = '';
@@ -2766,7 +2775,7 @@ return 'application/octet-stream';
     				$return .= '</div>
     							<div style="display: none;" id="'.$resource['id'].'">';
     				
-    				if (isset($resource['files'])) {
+    				if (isset($resource['files'])) {    					
     					$return .= self::write_resources_tree($course_info, $session_id, $resource['files'], $num +1, $lp_id, $target);
     				}
     				$return .= '</div></div>';
@@ -2789,8 +2798,12 @@ return 'application/octet-stream';
     					} else {
     						//Direct document URL
     						$url  = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id_session='.$session_id.'&id='.$key;
-    					}	
+    					}
     					$img = $img_path.$icon;
+    					if (!file_exists($img_sys_path.$icon)) {
+    						$img = $img_path.'icons/16/default_small.gif';
+    					}
+    					
     					$link = Display::url('<img alt="" src="'.$img.'" title="" />&nbsp;' . $my_file_title, $url, array('target' => $target));
     					 
     					$return .= '<div class="doc_resource"><div style="margin-left:' . (($num +1) * 18) . 'px;margin-right:5px;">';    					

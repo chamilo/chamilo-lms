@@ -28,6 +28,8 @@ define('RESOURCE_SURVEYQUESTION','survey_question');
 define('RESOURCE_SURVEYINVITATION','survey_invitation');
 define('RESOURCE_WIKI','wiki');
 
+define('RESOURCE_THEMATIC','thematic');
+
 /**
  * Representation of a resource in a Chamilo-course.
  * This is a base class of which real resource-classes (for Links,
@@ -169,6 +171,8 @@ class Resource
 				return TOOL_GLOSSARY;
 			case RESOURCE_WIKI:
 				return TOOL_WIKI;
+			case RESOURCE_THEMATIC:
+				return TOOL_ATTENDANCE;
 			default:
 				return null;
 		}

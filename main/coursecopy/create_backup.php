@@ -97,7 +97,6 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 
 		$values['backup_option'] = 'full_backup';
 		$form->setDefaults($values);
-
 		$form->display();
 	}
 }

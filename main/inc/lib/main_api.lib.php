@@ -2598,6 +2598,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
     if (Database::affected_rows() == 0) {
         $sql = "INSERT INTO $TABLE_ITEMPROPERTY (tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id,$to_field,  visibility,   start_visible,   end_visible, id_session)
                 VALUES ('$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
+        
         $res = Database::query($sql);
         if (!$res) {
             return false;

@@ -157,16 +157,16 @@ switch ($action) {
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
                 $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(),$item['code'], $session_id, false);
                 if ($lp_item['modified_on'] == '0000-00-00 00:00:00' || empty($lp_item['modified_on'])) {
-                    $lp_date = api_get_local_time($lp_item['created_on'], null, date_default_timezone_get());
+                    $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
                     $label      = get_lang('LearnpathAdded');
                 } else {
-                    $lp_date    = api_get_local_time($lp_item['modified_on'], null, date_default_timezone_get());
+                    $lp_date    = api_get_local_time($lp_item['modified_on']);
                     $image      = 'moderator_star.png';
                     $label      = get_lang('LearnpathUpdated');
                 }
                 if (strtotime($last_date) < strtotime($lp_date)) {
-                    $icons = ' '.Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date);                    
+                    $icons = Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date);                    
                 }
                 
                 if (!empty($lp_item['publicated_on'])) {
@@ -188,7 +188,7 @@ switch ($action) {
                     }
                 }
                 
-                $temp[$count]['cell']=array($date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>SESSION_LINK_TARGET)));
+                $temp[$count]['cell']=array($date, $item['title'], Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET)));
                 $count++;     
             }              
         } 
@@ -283,16 +283,16 @@ switch ($action) {
                 
                 $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(),$item['code'], $session_id, false);
                 if ($lp_item['modified_on'] == '0000-00-00 00:00:00' || empty($lp_item['modified_on'])) {
-                    $lp_date = api_get_local_time($lp_item['created_on'], null, date_default_timezone_get());
+                    $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
                     $label      = get_lang('LearnpathAdded');
                 } else {
-                    $lp_date    = api_get_local_time($lp_item['modified_on'], null, date_default_timezone_get());
+                    $lp_date    = api_get_local_time($lp_item['modified_on']);
                     $image      = 'moderator_star.png';
                     $label      = get_lang('LearnpathUpdated');
                 }
                 if (strtotime($last_date) < strtotime($lp_date)) {
-                    $icons = ' '.Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date);                    
+                    $icons = Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date);                    
                 }
                 
                 if (!empty($lp_item['publicated_on'])) {
@@ -318,7 +318,7 @@ switch ($action) {
                     }
                 }
             
-                $temp[$count]['cell'] = array($week_data, $date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>SESSION_LINK_TARGET)));
+                $temp[$count]['cell'] = array($week_data, $date, $item['title'], Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET)));
                 $count++;     
             }              
         }     
@@ -410,16 +410,16 @@ switch ($action) {
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
                 $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(),$item['code'], $session_id, false);
                 if ($lp_item['modified_on'] == '0000-00-00 00:00:00' || empty($lp_item['modified_on'])) {
-                    $lp_date = api_get_local_time($lp_item['created_on'], null, date_default_timezone_get());
+                    $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
                     $label      = get_lang('LearnpathAdded');
                 } else {
-                    $lp_date    = api_get_local_time($lp_item['modified_on'], null, date_default_timezone_get());
+                    $lp_date    = api_get_local_time($lp_item['modified_on']);
                     $image      = 'moderator_star.png';
                     $label      = get_lang('LearnpathUpdated');
                 }
                 if (strtotime($last_date) < strtotime($lp_date)) {
-                    $icons = ' '.Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date);                    
+                    $icons = Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date);                    
                 }
                 if (!empty($lp_item['publicated_on'])) {
                     $date = substr($lp_item['publicated_on'], 0, 10);
@@ -438,7 +438,7 @@ switch ($action) {
                         continue;
                     }
                 }                
-                $temp[$count]['cell']=array($date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>SESSION_LINK_TARGET)));
+                $temp[$count]['cell']=array($date, $item['title'], Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET)));
                 $count++;     
             }              
         } 

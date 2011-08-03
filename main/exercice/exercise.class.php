@@ -1779,8 +1779,7 @@ class Exercise {
 		if ($debug) error_log('manage_answer $from_database '.$from_database);
 		if ($debug) error_log('manage_answer $show_result '.$show_result);		
 		if ($debug) error_log('manage_answer $propagate_neg '.$propagate_neg);
-		if ($debug) error_log('manage_answer $$hotspot_delineation_result '.print_r($hotspot_delineation_result, 1));
-		
+		if ($debug) error_log('manage_answer $$hotspot_delineation_result '.print_r($hotspot_delineation_result, 1));		
 		 
 		$extra_data = array();  		
 		$html = '';
@@ -1791,7 +1790,7 @@ class Exercise {
         $table_ans              = Database::get_course_table(TABLE_QUIZ_ANSWER);        
                     
      	// Creates a temporary Question object
-        $objQuestionTmp         = Question :: read($questionId);
+        $objQuestionTmp         = Question::read($questionId);
 
         $questionName 			= $objQuestionTmp->selectTitle();
         $questionDescription 	= $objQuestionTmp->selectDescription();
@@ -1803,7 +1802,7 @@ class Exercise {
         $next = 1; //not for now
                  
         //Extra information of the question 
-        if (!empty($extra)){
+        if (!empty($extra)) {
             $extra          = explode(':', $extra);            
             $true_score     = $extra[0];
             $false_score    = $extra[1];
@@ -1931,7 +1930,7 @@ class Exercise {
                     break;
                 case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
                     if ($from_database) {
-                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
+                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = ".$exeId." AND question_id= ".$questionId;                        
                         $resultans = Database::query($queryans);
                         while ($row = Database::fetch_array($resultans)) {
                             $ind = $row['answer'];
@@ -1939,11 +1938,20 @@ class Exercise {
                             $my_answer_id = $result[0];
                             $option       = $result[1];
                             $choice[$my_answer_id] = $option;    
-                        }     
-                                             
-                        $numAnswer=$objAnswerTmp->selectAutoId($answerId);
-                        $studentChoice=$choice[$numAnswer];
-                       
+                        }                                             
+                        $numAnswer = $objAnswerTmp->selectAutoId($answerId);
+                        $studentChoice = $choice[$numAnswer];
+                        
+                        if ($answerCorrect == $studentChoice) {
+                        	//$answerCorrect = 1;
+	                       	$real_answers[$answerId] = true;
+                        } else {
+                        	//$answerCorrect = 0;
+                        	$real_answers[$answerId] = false;
+                        }
+                       		 
+                       		
+                       /*                 
                         if ($answerCorrect == 1) {
                             if ($studentChoice == 1) { //true value see MultipleAnswerCombinationTrueFalse class
                                 $real_answers[$answerId] = true;
@@ -1960,10 +1968,19 @@ class Exercise {
                             } else {
                                 $real_answers[$answerId] = true;
                             }
-                        }                                  
+                        }*/                                  
                     } else {                        
-                        $studentChoice=$choice[$numAnswer];
-                          if ($answerCorrect == 1) {
+                        $studentChoice = $choice[$numAnswer];
+                        
+                        if ($answerCorrect == $studentChoice) {
+                        	//$answerCorrect = 1;
+                        	$real_answers[$answerId] = true;
+                        } else {
+                        	//$answerCorrect = 0;
+                        	$real_answers[$answerId] = false;
+                        }                        
+                        
+                        /*if ($answerCorrect == 1) {
                             if ($studentChoice == 1) { //true value see MultipleAnswerCombinationTrueFalse class
                                 $real_answers[$answerId] = true;
                             } elseif ($studentChoice == 2) { //false value
@@ -1979,14 +1996,15 @@ class Exercise {
                             } else {
                                 $real_answers[$answerId] = true;
                             }
-                        }
+                        }                        */
                         $final_answer = true;
                         foreach($real_answers as $my_answer) {
                             if (!$my_answer) {
                                 $final_answer = false;
                             }
                         }
-                    }                    
+                    }      
+                                  
                     break;
                 case MULTIPLE_ANSWER_COMBINATION:                
                     if ($from_database) {

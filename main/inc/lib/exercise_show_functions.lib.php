@@ -301,9 +301,8 @@ class ExerciseShowFunctions {
         <tr>
         <td width="5%" align="center">
         <?php   
-
-        $question = new MultipleAnswerCombinationTrueFalse();
-        
+		//Your choice
+        $question = new MultipleAnswerCombinationTrueFalse();        
         if (isset($question->options[$studentChoice])) {
             echo $question->options[$studentChoice];
         } else {
@@ -313,18 +312,17 @@ class ExerciseShowFunctions {
         </td>
         <td width="5%" align="center">
         <?php
-
+		//Expected choice
         if (isset($question->options[$answerCorrect])) {
             echo $question->options[$answerCorrect];
         } else {
             echo $question->options[2];
         }        
-        ?>
-          
+        ?>          
         </td>
         <td width="40%" style="border-bottom: 1px solid #4171B5;">
             <?php
-            $answer=text_filter($answer);
+            //my answer            
             echo $answer;
             ?>
         </td>
@@ -332,16 +330,13 @@ class ExerciseShowFunctions {
         <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
         <td width="20%" style="border-bottom: 1px solid #4171B5;">
             <?php
-            $answerComment=text_filter($answerComment);
-            if($studentChoice) {
-                if(!$answerCorrect) {
-                    echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
-                } else {
-                    echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
-                }
-            } else {
-                echo '&nbsp;';
-            }
+            
+			if ($studentChoice == $answerCorrect) {
+            	echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
+			} else {
+				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+			}
+            
             ?>
         </td>
             <?php

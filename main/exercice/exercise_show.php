@@ -318,7 +318,7 @@ foreach ($questionList as $questionId) {
         $questionScore   = $question_result['score'];
         $totalScore      += $question_result['score'];
 	} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
-		$choice=array();
+		$choice = array();
         $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                       
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];	
@@ -415,8 +415,7 @@ foreach ($questionList as $questionId) {
         	    
         	    if ($final_excess>100) {
         	    	$final_excess = 100;
-        	    }
-            
+        	    }            
             
         		$table_resume='<table class="data_table">		
         		<tr class="row_odd" >

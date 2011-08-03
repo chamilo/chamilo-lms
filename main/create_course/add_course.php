@@ -123,9 +123,10 @@ $form->add_textfield('wanted_code', get_lang('Code'), '', array('size' => $maxle
 $form->addElement('static', null, null, get_lang('OnlyLettersAndNumbers'));
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule('wanted_code', get_lang('Max'), 'maxlength', $maxlength);
-if ($course_validation_feature) {
+
+/*if ($course_validation_feature) {
     $form->addRule('wanted_code', get_lang('ThisFieldIsRequired'), 'required');
-}
+}*/
 
 // The teacher.
 $titular = & $form->add_textfield('tutor_name', get_lang('Professor'), null, array('size' => '60', 'disabled' => 'disabled'));
@@ -136,15 +137,15 @@ if ($course_validation_feature) {
 
     // Description of the requested course.
     $form->addElement('textarea', 'description', get_lang('Description'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
-    $form->addRule('description', get_lang('ThisFieldIsRequired'), 'required');
+    //$form->addRule('description', get_lang('ThisFieldIsRequired'), 'required');
 
     // Objectives of the requested course.
     $form->addElement('textarea', 'objetives', get_lang('Objectives'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
-    $form->addRule('objetives', get_lang('ThisFieldIsRequired'), 'required');
+    //$form->addRule('objetives', get_lang('ThisFieldIsRequired'), 'required');
 
     // Target audience of the requested course.
     $form->addElement('textarea', 'target_audience', get_lang('TargetAudience'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
-    $form->addRule('target_audience', get_lang('ThisFieldIsRequired'), 'required');
+    //$form->addRule('target_audience', get_lang('ThisFieldIsRequired'), 'required');
 }
 
 // Course language.

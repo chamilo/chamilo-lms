@@ -105,7 +105,7 @@ echo '<div id="social-content">';
 											
 					$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';			
 					$grid_item_1 = Display::return_icon('boxmygroups.jpg');				
-					$item_1 = '<div>'.$url_open.$result['picture_uri'].'<strong>'.$name.'<br />('.$count_users_group.')</strong>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
+					$item_1 = '<div>'.$url_open.$result['picture_uri'].'<strong>'.$name.'<br />('.$count_users_group.')</strong>'.$url_close.'</div>';
 				
 					if ($result['description'] != '') {
 						$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.get_lang('Description').'</span></div>';

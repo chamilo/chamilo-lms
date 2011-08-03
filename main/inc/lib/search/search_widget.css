@@ -77,7 +77,6 @@
     width: 100%;
     border: 1px solid #979797;
     position: relative;
-    background-image: url('/main/img/search_background_bar.jpg');
     background-repeat: repeat-x
 }
 #mode-selector {

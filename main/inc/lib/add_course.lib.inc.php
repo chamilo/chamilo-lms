@@ -1913,17 +1913,6 @@ function fill_course_repository($course_repository, $fill_with_exemplary_content
     $perm = api_get_permissions_for_new_directories();
     $perm_file = api_get_permissions_for_new_files();
 
-    /*doc_html = file(api_get_path(SYS_CODE_PATH).'document/example_document.html');
-
-    $fp = fopen($sys_course_path.$course_repository.'/document/example_document.html', 'w');
-
-    foreach ($doc_html as $key => $enreg) {
-        $enreg = str_replace('"stones.jpg"', '"'.$web_code_path.'img/stones.jpg"', $enreg);
-        fputs($fp, $enreg);
-    }
-    fclose($fp);
-    */
-
     $default_document_array = array();
 
     if ($fill_with_exemplary_content) {

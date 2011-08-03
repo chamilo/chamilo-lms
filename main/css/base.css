@@ -1443,8 +1443,8 @@ div.image-social-content center.friend {
 }
 .social-menu li {
     margin-bottom:4px;
-    padding-bottom:12px;
-    background-image:url(../img/line-social.jpg);
+    padding-bottom:12px;    
+    border-bottom : 1px solid #ddd;
     background-position:bottom;
     background-repeat:repeat-x;
 }

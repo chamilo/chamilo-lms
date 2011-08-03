@@ -178,7 +178,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 		}		
 		echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-3\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'','32')."</a>";		
 	} else {
-		echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png', get_lang('BackToLinksOverview'),'','32').'</a>';
+		//echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png', get_lang('BackToLinksOverview'),'','32').'</a>';
 	}	
 	
 	echo '</div>';
@@ -432,7 +432,7 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 	echo '<table class="data_table">';
 	
 	if ($numberofzerocategory !== 0) {	    
-		echo '<tr><th style="font-weight: bold; text-align:left;padding-left: 10px;"><i>'.get_lang('General').'</i></th></tr>';
+		echo '<tr><th style="font-weight: bold; text-align:left;padding-left: 10px;">'.get_lang('General').'</th></tr>';
 		echo '</table>';
 		showlinksofcategory(0);
 	}

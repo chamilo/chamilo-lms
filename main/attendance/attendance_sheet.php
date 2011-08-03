@@ -70,9 +70,7 @@ if (api_is_allowed_to_edit(null, true)) {
     $form->setDefaults(array('filter'=>$default_filter));
     $param_filter = '&filter='.Security::remove_XSS($default_filter);
     
-    
-    
-    if (count($users_in_course) > 0) { 
+    if (count($users_in_course) > 0) {
         $form->display();  
     ?>
     <script type="text/javascript">
@@ -125,7 +123,7 @@ if (api_is_allowed_to_edit(null, true)) {
         $(window).scroll(UpdateTableHeaders);
         $(window).resize(UpdateTableHeaders);
     });
-</script>
+	</script>
 
     <form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_gradebook.$param_filter ?>&attendance_id=<?php echo $attendance_id?>" >
     
@@ -208,9 +206,9 @@ if (api_is_allowed_to_edit(null, true)) {
                             $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin()?$img_lock:'').'</span>';
                             $result .= '<br /><input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />'.$input_hidden.'</div></center></th>';
                          }                  
-                    } else { 
-                        $result = '<th width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">';
-                        $result .=Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'','32').' '.get_lang('GoToAttendanceCalendar').'</a></span></th>';
+                    } else {
+                        $result  = '<th width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">';
+                        $result .= Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'','32').' '.get_lang('GoToAttendanceCalendar').'</a></span></th>';
                     }
                     ?>
                     
@@ -226,7 +224,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 <tbody>         
                 <?php 
                 $i = 0;
-                foreach ($users_in_course as $user) { 
+                foreach ($users_in_course as $user) {
                         $class = '';
                         if ($i%2==0) {$class = 'row_even';}
                         else {$class = 'row_odd';}
@@ -290,10 +288,10 @@ if (api_is_allowed_to_edit(null, true)) {
     <div class="clear"></div>
     <div style="margin-top:20px;"><?php if (!$is_locked_attendance || api_is_platform_admin()) { ?><button type="submit" class="save"><?php echo get_lang('Save') ?></button><?php } ?></div>
     </form> 
-    <?php } else {  
-        echo '<div><a href="'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'">'.get_lang('ThereAreNoRegisteredLearnersInsidetheCourse').'</a></div>';  
+    <?php 
+    } else {  
+        echo Display::display_warning_message('<a href="'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'">'.get_lang('ThereAreNoRegisteredLearnersInsidetheCourse').'</a>', false);  
     }
-
 } else {
     // View for students
 ?>  

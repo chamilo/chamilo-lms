@@ -271,5 +271,3 @@ switch ($action) {
 	default		  		:	
         $attendance_controller->attendance_list();
 }
-
-?>

@@ -143,25 +143,22 @@ switch ($action) {
 		if (api_is_anonymous()){
 			echo '';
 			break;
-		}
-		
+		}		
 		require_once api_get_path(LIBRARY_PATH).'blog.lib.php';
 		require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 		require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 		
 		$user_id = intval($_SESSION['social_user_id']);
+		
 		if ($_POST['action']) {$action = $_POST['action'];}
 		
-		switch($action) {
-			
+		switch ($action) {			
 			case 'load_course' :
 				$course_db =  $_POST['course_code'];
 				
-				// @todo goto the course link
-				//echo '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.get_lang('GotoCourse').'</a>';
-				$course_id=CourseManager::get_course_id_by_database_name($course_db);
+				$course_id = CourseManager::get_course_id_by_database_name($course_db);
 	
-				if (api_is_user_of_course($course_id,api_get_user_id())) {
+				if (api_is_user_of_course($course_id, api_get_user_id())) {
 	
 					$table_forums 			= Database :: get_course_table(TABLE_FORUM,$course_db);
 					$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD,$course_db);
@@ -176,8 +173,7 @@ switch ($action) {
 					if ($forum_result !='') {
 						echo '<div id="social-forum-main-title">';
 						echo api_xml_http_response_encode(get_lang('Forum'));
-						echo '</div>';
-						
+						echo '</div>';						
 						
 						echo '<div style="background:#FAF9F6; padding:0px;" >';
 						echo api_xml_http_response_encode($forum_result);

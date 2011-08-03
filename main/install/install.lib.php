@@ -1694,7 +1694,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm',  $dbNameForm,  '&nbsp;', null, 'id="optional_param1" '.$style);
     
     //Only for updates we show this options
-    if ($install_type == INSTALL_TYPE_UPDATE) {    
+    if ($installType == INSTALL_TYPE_UPDATE) {    
     	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" '.$style);    
     
 	    if ($installType == INSTALL_TYPE_UPDATE && in_array($_POST['old_version'], $update_from_version_6)) {

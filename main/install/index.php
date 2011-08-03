@@ -637,16 +637,20 @@ if ($_POST['step2']) {
 	<?php if ($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br />
 	<?php
 	if (!$singleDbForm) {
-		/*echo get_lang('StatDB').' : <strong>'.$dbStatsForm.'</strong>';
-		if ($installType == 'new') {
-			echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
+		//Showing this data only in case a user migrates from a 3 main databases (main, user, tracking)
+		//@todo should be removed
+		if ($installType == 'update') {
+			echo get_lang('StatDB').' : <strong>'.$dbStatsForm.'</strong>';
+			if ($installType == 'new') {
+				echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
+			}
+			echo '<br />';
+			echo get_lang('UserDB').' : <strong>'.$dbUserForm.'</strong>';
+			if ($installType == 'new') {
+				echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
+			}
+			echo '<br />';
 		}
-		echo '<br />';
-		echo get_lang('UserDB').' : <strong>'.$dbUserForm.'</strong>';
-		if ($installType == 'new') {
-			echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
-		}
-		echo '<br />';*/
 	}
 	?>
 	<?php //echo get_lang('EnableTracking').' : '.($enableTrackingForm ? get_lang('Yes') : get_lang('No')); ?>

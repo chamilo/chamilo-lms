@@ -408,24 +408,23 @@ elseif ($displayMode == "viewContentEdit") {
 
 		echo "<p>".Display :: encrypted_mailto_link($mainUserInfo['email'], $mainUserInfo['email'])."</p>";
 
-				if (api_get_setting('extended_profile') == 'true')
-				{
-					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
-					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
-					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
-					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
-					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
-				}
-
-	}
-	else
-	{
+		if (api_get_setting('extended_profile') == 'true') {			
+			if (!empty($mainUserInfo['competences']))
+			echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';			
+			if (!empty($mainUserInfo['diplomas']))			
+			echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
+			if (!empty($mainUserInfo['teach']))
+			echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
+			if (!empty($mainUserInfo['openarea']))
+			echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
+			if (!empty($mainUserInfo['competences']))
+			echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
+		}
+	} else {
 		Display :: display_normal_message(get_lang('ThisStudentIsSubscribeThroughASession'));
 	}
 } elseif ($displayMode == "viewContentList") {
-        // default display
-	/*>>>>>>>>>>>> CATEGORIES CONTENTS : LIST <<<<<<<<<<<<*/
-
+	// default display
 	$virtual_course_code = $_GET["virtual_course"];
 	if (isset ($virtual_course_code)) {
 		$courseCode = $virtual_course_code;
@@ -528,9 +527,7 @@ elseif ($displayMode == "viewContentEdit") {
 					//echo "<a href=\"../mySpace/myStudents.php?".api_get_cidreq()."&origin=user_course&student=$userIdViewed&details=true&course=".$_course['id']."\"><img border=\"0\" alt=\"".get_lang('Tracking')." : $userIdViewed\" src=\"../img/statistics.gif\" /></a>";
 					//echo "</td>";
 				}
-				echo "</tr>",
-				"</table>";
-				//"<p><a href=\"mailto:",$mainUserInfo['email'],"\">",$mainUserInfo['email'],"</a>",
+				echo "</tr></table>";			
 
 				if (api_get_setting("show_email_addresses") == "true") {
 					echo "<p>". Display::encrypted_mailto_link($mainUserInfo['email'],$mainUserInfo['email']). "</p>";
@@ -541,14 +538,18 @@ elseif ($displayMode == "viewContentEdit") {
 				}
 
 				if (api_get_setting('extended_profile') == 'true') {
+					if (!empty($mainUserInfo['competences']))
 					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
+					if (!empty($mainUserInfo['diplomas']))
 					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
+					if (!empty($mainUserInfo['teach']))
 					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
+					if (!empty($mainUserInfo['openarea']))
 					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
-					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
+					if (!empty($mainUserInfo['competences']))
+					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';					
 				}
-	}
-	else{
+	} else {
 		Display :: display_normal_message(get_lang('ThisStudentIsSubscribeThroughASession'));
 	}
 

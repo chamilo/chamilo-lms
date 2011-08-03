@@ -48,7 +48,7 @@ function active_user(element_div) {
 	image_clicked_info = image_clicked.split("/");
 	image_real_clicked = image_clicked_info[image_clicked_info.length-1];
 	var status = 1;
-	if (image_real_clicked == "right.gif") {
+	if (image_real_clicked == "accept.png") {
 		status = 0;
 	}
 	user_id=id_image.split("_");
@@ -57,20 +57,17 @@ function active_user(element_div) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'loading1.gif'.'"); }, //candy eye stuff
+				$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'loading1.gif'.'"); }, //candy eye stuff
 			type: "GET",
 			url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=active_user",
 			data: "user_id="+user_id[1]+"&status="+status,
 			success: function(datos) {
-
 				if (status == 1) {
-					$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'right.gif'.'");
+					$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'icons/16/accept.png'.'");
 					$(ident).attr("title","'.get_lang('Lock').'");
-
 				} else {
-					$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'wrong.gif'.'");
+					$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'icons/16/error.png'.'");
 					$(ident).attr("title","'.get_lang('Unlock').'");
-
 				}
 			}
 		});
@@ -486,13 +483,14 @@ function get_user_data($from, $number_of_items, $column, $direction)
 			$keyword_admin = ' AND a.user_id = u.user_id ';
 		}
 
-                $keyword_extra_value = '';
-                if (isset($_GET['keyword_extra_data'])) {
-                    if (!empty($_GET['keyword_extra_data']) && !empty($_GET['keyword_extra_data_text'])) {
-                        $keyword_extra_data_text = Database::escape_string($_GET['keyword_extra_data_text']);
-                        $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
-                    }
-                }
+		$keyword_extra_value = '';
+		
+        if (isset($_GET['keyword_extra_data'])) {
+        	if (!empty($_GET['keyword_extra_data']) && !empty($_GET['keyword_extra_data_text'])) {
+            	$keyword_extra_data_text = Database::escape_string($_GET['keyword_extra_data_text']);
+                $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
+			}
+		}
 
 		$keyword_active = isset($_GET['keyword_active']);
 		$keyword_inactive = isset($_GET['keyword_inactive']);
@@ -514,14 +512,14 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
     // adding the filter to see the user's only of the current access_url
 	if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
+		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
     }
 
     if (!in_array($direction, array('ASC','DESC'))) {
     	$direction = 'ASC';
     }
     $column = intval($column);
-    $from = intval($from);
+    $from 	= intval($from);
     $number_of_items = intval($number_of_items);
 
 	$sql .= " ORDER BY col$column $direction ";
@@ -532,15 +530,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$users = array ();
     $t = time();
 	while ($user = Database::fetch_row($res)) {
-
-		$image_path = UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
-		$user_profile = UserManager::get_picture_user($user[0], $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
+		$image_path 	= UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
+		$user_profile 	= UserManager::get_picture_user($user[0], $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
 		if (!api_is_anonymous()) {
-			$photo = '<center><a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$user[0].'" title="'.get_lang('Info').'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2],$user[3]).'"  title="'.api_get_person_name($user[2], $user[3]).'" /></a></center>';
+			$photo = '<center><a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$user[0].'" title="'.get_lang('Info').'"><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2],$user[3]).'"  title="'.api_get_person_name($user[2], $user[3]).'" /></a></center>';
 		} else {
 			$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2], $user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" /></center>';
 		}
-
         if ($user[7] == 1 && $user[9] != '0000-00-00 00:00:00') {
             // check expiration date
             $expiration_time = convert_mysql_date($user[9]);
@@ -550,7 +546,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             }
         }
         // forget about the expiration date field
-        $users[] = array($user[0],$photo,$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);
+        $users[] = array($user[0],$photo,$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);        
 	}
 	return $users;
 }
@@ -686,24 +682,21 @@ function active_filter($active, $url_params, $row) {
 
 	if ($active=='1') {
 		$action='Lock';
-		$image='right';
+		$image='accept';
 	} elseif ($active=='-1') {
     	$action='edit';
-        $image='expired';
+        $image='warning';
     } elseif ($active=='0') {
 		$action='Unlock';
-		$image='wrong';
+		$image='error';
 
 	}
     $result = '';
     if ($action=='edit') {
-        $result = Display::return_icon($image.'.gif', get_lang('AccountExpired'));
+        $result = Display::return_icon($image.'.png', get_lang('AccountExpired'), array(), 16);
     } elseif ($row['0']<>$_user['user_id']) {
-    	// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-		//$result = '<a href="user_list.php?action='.$action.'&amp;user_id='.$row['0'].'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon($image.'.gif', get_lang(ucfirst($action))).'</a>';
-		//$result = '<a href="'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?action=active_user&amp;user_id='.$row['0'].'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'">';
-		$result = Display::return_icon($image.'.gif', get_lang(ucfirst($action)), array('onclick'=>'active_user(this);', 'id'=>'img_'.$row['0'])).'</a>';
-		//$result .= '<div>';
+    	// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.		
+		$result = Display::return_icon($image.'.png', get_lang(ucfirst($action)), array('onclick'=>'active_user(this);', 'id'=>'img_'.$row['0']), 16).'</a>';
 	}
 	return $result;
 }

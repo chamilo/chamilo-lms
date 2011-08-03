@@ -119,7 +119,7 @@ if (api_is_allowed_to_edit(null, true)) {
 						if ($_configuration['multiple_access_urls']) {
 							$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
 						}
-						$sql_query .="WHERE course_code = '$currentCourseID' AND session_course_user.id_user = user.user_id ";
+						$sql_query .=" WHERE course_code = '$currentCourseID' AND session_course_user.id_user = user.user_id ";
 						$sql_query .= ' AND id_session = '.$session_id;							
 						
 						if ($_configuration['multiple_access_urls']) {				
@@ -148,10 +148,10 @@ if (api_is_allowed_to_edit(null, true)) {
 					// users directly subscribed to the course
 					$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 					$sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").", user.email, phone, user.official_code, active
-								  FROM $table_course_user as course_user, $table_users as user";
+								  FROM $table_course_user as course_user, $table_users as user ";
 					if ($_configuration['multiple_access_urls']) {
 						$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
-					}   
+					}
 					$sql_query .= "WHERE course_code = '$currentCourseID' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_user.user_id = user.user_id ";
 					
 					if ($_configuration['multiple_access_urls']) {							
@@ -174,7 +174,7 @@ if (api_is_allowed_to_edit(null, true)) {
 				}		
 				
 				switch ($_GET['type']) {
-					case 'csv' :
+					case 'csv' :						
 						Export::export_table_csv($a_users);
 						exit;
 					case 'xls' :
@@ -499,7 +499,8 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" /></center>';
 				}
 				$temp[] = $photo;
-
+				$temp[] = $o_course_user['official_code'];
+				
 				if ($is_western_name_order) {
 					$temp[] = $o_course_user['firstname'];
 					$temp[] = $o_course_user['lastname'];
@@ -510,7 +511,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 				$temp[] = isset($o_course_user['role']) ? $o_course_user['role'] : null;
 				$temp[] = implode(', ', $groups_name); //Group
-				$temp[] = $o_course_user['official_code'];
+				
 
 				// deprecated feature
 				if ((isset($o_course_user['status_rel']) && $o_course_user['status_rel'] == 1) || (isset($o_course_user['status_session']) && $o_course_user['status_session'] == 2)) {
@@ -566,15 +567,15 @@ function active_filter($active, $url_params, $row) {
 	global $_user;
 	if ($active=='1') {
 		$action='AccountActive';
-		$image='right';
+		$image='accept';
 	}
 	if ($active=='0') {
 		$action='AccountInactive';
-		$image='wrong';
+		$image='error';
 	}
 	$result = '';
 	if ($row[count($row)-1]<>$_user['user_id']) {  // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-		$result = '<center><img src="../img/'.$image.'.gif" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
+		$result = '<center><img src="../img/icons/16/'.$image.'.png" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
 	}
 	return $result;
 }
@@ -624,6 +625,8 @@ if (api_is_allowed_to_edit(null, true)) {
         }
 }
 $table->set_header($header_nr++, get_lang('Photo'), false);
+$table->set_header($header_nr++, get_lang('OfficialCode'));
+
 if ($is_western_name_order) {
 	$table->set_header($header_nr++, get_lang('FirstName'));
 	$table->set_header($header_nr++, get_lang('LastName'));
@@ -633,7 +636,6 @@ if ($is_western_name_order) {
 }
 $table->set_header($header_nr++, get_lang('Description'), false);
 $table->set_header($header_nr++, get_lang('GroupSingle'), false);
-$table->set_header($header_nr++, get_lang('OfficialCode'));
 
 if (api_is_allowed_to_edit(null, true)) {
 	// deprecated feature

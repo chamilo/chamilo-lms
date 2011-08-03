@@ -956,6 +956,14 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                   ORDER BY exe_cours_id ASC, exe_date DESC";
     }   
     
+    require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+    $teacher_list = CourseManager::get_teacher_list_from_course_code(api_get_course_id());
+    $teacher_id_list = array();
+    foreach ($teacher_list as $teacher) {
+    	$teacher_id_list[] =$teacher['user_id'];
+    }  
+    
+    
     if (empty($hotpotatoe_where)) {
         $column             = intval($column);
         $from               = intval($from);
@@ -1087,6 +1095,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     
                     $html_link = '';
                     if ($is_allowedToEdit || $is_tutor) {
+                    	if (in_array($results[$i]['excruid'], $teacher_id_list)) {
+                    		$html_link.= Display::return_icon('teachers.gif', get_lang('Teacher'));
+                    	}
                         if ($revised) {
                             $html_link.= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".Display :: return_icon('edit.png', get_lang('Edit'), array(), 22);
                             $html_link.= '&nbsp;';

@@ -333,26 +333,28 @@ class DisplayGradebook
 
                 if (!$message_resource) {
                 	$myname=$catobj->shows_all_information_an_category($catobj->get_id());
-                 	$header .= '<td><a href="gradebook_edit_all.php?id_session='.intval($_SESSION['id_session']).'&amp;'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('percentage.png', get_lang('EditAllWeights'),'','32').'</a>';
+                 	
                 	$my_course_id=api_get_course_id();
                 	$my_file= substr($_SESSION['gradebook_dest'],0,5);
-
-					if (api_is_allowed_to_edit(null, true)) {
                 		
-						$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats.png', get_lang('FlatView'),'','32').'</a>';
-						$header .= '<td style="vertical-align: top;"><a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('certificate.png', get_lang('AttachCertificate'),'','32').'</a>';
-						$header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?'.$my_api_cidreq.'&amp;cat_id='.(int)$_GET['selectcat'].'">'.Display::return_icon('certificate_list.png', get_lang('GradebookSeeListOfStudentsCertificates'),'','32').'</a>';
-						
-						$visibility_icon    = ($catobj->is_visible() == 0) ? 'invisible' : 'visible';
-			            $visibility_command = ($catobj->is_visible() == 0) ? 'set_visible' : 'set_invisible';
+					$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats.png', get_lang('FlatView'),'','32').'</a>';
+					$header .= '<td style="vertical-align: top;"><a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('certificate.png', get_lang('AttachCertificate'),'','32').'</a>';
+					$header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?'.$my_api_cidreq.'&amp;cat_id='.(int)$_GET['selectcat'].'">'.Display::return_icon('certificate_list.png', get_lang('GradebookSeeListOfStudentsCertificates'),'','32').'</a>';
+					
+					$visibility_icon    = ($catobj->is_visible() == 0) ? 'invisible' : 'visible';
+			        $visibility_command = ($catobj->is_visible() == 0) ? 'set_visible' : 'set_invisible';
 			
-            			$modify_icons  = '<a href="gradebook_edit_cat.php?editcat=' . $catobj->get_id() . ' &amp;cidReq='.$catobj->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Edit'),'','32').'</a>';
-            			$modify_icons .= '<a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('ranking.png', get_lang('ScoreEdit'),'','32').'</a>';
-            			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $catobj->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'','32').'</a>';
-            			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $catobj->get_id() . '&amp;selectcat=0&amp;cidReq='.$catobj->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'','32').'</a>';
+            		$modify_icons  = '<a href="gradebook_edit_cat.php?editcat=' . $catobj->get_id() . ' &amp;cidReq='.$catobj->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Edit'),'','32').'</a>';
+            		$modify_icons .= '<a href="gradebook_edit_all.php?id_session='.intval($_SESSION['id_session']).'&amp;'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('percentage.png', get_lang('EditAllWeights'),'','32').'</a>';
+            		
+            		$modify_icons .= '<a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('ranking.png', get_lang('ScoreEdit'),'','32').'</a>';
+            		
+            		//hide or delete are not options available
+            		//$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $catobj->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'','32').'</a>';
+            		//$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $catobj->get_id() . '&amp;selectcat=0&amp;cidReq='.$catobj->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'','32').'</a>';
             			
-            			$header .= Display::div($modify_icons, array('class'=>'right'));
-					}
+            		$header .= Display::div($modify_icons, array('class'=>'right'));
+					
                 }
 			}
 		} elseif (isset ($_GET['search'])) {

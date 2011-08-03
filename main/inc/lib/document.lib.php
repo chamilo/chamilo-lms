@@ -1427,7 +1427,7 @@ return 'application/octet-stream';
             $visibility_command='invisible';
             if (!is_dir($base_work_dir_test)) {
                 $created_dir = create_unexisting_directory($course_info, api_get_user_id(), api_get_session_id(), $to_group_id,$to_user_id,$base_work_dir,$dir_name,$post_dir_name);
-                $update_id=DocumentManager::get_document_id_of_directory_certificate();
+                $update_id = DocumentManager::get_document_id_of_directory_certificate();
                 api_item_property_update($course_info, TOOL_DOCUMENT, $update_id, $visibility_command, api_get_user_id());
             }
         }

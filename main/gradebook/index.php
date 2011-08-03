@@ -1,13 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Script
+ * 
  * @package chamilo.gradebook
  */
-/**
- * Init
- */
-
 $language_file= 'gradebook';
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
@@ -73,10 +69,7 @@ $_GET['selectcat'] = $cats[0]->get_id();
 
 if (isset($_GET['isStudentView'])) {
 	if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
-		$interbreadcrumb[]= array (
-		'url' => 'index.php'.'?selectcat=0&amp;isStudentView='.$_GET['isStudentView'],
-		'name' => get_lang('ToolGradebook')
-		);
+		$interbreadcrumb[]= array ('url' => 'index.php'.'?selectcat=0&amp;isStudentView='.$_GET['isStudentView'],'name' => get_lang('ToolGradebook'));
 	}
 }
 
@@ -481,9 +474,9 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 		$interbreadcrumb[]= array ('url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),'name' => get_lang('ToolGradebook'));
 		Display :: display_header(get_lang('SearchResults'));
 	} elseif(isset ($_GET['selectcat'])) {
-		$interbreadcrumb[]= array (	'url' => $_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));
+		$interbreadcrumb[]= array (	'url' =>'#','name' => get_lang('ToolGradebook'));
 		if (!isset($_GET['gradebooklist_direction'])) {
-			$interbreadcrumb[]= array ('url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),'name' => get_lang('Details'));
+			//$interbreadcrumb[]= array ('url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),'name' => get_lang('Details'));
 		}
 		Display :: display_header('');
 	} else {

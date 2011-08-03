@@ -175,22 +175,25 @@ switch ($action) {
 		break;
 }
 
+// I'm in the certification module?
+$is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath']);
+
 //If no actions we proceed to show the document (Hack in order to use document.php?id=X) 
 if (isset($document_id)) {
-    $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+    $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());    
     
     //If the document is not a folder we show the document
-    if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file') {
-    	$visibility = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
-    	if ($visibility && api_is_allowed_to_session_edit()) {    		
-    		$url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$document_data['path'].'?'.api_get_cidreq();    	    	
-    		header("Location: $url");
-    	}
-    	exit;
+    if ($document_data) {
+	    if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file') {
+	    	$visibility = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
+	    	if ($visibility && api_is_allowed_to_session_edit()) {    		
+	    		$url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$document_data['path'].'?'.api_get_cidreq();    	    	
+	    		header("Location: $url");
+	    	}    	
+	    	exit;
+	    }
+    	$_GET['curdirpath'] = $document_data['path'];
     }
-    
-    //@todo replace all 
-    $_GET['curdirpath'] = $document_data['path'];    
 }
 
 // What's the current path?
@@ -266,9 +269,6 @@ function confirmation (name) {
         {return false;}
 }
 </script>";
-
-// I'm in the certification module?
-$is_certificate_mode = DocumentManager::is_certificate_mode($curdirpath);
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $group_member_with_upload_rights = false;

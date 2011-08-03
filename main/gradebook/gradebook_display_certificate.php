@@ -32,8 +32,9 @@ if (!api_is_allowed_to_edit()) {
 	api_not_allowed(true);
 }
 $interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',	'name' => get_lang('Gradebook'));
-$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.Security::remove_XSS($_GET['cat_id']),'name' => get_lang('Details'));
-$interbreadcrumb[] = array ('url' => 'gradebook_display_certificate.php?cat_id='.Security::remove_XSS($_GET['cat_id']),'name' => get_lang('GradebookListOfStudentsCertificates'));
+//$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.Security::remove_XSS($_GET['cat_id']),'name' => get_lang('Details'));
+//$interbreadcrumb[] = array ('url' => 'gradebook_display_certificate.php?cat_id='.Security::remove_XSS($_GET['cat_id']),'name' => get_lang('GradebookListOfStudentsCertificates'));
+$interbreadcrumb[] = array ('url' => '#','name' => get_lang('GradebookListOfStudentsCertificates'));
 $this_section = SECTION_COURSES;
 Display::display_header('');
 

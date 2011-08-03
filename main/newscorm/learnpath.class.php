@@ -4940,8 +4940,7 @@ class learnpath {
         
         $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $dir;
         
-        if (empty($_POST['dir']) && empty($_GET['dir'])) {
-            var_dump($dir);
+        if (empty($_POST['dir']) && empty($_GET['dir'])) {            
         	$result = $this->generate_lp_folder($_course, $dir);
         	$dir 		= $result['dir'];
         	$filepath 	= $result['filepath'];

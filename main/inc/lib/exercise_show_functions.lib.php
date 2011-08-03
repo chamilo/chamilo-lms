@@ -230,7 +230,7 @@ class ExerciseShowFunctions {
         
         $question = new MultipleAnswerTrueFalse();        
         $new_options = Question::readQuestionOption($questionId);
-         
+        //Your choice
         if (isset($new_options[$studentChoice])) {
             echo get_lang($new_options[$studentChoice]['name']);
         } else {
@@ -240,7 +240,7 @@ class ExerciseShowFunctions {
         </td>
         <td width="5%" align="center">
         <?php
-
+		//Expected choice
         if (isset($new_options[$answerCorrect])) {
             echo get_lang($new_options[$answerCorrect]['name']);
         } else {
@@ -249,30 +249,22 @@ class ExerciseShowFunctions {
         ?>          
         </td>
         <td width="40%" style="border-bottom: 1px solid #4171B5;">
-            <?php
-            $answer=text_filter($answer);
-            echo $answer;
-            ?>
+			<?php echo $answer; ?>
         </td>
 
         <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
         <td width="20%" style="border-bottom: 1px solid #4171B5;">
-            <?php
-            $answerComment=text_filter($answerComment);
-            if($studentChoice) {
-                if(!$answerCorrect) {
-                    echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
-                } else {
-                    echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
-                }
+            <?php            
+            if ($studentChoice == $answerCorrect) {
+            	echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';                    
             } else {
-                echo '&nbsp;';
+                echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
             }
             ?>
         </td>
             <?php
             if ($ans==1) {
-                $comm = get_comments($id,$questionId);
+                $comm = get_comments($id, $questionId);
             }
             ?>
          <?php } else { ?>

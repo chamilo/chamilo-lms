@@ -1888,7 +1888,7 @@ class Exercise {
                             $option       = $result[1];
                             $choice[$my_answer_id] = $option;                            
                         }                        
-                        $numAnswer=$objAnswerTmp->selectAutoId($answerId);                        
+                        $numAnswer = $objAnswerTmp->selectAutoId($answerId);                        
                         $studentChoice  =$choice[$numAnswer];
                     } else {                             
                         $studentChoice  =$choice[$numAnswer];                   

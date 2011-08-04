@@ -228,7 +228,7 @@ function display_mymonthcalendar($user_id, $agendaitems, $month, $year, $weekday
                             $result .= $time.' '.$icon.' '.Display::div($url);
                             
                             //Hidden content
-                            $content = Display::div($icon.Display::tag('h1', $value['title']).$complete_time.Security::remove_XSS($value['content']));
+                            $content = Display::div($icon.Display::tag('h1', $value['title']).$complete_time.'<hr />'.Security::remove_XSS($value['content']));
                             
                             //Main div
                             $result .= Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog', 'style' => 'display:none'));

@@ -204,12 +204,11 @@ if (isset($_user['user_id'])) {
 	}
 	
 	switch ($process) {
-		case 'month_view' :
-			
+		case 'month_view' :			
 			display_mymonthcalendar(api_get_user_id(), $agendaitems, $month, $year, array(), $monthName);
 			break;
 		case 'week_view' :
-			$agendaitems = get_week_agendaitems($my_course_list, $month, $year, $week);			
+			$agendaitems = get_week_agendaitems($my_course_list, $month, $year, $week);						
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");			
 			if (api_get_setting("allow_personal_agenda") == "true") {
 				$agendaitems = get_personal_agenda_items(api_get_user_id(), $agendaitems, $day, $month, $year, $week, "week_view");

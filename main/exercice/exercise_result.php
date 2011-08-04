@@ -10,14 +10,12 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 22201 2009-07-17 19:57:03Z cfasanando $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
 /**
  * Code
  */
-/*	INIT SECTION	*/
 require_once 'exercise.class.php';
 require_once 'exercise.lib.php';
 require_once 'question.class.php';
@@ -258,18 +256,17 @@ foreach ($questionList as $questionId) {
 } // end foreach() block that loops over all questions
 
 
-if ($origin != 'learnpath') {
-    if ($show_results || $show_only_score) {
-        echo '<div id="question_score">';
-        echo get_lang('YourTotalScore')." ";	
-        if ($objExercise->selectPropagateNeg() == 0 && $totalScore < 0) {
-    	    $totalScore = 0;
-        }     
-        echo show_score($totalScore, $totalWeighting, false);	
-        echo '</div>';
-    }
-    /* <button type="submit" class="save"><?php echo get_lang('Finish');?></button> */
+
+if ($show_results || $show_only_score) {
+	echo '<div id="question_score">';
+    echo get_lang('YourTotalScore')." ";	
+    if ($objExercise->selectPropagateNeg() == 0 && $totalScore < 0) {
+    	$totalScore = 0;
+    }     
+    echo show_score($totalScore, $totalWeighting, false);	
+    echo '</div>';
 }
+
 
 // Tracking of results
 

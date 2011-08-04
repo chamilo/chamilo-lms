@@ -206,7 +206,7 @@ $show_only_total_score  = false;
 
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (!empty($track_exercise_info)) {
-	$exerciseTitle			= text_filter($track_exercise_info['title']);
+	$exerciseTitle			= $track_exercise_info['title'];
 	$exerciseDescription	= $track_exercise_info['description'];
 	// if the results_disabled of the Quiz is 1 when block the script
 	$result_disabled		= $track_exercise_info['results_disabled'];
@@ -254,7 +254,7 @@ if ($show_results || $show_only_total_score) {
     echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date));
 }
 
-$i=$totalScore=$totalWeighting=0;
+$i = $totalScore = $totalWeighting = 0;
 
 if($debug>0){error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
 
@@ -465,7 +465,6 @@ foreach ($questionList as $questionId) {
         		} 
         	
         		echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
-        		//<p style="text-align:center">
         		if ($answerType == HOT_SPOT_DELINEATION) {			
         			if ($organs_at_risk_hit>0) {
         				$message='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';				
@@ -476,24 +475,15 @@ foreach ($questionList as $questionId) {
         				$message.='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
         			}
         			$message.='<p>'.$comment.'</p>';	
-        			echo $message;
-        			
-        			// by default we assume that the answer is ok but if the final answer after calculating the area in hotspot delineation =0 then update  
-        			if ($final_answer==0) {
-        				//update_exercise_attempt(0, 0,$questionId,$exeId, 0 ); //we do not update the user_id 
-        				//update_event_exercice($exeId, )
-        			}
-        			
+        			echo $message;              			
         		} else {
         			echo '<p>'.$comment.'</p>';
         		}
-        		//echo '<a onclick="self.parent.tb_remove();" href="#" style="float:right;">'.get_lang('Close').'</a>';
-        
         		
         		//showing the score	
          		$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-        		$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
-        		$questionScore= mysql_result($resfree,0,"marks");
+        		$resfree = Database::query($queryfree);
+        		$questionScore= Database::result($resfree,0,"marks");
         		$totalScore+=$questionScore;        		
         		 			?>
         		 			</table>
@@ -605,12 +595,6 @@ foreach ($questionList as $questionId) {
 		</table>';		
 	}
 	
-    
-	/*
-	Do not convert question results
-	$my_total_score  = convert_score($questionScore, $total_weighting);
-	$my_total_weight = convert_score($questionWeighting, $total_weighting);*/
-	
 	$my_total_score  = $questionScore;
 	$my_total_weight = $questionWeighting;   
 	
@@ -619,10 +603,7 @@ foreach ($questionList as $questionId) {
     }  
     if ($show_results) {
 	    echo '<div id="question_score">';
-		//echo get_lang('Score')." : $my_total_score / $my_total_weight";
-		echo get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);    
-		
-        //echo get_lang('Score')." : ".show_score($my_total_score, $total_weighting, false);
+		echo get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);
 		echo '</div>';
     }
 	unset($objAnswerTmp);
@@ -679,7 +660,7 @@ if ($origin =='student_progress') {?>
 	<button type="button" class="save" onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id()?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>
 <?php
 }
-   
+
 if ($origin != 'learnpath') {
 	//we are not in learnpath tool
 	Display::display_footer();
@@ -688,9 +669,9 @@ if ($origin != 'learnpath') {
 		$lp_mode =  $_SESSION['lp_mode'];
 		$url = '../newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
 		$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
-		echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
-
-		//record the results in the learning path, using the SCORM interface (API)
+		echo '<script language="javascript" type="text/javascript">'.$href.'</script>';		
+		
+		//Record the results in the learning path, using the SCORM interface (API)		
 		echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
 		echo '</body></html>';
 	} else {

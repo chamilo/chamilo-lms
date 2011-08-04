@@ -194,4 +194,8 @@ $SeeAllMyGroups = "Ver tódolos meus grupos";
 $YouAlreadyInviteAllYourContacts = "Xa invitou a tódolos seus contactos";
 $YouShouldCreateAGroup = "Debería crear un grupo";
 $MyFiles = "Os meus arquivos";
+$MySocialGroups = "Os meus grupos";
+$SocialGroups = "Grupos";
+$CreateASocialGroup = "Crear un grupo social";
+$EditMembersList = "Editar lista de membros";
 ?>

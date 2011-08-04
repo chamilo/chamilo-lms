@@ -1125,4 +1125,5 @@ $CheckURL = "Verificar enlace";
 $NoItem = "Todavía ningun elemento";
 $LoadExtraData = "Cargar los datos de campos usuario adicionales (estos tienen que ser marcados como 'Filtro' para que aparezcan).";
 $CourseAssistant = "Asistente";
+$SupportedScormContentMakers = "Paquetes Scorm soportados";
 ?>

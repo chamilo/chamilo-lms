@@ -148,4 +148,5 @@ $InsertQualificationCorrespondingToMaxScore = "Vstavi kvalifikacije v korelaciji
 $ThreadMoved = "Nit je bila prestavljena";
 $MigrateForum = "Migriraj forum";
 $YouWillBeNotified = "Obveščanje je aktivirano";
+$ForumCategories = "Kategorije foruma";
 ?>

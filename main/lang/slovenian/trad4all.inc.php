@@ -1120,4 +1120,8 @@ $Reply = "Odgovor";
 $Broken = "Neobstoječa";
 $CheckURL = "Preveri povezano";
 $NoItem = "Trenutno brez elementov";
+$LoadExtraData = "Naloži podatke dodatnih uporabniških polj (morajo biti označena z 'Filter', da so dostopna)";
+$CourseAssistant = "Asistent";
+$SupportedScormContentMakers = "Podprta SCORM avtorska orodja";
+$Copy = "Kopiraj";
 ?>

@@ -222,4 +222,5 @@ $BackToEvaluation = "Nazaj na ocenjevanje";
 $TotalWeight = "Skupna utež";
 $SumOfActivitiesWeightMustBeEqualToTotalWeight = "Vsota uteži vseh aktivnosti mora biti enaka skupni uteži določeni v nastavitvah ocenjevanja, sicer tečajniki ne bodo mogli doseči zadostnega rezultata za pridobitev certifikata.";
 $TotalSumOfWeights = "Vrednost mora biti enaka vsoti uteži vseh aktivnosti znotraj tega ocenjevanja.";
+$TotalWeightMustBeX = "Vsota vseh uteži aktivnosti mora biti %s";
 ?>

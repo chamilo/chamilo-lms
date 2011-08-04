@@ -91,4 +91,7 @@ $HomeworkCreated = "Unha tarefa foi creada";
 $HomeworkHasBeenCreatedForTheCourse = "Unha tarefa foi creada para o curso";
 $PleaseCheckHomeworkPage = "Por favor comprobe a páxina de tarefas";
 $IncludedInEvaluation = "Incluido na avaliación";
+$DateExpiredNotBeLessDeadLine = "A data de caducidade non pode ser menor que a data límite";
+$NotRevised = "Non se revisou";
+$MaxWeightNeedToBeProvided = "Necesita indicar o peso máximo";
 ?>

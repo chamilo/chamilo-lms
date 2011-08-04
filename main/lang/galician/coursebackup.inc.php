@@ -48,4 +48,5 @@ $DocumentsWillBeAddedToo = "Tamén se engadirán os documentos";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Se quere exportar un itinerario de aprendizaxe que conteña exercicios, terá que asegurarse de que estes exercicios foron incluídos na exportación; para iso terá que telos seleccionado na lista de exercicios.";
 $ArchivesDirectoryNotWriteableContactAdmin = "O directorio \"archive\" utilizado por esta ferramenta non ten habilitado os permisos de escritura. Contacte co administrador da plataforma.";
 $DestinationCourse = "Curso de destino";
+$IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Se a súa lección ten arquivos de audio incluídos, debería seleccionalos desde os documentos";
 ?>

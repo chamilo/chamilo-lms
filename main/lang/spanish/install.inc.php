@@ -116,6 +116,7 @@ $FailedConectionDatabase = "La conexión con la base de datos ha fallado. Puede 
 $EncryptMethodUserPass = "Método de encriptación";
 $UpgradeFromDokeos16x = "Actualizar desde Chamilo 1.6.x";
 $UpgradeFromDokeos18x = "Actualizar desde Chamilo 1.8.x";
+$Step7 = "Paso 7";
 $SuggestionOnlyToEnableCSSUploadFeature = "Solamente necesario si desea habilitar la funcionalidad de cargar archivos CSS";
 $SuggestionOnlyToEnableSubLanguageFeature = "Solamente necesario si desea habilitar la funcionalidad de sub-idiomas";
 $IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Si intenta actualizar desde una versión anterior de Chamilo, quizás desee <a href=\"http://translate.chamilo.org/documentation/changelog.html\" target=\"_blank\">tomar una mirada al registro de cambios</a> para conocer las novedades y lo que se ha cambiado.";

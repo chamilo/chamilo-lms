@@ -260,4 +260,8 @@ $UseMaxScore100 = "Usar por defecto 100 como puntuación máxima";
 $EnableLPAutoLaunch = "Activar o despregue automático";
 $DisableLPAutoLaunch = "Desactivar o despregue automático";
 $ViewModeEmbedFrame = "Vista actual: incrustado externo. Só para uso desde outros sitios.";
+$LPNotVisibleToStudent = "Os estudantes non poden ver esta lección";
+$EditCurrentModule = "Editar módulo actual";
+$SearchFeatureTerms = "Termos para a búsqueda";
+$PrerequisiteDeletedError = "Erro: o elemento definido como prerquisito foi eliminado";
 ?>

@@ -183,4 +183,7 @@ $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Non pode loguear
 $AreYouSureToEditTheUserStatus = "Está seguro/a de editar o status do usuario?";
 $TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "O tutor só pode manter o seguimento dos progresos de usuarios rexistrados no curso.";
 $TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "O profesor pode cualificar, evaluar e manter un seguimento de tódolos usuarios inscritos no curso.";
+$LoginOrEmailAddress = "Nome de usuario ou dirección de correo-e";
+$AtOnce = "Inmediatamente";
+$Daily = "A diario";
 ?>

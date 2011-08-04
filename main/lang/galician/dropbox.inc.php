@@ -125,4 +125,7 @@ $ErrorNoFilesInFolder = "Este directorio está baleiro";
 $AddComment = "Engadir comentario";
 $SentCatgoryDeleted = "Eliminouse a carpeta";
 $ReceivedCatgoryDeleted = "Eliminouse a carpeta";
+$InvalideUserDetected = "Usuario non valido detectado";
+$InvalideGroupDetected = "Grupo non valido detectado";
+$OverviewOfFilesInThisZip = "Listado de arquivos neste ZIP";
 ?>

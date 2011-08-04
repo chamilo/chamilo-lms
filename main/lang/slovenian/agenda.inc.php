@@ -79,4 +79,5 @@ $RepeatDate = "Ponovi datum";
 $EndDateMustBeMoreThanStartDate = "Končni datum mora biti kasnejši od začetnega datuma";
 $SelectACourse = "Izberi tečaj";
 $PleaseSelectACourseOrASessionInTheLeftColumn = "Izberite tečaj ali sejo s stranskega menija.";
+$DisableEndDate = "Onemogoči končni datum";
 ?>

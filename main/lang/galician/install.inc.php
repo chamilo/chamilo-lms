@@ -116,6 +116,13 @@ $FailedConectionDatabase = "A conexión coa base de datos fallou. Poida que o no
 $EncryptMethodUserPass = "Método de encriptación";
 $UpgradeFromDokeos16x = "Actualizar desde Chamilo 1.6.x";
 $UpgradeFromDokeos18x = "Actualizar desde Chamilo 1.8.x";
+$Step7 = "Paso 7";
 $SuggestionOnlyToEnableCSSUploadFeature = "Aconsellable só si quere activar a opción de subida de CSS";
 $SuggestionOnlyToEnableSubLanguageFeature = "Aconsellable só si quere activar a opción de sub-linguaxe";
+$IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Se intenta actualizar <a href=\"http://translate.chamilo.org/documentation/changelog.html\" target=\"_blank\">desde unha versión anterior de Chamilo</a>, quizás desexe botar unha mirada ao rexistro de cambios para coñecer as novidades e o que cambiou.";
+$WelcomeToTheDokeosInstaller = "Benvido ao instalador de Chamilo";
+$PHPVersionError = "A súa versión de PHP non coincide cos requisitos para este software. Por favor, comprobe que ten a versión máis recente e volva intentalo.";
+$ExtensionSessionsNotAvailable = "Extensión de sesións non dispoñible";
+$ExtensionZlibNotAvailable = "Extensión Zlib non dispoñible";
+$ExtensionPCRENotAvailable = "Extensión PCRE non dispoñible";
 ?>

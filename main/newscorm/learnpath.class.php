@@ -7159,7 +7159,7 @@ class learnpath {
             $return .= Display::url(Display::return_icon('accept.png', get_lang('Prerequisites'), array(), 22), $url.'&action=edit_item_prereq');
         }
         $return .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), 22), $url.'&action=delete_item');
-
+/*
         // Get the audiorecorder. Use of ob_* functions since there are echos in the file.
         ob_start();
         $audio_recorder_studentview = 'false';
@@ -7170,7 +7170,7 @@ class learnpath {
         $return .= ob_get_contents();
         ob_end_clean();
         // End of audiorecorder include
-        $return .= '</div>';
+        $return .= '</div>';*/
         return $return;
     }
 

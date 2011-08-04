@@ -69,7 +69,7 @@ class Display {
 
     /**
      *	Display simple html header of table.
-     *  @deprecated
+     *  @deprecated use the HTML_table class
      */
     /*public static function display_table_header() {
         $bgcolor = 'bgcolor="white"';
@@ -89,8 +89,9 @@ class Display {
      *	@author Roan Embrechts
      *	@version 1.01
      *  @todo remove this function, is only use in user.php
+     *  @deprecated use the HTML_table class
      *	@return return type string, bgcolor
-     */
+     *//*
     public static function display_complex_table_header($properties, $column_header) {
         $width = $properties['width'];
         if (!isset($width)) {
@@ -120,7 +121,7 @@ class Display {
         echo "<tbody>\n";
         $bgcolor = 'bgcolor="'.HTML_WHITE.'"';
         return $bgcolor;
-    }
+    }*/
 
     /**
      *	Displays a table row.
@@ -130,7 +131,7 @@ class Display {
      *	@param $is_alternating true: the row colours alternate, false otherwise
      *  @todo remove this function, is only use in user.php
      */
-    public static function display_table_row($bgcolor, $table_row, $is_alternating = true) {
+    /*public static function display_table_row($bgcolor, $table_row, $is_alternating = true) {
         echo '<tr '.$bgcolor.'>';
         foreach ($table_row as & $table_element) {
             echo '<td>'.$table_element.'</td>';
@@ -144,7 +145,7 @@ class Display {
             }
         }
         return $bgcolor;
-    }
+    }*/
 
     /**
      * Displays a table

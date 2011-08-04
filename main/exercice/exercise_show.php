@@ -74,6 +74,7 @@ $is_allowedToEdit   = api_is_allowed_to_edit(null,true) || $is_courseTutor;
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = get_exercise_track_exercise_info($id);
 
+
 //No track info
 if (empty($track_exercise_info)) {
     api_not_allowed();
@@ -125,8 +126,6 @@ if($origin=='user_course') {
 	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".Security::remove_XSS($_GET['course']), "name" => get_lang("Users"));
 	$interbreadcrumb[] = array("url" => "../mySpace/myStudents.php?student=".$student_id."&course=".$_course['id']."&details=true&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("DetailsStudentInCourse"));
 } else if($origin=='tracking_course') {
-	//$interbreadcrumb[] = array ("url" => "../mySpace/index.php", "name" => get_lang('MySpace'));
- 	//$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($student_id).'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
  	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$_course['directory'], 'name' => $_course['title']);
 	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$cidReq.'&studentlist=true&id_session='.$_SESSION['id_session'], "name" => get_lang("Tracking"));
 	$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".$student_id.'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
@@ -153,20 +152,7 @@ if ($origin != 'learnpath') {
 } else {
 	Display::display_reduced_header();
 }
-
 ?>
-<style type="text/css">
-<!--
-#comments {
-	position:absolute;
-	left:795px;
-	top:0px;
-	width:200px;
-	height:75px;
-	z-index:1;
-}
--->
-</style>
 <script language="javascript">
 function showfck(sid,marksid) {
 	document.getElementById(sid).style.display='block';
@@ -270,7 +256,7 @@ $query = "SELECT attempts.question_id, answer  from ".$TBL_TRACK_ATTEMPT." as at
 		  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 			//GROUP BY questions.position, attempts.question_id";
 
-$result =Database::query($query);	
+$result = Database::query($query);	
 $questionList = array();
 $exerciseResult = array();
 
@@ -282,7 +268,7 @@ while ($row = Database::fetch_array($result)) {
 //Fixing #2073 Fixing order of questions
 if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info['random']) ) {
 	$tempquestionList = explode(',',$track_exercise_info['data_tracking']);
-	if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {
+	if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {	
 		$questionList = $tempquestionList;			
 	}		
 }
@@ -314,12 +300,12 @@ foreach ($questionList as $questionId) {
 	    echo $objQuestionTmp->return_header($feedback_type);
 	}		
 	if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
+        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                    
         $questionScore   = $question_result['score'];
-        $totalScore      += $question_result['score'];
+        $totalScore      += $question_result['score'];        
 	} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
 		$choice = array();
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                       
+        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                               
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];	
 	} elseif ($answerType == UNIQUE_ANSWER || $answerType ==  UNIQUE_ANSWER_NO_OPTION) {	
@@ -609,7 +595,7 @@ foreach ($questionList as $questionId) {
 	unset($objAnswerTmp);
 	$i++;
 
-	$totalWeighting+=$questionWeighting;
+	$totalWeighting += $questionWeighting;
     
 } // end of large foreach on questions
 

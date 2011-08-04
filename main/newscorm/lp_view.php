@@ -171,11 +171,15 @@ foreach($list as $toc) {
     }
 }
 
+$debug = 0;
+
 $autostart = 'true';
 // Update status, total_time from lp_item_view table when you finish the exercises in learning path.
 if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp_item_id'])) {
     global $src;
+    
     $_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();
+    
     $TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $TBL_LP_ITEM_VIEW       = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $TBL_LP_VIEW            = Database::get_course_table(TABLE_LP_VIEW);
@@ -185,19 +189,29 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
     $safe_exe_id            = intval($_REQUEST['exeId']);
 
     if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
-
-        $sql = 'SELECT start_date,exe_date,exe_result,exe_weighting FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.$safe_exe_id;
+		
+        $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.$safe_exe_id;
         $res = Database::query($sql);
         $row_dates = Database::fetch_array($res);
 
         $time_start_date = api_strtotime($row_dates['start_date'],'UTC');
         $time_exe_date   = api_strtotime($row_dates['exe_date'],'UTC');
 
-        $mytime = ((int)$time_exe_date-(int)$time_start_date);
-        $score = (float)$row_dates['exe_result'];
-        $max_score = (float)$row_dates['exe_weighting'];
+        $mytime 	= ((int)$time_exe_date-(int)$time_start_date);        
+        $score 		= (float)$row_dates['exe_result'];
+        $max_score 	= (float)$row_dates['exe_weighting'];
+        
+        /*require_once '../exercice/exercise.class.php';
+        require_once '../exercice/question.class.php';
+        require_once '../exercice/answer.class.php';
+        require_once '../exercice/exercise.lib.php';
+        
+        $exercise_obj = new Exercise();
+        $score_result = $exercise_obj->get_exercise_result($safe_exe_id);
+        $score = (float)$score_result['score'];*/        
 
         $sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE id = '".(int)$safe_item_id."'";
+        if ($debug) error_log($sql_upd_max_score);
         Database::query($sql_upd_max_score);
 
         $sql_last_attempt = "SELECT id FROM $TBL_LP_ITEM_VIEW  WHERE lp_item_id = '$safe_item_id' AND lp_view_id = '".$_SESSION['oLP']->lp_view_id."' order by id desc limit 1";
@@ -206,10 +220,11 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         $lp_item_view_id = $row_last_attempt[0];
 
         if (Database::num_rows($res_last_attempt) > 0) {
-            $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' , score = $score,total_time = $mytime WHERE id='".$lp_item_view_id."'";
+            $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' , score = $score, total_time = $mytime WHERE id='".$lp_item_view_id."'";
+            if ($debug) error_log($sql_upd_score);
             Database::query($sql_upd_score);
 
-            $update_query = "UPDATE $TBL_TRACK_EXERCICES SET  orig_lp_item_view_id = $lp_item_view_id  WHERE exe_id = ".$safe_exe_id;
+            $update_query = "UPDATE $TBL_TRACK_EXERCICES SET orig_lp_item_view_id = $lp_item_view_id  WHERE exe_id = ".$safe_exe_id;
             Database::query($update_query);
         }
     }
@@ -217,7 +232,8 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
     if (intval($_GET['fb_type']) > 0) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
-        $src = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?id='.Security::remove_XSS($_REQUEST['exeId']).'&origin=learnpath&learnpath_id='.$lp_id.'&learnpath_item_id='.$lp_id.'&fb_type='.Security::remove_XSS($_GET['fb_type']);
+        $src = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?id='.$safe_exe_id.'&origin=learnpath&learnpath_id='.$lp_id.'&learnpath_item_id='.$lp_id.'&fb_type='.Security::remove_XSS($_GET['fb_type']);
+        if ($debug) error_log('Calling URL'.$src);
     }
     $autostart = 'false';
 }
@@ -235,18 +251,19 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
     $htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";
 }
 
-    // Not in fullscreen mode.
-    require_once '../inc/reduced_header.inc.php';
-    //$displayAudioRecorder = (api_get_setting('service_visio', 'active') == 'true') ? true : false;
-    // Check if audio recorder needs to be in studentview.
-    $course_id = $_SESSION['_course']['id'];
-    if ($_SESSION['status'][$course_id] == 5) {
-        $audio_recorder_studentview = true;
-    } else {
-        $audio_recorder_studentview = false;
-    }
-    // Set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php).
-    $_SESSION['loaded_lp_view'] = true;
+// Not in fullscreen mode.
+require_once '../inc/reduced_header.inc.php';
+//$displayAudioRecorder = (api_get_setting('service_visio', 'active') == 'true') ? true : false;
+// Check if audio recorder needs to be in studentview.
+$course_id = $_SESSION['_course']['id'];
+if ($_SESSION['status'][$course_id] == 5) {
+	$audio_recorder_studentview = true;
+} else {
+	$audio_recorder_studentview = false;
+}
+
+// Set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php).
+$_SESSION['loaded_lp_view'] = true;
 
 $display_none = '';
 $margin_left = '290px';

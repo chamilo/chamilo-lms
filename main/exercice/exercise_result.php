@@ -108,7 +108,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('ToolGradebook'));
 }
 
-$nameTools=get_lang('Exercice');
+$nameTools = get_lang('Exercice');
 
 $interbreadcrumb[]=array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
 //$htmlHeadXtra[] = $objExercise->show_lp_javascript();
@@ -155,7 +155,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '</div>';
 }
 
-$exerciseTitle=text_filter($objExercise->selectTitle());
+$exerciseTitle = $objExercise->selectTitle();
 $feedback_type = $objExercise->feedbacktype;
 
 //show exercise title
@@ -275,7 +275,7 @@ if ($show_results || $show_only_score) {
 $quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
 
 if (api_is_allowed_to_session_edit() ) {
-	update_event_exercice($exeId, $objExercise->selectId(), $totalScore, $totalWeighting, api_get_session_id(), $safe_lp_id,$safe_lp_item_id,$safe_lp_item_view_id, $quizDuration);
+	update_event_exercice($exeId, $objExercise->selectId(), $totalScore, $totalWeighting, api_get_session_id(), $safe_lp_id,$safe_lp_item_id,$safe_lp_item_view_id, $quizDuration, $questionList);
 }
 
 if ($origin != 'learnpath') {

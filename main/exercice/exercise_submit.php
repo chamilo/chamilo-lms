@@ -91,11 +91,11 @@ if (empty ($exerciseType)) {
 if (empty ($exerciseId)) {
     $exerciseId = intval($_REQUEST['exerciseId']);
 }
-if (empty ($choice)) {
-    $choice = $_REQUEST['choice'];
+if (empty($choice)) {	
+    $choice = $_REQUEST['choice'];    
 }
-if (empty ($_REQUEST['choice'])) {
-    $choice = $_REQUEST['choice2'];
+if (empty($_REQUEST['choice'])) {	
+    $choice = $_REQUEST['choice2'];    
 }
 if (empty ($questionNum)) {
     $questionNum = intval($_REQUEST['questionNum']);
@@ -118,7 +118,6 @@ if ($buttonCancel) {
 $safe_lp_id             = ($learnpath_id == '')             ? 0 : $learnpath_id;
 $safe_lp_item_id        = ($learnpath_item_id == '')        ? 0 : $learnpath_item_id;
 $safe_lp_item_view_id   = ($learnpath_item_view_id == '')   ? 0 : $learnpath_item_view_id;
-
 
 /*
  * Teacher takes an exam and want to see a preview, we delete the objExercise from the session in order to get the latest changes
@@ -302,8 +301,9 @@ if ($formSent && isset($_POST)) {
         $hotspot_id = (int)($_REQUEST['hidden_hotspot_id']);
         $choice     = array($hotspot_id => '');
     }
-    // if the user has answered at least one question
+    // if the user has answered at least one question    
     if (is_array($choice)) {
+    	
         if ($debug) { error_log('$choice is an array '.print_r($choice, 1)); } 	
         // Also store hotspot spots in the session ($exerciseResultCoordinates
         // will be stored in the session at the end of this script)
@@ -333,8 +333,8 @@ if ($formSent && isset($_POST)) {
                     $choice = $exerciseResult[$questionId];                    
                     if (isset($exe_id)) {
                     	//Manage the question and answer attempts
-                       if ($debug > 0) { error_log('manage_answer exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1)); }
-                    	$objExercise->manage_answer($exe_id, $questionId, $choice,'exercise_show',$exerciseResultCoordinates, true, false,false);
+                        if ($debug > 0) { error_log('manage_answer exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1)); }
+                    	$objExercise->manage_answer($exe_id, $questionId, $choice,'exercise_show',$exerciseResultCoordinates, true, false,false, $objExercise->propagate_neg);
                     }
                     //END of saving and qualifying
                 }
@@ -475,14 +475,13 @@ if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<a href="exercice.php?show=test&id_session='.api_get_session_id().'">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
     if ($show_quiz_edition) {
     	echo '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">'.Display :: return_icon('settings.png', get_lang('ModifyExercise'),'','32').'</a>';
-        //echo Display :: return_icon('wizard.gif', get_lang('QuestionList')) . '<a href="exercice/admin.php?' . api_get_cidreq() . '&exerciseId=' . $objExercise->id . '">' . get_lang('QuestionList') . '</a>';
     } else {
     	echo '<a href="#">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'','32').'</a>';
     }
     echo '</div>';
 }
 
-$exerciseTitle = text_filter($objExercise->selectTitle());
+$exerciseTitle = $objExercise->selectTitle();
 echo Display::tag('h2', $exerciseTitle);
 $show_clock = true;
 $user_id = api_get_user_id();
@@ -517,8 +516,6 @@ if ($objExercise->selectAttempts() > 0) {
                     }                    
                     $score =  show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
                     echo Display::div(get_lang('YourTotalScore').' '.$score, array('id'=>'question_score'));
-                    
-                    
                     
                 } else {
                     Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);	

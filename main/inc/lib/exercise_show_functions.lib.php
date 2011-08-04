@@ -228,7 +228,7 @@ class ExerciseShowFunctions {
         <td width="5%" align="center">
         <?php   
         
-        $question = new MultipleAnswerTrueFalse();        
+        $question 	 = new MultipleAnswerTrueFalse();        
         $new_options = Question::readQuestionOption($questionId);
         //Your choice
         if (isset($new_options[$studentChoice])) {

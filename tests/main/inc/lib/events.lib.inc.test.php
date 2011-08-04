@@ -142,9 +142,9 @@ class TestEvents extends UnitTestCase {
 		$weighting='';
 		$session_id='';
 		$duration='';
-		$res=update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$learnpath_id=0,$learnpath_item_id=0, $duration);
+		$question_list = array();
+		$res=update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$learnpath_id=0,$learnpath_item_id=0, $duration, $question_list);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
 }
-?>

@@ -146,31 +146,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
       ?>          
     <style>    
    
-   #questions {
-    width:40%; 
-    height:50px;
-    float:left;  
-    padding:5px;  
-   }
-   
-   #options {
-    width:40%;
-    float:left;
-    padding:5px;  
-          
-   }
-   
-   .question_item {   
-      height:50px;
-      padding:5px;
-      margin:10px 0px 10px 0px;	
-   }
-   
-   .option_item {
-    width:150px;
-    padding:3px;
-    margin:10px;      
-   } 
+  
     </style>
     <script>
     $(function() {
@@ -239,8 +215,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				// splits text and weightings that are joined with the character '::'
 				list($answer) = explode('::',$answer);
 
-				// because [] is parsed here we follow this procedure:
-				$answer = text_filter($answer);
 				//getting the matches
 				$answer = api_ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10" />',($answer));
 			}
@@ -300,6 +274,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
                 } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {                    
                     $options = array('type'=>'radio','name'=>'choice['.$questionId.']['.$numAnswer.']', 'class'=>'checkbox');
+                    $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
                     $s .='<tr>';     
                     $s .= Display::tag('td', $answer);
                     if (!empty($quiz_question_options)) {       
@@ -334,6 +309,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 // multiple answers
                 // set $debug_mark_answer to true at function start to
                 // show the correct answer with a suffix '-x'
+                
+            	$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
                 $help = $selected = '';
                 if ($debug_mark_answer) {
                     if ($answerCorrect) {
@@ -960,9 +937,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     $teacher_list = CourseManager::get_teacher_list_from_course_code(api_get_course_id());
     $teacher_id_list = array();
     foreach ($teacher_list as $teacher) {
-    	$teacher_id_list[] =$teacher['user_id'];
-    }  
-    
+    	$teacher_id_list[] = $teacher['user_id'];
+    }    
     
     if (empty($hotpotatoe_where)) {
         $column             = intval($column);

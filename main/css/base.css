@@ -2278,3 +2278,33 @@ div.admin_section h4 {
     font-size: 12px !important;
     color: #111 ! important;	
 }
+
+/* Exercise comment*/
+#comments {
+    position:absolute;
+    left:795px;
+    top:0px;
+    width:200px;
+    height:75px;
+    z-index:1;
+}
+
+#questions {
+   width:40%; 
+   height:50px;
+   float:left;  
+   padding:5px;  
+}
+  
+
+.question_item {   
+    height:50px;
+    padding:5px;
+    margin:10px 0px 10px 0px; 
+}
+  
+.option_item {
+   width:150px;
+   padding:3px;
+   margin:10px;      
+}

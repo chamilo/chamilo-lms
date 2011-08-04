@@ -1244,10 +1244,10 @@ a.unread {
 }
 .clip_vertical {
 	position:absolute;
-	clip:rect(0px 218px 155px 0px);
-	top:-42px;
+	clip:rect(0px 218px 185px 0px);
+	top:-50px;
 	left:-32px;
-	
+		
 	 -webkit-transform: scale(0.6);
     -moz-transform: scale(0.6);
     -o-transform: scale(0.6);   
@@ -1646,8 +1646,8 @@ div.image-social-content center.friend {
 .social-background-content {
     z-index:5;
     position:relative;
-    /* border:1px dotted #DDDDDD; */
-    width:170px;
+    width:185px;
+    left:-10px;
     overflow:hidden;
 }
 

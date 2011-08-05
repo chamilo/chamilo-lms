@@ -1283,14 +1283,14 @@ if ($is_course_member) {
 		$oFCKeditor->ToolbarSet = 'work';
 		$oFCKeditor->Width		= '100%';
 		$oFCKeditor->Height		= '200';
-		$oFCKeditor->Value		= $message;
+		$oFCKeditor->Value		= isset($message) ? $message : null;
 		$return =	$oFCKeditor->CreateHtml();
 		$new_folder_text .= $return;
 		$new_folder_text .= '</div>
 							</div>';
 
 		// Advanced parameters
-		$addtext .='<div id="options" style="display: none;">';
+		$addtext  = '<div id="options" style="display: none;">';
 		$addtext .= '<div style="padding:10px">';
 		$addtext .= '<b>'.get_lang('QualificationOfAssignment').'</b>';
 		$addtext .= '<table cellspacing="0" cellpading="0" border="0"><tr>';

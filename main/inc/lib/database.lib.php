@@ -1200,10 +1200,11 @@ class Database {
      * Experimental useful database update
      * @todo lot of stuff to do here
      */
-    public static function delete($table_name, $where_conditions) {
+    public static function delete($table_name, $where_conditions, $show_query = false) {
         $result = false;
         $where_return = self::parse_where_conditions($where_conditions);
         $sql    = "DELETE FROM $table_name $where_return ";
+        if ($show_query) { echo $sql; echo '<br />'; }
         $result = self::query($sql);
         $affected_rows = self::affected_rows();
         //@todo should return affected_rows for

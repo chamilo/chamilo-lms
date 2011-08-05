@@ -1,23 +1,22 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*   @author Juan Carlos Raña <herodoto@telefonica.net>
-*	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium*
-*   @author Julio Montoya <gugli100@gmail.com> using the pdf.lib.php library
-*
-* 	@package chamilo.wiki
-*/
+ * Functions library for the wiki tool
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @author Julio Montoya <gugli100@gmail.com> using the pdf.lib.php library
+ * @package chamilo.wiki
+ */
 
 /* FUNCTIONS FOR WIKI */
-
-
 /**
-* @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
-* @desc This function checks weither the proposed reflink is not in use yet. It is a recursive function because every newly created reflink suggestion
-*		has to be checked also
-*/
-function createreflink($testvalue)
-{
+ * Create a reference link for a given new page title (adds incremental number 
+ * to the title). It is a recursive function because every newly created 
+ * reflink suggestion has to be checked also
+ * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+ * @param 
+ */
+function createreflink($testvalue) {
     $counter='';
     while (!checktitle($testvalue.$counter))
     {
@@ -31,10 +30,12 @@ function createreflink($testvalue)
 
 
 /**
-* @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
-**/
-function checktitle($paramwk)
-{
+ * Check whether this title is already used 
+ * @param string title
+ * @return bool  False if title is already taken
+ * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+ **/
+function checktitle($paramwk) {
     global $tbl_wiki;
     global $groupfilter;
     global $condition_session;
@@ -55,11 +56,10 @@ function checktitle($paramwk)
 
 
 /**
-* @author Juan Carlos Raña <herodoto@telefonica.net>
-* check wikilinks that has a page
-**/
-function links_to($input)
-{
+ * check wikilinks that has a page
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
+ **/
+function links_to($input) {
     $input_array=preg_split("/(\[\[|\]\])/",$input,-1, PREG_SPLIT_DELIM_CAPTURE);
     $all_links = array();
 
@@ -94,89 +94,80 @@ function links_to($input)
 
 }
 
-/*
-detect and add style to external links
-author Juan Carlos Raña Trabado
-**/
-function detect_external_link($input)
-{
+/**
+ * detect and add style to external links
+ * @author Juan Carlos Raña Trabado
+ **/
+function detect_external_link($input) {
     $exlink='href=';
     $exlinkStyle='class="wiki_link_ext" href=';
     $output=str_replace($exlink, $exlinkStyle, $input);
     return $output;
 }
 
-/*
-detect and add style to anchor links
-author Juan Carlos Raña Trabado
-**/
-function detect_anchor_link($input)
-{
+/**
+ * detect and add style to anchor links
+ * @author Juan Carlos Raña Trabado
+ **/
+function detect_anchor_link($input) {
     $anchorlink='href="#';
     $anchorlinkStyle='class="wiki_anchor_link" href="#';
     $output=str_replace($anchorlink, $anchorlinkStyle, $input);
     return $output;
 }
 
-/*
-detect and add style to mail links
-author Juan Carlos Raña Trabado
-**/
-function detect_mail_link($input)
-{
+/**
+ * detect and add style to mail links
+ * author Juan Carlos Raña Trabado
+ **/
+function detect_mail_link($input) {
     $maillink='href="mailto';
     $maillinkStyle='class="wiki_mail_link" href="mailto';
     $output=str_replace($maillink, $maillinkStyle, $input);
     return $output;
 }
 
-/*
-detect and add style to ftp links
-author Juan Carlos Raña Trabado
+/** 
+ * detect and add style to ftp links
+ * @author Juan Carlos Raña Trabado
 **/
-function detect_ftp_link($input)
-{
+function detect_ftp_link($input) {
     $ftplink='href="ftp';
     $ftplinkStyle='class="wiki_ftp_link" href="ftp';
     $output=str_replace($ftplink, $ftplinkStyle, $input);
     return $output;
 }
 
-/*
-detect and add style to news links
-author Juan Carlos Raña Trabado
-**/
-function detect_news_link($input)
-{
+/**
+ * detect and add style to news links
+ * @author Juan Carlos Raña Trabado
+ **/
+function detect_news_link($input) {
     $newslink='href="news';
     $newslinkStyle='class="wiki_news_link" href="news';
     $output=str_replace($newslink, $newslinkStyle, $input);
     return $output;
 }
 
-/*
-detect and add style to irc links
-author Juan Carlos Raña Trabado
-**/
-function detect_irc_link($input)
-{
+/**
+ * detect and add style to irc links
+ * @author Juan Carlos Raña Trabado
+ **/
+function detect_irc_link($input) {
     $irclink='href="irc';
     $irclinkStyle='class="wiki_irc_link" href="irc';
     $output=str_replace($irclink, $irclinkStyle, $input);
     return $output;
 }
-
-
-/*
-* This function allows users to have [link to a title]-style links like in most regular wikis.
-* It is true that the adding of links is probably the most anoying part of Wiki for the people
-* who know something about the wiki syntax.
-* @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
-* Improvements [[]] and [[ | ]]by Juan Carlos Raña
-* Improvements internal wiki style and mark group by Juan Carlos Raña
-**/
-function make_wiki_link_clickable($input)
-{
+/**
+ * This function allows users to have [link to a title]-style links like in most regular wikis.
+ * It is true that the adding of links is probably the most anoying part of Wiki for the people
+ * who know something about the wiki syntax.
+ * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+ * Improvements [[]] and [[ | ]]by Juan Carlos Raña
+ * Improvements internal wiki style and mark group by Juan Carlos Raña
+ **/
+function make_wiki_link_clickable($input) {
     global $_course;
 
     if (isset($_SESSION['_gid'])) {
@@ -368,9 +359,9 @@ function save_wiki() {
 /**
 * This function restore a wikipage
 * @author Juan Carlos Raña <herodoto@telefonica.net>
+* @return string Message of success (to be printed on screen)
 **/
-function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group_id, $r_assignment, $r_progress, $c_version, $r_version, $r_linksto)
-{
+function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group_id, $r_assignment, $r_progress, $c_version, $r_version, $r_linksto) {
     global $tbl_wiki, $_course;
     $r_user_id= api_get_user_id();
     $r_dtime = date( "Y-m-d H:i:s" );
@@ -392,8 +383,8 @@ function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group
 /**
 * This function delete a wiki
 * @author Juan Carlos Raña <herodoto@telefonica.net>
+* @return   string  Message of success (to be printed)
 **/
-
 function delete_wiki() {
     global $tbl_wiki, $tbl_wiki_conf, $tbl_wiki_discuss, $tbl_wiki_mailcue, $groupfilter, $condition_session;
 
@@ -420,6 +411,7 @@ function delete_wiki() {
 * This function saves a new wiki page.
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @todo consider merging this with the function save_wiki into one single function.
+* @return string Message of success
 **/
 function save_new_wiki() {
     global $charset;
@@ -542,15 +534,12 @@ function save_new_wiki() {
 }
 
 /**
-* This function displays the form for adding a new wiki page.
-* @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
-* @return html code
-**/
-function display_new_wiki_form()
-{
-global $_course, $page;
-
-
+ * This function displays the form for adding a new wiki page.
+ * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+ * @return html code
+ **/
+function display_new_wiki_form() {
+  global $_course, $page;
 ?>
 <script type="text/javascript">
 function CheckSend()
@@ -734,29 +723,24 @@ return true;
 }
 
 /**
-* This function displays a wiki entry
-* @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
-* @author Juan Carlos Raña Trabado
-* @return html code
-**/
-function display_wiki_entry($newtitle)
-{
+ * This function displays a wiki entry
+ * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+ * @author Juan Carlos Raña Trabado
+ * @return html code
+ **/
+function display_wiki_entry($newtitle) {
     global $charset, $tbl_wiki, $tbl_wiki_conf, $groupfilter, $condition_session, $page;
 
-    if($newtitle)
-    {
+    if($newtitle) {
         $pageMIX=$newtitle; //display the page after it is created
-    }
-    else
-    {
+    } else {
         $pageMIX=$page;//display current page
     }
 
     $_clean['group_id']=(int)$_SESSION['_gid'];
     $session_id=api_get_session_id();
 
-    if ($_GET['view'])
-    {
+    if ($_GET['view']) {
         $_clean['view']=(int)Database::escape_string($_GET['view']);
 
         $filter=' AND '.$tbl_wiki.'.id="'.$_clean['view'].'"';
@@ -764,9 +748,9 @@ function display_wiki_entry($newtitle)
 
     //first, check page visibility in the first page version
     $sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.Database::escape_string($pageMIX).'" AND '.$groupfilter.$condition_session.' ORDER BY id ASC';
-        $result=Database::query($sql);
-        $row=Database::fetch_array($result);
-        $KeyVisibility=$row['visibility'];
+    $result=Database::query($sql);
+    $row=Database::fetch_array($result);
+    $KeyVisibility=$row['visibility'];
 
     // second, show the last version
     $sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.Database::escape_string($pageMIX).'" AND '.$tbl_wiki.'.session_id='.$session_id.' AND '.$tbl_wiki.'.'.$groupfilter.' '.$filter.' ORDER BY id DESC';
@@ -774,67 +758,51 @@ function display_wiki_entry($newtitle)
     $row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
 	
 	//update visits
-    if($row['id'])
-    {
+    if($row['id']) {
         $sql='UPDATE '.$tbl_wiki.' SET hits=(hits+1) WHERE id='.$row['id'].'';
         Database::query($sql);
     }
 
     // if both are empty and we are displaying the index page then we display the default text.
-    if ($row['content']=='' AND $row['title']=='' AND $page=='index')
-    {
-        if(api_is_allowed_to_edit(false,true) || api_is_platform_admin() || GroupManager :: is_user_in_group(api_get_user_id(),$_SESSION['_gid']))
-        {
+    if ($row['content']=='' AND $row['title']=='' AND $page=='index') {
+        if (api_is_allowed_to_edit(false,true) || api_is_platform_admin() || GroupManager :: is_user_in_group(api_get_user_id(),$_SESSION['_gid'])) {
             //Table structure for better export to pdf
             $default_table_for_content_Start='<table align="center" border="0"><tr><td align="center">';
             $default_table_for_content_End='</td></tr></table>';
 
             $content=$default_table_for_content_Start.sprintf(get_lang('DefaultContent'),api_get_path(WEB_IMG_PATH)).$default_table_for_content_End;
             $title=get_lang('DefaultTitle');
-        }
-        else
-        {
+        } else {
             return Display::display_normal_message(get_lang('WikiStandBy'));
         }
-    }
-    else
-    {
+    } else {
           $content=Security::remove_XSS($row['content'],COURSEMANAGERLOWSECURITY);
         $title= $row['title'];
     }
 
     //assignment mode: identify page type
-    if($row['assignment']==1)
-    {
+    if ($row['assignment']==1) {
         $icon_assignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',22);
-    }
-    elseif($row['assignment']==2)
-    {
+    } elseif($row['assignment']==2) {
         $icon_assignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',22);
     }
 
     //task mode
 
-    if (!empty($row['task']))
-    {
+    if (!empty($row['task'])) {
         $icon_task=Display::return_icon('wiki_task.png', get_lang('StandardTask'),'',22);
     }
 
     //Show page. Show page to all users if isn't hide page. Mode assignments: if student is the author, can view
-    if($KeyVisibility=="1" || api_is_allowed_to_edit(false,true) || api_is_platform_admin() || ($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id'])))
-    {
+    if ($KeyVisibility=="1" || api_is_allowed_to_edit(false,true) || api_is_platform_admin() || ($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id']))) {
         echo '<div id="wikititle">';
 
         // page action: protecting (locking) the page
-        if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
-        {
-            if (check_protect_page()==1)
-            {
+        if(api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+            if (check_protect_page()==1) {
 				$protect_page= Display::return_icon('lock.png', get_lang('PageLockedExtra'),'',22);
                 $lock_unlock_protect='unlock';
-            }
-            else
-            {
+            } else {
                 $protect_page= Display::return_icon('unlock.png', get_lang('PageUnlockedExtra'),'',22);
                 $lock_unlock_protect='lock';
             }
@@ -844,10 +812,8 @@ function display_wiki_entry($newtitle)
         echo '</span>';
 
         //page action: visibility
-        if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
-        {
-            if (check_visibility_page()==1)
-            {
+        if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+            if (check_visibility_page()==1) {
                 // TODO: FIX  This hides the icon eye closed to users of work they can see yours
                 //if(($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id']))==false)
                 //{
@@ -856,9 +822,7 @@ function display_wiki_entry($newtitle)
                 $visibility_page= Display::return_icon('visible.png', get_lang('ShowPageExtra'),'',22);
                 $lock_unlock_visibility='invisible';
 
-            }
-            else
-            {
+            } else {
 
 				$visibility_page= Display::return_icon('invisible.png', get_lang('HidePageExtra'),'',22);
                 $lock_unlock_visibility='visible';
@@ -869,8 +833,7 @@ function display_wiki_entry($newtitle)
         echo '</span>';
 
         //page action: notification
-        if (api_is_allowed_to_session_edit())
-        {
+        if (api_is_allowed_to_session_edit()) {
             if (check_notify_page($page)==1) {
                 $notify_page= Display::return_icon('messagebox_info.png', get_lang('NotifyByEmail'),'',22);
                 $lock_unlock_notify_page='unlocknotify';
@@ -893,8 +856,7 @@ function display_wiki_entry($newtitle)
         echo '</span>';
 
         //page action: copy last version to doc area
-        if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
-        {
+        if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
             echo '<span style="float:right;">';
             echo '<form name="form_export2DOC" method="post" action="index.php" >';
             echo '<input type=hidden name="export2DOC" value="export2doc">';
@@ -907,8 +869,7 @@ function display_wiki_entry($newtitle)
         ?>
 
         <script>
-        function goprint()
-        {
+        function goprint() {
             var a = window.open('','','width=800,height=600');
             a.document.open("text/html");
             a.document.write(document.getElementById('wikicontent').innerHTML);
@@ -918,28 +879,23 @@ function display_wiki_entry($newtitle)
         </script>
         <?php
         echo '<span style="float:right; cursor: pointer;">';		
-			echo Display::return_icon('printer.png', get_lang('Print'),array('onclick' => "javascript: goprint();"),'22');
+	    echo Display::return_icon('printer.png', get_lang('Print'),array('onclick' => "javascript: goprint();"),'22');
         echo '</span>';
 
 
-        if (empty($title))
-        {
+        if (empty($title)) {
             $title=get_lang('DefaultTitle');
 
         }
 
-        if (wiki_exist($title))
-        {
+        if (wiki_exist($title)) {
             echo $icon_assignment.'&nbsp;'.$icon_task.'&nbsp;'.api_htmlentities($title);
-        }
-        else
-        {
+        } else {
             echo api_htmlentities($title);
         }
 
-            echo '</div>';
-            echo '<div id="wikicontent">'. make_wiki_link_clickable(detect_external_link(detect_anchor_link(detect_mail_link(detect_ftp_link(detect_irc_link(detect_news_link($content))))))).'</div>';
-
+        echo '</div>';
+        echo '<div id="wikicontent">'. make_wiki_link_clickable(detect_external_link(detect_anchor_link(detect_mail_link(detect_ftp_link(detect_irc_link(detect_news_link($content))))))).'</div>';
         echo '<div id="wikifooter">'.get_lang('Progress').': '.$row['progress'].'%&nbsp;&nbsp;&nbsp;'.get_lang('Rating').': '.$row['score'].'&nbsp;&nbsp;&nbsp;'.get_lang('Words').': '.word_count($content).'</div>';
 
     }//end filter visibility
@@ -947,9 +903,10 @@ function display_wiki_entry($newtitle)
 
 
 /**
-* This function counted the words in a document. Thanks Adeel Khan
-*/
-
+ * This function counted the words in a document. Thanks Adeel Khan
+ * @param   string  Document's text
+ * @return  int     Number of words
+ */
 function word_count($document) {
 
     $search = array(
@@ -988,8 +945,7 @@ function word_count($document) {
  * This function checks if wiki title exist
  */
 
-function wiki_exist($title)
-{
+function wiki_exist($title) {
     global $tbl_wiki;
     global $groupfilter;
     global $condition_session;
@@ -997,10 +953,11 @@ function wiki_exist($title)
     $sql='SELECT id FROM '.$tbl_wiki.'WHERE title="'.Database::escape_string($title).'" AND '.$groupfilter.$condition_session.' ORDER BY id ASC';
     $result=Database::query($sql);
     $cant=Database::num_rows($result);
-    if ($cant>0)
+    if ($cant>0) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
 /**
@@ -1008,34 +965,27 @@ function wiki_exist($title)
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @return html code
 **/
-function display_wiki_warning($variable)
-{
+function display_wiki_warning($variable) {
     echo '<div class="wiki_warning">'.$variable.'</div>';
 }
-
 
 /**
  * Checks if this navigation tab has to be set to active
  * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
  * @return html code
  */
-function is_active_navigation_tab($paramwk)
-{
-    if ($_GET['action']==$paramwk)
-    {
+function is_active_navigation_tab($paramwk) {
+    if ($_GET['action']==$paramwk) {
         return ' class="active"';
     }
 }
-
 
 /**
  * Lock add pages
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  * return current database status of protect page and change it if get action
  */
-
-function check_addnewpagelock()
-{
+function check_addnewpagelock() {
 
     global $tbl_wiki;
     global $groupfilter;
@@ -1081,8 +1031,7 @@ function check_addnewpagelock()
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  * return current database status of protect page and change it if get action
  */
-function check_protect_page()
-{
+function check_protect_page() {
     global $tbl_wiki;
     global $page;
     global $groupfilter;
@@ -1099,14 +1048,11 @@ function check_protect_page()
     $id=$row['id'];
 
     ///change status
-    if (api_is_allowed_to_edit(false,true) || api_is_platform_admin())
-    {
-        if($_GET['actionpage']=='lock' && $status_editlock==0)
-        {
+    if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+        if ($_GET['actionpage']=='lock' && $status_editlock==0) {
             $status_editlock=1;
         }
-        if($_GET['actionpage']=='unlock' && $status_editlock==1)
-        {
+        if ($_GET['actionpage']=='unlock' && $status_editlock==1) {
             $status_editlock=0;
         }
 
@@ -1132,8 +1078,7 @@ function check_protect_page()
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  * return current database status of visibility and change it if get action
  */
-function check_visibility_page()
-{
+function check_visibility_page() {
 
     global $tbl_wiki;
     global $page;
@@ -1151,15 +1096,12 @@ function check_visibility_page()
 
     //change status
 
-    if (api_is_allowed_to_edit(false,true) || api_is_platform_admin())
-    {
-        if($_GET['actionpage']=='visible' && $status_visibility==0)
-        {
+    if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+        if ($_GET['actionpage']=='visible' && $status_visibility==0) {
             $status_visibility=1;
 
         }
-        if($_GET['actionpage']=='invisible' && $status_visibility==1)
-        {
+        if ($_GET['actionpage']=='invisible' && $status_visibility==1) {
             $status_visibility=0;
         }
 
@@ -1171,27 +1113,22 @@ function check_visibility_page()
         $result=Database::query($sql);
         $row=Database::fetch_array($result);
 
-     }
-
-    if(empty($row['id']))
-    {
-        $row['visibility']= 1;
     }
 
+    if (empty($row['id'])) {
+        $row['visibility']= 1;
+    }
 
     //show status
     return $row['visibility'];
 }
 
-
-
 /**
  * Visibility discussion
  * @author Juan Carlos Raña <herodoto@telefonica.net>
- * return current database status of discuss visibility and change it if get action page
+ * @return int current database status of discuss visibility and change it if get action page
  */
-function check_visibility_discuss()
-{
+function check_visibility_discuss() {
 
     global $tbl_wiki;
     global $page;
@@ -1236,10 +1173,9 @@ function check_visibility_discuss()
 /**
  * Lock add discussion
  * @author Juan Carlos Raña <herodoto@telefonica.net>
- * return current database status of lock dicuss and change if get action
+ * @return int current database status of lock dicuss and change if get action
  */
-function check_addlock_discuss()
-{
+function check_addlock_discuss() {
     global $tbl_wiki;
     global $page;
     global $groupfilter;
@@ -1283,10 +1219,9 @@ function check_addlock_discuss()
 /**
  * Lock rating discussion
  * @author Juan Carlos Raña <herodoto@telefonica.net>
- *	Return current database status of rating discuss and change it if get action
+ * @return  int  current database status of rating discuss and change it if get action
  */
-function check_ratinglock_discuss()
-{
+function check_ratinglock_discuss() {
 
     global $tbl_wiki;
     global $page;
@@ -1332,11 +1267,10 @@ function check_ratinglock_discuss()
 /**
  * Notify page changes
  * @author Juan Carlos Raña <herodoto@telefonica.net>
- * return the current
+ * @return int the current notification status
  */
 
-function check_notify_page($reflink)
-{
+function check_notify_page($reflink) {
     global $tbl_wiki;
     global $groupfilter;
     global $tbl_wiki_mailcue;
@@ -1391,10 +1325,9 @@ function check_notify_page($reflink)
 /**
  * Notify discussion changes
  * @author Juan Carlos Raña <herodoto@telefonica.net>
- * Return current database status of rating discuss and change it if get action
+ * @return int current database status of rating discuss and change it if get action
  */
-function check_notify_discuss($reflink)
-{
+function check_notify_discuss($reflink) {
     global $tbl_wiki;
     global $groupfilter;
     global $tbl_wiki_mailcue;
@@ -1450,9 +1383,7 @@ function check_notify_discuss($reflink)
  * Notify all changes
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
-
-function check_notify_all()
-{
+function check_notify_all() {
 
     global $tbl_wiki_mailcue;
 
@@ -1494,8 +1425,10 @@ function check_notify_all()
         return $status_notify_all;
 }
 
-function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
-{
+/**
+ * Sends pending e-mails
+ */
+function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='') {
     global $tbl_wiki;
     global $groupfilter;
     global $tbl_wiki_mailcue;
@@ -1674,7 +1607,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
             if($session_id==0){
                 $email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br /><br /><br />';
             }else{
-                $email_body .= $emailtext.' <strong>'.$_course['name'].' ('.api_get_session_name($current_session_id).') - '.$group_name.'</strong><br /><br /><br />';
+                $email_body .= $emailtext.' <strong>'.$_course['name'].' ('.api_get_session_name(api_get_session_id()).') - '.$group_name.'</strong><br /><br /><br />';
             }
             $email_body .= $email_user_author.' ('.$email_date_changes.')<br /><br /><br />';
             $email_body .= $email_assignment.'<br /><br /><br />';
@@ -1777,6 +1710,9 @@ function export2doc($doc_id) {
     // TODO: link to go document area
 }
 
+/**
+ * Exports the wiki page to PDF
+ */
 function export_to_pdf($id, $course_code) {
     $data        = get_wiki_data($id);	
     $content_pdf = api_html_entity_decode($data['content'], ENT_QUOTES, api_get_system_encoding());
@@ -1819,39 +1755,29 @@ function export_to_pdf($id, $course_code) {
     exit;
 }
 
-
 /**
  * Function prevent double post (reload or F5)
+ * 
  */
-
-function double_post($wpost_id)
-{
-    if(isset($_SESSION['wpost_id']))
-    {
-         if ($wpost_id == $_SESSION['wpost_id'])
-        {
+function double_post($wpost_id) {
+    if (isset($_SESSION['wpost_id'])) {
+        if ($wpost_id == $_SESSION['wpost_id']) {
              return false;
-        }
-        else
-        {
+        } else {
             $_SESSION['wpost_id'] = $wpost_id;
             return true;
         }
-    }
-    else
-    {
+    } else {
         $_SESSION['wpost_id'] = $wpost_id;
         return true;
     }
 }
 
-
 /**
  * Function wizard individual assignment
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
-function auto_add_page_users($assignment_type)
-{
+function auto_add_page_users($assignment_type) {
     global $assig_user_id, $session_id; //$assig_user_id is need to identify end reflinks
 
     $_clean['group_id']=(int)$_SESSION['_gid'];
@@ -1991,8 +1917,9 @@ function auto_add_page_users($assignment_type)
 }
 
 /**
- * Enter description here...
- *
+ * Displays the results of a wiki search
+ * @param   string  Search term
+ * @param   int     Whether to search the contents (1) or just the titles (0)
  */
 function display_wiki_search_results($search_term, $search_content=0)
 {
@@ -2092,7 +2019,8 @@ function display_wiki_search_results($search_term, $search_content=0)
 }
 
 /**
- * Enter description here...
+ * Returns a date picker
+ * @todo replace this function with the formvalidator datepicker
  *
  */
 function draw_date_picker($prefix,$default='') {
@@ -2130,7 +2058,7 @@ function draw_date_picker($prefix,$default='') {
 }
 
 /**
- * Enter description here...
+ * Draws an HTML form select with the given options
  *
  */
 function make_select($name,$values,$checked='') {
@@ -2144,7 +2072,7 @@ function make_select($name,$values,$checked='') {
 
 
 /**
- * Enter description here...
+ * Translates a form date into a more usable format
  *
  */
 function get_date_from_select($prefix) {
@@ -2152,10 +2080,9 @@ function get_date_from_select($prefix) {
 }
 
 /**
-* converts 1-9 to 01-09
+* Converts 1-9 to 01-09
 */
-function two_digits($number)
-{
+function two_digits($number) {
     $number = (int)$number;
     return ($number < 10) ? '0'.$number : $number;
 }
@@ -2177,4 +2104,3 @@ function get_wiki_data($id) {
     }
     return $data;
 }
-?>

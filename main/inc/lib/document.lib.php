@@ -2668,17 +2668,23 @@ return 'application/octet-stream';
 		    				$path_to_eval .= "['$resource_path']['files']";
 		    			}
 		    		}
-		    	}	
-		    	
+		    	}
 		    	$last_path = $resource_path;
 		    	
+		    	//$data = json_encode(array('title'=>$resource['title'], 'path'=>$last_path));
+		    	//@todo not sure if it's a good thing using base64_encode. I tried with json_encode but i received the same error
+		    	//Some testing is needed in order to prove the performance 
+		    	//Also change the explode to value from "/" to "|@j@|" it fixes  #3780
 		    	
+		    	$data = base64_encode($resource['title'].'|@j@|'.$last_path);		    	
+		    		    	
 		    	if ($is_file) {
 		    		//for backward compatibility
 		    		if (empty($resource['title'])) {
 		    			$resource['title'] = basename($resource['path']);
 		    		}
-		    		eval ('$resources_sorted'.$path_to_eval.'['.$resource['id'].'] = "'.$resource['title']."/". $last_path.'";');
+		    		//eval ('$resources_sorted'.$path_to_eval.'['.$resource['id'].'] = "'.$resource['title']."/". $last_path.'";');
+		    		eval ('$resources_sorted'.$path_to_eval.'['.$resource['id'].'] = "'.$data.'" ; ');
 		    	} else {
 		    		eval ('$resources_sorted'.$path_to_eval.'["'.$last_path.'"]["id"]='.$resource['id'].';');
 		    	}
@@ -2686,6 +2692,7 @@ return 'application/octet-stream';
     	}
     	
     	$label = get_lang('Documents');
+    	//var_dump($resources_sorted);
     	$new_array[$label] = array('id' => 0, 'files' => $resources_sorted);
     	
     	$write_result = self::write_resources_tree($course_info, $session_id, $new_array, 0, $lp_id, $target);
@@ -2696,8 +2703,7 @@ return 'application/octet-stream';
     	$img_path = api_get_path(WEB_IMG_PATH);
     	
     	if ($lp_id == false) {
-    		$return .= "<script>
-    		
+    		$return .= "<script>    		
     		    	$('.doc_folder').mouseover(function() {	
     					var my_id = this.id.split('_')[2];    						
     					$('#'+my_id).show();
@@ -2798,12 +2804,14 @@ return 'application/octet-stream';
     				$return .= '</div></div>';
     			} else {
     				if (!is_array($resource)) {
-    					
+    				//if (isset($resource)) {
+    					//var_dump($resource);
+    					$resource = base64_decode($resource);
     					// It's a file.
     					$icon		= choose_image($resource);
     					$position 	= strrpos($icon, '.');
     					$icon 		= substr($icon, 0, $position) . '_small.gif';
-    					$file_info	= explode('/', $resource);
+    					$file_info	= explode('|@j@|', $resource);
     					$my_file_title = $file_info[0];
     					$my_file_name  = $file_info[1];
 

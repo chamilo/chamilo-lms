@@ -25,7 +25,8 @@ require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
  * @param int   number of total questions
  * */
 function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false) {
-
+	
+	$s = '';
 	// Text direction for the current language
 	$is_ltr_text_direction = api_get_text_direction() != 'rtl';
 

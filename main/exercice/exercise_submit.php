@@ -588,9 +588,7 @@ if (!empty ($error)) {
     $number_of_hotspot_questions = 0;
     $onsubmit = '';
     $i = 0;
-    //i have a doubt in this line cvargas
-    //var_dump($questionList);
-    if (!strcmp($questionList[0], '') === 0) {
+    if (!empty($questionList) && is_array($questionList)) {
         foreach ($questionList as $questionId) {
             $i++;
             $objQuestionTmp = Question::read($questionId);
@@ -636,39 +634,41 @@ if (!empty ($error)) {
                         
 		//Show list of questions
 	    $i = 1;    
-	    foreach ($questionList as $questionId) {
-	       
-	        // for sequential exercises
-	        if ($exerciseType == ONE_PER_PAGE) {
-	            // if it is not the right question, goes to the next loop iteration
-	            if ($questionNum != $i) {
-	                $i++;
-	                continue;
-	            } else {
-	                if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {
-	                    // if the user has already answered this question
-	                    if (isset ($exerciseResult[$questionId])) {
-	                        // construction of the Question object
-	                        $objQuestionTmp = Question::read($questionId);
-	                        $questionName = $objQuestionTmp->selectTitle();
-	                        // destruction of the Question object
-	                        unset ($objQuestionTmp);
-	                        Display :: display_normal_message(get_lang('AlreadyAnswered'));
-	                        $i++;
-	                        break;
-	                    }
-	                }
-	            }
-	        }        
-	        // shows the question and its answers
-	        showQuestion($questionId, false, $origin, $i);
-	        $i++;
-	        // for sequential exercises
-	        if ($exerciseType == ONE_PER_PAGE) {
-	            // quits the loop
-	            break;
-	        }
-	    }    
+	    if (is_array($questionList)) {
+		    foreach ($questionList as $questionId) {
+		       
+		        // for sequential exercises
+		        if ($exerciseType == ONE_PER_PAGE) {
+		            // if it is not the right question, goes to the next loop iteration
+		            if ($questionNum != $i) {
+		                $i++;
+		                continue;
+		            } else {
+		                if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+		                    // if the user has already answered this question
+		                    if (isset ($exerciseResult[$questionId])) {
+		                        // construction of the Question object
+		                        $objQuestionTmp = Question::read($questionId);
+		                        $questionName = $objQuestionTmp->selectTitle();
+		                        // destruction of the Question object
+		                        unset ($objQuestionTmp);
+		                        Display :: display_normal_message(get_lang('AlreadyAnswered'));
+		                        $i++;
+		                        break;
+		                    }
+		                }
+		            }
+		        }        
+		        // shows the question and its answers
+		        showQuestion($questionId, false, $origin, $i);
+		        $i++;
+		        // for sequential exercises
+		        if ($exerciseType == ONE_PER_PAGE) {
+		            // quits the loop
+		            break;
+		        }
+		    }    
+	    }
 	    // end foreach()
 	    echo $objExercise->show_button($nbrQuestions, $questionNum, $exerciseId);     
 	    echo '</table>

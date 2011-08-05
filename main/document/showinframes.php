@@ -55,7 +55,7 @@ if (empty($document_data)) {
 }
 
 $header_file  = $document_data['path'];
-$name_to_show = cut($header_file, 80);
+$name_to_show = $document_data['title'];
 
 $path_array = explode('/', str_replace('\\', '/', $header_file));
 $path_array = array_map('urldecode', $path_array);

@@ -52,7 +52,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 	$cr = new CourseRestorer($course);
 	$cr->set_file_option($_POST['same_file_name_option']);
 	$cr->restore($_POST['destination_course']);
-	Display::display_normal_message(get_lang('CopyFinished'));
+	Display::display_normal_message(get_lang('CopyFinished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.$_POST['destination_course'].'</a>',false);
 } elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
 	$cb = new CourseBuilder();
 	$course = $cb->build();	

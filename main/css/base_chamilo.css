@@ -1709,12 +1709,10 @@ padding-top: 0px;   padding-right: 0px; padding-bottom: 0px;    padding-left: 0p
     display: none;
 }
 /*
-------------------------------------------------------------------------------
-    OTHERS
-------------------------------------------------------------------------------
+Document title
 */
 .input_titles {
-    width: 300px;
+    width: 400px;
     -moz-border-radius-bottomleft:5px;
     -moz-border-radius-bottomright:5px;
     -moz-border-radius-topleft:5px;
@@ -1722,9 +1720,7 @@ padding-top: 0px;   padding-right: 0px; padding-bottom: 0px;    padding-left: 0p
     border:1px solid #E1E1E0;
 }
 /*
-------------------------------------------------------------------------------
     Survey
-------------------------------------------------------------------------------
 */
 #survey_title {
     background-color:#dcdcdc;
@@ -1760,10 +1756,7 @@ padding-top: 0px;   padding-right: 0px; padding-bottom: 0px;    padding-left: 0p
     padding:5px;/*border: 1px solid #264269;*/
 }
 /*
-|----------------------------------------------------------------------------
-| Added: to fit img and blocks in home page
-|----------------------------------------------------------------------------
-|
+ Added: to fit img and blocks in home page
 */
 #hellomindfactory {
     border: 1px solid #ccc;

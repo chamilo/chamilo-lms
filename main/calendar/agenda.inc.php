@@ -1427,8 +1427,8 @@ function show_user_filter_form()
 function show_user_group_filter_form() {    
 	echo "<select name=\"select\" onchange=\"javascript: MM_jumpMenu('parent',this,0)\">";	
     echo "<option value=\"agenda.php?user=none&action=view\">".get_lang("ShowAll")."</option>";
-	// Groups
-	
+    
+	// Groups	
 	$group_list = get_course_groups();
 
 	$group_available_to_access =array();
@@ -1537,11 +1537,10 @@ function change_visibility($tool,$id,$visibility)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
 function display_courseadmin_links() {
-	//echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
 	echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".api_get_group_id()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'),'','32')."</a>";
 	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=importical&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'),'','32')."</a>";
+	
 	if (empty ($_SESSION['toolgroup'])) {
-		//echo get_lang('UserGroupFilter');
 		echo get_lang('SentTo');
 		echo "&nbsp;&nbsp;<form name=\"filter\" style=\"display:inline;\">";
 		show_user_group_filter_form();
@@ -1569,7 +1568,12 @@ function display_student_links() {
 	}	
 	$day_url = '&month='.date('m').'&year='.date('Y').'&view='.Security::remove_XSS($_GET['view']);
 	$today_url = api_get_self()."?action=view".$day_url."&toolgroup=".api_get_group_id();
-	echo Display::url(get_lang('Today'), $today_url );
+	echo Display::url(get_lang('Today'), $today_url, array('class'=>'a_button white medium'));
+	
+	//@todo Add next events and all events?  ...
+	 
+	//echo Display::url(get_lang('AllEvents'), $all_url, array('class'=>'a_button white medium'));
+	//echo Display::url(get_lang('Next events'), $all_url, array('class'=>'a_button white medium'));
 }
 
 
@@ -2304,7 +2308,7 @@ function show_add_form($id = '') {
 
 	<!-- START OF THE FORM  -->
 
-	<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$origin.'&'.api_get_cidreq()."&sort=asc&toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
+	<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$origin.'&'.api_get_cidreq()."&sort=asc&toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&action='.Security::remove_XSS($_GET['action']); ?>" method="post" name="new_calendar_item">
 	<input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
 	<input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
 	<input type="hidden" name="id_attach" value="<?php echo isset($_REQUEST['id_attach']) ? intval($_REQUEST['id_attach']) : null; ?>" />
@@ -4052,6 +4056,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     			AND item_property.tool       = '".TOOL_CALENDAR_EVENT."'
     			AND item_property.ref = agenda.id
     			AND item_property.visibility <> 2";
+    
     $result = Database::query($sql);
     $count = Database::num_rows($result);
     if ($count > 0) {
@@ -4088,8 +4093,8 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
         }
     }
 
-    if(!$done) // the message is sent to everyone, so we set the group to 0
-    {
+    if(!$done) {
+    	// the message is sent to everyone, so we set the group to 0
         api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id,0,0, $start_date,$end_date);
     }
     // storing the resources
@@ -4318,7 +4323,7 @@ function agenda_import_ical($course_info,$file) {
 	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
    	$charset = api_get_system_encoding();
     $filepath = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
-    if(!@move_uploaded_file($file['tmp_name'],$filepath)) {
+    if (!@move_uploaded_file($file['tmp_name'],$filepath)) {
     	error_log('Problem moving uploaded file: '.$file['error'].' in '.__FILE__.' line '.__LINE__);
     	return false;
     }
@@ -4385,7 +4390,7 @@ function agenda_import_ical($course_info,$file) {
     while (true) {
     	//we need to recover: summary, description, dtstart, dtend, organizer, attendee, location (=course name),
     
-    	$ve = $ical->getComponent(VEVENT, $eventcount);
+    	$ve = $ical->getComponent(VEVENT, $eventcount);    	
     	if (!$ve)
     	break;
     

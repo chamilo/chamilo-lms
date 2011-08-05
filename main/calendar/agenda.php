@@ -168,26 +168,24 @@ Display::display_introduction_section(TOOL_CALENDAR_EVENT);
 //setting the default year and month
 $select_year = '';
 $select_month = '';
+$select_day = '';
+
 if(!empty($_GET['year'])) {
 	$select_year = (int)$_GET['year'];
 }
 if(!empty($_GET['month'])) {
 	$select_month = (int)$_GET['month'];
 }
-
-$select_day = '';
-
 if(!empty($_GET['day'])) {
     $select_day = (int)$_GET['day'];
 }
-$select_year = '';
-if (empty($select_year)) {
-	$today = getdate();
+
+$today = getdate();
+
+if (empty($select_year)) {	
 	$select_year = $today['year'];	
 }
-
-if (empty($select_month)) {
-    $today = getdate();
+if (empty($select_month)) { 
     $select_month = $today['mon'];
 }
 
@@ -198,45 +196,101 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 display_student_links();
 echo '</div>';
 
+
+// Getting agenda items
+
+$agenda_items = get_calendar_items($select_month, $select_year);
+
+if ($_SESSION['view'] != 'month') {
+	echo '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
+
+	// THE LEFT PART
+	if (empty($origin) or $origin !='learnpath') {
+		echo '<td width="220" height="19" valign="top">';
+		// the small calendar
+		if (api_get_setting('display_mini_month_calendar') == 'true') {
+			display_minimonthcalendar($agenda_items, $select_month, $select_year);
+		}
+		echo '<br />';
+		if (api_get_setting('display_upcoming_events') == 'true') {
+			display_upcoming_events();
+		}
+		echo '</td>';
+		echo '<td width="20" background="../img/verticalruler.gif">&nbsp;</td>';
+	}
+
+	// THE RIGHT PART
+	echo '<td valign="top">';
+	echo '<div class="sort" style="float:left">';
+	echo '</div>';
+}
+
+$event_id = isset($_GET['id']) ? $_GET['id'] : null;
+$course_info = api_get_course_info(); 
+
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false,true))) {
 	switch($action) {
+		case 'add':
+			if (isset($_POST['submit_event']) && $_POST['submit_event']) {				
+				$event_start 		= (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
+				$event_stop   		= (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
+				$safe_title 		= Security::remove_XSS($_POST['title']);
+				$safe_file_comment 	= Security::remove_XSS($_POST['file_comment']);
+		
+				if ($_POST['empty_end_date'] == 'on' ) {
+					$event_stop = '0000-00-00 00:00:00';
+				}
+				$id = agenda_add_item($course_info,$safe_title,$_POST['content'],$event_start,$event_stop,$_POST['selectedform'],false,$safe_file_comment);
+				if (!empty($_POST['repeat'])) {
+					$end_y = intval($_POST['repeat_end_year']);
+					$end_m = intval($_POST['repeat_end_month']);
+					$end_d = intval($_POST['repeat_end_day']);
+					$end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
+					$res   = agenda_add_repeat_item($course_info,$id, $_POST['repeat_type'], $end,$_POST['selectedform'], $safe_file_comment);
+				}
+				$action = 'view';
+			} else {
+				show_add_form();
+			}
+			break;			
+		case "announce":
+			//copying the agenda item into an announcement
+			if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $event_id))) {
+				// a coach can only delete an element belonging to his session
+				$ann_id = store_agenda_item_as_announcement($event_id);
+				$tool_group_link = (isset($_SESSION['toolgroup'])?'&toolgroup='.$_SESSION['toolgroup']:'');
+				Display::display_normal_message(get_lang('CopiedAsAnnouncement').'&nbsp;<a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.get_lang('NewAnnouncement').'</a>', false);
+			}
+			display_agenda_items($agenda_items, $select_day);
+			break;
+			
 		case 'importical':
-			if(isset($_POST['ical_submit'])) {
-                $course_info = api_get_course_info();
+			if (isset($_POST['ical_submit'])) {                
                 $ical_name = $_FILES['ical_import']['name'];
                 $ical_type = $_FILES['ical_import']['type'];
                 
                 $ext = substr($ical_name,(strrpos($ical_name,".")+1));
+
                 //$ical_type === 'text/calendar' 
                 if ($ext === 'ics' || $ext === 'ical' || $ext === 'icalendar'  || $ext === 'ifb') {
-                	agenda_import_ical($course_info,$_FILES['ical_import']);
+                	agenda_import_ical($course_info, $_FILES['ical_import']);
                 	$is_ical = true;
                 } else {
                 	$is_ical = false;
                 }
-            }
-            break;
-		case 'add':
-			if (isset($_POST['submit_event']) && $_POST['submit_event']) {
-		     	$course_info 		= api_get_course_info();
-			    $event_start 		= (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
-                $event_stop   		= (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
-                $safe_title 		= Security::remove_XSS($_POST['title']);
-                $safe_file_comment 	= Security::remove_XSS($_POST['file_comment']);
                 
-                if ($_POST['empty_end_date'] == 'on' ) {
-                	$event_stop = '0000-00-00 00:00:00';
+                if (!$is_ical) {
+                	Display::display_error_message(get_lang('IsNotiCalFormatFile'));
+                	display_ical_import_form();
+                	break;
+                } else {
+                	Display::display_confirmation_message(get_lang('AddSuccess'));
                 }
-				$id = agenda_add_item($course_info,$safe_title,$_POST['content'],$event_start,$event_stop,$_POST['selectedform'],false,$safe_file_comment);
-                if (!empty($_POST['repeat'])) {
-                	$end_y = intval($_POST['repeat_end_year']);
-                    $end_m = intval($_POST['repeat_end_month']);
-                    $end_d = intval($_POST['repeat_end_day']);
-                    $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
-                    $res = agenda_add_repeat_item($course_info,$id, $_POST['repeat_type'], $end,$_POST['selectedform'], $safe_file_comment);
-                }
-			}
-			break;
+                display_agenda_items($agenda_items, $select_day);
+            } else {
+            	display_ical_import_form();
+            }
+            break;		
 		case 'edit':
 			if( !(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id'])))) {
 				// a coach can only delete an element belonging to his session
@@ -244,113 +298,38 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 					$my_id_attach = (int)$_REQUEST['id_attach'];
 					$safe_file_comment = Security::remove_XSS($_REQUEST['file_comment']);
 					store_edited_agenda_item($my_id_attach, $safe_file_comment);
+					display_agenda_items($agenda_items, $select_day);					
+				} else {					
+					show_add_form($event_id);
 				}
+			} else {
+				display_agenda_items($agenda_items, $select_day);
 			}
 			break;
-		case "delete":
-			$id=(int)$_GET['id'];
-			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
-			{ // a coach can only delete an element belonging to his session
-				delete_agenda_item($id);
+		case "delete":			
+			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $event_id ) ) ) {
+				// a coach can only delete an element belonging to his session
+				delete_agenda_item($event_id);
 			}
+			display_agenda_items($agenda_items, $select_day);
 			break;
-		case "showhide":
-			$id=(int)$_GET['id'];
-			if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) ) {
+		case "showhide":			
+			if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $event_id))) {
 			     // a coach can only delete an element belonging to his session			   
-				showhide_agenda_item($id);
+				showhide_agenda_item($event_id);
 			}
-			break;
-		case "announce": 		
-			//copying the agenda item into an announcement
-			$id=(int)$_GET['id'];
-			if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id))) { 
-			    // a coach can only delete an element belonging to his session
-				$ann_id = store_agenda_item_as_announcement($id);
-				$tool_group_link = (isset($_SESSION['toolgroup'])?'&toolgroup='.$_SESSION['toolgroup']:'');
-				Display::display_normal_message(get_lang('CopiedAsAnnouncement').'&nbsp;<a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.get_lang('NewAnnouncement').'</a>', false);
-			}
-			break;
+			
+			if (!empty($event_id)) {
+				display_one_agenda_item($event_id);
+			} else {
+				display_agenda_items($agenda_items, $select_day);
+			}			
+			break;		
 		case "delete_attach": 	//delete attachment file
 			$id_attach = (int)$_GET['id_attach'];
 			if (!empty($id_attach)) {
 				delete_attachment_file($id_attach);
 			}
-			break;
-	}
-}
-
-// Getting agenda items
-
-$agenda_items = get_calendar_items($select_month, $select_year);
-
-if ($_SESSION['view'] != 'month') {
-    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
-    
-    // THE LEFT PART
-    if (empty($origin) or $origin !='learnpath') {
-    	echo '<td width="220" height="19" valign="top">';
-    	// the small calendar    	
-    	if (api_get_setting('display_mini_month_calendar') == 'true') {	   
-            display_minimonthcalendar($agenda_items, $select_month, $select_year);	   
-    	}	
-    	echo '<br />';
-    	if (api_get_setting('display_upcoming_events') == 'true') {
-    		display_upcoming_events();
-    	}
-    	echo '</td>';
-    	echo '<td width="20" background="../img/verticalruler.gif">&nbsp;</td>';
-    }
-    
-    // THE RIGHT PART
-    echo '<td valign="top">';
-    echo '<div class="sort" style="float:left">';
-    echo '</div>';
-}
-
-if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false,true) )) {		
-	switch ($action) {
-		case 'importical' :
-			if (isset($_POST['ical_submit'])) {
-		        if (!$is_ical) {
-					Display::display_error_message(get_lang('IsNotiCalFormatFile'));
-					display_ical_import_form();
-					break;
-				}
-		        display_agenda_items($agenda_items, $select_day);
-		    } else {
-		    	display_ical_import_form();
-		    }
-		    break;
-		case 'add' :
-			if (isset($_POST['submit_event']) && $_POST['submit_event']) {
-				display_agenda_items($agenda_items, $select_day);
-			} else {
-				show_add_form();
-			}
-			break;
-		case 'edit' :
-			if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id'])))) {
-				if ($_POST['submit_event']) {
-					display_agenda_items($agenda_items, $select_day);
-				} else {
-					$id=(int)$_GET['id'];
-					show_add_form($id);
-				}
-			} else {
-				display_agenda_items($agenda_items, $select_day);
-			}
-			break;
-		case 'showhide':
-			if(!empty($_GET['agenda_id'])) {
-				 display_one_agenda_item((int)$_GET['agenda_id']);
-			} else {
-				display_agenda_items($agenda_items, $select_day);
-			}
-			break;
-        case 'delete':
-        case 'delete_attach':    
-		case 'announce': 		
 			display_agenda_items($agenda_items, $select_day);
 			break;
 	}
@@ -360,14 +339,14 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 if ($action == "view" || empty($action)) {    
 	if ($origin != 'learnpath') {	    
-		if ($_SESSION['view'] == 'month') {			
+		if ($_SESSION['view'] == 'month') {
 		    display_monthcalendar($select_month, $select_year, $agenda_items);            
 		} else {
 		  if (!empty($_GET['agenda_id'])) {
                 display_one_agenda_item($_GET['agenda_id']);
             } else {
-                $month_name = $MonthsLong[$select_month -1];               
-                echo Display::tag('h2', $select_day.' '.$month_name.' '.$select_year);
+                $month_name = $MonthsLong[$select_month -1];                
+                echo Display::tag('h2', $select_day.' '.$month_name.' '.$select_year);                
                 display_agenda_items($agenda_items, $select_day);
             }
 		}

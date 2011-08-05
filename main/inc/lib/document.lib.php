@@ -2109,26 +2109,25 @@ return 'application/octet-stream';
         $base_work_dir    = $sys_course_path.$course_dir;
          
         if (isset($files['file'])) {
-            $upload_ok = process_uploaded_file($files['file'], $show_output);
+            $upload_ok = process_uploaded_file($files['file'], $show_output);            
              
             if ($upload_ok) {
                 // File got on the server without problems, now process it
                 $new_path = handle_uploaded_document($course_info, $files['file'], $base_work_dir, $path, api_get_user_id(), api_get_group_id(), null, $max_filled_space, $unzip, $if_exists, $show_output);
                 if ($new_path) {
-
-                    $new_comment = isset($title) ? trim($comment) : '';
-                    $new_title   = isset($title) ? trim($title) : '';
-
                     $docid = DocumentManager::get_document_id($course_info, $new_path);
-
-                    if ($new_path && ($new_comment || $new_title)) {
-                        if (!empty($docid)) {
-                            $table_document = Database::get_course_table(TABLE_DOCUMENT);
-                            $ct = '';
-                            if ($new_comment) $ct .= ", comment='$new_comment'";
-                            if ($new_title)   $ct .= ", title='$new_title'";
-                            Database::query("UPDATE $table_document SET ".substr($ct, 1)." WHERE id = $docid");
+                    if (!empty($docid)) {
+                    	$table_document = Database::get_course_table(TABLE_DOCUMENT);
+						$params = array();
+                        if (!empty($title)) {                        	
+                        	$params['title'] = trim($title);
+                        } else {
+                        	$params['title']  = $files['file']['name'];
                         }
+                        if (!empty($comment)) {
+                        	$params['comment'] = trim($comment);
+                        }         
+                        Database::update($table_document, $params, array('id = ?' =>$docid));                                           
                     }
 
                     // Showing message when sending zip files

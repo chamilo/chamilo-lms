@@ -170,6 +170,7 @@ $htmlHeadXtra[] = '
         //FooterHeight = document.getElementById("footer").offsetHeight;
         //document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))+60)+"px";
         my_iframe = document.getElementById("mainFrame");
+        //this doesnt seem to work in IE 7,8,9
         new_height = my_iframe.contentWindow.document.body.scrollHeight;
         my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
     };
@@ -203,6 +204,6 @@ if ($pathinfo['extension']=='wav' && api_get_setting('enable_nanogong') == 'true
 	echo '</div>';
 }
 else{
-	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'"></iframe>';
+	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;" height="600"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'" height="500"></iframe>';
 }
 Display::display_footer();

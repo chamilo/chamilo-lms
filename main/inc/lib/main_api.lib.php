@@ -1018,10 +1018,12 @@ function api_get_anonymous_id() {
 }
 
 /**
- * Returns the cidreq parameter name + current course id
+ * Returns the cidreq parameter name + current course id taken from 
+ * $GLOBALS['_cid'] and returns a string like 'cidReq=ABC&id_session=123
+ * @return  string  Course & session references to add to a URL
  */
 function api_get_cidreq() {
-    return empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']).(api_get_session_id() == 0 ? '' : '&id_session='.api_get_session_id());
+    return empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']).(api_get_session_id() == 0 ? '' : '&amp;id_session='.api_get_session_id());
 }
 /**
  * Returns the current course info array.

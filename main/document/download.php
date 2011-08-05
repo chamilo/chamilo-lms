@@ -72,7 +72,9 @@ if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
 if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     $full_file_name = $sys_course_path.$doc_url;    
     // Check visibility of document and paths    
-    if (!api_is_allowed_to_edit() && !DocumentManager::is_visible($doc_url, $_course, api_get_session_id())) {
+    $is_visible = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
+    //$is_visible = DocumentManager::is_visible($doc_url, $_course, api_get_session_id());
+    if (!api_is_allowed_to_edit() && !$is_visible) {
     	Display::display_error_message(get_lang('ProtectedDocument'));//api_not_allowed backbutton won't work.
     	exit; // You shouldn't be here anyway.
     }    

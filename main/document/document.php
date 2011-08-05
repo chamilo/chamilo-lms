@@ -179,20 +179,25 @@ $is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath'])
 
 //If no actions we proceed to show the document (Hack in order to use document.php?id=X) 
 if (isset($document_id)) {
-    $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true);
-        
+    $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true); 
     
     //If the document is not a folder we show the document
     if ($document_data) {
     	$parent_id     = $document_data['parent_id'];
     	
-	    if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file') {
-	    	$visibility = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
+    	//$visibility = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
+    	$visibility = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
+    	
+	    if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file') {	    	
 	    	if ($visibility && api_is_allowed_to_session_edit()) {    		
 	    		$url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$document_data['path'].'?'.api_get_cidreq();    	    	
 	    		header("Location: $url");
 	    	}    	
 	    	exit;
+	    } else {
+	    	if (!$visibility) {
+	    		api_not_allowed();
+	    	}
 	    }
     	$_GET['curdirpath'] = $document_data['path'];
     }
@@ -370,8 +375,13 @@ if ($is_certificate_mode) {
 }
 
 // Interbreadcrumb for the current directory root path
+
 if (empty($document_data['parents'])) {
-	$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+	if (isset($_GET['createdir'])) {		
+		$interbreadcrumb[] = array('url' => $document_data['document_url'], 'name' => $document_data['title']);
+	} else {
+		$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+	}	
 } else {	
 	foreach($document_data['parents'] as $document_sub_data) {
 		if (!isset($_GET['createdir']) && $document_sub_data['id'] ==  $document_data['id']) {
@@ -851,7 +861,7 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
 }
 
 /*	GET ALL DOCUMENT DATA FOR CURDIRPATH */
-if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {	
     $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, true);    
 } else {
     $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
@@ -863,7 +873,7 @@ if ($folders === false) {
 }
 
 echo '<div class="actions">';
-if ($is_allowed_to_edit || $group_member_with_upload_rights){
+//if ($is_allowed_to_edit || $group_member_with_upload_rights){
 /* BUILD SEARCH FORM */
     echo '<span style="display:inline-block;">';
     $form = new FormValidator('search_document', 'get', '', '', null, false);
@@ -873,7 +883,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights){
     $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
     $form->display();
     echo '</span>';
-}
+//}
 
 /* GO TO PARENT DIRECTORY */
 if ($curdirpath!= '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {
@@ -899,7 +909,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
     // Create a sortable table with our data
     $sortable_data = array();
 
-    $count = 1;
+    $count = 1;    
     foreach ($docs_and_folders as $key => $document_data) {
         $row = array();        
         $row['id']   = $document_data['id'];
@@ -1198,6 +1208,7 @@ if (count($docs_and_folders) > 1) {
 if (!empty($table_footer)) {
     Display::display_warning_message($table_footer);
 }
+
 
 // Footer
 Display::display_footer();

@@ -469,7 +469,7 @@ if ($show_quiz_edition) {
 echo '</div>';
 
 if (isset($_GET['message'])) {
-	if (in_array($_GET['message'], array('ExerciseStored', 'ItemUpdated'))) {
+	if (in_array($_GET['message'], array('ExerciseStored', 'ItemUpdated', 'ItemAdded'))) {
 		Display::display_confirmation_message(get_lang($_GET['message']));
 	}
 }
@@ -481,7 +481,7 @@ if ($newQuestion || $editQuestion) {
 	<?php	
    require 'question_admin.inc.php';
 }
-
+ 
 if (isset($_GET['hotspotadmin'])) {
     
     if (!is_object($objQuestion)) {

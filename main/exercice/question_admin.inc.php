@@ -88,10 +88,17 @@ if(is_object($objQuestion)) {
         // TODO: maybe here is the better place to index this tool, including answers text
 
 	    // redirect
-	    if($objQuestion -> type != HOT_SPOT && $objQuestion -> type !=  HOT_SPOT_DELINEATION)
-	    	echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'"</script>';
-	    else
+	    if ($objQuestion -> type != HOT_SPOT && $objQuestion -> type !=  HOT_SPOT_DELINEATION) {
+	    	
+	    	if(isset($_GET['editQuestion'])) {
+	    		echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&message=ItemUpdated"</script>';
+	    	} else {
+	    		//New question
+	    		echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&message=ItemAdded"</script>';
+	    	}
+	    } else {
 	    	echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'"</script>';
+	    }
 	} else {	 
 		echo '<h3>'.$questionName.'</h3>';
 		if(!empty($pictureName)){

@@ -20,7 +20,7 @@ function validate_data($users) {
 				}
 			}
 			// 2. Check username.
-			if (!UserManager::is_username_empty($username)) {
+			if (!UserManager::is_username_empty($user['UserName'])) {
 				// 2.1. Check whether username was used twice in the import file.
 				if (isset($usernames[$user['UserName']])) {
 					$user['error'] = get_lang('UserNameUsedTwice');

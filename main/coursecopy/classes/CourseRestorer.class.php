@@ -1754,7 +1754,7 @@ class CourseRestorer
 	
 				$doc = '';
 				$thematic->params['id'] = null;
-				$last_id = Database::insert($table_thematic, $thematic->params, true);
+				$last_id = Database::insert($table_thematic, $thematic->params, false);
 				
 				if (is_numeric($last_id)) {
 					api_item_property_update($this->destination_course_info, 'thematic', $last_id,"ThematicAdded", api_get_user_id());
@@ -1763,7 +1763,7 @@ class CourseRestorer
 						unset($thematic_advance['id']);						
 						$thematic_advance['attendance_id'] = 0;
 						$thematic_advance['thematic_id'] = $last_id;
-						$my_id = Database::insert($table_thematic_advance, $thematic_advance, true);
+						$my_id = Database::insert($table_thematic_advance, $thematic_advance, false);
 						
 						if (is_numeric($my_id)) {
 							api_item_property_update($this->destination_course_info, 'thematic_advance', $my_id,"ThematicAdvanceAdded", api_get_user_id());
@@ -1773,7 +1773,7 @@ class CourseRestorer
 					foreach($thematic->thematic_plan_list as $thematic_plan) {
 						unset($thematic_advance['id']);						
 						$thematic_plan['thematic_id'] = $last_id;
-						$my_id = Database::insert($table_thematic_plan, $thematic_plan, true);
+						$my_id = Database::insert($table_thematic_plan, $thematic_plan, false);
 						if (is_numeric($my_id)) {
 							api_item_property_update($this->destination_course_info, 'thematic_plan', $my_id, "ThematicPlanAdded", api_get_user_id());
 						}

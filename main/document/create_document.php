@@ -168,7 +168,7 @@ $nameTools = get_lang('CreateDocument');
 
 /*	Constants and variables */
 
-$document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id());    
+$document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);    
 if (empty($document_data)) {
     if (api_is_in_group()) {
         $group_properties   = GroupManager::get_group_properties(api_get_group_id());        
@@ -339,44 +339,20 @@ $group = array();
 
 // If allowed, add element for document title
 if (api_get_setting('use_document_title') == 'true') {
-	//$group[]= $form->add_textfield('title', get_lang('Title'),true,'class="input_titles" id="title"');
-	// replace the 	add_textfield with this
 	$group[]=$form->createElement('text','title',get_lang('Title'),'class="input_titles" id="document_title"');
-	
-	
-	//$form->applyFilter('title','trim');
-	//$form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
 	// Added by Ivan Tcholakov, 10-OCT-2009.
 	$form->addElement('hidden', 'filename', '', array('id' => 'filename'));
 	//
 } else {
-	//$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename" onblur="javascript: check_if_still_empty();"');
 	// replace the 	add_textfield with this
-	$group[]=$form->createElement('text', 'filename', get_lang('FileName'), 'class="input_titles" id="document_title" onblur="javascript: check_if_still_empty();"');
-	
-	//$form->applyFilter('filename','trim');
-	//$form->addRule('filename', get_lang('ThisFieldIsRequired'), 'required');
-	//$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
-
+	$group[]=$form->createElement('text', 'filename', get_lang('FileName'), 'class="input_titles" id="document_title" onblur="javascript: check_if_still_empty();"');	
 	// Added by Ivan Tcholakov, 10-OCT-2009.
 	$form->addElement('hidden', 'title', '', array('id' => 'title'));
-	//
 }
-
-/*
-// Selected the file where are save the news documents
-
-build_directory_selector($folders, $path, $group_properties['directory']);
-
-$subjects = $folders;
-
-$form->addElement('select', get_lang('CurrentDirectory'), '', $folders);
-*/
 
 // Show read-only box only in groups
 if (!empty($_SESSION['_gid'])) {
-	//$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
 	$group[]= $form->createElement('checkbox', 'readonly', '', get_lang('ReadOnly'));
 }
 
@@ -406,14 +382,12 @@ if (api_get_setting('use_document_title') == 'true') {
 
 $current_session_id = api_get_session_id();
 
-//$form->addElement('style_submit_button', 'submit', get_lang('SaveDocument'), 'class="save"');
-
 // HTML-editor
 $renderer->setElementTemplate('<div class="row"><div class="label" id="frmModel" style="overflow: visible;"></div><div class="formw">{element}</div></div>', 'content');
 
 $form->add_html_editor('content','', false, false, $html_editor_config);
-// Comment-field
 
+// Comment-field
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
 
 // If we are not in the certificates creation, display a folder chooser for the
@@ -515,8 +489,8 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $curr
 		}
 	}
 }
-
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
+
 if ($is_certificate_mode)
 	$form->addElement('style_submit_button', 'submit', get_lang('CreateCertificate'), 'class="save"');
 else
@@ -524,26 +498,14 @@ else
 
 $form->setDefaults($default);
 
-// HTML
-/*
-$form->addElement('html','<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');
-*/
 
 // If form validates -> save the new document
 if ($form->validate()) {
 	$values = $form->exportValues();
 	$readonly = isset($values['readonly']) ? 1 : 0;
 
-	$values['title'] = addslashes(trim($values['title']));
-	$values['title'] = Security::remove_XSS($values['title']);
-	$values['title'] = replace_dangerous_char($values['title']);
-	$values['title'] = disable_dangerous_file($values['title']);
-
-	$values['filename'] = addslashes(trim($values['filename']));
-	$values['filename'] = Security::remove_XSS($values['filename']);
-	$values['filename'] = replace_dangerous_char($values['filename']);
-	$values['filename'] = disable_dangerous_file($values['filename']);
-	//die($values['curdirpath']);
+	$values['title'] = trim($values['title']);	
+	
 	if (!empty($values['curdirpath'])) {
 		$dir = $values['curdirpath'];
 	}
@@ -556,9 +518,15 @@ if ($form->validate()) {
 	} else	{
 		$values['filename'] = $values['title'];
 	}
+	
+	$values['filename'] = addslashes(trim($values['filename']));
+	$values['filename'] = Security::remove_XSS($values['filename']);
+	$values['filename'] = replace_dangerous_char($values['filename']);
+	$values['filename'] = disable_dangerous_file($values['filename']);
+	
 
-	$filename = $values['filename'];
-	$title = $values['title'];
+	$filename 	= $values['filename'];
+	$title 		= $values['title'];
 	$extension = 'html';
 
 	$content = Security::remove_XSS($values['content'], COURSEMANAGERLOWSECURITY);
@@ -567,7 +535,6 @@ if ($form->validate()) {
 		$content = str_replace('</head>', '<style> body{margin:10px;}</style> <link rel="stylesheet" href="./css/frames.css" type="text/css" /></head>', $content);
 	}
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
-		$content = text_filter($content);
 		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
 		
 		// change the path of mp3 to absolute
@@ -598,7 +565,7 @@ if ($form->validate()) {
 		$file_size = filesize($filepath.$filename.'.'.$extension);
 		$save_file_path = $dir.$filename.'.'.$extension;
 
-		$document_id = add_document($_course, $save_file_path, 'file', $file_size, $filename, null, $readonly);
+		$document_id = add_document($_course, $save_file_path, 'file', $file_size, $title, null, $readonly);
 		if ($document_id) {
 			api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id'], $to_group_id, null, null, null, $current_session_id);
 			// Update parent folders
@@ -649,19 +616,16 @@ if ($form->validate()) {
 	}
 	*/
 	
-	$dir_acum = '';
-	for ($i = 0; $i < $array_len; $i++) {
-		$url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
-		//Max char 80
-		$url_to_who = cut($dir_array[$i],80);
-		if ($is_certificate_mode) {
-			$interbreadcrumb[] = array('url' => $url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => $url_to_who);
-		} else {
-			$interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
+	// Interbreadcrumb for the current directory root path
+	if (empty($document_data['parents'])) {
+		$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+	} else {
+		foreach($document_data['parents'] as $document_sub_data) {
+			$interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
 		}
-		$dir_acum .= $dir_array[$i].'/';
 	}
-	
+
+
 	Display :: display_header($nameTools, "Doc");
 	//api_display_tool_title($nameTools);
 	// actions

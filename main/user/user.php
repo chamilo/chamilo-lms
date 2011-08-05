@@ -22,8 +22,6 @@
 /**
  * Code
  */
-
-/*	   INIT SECTION	*/
 // name of the language file that needs to be included
 $language_file = array('registration', 'admin', 'userInfo');
 $use_anonymous = true;
@@ -216,11 +214,7 @@ if (api_is_allowed_to_edit(null, true)) {
 } // end if allowed to edit
 
 
-/*
-==============================================================================
-		FUNCTIONS
-==============================================================================
-*/
+/*		FUNCTIONS	*/
 
 function display_user_search_form() {
 	echo '<form method="get" action="user.php">';
@@ -239,11 +233,13 @@ function display_user_search_form() {
 *	@author Roan Embrechts
 *	@todo users from virtual courses always show "-" for the group related output. Edit and statistics columns are disabled *	for these users, for now.
 */
+/*
 function show_users_in_virtual_courses() {
 	global $_course, $_user, $origin;
 	$real_course_code = $_course['sysCode'];
 	$real_course_info = Database::get_course_info($real_course_code);
 	$user_subscribed_virtual_course_list = CourseManager::get_list_of_virtual_courses_for_specific_user_and_real_course($_user['user_id'], $real_course_code);
+	
 	$number_of_virtual_courses = count($user_subscribed_virtual_course_list);
 	$row = 0;
 	$column_header[$row++] = "ID";
@@ -302,17 +298,13 @@ function show_users_in_virtual_courses() {
 		}
 		echo '</tbody></table>';
 	}
-}
+}*/
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
+/*	Header */
 if ($origin != 'learnpath') {
 	if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
 		$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
@@ -668,8 +660,8 @@ if (api_get_setting('allow_user_headings') == 'true' && $is_courseAdmin && api_i
 }
 
 //User list of the virtual courses linked to this course.
-
-show_users_in_virtual_courses($is_allowed_to_track);
+//@todo 
+//show_users_in_virtual_courses($is_allowed_to_track);
 
 /*		FOOTER  */
 if ($origin != 'learnpath') {

@@ -305,7 +305,7 @@ function event_link($link_id) {
  * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
  * @desc Record result of user when an exercice was done 
 */
-function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$learnpath_id=0, $learnpath_item_id=0, $learnpath_item_view_id = 0, $duration) {
+function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$learnpath_id=0, $learnpath_item_id=0, $learnpath_item_view_id = 0, $duration , $question_list) {
 	require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     if ($exeid!='') {
 		// Validation in case of fraud with actived control time
@@ -323,6 +323,7 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$
 	    }
 
 		$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+		array_map('intval', $question_list);
 
 		$sql = "UPDATE $TABLETRACK_EXERCICES SET
 				   exe_exo_id 		= '".Database::escape_string($exo_id)."',
@@ -335,18 +336,17 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$
 				   exe_duration 	= '".Database::escape_string($duration)."',
 				   exe_date			= '".api_get_utc_datetime()."',
 				   status 			= '',
-				   start_date       = '".api_get_utc_datetime($start_date)."'
+				   start_date       = '".api_get_utc_datetime($start_date)."',
+				   data_tracking    = '".implode(',', $question_list)."'
 				 WHERE exe_id = '".Database::escape_string($exeid)."'";
 		$res = @Database::query($sql);
         
         //Deleting control time session track		
 		exercise_time_control_delete($exo_id);
-        //error_log('update_event_exercice');
-        //error_log($sql);
-		return $res;
-        
-	} else
+		return $res;        
+	} else {
 		return false;
+	}
 }
 
 /**

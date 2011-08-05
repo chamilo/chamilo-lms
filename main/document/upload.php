@@ -108,19 +108,8 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $courseDir = $_course['path'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
-$noPHP_SELF = true;
 
-/*
-// What's the current path?
-if (isset($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
-	$path = $_GET['curdirpath'];
-} elseif (isset($_POST['curdirpath'])) {
-	$path = $_POST['curdirpath'];
-} else {
-	$path = '/';
-}*/
-
-$document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id());
+$document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     $document_id  = $parent_id =  0;
     $path = '/';    
@@ -137,8 +126,7 @@ if (api_get_group_id()) {
 	require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 	// Get group info
 	$group_properties = GroupManager::get_group_properties(api_get_group_id());
-	$noPHP_SELF = true;
-
+	
 	if ($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'], api_get_group_id())) { // Only courseadmin or group members allowed
 		$to_group_id = api_get_group_id();
 		$req_gid = '&amp;gidReq='.api_get_group_id();
@@ -187,6 +175,16 @@ if ($is_certificate_mode) {
 } else {
 	$interbreadcrumb[] = array('url' => './document.php?id='.$document_id.$req_gid, 'name'=> get_lang('Documents'));
 }
+
+// Interbreadcrumb for the current directory root path
+if (empty($document_data['parents'])) {
+	$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+} else {
+	foreach($document_data['parents'] as $document_sub_data) {
+		$interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+	}
+}
+
 
 
 $this_section = SECTION_COURSES;
@@ -291,8 +289,12 @@ $multiple_form .=  '
 	</center>
 	<table class="files"></table>';
 
-$headers = array(get_lang('Send') , get_lang('Send').' ('.get_lang('Simple').')');
-echo Display::tabs($headers, array($multiple_form, $simple_form ),'tabs');
+$nav_info = api_get_navigator();
+if ($nav_info ['name'] == 'Internet Explorer') {
+	echo $simple_form;
+} else {
+	$headers = array(get_lang('Send') , get_lang('Send').' ('.get_lang('Simple').')');
+	echo Display::tabs($headers, array($multiple_form, $simple_form),'tabs');	
+}
 
-// Footer
 Display::display_footer();

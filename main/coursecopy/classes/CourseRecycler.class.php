@@ -47,6 +47,8 @@ class CourseRecycler
         $this->recycle_cours_description();
         $this->recycle_wiki();
         $this->recycle_glossary();
+        $this->recycle_thematic();
+        $this->recycle_attendance();
 
 
         foreach ($this->course->resources as $type => $resources) {
@@ -406,6 +408,62 @@ class CourseRecycler
             $ids = implode(',', (array_keys($this->course->resources[RESOURCE_COURSEDESCRIPTION])));
             $sql = "DELETE FROM ".$table." WHERE id IN(".$ids.")";
             Database::query($sql);
+        }
+    }
+    /**
+    * Recycle Thematics
+    */
+    function recycle_thematic($session_id = 0) {
+        if ($this->course->has_resources(RESOURCE_THEMATIC)) {
+            $table_thematic         = Database :: get_course_table(TABLE_THEMATIC, $this->course->destination_db);
+            $table_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE, $this->course->destination_db);
+            $table_thematic_plan    = Database :: get_course_table(TABLE_THEMATIC_PLAN, $this->course->destination_db);
+        
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_THEMATIC] as $last_id => $thematic) {
+                if (is_numeric($last_id)) {
+                    
+                    foreach($thematic->thematic_advance_list as $thematic_advance) {
+                        $cond = array('id = ?'=>$thematic_advance['id']);
+                        api_item_property_update($this->destination_course_info, 'thematic_advance', $thematic_advance['id'],'ThematicAdvanceDeleted', api_get_user_id());
+                        Database::delete($table_thematic_advance, $cond);
+                    }
+                    
+                    foreach($thematic->thematic_plan_list as $thematic_plan) {
+                        $cond = array('id = ?'=>$thematic_plan['id']);
+                        api_item_property_update($this->destination_course_info, 'thematic_plan', $thematic_advance['id'], 'ThematicPlanDeleted', api_get_user_id());
+                        Database::delete($table_thematic_plan, $cond);
+                    }
+                    $cond = array('id = ?'=>$last_id);
+                    api_item_property_update($this->destination_course_info, 'thematic', $last_id,'ThematicDeleted', api_get_user_id());
+                    Database::delete($table_thematic,$cond);
+                }
+            }
+        }
+    }
+    
+    /**
+    * Recycle Attendances
+    */
+    function recycle_attendance($session_id = 0) {
+        if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
+            $table_attendance          = Database :: get_course_table(TABLE_ATTENDANCE, $this->course->destination_db);
+            $table_attendance_calendar = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR, $this->course->destination_db);
+           
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_ATTENDANCE] as $last_id => $obj) {
+                print_r($obj);
+                if (is_numeric($last_id)) {
+                    
+                    foreach($obj->attendance_calendar as $attendance_calendar) {
+                        $cond = array('id = ?'=>$attendance_calendar['id']);
+                        $my_id = Database::delete($table_attendance_calendar, $cond);
+                    }
+                    $cond = array('id = ?'=>$last_id);
+                    Database::delete($table_attendance, $cond);
+                    api_item_property_update($this->destination_course_info, TOOL_ATTENDANCE, $last_id,'AttendanceDeleted', api_get_user_id());
+                }
+            }
         }
     }
 }

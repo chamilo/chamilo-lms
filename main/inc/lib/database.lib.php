@@ -1057,7 +1057,7 @@ class Database {
      * Experimental useful database insert
      * @todo lot of stuff to do here
      */
-    public static function insert($table_name, $attributes , $show_query = false) {
+    public static function insert($table_name, $attributes, $show_query = false) {
         if (empty($attributes) || empty($table_name)) {
             return false;
         }
@@ -1192,7 +1192,7 @@ class Database {
         return $return_value;
     }
 
-    private function parse_where_conditions($coditions){
+    private function parse_where_conditions($coditions) {
         return self::parse_conditions(array('where'=>$coditions));
     }
 
@@ -1200,10 +1200,11 @@ class Database {
      * Experimental useful database update
      * @todo lot of stuff to do here
      */
-    public static function delete($table_name, $where_conditions) {
+    public static function delete($table_name, $where_conditions, $show_query = false) {
         $result = false;
         $where_return = self::parse_where_conditions($where_conditions);
         $sql    = "DELETE FROM $table_name $where_return ";
+        if ($show_query) { echo $sql; echo '<br />'; }
         $result = self::query($sql);
         $affected_rows = self::affected_rows();
         //@todo should return affected_rows for
@@ -1213,9 +1214,12 @@ class Database {
 
     /**
      * Experimental useful database update
+     * @param	string	table name use Database::get_main_table
+     * @param	array	array with values to updates, keys are the fields in the database: Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya'; 
+     * @param	array	where conditions i.e array('id = ?' =>'4')
      * @todo lot of stuff to do here
      */
-    public static function update($table_name, $attributes, $where_conditions = array()) {
+    public static function update($table_name, $attributes, $where_conditions = array(), $show_query = false) {
 
         if (!empty($table_name) && !empty($attributes)) {
             $update_sql = '';
@@ -1233,7 +1237,7 @@ class Database {
                 //Parsing and cleaning the where conditions
                 $where_return = self::parse_where_conditions($where_conditions);
                 $sql    = "UPDATE $table_name SET $update_sql $where_return ";
-                //echo $sql; exit;
+                if ($show_query) { echo $sql; echo '<br />'; }
                 $result = self::query($sql);
                 $affected_rows = self::affected_rows();
                 return $affected_rows;

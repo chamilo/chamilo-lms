@@ -28,8 +28,9 @@ switch($action) {
 		
 		if (!empty($_FILES)) {		    
 		    require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-		    $result = DocumentManager::upload_document($_FILES, $_POST['curdirpath'], '', '', 0, 'overwrite', false, false);
-		    $file = $_FILES['file'];    
+		    $file = $_FILES['file'];
+		    
+		    $result = DocumentManager::upload_document($_FILES, $_POST['curdirpath'], $file['name'], '', 0, 'overwrite', false, false);		    
 		    $json = array();
 		    $json['name'] = Display::url(api_htmlentities($file['name']), api_htmlentities($result['url']), array('target'=>'_blank'));
 		    $json['type'] = api_htmlentities($file['type']);

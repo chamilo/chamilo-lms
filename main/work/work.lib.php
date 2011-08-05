@@ -975,8 +975,8 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	if (isset($_GET['curdirpath'])) {
 		$my_params = array ('curdirpath' => Security::remove_XSS($_GET['curdirpath']));
 	}
-
-	$my_params = array ('id' => Security::remove_XSS($_GET['id']));
+	
+	$my_params = array ('id' => isset($_GET['id']) ? $_GET['id'] : null);
 
 	if (isset($_GET['edit_dir'])) {
 		$my_params = array ('edit_dir' => Security::remove_XSS($_GET['edit_dir']));
@@ -1781,14 +1781,12 @@ function make_checkbox($name, $checked = '') {
 }
 
 function draw_date_picker($prefix, $default = '') {
-	//$default = 2008-10-01 10:00:00
 	if (empty($default)) {
-		//$default = date('Y-m-d H:i:s');
 		$default = api_get_local_time();
 	}
-	$parts = split(' ', $default);
-	list($d_year, $d_month, $d_day) = split('-', $parts[0]);
-	list($d_hour, $d_minute) = split(':', $parts[1]);
+	$parts = explode(' ', $default);
+	list($d_year, $d_month, $d_day) = explode('-', $parts[0]);
+	list($d_hour, $d_minute) = explode(':', $parts[1]);
 
 	$minute = range(10, 59);
 	array_unshift($minute, '00', '01', '02', '03', '04', '05', '06', '07', '08', '09');

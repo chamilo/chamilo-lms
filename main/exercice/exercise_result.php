@@ -10,14 +10,12 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 22201 2009-07-17 19:57:03Z cfasanando $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
 /**
  * Code
  */
-/*	INIT SECTION	*/
 require_once 'exercise.class.php';
 require_once 'exercise.lib.php';
 require_once 'question.class.php';
@@ -110,7 +108,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('ToolGradebook'));
 }
 
-$nameTools=get_lang('Exercice');
+$nameTools = get_lang('Exercice');
 
 $interbreadcrumb[]=array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
 //$htmlHeadXtra[] = $objExercise->show_lp_javascript();
@@ -157,7 +155,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '</div>';
 }
 
-$exerciseTitle=text_filter($objExercise->selectTitle());
+$exerciseTitle = $objExercise->selectTitle();
 $feedback_type = $objExercise->feedbacktype;
 
 //show exercise title
@@ -258,18 +256,17 @@ foreach ($questionList as $questionId) {
 } // end foreach() block that loops over all questions
 
 
-if ($origin != 'learnpath') {
-    if ($show_results || $show_only_score) {
-        echo '<div id="question_score">';
-        echo get_lang('YourTotalScore')." ";	
-        if ($objExercise->selectPropagateNeg() == 0 && $totalScore < 0) {
-    	    $totalScore = 0;
-        }     
-        echo show_score($totalScore, $totalWeighting, false);	
-        echo '</div>';
-    }
-    /* <button type="submit" class="save"><?php echo get_lang('Finish');?></button> */
+
+if ($show_results || $show_only_score) {
+	echo '<div id="question_score">';
+    echo get_lang('YourTotalScore')." ";	
+    if ($objExercise->selectPropagateNeg() == 0 && $totalScore < 0) {
+    	$totalScore = 0;
+    }     
+    echo show_score($totalScore, $totalWeighting, false);	
+    echo '</div>';
 }
+
 
 // Tracking of results
 
@@ -278,7 +275,7 @@ if ($origin != 'learnpath') {
 $quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
 
 if (api_is_allowed_to_session_edit() ) {
-	update_event_exercice($exeId, $objExercise->selectId(), $totalScore, $totalWeighting, api_get_session_id(), $safe_lp_id,$safe_lp_item_id,$safe_lp_item_view_id, $quizDuration);
+	update_event_exercice($exeId, $objExercise->selectId(), $totalScore, $totalWeighting, api_get_session_id(), $safe_lp_id,$safe_lp_item_id,$safe_lp_item_view_id, $quizDuration, $questionList);
 }
 
 if ($origin != 'learnpath') {

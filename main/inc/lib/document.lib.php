@@ -476,7 +476,7 @@ return 'application/octet-stream';
      * @param boolean $can_see_invisible
      * @return array with all document data
      */
-    public static function get_all_document_data($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false, $search =false) {
+    public static function get_all_document_data($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false, $search = false) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
         $TABLE_DOCUMENT     = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
         $TABLE_COURSE       = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -497,7 +497,7 @@ return 'application/octet-stream';
         $to_value	= Database::escape_string($to_value);
 
         //if they can't see invisible files, they can only see files with visibility 1
-        $visibility_bit = ' = 1';
+        //$visibility_bit = ' = 1';
         //if they can see invisible files, only deleted files (visibility 2) are filtered out
         //if ($can_see_invisible) {
         $visibility_bit = ' <> 2';
@@ -533,7 +533,7 @@ return 'application/octet-stream';
                         AND ".$to_field." = ".$to_value."
                         AND last.visibility".$visibility_bit.$condition_session;
         }
-
+		
         $result = Database::query($sql);
 
         $doc_list = array();
@@ -587,7 +587,8 @@ return 'application/octet-stream';
                     }
                     $temp[$row['id']] = $row;
                 }
-
+				//@todo use the DocumentManager::is_visible function
+				
                 //Checking disponibility in a session
                 foreach($my_repeat_ids as $id) {
                     foreach($doc_list as $row ) {
@@ -623,8 +624,19 @@ return 'application/octet-stream';
                         unset($document_data[$row['id']]);
                     }
                 }
+                
+                //Checking parents visibility
+                $final_document_data = array();
+                foreach($document_data as $row) {                	
+                	$is_visible = DocumentManager::check_visibility_tree($row['id'], $_course['code'], $current_session_id, api_get_user_id());
+                	if ($is_visible) { 
+                		$final_document_data[$row['id']]=$row;
+                	}                	 
+                }
+            } else {
+            	$final_document_data = $document_data;
             }
-            return $document_data;
+            return $final_document_data;
         } else {
             //display_error("Error getting document info from database (".Database::error().")!");
             return false;
@@ -1001,7 +1013,7 @@ return 'application/octet-stream';
      * @todo load parent_id
      * @return int id of document / false if no doc found
      */
-    public static function get_document_data_by_id($id, $course_code) {
+    public static function get_document_data_by_id($id, $course_code, $load_parents = false) {
         $course_info = api_get_course_info($course_code);
         if (empty($course_info)) {
             return false;
@@ -1014,12 +1026,52 @@ return 'application/octet-stream';
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result,'ASSOC');
-            //Public document URL
-            $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?cidReq='.$course_code.'&id='.$id;            
+            
+            //@todo need to clarify the name of the URLs not nice right now
             $url_path = urlencode($row['path']);
-            $path = str_replace('%2F', '/',$url_path);            
-            $row['direct_url'] = $www.$path;            
-            $row['parent_id']  = self::get_document_id($course_info, dirname($row['path']));
+            $path 	  = str_replace('%2F', '/',$url_path);
+            
+            $row['url'] 			= api_get_path(WEB_CODE_PATH).'document/showinframes.php?cidReq='.$course_code.'&id='.$id;
+            $row['document_url'] 	= api_get_path(WEB_CODE_PATH).'document/document.php?cidReq='.$course_code.'&id='.$id;
+            $row['direct_url'] 		= $www.$path;
+            
+            if (dirname($row['path']) == '.') { 
+            	$row['parent_id'] = '0';
+            } else {
+            	$row['parent_id'] = self::get_document_id($course_info, dirname($row['path']));
+            }            
+            $parents = array();
+            
+            //Use to generate parents (needed for the breadcrumb)
+            //@todo sorry but this for is here because there's not a parent_id in the document table so we parsed the path!!
+            
+            $visibility = true;
+                        
+            if ($load_parents) { 	
+            	$dir_array = explode('/', $row['path']);
+            	$dir_array = array_filter($dir_array);            	
+            	$array_len = count($dir_array) +1 ;
+            	$real_dir  = '';
+            	
+            	for ($i = 1; $i < $array_len; $i++) {
+            		$sub_visibility = true;
+            		$real_dir .= '/'.$dir_array[$i];            	
+            		$parent_id = self::get_document_id($course_info, $real_dir);
+            		if (!empty($parent_id)) {            		
+            			 $sub_document_data = self::get_document_data_by_id($parent_id, $course_code, false);
+            			 //@todo add visibility here             			 
+            			 
+            			 /*$sub_visibility    = self::is_visible_by_id($parent_id, $course_info, api_get_session_id(), api_get_user_id());
+            			 if ($visibility && $sub_visibility == false) {
+            			 	$visibility = false;
+            			 }
+            			 */
+            			 $parents[] = $sub_document_data;
+            		}
+            	}  	
+            }
+            //$row['visibility_for_user'] = $visibility;
+            $row['parents'] = $parents;
             return $row;
         }
         return false;
@@ -2109,26 +2161,25 @@ return 'application/octet-stream';
         $base_work_dir    = $sys_course_path.$course_dir;
          
         if (isset($files['file'])) {
-            $upload_ok = process_uploaded_file($files['file'], $show_output);
+            $upload_ok = process_uploaded_file($files['file'], $show_output);            
              
             if ($upload_ok) {
                 // File got on the server without problems, now process it
                 $new_path = handle_uploaded_document($course_info, $files['file'], $base_work_dir, $path, api_get_user_id(), api_get_group_id(), null, $max_filled_space, $unzip, $if_exists, $show_output);
                 if ($new_path) {
-
-                    $new_comment = isset($title) ? trim($comment) : '';
-                    $new_title   = isset($title) ? trim($title) : '';
-
                     $docid = DocumentManager::get_document_id($course_info, $new_path);
-
-                    if ($new_path && ($new_comment || $new_title)) {
-                        if (!empty($docid)) {
-                            $table_document = Database::get_course_table(TABLE_DOCUMENT);
-                            $ct = '';
-                            if ($new_comment) $ct .= ", comment='$new_comment'";
-                            if ($new_title)   $ct .= ", title='$new_title'";
-                            Database::query("UPDATE $table_document SET ".substr($ct, 1)." WHERE id = $docid");
+                    if (!empty($docid)) {
+                    	$table_document = Database::get_course_table(TABLE_DOCUMENT);
+						$params = array();
+                        if (!empty($title)) {                        	
+                        	$params['title'] = trim($title);
+                        } else {
+                        	$params['title']  = $files['file']['name'];
                         }
+                        if (!empty($comment)) {
+                        	$params['comment'] = trim($comment);
+                        }         
+                        Database::update($table_document, $params, array('id = ?' =>$docid));                                           
                     }
 
                     // Showing message when sending zip files
@@ -2651,17 +2702,23 @@ return 'application/octet-stream';
 		    				$path_to_eval .= "['$resource_path']['files']";
 		    			}
 		    		}
-		    	}	
-		    	
+		    	}
 		    	$last_path = $resource_path;
 		    	
+		    	//$data = json_encode(array('title'=>$resource['title'], 'path'=>$last_path));
+		    	//@todo not sure if it's a good thing using base64_encode. I tried with json_encode but i received the same error
+		    	//Some testing is needed in order to prove the performance 
+		    	//Also change the explode to value from "/" to "|@j@|" it fixes  #3780
 		    	
+		    	$data = base64_encode($resource['title'].'|@j@|'.$last_path);		    	
+		    		    	
 		    	if ($is_file) {
 		    		//for backward compatibility
 		    		if (empty($resource['title'])) {
 		    			$resource['title'] = basename($resource['path']);
 		    		}
-		    		eval ('$resources_sorted'.$path_to_eval.'['.$resource['id'].'] = "'.$resource['title']."/". $last_path.'";');
+		    		//eval ('$resources_sorted'.$path_to_eval.'['.$resource['id'].'] = "'.$resource['title']."/". $last_path.'";');
+		    		eval ('$resources_sorted'.$path_to_eval.'['.$resource['id'].'] = "'.$data.'" ; ');
 		    	} else {
 		    		eval ('$resources_sorted'.$path_to_eval.'["'.$last_path.'"]["id"]='.$resource['id'].';');
 		    	}
@@ -2669,6 +2726,7 @@ return 'application/octet-stream';
     	}
     	
     	$label = get_lang('Documents');
+    	//var_dump($resources_sorted);
     	$new_array[$label] = array('id' => 0, 'files' => $resources_sorted);
     	
     	$write_result = self::write_resources_tree($course_info, $session_id, $new_array, 0, $lp_id, $target);
@@ -2679,8 +2737,7 @@ return 'application/octet-stream';
     	$img_path = api_get_path(WEB_IMG_PATH);
     	
     	if ($lp_id == false) {
-    		$return .= "<script>
-    		
+    		$return .= "<script>    		
     		    	$('.doc_folder').mouseover(function() {	
     					var my_id = this.id.split('_')[2];    						
     					$('#'+my_id).show();
@@ -2781,12 +2838,14 @@ return 'application/octet-stream';
     				$return .= '</div></div>';
     			} else {
     				if (!is_array($resource)) {
-    					
+    				//if (isset($resource)) {
+    					//var_dump($resource);
+    					$resource = base64_decode($resource);
     					// It's a file.
     					$icon		= choose_image($resource);
     					$position 	= strrpos($icon, '.');
     					$icon 		= substr($icon, 0, $position) . '_small.gif';
-    					$file_info	= explode('/', $resource);
+    					$file_info	= explode('|@j@|', $resource);
     					$my_file_title = $file_info[0];
     					$my_file_name  = $file_info[1];
 
@@ -2816,5 +2875,26 @@ return 'application/octet-stream';
     	return $return;
     }
     
+    public function check_visibility_tree($doc_id, $course_code, $session_id, $user_id) {
+    	$document_data = self::get_document_data_by_id($doc_id, $course_code);    
+  	
+    	if (!empty($document_data)) {
+    		if ($document_data['parent_id'] == false) {
+    			$visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
+    			return $visible;
+    		} else {
+    			$course_info = api_get_course_info($course_code);
+    			$visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
+    			
+    			if (!$visible) {
+    				return false;
+    			} else {
+    				return self::check_visibility_tree($document_data['parent_id'], $course_code, $session_id, $user_id);
+    			}
+    		}	
+    	} else {
+    		return false;
+    	}    	
+    }    
 }
 //end class DocumentManager

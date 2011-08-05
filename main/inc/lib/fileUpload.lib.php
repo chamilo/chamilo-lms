@@ -825,7 +825,7 @@ function add_document($_course, $path, $filetype, $filesize, $title, $comment = 
 	$table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 	$sql = "INSERT INTO $table_document (path, filetype, size, title, comment, readonly, session_id)
 	        VALUES ('$path','$filetype','$filesize','".
-	Database::escape_string(htmlspecialchars($title, ENT_QUOTES, api_get_system_encoding()))."', '$comment', $readonly, $session_id)";
+	Database::escape_string($title)."', '$comment', $readonly, $session_id)";
 	if (Database::query($sql)) {
 		//display_message("Added to database (id ".Database::insert_id().")!");
 		return Database::insert_id();

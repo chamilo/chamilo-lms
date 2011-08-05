@@ -51,6 +51,7 @@ class TestDisplay extends UnitTestCase {
 	*	@param $is_alternating true: the row colours alternate, false otherwise
 	*	@return string color
 	*/
+	/*
 	public function testdisplay_table_row() {
 		$bgcolor = 'red';
 		$table_row = array();
@@ -60,7 +61,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
-	}
+	}*/
 
 	public function testdisplay_sortable_table() {
 		$header='';

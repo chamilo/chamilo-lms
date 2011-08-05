@@ -55,7 +55,7 @@ if (empty($document_data)) {
 }
 
 $header_file  = $document_data['path'];
-$name_to_show = cut($header_file, 80);
+$name_to_show = $document_data['title'];
 
 $path_array = explode('/', str_replace('\\', '/', $header_file));
 $path_array = array_map('urldecode', $path_array);
@@ -83,7 +83,9 @@ if ($is_allowed_in_course == false) {
 }
 
 //Check user visibility
-$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
+//$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
+$is_visible = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
+
 if (!api_is_allowed_to_edit() && !$is_visible) {
     api_not_allowed(true);
 }

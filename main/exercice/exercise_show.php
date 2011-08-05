@@ -74,6 +74,7 @@ $is_allowedToEdit   = api_is_allowed_to_edit(null,true) || $is_courseTutor;
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = get_exercise_track_exercise_info($id);
 
+
 //No track info
 if (empty($track_exercise_info)) {
     api_not_allowed();
@@ -125,8 +126,6 @@ if($origin=='user_course') {
 	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".Security::remove_XSS($_GET['course']), "name" => get_lang("Users"));
 	$interbreadcrumb[] = array("url" => "../mySpace/myStudents.php?student=".$student_id."&course=".$_course['id']."&details=true&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("DetailsStudentInCourse"));
 } else if($origin=='tracking_course') {
-	//$interbreadcrumb[] = array ("url" => "../mySpace/index.php", "name" => get_lang('MySpace'));
- 	//$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($student_id).'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
  	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$_course['directory'], 'name' => $_course['title']);
 	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$cidReq.'&studentlist=true&id_session='.$_SESSION['id_session'], "name" => get_lang("Tracking"));
 	$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".$student_id.'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
@@ -153,20 +152,7 @@ if ($origin != 'learnpath') {
 } else {
 	Display::display_reduced_header();
 }
-
 ?>
-<style type="text/css">
-<!--
-#comments {
-	position:absolute;
-	left:795px;
-	top:0px;
-	width:200px;
-	height:75px;
-	z-index:1;
-}
--->
-</style>
 <script language="javascript">
 function showfck(sid,marksid) {
 	document.getElementById(sid).style.display='block';
@@ -206,7 +192,7 @@ $show_only_total_score  = false;
 
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (!empty($track_exercise_info)) {
-	$exerciseTitle			= text_filter($track_exercise_info['title']);
+	$exerciseTitle			= $track_exercise_info['title'];
 	$exerciseDescription	= $track_exercise_info['description'];
 	// if the results_disabled of the Quiz is 1 when block the script
 	$result_disabled		= $track_exercise_info['results_disabled'];
@@ -254,7 +240,7 @@ if ($show_results || $show_only_total_score) {
     echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date));
 }
 
-$i=$totalScore=$totalWeighting=0;
+$i = $totalScore = $totalWeighting = 0;
 
 if($debug>0){error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
 
@@ -270,7 +256,7 @@ $query = "SELECT attempts.question_id, answer  from ".$TBL_TRACK_ATTEMPT." as at
 		  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 			//GROUP BY questions.position, attempts.question_id";
 
-$result =Database::query($query);	
+$result = Database::query($query);	
 $questionList = array();
 $exerciseResult = array();
 
@@ -282,7 +268,7 @@ while ($row = Database::fetch_array($result)) {
 //Fixing #2073 Fixing order of questions
 if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info['random']) ) {
 	$tempquestionList = explode(',',$track_exercise_info['data_tracking']);
-	if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {
+	if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {	
 		$questionList = $tempquestionList;			
 	}		
 }
@@ -314,12 +300,12 @@ foreach ($questionList as $questionId) {
 	    echo $objQuestionTmp->return_header($feedback_type);
 	}		
 	if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
+        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                    
         $questionScore   = $question_result['score'];
-        $totalScore      += $question_result['score'];
+        $totalScore      += $question_result['score'];        
 	} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
 		$choice = array();
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                       
+        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                               
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];	
 	} elseif ($answerType == UNIQUE_ANSWER || $answerType ==  UNIQUE_ANSWER_NO_OPTION) {	
@@ -465,7 +451,6 @@ foreach ($questionList as $questionId) {
         		} 
         	
         		echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
-        		//<p style="text-align:center">
         		if ($answerType == HOT_SPOT_DELINEATION) {			
         			if ($organs_at_risk_hit>0) {
         				$message='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';				
@@ -476,24 +461,15 @@ foreach ($questionList as $questionId) {
         				$message.='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
         			}
         			$message.='<p>'.$comment.'</p>';	
-        			echo $message;
-        			
-        			// by default we assume that the answer is ok but if the final answer after calculating the area in hotspot delineation =0 then update  
-        			if ($final_answer==0) {
-        				//update_exercise_attempt(0, 0,$questionId,$exeId, 0 ); //we do not update the user_id 
-        				//update_event_exercice($exeId, )
-        			}
-        			
+        			echo $message;              			
         		} else {
         			echo '<p>'.$comment.'</p>';
         		}
-        		//echo '<a onclick="self.parent.tb_remove();" href="#" style="float:right;">'.get_lang('Close').'</a>';
-        
         		
         		//showing the score	
          		$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-        		$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
-        		$questionScore= mysql_result($resfree,0,"marks");
+        		$resfree = Database::query($queryfree);
+        		$questionScore= Database::result($resfree,0,"marks");
         		$totalScore+=$questionScore;        		
         		 			?>
         		 			</table>
@@ -605,12 +581,6 @@ foreach ($questionList as $questionId) {
 		</table>';		
 	}
 	
-    
-	/*
-	Do not convert question results
-	$my_total_score  = convert_score($questionScore, $total_weighting);
-	$my_total_weight = convert_score($questionWeighting, $total_weighting);*/
-	
 	$my_total_score  = $questionScore;
 	$my_total_weight = $questionWeighting;   
 	
@@ -619,16 +589,13 @@ foreach ($questionList as $questionId) {
     }  
     if ($show_results) {
 	    echo '<div id="question_score">';
-		//echo get_lang('Score')." : $my_total_score / $my_total_weight";
-		echo get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);    
-		
-        //echo get_lang('Score')." : ".show_score($my_total_score, $total_weighting, false);
+		echo get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);
 		echo '</div>';
     }
 	unset($objAnswerTmp);
 	$i++;
 
-	$totalWeighting+=$questionWeighting;
+	$totalWeighting += $questionWeighting;
     
 } // end of large foreach on questions
 
@@ -679,7 +646,7 @@ if ($origin =='student_progress') {?>
 	<button type="button" class="save" onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id()?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>
 <?php
 }
-   
+
 if ($origin != 'learnpath') {
 	//we are not in learnpath tool
 	Display::display_footer();
@@ -688,9 +655,9 @@ if ($origin != 'learnpath') {
 		$lp_mode =  $_SESSION['lp_mode'];
 		$url = '../newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
 		$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
-		echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
-
-		//record the results in the learning path, using the SCORM interface (API)
+		echo '<script language="javascript" type="text/javascript">'.$href.'</script>';		
+		
+		//Record the results in the learning path, using the SCORM interface (API)		
 		echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
 		echo '</body></html>';
 	} else {

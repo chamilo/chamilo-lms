@@ -1001,7 +1001,7 @@ return 'application/octet-stream';
      * @todo load parent_id
      * @return int id of document / false if no doc found
      */
-    public static function get_document_data_by_id($id, $course_code) {
+    public static function get_document_data_by_id($id, $course_code, $load_parents = false) {
         $course_info = api_get_course_info($course_code);
         if (empty($course_info)) {
             return false;
@@ -1015,11 +1015,29 @@ return 'application/octet-stream';
         if ($result && Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result,'ASSOC');
             //Public document URL
-            $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?cidReq='.$course_code.'&id='.$id;            
+            $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?cidReq='.$course_code.'&id='.$id;
+            $row['document_url'] = api_get_path(WEB_CODE_PATH).'document/document.php?cidReq='.$course_code.'&id='.$id;        
             $url_path = urlencode($row['path']);
             $path = str_replace('%2F', '/',$url_path);            
-            $row['direct_url'] = $www.$path;            
+            $row['direct_url'] = $www.$path;
             $row['parent_id']  = self::get_document_id($course_info, dirname($row['path']));
+            $parents = array();
+            //Use to generate the breadcrumb
+            if ($load_parents) {            	
+            	$dir_array = explode('/', $row['path']);
+            	$dir_array = array_filter($dir_array);            	
+            	$array_len = count($dir_array) +1 ;
+            	$real_dir = '';
+            	
+            	for ($i = 1; $i < $array_len; $i++) {            	
+            		$real_dir .= '/'.$dir_array[$i];            	
+            		$parent_id = self::get_document_id($course_info, $real_dir);
+            		if (!empty($parent_id)) {            		
+            			$parents[] =  self::get_document_data_by_id($parent_id, $course_code, false);
+            		}
+            	}            	
+            }           
+            $row['parents'] = $parents;
             return $row;
         }
         return false;

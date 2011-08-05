@@ -31,7 +31,6 @@
 /**
  * Code
  */
-/*	INIT SECTION */
 
 // Language files that need to be included
 $language_file = array('document', 'slideshow', 'gradebook', 'create_course');
@@ -180,10 +179,13 @@ $is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath'])
 
 //If no actions we proceed to show the document (Hack in order to use document.php?id=X) 
 if (isset($document_id)) {
-    $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());    
+    $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true);
+        
     
     //If the document is not a folder we show the document
     if ($document_data) {
+    	$parent_id     = $document_data['parent_id'];
+    	
 	    if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file') {
 	    	$visibility = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
 	    	if ($visibility && api_is_allowed_to_session_edit()) {    		
@@ -194,37 +196,50 @@ if (isset($document_id)) {
 	    }
     	$_GET['curdirpath'] = $document_data['path'];
     }
-}
-
-// What's the current path?
-// We will verify this a bit further down
-if (isset($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
-    $curdirpath = Security::remove_XSS($_GET['curdirpath']);
-} elseif (isset($_POST['curdirpath']) && $_POST['curdirpath'] != '') {
-    $curdirpath = Security::remove_XSS($_POST['curdirpath']);
+    
+    // What's the current path?
+    // We will verify this a bit further down
+    if (isset($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
+    	$curdirpath = Security::remove_XSS($_GET['curdirpath']);
+    } elseif (isset($_POST['curdirpath']) && $_POST['curdirpath'] != '') {
+    	$curdirpath = Security::remove_XSS($_POST['curdirpath']);
+    } else {
+    	$curdirpath = '/';
+    }
+    
+    $curdirpathurl = urlencode($curdirpath);
+    
 } else {
-    $curdirpath = '/';
+	// What's the current path?
+	// We will verify this a bit further down
+	if (isset($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
+		$curdirpath = Security::remove_XSS($_GET['curdirpath']);
+	} elseif (isset($_POST['curdirpath']) && $_POST['curdirpath'] != '') {
+		$curdirpath = Security::remove_XSS($_POST['curdirpath']);
+	} else {
+		$curdirpath = '/';
+	}
+	
+	$curdirpathurl = urlencode($curdirpath);
+	
+	// Check the path
+	// If the path is not found (no document id), set the path to /
+	$document_id = DocumentManager::get_document_id($course_info, $curdirpath);
+	
+	if (!$document_id) {
+		$document_id = DocumentManager::get_document_id($course_info, $curdirpath);
+	}
+	
+	$document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true);	
+	$parent_id     = $document_data['parent_id'];	
 }
 
-$curdirpathurl = urlencode($curdirpath);
-
-// Check the path
-// If the path is not found (no document id), set the path to /
-$document_id = DocumentManager::get_document_id($course_info, $curdirpath);
-
-if (!$document_id) {    
-    $document_id = DocumentManager::get_document_id($course_info, $curdirpath);
-}
-
-$document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
-$parent_id     = DocumentManager::get_document_id($course_info, dirname($document_data['path']));
 
 if (!$parent_id) {
     $parent_id = 0; 
 }    
 
 $current_folder_id = $document_id;
-
 
 // Show preview
 if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isset($_GET['set_preview']) && $_GET['set_preview'] == strval(intval($_GET['set_preview']))) {
@@ -355,32 +370,15 @@ if ($is_certificate_mode) {
 }
 
 // Interbreadcrumb for the current directory root path
-
-$dir_array = explode('/', $curdirpath);
-$array_len = count($dir_array);
-
-$dir_acum = '';
-
-for ($i = 0; $i < $array_len; $i++) {
-    $url_dir = 'document.php?&amp;curdirpath='.$dir_acum.$dir_array[$i];
-    //Max char 80
-    $url_to_who = cut($dir_array[$i],80);
-    if ($is_certificate_mode) {
-        $interbreadcrumb[] = array('url' => $url_dir.'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => $url_to_who);
-    } else {
-        if( $i == $array_len - 1 && !isset($_GET['createdir']) ) {
-            $url_dir = '#';
-        }
-        if ($url_to_who == 'learning_path') {
-            $url_to_who = get_lang('LearningPaths');
-        }
-        $interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
-    }
-    //does not repeat the name group in the url
-    if (!empty($_SESSION['_gid'])) {
-        unset($dir_array[1]);
-    }
-    $dir_acum .= $dir_array[$i].'/';
+if (empty($document_data['parents'])) {
+	$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+} else {	
+	foreach($document_data['parents'] as $document_sub_data) {
+		if (!isset($_GET['createdir']) && $document_sub_data['id'] ==  $document_data['id']) {
+			$document_sub_data['document_url'] = '#';
+		}
+		$interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+	}
 }
 
 if (isset($_GET['createdir'])) {
@@ -688,7 +686,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
         // Needed for directory creation
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-        $post_dir_name = Security::remove_XSS($_POST['dirname']);
+        $post_dir_name = $_POST['dirname'];
 
         if ($post_dir_name == '../' || $post_dir_name == '.' || $post_dir_name == '..') {
             Display::display_error_message(get_lang('CannotCreateDir'));
@@ -701,6 +699,8 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
             $dir_name = $curdirpath.$added_slash.replace_dangerous_char($post_dir_name);
             $dir_name = disable_dangerous_file($dir_name);
             $dir_name = str_replace('.', '_', $dir_name);
+            
+            //@todo why the folder name can't have a dot. It's just the folder name
             $post_dir_name = str_replace('.', '_', $post_dir_name);
             
             $dir_check = $base_work_dir.$dir_name;

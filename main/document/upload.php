@@ -109,7 +109,7 @@ $courseDir = $_course['path'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
 
-$document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id());
+$document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     $document_id  = $parent_id =  0;
     $path = '/';    
@@ -175,6 +175,16 @@ if ($is_certificate_mode) {
 } else {
 	$interbreadcrumb[] = array('url' => './document.php?id='.$document_id.$req_gid, 'name'=> get_lang('Documents'));
 }
+
+// Interbreadcrumb for the current directory root path
+if (empty($document_data['parents'])) {
+	$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+} else {
+	foreach($document_data['parents'] as $document_sub_data) {
+		$interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+	}
+}
+
 
 
 $this_section = SECTION_COURSES;

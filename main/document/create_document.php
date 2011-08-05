@@ -168,7 +168,7 @@ $nameTools = get_lang('CreateDocument');
 
 /*	Constants and variables */
 
-$document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id());    
+$document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);    
 if (empty($document_data)) {
     if (api_is_in_group()) {
         $group_properties   = GroupManager::get_group_properties(api_get_group_id());        
@@ -616,19 +616,16 @@ if ($form->validate()) {
 	}
 	*/
 	
-	$dir_acum = '';
-	for ($i = 0; $i < $array_len; $i++) {
-		$url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
-		//Max char 80
-		$url_to_who = cut($dir_array[$i],80);
-		if ($is_certificate_mode) {
-			$interbreadcrumb[] = array('url' => $url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => $url_to_who);
-		} else {
-			$interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
+	// Interbreadcrumb for the current directory root path
+	if (empty($document_data['parents'])) {
+		$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+	} else {
+		foreach($document_data['parents'] as $document_sub_data) {
+			$interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
 		}
-		$dir_acum .= $dir_array[$i].'/';
 	}
-	
+
+
 	Display :: display_header($nameTools, "Doc");
 	//api_display_tool_title($nameTools);
 	// actions

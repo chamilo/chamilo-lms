@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langActivate = "Zichtbaar maken";
 $langDeactivate = "Verbergen";
 $langInLnk = "Deze modules en links zijn nu inactief.";
@@ -18,7 +15,7 @@ $EditLink = "Wijzig deze link";
 $Blog_management = "Projecten";
 $Forum = "Forums";
 $Course_maintenance = "Cursusbeheer";
-$TOOL_SURVEY = "Enquêtes";
+$TOOL_SURVEY = "Vragenlijsten";
 $GreyIcons = "Modules";
 $Interaction = "Interactie";
 $Authoring = "Opstellen";
@@ -29,4 +26,6 @@ $SessionIdentifier = "Sessie herkenningsteken";
 $SessionName = "Sessienaam";
 $SessionCategory = "Sessiecategorie";
 $SessionData = "Sessiedata";
+$TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "Leerpad auto-start staat aan. Wanneer leerlingen deze cursus binnenkomen, worden ze automatisch doorgestuurd naar het leerpad wat als auto-start staat gemarkeerd.";
+$ToolSearch = "Zoek";
 ?>

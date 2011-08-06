@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langShouldBeCSVFormat = "Het bestand moet in CSV-formaat zijn. Voeg geen spaties toe. De structuur moet exact zijn zoals:";
 $langTracking = "Statistieken";
 $langEnter2passToChange = "Nieuw wachtwoord tweemaal invullen, of blanco laten om het huidige te behouden.";
@@ -10,6 +7,8 @@ $langUpdateImage = "Wijzig foto";
 $langImageWrong = "De bestandsgrootte voor de foto moet kleiner zijn dan";
 $langAddImage = "Foto";
 $langCourseManager = "Cursusbeheerder";
+$NewPass = "Nieuw wachtwoord";
+$CurrentPasswordEmptyOrIncorrect = "Het huidige wachtwoord is onjuist";
 $password_request = "U heeft gevraagd om uw wachtwoord op te sturen.Indien u dit niet gedaan heeft, negeer deze mail.Om uw wachtwoord te resetten, klik op de resetlink.";
 $YourPasswordHasBeenEmailed = "Uw wachtwoord werd u doorgestuurd per e-mail.";
 $lang_enter_email_and_well_send_you_password = "Geef het e-mailadres waarmee u registreerde en wij sturen u een nieuw wachtwoord.";
@@ -153,6 +152,35 @@ $PictureUploaded = "Uw afbeelding werd geüploaded";
 $ProductionUploaded = "Het bestand van uw productie is geüploaded.";
 $FolderUpdated = "De folder werd geüpdated.";
 $UsersRegistered = "Deze gebruikers werden ingeschreven in de cursus";
+$UserAlreadyRegisterByOtherCreator = "Gebruiker is al geregistreerd door een andere coach";
+$UserCreatedPlatform = "Gebruiker gemaakt in platform";
+$UserInSession = "Gebruiker toegevoegd aan sessie";
+$UserNotAdded = "Gebruiker niet toegevoegd";
+$NoSessionId = "Onbekende sessie";
 $NoUsersRead = "Gelieve uw XML/CSV bestand te controleren";
+$UserImportFileMessage = "Als de login ontbreekt in het XML- of CSV-bestand, wordt er een gegenereerd uit de voor- en achternaam, Bas Wijnen wordt bijvoorbeeld bwijnen";
+$UserAlreadyRegisteredByOtherCreator = "Gebruiker is al door een andere coach geregistreerd";
+$NewUserInTheCourse = "Nieuwe gebruiker in de cursus";
+$MessageNewUserInTheCourse = "Er is een nieuwe gebruiker in de cursus";
+$EditNormalProfile = "Bewerk gewone profiel";
+$EditExtendProfile = "Bewerk uitgebreid profiel";
+$EditInformation = "Bewerk profiel";
 $RegisterUser = "Registreer";
+$IHaveReadAndAgree = "Ik heb gelezen en ga accoord met de";
+$ByClickingRegisterYouAgreeTermsAndConditions = "Door hieronder op 'Registreren' te klikken gaat u accoord met de voorwaarden";
+$User = "Gebruiker";
+$LostPass = "Wachtwoord vergeten?";
+$EnterEmailUserAndWellSendYouPassword = "Geef de gebruikersnaam en het wachtwoord waarmee u geregistreerd bent, en we sturen u een nieuw wachtwoord.";
+$NoUserAccountWithThisEmailAddress = "Er is geen gebruiker met deze gebruikernaam en/of dit e-mailadres";
+$CouldNotResetPassword = "Kan wachtwoord niet herstellen";
+$WithTheFollowingSettings = "met de volgende instellingen:";
+$YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Uw account op %s is zojuist toegekend door een van onze beheerders.";
+$HaveFun = "Veel plezier,";
+$YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "U kunt u nu aanmelden bij %s met de gebruikersnaam en het wachtwoord dat u heeft opgegeven.";
+$AreYouSureToEditTheUserStatus = "Weet u zeker dat u de status van de gebruiker wilt wijzigen?";
+$TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "De tutor kan alleen de voortgang volgen van leerlingen die zijn ingeschreven in de cursus.";
+$TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "De leraar kan alle studenten in de cursus volgen en beoordelen.";
+$LoginOrEmailAddress = "Gebruikersnaam of e-mailadres";
+$AtOnce = "Bij ontvangst";
+$Daily = "Dagelijks";
 ?>

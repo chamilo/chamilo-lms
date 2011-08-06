@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langOnlineConference = "Onlineconferentie";
 $langWash = "Wissen";
 $langReset = "Herstart";

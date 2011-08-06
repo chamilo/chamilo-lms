@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $Upload = "Uploaden";
 $FilingName = "Naam";
 $FilingOtherAs = "nieuwe map ==>";
@@ -31,6 +28,7 @@ $MailingBackToDropbox = "(terug naar het dropboxhoofdvenster)";
 $MailingConfirmSend = "Documenten naar hun indivuele bestemmelingen sturen?";
 $MailingSend = "Verzend documenten";
 $MailingNotYetSent = "Mailingdocumenten zijn nog niet verzonden...";
+$$MailingExamine = "Onderzoek post";
 $MailingInSelect = "---Mailing---";
 $MailingAsUsername = "Mailing";
 $FileDeleted = "Het geselecteerde bestand is verwijderd uit de dropbox.";
@@ -124,4 +122,7 @@ $ErrorNoFilesInFolder = "Deze map is leeg";
 $AddComment = "Commentaar toevoegen";
 $SentCatgoryDeleted = "De categorie is verwijderd";
 $ReceivedCatgoryDeleted = "De categorie is verwijderd";
+$InvalideUserDetected = "Ongeldige gebruiker gevonden";
+$InvalideGroupDetected = "Ongeldige groep gezien";
+$OverviewOfFilesInThisZip = "Overzicht van bestanden in de ZIP";
 ?>

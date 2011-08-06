@@ -555,7 +555,7 @@ $SelectFile = "Seleccione un archivo";
 $WarningFaqFileNonWriteable = "Atención - El archivo FAQ localizado en el directorio  /home/ de su plataforma, no es un archivo en el que se pueda escribir. Su texto no será guardado hasta que no cambie los permisos del archivo.";
 $AddCategory = "Añadir categoría";
 $NoExercises = "No hay ejercicios disponibles";
-$NotAllowedClickBack = "Lo sentimos, no le está permitido acceder a esta página. Para volver a la página anterior pulse el enlace inferior o haga clic en el botón \"Atrás\" de su navegador.";
+$NotAllowedClickBack = "Lo sentimos, no le está permitido acceder a esta página, o su conexión ha caducido. Para volver a la página anterior pulse el enlace inferior o haga clic en el botón \"Atrás\" de su navegador.";
 $Exercise = "Ejercicios";
 $Result = "Resultado";
 $AttemptingToLoginAs = "Intentar identificarse como %s %s (id %s)";
@@ -1126,4 +1126,5 @@ $NoItem = "Todavía ningun elemento";
 $LoadExtraData = "Cargar los datos de campos usuario adicionales (estos tienen que ser marcados como 'Filtro' para que aparezcan).";
 $CourseAssistant = "Asistente";
 $SupportedScormContentMakers = "Paquetes Scorm soportados";
+$Copy = "Copiar";
 ?>

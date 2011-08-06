@@ -555,7 +555,7 @@ $SelectFile = "Select a file";
 $WarningFaqFileNonWriteable = "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed.";
 $AddCategory = "Add category";
 $NoExercises = "No tests";
-$NotAllowedClickBack = "Sorry, you are not allowed to access this page. Please click your browser's \"Back\" button or follow the link below to return to the previous page.";
+$NotAllowedClickBack = "Sorry, you are not allowed to access this page, or maybe your connection has expired. Please click your browser's \"Back\" button or follow the link below to return to the previous page.";
 $Exercise = "Tests";
 $Result = "Result";
 $AttemptingToLoginAs = "Attempting to login as %s %s (id %s)";
@@ -1123,5 +1123,5 @@ $NoItem = "No item yet";
 $LoadExtraData = "Load extra user fields data (have to be marked as 'Filter' to appear).";
 $CourseAssistant = "Assistant";
 $SupportedScormContentMakers = "Scorm Authoring tools supported";
-$Copy = "Copiar";
+$Copy = "Copy";
 ?>

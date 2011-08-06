@@ -555,7 +555,7 @@ $SelectFile = "Selectionnez un document";
 $WarningFaqFileNonWriteable = "Attention - Le fichier de FAQ situé dans le répertoire /home/ de votre campus n'est pas inscriptible. Le texte que vous venez d'entrer ne pourra pas être sauvé tant que les permissions n'auront pas été modifiées.";
 $AddCategory = "Ajouter ce dossier";
 $NoExercises = "Aucun test";
-$NotAllowedClickBack = "Désolé, vous n'êtes pas autorisé à accéder à cette page. Veuillez cliquez sur le bouton \"Précédent\" de votre navigateur ou suivre le lien ci-dessous pour retourner à la page précédente.";
+$NotAllowedClickBack = "Désolé, vous n'êtes pas autorisé à accéder à cette page, ou votre connexion a expiré. Veuillez cliquez sur le bouton \"Précédent\" de votre navigateur ou suivre le lien ci-dessous pour retourner à la page précédente.";
 $Exercise = "Tests";
 $Result = "Résultat";
 $AttemptingToLoginAs = "Tentative d'identification comme %s %s (id %s)";
@@ -1120,4 +1120,6 @@ $CheckURL = "Vérifier lien";
 $NoItem = "Pas encore d'élément";
 $LoadExtraData = "Charger les données des champs utilisateurs (seulement les champs notés comme 'Filtre' apparaîtront).";
 $CourseAssistant = "Assistant";
+$SupportedScormContentMakers = "Paquets SCORM supportés";
+$Copy = "Copier";
 ?>

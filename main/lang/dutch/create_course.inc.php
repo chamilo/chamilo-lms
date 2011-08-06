@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langProfessors = "Lesgevers";
 $langExplanation = "Wanneer u op OK klikt, wordt een cursuspagina aangemaakt met o.a. de onderdelen: forum, links, oefeningen, agenda en cursusmateriaal. Met uw log-in kan u de inhoud later wijzigen.";
 $langEmpty = "U hebt niet alle velden ingevuld.<br />Gebruik de terugknop en herbegin.<br />Als u uw cursuscode niet kent, kunt u de cursuslijst raadplegen.";
@@ -100,10 +97,54 @@ $ExampleForum = "Voorbeeldforum";
 $ExampleThread = "Voorbeelddiscussie";
 $ExampleThreadContent = "Voorbeeldinhoud";
 $IntroductionWiki = "Het woord Wiki is een afkorting van WikiWikiWeb, een woord dat komt van het Hawaiaans en snel of snelheid betekent. In een wiki kunnen mensen samen aan paginas schrijven. Als een bepaald iemand iets verkeerds schrijft dan kan een andere persoon dit corrigeren en eventueel ook iets nieuws toevoegen aan de pagina. Hierdoor wordt de inhoud telkens beter als er iets gewijzigd wordt.";
-$CreateCourseArea = "Maak deze training aan";
-$CreateCourse = "Training aanmaken";
+$CreateCourseArea = "Maak deze cursus aan";
+$CreateCourse = "Cursus aanmaken";
 $Create = "Aanmaken";
 $MessageOfNewCourseToAdmin = "Er werd een nieuwe cursus aangemaakt op het platform:";
 $NewCourseCreatedIn = "Er werd een nieuwe cursus aangemaakt in";
 $ExplicationTrainers = "Je staat op dit moment ingesteld als cursusbeheerder. Je kan dit later aanpassen via de cursuseigenschappen.";
+$Objectives = "Doelen";
+$TargetAudience = "Beoogd publiek";
+$YouHaveToAcceptTermsAndConditions = "Je moet de voorwaarden accepteren om een nieuwe cursus aan te vragen.";
+$CourseRequestCreated = "Je verzoek om een nieuwe cursus is verstuurd. Je kunt binnenkort een antwoord verwachten, binnen een of twee dagen.";
+$CreateThisCourseRequest = "Verzoek om deze cursus";
+$CourseRequestDate = "Verzoekdatum";
+$AcceptThisCourseRequest = "Accepteer deze cursus";
+$ANewCourseWillBeCreated = "Een nieuwe cursus %s wordt gemaakt. Doorgaan?";
+$AdditionalInfoWillBeAsked = "Extra informatie over %s cursus wordt aangevraagd per e-mail. Doorgaan?";
+$AskAdditionalInfo = "Vraag om extra informatie";
+$DeleteThisCourseRequest = "Verwijder verzoek";
+$ACourseRequestWillBeDeleted = "Het verzoek %s wordt verwijderd. Doorgaan?";
+$RejectThisCourseRequest = "Wijs dit verzoek af";
+$ACourseRequestWillBeRejected = "Het verzoek %s wordt afgewezen. Doorgaan?";
+$CourseRequestAccepted = "Het cursusverzoek %s is toegewezen. Een nieuwe cursus %s is aangemaakt.";
+$CourseRequestAcceptanceFailed = "Het cursusverzoek %s is vanwege een interne fout niet geaccepteerd.";
+$CourseRequestRejected = "Het cursusverzoek %s is afgewezen.";
+$CourseRequestRejectionFailed = "Het cursusverzoek %s is vanwege een interne fout niet afgewezen.";
+$CourseRequestInfoAsked = "Extra informatie over het cursusverzoek %s is opgevraagd.";
+$CourseRequestInfoFailed = "Extra informatie over het cursusverzoek %s is vanwege een interne fout niet aangevraagd.";
+$CourseRequestDeleted = "Het cursusverzoek %s is verwijderd.";
+$CourseRequestDeletionFailed = "Het cursusverzoek %s is vanwege een interne fout niet verwijderd.";
+$DeleteCourseRequests = "Verwijder geselecteerde cursusverzoek(en)";
+$SelectedCourseRequestsDeleted = "De geselecteerde cursusverzoeken zijn verwijderd.";
+$SomeCourseRequestsNotDeleted = "Een deel van de geselecteerde cursusverzoeken zijn vanwegen een interne fout niet verwijderd.";
+$CourseRequestEmailSubject = "%s Een verzoek voor een nieuwe cursus %s";
+$CourseRequestMailOpening = "We hebben het volgende verzoek voor een nieuwe cursus geregistreerd:";
+$CourseRequestPageForApproval = "Dit cursusverzoek kan op de volgende pagina worden geaccepteerd (toegewezen):";
+$PleaseActivateCourseValidationFeature = "De \"cursusaanvraag\" is momenteel niet actief. Om dit te gebruiken, moet je het activeren via de instelling %s.";
+$CourseRequestLegalNote = "De informatie in dit verzoek is beschermd; het mag alleen gebruikt worden om de aanvraag te beoordelen; het mag niet worden doorgegeven aan derden.";
+$CourseRequestAskInfoEmailSubject = "%s Een vraag om extra informatie over het cursusverzoek %s";
+$CourseRequestAskInfoEmailText = "We hebben uw aanvraag voor een nieuwe cursus met code %s ontvangen. Maar voordat we over het verzoek kunnen beslissen, hebben we wat extra informatie nodig.\n\nStuur alstublieft een korte omschrijving van de inhoud van de cursus, de doelen en de doelgroep. Indien van toepassing, noem dan ook de naam van het instituut of de afdeling namens wie het verzoek gedaan wordt.";
+$CourseRequestAcceptedEmailSubject = "%s Het cursusverzoek %s is toegewezen";
+$CourseRequestAcceptedEmailText = "Uw cursusaanvraag %s is toegewezen. Een nieuwe cursus %s is aangemaakt en u bent geregistreerd als leraar.\n\nU kunt uw nieuwe cursus bereiken via: %s";
+$CourseRequestRejectedEmailSubject = "%s Het cursusverzoek %s is afgewezen";
+$CourseRequestRejectedEmailText = "Tot onze spijt moeten we u informeren dat het cursusverzoek %s afgewezen is, omdat het niet voldoet aan onze voorwaarden.";
+$CourseCreationFailed = "De cursus is vanwege een interne fout niet aangemaakt.";
+$CourseRequestCreationFailed = "Het cursusverzoek is vanwege een interne fout niet aangemaakt.";
+$CourseRequestEdit = "Wijzig een cursusverzoek";
+$CourseRequestHasNotBeenFound = "Het cursusverzoek waarom gevraagd wordt is niet gevonden of bestaat niet.";
+$Accept = "Accepteren";
+$Reject = "Afwijzen";
+$CourseRequestUpdateFailed = "Het cursusverzoek %s is vanwege een interne fout niet bijgewerkt.";
+$CourseRequestUpdated = "Het cursusverzoek %s is bijgewerkt.";
 ?>

@@ -1464,4 +1464,10 @@ $ContributorsList = "Liste des contributeurs";
 $SecurityGuide = "Guide de sécurité";
 $OptimizationGuide = "Guide d'optimization";
 $FreeBusyCalendar = "Calendrier libre/occupé";
+$ExtensionCouldBeLoaded = "L'extension a été détectée";
+$ArchiveDirCleanup = "Vidange du répertoire archive";
+$ArchiveDirCleanupDescr = "Chamilo garde une copie de la plupart des fichiers temporaires qu'il génère (pour les exports, copies et backups divers) dans son répertoire archive/. Après un certain temps, ces fichiers peuvent s'accumuler et représenter un usage de l'espace disque assez important et sans intérêt particulier. Cliquez sur le bouton ci-dessous pour vider ce répertoire immédiatement. Cette opération devrait en fait être exécutée automatiquement depuis un processus cron, mais si cela représente une difficulté importante dans votre contexte, vous pouvez visiter cette page de temps en temps pour éliminer tous les fichiers temporaires du répertoire.";
+$ArchiveDirCleanupProceedButton = "Vidanger";
+$ArchiveDirCleanupSucceeded = "Le répertoire archive/ a été vidangé.";
+$ArchiveDirCleanupFailed = "Le répertoire archive/ n'a pas pu être vidé entièrement. Veuillez le vider manuellement en vous connectant au serveur et en supprimant tou les fichiers dans le répertoire chamilo/archive/, à l'exception du fichier caché .htaccess.";
 ?>

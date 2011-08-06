@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $TermAddNew = "Voeg een nieuw begrip toe";
 $TermName = "Begrip";
 $TermDefinition = "Verklaring";

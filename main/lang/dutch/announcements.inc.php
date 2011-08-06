@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $Announcement = "Aankondigingen";
 $langAnnEmpty = "Alle aankondigingen zijn verwijderd.";
 $AnnouncementModified = "De aankondiging is gewijzigd.";
@@ -56,4 +53,7 @@ $AnnounceSentToUserSelection = "De aankondiging is gestuurd naar de geslecteerde
 $SendAnnouncement = "Stuur aankondiging";
 $ModifyAnnouncement = "Wijzig aankondiging";
 $ButtonPublishAnnouncement = "Plaats aankondiging";
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Geachte gebruiker,
+
+Uw account op het platform is geactiveerd. U kunt nu inloggen en gebruik maken van onze cursussen.";
 ?>

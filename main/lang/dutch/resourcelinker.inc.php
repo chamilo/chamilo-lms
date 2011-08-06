@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $ResourceAdded = "Materiaal toegevoegd. Keer nu terug naar het pad of voeg meer materiaal toe.";
 $LearningPath = "Leerpad";
 $LevelUp = "omhoog";

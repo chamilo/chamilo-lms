@@ -1464,4 +1464,10 @@ $ContributorsList = "Lista de contribuidores";
 $SecurityGuide = "Guía de seguridad";
 $OptimizationGuide = "Guía de optimización";
 $FreeBusyCalendar = "Calendario libre/ocupado";
+$ExtensionCouldBeLoaded = "La extensión está disponible";
+$ArchiveDirCleanup = "Limpieza de la carpeta archive";
+$ArchiveDirCleanupDescr = "Chamilo guarda una copia de los archivos temporales que genera (para los backups, los exportes, las copias, etc) dentro de la carpeta archive/. Pasado un cierto tiempo, esto puede llegar a proporciones importantes del disco duro siendo usado sin interés particular. Dándole click al botón sifuiente, ejecutará una limpieza manual de esta carpeta. Esta operación debería ser ejecutada regularmente por un proceso cronológico (cron) pero si esto es complicado en su contexto, puede regresar en esta página regularmente para eliminar los archivos temporales que contiene la carpeta archive/.";
+$ArchiveDirCleanupProceedButton = "Ejecutar la limpieza";
+$ArchiveDirCleanupSucceeded = "Los contenidos de la carpeta archive/ fueron eliminados exitosamente.";
+$ArchiveDirCleanupFailed = "Por alguna razón, no se pudió limpiar la carpeta archive/, probablemente por razón de permisos. Puede limpiarla manualmente conectándose al servidor y eliminando todos los contenidos de la carpeta chamilo/archive/, excepto el fichero .htaccess.";
 ?>

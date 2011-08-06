@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $LinkMoved = "De link is verplaatst";
 $langLinkName = "Naam";
 $langLinkAdd = "Link toevoegen";
@@ -43,4 +40,14 @@ $langAll_Link_Deleted = "Link is verwijderd.";
 $langOnHomepage = "Toon link op cursushoofdpagina";
 $langShowLinkOnHomepage = "Toon deze link als een icoon op de cursushoofdpagina";
 $General = "algemeen";
+$SearchFeatureDoIndexLink = "Linktitel en -omschrijving indexeren?";
+$langSaveLink = "Link opslaan";
+$langSaveCategory = "Map opslaan";
+$BackToLinksOverview = "Terug naar linkoverzicht";
+$AddTargetOfLinkOnHomepage = "Kies het \"doel\" wat de link op de hoofdpagina van de cursus laat zien";
+$Url = "URL";
+$LinkOpenSelf = "Open zelf";
+$LinkOpenBlank = "Open leeg";
+$LinkOpenParent = "Open ouder";
+$LinkOpenTop = "Open top";
 ?>

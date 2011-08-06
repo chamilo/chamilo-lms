@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langCourseProgram = "Cursus: situering en randinformatie";
 $langThisCourseDescriptionIsEmpty = "Deze cursus heeft nog geen beschrijving.";
 $langEditCourseProgram = "Aanmaken/aanpassen van cursusinformatie";

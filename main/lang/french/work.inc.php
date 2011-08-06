@@ -93,4 +93,5 @@ $PleaseCheckHomeworkPage = "Veuillez vérifier la page des tâches";
 $IncludedInEvaluation = "Inclus dans le cahier de notes";
 $DateExpiredNotBeLessDeadLine = "La date d'expiration ne peut pas être antérieure à la date de fin.";
 $NotRevised = "Non cotés";
+$MaxWeightNeedToBeProvided = "Un poids maximum doit être indiqué dans les options du cahier de notes";
 ?>

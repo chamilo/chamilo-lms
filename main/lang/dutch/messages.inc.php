@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MessageEmptyMessageOrSubject = "Gelieve een onderwerp of bericht in te vullen";
 $Inbox = "Postvak In";
 $Messages = "Berichten";

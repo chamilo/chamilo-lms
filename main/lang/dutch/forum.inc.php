@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $ForumDeleted = "Forum verwijderd";
 $ForumCategoryDeleted = "Forumcategorie verwijderd";
 $ForumLocked = "Forum geblokkeerd";
@@ -94,17 +91,58 @@ $ForumSearchInformation = "U kunt op meerdere zoektermen zoeken door gebruik te 
 $YouWillBeNotifiedOfNewPosts = "U zal via email op de hoogte gebracht worden van nieuwe berichten.";
 $YouWillNoLongerBeNotifiedOfNewPosts = "U zal niet langer via email op de hoogte gebracht worden van nieuwe berichten.";
 $AddImage = "Voeg afbeelding toe";
+$QualifyThread = "Markeer discussie";
+$ThreadUsersList = "Gebruikerslijst van de discussie";
 $StudentList = "lijst van cursisten";
-$CourseUsers = "Gebruikers in de training";
+$QualifyThisThread = "Markeer deze discussie";
+$CourseUsers = "Gebruikers in de cursus";
 $PostsNumber = "Aantal berichten";
+$NumberOfPostsForThisUser = "Aantal berichten van deze gebruiker";
+$AveragePostPerUser = "Berichten per gebruiker";
+$QualificationChangesHistory = "Geschiedenis van rapport";
+$MoreRecent = "recenter";
+$Older = "ouder";
 $OrderBy = "sorteer op";
+$WhoChanged = "Wie wijzigde";
+$NoteChanged = "Notite aangepast";
+$DateChanged = "Datum aangepast";
+$ViewComentPost = "Bekijk commentaar op de berichten";
+$AllStudents = "Alle leerlingen";
+$StudentsQualified = "Beoordeelde leerlingen";
+$StudentsNotQualified = "Niet-beoordeelde leerlingen";
+$NamesAndLastNames = "Voor- en achternamen";
+$MaxScore = "Score";
+$QualificationCanNotBeGreaterThanMaxScore = "Score mag niet hoger zijn dan maximum";
 $ThreadStatistics = "Statistieken van de discussie";
 $Thread = "Discussie";
 $NotifyMe = "Hou me op de hoogte";
+$ConfirmUserQualification = "Bevestig score";
 $NotChanged = "Ongewijzigd";
+$TitleColumnGradebook = "Kolomtitel in competentierapport";
+$QualifyThreadGradebook = "Markeer deze discussie";
+$QualifyWeight = "Gewicht voor rapport";
 $QualifyNumeric = "Score";
+$AlterQualifyThread = "Bewerk discussiescore";
+$ForumMoved = "Het forum is verplaatst";
+$YouMustAssignWeightOfQualification = "Je moet een score toekennen aan deze activiteit";
+$DeleteAttachmentFile = "Verwijder bijlage";
 $EditAnAttachment = "Wijzig een bijlage";
+$SeeForum = "Bekijk forum";
+$CreateForum = "Maak forum";
+$ModifyForum = "Bewerk forum";
+$CreateThread = "Nieuwe discussie";
+$ModifyThread = "Bewerk discussie";
 $EditForum = "Forum wijzigen";
 $BackToForum = "Terug naar het forum";
 $BackToForumOverview = "Terug naar het forum overzicht";
+$BackToThread = "Terug naar discussie";
+$ForumcategoryLocked = "Forumcategorie geblokkeerd";
+$PreviewImage = "Voorvertoning";
+$UpdateImage = "Bewerk afbeelding";
+$EnableTimeLimits = "Stel tijdslimieten in";
+$RemoveSearchResults = "Wis zoekresultaten";
+$InsertQualificationCorrespondingToMaxScore = "Geef maximumscore";
+$ThreadMoved = "Discussie verplaatst";
+$MigrateForum = "Verplaats forum";
+$YouWillBeNotified = "Je wordt op de hoogte gehouden";
 ?>

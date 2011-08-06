@@ -93,4 +93,5 @@ $PleaseCheckHomeworkPage = "Por favor, consulte la página de tareas.";
 $IncludedInEvaluation = "Incluida en la evaluación";
 $DateExpiredNotBeLessDeadLine = "La fecha de caducidad no puede ser menor que la fecha límite";
 $NotRevised = "No se ha revisado";
+$MaxWeightNeedToBeProvided = "Un peso máximo tiene que ser indicado en las opciones de esta evaluación.";
 ?>

@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $nameTools = "verouderde taalvariabele";
 $langMdCallingTool = "Documenten";
 $langTool = "Document Metadata";

@@ -593,20 +593,22 @@ if (!empty ($error)) {
             $i++;
             $objQuestionTmp = Question::read($questionId);
             // for sequential exercises
-            if ($exerciseType == ONE_PER_PAGE) {
-                // if it is not the right question, goes to the next loop iteration
-                if ($questionNum != $i) {
-                    continue;
-                } else {                    
-                    if ($objQuestionTmp->selectType() == HOT_SPOT || $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION) {
-                        $number_of_hotspot_questions++;
-                    }
-                    break;
-                }
-            } else {
-                if ($objQuestionTmp->selectType() == HOT_SPOT || $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION) {
-                    $number_of_hotspot_questions++;
-                }
+            if (!empty($objQuestionTmp)) {
+	            if ($exerciseType == ONE_PER_PAGE) {
+	                // if it is not the right question, goes to the next loop iteration
+	                if ($questionNum != $i) {
+	                    continue;
+	                } else {                    
+	                    if ($objQuestionTmp->selectType() == HOT_SPOT || $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION) {
+	                        $number_of_hotspot_questions++;
+	                    }
+	                    break;
+	                }
+	            } else {
+	                if ($objQuestionTmp->selectType() == HOT_SPOT || $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION) {
+	                    $number_of_hotspot_questions++;
+	                }
+	            }
             }
         }
     }

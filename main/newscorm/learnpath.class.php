@@ -7170,7 +7170,8 @@ class learnpath {
         $return .= ob_get_contents();
         ob_end_clean();
         // End of audiorecorder include
-        $return .= '</div>';*/
+        */
+        $return .= '</div>';
         return $return;
     }
 

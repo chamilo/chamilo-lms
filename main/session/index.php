@@ -263,8 +263,8 @@ $extra_params_courses['autowidth'] = 'false'; //use the width of the parent
 $url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id.'&course_id='.$course_id;
 $columns        = array(get_lang('PublicationDate'),get_lang('Course'), get_lang('LearningPaths'));
 $column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'120', 'align'=>'left', 'sortable'=>'false'),
-                        array('name'=>'course', 'index'=>'course', 'width'=>'400', 'align'=>'left', 'sortable'=>'false'),
-                        array('name'=>'lp',     'index'=>'lp',     'width'=>'330', 'align'=>'left', 'sortable'=>'false'));
+                        array('name'=>'course', 'index'=>'course', 'width'=>'300', 'align'=>'left', 'sortable'=>'false'),
+                        array('name'=>'lp',     'index'=>'lp',     'width'=>'440', 'align'=>'left', 'sortable'=>'false'));
 $extra_params = array();                        
 //$extra_params['autowidth'] = 'true'; //use the width of the parent
 //$extra_params['forceFit'] = 'true'; //use the width of the parent
@@ -284,9 +284,9 @@ $url_week           = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=sessio
 $column_week        = array(get_lang('PeriodWeek'), get_lang('PublicationDate'), get_lang('Course'), get_lang('LearningPaths'));
 $column_week_model  = array (
                           array('name'=>'week',     'index'=>'week',    'width'=>'50',  'align'=>'left', 'sortable'=>'false'),       
-                          array('name'=>'date',     'index'=>'date',    'width'=>'100', 'align'=>'left', 'sortable'=>'false'),
-                          array('name'=>'course',   'index'=>'course',  'width'=>'400', 'align'=>'left', 'sortable'=>'false'),
-                          array('name'=>'lp',       'index'=>'lp',      'width'=>'300', 'align'=>'left', 'sortable'=>'false'));
+                          array('name'=>'date',     'index'=>'date',    'width'=>'113', 'align'=>'left', 'sortable'=>'false'),
+                          array('name'=>'course',   'index'=>'course',  'width'=>'282', 'align'=>'left', 'sortable'=>'false'),
+                          array('name'=>'lp',       'index'=>'lp',      'width'=>'416', 'align'=>'left', 'sortable'=>'false'));
                           
 $extra_params_week['grouping'] = 'true';
 //For more details see http://www.trirand.com/jqgridwiki/doku.php?id=wiki:grouping

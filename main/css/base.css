@@ -2354,3 +2354,7 @@ div.admin_section h4 {
    padding:3px;
    margin:10px;      
 }
+
+.ui-jqgrid tr.jqgrow td {
+    height:38px !important;
+}

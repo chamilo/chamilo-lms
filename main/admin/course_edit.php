@@ -97,6 +97,8 @@ $form->applyFilter('title','html_filter');
 $form->applyFilter('title','trim');
 // code
 $form->add_textfield('visual_code', get_lang('CourseCode'));
+$form->addElement('static', null, null, get_lang('OnlyLettersAndNumbers'));
+
 $form->applyFilter('visual_code','strtoupper');
 $form->applyFilter('visual_code','html_filter');
 //$form->add_textfield('tutor_name', get_lang('CourseTitular'));
@@ -188,7 +190,8 @@ if ($form->validate()) {
 	$course = $form->getSubmitValues();
 	$dbName = $_POST['dbName'];
 	$course_code = $course['code'];
-	$visual_code = $course['visual_code'];
+	$visual_code = $course['visual_code'];	
+	$visual_code = generate_course_code($visual_code);   
 
     // Check if the visual code is already used by *another* course
     $visual_code_is_used = false;

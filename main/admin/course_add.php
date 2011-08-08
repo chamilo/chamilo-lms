@@ -63,6 +63,8 @@ $form->applyFilter('title', 'trim');
 
 // Code
 $form->add_textfield('visual_code', get_lang('CourseCode'), false, array('size' => '20', 'maxlength' => 20));
+$form->addElement('static', null, null, get_lang('OnlyLettersAndNumbers'));
+
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 $form->addRule('visual_code', get_lang('Max'), 'maxlength', $maxlength);

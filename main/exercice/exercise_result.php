@@ -198,7 +198,7 @@ $user_info   = api_get_user_info(api_get_user_id());
 if ($show_results || $show_only_score) {
     echo $exercise_header = $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']));
 }
-
+$counter = 1;
 // Loop over all question to show results for each of them, one by one
 foreach ($questionList as $questionId) {
     // destruction of the Question object
@@ -222,8 +222,9 @@ foreach ($questionList as $questionId) {
 	
 	if ($show_results) {
     	// show titles
-    	if ($origin != 'learnpath') { 
-    		echo $objQuestionTmp->return_header($objExercise->feedbacktype);
+    	if ($origin != 'learnpath') {
+    		echo $objQuestionTmp->return_header($objExercise->feedbacktype, $counter );
+    		$counter++;
     		if ($answerType == HOT_SPOT) {
     			?>
     				<tr>

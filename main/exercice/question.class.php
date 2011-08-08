@@ -1256,8 +1256,8 @@ abstract class Question
     
 	function return_header($feedback_type, $counter = null) {
 	    $counter_label = '';
-	    if (!is_null($counter)) {
-	        $counter = intval($counter);
+	    if (!empty($counter)) {
+	        $counter_label = intval($counter);
 	    }	
 	    echo Display::div(get_lang("Question").' '.($counter_label).' : '.$this->question, array('id'=>'question_title', 'class'=>'sectiontitle'));
 	    echo Display::div($this->description, array('id'=>'question_description'));	    

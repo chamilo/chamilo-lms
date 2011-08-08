@@ -274,16 +274,15 @@ if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info
 }
 
 // for each question
-$counter=0;
-
 $total_weighting = 0;
 foreach ($questionList as $questionId) {
     $objQuestionTmp     = Question::read($questionId);
     $total_weighting  +=$objQuestionTmp->selectWeighting();        
 }
+$counter = 1;
 
 foreach ($questionList as $questionId) {
-	$counter++;		
+			
 	$choice=$exerciseResult[$questionId];
 		// destruction of the Question object
 	unset($objQuestionTmp);
@@ -297,8 +296,10 @@ foreach ($questionList as $questionId) {
 	$quesId 			= $objQuestionTmp->selectId();	
 	        	
  	if ($show_results) { 	    
-	    echo $objQuestionTmp->return_header($feedback_type);
+	    echo $objQuestionTmp->return_header($feedback_type, $counter);
 	}		
+	$counter++;
+	
 	if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
         $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                    
         $questionScore   = $question_result['score'];
@@ -368,7 +369,7 @@ foreach ($questionList as $questionId) {
             $threadhold3      = $question_result['extra']['threadhold3'];
             
 	   
-	        if ($show_results) {	
+	        if ($show_results) {
 	    
         	    if ($overlap_color) {
         			$overlap_color='green';
@@ -484,7 +485,7 @@ foreach ($questionList as $questionId) {
         				</td>
         			</tr>
         			</table>';
-	        }
+	        }		
 	}
 
 	if ($show_results) {

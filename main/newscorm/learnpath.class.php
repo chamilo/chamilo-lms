@@ -5313,16 +5313,10 @@ class learnpath {
         $tbl_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
 
         if ($id != 0 && is_array($extra_info)) {
-            $item_title = stripslashes($extra_info['title']);
-            $item_description = stripslashes($extra_info['description']);
-        }
-        elseif (is_numeric($extra_info)) {
-            $sql_quiz = "
-                            SELECT
-                                title,
-                                description
-                            FROM " . $tbl_quiz . "
-                            WHERE id = " . $extra_info;
+            $item_title = $extra_info['title'];
+            $item_description = $extra_info['description'];
+        } elseif (is_numeric($extra_info)) {
+            $sql_quiz = "SELECT title, description FROM " . $tbl_quiz . " WHERE id = " . $extra_info;
 
             $result = Database::query($sql_quiz);
             $row = Database :: fetch_array($result);
@@ -5332,6 +5326,8 @@ class learnpath {
             $item_title = '';
             $item_description = '';
         }
+        $item_title			= Security::remove_XSS($item_title);        
+        $item_description 	= Security::remove_XSS($item_description);
 
         $return = '	<div class="row">
                                 <div class="form_header">';
@@ -5340,11 +5336,7 @@ class learnpath {
         else
             $parent = 0;
 
-        $sql = "
-                        SELECT *
-                        FROM " . $tbl_lp_item . "
-                        WHERE
-                            lp_id = " . $this->lp_id;
+        $sql = "SELECT * FROM " . $tbl_lp_item . " WHERE lp_id = " . $this->lp_id;
 
         $result = Database::query($sql);
         $arrLP = array ();
@@ -5399,9 +5391,9 @@ class learnpath {
         $return .= '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>';
         $return .= '<td class="input">';
 
-        $return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
+        $return .= '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
 
-        $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
+        $return .= '<option class="top" value="0">' . $this->name . '</option>';
 
         $arrHide = array (
             $id
@@ -5410,13 +5402,13 @@ class learnpath {
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
                 if (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
-                    $return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                    $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
                 } else {
                     $arrHide[] = $arrLP[$i]['id'];
                 }
             } else {
                 if ($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-                    $return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                    $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
             }
         }
         if (is_array($arrLP)) {
@@ -5431,9 +5423,9 @@ class learnpath {
         $return .= '<td class="label"><label for="previous">' . get_lang('Position') . '</label></td>';
         $return .= '<td class="input">';
 
-        $return .= "\t\t\t\t" . '<select class="learnpath_item_form" style="width:100%;" id="previous" name="previous" size="1">';
+        $return .= '<select class="learnpath_item_form" style="width:100%;" id="previous" name="previous" size="1">';
 
-        $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
+        $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
@@ -5443,11 +5435,11 @@ class learnpath {
                 else
                     $selected = '';
 
-                $return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
+                $return .= '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
             }
         }
 
-        $return .= "\t\t\t\t" . '</select>';
+        $return .= '</select>';
         $return .= '</td>';
         $return .= '</tr>';
         if ($action != 'move') {
@@ -7187,11 +7179,8 @@ class learnpath {
         $return .= 'child_value[0] = new Array();' . "\n\n";
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $sql_zero = "
-                    SELECT *
-                    FROM " . $tbl_lp_item . "
-                    WHERE
-                        lp_id = " . $this->lp_id . " AND
-                        parent_item_id = 0
+                    SELECT * FROM " . $tbl_lp_item . "
+                    WHERE lp_id = " . $this->lp_id . " AND parent_item_id = 0
                     ORDER BY display_order ASC";
         $res_zero = Database::query($sql_zero);
 
@@ -7199,20 +7188,16 @@ class learnpath {
         $i = 0;
 
         while ($row_zero = Database :: fetch_array($res_zero)) {
-            $return .= 'child_name[0][' . $i . '] = "' . get_lang('After') . ' \"' . $row_zero['title'] . '\"";' . "\n";
+        	$js_var = json_encode(get_lang('After').' '.$row_zero['title']);
+            $return .= 'child_name[0][' . $i . '] = '.$js_var.' ;' . "\n";
             $return .= 'child_value[0][' . $i++ . '] = "' . $row_zero['id'] . '";' . "\n";
         }
         $return .= "\n";
-        $sql = "
-                    SELECT *
-                    FROM " . $tbl_lp_item . "
-                    WHERE
-                        lp_id = " . $this->lp_id;
+        $sql = "SELECT * FROM " . $tbl_lp_item . " WHERE lp_id = " . $this->lp_id;
         $res = Database::query($sql);
         while ($row = Database :: fetch_array($res)) {
             $sql_parent = "
-                            SELECT *
-                            FROM " . $tbl_lp_item . "
+                            SELECT * FROM " . $tbl_lp_item . "
                             WHERE parent_item_id = " . $row['id'] . "
                             ORDER BY display_order ASC";
             $res_parent = Database::query($sql_parent);
@@ -7221,7 +7206,10 @@ class learnpath {
             $return .= 'child_value[' . $row['id'] . '] = new Array();' . "\n\n";
 
             while ($row_parent = Database :: fetch_array($res_parent)) {
-                $return .= 'child_name[' . $row['id'] . '][' . $i . '] = "' . get_lang('After') . ' \"' . api_html_entity_decode($row_parent['title'], ENT_QUOTES) . '\"";' . "\n";
+            	$js_var = json_encode(get_lang('After').' '.$row_parent['title']);
+            	
+            	
+                $return .= 'child_name[' . $row['id'] . '][' . $i . '] =   '.$js_var.' ;' . "\n";
                 $return .= 'child_value[' . $row['id'] . '][' . $i++ . '] = "' . $row_parent['id'] . '";' . "\n";
             }
             $return .= "\n";

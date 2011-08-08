@@ -932,7 +932,7 @@ Door wat meer over u, een van onze belangrijkste gebruikers, die deze ELO zal be
 <br />
 Door dit formulier in te vullen stemt u toe dat de Chamilo associatie of haar leden u informatie toesturen over evenementen of aanvullingen betreffende de Chamilo software of gemeenschap. Dit helpt de gemeenschap te groeien als een georganiseerde eenheid, met respect voor uw tijd en privacy.<br />
 <br />
-Merk op dat het <b>niet verplicht</b> is om dit formulier in te vullen. Als u anoniem wilt blijven kunnen wij u niet op de hoogte houden, maar we respecteren uw beslissing. Laat dit in dat geval leeg en klik op \\"Volgende\\".<br /><br />";
+Merk op dat het <b>niet verplicht</b> is om dit formulier in te vullen. Als u anoniem wilt blijven kunnen wij u niet op de hoogte houden, maar we respecteren uw beslissing. Laat dit in dat geval leeg en klik op \"Volgende\".<br /><br />";
 $CompanyActivity = "";
 $DateUnLock = "";
 $DateLock = "";

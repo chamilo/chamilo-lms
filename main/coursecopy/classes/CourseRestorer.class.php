@@ -54,12 +54,18 @@ class CourseRestorer
 	 * FILE_OVERWRITE)
 	 */
 	var $file_option;
+	
+	var $set_tools_invisible_by_default;
+
+	var $skip_content;
 	/**
 	 * Create a new CourseRestorer
 	 */
 	function CourseRestorer($course) {
-		$this->course = $course;
-		$this->file_option = FILE_RENAME;
+		$this->course							= $course;
+		$this->file_option 						= FILE_RENAME;
+		$this->set_tools_invisible_by_default 	= false;
+		$this->skip_content 					= array();
 	}
 	/**
 	 * Set the file-option
@@ -156,8 +162,7 @@ class CourseRestorer
 		foreach ($this->course->resources as $type => $resources) {
 			if (is_array($resources)) {
 				foreach ($resources as $id => $resource) {
-					foreach ($resource->item_properties as $property)
-					{
+					foreach ($resource->item_properties as $property) {
 						// First check if there isn't allready a record for this resource
 						$sql = "SELECT * FROM $table WHERE tool = '".$property['tool']."' AND ref = '".$resource->destination_id."'";
 
@@ -1332,8 +1337,7 @@ class CourseRestorer
 	/**
 	 * Restore learnpaths
 	 */
-	function restore_learnpaths($session_id = 0, $respect_base_content = false)
-	{
+	function restore_learnpaths($session_id = 0, $respect_base_content = false) {
 		if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
 			$table_main 	= Database::get_course_table(TABLE_LP_MAIN,  $this->course->destination_db);
 			$table_item 	= Database::get_course_table(TABLE_LP_ITEM,  $this->course->destination_db);
@@ -1373,6 +1377,14 @@ class CourseRestorer
 						}
 					}
 				}
+				
+				if (isset($this->skip_content['skip_lp_dates'])) {
+					if ($this->skip_content['skip_lp_dates']) {
+						$lp->modified_on 	= '0000-00-00 00:00:00';
+						$lp->publicated_on 	= '0000-00-00 00:00:00';
+						$lp->expired_on 	= '0000-00-00 00:00:00';						
+					}
+				}
 
 				$sql = "INSERT INTO ".$table_main." SET " .
 						"lp_type            = '".$lp->lp_type."', " .
@@ -1403,9 +1415,13 @@ class CourseRestorer
 
 				$new_lp_id = Database::insert_id();
 
-				if($lp->visibility) {
+				if ($lp->visibility) {
 					$sql = "INSERT INTO $table_tool SET name='".Database::escape_string($lp->name)."', link='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id', image='scormbuilder.gif', visibility='1', admin='0', address='squaregrey.gif'";
 					Database::query($sql);
+				}
+				
+				if ($new_lp_id) {
+					api_item_property_update($this->destination_course_info, TOOL_LEARNPATH, $new_lp_id, 'LearnpathAdded', api_get_user_id(), 0, 0, 0, 0, $session_id);					
 				}
 
 				$new_item_ids 		= array();

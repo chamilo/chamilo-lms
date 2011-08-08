@@ -169,6 +169,7 @@ class Career extends Model {
 	    if (!empty($id)) {
 	    	event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
    		}
+   		return $id;
     }
     
     public function delete($id) {

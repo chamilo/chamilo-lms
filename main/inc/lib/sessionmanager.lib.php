@@ -1453,7 +1453,7 @@ class SessionManager {
      * @param $set_exercises_lp_invisible
      * @return unknown_type
      */
-    public function copy_session($id, $copy_courses=true, $copy_users = true, $create_new_courses = false, $set_exercises_lp_invisible = false) {
+    public function copy_session($id, $copy_courses = true, $copy_users = true, $create_new_courses = false, $set_exercises_lp_invisible = false) {
         $id = intval($id);
         $s = self::fetch($id);
         $s['year_start']    = substr($s['date_start'],0,4);
@@ -1502,9 +1502,12 @@ class SessionManager {
                     if (function_exists('ini_set')) {
                     	ini_set('memory_limit','256M');
                     	ini_set('max_execution_time',0);
-                    }                    
+                    }      
+                    $params = array();                    
+                    $params['skip_lp_dates'] = true;                    
+                    
                     foreach ($short_courses as $course_data) {
-                        $course_info = CourseManager::copy_course_simple($course_data['title'].' '.get_lang('Copy'), $course_data['course_code'], $id, $sid);
+                        $course_info = CourseManager::copy_course_simple($course_data['title'].' '.get_lang('Copy'), $course_data['course_code'], $id, $sid, $params);
                         if ($course_info) {
                             //By default new elements are invisible
                             if ($set_exercises_lp_invisible) {    
@@ -1513,8 +1516,8 @@ class SessionManager {
                                 $flat_list  = $list->get_flat_list(); 
                                 if (!empty($flat_list)) {                               
                                     foreach($flat_list as $lp_id => $data) { 
-                                        api_item_property_update($course_info, TOOL_LEARNPATH, $lp_id, 'invisible', api_get_user_id(), 0 ,0, $sid);
-                                        api_item_property_update($course_info, TOOL_LEARNPATH, $lp_id, 'invisible', api_get_user_id(), 0 ,0);
+                                        api_item_property_update($course_info, TOOL_LEARNPATH, $lp_id, 'invisible', api_get_user_id(), 0 ,0, 0, 0, $sid);
+                                        api_item_property_update($course_info, TOOL_LEARNPATH, $lp_id, 'invisible', api_get_user_id(), 0 ,0, 0, 0);
                                     }
                                 }
                                 $quiz_table   = Database::get_course_table(TABLE_QUIZ_TEST, $course_info['db_name']);

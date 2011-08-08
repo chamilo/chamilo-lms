@@ -160,7 +160,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
-    $res = $promotion->copy($_GET['id'], null, true);
+    $res = $promotion->copy($_GET['id'], null, true);    
     if ($res) {
         Display::display_confirmation_message(get_lang('ItemCopied').' - '.get_lang('ExerciseAndLPsAreInvisibleInTheNewCourse'));
     }

@@ -100,14 +100,14 @@ class Model {
 	 * @return bool
 	 *
 	 */
-	public function save($params) {
+	public function save($params, $show_query = false) {
         $params = $this->clean_parameters($params);
         
         if (in_array('created_at', $this->columns)) {        	
             $params['created_at'] = api_get_utc_datetime();
         }
         if (!empty($params)) {
-            $id = Database::insert($this->table, $params);        
+            $id = Database::insert($this->table, $params, $show_query);        
     		if (is_numeric($id)){
     			return $id;
     		}

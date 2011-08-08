@@ -65,23 +65,6 @@ $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 </script>';
 
 $_SESSION['oLP']->error = '';
-
-$now = time();
-
-if (!api_is_allowed_to_edit(null, true)) {
-    //Adding visibility reestrinctions
-    if (!empty($_SESSION['oLP']->publicated_on) && $_SESSION['oLP']->publicated_on != '0000-00-00 00:00:00') {
-        if ($now < api_strtotime($_SESSION['oLP']->publicated_on, 'UTC')) {
-            api_not_allowed();
-        }    
-    }
-    
-    if (!empty($_SESSION['oLP']->expired_on) && $_SESSION['oLP']->expired_on != '0000-00-00 00:00:00') {
-        if ($now > api_strtotime($_SESSION['oLP']->expired_on, 'UTC')) {            
-            api_not_allowed();
-        }    
-    }
-}
 $lp_item_id = $_SESSION['oLP']->get_current_item_id();
 $lp_type    = $_SESSION['oLP']->get_type();
 $lp_id      = intval($_GET['lp_id']);

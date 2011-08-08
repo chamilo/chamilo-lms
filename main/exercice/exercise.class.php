@@ -3232,5 +3232,8 @@ class Exercise {
 		}
 		return $result;
 	}
+	
+	public function is_visible_for_student() {		
+	}
 }
 endif;

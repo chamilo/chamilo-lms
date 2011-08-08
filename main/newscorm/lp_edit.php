@@ -31,14 +31,22 @@ $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => g
 $interbreadcrumb[] = array('url' => api_get_self()."?action=admin_view&lp_id=$learnpath_id", 'name' => $_SESSION['oLP']->get_name());
 
 $htmlHeadXtra[] = '<script type="text/javascript">        
-    function timelimit() {
-        if(document.getElementById(\'options2\').style.display == \'none\')
-        {
-            document.getElementById(\'options2\').style.display = \'block\';
-        } else {
-            document.getElementById(\'options2\').style.display = \'none\';
-        }
-    }     
+function activate_start_date() {
+	if(document.getElementById(\'start_date_div\').style.display == \'none\') {
+		document.getElementById(\'start_date_div\').style.display = \'block\';
+	} else {
+		document.getElementById(\'start_date_div\').style.display = \'none\';
+	}
+}
+
+function activate_end_date() {
+    if(document.getElementById(\'end_date_div\').style.display == \'none\') {
+        document.getElementById(\'end_date_div\').style.display = \'block\';
+    } else {
+        document.getElementById(\'end_date_div\').style.display = \'none\';
+    }
+}
+       
 </script>';
 
 
@@ -186,23 +194,30 @@ $publicated_on  = $_SESSION['oLP'] ->publicated_on;
 $form->addElement('html', '<div class="row"><div class="label">'.get_lang('Prerequisites').'</div><div class="formw">'.$_SESSION['oLP']->display_lp_prerequisites_list().'</div></div>');
 $form->addElement('static', null, null, get_lang('LpPrerequisiteDescription'));
 
-$form->addElement('checkbox', 'enabletimelimit',get_lang('EnableTimeLimits'),null,'onclick = "  return timelimit() "');
 
-if( ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on)) && ( $expired_on!='0000-00-00 00:00:00' && !empty($expired_on))  )
-    $defaults['enabletimelimit'] = 1;
-    
-$display_date = 'none';   
-if ($defaults['enabletimelimit'] ) {
-    $display_date = 'block';
+//Start date
+$form->addElement('checkbox', 'activate_start_date_check', get_lang('EnableStartTime'),null, array('onclick' => 'activate_start_date()'));
+$display_date = 'none';
+if ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on)) {
+	$display_date = 'block';
+	$defaults['activate_start_date_check'] = 1;
 }
 
-
-$form->addElement('html','<div id="options2" style="display:'.$display_date.';">');
-
+$form->addElement('html','<div id="start_date_div" style="display:'.$display_date.';">');
 $form->addElement('datepicker', 'publicated_on', get_lang('PublicationDate'), array('form_name'=>'exercise_admin'), 5);
-$form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array('form_name'=>'exercise_admin'), 5);
+$form->addElement('html','</div>');
 
-$form->addElement('html','</div>');            
+//End date
+$form->addElement('checkbox', 'activate_end_date_check',  get_lang('EnableEndTime'),  null,array('onclick' => 'activate_end_date()'));
+$display_date = 'none';
+if ($expired_on!='0000-00-00 00:00:00' && !empty($expired_on)) {
+	$display_date = 'block';
+	$defaults['activate_end_date_check'] = 1;
+}
+
+$form->addElement('html','<div id="end_date_div" style="display:'.$display_date.';">');
+$form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array('form_name'=>'exercise_admin'), 5);
+$form->addElement('html','</div>');
 
 if (api_is_platform_admin()) {
     $form->addElement('checkbox', 'use_max_score', get_lang('UseMaxScore100'));    

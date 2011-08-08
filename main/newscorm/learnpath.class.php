@@ -603,7 +603,8 @@ class learnpath {
 
         if ($publicated_on == '0000-00-00 00:00:00' || empty($publicated_on)) {
             //by default the publication date is the same that the creation date
-            $publicated_on = api_get_utc_datetime();
+            //The behaviour above was changed due BT#2800
+            $publicated_on = '';
         } else {
             $publicated_on   = Database::escape_string(api_get_utc_datetime($publicated_on));
         }
@@ -1985,12 +1986,10 @@ class learnpath {
         // Get current prerequisite
         $sql = "SELECT id, prerequisite, publicated_on, expired_on FROM $tbl_learnpath WHERE id = $lp_id";
         $rs  = Database::query($sql);
+        $now = time();
         if (Database::num_rows($rs)>0) {
-            $row = Database::fetch_array($rs);
-            $prerequisite = $row['prerequisite'];
-            $find = array(' ','-',':');
-            $from = str_replace($find,'',api_get_local_time($row['publicated_on']));
-            $to = str_replace($find,'',api_get_local_time($row['expired_on']));
+            $row = Database::fetch_array($rs, 'ASSOC');
+            $prerequisite = $row['prerequisite'];           
             $is_visible = true;
             $progress = 0;
     
@@ -2001,13 +2000,33 @@ class learnpath {
                     $is_visible = false;
                 }
             }
-            // Also check the time availability of the learning path
+            
+            // Also check the time availability of the LP   
+             
             if ($is_visible) {
-                $now = str_replace($find,'',api_get_local_time());
-            	if ((($row['publicated_on']!='0000-00-00 00:00:00') && ($now<$from)) or (($row['expired_on']!='0000-00-00 00:00:00') && ($now>$to))) {
-            		$is_visible = false;
-            	}
+	            //Adding visibility reestrinctions
+	            if (!empty($row['publicated_on']) && $row['publicated_on'] != '0000-00-00 00:00:00') {
+	            	if ($now < api_strtotime($row['publicated_on'], 'UTC')) {
+	            		//api_not_allowed();
+	            		$is_visible = false;
+	            	}
+	            }
+	            
+	            //Blocking empty start times see BT#2800
+	            /*
+	            if (empty($row['publicated_on']) || $row['publicated_on'] == '0000-00-00 00:00:00') {
+	            	//api_not_allowed();
+	            	$is_visible = false;
+	            }*/
+	            
+	            if (!empty($row['expired_on']) && $row['expired_on'] != '0000-00-00 00:00:00') {
+	            	if ($now > api_strtotime($row['expired_on'], 'UTC')) {
+	            		//api_not_allowed();
+	            		$is_visible = false;
+	            	}
+	            }
             }
+            
             return $is_visible;
         }
         return false;
@@ -2692,12 +2711,17 @@ class learnpath {
             if ($item['id'] == $this->current) {
                 $style = 'scorm_item_highlight';
                 $scorm_color_background = 'scorm_item_highlight';
-            } else
+            } else {
+            	
                 if ($color_counter % 2 == 0) {
                     $scorm_color_background = 'scorm_item_1';
                 } else {
                     $scorm_color_background = 'scorm_item_2';
                 }
+                if ($item['type'] == 'dokeos_module' || $item['type'] == 'dokeos_chapter') {
+                	$scorm_color_background =' scorm_item_section ';
+                }
+            }
 
             if ($scorm_color_background != '') {
                 $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . '">';
@@ -8665,7 +8689,6 @@ EOD;
     	// Return the previous item ID
     	return $row_max->previous;
     }
-
 }
 
 if (!function_exists('trim_value')) {

@@ -568,6 +568,15 @@ if ($limit_time_exists) {
     }
 }
 
+/*
+ * Blocking empty start times see BT#2800
+if (empty($objExercise->start_time) || $objExercise->start_time == '0000-00-00 00:00:00') {
+	Display :: display_warning_message(sprintf(get_lang('ExerciseNoStartedYet'), $exerciseTitle, $objExercise->selectAttempts()));
+	if ($origin != 'learnpath') {
+		Display :: display_footer();
+	}
+}*/
+
 //Timer control
 if ($time_control) {
   echo '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';

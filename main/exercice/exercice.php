@@ -773,7 +773,15 @@ if ($show == 'test') {
                             }
                         }
                     }                    
-                }                
+                }  
+                 
+				
+ 				//Blocking empty start times see BT#2800
+ 				/*
+                if (empty($row['start_time']) || $row['start_time'] == '0000-00-00 00:00:00') {                	
+                	$time_limits = true;
+                	$is_actived_time = false;
+                }*/
                       
                 // Teacher only
                 if ($is_allowedToEdit) {                   
@@ -859,7 +867,7 @@ if ($show == 'test') {
                         
                 } else {                     
                     // --- Student only
-                    $row['title'] = text_filter(cut($row['title'], EXERCISE_MAX_NAME_SIZE));  
+                    $row['title'] = cut($row['title'], EXERCISE_MAX_NAME_SIZE);  
                     
                     // if time is actived show link to exercise
                     if ($time_limits) {                 

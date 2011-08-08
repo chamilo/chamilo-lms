@@ -41,13 +41,21 @@ $("#learnpath_title").focus();
 $(document).ready(function () {
   setFocus();
 });
-        
-function timelimit() {
-    if(document.getElementById(\'options2\').style.display == \'none\')
-    {
-        document.getElementById(\'options2\').style.display = \'block\';
+
+
+function activate_start_date() {
+	if(document.getElementById(\'start_date_div\').style.display == \'none\') {
+		document.getElementById(\'start_date_div\').style.display = \'block\';
+	} else {
+		document.getElementById(\'start_date_div\').style.display = \'none\';
+	}
+}
+
+function activate_end_date() {
+    if(document.getElementById(\'end_date_div\').style.display == \'none\') {
+        document.getElementById(\'end_date_div\').style.display = \'block\';
     } else {
-        document.getElementById(\'options2\').style.display = \'none\';
+        document.getElementById(\'end_date_div\').style.display = \'none\';
     }
 }
      
@@ -125,16 +133,20 @@ $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('hidden', 'post_time', time());
 $form->addElement('hidden', 'action', 'add_lp');
 
-$form->addElement('checkbox', 'enabletimelimit',get_lang('EnableTimeLimits'),null,'onclick = "  return timelimit() "');
-    
-$form->addElement('html','<div id="options2" style="display:none;">');
-
+//Start date
+$form->addElement('checkbox', 'activate_start_date_check',get_lang('EnableStartTime'),null, array('onclick' => 'activate_start_date()'));
+$form->addElement('html','<div id="start_date_div" style="display:block;">');
 $form->addElement('datepicker', 'publicated_on', get_lang('PublicationDate'), array('form_name'=>'exercise_admin'), 5);
-$form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array('form_name'=>'exercise_admin'), 5);
-
 $form->addElement('html','</div>');
-            
-            
+
+//End date
+$form->addElement('checkbox', 'activate_end_date_check',  get_lang('EnableEndTime'),  null,array('onclick' => 'activate_end_date()'));    
+$form->addElement('html','<div id="end_date_div" style="display:none;">');
+$form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array('form_name'=>'exercise_admin'), 5);
+$form->addElement('html','</div>');
+
+$defaults['activate_start_date_check']  = 1;
+
 $defaults['publicated_on']  = date('Y-m-d 12:00:00');
 $defaults['expired_on']     = date('Y-m-d 12:00:00',time()+84600);
 

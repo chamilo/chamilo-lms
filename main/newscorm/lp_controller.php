@@ -261,31 +261,31 @@ switch ($action) {
             } else {
                 $_SESSION['post_time'] = $_REQUEST['post_time'];
 
-                if (!$_REQUEST['enabletimelimit']) {
-                    $_REQUEST['publicated_on'] = null;
-                    $_REQUEST['expired_on'] = null;
+                if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {                	
+                	$publicated_on  = $_REQUEST['publicated_on'];
+                	$publicated_on  = $publicated_on['Y'].'-'.$publicated_on['F'].'-'.$publicated_on['d'].' '.$publicated_on['H'].':'.$publicated_on['i'].':00';
                 } else {
-                    $publicated_on  = $_REQUEST['publicated_on'];
-                    $publicated_on  = $publicated_on['Y'].'-'.$publicated_on['F'].'-'.$publicated_on['d'].' '.$publicated_on['H'].':'.$publicated_on['i'].':00';
-
-                    $expired_on   = $_REQUEST['expired_on'];
-                    $expired_on   = $expired_on['Y'].'-'.$expired_on['F'].'-'.$expired_on['d'].' '.$expired_on['H'].':'.$expired_on['i'].':00';
+                	$publicated_on = null;
                 }
-                // Kevin Van Den Haute: Changed $_REQUEST['learnpath_description'] by '' because it's not used.
-                //old->$new_lp_id = learnpath::add_lp(api_get_course_id(), $_REQUEST['learnpath_name'], $_REQUEST['learnpath_description'], 'dokeos', 'manual', '');
+                
+                if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {                	
+                	$expired_on   = $_REQUEST['expired_on'];
+                	$expired_on   = $expired_on['Y'].'-'.$expired_on['F'].'-'.$expired_on['d'].' '.$expired_on['H'].':'.$expired_on['i'].':00';
+                } else {
+                	$expired_on   = null;
+                }
+
                 $new_lp_id = learnpath::add_lp(api_get_course_id(), Security::remove_XSS($_REQUEST['lp_name']), '', 'chamilo', 'manual', '', $publicated_on, $expired_on);
-                //learnpath::toggle_visibility($new_lp_id,'v');
-                // Kevin Van Den Haute: Only go further if learnpath::add_lp has returned an id.
+
                 if (is_numeric($new_lp_id)) {
                     // TODO: Maybe create a first module directly to avoid bugging the user with useless queries
                     $_SESSION['oLP'] = new learnpath(api_get_course_id(),$new_lp_id,api_get_user_id());
-                    //$_SESSION['oLP']->add_item(0, -1, 'dokeos_chapter', $_REQUEST['path'], 'Default');
                     require 'lp_build.php';
                 }
             }
-        }
-        else
+        } else {
             require 'lp_add.php';
+        }
 
         break;
 
@@ -597,24 +597,24 @@ switch ($action) {
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
 
-            if (!$_REQUEST['enabletimelimit']) {
-                //there will be always a publication date
-                $publicated_on  = $_REQUEST['publicated_on'];
-                $publicated_on  = $publicated_on['Y'].'-'.$publicated_on['F'].'-'.$publicated_on['d'].' '.$publicated_on['H'].':'.$publicated_on['i'].':00';
-
-                $expired_on = null;
+            
+            if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
+            	$publicated_on  = $_REQUEST['publicated_on'];
+            	$publicated_on  = $publicated_on['Y'].'-'.$publicated_on['F'].'-'.$publicated_on['d'].' '.$publicated_on['H'].':'.$publicated_on['i'].':00';
             } else {
-                $publicated_on  = $_REQUEST['publicated_on'];
-                $publicated_on  = $publicated_on['Y'].'-'.$publicated_on['F'].'-'.$publicated_on['d'].' '.$publicated_on['H'].':'.$publicated_on['i'].':00';
-
-                $expired_on   = $_REQUEST['expired_on'];
-                $expired_on   = $expired_on['Y'].'-'.$expired_on['F'].'-'.$expired_on['d'].' '.$expired_on['H'].':'.$expired_on['i'].':00';
+            	$publicated_on = null;
+            }
+            
+            if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {
+            	$expired_on   = $_REQUEST['expired_on'];
+            	$expired_on   = $expired_on['Y'].'-'.$expired_on['F'].'-'.$expired_on['d'].' '.$expired_on['H'].':'.$expired_on['i'].':00';
+            } else {
+            	$expired_on   = null;
             }
 
             $_SESSION['oLP']->set_modified_on();
             $_SESSION['oLP']->set_publicated_on($publicated_on);
             $_SESSION['oLP']->set_expired_on($expired_on);
-
 
             if ($_REQUEST['remove_picture']) {
                 $_SESSION['oLP']->delete_lp_image();

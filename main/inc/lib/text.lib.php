@@ -7,6 +7,9 @@
  *
  * @package chamilo.library
  */
+
+define ('EXERCISE_NUMBER_OF_DECIMALS', 2);
+
 /**
  * This function strips all html-tags found in the input string and outputs a pure text.
  * Mostly, the function is to be used before language or encoding detection of the input string.
@@ -573,17 +576,17 @@ function cut($text, $maxchar, $embed = false) {
  * @return mixed    An integer or a float depends on the parameter
  */
 function float_format($number, $flag = 1) {
-    if (is_numeric($number)) {
+    if (is_numeric($number)) {    	
         if (!$number) {
-            $result = ($flag == 2 ? '0.00' : '0');
+            $result = ($flag == 2 ? '0.'.str_repeat('0', EXERCISE_NUMBER_OF_DECIMALS) : '0');
         } else {
             
             if (floor($number) == $number) {
-                $result = number_format($number, ($flag == 2 ? 2 : 0));
+                $result = number_format($number, ($flag == 2 ? EXERCISE_NUMBER_OF_DECIMALS : 0));
             } else {
-                $result = number_format(round($number, 2), ($flag == 0 ? 0 : 2));
+                $result = number_format(round($number, 2), ($flag == 0 ? 0 : EXERCISE_NUMBER_OF_DECIMALS));
             }
-        }
+        }        
         return $result;
     }
 }

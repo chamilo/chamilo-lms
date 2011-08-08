@@ -2717,38 +2717,6 @@ span.form_required  {
     cursor: pointer;
 }
 
-.online_grid_item {
-    float:left;
-    margin:10px;
-    text-align:center;    
-}
-.online_grid_element_0 {    
-    width: 100px; 
-    height: 100px; 
-    overflow: hidden;
-}
-/* input values to crop the image: top, right, bottom, left */
-
-.online_grid_element_0 img{
-     /* width: 200px; */     
-      /* height: 150px; */ 
-}
-
-.social-home-users-online {
-     width: 200px;
-     margin: -28px 0 0 -50px;
-      /* height: 150px; */ 
-}
-.social-home-anonymous-online {
-     width: 200px;
-     margin: -10px 0 0 -50px;
-      /* height: 150px; */ 
-}
-
-.online_grid_element_1, .online_grid_element_2 {    
-    font-size:10px;
-}
-
 .progresstext {
     text-align:center;
 }

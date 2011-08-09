@@ -840,7 +840,7 @@ button:hover {
 
 .bread .home {
     padding:5px 15px 4px 8px;
-    /* padding:5px 15px 4px 8px; might show better in IE7 & 8 */
+    /* padding:0px 15px 4px 8px; might show better in IE7 & 8 */
 }    
 
 

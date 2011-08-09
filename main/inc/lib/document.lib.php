@@ -1203,7 +1203,7 @@ return 'application/octet-stream';
     	//3. Checking if user exist in course/session
     	
     	if ($session_id == 0 ) {
-			if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
+			if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code']) || api_is_platform_admin()) {
 				$user_in_course = true;
     		}
     	} else {

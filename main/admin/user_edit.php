@@ -33,16 +33,11 @@ function password_switch_radio_button(){
 }
 
 function display_drh_list(){
-	if(document.getElementById("status_select").value=='.COURSEMANAGER.')
-	{
+	if(document.getElementById("status_select").value=='.COURSEMANAGER.') {
 		document.getElementById("id_platform_admin").style.display="block";
-	}
-	else if (document.getElementById("status_select").value=='.STUDENT.')
-	{
+	} else if (document.getElementById("status_select").value=='.STUDENT.') {
 		document.getElementById("id_platform_admin").style.display="none";
-	}
-	else
-	{
+	} else {
 		document.getElementById("id_platform_admin").style.display="none";
 	}
 }
@@ -171,12 +166,12 @@ $form->addGroup($group, 'password', null, '', false);
 
 // Status
 $status = array();
-$status[COURSEMANAGER] = get_lang('Teacher');
-$status[STUDENT] = get_lang('Learner');
-$status[DRH] = get_lang('Drh');
-$status[SESSIONADMIN] = get_lang('SessionsAdmin');
+$status[COURSEMANAGER] 	= get_lang('Teacher');
+$status[STUDENT] 		= get_lang('Learner');
+$status[DRH] 			= get_lang('Drh');
+$status[SESSIONADMIN] 	= get_lang('SessionsAdmin');
 
-$form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();'));
+$form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();','class'=>'chzn-select'));
 
 //Language
 $form->addElement('select_language', 'language', get_lang('Language'));

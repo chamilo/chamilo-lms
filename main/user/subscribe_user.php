@@ -602,15 +602,15 @@ function active_filter($active, $url_params, $row) {
 	global $_user;
 	if ($active=='1') {
 		$action='AccountActive';
-		$image='right';
+		$image='accept';
 	}
 
 	if ($active=='0') {
 		$action='AccountInactive';
-		$image='wrong';
+		$image='error';
 	}
 	if ($row['0']<>$_user['user_id']) { // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-		$result = '<center><img src="../img/'.$image.'.gif" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
+		$result = '<center>'.Display::return_icon($image.'.png',  get_lang(ucfirst($action)), array('border'=>'0', 'style'=>'vertical-align: middle;') , 16).'</center>';
 	}
 	return $result;
 }
@@ -622,13 +622,10 @@ $sort_by_first_name = api_sort_by_first_name();
 // Build search-form
 echo '<div class="actions">';
 
-$actions .= '<a href="user.php">'.Display::return_icon('user.png',get_lang('BackToUserList'),'','32').'</a>';
-if ($_GET['keyword'])
-{
+if ($_GET['keyword']) {
 	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_REQUEST['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';
 }
-if ($_GET['subscribe_user_filter_value'] AND !empty($_GET['subscribe_user_filter_value']))
-{
+if ($_GET['subscribe_user_filter_value'] AND !empty($_GET['subscribe_user_filter_value'])) {
 	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_REQUEST['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
 }
 if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {

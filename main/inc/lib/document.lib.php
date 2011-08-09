@@ -1255,7 +1255,9 @@ return 'application/octet-stream';
     				}
     			}
     		}
-    	}
+    	} elseif ($admins_can_see_everything && api_is_platform_admin()) {
+            return true;
+        }
     	
     	return false;
     	
@@ -2876,9 +2878,12 @@ return 'application/octet-stream';
     }
     
     public function check_visibility_tree($doc_id, $course_code, $session_id, $user_id) {
-    	$document_data = self::get_document_data_by_id($doc_id, $course_code);    
-  	
-    	if (!empty($document_data)) {
+    	$document_data = self::get_document_data_by_id($doc_id, $course_code);
+        
+        if (!empty($document_data)) {
+            //if admin or course teacher, allow anyway
+            if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id,$course_code)) { return true; }        
+            $course_info = api_get_course_info($course_code);
     		if ($document_data['parent_id'] == false) {
     			$visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
     			return $visible;

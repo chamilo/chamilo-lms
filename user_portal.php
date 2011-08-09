@@ -225,7 +225,7 @@ if ($load_dirs) {
 	            	image.attr("src", "'.$folder_icon.'");
 	            	$("#document_result_" +course_id+"_" + session_id).html(return_value);
 	            	
-	            },
+	            }
 	        });
 	        
 		});

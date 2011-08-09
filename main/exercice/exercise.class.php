@@ -1846,7 +1846,7 @@ class Exercise {
 		$questionScore = 0;
 		 
 		for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-			$answer             = $objAnswerTmp->selectAnswer($answerId);
+			$answer             = $objAnswerTmp->selectAnswer($answerId);			
 			$answerComment      = $objAnswerTmp->selectComment($answerId);
 			$answerCorrect      = $objAnswerTmp->isCorrect($answerId);
 			$answerWeighting    = $objAnswerTmp->selectWeighting($answerId);
@@ -1865,8 +1865,6 @@ class Exercise {
 						$resultans = Database::query($queryans);
 						$choice = Database::result($resultans,0,"answer");
 
-						$numAnswer=$objAnswerTmp->selectAutoId($answerId);
-
 						$studentChoice=($choice == $numAnswer)?1:0;
 						if ($studentChoice) {
 							$questionScore+=$answerWeighting;
@@ -1883,8 +1881,8 @@ class Exercise {
 					// for multiple answers
 				case MULTIPLE_ANSWER_TRUE_FALSE :					
 					if ($from_database) {
-						$choice=array();
-						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
+						$choice = array();
+						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = ".$exeId." and question_id = ".$questionId;
 						$resultans = Database::query($queryans);
 						while ($row = Database::fetch_array($resultans)) {
 							$ind          = $row['answer'];
@@ -1892,24 +1890,30 @@ class Exercise {
 							$my_answer_id = $result[0];
 							$option       = $result[1];
 							$choice[$my_answer_id] = $option;
-						}
-						$numAnswer = $objAnswerTmp->selectAutoId($answerId);
+						}						
 						$studentChoice  =$choice[$numAnswer];
 					} else {
 						$studentChoice  =$choice[$numAnswer];
 					}
-					if ($studentChoice == $answerCorrect ) {
-						$questionScore  += $true_score;						
-					} else {
-						if ($quiz_question_options[$studentChoice]['name'] != "Don't know") {
-							$questionScore   +=  $false_score;													
+					
+				
+					if (!empty($studentChoice)) {
+						if ($studentChoice == $answerCorrect ) {
+							$questionScore  += $true_score;						
 						} else {
-							$questionScore  +=  $doubt_score;														
+							if ($quiz_question_options[$studentChoice]['name'] != "Don't know") {
+								$questionScore   +=  $false_score;													
+							} else {
+								$questionScore  +=  $doubt_score;														
+							}
 						}
+					} else {
+						//if no result then the user just hit don't know
+						$studentChoice = 3;
+						$questionScore  +=  $doubt_score;
 					}
-					$totalScore = $questionScore;			
-					/*error_log('$totalScore '.$totalScore);
-					error_log('$$questionScore '.$questionScore);*/
+					
+					$totalScore = $questionScore;
 					break;
 				case MULTIPLE_ANSWER :
 					if ($from_database) {
@@ -2318,7 +2322,7 @@ class Exercise {
 								ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
 							}
 						} elseif($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
-							if ($origin!='learnpath') {
+							if ($origin!='learnpath') {								
 								ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,$questionId,0);
 							}
 						} elseif($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
@@ -2527,7 +2531,7 @@ class Exercise {
 								ExerciseShowFunctions::display_multiple_answer_combination_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,"");
 							}
 							break;
-						case MULTIPLE_ANSWER_TRUE_FALSE :
+						case MULTIPLE_ANSWER_TRUE_FALSE :							
 							if ($answerId==1) {
 								ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId);
 							} else {

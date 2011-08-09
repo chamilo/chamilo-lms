@@ -195,7 +195,7 @@ if (isset($document_id)) {
 	    	}    	
 	    	exit;
 	    } else {
-	    	if (!$visibility) {
+	    	if (!$visibility && !api_is_allowed_to_edit()) {
 	    		api_not_allowed();
 	    	}
 	    }
@@ -743,10 +743,10 @@ if ($is_allowed_to_edit) {
     if ((isset($_GET['set_invisible']) && !empty($_GET['set_invisible'])) || (isset($_GET['set_visible']) && !empty($_GET['set_visible'])) && $_GET['set_visible'] != '*' && $_GET['set_invisible'] != '*') {
         // Make visible or invisible?
         if (isset($_GET['set_visible'])) {
-            $update_id = $_GET['set_visible'];
+            $update_id = intval($_GET['set_visible']);
             $visibility_command = 'visible';
         } else {
-            $update_id = $_GET['set_invisible'];
+            $update_id = intval($_GET['set_invisible']);
             $visibility_command = 'invisible';
         }
         

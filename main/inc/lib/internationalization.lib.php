@@ -27,6 +27,8 @@ define('DATE_FORMAT_SHORT', 1);		// Aug 25, 09
 define('DATE_FORMAT_LONG', 2);		// Aug 25, 09
 define('DATE_TIME_FORMAT_LONG', 3);	// August 25, 2009 at 03:28 PM
 
+define('DATE_FORMAT_NUMBER', 4);	// 25.08.09
+
 // Formatting person's name.
 define('PERSON_NAME_COMMON_CONVENTION', 0);	// Formatting a person's name using the pattern as it has been
                                             // configured in the internationalization database for every language.
@@ -640,8 +642,17 @@ function api_format_date($time, $format = null, $language = null) {
     $datetype = null;
     $timetype = null;
 
-    if(is_int($format)) {
+    if (is_int($format)) {
         switch ($format) {
+        	case DATE_FORMAT_NUMBER:
+        		/*
+        		//$date_format = get_lang('dateFormatShortNumber', '', $language);
+        		$date_format = "%b %d, %Y";
+        		if (IS_PHP_53 && INTL_INSTALLED) {
+        			$datetype = IntlDateFormatter::LONG;
+        			$timetype = IntlDateFormatter::NONE;
+        		}
+        		break;*/
             case TIME_NO_SEC_FORMAT:
                 $date_format = get_lang('timeNoSecFormat', '', $language);
                 if (IS_PHP_53 && INTL_INSTALLED) {

@@ -1100,7 +1100,7 @@ class Database {
         }
 
         $sql    = "SELECT $clean_columns FROM $table_name $conditions";
-
+		//echo $sql.'<br />';
         $result = self::query($sql);
         $array = array();
         //if (self::num_rows($result) > 0 ) {

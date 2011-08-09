@@ -1445,20 +1445,40 @@ function get_average_score($exercise_id, $course_code, $session_id) {
  * @return 	float	Average score
  */
 function get_average_score_by_course($course_code, $session_id) { 
-    $user_results = get_all_exercise_results_by_course($course_code, $session_id, false);        
-    $avg_score = 0;
+    $user_results = get_all_exercise_results_by_course($course_code, $session_id, false);
+    //echo $course_code.' - '.$session_id.'<br />';
+    $avg_score = 0;    
     if (!empty($user_results)) {        
         foreach($user_results as $result) {
             if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) { 
                 $score = $result['exe_result']/$result['exe_weighting'];
-                $avg_score +=$score;                
+                //var_dump($score);
+                $avg_score +=$score;                               
             }
         }
         //We asume that all exe_weighting
         //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
         $avg_score = ($avg_score / count($user_results));
-    }
+    }   
+    //var_dump($avg_score); 
     return $avg_score;
+}
+
+function get_average_score_by_course_by_user($user_id, $course_code, $session_id) {
+	$user_results = get_all_exercise_results_by_user($user_id, $course_code, $session_id, false);
+	$avg_score = 0;
+	if (!empty($user_results)) {
+		foreach($user_results as $result) {
+			if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
+				$score = $result['exe_result']/$result['exe_weighting'];
+				$avg_score +=$score;
+			}
+		}
+		//We asume that all exe_weighting
+		//$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
+		$avg_score = ($avg_score / count($user_results));
+	}
+	return $avg_score;
 }
 
 

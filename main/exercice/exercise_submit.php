@@ -495,7 +495,7 @@ if ($objExercise->selectAttempts() > 0) {
             if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
                 
                 //Showing latest attempt according with task BT#1628
-                $exercise_stat_info = get_all_exercise_results_by_user($user_id, $exerciseId, api_get_course_id(), api_get_session_id());
+                $exercise_stat_info = get_exercise_results_by_user($user_id, $exerciseId, api_get_course_id(), api_get_session_id());
                 
                 if (!empty($exercise_stat_info)) {               
                     $max_exe_id = max(array_keys($exercise_stat_info));
@@ -532,6 +532,7 @@ if ($objExercise->selectAttempts() > 0) {
     }
 }
 
+//@todo create a function and move to the exercise class
 $limit_time_exists = (($objExercise->start_time != '0000-00-00 00:00:00') || ($objExercise->end_time != '0000-00-00 00:00:00')) ? true : false;
 
 if ($limit_time_exists) {	

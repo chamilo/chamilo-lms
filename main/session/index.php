@@ -110,7 +110,7 @@ if (!empty($new_session_list)) {
                         $exercise->read($exercise_item['id']);                                    
                         //$exercise_course_list[$exercise_item['id']] = $exercise;
                         //Reading all Exercise results by user, exercise_id, code, and session
-                        $user_results = get_all_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);
+                        $user_results = get_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);
                         $course['exercises'][$exercise_item['id']]['data']['exercise_data'] =  $exercise;                            
                         $course['exercises'][$exercise_item['id']]['data']['results']       =  $user_results;
                     }

@@ -3233,7 +3233,38 @@ class Exercise {
 		return $result;
 	}
 	
-	public function is_visible_for_student() {		
+	public function is_visible() {
+		$is_visible = true;
+		//$this->id;
+		
+		if ($this->active == 0) {
+			return false;
+		}
+		
+		$limit_time_exists = ((!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') || (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00')) ? true : false;
+		
+		if ($limit_time_exists) {			
+			$time_now 				= time();
+		
+			if ($this->start_time != '0000-00-00 00:00:00') {
+				$permission_to_start = (($time_now - $this->start_time) > 0) ? true : false;
+			} else {
+				$permission_to_start = true;
+			}
+			
+			if ($this->end_time != '0000-00-00 00:00:00') {
+				$exercise_timeover = (($time_now - $this->end_time) > 0) ? true : false;
+			} else {
+				$exercise_timeover = false;
+			}
+		
+			if (!$permission_to_start || $exercise_timeover) {
+				$is_visible = false;
+			}
+		}
+		return $is_visible;
+		
+		
 	}
 }
 endif;

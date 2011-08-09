@@ -683,7 +683,6 @@ function get_all_exercise_results($exercise_id, $course_code, $session_id = 0) {
 
 /**
  * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session
- * @param   int     exercise id
  * @param   string  course code
  * @param   int     session id
  * @return  array   with the results
@@ -699,7 +698,7 @@ function get_all_exercise_results_by_course($course_code, $session_id = 0, $get_
 	if ($get_count) {
 	    $select = 'count(*) as count';    
 	}	
-	$sql = "SELECT $select FROM $table_track_exercises WHERE status = ''  AND exe_cours_id = '$course_code' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";	
+	$sql = "SELECT $select FROM $table_track_exercises WHERE status = ''  AND exe_cours_id = '$course_code' AND session_id = $session_id  AND orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY exe_id";	
 	$res = Database::query($sql);	
 	if ($get_count) {
 	    $row = Database::fetch_array($res,'ASSOC');	    
@@ -718,17 +717,51 @@ function get_all_exercise_results_by_course($course_code, $session_id = 0, $get_
 	}
 }
 
+/**
+* Gets all exercise results (NO Exercises in LPs) from a given exercise id, course, session
+* @param   int     exercise id
+* @param   string  course code
+* @param   int     session id
+* @return  array   with the results
+*
+*/
+function get_all_exercise_results_by_user($user_id,  $course_code, $session_id = 0) {
+	$table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+	$course_code = Database::escape_string($course_code);
+	$exercise_id = intval($exercise_id);
+	$session_id = intval($session_id);
+	$user_id    = intval($user_id);
+
+	$sql = "SELECT * FROM $table_track_exercises WHERE status = '' AND exe_user_id = $user_id AND exe_cours_id = '$course_code' AND session_id = $session_id AND orig_lp_id = 0 AND orig_lp_item_id = 0   ORDER by exe_id";
+
+	$res = Database::query($sql);
+	$list = array();
+	while($row = Database::fetch_array($res,'ASSOC')) {
+        $list[$row['exe_id']] = $row;       
+	$sql = "SELECT * FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
+        $res_question = Database::query($sql);
+	while($row_q = Database::fetch_array($res_question,'ASSOC')) {
+	$list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
+        }       
+    }
+    //echo '<pre>'; print_r($list);
+	return $list;
+}
+
+
+
 
 
 /**
- * Gets all exercise results (NO Exercises in LPs) from a given exercise id, course, session
+ * Gets exercise results (NO Exercises in LPs) from a given exercise id, course, session
  * @param   int     exercise id
  * @param   string  course code
  * @param   int     session id
  * @return  array   with the results
  * 
  */
-function get_all_exercise_results_by_user($user_id, $exercise_id, $course_code, $session_id = 0) {
+function get_exercise_results_by_user($user_id, $exercise_id, $course_code, $session_id = 0) {
 	$table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $course_code = Database::escape_string($course_code);
@@ -770,8 +803,8 @@ function count_exercise_attempts_by_user($user_id, $exercise_id, $course_code, $
 	$session_id            = intval($session_id);
 	$user_id               = intval($user_id);
 	
-	$sql = "SELECT count(*) as count FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_user_id = '$user_id' AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";
-	
+	$sql = "SELECT count(*) as count FROM $TABLETRACK_EXERCICES 
+			WHERE status = ''  AND exe_user_id = '$user_id' AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";
 	$res = Database::query($sql);
 	$result = 0;
 	if (Database::num_rows($res) > 0 ) {		
@@ -844,7 +877,7 @@ function get_count_exercises_attempted_by_course($course_code, $session_id = 0) 
 	$course_code           = Database::escape_string($course_code);	
 	$session_id            = intval($session_id);
 	
-	$sql = "SELECT DISTINCT exe_exo_id, exe_user_id FROM $table_track_exercises WHERE status = ''  AND exe_cours_id = '$course_code' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";	
+	$sql = "SELECT DISTINCT exe_exo_id, exe_user_id FROM $table_track_exercises WHERE status = '' AND exe_cours_id = '$course_code' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";	
 	$res = Database::query($sql);
 	$count = 0;
 	if (Database::num_rows($res) > 0) {

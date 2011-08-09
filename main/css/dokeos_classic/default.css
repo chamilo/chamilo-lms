@@ -554,6 +554,10 @@ input[text] {
     width:98%;
 	clear:right;
 }
+/* Special hack for IE7 using the html>body hack - 
+otherwise the breadcrumb jumps to the right */
+html>body #header4 { clear: none; }
+
 #header4 a {
 	color: #4171b5;
 }

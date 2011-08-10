@@ -1577,11 +1577,11 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
  * @param id_in_path  - the unique index in the items table
  */
 function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_path) {
-    //error_log('In rl_get_resource_link_for_learnpath()', 0);
-    $_course = Database::get_course_info($course_code);
-
-    $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-
+    $_course 		= Database::get_course_info($course_code);
+    $tbl_lp_item 	= Database::get_course_table(TABLE_LP_ITEM);
+    $learnpath_id 	= intval($learnpath_id);
+    $id_in_path		= intval($id_in_path);
+    
     $sql_item = "SELECT * FROM $tbl_lp_item WHERE lp_id = $learnpath_id AND id = $id_in_path";
     $res_item = Database::query($sql_item);
     if (Database::num_rows($res_item) < 1) return -1; //exit
@@ -1619,7 +1619,8 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
                 $myrow=Database::fetch_array($result);
 
                 if ($row_item['title'] != '') { $myrow['title'] = $row_item['title']; }
-                $link .= $main_dir_path.'exercice/exercise_submit.php?lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
+                //$link .= $main_dir_path.'exercice/exercise_submit.php?lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
+                $link .= $main_dir_path.'exercice/overview.php?lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
             }
             break;
         case 'hotpotatoes': //lowercase because of strtolower above

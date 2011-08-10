@@ -114,10 +114,10 @@ class Exercise {
 			$this->propagate_neg    = $object->propagate_neg;
 				
 			if ($object->end_time != '0000-00-00 00:00:00') {
-				$this->end_time 		= api_get_local_time($object->end_time);
+				$this->end_time 	= api_get_local_time($object->end_time);
 			}
 			if ($object->start_time != '0000-00-00 00:00:00') {
-				$this->start_time 		= api_get_local_time($object->start_time);
+				$this->start_time 	= api_get_local_time($object->start_time);
 			}
 			$this->expired_time 	= $object->expired_time; //control time
 
@@ -1846,7 +1846,7 @@ class Exercise {
 		$questionScore = 0;
 		 
 		for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-			$answer             = $objAnswerTmp->selectAnswer($answerId);
+			$answer             = $objAnswerTmp->selectAnswer($answerId);			
 			$answerComment      = $objAnswerTmp->selectComment($answerId);
 			$answerCorrect      = $objAnswerTmp->isCorrect($answerId);
 			$answerWeighting    = $objAnswerTmp->selectWeighting($answerId);
@@ -1865,8 +1865,6 @@ class Exercise {
 						$resultans = Database::query($queryans);
 						$choice = Database::result($resultans,0,"answer");
 
-						$numAnswer=$objAnswerTmp->selectAutoId($answerId);
-
 						$studentChoice=($choice == $numAnswer)?1:0;
 						if ($studentChoice) {
 							$questionScore+=$answerWeighting;
@@ -1883,8 +1881,8 @@ class Exercise {
 					// for multiple answers
 				case MULTIPLE_ANSWER_TRUE_FALSE :					
 					if ($from_database) {
-						$choice=array();
-						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
+						$choice = array();
+						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = ".$exeId." and question_id = ".$questionId;
 						$resultans = Database::query($queryans);
 						while ($row = Database::fetch_array($resultans)) {
 							$ind          = $row['answer'];
@@ -1892,24 +1890,30 @@ class Exercise {
 							$my_answer_id = $result[0];
 							$option       = $result[1];
 							$choice[$my_answer_id] = $option;
-						}
-						$numAnswer = $objAnswerTmp->selectAutoId($answerId);
+						}						
 						$studentChoice  =$choice[$numAnswer];
 					} else {
 						$studentChoice  =$choice[$numAnswer];
 					}
-					if ($studentChoice == $answerCorrect ) {
-						$questionScore  += $true_score;						
-					} else {
-						if ($quiz_question_options[$studentChoice]['name'] != "Don't know") {
-							$questionScore   +=  $false_score;													
+					
+				
+					if (!empty($studentChoice)) {
+						if ($studentChoice == $answerCorrect ) {
+							$questionScore  += $true_score;						
 						} else {
-							$questionScore  +=  $doubt_score;														
+							if ($quiz_question_options[$studentChoice]['name'] != "Don't know") {
+								$questionScore   +=  $false_score;													
+							} else {
+								$questionScore  +=  $doubt_score;														
+							}
 						}
+					} else {
+						//if no result then the user just hit don't know
+						$studentChoice = 3;
+						$questionScore  +=  $doubt_score;
 					}
-					$totalScore = $questionScore;			
-					/*error_log('$totalScore '.$totalScore);
-					error_log('$$questionScore '.$questionScore);*/
+					
+					$totalScore = $questionScore;
 					break;
 				case MULTIPLE_ANSWER :
 					if ($from_database) {
@@ -2318,7 +2322,7 @@ class Exercise {
 								ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
 							}
 						} elseif($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
-							if ($origin!='learnpath') {
+							if ($origin!='learnpath') {								
 								ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,$questionId,0);
 							}
 						} elseif($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
@@ -2527,7 +2531,7 @@ class Exercise {
 								ExerciseShowFunctions::display_multiple_answer_combination_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,"");
 							}
 							break;
-						case MULTIPLE_ANSWER_TRUE_FALSE :
+						case MULTIPLE_ANSWER_TRUE_FALSE :							
 							if ($answerId==1) {
 								ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId);
 							} else {
@@ -2973,7 +2977,7 @@ class Exercise {
 			$sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . floatval($questionScore) . ' WHERE exe_id = ' . $exeId;	
 			if ($debug) error_log($sql_update);	
 			Database::query($sql_update);
-		}		
+		}
 		$return_array = array('score'=>$questionScore, 'weight'=>$questionWeighting,'extra'=>$extra_data);
 		return $return_array;
 	} //End function
@@ -3233,7 +3237,61 @@ class Exercise {
 		return $result;
 	}
 	
-	public function is_visible_for_student() {		
+	/**
+	 * 
+	 * Checks if the exercise is visible due a lot of conditions - visibility, time limits, student attempts
+	 * @return bool true if is active
+	 */
+		
+	 public function is_visible($lp_id = 0, $lp_item_id = 0 , $lp_item_view_id = 0) {
+		//1. By default the exercise is visible
+		$is_visible = true;
+		
+		//1.1 Admins and teachers can access to the exercise
+		if (api_is_platform_admin() || api_is_course_admin()) {
+			return true;
+		}
+		
+		//2. If the exercise is not active 
+		if ($this->active == 0) {
+			return false;
+		}
+		
+		//3. We check if the time limits are on
+		$limit_time_exists = ((!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') || (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00')) ? true : false;
+		
+		if ($limit_time_exists) {
+			$time_now 				= time();
+		
+			if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {				
+				$permission_to_start = (($time_now - api_strtotime($this->start_time, 'UTC')) > 0) ? true : false;
+			} else {
+				$permission_to_start = true;
+			}
+			
+			if ($this->end_time != '0000-00-00 00:00:00') {
+				$exercise_timeover = (($time_now - api_strtotime($this->end_time, 'UTC')) > 0) ? true : false;
+			} else {
+				$exercise_timeover = false;
+			}
+		
+			if (!$permission_to_start || $exercise_timeover) {
+				$is_visible = false;
+			}
+		}
+		
+		// 4. We check if the student have attempts
+		if ($is_visible) {
+			if ($this->selectAttempts()) {
+				$attempt_count = get_attempt_count(api_get_user_id(), $this->id, $lp_id, $lp_item_id, $lp_item_view_id);
+				if ($attempt_count >= $this->selectAttempts()) {
+					//Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);
+					$is_visible = false;
+				}
+			}
+		}
+		
+		return $is_visible;
 	}
 }
 endif;

@@ -24,8 +24,9 @@ if (isset($_GET['src'])) {
 
     // The host must be the same.
     if ($url_info['host'] == $real_url_info['host']) {
-        header("Location: ".urldecode(Security::remove_XSS($_GET['src'])));
-        exit;
+    	$url = urldecode(Security::remove_XSS($_GET['src']));      
+    	header("Location: ".$url);
+    	exit;
     } else {
         header("Location: blank.php?error=document_not_found");
         exit;

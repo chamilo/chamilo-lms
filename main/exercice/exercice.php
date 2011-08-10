@@ -806,14 +806,13 @@ if ($show == 'test') {
                         //Settings                                                                
                         //echo Display::url(Display::return_icon('settings.png',get_lang('Edit'), array('width'=>'22px'))." ".get_lang('Edit'), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
                     }                                                      
-                    //echo '<p>';
-                    //echo $session_img;
+
                     if ($row['active'] == 0) {
                         $title = Display::tag('font', $row['title'], array('style'=>'color:grey'));
                     } else {
                         $title = $row['title'];
                     }
-                    $url = '<a href="exercise_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>'.$lp_blocked;                    
+                    $url = '<a href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>'.$lp_blocked;                    
                     $item =  Display::tag('td', $url.' '.$session_img);  
                     $exid = $row['id'];
     

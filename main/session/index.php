@@ -110,7 +110,7 @@ if (!empty($new_session_list)) {
                         $exercise->read($exercise_item['id']);                                    
                         //$exercise_course_list[$exercise_item['id']] = $exercise;
                         //Reading all Exercise results by user, exercise_id, code, and session
-                        $user_results = get_all_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);
+                        $user_results = get_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);
                         $course['exercises'][$exercise_item['id']]['data']['exercise_data'] =  $exercise;                            
                         $course['exercises'][$exercise_item['id']]['data']['results']       =  $user_results;
                     }
@@ -198,7 +198,7 @@ foreach($final_array as $session_data) {
                                   continue;
                             }
                         }
-                        $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/exercise_submit.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id", array('target'=>SESSION_LINK_TARGET));
+                        $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id", array('target'=>SESSION_LINK_TARGET));
                         $new_exercises[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']), 
                        							'status'      => Display::return_icon('star.png', get_lang('New'), array('width'=>'22')),
                     							'date'        => $start_date,

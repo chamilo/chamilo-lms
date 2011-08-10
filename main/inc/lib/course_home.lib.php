@@ -9,9 +9,7 @@ class CourseHome {
      * Gets the html content to show in the 3 column view
      */
     public static function show_tool_3column($cat) {
-        if (!class_exists('HTML_Table')) {
-            require_once 'pear/HTML/Table.php';
-        }
+
         global $_user;
         $charset = api_get_system_encoding();
         $TBL_ACCUEIL = Database :: get_course_table(TABLE_TOOL_LIST);
@@ -695,17 +693,19 @@ class CourseHome {
                 
                 $tool_link_params = array();
                 
+                //$tool['link'] = htmlspecialchars($tool['link']) ;
+                 
                 if (strpos($tool['name'],'visio_') !== false) {                    
                     $tool_link_params = array('id'      => 'tooldesc_'.$tool["id"], 
                                               'href'    => '"javascript: void(0);"',
                                               'class'   => $class,
-                                              'onclick' => 'javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
+                                              'onclick' => 'javascript: window.open(\'' . $tool['link'] . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
                                               'target'  =>  $tool['target']);
                 } elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {                                        
                     $tool_link_params = array('id'      => 'tooldesc_'.$tool["id"],
                                               'class'   => $class, 
                                               'href'    => 'javascript: void(0);',
-                                              'onclick' => 'javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
+                                              'onclick' => 'javascript: window.open(\'' . $tool['link'] . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
                                               'target'  =>  $tool['target']);
                 } else {
                     if (count(explode('type=classroom',$tool['link'])) == 2 || count(explode('type=conference', $tool['link'])) == 2) {                        
@@ -717,7 +717,7 @@ class CourseHome {
 
                     } else {                        
                         $tool_link_params = array('id'      => 'tooldesc_'.$tool["id"], 
-                                                  'href'    => htmlspecialchars($tool['link']),
+                                                  'href'    => $tool['link'],
                                                   'class'   => $class,
                                                   'target'  => $tool['target']);
                         

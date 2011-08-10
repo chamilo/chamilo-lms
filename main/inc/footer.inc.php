@@ -34,13 +34,17 @@ if (api_get_setting('show_navigation_menu') != 'false') {
 <div id="bottom_corner"></div>
 <?php
 global $_configuration;
+
 echo '<div class="copyright">';
+
 	if (api_get_setting('show_administrator_data') == 'true') {
 		// Platform manager
 		echo '<div align="right">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))).'</div>';
 	}
-
-	echo get_lang('Platform'), ' <a href="', $_configuration['software_url'], '" target="_blank">', $_configuration['software_name'], ' ', $_configuration['system_version'], '</a> &copy; ', date('Y');
+	echo '<div align="right">'.get_lang('Platform').' <a href="', $_configuration['software_url'], '" target="_blank">', $_configuration['software_name'], ' ', $_configuration['system_version'], '</a>';
+	echo '&copy; ', date('Y');
+	echo '</div>';
+	
 echo '</div>'; //copyright div
 
 echo '<div class="footer_emails">';

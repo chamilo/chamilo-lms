@@ -167,32 +167,34 @@ class ExerciseShowFunctions {
 		?>
 		<tr>
 		<td width="5%" align="center">
-			<img src="../img/<?php echo ($answerType == UNIQUE_ANSWER)?'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif"
+			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif"
 			border="0" alt="" />
 		</td>
 		<td width="5%" align="center">
-			<img src="../img/<?php echo ($answerType == UNIQUE_ANSWER)?'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif"
+			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif"
 			border="0" alt=" " />
 		</td>
 		<td width="40%" style="border-bottom: 1px solid #4171B5;">
-			<?php
-			$answer=text_filter($answer);
+			<?php			
 			echo $answer;
 			?>
 		</td>
 
 		<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 		<td width="20%" style="border-bottom: 1px solid #4171B5;">
-			<?php
-			$answerComment=text_filter($answerComment);
-			if($studentChoice) {
-				if(!$answerCorrect) {
-					echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+			<?php			
+			if ($studentChoice) {
+				if($answerCorrect) {
+					echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
 				} else {
-                    echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
+					echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
 				}
 			} else {
-				echo '&nbsp;';
+				if($answerCorrect) {
+					echo '<span style="font-weight: bold; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
+				} else {
+					echo '<span style="font-weight: normal; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
+				}
 			}
 			?>
 		</td>
@@ -205,7 +207,7 @@ class ExerciseShowFunctions {
 			<td>&nbsp;</td>
 		<?php } ?>
 		</tr>
-		<?php
+		<?php		
 	} 
     
     /**
@@ -230,7 +232,8 @@ class ExerciseShowFunctions {
         
         $question 	 = new MultipleAnswerTrueFalse();        
         $new_options = Question::readQuestionOption($questionId);
-        //Your choice
+        
+        //Your choice        
         if (isset($new_options[$studentChoice])) {
             echo get_lang($new_options[$studentChoice]['name']);
         } else {
@@ -239,7 +242,7 @@ class ExerciseShowFunctions {
         ?>          
         </td>
         <td width="5%" align="center">
-        <?php
+        <?php        
 		//Expected choice
         if (isset($new_options[$answerCorrect])) {
             echo get_lang($new_options[$answerCorrect]['name']);
@@ -255,10 +258,16 @@ class ExerciseShowFunctions {
         <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
         <td width="20%" style="border-bottom: 1px solid #4171B5;">
             <?php            
-            if ($studentChoice == $answerCorrect) {
-            	echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';                    
+            //@todo replace this harcoded value
+            
+            if ($studentChoice == 3 || $studentChoice == '') {
+            	echo '<span style="font-weight: bold; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
             } else {
-                echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+	            if ($studentChoice == $answerCorrect) {
+	            	echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';                    
+	            } else {
+	                echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+	            }
             }
             ?>
         </td>
@@ -322,12 +331,17 @@ class ExerciseShowFunctions {
         <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
         <td width="20%" style="border-bottom: 1px solid #4171B5;">
             <?php
+            //@todo replace this harcoded value
             
-			if ($studentChoice == $answerCorrect) {
-            	echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
-			} else {
-				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
-			}
+            if ($studentChoice == 2 || $studentChoice == '') {
+            	echo '<span style="font-weight: bold; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
+            } else {
+				if ($studentChoice == $answerCorrect) {
+	            	echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
+				} else {
+					echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+				}
+            }
             
             ?>
         </td>

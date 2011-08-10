@@ -87,3 +87,24 @@ function array_walk_recursive_limited(&$array, $function, $apply_to_keys_also = 
 	}	
 	$recursive_counter--;
 }
+
+function utf8_sort($array) {
+	$old_locale = setlocale(LC_ALL, null);	
+	$code = api_get_language_isocode();
+	$locale_list = array($code.'.utf8', 'en.utf8','en_US.utf8','en_GB.utf8');
+	$try_sort = false;
+	
+	foreach($locale_list as $locale) {
+		$my_local = setlocale(LC_COLLATE, $locale);
+		if ($my_local) {
+			$try_sort = true;
+			break;
+		}
+	}
+	
+	if ($try_sort) {
+		uasort($array, 'strcoll');
+	}
+	setlocale(LC_COLLATE, $old_locale);	
+	return $array;
+}

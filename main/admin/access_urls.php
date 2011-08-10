@@ -9,7 +9,6 @@
 $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 //api_protect_admin_script();
@@ -24,7 +23,6 @@ $interbreadcrumb[] = array ("url" => 'index.php', 'name' => get_lang('PlatformAd
 $tool_name = get_lang('MultipleAccessURLs');
 Display :: display_header($tool_name);
 
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'security.lib.php';
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';

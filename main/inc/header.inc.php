@@ -197,5 +197,6 @@ if (defined('CHAMILO_HOMEPAGE') && CHAMILO_HOMEPAGE)
 </ul>
 </div>
 <?php
+
 // Banner
 require_once api_get_path(INCLUDE_PATH).'banner.inc.php';

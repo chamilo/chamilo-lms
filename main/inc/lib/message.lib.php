@@ -12,9 +12,7 @@
 require_once api_get_path(LIBRARY_PATH).'online.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 
 /*
  * @todo use constants!

@@ -17,8 +17,6 @@ define('SOCIAL_RIGHT_PLUGIN',	3);
 
 define('CUT_GROUP_NAME', 50);
 
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 /**
  *
 *	@package chamilo.social

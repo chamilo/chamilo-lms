@@ -274,6 +274,7 @@ if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info
 }
 
 // for each question
+$counter=0;
 $total_weighting = 0;
 foreach ($questionList as $questionId) {
     $objQuestionTmp     = Question::read($questionId);
@@ -282,8 +283,8 @@ foreach ($questionList as $questionId) {
 $counter = 1;
 
 foreach ($questionList as $questionId) {
-			
-	$choice=$exerciseResult[$questionId];
+	$counter++;
+	$choice = $exerciseResult[$questionId];
 		// destruction of the Question object
 	unset($objQuestionTmp);
 	

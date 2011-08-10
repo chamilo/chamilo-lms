@@ -104,11 +104,12 @@ if (!isset($src)) {
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {            	
-                $src = $_SESSION['oLP']->get_link('http', $lp_item_id);
+                $src = $_SESSION['oLP']->get_link('http', $lp_item_id);                
                 
                 //Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
-                $file_info = pathinfo($src);
-                if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {
+                $file_info = parse_url($src); 
+                $file_info = pathinfo($file_info['path']);                
+                if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {                	
                     $src = 'lp_view_item.php?src='.$src;
                 }
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset

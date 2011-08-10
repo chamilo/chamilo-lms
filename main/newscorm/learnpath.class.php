@@ -2904,8 +2904,7 @@ class learnpath {
                     } else {
                         require_once 'resourcelinker.inc.php';
                         $file = rl_get_resource_link_for_learnpath(api_get_course_id(), $this->get_id(), $item_id);
-                        
-                            //CEV CHANGE
+
                         if ($lp_item_type == 'link') {
                             require_once api_get_path(LIBRARY_PATH).'link.lib.php';
                             if (is_youtube_link($file)) {

@@ -664,10 +664,15 @@ button:hover {
     top: 1px;
 }
 
-.bigrounded {
-    -webkit-border-radius: 2em;
-    -moz-border-radius: 2em;
-    border-radius: 2em;
+.round {
+    -webkit-border-radius: 1em;
+    -moz-border-radius: 1em;
+    border-radius: 1em;
+}
+
+.big {
+    font-size: 14px;
+    padding: .8em 2em .62em;
 }
 .medium {
     font-size: 12px;
@@ -708,7 +713,7 @@ button:hover {
 
 /* gray */
 .gray {
-    color: #e9e9e9;
+    color: #fff !important;
     border: solid 1px #555;
     background: #6e6e6e;
     background: -webkit-gradient(linear, left top, left bottom, from(#888), to(#575757));
@@ -2007,7 +2012,7 @@ input.maininput:focus {
     float: left;
     height: auto;
     margin: 10px 8px 15px 15px;
-    padding: 16px 12px 5px;
+    padding: 20px;
 }
 
 /* Makes the course elements more readable */ 
@@ -2392,3 +2397,26 @@ div.admin_section h4 {
 .ui-jqgrid tr.jqgrow td {
     height:38px !important;
 }
+
+.exercise_overview_options {
+	background-color: #F9F9F9;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+
+    height: 40px;
+    margin: 5px;
+    padding: 15px;
+}
+
+.exercise_overview_options .left_option {
+	float:left;
+	margin:12px 5px;
+}
+
+.exercise_overview_options .right_option {
+	float:right;
+    margin:12px 5px;
+    font-size : 14px;    
+}
+

@@ -2446,7 +2446,7 @@ class Tracking {
 						$to_graph_exercise_result[$exercices['id']] = array('title'=>$exercices['title'], 'data'=>$best_exercise_stats);
 				
 						$html .= '<tr class="row_even">';
-						$url = api_get_path(WEB_CODE_PATH)."exercice/exercise_submit.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
+						$url = api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
 						$exercices['title'] = Display::url($exercices['title'], $url, array('target'=>SESSION_LINK_TARGET));
 						$html .= Display::tag('td', $exercices['title']);
 				

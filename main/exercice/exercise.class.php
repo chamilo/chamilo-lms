@@ -114,10 +114,10 @@ class Exercise {
 			$this->propagate_neg    = $object->propagate_neg;
 				
 			if ($object->end_time != '0000-00-00 00:00:00') {
-				$this->end_time 		= api_get_local_time($object->end_time);
+				$this->end_time 	= api_get_local_time($object->end_time);
 			}
 			if ($object->start_time != '0000-00-00 00:00:00') {
-				$this->start_time 		= api_get_local_time($object->start_time);
+				$this->start_time 	= api_get_local_time($object->start_time);
 			}
 			$this->expired_time 	= $object->expired_time; //control time
 
@@ -2977,7 +2977,7 @@ class Exercise {
 			$sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . floatval($questionScore) . ' WHERE exe_id = ' . $exeId;	
 			if ($debug) error_log($sql_update);	
 			Database::query($sql_update);
-		}		
+		}
 		$return_array = array('score'=>$questionScore, 'weight'=>$questionWeighting,'extra'=>$extra_data);
 		return $return_array;
 	} //End function
@@ -3237,27 +3237,40 @@ class Exercise {
 		return $result;
 	}
 	
-	public function is_visible() {
-		$is_visible = true;
-		//$this->id;
+	/**
+	 * 
+	 * Checks if the exercise is visible due a lot of conditions - visibility, time limits, student attempts
+	 * @return bool true if is active
+	 */
 		
+	 public function is_visible($lp_id = 0, $lp_item_id = 0 , $lp_item_view_id = 0) {
+		//1. By default the exercise is visible
+		$is_visible = true;
+		
+		//1.1 Admins and teachers can access to the exercise
+		if (api_is_platform_admin() || api_is_course_admin()) {
+			return true;
+		}
+		
+		//2. If the exercise is not active 
 		if ($this->active == 0) {
 			return false;
 		}
 		
+		//3. We check if the time limits are on
 		$limit_time_exists = ((!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') || (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00')) ? true : false;
 		
-		if ($limit_time_exists) {			
+		if ($limit_time_exists) {
 			$time_now 				= time();
 		
-			if ($this->start_time != '0000-00-00 00:00:00') {
-				$permission_to_start = (($time_now - $this->start_time) > 0) ? true : false;
+			if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {				
+				$permission_to_start = (($time_now - api_strtotime($this->start_time, 'UTC')) > 0) ? true : false;
 			} else {
 				$permission_to_start = true;
 			}
 			
 			if ($this->end_time != '0000-00-00 00:00:00') {
-				$exercise_timeover = (($time_now - $this->end_time) > 0) ? true : false;
+				$exercise_timeover = (($time_now - api_strtotime($this->end_time, 'UTC')) > 0) ? true : false;
 			} else {
 				$exercise_timeover = false;
 			}
@@ -3266,9 +3279,19 @@ class Exercise {
 				$is_visible = false;
 			}
 		}
+		
+		// 4. We check if the student have attempts
+		if ($is_visible) {
+			if ($this->selectAttempts()) {
+				$attempt_count = get_attempt_count(api_get_user_id(), $this->id, $lp_id, $lp_item_id, $lp_item_view_id);
+				if ($attempt_count >= $this->selectAttempts()) {
+					//Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);
+					$is_visible = false;
+				}
+			}
+		}
+		
 		return $is_visible;
-		
-		
 	}
 }
 endif;

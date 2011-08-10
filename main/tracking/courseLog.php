@@ -251,7 +251,6 @@ if ($_GET['studentlist'] == 'false') {
     echo '</table></div>';
     echo '<div class="clear"></div>';
     //hiding detail for exercises
-//&nbsp;-&nbsp;<a href="../exercice/exercice.php?'.api_get_cidreq().'&show=result">'.get_lang('SeeDetail').'</a>
      // Exercices tracking.
      echo '<div class="report_section">
                 <h2>'.Display::return_icon('quiz.gif',get_lang('AverageResultsToTheExercices')).get_lang('AverageResultsToTheExercices').'</h2>

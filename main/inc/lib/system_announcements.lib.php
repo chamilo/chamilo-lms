@@ -57,7 +57,7 @@ class SystemAnnouncementManager {
 					} else {
 						$show_url = 'news_list.php#'.$announcement->id;
 					}
-			        $display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, date_default_timezone_get());					
+			        $display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG);					
 					echo '<a name="'.$announcement->id.'"></a>
 						<div class="system_announcement">
 							<div class="system_announcement_title"><a name="ann'.$announcement->id.'" href="'.$show_url.'">'.$announcement->title.'</a></div><div class="system_announcement_date">'.$display_date.'</div>

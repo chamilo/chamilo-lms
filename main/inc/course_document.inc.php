@@ -8,7 +8,6 @@ require 'global.inc.php';
 
 /*	Libraries */
 
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'course_document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';

@@ -9,9 +9,7 @@ class CourseHome {
      * Gets the html content to show in the 3 column view
      */
     public static function show_tool_3column($cat) {
-        if (!class_exists('HTML_Table')) {
-            require_once 'pear/HTML/Table.php';
-        }
+
         global $_user;
         $charset = api_get_system_encoding();
         $TBL_ACCUEIL = Database :: get_course_table(TABLE_TOOL_LIST);

@@ -78,47 +78,14 @@ if (!empty($thematic_id)) {
 $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
 
 
-$htmlHeadXtra[] = api_get_jquery_ui_js(); 
+$htmlHeadXtra[] = api_get_jquery_ui_js();
+
+// Only when I see the 3 columns. Avoids double or triple click binding for onclick event 
  
-$htmlHeadXtra[] = '<script language="javascript">
-
-function datetime_by_attendance(selected_value) {
-	$.ajax({
-		contentType: "application/x-www-form-urlencoded",
-		beforeSend: function(objeto) {},
-		type: "POST",
-		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=get_datetime_by_attendance",
-		data: "attendance_id="+selected_value+"&thematic_advance_id='.$thematic_id.'",
-		success: function(datos) {
-		 $("#div_datetime_attendance").html(datos);
-		}
-	});
-}
-
-$(document).ready(function() {
-	$(".thematic_advance_actions, .thematic_tools ").hide();	
+if ($action == 'thematic_details') {	
+	$htmlHeadXtra[] = '<script language="javascript">
 	
-	$(".thematic_content").mouseover(function() {
-		var id = parseInt(this.id.split("_")[3]);
-		$("#thematic_id_content_"+id ).show();
-	});
-	
-	$(".thematic_content").mouseleave(function() {
-		var id = parseInt(this.id.split("_")[3]);
-		$("#thematic_id_content_"+id ).hide();
-	});	
-	
-	
-	$(".thematic_advance_content").mouseover(function() {
-		var id = parseInt(this.id.split("_")[4]);
-		$("#thematic_advance_tools_"+id ).show();
-	});
-	
-	$(".thematic_advance_content").mouseleave(function() {
-		var id = parseInt(this.id.split("_")[4]);
-		$("#thematic_advance_tools_"+id ).hide();
-	});
-	
+	$(document).ready(function() {
 	//Second col
 	
     $(".thematic_plan_opener").live("click", function() {
@@ -177,13 +144,13 @@ $(document).ready(function() {
     
    // Third col
    
-	$(".thematic_advanced_opener, .thematic_advanced_add_opener").live("click", function() {
-        var url = this.href;
+	$(".thematic_advanced_opener, .thematic_advanced_add_opener").click(function() {
+        var url = this.href;        
         var my_class = this.className;
-        var dialog = $("#dialog");                
+        var dialog = $("#dialog")
         if ($("#dialog").length == 0) {
             dialog = $(\'<div id="dialog" style="display:hidden"></div> \').appendTo(\'body\');
-        }
+        }      
         
         // load remote content
         dialog.load(
@@ -194,9 +161,9 @@ $(document).ready(function() {
                     dialog.dialog({
 	                    width:	720, 
 	                    height:	550, 
-	                    modal:	true,
+	                    modal:	true,	  
 	                    buttons: {
-								'.addslashes(get_lang('Save')).' : function() {								
+								'.addslashes(get_lang('Save')).' : function() {
 								var serialize_form_content = $("#thematic_advance").serialize();
 								
 								//Getting FCK content								
@@ -215,7 +182,7 @@ $(document).ready(function() {
 												location.reload(true);
 											}
 										}
-									});								
+								});								
 								dialog.dialog("close");
 							}
 						}
@@ -224,7 +191,51 @@ $(document).ready(function() {
 		);
         //prevent the browser to follow the link
         return false;
-    });     
+    });
+    
+	});   	
+	</script>';
+}
+ 
+$htmlHeadXtra[] = '<script language="javascript">
+
+function datetime_by_attendance(selected_value) {
+	$.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {},
+		type: "POST",
+		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=get_datetime_by_attendance",
+		data: "attendance_id="+selected_value+"&thematic_advance_id='.$thematic_id.'",
+		success: function(datos) {
+		 $("#div_datetime_attendance").html(datos);
+		}
+	});
+}
+
+$(document).ready(function() {
+	$(".thematic_advance_actions, .thematic_tools ").hide();	
+	
+	$(".thematic_content").mouseover(function() {
+		var id = parseInt(this.id.split("_")[3]);
+		$("#thematic_id_content_"+id ).show();
+	});
+	
+	$(".thematic_content").mouseleave(function() {
+		var id = parseInt(this.id.split("_")[3]);
+		$("#thematic_id_content_"+id ).hide();
+	});	
+	
+	$(".thematic_advance_content").mouseover(function() {
+		var id = parseInt(this.id.split("_")[4]);
+		$("#thematic_advance_tools_"+id ).show();
+	});
+	
+	$(".thematic_advance_content").mouseleave(function() {
+		var id = parseInt(this.id.split("_")[4]);
+		$("#thematic_advance_tools_"+id ).hide();
+	});
+	
+	  
 });    
 
 

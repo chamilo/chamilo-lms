@@ -4,9 +4,7 @@
 /**
  * This file contains class used like library, provides functions for thematic option inside attendance tool. It's also used like model to thematic_controller (MVC pattern)
  * @author Christian Fasanando <christian1827@gmail.com>
- * @author Julio Montoya <gugli100@gmail.com> SQL fixes, 
- * By the way there are 3 tables that are mixed,
- * there should be 3 different classes Thematic, ThematicAdvanced and Thematic plan and a controller
+ * @author Julio Montoya <gugli100@gmail.com> SQL fixes 
  * @package chamilo.course_progress
  */
 

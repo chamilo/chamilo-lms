@@ -155,12 +155,12 @@ if ($action == 'thematic_list') {
 					
 					$thematic_advance['start_date'] = api_get_local_time($thematic_advance['start_date']);
 					$thematic_advance['start_date'] = api_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG);
-					echo '<tr>';
+					echo '<tr>'; 
 					echo '<td width="90%" class="thematic_advance_content" id="thematic_advance_content_id_'.$thematic_advance['id'].'">';
 					
 					$edit_link = '';
 					if (api_is_allowed_to_edit(null, true)) {
-						$edit_link  =  '<a class="thematic_advanced_opener" href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'" >'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array(),22).'</a>';
+						$edit_link   =  '<a class="thematic_advanced_opener" href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'" >'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array(),22).'</a>';
 						$edit_link  .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a></center>';
 						
 						//Links

@@ -21,6 +21,8 @@ unset($_SESSION['this_section']);//for hmtl editor repository
 ob_start();
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+
+$display 	= isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 $csv_content = array();
 $nameTools = get_lang('MySpace');
 
@@ -33,13 +35,13 @@ if (!$export_csv) {
 	Display :: display_header($nameTools);
 } else {
 	if ($_GET['view'] == 'admin') {
-		if($_GET['display'] == 'useroverview') {
+		if($display == 'useroverview') {
 			MySpace::export_tracking_user_overview();
 			exit;
-		} else if($_GET['display'] == 'sessionoverview') {
+		} else if($display == 'sessionoverview') {
 			MySpace::export_tracking_session_overview();
 			exit;
-		} else if($_GET['display'] == 'courseoverview') {
+		} else if($display == 'courseoverview') {
 			MySpace::export_tracking_course_overview();
 			exit;
 		}
@@ -129,7 +131,7 @@ global $_configuration;
 
 
 // interbreadcrumbs
-// && isset($_GET['display']) && $_GET['display'] != 'yourstudents'
+// && isset($display) && $display != 'yourstudents'
 
 if (api_is_allowed_to_create_course()) {
 	$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): 0;
@@ -165,7 +167,7 @@ if (api_is_allowed_to_create_course()) {
 	}
 }
 
-if ($is_coach && $_GET['display'] != 'yourstudents') {
+if ($is_coach && $display != 'yourstudents') {
 	if ($nb_teacher_courses == 0 && !$is_platform_admin) {
 		$view = 'coach';
 	}
@@ -177,10 +179,11 @@ if ($is_coach && $_GET['display'] != 'yourstudents') {
 	}
 }
 
-if ($is_platform_admin && isset($_GET['display']) && $_GET['display'] != 'yourstudents') {
+if ($is_platform_admin && $display != 'yourstudents') {
 	if ($nb_teacher_courses == 0 && $nb_sessions == 0) {
 		$view = 'admin';
 	}
+	
 	if ($view == 'admin') {
 		$menu_items[] = get_lang('AdminInterface');
 		$title = get_lang('CoachList');
@@ -191,7 +194,7 @@ if ($is_platform_admin && isset($_GET['display']) && $_GET['display'] != 'yourst
 	}
 }
 
-if ($is_drh || (isset($_GET['display']) && $_GET['display'] == 'yourstudents')) {
+if ($is_drh || ($display == 'yourstudents')) {
 	$view = 'drh';
 	$menu_items[] = get_lang('Students');
 	$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
@@ -205,8 +208,8 @@ $nb_menu_items = count($menu_items);
 if ($nb_teacher_courses > 0 ) {    
 	echo '<div id="actions" class="actions">';
                
-    if (isset($_GET['display']) && ($_GET['display'] == 'useroverview' || $_GET['display'] == 'sessionoverview' || $_GET['display'] == 'courseoverview')) {
-        echo '<a href="'.api_get_self().'?display='.$_GET['display'].'&export=csv&view='.$view.'">';
+    if ($display == 'useroverview' || $display == 'sessionoverview' || $display == 'courseoverview') {
+        echo '<a href="'.api_get_self().'?display='.$display.'&export=csv&view='.$view.'">';
         echo Display::return_icon("export_csv.png", get_lang('ExportAsCSV'),array(), 32);
         echo '</a>';
     }
@@ -243,7 +246,7 @@ if ($nb_teacher_courses > 0 ) {
 
 echo Display::tag('h2', $title);
 
-if (($is_drh && $view == 'drh') || (isset($_GET['display']) && $_GET['display'] == 'yourstudents')) {
+if (($is_drh && $view == 'drh') || ($display == 'yourstudents')) {
 	// get data for human resources manager
 	$students = array_keys(UserManager::get_users_followed_by_drh($user_id, STUDENT));
 	$courses_of_the_platform = CourseManager :: get_real_course_list();
@@ -594,11 +597,11 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 	}
 }
 
-if ($is_platform_admin && $view == 'admin' && $_GET['display'] != 'yourstudents') {
+if ($is_platform_admin && $view == 'admin' && $display != 'yourstudents') {
     
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=coaches">'.get_lang('DisplayCoaches').'</a> | ';
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=useroverview">'.get_lang('DisplayUserOverview').'</a>';
-	if ($_GET['display'] == 'useroverview') {
+	if ($display == 'useroverview') {
 		echo ' | <a href="'.api_get_self().'?view=admin&amp;display=useroverview&amp;export=options">'.get_lang('ExportUserOverviewOptions').'</a>';
 	}
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=sessionoverview">'.get_lang('DisplaySessionOverview').'</a>';
@@ -610,11 +613,11 @@ if ($is_platform_admin && $view == 'admin' && $_GET['display'] != 'yourstudents'
     
     
 	echo '<br /><br />';
-	if ($_GET['display'] === 'useroverview') {
+	if ($display === 'useroverview') {
 		MySpace::display_tracking_user_overview();
-	} else if($_GET['display'] == 'sessionoverview') {
+	} else if($display == 'sessionoverview') {
 		MySpace::display_tracking_session_overview();
-	} else if($_GET['display'] == 'courseoverview') {
+	} else if($display == 'courseoverview') {
 		MySpace::display_tracking_course_overview();
 	} else {
 		if ($export_csv) {

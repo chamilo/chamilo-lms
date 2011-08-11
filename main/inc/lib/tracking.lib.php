@@ -2647,8 +2647,8 @@ class Tracking {
 			// $main_graph = new pChart($main_width,$main_height);
 
 			$graph_id = 'generate_session_exercise_graph'.Security::remove_XSS($_GET['course']).'-'.intval($_GET['session_id']).'-'.api_get_user_id();
-			//if ($cache->IsInCache($graph_id, $data_set->GetData())) {
-			if (0) {
+			if ($cache->IsInCache($graph_id, $data_set->GetData())) {
+			//if (0) {
 				//if we already created the img
 				//echo 'in cache';
 				$img_file = $cache->GetHash($graph_id,$data_set->GetData());

@@ -161,8 +161,8 @@ class FCKeditor
         // Adaptation for the Chamilo LMS
         
 		//@todo why the BasePath is relative ? we should use this constant WEB_PATH
-        //$this->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
-        $this->BasePath = api_get_path(WEB_PATH).'main/inc/lib/fckeditor/';
+        $this->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
+        //$this->BasePath = api_get_path(WEB_PATH).'main/inc/lib/fckeditor/';
 
         $config = $this->get_custom_configuration();
         $this->read_configuration($config);

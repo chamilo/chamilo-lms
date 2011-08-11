@@ -157,11 +157,12 @@ class FCKeditor
      *
      * @return string
      */
-    public function CreateHtml()
-    {
-        // Adaptation for the Chamilo LMS ---------------------------------------------------------
-
-        $this->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
+    public function CreateHtml() {
+        // Adaptation for the Chamilo LMS
+        
+		//@todo why the BasePath is relative ? we should use this constant WEB_PATH
+        //$this->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
+        $this->BasePath = api_get_path(WEB_PATH).'main/inc/lib/fckeditor/';
 
         $config = $this->get_custom_configuration();
         $this->read_configuration($config);
@@ -173,14 +174,9 @@ class FCKeditor
             $this->Config['BlockCopyPaste'] = false;
         }
 
-        //----------------------------------------------------------------------------------------
-
         $HtmlValue = htmlspecialchars( $this->Value ) ;
-
         $Html = '' ;
-
-        if ( $this->IsCompatible() )
-        {
+        if ( $this->IsCompatible() ) {
             if ( api_get_setting('server_type') == 'test' )
                 $File = 'fckeditor.original.html' ;
             else
@@ -199,9 +195,7 @@ class FCKeditor
 
             // Render the editor IFRAME.
             $Html .= "<iframe id=\"{$this->InstanceName}___Frame\" src=\"{$Link}\" width=\"{$this->Width}\" height=\"{$this->Height}\" frameborder=\"0\" scrolling=\"no\"></iframe>" ;
-        }
-        else
-        {
+        } else {
             if ( strpos( $this->Width, '%' ) === false )
                 $WidthCSS = $this->Width . 'px' ;
             else
@@ -214,7 +208,6 @@ class FCKeditor
 
             $Html .= "<textarea name=\"{$this->InstanceName}\" rows=\"4\" cols=\"40\" style=\"width: {$WidthCSS}; height: {$HeightCSS}\">{$HtmlValue}</textarea>" ;
         }
-
         return $Html ;
     }
 

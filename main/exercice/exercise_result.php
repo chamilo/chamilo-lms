@@ -108,7 +108,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('ToolGradebook'));
 }
 
-$nameTools = get_lang('Exercice');
+$nameTools = get_lang('Result');
 
 $interbreadcrumb[]=array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
 //$htmlHeadXtra[] = $objExercise->show_lp_javascript();

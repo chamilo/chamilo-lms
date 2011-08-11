@@ -175,7 +175,9 @@ foreach($final_array as $session_data) {
                                 $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
                             }
                             $position       = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id,  $my_course_code,$session_id);
-                            $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/exercice.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id&show=result", array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link'));
+                            //$exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/exercice.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id&show=result", array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link'));
+                            $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/result.php?cidReq=$my_course_code&id={$exercise_result['exe_id']}&id_session=$session_id&show_headers=1", array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link'));
+                            
                             $my_real_array[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']),
                             							'status'      => Display::return_icon('quiz.gif', get_lang('Attempted'),'','22'), 
                             							'date'        => $start_date,

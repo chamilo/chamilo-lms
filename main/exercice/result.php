@@ -27,8 +27,9 @@ if (empty($origin) ) {
 
 api_protect_course_script();
 
-$id 	       = intval($_REQUEST['id']); //exe id
-$current_time  = time();
+$id 	       = isset($_REQUEST['id']) 	  ? intval($_GET['id']) : null; //exe id
+$show_headers  = isset($_GET['show_headers']) ? intval($_GET['show_headers']) : null; //exe id
+
 
 if (empty($id)) {
 	api_not_allowed();
@@ -64,7 +65,15 @@ if (!$is_allowedToEdit) {
     }
 }
 
-Display::display_reduced_header();	
+if ($show_headers) {
+	$interbreadcrumb[] = array("url" => "exercice.php","name" => get_lang('Exercices'));
+	$interbreadcrumb[] = array("url" => "#","name" => get_lang('Result'));
+	$this_section = SECTION_COURSES;
+	
+	Display::display_header();
+} else {
+	Display::display_reduced_header();
+}	
 
 $show_results           = true;
 $show_only_total_score  = false;
@@ -87,7 +96,6 @@ if (!empty($track_exercise_info)) {
 	}
 }
 
-$html = '';
 if ($show_results || $show_only_total_score) {
     $user_info   = api_get_user_info($student_id);
     //Shows exercise header
@@ -102,247 +110,251 @@ $question_list = $result[$id]['question_list'];
 
 // for each question
 $total_weighting = 0;
-foreach ($question_list as $question_item) {
-    $objQuestionTmp     = Question::read($question_item['question_id']);
-    $total_weighting   += $objQuestionTmp->selectWeighting();        
-}
 $counter = 1;
+if (!empty($question_list)) {
 
-foreach ($question_list as $question_item) {		
-	$choice = $question_item['answer'];
+	foreach ($question_list as $question_item) {
+    	$objQuestionTmp     = Question::read($question_item['question_id']);
+    	$total_weighting   += $objQuestionTmp->selectWeighting();        
+	}
+
+
+	foreach ($question_list as $question_item) {	
+		$choice = $question_item['answer'];
+			
+		// creates a temporary Question object
+		$questionId 		= $question_item['question_id'];
+		$objQuestionTmp 	= Question::read($questionId);
 		
-	// creates a temporary Question object
-	$questionId 		= $question_item['question_id'];
-	$objQuestionTmp 	= Question::read($questionId);
-	
-	$questionName		= $objQuestionTmp->selectTitle();
-	$questionDescription= $objQuestionTmp->selectDescription();
-	$questionWeighting	= $objQuestionTmp->selectWeighting();
-	$answerType			= $objQuestionTmp->selectType();
-	$quesId 			= $objQuestionTmp->selectId();	
-	        	
- 	if ($show_results) { 	    
-	    echo $objQuestionTmp->return_header($objExercise->feedbacktype, $counter);
-	}
-	$counter++;	
-	if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                    
-        $questionScore   = $question_result['score'];
-        $totalScore      += $question_result['score'];        
-	} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
-		$choice = array();
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                               
-        $questionScore   = $question_result['score'];
-        $totalScore     += $question_result['score'];	
-	} elseif ($answerType == UNIQUE_ANSWER || $answerType ==  UNIQUE_ANSWER_NO_OPTION) {	
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
-        $questionScore   = $question_result['score'];
-        $totalScore     += $question_result['score'];
-	} elseif ($answerType == FILL_IN_BLANKS) {
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
-        $questionScore   = $question_result['score'];
-        $totalScore     += $question_result['score'];              
-	} elseif ($answerType == FREE_ANSWER) {
-        $answer = $str;     
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
-        $questionScore   = $question_result['score'];
-        $totalScore     += $question_result['score'];
-	} elseif ($answerType == MATCHING) {            
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
-        $questionScore   = $question_result['score'];
-        $totalScore     += $question_result['score'];		
-	} elseif ($answerType == HOT_SPOT) {	
-	    if ($show_results) {
-		    echo '<table width="500" border="0"><tr>
-                    <td valign="top" align="center" style="padding-left:0px;" >
-                        <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';
-		}		
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
-        $questionScore  = $question_result['score'];
-        $totalScore    += $question_result['score'];
-        
-        if ($show_results) {                
-			echo '</table></td></tr>';            
-		 	echo '<tr>
-				<td colspan="2">'.
-					'<object type="application/x-shockwave-flash" data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" width="552" height="352">
-						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" />
-					</object>
-				</td>
-			</tr>
-			</table><br/>';
-        }
-	} else if($answerType == HOT_SPOT_DELINEATION) {
+		$questionName		= $objQuestionTmp->selectTitle();
+		$questionDescription= $objQuestionTmp->selectDescription();
+		$questionWeighting	= $objQuestionTmp->selectWeighting();
+		$answerType			= $objQuestionTmp->selectType();
+		$quesId 			= $objQuestionTmp->selectId();	
+		        	
+	 	if ($show_results) { 	    
+		    echo $objQuestionTmp->return_header($objExercise->feedbacktype, $counter);
+		}
+		$counter++;	
+		if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
+	        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                    
+	        $questionScore   = $question_result['score'];
+	        $totalScore      += $question_result['score'];        
+		} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
+			$choice = array();
+	        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                               
+	        $questionScore   = $question_result['score'];
+	        $totalScore     += $question_result['score'];	
+		} elseif ($answerType == UNIQUE_ANSWER || $answerType ==  UNIQUE_ANSWER_NO_OPTION) {	
+	        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+	        $questionScore   = $question_result['score'];
+	        $totalScore     += $question_result['score'];
+		} elseif ($answerType == FILL_IN_BLANKS) {
+	        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+	        $questionScore   = $question_result['score'];
+	        $totalScore     += $question_result['score'];              
+		} elseif ($answerType == FREE_ANSWER) {
+	        $answer = $str;     
+	        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
+	        $questionScore   = $question_result['score'];
+	        $totalScore     += $question_result['score'];
+		} elseif ($answerType == MATCHING) {            
+	        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
+	        $questionScore   = $question_result['score'];
+	        $totalScore     += $question_result['score'];		
+		} elseif ($answerType == HOT_SPOT) {	
+		    if ($show_results) {
+			    echo '<table width="500" border="0"><tr>
+	                    <td valign="top" align="center" style="padding-left:0px;" >
+	                        <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';
+			}		
+	        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
+	        $questionScore  = $question_result['score'];
+	        $totalScore    += $question_result['score'];
 	        
-            $question_result  = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), 'database');
-                        
-            $questionScore    = $question_result['score'];
-            $totalScore      += $question_result['score'];
-       
-            $final_overlap    = $question_result['extra']['final_overlap'];
-            $final_missing    = $question_result['extra']['final_missing'];
-            $final_excess     = $question_result['extra']['final_excess'];
-            
-            $overlap_color    = $question_result['extra']['overlap_color'];
-            $missing_color    = $question_result['extra']['missing_color'];
-            $excess_color     = $question_result['extra']['excess_color'];
-            
-            $threadhold1      = $question_result['extra']['threadhold1'];            
-            $threadhold2      = $question_result['extra']['threadhold2'];
-            $threadhold3      = $question_result['extra']['threadhold3'];
-            
-	   
-	        if ($show_results) {
-	    
-        	    if ($overlap_color) {
-        			$overlap_color='green';
-        	    } else {
-        			$overlap_color='red';
-        	    }
-        	    
-        		if ($missing_color) {
-        			$missing_color='green';
-        	    } else {
-        			$missing_color='red';
-        	    }
-        		if ($excess_color) {
-        			$excess_color='green';
-        	    } else {
-        			$excess_color='red';
-        	    }
-        	    
-        	    
-        	    if (!is_numeric($final_overlap)) {
-            	    $final_overlap = 0;
-        	    }
-        	    
-        	    if (!is_numeric($final_missing)) {
-        	    	$final_missing = 0;
-        	    }
-        	    if (!is_numeric($final_excess)) {
-        	    	$final_excess = 0;
-        	    }
-        	    
-        	    if ($final_excess>100) {
-        	    	$final_excess = 100;
-        	    }            
-            
-        		$table_resume='<table class="data_table">		
-        		<tr class="row_odd" >
-        		<td></td>
-        		<td ><b>'.get_lang('Requirements').'</b></td>
-        		<td><b>'.get_lang('YourAnswer').'</b></td>
-        		</tr>
-        									
-        		<tr class="row_even">
-        		<td><b>'.get_lang('Overlap').'</b></td>
-        		<td>'.get_lang('Min').' '.$threadhold1.'</td>
-        			<td><div style="color:'.$overlap_color.'">'.(($final_overlap < 0)?0:intval($final_overlap)).'</div></td>
-        		</tr>
-        				
-        		<tr>
-        			<td><b>'.get_lang('Excess').'</b></td>
-        			<td>'.get_lang('Max').' '.$threadhold2.'</td>
-        			<td><div style="color:'.$excess_color.'">'.(($final_excess < 0)?0:intval($final_excess)).'</div></td>
-        		</tr>
-        				 
-        		<tr class="row_even">
-        			<td><b>'.get_lang('Missing').'</b></td>
-        			<td>'.get_lang('Max').' '.$threadhold3.'</td>
-        			<td><div style="color:'.$missing_color.'">'.(($final_missing < 0)?0:intval($final_missing)).'</div></td>
-        		</tr></table>';
-        							
-        		if ($answerType!= HOT_SPOT_DELINEATION) {
-        			$item_list=explode('@@',$destination);
-        			//print_R($item_list);
-        			$try = $item_list[0];
-        			$lp = $item_list[1];
-        			$destinationid= $item_list[2];
-        			$url=$item_list[3];
-        			$table_resume='';
-        		} else {
-        			if ($next==0) {
-        				$try = $try_hotspot;
-        				$lp = $lp_hotspot;
-        				$destinationid= $select_question_hotspot;
-        				$url=$url_hotspot;
-        			} else {
-        				//show if no error
-        				//echo 'no error';
-        				$comment=$answerComment=$objAnswerTmp->selectComment($nbrAnswers);	
-        				$answerDestination=$objAnswerTmp->selectDestination($nbrAnswers);
-        			}
-        		} 
-        	
-        		echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
-        		if ($answerType == HOT_SPOT_DELINEATION) {			
-        			if ($organs_at_risk_hit>0) {
-        				$message='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';				
-        				$message.='<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
-        			} else {
-        				$message='<p>'.get_lang('YourDelineation').'</p>';
-        				$message.=$table_resume;	
-        				$message.='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
-        			}
-        			$message.='<p>'.$comment.'</p>';	
-        			echo $message;              			
-        		} else {
-        			echo '<p>'.$comment.'</p>';
-        		}
-        		
-        		//showing the score	
-         		$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-        		$resfree = Database::query($queryfree);
-        		$questionScore= Database::result($resfree,0,"marks");
-        		$totalScore+=$questionScore;        		
-        		 			?>
-        		 			</table>
-        		 		</td></tr>
-        		 		<?php        		 		
-        		 	echo '<tr>
-        				<td colspan="2">
-        					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="556" height="350">
-        						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" />
-        							
-        					</object>
-        				</td>
-        			</tr>
-        			</table>';
-	        }		
-	}
-
-	if ($show_results) {
-	    if ($answerType != HOT_SPOT) {
-	        echo '</table>';
+	        if ($show_results) {                
+				echo '</table></td></tr>';            
+			 	echo '<tr>
+					<td colspan="2">'.
+						'<object type="application/x-shockwave-flash" data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" width="552" height="352">
+							<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" />
+						</object>
+					</td>
+				</tr>
+				</table><br/>';
+	        }
+		} else if($answerType == HOT_SPOT_DELINEATION) {
+		        
+	            $question_result  = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), 'database');
+	                        
+	            $questionScore    = $question_result['score'];
+	            $totalScore      += $question_result['score'];
+	       
+	            $final_overlap    = $question_result['extra']['final_overlap'];
+	            $final_missing    = $question_result['extra']['final_missing'];
+	            $final_excess     = $question_result['extra']['final_excess'];
+	            
+	            $overlap_color    = $question_result['extra']['overlap_color'];
+	            $missing_color    = $question_result['extra']['missing_color'];
+	            $excess_color     = $question_result['extra']['excess_color'];
+	            
+	            $threadhold1      = $question_result['extra']['threadhold1'];            
+	            $threadhold2      = $question_result['extra']['threadhold2'];
+	            $threadhold3      = $question_result['extra']['threadhold3'];
+	            
+		   
+		        if ($show_results) {
+		    
+	        	    if ($overlap_color) {
+	        			$overlap_color='green';
+	        	    } else {
+	        			$overlap_color='red';
+	        	    }
+	        	    
+	        		if ($missing_color) {
+	        			$missing_color='green';
+	        	    } else {
+	        			$missing_color='red';
+	        	    }
+	        		if ($excess_color) {
+	        			$excess_color='green';
+	        	    } else {
+	        			$excess_color='red';
+	        	    }
+	        	    
+	        	    
+	        	    if (!is_numeric($final_overlap)) {
+	            	    $final_overlap = 0;
+	        	    }
+	        	    
+	        	    if (!is_numeric($final_missing)) {
+	        	    	$final_missing = 0;
+	        	    }
+	        	    if (!is_numeric($final_excess)) {
+	        	    	$final_excess = 0;
+	        	    }
+	        	    
+	        	    if ($final_excess>100) {
+	        	    	$final_excess = 100;
+	        	    }            
+	            
+	        		$table_resume='<table class="data_table">		
+	        		<tr class="row_odd" >
+	        		<td></td>
+	        		<td ><b>'.get_lang('Requirements').'</b></td>
+	        		<td><b>'.get_lang('YourAnswer').'</b></td>
+	        		</tr>
+	        									
+	        		<tr class="row_even">
+	        		<td><b>'.get_lang('Overlap').'</b></td>
+	        		<td>'.get_lang('Min').' '.$threadhold1.'</td>
+	        			<td><div style="color:'.$overlap_color.'">'.(($final_overlap < 0)?0:intval($final_overlap)).'</div></td>
+	        		</tr>
+	        				
+	        		<tr>
+	        			<td><b>'.get_lang('Excess').'</b></td>
+	        			<td>'.get_lang('Max').' '.$threadhold2.'</td>
+	        			<td><div style="color:'.$excess_color.'">'.(($final_excess < 0)?0:intval($final_excess)).'</div></td>
+	        		</tr>
+	        				 
+	        		<tr class="row_even">
+	        			<td><b>'.get_lang('Missing').'</b></td>
+	        			<td>'.get_lang('Max').' '.$threadhold3.'</td>
+	        			<td><div style="color:'.$missing_color.'">'.(($final_missing < 0)?0:intval($final_missing)).'</div></td>
+	        		</tr></table>';
+	        							
+	        		if ($answerType!= HOT_SPOT_DELINEATION) {
+	        			$item_list=explode('@@',$destination);
+	        			//print_R($item_list);
+	        			$try = $item_list[0];
+	        			$lp = $item_list[1];
+	        			$destinationid= $item_list[2];
+	        			$url=$item_list[3];
+	        			$table_resume='';
+	        		} else {
+	        			if ($next==0) {
+	        				$try = $try_hotspot;
+	        				$lp = $lp_hotspot;
+	        				$destinationid= $select_question_hotspot;
+	        				$url=$url_hotspot;
+	        			} else {
+	        				//show if no error
+	        				//echo 'no error';
+	        				$comment=$answerComment=$objAnswerTmp->selectComment($nbrAnswers);	
+	        				$answerDestination=$objAnswerTmp->selectDestination($nbrAnswers);
+	        			}
+	        		} 
+	        	
+	        		echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
+	        		if ($answerType == HOT_SPOT_DELINEATION) {			
+	        			if ($organs_at_risk_hit>0) {
+	        				$message='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';				
+	        				$message.='<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
+	        			} else {
+	        				$message='<p>'.get_lang('YourDelineation').'</p>';
+	        				$message.=$table_resume;	
+	        				$message.='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
+	        			}
+	        			$message.='<p>'.$comment.'</p>';	
+	        			echo $message;              			
+	        		} else {
+	        			echo '<p>'.$comment.'</p>';
+	        		}
+	        		
+	        		//showing the score	
+	         		$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
+	        		$resfree = Database::query($queryfree);
+	        		$questionScore= Database::result($resfree,0,"marks");
+	        		$totalScore+=$questionScore;        		
+	        		 			?>
+	        		 			</table>
+	        		 		</td></tr>
+	        		 		<?php        		 		
+	        		 	echo '<tr>
+	        				<td colspan="2">
+	        					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="556" height="350">
+	        						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" />
+	        							
+	        					</object>
+	        				</td>
+	        			</tr>
+	        			</table>';
+		        }		
+		}
+	
+		if ($show_results) {
+		    if ($answerType != HOT_SPOT) {
+		        echo '</table>';
+		    }
+		}	
+		
+		if ($show_results) {
+			$comnt = get_comments($id, $questionId);		
+			if (!empty($comnt)) {
+				echo '<b>'.get_lang('Feedback').'</b>';
+				echo '<div id="question_feedback">'.$comnt.'</div>';
+			}		
+		}
+		
+		
+		$my_total_score  = $questionScore;
+		$my_total_weight = $questionWeighting;   
+		
+	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
+	        $my_total_score = 0;
+	    }  
+	    if ($show_results) {
+		    echo '<div id="question_score">';
+			echo get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);
+			echo '</div>';
 	    }
-	}	
-	
-	if ($show_results) {
-		$comnt = get_comments($id, $questionId);		
-		if (!empty($comnt)) {
-			echo '<b>'.get_lang('Feedback').'</b>';
-			echo '<div id="question_feedback">'.$comnt.'</div>';
-		}		
-	}
-	
-	
-	$my_total_score  = $questionScore;
-	$my_total_weight = $questionWeighting;   
-	
-    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
-        $my_total_score = 0;
-    }  
-    if ($show_results) {
-	    echo '<div id="question_score">';
-		echo get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);
-		echo '</div>';
-    }
-	unset($objAnswerTmp);
-	unset($objQuestionTmp);
-	$i++;
-	$totalWeighting += $questionWeighting;
-    
-} // end of large foreach on questions
+		unset($objAnswerTmp);
+		unset($objQuestionTmp);
+		$i++;
+		$totalWeighting += $questionWeighting;
+	    
+	} // end of large foreach on questions
+}
 
 //Total score
 if ($show_results || $show_only_total_score) {        
@@ -354,3 +366,7 @@ if ($show_results || $show_only_total_score) {
     echo show_score($my_total_score_temp, $totalWeighting, false);	
 	echo '</div>';
 }
+
+if ($show_headers) {
+	Display::display_footer();
+} 

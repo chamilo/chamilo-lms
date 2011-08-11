@@ -82,120 +82,81 @@ $htmlHeadXtra[] = api_get_jquery_ui_js();
 
 // Only when I see the 3 columns. Avoids double or triple click binding for onclick event 
  
-if ($action == 'thematic_details') {	
-	$htmlHeadXtra[] = '<script language="javascript">
 	
-	$(document).ready(function() {
+$htmlHeadXtra[] = '<script language="javascript">
+	
+$(document).ready(function() {
 	//Second col
 	
-    $(".thematic_plan_opener").live("click", function() {
-        var url = this.href;
-        var dialog = $("#dialog");
-                
-        if ($("#dialog").length == 0) {
-            dialog = $(\'<div id="dialog" style="display:hidden"></div> \').appendTo(\'body\');
-        }
-        
-        // load remote content
-        dialog.load(
-                url,
-                {},
-                function(responseText, textStatus, XMLHttpRequest) {
-                    dialog.dialog({
-	                    width:	720, 
-	                    height:	550, 
-	                    modal:	true,
-	                    buttons: {
-								'.addslashes(get_lang('Save')).' : function() {
-								var serialize_form_content = $("#thematic_plan_add").serialize();
+    $("#add_plan").live("click", function() {
+                   
+		var serialize_form_content = $("#thematic_plan_add").serialize();
 
-								//Getting FCK content								
-								var oEditor = FCKeditorAPI.GetInstance("description[1]");
-								content_1=  oEditor.GetXHTML(true) ;
-								var oEditor = FCKeditorAPI.GetInstance("description[2]");
-								content_2=  oEditor.GetXHTML(true) ;
-								var oEditor = FCKeditorAPI.GetInstance("description[3]");
-								content_3=  oEditor.GetXHTML(true) ;
-								var oEditor = FCKeditorAPI.GetInstance("description[4]");
-								content_4=  oEditor.GetXHTML(true) ;
-								var oEditor = FCKeditorAPI.GetInstance("description[5]");
-								content_5=  oEditor.GetXHTML(true) ;
-								var oEditor = FCKeditorAPI.GetInstance("description[6]");
-								content_6=  oEditor.GetXHTML(true) ;	
-								
-								$.ajax({
-									type: "POST",
-									url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=save_thematic_plan",
-									data: "desc[1]="+content_1+"&"+"desc[2]="+content_2+"&"+"desc[3]="+content_3+"&"+"desc[4]="+content_4+"&"+"desc[5]="+content_5+"&"+"desc[6]="+content_6+"&"+serialize_form_content,
-									success: function(data) {										
-										var thematic_id = $("input[name=\"thematic_id\"]").val();
-										$("#thematic_plan_"+thematic_id).html(data);
-									}
-								});
-								dialog.dialog("close");
-							}
-						}
-	                });
-				}
-		);
-        //prevent the browser to follow the link
-        return false;
-    }); 
+		//Getting FCK content								
+		var oEditor = FCKeditorAPI.GetInstance("description[1]");
+		content_1=  oEditor.GetXHTML(true) ;
+		var oEditor = FCKeditorAPI.GetInstance("description[2]");
+		content_2=  oEditor.GetXHTML(true) ;
+		var oEditor = FCKeditorAPI.GetInstance("description[3]");
+		content_3=  oEditor.GetXHTML(true) ;
+		var oEditor = FCKeditorAPI.GetInstance("description[4]");
+		content_4=  oEditor.GetXHTML(true) ;
+		var oEditor = FCKeditorAPI.GetInstance("description[5]");
+		content_5=  oEditor.GetXHTML(true) ;
+		var oEditor = FCKeditorAPI.GetInstance("description[6]");
+		content_6=  oEditor.GetXHTML(true) ;	
+		
+		$.ajax({
+			type: "POST",
+			url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=save_thematic_plan",
+			data: "desc[1]="+content_1+"&"+"desc[2]="+content_2+"&"+"desc[3]="+content_3+"&"+"desc[4]="+content_4+"&"+"desc[5]="+content_5+"&"+"desc[6]="+content_6+"&"+serialize_form_content,
+			success: function(data) {										
+				var thematic_id = $("input[name=\"thematic_id\"]").val();
+				$("#thematic_plan_"+thematic_id).html(data);				
+				$("#thematic_plan_add").html("<div class=\"confirmation-message\">'.addslashes(get_lang('Saved')).'</div>");																	
+					
+			}
+		});
+		//prevent the browser to follow the link
+        return false;				
+	});
+        
+    
     
    // Third col
    
-	$(".thematic_advanced_opener, .thematic_advanced_add_opener").click(function() {
-        var url = this.href;        
-        var my_class = this.className;
-        var dialog = $("#dialog")
-        if ($("#dialog").length == 0) {
-            dialog = $(\'<div id="dialog" style="display:hidden"></div> \').appendTo(\'body\');
-        }      
-        
-        // load remote content
-        dialog.load(
-                url,
-                {},
-                function(responseText, textStatus, XMLHttpRequest) {
-                
-                    dialog.dialog({
-	                    width:	720, 
-	                    height:	550, 
-	                    modal:	true,	  
-	                    buttons: {
-								'.addslashes(get_lang('Save')).' : function() {
-								var serialize_form_content = $("#thematic_advance").serialize();
-								
-								//Getting FCK content								
-								var oEditor = FCKeditorAPI.GetInstance("content");
-								content =  oEditor.GetXHTML(true) ;							
-								$.ajax({
-										type: "POST",
-										url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=save_thematic_advance",
-										data: "real_content=" + content + "&" +serialize_form_content,
-										success: function(data) {										
-											var thematic_advance_id = $("input[name=\"thematic_advance_id\"]").val();
-											$("#thematic_advance_"+thematic_advance_id).html(data);																						
-											
-											//Only refresh if the parent is to add
-											if (my_class == "thematic_advanced_add_opener") {
-												location.reload(true);
-											}
-										}
-								});								
-								dialog.dialog("close");
-							}
-						}
-	                });
+	$("#update_button, #add_button").click(function() {
+	   	var url = this.href;        
+        var my_id = this.id;
+		var serialize_form_content = $("#thematic_advance").serialize();
+		
+		//Getting FCK content								
+		var oEditor = FCKeditorAPI.GetInstance("content");
+		content =  oEditor.GetXHTML(true) ;							
+		$.ajax({
+				type: "POST",
+				url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=save_thematic_advance",
+				data: "real_content=" + content + "&" +serialize_form_content,
+				success: function(data) {										
+					var thematic_advance_id = $("input[name=\"thematic_advance_id\"]").val();
+					$("#thematic_advance_"+thematic_advance_id).html(data);
+					
+					$("#thematic_advance").html("<div class=\"confirmation-message\">'.addslashes(get_lang('Saved')).'</div>");																	
+					
+					//Only refresh if the parent is to add
+					if (my_id == "add_button") {
+						location.reload(true);
+					}
 				}
-		);
-        //prevent the browser to follow the link
-        return false;
-    });
+		});								
+		//prevent the browser to follow the link
+        return false;	
+	});
+        
     
-	});   	
-	</script>';
-}
+});   	
+</script>';
+
  
 $htmlHeadXtra[] = '<script language="javascript">
 

@@ -76,7 +76,13 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	//$form->addElement('textarea', 'content', get_lang('Content'));
 	
 	$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
-	//$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+	
+	if ($action == 'thematic_advance_add') {
+		$form->addElement('style_submit_button', null, get_lang('Save'), 'id="add_button" class="save"');
+	} else {
+		$form->addElement('style_submit_button', null, get_lang('Save'), 'id="update_button" class="save"');
+	}
+	//$form->addElement('html', '<a href="#" id="save_button" onclick="save();">Save</a>');
 	
 	$default['start_date_type'] = 1;	
 	$default['custom_start_date'] = date('d-F-Y H:i',api_strtotime(api_get_local_time()));

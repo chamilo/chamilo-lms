@@ -127,7 +127,7 @@ if ($action == 'thematic_list') {
 							
 			//if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {
 			if (api_is_allowed_to_edit(null, true)) {
-				echo '<div style="text-align:right"><a class="thematic_plan_opener" href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_plan_list&thematic_id='.$thematic['id'].'">'.
+				echo '<div style="text-align:right"><a class="thickbox" href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_plan_list&thematic_id='.$thematic['id'].'&width=700&height=500">'.
 				Display::return_icon('edit.png', get_lang('EditThematicPlan'), array('style'=>'vertical-align:middle'),32).'</a></div><br />';
 			}			
 			
@@ -145,7 +145,7 @@ if ($action == 'thematic_list') {
 			//if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {					
 			if (api_is_allowed_to_edit(null, true)) {
 				//echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_advance_list&thematic_id='.$thematic['id'].'">'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array('style'=>'vertical-align:middle'),22).'</a></div><br />';
-				echo '<div style="text-align:right"><a class="thematic_advanced_add_opener" href="index.php?'.api_get_cidreq().'&action=thematic_advance_add&thematic_id='.$thematic['id'].'">'.Display::return_icon('add.png',get_lang('NewThematicAdvance'),'','32').'</a></div>';
+				echo '<div style="text-align:right"><a class="thickbox" href="index.php?'.api_get_cidreq().'&action=thematic_advance_add&thematic_id='.$thematic['id'].'">'.Display::return_icon('add.png',get_lang('NewThematicAdvance'),'','32').'</a></div>';
 			}						
 			
 			//if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {
@@ -160,7 +160,7 @@ if ($action == 'thematic_list') {
 					
 					$edit_link = '';
 					if (api_is_allowed_to_edit(null, true)) {
-						$edit_link   =  '<a class="thematic_advanced_opener" href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'" >'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array(),22).'</a>';
+						$edit_link   = '<a class="thickbox" href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'" >'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array(),22).'</a>';
 						$edit_link  .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a></center>';
 						
 						//Links

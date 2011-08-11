@@ -48,7 +48,7 @@ if (empty($course_info)) {
 if (!$document_id) {
     $document_id = DocumentManager::get_document_id($course_info, $header_file);
 }
-$document_data = DocumentManager::get_document_data_by_id($document_id, $course_code);
+$document_data = DocumentManager::get_document_data_by_id($document_id, $course_code, true);
 
 if (empty($document_data)) {
     api_not_allowed(true);
@@ -104,7 +104,21 @@ if (isset($group_id) && $group_id != '') {
 }
 
 $interbreadcrumb[] = array('url' => './document.php?curdirpath='.dirname($header_file).$req_gid, 'name' => get_lang('Documents'));
-$interbreadcrumb[] = array('url' => 'showinframes.php?gid='.$req_gid.'&amp;file='.$header_file, 'name' => $name_to_show);
+
+if (empty($document_data['parents'])) {
+	if (isset($_GET['createdir'])) {
+		$interbreadcrumb[] = array('url' => $document_data['document_url'], 'name' => $document_data['title']);
+	} else {
+		$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+	}
+} else {
+	foreach($document_data['parents'] as $document_sub_data) {
+		if (!isset($_GET['createdir']) && $document_sub_data['id'] ==  $document_data['id']) {
+			$document_sub_data['document_url'] = '#';
+		}
+		$interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+	}
+}
 
 $this_section = SECTION_COURSES;
 $_SESSION['whereami'] = 'document/view';

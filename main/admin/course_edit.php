@@ -191,7 +191,7 @@ if ($form->validate()) {
 	$dbName = $_POST['dbName'];
 	$course_code = $course['code'];
 	$visual_code = $course['visual_code'];	
-	//$visual_code = generate_course_code($visual_code);   
+	$visual_code = generate_course_code($visual_code);   
 
     // Check if the visual code is already used by *another* course
     $visual_code_is_used = false;

@@ -207,8 +207,8 @@ class FlatViewDataGenerator
 			$item_total=0;
 			for ($count=0;$count < count($this->evals_links); $count++) {
 				$item = $this->evals_links [$count];
-				$score = $item->calc_score($user[0]);
-				$porcent_score = $score[1] ?round(($score[0]*100)/$score[1]):0;
+				$score = $item->calc_score($user[0]);				
+				$porcent_score = isset($score[1]) &&  $score[1] > 0 ? round(($score[0]*100)/$score[1]):0;
 				$row[$item->get_name()] = $porcent_score;
 			}
 			$data[$user[0]] = $row;

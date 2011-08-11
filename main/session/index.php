@@ -15,9 +15,7 @@ require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 
 require_once $libpath.'course.lib.php';
-//require_once $libpath.'usermanager.lib.php';
 require_once $libpath.'sessionmanager.lib.php';
-require_once $libpath.'usermanager.lib.php';
 require_once $libpath.'formvalidator/FormValidator.class.php';
 require_once $libpath.'tracking.lib.php';
 

@@ -18,9 +18,7 @@ require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'thematic_controller.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 //require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 

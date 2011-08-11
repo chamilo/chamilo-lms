@@ -18,7 +18,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once '../gradebook/lib/be/gradebookitem.class.php';
 require_once '../gradebook/lib/be/category.class.php';
 

@@ -24,13 +24,7 @@ if (!api_is_allowed_to_edit()) {
 // including additional libraries
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-
-/*	MAIN CODE	*/
-
-/*	Header	*/
 
 $tool_name = get_lang("SubscribeUserToCourse");
 if ($_REQUEST['type']=='teacher') {

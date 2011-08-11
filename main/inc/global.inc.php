@@ -101,8 +101,8 @@ require_once $lib_path.'security.lib.php';
 require_once $lib_path.'events.lib.inc.php';
 require_once $lib_path.'debug.lib.php';
 
-require_once $lib_path.'usermanager.lib.php';
 require_once $lib_path.'sortabletable.class.php';
+require_once $lib_path.'usermanager.lib.php';
 require_once $lib_path.'message.lib.php';
 require_once $lib_path.'social.lib.php';
 

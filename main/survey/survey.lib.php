@@ -12,9 +12,6 @@
  * Code
  */
 $config['survey']['debug'] = false;
-//require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 		function setFocus(){

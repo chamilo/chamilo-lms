@@ -16,8 +16,6 @@ $language_file = 'survey';
 require '../inc/global.inc.php';
 
 // Including additional libraries
-//require_once api_get_path(LIBRARY_PATH).'survey.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once 'survey.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';

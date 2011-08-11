@@ -11,7 +11,6 @@ $language_file = array('glossary');
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
 
 // The section (tabs).

@@ -39,7 +39,7 @@ if (!$is_allowedToTrack) {
 }
 
 // Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
@@ -47,7 +47,6 @@ require_once api_get_path(SYS_CODE_PATH).'newscorm/scorm.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/scormItem.class.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';

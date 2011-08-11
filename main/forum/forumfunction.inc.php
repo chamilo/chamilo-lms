@@ -47,12 +47,10 @@ $(document).ready(function () {
  * This function handles all the forum and forumcategories actions. This is a wrapper for the
  * forum and forum categories. All this code code could go into the section where this function is
  * called but this make the code there cleaner.
+ * @param   int Learning path ID
  * @return void
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * 
- * Juan Carlos Raña Trabado (return to lp_id)
- *
+ * @author Juan Carlos Raña Trabado (return to lp_id)
  * @version may 2011, Chamilo 1.8.8
  */
 function handle_forum_and_forumcategories($lp_id = null) {
@@ -60,34 +58,31 @@ function handle_forum_and_forumcategories($lp_id = null) {
     $post_submit_cat    = isset($_POST['SubmitForumCategory']) ?  true : false;
     $post_submit_forum  = isset($_POST['SubmitForum']) ? true : false;
     $get_id = isset($_GET['id']) ? $_GET['id'] : '';
-    // Adding a forum category.
+    // Adding a forum category
     if (($action_forum_cat == 'add' && $_GET['content'] == 'forumcategory') || $post_submit_cat) {
-        show_add_forumcategory_form($inputvalues, $lp_id);//$lp_id when is called from learning path
+        show_add_forumcategory_form(array(), $lp_id);//$lp_id when is called from learning path
     }
-    // Adding a forum.
+    // Adding a forum
     if ((($action_forum_cat == 'add' || $action_forum_cat == 'edit') && $_GET['content'] == 'forum') || $post_submit_forum) {
         if ($action_forum_cat == 'edit' && $get_id || $post_submit_forum) {
-            $inputvalues = get_forums(strval(intval($get_id))); // Note: This has to be cleaned first.
+            $inputvalues = get_forums(intval($get_id)); // Note: This has to be cleaned first.
         } else {
             $inputvalues = array();
         }
         show_add_forum_form($inputvalues,$lp_id);
     }
-    // Edit a forum category.
+    // Edit a forum category
     if (($action_forum_cat == 'edit' && $_GET['content'] == 'forumcategory' && isset($_GET['id'])) || (isset($_POST['SubmitEditForumCategory'])) ? true : false ) {
         $forum_category = get_forum_categories(strval(intval($_GET['id']))); // Note: This has to be cleaned first.
         show_edit_forumcategory_form($forum_category);
     }
-    // Delete a forum category.
+    // Delete a forum category
     if ((isset($_GET['action']) && $_GET['action'] == 'delete') && isset($_GET['content']) && $get_id) {
         $id_forum = Security::remove_XSS($get_id);
         $list_threads = get_threads($id_forum);
 
         for ($i = 0; $i < count($list_threads); $i++) {
-            $messaje = delete_forum_forumcategory_thread('thread', $list_threads[$i]['thread_id']);
-            /*$table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-            $sql_link = 'DELETE FROM '.$table_link.' WHERE ref_id='.$list_threads[$i]['thread_id'].' and type=5 and course_code="'.api_get_course_id().'";';
-            Database::query($sql_link);*/            
+            $messaje = delete_forum_forumcategory_thread('thread', $list_threads[$i]['thread_id']);         
             require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
             $link_id = is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($list_threads[$i]['thread_id']), api_get_session_id());
             if ($link_id !== false) {
@@ -117,20 +112,18 @@ function handle_forum_and_forumcategories($lp_id = null) {
 /**
  * This function displays the form that is used to add a forum category.
  *
- * @param array input values
+ * @param array input values (deprecated, set to null when calling)
+ * @param   int Learning path ID
  * @return void HTML
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * Juan Carlos Raña Trabado (return to lp_id)
- *
+ * @author Juan Carlos Raña Trabado (return to lp_id)
  * @version may 2011, Chamilo 1.8.8
  */
 function show_add_forumcategory_form($inputvalues = array(),$lp_id) {
     $gradebook = Security::remove_XSS($_GET['gradebook']);
 
     // Initialize the object.
-    $form = new FormValidator('forumcategory', 'post', 'index.php?&amp;gradebook='.$gradebook.'');
+    $form = new FormValidator('forumcategory', 'post', 'index.php?gradebook='.$gradebook.'');
    	// hidden field if from learning path
    	
 	$form->addElement('hidden', 'lp_id', $lp_id);

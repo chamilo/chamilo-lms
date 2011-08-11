@@ -3,7 +3,7 @@
 /**
  *  Shows the exercise results 
  *
- * @author Julio Montoya Armas Simple exercise result page
+ * @author Julio Montoya Armas  - Simple exercise result page
  * 
  */
 
@@ -27,9 +27,6 @@ if (empty($origin) ) {
 
 api_protect_course_script();
 
-if ( empty ( $exeId ) ) {               $exeId          = $_REQUEST['id'];}
-
-//$emailId       = $_REQUEST['email'];
 $id 	       = intval($_REQUEST['id']); //exe id
 $current_time  = time();
 
@@ -46,9 +43,8 @@ $track_exercise_info = get_exercise_track_exercise_info($id);
 if (empty($track_exercise_info)) {
     api_not_allowed(false);
 }
-
 $exercise_id        = $track_exercise_info['id'];
-$exercise_date      = $track_exercise_info['exe_date'];
+$exercise_date      = $track_exercise_info['start_date'];
 $student_id         = $track_exercise_info['exe_user_id'];
 $learnpath_id       = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id  = $track_exercise_info['orig_lp_item_id'];    
@@ -81,43 +77,22 @@ if (!empty($track_exercise_info)) {
 	$result_disabled		= $track_exercise_info['results_disabled'];
 	
 	if (!(api_is_platform_admin() || api_is_course_admin()) ) {    
-		if ($result_disabled == 1) {		    
-			//api_not_allowed();
-			$show_results = false;
-			//Display::display_warning_message(get_lang('CantViewResults'));
-			if ($origin != 'learnpath') {
-			    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td colspan="2">';
-				Display::display_warning_message(get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercice.php">'.(get_lang('BackToExercisesList')).'</a>', false);
-				echo '</td>
-				</tr>
-				</table>';
-			}
-		} elseif ($result_disabled == 2) {
+		if ($result_disabled == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+			$show_results = false;			
+			Display::display_warning_message(get_lang('CantViewResults'));
+		} elseif ($result_disabled == EXERCISE_FEEDBACK_TYPE_EXAM) {
 		    $show_results = false;
-		    $show_only_total_score = true;			  
-			if ($origin != 'learnpath') {
-			    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td colspan="2">';
-				Display::display_warning_message(get_lang('ThankYouForPassingTheTest'), false);
-				echo '</td>
-				</tr>
-				</table>';
-			}			  
+		    $show_only_total_score = true;			
 		}       
 	}
-} else {
-	Display::display_warning_message(get_lang('CantViewResults'));
-	$show_results = false;
 }
 
 $html = '';
 if ($show_results || $show_only_total_score) {
     $user_info   = api_get_user_info($student_id);
     //Shows exercise header
-    echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date));
+    $objExercise->description = '';
+    echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date, DATE_TIME_FORMAT_LONG));
 }
 
 $i = $totalScore = $totalWeighting = 0;
@@ -129,17 +104,15 @@ $question_list = $result[$id]['question_list'];
 $total_weighting = 0;
 foreach ($question_list as $question_item) {
     $objQuestionTmp     = Question::read($question_item['question_id']);
-    $total_weighting  +=$objQuestionTmp->selectWeighting();        
+    $total_weighting   += $objQuestionTmp->selectWeighting();        
 }
 $counter = 1;
 
 foreach ($question_list as $question_item) {		
 	$choice = $question_item['answer'];
-	// destruction of the Question object
-	unset($objQuestionTmp);
 		
 	// creates a temporary Question object
-	$questionId = $question_item['question_id'];
+	$questionId 		= $question_item['question_id'];
 	$objQuestionTmp 	= Question::read($questionId);
 	
 	$questionName		= $objQuestionTmp->selectTitle();
@@ -342,7 +315,16 @@ foreach ($question_list as $question_item) {
 	    if ($answerType != HOT_SPOT) {
 	        echo '</table>';
 	    }
+	}	
+	
+	if ($show_results) {
+		$comnt = get_comments($id, $questionId);		
+		if (!empty($comnt)) {
+			echo '<b>'.get_lang('Feedback').'</b>';
+			echo '<div id="question_feedback">'.$comnt.'</div>';
+		}		
 	}
+	
 	
 	$my_total_score  = $questionScore;
 	$my_total_weight = $questionWeighting;   
@@ -356,14 +338,14 @@ foreach ($question_list as $question_item) {
 		echo '</div>';
     }
 	unset($objAnswerTmp);
+	unset($objQuestionTmp);
 	$i++;
-
 	$totalWeighting += $questionWeighting;
     
 } // end of large foreach on questions
 
 //Total score
-if ($show_results || $show_only_total_score ) {        
+if ($show_results || $show_only_total_score) {        
 	echo '<div id="question_score">'.get_lang('YourTotalScore').": ";
     $my_total_score_temp = $totalScore; 
 	if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {

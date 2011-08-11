@@ -81,7 +81,7 @@ if (empty($track_exercise_info)) {
 }
 
 $exercise_id        = $track_exercise_info['id'];
-$exercise_date      = $track_exercise_info['exe_date'];
+$exercise_date      = $track_exercise_info['start_date'];
 $student_id         = $track_exercise_info['exe_user_id'];
 $learnpath_id       = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id  = $track_exercise_info['orig_lp_item_id'];    

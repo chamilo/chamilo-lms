@@ -12,9 +12,9 @@
 define('ALL_ON_ONE_PAGE',                   1);
 define('ONE_PER_PAGE',                      2);
 
-define('EXERCISE_FEEDBACK_TYPE_END',        0); //Feedback
-define('EXERCISE_FEEDBACK_TYPE_DIRECT',     1); //DirectFeedback
-define('EXERCISE_FEEDBACK_TYPE_EXAM',       2); //NoFeedback
+define('EXERCISE_FEEDBACK_TYPE_END',        0); //Feedback 		 - show score and expected answers 
+define('EXERCISE_FEEDBACK_TYPE_DIRECT',     1); //DirectFeedback - Do not show score nor answers
+define('EXERCISE_FEEDBACK_TYPE_EXAM',       2); //NoFeedback 	 - Show score only
 
 define('EXERCISE_MAX_NAME_SIZE',            80);
 

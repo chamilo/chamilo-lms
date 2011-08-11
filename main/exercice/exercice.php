@@ -16,7 +16,6 @@ $language_file = array('exercice','tracking');
 
 // including the global library
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once '../gradebook/lib/be.inc.php';
 
 // Setting the tabs
@@ -873,12 +872,12 @@ if ($show == 'test') {
                     // if time is actived show link to exercise
                     if ($time_limits) {                 
                         if ($is_actived_time) {
-                            $url =  '<a href="exercise_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';
+                            $url =  '<a href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';
                         } else {
                             $url = $row['title'];                            
                         }                       
                     } else {
-                        $url = '<a href="exercise_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';                       
+                        $url = '<a href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';                       
                     }                   
                     
                     //Link of the exercise             

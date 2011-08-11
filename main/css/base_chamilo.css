@@ -2134,16 +2134,7 @@ span.radio {
     font-weight:bold;
     font-size:130%;
 }
-#question_feedback {
-    background-color:#FCF7BA;
-    border:1px solid #CCCCCC;
-    color:#666666;
-    font-size:11px;
-    font-weight:bold;
-    list-style-type:none;
-    margin-top:5px;
-    padding:5px;
-}
+
 #exercise_close_link {
     padding-left: 20px;
 }
@@ -2154,7 +2145,6 @@ span.radio {
 /*****************************************************
  *  BUTTONS                                          *
  *****************************************************/
-/* BUTTONS */
 button {
     margin:2px 5px 3px 3px !important;
     background-color: #F5F5F5;

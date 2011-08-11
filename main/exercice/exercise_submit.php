@@ -482,7 +482,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 }
 
 $exerciseTitle = $objExercise->selectTitle();
-echo Display::tag('h2', $exerciseTitle);
+echo Display::tag('h1', $exerciseTitle);
 $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {	

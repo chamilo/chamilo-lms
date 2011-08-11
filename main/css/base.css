@@ -649,12 +649,15 @@ button:hover {
     font: 14px/100% Arial, Helvetica, sans-serif;
     padding: .5em 2em .55em;
     text-shadow: 0 1px 1px rgba(0,0,0,.3);
+    
     -webkit-border-radius: .5em; 
     -moz-border-radius: .5em;
     border-radius: .5em;
-    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
-    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
-    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    
+    -webkit-box-shadow  : 0 1px 2px rgba(0,0,0,.2);
+    -moz-box-shadow     : 0 1px 2px rgba(0,0,0,.2);
+    box-shadow          : 0 1px 2px rgba(0,0,0,.2);
+    
 }
 .a_button:hover {
     text-decoration: none;
@@ -670,8 +673,15 @@ button:hover {
     border-radius: 1em;
 }
 
+.bigger {
+    font-size: 16px;
+    font-weight: bold; 
+    padding: .8em 2em .62em;
+}
+
 .big {
     font-size: 14px;
+    font-weight: bold; 
     padding: .8em 2em .62em;
 }
 .medium {
@@ -681,6 +691,19 @@ button:hover {
 .small {
     font-size: 11px;
     padding: .2em 1em .275em;
+}
+
+.no_link {
+	cursor:default;
+	
+}
+
+.no_link:hover {
+    cursor:default;    
+}
+.no_link:active {
+    cursor:default;
+    
 }
 
 /* white */
@@ -2405,18 +2428,49 @@ div.admin_section h4 {
     border-radius: 10px;
 
     height: 40px;
-    margin: 5px;
+    /* margin: 5px; */
     padding: 15px;
 }
 
 .exercise_overview_options .left_option {
 	float:left;
 	margin:12px 5px;
+	width:33%;
 }
+
+.exercise_overview_options .center_option {
+    float:left;
+    margin:15px 5px;
+    text-align: center;
+    width:33%;
+}
+
 
 .exercise_overview_options .right_option {
 	float:right;
     margin:12px 5px;
+    text-align: right;    
     font-size : 14px;    
 }
 
+.red_alert {
+	color:red;
+	font-weight: bold;
+	color:red;
+}
+
+
+#question_feedback {
+	-webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    
+    background-color:#FCF7BA;
+    border:1px solid #EADC31;
+    color:#555;
+    font-size:12px;
+    font-weight:bold;
+    list-style-type:none;
+    margin-top:5px;
+    padding:5px;
+}

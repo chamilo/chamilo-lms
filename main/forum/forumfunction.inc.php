@@ -3937,12 +3937,14 @@ function get_statistical_information($thread_id, $user_id, $course_id) {
 function get_thread_user_post($course_db, $thread_id, $user_id ) {
     $table_posts =  Database::get_course_table(TABLE_FORUM_POST, $course_db);
     $table_users =  Database::get_main_table(TABLE_MAIN_USER);
+    $thread_id = intval($thread_id);
+    $user_id = intval($user_id);
 
     $sql = "SELECT * FROM $table_posts posts
                         LEFT JOIN  $table_users users
                             ON posts.poster_id=users.user_id
-                        WHERE posts.thread_id='".Database::escape_string($thread_id)."'
-                            AND posts.poster_id='".Database::escape_string($user_id)."'
+                        WHERE posts.thread_id='$thread_id'
+                            AND posts.poster_id='$user_id'
                         ORDER BY posts.post_id ASC";
 
     $result = Database::query($sql);
@@ -3953,7 +3955,7 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
         $sql = "SELECT * FROM $table_posts posts
                     LEFT JOIN  $table_users users
                         ON posts.poster_id=users.user_id
-                    WHERE posts.thread_id='".Database::escape_string($thread_id)."'
+                    WHERE posts.thread_id='$thread_id'
                         AND posts.post_parent_id='".$row['post_id']."'
                     ORDER BY posts.post_id ASC";
         $result2 = Database::query($sql);

@@ -569,14 +569,16 @@ if ($limit_time_exists) {
     }
 }
 
-/*
- * Blocking empty start times see BT#2800
-if (empty($objExercise->start_time) || $objExercise->start_time == '0000-00-00 00:00:00') {
-	Display :: display_warning_message(sprintf(get_lang('ExerciseNoStartedYet'), $exerciseTitle, $objExercise->selectAttempts()));
-	if ($origin != 'learnpath') {
-		Display :: display_footer();
+// Blocking empty start times see BT#2800
+global $_custom;
+if (isset($_custom['exercises_hidden_when_no_start_date']) && $_custom['exercises_hidden_when_no_start_date']) {
+	if (empty($objExercise->start_time) || $objExercise->start_time == '0000-00-00 00:00:00') {
+		Display :: display_warning_message(sprintf(get_lang('ExerciseNoStartedYet'), $exerciseTitle, $objExercise->selectAttempts()));
+		if ($origin != 'learnpath') {
+			Display :: display_footer();
+		}
 	}
-}*/
+}
 
 //Timer control
 if ($time_control) {

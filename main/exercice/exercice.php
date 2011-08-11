@@ -777,11 +777,13 @@ if ($show == 'test') {
                  
 				
  				//Blocking empty start times see BT#2800
- 				/*
-                if (empty($row['start_time']) || $row['start_time'] == '0000-00-00 00:00:00') {                	
-                	$time_limits = true;
-                	$is_actived_time = false;
-                }*/
+            	global $_custom; 
+				if (isset($_custom['exercises_hidden_when_no_start_date']) && $_custom['exercises_hidden_when_no_start_date']) { 
+	                if (empty($row['start_time']) || $row['start_time'] == '0000-00-00 00:00:00') {                	
+	                	$time_limits = true;
+	                	$is_actived_time = false;
+	                }
+				}
                       
                 // Teacher only
                 if ($is_allowedToEdit) {                   

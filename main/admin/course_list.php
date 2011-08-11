@@ -221,9 +221,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
                 break;
         }
     }
-    //api_display_tool_title($tool_name);
     if (isset ($_GET['delete_course'])) {
-
         CourseManager :: delete_course($_GET['delete_course']);
         $obj_cat = new Category();
         $obj_cat->update_category_delete($_GET['delete_course']);
@@ -236,10 +234,11 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('text', 'keyword', get_lang('keyword'));
     $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="search"');
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
-    echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';
-    if (api_get_setting('course_validation') != 'true') {
-        echo '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'','32').'</a>';
-    } else {
+    
+    echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';    
+    echo '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'','32').'</a> ';
+    
+    if (api_get_setting('course_validation') == 'true') {    
         echo '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'),'','32').'</a>';
     }
     echo '</div>';

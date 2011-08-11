@@ -25,8 +25,6 @@ require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 // Including a configuration file.
 require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
@@ -260,6 +258,8 @@ function get_caller_name($caller_id) {
 
 // The header.
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
+
 Display :: display_header($tool_name);
 
 // Display confirmation or error message.

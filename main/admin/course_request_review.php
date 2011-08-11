@@ -27,8 +27,6 @@ require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 // Including a configuration file.
 require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
@@ -228,6 +226,8 @@ function modify_filter($id) {
 }
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
+
 $tool_name = get_lang('ReviewCourseRequests');
 Display :: display_header($tool_name);
 
@@ -254,7 +254,7 @@ $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="s
 
 // The action bar.
 echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';
-echo '<a href="course_list.php">'.Display::return_icon('courses.gif', get_lang('CourseList')).get_lang('CourseList').'</a>';
+//echo '<a href="course_list.php">'.Display::return_icon('courses.gif', get_lang('CourseList')).get_lang('CourseList').'</a>';
 echo ' <a href="course_request_accepted.php">'.Display::return_icon('course_request_accepted.gif', get_lang('AcceptedCourseRequests')).get_lang('AcceptedCourseRequests').'</a>';
 echo ' <a href="course_request_rejected.php">'.Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
 echo '</div>';

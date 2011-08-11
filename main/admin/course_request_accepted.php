@@ -29,7 +29,6 @@ require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 
 // Including a configuration file.
 require api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
@@ -144,6 +143,7 @@ function modify_filter($id) {
 }
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
 $tool_name = get_lang('AcceptedCourseRequests');
 Display :: display_header($tool_name);
 
@@ -170,7 +170,7 @@ $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="s
 
 // The action bar.
 echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';
-echo '<a href="course_list.php">'.Display::return_icon('courses.gif', get_lang('CourseList')).get_lang('CourseList').'</a>';
+//echo '<a href="course_list.php">'.Display::return_icon('courses.gif', get_lang('CourseList')).get_lang('CourseList').'</a>';
 echo ' <a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').'</a>';
 echo ' <a href="course_request_rejected.php">'.Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
 echo '</div>';

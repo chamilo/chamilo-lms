@@ -292,8 +292,7 @@ class UserManager {
                     GroupPortalManager::delete_user_rel_group($user_id, $group_id);
 			    }
 			}
-			
-			require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+						
 			//Delete user from friend lists
 			SocialManager::remove_user_rel_user($user_id, true);
 		}

@@ -26,7 +26,6 @@ if (api_get_setting('allow_message_tool') !='true' ){
 
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
 $nameTools = api_xml_http_response_encode(get_lang('Messages'));
 /*	Constants and variables */

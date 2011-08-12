@@ -8,8 +8,6 @@
 /**
  * Code
  */
-require_once 'model.lib.php';
-require_once 'usermanager.lib.php';
 
 //@todo put constants in an array
 

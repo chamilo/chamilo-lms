@@ -191,7 +191,6 @@ class SocialManager extends UserManager {
 			$sql='INSERT INTO '.$tbl_message.'(user_sender_id,user_receiver_id,msg_status,send_date,title,content) VALUES('.$user_id.','.$friend_id.','.MESSAGE_STATUS_INVITATION_PENDING.',"'.$current_date.'","'.$message_title.'","'.$message_content.'")';
 			Database::query($sql);	
 			
-			require_once api_get_path(LIBRARY_PATH).'notification.lib.php';
 			$sender_info = api_get_user_info($user_id);
 			$notification = new Notification(); 
 		    $notification->save_notification(NOTIFICATION_TYPE_INVITATION, array($friend_id), $message_title, $message_content, $sender_info);    		

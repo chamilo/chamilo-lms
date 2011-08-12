@@ -287,8 +287,7 @@ class MessageManager
 				}
 			}
 			
-			//Load user settings
-			require_once api_get_path(LIBRARY_PATH).'notification.lib.php';
+			//Load user settings			
 			$notification = new Notification();			    
 		    if (empty($group_id)) {                
 		        $sender_info = api_get_user_info($user_sender_id);

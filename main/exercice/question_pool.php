@@ -39,7 +39,9 @@ if ( empty ( $fromExercise ) ) {
 if(isset($_GET['exerciseId'])){
 	$exerciseId = intval($_GET['exerciseId']);
 }
-if(isset($_GET['exerciseLevel'])){
+
+$exerciseLevel = -1;
+if(isset($_REQUEST['exerciseLevel'])){
 	$exerciseLevel = intval($_REQUEST['exerciseLevel']);
 }
 if(isset($_GET['answerType'])){
@@ -266,7 +268,7 @@ $session_select_list = array();
 foreach($session_list as $item) {
     $session_select_list[$item['id']] = $item['name'];
 }
-$select_session_html =  Display::select('session_id', $session_select_list, $session_id, array('onchange'=>'submit_form(this);'));
+$select_session_html =  Display::select('session_id', $session_select_list, $session_id, array('class'=>'chzn-select','onchange'=>'submit_form(this);'));
 echo Display::form_row(get_lang('Session'), $select_session_html);
 
 //Course list
@@ -281,7 +283,7 @@ foreach ($course_list as $item) {
 	$course_select_list[$item['id']] = $item['title'];
 }    
 
-$select_course_html =  Display::select('selected_course', $course_select_list, $selected_course, array('onchange'=>'submit_form(this);'));
+$select_course_html =  Display::select('selected_course', $course_select_list, $selected_course, array('class'=>'chzn-select','onchange'=>'submit_form(this);'));
 echo Display::form_row(get_lang('Course'), $select_course_html);    
 
 if (empty($selected_course) || $selected_course == '-1') {
@@ -312,17 +314,18 @@ if (is_array($exercise_list)) {
         }
     }
 }    
-$select_exercise_html =  Display::select('exerciseId', $my_exercise_list, $exerciseId, array('onchange'=>'submit_form(this);'), false);
+$select_exercise_html =  Display::select('exerciseId', $my_exercise_list, $exerciseId, array('class'=>'chzn-select','onchange'=>'submit_form(this);'), false);
 echo Display::form_row(get_lang('Exercise'), $select_exercise_html);
 
 //Difficulty list (only from 0 to 5)                
-$select_difficulty_html = Display::select('exerciseLevel', array(0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5), $exerciseLevel, array('onchange'=>'submit_form(this);'));
+$select_difficulty_html = Display::select('exerciseLevel', array(-1 => get_lang('All'), 0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5), $exerciseLevel, array('class'=>'chzn-select', 'onchange'=>'submit_form(this);'), false);
 echo Display::form_row(get_lang('Difficulty'), $select_difficulty_html);
 
 //Answer type
 
 $question_list = Question::get_types_information();
 $new_question_list = array();
+$new_question_list['-1']  = get_lang('All');
 $objExercise->feedbacktype;
 foreach ($question_list as $key=>$item) {
     if ($objExercise->feedbacktype == EXERCISE_FEEDBACK_TYPE_DIRECT) {
@@ -339,7 +342,7 @@ foreach ($question_list as $key=>$item) {
 }
 
 //Answer type list
-$select_answer_html = Display::select('answerType', $new_question_list, $answerType, array('onchange'=>'submit_form(this);'));
+$select_answer_html = Display::select('answerType', $new_question_list, $answerType, array('class'=>'chzn-select','onchange'=>'submit_form(this);'), false);
 echo Display::form_row(get_lang('AnswerType'), $select_answer_html);
 $button = '<button class="save" type="submit" name="name" value="'.get_lang('Filter').'">'.get_lang('Filter').'</button>'; 
 echo Display::form_row('', $button);
@@ -351,6 +354,8 @@ echo Display::form_row('', $button);
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
 echo '<table class="data_table">';
 $from = $page * $limitQuestPage;
+
+$show_pagination = true;
 
 // if we have selected an exercise in the list-box 'Filter'
 if ($exerciseId > 0) {
@@ -368,9 +373,9 @@ if ($exerciseId > 0) {
 		$where .= ' type='.$answerType.' AND ';
 	}
 
-	$sql="SELECT id,question,type,level
+	$sql = "SELECT id,question,type,level
 			FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS
-		  	WHERE $where question_id=id AND exercice_id='".Database::escape_string($exerciseId)."'
+		  	WHERE $where question_id=id AND exercice_id='".$exerciseId."'
 			ORDER BY question_order";
             
     $result=Database::query($sql);
@@ -419,7 +424,7 @@ if ($exerciseId > 0) {
 		$answer_where = ' questions.type='.$answerType.' AND ';
 	}
 
-	$sql='SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id , level, session_id
+	$sql = 'SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id , level, session_id
 			FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions
 			ON questions.id=quizz_questions.question_id LEFT JOIN '.$TBL_EXERCICES.' as exercices
 			ON exercice_id=exercices.id
@@ -432,9 +437,8 @@ if ($exerciseId > 0) {
     }
 
 } else {
+	$show_pagination = false;
 	// if we have not selected any option in the list-box 'Filter'
-
-	//$sql="SELECT id,question,type FROM $TBL_QUESTIONS LIMIT $from, ".($limitQuestPage + 1);
 	$filter = '';
 
 	if (isset($type) && $type==1){
@@ -454,11 +458,11 @@ if ($exerciseId > 0) {
     }
     
 	$new_limit_page = $limitQuestPage + 1;
-    if ($session_id != 0) {       
-
+	
+    if ($session_id != 0) {
         $main_question_list = array();
         if (!empty($course_list))
-        foreach ($course_list as $course_item) {        
+        foreach ($course_list as $course_item) {    
             if (!empty($selected_course) && $selected_course != '-1') {
                 if ($selected_course != $course_item['id']) {                
                 	continue;
@@ -503,41 +507,48 @@ if ($exerciseId > 0) {
         //By default
     	$sql="SELECT qu.id, question, qu.type, level, q.session_id FROM $TBL_QUESTIONS as qu, $TBL_EXERCICE_QUESTION as qt, $TBL_EXERCICES as q
               WHERE q.id=qt.exercice_id AND qu.id=qt.question_id AND qt.exercice_id<>".$fromExercise." $filter ORDER BY session_id ASC LIMIT $from, $new_limit_page";
+    	$result = Database::query($sql);
+    	
+    	while($row = Database::fetch_array($result, 'ASSOC')) {
+    		$main_question_list[] = $row;
+    	}
     }
 	// forces the value to 0
 	$exerciseId=0;
 }
 $nbrQuestions = count($main_question_list);
-echo '<tr>',
-  '<td colspan="',($fromExercise?4:4),'">',
-	'<table border="0" cellpadding="0" cellspacing="0" width="100%">',
-	'<tr><td align="right">';
-
-if(!empty($page)) {	
-	echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page-1),'&session_id='.$session_id.'&selected_course='.$selected_course.'&answerType=',$answerType,'&exerciseLevel='.$exerciseLevel.'">';
-	echo Display::return_icon('action_prev.png');
-	echo '&nbsp;';
+if ($show_pagination) {
+	echo '<tr>',
+	  '<td colspan="',($fromExercise?4:4),'">',
+		'<table border="0" cellpadding="0" cellspacing="0" width="100%">',
+		'<tr><td align="right">';
 	
-} elseif($nbrQuestions > $limitQuestPage) {
-	echo Display::return_icon('action_prev_na.png');
-	echo '&nbsp;';
-}
-
-if($nbrQuestions > $limitQuestPage) {
-	echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page+1),'&session_id='.$session_id.'&selected_course='.$selected_course.'&answerType=',$answerType,'&exerciseLevel='.$exerciseLevel.'">';
-	echo Display::return_icon('action_next.png');
-	echo '</a>';
+	if(!empty($page)) {	
+		echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page-1),'&session_id='.$session_id.'&selected_course='.$selected_course.'&answerType=',$answerType,'&exerciseLevel='.$exerciseLevel.'">';
+		echo Display::return_icon('action_prev.png');
+		echo '&nbsp;';
+		
+	} elseif($nbrQuestions > $limitQuestPage) {
+		echo Display::return_icon('action_prev_na.png');
+		echo '&nbsp;';
+	}
 	
-} elseif($page) {
-   	echo Display::return_icon('action_next_na.png');
-   echo '&nbsp;';
+	if($nbrQuestions > $limitQuestPage) {
+		echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page+1),'&session_id='.$session_id.'&selected_course='.$selected_course.'&answerType=',$answerType,'&exerciseLevel='.$exerciseLevel.'">';
+		echo Display::return_icon('action_next.png');
+		echo '</a>';
+		
+	} elseif($page) {
+	   	echo Display::return_icon('action_next_na.png');
+	   echo '&nbsp;';
+	}
+	echo '</td>
+		</tr>
+		</table>
+	  </td>
+	</tr>';
 }
-echo '</td>
-	</tr>
-	</table>
-  </td>
-</tr>
-<tr bgcolor="#e6e6e6">';
+echo '<tr>';
 
 if (!empty($fromExercise)) {
 	if (api_get_session_id() == 0 ){

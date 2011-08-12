@@ -8,7 +8,6 @@
 /**
  * Code
  */
-require_once 'model.lib.php';
 require_once 'promotion.lib.php';
 require_once 'fckeditor/fckeditor.php';
 

@@ -94,31 +94,34 @@ if ($is_allowedToEdit) {
         
         //Reading the source question
 		$old_question_obj = Question::read($old_question_id, $origin_course_id);
-		$old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));     
-        
-        //Duplicating the source question, in the current course
-		$new_id = $old_question_obj->duplicate($current_course);
-		
-        //Reading new question
-		$new_question_obj = Question::read($new_id);			
-		$new_question_obj->addToList($fromExercise);
-        			
-        //Reading Answers obj of the current course 
-		$new_answer_obj = new Answer($old_question_id, $origin_course_id);
-		$new_answer_obj->read();
-        
-        //Duplicating the Answers in the current course
-		$new_answer_obj->duplicate($new_id, $current_course);		
-		
-		// destruction of the Question object
-		unset($new_question_obj);
-		unset($old_question_obj);
-
-        if (!$objExcercise instanceOf Exercise) {
-        	$objExercise = new Exercise();
-            $objExercise->read($fromExercise);
-        }
-		api_session_register('objExercise');
+		if ($old_question_obj) {
+			$old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));     
+	        
+	        //Duplicating the source question, in the current course
+			$new_id = $old_question_obj->duplicate($current_course);
+			
+	        //Reading new question
+			$new_question_obj = Question::read($new_id);
+						
+			$new_question_obj->addToList($fromExercise);
+	        			
+	        //Reading Answers obj of the current course 
+			$new_answer_obj = new Answer($old_question_id, $origin_course_id);
+			$new_answer_obj->read();
+	        
+	        //Duplicating the Answers in the current course
+			$new_answer_obj->duplicate($new_id, $current_course);		
+			
+			// destruction of the Question object
+			unset($new_question_obj);
+			unset($old_question_obj);
+	
+	        if (!$objExcercise instanceOf Exercise) {
+	        	$objExercise = new Exercise();
+	            $objExercise->read($fromExercise);
+	        }
+			api_session_register('objExercise');
+		}
 		header("Location: admin.php?".api_get_cidreq()."&exerciseId=$fromExercise");
 		exit();	
 	}
@@ -159,60 +162,59 @@ if ($is_allowedToEdit) {
 		exit();*/
 	} else if( isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
 		$list_recup 		= $_POST['recup'];
-		$origin_course_id   = intval($_REQUEST['course_id']);
-		$origin_course_info = api_get_course_info_by_id($origin_course_id);
-		$current_course     = api_get_course_info();
 		
-		
-		foreach ($list_recup as $recup) {
-			/*
-			$recup = intval($recup);
-			// if the question exists
-			if($objQuestionTmp = Question :: read($recup)) {
-				// adds the exercise ID represented by $fromExercise into the list of exercises for the current question
-				$objQuestionTmp->addToList($fromExercise);
-			}
-			// destruction of the Question object
-			unset($objQuestionTmp);
-	        if(!$objExcercise instanceOf Exercise) {
-	        	$objExercise = new Exercise();
-	            $objExercise->read($fromExercise);
-	        }
-			// adds the question ID represented by $recup into the list of questions for the current exercise
-			$objExercise->addToList($recup);
-			*/
+		foreach ($list_recup as $course_id => $question_data) {
 			
+			$origin_course_id   = intval($course_id);
+			$origin_course_info = api_get_course_info_by_id($origin_course_id);
+			$current_course     = api_get_course_info();
 			
-			
-			
-			
-			$old_question_id    = $recup;
-			
-			//Reading the source question
-			$old_question_obj = Question::read($old_question_id, $origin_course_id);
-			$old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));
-			
-			//Duplicating the source question, in the current course
-			$new_id = $old_question_obj->duplicate($current_course);
-			
-			//Reading new question
-			$new_question_obj = Question::read($new_id);
-			$new_question_obj->addToList($fromExercise);
-			 
-			//Reading Answers obj of the current course
-			$new_answer_obj = new Answer($old_question_id, $origin_course_id);
-			$new_answer_obj->read();
-			
-			//Duplicating the Answers in the current course
-			$new_answer_obj->duplicate($new_id, $current_course);
-			
-			// destruction of the Question object
-			unset($new_question_obj);
-			unset($old_question_obj);
-			
-			if (!$objExcercise instanceOf Exercise) {
-				$objExercise = new Exercise();
-				$objExercise->read($fromExercise);
+			foreach ($question_data as $old_question_id) {			
+				/*
+				$recup = intval($recup);
+				// if the question exists
+				if($objQuestionTmp = Question :: read($recup)) {
+					// adds the exercise ID represented by $fromExercise into the list of exercises for the current question
+					$objQuestionTmp->addToList($fromExercise);
+				}
+				// destruction of the Question object
+				unset($objQuestionTmp);
+		        if(!$objExcercise instanceOf Exercise) {
+		        	$objExercise = new Exercise();
+		            $objExercise->read($fromExercise);
+		        }
+				// adds the question ID represented by $recup into the list of questions for the current exercise
+				$objExercise->addToList($recup);
+				*/	
+				
+				//Reading the source question
+				$old_question_obj = Question::read($old_question_id, $origin_course_id);
+				if ($old_question_obj) {
+					$old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));
+					
+					//Duplicating the source question, in the current course
+					$new_id = $old_question_obj->duplicate($current_course);
+					
+					//Reading new question
+					$new_question_obj = Question::read($new_id);
+					$new_question_obj->addToList($fromExercise);
+					 
+					//Reading Answers obj of the current course
+					$new_answer_obj = new Answer($old_question_id, $origin_course_id);
+					$new_answer_obj->read();
+					
+					//Duplicating the Answers in the current course
+					$new_answer_obj->duplicate($new_id, $current_course);
+					
+					// destruction of the Question object
+					unset($new_question_obj);
+					unset($old_question_obj);
+					
+					if (!$objExcercise instanceOf Exercise) {
+						$objExercise = new Exercise();
+						$objExercise->read($fromExercise);
+					}
+				}
 			}
 		}
 		api_session_register('objExercise');
@@ -494,7 +496,13 @@ if ($exerciseId > 0) {
                                          continue;
                                      }
                                 }                    
-                                $question_row       = array('id'=>$question_obj->id, 'question'=>$question_obj->question, 'type'=>$question_obj->type, 'level'=>$question_obj->level, 'exercise_id'=>$exercise['id']);
+                                $question_row = array(	'id'			=> $question_obj->id, 
+                                						'question'		=> $question_obj->question, 
+                                						'type'			=> $question_obj->type, 
+                                						'level'			=> $question_obj->level, 
+                                						'exercise_id'	=> $exercise['id'],
+                                						'course_id'		=> $course_item['id'],
+                                );
                                                             
                                 $main_question_list[]    = $question_row;                        
                             }
@@ -555,7 +563,7 @@ if (!empty($fromExercise)) {
     	echo '<th width="4%"> </th>';
 	}
     echo '<th>',get_lang('Question'),'</th>',
-        '<th>',get_lang('Level'),'</th>',
+        '<th>',get_lang('Difficulty'),'</th>',
         '<th>',get_lang('Reuse'),'</th>';
 } else {
     echo '<td width="60%" align="center">',get_lang('Question'),'</td>',
@@ -568,6 +576,12 @@ $i=1;
 $session_id  = api_get_session_id();
 if (!empty($main_question_list))
 foreach ($main_question_list as $row) {
+	$my_course_id = 0;
+	if (isset($row['course_id'])) {
+		$my_course_id = $row['course_id'];
+	}
+	
+
 	// if we come from the exercise administration to get a question,
     // don't show the questions already used by that exercise
 
@@ -576,7 +590,7 @@ foreach ($main_question_list as $row) {
 	if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (is_array($objExercise->questionList)) ) {
         echo '<tr ',($i%2==0?'class="row_odd"':'class="row_even"'),'>';
         if (api_get_session_id() == 0 ){
-        	echo '<td align="center"> <input type="checkbox" value="'.$row['id'].'" name="recup[]"/></td>';
+        	echo '<td align="center"> <input type="checkbox" value="'.$row['id'].'" name="recup['.$my_course_id.'][]"/></td>';
         }
         echo '  <td><a href="admin.php?',api_get_cidreq(),'&editQuestion=',$row['id'],'&fromExercise='.$fromExercise.'&answerType='.$row['type'].'">',$row['question'],'</a></td>';
         echo '  <td align="center" >';
@@ -589,7 +603,8 @@ foreach ($main_question_list as $row) {
 		} else {
 			echo $row['level'],'</td>',
 				 '<td align="center">';
-			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;copy_question='.$row['id'].'&course_id='.$selected_course.'&fromExercise=',$fromExercise,'">';                
+			
+			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;copy_question='.$row['id'].'&course_id='.$my_course_id.'&fromExercise=',$fromExercise,'">';                
             echo ' '.Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest'));
             echo '</a> ';
 			if ($row['session_id'] == $session_id) {

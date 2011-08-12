@@ -608,6 +608,7 @@ if (isset ($_GET['studentoverview'])) {
     if (empty($user_id)) {
         api_not_allowed();
     }
+    
     $my_category = Category :: load($category); //hack replace $category = Category :: load ($_GET['cat_id']); to get de course name in certificates
     global $charset;
     
@@ -626,7 +627,7 @@ if (isset ($_GET['studentoverview'])) {
                     echo @file_get_contents($user_certificate);                    
                 }  
 	        } else {
-	            $new_content_html = get_user_certificate_content($user_id, true);
+	            $new_content_html = get_user_certificate_content($user_id, api_get_course_id(), true);
 	            if (empty($new_content_html)) {
 	                Display :: display_reduced_header();
                     Display :: display_warning_message(get_lang('NoCertificateAvailable'));	                
@@ -675,7 +676,7 @@ if (isset ($_GET['studentoverview'])) {
     			$name    = $data['path_certificate'];
     
     			if (!empty($data)) {
-    			    $new_content_html = get_user_certificate_content($user_id, false);
+    			    $new_content_html = get_user_certificate_content($user_id, api_get_course_id(), false);
     				    
     				if ($cat_id = strval(intval($cat_id))) {    				    
     				    $my_path_certificate = $path_directory_user_certificate.$name;
@@ -847,12 +848,16 @@ if ($category != '0') {
             //$score_compare = ($scoretotal[0] / $scoretotal[1]) * 100; //build the total percentage obtained in order to compare it to the minimum certification percentage
 			if (isset($certificate_min_score) && $item_value >= $certificate_min_score) {
 				$url  = api_get_path(WEB_CODE_PATH) .'gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=yes&cat_id='.$cats[0]->get_id();
-
-				$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 48), $url, array('target'=>'_blank'));
 				
-				echo '<div class="actions" align="right">';
-				echo $certificates;
-				echo '</div>';
+				$my_certificate = get_certificate_by_user_id($cats[0]->get_id(), api_get_user_id());
+				if (!empty($my_certificate)) {
+					$url  = api_get_path(WEB_PATH) .'certificates/?id='.$my_certificate['id'];	
+					$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 48), $url, array('target'=>'_blank'));					
+					echo '<div class="actions" align="right">';
+					echo $certificates;
+					echo '<br />'.Display::url($url, $url, array('_blank'));
+					echo '</div>';
+				}
 			}
 		} //end hack
 		

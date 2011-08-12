@@ -2884,7 +2884,7 @@ return 'application/octet-stream';
             //if admin or course teacher, allow anyway
             if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id,$course_code)) { return true; }        
             $course_info = api_get_course_info($course_code);
-    		if ($document_data['parent_id'] == false) {
+    		if ($document_data['parent_id'] == false || empty($document_data['parent_id'])) {
     			$visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
     			return $visible;
     		} else {

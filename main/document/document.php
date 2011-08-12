@@ -187,10 +187,13 @@ switch ($action) {
 
 // I'm in the certification module?
 $is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath']);
+if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
+	$is_certificate_mode = true;	
+}
 
 //If no actions we proceed to show the document (Hack in order to use document.php?id=X) 
 if (isset($document_id)) {
-    $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true); 
+    $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true);
     
     //If the document is not a folder we show the document
     if ($document_data) {
@@ -250,6 +253,9 @@ if (isset($document_id)) {
 	$parent_id     = $document_data['parent_id'];	
 }
 
+if (isset($document_data) && $document_data['path'] == '/certificates') {
+	$is_certificate_mode = true;	
+}
 
 if (!$parent_id) {
     $parent_id = 0; 
@@ -874,17 +880,17 @@ if ($folders === false) {
 }
 
 echo '<div class="actions">';
-//if ($is_allowed_to_edit || $group_member_with_upload_rights){
-/* BUILD SEARCH FORM */
-    echo '<span style="display:inline-block;">';
-    $form = new FormValidator('search_document', 'get', '', '', null, false);
-    $renderer = & $form->defaultRenderer();
-    $renderer->setElementTemplate('<span>{element}</span> ');
-    $form->add_textfield('keyword', '', false);
-    $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
-    $form->display();
-    echo '</span>';
-//}
+	if (!$is_certificate_mode) {
+		/* BUILD SEARCH FORM */
+	    echo '<span style="display:inline-block;">';
+	    $form = new FormValidator('search_document', 'get', '', '', null, false);
+	    $renderer = & $form->defaultRenderer();
+	    $renderer->setElementTemplate('<span>{element}</span> ');
+	    $form->add_textfield('keyword', '', false);
+	    $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
+	    $form->display();
+	    echo '</span>';
+	}
 
 /* GO TO PARENT DIRECTORY */
 if ($curdirpath!= '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {

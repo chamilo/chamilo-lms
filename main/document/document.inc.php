@@ -258,15 +258,17 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 			     //|| (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
             ) {
             	//yox view
-				$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
-				$class = 'yoxview';
+				//$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
+				//Simpler version of showinframesmin.php with no headers 
+				$url = 'show_content.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid.'&width=700&height=500';
+				$class = 'thickbox';
 				if ($visibility == false) {
-					$class = "yoxview invisible";
+					$class = "thickbox invisible";
 				}								
-				return '<a href="'.$url.'" class="'.$class.'" title="'.$tooltip_title_alt.'" target="yoxview" style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+				return '<a href="'.$url.'" class="'.$class.'" title="'.$tooltip_title_alt.'" style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
 			} else {
 				$url = 'showinframes.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
-			    //No yoxview			
+			    //No plugin just the old and good showinframes.php page 			
             	return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" style="float:left" '.$visibility_class.' >'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
 			}          
         } else {

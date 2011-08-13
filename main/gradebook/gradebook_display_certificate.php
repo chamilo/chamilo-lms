@@ -111,8 +111,8 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
 	<td>
 	<table class="data_table" width="100%" >
 		<?php
-		$list_certificate = get_list_gradebook_certificates_by_user_id ($value['user_id'],$cat_id);
-		foreach ($list_certificate as $index_certificate=>$value_certificate) {
+		$list_certificate = get_list_gradebook_certificates_by_user_id ($value['user_id'], $cat_id);		
+		foreach ($list_certificate as $index_certificate => $value_certificate) {
 			?>
 			<tr >
 			<td width="50%"><?php echo get_lang('Score').' : '.$value_certificate['score_certificate'] ?></td>
@@ -120,6 +120,7 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
 			<td width="20%">
 			<?php			
                 $url = "index.php?export_certificate=yes&cat_id=".$cat_id."&user=".$value['user_id'];
+                //$url = api_get_path(WEB_PATH).'certificates/?id=';
     			$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 22), $url, array('target'=>'_blank'));
     			echo $certificates;
             ?>

@@ -292,8 +292,7 @@ class UserManager {
                     GroupPortalManager::delete_user_rel_group($user_id, $group_id);
 			    }
 			}
-			
-			require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+						
 			//Delete user from friend lists
 			SocialManager::remove_user_rel_user($user_id, true);
 		}
@@ -3251,15 +3250,16 @@ class UserManager {
 	  	$rs  = Database::query($sql);	  		  		  	
 	  	if (Database::num_rows($rs) > 0) {
 	  	    $row = Database::fetch_array($rs,'ASSOC');	  	
-	  	    $score = $row['score_certificate'];
+	  	    $score 		  = $row['score_certificate'];
 	  	    $category_id  = $row['cat_id'];
-	  	    $eval         = Evaluation::load(null, null, $course_code, $category_id);	  		  	
+	  	    $cat         = Category::load($category_id);	  		  	
 	  	    $displayscore = ScoreDisplay::instance();
-	  	
-	  	    $grade = '';
-	  	    if (isset($eval) && $displayscore->is_custom()) {
-                $grade = $displayscore->display_score(array($score, $eval[0]->get_max()), SCORE_DIV_PERCENT_WITH_CUSTOM);			
-    	  	}
+			$grade = '';
+	  	    if (isset($cat) && $displayscore->is_custom()) {
+                $grade = $displayscore->display_score(array($score, $cat[0]->get_weight()), SCORE_DIV_PERCENT_WITH_CUSTOM);			
+    	  	} else {
+    	  		$grade = $displayscore->display_score(array($score, $cat[0]->get_weight()));    	  		
+    	  	}    	  	    	  	    	  	
 	  	    $row['grade'] = $grade;
 	  		return $row;
         }

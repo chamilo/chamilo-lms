@@ -156,15 +156,20 @@ require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
-if (isset($_REQUEST['certificate'])) {
+
+//I'm in the certification module?
+$is_certificate_mode = false;
+
+if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
+	$is_certificate_mode = true;
+}
+
+if ($is_certificate_mode) {
 	$nameTools = get_lang('CreateCertificate');
 } else {
 	$nameTools = get_lang('CreateDocument');
 }
-
-$nameTools = get_lang('CreateDocument');
 
 /*	Constants and variables */
 
@@ -203,6 +208,13 @@ if ($dir[0] != '/') {
 
 if ($dir[strlen($dir) - 1] != '/') {
 	$dir .= '/';
+}
+
+if ($is_certificate_mode) {
+	$document_id 	= DocumentManager::get_document_id(api_get_course_info(), '/certificates');
+	$document_data 	= DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true);
+	$folder_id = $document_data['id'];
+	$dir = '/certificates/';
 }
 
 // Configuration for the FCKEDITOR
@@ -249,14 +261,6 @@ if (!is_dir($filepath)) {
 	$dir = '/';
 }
 
-
-//I'm in the certification module?
-$is_certificate_mode = false;
-$is_certificate_array = explode('/',$dir);
-array_shift($is_certificate_array);
-if ($is_certificate_array[0]=='certificates') {
-	$is_certificate_mode = true;
-}
 $to_group_id = 0;
 
 if (!$is_certificate_mode) {
@@ -299,10 +303,10 @@ $form = new FormValidator('create_document','post',api_get_self().'?dir='.Securi
 // form title
 $form->addElement('header', '', $nameTools);
 
-if (isset($_REQUEST['certificate'])) {//added condition for certicate in gradebook
+if ($is_certificate_mode) {//added condition for certicate in gradebook
 	$form->addElement('hidden','certificate','true',array('id'=>'certificate'));
 	if (isset($_GET['selectcat']))
-		$form->addElement('hidden','selectcat',intval($_GET['selectcat']));
+		$form->addElement('hidden','selectcat', intval($_GET['selectcat']));
 
 }
 $renderer = & $form->defaultRenderer();
@@ -533,7 +537,7 @@ if ($form->validate()) {
 
 	if (strpos($content, '/css/frames.css') === false) {
 		$content = str_replace('</head>', '<style> body{margin:10px;}</style> <link rel="stylesheet" href="./css/frames.css" type="text/css" /></head>', $content);
-	}
+	}	
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
 		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
 		
@@ -585,7 +589,11 @@ if ($form->validate()) {
 			$selectcat = '';
 			if (isset($_REQUEST['selectcat']))
 				$selectcat = "&selectcat=".Security::remove_XSS($_REQUEST['selectcat']);
-			header('Location: document.php?id='.$folder_id.$selectcat);
+			$certificate_condition = '';
+			if ($is_certificate_mode) {
+				$certificate_condition = '&certificate=true';
+			}
+			header('Location: document.php?id='.$folder_id.$selectcat.$certificate_condition);
 			exit ();
 		} else {
 			Display :: display_header($nameTools, 'Doc');
@@ -594,7 +602,6 @@ if ($form->validate()) {
 		}
 	} else {
 		Display :: display_header($nameTools, 'Doc');
-		//api_display_tool_title($nameTools);
 		Display :: display_error_message(get_lang('Impossible'));
 		Display :: display_footer();
 	}
@@ -629,8 +636,8 @@ if ($form->validate()) {
 	Display :: display_header($nameTools, "Doc");
 	//api_display_tool_title($nameTools);
 	// actions
-	if (isset($_REQUEST['certificate'])) {
-		$all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(api_get_user_id());
+	if ($is_certificate_mode) {
+		$all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(api_get_user_id(), api_get_course_id());
 		
 		$str_info = '';
 		foreach ($all_information_by_create_certificate[0] as $info_value) {

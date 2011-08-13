@@ -493,7 +493,7 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 	$form->addElement('html', '<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');
 	*/
 	if (isset($_REQUEST['curdirpath']) && $dir =='/certificates') {
-		$all_information_by_create_certificate=DocumentManager::get_all_info_to_certificate(api_get_user_id());
+		$all_information_by_create_certificate=DocumentManager::get_all_info_to_certificate(api_get_user_id(), api_get_course_id());
 		$str_info='';
 		foreach ($all_information_by_create_certificate[0] as $info_value) {
 			$str_info.=$info_value.'<br/>';

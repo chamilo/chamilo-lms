@@ -332,13 +332,17 @@ class DisplayGradebook
                 }
 
                 if (!$message_resource) {
-                	$myname=$catobj->shows_all_information_an_category($catobj->get_id());
+                	$myname = $catobj->shows_all_information_an_category($catobj->get_id());
                  	
                 	$my_course_id=api_get_course_id();
                 	$my_file= substr($_SESSION['gradebook_dest'],0,5);
                 		
 					$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats.png', get_lang('FlatView'),'','32').'</a>';
-					$header .= '<td style="vertical-align: top;"><a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('certificate.png', get_lang('AttachCertificate'),'','32').'</a>';
+					
+					$header .= '<td style="vertical-align: top;"><a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.
+								Display::return_icon('certificate.png', get_lang('AttachCertificate'),'','32').
+								'</a>';
+					
 					$header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?'.$my_api_cidreq.'&amp;cat_id='.(int)$_GET['selectcat'].'">'.Display::return_icon('certificate_list.png', get_lang('GradebookSeeListOfStudentsCertificates'),'','32').'</a>';
 					
 					$visibility_icon    = ($catobj->is_visible() == 0) ? 'invisible' : 'visible';

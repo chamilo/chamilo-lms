@@ -69,6 +69,19 @@ $session_id  = api_get_session_id();
 $course_code = api_get_course_id();
 $to_group_id = api_get_group_id();
 
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$group_member_with_upload_rights = false;
+
+// If the group id is set, we show them group documents
+$group_properties = array();
+$group_properties['directory'] = null;
+
+// For sessions we should check the parameters of visibility
+if (api_get_session_id() != 0) {
+	$group_member_with_upload_rights = $group_member_with_upload_rights && api_is_allowed_to_session_edit(false, true);
+}
+
+
 //Setting group variables 
 if (api_get_group_id()) {
 	// Needed for group related stuff
@@ -174,10 +187,13 @@ switch ($action) {
 
 // I'm in the certification module?
 $is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath']);
+if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
+	$is_certificate_mode = true;	
+}
 
 //If no actions we proceed to show the document (Hack in order to use document.php?id=X) 
 if (isset($document_id)) {
-    $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true); 
+    $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true);
     
     //If the document is not a folder we show the document
     if ($document_data) {
@@ -237,6 +253,9 @@ if (isset($document_id)) {
 	$parent_id     = $document_data['parent_id'];	
 }
 
+if (isset($document_data) && $document_data['path'] == '/certificates') {
+	$is_certificate_mode = true;	
+}
 
 if (!$parent_id) {
     $parent_id = 0; 
@@ -274,6 +293,7 @@ $tool_sql           = 'SELECT visibility FROM ' . $table_course_tool . ' WHERE n
 $tool_result        = Database::query($tool_sql);
 $tool_row           = Database::fetch_array($tool_result);
 $tool_visibility    = $tool_row['visibility'];
+
 if ($tool_visibility == '0' && $to_group_id == '0' && !($is_allowed_to_edit || $group_member_with_upload_rights)) {
     api_not_allowed(true);
 }
@@ -287,18 +307,6 @@ function confirmation (name) {
         {return false;}
 }
 </script>";
-
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-$group_member_with_upload_rights = false;
-
-// If the group id is set, we show them group documents
-$group_properties = array();
-$group_properties['directory'] = null;
-
-// For sessions we should check the parameters of visibility
-if (api_get_session_id() != 0) {
-    $group_member_with_upload_rights = $group_member_with_upload_rights && api_is_allowed_to_session_edit(false, true);
-}
 
 // If they are looking at group documents they can't see the root
 if ($to_group_id != 0 && $curdirpath == '/') {
@@ -392,23 +400,25 @@ if (empty($document_data['parents'])) {
 if (isset($_GET['createdir'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('CreateDir'));
 }
-
-$htmlHeadXtra[] = api_get_jquery_js();
 $htmlHeadXtra[] = api_get_jquery_ui_js();
 
+$js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';
+/*
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'yoxview/yox.js"></script>';
 $htmlHeadXtra[] = api_get_js('yoxview/yoxview-init.js');
-$js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';   
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'yoxview/yoxview.css" type="text/css">';
+*/
+
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/chamilo/jplayer.blue.monday.css" type="text/css">';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
+
 
 $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
 
 //automatic loading the course language for yoxview
-$yoxview_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
+/*$yoxview_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
 $lang_yoxview  = api_get_language_isocode();
 $lang_yoxview = isset($yoxview_code_translation_table[$lang_yoxview]) ? $yoxview_code_translation_table[$lang_yoxview] : $lang_yoxview;
-
+*/
 $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
 
 $file_list = $format_list = '';
@@ -443,15 +453,14 @@ foreach ($docs_and_folders  as $file) {
 }
  
 $htmlHeadXtra[] = '<script type="text/javascript">
-$(document).ready( function() {  
-	  
-    $(".yoxview").yoxview({
+$(document).ready( function() {
+	   /*
+    $(".yoxview").yoxview({ 
         lang: "'.$lang_yoxview.'",
         flashVideoPlayerPath: "'.$mediaplayer_path.'",
         allowInternalLinks:true,
-        defaultDimensions: { iframe: { width: 800}},
-        titleAttribute : "alt"        
-    });
+        defaultDimensions: { iframe: { width: 800}},              
+    });*/
         
     //Experimental changes to preview mp3, ogg files        
      '.$jquery.'              
@@ -871,17 +880,17 @@ if ($folders === false) {
 }
 
 echo '<div class="actions">';
-//if ($is_allowed_to_edit || $group_member_with_upload_rights){
-/* BUILD SEARCH FORM */
-    echo '<span style="display:inline-block;">';
-    $form = new FormValidator('search_document', 'get', '', '', null, false);
-    $renderer = & $form->defaultRenderer();
-    $renderer->setElementTemplate('<span>{element}</span> ');
-    $form->add_textfield('keyword', '', false);
-    $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
-    $form->display();
-    echo '</span>';
-//}
+	if (!$is_certificate_mode) {
+		/* BUILD SEARCH FORM */
+	    echo '<span style="display:inline-block;">';
+	    $form = new FormValidator('search_document', 'get', '', '', null, false);
+	    $renderer = & $form->defaultRenderer();
+	    $renderer->setElementTemplate('<span>{element}</span> ');
+	    $form->add_textfield('keyword', '', false);
+	    $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
+	    $form->display();
+	    echo '</span>';
+	}
 
 /* GO TO PARENT DIRECTORY */
 if ($curdirpath!= '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {

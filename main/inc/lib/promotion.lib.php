@@ -8,7 +8,7 @@
 /**
  * Code
  */
-require_once 'model.lib.php';
+
 require_once 'career.lib.php';
 require_once 'fckeditor/fckeditor.php';
 
@@ -145,11 +145,11 @@ class Promotion extends Model {
     function return_form($url, $action = 'add') {
     	
 		$oFCKeditor = new FCKeditor('description') ;
-				$oFCKeditor->ToolbarSet = 'careers';
-				$oFCKeditor->Width		= '100%';
-				$oFCKeditor->Height		= '200';
-				$oFCKeditor->Value		= '';
-				$oFCKeditor->CreateHtml();		
+		$oFCKeditor->ToolbarSet = 'careers';
+		$oFCKeditor->Width		= '100%';
+		$oFCKeditor->Height		= '200';
+		$oFCKeditor->Value		= '';
+		$oFCKeditor->CreateHtml();		
 		
 		$form = new FormValidator('promotion', 'post', $url);
         // Settting the form elements

@@ -598,14 +598,13 @@ function delete_certificate($cat_id, $user_id) {
     }
 }
 
-function get_user_certificate_content($user_id, $is_preview = false) {
-    //generate document HTML
-    $course_id          = api_get_course_id();
-    $content_html       = DocumentManager::replace_user_info_into_html($user_id, $course_id, $is_preview);
+function get_user_certificate_content($user_id, $course_code, $is_preview = false) {
+    //generate document HTML    
+    $content_html       = DocumentManager::replace_user_info_into_html($user_id, $course_code, $is_preview);
         
     $new_content        = explode('</head>', $content_html);    
     $new_content_html   = $new_content[1];                    
-    $path_image         = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';
+    $path_image         = api_get_path(WEB_COURSE_PATH).api_get_course_path($course_code).'/document/images/gallery';
     $new_content_html   = str_replace('../images/gallery',$path_image,$new_content_html);
     
     $path_image_in_default_course = api_get_path(WEB_CODE_PATH).'default_course_document';

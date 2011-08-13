@@ -1346,12 +1346,12 @@ return 'application/octet-stream';
         $new_content = '';
         if (Database::num_rows($rs)) {
             $row=Database::fetch_array($rs);
-            $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
+           $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
 
             if (is_file($filepath)) {
                 $my_content_html=file_get_contents($filepath);
             }
-            $all_user_info = self::get_all_info_to_certificate($user_id, $is_preview);
+            $all_user_info = self::get_all_info_to_certificate($user_id, $course_id, $is_preview);
             $info_to_be_replaced_in_content_html=$all_user_info[0];
             $info_to_replace_in_content_html=$all_user_info[1];
             $new_content=str_replace($info_to_be_replaced_in_content_html,$info_to_replace_in_content_html, $my_content_html);
@@ -1362,11 +1362,10 @@ return 'application/octet-stream';
     /**
      * return all content to replace and all content to be replace
      */
-    function get_all_info_to_certificate($user_id, $is_preview = false) {
+    function get_all_info_to_certificate($user_id, $course_id, $is_preview = false) {
         $info_list	= array();
         $user_id	= intval($user_id);
-        $course_id	= api_get_course_id();
-        
+                
         $course_info = api_get_course_info($course_id);
 
         //info portal
@@ -2884,7 +2883,7 @@ return 'application/octet-stream';
             //if admin or course teacher, allow anyway
             if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id,$course_code)) { return true; }        
             $course_info = api_get_course_info($course_code);
-    		if ($document_data['parent_id'] == false) {
+    		if ($document_data['parent_id'] == false || empty($document_data['parent_id'])) {
     			$visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
     			return $visible;
     		} else {

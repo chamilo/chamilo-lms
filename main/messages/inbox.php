@@ -10,7 +10,6 @@
 $language_file = array('registration','messages','userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
 api_block_anonymous_users();
 if (isset($_GET['messages_page_nr'])) {
@@ -150,8 +149,7 @@ echo '<div id="social-content">';
 	//LEFT CONTENT			
 	if (api_get_setting('allow_social_tool') != 'true') { 
 		$id_content_right = 'inbox';		
-	} else {
-		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+	} else {		
 		$id_content_right = 'social-content-right';
 		echo '<div id="social-content-left">';	
 			//this include the social menu div

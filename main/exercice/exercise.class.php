@@ -2836,14 +2836,14 @@ class Exercise {
 					 
 					//save the score attempts
 
-					if (1 ) {
+					if (1) {
 						$final_answer = $hotspot_delineation_result[1]; //getting the answer 1 or 0 comes from exercise_submit_modal.php
 						if ($final_answer == 0) {
 							$questionScore = 0;
 						}
 						exercise_attempt($questionScore, 1, $quesId, $exeId, 0); // we always insert the answer_id 1 = delineation
-						//we will only save one item - @TODO $my_hotspot_answer seems unefined. Find where it should come from
-						exercise_attempt_hotspot($exeId,$quesId,1, $my_hotspot_answer, $exerciseResultCoordinates[$quesId]);
+                        //in delineation mode, get the answer from $hotspot_delineation_result[1]
+						exercise_attempt_hotspot($exeId,$quesId,1, $hotspot_delineation_result[1], $exerciseResultCoordinates[$quesId]);
 					} else {
 						if ($final_answer==0) {
 							$questionScore = 0;

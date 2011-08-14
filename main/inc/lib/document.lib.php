@@ -1400,6 +1400,7 @@ return 'application/octet-stream';
             $date_long_certificate = api_convert_and_format_date(api_get_utc_datetime());
         }
 
+        $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
         //replace content
         $info_to_replace_in_content_html     = array($first_name, 
                                                      $last_name,
@@ -1411,7 +1412,10 @@ return 'application/octet-stream';
                                                      $date_long_certificate,
                                                      $course_id,
                                                      $course_info['name'],
-                                                     $info_grade_certificate['grade'], 
+                                                     $info_grade_certificate['grade'],
+                                                     $url,
+                                                     '<a href="'.$url.'" target="_blank">'.get_lang('CertificateOnlineLink').'</a>',
+                                                     $url,
                                                     );
         $info_to_be_replaced_in_content_html = array('((user_firstname))',
         											 '((user_lastname))',
@@ -1424,6 +1428,9 @@ return 'application/octet-stream';
         											 '((course_code))',
                 									 '((course_title))',
         											 '((gradebook_grade))',
+                                                     '((certificate_link))',
+                                                     '((certificate_link_html))',
+                                                     '((certificate_barcode))',
                                             );
                                             
         if (!empty($extra_user_info_data)) {

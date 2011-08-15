@@ -1401,7 +1401,7 @@ return 'application/octet-stream';
             $date_long_certificate = api_convert_and_format_date(api_get_utc_datetime());
         }
 
-        $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
+        $url = api_get_path(WEB_PATH).'certificates/?id='.$info_grade_certificate['id'];
         //replace content
         $info_to_replace_in_content_html     = array($first_name, 
                                                      $last_name,

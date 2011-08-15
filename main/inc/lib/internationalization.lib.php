@@ -1945,6 +1945,7 @@ function api_strripos($haystack, $needle, $offset = 0, $encoding = null) {
  * @link http://php.net/manual/en/function.mb-strrpos
  */
 function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
+	
     if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
     }
@@ -1964,15 +1965,22 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
     }
     if (_api_mb_supports($encoding) && IS_PHP_52) {
         return @mb_strrpos($haystack, $needle, $offset, $encoding);
-    }
-    elseif (api_is_encoding_supported($encoding)) {
+    } elseif (api_is_encoding_supported($encoding)) {
+    	
         if (!api_is_utf8($encoding)) {
-            $haystack = api_utf8_encode($haystack, $encoding);
-            $needle = api_utf8_encode($needle, $encoding);
+            $haystack 	= api_utf8_encode($haystack, $encoding);
+            $needle 	= api_utf8_encode($needle, $encoding);
         }
+        // In PHP 5.1 the $offset parameter didn't exist see http://php.net/manual/en/function.mb-strrpos.php
+        if (MBSTRING_INSTALLED && IS_PHP_51) {       	
+            //return @mb_strrpos($haystack, $needle, $offset, 'UTF-8');
+            //@todo fix the missing $offset parameter 
+            return @mb_strrpos($haystack, $needle, 'UTF-8');
+        }        
         if (MBSTRING_INSTALLED && IS_PHP_52) {
-            return @mb_strrpos($haystack, $needle, $offset, 'UTF-8');
+        	return @mb_strrpos($haystack, $needle, $offset, 'UTF-8');
         }
+        
         // This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
         $found = false;
         $haystack = _api_utf8_to_unicode($haystack);

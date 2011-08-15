@@ -17,8 +17,7 @@ require_once dirname(__FILE__).'/../be.inc.php';
  * @author Bert Steppé (refactored, optimised)
  * @package chamilo.gradebook
  */
-class GradebookTable extends SortableTable
-{
+class GradebookTable extends SortableTable {
 
 	private $currentcat;
 	private $datagen;
@@ -241,6 +240,7 @@ class GradebookTable extends SortableTable
 		// warning messages
 
 		if (api_is_allowed_to_edit()) {
+			
 			if (isset($_GET['selectcat']) && $_GET['selectcat'] > 0 && $_GET['view'] <> 'presence') {
 				$id_cat = intval($_GET['selectcat']);
 				$category = Category :: load($id_cat);
@@ -258,8 +258,8 @@ class GradebookTable extends SortableTable
 				}
 
 				$content_html = DocumentManager::replace_user_info_into_html(api_get_user_id(), $course_code);
-
-				$new_content=explode('</head>',$content_html['content_html']);
+				
+				$new_content = explode('</head>',$content_html['html_content']);
 
 				if (empty($new_content[0])) {
 					$warning_message = get_lang('ThereIsNotACertificateAvailableByDefault');

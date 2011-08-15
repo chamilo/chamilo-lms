@@ -158,9 +158,14 @@ define('USERNAME_PURIFIER_SHALLOW', '/\s/');
 // Constants for detection some important PHP5 subversions.
 $php_version = (float) PHP_VERSION;
 
-define('IS_PHP_53', ($php_version >= 5.3));
-define('IS_PHP_52', ($php_version >= 5.2 && !IS_PHP_53));
-define('IS_PHP_51', ($php_version >= 5.1 && !IS_PHP_52 && !IS_PHP_53));
+define('IS_PHP_52', !((float)$php_version < 5.2));
+define('IS_PHP_53', !((float)$php_version < 5.3));
+
+define('IS_PHP_SUP_OR_EQ_53', ($php_version >= 5.3));
+define('IS_PHP_SUP_OR_EQ_52', ($php_version >= 5.2 && !IS_PHP_53));
+define('IS_PHP_SUP_OR_EQ_51', ($php_version >= 5.1 && !IS_PHP_52 && !IS_PHP_53));
+
+
 
 // This constant is a result of Windows OS detection, it has a boolean value:
 // true whether the server runs on Windows OS, false otherwise.

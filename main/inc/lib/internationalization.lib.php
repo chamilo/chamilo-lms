@@ -1962,7 +1962,7 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
     }
     if (_api_is_single_byte_encoding($encoding)) {
         return strrpos($haystack, $needle, $offset);
-    }
+    }    
     if (_api_mb_supports($encoding) && IS_PHP_52) {
         return @mb_strrpos($haystack, $needle, $offset, $encoding);
     } elseif (api_is_encoding_supported($encoding)) {
@@ -1972,12 +1972,12 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
             $needle 	= api_utf8_encode($needle, $encoding);
         }
         // In PHP 5.1 the $offset parameter didn't exist see http://php.net/manual/en/function.mb-strrpos.php
-        if (MBSTRING_INSTALLED && IS_PHP_51) {       	
+        if (MBSTRING_INSTALLED && IS_PHP_SUP_OR_EQ_51) {       	
             //return @mb_strrpos($haystack, $needle, $offset, 'UTF-8');
-            //@todo fix the missing $offset parameter 
+            //@todo fix the missing $offset parameter
             return @mb_strrpos($haystack, $needle, 'UTF-8');
         }        
-        if (MBSTRING_INSTALLED && IS_PHP_52) {
+        if (MBSTRING_INSTALLED && IS_PHP_SUP_OR_EQ_52) {
         	return @mb_strrpos($haystack, $needle, $offset, 'UTF-8');
         }
         

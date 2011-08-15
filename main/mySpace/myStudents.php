@@ -694,7 +694,7 @@ if ($timezone !== null) {
 					<th><?php echo get_lang('Exercices'); ?></th>
 					<th><?php echo get_lang('AverageScore').Display :: return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
 					<th><?php echo get_lang('Attempts'); ?></th>
-					<th><?php echo get_lang('CorrectTest'); ?></th>
+					<th><?php echo get_lang('LatestAttempt'); ?></th>
 				</tr>
 			<?php
 

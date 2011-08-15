@@ -20,13 +20,12 @@ unset($_SESSION['this_section']);//for hmtl editor repository
 
 ob_start();
 
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-
-$display 	= isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
+$export_csv  = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$display 	 = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 $csv_content = array();
-$nameTools = get_lang('MySpace');
+$nameTools   = get_lang('MySpace');
 
-$user_id = api_get_user_id();
+$user_id 	 = api_get_user_id();
 $nb_sessions = 0;
 
 // access control
@@ -118,7 +117,7 @@ if ($is_session_admin) {
 
 // Get views
 $views = array('admin', 'teacher', 'coach', 'drh');
-$view = 'teacher';
+$view  = 'teacher';
 if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 	$view = $_GET['view'];
 }
@@ -128,12 +127,9 @@ $nb_teacher_courses = 0;
 $title = null;
 global $_configuration;
 
-
-
-// interbreadcrumbs
-// && isset($display) && $display != 'yourstudents'
-
+//If is a teacher coach or admin
 if (api_is_allowed_to_create_course()) {
+	
 	$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): 0;
 	if (!empty($session_id)) {
 		$courses = Tracking::get_courses_followed_by_coach($user_id, $session_id);
@@ -143,13 +139,15 @@ if (api_is_allowed_to_create_course()) {
 
 	$nb_teacher_courses = count($courses);	
 
-	$sessions = Tracking::get_sessions_coached_by_user($user_id);	
+	$sessions 	 = Tracking::get_sessions_coached_by_user($user_id);	
 	$nb_sessions = count($sessions);
 
-	if ($nb_teacher_courses || $nb_sessions) {	    
+	if ($nb_teacher_courses || $nb_sessions) {
+			    
 		if (!$is_coach && !$is_platform_admin) {
 			$view = 'teacher';
 		}
+				
 		if ($view == 'teacher' && empty($session_id)) {
 			$menu_items[] = get_lang('TeacherInterface');
 
@@ -241,7 +239,7 @@ if ($nb_teacher_courses > 0 ) {
 	echo '<div id="actions" class="actions">';
 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.Display::return_icon('stats.png', get_lang('MyStats'),'','32').'</a>';//
 	echo '</div>';
-	Display::display_warning_message(get_lang('HaveNoCourse'));
+	//Display::display_warning_message(get_lang('HaveNoCourse'));
 }
 
 echo Display::tag('h2', $title);

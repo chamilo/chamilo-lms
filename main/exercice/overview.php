@@ -47,8 +47,12 @@ if ($origin != 'learnpath') {
 $html = '';
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+$edit_link = '';
+if ($is_allowed_to_edit ) {
+	$edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), 22), api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id);
+}
 
-$html .= Display::tag('h1', $objExercise->name);
+$html .= Display::tag('h1', $objExercise->name .' '.$edit_link);
 $html .= Display::div($objExercise->description, array('class'=>'exercise_description'));
 
 //Buttons

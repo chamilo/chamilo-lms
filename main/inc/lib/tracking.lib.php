@@ -353,7 +353,7 @@ class Tracking {
 				$session_id = intval($session_id);
 				$condition_session = " AND session_id = $session_id ";
 			}
-			$sql = "SELECT count(id) FROM $tbl_course_quiz WHERE active <> -1 $condition_quiz ";
+			$sql = "SELECT count(id) FROM $tbl_course_quiz WHERE active <> -1 $condition_quiz ";			
 			$count_quiz = Database::fetch_row(Database::query($sql));
 
 			$quiz_avg_total_score = 0;
@@ -439,6 +439,7 @@ class Tracking {
                     AND orig_lp_item_id = $lp_item_id
                     AND exe_user_id= $student_id 
                     AND session_id = $session_id ";
+			
 			$rs = Database::query($sql);
 			$row = Database::fetch_row($rs);
 			$count_attempts = $row[0];

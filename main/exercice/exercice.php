@@ -652,6 +652,7 @@ if ($show == 'test') {
         echo '</div>';
     }
 }
+
 if ($show == 'test') {
     ?>    
     <script type="text/javascript">
@@ -683,16 +684,7 @@ if ($show == 'test') {
     $online_icon  = Display::return_icon('online.png', get_lang('Visible'),array('width'=>'12px'));
     $offline_icon = Display::return_icon('offline.png',get_lang('Invisible'),array('width'=>'12px'));
     
-    while ($row = Database :: fetch_array($result,'ASSOC')) {        
-        /*$status = $online_icon;
-        if (empty($row['active'])) {
-            $status = $offline_icon;    
-        }
-        if (!(api_is_platform_admin() || api_is_allowed_to_edit()) ) {
-        	$status = '';
-        }
-        $lis.= Display::tag('li','<a href="#tabs-'.$i.'">'.$status.' '.$row['title'].'</a>');
-        $i++;*/
+    while ($row = Database :: fetch_array($result,'ASSOC')) {
         $exercise_list[] = $row;
     } 
     
@@ -784,7 +776,7 @@ if ($show == 'test') {
 	                }
 				}
                       
-                // Teacher only
+                // Teacher only                
                 if ($is_allowedToEdit) {                   
                     $show_quiz_edition = true;                
                     $table_lp_item    = Database::get_course_table(TABLE_LP_ITEM);

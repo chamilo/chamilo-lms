@@ -12,7 +12,6 @@ $language_file = array('registration', 'index', 'tracking', 'exercice', 'admin',
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
@@ -179,17 +178,6 @@ $tbl_stats_access 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_A
 $tbl_stats_exercices 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $tbl_stats_exercices_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-//$tbl_course_lp_view = 'lp_view';
-//$tbl_course_lp_view_item = 'lp_item_view';
-//$tbl_course_lp_item = 'lp_item';
-//$tbl_course_lp = 'lp';
-//$tbl_course_quiz = 'quiz';
-//$course_quiz_question = 'quiz_question';
-//$course_quiz_rel_question = 'quiz_rel_question';
-//$course_quiz_answer = 'quiz_answer';
-//$course_student_publication = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-
-
 if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
 	$user_id = intval($_GET['user_id']);
 } else {
@@ -216,24 +204,7 @@ if ($check) {
 			if (api_is_course_admin() && !empty($course) && !empty($lp_id) && !empty($student_id)) {					   
 				$course_info 	= api_get_course_info($course);                    
                 delete_student_lp_events($student_id, $lp_id, $course_info, $session_id);
-                
-                /*
-				$lp_view_table 	= Database::get_course_table(TABLE_LP_VIEW, $course_info['db_name']);
-				$lp_item_view_table 	= Database::get_course_table(TABLE_LP_ITEM_VIEW, $course_info['db_name']);
-                
-				//make sure we have the exact lp_view_id
-				$sqlview       = "SELECT id FROM $lp_view_table WHERE user_id = $student_id AND lp_id = $lp_id AND session_id= $session_id";					
-				$resultview    = Database::query($sqlview);
-				$view          = Database::fetch_array($resultview, 'ASSOC');
-				$lp_view_id    = $view['id'] ;					
-				
-				$sql_delete = "DELETE FROM $lp_item_view_table  WHERE lp_view_id = $view_id ";
-				$result = Database::query($sql_delete);
-					
-				$sql_delete = "DELETE FROM $lp_view_table  WHERE user_id = $student_id AND lp_id= $lp_id AND session_id= $session_id ";
-				$result = Database::query($sql_delete);
-                */
-				
+			
 				//@todo delete the stats.track_e_exercices records. First implement this http://support.chamilo.org/issues/1334					
 				Display::display_confirmation_message(get_lang('LPWasReset'));
 			}				
@@ -722,7 +693,7 @@ if ($timezone !== null) {
 			<table class="data_table">
 				<tr>
 					<th><?php echo get_lang('Exercices'); ?></th>
-					<th><?php echo get_lang('Score').Display :: return_icon('info3.gif', get_lang('LastScoreTest'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
+					<th><?php echo get_lang('AverageScore').Display :: return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
 					<th><?php echo get_lang('Attempts'); ?></th>
 					<th><?php echo get_lang('CorrectTest'); ?></th>
 				</tr>
@@ -736,17 +707,16 @@ if ($timezone !== null) {
 		);
 
 		$t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST, $info_course['db_name']);
-		$sql_exercices = "SELECT quiz.title,id
-											FROM " . $t_quiz . " AS quiz
-											WHERE active='1' AND quiz.session_id = $session_id ORDER BY quiz.title ASC
-											";
+		$sql_exercices = "SELECT quiz.title, id FROM " . $t_quiz . " AS quiz
+						  WHERE active='1' AND quiz.session_id = $session_id ORDER BY quiz.title ASC ";
 
 		$result_exercices = Database::query($sql_exercices);
 		$i = 0;
 		if (Database :: num_rows($result_exercices) > 0) {
 			while ($exercices = Database :: fetch_array($result_exercices)) {					
 				$exercise_id = intval($exercices['id']);
-				$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id,$session_id);
+				
+				$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id, 0, 0, $session_id);				
 				$score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $session_id);                
 
 				$csv_content[] = array (

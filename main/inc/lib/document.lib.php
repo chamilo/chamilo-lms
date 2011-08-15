@@ -1344,19 +1344,20 @@ return 'application/octet-stream';
 
         $rs = Database::query($sql);
         $new_content = '';
+        $all_user_info = array();
         if (Database::num_rows($rs)) {
             $row=Database::fetch_array($rs);
            $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
 
             if (is_file($filepath)) {
-                $my_content_html=file_get_contents($filepath);
+                $my_content_html = file_get_contents($filepath);
             }
-            $all_user_info = self::get_all_info_to_certificate($user_id, $course_id, $is_preview);
+            $all_user_info = self::get_all_info_to_certificate($user_id, $course_id, $is_preview);            
             $info_to_be_replaced_in_content_html=$all_user_info[0];
             $info_to_replace_in_content_html=$all_user_info[1];
             $new_content=str_replace($info_to_be_replaced_in_content_html,$info_to_replace_in_content_html, $my_content_html);
         }
-        return $new_content;
+        return array('html_content' => $new_content, 'variables' => $all_user_info);
     }
 
     /**
@@ -1415,7 +1416,7 @@ return 'application/octet-stream';
                                                      $info_grade_certificate['grade'],
                                                      $url,
                                                      '<a href="'.$url.'" target="_blank">'.get_lang('CertificateOnlineLink').'</a>',
-                                                     $url,
+                                                     '((certificate_barcode))',
                                                     );
         $info_to_be_replaced_in_content_html = array('((user_firstname))',
         											 '((user_lastname))',

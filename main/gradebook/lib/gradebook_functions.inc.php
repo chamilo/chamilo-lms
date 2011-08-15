@@ -602,7 +602,7 @@ function get_user_certificate_content($user_id, $course_code, $is_preview = fals
     //generate document HTML    
     $content_html       = DocumentManager::replace_user_info_into_html($user_id, $course_code, $is_preview);
         
-    $new_content        = explode('</head>', $content_html);    
+    $new_content        = explode('</head>', $content_html['html_content']);    
     $new_content_html   = $new_content[1];                    
     $path_image         = api_get_path(WEB_COURSE_PATH).api_get_course_path($course_code).'/document/images/gallery';
     $new_content_html   = str_replace('../images/gallery',$path_image,$new_content_html);
@@ -617,5 +617,5 @@ function get_user_certificate_content($user_id, $course_code, $is_preview = fals
     
     //add header
     $new_content_html = $new_content[0].$print.'</head>'.$new_content_html;
-    return $new_content_html;
+    return array('content' => $new_content_html, 'variables'=>$content_html['variables']);
 }

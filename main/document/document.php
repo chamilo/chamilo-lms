@@ -269,7 +269,7 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
         // Generate document HTML        
         $content_html = DocumentManager::replace_user_info_into_html(api_get_user_id(), api_get_course_id(), true);
 
-        $new_content_html = $content_html;
+        $new_content_html = $content_html['html_content'];
 
         $path_image = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';
         $new_content_html = str_replace('../images/gallery', $path_image, $new_content_html);

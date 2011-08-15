@@ -632,7 +632,7 @@ if (isset ($_GET['studentoverview'])) {
 	                Display :: display_reduced_header();
                     Display :: display_warning_message(get_lang('NoCertificateAvailable'));	                
 	            } else {
-	                echo $new_content_html ;
+	                echo $new_content_html['content'] ;
 	            }            
 	        }	        
 	        exit;
@@ -682,10 +682,10 @@ if (isset ($_GET['studentoverview'])) {
     				    $my_path_certificate = $path_directory_user_certificate.$name;
     					if (file_exists($my_path_certificate) && !empty($name)&& !is_dir($my_path_certificate) ) {    					        					    
     						header('Content-Type: text/html; charset='. $charset);    						
-    						echo $new_content_html;
+    						echo $new_content_html['content'];
     					} else {
-    						$my_new_content_html=$new_content_html;
-    						$my_new_content_html=mb_convert_encoding($my_new_content_html,'UTF-8',$charset);
+    						$my_new_content_html = $new_content_html['content'];
+    						$my_new_content_html = mb_convert_encoding($my_new_content_html,'UTF-8',$charset);
     						
     						//Creating new name                            
                             $name    = md5($user_id.$category_id).'.html';

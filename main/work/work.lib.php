@@ -372,12 +372,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	$my_params      = $sort_params;
 	$origin         = Security::remove_XSS($origin);
 
-	/*
-	 *
-	* Getting may work data
-	*
-	*/
-
+	// Getting the work data
 	$my_folder_data = get_work_data_by_id($id);
 
 	$work_in_gradebook_link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $id, api_get_session_id());
@@ -434,9 +429,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 
 		$sql_get_publications_list = "SELECT * FROM  $work_table $group_query $subdirs_query ".$add_in_where_query."  $condition_session ORDER BY id";
 		$sql_get_publications_num  = "SELECT count(url) FROM  ".$work_table." " .
-								    "WHERE url LIKE BINARY '$sub_course_dir%' AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.
-		$condition_session.
-		                 			" ORDER BY id";
+								     " WHERE url LIKE BINARY '$sub_course_dir%' AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.$condition_session." ORDER BY id";
 	}
 
 	//echo $sql_get_publications_list;
@@ -852,10 +845,12 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 		while ($work = Database::fetch_object($sql_result)) {
 			//Get the author ID for that document from the item_property table
 			$is_author = false;
-			$item_property_data = api_get_item_property_info(api_get_course_int_id(), 'work', $work->id);
+			$item_property_data = api_get_item_property_info(api_get_course_int_id(), 'work', $work->id, api_get_session_id());
+			
 			if (!$is_allowed_to_edit && $item_property_data['insert_user_id'] == api_get_user_id()) {
 				$is_author = true;
 			}
+			
 			$user_info = api_get_user_info($item_property_data['insert_user_id']);
 				
 			//display info depending on the permissions
@@ -916,6 +911,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 						$table_header[] = array(get_lang('Actions'), false, 'style="width:90px"');
 						$table_has_actions_column = true;
 					}
+					
 					$action = '';
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), 22).'</a>';
 					if (api_get_course_setting('student_delete_own_publication') == 1) {

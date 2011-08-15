@@ -120,7 +120,7 @@ $table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURS
 
 /*	Constants and variables */
 
-$tool_name = get_lang('StudentPublications');
+$tool_name 		= get_lang('StudentPublications');
 $user_id 		= api_get_user_id();
 $course_code 	= api_get_course_id();
 $session_id 	= api_get_session_id();
@@ -140,7 +140,7 @@ $delete = isset($_REQUEST['delete']) ? Database::escape_string($_REQUEST['delete
 $description = isset($_REQUEST['description']) ? Database::escape_string($_REQUEST['description']) : '';
 $display_tool_options = isset($_REQUEST['display_tool_options']) ? $_REQUEST['display_tool_options'] : '';
 $display_upload_form = isset($_REQUEST['display_upload_form']) ? $_REQUEST['display_upload_form'] : '';
-$edit = isset($_REQUEST['edit']) ? Database::escape_string($_REQUEST['edit']) : '';
+$edit = isset($_REQUEST['edit']) ? intval($_REQUEST['edit']) : '';
 $parent_id = isset($_REQUEST['parent_id']) ? Database::escape_string($_REQUEST['parent_id']) : '';
 $make_invisible = isset($_REQUEST['make_invisible']) ? Database::escape_string($_REQUEST['make_invisible']) : '';
 $make_visible = isset($_REQUEST['make_visible']) ? Database::escape_string($_REQUEST['make_visible']) : '';
@@ -804,10 +804,10 @@ else {
 			$result = Database::query($sql);
 			if ($result) {
 				$row = Database::fetch_array($result);
-				$workTitle = $row['title'];
-				$workAuthor = $row['author'];
-				$workDescription = $row['description'];
-				$workUrl = $row['url'];
+				$workTitle 			  = $row['title'];
+				$workAuthor 		  = $row['author'];
+				$workDescription 	  = $row['description'];
+				$workUrl 			  = $row['url'];
 				$qualification_number = $row['qualification'];
 			}
 		}
@@ -1130,11 +1130,16 @@ if ($is_special) {
 /*	Display form to upload document */
 
 if ($is_course_member) {
-	if (($display_upload_form || $edit) && !$has_ended) {
-
+	if (($display_upload_form || $edit)) {
+		
+		/*if (!$is_allowed_to_edit && $edit) {
+			api_not_allowed();
+		}*/
+		
 		if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 			api_not_allowed();
 		}
+		
 
 		if ($edit) {
 			//Get the author ID for that document from the item_property table

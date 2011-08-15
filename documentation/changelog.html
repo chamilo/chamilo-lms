@@ -37,6 +37,9 @@ This version of Chamilo only includes a few minor new features:
   <li>Added tokens to certificates generation (changeset c2201eee3558)</li>
   <li>Attendances session support</li> 
   <li>Added quick browsing of directories' documents - requires manual activation for now: in user_portal.php, find $load_dirs and set to $load_dirs = true;. Will be setable through admin page in next version (changeset 7f84869233c2)</li>
+  <li>Certificates: An easy to remember URL to view students URL: campus.chamilo.org/certificates/?id=123 (public for everyone right now) see #3630</li>
+  <li>New landing page for every exercise created, now we show the student's results see BT#2804 </li>
+  <li>Attendances and Course Progress added in the backup/copy course Chamilo creation</li>
 </ul>
 <h3>Debugging</h3>
 <ul>
@@ -46,6 +49,7 @@ This version of Chamilo only includes a few minor new features:
             <li>Improving UI + fixes in previews</li>
             <li>Import ICS with multiple events #3622</li>
             <li>Now we can create an event with only a start date</li>
+            <li>In the Personal Calendar (day view) now we show hours from 0:00h to 5:00h </li>
         </ul>
     </li>
     <li>
@@ -57,14 +61,15 @@ This version of Chamilo only includes a few minor new features:
     <li>
       Assignments
       <ul>
-        <li>Made assignments editable/removable by students only until they have been reviewed and scored (>0) by the teacher (changeset bc1b8e1e603d)</li>
+        <li>Made assignments editable/removable by students only until they have been reviewed and scored (&#062; 0) by the teacher (changeset bc1b8e1e603d)</li>
       </ul>
     </li>
     <li>
         Attendances
         <ul>            
             <li>Improving UI</li>
-            <li>Fixed bug when clicking in the "Today" filter BT#2663</li>
+            <li>Fixed bug when clicking in the "Today" filter. Filter is set to "All"  by default BT#2663</li>
+            <li>Adding shortcuts in order to edit or create Attendances plans</li>            
         </ul>
     </li>
     <li>Documents
@@ -74,6 +79,7 @@ This version of Chamilo only includes a few minor new features:
 		    <li>Bug fixed when reading MP3 files using the jplayer plugin #3593</li>
 		    <li>Bug fixed when hiding a course document in a session </li>  
 		    <li>Bug fixed when using the simple upload form</li>
+		    <li>Improved documents visibility now we check the parents visibility</li>
         </ul>
     </li>    
 	<li>Exercises
@@ -86,7 +92,8 @@ This version of Chamilo only includes a few minor new features:
     <li>Gradebook
         <ul>
             <li>Several fixes including, better session integration and some warning messages added when total score is not correct </li>
-            <li>Adding 2 new tags in the certification: course title and gradebook result </li>                        
+            <li>Adding 2 new tags in the certification: course title and gradebook result </li>
+                  
         </ul>
     </li>
     <li>Globally
@@ -132,7 +139,8 @@ This version of Chamilo only includes a few minor new features:
             <li>New way to generate usernames when importing users using CSV or XML file </li>
             <li>Activities stats date fixed</li>
             <li>When uploading users using a CSV/XML file, the username is generated using the first letter of the first name and the lastname #3686 </li>
-            <li>Now we can clean the chamilo/archive folder from the Portal Administration  #3748</li>            
+            <li>Now we can clean the chamilo/archive folder from the Portal Administration  #3748</li>          
+            <li>Catalan and Dutch translations updated</li>  
         </ul>
     </li>
     <li>User portal/ My courses
@@ -161,7 +169,8 @@ This version of Chamilo only includes a few minor new features:
             <li>Fixed who is online user images (changeset 61945685bcff)</li>                
             <li>CSS styles: fix.css and fix_chamilo.css were deleted, there are only base.css and base_chamilo.css calls are added directly in the CSS file</li>
             <li>All CSS were reduced and improved in order to use the base.css and base_chamilo.css styles</li>
-            <li>Chosen library (select tag improved)added #3740</li>
+            <li>Chosen library added (select tag improved) #3740</li>
+            <li>New breadcrumb added to old styles (blue, academic, etc)</li>
         </ul>
     </li>
 </ul>

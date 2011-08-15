@@ -181,17 +181,8 @@ input[type=button], input[type=submit] {
 /* header 4 styles */
 #header4 {
 	float:left;
-    width:98%;
-	background-color: #fff;
-	height: 21px;
-}
-a.breadcrumb {
-	height: 21px;
-	color: #4171b5;
-}
-a.breadcrumb0 {
-	background:url(images/home.gif) no-repeat;
-	padding-left: 22px;
+    width:100%;
+	background-color: #fff;	
 }
 /* The tool shortcuts */
 #toolshortcuts {

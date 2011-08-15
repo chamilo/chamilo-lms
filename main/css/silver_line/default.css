@@ -24,7 +24,6 @@ body {
 
 a {
     text-decoration: none;
-    font: bold 100% Arial, sans-serif, sans;
     color: #900;
 }
 a:hover, a:focus {
@@ -441,10 +440,11 @@ ul#navigation .student-connect a {
 
 #header3 {
     width: 100%;
-    margin: 0;
+    margin: 5;
     padding: 0;
     float: left;
     clear: both;
+    height:20px;
 }
 #header3 input.logout {
     /* makes an input appear like a link in this header */
@@ -479,10 +479,12 @@ ul#navigation .student-connect a {
 }
 
 #header3 ul {
-    list-style: none;
-    margin: 0 0 0 3.9em;
-    padding: 0;
-    width: 80%;
+    PADDING-RIGHT: 10px;
+    PADDING-LEFT: 10px;
+    PADDING-BOTTOM: 0px;
+    MARGIN: 5px;
+    LIST-STYLE-TYPE: none;
+    display: inline;
 }
 #header3 ul li {
     float: left;
@@ -501,42 +503,15 @@ ul#navigation .student-connect a {
 ------------------------------------------------------------------------------
 */
 
-#header4 {
-    margin-top: .9em;
-    text-indent: 3.9em;
-    width: 100%;
-    float: left;
-    clear: both;
-    line-height: .9em;
-    height: auto;
-    background: #fff none;
-    position: relative;
-    padding: 0;
+#header4 { 
+    background-color: #fff;
+    color: #fff;
+    margin-bottom: 2px;
+    clear:right;    
+    width:100%;
+    float:left; 
 }
-/* Solves the IE inherited margin bug */
-/* IE-7*/
-*:first-child+html #header4 {
-    margin-top: 0;
-}
-/*IE-6 or older*/
-* html #header4 {
-    margin-top: 0;
-}
-#header4 a {
-    font-size: 120%;
-    letter-spacing: -.05em;
-    width:30%;
-}
-#header4 .clear {
-    width: 100%;
-    background: url('images/shadowup.jpg') no-repeat bottom right;
-    clear: both;
-    position: absolute;
-    top: -.9em;
-    right: 0;
-    margin: 0;
-    padding: 0;
-}
+
 /*
 ------------------------------------------------------------------------------
     SHORTCUTS

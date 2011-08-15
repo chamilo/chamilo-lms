@@ -183,25 +183,14 @@ input[type=button], input[type=submit] {
 }
 /* header 4 styles */
 #header4 {
-	background-color: transparent;
-	color: #009;
-	padding: 2px;
-	margin-bottom: 1px;
-	margin-top: 0px;
-	margin-left: 18px;
-	position:relative;
-	clear:left;
-    float:left;
+	   background-color: #fff;
+    color: #fff;
+    margin-bottom: 2px;
+    clear:right;    
     width:100%;
+    float:left; 
 }
-#header4 a {
-	color: #7171b7;
-	background:transparent;
-}
-#header4 a:hover {
-	text-decoration: none;
-	color: #f3840d;
-}
+
 /* The tool shortcuts */
 #toolshortcuts {
 	text-align: right;
@@ -210,13 +199,6 @@ input[type=button], input[type=submit] {
 	margin-right: auto;
 	padding: 10px;
 	width: 98.7%;
-}
-a.breadcrumb {
-	height: 21px;
-}
-a.breadcrumb0 {
-	background:url(images/home.gif) no-repeat;
-	padding-left: 22px;
 }
 
 /* footer styles */

@@ -508,20 +508,17 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	display: none;
 }
 /*****************************************************
- *  HEADER 3: not used          			     	 *
+ *  HEADER 4
  *****************************************************/
 #header4 {
-	height: 15px;
-	background-color: #5b975b;
-	color: #fff;
-	padding: 4px 0px 4px 21px;	
-	margin-bottom: 2px;
-	float:left;
-	width:98%;
+    background-color: #fff;
+    color: #fff;
+    margin-bottom: 2px;
+    clear:right;    
+    width:100%;
+    float:left; 
 }
-#header4 a {
-	color: #fff;
-}
+
 #header4 a:hover {
 	text-decoration: none;
 	color: #a8a7a7;

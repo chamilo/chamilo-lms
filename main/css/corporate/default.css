@@ -194,26 +194,15 @@ input[type=button], input[type=submit] {
 
 
 /* header 4 styles */
-#header4 {
-	height: 15px;
-    padding: 4px;
-    padding-left: 21px;
+#header4 {	
+	background-color: #fff;
+    color: #fff;
     margin-bottom: 2px;
-    clear:right;
-    
-    width:98%;
-    float:left; 
-    padding-left:20px;
-    padding-right:0px; 
-    
+    clear:right;    
+    width:100%;
+    float:left;
 }
-a.breadcrumb {
-	height: 21px;
-}
-a.breadcrumb0 {
-	background:url(images/home.gif) no-repeat;
-	padding-left: 22px;
-}
+
 /* The tool shortcuts */
 #toolshortcuts {
 	text-align: right;

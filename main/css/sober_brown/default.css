@@ -549,18 +549,15 @@ input[text] {
     color:#333;
 }
 /*****************************************************
- *  HEADER 3: not used          			     	 *
+ *  HEADER 4
  *****************************************************/
 #header4 {
     background-color: #fff;
-    color: #666;
-    padding: 4px;
+    color: #fff;
     margin-bottom: 2px;
-    padding-left: 20px;
-
-    float:left;
+    clear:right;    
     width:100%;
-    clear:right;
+    float:left; 
 }
 #header4 a {
     color: #666;

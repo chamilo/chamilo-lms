@@ -168,17 +168,9 @@ input[type=button], input[type=submit] {
 }
 /* header 4 styles */
 #header4 {
-	background-color: #fff;
-	height: 21px;
+	background-color: #fff;	
 	float:left;
     width:100%;
-}
-a.breadcrumb {
-	height: 21px;
-}
-a.breadcrumb0 {
-	background:url(images/home.gif) no-repeat;
-	padding-left: 22px;
 }
 /* The tool shortcuts */
 #toolshortcuts {

@@ -510,26 +510,12 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 /*****************************************************
  *  HEADER 3: not used          			     	 *
  *****************************************************/
-#header4 {
-	height: 15px;
-	background-color: #32578b;
+#header4 {	
+	background-color: #fff;
 	color: #fff;
-	padding: 4px;
-	padding-left: 21px;
-	margin-bottom: 2px;
 	clear:right;
-	width:98%;
-    float:left; 
-    padding-left:20px;
-    padding-right:0px; 
-    
-}
-#header4 a {
-	color: #fff;
-}
-#header4 a:hover {
-	text-decoration: none;
-	color: #a8a7a7;
+	width:100%;
+    float:left;     
 }
 /* The tool shortcuts */
 #toolshortcuts {

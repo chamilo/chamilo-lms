@@ -47,7 +47,10 @@ body {
 
 #submain {
     padding:10px;   
-    border:1px solid #ddd;
+    border-bottom:1px solid #ddd;
+    border-left:1px solid #ddd;
+    border-right:1px solid #ddd;
+    
     position: relative; /* to avoid the IE peekabo bug*/
     margin: 0px auto;
     min-height: 320px;   

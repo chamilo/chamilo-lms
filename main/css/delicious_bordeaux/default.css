@@ -510,17 +510,14 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
  *  HEADER 3: not used          			     	 *
  *****************************************************/
 #header4 {
-	height: 15px;
-	background-color: #975b5b;
-	color: #fff;
-	padding: 4px 0px 4px 10px;	
-	margin-bottom: 2px;	
-	width:99%;
-	float:left;
+	   background-color: #fff;
+    color: #fff;
+    margin-bottom: 2px;
+    clear:right;    
+    width:100%;
+    float:left; 
 }
-#header4 a {
-	color: #fff;
-}
+
 #header4 a:hover {
 	text-decoration: none;
 	color: #a8a7a7;

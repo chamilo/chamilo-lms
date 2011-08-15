@@ -10,6 +10,14 @@
     width:180px;
 }
 
+#header4 {
+    height: 26px !important; /* breadcrumb fix */
+}
+
+#submain {
+	padding-top:10px;
+}
+
 a.tag {
     background-color: #E0EAF1;
     border-bottom: 1px solid #3E6D8E;
@@ -828,8 +836,9 @@ button:hover {
 
 .bread {
     height: 25px;
-    margin: 0px;    
-    padding:0px;     
+    margin: 0px 0px 5px 0px;    
+    padding:0px;
+    border-bottom:1px solid #ccc;
 }
 
 .bread li {

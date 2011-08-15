@@ -146,8 +146,7 @@ switch ($action) {
 		}		
 		require_once api_get_path(LIBRARY_PATH).'blog.lib.php';
 		require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-		require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-		
+				
 		$user_id = intval($_SESSION['social_user_id']);
 		
 		if ($_POST['action']) {$action = $_POST['action'];}

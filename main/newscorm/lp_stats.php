@@ -14,7 +14,6 @@
 require_once 'learnpath.class.php';
 require_once 'resourcelinker.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once '../exercice/exercise.lib.php';
 
 $course_id = api_get_course_id();

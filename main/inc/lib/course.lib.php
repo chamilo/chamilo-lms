@@ -67,13 +67,8 @@
 /**
  * Configuration files
  */
+
 require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-
-/**
- * Libraries (we assume main_api is also included...)
- */
-
-require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
 
 /**

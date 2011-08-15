@@ -36,7 +36,6 @@ if ($_GET['origin']=='learnpath') {
 }
 require_once api_get_path(LIBRARY_PATH).'exercise_show_functions.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 $this_section=SECTION_COURSES;
 

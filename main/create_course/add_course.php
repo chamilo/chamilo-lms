@@ -37,7 +37,6 @@ $course_validation_feature = api_get_setting('course_validation') == 'true';
 
 // Require additional libraries.
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';

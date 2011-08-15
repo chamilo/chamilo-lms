@@ -24,7 +24,6 @@ require_once 'answer.class.php';
 
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 

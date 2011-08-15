@@ -934,7 +934,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                   ORDER BY exe_cours_id ASC, exe_date DESC";
     }   
     
-    require_once api_get_path(LIBRARY_PATH).'course.lib.php';
     $teacher_list = CourseManager::get_teacher_list_from_course_code(api_get_course_id());
     $teacher_id_list = array();
     foreach ($teacher_list as $teacher) {

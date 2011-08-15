@@ -108,7 +108,9 @@ require_once $lib_path.'usermanager.lib.php';
 require_once $lib_path.'message.lib.php';
 require_once $lib_path.'social.lib.php';
 require_once $lib_path.'notification.lib.php';
+require_once $lib_path.'course.lib.php';
 
+require_once $lib_path.'online.inc.php';
 
 /*  DATABASE CONNECTION  */
 
@@ -286,7 +288,7 @@ require $includePath.'/local.inc.php';
 
 // ===== "who is logged in?" module section =====
 
-require_once $lib_path.'online.inc.php';
+
 // check and modify the date of user in the track.e.online table
 if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
     LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');

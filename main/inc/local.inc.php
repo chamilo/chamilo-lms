@@ -128,8 +128,6 @@ The course id is stored in $_cid session variable.
         variables should be initialised here
 */
 
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-
 // verified if exists the username and password in session current
 if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
     require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
@@ -436,9 +434,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
         }
         if (isset($_SESSION['_user']['user_id'])) {
             if ($logout) {
-                // Library needed by index.php
-                include_once api_get_path(LIBRARY_PATH) . 'online.inc.php';
-                include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+                
                 // Prevent index.php to redirect
                 global $logout_no_redirect;
                 $logout_no_redirect = TRUE;
@@ -555,8 +551,7 @@ if (isset($use_anonymous) && $use_anonymous) {
 }
 
 // if there is a cDir parameter in the URL (coming from courses/.htaccess redirection)
-if (!empty($cDir)) {
-    require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+if (!empty($cDir)) {    
     $c = CourseManager::get_course_id_from_path($cDir);
     if ($c) { $cidReq = $c; }
 }

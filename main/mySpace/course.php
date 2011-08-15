@@ -13,7 +13,6 @@ require '../inc/global.inc.php';
 
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
 $this_section = SECTION_TRACKING;

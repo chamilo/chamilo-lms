@@ -15,7 +15,6 @@
  */
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 
@@ -1722,8 +1721,7 @@ function send_reminder_users_without_publication($task_data) {
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  * @author Julio Montoya <gugli100@gmail.com> Adding session support - 2011
  */
-function send_email_on_homework_creation($course_id) {
-	require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+function send_email_on_homework_creation($course_id) {	
 	// Get the students of the course
 	$session_id = api_get_session_id();
 	if (empty($session_id)) {

@@ -29,11 +29,10 @@ require '../inc/global.inc.php';
 // Including additional libraries
 //require_once api_get_path(LIBRARY_PATH).'survey.lib.php';
 require_once 'survey.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 // Breadcrumbs
 if (!empty($_user)) {
-	$interbreadcrumb[] = array('url' => 'survey_list.php?cidReq='.$_GET['course'], 'name' => get_lang('SurveyList'));
+	$interbreadcrumb[] = array('url' => 'survey_list.php?cidReq='.Security::remove_XSS($_GET['course']), 'name' => get_lang('SurveyList'));
 }
 
 // Header

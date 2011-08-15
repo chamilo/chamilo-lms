@@ -104,10 +104,8 @@ switch ($action) {
         
         require_once '../global.inc.php';
         
-        $libpath = api_get_path(LIBRARY_PATH);
-        require_once $libpath.'course.lib.php';
-        require_once $libpath.'sessionmanager.lib.php';
-        require_once $libpath.'usermanager.lib.php';
+        $libpath = api_get_path(LIBRARY_PATH);        
+        require_once $libpath.'sessionmanager.lib.php';        
         require_once $libpath.'tracking.lib.php';                      
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         
@@ -225,9 +223,7 @@ switch ($action) {
         
         require_once '../global.inc.php';
     
-        $libpath = api_get_path(LIBRARY_PATH);
-        require_once $libpath.'course.lib.php';
-        require_once $libpath.'usermanager.lib.php';
+        $libpath = api_get_path(LIBRARY_PATH);        
         require_once $libpath.'tracking.lib.php';   
         require_once $libpath.'sessionmanager.lib.php';        
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';        
@@ -356,9 +352,7 @@ switch ($action) {
         
         require_once '../global.inc.php';
     
-        $libpath = api_get_path(LIBRARY_PATH);
-        require_once $libpath.'course.lib.php';
-        require_once $libpath.'usermanager.lib.php';
+        $libpath = api_get_path(LIBRARY_PATH);        
         require_once $libpath.'tracking.lib.php';   
         require_once $libpath.'sessionmanager.lib.php';        
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';        

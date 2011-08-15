@@ -19,8 +19,6 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 }
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';

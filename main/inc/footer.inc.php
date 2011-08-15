@@ -9,7 +9,6 @@
  */
 
 // Display of tool_navigation_menu according to admin setting.
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 if (api_get_setting('show_navigation_menu') != 'false') {
    $course_id = api_get_course_id();
    if (!empty($course_id) && ($course_id != -1)) {

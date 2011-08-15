@@ -24,8 +24,6 @@ $cidReset = true;
 /** @todo Make all the library files consistent, use filename.lib.php and not filename.lib.inc.php. */
 require_once 'main/inc/global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'events.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';

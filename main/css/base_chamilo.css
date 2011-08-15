@@ -46,10 +46,8 @@ body {
 }
 
 #submain {
-    padding:10px;   
-    border-bottom:1px solid #ddd;
-    border-left:1px solid #ddd;
-    border-right:1px solid #ddd;
+    padding:10px;
+    border: 1px solid #ddd;
     
     position: relative; /* to avoid the IE peekabo bug*/
     margin: 0px auto;
@@ -58,6 +56,10 @@ body {
     border-radius:0px 0px 10px 10px;
     box-shadow: 3px 3px 10px #ddd;
     -moz-box-shadow: 3px 3px 10px #ddd; 
+}
+
+.bread {
+    border-bottom: none;
 }
 
 .item {

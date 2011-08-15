@@ -149,7 +149,7 @@ class Certificate extends Model {
 							//Getting QR filename
 							$file_info = pathinfo($path_certificate);
 							$qr_code_filename = $this->certification_user_path.$file_info['filename'].'_qr.png';							
-							$new_content_html['content'] = str_replace('((certificate_bar_code))', Display::img($this->certification_web_user_path.$file_info['filename'].'_qr.png', 'QR'), $new_content_html['content']);
+							$new_content_html['content'] = str_replace('((certificate_barcode))', Display::img($this->certification_web_user_path.$file_info['filename'].'_qr.png', 'QR'), $new_content_html['content']);
 							
 							$my_new_content_html = $new_content_html['content'];
 						

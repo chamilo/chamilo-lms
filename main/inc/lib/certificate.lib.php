@@ -17,6 +17,8 @@ class Certificate extends Model {
     var $certification_web_user_path = null;  
     var $user_id;
     
+    var $force_certificate_generation = false; //If true every time we enter to the certificate URL we would generate a new certificate
+    
 	public function __construct($certificate_id = null) {
         $this->table 			=  Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $this->certificate_data = null;
@@ -35,7 +37,9 @@ class Certificate extends Model {
 	        $this->check_certificate_path();
 	        	    
 			//To force certification generation
-	        $this->generate();
+	        if ($this->force_certificate_generation) {
+	        	$this->generate();
+	        }
 	        
 	        if (isset($this->certificate_data) && $this->certificate_data) {        
 	        	if (empty($this->certificate_data['path_certificate'])) {
@@ -96,10 +100,10 @@ class Certificate extends Model {
 	 * */
 	
 	public function generate() {
-		$always_generate = false; // For test purposes
+		
 		
 		//The user directory should be set
-		if (empty($this->certification_user_path) && $always_generate == false) {
+		if (empty($this->certification_user_path) && $this->force_certificate_generation == false) {
 			return false;
 		}		
 		require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
@@ -107,7 +111,7 @@ class Certificate extends Model {
 		require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
 		
 		$my_category = Category :: load($this->certificate_data['cat_id']);		
-		if ($my_category[0]->is_certificate_available($this->user_id)) {
+		if (isset($my_category[0]) && $my_category[0]->is_certificate_available($this->user_id)) {
 						
 			$user         = api_get_user_info($this->user_id);
 			$scoredisplay = ScoreDisplay :: instance();
@@ -137,7 +141,7 @@ class Certificate extends Model {
 					if ($cat_id = strval(intval($this->certificate_data['cat_id']))) {
 						$name = $this->certificate_data['path_certificate'];
 						$my_path_certificate = $this->certification_user_path.basename($name);
-						if (file_exists($my_path_certificate) && !empty($name) && !is_dir($my_path_certificate) && $always_generate == false) {
+						if (file_exists($my_path_certificate) && !empty($name) && !is_dir($my_path_certificate) && $this->force_certificate_generation == false) {
 							//Seems that the file was already generated							
 							return true;
 						} else {

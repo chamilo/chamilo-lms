@@ -621,7 +621,8 @@ if ($form->validate()) {
 			}
 		}
 	}
-	*/
+	*/ 
+	get_list_gradebook_certificates_by_user_id()
 	
 	// Interbreadcrumb for the current directory root path
 	if (empty($document_data['parents'])) {
@@ -632,27 +633,29 @@ if ($form->validate()) {
 		}
 	}
 
-
 	Display :: display_header($nameTools, "Doc");
 	//api_display_tool_title($nameTools);
-	// actions
+	// actions	
+	echo '<div class="actions">';
+	
+	// link back to the documents overview
+	if ($is_certificate_mode)
+		echo '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'','32').'</a>';
+	else
+		echo '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+	echo '</div>';
+	
 	if ($is_certificate_mode) {
 		$all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(api_get_user_id(), api_get_course_id());
-		
+	
 		$str_info = '';
 		foreach ($all_information_by_create_certificate[0] as $info_value) {
 			$str_info.=$info_value.'<br/>';
 		}
-		$create_certificate=get_lang('CreateCertificateWithTags');
+		$create_certificate = get_lang('CreateCertificateWithTags');
 		Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info,false);
 	}
-	echo '<div class="actions">';
-	// link back to the documents overview
-	if ($is_certificate_mode)
-		echo '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'','32').'</a>';
-	else
-		echo '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'','32').'</a>';
-	echo '</div>';
+	
 	$form->display();
 	Display :: display_footer();
 }

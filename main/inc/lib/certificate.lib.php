@@ -15,6 +15,8 @@ class Certificate extends Model {
      * */    
     var $certification_user_path = null;  
     var $certification_web_user_path = null;  
+    var $html_file 	= null;
+    var $qr_file 	= null;
     var $user_id;
     
     var $force_certificate_generation = false; //If true every time we enter to the certificate URL we would generate a new certificate
@@ -25,7 +27,7 @@ class Certificate extends Model {
         
         if (isset($certificate_id)) {
         	$this->certificate_data = $this->get($certificate_id);
-        	$this->user_id = $this->certificate_data['user_id']; 
+        	$this->user_id 			= $this->certificate_data['user_id'];
         } else {
         	//Try with the current user
         	$this->user_id = api_get_user_id();
@@ -47,25 +49,15 @@ class Certificate extends Model {
 	        	}        	
 	        }
         }
+        
+        //Setting the qr and html variables
+        if (isset($certificate_id) && !empty($this->certification_user_path)) {
+        	$pathinfo = pathinfo($this->certificate_data['path_certificate']);
+        	$this->html_file		= $this->certification_user_path.basename($this->certificate_data['path_certificate']);
+        	$this->qr_file			= $this->certification_user_path.$pathinfo['filename'].'_qr.png';
+        }        
 	}
 	
-	/**
-	 * Shows the student's certificate (HTML file)	 
-	 */
-	public function show() {		
-		//Read file or preview file
-		if (!empty($this->certificate_data['path_certificate'])) {
-			$user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
-			if (file_exists($user_certificate)) {
-				header('Content-Type: text/html; charset='. api_get_system_encoding());
-				echo @file_get_contents($user_certificate);				
-			}
-		} else {			
-			Display :: display_reduced_header();
-			Display :: display_warning_message(get_lang('NoCertificateAvailable'));			
-		}
-		exit;
-	}
 	
 	/**
 	 * Checks if the certificate user path directory is created
@@ -81,8 +73,7 @@ class Certificate extends Model {
 		if (!empty($path_info) && isset($path_info['dir'])) {
 			
 			$this->certification_user_path = $path_info['dir'].'certificate/';
-			$this->certification_web_user_path = $web_path_info['dir'].'certificate/';
-			
+			$this->certification_web_user_path = $web_path_info['dir'].'certificate/';			
 			
 			if (!is_dir($path_info['dir'])) {
 				mkdir($path_info['dir'],0777);
@@ -91,8 +82,35 @@ class Certificate extends Model {
 			if (!is_dir($this->certification_user_path)) {
 				mkdir($this->certification_user_path, 0777);
 			}
-		}
+		}		
+	}
+	
+	public function delete() {
 		
+		if (!empty($this->certificate_data)) {
+						 
+			if (!is_null($this->html_file) || $this->html_file!='' || strlen($this->html_file)) {
+				//Deleting HTML file				
+				if (is_file($this->html_file)) {
+					@unlink($this->html_file);
+					if (is_file($this->html_file) === false) {
+						$delete_db = true;
+					} else {
+						$delete_db = false;
+					}
+				}
+				//Deleting QR code PNG image file				
+				if (is_file($this->qr_file)) {
+					@unlink($this->qr_file);
+				}				
+				if ($delete_db) {
+					return parent::delete($this->certificate_data['id']);
+				}				
+			} else {
+				return parent::delete($this->certificate_data['id']);
+			}
+		}
+		return false;
 	}
 	
 	/** 
@@ -171,8 +189,7 @@ class Certificate extends Model {
 										$text = $this->parse_certificate_variables($new_content_html['variables']);										
 										$this->generate_qr($text, $qr_code_filename);
 									}
-								}
-								
+								}								
 							}
 							return $result;
 						}						
@@ -199,11 +216,16 @@ class Certificate extends Model {
 		return false;
 	} 
 	
+	/**
+	 * @param	string	Text to be added in the QR code
+	 * @param	string	file path of the image
+	 * */
 	public function generate_qr($text, $path) {		
 		//Make sure HTML certificate is generated
 		if (!empty($text) && !empty($path)) {
-			require_once api_get_path(LIBRARY_PATH).'phpqrcode/qrlib.php';			
-			$return = QRcode::png($text, $path, 'L', 4, 2);						
+			require_once api_get_path(LIBRARY_PATH).'phpqrcode/qrlib.php';
+			//L low, M - Medium, L large			
+			$return = QRcode::png($text, $path, 'L', 1, 2);						
 		}
 	}
 	
@@ -219,7 +241,7 @@ class Certificate extends Model {
 			$final_content[$my_header] = $value;
 		}
 		
-		/*
+		/* Certificate tags
 		 * 
 		  0 => string '((user_firstname))' (length=18)
           1 => string '((user_lastname))' (length=17)
@@ -234,22 +256,36 @@ class Certificate extends Model {
           10 => string '((gradebook_grade))' (length=19)
           11 => string '((certificate_link))' (length=20)
           12 => string '((certificate_link_html))' (length=25)
-          13 => string '((certificate_barcode))' (length=23)
-          
+          13 => string '((certificate_barcode))' (length=23)          
 		 */
 		
 		$break_space = " \n\r ";
 		
 		$text = $final_content['gradebook_institution'].' - '.$final_content['gradebook_sitename'].' - '.get_lang('Certification').$break_space.
 				get_lang('Student'). ': '.$final_content['user_firstname'].' '.$final_content['user_lastname'].$break_space.
-				//get_lang('Portal'). ': '.$final_content['gradebook_sitename'].$break_space.
 				get_lang('Teacher'). ': '.$final_content['teacher_firstname'].' '.$final_content['teacher_lastname'].$break_space.
 				get_lang('Date'). ': '.$final_content['date_certificate'].$break_space.
 				get_lang('Score'). ': '.$final_content['gradebook_grade'].$break_space.
 				'URL'. ': '.$final_content['certificate_link'];		
 		return $text;
-		                                                                                                    
-		
+	}
+	
+	/**
+	* Shows the student's certificate (HTML file)
+	*/
+	public function show() {
+		//Read file or preview file
+		if (!empty($this->certificate_data['path_certificate'])) {
+			$user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
+			if (file_exists($user_certificate)) {
+				header('Content-Type: text/html; charset='. api_get_system_encoding());
+				echo @file_get_contents($user_certificate);
+			}
+		} else {
+			Display :: display_reduced_header();
+			Display :: display_warning_message(get_lang('NoCertificateAvailable'));
+		}
+		exit;
 	}
 	
 }

@@ -133,14 +133,7 @@ class GradebookTable extends SortableTable {
             // list of items inside the gradebook (exercises, lps, fora, etc)
 			$row  = array ();
 			$item = $data[0];
-			$id   = $item->get_id();
-            //the following condition seems strange to me - YW 20110421
-            //GET['selectcat'] is the main gradebook. When defined, it means we are looking at the whole stuff instead of one sub-element (or something like that?)
-            
-			//if (empty($_GET['selectcat']) ) { //if not particular gradebook item was selected, take the certificate score for the current item
-				//$certificate_min_score = $this->build_certificate_min_score($item);
-			//}
-			//$_GET['selectcat'] is never empty jm 20110426
+			$id   = $item->get_id();   
 			
 			//if the item is invisible, wrap it in a span with class invisible
 			$invisibility_span_open  = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
@@ -157,40 +150,16 @@ class GradebookTable extends SortableTable {
 				$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
 				$weight_total_links += intval($data[3]);
 			} else {
-                 // is never empty
-				/*if (empty($_GET['selectcat'])) {
-				    // generating the total score for a course
-				    $stud_id= api_get_user_id();
-					$cats_course = Category::load($id, null, null, null, null, null, false);
-					$alleval_course= $cats_course[0]->get_evaluations($stud_id,true);
-					$alllink_course= $cats_course[0]->get_links($stud_id,true);
-					$evals_links = array_merge($alleval_course, $alllink_course);
-					$item_value=0;
-					$item_total=0;
-					for ($count=0; $count < count($evals_links); $count++) {
-    					$item = $evals_links[$count];
-    					$score = $item->calc_score($stud_id);
-    
-    					$score_denom=($score[1]==0) ? 1 : $score[1];
-    					$item_value+=$score[0]/$score_denom*$item->get_weight();
-    					$item_total+=$item->get_weight();
-					}
-					$item_value = number_format($item_value, 2, '.', ' ');
-                    $cattotal = Category :: load($id);
-                    $scoretotal= $cattotal[0]->calc_score(api_get_user_id());
-                    $scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).' ('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');
-					$row[] = $item_value;                
-				} else {*/
-                    $cattotal   = Category :: load($_GET['selectcat']);
-                    $scoretotal = $cattotal[0]->calc_score(api_get_user_id());                    
-                    $item_value = $scoretotal[0];
-                    $item_value = number_format($item_value, 2, '.', ' ');
-			   		$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
-			   //}			   	
+				$cattotal   = Category :: load($_GET['selectcat']);
+                $scoretotal = $cattotal[0]->calc_score(api_get_user_id());                    
+                $item_value = $scoretotal[0];
+                $item_value = number_format($item_value, 2, '.', ' ');
+			   	$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;			  			   	
 			}
+			
     		$row[] = $invisibility_span_open.$data[4].$invisibility_span_close;
 
-			//admins get an edit column
+			//Admins get an edit column
 			if (api_is_allowed_to_edit(null, true)) {
 				$cat = new Category();
 				$show_message = $cat->show_message_resource_delete($item->get_course_code());
@@ -204,35 +173,7 @@ class GradebookTable extends SortableTable {
 					if (!is_null($value_data)) {
 						$row[] = $value_data;
 					}
-				}
-
-				/*if (empty($_GET['selectcat'])) {
-					if (isset($certificate_min_score) && $item_value >= $certificate_min_score) {
-						$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.$_SESSION['gradebook_dest'].'?export_certificate=yes&cat_id='.$id.'" target="_blank">
-										 <img src="'.api_get_path(WEB_CODE_PATH) . 'img/logo.gif" /></a>&nbsp;'.$scoretotal_display;
-
-						//register gradebook certificate
-						$current_user_id=api_get_user_id();
-						register_user_info_about_certificate($id,$current_user_id, $my_score_in_gradebook, api_get_utc_datetime());
-
-					} else {
-						$certificates = '-';
-					}
-					//show certificate date
-					$get_date=get_certificate_date_by_user_id($id,$current_user_id);
-					if ($get_date=='' || is_null($get_date)) {
-							$row[4]='-';
-					} else {
-							$row[4] = api_convert_and_format_date($get_date);
-					}
-					$row[] = $certificates;
-				} else {*/				    
-					if (isset($certificate_min_score) && $item_value >= $certificate_min_score) {
-						//register gradebook certificate
-						$current_user_id = api_get_user_id();
-						register_user_info_about_certificate($_GET['selectcat'], $current_user_id, $my_score_in_gradebook, api_get_utc_datetime());
-					}					
-				//}
+				}    
 			}
 			$sortable_data[] = $row;
 		}

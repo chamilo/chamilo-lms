@@ -337,18 +337,17 @@ class DisplayGradebook
                 	$my_course_id=api_get_course_id();
                 	$my_file= substr($_SESSION['gradebook_dest'],0,5);
                 		
-					$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats.png', get_lang('FlatView'),'','32').'</a>';
-					
-					$header .= '<td style="vertical-align: top;"><a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.
-								Display::return_icon('certificate.png', get_lang('AttachCertificate'),'','32').
-								'</a>';
-					
+					$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats.png', get_lang('FlatView'),'','32').'</a>';					
 					$header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?'.$my_api_cidreq.'&amp;cat_id='.(int)$_GET['selectcat'].'">'.Display::return_icon('certificate_list.png', get_lang('GradebookSeeListOfStudentsCertificates'),'','32').'</a>';
 					
 					$visibility_icon    = ($catobj->is_visible() == 0) ? 'invisible' : 'visible';
 			        $visibility_command = ($catobj->is_visible() == 0) ? 'set_visible' : 'set_invisible';
-			
+			        
+					//Right icons
             		$modify_icons  = '<a href="gradebook_edit_cat.php?editcat=' . $catobj->get_id() . ' &amp;cidReq='.$catobj->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Edit'),'','32').'</a>';
+            		$modify_icons .= '<a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.
+            							Display::return_icon('certificate.png', get_lang('AttachCertificate'),'','32').'</a>';
+            		
             		$modify_icons .= '<a href="gradebook_edit_all.php?id_session='.intval($_SESSION['id_session']).'&amp;'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('percentage.png', get_lang('EditAllWeights'),'','32').'</a>';
             		
             		$modify_icons .= '<a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('ranking.png', get_lang('ScoreEdit'),'','32').'</a>';

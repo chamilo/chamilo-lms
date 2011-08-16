@@ -82,7 +82,6 @@ require_once $lib_path.'document.lib.php';
 require_once $lib_path.'groupmanager.lib.php';
 require_once $lib_path.'formvalidator/FormValidator.class.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-/* Constants & Variables */
 
 if (api_is_in_group()) {
 	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
@@ -108,8 +107,12 @@ if (isset($_GET['id'])) {
     $file = $_GET['file'];
     $doc = basename($file);    
 }
-
+/*
 //I'm in the certification module?
+if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
+	$is_certificate_mode = true;
+}*/
+
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
 //Call from
@@ -381,8 +384,6 @@ if (file_exists($filepath.$doc)) {
 $nameTools = get_lang('EditDocument') . ': '.$oldTitle;
 Display::display_header($nameTools, 'Doc');
 
-// Display the tool title
-//api_display_tool_title($nameTools);
 
 if (isset($msgError)) {
 	Display::display_error_message($msgError);
@@ -395,6 +396,7 @@ if (isset($info_message)) {
 		$call_from_tool = $_POST['origin'];
 	}
 }
+
 
 // Readonly
 $sql = 'SELECT id, readonly FROM '.$dbTable.' WHERE path LIKE BINARY "'.$dir.$doc.'"';
@@ -492,7 +494,9 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 	/*
 	$form->addElement('html', '<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');
 	*/
-	if (isset($_REQUEST['curdirpath']) && $dir =='/certificates') {
+	show_return($parent_id, $dir_original, $call_from_tool, $slide_id, $is_certificate_mode);
+	
+	if ($is_certificate_mode) {
 		$all_information_by_create_certificate=DocumentManager::get_all_info_to_certificate(api_get_user_id(), api_get_course_id());
 		$str_info='';
 		foreach ($all_information_by_create_certificate[0] as $info_value) {
@@ -500,9 +504,9 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 		}
 		$create_certificate=get_lang('CreateCertificateWithTags');
 		Display::display_normal_message($create_certificate.': <br /><br />'.$str_info,false);
-	}	
-	show_return($parent_id, $dir_original, $call_from_tool, $slide_id, $is_certificate_mode);
-	if($extension=='svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true'){
+	}
+	
+	if ($extension=='svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true'){
 		Display::display_warning_message(get_lang('BrowserDontSupportsSVG'));
 	}
 	$form->display();

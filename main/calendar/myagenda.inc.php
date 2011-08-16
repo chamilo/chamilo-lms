@@ -236,8 +236,8 @@ function display_mymonthcalendar($user_id, $agendaitems, $month, $year, $weekday
                             echo $result;
                                                         
                             //echo Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog'));
-                        } else {
-                            echo $result .= $icon;
+                        } else {                        	
+                            echo $result .= $icon.'</div>';
                         }
 				   }
 				}

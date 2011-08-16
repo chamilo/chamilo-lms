@@ -881,14 +881,15 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     if ($is_allowedToEdit || $is_tutor) {
         
         $user_id_and = '';
-        if (!empty ($_POST['filter_by_user'])) {
-            if ($_POST['filter_by_user'] == 'all') {
+        if (!empty ($_REQUEST['filter_by_user'])) {
+            if ($_REQUEST['filter_by_user'] == 'all') {
                 $user_id_and = " AND user_id like '%'";
             } else {
-                $user_id_and = " AND user_id = '" . intval($_POST['filter_by_user']) . "' ";
+                $user_id_and = " AND user_id = '" . intval($_REQUEST['filter_by_user']) . "' ";
             }
         }        
-            
+        
+          
         if ($_GET['gradebook'] == 'view') {
             $exercise_where_query = ' te.exe_exo_id =ce.id AND ';
         }

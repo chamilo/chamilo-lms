@@ -689,14 +689,15 @@ if ($timezone !== null) {
     </table>
 
 	<!-- line about exercises -->
-			<table class="data_table">
-				<tr>
-					<th><?php echo get_lang('Exercices'); ?></th>
-					<th><?php echo get_lang('AverageScore').Display :: return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
-					<th><?php echo get_lang('Attempts'); ?></th>
-					<th><?php echo get_lang('LatestAttempt'); ?></th>
-				</tr>
-			<?php
+		<table class="data_table">
+			<tr>
+				<th><?php echo get_lang('Exercices'); ?></th>
+				<th><?php echo get_lang('AverageScore').Display :: return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
+				<th><?php echo get_lang('Attempts'); ?></th>
+				<th><?php echo get_lang('LatestAttempt'); ?></th>
+				<th><?php echo get_lang('AllAttempts'); ?></th>
+			</tr>
+		<?php
 
 		$csv_content[] = array ();
 		$csv_content[] = array (
@@ -749,6 +750,12 @@ if ($timezone !== null) {
 					if ($count_attempts > 0)
 						echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&student='.$student_id.'&origin='.(empty($_GET['origin'])?'tracking':Security::remove_XSS($_GET['origin'])).'"> <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
 				}
+				echo '</td>';
+				
+				echo '<td align="center">';
+				$all_attempt_url = "../exercice/exercice.php?show=result&exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$session_id";
+				echo Display::url(Display::return_icon('test_results.png', get_lang('AllAttempts'), array(), 22), $all_attempt_url );
+				
 				echo '</td></tr>';
 				$data_exercices[$i][] = $exercices['title'];
 				$data_exercices[$i][] = $score_percentage . '%';

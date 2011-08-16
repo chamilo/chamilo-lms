@@ -212,7 +212,7 @@ if ($nb_teacher_courses > 0 ) {
     }
     
     if (!empty($session_id)) {
-        echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'','32').'</a>';
+        echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('Back'),'','32').'</a>';
     }
     echo Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',32),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
     
@@ -420,7 +420,7 @@ if ($view == 'coach') {
 	$nb_sessions = count($sessions);
 	$nb_sessions_past = $nb_sessions_future = $nb_sessions_current = 0;
 	$courses = array();
-	foreach ($sessions as $session) {
+	foreach ($sessions as $session) {		
 		if ($session['date_start'] == '0000-00-00') {
 			$nb_sessions_current ++;
 		} else {
@@ -555,12 +555,13 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 
 		$all_data = array();
 		foreach ($sessions as $session) {
+			
 			$count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
 			$row = array();
 			$row[] = $session['name'];
 
-			if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {
-				$row[] = get_lang('From').' '.api_convert_and_format_date($session['date_start'], DATE_FORMAT_SHORT, date_default_timezone_get()).' '.get_lang('Until').' '.api_convert_and_format_date($session['date_end'], DATE_FORMAT_SHORT, date_default_timezone_get());
+			if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {				
+				$row[] = get_lang('From').' '.api_format_date($session['date_start'], DATE_FORMAT_SHORT).' '.get_lang('Until').' '.api_format_date($session['date_end'], DATE_FORMAT_SHORT);
 			} else {
 				$row[] = ' - ';
 			}

@@ -200,7 +200,7 @@ class GradebookTable extends SortableTable {
 
 				$content_html = DocumentManager::replace_user_info_into_html(api_get_user_id(), $course_code);
 				
-				$new_content = explode('</head>',$content_html['html_content']);
+				$new_content = explode('</head>',$content_html['content']);
 
 				if (empty($new_content[0])) {
 					$warning_message = get_lang('ThereIsNotACertificateAvailableByDefault');

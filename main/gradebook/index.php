@@ -681,7 +681,7 @@ if (isset($_GET['cidReq']) && $_GET['cidReq']!='') {
 } else {
 	$addparams['cidReq']='';
 }
-$gradebooktable= new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addparams);
+$gradebooktable = new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addparams);
 $no_qualification = false;
 if (( count($allcat) == 0) && ( count($alleval) == 0 ) && ( count($alllink) == 0 )) {
     $no_qualification = true;

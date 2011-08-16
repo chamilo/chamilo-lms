@@ -1357,7 +1357,7 @@ return 'application/octet-stream';
             $info_to_replace_in_content_html=$all_user_info[1];
             $new_content=str_replace($info_to_be_replaced_in_content_html,$info_to_replace_in_content_html, $my_content_html);
         }
-        return array('html_content' => $new_content, 'variables' => $all_user_info);
+        return array('content' => $new_content, 'variables' => $all_user_info);
     }
 
     /**

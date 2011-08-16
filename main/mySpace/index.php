@@ -104,7 +104,7 @@ function rsort_sessions($a, $b) {
 
 /* * MAIN CODE  */
 
-$is_coach 			= api_is_coach();
+$is_coach 			= api_is_coach($_GET['session_id']);
 $is_platform_admin 	= api_is_platform_admin();
 $is_drh 			= api_is_drh();
 $is_session_admin 	= api_is_session_admin();
@@ -146,12 +146,12 @@ if (api_is_allowed_to_create_course()) {
 		if (!$is_coach && !$is_platform_admin) {
 			$view = 'teacher';
 		}
-				
+						
 		if ($view == 'teacher' && empty($session_id)) {
 			$menu_items[] = get_lang('TeacherInterface');
 
 			if ($nb_teacher_courses) {
-				$title = get_lang('YourCourseList');
+				$title = get_lang('Courses');
 			}
 
 		} else {
@@ -213,11 +213,10 @@ if ($nb_teacher_courses > 0 ) {
     
     if (!empty($session_id)) {
         echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('Back'),'','32').'</a>';
-    }
-    echo Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',32),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
-    
-    
-    //echo Display::url(Display::return_icon('printer.png', get_lang('Print'),'',32),"javascript: void(0);", array('onclick'=>'window.print();'));	
+    } else {
+    	echo Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',32),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
+    }    	
+
     echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.	Display::return_icon('printer.png', get_lang('Print'),'','32').'</a>';
 	
     if (empty($session_id)) {
@@ -229,8 +228,6 @@ if ($nb_teacher_courses > 0 ) {
     			}
     		}
     	}
-    } else {
-    	//
     }
 		
 	echo '</div>';
@@ -238,7 +235,6 @@ if ($nb_teacher_courses > 0 ) {
 	echo '<div id="actions" class="actions">';
 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.Display::return_icon('stats.png', get_lang('MyStats'),'','32').'</a>';//
 	echo '</div>';
-	//Display::display_warning_message(get_lang('HaveNoCourse'));
 }
 
 echo Display::tag('h2', $title);

@@ -131,7 +131,7 @@ if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !emp
 	$sql = 'DELETE FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES) . ' WHERE exe_id = ' . $_GET['did']; //_GET[did] filtered by entry condition
 	Database::query($sql);
 	$filter=Security::remove_XSS($_GET['filter']);
-	header('Location: exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '&exerciseId='.$exerciseId);
+	header('Location: exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '&exerciseId='.$exerciseId.'&filter_by_user='.$_GET['filter_by_user']);
 	exit;
 }
 
@@ -572,9 +572,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
             });
             </script>';
             
-            echo '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';    
-                //echo Display::tag('p', get_lang("CSVOrExcel"));
-                //Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32')
+            echo '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
                 echo Display::tag('p', Display::input('radio', 'export_format', 'csv', array('checked'=>'1', 'id'=>'export_format_csv_label')). Display::tag('label', get_lang('ExportAsCSV'), array('for'=>'export_format_csv_label')));
                 echo Display::tag('p', Display::input('radio', 'export_format', 'xls', array('id'=>'export_format_xls_label')). Display::tag('label', get_lang('ExportAsXLS'), array('for'=>'export_format_xls_label')));   
                 echo Display::tag('p', Display::input('checkbox', 'load_extra_data',  '0',array('id'=>'load_extra_data_id')). Display::tag('label', get_lang('LoadExtraData'), array('for'=>'load_extra_data_id')));
@@ -616,7 +614,7 @@ if ($show == 'result') {
 			default :
 				null;
 		}
-		if (!empty($_GET['exerciseId'])) {
+		if (!empty($_GET['exerciseId']) && empty($_GET['filter_by_user'])) {
     		if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
     			$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_check.png', get_lang('ShowCorrectedOnly'),'','32').'</a>';
     		} else {
@@ -653,31 +651,7 @@ if ($show == 'test') {
     }
 }
 
-if ($show == 'test') {
-    ?>    
-    <script type="text/javascript">
-    $(function() {
-        /*               
-        $( "a", ".operations" ).button();        
-        $(".tabs-left").tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
-        $(".tabs-left li").removeClass('ui-corner-top').addClass('ui-corner-left');        
-        */
-    });
-    </script>
-    <style type="text/css">
-        /*
-        New interface not yet ready for 1.8.8
-         Vertical Tabs 
-        .ui-tabs-vertical { width: 99%; }
-        .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 20%; }
-        .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0;   white-space:normal;}
-        .ui-tabs-vertical .ui-tabs-nav li a { display:block; width:100%; }
-        .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-selected { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; border-right-width: 1px; }
-        .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: left; width: 40em;}     
-        
-        */       
-    </style>
-  <?php    
+if ($show == 'test') { 
     $i =1;
     $lis = '';
     $exercise_list = array();
@@ -690,9 +664,6 @@ if ($show == 'test') {
     
     echo '<table class="data_table">';    
     if (!empty($exercise_list)) {     
-        //echo '<div id="exercise_tabs" class="tabs-left">';
-        //echo '<div style="float:left;width:100%">';
-        //echo Display::tag('ul', $lis);    
         /*  Listing exercises  */
         
         if ($origin != 'learnpath') {
@@ -841,7 +812,6 @@ if ($show == 'test') {
                     if ($session_id == $row['session_id']) {
                         $actions .= Display::url(Display::return_icon('delete.png', get_lang('Delete'),'',22), '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id']));            
                     }
-                    //$actions .= '<br />';
 
                     $random_label = '';                    
                     if ($row['random'] > 0) {
@@ -951,16 +921,6 @@ if ($show == 'test') {
                             $attempt_text = get_lang('CantShowResults');
                         }
                     }                    
-                    //User Attempts
-                    /*    
-                    if (empty($row['max_attempt'])) {
-                        //$item .=  Display::tag('td',$num);     
-                    } else {
-                        if (empty($num)) {
-                        	$num = '';
-                        }
-                        //$item .=  Display::tag('td',$num.' / '.$row['max_attempt']);                        
-                    }*/
                     
                     if (empty($num)) {
                         $num = '';
@@ -1058,14 +1018,8 @@ if ($show == 'test') {
             }
             $count ++;
         }
-        //echo '</div>';
     }    
-    echo '</table>';     
-    /*} else {
-        echo '<div style="float:left;width:100%">';
-        echo Display::display_warning_message(get_lang('NoExercises'));
-        echo '</div>';
-    }*/
+    echo '</table>';    
     Display :: display_footer();    
     exit;
 }

@@ -1089,7 +1089,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                             }
                         }
                         if (api_is_platform_admin() || $is_tutor) {
-                            $html_link.=' <a href="exercice.php?'.api_get_cidreq().'&show=result&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';
+                        	
+                            $html_link.=' <a href="exercice.php?'.api_get_cidreq().'&show=result&filter_by_user='.intval($_GET['filter_by_user']).'&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';
+                            
                             $html_link.='&nbsp;';
                         }
                     } else {

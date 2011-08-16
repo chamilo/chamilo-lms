@@ -1834,39 +1834,42 @@ function api_is_course_tutor() {
  * @return boolean True if current user is a course or session coach
  */
 function api_is_coach($session_id = 0, $course_code = '') {
-    global $_user;
-    global $sessionIsCoach;
-
     if (!empty($session_id)) {
         $session_id = intval($session_id);
     } else {
         $session_id = api_get_session_id();
-    }
+    }   
 
     if (!empty($course_code)) {
         $course_code = Database::escape_string($course_code);
     } else {
         $course_code = api_get_course_id();
     }
-
-    $sql = "SELECT DISTINCT id, name, date_start, date_end
-                            FROM session
-                            INNER JOIN session_rel_course_rel_user session_rc_ru
-                                ON session_rc_ru.id_user = '".Database::escape_string($_user['user_id'])."'
-                            WHERE session_rc_ru.course_code = '$course_code' AND session_rc_ru.status = 2 AND session_rc_ru.id_session = '$session_id'
-                            ORDER BY date_start, date_end, name";
-
-    $result = Database::query($sql);
-    $sessionIsCoach = Database::store_result($result);
-
-    $sql = "SELECT DISTINCT id, name, date_start, date_end
-                            FROM session
-                            WHERE session.id_coach =  '".Database::escape_string($_user['user_id'])."'
-                            AND id = '$session_id'
-                            ORDER BY date_start, date_end, name";
-
-    $result = Database::query($sql);
-    $sessionIsCoach = array_merge($sessionIsCoach , Database::store_result($result));
+    
+	if (!empty($course_code)) {
+	    $sql = "SELECT DISTINCT id, name, date_start, date_end
+				FROM session INNER JOIN session_rel_course_rel_user session_rc_ru
+	            ON session_rc_ru.id_user = '".api_get_user_id()."'
+	            WHERE session_rc_ru.course_code = '$course_code' AND session_rc_ru.status = 2 AND session_rc_ru.id_session = '$session_id'
+	            ORDER BY date_start, date_end, name";
+	
+	    $result = Database::query($sql);
+	    $sessionIsCoach = Database::store_result($result);
+	}
+	
+	if (!empty($session_id)) {
+	    $sql = "SELECT DISTINCT id, name, date_start, date_end
+	         	FROM session
+	         	WHERE session.id_coach =  '".api_get_user_id()."' AND id = '$session_id'
+				ORDER BY date_start, date_end, name";
+	
+	    $result = Database::query($sql);
+	    if (!empty($sessionIsCoach)) {
+	    	$sessionIsCoach = array_merge($sessionIsCoach , Database::store_result($result));
+	    } else {
+	    	$sessionIsCoach = Database::store_result($result);
+	    }
+	}
 
     return (count($sessionIsCoach) > 0);
 }

@@ -73,7 +73,7 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
     } else {
         $mail->FromName = $platform_email['SMTP_FROM_NAME'];
     }
-    $mail->Subject = $subject;
+    $mail->Subject = $subject;    
     $mail->Body    = $message;
 
     // Only valid addresses are accepted.
@@ -168,35 +168,36 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 
     $mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
 
-        // Send embedded image.
-        if ($embedded_image) {
-           // Get all images html inside content.
-           preg_match_all("/<img\s+.*?src=[\"\']?([^\"\' >]*)[\"\']?[^>]*>/i", $message, $m);
-           // Prepare new tag images.
-           $new_images_html = array();
-           $i = 1;
-           if (!empty($m[1])) {
-               foreach ($m[1] as $image_path) {
-                   $real_path = realpath($image_path);
-                   $filename  = basename($image_path);
-                   $image_cid = $filename.'_'.$i;
-                   $encoding = 'base64';
-                   $image_type = mime_content_type($real_path);
-                   $mail->AddEmbeddedImage($real_path, $image_cid, $filename, $encoding, $image_type);
-                   $new_images_html[] = '<img src="cid:'.$image_cid.'" />';
-                   $i++;
-               }
-           }
-           // Replace origin image for new embedded image html.
-           $x = 0;
-           if (!empty($m[0])) {
-               foreach ($m[0] as $orig_img) {
-                   $message = str_replace($orig_img, $new_images_html[$x], $message);
-                   $x++;
-               }
-           }
-        }
-
+    // Send embedded image.
+    if ($embedded_image) {
+    	// Get all images html inside content.
+        preg_match_all("/<img\s+.*?src=[\"\']?([^\"\' >]*)[\"\']?[^>]*>/i", $message, $m);
+        // Prepare new tag images.
+        $new_images_html = array();
+        $i = 1;
+        if (!empty($m[1])) {
+        	foreach ($m[1] as $image_path) {
+            	$real_path = realpath($image_path);
+                $filename  = basename($image_path);
+                $image_cid = $filename.'_'.$i;
+                $encoding = 'base64';
+                $image_type = mime_content_type($real_path);
+                $mail->AddEmbeddedImage($real_path, $image_cid, $filename, $encoding, $image_type);
+                $new_images_html[] = '<img src="cid:'.$image_cid.'" />';
+                $i++;
+			}
+		}
+		
+	    // Replace origin image for new embedded image html.
+	    $x = 0;
+	    if (!empty($m[0])) {
+	    	foreach ($m[0] as $orig_img) {
+	        	$message = str_replace($orig_img, $new_images_html[$x], $message);
+	            $x++;
+	         }
+	    }
+    }
+    $message = str_replace(array('\n\r', '\n', '\r'), '<br />', $message);
     $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
 
     // Attachment ...

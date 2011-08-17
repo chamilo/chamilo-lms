@@ -605,7 +605,92 @@ class CourseManager {
         }
         return $result_array;
     }
-
+	
+    /**
+     * Get course list as coach
+     * 
+     * @param 	int		user id
+     * @return	array	course list
+     * 
+     *  */
+    public static function get_course_list_as_coach($user_id, $include_courses_in_sessions = false) {
+    	
+    	//1. Getting courses as teacher (No session)
+    	$courses_temp   		= CourseManager::get_course_list_of_user_as_course_admin($user_id);
+    	$courses_as_admin 		= array();
+    	
+    	if (!empty($courses_temp)) {
+    		foreach($courses_temp as $course_item) {
+    			$courses_as_admin[0][$course_item['course_code']] = $course_item['course_code'];    			
+    		}
+    	}   
+    	
+    	//2. Include courses in sessions    	
+    	if ($include_courses_in_sessions) {
+    		$sessions 	 = Tracking::get_sessions_coached_by_user($user_id);
+    		
+    		if (!empty($sessions)) {
+    			foreach($sessions as $session_item) {    				
+    				$courses  = Tracking :: get_courses_followed_by_coach($user_id, $session_item['id']);    				
+    				foreach($courses as $course_item) {
+    					$courses_as_admin[$session_item['id']][$course_item] = $course_item;
+    				}
+    			}
+    		}
+    	}
+    	return $courses_as_admin;
+    }
+        
+    public static function get_user_list_from_courses_as_coach($user_id, $include_sessions = true) {
+    	$courses_as_admin = $students_in_courses = array();
+    	
+    	$sessions = CourseManager::get_course_list_as_coach($user_id, true);
+    	
+    	if (!empty($sessions)) {
+    		foreach($sessions as $session_id => $courses) {
+    			if (!$include_sessions) {
+    				if (!empty($session_id)) {
+    					continue;
+    				}
+    			}
+    			if (empty($session_id)) {
+		    		foreach($courses as $course_code) {
+		    			$students_in_course = CourseManager::get_user_list_from_course_code($course_code);		    			
+		    			
+		    			foreach($students_in_course as $user_item) {
+		    				//Only students
+		    				if ($user_item['status_rel'] == STUDENT)
+		    					$students_in_courses[$user_item['user_id']] = $user_item['user_id'];
+		    			}
+		    		}		    		
+		    	} else {		    		
+		    		$students_in_course = SessionManager::get_users_by_session($session_id, '0');
+		    		
+		    		foreach($students_in_course as $user_item) {
+		    			$students_in_courses[$user_item['user_id']] = $user_item['user_id'];
+		    		}		    		
+		    	}		    	
+    		}
+    	}
+    	    	
+    	$students = Tracking :: get_student_followed_by_coach($coach_id);
+    	if (!empty($students_in_courses)) {
+    		if (!empty($students)) {
+    			$students = array_merge($students, $students_in_courses);
+    		} else {
+    			$students = $students_in_courses;
+    		}
+    	}
+    	
+    	if (!empty($students)) {
+    		$students = array_unique($students);
+    	}
+    	return $students;
+    }
+    
+    
+    
+    
     /**
      *	@return an array with the course info of all the courses (real and virtual) of which
      *	the current user is course admin

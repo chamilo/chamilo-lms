@@ -24,9 +24,6 @@ $language_file = array ('registration', 'userInfo');
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 

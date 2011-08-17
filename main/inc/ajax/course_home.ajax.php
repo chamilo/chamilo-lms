@@ -102,11 +102,7 @@ switch ($action) {
      */
     case 'session_courses_lp_default':        
         
-        require_once '../global.inc.php';
-        
-        $libpath = api_get_path(LIBRARY_PATH);        
-        require_once $libpath.'sessionmanager.lib.php';        
-        require_once $libpath.'tracking.lib.php';                      
+        require_once '../global.inc.php';                
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         
         
@@ -221,11 +217,7 @@ switch ($action) {
         
     case 'session_courses_lp_by_week':
         
-        require_once '../global.inc.php';
-    
-        $libpath = api_get_path(LIBRARY_PATH);        
-        require_once $libpath.'tracking.lib.php';   
-        require_once $libpath.'sessionmanager.lib.php';        
+        require_once '../global.inc.php';                
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';        
         
         $page  = intval($_REQUEST['page']);     //page
@@ -350,11 +342,7 @@ switch ($action) {
 
     case 'session_courses_lp_by_course':
         
-        require_once '../global.inc.php';
-    
-        $libpath = api_get_path(LIBRARY_PATH);        
-        require_once $libpath.'tracking.lib.php';   
-        require_once $libpath.'sessionmanager.lib.php';        
+        require_once '../global.inc.php';                
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';        
         
         $page  = intval($_REQUEST['page']);     //page

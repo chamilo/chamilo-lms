@@ -109,6 +109,9 @@ require_once $lib_path.'message.lib.php';
 require_once $lib_path.'social.lib.php';
 require_once $lib_path.'notification.lib.php';
 require_once $lib_path.'course.lib.php';
+require_once $lib_path.'sessionmanager.lib.php';
+require_once $lib_path.'tracking.lib.php';
+
 
 require_once $lib_path.'online.inc.php';
 

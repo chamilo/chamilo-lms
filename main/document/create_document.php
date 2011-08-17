@@ -622,7 +622,6 @@ if ($form->validate()) {
 		}
 	}
 	*/ 
-	get_list_gradebook_certificates_by_user_id()
 	
 	// Interbreadcrumb for the current directory root path
 	if (empty($document_data['parents'])) {

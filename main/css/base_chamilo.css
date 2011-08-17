@@ -1982,29 +1982,22 @@ Document title
     margin-right: 10px;
     vertical-align:middle;
 }
-.actions {
-    background:#E5EDF9;
-    border-bottom:1px dotted #999999;
-    border-top:1px dotted #999999;
-    /*height:35px;*/
-    padding:2px;
-     margin-bottom: 5px;
+.actions {	
+	background:#efefef;
+    border:1px solid #ccc; 
+    margin-bottom: 5px;
+    height:32px;
+    padding:2px;     
     vertical-align:middle;
 }
 .actions a img {
     padding-right:0px;
 }
 
-.actions img {
-    padding-right:10px;
-}
-
-.actions img {
-    /*display:inline-block;*/
+.actions img {	
+	padding-right:10px;
     border: none;
-    text-decoration: none;
-    /*background-color: #E5EDF9;*/
-    /* padding-right: 5px; */
+    text-decoration: none;    
     vertical-align:middle;
 }
 .actions a {
@@ -2045,13 +2038,6 @@ Document title
     padding-left:6px;
     padding-right:12px;
     text-align:center;
-}
-.actions img {
-    vertical-align:middle;
-}
-.actions a {
-    margin-right: 10px;
-    vertical-align:middle;
 }
 .actions-title {
     background:#E5EDF9;
@@ -2178,7 +2164,7 @@ button:hover {
 /* button with image */
 button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
     padding-left:30px;
-    background-position:10px;
+    background-position:8px;
     background-repeat:no-repeat;
 }
 /* POSITIVE */
@@ -2419,13 +2405,6 @@ input.arrowl {
 
 a.read {
     font-weight:normal;
-}
-.actions {
-    background:#efefef;
-    border:1px solid #ccc;
-    padding:2px;
-    margin-bottom: 5px;
-    vertical-align:middle;
 }
 .actions-title {
     background:#efefef;

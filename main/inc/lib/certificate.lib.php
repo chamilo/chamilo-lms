@@ -224,8 +224,8 @@ class Certificate extends Model {
 		//Make sure HTML certificate is generated
 		if (!empty($text) && !empty($path)) {
 			require_once api_get_path(LIBRARY_PATH).'phpqrcode/qrlib.php';
-			//L low, M - Medium, L large			
-			$return = QRcode::png($text, $path, 'L', 1, 2);						
+			//L low, M - Medium, L large error correction
+			$return = QRcode::png($text, $path, 'M', 2, 2);
 		}
 	}
 	

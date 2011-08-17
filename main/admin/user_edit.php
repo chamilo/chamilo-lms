@@ -274,7 +274,7 @@ foreach ($extra as $id => $field_details) {
             if ($get_lang_variables) {
                 $field_details[3] = get_lang($field_details[3]);
             }
-            $form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');		
+            $form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, array('class'=>'chzn-select', 'id'=>'extra_'.$field_details[1]));		
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
 			$options = array();

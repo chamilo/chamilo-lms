@@ -103,8 +103,7 @@ require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 // Libraries
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+
 
 $tool_name = is_profile_editable() ? get_lang('ModifProfile') : get_lang('ViewProfile');
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -326,7 +325,7 @@ foreach ($extra as $id => $field_details) {
 			    }
 				$options[$option_details[1]] = $option_details[2];
 			}
-			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');
+			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, array('class'=>'chzn-select', 'id'=>'extra_'.$field_details[1]));
 			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:

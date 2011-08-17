@@ -10,7 +10,7 @@
  *
  * The aim is, as always, to have good default settings and suggestions.
  *
- * @todo	reduce high level of duplication in this code
+ * @todo reduce high level of duplication in this code
  * @todo (busy) organise code into functions
  * @package chamilo.install
  */
@@ -119,20 +119,20 @@ if (!empty($_POST['old_version'])) {
 	$my_old_version = $dokeos_version;
 }
 
-$new_version = '1.8.8.4';
+$new_version 		= '1.8.8.4';
 $new_version_stable = true;
-$new_version_major = false;
-$software_name = 'Chamilo';
-$software_url = 'http://www.chamilo.org/';
+$new_version_major 	= false;
+$software_name 		= 'Chamilo';
+$software_url 		= 'http://www.chamilo.org/';
 
 // A protection measure for already installed systems.
-
+/*
 if (is_already_installed_system()) {
 	// The system has already been installed, so block re-installation.
 	$global_error_code = 6;
 	require '../inc/global_error_message.inc.php';
 	die();
-}
+}*/
 
 /*		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
 
@@ -377,7 +377,7 @@ if ($encryptPassForm == '1') {
 				}
 				
 				//document.getElementById('optional_param5').style.display = '';
-				document.getElementById('optional_param6').style.display = '';
+				//document.getElementById('optional_param6').style.display = '';
 				init_visibility = 1;
 				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters', ''); ?>';
 			} else {
@@ -389,7 +389,7 @@ if ($encryptPassForm == '1') {
 				document.getElementById('optional_param4').style.display = 'none';
 				*/
 				document.getElementById('optional_param5').style.display = 'none';
-				document.getElementById('optional_param6').style.display = 'none';
+				//document.getElementById('optional_param6').style.display = 'none';
 				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters', ''); ?>';
 				init_visibility = 0;
 			}
@@ -446,19 +446,18 @@ if ($encryptPassForm == '1') {
 
 <div id="wrapper">
 
-<div id="header">
-	<div id="header1">
-	
-	<div id="logo">	   
-        <img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />        
-	</div>	
-	</div>	
-	<div id="header3">
-		<ul>
-			<li id="current"><a href="#"><span id="tab_active"><?php echo get_lang('Installation'); ?></span></a></li>
-		</ul>
+	<div id="header">
+		<div id="header1">	
+			<div id="logo">	   
+	        	<img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />        
+			</div>	
+		</div>	
+		<div id="header3">
+			<ul>
+				<li id="current"><a href="#"><span id="tab_active"><?php echo get_lang('Installation'); ?></span></a></li>
+			</ul>
+		</div>
 	</div>
-</div>
 
 <div id="main">
 <form id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
@@ -476,13 +475,13 @@ if ($encryptPassForm == '1') {
 </div>
 
 <table cellpadding="6" cellspacing="0" border="0" width="72%" align="center">
-<tr>
-<td>
-	<div id="note" style="float:right;">
-		<a href="../../documentation/installation_guide.html" target="_blank"><?php echo get_lang('ReadTheInstallationGuide'); ?></a>
-	</div>
-</td>
-</tr>
+	<tr>
+		<td>
+			<div id="note" style="float:right;">
+				<a href="../../documentation/installation_guide.html" target="_blank"><?php echo get_lang('ReadTheInstallationGuide'); ?></a>
+			</div>
+		</td>
+	</tr>
 <tr>
   <td>
     <?php     
@@ -619,10 +618,10 @@ if ($_POST['step2']) {
 	//STEP 6 : LAST CHECK BEFORE INSTALL
 ?>
     <div class="RequirementHeading">
-	<h2><?php echo display_step_sequence().get_lang('LastCheck'); ?></h2>
+		<h2><?php echo display_step_sequence().get_lang('LastCheck'); ?></h2>
 	</div>
     <div class="RequirementContent">
-	<?php echo get_lang('HereAreTheValuesYouEntered'); ?>
+		<?php echo get_lang('HereAreTheValuesYouEntered'); ?>
 	</div>
 	<strong><?php echo get_lang('PrintThisPageToRememberPassAndOthers'); ?></strong>
 
@@ -685,12 +684,10 @@ if ($_POST['step2']) {
 	</blockquote>
 
 	<?php if ($installType == 'new'): ?>
-	<div style="background-color:#FFFFFF">
-	
-	<div class="warning-message"><center><h2><?php echo get_lang('Warning'); ?> !</h2></center><br />
-	<?php echo get_lang('TheInstallScriptWillEraseAllTables'); ?>
-	</div>
-	
+	<div style="background-color:#FFFFFF">	
+		<div class="warning-message"><center><h2><?php echo get_lang('Warning'); ?> !</h2></center><br />
+		<?php echo get_lang('TheInstallScriptWillEraseAllTables'); ?>
+		</div>	
 	</div>
 	<?php endif; ?>
 
@@ -796,9 +793,7 @@ if ($_POST['step2']) {
             default:
 				break;
 		}
-
-	} else {
-	
+	} else {	
 		set_file_folder_permissions();
 		database_server_connect();
 
@@ -815,26 +810,30 @@ if ($_POST['step2']) {
     display_after_install_message($installType, $nbr_courses);
 
 } elseif ($_POST['step1'] || $badUpdatePath) {
-        //STEP 1 : REQUIREMENTS
-        //make sure that proposed path is set, shouldn't be necessary but...
-        if (empty($proposedUpdatePath)) { $proposedUpdatePath = $_POST['updatePath']; }
-        display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8, $update_from_version_6);
+	//STEP 1 : REQUIREMENTS
+    //make sure that proposed path is set, shouldn't be necessary but...
+    if (empty($proposedUpdatePath)) { $proposedUpdatePath = $_POST['updatePath']; }
+    display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8, $update_from_version_6);
 } else {
-        // This is the start screen.
-        display_language_selection();
+	// This is the start screen.
+    display_language_selection();
 }
 ?>
   </td>
 </tr>
 </table>
 </form>
-</div>
-<br style="clear:both;" />
+
+</div> <!-- main end-->
 <div class="push"></div>
 </div><!-- wrapper end-->
+
 <div id="footer">
-	<div class="copyright"><?php echo get_lang('Platform'); ?> <a href="<?php echo $software_url; ?>" target="_blank"><?php echo $software_name; ?> <?php echo $new_version; ?></a> &copy; <?php echo date('Y'); ?> </div>
-	&nbsp;
+	<div id="bottom_corner"></div>
+	<div class="copyright">
+		<?php echo get_lang('Platform'); ?> <a href="<?php echo $software_url; ?>" target="_blank"><?php echo $software_name; ?> <?php echo $new_version; ?></a> &copy; <?php echo date('Y'); ?>
+	</div>
+	<div class="footer_emails"><div style="clear:both"></div></div>	
 </div>
 </body>
 </html>

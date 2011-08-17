@@ -1012,8 +1012,8 @@ function display_language_selection() { ?>
         <h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage'); ?></h2>
         <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
     <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
-<?php display_language_selection_box('language_list', api_get_interface_language()); ?>
-    <button type="submit" name="step1" class="next" value="<?php get_lang('Next'); ?> &gt;"><?php echo get_lang('Next'); ?></button>
+	<?php display_language_selection_box('language_list', api_get_interface_language()); ?>
+    <button type="submit" name="step1" class="next" value="<?php echo get_lang('Next'); ?>"><?php echo get_lang('Next'); ?></button>
     <input type="hidden" name="is_executable" id="is_executable" value="-" />
     </form>
     </div>
@@ -1040,7 +1040,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />'."\n";
     
     if ($installType == 'update')  {
-        echo get_lang('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />'."\n";
+        echo get_lang('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />';
     }
     echo '</div>';
 
@@ -1372,45 +1372,47 @@ function display_license_agreement() {
     echo '</div>';
     ?>
     <table>
-        <tr><td>
+		<tr><td>
             <p style="font-size:75%"><textarea cols="80" rows="10" readonly><?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?></textarea></p>
         </td>
         </tr>
-                <tr><td>
-                    <input type="checkbox" name="accept" id="accept_licence" value="1">
-                    <label for="accept_licence"><?php echo get_lang('IAccept'); ?></label>
-                    </td></tr>
-                <tr><td><p><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>
-                <tr>
-                    <td>
-                        <table width="100%">
-            <tr>
-                <td></td>
-                <td align="center">
-                    <button type="submit" class="back" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
-                    <input type="hidden" name="is_executable" id="is_executable" value="-" />
-                    <button type="submit" class="next" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" ><?php echo get_lang('Next'); ?></button>
-                </td>
-            </tr>
-                        </table>
-                    </td>
-                </tr>
-                </table>
+        <tr><td>
+        	<input type="checkbox" name="accept" id="accept_licence" value="1" />
+            <label for="accept_licence"><?php echo get_lang('IAccept'); ?></label>
+            </td>
+		</tr>
+        <tr><td><p><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>
+        <tr>
+        	<td>
+            <table width="100%">
+            	<tr>
+                	<td></td>
+                	<td align="center">
+                    	<button type="submit" class="back" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
+                    	<input type="hidden" name="is_executable" id="is_executable" value="-" />
+                    	<button type="submit" class="next" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" ><?php echo get_lang('Next'); ?></button>
+                	</td>
+            	</tr>
+            </table>
+            </td>
+		</tr>
+	</table>
 
-        <!-- Contact information form -->
-                    <div>
-                        <div class="formw">
-                            <a href="javascript://" class = "advanced_parameters" >
-                                <span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?></span>
-                            </a>
-                        </div>
-                    </div>
-                    <div id="id_contact_form" style="display:block">
-                           <div class="normal-message"><?php echo get_lang('ContactInformationDescription') ?></div>
-                        <p><?php echo get_contact_registration_form() ?></p><br />
-                    </div>
-
-
+    <!-- Contact information form -->
+	<div>
+    	<div class="formw">
+        	<a href="javascript://" class = "advanced_parameters" >
+            	<span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" />&nbsp;<?php echo get_lang('ContactInformation') ?></span>
+           	</a>
+		</div>
+	</div>
+                    
+    <div id="id_contact_form" style="display:block">
+    	<div class="normal-message"><?php echo get_lang('ContactInformationDescription') ?></div>
+        <div id="contact_registration">
+        	<p><?php echo get_contact_registration_form() ?></p><br />
+    	</div>	
+	</div>
     <?php
 }
 
@@ -1420,8 +1422,7 @@ function display_license_agreement() {
  */
 function get_contact_registration_form() {
 
-    $html ='
-    <div id="contact_registration">
+    $html ='    
     <fieldset style="width:95%;padding:15px;border:1pt solid #eee">
     <div id="div_sent_information"></div>
     <form>
@@ -1457,14 +1458,14 @@ function get_contact_registration_form() {
                             <Option value="Shipping/Transportation">Shipping/Transportation</Option>
                             <Option value="Technology">Technology</Option><Option value="Telecommunications">Telecommunications</Option>
                             <Option value="Other">Other</Option>
-                    </Select>
+                    </select>
             </div>
     </div>
 
     <div class="row">
             <div class="label"><span class="form_required">*</span>'.get_lang('PersonRole').'</div>
             <div class="formw">
-                    <Select name="person_role" id="person_role" >
+                    <select name="person_role" id="person_role" >
                             <option value="">--- '.get_lang('SelectOne').' ---</option>
                             <Option value="Administration">Administration</Option><Option value="CEO/President/ Owner">CEO/President/ Owner</Option>
                             <Option value="CFO">CFO</Option><Option value="CIO/CTO">CIO/CTO</Option>
@@ -1477,21 +1478,19 @@ function get_contact_registration_form() {
                             <Option value="Partner/Principal">Partner/Principal</Option><Option value="Purchasing Manager">Purchasing Manager</Option>
                             <Option value="Sales/ Business Dev. Manager">Sales/ Business Dev. Manager</Option><Option value="Sales/ Business Dev.">Sales/ Business Dev.</Option>
                             <Option value="Vice President/Senior Manager">Vice President/Senior Manager</Option><Option value="Other">Other</Option>
-                    </Select>
+                    </select>
             </div>
     </div>
     <div class="row">
             <div class="label">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</div>
             <div class="formw">
-                    <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked>'.get_lang('Yes').'
-                    <input type="radio" name="financial_decision" id="financial_decision2" value="0">'.get_lang('No').'
+                    <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked />'.get_lang('Yes').'
+                    <input type="radio" name="financial_decision" id="financial_decision2" value="0" />'.get_lang('No').'
             </div>
     </div>
     <div class="row">
             <div class="label"><span class="form_required">*</span>'.get_lang('CompanyCountry').'</div>
-            <div class="formw">
-                    '.get_countries_list_from_array(true).'
-            </div>
+            <div class="formw">'.get_countries_list_from_array(true).'</div>
     </div>
     <div class="row">
             <div class="label">'.get_lang('CompanyCity').'</div>
@@ -1503,7 +1502,7 @@ function get_contact_registration_form() {
             <div class="label">'.get_lang('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</div>
             <div class="formw">
                     <select id="language" name="language">
-                            <option value="bulgarian">??????????????????</option>
+                            <option value="bulgarian">Bulgarian</option>
                             <option value="indonesian">Bahasa Indonesia</option>
                             <option value="bosnian">Bosanski</option>
                             <option value="german">Deutsch</option>
@@ -1527,15 +1526,10 @@ function get_contact_registration_form() {
             <div class="label">&nbsp;</div>
             <div class="formw"><span class="form_required">*</span><small>'.get_lang('FieldRequired').'</small></div>
     </div>
-
     </form>
-
-</fieldset>
-</div>
-';
+</fieldset>';
 
 return $html;
-
 }
 
 /**
@@ -1551,10 +1545,10 @@ return $html;
  * @return  void    Direct output
  */
 function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = true, $tr_attribute = '') {
-    echo "<tr ".$tr_attribute.">\n";
-    echo "<td>$parameter_name&nbsp;&nbsp;</td>\n";
+    echo "<tr ".$tr_attribute.">";
+    echo "<td>$parameter_name&nbsp;&nbsp;</td>";
     if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update) {
-        echo '<td><input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'.$parameter_value."</td>\n";
+        echo '<td><input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'.$parameter_value."</td>";
     } else {
         $inputtype = $form_field_name == 'dbPassForm' ? 'password' : 'text';
 
@@ -1565,12 +1559,12 @@ function display_database_parameter($install_type, $parameter_name, $form_field_
             echo '<td>'.api_htmlentities($parameter_value)."</td>";
             //echo "<td>$extra_notice</td>\n";
         } else {
-            echo '<td><input type="'.$inputtype.'" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxlength.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'."</td>\n";
-            echo "<td>$extra_notice</td>\n";
+            echo '<td><input type="'.$inputtype.'" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxlength.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'."</td>";
+            echo "<td>$extra_notice</td>";
         }
         
     }
-    echo "</tr>\n";
+    echo "</tr>";
 }
 
 /**
@@ -1628,8 +1622,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         if (empty($dbPrefixForm)) { //make sure there is a default value for db prefix
             $dbPrefixForm = 'chamilo_';
         }
-        echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2>';
-        echo '</div>';
+        echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2></div>';
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingIntro');
         echo '</div>';                
@@ -1659,33 +1652,35 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     //database user password
     $example_password = get_lang('EG').' '.api_generate_password();
     display_database_parameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
+    ?>
+    
+    <tr id="optional_param6">
+    	<td><?php echo get_lang('SingleDb'); ?> </td>
+        <?php if ($installType == INSTALL_TYPE_UPDATE): ?>
+        <td><input type="hidden" name="singleDbForm" value="<?php echo $singleDbForm; ?>" /><?php echo $singleDbForm ? get_lang('One') : get_lang('Several'); ?></td>
+        <?php else: ?>
+        <td>
+        	<input class="checkbox" type="radio" name="singleDbForm" value="1" id="singleDb1" <?php echo $singleDbForm ? 'checked="checked" ' : ''; ?> onclick="javascript: show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb1"><?php echo get_lang('One'); ?></label>
+            <input class="checkbox" type="radio" name="singleDbForm" value="0" id="singleDb0" <?php echo $singleDbForm ? '' : 'checked="checked" '; ?> onclick="javascript: show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb0"><?php echo get_lang('Several'); ?></label>
+		</td>
+        <?php endif; ?>
+        <td>&nbsp;</td>
+	</tr>
+        
+	<?php 
 
     //Fields for the four standard Chamilo databases    
     if ($installType != INSTALL_TYPE_UPDATE) {        
         echo '<tr><td colspan="3">';
-        echo '<a href="#;" onclick="javascript:show_hide_option();" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters').'</a>';
+        echo '<a href="#;" onclick="javascript:show_hide_option();" id="optionalparameters">
+        	  <img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters').'</a>';
         echo '</td></tr>';
     }
     ?>    
     <input type="hidden" name="enableTrackingForm" value="1" />
-    <tr id="optional_param6" style="display:none;">
-      <td><?php echo get_lang('SingleDb'); ?> </td>
-
-      <?php if ($installType == INSTALL_TYPE_UPDATE): ?>
-      <td><input type="hidden" name="singleDbForm" value="<?php echo $singleDbForm; ?>" /><?php echo $singleDbForm ? get_lang('One') : get_lang('Several'); ?></td>
-      <?php else: ?>
-      <td>
-        <input class="checkbox" type="radio" name="singleDbForm" value="1" id="singleDb1" <?php echo $singleDbForm ? 'checked="checked" ' : ''; ?> onclick="javascript: show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb1"><?php echo get_lang('One'); ?></label>
-        <input class="checkbox" type="radio" name="singleDbForm" value="0" id="singleDb0" <?php echo $singleDbForm ? '' : 'checked="checked" '; ?> onclick="javascript: show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb0"><?php echo get_lang('Several'); ?></label>
-      </td>
-      <?php endif; ?>
-
-      <td>&nbsp;</td>
-    </tr>
-    </div>    
     <?php   
-    $style = 'style="display:none;"';
     
+    $style = 'style="display:none;"';    
     if ($installType == INSTALL_TYPE_UPDATE) {
         $style = '';
     } 
@@ -1706,8 +1701,6 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     //Database Prefix
     display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, '', null, 'id="optional_param5" '.$style); //get_lang('DbPrefixCom')
     
-  
-
     /*  Tracking is always available see #2066
      *
     <tr id="optional_param5" style="display:none;">
@@ -1731,29 +1724,21 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         $dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm);
         if ($dbConnect == 1): ?>
         <td colspan="2">
-            <div class="confirmation-message">
-                <!--<div  style="float:left; margin-right:10px;">
-                <img src="../img/message_confirmation.png" alt="Confirmation" />
-                </div>-->
-                <!--<div style="float:left;">-->
+            <div class="confirmation-message">                
                 Database host info: <strong><?php echo Database::get_host_info(); ?></strong><br />
                 Database server version: <strong><?php echo Database::get_server_info(); ?></strong><br />
                 Database client version: <strong><?php echo Database::get_client_info(); ?></strong><br />
                 Database protocol version: <strong><?php echo Database::get_proto_info(); ?></strong>
-                <!--</div>-->
                 <div style="clear:both;"></div>
             </div>
         </td>
         <?php else: ?>
         <td colspan="2">
-            <div style="float:left;" class="error-message">
-                <!--<div  style="float:left; margin-right:10px;">
-                <img src="../img/message_error.png" alt="Error" />
-                </div>-->
+            <div style="float:left;" class="error-message">                
                 <div style="float:left;">
-                <strong>Database error: <?php echo Database::errno(); ?></strong><br />
-                <?php echo Database::error().'<br />'; ?>
-                <strong><?php echo get_lang('Details').': '. get_lang('FailedConectionDatabase'); ?></strong><br />
+	                <strong>Database error: <?php echo Database::errno(); ?></strong><br />
+	                <?php echo Database::error().'<br />'; ?>
+	                <strong><?php echo get_lang('Details').': '. get_lang('FailedConectionDatabase'); ?></strong><br />
                 </div>
             </div>
         </td>
@@ -1797,7 +1782,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
     echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>main/inc/conf/configuration.php</strong></p>';
     echo '</div>';
 
-    echo "</td></tr>\n<tr><td>";
+    echo "</td></tr> <tr><td>";
     echo "<table width=\"100%\">";
 
     //First parameter: language
@@ -1934,7 +1919,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 function display_after_install_message($installType, $nbr_courses) {
     ?>
     <div class="RequirementHeading">
-    <h2><?php echo display_step_sequence() . get_lang('CfgSetting'); ?></h2>
+    	<h2><?php echo display_step_sequence() . get_lang('CfgSetting'); ?></h2>
     </div>
     
     <div class="RequirementContent">

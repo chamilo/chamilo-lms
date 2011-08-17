@@ -9,7 +9,6 @@
  * Code
  */
 require_once 'model.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 /**
  * Class
  * @package chamilo.library
@@ -107,8 +106,7 @@ class UserGroup extends Model {
      * @param   int     usergroup id
      * @param   array   list of session ids
     */
-    function subscribe_sessions_to_usergroup($usergroup_id, $list) {
-        require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+    function subscribe_sessions_to_usergroup($usergroup_id, $list) {        
         $current_list = self::get_sessions_by_usergroup($usergroup_id);
         $user_list    = self::get_users_by_usergroup($usergroup_id);
      
@@ -172,8 +170,7 @@ class UserGroup extends Model {
      * @param   array   list of course ids
      */
     function subscribe_courses_to_usergroup($usergroup_id, $list) {
-        require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-  
+          
         $current_list = self::get_courses_by_usergroup($usergroup_id);
         $user_list    = self::get_users_by_usergroup($usergroup_id);
      

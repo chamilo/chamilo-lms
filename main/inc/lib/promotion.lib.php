@@ -69,8 +69,7 @@ class Promotion extends Model {
 				 * 1. Copy a new session from the source
 				 * 2. Copy all courses from the session (no user data, no user list)
 				 * 3. Create the promotion
-				 */
-				require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+				 */				
 				$session_list   = SessionManager::get_all_sessions_by_promotion($id);
 				
 				if (!empty($session_list)) {
@@ -123,8 +122,7 @@ class Promotion extends Model {
      * @param   int     promotion id
      * @param   int     status (1, 0)
     */
-    public function update_all_sessions_status_by_promotion_id($promotion_id, $status) { 
-        require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';               
+    public function update_all_sessions_status_by_promotion_id($promotion_id, $status) {
         $session_list   = SessionManager::get_all_sessions_by_promotion($promotion_id);    
         if (!empty($session_list)) {
             foreach($session_list  as $item) {

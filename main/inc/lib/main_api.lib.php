@@ -2098,9 +2098,10 @@ function api_display_debug_info($debug_info) {
 
 function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false) {
 
-    $my_session_id = api_get_session_id();
-    $is_allowed_coach_to_edit = api_is_coach();
-    $session_visibility = api_get_session_visibility($my_session_id);
+    $my_session_id 				= api_get_session_id();
+    $is_allowed_coach_to_edit 	= api_is_coach();
+    $session_visibility 		= api_get_session_visibility($my_session_id);
+    
     $is_courseAdmin = api_is_course_admin() || api_is_platform_admin();
     if (!$is_courseAdmin && $tutor) {   // If we also want to check if the user is a tutor...
         $is_courseAdmin = $is_courseAdmin || api_is_course_tutor();

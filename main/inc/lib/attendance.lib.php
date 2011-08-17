@@ -341,8 +341,6 @@ class Attendance
 	 */
 	public function get_users_rel_course($attendance_id = 0) {
 	    
-	    require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-	    
 		$current_session_id = api_get_session_id();
 		$current_course_id  = api_get_course_id();
 		if (!empty($current_session_id)) {

@@ -9,8 +9,7 @@
  * Code
  */
 /* LIBRARIES */
-require_once 'display.lib.php';
-require_once 'course.lib.php';
+
 
 /**
 *	This class provides methods for sessions management.
@@ -1254,7 +1253,7 @@ class SessionManager {
 
 	/**
 	 * Get sessions followed by human resources manager
-	 * @param int		Human resources manager id
+	 * @param int		Human resources manager or Session admin id
 	 * @return array 	sessions
 	 */
 	public static function get_sessions_followed_by_drh($hr_manager_id) {
@@ -1282,6 +1281,8 @@ class SessionManager {
 		}
 		return $assigned_sessions_to_hrm;
 	}
+
+	
 
 	/**
 	 * Gets the list of courses by session filtered by access_url
@@ -1329,22 +1330,27 @@ class SessionManager {
     /**
      * Get users by session
      * @param   int sesssion id
+     * @param	int	filter by status 
      * @return  array a list with an user list
      */
-    public static function get_users_by_session($id) {
+    public static function get_users_by_session($id, $with_status = false) {
         if (empty($id)) {
             return array();
         }
         $id = intval($id);
         $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_rel_user               = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $order_clause ='';
+
         $sql = 'SELECT '.$tbl_user.'.user_id, lastname, firstname, username
                 FROM '.$tbl_user.'
                 INNER JOIN '.$tbl_session_rel_user.'
                     ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user 
-                    AND '.$tbl_session_rel_user.'.id_session = '.$id.$order_clause;
-        $result=Database::query($sql);
+                    AND '.$tbl_session_rel_user.'.id_session = '.$id;
+        if ($with_status !== false) {
+        	$with_status = intval($with_status);
+        	$sql .= " WHERE relation_type = $with_status ";
+        }        
+        $result = Database::query($sql);
         while ($row = Database::fetch_array($result,'ASSOC')) {
             $return_array[] = $row;
         }
@@ -1496,8 +1502,7 @@ class SessionManager {
             
             //We will copy the current courses of the session to new courses
             if (!empty($short_courses)) {
-                if ($create_new_courses) {                    
-                    require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+                if ($create_new_courses) {
                     //Just in case
                     if (function_exists('ini_set')) {
                     	ini_set('memory_limit','256M');

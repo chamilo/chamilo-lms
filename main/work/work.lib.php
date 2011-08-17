@@ -481,7 +481,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				$mydir_temp = '/'.$my_sub_dir.$dir;
 			}
 
-			$sql_select_directory = "SELECT prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE ";
+			$sql_select_directory = "SELECT prop.insert_date, prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE ";
 			if (!empty($_SESSION['toolgroup'])) {
 				$sql_select_directory .= " work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
 			} else {
@@ -491,7 +491,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 
 			$result = Database::query($sql_select_directory);
 			$row = Database::fetch_array($result);
-
+			
 			if (!$row) {
 				// the folder belongs to another session
 				continue;
@@ -553,7 +553,6 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					$form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'), 'size="10"');
 						
 					if ((int)$row['weight'] == 0) {
-
 						$form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
 						$form_folder -> addElement('html', '<div id=\'option3\' style="display:none">');
 						$weight_input2[] = FormValidator :: createElement('text', 'weight');
@@ -562,29 +561,55 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					} else {
 						$weight_input[] = FormValidator :: createElement('text', 'weight');
 						$form_folder -> addGroup($weight_input, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
-						//$form_folder->freeze();
 					}
-						
+											
 					if ($homework['expires_on'] != '0000-00-00 00:00:00') {
 						$homework['expires_on'] = api_get_local_time($homework['expires_on']);
 						$there_is_a_expire_date = true;
+						$defaults['enableExpiryDate'] = true;						
+						
+						$form_folder -> addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
+						$form_folder -> addElement('html', '<div id=\'option1\' style="display:block">');
 						$form_folder -> addGroup(create_group_date_select(), 'expires', get_lang('ExpiresAt'));
+						$form_folder -> addElement('html', '</div>');
+						
 					} else {
 						$homework['expires_on'] = api_get_local_time();
-						$there_is_a_expire_date = true;
+												
+						$expires_date_array = convert_date_to_array(api_get_local_time(), 'expires');
+						$defaults 			= array_merge($defaults, $expires_date_array);
+						
+						$there_is_a_expire_date = false;	
+
 						$form_folder -> addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
 						$form_folder -> addElement('html', '<div id=\'option1\' style="display:none">');
 						$form_folder -> addGroup(create_group_date_select(), 'expires', get_lang('ExpiresAt'));
-						$form_folder -> addElement('html', '</div>');
+						$form_folder -> addElement('html', '</div>');						
 					}
+			
+					
+					
 						
 					if ($homework['ends_on'] != '0000-00-00 00:00:00') {
 						$homework['ends_on'] = api_get_local_time($homework['ends_on']);
 						$there_is_a_end_date = true;
+						
+						$defaults['enableEndDate'] = true;
+						
+						$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
+						$form_folder -> addElement('html', '<div id=\'option2\' style="display:block">');
 						$form_folder -> addGroup(create_group_date_select(), 'ends', get_lang('EndsAt'));
+						$form_folder -> addElement('html', '</div>');
+						$form_folder -> addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
+						
 					} else {
 						$homework['ends_on'] = api_get_local_time();
-						$there_is_a_end_date = true;
+						
+						$expires_date_array = convert_date_to_array(api_get_local_time(), 'ends');
+						$defaults 			= array_merge($defaults, $expires_date_array);
+						
+						$there_is_a_end_date = false;
+						
 						$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
 						$form_folder -> addElement('html', '<div id=\'option2\' style="display:none">');
 						$form_folder -> addGroup(create_group_date_select(), 'ends', get_lang('EndsAt'));
@@ -599,14 +624,17 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					$form_folder -> addElement('html', '</div>');
 
 					$form_folder -> addElement('style_submit_button', 'submit', get_lang('ModifyDirectory'), 'class="save"');
+					
 					if ($there_is_a_end_date) {
 						$end_date_array = convert_date_to_array($homework['ends_on'], 'ends');
 						$defaults = array_merge($defaults, $end_date_array);
 					}
+					
 					if ($there_is_a_expire_date) {
 						$expires_date_array = convert_date_to_array($homework['expires_on'], 'expires');
-						$defaults = array_merge($defaults, $expires_date_array);
+						$defaults = array_merge($defaults, $expires_date_array);						
 					}
+					
 					if (!empty($row['qualification'])) {
 						$defaults = array_merge($defaults, array('qualification[qualification]' => $row['qualification']));
 					}
@@ -617,6 +645,18 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					$display_edit_form = true;
 
 					if ($form_folder->validate()) {
+						
+						if ($_POST['enableExpiryDate'] == '1') {
+							$there_is_a_expire_date = true;
+						} else {
+							$there_is_a_expire_date = false;
+						}
+						if ($_POST['enableEndDate'] == '1') {
+							$there_is_a_end_date = true;
+						} else {
+							$there_is_a_end_date = false;
+						}							
+						
 						$values = $form_folder -> exportValues();
 						$values = $values['my_group'];
 						$dir_name = replace_dangerous_char($values['dir_name']);
@@ -634,30 +674,31 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 						if ($edit_check) {
 
 							$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
-							if ($there_is_a_end_date || $there_is_a_expire_date) {
-								if ($row['view_properties'] == '1') {
-									$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
-									Database::query($sql_add_publication);
-									$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? api_get_utc_datetime(get_date_from_group('expires')) : '0000-00-00 00:00:00')."'".',';
-									$ends_query =    ' ends_on = '."'".($there_is_a_end_date ? api_get_utc_datetime(get_date_from_group('ends')) : '0000-00-00 00:00:00')."'";
-									Database::query('UPDATE '.$work_assigment.$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'");
-								} elseif ($row['view_properties'] == '0') {
-									if ($_POST['enableExpiryDate'] == '1') {
-										$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? api_get_utc_datetime(get_date_from_group('expires')) : '0000-00-00 00:00:00')."'";
-										Database::query('UPDATE '.$work_assigment.$expires_query.' WHERE id = '."'".$row['has_properties']."'");
-										$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
-										Database::query($sql_add_publication);
-									}
-									if ($_POST['enableEndDate'] == '1') {
-										//$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? get_date_from_group('expires') : '0000-00-00 00:00:00')."'".',';
-										$ends_query =    ' SET ends_on = '."'".($there_is_a_end_date ? api_get_utc_datetime(get_date_from_group('ends')) : '0000-00-00 00:00:00')."'";
-										Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE id = '."'".$row['has_properties']."'");
-										$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
-										Database::query($sql_add_publication);
-									}
-								}
-							}
-							//if($_POST['qualification']['qualification']!='')
+					/*
+							if ($row['view_properties'] == '1') {
+								//@todo check this condition When this code happens???
+								$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+								Database::query($sql_add_publication);
+								$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? api_get_utc_datetime(get_date_from_group('expires')) : '0000-00-00 00:00:00')."'".',';
+								$ends_query =    ' ends_on = '."'".($there_is_a_end_date ? api_get_utc_datetime(get_date_from_group('ends')) : '0000-00-00 00:00:00')."'";
+								Database::query('UPDATE '.$work_assigment.$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'");
+							} elseif ($row['view_properties'] == '0') {								
+						*/		
+								
+							$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? api_get_utc_datetime(get_date_from_group('expires')) : '0000-00-00 00:00:00')."'";
+							Database::query('UPDATE '.$work_assigment.$expires_query.' WHERE id = '."'".$row['has_properties']."'");
+							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+							Database::query($sql_add_publication);
+						
+			
+							$ends_query =    ' SET ends_on = '."'".($there_is_a_end_date ? api_get_utc_datetime(get_date_from_group('ends')) : '0000-00-00 00:00:00')."'";
+							Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE id = '."'".$row['has_properties']."'");
+							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+							Database::query($sql_add_publication);
+							
+							//}
+							
+
 							Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'");
 								
 							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
@@ -688,9 +729,9 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							$calendar_id = Database::fetch_row($res);
 							$dir_name = sprintf(get_lang('HandingOverOfTaskX'), $dir_name);
 								
-							$end_date = "0000-00-00 00:00:00";
+							$end_date = $row['insert_date'];
 
-							if ($_POST['enableExpiryDate'] == '1' || $there_is_a_end_date) {
+							if ($_POST['enableExpiryDate'] == '1') {
 								$end_date = Database::escape_string(api_get_utc_datetime(get_date_from_group('expires')));
 							}
 
@@ -699,7 +740,8 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 								$sql = "UPDATE ".$TABLEAGENDA."
 										SET title='".$dir_name."',
 											content  = '".Database::escape_string($_POST['description'])."',
-											end_date = '".$end_date."'
+											start_date = '".$end_date."',
+											end_date   = '".$end_date."'
 										WHERE id='".$calendar_id[0]."'";
 								Database::query($sql);
 							}

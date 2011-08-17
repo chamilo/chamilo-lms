@@ -22,8 +22,7 @@
  *
  * GOALS
  * *****
- * Allow student to quickly send documents immediately
- * visible on the course website.
+ * Allow student to quickly send documents immediately visible on the Course 
  *
  * The script does 5 things:
  *
@@ -36,25 +35,9 @@
  * On the long run, the idea is to allow sending realvideo . Which means only
  * establish a correspondence between RealServer Content Path and the user's
  * documents path.
+ * 
  *
- * All documents are sent to the address /$_configuration['root_sys']/$currentCourseID/document/
- * where $currentCourseID is the web directory for the course and $_configuration['root_sys']
- * usually /var/www/html
- *
- *	Modified by Patrick Cool, february 2004:
- *	Allow course managers to specify wether newly uploaded documents should
- *	be visible or unvisible by default
- *	This is ideal for reviewing the uploaded documents before the document
- *	is available for everyone.
- *
- *	note: maybe the form to change the behaviour should go into the course
- *	properties page?
- *	note 2: maybe a new field should be created in the course table for
- *	this behaviour.
- *
- *	We now use the show_score field since this is not used.
- *
- */
+*/
 
 /*		INIT SECTION */
 
@@ -464,24 +447,9 @@ if (!empty($_REQUEST['new_dir'])) {
 			} else {
 				$dir_name_sql = '/'.$created_dir;
 			}
-
-			// Insert into agenda
-			$agenda_id = 0;
-			$end_date = '';
-			if (isset($_POST['add_to_calendar']) && $_POST['add_to_calendar'] == 1) {
-				require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
-				require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
-				$course = isset($course_info) ? $course_info : null;
-				$date = time();				
-				$title = sprintf(get_lang('HandingOverOfTaskX'), $_POST['new_dir']);
-				if (!empty($_POST['type1'])) {
-					$end_date = get_date_from_select('expires');					
-				}				
-				$description = isset($_POST['description']) ? $_POST['description'] : '';
-				$content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.api_substr($dir_name_sql, 1).'" >'.$_POST['new_dir'].'</a>'.$description;
-				
-				$agenda_id = agenda_add_item($course, $title, $content, $date, $end_date, array('GROUP:'.$toolgroup), 0);
-			}
+			$time = time();
+			$today = api_get_utc_datetime($time);
+						
 			$sql_add_publication = "INSERT INTO " . $work_table . " SET 
 									   url         		= '".Database::escape_string($dir_name_sql)."',
 								       title        	= '".Database::escape_string($_POST['new_dir'])."',
@@ -491,7 +459,7 @@ if (!empty($_REQUEST['new_dir'])) {
 									   accepted			= '1',
 									   filetype 		= 'folder',
 									   post_group_id 	= '".$toolgroup."',
-									   sent_date		= '".api_get_utc_datetime()."',
+									   sent_date		= '".$today."',
 									   qualification	= '".(($_POST['qualification_value']!='') ? Database::escape_string($_POST['qualification_value']) : '') ."',
 									   parent_id		= '',
 									   qualificator_id	= '',
@@ -504,6 +472,30 @@ if (!empty($_REQUEST['new_dir'])) {
 
 			// add the directory
 			$id = Database::insert_id();
+			if ($id) {
+				// Insert into agenda
+				$agenda_id = 0;
+				$end_date = '';
+				if (isset($_POST['add_to_calendar']) && $_POST['add_to_calendar'] == 1) {
+					require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
+					require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
+					$course = isset($course_info) ? $course_info : null;
+					
+					// Setting today date
+					$date = $end_date = $time;
+					
+					$title = sprintf(get_lang('HandingOverOfTaskX'), $_POST['new_dir']);
+					if (!empty($_POST['type1'])) {
+						$end_date = get_date_from_select('expires');
+						$date	  = $end_date;
+					}
+					$description = isset($_POST['description']) ? $_POST['description'] : '';
+					$content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.api_substr($dir_name_sql, 1).'" >'.$_POST['new_dir'].'</a>'.$description;
+				
+					$agenda_id = agenda_add_item($course, $title, $content, $date, $end_date, array('GROUP:'.$toolgroup), 0);
+				}
+			}
+			
 			//Folder created
 			api_item_property_update($_course, 'work', $id, 'DirectoryCreated', $user_id);
 			Display :: display_confirmation_message(get_lang('DirectoryCreated'), false);

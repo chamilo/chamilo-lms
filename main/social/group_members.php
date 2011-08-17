@@ -17,8 +17,6 @@ if (api_get_setting('allow_social_tool') !='true') {
 }
 
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 
 $this_section = SECTION_SOCIAL;
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));

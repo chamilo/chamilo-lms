@@ -10,9 +10,6 @@
 $language_file = array('userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-require_once api_get_path(LIBRARY_PATH).'array.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 if (api_get_setting('allow_social_tool') !='true') {
@@ -248,7 +245,7 @@ echo '</div>';
 
 echo '<div id="social-content-right">';
 
-echo '<div class="rounded_div" style="width:300px">';
+echo '<div class="rounded_div" style="width:280px">';
 
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
 	echo '<div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';

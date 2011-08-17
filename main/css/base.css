@@ -1487,7 +1487,7 @@ div.image-social-content center.friend {
     margin-right:10px;
     min-height:300px;
     overflow:hidden;
-    width:175px;
+    width:180px;
 }
 
 .social-content-description {
@@ -2037,9 +2037,9 @@ input.maininput:focus {
     border-radius: 11px;
         
     -webkit-box-shadow: 0 4px 18px #C8C8C8;
-    -opera-box-shadow: 0 4px 18px #C8C8C8;
-    -moz-box-shadow: 0 4px 18px #C8C8C8;
-    box-shadow: 0 4px 18px #C8C8C8;
+    -opera-box-shadow:  0 4px 18px #C8C8C8;
+    -moz-box-shadow:    0 4px 18px #C8C8C8;
+    box-shadow:         0 4px 18px #C8C8C8;
     
     float: left;
     height: auto;

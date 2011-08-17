@@ -9,12 +9,10 @@
  */
 $language_file = array('userInfo');
 $cidReset=true;
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 
 api_block_anonymous_users();
 if (api_get_setting('allow_social_tool') !='true') {

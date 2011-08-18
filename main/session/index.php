@@ -14,9 +14,7 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 
-require_once $libpath.'sessionmanager.lib.php';
 require_once $libpath.'formvalidator/FormValidator.class.php';
-require_once $libpath.'tracking.lib.php';
 
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';

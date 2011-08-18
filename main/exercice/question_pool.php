@@ -20,9 +20,8 @@ require_once 'exercise.lib.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 $is_allowedToEdit=api_is_allowed_to_edit(null,true);
 

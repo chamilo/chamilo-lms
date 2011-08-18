@@ -22,8 +22,6 @@ if (!api_is_allowed_to_edit()) {
 }
 
 // including additional libraries
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $tool_name = get_lang("SubscribeUserToCourse");

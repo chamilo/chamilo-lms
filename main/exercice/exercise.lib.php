@@ -1248,11 +1248,9 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_dates = 
  */
 function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $course_code, $session_id = 0, $return_string = true) {
     if (empty($session_id)) {
-    	$session_id = 0;
-    	require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+    	$session_id = 0;    	
     	$user_list  = UserManager::get_user_list();
-    } else {
-        require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+    } else {        
         $user_list = SessionManager::get_users_by_session($session_id);        
     }
     //No score given we return 

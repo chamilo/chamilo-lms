@@ -68,7 +68,7 @@ if (empty($id)) {
 	api_not_allowed();
 }
 
-$is_allowedToEdit   = api_is_allowed_to_edit(null,true) || $is_courseTutor;
+$is_allowedToEdit    = api_is_allowed_to_edit(null,true) || $is_courseTutor || api_is_session_admin();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = get_exercise_track_exercise_info($id);

@@ -276,10 +276,12 @@ class GroupPortalManager
     $res = Database::query($sql);
     $temp_arr = Database::fetch_array($res, 'NUM');
     $toreturn = array();
-    foreach ($temp_arr as $elt) {
-      if (isset($elt))
-        $toreturn[] = $elt;
-    }
+		if (is_array($temp_arr)) {
+			foreach ($temp_arr as $elt) {
+				if (isset($elt))
+					$toreturn[] = $elt;
+			}
+		}
     return $toreturn;
   }
 

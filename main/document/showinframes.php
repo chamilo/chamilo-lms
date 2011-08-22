@@ -219,6 +219,6 @@ if ($pathinfo['extension']=='wav' && api_get_setting('enable_nanogong') == 'true
 	echo '</div>';
 }
 else{
-	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;" height="600"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'" height="500"></iframe>';
+	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;" height="600"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'&amp;rand='.mt_rand(1, 10000).'" height="500"></iframe>';
 }
 Display::display_footer();

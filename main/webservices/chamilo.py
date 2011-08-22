@@ -3,6 +3,7 @@
 # This file is useless here, and should be placed on the OpenERP side after 
 # being correctly configured (change variables below) in order to be put
 # to good use
+# @author Gustavo Maggi - Latinux
 
 ## Configuration section - set the variables below to their right values
 # Chamilo's root directory URL. Replace by your own URL without the trailing /

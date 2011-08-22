@@ -14,12 +14,10 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+
 
 $form_sent = 0;
 $error_message = ''; // Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.

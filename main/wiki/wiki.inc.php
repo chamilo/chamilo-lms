@@ -587,7 +587,7 @@ return true;
         echo '</tr>';
         echo '<tr>';
         //echo '<td><textarea name="task" cols="60" rows="4" >'.stripslashes($row['task']).'</textarea></td>';	// TODO: ¿delete?
-        echo '<td>'.api_disp_html_area('task', $row['task'], '', '', null, array('ToolbarSet' => 'wiki_task', 'Width' => '580', 'Height' => '200')).'</td>';
+        echo '<td>'.api_disp_html_area('task', '', '', '', null, array('ToolbarSet' => 'wiki_task', 'Width' => '580', 'Height' => '200')).'</td>';
         echo '</tr>';
         echo '</table>';
         echo '</div>';
@@ -1813,6 +1813,7 @@ function auto_add_page_users($assignment_type) {
 
     //data about teacher
     $userinfo=Database::get_user_info_from_id(api_get_user_id());
+    $name = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
     require_once api_get_path(INCLUDE_PATH).'/lib/usermanager.lib.php';
     if (api_get_user_id()<>0) {
         $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',false, true);

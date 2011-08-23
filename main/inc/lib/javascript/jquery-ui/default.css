@@ -2,7 +2,7 @@
 	Custom changes for the jquery-ui see the readme file
 */
 
-/*  smoothness */
+/*  Smoothness */
 
 /* Removing glow effect in tables */
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { 
@@ -98,3 +98,5 @@
 
 
 /* ui-lightness */
+
+

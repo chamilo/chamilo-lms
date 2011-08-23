@@ -5019,8 +5019,11 @@ function api_get_jquery_libraries_js($libraries) {
     if (in_array('jquery-ui', $libraries)) {
         //Jquery ui
         $theme = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
-        $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.css" type="text/css">';
-        $js .= api_get_js('jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.min.js');
+        
+        $jquery_ui_version = '1.8.16';
+        
+        $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.css" type="text/css">';
+        $js .= api_get_js('jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.min.js');
     }
     
     //jqgrid js and css

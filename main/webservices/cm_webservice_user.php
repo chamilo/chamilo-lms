@@ -94,7 +94,8 @@ class WSCMUser extends WSCM {
     }
 
     public function send_invitation($username, $password, $userfriend_id, $content_message = '')
-    { 
+    {
+        global $charset;
         if($this->verifyUserPass($username, $password) == "valid")
         { 
 		$user_id = UserManager::get_user_id_from_username($username); 

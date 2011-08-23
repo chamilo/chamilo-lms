@@ -62,7 +62,7 @@ class WSCMCourse extends WSCM {
 			$this->handleError($verifKey);
 		} else {
 			$results = array();
-			foreach($users as $user) {
+			foreach($courses as $course) {
 				$result_tmp = array();
 				$result_op = $this->deleteCourseHelper($course['course_id_field_name'], $course['course_id_value']);
 				$result_tmp['course_id_value'] = $course['course_id_value'];
@@ -170,6 +170,8 @@ class WSCMCourse extends WSCM {
 			$results = array();
 			foreach($courses as $course) {
 				$result_tmp = array();
+                //reinitialize variables just in case
+                $title = $category_code = $wanted_code = $tutor_name = $course_admin_user_id_field_name = $course_admin_user_id_value = $language = $course_id_field_name = $course_id_value = $extras = null;
 				extract($course);
 				$result = $this->createCourseHelper($title, $category_code, $wanted_code, $tutor_name, $course_admin_user_id_field_name, $course_admin_user_id_value, $language, $course_id_field_name, $course_id_value, $extras);
 				if($result instanceof WSCMError) {
@@ -322,7 +324,7 @@ class WSCMCourse extends WSCM {
 				$course_tmp['number_students'] = count($user_list);
 
 				// Determining external course id
-				$course_tmp['external_course_id'] = CourseManager::get_course_extra_field_value($course_field_name, $course['code']);
+				$course_tmp['external_course_id'] = CourseManager::get_course_extra_field_value($course_id_field_name, $course['code']);
 
 
 				$courses_result[] = $course_tmp;

@@ -173,6 +173,8 @@ class WSCourse extends WS {
 			$results = array();
 			foreach($courses as $course) {
 				$result_tmp = array();
+                // re-initialize variables just in case
+                $title = $category_code = $wanted_code = $tutor_name = $course_admin_user_id_field_name = $course_admin_user_id_value = $language = $course_id_field_name = $course_id_value = $extras = 0;
 				extract($course);
 				$result = $this->createCourseHelper($title, $category_code, $wanted_code, $tutor_name, $course_admin_user_id_field_name, $course_admin_user_id_value, $language, $course_id_field_name, $course_id_value, $extras);
 				if($result instanceof WSError) {

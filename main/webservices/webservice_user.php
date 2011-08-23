@@ -297,6 +297,8 @@ class WSUser extends WS {
 			$results = array();
 			foreach($users as $user) {
 				$result_tmp = array();
+                // re-initialize variables just in case
+                $firstname = $lastname = $status = $login = $password = $encrypt_method = $user_id_field_name = $user_id_value = $visibility = $email = $language = $phone = $expiration_date = $extras = null;
 				extract($user);
 				$result = $this->createUserHelper($firstname, $lastname, $status, $login, $password, $encrypt_method, $user_id_field_name, $user_id_value, $visibility, $email, $language, $phone, $expiration_date, $extras);
 				if($result instanceof WSError) {
@@ -406,6 +408,8 @@ class WSUser extends WS {
 			$results = array();
 			foreach($users as $user) {
 				$result_tmp = array();
+                // re-initialize variables just in case
+                $user_id_field_name = $user_id_value = $firstname = $lastname = $status = $loginname = $password = $encrypt_method = $email = $language = $phone = $expiration_date = $extras = null;
 				extract($user);
 				$result_op = $this->editUserHelper($user_id_field_name, $user_id_value, $firstname, $lastname, $status, $loginname, $password, $encrypt_method, $email, $language, $phone, $expiration_date, $extras);
 				$result_tmp['user_id_value'] = $user['user_id_value'];

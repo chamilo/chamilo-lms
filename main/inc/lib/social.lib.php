@@ -177,18 +177,19 @@ class SocialManager extends UserManager {
 		$tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
 		$user_id = intval($user_id);
 		$friend_id = intval($friend_id);
-		$message_title   = Database::escape_string($message_title);
-		$message_content = Database::escape_string($message_content);
+		$clean_message_title   = Database::escape_string($message_title);
+		$clean_message_content = Database::escape_string($message_content);
 
 		$current_date = date('Y-m-d H:i:s',time());
-		$sql_exist='SELECT COUNT(*) AS count FROM '.$tbl_message.' WHERE user_sender_id='.($user_id).' AND user_receiver_id='.($friend_id).' AND msg_status IN(5,6,7);';
+		$sql_exist='SELECT COUNT(*) AS count FROM '.$tbl_message.' WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status IN(5,6,7);';
 
 		$res_exist = Database::query($sql_exist);
 		$row_exist = Database::fetch_array($res_exist,'ASSOC');
 		
 		if ($row_exist['count']==0) {
 		    		    
-			$sql='INSERT INTO '.$tbl_message.'(user_sender_id,user_receiver_id,msg_status,send_date,title,content) VALUES('.$user_id.','.$friend_id.','.MESSAGE_STATUS_INVITATION_PENDING.',"'.$current_date.'","'.$message_title.'","'.$message_content.'")';
+			$sql=' INSERT INTO '.$tbl_message.'(user_sender_id,user_receiver_id,msg_status,send_date,title,content) 
+				   VALUES('.$user_id.','.$friend_id.','.MESSAGE_STATUS_INVITATION_PENDING.',"'.$current_date.'","'.$clean_message_title.'","'.$clean_message_content.'") ';
 			Database::query($sql);	
 			
 			$sender_info = api_get_user_info($user_id);
@@ -198,12 +199,11 @@ class SocialManager extends UserManager {
 			return true;
 		} else {
 			//invitation already exist
-			$sql_if_exist ='SELECT COUNT(*) AS count, id FROM '.$tbl_message.' WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status=7';
+			$sql_if_exist ='SELECT COUNT(*) AS count, id FROM '.$tbl_message.' WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7';
 			$res_if_exist = Database::query($sql_if_exist);
 			$row_if_exist = Database::fetch_array($res_if_exist,'ASSOC');
 			if ($row_if_exist['count']==1) {
-				$sql_if_exist_up='UPDATE '.$tbl_message.'SET msg_status=5, content = "'.$message_content.'"  WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7 ';
-				//$sql_if_exist_up='UPDATE '.$tbl_message.'SET msg_status=5, set content = '.$message_content.' WHERE id='.$row_if_exist['id'].'';
+				$sql_if_exist_up='UPDATE '.$tbl_message.'SET msg_status=5, content = "'.$clean_message_content.'"  WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7 ';
 				Database::query($sql_if_exist_up);
 				return true;
 			} else {

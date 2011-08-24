@@ -239,20 +239,20 @@ class MessageManager
 
         if (!empty($receiver_user_id) || !empty($group_id)) {
 
-        	// message for user friend
-	        $subject = Database::escape_string($subject);
-	        $content = Database::escape_string($content);
+        	// message for user friend        	
+        	
+	        $clean_subject = Database::escape_string($subject);
+	        $clean_content = Database::escape_string($content);
 
 			//message in inbox for user friend
             //@todo it's possible to edit a message? yes, only for groups 
-			if ($edit_message_id) {
-			    //title = '$subject', 
-				$query = " UPDATE $table_message SET update_date = '".api_get_utc_datetime()."', content = '$content' WHERE id = '$edit_message_id' ";                
+			if ($edit_message_id) { 
+				$query = " UPDATE $table_message SET update_date = '".api_get_utc_datetime()."', content = '$clean_content' WHERE id = '$edit_message_id' ";                
 				$result = Database::query($query);
 				$inbox_last_id = $edit_message_id;
 			} else {
 				$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
-					     "VALUES ('$user_sender_id', '$receiver_user_id', '1', '".api_get_utc_datetime()."','$subject','$content','$group_id','$parent_id', '".api_get_utc_datetime()."')";
+					     "VALUES ('$user_sender_id', '$receiver_user_id', '1', '".api_get_utc_datetime()."','$clean_subject','$clean_content','$group_id','$parent_id', '".api_get_utc_datetime()."')";
 				$result = Database::query($query);
 				$inbox_last_id = Database::insert_id();
 			}        
@@ -271,7 +271,7 @@ class MessageManager
 			if (empty($group_id)) {
 				//message in outbox for user friend or group
 				$sql = "INSERT INTO $table_message (user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
-					   " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".api_get_utc_datetime()."','$subject','$content', '$group_id', '$parent_id', '".api_get_utc_datetime()."')";
+					   " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".api_get_utc_datetime()."','$clean_subject','$clean_content', '$group_id', '$parent_id', '".api_get_utc_datetime()."')";
 				$rs = Database::query($sql);
 				$outbox_last_id = Database::insert_id();
 

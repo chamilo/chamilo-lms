@@ -113,6 +113,7 @@ function hoursTab($sql) {
 	$hours_array = array('total' => 0);
 	$res = Database::query($sql);
 	if ($res !== false) {
+        $last_hours = -1;
 		while ($row = Database::fetch_row($res)) {
 			$date_array = getdate($row[0]);
 			if ($date_array['hours'] == $last_hours) {
@@ -143,6 +144,7 @@ function daysTab($sql) {
 	$days_array = array('total' => 0);
 	$res = Database::query($sql);
 	if ($res !== false) {
+        $last_day = -1;
 		while ($row = Database::fetch_row($res)) {
 			$date_array = getdate($row[0]);
 			$display_date = $date_array['mday'].' '.$MonthsShort[$date_array['mon'] - 1].' '.$date_array['year'];

@@ -177,8 +177,6 @@ function show_compose_to_user ($receiver_id) {
 }
 
 function manage_form ($default, $select_from_user_list = null) {
-
-	global $charset;
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 
 	$group_id 		= isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
@@ -226,7 +224,7 @@ function manage_form ($default, $select_from_user_list = null) {
 
 		//adding reply mail
 		$user_reply_info = UserManager::get_user_info_by_id($message_reply_info['user_sender_id']);
-		$default['content']='<p></p>'.sprintf(get_lang('XWroteY'),api_get_person_name($user_reply_info['firstname'],$user_reply_info['lastname']), api_html_entity_decode($message_reply_info['content'],ENT_QUOTES,$charset));
+		$default['content']='<p></p>'.sprintf(get_lang('XWroteY'), api_get_person_name($user_reply_info['firstname'], $user_reply_info['lastname']), $message_reply_info['content']);
 
 	}
 	if (empty($group_id)) {
@@ -243,7 +241,7 @@ function manage_form ($default, $select_from_user_list = null) {
 	$form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
 	if (!empty($group_id) && !empty($message_id)) {
 		$message_info = MessageManager::get_message_by_id($message_id);
-		$default['title']=get_lang('Re:').api_html_entity_decode($message_info['title'],ENT_QUOTES,$charset);
+		$default['title'] = get_lang('Re:').$message_info['title'];
 	}
 	$form->setDefaults($default);
 
@@ -377,7 +375,7 @@ echo '<div id="social-content">';
 					}
 					if (isset($_POST['hidden_user'])) {
 						$default['users']	 = array($_POST['hidden_user']);
-					}
+					}					
 					manage_form($default);
 				} else {
 					Display::display_error_message(get_lang('ErrorSendingMessage'));

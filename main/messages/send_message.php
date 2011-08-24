@@ -66,6 +66,8 @@ if ($panel_id == 2 || $panel_id == 4 )  {
 <?php
 }
 //here we decode to utf8 because this page is called from an ajax popup
+$subject_message = api_utf8_decode($subject_message);
+$content_message = api_utf8_decode($content_message);
 
 if ($panel_id==4 && !empty($content_message)) {
 	if ($subject_message=='clear') {

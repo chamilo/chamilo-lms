@@ -56,7 +56,7 @@ class CourseRequestManager {
      * @return int/bool                 The database id of the newly created course request or FALSE on failure.
      */
     public static function create_course_request($wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, $user_id, $exemplary_content) {
-
+        global $_configuration;
         $wanted_code = trim($wanted_code);
         $user_id = (int)$user_id;
         $exemplary_content = (bool)$exemplary_content ? 1 : 0;
@@ -185,7 +185,7 @@ class CourseRequestManager {
      * @return bool                     Returns TRUE on success or FALSE on failure.
      */
     public static function update_course_request($id, $wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, $user_id, $exemplary_content) {
-
+        global $_configuration;
         $id = (int)$id;
         $wanted_code = trim($wanted_code);
         $user_id = (int)$user_id;
@@ -327,7 +327,7 @@ class CourseRequestManager {
      * @return string/bool                Returns the code of the newly created course or FALSE on failure.
      */
     public static function accept_course_request($id) {
-
+        global $_configuration;
         $id = (int)$id;
 
         // Retrieve request's data
@@ -368,12 +368,11 @@ class CourseRequestManager {
         $code = $keys['currentCourseId'];
         $db_name = $keys['currentCourseDbName'];
         $directory = $keys['currentCourseRepository'];
-        $expiration_date = time() + $firstExpirationDelay;
         prepare_course_repository($directory, $code);
         update_Db_course($db_name);
         $pictures_array = fill_course_repository($directory, $exemplary_content);
         fill_Db_course($db_name, $directory, $course_language, $pictures_array, $exemplary_content);
-        register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $user_id, $expiration_date);
+        register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $user_id, null);
 
         // Mark the request as accepted.
         $sql = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." SET status = ".COURSE_REQUEST_ACCEPTED." WHERE id = ".$id;

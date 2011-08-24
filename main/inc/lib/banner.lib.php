@@ -99,6 +99,7 @@ function get_tabs() {
 }
 
 function show_header_1($language_file, $nameTools) {
+    global $noPHP_SELF;
     $_course = api_get_course_info();        
     echo '<div id="header1">';
         echo '<div id="top_corner"></div>';        

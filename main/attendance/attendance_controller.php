@@ -190,7 +190,7 @@
         } else {
             $result = $attendance->lock_attendance($attendance_id, false);
         }
-        if ($affected_rows) {
+        if ($result) {
 	        $message['message_locked_attendance'] = true;
         }
         $this->attendance_list();

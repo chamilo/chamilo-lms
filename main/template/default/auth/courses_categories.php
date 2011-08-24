@@ -10,16 +10,19 @@
 $stok = Security::get_token();
 // Actions: The menu with the different options in cathe course management 
 
-if (intval($_GET['hidden_links']) != 1) { ?>
-
-<div id="actions" class="actions">
-    <?php if ($action != 'subscribe') { ?>
+/*
+<?php if ($action != 'subscribe') { ?>
         &nbsp;<a href="<?php echo api_get_self(); ?>?action=subscribe"><?php echo Display::return_icon('user_subscribe_course.png', get_lang('SubscribeToCourse'),'','32'); ?></a>
     <?php } ?>
 
     <?php if ($action != 'sortmycourses' && isset($action)) { ?>
             &nbsp;<a href="<?php echo api_get_self(); ?>?action=sortmycourses"><?php echo Display::return_icon('course_move.png', get_lang('SortMyCourses'),'','32'); ?></a>
     <?php } ?>
+*/
+
+if (intval($_GET['hidden_links']) != 1) { ?>
+
+<div id="actions" class="actions">
 
         <span id="categories-search">
             <form class="course_list" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">

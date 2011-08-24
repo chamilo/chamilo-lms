@@ -259,6 +259,12 @@ if ($maxCourse > 0) {
 }
 
 echo '<div class="maincontent" id="maincontent">'; // Start of content for logged in users.
+
+$url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
+
+echo Display::url(Display::return_icon('course_move.png', get_lang('SortMyCourses'),'','32'), $url);
+
+    
 // Plugins for the my courses main area.
 echo '<div id="plugin-mycourses_main">';
 api_plugin('mycourses_main');

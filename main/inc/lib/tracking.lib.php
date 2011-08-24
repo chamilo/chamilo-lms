@@ -1732,7 +1732,7 @@ class Tracking {
 		 * @param    int     User id
 		 * @param     string     Course id
 		 * @return    float    average of test
-		 * @author     isaac flores paz <florespaz@bidsoftperu.com>
+		 * @author     isaac flores paz 
 		 * @deprecated get_avg_student_score should be use
 		 */
 		public static function get_average_test_scorm_and_lp ($user_id,$course_id) {

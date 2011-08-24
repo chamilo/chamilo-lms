@@ -28,7 +28,7 @@ class SocialManager extends UserManager {
 
 	/**
 	 * Allow to see contacts list
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author isaac flores paz 
 	 * @return array
 	 */
 	public static function show_list_type_friends () {
@@ -52,7 +52,7 @@ class SocialManager extends UserManager {
 	 * Get relation type contact by name
 	 * @param string names of the kind of relation
 	 * @return int
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author isaac flores paz 
 	 */
 	public static function get_relation_type_by_name ($relation_type_name) {
 		$list_type_friend=array();
@@ -68,7 +68,7 @@ class SocialManager extends UserManager {
 	 * @param int user id
 	 * @param int user friend id
 	 * @param string
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author isaac flores paz 
 	 */
 	public static function get_relation_between_contacts ($user_id,$user_friend) {
 		$tbl_my_friend_relation_type = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
@@ -92,7 +92,7 @@ class SocialManager extends UserManager {
 	 * @param bool true will load firstname, lastname, and image name
 	 * @return array
 	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code, function renamed, $load_extra_info option added
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author isaac flores paz 
 	 */
 	public static function get_friends($user_id, $id_group = null, $search_name = null, $load_extra_info = true) {
 		$list_ids_friends=array();
@@ -128,7 +128,7 @@ class SocialManager extends UserManager {
 	 * @param int group id
 	 * @param string name to search
 	 * @param array
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author isaac flores paz 
 	 */
 	public static function get_list_path_web_by_user_id ($user_id,$id_group=null,$search_name=null) {
 		$list_paths=array();
@@ -170,13 +170,18 @@ class SocialManager extends UserManager {
 	 * @param string title of the message
 	 * @param string content of the message
 	 * @return boolean
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author isaac flores paz
 	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
 	 */
 	public static function send_invitation_friend ($user_id, $friend_id, $message_title, $message_content) {
 		$tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
 		$user_id = intval($user_id);
 		$friend_id = intval($friend_id);
+		
+		//Just in case we replace the and \n and \n\r while saving in the DB
+		$message_content = str_replace(array("\n", "\n\r"), '<br />', $message_content);
+		
+		
 		$clean_message_title   = Database::escape_string($message_title);
 		$clean_message_content = Database::escape_string($message_content);
 
@@ -213,7 +218,7 @@ class SocialManager extends UserManager {
 	}
 	/**
 	 * Get number messages of the inbox
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author isaac flores paz 
 	 * @param int user receiver id
 	 * @return int
 	 */
@@ -227,7 +232,7 @@ class SocialManager extends UserManager {
 
 	/**
 	 * Get invitation list received by user
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author isaac flores paz 
 	 * @param int user id
 	 * @return array()
 	 */
@@ -264,7 +269,7 @@ class SocialManager extends UserManager {
 	 * Accepts invitation
 	 * @param int user sender id
 	 * @param int user receiver id
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author isaac flores paz 
 	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
 	 */
 	public static function invitation_accepted ($user_send_id,$user_receiver_id) {
@@ -276,7 +281,7 @@ class SocialManager extends UserManager {
 	 * Denies invitation
 	 * @param int user sender id
 	 * @param int user receiver id
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author isaac flores paz 
 	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
 	 */
 	public static function invitation_denied ($user_send_id,$user_receiver_id) {
@@ -288,7 +293,7 @@ class SocialManager extends UserManager {
 	}
 	/**
 	 * allow attach to group
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author isaac flores paz 
 	 * @param int user to qualify
 	 * @param int kind of rating
 	 * @return void()

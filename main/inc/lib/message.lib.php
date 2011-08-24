@@ -236,6 +236,9 @@ class MessageManager
 		}
 		
 		$inbox_last_id = null;
+		
+		//Just in case we replace the and \n and \n\r while saving in the DB
+		$content = str_replace(array("\n", "\n\r"), '<br />', $content);		
 
         if (!empty($receiver_user_id) || !empty($group_id)) {
 
@@ -695,6 +698,7 @@ class MessageManager
 	 * display message box in the inbox
 	 * @param int the message id
 	 * @param string inbox or outbox strings are available
+	 * @todo replace numbers with letters in the $row array pff... 
 	 * @return string html with the message content
 	 */
 	public static function show_message_box($message_id, $source = 'inbox') {
@@ -765,7 +769,6 @@ class MessageManager
     			$message_content .='<td>'.get_lang('From').'&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b> </td>';
     		}
     	}
-
 		 $message_content .='</tr>
 		              <tr>
 		              <td>'.get_lang('Date').'&nbsp; '.$row[4].'</td>
@@ -776,7 +779,7 @@ class MessageManager
 		        <hr style="color:#ddd" />
 		        <table height="209px" width="100%">
 		            <tr>
-		              <td valign=top class="view-message-content">'.str_replace("\\","",$row[6]).'</td>
+		              <td valign=top class="view-message-content">'.str_replace("\\","",$row['content']).'</td>
 		            </tr>
 		        </table>
 		        <div id="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>

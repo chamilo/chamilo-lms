@@ -196,8 +196,8 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 	            $x++;
 	         }
 	    }
-    }
-    $message = str_replace(array('\n\r', '\n', '\r'), '<br />', $message);
+    }    
+    $message = str_replace(array("\n\r", "\n", "\r"), '<br />', $message);
     $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
 
     // Attachment ...

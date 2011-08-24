@@ -715,11 +715,6 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
             $added_slash = ($curdirpath == '/') ? '' : '/';                
             $dir_name = $curdirpath.$added_slash.replace_dangerous_char($post_dir_name);
             $dir_name = disable_dangerous_file($dir_name);
-            $dir_name = str_replace('.', '_', $dir_name);
-            
-            //@todo why the folder name can't have a dot. It's just the folder name
-            $post_dir_name = str_replace('.', '_', $post_dir_name);
-            
             $dir_check = $base_work_dir.$dir_name;
             
             if (!is_dir($dir_check)) {

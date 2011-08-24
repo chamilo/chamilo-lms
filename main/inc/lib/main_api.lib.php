@@ -4730,7 +4730,6 @@ function api_sql_query($query, $file = '', $line = 0) {
 function api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null) {
 
     require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
-    require_once api_get_path(CONFIGURATION_PATH).'mail.conf.php';
 
     if (empty($platform_email['SMTP_FROM_NAME'])) {
         $platform_email['SMTP_FROM_NAME'] = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);

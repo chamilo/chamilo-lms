@@ -289,6 +289,12 @@ require_once $lib_path.'formvalidator/Rule/allowed_tags.inc.php';
 // include the local (contextual) parameters of this course or section
 require $includePath.'/local.inc.php';
 
+//Include Chamilo Mail conf this is added here because the api_get_setting works
+$mail_conf = api_get_path(CONFIGURATION_PATH).'mail.conf.php';
+if (file_exists($mail_conf)) {
+	require_once $mail_conf; 
+}
+
 // ===== "who is logged in?" module section =====
 
 

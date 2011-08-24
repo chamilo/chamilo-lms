@@ -17,6 +17,7 @@
 $language_file= array('messages','userInfo', 'admin');
 $cidReset	= true;
 require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 api_block_anonymous_users();
 
@@ -129,10 +130,8 @@ div.row div.formw {
     width:80%;
 }
 </style>';
-
 $nameTools = get_lang('ComposeMessage');
-
-/*		FUNCTIONS */
+/*		FUNCTIONS  */
 
 /**
 * Shows the compose area + a list of users to select from.

@@ -287,6 +287,8 @@ class MessageManager
 				}
 			}
 			
+			
+			
 			//Load user settings			
 			$notification = new Notification();			    
 		    if (empty($group_id)) {                

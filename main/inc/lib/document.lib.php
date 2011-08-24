@@ -2335,7 +2335,7 @@ return 'application/octet-stream';
                                 }
                             }
                         }
-                    }
+                    } // end of document indexation loop
 
                     /*// Check for missing images in html files
                      $missing_files = check_for_missing_files($base_work_dir.$new_path);

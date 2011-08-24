@@ -43,8 +43,8 @@ function hide_icon_edit(element_html)  {
 /*
 		MAIN CODE
 */
-$nameTools = get_lang('Messages');
-$request=api_is_xml_http_request();
+$nameTools 	= get_lang('Messages');
+$request 	= api_is_xml_http_request();
 if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 	$info_reply=array();
 	$info_delete=array();
@@ -58,17 +58,15 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 	
 	if ( isset($_GET['form_delete']) ) {
 		//allow to delete messages
-		$info_delete=explode(',',$_GET['form_delete']);
-		$count_delete=(count($info_delete)-1);
+		$info_delete  = explode(',',$_GET['form_delete']);
+		$count_delete = (count($info_delete)-1);
 	}
 	
-	if ( isset($button_sent) ) {
-		$title     = api_convert_encoding(urldecode($info_reply[0]),'UTF-8',$charset);
-		$content   = api_convert_encoding(str_replace("\\","",urldecode($info_reply[1])),'UTF-8',$charset);
-		$title     = Security::remove_XSS($title);
-		$content   = Security::remove_XSS($content,COURSEMANAGERLOWSECURITY);
-
-		$user_reply= $info_reply[2];
+	if (isset($button_sent)) {		
+		$title     = urldecode($info_reply[0]);
+		$content   = str_replace("\\","",urldecode($info_reply[1]));		
+				
+		$user_reply = $info_reply[2];
 		$user_email_base=str_replace(')','(',$info_reply[5]);
 		$user_email_prepare=explode('(',$user_email_base);
 		if (count($user_email_prepare)==1) {
@@ -76,12 +74,12 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 		} elseif (count($user_email_prepare)==3) {
 			$user_email=trim($user_email_prepare[1]);
 		}
-		$user_id_by_email=MessageManager::get_user_id_by_email($user_email);
+		$user_id_by_email = MessageManager::get_user_id_by_email($user_email);
 
 		if ($info_reply[6]=='save_form') {
 			$user_id_by_email=$info_reply[2];
 		}
-		if ( isset($user_reply) && !is_null($user_id_by_email) && strlen($info_reply[0]) >0) {
+		if (isset($user_reply) && !is_null($user_id_by_email) && strlen($info_reply[0]) >0) {
 			MessageManager::send_message($user_id_by_email, $title, $content);
 			MessageManager::display_success_message($user_id_by_email);
 			inbox_display();

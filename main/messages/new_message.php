@@ -247,15 +247,13 @@ function manage_form ($default, $select_from_user_list = null) {
 
 	if ($form->validate()) {
 		$check = Security::check_token('post');		
-		if ($check) {
-			$values 		= $default;
-			$user_list		= $values['users'];
+		if ($check) {			
+			$user_list		= $default['users'];
 			$file_comments	= $_POST['legend'];
-			$title 			= $values['title'];
-			$content 		= $values['content'];
-			$group_id		= $values['group_id'];
-			$parent_id 		= $values['parent_id'];
-	
+			$title 			= $default['title'];			
+			$content 		= $default['content'];
+			$group_id		= $default['group_id'];
+			$parent_id 		= $default['parent_id'];	
 			if (is_array($user_list) && count($user_list)> 0) {                
 				//all is well, send the message                 
 				foreach ($user_list as $user) {
@@ -270,7 +268,7 @@ function manage_form ($default, $select_from_user_list = null) {
 				}       
 			} else {
 				Display::display_error_message('ErrorSendingMessage');
-			}
+			}			
 		}
 		Security::clear_token();
 	} else {

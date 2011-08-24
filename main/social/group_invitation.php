@@ -217,11 +217,11 @@ if($_POST['form_sent']) {
 	}
 	if ($form_sent == 1) {
 		//invite this users
-		$result = GroupPortalManager::add_users_to_groups($user_list, array($group_id), GROUP_USER_PERMISSION_PENDING_INVITATION);
-		$title = get_lang('YouAreInvitedToGroup').' '.$group_info['name'];
-		$content = get_lang('YouAreInvitedToGroupContent').' '.$group_info['name'].' <br />';
-		$content .= get_lang('ToSubscribeClickInTheLinkBelow').' <br />';
-		$content .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php?accept='.$group_id.'">'.get_lang('Subscribe').'</a>';
+		$result 	= GroupPortalManager::add_users_to_groups($user_list, array($group_id), GROUP_USER_PERMISSION_PENDING_INVITATION);
+		$title 		= get_lang('YouAreInvitedToGroup').' '.$group_info['name'];
+		$content  	= get_lang('YouAreInvitedToGroupContent').' '.$group_info['name'].' <br />';
+		$content   .= get_lang('ToSubscribeClickInTheLinkBelow').' <br />';
+		$content   .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php?accept='.$group_id.'">'.get_lang('Subscribe').'</a>';
 
 		if (is_array($user_list) && count($user_list) > 0) {
 			//send invitation message

@@ -70,40 +70,4 @@ class TestExport extends UnitTestCase {
         $this->assertTrue(is_string($res));
         ob_end_clean();
   	}
-
- 	function testBackupDatabase() {
- 		$link='';
- 		$db_name='';
- 		$structure='';
- 		$donnees='';
- 		$format = 'SQL';
- 		$whereSave = '.';
- 		$insertComplet = '';
- 		$verbose = false;
- 		global $error_msg, $error_no;
- 		$res=backupDatabase($link, $db_name, $structure, $donnees);
- 		$this->assertTrue(is_bool($res));
- 		//var_dump($res);
- 	}
- 	/* DEPRECATED
- 	function testCopydir() {
- 		$origine='';
- 		$destination='';
- 		$verbose = '';
- 		$res =Export::copydir($origine, $destination, $verbose = false);
- 		$this->assertTrue($res);
- 		var_dump($verbose);
- 	}*/
-
- 	function testmakeTheBackup() {
- 		global $error_msg, $error_no, $db, $archiveRepositorySys,
- 		       $archiveRepositoryWeb, $appendCourse, $appendMainDb, $archiveName,
- 			   $_configuration, $_course, $TABLEUSER, $TABLECOURSUSER,
- 			   $TABLECOURS, $TABLEANNOUNCEMENT;
-		$exportedCourseId='';
-		$res=makeTheBackup($exportedCourseId);
-		$this->assertTrue(is_bool($res));
-		//var_dump($res);
- 	}
 }
-?>

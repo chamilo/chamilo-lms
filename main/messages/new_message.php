@@ -143,7 +143,7 @@ function show_compose_to_any ($user_id) {
 	manage_form($default, $online_user_list);
 }
 
-function show_compose_reply_to_message ($message_id, $receiver_id) {
+function show_compose_reply_to_message($message_id, $receiver_id) {
 	global $charset;
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 	$query = "SELECT user_sender_id FROM $table_message WHERE user_receiver_id=".intval($receiver_id)." AND id='".intval($message_id)."';";
@@ -216,15 +216,14 @@ function manage_form ($default, $select_from_user_list = null) {
 	$form->add_html_editor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
 	//$form->addElement('textarea','content', get_lang('Message'), array('cols' => 75,'rows'=>8));
 
-	if (isset($_GET['re_id'])) {
-		$message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);
-		$form->addElement('hidden','re_id',Security::remove_XSS($_GET['re_id']));
+	if (isset($_GET['re_id'])) {		
+		$message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);				
+		$form->addElement('hidden','re_id', intval($_GET['re_id']));
 		$form->addElement('hidden','save_form','save_form');
 
 		//adding reply mail
-		$user_reply_info = UserManager::get_user_info_by_id($message_reply_info['user_sender_id']);
-		$default['content']='<p></p>'.sprintf(get_lang('XWroteY'), api_get_person_name($user_reply_info['firstname'], $user_reply_info['lastname']), $message_reply_info['content']);
-
+		$user_reply_info = UserManager::get_user_info_by_id($message_reply_info['user_sender_id']);		
+		$default['content'] = '<br />'.sprintf(get_lang('XWroteY'), api_get_person_name($user_reply_info['firstname'], $user_reply_info['lastname']), $message_reply_info['content']);
 	}
 	if (empty($group_id)) {
 		$form->addElement('html','<div class="row"><div class="label">'.get_lang('FilesAttachment').'</div><div class="formw">
@@ -307,12 +306,10 @@ if ($group_id != 0) {
 			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
 		}
 		if (api_get_setting('allow_message_tool') == 'true') {
-			// echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';			
 			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>';
 			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>';
             echo '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>';		    
 		}
-		//echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?type=reduced">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
 		echo '</div>';
 	}
 }

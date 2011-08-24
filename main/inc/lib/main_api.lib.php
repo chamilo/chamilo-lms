@@ -5043,7 +5043,7 @@ function api_get_jquery_libraries_js($libraries) {
     }
     
     //Document multiple upload funcionality
-    if (in_array('jquery-upload',$libraries)) {
+    if (in_array('jquery-upload', $libraries)) {
         $js .= api_get_js('jquery-upload/jquery.fileupload.js'); 
         $js .= api_get_js('jquery-upload/jquery.fileupload-ui.js');
         $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-upload/jquery.fileupload-ui.css" type="text/css">';        
@@ -5054,6 +5054,12 @@ function api_get_jquery_libraries_js($libraries) {
         //Adding default CSS changes of the jquery-ui themes for Chamilo in order to preserve the original jquery-ui css
         $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/default.css" type="text/css">';
     }
+    
+    if (in_array('bxslider',$libraries)) {
+    	$js .= api_get_js('bxslider/jquery.bxSlider.min.js');
+    	$js .= '<link rel="stylesheet" href="'.$js_path.'bxslider/bx_styles/bx_styles.css" type="text/css">';
+    }
+    
     return $js;	
 }
 

@@ -2483,3 +2483,12 @@ div.admin_section h4 {
     margin-top:5px;
     padding:5px;
 }
+
+
+#container-slider {
+    margin: 0 auto;
+    min-height: 310px;
+    padding: 0 0 0 6%;
+    width: 560px;
+    z-index: 0;
+}

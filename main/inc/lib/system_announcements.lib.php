@@ -76,7 +76,7 @@ class SystemAnnouncementManager {
 		return;
 	}
 
-	public static function display_all_announcements($visible, $id = -1,$start = 0,$user_id='') {
+	public static function display_all_announcements($visible, $id = -1, $start = 0,$user_id='') {
 		$user_selected_language = api_get_interface_language();
 		$start	= intval($start);				
 
@@ -210,12 +210,10 @@ class SystemAnnouncementManager {
 	 * @return array An array with all available system announcements (as php
 	 * objects)
 	 */
-	public static function get_all_announcements()
-	{
+	public static function get_all_announcements() {
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-
-		$sql = "SELECT *, IF( NOW() BETWEEN date_start AND date_end, '1', '0') AS visible FROM ".$db_table." ";
-		
+		$now = api_get_utc_datetime();
+		$sql = "SELECT *, IF( '$now'  >= date_start AND '$now' <= date_end, '1', '0') AS visible FROM ".$db_table." ";		
 		
 		global $_configuration;
 		$current_access_url_id = 1;
@@ -223,7 +221,7 @@ class SystemAnnouncementManager {
 			$current_access_url_id = api_get_current_access_url_id();
 		}
 		$sql .= " WHERE access_url_id = '$current_access_url_id' ";
-		$sql .= "ORDER BY date_start ASC";		
+		$sql .= " ORDER BY date_start ASC";		
 		
 		$announcements = Database::query($sql);
 		$all_announcements = array();
@@ -461,4 +459,57 @@ class SystemAnnouncementManager {
 		}
 		return $res; //true if at least one e-mail was sent
 	}
+	
+	
+	/**
+	* Displays announcements as an slideshow
+	* @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
+	* @param int $id The identifier of the announcement to display
+	*/
+	public static function display_announcements_slider($visible, $id = -1) {
+		$user_selected_language = Database::escape_string(api_get_interface_language());
+		$db_table 				= Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+		
+		$now  = api_get_utc_datetime();
+		
+		$sql = "SELECT * FROM ".$db_table." 
+				WHERE ( lang = '$user_selected_language' OR lang IS NULL) AND ( '$now' >= date_start AND '$now' <= date_end) ";
+		
+		switch ($visible) {
+			case VISIBLE_GUEST :
+				$sql .= " AND visible_guest = 1 ";
+				break;
+			case VISIBLE_STUDENT :
+				$sql .= " AND visible_student = 1 ";
+				break;
+			case VISIBLE_TEACHER :
+				$sql .= " AND visible_teacher = 1 ";
+				break;
+		}
+		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
+	
+		$announcements = Database::query($sql);
+		if (Database::num_rows($announcements) > 0) {
+			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
+			$query_string = ereg_replace('&$', '', $query_string);
+			$url = api_get_self();
+	
+			echo '<div class="system_announcements">';
+			echo '<h3>'.get_lang('SystemAnnouncements').'</h3>';
+			//echo '<div style="margin:10px;text-align:right;"><a href="news_list.php">'.get_lang('More').'</a></div>';
+			
+			echo '<div id="container-slider">
+					<ul id="slider">';
+			while ($announcement = Database::fetch_object($announcements)) {				
+				if ($id != $announcement->id) {
+					echo '<li><h1>'.$announcement->title.'</h1>'.$announcement->content.'</li>';
+				} else {
+					echo '<li><h1>'.$announcement->title.'</h1>'.$announcement->content.'</li>';
+				}
+			}
+			echo '</ul></div></div>';			
+		}
+		return;
+	}
+	
 }

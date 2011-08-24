@@ -4,8 +4,6 @@
  * @package chamilo.webservices
  */
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
-$libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'usermanager.lib.php';
 require_once(dirname(__FILE__).'/webservice.php');
 
 /**

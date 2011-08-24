@@ -7,12 +7,9 @@ require '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'nusoap/nusoap.php';
 require_once $libpath.'fileManage.lib.php';
-require_once $libpath.'usermanager.lib.php';
 require_once $libpath.'fileUpload.lib.php';
 require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
 require_once $libpath.'add_course.lib.inc.php';
-require_once $libpath.'course.lib.php';
-require_once $libpath.'sessionmanager.lib.php';
 
 $debug = false;
 
@@ -4788,7 +4785,7 @@ function WSListCourses($params) {
         }
 
         // Determining number of students registered in course
-        $course_tmp['number_students'] = CourseManager::get_users_count_in_course($course['code']);
+        $course_tmp['number_students'] = CourseManager::get_users_count_in_course($course['code']);      
         
         // Determining external course id
         $course_tmp['external_course_id'] = CourseManager::get_course_extra_field_value($course_field_name, $course['code']);

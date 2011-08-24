@@ -29,9 +29,6 @@ function courses_list($security_key, $visibilities = 'public') {
    		return array('error_msg' => 'Security check failed');
    	}
 
-   	// Libraries
-	require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-
 	$vis = array('public' => '3', 'public-registered' => '2', 'private' => '1', 'closed' => '0');
 
 	$courses_list = array();

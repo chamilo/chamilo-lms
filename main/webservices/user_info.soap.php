@@ -71,9 +71,6 @@ $server->register('DokeosWSCourseListOfUser',   // method name
  */
 function DokeosWSCourseListOfUser($username, $signature) {
     if (empty($username) or empty($signature)) { return -1; }
-
-    require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-    require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
     global $_configuration;
 
     $info = api_get_user_info_from_username($username);
@@ -89,9 +86,6 @@ function DokeosWSCourseListOfUser($username, $signature) {
     if (!api_is_valid_secret_key($signature, $local_key)) {
         return -1; // The secret key is incorrect.
     }
-
-    // libraries
-    require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
     $courses_list = array();
     $courses_list_tmp = CourseManager::get_courses_list_by_user_id($user_id);
@@ -159,9 +153,6 @@ $server->register('DokeosWSEventsList',       // method name
 function DokeosWSEventsList($username, $signature, $datestart = 0, $dateend = 0) {
 
     if (empty($username) or empty($signature)) { return -1; }
-
-    require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-    require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
     global $_configuration;
 
     $info = api_get_user_info_from_username($username);
@@ -177,10 +168,6 @@ function DokeosWSEventsList($username, $signature, $datestart = 0, $dateend = 0)
     if (!api_is_valid_secret_key($signature, $local_key)) {
         return -1; // The secret key is incorrect.
     }
-
-    // Libraries
-    require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-
     $events_list = array();
 
     $user_id = UserManager::get_user_id_from_username($username);

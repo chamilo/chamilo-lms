@@ -76,8 +76,6 @@ $server->register('WSCourseList',         // method name
 function WSCourseList($username, $signature, $visibilities = 'public') {
     if (empty($username) or empty($signature)) { return -1; }
 
-    require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-    require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
     global $_configuration;
 
     $info = api_get_user_info_from_username($username);
@@ -95,9 +93,6 @@ function WSCourseList($username, $signature, $visibilities = 'public') {
     if (!api_is_valid_secret_key($signature, $local_key)) {
         return -1; // The secret key is incorrect.
     }
-
-   	// Libraries
-	require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 
 	$vis = array('public' => '3', 'public-registered' => '2', 'private' => '1', 'closed' => '0');
 

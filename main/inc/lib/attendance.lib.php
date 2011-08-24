@@ -107,7 +107,7 @@ class Attendance
 		if (isset($_SESSION['gradebook'])) {
 			$param_gradebook = '&gradebook='.$_SESSION['gradebook'];
 		}
-
+        $user_info = api_get_user_info();
 		while ($attendance = Database::fetch_row($res)) {
 		    
 			$student_param = '';

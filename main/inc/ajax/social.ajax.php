@@ -3,18 +3,18 @@
 /**
  * Responses to AJAX calls 
  */
+$language_file = array('messages','userInfo');
 require_once '../global.inc.php';
 
 $action = $_GET['a'];
 
 $current_user_id	 = api_get_user_id();
 switch ($action) {	
-	case 'add_friend':
-	
-		if (api_is_anonymous()){
+	case 'add_friend':	
+		if (api_is_anonymous()) {
 			echo '';
 			break;
-		}	
+		}
 
 		$my_current_friend		 = Security::remove_XSS($_POST['friend_id']);
 		$my_denied_current_friend= Security::remove_XSS($_POST['denied_friend_id']);
@@ -32,8 +32,7 @@ switch ($action) {
 		if (isset($_POST['friend_id'])) {
 			
 			UserManager::relate_users($current_user_id,$my_current_friend,$relation_type);
-			UserManager::relate_users($my_current_friend,$current_user_id,$relation_type);
-			
+			UserManager::relate_users($my_current_friend,$current_user_id,$relation_type);			
 			SocialManager::invitation_accepted($my_current_friend,$current_user_id);
 			
 			if (isset($_POST['is_my_friend'])) {
@@ -42,14 +41,12 @@ switch ($action) {
 				Display::display_normal_message(api_xml_http_response_encode(get_lang('AddedContactToList')));
 			}
 		}
-		
-	case 'deny_friend':
-	
+		break;		
+	case 'deny_friend':	
 		if (api_is_anonymous()){
 			echo '';
 			break;
 		}
-
 		$my_current_friend		 = Security::remove_XSS($_POST['friend_id']);
 		$my_denied_current_friend= Security::remove_XSS($_POST['denied_friend_id']);
 		$my_delete_friend        = Security::remove_XSS($_POST['delete_friend_id']);
@@ -66,9 +63,8 @@ switch ($action) {
 			Display::display_confirmation_message(api_xml_http_response_encode(get_lang('InvitationDenied')));
 		}	
 		break;
-	case 'delete_friend':
-	
-		if (api_is_anonymous()){
+	case 'delete_friend':	
+		if (api_is_anonymous()) {
 			echo '';
 			break;
 		}
@@ -90,8 +86,7 @@ switch ($action) {
 			echo api_xml_http_response_encode(get_lang('AttachContactsToGroupSuccesfuly'));
 		}*/		
 		break;
-	case 'show_my_friends':
-	
+	case 'show_my_friends':	
 		if (api_is_anonymous()) {
 			echo '';
 			break;
@@ -150,10 +145,9 @@ switch ($action) {
 		
 		if ($_POST['action']) {$action = $_POST['action'];}
 		
-		switch ($action) {			
+		switch ($action) {
 			case 'load_course' :
-				$course_db =  $_POST['course_code'];
-				
+				$course_db =  $_POST['course_code'];				
 				$course_id = CourseManager::get_course_id_by_database_name($course_db);
 	
 				if (api_is_user_of_course($course_id, api_get_user_id())) {

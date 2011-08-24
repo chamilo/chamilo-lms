@@ -161,23 +161,24 @@ function hide_display_message () {
 	}
 }
 function register_friend(element_input) {
- if(confirm("'.get_lang('AddToFriends').'")) {
+	if(confirm("'.get_lang('AddToFriends').'")) {
 		name_button=$(element_input).attr("id");
 		name_div_id="id_"+name_button.substring(13);
 		user_id=name_div_id.split("_");
-		user_friend_id=user_id[1];
-		 $.ajax({
+		user_friend_id=user_id[1];		
+		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
+				$("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); 
+			},
 			type: "POST",
 			url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
 			data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
 			success: function(datos) {
-				$("form").submit()
+				$("#dpending_" + user_friend_id).html(datos);
 			}
 		});
- }
+	}
 }
 
 </script>';
@@ -583,23 +584,28 @@ if ($show_full_profile) {
 			}
 		}
 				
-		echo '<div class="rounded_div" style="width:280px">';
+		
 		//--Productions
 		$production_list =  UserManager::build_production_list($user_id);
-		if (!empty($production_list )) {
-			echo '<div><h3>'.get_lang('MyProductions').'</h3></div>';
-			echo '<div class="rounded1">';
-			echo $production_list;
-			echo '</div>';
+		$product_content  = '';
+		if (!empty($production_list)) {
+			$product_content .= '<div><h3>'.get_lang('MyProductions').'</h3></div>';
+			$product_content .=  '<div class="rounded1">';
+			$product_content .=  $production_list;
+			$product_content .=  '</div>';
 		}
 		// Images uploaded by course
 		if (!empty($file_list)) {
-			echo '<div><h3>'.get_lang('ImagesUploaded').'</h3></div>';
-			echo '<div class="social-content-information">';
-			echo $file_list;
-			echo '</div>';
+			$product_content .=  '<div><h3>'.get_lang('ImagesUploaded').'</h3></div>';
+			$product_content .=  '<div class="social-content-information">';
+			$product_content .=  $file_list;
+			$product_content .=  '</div>';
 		}
-		echo '</div>'; // close rounded		
+		if (!empty($product_content)) {
+			echo '<div class="rounded_div" style="width:280px">';
+			echo $product_content;
+			echo '</div>'; // close rounded
+		}				
 	}
 	
 	 

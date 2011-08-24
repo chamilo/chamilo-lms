@@ -1253,13 +1253,15 @@ function inbox_display() {
 	//$table->set_header(2,$title,true);
 	$table->set_header(2,api_xml_http_response_encode(get_lang('Date')),true, array('style' => 'width:160px;'));
 	$table->set_header(3,$action,false,array ('style' => 'width:70px;'));
-
+	
 	if ($_REQUEST['f']=='social') {
 		$parameters['f'] = 'social';
 		$table->set_additional_parameters($parameters);
 	}    
 	$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
-	$table->display();	
+
+	$table->display();
+	
 }
 
 function get_number_of_messages_mask() {

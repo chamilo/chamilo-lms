@@ -3316,17 +3316,14 @@ class CourseManager {
         
     /**
      * Creates a course very fast (the function doesn't need a lot of parameters)
-     * 
+     * Coded originally found in create_course/add_course.php
      * @param	string	course title
      * @param	bool	add example content or not
      * @param	mixed	false if the course was not created, array with the course info
-     * 
-		Coded found in create_course/add_course.php
-		
      */
     function create_course($title, $wanted_code  = '', $exemplary_content = false) {
         require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-        global $_configuration, $firstExpirationDelay;
+        global $_configuration, $firstExpirationDelay, $language_interface;
         if (empty($title)) {
             return false;
         }        
@@ -3354,9 +3351,8 @@ class CourseManager {
                 prepare_course_repository($directory, $code);
                 update_Db_course($db_name);
                 $pictures_array = fill_course_repository($directory,  $exemplary_content);
-                fill_Db_course($db_name, $directory, $course_language, $pictures_array, $exemplary_content);
-                $course_language = api_get_setting('platformLanguage');
-                $result = register_course($code, $visual_code, $directory, $db_name, '', '', $title, $course_language, api_get_user_id(), $expiration_date);
+                fill_Db_course($db_name, $directory, $language_interface, $pictures_array, $exemplary_content);
+                $result = register_course($code, $visual_code, $directory, $db_name, '', '', $title, $language_interface, api_get_user_id(), $expiration_date);
                 $course_info = api_get_course_info($code);
                 if (!empty($course_info)) {
                     return $course_info;    

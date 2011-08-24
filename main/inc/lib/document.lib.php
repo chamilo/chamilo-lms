@@ -2281,7 +2281,8 @@ return 'application/octet-stream';
                                                 $sterm = trim($sterm);
                                                 if (!empty($sterm)) {
                                                     $ic_slide->addTerm($sterm, $specific_field['code']);
-                                                    add_specific_field_value($specific_field['id'], $courseid, TOOL_DOCUMENT, $docid, $value);
+                                                    // updated the last param here from $value to $sterm without being sure - see commit15464
+                                                    add_specific_field_value($specific_field['id'], $courseid, TOOL_DOCUMENT, $docid, $sterm);
                                                 }
                                             }
                                         }

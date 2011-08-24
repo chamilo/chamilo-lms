@@ -673,7 +673,7 @@ class CourseManager {
     		}
     	}
     	    	
-    	$students = Tracking :: get_student_followed_by_coach($coach_id);
+    	$students = Tracking :: get_student_followed_by_coach($user_id);
     	if (!empty($students_in_courses)) {
     		if (!empty($students)) {
     			$students = array_merge($students, $students_in_courses);

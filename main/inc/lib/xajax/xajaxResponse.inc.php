@@ -261,6 +261,7 @@ class xajaxResponse
 			if ($queryEnd === FALSE)
 				$queryEnd = strlen($sURL);
 			$queryPart = substr($sURL, $queryStart, $queryEnd-$queryStart);
+            $queryParts = array();
 			parse_str($queryPart, $queryParts);
 			$newQueryPart = "";
 			foreach($queryParts as $key => $value)

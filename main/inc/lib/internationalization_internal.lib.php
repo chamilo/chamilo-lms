@@ -63,7 +63,7 @@ function &_api_generate_n_grams(&$string, $encoding, $n_grams_max = 350, $n_max 
     // Splitting the sample text into separate words.
     $words = preg_split('/_/u', preg_replace('/[\x00-\x1F\x20-\x26\x28-\x3E\?@\x5B-\x60{|}~\x7F]/u', '_', ' '.api_strtolower(api_utf8_encode($string, $encoding), 'UTF-8').' '), -1, PREG_SPLIT_NO_EMPTY);
     $prefix = '_'; // Beginning of a word.
-    $suffix = str_repeat('_', $n_nax); // End of a word. Only the last '_' stays.
+    $suffix = str_repeat('_', $n_max); // End of a word. Only the last '_' stays.
     $n_grams = array(); // The array that will contain the constructed n-grams.
     foreach ($words as $word) {
         $k = api_strlen($word, 'UTF-8') + 1;
@@ -696,7 +696,7 @@ function _api_array_utf8_decode($variable) {
     if (is_array($variable)) {
         return array_map('_api_array_utf8_decode', $variable);
     }
-    if (is_string($var)) {
+    if (is_string($variable)) {
         return api_utf8_decode($variable, $_api_encoding);
     }
     return $variable;

@@ -1638,7 +1638,7 @@ function get_agenda_item($id)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @author Julio Montoya Adding UTC support
 */
-function store_edited_agenda_item($id_attach,$file_comment) {
+function store_edited_agenda_item($id_attach, $file_comment) {
 	global $_course;
 
 	// database definitions
@@ -1664,7 +1664,7 @@ function store_edited_agenda_item($id_attach,$file_comment) {
 	$edit_result  = save_edit_agenda_item($id, $title, $content, $start_date, $end_date);
 	 
 	if (empty($id_attach)) {
-		add_agenda_attachment_file($file_comment,$id);
+		add_agenda_attachment_file($file_comment, $id);
 	} else {
 		edit_agenda_attachment_file($file_comment,$id,$id_attach);
 	}
@@ -2237,34 +2237,35 @@ function show_add_form($id = '') {
 		$title=$form_elements['title'];
 		$content=$form_elements['content'];
 		$id=$form_elements['id'];
+		
 		$to=$form_elements['to'];
         $repeat = $form_elements['repeat'];
 	}
 
 	//	switching the send to all/send to groups/send to users
 	if (isset($_POST['To']) && $_POST['To']) {
-			$day			= $_POST['fday'];
-			$month			= $_POST['fmonth'];
-			$year			= $_POST['fyear'];
-			$hours			= $_POST['fhour'];
-			$minutes		= $_POST['fminute'];
-			$end_day		= $_POST['end_fday'];
-			$end_month		= $_POST['end_fmonth'];
-			$end_year		= $_POST['end_fyear'];
-			$end_hours		= $_POST['end_fhour'];
-			$end_minutes	= $_POST['end_fminute'];
-			$title 			= $_POST['title'];
-			$content		= $_POST['content'];
-			// the invisible fields
-			$action			= $_POST['action'];
-			$id				= $_POST['id'];
-            $repeat         = !empty($_POST['repeat'])?true:false;
-		}
+		$day			= $_POST['fday'];
+		$month			= $_POST['fmonth'];
+		$year			= $_POST['fyear'];
+		$hours			= $_POST['fhour'];
+		$minutes		= $_POST['fminute'];
+		$end_day		= $_POST['end_fday'];
+		$end_month		= $_POST['end_fmonth'];
+		$end_year		= $_POST['end_fyear'];
+		$end_hours		= $_POST['end_fhour'];
+		$end_minutes	= $_POST['end_fminute'];
+		$title 			= $_POST['title'];
+		$content		= $_POST['content'];
+		// the invisible fields
+		$action			= $_POST['action'];
+		$id				= $_POST['id'];
+		$repeat         = !empty($_POST['repeat'])?true:false;
+	}
 		
 	$default_no_empty_end_date = 0;
 	
 	// if the id is set then we are editing an agenda item
-	if (is_int($id)) {
+	if (!empty($id)) { 
 		//echo "before get_agenda_item".$_SESSION['allow_individual_calendar'];
 		$item_2_edit = get_agenda_item($id);
 		
@@ -2294,7 +2295,6 @@ function show_add_form($id = '') {
 		// attachments
 		edit_added_resources("Agenda", $id);
 		$to=$item_2_edit['to'];
-		//echo "<br />after get_agenda_item".$_SESSION['allow_individual_calendar'];
 	}
 	$content	= stripslashes($content);
 	$title		= stripslashes($title);
@@ -4112,9 +4112,9 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 function delete_attachment_file($id_attach) {
 	global $_course;
 	$agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-	$id_attach=Database::escape_string($id_attach);
+	$id_attach = intval($id_attach);
 
-	$sql="DELETE FROM $agenda_table_attachment WHERE id = ".(int)$id_attach;
+	$sql="DELETE FROM $agenda_table_attachment WHERE id = ".$id_attach;
 	$result=Database::query($sql);
 	$last_id_file=Database::insert_id();
 	// update item_property

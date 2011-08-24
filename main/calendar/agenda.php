@@ -51,13 +51,7 @@ if (!empty($_GET['view'])) {
 	$_SESSION['view'] = Security::remove_XSS($_GET['view']);
 }
 
-
-
-
-/*
-	Libraries
-*/
-// containing the functions for the agenda tool
+// Functions for the agenda tool
 require_once 'agenda.inc.php';
 /*
   			TREATING THE PARAMETERS
@@ -159,11 +153,10 @@ $tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USE
 // permission stuff - also used by loading from global in agenda.inc.php
 $is_allowed_to_edit = api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());
 
-
 // Tool introduction
 Display::display_introduction_section(TOOL_CALENDAR_EVENT);
 
-/*		MAIN SECTION*/
+/*		MAIN SECTION	*/
 
 //setting the default year and month
 $select_year = '';
@@ -260,10 +253,8 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 				$ann_id = store_agenda_item_as_announcement($event_id);
 				$tool_group_link = (isset($_SESSION['toolgroup'])?'&toolgroup='.$_SESSION['toolgroup']:'');
 				Display::display_normal_message(get_lang('CopiedAsAnnouncement').'&nbsp;<a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.get_lang('NewAnnouncement').'</a>', false);
-			}
-			display_agenda_items($agenda_items, $select_day);
+			}			
 			break;
-			
 		case 'importical':
 			if (isset($_POST['ical_submit'])) {                
                 $ical_name = $_FILES['ical_import']['name'];
@@ -285,55 +276,50 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                 	break;
                 } else {
                 	Display::display_confirmation_message(get_lang('AddSuccess'));
-                }
-                display_agenda_items($agenda_items, $select_day);
+                }                
             } else {
             	display_ical_import_form();
             }
             break;		
 		case 'edit':
-			if( !(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id'])))) {
+			if(!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id'])))) {				
 				// a coach can only delete an element belonging to his session
-				if ($_POST['submit_event']) {		
-					$my_id_attach = (int)$_REQUEST['id_attach'];
-					$safe_file_comment = Security::remove_XSS($_REQUEST['file_comment']);
-					store_edited_agenda_item($my_id_attach, $safe_file_comment);
-					display_agenda_items($agenda_items, $select_day);					
-				} else {					
+				if ($_POST['submit_event']) {
+					store_edited_agenda_item($_REQUEST['id_attach'], $_REQUEST['file_comment']);
+					$action = 'view';
+				} else {
 					show_add_form($event_id);
 				}
-			} else {
-				display_agenda_items($agenda_items, $select_day);
 			}
 			break;
 		case "delete":			
 			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $event_id ) ) ) {
 				// a coach can only delete an element belonging to his session
 				delete_agenda_item($event_id);
-			}
-			display_agenda_items($agenda_items, $select_day);
+				$action = 'view';
+			}			
 			break;
 		case "showhide":			
 			if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $event_id))) {
 			     // a coach can only delete an element belonging to his session			   
 				showhide_agenda_item($event_id);
+				$action = 'view';
 			}
-			
-			if (!empty($event_id)) {
-				display_one_agenda_item($event_id);
-			} else {
-				display_agenda_items($agenda_items, $select_day);
-			}			
+			if (!empty($_GET['agenda_id'])) {
+				display_one_agenda_item($_GET['agenda_id']);
+			}					
 			break;		
 		case "delete_attach": 	//delete attachment file
-			$id_attach = (int)$_GET['id_attach'];
+			$id_attach = $_GET['id_attach'];
 			if (!empty($id_attach)) {
 				delete_attachment_file($id_attach);
-			}
-			display_agenda_items($agenda_items, $select_day);
+				$action = 'view';
+			}			
 			break;
 	}
 }
+
+$agenda_items = get_calendar_items($select_month, $select_year);
 
 // this is for students and whenever the courseaministrator has not chosen any action. It is in fact the default behaviour
 

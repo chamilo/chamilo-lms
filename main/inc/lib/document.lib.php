@@ -2070,11 +2070,7 @@ return 'application/octet-stream';
         var_dump(' link to add '.$link_to_add.'  -- remove '.$pre_remove);
 
         $orig_source_html   = DocumentManager::get_resources_from_source_html($content_html);
-        $orig_course_info   = api_get_course_info($origin_course_code);
-        $orig_course_path   = api_get_path(SYS_PATH).'courses/'.$orig_course_info['path'].'/';
 
-        //$destination_course_code = CourseManager::get_course_id_from_path ($destination_course_directory);
-        //$dest_course_path   = api_get_path(SYS_COURSE_PATH).$destination_course_directory.'/';
         var_dump($orig_source_html);
          
         foreach ($orig_source_html as $source) {
@@ -2130,8 +2126,7 @@ return 'application/octet-stream';
                 }
             }
         }        
-        $return = file_put_contents($destination, $content_html);
-        //var_dump($destination, $content_html);        
+        $return = file_put_contents($destination, $content_html);    
         return $return;
     }
 

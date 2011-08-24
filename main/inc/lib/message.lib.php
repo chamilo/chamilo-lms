@@ -240,6 +240,8 @@ class MessageManager
 		//Just in case we replace the and \n and \n\r while saving in the DB
 		$content = str_replace(array("\n", "\n\r"), '<br />', $content);		
 
+		$now = api_get_utc_datetime();
+		
         if (!empty($receiver_user_id) || !empty($group_id)) {
 
         	// message for user friend        	
@@ -250,12 +252,12 @@ class MessageManager
 			//message in inbox for user friend
             //@todo it's possible to edit a message? yes, only for groups 
 			if ($edit_message_id) { 
-				$query = " UPDATE $table_message SET update_date = '".api_get_utc_datetime()."', content = '$clean_content' WHERE id = '$edit_message_id' ";                
+				$query = " UPDATE $table_message SET update_date = '".$now."', content = '$clean_content' WHERE id = '$edit_message_id' ";                
 				$result = Database::query($query);
 				$inbox_last_id = $edit_message_id;
 			} else {
 				$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
-					     "VALUES ('$user_sender_id', '$receiver_user_id', '1', '".api_get_utc_datetime()."','$clean_subject','$clean_content','$group_id','$parent_id', '".api_get_utc_datetime()."')";
+					     "VALUES ('$user_sender_id', '$receiver_user_id', '1', '".$now."','$clean_subject','$clean_content','$group_id','$parent_id', '".$now."')";
 				$result = Database::query($query);
 				$inbox_last_id = Database::insert_id();
 			}        
@@ -274,7 +276,7 @@ class MessageManager
 			if (empty($group_id)) {
 				//message in outbox for user friend or group
 				$sql = "INSERT INTO $table_message (user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
-					   " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".api_get_utc_datetime()."','$clean_subject','$clean_content', '$group_id', '$parent_id', '".api_get_utc_datetime()."')";
+					   " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".$now."','$clean_subject','$clean_content', '$group_id', '$parent_id', '".$now."')";
 				$rs = Database::query($sql);
 				$outbox_last_id = Database::insert_id();
 
@@ -289,9 +291,7 @@ class MessageManager
 					}
 				}
 			}
-			
-			
-			
+						
 			//Load user settings			
 			$notification = new Notification();			    
 		    if (empty($group_id)) {                

@@ -173,19 +173,19 @@ class SocialManager extends UserManager {
 	 * @author isaac flores paz
 	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
 	 */
-	public static function send_invitation_friend ($user_id, $friend_id, $message_title, $message_content) {
+	public static function send_invitation_friend($user_id, $friend_id, $message_title, $message_content) {
 		$tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
 		$user_id = intval($user_id);
 		$friend_id = intval($friend_id);
 		
 		//Just in case we replace the and \n and \n\r while saving in the DB
-		$message_content = str_replace(array("\n", "\n\r"), '<br />', $message_content);
-		
+		$message_content = str_replace(array("\n", "\n\r"), '<br />', $message_content);		
 		
 		$clean_message_title   = Database::escape_string($message_title);
 		$clean_message_content = Database::escape_string($message_content);
-
-		$current_date = date('Y-m-d H:i:s',time());
+		
+		$now = api_get_utc_datetime();
+		
 		$sql_exist='SELECT COUNT(*) AS count FROM '.$tbl_message.' WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status IN(5,6,7);';
 
 		$res_exist = Database::query($sql_exist);
@@ -194,7 +194,7 @@ class SocialManager extends UserManager {
 		if ($row_exist['count']==0) {
 		    		    
 			$sql=' INSERT INTO '.$tbl_message.'(user_sender_id,user_receiver_id,msg_status,send_date,title,content) 
-				   VALUES('.$user_id.','.$friend_id.','.MESSAGE_STATUS_INVITATION_PENDING.',"'.$current_date.'","'.$clean_message_title.'","'.$clean_message_content.'") ';
+				   VALUES('.$user_id.','.$friend_id.','.MESSAGE_STATUS_INVITATION_PENDING.',"'.$now.'","'.$clean_message_title.'","'.$clean_message_content.'") ';
 			Database::query($sql);	
 			
 			$sender_info = api_get_user_info($user_id);
@@ -238,10 +238,10 @@ class SocialManager extends UserManager {
 	 */
 	public static function get_list_invitation_of_friends_by_user_id ($user_id) {
 		$list_friend_invitation=array();
-		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
-		$sql='SELECT user_sender_id,send_date,title,content FROM '.$tbl_message.' WHERE user_receiver_id='.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
-		$res=Database::query($sql);
-		while ($row=Database::fetch_array($res,'ASSOC')) {
+		$tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+		$sql = 'SELECT user_sender_id,send_date,title,content FROM '.$tbl_message.' WHERE user_receiver_id='.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
+		$res = Database::query($sql);
+		while ($row = Database::fetch_array($res,'ASSOC')) {
 			$list_friend_invitation[]=$row;
 		}
 		return $list_friend_invitation;
@@ -311,13 +311,14 @@ class SocialManager extends UserManager {
 	 * @param void
 	 * @return string message invitation
 	 */
-	public static function send_invitation_friend_user ($userfriend_id, $subject_message = '', $content_message = '') {
+	public static function send_invitation_friend_user($userfriend_id, $subject_message = '', $content_message = '') {
 		global $charset;
-		//$id_user_friend=array();
+		
 		$user_info = array();
 		$user_info = api_get_user_info($userfriend_id);
 		$succes = get_lang('MessageSentTo');
 		$succes.= ' : '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
+		
 		if (isset($subject_message) && isset($content_message) && isset($userfriend_id)) {
 			$send_message = MessageManager::send_message($userfriend_id, $subject_message, $content_message); 
 			if ($send_message) {

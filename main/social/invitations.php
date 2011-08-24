@@ -138,8 +138,8 @@ echo '<div id="social-content">';
 				   		$friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
 				        $user_info	= api_get_user_info($sender_user_id);
 				        $title 		= Security::remove_XSS($invitation['title']);	        
-				        $content 	= Security::remove_XSS($invitation['content']);
-				        $date		= $invitation['send_date'];  				                        
+				        $content 	= Security::remove_XSS($invitation['content']);				        
+				        $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);  				                        
 				    ?>	   	
 					<table cellspacing="0" border="0">
 					<tbody>
@@ -184,7 +184,7 @@ echo '<div id="social-content">';
 				              
 				        $title		= Security::remove_XSS($invitation['title']);
 						$content	= Security::remove_XSS($invitation['content']);
-				        $date		= $invitation['send_date'];                  
+				        $date		= api_convert_and_format_date($invitation['send_date'], $invitation['send_date'], DATE_TIME_FORMAT_LONG); 		               
 				    ?>	   	
 					<table cellspacing="0" border="0">
 					<tbody>
@@ -222,13 +222,10 @@ echo '<div id="social-content">';
 				$invitation['join'] = '<a href="invitations.php?accept='.$invitation['id'].'">'.Display::return_icon('accept_invitation.png', get_lang('AcceptInvitation')).'&nbsp;&nbsp;'.get_lang('AcceptInvitation').'</a>';
 				$invitation['deny'] = '<a href="invitations.php?deny='.$invitation['id'].'">'.Display::return_icon('denied_invitation.png', get_lang('DenyInvitation')).'&nbsp;&nbsp;'.get_lang('DenyInvitation').'</a>';
 				$invitation['description'] = cut($invitation['description'],220,true);
-				//$invitation['send_message'] = '<a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?height=300&width=610&user_friend='.$invitation['id'].'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">';
-				//$invitation['send_message'] .= Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a>';
 				$new_invitation[]=$invitation;
 			}
 			Display::display_sortable_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));
-		}
-		
+		}		
 	echo '</div>';
 echo '</div>';
 Display::display_footer();

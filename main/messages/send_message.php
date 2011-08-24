@@ -7,7 +7,7 @@
  * Code
  */
 $language_file = array('registration','messages','userInfo','admin');
-$cidReset=true;
+$cidReset = true;
 require_once '../inc/global.inc.php';
 
 if (api_is_anonymous()) {

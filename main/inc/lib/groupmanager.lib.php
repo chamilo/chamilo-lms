@@ -1340,47 +1340,45 @@ class GroupManager {
 		$number_of_groups_limit = $category['groups_per_user'] == GROUP_PER_MEMBER_NO_LIMIT ? INFINITE : $category['groups_per_user'];
 		$real_course_code = $_course['sysCode'];
 		$real_course_info = Database :: get_course_info($real_course_code);
-		$real_course_user_list = CourseManager :: get_user_list_from_course_code($virtual_course_code);
+		$real_course_user_list = CourseManager :: get_user_list_from_course_code($real_course_code);
 		//get list of all virtual courses
 		$user_subscribed_course_list = CourseManager :: get_list_of_virtual_courses_for_specific_user_and_real_course($_user['user_id'], $real_course_code);
 		//add real course to the list
 		$user_subscribed_course_list[] = $real_course_info;
-		if (!is_array($user_subscribed_course_list))
+		if (!is_array($user_subscribed_course_list)) {
 			return;
+        }
 		//for all courses...
-		foreach ($user_subscribed_course_list as $this_course)
-		{
-			$this_course_code = $this_course["code"];
+		foreach ($user_subscribed_course_list as $this_course) {
+			$this_course_code = $this_course['code'];
 			$course_user_list = CourseManager :: get_user_list_from_course_code($this_course_code);
 			//for all users in the course
-			foreach ($course_user_list as $this_user)
-			{
-				$user_id = $this_user["user_id"];
-				$loginname = $this_user["username"];
-				$lastname = $this_user["lastname"];
-				$firstname = $this_user["firstname"];
-				$status = $this_user["status"];
-				//$role =  $this_user["role"];
-				$tutor_id = $this_user["tutor_id"];
+			foreach ($course_user_list as $this_user) {
+				$user_id = $this_user['user_id'];
+				$loginname = $this_user['username'];
+				$lastname = $this_user['lastname'];
+				$firstname = $this_user['firstname'];
+				$status = $this_user['status'];
+				//$role =  $this_user['role'];
+				$tutor_id = $this_user['tutor_id'];
 				$full_name = api_get_person_name($firstname, $lastname);
-				if ($lastname == "" || $firstname == '')
+				if ($lastname == "" || $firstname == '') {
 					$full_name = $loginname;
-				$complete_user["user_id"] = $user_id;
-				$complete_user["full_name"] = $full_name;
+                }
+				$complete_user['user_id'] = $user_id;
+				$complete_user['full_name'] = $full_name;
 				$complete_user['firstname'] = $firstname;
 				$complete_user['lastname'] = $lastname;
-				$complete_user["status"] = $status;
-				$complete_user["tutor_id"] = $tutor_id;
+				$complete_user['status'] = $status;
+				$complete_user['tutor_id'] = $tutor_id;
 				$student_number_of_groups = self :: user_in_number_of_groups($user_id, $category['id']);
 				//filter: only add users that have not exceeded their maximum amount of groups
-				if ($student_number_of_groups < $number_of_groups_limit)
-				{
+				if ($student_number_of_groups < $number_of_groups_limit) {
 					$complete_user_list[] = $complete_user;
 				}
 			}
 		}
-		if (is_array($complete_user_list))
-		{
+		if (is_array($complete_user_list)) {
 			//sort once, on array field "full_name"
 			$complete_user_list = TableSort :: sort_table($complete_user_list, "full_name");
 			//filter out duplicates, based on field "user_id"

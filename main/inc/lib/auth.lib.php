@@ -562,7 +562,7 @@ class Auth
                                     'tutor' => $row['tutor_name'],
                                     'subscribe' => $row['subscribe'],
                                     'unsubscribe' => $row['unsubscribe'],
-                                    'registration_code' => $registration_code,
+                                    'registration_code' => $row['registration_code'],
                                     'creation_date' => $row['creation_date'],
                                     'count_users' => $count_users,
                                     'count_connections' => $count_connections_last_month

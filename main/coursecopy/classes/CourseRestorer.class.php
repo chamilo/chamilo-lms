@@ -21,8 +21,6 @@ require_once 'CourseCopyLearnpath.class.php';
 require_once 'Survey.class.php';
 require_once 'SurveyQuestion.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php'; 
-//require_once 'mkdirr.php';
-//require_once 'rmdirr.php';
 require_once 'Glossary.class.php';
 require_once 'wiki.class.php';
 require_once 'Thematic.class.php';
@@ -31,9 +29,12 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
-define('FILE_SKIP', 1);
-define('FILE_RENAME', 2);
-define('FILE_OVERWRITE', 3);
+define('FILE_SKIP', 		1);
+define('FILE_RENAME', 		2);
+define('FILE_OVERWRITE', 	3);
+
+define('UTF8_CONVERT', 		true);
+
 /**
  * Class to restore items from a course object to a Chamilo-course
  * @author Bart Mollet <bart.mollet@hogent.be>
@@ -309,7 +310,8 @@ class CourseRestorer
                                 
                                 $file_info = pathinfo($path.$document->path);                                    
                                 if (in_array($file_info['extension'], array('html','htm'))) {
-                                    $content    = file_get_contents($path.$document->path);                                    
+                                    $content    = file_get_contents($path.$document->path);      
+                                    if (UTF8_CONVERT) $content = utf8_encode($content);                                    
                                     $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);                                   
                                     $result     = file_put_contents($path.$document->path,$content);                                   
                                 }                                
@@ -386,8 +388,8 @@ class CourseRestorer
 										}
 
 										$dest_document_path = $new_base_path.'/'.$document_path[2];		// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1/collaborative.png"
-										$basedir_dest_path = dirname($dest_document_path);				// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1"
-										$dest_filename = basename($dest_document_path);  				// e.g: "collaborative.png"
+										$basedir_dest_path 	= dirname($dest_document_path);				// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1"
+										$dest_filename 		= basename($dest_document_path);  				// e.g: "collaborative.png"
 										$base_path_document = $course_path.$document_path[0];			// e.g: "/var/www/wiener/courses/CURSO4/document"
 										
 										$path_title = '/'.$new_base_foldername.'/'.$document_path[2];
@@ -402,7 +404,8 @@ class CourseRestorer
                                         if (file_exists($dest_document_path)) {
                                             $file_info = pathinfo($dest_document_path);                                    
                                             if (in_array($file_info['extension'], array('html','htm'))) {
-                                                $content    = file_get_contents($dest_document_path);                                    
+                                                $content    = file_get_contents($dest_document_path);
+                                                if (UTF8_CONVERT) $content = utf8_encode($content);
                                                 $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);                                   
                                                 $result     = file_put_contents($dest_document_path,$content);                                   
                                             }
@@ -424,7 +427,8 @@ class CourseRestorer
                                         if (file_exists($path.$new_file_name)) {
                                             $file_info = pathinfo($path.$new_file_name);                                    
                                             if (in_array($file_info['extension'], array('html','htm'))) {
-                                                $content    = file_get_contents($path.$new_file_name);                                    
+                                                $content    = file_get_contents($path.$new_file_name);  
+                                                if (UTF8_CONVERT) $content = utf8_encode($content);
                                                 $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);                                   
                                                 $result     = file_put_contents($path.$new_file_name, $content);                                   
                                             }
@@ -446,7 +450,8 @@ class CourseRestorer
                                     if (file_exists($path.$new_file_name)) {
                                         $file_info = pathinfo($path.$new_file_name);                                    
                                         if (in_array($file_info['extension'], array('html','htm'))) {
-                                            $content    = file_get_contents($path.$new_file_name);                                    
+                                            $content    = file_get_contents($path.$new_file_name);
+                                            if (UTF8_CONVERT) $content = utf8_encode($content);
                                             $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);                                   
                                             $result     = file_put_contents($path.$new_file_name, $content);                                   
                                         }
@@ -472,7 +477,8 @@ class CourseRestorer
                             if (file_exists($path.$document->path)) {
                                 $file_info = pathinfo($path.$document->path);                                    
                                 if (in_array($file_info['extension'], array('html','htm'))) {
-                                    $content    = file_get_contents($path.$document->path);                                    
+                                    $content    = file_get_contents($path.$document->path);
+                                    if (UTF8_CONVERT) $content = utf8_encode($content);
                                     $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);                                   
                                     $result     = file_put_contents($path.$document->path, $content);                                   
                                 }
@@ -781,7 +787,8 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro) {
 				$sql = "DELETE FROM ".$tool_intro_table." WHERE id='".Database::escape_string($tool_intro->id)."'";
-				Database::query($sql);                                
+				Database::query($sql);              
+				if (UTF8_CONVERT) $tool_intro->intro_text = utf8_encode($tool_intro->intro_text);
                 $tool_intro->intro_text = DocumentManager::replace_urls_inside_content_html_from_copy_course($tool_intro->intro_text,$this->course->code,$this->course->destination_path);
 				$sql = "INSERT INTO ".$tool_intro_table." SET id='".Database::escape_string($tool_intro->id)."', intro_text = '".Database::escape_string($tool_intro->intro_text)."'";
 				Database::query($sql);
@@ -828,6 +835,7 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_EVENT] as $id => $event) {
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				if (UTF8_CONVERT) $event->content = utf8_encode($event->content);
 				$event->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($event->content, $this->course->code, $this->course->destination_path);
 
 				$sql = "INSERT INTO ".$table." SET title = '".Database::escape_string($event->title)."', content = '".Database::escape_string($event->content)."', start_date = '".$event->start_date."', end_date = '".$event->end_date."'";
@@ -888,7 +896,10 @@ class CourseRestorer
 					$course_destination=$this->course->destination_path;
 				}
 
-				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				// Check resources inside html from fckeditor tool and copy correct urls into recipient course
+				if (UTF8_CONVERT) $cd->title = utf8_encode($cd->title);
+				if (UTF8_CONVERT) $cd->content = utf8_encode($cd->content);
+				
 				$description_content = DocumentManager::replace_urls_inside_content_html_from_copy_course($cd->content, $this->course->code, $this->course->destination_path);
 
 				$condition_session = "";
@@ -912,6 +923,7 @@ class CourseRestorer
 			foreach ($resources[RESOURCE_ANNOUNCEMENT] as $id => $announcement) {
 
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				if (UTF8_CONVERT) $announcement->content = utf8_encode($announcement->content);
 				$announcement->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($announcement->content, $this->course->code, $this->course->destination_path);
 
 				$sql = "INSERT INTO ".$table." " .
@@ -1000,6 +1012,8 @@ class CourseRestorer
                     }
 
 					// check resources inside html from fckeditor tool and copy correct urls into recipient course
+                    if (UTF8_CONVERT) $quiz->description = utf8_encode($quiz->description);
+                    	
 					$quiz->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($quiz->description, $this->course->code, $this->course->destination_path);
 
 					// Normal tests are stored in the database.
@@ -1045,7 +1059,7 @@ class CourseRestorer
 
 		$new_id=0;
 
-		if(is_object($question)) {
+		if (is_object($question)) {
 			if ($question->is_restored()) {
 				return $question->destination_id;
 			}
@@ -1054,6 +1068,8 @@ class CourseRestorer
             $table_options = Database :: get_course_table(TABLE_QUIZ_QUESTION_OPTION, $this->course->destination_db);
 
 			// check resources inside html from fckeditor tool and copy correct urls into recipient course
+            if (UTF8_CONVERT) $question->description = utf8_encode($question->description);
+            	
 			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($question->description, $this->course->code, $this->course->destination_path);
 
 			$sql = "INSERT INTO ".$table_que." SET question = '".addslashes($question->question)."', description = '".addslashes($question->description)."', ponderation = '".addslashes($question->ponderation)."', position = '".addslashes($question->position)."', type='".addslashes($question->quiz_type)."', picture='".addslashes($question->picture)."', level='".addslashes($question->level)."', extra='".addslashes($question->extra)."'";
@@ -1070,6 +1086,8 @@ class CourseRestorer
 				foreach ($question->answers as $index => $answer) {
 
 					// check resources inside html from fckeditor tool and copy correct urls into recipient course
+					if (UTF8_CONVERT) $answer['answer']  = utf8_encode($answer['answer']);
+					if (UTF8_CONVERT) $answer['comment'] = utf8_encode($answer['comment']);
 					$answer['answer']  = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['answer'], $this->course->code, $this->course->destination_path);
 					$answer['comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['comment'], $this->course->code, $this->course->destination_path);
 
@@ -1113,12 +1131,18 @@ class CourseRestorer
 
 				$sql_check =   'SELECT survey_id FROM '.$table_sur.'
 								WHERE code = "'.Database::escape_string($survey->code).'"
-								AND lang="'.Database::escape_string($survey->lang).'"
-								';
+								AND lang="'.Database::escape_string($survey->lang).'"';
 
 				$result_check = Database::query($sql_check);
 
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				if (UTF8_CONVERT) {
+					$survey->title 			= utf8_encode($survey->title);
+					$survey->subtitle 		= utf8_encode($survey->subtitle);
+					$survey->intro 			= utf8_encode($survey->intro);
+					$survey->surveythanks 	= utf8_encode($survey->surveythanks);
+				}
+				
 				$survey->title 		  = DocumentManager::replace_urls_inside_content_html_from_copy_course($survey->title, $this->course->code, $this->course->destination_path);
 				$survey->subtitle 	  = DocumentManager::replace_urls_inside_content_html_from_copy_course($survey->subtitle, $this->course->code, $this->course->destination_path);
 				$survey->intro 		  = DocumentManager::replace_urls_inside_content_html_from_copy_course($survey->intro, $this->course->code, $this->course->destination_path);
@@ -1157,8 +1181,7 @@ class CourseRestorer
 							$survey_code = $survey->code.'_';
 							$i=1;
 							$temp_survey_code = $survey_code.$i;
-							while (!$this->is_survey_code_available($temp_survey_code))
-							{
+							while (!$this->is_survey_code_available($temp_survey_code)) {
 								$temp_survey_code = $survey_code.++$i;
 							}
 							$survey_code = $temp_survey_code;
@@ -1186,8 +1209,7 @@ class CourseRestorer
 
 							$new_id = Database::insert_id();
 							$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
-							foreach ($survey->question_ids as $index => $question_id)
-							{
+							foreach ($survey->question_ids as $index => $question_id) {
 								$qid = $this->restore_survey_question($question_id);
 								$sql = "UPDATE ".$table_que." " .
 										"SET survey_id = ".$new_id." WHERE " .
@@ -1198,7 +1220,6 @@ class CourseRestorer
 										"question_id = ".$qid."";
 								Database::query($sql);
 							}
-
 							break;
 
 						case FILE_OVERWRITE:
@@ -1213,8 +1234,7 @@ class CourseRestorer
 							$survey_data = Database::fetch_array($result,'ASSOC');
 
 							// if the survey is shared => also delete the shared content
-							if (is_numeric($survey_data['survey_share']))
-							{
+							if (is_numeric($survey_data['survey_share'])){
 								survey_manager::delete_survey($survey_data['survey_share'], true,$this->course->destination_db);
 							}
 							$return = survey_manager :: delete_survey($survey_data['survey_id'],false,$this->course->destination_db);
@@ -1236,9 +1256,7 @@ class CourseRestorer
 										"question_id = ".$qid."";
 								Database::query($sql);
 							}
-
 							break;
-
 						default:
 							break;
 					}
@@ -1301,6 +1319,8 @@ class CourseRestorer
 			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION, $this->course->destination_db);
 
 			// check resources inside html from fckeditor tool and copy correct urls into recipient course
+			if (UTF8_CONVERT) $question->survey_question = utf8_encode($question->survey_question);
+				
 			$question->survey_question = DocumentManager::replace_urls_inside_content_html_from_copy_course($question->survey_question, $this->course->code, $this->course->destination_path);
 
 			$sql = "INSERT INTO ".$table_que." " .
@@ -1318,6 +1338,8 @@ class CourseRestorer
 			foreach ($question->answers as $index => $answer) {
 
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				if (UTF8_CONVERT) $answer['option_text'] = utf8_encode($answer['option_text']);
+				
 				$answer['option_text'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['option_text'], $this->course->code, $this->course->destination_path);
 
 				$sql = "INSERT INTO ".$table_ans." " .
@@ -1696,6 +1718,8 @@ class CourseRestorer
     			}
 
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+    			if (UTF8_CONVERT) $glossary->description = utf8_encode($glossary->description);
+    			
 				$glossary->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($glossary->description, $this->course->code, $this->course->destination_path);
 
 				$sql = "INSERT INTO ".$table_glossary." SET  name = '".Database::escape_string($glossary->name)."', description = '".Database::escape_string($glossary->description)."', display_order='".Database::escape_string($glossary->display_order)."' $condition_session ";
@@ -1717,12 +1741,13 @@ class CourseRestorer
 			// storing all the resources that have to be copied in an array
 			$resources = $this->course->resources;
 
-			foreach ($resources[RESOURCE_WIKI] as $id => $wiki)
-			{
+			foreach ($resources[RESOURCE_WIKI] as $id => $wiki) {
 				//$wiki = new Wiki($obj->page_id, $obj->reflink, $obj->title, $obj->content, $obj->user_id, $obj->group_id, $obj->dtime);
 				// the sql statement to insert the groups from the old course to the new course
-
+				
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				if (UTF8_CONVERT) $wiki->content = utf8_encode($wiki->content);
+				
 				$wiki->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($wiki->content, $this->course->code, $this->course->destination_path);
 
 				$sql = "INSERT INTO $table_wiki (page_id, reflink, title, content, user_id, group_id, dtime, progress, version, session_id)

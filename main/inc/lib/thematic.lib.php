@@ -468,6 +468,7 @@ class Thematic
 	 	
 	public function get_thematic_advance_div($data) {		
 		$return_array = array();
+        $uinfo = api_get_user_info();
 		
 		foreach ($data as $thematic_id => $thematic_advance_data) {
 			foreach ($thematic_advance_data as $key => $thematic_advance) {
@@ -475,7 +476,7 @@ class Thematic
 				$session_star = '';
 				if (api_is_allowed_to_edit(null, true)) {
 					if ($thematic_advance['session_id'] !=0) {
-						$session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
+						$session_star = api_get_session_image(api_get_session_id(), $uinfo['status']);
 					}
 				}
 					
@@ -491,6 +492,7 @@ class Thematic
 	 
 	 public function get_thematic_plan_div($data) {
 	 	$final_return = array();
+        $uinfo = api_get_user_info();
 	
 		foreach ($data as $thematic_id => $thematic_plan_data) {
 			$new_thematic_plan_data = array();
@@ -522,7 +524,7 @@ class Thematic
 					if (!empty($data[$thematic_id][$id]['title']) && !empty($data[$thematic_id][$id]['description'])) {
 						if (api_is_allowed_to_edit(null, true)) {
 							if ($data[$thematic_id][$id]['session_id'] !=0) {
-								$session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
+								$session_star = api_get_session_image(api_get_session_id(), $uinfo['status']);
 							}
 						}
 				 		$return  .= Display::tag('h3', Security::remove_XSS($data[$thematic_id][$id]['title'], STUDENT).$session_star);

@@ -47,9 +47,7 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 }
 
 //checking for extra field with filter on
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 
 //todo @this validation could be in a function in group_portal_manager
 if (empty($group_id)) {

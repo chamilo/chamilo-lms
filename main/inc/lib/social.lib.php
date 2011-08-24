@@ -306,7 +306,7 @@ class SocialManager extends UserManager {
 	 * @param void
 	 * @return string message invitation
 	 */
-	public static function send_invitation_friend_user ($userfriend_id, $subject_message='', $content_message='') {
+	public static function send_invitation_friend_user ($userfriend_id, $subject_message = '', $content_message = '') {
 		global $charset;
 		//$id_user_friend=array();
 		$user_info = array();

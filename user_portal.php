@@ -616,9 +616,6 @@ $profile_content .= ' </div></div>';
 
 //  @todo Add a platform setting to add the user image.
 if (api_get_setting('allow_message_tool') == 'true') {
-
-    require_once api_get_path(LIBRARY_PATH).'message.lib.php';
-    require_once api_get_path(LIBRARY_PATH).'social.lib.php';
     require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
     // New messages.

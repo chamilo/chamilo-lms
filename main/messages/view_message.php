@@ -64,8 +64,7 @@ echo '<div id="social-content">';
 	//LEFT COLUMN
 	if (api_get_setting('allow_social_tool') != 'true') { 
 		$id_content_right = 'inbox';	
-	} else {
-		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+	} else {		
 		$id_content_right = 'social-content-right';
 		echo '<div id="social-content-left">';	
 			//this include the social menu div			

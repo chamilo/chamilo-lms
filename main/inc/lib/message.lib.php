@@ -271,7 +271,7 @@ class MessageManager
 			if (empty($group_id)) {
 				//message in outbox for user friend or group
 				$sql = "INSERT INTO $table_message (user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
-						 " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".api_get_utc_datetime()."','$subject','$content', '$group_id', '$parent_id', '".api_get_utc_datetime()."')";
+					   " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".api_get_utc_datetime()."','$subject','$content', '$group_id', '$parent_id', '".api_get_utc_datetime()."')";
 				$rs = Database::query($sql);
 				$outbox_last_id = Database::insert_id();
 
@@ -294,7 +294,7 @@ class MessageManager
                 $notification->save_notification(NOTIFICATION_TYPE_MESSAGE, array($receiver_user_id), $subject, $content, $sender_info);                
 		    } else {
 		        $group_info = GroupPortalManager::get_group_data($group_id);		        
-		        $user_list = GroupPortalManager::get_users_by_group($group_id, false, array(),0, 1000);
+		        $user_list  = GroupPortalManager::get_users_by_group($group_id, false, array(),0, 1000);
 		        $new_user_list = array();		   
                 foreach($user_list as $user_data) {
                     $new_user_list[]= $user_data['user_id'];

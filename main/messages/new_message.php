@@ -326,16 +326,8 @@ echo '<div id="social-content">';
 	$id_content_right = '';
 	//LEFT COLUMN
 	if (api_get_setting('allow_social_tool') != 'true') {
-		$id_content_right = 'inbox';
-	/*	echo '<div id="inbox-menu" class="actions">';
-		echo '<ul>';
-			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>'.'</li>';
-			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';			
-			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
-		echo '</ul>';
-		echo '</div>';*/
-	} else {
-		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+		$id_content_right = 'inbox';		
+	} else {		
 		echo '<div id="social-content-left">';
 		//this include the social menu div
 		SocialManager::show_social_menu('messages');

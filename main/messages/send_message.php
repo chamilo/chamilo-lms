@@ -17,8 +17,8 @@ if (api_is_anonymous()) {
 $user_id	= intval($_POST['user_id']);
 $panel_id	= intval($_POST['panel_id']);
 
-$content_message = ($_POST['txt_content']); //check this is filtered on output
-$subject_message = ($_POST['txt_subject']); //check this is filtered on output
+$content_message = $_POST['txt_content']; //check this is filtered on output
+$subject_message = $_POST['txt_subject']; //check this is filtered on output
 
 
 $user_info = array();
@@ -66,15 +66,12 @@ if ($panel_id == 2 || $panel_id == 4 )  {
 <?php
 }
 //here we decode to utf8 because this page is called from an ajax popup
-$subject_message = api_utf8_decode($subject_message);
-$content_message = api_utf8_decode($content_message);
 
 if ($panel_id==4 && !empty($content_message)) {
 	if ($subject_message=='clear') {
 		$subject_message=null;
 	}	
-	SocialManager::send_invitation_friend_user($user_id,$subject_message,$content_message);
+	SocialManager::send_invitation_friend_user($user_id, $subject_message, $content_message);
 } elseif ($panel_id==5 && !empty($subject_message) ) {
-	SocialManager::send_invitation_friend_user($user_id,$subject_message,$content_message);
+	SocialManager::send_invitation_friend_user($user_id, $subject_message, $content_message);
 }
-?>

@@ -5,7 +5,6 @@
  * Script opened in an iframe and containing the learning path's navigation and progress bar
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
- * @license	GNU/GPL
  */
 /**
  * Code
@@ -23,8 +22,7 @@ require_once 'learnpath.class.php';
 require_once 'scorm.class.php';
 require_once 'aicc.class.php';
 
-//error_log('New LP - Loaded lp_nav: '.$_SERVER['REQUEST_URI'], 0);
-$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
+$htmlHeadXtra[] = '<script type="text/javascript">
       var dokeos_xajax_handler = window.parent.oxajax;
     </script>';
 
@@ -45,18 +43,27 @@ if (isset($_SESSION['lpobject'])) {
     $display_mode = $_SESSION['oLP']->mode;
     $scorm_css_header = true;
     $lp_theme_css = $_SESSION['oLP']->get_theme();
+    
+    $my_style = api_get_visual_theme();
+    
+   
     //Setting up the CSS theme if exists
-    include_once '../inc/reduced_header.inc.php';
+    //require_once '../inc/reduced_header.inc.php'; //fixes js bug in ie8 -> "src" not found see #
+    
+    $mycourselptheme = null;
+    if (api_get_setting('allow_course_theme') == 'true') {
+    	$mycourselptheme = api_get_course_setting('allow_learning_path_theme');
+    }
 
     if (!empty($lp_theme_css) && !empty($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
         global $lp_theme_css;
     } else {
         $lp_theme_css = $my_style;
     }
-    //$progress_bar = $_SESSION['oLP']->get_progress_bar();
-    $progress_bar = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
+   
+    $progress_bar 	= $_SESSION['oLP']->get_progress_bar('', -1, '', true);
     $navigation_bar = $_SESSION['oLP']->get_navigation_bar();
-    $mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);
+    $mediaplayer 	= $_SESSION['oLP']->get_mediaplayer($autostart);
 }
 session_write_close();
 ?>

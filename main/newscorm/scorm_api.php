@@ -1464,7 +1464,7 @@ function switch_item(current_item, next_item){
         default:
             break;
     }
-    var mysrc = 'lp_controller.php?action=content&lp_id='+olms.lms_lp_id+'&item_id='+next_item;
+    var mysrc = 'lp_controller.php?action=content&lp_id='+olms.lms_lp_id+'&item_id='+next_item; 
     var cont_f = $("#content_id");
 
     <?php if($oLP->mode == 'fullscreen'){ ?>
@@ -1490,9 +1490,9 @@ function switch_item(current_item, next_item){
         url: "lp_nav.php",
         data: "",
         success: function(tmp_data) {
-                 $("#media").html(tmp_data);
-    }
-      });
+            $("#media").html(tmp_data);
+        }
+    });
     return true;
 }
 /**

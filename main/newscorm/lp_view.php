@@ -185,15 +185,6 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         $score 		= (float)$row_dates['exe_result'];
         $max_score 	= (float)$row_dates['exe_weighting'];
         
-        /*require_once '../exercice/exercise.class.php';
-        require_once '../exercice/question.class.php';
-        require_once '../exercice/answer.class.php';
-        require_once '../exercice/exercise.lib.php';
-        
-        $exercise_obj = new Exercise();
-        $score_result = $exercise_obj->get_exercise_result($safe_exe_id);
-        $score = (float)$score_result['score'];*/        
-
         $sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE id = '".(int)$safe_item_id."'";
         if ($debug) error_log($sql_upd_max_score);
         Database::query($sql_upd_max_score);

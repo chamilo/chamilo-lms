@@ -1971,7 +1971,7 @@ class learnpath {
                                     s1.addParam("allowscriptaccess","always");
                                         s1.addParam("flashvars","file=' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=' . $autostart_audio.'");
                                     s1.write("container");
-                                </script></div>';
+						</script></div>';
         }
         return $output;
     }

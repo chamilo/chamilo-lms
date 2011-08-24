@@ -15,8 +15,7 @@ if ($debug > 0) error_log('New LP -+- Entered lp_controller.php -+- (action: '.$
 if (isset($_GET['action'])) {
     if ($_GET['action'] == 'export') {
         // Only needed on export.
-        $language_file[] = 'hotspot';
-        $language_file[] = 'exercice';
+        $language_file[] = 'hotspot';        
     }
 }
 $language_file[] = 'course_home';
@@ -25,6 +24,7 @@ $language_file[] = 'scorm';
 $language_file[] = 'learnpath';
 $language_file[] = 'resourcelinker';
 $language_file[] = 'registration';
+$language_file[] = 'exercice';
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';

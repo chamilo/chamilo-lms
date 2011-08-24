@@ -4583,7 +4583,7 @@ function api_calculate_image_size($image_width, $image_height, $target_width, $t
 /**
  * Returns a list of Chamilo's tools or
  * checks whether a given identificator is a valid Chamilo's tool.
- * @author Isaac flores paz <florespaz@bidsoftperu.com>
+ * @author Isaac flores paz 
  * @param string The tool name to filter
  * @return mixed Filtered string or array
  */
@@ -4976,7 +4976,7 @@ function api_check_browscap() {
 
 
 function api_get_js($file) {    
-    return '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'" type="text/javascript" language="javascript"></script>';
+    return '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'"></script>';
 }
 
 

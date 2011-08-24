@@ -1672,13 +1672,13 @@ function api_get_session_visibility_by_user($session_id, $course_code, $user_id)
 }
 
 /**
- * This function validates if the resource belongs to a session and returns an image
- * @param int       session id
- * @param int       status id
- * @return string   image session
+ * This function returns a (star) session icon if the session is not null and 
+ * the user is not a student 
+ * @param int       Session id
+ * @param int       User status id - if 5 (student), will return empty
+ * @return string   Session icon
  */
 function api_get_session_image($session_id, $status_id) {
-    //validacion when belongs to a session
     $session_id = (int)$session_id;
     $session_img = '';
     if ((int)$status_id != 5) { //check whether is not a student

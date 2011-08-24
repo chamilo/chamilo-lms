@@ -9,6 +9,19 @@ require_once 'main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
 
 $tool_name = get_lang('SystemAnnouncements');
+$htmlHeadXtra[] = api_get_jquery_libraries_js(array('bxslider'));
+$htmlHeadXtra[] ='
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#slider").bxSlider({
+		infiniteLoop	: true,
+		auto			: true,
+		pager			: true,
+		autoHover		: true,
+		pause			: 10000
+	});
+});
+</script>';
 Display::display_header($tool_name);
 
 if (api_is_platform_admin()) {
@@ -18,12 +31,12 @@ if (api_is_platform_admin()) {
 }
 
 $start = isset($_GET['start']) ? (int)$_GET['start'] : $start = 0;
-
+/*
 if (isset($_user['user_id'])) {
 	$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
 	SystemAnnouncementManager :: display_all_announcements($visibility, $announcement, $start, $_user['user_id']);
 } else {
 	SystemAnnouncementManager :: display_all_announcements(VISIBLE_GUEST, $announcement, $start);
-}
-
+}*/
+SystemAnnouncementManager ::display_announcements_slider($visibility);
 Display::display_footer();

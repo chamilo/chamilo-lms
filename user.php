@@ -20,8 +20,6 @@ $language_file = array('index','registration','messages','userInfo');
 
 $cidReset = true;
 require_once 'main/inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 /**
  * Access permissions check
@@ -49,4 +47,3 @@ if (!empty($array_keys)) {
 	header('Location: whoisonline.php');
 	exit;
 }
-

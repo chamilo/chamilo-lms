@@ -15,8 +15,7 @@ if (!isset($_GET['cidReq'])) {
 // including necessary files
 require_once './main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+
 
 //social tab
 $this_section = SECTION_SOCIAL;

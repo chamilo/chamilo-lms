@@ -115,9 +115,8 @@ if (!empty($_POST['submitAuth'])) {
             decodeOpenInfos();
         }
     }
-
-} // End login -- if ($_POST['submitAuth'])
-else {
+    // End login -- if ($_POST['submitAuth'])
+} else {
     // Only if login form was not sent because if the form is sent the user was already on the page.
     event_open();
 }
@@ -132,11 +131,26 @@ $header_title = null;
 if (!api_is_anonymous()) {
     $header_title = " ";
 }
+
+$htmlHeadXtra[] = api_get_jquery_libraries_js(array('bxslider'));
+$htmlHeadXtra[] ='
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#slider").bxSlider({
+		infiniteLoop	: true,
+		auto			: true,
+		pager			: true,
+		autoHover		: true,
+		pause			: 10000
+	});
+});
+</script>';
+
 Display::display_header($header_title);
 
 /* MAIN CODE */
 
-echo '<div class="maincontent" id="content">';
+echo '<div id="content" class="maincontent">';
 
 // Plugins for loginpage_main AND campushomepage_main.
 if (!api_get_user_id()) {
@@ -208,9 +222,9 @@ if (!$page_included) {
 
     if (isset($_user['user_id'])) {
         $visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
-        SystemAnnouncementManager :: display_announcements($visibility, $announcement);
+        SystemAnnouncementManager :: display_announcements_slider($visibility, $announcement);
     } else {
-        SystemAnnouncementManager :: display_announcements(VISIBLE_GUEST, $announcement);
+        SystemAnnouncementManager :: display_announcements_slider(VISIBLE_GUEST, $announcement);
     }
 
     if (api_get_setting('display_categories_on_homepage') == 'true') {
@@ -248,10 +262,7 @@ if (!api_is_anonymous()) {
     }
     $profile_content .= ' </div></div>';
     
-    if (api_get_setting('allow_message_tool') == 'true') {
-    
-        require_once api_get_path(LIBRARY_PATH).'message.lib.php';
-        require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+    if (api_get_setting('allow_message_tool') == 'true') {    
         require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
     
         // New messages.

@@ -2885,18 +2885,17 @@ class Exercise {
 				}
 			}
 
-			if ($origin != 'learnpath') {
+			if ($origin != 'learnpath') {				
 				if ($show_result) {
 					echo '</table>';
-					if ($this->type == ALL_ON_ONE_PAGE) {
+					//if ($this->type == ALL_ON_ONE_PAGE) {
 						echo '<div id="question_score">';
 						if ($propagate_neg == 0 && $questionScore < 0) {
 							$questionScore = 0;
 						}
 						echo get_lang('Score').": ".show_score($questionScore, $questionWeighting, false, false);
-
 						echo '</div>';
-					}
+					//}
 					echo '<br />';
 				}
 			}

@@ -77,10 +77,10 @@ if ($action == 'createcoursecategory') {
 	$nameTools = get_lang('CreateCourseCategory');
 }
 if ($action == 'subscribe') {
-	$nameTools = get_lang('SubscribeToCourse');
+	$nameTools = get_lang('CourseManagement');
 }
 
-if ($action == 'display_random_courses' || $action == 'display_courses') {
+if ($action == 'display_random_courses' || $action == 'display_courses' ) {
 	$nameTools = get_lang('CourseManagement');
 }
 
@@ -92,7 +92,7 @@ if (empty($nameTools)) {
 	$nameTools = get_lang('CourseManagement');
 } else {
 	
-	if (!in_array($action, array('sortmycourses', 'createcoursecategory', 'display_random_courses', 'display_courses'))) {
+	if (!in_array($action, array('sortmycourses', 'createcoursecategory', 'display_random_courses', 'display_courses', 'subscribe'))) {
 		$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'auth/courses.php', 'name' => get_lang('CourseManagement'));
 	}
 	if ($action == 'createcoursecategory') {

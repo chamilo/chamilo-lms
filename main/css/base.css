@@ -900,7 +900,7 @@ button:hover {
 #categories-search {
     text-align:center;
     /*height:55px; */
-    float: right;
+    float: left;
 }
 
 #categories-list {

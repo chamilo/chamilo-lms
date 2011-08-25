@@ -208,10 +208,14 @@ function display_mymonthcalendar($user_id, $agendaitems, $month, $year, $weekday
                                 break;
                             case 'course':
                                 $bg_color = '#CAFFAA';
+                                $icon_name = 'course.png';
+                                if (!empty($value['session_id'])) {
+                                	$icon_name = 'session.png';
+                                }
                                 if ($show_content) {
-                                    $icon = Display::url(Display::return_icon('course.png', $value['course_name'].' '.get_lang('Course'), array(), 22), $value['url']);
+                                    $icon = Display::url(Display::return_icon($icon_name, $value['course_name'].' '.get_lang('Course'), array(), 22), $value['url']);
                                 } else {
-                                    $icon = Display::return_icon('course.png', $value['course_name'].' '.get_lang('Course'), array(), 22);
+                                    $icon = Display::return_icon($icon_name, $value['course_name'].' '.get_lang('Course'), array(), 22);
                                 }                                                                                  
                                 break;              
                             default:

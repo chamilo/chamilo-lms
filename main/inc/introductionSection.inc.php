@@ -178,20 +178,20 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 
 	if (!empty($thematic_advance_info)) {
 
-		$style_introduction_section = 'style="width:60%;float:left;margin-left:6%;"';
+		$style_introduction_section = 'style="margin-left:10%;margin-right:10%; margin-bottom:30px;"';
 		$thematic_advance = get_lang('CourseThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%';		
 		if (api_is_allowed_to_edit(null, true)) {
-			$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq().'">'.get_lang('CourseThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%</a>';
+			//$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq().'">'.get_lang('CourseThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%</a>';
 		}		
 		$thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
 		
 		$thematic_advance_info['start_date'] = api_get_local_time($thematic_advance_info['start_date']);
 		$thematic_advance_info['start_date'] = api_format_date($thematic_advance_info['start_date'], DATE_TIME_FORMAT_LONG);
 		
-		$thematic_description_html = '<div style="width:20%;float:left;font-size:10pt;"><div class="thematic-postit">
-								  <div class="thematic-postit-top"><a class="thematic-postit-head" style="" href="#">'.Display::return_icon('postit_top.png').'</a></div>
-								  <div class="thematic-postit-center">'; 								
-		$thematic_description_html .= '<h3>'.$thematic_advance.'</h3>';	
+		$thematic_description_html = '<div '.$style_introduction_section.'>
+									  <div class="thematic-postit">
+								  	  <div class="thematic-postit-top"><h3><a class="thematic-postit-head" style="" href="#"> '.$thematic_advance.'</h3></a></div>						 
+								  	  <div class="thematic-postit-center" style="display:none">';
 		$thematic_description_html .= '<div><strong>'.$thematic_info['title'].'</strong></div>';			
 		$thematic_description_html .= '<div style="font-size:8pt;"><strong>'.$thematic_advance_info['start_date'].'</strong></div>';
 		$thematic_description_html .= '<div>'.$thematic_advance_info['content'].'</div>';
@@ -210,7 +210,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 			$thematic_description_html .= '<br />';								  	
 		}								  	
 		$thematic_description_html .= '</div>
-								  <div  class="thematic-postit-bottom">'.Display::return_icon('postit_bottom.png').'</div>
+								  <div class="thematic-postit-bottom"></div>
 								  </div></div>';
 
 	} 

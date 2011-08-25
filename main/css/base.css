@@ -1055,17 +1055,30 @@ button:hover {
 	width:250px;
 	height:auto;
 	overflow:hidden;
+	float:right;
+}
+.thematic-postit-top {	
+	background-image: url('../img/postit_top.png');
+	height: 38px;
+	
+}
+.thematic-postit-top h3 {
+	margin:20px 5px 10px 20px;
+	padding-top:40px;
+}
+
+.thematic-postit-bottom {
+	background-image: url('../img/postit_bottom.png');
+	height:40px;	
 }
 .thematic-postit-center {
 	background-image: url('../img/postit_center.png');
 	height:auto;
 	margin-top: 0px;
 	margin-bottom:-16px;
-	padding-left:20px;
-	padding-right:20px;
-	padding-bottom:10px;
-	padding-top: 5px;
+	padding: 28px 20px 0;
 }
+
 #titlethematic{
     text-transform: uppercase;
 }

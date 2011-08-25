@@ -1963,7 +1963,7 @@ class CourseManager {
         }
         
         if (!empty($with_special_courses)) {
-            $sql = "SELECT DISTINCT(course.code), course.db_name db_name, course.title
+            $sql = "SELECT DISTINCT(course.code), course.db_name db_name, course.title , course.id as course_id
                         FROM    ".$tbl_course_user." course_rel_user
                         LEFT JOIN ".$tbl_course." course
                         ON course.code = course_rel_user.course_code
@@ -1984,7 +1984,7 @@ class CourseManager {
 
         // get course list not auto-register. Use Distinct to avoid multiple
         // entries when a course is assigned to a HRD (DRH) as watcher
-        $sql = "SELECT DISTINCT(course.code),course.db_name,course.title
+        $sql = "SELECT DISTINCT(course.code),course.db_name,course.title , course.id as course_id
                 FROM $tbl_course course
                 INNER JOIN $tbl_course_user cru
                 ON course.code=cru.course_code
@@ -2000,7 +2000,7 @@ class CourseManager {
         }
 
         if ($include_sessions === true) {
-            $r = Database::query("SELECT DISTINCT(c.code),c.db_name,c.title
+            $r = Database::query("SELECT DISTINCT(c.code), c.db_name, c.title, c.id as course_id
                     FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." s, ".Database::get_main_table(TABLE_MAIN_COURSE)." c
                     WHERE id_user = $user_id AND s.course_code=c.code");
             while ($row = Database::fetch_array($r, 'ASSOC')) {

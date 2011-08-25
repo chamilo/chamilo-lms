@@ -93,7 +93,9 @@ function get_myagendaitems($user_id, $courses_dbs, $month, $year) {
 			
 			$item['url'] = $url;
 			$item['course_name'] = $array_course_info['title'];	
-			$item['calendar_type'] = 'course';			
+			$item['calendar_type'] = 'course';
+			$item['course_id'] = $array_course_info['course_id'];
+			
 			$my_list[$agendaday][] = $item;					
 		}
 	}
@@ -218,23 +220,24 @@ function display_mymonthcalendar($user_id, $agendaitems, $month, $year, $weekday
                         
                         $result = '<div class="rounded_div_agenda" style="background-color:'.$bg_color.';">';
                         
-                        if ($show_content) {
+                        if ($show_content) {                       	                       	
     				        
                             //Setting a personal event to green
-                            $icon = Display::div($icon, array('style'=>'float:right'));                            
+                            $icon = Display::div($icon, array('style'=>'float:right'));      
+
+                            $link = $value['calendar_type'].'_'.$value['id'].'_'.$value['course_id'].'_'.$value['session_id'];
                             
                             //Link to bubble                                                
-                            $url = Display::url(cut($value['title'], 40), '#', array('id'=>$value['calendar_type'].'_'.$value['id'], 'class'=>'opener'));                                 
+                            $url = Display::url(cut($value['title'], 40), '#', array('id'=>$link, 'class'=>'opener'));                                 
                             $result .= $time.' '.$icon.' '.Display::div($url);
                             
                             //Hidden content
-                            $content = Display::div($icon.Display::tag('h1', $value['title']).$complete_time.'<hr />'.Security::remove_XSS($value['content']));
+                            $content = Display::div($icon.Display::tag('h2', $value['course_name']).'<hr />'.Display::tag('h3', $value['title']).$complete_time.'<hr />'.Security::remove_XSS($value['content']));
                             
                             //Main div
-                            $result .= Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog', 'style' => 'display:none'));
+                            $result .= Display::div($content, array('id'=>'main_'.$link, 'class' => 'dialog', 'style' => 'display:none'));
                             $result .= '</div>';                        
-                            echo $result;
-                                                        
+                            echo $result;                                                        
                             //echo Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog'));
                         } else {                        	
                             echo $result .= $icon.'</div>';

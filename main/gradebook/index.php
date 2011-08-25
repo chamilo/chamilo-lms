@@ -28,7 +28,6 @@ require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/fe/userform.class.php';
 require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {

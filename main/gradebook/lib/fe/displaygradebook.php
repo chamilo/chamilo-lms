@@ -70,12 +70,15 @@ class DisplayGradebook
 		}
     
 		$evalinfo= '<table width="100%" border="0"><tr><td>';
-		$evalinfo .= get_lang('EvaluationName') . ' :<b> ' . $evalobj->get_name() . ' </b>(' . api_format_date($evalobj->get_date()).' )<br />' . get_lang('Course') . ' :<b> ' . $course . '</b><br />';
+		$evalinfo .= '<h2>'.$evalobj->get_name().'</h2><br />'; 
+		$evalinfo .= $description;
+		$evalinfo .= get_lang('Course') . ' :<b> ' . $course . '</b><br />';
 		//'<br>' . get_lang('Weight') . ' :<b> ' . $evalobj->get_weight() . '</b><br>' . get_lang('Visible') . ' :<b> ' . $visible . '</b>
-        $evalinfo .=  get_lang('QualificationNumeric') . ' :<b> ' . $evalobj->get_max() . '</b><br>' . $description .$average;
+        $evalinfo .=  get_lang('QualificationNumeric') . ' :<b> ' . $evalobj->get_max() . '</b><br>'.$average;
+        
 		if (!$evalobj->has_results()) {
 			$evalinfo .= '<br /><i>' . get_lang('NoResultsInEvaluation') . '</i>';
-		} elseif ($scoredisplay->is_custom() && api_get_self() != '/dokeos/main/gradebook/gradebook_statistics.php') {
+		} elseif ($scoredisplay->is_custom() && api_get_self() != '/main/gradebook/gradebook_statistics.php') {
             if (api_is_allowed_to_edit(null, true)) {
                 if ($page != 'statistics') {    
                     //$evalinfo .= '<br /><br /><a href="gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('evaluation_rate.png'),get_lang('ViewResult'),'','32') . '</a>';

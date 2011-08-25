@@ -112,13 +112,13 @@ if (api_is_allowed_to_edit(null, true)) {
         
         // Date treatment for timezones
         if (!empty($glossary_data['insert_date'])  && $glossary_data['insert_date'] != '0000-00-00 00:00:00:') {
-            $glossary_data['insert_date'] = api_get_local_time($glossary_data['insert_date'] , null, date_default_timezone_get());
+            $glossary_data['insert_date'] = api_get_local_time($glossary_data['insert_date']);
         } else {
             $glossary_data['insert_date']  = '';
         }
         
         if (!empty($glossary_data['update_date'])  && $glossary_data['update_date'] != '0000-00-00 00:00:00:') {
-            $glossary_data['update_date'] = api_get_local_time($glossary_data['update_date'] , null, date_default_timezone_get());
+            $glossary_data['update_date'] = api_get_local_time($glossary_data['update_date']);
         } else {
             $glossary_data['update_date']  = '';
         }

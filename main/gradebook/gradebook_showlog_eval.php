@@ -45,10 +45,10 @@ $sql="SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at,u
 $result=Database::query($sql);
 $list_info=array();
 while ($row=Database::fetch_row($result)) {
-	$list_info[]=$row;
+	$list_info[]=$row; 
 }
 
-foreach($list_info as $key => $info_log) {
+foreach($list_info as $key => $info_log) {	
 	$list_info[$key][5]=($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
 	$list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }

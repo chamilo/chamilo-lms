@@ -54,7 +54,7 @@ class GradebookTable extends SortableTable {
 			}
 		}
 		if (api_is_allowed_to_edit(null, true)) {
-			$this->set_header($column++, get_lang('Date'),true, 'width="100px"');
+			$this->set_header($column++, get_lang('CreationDate'),true, 'width="100px"');
 		} elseif (($status<>1)  && !api_is_allowed_to_create_course() && (!isset($_GET['selectcat']) || $_GET['selectcat']==0)) {
 			$this->set_header($column++, get_lang('Date'),true, 'width="100px"');
 		}

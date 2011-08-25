@@ -1566,6 +1566,11 @@ div.image-social-content center.friend {
     width:100%;
     height:auto;
 }
+
+.social-menu-title {
+    background-color: #888;
+}
+
 .social-menu ul {
     list-style-image:none;
     list-style-position:outside;

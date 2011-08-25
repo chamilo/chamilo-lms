@@ -191,7 +191,6 @@ if ($objExercise->selectAttempts() > 0) {
 if (api_is_allowed_to_session_edit()) {
     $exeId = create_event_exercice($objExercise->selectId());
 }
-$counter=0;
 
 $user_info   = api_get_user_info(api_get_user_id());     
 if ($show_results || $show_only_score) {
@@ -203,7 +202,6 @@ foreach ($questionList as $questionId) {
     // destruction of the Question object
 	unset($objQuestionTmp);
 	
-	$counter++;
 	// gets the student choice for this question
 	$choice                = $exerciseResult[$questionId];
     

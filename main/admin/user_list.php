@@ -11,7 +11,6 @@ $language_file = array ('registration','admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'security.lib.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
 
 global $_configuration;
@@ -861,7 +860,7 @@ $form->addElement('style_submit_button', 'submit',get_lang('Search'),'class="sea
 
 echo '<div class="actions" style="width:100%;">';
 if (api_is_platform_admin()) {
-	echo '<span style="float:right; padding-top:7px;">'.
+	echo '<span style="float:right;">'.
 		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('new_user.png',get_lang('AddUsers'),'','32').'</a>'.
 		 '</span>';
 }

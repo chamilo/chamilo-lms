@@ -81,9 +81,9 @@ function toogle_course (element_html, course_code){
 	var content = \'social_content\' + id_elem[1];
 	if (my_image=="nolines_plus.gif") {
 		$(id_button).attr("src","../img/nolines_minus.gif"); var action = "load_course";
-		$("div#"+content).show("slow");
+		$("div#"+content).show("fast");
 	} else {
-		$("div#"+content).hide("slow");
+		$("div#"+content).hide("fast");
 		$(id_button).attr("src","../img/nolines_plus.gif"); var action = "unload";
 		return false;
 	}
@@ -96,7 +96,6 @@ function toogle_course (element_html, course_code){
 		url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=toogle_course",
 		data: "load_ajax="+id_elem+"&action="+action+"&course_code="+course_code,
 		success: function(datos) {
-		 //$("div#"+name_div_id).hide("slow");
 		 $("div#"+content).html(datos);
 		}
 	});

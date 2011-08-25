@@ -154,7 +154,7 @@ if ($intro_dispForm) {
 	echo '</div>';
 }
 
-$style_introduction_section = 'style="margin-left:10%;margin-right:10%;"';
+
 $thematic_description_html = '';
 
 if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
@@ -177,8 +177,17 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 	}
 
 	if (!empty($thematic_advance_info)) {
-
-		$style_introduction_section = 'style="margin-left:10%;margin-right:10%; margin-bottom:30px;"';
+		
+		if ($is_allowed_to_edit) {			
+			$style_introduction_section = 'style="margin-left:10%;margin-right:10%; margin-top:30px;" ';			
+		} else {
+			if (empty($intro_content)) {
+				$style_introduction_section = 'style="margin-left:10%;margin-right:10%; "';
+			} else {
+				$style_introduction_section = 'style="margin-left:10%;margin-right:10%;" margin-top:30px;';
+			}	
+		}
+		
 		$thematic_advance = get_lang('CourseThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%';		
 		if (api_is_allowed_to_edit(null, true)) {
 			//$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq().'">'.get_lang('CourseThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%</a>';
@@ -215,12 +224,12 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 
 	} 
 }
-
+$style_introduction_section = 'style="margin-left:10%; margin-right:10%;"';
 echo '<div '.$style_introduction_section.'>';
 if ($intro_dispDefault) {
 	//$intro_content = make_clickable($intro_content); // make url in text clickable
 	$intro_content = text_filter($intro_content); // parse [tex] codes
-	if (!empty($intro_content) || !empty($thematic_description_html))	{
+	if (!empty($intro_content))	{
 		echo "<table align=\"center\"><tr><td>$intro_content</td></tr></table>";
 	}
 }

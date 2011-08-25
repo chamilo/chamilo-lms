@@ -114,6 +114,7 @@ class UserManager {
 			}
 		}
 		//$password = ($userPasswordCrypted ? md5($password) : $password);
+		//@todo replace this date with the api_get_utc_date function big problem with users that are already registered
 		$current_date = date('Y-m-d H:i:s', time());
 		$sql = "INSERT INTO $table_user
 				SET lastname = 		'".Database::escape_string(trim($lastName))."',

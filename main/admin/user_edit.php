@@ -78,6 +78,8 @@ $user_data['platform_admin'] = is_null($user_data['is_admin']) ? 0 : 1;
 $user_data['send_mail'] = 0;
 $user_data['old_password'] = $user_data['password'];
 //Convert the registration date of the user
+
+//@todo remove the date_default_timezone_get() see UserManager::create_user function
 $user_data['registration_date'] = api_get_local_time($user_data['registration_date'], null, date_default_timezone_get());
 unset($user_data['password']);
 

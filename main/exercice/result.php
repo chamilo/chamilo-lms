@@ -186,7 +186,7 @@ if (!empty($question_list)) {
 		} else if($answerType == HOT_SPOT_DELINEATION) {
 		        
 	            $question_result  = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), 'database');
-	                        
+	            
 	            $questionScore    = $question_result['score'];
 	            $totalScore      += $question_result['score'];
 	       
@@ -302,10 +302,11 @@ if (!empty($question_list)) {
 	        		}
 	        		
 	        		//showing the score	
+	        		/*
 	         		$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 	        		$resfree = Database::query($queryfree);
-	        		$questionScore= Database::result($resfree,0,"marks");
-	        		$totalScore+=$questionScore;        		
+	        		$questionScore= Database::result($resfree,0,"marks");	        		
+	        		$totalScore+=$questionScore;*/        		
 	        		 			?>
 	        		 			</table>
 	        		 		</td></tr>

@@ -21,7 +21,7 @@
 <div id="main">
 
 
-<h1>Chamilo 1.8.8.4 - La Molina, June 2011</h1>
+<h1>Chamilo 1.8.8.4 - La Molina, August 2011</h1>
 
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.8.8.4 is a minor corrective stable version for version 1.8.8.2</p>
@@ -52,12 +52,14 @@ This version of Chamilo only includes a few minor new features:
             <li>Import ICS with multiple events #3622</li>
             <li>Now we can create an event with only a start date</li>
             <li>In the Personal Calendar (day view) now we show hours from 0:00h to 5:00h </li>
+            <li>Fixed wrong date convertions </li>
         </ul>
     </li>
     <li>
         Announcements
         <ul>            
             <li>Fixing announcements listing BT#2751 </li>
+            <li>New slider added in the index.php see #3785</li>
         </ul>
     </li>
     <li>
@@ -65,6 +67,7 @@ This version of Chamilo only includes a few minor new features:
       <ul>
         <li>Made assignments editable/removable by students only until they have been reviewed and scored (&#062; 0) by the teacher (changeset bc1b8e1e603d)</li>
         <li>Teachers can changed the score even if the assignment is already passed.</li>
+        <li>Fixed wrong date convertions </li>        
       </ul>
     </li>
     <li>
@@ -87,36 +90,28 @@ This version of Chamilo only includes a few minor new features:
     </li>    
 	<li>Exercises
         <ul>
-	       <li>Fixed question matching when using french/spanish accents </li> 
+	       <li>Fixed question matching when using French/Spanish accents </li> 
 	       <li>Exercise results: Fixing and improving export to CSV using jquery BT#2722</li>
-           <li>Fixed bug with feedback in XLS import #3763</li> 
+           <li>Fixed bug with feedback in XLS import #3763</li>
+           <li>New overview page added in order to view the current student attempts</li>
+           <li>Question pool bugs fixed see #3789</li> 
         </ul>
     </li>
     <li>Gradebook
         <ul>
             <li>Several fixes including, better session integration and some warning messages added when total score is not correct </li>
-            <li>Adding 2 new tags in the certification: course title and gradebook result </li>
-                  
+            <li>Adding 2 new tags in the certification: course title and gradebook result </li>                  
         </ul>
-    </li>
-    <li>Globally
-        <ul>
-            <li>Fixed possible bug with magic_quotes_gpc #2970</li>
-        </ul>
-    </li>
+    </li>    
     <li>Glossary
         <ul>
             <li>Order arrows are removed #3123 </li>
             <li>Fixed problem when adding a document in a learning path with glossary terms #3620</li>
             <li>Fixed mp3 previews </li>
+            <li>Fixed wrong date convertions </li>
         </ul>
     </li>
-    <li>
-      <ul>
-        <li>Fixed fatal error in upgrade from 1.8.5 by requiring image.lib.php - BT#2777</li>
-        <li>Fixed fatal error in upgrade from 1.8.6.2 by checking the availability of the DateTimeZone library in PHP - BT#2777</li> 
-      </ul>
-    </li>
+        
     <li>Learning path
         <ul>
         <li>Drag and drop to order LP items! #3741</li>
@@ -124,14 +119,20 @@ This version of Chamilo only includes a few minor new features:
         <li>Fatal error fixed when editing item prerequisites when the videoconference is enabled #3658 </li>
         <li>When creating documents inside the LP tool, a new folder with the LP name is created inside the Learning Path folder</li>
         </ul>
-    </li>  
-        
+    </li>          
     <li>Links
         <ul>
         <li>URL fixed when adding the link in the course homepage  BT#2751</li>
         <li>Token support added #2477</li>        
         </ul>
     </li>  
+    
+    <li>Migration
+      <ul>
+        <li>Fixed fatal error in upgrade from 1.8.5 by requiring image.lib.php - BT#2777</li>
+        <li>Fixed fatal error in upgrade from 1.8.6.2 by checking the availability of the DateTimeZone library in PHP - BT#2777</li> 
+      </ul>
+    </li>
      
     <li>Portal administration
         <ul>
@@ -142,38 +143,47 @@ This version of Chamilo only includes a few minor new features:
             <li>New way to generate usernames when importing users using CSV or XML file </li>
             <li>Activities stats date fixed</li>
             <li>When uploading users using a CSV/XML file, the username is generated using the first letter of the first name and the lastname #3686 </li>
-            <li>Now we can clean the chamilo/archive folder from the Portal Administration  #3748</li>          
+            <li>Now we can clean the chamilo/archive folder from the Portal Administration to make free space #3748</li>          
             <li>Catalan and Dutch translations updated</li>  
         </ul>
     </li>
     <li>User portal/ My courses
         <ul>            
             <li>Improving Course Catalog load time </li>
-            <li>Course catalog view is random by default</li>      
+            <li>Course catalog view is random by default</li>
+            <li>Courses order feature (creation of categories of courses by user) was moved from the Course Catalog to an independent window</li>      
         </ul>
     </li>
     <li>Sessions
         <ul>
-            <li>A Session doesn't exist in 2 URLs at the same time  #3733 </li>
+            <li>A Session doesn't exist in 2 URLs at the same time #3733 </li>
+            <li>New session page UI fixes</li>
         </ul>
     </li>    
     <li>Social Network / Groups
         <ul>
             <li>Reply counter fixed in group topics and improving UI</li>
+            <li>Fixed lot of bugs when sending messages to an user (wrong format email notifications) see #3827</li>
         </ul>
     </li>
     <li>Survey
         <ul>
             <li>Adding user extra fields in CSV/XLS exports #1647</li>
         </ul>
-    </li>       
+    </li>
+    
+    <li>System
+        <ul>
+            <li>Fixed possible bug with magic_quotes_gpc #2970</li>
+        </ul>
+    </li>
+        
     <li>Style changes
         <ul>
             <li>Fixed who is online user images (changeset 61945685bcff)</li>                
             <li>CSS styles: fix.css and fix_chamilo.css were deleted, there are only base.css and base_chamilo.css calls are added directly in the CSS file</li>
-            <li>All CSS were reduced and improved in order to use the base.css and base_chamilo.css styles</li>
-            <li>Chosen library added (select tag improved) #3740</li>
-            <li>New breadcrumb added to old styles (blue, academic, etc)</li>
+            <li>All CSS were reduced and improved in order to use the base.css and base_chamilo.css styles</li>            
+            <li>New breadcrumb added to old styles (blue, academic, etc)</li>            
         </ul>
     </li>
 </ul>
@@ -187,6 +197,14 @@ This version of Chamilo only includes a few minor new features:
 <ul>
   <li>Watermark portal images are now saved in the main/default_course_document/images/ folder. If you used portal-wide watermarks before, you might need to upload the watermark image again.</li>
   <li>A style-specific switch had been added in 1.8.8.2, which improved the appearance of older style but went against MVC's principles and broke copies of Chamilo-based styles. This switch has been removed, which may lead to the breadcrumb in non-chamilo-based styles to appear as less attractive, but keeps the MVC model safe so anyone can modify the appearance safely from the CSS. This might require very little cosmetic changes from you (in your style's default.css file), but we believe it's for the best.</li>
+</ul>
+
+<h3>Third-Party Libraries updates</h3>
+<ul>    
+    <li>Chozen library added (select tag improved) #3740</li>
+    <li>Jquery updated to version 1.6.2</li>
+    <li>Jquery-ui updated from version 1.8.7 to 1.8.16</li>
+    <li>bxslider library added to view Announcements</li>    
 </ul>
 
 <h1>Chamilo 1.8.8.2 - Bellavista, May 2011</h1>

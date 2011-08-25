@@ -393,23 +393,35 @@ function api_get_platform_isocodes() {
  */
 function api_get_text_direction($language = null) {
     static $text_direction = array();
-    
-    $language_is_supported = api_is_language_supported($language);   
+        
+    /*
+     * Not necessary to validate the language because the list if rtl/ltr is harcoded
+     * 
+    /*  
+     $language_is_supported = api_is_language_supported($language);  
     if (!$language_is_supported || empty($language)) {
         $language = api_get_interface_language(false, true);        
-    }
-    
+    }*/    
+    if (empty($language)) {
+    	$language = api_get_interface_language();
+    }    
     if (!isset($text_direction[$language])) {
         $text_direction[$language] = in_array(api_purify_language_id($language),
             array(
-                'arabic', 'ar',
-                'dari', 'prs',
-                'hebrew', 'he',
+                'arabic', 
+                'ar',
+                'dari', 
+                'prs',
+                'hebrew', 
+                'he',
                 'iw',
-                'pashto', 'ps',
-                'persian', 'fa',
+                'pashto', 
+                'ps',
+                'persian', 
+                'fa',
                 'ur',
-                'yiddish', 'yid'
+                'yiddish', 
+                'yid'
             )
         ) ? 'rtl' : 'ltr';
     }

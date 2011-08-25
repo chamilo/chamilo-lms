@@ -54,7 +54,7 @@ foreach ($rows as $post) {
         echo '<br />'.display_user_image($post['user_id'],$name,$origin).'<br />';
     }
     echo display_user_link($post['user_id'], $name, $origin).'<br />';
-    echo api_convert_and_format_date($post['post_date'], null, date_default_timezone_get()).'<br /><br />';
+    echo api_convert_and_format_date($post['post_date']).'<br /><br />';
     // get attach id
     $attachment_list=get_attachment($post['post_id']);
     $id_attach = !empty($attachment_list)?$attachment_list['id']:'';

@@ -400,7 +400,7 @@ if (is_array($forum_categories_list)) {
                         echo '<td nowrap="nowrap">';
 
                         if (!empty($forum['last_post_id'])) {
-                            echo api_convert_and_format_date($forum['last_post_date'], null, date_default_timezone_get()).'<br /> '.get_lang('By').' '.display_user_link($poster_id, $name);
+                            echo api_convert_and_format_date($forum['last_post_date']).'<br /> '.get_lang('By').' '.display_user_link($poster_id, $name);
                         }
                         echo '</td>';
                         echo '<td nowrap="nowrap" align="center">';

@@ -164,7 +164,7 @@ if ($rows[$display_post_id]['user_id']=='0') {
 
 if (api_get_course_setting('allow_user_image_forum')) {echo '<br />'.display_user_image($rows[$display_post_id]['user_id'],$name, $origin).'<br />';	}
 echo display_user_link($rows[$display_post_id]['user_id'], $name, $origin).'<br />';
-echo api_convert_and_format_date($rows[$display_post_id]['post_date'], null, date_default_timezone_get()).'<br /><br />';
+echo api_convert_and_format_date($rows[$display_post_id]['post_date']).'<br /><br />';
 // get attach id
 $attachment_list=get_attachment($display_post_id);
 $id_attach = !empty($attachment_list)?$attachment_list['id']:'';

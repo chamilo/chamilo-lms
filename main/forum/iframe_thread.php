@@ -107,7 +107,7 @@ while ($row = Database::fetch_array($result)) {
         $name = api_get_person_name($row['firstname'], $row['lastname']);
     }
     echo $name.'<br />';
-    echo $row['post_date'].'<br /><br />';
+    echo api_convert_and_format_date($row['post_date']).'<br /><br />';
 
     echo "</td>";
     echo "<td class=\"forum_message_post_title\">".Security::remove_XSS($row['post_title'])."</td>";

@@ -34,11 +34,11 @@ if (isset($current_thread['thread_id'])){
         echo "<td rowspan=\"3\" class=\"$leftclass\">";
         
         if ($row['user_id']=='0') {
-            $name=prepare4display($row['poster_name']);
+            $name = prepare4display($row['poster_name']);
         } else {
-            $name=api_get_person_name($row['firstname'], $row['lastname']);
+            $name = api_get_person_name($row['firstname'], $row['lastname']);
         }
-        if($origin!='learnpath') {
+        if ($origin!='learnpath') {
             if (api_get_course_setting('allow_user_image_forum')) {
                 echo '<br />'.display_user_image($row['user_id'],$name).'<br />';
             }
@@ -46,7 +46,8 @@ if (isset($current_thread['thread_id'])){
         } else {
             echo $name. '<br />';
         }
-        echo api_convert_and_format_date($row['post_date'], null, date_default_timezone_get()).'<br /><br />';
+        
+        echo api_convert_and_format_date($row['post_date']).'<br /><br />';
         // get attach id
         $attachment_list=get_attachment($row['post_id']);
         $id_attach = !empty($attachment_list)?$attachment_list['id']:'';

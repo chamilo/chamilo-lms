@@ -374,19 +374,19 @@ if (is_array($threads)) {
 
             // If the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread.
             if (($row['visible'] == '1' OR api_is_allowed_to_edit(false, true)) && $origin != 'learnpath') {
-                $last_post = api_convert_and_format_date($row['thread_date'], null, date_default_timezone_get()).' '.get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name);
+                $last_post = api_convert_and_format_date($row['thread_date']).' '.get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name);
             } elseif ($origin != 'learnpath') {
                 $last_post_sql = "SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
                 $last_post_result = Database::query($last_post_sql);
                 $last_post_row = Database::fetch_array($last_post_result);
                 $name = api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
-                $last_post = api_convert_and_format_date($last_post_row['post_date'], null, date_default_timezone_get()).' '.get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name);
+                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name);
             } else {
                 $last_post_sql = "SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
                 $last_post_result = Database::query($last_post_sql);
                 $last_post_row = Database::fetch_array($last_post_result);
                 $name = api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
-                $last_post = api_convert_and_format_date($last_post_row['post_date'], null, date_default_timezone_get()).' '.get_lang('By').' '.$name;
+                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.$name;
             }
 
             echo '<td>'.$last_post.'</td>';

@@ -3010,7 +3010,6 @@ class Exercise {
 
 		$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&show=result&exerciseId='.$this->id;
 
-		require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 		$user_info = UserManager::get_user_info_by_id(api_get_user_id());
 
 		if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {

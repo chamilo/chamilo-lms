@@ -20,7 +20,6 @@ require_once 'lib/fe/dataform.class.php';
 require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'import.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php';
 require_once 'lib/results_data_generator.class.php';
 require_once 'lib/fe/resulttable.class.php';
 require_once 'lib/fe/exportgradebook.php';

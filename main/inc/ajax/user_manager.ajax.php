@@ -5,7 +5,6 @@
  */
 $language_file = array('admin', 'registration');
 require_once '../global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 $action = $_GET['a'];
 
 switch ($action) {	

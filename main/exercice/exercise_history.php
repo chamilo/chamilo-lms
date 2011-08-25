@@ -27,7 +27,6 @@ $show=(isset($_GET['show']) && $_GET['show'] == 'result')?'result':'test'; // mo
 
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 //include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 /* 	Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);

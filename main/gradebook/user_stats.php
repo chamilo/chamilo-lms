@@ -19,8 +19,6 @@ require_once 'lib/fe/usertable.class.php';
 require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/scoredisplay.class.php';
 
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-
 api_block_anonymous_users();
 block_students();
 

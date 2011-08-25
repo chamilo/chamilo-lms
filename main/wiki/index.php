@@ -1942,8 +1942,7 @@ if ($_GET['action']=='discuss') {
                 } else {
                     $author_status=get_lang('Teacher');
                 }
-
-                require_once api_get_path(INCLUDE_PATH).'/lib/usermanager.lib.php';
+                
                 $user_id=$row['userc_id'];
                 $name = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
                 $attrb=array();

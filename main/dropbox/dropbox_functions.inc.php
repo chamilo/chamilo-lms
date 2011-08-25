@@ -886,8 +886,7 @@ function store_add_dropbox() {
 	$b_send_mail = api_get_course_setting('email_alert_on_new_doc_dropbox');
 
 	if ($b_send_mail) {
-		foreach ($new_work_recipients as $recipient_id) {
-			require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php' ;
+		foreach ($new_work_recipients as $recipient_id) {			
 			$recipent_temp = UserManager :: get_user_info_by_id($recipient_id);
 			@api_mail(api_get_person_name($recipent_temp['firstname'].' '.$recipent_temp['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $recipent_temp['email'],
 				get_lang('NewDropboxFileUploaded'),

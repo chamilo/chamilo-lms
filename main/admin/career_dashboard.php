@@ -6,11 +6,8 @@ $language_file = array('courses', 'index', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'course.lib.php';
-//require_once $libpath.'usermanager.lib.php';
 require_once $libpath.'career.lib.php';
 require_once $libpath.'promotion.lib.php';
-require_once $libpath.'sessionmanager.lib.php';
 require_once $libpath.'formvalidator/FormValidator.class.php';
 
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
@@ -29,8 +26,6 @@ $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'
 $interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
 
 Display :: display_header($nameTools);
-
-
 
 $form = new FormValidator('filter_form','GET', api_get_self());
 
@@ -52,7 +47,7 @@ foreach ($careers as $item) {
     $career_select_list[$item['id']] = $item['name'];
 }
 
-$form->addElement('select', 'filter', get_lang('Career'), $career_select_list);
+$form->addElement('select', 'filter', get_lang('Career'), $career_select_list, array('id'=>'filter_1', 'class'=>'chzn-select'));
 $form->addElement('style_submit_button', 'submit', get_lang('Filter'), 'class="search"');
 
 

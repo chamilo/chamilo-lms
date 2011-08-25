@@ -1813,8 +1813,7 @@ function auto_add_page_users($assignment_type) {
 
     //data about teacher
     $userinfo=Database::get_user_info_from_id(api_get_user_id());
-    $name = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
-    require_once api_get_path(INCLUDE_PATH).'/lib/usermanager.lib.php';
+    $name = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);    
     if (api_get_user_id()<>0) {
         $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',false, true);
         $image_repository = $image_path['dir'];

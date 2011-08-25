@@ -13,7 +13,6 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'import.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php';
 api_block_anonymous_users();
 
 if (isset($_GET['userid'])) {

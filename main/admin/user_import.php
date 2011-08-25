@@ -267,7 +267,6 @@ function parse_xml_data($file) {
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';

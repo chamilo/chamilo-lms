@@ -2165,10 +2165,7 @@ class Blog {
 		}
 		$column_header[] = array (get_lang('Email'), true, '');
 		$column_header[] = array (get_lang('Register'), false, '');
-
-		include_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
-		include_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
-
+		
 		if(isset($_SESSION['session_id'])){
 			$session_id = intval($_SESSION['session_id']);
 		}

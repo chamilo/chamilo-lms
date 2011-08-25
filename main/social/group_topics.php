@@ -101,7 +101,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
         $content      = $_POST['content'];
         $group_id     = intval($_POST['group_id']);
         $parent_id    = intval($_POST['parent_id']);
-        
+                
         if ($_POST['action'] == 'reply_message_group') {
             $title = cut($content, 50);
         }
@@ -119,7 +119,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
         if (is_string($res)) {
             Display::display_error_message($res);
         }
-
+/*
         if (!empty($res)) {
             $groups_user = GroupPortalManager::get_users_by_group($group_id);
             $group_info  = GroupPortalManager::get_group_data($group_id);
@@ -139,7 +139,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
                 $recipient_email    = $group_user_info['mail'];
                 @api_mail_html($recipient_name, $recipient_email, stripslashes($subject), $message, $sender_name, $sender_email);
             }
-        }        
+        }    */    
         $topic_id = intval($_GET['topic_id']);
         if ($_POST['action'] == 'add_message_group') {
             $topic_id = $res;    

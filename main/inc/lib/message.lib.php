@@ -300,6 +300,10 @@ class MessageManager
 		    } else {
 		        $group_info = GroupPortalManager::get_group_data($group_id);		        
 		        $user_list  = GroupPortalManager::get_users_by_group($group_id, false, array(),0, 1000);
+		        
+		        //Adding more sens to the message group
+		        $subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'), $group_info['name']);
+		        
 		        $new_user_list = array();		   
                 foreach($user_list as $user_data) {
                     $new_user_list[]= $user_data['user_id'];

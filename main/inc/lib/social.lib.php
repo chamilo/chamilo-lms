@@ -442,14 +442,16 @@ class SocialManager extends UserManager {
 		$s_htlm_status_icon="";
 
 		if ($s_course_status==1) {
-			$s_htlm_status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px'));
+			$s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px'));
 		}
 		if ($s_course_status==2) {
-			$s_htlm_status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('coachs.gif', get_lang('Status').': '.get_lang('GeneralCoach'),array('style'=>'width:11px; height:11px'));
+			$s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('coachs.gif', get_lang('Status').': '.get_lang('GeneralCoach'),array('style'=>'width:11px; height:11px'));
 		}
 		if ($s_course_status==5) {
-			$s_htlm_status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
+			$s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
 		}
+		
+		$s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course'));
 
 		//display course entry
 		$result .= '<div id="div_'.$count.'">';
@@ -732,11 +734,15 @@ class SocialManager extends UserManager {
 				$my_announcement_by_user_id= intval($user_id);
 				$announcements = array();
 		    	foreach ($course_list_code as $course) {
-	    			$content = AnnouncementManager::get_all_annoucement_by_user_course($course['dbName'], $my_announcement_by_user_id);	    			
-	    			$course_info=api_get_course_info($course['code']);
-	    	  		if (!empty($content)) {
-	    				$announcements[] = '<li><a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$course['code'].'"'.Display::return_icon('announcement.png',get_lang('Announcements'),array('hspace'=>'6')).$course_info['name'].' ('.$content['count'].')</a></li>';
-	    	  		}
+		    		$course_info = api_get_course_info($course['code']);
+		    		if (!empty($course_info)) {		    		
+		    			$content = AnnouncementManager::get_all_annoucement_by_user_course($course_info['dbName'], $my_announcement_by_user_id);	    			
+		    			
+		    	  		if (!empty($content)) {	    	  			
+		    				$url = Display::url(Display::return_icon('announcement.png',get_lang('Announcements')).$course_info['name'].' ('.$content['count'].')', api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$course['code']);
+		    				$announcements[] = Display::tag('li', $url);
+		    	  		}
+		    		}
 	    	  	}
 	    	  	if (!empty($announcements)) {
 			    	echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('ToolAnnouncement').'</span></div>';

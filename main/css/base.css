@@ -2507,3 +2507,9 @@ div.admin_section h4 {
 .userportal-order-courses-link a {
     float:right;
 }
+
+.course_social_content {
+	background : #EFEFEF;
+	margin:10px 21px; 
+	padding:10px; 
+}

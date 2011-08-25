@@ -222,9 +222,7 @@ if (is_array($personal_course_list)) {
 	foreach ($personal_course_list as $my_course) {
 		if ($i<=10) {
 			$list[] = SocialManager::get_logged_user_course_html($my_course,$i);
-			//$course_list_code[] = array('code'=>$my_course['c'],'dbName'=>$my_course['db'], 'title'=>$my_course['i']); cause double
 			$course_list_code[] = array('code'=>$my_course['c'],'dbName'=>$my_course['db']);
-
 		} else {
 			break;
 		}
@@ -470,15 +468,15 @@ if ($show_full_profile) {
 	}
 
     if (count($grid_my_groups) > 0) {
-		echo '<div class="rounded_div" style="width:90%">';
-    		echo '<div><h3>'.get_lang('MyGroups').'</h3></div>';
+		echo '<div class="rounded_div" style="width:90%">';    		
     		$count_groups = 0;
     		if (count($results) == 1 ) {
-    			$count_groups = count($results).' '.get_lang('Group');
+    			$count_groups = count($results);
     		} else {
-    			$count_groups = count($results).' '.get_lang('Groups');
+    			$count_groups = count($results);
     		}
-    		echo '<div>'.$count_groups.'</div>';
+    		echo '<div><h3>'.get_lang('MyGroups').' ('.$count_groups.') </h3></div>';
+    		
     		if ($i > $max_numbers_of_group) {
     			if (api_get_user_id() == $user_id) {
     				echo '<div class="box_shared_profile_group_actions"><a href="groups.php?#tab_browse-1">'.get_lang('SeeAllMyGroups').'</a></div>';
@@ -510,8 +508,7 @@ if ($show_full_profile) {
 			foreach($list as $key=>$value) {
 				if ( empty($value[2]) ) { //if out of any session
 					echo $value[1];
-					echo '<div id="social_content'.$i.'" style="background : #EFEFEF; padding:0px; ">';
-					echo '</div>';
+					echo '<div id="social_content'.$i.'" class="course_social_content" style="display:none" ></div>';					
 					$i++;
 				}
 			}

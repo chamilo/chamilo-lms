@@ -2494,3 +2494,16 @@ div.admin_section h4 {
     width: 560px;
     z-index: 0;
 }
+
+
+.userportal-order-courses-link {
+    background-color: #F9F9F9;
+    border-radius: 10px 10px 10px 10px;
+    height: 40px;
+    margin: 5px;
+    padding: 15px;
+}
+
+.userportal-order-courses-link a {
+    float:right;
+}

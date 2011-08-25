@@ -1125,7 +1125,6 @@ div.admin_section h4 {
 
 .user_course_category {
     background-color: #E5EDF9;
-    border: 1px solid #666;
     font-weight: bold;
     color: #666;
     list-style-type: none;
@@ -2511,9 +2510,12 @@ span.form_required  {
 .userportal-catalog-item {
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
-    border-radius: 10px;
-    background-color:#F9F9F9;
-    padding:5px 10px 10px 6px;
+    border-radius: 10px;    
+    border: 1px solid #DCE5F3;    
+    
+    /*background-color:#F9F9F9; */
+    padding:0px 0px 0px 5px;
+    margin:5px;
     /* height:40px; */
 }
 
@@ -2524,16 +2526,13 @@ span.form_required  {
 }
 
 .catalog_box {
-    border: 1px solid #DCE5F3;
+    
     /* font-weight: bold; */
     color: #666;
     list-style-type: none;
     margin:5px 5px 10px 5px;
     padding: 5px;
     background-color:#FFF;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
 }
 
 

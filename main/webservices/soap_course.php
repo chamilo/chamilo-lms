@@ -4,8 +4,8 @@
  * Configures the WSCourse SOAP service
  * @package chamilo.webservices
  */
-require_once(dirname(__FILE__).'/webservice_course.php');
-require_once(dirname(__FILE__).'/soap.php');
+require_once dirname(__FILE__).'/webservice_course.php';
+require_once dirname(__FILE__).'/soap.php';
 
 /**
  * Configures the WSCourse SOAP service
@@ -49,7 +49,14 @@ $s->wsdl->addComplexType(
 
 $s->register(
 	'WSCourse.DeleteCourse',
-	array('secret_key' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string')
+	array('secret_key' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string'),
+	array(),
+    'urn:WSService',                               // namespace
+    'urn:WSService#WSCourse.DeleteCourse',         // soapaction
+    'rpc',                                         // style
+    'encoded',                                     // use
+    'Delete a course in chamilo'                   // documentation
+
 );
 
 $s->register(

@@ -260,9 +260,7 @@ if ($maxCourse > 0) {
 
 echo '<div class="maincontent" id="maincontent">'; // Start of content for logged in users.
 
-$url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
 
-echo Display::url(Display::return_icon('course_move.png', get_lang('SortMyCourses'),'','32'), $url);
 
     
 // Plugins for the my courses main area.
@@ -270,11 +268,9 @@ echo '<div id="plugin-mycourses_main">';
 api_plugin('mycourses_main');
 echo '</div>';
 
-/* System Announcements */
-/*
-$announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;
-$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
-SystemAnnouncementManager :: display_announcements($visibility, $announcement);*/
+
+/*$url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
+echo Display::div(Display::url(Display::return_icon('course_move.png', get_lang('SortMyCourses'),'','32'), $url), array('class'=>'userportal-order-courses-link'));*/
 
 if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['include'])) {
     include './home/'.$_GET['include'];
@@ -672,6 +668,10 @@ if ($show_menu) {
     if ($show_course_link) {
         if (!api_is_drh()) {
             $my_account_content .=  '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
+            
+            $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
+            $my_account_content .=  Display::url(get_lang('SortMyCourses'), $url);
+            
             if (api_get_setting('use_session_mode') == 'true') {
                 if (isset($_GET['history']) && intval($_GET['history']) == 1) {
                     $my_account_content .=  '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';

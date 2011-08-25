@@ -73,22 +73,33 @@ if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {
 	$action = $_GET['action'];
 }
 
-if ($action == 'createcoursecategory') {
+if ($action == 'createcoursecategory') {	
 	$nameTools = get_lang('CreateCourseCategory');
 }
 if ($action == 'subscribe') {
 	$nameTools = get_lang('SubscribeToCourse');
 }
 
+if ($action == 'display_random_courses' || $action == 'display_courses') {
+	$nameTools = get_lang('CourseManagement');
+}
+
+
 // Breadcrumbs.
 $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'user_portal.php', 'name' => get_lang('MyCourses'));
+
 if (empty($nameTools)) {
 	$nameTools = get_lang('CourseManagement');
 } else {
-	$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'auth/courses.php', 'name' => get_lang('CourseManagement'));
+	
+	if (!in_array($action, array('sortmycourses', 'createcoursecategory', 'display_random_courses', 'display_courses'))) {
+		$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'auth/courses.php', 'name' => get_lang('CourseManagement'));
+	}
+	if ($action == 'createcoursecategory') {
+		$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses', 'name' => get_lang('SortMyCourses'));
+	} 
     $interbreadcrumb[] = array('url' => '#', 'name' => $nameTools);
 }
-
 
 // course description controller object
 $courses_controller = new CoursesController();

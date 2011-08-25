@@ -709,6 +709,13 @@ class Display {
         }
         return self::tag('input', '',$extra_attributes);
     }
+    
+    public static function button($name, $value, $extra_attributes = array()) {
+    	if (!empty($name)) {
+    		$extra_attributes['name']= $name;
+    	}
+    	return self::tag('button', $value, $extra_attributes);
+    }
 
     /**
      * Displays an HTML select tag

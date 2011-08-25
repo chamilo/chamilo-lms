@@ -11,7 +11,7 @@ require_once 'Resource.class.php';
 
 /**
  * Add resource glossary
- * @author Isaac flores <florespaz@bidsoftperu.com>
+ * @author Isaac flores
  * @package chamilo.backup
  */
 class Glossary extends Resource

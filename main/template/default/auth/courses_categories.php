@@ -51,6 +51,7 @@ if (intval($_GET['hidden_links']) != 1) { ?>
                 } else {
                     echo '<a href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a>';
                 }
+                
                 // level 1
                 foreach ($browse_course_categories[0] as $category) {
                     $category_name = $category['name'];
@@ -63,10 +64,11 @@ if (intval($_GET['hidden_links']) != 1) { ?>
                         if (!empty($count_courses_lv1)) {
                             $category_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$category_code.'&amp;hidden_links='.$hidden_links.'">'.$category_name.'</a> ('.$count_courses_lv1.')';
                         } else {
-                            $category_link = '<a href="#">'.$category_name.' ('.$count_courses_lv1.')</a>';    
+                            $category_link = ''.$category_name.' ('.$count_courses_lv1.')';    
                         }
                     }                        
                     echo '<div>'.$category_link.'</div>';
+                    
                     // level 2
                     if (!empty($browse_course_categories[$category_code])) {
                         foreach ($browse_course_categories[$category_code] as $subcategory1) {
@@ -80,6 +82,7 @@ if (intval($_GET['hidden_links']) != 1) { ?>
                             }
                             echo '<div style="margin-left:20px;">'.$subcategory1_link.'</div>';
                         }
+                        
                         // level 3
                         if (!empty($browse_course_categories[$subcategory1_code])) {
                             foreach ($browse_course_categories[$subcategory1_code] as $subcategory2) {

@@ -1459,4 +1459,9 @@ $SecurityGuide = "Varnostni vodič";
 $OptimizationGuide = "Vodič za optimizacijo";
 $FreeBusyCalendar = "Prost/zaseden koledar";
 $ExtensionCouldBeLoaded = "Razširitev se lahko naloži";
+$ArchiveDirCleanup = "Čiščenje mape arhivov";
+$ArchiveDirCleanupDescr = "Chamilo vzdržuje kopijo večine začasnih datotek, ki so ustvarjene med izvajanjem (rezervne kopije, izvozi, kopije, ...) v mapi 'archive'. Količina datotek in njihova velikost v določenem času lahko presežeta zmožnosti sistema. Kliknite spodnji gumb za čiščenje arhivske mape sistema. Operacijo je mogoče avtomatizirati preko cron procesa, če pa to ni možno, čistite občasno mapo preko te strani.";
+$ArchiveDirCleanupProceedButton = "Nadaljuj s čiščenjem";
+$ArchiveDirCleanupSucceeded = "čiščenje mape arhivov je bilo uspešno.";
+$ArchiveDirCleanupFailed = "Iz neznanega razloge mape arhivov (archive/) ni bilo mogoče očistiti. Mapo 'chamilo/archive' očistite ročno, pustite nedotaknjeno zgolj datoteto .htaccess .";
 ?>

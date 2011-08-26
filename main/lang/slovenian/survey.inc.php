@@ -199,7 +199,7 @@ $ModifySurvey = "Spremeni vprašalnik";
 $CreateQuestionSurvey = "Ustvari vprašanje";
 $ModifyQuestionSurvey = "Spremeni vprašanje";
 $BackToSurvey = "Nazaj na vprašalnik";
-$UpdateInformation = "Ažuriraj informacije";
+$UpdateInformation = "Ažuriraj informacijo";
 $PleaseFillSurvey = "Prosim, izpolnite vprašalnik";
 $ReportingOverview = "Poročila - pregled";
 $ThereAreNotQuestionsForthisSurvey = "V tem vprašalniku trenutno ni vprašanj";
@@ -210,6 +210,6 @@ $QuestionComment = "Komentar vprašanja";
 $UnknowQuestion = "Neznano vprašanje";
 $Lastname = "Priimek";
 $Firstname = "Ime";
-$DeleteSurveyGroup = "Odstrani skupino vprašalnika";
+$DeleteSurveyGroup = "Odstrani skupino vprašalnikov";
 $ErrorOccurred = "Pojavila se je napaka.";
 ?>

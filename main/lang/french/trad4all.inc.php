@@ -1088,7 +1088,7 @@ $NextBis = "Suivant";
 $Prev = "Précédent";
 $Configuration = "Configuration";
 $ToGroup = "À un groupe social";
-$XWroteY = "%s a écrit: <i>%y</i>";
+$XWroteY = "%s a écrit: <i>%s</i>";
 $BackToGroup = "Retour au groupe";
 $GoAttendance = "Aller à la feuille de présences";
 $GoAssessments = "Aller au cahier de notes";
@@ -1122,4 +1122,6 @@ $LoadExtraData = "Charger les données des champs utilisateurs (seulement les ch
 $CourseAssistant = "Assistant";
 $SupportedScormContentMakers = "Paquets SCORM supportés";
 $Copy = "Copier";
+$EnableStartTime = "Activer date de début";
+$EnableEndTime = "Utiliser date de fin";
 ?>

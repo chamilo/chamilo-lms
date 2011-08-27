@@ -1470,4 +1470,5 @@ $ArchiveDirCleanupDescr = "Chamilo garde une copie de la plupart des fichiers te
 $ArchiveDirCleanupProceedButton = "Vidanger";
 $ArchiveDirCleanupSucceeded = "Le répertoire archive/ a été vidangé.";
 $ArchiveDirCleanupFailed = "Le répertoire archive/ n'a pas pu être vidé entièrement. Veuillez le vider manuellement en vous connectant au serveur et en supprimant tou les fichiers dans le répertoire chamilo/archive/, à l'exception du fichier caché .htaccess.";
+$LocalTimeUsingPortalTimezoneXIsY = "L'heure locale selon la zone horaire du portail (%s) est %s";
 ?>

@@ -1126,4 +1126,10 @@ $SupportedScormContentMakers = "Scorm Authoring tools supported";
 $Copy = "Copy";
 $EnableStartTime = "Enable start time";
 $EnableEndTime = "Enable end time";
+$Wrong = "Wrong";
+$Certification = "Certification";
+$CertificateOnlineLink = "Online link to certificate";
+$NewExercises = "New exercises";
+$MyAverage = "My average";
+$AllAttempts = "All attempts";
 ?>

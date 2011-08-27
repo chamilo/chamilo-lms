@@ -1461,4 +1461,10 @@ $ContributorsList = "Lista de colaboradores";
 $SecurityGuide = "Guía de seguridade";
 $OptimizationGuide = "Guía de optimización";
 $FreeBusyCalendar = "Calendario libre/ocupado";
+$ExtensionCouldBeLoaded = "A extensión está dispoñible";
+$ArchiveDirCleanup = "Limpeza do cartafol arquivos";
+$ArchiveDirCleanupDescr = "Chamilo garda unha copia dos arquivos temporais que xenera (para os backups, as exportacións, as copias, etc) dentro do cartafol archive/. Pasado certo tempo, isto pode chegar a proporcións importantes do disco duro que se está usando sen interese particular.Prema no botón para limpar o cartafol. Executarase unha limpeza manual deste cartafol. Esta operación debería ser executada regularmente por un proceso automático (cron) pero se isto é complicado no seu conterxto, pode regresar a esta páxina regularmente para eliminar os arquivos temporais que contén o cartafol archive/.";
+$ArchiveDirCleanupProceedButton = "Executar limpeza";
+$ArchiveDirCleanupSucceeded = "Os contidos do cartafol archive/ foron eliminados satisfactoriamente.";
+$ArchiveDirCleanupFailed = "Por algunha razón, non se puido limpar o cartafol archive/. Probablemente debido aos permisos. Pode limpar manualmente conectandose  ao servidor e eliminando todos os contidos do cartafol chamilo/archive/, excepto o ficherio htaccess.";
 ?>

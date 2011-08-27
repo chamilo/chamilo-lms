@@ -412,4 +412,5 @@ $InvalidQuestionType = "Invalid question type";
 $ShowScoreAndRightAnswer = "Auto-evaluation mode: show score and expected answers";
 $DoNotShowScoreNorRightAnswer = "Exam mode: Do not show score nor answers";
 $LoadUsersExtraData = "Load users' extra data";
+$StartTest = "Start test";
 ?>

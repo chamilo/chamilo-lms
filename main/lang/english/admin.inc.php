@@ -1467,4 +1467,5 @@ $ArchiveDirCleanupDescr = "Chamilo keeps a copy of most of the temporary files i
 $ArchiveDirCleanupProceedButton = "Proceed with cleanup";
 $ArchiveDirCleanupSucceeded = "The archive/ directory cleanup has been executed successfully.";
 $ArchiveDirCleanupFailed = "For some reason, the archive/ directory could not be cleaned up. Please clean it up by manually connecting to the server and deleting the contents of the chamilo/archive/ directory, except the .htaccess file.";
+$LocalTimeUsingPortalTimezoneXIsY = "The local time in the portal timezone (%s) is %s";
 ?>

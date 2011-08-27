@@ -1128,4 +1128,10 @@ $SupportedScormContentMakers = "Paquetes Scorm soportados";
 $Copy = "Copiar";
 $EnableStartTime = "Usar tiempo de publicación";
 $EnableEndTime = "Usar tiempo de fin de publicación";
+$Wrong = "Equivocado";
+$Certification = "Certificación";
+$CertificateOnlineLink = "Vínculo al certificado en línea";
+$NewExercises = "Nuevo ejercicio";
+$MyAverage = "Mi promedio";
+$AllAttempts = "Todos los intentos";
 ?>

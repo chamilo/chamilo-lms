@@ -1124,4 +1124,10 @@ $SupportedScormContentMakers = "Paquets SCORM supportés";
 $Copy = "Copier";
 $EnableStartTime = "Activer date de début";
 $EnableEndTime = "Utiliser date de fin";
+$Wrong = "Faux";
+$Certification = "Certification";
+$CertificateOnlineLink = "Lien vers le certificat";
+$NewExercises = "Nouveaux exercices";
+$MyAverage = "Ma moyenne";
+$AllAttempts = "Toutes les tentatives";
 ?>

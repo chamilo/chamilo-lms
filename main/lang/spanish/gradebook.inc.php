@@ -223,4 +223,5 @@ $TotalWeight = "Peso total";
 $SumOfActivitiesWeightMustBeEqualToTotalWeight = "La suma de pesos de todas las actividades tiene que ser igual al peso total definido en la configuración de esta evaluación, sino los alumnos no podrán alcanzar el puntaje mínimo requerido para obtener su certificado.";
 $TotalSumOfWeights = "La suma de pesos de todos los componentes de esta evaluación tiene que ser igual a este número.";
 $TotalWeightMustBeX = "La suma de todos los pesos de los componentes deve ser de %s";
+$ExportAsDOC = "Exportar como .doc";
 ?>

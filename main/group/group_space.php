@@ -282,6 +282,9 @@ if (api_get_setting('show_email_addresses') == 'true') {
 		$table->set_column_filter(3, 'email_filter');
 	}
 }
+//the order of these calls is important
+$table->set_column_filter(1, 'user_name_filter');
+$table->set_column_filter(2, 'user_name_filter');
 $table->set_column_filter(0, 'user_icon_filter');
 $table->display();
 
@@ -413,6 +416,20 @@ function user_icon_filter($user_id) {
 	$existing_image = $image_path['file'];
 	$photo = '<center><img src="'.$image_repository.$existing_image.'" alt="'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'"  width="22" height="22" title="'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'" /></center>';
 	return '<a href="../user/userInfo.php?origin='.$origin.'&amp;uInfo='.$user_id.'">'.$photo;
+}
+/**
+ * Return user profile link around the given user name.
+ * 
+ * The parameters use a trick of the sorteable table, where the first param is
+ * the original value of the column 
+ * @param   string  User name (value of the column at the time of calling)
+ * @param   string  URL parameters
+ * @param   array   Row of the "sortable table" as it is at the time of function call - we extract the user ID from there
+ * @return  string  HTML link
+ */
+function user_name_filter($name, $url_params, $row) {
+    global $origin;
+	return '<a href="../user/userInfo.php?uInfo='.$row[0].'&amp;'.$url_params.'">'.$name.'</a>';
 }
 
 // Footer

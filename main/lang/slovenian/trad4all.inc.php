@@ -1124,4 +1124,6 @@ $LoadExtraData = "Naloži podatke dodatnih uporabniških polj (morajo biti ozna�
 $CourseAssistant = "Asistent";
 $SupportedScormContentMakers = "Podprta SCORM avtorska orodja";
 $Copy = "Kopiraj";
+$EnableStartTime = "Omogoči čas začetka";
+$EnableEndTime = "Omogoči čas zaključka";
 ?>

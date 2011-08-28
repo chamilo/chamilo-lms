@@ -1092,8 +1092,7 @@ $NextBis = "Siguiente";
 $Prev = "Anterior";
 $Configuration = "Configuración";
 $ToGroup = "Para un grupo social";
-$XWroteY = "%s escribió:
-%y";
+$XWroteY = "%s escribió: <br /><i>%s</i>";
 $BackToGroup = "Regresar al grupo";
 $GoAttendance = "Ir a las asistencias";
 $GoAssessments = "Ir a las evaluaciones";
@@ -1127,4 +1126,12 @@ $LoadExtraData = "Cargar los datos de campos usuario adicionales (estos tienen q
 $CourseAssistant = "Asistente";
 $SupportedScormContentMakers = "Paquetes Scorm soportados";
 $Copy = "Copiar";
+$EnableStartTime = "Usar tiempo de publicación";
+$EnableEndTime = "Usar tiempo de fin de publicación";
+$Wrong = "Equivocado";
+$Certification = "Certificación";
+$CertificateOnlineLink = "Vínculo al certificado en línea";
+$NewExercises = "Nuevo ejercicio";
+$MyAverage = "Mi promedio";
+$AllAttempts = "Todos los intentos";
 ?>

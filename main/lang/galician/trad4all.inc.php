@@ -1125,4 +1125,8 @@ $CheckURL = "Verificar ligazón";
 $NoItem = "Todavía ningún elemento";
 $LoadExtraData = "Cargar os datos de campos de ususario adicionais (estes teñen que ser marcados como 'Filtro' para que aparezan).";
 $CourseAssistant = "Asistente";
+$SupportedScormContentMakers = "Paquetes Scorm soportados";
+$Copy = "Copiar";
+$EnableStartTime = "Usar tempo de publicación";
+$EnableEndTime = "Usar tempo de fin de publicación";
 ?>

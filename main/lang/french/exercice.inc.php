@@ -382,8 +382,8 @@ $OnlyShowScore = "Mode exercice: montrer le score uniquement";
 $ImportExcelQuiz = "Importer un exercice via Excel";
 $DownloadExcelTemplate = "Télécharger le modèle Excel";
 $ExerciseWillBeActivatedFromXToY = "L'exercice sera activé du %s au %s";
-$EnableStartTime = "Utiliser une date de début";
-$EnableEndTime = "Utiliser une date de fin";
+$EnableStartTime = "Activer date de début";
+$EnableEndTime = "Utiliser date de fin";
 $ExerciseAvailableFromX = "Exercice disponible depuis le %s";
 $ExerciseAvailableUntilX = "Exercice disponible jusqu'au %s";
 $TestLimitsAdded = "Limites de test ajoutées";
@@ -412,4 +412,5 @@ $InvalidQuestionType = "Type de question non valide";
 $ShowScoreAndRightAnswer = "Mode auto-évaluation: afficher le score et les réponses attendues sur la page finale";
 $DoNotShowScoreNorRightAnswer = "Mode examen: ne rien divulguer (ni score, ni réponses)";
 $LoadUsersExtraData = "Charger les données de profil des utilisateurs";
+$StartTest = "Démarrer le test";
 ?>

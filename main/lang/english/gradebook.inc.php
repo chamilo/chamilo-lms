@@ -19,7 +19,7 @@ $Between = "Between";
 $CurrentCategory = "Current training";
 $RootCat = "Main folder";
 $NewCategory = "New category";
-$NewEvaluation = "Add classroom assessment";
+$NewEvaluation = "Add classroom activity";
 $Weight = "Weight";
 $PickACourse = "Pick a course";
 $CategoryName = "Folder name";
@@ -223,4 +223,5 @@ $TotalWeight = "Total weight";
 $SumOfActivitiesWeightMustBeEqualToTotalWeight = "The sum of all activity weights must be equal to the total weight indicated in your assessment settings, otherwise the students will not be able to reach the sufficient score to achieve their certification.";
 $TotalSumOfWeights = "The sum of all weights of activities inside this assessment has to be equivalent to this number.";
 $TotalWeightMustBeX = "The sum of all weights of activities must be %s";
+$ExportAsDOC = "Export as .doc";
 ?>

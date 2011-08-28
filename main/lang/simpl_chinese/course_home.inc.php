@@ -29,4 +29,5 @@ $SessionIdentifier = "会话识别符";
 $SessionName = "会话名称";
 $SessionCategory = "会话分类";
 $SessionData = "会话数据";
+$ToolSearch = "搜索";
 ?>

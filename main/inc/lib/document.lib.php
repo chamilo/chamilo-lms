@@ -2188,162 +2188,15 @@ return 'application/octet-stream';
                         Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />', false);
                     }
 
-                    //@todo move this code somewhere else a.k.a Rework search module
-                    if ((api_get_setting('search_enabled') == 'true') && $index_document && !empty($docid)) {
-                        $table_document = Database::get_course_table(TABLE_DOCUMENT);
-                        $result = Database::query("SELECT * FROM $table_document WHERE id = '$docid' LIMIT 1");
-                        if (Database::num_rows($result) == 1) {
-                            $row = Database::fetch_array($result);
-                            $doc_path = api_get_path(SYS_COURSE_PATH).$course_dir.$row['path'];
-                            //TODO: mime_content_type is deprecated, fileinfo php extension is enabled by default as of PHP 5.3.0
-                            // now versions of PHP on Debian testing(5.2.6-5) and Ubuntu(5.2.6-2ubuntu) are lower, so wait for a while
-                            $doc_mime = mime_content_type($doc_path);
-                            //echo $doc_mime;
-                            //TODO: more mime types
-                            $allowed_mime_types = array('text/plain', 'application/pdf', 'application/postscript', 'application/msword', 'text/html', 'text/rtf', 'application/vnd.ms-powerpoint', 'application/vnd.ms-excel');
-
-                            // mime_content_type does not detect correctly some formats that are going to be supported for index, so an extensions array is used by the moment
-                            if (empty($doc_mime)) {
-                                $allowed_extensions = array('ppt', 'pps', 'xls');
-                                $extensions = preg_split("/[\/\\.]/", $doc_path) ;
-                                $doc_ext = strtolower($extensions[count($extensions) - 1]);
-                                if (in_array($doc_ext, $allowed_extensions)) {
-                                    switch ($doc_ext) {
-                                        case 'ppt':
-                                        case 'pps':
-                                            $doc_mime = 'application/vnd.ms-powerpoint';
-                                            break;
-                                        case 'xls':
-                                            $doc_mime = 'application/vnd.ms-excel';
-                                            break;
-                                    }
-                                }
-                            }
-
-                            //@todo move this nightmare in a search controller or something like that!!! J.M
-                             
-                            if (in_array($doc_mime, $allowed_mime_types) && isset($index_document) && $index_document) {
-                                $file_title = $row['title'];
-                                $file_content = self::get_text_content($doc_path, $doc_mime);
-                                $courseid = api_get_course_id();
-                                $lang = isset($_POST['language']) ? Database::escape_string($_POST['language']) : 'english';
-
-                                require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
-                                require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
-
-                                $ic_slide = new IndexableChunk();
-                                $ic_slide->addValue('title', $file_title);
-                                $ic_slide->addCourseId($courseid);
-                                $ic_slide->addToolId(TOOL_DOCUMENT);
-                                $xapian_data = array(
-                                SE_COURSE_ID => $courseid,
-                                SE_TOOL_ID   => TOOL_DOCUMENT,
-                                SE_DATA      => array('doc_id' => $docid),
-                                SE_USER      => api_get_user_id(),
-                                );
-
-                                //var_dump($xapian_data); echo '<pre>';
-
-                                $ic_slide->xapian_data = serialize($xapian_data);
-                                $di = new DokeosIndexer();
-                                $return = $di->connectDb(null, null, $lang);
-                                 
-                                $specific_fields = get_specific_field_list();
-
-                                // process different depending on what to do if file exists
-                                /**
-                                * FIXME: Find a way to really verify if the file had been
-                                * overwriten. Now all work is done at
-                                * handle_uploaded_document() and it's difficult to verify it
-                                */
-                                if (!empty($if_exists) && $if_exists == 'overwrite') {
-                                    // overwrite the file on search engine
-                                    // actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one
-
-                                    // Get search_did
-                                    $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-                                    $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
-                                    $sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_DOCUMENT, $docid);
-
-                                    $res = Database::query($sql);
-
-                                    if (Database::num_rows($res) > 0) {
-                                        $se_ref = Database::fetch_array($res);
-                                        $di->remove_document($se_ref['search_did']);
-                                        $all_specific_terms = '';
-                                        foreach ($specific_fields as $specific_field) {
-                                            delete_all_specific_field_value($courseid, $specific_field['id'], TOOL_DOCUMENT, $docid);
-                                            // Update search engine
-                                            $sterms = trim($_REQUEST[$specific_field['code']]);
-                                            $all_specific_terms .= ' '. $sterms;
-                                            $sterms = explode(',', $sterms);
-                                            foreach ($sterms as $sterm) {
-                                                $sterm = trim($sterm);
-                                                if (!empty($sterm)) {
-                                                    $ic_slide->addTerm($sterm, $specific_field['code']);
-                                                    // updated the last param here from $value to $sterm without being sure - see commit15464
-                                                    add_specific_field_value($specific_field['id'], $courseid, TOOL_DOCUMENT, $docid, $sterm);
-                                                }
-                                            }
-                                        }
-                                        // Add terms also to content to make terms findable by probabilistic search
-                                        $file_content = $all_specific_terms .' '. $file_content;
-
-                                        $ic_slide->addValue('content', $file_content);
-                                        $di->addChunk($ic_slide);
-                                        // Index and return a new search engine document id
-                                        $did = $di->index();
-                                        //var_dump($did);
-                                        if ($did) {
-                                            // update the search_did on db
-                                            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-                                            $sql = 'UPDATE %s SET search_did=%d WHERE id=%d LIMIT 1';
-                                            $sql = sprintf($sql, $tbl_se_ref, (int)$did, (int)$se_ref['id']);
-                                            Database::query($sql);
-                                        }
-                                    }
-                                } else {
-                                    // Add all terms
-                                    $all_specific_terms = '';
-                                    foreach ($specific_fields as $specific_field) {
-                                        if (isset($_REQUEST[$specific_field['code']])) {
-                                            $sterms = trim($_REQUEST[$specific_field['code']]);
-                                            $all_specific_terms .= ' '. $sterms;
-                                            if (!empty($sterms)) {
-                                                $sterms = explode(',', $sterms);
-                                                foreach ($sterms as $sterm) {
-                                                    $ic_slide->addTerm(trim($sterm), $specific_field['code']);
-                                                    add_specific_field_value($specific_field['id'], $courseid, TOOL_DOCUMENT, $docid, $sterm);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    // Add terms also to content to make terms findable by probabilistic search
-                                    $file_content = $all_specific_terms .' '. $file_content;
-                                    $ic_slide->addValue('content', $file_content);
-                                    $di->addChunk($ic_slide);
-                                    // Index and return search engine document id
-                                    $did = $di->index();
-                                    if ($did) {
-                                        // Save it to db
-                                        $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-                                        $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
-                                            VALUES (NULL , \'%s\', \'%s\', %s, %s)';
-                                        $sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_DOCUMENT, $docid, $did);
-                                        Database::query($sql);
-                                    }
-                                }
-                            }
-                        }
-                    } // end of document indexation loop
-
                     /*// Check for missing images in html files
                      $missing_files = check_for_missing_files($base_work_dir.$new_path);
                      if ($missing_files && $show_output) {
                      // Show a form to upload the missing files
                      Display::display_normal_message(build_missing_files_form($missing_files, $path, $files['file']['name']), false);
                      }*/
-
+                    if ($index_document) {
+                        $idx_doc = self::index_document($docid,$course_info['code'],null,api_get_user_id(),Database::escape_string($_POST['language']),$if_exists);
+                    }
                     if (!empty($docid) && is_numeric($docid)) {
                         $document_data = self::get_document_data_by_id($docid, $course_info['code']);
                         return $document_data;
@@ -2900,6 +2753,178 @@ return 'application/octet-stream';
     	} else {
     		return false;
     	}    	
-    }    
+    }
+    /**
+     * Index a given document
+     * @param   int     Document ID inside its corresponding course
+     * @param   string  Course code
+     * @param   int     Session ID (not used yet)
+     * @param   string  Language of document's content (defaults to course language)
+     * @param   string  What to do if the file already exists (default or overwrite)
+     * @return  void
+     */
+    public function index_document($docid, $course_code, $session_id=0, $lang='english', $if_exists = '') {
+        
+        if (api_get_setting('search_enabled') !== 'true') {
+        	return false;
+        }
+        if (empty($docid) or $docid != intval($docid)) {
+        	return false;
+        }
+        if (empty($session_id)) {
+        	$session_id = api_get_session_id();
+        }
+        
+        $course_info      = api_get_course_info($course_code);
+        $course_dir       = $course_info['path'].'/document';
+        $sys_course_path  = api_get_path(SYS_COURSE_PATH);
+        $base_work_dir    = $sys_course_path.$course_dir;
+        
+        $table_document = Database::get_course_table(TABLE_DOCUMENT);
+        $result = Database::query("SELECT path, title FROM $table_document WHERE id = '$docid' LIMIT 1");
+        if (Database::num_rows($result) == 1) {
+            $row = Database::fetch_array($result);
+            $doc_path = api_get_path(SYS_COURSE_PATH).$course_dir.$row['path'];
+            //TODO: mime_content_type is deprecated, fileinfo php extension is enabled by default as of PHP 5.3.0
+            // now versions of PHP on Debian testing(5.2.6-5) and Ubuntu(5.2.6-2ubuntu) are lower, so wait for a while
+            $doc_mime = mime_content_type($doc_path);
+            //echo $doc_mime;
+            $allowed_mime_types = self::file_get_mime_type(true);
+
+            // mime_content_type does not detect correctly some formats that are going to be supported for index, so an extensions array is used for the moment
+            if (empty($doc_mime)) {
+                $allowed_extensions = array('doc', 'docx', 'ppt', 'pptx', 'pps', 'ppsx', 'xls', 'xlsx');
+                $extensions = preg_split("/[\/\\.]/", $doc_path) ;
+                $doc_ext = strtolower($extensions[count($extensions) - 1]);
+                if (in_array($doc_ext, $allowed_extensions)) {
+                    switch ($doc_ext) {
+                        case 'ppt':
+                        case 'pps':
+                            $doc_mime = 'application/vnd.ms-powerpoint';
+                            break;
+                        case 'xls':
+                            $doc_mime = 'application/vnd.ms-excel';
+                            break;
+                    }
+                }
+            }
+
+            //@todo move this nightmare in a search controller or something like that!!! J.M
+             
+            if (in_array($doc_mime, $allowed_mime_types)) {
+                $file_title = $row['title'];
+                $file_content = self::get_text_content($doc_path, $doc_mime);
+                $course_code = Database::escape_string($course_code);
+
+                require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
+                require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
+
+                $ic_slide = new IndexableChunk();
+                $ic_slide->addValue('title', $file_title);
+                $ic_slide->addCourseId($course_code);
+                $ic_slide->addToolId(TOOL_DOCUMENT);
+                $xapian_data = array(
+                SE_COURSE_ID => $course_code,
+                SE_TOOL_ID   => TOOL_DOCUMENT,
+                SE_DATA      => array('doc_id' => $docid),
+                SE_USER      => api_get_user_id(),
+                );
+
+                //var_dump($xapian_data); echo '<pre>';
+
+                $ic_slide->xapian_data = serialize($xapian_data);
+                $di = new DokeosIndexer();
+                $return = $di->connectDb(null, null, $lang);
+                 
+                $specific_fields = get_specific_field_list();
+
+                // process different depending on what to do if file exists
+                /**
+                * FIXME: Find a way to really verify if the file had been
+                * overwriten. Now all work is done at
+                * handle_uploaded_document() and it's difficult to verify it
+                */
+                if (!empty($if_exists) && $if_exists == 'overwrite') {
+                    // Overwrite the file on search engine
+                    // Actually, it consists on a delete of terms from db, 
+                    // insert new ones, create a new search engine document, 
+                    // and remove the old one
+
+                    // Get search_did
+                    $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+                    $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
+                    $sql = sprintf($sql, $tbl_se_ref, $course_code, TOOL_DOCUMENT, $docid);
+
+                    $res = Database::query($sql);
+
+                    if (Database::num_rows($res) > 0) {
+                        $se_ref = Database::fetch_array($res);
+                        $di->remove_document($se_ref['search_did']);
+                        $all_specific_terms = '';
+                        foreach ($specific_fields as $specific_field) {
+                            delete_all_specific_field_value($course_code, $specific_field['id'], TOOL_DOCUMENT, $docid);
+                            // Update search engine
+                            $sterms = trim($_REQUEST[$specific_field['code']]);
+                            $all_specific_terms .= ' '. $sterms;
+                            $sterms = explode(',', $sterms);
+                            foreach ($sterms as $sterm) {
+                                $sterm = trim($sterm);
+                                if (!empty($sterm)) {
+                                    $ic_slide->addTerm($sterm, $specific_field['code']);
+                                    // updated the last param here from $value to $sterm without being sure - see commit15464
+                                    add_specific_field_value($specific_field['id'], $course_code, TOOL_DOCUMENT, $docid, $sterm);
+                                }
+                            }
+                        }
+                        // Add terms also to content to make terms findable by probabilistic search
+                        $file_content = $all_specific_terms .' '. $file_content;
+
+                        $ic_slide->addValue('content', $file_content);
+                        $di->addChunk($ic_slide);
+                        // Index and return a new search engine document id
+                        $did = $di->index();
+                        //var_dump($did);
+                        if ($did) {
+                            // update the search_did on db
+                            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+                            $sql = 'UPDATE %s SET search_did=%d WHERE id=%d LIMIT 1';
+                            $sql = sprintf($sql, $tbl_se_ref, (int)$did, (int)$se_ref['id']);
+                            Database::query($sql);
+                        }
+                    }
+                } else {
+                    // Add all terms
+                    $all_specific_terms = '';
+                    foreach ($specific_fields as $specific_field) {
+                        if (isset($_REQUEST[$specific_field['code']])) {
+                            $sterms = trim($_REQUEST[$specific_field['code']]);
+                            $all_specific_terms .= ' '. $sterms;
+                            if (!empty($sterms)) {
+                                $sterms = explode(',', $sterms);
+                                foreach ($sterms as $sterm) {
+                                    $ic_slide->addTerm(trim($sterm), $specific_field['code']);
+                                    add_specific_field_value($specific_field['id'], $course_code, TOOL_DOCUMENT, $docid, $sterm);
+                                }
+                            }
+                        }
+                    }
+                    // Add terms also to content to make terms findable by probabilistic search
+                    $file_content = $all_specific_terms .' '. $file_content;
+                    $ic_slide->addValue('content', $file_content);
+                    $di->addChunk($ic_slide);
+                    // Index and return search engine document id
+                    $did = $di->index();
+                    if ($did) {
+                        // Save it to db
+                        $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+                        $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
+                            VALUES (NULL , \'%s\', \'%s\', %s, %s)';
+                        $sql = sprintf($sql, $tbl_se_ref, $course_code, TOOL_DOCUMENT, $docid, $did);
+                        Database::query($sql);
+                    }
+                }
+            }
+        }
+    }
 }
 //end class DocumentManager

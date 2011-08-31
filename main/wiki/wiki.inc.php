@@ -1720,11 +1720,13 @@ function export_to_pdf($id, $course_code) {
     $content_pdf = api_html_entity_decode($data['content'], ENT_QUOTES, api_get_system_encoding());
 	
 	//clean wiki links
+	
 	$clean_pdf_content = trim(preg_replace("/\[\[|\]\]/", " ", $content_pdf));
 	
-	//@todo this line breaks the pdf export	
-    //$array_clean_pdf_content= explode('|', $clean_pdf_content);
-        
+	//@todo this line breaks the pdf export. TODO:clean compound wiki names	
+    //$array_clean_pdf_content= explode('|', $clean_pdf_content);//delete and reworking
+    //$clean_pdf_content = $array_clean_pdf_content[1];//delete and reworking
+		
     $content_pdf= $clean_pdf_content;		
     $title_pdf   = api_html_entity_decode($data['title'], ENT_QUOTES, api_get_system_encoding());
     $title_pdf   = api_utf8_encode($title_pdf, api_get_system_encoding());

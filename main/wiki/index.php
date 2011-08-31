@@ -869,17 +869,19 @@ if ($_GET['action']=='searchpages') {
 		if (! $_GET['SearchPages_table_page_nr']) {
 			$_GET['search_term']=$_POST['search_term'];
 			$_GET['search_content']=$_POST['search_content'];
+			$_GET['all_vers']=$_POST['all_vers'];
 		}
-		display_wiki_search_results(api_htmlentities($_GET['search_term']),api_htmlentities($_GET['search_content']));
+		display_wiki_search_results(api_htmlentities($_GET['search_term']),api_htmlentities($_GET['search_content']),api_htmlentities($_GET['all_vers']));
 	} else {
 	
 		// initiate the object
-		$form = new FormValidator('wiki_search','post', api_get_self().'?cidReq='.api_htmlentities($_GET['cidReq']).'&action='.api_htmlentities($_GET['action']).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'&mode_table=yes1&search_term='.api_htmlentities($_GET['search_term']).'&search_content='.api_htmlentities($_GET['search_content']));
-	
+		$form = new FormValidator('wiki_search','post', api_get_self().'?cidReq='.api_htmlentities($_GET['cidReq']).'&action='.api_htmlentities($_GET['action']).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'&mode_table=yes1&search_term='.api_htmlentities($_GET['search_term']).'&search_content='.api_htmlentities($_GET['search_content']).'&all_vers='.api_htmlentities($_GET['all_vers']));
+
 		// settting the form elements
 	
 		$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles" id="search_title"');
 		$form->addElement('checkbox', 'search_content', null, get_lang('AlsoSearchContent'));
+		$form->addElement('checkbox', 'all_vers', null, get_lang('IncludeAllVersions'));
 		$form->addElement('style_submit_button', 'SubmitWikiSearch', get_lang('Search'), 'class="search"');
 	
 		// setting the rules
@@ -888,7 +890,7 @@ if ($_GET['action']=='searchpages') {
 		if ($form->validate()) {
 			$form->display();
 			$values = $form->exportValues();
-			display_wiki_search_results($values['search_term'], $values['search_content']);
+			display_wiki_search_results($values['search_term'], $values['search_content'], $values['all_vers']);
 		} else {
 			$form->display();
 		}

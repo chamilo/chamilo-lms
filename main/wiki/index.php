@@ -315,15 +315,15 @@ echo '<div id="wikiwrapper">';
 ?>
 <script type="text/javascript">
 function menu_wiki(){
- if(document.getElementById("menuwiki").style.width=="160px"){
+ if(document.getElementById("menuwiki").style.width=="170px"){
 	var w=74;
 	var b=2;
 	var h=30;
  }
  else{
-	 var w=160;
+	 var w=170;
 	 var b=1;
-	 var h=200;
+	 var h=220;
  }
 
 document.getElementById("menuwiki").style.width=w+"px";

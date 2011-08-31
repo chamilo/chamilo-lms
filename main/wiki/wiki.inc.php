@@ -912,23 +912,25 @@ function word_count($document) {
     $search = array(
     '@<script[^>]*?>.*?</script>@si',
     '@<style[^>]*?>.*?</style>@siU',
+	'@<div id="player.[^>]*?>.*?</div>@',
     '@<![\s\S]*?--[ \t\n\r]*>@'
     );
 
     $document = preg_replace($search, '', $document);
 
       # strip all html tags
-      $wc = strip_tags($document);
-
-    //remove words and remove one letter words commented temporarily because of problems with utf8 support. TODO: fix and enable
-      # remove 'words' that don't consist of alphanumerical characters or punctuation
-      //$pattern = "#[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]+#";
-      //$wc = trim(preg_replace($pattern, " ", $wc));
-      # remove one-letter 'words' that consist only of punctuation
-      //$wc = trim(preg_replace("#\s*[(\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]\s*#", " ", $wc)); //
-
-      # remove superfluous whitespace
-      $wc = preg_replace("/\s\s+/", " ", $wc);
+      $wc = strip_tags($document);	  
+      $wc = html_entity_decode(utf8_encode($wc)); //html_entity_decode($wc,ENT_NOQUOTES, 'UTF-8') does not work ok
+	  
+	  # remove 'words' that don't consist of alphanumerical characters or punctuation
+ 	  $pattern = "#[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]+#";	
+      $wc = trim(preg_replace($pattern, " ", $wc));
+	  	  
+	  # remove one-letter 'words' that consist only of punctuation
+      $wc = trim(preg_replace("#\s*[(\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]\s*#", " ", $wc));
+	  
+	  # remove superfluous whitespace
+      $wc = preg_replace("/\s\s+/", " ", $wc);	
 
       # split string into an array of words
       $wc = explode(" ", $wc);

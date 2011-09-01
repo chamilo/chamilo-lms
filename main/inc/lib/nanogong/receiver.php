@@ -15,7 +15,7 @@
 require_once '../../../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
-//security. Nanogong need less security
+//security. Nanogong need less security because under Firefox, Chrome..., not save user_id...
 if(api_get_setting('enable_nanogong') == 'false'){
 	api_protect_course_script();
 	api_block_anonymous_users();

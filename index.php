@@ -152,6 +152,20 @@ Display::display_header($header_title);
 
 echo '<div id="content" class="maincontent">';
 
+//check if javascript is enabled
+echo '<noscript>';
+echo Display::display_error_message(get_lang("NoJavascript"));
+echo '</noscript>';
+
+//check if cookies are enabled
+?>
+<script language="JavaScript">
+if(navigator.cookieEnabled==false){
+	document.writeln('<?php Display::display_error_message(get_lang("NoCookies")); ?>');
+}
+</script>
+<?php
+
 // Plugins for loginpage_main AND campushomepage_main.
 if (!api_get_user_id()) {
     api_plugin('loginpage_main');

@@ -856,7 +856,7 @@ function is_browser_viewable($file_extension) {
 		'txt', 'log',
         'mp4', 'ogg', 'ogv', 'ogx', 'mpg', 'mpeg', 'mov', 'avi', 'webm', 'wmv',
 		'mp3', 'oga', 'wav', 'au', 'wma', 'mid', 'kar'
-    )
+    );
 	
 	/*
 	//TODO: make a admin swich to strict mode

@@ -20,7 +20,6 @@ require_once api_get_path(LIBRARY_PATH).'auth.lib.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'courses_controller.php';
 //require_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
@@ -28,26 +27,30 @@ if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
 	$htmlHeadXtra[] = api_get_jquery_ui_js();
     $htmlHeadXtra[] = '
     <script language="javascript">
-        $(\'a.ajax\').live(\'click\', function() {
-            var url     = this.href;
-            var dialog  = $("#dialog");
-            if ($("#dialog").length == 0) {
-                dialog  = $(\'<div id="dialog" style="display:hidden"></div>\').appendTo(\'body\');
-            }
-                                
-            $("#dialog").dialog({modal :true, width:540, height:400});
-            
-            // load remote content
-            dialog.load(
-                    url,                    
-                    {},
-                    function(responseText, textStatus, XMLHttpRequest) {
-                        dialog.dialog();
-                    }
-                );
-            //prevent the browser to follow the link
-            return false;
+    	$(document).ready(function() {    
+	        $(\'.ajax\').live(\'click\', function() {
+	            var url     = this.href;
+	            var dialog  = $("#dialog");
+	            if ($("#dialog").length == 0) {
+	                dialog  = $(\'<div id="dialog" style="display:hidden"></div>\').appendTo(\'body\');
+	            }
+	            
+	            // load remote content
+	            dialog.load(
+	                    url,                    
+	                    {},
+	                    function(responseText, textStatus, XMLHttpRequest) {
+	                        dialog.dialog({
+	                            modal	: true, 
+	            				width	: 540, 
+	            				height	: 400,              
+	                        });	                    
+				});
+	            //prevent the browser to follow the link
+	            return false;
+	        });
         });
+        
     </script>';
 }
 

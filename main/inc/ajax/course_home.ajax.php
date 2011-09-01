@@ -73,8 +73,7 @@ switch ($action) {
 		require_once '../global.inc.php';			
         if (api_is_anonymous()) {
             exit;
-        }
-		require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php' ;
+        }		
 		
 		// Get the name of the database course.
 		$database_course        = CourseManager::get_name_database_course($_GET['code']);

@@ -104,7 +104,7 @@ error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 // Upgrading from any subversion of 1.6 is just like upgrading from 1.6.5
 $update_from_version_6 = array('1.6', '1.6.1', '1.6.2', '1.6.3', '1.6.4', '1.6.5');
 // Upgrading from any subversion of 1.8 avoids the additional step of upgrading from 1.6
-$update_from_version_8 = array('1.8', '1.8.2', '1.8.3', '1.8.4', '1.8.5', '1.8.6', '1.8.6.1', '1.8.6.2','1.8.7','1.8.7.1','1.8.8','1.8.8.2');
+$update_from_version_8 = array('1.8', '1.8.2', '1.8.3', '1.8.4', '1.8.5', '1.8.6', '1.8.6.1', '1.8.6.2','1.8.7','1.8.7.1','1.8.8','1.8.8.2', '1.8.8.4');
 
 $my_old_version = '';
 $tmp_version = get_config_param('dokeos_version');
@@ -119,9 +119,9 @@ if (!empty($_POST['old_version'])) {
 	$my_old_version = $dokeos_version;
 }
 
-$new_version 		= '1.8.8.4';
-$new_version_stable = true;
-$new_version_major 	= false;
+$new_version 		= '1.9.0';
+$new_version_stable = false;
+$new_version_major 	= true;
 $software_name 		= 'Chamilo';
 $software_url 		= 'http://www.chamilo.org/';
 
@@ -789,6 +789,12 @@ if ($_POST['step2']) {
             case '1.8.8.2':
                 //Only updates the configuration.inc.php with the new version 
                 include 'update-configuration.inc.php';
+			case '1.8.8.4':				
+				include 'update-db-1.8.8-1.9.0.inc.php';
+				//include 'update-files-1.8.8-1.9.0.inc.php';
+				//Only updates the configuration.inc.php with the new version
+				include 'update-configuration.inc.php';
+				
                 break;
             default:
 				break;

@@ -964,25 +964,33 @@ class Display {
         });  */
     }
 
-    public static function table($headers, $rows) {
-        /*
-        require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php';
-        $table = new HTML_Table(array('class' => 'data_table'));
+    public static function table($headers, $rows, $attributes = array()) {
+        
+    	if (empty($attributes)) {
+    		$attributes['class'] = 'data_table';
+    	}
+        //require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php';
+        $table = new HTML_Table($attributes);
         $row = 0;
         $column = 0;
 
         //Course headers
-        foreach ($headers as $item) {
-            $table->setHeaderContents($row, $column, $item);
-            $column++;
+        if (!empty($headers)) {
+	        foreach ($headers as $item) {
+	            $table->setHeaderContents($row, $column, $item);
+	            $column++;
+	        }
+	        $row = 1;
+	        $column = 0;
         }
-        $row = 1;
-        $column = 0;
-        foreach($rows as $content) {
-            $table->setCellContents($row, $column, $content);
-            $column++;
+       
+        if (!empty($rows)) {
+	        foreach($rows as $content) {
+	            $table->setCellContents($row, $column, $content);
+	            $column++;
+	        }
         }
-        return $table->toHtml();*/
+        return $table->toHtml();
     }
 
     /**

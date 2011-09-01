@@ -276,7 +276,7 @@ foreach ($questionList as $questionId) {
 	$quesId 			= $objQuestionTmp->selectId();	
 	        	
  	if ($show_results) { 	    
-	    echo $objQuestionTmp->return_header($feedback_type, $counter);
+	    echo $objQuestionTmp->return_header($counter);
 	}
 	$counter++;
 	

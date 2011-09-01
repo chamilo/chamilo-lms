@@ -1509,8 +1509,12 @@ class Exercise {
 	 * @param array question list
 
 	 */
-	public function save_stat_track_exercise_info($clock_expired_time = 0, $safe_lp_id = 0, $safe_lp_item_id = 0, $safe_lp_item_view_id = 0, $questionList = array(), $weight) {
+	public function save_stat_track_exercise_info($clock_expired_time = 0, $safe_lp_id = 0, $safe_lp_item_id = 0, $safe_lp_item_view_id = 0, $questionList = array(), $weight = 0) {
 		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+		$safe_lp_id 			= intval($safe_lp_id);
+		$safe_lp_item_id 		= intval($safe_lp_item_id);
+		$safe_lp_item_view_id 	= intval($safe_lp_item_view_id);
+		
 		if (empty($safe_lp_id)) {
 			$safe_lp_id = 0;
 		}
@@ -1528,63 +1532,72 @@ class Exercise {
 			$sql_fields_values = "";
 		}
 		array_map('intval', $questionList);
+		
+		$weight = Database::escape_string($weight);
 		if ($this->type == ONE_PER_PAGE) {
 			$sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status,session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, exe_weighting)
                     VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "', '" . api_get_utc_datetime() . "', '$safe_lp_id', '$safe_lp_item_id', '$weight' )";
 		} else {
-			$sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
-                    VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . api_get_utc_datetime() . "', '$safe_lp_id', '$safe_lp_item_id' , '$weight' )";
+			$sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status, session_id, start_date, orig_lp_id, orig_lp_item_id)
+                    VALUES($sql_fields_values '".$this->id."','".api_get_user_id()."','".api_get_course_id()."','incomplete','".api_get_session_id()."','".api_get_utc_datetime()."', '$safe_lp_id', '$safe_lp_item_id')";
 		}
 		Database::query($sql);
+		$id = Database::insert_id();
+		return $id;		
 	}
 
-	public function show_button($nbrQuestions, $questionNum, $exerciseId) {
-		global $origin, $learnpath_id,$learnpath_item_id;
-		$nbrQuestions = intval($nbrQuestions);
-		$exerciseId   = intval($exerciseId);
-
-		$html = '';
-		$html =  '<div style="margin-top:-10px;">';
-		$confirmation_alert = $this->type == 1? " onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\" ":"";
-		$submit_btn = '<button class="next" type="submit" name="submit" name="submit_save" id="submit_save" '.$confirmation_alert.' >';
-		$hotspot_get = isset($_POST['hotspot'])?Security::remove_XSS($_POST['hotspot']):null;
-
-		if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {
-			$submit_btn = '';
-			$html .='<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.js" type="text/javascript"></script>';
-			$html .='<style type="text/css" media="all">@import "' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css";</style>';
-			$html .='<style type="text/css" media="all">@import "' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css";</style>';
-			$html .= api_get_jquery_ui_js();
-			$html .='
-            <script>
-            $(function() {
-                $(".button").button();
-            });
-            </script>';
-			//$html .='<br /><a href="exercise_submit_modal.php?learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&origin='.$origin.'&hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&exerciseId='.$exerciseId.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox button" id="validationButton">';
-			$html .='<a href="exercise_submit_modal.php?learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&origin='.$origin.'&hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$this->type.'&exerciseId='.$exerciseId.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox button" id="validationButton">';
+	public function show_button($question_id, $questionNum) {	
+		global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
+		$nbrQuestions = count($this->get_validated_question_list());		
+		 
+		$html = $label = '';
+		$confirmation_alert = $this->type == ALL_ON_ONE_PAGE? " onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\" ":"";
+		$hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']):null;
+	
+		if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {			
+			$html .='<script>
+	            $(function() {
+	                $(".button").button();
+	            });
+	            </script>';	
+			$html .='<a href="exercise_submit_modal.php?learnpath_id='.$safe_lp_id.'&learnpath_item_id='.$safe_lp_item_id.'&learnpath_item_view_id='.$safe_lp_item_view_id.'&origin='.$origin.'&hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$this->type.'&exerciseId='.$this->id.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox button" id="validationButton">';
 			$html .= get_lang('ValidateAnswer').'</a>';
 			$html .='<br />';
 			 
 		} else {
-			if (api_is_allowed_to_session_edit() ) {
+			//User
+			if (api_is_allowed_to_session_edit()) {
 				if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
-					$submit_btn .= get_lang('ValidateAnswer');
-					$name_btn 	= get_lang('ValidateAnswer');
+					$label = get_lang('ValidateAnswer');
+					$class = 'accept';
 				} else {
-					$submit_btn .= get_lang('NextQuestion');
-					$name_btn = get_lang('NextQuestion');
+					$label = get_lang('NextQuestion');
+					$class = 'next';
 				}
-				$submit_btn .= '</button>';
-				if ($this->expired_time != 0) {
-					$html .= $submit_btn ='<button class="next" type="submit" id="submit_save" value="'.$name_btn.'" name="submit_save"/>'.$name_btn.'</button>';
+				 
+				/*if ($this->type == ALL_ON_ONE_PAGE && $nbrQuestions > 1) {
+					$all_button = '<a href="javascript://" class="a_button orange medium" onclick="save_now_all(); ">'.get_lang('SaveForNow').'</a>';
+					$all_button .= '&nbsp;<span id="save_all_reponse"></span>';
+					$html .= $all_button;
+				}*/
+	
+				if ($this->type == ONE_PER_PAGE) {
+					$all_button = '<a href="javascript://" class="a_button blue medium" onclick="save_now('.$question_id.'); ">'.$label.'</a>';
+					//$all_button .= '&nbsp;<span id="save_all_reponse"></span>';
+					$all_button .= '<span id="save_for_now_'.$question_id.'"></span>&nbsp;';
+					$html .= $all_button;
 				} else {
-					$html .= $submit_btn;
+					$all_button = '<a href="javascript://" class="a_button green" onclick="validate_all(); ">'.get_lang('ValidateAnswer').'</a>';
+					$all_button .= '&nbsp;<span id="save_all_reponse"></span>';
+					$html .= $all_button;
 				}
+	
 			}
-		}
-		$html .= '</div>';  //margin top -10
+		}		
+		
+		$html =  Display::span($html, array('class'=>'exercise_button'));
 		return $html;
+		
 	}
 
 	/**
@@ -1779,7 +1792,7 @@ class Exercise {
 		if ($debug) error_log('manage_answer $from_database '.$from_database);
 		if ($debug) error_log('manage_answer $show_result '.$show_result);
 		if ($debug) error_log('manage_answer $propagate_neg '.$propagate_neg);
-		if ($debug) error_log('manage_answer $$hotspot_delineation_result '.print_r($hotspot_delineation_result, 1));
+		if ($debug) error_log('manage_answer $hotspot_delineation_result '.print_r($hotspot_delineation_result, 1));
 			
 		$extra_data = array();
 		$html = '';
@@ -1894,8 +1907,7 @@ class Exercise {
 						$studentChoice  =$choice[$numAnswer];
 					} else {
 						$studentChoice  =$choice[$numAnswer];
-					}
-					
+					}					
 				
 					if (!empty($studentChoice)) {
 						if ($studentChoice == $answerCorrect ) {
@@ -2242,12 +2254,14 @@ class Exercise {
 					}
 					// for hotspot with no order
 				case HOT_SPOT :
+					
 					if ($from_database) {
+						
 						if ($show_result) {
 							$TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 							$query = "SELECT hotspot_correct FROM ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = '".$exeId."' and hotspot_question_id= '".$questionId."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
-							$resq=Database::query($query);
-							$studentChoice = Database::result($resq,0,"hotspot_correct");
+							$resq = Database::query($query);
+							$studentChoice = Database::result($resq,0,"hotspot_correct");							
 						}
 					}  else {
 						$studentChoice = $choice[$answerId];
@@ -2318,7 +2332,7 @@ class Exercise {
 					//display answers (if not matching type, or if the answer is correct)
 					if ($answerType != MATCHING || $answerCorrect) {
 						if (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION))) {
-							if ($origin!='learnpath') {
+							if ($origin != 'learnpath') {
 								ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
 							}
 						} elseif($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
@@ -2743,7 +2757,7 @@ class Exercise {
         					'overlap_color' => $overlap_color, 'missing_color'=>$missing_color, 'excess_color'=> $excess_color,
         					'threadhold1'   => $threadhold1,   'threadhold2'=>$threadhold2, 'threadhold3'=> $threadhold3,
 		);
-		 
+		
 		if ($from == 'exercise_result') {
 			// if answer is hotspot. To the difference of exercise_show.php, we use the results from the session (from_db=0)
 			// TODO Change this, because it is wrong to show the user some results that haven't been stored in the database yet
@@ -2869,16 +2883,19 @@ class Exercise {
 			 
 			if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
 				// We made an extra table for the answers
+				
 				if ($show_result) {
+				
 					if ($origin != 'learnpath') {
 						echo '</table></td></tr>';
 						echo '<tr>
                             <td colspan="2">';
 						echo '<i>'.get_lang('HotSpot').'</i><br /><br />';
-						echo '<object type="application/x-shockwave-flash" data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id=&from_db=0" width="552" height="352">';
-						echo '<param name="movie" value="'.api_get_path(WEB_PLUGIN_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id=&from_db=0" />
-                                </object>
-                            </td>
+						
+						echo '<object type="application/x-shockwave-flash" data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$exeId.'&from_db=1" width="552" height="352">
+								<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$exeId.'&from_db=1" />
+							</object>';
+						echo '</td>
                         </tr>';  
 
 					}
@@ -2908,7 +2925,7 @@ class Exercise {
 		// For all in one page exercises, the results will be
 		// stored by exercise_results.php (using the session)
 
-		if ($saved_results) {			
+		if ($saved_results) {
 			if (empty($choice)) {
 				$choice = 0;
 			}
@@ -2956,14 +2973,14 @@ class Exercise {
 				$answer = $choice;
 				exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
 				//            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
-			} elseif ($answerType == HOT_SPOT) {
+			} elseif ($answerType == HOT_SPOT) {				
 				exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
 				if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
-					foreach($exerciseResultCoordinates[$questionId] as $idx => $val) {
+					foreach($exerciseResultCoordinates[$questionId] as $idx => $val) {						
 						exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val,$this->id);
 					}
 				}
-			} else {
+			} else {				
 				exercise_attempt($questionScore, $answer, $quesId, $exeId, 0,$this->id);
 			}
 		}
@@ -3291,5 +3308,113 @@ class Exercise {
 		
 		return $is_visible;
 	}
+	
+	function save_attempt() {
+	
+	}
+	
+	function added_in_lp() {
+		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
+		$sql = "SELECT max_score FROM $TBL_LP_ITEM WHERE item_type = '".TOOL_QUIZ."' AND path = '".$this->id."'";
+		$result = Database::query($sql);
+		if (Database::num_rows($result) > 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	function get_validated_question_list() {
+		return  ($this->isRandom() ? $this->selectRandomList() : $this->selectQuestionList());
+	}
+	
+	public function get_stat_track_exercise_info_by_exe_id($exe_id) {
+		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+		$exe_id = intval($exe_id);
+		$sql_track = "SELECT * FROM $track_exercises WHERE exe_id = $exe_id ";
+		$result = Database::query($sql_track);
+		$new_array = array();
+		if (Database::num_rows($result) > 0 ) {
+			$new_array = Database::fetch_array($result, 'ASSOC');
+		}
+		return $new_array;
+	}
+	
+	public function edit_question_to_remind($exe_id, $question_id, $action = 'add') {
+		$exercise_info = self::get_stat_track_exercise_info_by_exe_id($exe_id);
+		$question_id = intval($question_id);
+		$exe_id = intval($exe_id);
+		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+		if ($exercise_info) {
+						
+			if (empty($exercise_info['questions_to_check'])) {
+				if ($action == 'add') {
+					$sql = "UPDATE $track_exercises SET questions_to_check = '$question_id' WHERE exe_id = $exe_id ";
+					$result = Database::query($sql);
+				}
+			} else {				
+				$remind_list = explode(',',$exercise_info['questions_to_check']);
+				
+				$remind_list_string = '';
+				if ($action == 'add') {
+					if (!in_array($question_id, $remind_list)) {						
+						$remind_list[] = $question_id;
+						if (!empty($remind_list)) {
+							sort($remind_list);
+							array_filter($remind_list);
+						}
+						$remind_list_string = implode(',', $remind_list);
+					}
+				} elseif ($action == 'delete')  {
+					if (!empty($remind_list)) {
+						if (in_array($question_id, $remind_list)) {
+							$remind_list = array_flip($remind_list);						
+							unset($remind_list[$question_id]);
+							$remind_list = array_flip($remind_list);
+							
+							if (!empty($remind_list)) {
+								sort($remind_list);
+								array_filter($remind_list);
+								$remind_list_string = implode(',', $remind_list);
+							}						
+						}
+					}
+				}				
+				$remind_list_string = Database::escape_string($remind_list_string);
+				$sql = "UPDATE $track_exercises SET questions_to_check = '$remind_list_string' WHERE exe_id = $exe_id ";
+				$result = Database::query($sql);				
+			}
+		}
+	}
+	
+	public function fill_in_blank_answer_to_string($answer) {
+				
+		api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);
+		
+				
+		$result = '';
+		
+		if (!empty($teacher_answer_list)) {
+			$teacher_answer_list = $teacher_answer_list[0];
+			
+		
+			$i = 0;
+			foreach($teacher_answer_list as $teacher_item) {
+				$value = null;				
+					//Cleaning student answer list
+					$value = strip_tags($teacher_item);					
+					$value = api_substr($value,1, api_strlen($value)-2);					
+					$value = explode('/', $value);
+					if (!empty($value[0])) {
+						$value = trim($value[0]);
+						$value = str_replace('&nbsp;', '',  $value);
+						$result .= $value;
+					}
+			}
+		}
+		
+		return $result;
+	}
+	
+	
 }
 endif;

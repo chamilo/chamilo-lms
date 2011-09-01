@@ -1254,7 +1254,7 @@ abstract class Question
         return $result;        
     }
     
-	function return_header($feedback_type, $counter = null) {
+	function return_header($feedback_type = null, $counter = null) {
 	    $counter_label = '';
 	    if (!empty($counter)) {
 	        $counter_label = intval($counter);

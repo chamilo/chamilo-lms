@@ -24,11 +24,12 @@ require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
  * @param int   current item from the list of questions
  * @param int   number of total questions
  * */
-function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false) {
+function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array()) {
 	
-	$s = '';
 	// Text direction for the current language
 	$is_ltr_text_direction = api_get_text_direction() != 'rtl';
+	
+	$remind_question = 1;
 
 	// Change false to true in the following line to enable answer hinting.
 	$debug_mark_answer = api_is_allowed_to_edit() && false;
@@ -41,56 +42,35 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     
 	$answerType    = $objQuestionTmp->selectType();
 	$pictureName   = $objQuestionTmp->selectPicture();
-
+	
+	$html = '';
 	if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION) {
 		// Question is not a hotspot
         
 		if (!$only_questions) {
-            
-			$questionName        = $objQuestionTmp->selectTitle();
 			$questionDescription = $objQuestionTmp->selectDescription();
-			$questionName        = text_filter($questionName);
-            
-            if ($show_title) {
-    			$s='<div id="question_title" class="sectiontitle">'.get_lang('Question').' ';
-    			$s.=$current_item;
-    			//@todo I need the get the feedback type
-    			//if($answerType != 1)
-    			//$s.=' / '.$total_item;
-    			echo $s;
-    			echo ' : ';
-    			echo $questionName.'</div>';
-            }
-            
-			$s='';
-			$s.='<table class="exercise_questions" style="margin:4px 4px 4px 0px; padding:2px;">
-				<tr><td valign="top" colspan="2">';
-			$questionDescription=text_filter($questionDescription);
-			$s.=$questionDescription;
-			$s.='</td></tr></table>';
-
-			if (!empty($pictureName)) {
-				$s.="<tr>
-				        <td align='center' colspan='2'><img src='../document/download.php?doc_url=%2Fimages%2F'".$pictureName."' border='0'></td>
-				    </tr>";
+			
+			if ($show_title) {
+				echo Display::div($current_item.'. '.$objQuestionTmp->selectTitle(), array('class'=>'question_title'));
 			}
-            $s.= '</table>';
-		}		
-        
-        $s .= '<div class="rounded exercise_questions" style="width: 720px; padding: 3px;">';
-        $option_ie = '';
-        /*
-		if (!ereg("MSIE",$_SERVER["HTTP_USER_AGENT"])) {
-			$s .= '<div class="rounded exercise_questions" style="width: 720px; padding: 3px;">';
-		} else {
-			$option_ie="margin-left:10px";
-		}*/
+			if (!empty($questionDescription)) {
+				echo Display::div($questionDescription, array('class'=>'question_description'));
+			}
+			//@deprecated
+			if (!empty($pictureName)) {
+				//echo "<img src='../document/download.php?doc_url=%2Fimages%2F'".$pictureName."' border='0'>";
+			}
+		}
+		
+		echo '<div class="question_options">';
         
         if ($answerType == FREE_ANSWER && $freeze) {
             return '';
         }
         
-		$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;">';
+		//$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;">';
+		
+		$s .= '<table class="exercise_options">';
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp = new Answer($questionId);
         
@@ -114,7 +94,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			$answer_matching = $cpt1 = array();
 			$answer_suggestions = $nbrAnswers;
 
-			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+			for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
 				$answerCorrect = $objAnswerTmp->isCorrect($answerId);
 				$numAnswer = $objAnswerTmp->selectAutoId($answerId);
 				$answer=$objAnswerTmp->selectAnswer($answerId);
@@ -127,99 +107,60 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				}
 			}
 			$i = 1;
+			
+			$select_items[0]['id'] = 0;
+			$select_items[0]['letter'] = '--';
+			$select_items[0]['answer'] = '';
+			
 			foreach ($answer_matching as $id => $value) {
-				$select_items[$i]['id'] =  $value['id'];
-				$select_items[$i]['letter'] =  $cpt1[$id];
+				$select_items[$i]['id'] 	= $value['id'];
+				$select_items[$i]['letter'] = $cpt1[$id];
 				$select_items[$i]['answer'] = $value['answer'];
 				$i ++;
 			}
 			$num_suggestions = ($nbrAnswers - $x) + 1;
+			
 		} elseif ($answerType == FREE_ANSWER) {
+			$fck_content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer']:null;
+			
 			$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
+			
 			$oFCKeditor->ToolbarSet = 'TestFreeAnswer';
 			$oFCKeditor->Width  = '100%';
 			$oFCKeditor->Height = '200';
-			$oFCKeditor->Value	= '' ;
+			$oFCKeditor->Value	= $fck_content;
             $s .= '<tr><td colspan="3">';
             $s .= $oFCKeditor->CreateHtml();
             $s .= '</td></tr>';
 		}  
-      ?>          
-    <style>    
-   
-  
-    </style>
-    <script>
-    $(function() {
-        /*
-        var $options = $( "#options" );
-        
-        $( "div", $options ).draggable({            
-            revert: "invalid", // when not dropped, the item will revert back to its initial position                        
-            cursor: "move",            
-        });
-        
-        
-        var $question_1 = $( "#question_1" );        
-        $question_1.droppable({        
-            accept: "#options div",            
-                  
-            activeClass: "ui-state-hover",
-            hoverClass: "ui-state-active",
-                  
-            drop: function( event, ui ) {
-                //$( this ).addClass( "ui-state-highlight" );  
-                              
-            }
-        });
-        
-        
-        var $question_2 = $( "#question_2" );        
-        $question_2.droppable({        
-            accept: "#options div",            
-                hoverClass: "ui-state-active",
-            drop: function( event, ui ) {
-                //$( this ).addClass( "ui-state-highlight" );
-            }
-        });        
-        
-        $options.droppable({        
-            accept: "#options div",
-            hoverClass: "ui-state-active",
-            drop: function( event, ui ) {                
-            }
-        });*/
-
-    });
-    </script>    
-    <?php
     
 		// Now navigate through the possible answers, using the max number of
 		// answers for the question as a limiter
-		$lines_count=1; // a counter for matching-type answers
+		$lines_count = 1; // a counter for matching-type answers
         $question_list = array();
-        
+            
         if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {            
             $header .= Display::tag('th', get_lang('Options'));   
             foreach ($objQuestionTmp->options as $key=>$item) {                
                 $header .= Display::tag('th', $item);                           
             }                
-            $s.=Display::tag('tr',$header, array('style'=>'text-align:left;'));  
+            $s.= Display::tag('tr',$header, array('style'=>'text-align:left;'));  
         }
         
-		for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+        $matching_correct_answer = 0;
+        $user_choice_array = array();
+        if (!empty($user_choice)) {        	
+        	foreach($user_choice as $item) {
+        		$user_choice_array[] = $item['answer'];
+        	}
+        }
+        
+        
+		for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
 			$answer          = $objAnswerTmp->selectAnswer($answerId);            
 			$answerCorrect   = $objAnswerTmp->isCorrect($answerId);            
 			$numAnswer       = $objAnswerTmp->selectAutoId($answerId);
-
-			if ($answerType == FILL_IN_BLANKS) {
-				// splits text and weightings that are joined with the character '::'
-				list($answer) = explode('::',$answer);
-
-				//getting the matches
-				$answer = api_ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10" />',($answer));
-			}
-
+		
 			// Unique answer
 			if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
 				// set $debug_mark_answer to true at function start to
@@ -232,16 +173,25 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 						$selected = 'checked';
 					}
 				}
-				$answer = text_filter($answer);
+				$input_id = 'choice-'.$questionId.'-'.$answerId;
+				if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer ) {
+					$attributes = array('id' =>$input_id, 'class'=>'checkbox','checked'=>1, 'selected'=>1);
+				} else {
+					$attributes = array('id' =>$input_id, 'class'=>'checkbox');
+				}
+				
 				$answer = Security::remove_XSS($answer, STUDENT);
                 
-				$s .= Display::input('hidden','choice2['.$questionId.']','0').
-					'<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">'.
-					'<span>'.Display::input('radio','choice['.$questionId.']', $numAnswer, array('class'=>'checkbox','selected'=>$selected)).'</span></p>'.
-					'<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
-					$answer.
-					'</div></div></td></tr>';
-
+				$s .= Display::input('hidden','choice2['.$questionId.']','0');
+				//@todo fix $is_ltr_text_direction
+				//<p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">
+				//$s .= '<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
+						
+				$s .= '<tr><td colspan="3">';
+				$s .= '<span class="question_answer">';
+				$s .= Display::input('radio', 'choice['.$questionId.']', $numAnswer, $attributes);
+				$s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span>';
+				$s .= '</td></tr>';
 			} elseif ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
                
 				// multiple answers
@@ -253,36 +203,53 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 						$help = 'x-';
 						$selected = 'checked="checked"';
 					}
-				}                
-				$answer = text_filter($answer);
+				}
+				$input_id = 'choice-'.$questionId.'-'.$answerId;
+				 
+				$answer = Security::remove_XSS($answer, STUDENT);
+				
+				if (in_array($numAnswer, $user_choice_array)) {
+					$attributes = array('id' =>$input_id, 'class'=>'checkbox','checked'=>1, 'selected'=>1);
+				} else {
+					$attributes = array('id' =>$input_id, 'class'=>'checkbox');
+				}				
+
 				$answer = Security::remove_XSS($answer, STUDENT);
                 
                 if ($answerType == MULTIPLE_ANSWER) {
                     $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';                
-                    $s .= '<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">';
-                    
-                    $options = array('type'=>'checkbox','name'=>'choice['.$questionId.']['.$numAnswer.']', 'class'=>'checkbox');
+                    $s .= '<tr><td colspan="3">';
+                    $s .= '<span class="question_answer">';
+                                        
                     if ($debug_mark_answer) {
                         if ($answerCorrect) {
-                            $options['checked'] = 'checked';
+                            //$options['checked'] = 'checked';
                         }
                     }
-                    $s .= Display::tag('span', Display::tag('input','',$options ));
-                    $s .= '</p>';                    
-                    $s .= '<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
-                        $answer.
-                        '</div></div></td></tr>';
+    				
+                    $s .= Display::tag('span', Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', $numAnswer, $attributes));                                        
+                    $s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span></td></tr>';                	
 
-                } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {                    
-                    $options = array('type'=>'radio','name'=>'choice['.$questionId.']['.$numAnswer.']', 'class'=>'checkbox');
-                    $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-                    $s .='<tr>';     
-                    $s .= Display::tag('td', $answer);
-                    if (!empty($quiz_question_options)) {       
-                        foreach ($quiz_question_options as $id=>$item) {
-                            $options['value'] = $id;
-                            $s .= Display::tag('td', Display::tag('input','',$options ));                        	
+                } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
+                	$my_choice = array();
+                    if (!empty($user_choice_array)) {
+                        foreach ($user_choice_array as $item) {
+                            $item = explode(':', $item);
+                            $my_choice[$item[0]] = $item[1];
                         }
+                    }
+                    $s .='<tr>';
+                    $s .= Display::tag('td', $answer);
+                    if (!empty($quiz_question_options)) {
+                    	foreach ($quiz_question_options as $id=>$item) {
+                    		if (isset($my_choice[$numAnswer]) && $id == $my_choice[$numAnswer]) {
+                    			$attributes = array('class'=>'checkbox','checked'=>1, 'selected'=>1);
+                    		} else {
+                    			$attributes = array('class'=>'checkbox');
+                    		}
+                    
+                    		$s .= Display::tag('td', Display::input('radio', 'choice['.$questionId.']['.$numAnswer.']', $id, $attributes));
+                    	}
                     }
                     $s.='<tr>';
                 }
@@ -298,57 +265,123 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 						$selected = 'checked="checked"';
 					}
 				}
-				$answer = text_filter($answer);
+				$input_id = 'choice-'.$questionId.'-'.$answerId;
+				
+				if (in_array($numAnswer, $user_choice_array)) {				    
+				    $attributes = array('id'=>$input_id, 'class'=>'checkbox','checked'=>1, 'selected'=>1);
+				} else {
+				    $attributes = array('id'=>$input_id, 'class'=>'checkbox');
+				}		
+								
 				$answer = Security::remove_XSS($answer, STUDENT);
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
-					'<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">'.
-					'<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>'.
-					'<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
-					$answer.
-					'</div></div></td></tr>';
+				    '<tr><td colspan="3">';
+				$s .= '<span class="question_answer">';				
+				$s .= Display::tag('span', Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', 1, $attributes));				
+			    $s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span></td></tr>';
+					
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                 // multiple answers
                 // set $debug_mark_answer to true at function start to
                 // show the correct answer with a suffix '-x'
                 
             	$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-                $help = $selected = '';
-                if ($debug_mark_answer) {
-                    if ($answerCorrect) {
-                        $help = 'x-';
-                        $selected = 'checked="checked"';
-                    }
-                }
-                $answer = text_filter($answer);
-                $answer = Security::remove_XSS($answer, STUDENT);
-                $options = array('type'=>'radio','name'=>'choice['.$questionId.']['.$numAnswer.']', 'class'=>'checkbox');
-                $s .='<tr>';     
-                $s .= Display::tag('td', $answer);       
-                foreach ($objQuestionTmp->options as $key=>$item) {
-                    $options['value'] = $key;
-                    $s .= Display::tag('td', Display::tag('input','',$options ));                           
-                }
-                $s.='<tr>';
-  
+            	
+            	$my_choice = array();
+            	if (!empty($user_choice_array)) {
+            		foreach ($user_choice_array as $item) {
+            			$item = explode(':', $item);
+            			$my_choice[$item[0]] = $item[1];
+            		}
+            	}
+            	$answer = Security::remove_XSS($answer, STUDENT);
+            	$s .='<tr>';
+            	$s .= Display::tag('td', $answer);
+            	
+            	foreach ($objQuestionTmp->options as $key => $item) {
+            		//$options['value'] = $key;
+            		if (isset($my_choice[$numAnswer]) && $key == $my_choice[$numAnswer]) {
+            			$attributes = array('class'=>'checkbox','checked'=>1, 'selected'=>1);
+            		} else {
+            			$attributes = array('class'=>'checkbox');
+            		}
+            		$s .= Display::tag('td', Display::input('radio','choice['.$questionId.']['.$numAnswer.']', $key, $attributes));
+            	}
+            	$s.='<tr>';
 			} elseif ($answerType == FILL_IN_BLANKS) {
-				// fill in blanks
+				
+				/*
+				// splits text and weightings that are joined with the character '::'
+				list($answer) = explode('::',$answer);
+			
+				//getting the matches
+				$answer = api_ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10" />',($answer));
+				
+			
+				
+				$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+				
+				api_preg_match_all('/\[[^]]+\]/', $answer, $fill_list);
+				
+
+				if (isset($user_choice[0]['answer'])) {
+				    api_preg_match_all('/\[[^]]+\]/', $user_choice[0]['answer'], $user_fill_list);	
+				    $user_fill_list = $user_fill_list[0];
+				}*/
+				
+				list($answer) = explode('::',$answer);
+				
+				api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);				
+				
+				if (isset($user_choice[0]['answer'])) {
+					api_preg_match_all('/\[[^]]+\]/', $user_choice[0]['answer'], $student_answer_list);
+					$student_answer_list = $student_answer_list[0];
+				}
+				
+				//var_dump($teacher_answer_list, $student_answer_list);				
+								
+				if (!empty($teacher_answer_list) && !empty($student_answer_list)) {
+				    $teacher_answer_list = $teacher_answer_list[0];
+				    
+				    $i = 0;				    
+				    foreach($teacher_answer_list as $teacher_item) {				    	
+				        $value = null;
+				        if (isset($student_answer_list[$i]) && !empty($student_answer_list[$i])) {
+				        	//Cleaning student answer list
+				            $value = strip_tags($student_answer_list[$i]);				            				            
+				            $value = api_substr($value,1, api_strlen($value)-2);
+				            $value = explode('/', $value);
+				            if (!empty($value[0])) {
+				            	$value = trim($value[0]);
+				            	$value = str_replace('&nbsp;', '',  $value);
+				            }
+				            $answer = api_preg_replace('/\['.$teacher_item.'+\]/', Display::input('text', "choice[$questionId][]", $value), $answer);				            
+				        }				        				        
+				        $i++;				        
+				    }
+				} else {
+					$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+				}
+				
 				$s .= '<tr><td colspan="3">'.$answer.'</td></tr>';
-			} else {
+            } elseif ($answerType == MATCHING) {
 				//  matching type, showing suggestions and answers
 				// TODO: replace $answerId by $numAnswer
+				
 				if ($answerCorrect != 0) {
 					// only show elements to be answered (not the contents of
 					// the select boxes, who are corrrect = 0)
-					$s .= '<tr><td width="45%" valign="top" >';
-					$parsed_answer = text_filter($answer);
-                    $question_list[] = $parsed_answer;
+					$s .= '<tr><td width="45%" valign="top">';
+					$parsed_answer = $answer;
+                    //$question_list[] = $parsed_answer;
 					//left part questions
 					$s .= ' <span style="float:left; width:8%;"><b>'.$lines_count.'</b>.&nbsp;</span>
 						 	<span style="float:left; width:92%;">'.$parsed_answer.'</span></td>';
-					//middle part (matches selects)
+					//middle part (matches selects)					
+					
 					$s .= '<td width="10%" valign="top" align="center">&nbsp;&nbsp;
-				            <select name="choice['.$questionId.']['.$numAnswer.']">
-							  <option value="0">--</option>';
+				            <select name="choice['.$questionId.']['.$numAnswer.']">';
+					
 					// fills the list-box
 					foreach ($select_items as $key=>$val) {
 						// set $debug_mark_answer to true at function start to
@@ -357,13 +390,17 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 						if ($debug_mark_answer) {
 							if ($val['id'] == $answerCorrect) {
 								$help = '-x';
-								$selected = 'selected="selected"';
+								//$selected = 'selected="selected"';
 							}
+						}						
+						if (isset($user_choice[$matching_correct_answer]) && $val['id'] == $user_choice[$matching_correct_answer]['answer']) {
+						    $selected = 'selected="selected"';
 						}
-						$s.='<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].$help.'</option>';
+						$s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].$help.'</option>';						
+				
 					}  // end foreach()
 
-					$s .= '</select>&nbsp;&nbsp;</td>';
+					$s .= '</select></td>';
 					//print_r($select_items);
 					//right part (answers)
 					$s.='<td width="45%" valign="top" >';
@@ -382,7 +419,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 						// if it remains answers to shown at the right side
 						while (isset($select_items[$lines_count])) {
 							$s .= '<tr>
-								  <td colspan="2">&nbsp;</td>
+								  <td colspan="2"></td>
 								  <td valign="top">';
 							$s.='<b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'];
 							$s.="</td>
@@ -390,35 +427,13 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 							$lines_count++;
 						}	// end while()
 					}  // end if()
+					$matching_correct_answer++;
 				}
 			}
 		}	// end for()
-                
-        /*
-        //Adding divs for the new MATCHING interface
-        
-        if ($answerType == MATCHING && !$freeze) {
-            echo '<div id="questions">';
-            echo Display::tag('h2','Questions'); 
-            $i = 1;
-            foreach ($question_list as $key=>$val) {
-                echo Display::tag('div', Display::tag('p',$val), array('id'=>'question_'.$i, 'class'=>'question_item  ui-widget-header'));
-                $i++;            
-            }
-            echo '</div>';
-            
-             
-            echo Display::tag('h2','Options');
-            echo '<div id="options" class=" ui-widget-header">';        
-            foreach ($select_items as $key=>$val) {
-                echo Display::tag('div', Display::tag('p',$val['answer']), array('id'=>'option_'.$i, 'class'=>'option_item ui-widget-content'));                        
-            }
-            echo '</ul>';
-        }*/
+		$s .= '</table>';		
+		$s .= '</div>';
 		
-			$s .= '</table>';
-		
-		$s .= '</div><br />';
 
 		// destruction of the Answer object
 		unset($objAnswerTmp);
@@ -429,7 +444,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 		if ($origin != 'export') {
 			echo $s;
 		} else {
-			return($s);
+			return $s;
 		}
 	} elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
 		// Question is a HOT_SPOT        
@@ -486,16 +501,14 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
 		if (!$only_questions) {
             if ($show_title) {
-                echo '<div id="question_title" class="sectiontitle">'.get_lang('Question').' '.$current_item.' : '.$questionName.'</div>';
+                echo '<div class="question_title">'.$current_item.'. '.$questionName.'</div>';
             }
 			//@todo I need to the get the feedback type
-			//if($answerType == 2)
-			//	$s.=' / '.$total_item;
 			echo '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />';
 			echo '<table class="exercise_questions" >
 				  <tr>
 			  		<td valign="top" colspan="2">';
-			echo $questionDescription=text_filter($questionDescription);
+			echo $questionDescription;
 			echo '</td></tr>';
 		}        
 		$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
@@ -638,7 +651,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 		</td></tr>';        
 		echo $s;
 	}
-	echo '</table><br />';
+	echo '</table>';
 	return $nbrAnswers;
 }
 

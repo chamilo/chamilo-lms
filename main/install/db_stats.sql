@@ -117,6 +117,8 @@ ALTER TABLE track_e_exercices ADD orig_lp_item_id int  NOT NULL default 0;
 ALTER TABLE track_e_exercices ADD exe_duration int UNSIGNED NOT NULL default 0;
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
+ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
+
 
 CREATE TABLE track_e_attempt (
   exe_id int default NULL,

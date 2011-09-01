@@ -162,7 +162,8 @@ if (!empty($question_list)) {
 	        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
 	        $questionScore   = $question_result['score'];
 	        $totalScore     += $question_result['score'];		
-		} elseif ($answerType == HOT_SPOT) {	
+		} elseif ($answerType == HOT_SPOT) {
+			//@todo move this in the manage_answer function	
 		    if ($show_results) {
 			    echo '<table width="500" border="0"><tr>
 	                    <td valign="top" align="center" style="padding-left:0px;" >
@@ -183,6 +184,7 @@ if (!empty($question_list)) {
 				</tr>
 				</table><br/>';
 	        }
+	        
 		} else if($answerType == HOT_SPOT_DELINEATION) {
 		        
 	            $question_result  = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), 'database');

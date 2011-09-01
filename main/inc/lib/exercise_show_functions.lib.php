@@ -60,9 +60,11 @@ class ExerciseShowFunctions {
 	function display_free_answer($answer,$id,$questionId) {
         global $feedback_type;
         if (empty($id)) {
-            echo '<tr>';            
-            echo Display::tag('td',nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)), array('width'=>'55%'));            
-            echo '</tr>';
+        	if (!empty($answer)) {
+        	    echo '<tr>';            
+    	        echo Display::tag('td',nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)), array('width'=>'55%'));            
+	            echo '</tr>';
+        	}
             if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
                 echo '<tr>';
                 echo Display::tag('td',get_lang('notCorrectedYet'), array('width'=>'45%'));            
@@ -72,12 +74,11 @@ class ExerciseShowFunctions {
             }
         } else {
             echo '<tr>';
-            echo '<td>';		
 		    if (!empty($answer)) {
+		    	echo '<td>';
 		        echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY));
+		        echo '</td>';
 		    }
-		    echo '</td>';
-			
 			if(!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 echo '<td>';
 	            $comm = get_comments($id,$questionId);
@@ -112,6 +113,7 @@ class ExerciseShowFunctions {
 										"#3B3B3B",
 										"#F7BDE2");
 		?>
+		<table class="data_table">
 		<tr>
 			<td width="100px" valign="top" align="left">
 				<div style="width:100%;">
@@ -132,8 +134,7 @@ class ExerciseShowFunctions {
 
 			<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 			<td valign="top" align="left" >
-				<?php
-				$answerComment=text_filter($answerComment);
+				<?php				
 				if($studentChoice) {
 					echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
 				} else {

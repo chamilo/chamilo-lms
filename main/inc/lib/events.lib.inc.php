@@ -305,9 +305,9 @@ function event_link($link_id) {
  * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
  * @desc Record result of user when an exercice was done 
 */
-function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$learnpath_id=0, $learnpath_item_id=0, $learnpath_item_view_id = 0, $duration , $question_list) {
+function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$learnpath_id=0, $learnpath_item_id=0, $learnpath_item_view_id = 0, $duration, $question_list, $status = '', $remind_list = array()) {
 	require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-    if ($exeid!='') {
+    if ($exeid != '') {
 		// Validation in case of fraud with actived control time
 		if (!exercise_time_control_is_valid($exo_id)) {
 			$score = 0;		
@@ -321,25 +321,41 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$
 	    		$start_date = $now - 1800; //	Now - 30min
 	    	}
 	    }
+	    
+	    if (!isset($status) || empty($status)) {
+	    	$status = '';
+	    } else {
+	    	$status = Database::escape_string($status);
+	    }
+	    
 
 		$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		array_map('intval', $question_list);
+		
+		if (!empty($remind_list)) {
+			array_map('intval', $remind_list);
+			$remind_list = array_filter($remind_list);
+			$remind_list = implode(",", $remind_list);
+		} else {
+			$remind_list = '';
+		}		
 
 		$sql = "UPDATE $TABLETRACK_EXERCICES SET
-				   exe_exo_id 		= '".Database::escape_string($exo_id)."',
-				   exe_result		= '".Database::escape_string($score)."',
-				   exe_weighting 	= '".Database::escape_string($weighting)."',
-				   session_id		= '".Database::escape_string($session_id)."',
-				   orig_lp_id 		= '".Database::escape_string($learnpath_id)."',
-				   orig_lp_item_id 	= '".Database::escape_string($learnpath_item_id)."',
-                   orig_lp_item_view_id  = '".Database::escape_string($learnpath_item_view_id)."',
-				   exe_duration 	= '".Database::escape_string($duration)."',
-				   exe_date			= '".api_get_utc_datetime()."',
-				   status 			= '',
-				   start_date       = '".api_get_utc_datetime($start_date)."',
-				   data_tracking    = '".implode(',', $question_list)."'
+				   exe_exo_id 			= '".Database::escape_string($exo_id)."',
+				   exe_result			= '".Database::escape_string($score)."',
+				   exe_weighting 		= '".Database::escape_string($weighting)."',
+				   session_id			= '".Database::escape_string($session_id)."',
+				   orig_lp_id 			= '".Database::escape_string($learnpath_id)."',
+				   orig_lp_item_id 		= '".Database::escape_string($learnpath_item_id)."',
+                   orig_lp_item_view_id = '".Database::escape_string($learnpath_item_view_id)."',
+				   exe_duration 		= '".Database::escape_string($duration)."',
+				   exe_date				= '".api_get_utc_datetime()."',
+				   status 				= '".$status."',
+				   questions_to_check 	= '".$remind_list."',
+				   start_date       	= '".api_get_utc_datetime($start_date)."',
+				   data_tracking    	= '".implode(',', $question_list)."'
 				 WHERE exe_id = '".Database::escape_string($exeid)."'";
-		$res = @Database::query($sql);
+		$res = Database::query($sql);
         
         //Deleting control time session track		
 		exercise_time_control_delete($exo_id);
@@ -1018,5 +1034,49 @@ function get_comments($id,$question_id) {
     $sqlres = Database::query($sql);
     $comm = Database::result($sqlres,0,"teacher_comment");
     return $comm;
+}
+
+
+
+function get_all_exercise_event_by_exe_id($exe_id) {
+	$table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+	$exe_id = intval($exe_id);
+	$list = array();
+
+	$sql = "SELECT * FROM $table_track_attempt WHERE exe_id = $exe_id ORDER BY position";
+	$res_question = Database::query($sql);
+	if (Database::num_rows($res_question))
+	while($row_q = Database::fetch_array($res_question,'ASSOC')) {
+		$list[$row_q['question_id']][] = $row_q;
+	}
+	return $list;
+}
+
+
+
+function delete_attempt($exe_id, $user_id, $course_code, $session_id, $question_id) {
+	$table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+	$exe_id          = intval($exe_id);
+	$user_id         = intval($user_id);
+	$course_code     = Database::escape_string($course_code);
+	$session_id      = intval($session_id);
+	$question_id     = intval($question_id);
+
+	$sql = "DELETE FROM $table_track_attempt WHERE exe_id = $exe_id AND user_id = $user_id AND course_code = '$course_code' AND session_id = $session_id AND question_id = $question_id ";
+	Database::query($sql);
+}
+
+function delete_attempt_hotspot($exe_id, $user_id, $course_code, $question_id) {
+	$table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+
+	$exe_id          = intval($exe_id);
+	$user_id         = intval($user_id);
+	$course_code     = Database::escape_string($course_code);
+	//$session_id      = intval($session_id);
+	$question_id     = intval($question_id);
+
+	$sql = "DELETE FROM $table_track_attempt WHERE hotspot_exe_id = $exe_id AND hotspot_user_id = $user_id AND hotspot_course_code = '$course_code' AND hotspot_question_id = $question_id ";
+	Database::query($sql);
 }
 

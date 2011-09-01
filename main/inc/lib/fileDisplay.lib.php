@@ -54,8 +54,8 @@ function choose_image($file_name)
         $type['web'       ] = array('htm', 'html', 'htx', 'xml',  'xsl',  'php', 'xhtml');
         $type['image'     ] = array('gif', 'jpg',  'png', 'bmp',  'jpeg');
         $type['image_vect'] = array('svg','svgz');
-        $type['audio'     ] = array('wav', 'mid',  'mp2', 'mp3',  'midi', 'sib', 'amr', 'kar', 'oga');
-        $type['video'     ] = array('mp4', 'mov',  'rm',  'pls',  'mpg',  'mpeg', 'au', 'flv', 'avi', 'wmv', 'asf', '3gp','ogv','ogg','ogx');
+        $type['audio'     ] = array('wav', 'mid',  'mp2', 'mp3',  'midi', 'sib', 'amr', 'kar', 'oga', 'au');
+        $type['video'     ] = array('mp4', 'mov',  'rm',  'pls',  'mpg',  'mpeg', 'flv', 'avi', 'wmv', 'asf', '3gp','ogv','ogg','ogx');
         $type['excel'     ] = array('xls', 'xlt',  'xls', 'xlt', 'pxl', 'xlsx', 'xlsm', 'xlam', 'xlsb', 'xltm', 'xltx');
         $type['compressed'] = array('zip', 'tar',  'rar', 'gz');
         $type['code'      ] = array('js',  'cpp',  'c',   'java', 'phps');

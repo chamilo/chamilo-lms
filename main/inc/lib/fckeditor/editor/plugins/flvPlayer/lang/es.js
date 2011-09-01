@@ -3,7 +3,7 @@
 // Please, use UTF-8 encoding.
 
 FCKLang["DlgFLVPlayerTitle"]          = "FLV Media Player" ;
-FCKLang["DlgFLVPlayerURL"]            = "Pel&iacute;cula/Archivo de medios (flv, mov, swf, mp3, mp4)" ;
+FCKLang["DlgFLVPlayerURL"]            = "Pel&iacute;cula/Archivo de medios" ;
 FCKLang["DlgFLVPlayerBtnBrowse"]      = "Ver Servidor" ;
 FCKLang["DlgFLVPlayerImgURL"]         = "Imagen de previsualizaci&oacute;n" ;
 FCKLang["DlgFLVPlayerWidth"]          = "Anchura (px)" ;

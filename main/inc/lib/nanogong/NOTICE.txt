@@ -1,4 +1,4 @@
-The NanoGong Applet 4.1
+The NanoGong Applet 4.2
 Copyright 2002-2011 The Gong Project
 
 This product includes software developed by the Gong Project

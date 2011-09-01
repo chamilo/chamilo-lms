@@ -850,19 +850,77 @@ function search_keyword($document_name, $keyword) {
  */
 function is_browser_viewable($file_extension) {
     static $allowed_extensions = array(
-        'htm', 'html', 'xhtml', 'gif', 'jpg', 'jpeg', 'png', 'pdf', 'swf', 'mp3', 'mp4', 'ogg', 'ogx', 'oga', 'ogv', 'svg',
-        'txt', 'log',
-        'mpg', 'mpeg',
-		'wav'
-    );
+        'htm', 'html', 'xhtml', 
+		'gif', 'jpg', 'jpeg', 'png', 'tif', 'tiff',
+        'pdf', 'svg', 'swf',
+		'txt', 'log',
+        'mp4', 'ogg', 'ogv', 'ogx', 'mpg', 'mpeg', 'mov', 'avi', 'webm', 'wmv',
+		'mp3', 'oga', 'wav', 'au', 'wma', 'mid', 'kar'
+    )
+	
+	/*
+	//TODO: make a admin swich to strict mode
+	 1. global default $allowed_extensions only: 'htm', 'html', 'xhtml', 'gif', 'jpg', 'jpeg', 'png', 'bmp', 'txt', 'log' 
+	 if (in_array($file_extension, $allowed_extensions)) { // Assignment + a logical check.
+        return true;
+     }
+	 2. check native support
+	 3. check plugins: quicktime, mediaplayer, vlc, acrobat, flash, java
+	 */
+	
     if (!($result = in_array($file_extension, $allowed_extensions))) { // Assignment + a logical check.
         return false;
-    }
-    switch ($file_extension) {
-        case 'ogg':
-            return api_browser_support('ogg');
-        case 'svg':
-            return api_browser_support('svg');
-    }
+    }		
+			//check native support (Explorer, Opera, Firefox, Chrome, Safari)
+	
+	if ($file_extension=="pdf"){
+		return api_browser_support('pdf');
+	}
+	elseif ($file_extension=="mp3"){
+		return api_browser_support('mp3');
+	}
+	elseif ($file_extension=="mp4"){
+		return api_browser_support('mp4');
+	}
+	elseif ($file_extension=="ogg" || $file_extension=="ogx" || $file_extension=="ogv" || $file_extension=="oga"){
+		return api_browser_support('ogg');
+	}
+	elseif ($file_extension=="svg"){
+		return api_browser_support('svg');
+	}
+	elseif ($file_extension=="mpg" || $file_extension=="mpeg"){
+		return api_browser_support('mpg');
+	}
+	elseif ($file_extension=="mov"){
+		return api_browser_support('mov');
+	}
+	elseif ($file_extension=="wav"){
+		return api_browser_support('wav');
+	}
+	elseif ($file_extension=="mid" || $file_extension=="kar"){
+		return api_browser_support('mid');
+	}
+	elseif ($file_extension=="avi"){
+		return api_browser_support('avi');
+	}
+	elseif ($file_extension=="wma"){
+		return api_browser_support('wma');
+	}
+	elseif ($file_extension=="wmv"){
+		return api_browser_support('wmv');
+	}
+	elseif ($file_extension=="tif" || $file_extension=="tiff"){
+		return api_browser_support('tif');
+	}
+	elseif ($file_extension=="mov"){
+		return api_browser_support('mov');
+	}
+	elseif ($file_extension=="au"){
+		return api_browser_support('au');
+	}
+	elseif ($file_extension=="webm"){
+		return api_browser_support('webm');
+	}
+
     return $result;
 }

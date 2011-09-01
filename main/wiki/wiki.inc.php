@@ -688,7 +688,7 @@ return true;
         echo '</div>';
         echo '</div>';
         //to define as an individual assignment
-        echo '<div style= "border : 1px dotted; padding:4px; margin-top:20px;"><img src="../img/wiki/assignment.png" title="'.get_lang('CreateAssignmentPage').'" alt="'.get_lang('CreateAssignmentPage').'"/>&nbsp;'.get_lang('DefineAssignmentPage').': <input type="checkbox" name="assignment" value="1"></div>'; // 1= teacher 2 =student
+		echo '<div style= "border : 1px dotted; padding:4px; margin-top:20px;"><img src="../img/icons/22/wiki_assignment.png" title="'.get_lang('CreateAssignmentPage').'" alt="'.get_lang('CreateAssignmentPage').'"/>&nbsp;'.get_lang('DefineAssignmentPage').': <input type="checkbox" name="assignment" value="1"></div>'; // 1= teacher 2 =student
         //
         echo'</div>';
 
@@ -912,23 +912,25 @@ function word_count($document) {
     $search = array(
     '@<script[^>]*?>.*?</script>@si',
     '@<style[^>]*?>.*?</style>@siU',
+	'@<div id="player.[^>]*?>.*?</div>@',
     '@<![\s\S]*?--[ \t\n\r]*>@'
     );
 
     $document = preg_replace($search, '', $document);
 
       # strip all html tags
-      $wc = strip_tags($document);
-
-    //remove words and remove one letter words commented temporarily because of problems with utf8 support. TODO: fix and enable
-      # remove 'words' that don't consist of alphanumerical characters or punctuation
-      //$pattern = "#[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]+#";
-      //$wc = trim(preg_replace($pattern, " ", $wc));
-      # remove one-letter 'words' that consist only of punctuation
-      //$wc = trim(preg_replace("#\s*[(\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]\s*#", " ", $wc)); //
-
-      # remove superfluous whitespace
-      $wc = preg_replace("/\s\s+/", " ", $wc);
+      $wc = strip_tags($document);	  
+      $wc = html_entity_decode(utf8_encode($wc)); //html_entity_decode($wc,ENT_NOQUOTES, 'UTF-8') does not work ok
+	  
+	  # remove 'words' that don't consist of alphanumerical characters or punctuation
+ 	  $pattern = "#[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]+#";	
+      $wc = trim(preg_replace($pattern, " ", $wc));
+	  	  
+	  # remove one-letter 'words' that consist only of punctuation
+      $wc = trim(preg_replace("#\s*[(\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]\s*#", " ", $wc));
+	  
+	  # remove superfluous whitespace
+      $wc = preg_replace("/\s\s+/", " ", $wc);	
 
       # split string into an array of words
       $wc = explode(" ", $wc);
@@ -1718,11 +1720,13 @@ function export_to_pdf($id, $course_code) {
     $content_pdf = api_html_entity_decode($data['content'], ENT_QUOTES, api_get_system_encoding());
 	
 	//clean wiki links
+	
 	$clean_pdf_content = trim(preg_replace("/\[\[|\]\]/", " ", $content_pdf));
 	
-	//@todo this line breaks the pdf export	
-    //$array_clean_pdf_content= explode('|', $clean_pdf_content);
-        
+	//@todo this line breaks the pdf export. TODO:clean compound wiki names	
+    //$array_clean_pdf_content= explode('|', $clean_pdf_content);//delete and reworking
+    //$clean_pdf_content = $array_clean_pdf_content[1];//delete and reworking
+		
     $content_pdf= $clean_pdf_content;		
     $title_pdf   = api_html_entity_decode($data['title'], ENT_QUOTES, api_get_system_encoding());
     $title_pdf   = api_utf8_encode($title_pdf, api_get_system_encoding());
@@ -1918,7 +1922,8 @@ function auto_add_page_users($assignment_type) {
  * @param   string  Search term
  * @param   int     Whether to search the contents (1) or just the titles (0)
  */
-function display_wiki_search_results($search_term, $search_content=0)
+
+function display_wiki_search_results($search_term, $search_content=0, $all_vers=0)
 {
     global $tbl_wiki, $groupfilter, $MonthsLong, $condition_session;
 
@@ -1927,28 +1932,43 @@ function display_wiki_search_results($search_term, $search_content=0)
     $_clean['group_id']=(int)$_SESSION['_gid'];
     $session_id=api_get_session_id();
 
-    if(api_is_allowed_to_edit(false,true) || api_is_platform_admin()) //only by professors if page is hidden
-    {
-        if($search_content=='1')
-        {
-            $sql="SELECT * FROM ".$tbl_wiki." s1 WHERE title LIKE '%".Database::escape_string($search_term)."%' OR content LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";// warning don't use group by reflink because don't return the last version
-        }
-        else
-        {
-            $sql="SELECT * FROM ".$tbl_wiki." s1 WHERE title LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";// warning don't use group by reflink because don't return the last version
-        }
-    }
-    else
-    {
-        if($search_content=='1')
-        {
 
-            $sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  visibility=1 AND title LIKE '%".Database::escape_string($search_term)."%' OR content LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";// warning don't use group by reflink because don't return the last version
-        }
-        else
-        {
-            $sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  visibility=1 AND title LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";// warning don't use group by reflink because don't return the last version
-        }
+//only by professors when page is hidden   
+    if(api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {  
+		if($all_vers=='1') {
+			if ($search_content=='1') {
+				$sql="SELECT * FROM ".$tbl_wiki."WHERE title LIKE '%".Database::escape_string($search_term)."%' OR content LIKE '%".Database::escape_string($search_term)."%' AND ".$groupfilter.$condition_session."";//search all pages and all versions
+			}
+			else {
+				$sql="SELECT * FROM ".$tbl_wiki."WHERE title LIKE '%".Database::escape_string($search_term)."%' AND ".$groupfilter.$condition_session."";//search all pages and all versions
+			}			
+		}
+		else {
+			if ($search_content=='1') {
+			   $sql="SELECT * FROM ".$tbl_wiki." s1 WHERE title LIKE '%".Database::escape_string($search_term)."%' OR content LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";// warning don't use group by reflink because don't return the last version
+			}
+			else {
+			   $sql="SELECT * FROM ".$tbl_wiki." s1 WHERE title LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";// warning don't use group by reflink because don't return the last version
+			}		
+		}
+	}
+	else {
+		if($all_vers=='1') {
+			if ($search_content=='1') {
+			$sql="SELECT * FROM ".$tbl_wiki."WHERE visibility=1 AND title LIKE '%".Database::escape_string($search_term)."%' OR content LIKE '%".Database::escape_string($search_term)."%' AND ".$groupfilter.$condition_session."";//search all pages and all versions
+			}
+			else {
+				$sql="SELECT * FROM ".$tbl_wiki."WHERE visibility=1 AND title LIKE '%".Database::escape_string($search_term)."%' AND ".$groupfilter.$condition_session."";//search all pages and all versions
+			}			
+		}
+		else {		
+			if($search_content=='1') {
+			   $sql="SELECT * FROM ".$tbl_wiki." s1 WHERE visibility=1 AND title LIKE '%".Database::escape_string($search_term)."%' OR content LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";// warning don't use group by reflink because don't return the last version
+		}
+			else {
+			   $sql="SELECT * FROM ".$tbl_wiki." s1 WHERE visibility=1 AND title LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";// warning don't use group by reflink because don't return the last version
+			}
+		}
     }
 
     $result=Database::query($sql);
@@ -1985,29 +2005,45 @@ function display_wiki_search_results($search_term, $search_content=0)
 
             $row = array ();
             $row[] =$ShowAssignment;
-            $row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.$obj->title.'</a>';
-            $row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
+			
+			if($all_vers=='1') {
+				$row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&view='.$obj->id.'&session_id='.api_htmlentities(urlencode($_GET['$session_id'])).'&group_id='.api_htmlentities(urlencode($_GET['group_id'])).'">'.api_htmlentities($obj->title).'</a>';
+			}
+			else {			
+				$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.$obj->title.'</a>';
+			}       
+
+			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
             $row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
 
-            if(api_is_allowed_to_edit(false,true)|| api_is_platform_admin())
-            {
-                $showdelete=' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('delete.png', get_lang('Delete'),'',22);
-            }
-            $row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('edit.png', get_lang('EditPage'),'',22).'</a> <a href="'.api_get_self().'?'.api_get_cidreq().'&action=discuss&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">
-			'.Display::return_icon('discuss.png', get_lang('Discuss'),'',22).'</a> <a href="'.api_get_self().'?'.api_get_cidreq().'&action=history&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('history.png', get_lang('History'),'',22).'</a> <a href="'.api_get_self().'?'.api_get_cidreq().'&action=links&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('what_link_here.png', get_lang('LinksPages'),'',22).'</a>'.$showdelete;
-		
+            if($all_vers=='1') {
+				$row[] = $obj->version;
+			}
+			else {
+				if(api_is_allowed_to_edit(false,true)|| api_is_platform_admin()) {
+					$showdelete=' <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=delete&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('delete.png', get_lang('Delete'),'',22);
+				}				
+				$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=edit&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('edit.png', get_lang('EditPage'),'',22).'</a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=discuss&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('discuss.png', get_lang('Discuss'),'',22).'</a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=history&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('history.png', get_lang('History'),'',22).'</a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=links&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('what_link_here.png', get_lang('LinksPages'),'',22).'</a>'.$showdelete;
+			}
+
             $rows[] = $row;
         }
 
         $table = new SortableTableFromArrayConfig($rows,1,10,'SearchPages_table','','','ASC');
-        $table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id']),'mode_table'=>'yes2','search_term'=>$search_term, 'search_content'=>$search_content));
-
-        $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
-        $table->set_header(1,get_lang('Title'), true);
-        $table->set_header(2,get_lang('Author').' ('.get_lang('LastVersion').')', true);
-        $table->set_header(3,get_lang('Date').' ('.get_lang('LastVersion').')', true);
-        $table->set_header(4,get_lang('Actions'), false, array ('style' => 'width:130px;'));
-        $table->display();
+		$table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id']),'mode_table'=>'yes2','search_term'=>$search_term, 'search_content'=>$search_content, 'all_vers'=>$all_vers));	
+		$table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
+		$table->set_header(1,get_lang('Title'), true);
+		if($all_vers=='1') {
+			$table->set_header(2,get_lang('Author'), true);
+			$table->set_header(3,get_lang('Date'), true);
+			$table->set_header(4,get_lang('Version'), true);
+		}
+		else {			
+			$table->set_header(2,get_lang('Author').' ('.get_lang('LastVersion').')', true);
+			$table->set_header(3,get_lang('Date').' ('.get_lang('LastVersion').')', true);		
+			$table->set_header(4,get_lang('Actions'), false, array ('style' => 'width:130px;'));
+		}
+		$table->display();
     }
     else
     {

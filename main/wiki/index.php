@@ -315,15 +315,15 @@ echo '<div id="wikiwrapper">';
 ?>
 <script type="text/javascript">
 function menu_wiki(){
- if(document.getElementById("menuwiki").style.width=="160px"){
+ if(document.getElementById("menuwiki").style.width=="170px"){
 	var w=74;
 	var b=2;
 	var h=30;
  }
  else{
-	 var w=160;
+	 var w=170;
 	 var b=1;
-	 var h=200;
+	 var h=220;
  }
 
 document.getElementById("menuwiki").style.width=w+"px";
@@ -869,17 +869,19 @@ if ($_GET['action']=='searchpages') {
 		if (! $_GET['SearchPages_table_page_nr']) {
 			$_GET['search_term']=$_POST['search_term'];
 			$_GET['search_content']=$_POST['search_content'];
+			$_GET['all_vers']=$_POST['all_vers'];
 		}
-		display_wiki_search_results(api_htmlentities($_GET['search_term']),api_htmlentities($_GET['search_content']));
+		display_wiki_search_results(api_htmlentities($_GET['search_term']),api_htmlentities($_GET['search_content']),api_htmlentities($_GET['all_vers']));
 	} else {
 	
 		// initiate the object
-		$form = new FormValidator('wiki_search','post', api_get_self().'?cidReq='.api_htmlentities($_GET['cidReq']).'&action='.api_htmlentities($_GET['action']).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'&mode_table=yes1&search_term='.api_htmlentities($_GET['search_term']).'&search_content='.api_htmlentities($_GET['search_content']));
-	
+		$form = new FormValidator('wiki_search','post', api_get_self().'?cidReq='.api_htmlentities($_GET['cidReq']).'&action='.api_htmlentities($_GET['action']).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'&mode_table=yes1&search_term='.api_htmlentities($_GET['search_term']).'&search_content='.api_htmlentities($_GET['search_content']).'&all_vers='.api_htmlentities($_GET['all_vers']));
+
 		// settting the form elements
 	
 		$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles" id="search_title"');
 		$form->addElement('checkbox', 'search_content', null, get_lang('AlsoSearchContent'));
+		$form->addElement('checkbox', 'all_vers', null, get_lang('IncludeAllVersions'));
 		$form->addElement('style_submit_button', 'SubmitWikiSearch', get_lang('Search'), 'class="search"');
 	
 		// setting the rules
@@ -888,7 +890,7 @@ if ($_GET['action']=='searchpages') {
 		if ($form->validate()) {
 			$form->display();
 			$values = $form->exportValues();
-			display_wiki_search_results($values['search_term'], $values['search_content']);
+			display_wiki_search_results($values['search_term'], $values['search_content'], $values['all_vers']);
 		} else {
 			$form->display();
 		}
@@ -1663,22 +1665,16 @@ if ($_GET['action']=='recentchanges') {
 
 /////////////////////// all pages ///////////////////////
 
-
 if ($_GET['action']=='allpages') {
     echo '<div class="actions">'.get_lang('AllPages').'</div>';
 
     $_clean['group_id']=(int)$_SESSION['_gid'];
 
-
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden 
-        //$sql='SELECT  *  FROM  '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; // warning don't use group by reflink because don't return the last version// old version TODO: Replace by the bottom line
+        $sql='SELECT  *  FROM  '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')'; // warning don't use group by reflink because does not return the last version
 
-        $sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' AND '.$tbl_wiki.'.session_id="'.$session_id.'" GROUP BY '.$tbl_wiki.'.page_id'; // new version
-    } else {
-        //$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE visibility=1 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; // warning don't use group by reflink because don't return the last version	// old version TODO: Replace by the bottom line
-
-        $sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE visibility=1 AND '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' AND '.$tbl_wiki.'.session_id="'.$session_id.'" GROUP BY '.$tbl_wiki.'.page_id'; // new version
-
+    } else {        
+		$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE visibility=1 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')'; // warning don't use group by reflink because does not return the last version
     }
 
     $allpages=Database::query($sql);

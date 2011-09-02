@@ -15,19 +15,25 @@
 require_once '../../../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
-//security
-api_protect_course_script();
-api_block_anonymous_users();
-if (!isset($_GET['filename']) || !isset($_GET['filepath']) || !isset($_GET['dir'])){
+//security. Nanogong need less security because under Firefox, Chrome..., not save user_id...
+if(api_get_setting('enable_nanogong') == 'false'){
+	api_protect_course_script();
+	api_block_anonymous_users();
+}
+
+if (!isset($_GET['filename']) || !isset($_GET['filepath']) || !isset($_GET['dir']) || !isset($_GET['course_code'])){
 	api_not_allowed(true);
 }
 if (!is_uploaded_file($_FILES['voicefile']['tmp_name'])) exit;
 
 //clean
-$filename=$_GET['filename'];
-$filename=urldecode($filename);//TODO: implement a good for record_audio.php encodeURIComponent
-$filepath=urldecode($_GET['filepath']);
-$dir=urldecode($_GET['dir']);
+$filename=Security::remove_XSS($_GET['filename']);
+$filename=urldecode($filename);
+$filepath=Security::remove_XSS(urldecode($_GET['filepath']));
+$dir=Security::remove_XSS(urldecode($_GET['dir']));
+
+$course_code = Security::remove_XSS(urldecode($_GET['course_code']));
+$_course=api_get_course_info($course_code);
 
 $filename = trim($_GET['filename']);
 $filename = Security::remove_XSS($filename);

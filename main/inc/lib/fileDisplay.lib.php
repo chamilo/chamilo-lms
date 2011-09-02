@@ -52,13 +52,13 @@ function choose_image($file_name)
     {
         $type['word'      ] = array('doc', 'dot',  'rtf', 'mcw',  'wps', 'psw', 'docm', 'docx', 'dotm',  'dotx');
         $type['web'       ] = array('htm', 'html', 'htx', 'xml',  'xsl',  'php', 'xhtml');
-        $type['image'     ] = array('gif', 'jpg',  'png', 'bmp',  'jpeg');
+        $type['image'     ] = array('gif', 'jpg',  'png', 'bmp',  'jpeg', 'tif', 'tiff');
         $type['image_vect'] = array('svg','svgz');
-        $type['audio'     ] = array('wav', 'mid',  'mp2', 'mp3',  'midi', 'sib', 'amr', 'kar', 'oga');
-        $type['video'     ] = array('mp4', 'mov',  'rm',  'pls',  'mpg',  'mpeg', 'au', 'flv', 'avi', 'wmv', 'asf', '3gp','ogv','ogg','ogx');
+        $type['audio'     ] = array('wav', 'mid',  'mp2', 'mp3',  'midi', 'sib', 'amr', 'kar', 'oga','au','wma');
+		$type['video'     ] = array('mp4', 'mov',  'rm',  'pls',  'mpg',  'mpeg', 'm2v', 'm4v', 'flv', 'f4v', 'avi', 'wmv', 'asf', '3gp','ogv','ogg','ogx','webm');
         $type['excel'     ] = array('xls', 'xlt',  'xls', 'xlt', 'pxl', 'xlsx', 'xlsm', 'xlam', 'xlsb', 'xltm', 'xltx');
         $type['compressed'] = array('zip', 'tar',  'rar', 'gz');
-        $type['code'      ] = array('js',  'cpp',  'c',   'java', 'phps');
+        $type['code'      ] = array('js',  'cpp',  'c',   'java', 'phps', 'jsp', 'asp', 'aspx', 'cfm');
         $type['acrobat'   ] = array('pdf');
         $type['powerpoint'] = array('ppt', 'pps', 'pptm', 'pptx', 'potm', 'potx', 'ppam', 'ppsm', 'ppsx');
         $type['flash'     ] = array('fla', 'swf');
@@ -68,6 +68,7 @@ function choose_image($file_name)
         $type['oo_impress'] = array('odp', 'otp', 'sxi', 'sti');
         $type['oo_draw'   ] = array('odg', 'otg', 'sxd', 'std');
         $type['epub'      ] = array('epub');
+		$type['java'      ] = array('class','jar');
 
         $image['word'      ] = 'word.gif';
         $image['web'       ] = 'file_html.gif';
@@ -87,6 +88,7 @@ function choose_image($file_name)
         $image['oo_impress'] = 'file_oo_impress.gif';
         $image['oo_draw'   ] = 'file_oo_draw.gif';
         $image['epub'      ] = 'file_epub.gif';
+		$image['java'      ] = 'file_java.png';
     }
 
     /* FUNCTION CORE */

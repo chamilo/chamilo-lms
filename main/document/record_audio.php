@@ -137,7 +137,7 @@ if (isset ($group)) {
 Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
-		echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+		echo '<a href="document.php?'.api_get_cidreq().'&id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 echo '</div>';
 
 echo '<br/>';
@@ -155,10 +155,13 @@ function submitVoice() {
 	//path, url and filename
 	var filename = document.getElementById("audio_title").value+".wav";	
 	var filename = filename.replace(/\s/g, "_");//replace spaces by _
-	var filename = encodeURIComponent(filename);//TODO:implement a good encode into receiver.php	
+	var filename = encodeURIComponent(filename);	
 	var filepath="<?php echo urlencode($filepath); ?>";
-	var dir="<?php echo urlencode($dir); ?>";	
-	var urlnanogong="../inc/lib/nanogong/receiver.php?filename="+filename+"&filepath="+filepath+"&dir="+dir;	
+	var dir="<?php echo urlencode($dir); ?>";
+	var course_code="<?php echo urlencode($course_code); ?>";
+	var urlnanogong="../inc/lib/nanogong/receiver.php?filename="+filename+"&filepath="+filepath+"&dir="+dir+"&course_code="+course_code;
+	
+	
 	//check	
 	var recorder
 	if (!(recorder = document.getElementById("nanogong")) || !(recorder.sendGongRequest)) {
@@ -209,6 +212,8 @@ if ($array_browser[0]=="Internet Explorer") {
 } else {   
 	echo '<form name="form_nanogong">';	
 		echo '<input type="text" id="audio_title">';
+		echo '<input type="hidden" name="cidReq" value="'.$_course['id'].'">';
+		echo '<input type="hidden" name="id" value="'.$document_id.'">';
 		echo '<button class="upload" type="submit" value="'.get_lang('Send').'" onClick="submitVoice()" />'.get_lang('Send').'</button>';
 	echo '</form>';
 }

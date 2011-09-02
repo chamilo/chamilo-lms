@@ -456,7 +456,7 @@ class Display {
         $nameTools = $tool_name;
         global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
         global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
-        global $menu_navigation;
+        global $menu_navigation;        
         require api_get_path(INCLUDE_PATH).'header.inc.php';
     }
 

@@ -123,7 +123,7 @@ if (api_get_setting('show_teacher_data') == 'true') {
 echo '</div>';
 
 echo '</div> <!-- end of #footer -->';
-
+/*
 // Test server mode indicator and information for testing purposes.
 if (api_is_platform_admin()) {
 	if (api_get_setting('server_type') == 'test') {
@@ -136,7 +136,7 @@ if (api_is_platform_admin()) {
 		$mtime = explode(" ",$mtime);
 		$mtime = $mtime[1] + $mtime[0];
 		$endtime = $mtime;
-		$starttime = $_SESSION['page_start_time_execution'];
+		$starttime = $_SESSION['page_start_time_execution']; 
 		$totaltime = ($endtime - $starttime);
 
 		$starttime = null;
@@ -152,7 +152,7 @@ if (api_is_platform_admin()) {
 		echo '<br />';
 		echo get_lang('MemoryUsagePeak').': '.number_format((memory_get_peak_usage()/1048576), 3, '.', '').' Mb';
 	}
-}
+}*/
 ?>
 <script>
 $(document).ready( function() {

@@ -112,8 +112,10 @@ require_once $lib_path.'course.lib.php';
 require_once $lib_path.'sessionmanager.lib.php';
 require_once $lib_path.'tracking.lib.php';
 
-
+require_once $lib_path.'formvalidator/FormValidator.class.php';
 require_once $lib_path.'online.inc.php';
+
+require_once $lib_path.'template.lib.php';
 
 /*  DATABASE CONNECTION  */
 

@@ -458,7 +458,8 @@ function show_header_3() {
 }
 
 //Header 4
-function show_header_4($interbreadcrumb, $language_file, $nameTools) {   
+function show_header_4($interbreadcrumb, $language_file, $nameTools) {  
+	 
     $session_id     = api_get_session_id();
     $session_name   = api_get_session_name($session_id);
     $_course        = api_get_course_info();    
@@ -545,7 +546,7 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
     
     // part 3: The tool itself. If we are on the course homepage we do not want to display the title of the course because this
     // is the same as the first part of the breadcrumbs (see part 1)
-    if (isset($nameTools) && $language_file != 'course_home') { // TODO: This condition $language_file != 'course_home' might bring surprises.
+    if (isset($nameTools) && $language_file != 'course_home') { // TODO: This condition $language_file != 'course_home' might bring surprises.    	
         $navigation_item['url'] = '#';
         $navigation_item['title'] = $nameTools;
         $navigation[] = $navigation_item;
@@ -564,9 +565,9 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
             $counter++;
         }
     }
-    
+    $html = '';
     if (!empty($final_navigation)) {
-        echo '<div id="header4">';
+        $html .= '<div id="header4">';
         $lis = '';
         $i = 0;
         $lis.= Display::tag('li', Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home')));        
@@ -574,13 +575,15 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
             $lis.= Display::tag('li', $bread);
             $i++;
         }
-        echo Display::tag('ul',$lis, array('class'=>'bread'));
-        echo '</div>';        
+        $html .= Display::tag('ul',$lis, array('class'=>'bread'));
+        $html .= '</div>';        
     } else {
-        echo '<div id="header4">';
-        echo '</div>';
+        $html .= '<div id="header4">';
+        $html .= '</div>';
     } 
-    echo '<div class="clear"></div>';
+    $html .= '<div class="clear"></div>';
+    
+    return $html ;
 }
 
 

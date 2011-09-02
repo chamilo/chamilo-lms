@@ -2809,31 +2809,32 @@ function api_display_language_form($hide_if_no_choice = false) {
 
     $original_languages = $language_list['name'];
     $folder = $language_list['folder']; // This line is probably no longer needed.
-?>
+	$html = '
     <script type="text/javascript">
     <!--
     function jumpMenu(targ,selObj,restore){ // v3.0
-        eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
+        eval(targ+".location=\'"+selObj.options[selObj.selectedIndex].value+"\'");
         if (restore) selObj.selectedIndex=0;
     }
     //-->
-    </script>
-<?php
-    echo '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
-    echo "<select class=\"chzn-select\" name=\"language_list\" onchange=\"javascript: jumpMenu('parent',this,0);\">";
+    </script>';
+
+    $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
+    $html .=  "<select class=\"chzn-select\" name=\"language_list\" onchange=\"javascript: jumpMenu('parent',this,0);\">";
     foreach ($original_languages as $key => $value) {
         if ($folder[$key] == $user_selected_language) {
             $option_end = ' selected="selected" >';
         } else {
             $option_end = '>';
         }
-        echo '<option value="'.api_get_self().'?language='.$folder[$key].'"'.$option_end;
+        $html .=  '<option value="'.api_get_self().'?language='.$folder[$key].'"'.$option_end;
         //echo substr($value, 0, 16); // Cut string to keep 800x600 aspect.
-        echo $value, '</option>', "\n";
+        $html .=  $value.'</option>';
     }
-    echo '</select>';
-    echo '<noscript><input type="submit" name="user_select_language" value="'.get_lang('Ok').'" /></noscript>';
-    echo '</form>';
+    $html .=  '</select>';
+    $html .=  '<noscript><input type="submit" name="user_select_language" value="'.get_lang('Ok').'" /></noscript>';
+    $html .=  '</form>';
+    return $html;
 }
 
 /**
@@ -4979,6 +4980,12 @@ function api_get_js($file) {
     return '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'"></script>';
 }
 
+function api_get_css($file) {
+	$media = '';
+	return '<link rel="stylesheet" href="'.$file.'" type="text/css" media="'.$media.'" />';	
+}
+
+
 
 /**
  * Returns the js header to include the jquery library
@@ -5021,7 +5028,8 @@ function api_get_jquery_libraries_js($libraries) {
         
         $jquery_ui_version = '1.8.16';
         
-        $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.css" type="text/css">';
+        //$js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.css" type="text/css">';
+        $js .= api_get_css($js_path.'jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.css');
         $js .= api_get_js('jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.min.js');
     }
     
@@ -5036,7 +5044,8 @@ function api_get_jquery_libraries_js($libraries) {
         if (in_array($platform_isocode, $jqgrid_langs)) {
             $languaje = $platform_isocode;
         }    
-        $js .= '<link rel="stylesheet" href="'.$js_path.'jqgrid/css/ui.jqgrid.css" type="text/css">';
+        //$js .= '<link rel="stylesheet" href="'.$js_path.'jqgrid/css/ui.jqgrid.css" type="text/css">';
+        $js .= api_get_css($js_path.'jqgrid/css/ui.jqgrid.css');
         $js .= api_get_js('jqgrid/js/i18n/grid.locale-'.$languaje.'.js');
         $js .= api_get_js('jqgrid/js/jquery.jqGrid.min.js');
     }
@@ -5045,20 +5054,19 @@ function api_get_jquery_libraries_js($libraries) {
     if (in_array('jquery-upload', $libraries)) {
         $js .= api_get_js('jquery-upload/jquery.fileupload.js'); 
         $js .= api_get_js('jquery-upload/jquery.fileupload-ui.js');
-        $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-upload/jquery.fileupload-ui.css" type="text/css">';        
+        $js .= api_get_css($js_path.'jquery-upload/jquery.fileupload-ui.css');                
     }
     
     //jquery-ui css changes for Chamilo
     if (in_array('jquery-ui',$libraries)) {
-        //Adding default CSS changes of the jquery-ui themes for Chamilo in order to preserve the original jquery-ui css
-        $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/default.css" type="text/css">';
+        //Adding default CSS changes of the jquery-ui themes for Chamilo in order to preserve the original jquery-ui css        
+        $js .= api_get_css($js_path.'jquery-ui/default.css');
     }
     
     if (in_array('bxslider',$libraries)) {
     	$js .= api_get_js('bxslider/jquery.bxSlider.min.js');
-    	$js .= '<link rel="stylesheet" href="'.$js_path.'bxslider/bx_styles/bx_styles.css" type="text/css">';
-    }
-    
+    	$js .= api_get_css($js_path.'bxslider/bx_styles/bx_styles.css');    	
+    }    
     return $js;	
 }
 
@@ -5115,3 +5123,8 @@ function api_get_unique_id() {
     $id = md5(time().uniqid().api_get_user_id().api_get_course_id().api_get_session_id());    
     return $id;
 }
+
+
+
+
+

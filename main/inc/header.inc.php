@@ -52,9 +52,11 @@ $title_list[] = api_get_setting('siteName');
 if (!empty($course_title)) {
     $title_list[] = $course_title;
 }
+
 if ($nameTools != '') {
     $title_list[] = $nameTools;
 }
+
 $title_string = '';
 for($i=0; $i<count($title_list);$i++) {
     $title_string .=$title_list[$i];

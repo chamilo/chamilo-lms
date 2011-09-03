@@ -8,7 +8,7 @@ require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
 
 class Template extends Smarty {
 	
-	var $style = 'default'; //see the template folder 
+	var $style = 'experimental'; //see the template folder 
 	
 	function __construct($title = '') {
 		$this->title = $title;
@@ -48,7 +48,10 @@ class Template extends Smarty {
 					
 		$this->set_header_parameters();
 		$this->set_footer_parameters();	
+		//Now we can call the get_lang from a template!!! Just use {"MyString"|get_lang} 
+		$this->registerPlugin("modifier","get_lang", "get_lang");
 		
+		//$this->loadPlugin('smarty_function_get_lang');
 		//$this->caching = Smarty::CACHING_LIFETIME_CURRENT;				
 		$this->assign('style', $this->style);
 		

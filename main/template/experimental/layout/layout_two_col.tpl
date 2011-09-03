@@ -5,7 +5,7 @@
 {/block}
 
 {block name=body}
-	<h1>My experimental Template!!</h1>
+	<h1>{"WelcomeUserXToTheSiteX"|get_lang} </h1>
 	<div id="maincontent" class="maincontent">
 		{$home_page_block}
 		{$plugin_courses_block}

@@ -20,7 +20,7 @@ $this_section = SECTION_COURSES;
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
 $userportal = new IndexManager(get_lang('MyCourses'));
-$tpl = $userportal->tpl->get_template('layout/layout_two_col.tpl');
+$tpl = $userportal->tpl->get_template('layout/layout_3_col.tpl');
 
 //if (!$userportal->tpl->isCached($tpl, api_get_user_id())) {
 		

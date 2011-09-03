@@ -40,8 +40,11 @@ $(document).ready(function(){
 
 
 $index = new IndexManager($header_title);
- 
-$tpl = $index->tpl->get_template('layout/layout_two_col.tpl');
+if (api_get_user_id()) {
+	$tpl = $index->tpl->get_template('layout/layout_3_col.tpl');
+} else {
+	$tpl = $index->tpl->get_template('layout/layout_2_col.tpl');
+}
 
 
 //@todo move this inside the IndexManager

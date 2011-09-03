@@ -45,17 +45,33 @@ class Template extends Smarty {
 		$this->caching 			= true;
 		$this->cache_lifetime 	= Smarty::CACHING_OFF; // no caching
 		//$this->cache_lifetime 	= 120;
-					
-		$this->set_header_parameters();
+		
+		$this->set_user_parameters();
+		
+		$this->set_header_parameters();		
+		
 		$this->set_footer_parameters();	
+		
 		//Now we can call the get_lang from a template!!! Just use {"MyString"|get_lang} 
 		$this->registerPlugin("modifier","get_lang", "get_lang");
 		
 		//$this->loadPlugin('smarty_function_get_lang');
 		//$this->caching = Smarty::CACHING_LIFETIME_CURRENT;				
-		$this->assign('style', $this->style);
-		
+		$this->assign('style', $this->style);		
 	}
+	
+	function set_user_parameters() {		
+		if (api_get_user_id()) {
+			$user_info = api_get_user_info();
+			//$this->assign('user_info', $user_info);
+			$this->assign('user_complete_name', api_get_person_name($user_info['firstname'], $user_info['lastname']));
+			
+			
+		} else {
+			
+		}
+	}
+	
 	
 	function get_template($name) {
 		return $this->style.'/'.$name;

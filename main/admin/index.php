@@ -14,8 +14,6 @@ $cidReset = true;
 
 // Including some necessary chamilo files.
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'security.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php';
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 

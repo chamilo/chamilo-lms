@@ -46,6 +46,7 @@ class Template extends Smarty {
 		$this->cache_lifetime 	= Smarty::CACHING_OFF; // no caching
 		//$this->cache_lifetime 	= 120;
 		
+		$this->set_system_parameters();
 		$this->set_user_parameters();
 		
 		$this->set_header_parameters();		
@@ -60,16 +61,19 @@ class Template extends Smarty {
 		$this->assign('style', $this->style);		
 	}
 	
-	function set_user_parameters() {		
+	private function set_user_parameters() {		
 		if (api_get_user_id()) {
 			$user_info = api_get_user_info();
 			//$this->assign('user_info', $user_info);
 			$this->assign('user_complete_name', api_get_person_name($user_info['firstname'], $user_info['lastname']));
-			
-			
-		} else {
-			
 		}
+	}
+	
+	
+	private function set_system_parameters() {
+		$this->assign('WEB_PATH', 			api_get_path(WEB_PATH));
+		$this->assign('WEB_COURSE_PATH', 	api_get_path(WEB_COURSE_PATH));
+		$this->assign('WEB_MAIN_PATH', 		api_get_path(WEB_CODE_PATH));
 	}
 	
 	
@@ -77,7 +81,7 @@ class Template extends Smarty {
 		return $this->style.'/'.$name;
 	}
 
-	public function set_header_parameters($help = null) {
+	private function set_header_parameters($help = null) {
 		$nameTools = $this->title;
 		global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
 		global $httpHeadXtra, $htmlHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_user, 
@@ -285,7 +289,7 @@ class Template extends Smarty {
 		header('X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'],0,1));
 	}
 
-	function set_footer_parameters() {
+	private function set_footer_parameters() {
 		//Footer plugin
 		global $_plugins, $_configuration;
 		ob_start();

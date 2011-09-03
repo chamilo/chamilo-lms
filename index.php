@@ -24,11 +24,9 @@ $cidReset = true;
 /** @todo Make all the library files consistent, use filename.lib.php and not filename.lib.inc.php. */
 require_once 'main/inc/global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
+
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
-
 require_once 'main/chat/chat_functions.lib.php';
 
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
@@ -37,6 +35,13 @@ $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 't
 // The section (for the tabs).
 $this_section = SECTION_CAMPUS;
 unset($_SESSION['this_section']);//for hmtl editor repository
+
+$header_title = null;
+if (!api_is_anonymous()) {
+	$header_title = " ";
+}
+
+$index = new IndexManager($header_title, false);
 
 /* Action Handling */
 
@@ -48,24 +53,17 @@ unset($_SESSION['this_section']);//for hmtl editor repository
 $my_user_id = api_get_user_id();
 
 if (!empty($_GET['logout'])) {
-    logout();
+    $index->logout();
 }
 
 /* Table definitions */
-$main_course_table      = Database :: get_main_table(TABLE_MAIN_COURSE);
-$main_category_table    = Database :: get_main_table(TABLE_MAIN_CATEGORY);
-$track_login_table      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+
 
 /* Constants and CONFIGURATION parameters */
 /** @todo these configuration settings should move to the Chamilo config settings. */
 
 /** Defines wether or not anonymous visitors can see a list of the courses on the Chamilo homepage that are open to the world. */
 $_setting['display_courses_to_anonymous_users'] = 'true';
-
-/** @todo Remove this piece of code because this is not used. */
-if (isset($_user['user_id'])) {
-    $nameTools = api_get_setting('siteName');
-}
 
 /* LOGIN */
 
@@ -96,6 +94,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 if (!empty($_POST['submitAuth'])) {
     // The user has been already authenticated, we are now to find the last login of the user.
     if (isset ($_user['user_id'])) {
+    	$track_login_table      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $sql_last_login = "SELECT UNIX_TIMESTAMP(login_date)
                                 FROM $track_login_table
                                 WHERE login_user_id = '".$_user['user_id']."'
@@ -123,17 +122,6 @@ if (!empty($_POST['submitAuth'])) {
     event_open();
 }
 
-// The header.
-/*$header_title = get_lang('Homepage');
-//$sitename = api_get_setting('siteName');
-if (!api_get_user_id()) { 
-    $header_title = null;
-}*/
-$header_title = null;
-if (!api_is_anonymous()) {
-    $header_title = " ";
-}
-
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('bxslider'));
 $htmlHeadXtra[] ='
 <script type="text/javascript">
@@ -149,10 +137,6 @@ $(document).ready(function(){
 </script>';
 
 Display::display_header($header_title);
-
-
-$index = new IndexManager($header_title, false);
-
 
 /* MAIN CODE */
 
@@ -185,18 +169,8 @@ echo $index->return_home_page();
 
 // Display courses and category list.
 //if (!$page_included) {
-
-    // Display System announcements
-    $announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;
-    $announcement = intval($announcement);
-
-    if (isset($_user['user_id'])) {
-        $visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
-        SystemAnnouncementManager :: display_announcements_slider($visibility, $announcement);
-    } else {
-        SystemAnnouncementManager :: display_announcements_slider(VISIBLE_GUEST, $announcement);
-    }
-
+    echo $index->return_announcements();
+     
     if (api_get_setting('display_categories_on_homepage') == 'true') {
         echo '<div class="home_cats">';
         $index->display_anonymous_course_list();
@@ -206,16 +180,13 @@ echo $index->return_home_page();
 
 echo '</div>';
 
-
 echo '<div id="menu-wrapper">';
-
-echo $index->return_profile_block();
-
-// Display right menu: language form, login section + useful weblinks.
-$index->display_anonymous_right_menu();
+	echo $index->return_profile_block();
+	
+	// Display right menu: language form, login section + useful weblinks.
+	$index->display_anonymous_right_menu();
 
 echo '</div>';
 
 /* Footer */
-
 Display :: display_footer();

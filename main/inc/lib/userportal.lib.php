@@ -1,23 +1,102 @@
 <?php 
 
 require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
+
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
 
 
 class IndexManager {
-	var $tpl = false;
-	var $name = '';
+	var $tpl 	= false; //An instance of the template engine
+	var $name 	= '';
+	
+	var $home			= '';
+	var $default_home 	= 'home/';
 	
 	function __construct($title, $load_template = true) {
+		
 		if ($load_template) {			
 			$this->tpl = new Template($title);					
-		}		
+		}
+				
+		$home = 'home/';
+		if (api_get_multiple_access_url()) {
+			$access_url_id = api_get_current_access_url_id();
+			$url_info      = api_get_access_url($access_url_id);
+			$url           = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
+			$clean_url     = replace_dangerous_char($url);
+			$clean_url     = str_replace('/', '-', $clean_url);
+			$clean_url     .= '/';			
+			// if $clean_url ==  "localhost/" means that the multiple URL was not well configured we don't rename the $home variable
+			if ($clean_url != 'localhost/')
+			$home          = 'home/'.$clean_url;
+		}
+		$this->home = $home;
+		$this->user_id = api_get_user_id();
 	}
 	
 	
-	/* Functions */
+	function set_login_form($use_template = true) {
+		global $loginFailed;
+		
+		$login_form = '';
 	
+		if (!($this->user_id) || api_is_anonymous($this->user_id)) {
+	
+			// Only display if the user isn't logged in.
+			$login_form = api_display_language_form(true);	
+			$login_form .= self::display_login_form();	
+			if ($loginFailed) {
+				$login_form .= self::handle_login_failed();
+			}
+	
+			if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
+				$login_form .= '<div class="menusection"><span class="menusectioncaption">'.get_lang('MenuUser').'</span><ul class="menulist">';
+				if (api_get_setting('allow_registration') != 'false') {
+					$login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
+				}
+				if (api_get_setting('allow_lostpassword') == 'true') {
+					$login_form .= '<li><a href="main/auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
+				}
+				$login_form .= '</ul></div>';
+			}
+	
+			if (api_number_of_plugins('loginpage_menu') > 0) {
+				$login_form .= '<div class="note" style="background: none">';
+				ob_start();
+				api_plugin('loginpage_menu');
+				$plugin_login = ob_get_contents();
+				$login_form .= $plugin_login;
+				$login_form .= '</div>';
+			}
+			if (!empty($login_form)) {
+				$login_form  = '<div class="menu" id="menu">'.$login_form.'</div>';
+			}			
+		}		
+		$login_form_tmp = $login_form;
+		if ($use_template)
+			$this->tpl->assign('login_block', $login_form);
+		//@todo remove this return
+		
+		return $login_form;		
+	}
+	
+	function return_announcements() {	
+		// Display System announcements
+		$announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;
+		$announcement = intval($announcement);
+		
+		if (isset($_user['user_id'])) {
+			$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
+			$announcements = SystemAnnouncementManager :: display_announcements_slider($visibility, $announcement);
+		} else {
+			$announcements = SystemAnnouncementManager :: display_announcements_slider(VISIBLE_GUEST, $announcement);
+		}
+		return $announcements;
+	}
+	
+	
+		
 	/**
 	 * This function handles the logout and is called whenever there is a $_GET['logout']
 	 *
@@ -112,24 +191,17 @@ class IndexManager {
 	 * @todo does $_plugins need to be global?
 	 */
 	function display_anonymous_right_menu() {
-		global $loginFailed, $_plugins, $_user, $menu_navigation, $home, $home_old;
+		global $loginFailed, $_plugins, $_user, $menu_navigation;
 	
-		$platformLanguage       = api_get_setting('platformLanguage');	
-		
-		$display_add_course_link= api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');
+		$platformLanguage       	= api_get_setting('platformLanguage');		
+		$display_add_course_link	= api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');	
+		$current_user_id        	= api_get_user_id();
 	
-		$current_user_id        = api_get_user_id();
-	
-		$login_form = self::show_login_form($current_user_id);
-		if (!empty($login_form)) {
-			echo '<div class="menu" id="menu">';
-			echo $login_form;
-			echo '</div>';
-		}
+		echo self::set_login_form(false);		
 		
-		echo self::display_teacher_link($current_user_id);
+		echo self::return_teacher_link();
 		
-		echo self::return_notice($home);
+		echo self::return_notice();
 		
 		//Plugin
 		echo self::return_plugin_campushomepage();	
@@ -137,9 +209,9 @@ class IndexManager {
 	
 	
 	
-	function display_teacher_link($current_user_id) {
+	function return_teacher_link() {
 		$html = '';
-		if (!empty($current_user_id)) {
+		if (!empty($this->user_id)) {
 			// tabs that are deactivated are added here
 		
 			$show_menu = false;
@@ -194,75 +266,58 @@ class IndexManager {
 	
 	
 	function return_home_page() {	
-		$home = 'home/';
-		if (api_get_multiple_access_url()) {
-			$access_url_id = api_get_current_access_url_id();
-			$url_info      = api_get_access_url($access_url_id);
-			$url           = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-			$clean_url     = replace_dangerous_char($url);
-			$clean_url     = str_replace('/', '-', $clean_url);
-			$clean_url     .= '/';
-			$home_old      = 'home/';
-			// if $clean_url ==  "localhost/" means that the multiple URL was not well configured we don't rename the $home variable
-			if ($clean_url != 'localhost/')
-			$home          = 'home/'.$clean_url;
-		}
-		
+
 		// Including the page for the news
 		$html = '';
 		
 		if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
-			$open = @(string)file_get_contents(api_get_path(SYS_PATH).$home.$_GET['include']);
-			$html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));		 
-			
-		} else {
-		
+			$open = @(string)file_get_contents(api_get_path(SYS_PATH).$this->home.$_GET['include']);
+			$html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));		 			
+		} else {		
 			if (!empty($_SESSION['user_language_choice'])) {
 				$user_selected_language = $_SESSION['user_language_choice'];
 			} elseif (!empty($_SESSION['_user']['language'])) {
 				$user_selected_language = $_SESSION['_user']['language'];
 			} else {
 				$user_selected_language = api_get_setting('platformLanguage');
-			}
-		
-			if (!file_exists($home.'home_news_'.$user_selected_language.'.html')) {
-				if (file_exists($home.'home_top.html')) {
-					$home_top_temp = file($home.'home_top.html');
+			}		
+			if (!file_exists($this->home.'home_news_'.$user_selected_language.'.html')) {
+				if (file_exists($this->home.'home_top.html')) {
+					$home_top_temp = file($this->home.'home_top.html');
 				} else {
-					$home_top_temp = file($home_old.'home_top.html');
+					$home_top_temp = file($this->default_home.'home_top.html');
 				}
 				$home_top_temp = implode('', $home_top_temp);
 			} else {
-				if (file_exists($home.'home_top_'.$user_selected_language.'.html')) {
-					$home_top_temp = file_get_contents($home.'home_top_'.$user_selected_language.'.html');
+				if (file_exists($this->home.'home_top_'.$user_selected_language.'.html')) {
+					$home_top_temp = file_get_contents($this->home.'home_top_'.$user_selected_language.'.html');
 				} else {
-					$home_top_temp = file_get_contents($home.'home_top.html');
+					$home_top_temp = file_get_contents($this->home.'home_top.html');
 				}
 			}
 			if (trim($home_top_temp) == '' && api_is_platform_admin()) {
 				$home_top_temp = get_lang('PortalHomepageDefaultIntroduction');
 			}
 			$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
-			$html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));		
+			$html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));				
 		}
-		return $html;
-		
+		return $html;		
 	}
 	
-	function return_notice($home) {
+	function return_notice() {
 		$sys_path               = api_get_path(SYS_PATH);
 		$user_selected_language = api_get_interface_language();
 		
 		$html = '';
 		// Notice
-		$home_notice = @(string)file_get_contents($sys_path.$home.'home_notice_'.$user_selected_language.'.html');
+		$home_notice = @(string)file_get_contents($sys_path.$this->home.'home_notice_'.$user_selected_language.'.html');
 		if (empty($home_notice)) {
-			$home_notice = @(string)file_get_contents($sys_path.$home.'home_notice.html');
+			$home_notice = @(string)file_get_contents($sys_path.$this->home.'home_notice.html');
 		}
 		
 		if (!empty($home_notice)) {
 			$home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
-			echo show_right_block('', $home_notice, 'note');
+			echo self::show_right_block('', $home_notice, 'note');
 		}
 		
 		if (isset($_SESSION['_user']['user_id']) && $_SESSION['_user']['user_id'] != 0) {
@@ -278,7 +333,7 @@ class IndexManager {
 					$content .='<li'.$current.'><a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a></li>';
 				}
 				$content .= '</ul>';
-				$html .= show_right_block(get_lang('MainNavigation'), $content);
+				$html .= self::show_right_block(get_lang('MainNavigation'), $content);
 			}
 		}
 		
@@ -289,12 +344,12 @@ class IndexManager {
 			$user_selected_language = $platformLanguage;
 		}
 		
-		$home_menu = @(string)file_get_contents($sys_path.$home.'home_menu_'.$user_selected_language.'.html');
+		$home_menu = @(string)file_get_contents($sys_path.$this->home.'home_menu_'.$user_selected_language.'.html');
 		if (!empty($home_menu)) {
 			$home_menu_content .= '<ul class="menulist">';
 			$home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 			$home_menu_content .= '</ul>';
-			$html .= show_right_block(get_lang('MenuGeneral'), $home_menu_content);
+			$html .= self::show_right_block(get_lang('MenuGeneral'), $home_menu_content);
 		}
 		
 		return $html;
@@ -351,12 +406,6 @@ class IndexManager {
 	
 	
 	
-	/**
-	 * Displays a link to the lost password section
-	 */
-	function display_lost_password_info() {
-		return '<li><a href="main/auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
-	}
 	
 	/**
 	 * Display list of courses in a category.
@@ -674,41 +723,7 @@ class IndexManager {
 		return $html;
 	}
 	
-	function show_login_form($current_user_id) {
-		$login_form = '';
-		if (!($current_user_id) || api_is_anonymous($current_user_id) ) {
-		
-			// Only display if the user isn't logged in.
-			$login_form = api_display_language_form(true);
-		
-			$login_form .= self::display_login_form();
-		
-			if ($loginFailed) {
-				$login_form .= self::handle_login_failed();
-			}
-		
-			if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-				$login_form .= '<div class="menusection"><span class="menusectioncaption">'.get_lang('MenuUser').'</span><ul class="menulist">';
-				if (api_get_setting('allow_registration') != 'false') {
-					$login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
-				}
-				if (api_get_setting('allow_lostpassword') == 'true') {
-					$login_form .= self::display_lost_password_info();
-				}
-				$login_form .= '</ul></div>';
-			}
-		
-			if (api_number_of_plugins('loginpage_menu') > 0) {
-				$login_form .= '<div class="note" style="background: none">';
-				ob_start();
-				api_plugin('loginpage_menu');
-				$plugin_login = ob_get_contents();
-				$login_form .= $plugin_login;
-				$login_form .= '</div>';
-			}
-		}
-		return $login_form;
-	}
+
 	
 	function return_search_block() {
 		$html = '';
@@ -948,8 +963,10 @@ class IndexManager {
 		return $plugin_content;
 	}
 	
-	
-	
+	/**
+	 * The most important function here, prints the session and course list
+	 *  
+	 * */
 	function return_courses_and_sessions($personal_course_list) {
 		
 		// Don't change these settings

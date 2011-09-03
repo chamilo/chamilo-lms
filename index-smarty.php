@@ -13,31 +13,45 @@ $language_file = array('courses', 'index');
 // Maybe we should change this into an api function? an example: Coursemanager::unset();
 $cidReset = true;
 
-/* Included libraries */
-// The section (for the tabs).
-$this_section = SECTION_CAMPUS;
-
 require_once 'main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
+
+// The section (for the tabs).
+$this_section = SECTION_CAMPUS;
 
 $header_title = null;
 if (!api_is_anonymous()) {
 	$header_title = " ";
 }
 
+$htmlHeadXtra[] = api_get_jquery_libraries_js(array('bxslider'));
+$htmlHeadXtra[] ='
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#slider").bxSlider({
+		infiniteLoop	: true,
+		auto			: true,
+		pager			: true,
+		autoHover		: true,
+		pause			: 10000
+	});
+});
+</script>';
+
+
 $index = new IndexManager($header_title);
  
 $tpl = $index->tpl->get_template('layout/layout_two_col.tpl');
 
-$user_id        = api_get_user_id();
 
 //@todo move this inside the IndexManager
-$index->tpl->assign('login_block', 				$index->show_login_form($user_id));
-$index->tpl->assign('teacher_block', 			$index->display_teacher_link($user_id));
-$index->tpl->assign('home_page', 				$index->return_home_page());
+
+$index->tpl->assign('announcements_block', 		$index->return_announcements());
+$index->tpl->assign('teacher_block', 			$index->return_teacher_link());
+$index->tpl->assign('home_page_block', 			$index->return_home_page());
 
 $index->tpl->assign('profile_block', 			$index->return_profile_block());
-$index->tpl->assign('notice_block',				$index->return_notice($home));
+$index->tpl->assign('notice_block',				$index->return_notice());
 $index->tpl->assign('plugin_campushomepage', 	$index->return_plugin_campushomepage());
 
 $index->tpl->display($tpl);

@@ -489,27 +489,28 @@ class SystemAnnouncementManager {
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
 	
 		$announcements = Database::query($sql);
+		$html = '';
 		if (Database::num_rows($announcements) > 0) {
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
 			$query_string = ereg_replace('&$', '', $query_string);
 			$url = api_get_self();
 	
-			echo '<div class="system_announcements">';
-			echo '<h3>'.get_lang('SystemAnnouncements').'</h3>';
+			$html .= '<div class="system_announcements">';
+			$html .=  '<h3>'.get_lang('SystemAnnouncements').'</h3>';
 			//echo '<div style="margin:10px;text-align:right;"><a href="news_list.php">'.get_lang('More').'</a></div>';
 			
-			echo '<div id="container-slider">
+			$html .=  '<div id="container-slider">
 					<ul id="slider">';
 			while ($announcement = Database::fetch_object($announcements)) {				
 				if ($id != $announcement->id) {
-					echo '<li><h1>'.$announcement->title.'</h1>'.$announcement->content.'</li>';
+					$html .=  '<li><h1>'.$announcement->title.'</h1>'.$announcement->content.'</li>';
 				} else {
-					echo '<li><h1>'.$announcement->title.'</h1>'.$announcement->content.'</li>';
+					$html .=  '<li><h1>'.$announcement->title.'</h1>'.$announcement->content.'</li>';
 				}
 			}
-			echo '</ul></div></div>';			
+			$html .=  '</ul></div></div>';			
 		}
-		return;
+		return $html;
 	}
 	
 }

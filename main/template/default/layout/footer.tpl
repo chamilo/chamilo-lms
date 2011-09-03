@@ -1,26 +1,23 @@
 <div id="footer"> <!-- start of #footer section -->
 	<div id="bottom_corner"></div>
-	<div class="copyright">
+	<div class="copyright">		
 	    {if $show_administrator_data == 'true'}
-	        {* Platform manager *}
 	        <div align="right">
-	            {$administrator_data}            
+	            {$administrator_name}            
 	        </div>
 	    {/if}    
 	    <div align="right">
-	    	{$platform}
+	    	{$platform_name}
 	    </div>    
-	</div>  {* //copyright div *}
-	
-	<div class="footer_emails">
-	
-	{*  Plugins for footer section *}
-	
-	<div id="plugin-footer">
-	{$plugin_footer}
 	</div>
 	
-	<div style="clear:both"></div>
+	<div class="footer_emails">
+		
+		{*  Plugins for footer section *}		
+		<div id="plugin-footer">
+			{$plugin_footer}
+		</div>		
+		<div style="clear:both"></div>
 	</div>
 </div> <!-- end of #footer -->
 

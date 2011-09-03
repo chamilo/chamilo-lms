@@ -1011,8 +1011,7 @@ class IndexManager {
 			if (empty($courses_tree)) {
 				echo get_lang('YouDoNotHaveAnySessionInItsHistory');
 			}
-		}
-		
+		}		
 		
 		/* PERSONAL COURSE LIST */
 		

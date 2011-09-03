@@ -16,9 +16,10 @@ $cidReset = true;
 require_once 'main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
 
+$this_section = SECTION_COURSES;
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
-$userportal = new IndexManager(' ');
+$userportal = new IndexManager(get_lang('MyCourses'));
 $tpl = $userportal->tpl->get_template('layout/layout_two_col.tpl');
 
 //if (!$userportal->tpl->isCached($tpl, api_get_user_id())) {
@@ -33,9 +34,12 @@ $tpl = $userportal->tpl->get_template('layout/layout_two_col.tpl');
 	ob_start();
 	$userportal->return_courses_and_sessions($personal_course_list);
 	$courses_and_sessions = ob_get_contents();
-	ob_get_clean();	
-	$userportal->tpl->assign('plugin_courses_block', 		$userportal->return_courses_main_plugin());
-	$userportal->tpl->assign('content', 					$courses_and_sessions);	
+	ob_get_clean();
+	
+	//
+	$userportal->tpl->assign('content', 					$courses_and_sessions);
+	
+	$userportal->tpl->assign('plugin_courses_block', 		$userportal->return_courses_main_plugin());		
 	$userportal->tpl->assign('profile_block', 				$userportal->return_profile_block());
 	$userportal->tpl->assign('account_block',				$userportal->return_account_block());
 	$userportal->tpl->assign('navigation_course_links', 	$userportal->return_navigation_course_links($menu_navigation));

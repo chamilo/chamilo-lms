@@ -279,10 +279,10 @@ class Template extends Smarty {
 		
 		$platform = get_lang('Platform').' <a href="'.$_configuration['software_url'].'" target="_blank">'.$_configuration['software_name'].' '.$_configuration['system_version'].'</a> &copy; '.date('Y');
 		
-		$this->assign('platform', $platform);
+		$this->assign('platform_name', $platform);
 		
 		$administrator_data = get_lang('Manager'). ' : '. Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))); 
-		$this->assign('administrator_data', $administrator_data);
+		$this->assign('administrator_name', $administrator_data);
 		
 		$stats = '';
 	

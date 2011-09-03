@@ -81,8 +81,10 @@ class SystemAnnouncementManager {
 		$start	= intval($start);				
 
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date FROM ".$db_table."
-				WHERE (lang='$user_selected_language' OR lang IS NULL) AND ((NOW() BETWEEN date_start AND date_end)	OR date_end='0000-00-00')";
+		$now  = api_get_utc_datetime();
+		
+		$sql = "SELECT * FROM ".$db_table." 
+				WHERE ( lang = '$user_selected_language' OR lang IS NULL) AND ( '$now' >= date_start AND '$now' <= date_end) ";
 				
 		switch ($visible) {
 			case VISIBLE_GUEST :
@@ -213,7 +215,11 @@ class SystemAnnouncementManager {
 	public static function get_all_announcements() {
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$now = api_get_utc_datetime();
-		$sql = "SELECT *, IF( '$now'  >= date_start AND '$now' <= date_end, '1', '0') AS visible FROM ".$db_table." ";		
+		$now  = api_get_utc_datetime();
+		
+		$sql = "SELECT * FROM ".$db_table."
+				WHERE ( lang = '$user_selected_language' OR lang IS NULL) AND ( '$now' >= date_start AND '$now' <= date_end) ";
+			
 		
 		global $_configuration;
 		$current_access_url_id = 1;

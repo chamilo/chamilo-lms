@@ -81,16 +81,24 @@ class IndexManager {
 		return $login_form;		
 	}
 	
-	function return_announcements() {	
+	function return_announcements($show_slide = true) {	
 		// Display System announcements
 		$announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;
 		$announcement = intval($announcement);
 		
 		if (isset($_user['user_id'])) {
 			$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
-			$announcements = SystemAnnouncementManager :: display_announcements_slider($visibility, $announcement);
+			if ($show_slide) {
+				$announcements = SystemAnnouncementManager :: display_announcements_slider($visibility, $announcement);
+			} else {
+				$announcements = SystemAnnouncementManager :: get_all_announcements($visibility, $announcement);
+			}
 		} else {
-			$announcements = SystemAnnouncementManager :: display_announcements_slider(VISIBLE_GUEST, $announcement);
+			if ($show_slide) {
+				$announcements = SystemAnnouncementManager :: display_announcements_slider(VISIBLE_GUEST, $announcement);
+			} else {
+				$announcements = SystemAnnouncementManager :: get_all_announcements(VISIBLE_GUEST, $announcement);
+			}
 		}
 		return $announcements;
 	}

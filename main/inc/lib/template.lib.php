@@ -39,6 +39,10 @@ class Template extends Smarty {
 		//$this->caching = Smarty::CACHING_LIFETIME_CURRENT;				
 		$this->assign('style', $this->style);		
 	}
+		
+	function get_template($name) {
+		return $this->style.'/'.$name;
+	}	
 	
 	private function set_user_parameters() {		
 		if (api_get_user_id()) {
@@ -66,11 +70,6 @@ class Template extends Smarty {
 		);	
 		$this->assign('app', $app);		
 		
-	}
-	
-	
-	function get_template($name) {
-		return $this->style.'/'.$name;
 	}
 
 	private function set_header_parameters($help = null) {

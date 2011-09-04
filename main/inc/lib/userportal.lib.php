@@ -123,7 +123,8 @@ class IndexManager {
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 	
 		// Selecting the last login of the user.
-		$uid = intval($_GET['uid']);
+		$uid = $this->user_id;
+		
 		$sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='$uid' ORDER BY login_date DESC LIMIT 0,1";
 		$q_last_connection = Database::query($sql_last_connection);
 		if (Database::num_rows($q_last_connection) > 0) {

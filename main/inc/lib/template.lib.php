@@ -6,7 +6,7 @@ require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
 
 class Template extends Smarty {
 	
-	var $style = 'experimental'; //see the template folder 
+	var $style = 'air'; //see the template folder 
 	
 	function __construct($title = '') {
 		$this->title = $title;		
@@ -66,8 +66,10 @@ class Template extends Smarty {
 		//Here we can add system parameters that can be use in any template
 		$app = array(
 				'software_name' 	=> $_configuration['software_name'],
-				'system_version' 	=> $_configuration['system_version']
-		);	
+				'system_version' 	=> $_configuration['system_version'],
+				'site_name'			=> api_get_setting('siteName'),
+				'institution'		=> api_get_setting('Institution'),		
+		);
 		$this->assign('app', $app);		
 		
 	}

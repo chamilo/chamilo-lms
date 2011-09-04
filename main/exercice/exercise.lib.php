@@ -1523,3 +1523,18 @@ function get_best_average_score_by_exercise($exercise_id, $course_code, $session
     }
     return $avg_score;
 }
+
+
+
+function get_exercises_to_be_end($course_code, $session_id) {
+	$course_info = api_get_course_info($course_code);
+	$exercises = get_all_exercises($course_info, $session_id);
+	$result = array();
+	$now = time() + 15*24*60*60;
+	foreach($exercises as $exercise_item) {
+		if (isset($exercise_item['end_time'])  && !empty($exercise_item['end_time']) && api_strtotime($exercise_item['end_time']) < $now) {
+			$result[] = $exercise_item;
+		}
+	}
+	return $result;
+}

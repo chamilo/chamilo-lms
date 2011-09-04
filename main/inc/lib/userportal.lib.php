@@ -81,6 +81,35 @@ class IndexManager {
 		return $login_form;		
 	}
 	
+	
+	function return_exercise_block($personal_course_list) {
+		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+		$exercise_list = array();
+		if (!empty($personal_course_list)) {
+			foreach($personal_course_list as  $course_item) {
+				$course_code 	= $course_item['c'];
+				$session_id 	= $course_item['id_session'];
+					
+				$exercises = get_exercises_to_be_end($course_code, $session_id);
+	
+				foreach($exercises as $exercise_item) {
+					$exercise_item['course_code'] 	= $course_code;
+					$exercise_item['session_id'] 	= $session_id;
+					$exercise_item['tms'] 	= api_strtotime($exercise_item['end_time']);
+						
+					$exercise_list[] = $exercise_item;
+				}
+			}
+			if (!empty($exercise_list)) {
+				$exercise_list = msort($exercise_list, 'tms');
+				$my_exercise = $exercise_list[0];
+				$url = Display::url($my_exercise['title'], api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']);
+				$this->tpl->assign('exercise_url', $url);
+				$this->tpl->assign('exercise_end_date', api_convert_and_format_date($my_exercise['end_time'], DATE_FORMAT_SHORT));
+			}
+		}
+	}
+	
 	function return_announcements($show_slide = true) {	
 		// Display System announcements
 		$announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;

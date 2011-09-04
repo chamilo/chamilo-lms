@@ -213,22 +213,21 @@ class SystemAnnouncementManager {
 	 * objects)
 	 */
 	public static function get_all_announcements() {
-		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);	
 		$now = api_get_utc_datetime();		
-		
-		$sql = "SELECT * FROM ".$db_table."
-				WHERE ( lang = '$user_selected_language' OR lang IS NULL) AND ( '$now' >= date_start AND '$now' <= date_end) ";		
+		$sql = "SELECT *, IF( '$now'  >= date_start AND '$now' <= date_end, '1', '0') AS visible FROM $db_table";		
 		
 		global $_configuration;
 		$current_access_url_id = 1;
 		if ($_configuration['multiple_access_urls']) {
 			$current_access_url_id = api_get_current_access_url_id();
 		}
-		$sql .= " AND access_url_id = '$current_access_url_id' ";
+		$sql .= " WHERE access_url_id = '$current_access_url_id' ";
 		$sql .= " ORDER BY date_start ASC";
+		
 		$announcements = Database::query($sql);
 		$all_announcements = array();
-		while ($announcement = Database::fetch_object($announcements)) {
+		while ($announcement = Database::fetch_object($announcements)) {			
 			$all_announcements[] = $announcement;
 		}
 		return $all_announcements;

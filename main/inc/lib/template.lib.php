@@ -1,62 +1,41 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 // Load Smarty library
-
 require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
-//include api_get_path(LIBRARY_PATH)."raintpl/rain.tpl.class.php";
-//include api_get_path(LIBRARY_PATH)."dwoo/dwooAutoload.php";
 
 class Template extends Smarty {
 	
 	var $style = 'experimental'; //see the template folder 
 	
 	function __construct($title = '') {
-		$this->title = $title;
+		$this->title = $title;		
 		
-		/*
-		 * 
-		 * Rain TPL
-		raintpl::configure("base_url", null );
-		raintpl::configure("tpl_dir", api_get_path(SYS_CODE_PATH).'template/' );
-		raintpl::configure("cache_dir", api_get_path(SYS_ARCHIVE_PATH));
-		$this->tpl = new RainTPL();
-		*/
-		
-		// Dwoo
-		
-		//$this->dwoo = new Dwoo(api_get_path(SYS_ARCHIVE_PATH), api_get_path(SYS_ARCHIVE_PATH));
-		
-		// Load a template file, this is reusable if you want to render multiple times the same template with different data
-		//$tpl = new Dwoo_Template_File('path/to/index.tpl');
-		
-		// Create a data set, this data set can be reused to render multiple templates if it contains enough data to fill them all
-		//$this->tpl  = new Dwoo_Data();
-
-		// Class Constructor.
-		// These automatically get set with each new instance.
-		
-		
-		$this->template_dir 	= api_get_path(SYS_CODE_PATH).'template/';	// '/web/www.example.com/guestbook/templates/';
-		$this->compile_dir  	= api_get_path(SYS_ARCHIVE_PATH); 	// '/web/www.example.com/guestbook/templates_c/';
-		$this->config_dir   	= api_get_path(SYS_ARCHIVE_PATH);	// '/web/www.example.com/guestbook/configs/'; main/inc/conf/config?
-		$this->cache_dir    	= api_get_path(SYS_ARCHIVE_PATH);	// '/web/www.example.com/guestbook/cache/';
-		
+		$this->template_dir 	= api_get_path(SYS_CODE_PATH).'template/';	
+		$this->compile_dir  	= api_get_path(SYS_ARCHIVE_PATH); 	
+		//@todo check this config fir
+		$this->config_dir   	= api_get_path(SYS_ARCHIVE_PATH);	// main/inc/conf/config?
+		$this->cache_dir    	= api_get_path(SYS_ARCHIVE_PATH);			
+		$this->plugins_dir		= api_get_path(LIBRARY_PATH).'smarty/plugins';		
 		
 		$this->caching 			= true;
 		$this->cache_lifetime 	= Smarty::CACHING_OFF; // no caching
 		//$this->cache_lifetime 	= 120;
 		
 		$this->set_system_parameters();
+		
 		$this->set_user_parameters();
 		
 		$this->set_header_parameters();		
 		
 		$this->set_footer_parameters();	
 		
-		//Now we can call the get_lang from a template!!! Just use {"MyString"|get_lang} 
+		//Creating a Smarty modifier - Now we can call the get_lang from a template!!! Just use {"MyString"|get_lang} 
 		$this->registerPlugin("modifier","get_lang", "get_lang");
 		
+		//To load a smarty plugin				
 		//$this->loadPlugin('smarty_function_get_lang');
+
 		//$this->caching = Smarty::CACHING_LIFETIME_CURRENT;				
 		$this->assign('style', $this->style);		
 	}
@@ -65,15 +44,28 @@ class Template extends Smarty {
 		if (api_get_user_id()) {
 			$user_info = api_get_user_info();
 			//$this->assign('user_info', $user_info);
-			$this->assign('user_complete_name', api_get_person_name($user_info['firstname'], $user_info['lastname']));
+			$this->assign('_u', $user_info);
 		}
-	}
-	
+	}	
 	
 	private function set_system_parameters() {
-		$this->assign('WEB_PATH', 			api_get_path(WEB_PATH));
-		$this->assign('WEB_COURSE_PATH', 	api_get_path(WEB_COURSE_PATH));
-		$this->assign('WEB_MAIN_PATH', 		api_get_path(WEB_CODE_PATH));
+		global $_configuration;
+		
+		//Setting app paths		
+		$_p = array('web' 			=> api_get_path(WEB_PATH),
+					'web_course'	=> api_get_path(WEB_COURSE_PATH),
+					'web_main' 		=> api_get_path(WEB_CODE_PATH),
+					
+					);
+		$this->assign('_p', $_p);
+		
+		//Here we can add system parameters that can be use in any template
+		$app = array(
+				'software_name' 	=> $_configuration['software_name'],
+				'system_version' 	=> $_configuration['system_version']
+		);	
+		$this->assign('app', $app);		
+		
 	}
 	
 	
@@ -89,7 +81,7 @@ class Template extends Smarty {
 		global $menu_navigation;
 		global $_configuration, $show_learn_path;
 		
-		$this->assign('system_charset', api_get_system_encoding());		
+		$this->assign('system_charset', api_get_system_encoding());
 			
 		if (isset($httpHeadXtra) && $httpHeadXtra) {
 			foreach ($httpHeadXtra as & $thisHttpHead) {
@@ -300,9 +292,8 @@ class Template extends Smarty {
 		
 		$this->assign('show_administrator_data', api_get_setting('show_administrator_data'));
 		
-		$platform = get_lang('Platform').' <a href="'.$_configuration['software_url'].'" target="_blank">'.$_configuration['software_name'].' '.$_configuration['system_version'].'</a> &copy; '.date('Y');
-		
-		$this->assign('platform_name', $platform);
+		//$platform = get_lang('Platform').' <a href="'.$_configuration['software_url'].'" target="_blank">'.$_configuration['software_name'].' '.$_configuration['system_version'].'</a> &copy; '.date('Y');		
+		//$this->assign('platform_name', $platform);
 		
 		$administrator_data = get_lang('Manager'). ' : '. Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))); 
 		$this->assign('administrator_name', $administrator_data);

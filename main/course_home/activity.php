@@ -19,23 +19,7 @@ require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 
 if (api_is_allowed_to_edit(null, true)) {
 	// HIDE
-	if (!empty($_GET['hide'])) { // visibility 1 -> 0
-		/* -- session condition for visibility
-		if (!empty($session_id)) {
-			$sql = "select session_id FROM $tool_table WHERE id='".intval($_GET["id"])."' AND session_id = '".intval($session_id)."'";
-			$rs = Database::query($sql);
-			if (Database::num_rows($rs) > 0) {
-	 			$sql="UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."' AND session_id = '".intval($session_id)."'";
-			} else {
-				$sql_select = "select * FROM $tool_table WHERE id='".$_GET["id"]."'";
-				$res_select = Database::query($sql_select);
-				$row_select = Database::fetch_array($res_select);
-				$sql = "INSERT INTO $tool_table(name,link,image,visibility,admin,address,added_tool,target,category,session_id)
-						VALUES('{$row_select['name']}','{$row_select['link']}','{$row_select['image']}','0','{$row_select['admin']}','{$row_select['address']}','{$row_select['added_tool']}','{$row_select['target']}','{$row_select['category']}','$session_id')";
-			}
-		} else {
-			$sql="UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."'";
-		}*/
+	if (!empty($_GET['hide'])) {
 		$sql = "UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."'";
 		Database::query($sql);
 		Display::display_confirmation_message(get_lang('ToolIsNowHidden'));

@@ -6,13 +6,12 @@
 	            {$administrator_name}            
 	        </div>
 	    {/if}    
-	    <div align="right">
-	    	{$platform_name}
+	    <div align="right">	    	
+	    	{"Platform"|get_lang} <a href="{$_p.web}" target="_blank">{$app.software_name} {$app.version} </a> &copy; {$smarty.now|date_format:"%Y"}	    	
 	    </div>    
 	</div>
 	
-	<div class="footer_emails">
-		
+	<div class="footer_emails">		
 		{*  Plugins for footer section *}		
 		<div id="plugin-footer">
 			{$plugin_footer}

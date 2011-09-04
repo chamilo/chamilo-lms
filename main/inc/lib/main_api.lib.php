@@ -861,15 +861,17 @@ function _api_format_user($user) {
         $firstname = $user['firstName'];
         $lastname = $user['lastName'];
     }
+    
+    $result['complete_name'] 	= api_get_person_name($firstname, $lastname);
 
-    $result['firstname'] = $firstname;
-    $result['lastname'] = $lastname;
+    $result['firstname'] 		= $firstname;
+    $result['lastname'] 		= $lastname;
 
     // Kept for historical reasons
-    $result['firstName'] = $firstname;
-    $result['lastName'] = $lastname;
+    $result['firstName'] 		= $firstname;
+    $result['lastName'] 		= $lastname;
 
-    if(isset($user['email'])) {
+    if (isset($user['email'])) {
         $result['mail'] = $user['email'];
     } else {
         $result['mail'] = $user['mail'];
@@ -880,9 +882,11 @@ function _api_format_user($user) {
     $result['official_code']    = $user['official_code'];
     $result['status']           = $user['status'];
     $result['auth_source']      = $user['auth_source'];
+    
     if (isset($user['username'])) {
         $result['username']         = $user['username'];
     }
+    
     $result['theme']            = $user['theme'];
     $result['language']         = $user['language'];
     if (!isset($user['lastLogin']) && !isset($user['last_login'])) {

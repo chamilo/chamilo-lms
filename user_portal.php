@@ -346,39 +346,39 @@ if (stripos("flash_yes", $_SESSION['sniff_check_some_activex'])===0 || stripos("
 
 /* MAIN CODE */
 
-$userportal = new IndexManager(get_lang('MyCourses'));
+$controller = new IndexManager(get_lang('MyCourses'));
 
-$tpl = $userportal->tpl->get_template('layout/layout_2_col.tpl');
+$tpl = $controller->tpl->get_template('layout/layout_2_col.tpl');
 
 
-//if (!$userportal->tpl->isCached($tpl, api_get_user_id())) {
+//if (!$$controllerl->tpl->isCached($tpl, api_get_user_id())) {
 
 //@todo all this could be moved in the IndexManager
 
-$courses_list 			= $userportal->return_courses_main_plugin();
+$courses_list 			= $controller->return_courses_main_plugin();
 $personal_course_list 	= UserManager::get_personal_session_course_list(api_get_user_id());
 
 
 // Main courses and session list
 ob_start();
-$userportal->return_courses_and_sessions($personal_course_list);
+$controller->return_courses_and_sessions($personal_course_list);
 $courses_and_sessions = ob_get_contents();
 ob_get_clean();
 
 //
-$userportal->tpl->assign('content', 					$courses_and_sessions);
+$controller->tpl->assign('content', 					$courses_and_sessions);
 
-$userportal->tpl->assign('plugin_courses_block', 		$userportal->return_courses_main_plugin());
-$userportal->tpl->assign('profile_block', 				$userportal->return_profile_block());
-$userportal->tpl->assign('account_block',				$userportal->return_account_block());
-$userportal->tpl->assign('navigation_course_links', 	$userportal->return_navigation_course_links($menu_navigation));
-$userportal->tpl->assign('plugin_courses_right_block', 	$userportal->return_plugin_courses_block());
-$userportal->tpl->assign('reservation_block', 			$userportal->return_reservation_block());
-$userportal->tpl->assign('search_block', 				$userportal->return_search_block());
-$userportal->tpl->assign('classes_block', 				$userportal->return_classes_block());
+$controller->tpl->assign('plugin_courses_block', 		$controller->return_courses_main_plugin());
+$controller->tpl->assign('profile_block', 				$controller->return_profile_block());
+$controller->tpl->assign('account_block',				$controller->return_account_block());
+$controller->tpl->assign('navigation_course_links', 	$controller->return_navigation_course_links($menu_navigation));
+$controller->tpl->assign('plugin_courses_right_block', 	$controller->return_plugin_courses_block());
+$controller->tpl->assign('reservation_block', 			$controller->return_reservation_block());
+$controller->tpl->assign('search_block', 				$controller->return_search_block());
+$controller->tpl->assign('classes_block', 				$controller->return_classes_block());
 /*} else {
 }*/
-$userportal->tpl->display($tpl);
+$controller->tpl->display($tpl);
 
 // Deleting the session_id.
 api_session_unregister('session_id');

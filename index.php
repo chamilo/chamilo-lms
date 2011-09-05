@@ -56,14 +56,14 @@ if(navigator.cookieEnabled==false){
 </script>
 <?php
 
-$index = new IndexManager($header_title);
+$controller = new IndexManager($header_title);
 
 //Actions
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
 $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
 
 if (!empty($_GET['logout'])) {
-	$index->logout();
+	$controller->logout();
 }
 
 /* Table definitions */
@@ -145,21 +145,21 @@ if (!api_get_user_id()) {
 //@todo add this in the template
 if (api_get_setting('display_categories_on_homepage') == 'true') {
 	echo '<div class="home_cats">';
-	$index->display_anonymous_course_list();
+	$controller->display_anonymous_course_list();
 	echo '</div>';
 }
 
 
-$tpl = $index->tpl->get_template('layout/layout_2_col.tpl');
-$index->set_login_form();
+$tpl = $controller->tpl->get_template('layout/layout_2_col.tpl');
+$controller->set_login_form();
 
 //@todo move this inside the IndexManager
-$index->tpl->assign('announcements_block', 		$index->return_announcements());
-$index->tpl->assign('teacher_block', 			$index->return_teacher_link());
-$index->tpl->assign('home_page_block', 			$index->return_home_page());
+$controller->tpl->assign('announcements_block', 	$controller->return_announcements());
+$controller->tpl->assign('teacher_block', 			$controller->return_teacher_link());
+$controller->tpl->assign('home_page_block', 		$controller->return_home_page());
 
-$index->tpl->assign('profile_block', 			$index->return_profile_block());
-$index->tpl->assign('notice_block',				$index->return_notice());
-$index->tpl->assign('plugin_campushomepage', 	$index->return_plugin_campushomepage());
+$controller->tpl->assign('profile_block', 			$controller->return_profile_block());
+$controller->tpl->assign('notice_block',			$controller->return_notice());
+$controller->tpl->assign('plugin_campushomepage', 	$controller->return_plugin_campushomepage());
 
-$index->tpl->display($tpl);
+$controller->tpl->display($tpl);

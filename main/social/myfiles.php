@@ -107,7 +107,7 @@ echo '<div id="social-content">';
 	echo '<div id="social-content-right>';
 		echo '<a href=""></a>';//TODO: hack and delete this line
 		echo '<br />';								
-        echo '<table><tr><td><iframe name="fileManager" id="fileManager" src="'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=stand_alone" scrolling="no" noresize="noresize" frameborder="no" style="height:450px; width:710px; float:left"></iframe></td></tr></table>';
+        echo '<table><tr><td><iframe name="fileManager" id="fileManager" src="'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=stand_alone" scrolling="no" noresize="noresize" frameborder="no" style="height:450px; width:700px; float:left"></iframe></td></tr></table>';
 	echo '</div>';
 echo '</div>';	
 Display::display_footer();

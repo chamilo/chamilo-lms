@@ -5,9 +5,14 @@
 {/block}
 
 {block name=body}	
+	{if $show_sniff == 1 }
+	 	{include file="default/layout/sniff.tpl"}
+	{/if}
 	<div id="maincontent" class="maincontent">
+		
 		{$plugin_courses_block}
 		{$home_page_block}
+		{$sniff_notification}
 		{$content}
 		{$announcements_block}
 	</div>

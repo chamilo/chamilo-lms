@@ -1526,7 +1526,7 @@ function get_best_average_score_by_exercise($exercise_id, $course_code, $session
 
 
 
-function get_exercises_to_be_end($course_code, $session_id) {
+function get_exercises_to_be_taken($course_code, $session_id) {
 	$course_info = api_get_course_info($course_code);
 	$exercises = get_all_exercises($course_info, $session_id);
 	$result = array();

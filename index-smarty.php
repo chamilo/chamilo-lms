@@ -40,15 +40,12 @@ $(document).ready(function(){
 
 
 $index = new IndexManager($header_title);
-if (api_get_user_id()) {
-	$tpl = $index->tpl->get_template('layout/layout_3_col.tpl');
-} else {
-	$tpl = $index->tpl->get_template('layout/layout_2_col.tpl');
-}
+$tpl = $index->tpl->get_template('layout/layout_2_col.tpl');
+
 
 
 //@todo move this inside the IndexManager
-
+$index->tpl->assign('login_block', 				$index->set_login_form());
 $index->tpl->assign('announcements_block', 		$index->return_announcements());
 $index->tpl->assign('teacher_block', 			$index->return_teacher_link());
 $index->tpl->assign('home_page_block', 			$index->return_home_page());

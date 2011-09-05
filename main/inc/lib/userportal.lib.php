@@ -90,7 +90,7 @@ class IndexManager {
 				$course_code 	= $course_item['c'];
 				$session_id 	= $course_item['id_session'];
 					
-				$exercises = get_exercises_to_be_end($course_code, $session_id);
+				$exercises = get_exercises_to_be_taken($course_code, $session_id);
 	
 				foreach($exercises as $exercise_item) {
 					$exercise_item['course_code'] 	= $course_code;

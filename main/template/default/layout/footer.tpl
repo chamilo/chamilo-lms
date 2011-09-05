@@ -7,7 +7,7 @@
 	        </div>
 	    {/if}    
 	    <div align="right">	    	
-	    	{"Platform"|get_lang} <a href="{$_p.web}" target="_blank">{$app.software_name} {$app.version} </a> &copy; {$smarty.now|date_format:"%Y"}	    	
+	    	{"Platform"|get_lang} <a href="{$_p.web}" target="_blank">{$_s.software_name} {$_s.system_version}</a> &copy; {$smarty.now|date_format:"%Y"}	    	
 	    </div>    
 	</div>
 	

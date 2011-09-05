@@ -6,7 +6,7 @@ require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
 
 class Template extends Smarty {
 	
-	var $style = 'experimental'; //see the template folder 
+	var $style = 'default'; //see the template folder 
 	
 	function __construct($title = '') {
 		$this->title = $title;		
@@ -44,12 +44,14 @@ class Template extends Smarty {
 		return $this->style.'/'.$name;
 	}	
 	
-	private function set_user_parameters() {		
-		if (api_get_user_id()) {
+	private function set_user_parameters() {
+		$user_info = array();
+		$user_info['logged'] = 0;
+		if (api_get_user_id() && !api_is_anonymous()) {
 			$user_info = api_get_user_info();
-			//$this->assign('user_info', $user_info);
-			$this->assign('_u', $user_info);
+			$user_info['logged'] = 1;
 		}
+		$this->assign('_u', $user_info);
 	}	
 	
 	private function set_system_parameters() {

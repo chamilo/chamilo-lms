@@ -1,7 +1,7 @@
 {extends file="default/layout/main.tpl"}
 
 {block name=header}
-	{include file="default/layout/header.tpl"}	
+	{include file="default/layout/header.tpl"}
 {/block}
 
 {block name=body}	
@@ -12,8 +12,10 @@
 		{$announcements_block}
 	</div>
 	
-	<div id="menu-wrapper">	
-		{$login_block}		
+	<div id="menu-wrapper">		
+		{if $_u.logged == 0}
+			{include file="default/layout/login_form.tpl"}
+		{/if}			
 		{$profile_block}			
 		{$account_block}		
 		{$teacher_block}

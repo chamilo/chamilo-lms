@@ -33,10 +33,11 @@ class IndexManager {
 		}
 		$this->home = $home;
 		$this->user_id = api_get_user_id();
+		$this->load_directories_preview = true;
 	}
 	
 	
-	function set_login_form($use_template = true) {
+	function set_login_form() {
 		global $loginFailed;
 		
 		$login_form = '';
@@ -44,41 +45,35 @@ class IndexManager {
 		if (!($this->user_id) || api_is_anonymous($this->user_id)) {
 	
 			// Only display if the user isn't logged in.
-			$login_form = api_display_language_form(true);	
-			$login_form .= self::display_login_form();	
-			if ($loginFailed) {
-				$login_form .= self::handle_login_failed();
+			$this->tpl->assign('login_language_form', api_display_language_form(true));
+			$this->tpl->assign('login_form',  self::display_login_form());
+			
+			if ($loginFailed) {				
+				$this->tpl->assign('login_failed',  self::handle_login_failed());
 			}
 	
 			if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-				$login_form .= '<div class="menusection"><span class="menusectioncaption">'.get_lang('MenuUser').'</span><ul class="menulist">';
+				$login_form .= '<ul class="menulist">';
 				if (api_get_setting('allow_registration') != 'false') {
-					$login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
+					$login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';					
 				}
 				if (api_get_setting('allow_lostpassword') == 'true') {
 					$login_form .= '<li><a href="main/auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
 				}
-				$login_form .= '</ul></div>';
+				$login_form .= '</ul>';
 			}
+			$this->tpl->assign('login_options',  $login_form);
 	
 			if (api_number_of_plugins('loginpage_menu') > 0) {
-				$login_form .= '<div class="note" style="background: none">';
+				$login_form = '<div class="note" style="background: none">';
 				ob_start();
 				api_plugin('loginpage_menu');
 				$plugin_login = ob_get_contents();
 				$login_form .= $plugin_login;
 				$login_form .= '</div>';
-			}
-			if (!empty($login_form)) {
-				$login_form  = '<div class="menu" id="menu">'.$login_form.'</div>';
+				$this->tpl->assign('login_plugin_menu',  $login_form);
 			}			
-		}		
-		$login_form_tmp = $login_form;
-		if ($use_template)
-			$this->tpl->assign('login_block', $login_form);
-		//@todo remove this return
-		
-		return $login_form;		
+		}
 	}
 	
 	
@@ -775,7 +770,7 @@ class IndexManager {
 		    	<input type="text" id="query" size="15" name="query" value="" />
 		    	<button class="save" type="submit" name="submit" value="'.$search_btn.'" />'.$search_btn.' </button>
 		    	</form></div>';    
-			$html .= show_right_block(get_lang('Search'), $search_content);
+			$html .= self::show_right_block(get_lang('Search'), $search_content);
 		}
 		return $html;	
 	}
@@ -799,7 +794,7 @@ class IndexManager {
 			}
 			if (!empty($classes)) {
 				$classes = Display::tag('ul', $classes, array('class'=>'menulist'));
-				$html .= show_right_block(get_lang('Classes'), $classes);
+				$html .= self::show_right_block(get_lang('Classes'), $classes);
 			}		
 		}
 		return $html;
@@ -811,7 +806,7 @@ class IndexManager {
 			$booking_content .='<ul class="menulist">';
 			$booking_content .='<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
 			$booking_content .='</ul>';
-			$html .= show_right_block(get_lang('Booking'), $booking_content);
+			$html .= self::show_right_block(get_lang('Booking'), $booking_content);
 		}
 		return $html;
 	}
@@ -824,7 +819,7 @@ class IndexManager {
 			api_plugin('mycourses_menu');
 			$plugin_content = ob_get_contents();
 			ob_end_clean();
-			echo show_right_block('', $plugin_content);
+			echo self::show_right_block('', $plugin_content);
 		}
 	}
 	
@@ -1192,8 +1187,8 @@ class IndexManager {
 					// Sessions and courses that are not in a session category.
 					if (!isset($_GET['history'])) {
 						// If we're not in the history view...
-						CourseManager :: display_special_courses(api_get_user_id(), $load_dirs);
-						CourseManager :: display_courses(api_get_user_id(), $load_dirs);
+						CourseManager :: display_special_courses(api_get_user_id(), $this->load_directories_preview);
+						CourseManager :: display_courses(api_get_user_id(), $this->load_directories_preview);
 					}
 					// Independent sessions.
 					foreach ($category['sessions'] as $session) {
@@ -1223,7 +1218,7 @@ class IndexManager {
 							if ($session_now > $allowed_time) {
 								//read only and accesible
 								if (api_get_setting('hide_courses_in_sessions') == 'false') {
-									$c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item', true, $load_dirs);
+									$c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item', true, $this->load_directories_preview);
 									//$c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',($session['details']['visibility']==3?false:true));
 									$html_courses_session .= $c[1];
 								}

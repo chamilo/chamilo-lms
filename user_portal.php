@@ -21,6 +21,7 @@
 /**
  * INIT SECTION
  */
+
 // Language files that should be included.
 $language_file = array('courses', 'index','admin');
 
@@ -34,7 +35,6 @@ if (isset($_SESSION['this_section']))
 
 require_once './main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
-
 
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
@@ -182,8 +182,6 @@ if ($load_dirs) {
 	});
 	</script>';
 }
-
-Display :: display_header($nameTools);
 
 /* Sniffing system */
 //by Juan Carlos Raña Trabado
@@ -348,45 +346,40 @@ if (stripos("flash_yes", $_SESSION['sniff_check_some_activex'])===0 || stripos("
 
 /* MAIN CODE */
 
-$index = new IndexManager($nameTools, false);
+$userportal = new IndexManager(get_lang('MyCourses'));
 
-echo '<div class="maincontent" id="maincontent">'; // Start of content for logged in users.
-   
-	// Plugins for the my courses main area.	
-	echo $index->return_courses_main_plugin(); 	
-	
-	// Main courses and session list
-	echo $index->return_courses_and_sessions($personal_course_list);    
-
-echo '</div>'; // End of content main-section
+$tpl = $userportal->tpl->get_template('layout/layout_2_col.tpl');
 
 
-// Register whether full admin or null admin course by course through an array dbname x user status.
-api_session_register('status');
+//if (!$userportal->tpl->isCached($tpl, api_get_user_id())) {
 
-/* RIGHT MENU */
+//@todo all this could be moved in the IndexManager
 
-echo '<div id="menu-wrapper">';
+$courses_list 			= $userportal->return_courses_main_plugin();
+$personal_course_list 	= UserManager::get_personal_session_course_list(api_get_user_id());
 
-	//Profile content
-	echo $index->return_profile_block();
-	
-	echo $index->return_account_block();
-	
-	echo $index->return_navigation_course_links($menu_navigation);
-	
-	echo $index->return_plugin_courses_block();
-	
-	echo $index->return_reservation_block();
-	
-	echo $index->return_search_block();
-	
-	echo $index->return_classes_block();
 
-echo '</div>'; // End of menu wrapper
+// Main courses and session list
+ob_start();
+$userportal->return_courses_and_sessions($personal_course_list);
+$courses_and_sessions = ob_get_contents();
+ob_get_clean();
+
+//
+$userportal->tpl->assign('content', 					$courses_and_sessions);
+
+$userportal->tpl->assign('plugin_courses_block', 		$userportal->return_courses_main_plugin());
+$userportal->tpl->assign('profile_block', 				$userportal->return_profile_block());
+$userportal->tpl->assign('account_block',				$userportal->return_account_block());
+$userportal->tpl->assign('navigation_course_links', 	$userportal->return_navigation_course_links($menu_navigation));
+$userportal->tpl->assign('plugin_courses_right_block', 	$userportal->return_plugin_courses_block());
+$userportal->tpl->assign('reservation_block', 			$userportal->return_reservation_block());
+$userportal->tpl->assign('search_block', 				$userportal->return_search_block());
+$userportal->tpl->assign('classes_block', 				$userportal->return_classes_block());
+/*} else {
+}*/
+$userportal->tpl->display($tpl);
 
 // Deleting the session_id.
 api_session_unregister('session_id');
 
-// Footer
-Display :: display_footer();

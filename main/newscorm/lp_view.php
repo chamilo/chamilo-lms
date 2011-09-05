@@ -271,7 +271,7 @@ $display_none = '';
 $margin_left = '290px';
 if ($_SESSION['oLP']->mode == 'embedframe' ||$_SESSION['oLP']->get_hide_toc_frame()==1 ) {
     $display_none = ';display:none;';
-    $margin_left = '0px';
+    $margin_left = '12px';
 }
 ?>
 <body dir="<?php echo api_get_text_direction(); ?>">

@@ -50,7 +50,8 @@ class Template extends Smarty {
 		if (api_get_user_id() && !api_is_anonymous()) {
 			$user_info = api_get_user_info();
 			$user_info['logged'] = 1;
-		}
+			$user_info['messages_count'] = MessageManager::get_new_messages();
+		}		
 		$this->assign('_u', $user_info);
 	}	
 	

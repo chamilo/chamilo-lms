@@ -732,8 +732,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $row = array();        
         $row['id']   = $document_data['id'];
         //$row['type'] = $document_data['filetype'];
-        $row['type'] = create_document_link($document_data,  true, $count, $is_visible);
-        
+        $row['type'] = create_document_link($document_data,  true, $count, $is_visible);        
        
         // If the item is invisible, wrap it in a span with class invisible
         
@@ -753,7 +752,9 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         } else {
             $document_name = basename($document_data['path']);
         }
-        $row['name'] = $document_name;
+        $row['name'] = $document_name;        
+        $row['name'] = create_document_link($document_data, false, null, $is_visible).$session_img.'<br />'.$invisibility_span_open.'<i>'.nl2br(htmlspecialchars($document_data['comment'],ENT_QUOTES,$charset)).'</i>'.$invisibility_span_close.$user_link;
+        
         // Data for checkbox
         if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
             $row[] = $document_data['path'];
@@ -849,9 +850,9 @@ $columns        = array(get_lang('Type'), get_lang('Name'), get_lang('Size'));
 
 //Column config
 $column_model   = array(
-	array('name'=>'type',    'index'=>'type',   'width'=>'100', 'align'=>'left','sortable'=>'false'),
+	array('name'=>'type',    'index'=>'type',   'width'=>'28',  'align'=>'center','sortable'=>'false'),
 	array('name'=>'name',    'index'=>'name',   'width'=>'500', 'align'=>'left'),
-	array('name'=>'size',    'index'=>'size', 	'width'=>'30',  'align'=>'left','sortable'=>'true')
+	array('name'=>'size',    'index'=>'size', 	'width'=>'35',  'align'=>'right','sortable'=>'true')
 
 );
 //Autowidth

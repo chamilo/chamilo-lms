@@ -717,7 +717,11 @@ function api_valid_email($address) {
  * @author Roan Embrechts
  */
 function api_protect_course_script($print_headers = false) {
-    global $is_allowed_in_course;
+    global $is_allowed_in_course;    
+    $course_info = api_get_course_info();
+    if (isset($course_info) && $course_info['visibility'] == 3) {    	
+    	return true;    	
+    }    
     if (!$is_allowed_in_course) {
         api_not_allowed($print_headers);
         return false;

@@ -1208,7 +1208,12 @@ return 'application/octet-stream';
     		if (in_array($user_status, array('0', '6'))) {
     			//is true if is an student or a coach
     			$user_in_course = true;
-    		}    		
+    		}
+    		
+    		//Check if course is open then we can consider that the student is regitered to the course
+    		if (isset($course_info) && $course_info['visibility'] == 3) {
+    			$user_in_course = true;
+    		}	
     	}
     	
     	

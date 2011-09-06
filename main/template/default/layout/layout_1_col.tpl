@@ -9,5 +9,5 @@
 {/block}
 
 {block name=footer}
-	{include file="default/layout/header.tpl"}	
+	{include file="default/layout/footer.tpl"}	
 {/block}

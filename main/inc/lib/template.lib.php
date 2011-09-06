@@ -7,6 +7,8 @@ require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
 class Template extends Smarty {
 	
 	var $style = 'default'; //see the template folder 
+	var $show_header = true;
+	var $show_footer = true;
 	
 	function __construct($title = '') {
 		$this->title = $title;		
@@ -38,6 +40,14 @@ class Template extends Smarty {
 
 		//$this->caching = Smarty::CACHING_LIFETIME_CURRENT;				
 		$this->assign('style', $this->style);		
+	}
+	
+	function set_footer($status) {
+		$this->assign('show_footer', $status);
+	}
+	
+	function set_header($status) {
+		$this->assign('show_header', $status);	
 	}
 		
 	function get_template($name) {

@@ -746,11 +746,10 @@ function api_protect_admin_script($allow_sessions_admins = false) {
  *
  * @author Roan Embrechts
  */
-function api_block_anonymous_users() {
+function api_block_anonymous_users($print_headers = true) {
     global $_user;
-    if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
-        require_once api_get_path(INCLUDE_PATH).'header.inc.php';
-        api_not_allowed();
+    if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {        
+        api_not_allowed($print_headers);
         return false;
     }
     return true;
@@ -2304,89 +2303,89 @@ function api_is_anonymous($user_id = null, $db_check = false) {
  * @version dokeos 1.8, August 2006
  */
 function api_not_allowed($print_headers = false) {
-
-    $home_url   = api_get_path(WEB_PATH);
-    $user       = api_get_user_id();
-    $course     = api_get_course_id();
-
-    global $this_section;
-
+	
+	$home_url   = api_get_path(WEB_PATH);
+	$user       = api_get_user_id();
+	$course     = api_get_course_id();
+	
+	global $this_section;
+	$tpl = new Template();
+	
+	$template_file = $tpl->get_template('layout/layout_1_col.tpl');
+	
     $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
     if ($origin == 'learnpath') {
-        echo '<style type="text/css" media="screen, projection">
-				/*<![CDATA[*/
-                @import "'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css";
-                /*]]>*/
-                </style>';
+	$htmlHeadXtra[]= '<style type="text/css" media="screen, projection">
+					/*<![CDATA[*/
+	                @import "'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css";
+	                /*]]>*/
+	                </style>';
     }
+    
+    $msg = Display::return_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br />', 'error', false);
+    $msg = Display::div($msg, array('align'=>'center'));
+	$tpl->assign('content', $msg);
+	    
+	
+	$show_headers = 0;
+    if ((!headers_sent() || $print_headers) && $origin != 'learnpath') {
+		$show_headers = 1;
+	}
+	
+	$tpl->set_header($show_headers);
+	$tpl->set_footer($show_headers);
 
-    if ((isset($user) && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
-        //if the access is not authorized and there is some login information
-        // but the cidReq is not found, assume we are missing course data and send the user
-        // to the user_portal
-        if ((!headers_sent() or $print_headers) && $origin != 'learnpath') { Display::display_header(null); }
-        echo '<div align="center">';
-        Display::display_error_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br />', false);
-        echo '</div>';
-        if ($print_headers && $origin != 'learnpath') { Display::display_footer(); }
-        die();
-    }
-    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
-        //only display form and return to the previous URL if there was a course ID included
-        if (!empty($user) && !api_is_anonymous()) {
-            if ((!headers_sent() || $print_headers) && $origin != 'learnpath') { Display::display_header(null); }
-            echo '<div align="center">';
-            Display::display_error_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br />', false);
-            echo '</div>';
-            if ($print_headers && $origin != 'learnpath') { Display::display_footer(); }
-            die();
-        }
-        require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-        $form = new FormValidator('formLogin', 'post', api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']));
+	if ((isset($user) && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
+		//if the access is not authorized and there is some login information
+		// but the cidReq is not found, assume we are missing course data and send the user
+		// to the user_portal
+		$tpl->display($template_file);
+		exit;
+	}
+
+	if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
+		//only display form and return to the previous URL if there was a course ID included
+		if (!empty($user) && !api_is_anonymous()) {
+			$tpl->assign('content', $msg);
+			$tpl->display($template_file);
+			exit;
+		}
+		require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+		$form = new FormValidator('formLogin', 'post', api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']));
         $form->addElement('text', 'login', get_lang('UserName'), array('size' => 17));
         $form->addElement('password', 'password', get_lang('Password'), array('size' => 17));
-        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'),'class="login"');
+		$form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'),'class="login"');
 
-        if ((!headers_sent() || $print_headers) && $origin != 'learnpath') { Display::display_header(null); }
+        if ((!headers_sent() || $print_headers) && $origin != 'learnpath') { 
+			Display::display_header(null);
+		}
         Display::display_error_message(get_lang('NotAllowed').'<br />'.get_lang('PleaseLoginAgainFromFormBelow').'<br />', false);
 
-        echo '<div class="menu" id="menu" style="float:left">';
-        echo '<br />';
-        $renderer =& $form->defaultRenderer();
-        $renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
-        $form->display();
-        /*
-        if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-            echo '<div class="menusection"><span class="menusectioncaption">'.get_lang('MenuUser').'</span><ul class="menulist">';
-            if (api_get_setting('allow_registration') <> 'false') {
-                echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'auth/inscription.php">'.get_lang('Reg').'</a></li>';
-            }
-            if (api_get_setting('allow_lostpassword') == 'true') {
-                echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
-            }
-            echo '</ul></div>';
-        }*/
-        echo '</div>';
+		echo '<div class="menu" id="menu" style="float:left">';
+		echo '<br />';
+		$renderer =& $form->defaultRenderer();
+		$renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
+	        $form->display();
+		echo '</div>';
 
         $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
-        if ($print_headers && $origin != 'learnpath') { Display::display_footer(); }
+		if ($print_headers && $origin != 'learnpath') {
+				Display::display_footer(); 
+		}
         die();
-    }
-    if (!empty($user) && !api_is_anonymous()) {
-        if ((!headers_sent() or $print_headers) && $origin != 'learnpath') { Display::display_header(''); }
-        echo '<div align="center">';
-        Display::display_error_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br />', false);
-        echo '</div>';
-        if ($print_headers && $origin != 'learnpath') {Display::display_footer();}
-        die();
+	}
+
+	if (!empty($user) && !api_is_anonymous()) {
+	$tpl->display($template_file);
+        exit;
     }    
-    //if no course ID was included in the requested URL, redirect to homepage
-    if ($print_headers && $origin != 'learnpath') { Display::display_header(''); }
-    echo '<div align="center">';
-    Display::display_error_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', false);
-    echo '</div>';    
-    if ($print_headers && $origin != 'learnpath') { Display::display_footer(); }
-    die();
+
+	//if no course ID was included in the requested URL, redirect to homepage
+	$msg = Display::return_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
+	$msg = Display::div($msg, array('align'=>'center'));
+	$tpl->assign('content', $msg);
+	$tpl->display($template_file);
+    exit;
 }
 
 

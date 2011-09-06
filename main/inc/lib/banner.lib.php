@@ -340,6 +340,22 @@ function show_header_3() {
                 $menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];
             }
         }
+				// Reports
+				if (api_get_setting('show_tabs', 'reports') == 'true') {
+					if ((api_is_platform_admin() || api_is_drh() || api_is_session_admin()) && Rights::hasRight('show_tabs:reports')) {
+						$navigation['reports'] = $possible_tabs['reports'];
+					}
+				} else{
+					$menu_navigation['reports'] = $possible_tabs['reports'];
+				}
+
+				// Custom tabs
+				for ($i=1;$i<=3;$i++)
+					if (api_get_setting('show_tabs', 'custom_tab_'.$i) == 'true') {
+						$navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
+					} else{
+						$menu_navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
+					}
     }
     
     // Displaying the tabs

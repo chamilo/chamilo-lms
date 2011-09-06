@@ -24,25 +24,8 @@ if (!empty($help)) {
         <img src="<?php echo api_get_path(WEB_IMG_PATH);?>help.large.png" alt="<?php echo get_lang('Help');?>" title="<?php echo get_lang('Help');?>" />
         </a>
     </li>
+<?php } ?>
 <?php 
-	// Reports
-	if (api_get_setting('show_tabs', 'reports') == 'true') {
-		if ((api_is_platform_admin() || api_is_drh() || api_is_session_admin()) && Rights::hasRight('show_tabs:reports')) {
-			$navigation['reports'] = $possible_tabs['reports'];
-		}
-	} else{
-		$menu_navigation['reports'] = $possible_tabs['reports'];
-	}
-
-	// Custom tabs
-	for ($i=1;$i<=3;$i++)
-		if (api_get_setting('show_tabs', 'custom_tab_'.$i) == 'true') {
-			$navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
-		} else{
-			$menu_navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
-		}
-
-}
 if (api_get_setting('show_link_bug_notification') == 'true') { 
 ?>
     <li class="report">

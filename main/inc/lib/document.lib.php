@@ -2926,8 +2926,12 @@ return 'application/octet-stream';
                             VALUES (NULL , \'%s\', \'%s\', %s, %s)';
                         $sql = sprintf($sql, $tbl_se_ref, $course_code, TOOL_DOCUMENT, $docid, $did);
                         Database::query($sql);
+                    } else {
+                    	return false;
                     }
                 }
+            } else {
+            	return false;
             }
         }
         return true;

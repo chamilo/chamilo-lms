@@ -7,6 +7,8 @@ Class LoginRedirection {
 
 	//checks user status and redirect him through custom page if setting is enabled
 	public function redirect(){
+		
+		global $param;
 
 		if ( api_is_student() && !api_get_setting('student_page_after_login') == '' ){
 			$redirect_url = html_entity_decode(api_get_setting('student_page_after_login'));

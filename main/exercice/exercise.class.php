@@ -1569,7 +1569,7 @@ class Exercise {
 			//User
 			if (api_is_allowed_to_session_edit()) {
 				if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
-					$label = get_lang('ValidateAnswer');
+					$label = get_lang('ReviewQuestions');
 					$class = 'accept';
 				} else {
 					$label = get_lang('NextQuestion');
@@ -1590,7 +1590,7 @@ class Exercise {
 					
 					$html .= $all_button;
 				} else {
-					$all_button = '<a href="javascript://" class="a_button green" onclick="validate_all(); ">'.get_lang('ValidateAnswer').'</a>';
+					$all_button = '<a href="javascript://" class="a_button green" onclick="validate_all(); ">'.get_lang('ReviewQuestions').'</a>';
 					$all_button .= '&nbsp;<span id="save_all_reponse"></span>';
 					$html .= $all_button;
 				}

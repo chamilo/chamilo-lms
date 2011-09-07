@@ -56,6 +56,23 @@ if (!$objExercise) {
 	exit;	
 }
 
+$time_control = false;
+if ($objExercise->expired_time != 0 && $origin != 'learnpath') {
+	$time_control = true;
+}
+
+$clock_expired_time = get_session_time_control_key($objExercise->id);
+
+// Get time left for exipiring time
+$time_left = api_strtotime($clock_expired_time,'UTC') - time();
+
+if ($time_control) {
+	$htmlHeadXtra[] = api_get_js('jquery.epiclock.min.js');
+	$htmlHeadXtra[] = $objExercise->show_time_control_js($time_left); 
+	
+}
+
+
 if (isset($_SESSION['exe_id'])) {
 	$exe_id = intval($_SESSION['exe_id']);
 }
@@ -92,6 +109,13 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 $user_info   = api_get_user_info(api_get_user_id());     
 echo $exercise_header = $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), null, 'review');
 echo Display::div(get_lang('QuestionsToReview'), array('class'=>'question_title'));
+
+if ($time_control) {
+	echo '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
+}
+
+
+
 echo Display::div('', array('id'=>'message'));
 
 echo '<script>
@@ -207,12 +231,14 @@ foreach ($question_list as $questionId) {
 	$table            .= Display::div($checkbox.$question_title, array('class'=>'exercise_reminder_item'));		
 } // end foreach() block that loops over all questions
 
+
 echo Display::div($table, array('class'=>'exercise_reminder_container'));
 
 $exercise_actions = Display::url(get_lang('ValidateAnswers'), 'javascript://', array('onclick'=>'final_submit();', 'class'=>'a_button green'));
 $exercise_actions .=  Display::url(get_lang('ReviewQuestions'), 'javascript://', array('onclick'=>'review_questions();','class'=>'a_button white medium '));
 
 echo Display::div('', array('class'=>'clear'));
+
 
 echo Display::div($exercise_actions, array('class'=>'exercise_actions'));
 

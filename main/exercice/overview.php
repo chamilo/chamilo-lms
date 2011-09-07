@@ -38,6 +38,21 @@ $origin  			= isset($_REQUEST['origin']) 			? Security::remove_XSS($_REQUEST['or
 $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
 $interbreadcrumb[] = array ("url" => "#","name" => $objExercise->name);
 
+$time_control = false;
+if ($objExercise->expired_time != 0 && $origin != 'learnpath') {
+	$time_control = true;
+}
+
+$clock_expired_time = get_session_time_control_key($objExercise->id);
+
+// Get time left for exipiring time
+$time_left = api_strtotime($clock_expired_time,'UTC') - time();
+
+if ($time_control) {
+	$htmlHeadXtra[] = api_get_js('jquery.epiclock.min.js');
+	$htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
+}
+
 if ($origin != 'learnpath') {
 	Display::display_header();
 } else {
@@ -58,10 +73,15 @@ $html .= Display::div($objExercise->description, array('class'=>'exercise_descri
 //Buttons
 //Notice we not add there the lp_item_view__id because is not already generated 
 $exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id;
-$exercise_url = Display::url(get_lang('StartTest'), $exercise_url, array('class'=>'a_button orange bigger round'));
+
+$label = get_lang('StartTest');
+if ($time_control && !empty($clock_expired_time)) {
+	$label = get_lang('ContinueTest');
+}
+$exercise_url = Display::url($label, $exercise_url, array('class'=>'a_button orange bigger round'));
 
 if (!$objExercise->is_visible()) {
-	$exercise_url = Display::div(get_lang('StartTest'), array('class'=>'a_button white bigger round no_link'));
+	$exercise_url = Display::div($label, array('class'=>'a_button white bigger round no_link'));
 }
 
 $options  = Display::div('', array('class'=>'left_option'));
@@ -149,7 +169,11 @@ if ($objExercise->selectAttempts()) {
 		$options.= Display::div(get_lang('Attempts').' '.$counter.' / '.$objExercise->selectAttempts(), array('class'=>"right_option $class"));
 	}
 }
+if ($time_control) {
+	$html.=  '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
+}
 $html.=  Display::div($options, array('class'=>'exercise_overview_options'));
+
 
 $html .= $table_content;
 

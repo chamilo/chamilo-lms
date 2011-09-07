@@ -2157,7 +2157,7 @@ return 'application/octet-stream';
      * @param bool      print html messages
      * @return unknown_type
      */
-    public function upload_document($files, $path, $title = '', $comment = '', $unzip = 0, $if_exists = '', $index_document = false, $show_output = false) {
+    public function upload_document($files, $path, $title ='', $comment = '', $unzip = 0, $if_exists = '', $index_document = false, $show_output = false) {
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
         $max_filled_space = self::get_course_quota();
@@ -2200,7 +2200,7 @@ return 'application/octet-stream';
                      Display::display_normal_message(build_missing_files_form($missing_files, $path, $files['file']['name']), false);
                      }*/
                     if ($index_document) {
-                        $idx_doc = self::index_document($docid,$course_info['code'],null,api_get_user_id(),Database::escape_string($_POST['language']),$if_exists);
+                        $idx_doc = self::index_document($docid,$course_info['code'],null,$_POST['language'],$_REQUEST,$if_exists);
                     }
                     if (!empty($docid) && is_numeric($docid)) {
                         $document_data = self::get_document_data_by_id($docid, $course_info['code']);
@@ -2760,16 +2760,17 @@ return 'application/octet-stream';
     	}    	
     }
     /**
-     * Index a given document
+     * Index a given document.
      * @param   int     Document ID inside its corresponding course
      * @param   string  Course code
      * @param   int     Session ID (not used yet)
      * @param   string  Language of document's content (defaults to course language)
+     * @param   array   Array of specific fields (['code'=>'value',...])
      * @param   string  What to do if the file already exists (default or overwrite)
      * @param   bool    When set to true, this runs the indexer without actually saving anything to any database
      * @return  bool    Returns true on presumed success, false on failure
      */
-    public function index_document($docid, $course_code, $session_id=0, $lang='english', $if_exists = '', $simulation = false) {
+    public function index_document($docid, $course_code, $session_id=0, $lang='english', $specific_fields_values=array(), $if_exists = '', $simulation = false) {
         if (api_get_setting('search_enabled') !== 'true') {
         	return false;
         }
@@ -2779,14 +2780,14 @@ return 'application/octet-stream';
         if (empty($session_id)) {
         	$session_id = api_get_session_id();
         }
-        
         $course_info      = api_get_course_info($course_code);
         $course_dir       = $course_info['path'].'/document';
         $sys_course_path  = api_get_path(SYS_COURSE_PATH);
         $base_work_dir    = $sys_course_path.$course_dir;
         
-        $table_document = Database::get_course_table(TABLE_DOCUMENT);
-        $result = Database::query("SELECT path, title FROM $table_document WHERE id = '$docid' LIMIT 1");
+        $table_document = Database::get_course_table(TABLE_DOCUMENT,$course_info['db_name']);
+        $qry = "SELECT path, title FROM $table_document WHERE id = '$docid' LIMIT 1";
+        $result = Database::query($qry);
         if (Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result);
             $doc_path = api_get_path(SYS_COURSE_PATH).$course_dir.$row['path'];
@@ -2798,7 +2799,7 @@ return 'application/octet-stream';
 
             // mime_content_type does not detect correctly some formats that are going to be supported for index, so an extensions array is used for the moment
             if (empty($doc_mime)) {
-                $allowed_extensions = array('doc', 'docx', 'ppt', 'pptx', 'pps', 'ppsx', 'xls', 'xlsx');
+                $allowed_extensions = array('doc', 'docx', 'ppt', 'pptx', 'pps', 'ppsx', 'xls', 'xlsx', 'odt', 'odp', 'ods', 'pdf', 'txt', 'rtf', 'msg', 'csv', 'html', 'htm');
                 $extensions = preg_split("/[\/\\.]/", $doc_path) ;
                 $doc_ext = strtolower($extensions[count($extensions) - 1]);
                 if (in_array($doc_ext, $allowed_extensions)) {
@@ -2840,12 +2841,13 @@ return 'application/octet-stream';
                 $ic_slide->xapian_data = serialize($xapian_data);
                 $di = new DokeosIndexer();
                 $return = $di->connectDb(null, null, $lang);
-                 
+                
+                require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
                 $specific_fields = get_specific_field_list();
 
                 // process different depending on what to do if file exists
                 /**
-                * FIXME: Find a way to really verify if the file had been
+                * @TODO Find a way to really verify if the file had been
                 * overwriten. Now all work is done at
                 * handle_uploaded_document() and it's difficult to verify it
                 */
@@ -2873,7 +2875,11 @@ return 'application/octet-stream';
                               delete_all_specific_field_value($course_code, $specific_field['id'], TOOL_DOCUMENT, $docid);
                             }
                             // Update search engine
-                            $sterms = trim($_REQUEST[$specific_field['code']]);
+                            if (isset($specific_fields_values[$specific_field['code']])) {
+                                $sterms = trim($specific_fields_values[$specific_field['code']]);
+                            } else { //if the specific field is not defined, force an empty one
+                                $sterms = '';
+                            }
                             $all_specific_terms .= ' '. $sterms;
                             $sterms = explode(',', $sterms);
                             foreach ($sterms as $sterm) {
@@ -2909,16 +2915,18 @@ return 'application/octet-stream';
                     // Add all terms
                     $all_specific_terms = '';
                     foreach ($specific_fields as $specific_field) {
-                        if (isset($_REQUEST[$specific_field['code']])) {
-                            $sterms = trim($_REQUEST[$specific_field['code']]);
-                            $all_specific_terms .= ' '. $sterms;
-                            if (!empty($sterms)) {
-                                $sterms = explode(',', $sterms);
-                                foreach ($sterms as $sterm) {
-                                    if (!$simulation) {
-                                      $ic_slide->addTerm(trim($sterm), $specific_field['code']);
-                                      add_specific_field_value($specific_field['id'], $course_code, TOOL_DOCUMENT, $docid, $sterm);
-                                    }
+                        if (isset($specific_fields_values[$specific_field['code']])) {
+                            $sterms = trim($specific_fields_values[$specific_field['code']]);
+                        } else { //if the specific field is not defined, force an empty one
+                        	$sterms = '';
+                        }
+                        $all_specific_terms .= ' '. $sterms;
+                        if (!empty($sterms)) {
+                            $sterms = explode(',', $sterms);
+                            foreach ($sterms as $sterm) {
+                                if (!$simulation) {
+                                  $ic_slide->addTerm(trim($sterm), $specific_field['code']);
+                                  add_specific_field_value($specific_field['id'], $course_code, TOOL_DOCUMENT, $docid, $sterm);
                                 }
                             }
                         }

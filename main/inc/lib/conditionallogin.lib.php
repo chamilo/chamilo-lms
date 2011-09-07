@@ -6,17 +6,19 @@
 class ConditionalLogin {
 
   public static function check_conditions($user) {
-    if (file_exists(api_get_path(SYS_PATH).'main/auth/conditional_login/conditional_login.php')) {
-      include_once(api_get_path(SYS_PATH).'main/auth/conditional_login/conditional_login.php');
-      foreach ($dc_conditions as $dc_condition) {
-        if ($dc_condition['conditional_function']($user)) {
-          $_SESSION['conditional_login']['uid'] = $user['user_id'];
-          $_SESSION['conditional_login']['can_login'] = false;
-          header("Location:". $dc_condition['url']);
-          exit();
-        }
-      }
-    }
+		if (file_exists(api_get_path(SYS_PATH).'main/auth/conditional_login/conditional_login.php')) {
+			include_once(api_get_path(SYS_PATH).'main/auth/conditional_login/conditional_login.php');
+			if (isset($dc_conditions)){
+				foreach ($dc_conditions as $dc_condition) {
+					if ($dc_condition['conditional_function']($user)) {
+						$_SESSION['conditional_login']['uid'] = $user['user_id'];
+						$_SESSION['conditional_login']['can_login'] = false;
+						header("Location:". $dc_condition['url']);
+						exit();
+					}
+				}
+			}
+		}
   }
 
   public static function login(){

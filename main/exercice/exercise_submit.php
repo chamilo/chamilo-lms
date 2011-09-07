@@ -998,7 +998,7 @@ if (!empty($error)) {
 			}		
 			
 			$remind_question_div  = Display::input('checkbox', 'remind_list['.$questionId.']',  '', $attributes);
-			$remind_question_div .= Display::tag('label', get_lang('RemindQuestion'), array('for' =>'remind_list['.$questionId.']'));
+			$remind_question_div .= Display::tag('label', get_lang('ReviewQuestionLater'), array('for' =>'remind_list['.$questionId.']'));
 			$exercise_actions    .= Display::span($remind_question_div, array('class'=>'exercise_save_now_button'));		
 			
 			echo Display::div($exercise_actions, array('class'=>'exercise_actions'));		

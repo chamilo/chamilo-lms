@@ -7,7 +7,7 @@
  */
 die();
 require '../../inc/global.inc.php';
-require_once '../inc/lib/course.lib.php';
+require_once '../../inc/lib/course.lib.php';
 if (empty($_GET['doc'])) {
   echo "To add a document name to search, add ?doc=abc to the URL";
 } else {

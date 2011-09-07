@@ -358,7 +358,7 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$
 		$res = Database::query($sql);
         
         //Deleting control time session track		
-		exercise_time_control_delete($exo_id);
+		//exercise_time_control_delete($exo_id);
 		return $res;        
 	} else {
 		return false;

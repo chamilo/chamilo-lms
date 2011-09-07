@@ -50,16 +50,12 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 $htmlHeadXtra[] = api_get_jquery_js();
 
 if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/glossary.js" type="text/javascript" language="javascript"></script>'; //Glossary
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
+    $htmlHeadXtra[] = api_get_js('glossary.js'); //Glossary
+    $htmlHeadXtra[] = api_get_js('jquery.highlight.js'); //highlight
 }
 
 //This library is necessary for the time control feature
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.epiclock.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
-
-//Table calls
-$stat_table 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$exercice_attemp_table 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+$htmlHeadXtra[] = api_get_js('jquery.epiclock.min.js');
 
 // General parameters passed via POST/GET
 if (empty ($origin)) {
@@ -98,41 +94,35 @@ if (empty ($questionNum)) {
 if (empty ($current_question)) {
     $current_question = intval($_REQUEST['num']);
 }
-if (empty ($buttonCancel)) {
-    $buttonCancel = $_REQUEST['buttonCancel'];
-}
+
+//Error message
+$error = '';
 
 $reminder 			= isset($_GET['reminder']) ? intval($_GET['reminder']) : 0;
 $remind_question_id = isset($_GET['remind_question_id']) ? intval($_GET['remind_question_id']) : 0;
-
-if ($remind_question_id == -1) {
-	header('Location: exercise_reminder.php?origin='.$origin.'&exerciseId='.$exerciseId);
-	exit;
-}
-
-$error = '';
-
-// If the user has clicked on the "Cancel" button
-if ($buttonCancel) {
-    // returns to the exercise list
-    header("Location: exercice.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
-    exit;
-}
 
 $safe_lp_id             = ($learnpath_id == '')             ? 0 : $learnpath_id;
 $safe_lp_item_id        = ($learnpath_item_id == '')        ? 0 : $learnpath_item_id;
 $safe_lp_item_view_id   = ($learnpath_item_view_id == '')   ? 0 : $learnpath_item_view_id;
 
-/*
- * Teacher takes an exam and want to see a preview, we delete the objExercise from the session in order to get the latest changes
-    in the exercise 
-*/
+//if reminder ends we jump to the exexrcise_reminder
+if ($remind_question_id == -1) {
+	header('Location: exercise_reminder.php?origin='.$origin.'&exerciseId='.$exerciseId);
+	exit;
+}
+
+//Table calls
+$stat_table 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$exercice_attemp_table 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+/*  Teacher takes an exam and want to see a preview, we delete the objExercise from the session in order to get the latest changes in the exercise */
 if (api_is_allowed_to_edit(null,true) && $_GET['preview'] == 1 ) {
     api_session_unregister('objExercise');
 }
 
 // 1. Loading the $objExercise variable
-if (!isset ($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {    
+
+if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {    
     // Construction of Exercise
     $objExercise = new Exercise();   
     if ($debug) {error_log('1. Setting the $objExercise variable'); };
@@ -163,19 +153,62 @@ if (!is_object($objExercise)) {
     exit;
 }
 
-$current_timestamp = time();
+$current_timestamp 	= time();
+$my_remind_list 	= array();
 
 //4. Setting the exe_id (attempt id)
+/*
 $exe_id = null;
 if (isset($_SESSION['exe_id'])) {
 	$exe_id = $_SESSION['exe_id'];
+}*/
+
+$time_control = false;
+if ($objExercise->expired_time != 0 && $origin != 'learnpath') {
+	$time_control = true;
 }
 
+if ($time_control) {
+	//Get the expired time of the current exercice in track_e_exercices
+	$total_seconds 			= $objExercise->expired_time*60;
+	
+	//Generating the time control key for the user
+	$current_expired_time_key = generate_time_control_key($objExercise->id);
+}
 
-//4. Getting user exercise info (if the user took the exam before)
+if ($debug) { error_log("4. Setting the exe_id $exe_id");} ;
+
+//5. Getting user exercise info (if the user took the exam before) - generating exe_id
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);
-//$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
-$my_remind_list = array();
+
+if (empty($exercise_stat_info)) {
+	$total_weight = 0;
+	$questionList = $objExercise->get_validated_question_list();
+	foreach($questionList as $question_id) {
+		$objQuestionTmp = Question::read($question_id);
+		$total_weight += floatval($objQuestionTmp->weighting);
+	}
+	$clock_expired_time = '';
+	if ($time_control) {
+		$expected_time = $current_timestamp + $total_seconds;
+		
+		if ($debug)  error_log('6.3. $current_timestamp '.$current_timestamp);
+		if ($debug)  error_log('6.4. $expected_time '.$expected_time);
+		
+		$clock_expired_time 	= api_get_utc_datetime($expected_time);
+		if ($debug) error_log('6.5. $expected_time '.$clock_expired_time);
+		
+		//Sessions  that contain the expired time
+		$_SESSION['expired_time'][$current_expired_time_key] 	 = $clock_expired_time;
+		if ($debug) {
+			error_log('6.6. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key] );
+		};
+	}
+	$exe_id = $objExercise->save_stat_track_exercise_info($clock_expired_time, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $questionList, $total_weight);
+	$exercise_stat_info = $objExercise->get_stat_track_exercise_info($safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);	
+} else {
+	$exe_id = $exercise_stat_info['exe_id'];
+}
 
 if ($debug) { error_log('5. $objExercise->get_stat_track_exercise_info function called::  '.print_r($exercise_stat_info, 1)); };
 
@@ -184,9 +217,11 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
 	$my_remind_list = explode(',', $my_remind_list);
 	$my_remind_list = array_filter($my_remind_list);
 }
-$params = 'exe_id'.$exe_id.'&exerciseId='.$exerciseId.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpath_item_view_id;
 
-if ($reminder == 2 && empty($my_remind_list)) {
+$params = 'exe_id'.$exe_id.'&exerciseId='.$exerciseId.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpath_item_view_id;
+if ($debug) { error_log("5.1 params: ->  $params"); };
+
+if ($reminder == 2 && empty($my_remind_list)) {	
 	header('Location: exercise_reminder.php?'.$params);
 	exit;
 }
@@ -196,17 +231,12 @@ if ($reminder == 2 && empty($my_remind_list)) {
  * If the expired time is major that zero(0) then the expired time is compute on this time. Disable for learning path
  */
 
-$time_control = false;
-if ($objExercise->expired_time != 0 && $origin != 'learnpath') {
-	$time_control = true;
-}
+
 if ($time_control) {
-	if ($debug) error_log('6.1. Time control is enabled');
-	//Get the expired time of the current exercice in track_e_exercices
-	$total_seconds 			= $objExercise->expired_time*60;
-	//Generating the time control key
-	$current_expired_time_key = generate_time_control_key($objExercise->id);
+	if ($debug) error_log('6.1. Time control is enabled');	
 	if ($debug) {error_log('6.2. $current_expired_time_key  '.$current_expired_time_key); };
+	if ($debug) { error_log('6.2. $_SESSION[expired_time][$current_expired_time_key]  '.$_SESSION['expired_time'][$current_expired_time_key]); };
+	
     if (!isset($_SESSION['expired_time'][$current_expired_time_key])) {
         //Timer - Get expired_time for a student        
         if (!empty($exercise_stat_info)) {
@@ -245,23 +275,10 @@ if ($time_control) {
 	        	
 	        //Sessions  that contain the expired time
 	        $_SESSION['expired_time'][$current_expired_time_key] 		= $clock_expired_time;
-	        
 	        if ($debug) {error_log('6.9. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key] ); };
-        } else {
-            $expected_time = $current_timestamp + $total_seconds;
-            if ($debug)  error_log('6.3. $current_timestamp '.$current_timestamp);
-            if ($debug)  error_log('6.4. $expected_time '.$expected_time);
-            
-            $clock_expired_time 	= api_get_utc_datetime($expected_time);
-            if ($debug) error_log('6.5. $expected_time '.$clock_expired_time);
-
-            //Sessions  that contain the expired time
-            $_SESSION['expired_time'][$current_expired_time_key] 	 = $clock_expired_time;  
-            if ($debug) {error_log('6.6. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key] ); };
         }
     } else {
-        $clock_expired_time =  $_SESSION['expired_time'][$current_expired_time_key];        
-        if ($debug) {error_log('6.2. Getting the $_SESSION[end_expired_time]: '.$_SESSION['end_expired_time'][$current_expired_time_key] ); };
+        $clock_expired_time =  $_SESSION['expired_time'][$current_expired_time_key];
     }
 }
 
@@ -272,7 +289,7 @@ $time_left = api_strtotime($clock_expired_time,'UTC') - time();
  * The time control feature is enable here - this feature is enable for a jquery plugin called epiclock
  * for more details of how it works see this link : http://eric.garside.name/docs.html?p=epiclock
  */
-if ($time_control) { //Sends the exercice form when the expired time is finished
+if ($time_control) { //Sends the exercice form when the expired time is finished	
 	$htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
 }
 
@@ -302,14 +319,16 @@ $exercise_sound 		= $objExercise->selectSound();
 
 //if (!isset($_SESSION['questionList']) || $origin == 'learnpath') {
 //in LP's is enabled the "remember question" feature?
+
 if (!isset($_SESSION['questionList'])) {    
     // selects the list of question ID        
     $questionList = $objExercise->get_validated_question_list();
-    api_session_register('questionList');
+    api_session_register('questionList');    
     if ($debug > 0) { error_log('$_SESSION[questionList] was set'); }
-}
-if (!isset($objExercise) && isset($_SESSION['objExercise'])) {
-    $questionList = $_SESSION['questionList'];
+} else {	
+	if (isset($objExercise) && isset($_SESSION['objExercise'])) {		
+    	$questionList = $_SESSION['questionList'];
+	}
 }
 
 if ($debug) error_log('7 Question list loaded '.print_r($questionList, 1));
@@ -427,7 +446,8 @@ if ($formSent && isset($_POST)) {
                     Database::query($update_query);*/
                 }                
                 if ($debug) { error_log('Redirecting to exercise_show.php'); }
-                header("Location: exercise_show.php?id=$exe_id&origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
+                //header("Location: exercise_show.php?id=$exe_id&origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
+                header("Location: exercise_result.php?exe_id=$exe_id&origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
                 exit;
             }            
         } else {
@@ -453,7 +473,7 @@ if (!$current_question || $_REQUEST['num']) {
         $current_question++;
     }
 }
-
+//var_dump($current_question , $question_count);
 if (($objExercise->type == ALL_ON_ONE_PAGE || $current_question > $question_count)) {       
     if (api_is_allowed_to_session_edit()) {
         // goes to the script that will show the result of the exercise
@@ -478,11 +498,13 @@ if (($objExercise->type == ALL_ON_ONE_PAGE || $current_question > $question_coun
             //header("Location: exercise_result.php?origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
             //exit;
         } else {
-            //Time control is only enabled for ONE PER PAGE
-            
+        	
+            //Time control is only enabled for ONE PER PAGE        	
             if (!empty($exe_id) && is_numeric($exe_id)) {
                 //Verify if the current test is fraudulent
-                if (exercise_time_control_is_valid($exerciseId)) {
+            	$check = exercise_time_control_is_valid($exerciseId);
+            
+                if ($check) {
                 	$sql_exe_result = "";                    	
                     if ($debug) { error_log('exercise_time_control_is_valid is valid'); }
                 } else {
@@ -496,9 +518,10 @@ if (($objExercise->type == ALL_ON_ONE_PAGE || $current_question > $question_coun
                 //if ($debug) { error_log('Updating track_e_exercises '.$update_query); }                    
                 Database::query($update_query);*/
             }                
-            //if ($debug) { error_log('Redirecting to exercise_show.php'); }            
+            //if ($debug) { error_log('Redirecting to exercise_show.php'); }  
             header('Location: exercise_reminder.php?'.$params);
             exit;
+            //header("Location: exercise_submit.php?exerciseId=$exerciseId");
         }            
     } else {
         if ($debug) { error_log('Redirecting to exercise_submit.php'); }
@@ -537,7 +560,7 @@ $show_quiz_edition = $objExercise->added_in_lp();
 // I'm in a preview mode
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';
-    echo '<a href="exercice.php?show=test&id_session='.api_get_session_id().'">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
+    //echo '<a href="exercice.php?show=test&id_session='.api_get_session_id().'">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
     if ($show_quiz_edition == false) {
     	echo '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">'.Display :: return_icon('settings.png', get_lang('ModifyExercise'),'','32').'</a>';
         //echo Display :: return_icon('wizard.gif', get_lang('QuestionList')) . '<a href="exercice/admin.php?' . api_get_cidreq() . '&exerciseId=' . $objExercise->id . '">' . get_lang('QuestionList') . '</a>';
@@ -650,8 +673,8 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) && $_custom['exercise
 
 //Timer control
 if ($time_control) {
-  echo '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
-  echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
+	echo '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
+	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
 }
 
 if ($origin != 'learnpath') {
@@ -793,7 +816,7 @@ if (!empty($error)) {
                 }    
                             
            		// Only for the first time
-           		lp_data = $.param({"learnpath_id": '.$safe_lp_id.', "learnpath_item_id" : '.$safe_lp_item_id.', "learnpath_item_view_id": '.$safe_lp_item_view_id.'});
+           		lp_data = $.param({"exe_id": '.$exe_id.'});
            		
            		
           		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('loading1.gif')).'");                                
@@ -852,7 +875,7 @@ if (!empty($error)) {
            		//lok+(fgt)= data base
            		free_answers = $.param(free_answers);				
            		                 		
-           		lp_data = $.param({"learnpath_id": '.$safe_lp_id.', "learnpath_item_id" : '.$safe_lp_item_id.', "learnpath_item_view_id": '.$safe_lp_item_view_id.'});    		
+           		lp_data = $.param({"exe_id": '.$exe_id.'});    		
            		
           		$("#save_all_reponse").html("'.addslashes(Display::return_icon('loading1.gif')).'");
           		                             
@@ -886,6 +909,7 @@ if (!empty($error)) {
          <input type="hidden" name="formSent"				value="1" />
          <input type="hidden" name="exerciseId" 			value="'.$exerciseId . '" />
          <input type="hidden" name="num" 					value="'.$current_question . '" />
+         <input type="hidden" name="exe_id" 				value="'.$exe_id . '" />
          <input type="hidden" name="origin" 				value="'.$origin . '" />
          <input type="hidden" name="learnpath_id" 			value="'.$safe_lp_id . '" />
          <input type="hidden" name="learnpath_item_id" 		value="'.$safe_lp_item_id . '" />
@@ -987,17 +1011,6 @@ if (!empty($error)) {
     }      
     echo '</form>';
 }
-/*
-if ($objExercise->type == ONE_PER_PAGE) {	
-  	if (empty($exercise_stat_info)) {
-        $total_weight = 0; 	    
-  	    foreach($questionList as $question_id) {
-  	        $objQuestionTmp = Question::read($question_id);  	        
-  	        $total_weight += floatval($objQuestionTmp->weighting);
-  	    }
-  		$objExercise->save_stat_track_exercise_info($clock_expired_time, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $questionList, $total_weight);
-    }
-}*/
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool
     echo '</div>'; //End glossary div

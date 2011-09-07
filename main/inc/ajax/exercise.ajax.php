@@ -50,11 +50,13 @@ switch ($action) {
             
             //There is a reminder?
             $remind_list             = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
-            
+            /*
             //Lp ids
             $safe_lp_id              = $_REQUEST['learnpath_id'];  
             $safe_lp_item_id         = $_REQUEST['learnpath_item_id'];
-            $safe_lp_item_view_id    = $_REQUEST['learnpath_item_view_id'];
+            $safe_lp_item_view_id    = $_REQUEST['learnpath_item_view_id'];*/
+            
+            $exe_id = $_REQUEST['exe_id'];
             
             //Exercise information            
             $question_id             = intval($_REQUEST['question_id']);            
@@ -65,21 +67,18 @@ switch ($action) {
                 echo 0;
                 exit;
             }          
-            
-            $exe_id = null;
-            if (isset($_SESSION['exe_id'])) {
-            	$exe_id = $_SESSION['exe_id'];
-            }           
+                 
             
             //Getting information of the current exercise    
-            $exercise_stat_info = $objExercise->get_stat_track_exercise_info($safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);
-            //$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+            //$exercise_stat_info = $objExercise->get_stat_track_exercise_info($safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);
+            $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
             
             
             $attempt_list = array();
               
             //First time here we create an attempt (getting the exe_id)
-            if (empty($exercise_stat_info)) {            
+            if (empty($exercise_stat_info)) {           
+            	/* 
                 //$exe_id = create_event_exercice($objExercise->selectId());                
                 $current_expired_time_key = get_time_control_key($objExercise->id);
                 if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
@@ -87,9 +86,9 @@ switch ($action) {
                 } else {
                 	$expired_date = '0000-00-00 00:00:00';
                 }
-                $exe_id = $objExercise->save_stat_track_exercise_info($expired_date, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $question_list, 0); //total weight 0 by now
-                
+                $exe_id = $objExercise->save_stat_track_exercise_info($expired_date, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $question_list, 0); //total weight 0 by now                
                 $total_score = $total_weight = 0;
+                */
             } else {               
                 //We know the user we get the exe_id
                 $exe_id        = $exercise_stat_info['exe_id'];

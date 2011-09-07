@@ -167,30 +167,32 @@ Display :: display_confirmation_message(get_lang('Saved').'<br /><br />',false);
 
 $counter = 1;
 // Loop over all question to show results for each of them, one by one
-foreach ($question_list as $questionId) {
-    // destruction of the Question object
-	unset($objQuestionTmp);
-	
-	// gets the student choice for this question
-	$choice                = $exerciseResult[$questionId];
-    
-	// creates a temporary Question object
-	$objQuestionTmp        = Question :: read($questionId);
+if (!empty($question_list)) {
+	foreach ($question_list as $questionId) {
+	    // destruction of the Question object
+		unset($objQuestionTmp);
 		
-	//this variable commes from exercise_submit_modal.php	
-
-	//$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$quesId]; 
+		// gets the student choice for this question
+		$choice                = $exerciseResult[$questionId];
+	    
+		// creates a temporary Question object
+		$objQuestionTmp        = Question :: read($questionId);
+			
+		//this variable commes from exercise_submit_modal.php	
 	
-	if ($show_results) {
-    	// show titles    	
-    	echo $objQuestionTmp->return_header($objExercise->feedback_type, $counter);
-    	$counter++;    	
-	    // We're inside *one* question. Go through each possible answer for this question
-	    $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null ,'exercise_result', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);	    
-	}   	
-    $total_score     += $result['score'];    
-    $total_weight    += $result['weight'];    
-} // end foreach() block that loops over all questions
+		//$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$quesId]; 
+		
+		if ($show_results) {
+	    	// show titles    	
+	    	echo $objQuestionTmp->return_header($objExercise->feedback_type, $counter);
+	    	$counter++;    	
+		    // We're inside *one* question. Go through each possible answer for this question
+		    $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null ,'exercise_result', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);	    
+		}   	
+	    $total_score     += $result['score'];    
+	    $total_weight    += $result['weight'];    
+	} // end foreach() block that loops over all questions
+}
 
 if ($origin != 'learnpath') {
     if ($show_results || $show_only_score) {
@@ -212,11 +214,22 @@ if ($origin != 'learnpath') {
 $quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
 
 $feed = $objExercise->feedbacktype; 
-if (api_is_allowed_to_session_edit()) {
-	update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $quiz_duration, $question_list, '');
-	api_session_unregister('objExercise');
-	api_session_unregister('exe_id');	
+if (api_is_allowed_to_session_edit()) {	
+	update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $quiz_duration, $question_list, '');	
 }
+
+
+//If is not valid
+$session_control_key = get_session_time_control_key($objExercise->id);
+if (isset($session_control_key) && !exercise_time_control_is_valid($objExercise->id)) {
+	$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+	$sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = $exe_id ";
+	Database::query($sql_fraud);
+}
+
+//Unset session for clock time
+var_dump($objExercise->id);
+exercise_time_control_delete($objExercise->id);
 
 if ($origin != 'learnpath') {	
 	Display::display_footer();
@@ -234,4 +247,8 @@ if ($origin != 'learnpath') {
 // Send notification..
 if (!api_is_allowed_to_edit(null,true)) {	
     $objExercise->send_notification($arrques, $arrans, $origin);	
+}
+if (api_is_allowed_to_session_edit()) {
+	api_session_unregister('objExercise');
+	api_session_unregister('exe_id');
 }

@@ -1607,45 +1607,46 @@ class Exercise {
 		$time_left = intval($time_left);
 		return "<script type=\"text/javascript\">
 	
-			$(document).ready(function(){
+			$(document).ready(function() {
 	
-			function get_expired_date_string(expired_time) {
-		        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-		        var day, month, year, hours, minutes, seconds, date_string;
-		        var obj_date = new Date(expired_time);
-		        day     = obj_date.getDate();
-		        if (day < 10) day = '0' + day;
-			        month   = obj_date.getMonth();
-			        year    = obj_date.getFullYear();
-			        hours   = obj_date.getHours();
-		        if (hours < 10) hours = '0' + hours;
-		        minutes = obj_date.getMinutes();
-		        if (minutes < 10) minutes = '0' + minutes;
-		        seconds = obj_date.getSeconds();
-		        if (seconds < 10) seconds = '0' + seconds;
-		        date_string = months[month] +' ' + day + ', ' + year + ' ' + hours + ':' + minutes + ':' + seconds;
-		        return date_string;
-		      }
+				function get_expired_date_string(expired_time) {
+			        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+			        var day, month, year, hours, minutes, seconds, date_string;
+			        var obj_date = new Date(expired_time);
+			        day     = obj_date.getDate();
+			        if (day < 10) day = '0' + day;
+				        month   = obj_date.getMonth();
+				        year    = obj_date.getFullYear();
+				        hours   = obj_date.getHours();
+			        if (hours < 10) hours = '0' + hours;
+			        minutes = obj_date.getMinutes();
+			        if (minutes < 10) minutes = '0' + minutes;
+			        seconds = obj_date.getSeconds();
+			        if (seconds < 10) seconds = '0' + seconds;
+			        date_string = months[month] +' ' + day + ', ' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+			        return date_string;
+				}
 	
-	      function onExpiredTimeExercise() { 
-	        $('#wrapper-clock').hide(); $('#exercise_form').hide();
-	        $('#expired-message-id').show();
-	        $('#exercise_form').submit();	     		
-	      }
+				function onExpiredTimeExercise() { 
+        			$('#wrapper-clock').hide(); 
+        			$('#exercise_form').hide();
+        			$('#expired-message-id').show();
+        			$('#exercise_form').submit();	     		
+	      		}
 	
-	      var current_time = new Date().getTime();
-	      var time_left    = parseInt(".$time_left.");
-	      var expired_time = current_time + (time_left*1000);
-	      var expired_date = get_expired_date_string(expired_time);
-	
-	       $('#text-content').epiclock({
-	         mode: EC_COUNTDOWN,
-	         format: 'x{ : } i{ : } s{}',
-	         target: expired_date,
-	         onTimer: function(){ onExpiredTimeExercise(); }
-	       }).clocks(EC_RUN);
+				var current_time = new Date().getTime();
+				var time_left    = parseInt(".$time_left.");
+				var expired_time = current_time + (time_left*1000);
+				var expired_date = get_expired_date_string(expired_time);
+					
+	       		$('#text-content').epiclock({
+	         		mode: EC_COUNTDOWN,
+	         		format: 'x{ : } i{ : } s{}',
+	         		target: expired_date,
+	         		onTimer: function(){ onExpiredTimeExercise(); }
+	       		}).clocks(EC_RUN);
 	       
-	       $('#submit_save').click(function () {});
+	       		$('#submit_save').click(function () {});
 	    });
 	    </script>";
 	}

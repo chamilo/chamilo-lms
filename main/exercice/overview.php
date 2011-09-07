@@ -64,7 +64,7 @@ if (!$objExercise->is_visible()) {
 	$exercise_url = Display::div(get_lang('StartTest'), array('class'=>'a_button white bigger round no_link'));
 }
 
-$options = Display::div('', array('class'=>'left_option'));
+$options  = Display::div('', array('class'=>'left_option'));
 $options .= Display::div($exercise_url, array('class'=>'center_option'));
 
 $attempts = get_exercise_results_by_user(api_get_user_id(), $objExercise->id, api_get_course_id(), api_get_session_id(), $learnpath_id, $learnpath_item_id);
@@ -135,8 +135,7 @@ if (!empty($attempts)) {
 			$row++;
 		}
 	}
-	$table_content = $table->toHtml();
-	
+	$table_content = $table->toHtml();	
 }
 
 if ($objExercise->selectAttempts()) {

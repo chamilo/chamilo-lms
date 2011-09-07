@@ -218,7 +218,7 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
 	$my_remind_list = array_filter($my_remind_list);
 }
 
-$params = 'exe_id'.$exe_id.'&exerciseId='.$exerciseId.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpath_item_view_id;
+$params = 'exe_id='.$exe_id.'&exerciseId='.$exerciseId.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpath_item_view_id;
 if ($debug) { error_log("5.1 params: ->  $params"); };
 
 if ($reminder == 2 && empty($my_remind_list)) {	
@@ -230,7 +230,6 @@ if ($reminder == 2 && empty($my_remind_list)) {
  * 6. Loading Time control parameters
  * If the expired time is major that zero(0) then the expired time is compute on this time. Disable for learning path
  */
-
 
 if ($time_control) {
 	if ($debug) error_log('6.1. Time control is enabled');	
@@ -473,61 +472,63 @@ if (!$current_question || $_REQUEST['num']) {
         $current_question++;
     }
 }
-//var_dump($current_question , $question_count);
-if (($objExercise->type == ALL_ON_ONE_PAGE || $current_question > $question_count)) {       
-    if (api_is_allowed_to_session_edit()) {
-        // goes to the script that will show the result of the exercise
-        if ($objExercise->type == ALL_ON_ONE_PAGE) {
-            if ($debug) { error_log('Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php'); }
-            
-            //We check if the user attempts before sending to the exercise_result.php
-            if ($objExercise->selectAttempts() > 0) {
-                $attempt_count = get_attempt_count(api_get_user_id(), $exerciseId, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);                
-                if ($attempt_count >= $objExercise->selectAttempts()) {
-                    Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), false);                        
-                    if ($origin != 'learnpath') {
-                        //so we are not in learnpath tool
-                        echo '</div>'; //End glossary div
-                        Display :: display_footer();                        
-                    } else {
-                        echo '</body></html>';
-                    }
-                    exit;
-                }
-            }             
-            //header("Location: exercise_result.php?origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
-            //exit;
-        } else {
-        	
-            //Time control is only enabled for ONE PER PAGE        	
-            if (!empty($exe_id) && is_numeric($exe_id)) {
-                //Verify if the current test is fraudulent
-            	$check = exercise_time_control_is_valid($exerciseId);
-            
-                if ($check) {
-                	$sql_exe_result = "";                    	
-                    if ($debug) { error_log('exercise_time_control_is_valid is valid'); }
-                } else {
-                	$sql_exe_result = ", exe_result = 0";
-                    if ($debug) { error_log('exercise_time_control_is_valid is NOT valid then exe_result = 0 '); }
-                }
-                /*
-                //Clean incomplete - @todo why setting to blank the status?                  
-                $update_query = "UPDATE $stat_table SET  status = '', exe_date = '".api_get_utc_datetime() ."' , orig_lp_item_view_id = '$safe_lp_item_view_id' $sql_exe_result  WHERE exe_id = ".$exe_id;
-                
-                //if ($debug) { error_log('Updating track_e_exercises '.$update_query); }                    
-                Database::query($update_query);*/
-            }                
-            //if ($debug) { error_log('Redirecting to exercise_show.php'); }  
-            header('Location: exercise_reminder.php?'.$params);
-            exit;
-            //header("Location: exercise_submit.php?exerciseId=$exerciseId");
-        }            
-    } else {
-        if ($debug) { error_log('Redirecting to exercise_submit.php'); }
-        //header("Location: exercise_submit.php?exerciseId=$exerciseId");
-        exit;            
-    }
+if ($question_count != 0) {
+	if (($objExercise->type == ALL_ON_ONE_PAGE || $current_question > $question_count)) {       
+	    if (api_is_allowed_to_session_edit()) {
+	        // goes to the script that will show the result of the exercise
+	        if ($objExercise->type == ALL_ON_ONE_PAGE) {
+	            if ($debug) { error_log('Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php'); }
+	            
+	            //We check if the user attempts before sending to the exercise_result.php
+	            if ($objExercise->selectAttempts() > 0) {
+	                $attempt_count = get_attempt_count(api_get_user_id(), $exerciseId, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);                
+	                if ($attempt_count >= $objExercise->selectAttempts()) {
+	                    Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), false);                        
+	                    if ($origin != 'learnpath') {
+	                        //so we are not in learnpath tool
+	                        echo '</div>'; //End glossary div
+	                        Display :: display_footer();                        
+	                    } else {
+	                        echo '</body></html>';
+	                    }
+	                    exit;
+	                }
+	            }             
+	            //header("Location: exercise_result.php?origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
+	            //exit;
+	        } else {
+	        	
+	            //Time control is only enabled for ONE PER PAGE        	
+	            if (!empty($exe_id) && is_numeric($exe_id)) {
+	                //Verify if the current test is fraudulent
+	            	$check = exercise_time_control_is_valid($exerciseId);
+	            
+	                if ($check) {
+	                	$sql_exe_result = "";                    	
+	                    if ($debug) { error_log('exercise_time_control_is_valid is valid'); }
+	                } else {
+	                	$sql_exe_result = ", exe_result = 0";
+	                    if ($debug) { error_log('exercise_time_control_is_valid is NOT valid then exe_result = 0 '); }
+	                }
+	                /*
+	                //Clean incomplete - @todo why setting to blank the status?                  
+	                $update_query = "UPDATE $stat_table SET  status = '', exe_date = '".api_get_utc_datetime() ."' , orig_lp_item_view_id = '$safe_lp_item_view_id' $sql_exe_result  WHERE exe_id = ".$exe_id;
+	                
+	                //if ($debug) { error_log('Updating track_e_exercises '.$update_query); }                    
+	                Database::query($update_query);*/
+	            }                           
+	            header('Location: exercise_reminder.php?'.$params);
+	            exit;
+	            //header("Location: exercise_submit.php?exerciseId=$exerciseId");
+	        }            
+	    } else {
+	        if ($debug) { error_log('Redirecting to exercise_submit.php'); }
+	        //header("Location: exercise_submit.php?exerciseId=$exerciseId");
+	        exit;            
+	    }
+	}
+} else {
+	$error = get_lang('QuestionNotFound');
 }
 
 if (!empty ($_GET['gradebook']) && $_GET['gradebook'] == 'view') {

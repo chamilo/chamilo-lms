@@ -1532,7 +1532,7 @@ function get_exercises_to_be_taken($course_code, $session_id) {
 	$result = array();
 	$now = time() + 15*24*60*60;
 	foreach($exercises as $exercise_item) {
-		if (isset($exercise_item['end_time'])  && !empty($exercise_item['end_time']) && api_strtotime($exercise_item['end_time']) < $now) {
+		if (isset($exercise_item['end_time'])  && !empty($exercise_item['end_time']) && $exercise_item['end_time'] != '0000-00-00 00:00:00' && api_strtotime($exercise_item['end_time']) < $now) {
 			$result[] = $exercise_item;
 		}
 	}

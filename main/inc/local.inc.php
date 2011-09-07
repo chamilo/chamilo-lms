@@ -410,18 +410,6 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                 //huh... nothing to do... we shouldn't get here
                 error_log('Chamilo Authentication file '. $extAuthSource[$uData['auth_source']]['login']. ' could not be found - this might prevent your system from doing the corresponding authentication process',0);
             }
-            if (!empty($_SESSION['request_uri'])) {
-                  $req = $_SESSION['request_uri'];
-                  unset($_SESSION['request_uri']);
-                  header('location: '.$req);
-            } else {
-                if (isset($param)) {
-                    header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login').$param);
-                } else {
-                    // here is the main redirect of a *normal* login page in Chamilo
-                    header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login'));
-                }
-            }
         } else {
             // login failed, Database::num_rows($result) <= 0
             $loginFailed = true;  // Default initialisation. It could
@@ -656,6 +644,9 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 
             api_session_register('_user');
             UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
+
+						require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';
+						LoginRedirection::redirect();
         } else {
             header('location:'.api_get_path(WEB_PATH));
             //exit("WARNING UNDEFINED UID !! ");

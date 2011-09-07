@@ -1842,14 +1842,23 @@ function api_is_drh() {
     return $_user['status'] == DRH;
 }
 
-/*
- * @todo finish this function ...
+/**
+ * Checks whether the current user is a student
+ * @return boolean True if current user is a human resources manager
+ */
 function api_is_student() {
-    if (!api_is_platform_admin() && !api_is_session_admin() && !api_is_coach()) {
-        return true;
-    }
-    return false;
-}*/
+    global $_user;
+    return $_user['status'] == STUDENT;
+		
+}
+/**
+ * Checks whether the current user is a teacher
+ * @return boolean True if current user is a human resources manager
+ */
+function api_is_teacher() {
+    global $_user;
+    return $_user['status'] == COURSEMANAGER;
+}
 
 /**
  * This function checks whether a session is assigned into a category

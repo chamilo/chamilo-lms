@@ -125,53 +125,6 @@ else {
     // Only if login form was not sent because if the form is sent the user was already on the page.
     event_open();
 }
-//checks user status and redirect him through custom page if setting is enabled
-
-$user_status = (isset($_SESSION['_user']['user_id'])) ? $_user['status'] : null;
-
-if ( $user_status == STUDENT && !api_get_setting('student_page_after_login') == '' ){
-	$redirect_url = html_entity_decode(api_get_setting('student_page_after_login'));
-	if ($redirect_url[0] == "/") {
-		$redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
-	}
-    header('Location: '.$redirect_url);
-      exit();
-}
-if ( $user_status == COURSEMANAGER && !api_get_setting('teacher_page_after_login') == '' ){
-	$redirect_url = html_entity_decode(api_get_setting('teacher_page_after_login'));
-	if ($redirect_url[0] == "/") {
-		$redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
-	}
-    header('Location: '.$redirect_url);
-      exit();
-}
-if ( $user_status == DRH && !api_get_setting('DRH_page_after_login') == '' ){
-	$redirect_url = html_entity_decode(api_get_setting('DRH_page_after_login'));
-	if ($redirect_url[0] == "/") {
-		$redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
-	}
-    header('Location: '.$redirect_url);
-      exit();
-}
-if ( $user_status == SESSIONADMIN && !api_get_setting('sessionadmin_page_after_login') == '' ){
-	$redirect_url = html_entity_decode(api_get_setting('sessionadmin_page_after_login'));
-	if ($redirect_url[0] == "/") {
-		$redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
-	}
-    header('Location: '.$redirect_url);
-      exit();
-}
-
-
-// Custom pages
-if (api_get_setting('use_custom_pages') == 'true') {
-	if (api_get_user_id()) {
-		CustomPages::displayPage('index-logged');
-	}
-	else {
-		CustomPages::displayPage('index-unlogged');
-	}
-}
 // The header.
 /*$header_title = get_lang('Homepage');
 //$sitename = api_get_setting('siteName');

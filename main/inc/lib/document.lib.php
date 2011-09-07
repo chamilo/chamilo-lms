@@ -2766,10 +2766,10 @@ return 'application/octet-stream';
      * @param   int     Session ID (not used yet)
      * @param   string  Language of document's content (defaults to course language)
      * @param   string  What to do if the file already exists (default or overwrite)
-     * @return  void
+     * @param   bool    When set to true, this runs the indexer without actually saving anything to any database
+     * @return  bool    Returns true on presumed success, false on failure
      */
-    public function index_document($docid, $course_code, $session_id=0, $lang='english', $if_exists = '') {
-        
+    public function index_document($docid, $course_code, $session_id=0, $lang='english', $if_exists = '', $simulation = false) {
         if (api_get_setting('search_enabled') !== 'true') {
         	return false;
         }
@@ -2864,10 +2864,14 @@ return 'application/octet-stream';
 
                     if (Database::num_rows($res) > 0) {
                         $se_ref = Database::fetch_array($res);
-                        $di->remove_document($se_ref['search_did']);
+                        if (!$simulation) {
+                          $di->remove_document($se_ref['search_did']);
+                        }
                         $all_specific_terms = '';
                         foreach ($specific_fields as $specific_field) {
-                            delete_all_specific_field_value($course_code, $specific_field['id'], TOOL_DOCUMENT, $docid);
+                            if (!$simulation) {
+                              delete_all_specific_field_value($course_code, $specific_field['id'], TOOL_DOCUMENT, $docid);
+                            }
                             // Update search engine
                             $sterms = trim($_REQUEST[$specific_field['code']]);
                             $all_specific_terms .= ' '. $sterms;
@@ -2877,24 +2881,28 @@ return 'application/octet-stream';
                                 if (!empty($sterm)) {
                                     $ic_slide->addTerm($sterm, $specific_field['code']);
                                     // updated the last param here from $value to $sterm without being sure - see commit15464
-                                    add_specific_field_value($specific_field['id'], $course_code, TOOL_DOCUMENT, $docid, $sterm);
+                                    if (!$simulation) {
+                                      add_specific_field_value($specific_field['id'], $course_code, TOOL_DOCUMENT, $docid, $sterm);
+                                    }
                                 }
                             }
                         }
                         // Add terms also to content to make terms findable by probabilistic search
                         $file_content = $all_specific_terms .' '. $file_content;
 
-                        $ic_slide->addValue('content', $file_content);
-                        $di->addChunk($ic_slide);
-                        // Index and return a new search engine document id
-                        $did = $di->index();
-                        //var_dump($did);
-                        if ($did) {
+                        if (!$simulation) {
+                          $ic_slide->addValue('content', $file_content);
+                          $di->addChunk($ic_slide);
+                          // Index and return a new search engine document id
+                          $did = $di->index();
+                          //var_dump($did);
+                          if ($did) {
                             // update the search_did on db
                             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
                             $sql = 'UPDATE %s SET search_did=%d WHERE id=%d LIMIT 1';
                             $sql = sprintf($sql, $tbl_se_ref, (int)$did, (int)$se_ref['id']);
                             Database::query($sql);
+                          }
                         }
                     }
                 } else {
@@ -2907,29 +2915,38 @@ return 'application/octet-stream';
                             if (!empty($sterms)) {
                                 $sterms = explode(',', $sterms);
                                 foreach ($sterms as $sterm) {
-                                    $ic_slide->addTerm(trim($sterm), $specific_field['code']);
-                                    add_specific_field_value($specific_field['id'], $course_code, TOOL_DOCUMENT, $docid, $sterm);
+                                    if (!$simulation) {
+                                      $ic_slide->addTerm(trim($sterm), $specific_field['code']);
+                                      add_specific_field_value($specific_field['id'], $course_code, TOOL_DOCUMENT, $docid, $sterm);
+                                    }
                                 }
                             }
                         }
                     }
                     // Add terms also to content to make terms findable by probabilistic search
                     $file_content = $all_specific_terms .' '. $file_content;
-                    $ic_slide->addValue('content', $file_content);
-                    $di->addChunk($ic_slide);
-                    // Index and return search engine document id
-                    $did = $di->index();
-                    if ($did) {
+                    if (!$simulation) {
+                      $ic_slide->addValue('content', $file_content);
+                      $di->addChunk($ic_slide);
+                      // Index and return search engine document id
+                      $did = $di->index();
+                      if ($did) {
                         // Save it to db
                         $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
                         $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
                             VALUES (NULL , \'%s\', \'%s\', %s, %s)';
                         $sql = sprintf($sql, $tbl_se_ref, $course_code, TOOL_DOCUMENT, $docid, $did);
                         Database::query($sql);
+                      } else {
+                    	  return false;
+                      }
                     }
                 }
+            } else {
+                return false;
             }
         }
+        return true;
     }
 }
 //end class DocumentManager

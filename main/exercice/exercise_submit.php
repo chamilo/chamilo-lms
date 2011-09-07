@@ -784,7 +784,14 @@ if (!empty($error)) {
                 	//$(this).find(".exercise_save_now_button").hide();
                 	$(this).removeClass("question_highlight");
                 });
-    		});			
+    		});		
+
+    		
+			function previous_question(question_num) {
+				lp_data = $.param({"exe_id": '.$exe_id.'});
+				url = "exercise_submit.php?origin='.$origin.'&exerciseId='.$exerciseId.'&num="+question_num+"&" + lp_data;																
+				window.location = url;
+			}
     		
            function save_now(question_id) {
            		//1. Normal choice inputs               

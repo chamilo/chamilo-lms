@@ -228,7 +228,6 @@ if (isset($session_control_key) && !exercise_time_control_is_valid($objExercise-
 }
 
 //Unset session for clock time
-var_dump($objExercise->id);
 exercise_time_control_delete($objExercise->id);
 
 if ($origin != 'learnpath') {	

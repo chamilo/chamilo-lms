@@ -1553,6 +1553,7 @@ class Exercise {
 		$html = $label = '';
 		$confirmation_alert = $this->type == ALL_ON_ONE_PAGE? " onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\" ":"";
 		$hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']):null;
+		$all_button = '';
 	
 		if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {			
 			$html .='<script>
@@ -1574,17 +1575,19 @@ class Exercise {
 					$label = get_lang('NextQuestion');
 					$class = 'next';
 				}
-				 
-				/*if ($this->type == ALL_ON_ONE_PAGE && $nbrQuestions > 1) {
-					$all_button = '<a href="javascript://" class="a_button orange medium" onclick="save_now_all(); ">'.get_lang('SaveForNow').'</a>';
-					$all_button .= '&nbsp;<span id="save_all_reponse"></span>';
-					$html .= $all_button;
-				}*/
-	
-				if ($this->type == ONE_PER_PAGE) {
-					$all_button = '<a href="javascript://" class="a_button blue medium" onclick="save_now('.$question_id.'); ">'.$label.'</a>';
+				if ($this->type == ONE_PER_PAGE) {					
+					//Next question
+					$all_button .= '<a href="javascript://" class="a_button blue medium" onclick="save_now('.$question_id.'); ">'.$label.'</a>';
+					
+					if ($questionNum != 1) {
+						$prev_question = $questionNum - 2;
+						$all_button .= '<a href="javascript://" class="a_button white small" onclick="previous_question('.$prev_question.'); "> << </a>';
+					}
+					
 					//$all_button .= '&nbsp;<span id="save_all_reponse"></span>';
 					$all_button .= '<span id="save_for_now_'.$question_id.'"></span>&nbsp;';
+					
+					
 					$html .= $all_button;
 				} else {
 					$all_button = '<a href="javascript://" class="a_button green" onclick="validate_all(); ">'.get_lang('ValidateAnswer').'</a>';

@@ -23,7 +23,7 @@ class ConditionalLogin {
 
   public static function login(){
     $_SESSION['conditional_login']['can_login'] = true;
-    header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login').$param);
+		LoginRedirection::redirect();
     exit();
   }
 }

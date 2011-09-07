@@ -2766,7 +2766,7 @@ return 'application/octet-stream';
      * @param   int     Session ID (not used yet)
      * @param   string  Language of document's content (defaults to course language)
      * @param   string  What to do if the file already exists (default or overwrite)
-     * @return  void
+     * @return  bool    Returns true on presumed success, false on failure
      */
     public function index_document($docid, $course_code, $session_id=0, $lang='english', $if_exists = '') {
         
@@ -2930,6 +2930,7 @@ return 'application/octet-stream';
                 }
             }
         }
+        return true;
     }
 }
 //end class DocumentManager

@@ -1023,18 +1023,10 @@ class Exercise {
 			$form->addElement('html','<div id="end_date_div" style="display:none;">');
 
 			$form->addElement('datepicker', 'end_time', '', array('form_name'=>'exercise_admin'), 5);
-
-			//$form->addElement('select', 'enabletimercontroltotalminutes',get_lang('ExerciseTimerControlMinutes'),$time_minutes_option);
 			$form->addElement('html','</div>');
 
-			$check_option=$this->selectType();
-
-			if ($check_option==1 && isset($_GET['exerciseId'])) {
-				$diplay = 'none';
-			} else {
-				$diplay = 'block';
-			}
-				
+			//$check_option=$this->selectType();
+			$diplay = 'block';							
 			$form->addElement('checkbox', 'propagate_neg',get_lang('PropagateNegativeResults'),null);
 				
 			$form->addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');
@@ -1046,6 +1038,7 @@ class Exercise {
 			$expired_date = (int)$this->selectExpiredTime();
 
 			if(($expired_date!='0')) {
+				
 				$form->addElement('html','<div id="timercontrol" style="display:block;">');
 			} else {
 				$form->addElement('html','<div id="timercontrol" style="display:none;">');
@@ -1128,7 +1121,7 @@ class Exercise {
 				$defaults['end_time']   = ($this->end_time!='0000-00-00 00:00:00')?$this->end_time : date('Y-m-d 12:00:00',time()+84600);
 
 				//Get expired time
-				if($this->expired_time != '0') {
+				if($this->expired_time != '0') {					
 					$defaults['enabletimercontrol'] = 1;
 					$defaults['enabletimercontroltotalminutes'] = $this->expired_time;
 				} else {
@@ -1534,13 +1527,13 @@ class Exercise {
 		array_map('intval', $questionList);
 		
 		$weight = Database::escape_string($weight);
-		if ($this->type == ONE_PER_PAGE) {
+		//if ($this->type == ONE_PER_PAGE) {
 			$sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status,session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, exe_weighting)
                     VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "', '" . api_get_utc_datetime() . "', '$safe_lp_id', '$safe_lp_item_id', '$weight' )";
-		} else {
+		/*} else {
 			$sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status, session_id, start_date, orig_lp_id, orig_lp_item_id)
                     VALUES($sql_fields_values '".$this->id."','".api_get_user_id()."','".api_get_course_id()."','incomplete','".api_get_session_id()."','".api_get_utc_datetime()."', '$safe_lp_id', '$safe_lp_item_id')";
-		}
+		}*/
 		Database::query($sql);
 		$id = Database::insert_id();
 		return $id;		

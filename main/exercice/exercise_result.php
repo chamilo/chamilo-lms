@@ -122,6 +122,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 $feedback_type           = $objExercise->feedbacktype;
 
 $exercise_stat_info      = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+
 if (!empty($exercise_stat_info['data_tracking'])) {
 	$question_list		= explode(',', $exercise_stat_info['data_tracking']);
 }

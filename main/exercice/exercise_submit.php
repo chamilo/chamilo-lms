@@ -156,13 +156,6 @@ if (!is_object($objExercise)) {
 $current_timestamp 	= time();
 $my_remind_list 	= array();
 
-//4. Setting the exe_id (attempt id)
-/*
-$exe_id = null;
-if (isset($_SESSION['exe_id'])) {
-	$exe_id = $_SESSION['exe_id'];
-}*/
-
 $time_control = false;
 if ($objExercise->expired_time != 0 && $origin != 'learnpath') {
 	$time_control = true;
@@ -183,7 +176,7 @@ $exercise_stat_info = $objExercise->get_stat_track_exercise_info($safe_lp_id, $s
 
 if (empty($exercise_stat_info)) {
 	$total_weight = 0;
-	$questionList = $objExercise->get_validated_question_list();
+	$questionList = $objExercise->get_validated_question_list();	
 	foreach($questionList as $question_id) {
 		$objQuestionTmp = Question::read($question_id);
 		$total_weight += floatval($objQuestionTmp->weighting);
@@ -423,8 +416,8 @@ if ($formSent && isset($_POST)) {
                             echo '</body></html>';
                         }                        
                     }
-                }             
-                header("Location: exercise_result.php?origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
+                }                            
+                header("Location: exercise_result.php?exe_id=$exe_id&origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
                 exit;
             } else {
                 //Time control is only enabled for ONE PER PAGE

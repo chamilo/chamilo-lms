@@ -98,20 +98,19 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 	    }  	
       	
      	function check_per_page_one() {
-     		if (document.getElementById(\'divtimecontrol\').style.display==\'none\') {
-     		
+     		/*if (document.getElementById(\'divtimecontrol\').style.display==\'none\') {     		
      			document.getElementById(\'divtimecontrol\').style.display=\'block\';
      			document.getElementById(\'divtimecontrol\').display=block;
      			document.getElementById(\'timecontrol\').display=none;
-     		}
+     		}*/
      		document.getElementById(\'exerciseType_0\').checked=true;
 		}
 
 		function check_per_page_all() {
-			if (document.getElementById(\'divtimecontrol\').style.display==\'block\') {
+			/*if (document.getElementById(\'divtimecontrol\').style.display==\'block\') {
 				document.getElementById(\'divtimecontrol\').style.display=\'none\';
 				document.getElementById(\'enabletimercontroltotalminutes\').value=\'\';
-			}
+			}*/
 			if (document.getElementById(\'exerciseType_1\').checked) {
 				document.getElementById(\'exerciseType_0\').checked = true;
 			}

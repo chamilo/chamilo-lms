@@ -8,12 +8,30 @@ require_once '../global.inc.php';
 
 require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.lib.php';
 
 api_protect_admin_script();
 
 $action = $_REQUEST['a'];
+$agenda = new Agenda();
 
 switch ($action) {    
+	case 'move_event':
+		$day_delta 		= $_REQUEST['day_delta'];
+		$minute_delta 	= $_REQUEST['minute_delta'];
+		$type 			=  $_REQUEST['type'][0];
+		$id 			=  explode('_', $_REQUEST['id']);
+		$id				= $id[1];
+		$agenda->move_event($id, $type, $day_delta, $minute_delta);
+		
+		break;
+	case 'get_events':
+		$start 	= $_REQUEST['start'];
+		$end 	= $_REQUEST['end'];		
+		
+		$events = $agenda->get_events($start, $end, 1);
+		echo $events;		
+		break;
     case 'get_user_agenda':
         if (api_is_allowed_to_edit(null, true)) {
             //@todo move this in the agenda class

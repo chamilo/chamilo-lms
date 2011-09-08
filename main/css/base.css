@@ -596,7 +596,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 }
 
 .group_discussions_info {
-	width:100%;
+	width:400px;
 }
 
 .group_social_grid {
@@ -1916,24 +1916,19 @@ div.image-social-content center.friend {
 /*MY GROUPS*/
 
 .mygroups_grid_item {
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #E5E5E5;
-    border-radius: 11px 11px 11px 11px;
-    
-    -webkit-border-radius: 11px 11px 11px 11px;
-    -opera-border-radius: 11px 11px 11px 11px;
-    -moz-border-radius: 11px 11px 11px 11px;
-    
-    box-shadow: 0 4px 18px #C8C8C8;
-    -webkit-box-shadow: 0 4px 18px #C8C8C8;
-    -opera-box-shadow: 0 4px 18px #C8C8C8;
-    -moz-box-shadow: 0 4px 18px #C8C8C8;
-    
+    border-bottom:1px solid #EAEAEA;
     float: left;
-    height: 120px;
+    height: 70px;
     margin: 0 8px 15px 15px;
     padding: 16px 12px 5px;
     width:600px;
+}
+
+.topic_div {
+    width:620px;
+    border-bottom:1px solid #EAEAEA;
+    margin-bottom: 20px;
+    height: 96px;
 }
 
 .box_description_group_member {
@@ -2654,3 +2649,6 @@ div.admin_section h4 {
 	padding:10px; 
 }
 
+.topics_grid_item {
+    margin-left:20px;
+}

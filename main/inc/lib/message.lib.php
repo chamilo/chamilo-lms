@@ -943,20 +943,20 @@ class MessageManager
 				$files_attachments  = self::get_links_message_attachment_files($topic['id']);
 				$name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
 
-				$html .= '<div class="rounded_div" style="width:620px">';
+				$html .= '<div class="topic_div">';
 				
 				    $items = $topic['count'];				    
 				    $reply_label = ($items == 1) ? get_lang('Reply'): get_lang('Replies');
 				    $html .= '<table width="100%"><tr><td width="20px" valign="top">'; 
 				    $html .= Display::div(Display::tag('span', $items).$reply_label, array('class' =>'group_discussions_replies'));
-				    $html .= '</td><td valign="top">';
+				    $html .= '</td><td width="150px"  valign="top">';
 				    
 			        $topic['title'] = trim($topic['title']);
 			        
 			        if (empty($topic['title'])) {
 			            $topic['title'] = get_lang('Untitled');
 			        } 				
-			        $title = Display::url('<h2>'.Security::remove_XSS($topic['title']).'</h2>', 'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']);
+			        $title = Display::url('<h3>'.Security::remove_XSS($topic['title']).'</h3>', 'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']);
                                             
                     $date = '';
                     $link = '';
@@ -970,11 +970,11 @@ class MessageManager
 					$image_path = UserManager::get_user_picture_path_by_id($topic['user_sender_id'], 'web', false, true);							
 					$image_repository = $image_path['dir'];
 					$existing_image = $image_path['file'];
-					$user = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a>';
-					$user_image = '<div class="clear"></div><div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
-					$user = '<div class="message-group-author">'.$user.'</div>';
+					$user_info = '<td valign="top"><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a>';
+					$user_info .= '<div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
+					$user_info .= '<div class="message-group-author">'.$user.'</div></td>';
 					//$date.								 
-					$html .= Display::div($title.cut($topic['content'], 350).$user_image.$user.$link, array('class'=>'group_discussions_info')).'</td></table>';						
+					$html .= Display::div($title.cut($topic['content'], 150).$user_info, array('class'=>'group_discussions_info')).'</td></table>';						
 		
 				$html .= '</div>'; //rounded_div
 				
@@ -1019,7 +1019,7 @@ class MessageManager
         //$items_page_nr = intval($_GET['items_'.$topic['id'].'_page_nr']);
         $items_page_nr = null;
         
-        echo Display::tag('h1', $main_message['title']);
+        echo Display::tag('h2', $main_message['title']);
         $user_sender_info = UserManager::get_user_info_by_id($main_message['user_sender_id']);
         $files_attachments = self::get_links_message_attachment_files($main_message['id']);
         $name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
@@ -1075,7 +1075,7 @@ class MessageManager
                 $links.= '<div id="message-reply-link">';                
                 if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $topic['user_sender_id'] == $current_user_id) {
                     $links.= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.png', get_lang('Edit'), array(), 22).'</a>';
-                }
+                } 
                 $links.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
                 $links.= '</div>';
                                         
@@ -1118,7 +1118,7 @@ class MessageManager
             }
         }
         $html .= '</div>';                
-        $html = Display::div($html, array('class'=>'rounded_div', 'style'=>'width:638px'));
+        $html = Display::div($html, array('class'=>'', 'style'=>'width:638px'));
         return $html;
     }	
 	

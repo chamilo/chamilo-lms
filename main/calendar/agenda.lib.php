@@ -8,7 +8,7 @@ class Agenda {
 		$this->events				= array();
 		
 		$this->event_platform_color = 'red';//red
-		$this->event_course_color 	= '#6B8E23'; //green
+		$this->event_course_color 	= '#458B00'; //green
 		$this->event_group_color 	= '#A0522D'; //siena
 		$this->event_session_color 	= '#000080'; // blue
 		$this->event_personal_color = 'steel blue'; //steel blue
@@ -33,8 +33,7 @@ class Agenda {
 		$my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id(), true);
 		foreach($my_course_list as $course_item) {			
 			$this->get_course_events($start, $end, $course_item);
-		}
-		
+		}		
 		
 		if (!empty($this->events)) {
 			return json_encode($this->events);
@@ -50,8 +49,7 @@ class Agenda {
 		//$table_agenda = Database::get_course_table ( TABLE_AGENDA );
 		switch($type) {
 			case 'personal':
-				$personal_event = $this->get_personal_event($id);
-				
+				$personal_event = $this->get_personal_event($id);				
 				if (!empty($personal_event)) {
 					$sql = "UPDATE $this->tbl_personal_agenda SET date = DATE_ADD(date,INTERVAL $delta MINUTE), enddate = DATE_ADD(enddate,INTERVAL $delta MINUTE) 
 							WHERE id=".intval($id);

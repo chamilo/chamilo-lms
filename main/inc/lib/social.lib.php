@@ -628,11 +628,12 @@ class SocialManager extends UserManager {
 	  	}
 
 		if (!in_array($show, array('shared_profile', 'groups', 'group_edit', 'member_list','waiting_list','invite_friends'))) {
-			echo '<div align="center" class="social-menu-title">';
-			echo '<span class="social-menu-text1">'.get_lang('Menu').'</span>';
-			echo '</div>';
+			//echo Display::div(get_lang('Actions') ,array('class' => 'social_menu_option'));
+			/*echo '<div align="center" class="social-menu-title">';
+			echo '<span>'.get_lang('Optoi').'</span>';
+			echo '</div>';*/
 
-	        echo '<div><ul>';
+	        echo '<div class="social_menu_items"><ul>';
 	        	                	
             echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.png',get_lang('Home'),array('hspace'=>'6')).'<span class="'.($show=='home'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Home').'</span></a></li>';
             echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('instant_message.png',get_lang('Messages'),array('hspace'=>'6')).'<span class="'.($show=='messages'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Messages').$count_unread_message.'</span></a></li>';
@@ -659,9 +660,8 @@ class SocialManager extends UserManager {
         }
 
         if ($show == 'shared_profile') {
-
-				echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
-	        	echo 	'<div>
+				//echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
+	        	echo '<div class="social_menu_items">
 	                	<ul>';
 
     	  	// My own profile
@@ -745,8 +745,8 @@ class SocialManager extends UserManager {
 		    		}
 	    	  	}
 	    	  	if (!empty($announcements)) {
-			    	echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('ToolAnnouncement').'</span></div>';
-					echo '<div>';
+			    	//echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('ToolAnnouncement').'</span></div>';
+					echo '<div class="social_menu_items">';
 					echo '<ul>';
 						foreach ($announcements as $announcement) {
 							echo $announcement;

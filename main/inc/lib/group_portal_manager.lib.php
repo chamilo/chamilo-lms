@@ -957,40 +957,11 @@ class GroupPortalManager {
 		}
 
 		if (!empty($links)) {
-			echo '<div align="center" class="social-menu-title"><span class="social-menu-text1">'.cut($group_info['name'], GROUP_TITLE_LENGTH, true).'</span></div>';
+			//echo '<div align="center" class="social-menu-title"><span class="social-menu-text1">'.cut($group_info['name'], GROUP_TITLE_LENGTH, true).'</span></div>';
+			//echo Display::div(get_lang('Actions') ,array('class' => 'social_menu_option'));
 			echo '<ul class="social-menu-groups">';
 			echo $links;
 			echo '</ul>';
 		}
-
-		
-		/*
-		// my other groups
-		if (count($groups_by_user) > 1) {
-			echo '<div align="center" class="social-menu-title"><span class="social-menu-text1">'.get_lang('MyOtherGroups').'</span></div>';
-			echo '<div align="center">';
-				$min_count_groups = 4;
-				$i = 1;
-				$more_link = false;
-				foreach($groups_by_user as $group) {
-					if ($group['id'] == $group_id) continue;
-					if ($i > $min_count_groups) {
-						$more_link = true;
-						break;
-					}
-					$picture = GroupPortalManager::get_picture_group($group['id'], $group['picture_uri'],80);
-					echo '<a href="groups.php?id='.$group['id'].'">';
-					echo '<img height="44" border="2" align="middle" width="44" vspace="10" class="social-groups-image" src="'.$picture['file'].'"/>';
-					echo '<div>'.cut($group['name'],50,true).'</div></a>';
-					$i++;
-				}
-				if ($more_link) {
-					//More link
-					echo '<div class="mygroups_more" style="margin-top:20px;"><a href="groups.php?view=mygroups">'.get_lang('SeeMore').'</a></div>';
-				}
-			echo '</div>';
-		}
-		*/
 	}
 }
-?>

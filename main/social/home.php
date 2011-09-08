@@ -79,7 +79,8 @@ echo '<div id="social-content">';
 	echo '</div>';
 	echo '<div id="social-content-right">';
 		echo '<div class="social-box-main1">';
-			echo '<div class="rounded_div" style="width:280px">';
+			echo '<div class="social_user_information" style="width:280px">';
+				echo '<div class="social-groups-home-title">'.get_lang('ContactInformation').'</div>';
 			
 			   // information current user		       
                echo '<div><p><strong>'.get_lang('Name').'</strong><br /><span class="social-groups-text4">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</span></p></div>

@@ -195,7 +195,6 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 		if ($editQuestion) {
 			// question not found
 			if (!$objQuestion = Question::read($editQuestion)) {
-				//die(get_lang('QuestionNotFound'));
 				api_not_allowed();
 			}
 			// saves the object into the session

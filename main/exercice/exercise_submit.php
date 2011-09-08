@@ -521,7 +521,7 @@ if ($question_count != 0) {
 	    }
 	}
 } else {
-	$error = get_lang('QuestionNotFound');
+	$error = get_lang('ThereAreNoQuestionsForThisExercise');
 }
 
 if (!empty ($_GET['gradebook']) && $_GET['gradebook'] == 'view') {

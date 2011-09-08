@@ -10,8 +10,6 @@ require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.lib.php';
 
-api_protect_admin_script();
-
 $action = $_REQUEST['a'];
 $agenda = new Agenda();
 
@@ -33,6 +31,9 @@ switch ($action) {
 		echo $events;		
 		break;
     case 'get_user_agenda':
+    	
+    	api_protect_admin_script();
+    	 
         if (api_is_allowed_to_edit(null, true)) {
             //@todo move this in the agenda class
             $DaysShort  = api_get_week_days_short();

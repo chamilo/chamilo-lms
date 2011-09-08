@@ -7,10 +7,11 @@ class Agenda {
 		$this->tbl_personal_agenda 	= Database::get_user_personal_table(TABLE_PERSONAL_AGENDA);
 		$this->events				= array();
 		
-		$this->event_platform_color = 'red';
-		$this->event_course_color 	= 'green';
-		$this->event_session_color 	= 'blue';
-		$this->event_personal_color = 'light blue';
+		$this->event_platform_color = 'red';//red
+		$this->event_course_color 	= '#6B8E23'; //green
+		$this->event_group_color 	= '#A0522D'; //siena
+		$this->event_session_color 	= '#000080'; // blue
+		$this->event_personal_color = 'steel blue'; //steel blue
 		
 	}
 	
@@ -195,9 +196,14 @@ class Agenda {
 				$event['title'] 		= $row['title'];
 				$event['className'] 	= 'course';
 				$event['allDay'] 	  	= 'false';
+			//	var_dump($row);
 				$event['borderColor'] 	= $event['backgroundColor'] = $this->event_course_color;
 				if (isset($row['session_id']) && !empty($row['session_id'])) {
 					$event['borderColor'] 	= $event['backgroundColor'] = $this->event_session_color;
+				}
+				
+				if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
+					$event['borderColor'] 	= $event['backgroundColor'] = $this->event_group_color;
 				}
 				
 				$event['editable'] 		= false;

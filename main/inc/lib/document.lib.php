@@ -625,7 +625,7 @@ return 'application/octet-stream';
                 //Checking parents visibility
                 $final_document_data = array();
                 foreach($document_data as $row) {                	
-                	$is_visible = DocumentManager::check_visibility_tree($row['id'], $_course['code'], $current_session_id, api_get_user_id());
+                	$is_visible = DocumentManager::check_visibility_tree($row['id'], $_course['code'], $current_session_id, api_get_user_id());                	
                 	if ($is_visible) { 
                 		$final_document_data[$row['id']]=$row;
                 	}                	 
@@ -1203,17 +1203,16 @@ return 'application/octet-stream';
 			if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code']) || api_is_platform_admin()) {
 				$user_in_course = true;
     		}
+    		//Check if course is open then we can consider that the student is regitered to the course
+    		if (isset($course_info) && in_array($course_info['visibility'], array(2, 3))) {
+    			$user_in_course = true;
+    		}
     	} else {
     		$user_status = SessionManager::get_user_status_in_session($user_id, $course_info['code'], $session_id);
     		if (in_array($user_status, array('0', '6'))) {
     			//is true if is an student or a coach
     			$user_in_course = true;
     		}
-    		
-    		//Check if course is open then we can consider that the student is regitered to the course
-    		if (isset($course_info) && $course_info['visibility'] == 3) {
-    			$user_in_course = true;
-    		}	
     	}
     	
     	

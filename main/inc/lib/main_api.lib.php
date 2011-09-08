@@ -719,7 +719,7 @@ function api_valid_email($address) {
 function api_protect_course_script($print_headers = false) {
     global $is_allowed_in_course;    
     $course_info = api_get_course_info();
-    if (isset($course_info) && $course_info['visibility'] == 3) {    	
+    if (isset($course_info) && in_array($course_info['visibility'], array(2,3))) {    	
     	return true;    	
     }    
     if (!$is_allowed_in_course) {

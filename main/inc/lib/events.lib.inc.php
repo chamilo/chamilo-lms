@@ -77,25 +77,27 @@ function event_login() {
 
 	$reallyNow = api_get_utc_datetime();
 	$sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, login_ip, login_date, logout_date)
-			VALUES	('".$_user['user_id']."',
-					'".Database::escape_string($_SERVER['REMOTE_ADDR'])."',
-					'".$reallyNow."',
-					'".$reallyNow."'		 
-					)";
+		VALUES	('".$_user['user_id']."',
+				'".Database::escape_string($_SERVER['REMOTE_ADDR'])."',
+				'".$reallyNow."',
+				'".$reallyNow."'		 
+				)";
 	$res = Database::query($sql);
 	// autoSubscribe
 	$user_status = $_user['status'];
 	$user_status = $_user['status']  == SESSIONADMIN ? 'sessionadmin' : 
-			$_user['status'] == COURSEMANAGER ? 'teacher' :
-			$_user['status'] == DRH ? 'DRH' :
-			'student';
+		$_user['status'] == COURSEMANAGER ? 'teacher' :
+		$_user['status'] == DRH ? 'DRH' :
+		'student';
 	$autoSubscribe = api_get_setting($user_status.'_autosubscribe');
 	if ($autoSubscribe) {
 		$autoSubscribe = explode('|', $autoSubscribe);
-		foreach ($autoSubscribe as $code) 
-			CourseManager::subscribe_user($_user['user_id'], $code);
+		foreach ($autoSubscribe as $code) {
+			if (CourseManager::course_exists($code)) { 
+				CourseManager::subscribe_user($_user['user_id'], $code);
+			}
+		}
 	}
-
 }
 
 /**

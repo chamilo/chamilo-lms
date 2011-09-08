@@ -644,9 +644,12 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 
 			api_session_register('_user');
 			UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
+			api_session_register('is_platformAdmin');
+			api_session_register('is_allowedCreateCourse');
 
 			require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';
 			LoginRedirection::redirect();
+
 		} else {
 			header('location:'.api_get_path(WEB_PATH));
 			//exit("WARNING UNDEFINED UID !! ");

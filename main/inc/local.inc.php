@@ -858,29 +858,29 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 
                 $result = Database::query($sql);
                 $row = Database::store_result($result);
-
-                if ($row[0]['id_coach']==$_user['user_id']) {
-                    $_courseUser['role'] = 'Professor';
-                    $is_courseMember     = true;
-                    $is_courseTutor      = true;
-                    $is_courseCoach      = true;
-                    $is_sessionAdmin     = false;
-
-                    if (api_get_setting('extend_rights_for_coach')=='true') {
-                        $is_courseAdmin = true;
-                    } else {
-                        $is_courseAdmin = false;
-                    }
-
-                    api_session_register('_courseUser');
-                } elseif ($row[0]['session_admin_id']==$_user['user_id']) {
-                    $_courseUser['role'] = 'Professor';
-                    $is_courseMember     = false;
-                    $is_courseTutor      = false;
-                    $is_courseAdmin      = false;
-                    $is_courseCoach      = false;
-                    $is_sessionAdmin     = true;
-                } else {
+                if (isset($row[0])) {
+	                if ($row[0]['id_coach']==$_user['user_id']) {
+	                    $_courseUser['role'] = 'Professor';
+	                    $is_courseMember     = true;
+	                    $is_courseTutor      = true;
+	                    $is_courseCoach      = true;
+	                    $is_sessionAdmin     = false;
+	
+	                    if (api_get_setting('extend_rights_for_coach')=='true') {
+	                        $is_courseAdmin = true;
+	                    } else {
+	                        $is_courseAdmin = false;
+	                    }	
+	                    api_session_register('_courseUser');
+	                } elseif ($row[0]['session_admin_id']==$_user['user_id']) {
+	                    $_courseUser['role'] = 'Professor';
+	                    $is_courseMember     = false;
+	                    $is_courseTutor      = false;
+	                    $is_courseAdmin      = false;
+	                    $is_courseCoach      = false;
+	                    $is_sessionAdmin     = true;
+	                }
+				} else {
                     // Check if the current user is the course coach
                     $sql = "SELECT 1
                             FROM ".$tbl_session_course_user."

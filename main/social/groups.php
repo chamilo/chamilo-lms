@@ -179,7 +179,7 @@ if ($group_id != 0 ) {
 echo '<div id="social-content">';
 	echo '<div id="social-content-left">';
 		//this include the social menu div
-		if ($group_id != 0 ) {
+		if ($group_id != 0 ) {									
 			SocialManager::show_social_menu('groups',$group_id);
 		} else {
 			$show_menu = 'browse_groups';
@@ -220,9 +220,8 @@ if ($group_id != 0 ) {
 		echo '<div id="social-group-details">';
 				//Group's title
 				echo '<h1><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h1>';
-				//Group's description
-				echo '<div class="social-group-details-info">'.$group_info['description'].'</div>';
-				echo '<div class="social-group-details-info"><a target="_blank" href="'.$group_info['url'].'">'.$group_info['url'].'</a></div>';
+				
+				//echo '<div class="social-group-details-info"><a target="_blank" href="'.$group_info['url'].'">'.$group_info['url'].'</a></div>';
 				
 				//Privacy
 				if (!$is_group_member) {

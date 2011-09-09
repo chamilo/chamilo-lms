@@ -1648,14 +1648,14 @@ div.image-social-content center.friend {
     font-family:Verdana, Geneva, sans-serif;
     color:#000;
     font-weight:normal;
-    font-size:13px;
+    font-size:10px;
     vertical-align:bottom;
 }
 .social-menu-text-active {
     font-family:Verdana, Geneva, sans-serif;
     color:#000;
     font-weight:bold;
-    font-size:13px;
+    font-size:10px;
     vertical-align:bottom;
 }
 .social-menu-title-right {
@@ -1668,6 +1668,23 @@ div.image-social-content center.friend {
 
 
 /* BOX SHARED PROFILE */
+
+.social_menu_items {
+/*     font-size:9px; */
+}
+
+.social_menu_option {
+    color: #999999;
+	font-size: 9px;
+	font-weight: bold;
+    margin-top: 12px;
+    margin-bottom:10px;
+}
+
+.social_user_information {
+    width:300px;
+    float:left;
+}
 
 .social-friend-container {
     width:100%;
@@ -1777,10 +1794,11 @@ div.image-social-content center.friend {
     /* border: 2px solid #cac9c9; */
 }
 .social-groups-home-title {
-    border-bottom:1pt dotted #000;
+border-top: 1px solid #E2E2E2;
     padding:2px;
     margin-bottom:5px;
     font-weight:bold;
+    background: #F2F2F2;
 }
 .social-home-users-online {
     border:3px solid #E6E6E6;
@@ -1920,7 +1938,7 @@ div.image-social-content center.friend {
     float: left;
     height: 70px;
     margin: 0 8px 15px 15px;
-    padding: 16px 12px 5px;
+    padding: 16px 12px 27px;
     width:600px;
 }
 
@@ -2651,4 +2669,15 @@ div.admin_section h4 {
 
 .topics_grid_item {
     margin-left:20px;
+}
+
+#div_content_table {
+    border-bottom:1px solid #EAEAEA;
+    margin-bottom:20px;
+    padding-bottom:10px;
+}
+
+.group_description {
+    word-wrap: break-word;
+    font-size:11px;
 }

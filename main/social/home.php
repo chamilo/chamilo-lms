@@ -87,19 +87,9 @@ echo '<div id="social-content">';
                         <div><p><strong>'.get_lang('Email').'</strong><br /><span class="social-groups-text4">'.($user_info['email']?$user_info['email']:'').'</span></p></div>
                         <div class="box_description_group_actions" ><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.Display::return_icon('profile_edit.png', get_lang('EditProfile'), array('hspace'=>'6')).get_lang('EditProfile').'</a></div>';
                 echo '</div>';
-                /*
-			echo '<div class="rounded_div" style="width:280px">';
-            if (count($user_online_list) > 0) {
-                echo' <div class="clear"></div>
-                        <h3>'.get_lang('UsersOnline').'</strong> </p></h3>';
-                                echo '<center>'.SocialManager::display_user_list($user_online_list).'</center>';
-                
-            }            
-            echo '</div>';*/
-            
+                 
             //Search box
-			echo '<div class="social-box-right">';
-			echo '<br />';
+			echo '<div class="social-box-right">';			
 			echo UserManager::get_search_form('');
 			echo '<br />';
 

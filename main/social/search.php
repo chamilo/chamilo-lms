@@ -74,7 +74,7 @@ echo '<div id="social-content">';
 					$results[] = array($img, $user['firstname'], $user['lastname'], $user['tag']);			
 				}					
 					
-				echo '<div id="div_content_table" class="rounded_div">';				
+				echo '<div id="div_content_table">';				
 					Display::display_sortable_grid('online', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
 				echo '</div>';											
 			}

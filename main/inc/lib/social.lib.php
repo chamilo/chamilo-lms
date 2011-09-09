@@ -602,6 +602,7 @@ class SocialManager extends UserManager {
 				}
 	    		echo '</center></div>';
 		  	echo '</div>';
+		  	
 	  	} else {
 	  		$img_array = UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
 	  		
@@ -634,6 +635,8 @@ class SocialManager extends UserManager {
 			echo '</div>';*/
 
 	        echo '<div class="social_menu_items"><ul>';
+	        
+	        
 	        	                	
             echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.png',get_lang('Home'),array('hspace'=>'6')).'<span class="'.($show=='home'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Home').'</span></a></li>';
             echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('instant_message.png',get_lang('Messages'),array('hspace'=>'6')).'<span class="'.($show=='messages'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Messages').$count_unread_message.'</span></a></li>';

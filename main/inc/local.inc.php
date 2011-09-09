@@ -841,46 +841,40 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
             if (!isset($is_courseAdmin)) { // this user has no status related to this course
                 // is it the session coach or the session admin ?
 
-                $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-                $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-                $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+             	$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
+                $tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+                $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-
-                $sql = " SELECT session.id_coach, session_admin_id FROM $tbl_session session,$tbl_session_course_user session_rcru
+				//Session coach, session admin, course coach admin 
+                $sql = " SELECT session.id_coach, session_admin_id, session_rcru.id_user
+                		FROM $tbl_session session,$tbl_session_course_user session_rcru
                         WHERE session_rcru.id_session = session.id AND session_rcru.course_code = '$_cid' AND session_rcru.id_user='{$_user['user_id']}' AND session_rcru.status = 2";
 
-                /*$sql = "SELECT session.id_coach, session_admin_id
-                        FROM ".$tbl_session." as session
-                        INNER JOIN ".$tbl_session_course_user."
-                            ON session_rel_course.id_session = session.id
-                            AND session_rel_course.course_code='$_cid'";
-                */
-
                 $result = Database::query($sql);
-                $row = Database::store_result($result);
-                if (isset($row[0])) {
-	                if ($row[0]['id_coach']==$_user['user_id']) {
-	                    $_courseUser['role'] = 'Professor';
-	                    $is_courseMember     = true;
-	                    $is_courseTutor      = true;
-	                    $is_courseCoach      = true;
-	                    $is_sessionAdmin     = false;
+                $row 	= Database::store_result($result);
+           
+                if (isset($row) && $row[0]['id_coach'] == $_user['user_id']) {
+					$_courseUser['role'] = 'Professor';
+	                $is_courseMember     = true;
+	                $is_courseTutor      = true;
+	                $is_courseCoach      = true;
+	                $is_sessionAdmin     = false;
 	
-	                    if (api_get_setting('extend_rights_for_coach')=='true') {
-	                        $is_courseAdmin = true;
-	                    } else {
-	                        $is_courseAdmin = false;
-	                    }	
-	                    api_session_register('_courseUser');
-	                } elseif ($row[0]['session_admin_id']==$_user['user_id']) {
-	                    $_courseUser['role'] = 'Professor';
-	                    $is_courseMember     = false;
-	                    $is_courseTutor      = false;
-	                    $is_courseAdmin      = false;
-	                    $is_courseCoach      = false;
-	                    $is_sessionAdmin     = true;
-	                }
+	                if (api_get_setting('extend_rights_for_coach')=='true') {
+	                	$is_courseAdmin = true;
+					} else {
+	                	$is_courseAdmin = false;
+					}
+					api_session_register('_courseUser');
+	            } elseif(isset($row) && $row[0]['session_admin_id']==$_user['user_id']) { 
+					$_courseUser['role'] = 'Professor';
+	                $is_courseMember     = false;
+	                $is_courseTutor      = false;
+	                $is_courseAdmin      = false;
+	                $is_courseCoach      = false;
+	                $is_sessionAdmin     = true;
 				} else {
+				
                     // Check if the current user is the course coach
                     $sql = "SELECT 1
                             FROM ".$tbl_session_course_user."
@@ -929,9 +923,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
                             api_session_unregister('_courseUser');
                             //$_course['visibility'] = 0; this depends the
                         }
-
                     }
-                }
+				}
             }
         }
     } else { // keys missing => not anymore in the course - user relation

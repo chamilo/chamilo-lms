@@ -1,4 +1,4 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /chamilo_license.txt */
 /**
  * @package chamilo.social
@@ -101,6 +101,8 @@ echo '<div id="social-content">';
 			if (!empty($results)) {
     			foreach ($results as $result) {
     				$id = $result['id'];    				
+    				$result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
+    				$result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
     			    if ($result['count'] == 1 ) {
                         $result['count'] = '1 '.get_lang('Member');
                     } else {
@@ -119,6 +121,8 @@ echo '<div id="social-content">';
 			
 			$groups_pop = array();
 			foreach ($results as $result) {
+				$result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
+				$result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
 				$id = $result['id'];
                 $group_url = "groups.php?id=$id";
 				

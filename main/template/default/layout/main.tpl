@@ -10,8 +10,8 @@
 
 <div class="skip">
 	<ul>
-		<li><a href="#menu"><?php echo get_lang('WCAGGoMenu'); ?></a></li>
-		<li><a href="#content" accesskey="2"><?php echo get_lang('WCAGGoContent'); ?></a></li>
+		<li><a href="#menu">{"WCAGGoMenu"|get_lang}</a></li>
+		<li><a href="#content" accesskey="2">{"WCAGGoContent"|get_lang}</a></li>
 	</ul>
 </div>
 
@@ -30,7 +30,6 @@
 	</div> <!-- end of #main" started at the end of banner.inc.php -->
 	<div class="push"></div>
 </div> <!-- end of #wrapper section -->
-
 {block name="footer"}{/block}
 </body>
 </html>

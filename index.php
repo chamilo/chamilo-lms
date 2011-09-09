@@ -29,25 +29,38 @@ if (!api_is_anonymous()) {
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('bxslider'));
 $htmlHeadXtra[] ='
 <script type="text/javascript">
-$(document).ready(function(){
-	$("#slider").bxSlider({
-		infiniteLoop	: true,
-		auto			: true,
-		pager			: true,
-		autoHover		: true,
-		pause			: 10000
+	$(document).ready(function(){
+		$("#slider").bxSlider({
+			infiniteLoop	: true,
+			auto			: true,
+			pager			: true,
+			autoHover		: true,
+			pause			: 10000
+		});
 	});
-});
-</script>';
+	alert(navigator.cookieEnabled);
+	if(navigator.cookieEnabled==false){
+        document.writeln("'.addslashes(Display::display_error_message(get_lang("NoCookies"))).'");
+	}
+	
+</script>
+
+<noscript>
+	'.addslashes(Display::display_error_message(get_lang("NoJavascript"))).'
+</noscript>
+
+';
 
 //@todo add this in the template
 
 //check if javascript is enabled
+/*
 echo '<noscript>';
 echo Display::display_error_message(get_lang("NoJavascript"));
 echo '</noscript>';
-
+*/
 //check if cookies are enabled
+/*
 ?>
 <script language="JavaScript">
 if(navigator.cookieEnabled==false){
@@ -55,7 +68,7 @@ if(navigator.cookieEnabled==false){
 }
 </script>
 <?php
-
+*/
 $controller = new IndexManager($header_title);
 
 //Actions

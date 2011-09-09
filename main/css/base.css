@@ -548,6 +548,11 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     width:100%;
 }
 
+.group_social_sub_item_highlight {
+    background-color: #FFFFDD;
+}
+
+
 .message-group-content {
     float:right;
     width:90%;
@@ -597,6 +602,9 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 
 .group_discussions_info {
 	width:400px;
+    height: 80px;
+    overflow: hidden;
+    width: 400px;
 }
 
 .group_social_grid {

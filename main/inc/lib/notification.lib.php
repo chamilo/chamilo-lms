@@ -171,11 +171,17 @@ class Notification extends Model {
                 $link_to_new_message = Display::url(get_lang('SeeInvitation'), api_get_path(WEB_CODE_PATH).'social/invitations.php');            
                 break;
             case NOTIFICATION_TYPE_GROUP:
-                if (!empty($sender_info)) {            
-                    $sender_name = $sender_info['name'];                    
+            	$topic_page = intval($_REQUEST['topics_page_nr']);
+                if (!empty($sender_info)) {                            
+                    $sender_name = $sender_info['group_info']['name'];                    
                     $new_message_text  = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $sender_name);                    
+                    $sender_name = api_get_person_name($sender_info['user_info']['firstname'], $sender_info['user_info']['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+                    $sender_name = Display::url($sender_name , api_get_path(WEB_CODE_PATH).'social/profile.php?'.$sender_info['user_info']['user_id']);
+                    $new_message_text  .= '<br />'.get_lang('User').': '.$sender_name;
+                                        
                 }    
-                $link_to_new_message = Display::url(get_lang('SeeMessage'), api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$sender_info['id']);
+                $group_url = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$sender_info['group_info']['id'].'&topic_id='.$sender_info['group_info']['topic_id'].'&msg_id='.$sender_info['group_info']['msg_id'].'&topics_page_nr='.$topic_page;                 
+                $link_to_new_message = Display::url(get_lang('SeeMessage'), $group_url);
                 break;
         }        
         $preference_url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
@@ -192,7 +198,7 @@ class Notification extends Model {
               
         // You have received this message because you are subscribed text
         $content        = $content.'<br /><hr><i>'.
-                          sprintf(get_lang('YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX'), Display::url($preference_url, $preference_url)).'</i>'; 
+                          sprintf(get_lang('YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX'), Display::url($preference_url, $preference_url)).'</i>';
         return $content;        
     }
 }

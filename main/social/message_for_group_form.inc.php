@@ -69,13 +69,13 @@ $param_item_page .= '&topic_id='.intval($_GET['topic_id']);
 $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1;
 ?>
 
-<form name="form" action="group_topics.php?id=<?php echo $group_id ?>&anchor_topic=<?php echo Security::remove_XSS($_GET['anchor_topic']) ?>&topics_page_nr=<?php echo $page_topic ?><?php echo $param_item_page ?>" method="POST" enctype="multipart/form-data">
+<form name="form" action="group_topics.php?id=<?php echo $group_id ?>&anchor_topic=<?php echo Security::remove_XSS($_GET['anchor_topic']) ?>&topics_page_nr=<?php echo $page_topic.$param_item_page ?>" method="POST" enctype="multipart/form-data">
 <input type="hidden" name="action" value="<?php echo $allowed_action ?>" />
 <input type="hidden" name="group_id" value="<?php echo $group_id ?>" />
 <input type="hidden" name="parent_id" value="<?php echo $message_id ?>" />
 <input type="hidden" name="message_id" value="<?php echo $message_id ?>" />
 <input type="hidden" name="token" value="<?php echo $tok ?>" />
-<table width="600" border="0" height="220">
+<table width="500px" border="0" height="220px">
     <tr height="180">
         <td align="left">
 <div id="id_content_panel_init">
@@ -95,7 +95,7 @@ $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1
 	   		
 			$oFCKeditor = new FCKeditor('content') ;
 			$oFCKeditor->ToolbarSet = 'messages';
-			$oFCKeditor->Width		= '100%';
+			$oFCKeditor->Width		= '95%';
 			$oFCKeditor->Height		= $height;
 			$oFCKeditor->Value		= $message;
 								
@@ -115,8 +115,12 @@ $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1
 			(<?php echo api_xml_http_response_encode(sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize')))) ?>)		   				   				   		
 	   		<br />
 	   		<br />
-	   		<button class="save" onclick="if(validate_text_empty(this.form.title.value,'<?php echo get_lang('YouShouldWriteASubject')?>')){return false;}" type="submit" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
 	   		
+	   		<?php if ($allowed_action == 'add_message_group') { ?>
+	   			<button class="save" onclick="if(validate_text_empty(this.form.title.value,'<?php echo get_lang('YouShouldWriteASubject')?>')){return false;}" type="submit" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
+	   		<?php } else { ?>
+	   			<button class="save" type="submit" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
+	   		<?php } ?>	
 	<?php } ?>
 	</dl>
 </td>

@@ -40,13 +40,13 @@ $htmlHeadXtra[] ='
 	});
 	
 	if(navigator.cookieEnabled==false){
-        document.writeln("'.addslashes(Display::display_error_message(get_lang("NoCookies"))).'");
+        document.writeln("'.addslashes(Display::return_message(get_lang("NoCookies"), 'error')).'");
 	}
 	
 </script>
 
 <noscript>
-	'.addslashes(Display::display_error_message(get_lang("NoJavascript"))).'
+	'.addslashes(Display::return_message(get_lang("NoJavascript"), 'error')).'
 </noscript>
 
 ';

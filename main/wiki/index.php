@@ -568,6 +568,7 @@ if ($_GET['action']=='statistics' && (api_is_allowed_to_edit(false,true) || api_
 
 //Total pages edited at this time
 
+$total_editing_now=0;
 $sql='SELECT  *, COUNT(*) AS TOTAL_EDITING_NOW FROM  '.$tbl_wiki.' s1 WHERE is_editing!=0 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';//Can not use group by because the mark is set in the latest version
 	$allpages=Database::query($sql);
 while ($row=Database::fetch_array($allpages)) {
@@ -649,7 +650,7 @@ while ($row=Database::fetch_array($allpages)) {
  }
 
 //Total pages scored by peers
-
+$total_rating_by_peers=0;
 $total_rating_by_peers=$total_pages-$total_only_teachers_rating;//put always this line alfter check num all pages and num pages rated by teachers
 
 //Total pages identified as standard task
@@ -773,7 +774,7 @@ echo '<td>'.get_lang('AverageMediaUserProgress').'</td>';
 echo '<td>'.$media_progress.' %</td>';
 echo '</tr>';
 echo '<tr>';
-echo '<td>'.get_lang('TotalParticipants').'</td>';
+echo '<td>'.get_lang('TotalWikiUsers').'</td>';
 echo '<td>'.$total_users.'</td>';
 echo '</tr>';
 echo '<tr>';
@@ -792,15 +793,15 @@ echo '<td>'.get_lang('Pages').'</td>';
 echo '<td>'.$total_pages.' ('.get_lang('Versions').': '.$total_versions.')</td>';
 echo '</tr>';
 echo '<tr>';
-echo '<td>'.get_lang('PagesEditedAtThisTime').'</td>';
+echo '<td>'.get_lang('TotalPagesEditedAtThisTime').'</td>';
 echo '<td>'.$total_editing_now.'</td>';
 echo '</tr>';
 echo '<tr>';
-echo '<td>'.get_lang('HiddenPages').'</td>';
+echo '<td>'.get_lang('TotalHiddenPages').'</td>';
 echo '<td>'.$total_hidden.'</td>';
 echo '</tr>';
 echo '<tr>';
-echo '<td>'.get_lang('ProtectedPages').'</td>';
+echo '<td>'.get_lang('NumProtectedPages').'</td>';
 echo '<td>'.$total_protected.'</td>';
 echo '</tr>';
 echo '<tr>';
@@ -828,15 +829,15 @@ echo '<td>'.get_lang('TotalRatingPeers').'</td>';
 echo '<td>'.$total_rating_by_peers.'</td>';
 echo '</tr>';
 echo '<tr>';
-echo '<td>'.get_lang('TotalTeacherAssignments - Portfolio mode').'</td>';
+echo '<td>'.get_lang('TotalTeacherAssignments').' - '.get_lang('PortfolioMode').'</td>';
 echo '<td>'.$total_teacher_assignment.'</td>';
 echo '</tr>';
 echo '<tr>';
-echo '<td>'.get_lang('TotalStudentAssignments - Portfolio mode').'</td>';
+echo '<td>'.get_lang('TotalStudentAssignments').' - '.get_lang('PortfolioMode').'</td>';
 echo '<td>'.$total_student_assignment.'</td>';
 echo '</tr>';
 echo '<tr>';
-echo '<td>'.get_lang('Total Task - Standard mode').'</td>';
+echo '<td>'.get_lang('TotalTask').' - '.get_lang('StandardMode').'</td>';
 echo '<td>'.$total_task.'</td>';
 echo '</tr>';
 echo '</table>';
@@ -848,7 +849,7 @@ echo '<td colspan="3" bgcolor="#EFEFEF">'.get_lang('ContentPagesInfo').'</td>';
 echo '</tr>';
 echo '<tr>';
 echo '<td bgcolor="#EFEFEF"></td>';
-echo '<td bgcolor="#EFEFEF">'.get_lang('InTheLastVersionOfEachPage').'</td>';
+echo '<td bgcolor="#EFEFEF">'.get_lang('InTheLastVersion').'</td>';
 echo '<td bgcolor="#EFEFEF">'.get_lang('InAllVersions').'</td>';
 echo '</tr>';
 echo '<tr>';
@@ -868,8 +869,8 @@ echo '<td>'.$total_words.'</td>';
 echo '</tr>';
 echo '<tr>';
 echo '<td>'.get_lang('NumlinksHtmlImagMedia').'</td>';
-echo '<td>'.$total_links_lv.' ( Anchors:'.$total_links_anchors_lv.', Mail:'.$total_links_mail_lv.', FTP:'.$total_links_ftp_lv.' IRC:'.$total_links_irc_lv.', News:'.$total_links_news_lv.', ... ) </td>';
-echo '<td>'.$total_links.' (Anchors:'.$total_links_anchors.', Mail:'.$total_links_mail.', FTP:'.$total_links_ftp.', IRC:'.$total_links_irc.', News:'.$total_links_news.', ... ) </td>';
+echo '<td>'.$total_links_lv.' ('.get_lang('Anchors').':'.$total_links_anchors_lv.', Mail:'.$total_links_mail_lv.', FTP:'.$total_links_ftp_lv.' IRC:'.$total_links_irc_lv.', News:'.$total_links_news_lv.', ... ) </td>';
+echo '<td>'.$total_links.' ('.get_lang('Anchors').':'.$total_links_anchors.', Mail:'.$total_links_mail.', FTP:'.$total_links_ftp.', IRC:'.$total_links_irc.', News:'.$total_links_news.', ... ) </td>';
 echo '</tr>';
 echo '<tr>';
 echo '<td>'.get_lang('NumWikilinks').'</td>';

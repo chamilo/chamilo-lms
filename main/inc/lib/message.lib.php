@@ -212,13 +212,15 @@ class MessageManager
      * @param bool    sent an email or not (@todo)
 	 * @return bool
 	 */
-	public static function send_message($receiver_user_id, $subject, $content, $file_attachments = array(), $file_comments = array(), $group_id = 0, $parent_id = 0, $edit_message_id = 0, $sent_email = false) {
+	public static function send_message($receiver_user_id, $subject, $content, $file_attachments = array(), $file_comments = array(), $group_id = 0, $parent_id = 0, $edit_message_id = 0, $topic_id = 0) {
         global $charset;
 		$table_message      = Database::get_main_table(TABLE_MESSAGE);
         $group_id           = intval($group_id);
         $receiver_user_id   = intval($receiver_user_id);
         $parent_id          = intval($parent_id);
         $edit_message_id    = intval($edit_message_id);
+        $topic_id   		= intval($topic_id);
+                
 		$user_sender_id     = api_get_user_id();
 
 		$total_filesize = 0;
@@ -293,27 +295,31 @@ class MessageManager
 			}
 						
 			//Load user settings			
-			$notification = new Notification();			    
-		    if (empty($group_id)) {                
-		        $sender_info = api_get_user_info($user_sender_id);
+			$notification = new Notification();
+			$sender_info = api_get_user_info($user_sender_id);
+			
+		    if (empty($group_id)) {		    	
                 $notification->save_notification(NOTIFICATION_TYPE_MESSAGE, array($receiver_user_id), $subject, $content, $sender_info);                
 		    } else {
-		        $group_info = GroupPortalManager::get_group_data($group_id);		        
+		        $group_info = GroupPortalManager::get_group_data($group_id);
+		        $group_info['topic_id'] = $topic_id;
+		        $group_info['msg_id'] 	= $inbox_last_id;
+		        
 		        $user_list  = GroupPortalManager::get_users_by_group($group_id, false, array(),0, 1000);
 		        
 		        //Adding more sens to the message group
-		        $subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'), $group_info['name']);
+		        $subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'), $group_info['name']);		        
 		        
 		        $new_user_list = array();		   
                 foreach($user_list as $user_data) {
-                    $new_user_list[]= $user_data['user_id'];
+                    $new_user_list[] = $user_data['user_id'];
                 }
+                $group_info = array('group_info'=>$group_info, 'user_info' => $sender_info);
                 $notification->save_notification(NOTIFICATION_TYPE_GROUP, $new_user_list, $subject, $content, $group_info);                     		
 		    }
 			return $inbox_last_id;
-        } else {
-        	return get_lang('UserDoesNotExist');
         }
+        return false;
 	}
 
 	/**
@@ -992,13 +998,13 @@ class MessageManager
      * Displays messages of a group with nested view
      * @param int group id
      */
-    public static function display_message_for_group($group_id, $message_id, $is_member) {
+    public static function display_message_for_group($group_id, $topic_id, $is_member, $message_id ) {
         global $my_group_role;
         
-        $main_message 	= self::get_message_by_id($message_id);                
+        $main_message 	= self::get_message_by_id($topic_id);                
         $group_info		= GroupPortalManager::get_group_data($group_id);
-        $rows 			= self::get_messages_by_group_by_message($group_id, $message_id);            
-        $rows 			= self::calculate_children($rows, $message_id);                
+        $rows 			= self::get_messages_by_group_by_message($group_id, $topic_id);            
+        $rows 			= self::calculate_children($rows, $topic_id);                
         
         $current_user_id  = api_get_user_id();
         
@@ -1007,7 +1013,7 @@ class MessageManager
         
         $count_items = 0;
         $html_messages = '';
-        $query_vars = array('id'=>$group_id, 'topic_id'=>$message_id , 'topics_page_nr'=>0);        
+        $query_vars = array('id'=>$group_id, 'topic_id'=>$topic_id , 'topics_page_nr'=>0);        
         
         
         // Main message        
@@ -1106,8 +1112,12 @@ class MessageManager
                 } else {
                     $indent = intval($topic['indent_cnt'])*$base_padding + $base_padding;
                 }
+                $class = 'group_social_sub_item';
+                if (isset($message_id) && $message_id == $topic['id']) {
+                	$class .= ' group_social_sub_item_highlight';
+                }
                 
-                $html_items = Display::div($html_items, array('class' => 'group_social_sub_item'));
+                $html_items = Display::div($html_items, array('class' => $class, 'id'=>'msg_'.$topic['id']));
                 $html_items = Display::div($html_items, array('class' => '', 'style'=>'margin-left:'.$indent.'px'));            
                 $array_html_items[] = array($html_items);
             }                   

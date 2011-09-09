@@ -15,6 +15,47 @@ if (api_get_setting('allow_social_tool') !='true') {
 }
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
+$group_id   = intval($_GET['id']);
+$topic_id   = intval($_GET['topic_id']);
+$message_id  = intval($_GET['msg_id']);
+
+
+
+// save message group
+if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
+
+	if (isset($_POST['action'])) {
+		$title        = isset($_POST['title']) ? $_POST['title'] : null;
+		$content      = $_POST['content'];
+		$group_id     = intval($_POST['group_id']);
+		$parent_id    = intval($_POST['parent_id']);
+
+		if ($_POST['action'] == 'reply_message_group') {
+			$title = cut($content, 50);
+		}
+		if ($_POST['action'] == 'edit_message_group') {
+			$edit_message_id =  intval($_POST['message_id']);			
+			$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, $edit_message_id, 0, $topic_id);
+		} else {
+			if ($_POST['action'] == 'add_message_group' && !$is_member) {
+				api_not_allowed();
+			}
+			$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, 0, $topic_id);
+		}
+
+		// display error messages
+		if (!$res) {
+			Display::display_error_message(get_lang('Error'));
+		}
+		$topic_id = intval($_GET['topic_id']);
+		if ($_POST['action'] == 'add_message_group') {
+			$topic_id = $res;
+		}
+		$message_id = $res;
+	}
+}
+
+
 $htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = '<script type="text/javascript"> 
 
@@ -65,8 +106,22 @@ function hide_icon_edit(element_html)  {
     $(ident).hide();
 }  
 
+function validate_text_empty(str,msg) {
+	var str = str.replace(/^\s*|\s*$/g,"");
+	if (str.length == 0) {
+		alert(msg);
+		return true;
+	}
+}
 
-$(document).ready(function() {    
+
+$(document).ready(function() {
+	if ( $("#msg_'.$message_id.'").length) {
+		$("html,body").animate({
+			scrollTop: $("#msg_'.$message_id.'").offset().top
+		})
+	}
+	   
 	$(\'.group_message_popup\').live(\'click\', function() {
 		var url     = this.href;
 	    var dialog  = $("#dialog");
@@ -98,8 +153,8 @@ $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 $interbreadcrumb[] = array('url' => 'groups.php','name' => get_lang('Groups'));
 $interbreadcrumb[] = array('url' => '#','name' => get_lang('Thread'));
 
-$group_id   = intval($_GET['id']);
-$topic_id   = intval($_GET['topic_id']);
+Display::display_header($tool_name, 'Groups');
+
 
 //todo @this validation could be in a function in group_portal_manager
 if (empty($group_id)) {
@@ -116,40 +171,6 @@ if (empty($group_id)) {
     }
 }
 
-Display::display_header($tool_name, 'Groups');
-
-// save message group
-if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
-
-    if (isset($_POST['action'])) {        
-        $title        = isset($_POST['title']) ? $_POST['title'] : null;
-        $content      = $_POST['content'];
-        $group_id     = intval($_POST['group_id']);
-        $parent_id    = intval($_POST['parent_id']);
-                
-        if ($_POST['action'] == 'reply_message_group') {
-            $title = cut($content, 50);
-        }
-        if ($_POST['action'] == 'edit_message_group') {
-            $edit_message_id =  intval($_POST['message_id']);
-            $res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, $edit_message_id);
-        } else {
-            if ($_POST['action'] == 'add_message_group' && !$is_member) {
-                api_not_allowed();
-            }            
-            $res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id);
-        }
-
-        // display error messages
-        if (is_string($res)) {
-            Display::display_error_message($res);
-        }
-        $topic_id = intval($_GET['topic_id']);
-        if ($_POST['action'] == 'add_message_group') {
-            $topic_id = $res;    
-        }        
-    }
-}
 
 
 echo '<div id="social-content">';
@@ -163,7 +184,7 @@ echo '<div id="social-content">';
         if (!empty($show_message)){
             Display::display_confirmation_message($show_message);
         }
-        $content = MessageManager::display_message_for_group($group_id, $topic_id, $is_member);
+        $content = MessageManager::display_message_for_group($group_id, $topic_id, $is_member, $message_id);
         echo $content;
     echo '</div>';
 echo '</div>';

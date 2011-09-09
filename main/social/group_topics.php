@@ -132,8 +132,8 @@ echo '<div id="social-content">';
     //this include the social menu div
     SocialManager::show_social_menu('member_list', $group_id);
     echo '</div>';
-    echo '<div id="social-content-right">';    
-         echo '<h1><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a> &raquo; '.get_lang('Messages').'</h1>';
+    echo '<div id="social-content-right">';
+         echo '<h1><a href="groups.php?id='.$group_id.'">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</a> &raquo; '.get_lang('Messages').'</h1>';
          
         if (!empty($show_message)){
             Display::display_confirmation_message($show_message);

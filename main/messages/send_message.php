@@ -21,6 +21,7 @@ $content_message = $_POST['txt_content'];
 $subject_message = $_POST['txt_subject'];
 
 
+
 $user_info = array();
 $user_info = api_get_user_info($user_id);
 

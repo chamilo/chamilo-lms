@@ -66,7 +66,7 @@ class Notification extends Model {
             foreach($notifications as $item_to_send) {
                 
                 //Sending email
-                api_mail_html($item_to_send['dest_mail'], $item_to_send['dest_mail'], $item_to_send['title'], $item_to_send['content'], $this->admin_name, $this->admin_email);                    
+                api_mail_html($item_to_send['dest_mail'], $item_to_send['dest_mail'], Security::filter_terms($item_to_send['title']), Security::filter_terms($item_to_send['content']), $this->admin_name, $this->admin_email);                    
                 if ($this->debug) { error_log('Sending message to: '.$item_to_send['dest_mail']); }
                 
                 //Updating
@@ -128,7 +128,7 @@ class Notification extends Model {
                     case NOTIFY_GROUP_AT_ONCE:                     
                         if (!empty($user_info['mail'])) {
                             $name = api_get_person_name($user_info['firstname'], $user_info['lastname']);                            
-                            api_mail_html($name, $user_info['mail'], $title, $content, $this->admin_name, $this->admin_email);
+                            api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $this->admin_name, $this->admin_email);
                         }
                         $params['sent_at']       = api_get_utc_datetime();
                     //Saving the notification to be sent some day 

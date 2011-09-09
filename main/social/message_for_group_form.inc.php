@@ -24,10 +24,10 @@ $tok = Security::get_token();
 if (isset($_REQUEST['user_friend'])) {
 	$info_user_friend=array();
 	$info_path_friend=array();
- 	$userfriend_id=Security::remove_XSS($_REQUEST['user_friend']);
+ 	$userfriend_id = intval($_REQUEST['user_friend']);
  	// panel=1  send message
  	// panel=2  send invitation
- 	$panel=Security::remove_XSS($_REQUEST['view_panel']);
+ 	$panel = Security::remove_XSS($_REQUEST['view_panel']);
  	$info_user_friend = api_get_user_info($userfriend_id);
  	$info_path_friend = UserManager::get_user_picture_path_by_id($userfriend_id,'web',false,true);
 }
@@ -43,7 +43,7 @@ $to_group = '';
 $subject = '';
 $message = '';
 if (!empty($group_id) && $allowed_action) {
-	$group_info = GroupPortalManager::get_group_data($group_id);
+	$group_info = GroupPortalManager::get_group_data($group_id);	
 	$is_member = GroupPortalManager::is_group_member($group_id);
 	
     if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member) {
@@ -52,9 +52,10 @@ if (!empty($group_id) && $allowed_action) {
 
 	$to_group   = $group_info['name'];
 	if (!empty($message_id)) {
-		$message_info = MessageManager::get_message_by_id($message_id);
+		$message_info = MessageManager::get_message_by_id($message_id);		
 		if ($allowed_action == 'reply_message_group') {				
 			$subject  = get_lang('Reply').': '.api_xml_http_response_encode($message_info['title']);
+			//$message  = api_xml_http_response_encode($message_info['content']);
 		} else {
 			$subject  = api_xml_http_response_encode($message_info['title']);
 			$message  = api_xml_http_response_encode($message_info['content']);
@@ -96,7 +97,8 @@ $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1
 			$oFCKeditor->ToolbarSet = 'messages';
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Height		= $height;
-			$oFCKeditor->Value		= $message;					
+			$oFCKeditor->Value		= $message;
+								
 			$return =	$oFCKeditor->CreateHtml();	
 			echo $return;
 			if ($allowed_action == 'add_message_group') {

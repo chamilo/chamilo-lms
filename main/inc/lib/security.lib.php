@@ -343,7 +343,7 @@ class Security {
     	$replace = '***';    	
     	if (!empty($bad_terms)) {
     		//Fast way
-    		$new_text = str_replace($bad_terms, $replace, $text, $count);
+    		$new_text = str_ireplace($bad_terms, $replace, $text, $count);
     		
     		//We need statistics
     		/*

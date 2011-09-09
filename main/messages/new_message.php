@@ -223,7 +223,7 @@ function manage_form ($default, $select_from_user_list = null) {
 
 		//adding reply mail
 		$user_reply_info = UserManager::get_user_info_by_id($message_reply_info['user_sender_id']);		
-		$default['content'] = '<br />'.sprintf(get_lang('XWroteY'), api_get_person_name($user_reply_info['firstname'], $user_reply_info['lastname']), $message_reply_info['content']);
+		$default['content'] = '<br />'.sprintf(get_lang('XWroteY'), api_get_person_name($user_reply_info['firstname'], $user_reply_info['lastname']), Security::filter_terms($message_reply_info['content']));
 	}
 	if (empty($group_id)) {
 		$form->addElement('html','<div class="row"><div class="label">'.get_lang('FilesAttachment').'</div><div class="formw">

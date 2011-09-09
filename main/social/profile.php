@@ -16,7 +16,6 @@ if (api_get_setting('allow_social_tool') !='true') {
     api_not_allowed();
 }
 
-
 $user_id = api_get_user_id();
 
 $show_full_profile = true;
@@ -569,7 +568,7 @@ if ($show_full_profile) {
         					$user_invitation_info = api_get_user_info($user_invitation_id);
         					echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_invitation_id.'">'.api_get_person_name($user_invitation_info['firstname'], $user_invitation_info['lastname']).'</a>';
         					echo '<br />';
-        					echo ' '.(substr($pending_invitations[$i]['content'],0,50));
+        					echo Security::remove_XSS(cut($pending_invitations[$i]['content'], 50), STUDENT, true);
         					echo '<br />';
         					echo '<a id="btn_accepted_'.$user_invitation_id.'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
         					echo '<div id="id_response"></div>';

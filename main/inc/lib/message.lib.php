@@ -159,7 +159,7 @@ class MessageManager
 			 } else {
 				$message[0] = ($result[0]);
 			 }
-			$result[2] = Security::remove_XSS($result[2]);
+			$result[2] = Security::remove_XSS($result[2], STUDENT, true);
 			$result[2] = cut($result[2], 80,true);
 
 			if ($request===true) {
@@ -708,7 +708,7 @@ class MessageManager
 	public static function show_message_box($message_id, $source = 'inbox') {
 		$table_message 		= Database::get_main_table(TABLE_MESSAGE);
 		$tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
-		$message_id = intval($message_id);
+		$message_id 		= intval($message_id);
 
 		if ($source == 'outbox') {
 			if (isset($message_id) && is_numeric($message_id)) {
@@ -726,8 +726,8 @@ class MessageManager
 			}
 			$path='inbox.php';
 		}
-
-		$row = Database::fetch_array($result);
+		$row = Database::fetch_array($result, 'ASSOC');		
+		$user_sender_id = $row['user_sender_id'];
 
 		// get file attachments by message id
 		$files_attachments = self::get_links_message_attachment_files($message_id,$source);
@@ -736,14 +736,15 @@ class MessageManager
 		$band=0;
 		$reply='';
 		for ($i=0;$i<count($user_con);$i++)
-			if ($row[1]==$user_con[$i])
+			if ($user_sender_id == $user_con[$i])
 				$band=1;
 
-		$row[5] = Security::remove_XSS($row[5]);
+		$title  	= Security::remove_XSS($row['title'], STUDENT, true);
+		$content  	= Security::remove_XSS($row['content'], STUDENT, true);
 		
-		$from_user = UserManager::get_user_info_by_id($row[1]);
-		$name = api_get_person_name($from_user['firstname'], $from_user['lastname']);
-		$user_image = UserManager::get_picture_user($row[1], $from_user['picture_uri'],80);
+		$from_user  = UserManager::get_user_info_by_id($user_sender_id);
+		$name 		= api_get_person_name($from_user['firstname'], $from_user['lastname']);
+		$user_image = UserManager::get_picture_user($row['user_sender_id'], $from_user['picture_uri'],80);
 		$user_image = Display::img($user_image['file'], $name, array('title'=>$name));		
 
 		$message_content =  '<table>
@@ -753,7 +754,7 @@ class MessageManager
 		      	<table>
 		            <tr>
 		              <td valign="top" width="100%">
-		               <h1>'.str_replace("\\","",$row[5]).'</h1>
+		               <h1>'.str_replace("\\","",$title).'</h1>
 		              </td>';
 		if (api_get_setting('allow_social_tool') == 'true') {
             $message_content .='<td width="100%">'.$user_image.'</td>';
@@ -762,20 +763,20 @@ class MessageManager
         $message_content .='<tr>';
     	if (api_get_setting('allow_social_tool') == 'true') {	
     		if ($source == 'outbox') {
-    			$message_content .='<td>'.get_lang('From').' <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b> </td>';
+    			$message_content .='<td>'.get_lang('From').': <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b> </td>';
     		} else {
-    			$message_content .='<td>'.get_lang('From').' <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b> </td>';
+    			$message_content .='<td>'.get_lang('From').' <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b> </td>';
     		}    
     	} else {
     		if ($source == 'outbox') {
-    			$message_content .='<td>'.get_lang('From').'&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.GetFullUserName($row[2]).'</b> </td>';
+    			$message_content .='<td>'.get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.GetFullUserName($row['user_receiver_id']).'</b> </td>';
     		} else {
-    			$message_content .='<td>'.get_lang('From').'&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b> </td>';
+    			$message_content .='<td>'.get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b> </td>';
     		}
     	}
 		 $message_content .='</tr>
 		              <tr>
-		              <td>'.get_lang('Date').'&nbsp; '.$row[4].'</td>
+		              <td>'.get_lang('Date').':  '.api_get_local_time($row['send_date']).'</td>
 		              </tr>
 		            </tr>
 		        </table>		        
@@ -783,7 +784,7 @@ class MessageManager
 		        <hr style="color:#ddd" />
 		        <table height="209px" width="100%">
 		            <tr>
-		              <td valign=top class="view-message-content">'.str_replace("\\","",$row['content']).'</td>
+		              <td valign=top class="view-message-content">'.str_replace("\\","",$content).'</td>
 		            </tr>
 		        </table>
 		        <div id="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>
@@ -956,7 +957,7 @@ class MessageManager
 			        if (empty($topic['title'])) {
 			            $topic['title'] = get_lang('Untitled');
 			        } 				
-			        $title = Display::url('<h3>'.Security::remove_XSS($topic['title']).'</h3>', 'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']);
+			        $title = Display::url('<h3>'.Security::remove_XSS($topic['title'], STUDENT, true).'</h3>', 'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']);
                                             
                     $date = '';
                     $link = '';
@@ -974,7 +975,7 @@ class MessageManager
 					$user_info .= '<div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
 					$user_info .= '<div class="message-group-author">'.$user.'</div></td>';
 					//$date.								 
-					$html .= Display::div($title.cut($topic['content'], 150).$user_info, array('class'=>'group_discussions_info')).'</td></table>';						
+					$html .= Display::div($title.Security::remove_XSS(cut($topic['content'], 150), STUDENT, true).$user_info, array('class'=>'group_discussions_info')).'</td></table>';						
 		
 				$html .= '</div>'; //rounded_div
 				
@@ -994,11 +995,10 @@ class MessageManager
     public static function display_message_for_group($group_id, $message_id, $is_member) {
         global $my_group_role;
         
-        $main_message = self::get_message_by_id($message_id);
-                
-        $group_info = GroupPortalManager::get_group_data($group_id);
-        $rows = self::get_messages_by_group_by_message($group_id, $message_id);            
-        $rows = self::calculate_children($rows, $message_id);                
+        $main_message 	= self::get_message_by_id($message_id);                
+        $group_info		= GroupPortalManager::get_group_data($group_id);
+        $rows 			= self::get_messages_by_group_by_message($group_id, $message_id);            
+        $rows 			= self::calculate_children($rows, $message_id);                
         
         $current_user_id  = api_get_user_id();
         
@@ -1019,7 +1019,7 @@ class MessageManager
         //$items_page_nr = intval($_GET['items_'.$topic['id'].'_page_nr']);
         $items_page_nr = null;
         
-        echo Display::tag('h2', $main_message['title']);
+        echo Display::tag('h2', Security::remove_XSS($main_message['title'], STUDENT, true));
         $user_sender_info = UserManager::get_user_info_by_id($main_message['user_sender_id']);
         $files_attachments = self::get_links_message_attachment_files($main_message['id']);
         $name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
@@ -1048,7 +1048,8 @@ class MessageManager
             $date = '<div class="message-group-date"> '.get_lang('Created').' '.date_to_str_ago($main_message['send_date']).'</div>';
         }
         $attachment = '<div class="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>';                
-        $main_content.= '<div class="message-group-content">'.$links.$user_link.' '.$date.$main_message['content'].$attachment.'</div>';          
+        $main_content.= '<div class="message-group-content">'.$links.$user_link.' '.$date.$main_message['content'].$attachment.'</div>';
+        $main_content = Security::remove_XSS($main_content, STUDENT, true);
 
         $html = '';   
         
@@ -1094,7 +1095,7 @@ class MessageManager
                     $date = '<div class="message-group-date"> '.get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</div>';
                 }
                 $attachment = '<div class="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>';                
-                $html_items.= '<div class="message-group-content">'.$links.$user_link.' '.$date.$topic['content'].$attachment.'</div>';                          
+                $html_items.= '<div class="message-group-content">'.$links.$user_link.' '.$date.Security::remove_XSS($topic['content'], STUDENT, true).$attachment.'</div>';                          
                       
                 $base_padding = 20;
                 

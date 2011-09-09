@@ -137,8 +137,8 @@ echo '<div id="social-content">';
 				   		$picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web',false,true);
 				   		$friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
 				        $user_info	= api_get_user_info($sender_user_id);
-				        $title 		= Security::remove_XSS($invitation['title']);	        
-				        $content 	= Security::remove_XSS($invitation['content']);				        
+				        $title 		= Security::remove_XSS($invitation['title'], STUDENT, true);	        
+				        $content 	= Security::remove_XSS($invitation['content'], STUDENT, true);				        
 				        $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);  				                        
 				    ?>	   	
 					<table cellspacing="0" border="0">
@@ -182,9 +182,9 @@ echo '<div id="social-content">';
 				   		$friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
 				        $user_info	= api_get_user_info($sender_user_id);	  
 				              
-				        $title		= Security::remove_XSS($invitation['title']);
-						$content	= Security::remove_XSS($invitation['content']);
-				        $date		= api_convert_and_format_date($invitation['send_date'], $invitation['send_date'], DATE_TIME_FORMAT_LONG); 		               
+				        $title		= Security::remove_XSS($invitation['title'], STUDENT, true);
+						$content	= Security::remove_XSS($invitation['content'], STUDENT, true);
+				        $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG); 		               
 				    ?>	   	
 					<table cellspacing="0" border="0">
 					<tbody>

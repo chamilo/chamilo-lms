@@ -43,7 +43,7 @@ echo '<div id="social-content">';
 			//get users from tags
 			$users  = UserManager::get_all_user_tags($_GET['q'], 0, 0, 5);
 			$groups = GroupPortalManager::get_all_group_tags($_GET['q']);
-			
+						
 			if (empty($users) && empty($groups)) {
 				echo get_lang('SorryNoResults');	
 			}
@@ -79,10 +79,12 @@ echo '<div id="social-content">';
 				echo '</div>';											
 			}
 								
-			//Get users from tags
+			//Get users from tags this loop does not make sense for now ... 
+			/*
 			if (is_array($results) && count($results) > 0) {				
-				foreach ($results as $result) {					
-					$id = $result['id'];
+				foreach ($results as $result) {
+							
+					$id = $result['id'];					
 					$url_open  = '<a href="groups.php?id='.$id.'">';
 					$url_close = '</a>';
 						
@@ -116,12 +118,14 @@ echo '<div id="social-content">';
 					$grid_item_2 = $item_1.$item_2.$item_3.$item_4;				
 					$grid_my_groups[]= array($grid_item_1,$grid_item_2);
 				}
-			}
+			}*/
 				
 			$grid_groups = array();
 			if (is_array($groups) && count($groups)>0) {
 				echo '<h2>'.get_lang('Groups').'</h2>';
-				foreach($groups as $group) {						
+				foreach($groups as $group) {	
+					$group['name'] = Security::remove_XSS($group['name'], STUDENT, true);
+					$$group['description'] = Security::remove_XSS($group['description'], STUDENT, true);
 					$id = $group['id'];
 					$url_open  = '<a href="groups.php?id='.$id.'">';
 					$url_close = '</a>';						

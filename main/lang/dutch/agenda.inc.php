@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Nieuw agenda-item";
 $ShowAllEvents = "Alles tonen";
 $ShowCurrent = "Toon de agenda-items van deze maand";
@@ -72,8 +75,4 @@ $AgendaSortChronologicallyDown = "Aflopend";
 $ItemForUserSelection = "Selecteer gebruikers";
 $IsNotiCalFormatFile = "Dit bestand is geen iCal bestand.";
 $RepeatEvent = "Herhaal gebeurtenis";
-$RepeatDate = "Herhaaldatum";
-$EndDateMustBeMoreThanStartDate = "Einddatum moet na startdatum zijn";
-$SelectACourse = "Kies een cursus";
-$PleaseSelectACourseOrASessionInTheLeftColumn = "Kies een cursus of sessie in de zijbalk";
 ?>

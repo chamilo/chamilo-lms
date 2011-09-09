@@ -192,4 +192,8 @@ $MProgressPages = "Highest progress pages";
 $MostDiscussUsers = "Most discussed users";
 $RandomPage = "Random page";
 $ProtectedPages = "Protected pages";
+$IncludeAllVersions = "Also search in older versions of each page";
+$TotalHiddenPages = "Total hidden pages";
+$TotalPagesEditedAtThisTime = "Total pages edited at this time";
+$TotalWikiUsers = "Total users that have participated in this Wiki";
 ?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langMdCallingTool = "Documenten";
 $langMdTitle = "Titel van het leerobject";
 $langMdDescription = "Om de gegevens te bewaren, druk op \"Bewaren\"";

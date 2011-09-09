@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Verplaats naar";
 $langDownloadFile = "Upload volgend bestand naar de server";
 $langNameDir = "Titel van nieuwe map";
@@ -208,67 +211,6 @@ $CreateTheDocument = "Document aanmaken";
 $CreateTemplate = "Sjabloon aanmaken";
 $SharedFolder = "Gedeelde folder";
 $CreateFolder = "Maak de folder aan";
-$HelpDefaultDirDocuments = "INFORMATIE DIE ALLEEN VOOR DE LERAAR ZICHTBAAR IS:
-
-Deze map bevat de standaardarchieven. Je kunt bestanden verwijderen en nieuwe bestanden toevoegen, maar als een verborgen bestand aan een webdocument wordt toegevoegd, kunnen leerlingen het niet zien. Als je een bestand aan een webdocument toevoegt, maak het dan zichtbaar. De mappen mogen verborgen blijven.";
-$HelpSharedFolder = "Deze map bevat bestanden die andere leerlingen (of jij zelf) in de cursus hebben gezet met de tekstverwerker (als ze het niet via een groep hebben gedaan). Standaard zijn ze zichtbaar voor alle leraren, maar verborgen voor andere leerlingen (behalve via een directe link). Als je een gebruikersmap zichtbaar maakt, kunnen andere gebruikers de inhoud zien.";
 $TemplateImage = "Icoon voor het sjabloon";
 $MoveElement = "Verplaats element";
-$CertificateName = "Naam";
-$CopyToMyFiles = "Kopiëer naar mijn persoonlijke map";
-$Export2PDF = "Exporteer als PDF";
-$ResourceShared = "Materiaal gedeeld";
-$CopyAlreadyDone = "Er staat een bestand met dezelfde naam in je persoonlijke map. Wil je die vervangen?";
-$CopyFailed = "Kopie mislukt";
-$CopyMade = "De kopie is gemaakt";
-$OverwritenFile = "Bestand vervangen";
-$Draw = "Teken";
-$FileExistsChangeToSave = "Deze bestandsnaam bestaat al, kies een andere om je afbeelding op te slaan.";
-$FileSavedAs = "Bestand opgeslagen als";
-$FileExportAs = "Bestand geëxporteerd als";
-$UserFolder = "Gebruikersmap";
-$HelpUsersFolder = "INFORMATIE ALLEEN ZICHTBAAR VOOR DE LERAAR:<br />
-<br />
-De gebruikersmap bevat een map voor elke gebruiker die er iets in heeft gezet via Documenten of via de online tekstverwerker. Is dat niet gebeurd, dan is er nog geen gebruikersmap gemaakt. In het geval van groepen worden bestanden die via de tekstverwerker worden verstuurd toegevoegd aan de groepsmap, die beschikbaar is voor alle leerlingen in de groep.
-<br /><br />
-De gebruikersmap en elk van de mappen daarin zijn standaard verborgen voor alle leerlingen, maar elke leerling kan de inhoud van zijn of haar eigen map zien via de tekstverwerker. Echter, als een leerling het adres van een bestand of map van een andere leerling weet, kan hij er toegang to krijgen.
-<br /><br />
-Als een gebruikersmap zichtbaar is, kunnen andere leerlingen zien wat erin zit. In dat geval kan de eigenaar (vanuit Documenten, en alleen zijn of haar eigen map) docuemnten maken en bewerken, omzetten in een sjabloon voor eigen gebruik, tekeningen maken en bewerken in SVG en PNG, documenten versturen, mappen aanmaken en verplaatsenmappen verwijderen en een backup van zijn of haar map downloaden.
-<br /><br />
-Bovendien zijn de Documenten en de tekstverwerker gesynchroniseerd, zodat een verandering op een plaats ook op de andere plaats te zien is.
-<br /><br />
-De gebruikersmap is dan ook niet alleen een plaats om bestanden neer te zetten, maar het kan gebruikt worden als complete documentmanager voor alle documenten die de leerling tijdens de cursus gebruikt. Daarnaast kan de leerling elk document wat zichtbaar voor hem of haar is kopiëren naar de persoonlijke map in het sociale netwerk, zodat de documenten ook in andere cursussen gebruikt kunnen worden.";
-$HelpFolderChat = "INFORMATIE ALLEEN ZICHTBAAR VOOR DE LERAAR:
-
-Deze map bevat alle sessies die in de chat zijn geopend. Hoewel de chat-sessies vaak niet erg interessant zijn, zijn er uitzonderingen die gebruikt kunnen worden als werkdocument. Om dit te doen zonder de zichtbaarheid van de map aan te passen, kun je het bestand zichtbaar maken en linken vanaf een geschikte plaats. Het zichtbaar maken van de map wordt afgeraden.";
-$HelpFolderCertificates = "INFORMATIE ALLEEN ZICHTBAAR VOOR DE LERAAR:<br /><br />
-Deze map bevat de diplomasjablonen die zijn gemaakt voor de rapporten. Het wordt afgeraden om deze map zichtbaar te maken voor leerlingen.";
-$DestinationDirectory = "Doelmap";
-$CreateAudio = "Maak audio";
-$InsertText2Audio = "Type de tekst die je wilt omzetten in een audiobestand";
-$HelpText2Audio = "Zet je tekst om naar spraak";
-$BuildMP3 = "Maak mp3";
-$Voice = "Spraak";
-$Female = "Vrouwelijk";
-$Male = "Mannelijk";
-$GoogleAudio = "Gebruik Google audio services";
-$vozMe = "Gebruik vozMe audio services";
-$HelpGoogleAudio = "Ondersteunt tot 100 tekens in een verscheidenheid aan talen. De gegenereerde bestanden worden automatisch opgeslagen in de Chamilomap waar je momenteel bent.";
-$HelpvozMe = "Ondersteunt tekst van enkele duizenden tekens, geeft de keus tussen een vrouwen- of mannenstem. Het werkt met minder talen, en de kwaliteit is minder. Ten slotte moet je de bestanden handmatig uit een nieuw window downloaden.";
-$SaveMP3 = "Mp3 opslaan";
-$Speed = "Snelheid";
-$GoFaster = "Sneller";
-$Fast = "Snel";
-$Normal = "Normaal";
-$Slow = "Langzaam";
-$SlowDown = "Langzamer";
-$Pediaphon = "Gebruik Pediaphon audio services";
-$HelpPediaphon = "Ondersteunt tekst met enkele duizenden tekens, in verschillende mannelijke en vrouwelijke stemmen (afhankelijk van de taal). Gegenereerde audiobestanden worden automatisch opgeslagen in de Chamilomap waar je bent.";
-$FirstSelectALanguage = "Kies een taal";
-$RenameAndComment = "Hernoem en commentaar";
-$YouAreCurrentlyUsingXOfYourX = "Je gebruikt nu %s MB (%s) van je %s MB.";
-$UplUploadFailedSizeIsZero = "Er was een probleem met het uploaden van je document: het ontvangen bestand heeft een grootte van 0 bytes. Controleer je bestand en probeer het opnieuw.";
-$NewImage = "Nieuwe afbeelding";
-$DirExists = "De operatie is onmogelijk, een map met die naam bestaat al.";
-$DocMv = "Document verplaatst";
 ?>

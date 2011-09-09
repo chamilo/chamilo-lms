@@ -412,4 +412,5 @@ $InvalidQuestionType = "Napačen tip vprašanja";
 $ShowScoreAndRightAnswer = "Samo-evalvacijski način: prikaže rezultate in pričakovane odgovore";
 $DoNotShowScoreNorRightAnswer = "Izpitni način: ne prikaže rezultatov niti pričakovanih odgovorov";
 $LoadUsersExtraData = "Naloži uporabnikove dodatne podatke";
+$StartTest = "Prični test";
 ?>

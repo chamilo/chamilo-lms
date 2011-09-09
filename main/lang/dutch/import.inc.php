@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langPgTitle = "Titel van de pagina";
 $langExplanation = "Wanneer u op OK klikt, wordt een cursuspagina aangemaakt met o.a. de onderdelen: forum, links, oefeningen, agenda en cursusmateriaal. Met uw log-in kan u de inhoud later wijzigen.";
 $langTooBig = "U hebt geen bestand gekozen op te verzenden, of het bestand is te groot.";

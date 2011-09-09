@@ -1467,4 +1467,5 @@ $ArchiveDirCleanupDescr = "Chamilo garda unha copia dos arquivos temporais que x
 $ArchiveDirCleanupProceedButton = "Executar limpeza";
 $ArchiveDirCleanupSucceeded = "Os contidos do cartafol archive/ foron eliminados satisfactoriamente.";
 $ArchiveDirCleanupFailed = "Por algunha razón, non se puido limpar o cartafol archive/. Probablemente debido aos permisos. Pode limpar manualmente conectandose  ao servidor e eliminando todos os contidos do cartafol chamilo/archive/, excepto o ficherio htaccess.";
+$LocalTimeUsingPortalTimezoneXIsY = "A hora local usando a zona horaria do portal (%s) é %s";
 ?>

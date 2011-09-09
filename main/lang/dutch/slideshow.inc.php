@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_height = "Hoogte";
 $lang_resizing_comment = "Pas de grootte van de afbeelding aan tot de volgende afmetingen (in pixels)";
 $lang_width = "Breedte";

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $GeneralDescription = "Algemene beschrijving";
 $GeneralDescriptionQuestions = "Waar situeert deze cursus zich in de opleiding? Is er voorkennis vereist? Wat is de relatie tussen deze cursus en andere cursussen?";
 $GeneralDescriptionInformation = "Beschrijf de cursus (aantal lesuren, officiële code, lokaal waar de lessen doorgaan, ...) en de docent (naam, voornaam, bureau, telefoonnummer, email, ...).";

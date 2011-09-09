@@ -80,4 +80,5 @@ $EndDateMustBeMoreThanStartDate = "A data final ten que ser maior que a de inici
 $SelectACourse = "Seleccione un curso";
 $PleaseSelectACourseOrASessionInTheLeftColumn = "Seleccione un curso ou unha sesión";
 $DisableEndDate = "Deshabilitar data final";
+$AllEvents = "Todos os eventos";
 ?>

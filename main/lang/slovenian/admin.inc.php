@@ -1464,4 +1464,5 @@ $ArchiveDirCleanupDescr = "Chamilo vzdržuje kopijo večine začasnih datotek, k
 $ArchiveDirCleanupProceedButton = "Nadaljuj s čiščenjem";
 $ArchiveDirCleanupSucceeded = "čiščenje mape arhivov je bilo uspešno.";
 $ArchiveDirCleanupFailed = "Iz neznanega razloge mape arhivov (archive/) ni bilo mogoče očistiti. Mapo 'chamilo/archive' očistite ročno, pustite nedotaknjeno zgolj datoteto .htaccess .";
+$LocalTimeUsingPortalTimezoneXIsY = "Lokalni čas portalovega časovnega pasu (%s) je %s";
 ?>

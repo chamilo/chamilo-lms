@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLinkSite = "Link toevoegen en verbinden met startpagina";
 $langSubTitle = "Voegt een link toe aan uw cursusstartpagina.";
 $langAddPage = "Pagina toevoegen";

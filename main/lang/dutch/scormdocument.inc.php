@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langChapter = "Hoofdstuk";
 $langDocumentList = "Lijst van alle documenten";
 $langOrganisationList = "Inhoudsopgave";

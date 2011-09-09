@@ -80,4 +80,5 @@ $EndDateMustBeMoreThanStartDate = "Končni datum mora biti kasnejši od začetne
 $SelectACourse = "Izberi tečaj";
 $PleaseSelectACourseOrASessionInTheLeftColumn = "Izberite tečaj ali sejo s stranskega menija.";
 $DisableEndDate = "Onemogoči končni datum";
+$AllEvents = "Vsi dogodki";
 ?>

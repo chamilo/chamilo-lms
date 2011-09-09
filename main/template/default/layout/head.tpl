@@ -1,3 +1,13 @@
+<link href="http://www.chamilo.org/documentation.php" rel="Help" />
+<link href="http://www.chamilo.org/team.php" rel="Author" />
+<link href="http://www.chamilo.org" rel="Copyright" />
+<link rel="top" href="{$_p.web_main}index.php" title="" />
+<link rel="courses" href="{$_p.web_main}auth/courses.php" title="{"OtherCourses"|get_lang}"/>
+<link rel="profil" href="{$_p.web_main}auth/profile.php" title="{"ModifyProfile"|get_lang}"/>
+
+<meta http-equiv="Content-Type" content="text/html; charset={$system_charset}" />
+<meta name="Generator" content="{$_s.software_name} {$_s.system_version|substr:0:1}" />
+		
 <title>{$title_string}</title>
 
 <style type="text/css" media="screen, projection">

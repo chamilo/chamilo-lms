@@ -188,20 +188,7 @@ class Template extends Smarty {
 		
 		$this->assign('css_file_to_string', $css_file_to_string);
 		$this->assign('js_file_to_string',  $js_file_to_string);		
-		$this->assign('text_direction',	 api_get_text_direction());		
-
-	
-		//@todo add this
-		/*<link rel="top" href="<?php echo api_get_path(WEB_PATH); ?>index.php" title="" />
-		<link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/courses.php" title="<?php echo api_htmlentities(get_lang('OtherCourses'), ENT_QUOTES); ?>" />
-		<link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/profile.php" title="<?php echo api_htmlentities(get_lang('ModifyProfile'), ENT_QUOTES); ?>" />
-		<link href="http://www.chamilo.org/documentation.php" rel="Help" />
-		<link href="http://www.chamilo.org/team.php" rel="Author" />
-		<link href="http://www.chamilo.org" rel="Copyright" />
-		<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
-		<meta name="Generator" content="<?php echo $_configuration['software_name'].' '.substr($_configuration['system_version'],0,1);?>" />
-		*/
-		
+		$this->assign('text_direction',	 api_get_text_direction());			
 		$this->assign('style_print', $style_print);
 		
 		$extra_headers = '';		

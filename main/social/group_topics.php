@@ -13,9 +13,9 @@ api_block_anonymous_users();
 if (api_get_setting('allow_social_tool') !='true') {
     api_not_allowed();
 }
-
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
+$htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = '<script type="text/javascript"> 
 
 var counter_image = 1;
@@ -63,7 +63,33 @@ function show_icon_edit(element_html) {
 function hide_icon_edit(element_html)  {
     ident="#edit_image";
     $(ident).hide();
-}       
+}  
+
+
+$(document).ready(function() {    
+	$(\'.group_message_popup\').live(\'click\', function() {
+		var url     = this.href;
+	    var dialog  = $("#dialog");
+	    if ($("#dialog").length == 0) {
+	    	dialog  = $(\'<div id="dialog" style="display:hidden"></div>\').appendTo(\'body\');
+		}
+	            
+	    // load remote content
+	    dialog.load(
+	    	url,                    
+	        {},
+	        	function(responseText, textStatus, XMLHttpRequest) {
+	                        dialog.dialog({
+	                            modal	: true, 
+	            				width	: 520, 
+	            				height	: 400,	            				
+	                        });	                    
+				});
+	            //prevent the browser to follow the link
+	            return false;
+	        });
+        });
+        
         
 </script>';
 
@@ -71,7 +97,6 @@ $this_section = SECTION_SOCIAL;
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 $interbreadcrumb[] = array('url' => 'groups.php','name' => get_lang('Groups'));
 $interbreadcrumb[] = array('url' => '#','name' => get_lang('Thread'));
-api_block_anonymous_users();
 
 $group_id   = intval($_GET['id']);
 $topic_id   = intval($_GET['topic_id']);

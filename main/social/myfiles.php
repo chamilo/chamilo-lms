@@ -23,8 +23,6 @@ $this_section = SECTION_SOCIAL;
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('MyFiles'));
 
-//jquery thickbox already called from main/inc/header.inc.php
-
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 		

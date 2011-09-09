@@ -21,7 +21,6 @@ if (api_get_setting('allow_social_tool') !='true') {
 
 $this_section = SECTION_SOCIAL;
 
-//jquery thickbox already called from main/inc/header.inc.php
 $htmlHeadXtra[] = '<script type="text/javascript">
 
 function delete_friend (element_div) {

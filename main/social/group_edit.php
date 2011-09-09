@@ -26,8 +26,6 @@ require_once $libpath.'group_portal_manager.lib.php';
 require_once $libpath.'formvalidator/FormValidator.class.php';
 require_once $libpath.'mail.lib.inc.php';
 
-//jquery thickbox already called from main/inc/header.inc.php
-
 $htmlHeadXtra[] = '<script type="text/javascript">
 var textarea = "";
 var num_characters_permited = 255;

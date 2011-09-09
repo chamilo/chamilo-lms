@@ -75,7 +75,7 @@ $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1
 <input type="hidden" name="parent_id" value="<?php echo $message_id ?>" />
 <input type="hidden" name="message_id" value="<?php echo $message_id ?>" />
 <input type="hidden" name="token" value="<?php echo $tok ?>" />
-<table width="600" border="0" height="220">
+<table width="500px" border="0" height="220px">
     <tr height="180">
         <td align="left">
 <div id="id_content_panel_init">
@@ -95,7 +95,7 @@ $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1
 	   		
 			$oFCKeditor = new FCKeditor('content') ;
 			$oFCKeditor->ToolbarSet = 'messages';
-			$oFCKeditor->Width		= '100%';
+			$oFCKeditor->Width		= '95%';
 			$oFCKeditor->Height		= $height;
 			$oFCKeditor->Value		= $message;
 								

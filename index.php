@@ -38,7 +38,7 @@ $htmlHeadXtra[] ='
 			pause			: 10000
 		});
 	});
-	alert(navigator.cookieEnabled);
+	
 	if(navigator.cookieEnabled==false){
         document.writeln("'.addslashes(Display::display_error_message(get_lang("NoCookies"))).'");
 	}

@@ -233,7 +233,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 }
                 break;
             case 'textarea':
-                $form->addElement('textarea', $row['variable'], get_lang($row['comment']), $hideme);
+                $form->addElement('textarea', $row['variable'], get_lang($row['comment']) , array('rows'=>'10','cols'=>'50'), $hideme);
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
             case 'radio':

@@ -13,12 +13,14 @@
 -- This first part is for the main database
 
 -- xxMAINxx
-UPDATE settings_current SET selected_value = '1.9.0.14911' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.15605' WHERE variable = 'chamilo_database_version';
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('filter_terms', NULL, 'textarea', 'Security', '', 'FilterTermsTitle', 'FilterTermsComment', NULL, NULL, 0);
 
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
-
+--CREATE TABLE track_filtered_terms (id int, user_id int, course_id int, session_id int, tool_id char(12), filtered_term varchar(255), created_at datetime);
 
 -- xxUSERxx
 

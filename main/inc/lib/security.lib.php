@@ -256,7 +256,11 @@ class Security {
      * @param   integer The user status,constant allowed (STUDENT, COURSEMANAGER, ANONYMOUS, COURSEMANAGERLOWSECURITY)
      * @return	mixed	Filtered string or array
      */
-    public static function remove_XSS($var, $user_status = ANONYMOUS) {
+    public static function remove_XSS($var, $user_status = ANONYMOUS, $filter_terms = false) {
+    	if ($filter_terms) {
+    		$var = self::filter_terms($var);
+    	}
+    	
         if ($user_status == COURSEMANAGERLOWSECURITY) {
             return $var;  // No filtering.
         }
@@ -308,6 +312,61 @@ class Security {
             return $purifier[$user_status]->purify($var);
         }
     }
+    
+    
+    /**
+     * 
+     * Filter content 
+     * @param	string content to be filter
+     * @return 	string
+     */
+    function filter_terms($text) {
+    	static $bad_terms = array();
+    	    	
+    	if (empty($bad_terms)) {    		
+    		$list = api_get_setting('filter_terms');    	    	
+    		$list = explode("\n", $list);    		
+    		$list = array_filter($list);    		
+    		if (!empty($list)) {
+    			foreach($list as $term) {
+    				$term = str_replace(array("\r\n", "\r", "\n", "\t"), '', $term);
+    				$html_entities_value = api_htmlentities($term, ENT_QUOTES, api_get_system_encoding()); 
+    				$bad_terms[] = $term;
+    				if ($term != $html_entities_value) {    				 
+    					$bad_terms[] = $html_entities_value;
+    				}
+    			}
+    			$bad_terms = array_filter($bad_terms);
+    		}
+    	}
+    	    	
+    	$replace = '***';    	
+    	if (!empty($bad_terms)) {
+    		//Fast way
+    		$new_text = str_replace($bad_terms, $replace, $text, $count);
+    		
+    		//We need statistics
+    		/*
+    		if (strlen($new_text) != strlen($text)) {
+    			$table = Database::get_main_table(TABLE_STATISTIC_TRACK_FILTERED_TERMS);
+    			$attributes = array();
+    			
+    			
+    			$attributes['user_id'] 		=
+    			$attributes['course_id'] 	=
+    			$attributes['session_id'] 	=
+    			$attributes['tool_id'] 		=
+    			$attributes['term'] 		=
+    			$attributes['created_at'] 	= api_get_utc_datetime();
+    			$sql = Database::insert($table, $attributes);
+    		}
+    		*/
+    		$text = $new_text;
+    		
+    	}        	
+		return $text;
+    }
+    
 
     /**
      * This method provides specific protection (against XSS and other kinds of attacks) for static images (icons) used by the system.
@@ -350,5 +409,5 @@ class Security {
             return '';
         }
         return $image_path;
-    }
+    }   
 }

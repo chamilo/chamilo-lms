@@ -125,6 +125,9 @@ define('TABLE_STATISTIC_TRACK_E_HOTSPOT',           'track_e_hotspot');
 define('TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY',     'track_e_item_property');
 define('TABLE_STATISTIC_TRACK_E_OPEN',              'track_e_open');
 
+define('TABLE_STATISTIC_TRACK_FILTERED_TERMS',      'track_filtered_terms');
+
+
 define('TABLE_STATISTIC_TRACK_C_BROWSERS',          'track_c_browsers');
 define('TABLE_STATISTIC_TRACK_C_COUNTRIES',         'track_c_countries');
 define('TABLE_STATISTIC_TRACK_C_OS',                'track_c_os');
@@ -294,3 +297,4 @@ define('TABLE_USERGROUP_REL_SESSION',   'usergroup_rel_session');
 
 // Mail notifications
 define('TABLE_NOTIFICATION',               'notification');
+

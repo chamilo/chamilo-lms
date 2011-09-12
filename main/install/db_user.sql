@@ -13,10 +13,11 @@ CREATE TABLE personal_agenda (
   user int unsigned,
   title text,
   `text` text,
-  `date` datetime default NULL,
-  enddate datetime default NULL,
+  `date` datetime DEFAULT NULL,
+  enddate datetime DEFAULT NULL,
   course varchar(255),
-  parent_event_id int null,
+  parent_event_id int NULL,
+  all_day int NOT NULL DEFAULT 0,
   PRIMARY KEY id (id)
 );
 CREATE TABLE personal_agenda_repeat (

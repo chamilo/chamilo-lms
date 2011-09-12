@@ -25,26 +25,82 @@ $(document).ready(function() {
 			var start_date 	= Math.round(start.getTime() / 1000);
 			var end_date 	= Math.round(end.getTime() / 1000);
 			
-			var url = '{$_p.web_ajax}agenda.ajax.php?a=add_event&start='+start_date+'&end='+end_date+'&view='+view.name;
+			var url = '{$_p.web_ajax}agenda.ajax.php?a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
 			
 			$('#start_date').html(start.getDate() +"/"+ start.getMonth() +"/"+start.getFullYear());
 			$('#end_date').html(end.getDate() +"/"+ end.getMonth() +"/"+end.getFullYear());
 			
 			$("#dialog-form").dialog("open");
+
+			
+			
 			$("#dialog-form").dialog({				
 				buttons: {
 					"Add event": function() {
 						var params = $("#add_event_form").serialize();						
 						$.ajax({
 							url: url+'&'+params,
+							success:function(data) {
+								calendar.fullCalendar("refetchEvents");
+								calendar.fullCalendar("rerenderEvents");
+								$("#dialog-form").dialog("close");										
+							}							
+						});
+					},
+				},				
+				close: function() {		
+					$("#title").attr('value', '');
+					$("#content").attr('value', '');					
+				}
+			});		
+            //prevent the browser to follow the link
+            return false;
+			calendar.fullCalendar('unselect');
+		},	
+		eventRender: function(event, element) {
+			if (event.description) {
+				element.qtip({
+		            content: event.description
+		        });
+			}
+	        
+	    },
+		eventClick: function(calEvent, jsEvent, view) {						
+			var start_date 	= Math.round(calEvent.start.getTime() / 1000);
+			if (calEvent.allDay == 1) {				
+				var end_date 	= '';				
+			} else {			
+				var end_date 	= Math.round(calEvent.end.getTime() / 1000);				
+			}			
+			
+			$('#start_date').html(calEvent.start.getDate() +"/"+ calEvent.start.getMonth() +"/"+calEvent.start.getFullYear());
+			
+			if (end_date != '') {
+				$('#end_date').html(calEvent.end.getDate() +"/"+ calEvent.end.getMonth() +"/"+calEvent.end.getFullYear());
+			}			
+
+			$("#title").attr('value', calEvent.title);
+			$("#content").attr('value', calEvent.description);
+			
+			$("#dialog-form").dialog("open");
+
+			var url = '{$_p.web_ajax}agenda.ajax.php?a=edit_event&id='+calEvent.id+'&start='+start_date+'&end='+end_date+'&all_day='+calEvent.allDay+'&view='+view.name;
+			var delete_url = '{$_p.web_ajax}agenda.ajax.php?a=delete_event&id='+calEvent.id;
+			
+			$("#dialog-form").dialog({				
+				buttons: {
+					"Edit event": function() {
+						var params = $("#add_event_form").serialize();						
+						$.ajax({
+							url: url+'&'+params,
 							success:function() {
-								calendar.fullCalendar('renderEvent', 
-										{
-											title: $("#title").val(),
-											start: start,
-											end: end,
-											allDay: allDay
-										},
+								calEvent.title 			= $("#title").val();
+								calEvent.start 			= calEvent.start;
+								calEvent.end 			= calEvent.end;
+								calEvent.allDay 		= calEvent.allDay;
+								calEvent.description 	= $("#content").val();								
+								calendar.fullCalendar('updateEvent', 
+										calEvent,
 										true // make the event "stick"
 								);
 								
@@ -52,20 +108,28 @@ $(document).ready(function() {
 							}							
 						});
 					},
-				},				
-				close: function() {
+					"Delete": function() {
+						$.ajax({
+							url: delete_url,
+							success:function() {
+								calendar.fullCalendar('removeEvents',										
+									calEvent										
+								);								
+								calendar.fullCalendar("refetchEvents");
+								calendar.fullCalendar("rerenderEvents");
+								$("#dialog-form").dialog( "close" );		
+							}
+						});
 						
+						
+					}
+				},				
+				close: function() {		
+					$("#title").attr('value', '');
+					$("#content").attr('value', '');				
 				}
-			});                   
+			});
 
-			
-			 
-		
-            //prevent the browser to follow the link
-            return false;
-			calendar.fullCalendar('unselect');
-		},	
-		dayClick: function(date, allDay, jsEvent, view) {
 		},
 		editable: true,		
 		events: "{$ajax_url}?a=get_events",		
@@ -89,9 +153,9 @@ $(document).ready(function() {
 });
 </script>
 
-<div id="dialog-form"  title="{"AddEvent"|get_lang}" style="display:none">				
+<div id="dialog-form"  style="display:none">				
 	<form id="add_event_form" name="form">
-		<span id="start_date" ></span> - <span id="end_date" ></span>
+		<span id="start_date" ></span><span id="end_date" ></span>
 		<div class="row">
 				<label for="name">{"Title"|get_lang}</label>
 		</div>

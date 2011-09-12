@@ -15,9 +15,24 @@ $agenda = new Agenda();
 
 switch ($action) {    
 	case 'add_event':		
-		$agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['view'], 'personal',$_REQUEST['title'], $_REQUEST['content']);
-		break;
+		//For now we only save personal events
+		echo $agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], 'personal',$_REQUEST['title'], $_REQUEST['content']);
+		break;		
+	case 'edit_event':
+		$id_list 	= explode('_', $_REQUEST['id']);		
+		$type 		= $id_list[0];
+		$id 		= $id_list[1];		
 		
+		$agenda->edit_event($id, $_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], $type ,$_REQUEST['title'], $_REQUEST['content']);
+		break;
+	case 'delete_event':
+		$id_list 	= explode('_', $_REQUEST['id']);
+		$type 		= $id_list[0];
+		$id 		= $id_list[1];
+		
+		$agenda->delete_event($id, $type);
+		
+		break;
 	case 'move_event':
 		$day_delta 		= $_REQUEST['day_delta'];
 		$minute_delta 	= $_REQUEST['minute_delta'];
@@ -29,9 +44,9 @@ switch ($action) {
 		break;
 	case 'get_events':
 		$start 	= $_REQUEST['start'];
-		$end 	= $_REQUEST['end'];		
-		
-		$events = $agenda->get_events($start, $end, 1);
+		$end 	= $_REQUEST['end'];
+					
+		$events = $agenda->get_events($start, $end, api_get_user_id(), api_get_course_int_id());
 		echo $events;		
 		break;
     case 'get_user_agenda':

@@ -23,19 +23,50 @@ class Agenda {
 	 * @param 	string	agendaDay, agendaWeek, month
 	 * @param	string	personal, course or global (only works for personal by now) 
 	 */
-	function add_event($start, $end, $view, $type, $title, $content) {
+	function add_event($start, $end, $all_day, $view, $type, $title, $content) {
+		$attributes = array();
 		$start = date('Y-m-d H:i:s', $start);
 		$end = date('Y-m-d H:i:s', $end);
-				
-		$start 		= api_get_utc_datetime($start);
-		$end 		= api_get_utc_datetime($end);
-		$title 		= Database::escape_string($title);
-		$content 	= Database::escape_string($content);
 			
-		// we are adding a new item
-		$sql = "INSERT INTO $this->tbl_personal_agenda (user, title, text, date, enddate) VALUES ('".api_get_user_id()."','$title', '$content', '$start', '$end')";		
-		$result = Database::query($sql);
+		$start 		= api_get_utc_datetime($start);
+		$end 		= api_get_utc_datetime($end);		
+		$all_day = isset($all_day) && $all_day == 'true' ? 1:0;
 		
+		$attributes['user'] 	= api_get_user_id();
+		$attributes['title'] 	= $title;
+		$attributes['text'] 	= $content;
+		$attributes['date'] 	= $start;
+		$attributes['enddate'] 	= $end;
+		$attributes['all_day'] 	= $all_day;
+		
+		$id = Database::insert($this->tbl_personal_agenda, $attributes);		
+		return $id;
+				
+	}
+	
+	function edit_event($id, $start, $end, $all_day, $view, $type, $title, $content) {
+		$attributes = array();
+		$start 		= date('Y-m-d H:i:s', $start);
+		$start 		= api_get_utc_datetime($start);
+		if ($all_day == '0') {
+			$end 		= date('Y-m-d H:i:s', $end);		
+			$end 		= api_get_utc_datetime($end);
+			$attributes['enddate'] 	= $end;
+		}
+		$all_day 	= isset($all_day) && $all_day == '1' ? 1:0;
+			
+		//$attributes['user'] 	= api_get_user_id();
+		$attributes['title'] 	= $title;
+		$attributes['text'] 	= $content;
+		$attributes['date'] 	= $start;
+		
+		//$attributes['all_day'] 	= $all_day;
+		
+		Database::update($this->tbl_personal_agenda, $attributes, array('id = ?' =>$id));
+	}
+	
+	function delete_event($id, $type) {
+		Database::delete($this->tbl_personal_agenda, array('id = ?' =>$id));
 	}
 	
 	/**
@@ -48,14 +79,20 @@ class Agenda {
 	 * @param day		$day
 	 * @param type		all, global (platform), course
 	 */
-	function get_events($start, $end, $user_id) {
+	function get_events($start, $end, $user_id, $course_id = null) {
 				
 		$this->get_personal_events($start, $end);
 		$this->get_platform_events($start, $end);
 		
 		$my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id(), true);
-		foreach($my_course_list as $course_item) {			
-			$this->get_course_events($start, $end, $course_item);
+		foreach($my_course_list as $course_item) {	
+			if (isset($course_id) && !empty($course_id)) {
+				if ($course_item['course_id'] == $course_id) {
+					$this->get_course_events($start, $end, $course_item);
+				}
+			} else {
+				$this->get_course_events($start, $end, $course_item);
+			}
 		}		
 		
 		if (!empty($this->events)) {
@@ -102,7 +139,7 @@ class Agenda {
 		$end  	= api_get_utc_datetime($end);
 		
 		$sql 	= "SELECT * FROM ".$this->tbl_personal_agenda."
-				   WHERE date>='".$start."' AND (enddate <='".$end."' OR enddate IS NULL) ";
+				   WHERE date >= '".$start."' AND (enddate <='".$end."' OR enddate IS NULL) ";
 		
 		$result = Database::query($sql);
 		if (Database::num_rows($result)) {
@@ -114,7 +151,6 @@ class Agenda {
 				$event['borderColor'] 	= $event['backgroundColor'] = $this->event_personal_color;
 				$event['editable'] 		= true;
 				
-				
 				if (!empty($row['date']) && $row['date'] != '0000-00-00 00:00:00') {
 					$event['start'] = $this->format_event_date($row['date']);
 				}
@@ -122,8 +158,8 @@ class Agenda {
 				if (!empty($row['enddate']) && $row['enddate'] != '0000-00-00 00:00:00') {
 					$event['end'] = $this->format_event_date($row['enddate']);				
 				}
-								
-				$event['allDay'] = false;
+				$event['description'] = $row['text']; 
+				$event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
 				$my_events[] = $event;
 				$this->events[]= $event;
 			}
@@ -211,7 +247,12 @@ class Agenda {
 		$events = array();
 		if (Database::num_rows($result)) {
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
-				
+				//Only show events from the session
+				if (api_get_course_int_id()) {
+					if ($row['session_id'] != api_get_session_id()) {
+						continue;
+					}				
+				}
 				$event = array();
 				$event['id'] 	  		= 'course_'.$row['id'];
 				$event['title'] 		= $row['title'];
@@ -248,7 +289,7 @@ class Agenda {
 		return $events;
 	}
 	
-	function format_event_date($utc_time) {
+	function format_event_date($utc_time) {		
 		return date('c', api_strtotime(api_get_local_time($utc_time)));
 	}
 	

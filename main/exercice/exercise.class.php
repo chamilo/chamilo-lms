@@ -1568,14 +1568,17 @@ class Exercise {
 					$label = get_lang('NextQuestion');
 					$class = 'next';
 				}
-				if ($this->type == ONE_PER_PAGE) {					
+				if ($this->type == ONE_PER_PAGE) {	
+
+					if ($questionNum != 1) {
+						$prev_question = $questionNum - 2;
+						$all_button .= '<a href="javascript://" class="a_button white medium" onclick="previous_question('.$prev_question.'); ">'.get_lang('PreviousQuestion').'</a>';
+					}
+					
 					//Next question
 					$all_button .= '<a href="javascript://" class="a_button blue medium" onclick="save_now('.$question_id.'); ">'.$label.'</a>';
 					
-					if ($questionNum != 1) {
-						$prev_question = $questionNum - 2;
-						$all_button .= '<a href="javascript://" class="a_button white small" onclick="previous_question('.$prev_question.'); "> << </a>';
-					}
+				
 					
 					//$all_button .= '&nbsp;<span id="save_all_reponse"></span>';
 					$all_button .= '<span id="save_for_now_'.$question_id.'"></span>&nbsp;';

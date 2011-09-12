@@ -40,7 +40,6 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 $this_section = SECTION_COURSES;
 
 /* 	ACCESS RIGHTS  */
-// notice for unauthorized people.
 api_protect_course_script(true);
 
 // Database table definitions
@@ -120,7 +119,6 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 }
 
 $feedback_type           = $objExercise->feedbacktype;
-
 $exercise_stat_info      = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 
 if (!empty($exercise_stat_info['data_tracking'])) {
@@ -164,7 +162,7 @@ if ($show_results || $show_only_score) {
     echo $exercise_header = $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']));
 }
 
-Display :: display_confirmation_message(get_lang('Saved').'<br /><br />',false);
+Display :: display_confirmation_message(get_lang('Saved').'<br />',false);
 
 $counter = 1;
 // Loop over all question to show results for each of them, one by one
@@ -187,9 +185,11 @@ if (!empty($question_list)) {
 	    	// show titles    	
 	    	echo $objQuestionTmp->return_header($objExercise->feedback_type, $counter);
 	    	$counter++;    	
-		    // We're inside *one* question. Go through each possible answer for this question
-		    $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null ,'exercise_result', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);	    
-		}   	
+		}
+		
+	    // We're inside *one* question. Go through each possible answer for this question
+	    $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null ,'exercise_result', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);	    
+	   	
 	    $total_score     += $result['score'];    
 	    $total_weight    += $result['weight'];    
 	} // end foreach() block that loops over all questions

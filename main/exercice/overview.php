@@ -70,9 +70,13 @@ if ($is_allowed_to_edit ) {
 $html .= Display::tag('h1', $objExercise->name .' '.$edit_link);
 $html .= Display::div($objExercise->description, array('class'=>'exercise_description'));
 
-//Buttons
+$extra_params = '';
+if (isset($_GET['preview'])) {
+	$extra_params = '&preview=1';	
+}
+
 //Notice we not add there the lp_item_view__id because is not already generated 
-$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id;
+$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.$extra_params;
 
 $label = get_lang('StartTest');
 if ($time_control && !empty($clock_expired_time)) {

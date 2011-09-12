@@ -708,5 +708,6 @@ $FieldTypeSelect = "تحديد المنسدلة";
 $FieldTypeSelectMultiple = "متعددة اختيار المنسدلة";
 $FieldAdded = "أضيف الحقل بنجاح";
 $GradebookScoreDisplayColoring = "عتبات التلوين";
+$FieldTypeDatetime = "التاريخ و الوقت";
 $CannotDeleteField = "لا يستطيع حذف الحقل";
 ?>

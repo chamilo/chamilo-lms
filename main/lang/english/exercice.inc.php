@@ -419,4 +419,5 @@ $QuestionWithNoAnswer = "Questions without answer";
 $ValidateAnswers = "Validate answers";
 $ReviewQuestions = "Review selected questions";
 $YouTriedToResolveThisExerciseEarlier = "You have tried to resolve this question earlier";
+$ThereAreNoQuestionsForThisExercise = "There are no questions for this exercise";
 ?>

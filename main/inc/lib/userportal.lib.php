@@ -536,7 +536,7 @@ class IndexManager {
 			while ($catLine = Database::fetch_array($resCats)) {
 				if ($catLine['code'] != $category) {
 	
-					$category_has_open_courses = category_has_open_courses($catLine['code']);
+					$category_has_open_courses = self::category_has_open_courses($catLine['code']);
 					if ($category_has_open_courses) {
 						// The category contains courses accessible to anonymous visitors.
 						$htmlListCat .= '<li>';
@@ -595,7 +595,7 @@ class IndexManager {
 			$courses_list_string .= '<h4 style="margin-top: 0px;">'.get_lang('CourseList')."</h4>\n<ul>\n";
 	
 			if (api_get_user_id()) {
-				$courses_of_user = get_courses_of_user(api_get_user_id());
+				$courses_of_user = self::get_courses_of_user(api_get_user_id());
 			}
 	
 			foreach ($course_list as $course) {
@@ -668,31 +668,31 @@ class IndexManager {
 	                // 1. it is allowed to register for the course and if the course is not already in the courselist of the user and if the user is identiefied
 	                // 2.
 						if ($user_identified && !key_exists($course['code'], $courses_of_user)) {
-	                    if ($course['subscribe'] == '1') {
-						$courses_list_string .= '<form action="main/auth/courses.php?action=subscribe&category='.Security::remove_XSS($_GET['category']).'" method="post">';
-						$courses_list_string .= '<input type="hidden" name="sec_token" value="'.$stok.'">';
-						$courses_list_string .= '<input type="hidden" name="subscribe" value="'.$course['code'].'" />';
-	                        $courses_list_string .= '<input type="image" name="unsub" src="main/img/enroll.gif" alt="'.get_lang('Subscribe').'" />'.get_lang('Subscribe').'</form>';
-	                    } else {
-	                        $courses_list_string .= '<br />'.get_lang('SubscribingNotAllowed');
+		                    if ($course['subscribe'] == '1') {
+							$courses_list_string .= '<form action="main/auth/courses.php?action=subscribe&category='.Security::remove_XSS($_GET['category']).'" method="post">';
+							$courses_list_string .= '<input type="hidden" name="sec_token" value="'.$stok.'">';
+							$courses_list_string .= '<input type="hidden" name="subscribe" value="'.$course['code'].'" />';
+		                        $courses_list_string .= '<input type="image" name="unsub" src="main/img/enroll.gif" alt="'.get_lang('Subscribe').'" />'.get_lang('Subscribe').'</form>';
+		                    } else {
+	                        	$courses_list_string .= '<br />'.get_lang('SubscribingNotAllowed');
 	                        }
 						}
-						$courses_list_string .= "</li>\n";
+						$courses_list_string .= "</li>";
 	            }
 	        }
-	        $courses_list_string .= "</ul>\n";
+	        $courses_list_string .= "</ul>";
 						} else {
 						//echo '<blockquote>', get_lang('_No_course_publicly_available'), "</blockquote>\n";
-	    }
-						if ($courses_shown > 0) {
-							// Only display the list of courses and categories if there was more than
-	                                // 0 courses visible to the world (we're in the anonymous list here).
-								echo $courses_list_string;
-						}
-								if ($category != '') {
-								echo '<p><a href="'.api_get_self().'"> ', Display :: return_icon('back.png', get_lang('BackToHomePage')), get_lang('BackToHomePage'), '</a></p>', "\n";
-								}
+	   					}
+					if ($courses_shown > 0) {
+						// Only display the list of courses and categories if there was more than
+                                // 0 courses visible to the world (we're in the anonymous list here).
+							echo $courses_list_string;
+					}
+		if ($category != '') {
+			echo '<p><a href="'.api_get_self().'"> ', Display :: return_icon('back.png', get_lang('BackToHomePage')), get_lang('BackToHomePage'), '</a></p>';
 		}
+	}
 	
 	/**
 	* retrieves all the courses that the user has already subscribed to

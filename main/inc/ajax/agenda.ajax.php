@@ -14,6 +14,10 @@ $action = $_REQUEST['a'];
 $agenda = new Agenda();
 
 switch ($action) {    
+	case 'add_event':		
+		$agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['view'], 'personal',$_REQUEST['title'], $_REQUEST['content']);
+		break;
+		
 	case 'move_event':
 		$day_delta 		= $_REQUEST['day_delta'];
 		$minute_delta 	= $_REQUEST['minute_delta'];

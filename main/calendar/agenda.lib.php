@@ -17,6 +17,29 @@ class Agenda {
 	
 	/**
 	 * 
+	 * Add an event
+	 * @param 	int		start tms
+	 * @param 	int		end tms
+	 * @param 	string	agendaDay, agendaWeek, month
+	 * @param	string	personal, course or global (only works for personal by now) 
+	 */
+	function add_event($start, $end, $view, $type, $title, $content) {
+		$start = date('Y-m-d H:i:s', $start);
+		$end = date('Y-m-d H:i:s', $end);
+				
+		$start 		= api_get_utc_datetime($start);
+		$end 		= api_get_utc_datetime($end);
+		$title 		= Database::escape_string($title);
+		$content 	= Database::escape_string($content);
+			
+		// we are adding a new item
+		$sql = "INSERT INTO $this->tbl_personal_agenda (user, title, text, date, enddate) VALUES ('".api_get_user_id()."','$title', '$content', '$start', '$end')";		
+		$result = Database::query($sql);
+		
+	}
+	
+	/**
+	 * 
 	 * Get agenda events
 	 * @param string	$course_code
 	 * @param int		$session_id

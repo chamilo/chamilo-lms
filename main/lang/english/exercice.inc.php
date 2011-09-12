@@ -413,4 +413,10 @@ $ShowScoreAndRightAnswer = "Auto-evaluation mode: show score and expected answer
 $DoNotShowScoreNorRightAnswer = "Exam mode: Do not show score nor answers";
 $LoadUsersExtraData = "Load users' extra data";
 $StartTest = "Start test";
+$SaveForNow = "Save and continue";
+$QuestionsToReview = "Questions to be reviewed";
+$QuestionWithNoAnswer = "Questions without answer";
+$ValidateAnswers = "Validate answers";
+$ReviewQuestions = "Review selected questions";
+$YouTriedToResolveThisExerciseEarlier = "You have tried to resolve this question earlier";
 ?>

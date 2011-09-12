@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Nieuwe groep(en) aanmaken";
 $langGroupCreation = "Nieuwe groepen aanmaken";
 $langCreate = "aanmaken";
@@ -90,5 +93,4 @@ $GroupsFromClassesInfo = "Gebruik makend van deze optie, kan u groepen aanmaken 
 $Group = "Groep";
 $ForumOfGroup = "forum van groep:";
 $BackToGroupList = "terug naar de groepenlijst";
-$EditGroupCategory = "Bewerk groepscategorie";
 ?>

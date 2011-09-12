@@ -1126,4 +1126,10 @@ $SupportedScormContentMakers = "Podprta SCORM avtorska orodja";
 $Copy = "Kopiraj";
 $EnableStartTime = "Omogoči čas začetka";
 $EnableEndTime = "Omogoči čas zaključka";
+$Wrong = "Narobe";
+$Certification = "Certificiranje";
+$CertificateOnlineLink = "Povezava na certifikat";
+$NewExercises = "Nove vaje/testi";
+$MyAverage = "Moje povprečje";
+$AllAttempts = "Vsi poskusi";
 ?>

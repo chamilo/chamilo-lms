@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langMdCallingTool = "Documenten";
 $langMdTitle = "Titel van het leerobject";
 $langMdDescription = "Om de gegevens te bewaren, druk op \"Bewaren\"";
@@ -41,5 +44,5 @@ $langStatuses = ":draft:kladversie,,      final:finale versie,,      revised:her
 $langCosts = ":no:gratis,, yes:tegen betaling";
 $langCopyrights = ":yes:copyright,, no:geen copyright";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langLngResTypes = ":exercise:oefening,,      simulation:simulatie,,      questionnaire:vragenlijst,,      diagram:diagram,,      figure:figuur,,      graph:grafiek,,      index:index,,      slide:dia,,      table:tabel,,      narrative text:vertellende tekst,,      exam:examen,,      experiment:experiment,,      problem statement:probleemstelling,,      self assessment:zelftest,,      lecture:voordracht";
+$langLngResTypes = ":exercise:oefening,,      simulation:simulatie,,      questionnaire:enquête,,      diagram:diagram,,      figure:figuur,,      graph:grafiek,,      index:index,,      slide:dia,,      table:tabel,,      narrative text:vertellende tekst,,      exam:examen,,      experiment:experiment,,      problem statement:probleemstelling,,      self assessment:zelftest,,      lecture:voordracht";
 ?>

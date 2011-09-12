@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langStatDB = "Statistiekendatabank";
 $langEnableTracking = "Statistieken inschakelen";
 $langInstituteShortName = "De korte naam van uw organisatie";
@@ -113,12 +116,4 @@ $FailedConectionDatabase = "De verbinding met de databank is mislukt. Meestal is
 $EncryptMethodUserPass = "Encryptie methode";
 $UpgradeFromDokeos16x = "Upgrade vanaf Chamilo 1.6.x";
 $UpgradeFromDokeos18x = "Upgrade vanaf Chamilo 1.8.x";
-$SuggestionOnlyToEnableCSSUploadFeature = "Aanbevolen als u CSS upload wilt gebruiken";
-$SuggestionOnlyToEnableSubLanguageFeature = "Aanbevolen als u sub-talen wilt gebruiken";
-$IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Als u opwaardeert vanaf een oudere versie van Chamilo, kunt u <a href=\"../../documentation/changelog.html\" target=\"_blank\">de wijzigingen bekijken (engels)</a> om te weten wat er veranderd is";
-$WelcomeToTheDokeosInstaller = "Welkom bij de Chamilo-installatie";
-$PHPVersionError = "U heeft een te lage versie van PHP voor deze software. Installeer de nieuwste versie en probeer het opnieuw.";
-$ExtensionSessionsNotAvailable = "Sessies-uitbreiding is niet beschikbaar";
-$ExtensionZlibNotAvailable = "Zlib-uitbreiding is niet beschikbaar";
-$ExtensionPCRENotAvailable = "PCRE-uitbreiding is niet beschikbaar";
 ?>

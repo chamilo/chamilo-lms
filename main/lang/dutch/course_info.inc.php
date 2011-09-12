@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifInfo = "Cursuseigenschappen";
 $langModifDone = "De eigenschappen werden gewijzigd.";
 $langDelCourse = "Deze cursussite verwijderen";
@@ -110,18 +113,4 @@ $NewUserEmailAlert = "Melding van nieuwe zelfinschrijvingen aan de cursusbeheerd
 $NewUserEmailAlertEnable = "Breng de cursusbeheerder op de hoogte van nieuwe zelfinschrijvingen";
 $NewUserEmailAlertToTeacharAndTutor = "Breng de cursusbeheerder en tutoren op de hoogte van nieuwe zelfinschrijvingen";
 $NewUserEmailAlertDisable = "Breng de beheerders niet op de hoogte";
-$AllowUserViewUserList = "Gebruikers mogen gebruikerslijst bekijken";
-$AllowUserViewUserListActivate = "Gebruik gebruikerslijst";
-$AllowUserViewUserListDeactivate = "Gebruik gebruikerslijst niet";
-$DoNotDisplayAnyAdvance = "Toon voortgang niet";
-$NewHomeworkEmailAlert = "Stuur gebruikers e-mail wanneer huiswerk wordt aangemaakt";
-$NewHomeworkEmailAlertEnable = "E-mail gebruikers bij het inleveren van huiswerk";
-$NewHomeworkEmailAlertDisable = "E-mail gebruikers niet bij het inleveren van huiswerk";
-$DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Toon de laatst uitgevoerde stap en de volgende niet-uitgevoerde stap";
-$AddPicture = "Voeg een afbeelding toe";
-$LPAutoLaunch = "Gebruik leerpad auto-start";
-$ConfigLearnpath = "Leerpadinstellingen";
-$PDFWaterMarkHeader = "Watermerktitel in PDF exports";
-$RedirectToALearningPath = "Verwijs naar geselecteerd leerpad";
-$RedirectToTheLearningPathList = "Verwijs naar leerpadlijst";
 ?>

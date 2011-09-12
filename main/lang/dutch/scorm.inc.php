@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "versie";
 $langScormRestarted = "Alle lessen zijn nu onvolledig.";
 $langScormNoNext = "Dit is de laatste les.";
@@ -50,8 +53,4 @@ $UnknownPackageFormat = "Het pakket kan niet worden herkend. Zorg er voor dat he
 $Attempt = "Poging";
 $MoveTheCurrentForum = "Verplaats het huidige forum";
 $WarningWhenEditingScorm = "Opgelet !<br /> Wanneer u de inhoud van een scorm-fase wijzigt, kunt u de weergave van het leerpad veranderen, of de stap beschadigen.";
-$AdditionalProfileField = "Voeg gebruikersprofielveld toe";
-$ScormUnknownPackageFormat = "Het pakket wat je probeert te uploaden heeft een onbekend formaat. Controleer of het een van de ondersteunde formaten gebruikt.";
-$ScormNotEnoughSpaceInCourseToInstallPackage = "Er is niet genoeg ruimte vrij in de huidige cursus om het huidige pakket uit te pakken.";
-$ScormPackageFormatNotScorm = "Het pakket wat je uploadt is niet in SCORM formaat. Controleer dat imsmanifest.xml in het ZIP-bestand zit.";
 ?>

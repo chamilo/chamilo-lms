@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langInvalidId = "Deze identificatie is niet geldig (verkeerde log-in of wachtwoord).";
 $langWelcome = "Welkom !";
 $langPass = "Wachtwoord";
@@ -63,13 +66,8 @@ $FolderCreated = "Nieuwe folder aangemaakt";
 $LinkAdded = "Een link werd toegevoegd.";
 $AnnouncementAdded = "De aankondiging is toegevoegd.";
 $AgendaAdded = "Agenda item toegevoegd";
-$LoginEnter = "Aanmelden";
 $Messages = "Berichten";
 $Inbox = "Postvak In";
 $Comppose = "Opstellen";
 $PendingInvitations = "Hangende uitnodigingen";
-$YouDoNotHaveAnySessionInItsHistory = "Je hebt geen sessie in je geschiedenis";
-$PortalHomepageDefaultIntroduction = "<h2>Gefeliciteerd! Je hebt je ELO geïnstalleerd!</h2><p>Je kunt nu de installatie afronden in drie eenvoudige stappen:<br /><ol><li>Stel je platform in door naar het platformbeheer te gaan, en Platform -> <a href=\"main/admin/settings.php\">Chamiloinstellingen</a> te kiezen.</li><li>Geef je platform wat leven door gebruikers en/of cursussen aan te maken. Je kunt mensen vragen een account te maken, of het zelf doen via het <a href=\"main/admin/\">platformbeheer</a> onder Gebruikers en Cursussen.</li><li>Bewerk deze pagina via <a href=\"main/admin/configure_homepage.php\">Aanpassen startpagina</a>.</li></ol><p>Meer informatie over deze software vind je op onze website: <a href=\"http://www.chamilo.org\">http://www.chamilo.org</a>.</p><p>Veel plezier, en aarzel niet om vragen te stellen en/of feedback te geven via <a href=\"http://www.chamilo.org/forum\">ons forum</a>.</p>";
-$Username = "Gebruikersnaam";
-$Profile = "Profiel";
 ?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "reeds ingeschreven";
 $lang_my_personnal_course_list = "Mijn cursuslijst";
 $lang_course_enrollment = "Inschrijven/uitschrijven voor cursussen";
@@ -70,7 +73,7 @@ $SubmitRegistrationCode = "Verstuur registratiecode";
 $CourseCategoryDeleted = "Cursuscategorie verwijderd";
 $CategorySortingDone = "De categorieën zijn gesorteerd";
 $CourseCategoryEditStored = "Categorie bijgewerkt";
-$buttonCreateCourseCategory = "Cursuscategorie bewaren";
+$buttonCreateCourseCategory = "Trainingscategorie bewaren";
 $buttonSaveCategory = "Categorie bewaren";
 $buttonChangeCategory = "Categorie wijzigen";
 $SessionName = "Sessienaam";
@@ -80,5 +83,4 @@ $Collapse = "Verbergen";
 $CourseDetails = "Cursusomschrijving";
 $GroupPendingInvitations = "Zwevende uitnodigingen voor groep";
 $Compose = "Opstellen";
-$ThereAreNoCoursesInThisCategory = "Geen cursus op dit categorieniveau";
 ?>

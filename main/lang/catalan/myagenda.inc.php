@@ -2,6 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langMyAgenda = "La meva agenda";
+$langMyAgenda = "Agenda personal";
 $langToday = "Avui";
 ?>

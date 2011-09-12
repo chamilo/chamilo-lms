@@ -412,4 +412,11 @@ $InvalidQuestionType = "Tipo de pregunta non válida";
 $ShowScoreAndRightAnswer = "Modo auto-avaliación: amosar a puntuación e as respostas esperadas";
 $DoNotShowScoreNorRightAnswer = "Modo exame: non amosar nada (nin puntuación, nin respostas)";
 $LoadUsersExtraData = "Cargar os datos extra de usuarios";
+$StartTest = "Iniciar a proba";
+$SaveForNow = "Gardar e continuar";
+$QuestionsToReview = "Preguntas para ser revisadas";
+$QuestionWithNoAnswer = "Preguntas sen resposta";
+$ValidateAnswers = "Respostas válidas";
+$ReviewQuestions = "Revisar as pregunta seleccionadas";
+$YouTriedToResolveThisExerciseEarlier = "Tentaches resolver esta pregunta doadamente";
 ?>

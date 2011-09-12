@@ -1134,4 +1134,17 @@ $CertificateOnlineLink = "Vínculo al certificado en línea";
 $NewExercises = "Nuevo ejercicio";
 $MyAverage = "Mi promedio";
 $AllAttempts = "Todos los intentos";
+$NoCookies = "Las cookies no están activadas en su navegador.
+Chamilo utiliza \"cookies\" para almacenar sus datos de conexión, por lo que no le será posible entrar si las cookies no están habilitadas. Por favor, cambie la configuración de su navegador y recargue esta página.";
+$NoJavascript = "Su navegador no tiene activado JavaScript.
+Chamilo se sirve de JavaScript para proporcionar un interfaz más dinámico. Es probable que muchas prestaciones sigan funcionando pero otras no lo harán, especialmente las relacionadas con la usabilidad. Le recomendamos que cambie la configuración de su navegador y recargue esta página.";
+$NoFlash = "Su navegador no tiene activado el soporte de Flash.
+Chamilo sólo se apoya en Flash para algunas de sus funciones por lo que su ausencia no le impedirá continuar. Pero si quiere beneficiarse del conjunto de las herramientas de Chamilo, le recomendamos que instale-active el plugin de Flash y reinicialice su navegador.";
+$Attempt = "Intento";
+$SaveForNow = "Guardar y continuar más tarde";
+$NoQuicktime = "No tiene instalado el plugin de QuickTime en su navegador. Puede seguir utilizando la plataforma, pero para conseguir reproducir un mayor número de tipos de archivos multimedia le recomendamos su instalación.";
+$NoJavaSun = "No tiene instalado el plugin de Java de Sun en su navegador. Puede seguir utilizando la plataforma, pero perderá algunas de sus prestaciones.";
+$NoJava = "Su navegador no tiene soporte para Java";
+$JavaSun24 = "Usted tiene instalada en su navegador una versión de Java incompatible con esta herramienta. Para poder utilizarla deberá instalar una versión de Java de Sun superior a la 24";
+$NoMessageAnywere = "Si no desea visualizar más este mensaje durante esta sesión pulse aquí";
 ?>

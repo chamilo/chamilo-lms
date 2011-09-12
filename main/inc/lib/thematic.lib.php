@@ -695,51 +695,63 @@ class Thematic
 			$description_type = intval($description_type);
 			$condition .= " AND description_type = $description_type ";
 		}
-		
-		$session_condition = '';
-		if (!api_get_session_id()) {
-		    $session_condition .= ' AND t.session_id = 0'; 
-		}
-		
-		$sql = "SELECT tp.id, thematic_id, tp.title, description, description_type, t.session_id 
-		        FROM $tbl_thematic_plan tp INNER JOIN $tbl_thematic t ON (t.id=tp.thematic_id) 
-		        WHERE 1 $condition  $session_condition ";
+
+	
 		$items = $elements_to_show = $elements_to_show_values = array();
 		
-	    $items = api_get_item_property_by_tool('thematic_plan', api_get_course_id(), api_get_session_id());
+		$items_from_course  = api_get_item_property_by_tool('thematic_plan', api_get_course_id(), 0);		
+	    $items_from_session = api_get_item_property_by_tool('thematic_plan', api_get_course_id(), api_get_session_id());
+	    
 	 	$elements_to_show = array();
 		foreach($items as $value) {
 		    $elements_to_show[$value['ref']] = $value;
 		}
 		$elements_to_show_values = array_keys($elements_to_show);
+		$thematic_plan_complete_list  = array();
+		$thematic_plan_id_list = array();
 		
-		$rs	 = Database::query($sql);
-		if (Database::num_rows($rs) > 0) {			
-			if (!isset($thematic_id) && !isset($description_type)) {		
-				// group all data group by thematic id
-				$tmp = array();
-				while ($row = Database::fetch_array($rs,'ASSOC')) {	
-				    if (!in_array($row['id'], $elements_to_show_values) && !api_get_session_id()) {
-				        continue;
-				    }			    		
-                    $tmp[] = $row['thematic_id'];
-                    if (in_array($row['thematic_id'], $tmp)) {                        
-                        $row['session_id'] =isset($elements_to_show[$row['id']]) ? $elements_to_show[$row['id']]['id_session']: 0;                        
-                        $data[$row['thematic_id']][$row['description_type']] = $row;
-                    }					
-				}				
-			} else {                
-				while ($row = Database::fetch_array($rs,'ASSOC')) {
-				    if (!in_array($row['id'], $elements_to_show_values) && !api_get_session_id()) {
-				        continue;
-				    }
-				    $row['session_id'] =isset($elements_to_show[$row['id']]) ? $elements_to_show[$row['id']]['id_session']: 0;
-				    
-					$data[] = $row;
-				}	
+		
+		if (!empty($items_from_course)) {
+			foreach($items_from_course as $item) {				
+				$thematic_plan_id_list[] = $item['ref'];
+				$thematic_plan_complete_list[$item['ref']] = $item;
 			}
 		}
-
+		
+		if (!empty($items_from_session)) {
+			foreach($items_from_session as $item) {				
+				$thematic_plan_id_list[] = $item['ref'];
+				$thematic_plan_complete_list[$item['ref']] = $item;
+			}
+		}
+		if (!empty($thematic_plan_id_list)) {		
+			$sql = "SELECT tp.id, thematic_id, tp.title, description, description_type, t.session_id
+			        FROM $tbl_thematic_plan tp INNER JOIN $tbl_thematic t ON (t.id=tp.thematic_id) 
+			        WHERE 1 $condition  AND tp.id IN (".implode(', ', $thematic_plan_id_list).") ";
+			
+			$rs = Database::query($sql);
+			
+			if (Database::num_rows($rs)) {
+				if (!isset($thematic_id) && !isset($description_type)) {		
+					// group all data group by thematic id
+					$tmp = array();					
+					while ($row = Database::fetch_array($rs,'ASSOC')) {					    
+	                    $tmp[] = $row['thematic_id'];
+	                    if (in_array($row['thematic_id'], $tmp)) {                        
+	                        $row['session_id'] = $thematic_plan_complete_list[$row['id']];                        
+	                        $data[$row['thematic_id']][$row['description_type']] = $row;
+	                    }					
+					}				
+				} else {					
+					while ($row = Database::fetch_array($rs,'ASSOC')) {
+						$row['session_id'] = $thematic_plan_complete_list[$row['id']];					    
+						$data[] = $row;
+					}	
+				}
+			}
+		
+		}
+			
 		return $data;
 	}
 

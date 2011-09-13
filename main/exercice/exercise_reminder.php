@@ -106,8 +106,8 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 }
 
 
-$user_info   = api_get_user_info(api_get_user_id());     
-echo $exercise_header = $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), null, 'review');
+//$user_info   = api_get_user_info(api_get_user_id());     
+//echo $exercise_header = $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), null, 'review');
 echo Display::div(get_lang('QuestionsToReview'), array('class'=>'question_title'));
 
 if ($time_control) {

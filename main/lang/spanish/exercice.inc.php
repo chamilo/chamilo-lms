@@ -413,4 +413,12 @@ $ShowScoreAndRightAnswer = "Modo auto-evaluación: mostrar la puntuación y las 
 $DoNotShowScoreNorRightAnswer = "Modo examen: No mostrar nada (ni puntuación, ni respuestas)";
 $LoadUsersExtraData = "Cargar los datos extra de usuarios";
 $StartTest = "Iniciar la prueba";
+$SaveForNow = "Guardar y continuar";
+$QuestionsToReview = "Preguntas que desea comprobar";
+$QuestionWithNoAnswer = "Preguntas sin responder";
+$ValidateAnswers = "Validar respuestas";
+$ReviewQuestions = "Comprobar las preguntas seleccionadas";
+$YouTriedToResolveThisExerciseEarlier = "Ya intentó resolver esta pregunta anteriormente";
+$ThereAreNoQuestionsForThisExercise = "En este ejercicio no hay preguntas disponibles";
+$ContinueTest = "Continuar el ejercicio";
 ?>

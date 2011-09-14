@@ -148,7 +148,7 @@ $table = new SortableTableFromArrayConfig($urls, 2, 50, 'urls');
 $table->set_additional_parameters($parameters);
 
 //$table->set_header(0, '');
-$table->set_header(0, get_lang('URL'));
+$table->set_header(0, 'URL');
 $table->set_header(1, get_lang('Description'));
 $table->set_header(2, get_lang('Active'));
 $table->set_header(3, get_lang('Modify'), false);

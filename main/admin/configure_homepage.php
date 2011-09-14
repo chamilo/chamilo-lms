@@ -14,7 +14,6 @@ api_protect_admin_script();
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'security.lib.php';
 
 $action = Security::remove_XSS($_GET['action']);
 $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);

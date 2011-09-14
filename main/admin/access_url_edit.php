@@ -77,7 +77,7 @@ if( $form->validate()) {
 }
 
 
-$form->addElement('text','url',get_lang('URL'),array('size'=>'30'));
+$form->addElement('text','url', 'URL',array('size'=>'30'));
 $form->addRule('url', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('url', '', 'maxlength',254);
 $form->addElement('textarea','description',get_lang('Description'));

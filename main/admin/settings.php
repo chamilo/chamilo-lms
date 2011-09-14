@@ -39,42 +39,6 @@ $_SESSION['this_section'] = $this_section;
 
 // Access restrictions.
 api_protect_admin_script();
-/* This fragment of code has been moved to gradebook_scoring_system file.
-if ($_GET['category'] == 'Gradebook') {
-    // Used for the gradebook system
-    $htmlHeadXtra[]= '
-      <script language="JavaScript">
-      function plusItem(item)
-      {
-            document.getElementById(item).style.display = "inline";
-            document.getElementById("plus-"+item).style.display = "none";
-            document.getElementById("min-"+(item-1)).style.display = "none";
-            document.getElementById("min-"+(item)).style.display = "inline";
-            document.getElementById("plus-"+(item+1)).style.display = "inline";
-            document.getElementById("txta-"+(item)).value = "100";
-            document.getElementById("txta-"+(item-1)).value = "";
-      }
-
-      function minItem(item)
-      {
-        if (item != 1)
-        {
-         document.getElementById(item).style.display = "none";
-         document.getElementById("txta-"+item).value = "";
-         document.getElementById("txtb-"+item).value = "";
-         document.getElementById("plus-"+item).style.display = "inline";
-         document.getElementById("min-"+(item-1)).style.display = "inline";
-         document.getElementById("txta-"+(item-1)).value = "100";
-
-        }
-        if (item = 1)
-        {
-            document.getElementById("min-"+(item)).style.display = "none";
-        }
-      }
-     </script>';
- }
-*/
 
 // Submit stylesheets.
 if (isset($_POST['submit_stylesheets'])) {
@@ -139,10 +103,6 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         }
     }
 
-    //print_r($settings_by_access_list);echo '</pre>';
-    //$sqlsettings = "SELECT DISTINCT * FROM $table_settings_current WHERE category='$my_category' GROUP BY variable ORDER BY id ASC";
-    //$resultsettings = Database::query($sqlsettings);
-    //while ($row = Database::fetch_array($resultsettings))
     $default_values = array();
     foreach ($settings as $row) {
         // Settings to avoid
@@ -497,16 +457,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
                     }
                 }
-            //} else {
-            //    $gradebook_score_display_custom_values[$key] = $value;
-            //}
         }
-
-        /*
-        if (count($gradebook_score_display_custom_values) > 0) {
-            update_gradebook_score_display_custom_values($gradebook_score_display_custom_values);
-        }
-        */
 
         // Add event configuration settings category to the system log.        
         $user_id = api_get_user_id();
@@ -520,8 +471,6 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_VARIABLE, $variable, api_get_utc_datetime(), $user_id);
             }
         }
-        //header('Location: settings.php?action=stored&category='.Security::remove_XSS($_GET['category']).'&message='.$message);
-        //exit;
     }
 }
 
@@ -549,11 +498,8 @@ $action_images['timezones']     = 'timezone.png';
 $action_images['extra']     	= 'wizard.png';
 
 // Grabbing the categories.
-//$selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
-//$resultcategories = Database::query($selectcategories);
 $resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 'Templates', 'Search'));
 echo "<div class=\"actions\">";
-//while ($row = Database::fetch_array($resultcategories))
 foreach ($resultcategories as $row) {
     echo "<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], api_ucfirst(get_lang($row['category'])),'','32')."</a>";
 }
@@ -567,8 +513,6 @@ echo "</div>";
 if ($watermark_deleted) {    
     Display :: display_normal_message(get_lang('FileDeleted'));
 }
-
-//api_display_tool_title($tool_name);
 
 // Displaying the message that the settings have been stored.
 if (isset($form) && $form->validate()) {

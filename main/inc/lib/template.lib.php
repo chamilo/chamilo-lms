@@ -42,11 +42,18 @@ class Template extends Smarty {
 		$this->assign('style', $this->style);		
 	}
 	
+	/**	  
+	 * Sets the footer visibility 
+	 * @param bool true if we show the footer
+	 */
 	function set_footer($status) {
 		$this->assign('show_footer', $status);
 	}
-	
-	function set_header($status) {
+	/**
+	 * Sets the header visibility
+	 * 
+	 */
+	function set_header($status) {		
 		$this->assign('show_header', $status);	
 	}
 		
@@ -189,8 +196,8 @@ class Template extends Smarty {
 		
 		$this->assign('css_file_to_string', $css_file_to_string);
 		$this->assign('js_file_to_string',  $js_file_to_string);		
-		$this->assign('text_direction',	 api_get_text_direction());			
-		$this->assign('style_print', $style_print);
+		$this->assign('text_direction',	 	api_get_text_direction());			
+		$this->assign('style_print', 		$style_print);
 		
 		$extra_headers = '';		
 		if (isset($htmlHeadXtra) && $htmlHeadXtra) {
@@ -198,8 +205,7 @@ class Template extends Smarty {
 		        $extra_headers .= $this_html_head;
 		    }
 		}
-		$this->assign('extra_headers', $extra_headers);
-	
+		$this->assign('extra_headers', $extra_headers);	
 	
 		$favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
 		if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
@@ -249,11 +255,6 @@ class Template extends Smarty {
 		
 		if (isset($database_connection)) {
 			// connect to the main database.
-			// if single database, don't pefix table names with the main database name in SQL queries
-			// (ex. SELECT * FROM table)
-			// if multiple database, prefix table names with the course database name in SQL queries (or no prefix if the table is in
-			// the main database)
-			// (ex. SELECT * FROM table_from_main_db  -  SELECT * FROM courseDB.table_from_course_db)
 			Database::select_db($_configuration['main_database'], $database_connection);
 		}
 		
@@ -278,6 +279,13 @@ class Template extends Smarty {
 		$this->assign('header2', $header2);
 		$this->assign('header3', $header3);
 		$this->assign('header4', $header4);
+		
+		if (!api_is_platform_admin()) {
+			$extra_header = trim(api_get_setting('header_extra_content'));
+			if (!empty($extra_header)) {				
+				$this->assign('header_extra_content', $extra_header);
+			}		
+		}
 		
 		header('Content-Type: text/html; charset='.api_get_system_encoding());
 		header('X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'],0,1));

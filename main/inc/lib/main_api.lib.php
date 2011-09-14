@@ -1770,9 +1770,14 @@ function api_get_coachs_from_course($session_id=0,$course_code='') {
  * @author Bart Mollet
  */
 function api_get_setting($variable, $key = null) {
-    global $_setting;
-    //return is_null($key) ? (!empty($_setting[$variable]) ? $_setting[$variable] : null) : $_setting[$variable][$key];  does not allow "0" values
-    //Allowing "0" values
+    global $_setting;    
+    if ($variable == 'header_extra_content') {    	
+    	$filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content';
+	    if (file_exists($filename)) {
+	    	$value = file_get_contents($filename);
+	    	return $value ;
+    	}
+    }
     return is_null($key) ? ((isset($_setting[$variable]) && $_setting[$variable] != '') ? $_setting[$variable] : null) : $_setting[$variable][$key];
 }
 
@@ -5211,7 +5216,7 @@ function api_get_multiple_access_url() {
     return false;    
 }
 
-/*
+/**
  * Returns a md5 unique id
  * @todo add more parameters 
  */
@@ -5223,5 +5228,18 @@ function api_get_unique_id() {
 
 
 
-
-
+function api_get_home_path() {
+	$home = 'home';	
+	if (api_get_multiple_access_url()) {
+		$access_url_id = api_get_current_access_url_id();
+		$url_info      = api_get_access_url($access_url_id);
+		$url           = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
+		$clean_url     = replace_dangerous_char($url);
+		$clean_url     = str_replace('/', '-', $clean_url);
+		$clean_url     .= '/';
+		// if $clean_url ==  "localhost/" means that the multiple URL was not well configured we don't rename the $home variable
+		if ($clean_url != 'localhost/')
+			$home          = 'home/'.$clean_url;
+	}
+	return $home;
+}

@@ -1,3 +1,4 @@
+<!--  head start -->
 <link href="http://www.chamilo.org/documentation.php" rel="Help" />
 <link href="http://www.chamilo.org/team.php" rel="Author" />
 <link href="http://www.chamilo.org" rel="Copyright" />
@@ -13,7 +14,6 @@
 <style type="text/css" media="screen, projection">
 	/*<![CDATA[*/
 	{$css_style}
-	?>
 	/*]]>*/
 </style>
 <style type="text/css" media="print">
@@ -44,3 +44,6 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
 {$css_file_to_string}
 {$extra_headers}
 {$favico}
+
+{$header_extra_content}
+<!--  head end-->

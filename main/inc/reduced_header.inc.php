@@ -150,5 +150,13 @@ if (isset($htmlHeadXtra) && $htmlHeadXtra) {
         echo $this_html_head;
     }
 }
+
+if (!api_is_platform_admin()) {
+	$extra_header = trim(api_get_setting('header_extra_content'));
+	if (!empty($extra_header)) {
+		$this->assign('header_extra_content', $extra_header);
+	}		
+}
+
 ?>
 </head>

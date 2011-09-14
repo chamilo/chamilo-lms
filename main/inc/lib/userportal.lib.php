@@ -19,19 +19,8 @@ class IndexManager {
 			$this->tpl = new Template($title);					
 		}
 				
-		$home = 'home/';
-		if (api_get_multiple_access_url()) {
-			$access_url_id = api_get_current_access_url_id();
-			$url_info      = api_get_access_url($access_url_id);
-			$url           = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-			$clean_url     = replace_dangerous_char($url);
-			$clean_url     = str_replace('/', '-', $clean_url);
-			$clean_url     .= '/';			
-			// if $clean_url ==  "localhost/" means that the multiple URL was not well configured we don't rename the $home variable
-			if ($clean_url != 'localhost/')
-			$home          = 'home/'.$clean_url;
-		}
-		$this->home = $home;
+		
+		$this->home = api_get_home_path();
 		$this->user_id = api_get_user_id();
 		$this->load_directories_preview = true;
 	}

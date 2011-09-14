@@ -153,7 +153,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         }
 
         switch ($row['type']) {
-            case 'textfield':
+            case 'textfield':            	
                 if ($row['variable'] == 'account_valid_duration') {
                     $form->addElement('text', $row['variable'], get_lang($row['comment']), array('maxlength' => '5'));
                     $form->applyFilter($row['variable'], 'html_filter');
@@ -192,9 +192,19 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                     $default_values[$row['variable']] = $row['selected_value'];
                 }
                 break;
-            case 'textarea':
-                $form->addElement('textarea', $row['variable'], get_lang($row['comment']) , array('rows'=>'10','cols'=>'50'), $hideme);
-                $default_values[$row['variable']] = $row['selected_value'];
+            case 'textarea':            	
+            	if ($row['variable'] == 'header_extra_content') {
+            		$file = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content';
+            		$value = '';
+            		if (file_exists($file)) {
+						$value = file_get_contents($file);
+            		}
+            	    $form->addElement('textarea', $row['variable'], get_lang($row['comment']) , array('rows'=>'10','cols'=>'50'), $hideme);
+            	    $default_values[$row['variable']] = $value;            	        
+            	} else {
+                	$form->addElement('textarea', $row['variable'], get_lang($row['comment']) , array('rows'=>'10','cols'=>'50'), $hideme);
+                	$default_values[$row['variable']] = $row['selected_value'];
+            	}
                 break;
             case 'radio':
                 $values = get_settings_options($row['variable']);
@@ -330,7 +340,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         
         
         if ($row['variable'] == 'pdf_export_watermark_enable') {
-        	 $url =  PDF::get_watermark($course_code);
+        	$url =  PDF::get_watermark($course_code);
             $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
             if ($url != false) {                
                 $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
@@ -342,6 +352,8 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         if ($row['variable'] == 'timezone_value') {
             $form->addElement('html', sprintf(get_lang('LocalTimeUsingPortalTimezoneXIsY'),$row['selected_value'],api_get_local_time()));
         }
+
+        	
     }
 
     $form->addElement('html', '<div style="text-align: right; clear: both;">');
@@ -394,12 +406,13 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             // Treat gradebook values in separate function.
             //if (strpos($key, 'gradebook_score_display_custom_values') === false) {
                 if (!is_array($value)) {
-                    //$sql = "UPDATE $table_settings_current SET selected_value='".Database::escape_string($value)."' WHERE variable='$key'";
-                    //$result = Database::query($sql);
-
                     $old_value = api_get_setting($key);
 
                     switch ($key) {
+                    	case 'header_extra_content':
+                    		file_put_contents(api_get_path(SYS_PATH).api_get_home_path().'/header_extra_content', $value);                    		
+                    		$value = api_get_home_path().'/header_extra_content';
+                    		break;
 
                         // URL validation for some settings.
                         case 'InstitutionUrl':
@@ -431,7 +444,6 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                     }
 
                     if ($old_value != $value) $keys[] = $key;
-
                     $result = api_set_setting($key, $value, null, null, $_configuration['access_url']);
 
                 } else {
@@ -496,9 +508,11 @@ $action_images['search']        = 'search.png';
 $action_images['editor']        = 'html_editor.png';
 $action_images['timezones']     = 'timezone.png';
 $action_images['extra']     	= 'wizard.png';
+$action_images['tracking']     	= 'statistics.png';
 
 // Grabbing the categories.
 $resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 'Templates', 'Search'));
+
 echo "<div class=\"actions\">";
 foreach ($resultcategories as $row) {
     echo "<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], api_ucfirst(get_lang($row['category'])),'','32')."</a>";

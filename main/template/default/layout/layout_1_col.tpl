@@ -4,7 +4,8 @@
 	{include file="default/layout/header.tpl"}	
 {/block}
 
-{block name=body}	
+{block name=body}
+	{$message}
 	{$content}
 {/block}
 

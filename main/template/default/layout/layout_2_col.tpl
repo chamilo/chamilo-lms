@@ -13,6 +13,7 @@
 		{$plugin_courses_block}
 		{$home_page_block}
 		{$sniff_notification}
+		{$message}
 		{$content}
 		{$announcements_block}
 	</div>

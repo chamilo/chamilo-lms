@@ -22,258 +22,255 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions.
 api_protect_admin_script(true);
+
 $nameTools = get_lang('PlatformAdmin');
 
-// Setting breadcrumbs.
-//$interbreadcrumb[] = array('url' => 'index.php', 'name' => $nameTools);
-
-// Setting the name of the tool.
-$tool_name = get_lang('PlatformAdmin');
-
 // Displaying the header
-Display::display_header($nameTools);
+$message = '';
 
 if (api_is_platform_admin()) {
     if (is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php')) {
-        Display::display_warning_message(get_lang('InstallDirAccessibleSecurityThreat'));
+        $message = Display::return_message(get_lang('InstallDirAccessibleSecurityThreat'),'warning');
     }
-
     /* ACTION HANDLING */
-
     if (!empty($_POST['Register'])) {
         register_site();
-        Display :: display_confirmation_message(get_lang('VersionCheckEnabled'));
+        $message = Display :: return_message(get_lang('VersionCheckEnabled'),'confirmation');
     }
-
-    /* MAIN SECTION */
-
     $keyword_url = Security::remove_XSS((empty($_GET['keyword']) ? '' : $_GET['keyword']));
 }
 
 if (isset($_GET['msg']) && isset($_GET['type'])) {
 	if (in_array($_GET['msg'], array('ArchiveDirCleanupSucceeded', 'ArchiveDirCleanupFailed')))
-	switch($_GET['type']) {
+	switch($_GET['type']) {		
 		case 'error':
-			Display::display_error_message(get_lang($_GET['msg']));
+			$message = Display::return_message(get_lang($_GET['msg']), 'error');
+			break;
 		case 'confirmation':			
-			Display::display_confirmation_message(get_lang($_GET['msg']));
+			$message = Display::return_message(get_lang($_GET['msg']), 'confirm');
+	}	
+}
+
+$blocks = array();
+
+/* Users */
+
+$blocks['users']['icon']  = Display::return_icon('members.gif', get_lang('Users'));
+$blocks['users']['label'] = api_ucfirst(get_lang('Users'));
+
+if (api_is_platform_admin()) {	
+	$search_form = ' <form method="get" action="user_list.php">
+						<input type="text" name="keyword" value="">
+						<button class="search" type="submit">'.get_lang('Search').'</button>
+            		</form>';
+	$blocks['users']['search_form'] = $search_form;	
+	$items = array(
+		array('url'=>'user_list.php', 	'label' => get_lang('UserList')),
+		array('url'=>'user_add.php', 	'label' => get_lang('AddUsers')),
+		array('url'=>'user_export.php', 'label' => get_lang('ExportUserListXMLCSV')),
+		array('url'=>'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),	
+	);
+	
+	if (api_get_setting('allow_social_tool') == 'true') {
+		$items[] = array('url'=>'group_add.php', 	'label' => get_lang('AddGroups'));
+		$items[] = array('url'=>'group_list.php', 	'label' => get_lang('GroupList'));
+	}
+	if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
+		$items[] = array('url'=>'ldap_users_list.php', 	'label' => get_lang('ImportLDAPUsersIntoPlatform'));
+	}
+	$items[] = array('url'=>'user_fields.php', 	'label' => get_lang('ManageUserFields'));		
+} else {
+ 	$items = array(
+ 		array('url'=>'user_list.php', 	'label' => get_lang('UserList')),
+ 		array('url'=>'../mySpace/user_add.php', 	'label' => get_lang('AddUsers')), 	
+ 		array('url'=>'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
+ 	);
+}
+$blocks['users']['items'] = $items;
+
+if (api_is_platform_admin()) {
+	/* Courses */
+	$blocks['courses']['icon']  = Display::return_icon('course.gif', get_lang('Courses'));
+	$blocks['courses']['label'] = api_ucfirst(get_lang('Courses'));
+	
+	$search_form = ' <form method="get" action="course_list.php">
+							<input type="text" name="keyword" value="">
+							<button class="search" type="submit">'.get_lang('Search').'</button>
+	            		</form>';
+	$blocks['courses']['search_form'] = $search_form;
+	
+	$items = array();	
+	$items[] = array('url'=>'course_list.php', 	'label' => get_lang('CourseList'));
+	
+	if (api_get_setting('course_validation') != 'true') {
+		$items[] = array('url'=>'course_add.php', 	'label' => get_lang('AddCourse'));
+	} else {
+		$items[] = array('url'=>'course_request_review.php', 	'label' => get_lang('ReviewCourseRequests'));
+		$items[] = array('url'=>'course_request_accepted.php', 	'label' => get_lang('ReviewCourseRequests'));
+		$items[] = array('url'=>'course_request_rejected.php', 	'label' => get_lang('ReviewCourseRequests'));
 	}
 	
-}
+	$items[] = array('url'=>'course_export.php', 			'label' => get_lang('ExportCourses'));
+	$items[] = array('url'=>'course_import.php', 			'label' => get_lang('ImportCourses'));
+	$items[] = array('url'=>'course_category.php', 			'label' => get_lang('AdminCategories'));
+	$items[] = array('url'=>'subscribe_user2course.php', 	'label' => get_lang('AddUsersToACourse'));
+	$items[] = array('url'=>'course_user_import.php', 		'label' => get_lang('ImportUsersToACourse'));
 
-if (api_is_platform_admin()) {
-?>
-<div class="admin_section">
-    <h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo api_ucfirst(get_lang('Users')); ?></h4>
-
-        <div style="list-style-type:none">
-            <form method="get" action="user_list.php">
-                <input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
-                <button class="search" type="submit"> <?php echo get_lang('Search'); ?></button>
-            </form>
-        </div>
-    <ul>        
-        <li><a href="user_list.php"><?php echo get_lang('UserList'); ?></a></li>
-        <li><a href="user_add.php"><?php echo get_lang('AddUsers'); ?></a></li>
-        <li><a href="user_export.php"><?php echo get_lang('ExportUserListXMLCSV'); ?></a></li>
-        <li><a href="user_import.php"><?php echo get_lang('ImportUserListXMLCSV'); ?></a></li>
-    <?php if (api_get_setting('allow_social_tool') == 'true') { ?>
-        <li><a href="group_add.php"><?php echo get_lang('AddGroups'); ?></a></li>
-        <li><a href="group_list.php"><?php echo get_lang('GroupList'); ?></a></li>
-    <?php }
-    if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) { ?>
-        <li><a href="ldap_users_list.php"><?php echo get_lang('ImportLDAPUsersIntoPlatform');?></a></li>
-    <?php } ?>
-        <li><a href="user_fields.php"><?php echo get_lang('ManageUserFields'); ?></a></li>
-    </ul>
-</div>
-<?php } else { ?>
-<div class="admin_section">
-    <h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo api_ucfirst(get_lang('Users')); ?></h4>
-    <ul>
-        <li><a href="user_list.php"><?php echo get_lang('UserList'); ?></a></li>
-        <li><a href="../mySpace/user_add.php"><?php echo get_lang('AddUsers'); ?></a></li>
-        <li><a href="user_import.php"><?php echo get_lang('ImportUserListXMLCSV'); ?></a></li>
-    </ul>
-</div>
-<?php
-}
-
-if (api_is_platform_admin()) { ?>
-<div class="admin_section">
-    <h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo api_ucfirst(get_lang('Courses')); ?></h4>
-    <div style="list-style-type:none">
-        <form method="get" action="course_list.php">
-            <input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
-            <button class="search" type="submit"><?php echo get_lang('Search'); ?></button>
-        </form>
-    </div>
-    <ul>
-        <li><a href="course_list.php"><?php echo get_lang('CourseList'); ?></a></li>
-    <?php if (api_get_setting('course_validation') != 'true') { ?>
-        <li><a href="course_add.php"><?php echo get_lang('AddCourse'); ?></a></li>
-    <?php } else { ?>
-        <li><a href="course_request_review.php"><?php echo get_lang('ReviewCourseRequests'); ?></a></li>
-        <li><a href="course_request_accepted.php"><?php echo get_lang('AcceptedCourseRequests'); ?></a></li>
-        <li><a href="course_request_rejected.php"><?php echo get_lang('RejectedCourseRequests'); ?></a></li>
-    <?php } ?>
-        <li><a href="course_export.php"><?php echo get_lang('ExportCourses'); ?></a></li>
-        <li><a href="course_import.php"><?php echo get_lang('ImportCourses'); ?></a></li>
-        <!-- <li><a href="course_virtual.php"><?php //echo get_lang('AdminManageVirtualCourses'); ?></a></li> -->
-        <li><a href="course_category.php"><?php echo get_lang('AdminCategories'); ?></a></li>
-        <li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>
-        <li><a href="course_user_import.php"><?php echo get_lang('ImportUsersToACourse'); ?></a></li>
-    <?php 
-    if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) { ?>
-        <li><a href="ldap_import_students.php"><?php echo get_lang('ImportLDAPUsersIntoCourse'); ?></a></li>
-    <?php } ?>
-    </ul>
-</div>
-
-<div class="admin_section">
-    <h4><?php Display::display_icon('platform.png', get_lang('Platform'), array(), 32); ?> <?php echo api_ucfirst(get_lang('Platform')); ?></h4>
-    <ul>
-        <li><a href="settings.php"><?php echo get_lang('DokeosConfigSettings') ?></a></li>
-        <li><a href="system_announcements.php"><?php echo get_lang('SystemAnnouncements') ?></a></li>
-        <li><a href="calendar.php"><?php echo get_lang('GlobalAgenda'); ?> </a></li>
-        <li><a href="configure_homepage.php"><?php echo get_lang('ConfigureHomePage'); ?></a></li>
-        <li><a href="configure_inscription.php"><?php echo get_lang('ConfigureInscription'); ?></a></li>
-        <li><a href="statistics/index.php"><?php echo get_lang('Statistics'); ?> </a></li>
-                
-    <?php
-        if (!empty($_configuration['multiple_access_urls'])) {
-            if (api_is_global_platform_admin()) {
-                echo '<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
-            }
-        }
-        if (api_get_setting('allow_reservation') == 'true') {
-            echo '<li><a href="../reservation/m_category.php">'.get_lang('BookingSystem').'</a></li>';
-        }
-
-        if (api_get_setting('allow_terms_conditions') == 'true') {
-            echo '<li><a href="legal_add.php">'.get_lang('TermsAndConditions').'</a></li>';
-        }
-    ?>
-    </ul>
-</div>
-<?php
-}
-
-if (api_get_setting('use_session_mode') == 'true') { ?>
-
-<div class="admin_section">
-    <h4><?php Display::display_icon('blackboard_blue.png', get_lang('Sessions'), array('width' => '22px')); ?> <?php echo get_lang('Sessions'); ?></h4>
-    <div style="list-style-type:none">
-        <form method="POST" action="session_list.php">
-            <input type="text" name="keyword_name" value="<?php echo $keyword_url; ?>"/>
-            <button class="search" type="submit"><?php echo get_lang('Search'); ?></button>
-        </form>
-    </div>
-    <ul>        
-        <li><a href="session_list.php"><?php echo get_lang('ListSession'); ?></a></li>
-        <li><a href="session_add.php"><?php echo get_lang('AddSession'); ?></a></li>
-        <li><a href="session_category_list.php"><?php echo get_lang('ListSessionCategory'); ?></a></li>        
-        <li><a href="session_import.php"><?php echo get_lang('ImportSessionListXMLCSV'); ?></a></li>
-    <?php if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) { ?>
-        <li><a href="ldap_import_students_to_session.php"><?php echo get_lang('ImportLDAPUsersIntoSession'); ?></a></li>
-    <?php } ?>
-        <li><a href="session_export.php"><?php echo get_lang('ExportSessionListXMLCSV'); ?></a></li>
-        <li><a href="../coursecopy/copy_course_session.php"><?php echo get_lang('CopyFromCourseInSessionToAnotherSession'); ?></a></li>
-    <?php if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) { // option only visible in development mode. Enable through code if required ?>
-        <li><a href="user_move_stats.php"><?php echo get_lang('MoveUserStats'); ?></a></li>
-    <?php }
-        echo Display::tag('li',Display::url(get_lang('CareersAndPromotions'), 'career_dashboard.php'));
-        echo Display::tag('li',Display::url(get_lang('Classes'), 'usergroups.php'));
-     ?>
-    </ul>
-</div>
-
-<?php
-} elseif (api_is_platform_admin()) { ?>
-
-<div class="admin_section">
-    <h4><?php Display::display_icon('group.gif', get_lang('AdminClasses')); ?> <?php echo api_ucfirst(get_lang('AdminClasses')); ?></h4>
-    <div style="list-style-type:none">
-        <form method="get" action="class_list.php">
-            <input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
-            <input class="search" type="submit" value="<?php echo get_lang('Search'); ?>"/>
-        </form>
-    </div>
-    <ul>
-        <li><a href="class_list.php"><?php echo get_lang('ClassList'); ?></a></li>
-        <li><a href="class_add.php"><?php echo get_lang('AddClasses'); ?></a></li>
-        <li><a href="class_import.php"><?php echo get_lang('ImportClassListCSV'); ?></a></li>
-        <li><a href="class_user_import.php"><?php echo get_lang('AddUsersToAClass'); ?> CSV</a></li>
-        <li><a href="subscribe_class2course.php"><?php echo get_lang('AddClassesToACourse'); ?></a></li>
-    </ul>
-    <br /><br />
-</div>
-<?php }
-
-if (api_is_platform_admin()) {
-?>
-
-
-<div class="admin_section">
-<h4><?php Display::display_icon('settings.png', get_lang('System')); ?> <?php echo api_ucfirst(get_lang('System')); ?></h4>
-    <ul>
-        <li><a href="special_exports.php"><?php echo get_lang('SpecialExports') ?></a></li>
-
-    <?php if (!empty($phpMyAdminPath)) { ?>
-        <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang('AdminDatabases'); ?></a><br />(<?php echo get_lang('DBManagementOnlyForServerAdmin'); ?>)</li>
-    <?php
+    if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) { 
+    	$items[] = array('url'=>'ldap_import_students.php', 	'label' => get_lang('ImportLDAPUsersIntoCourse'));
     }
-        //@todo Translations needed in order to see a better explanation of issues
-        echo '<li><a href="system_status.php">'.get_lang('SystemStatus').'</a></li>';
-
-        if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
-            // Do not show on production portals, where the tests directory doesn't exist.
-            echo '<li><a href="filler.php">'.get_lang('DataFiller').'</a></li>';
-        }
-        
-        if (api_is_global_platform_admin()) {
-        	echo '<li><a href="archive_cleanup.php">'.get_lang('ArchiveDirCleanup').'</a></li>';
-        }
-    ?>
-    </ul>
-</div>
-
-<div class="admin_section">
-    <h4><?php Display::display_icon('visio_meeting.gif', get_lang('ConfigureExtensions')); ?> <?php echo api_ucfirst(get_lang('ConfigureExtensions')); ?></h4>
-    <ul>
-        <li><a href="configure_extensions.php?display=visio"><?php echo get_lang('Visioconf'); ?></a></li>
-        <li><a href="configure_extensions.php?display=ppt2lp"><?php echo get_lang('Ppt2lp'); ?></a></li>
-<?php
-        /* <li><a href="configure_extensions.php?display=ephorus"><?php echo get_lang('EphorusPlagiarismPrevention'); ?></a></li> */
-?>
-        <li><a href="configure_extensions.php?display=search"><?php echo get_lang('SearchEngine'); ?></a></li>
-        <li><a href="configure_extensions.php?display=serverstats"><?php echo get_lang('ServerStatistics'); ?></a></li>
-        <li><a href="configure_extensions.php?display=bandwidthstats"><?php echo get_lang('BandWidthStatistics'); ?></a></li>
-    </ul>
-</div>
-
-<div class="admin_section">
-    <h4><?php Display::display_icon('logo.gif', 'Chamilo'); ?> Chamilo.org</h4>
-    <ul>
-        <li><a href="http://www.chamilo.org/" target="_blank"><?php echo get_lang('ChamiloHomepage'); ?></a></li>
-        <li><a href="http://www.chamilo.org/forum" target="_blank"><?php echo get_lang('ChamiloForum'); ?></a></li>
-        <li><a href="../../documentation/installation_guide.html" target="_blank"><?php echo get_lang('InstallationGuide'); ?></a></li>
-        <li><a href="../../documentation/changelog.html" target="_blank"><?php echo get_lang('ChangesInLastVersion'); ?></a></li>
-        <li><a href="../../documentation/credits.html" target="_blank"><?php echo get_lang('ContributorsList'); ?></a></li>
-        <li><a href="../../documentation/security.html" target="_blank"><?php echo get_lang('SecurityGuide'); ?></a></li>
-        <li><a href="../../documentation/optimization.html" target="_blank"><?php echo get_lang('OptimizationGuide'); ?></a></li>
-        <li><a href="http://www.chamilo.org/extensions" target="_blank"><?php echo get_lang('ChamiloExtensions'); ?></a></li>
-<?php
-    // Try to display a maximum before we check the chamilo version and all that.
-    //session_write_close(); //close session to avoid blocking concurrent access
-    flush(); //send data to client as much as allowed by the web server
-    //ob_flush();
-    echo '<br />'.get_lang('VersionCheck').': '.version_check().'';
-?>
-    </ul>
-</div>
-<?php
+    $blocks['courses']['items'] = $items;
+    
+    /* Platform */ 
+    
+    $blocks['platform']['icon']  = Display::return_icon('platform.png', get_lang('Platform'), array(), 32);
+    $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));
+    
+    $items = array();
+    $items[] = array('url'=>'settings.php', 	'label' => get_lang('DokeosConfigSettings'));
+    $items[] = array('url'=>'system_announcements.php', 	'label' => get_lang('SystemAnnouncements'));
+    $items[] = array('url'=>'calendar.php', 	'label' => get_lang('GlobalAgenda'));
+    $items[] = array('url'=>'configure_homepage.php', 	'label' => get_lang('ConfigureHomePage'));
+    $items[] = array('url'=>'configure_inscription.php', 	'label' => get_lang('ConfigureInscription'));
+    $items[] = array('url'=>'statistics/index.php', 	'label' => get_lang('Statistics'));
+    
+    if (!empty($_configuration['multiple_access_urls'])) {
+		if (api_is_global_platform_admin()) {
+            	$items[] = array('url'=>'access_urls.php', 	'label' => get_lang('ConfigureMultipleAccessURLs'));                
+            }
+    }
+    
+    if (api_get_setting('allow_reservation') == 'true') {
+    	$items[] = array('url'=>'../reservation/m_category.php', 	'label' => get_lang('BookingSystem'));            
+	}
+	if (api_get_setting('allow_terms_conditions') == 'true') {
+    	$items[] = array('url'=>'legal_add.php', 	'label' => get_lang('TermsAndConditions'));
+	}    
+	$blocks['platform']['items'] = $items;
 }
+
+/* Sessions */
+
+if (api_get_setting('use_session_mode') == 'true') { 
+	
+	$blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), 22);
+	$blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
+	
+	$search_form = ' <form method="POST" action="session_list.php">
+								<input type="text" name="keyword" value="">
+								<button class="search" type="submit">'.get_lang('Search').'</button>
+		            		</form>';
+	$blocks['sessions']['search_form'] = $search_form;	
+	$items = array();
+	$items[] = array('url'=>'session_list.php', 	'label' => get_lang('ListSession'));
+	$items[] = array('url'=>'session_add.php', 	'label' => get_lang('AddSession'));
+	$items[] = array('url'=>'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
+	$items[] = array('url'=>'session_import.php', 	'label' => get_lang('ImportSessionListXMLCSV'));
+	if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
+		$items[] = array('url'=>'ldap_import_students_to_session.php', 	'label' => get_lang('ImportLDAPUsersIntoSession'));
+	}
+	$items[] = array('url'=>'session_export.php', 	'label' => get_lang('ExportSessionListXMLCSV'));
+	$items[] = array('url'=>'../coursecopy/copy_course_session.php', 	'label' => get_lang('CopyFromCourseInSessionToAnotherSession'));
+	$items[] = array('url'=>'session_list.php', 	'label' => get_lang('ListSession'));
+	
+    if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) { // option only visible in development mode. Enable through code if required 
+    	$items[] = array('url'=>'user_move_stats.php', 	'label' => get_lang('MoveUserStats'));
+    }            
+    $items[] = array('url'=>'career_dashboard.php', 	'label' => get_lang('CareersAndPromotions'));
+    $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
+    
+    $blocks['sessions']['items'] = $items;
+
+} elseif (api_is_platform_admin()) {
+
+	$blocks['classes']['items'] = $items;
+	
+	$blocks['classes']['icon']  = Display::return_icon('group.gif', get_lang('AdminClasses'));
+	$blocks['classes']['label'] = api_ucfirst(get_lang('AdminClasses'));
+	
+	$search_form = ' <form method="POST" action="class_list.php">
+									<input type="text" name="keyword" value="">
+									<button class="search" type="submit">.'.get_lang('Search').'</button>
+			            		</form>';
+	$blocks['classes']['search_form'] = $search_form;
+	$items = array();
+	$items[] = array('url'=>'class_list.php', 	'label' => get_lang('ClassList'));
+	$items[] = array('url'=>'class_add.php', 	'label' => get_lang('AddClasses'));
+	$items[] = array('url'=>'class_import.php', 	'label' => get_lang('ImportClassListCSV'));
+	$items[] = array('url'=>'class_user_import.php', 	'label' => get_lang('AddUsersToAClass'));
+	$items[] = array('url'=>'subscribe_class2course.php', 	'label' => get_lang('AddClassesToACourse'));
+	
+	$blocks['classes']['items'] = $items;
+}
+
+/* Settings */
+if (api_is_platform_admin()) {	
+	
+	$blocks['settings']['icon']  = Display::return_icon('settings.png', get_lang('System'));
+	$blocks['settings']['label'] = api_ucfirst(get_lang('System'));
+	
+	$items = array();
+	$items[] = array('url'=>'special_exports.php.php', 	'label' => get_lang('SpecialExports'));
+	if (!empty($phpMyAdminPath)) {
+		$items[] = array('url'=>$phpMyAdminPath, 	'label' => get_lang('AdminDatabases').' ('.get_lang('DBManagementOnlyForServerAdmin').') ');
+	}
+	$items[] = array('url'=>'system_status.php', 	'label' => get_lang('SystemStatus'));
+	if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
+		$items[] = array('url'=>'filler.php', 	'label' => get_lang('DataFiller'));
+	}
+	if (api_is_global_platform_admin()) {
+		$items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
+	}	
+	$blocks['settings']['items'] = $items;
+
+	/* Extensions */
+	
+	$blocks['extensions']['icon']  = Display::return_icon('visio_meeting.gif', get_lang('ConfigureExtensions'));
+	$blocks['extensions']['label'] = api_ucfirst(get_lang('ConfigureExtensions'));
+	
+	$items = array();
+	$items[] = array('url'=>'configure_extensions.php?display=visio', 	'label' => get_lang('Visioconf'));
+	$items[] = array('url'=>'configure_extensions.php?display=ppt2lp', 	'label' => get_lang('Ppt2lp'));
+	//$items[] = array('url'=>'configure_extensions.php?display=ephorus', 	'label' => get_lang('EphorusPlagiarismPrevention'));
+	$items[] = array('url'=>'configure_extensions.php?display=search', 	'label' => get_lang('SearchEngine'));
+	$items[] = array('url'=>'configure_extensions.php?display=serverstats', 	'label' => get_lang('ServerStatistics'));
+	$items[] = array('url'=>'configure_extensions.php?display=bandwidthstats', 	'label' => get_lang('BandWidthStatistics'));	
+	$blocks['extensions']['items'] = $items;	
+
+	
+	/* Extensions */
+	
+	$blocks['chamilo']['icon']  = Display::return_icon('logo.gif', 'Chamilo.org');
+	$blocks['chamilo']['label'] = 'Chamilo.org';
+	
+	$items = array();
+	$items[] = array('url'=>'http://www.chamilo.org/', 	'label' => get_lang('ChamiloHomepage'));
+	$items[] = array('url'=>'http://www.chamilo.org/forum', 	'label' => get_lang('ChamiloForum'));
+	
+	$items[] = array('url'=>'../../documentation/installation_guide.html', 	'label' => get_lang('InstallationGuide'));
+	$items[] = array('url'=>'../../documentation/changelog.html', 	'label' => get_lang('ChangesInLastVersion'));
+	$items[] = array('url'=>'../../documentation/credits.html', 	'label' => get_lang('ContributorsList'));
+	$items[] = array('url'=>'../../documentation/security.html', 	'label' => get_lang('SecurityGuide'));
+	$items[] = array('url'=>'../../documentation/optimization.html', 	'label' => get_lang('OptimizationGuide'));
+	$items[] = array('url'=>'http://www.chamilo.org/extensions', 	'label' => get_lang('ChamiloExtensions'));	
+	
+	$blocks['chamilo']['items'] = $items;
+	
+	// Try to display a maximum before we check the chamilo version and all that.
+	//session_write_close(); //close session to avoid blocking concurrent access
+	//flush(); //send data to client as much as allowed by the web server
+	//ob_flush();
+	$blocks['chamilo']['extra'] = '<br />'.get_lang('VersionCheck').': '.version_check().'';	
+}
+
+$tpl = new Template();
+$tpl->assign('blocks', $blocks);
+$admin_template = $tpl->get_template('admin/settings_index.tpl');
+$content = $tpl->fetch($admin_template);
+$tpl->assign('content', $content);
+$template = $tpl->get_template('layout/layout_1_col.tpl');
+$tpl->display($template);
+
 
 /**
  * Displays either the text for the registration or the message that the installation is (not) up to date
@@ -377,5 +374,3 @@ function check_system_version() {
     }
     return $output;
 }
-/* FOOTER */
-Display::display_footer();

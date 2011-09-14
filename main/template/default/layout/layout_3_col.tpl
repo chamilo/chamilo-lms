@@ -8,6 +8,7 @@
 	<div id="maincontent" class="maincontent">
 		{$plugin_courses_block}
 		{$home_page_block}
+		{$message}
 		{$content}
 		{$announcements_block}
 	</div>

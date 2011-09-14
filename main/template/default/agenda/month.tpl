@@ -28,7 +28,7 @@ $(document).ready(function() {
 			var url = '{$_p.web_ajax}agenda.ajax.php?a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
 			
 			$('#start_date').html(start.getDate() +"/"+ start.getMonth() +"/"+start.getFullYear());
-			$('#end_date').html(end.getDate() +"/"+ end.getMonth() +"/"+end.getFullYear());
+			$('#end_date').html('- '+ end.getDate() +"/"+ end.getMonth() +"/"+end.getFullYear());
 			
 			$("#dialog-form").dialog("open");
 
@@ -89,7 +89,7 @@ $(document).ready(function() {
 			
 			$("#dialog-form").dialog({				
 				buttons: {
-					"Edit event": function() {
+					"Edit event" : function() {
 						var params = $("#add_event_form").serialize();						
 						$.ajax({
 							url: url+'&'+params,
@@ -132,7 +132,7 @@ $(document).ready(function() {
 
 		},
 		editable: true,		
-		events: "{$ajax_url}?a=get_events",		
+		events: "{$_p.web_ajax}agenda.ajax.php?a=get_events",		
 		eventDrop: function(event, day_delta, minute_delta, all_day, revert_func) {		
 			$.ajax({
 				url: '{$ajax_url}',
@@ -155,9 +155,16 @@ $(document).ready(function() {
 
 <div id="dialog-form"  style="display:none">				
 	<form id="add_event_form" name="form">
-		<span id="start_date" ></span><span id="end_date" ></span>
+		<div class="row">		
+			<div class="label">
+			<label for="date">{"Date"|get_lang}</label>
+			</div>
+			<div class="formw">
+				<span id="start_date" class="label"></span><span id="end_date" class="label"></span>
+			</div>					
+		</div>
 		<div class="row">
-				<label for="name">{"Title"|get_lang}</label>
+			<label for="name">{"Title"|get_lang}</label>
 		</div>
 		<div class="formw">
 			<input type="text" name="title" id="title" size="52" />				
@@ -172,5 +179,6 @@ $(document).ready(function() {
 		</div>
 	</form>
 </div>
+<div id='loading' style='position:absolute; display:none'>{"Loading"|get_lang}...</div>
+
 <div id='calendar'></div>
-<div id='loading' style='display:none'>{"Loading"|get_lang}...</div>

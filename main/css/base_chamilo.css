@@ -751,12 +751,6 @@ input.link_alike:hover {
 }
 #lang_form input, #lang_form select {
     font-size: 12px;
-    margin-left: 6px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
     /* width:100%; */
 }
 #formLogin label {
@@ -765,18 +759,14 @@ input.link_alike:hover {
     font-family:Tahoma, Geneva, sans-serif;
     color:#666666;
 }
+
 #formLogin input {
     font-size: 13px;
     margin: 4px 6px;
     padding:6px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-    /*width:100%;*/
 
 }
+
 #login_fail {
     margin: 0 6px 6px 6px;
     padding: 4px;
@@ -937,46 +927,7 @@ a.nobold:hover {
     border-collapse: collapse;
 }
 
-/*****************************************************
- *  FORM STYLES                                      *
- *****************************************************/
-div.row {
-    clear: both;
-    padding-top: 10px;
-}
-div.row div.form_header {
-    white-space: nowrap;
-    padding: 2px;
-    margin : 0px 0px 10px 0px;
-    background-color: #E5EDF9;
-    border: 1px solid #E5EDF9;
-    font-size:20px;
-}
-div.row div.label {
-    float: left;
-    width: 22%;
-    text-align: right;
-}
-div.row div.formw {
-    width: 76%;
-    float:left;
-}
-[dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
-    float: left;
-    text-align: right;
-}
-[dir=rtl] div.row div.label, [dir=ltr] div.row div.formw {
-    float: right;
-    text-align: left;
-}
-span.form_required {
-    color: #f00;header2
-}
-span.form_error {
-    color: #f00;
-    font-size: x-small;
-    margin: 2px;
-}
+
 
 /*****************************************************
  *  DATA TABLE STYLES                                *
@@ -1000,6 +951,7 @@ span.form_error {
     text-align: center;
     vertical-align: middle;
     background-color: #F2F2F2;  
+    font-weight: bold;
 }
 .cell_header {
     background-color: #EEEEFF;
@@ -1082,8 +1034,8 @@ form br {
     background-color: transparent;
 }
 .required {
-    color: #f00;
-    font-weight: bold;
+/*    color: #f00;
+    font-weight: bold;*/
 }
 
 /* Admin section */
@@ -2707,3 +2659,6 @@ abbr {
     padding: 8px 0px 2px 0; 
 }
 
+.chzn-search input {
+
+}

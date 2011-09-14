@@ -161,11 +161,9 @@ echo '<div id="social-content">';
 	//this include the social menu div
 	SocialManager::show_social_menu('group_edit',$group_id);
 	echo '</div>';
-	echo '<div id="social-content-right">';			
-				echo '<table><tr><td>';
-				// Display form
-				$form->display();
-				echo '</td></tr></table>';		
+	echo '<div id="social-content-right">';
+	// Display form
+	$form->display();						
 	echo '</div>';
 echo '</div>';
 

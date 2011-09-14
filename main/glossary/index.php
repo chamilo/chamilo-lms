@@ -65,9 +65,9 @@ if (api_is_allowed_to_edit(null, true)) {
         $form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
         // settting the form elements
         $form->addElement('header', '', get_lang('TermAddNew'));
-        $form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'95', 'id'=>'glossary_title'));
+        $form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'80', 'id'=>'glossary_title'));
         //$form->applyFilter('glossary_title', 'html_filter');
-        $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '100%', 'Height' => '300'));
+        $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));
         $form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="save"');
         // setting the rules
         $form->addRule('glossary_title',get_lang('ThisFieldIsRequired'), 'required');
@@ -92,9 +92,9 @@ if (api_is_allowed_to_edit(null, true)) {
         // settting the form elements
         $form->addElement('header', '', get_lang('TermEdit'));
         $form->addElement('hidden', 'glossary_id');
-        $form->addElement('text', 'glossary_title', get_lang('TermName'),array('size'=>'100'));
+        $form->addElement('text', 'glossary_title', get_lang('TermName'),array('size'=>'80'));
         //$form->applyFilter('glossary_title', 'html_filter');
-        $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '100%', 'Height' => '300'));
+        $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));
         
         
         

@@ -477,7 +477,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                             $mail_body = api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS)."<br />\n".stripslashes($emailTitle)."<br />";
 
 	                        // Main part of the email
-	                        $mail_body .= trim(stripslashes(AnnouncementManager::parse_content($newContent)));
+	                        $mail_body .= trim(stripslashes(AnnouncementManager::parse_content($newContent, api_get_course_id())));
                             // Signature of email: sender name and course URL after -- line
 	                        $mail_body .= "<br />-- <br />";
 	                        $mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)." \n";

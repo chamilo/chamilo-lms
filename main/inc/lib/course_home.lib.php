@@ -752,7 +752,7 @@ class CourseHome {
                     $data = '';
                     
                     if ($i == 0) {
-                         echo '<table width="100%">';
+                         echo '<table class="100%">';
                     }
                     $row_per = 33;
                     $mod = 3;                    
@@ -783,7 +783,7 @@ class CourseHome {
                     break;
                 case 'activity':  
                     if ($i == 0) {
-                         echo '<table width="100%">';
+                         echo '<table class="course_activity_home">';
                     }                    
                     if (!($i % 2)) {
                         echo '<tr valign="top">';

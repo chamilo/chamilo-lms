@@ -87,7 +87,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 ?>
 	<div class="courseadminview">
 		<span class="viewcaption"><?php echo get_lang('SessionData'); ?></span>
-		<table width="100%">
+		<table class="course_activity_home">
 <?php
 			echo show_session_data($id_session);
 ?>
@@ -130,7 +130,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 ?>
 		<div class="courseadminview">
 			<span class="viewcaption"><?php echo get_lang('SessionData'); ?></span>
-			<table width="100%">
+			<table class="course_activity_home">
 <?php
 				echo CourseHome::show_session_data($id_session);
 ?>

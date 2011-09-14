@@ -22,7 +22,6 @@ $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/fullcal
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/jquery.qtip.min.css');
 
 $tpl = new Template();
-$tpl->assign('ajax_url', api_get_path(WEB_AJAX_PATH).'agenda.ajax.php');
 $content = $tpl->fetch('default/agenda/month.tpl');
 $tpl->assign('content', $content);
 $template_file = $tpl->get_template('layout/layout_1_col.tpl');

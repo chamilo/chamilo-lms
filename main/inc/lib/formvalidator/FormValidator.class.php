@@ -58,33 +58,30 @@ class FormValidator extends HTML_QuickForm {
 		// Modify the default templates
 		$renderer = & $this->defaultRenderer();
 		$form_template = <<<EOT
-
 <form {attributes}>
-{content}
-	<div class="clear">
-		&nbsp;
-	</div>
+<fieldset>
+	{content}
+	<div class="clear"></div>
+</fieldset>
 </form>
 
 EOT;
 		$renderer->setFormTemplate($form_template);
 		$element_template = <<<EOT
-	<div class="row">
-		<div class="label">
-			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
+	
+		<div class="row {error_class}">	
+			<div class="label">
+				<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
+			</div>
+			<div class="formw">
+				{element}<!-- BEGIN error --><span class="help-inline">{error}</span><!-- END error -->	
+			</div>
 		</div>
-		<div class="formw">
-			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}
-		</div>
-	</div>
 
 EOT;
 		$renderer->setElementTemplate($element_template);
 		$header_template = <<<EOT
-	<div class="row">
-		<div class="form_header">{header}</div>
-	</div>
-
+	<legend>{header}</legend>
 EOT;
 		$renderer->setHeaderTemplate($header_template);
 		HTML_QuickForm :: setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
@@ -332,7 +329,7 @@ EOT;
 			}
 		}
 		if ($error) {
-			Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
+			Display::display_warning_message(get_lang('FormHasErrorsPleaseComplete'));
 		}
 		$return_value = parent::toHtml();
 		// Add div-element which is to hold the progress bar

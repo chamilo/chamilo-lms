@@ -330,15 +330,9 @@ function document_exists($filename) {
 	return !file_exists($filepath.$filename.'.html');
 }
 
-// Change the default renderer for the filename-field to display the dir and extension
-/*
-$renderer = & $form->defaultRenderer();
-*/
-//$filename_template = str_replace('{element}', "<tt>$display_dir</tt> {element} <tt>.html</tt>", $renderer->_elementTemplate);
 $filename_template = str_replace('{element}', '{element}', $renderer->_elementTemplate); // TODO: What is the point of this statement?
 $renderer->setElementTemplate($filename_template, 'filename');
 // Initialize group array
-
 $group = array();
 
 // If allowed, add element for document title

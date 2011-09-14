@@ -49,7 +49,7 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 	$form->addElement('style_submit_button', 'submit', get_lang('Send'),'class="save"');
 
 	// setting the rules
-	$form->addRule('user', '<div class="required">'.get_lang('ThisFieldIsRequired').'</div>', 'required');
+	$form->addRule('user', get_lang('ThisFieldIsRequired'), 'required');
 
 	if ($form->validate()) {
 		$values = $form->exportValues();

@@ -560,7 +560,7 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
             if ($navigation_info['url'] == '#') {
                 $final_navigation[$index] = '<span>'.$navigation_info['title'].'</span>';
             } else {
-                $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="breadcrumb breadcrumb'.$index.'" target="_top"><span>'.$navigation_info['title'].'</span></a>';
+                $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="" target="_top"><span>'.$navigation_info['title'].'</span></a>';
             }
             $counter++;
         }

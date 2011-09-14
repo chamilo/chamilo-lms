@@ -263,9 +263,9 @@ if ($group_id != 0 ) {
 		if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
 		    if (!$is_group_member) {		        
     		    if (!in_array($my_group_role, array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION))) {
-                    echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('YouShouldJoinTheGroup'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('YouShouldJoinTheGroup').'</a></span>';
+                    echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('YouShouldJoinTheGroup'), array('hspace'=>'6')).get_lang('YouShouldJoinTheGroup').'</a>';
                 } elseif ($my_group_role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-                    echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('YouHaveBeenInvitedJoinNow'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('YouHaveBeenInvitedJoinNow').'</span></a>';
+                    echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('YouHaveBeenInvitedJoinNow'), array('hspace'=>'6')).get_lang('YouHaveBeenInvitedJoinNow').'</a>';
                 }
                 echo '<br /><br />';
 		    }            
@@ -314,9 +314,9 @@ if ($group_id != 0 ) {
 		} else {
 			// if I already sent an invitation message
 			if (!in_array($my_group_role, array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION))) {
-				echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('YouShouldJoinTheGroup'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('YouShouldJoinTheGroup').'</a></span>';
+				echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('YouShouldJoinTheGroup'), array('hspace'=>'6')).get_lang('YouShouldJoinTheGroup').'</a>';
 			} elseif ($my_group_role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-				echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('YouHaveBeenInvitedJoinNow'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('YouHaveBeenInvitedJoinNow').'</span></a>';
+				echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('YouHaveBeenInvitedJoinNow'), array('hspace'=>'6')).get_lang('YouHaveBeenInvitedJoinNow').'</a>';
 			}
 		}
 	echo '</div>'; // end layout messages
@@ -470,11 +470,11 @@ if ($group_id != 0 ) {
 	        			$my_group_content = Display::return_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));
 	        		}
         	   		if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
-    	        	    $create_group_item =  '<a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).get_lang('CreateASocialGroup').'</a>';
+    	        	    $create_group_item =  '<a class="a_button orange medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
     	        	    $my_group_content = $create_group_item. $my_group_content;
         	        } else {        	           
     	            	if (api_is_allowed_to_edit(null,true)) {
-    	            	    $create_group_item =  '<a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).get_lang('CreateASocialGroup').'</a>';
+    	            	    $create_group_item =  '<a class="a_button orange medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
     	        	        $my_group_content = $create_group_item. $my_group_content;
     	            	}
         	        }
@@ -506,11 +506,11 @@ if ($group_id != 0 ) {
 	        	$my_group_content = Display::return_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));           
 	        }
    	        if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
-                $create_group_item =  '<a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).get_lang('CreateASocialGroup').'</a>';
+                $create_group_item =  '<a class="a_button orange medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
                 $my_group_content = $create_group_item. $my_group_content;
             } else {
                 if (api_is_allowed_to_edit(null,true)) {
-                    $create_group_item =  '<a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).get_lang('CreateASocialGroup').'</a>';
+                    $create_group_item =  '<a class="a_button orange medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
                     $my_group_content  = $create_group_item. $my_group_content;
                 }
             }

@@ -260,9 +260,11 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
         }
         if (isset($error)) {
             $html = str_replace('{error}', $error, $html);
+            $html = str_replace('{error_class}', 'error', $html);
             $html = str_replace('<!-- BEGIN error -->', '', $html);
             $html = str_replace('<!-- END error -->', '', $html);
         } else {
+        	$html = str_replace('{error_class}', '', $html);
             $html = preg_replace("/([ \t\n\r]*)?<!-- BEGIN error -->.*<!-- END error -->([ \t\n\r]*)?/isU", '', $html);
         }
         if (is_array($label)) {

@@ -131,26 +131,21 @@ if (api_is_platform_admin()) { ?>
 </div>
 
 <div class="admin_section">
-    <h4><?php Display::display_icon('settings.png', get_lang('Platform')); ?> <?php echo api_ucfirst(get_lang('Platform')); ?></h4>
+    <h4><?php Display::display_icon('platform.png', get_lang('Platform'), array(), 32); ?> <?php echo api_ucfirst(get_lang('Platform')); ?></h4>
     <ul>
         <li><a href="settings.php"><?php echo get_lang('DokeosConfigSettings') ?></a></li>
-        <li><a href="special_exports.php"><?php echo get_lang('SpecialExports') ?></a></li>
         <li><a href="system_announcements.php"><?php echo get_lang('SystemAnnouncements') ?></a></li>
-        <li><a href="languages.php"><?php echo get_lang('Languages'); ?></a></li>
+        <li><a href="calendar.php"><?php echo get_lang('GlobalAgenda'); ?> </a></li>
         <li><a href="configure_homepage.php"><?php echo get_lang('ConfigureHomePage'); ?></a></li>
         <li><a href="configure_inscription.php"><?php echo get_lang('ConfigureInscription'); ?></a></li>
         <li><a href="statistics/index.php"><?php echo get_lang('Statistics'); ?> </a></li>
-        <li><a href="calendar.php"><?php echo get_lang('GlobalAgenda'); ?> </a></li>
-    <?php if (!empty($phpMyAdminPath)) { ?>
-        <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang('AdminDatabases'); ?></a><br />(<?php echo get_lang('DBManagementOnlyForServerAdmin'); ?>)</li>
+                
     <?php
-    }
         if (!empty($_configuration['multiple_access_urls'])) {
             if (api_is_global_platform_admin()) {
                 echo '<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
             }
         }
-
         if (api_get_setting('allow_reservation') == 'true') {
             echo '<li><a href="../reservation/m_category.php">'.get_lang('BookingSystem').'</a></li>';
         }
@@ -158,22 +153,9 @@ if (api_is_platform_admin()) { ?>
         if (api_get_setting('allow_terms_conditions') == 'true') {
             echo '<li><a href="legal_add.php">'.get_lang('TermsAndConditions').'</a></li>';
         }
-
-        //@todo Translations needed in order to see a better explanation of issues
-        echo '<li><a href="system_status.php">'.get_lang('SystemStatus').'</a></li>';
-
-        if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
-            // Do not show on production portals, where the tests directory doesn't exist.
-            echo '<li><a href="filler.php">'.get_lang('DataFiller').'</a></li>';
-        }
-        
-        if (api_is_global_platform_admin()) {
-        	echo '<li><a href="archive_cleanup.php">'.get_lang('ArchiveDirCleanup').'</a></li>';
-        }
     ?>
     </ul>
 </div>
-
 <?php
 }
 
@@ -226,11 +208,35 @@ if (api_get_setting('use_session_mode') == 'true') { ?>
     </ul>
     <br /><br />
 </div>
-<?php
-}
+<?php }
 
 if (api_is_platform_admin()) {
 ?>
+
+
+<div class="admin_section">
+<h4><?php Display::display_icon('settings.png', get_lang('System')); ?> <?php echo api_ucfirst(get_lang('System')); ?></h4>
+    <ul>
+        <li><a href="special_exports.php"><?php echo get_lang('SpecialExports') ?></a></li>
+
+    <?php if (!empty($phpMyAdminPath)) { ?>
+        <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang('AdminDatabases'); ?></a><br />(<?php echo get_lang('DBManagementOnlyForServerAdmin'); ?>)</li>
+    <?php
+    }
+        //@todo Translations needed in order to see a better explanation of issues
+        echo '<li><a href="system_status.php">'.get_lang('SystemStatus').'</a></li>';
+
+        if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
+            // Do not show on production portals, where the tests directory doesn't exist.
+            echo '<li><a href="filler.php">'.get_lang('DataFiller').'</a></li>';
+        }
+        
+        if (api_is_global_platform_admin()) {
+        	echo '<li><a href="archive_cleanup.php">'.get_lang('ArchiveDirCleanup').'</a></li>';
+        }
+    ?>
+    </ul>
+</div>
 
 <div class="admin_section">
     <h4><?php Display::display_icon('visio_meeting.gif', get_lang('ConfigureExtensions')); ?> <?php echo api_ucfirst(get_lang('ConfigureExtensions')); ?></h4>
@@ -371,7 +377,5 @@ function check_system_version() {
     }
     return $output;
 }
-
 /* FOOTER */
-
 Display::display_footer();

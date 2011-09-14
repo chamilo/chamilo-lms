@@ -18,7 +18,6 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 
 // Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
@@ -47,7 +46,7 @@ Display :: display_header($tool_name);
 
 if ($_GET['action'] != 'add' && $_GET['action'] != 'edit') {
     echo '<div class="actions">';
-    echo '<a href="?action=add">'.Display::return_icon('announce_add.gif', get_lang('langAddAnnouncement')).get_lang('langAddAnnouncement').'</a>';
+    echo '<a href="?action=add">'.Display::return_icon('add.png', get_lang('langAddAnnouncement'), array(), 32).'</a>';
     echo '</div>';
 }
 $form_action = '';

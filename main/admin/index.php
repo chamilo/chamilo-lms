@@ -210,7 +210,7 @@ if (api_is_platform_admin()) {
 	$blocks['settings']['label'] = api_ucfirst(get_lang('System'));
 	
 	$items = array();
-	$items[] = array('url'=>'special_exports.php.php', 	'label' => get_lang('SpecialExports'));
+	$items[] = array('url'=>'special_exports.php', 	'label' => get_lang('SpecialExports'));
 	if (!empty($phpMyAdminPath)) {
 		$items[] = array('url'=>$phpMyAdminPath, 	'label' => get_lang('AdminDatabases').' ('.get_lang('DBManagementOnlyForServerAdmin').') ');
 	}

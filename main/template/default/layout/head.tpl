@@ -45,5 +45,13 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
 {$extra_headers}
 {$favico}
 
+<script type="text/javascript">
+$(document).ready(function(){	
+	$(".dropdown-toggle, .menu").click(function (e) {
+    	var $li = $(this).parent("li").toggleClass('open'); 
+  	});
+});
+</script>
+
 {$header_extra_content}
 <!--  head end-->

@@ -68,23 +68,10 @@ switch ($action) {
 			echo '';
 			break;
 		}
-		
-		//deprecated variables?
-		//$my_current_friend		 = Security::remove_XSS($_POST['friend_id']);
-		//$my_denied_current_friend= Security::remove_XSS($_POST['denied_friend_id']);
-		$my_delete_friend        = Security::remove_XSS($_POST['delete_friend_id']);
-		//$friend_id_qualify       = Security::remove_XSS($_POST['user_id_friend_q']);
-		//$type_friend_qualify     = Security::remove_XSS($_POST['type_friend_q']); //filtered?
-		//$is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filtered?
-
+		$my_delete_friend        = intval($_POST['delete_friend_id']);
 		if (isset($_POST['delete_friend_id'])) {
 			SocialManager::remove_user_rel_user($my_delete_friend);
-		}
-		/*
-		if(isset($_POST['user_id_friend_q']) && isset($_POST['type_friend_q'])) {
-			SocialManager::qualify_friend($friend_id_qualify,$type_friend_qualify);
-			echo api_xml_http_response_encode(get_lang('AttachContactsToGroupSuccesfuly'));
-		}*/		
+		}	
 		break;
 	case 'show_my_friends':	
 		if (api_is_anonymous()) {
@@ -93,11 +80,11 @@ switch ($action) {
 		}
 		$list_path_friends	= array();
 		$user_id	= api_get_user_id();
-		$name_search= Security::remove_XSS($_POST['search_name_q']);
+		$name_search= Security::remove_XSS($_POST['search_name_q']);		
 		$number_friends = 0;
 		
-		if (isset($name_search) && $name_search!='undefined') {
-			$friends = SocialManager::get_friends($user_id,null,$name_search);
+		if (isset($name_search) && $name_search != 'undefined') {
+			$friends = SocialManager::get_friends($user_id, null, $name_search);
 		} else {
 			$friends = SocialManager::get_friends($user_id);
 		}
@@ -123,7 +110,7 @@ switch ($action) {
 						$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92);
 						$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
 						$friend_html.='<span><a href="profile.php?u='.$friend['friend_user_id'].'"><center><img src="'.$friends_profile['file'].'" style="width:60px;height:60px;border:3pt solid #eee" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" /></center></a></span>';
-						$friend_html.='<img onclick="delete_friend (this)" id=img_'.$friend['friend_user_id'].' src="../img/blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';				
+						$friend_html.='<img onclick="delete_friend (this)" id=img_'.$friend['friend_user_id'].' src="'.api_get_path(WEB_IMG_PATH).'blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';				
 					}
 					$j++;
 				}

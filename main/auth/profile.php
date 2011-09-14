@@ -249,14 +249,15 @@ if (api_get_setting('profile', 'language') !== 'true') {
 //	EXTENDED PROFILE  this make the page very slow!
 if (api_get_setting('extended_profile') == 'true') {
 	if (!isset($_GET['type']) || (isset($_GET['type']) && $_GET['type'] == 'extended')) {
+		$width_extended_profile = 500;
 		//$form->addElement('html', '<a href="javascript: void(0);" onclick="javascript: show_extend();"> show_extend_profile</a>');
 		$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
 		//	MY COMPETENCES
-		$form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '580', 'Height' => '130'));
+		$form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
 		//	MY DIPLOMAS
-		$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '580', 'Height' => '130'));
+		$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
 		//	WHAT I AM ABLE TO TEACH
-		$form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '580', 'Height' => '130'));
+		$form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
 
 		//	MY PRODUCTIONS
 		$form->addElement('file', 'production', get_lang('MyProductions'));
@@ -264,7 +265,7 @@ if (api_get_setting('extended_profile') == 'true') {
 			$form->addElement('static', 'productions_list', null, $production_list);
 		}
 		//	MY PERSONAL OPEN AREA
-		$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '580', 'Height' => '350'));
+		$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '350'));
 		$form->applyFilter(array('competences', 'diplomas', 'teach', 'openarea'), 'stripslashes');
 		$form->applyFilter(array('competences', 'diplomas', 'teach'), 'trim'); // openarea is untrimmed for maximum openness
 	}
@@ -828,21 +829,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 		echo '</div>';
 
 		echo '<div id="social-content-right">';
-			echo '<table><tr><td>';
-			//Useless link
-			/*
-				echo '<div id="social-content-online">';
-					if (api_get_setting('extended_profile') == 'true') {
-						$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
-						if (isset($_GET['type']) && $_GET['type'] == 'reduced') {
-							echo '<a href="profile.php?type=extended '.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.png', get_lang('EditExtendProfile'),'',16).'&nbsp;'.get_lang('EditExtendProfile').'</span></a>';
-						} else {
-							echo '<a href="profile.php?type=reduced'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.png', get_lang('EditNormalProfile'),'',16).'&nbsp;'.get_lang('EditNormalProfile').'</span></a>';
-						}
-					}
-				echo '</div>';*/				
-            $form->display();
-			echo '</td></tr></table>';		
+        $form->display();			
 	echo '</div>';
 } else {
 	// Style position:absolute has been removed for Opera-compatibility.

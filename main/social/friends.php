@@ -42,15 +42,15 @@ function delete_friend (element_div) {
 }
 			
 		
-function search_image_social(element_html)  {
-	name_search=$(element_html).attr("value");
+function search_image_social()  {
+	var name_search = $("#id_search_image").attr("value");	
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		type: "POST",
 		url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=show_my_friends",
 		data: "search_name_q="+name_search,
 		success: function(datos) {
-			$("div#div_content_table").html(datos);
+			$("#friend_table").html(datos);
 		}
 	});
 }
@@ -114,64 +114,35 @@ if (count($friends) == 0 ) {
 	echo get_lang('NoFriendsInYourContactList').'<br /><br />';
 	echo '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';	
 } else {
-	
-	?>
-	<div align="center" >
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" >
-	  <tr>
-	    <td height="25" valign="top">
-	    <table width="100%" border="0" cellpadding="0" cellspacing="0" >
-	      <tr>
-	        <td width="100%"  valign="top" class="social-align-box">&nbsp;&nbsp;<?php echo get_lang('Search') .'&nbsp;&nbsp; : &nbsp;&nbsp;'; ?>
-	        	<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" value="" onkeyup="search_image_social(this)" />
-	        </td>
-	      </tr>
-	    </table></td>
-	  </tr>
-	  <tr>
-	    <td height="175" valign="top">
-	    <table width="100%" border="0" cellpadding="0" cellspacing="0" >
-	      <tr>
-			<td height="153" valign="top">
-				<?php
+	echo get_lang('Search') .'&nbsp;&nbsp; : &nbsp;&nbsp;'; ?>
+	<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" onkeyup="search_image_social()" />
+	<?php				
+		$friend_html = '';
+		$number_of_images = 8;
+		
+		$number_friends = count($friends);
+		$j=0;		
 							
-					$friend_html = '';
-					$number_of_images = 8;
-					
-					$number_friends = count($friends);
-					$j=0;
-					echo '<div id ="social-content-right">';
-					//echo '<div id="div_content_table" class="rounded_div" style="width:90%">';
-					
-					$friend_html.= '<table class="rounded_div" width="95%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
-					for ($k=0;$k<$number_friends;$k++) {
-						$friend_html.='<tr><td valign="top">';
-					
-						while ($j<$number_friends) {
-							if (isset($friends[$j])) {
-								$friend = $friends[$j];
-								$user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
-								$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92);
-								$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
-								$friend_html.='<span><a href="profile.php?u='.$friend['friend_user_id'].'"><center><img src="'.$friends_profile['file'].'" style="height:60px;" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" /></center></a></span>';
-								$friend_html.='<img onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].' src="../img/blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';				
-							}
-							$j++;
-						}
-						$friend_html.='</td></tr>';
-					}
-					$friend_html.='<br/></table>';
-					echo $friend_html;				
-				    echo '</div>';
-				?>
-			</td>
-	        </tr>
-	    </table></td>
-	  </tr>
-	</table>
-	</div>
-	<?php		
-	}	
+		$friend_html.= '<table  id="friend_table" class="rounded_div" width="95%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
+		for ($k=0;$k<$number_friends;$k++) {
+			$friend_html.='<tr><td valign="top">';
+		
+			while ($j<$number_friends) {
+				if (isset($friends[$j])) {
+					$friend = $friends[$j];
+					$user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
+					$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92);
+					$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
+					$friend_html.='<span><a href="profile.php?u='.$friend['friend_user_id'].'"><center><img src="'.$friends_profile['file'].'" style="height:60px;" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" /></center></a></span>';
+					$friend_html.='<img onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].' src="../img/blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';				
+				}
+				$j++;
+			}
+			$friend_html.='</td></tr>';
+		}
+		$friend_html.='<br/></table>';
+		echo $friend_html;
+	}
 	echo '</div>';
 	echo '</div>';	
 Display :: display_footer();

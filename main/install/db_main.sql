@@ -823,6 +823,7 @@ VALUES
 ('enable_quiz_scenario',  NULL,'radio','Course','false','EnableQuizScenarioTitle','EnableQuizScenarioComment',NULL,NULL, 1),
 ('enable_nanogong',NULL,'radio','Tools','false','EnableNanogongTitle','EnableNanogongComment',NULL,NULL, 0),
 ('filter_terms',NULL,'textarea','Security','','FilterTermsTitle','FilterTermsComment',NULL,NULL, 0),
+('header_extra_content', NULL, 'textarea', 'Tracking', '', 'HeaderExtraContentTitle', 'HeaderExtraContentComment', NULL, NULL, 1),
 ('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.15605','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;

@@ -17,6 +17,7 @@ UPDATE settings_current SET selected_value = '1.9.0.15605' WHERE variable = 'cha
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('filter_terms', NULL, 'textarea', 'Security', '', 'FilterTermsTitle', 'FilterTermsComment', NULL, NULL, 0);
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('header_extra_content', NULL, 'textarea', 'Tracking', '', 'HeaderExtraContentTitle', 'HeaderExtraContentComment', NULL, NULL, 1);
 
 ALTER TABLE personal_agenda ADD COLUMN 'all_day' INTEGER NOT NULL DEFAULT 0;
 

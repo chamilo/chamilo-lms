@@ -506,8 +506,11 @@ function handle_search() {
     $form = new FormValidator('search-options', 'post', api_get_self().'?category=Search');
         
     $renderer = & $form->defaultRenderer();
-    $renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
-    $renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
+    //$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
+    //$renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
+    $renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 --></div></div>');
+    
+    
     
     $values = get_settings_options('search_enabled');   
     $form->addElement('header', null, get_lang('SearchEnabledTitle'));    
@@ -524,7 +527,8 @@ function handle_search() {
             $group[] = $element;
         }
     }
-    $form->addGroup($group, 'search_enabled', get_lang('SearchEnabledComment'), '<br />', false);
+    //SearchEnabledComment
+    $form->addGroup($group, 'search_enabled', array(get_lang('SearchEnabledTitle'), get_lang('SearchEnabledComment')), '<br />', false);
     
     $search_enabled = api_get_setting('search_enabled');
     
@@ -543,7 +547,7 @@ function handle_search() {
     if ($search_enabled == 'true') {
     
         // Search_show_unlinked_results.
-        $form->addElement('header', null, get_lang('SearchShowUnlinkedResultsTitle'));
+        //$form->addElement('header', null, get_lang('SearchShowUnlinkedResultsTitle'));
         //$form->addElement('label', null, get_lang('SearchShowUnlinkedResultsComment'));
         $values = get_settings_options('search_show_unlinked_results');
         $group = array ();
@@ -551,11 +555,11 @@ function handle_search() {
             $element = & $form->createElement('radio', 'search_show_unlinked_results', '', get_lang($value['display_text']), $value['value']);
             $group[] = $element;
         }
-        $form->addGroup($group, 'search_show_unlinked_results', get_lang('SearchShowUnlinkedResultsComment'), '<br />', false);
+        $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'),get_lang('SearchShowUnlinkedResultsComment')), '<div></div>', false);
         $default_values['search_show_unlinked_results'] = api_get_setting('search_show_unlinked_results');
     
         // Search_prefilter_prefix.
-        $form->addElement('header', null, get_lang('SearchPrefilterPrefix'));
+        //$form->addElement('header', null, get_lang('SearchPrefilterPrefix'));
         //$form->addElement('label', null, get_lang('SearchPrefilterPrefixComment'));
         
         $sf_values = array();
@@ -565,12 +569,12 @@ function handle_search() {
         $group = array();
         $url =  Display::div(Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php'), array('class'=>'sectioncomment'));
         if (empty($sf_values)) {    
-            $form->addElement('html', get_lang('SearchPrefilterPrefix'));
+            $form->addElement('html', get_lang('SearchPrefilterPrefix').$url);
         } else {
-            $form->addElement('select', 'search_prefilter_prefix', get_lang('SearchPrefilterPrefix'), $sf_values, '');            
+            $form->addElement('select', 'search_prefilter_prefix', array(get_lang('SearchPrefilterPrefix'), $url), $sf_values, '');            
             $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
-        }   
-        $form->addElement('html', $url);                
+        }  
+                  
     }
 
     $default_values['search_enabled'] = $search_enabled;

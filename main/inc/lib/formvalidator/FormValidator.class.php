@@ -71,20 +71,27 @@ EOT;
 	
 		<div class="row {error_class}">	
 			<div class="label">
-				<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
+				<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
+				{label}
 			</div>
 			<div class="formw">
-				{element}<!-- BEGIN error --><span class="help-inline">{error}</span><!-- END error -->	
+				{element}
+				<!-- BEGIN label_2 -->
+					<span class="help-block">{label_2}</span>
+				<!-- END label_2 -->
+				
+				<!-- BEGIN error -->
+					<span class="help-inline">{error}</span>
+				<!-- END error -->	
 			</div>
 		</div>
-
 EOT;
 		$renderer->setElementTemplate($element_template);
 		$header_template = <<<EOT
 	<legend>{header}</legend>
 EOT;
 		$renderer->setHeaderTemplate($header_template);
-		HTML_QuickForm :: setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
+		HTML_QuickForm::setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
 		$required_note_template = <<<EOT
 	<div class="row">
 		<div class="label"></div>

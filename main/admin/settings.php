@@ -67,8 +67,12 @@ if (isset($_GET['delete_watermark'])) {
 if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {
     $form = new FormValidator('settings', 'post', 'settings.php?category='.$_GET['category']);
     $renderer = & $form->defaultRenderer();
-    $renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
-    $renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
+    /*$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>');
+    $renderer->setElementTemplate('<div class="sectionvalue">{element}</div><div class="sectioncomment">{label}</div>'."\n");*/
+    
+    //$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>');
+    $renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 --></div></div>');
+    
     $my_category = Database::escape_string($_GET['category']);
 
     $sqlcountsettings = "SELECT COUNT(*) FROM $table_settings_current WHERE category='".$my_category."' AND type<>'checkbox'";
@@ -121,7 +125,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
         $i++;
 
-        $form->addElement('header', null, get_lang($row['title']));
+        //$form->addElement('header', null, get_lang($row['title']));
 
         if ($row['access_url_changeable'] == '1' && $_configuration['multiple_access_urls']) {
             $form->addElement('html', '<div style="float: right;">'.Display::return_icon('shared_setting.png', get_lang('SharedSettingIconComment')).'</div>');
@@ -155,7 +159,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         switch ($row['type']) {
             case 'textfield':            	
                 if ($row['variable'] == 'account_valid_duration') {
-                    $form->addElement('text', $row['variable'], get_lang($row['comment']), array('maxlength' => '5'));
+                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), array('maxlength' => '5'));
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
 
@@ -184,10 +188,10 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                             unset($valid_encodings[$key]);
                         }
                     }
-                    $form->addElement('select', $row['variable'], get_lang($row['comment']), $valid_encodings);
+                    $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), $valid_encodings);
                     $default_values[$row['variable']] = $current_system_encoding;
                 } else {
-                    $form->addElement('text', $row['variable'], get_lang($row['comment']), $hideme);
+                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), $hideme);
                     $form->applyFilter($row['variable'],'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
                 }
@@ -199,10 +203,10 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             		if (file_exists($file)) {
 						$value = file_get_contents($file);
             		}
-            	    $form->addElement('textarea', $row['variable'], get_lang($row['comment']) , array('rows'=>'10','cols'=>'50'), $hideme);
+            	    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10','cols'=>'50'), $hideme);
             	    $default_values[$row['variable']] = $value;            	        
             	} else {
-                	$form->addElement('textarea', $row['variable'], get_lang($row['comment']) , array('rows'=>'10','cols'=>'50'), $hideme);
+                	$form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10','cols'=>'50'), $hideme);
                 	$default_values[$row['variable']] = $row['selected_value'];
             	}
                 break;
@@ -218,7 +222,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                         $group[] = $element;
                     }
                 }
-                $form->addGroup($group, $row['variable'], get_lang($row['comment']), '<br />', false);
+                $form->addGroup($group, $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), '<div></div>', false); //julio
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
             case 'checkbox';
@@ -259,17 +263,17 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                     }
                     $group[] = $element;
                 }
-                $form->addGroup($group, $row['variable'], get_lang($row['comment']), '<br />'."\n");
+                $form->addGroup($group, $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])),'<div></div>');
                 break;
             case 'link':
-                $form->addElement('static', null, get_lang($row['comment']), get_lang('CurrentValue').' : '.$row['selected_value'], $hideme);
+                $form->addElement('static', null, array(get_lang($row['title']), get_lang($row['comment'])), get_lang('CurrentValue').' : '.$row['selected_value'], $hideme);
                 break;
             /*
              * To populate its list of options, the select type dynamically calls a function that must be called select_ + the name of the variable being displayed.
              * The functions being called must be added to the file settings.lib.php.
              */
             case 'select':
-                $form->addElement('select', $row['variable'], get_lang($row['comment']), call_user_func('select_'.$row['variable']), $hideme);
+                $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), call_user_func('select_'.$row['variable']), $hideme);
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
             /*

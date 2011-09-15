@@ -3555,6 +3555,18 @@ fieldset legend {
     color: red;
 }
 
+.help-block{
+    display:block;
+    max-width:640px;
+    margin:5px 0 0!important;
+    line-height:18px;
+}
+.help-inline, .help-block {
+    color: #777777;
+    font-size: 12px;
+}
+
+
 form div.error > .label, 
 form div.error > label, 
 form div.error span.help-inline, 

@@ -77,19 +77,28 @@ if (isset($_GET['preview'])) {
 
 //Notice we not add there the lp_item_view__id because is not already generated 
 $exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.$extra_params;
-
 $label = get_lang('StartTest');
 if ($time_control && !empty($clock_expired_time)) {
 	$label = get_lang('ContinueTest');
 }
-$exercise_url = Display::url($label, $exercise_url, array('class'=>'a_button orange bigger round'));
+$exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, 0);
+if (isset($exercise_stat_info['exe_id'])) {
+	$attempt_list = get_all_exercise_event_by_exe_id($exercise_stat_info['exe_id']);
+}
+$message = '';
+if (!empty($attempt_list)) {
+	$message = Display::return_message(get_lang('YouTriedToResolveThisExerciseEarlier'));
+	$label = get_lang('ContinueTest');
+}
+$html .= $message;
+$exercise_url_button = Display::url($label, $exercise_url, array('class'=>'a_button blue bigger round'));
 
 if (!$objExercise->is_visible()) {
-	$exercise_url = Display::div($label, array('class'=>'a_button white bigger round no_link'));
+	$exercise_url_button = Display::url($label, $exercise_url, array('class'=>'a_button white bigger round no_link'));
 }
 
 $options  = Display::div('', array('class'=>'left_option'));
-$options .= Display::div($exercise_url, array('class'=>'center_option'));
+$options .= Display::div($exercise_url_button, array('class'=>'center_option'));
 
 $attempts = get_exercise_results_by_user(api_get_user_id(), $objExercise->id, api_get_course_id(), api_get_session_id(), $learnpath_id, $learnpath_item_id);
 

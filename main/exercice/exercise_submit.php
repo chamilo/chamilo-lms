@@ -926,7 +926,7 @@ if (!empty($error)) {
     }
     
     if (!empty($attempt_list) && $current_question == 1) {
-        Display::display_normal_message(get_lang('YouTriedToResolveThisExerciseEarlier'));
+        //Display::display_normal_message(get_lang('YouTriedToResolveThisExerciseEarlier'));
     }
     
     $remind_list  = array();

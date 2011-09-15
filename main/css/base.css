@@ -52,9 +52,7 @@ form,
 label,
 legend,
 button,
-table,
 caption,
-tbody,
 tfoot,
 thead,
 tr,
@@ -62,7 +60,7 @@ th,
 td {
   margin: 0;
   padding: 0;
-  border: 0;
+  border: 0; 
   font-weight: normal;
   font-style: normal;
   font-size: 100%;
@@ -83,13 +81,10 @@ blockquote:after {
   content: "";
 }
 html {
-  overflow-y: scroll;
+/*  overflow-y: scroll; breaks fckeditor */
   font-size: 100%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
-}
-a:focus {
-
 }
 article,
 aside,

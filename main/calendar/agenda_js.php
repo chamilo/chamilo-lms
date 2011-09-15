@@ -21,19 +21,33 @@ $htmlHeadXtra[] = api_get_js('fullcalendar/fullcalendar.min.js');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/fullcalendar/fullcalendar.css');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/jquery.qtip.min.css');
 
-$tpl = new Template();
-$type   = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ?  $_REQUEST['type'] : 'personal';
-
-$agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type=personal&';
+$tpl	= new Template();
+$type  	= isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ?  $_REQUEST['type'] : 'personal';
 
 if (api_is_platform_admin() && $type == 'admin') {	
-	$agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type=admin&';
+	$type = 'admin';
+}
+//if (api_get_course_id() != -1 && $type == 'course') {
+if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {	
+	$type = 'course';
+}
+$can_add_events = 0;
+
+if (api_is_platform_admin()) {
+	$can_add_events = 1;
+}
+if (api_is_allowed_to_edit()) {
+	$can_add_events = 1;	
 }
 
-//if (api_get_course_id() != -1 && $type == 'course') {
-if (api_get_course_id() != -1 && isset($_REQUEST['cidReq'])) {
-	$agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type=course&';
+if ($type == 'personal' && !api_is_anonymous()) {
+	$can_add_events = 1;
 }
+
+$tpl->assign('type', $type);
+$tpl->assign('can_add_events', $can_add_events);
+ 
+$agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type.'&';
 
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 

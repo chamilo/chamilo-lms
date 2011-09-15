@@ -5,6 +5,16 @@ class Agenda {
 	function __construct() {
 		$this->tbl_global_agenda 	= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);  
 		$this->tbl_personal_agenda 	= Database::get_user_personal_table(TABLE_PERSONAL_AGENDA);
+		
+		$this->course = null;
+		$this->tbl_course_agenda = null;
+		
+		$course_info = api_get_course_info();
+		if (!empty($course_info)) {
+			$this->course = $course_info;
+			$this->tbl_course_agenda 	= Database::get_course_table(TABLE_AGENDA, $course_info['db_name']);
+		}
+		
 		$this->events				= array();
 		
 		$this->event_platform_color = 'red';//red
@@ -30,7 +40,7 @@ class Agenda {
 		$end 		= date('Y-m-d H:i:s', $end);			
 		$start 		= api_get_utc_datetime($start);
 		$end 		= api_get_utc_datetime($end);				
-		$all_day = isset($all_day) && $all_day == 'true' ? 1:0;
+		$all_day 	= isset($all_day) && $all_day == 'true' ? 1:0;
 		
 		$attributes = array();
 		$id = null;
@@ -45,7 +55,18 @@ class Agenda {
 				$id = Database::insert($this->tbl_personal_agenda, $attributes);
 				break;
 			case 'course':
+				//$attributes['user'] 		= api_get_user_id();
+				$attributes['title'] 		= $title;
+				$attributes['content'] 		= $content;
+				$attributes['start_date'] 	= $start;
+				$attributes['end_date'] 	= $end;
+				$attributes['all_day'] 		= $all_day;
+				$attributes['session_id'] 	= api_get_session_id();
 				
+				//simple course event
+				$id = Database::insert($this->tbl_course_agenda, $attributes);				
+				api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id,"AgendaAdded", api_get_user_id(), '','',$start, $end);
+			
 				break;
 			case 'admin':				
 				$attributes['title'] 		= $title;
@@ -56,10 +77,8 @@ class Agenda {
 				$attributes['access_url_id'] 	= api_get_current_access_url_id();
 				$id = Database::insert($this->tbl_global_agenda, $attributes);
 				break;
-		}
-				
-		return $id;
-				
+		}				
+		return $id;				
 	}
 	
 	function edit_event($id, $start, $end, $all_day, $view, $type, $title, $content) {
@@ -74,22 +93,28 @@ class Agenda {
 		$all_day 	= isset($all_day) && $all_day == '1' ? 1:0;
 		
 		$attributes = array();
+		
 		switch($type) {
 			case 'personal':
 				$attributes['title'] 	= $title;
 				$attributes['text'] 	= $content;
 				$attributes['date'] 	= $start;
 				$attributes['enddate'] 	= $end;
-				Database::update($this->tbl_personal_agenda, $attributes, array('id = ?' =>$id));
+				Database::update($this->tbl_personal_agenda, $attributes, array('id = ?' => $id));
 				break;
 			case 'course':
+				$attributes['title'] 		= $title;
+				$attributes['content'] 		= $content;
+				$attributes['start_date'] 	= $start;
+				$attributes['end_date'] 	= $end;
+				Database::update($this->tbl_course_agenda, $attributes, array('id = ?' => $id));
 				break;
 			case 'admin':
 				$attributes['title'] 		= $title;
 				$attributes['content'] 		= $content;
 				$attributes['start_date'] 	= $start;
 				$attributes['end_date'] 	= $end;
-				Database::update($this->tbl_global_agenda, $attributes, array('id = ?' =>$id));
+				Database::update($this->tbl_global_agenda, $attributes, array('id = ?' => $id));
 				break;
 				break;
 		}
@@ -101,6 +126,7 @@ class Agenda {
 				Database::delete($this->tbl_personal_agenda, array('id = ?' =>$id));
 				break;
 			case 'course':
+				Database::delete($this->tbl_course_agenda, array('id = ?' =>$id));
 				break;
 			case 'admin':
 				Database::delete($this->tbl_global_agenda, array('id = ?' =>$id));
@@ -118,8 +144,7 @@ class Agenda {
 	 * @param	int		course id *integer* not the course code 
 	 * 
 	 */
-	function get_events($start, $end, $type, $user_id, $course_id = null) {
-				
+	function get_events($start, $end, $type, $user_id, $course_id = null) {				
 		switch($type) {
 			case 'admin':
 				$this->get_platform_events($start, $end);
@@ -132,17 +157,21 @@ class Agenda {
 			default:
 				$this->get_personal_events($start, $end);
 				$this->get_platform_events($start, $end);
-				$my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id(), true);
-				
-				foreach($my_course_list as $course_info_item) {
-					if (isset($course_id) && !empty($course_id)) {
-						if ($course_info_item['course_id'] == $course_id) {
+				$my_course_list = array();
+				if (!api_is_anonymous()) {
+					$my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id(), true);
+				}				
+				if (!empty($my_course_list)) {
+					foreach($my_course_list as $course_info_item) {
+						if (isset($course_id) && !empty($course_id)) {
+							if ($course_info_item['course_id'] == $course_id) {
+								$this->get_course_events($start, $end, $course_info_item);
+							}
+						} else {
 							$this->get_course_events($start, $end, $course_info_item);
 						}
-					} else {
-						$this->get_course_events($start, $end, $course_info_item);
-					}
-				}				
+					}				
+				}
 				break;
 		}		
 		if (!empty($this->events)) {
@@ -154,18 +183,29 @@ class Agenda {
 	function move_event($id, $type, $day_delta, $minute_delta) {		
 		// we convert the hour delta into minutes and add the minute delta
 		$delta = ($day_delta * 60 * 24) + $minute_delta;
+		$delta = intval($delta);
 		
-		//$table_agenda = Database::get_course_table ( TABLE_AGENDA );
-		switch($type) {
-			case 'personal':
-				$personal_event = $this->get_personal_event($id);				
-				if (!empty($personal_event)) {
-					$sql = "UPDATE $this->tbl_personal_agenda SET date = DATE_ADD(date,INTERVAL $delta MINUTE), enddate = DATE_ADD(enddate,INTERVAL $delta MINUTE) 
+		$event = $this->get_event($id, $type);
+		
+		if (!empty($event)){
+			switch($type) {
+				case 'personal':
+					$sql = "UPDATE $this->tbl_personal_agenda SET date = DATE_ADD(date, INTERVAL $delta MINUTE), enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE) 
+							WHERE id=".intval($id);
+					$result = Database::query($sql);				
+					break;
+				case 'course':
+					$sql = "UPDATE $this->tbl_course_agenda SET start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE), end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
+							WHERE id=".intval($id);
+					$result = Database::query($sql);					
+					break;
+				case 'admin':
+					$sql = "UPDATE $this->tbl_global_agenda SET start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE), end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
 							WHERE id=".intval($id);
 					$result = Database::query($sql);
-				}
-				break;
-		}
+					break;
+			}
+		}	
 		return 1;
 	}
 	
@@ -173,16 +213,35 @@ class Agenda {
 	 * Gets a single personal event	 
 	 * @param int event id
 	 */
-	function get_personal_event($id) {
+	function get_event($id, $type) {
 		// make sure events of the personal agenda can only be seen by the user himself
-		$user = api_get_user_id();
-		$sql = " SELECT * FROM ".$this->tbl_personal_agenda." WHERE id=".$id." AND user = ".$user;
-		$result = Database::query($sql);
-		$item = null;
-		if (Database::num_rows($result)) {
-			$item = Database::fetch_array($result);
+		$id = intval($id);
+		$event = null;
+		switch($type) {
+			case 'personal':
+				$user = api_get_user_id();
+				$sql = " SELECT * FROM ".$this->tbl_personal_agenda." WHERE id=".$id." AND user = ".$user;
+				$result = Database::query($sql);				
+				if (Database::num_rows($result)) {
+					$event = Database::fetch_array($result, 'ASSOC');
+				}
+				break;
+			case 'course':
+				$sql = " SELECT * FROM ".$this->tbl_course_agenda." WHERE id=".$id;
+				$result = Database::query($sql);
+				if (Database::num_rows($result)) {
+					$event = Database::fetch_array($result, 'ASSOC');
+				}
+				break;
+			case 'admin':
+				$sql = " SELECT * FROM ".$this->tbl_global_agenda." WHERE id=".$id;
+				$result = Database::query($sql);
+				if (Database::num_rows($result)) {
+					$event = Database::fetch_array($result, 'ASSOC');
+				}
+			break;
 		}
-		return $item;
+		return $event;
 	}
 	
 	/**
@@ -226,6 +285,91 @@ class Agenda {
 		return $my_events;
 	}
 	
+	function get_course_events($start, $end, $course_info, $group_id = 0) {
+		$group_memberships 	= GroupManager::get_group_ids($course_info['db_name'], api_get_user_id());
+	
+		$tlb_course_agenda	= Database::get_course_table(TABLE_AGENDA, $course_info['db_name']);
+		$tbl_property 		= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_info['db_name']);
+	
+		$user_id = api_get_user_id();
+	
+		if (is_array($group_memberships) && count($group_memberships)>0) {
+			$sql = "SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+						FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
+	                    WHERE agenda.id = ip.ref   ".$show_all_current."
+	                    AND ip.tool='".TOOL_CALENDAR_EVENT."'
+	                    AND ( ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+	                    AND ip.visibility='1'
+	            	";
+		} else {
+			if (api_get_user_id()) {
+				$sql="SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+	                		FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
+	            			WHERE agenda.id = ip.ref   ".$show_all_current." 
+	            				AND ip.tool='".TOOL_CALENDAR_EVENT."'
+	            				AND ( ip.to_user_id=$user_id OR ip.to_group_id='0')
+	                            AND ip.visibility='1'
+	                        ";
+			} else {
+				$sql="SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+	                                FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
+	                                WHERE agenda.id = ip.ref   ".$show_all_current."
+	                                AND ip.tool='".TOOL_CALENDAR_EVENT."'
+	                                AND ip.to_group_id='0'
+	                                AND ip.visibility='1'
+	                                ";
+			}
+		}
+		$result = Database::query($sql);
+		$events = array();
+		if (Database::num_rows($result)) {
+			while ($row = Database::fetch_array($result, 'ASSOC')) {
+				//Only show events from the session
+				if (api_get_course_int_id()) {
+					if ($row['session_id'] != api_get_session_id()) {
+						continue;
+					}
+				}
+				$event = array();
+				$event['id'] 	  		= 'course_'.$row['id'];
+				$event['title'] 		= $row['title'];
+				$event['className'] 	= 'course';
+				$event['allDay'] 	  	= 'false';
+				//	var_dump($row);
+				$event['borderColor'] 	= $event['backgroundColor'] = $this->event_course_color;
+				if (isset($row['session_id']) && !empty($row['session_id'])) {
+					$event['borderColor'] 	= $event['backgroundColor'] = $this->event_session_color;
+				}
+	
+				if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
+					$event['borderColor'] 	= $event['backgroundColor'] = $this->event_group_color;
+				}
+				
+				$event['editable'] 		= false;
+				if (api_is_allowed_to_edit()) {
+					$event['editable'] 		= true;
+				}	
+	
+				if (!empty($row['start_date']) && $row['start_date'] != '0000-00-00 00:00:00') {
+					$event['start'] = $this->format_event_date($row['start_date']);
+				}
+				if (!empty($row['end_date']) && $row['end_date'] != '0000-00-00 00:00:00') {
+					$event['end'] = $this->format_event_date($row['end_date']);
+				}
+	
+				$event['description'] = $row['content'];
+				$event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
+					
+	
+				$my_events[] = $event;
+	
+	
+				$this->events[] = $event;
+			}
+		}
+		return $events;
+	}
+	
 	function get_platform_events($start, $end) {
 		$start 	= intval($start);
 		$end	= intval($end);
@@ -249,6 +393,9 @@ class Agenda {
 				$event['allDay'] 	  	= 'false';
 				$event['borderColor'] 	= $event['backgroundColor'] = $this->event_platform_color;
 				$event['editable'] 		= false;
+				if (api_is_platform_admin()) {
+					$event['editable'] 		= true;
+				}
 				
 				if (!empty($row['start_date']) && $row['start_date'] != '0000-00-00 00:00:00') {
 					$event['start'] = $this->format_event_date($row['start_date']);					
@@ -268,86 +415,7 @@ class Agenda {
 		
 	}
 	
-	function get_course_events($start, $end, $course_info, $group_id = 0) {
-		$group_memberships 	= GroupManager::get_group_ids($course_info['db_name'], api_get_user_id());
-						
-		$tlb_course_agenda	= Database::get_course_table(TABLE_AGENDA, $course_info['db_name']);
-		$tbl_property 		= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_info['db_name']);
-		
-		$user_id = api_get_user_id();
-		
-		if (is_array($group_memberships) && count($group_memberships)>0) {
-        	$sql = "SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
-					FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
-                    WHERE agenda.id = ip.ref   ".$show_all_current."
-                    AND ip.tool='".TOOL_CALENDAR_EVENT."'
-                    AND ( ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-                    AND ip.visibility='1'
-            	";
-		} else {
-        	if (api_get_user_id()) {
-            	$sql="SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
-                		FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
-            			WHERE agenda.id = ip.ref   ".$show_all_current." 
-            				AND ip.tool='".TOOL_CALENDAR_EVENT."'
-            				AND ( ip.to_user_id=$user_id OR ip.to_group_id='0')
-                            AND ip.visibility='1'
-                        ";
-			} else {
-				$sql="SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
-                                FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
-                                WHERE agenda.id = ip.ref   ".$show_all_current."
-                                AND ip.tool='".TOOL_CALENDAR_EVENT."'
-                                AND ip.to_group_id='0'
-                                AND ip.visibility='1'
-                                ";
-            	}
-		}
-		$result = Database::query($sql);
-		$events = array();
-		if (Database::num_rows($result)) {
-			while ($row = Database::fetch_array($result, 'ASSOC')) {
-				//Only show events from the session
-				if (api_get_course_int_id()) {
-					if ($row['session_id'] != api_get_session_id()) {
-						continue;
-					}				
-				}
-				$event = array();
-				$event['id'] 	  		= 'course_'.$row['id'];
-				$event['title'] 		= $row['title'];
-				$event['className'] 	= 'course';
-				$event['allDay'] 	  	= 'false';
-			//	var_dump($row);
-				$event['borderColor'] 	= $event['backgroundColor'] = $this->event_course_color;
-				if (isset($row['session_id']) && !empty($row['session_id'])) {
-					$event['borderColor'] 	= $event['backgroundColor'] = $this->event_session_color;
-				}
-				
-				if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
-					$event['borderColor'] 	= $event['backgroundColor'] = $this->event_group_color;
-				}
-				
-				$event['editable'] 		= false;
-				
-				if (!empty($row['start_date']) && $row['start_date'] != '0000-00-00 00:00:00') {
-					$event['start'] = $this->format_event_date($row['start_date']);					
-				}			
-				if (!empty($row['end_date']) && $row['end_date'] != '0000-00-00 00:00:00') {
-					$event['end'] = $this->format_event_date($row['end_date']);
-					$event['allDay'] = false;
-				} else {
-					$event['allDay'] = true;
-				}			
-				$my_events[] = $event;
-				
-		
-				$this->events[] = $event;
-			}
-		}
-		
-		return $events;
-	}
+	
 	
 	function format_event_date($utc_time) {		
 		return date('c', api_strtotime(api_get_local_time($utc_time)));

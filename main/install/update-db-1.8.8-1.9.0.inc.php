@@ -253,7 +253,6 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
     }
 
-    /* // This fragment of code is not necessary so far.
     // Get the courses databases queries list (c_q_list)
     $c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-post.sql', 'course');
     if (count($c_q_list) > 0) {
@@ -296,11 +295,21 @@ if (defined('SYSTEM_INSTALLATION')) {
                             }
                         }
                     }
+                    //Adding all_day to the calendar event table
+                    $calendar_event_table = $row_course['db_name'].".calendar_event";
+                    if ($singleDbForm) {
+                    	$calendar_event_table = "$prefix{$row_course['db_name']}_calendar_event";
+                    }
+                    $query = "ALTER TABLE `".$calendar_event_table."` ADD COLUMN all_day INTEGER NOT NULL DEFAULT 0;";
+                    $res = Database::query($query);
+                    if ($res === false) {
+                    	error_log('Error in '.$query.': '.Database::error());
+                    }                    
                 }
             }
         }
     }
-    */
+    
 
 
 } else {

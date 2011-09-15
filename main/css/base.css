@@ -3518,7 +3518,7 @@ div.row div.formw {
 }
 
 .formw {
-    width:85%;
+/*    width:85%; */
 }
 .formw iframe {
    text-align: left;
@@ -3541,6 +3541,8 @@ fieldset {
     padding-top: 18px;
     */
 }
+
+
 
 
 fieldset legend {
@@ -3619,17 +3621,41 @@ form div.error input, form div.error textarea {
     width: 940px;
 }
 
+/* Top bar experimenting changes */
 #topbar_push {
-height:40px;
+    height:40px;
 }
-#header {
-/* padding-top: 41px !important;*/
-}
-
 .topbar-inner, .topbar .fill {
     height:40px;
 }
 
 .topbar li a   {
-color:#BFBFBF;
+    color:#BFBFBF;
 }
+
+/* agenda js  */
+#add_event_form fieldset {
+    width:400px;
+}
+
+.background_color_personal {
+    background:#3366CC;
+    width:100px;
+    display:block;
+    height:15px;
+}
+
+.background_color_admin {
+    background:red;
+    width:100px;
+    display:block;
+    height:15px;
+}
+
+.background_color_course {
+    background:#458B00;
+    width:100px;
+    display:block;
+    height:15px;
+}
+

@@ -25,7 +25,7 @@ $(document).ready(function() {
 			var start_date 	= Math.round(start.getTime() / 1000);
 			var end_date 	= Math.round(end.getTime() / 1000);
 			
-			var url = '{$_p.web_ajax}agenda.ajax.php?a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
+			var url = '{$web_agenda_ajax_url}a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
 			
 			$('#start_date').html(start.getDate() +"/"+ start.getMonth() +"/"+start.getFullYear());
 			$('#end_date').html('- '+ end.getDate() +"/"+ end.getMonth() +"/"+end.getFullYear());
@@ -84,8 +84,8 @@ $(document).ready(function() {
 			
 			$("#dialog-form").dialog("open");
 
-			var url = '{$_p.web_ajax}agenda.ajax.php?a=edit_event&id='+calEvent.id+'&start='+start_date+'&end='+end_date+'&all_day='+calEvent.allDay+'&view='+view.name;
-			var delete_url = '{$_p.web_ajax}agenda.ajax.php?a=delete_event&id='+calEvent.id;
+			var url = '{$web_agenda_ajax_url}a=edit_event&id='+calEvent.id+'&start='+start_date+'&end='+end_date+'&all_day='+calEvent.allDay+'&view='+view.name;
+			var delete_url = '{$web_agenda_ajax_url}a=delete_event&id='+calEvent.id;
 			
 			$("#dialog-form").dialog({				
 				buttons: {
@@ -132,7 +132,7 @@ $(document).ready(function() {
 
 		},
 		editable: true,		
-		events: "{$_p.web_ajax}agenda.ajax.php?a=get_events",		
+		events: "{$web_agenda_ajax_url}a=get_events",		
 		eventDrop: function(event, day_delta, minute_delta, all_day, revert_func) {		
 			$.ajax({
 				url: '{$ajax_url}',
@@ -153,32 +153,35 @@ $(document).ready(function() {
 });
 </script>
 
-<div id="dialog-form"  style="display:none">				
+<div id="dialog-form" style="display:none;">				
 	<form id="add_event_form" name="form">
+	<fieldset>
 		<div class="row">		
 			<div class="label">
-			<label for="date">{"Date"|get_lang}</label>
+				<label for="date">{"Date"|get_lang}</label>
 			</div>
 			<div class="formw">
 				<span id="start_date" class="label"></span><span id="end_date" class="label"></span>
 			</div>					
 		</div>
 		<div class="row">
-			<label for="name">{"Title"|get_lang}</label>
-		</div>
-		<div class="formw">
-			<input type="text" name="title" id="title" size="52" />				
-		</div>
-		
+			<div class="label">
+				<label for="name">{"Title"|get_lang}</label>
+			</div>		
+			<div class="formw">
+				<input type="text" name="title" id="title" size="52" />				
+			</div>
+		</div>		
 		<div class="row">
-			<label for="name">{"Description"|get_lang}</label>
+			<div class="label">
+				<label for="name">{"Description"|get_lang}</label>
+			</div>		
+			<div class="formw">
+				<textarea name="content" id="content" cols="50" rows="7"></textarea>
+			</div>
 		</div>
-		
-		<div class="formw">
-			<textarea name="content" id="content" cols="50" rows="7"></textarea>
-		</div>
+		</fieldset>
 	</form>
 </div>
 <div id='loading' style='position:absolute; display:none'>{"Loading"|get_lang}...</div>
-
 <div id='calendar'></div>

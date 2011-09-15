@@ -10,34 +10,33 @@ require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.lib.php';
 
-$action = $_REQUEST['a'];
+$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
+$type   = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ?  $_REQUEST['type'] : 'personal';
 $agenda = new Agenda();
 
 switch ($action) {    
-	case 'add_event':		
+	case 'add_event':
 		//For now we only save personal events
-		echo $agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], 'personal',$_REQUEST['title'], $_REQUEST['content']);
+		echo $agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], $type, $_REQUEST['title'], $_REQUEST['content']);
 		break;		
 	case 'edit_event':
 		$id_list 	= explode('_', $_REQUEST['id']);		
 		$type 		= $id_list[0];
 		$id 		= $id_list[1];		
-		
 		$agenda->edit_event($id, $_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], $type ,$_REQUEST['title'], $_REQUEST['content']);
 		break;
 	case 'delete_event':
 		$id_list 	= explode('_', $_REQUEST['id']);
 		$type 		= $id_list[0];
-		$id 		= $id_list[1];
-		
+		$id 		= $id_list[1];		
 		$agenda->delete_event($id, $type);
 		
 		break;
 	case 'move_event':
 		$day_delta 		= $_REQUEST['day_delta'];
 		$minute_delta 	= $_REQUEST['minute_delta'];
-		$type 			=  $_REQUEST['type'][0];
-		$id 			=  explode('_', $_REQUEST['id']);
+		$type 			= $_REQUEST['type'][0];
+		$id 			= explode('_', $_REQUEST['id']);
 		$id				= $id[1];
 		$agenda->move_event($id, $type, $day_delta, $minute_delta);
 		
@@ -46,11 +45,12 @@ switch ($action) {
 		$start 	= $_REQUEST['start'];
 		$end 	= $_REQUEST['end'];
 					
-		$events = $agenda->get_events($start, $end, api_get_user_id(), api_get_course_int_id());
+		$events = $agenda->get_events($start, $end, $type, api_get_user_id(), api_get_course_int_id());
 		echo $events;		
 		break;
+		
     case 'get_user_agenda':
-    	
+    	//Used in the admin user list 
     	api_protect_admin_script();
     	 
         if (api_is_allowed_to_edit(null, true)) {

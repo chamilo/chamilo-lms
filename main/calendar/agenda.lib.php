@@ -12,6 +12,7 @@ class Agenda {
 		$this->event_group_color 	= '#A0522D'; //siena
 		$this->event_session_color 	= '#000080'; // blue
 		$this->event_personal_color = 'steel blue'; //steel blue
+		$this->type 				= 'personal';
 		
 	}
 	
@@ -24,85 +25,133 @@ class Agenda {
 	 * @param	string	personal, course or global (only works for personal by now) 
 	 */
 	function add_event($start, $end, $all_day, $view, $type, $title, $content) {
-		$attributes = array();
-		$start = date('Y-m-d H:i:s', $start);
-		$end = date('Y-m-d H:i:s', $end);
-			
+		
+		$start 		= date('Y-m-d H:i:s', $start);
+		$end 		= date('Y-m-d H:i:s', $end);			
 		$start 		= api_get_utc_datetime($start);
-		$end 		= api_get_utc_datetime($end);		
+		$end 		= api_get_utc_datetime($end);				
 		$all_day = isset($all_day) && $all_day == 'true' ? 1:0;
 		
-		$attributes['user'] 	= api_get_user_id();
-		$attributes['title'] 	= $title;
-		$attributes['text'] 	= $content;
-		$attributes['date'] 	= $start;
-		$attributes['enddate'] 	= $end;
-		$attributes['all_day'] 	= $all_day;
-		
-		$id = Database::insert($this->tbl_personal_agenda, $attributes);		
+		$attributes = array();
+		$id = null;
+		switch($type) {
+			case 'personal':
+				$attributes['user'] 	= api_get_user_id();
+				$attributes['title'] 	= $title;
+				$attributes['text'] 	= $content;
+				$attributes['date'] 	= $start;
+				$attributes['enddate'] 	= $end;
+				$attributes['all_day'] 	= $all_day;
+				$id = Database::insert($this->tbl_personal_agenda, $attributes);
+				break;
+			case 'course':
+				
+				break;
+			case 'admin':				
+				$attributes['title'] 		= $title;
+				$attributes['content'] 		= $content;
+				$attributes['start_date'] 	= $start;
+				$attributes['end_date'] 	= $end;
+				$attributes['all_day'] 		= $all_day;
+				$attributes['access_url_id'] 	= api_get_current_access_url_id();
+				$id = Database::insert($this->tbl_global_agenda, $attributes);
+				break;
+		}
+				
 		return $id;
 				
 	}
 	
 	function edit_event($id, $start, $end, $all_day, $view, $type, $title, $content) {
-		$attributes = array();
+		
 		$start 		= date('Y-m-d H:i:s', $start);
 		$start 		= api_get_utc_datetime($start);
+		
 		if ($all_day == '0') {
 			$end 		= date('Y-m-d H:i:s', $end);		
-			$end 		= api_get_utc_datetime($end);
-			$attributes['enddate'] 	= $end;
+			$end 		= api_get_utc_datetime($end);			
 		}
 		$all_day 	= isset($all_day) && $all_day == '1' ? 1:0;
-			
-		//$attributes['user'] 	= api_get_user_id();
-		$attributes['title'] 	= $title;
-		$attributes['text'] 	= $content;
-		$attributes['date'] 	= $start;
 		
-		//$attributes['all_day'] 	= $all_day;
-		
-		Database::update($this->tbl_personal_agenda, $attributes, array('id = ?' =>$id));
+		$attributes = array();
+		switch($type) {
+			case 'personal':
+				$attributes['title'] 	= $title;
+				$attributes['text'] 	= $content;
+				$attributes['date'] 	= $start;
+				$attributes['enddate'] 	= $end;
+				Database::update($this->tbl_personal_agenda, $attributes, array('id = ?' =>$id));
+				break;
+			case 'course':
+				break;
+			case 'admin':
+				$attributes['title'] 		= $title;
+				$attributes['content'] 		= $content;
+				$attributes['start_date'] 	= $start;
+				$attributes['end_date'] 	= $end;
+				Database::update($this->tbl_global_agenda, $attributes, array('id = ?' =>$id));
+				break;
+				break;
+		}
 	}
 	
 	function delete_event($id, $type) {
-		Database::delete($this->tbl_personal_agenda, array('id = ?' =>$id));
+		switch($type) {
+			case 'personal':
+				Database::delete($this->tbl_personal_agenda, array('id = ?' =>$id));
+				break;
+			case 'course':
+				break;
+			case 'admin':
+				Database::delete($this->tbl_global_agenda, array('id = ?' =>$id));
+				break;
+		}
 	}
 	
 	/**
 	 * 
 	 * Get agenda events
-	 * @param string	$course_code
-	 * @param int		$session_id
-	 * @param int		$month
-	 * @param year		$year
-	 * @param day		$day
-	 * @param type		all, global (platform), course
+	 * @param	int		start tms
+	 * @param	int		end tms
+	 * @param 	string	agenda type (personal, admin or course)
+	 * @param	int		user id
+	 * @param	int		course id *integer* not the course code 
+	 * 
 	 */
-	function get_events($start, $end, $user_id, $course_id = null) {
+	function get_events($start, $end, $type, $user_id, $course_id = null) {
 				
-		$this->get_personal_events($start, $end);
-		$this->get_platform_events($start, $end);
-		
-		$my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id(), true);
-		foreach($my_course_list as $course_item) {	
-			if (isset($course_id) && !empty($course_id)) {
-				if ($course_item['course_id'] == $course_id) {
-					$this->get_course_events($start, $end, $course_item);
-				}
-			} else {
-				$this->get_course_events($start, $end, $course_item);
-			}
+		switch($type) {
+			case 'admin':
+				$this->get_platform_events($start, $end);
+				break;
+			case 'course':
+				$course_info = api_get_course_info_by_id($course_id);				
+				$this->get_course_events($start, $end, $course_info);
+				break;
+			case 'personal':
+			default:
+				$this->get_personal_events($start, $end);
+				$this->get_platform_events($start, $end);
+				$my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id(), true);
+				
+				foreach($my_course_list as $course_info_item) {
+					if (isset($course_id) && !empty($course_id)) {
+						if ($course_info_item['course_id'] == $course_id) {
+							$this->get_course_events($start, $end, $course_info_item);
+						}
+					} else {
+						$this->get_course_events($start, $end, $course_info_item);
+					}
+				}				
+				break;
 		}		
-		
 		if (!empty($this->events)) {
 			return json_encode($this->events);
 		}
 		return '';	
 	}
 	
-	function move_event($id, $type, $day_delta, $minute_delta) {
-		
+	function move_event($id, $type, $day_delta, $minute_delta) {		
 		// we convert the hour delta into minutes and add the minute delta
 		$delta = ($day_delta * 60 * 24) + $minute_delta;
 		
@@ -120,18 +169,28 @@ class Agenda {
 		return 1;
 	}
 	
+	/**
+	 * Gets a single personal event	 
+	 * @param int event id
+	 */
 	function get_personal_event($id) {
 		// make sure events of the personal agenda can only be seen by the user himself
 		$user = api_get_user_id();
 		$sql = " SELECT * FROM ".$this->tbl_personal_agenda." WHERE id=".$id." AND user = ".$user;
 		$result = Database::query($sql);
 		$item = null;
-		if (Database::num_rows($result)==1) {
+		if (Database::num_rows($result)) {
 			$item = Database::fetch_array($result);
 		}
 		return $item;
 	}
 	
+	/**
+	 * 
+	 * Gets personal events
+	 * @param int 	start date tms
+	 * @param int	end   date tms
+	 */
 	function get_personal_events($start, $end) {
 		$start 	= intval($start);
 		$end	= intval($end);		
@@ -195,11 +254,12 @@ class Agenda {
 					$event['start'] = $this->format_event_date($row['start_date']);					
 				}			
 				if (!empty($row['end_date']) && $row['end_date'] != '0000-00-00 00:00:00') {
-					$event['end'] = $this->format_event_date($row['end_date']);
-					$event['allDay'] = false;
-				} else {
-					$event['allDay'] = true;
-				}			
+					$event['end'] = $this->format_event_date($row['end_date']);				
+				}
+				
+				$event['description'] = $row['content'];								
+				$event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
+				
 				$my_events[] = $event;
 				$this->events[]= $event;
 			}

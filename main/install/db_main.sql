@@ -1408,6 +1408,7 @@ CREATE TABLE IF NOT EXISTS sys_calendar (
   start_date datetime NOT NULL default '0000-00-00 00:00:00',
   end_date datetime NOT NULL default '0000-00-00 00:00:00',
   access_url_id INT NOT NULL default 1,
+  all_day INT NOT NULL DEFAULT 0;
   PRIMARY KEY  (id)
 );
 

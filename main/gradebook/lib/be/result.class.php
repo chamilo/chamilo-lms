@@ -77,38 +77,41 @@ class Result
 	 * @param $evaluation_id evaluation where this is a result for
 	 */
 	public function load ($id = null, $user_id = null, $evaluation_id = null) {
-		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-		$tbl_course_rel_course = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		$tbl_session_rel_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$tbl_grade_results 				= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+		$tbl_course_rel_course 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$tbl_session_rel_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		
 		if (is_null($id ) && is_null($user_id) && !is_null($evaluation_id)) {
 
-			$sql_verified_if_exist_evaluation='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE evaluation_id="'.Database::escape_string($evaluation_id).'";';
-			$res_verified_if_exist_evaluation=Database::query($sql_verified_if_exist_evaluation);
-			$info_verified_if_exist_evaluation=Database::result($res_verified_if_exist_evaluation,0,0);
-				if ($info_verified_if_exist_evaluation!=0) {
+			$sql_verified_if_exist_evaluation	= 'SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE evaluation_id="'.Database::escape_string($evaluation_id).'";';
+			$res_verified_if_exist_evaluation	= Database::query($sql_verified_if_exist_evaluation);
+			$info_verified_if_exist_evaluation	= Database::result($res_verified_if_exist_evaluation,0,0);
+			
+			if ($info_verified_if_exist_evaluation != 0 ) {
 
 				$sql_course_rel_user= '';
 				if (api_get_session_id()) {
-					$sql_course_rel_user = 'SELECT course_code,id_user,status FROM '.$tbl_session_rel_course_user.' WHERE status=0 AND course_code="'.api_get_course_id().' AND id_session='.api_get_session_id().'"';
+					$sql_course_rel_user = 'SELECT course_code,id_user,status FROM '.$tbl_session_rel_course_user.' 
+											WHERE status=0 AND course_code="'.api_get_course_id().'" AND id_session='.api_get_session_id();
 				} else {
-					$sql_course_rel_user = 'SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status="'.STUDENT.'" AND course_code="'.api_get_course_id().'"; ';
+					$sql_course_rel_user = 'SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status ="'.STUDENT.'" AND course_code="'.api_get_course_id().'" ';
 				}
 
-				$res_course_rel_user=Database::query($sql_course_rel_user);
+				$res_course_rel_user = Database::query($sql_course_rel_user);
 
-				$list_user_course_list=array();
-				while ($row_course_rel_user=Database::fetch_array($res_course_rel_user)) {
-					$list_user_course_list[]=$row_course_rel_user;
+				$list_user_course_list = array();
+				while ($row_course_rel_user = Database::fetch_array($res_course_rel_user)) {
+					$list_user_course_list[]= $row_course_rel_user;
 				}
 
 				$current_date=api_get_utc_datetime();
-				for ($i=0;$i<count($list_user_course_list);$i++) {
-					$sql_verified='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE user_id="'.(int)($list_user_course_list[$i]['user_id']).'" AND evaluation_id="'.Database::escape_string($evaluation_id).'";';
+				for ($i=0; $i<count($list_user_course_list); $i++) {
+					$sql_verified = 'SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE user_id="'.intval(($list_user_course_list[$i]['user_id'])).'" AND evaluation_id="'.intval($evaluation_id).'";';
 					//$my_status_in_course=CourseManager::get_user_in_course_status($list_user_course_list[$i]['user_id'], api_get_course_id());
-					$res_verified=Database::query($sql_verified);
-					$info_verified=Database::result($res_verified,0,0);
-					if ($info_verified==0) {
-						$sql_insert='INSERT INTO '.$tbl_grade_results.'(user_id,evaluation_id,created_at,score) values ("'.Database::escape_string($list_user_course_list[$i]['user_id']).'","'.Database::escape_string($evaluation_id).'","'.$current_date.'",0);';
+					$res_verified 	= Database::query($sql_verified);
+					$info_verified  = Database::result($res_verified,0,0);
+					if ($info_verified == 0) {
+						$sql_insert='INSERT INTO '.$tbl_grade_results.'(user_id,evaluation_id,created_at,score) values ("'.intval($list_user_course_list[$i]['user_id']).'","'.intval($evaluation_id).'","'.$current_date.'",0);';
 						$res_insert=Database::query($sql_insert);
 					}
 				}

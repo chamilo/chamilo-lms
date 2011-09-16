@@ -824,7 +824,8 @@ VALUES
 ('enable_nanogong',NULL,'radio','Tools','false','EnableNanogongTitle','EnableNanogongComment',NULL,NULL, 0),
 ('filter_terms',NULL,'textarea','Security','','FilterTermsTitle','FilterTermsComment',NULL,NULL, 0),
 ('header_extra_content', NULL, 'textarea', 'Tracking', '', 'HeaderExtraContentTitle', 'HeaderExtraContentComment', NULL, NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.15605','DokeosDatabaseVersion','', NULL, NULL, 0);
+('show_documents_preview', NULL, 'radio', 'Tools', 'false', 'ShowDocumentPreviewTitle', 'ShowDocumentPreviewComment', NULL, NULL, 1),
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.15650','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1090,7 +1091,9 @@ VALUES
 ('enable_quiz_scenario', 'true', 'Yes'),
 ('enable_quiz_scenario', 'false', 'No'),
 ('enable_nanogong','true','Yes'),
-('enable_nanogong','false','No');
+('enable_nanogong','false','No'),
+('show_documents_preview', 'true', 'Yes'),
+('show_documents_preview', 'false', 'No');
 
 UNLOCK TABLES;
 

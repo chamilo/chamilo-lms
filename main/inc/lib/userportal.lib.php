@@ -22,7 +22,10 @@ class IndexManager {
 		
 		$this->home = api_get_home_path();
 		$this->user_id = api_get_user_id();
-		$this->load_directories_preview = true;
+		$this->load_directories_preview = false;
+		if (api_get_setting('show_documents_preview') == 'true') {
+			$this->load_directories_preview = true;
+		}		
 	}
 	
 	

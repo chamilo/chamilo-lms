@@ -13,7 +13,7 @@
 -- This first part is for the main database
 
 -- xxMAINxx
-UPDATE settings_current SET selected_value = '1.9.0.15605' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.15650' WHERE variable = 'chamilo_database_version';
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('filter_terms', NULL, 'textarea', 'Security', '', 'FilterTermsTitle', 'FilterTermsComment', NULL, NULL, 0);
 
@@ -21,6 +21,12 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 
 ALTER TABLE personal_agenda ADD COLUMN all_day INTEGER NOT NULL DEFAULT 0;
 ALTER TABLE sys_calendar ADD COLUMN all_day INTEGER NOT NULL DEFAULT 0;
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_documents_preview', NULL, 'radio', 'Tools', 'false', 'ShowDocumentPreviewTitle', 'ShowDocumentPreviewComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_documents_preview', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_documents_preview', 'false', 'No');
+
+show_documents_preview
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';

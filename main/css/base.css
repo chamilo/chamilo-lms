@@ -3670,3 +3670,14 @@ form div.error input, form div.error textarea {
     height:15px;
 }
 
+
+.tag {
+    background-color: #D3E6EF;
+    border-radius: 3px 3px 3px 3px;
+    display: inline-block;
+    float: left;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 0 10px 5px 0;
+    padding: 0.4em 0.6em;
+}

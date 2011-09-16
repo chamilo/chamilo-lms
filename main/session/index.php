@@ -25,8 +25,6 @@ api_block_anonymous_users(); // Only users who are logged in can proceed.
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 
-Display::display_header(get_lang('Session'));
-
 if (empty($_GET['session_id'])) {
 	api_not_allowed();
 }
@@ -39,6 +37,71 @@ $_SESSION['id_session'] = $session_id;
 $session_info   = SessionManager::fetch($session_id);
 $session_list   = SessionManager::get_sessions_by_coach(api_get_user_id());
 $course_list    = SessionManager::get_course_list_by_session_id($session_id);
+
+
+//Getting all sessions where I'm subscribed
+$new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
+
+$my_session_list = array();
+$final_array = array();
+
+if (!empty($new_session_list)) {
+	foreach($new_session_list as $item) {
+		$my_session_id = isset($item['id_session']) ? $item['id_session'] : null;
+		if (isset($my_session_id) && !in_array($my_session_id, $my_session_list) && $session_id == $my_session_id) {
+			$final_array[$my_session_id]['name'] = $item['session_name'];
+
+			//Get all courses by session where I'm subscribed
+			$my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id);
+			 
+			foreach ($my_course_list as $my_course) {
+				$course = array();
+
+				$course_info   = api_get_course_info($my_course['code']);
+				//Getting all exercises from the current course
+				$exercise_list = get_all_exercises($course_info, $my_session_id);
+				 
+				//Exercises we skip
+				/*if (empty($exercise_list)) {
+				continue;
+				} */
+				//$exercise_course_list = array();
+				$course['name'] = $course_info['name'];
+				$course['id']   = $course_info['real_id'];
+				if (!empty($exercise_list)) {
+					foreach($exercise_list as $exercise_item) {
+						//Loading the exercise
+						$exercise = new Exercise($course_info['real_id']);
+						$exercise->read($exercise_item['id']);
+						//$exercise_course_list[$exercise_item['id']] = $exercise;
+						//Reading all Exercise results by user, exercise_id, code, and session
+						$user_results = get_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);
+						$course['exercises'][$exercise_item['id']]['data']['exercise_data'] =  $exercise;
+						$course['exercises'][$exercise_item['id']]['data']['results']       =  $user_results;
+					}
+					$final_array[$my_session_id]['data'][$my_course['code']] = $course;
+				}
+			}
+		}
+		$my_session_list[] =  $my_session_id;
+	}
+}
+
+//echo '<pre>';print_r($final_array);
+//If the requested session does not exist in my list we stop the script
+if (!api_is_platform_admin()) {
+	if (!in_array($session_id, $my_session_list)) {
+		api_not_allowed();
+	}
+}
+
+//If session is not active we stop de script
+if (!api_is_allowed_to_session_edit()) {
+	api_not_allowed();
+}
+		
+Display::display_header(get_lang('Session'));
+
 
 $session_select = array();
 foreach ($session_list as $item) {
@@ -69,64 +132,7 @@ if (!empty($course_list)) {
     }
 }*/
 
-//Getting all sessions where I'm subscribed
-$new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
 
-$my_session_list = array();
-$final_array = array();
-
-if (!empty($new_session_list)) {
-    foreach($new_session_list as $item) {
-        $my_session_id = isset($item['id_session']) ? $item['id_session'] : null;    
-        if (isset($my_session_id) && !in_array($my_session_id, $my_session_list) && $session_id == $my_session_id) {
-        	$final_array[$my_session_id]['name'] = $item['session_name'];
-            
-            //Get all courses by session where I'm subscribed
-            $my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id);            
-                   
-            foreach ($my_course_list as $my_course) {
-                $course = array();
-            
-                $course_info   = api_get_course_info($my_course['code']);
-                //Getting all exercises from the current course            
-                $exercise_list = get_all_exercises($course_info, $my_session_id);
-                           
-                //Exercises we skip
-                /*if (empty($exercise_list)) {
-                    continue;
-                } */   
-                //$exercise_course_list = array();
-                $course['name'] = $course_info['name'];
-                $course['id']   = $course_info['real_id'];
-                if (!empty($exercise_list)) {        
-                    foreach($exercise_list as $exercise_item) {
-                        //Loading the exercise                
-                        $exercise = new Exercise($course_info['real_id']);
-                        $exercise->read($exercise_item['id']);                                    
-                        //$exercise_course_list[$exercise_item['id']] = $exercise;
-                        //Reading all Exercise results by user, exercise_id, code, and session
-                        $user_results = get_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);
-                        $course['exercises'][$exercise_item['id']]['data']['exercise_data'] =  $exercise;                            
-                        $course['exercises'][$exercise_item['id']]['data']['results']       =  $user_results;
-                    }
-                    $final_array[$my_session_id]['data'][$my_course['code']] = $course;        
-                }   
-            }            
-        }
-        $my_session_list[] =  $my_session_id;      
-    }
-}
-//echo '<pre>';print_r($final_array);
-//If the requested session does not exist in my list we stop the script
-if (!api_is_platform_admin()) {        
-    if (!in_array($session_id, $my_session_list)) {
-        api_not_allowed();
-    }
-}
-//If session is not active we stop de script
-if (!api_is_allowed_to_session_edit()) {
-    api_not_allowed();
-}
 
 //Final data to be show
 $my_real_array = $new_exercises = array();
@@ -219,7 +225,7 @@ if (!empty($new_exercises)) {
 }
 $back_url = '';
 if (!empty($course_id)) {
-    $back_url = Display::url(Display::return_icon('back.png',get_lang('back.png')), api_get_path(WEB_CODE_PATH).'session/?session_id='.$session_id);
+    //$back_url = Display::url(Display::return_icon('back.png',get_lang('back.png')), api_get_path(WEB_CODE_PATH).'session/?session_id='.$session_id);
 }
 
 $start = $end = $start_only = $end_only ='';

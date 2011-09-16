@@ -319,7 +319,7 @@ if ($add_type == 'multiple') {
 		echo '</div>';
 
 	echo '<div id="social-content-right">';	
-    echo '<h1><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h1>';
+    echo '<h2>'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h2>';
     
 	if (count($nosessionUsersList) == 0) {
 			$friends = SocialManager::get_friends(api_get_user_id());

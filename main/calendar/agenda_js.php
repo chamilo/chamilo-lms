@@ -31,16 +31,15 @@ if (api_is_platform_admin() && $type == 'admin') {
 if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {	
 	$type = 'course';
 }
-$can_add_events = 0;
 
-if (api_is_platform_admin()) {
+$can_add_events = 0;
+if (api_is_platform_admin() && $type == 'admin') {
 	$can_add_events = 1;
 }
-if (api_is_allowed_to_edit()) {
+if (api_is_allowed_to_edit() && $type == 'course') {
 	$can_add_events = 1;	
 }
-
-if ($type == 'personal' && !api_is_anonymous()) {
+if (!api_is_anonymous() && $type == 'personal') {
 	$can_add_events = 1;
 }
 

@@ -34,7 +34,7 @@ class Agenda {
 	 * @param 	string	agendaDay, agendaWeek, month
 	 * @param	string	personal, course or global (only works for personal by now) 
 	 */
-	function add_event($start, $end, $all_day, $view, $type, $title, $content) {
+	function add_event($start, $end, $all_day, $view, $title, $content) {
 		
 		$start 		= date('Y-m-d H:i:s', $start);
 		$end 		= date('Y-m-d H:i:s', $end);			
@@ -44,7 +44,7 @@ class Agenda {
 		
 		$attributes = array();
 		$id = null;
-		switch($type) {
+		switch($this->type) {
 			case 'personal':
 				$attributes['user'] 	= api_get_user_id();
 				$attributes['title'] 	= $title;
@@ -81,7 +81,7 @@ class Agenda {
 		return $id;				
 	}
 	
-	function edit_event($id, $start, $end, $all_day, $view, $type, $title, $content) {
+	function edit_event($id, $start, $end, $all_day, $view, $title, $content) {
 		
 		$start 		= date('Y-m-d H:i:s', $start);
 		$start 		= api_get_utc_datetime($start);
@@ -94,7 +94,7 @@ class Agenda {
 		
 		$attributes = array();
 		
-		switch($type) {
+		switch($this->type) {
 			case 'personal':
 				$attributes['title'] 	= $title;
 				$attributes['text'] 	= $content;
@@ -120,8 +120,8 @@ class Agenda {
 		}
 	}
 	
-	function delete_event($id, $type) {
-		switch($type) {
+	function delete_event($id) {
+		switch($this->type) {
 			case 'personal':
 				Database::delete($this->tbl_personal_agenda, array('id = ?' =>$id));
 				break;
@@ -144,8 +144,8 @@ class Agenda {
 	 * @param	int		course id *integer* not the course code 
 	 * 
 	 */
-	function get_events($start, $end, $type, $user_id, $course_id = null) {				
-		switch($type) {
+	function get_events($start, $end, $user_id, $course_id = null) {				
+		switch($this->type) {
 			case 'admin':
 				$this->get_platform_events($start, $end);
 				break;
@@ -180,15 +180,15 @@ class Agenda {
 		return '';	
 	}
 	
-	function move_event($id, $type, $day_delta, $minute_delta) {		
+	function move_event($id, $day_delta, $minute_delta) {		
 		// we convert the hour delta into minutes and add the minute delta
 		$delta = ($day_delta * 60 * 24) + $minute_delta;
 		$delta = intval($delta);
 		
-		$event = $this->get_event($id, $type);
+		$event = $this->get_event($id, $this->type);
 		
 		if (!empty($event)){
-			switch($type) {
+			switch($this->type) {
 				case 'personal':
 					$sql = "UPDATE $this->tbl_personal_agenda SET date = DATE_ADD(date, INTERVAL $delta MINUTE), enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE) 
 							WHERE id=".intval($id);
@@ -213,11 +213,11 @@ class Agenda {
 	 * Gets a single personal event	 
 	 * @param int event id
 	 */
-	function get_event($id, $type) {
+	function get_event($id) {
 		// make sure events of the personal agenda can only be seen by the user himself
 		$id = intval($id);
 		$event = null;
-		switch($type) {
+		switch ($this->type) {
 			case 'personal':
 				$user = api_get_user_id();
 				$sql = " SELECT * FROM ".$this->tbl_personal_agenda." WHERE id=".$id." AND user = ".$user;
@@ -346,7 +346,7 @@ class Agenda {
 				}
 				
 				$event['editable'] 		= false;
-				if (api_is_allowed_to_edit()) {
+				if (api_is_allowed_to_edit() && $this->type == 'course') {
 					$event['editable'] 		= true;
 				}	
 	
@@ -355,14 +355,12 @@ class Agenda {
 				}
 				if (!empty($row['end_date']) && $row['end_date'] != '0000-00-00 00:00:00') {
 					$event['end'] = $this->format_event_date($row['end_date']);
-				}
-	
+				}	
 				$event['description'] = $row['content'];
-				$event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
-					
+				
+				$event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;					
 	
-				$my_events[] = $event;
-	
+				$my_events[] = $event;	
 	
 				$this->events[] = $event;
 			}
@@ -380,7 +378,7 @@ class Agenda {
 		$access_url_id 	= api_get_current_access_url_id();
 		
 		$sql 	= "SELECT * FROM ".$this->tbl_global_agenda."
-				   WHERE start_date>='".$start."' AND end_date<='".$end."' AND access_url_id = $access_url_id ";
+				   WHERE start_date >= '".$start."' AND end_date <= '".$end."' AND access_url_id = $access_url_id ";
 		
 		$result = Database::query($sql);
 		$my_events = array();
@@ -393,7 +391,8 @@ class Agenda {
 				$event['allDay'] 	  	= 'false';
 				$event['borderColor'] 	= $event['backgroundColor'] = $this->event_platform_color;
 				$event['editable'] 		= false;
-				if (api_is_platform_admin()) {
+				
+				if (api_is_platform_admin() && $this->type == 'admin') {
 					$event['editable'] 		= true;
 				}
 				

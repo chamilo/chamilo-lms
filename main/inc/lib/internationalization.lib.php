@@ -123,7 +123,12 @@ function get_lang($variable, $reserved = null, $language = null) {
         $language_interface_initial_value,
         // For serving the function is_translated()
         $_api_is_translated, $_api_is_translated_call;
-
+	
+    global $used_lang_vars;        
+    if (!isset ($used_lang_vars))
+    	$used_lang_vars = array();
+   	
+    
     // Caching results from some API functions, for speed.
     static $initialized, $encoding, $is_utf8_encoding, $langpath, $test_server_mode, $show_special_markup;
     if (!isset($initialized)) {
@@ -139,6 +144,8 @@ function get_lang($variable, $reserved = null, $language = null) {
     if (empty($language)) {
         $language = $language_interface;
     }
+    $lang_postfix = $is_interface_language ? '' : '('.$language.')';
+    
     $is_interface_language = $language == $language_interface_initial_value;
 
     // This is a cache for already translated language variables. By using it, we avoid repetitive translations, gaining speed.
@@ -147,7 +154,10 @@ function get_lang($variable, $reserved = null, $language = null) {
     // Looking up into the cache for existing translation.
     if (isset($cache[$language][$variable]) && !$_api_is_translated_call) {
         // There is a previously saved translation, returning it.
-        return $cache[$language][$variable];
+        //return $cache[$language][$variable];
+        $ret = $cache[$language][$variable];
+        $used_lang_vars[$variable.$lang_postfix] = $ret;
+        return $ret;
     }
 
     $_api_is_translated = false;
@@ -209,12 +219,18 @@ function get_lang($variable, $reserved = null, $language = null) {
             $_api_is_translated = false;
             $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
         }
-        return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
+        //return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
+        $ret = $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);               
+        $used_lang_vars[$variable.$lang_postfix] = $ret;
+        return $ret;
     }
 
     // Translation mode for test/development servers.
     if (!is_string($variable)) {
-        return $cache[$language][$variable] = SPECIAL_OPENING_TAG.'get_lang(?)'.SPECIAL_CLOSING_TAG;
+        //return $cache[$language][$variable] = SPECIAL_OPENING_TAG.'get_lang(?)'.SPECIAL_CLOSING_TAG;
+        $ret = $cache[$language][$variable] = SPECIAL_OPENING_TAG.'get_lang(?)'.SPECIAL_CLOSING_TAG;        
+        $used_lang_vars[$variable.$lang_postfix] = $ret;
+        return $ret;
     }
     if (isset($$variable)) {
         $langvar = $$variable;
@@ -229,7 +245,10 @@ function get_lang($variable, $reserved = null, $language = null) {
         $_api_is_translated = false;
         $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
     }
-    return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
+    //return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
+    $ret = $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);     
+    $used_lang_vars[$variable.$lang_postfix] = $ret;        
+    return $ret;
 }
 
 /**

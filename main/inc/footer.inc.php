@@ -28,14 +28,26 @@ if (api_get_setting('show_navigation_menu') != 'false') {
 
 <div class="push"></div>
 </div> <!-- end of #wrapper section -->
+<?php 
+/*
+global $used_lang_vars;
+if (!empty($used_lang_vars)) {
+	echo '<div style="float:left"><ul>';
+	foreach ($used_lang_vars as $var => $value) {
+		echo '<li><b>'.$var.'</b>: '.$value.'</li>';
+	}
+	echo '</ul></div>';
+} else {
+	echo '<p>No translated strings on this page?!</p>';
+}*/
 
+?>
 <div id="footer"> <!-- start of #footer section -->
 <div id="bottom_corner"></div>
 <?php
 global $_configuration;
 
 echo '<div class="copyright">';
-
 	if (api_get_setting('show_administrator_data') == 'true') {
 		// Platform manager
 		echo '<div align="right">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))).'</div>';
@@ -121,6 +133,7 @@ if (api_get_setting('show_teacher_data') == 'true') {
 	}
 }
 echo '</div>';
+
 
 echo '</div> <!-- end of #footer -->';
 /*

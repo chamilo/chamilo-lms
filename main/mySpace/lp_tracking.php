@@ -1,13 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/*
- * Created on 26 mars 07 by Eric Marguin
- * Script to display the tracking of the students in the learning paths.
- */
-
 $language_file = array ('registration', 'index', 'tracking', 'exercice', 'scorm', 'learnpath');
 require_once '../inc/global.inc.php';
+
+// resetting the course id
+$cidReset = true;
 
 $from_myspace = false;
 $from_link = '';
@@ -22,6 +20,8 @@ require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+
+$session_id  = isset($_REQUEST['id_session']) && !empty($_REQUEST['id_session']) ? intval($_REQUEST['id_session']) : api_get_session_id();
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 if ($export_csv) {
@@ -56,7 +56,7 @@ if (!empty($_GET['origin']) && $_GET['origin'] == 'user_course') {
 	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$cidReq, "name" => get_lang("Users"));
 } else if(!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
 //	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['name']);
-	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$cidReq.'&studentlist=true&id_session='.$_SESSION['id_session'], "name" => get_lang("Tracking"));
+	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$cidReq.'&studentlist=true&id_session='.$session_id, "name" => get_lang("Tracking"));
 } else {
 	$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
 	$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
@@ -102,7 +102,7 @@ echo '</div>';
 
 echo '<div class="clear"></div>';
 
-$session_name = api_get_session_name(api_get_session_id());
+$session_name = api_get_session_name($session_id);
 $table_title = ($session_name? Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.$session_name.' ':' ').
                 Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_info['name'].' '.
                 Display::return_icon('user.png', get_lang('User'), array(), 22).' '.$name;

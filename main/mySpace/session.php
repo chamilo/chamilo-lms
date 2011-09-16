@@ -11,8 +11,6 @@ $language_file = array ('registration', 'index', 'trad4all', 'tracking', 'admin'
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 api_block_anonymous_users();
@@ -36,9 +34,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
 }
 
 /*
-===============================================================================
 	FUNCTION
-===============================================================================
 */
 
 function count_sessions_coached() {
@@ -64,11 +60,7 @@ function rsort_sessions($a, $b) {
 	}
 }
 
-/*
-===============================================================================
-	MAIN CODE
-===============================================================================
-*/
+/*	MAIN CODE	*/
 
 if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
 	$id_coach = intval($_GET['id_coach']);
@@ -81,28 +73,29 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 	$a_sessions = SessionManager::get_sessions_followed_by_drh($_user['user_id']);
 
 	if (!api_is_session_admin()) {
-		$menu_items[] = '<a href="index.php?view=drh_students&amp;display=yourstudents">'.get_lang('Students').'</a>';
-		$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
-		$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
+		$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',32),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
+		$menu_items[] = Display::url(Display::return_icon('user.png', get_lang('Students'), array(), 32), "index.php?view=drh_students&amp;display=yourstudents");
+		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), 32), 'teachers.php');
+		$menu_items[] = Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), 32), 'course.php');
+		$menu_items[] = Display::return_icon('session_na.png', get_lang('Sessions'), array(), 32);
 	}
-	$menu_items[] = get_lang('Sessions');
 
-	echo '<div class="actions-title" style ="font-size:10pt;">';
+	echo '<div class="actions">';
 	$nb_menu_items = count($menu_items);
 	if ($nb_menu_items > 1) {
 		foreach ($menu_items as $key => $item) {
-			echo $item;
-			if ($key != $nb_menu_items - 1) {
-				echo '&nbsp;|&nbsp;';
-			}
+			echo $item;			
 		}
 	}
 	if (count($a_sessions) > 0) {
-		echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
-		echo '<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+		echo '<span style="float:right">';
+		echo Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), 32), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
+		echo Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), 32), api_get_self().'?export=csv');
+		echo '</span>';
+		
 	}
 	echo '</div>';
-	echo '<h4>'.get_lang('YourSessionsList').'</h4>';
+	echo '<h2>'.get_lang('YourSessionsList').'</h2>';
 
 } else {
 	/*if (api_is_platform_admin()) {
@@ -119,13 +112,7 @@ if ($export_csv) {
 }
 
 if ($nb_sessions > 0) {
-
-	if (!api_is_drh()) {
-		echo '<div align="right">
-				<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-				<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-			  </div>';
-	}
+	
 	$table = new SortableTable('tracking', 'count_sessions_coached');
 	$table->set_header(0, get_lang('Title'));
 	$table->set_header(1, get_lang('Date'));
@@ -187,11 +174,4 @@ if ($nb_sessions > 0) {
 } else {
 	echo get_lang('NoSession');
 }
-
-/*
-==============================================================================
-	FOOTER
-==============================================================================
-*/
-
 Display::display_footer();

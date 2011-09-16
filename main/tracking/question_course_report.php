@@ -9,8 +9,6 @@
 $language_file = array ('registration', 'index', 'tracking', 'exercice','survey');
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
@@ -152,21 +150,19 @@ if (!empty($course_info)) {
 if (!$export_to_xls) {
 	
 	Display :: display_header(get_lang("MySpace"));
-		echo '<div class="actions" style ="font-size:10pt;" >';
-	if ($global) {		
-		$menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher">'.get_lang('TeacherInterface').'</a>';
-		$menu_items[] = get_lang('AdminInterface');
-        $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'tracking/exams.php">'.get_lang('ExamTracking').'</a>';
-        
+	echo '<div class="actions" style ="font-size:10pt;" >';
+	if ($global) {
+				
+		$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',32),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
+		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher');
+		$menu_items[] = Display::return_icon('star_na.png', get_lang('AdminInterface'), array(), 32);		
+		$menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
+		
 		$nb_menu_items = count($menu_items);
 		if($nb_menu_items>1) {
 			foreach($menu_items as $key=> $item) {
-				echo $item;
-				if($key!=$nb_menu_items-1) {
-					echo ' | ';
-				}
-			}
-			echo '<br />';
+				echo $item;			
+			}			
 		}
 	} else {
 		echo '<div style="float:left; clear:left">
@@ -176,7 +172,6 @@ if (!$export_to_xls) {
 		echo '</div>';	
 	}	
 	echo '</div>';
-	echo '<h4>'.get_lang('CoachList').'</h4>';
 	
 if (api_is_platform_admin()) {
 		echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=admin&amp;display=coaches">'.get_lang('DisplayCoaches').'</a> | ';

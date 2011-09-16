@@ -87,28 +87,25 @@ if (!$export_to_xls) {
         echo '</a>';
         
         echo '<span style="float:right">';
-        echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">
-		'.Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'','32').'</a>';
+        echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">'.Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'','32').'</a>';
+        echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.Display::return_icon('printer.png',get_lang('Print'),'','32').'</a>';        
         echo '</span>';
         
-        echo '<a href="javascript: void(0);" onclick="javascript: window.print()">
-		'.Display::return_icon('printer.png',get_lang('Print'),'','32').'</a>';
+        
+        
 	
-		$menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher">'.get_lang('TeacherInterface').'</a>';
+        $menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher');
         if (api_is_platform_admin()) {
-		  $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=admin">'.get_lang('AdminInterface').'</a>';
+        	$menu_items[] = Display::url(Display::return_icon('star.png', get_lang('AdminInterface'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/?view=admin');
         } else {
-            $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=coach">'.get_lang('AdminInterface').'</a>';	
+        	$menu_items[] = Display::url(Display::return_icon('star.png', get_lang('CoachInterface'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/?view=coach');
         }
-		$menu_items[] = get_lang('ExamTracking');
-		
+        $menu_items[] = Display::return_icon('quiz_na.png', get_lang('ExamTracking'), array(), 32);
+        		
 		$nb_menu_items = count($menu_items);
 		if($nb_menu_items>1) {
 			foreach($menu_items as $key=> $item) {
-				echo $item;
-				if($key!=$nb_menu_items-1) {
-					echo ' | ';
-				}
+				echo $item;				
 			}
 		}
 	} else {

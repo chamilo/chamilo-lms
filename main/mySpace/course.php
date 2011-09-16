@@ -82,31 +82,30 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 	$a_courses = array_keys($courses);
 
 	if (!api_is_session_admin()) {
-		$menu_items[] = '<a href="index.php?view=drh_students&amp;display=yourstudents">'.get_lang('Students').'</a>';
-		$menu_items[] = '<a href="teachers.php">'.get_lang('Teachers').'</a>';
-		if (empty($_GET['user_id']) && empty($id_session)) {
-			$menu_items[] = get_lang('Courses');
-		} else {
-			$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
-		}
-		$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
+		
+		$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',32),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
+		$menu_items[] = Display::url(Display::return_icon('user.png', get_lang('Students'), array(), 32), "index.php?view=drh_students&amp;display=yourstudents");
+		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), 32), 'teachers.php');
+		$menu_items[] = Display::return_icon('course_na.png', get_lang('Courses'), array(), 32);
+		$menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), 32), 'session.php');
+		
+		
 	}
 
-	echo '<div class="actions-title" style ="font-size:10pt;">';
+	echo '<div class="actions">';
 	$nb_menu_items = count($menu_items);
 	if ($nb_menu_items > 1) {
 		foreach ($menu_items as $key => $item) {
-			echo $item;
-			if ($key != $nb_menu_items - 1) {
-				echo '&nbsp;|&nbsp;';
-			}
+			echo $item;		
 		}
 	}
 	if (count($a_courses) > 0) {
-		echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
+		echo '<span style="float:right">';
+		echo Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), 32), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
+		echo '</span>';
 	}
 	echo '</div>';
-	echo '<h4>'.$title.'</h4>';
+	echo '<h2>'.$title.'</h2>';
 }
 
 // Database Table Definitions

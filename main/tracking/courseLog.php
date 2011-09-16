@@ -29,7 +29,7 @@ if ($from == 'myspace') {
 }
 
 // Access restrictions.
-$is_allowedToTrack = $is_courseAdmin || api_is_platform_admin() || $is_courseCoach || api_is_session_admin() || api_is_drh() || api_is_course_tutor() || api_is_coach();
+$is_allowedToTrack = api_is_platform_admin() || api_is_allowed_to_create_course() || api_is_session_admin() || api_is_drh() || api_is_course_tutor();
 
 if (!$is_allowedToTrack) {
     Display :: display_header(null);
@@ -45,7 +45,6 @@ require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/scorm.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/scormItem.class.php';
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
@@ -104,12 +103,12 @@ $nameTools = get_lang('Tracking');
 Display::display_header($nameTools, 'Tracking');
 
 // getting all the students of the course
-if (!empty($_SESSION['id_session'])) {
-    // Registered students in session.
-    $a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), true, api_get_session_id());
+if (empty($session_id)) {	
+	// Registered students in a course outside session.
+	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id());	
 } else {
-    // Registered students in a course outside session.
-    $a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id());
+	// Registered students in session.
+	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), true, api_get_session_id());    
 }
 
 $nbStudents = count($a_students);
@@ -467,11 +466,11 @@ if ($_GET['studentlist'] == 'false') {
     $course_info = api_get_course_info(api_get_course_id());
     $course_name = get_lang('Course').' '.$course_info['name'];
     
-    if (api_get_session_id()) {
-        echo '<h2>'.Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.api_get_session_name(api_get_session_id()).' '.
+    if ($session_id) {    	
+        echo '<h2>'.Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.api_get_session_name($session_id).' '.
                     Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_name.'</h2>';
     } else {
-        echo '<h2>'.Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_info['name'].'</h2>';
+    	echo '<h2>'.Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_info['name'].'</h2>';
     }
     
     $extra_field_select = TrackingCourseLog::display_additional_profile_fields();

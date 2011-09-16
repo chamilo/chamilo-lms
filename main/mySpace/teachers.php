@@ -9,6 +9,8 @@ $cidReset = true;
 
 require_once '../inc/global.inc.php';
 require_once 'myspace.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
 $this_section = SECTION_TRACKING;
 
@@ -23,28 +25,28 @@ if (api_is_drh() || api_is_platform_admin()) {
 
 	// followed teachers by drh
 	$formateurs = UserManager::get_users_followed_by_drh($_user['user_id'], COURSEMANAGER);
-	 
-	$menu_items[] = '<a href="index.php?view=drh_students&amp;display=yourstudents">'.get_lang('Students').'</a>';
-	$menu_items[] = get_lang('Trainers');
-	$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
-	$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
+	$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',32),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );	 
+	$menu_items[] = Display::url(Display::return_icon('user.png', get_lang('Students'), array(), 32), "index.php?view=drh_students&amp;display=yourstudents");
+	$menu_items[] = Display::return_icon('teacher_na.png', get_lang('Trainers'), array(), 32);
+	$menu_items[] = Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), 32), 'course.php');
+	$menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), 32), 'session.php');
+	
 		
-	echo '<div class="actions-title" style ="font-size:10pt;">';
+	echo '<div class="actions">';
 	$nb_menu_items = count($menu_items);
 	if ($nb_menu_items > 1) {
 		foreach ($menu_items as $key => $item) {
-			echo $item;
-			if ($key != $nb_menu_items - 1) {
-				echo '&nbsp;|&nbsp;';
-			}
+			echo $item;		
 		}
 	}	
 	if (count($formateurs) > 0) {
-		echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
-		echo '<a href="'.api_get_self().'?export=xls"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';	
+		echo '<span style="float:right">';
+		echo Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), 32), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
+		echo Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), 32), api_get_self().'?export=xls');
+		echo '</span>';			
 	}
 	echo '</div>';
-	echo '<h4>'.get_lang('YourTeachers').'</h4>';
+	echo '<h2>'.get_lang('YourTeachers').'</h2>';
 	echo '<br />';
 }
 

@@ -76,7 +76,7 @@ if (isset($_GET['preview'])) {
 }
 
 //Notice we not add there the lp_item_view__id because is not already generated 
-$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.$extra_params;
+$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.$extra_params;
 $label = get_lang('StartTest');
 if ($time_control && !empty($clock_expired_time)) {
 	$label = get_lang('ContinueTest');
@@ -94,7 +94,8 @@ $html .= $message;
 $exercise_url_button = Display::url($label, $exercise_url, array('class'=>'a_button blue bigger round'));
 
 if (!$objExercise->is_visible()) {
-	$exercise_url_button = Display::url($label, $exercise_url, array('class'=>'a_button white bigger round no_link'));
+	$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result&exerciseId='.$objExercise->id;
+	$exercise_url_button = Display::url(get_lang('SeeResults'), $exercise_url, array('class'=>'a_button white bigger round no_link'));
 }
 
 $options  = Display::div('', array('class'=>'left_option'));

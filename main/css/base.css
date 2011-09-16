@@ -2789,14 +2789,15 @@ select {
 }
 
 input[type=checkbox], input[type=radio], input[type=button], input[type=submit] {
-  border: 1px solid #E1E1E0;
+    border: 1px solid #E1E1E0;
     border-radius: 5px 5px 5px 5px;
     cursor: pointer;
     font-size: 12px;
 }
 
 input[type=checkbox], input[type=radio] {
- margin-right: 5px;
+    margin-right: 5px;
+    margin-top: 6px;
 }
 
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {	

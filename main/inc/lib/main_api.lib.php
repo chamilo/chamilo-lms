@@ -1057,7 +1057,7 @@ function api_get_anonymous_id() {
  * @return  string  Course & session references to add to a URL
  */
 function api_get_cidreq() {
-    return empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']).(api_get_session_id() == 0 ? '' : '&amp;id_session='.api_get_session_id());
+    return empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']).(api_get_session_id() == 0 ? '&amp;id_session=0' : '&amp;id_session='.api_get_session_id());
 }
 /**
  * Returns the current course info array.

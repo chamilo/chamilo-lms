@@ -43,6 +43,21 @@ if (!api_is_anonymous() && $type == 'personal') {
 	$can_add_events = 1;
 }
 
+//Setting translations
+$day_short 		= api_get_week_days_short();
+$days 			= api_get_week_days_long();
+$months 		= api_get_months_long();
+$months_short 	= api_get_months_short();
+
+$tpl->assign('month_names', json_encode($months));
+$tpl->assign('month_names_short', json_encode($months_short));
+$tpl->assign('day_names', json_encode($days));
+$tpl->assign('day_names_short', json_encode($day_short));
+
+$tpl->assign('button_text', json_encode(array('today'=>get_lang('Today'), 'month'=>get_lang('Month'), 'week'=>get_lang('Week'), 'day'=>get_lang('Day'))));
+
+
+
 $tpl->assign('type', $type);
 $tpl->assign('can_add_events', $can_add_events);
  

@@ -17,8 +17,13 @@ $(document).ready(function() {
 		header: {
 			left: '',
 			center: 'title',
-			right: 'today prev,next month,agendaWeek,agendaDay'
+			right: 'today prev,next month,agendaWeek,agendaDay',	
 		},	
+		buttonText: 	{$button_text}, 
+		monthNames: 	{$month_names},
+		monthNamesShort:{$month_names_short},
+		dayNames: 		{$day_names},
+		dayNamesShort: 	{$day_names_short},		
 		selectable	: true,
 		selectHelper: true,
 		select: function(start, end, allDay, jsEvent, view) {

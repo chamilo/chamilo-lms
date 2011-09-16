@@ -26,7 +26,6 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_documents_preview', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_documents_preview', 'false', 'No');
 
-show_documents_preview
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';

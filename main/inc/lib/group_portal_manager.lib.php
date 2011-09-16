@@ -957,10 +957,10 @@ class GroupPortalManager {
 		}
 
 		if (!empty($links)) {
-			//echo '<div align="center" class="social-menu-title"><span class="social-menu-text1">'.cut($group_info['name'], GROUP_TITLE_LENGTH, true).'</span></div>';
-			//echo Display::div(get_lang('Actions') ,array('class' => 'social_menu_option'));
 			echo '<ul class="social-menu-groups">';
-			echo Display::tag('li', Security::remove_XSS($group_info['description'], STUDENT, true), array('class'=>'group_description'));
+			if (!empty($group_info['description'])) {
+				echo Display::tag('li', Security::remove_XSS($group_info['description'], STUDENT, true), array('class'=>'group_description'));
+			}
 			echo $links;
 			echo '</ul>';
 		}

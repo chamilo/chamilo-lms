@@ -455,15 +455,16 @@ class SocialManager extends UserManager {
 
 		//display course entry
 		$result .= '<div id="div_'.$count.'">';
-		$result .= '<h2><img src="../img/nolines_plus.gif" id="btn_'.$count.'" onclick="toogle_course(this,\''.$course_database.'\' )">';
+		$result .= '<h3><img src="../img/nolines_plus.gif" id="btn_'.$count.'" onclick="toogle_course(this,\''.$course_database.'\' )">';
 		$result .= $s_htlm_status_icon;
 
 		//show a hyperlink to the course, unless the course is closed and user is not course admin
 		if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
-			$result .= '<a href="javascript:void(0)" id="ln_'.$count.'"  onclick=toogle_course(this,\''.$course_database.'\');>&nbsp;'.$course_title.'</a></h2>';
+			$result .= '<a href="javascript:void(0)" id="ln_'.$count.'"  onclick=toogle_course(this,\''.$course_database.'\');>&nbsp;'.$course_title.'</a>';
 		} else {
 			$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
 		}
+		$result .= '</h3>';
 		$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
 		// display the what's new icons
 		if ($nbDigestEntries > 0) {

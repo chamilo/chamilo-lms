@@ -123,7 +123,7 @@ if (count($friends) == 0 ) {
 		$number_friends = count($friends);
 		$j=0;		
 							
-		$friend_html.= '<table  id="friend_table" class="rounded_div" width="95%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
+		$friend_html.= '<table  id="friend_table" width="95%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
 		for ($k=0;$k<$number_friends;$k++) {
 			$friend_html.='<tr><td valign="top">';
 		

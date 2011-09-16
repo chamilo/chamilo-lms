@@ -1975,7 +1975,7 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
     font-size:120%;
 }
 .message-group-author {	
-    margin:5px 5px 5px 0px;    
+    margin:0px 5px 5px 0px;    
     float:left;
 }
 
@@ -2427,7 +2427,10 @@ div.image-social-content center.friend {
 
 
 /* BOX SHARED PROFILE */
-
+.social-menu-groups {
+    border-top:1px solid #ddd;
+    margin-top:2px;
+}
 .social-menu-groups li {
     padding:5px;
 }
@@ -3445,7 +3448,7 @@ div.admin_section h4 {
 }
 
 .topics_grid_item {
-    margin-left:20px;
+/*    margin-left:20px; */
 }
 
 #div_content_table {

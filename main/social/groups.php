@@ -175,6 +175,7 @@ if ($group_id != 0 ) {
 		}
 	}
 }
+$create_thread_link = '';
 
 echo '<div id="social-content">';
 	echo '<div id="social-content-left">';
@@ -219,7 +220,7 @@ if ($group_id != 0 ) {
 	echo '<div class="head_group">';    
 		echo '<div id="social-group-details">';
 				//Group's title
-				echo '<h1><a href="groups.php?id='.$group_id.'">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</a></h1>';
+				echo Display::tag('h2', Security::remove_XSS($group_info['name'], STUDENT, true));
 				
 				//echo '<div class="social-group-details-info"><a target="_blank" href="'.$group_info['url'].'">'.$group_info['url'].'</a></div>';
 				
@@ -273,10 +274,10 @@ if ($group_id != 0 ) {
 			$content = MessageManager::display_messages_for_group($group_id);
 			if ($is_group_member) {
     			if (empty($content)) {		
-    				$content =  '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('compose_message.png', get_lang('NewTopic'), array('hspace'=>'6')).get_lang('YouShouldCreateATopic').'</a></li>';
+    				$create_thread_link =  '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="a_button orange medium thickbox" title="'.get_lang('ComposeMessage').'">'.get_lang('YouShouldCreateATopic').'</a></li>';
     			} else {
-    			    $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('compose_message.png', get_lang('NewTopic'), array('hspace'=>'6')).get_lang('NewTopic').'</a>';
-    			    $content = $create_thread_link.$content; 			    
+    			    $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="a_button orange medium thickbox" title="'.get_lang('ComposeMessage').'">'.get_lang('NewTopic').'</a>';
+    			     			    
     			}			
 			}
 			$members		= GroupPortalManager::get_users_by_group($group_id);
@@ -309,8 +310,15 @@ if ($group_id != 0 ) {
 					}					 	
 				}					
     		}		
-    		$headers = array(get_lang('Messages'), get_lang('Members'));
-			echo Display::tabs($headers, array($content, $member_content),'tabs');			
+    		if (!empty($create_thread_link)) {
+    			$create_thread_link =  Display::div($create_thread_link, array('style'=>'padding-top:2px;height:40px'));
+    		}
+    		
+    		//api_get_item_property_by_tool('group', $course_info, $group_id);    		
+    		//$updates = 
+    		//get_lang('Updates'), 
+    		$headers = array(get_lang('Discussions'), get_lang('Members'));
+			echo Display::tabs($headers, array($create_thread_link.$content, $member_content),'tabs');			
 		} else {
 			// if I already sent an invitation message
 			if (!in_array($my_group_role, array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION))) {
@@ -471,11 +479,11 @@ if ($group_id != 0 ) {
 	        		}
         	   		if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
     	        	    $create_group_item =  '<a class="a_button orange medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
-    	        	    $my_group_content = $create_group_item. $my_group_content;
+    	        	    //$my_group_content = $create_group_item. $my_group_content;
         	        } else {        	           
     	            	if (api_is_allowed_to_edit(null,true)) {
     	            	    $create_group_item =  '<a class="a_button orange medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
-    	        	        $my_group_content = $create_group_item. $my_group_content;
+    	        	        //$my_group_content = $create_group_item. $my_group_content;
     	            	}
         	        }
 	        		break;
@@ -507,11 +515,11 @@ if ($group_id != 0 ) {
 	        }
    	        if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
                 $create_group_item =  '<a class="a_button orange medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
-                $my_group_content = $create_group_item. $my_group_content;
+                //$my_group_content = $create_group_item. $my_group_content;
             } else {
                 if (api_is_allowed_to_edit(null,true)) {
                     $create_group_item =  '<a class="a_button orange medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
-                    $my_group_content  = $create_group_item. $my_group_content;
+                    //$my_group_content  = $create_group_item. $my_group_content;
                 }
             }
 			if (count($grid_newest_groups) > 0) {
@@ -520,6 +528,10 @@ if ($group_id != 0 ) {
 			if (count($grid_pop_groups) > 0) {
 				$popular_content = Display::return_sortable_grid('mygroups', array(), $grid_pop_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 			}
+	   	}
+	   	
+	   	if (!empty($create_group_item)) {
+	   		echo Display::div($create_group_item, array('style'=>'padding-top:12px;height:30px'));
 	   	}	   	
 	   	$headers = array(get_lang('MyGroups'), get_lang('Newest'), get_lang('Popular'));	   	
 		echo Display::tabs($headers, array($my_group_content, $newest_content, $popular_content),'tab_browse');

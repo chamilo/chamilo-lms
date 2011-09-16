@@ -65,7 +65,7 @@
 
 /* tabs: removing a lot of padding */
 .ui-tabs .ui-tabs-panel {
-	padding: 10px;
+	padding: 10px 0px 0px 0px;
 }
 
 /* Set the selected tab background to white */
@@ -89,9 +89,10 @@
 	 
 }
 
-#resource_tab.ui-tabs-nav li {
-    
+.ui-tabs  {
+	border: none;
 }
+
 
 
 /*  cupertino */

@@ -963,7 +963,7 @@ class MessageManager
 			        if (empty($topic['title'])) {
 			            $topic['title'] = get_lang('Untitled');
 			        } 				
-			        $title = Display::url('<h3>'.Security::remove_XSS($topic['title'], STUDENT, true).'</h3>', 'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']);
+			        $title = Display::tag('h4', Display::url(Security::remove_XSS($topic['title'], STUDENT, true), 'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']));
                                             
                     $date = '';
                     $link = '';
@@ -1025,7 +1025,7 @@ class MessageManager
         //$items_page_nr = intval($_GET['items_'.$topic['id'].'_page_nr']);
         $items_page_nr = null;
         
-        echo Display::tag('h2', Security::remove_XSS($main_message['title'], STUDENT, true));
+        echo Display::tag('h3', Security::remove_XSS($main_message['title'], STUDENT, true));
         $user_sender_info = UserManager::get_user_info_by_id($main_message['user_sender_id']);
         $files_attachments = self::get_links_message_attachment_files($main_message['id']);
         $name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);

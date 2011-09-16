@@ -13,17 +13,34 @@ api_block_anonymous_users();
 if (api_get_setting('allow_social_tool') !='true') {
     api_not_allowed();
 }
+
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
-$group_id   = intval($_GET['id']);
+$group_id	= intval($_GET['id']);
 $topic_id   = intval($_GET['topic_id']);
-$message_id  = intval($_GET['msg_id']);
+$message_id = intval($_GET['msg_id']);
+
+//todo @this validation could be in a function in group_portal_manager
+if (empty($group_id)) {
+	api_not_allowed(true);
+
+} else {
+	$group_info = GroupPortalManager::get_group_data($group_id);
+
+	if (empty($group_info)) {
+		api_not_allowed(true);
+	}
+	$is_member = GroupPortalManager::is_group_member($group_id);
+	if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member ) {
+		api_not_allowed(true);
+	}
+}
 
 
 
 // save message group
 if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
-
+	
 	if (isset($_POST['action'])) {
 		$title        = isset($_POST['title']) ? $_POST['title'] : null;
 		$content      = $_POST['content'];
@@ -156,30 +173,13 @@ $interbreadcrumb[] = array('url' => '#','name' => get_lang('Thread'));
 Display::display_header($tool_name, 'Groups');
 
 
-//todo @this validation could be in a function in group_portal_manager
-if (empty($group_id)) {
-    api_not_allowed(true);
-} else {
-    $group_info = GroupPortalManager::get_group_data($group_id);
-    if (empty($group_info)) {
-        api_not_allowed(true);
-    }
-    $is_member = GroupPortalManager::is_group_member($group_id);
-    
-    if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member ) {
-        api_not_allowed(true);        
-    }
-}
-
-
-
 echo '<div id="social-content">';
     echo '<div id="social-content-left">';  
     //this include the social menu div
     SocialManager::show_social_menu('member_list', $group_id);
     echo '</div>';
     echo '<div id="social-content-right">';
-         echo '<h1><a href="groups.php?id='.$group_id.'">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</a> &raquo; '.get_lang('Messages').'</h1>';
+         echo '<h2><a href="groups.php?id='.$group_id.'">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</a> &raquo; <a href="groups.php?id='.$group_id.'#tabs_2">'.get_lang('Discussions').'</a></h2>';
          
         if (!empty($show_message)){
             Display::display_confirmation_message($show_message);

@@ -98,9 +98,9 @@ echo '<div id="social-content">';
 	echo '</div>';
 	echo '<div id="social-content-right">';
 	
-	     echo '<h1><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h1>';
+	     echo '<h2>'.$group_info['name'].'</h2>';
 	 
-		echo '<div class="rounded_div" style="width:90%">';
+		echo '<div style="width:90%">';
 			
 		if (! empty($show_message)){
 			Display :: display_confirmation_message($show_message);

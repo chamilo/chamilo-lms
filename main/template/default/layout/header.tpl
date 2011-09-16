@@ -9,7 +9,8 @@
 		            <li class="active"><a href="#">Home</a></li>
 		            <li><a href="#">Profile</a></li>
 		            <li><a href="#">Messages</a></li>
-		            <li><a href="#">Administrator</a></li>
+		            
+		            <li><a href="#">Administration</a></li>
 		            <li class="dropdown">
 		                <a class="dropdown-toggle" href="#">Dropdown</a>
 		            <ul class="dropdown-menu">
@@ -25,7 +26,7 @@
 		            </form>
 		            <ul class="nav secondary-nav">
 		                <li class="dropdown">
-		                <a class="dropdown-toggle" href="#">Settings</a>
+		                <a class="dropdown-toggle" href="#"><img src="{$_u.avatar_small}"/>  {$_u.complete_name}</a>
 		                <ul class="dropdown-menu">
 		                    <li><a href="#">Secondary link</a></li>
 		                    <li><a href="#">Help</a></li>

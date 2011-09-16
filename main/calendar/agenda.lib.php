@@ -185,13 +185,13 @@ class Agenda {
 		$delta = ($day_delta * 60 * 24) + $minute_delta;
 		$delta = intval($delta);
 		
-		$event = $this->get_event($id, $this->type);
+		$event = $this->get_event($id);
 		
-		if (!empty($event)){
+		if (!empty($event)) {
 			switch($this->type) {
 				case 'personal':
 					$sql = "UPDATE $this->tbl_personal_agenda SET date = DATE_ADD(date, INTERVAL $delta MINUTE), enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE) 
-							WHERE id=".intval($id);
+							WHERE id=".intval($id);					
 					$result = Database::query($sql);				
 					break;
 				case 'course':
@@ -218,9 +218,8 @@ class Agenda {
 		$id = intval($id);
 		$event = null;
 		switch ($this->type) {
-			case 'personal':
-				$user = api_get_user_id();
-				$sql = " SELECT * FROM ".$this->tbl_personal_agenda." WHERE id=".$id." AND user = ".$user;
+			case 'personal':				
+				$sql = " SELECT * FROM ".$this->tbl_personal_agenda." WHERE id=".$id." AND user = ".api_get_user_id();
 				$result = Database::query($sql);				
 				if (Database::num_rows($result)) {
 					$event = Database::fetch_array($result, 'ASSOC');
@@ -255,9 +254,9 @@ class Agenda {
 		$end	= intval($end);		
 		$start  = api_get_utc_datetime($start);	
 		$end  	= api_get_utc_datetime($end);
-		
+		$user_id = api_get_user_id();
 		$sql 	= "SELECT * FROM ".$this->tbl_personal_agenda."
-				   WHERE date >= '".$start."' AND (enddate <='".$end."' OR enddate IS NULL) ";
+				   WHERE date >= '".$start."' AND (enddate <='".$end."' OR enddate IS NULL) AND user = $user_id";
 		
 		$result = Database::query($sql);
 		if (Database::num_rows($result)) {

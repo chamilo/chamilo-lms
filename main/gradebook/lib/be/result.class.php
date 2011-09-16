@@ -91,7 +91,7 @@ class Result
 
 				$sql_course_rel_user= '';
 				if (api_get_session_id()) {
-					echo $sql_course_rel_user = 'SELECT course_code, id_user as user_id, status FROM '.$tbl_session_rel_course_user.' 
+					$sql_course_rel_user = 'SELECT course_code, id_user as user_id, status FROM '.$tbl_session_rel_course_user.' 
 												 WHERE status=0 AND course_code="'.api_get_course_id().'" AND id_session='.api_get_session_id();
 				} else {
 					$sql_course_rel_user = 'SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status ="'.STUDENT.'" AND course_code="'.api_get_course_id().'" ';
@@ -139,7 +139,7 @@ class Result
 			$sql .= ' evaluation_id = '.Database::escape_string($evaluation_id);
 			$paramcount ++;
 		}
-		echo $sql;
+
 		$result = Database::query($sql);
 		$allres=array();
 		while ($data=Database::fetch_array($result)) {

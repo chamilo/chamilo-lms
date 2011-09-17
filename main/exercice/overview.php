@@ -20,9 +20,7 @@ $this_section = SECTION_COURSES;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-if (empty ($exerciseId)) {
-	$exercise_id = intval($_REQUEST['exerciseId']);
-}
+$exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
 
 $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id);

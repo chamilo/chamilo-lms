@@ -13,18 +13,45 @@
 /**
  * Code
  */
-// Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
-if (isset($_GET['src'])) {
-    // Including the global initialization file.
-    require_once '../inc/global.inc.php';
-    api_protect_course_script();
+// Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
+
+
+
+// The main_api.lib.php, database.lib.php and display.lib.php
+// libraries are included by default.
+
+require_once 'back_compat.inc.php';
+require_once 'scorm.lib.php';
+require_once 'learnpath.class.php';
+require_once 'learnpathItem.class.php';
+
+require_once 'learnpath_functions.inc.php';
+//include '../resourcelinker/resourcelinker.inc.php';
+require_once 'resourcelinker.inc.php';
+//rewrite the language file, sadly overwritten by resourcelinker.inc.php
+// name of the language file that needs to be included
+
+// Including the global initialization file.
+require_once '../inc/global.inc.php';
+api_protect_course_script();
+
+if (isset($_GET['lp_item_id'])) {
+
     // Get parameter only came from lp_view.php.
-    $url_info 		= parse_url($_GET['src']);
+    $lp_item_id  = intval($_GET['lp_item_id']);
+    if (isset($_SESSION['lpobject'])) {
+        $oLP = unserialize($_SESSION['lpobject']);
+    }   
+    if (is_object($oLP)) {
+       $src = $oLP->get_link('http', $lp_item_id);
+    }
+    
+    $url_info 		= parse_url($src);
     $real_url_info	= parse_url(api_get_path(WEB_PATH));
 
     // The host must be the same.
     if ($url_info['host'] == $real_url_info['host']) {
-    	$url = urldecode(Security::remove_XSS($_GET['src']));      
+    	$url = Security::remove_XSS($src);    
     	header("Location: ".$url);
     	exit;
     } else {
@@ -41,18 +68,9 @@ if (isset($_SESSION['oLP']) && isset($_GET['id'])) {
 }
 $this_section=SECTION_COURSES;
 
-api_protect_course_script();
-
 /* Libraries */
 
-// The main_api.lib.php, database.lib.php and display.lib.php
-// libraries are included by default.
 
-require_once 'learnpath_functions.inc.php';
-//include '../resourcelinker/resourcelinker.inc.php';
-require_once 'resourcelinker.inc.php';
-//rewrite the language file, sadly overwritten by resourcelinker.inc.php
-// name of the language file that needs to be included
 $language_file = "learnpath";
 
 /* Header and action code */
@@ -100,7 +118,9 @@ $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Item'));
 
 // Theme calls
 $show_learn_path = true;
-$lp_theme_css = $_SESSION['oLP']->get_theme();
+if (isset($_SESSION['oLP']) && is_object($_SESSION['oLP'])) {
+	$lp_theme_css = $_SESSION['oLP']->get_theme();
+}
 
 Display::display_header(null,'Path');
 //api_display_tool_title($therow['name']);
@@ -127,24 +147,20 @@ function confirmation(name) {
 }
 </script>
 <?php
-
-//echo $admin_output;
-
-/* DISPLAY SECTION	*/
-
-echo $_SESSION['oLP']->build_action_menu();
-echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
-    echo '<tr>';
-        echo '<td class="tree">';
-            echo '<div class="lp_tree">';
-                // Build the tree with the menu items in it.
-                echo $_SESSION['oLP']->build_tree();
-            echo '</div>';
-        echo '</td>';
-        echo '<td class="workspace">';
-            echo $_SESSION['oLP']->display_item((isset($new_item_id)) ? $new_item_id : $_GET['id']);
-        echo '</td>';
-    echo '</tr>';
-echo '</table>';
-
+if (is_object($_SESSION['oLP'])) {
+	echo $_SESSION['oLP']->build_action_menu();
+	echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
+	    echo '<tr>';
+	        echo '<td class="tree">';
+	            echo '<div class="lp_tree">';
+	                // Build the tree with the menu items in it.
+	                echo $_SESSION['oLP']->build_tree();
+	            echo '</div>';
+	        echo '</td>';
+	        echo '<td class="workspace">';
+	            echo $_SESSION['oLP']->display_item((isset($new_item_id)) ? $new_item_id : $_GET['id']);
+	        echo '</td>';
+	    echo '</tr>';
+	echo '</table>';
+}
 Display::display_footer();

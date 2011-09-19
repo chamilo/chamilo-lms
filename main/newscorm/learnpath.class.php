@@ -49,6 +49,8 @@ class learnpath {
     public $prevent_reinit = 1;
 
     // Describes the mode of progress bar display.
+    public $seriousgame_mode = 0;
+
     public $progress_bar_mode = '%';
 
     // Percentage progress as saved in the db.
@@ -135,6 +137,7 @@ class learnpath {
                 $this->theme            = $row['theme'];
                 $this->maker            = $row['content_maker'];
                 $this->prevent_reinit   = $row['prevent_reinit'];
+    	        $this->seriousgame_mode = $row['seriousgame_mode'];
                 $this->license          = $row['content_license'];
                 $this->scorm_debug      = $row['debug'];
                 $this->js_lib           = $row['js_lib'];
@@ -4438,6 +4441,135 @@ class learnpath {
         return -1;
     }
 
+  /**
+   * Determine the attempt_mode thanks to prevent_reinit and seriousgame_mode db flag
+   *
+   * @return string 'single', 'multi' or 'seriousgame'
+   * @author ndiechburg <noel@cblue.be>
+   **/
+  public function get_attempt_mode()
+  {
+    if (!isset($this->seriousgame_mode)) { //Set default value for seriousgame_mode
+      $this->seriousgame_mode=0;
+    }
+    if (!isset($this->prevent_reinit)) { // Set default value for prevent_reinit
+      $this->prevent_reinit =1;
+    }
+    if ($this->seriousgame_mode == 1 && $this->prevent_reinit == 1) {
+      return 'seriousgame';
+    }
+    if ($this->seriousgame_mode == 0 && $this->prevent_reinit == 1) {
+      return 'single';
+    }
+    if ($this->seriousgame_mode == 0 && $this->prevent_reinit == 0) {
+      return 'multiple';
+    }
+    return 'single';
+  }
+
+  /**
+   * Register the attempt mode into db thanks to flags prevent_reinit and seriousgame_mode flags
+   *
+   * @param string 'seriousgame', 'single' or 'multiple'
+   * @return boolean
+   * @author ndiechburg <noel@cblue.be>
+   **/
+  public function set_attempt_mode($mode)
+  {
+    switch ($mode) {
+    case 'seriousgame' : 
+      $sg_mode = 1;
+      $prevent_reinit = 1;
+      break;
+    case 'single' : 
+      $sg_mode = 0;
+      $prevent_reinit = 1;
+      break;
+    case 'multiple' : 
+      $sg_mode = 0;
+      $prevent_reinit = 0;
+      break;
+    default :
+      $sg_mode = 0;
+      $prevent_reinit = 0;
+      break;
+    }
+    $this->prevent_reinit = $prevent_reinit;
+    $this->seriousgame_mode = $sg_mode;
+		$lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+    $sql = "UPDATE $lp_table SET prevent_reinit = $prevent_reinit , seriousgame_mode = $sg_mode WHERE id = " . $this->get_id();
+    $res = Database::query($sql);
+    if ($res) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  /**
+   * switch between multiple attempt, single attempt or serious_game mode (only for scorm)
+   *
+   * @return boolean
+   * @author ndiechburg <noel@cblue.be>
+   **/
+  public function switch_attempt_mode()
+  {
+    if ($this->debug > 0) {
+      error_log('New LP - In learnpath::switch_attempt_mode()', 0);
+    }
+    $mode = $this->get_attempt_mode();
+    switch ($mode) {
+    case 'single' :
+      $next_mode = 'multiple';
+      break;
+    case 'multiple' :
+      $next_mode = 'seriousgame';
+      break;
+    case 'seriousgame' :
+      $next_mode = 'single';
+      break;
+    default : 
+      $next_mode = 'single';
+      break;
+    }
+    $this->set_attempt_mode($next_mode);
+  }
+
+  /**
+   * Swithc the lp in ktm mode. This is a special scorm mode with unique attempt but possibility to do again a completed item.
+   *
+   * @return boolean true if seriousgame_mode has been set to 1, false otherwise
+   * @author ndiechburg <noel@cblue.be>
+   **/
+  public function set_seriousgame_mode()
+  {
+		if ($this->debug > 0) {
+			error_log('New LP - In learnpath::set_seriousgame_mode()', 0);
+		}
+		$lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+		$sql = "SELECT * FROM $lp_table WHERE id = " . $this->get_id();
+		$res = Database::query($sql);
+		if (Database :: num_rows($res) > 0) {
+			$row = Database :: fetch_array($res);
+			$force = $row['seriousgame_mode'];
+			if ($force == 1) {
+				$force = 0;
+			} elseif ($force == 0) {
+				$force = 1;
+			}
+			$sql = "UPDATE $lp_table SET seriousgame_mode = $force WHERE id = " . $this->get_id();
+			$res = Database::query($sql);
+			$this->seriousgame_mode = $force;
+			return $force;
+		} else {
+			if ($this->debug > 2) {
+				error_log('New LP - Problem in set_seriousgame_mode() - could not find LP ' . $this->get_id() . ' in DB', 0);
+			}
+		}
+		return -1;
+
+  }
     /**
      * Updates the "scorm_debug" value that shows or hide the debug window
      * @return	boolean	True if scorm_debug has been set to 'on', false otherwise (or 1 or 0 in this case)

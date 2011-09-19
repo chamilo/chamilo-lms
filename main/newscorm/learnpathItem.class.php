@@ -49,6 +49,7 @@ class learnpathItem {
 	public $prereqs = array();
 	public $previous;
 	public $prevent_reinit = 1; // 0 =  multiple attempts   1 = one attempt
+	public $seriousgame_mode;
 	public $ref;
 	public $save_on_close = true;
 	public $search_did = null;
@@ -56,6 +57,8 @@ class learnpathItem {
 	public $title;
 	public $type; // This attribute can contain chapter|link|student_publication|module|quiz|document|forum|thread
 	public $view_id;
+  //var used if absolute session time mode is used
+  private $last_scorm_session_time =0;
 
 	const debug = 0; // Logging parameter.
 
@@ -103,6 +106,7 @@ class learnpathItem {
 		}
 		$this->save_on_close = true;
 		$this->db_id = $id;
+    $this->seriousgame_mode = $this->get_seriousgame_mode();
 
 		// Get search_did.
 		if (api_get_setting('search_enabled')=='true') {
@@ -634,6 +638,37 @@ class learnpathItem {
 	}
 
 	/**
+     * Returns 1 if seriousgame_mode is activated, 0 otherwise
+     *
+     * @return int (0 or 1)
+     * @author ndiechburg <noel@cblue.be>
+     **/
+    public function get_seriousgame_mode()
+    {
+      if(self::debug>2){error_log('New LP - In learnpathItem::get_seriousgame_mode()',0);}
+        if(!isset($this->seriousgame_mode)){
+          if(!empty($this->lp_id)){
+            $db = Database::get_course_table(TABLE_LP_MAIN);
+            $sql = "SELECT * FROM $db WHERE id = ".$this->lp_id;
+            $res = @Database::query($sql);
+            if(Database::num_rows($res)<1)
+            {
+              $this->error = "Could not find parent learnpath in learnpath table";
+              if(self::debug>2){error_log('New LP - End of learnpathItem::get_seriousgame_mode() - Returning false',0);}
+              return false;
+            }else{
+              $row = Database::fetch_array($res);
+              $this->seriousgame_mode = isset($row['seriousgame_mode'])? $row['seriousgame_mode'] : 0;
+            }
+          }else{
+            $this->seriousgame_mode = 0; //SeriousGame mode is always off by default
+          }
+        }
+      if(self::debug>2){error_log('New LP - End of learnpathItem::get_seriousgame_mode() - Returned '.$this->seriousgame_mode,0);}
+        return $this->seriousgame_mode;
+    }
+
+    /**
 	 * Gets the item's reference column
 	 * @return string	The item's reference field (generally used for SCORM identifiers)
 	 */
@@ -1119,7 +1154,7 @@ class learnpathItem {
 			// If status is not attempted or incomplete, authorize retaking (of the same) anyway. Otherwise:
 			if ($mystatus != $this->possible_status[0] && $mystatus != $this->possible_status[1]) {
 				$restart = -1;
-			} else {
+			}else{ //status incompleted or not attempted
 				$restart = 0;
 			}
 		} else {
@@ -1577,7 +1612,18 @@ class learnpathItem {
 	 */
 	public function restart() {
 		if (self::debug > 0) { error_log('New LP - In learnpathItem::restart()', 0); }
+      if ($this->type == 'sco') { //If this is a sco, chamilo can't update the time without explicit scorm call
+        $this->current_start_time = 0;
+        $this->current_stop_time = 0; //Those 0 value have this effect
+        $this->last_scorm_session_time = 0;
+      }
 		$this->save();
+    //For serious game  : We reuse same attempt_id
+    if ($this->get_seriousgame_mode() == 1 && $this->type == 'sco') {
+			$this->current_start_time = 0;
+			$this->current_stop_time = 0;
+      return true;
+    }
 		$allowed = $this->is_restart_allowed();
 		if ($allowed === -1) {
 			// Nothing allowed, do nothing.
@@ -1606,6 +1652,8 @@ class learnpathItem {
 			$this->current_data = '';
 			$this->status = $this->possible_status[0];
 			$this->interactions_count = $this->get_interactions_count(true);
+      if ($this->type == 'sco') 
+        $this->scorm_init_time();
 		}
 		return true;
 	}
@@ -1995,10 +2043,10 @@ class learnpathItem {
 					$sec = $res[3];
 					// Getting total number of seconds spent.
 			 		$total_sec = $hour*3600 + $min*60 + $sec;
-			 		$this->update_time($total_sec);
+   		     		        $this->scorm_update_time($total_sec);
 			 	}
 	 		} elseif ($format == 'int') {
-	 			$this->update_time($scorm_time);
+     			$this->scorm_update_time($scorm_time);
 	 		}
 	 	}
 	}
@@ -2087,6 +2135,47 @@ class learnpathItem {
 	}
 
 	/**
+     * Special scorm update time function. This function will update time directly into db for scorm objects
+     **/
+    public function scorm_update_time($total_sec=0){
+      //Step 1 : get actual total time stored in db
+   		$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+      $get_view_sql='SELECT total_time, status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+      $result=Database::query($get_view_sql);
+      $row=Database::fetch_array($result);
+      if (!isset($row['total_time'])) {
+        $total_time = 0;
+      }
+      else { 
+        $total_time = $row['total_time'];
+      }
+      
+      //Step 2.1 : if normal mode total_time = total_time + total_sec
+      if (api_get_setting('scorm_cumulative_session_time') != 'false'){
+        $total_time +=$total_sec;
+        //$this->last_scorm_session_time = $total_sec;
+      }
+      //Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec 
+      else{
+        $total_time = $total_time - $this->last_scorm_session_time + $total_sec;
+        $this->last_scorm_session_time = $total_sec;
+      }
+      //Step 3 update db only if status != completed, passed, browsed or seriousgamemode not activated
+      $case_completed=array('completed','passed','browsed'); //TODO COMPLETE
+      if ($this->seriousgame_mode!=1 || !in_array($row['status'], $case_completed)){
+        $update_view_sql='UPDATE '.$item_view_table." SET total_time =$total_time".' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+        $result=Database::query($update_view_sql);
+      }
+    }
+    /**
+    * Set the total_time to 0 into db
+    **/
+    public function scorm_init_time(){
+      $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+      $update_view_sql='UPDATE '.$item_view_table.' SET total_time = 0, start_time='.time().' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+      $result=Database::query($update_view_sql);
+    }
+    /**
 	 * Write objectives to DB. This method is separate from write_to_db() because otherwise
 	 * objectives are lost as a side effect to AJAX and session concurrent access
 	 * @return	boolean		True or false on error
@@ -2171,9 +2260,10 @@ class learnpathItem {
    			$save = true;
    		}
 
-   		if (($save === false && $this->type == 'sco') ||(($this->type == 'sco') && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse'))) {
-   			// This info shouldn't be saved as the credit or lesson mode info prevent it.
-   			if (self::debug > 1) { error_log('New LP - In learnpathItem::write_to_db() - credit('.$credit.') or lesson_mode('.$mode.') prevent recording!', 0); }
+   		if ((($save===false && $this->type == 'sco') ||(($this->type == 'sco') && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse'))) && ($this->seriousgame_mode!=1 && $this->type == 'sco'))
+   		{
+   			//this info shouldn't be saved as the credit or lesson mode info prevent it
+   			if(self::debug>1){error_log('New LP - In learnpathItem::write_to_db() - credit('.$credit.') or lesson_mode('.$mode.') prevent recording!',0);}
    		} else {
 	  		// Check the row exists.
 	  		$inserted = false;
@@ -2293,8 +2383,12 @@ class learnpathItem {
 		 				// This is a array containing values finished
 		 				$case_completed = array('completed', 'passed', 'browsed');
 
-		 				if ($this->get_prevent_reinit() == 1) {
-		 					// Multiple attempts are prevented.
+	     				//is not multiple attempts
+              if ($this->seriousgame_mode==1 && $this->type=='sco') {
+                $total_time =" total_time = total_time +".$this->get_total_time().", ";
+                $my_status = " status = '".$this->get_status(false)."' ,";
+              } elseif ($this->get_prevent_reinit()==1) {
+			  		     	// process of status verified into data base
 
 		 					// Process of status verified into data base.
 			 				$sql_verified = 'SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
@@ -2357,6 +2451,20 @@ class learnpathItem {
 		 				}*/
 		 			}
 
+            
+            if ($this->type == 'sco'){ //IF scorm scorm_update_time has already updated total_tim in db
+			     	$sql = "UPDATE $item_view_table " .
+			     			" SET ".//start_time = ".$this->get_current_start_time().", " . //scorm_init_time does it
+			     			" score = ".$this->get_score().", " .
+			     			$my_status.
+			     			" max_score = '".$this->get_max()."'," .
+			     			" suspend_data = '".Database::escape_string($this->current_data)."'," .
+			     			//" max_time_allowed = '".$this->get_max_time_allowed()."'," .
+			     			" lesson_location = '".$this->lesson_location."' " .
+			     			"WHERE lp_item_id = ".$this->db_id." " .
+			     			"AND lp_view_id = ".$this->view_id." " .
+			     			"AND view_count = ".$this->attempt_id;
+            } else {
 				 	$sql = "UPDATE $item_view_table " .
 				 			"SET " .$total_time.
 				 			" start_time = ".$this->get_current_start_time().", " .
@@ -2369,6 +2477,7 @@ class learnpathItem {
 				 			"WHERE lp_item_id = ".$this->db_id." " .
 				 			"AND lp_view_id = ".$this->view_id." " .
 				 			"AND view_count = ".$this->attempt_id;
+            }
 
 				 	$this->current_start_time = time();
 		 		}

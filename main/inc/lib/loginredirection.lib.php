@@ -35,9 +35,11 @@ Class LoginRedirection {
         $redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
       }
     }
-    header('Location: '.$redirect_url.$param);
-    exit();
 
+    if (isset($redirect_url) && (!empty($redirect_url))){
+      header('Location: '.$redirect_url.$param);
+      exit();
+    }
 
     // Custom pages
     if (api_get_setting('use_custom_pages') == 'true') {

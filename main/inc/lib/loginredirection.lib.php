@@ -10,6 +10,7 @@ Class LoginRedirection {
 
     global $param;
     $param = isset($param) ? $param : '';
+    $redirect_url = '';
 
     if ( api_is_student() && !api_get_setting('student_page_after_login') == '' ){
       $redirect_url = html_entity_decode(api_get_setting('student_page_after_login'));
@@ -36,14 +37,16 @@ Class LoginRedirection {
       }
     }
 
-    if (isset($redirect_url) && (!empty($redirect_url))){
+    if (!empty($redirect_url)){
+      die("redirect : $redirect_url");
       header('Location: '.$redirect_url.$param);
       exit();
     }
 
     // Custom pages
     if (api_get_setting('use_custom_pages') == 'true') {
-      CustomPages::displayPage('index-unlogged');
+      require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
+      CustomPages::displayPage('index-logged');
     }
     if (!empty($_SESSION['request_uri'])) {
       $req = $_SESSION['request_uri'];

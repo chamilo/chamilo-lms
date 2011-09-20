@@ -19,10 +19,10 @@ if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
 	$sql = 'SELECT lastname, firstname FROM '.Database::get_main_table(TABLE_MAIN_USER).' WHERE user_id='.intval($_GET['id_coach']);
 	$rs = Database::query($sql);
 	$coach_name = api_get_person_name(Database::result($rs, 0, 1), Database::result($rs, 0, 0));
-	$title = get_lang('Probationers').' - '.$coach_name;
+	$title = get_lang('Students').' - '.$coach_name;
 } else {
 	$nameTools = get_lang("Students");
-	$title = get_lang('Probationers');
+	$title = get_lang('Students');
 }
 
 $this_section = SECTION_TRACKING;
@@ -130,8 +130,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 		$menu_items[] = Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), 32), 'course.php');
 		$menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), 32), 'session.php');
 		
-
-		echo '<div class="actions-title" style ="font-size:10pt;">';
+		echo '<div class="actions">';
 		$nb_menu_items = count($menu_items);
 		if ($nb_menu_items > 1) {
 			foreach ($menu_items as $key => $item) {

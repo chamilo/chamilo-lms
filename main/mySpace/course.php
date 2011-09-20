@@ -1,17 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-/*
- * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
- */
 ob_start();
 $nameTools = 'Cours';
 // name of the language file that needs to be included
 $language_file = array ('admin', 'registration', 'index', 'trad4all', 'tracking');
 $cidReset = true;
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
@@ -81,15 +77,12 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
 	$a_courses = array_keys($courses);
 
-	if (!api_is_session_admin()) {
-		
+	if (!api_is_session_admin()) {		
 		$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',32),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
 		$menu_items[] = Display::url(Display::return_icon('user.png', get_lang('Students'), array(), 32), "index.php?view=drh_students&amp;display=yourstudents");
 		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), 32), 'teachers.php');
 		$menu_items[] = Display::return_icon('course_na.png', get_lang('Courses'), array(), 32);
 		$menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), 32), 'session.php');
-		
-		
 	}
 
 	echo '<div class="actions">';
@@ -253,11 +246,5 @@ if (is_array($a_courses)) {
 $table -> setColAttributes(0, array('align' => 'left'));
 $table -> setColAttributes(7, array('align' => 'center'));
 $table -> display();
-
-/*
- ==============================================================================
-		FOOTER
- ==============================================================================
- */
 
 Display :: display_footer();

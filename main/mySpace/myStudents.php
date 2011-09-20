@@ -443,7 +443,7 @@ if (!empty($_GET['student'])) {
 	$url_big_image = $big_image . '?rnd=' . time();
 	$img_attributes = 'src="' . $image_file . '?rand=' . time() . '" ' .
 	'alt="' . api_get_person_name($info_user['firstname'], $info_user['lastname']) . '" ' .
-	'style="float:' . ($text_dir == 'rtl' ? 'left' : 'right') . '; padding:5px;" ';
+	'style="float:' . ($text_dir == 'rtl' ? 'right' : 'left') . '; padding:5px;" ';
 
 	if ($image_array['file'] == 'unknown.jpg') {
 		echo '<img ' . $img_attributes . ' />';

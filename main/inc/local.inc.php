@@ -653,8 +653,11 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 			api_session_register('is_platformAdmin');
 			api_session_register('is_allowedCreateCourse');
 
-			require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';
-			LoginRedirection::redirect();
+      // If request_uri is settd we have to go further to have course permissions
+      if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
+        require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';
+        LoginRedirection::redirect();
+      }
 
 		} else {
 			header('location:'.api_get_path(WEB_PATH));
@@ -1095,4 +1098,9 @@ if (isset($_cid)) {
 	$time = api_get_datetime();
 	$sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";
 	Database::query($sql);
+}
+if (!empty($_SESSION['request_uri'])){
+  $req= $_SESSION['request_uri'];
+  unset($_SESSION['request_uri']);
+  header('Location: '.$req);
 }

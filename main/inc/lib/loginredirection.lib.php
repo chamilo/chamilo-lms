@@ -12,6 +12,14 @@ Class LoginRedirection {
     $param = isset($param) ? $param : '';
     $redirect_url = '';
 
+    //If session request url is setted, we go there
+    if (!empty($_SESSION['request_uri'])) {
+      $req = $_SESSION['request_uri'];
+      unset($_SESSION['request_uri']);
+      header('location: '.$req);
+      exit();
+    }
+
     if ( api_is_student() && !api_get_setting('student_page_after_login') == '' ){
       $redirect_url = html_entity_decode(api_get_setting('student_page_after_login'));
       if ($redirect_url[0] == "/") {
@@ -38,7 +46,6 @@ Class LoginRedirection {
     }
 
     if (!empty($redirect_url)){
-      die("redirect : $redirect_url");
       header('Location: '.$redirect_url.$param);
       exit();
     }
@@ -48,15 +55,8 @@ Class LoginRedirection {
       require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
       CustomPages::displayPage('index-logged');
     }
-    if (!empty($_SESSION['request_uri'])) {
-      $req = $_SESSION['request_uri'];
-      unset($_SESSION['request_uri']);
-      header('location: '.$req);
-      exit();
-    } else {
-      header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login').$param);
-      exit();
-    }
+    header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login').$param);
+    exit();
   }
 }
 ?>

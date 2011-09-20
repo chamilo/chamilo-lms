@@ -11,7 +11,19 @@ class Template extends Smarty {
 	var $show_footer = true;
 	
 	function __construct($title = '') {
-		$this->title = $title;		
+		$this->title = $title;
+				
+		/*
+		 * 
+		 * For smarty 3.1 use 
+		 * 
+		$this->setPluginsDir(INCLUDES.'smarty/plugins/');
+		$this->setCacheDir(CACHE_PATH);
+		$this->setCompileDir(CACHE_PATH);
+		$this->setTemplateDir(INCLUDES.'tpl/');
+		$this->setConfigDir(CACHE_PATH);
+		
+		*/
 		
 		$this->template_dir 	= api_get_path(SYS_CODE_PATH).'template/';	
 		$this->compile_dir  	= api_get_path(SYS_ARCHIVE_PATH); 	
@@ -39,7 +51,8 @@ class Template extends Smarty {
 		//$this->loadPlugin('smarty_function_get_lang');
 
 		//$this->caching = Smarty::CACHING_LIFETIME_CURRENT;				
-		$this->assign('style', $this->style);		
+		$this->assign('style', $this->style);	
+		//$this->testInstall();	
 	}
 	
 	/**	  

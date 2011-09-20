@@ -77,7 +77,6 @@ if (isset($_GET['loginFailed'])){
       <span><?php echo cblue_get_lang('LoginEnter');?></span>
 			</div> <!-- #form-submit -->
 			<div id="links">
-      <a href="main/auth/inscription.php"><?php echo cblue_get_lang('langReg')?></a><br />
       <a href="main/auth/lostPassword.php"><?php echo cblue_get_lang('langLostPassword')?></a>
 			</div>
 		</div> <!-- #form -->

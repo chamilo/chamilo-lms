@@ -50,7 +50,7 @@ body {
 	text-align: center;
 }
 
-#login-form-box, #registration-form-box, #lostpassword-form-box {
+.form-box {
 	width: 310px;
 	margin-left: auto;
 	margin-right: auto;
@@ -60,7 +60,7 @@ body {
 	background-color: white;
 }
 
-#login-form, #registration-form, #lostpassword-form {
+.form {
 	margin-left: 15px;
 	margin-right: 15px;
 	margin-top: 30px;
@@ -69,7 +69,7 @@ body {
 	text-align: left;
 }
 
-#login-form-submit, #registration-form-submit, #lostpassword-form-submit {
+.form-submit {
 	margin: 0;
 	padding: 0;
 	width: 310px;

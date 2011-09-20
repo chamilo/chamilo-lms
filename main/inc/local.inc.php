@@ -1099,8 +1099,9 @@ if (isset($_cid)) {
 	$sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";
 	Database::query($sql);
 }
-if (!empty($_SESSION['request_uri'])){
+if (isset($_SESSION['request_uri']) && !empty($_SESSION['request_uri'])){
   $req= $_SESSION['request_uri'];
   unset($_SESSION['request_uri']);
   header('Location: '.$req);
+  exit;
 }

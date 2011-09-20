@@ -31,7 +31,6 @@ require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once 'main/chat/chat_functions.lib.php';
 
-require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
 
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
 $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
@@ -87,6 +86,12 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     unset($_SESSION['update_term_and_condition']);
     unset($_SESSION['info_current_user']);
 }
+//If we are not logged in and customapages activated
+if (!api_get_user_id() && api_get_setting('use_custom_pages') == 'true' ){
+  require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
+  CustomPages::displayPage('index-unlogged');
+}
+
 
 /**
  * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.

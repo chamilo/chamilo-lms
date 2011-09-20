@@ -7,7 +7,7 @@ Class LoginRedirection {
 
 	//checks user status and redirect him through custom page if setting is enabled
 	public function redirect(){
-		
+
 		global $param;
 
 		if ( api_is_student() && !api_get_setting('student_page_after_login') == '' ){
@@ -46,12 +46,7 @@ Class LoginRedirection {
 
 		// Custom pages
 		if (api_get_setting('use_custom_pages') == 'true') {
-			if (api_get_user_id()) {
-				CustomPages::displayPage('index-logged');
-			}
-			else {
-				CustomPages::displayPage('index-unlogged');
-			}
+			CustomPages::displayPage('index-unlogged');
 		}
 		if (!empty($_SESSION['request_uri'])) {
 			$req = $_SESSION['request_uri'];

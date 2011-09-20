@@ -17,7 +17,6 @@ require_once 'main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
 require_once 'main/chat/chat_functions.lib.php';
 
-
 // The section (for the tabs).
 $this_section = SECTION_CAMPUS;
 
@@ -167,11 +166,14 @@ $tpl = $controller->tpl->get_template('layout/layout_2_col.tpl');
 $controller->set_login_form();
 
 //@todo move this inside the IndexManager
-$controller->tpl->assign('announcements_block', 	$controller->return_announcements());
-$controller->tpl->assign('teacher_block', 			$controller->return_teacher_link());
-$controller->tpl->assign('home_page_block', 		$controller->return_home_page());
+if (!api_is_anonymous()) {
+	$controller->tpl->assign('profile_block', 			$controller->return_profile_block());
+	$controller->tpl->assign('teacher_block', 			$controller->return_teacher_link());
+}
 
-$controller->tpl->assign('profile_block', 			$controller->return_profile_block());
+$controller->tpl->assign('announcements_block', 	$controller->return_announcements());
+
+$controller->tpl->assign('home_page_block', 		$controller->return_home_page());
 $controller->tpl->assign('notice_block',			$controller->return_notice());
 $controller->tpl->assign('plugin_campushomepage', 	$controller->return_plugin_campushomepage());
 

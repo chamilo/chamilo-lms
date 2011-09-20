@@ -294,6 +294,12 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 
 				// Check the user's password
 				if ( ($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {
+          require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+          $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
+          $update_type= $update_type['update_type'];
+          if (!empty($extAuthSource[$update_type]['updateUser']) && file_exists($extAuthSource[$update_type]['updateUser'])) {
+            include_once($extAuthSource[$update_type]['updateUser']);
+          }
 					// Check if the account is active (not locked)
 					if ($uData['active']=='1') {
 						// Check if the expiration date has not been reached

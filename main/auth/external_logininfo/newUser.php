@@ -8,6 +8,9 @@
  You also have to implements the external_get_user_info function in this file.
  */
 	require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+	require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+  define('USERINFO_TABLE', 'userinfo');
+  define('DEFAULT_PASSWORD', 'boumbalah');
 
 //TODO : Please implements this function for this module to work.
 /**
@@ -26,14 +29,67 @@
 function external_get_user_info($login, $password){
   //Those are the mandatory fields for user creation.
   //See external_add_user function for all the fields you can have.
+  if ($password != DEFAULT_PASSWORD) {
+    return false;
+  }
+  $table = USERINFO_TABLE;
+  $sql = "SELECT * from $table where username='".Database::escape_string($login)."'";
+  $result = Database::query($sql);
+
+  if (Database::num_rows($result) == 0 ) { //false password
+    return false;
+  }
+  $user_info = Database::fetch_assoc($result);
+  // User status
+  $admin = false;
+  switch($user_info['status']){
+  case 'admin': 
+    $status = COURSEMANAGER;
+    $admin = true;
+    break;
+  case 'teacher':
+    $status = COURSEMANAGER;
+    break;
+  case 'user':
+    $status = STUDENT;
+    break;
+  default:
+    $status = STUDENT;
+  }
+  // Language
+  switch($user_info['language']){
+  case 'FR' :
+    $language = 'french';
+    break;
+  case 'EN' :
+    $language = 'english';
+    break;
+  default : 
+    $language = 'english';
+    break;
+  }
+
   $u = array(
-    'firstname' => 'firstname',
-    'lastname' => 'lastname',
-    'status' => STUDENT,
-    'email' => 'email@email.em',
-    'login' => $login,
-    'password' => $password
-  );
+    'firstname' => $user_info['firstname'],
+    'lastname' => $user_info['lastname'],
+    'status' => $status,
+    'admin' => $admin,
+    'email' => $user_info['email'],
+    'login' => $user_info['username'],
+    'language' => $language,
+    'password' => DEFAULT_PASSWORD,
+    'courses' => $user_info['courses'],
+    'profile_link' => $user_info['profile_link'],
+    'worldwide_bu' => $user_info['worlwide_bu'],
+    'manager' => $user_info['manager'],
+    'country_bu' => $user_info['country_bu'],
+    'extra' => array(
+      'position_title' => $user_info['position_title'],
+      'country' => $user_info['country'],
+      'job_family' => $user_info['job_family'],
+      'update_type' => 'external_logininfo')
+    );
+
   return $u; //Please return false if user does not exist
   //return false;
 }
@@ -81,9 +137,25 @@ $user = external_get_user_info($login, $password);
 if ($user !== false && ($chamilo_uid = external_add_user($user)) !== false) {
     //log in the user
     $loginFailed = false;
-    $uidReset = true;
     $_user['user_id'] = $chamilo_uid;
-    api_session_register('_uid');
+    api_session_register('_user');
+    //Autosubscribe to courses
+    if(!empty($user['courses'])){
+      $autoSubscribe = explode('|', $user['courses']);
+      foreach ($autoSubscribe as $code) {
+        if (CourseManager::course_exists($code)) { 
+          CourseManager::subscribe_user($_user['user_id'], $code);
+        }
+      }
+    }
+    // Is User Admin ?
+    if ($user['admin']){
+			$is_platformAdmin           = true;
+      Database::query("INSERT INTO admin values ('$chamilo_uid')");
+    }
+    // Can user create course
+    $is_allowedCreateCourse     = (bool) (($user['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $user['status'] == SESSIONADMIN));
+
     event_login();
 } else {
 	$loginFailed = true;

@@ -825,7 +825,8 @@ VALUES
 ('filter_terms',NULL,'textarea','Security','','FilterTermsTitle','FilterTermsComment',NULL,NULL, 0),
 ('header_extra_content', NULL, 'textarea', 'Tracking', '', 'HeaderExtraContentTitle', 'HeaderExtraContentComment', NULL, NULL, 1),
 ('show_documents_preview', NULL, 'radio', 'Tools', 'false', 'ShowDocumentPreviewTitle', 'ShowDocumentPreviewComment', NULL, NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.15650','DokeosDatabaseVersion','', NULL, NULL, 0);
+('htmlpurifier_wiki', NULL, 'radio', 'Editor', 'true', 'HtmlPurifierWikiTitle', 'HtmlPurifierWikiComment', NULL, NULL, 0),
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.15651','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1093,7 +1094,9 @@ VALUES
 ('enable_nanogong','true','Yes'),
 ('enable_nanogong','false','No'),
 ('show_documents_preview', 'true', 'Yes'),
-('show_documents_preview', 'false', 'No');
+('show_documents_preview', 'false', 'No'),
+('enabled_htmlpurifier', 'true', 'Yes'),
+('enabled_htmlpurifier', 'false', 'No');
 
 UNLOCK TABLES;
 

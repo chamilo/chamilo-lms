@@ -35,9 +35,24 @@ $(document).ready(function() {
 				var end_date 	= Math.round(end.getTime() / 1000);
 				
 				var url = '{$web_agenda_ajax_url}a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
+
+				$('#start_date').html(start.toDateString() + " " +  start.toTimeString().substr(0, 8));
+
+				if (view.name != 'month') {
+					$('#start_date').html(start.toDateString() + " " +  start.toTimeString().substr(0, 8));
+					if (start.toDateString() == end.toDateString()) {					
+						$('#end_date').html(' - '+end.toTimeString().substr(0, 8));
+					} else {
+						$('#end_date').html(' - '+end.toDateString()+" " + end.toTimeString().substr(0, 8));
+					}
+				} else {
+					$('#start_date').html(start.toDateString());					
+				}
 				
-				$('#start_date').html(start.getDate() +"/"+ start.getMonth() +"/"+start.getFullYear());
-				$('#end_date').html('- '+ end.getDate() +"/"+ end.getMonth() +"/"+end.getFullYear());
+
+				
+				
+				
 
 				$('#color_calendar').addClass('background_color_{$type}');
 											
@@ -159,27 +174,22 @@ $(document).ready(function() {
 		loading: function(bool) {
 			if (bool) $('#loading').show();
 			else $('#loading').hide();
-		}
-		
-	});
-	
+		}		
+	});	
 });
 </script>
 
 <div id="dialog-form" style="display:none;">
 	<div style="width:500px">			
-	<form id="add_event_form" name="form">
-	
+	<form id="add_event_form" name="form">	
 		<div class="row">		
 			<div class="label">
-				<label for="date">{"Calendar"|get_lang}</label>
+				<label for="date">{"Agenda"|get_lang}</label>
 			</div>
 			<div class="formw">
 				<span id="color_calendar" style="width:100px;"></span>
 			</div>					
 		</div>
-		
-	
 		<div class="row">		
 			<div class="label">
 				<label for="date">{"Date"|get_lang}</label>
@@ -203,8 +213,7 @@ $(document).ready(function() {
 			<div class="formw">
 				<textarea name="content" id="content" cols="40" rows="7"></textarea>
 			</div>
-		</div>
-	
+		</div>	
 	</form>
 	</div>
 </div>

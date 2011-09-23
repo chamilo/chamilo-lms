@@ -29,15 +29,13 @@ $(document).ready(function() {
 		select: function(start, end, allDay, jsEvent, view) {
 			/* When selecting one day or several days */
 			
-			if ({$can_add_events} == 1) {
+			var start_date 	= Math.round(start.getTime() / 1000);
+			var end_date 	= Math.round(end.getTime() / 1000);
 			
-				var start_date 	= Math.round(start.getTime() / 1000);
-				var end_date 	= Math.round(end.getTime() / 1000);
-				
+			if ({$can_add_events} == 1) {							
 				var url = '{$web_agenda_ajax_url}a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
-
+				
 				$('#start_date').html(start.toDateString() + " " +  start.toTimeString().substr(0, 8));
-
 				if (view.name != 'month') {
 					$('#start_date').html(start.toDateString() + " " +  start.toTimeString().substr(0, 8));
 					if (start.toDateString() == end.toDateString()) {					
@@ -48,10 +46,6 @@ $(document).ready(function() {
 				} else {
 					$('#start_date').html(start.toDateString());					
 				}
-				
-
-				
-				
 				
 
 				$('#color_calendar').addClass('background_color_{$type}');
@@ -106,7 +100,7 @@ $(document).ready(function() {
 				$('#start_date').html(calEvent.start.getDate() +"/"+ calEvent.start.getMonth() +"/"+calEvent.start.getFullYear());
 				
 				if (end_date != '') {
-					$('#end_date').html(calEvent.end.getDate() +"/"+ calEvent.end.getMonth() +"/"+calEvent.end.getFullYear());
+					$('#end_date').html(' '+calEvent.end.getDate() +"/"+ calEvent.end.getMonth() +"/"+calEvent.end.getFullYear());
 				}			
 	
 				$("#title").attr('value', calEvent.title);

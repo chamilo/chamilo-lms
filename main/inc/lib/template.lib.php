@@ -317,6 +317,13 @@ class Template extends Smarty {
 		
 		//$platform = get_lang('Platform').' <a href="'.$_configuration['software_url'].'" target="_blank">'.$_configuration['software_name'].' '.$_configuration['system_version'].'</a> &copy; '.date('Y');		
 		//$this->assign('platform_name', $platform);
+
+		if (!api_is_platform_admin()) {
+			$extra_footer = trim(api_get_setting('footer_extra_content'));
+			if (!empty($extra_footer)) {				
+				$this->assign('footer_extra_content', $extra_footer);
+			}		
+		}
 		
 		$administrator_data = get_lang('Manager'). ' : '. Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))); 
 		$this->assign('administrator_name', $administrator_data);

@@ -19,7 +19,7 @@
 		<div style="clear:both"></div>
 	</div>
 </div> <!-- end of #footer -->
-
+{$footer_extra_content}
 {literal}
 <script>
 $(document).ready( function() {

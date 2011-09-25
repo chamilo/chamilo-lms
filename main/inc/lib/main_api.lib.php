@@ -1798,6 +1798,13 @@ function api_get_setting($variable, $key = null) {
 	    	return $value ;
     	}
     }
+    if ($variable == 'footer_extra_content') {    	
+    	$filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content';
+	    if (file_exists($filename)) {
+	    	$value = file_get_contents($filename);
+	    	return $value ;
+    	}
+    }
     return is_null($key) ? ((isset($_setting[$variable]) && $_setting[$variable] != '') ? $_setting[$variable] : null) : $_setting[$variable][$key];
 }
 

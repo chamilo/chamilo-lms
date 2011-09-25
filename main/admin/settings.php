@@ -197,8 +197,16 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 }
                 break;
             case 'textarea':            	
-            	if ($row['variable'] == 'header_extra_content') {
+                if ($row['variable'] == 'header_extra_content') {
             		$file = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content';
+            		$value = '';
+            		if (file_exists($file)) {
+						$value = file_get_contents($file);
+            		}
+            	    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10','cols'=>'50'), $hideme);
+            	    $default_values[$row['variable']] = $value;            	        
+                } elseif ($row['variable'] == 'footer_extra_content') {
+            		$file = api_get_path(SYS_PATH).api_get_home_path().'footer_extra_content';
             		$value = '';
             		if (file_exists($file)) {
 						$value = file_get_contents($file);
@@ -417,7 +425,10 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                     		file_put_contents(api_get_path(SYS_PATH).api_get_home_path().'/header_extra_content', $value);                    		
                     		$value = api_get_home_path().'/header_extra_content';
                     		break;
-
+                    	case 'footer_extra_content':
+                    		file_put_contents(api_get_path(SYS_PATH).api_get_home_path().'/footer_extra_content', $value);                    		
+                    		$value = api_get_home_path().'/footer_extra_content';
+                    		break;
                         // URL validation for some settings.
                         case 'InstitutionUrl':
                         case 'course_validation_terms_and_conditions_url':

@@ -17,6 +17,7 @@ require_once 'main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
 require_once 'main/chat/chat_functions.lib.php';
 
+
 // The section (for the tabs).
 $this_section = SECTION_CAMPUS;
 
@@ -104,6 +105,12 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 	unset($_SESSION['update_term_and_condition']);
 	unset($_SESSION['info_current_user']);
 }
+//If we are not logged in and customapages activated
+if (!api_get_user_id() && api_get_setting('use_custom_pages') == 'true' ){
+  require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
+  CustomPages::displayPage('index-unlogged');
+}
+
 
 /**
  * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.

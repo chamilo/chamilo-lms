@@ -20,6 +20,7 @@ define('GROUP_USER_PERMISSION_PENDING_INVITATION'	,'3'); 	//   When an admin/mod
 define('GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER'	,'4'); // an user joins a group
 define('GROUP_USER_PERMISSION_MODERATOR'	,'5'); // a moderator
 define('GROUP_USER_PERMISSION_ANONYMOUS'	,'6'); // an anonymous user
+define('GROUP_USER_PERMISSION_HRM', '7'); // a human resources manager
 
 
 define('GROUP_IMAGE_SIZE_ORIGINAL',	1);
@@ -33,60 +34,58 @@ define('GROUP_TITLE_LENGTH',       50);
  * @package chamilo.library
  */
 class GroupPortalManager {
-	/**
-	  * Creates a new group
-	  *
-	  * @author Julio Montoya <gugli100@gmail.com>,
-	  *
-	  * @param	string	The URL of the site
- 	  * @param	string  The description of the site
- 	  * @param	int		is active or not
-	  * @param  int     the user_id of the owner
-	  * @return boolean if success
-	  */
-	public static function add($name, $description, $url, $visibility, $picture='')
-	{
-		$tms	= time();
-		$table 	= Database :: get_main_table(TABLE_MAIN_GROUP);
-		$sql 	= "INSERT INTO $table
-                SET name 	= '".Database::escape_string($name)."',
-                description = '".Database::escape_string($description)."',
-                picture_uri = '".Database::escape_string($picture)."',
-                url 		= '".Database::escape_string($url)."',
-                visibility 	= '".Database::escape_string($visibility)."',
-                created_on = FROM_UNIXTIME(".$tms."),
-                updated_on = FROM_UNIXTIME(".$tms.")";
-		$result = Database::query($sql);
-		$return = Database::insert_id();
-		return $return;
-	}
+    /**
+     * Creates a new group
+     *
+     * @author Julio Montoya <gugli100@gmail.com>,
+     *
+     * @param	string	The URL of the site
+     * @param	string  The description of the site
+     * @param	int		is active or not
+     * @param  int     the user_id of the owner
+     * @return boolean if success
+     */
+    public static function add($name, $description, $url, $visibility, $picture='') {
+        $tms	= time();
+        $table 	= Database :: get_main_table(TABLE_MAIN_GROUP);
+        $sql 	= "INSERT INTO $table
+                   SET name 	= '".Database::escape_string($name)."',
+                   description = '".Database::escape_string($description)."',
+                   picture_uri = '".Database::escape_string($picture)."',
+                   url 		= '".Database::escape_string($url)."',
+                   visibility 	= '".Database::escape_string($visibility)."',
+                   created_on = FROM_UNIXTIME(".$tms."),
+                   updated_on = FROM_UNIXTIME(".$tms.")";
+        $result = Database::query($sql);
+        $return = Database::insert_id();
+        return $return;
+    }
 
-	/**
-	* Updates a group
-	* @author Julio Montoya <gugli100@gmail.com>,
-	*
-	* @param	int 	The id
-	* @param	string  The description of the site
-	* @param	int		is active or not
-	* @param	int     the user_id of the owner
-	* @return 	boolean if success
-	*/
-	public static function update($group_id, $name, $description, $url, $visibility, $picture_uri)
-	{
-		$group_id = intval($group_id);
-		$table = Database::get_main_table(TABLE_MAIN_GROUP);
-		$tms = time();
-		$sql = "UPDATE $table
-             	SET name 	= '".Database::escape_string($name)."',
+    /**
+     * Updates a group
+     * @author Julio Montoya <gugli100@gmail.com>,
+     *
+     * @param	int 	The id
+     * @param	string  The description of the site
+     * @param	int		is active or not
+     * @param	int     the user_id of the owner
+     * @return 	boolean if success
+     */
+    public static function update($group_id, $name, $description, $url, $visibility, $picture_uri) {
+        $group_id = intval($group_id);
+        $table = Database::get_main_table(TABLE_MAIN_GROUP);
+        $tms = time();
+        $sql = "UPDATE $table
+               	SET name 	= '".Database::escape_string($name)."',
                 description = '".Database::escape_string($description)."',
                 picture_uri = '".Database::escape_string($picture_uri)."',
                 url 		= '".Database::escape_string($url)."',
                 visibility 	= '".Database::escape_string($visibility)."',
                 updated_on 	= FROM_UNIXTIME(".$tms.")
                 WHERE id = '$group_id'";
-		$result = Database::query($sql);
-		return $result;
-	}
+        $result = Database::query($sql);
+        return $result;
+    }
 
 
 	/**
@@ -130,6 +129,25 @@ class GroupPortalManager {
 		}
 		return $data;
 	}
+    /**
+     * Gets a list of all group
+     * @param id of a group not to include (i.e. to exclude)
+     * @return array : id => name
+     **/
+    public static function get_groups_list($without_this_one = NULL ) {
+        $where='';
+        if ( isset($without_this_one) && (intval($without_this_one) == $without_this_one) ) {
+            $where = "WHERE id <> $without_this_one"; 
+        }
+        $table	= Database :: get_main_table(TABLE_MAIN_GROUP);
+        $sql = "SELECT id, name FROM $table $where order by name";
+        $res = Database::query($sql);
+        $list = array ();
+        while ($item = Database::fetch_assoc($res)) {
+            $list[$item['id']] = $item['name'];
+	}
+	return $list;
+    }
 
 	/**
 	 * Gets the group data
@@ -150,7 +168,125 @@ class GroupPortalManager {
 		return $item;
 	}
 
-	/**
+    /**
+     * Set a parent group
+     * @param group_id
+     * @param parent_group, if 0, we delete the parent_group association
+     * @param relation_type
+     * @return true or false
+     **/ 
+    public static function set_parent_group($group_id, $parent_group_id, $relation_type = 1){
+        $table = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
+        $group_id = intval($group_id);
+        $parent_group_id = intval($parent_group_id);
+        if ($parent_group_id == 0) {
+            $sql = "DELETE FROM $table WHERE subgroup_id = $group_id";
+        } else {
+            $sql = "SELECT group_id FROM $table WHERE subgroup_id = $group_id";
+            $res = Database::query($sql);
+            if (Database::num_rows($res)==0) {
+                $sql = "INSERT INTO $table  SET group_id = $parent_group_id, subgroup_id = $group_id, relation_type = $relation_type";
+            } else {
+                $sql = "UPDATE $table SET group_id = $parent_group_id, relation_type = $relation_type  WHERE subgroup_id = $group_id"; 
+            }
+        }
+        $res = Database::query($sql);
+        return($res);
+    }
+    /**
+     * Get the parent group
+     * @param group_id
+     * @param relation_type
+     * @return int parent_group_id or false
+     **/
+    public static function get_parent_group($group_id, $relation_type=1) {
+        $table = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
+        $group_id=intval($group_id);
+        $parent_group_id=intval($parent_group_id);
+        $sql = "SELECT group_id FROM $table WHERE subgroup_id = $group_id";
+        $res = Database::query($sql);
+        if (Database::num_rows($res)==0) {
+            return 0;
+        } else {
+            $arr = Database::fetch_assoc($res);
+            return $arr['group_id'];
+        }
+    }
+    public static function get_subgroups($root, $level) {
+        $t_group = Database::get_main_table(TABLE_MAIN_GROUP);
+        $t_rel_group = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
+        $select_part = "SELECT ";
+        $cond_part='';
+        for ($i=1; $i <= $level; $i++) { 
+            $g_number=$i;
+            $rg_number=$i-1;
+            if ( $i == $level) { 
+                $select_part .= "g$i.id as id_$i, g$i.name as name_$i ";
+            } else {
+                $select_part .="g$i.id as id_$i, g$i.name name_$i, ";
+            }
+            if ($i == 1) {
+                $cond_part .= "FROM $t_group g1 JOIN $t_rel_group rg0 on g1.id = rg0.subgroup_id and rg0.group_id = $root "; 
+            } else {
+                $cond_part .= "LEFT JOIN $t_rel_group rg$rg_number on g$rg_number.id = rg$rg_number.group_id ";
+                $cond_part .= "LEFT JOIN $t_group g$g_number on rg$rg_number.subgroup_id = g$g_number.id ";
+            }
+        }
+        $sql = $select_part.' '. $cond_part;
+        $res = Database::query($sql);
+        $toreturn = array();
+
+        while ($item = Database::fetch_assoc($res)) { 
+            foreach ($item as $key => $value ){
+                if ($key == 'id_1') {
+                    $toreturn[$value]['name'] = $item['name_1'];
+                } else {
+                    $temp =  explode('_',$key);
+                    $index_key = $temp[1];
+                    $string_key = $temp[0];
+                    $previous_key = $string_key.'_'.$index_key-1;
+                    if ( $string_key == 'id' && isset($item[$key]) ) {
+                        $toreturn[$item[$previous_key]]['hrms'][$index_key]['name'] = $item['name_'.$index_id];
+                    }
+                }
+            }
+        }
+        return $toreturn;
+    }
+    public static function get_parent_groups($group_id) {
+        $t_rel_group = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
+        $max_level = 10;
+        $select_part = "SELECT ";
+        $cond_part='';
+        for ($i=1; $i <= $max_level; $i++) {
+            $g_number=$i;
+            $rg_number=$i-1;
+            if ( $i == $max_level) {
+                $select_part .= "rg$rg_number.group_id as id_$rg_number ";
+            } else {
+                $select_part .="rg$rg_number.group_id as id_$rg_number, ";
+            }
+            if ($i == 1) {
+                $cond_part .= "FROM $t_rel_group rg0 LEFT JOIN $t_rel_group rg$i on rg$rg_number.group_id = rg$i.subgroup_id ";
+            } else {
+                $cond_part .= " LEFT JOIN $t_rel_group rg$i on rg$rg_number.group_id = rg$i.subgroup_id ";
+            }
+        }
+        $sql = $select_part.' '. $cond_part . "WHERE rg0.subgroup_id='$group_id'";
+        $res = Database::query($sql);
+        $temp_arr = Database::fetch_array($res, 'NUM');
+        $toreturn = array();
+        if (is_array($temp_arr)) {
+            foreach ($temp_arr as $elt) {
+                if (isset($elt)) {
+                    $toreturn[] = $elt;
+                }
+            }
+        }
+        return $toreturn;
+    }
+
+    /**
 	 * Gets the tags from a given group
 	 * @param int	group id
 	 * @param bool show group links or not
@@ -240,11 +376,11 @@ class GroupPortalManager {
 			$num = intval($num);
 		}
 		// only show admins and readers
-		$where_relation_condition = " WHERE  gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."') ";
+		$where_relation_condition = " WHERE  gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
 		$sql = "SELECT DISTINCT count(user_id) as count, g.picture_uri, g.name, g.description, g.id
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
-				ON gu.group_id = g.id $where_relation_condition ORDER BY count DESC LIMIT $num";
+				ON gu.group_id = g.id $where_relation_condition GROUP BY g.id ORDER BY count DESC LIMIT $num";
 
 		$result=Database::query($sql);
 		$array = array();
@@ -278,7 +414,7 @@ class GroupPortalManager {
 		} else {
 			$num = intval($num);
 		}		
-		$where_relation_condition = " WHERE gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."') ";
+		$where_relation_condition = " WHERE gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
 		$sql = "SELECT DISTINCT count(user_id) as count, g.picture_uri, g.name, g.description, g.id
 					 FROM $tbl_group g INNER JOIN $table_group_rel_user gu ON gu.group_id = g.id 
 					 $where_relation_condition
@@ -318,14 +454,14 @@ class GroupPortalManager {
 		
 		if (empty($group_id)){
 			return array();
-		}		
-		
-		$limit_text = '';		
-		if (isset($from) && isset($limit)) {
-		    $from     = intval($from);
-            $limit    = intval($limit);        
-		    $limit_text = "LIMIT $from, $limit";
-		}        
+                }		
+
+                $limit_text = '';		
+                if (isset($from) && isset($limit)) {
+                    $from     = intval($from);
+                    $limit    = intval($limit);        
+                    $limit_text = "LIMIT $from, $limit";
+               }        
 
 		if (count($relation_type) == 0) {
 			$where_relation_condition = '';
@@ -876,7 +1012,7 @@ class GroupPortalManager {
 			$user_id = api_get_user_id();
 		}
 		$user_role	= GroupPortalManager::get_user_group_role($user_id, $group_id);
-		if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR, GROUP_USER_PERMISSION_READER))) {
+		if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_HRM))) {
 			return true;
 		} else {
 			return false;
@@ -951,6 +1087,14 @@ class GroupPortalManager {
 				}
 				$links .=  '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('invitation_friend.png', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';
 				break;
+			case GROUP_USER_PERMISSION_HRM:
+				$relation_group_title = get_lang('IamAHRM');
+				$links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('compose_message.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('NewTopic').'</span></a></li>';
+				$links .=  '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('message_list.png', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MessageList').'</span></a></li>';
+				$links .=  '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('invitation_friend.png', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';
+				$links .=  '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('member_list.png', get_lang('MemberList'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MemberList').'</span></a></li>';
+				$links .=  '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.	Display::return_icon('delete_data.gif', get_lang('LeaveGroup'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+				break;
 			default:
 				//$links .=  '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('JoinGroup'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('JoinGroup').'</a></span></li>';
 			break;
@@ -964,5 +1108,6 @@ class GroupPortalManager {
 			echo $links;
 			echo '</ul>';
 		}
+		
 	}
 }

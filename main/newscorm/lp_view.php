@@ -243,13 +243,12 @@ $_SESSION['loaded_lp_view'] = true;
 
 $display_none = '';
 $margin_left = '290px';
-if ($_SESSION['oLP']->mode == 'embedframe') {
+if ($_SESSION['oLP']->mode == 'embedframe' ||$_SESSION['oLP']->get_hide_toc_frame()==1 ) {
     $display_none = ';display:none;';
-    $margin_left = '0px';
+    $margin_left = '12px';
 }
 ?>
 <body dir="<?php echo api_get_text_direction(); ?>">
-<div id="learning_path_main"  style="width:100%;height:100%;" >
     <div id="learning_path_left_zone" style="float:left;width:280px;height:100%<?php echo $display_none;?>">
         <!-- header -->
         <div id="header">
@@ -367,6 +366,8 @@ if ($_SESSION['oLP']->mode == 'embedframe') {
 
     <!-- right Zone -->
     <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
+
+
     <?php
         // hub 26-05-2010 Fullscreen or not fullscreen
         if ($_SESSION['oLP']->mode == 'fullscreen') {

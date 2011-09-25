@@ -1,0 +1,168 @@
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: "Arial Black",sans-serif;
+	font-size: 10pt;
+	width: 100%;
+	text-align: center;
+	/*
+	background-image: url(images/page-background.png);
+	background-repeat: no-repeat;
+	background-size: 100%;
+	*/
+}
+
+#backgroundimage {
+	background-attachment:fixed;
+	width: 100%
+	height: 100%
+	position: absolute;
+	left: 0;
+	top: 30px;
+	z-index:-1;
+}
+
+.backgroundimage {
+	width: 100%;
+	height: auto;
+}
+
+#wrapper {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1;
+	text-align: center;
+}
+
+#header {
+	width: 520px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 30px;
+}
+
+#footer {
+	position: relative;
+	/*margin-top: 50px;*/
+	text-align: center;
+}
+
+.form-box {
+	width: 310px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 50px;
+	border: solid 1px #CCCCCC;
+	text-align: left;
+	/*background-color: white;*/
+}
+
+.form {
+	margin-left: 15px;
+	margin-right: 15px;
+	margin-top: 30px;
+	color: #1F3660;
+	/*position: relative;*/
+	text-align: left;
+}
+
+.form-submit {
+	margin: 0;
+	padding: 0;
+	width: 310px;
+	height: 27px;
+	background-color: #1F3660;
+	background-image: url(/custompages/images/login-form-submit-bg.jpg);
+	color: white;
+	cursor: pointer;
+	cursor: hand;
+}
+
+label {
+	width: 100px;
+	float: left;
+	margin-right: 1em;
+	display: block;
+	text-align: right;
+	line-height: 2ex;
+}
+
+input {
+	text-align: left;
+	vertical-align: baseline;
+	margin-bottom: 2em;
+	width: 150px;
+	color: white;
+       background-color: #1F3660;
+	border: none;
+}
+
+.radiobutton {
+	width: 20px;
+	background-color: white;
+	margin: 0;
+}
+
+.radiogroup {
+	margin-bottom: 2em;
+}
+
+select {
+	margin-bottom: 2em;
+	width: 150px;
+}
+
+label {
+	clear: both;
+}
+
+input, select, .radiogroup {
+	float: right;
+	clear: both;
+}
+
+.radiogroup input, .radiogroup label {
+	float: none;
+}
+
+
+#links {
+	margin-left: 15px;
+	margin-right: 15px;
+	margin-top: 10px;
+	margin-bottom: 50px;
+	color: #1F3660;
+}
+
+#links a, #links a:hover, #links a:active, #links a:visited {
+	color: #1F3660;
+}
+
+#links a {
+	text-decoration: none;
+}
+
+#links a:hover {
+	text-decoration: underline;
+}
+
+span {
+	margin-right: 30px;
+	margin-top: 3px;
+	float: right;
+}
+
+.form-info {
+	color: #1F3660;
+	font-size: 9pt;
+}
+
+.form-error {
+	color: red;
+	font-size: 9pt;
+}

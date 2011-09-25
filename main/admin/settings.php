@@ -494,6 +494,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 Display :: display_header($tool_name);
 
 
+$action_images['cas'] = 'loginmanager.gif';
 
 // The action images.
 $action_images['platform']      = 'platform.png';

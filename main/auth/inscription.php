@@ -16,6 +16,7 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
+require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
 
 // Load terms & conditions from the current lang
 if (api_get_setting('allow_terms_conditions') == 'true') {
@@ -47,7 +48,79 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
-$tool_name = get_lang('Registration',null,(!empty($_POST['language'])?api_get_valid_language($_POST['language']):$_user['language']));
+// Custom pages
+if (api_get_setting('use_custom_pages') == 'true') {
+	if (isset($_POST['username'])) {
+		$values = array();
+		$values['firstname'] = $_POST['firstname'];
+		$values['lastname'] = $_POST['lastname'];
+		$values['status'] = $_POST['status'];
+		$values['email'] = $_POST['email'];
+		$values['username'] = $_POST['username'];
+		$values['pass1'] = $_POST['pass1'];
+		$values['official_code'] = '';
+		$values['language'] = $_POST['language'];
+		$values['phone'] = $_POST['phone'];
+		$picture_uri = null;
+		$user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'], $values['email'], $values['username'], $values['pass1'], $values['official_code'], $values['language'], $values['phone'], $picture_uri);
+		if ($user_id) {
+			/*
+					  SESSION REGISTERING
+			 */
+			$_user['firstName'] = stripslashes($values['firstname']);
+			$_user['lastName'] 	= stripslashes($values['lastname']);
+			$_user['mail'] 		= $values['email'];
+			$_user['language'] 	= $values['language'];
+			$_user['user_id']	= $user_id;
+			$is_allowedCreateCourse = $values['status'] == 1;
+			api_session_register('_user');
+			api_session_register('is_allowedCreateCourse');
+
+			//stats
+			event_login();
+			// last user login date is now
+			$user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970
+
+			api_session_register('user_last_login_datetime');
+
+			/*
+						 EMAIL NOTIFICATION
+			 */
+
+			if (strpos($values['email'], '@') !== false) {
+				// Let us predefine some variables. Be sure to change the from address!
+				$recipient_name = api_get_person_name($values['firstname'], $values['lastname']);
+				$email = $values['email'];
+				$emailfromaddr = api_get_setting('emailAdministrator');
+				$emailfromname = api_get_setting('siteName');
+				$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg',null,$_user['language']).' '.api_get_setting('siteName');
+
+				// The body can be as long as you wish, and any combination of text and variables
+				$portal_url = $_configuration['root_web'];
+				if ($_configuration['multiple_access_urls']) {
+					$access_url_id = api_get_current_access_url_id();
+					if ($access_url_id != -1 ){
+						$url = api_get_access_url($access_url_id);
+						$portal_url = $url['url'];
+					}
+				}
+
+				$emailbody = get_lang('Dear',null,$_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).",\n\n".get_lang('YouAreReg',null,$_user['language']).' '.api_get_setting('siteName').' '.get_lang('WithTheFollowingSettings',null,$_user['language'])."\n\n".get_lang('Username',null,$_user['language']).' : '.$values['username']."\n".get_lang('Pass',null,$_user['language']).' : '.stripslashes($values['pass1'])."\n\n".get_lang('Address',null,$_user['language']).' '.api_get_setting('siteName').' '.get_lang('Is',null,$_user['language']).' : '.$portal_url."\n\n".get_lang('Problem',null,$_user['language'])."\n\n".get_lang('Formula',null,$_user['language']).",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager',null,$_user['language']).' '.api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email',null,$_user['language']).' : '.api_get_setting('emailAdministrator');
+
+				// Here we are forming one large header line
+				// Every header must be followed by a \n except the last
+				$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+				$email_admin = api_get_setting('emailAdministrator');
+				@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
+			}
+			CustomPages::displayPage('registration-feedback');
+	}
+	}
+	else {
+	CustomPages::displayPage('registration');
+	}
+}
+$tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
 Display :: display_header($tool_name);
 
 echo Display::tag('h1', $tool_name);

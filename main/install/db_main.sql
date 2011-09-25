@@ -1132,7 +1132,7 @@ VALUES
 ('show_documents_preview', 'true', 'Yes'),
 ('show_documents_preview', 'false', 'No'),
 ('enabled_htmlpurifier', 'true', 'Yes'),
-('enabled_htmlpurifier', 'false', 'No');
+('enabled_htmlpurifier', 'false', 'No'),
 ('cas_activate', 'true', 'Yes'),
 ('cas_activate', 'false', 'No'),
 ('cas_protocol', 'CAS1', 'CAS1Text'),
@@ -1479,8 +1479,8 @@ CREATE TABLE IF NOT EXISTS sys_calendar (
   start_date datetime NOT NULL default '0000-00-00 00:00:00',
   end_date datetime NOT NULL default '0000-00-00 00:00:00',
   access_url_id INT NOT NULL default 1,
-  all_day INT NOT NULL DEFAULT 0;
-  PRIMARY KEY  (id)
+  all_day INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS system_template (

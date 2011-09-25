@@ -653,7 +653,14 @@ function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFor
  */
 function fill_track_countries_table($track_countries_table) {
     $file_path = dirname(__FILE__).'/'.COUNTRY_DATA_FILENAME;
-    $add_country_sql = "LOAD DATA INFILE '".Database::escape_string($file_path)."' INTO TABLE $track_countries_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
+    $countries = file($file_path);
+    $add_country_sql = "INSERT INTO $track_countries_table (id, code, country, counter) VALUES ";
+    foreach ($countries as $line) {
+        $elems = split(',',$line);
+        $add_country_sql .= '('.intval($elems[0]).',\''.Database::escape_string($elems[1]).'\',\''.Database::escape_string($elems[2]).'\','.intval($elems[3]).'),';
+    }
+    $add_country_sql = substr($add_country_sql,0,-1);
+    //$add_country_sql = "LOAD DATA INFILE '".Database::escape_string($file_path)."' INTO TABLE $track_countries_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
     @ Database::query($add_country_sql);
 }
 

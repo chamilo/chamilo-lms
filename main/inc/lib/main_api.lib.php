@@ -113,6 +113,7 @@ define('SECTION_MYGRADEBOOK', 'mygradebook');
 define('SECTION_TRACKING','session_my_space');
 define('SECTION_SOCIAL', 'social');
 define('SECTION_DASHBOARD', 'dashboard');
+define('SECTION_REPORTS', 'reports');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');
@@ -1923,14 +1924,23 @@ function api_is_drh() {
     return $_user['status'] == DRH;
 }
 
-/*
- * @todo finish this function ...
+/**
+ * Checks whether the current user is a student
+ * @return boolean True if current user is a human resources manager
+ */
 function api_is_student() {
-    if (!api_is_platform_admin() && !api_is_session_admin() && !api_is_coach()) {
-        return true;
-    }
-    return false;
-}*/
+    global $_user;
+    return $_user['status'] == STUDENT;
+		
+}
+/**
+ * Checks whether the current user is a teacher
+ * @return boolean True if current user is a human resources manager
+ */
+function api_is_teacher() {
+    global $_user;
+    return $_user['status'] == COURSEMANAGER;
+}
 
 /**
  * This function checks whether a session is assigned into a category
@@ -2338,6 +2348,12 @@ function api_not_allowed($print_headers = false) {
 	
 	global $this_section;
 	$tpl = new Template();
+        if (api_get_setting('use_custom_pages') == 'true') {
+            $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
+            require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
+            CustomPages::displayPage('index-unlogged');
+            exit;
+        }
 	
 	$template_file = $tpl->get_template('layout/layout_1_col.tpl');
 	
@@ -2382,7 +2398,7 @@ function api_not_allowed($print_headers = false) {
 		$form = new FormValidator('formLogin', 'post', api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']));
         $form->addElement('text', 'login', get_lang('UserName'), array('size' => 17));
         $form->addElement('password', 'password', get_lang('Password'), array('size' => 17));
-		$form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'),'class="login"');
+        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'),'class="login"');
 
         if ((!headers_sent() || $print_headers) && $origin != 'learnpath') { 
 			Display::display_header(null);
@@ -2900,6 +2916,43 @@ function api_get_language_id($language) {
     $result = Database::query($sql);
     $row = Database::fetch_array($result);    
     return $row['id'];
+}
+/**
+ * Gets language of the requested type for the current user. Types are : 
+ * user_profil_lang : profile language of current user
+ * user_select_lang : language selected by user at login
+ * course_lang : language of the current course
+ * platform_lang : default platform language
+ * @param string lang_type
+ * @param return language of the requested type or false if the language is not available
+ **/
+function api_get_language_from_type($lang_type){
+  global $_user;
+  global $_course;
+  $toreturn = false;
+  switch ($lang_type) {
+  case 'platform_lang' : 
+    $temp_lang = api_get_setting('platformLanguage');
+    if (!empty($temp_lang))
+      $toreturn = $temp_lang;
+    break;
+  case 'user_profil_lang' : 
+    if (isset($_user['language']) && !empty($_user['language']) ) 
+      $toreturn = $_user['language'];
+    break;
+  case 'user_selected_lang' : 
+    if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice']) ) 
+      $toreturn = ($_SESSION['user_language_choice']);
+    break;
+  case 'course_lang' : 
+    if ($_course['language'] && !empty($_course['language']) )  
+      $toreturn = $_course['language'];
+    break;
+  default : 
+    $toreturn = false;
+    break;
+  }
+  return $toreturn;
 }
 
 function api_get_language_info($language_id) {

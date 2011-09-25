@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 /**
  * @package chamilo.library
  */
@@ -23,8 +24,24 @@ class SystemAnnouncementManager {
 	public static function display_announcements($visible, $id = -1) {
 		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);		
-		
-		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date FROM ".$db_table." WHERE (lang='$user_selected_language' OR lang IS NULL) AND ((NOW() BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
+    $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+    $temp_user_groups = GroupPortalManager::get_groups_by_user(api_get_user_id(),0);
+    $groups =array();
+    foreach ($temp_user_groups as $user_group) {
+      $groups = array_merge($groups, array($user_group['id']));
+      $groups = array_merge($groups, GroupPortalManager::get_parent_groups($user_group['id']));
+    }
+    //checks if tables exists to not break platform not updated
+    $ann_group_db_ok =false;
+    if( Database::num_rows(Database::query("SHOW TABLES LIKE 'announcement_rel_group'")) > 0)
+       $ann_group_db_ok =true;
+
+    $groups_string = '('.implode($groups,',').')';
+    $sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date" 
+      ." FROM  $db_table"
+      ." WHERE (lang='$user_selected_language'"
+      ." OR lang IS NULL)"
+      ." AND ((NOW() BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
 		switch ($visible) {
 			case VISIBLE_GUEST :
 				$sql .= " AND visible_guest = 1 ";
@@ -36,7 +53,16 @@ class SystemAnnouncementManager {
 				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}	
-		$sql .= " AND access_url_id = ".api_get_current_access_url_id()." ";
+    if (count($groups) > 0 and $ann_group_db_ok ) {
+      $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group "
+        ." WHERE group_id in $groups_string) ";
+    }
+		global $_configuration;
+		$current_access_url_id = 1;
+		if ($_configuration['multiple_access_urls']) {
+			$current_access_url_id = api_get_current_access_url_id();
+		}
+		$sql .= " AND access_url_id = '$current_access_url_id' ";		
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
 		
 		$announcements = Database::query($sql);
@@ -80,6 +106,19 @@ class SystemAnnouncementManager {
 		$user_selected_language = api_get_interface_language();
 		$start	= intval($start);				
 
+    $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+    $temp_user_groups = GroupPortalManager::get_groups_by_user(api_get_user_id(),0);
+    $groups =array();
+    foreach ($temp_user_groups as $user_group) {
+      $groups = array_merge($groups, array($user_group['id']));
+      $groups = array_merge($groups, GroupPortalManager::get_parent_groups($user_group['id']));
+    }
+    //checks if tables exists to not break platform not updated
+    $ann_group_db_ok =false;
+    if( Database::num_rows(Database::query("SHOW TABLES LIKE 'announcement_rel_group'")) > 0)
+       $ann_group_db_ok =true;
+    $groups_string = '('.implode($groups,',').')';
+
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$now  = api_get_utc_datetime();
 		
@@ -97,6 +136,10 @@ class SystemAnnouncementManager {
 				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}
+    if (count($groups) > 0 and $ann_group_db_ok ) {
+      $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group "
+        ." WHERE group_id in $groups_string) ";
+    }
 		
 		global $_configuration;
 		$current_access_url_id = 1;
@@ -244,7 +287,7 @@ class SystemAnnouncementManager {
 	 * @param int    Whether the announcement should be visible to anonymous users (1) or not (0)
 	 * @param string The language for which the announvement should be shown. Leave null for all langages
 	 * @param int    Whether to send an e-mail to all users (1) or not (0)
-	 * @return bool  True on success, false on failure
+	 * @return mixed  insert_id on success, false on failure
 	 */
 	public static function add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null, $send_mail = 0, $add_to_calendar = false ) {
 		$a_dateS = explode(' ',$date_start);
@@ -299,13 +342,56 @@ class SystemAnnouncementManager {
 		if ($res === false) {
 			Debug::log_s(mysql_error());
 			return false;
-		}		
+		}
 		if ($add_to_calendar) {
 		    require_once 'calendar.lib.php';
 		    $agenda_id = agenda_add_item($title, $content, $date_start, $date_end);
-		}
-		return true;
+		}		
+		return Database::insert_id();
 	}
+  /**
+   * Makes the announcement id visible only for groups in groups_array
+   * @param int announcement id
+   * @param array array of group id
+   **/
+  public static function announcement_for_groups($announcement_id, $group_array){
+    $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+    //first delete all group associations for this announcement
+    $res = Database::query("DELETE FROM $tbl_announcement_group where announcement_id=".intval($announcement_id));
+    if ($res === false) {
+      Debug::log_s(mysql_error());
+      return false;
+    }
+
+    foreach ($group_array as $group_id) {
+      if (intval($group_id) != 0 ) {
+        $res = Database::query("INSERT into $tbl_announcement_group set announcement_id=".intval($announcement_id)
+          .", group_id=".intval($group_id));
+        if ($res === false) {
+          Debug::log_s(mysql_error());
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  /**
+   * Gets the groups of this announce 
+   * @param int announcement id
+   * @return array array of group id
+   **/
+  public static function get_announcement_groups($announcement_id){
+    $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+    $tbl_group = Database :: get_main_table(TABLE_MAIN_GROUP);
+    //first delete all group associations for this announcement
+
+    $res = Database::query("SELECT g.id as group_id , g.name as group_name  FROM $tbl_group g , $tbl_announcement_group ag"
+      ." WHERE announcement_id=".intval($announcement_id)
+      ." AND ag.group_id = g.id");
+    $groups = Database::fetch_array($res);
+    return $groups;
+  }
+
 	/**
 	 * Updates an announcement to the database
 	 * @param integer $id      : id of the announcement

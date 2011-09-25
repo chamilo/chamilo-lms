@@ -16,8 +16,8 @@
  * Code
  */
 /*	CONSTANTS */
-
 require_once 'database.constants.inc.php';
+
 
 /*		DATABASE CLASS
         The class and its methods
@@ -738,6 +738,10 @@ class Database {
                 echo $info;
             }
         }
+		if(mysql_error()) {
+			error_log($query."\n".mysql_error());
+		}
+		// error_log($query);
         return $result;
     }
 

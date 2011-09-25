@@ -1213,8 +1213,10 @@ function update_Db_course($course_db_name) {
         "preview_image  varchar(255)        not null default '', " .        // stores the theme of the LP
         "author         varchar(255)        not null default '', " .        // stores the theme of the LP
         "session_id     int unsigned        not null default 0, " .         // the session_id
-        "prerequisite   int unsigned        not null default 0, " .         // pre requisite for next lp
-        "use_max_score  int unsigned        not null default 1, " .         // max scores for scorm packages
+	"prerequisite  	int	unsigned not null  default 0," . // pre requisite for next lp
+	"hide_toc_frame tinyint NOT NULL DEFAULT 0, ".
+        "seriousgame_mode tinyint NOT NULL DEFAULT 0, ".
+        "use_max_score  int unsigned        not null default 1, " .
         "autolunch      int unsigned        not null default 0, " .          // auto lunch LP
         "created_on     DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', " .          // auto lunch LP
         "modified_on    DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', " .          // auto lunch LP
@@ -1297,7 +1299,7 @@ function update_Db_course($course_db_name) {
         "total_time     int unsigned    not null default 0," .              // after how many seconds did he close it?
         "score          float unsigned  not null default 0," .              // score returned by SCORM or other techs
         "status         char(32)        not null default 'not attempted'," .    // status for this item (SCORM)
-        "suspend_data   text            null default ''," .
+	"suspend_data	longtext null default ''," .
         "lesson_location    text        null default ''," .
         "core_exit      varchar(32)     not null default 'none'," .
         "max_score      varchar(8)      default ''" .

@@ -25,6 +25,7 @@ define('TABLE_MAIN_CLASS_USER',             'class_user');
 define('TABLE_MAIN_CATEGORY',               'course_category');
 define('TABLE_MAIN_COURSE_MODULE',          'course_module');
 define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS',   'sys_announcement');
+define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS', 	'announcement_rel_group');
 define('TABLE_MAIN_LANGUAGE',               'language');
 define('TABLE_MAIN_SETTINGS_OPTIONS',       'settings_options');
 define('TABLE_MAIN_SETTINGS_CURRENT',       'settings_current');
@@ -65,6 +66,7 @@ define('TABLE_MAIN_USER_REL_TAG',       'user_rel_tag');
 define('TABLE_MAIN_GROUP',              'groups');
 define('TABLE_MAIN_USER_REL_GROUP',     'group_rel_user');
 define('TABLE_MAIN_GROUP_REL_TAG',      'group_rel_tag');
+define('TABLE_MAIN_GROUP_REL_GROUP',		'group_rel_group');
 
 // Search engine
 define('TABLE_MAIN_SPECIFIC_FIELD',         'specific_field');
@@ -300,3 +302,16 @@ define('TABLE_USERGROUP_REL_SESSION',   'usergroup_rel_session');
 // Mail notifications
 define('TABLE_NOTIFICATION',               'notification');
 
+
+//Custom reports table
+define('TABLE_MAIN_REPORTS_KEYS',			'reports_keys');
+define('TABLE_MAIN_REPORTS_VALUES', 			'reports_values');
+
+//Storage api tables
+define('TABLE_MAIN_STORED_VALUES',			'stored_values');
+define('TABLE_MAIN_STORED_VALUES_STACK',	'stored_values_stack');
+
+//Event tables
+define('TABLE_MAIN_EVENT_TYPE','event_type');
+define('TABLE_MAIN_EVENT_TYPE_MESSAGE','event_type_message');
+define('TABLE_MAIN_EVENT_TYPE_REL_USER','user_rel_event_type');

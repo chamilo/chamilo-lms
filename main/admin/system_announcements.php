@@ -22,6 +22,7 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 // Setting the section (for the tabs).
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -122,6 +123,8 @@ if (isset ($_GET['action']) && $_GET['action'] == 'edit') {
     $values['visible_guest'] 	= $announcement->visible_guest ;
     $values['lang'] 			= $announcement->lang;
     $values['action']			= 'edit';
+  $groups = SystemAnnouncementManager :: get_announcement_groups($announcement->id);
+  $values['group'] = isset($groups[0]['group_id']) ? $groups[0]['group_id'] : 0;
     $action_todo = true;
 }
 
@@ -154,6 +157,12 @@ if ($action_todo) {
     $form->addElement('checkbox', 'visible_guest', null, get_lang('Guest'));
     
     $form->addElement('hidden', 'id');
+
+  $group_list = GroupPortalManager::get_groups_list();
+  $group_list[0]  = get_lang('AllGroups');
+	$form->addElement('select', 'group',get_lang('AnnouncementForGroup'),$group_list);
+  $values['group'] = isset($values['group']) ? $values['group'] : '0';
+
     $form->addElement('checkbox', 'send_mail', get_lang('SendMail'));    
 
     if (isset($_REQUEST['action']) && $_REQUEST['action']=='add') {
@@ -192,7 +201,9 @@ if ($action_todo) {
         }
         switch ($values['action']) {
             case 'add':
-                if (SystemAnnouncementManager::add_announcement($values['title'], $values['content'], $values['start'], $values['end'], $values['visible_teacher'], $values['visible_student'], $values['visible_guest'], $values['lang'], $values['send_mail'], $values['add_to_calendar'])) {
+          $announcement_id = SystemAnnouncementManager::add_announcement($values['title'],$values['content'],$values['start'],$values['end'],$values['visible_teacher'],$values['visible_student'],$values['visible_guest'], $values['lang'],$values['send_mail'],  $values['add_to_calendar']);
+          if ($announcement_id !== false )  {
+          SystemAnnouncementManager::announcement_for_groups($announcement_id, array($values['group']));
                     Display :: display_confirmation_message(get_lang('AnnouncementAdded'));
                 } else {
                     $show_announcement_list = false;
@@ -201,6 +212,7 @@ if ($action_todo) {
                 break;
             case 'edit':
                 if (SystemAnnouncementManager::update_announcement($values['id'], $values['title'], $values['content'], $values['start'], $values['end'], $values['visible_teacher'], $values['visible_student'], $values['visible_guest'], $values['lang'], $values['send_mail'])) {
+          SystemAnnouncementManager::announcement_for_groups($values['id'], array($values['group']));
                     Display :: display_confirmation_message(get_lang('AnnouncementUpdated'));
                 } else {
                     $show_announcement_list = false;

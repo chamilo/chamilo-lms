@@ -148,7 +148,8 @@ class UserManager {
 
 			// Add event to system log			
 			$user_id_manager = api_get_user_id();
-			event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
+			$user_info = api_get_user_info($return);
+			event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager,null,$user_info);
 
 		} else {
 			//echo "false - failed" ;
@@ -161,6 +162,7 @@ class UserManager {
 				$res = $res && self::update_extra_field_value($return, $fname, $fvalue);
 			}
 		}
+                self::update_extra_field_value($return, 'already_logged_in', 'false');
 		return $return;
 	}
 
@@ -290,7 +292,7 @@ class UserManager {
 			$group_list = GroupPortalManager::get_groups_by_user($user_id);
 			if (!empty($group_list)) {
 			    foreach($group_list as $group_id => $data) {
-                    GroupPortalManager::delete_user_rel_group($user_id, $group_id);
+                                GroupPortalManager::delete_user_rel_group($user_id, $group_id);
 			    }
 			}
 						
@@ -299,7 +301,7 @@ class UserManager {
 		}
 		// Add event to system log		
 		$user_id_manager = api_get_user_id();
-		event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager);
+		event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager,null,$user_info);
 		return true;
 	}
 
@@ -481,11 +483,11 @@ class UserManager {
 		$firstname = api_substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($firstname, '', $encoding)), 0, 1); // The first letter only.
 		
 		//Looking for a space in the lastname
-		$pos = api_strpos($lastname, ' ');
-        if ($pos !== false ) {
-            $lastname = api_substr($lastname, 0, $pos);
-        }
-               
+                $pos = api_strpos($lastname, ' ');
+                    if ($pos !== false ) {
+                        $lastname = api_substr($lastname, 0, $pos);
+                } 
+
 		$lastname = preg_replace(USERNAME_PURIFIER, '', api_transliterate($lastname, '', $encoding));
 		//$username = api_is_western_name_order(null, $language) ? $firstname.$lastname : $lastname.$firstname;
 		$username = $firstname.$lastname;
@@ -1743,7 +1745,7 @@ class UserManager {
 		if ($user_id != strval(intval($user_id))) return array();
 
 		$categories = array();
-        $names = array();
+                $names = array();
 		if ($fill_first) {
 			$categories[0] = array();
 		}
@@ -1769,7 +1771,7 @@ class UserManager {
             }
         }
 
-		// get the list of sessions where the user is subscribed as coach in a 
+	// get the list of sessions where the user is subscribed as coach in a 
         // course, from table session_rel_course_rel_user
 
 		$sessions_sql = "SELECT DISTINCT id, session_category_id, session.name "
@@ -3253,14 +3255,14 @@ class UserManager {
 	  	    $category_id  = $row['cat_id'];
 	  	    $cat         = Category::load($category_id);	  		  	
 	  	    $displayscore = ScoreDisplay::instance();
-			$grade = '';
+                    $grade = '';
 	  	    if (isset($cat) && $displayscore->is_custom()) {
-                $grade = $displayscore->display_score(array($score, $cat[0]->get_weight()), SCORE_DIV_PERCENT_WITH_CUSTOM);			
-    	  	} else {
-    	  		$grade = $displayscore->display_score(array($score, $cat[0]->get_weight()));    	  		
-    	  	}    	  	    	  	    	  	
+                        $grade = $displayscore->display_score(array($score, $cat[0]->get_weight()), SCORE_DIV_PERCENT_WITH_CUSTOM);			
+    	            } else {
+    	  	        $grade = $displayscore->display_score(array($score, $cat[0]->get_weight()));    	  		
+                    }    	  	    	  	    	  	
 	  	    $row['grade'] = $grade;
-	  		return $row;
+	  	    return $row;
         }
 	  	return false;
 	}

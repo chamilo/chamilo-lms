@@ -4,7 +4,7 @@
  Requirements: JQuery 1.4.4, JQuery UI 1.8.7
  Alberto Torreblanca @albert1t0
  *******************************************/
-
+ function display_hide_toc(){
 // Copy little progress bar in <tr></tr>
 function minipb() {
     $('#learning_path_main #control tr').after('<tr></tr>');
@@ -47,6 +47,7 @@ function minipb() {
 
 
 
+      if($('#hide_bar').position().left == 280){
       // Construct mini panel
       var panel = $('#lp_navigation_elem div:first').clone();
       $(panel).attr('id','control');

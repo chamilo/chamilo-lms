@@ -2376,9 +2376,9 @@ CREATE TABLE user_rel_user (
   PRIMARY KEY(id)
 );
 
-ALTER TABLE user_friend ADD INDEX idx_user_friend_user (user_id);
-ALTER TABLE user_friend ADD INDEX idx_user_friend_friend_user(friend_user_id);
-ALTER TABLE user_friend ADD INDEX idx_user_friend_user_friend_user(user_id,friend_user_id);
+ALTER TABLE user_rel_user ADD INDEX idx_user_rel_user__user (user_id);
+ALTER TABLE user_rel_user ADD INDEX idx_user_rel_user__friend_user(friend_user_id);
+ALTER TABLE user_rel_user ADD INDEX idx_user_rel_user__user_friend_user(user_id,friend_user_id);
 
 --
 -- Table structure for table user_friend_relation_type

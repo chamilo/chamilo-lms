@@ -155,8 +155,6 @@ if (api_get_setting('use_session_mode') == 'true') {
 	
 	$blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), 22);
 	$blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
-	    <li><a href="event_type.php"><?php print  get_lang('events_title'); ?></a></li>
-    <?php endif ?>
 	
 	$search_form = ' <form method="POST" action="session_list.php">
 								<input type="text" name="keyword" value="">

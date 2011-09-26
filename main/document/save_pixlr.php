@@ -78,6 +78,7 @@ $title = $title.'.'.$extension;
 if($currentTool=='document/createpaint'){		
 	//check save as and prevent rewrite an older file with same name	
 	if (0 != $groupId){
+	require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 	$group_properties  = GroupManager :: get_group_properties($groupId);
 	$groupPath = $group_properties['directory'];
 	}

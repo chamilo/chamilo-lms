@@ -1093,7 +1093,7 @@ class Display {
                         " ORDER BY tet.lastedit_date";
         $res = Database::query($sql);
         // Get the group_id's with user membership.
-        $group_ids = GroupManager :: get_group_ids($course_database, $user_id);
+        $group_ids = GroupManager :: get_group_ids($my_course['real_id'], $user_id);
         $group_ids[] = 0; //add group 'everyone'
         $notifications = array();
         // Filter all last edits of all tools of the course

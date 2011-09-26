@@ -1311,16 +1311,18 @@ class GroupManager {
 	/**
 	 * Get all group's from a given course in which a given user is unsubscribed
 	 * @author  Patrick Cool
-	 * @param	 string $course_db: the database of the course you want to
+	 * @param	 int  course id
 	 * retrieve the groups for
 	 * @param integer $user_id: the ID of the user you want to know all its
 	 * group memberships
 	 */
-	public static function get_group_ids ($course_db, $user_id) {
+	public static function get_group_ids ($course_id, $user_id) {
 		$groups = array();
-		$tbl_group = Database::get_course_table(TABLE_GROUP_USER,$course_db);
-		$user_id = Database::escape_string($user_id);
-		$sql = "SELECT group_id FROM $tbl_group WHERE user_id = '$user_id'";
+		$tbl_group 	= Database::get_course_table(TABLE_GROUP_USER);
+		$user_id 	= intval($user_id);
+		$course_id 	= intval($course_id);
+		
+		$sql = "SELECT group_id FROM $tbl_group WHERE c_id = $course_id AND user_id = '$user_id'";
 		$groupres = Database::query($sql);
 
 		// uncommenting causes a bug in Agenda AND announcements because there we check if the return value of this function is an array or not

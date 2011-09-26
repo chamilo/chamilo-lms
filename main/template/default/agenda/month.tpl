@@ -46,9 +46,9 @@ $(document).ready(function() {
 				} else {
 					$('#start_date').html(start.toDateString());					
 				}
-				
-
-				$('#color_calendar').addClass('background_color_{$type}');
+				$('#color_calendar').html('{$type_label}');
+				$('#color_calendar').addClass('label_tag');
+				$('#color_calendar').addClass('{$type}_event');
 											
 				$("#dialog-form").dialog("open");		
 				
@@ -86,16 +86,17 @@ $(document).ready(function() {
 	    },
 		eventClick: function(calEvent, jsEvent, view) {
 			
-			if (calEvent.editable) {
-									
+			if (calEvent.editable) {									
 				var start_date 	= Math.round(calEvent.start.getTime() / 1000);
 				if (calEvent.allDay == 1) {				
 					var end_date 	= '';				
 				} else {			
 					var end_date 	= Math.round(calEvent.end.getTime() / 1000);				
 				}
-
-				$('#color_calendar').addClass('background_color_{$type}');
+				
+				$('#color_calendar').html('{$type_label}');
+				$('#color_calendar').addClass('label_tag');
+				$('#color_calendar').addClass('{$type}_event');
 				
 				$('#start_date').html(calEvent.start.getDate() +"/"+ calEvent.start.getMonth() +"/"+calEvent.start.getFullYear());
 				
@@ -181,7 +182,7 @@ $(document).ready(function() {
 				<label for="date">{"Agenda"|get_lang}</label>
 			</div>
 			<div class="formw">
-				<span id="color_calendar" style="width:100px;"></span>
+				<div id="color_calendar" style="width:100px;"></div>
 			</div>					
 		</div>
 		<div class="row">		

@@ -549,7 +549,7 @@ if(api_is_allowed_to_edit(false,true))  {
 } else {
 	// students only get to see the visible announcements
 		if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
-			$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
+			$group_memberships=GroupManager::get_group_ids($_course['real_id'], $_user['user_id']);
 
 			if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 
@@ -875,7 +875,7 @@ if ($display_announcement_list) {
 		//$group_id=$_SESSION['group'];
 	}
 	$group_id = api_get_group_id();
-	$group_memberships = GroupManager::get_group_ids($_course['dbName'],api_get_user_id());
+	$group_memberships = GroupManager::get_group_ids($_course['real_id'],api_get_user_id());
 
 	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 		// A.1. you are a course admin with a USER filter

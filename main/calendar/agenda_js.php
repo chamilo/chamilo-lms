@@ -21,7 +21,7 @@ $htmlHeadXtra[] = api_get_js('fullcalendar/fullcalendar.min.js');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/fullcalendar/fullcalendar.css');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/jquery.qtip.min.css');
 
-$tpl	= new Template();
+$tpl	= new Template(get_lang('Agenda'));
 $type  	= isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ?  $_REQUEST['type'] : 'personal';
 
 if (api_is_platform_admin() && $type == 'admin') {	
@@ -49,21 +49,31 @@ $days 			= api_get_week_days_long();
 $months 		= api_get_months_long();
 $months_short 	= api_get_months_short();
 
-$tpl->assign('month_names', json_encode($months));
-$tpl->assign('month_names_short', json_encode($months_short));
-$tpl->assign('day_names', json_encode($days));
-$tpl->assign('day_names_short', json_encode($day_short));
-
-$tpl->assign('button_text', json_encode(array('today'=>get_lang('Today'), 'month'=>get_lang('Month'), 'week'=>get_lang('Week'), 'day'=>get_lang('Day'))));
-
-
-
+//Setting calendar translations
+$tpl->assign('month_names', 		json_encode($months));
+$tpl->assign('month_names_short', 	json_encode($months_short));
+$tpl->assign('day_names', 			json_encode($days));
+$tpl->assign('day_names_short', 	json_encode($day_short));
+$tpl->assign('button_text', 		json_encode(array(	'today'	=> get_lang('Today'), 
+														'month'	=> get_lang('Month'), 
+														'week'	=> get_lang('Week'), 
+														'day'	=> get_lang('Day'))));
+//Calendar Type : course, admin, personal
 $tpl->assign('type', $type);
+//Calendar type label
+$tpl->assign('type_label', get_lang($type.'Calendar'));
+
+//Current user can add event?
 $tpl->assign('can_add_events', $can_add_events);
- 
+
+//Setting AJAX caller
 $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type.'&';
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
+
+//Loading Agenda template
 $content = $tpl->fetch('default/agenda/month.tpl');
 $tpl->assign('content', $content);
+
+//Loading main Chamilo 1 col template
 $template_file = $tpl->get_template('layout/layout_1_col.tpl');
 $tpl->display($template_file);

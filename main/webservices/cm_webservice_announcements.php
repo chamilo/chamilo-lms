@@ -98,7 +98,7 @@ class WSCMAnnouncements extends WSCM {
             $tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db);
             $maximum 	= '12';
 
-            $group_memberships=GroupManager::get_group_ids($course_db, $user_id);
+            $group_memberships=GroupManager::get_group_ids($course_info['real_id'], $user_id);
 
             if (api_get_group_id() == 0) {
                         $cond_user_id = " AND ( ip.to_user_id='".$user_id."'" .

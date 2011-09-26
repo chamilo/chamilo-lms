@@ -1372,7 +1372,7 @@ class Tracking {
 				$tbl_item_property          = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 				$tbl_student_publication 	= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 				
-				$course_id	 = $course_info['real_id'];
+				$course_id	 = $a_course['real_id'];
 
 				$condition_user = "";
 				if (is_array($student_id)) {

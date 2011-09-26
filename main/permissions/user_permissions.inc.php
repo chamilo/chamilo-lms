@@ -56,7 +56,7 @@ $current_user_permissions=get_permissions('user',$user_id);
 // 			RETRIEVING THE PERMISSIONS OF THE GROUPS OF THE USER
 // ------------------------------------------------------------------
 $groups_of_user=array();
-$groups_of_user=GroupManager::get_group_ids($_course['db_name'],$user_id);
+$groups_of_user=GroupManager::get_group_ids($_course['real_id'],$user_id);
 foreach ($groups_of_user as $group)
 {
 	$this_group_permissions=get_permissions('group',$group);

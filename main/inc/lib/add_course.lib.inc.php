@@ -761,7 +761,7 @@ function update_Db_course($course_db_name) {
         end_date datetime NOT NULL default '0000-00-00 00:00:00',
         parent_event_id INT NULL,
         session_id int unsigned NOT NULL default 0,
-        all_day INT NOT NULL DEFAULT 0;
+        all_day INT NOT NULL DEFAULT 0,
         PRIMARY KEY (id)
         )" . $charset_clause;
     Database::query($sql);

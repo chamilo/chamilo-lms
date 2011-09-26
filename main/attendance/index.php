@@ -30,7 +30,7 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // get actions
-$actions = array('attendance_list', 'attendance_sheet_list', 'attendance_sheet_print', 'attendance_sheet_add', 'attendance_add', 'attendance_edit', 'attendance_delete', 'attendance_delete_select');
+$actions = array('attendance_list', 'attendance_sheet_list', 'attendance_sheet_print', 'attendance_sheet_add', 'attendance_add', 'attendance_edit', 'attendance_delete', 'attendance_delete_select', 'attendance_restore');
 $actions_calendar = array('calendar_list', 'calendar_add', 'calendar_edit', 'calendar_delete', 'calendar_all_delete');
 $action  = 'attendance_list';
 
@@ -235,6 +235,11 @@ switch ($action) {
 	case 'attendance_delete'	:
     	if (api_is_allowed_to_edit(null, true)) {
         $attendance_controller->attendance_delete($attendance_id);
+        } else { api_not_allowed();}
+		 break;									
+	case 'attendance_restore':
+    	if (api_is_allowed_to_edit(null, true)) {
+        $attendance_controller->attendance_restore($attendance_id);
         } else { api_not_allowed();}
 		 break;									
 	case 'attendance_sheet_list':	

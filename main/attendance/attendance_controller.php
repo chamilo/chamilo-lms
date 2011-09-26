@@ -158,7 +158,7 @@
 	} 
 	
 	/**
-	 * It's used for delete attendace,
+	 * It's used for delete attendaces
 	 * render to attendance_list view
 	 * @param int	attendance id
 	 */
@@ -170,6 +170,21 @@
 		}		
 		if ($affected_rows) {        			
 			$message['message_attendance_delete'] = true;        			
+		}
+		$this->attendance_list();	
+	}
+	/**
+	 * Restores an attendance entry and fallback to attendances rendering
+	 * @param int	attendance id
+	 */
+	public function attendance_restore($attendance_id) {
+		$attendance = new Attendance();   
+		//$attendance_id = intval($attendance_id);
+		if (!empty($attendance_id)) {
+			$affected_rows = $attendance->attendance_restore($attendance_id);
+		}		
+		if ($affected_rows) {        			
+			$message['message_attendance_restore'] = true;        			
 		}
 		$this->attendance_list();	
 	}

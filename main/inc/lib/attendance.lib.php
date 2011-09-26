@@ -90,15 +90,18 @@ class Attendance
                     if (!in_array($direction, array('ASC','DESC'))) {
                     $direction = 'ASC';
                 }
+                $active_plus = 'att.active = 1';
+                if (api_is_platform_admin()) { $active_plus = ' 1=1 ';}
 		$sql = "SELECT
 				att.id AS col0,
 				att.name AS col1,
 				att.description AS col2,
 				att.attendance_qualify_max AS col3,
                 att.locked AS col4,
+                att.active AS col5,
                 att.session_id
 				FROM $tbl_attendance att
-				WHERE att.active = 1 $condition_session
+				WHERE $active_plus $condition_session
 				ORDER BY col$column $direction LIMIT $from,$number_of_items ";
 		$res = Database::query($sql);
 		$attendances = array ();
@@ -117,10 +120,14 @@ class Attendance
 			
             $session_star = '';
             
-            if (api_get_session_id() == $attendance[5]) {
+            if (api_get_session_id() == $attendance[6]) {
                 $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
             }
-			$attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
+                        if ($attendance[5] == 1) {
+                            $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
+                        } else {
+                            $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'"><del>'.$attendance[1].'</del></a>'.$session_star;
+                        }
 			$attendance[3] = '<center>'.$attendance[3].'</center>';
 			if (api_is_allowed_to_edit(null, true)) {
 				$actions  = '';
@@ -128,7 +135,11 @@ class Attendance
 
                 if (api_is_platform_admin()) {
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'), array(), 22).'</a>&nbsp;';
-                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), 22).'</a>';
+                    if ($attendance[5] == 1) {
+                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), 22).'</a>';
+                    } else {
+                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToRestore').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_restore&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('invisible.png',get_lang('Restore'), array(), 22).'</a>';
+                    }
                 } else {
                     $is_locked_attendance = self::is_locked_attendance($attendance[0]);
                     if ($is_locked_attendance) {
@@ -278,6 +289,40 @@ class Attendance
 
 		return $last_id;
 	}
+
+	/**
+	 * Restore attendance
+	 * @param 	int|array	   one or many attendances id
+	 * @return 	int    		   affected rows
+	 */
+	public function attendance_restore($attendance_id) {
+		global $_course;
+		$tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
+		$user_id 		= api_get_user_id();
+		if (is_array($attendance_id)) {
+			foreach ($attendance_id as $id) {
+				$id	= intval($id);
+				$sql = "UPDATE $tbl_attendance SET active = 1 WHERE id = '$id'";
+				Database::query($sql);
+				$affected_rows = Database::affected_rows();
+				if (!empty($affected_rows)) {
+					// update row item property table
+					api_item_property_update($_course, TOOL_ATTENDANCE, $id,"restore", $user_id);
+				}
+			}
+		} else  {
+			$attendance_id	= intval($attendance_id);
+			$sql = "UPDATE $tbl_attendance SET active = 1 WHERE id = '$attendance_id'";
+			Database::query($sql);
+			$affected_rows = Database::affected_rows();
+			if (!empty($affected_rows)) {
+				// update row item property table
+				api_item_property_update($_course, TOOL_ATTENDANCE, $attendance_id,"restore", $user_id);
+			}
+		}
+		return $affected_rows;
+	}
+
 
 	/**
 	 * delete attendaces

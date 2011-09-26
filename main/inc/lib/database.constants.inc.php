@@ -14,6 +14,9 @@
  * CONSTANTS 
  */
 
+//See #3910 defines the default prefix for the single course database
+define('DB_COURSE_PREFIX', 'c_');
+
 // Main database tables
 define('TABLE_MAIN_COURSE',                 'course');
 define('TABLE_MAIN_USER',                   'user');

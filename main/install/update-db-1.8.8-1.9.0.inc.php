@@ -192,7 +192,13 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
         // The SCORM database doesn't need a change in the pre-migrate part - ignore
     }
-
+    
+    
+    //Adds the c_XXX courses tables see #3910
+    require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
+    global $_configuration;
+    update_Db_course();
+    
     $prefix = '';
     if ($singleDbForm) {
         $prefix =  get_config_param ('table_prefix');
@@ -200,6 +206,8 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     // Get the courses databases queries list (c_q_list)
     $c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'course');
+    error_log('Starting migration: '.$old_file_version.' - '.$new_file_version);
+    
     if (count($c_q_list) > 0) {
         // Get the courses list
         if (strlen($dbNameForm) > 40) {
@@ -208,10 +216,14 @@ if (defined('SYSTEM_INSTALLATION')) {
             error_log('Database '.$dbNameForm.' was not found, skipping', 0);
         } else {
             Database::select_db($dbNameForm);
-            $res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
+            $res = Database::query("SELECT id, code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
             if ($res === false) { die('Error while querying the courses list in update_db-1.8.6.2-1.8.7.inc.php'); }
-
+			
+            $errors = array();
+            //$filename = api_get_path(SYS_ARCHIVE_PATH).'migration_report.log';
+            //$time = date(); file_put_contents($filename, "File creation at $time ");
+            
             if (Database::num_rows($res) > 0) {
                 $i = 0;
                 $list = array();
@@ -219,6 +231,8 @@ if (defined('SYSTEM_INSTALLATION')) {
                     $list[] = $row;
                     $i++;
                 }
+                $query_id = '';
+                
                 foreach ($list as $row_course) {
                     // Now use the $c_q_list
                     /**
@@ -233,7 +247,6 @@ if (defined('SYSTEM_INSTALLATION')) {
                         if ($singleDbForm) {
                             $query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
                         }
-
                         if ($only_test) {
                             error_log("Database::query(".$row_course['db_name'].",$query)", 0);
                         } else {
@@ -245,70 +258,170 @@ if (defined('SYSTEM_INSTALLATION')) {
                                 error_log('Error in '.$query.': '.Database::error());
                             }
                         }
-                    }                   
+                    }                    
                     
+                    $table_list = array(
+                    					'announcement',
+                                        'announcement_attachment',
+                                        'attendance',
+                                        'attendance_calendar',
+                                        'attendance_result',
+                                        'attendance_sheet',
+                                        'attendance_sheet_log',
+                                        'blog',
+                                        'blog_attachment',
+                                        'blog_comment',
+                                        'blog_post',
+                                        'blog_rating',
+                                        'blog_rel_user',
+                                        'blog_task',
+                                        'blog_task_rel_user',
+                                        'calendar_event',
+                                        'calendar_event_attachment',
+                                        'calendar_event_repeat',
+                                        'calendar_event_repeat_not',
+                                        'chat_connected',
+                                        'course_description',
+                                        'course_setting',
+                                        'document',
+                                        'dropbox_category',
+                                        'dropbox_feedback',
+                                        'dropbox_file',
+                                        'dropbox_person',
+                                        'dropbox_post',
+                                        'forum_attachment',
+                                        'forum_category',
+                                        'forum_forum',
+                                        'forum_mailcue',
+                                        'forum_notification',
+                                        'forum_post',
+                                        'forum_thread',
+                                        'forum_thread_qualify',
+                                        'forum_thread_qualify_log',
+                                        'glossary',
+                                        'group_category',
+                                        'group_info',
+                                        'group_rel_tutor',
+                                        'group_rel_user',
+                                        'item_property',
+                                        'link',
+                                        'link_category',
+                                        'lp',
+                                        'lp_item',
+                                        'lp_item_view',
+                                        'lp_iv_interaction',
+                                        'lp_iv_objective',
+                                        'lp_view',
+                                        'notebook',
+                                        'online_connected',
+                                        'online_link',
+                                        'permission_group',
+                                        'permission_task',
+                                        'permission_user',
+                                        'quiz',
+                                        'quiz_answer',
+                                        'quiz_question',
+                                        'quiz_question_option',
+                                        'quiz_rel_question',
+                                        'resource',
+                                        'role',
+                                        'role_group',
+                                        'role_permissions',
+                                        'role_user',
+                                        'student_publication',
+                                        'student_publication_assignment',
+                                        'survey',
+                                        'survey_answer',
+                                        'survey_group',
+                                        'survey_invitation',
+                                        'survey_question',
+                                        'survey_question_option',
+                                        'thematic',
+                                        'thematic_advance',
+                                        'thematic_plan',
+                                        'tool',
+                                        'tool_intro',
+                                        'userinfo_content',
+                                        'userinfo_def',
+                                        'wiki',
+                                        'wiki_conf',
+                                        'wiki_discuss',
+                                        'wiki_mailcue'                   
+                    );
                     
-                }
-            }
-        }
-    }
-
-    // Get the courses databases queries list (c_q_list)
-    $c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-post.sql', 'course');
-    if (count($c_q_list) > 0) {
-        // Get the courses list
-        if (strlen($dbNameForm) > 40) {
-            error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
-        } elseif (!in_array($dbNameForm, $dblist)) {
-            error_log('Database '.$dbNameForm.' was not found, skipping', 0);
-        } else {
-            Database::select_db($dbNameForm);
-            $res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
-            if ($res === false) { die('Error while querying the courses list in update_db-1.8.7-1.8.8.inc.php'); }
-            if (Database::num_rows($res) > 0) {
-                $i = 0;
-                while ($row = Database::fetch_array($res)) {
-                    $list[] = $row;
-                    $i++;
-                }
-                foreach ($list as $row) {
-                    // Now use the $c_q_list
-                    // We connect to the right DB first to make sure we can use the queries
-                    // without a database name
-                    $prefix_course = $prefix;
-                    if ($singleDbForm) {
-                        $prefix_course = $prefix.$row['db_name']."_";
-                    } else {
-                        Database::select_db($row['db_name']);
-                    }
-
-                    foreach($c_q_list as $query) {
-                        if ($singleDbForm) { //otherwise just use the main one
-                            $query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix$2$3", $query);
-                        }
-                        if ($only_test) {
-                            error_log("Database::query(".$row['db_name'].",$query)", 0);
-                        } else {
-                            $res = Database::query($query);
-                            if ($log) {
-                                error_log("In ".$row['db_name'].", executed: $query", 0);
-                            }
-                        }
-                    }
-                    //Adding all_day to the calendar event table
+                    error_log('<<<------- Loading DB course '.$row_course['db_name'].' -------->>');
+                    
+                    $count = $old_count = 0;
+                    foreach($table_list as $table) {
+                    	$old_table = $row_course['db_name'].".".$table;
+                    	if ($singleDbForm) {
+                    		$old_table = "$prefix{$row_course['db_name']}_".$table;
+                    	}
+                    	$course_id = $row_course['id'];
+                    	$new_table = DB_COURSE_PREFIX.$table;
+                    	
+                    	
+                    	if (!$singleDbForm) {
+                    		// otherwise just use the main one
+                    		Database::select_db($row_course['db_name']);
+                    	} else {
+                    		Database::select_db($dbNameForm);
+                    	}
+                    	
+                    	
+                    	//Count of rows
+                    	$sql = "SELECT count(*) FROM $old_table";
+                    	$result = Database::query($sql);
+                    	$row = Database::fetch_row($result);
+                    	$old_count = $row[0];
+                    	
+                    	error_log("#rows in $old_table: $old_count");
+                    	
+                    	$sql = "SELECT * FROM $old_table";
+                    	$result = Database::query($sql);
+                    	
+                    	$count = 0;                    	
+                    	while($row = Database::fetch_array($result, 'ASSOC')) {
+                    		$row['c_id'] = $course_id;
+                    		Database::select_db($dbNameForm);
+                    		$id = Database::insert($new_table, $row, true);
+                    		if (is_numeric($id)) {
+                    			$count++;
+                    		} else {
+                    			$errors[$old_table][] = $row;                    			
+                    		}
+                    	}
+                    	error_log("# rows inserted in $new_table: $count");
+                    	if ($old_count != $count) {
+                    		error_log("ERROR count of new and old table doesn't match: $old_count - $new_table");
+                    		error_log("Check the results: ");
+                    		error_log(print_r($errors, 1));
+                    	}
+                    }                    
+                    error_log('<<<------- end  -------->>');
+                    
+                    //error
+                    
+                     
+                    /*
+                     //Adding all_day to the calendar event table
                     $calendar_event_table = $row_course['db_name'].".calendar_event";
                     if ($singleDbForm) {
-                    	$calendar_event_table = "$prefix{$row_course['db_name']}_calendar_event";
+                    $calendar_event_table = "$prefix{$row_course['db_name']}_calendar_event";
                     }
                     $query = "ALTER TABLE `".$calendar_event_table."` ADD COLUMN all_day INTEGER NOT NULL DEFAULT 0;";
                     $res = Database::query($query);
                     if ($res === false) {
-                    	error_log('Error in '.$query.': '.Database::error());
-                    }                    
+                    error_log('Error in '.$query.': '.Database::error());
+                    } */
+                    
+                    
                 }
             }
         }
     }
+
+  
     
 
 

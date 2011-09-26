@@ -16,9 +16,6 @@
  * Code
  */
 /*	CONSTANTS */
-
-define('DB_COURSE_PREFIX', 'c_');
-
 require_once 'database.constants.inc.php';
 
 /*		DATABASE CLASS

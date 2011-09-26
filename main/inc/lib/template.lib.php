@@ -171,6 +171,7 @@ class Template extends Smarty {
 			'jquery.menu.js',
 			'dtree/dtree.js',
 			'email_links.lib.js.php',
+			'bootstrap/bootstrap-dropdown.js'
 		);
 		
 		if (api_get_setting('accessibility_font_resize') == 'true') {

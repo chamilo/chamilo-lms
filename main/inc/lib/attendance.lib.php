@@ -139,6 +139,7 @@ class Attendance
                         $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), 22).'</a>';
                     } else {
                         $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToRestore').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_restore&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('invisible.png',get_lang('Restore'), array(), 22).'</a>';
+			$attendance[2] = '<del>'.$attendance[2].'</del>';
                     }
                 } else {
                     $is_locked_attendance = self::is_locked_attendance($attendance[0]);

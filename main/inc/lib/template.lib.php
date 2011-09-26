@@ -46,6 +46,8 @@ class Template extends Smarty {
 		
 		//Creating a Smarty modifier - Now we can call the get_lang from a template!!! Just use {"MyString"|get_lang} 
 		$this->registerPlugin("modifier","get_lang", "get_lang");
+		$this->registerPlugin("modifier","get_path", "api_get_path");
+		$this->registerPlugin("modifier","get_setting", "api_get_setting");
 		
 		//To load a smarty plugin				
 		//$this->loadPlugin('smarty_function_get_lang');

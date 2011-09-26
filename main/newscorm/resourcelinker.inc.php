@@ -182,12 +182,14 @@ function file_or_folder($filefolder) {
 function store_resources($source_type, $source_id) {
     global $_course;
     $resource_table = Database::get_course_table(TABLE_LINKED_RESOURCES);
-
+    $course_id = api_get_course_int_id();
+    
     $addedresource = $_SESSION['addedresource'];
     $addedresourceid = $_SESSION['addedresourceid'];
     if ($_SESSION['addedresource']) {
         foreach ($addedresource as $resource_type) {
-            $sql="INSERT INTO $resource_table (source_type, source_id, resource_type, resource_id) VALUES ('$source_type', '$source_id', '$resource_type', '".$addedresourceid[key($addedresource)]."')";
+            $sql="INSERT INTO $resource_table (c_id, source_type, source_id, resource_type, resource_id) VALUES 
+            ($course_id, '$source_type', '$source_id', '$resource_type', '".$addedresourceid[key($addedresource)]."')";
             Database::query($sql);
             $i=key($addedresource);
             next($addedresource);

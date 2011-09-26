@@ -110,8 +110,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'empty') {
 // Action handling: performing the same action on multiple surveys
 if ($_POST['action']) {
 	if (is_array($_POST['id'])) {
-		foreach ($_POST['id'] as $key => & $value)
-		{
+		foreach ($_POST['id'] as $key => & $value) {
 			// getting the information of the survey (used for when the survey is shared)
 			$survey_data = survey_manager::get_survey($value);
 			// if the survey is shared => also delete the shared content

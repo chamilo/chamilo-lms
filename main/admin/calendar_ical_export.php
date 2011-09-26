@@ -21,13 +21,6 @@ require_once (api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
 // setting the name of the tool
 $nameTools = get_lang('MyAgenda');
 
-// setting the database variables
-//$TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
-//$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-//$TABLEAGENDA 			=Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-//$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-//$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
-
 // the variables for the days and the months
 // Defining the shorts for the days
 $DaysShort = api_get_week_days_short();

@@ -324,6 +324,8 @@ if (isset ($_GET['visiblelink'])) {
 	}
 }
 
+$course_id = api_get_course_int_id();
+
 if (isset ($_GET['deletelink'])) {
 	block_students();
 	$get_delete_link=Security::remove_XSS($_GET['deletelink']);
@@ -332,10 +334,12 @@ if (isset ($_GET['deletelink'])) {
 		$link= LinkFactory :: load($get_delete_link);
 		if ($link[0] != null) {
 			// clean forum qualify
-			$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' WHERE id='.$get_delete_link.' AND type = '.LINK_FORUM_THREAD.');';
+			$sql = 'UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" 
+					WHERE c_id = '.$course_id.' AND thread_id = (SELECT ref_id FROM '.$tbl_grade_links.' WHERE id='.$get_delete_link.' AND type = '.LINK_FORUM_THREAD.');';
 			Database::query($sql);
 			// clean attendance
-			$sql='UPDATE '.$tbl_attendance.' SET attendance_qualify_max=0, attendance_weight = 0, attendance_qualify_title="" WHERE id=(SELECT ref_id FROM '.$tbl_grade_links.' WHERE id='.$get_delete_link.' AND type = '.LINK_ATTENDANCE.');';
+			$sql = 'UPDATE '.$tbl_attendance.' SET attendance_qualify_max=0, attendance_weight = 0, attendance_qualify_title="" 
+				 	WHERE c_id = '.$course_id.' AND id = (SELECT ref_id FROM '.$tbl_grade_links.' WHERE id='.$get_delete_link.' AND type = '.LINK_ATTENDANCE.');';
 			Database::query($sql);
 			$link[0]->delete();
 		}

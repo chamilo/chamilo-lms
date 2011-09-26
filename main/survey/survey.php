@@ -51,7 +51,7 @@ $interbreadcrumb[] = array ('url' => 'survey_list.php', 'name' => get_lang('Surv
 if (isset($_GET['survey_id'])) {
 	$course_code = api_get_course_id();
 	if ($course_code!=-1) {
-		$survey_data = survey_manager::get_survey($survey_id);
+		$survey_data = survey_manager::get_survey($survey_id);		
 	} else {
 		Display :: display_header(get_lang('ToolSurvey'));
 		Display :: display_error_message(get_lang('NotAllowed'), false);
@@ -71,7 +71,7 @@ $is_survey_type_1 = $survey_data['survey_type'] == 1;
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 	$tool_name .= '...';
 }
-
+$course_id = api_get_course_int_id();
 if ($is_survey_type_1 && $_GET['action'] == 'addgroup' || $_GET['action'] == 'deletegroup') {
 	$_POST['name'] = trim($_POST['name']);
 
@@ -80,7 +80,7 @@ if ($is_survey_type_1 && $_GET['action'] == 'addgroup' || $_GET['action'] == 'de
 			Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\' WHERE id = \''.Database::escape_string($_POST['group_id']).'\'');
 			$sendmsg = 'GroupUpdatedSuccessfully';
 		} elseif(!empty($_POST['name'])) {
-			Database::query('INSERT INTO '.$table_survey_question_group.' (name,description,survey_id) values (\''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.Database::escape_string($survey_id).'\') ');
+			Database::query('INSERT INTO '.$table_survey_question_group.' (c_id, name,description,survey_id) values ('.$course_id.', \''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.Database::escape_string($survey_id).'\') ');
 			$sendmsg = 'GroupCreatedSuccessfully';
 		} else {
 			$sendmsg = 'GroupNeedName';
@@ -91,7 +91,6 @@ if ($is_survey_type_1 && $_GET['action'] == 'addgroup' || $_GET['action'] == 'de
 		Database::query('DELETE FROM '.$table_survey_question_group.' WHERE id = '.Database::escape_string($_GET['gid']).' and survey_id = '.Database::escape_string($survey_id));
 		$sendmsg = 'GroupDeletedSuccessfully';
 	}
-
 	header('Location:survey.php?survey_id='.$survey_id.'&sendmsg='.$sendmsg);
 	exit;
 }
@@ -187,7 +186,10 @@ $sql = "SELECT survey_question.*, count(survey_question_option.question_option_i
 			FROM $table_survey_question survey_question
 			LEFT JOIN $table_survey_question_option survey_question_option
 			ON survey_question.question_id = survey_question_option.question_id
-			WHERE survey_question.survey_id = '".Database::escape_string($survey_id)."'
+			WHERE 
+			survey_question.survey_id 	= '".Database::escape_string($survey_id)."' AND 
+			survey_question.c_id 		= $course_id AND 
+			survey_question_option.c_id = $course_id
 			GROUP BY survey_question.question_id
 			ORDER BY survey_question.sort ASC";
 $result = Database::query($sql);

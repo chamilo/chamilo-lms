@@ -1,5 +1,4 @@
 <!-- Topbar -->
-
 {if $_u.status == 1}
 	<div class="topbar">
 	    <div class="topbar-inner">

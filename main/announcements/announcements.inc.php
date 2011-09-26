@@ -51,28 +51,22 @@ class AnnouncementManager  {
 	 * @param	int session id
 	 * @return	array html with the content and count of announcements or false otherwise
 	 */
-	public static function get_all_annoucement_by_course($course_db, $session_id = 0) {
+	public static function get_all_annoucement_by_course($course_info, $session_id = 0) {
 		if (empty($course_db)) {
 			return false;
 		}
 		$session_id = intval($session_id);
+		$course_id = $course_info['real_id'];
 		
-		$tbl_announcement	= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db['db_name']);
-		$tbl_item_property  = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
-		/*
-		if (empty($group_id)) {
-			$group_condition = "AND (toolitemproperties.to_group_id='0' OR toolitemproperties.to_group_id is null)";
-		} else {
-			$group_condition = "AND (toolitemproperties.to_group_id='$group_id')";
-		}
-		$group_condition
-		*/
+		$tbl_announcement	= Database::get_course_table(TABLE_ANNOUNCEMENT);
+		$tbl_item_property  = Database::get_course_table(TABLE_ITEM_PROPERTY);
 			
 		$sql="SELECT DISTINCT announcement.id, announcement.title, announcement.content
 				FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 				WHERE announcement.id = toolitemproperties.ref
 				AND toolitemproperties.tool='announcement'				
-				AND announcement.session_id  = '$session_id'
+				AND announcement.session_id  = '$session_id' AND
+				c_id = $course_id
 				ORDER BY display_order DESC";
 		$rs = Database::query($sql);
 		$num_rows = Database::num_rows($rs);
@@ -135,13 +129,16 @@ class AnnouncementManager  {
         global $charset;
 		$tbl_announcement 	= Database::get_course_table(TABLE_ANNOUNCEMENT);
 		$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
+		$course_id 			= api_get_course_int_id();
 	    
 		if (api_is_allowed_to_edit(false,true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
             $sql_query = "  SELECT announcement.*, toolitemproperties.*
                             FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
                             WHERE announcement.id = toolitemproperties.ref
                             AND announcement.id = '$announcement_id'
-                            AND toolitemproperties.tool='announcement'                                                        
+                            AND toolitemproperties.tool='announcement' AND
+                            announcement.c_id = $course_id AND
+							toolitemproperties.c_id = $course_id                                       
                             ORDER BY display_order DESC";   
 		} else {
     		if (api_get_user_id() != 0) {
@@ -151,7 +148,9 @@ class AnnouncementManager  {
     							AND announcement.id = '$announcement_id'
     							AND toolitemproperties.tool='announcement'
     							AND (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id='0')
-    							AND toolitemproperties.visibility='1'
+    							AND toolitemproperties.visibility='1' AND
+    							announcement.c_id = $course_id AND
+								toolitemproperties.c_id = $course_id
     							ORDER BY display_order DESC";
     	
     		} else {
@@ -161,19 +160,19 @@ class AnnouncementManager  {
     							AND announcement.id = '$announcement_id'
     							AND toolitemproperties.tool='announcement'
     							AND toolitemproperties.to_group_id='0'
-    							AND toolitemproperties.visibility='1'";
+    							AND toolitemproperties.visibility='1' AND
+    							announcement.c_id = $course_id AND
+								toolitemproperties.c_id = $course_id
+    							";
     		}
 		}		
 		$sql_result = Database::query($sql_query);
 		if (Database::num_rows($sql_result) > 0 ) {
-    		$result		= Database::fetch_array($sql_result, 'ASSOC');    		
-    	
+    		$result		= Database::fetch_array($sql_result, 'ASSOC');    		    	
 			$title		 = $result['title'];
-			$content	 = $result['content'];
-				
+			$content	 = $result['content'];				
     		echo "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
-    		echo "<tr><td><h2>".$title."</h2></td></tr>";   		
-    		
+    		echo "<tr><td><h2>".$title."</h2></td></tr>";   	
     		
     		if (api_is_allowed_to_edit(false,true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
     		    $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$announcement_id."\">".Display::return_icon('edit.png', get_lang('Edit'),'',22)."</a>";
@@ -253,8 +252,15 @@ class AnnouncementManager  {
 		$newContent = Database::escape_string($newContent);
 		$order = intval($order);
 	    $now = api_get_utc_datetime();
+	    $course_id = api_get_course_int_id();
+	    
 		// store in the table announcement
-		$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = '$now', display_order ='$order', session_id=".api_get_session_id();
+		$sql = "INSERT INTO $tbl_announcement SET 
+				c_id = '$course_id',  
+				content = '$newContent', 
+				title = '$emailTitle', end_date = '$now', 
+				display_order ='$order', 
+				session_id=".api_get_session_id();
 		$result = Database::query($sql);
 		if ($result === false) {
 			return false;
@@ -306,9 +312,10 @@ class AnnouncementManager  {
 		$order = intval($order);
 		
 		$now = api_get_utc_datetime();
+		$course_id = api_get_course_int_id();
 	
 		// store in the table announcement
-		$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = '$now', display_order ='$order', session_id=".api_get_session_id();
+		$sql = "INSERT INTO $tbl_announcement SET c_id = '$course_id', content = '$newContent', title = '$emailTitle', end_date = '$now', display_order ='$order', session_id=".api_get_session_id();
 		$result = Database::query($sql);
 		if ($result === false) {
 			return false;
@@ -440,8 +447,9 @@ class AnnouncementManager  {
 		$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 		if ($insert_id != strval(intval($insert_id))) { return false; }
 		$insert_id = Database::escape_string($insert_id);
+		$course_id = api_get_course_int_id();
 		// store the modifications in the table tbl_annoucement
-		$sql = "UPDATE $tbl_announcement SET email_sent='1' WHERE id='$insert_id'";
+		$sql = "UPDATE $tbl_announcement SET email_sent='1' WHERE c_id = $course_id AND id='$insert_id'";
 		Database::query($sql);
 	}
 	
@@ -451,22 +459,29 @@ class AnnouncementManager  {
 	 * @param	int user id
 	 * @return	array html with the content and count of announcements or false otherwise
 	 */
-	public static function get_all_annoucement_by_user_course($course_db, $user_id) {
-		if (empty($course_db) || empty($user_id)) {
+	public static function get_all_annoucement_by_user_course($course_code, $user_id) {
+		
+		$course_info = api_get_course_info($course_code);
+		$course_id	 = $course_info['real_id'];
+		
+		if (empty($user_id)) {
 			return false;
 		}
-		$tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db);
-		$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db);
+		$tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT);
+		$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 		if (!empty($user_id) && is_numeric($user_id)) {
 			$user_id = intval($user_id);
 			$sql="SELECT DISTINCT announcement.title, announcement.content
-							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-							WHERE announcement.id = toolitemproperties.ref
-							AND toolitemproperties.tool='announcement'
-							AND (toolitemproperties.insert_user_id='$user_id' AND (toolitemproperties.to_group_id='0' OR toolitemproperties.to_group_id is null))
-							AND toolitemproperties.visibility='1'
-							AND announcement.session_id  = 0
-							ORDER BY display_order DESC";
+					FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+					WHERE
+						announcement.c_id = $course_id AND 
+						toolitemproperties.c_id = $course_id AND												 
+						announcement.id = toolitemproperties.ref AND 
+						toolitemproperties.tool='announcement' AND 
+						(toolitemproperties.insert_user_id='$user_id' AND (toolitemproperties.to_group_id='0' OR toolitemproperties.to_group_id is null))
+						AND toolitemproperties.visibility='1'
+						AND announcement.session_id  = 0
+					ORDER BY display_order DESC";
 			$rs = Database::query($sql);
 			$num_rows = Database::num_rows($rs);
 			$content = '';
@@ -1097,6 +1112,7 @@ class AnnouncementManager  {
 		$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 		$return = 0;
 		$announcement_id = intval($announcement_id);
+		$course_id = api_get_course_int_id();
 	
 		if (is_array($file) && $file['error'] == 0 ) {
 			$courseDir   = $_course['path'].'/upload/announcements'; // TODO: This path is obsolete. The new document repository scheme should be kept in mind here.
@@ -1119,8 +1135,8 @@ class AnnouncementManager  {
 				$safe_file_name     = Database::escape_string($file_name);
 				$safe_new_file_name = Database::escape_string($new_file_name);
 				// Storing the attachments if any
-				$sql = 'INSERT INTO '.$tbl_announcement_attachment.'(filename, comment, path, announcement_id, size) '.
-					   "VALUES ( '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '".intval($file['size'])."' )";
+				$sql = 'INSERT INTO '.$tbl_announcement_attachment.' (c_id, filename, comment, path, announcement_id, size) '.
+					   "VALUES ($course_id, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '".intval($file['size'])."' )";
 				$result = Database::query($sql);
 	            $return = 1;
 			}

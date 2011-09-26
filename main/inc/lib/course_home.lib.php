@@ -55,6 +55,9 @@ class CourseHome {
         while ($tool = Database::fetch_array($result)) {
             $all_tools[] = $tool;
         }
+        
+        $course_id = api_get_course_int_id();
+        
 
         // Grabbing all the links that have the property on_homepage set to 1
         if ($cat == 'External') {
@@ -62,14 +65,20 @@ class CourseHome {
             $tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
             if (api_is_allowed_to_edit(null, true)) {
                 $sql_links = "SELECT tl.*, tip.visibility
-                                    FROM $tbl_link tl
-                                    LEFT JOIN $tbl_item_property tip ON tip.tool='link' AND tip.ref=tl.id
-                                    WHERE tl.on_homepage='1' AND tip.visibility != 2";
+								FROM $tbl_link tl
+                                LEFT JOIN $tbl_item_property tip ON tip.tool='link' AND tip.ref=tl.id
+                                WHERE 	tl.c_id = $course_id AND
+                                		tip.c_id = $course_id AND
+                						tl.on_homepage='1' AND 
+                						tip.visibility != 2";
             } else {
                 $sql_links = "SELECT tl.*, tip.visibility
                                     FROM $tbl_link tl
                                     LEFT JOIN $tbl_item_property tip ON tip.tool='link' AND tip.ref=tl.id
-                                    WHERE tl.on_homepage='1' AND tip.visibility = 1";
+                                    WHERE 	tl.c_id = $course_id AND
+                                			tip.c_id = $course_id AND
+                							tl.on_homepage='1' AND 
+                							tip.visibility = 1";
             }
             $result_links = Database::query($sql_links);
             while ($links_row = Database::fetch_array($result_links)) { 
@@ -244,22 +253,29 @@ class CourseHome {
             }
             $all_tools_list[] = $temp_row;
         }
+        
+        $course_id = api_get_course_int_id();
 
         // Grabbing all the links that have the property on_homepage set to 1
-        $course_link_table = Database::get_course_table(TABLE_LINK);
+        $course_link_table 			= Database::get_course_table(TABLE_LINK);
         $course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        
         switch ($course_tool_category)  {
             case TOOL_PUBLIC:
                 $sql_links="SELECT tl.*, tip.visibility
                         FROM $course_link_table tl
                         LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
-                        WHERE tl.on_homepage='1' AND tip.visibility = 1";
+                        WHERE 	tl.c_id = $course_id AND 
+                        		tip.c_id = $course_id AND
+                        		tl.on_homepage='1' AND tip.visibility = 1";
                 break;
             case TOOL_PUBLIC_BUT_HIDDEN:
                 $sql_links="SELECT tl.*, tip.visibility
                     FROM $course_link_table tl
                     LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
-                    WHERE tl.on_homepage='1' AND tip.visibility = 0";
+                    WHERE 	tl.c_id = $course_id AND 
+                        	tip.c_id = $course_id AND
+                        	tl.on_homepage='1' AND tip.visibility = 0";
                 break;
             default:
                 $sql_links = null;
@@ -416,9 +432,10 @@ class CourseHome {
         $all_tools_list = array();
 
         // Condition for the session
-        $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id, true, true);
-
+        $session_id 			= api_get_session_id();
+        $condition_session 		= api_get_session_condition($session_id, true, true);
+        $course_id_condition 	= api_get_course_table_condition();
+        
         switch ($course_tool_category) {
             case TOOL_STUDENT_VIEW:
                     $condition_display_tools = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") ';
@@ -487,15 +504,19 @@ class CourseHome {
 
         $i = 0;
         // Grabbing all the links that have the property on_homepage set to 1
-        $course_link_table = Database::get_course_table(TABLE_LINK);
+        $course_link_table 			= Database::get_course_table(TABLE_LINK);
         $course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        
+        $course_id = api_get_course_int_id();
 
         switch ($course_tool_category) {
                 case TOOL_AUTHORING:
                     $sql_links = "SELECT tl.*, tip.visibility
                         FROM $course_link_table tl
                         LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
-                            WHERE tl.on_homepage='1' $condition_session";
+                        WHERE 	tl.c_id = $course_id AND 
+                        		tip.c_id = $course_id AND
+                        		tl.on_homepage='1' $condition_session";
                     break;
 
                 case TOOL_INTERACTION:
@@ -512,14 +533,18 @@ class CourseHome {
                     $sql_links = "SELECT tl.*, tip.visibility
                         FROM $course_link_table tl
                         LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
-                            WHERE tl.on_homepage='1' $condition_session";
+                            WHERE 	tl.c_id 		= $course_id AND 
+                        			tip.c_id 		= $course_id AND
+                        			tl.on_homepage	='1' $condition_session";
                     break;
 
                 case TOOL_ADMIN:
                     $sql_links = "SELECT tl.*, tip.visibility
                         FROM $course_link_table tl
                         LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
-                            WHERE tl.on_homepage='1' $condition_session";
+                        WHERE 	tl.c_id = $course_id AND 
+                        		tip.c_id = $course_id AND
+                        		tl.on_homepage='1' $condition_session";
                     break;
 
                 default:

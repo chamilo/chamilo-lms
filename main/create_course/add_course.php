@@ -205,6 +205,7 @@ if (isset($_user['language']) && $_user['language'] != '') {
 $values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
 $form->setDefaults($values);
 
+
 // Validate the form.
 if ($form->validate()) {
     $course_values = $form->exportValues();
@@ -241,20 +242,21 @@ if ($form->validate()) {
             // Create the course immediately.
 
             $keys = define_course_keys($wanted_code, '', $_configuration['db_prefix']);
-
             if (count($keys)) {
-
-                $visual_code = $keys['currentCourseCode'];
-                $code = $keys['currentCourseId'];
-                $db_name = $keys['currentCourseDbName'];
-                $directory = $keys['currentCourseRepository'];
-
+                $visual_code 	= $keys['currentCourseCode'];
+                $code 			= $keys['currentCourseId'];
+                $db_name 		= $keys['currentCourseDbName'];
+                $directory 		= $keys['currentCourseRepository'];
                 $expiration_date = time() + $firstExpirationDelay;
+                
                 prepare_course_repository($directory, $code);
-                update_Db_course($db_name);
+                //update_Db_course($db_name);
                 $pictures_array = fill_course_repository($directory,  $exemplary_content);
-                fill_Db_course($db_name, $directory, $course_language, $pictures_array, $exemplary_content);
-                register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);
+                
+                $course_id = register_course($code, $visual_code, $directory, '', $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);
+                                
+                fill_Db_course($course_id, $directory, $course_language, $pictures_array, $exemplary_content);
+                
 
                 // Preparing a confirmation message.
                 $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
@@ -265,9 +267,7 @@ if ($form->validate()) {
                 echo '<div style="float: right; margin:0px; padding: 0px;">' .
                     '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>' .
                     '</div>';
-
             } else {
-
                 Display :: display_error_message(get_lang('CourseCreationFailed'), false);
                 // Display the form.
                 $form->display();

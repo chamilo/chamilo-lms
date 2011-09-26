@@ -88,20 +88,23 @@ class learnpath {
         // Check params.
         // Check course code.
         $course_db = '';
+        
+        $this->course_id = api_get_course_int_id();
+        
         if ($this->debug > 0) {error_log('New LP - In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')', 0); }
         if (empty($course)) {
             $this->error = 'Course code is empty';
             return false;
         } else {
             $main_table = Database::get_main_table(TABLE_MAIN_COURSE);
-            //$course = Database::escape_string($course);
-            $course = $this->escape_string($course);
+            $course = $this->escape_string($course);            
             $sql = "SELECT * FROM $main_table WHERE code = '$course'";
             if ($this->debug > 2) { error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying course: '.$sql, 0); }
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
-                $this->cc = $course;
-                $row_course = Database::fetch_array($res); 
+                $this->cc 			= $course;                
+                $row_course = Database::fetch_array($res);
+                $this->course_id 	= $row_course['id'];
                 $course_db = $row_course['db_name'];
             } else {
                 $this->error = 'Course code does not exist in database ('.$sql.')';
@@ -208,7 +211,7 @@ class learnpath {
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
             }
             $this->attempt = 1;
-            $sql_ins = "INSERT INTO $lp_table (lp_id,user_id,view_count, session_id) VALUES ($lp_id,$user_id,1,$session_id)";
+            $sql_ins = "INSERT INTO $lp_table (c_id, lp_id,user_id,view_count, session_id) VALUES ($this->course_id, $lp_id,$user_id,1,$session_id)";
             $res_ins = Database::query($sql_ins);
             $this->lp_view_id = Database :: insert_id();
             if ($this->debug > 2) {
@@ -330,9 +333,8 @@ class learnpath {
                   $this->items[$row['id']]->set_status($this->default_status);
                 }
                 // Add that row to the lp_item_view table so that we have something to show in the stats page.
-                $sql_ins = "INSERT INTO $lp_item_view_table " .
-                    "(lp_item_id, lp_view_id, view_count, status) VALUES " .
-                    "(" . $row['id'] . "," . $this->lp_view_id . ",1,'not attempted')";
+                $sql_ins = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status) 
+                	VALUES ($this->course_id, ".$row['id'] . "," . $this->lp_view_id . ",1,'not attempted')";
                 if ($this->debug > 2) {
                     error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql_ins, 0);
                 }
@@ -428,22 +430,29 @@ class learnpath {
 
         $new_item_id = -1;
         $id = $this->escape_string($id);
-
+        
+        $course_id = api_get_course_int_id();
+        
+        
         if ($type == 'quiz') {
             $sql = 'SELECT SUM(ponderation)
 					FROM ' . Database :: get_course_table(TABLE_QUIZ_QUESTION) . ' as quiz_question
                     INNER JOIN  ' . Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION) . ' as quiz_rel_question
                     ON quiz_question.id = quiz_rel_question.question_id
-                    AND quiz_rel_question.exercice_id = ' . $id;
+                    WHERE 	quiz_rel_question.exercice_id = ' . $id." AND 
+	            			quiz_question.c_id = $course_id AND 
+	            			quiz_rel_question.c_id = $course_id ";
             $rsQuiz = Database::query($sql);
             $max_score = Database :: result($rsQuiz, 0, 0);
         } else {
             $max_score = 100;
         }
-
+        
+        
         if ($prerequisites != 0) {
-            $sql_ins = "INSERT INTO " . $tbl_lp_item . " ( ".
-                                "lp_id, ".
+            $sql_ins = "INSERT INTO " . $tbl_lp_item . " (
+            					c_id, 
+                                lp_id, ".
                                 "item_type, ".
                                 "ref, ".
                                 "title, ".
@@ -456,8 +465,9 @@ class learnpath {
                                 "display_order, ".
                                 "prerequisite, ".
                                 "max_time_allowed ".
-                            ") VALUES ( ".
-                                $this->get_id() . ", ".
+                            ") VALUES ( 
+                            	$course_id , 
+                                ".$this->get_id() . ", ".
                                 "'" . $type . "', ".
                                 "'', ".
                                 "'" . $title . "', ".
@@ -475,6 +485,7 @@ class learnpath {
             // Insert new item.
             $sql_ins = "
                             INSERT INTO " . $tbl_lp_item . " ( ".
+            					"c_id, ".
                                 "lp_id, ".
                                 "item_type, ".
                                 "ref, ".
@@ -488,6 +499,7 @@ class learnpath {
                                 "display_order, ".
                                 "max_time_allowed ".
                             ") VALUES (".
+            					$course_id. ",".
                                 $this->get_id() . ",".
                                 "'" . $type . "',".
                                 "'',".
@@ -586,8 +598,6 @@ class learnpath {
      */
     public function add_lp($course, $name, $description = '', $learnpath = 'guess', $origin = 'zip', $zipname = '', $publicated_on = '', $expired_on = '') {
         global $charset;
-
-        //if ($this->debug > 0) { error_log('New LP - In learnpath::add_lp()', 0); }
         $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
         // Check course code exists.
         // Check lp_name doesn't exist, otherwise append something.
@@ -619,6 +629,8 @@ class learnpath {
         } else {
             $expired_on   = Database::escape_string(api_get_utc_datetime($expired_on));
         }
+        
+        $course_id = api_get_course_int_id();
 
         while (Database :: num_rows($res_name)) {
             // There is already one such name, update the current one a bit.
@@ -656,14 +668,13 @@ class learnpath {
                     $row = Database :: fetch_array($res_max);
                     $dsp = $row[0] + 1;
                 }
-                $sql_insert = "INSERT INTO $tbl_lp (lp_type,name,description,path,default_view_mod, default_encoding,display_order,content_maker,content_local,js_lib,session_id, created_on, publicated_on, expired_on) " .
-                              "VALUES ($type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."')";
+                
+                $sql_insert = "INSERT INTO $tbl_lp (c_id, lp_type,name,description,path,default_view_mod, default_encoding,display_order,content_maker,content_local,js_lib,session_id, created_on, publicated_on, expired_on) " .
+                              "VALUES ($course_id, $type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."')";
 
-                //if ($this->debug > 2) { error_log('New LP - Inserting new lp '.$sql_insert, 0); }
                 $res_insert = Database::query($sql_insert);
                 $id = Database :: insert_id();
                 if ($id > 0) {
-
                     // Insert into item_property.
                     api_item_property_update(api_get_course_info(), TOOL_LEARNPATH, $id, 'LearnpathAdded', api_get_user_id());
                     return $id;
@@ -1866,11 +1877,12 @@ class learnpath {
      * @param	boolean	Whether to return null if no record was found (true), or 0 (false) (optional, defaults to false)
      * @return	integer	Current progress value as found in the database
      */
-    public function get_db_progress($lp_id, $user_id, $mode = '%', $course_db = '', $sincere = false,$session_id = 0) {
+    public function get_db_progress($lp_id, $user_id, $mode = '%', $course_code = '', $sincere = false,$session_id = 0) {
         //if ($this->debug > 0) { error_log('New LP - In learnpath::get_db_progress()', 0); }
         $session_id = intval($session_id);
+        $course_info = api_get_course_info($course_code);
         $session_condition = api_get_session_condition($session_id);
-        $table = Database :: get_course_table(TABLE_LP_VIEW, $course_db);
+        $table = Database :: get_course_table(TABLE_LP_VIEW);
         $sql = "SELECT * FROM $table WHERE lp_id = $lp_id AND user_id = $user_id $session_condition";
         $res = Database::query($sql);
         $view_id = 0;
@@ -1886,28 +1898,34 @@ class learnpath {
         if (empty ($progress)) {
             $progress = '0';
         }
+        
+        $course_id = $course_info['real_id'];
+        
         if ($mode == '%') {
             return $progress . '%';
         } else {
             // Get the number of items completed and the number of items total.
-            $tbl = Database :: get_course_table(TABLE_LP_ITEM, $course_db);
-            $sql = "SELECT count(*) FROM $tbl WHERE lp_id = " . $lp_id . "
-                                AND item_type NOT IN('dokeos_chapter','chapter','dir')";
+            $tbl = Database :: get_course_table(TABLE_LP_ITEM);
+            $sql = "SELECT count(*) FROM $tbl 
+            		WHERE c_id = $course_id AND lp_id = " . $lp_id . " AND item_type NOT IN('dokeos_chapter','chapter','dir')";
             $res = Database::query($sql);
             $row = Database :: fetch_array($res);
             $total = $row[0];
-            $tbl_item_view = Database :: get_course_table(TABLE_LP_ITEM_VIEW, $course_db);
-            $tbl_item = Database :: get_course_table(TABLE_LP_ITEM, $course_db);
-
+            $tbl_item_view = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+            $tbl_item = Database :: get_course_table(TABLE_LP_ITEM);
+            
             //$sql = "SELECT count(distinct(lp_item_id)) FROM $tbl WHERE lp_view_id = ".$view_id." AND status IN ('passed','completed','succeeded')";
             // Trying as also counting browsed and failed items.
             $sql = "SELECT count(distinct(lp_item_id))
-                                FROM $tbl_item_view as item_view
-                                INNER JOIN $tbl_item as item
-                                    ON item.id = item_view.lp_item_id
-                                    AND item_type NOT IN('dokeos_chapter','chapter','dir')
-                                WHERE lp_view_id = " . $view_id . "
-                                AND status IN ('passed','completed','succeeded','browsed','failed')"; //echo '<br />';
+                    FROM $tbl_item_view as item_view
+                    INNER JOIN $tbl_item as item
+                    ON item.id = item_view.lp_item_id
+                    AND item_type NOT IN('dokeos_chapter','chapter','dir')
+                    WHERE
+                    	item_view.c_id 	= $course_id AND
+                    	item.c_id 		= $course_id  AND 
+                    	lp_view_id 		= " . $view_id . " AND 
+            			status IN ('passed','completed','succeeded','browsed','failed')"; //echo '<br />';
             $res = Database::query($sql);
             $row = Database :: fetch_array($res);
             $completed = $row[0];
@@ -1929,17 +1947,17 @@ class learnpath {
      * @return string	The mediaplayer HTML
      */
     public function get_mediaplayer($autostart='true') {
-
         global $_course;
+        $tbl_lp_item 		= Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item_view 	= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $tbl_lp_item_view = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
-
+        $course_id = api_get_course_int_id();
+        
         // Getting all the information about the item.
-        $sql = "SELECT * FROM " . $tbl_lp_item . " as lp inner join " . $tbl_lp_item_view . " as lp_view on lp.id = lp_view.lp_item_id " .
-                "WHERE lp.id = '" . $_SESSION['oLP']->current . "'";
+        $sql = "SELECT * FROM " . $tbl_lp_item . " as lp INNER  JOIN " . $tbl_lp_item_view . " as lp_view on lp.id = lp_view.lp_item_id " .
+                "WHERE lp.id = '" . $_SESSION['oLP']->current . "' AND lp.c_id = $course_id AND lp_view.c_id = $course_id";
         $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $row 	= Database::fetch_assoc($result);
         $output = '';
 
         if (!empty ($row['audio'])) {
@@ -2861,13 +2879,19 @@ class learnpath {
         }
 
         $file = '';
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
-        $lp_item_table = Database :: get_course_table(TABLE_LP_ITEM);
-        $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
-        $item_id = Database::escape_string($item_id);
+        $lp_table 			= Database::get_course_table(TABLE_LP_MAIN);
+        $lp_item_table 		= Database::get_course_table(TABLE_LP_ITEM);
+        $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $item_id 			= Database::escape_string($item_id);
+        
+        $course_id = api_get_course_int_id();
 
-        $sel = "SELECT l.lp_type as ltype, l.path as lpath, li.item_type as litype, li.path as lipath, li.parameters as liparams " .
-               "FROM $lp_table l, $lp_item_table li WHERE li.id = $item_id AND li.lp_id = l.id";
+        $sel = "SELECT l.lp_type as ltype, l.path as lpath, li.item_type as litype, li.path as lipath, li.parameters as liparams 
+        		FROM $lp_table l, $lp_item_table li 
+        		WHERE 	l.c_id = $course_id AND
+        				li.c_id = $course_id AND 
+        				li.id = $item_id AND 
+        				li.lp_id = l.id";
         if ($this->debug > 2) {
             error_log('New LP - In learnpath::get_link() - selecting item ' . $sel, 0);
         }
@@ -3104,19 +3128,20 @@ class learnpath {
         }
         // When missing $attempt_num, search for a unique lp_view record for this lp and user.
         $lp_view_table = Database :: get_course_table(TABLE_LP_VIEW);
-        $sql = "SELECT id, view_count FROM $lp_view_table " .
-        "WHERE lp_id = " . $this->get_id() . " " .
-        "AND user_id = " . $this->get_user_id() . " " .
-        $search .
-        " ORDER BY view_count DESC";
+        
+        $course_id = api_get_course_int_id();
+        
+        $sql = "SELECT id, view_count FROM $lp_view_table 
+        		WHERE lp_id = " . $this->get_id() ." AND user_id = " . $this->get_user_id() . " " .$search .
+        		" ORDER BY view_count DESC";
         $res = Database::query($sql);
         if (Database :: num_rows($res) > 0) {
             $row = Database :: fetch_array($res);
             $this->lp_view_id = $row['id'];
         } else {
             // There is no database record, create one.
-            $sql = "INSERT INTO $lp_view_table(lp_id,user_id,view_count)" .
-            "VALUES (" . $this->get_id() . "," . $this->get_user_id() . ",1)";
+            $sql = "INSERT INTO $lp_view_table (c_id, lp_id,user_id,view_count) VALUES 
+            		($course_id, " . $this->get_id() . "," . $this->get_user_id() . ",1)";
             $res = Database::query($sql);
             $id = Database :: insert_id();
             $this->lp_view_id = $id;
@@ -3565,6 +3590,9 @@ class learnpath {
         $session_condition = api_get_session_condition($session_id);
 
         $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
+        
+        $course_id = api_get_course_int_id();
+        
         $link = 'newscorm/lp_controller.php?action=view&lp_id=' . $lp_id.'&id_session='.$session_id;
         $sql = "SELECT * FROM $tbl_tool where name='$name' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition";
         $result = Database::query($sql);
@@ -3574,7 +3602,8 @@ class learnpath {
         if (($set_visibility == 'i') && ($num > 0)) {
             $sql = "DELETE FROM $tbl_tool WHERE (name='$name' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition)";
         } elseif (($set_visibility == 'v') && ($num == 0)) {
-            $sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool, session_id) VALUES ('$name','$link','scormbuilder.gif','$v','0','pastillegris.gif',0, $session_id)";            
+            $sql = "INSERT INTO $tbl_tool (c_id, name, link, image, visibility, admin, address, added_tool, session_id) VALUES 
+            	    ($course_id, '$name','$link','scormbuilder.gif','$v','0','pastillegris.gif',0, $session_id)";            
         } else {            
             // Parameter and database incompatible, do nothing.
         }
@@ -3597,9 +3626,10 @@ class learnpath {
         // Call autosave method to save the current progress.
         //$this->index = 0;
         $session_id = api_get_session_id();
+        $course_id = api_get_course_int_id();
         $lp_view_table = Database :: get_course_table(TABLE_LP_VIEW);
-        $sql = "INSERT INTO $lp_view_table (lp_id, user_id, view_count, session_id) " .
-        "VALUES (" . $this->lp_id . "," . $this->get_user_id() . "," . ($this->attempt + 1) . ", $session_id)";
+        $sql = "INSERT INTO $lp_view_table (c_id, lp_id, user_id, view_count, session_id) " .
+        	   "VALUES ($course_id, " . $this->lp_id . "," . $this->get_user_id() . "," . ($this->attempt + 1) . ", $session_id)";
         if ($this->debug > 2) {
             error_log('New LP - Inserting new lp_view for restart: ' . $sql, 0);
         }
@@ -5175,6 +5205,8 @@ class learnpath {
      */
     public function display_edit_item($item_id) {
         global $_course; // It will disappear.
+        $course_id = api_get_course_int_id();
+        
         $return = '';
         if (is_numeric($item_id)) {
             $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
@@ -5199,7 +5231,9 @@ class learnpath {
                     $sql_step = " SELECT lp.*, doc.path as dir
                                     FROM " . $tbl_lp_item . " as lp
                                     LEFT JOIN " . $tbl_doc . " as doc ON doc.id = lp.path
-                                    WHERE lp.id = " . Database :: escape_string($item_id);
+                                    WHERE 	lp.c_id = $course_id AND 
+                    						doc.c_id = $course_id AND 
+                    						lp.id = " . Database :: escape_string($item_id);
                     $res_step = Database::query($sql_step);
                     $row_step = Database :: fetch_array($res_step);
                     $return .= $this->display_manipulate($item_id, $row['item_type']);

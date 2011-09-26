@@ -1,14 +1,18 @@
 {extends file="default/layout/main.tpl"}
 
 {block name=header}
-	{include file="default/layout/header.tpl"}	
+	{if $show_header == 1}
+		{include file="default/layout/header.tpl"}
+	{/if}	
 {/block}
 
-{block name=body}
+{block name=body}	
 	{$message}
 	{$content}
 {/block}
 
 {block name=footer}
-	{include file="default/layout/footer.tpl"}	
+	{if $show_header == 1}
+		{include file="default/layout/footer.tpl"}
+	{/if}	
 {/block}

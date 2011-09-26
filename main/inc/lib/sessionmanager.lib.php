@@ -1525,8 +1525,10 @@ class SessionManager {
                                         api_item_property_update($course_info, TOOL_LEARNPATH, $lp_id, 'invisible', api_get_user_id(), 0 ,0, 0, 0);
                                     }
                                 }
-                                $quiz_table   = Database::get_course_table(TABLE_QUIZ_TEST, $course_info['db_name']);
-                                $sql = "UPDATE $quiz_table SET active = 0 ";
+                                $quiz_table   = Database::get_course_table(TABLE_QUIZ_TEST);
+                                $course_id	 = $course_info['real_id'];
+                                //@todo check this query
+                                $sql = "UPDATE $quiz_table SET active = 0 WHERE c_id = $course_id ";
                                 $result=Database::query($sql);                                
                             }
                             $new_short_courses[] = $course_info['code'];

@@ -147,7 +147,7 @@ if ($action == 'mark') {
 			#	{
 			#		$user_id = '0';
 			#	}
-			#	$sql2 = "update $tbl_learnpath_user set score='$score' where (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
+			#	$sql2 = "update $tbl_learnpath_user set score='$score' WHERE (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
 			#	$res2 = Database::query($sql2);
 			#}
 			$res = Database::query($sql);

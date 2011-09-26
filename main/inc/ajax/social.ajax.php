@@ -134,20 +134,13 @@ switch ($action) {
 		
 		switch ($action) {
 			case 'load_course' :
-				$course_db =  $_POST['course_code'];				
-				$course_id = CourseManager::get_course_id_by_database_name($course_db);
-	
-				if (api_is_user_of_course($course_id, api_get_user_id())) {
-	
-					$table_forums 			= Database :: get_course_table(TABLE_FORUM,$course_db);
-					$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD,$course_db);
-					$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST,$course_db);
-					$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_db);
-					$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
-	
-					//------Forum messages
-	
-					$forum_result = get_all_post_from_user($user_id, $course_db);
+				$course_id =  intval($_POST['course_code']); // the int course id
+				$course_info = api_get_course_info_by_id($course_id);				
+				$course_code = $course_info['code'];
+					
+				if (api_is_user_of_course($course_code, api_get_user_id())) {	
+					//------Forum messages	
+					$forum_result = get_all_post_from_user($user_id, $course_code);
 					$all_result_data = 0;
 					if ($forum_result !='') {
 						echo '<div id="social-forum-main-title">';
@@ -162,7 +155,7 @@ switch ($action) {
 					}
 	
 					//------Blog posts
-					$result = get_blog_post_from_user($course_db, $user_id);
+					$result = get_blog_post_from_user($course_code, $user_id);
 					if (!empty($result)) {
 						api_display_tool_title(api_xml_http_response_encode(get_lang('Blog')));
 						echo '<div style="background:#FAF9F6; padding:0px;">';
@@ -173,7 +166,7 @@ switch ($action) {
 					}
 	
 					//------Blog comments
-					$result = get_blog_comment_from_user($course_db, $user_id);
+					$result = get_blog_comment_from_user($course_code, $user_id);
 					if (!empty($result)) {
 						echo '<div  style="background:#FAF9F6; padding-left:10px;">';
 						api_display_tool_title(api_xml_http_response_encode(get_lang('BlogComments')));

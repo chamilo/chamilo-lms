@@ -448,7 +448,7 @@ foreach ($questionList as $questionId) {
         		}
         		
         		//showing the score	
-         		$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
+         		$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
         		$resfree = Database::query($queryfree);
         		$questionScore= Database::result($resfree,0,"marks");
         		$totalScore+=$questionScore;        		

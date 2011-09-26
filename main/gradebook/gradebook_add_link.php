@@ -18,7 +18,7 @@ require_once '../forum/forumfunction.inc.php';
 api_block_anonymous_users();
 block_students();
 
-$course_info =isset($_GET['course_code'])? api_get_course_info($_GET['course_code']) : '';
+$course_info =isset($_GET['course_code'])? api_get_course_info($_GET['course_code']) : api_get_course_info();
 $my_db_course=isset($_GET['course_code'])?$course_info['dbName']:'';
 
 $tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_course);
@@ -59,7 +59,6 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 		$link->set_user_id(api_get_user_id());
 		if($category[0]->get_course_code() == '' && !empty($_GET['course_code'])) {
 			$link->set_course_code($_GET['course_code']);
-
 		} else {
 			$link->set_course_code($category[0]->get_course_code());
 		}
@@ -81,21 +80,22 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 		}
 		$link->set_visible(empty ($addvalues['visible']) ? 0 : 1);
 
-		//update view_properties
-		$work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+		//update view_properties		
 		if ( isset($_GET['typeselected']) && 5==$_GET['typeselected'] && (isset($addvalues['select_link']) && $addvalues['select_link']<>"")) {
 
-			$sql1='SELECT thread_title from '.$tbl_forum_thread.' where thread_id='.$addvalues['select_link'].';';
+			$sql1 = 'SELECT thread_title from '.$tbl_forum_thread.' 
+					 WHERE c_id = '.$course_info['real_id'].' AND thread_id='.$addvalues['select_link'];
 			$res1=Database::query($sql1);
 			$rowtit=Database::fetch_row($res1);
 			$course_id=api_get_course_id();
-			$sql_l='SELECT count(*) FROM '.$tbl_link.' WHERE ref_id='.$addvalues['select_link'].' and course_code="'.$course_id.'" and type=5;';
+			$sql_l='SELECT count(*) FROM '.$tbl_link.' WHERE c_id = '.$course_info['real_id'].' AND ref_id='.$addvalues['select_link'].' and course_code="'.$course_id.'" and type=5;';
 			$res_l=Database::query($sql_l);
 			$row=Database::fetch_row($res_l);
 
 			if ( $row[0]==0 ) {
 				$link->add();
-				$sql='UPDATE '.$tbl_forum_thread.' set thread_qualify_max='.$addvalues['weight'].',thread_weight='.$addvalues['weight'].',thread_title_qualify="'.$rowtit[0].'" WHERE thread_id='.$addvalues['select_link'].';';
+				$sql = 'UPDATE '.$tbl_forum_thread.' SET thread_qualify_max='.$addvalues['weight'].',thread_weight='.$addvalues['weight'].',thread_title_qualify="'.$rowtit[0].'" 
+						WHERE thread_id='.$addvalues['select_link'].' AND c_id = '.$course_info['real_id'].' ';
 				Database::query($sql);
 				//$sql_l='UPDATE '.$tbl_link.' SET weight='.$addvalues['weight'].' WHERE ref_id='.$addvalues['select_link'].' AND type=5;';
 				//Database::query($sql_l);

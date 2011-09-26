@@ -13,7 +13,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -296,9 +295,11 @@ if ($form->validate()) {
 				sort='0',
 				user_course_cat='0'";
 	Database::query($sql);
-
-	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE,$course_db_name);
-	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."'";
+	
+	$course_info = api_get_course_info($course_code);
+	$course_id = $course_info['real_id'];
+	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
+	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."' WHERE c_id = $course_id ";
 	if ($visual_code_is_used) {
 	    header('Location: course_list.php?action=show_msg&warn='.urlencode($warn));
 	} else {

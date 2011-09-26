@@ -379,9 +379,11 @@ function create_event_exercice($exo_id) {
 	$tbl_exe = Database::get_course_table(TABLE_QUIZ_TEST);
 	$now = api_get_utc_datetime();
 	$uid = api_get_user_id();
+	
+	$course_id = api_get_course_int_id();
 
     // First, check the exercise exists
-    $sql_exe_id="SELECT exercises.id FROM $tbl_exe as exercises WHERE exercises.id=$exo_id";
+    $sql_exe_id="SELECT exercises.id FROM $tbl_exe as exercises WHERE c_id = $course_id AND exercises.id=$exo_id";
     $res_exe_id=Database::query($sql_exe_id);
     if ($res_exe_id === false) { return false; } //sql error
     if (Database::num_rows($res_exe_id)<1) { return false;} //exe not found
@@ -588,9 +590,15 @@ function get_attempt_count($user_id, $exerciseId, $lp_id, $lp_item_id,$lp_item_v
 	$lp_item_id 	= intval($lp_item_id);
     $lp_item_view_id= intval($lp_item_view_id);
 	
-   	$sql = "SELECT count(*) as count FROM $stat_table WHERE exe_exo_id = '$exerciseId'
-            AND exe_user_id = '$user_id' AND status != 'incomplete'
-            AND orig_lp_id 	= $lp_id AND orig_lp_item_id = $lp_item_id AND orig_lp_item_view_id = $lp_item_view_id AND exe_cours_id = '".api_get_course_id()."' AND session_id = '" . api_get_session_id() . "'";
+   	$sql = "SELECT count(*) as count FROM $stat_table WHERE 	
+   				exe_exo_id 			= '$exerciseId' AND 
+   				exe_user_id 		= '$user_id' AND
+   				status 				!= 'incomplete' AND 
+   				orig_lp_id 			= $lp_id AND 
+   				orig_lp_item_id 	= $lp_item_id AND 
+   				orig_lp_item_view_id = $lp_item_view_id AND 
+   				exe_cours_id = '".api_get_course_id()."' AND 
+   				session_id = '" . api_get_session_id() . "'";
 
     $query = Database::query($sql);
     if (Database::num_rows($query) > 0 ) {
@@ -601,11 +609,39 @@ function get_attempt_count($user_id, $exerciseId, $lp_id, $lp_item_id,$lp_item_v
     } 
 }
 
+function get_attempt_count_not_finished($user_id, $exerciseId, $lp_id, $lp_item_id) {
+	$stat_table 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$user_id 		= intval($user_id);
+	$exerciseId 	= intval($exerciseId);
+	$lp_id 			= intval($lp_id);
+	$lp_item_id 	= intval($lp_item_id);
+	$lp_item_view_id= intval($lp_item_view_id);
+
+	$sql = "SELECT count(*) as count FROM $stat_table WHERE
+   				exe_exo_id 			= $exerciseId AND 
+   				exe_user_id 		= $user_id AND
+   				status 				!= 'incomplete' AND 
+   				orig_lp_id 			= $lp_id AND 
+   				orig_lp_item_id 	= $lp_item_id AND
+   				exe_cours_id = '".api_get_course_id()."' AND 
+   				session_id = '" . api_get_session_id() . "'";
+
+	$query = Database::query($sql);
+	if (Database::num_rows($query) > 0 ) {
+		$attempt = Database :: fetch_array($query,'ASSOC');
+		return $attempt['count'];
+	} else {
+		return 0;
+	}
+}
+
+
 
 function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
         
-	$lp_view_table         = Database::get_course_table(TABLE_LP_VIEW, $course['dbName']);
-    $lp_item_view_table    = Database::get_course_table(TABLE_LP_ITEM_VIEW, $course['dbName']);
+	$lp_view_table         = Database::get_course_table(TABLE_LP_VIEW);
+    $lp_item_view_table    = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+    $course_id 			   = $course['real_id'];
     
     $track_e_exercises     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $track_attempts        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -616,15 +652,15 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
     $session_id            = intval($session_id);
     
     //make sure we have the exact lp_view_id
-    $sqlview       = "SELECT id FROM $lp_view_table WHERE user_id = $user_id AND lp_id = $lp_id AND session_id = $session_id ";                    
+    $sqlview       = "SELECT id FROM $lp_view_table WHERE c_id = $course_id AND user_id = $user_id AND lp_id = $lp_id AND session_id = $session_id ";                    
     $resultview    = Database::query($sqlview);
     $view          = Database::fetch_array($resultview, 'ASSOC');
     $lp_view_id    = $view['id'];                  
     
-    $sql_delete = "DELETE FROM $lp_item_view_table  WHERE lp_view_id = $view_id ";
+    $sql_delete = "DELETE FROM $lp_item_view_table  WHERE c_id = $course_id AND lp_view_id = $view_id ";
     $result = Database::query($sql_delete);
         
-    $sql_delete = "DELETE FROM $lp_view_table  WHERE user_id = $user_id AND lp_id= $lp_id AND session_id= $session_id ";
+    $sql_delete = "DELETE FROM $lp_view_table  WHERE c_id = $course_id AND user_id = $user_id AND lp_id= $lp_id AND session_id= $session_id ";
     $result = Database::query($sql_delete);
     
     $select_all_attempts = "SELECT exe_id FROM $track_e_exercises WHERE exe_user_id = $user_id AND session_id= $session_id  AND exe_cours_id = '{$course['code']}' AND orig_lp_id = $lp_id";    
@@ -965,8 +1001,7 @@ function get_all_exercise_event_from_lp($exercise_id, $course_code, $session_id 
 	$table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $course_code = Database::escape_string($course_code);
     $exercise_id = intval($exercise_id);
-    $session_id = intval($session_id);
-    
+    $session_id = intval($session_id);    
   
     $sql = "SELECT * FROM $table_track_exercises WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id AND orig_lp_id !=0 AND orig_lp_item_id != 0";
     
@@ -982,34 +1017,13 @@ function get_all_exercise_event_from_lp($exercise_id, $course_code, $session_id 
     }
     return $list;
 }
-/*
-function get_all_exercise_event_from_lp($exercise_id, $course_db, $session_id ) {
-	$lp_item_table = Database  :: get_course_table(TABLE_LP_ITEM,$course_db);
-	$lp_item_view_table = Database  :: get_course_table(TABLE_LP_ITEM_VIEW,$course_db);
-	$lp_view_table = Database  :: get_course_table(TABLE_LP_VIEW,$course_db);
-	
-	$exercise_id 	= intval($exercise_id);
-	$session_id 	= intval($session_id);
-	
-	$sql = "SELECT  title, user_id, score , iv.max_score, status, session_id 
-			FROM $lp_item_table as i INNER JOIN $lp_item_view_table iv ON (i.id = iv.lp_item_id ) INNER JOIN $lp_view_table v ON iv.lp_view_id = v.id 
-			WHERE path = $exercise_id AND status ='completed' AND session_id = $session_id";
-	$res = Database::query($sql);
-	$list = array();	
-	
-	while($row = Database::fetch_array($res,'ASSOC')) {		
-		$list[$row['exe_id']]['question_list'][$row['question_id']] = $row;				
-	}
-	//echo '<pre>'; print_r($list);
-	return $list;
-}*/
 
 
-
-function get_all_exercises_from_lp($lp_id, $course_db) {
-	$lp_item_table = Database  :: get_course_table(TABLE_LP_ITEM,$course_db);
+function get_all_exercises_from_lp($lp_id, $course_id) {
+	$lp_item_table = Database  :: get_course_table(TABLE_LP_ITEM);
+	$course_id = intval($course_id);
 	$lp_id = intval($lp_id);
-	$sql = "SELECT * FROM $lp_item_table WHERE lp_id = '".$lp_id."'  ORDER BY parent_item_id, display_order";
+	$sql = "SELECT * FROM $lp_item_table WHERE c_id = $course_id AND lp_id = '".$lp_id."'  ORDER BY parent_item_id, display_order";
 	$res = Database::query($sql);
 	$my_exercise_list = array();	
 	while($row = Database::fetch_array($res,'ASSOC')) {

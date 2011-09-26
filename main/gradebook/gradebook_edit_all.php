@@ -30,7 +30,7 @@ if (!api_is_allowed_to_create_course()) {
 	exit;
 }
 
-$my_selectcat=isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
+$my_selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
 
 if (empty($my_selectcat)) {
 	api_not_allowed();
@@ -54,31 +54,14 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 
 
 
+$course_id			  =	get_course_id_by_link_id($my_selectcat);
+
 $table_link           = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $table_evaluation     = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-//$table_forum_thread=Database::get_course_table(TABLE_FORUM_THREAD);
+$tbl_forum_thread     = Database :: get_course_table(TABLE_FORUM_THREAD);
+$tbl_work             = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+$tbl_attendance       = Database :: get_course_table(TABLE_ATTENDANCE);
 
-$my_db_name=get_database_name_by_link_id($my_selectcat);
-$tbl_forum_thread     = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
-$tbl_work             = Database :: get_course_table(TABLE_STUDENT_PUBLICATION,$my_db_name);
-$tbl_attendance       = Database :: get_course_table(TABLE_ATTENDANCE,$my_db_name);
-/*
-if($_SERVER['REQUEST_METHOD']=='POST'):
-	foreach($_POST['link'] as $key => $value){
-		Database::query('UPDATE '.$table_link.' SET weight = '."'".$value."'".' WHERE id = '.$key);
-	}
-	foreach($_POST['evaluation'] as $key => $value){
-		Database::query('UPDATE '.$table_evaluation.' SET weight = '."'".$value."'".' WHERE id = '.$key);
-	}
-	Display :: display_normal_message(get_lang('GradebookWeightUpdated')) . '<br /><br />';
-endif;*/
-/*
-define('LINK_EXERCISE',1);
-define('LINK_DROPBOX',2);
-define('LINK_STUDENTPUBLICATION',3);
-define('LINK_LEARNPATH',4);
-define('LINK_FORUM_THREAD',5);
-*/
 $table_evaluated[LINK_EXERCISE]           = array(TABLE_QUIZ_TEST, 'title', 'id', get_lang('Exercise'));
 $table_evaluated[LINK_DROPBOX]            = array(TABLE_DROPBOX_FILE, 'name','id', get_lang('Dropbox'));
 $table_evaluated[LINK_STUDENTPUBLICATION] = array(TABLE_STUDENT_PUBLICATION, 'url','id', get_lang('Student_publication'));
@@ -94,12 +77,10 @@ if($submitted==1) {
 		require_once 'lib/be/evaluation.class.php';
 		$eval_log = new Evaluation();
 	}
-
 	if(isset($_POST['link'])){
 		require_once 'lib/be/abstractlink.class.php';
 		//$eval_link_log = new AbstractLink();
 	}
-
 }
 
 $category_id = (int)$_GET['selectcat'];
@@ -111,26 +92,29 @@ $result = Database::query($sql);
 		if(isset($_POST['link'][$row['id']]) && $_POST['link'][$row['id']] != $row['weight']) {
 
 			AbstractLink::add_link_log($row['id']);
-			Database::query('UPDATE '.$table_link.' SET weight = '."'".Database::escape_string(trim($_POST['link'][$row['id']]))."'".' WHERE id = '.$row['id']);
+			Database::query('UPDATE '.$table_link.' SET weight = '."'".Database::escape_string(trim($_POST['link'][$row['id']]))."'".' WHERE c_id = '.$course_id.' AND  id = '.$row['id']);
 			$row['weight'] = trim($_POST['link'][$row['id']]);
 
 			//Update weight for attendance
-			$sql = 'SELECT ref_id FROM '.$table_link.' WHERE id = '.intval($row['id']).' AND type='.LINK_ATTENDANCE;
+			$sql = 'SELECT ref_id FROM '.$table_link.' WHERE c_id = '.$course_id.' AND id = '.intval($row['id']).' AND type='.LINK_ATTENDANCE;
 			$rs_attendance  = Database::query($sql);
 			if (Database::num_rows($rs_attendance) > 0) {
 				$row_attendance = Database::fetch_array($rs_attendance);
-				$upd_attendance = 'UPDATE '.$tbl_attendance.' SET attendance_weight ='.floatval($_POST['link'][$row['id']]).' WHERE id = '.intval($row_attendance['ref_id']);
+				$upd_attendance = 'UPDATE '.$tbl_attendance.' SET attendance_weight ='.floatval($_POST['link'][$row['id']]).' 
+								 WHERE c_id = '.$course_id.' AND  id = '.intval($row_attendance['ref_id']);
 				Database::query($upd_attendance);
 			}
 			//Update weight into forum thread
-			$sql_t='UPDATE '.$tbl_forum_thread.' SET thread_weight='.floatval($_POST['link'][$row['id']]).' WHERE thread_id= (SELECT ref_id FROM '.$table_link.' WHERE id='.intval($row['id']).' AND type='.LINK_FORUM_THREAD.');';
+			$sql_t = 'UPDATE '.$tbl_forum_thread.' SET thread_weight='.floatval($_POST['link'][$row['id']]).' 
+					  WHERE c_id = '.$course_id.' AND thread_id = (SELECT ref_id FROM '.$table_link.' WHERE id='.intval($row['id']).' AND type='.LINK_FORUM_THREAD.' AND c_id = '.$course_id.') ';
 			Database::query($sql_t);
 			//Update weight into student publication(work)
-			$sql_t='UPDATE '.$tbl_work.' SET weight='.floatval($_POST['link'][$row['id']]).' WHERE id = (SELECT ref_id FROM '.$table_link.' WHERE id='.intval($row['id']).' AND type = '.LINK_STUDENTPUBLICATION.');';
+			$sql_t='UPDATE '.$tbl_work.' SET weight='.floatval($_POST['link'][$row['id']]).' 
+					WHERE  c_id = '.$course_id.' AND id = (SELECT ref_id FROM '.$table_link.' WHERE id='.intval($row['id']).' AND type = '.LINK_STUDENTPUBLICATION.' AND c_id = '.$course_id.' ) ';
 			Database::query($sql_t);
 		}
 
-		$tempsql = Database::query('SELECT * FROM '.get_table_type_course($row['type'],$row['course_code']).' WHERE '.$table_evaluated[$row['type']][2].' = '.$row['ref_id']);
+		$tempsql = Database::query('SELECT * FROM '.get_table_type_course($row['type'],$row['course_code']).' WHERE c_id = '.$course_id.' AND  '.$table_evaluated[$row['type']][2].' = '.$row['ref_id']);
 		$resource_name = Database ::fetch_array($tempsql);
 		//var_dump($resource_name['lp_type']);
 		if (isset($resource_name['lp_type'])) {
@@ -143,7 +127,6 @@ $result = Database::query($sql);
 
 	$sql = Database::query('SELECT * FROM '.$table_evaluation.' WHERE category_id = '.$category_id);
 	while($row = Database ::fetch_array($sql)) {
-
 		//update only if value changed
 		if(isset($_POST['evaluation'][$row['id']]) && $_POST['evaluation'][$row['id']] != $row['weight']) {
 			Evaluation::add_evaluation_log($row['id']);
@@ -184,4 +167,3 @@ Display::display_normal_message($warning_message,false);
 </form>
 <?php
 Display :: display_footer();
-?>

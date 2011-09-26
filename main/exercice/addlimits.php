@@ -183,7 +183,7 @@ if (isset($_POST['ok'])) {
 	$exercise_id = Database::escape_string($_POST['exe_id']);
 	if ($_POST['limit']==1) {
 		$minutes = Database::escape_string($_POST['minutes']);
-		$query = "UPDATE ".$TBL_EXERCICES." SET ques_time_limit= $minutes where id= $exercise_id";
+		$query = "UPDATE ".$TBL_EXERCICES." SET ques_time_limit= $minutes WHERE id= $exercise_id";
 		Database::query($query);
 	} else {
 		$query = "UPDATE ".$TBL_EXERCICES." SET ques_time_limit= 0 WHERE id= $exercise_id";

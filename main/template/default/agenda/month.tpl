@@ -113,7 +113,7 @@ $(document).ready(function() {
 				
 				$("#dialog-form").dialog({				
 					buttons: {
-						"Edit event" : function() {
+						"Edit" : function() {
 							var params = $("#add_event_form").serialize();						
 							$.ajax({
 								url: url+'&'+params,
@@ -132,7 +132,7 @@ $(document).ready(function() {
 								}							
 							});
 						},
-						"Delete": function() {
+						"Delete": function() { 
 							$.ajax({
 								url: delete_url,
 								success:function() {

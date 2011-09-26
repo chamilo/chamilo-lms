@@ -69,40 +69,11 @@ require_once $lib.'fckeditor/fckeditor.php';
 require_once $lib.'fileUpload.lib.php';
 require_once 'announcements.inc.php';
 
-/*
- 	Resource linker
-$_SESSION['source_type']="Ad_Valvas";
-require_once '../resourcelinker/resourcelinker.inc.php';
-if (!empty($_POST['addresources'])) {
-	// When the "Add Resource" button is clicked we store all the form data into a session
-    $form_elements= array ('emailTitle'=>Security::remove_XSS($emailTitle), 'newContent'=>Security::remove_XSS($newContent), 'id'=>$id, 'to'=>$selectedform, 'emailoption'=>$email_ann);
-    $_SESSION['formelements']=$form_elements;
-    if($id) {
-    	// this is to correctly handle edits
-		$action="edit";
-    } else {
-		$action="add";
-    }
-
-	// ============== //
-	// 7 = Ad_Valvas	//
-	// ============== //
-	if($surveyid) {
-		header("Location: ../resourcelinker/resourcelinker.php?source_id=7&action=$action&id=$id&originalresource=no&publish_survey=$surveyid&db_name=$db_name&cidReq=$cidReq");
-		exit;
-	} else {
-		header("Location: ../resourcelinker/resourcelinker.php?source_id=7&action=$action&id=$id&originalresource=no");
-		exit;
-	}
-	exit;
-}
-*/
 /*	Tracking	*/
 event_access_tool(TOOL_ANNOUNCEMENT);
 
 
 /*	POST TO	*/
-
 $safe_emailTitle = $_POST['emailTitle'];
 $safe_newContent = $_POST['newContent'];
 
@@ -500,7 +471,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                             	$data_file = array('path' => $path_attach,'filename' => $filename_attach);
                             }
                             @api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file, true);
-                            
+                            //@todo who uses the $table_reminder??
 							if ($_REQUEST['reminder']=="1") {
 								$time=getdate();
 								$time = $time['yday'];
@@ -888,6 +859,9 @@ if ($display_form) {
 /*
 		DISPLAY ANNOUNCEMENT LIST
 */
+
+$course_id = api_get_course_int_id();
+
 //if ($display_announcement_list && !$surveyid) {
 if ($display_announcement_list) {
 	// by default we use the id of the current user. The course administrator can see the announcement of other users by using the user / group filter
@@ -911,19 +885,24 @@ if ($display_announcement_list) {
 			if (is_array($group_memberships) && count($group_memberships)>0) {
 				$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
-					WHERE announcement.id = ip.ref
-					AND ip.tool='announcement'
-					AND	(ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-					$condition_session
+					WHERE 	announcement.c_id = $course_id AND
+							ip.c_id = $course_id AND							
+							announcement.id = ip.ref AND 
+							ip.tool			= 'announcement' AND	
+							(ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+							$condition_session
+							
 					ORDER BY display_order DESC";
 
 			} else {
 				$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
-					WHERE announcement.id = ip.ref
-					AND ip.tool='announcement'
-					AND (ip.to_user_id=$user_id OR ip.to_group_id='0')
-					AND ip.visibility='1'
+					WHERE	announcement.c_id 	= $course_id AND
+							ip.c_id 			= $course_id AND 
+							announcement.id 	= ip.ref AND 
+							ip.tool				='announcement' AND 
+							(ip.to_user_id		= $user_id OR ip.to_group_id='0') AND 
+							ip.visibility='1'
 					$condition_session
 					ORDER BY display_order DESC";
 
@@ -931,14 +910,15 @@ if ($display_announcement_list) {
 		} elseif (api_get_group_id() !=0 ) {
 			// A.2. you are a course admin with a GROUP filter
 			// => see only the messages of this specific group
-			$sql="SELECT
-				announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
+			$sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 				FROM $tbl_announcement announcement, $tbl_item_property ip
-				WHERE announcement.id = ip.ref
-				AND ip.tool='announcement'
-				AND ip.visibility<>'2'
-				AND (ip.to_group_id=$group_id OR ip.to_group_id='0')
-				$condition_session
+				WHERE	announcement.c_id = $course_id AND
+						ip.c_id = $course_id AND	 
+						announcement.id = ip.ref
+						AND ip.tool='announcement'
+						AND ip.visibility<>'2'
+						AND (ip.to_group_id=$group_id OR ip.to_group_id='0')
+						$condition_session
 				GROUP BY ip.ref
 				ORDER BY display_order DESC";
 		} else {
@@ -950,22 +930,25 @@ if ($display_announcement_list) {
 				$sql="SELECT
 					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
-					WHERE announcement.id = ip.ref
-					AND ip.tool='announcement'
-					AND ip.visibility='1'
-					$condition_session
+					WHERE	announcement.c_id = $course_id AND
+							ip.c_id = $course_id AND	 
+							announcement.id = ip.ref
+							AND ip.tool='announcement'
+							AND ip.visibility='1'
+							$condition_session
 					GROUP BY ip.ref
 					ORDER BY display_order DESC";
 			} else {
 				// A.3.a you are a course admin without user or group filter and WTIHOUT studentview (= the normal course admin view)
 				// => see all the messages of all the users and groups with editing possibilities
-				$sql="SELECT
-					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
+				$sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
-					WHERE announcement.id = ip.ref
-					AND ip.tool='announcement'
-					AND (ip.visibility='0' or ip.visibility='1')
-					$condition_session
+					WHERE 	announcement.c_id = $course_id AND
+							ip.c_id = $course_id AND	
+							announcement.id = ip.ref
+							AND ip.tool='announcement'
+							AND (ip.visibility='0' or ip.visibility='1')
+							$condition_session
 					GROUP BY ip.ref
 					ORDER BY display_order DESC";
 			}
@@ -994,11 +977,13 @@ if ($display_announcement_list) {
 
 				$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
         				FROM $tbl_announcement announcement, $tbl_item_property ip
-        				WHERE announcement.id = ip.ref
-        				AND ip.tool='announcement'
-        				$cond_user_id
-        				$condition_session
-        				AND ip.visibility='1'
+        				WHERE	announcement.c_id = $course_id AND
+								ip.c_id = $course_id AND	 
+		        				announcement.id = ip.ref
+		        				AND ip.tool='announcement'
+		        				$cond_user_id
+		        				$condition_session
+		        				AND ip.visibility='1'
         				ORDER BY display_order DESC";
 			} else {
 				if ($_user['user_id']) {
@@ -1010,12 +995,15 @@ if ($display_announcement_list) {
 
 					$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 							FROM $tbl_announcement announcement, $tbl_item_property ip
-    						WHERE announcement.id = ip.ref
-    						AND ip.tool='announcement'
-    						$cond_user_id
-    						$condition_session
-    						AND ip.visibility='1'
-    						AND announcement.session_id IN(0,".api_get_session_id().")
+    						WHERE
+	    						announcement.c_id = $course_id AND
+								ip.c_id = $course_id AND	 
+	    						announcement.id = ip.ref AND 
+	    						ip.tool='announcement'
+	    						$cond_user_id
+	    						$condition_session
+	    						AND ip.visibility='1'
+	    						AND announcement.session_id IN(0,".api_get_session_id().")
     						ORDER BY display_order DESC";
 				} else {
 
@@ -1027,7 +1015,10 @@ if ($display_announcement_list) {
 
 					$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
     						FROM $tbl_announcement announcement, $tbl_item_property ip
-    						WHERE announcement.id = ip.ref
+    						WHERE
+    						announcement.c_id = $course_id AND
+							ip.c_id = $course_id AND	 
+    						announcement.id = ip.ref
     						AND ip.tool='announcement'
     						$cond_user_id
     						$condition_session
@@ -1049,16 +1040,12 @@ if ($display_announcement_list) {
     	$iterator = 1;
     	$bottomAnnouncement = $announcement_number;
     
-    	echo '<table width="100%" class="data_table">';
-    	
+    	echo '<table width="100%" class="data_table">';    	
         $ths = Display::tag('th', get_lang('Title'));
-        //$ths .= Display::tag('th', get_lang('Content'));        
-        $ths .= Display::tag('th', get_lang('By') );
-        //$ths .= Display::tag('th', get_lang('AnnouncementPublishedOn') );    
+        $ths .= Display::tag('th', get_lang('By') );   
         $ths .= Display::tag('th', get_lang('LastUpdateDate') );
         if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id']))         
                  OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-            //$ths .= Display::tag('th', get_lang('SentTo'));
             $ths .= Display::tag('th', get_lang('Modify'));
         }
         
@@ -1074,8 +1061,6 @@ if ($display_announcement_list) {
                 }
                 
     			$title		 = $myrow['title'].$sent_to_icon;
-    			//$content	 = $myrow['content'];
-    
     
     			/* DATE */    
     			$last_post_datetime = $myrow['end_date'];    
@@ -1091,8 +1076,7 @@ if ($display_announcement_list) {
     			
     		    // show attachment list
                 $attachment_list = array();
-                $attachment_list = AnnouncementManager::get_attachment($myrow['id']);
-                
+                $attachment_list = AnnouncementManager::get_attachment($myrow['id']);                
                 
                 $attachment = '';
                 $attachment_icon = '';
@@ -1103,7 +1087,6 @@ if ($display_announcement_list) {
                 /* TITLE */
     		    $title = Display::url($title.$attachment_icon, '?action=view&id='.$myrow['id']);
                 echo Display::tag('td', Security::remove_XSS($title), array('class' => $style));                
-                //echo Display::tag('td', Security::remove_XSS($content).$attachment);    		
                 	
                 $user_info		= api_get_user_info($myrow['insert_user_id']);    						
     			echo Display::tag('td', api_get_person_name($user_info['firstName'], $user_info['lastName']));

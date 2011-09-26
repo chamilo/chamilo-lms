@@ -168,7 +168,7 @@ class BlockDaily extends Block {
             // Attendance table
             $table_course = Database::get_course_table(TABLE_ATTENDANCE, $course_info['db_name']);
 
-            $sql = "SELECT id, name, attendance_qualify_max FROM $table_course WHERE active = 1 AND session_id = 0";
+            $sql = "SELECT id, name, attendance_qualify_max FROM $table_course WHERE c_id = ".$course_info['real_id']." AND active = 1 AND session_id = 0";
             $rs  = Database::query($sql); 
 			$attendance = array();
             $attendances = array();

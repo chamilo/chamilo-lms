@@ -70,14 +70,10 @@ if (isset ($question[$description_type])) {
 	$message .= $question[$description_type];
 	Display::display_normal_message($message, false);
 }
-
 if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 	echo (WCAG_Rendering::editor_header());
 }
-
 $form->display();
-
 if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 	echo (WCAG_Rendering::editor_footer());
 }
-?>

@@ -393,6 +393,7 @@ $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is
 
 if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $current_session_id)) {
 	$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
+	
 	//$parent_select -> addOption(get_lang('HomeDirectory'), '/');
 	$parent_select = $form->addElement('select', 'curdirpath', get_lang('DestinationDirectory'));
 	
@@ -501,7 +502,7 @@ $form->setDefaults($default);
 if ($form->validate()) {
 	$values = $form->exportValues();
 	$readonly = isset($values['readonly']) ? 1 : 0;
-
+	
 	$values['title'] = trim($values['title']);	
 	
 	if (!empty($values['curdirpath'])) {

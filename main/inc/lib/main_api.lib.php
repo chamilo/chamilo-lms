@@ -1012,15 +1012,12 @@ function api_get_course_path($course_code = null) {
  * @param string    Optional: course code
  * @return mixed    The value of that setting in that table. Return -1 if not found.
  */
-function api_get_course_setting($setting_name, $course_code = null) {
-    if (!empty($course_code)) {
-        $course_info = api_get_course_info($course_code);
-        $table = Database::get_course_table(TABLE_COURSE_SETTING, $course_info['dbName']);
-    } else {
-        $table = Database::get_course_table(TABLE_COURSE_SETTING);
-    }
+function api_get_course_setting($setting_name, $course_code = null) {    
+    $course_info = api_get_course_info($course_code);    
+	$table 		 = Database::get_course_table(TABLE_COURSE_SETTING);
+    
     $setting_name = Database::escape_string($setting_name);
-    $sql = "SELECT value FROM $table WHERE variable = '$setting_name'";
+    $sql = "SELECT value FROM $table WHERE c_id = {$course_info['real_id']} AND variable = '$setting_name'";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_array($res);
@@ -2342,6 +2339,7 @@ function api_not_allowed($print_headers = false) {
 	$template_file = $tpl->get_template('layout/layout_1_col.tpl');
 	
     $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
+    
     if ($origin == 'learnpath') {
 	$htmlHeadXtra[]= '<style type="text/css" media="screen, projection">
 					/*<![CDATA[*/
@@ -2402,9 +2400,9 @@ function api_not_allowed($print_headers = false) {
 		}
         die();
 	}
-
+	
 	if (!empty($user) && !api_is_anonymous()) {
-	$tpl->display($template_file);
+		$tpl->display($template_file);
         exit;
     }    
 
@@ -2412,6 +2410,7 @@ function api_not_allowed($print_headers = false) {
 	$msg = Display::return_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
 	$msg = Display::div($msg, array('align'=>'center'));
 	$tpl->assign('content', $msg);
+	
 	$tpl->display($template_file);
     exit;
 }
@@ -2464,8 +2463,14 @@ function api_get_item_visibility($_course, $tool, $id, $session=0) {
     $tool = Database::escape_string($tool);
     $id = Database::escape_string($id);
     $session = (int) $session;
-    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
-    $sql = "SELECT visibility FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = $id AND (id_session = $session OR id_session = 0) ORDER BY id_session DESC, lastedit_date DESC";
+    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $course_id	 = $_course['real_id'];
+    $sql = "SELECT visibility FROM $TABLE_ITEMPROPERTY 
+    		WHERE 	c_id = $course_id AND 
+    				tool = '$tool' AND 
+    				ref = $id AND 
+    				(id_session = $session OR id_session = 0) 
+    		ORDER BY id_session DESC, lastedit_date DESC";
     $res = Database::query($sql);
     if ($res === false || Database::num_rows($res) == 0) { return -1; }
     $row = Database::fetch_array($res);
@@ -2505,10 +2510,6 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
     $start_visible  = ($start_visible == 0) ? '0000-00-00 00:00:00' : $start_visible;
     $end_visible    = ($end_visible == 0) ? '0000-00-00 00:00:00' : $end_visible;
     $to_filter      = '';
-    //$time           = time();
-    //$time           = date('Y-m-d H:i:s', $time);
-    // According to http://support.chamilo.org/projects/chamilo-18/wiki/Date_and_time_management
-    // @todo Fix $start_visible and $end_visible
     $time           = api_get_utc_datetime();
 
     if (!empty($session_id)) {
@@ -2518,7 +2519,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
     }
 
     // Definition of tables.
-    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
+    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
     if ($to_user_id <= 0) {
         $to_user_id = null; // No to_user_id set
@@ -2540,11 +2541,13 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
     if (!empty($session_id)) {
         $condition_session = " AND id_session = '$session_id' ";
     }
+    
+    $course_id	 = $_course['real_id'];
 
-    $filter = "tool='$tool' AND ref='$item_id' $condition_session ";
+    $filter = "c_id = $course_id AND tool='$tool' AND ref='$item_id' $condition_session ";
 
     if ($item_id == '*') {
-        $filter = "tool='$tool' AND visibility<>'2' $condition_session"; // For all (not deleted) items of the tool
+        $filter = "c_id = $course_id  AND tool='$tool' AND visibility<>'2' $condition_session"; // For all (not deleted) items of the tool
     }
     // Check whether $to_user_id and $to_group_id are passed in the function call.
     // If both are not passed (both are null) then it is a message for everybody and $to_group_id should be 0 !
@@ -2561,23 +2564,27 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 
     // Update if possible
     $set_type = '';
-
+    
+    
     switch ($lastedit_type) {
         case 'delete' : // delete = make item only visible for the platform admin.
             $visibility = '2';
-
             if (!empty($session_id)) {
-
                 // Check whether session id already exist into itemp_properties for updating visibility or add it.
-                $sql = "select id_session FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
+                $sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY 
+                		WHERE c_id = $course_id AND tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $sql = "UPDATE $TABLE_ITEMPROPERTY
-                            SET lastedit_type='".str_replace('_', '', ucwords($tool))."Deleted', lastedit_date='$time', lastedit_user_id='$user_id', visibility='$visibility', id_session = '$session_id' $set_type
+                            SET lastedit_type		= '".str_replace('_', '', ucwords($tool))."Deleted', 
+                            	lastedit_date		= '$time', 
+                            	lastedit_user_id	= '$user_id', 
+                            	visibility			= '$visibility', 
+                            	id_session 			= '$session_id' $set_type
                             WHERE $filter";
                 } else {
-                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, id_session)
-                            VALUES ('$tool','$item_id','$time', '$user_id', '$time', '$lastedit_type','$user_id', '$to_value', '$visibility', '$start_visible','$end_visible', '$session_id')";
+                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, id_session)
+                            VALUES ($course_id, '$tool','$item_id','$time', '$user_id', '$time', '$lastedit_type','$user_id', '$to_value', '$visibility', '$start_visible','$end_visible', '$session_id')";
                 }
 
             } else {
@@ -2598,8 +2605,8 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
                             SET lastedit_type='".str_replace('_', '', ucwords($tool))."Visible', lastedit_date='$time', lastedit_user_id='$user_id', visibility='$visibility', id_session = '$session_id' $set_type
                             WHERE $filter";
                 } else {
-                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, id_session)
-                            VALUES ('$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
+                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, id_session)
+                            VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
                 }
             } else {
                 $sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -2620,8 +2627,8 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
                             SET lastedit_type='".str_replace('_', '', ucwords($tool))."Invisible', lastedit_date='$time', lastedit_user_id='$user_id', visibility='$visibility', id_session = '$session_id' $set_type
                             WHERE $filter";
                 } else {
-                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, id_session)
-                            VALUES ('$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
+                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, id_session)
+                            VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
                 }
 
             } else {
@@ -2638,11 +2645,12 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
                     SET lastedit_date='$time', lastedit_user_id='$user_id' $set_type
                     WHERE $filter";
     }
+    
     $res = Database::query($sql);
     // Insert if no entries are found (can only happen in case of $lastedit_type switch is 'default').
     if (Database::affected_rows() == 0) {
-        $sql = "INSERT INTO $TABLE_ITEMPROPERTY (tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id,$to_field,  visibility,   start_visible,   end_visible, id_session)
-                VALUES ('$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
+        $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id,$to_field,  visibility,   start_visible,   end_visible, id_session)
+                VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
         
         $res = Database::query($sql);
         if (!$res) {
@@ -2664,12 +2672,13 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null) 
     $tool           = Database::escape_string($tool);
     
     // Definition of tables.
-    $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
+    $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $session_condition = '';
     $session_id = intval($session_id);
     $session_condition = ' AND id_session = '.$session_id;
+    $course_id	 = $course_info['real_id'];
     
-    $sql = "SELECT * FROM $item_property_table WHERE tool = '$tool'  $session_condition ";
+    $sql = "SELECT * FROM $item_property_table WHERE c_id = $course_id AND tool = '$tool'  $session_condition ";
     $rs  = Database::query($sql);
     $item_property_id = '';
     $list = array();
@@ -2694,8 +2703,9 @@ function api_get_item_property_id($course_code, $tool, $ref) {
     $ref            = intval($ref);  
 
     // Definition of tables.
-    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
-    $sql = "SELECT id FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = '$ref'";
+    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $course_id	 = $course_info['real_id'];
+    $sql = "SELECT id FROM $TABLE_ITEMPROPERTY WHERE c_id = $course_id AND tool = '$tool' AND ref = '$ref'";
     $rs  = Database::query($sql);
     $item_property_id = '';
     if (Database::num_rows($rs) > 0) {
@@ -2758,8 +2768,10 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0) {
     $ref            = intval($ref);
 
     // Definition of tables.
-    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_info['dbName']);
-   	$sql = "SELECT * FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = $ref ";
+    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $course_id	 = $course_info['real_id'];
+    
+   	$sql = "SELECT * FROM $TABLE_ITEMPROPERTY WHERE c_id = $course_id AND tool = '$tool' AND ref = $ref ";
    	if (!empty($session_id)) {
    		$session_id = intval($session_id);
    		$sql .= "AND id_session = $session_id ";
@@ -3337,7 +3349,7 @@ function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
 
 // TODO: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach. Documentation header to be added here.
 function copy_folder_course_session($pathname, $base_path_document, $session_id, $course_info, $document) {
-    $table = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
+    $table = Database :: get_course_table(TABLE_DOCUMENT);
     $session_id = intval($session_id);
     // Check whether directory already exists.
     if (is_dir($pathname) || empty($pathname)) {
@@ -3349,6 +3361,8 @@ function copy_folder_course_session($pathname, $base_path_document, $session_id,
         trigger_error('copy_folder_course_session(): File exists', E_USER_WARNING);
         return false;
     }
+    
+    $course_id	 = $course_info['real_id'];
 
     $folders = explode(DIRECTORY_SEPARATOR,str_replace($base_path_document.DIRECTORY_SEPARATOR,'',$pathname));
 
@@ -3370,7 +3384,14 @@ function copy_folder_course_session($pathname, $base_path_document, $session_id,
                 mkdir($new_pathname, api_get_permissions_for_new_directories());
 
                 // Insert new folder with destination session_id.
-                $sql = "INSERT INTO ".$table." SET path = '$path', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string(basename($new_pathname))."' ,filetype='folder', size= '0', session_id = '$session_id'";
+                $sql = "INSERT INTO ".$table." SET
+                		c_id = $course_id,  
+                		path = '$path',                 
+                		comment = '".Database::escape_string($document->comment)."', 
+                		title = '".Database::escape_string(basename($new_pathname))."' ,
+                		filetype='folder', 
+                		size= '0', 
+                		session_id = '$session_id'";
                 Database::query($sql);
                 $document_id = Database::insert_id();
                 api_item_property_update($course_info,TOOL_DOCUMENT,$document_id,'FolderCreated',api_get_user_id(),0,0,null,null,$session_id);
@@ -4225,8 +4246,9 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
             break;
         default: return false;
     }
-
-    $sql = 'SELECT session_id FROM '.$table_tool.' WHERE '.$key_field.'='.intval($element_id);
+    $course_id = api_get_course_int_id();
+    
+    $sql = "SELECT session_id FROM $table_tool WHERE c_id = $course_id AND $key_field =  ".intval($element_id);
     $rs = Database::query($sql);
     if ($element_session_id = Database::result($rs, 0, 0)) {
         if ($element_session_id == intval($session_id)) { // The element belongs to the session.
@@ -4676,7 +4698,8 @@ function api_check_term_condition($user_id) {
  */
 function api_get_tool_information($tool_id) {
     $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
-    $sql = 'SELECT * FROM '.$t_tool.' WHERE id="'.Database::escape_string($tool_id).'"';
+    $course_id = api_get_course_int_id();
+    $sql = "SELECT * FROM $t_tool WHERE c_id = $course_id AND id = ".Database::escape_string($tool_id);
     $rs  = Database::query($sql);
     return Database::fetch_array($rs);
 }
@@ -4688,7 +4711,8 @@ function api_get_tool_information($tool_id) {
  */
 function api_get_tool_information_by_name($name) {
     $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
-    $sql = 'SELECT * FROM '.$t_tool.' WHERE name="'.Database::escape_string($name).'"';
+    $course_id = api_get_course_int_id();
+    $sql = "SELECT * FROM $t_tool WHERE c_id = $course_id  AND name = '".Database::escape_string($name)."' ";
     $rs  = Database::query($sql);
     return Database::fetch_array($rs, 'ASSOC');
 }
@@ -5261,4 +5285,15 @@ function api_get_home_path() {
 			$home          = 'home/'.$clean_url;
 	}
 	return $home;
+}
+
+
+function api_get_course_table_condition($and = true) {
+	$course_id = api_get_course_int_id();
+	$condition = '';
+	$condition_add = $and ? " AND " : " WHERE ";
+	if (!empty($course_id)) {
+		$condition = " $condition_add c_id = $course_id";
+	}
+	return $condition;
 }

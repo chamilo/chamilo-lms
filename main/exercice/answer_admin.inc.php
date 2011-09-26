@@ -1128,7 +1128,7 @@ if($modifyAnswers)
 			?>
 			<h3>
 			<?php echo $questionName;?></h3><?php
-			$sql = "select description from ".$TBL_QUESTIONS." where id = '".Database::escape_string($questionId)."'";
+			$sql = "select description from ".$TBL_QUESTIONS." WHERE id = '".Database::escape_string($questionId)."'";
 			$res = Database::query($sql,_FILE_,_LINE_);
 			?>
 			&nbsp; &nbsp; &nbsp;

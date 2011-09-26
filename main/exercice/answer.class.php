@@ -151,7 +151,7 @@ class Answer {
 		$TBL_QUIZ= Database::get_course_table(TABLE_QUIZ_QUESTION, $this->course['db_name']);
 		$questionId=intval($this->questionId);
 		
-		$sql = "SELECT type FROM $TBL_QUIZ where id = $questionId";
+		$sql = "SELECT type FROM $TBL_QUIZ WHERE id = $questionId";
 		$result_question=Database::query($sql);
 		$question_type=Database::fetch_array($result_question);
 		$remove_doubt_answer = ''; //
@@ -484,15 +484,12 @@ class Answer {
 		$questionId=$this->questionId;
 
 		// removes old answers before inserting of new ones
-		$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($questionId)."'";
+		$sql = "DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($questionId)."'";
 		Database::query($sql);
-
+		$c_id = $this->course['real_id'];
 		// inserts new answers into data base
-		$sql="INSERT INTO $TBL_REPONSES" .
-				"(id,question_id,answer,correct,comment," .
-				"ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
-
-		for($i=1;$i <= $this->new_nbrAnswers;$i++) {
+		$sql = "INSERT INTO $TBL_REPONSES (c_id, id, question_id, answer,correct,comment, ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES ";
+		for ($i=1;$i <= $this->new_nbrAnswers;$i++) {
 			$answer					= Database::escape_string($this->new_answer[$i]);
 			$correct				= Database::escape_string($this->new_correct[$i]);
 			$comment				= Database::escape_string($this->new_comment[$i]);
@@ -502,8 +499,7 @@ class Answer {
 			$hotspot_type			= Database::escape_string($this->new_hotspot_type[$i]);
 			$destination			= Database::escape_string($this->new_destination[$i]);
 
-			$sql.="('$i','$questionId','$answer','$correct','$comment',
-					'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
+			$sql.="($c_id, '$i','$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
 		}
 		$sql = api_substr($sql,0,-1);
 		Database::query($sql);
@@ -567,7 +563,9 @@ class Answer {
 		// if at least one answer
 		if ($this->nbrAnswers) {
 			// inserts new answers into data base
-			$sql="INSERT INTO $TBL_REPONSES (id,question_id,answer,correct,comment, ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
+			$sql="INSERT INTO $TBL_REPONSES (c_id, id,question_id,answer,correct,comment, ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
+			$c_id = $course_info['real_id'];
+			
 			for($i=1;$i <= $this->nbrAnswers;$i++) {
                 if ($course_info['db_name'] != $this->course['db_name']) {                    
                 	$this->answer[$i]  = DocumentManager::replace_urls_inside_content_html_from_copy_course($this->answer[$i],$this->course['id'], $course_info['id']) ;
@@ -587,7 +585,7 @@ class Answer {
 				$hotspot_coordinates	= Database::escape_string($this->hotspot_coordinates[$i]);
 				$hotspot_type			= Database::escape_string($this->hotspot_type[$i]);
 				$destination			= Database::escape_string($this->destination[$i]);
-				$sql.="('$i','$newQuestionId','$answer','$correct','$comment'," .
+				$sql.="($c_id, '$i','$newQuestionId','$answer','$correct','$comment'," .
 						"'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
 			}
 

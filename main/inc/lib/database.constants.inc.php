@@ -192,6 +192,7 @@ define('TABLE_QUIZ_TEST_QUESTION',  'quiz_rel_question');
 define('TABLE_QUIZ_QUESTION_OPTION','quiz_question_option');
 
 // Linked resource table
+//@todo table exists?
 define('TABLE_LINKED_RESOURCES', 'resource');
 
 // New SCORM tables

@@ -20,42 +20,39 @@ api_protect_admin_script();
 /**
  *
  */
-function get_course_usage($course_code, $session_id = 0)
-{
+function get_course_usage($course_code, $session_id = 0) {
 	$table = Database::get_main_table(TABLE_MAIN_COURSE);
     $course_code = Database::escape_string($course_code);
 	$sql = "SELECT * FROM $table WHERE code='".$course_code."'";
 	$res = Database::query($sql);
 	$course = Database::fetch_object($res);
 	// Learnpaths
-	$table = Database :: get_course_table(TABLE_LP_MAIN, $course->db_name);
-	$usage[] = array (get_lang(ucfirst(TOOL_LEARNPATH)), CourseManager::count_rows_course_table($table,$session_id));
+	$table = Database :: get_course_table(TABLE_LP_MAIN);
+	$usage[] = array (get_lang(ucfirst(TOOL_LEARNPATH)), CourseManager::count_rows_course_table($table,$session_id, $course->id));
 	// Forums
-	$table = Database :: get_course_table(TABLE_FORUM, $course->db_name);
-	$usage[] = array (get_lang('Forums'), CourseManager::count_rows_course_table($table,$session_id));
+	$table = Database :: get_course_table(TABLE_FORUM);
+	$usage[] = array (get_lang('Forums'), CourseManager::count_rows_course_table($table,$session_id, $course->id));
 	// Quizzes
-	$table = Database :: get_course_table(TABLE_QUIZ_TEST, $course->db_name);
-	$usage[] = array (get_lang(ucfirst(TOOL_QUIZ)), CourseManager::count_rows_course_table($table,$session_id));
+	$table = Database :: get_course_table(TABLE_QUIZ_TEST);
+	$usage[] = array (get_lang(ucfirst(TOOL_QUIZ)), CourseManager::count_rows_course_table($table,$session_id, $course->id));
 	// Documents
-	$table = Database :: get_course_table(TABLE_DOCUMENT, $course->db_name);
-	$usage[] = array (get_lang(ucfirst(TOOL_DOCUMENT)), CourseManager::count_rows_course_table($table,$session_id));
+	$table = Database :: get_course_table(TABLE_DOCUMENT);
+	$usage[] = array (get_lang(ucfirst(TOOL_DOCUMENT)), CourseManager::count_rows_course_table($table,$session_id, $course->id));
 	// Groups
-	$table = Database :: get_course_table(TABLE_GROUP, $course->db_name);
-	$usage[] = array (get_lang(ucfirst(TOOL_GROUP)), CourseManager::count_rows_course_table($table,$session_id));
+	$table = Database :: get_course_table(TABLE_GROUP);
+	$usage[] = array (get_lang(ucfirst(TOOL_GROUP)), CourseManager::count_rows_course_table($table,$session_id, $course->id));
 	// Calendar
-	$table = Database :: get_course_table(TABLE_AGENDA, $course->db_name);
-	$usage[] = array (get_lang(ucfirst(TOOL_CALENDAR_EVENT)), CourseManager::count_rows_course_table($table,$session_id));
+	$table = Database :: get_course_table(TABLE_AGENDA);
+	$usage[] = array (get_lang(ucfirst(TOOL_CALENDAR_EVENT)), CourseManager::count_rows_course_table($table,$session_id, $course->id));
 	// Link
-	$table = Database::get_course_table(TABLE_LINK, $course->db_name);
-	$usage[] = array(get_lang(ucfirst(TOOL_LINK)), CourseManager::count_rows_course_table($table,$session_id));
+	$table = Database::get_course_table(TABLE_LINK);
+	$usage[] = array(get_lang(ucfirst(TOOL_LINK)), CourseManager::count_rows_course_table($table,$session_id, $course->id));
 	// Announcements
-	$table = Database::get_course_table(TABLE_ANNOUNCEMENT, $course->db_name);
-	$usage[] = array(get_lang(ucfirst(TOOL_ANNOUNCEMENT)), CourseManager::count_rows_course_table($table,$session_id));
+	$table = Database::get_course_table(TABLE_ANNOUNCEMENT);
+	$usage[] = array(get_lang(ucfirst(TOOL_ANNOUNCEMENT)), CourseManager::count_rows_course_table($table,$session_id, $course->id));
 	return $usage;
 }
-/*****************************************************************/
-if (!isset ($_GET['code']))
-{
+if (!isset ($_GET['code'])) {
 	api_not_allowed();
 }
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
@@ -154,7 +151,7 @@ echo '</blockquote>';
  * Show all classes subscribed in this course
  */
 $table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
-$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
+$table_class 		= Database :: get_main_table(TABLE_MAIN_CLASS);
 $sql = "SELECT * FROM $table_course_class cc, $table_class c WHERE cc.class_id = c.id AND cc.course_code = '".$code."'";
 $res = Database::query($sql);
 if (Database::num_rows($res) > 0)
@@ -181,4 +178,3 @@ if (Database::num_rows($res) > 0)
 }
 /*	FOOTER	*/
 Display::display_footer();
-?>

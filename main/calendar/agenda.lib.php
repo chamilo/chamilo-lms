@@ -62,6 +62,7 @@ class Agenda {
 				$attributes['end_date'] 	= $end;
 				$attributes['all_day'] 		= $all_day;
 				$attributes['session_id'] 	= api_get_session_id();
+				$attributes['c_id'] 		= $this->course['real_id'];
 				
 				//simple course event
 				$id = Database::insert($this->tbl_course_agenda, $attributes);				

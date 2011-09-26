@@ -62,9 +62,7 @@ $tpl->assign('type', $type);
 $tpl->assign('can_add_events', $can_add_events);
  
 $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type.'&';
-
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
-
 $content = $tpl->fetch('default/agenda/month.tpl');
 $tpl->assign('content', $content);
 $template_file = $tpl->get_template('layout/layout_1_col.tpl');

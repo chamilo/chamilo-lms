@@ -34,9 +34,6 @@ if (isset($_GET['export'])) {
 	$export_to_xls = true;
 }
 
-$TBL_EXERCICES			= Database::get_course_table(TABLE_QUIZ_TEST);
-$tbl_stats_exercices 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-
 if (api_is_platform_admin() ) {	
 	$global = true;
 } else {
@@ -96,7 +93,7 @@ if (!empty($course_info)) {
 	$_course = $course_info;	
 	$main_question_list = array();
 	foreach ($lp_list as $lp_id =>$lp) {
-		$exercise_list = get_all_exercises_from_lp($lp_id, $course_info['dbName']);	
+		$exercise_list = get_all_exercises_from_lp($lp_id, $course_info['real_id']);	
         //var_dump($exercise_list);	
 		foreach ($exercise_list as $exercise) {		
 			$my_exercise = new Exercise();			

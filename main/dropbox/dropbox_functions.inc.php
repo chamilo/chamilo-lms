@@ -331,6 +331,8 @@ function store_addcategory() {
 	if ($_POST['category_name'] == '') {
 		return array('type' => 'error', 'message' => get_lang('ErrorPleaseGiveCategoryName'));
 	}
+	
+	$course_id = api_get_course_int_id();
 
 	if (!$_POST['edit_id']) {
 		$session_id = api_get_session_id();
@@ -340,8 +342,8 @@ function store_addcategory() {
 
 		// step 3b, we add the category if it does not exist yet.
 		if (Database::num_rows($result) == 0) {
-			$sql = "INSERT INTO ".$dropbox_cnf['tbl_category']." (cat_name, received, sent, user_id, session_id)
-					VALUES ('".Database::escape_string($_POST['category_name'])."', '".Database::escape_string($received)."', '".Database::escape_string($sent)."', '".Database::escape_string($_user['user_id'])."',$session_id)";
+			$sql = "INSERT INTO ".$dropbox_cnf['tbl_category']." (c_id, cat_name, received, sent, user_id, session_id)
+					VALUES ($course_id, '".Database::escape_string($_POST['category_name'])."', '".Database::escape_string($received)."', '".Database::escape_string($sent)."', '".Database::escape_string($_user['user_id'])."',$session_id)";
 			Database::query($sql);
 			return array('type' => 'confirmation', 'message' => get_lang('CategoryStored'));
 		} else {
@@ -997,17 +999,16 @@ function feedback_form() {
 * @version march 2006
 */
 function store_feedback() {
-	global $dropbox_cnf;	
-
+	global $dropbox_cnf;
 	if (!is_numeric($_GET['id'])) {
 		return get_lang('FeedbackError');
 	}
-
+	$course_id = api_get_course_int_id();
 	if (empty($_POST['feedback'])) {
 		return get_lang('PleaseTypeText');
 	} else {
-		$sql="INSERT INTO ".$dropbox_cnf['tbl_feedback']." (file_id, author_user_id, feedback, feedback_date) VALUES
-				('".intval($_GET['id'])."','".api_get_user_id()."','".Database::escape_string($_POST['feedback'])."', '".api_get_utc_datetime()."')";
+		$sql="INSERT INTO ".$dropbox_cnf['tbl_feedback']." (c_id, file_id, author_user_id, feedback, feedback_date) VALUES
+			  ($course_id, '".intval($_GET['id'])."','".api_get_user_id()."','".Database::escape_string($_POST['feedback'])."', '".api_get_utc_datetime()."')";
 		Database::query($sql);
 		return get_lang('DropboxFeedbackStored');
 	}
@@ -1158,8 +1159,10 @@ function generate_html_overview($files, $dont_show_columns = array(), $make_link
 */
 function get_total_number_feedback($file_id = '') {
 	global $dropbox_cnf;
-	$sql = "SELECT COUNT(feedback_id) AS total, file_id FROM ".$dropbox_cnf['tbl_feedback']." GROUP BY file_id";
-	$result=Database::query($sql);
+	$course_id = api_get_course_int_id();
+	$sql = "SELECT COUNT(feedback_id) AS total, file_id FROM ".$dropbox_cnf['tbl_feedback']." 
+			WHERE c_id = $course_id GROUP BY file_id";
+	$result = Database::query($sql);
 	while ($row=Database::fetch_array($result)) {
 		$return[$row['file_id']] = $row['total'];
 	}

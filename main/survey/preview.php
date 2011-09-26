@@ -106,15 +106,18 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 				$paged_questions[$counter][] = $row['question_id'];
 			}
 		}
-
+		
+		$course_id = api_get_course_int_id();
+		
 		if (array_key_exists($_GET['show'], $paged_questions)) {
-			$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
+			$sql = "SELECT survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
 							survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
-					FROM $table_survey_question survey_question
-					LEFT JOIN $table_survey_question_option survey_question_option
+					FROM $table_survey_question survey_question LEFT JOIN $table_survey_question_option survey_question_option
 					ON survey_question.question_id = survey_question_option.question_id
-					WHERE survey_question.survey_id = '".Database::escape_string($survey_id)."'
-					AND survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']])).")
+					WHERE 	survey_question.survey_id = '".Database::escape_string($survey_id)."' AND 
+							survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']])).") AND
+							survey_question_option.c_id = $course_id AND
+							survey_question.c_id =  $course_id 
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
 			$result = Database::query($sql);

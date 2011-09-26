@@ -182,7 +182,7 @@ $(document).ready(function() {
 				<label for="date">{"Agenda"|get_lang}</label>
 			</div>
 			<div class="formw">
-				<div id="color_calendar" style="width:100px;"></div>
+				<div id="color_calendar"></div>
 			</div>					
 		</div>
 		<div class="row">		

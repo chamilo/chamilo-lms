@@ -44,7 +44,7 @@ function get_tabs() {
 	$navigation['myprofile']['title'] = get_lang('ModifyProfile');
 
 	// Link to my agenda
-	$navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/myagenda.php?view=month&'.(!empty($_course['path']) ? 'coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+	$navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=personal';
 	$navigation['myagenda']['title'] = get_lang('MyAgenda');
 
 	// Gradebook

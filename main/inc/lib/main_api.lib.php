@@ -1792,18 +1792,22 @@ function api_get_coachs_from_course($session_id=0,$course_code='') {
 function api_get_setting($variable, $key = null) {
     global $_setting;    
     if ($variable == 'header_extra_content') {    	
-    	$filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content';
-	    if (file_exists($filename)) {
-	    	$value = file_get_contents($filename);
-	    	return $value ;
-    	}
+        $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
+        if (file_exists($filename)) {
+            $value = file_get_contents($filename);
+            return $value ;
+        } else {
+            return '';
+        }
     }
     if ($variable == 'footer_extra_content') {    	
-    	$filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content';
-	    if (file_exists($filename)) {
-	    	$value = file_get_contents($filename);
-	    	return $value ;
-    	}
+        $filename = api_get_path(SYS_PATH).api_get_home_path().'footer_extra_content.txt';
+        if (file_exists($filename)) {
+            $value = file_get_contents($filename);
+            return $value ;
+        } else {
+            return '';
+        }
     }
     return is_null($key) ? ((isset($_setting[$variable]) && $_setting[$variable] != '') ? $_setting[$variable] : null) : $_setting[$variable][$key];
 }
@@ -5308,7 +5312,7 @@ function api_get_unique_id() {
 
 
 function api_get_home_path() {
-	$home = 'home';	
+	$home = 'home/';	
 	if (api_get_multiple_access_url()) {
 		$access_url_id = api_get_current_access_url_id();
 		$url_info      = api_get_access_url($access_url_id);

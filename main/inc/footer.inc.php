@@ -136,6 +136,14 @@ echo '</div>';
 
 
 echo '</div> <!-- end of #footer -->';
+
+if (!api_is_platform_admin()) {
+        $extra_footer = trim(api_get_setting('footer_extra_content'));
+        if (!empty($extra_footer)) {
+                echo $extra_footer;
+        }
+}
+
 /*
 // Test server mode indicator and information for testing purposes.
 if (api_is_platform_admin()) {

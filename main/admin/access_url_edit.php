@@ -43,6 +43,19 @@ if( $form->validate()) {
 			} else {
 				UrlManager::udpate($url_id, $url.'/', $description, $active);
 			}
+			// URL Images
+			$url_images_dir = api_get_path(SYS_PATH).'custompages/url-images/';
+			$image_fields = array("url_image_1", "url_image_2", "url_image_3");
+			foreach ($image_fields as $image_field) {
+				if ($_FILES[$image_field]['error'] == 0) {
+					// Hardcoded: only PNG files allowed
+					if (end(explode('.', $_FILES[$image_field]['name'])) == 'png') {
+						move_uploaded_file($_FILES[$image_field]['tmp_name'], $url_images_dir.$url_id.'_'.$image_field.'.png');
+					}
+					// else fail silently
+				}
+				// else fail silently
+			}
 			$url_to_go='access_urls.php';
 			$message=get_lang('URLEdited');
 		} else {
@@ -60,6 +73,21 @@ if( $form->validate()) {
 			} else {
 				$url_to_go='access_url_edit.php';
 				$message = get_lang('URLAlreadyAdded');
+			}
+			// URL Images
+			$url .= (substr($url,strlen($url)-1, strlen($url))=='/') ? '' : '/';
+			$url_id = UrlManager::get_url_id($url);
+			$url_images_dir = api_get_path(SYS_PATH).'custompages/url-images/';
+			$image_fields = array("url_image_1", "url_image_2", "url_image_3");
+			foreach ($image_fields as $image_field) {
+				if ($_FILES[$image_field]['error'] == 0) {
+					// Hardcoded: only PNG files allowed
+					if (end(explode('.', $_FILES[$image_field]['name'])) == 'png') {
+						move_uploaded_file($_FILES[$image_field]['tmp_name'], $url_images_dir.$url_id.'_'.$image_field.'.png');
+					}
+					// else fail silently
+				}
+				// else fail silently
 			}
 		}
 		Security::clear_token();
@@ -121,6 +149,11 @@ if (isset ($_GET['action'])) {
 			break;
 	}
 }
+
+// URL Images
+$form->addElement('file','url_image_1','URL Image 1 (PNG)');
+$form->addElement('file','url_image_2','URL Image 2 (PNG)');
+$form->addElement('file','url_image_3','URL Image 3 (PNG)');
 
 // Submit button
 $form->addElement('style_submit_button', 'submit', $submit_name, 'class="add"');

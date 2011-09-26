@@ -1,0 +1,43 @@
+HOWTO use Storage API in your content.
+
+Include the following JavaScript function in your content:
+--------------------javascript code--------------------
+function FindSTAPI(win) {
+	var g_nFindAPITries = 0;
+	while ((win.STAPI == null) && (win.parent != null) && (win.parent != win)) {
+		g_nFindAPITries ++;
+		if (g_nFindAPITries > 500) {
+			return null;
+		}
+		win = win.parent;
+	}
+	return win.STAPI;
+}
+--------------------javascript code--------------------
+
+This function returns a facade object which has the following methods :
+
+- testCall(message) : outputs message in an alertbox, you can use it to make sure the API is reachable
+- getAllUsers : get a list of users info (user ids, usernames, firstnames, lastnames)
+
+Basic storage:
+- setValue(sv_key, sv_value): set the given value for the given key for the current user
+- getValue(sv_key): get the value stored for the key sv_key for the current user
+- getAll(): get all stored key/values pair for the current user
+
+Stack storage (you can store a stack of values instead of a single value for each key):
+- stack_push(sv_key, sv_value): push a new value in the stack for sv_key for the current user
+- stack_pop(sv_key): pop the most recently pushed value from the sv_key stack for the current user
+- stack_length(sv_key): get the number of stacked values for the key sv_key for the current user
+- stack_clear(sv_key): erase all values from the storage stack for the key sv_key for the current user
+- stack_getAll(sv_key): get all values from the storage stack for the key sv_key for the current user
+
+These storage values have superuser counterparts which allow platform administrators to alter values for any user :
+- setValue_user(sv_key, sv_value, user_id)
+- getValue(sv_key, user_id)
+- getAll(user_id)
+- stack_push(sv_key, sv_value, user_id)
+- stack_pop(sv_key, sv_value, user_id)
+- stack_length(sv_key, user_id)
+- stack_clear(sv_key, user_id)
+- stack_getAll(sv_key, user_id)

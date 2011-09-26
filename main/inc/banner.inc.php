@@ -25,8 +25,8 @@ if (!empty($help)) {
         <img src="<?php echo api_get_path(WEB_IMG_PATH);?>help.large.png" alt="<?php echo get_lang('Help');?>" title="<?php echo get_lang('Help');?>" />
         </a>
     </li>
+<?php } ?>
 <?php 
-}
 if (api_get_setting('show_link_bug_notification') == 'true') { 
 ?>
     <li class="report">

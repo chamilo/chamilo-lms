@@ -51,6 +51,7 @@ class StudentPublicationLink extends AbstractLink
 			//$url = api_get_path(WEB_PATH).'main/gradebook/open_document.php?file='.$course_info['directory'].'/'.$fileurl[0];
 			//return $url;
             return null;
+      return null;
 		 } else {
 			return null;
 		}
@@ -280,5 +281,4 @@ class StudentPublicationLink extends AbstractLink
     public function get_icon_name() {
 		return 'studentpublication';
 	}
-
 }

@@ -389,7 +389,7 @@ if ($form->validate() && is_settings_editable()) {
 	foreach ($update_values as $index =>$value) {
 		$update_values[$index] = Database::escape_string($value);
 	}
-    
+	unset($value);
     
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "UPDATE $table_course SET

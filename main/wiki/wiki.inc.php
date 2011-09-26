@@ -264,6 +264,10 @@ function save_wiki() {
     $_clean['reflink']		= Database::escape_string(trim($_POST['reflink'])); 
     $_clean['title']		= Database::escape_string(trim($_POST['title']));
     $_clean['content']		= Database::escape_string($_POST['content']);
+	if (api_get_setting('htmlpurifier_wiki') == 'true'){
+		$purifier = new HTMLPurifier();
+		$_clean['content'] = $purifier->purify($_clean['content']);
+	}
     $_clean['user_id']		= api_get_user_id();
     $_clean['assignment']	= Database::escape_string($_POST['assignment']);
     $_clean['comment']		= Database::escape_string($_POST['comment']);
@@ -436,9 +440,14 @@ function save_new_wiki() {
     } else {
          $page = str_replace(' ','_',$_POST['title']);
     }
-    $_clean['reflink']=Database::escape_string(strip_tags(api_htmlentities($page)));
-    $_clean['title']=Database::escape_string(strip_tags(trim($_POST['title'])));
-    $_clean['content']= Database::escape_string($_POST['content']);
+    $_clean['reflink'] = Database::escape_string(strip_tags(api_htmlentities($page)));
+    $_clean['title']   = Database::escape_string(strip_tags(trim($_POST['title'])));
+    $_clean['content'] = Database::escape_string($_POST['content']);
+	
+	if (api_get_setting('htmlpurifier_wiki') == 'true'){
+		$purifier = new HTMLPurifier();
+		$_clean['content'] = $purifier->purify($_clean['content']);
+	}
 	
 	//re-check after strip_tags if the title is empty
 	if(empty($_clean['title']) || empty($_clean['reflink'])){

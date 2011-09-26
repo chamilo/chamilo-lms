@@ -100,7 +100,7 @@ require_once $lib_path.'array.lib.php';
 require_once $lib_path.'security.lib.php';
 require_once $lib_path.'events.lib.inc.php';
 require_once $lib_path.'debug.lib.php';
-
+require_once $lib_path.'rights.lib.php';
 
 require_once $lib_path.'model.lib.php';
 require_once $lib_path.'sortabletable.class.php';
@@ -123,7 +123,6 @@ require_once $lib_path.'template.lib.php';
 if (empty($_configuration['statistics_database']) && $already_installed) {
     $_configuration['statistics_database'] = $_configuration['main_database'];
 }
-
 global $database_connection;
 // Connect to the server database and select the main chamilo database.
 if (!($conn_return = @Database::connect(
@@ -451,33 +450,52 @@ $valid_languages = api_get_languages();
 
 if (!empty($valid_languages)) {
 
-    if (!in_array($user_language, $valid_languages['folder'])) {
-        $user_language = api_get_setting('platformLanguage');
-    }
+  if (!in_array($user_language, $valid_languages['folder'])) {
+    $user_language = api_get_setting('platformLanguage');
+  }
+  $language_priority1  = api_get_setting('languagePriority1');
+  $language_priority2 =  api_get_setting('languagePriority2');
+  $language_priority3 = api_get_setting('languagePriority3');
+  $language_priority4 = api_get_setting('languagePriority4');
 
-    if (in_array($user_language, $valid_languages['folder']) && (isset($_GET['language']) || isset($_POST['language_list']))) {
-        $user_selected_language = $user_language; // $_GET['language'];
-        $_SESSION['user_language_choice'] = $user_selected_language;
-        $platformLanguage = $user_selected_language;
-    } else {
-        $platformLanguage = api_get_setting('platformLanguage');
-    }
+  if (in_array($user_language, $valid_languages['folder']) && (isset($_GET['language']) || isset($_POST['language_list']))) {
+    $user_selected_language = $user_language; // $_GET['language'];
+    $_SESSION['user_language_choice'] = $user_selected_language;
+    $platformLanguage = $user_selected_language;
+  }
 
+  if (!empty($language_priority4) && api_get_language_from_type($language_priority4) !== false ) {
+    $language_interface =  api_get_language_from_type($language_priority4);
+  }
+  else {
+      $language_interface = api_get_setting('platformLanguage');
+  }
+
+  if (!empty($language_priority3) && api_get_language_from_type($language_priority3) !== false ) {
+    $language_interface =  api_get_language_from_type($language_priority3);
+  }else {
     if (isset($_SESSION['user_language_choice'])) {
-        $language_interface = $_SESSION['user_language_choice'];
-    } else {
-        $language_interface = api_get_setting('platformLanguage');
+      $language_interface = $_SESSION['user_language_choice'];
     }
+  }
 
+  if (!empty($language_priority2) && api_get_language_from_type($language_priority2) !== false ) {
+    $language_interface =  api_get_language_from_type($language_priority2);
+  }else {
     if (isset($_user['language'])) {
-        $language_interface = $_user['language'];
+      $language_interface = $_user['language'];
     }
-
+  }
+  if (!empty($language_priority1) && api_get_language_from_type($language_priority1) !== false ) {
+    $language_interface =  api_get_language_from_type($language_priority1);
+  }else {
     if ($_course['language']) {
-        $language_interface = $_course['language'];
+      $language_interface = $_course['language'];
     }
+  }
 }
 
+  
 // Sometimes the variable $language_interface is changed
 // temporarily for achieving translation in different language.
 // We need to save the genuine value of this variable and

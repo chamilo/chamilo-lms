@@ -48,6 +48,13 @@ $(window).load(function () {
 });
 </script>';
 
+// Storage API
+$htmlHeadXtra[] = '<script type="text/javascript">
+var sv_user = \''.api_get_user_id().'\';
+var sv_course = \''.api_get_course_id().'\';
+var sv_sco = \''.$_REQUEST['lp_id'].'\';
+</script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
@@ -594,6 +601,7 @@ switch ($action) {
             $_SESSION['oLP']->set_maker($_REQUEST['lp_maker']);
             $_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);
             $_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
+			$_SESSION['oLP']->set_hide_toc_frame($_REQUEST['hide_toc_frame']);
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
 
@@ -829,12 +837,27 @@ switch ($action) {
         $_SESSION['oLP']->update_default_scorm_commit();
         require 'lp_list.php';
         break;
-
+    /* Those 2 switches have been replaced by switc_attempt_mode switch
     case 'switch_reinit':
         if ($debug > 0) error_log('New LP - switch_reinit action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for switch', 0); require 'lp_list.php'; }
         $_SESSION['refresh'] = 1;
         $_SESSION['oLP']->update_reinit();
+		require 'lp_list.php';
+		break;
+	case 'switch_seriousgame_mode':
+		if($debug>0) error_log('New LP - switch_seriousgame_mode action triggered',0);
+		if(!$lp_found){ error_log('New LP - No learnpath given for switch',0); require 'lp_list.php'; }
+		$_SESSION['refresh'] = 1;
+		$_SESSION['oLP']->set_seriousgame_mode();
+		require 'lp_list.php';
+		break;
+     */
+	case 'switch_attempt_mode':
+		if($debug>0) error_log('New LP - switch_reinit action triggered',0);
+		if(!$lp_found){ error_log('New LP - No learnpath given for switch',0); require 'lp_list.php'; }
+		$_SESSION['refresh'] = 1;
+		$_SESSION['oLP']->switch_attempt_mode();
         require 'lp_list.php';
         break;
 

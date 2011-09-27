@@ -127,7 +127,7 @@ echo '<div class="actions">';
 echo '</div>';
 
 ///pixlr
-// max size 1 Mb
+// max size 1 Mb ??
 $title=urlencode(utf8_encode(get_lang('NewImage')));//TODO:check
 //
 $image=api_get_path(WEB_IMG_PATH).'canvas1024x768.png';
@@ -138,7 +138,7 @@ $langpixlr = isset($pixlr_code_translation_table[$langpixlr]) ? $pixlredit_code_
 $loc=$langpixlr;// deprecated ?? TODO:check pixlr read user browser
 
 $exit_path=api_get_path(WEB_CODE_PATH).'document/exit_pixlr.php';
-$_SESSION['exit_pixlr']= Security::remove_XSS($dir);
+$_SESSION['exit_pixlr']=$document_data['path'];
 $referrer="Chamilo";
 $target_path=api_get_path(WEB_CODE_PATH).'document/save_pixlr.php';
 $target=$target_path;

@@ -693,6 +693,7 @@ function api_valid_url($url, $absolute = false) {
  * @return mixed            Returns the e-mail if it is valid, FALSE otherwise.
  */
 function api_valid_email($address) {
+    // disable for now because the results are incoherent - YW 20110926
     if (function_exists('filter_var')) { // Introduced in PHP 5.2.
         return filter_var($address, FILTER_VALIDATE_EMAIL);
     } else {

@@ -81,13 +81,8 @@ $TABLETRACK_ACCESS_2    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_
 $TABLETRACK_EXERCISES 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TABLECOURSUSER	        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE	        = Database::get_main_table(TABLE_MAIN_COURSE);
-$TABLECOURSE_LINKS      = Database::get_course_table(TABLE_LINK);
 $table_user             = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ              = Database::get_course_table(TABLE_QUIZ_TEST);
-$tbl_learnpath_main     = Database::get_course_table(TABLE_LP_MAIN);
-$tbl_learnpath_item     = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_learnpath_view     = Database::get_course_table(TABLE_LP_VIEW);
-$tbl_learnpath_item_view= Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
@@ -253,8 +248,10 @@ if ($_GET['studentlist'] == 'false') {
                 <h2>'.Display::return_icon('quiz.gif',get_lang('AverageResultsToTheExercices')).get_lang('AverageResultsToTheExercices').'</h2>
             <table class="data_table">';
 
-    $sql = "SELECT id, title
-            FROM $TABLEQUIZ WHERE active <> -1 AND session_id = $session_id";
+    $course_id = api_get_course_int_id();
+     
+    $sql = "SELECT id, title FROM $TABLEQUIZ 
+    		WHERE c_id = $course_id AND active <> -1 AND session_id = $session_id";
     $rs = Database::query($sql);
 
     if ($export_csv) {

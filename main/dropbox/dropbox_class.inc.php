@@ -104,12 +104,13 @@ class Dropbox_Work {
 		$this->description = $description;
 		$this->author = api_get_person_name($_user['firstName'], $_user['lastName']);
 		$this->last_upload_date = api_get_utc_datetime();
+		
+		$course_id = api_get_course_int_id();
 
 		// Check if object exists already. If it does, the old object is used
 		// with updated information (authors, descriptio, upload_date)
 		$this->isOldWork = false;
-		$sql = "SELECT id, upload_date
-				FROM ".$dropbox_cnf['tbl_file']."
+		$sql = "SELECT id, upload_date FROM ".$dropbox_cnf['tbl_file']."
 				WHERE filename = '".Database::escape_string($this->filename)."'";
         $result = Database::query($sql);
 		$res = Database::fetch_array($result);
@@ -120,19 +121,19 @@ class Dropbox_Work {
 		if ($this->isOldWork) {
 			$this->id = $res['id'];
 			$this->upload_date = $res['upload_date'];
-		    $sql = "UPDATE ".$dropbox_cnf["tbl_file"]."
-					SET filesize = '".Database::escape_string($this->filesize)."'
-					, title = '".Database::escape_string($this->title)."'
-					, description = '".Database::escape_string($this->description)."'
-					, author = '".Database::escape_string($this->author)."'
-					, last_upload_date = '".Database::escape_string($this->last_upload_date)."'
+		    $sql = "UPDATE ".$dropbox_cnf["tbl_file"]." SET 
+					filesize			= '".Database::escape_string($this->filesize)."' , 
+					title 				= '".Database::escape_string($this->title)."', 
+					description 		= '".Database::escape_string($this->description)."', 
+					author 				= '".Database::escape_string($this->author)."',
+					last_upload_date 	= '".Database::escape_string($this->last_upload_date)."'
 					WHERE id='".Database::escape_string($this->id)."'";
 			$result = Database::query($sql);
 		} else {
 			$this->upload_date = $this->last_upload_date;
-			$sql = "INSERT INTO ".$dropbox_cnf['tbl_file']."
-				(uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, session_id)
-				VALUES ('".Database::escape_string($this->uploader_id)."'
+			$sql = "INSERT INTO ".$dropbox_cnf['tbl_file']." (c_id, uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, session_id)
+				VALUES ( $course_id, 
+						'".Database::escape_string($this->uploader_id)."'
 						, '".Database::escape_string($this->filename)."'
 						, '".Database::escape_string($this->filesize)."'
 						, '".Database::escape_string($this->title)."'
@@ -148,9 +149,9 @@ class Dropbox_Work {
 		}
 
 		// Insert entries into person table
-		$sql = "INSERT INTO ".$dropbox_cnf['tbl_person']."
-				(file_id, user_id)
-				VALUES ('".Database::escape_string($this->id)."'
+		$sql = "INSERT INTO ".$dropbox_cnf['tbl_person']." (c_id, file_id, user_id)
+				VALUES ($course_id, 
+						'".Database::escape_string($this->id)."'
 						, '".Database::escape_string($this->uploader_id)."'
 						)";
         $result = Database::query($sql);	//if work already exists no error is generated
@@ -261,6 +262,8 @@ class Dropbox_SentWork extends Dropbox_Work
 		global $dropbox_cnf;
 		// Call constructor of Dropbox_Work object
 		$this->Dropbox_Work($uploader_id, $title, $description, $author, $filename, $filesize);
+		
+		$course_id = api_get_course_int_id();
 
 		// Do sanity checks on recipient_ids array & property fillin
 		// The sanity check for ex-coursemembers is already done in base constructor
@@ -286,13 +289,13 @@ class Dropbox_SentWork extends Dropbox_Work
 
 		// Insert data in dropbox_post and dropbox_person table for each recipient
 		foreach ($this->recipients as $rec) {
-			$sql = "INSERT INTO ".$dropbox_cnf['tbl_post']." (file_id, dest_user_id, session_id)
-				VALUES ('".Database::escape_string($this->id)."', '".Database::escape_string($rec['id'])."', ".intval($_SESSION['id_session']).")";
+			$sql = "INSERT INTO ".$dropbox_cnf['tbl_post']." (c_id, file_id, dest_user_id, session_id) VALUES 
+					($course_id, '".Database::escape_string($this->id)."', '".Database::escape_string($rec['id'])."', ".intval($_SESSION['id_session']).")";
 	        $result = Database::query($sql);	// If work already exists no error is generated
 
 			// Insert entries into person table
-			$sql = "INSERT INTO ".$dropbox_cnf['tbl_person']." (file_id, user_id)
-				    VALUES ('".Database::escape_string($this->id)."', '".Database::escape_string($rec['id'])."')";
+			$sql = "INSERT INTO ".$dropbox_cnf['tbl_person']." (c_id, file_id, user_id)
+				    VALUES ($course_id, '".Database::escape_string($this->id)."', '".Database::escape_string($rec['id'])."')";
 
         	// Do not add recipient in person table if mailing zip or just upload.
 			if (!$justSubmit) {
@@ -377,16 +380,20 @@ class Dropbox_Person
 
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id);
-
+		$course_id = api_get_course_int_id();
+		
 		$post_tbl = Database::get_course_table(TABLE_DROPBOX_POST);
 		$person_tbl = Database::get_course_table(TABLE_DROPBOX_PERSON);
 		$file_tbl = Database::get_course_table(TABLE_DROPBOX_FILE);
 		// Find all entries where this person is the recipient
-		$sql = "SELECT r.file_id, r.cat_id
-				FROM $post_tbl r, $person_tbl p
-				WHERE r.dest_user_id = '".Database::escape_string($this->userId)."'
-					AND r.dest_user_id = p.user_id
-					AND r.file_id = p.file_id $condition_session";
+		 $sql = "SELECT r.file_id, r.cat_id FROM $post_tbl r, $person_tbl p
+				WHERE 
+					r.dest_user_id 	= '".Database::escape_string($this->userId)."' AND 
+					r.dest_user_id 	= p.user_id AND 
+		 			r.file_id 		= p.file_id $condition_session AND
+		 			r.c_id = $course_id AND
+		 			p.c_id = $course_id
+		 			";
 
 		//if (intval($_SESSION['id_session']>0)) { $sql .= " AND r.session_id = ".intval($_SESSION['id_session']); }
 
@@ -400,9 +407,13 @@ class Dropbox_Person
 		// Find all entries where this person is the sender/uploader
 		$sql = "SELECT f.id
 				FROM $file_tbl f, $person_tbl p
-				WHERE f.uploader_id = '".Database::escape_string($this->userId)."'
-				AND f.uploader_id = p.user_id
-				AND f.id = p.file_id $condition_session";
+				WHERE 
+				f.uploader_id 	= '".Database::escape_string($this->userId)."' AND 
+				f.uploader_id 	= p.user_id AND 
+				f.id 			= p.file_id $condition_session AND
+				f.c_id 			= $course_id AND
+		 		p.c_id 			= $course_id				 
+		";
 
 		//if(intval($_SESSION['id_session']>0)) { $sql .= " AND f.session_id = ".intval($_SESSION['id_session']); }
 
@@ -522,11 +533,11 @@ class Dropbox_Person
 	function deleteReceivedWorkFolder($id) {
 		global $dropbox_cnf;
 		$id = intval($id);
-		$sql = "DELETE FROM ".$dropbox_cnf['tbl_file']." where cat_id = '".$id."' ";
+		$sql = "DELETE FROM ".$dropbox_cnf['tbl_file']." WHERE cat_id = '".$id."' ";
 		if (!Database::query($sql)) return false;
-		$sql = "DELETE FROM ".$dropbox_cnf['tbl_category']." where cat_id = '".$id."' ";
+		$sql = "DELETE FROM ".$dropbox_cnf['tbl_category']." WHERE cat_id = '".$id."' ";
 		if (!Database::query($sql)) return false;
-		$sql = "DELETE FROM ".$dropbox_cnf['tbl_post']." where cat_id = '".$id."' ";
+		$sql = "DELETE FROM ".$dropbox_cnf['tbl_post']." WHERE cat_id = '".$id."' ";
 		if (!Database::query($sql)) return false;
 		return true;
 	}

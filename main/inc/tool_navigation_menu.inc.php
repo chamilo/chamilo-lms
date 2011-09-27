@@ -17,9 +17,7 @@ require_once api_get_path(LIBRARY_PATH).'course_home.lib.php'; // For using the 
  * Build the navigation items to show in a course menu
  * @param boolean $include_admin_tools
  */
-function get_navigation_items($include_admin_tools = false) {
-
-	
+function get_navigation_items($include_admin_tools = false) {	
 	global $is_courseMember;
 	global $_user;
 	global $_course;
@@ -35,7 +33,7 @@ function get_navigation_items($include_admin_tools = false) {
 
 		$user_id = api_get_user_id();
 
-		$course_tools_table = Database :: get_course_table(TABLE_TOOL_LIST, $database);
+		$course_tools_table = Database :: get_course_table(TABLE_TOOL_LIST);
 
 		/*	Link to the Course homepage */
 
@@ -44,8 +42,9 @@ function get_navigation_items($include_admin_tools = false) {
 		$navigation_items['home']['name'] = get_lang('CourseHomepageLink');
 
 		/*	Link to the different tools */
+		$course_id = api_get_course_int_id();
 
-		$sql_menu_query = "SELECT * FROM $course_tools_table WHERE visibility='1' and admin='0' ORDER BY id ASC";
+		$sql_menu_query = "SELECT * FROM $course_tools_table WHERE c_id = $course_id AND visibility='1' and admin='0' ORDER BY id ASC";
 		$sql_result = Database::query($sql_menu_query);
 		while ($row = Database::fetch_array($sql_result)) {
 			$navigation_items[$row['id']] = $row;
@@ -61,7 +60,7 @@ function get_navigation_items($include_admin_tools = false) {
 
 		if ($include_admin_tools) {
 			$course_settings_sql = "SELECT name,image FROM $course_tools_table
-									WHERE link='course_info/infocours.php'";
+									WHERE c_id = $course_id  AND link='course_info/infocours.php'";
 			$sql_result = Database::query($course_settings_sql);
 			$course_setting_info = Database::fetch_array($sql_result);
 			$course_setting_visual_name = CourseHome::translate_tool_name($course_setting_info);

@@ -398,19 +398,18 @@ class SocialManager extends UserManager {
 		// Table definitions
 		$main_user_table 		 = Database :: get_main_table(TABLE_MAIN_USER);
 		$tbl_session 			 = Database :: get_main_table(TABLE_MAIN_SESSION);
-		$course_database 		 = $my_course['db'];
-		$course_tool_table 		 = Database :: get_course_table(TABLE_TOOL_LIST, $course_database);
-		$tool_edit_table 		 = Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_database);
-		$course_group_user_table = Database :: get_course_table(TOOL_USER, $course_database);
-
+		
 		$user_id = api_get_user_id();
 		$course_system_code = $my_course['k'];
 		$course_visual_code = $my_course['c'];
 		$course_title = $my_course['i'];
 		$course_directory = $my_course['d'];
 		$course_teacher = $my_course['t'];
+		
 		$course_teacher_email = isset($my_course['email'])?$my_course['email']:'';
 		$course_info = Database :: get_course_info($course_system_code);
+		
+		$course_id = $course_info['real_id'];
 
 		$course_access_settings = CourseManager :: get_access_settings($course_system_code);
 
@@ -455,12 +454,12 @@ class SocialManager extends UserManager {
 
 		//display course entry
 		$result .= '<div id="div_'.$count.'">';
-		$result .= '<h3><img src="../img/nolines_plus.gif" id="btn_'.$count.'" onclick="toogle_course(this,\''.$course_database.'\' )">';
+		$result .= '<h3><img src="../img/nolines_plus.gif" id="btn_'.$count.'" onclick="toogle_course(this,\''.$course_id.'\' )">';
 		$result .= $s_htlm_status_icon;
 
 		//show a hyperlink to the course, unless the course is closed and user is not course admin
 		if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
-			$result .= '<a href="javascript:void(0)" id="ln_'.$count.'"  onclick=toogle_course(this,\''.$course_database.'\');>&nbsp;'.$course_title.'</a>';
+			$result .= '<a href="javascript:void(0)" id="ln_'.$count.'"  onclick=toogle_course(this,\''.$course_id.'\');>&nbsp;'.$course_title.'</a>';
 		} else {
 			$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
 		}
@@ -737,7 +736,7 @@ class SocialManager extends UserManager {
 		    	foreach ($course_list_code as $course) {
 		    		$course_info = api_get_course_info($course['code']);
 		    		if (!empty($course_info)) {		    		
-		    			$content = AnnouncementManager::get_all_annoucement_by_user_course($course_info['dbName'], $my_announcement_by_user_id);	    			
+		    			$content = AnnouncementManager::get_all_annoucement_by_user_course($course_info['code'], $my_announcement_by_user_id);	    			
 		    			
 		    	  		if (!empty($content)) {	    	  			
 		    				$url = Display::url(Display::return_icon('announcement.png',get_lang('Announcements')).$course_info['name'].' ('.$content['count'].')', api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$course['code']);

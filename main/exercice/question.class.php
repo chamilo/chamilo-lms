@@ -71,7 +71,7 @@ abstract class Question
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function Question() {
+	public function Question() {
 		$this->id=0;
 		$this->question='';
 		$this->description='';
@@ -81,6 +81,7 @@ abstract class Question
 		$this->level = 1;
         $this->extra='';
 		$this->exerciseList=array();
+		$this->course = api_get_course_info();
 	}
 
 	public function getIsContent() {
@@ -573,16 +574,17 @@ abstract class Question
 		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION, $this->course['db_name']);
 		$TBL_QUESTIONS			= Database::get_course_table(TABLE_QUIZ_QUESTION, $this->course['db_name']);
 
-		$id=$this->id;
-		$question=$this->question;
-		$description=$this->description;
-		$weighting=$this->weighting;
-		$position=$this->position;
-		$type=$this->type;
-		$picture=$this->picture;
-		$level=$this->level;
-        $extra=$this->extra;
-
+		$id				= $this->id;
+		$question		= $this->question;
+		$description	= $this->description;
+		$weighting		= $this->weighting;
+		$position		= $this->position;
+		$type			= $this->type;
+		$picture		= $this->picture;
+		$level			= $this->level;
+        $extra			= $this->extra;
+        $c_id 			= $this->course['real_id'];
+        
 		// question already exists
 		if(!empty($id)) {
 			$sql="UPDATE $TBL_QUESTIONS SET
@@ -596,8 +598,8 @@ abstract class Question
 					level		='".Database::escape_string($level)."'
 				WHERE id='".Database::escape_string($id)."'";
 			Database::query($sql);
-			if(!empty($exerciseId)) {
-			api_item_property_update($this->course, TOOL_QUIZ, $id,'QuizQuestionUpdated',api_get_user_id);
+			if (!empty($exerciseId)) {
+				api_item_property_update($this->course, TOOL_QUIZ, $id,'QuizQuestionUpdated',api_get_user_id);
 			}
             if (api_get_setting('search_enabled')=='true') {
                 if ($exerciseId != 0) {
@@ -612,13 +614,19 @@ abstract class Question
 
 		} else {
 			// creates a new question
-			$sql="SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question WHERE question.id=test_question.question_id AND test_question.exercice_id='".Database::escape_string($exerciseId)."'";
-			$result=Database::query($sql);
-			$current_position=Database::result($result,0,0);
-			$this -> updatePosition($current_position+1);
-			$position = $this -> position;
-
-			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture,extra, level) VALUES(
+			$sql	= "SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question 
+					   WHERE 	question.id					= test_question.question_id AND 
+								test_question.exercice_id	= '".Database::escape_string($exerciseId)."' AND
+								question.c_id 				= $c_id AND
+								test_question.c_id 			= $c_id
+								
+						";
+			$result	= Database::query($sql);
+			$current_position = Database::result($result,0,0);
+			$this->updatePosition($current_position+1);
+			$position = $this->position;
+			$sql = "INSERT INTO $TBL_QUESTIONS (c_id, question, description, ponderation, position, type, picture, extra, level) VALUES ( 
+					$c_id,
 					'".Database::escape_string($question)."',
 					'".Database::escape_string($description)."',
 					'".Database::escape_string($weighting)."',
@@ -627,29 +635,26 @@ abstract class Question
 					'".Database::escape_string($picture)."',
 					'".Database::escape_string($extra)."',
                     '".Database::escape_string($level)."'
-					)";
+					)";			
 			Database::query($sql);
 
-			$this->id=Database::insert_id();
+			$this->id = Database::insert_id();
 
 			api_item_property_update($this->course, TOOL_QUIZ, $this->id,'QuizQuestionAdded',api_get_user_id());
 
 			// If hotspot, create first answer
 			if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
 				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-				$sql="INSERT INTO $TBL_ANSWERS (id , question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type ) VALUES ('1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
+				$sql = "INSERT INTO $TBL_ANSWERS (c_id, id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type ) 
+					    VALUES (".$c_id.", '1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
 				Database::query($sql);
             }
             
 			if ($type == HOT_SPOT_DELINEATION ) {
 				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-				$sql="INSERT INTO $TBL_ANSWERS (id , question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type ) VALUES ('1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'delineation')";
-				api_sql_query($sql,__FILE__,__LINE__);
-				
-				//$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-				//$sql="INSERT INTO $TBL_ANSWERS (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('2', '".Database::escape_string($this->id)."', '', NULL , '', NULL , '1', '0;0|0|0', 'noerror')";
-				//api_sql_query($sql,__FILE__,__LINE__);		
-				
+				$sql="INSERT INTO $TBL_ANSWERS (c_id, id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type ) 
+					  VALUES (".$c_id.", '1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'delineation')";
+				Database::query($sql);
 			}
 			
 
@@ -802,7 +807,8 @@ abstract class Question
             $new_exercise->read($exerciseId);
             $count = $new_exercise->selectNbrQuestions();
             $count++;
-			$sql="INSERT INTO $TBL_EXERCICE_QUESTION (question_id, exercice_id, question_order) VALUES ('".Database::escape_string($id)."','".Database::escape_string($exerciseId)."', '$count' )";
+			$sql="INSERT INTO $TBL_EXERCICE_QUESTION (c_id, question_id, exercice_id, question_order) VALUES 
+				 ({$this->course['real_id']}, '".Database::escape_string($id)."','".Database::escape_string($exerciseId)."', '$count' )";
 			Database::query($sql);
             
             // we do not want to reindex if we had just saved adnd indexed the question

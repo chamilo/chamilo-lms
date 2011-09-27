@@ -270,6 +270,7 @@ class scorm extends learnpath {
         if (Database::num_rows($res) < 1) { error_log('Database for '.$course_code.' not found '.__FILE__.' '.__LINE__, 0); return -1; }
         $row = Database::fetch_array($res);
         $dbname = $row['db_name'];
+        $course_id  = $row['id'];
 
         // Get table names.
         $new_lp = Database::get_course_table(TABLE_LP_MAIN, $dbname);
@@ -294,8 +295,8 @@ class scorm extends learnpath {
             $myname = $oOrganization->get_name();
             $myname = api_utf8_decode($myname);
 
-            $sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order, session_id, use_max_score)" .
-                    "VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."', 'scorm_api.php', $dsp, $session_id, $use_max_score)";
+            $sql = "INSERT INTO $new_lp (c_id, lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order, session_id, use_max_score)" .
+                    "VALUES ($course_id , 2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."', 'scorm_api.php', $dsp, $session_id, $use_max_score)";
             if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting path: '. $sql, 0); }
 
             $res = Database::query($sql);
@@ -368,13 +369,13 @@ class scorm extends learnpath {
                 $identifier = Database::escape_string($item['identifier']);
                 $prereq = Database::escape_string($item['prerequisites']);
                 $sql_item = "INSERT INTO $new_lp_item " .
-                        "(lp_id,item_type,ref,title," .
+                        "(c_id, lp_id,item_type,ref,title," .
                         "path,min_score,max_score, $field_add" .
                         "parent_item_id,previous_item_id,next_item_id," .
                         "prerequisite,display_order,launch_data," .
                         "parameters) " .
                         "VALUES " .
-                        "($lp_id, '$type','".$identifier."','".$title."'," .
+                        "($course_id, $lp_id, '$type','".$identifier."','".$title."'," .
                         "'$path',0,$max_score, $value_add" .
                         "$parent, $previous, 0, " .
                         "'$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."'," .

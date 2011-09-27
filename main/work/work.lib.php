@@ -402,34 +402,36 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	}
 
 	//condition for the session
-	$session_id = api_get_session_id();
-	$condition_session = api_get_session_condition($session_id);
+	$session_id 		= api_get_session_id();
+	$condition_session  = api_get_session_condition($session_id);
+	
+	$course_id = api_get_course_int_id();
 
 	//Get list from database
 	if ($is_allowed_to_edit) {
-		$sql_get_publications_list = "SELECT *  FROM  ".$work_table." " .
-									"WHERE url LIKE BINARY '$sub_course_dir%' " .
-									"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.$condition_session.
+		$sql_get_publications_list = "SELECT *  FROM  ".$work_table."
+									  WHERE c_id = $course_id AND 
+									  		url LIKE BINARY '$sub_course_dir%' AND 
+									  		url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.$condition_session.
 	                 				" ORDER BY sent_date DESC";
 
-		$sql_get_publications_num = "SELECT count(*) FROM  ".$work_table." " .
-									"WHERE url LIKE BINARY '$sub_course_dir%' " .
-									"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.
-		$condition_session.
-	                 				" ORDER BY id";
+		$sql_get_publications_num = "SELECT count(*) FROM  ".$work_table." 
+									WHERE 	c_id = $course_id AND  
+											url LIKE BINARY '$sub_course_dir%' AND 
+											url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.$condition_session." ORDER BY id";
 
 	} else {
 		if (!empty($_SESSION['toolgroup'])) {
-			$group_query = " WHERE post_group_id = '".intval($_SESSION['toolgroup'])."' "; // set to select only messages posted by the user's group
+			$group_query = " WHERE c_id = $course_id AND post_group_id = '".intval($_SESSION['toolgroup'])."' "; // set to select only messages posted by the user's group
 			$subdirs_query = "AND url NOT LIKE BINARY '$sub_course_dir%/%' AND url LIKE BINARY '$sub_course_dir%'";
 		} else {
-			$group_query = " WHERE post_group_id = '0' ";
+			$group_query = " WHERE c_id = $course_id AND  post_group_id = '0' ";
 			$subdirs_query = "AND url NOT LIKE '$sub_course_dir%/%' AND url LIKE '$sub_course_dir%'";
 		}
 
 		$sql_get_publications_list = "SELECT * FROM  $work_table $group_query $subdirs_query ".$add_in_where_query."  $condition_session ORDER BY id";
 		$sql_get_publications_num  = "SELECT count(url) FROM  ".$work_table." " .
-								     " WHERE url LIKE BINARY '$sub_course_dir%' AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.$condition_session." ORDER BY id";
+								     " WHERE c_id = $course_id AND url LIKE BINARY '$sub_course_dir%' AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.$condition_session." ORDER BY id";
 	}
 
 	//echo $sql_get_publications_list;
@@ -481,11 +483,14 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				$mydir_temp = '/'.$my_sub_dir.$dir;
 			}
 
-			$sql_select_directory = "SELECT prop.insert_date, prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE ";
+			$sql_select_directory = "SELECT prop.insert_date, prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight 
+									 FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) 
+									 WHERE ";
+			
 			if (!empty($_SESSION['toolgroup'])) {
-				$sql_select_directory .= " work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
+				$sql_select_directory .= " prop.c_id = $course_id AND work.c_id = $course_id AND work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
 			} else {
-				$sql_select_directory .= " work.post_group_id = '0' ";
+				$sql_select_directory .= " prop.c_id = $course_id AND work.c_id = $course_id AND work.post_group_id = '0' ";
 			}
 			$sql_select_directory .= " AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $condition_session";
 
@@ -496,10 +501,8 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				// the folder belongs to another session
 				continue;
 			}
-			$direc_date      = $row['lastedit_date']; //directory's date
-				
-			$author          = $row['author']; //directory's author
-				
+			$direc_date      = $row['lastedit_date']; //directory's date				
+			$author          = $row['author']; //directory's author				
 			$view_properties = $row['view_properties'];
 			$is_assignment   = $row['has_properties'];
 			$id2             = $row['id'];
@@ -587,8 +590,6 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 						$form_folder -> addElement('html', '</div>');						
 					}
 			
-					
-					
 						
 					if ($homework['ends_on'] != '0000-00-00 00:00:00') {
 						$homework['ends_on'] = api_get_local_time($homework['ends_on']);
@@ -672,18 +673,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 						}
 
 						if ($edit_check) {
-
-							$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
-					/*
-							if ($row['view_properties'] == '1') {
-								//@todo check this condition When this code happens???
-								$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
-								Database::query($sql_add_publication);
-								$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? api_get_utc_datetime(get_date_from_group('expires')) : '0000-00-00 00:00:00')."'".',';
-								$ends_query =    ' ends_on = '."'".($there_is_a_end_date ? api_get_utc_datetime(get_date_from_group('ends')) : '0000-00-00 00:00:00')."'";
-								Database::query('UPDATE '.$work_assigment.$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'");
-							} elseif ($row['view_properties'] == '0') {								
-						*/		
+							$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);	
 								
 							$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? api_get_utc_datetime(get_date_from_group('expires')) : '0000-00-00 00:00:00')."'";
 							Database::query('UPDATE '.$work_assigment.$expires_query.' WHERE id = '."'".$row['has_properties']."'");
@@ -695,10 +685,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE id = '."'".$row['has_properties']."'");
 							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
 							Database::query($sql_add_publication);
-							
-							//}
-							
-
+				
 							Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'");
 								
 							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
@@ -760,6 +747,8 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 
 			$cant_files = 0;
 			$cant_dir   = 0;
+			
+			$course_id = api_get_course_int_id();
 				
 			if (api_is_allowed_to_edit()) {
 				$sql_document = "SELECT count(*) FROM $work_table WHERE url LIKE 'work/".$dir."/%'";
@@ -776,10 +765,10 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				}
 				if ($course_info['show_score'] == 1) {
 					$sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p
-									 WHERE s.id = p.ref AND p.tool='work' AND s.accepted='1' AND user_id = ".api_get_user_id()." AND url LIKE 'work/".$dir."/%'";
+									 WHERE s.c_id = $course_id  AND p.c_id = $course_id AND s.c_id = $course_id AND s.id = p.ref AND p.tool='work' AND s.accepted='1' AND user_id = ".api_get_user_id()." AND url LIKE 'work/".$dir."/%'";
 				} else {
 					$sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p
-									 WHERE s.id = p.ref AND p.tool='work' AND s.accepted='1' AND url LIKE 'work/".$dir."/%'";
+									 WHERE s.c_id = $course_id  AND p.c_id = $course_id AND s.c_id = $course_id AND s.id = p.ref AND p.tool='work' AND s.accepted='1' AND url LIKE 'work/".$dir."/%'";
 				}
 			}
 				
@@ -790,7 +779,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				
 			//count directories
 				
-			$sql_directory   = "SELECT count(*) FROM $work_table s WHERE  url NOT LIKE '/".$mydir."/%/%' AND url LIKE '/".$mydir."/%'";
+			$sql_directory   = "SELECT count(*) FROM $work_table s WHERE  s.c_id = $course_id AND url NOT LIKE '/".$mydir."/%/%' AND url LIKE '/".$mydir."/%'";
 			$res_directory   = Database::query($sql_directory);
 			$count_directory = Database::fetch_row($res_directory);
 			$cant_dir = $count_directory[0];
@@ -1233,16 +1222,16 @@ function del_dir($base_work_dir, $dir, $id) {
 		return -1;
 	}
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-
+	$course_id = api_get_course_int_id();
 	//Deleting the folder
 	$url_path = get_work_path($id);
 	if (!empty($url_path) && $url_path != -1) {
 	  
 		//Deleting all contents inside the folder
-		$sql = "DELETE FROM $table WHERE url LIKE BINARY 'work/".$dir."/%'";
+		$sql = "DELETE FROM $table WHERE c_id = $course_id AND url LIKE BINARY 'work/".$dir."/%'";
 		$res = Database::query($sql);
 
-		$sql = "DELETE FROM $table WHERE filetype = 'folder' AND id = $id";
+		$sql = "DELETE FROM $table WHERE c_id = $course_id AND filetype = 'folder' AND id = $id";
 		$res = Database::query($sql);
 
 		require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
@@ -1414,11 +1403,13 @@ function insert_all_directory_in_course_table($base_work_dir) {
 	for ($i = 0; $i < count($dir_to_array); $i++) {
 		$only_dir[] = substr($dir_to_array[$i], strlen($base_work_dir), strlen($dir_to_array[$i]));
 	}
-
+	$course_id = api_get_course_int_id();
 	for($i = 0; $i < count($only_dir); $i++) {
 		global $work_table;
-		$sql_insert_all= "INSERT INTO " . $work_table . " SET url = '" . $only_dir[$i] . "', " .
-							  "title        = '',
+		$sql_insert_all= "INSERT INTO " . $work_table . " SET
+							   c_id 		= '$course_id', 
+							   url 			= '" . $only_dir[$i] . "', 
+							   title        = '',
 			                   description 	= '',
 			                   author      	= '',
 							   active		= '0',

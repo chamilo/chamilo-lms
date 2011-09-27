@@ -89,7 +89,7 @@ Display :: display_header($nameTools);
 
 $lp_id = intval($_GET['lp_id']);
 
-$sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN, $course_info['db_name']).'	WHERE id='.$lp_id;
+$sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).' WHERE c_id = '.$course_info['real_id'].' AND id='.$lp_id;
 $rs  = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
 echo '<div class ="actions">';

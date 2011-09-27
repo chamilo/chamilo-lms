@@ -91,7 +91,7 @@ if (!empty($attempt_list)) {
 $html .= $message;
 $exercise_url_button = Display::url($label, $exercise_url, array('class'=>'a_button blue bigger round'));
 
-if (!$objExercise->is_visible()) {
+if (!$objExercise->is_visible($learnpath_id, $learnpath_item_id)) {
 	$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result&exerciseId='.$objExercise->id;
 	$exercise_url_button = Display::url(get_lang('SeeResults'), $exercise_url, array('class'=>'a_button white bigger round no_link'));
 }

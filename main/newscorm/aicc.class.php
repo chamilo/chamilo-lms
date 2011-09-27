@@ -237,8 +237,7 @@ class aicc extends learnpath {
         $res = Database::query($sql);
         if (Database::num_rows($res) < 1) { error_log('New LP - Database for '.$course_code.' not found '.__FILE__.' '.__LINE__, 0); return -1; }
         $row = Database::fetch_array($res);
-        $dbname = Database::get_course_table_prefix().$row['db_name'].Database::get_database_glue();
-
+        
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $get_max = "SELECT MAX(display_order) FROM $new_lp";
@@ -252,12 +251,9 @@ class aicc extends learnpath {
 
         $this->config_encoding = "ISO-8859-1"; // TODO: We may apply detection for this value, see the function api_detect_encoding().
 
-        $sql = "INSERT INTO $new_lp " .
-                "(lp_type, name, ref, description, " .
-                "path, force_commit, default_view_mod, default_encoding, " .
-                "js_lib, content_maker,display_order)" .
+        $sql = "INSERT INTO $new_lp (c_id, lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib, content_maker,display_order)" .
                 "VALUES " .
-                "(3,'".$this->course_title."', '".$this->course_id."','".$this->course_description."'," .
+                "($this->course_id, 3, '".$this->course_title."', '".$this->course_id."','".$this->course_description."'," .
                 "'".$this->subdir."', 0, 'embedded', '".$this->config_encoding."'," .
                 "'aicc_api.php','".$this->course_creator."',$dsp)";
         if ($this->debug > 2) { error_log('New LP - In import_aicc(), inserting path: '. $sql, 0); }
@@ -288,13 +284,9 @@ class aicc extends learnpath {
             $previous = 0;
             $prereq = $oAu->prereq_string;
             //$previous = (!empty($this->au_order_list_new_id[x]) ? $this->au_order_list_new_id[x] : 0); // TODO: Deal with the previous.
-            $sql_item = "INSERT INTO $new_lp_item " .
-                    "(lp_id,item_type,ref,title," .
-                    "path,min_score,max_score, $field_add" .
-                    "parent_item_id,previous_item_id,next_item_id," .
-                    "prerequisite,display_order) " .
+            $sql_item = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order) " .
                     "VALUES " .
-                    "($lp_id, 'au','".$oAu->identifier."','".$title."'," .
+                    "($this->course_id, $lp_id, 'au','".$oAu->identifier."','".$title."'," .
                     "'$path',0,100, $value_add" .
                     "$parent, $previous, 0, " .
                     "'$prereq', 0" .

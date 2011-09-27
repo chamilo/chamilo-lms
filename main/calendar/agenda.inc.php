@@ -66,7 +66,7 @@ function get_calendar_items($select_month, $select_year, $select_day = false) {
 	$TABLEAGENDA         = Database::get_course_table(TABLE_AGENDA);
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	
-	$group_memberships = GroupManager::get_group_ids($course_info['dbName'], api_get_user_id());
+	$group_memberships = GroupManager::get_group_ids($course_info['real_id'], api_get_user_id());
     $repeats = array();
 
 	/*	CONSTRUCT THE SQL STATEMENT */
@@ -87,7 +87,7 @@ function get_calendar_items($select_month, $select_year, $select_day = false) {
         // => see only the messages of this specific user + the messages of the group (s)he is member of.
         
         if (!empty($_SESSION['user'])) {
-            $group_memberships = GroupManager::get_group_ids($course_info['dbName'], $_SESSION['user']);
+            $group_memberships = GroupManager::get_group_ids($course_info['real_id'], $_SESSION['user']);
 
             $show_user =true;
             $new_group_memberships=array();
@@ -2725,8 +2725,8 @@ function get_agendaitems($month, $year) {
 	//databases of the courses
 	$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
 	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
-	$group_memberships = GroupManager :: get_group_ids(Database::get_current_course_database(), api_get_user_id());
+	$course_info = api_get_course_info();
+	$group_memberships = GroupManager :: get_group_ids($course_info['real_id'], api_get_user_id());
 	// if the user is administrator of that course we show all the agenda items
 	if (api_is_allowed_to_edit(false,true)) {
 		//echo "course admin";
@@ -2808,12 +2808,12 @@ function display_upcoming_events() {
 	//databases of the courses
 	$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
 	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-    $mycourse   = api_get_course_info();
-    $myuser     = api_get_user_info();
-    $session_id = api_get_session_id();
+    $mycourse   		= api_get_course_info();
+    $myuser     		= api_get_user_info();
+    $session_id 		= api_get_session_id();
 
 
-	$group_memberships = GroupManager :: get_group_ids($mycourse['dbName'], $myuser['user_id']);
+	$group_memberships = GroupManager :: get_group_ids($mycourse['real_id'], $myuser['user_id']);
 	// if the user is administrator of that course we show all the agenda items
 	if (api_is_allowed_to_edit(false,true)) {
 		//echo "course admin";
@@ -3100,11 +3100,11 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day) {
 	foreach ($courses_dbs as $key => $array_course_info) {
 		//echo $array_course_info['db'];
 		//databases of the courses
-		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info['db_name']);
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info['db_name']);
+		$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 		// getting all the groups of the user for the current course
-		$group_memberships = GroupManager :: get_group_ids($array_course_info['db_name'], api_get_user_id());
+		$group_memberships = GroupManager :: get_group_ids($array_course_info['real_id'], api_get_user_id());
 		$course_user_status = CourseManager::get_user_in_course_status(api_get_user_id(), $array_course_info['code']);
 		
 		
@@ -3222,11 +3222,11 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
 	// get agenda-items for every course
 	foreach ($courses_dbs as $key => $array_course_info) {
 		//databases of the courses
-		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info["db_name"]);
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info["db_name"]);
+		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 		// getting all the groups of the user for the current course
-		$group_memberships = GroupManager :: get_group_ids($array_course_info["db_name"], api_get_user_id());
+		$group_memberships = GroupManager :: get_group_ids($array_course_info["real_id"], api_get_user_id());
 		
 		$user_course_status = CourseManager::get_user_in_course_status(api_get_user_id(),$array_course_info["code"]);
 

@@ -107,9 +107,11 @@ class SurveyLink extends AbstractLink
 
 			$get_individual_score = !is_null($stud_id);
 
-			$sql = 'SELECT COUNT(i.answered) FROM '.$tbl_survey.' AS s JOIN '.$tbl_survey_invitation.' AS i
-				ON s.code = i.survey_code
-				WHERE s.survey_id = '.$ref_id.' AND i.session_id = '.$session_id;
+			$sql = "SELECT COUNT(i.answered) FROM $tbl_survey AS s JOIN $tbl_survey_invitation AS i ON s.code = i.survey_code
+					WHERE 	s.c_id = {$course_info['real_id']} AND
+							i.c_id = {$course_info['real_id']} AND 
+							s.survey_id = $ref_id AND 
+							i.session_id = $session_id";
 
 			$sql_result = Database::query($sql);
 			$data = Database::fetch_array($sql_result);
@@ -136,9 +138,11 @@ class SurveyLink extends AbstractLink
 
 			$get_individual_score = !is_null($stud_id);
 
-			$sql = 'SELECT i.answered FROM '.$tbl_survey.' AS s JOIN '.$tbl_survey_invitation.' AS i
+			$sql = "SELECT i.answered FROM $tbl_survey AS s JOIN $tbl_survey_invitation AS i
 				ON s.code = i.survey_code
-				WHERE s.survey_id = '.$ref_id.' AND i.session_id = '.$session_id;
+				WHERE 	s.c_id = {$course_info['real_id']} AND
+						i.c_id = {$course_info['real_id']} AND 
+						s.survey_id = $ref_id AND i.session_id = $session_id";
 
 			if ($get_individual_score) {
 	    		$sql .= ' AND i.user = '.intval($stud_id);

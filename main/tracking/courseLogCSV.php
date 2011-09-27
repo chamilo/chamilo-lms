@@ -32,25 +32,21 @@ require_once '../newscorm/scormItem.class.php';
 /* Constants and variables */
 
 // regroup table names for maintenance purpose
-$TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-$TABLETRACK_LINKS       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
-$TABLETRACK_DOWNLOADS   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-$TABLETRACK_ACCESS_2    = Database::get_statistic_table("track_e_access");
-$TABLECOURSUSER	        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLECOURSE	        = Database::get_main_table(TABLE_MAIN_COURSE);
-$TABLECOURSE_LINKS      = Database::get_course_table(TABLE_LINK);
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
+$TABLETRACK_ACCESS     	 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+$TABLETRACK_LINKS       	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
+$TABLETRACK_DOWNLOADS   	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+$TABLETRACK_ACCESS_2    	= Database::get_statistic_table("track_e_access");
+$TABLECOURSUSER	        	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$TABLECOURSE	        	= Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user 				= Database::get_main_table(TABLE_MAIN_USER);
 
-//$table_scormdata = Database::get_scorm_table(TABLE_SCORM_SCO_DATA);
-//$table_scormmain = Database::get_scorm_table(TABLE_SCORM_MAIN);
-//$tbl_learnpath_main = Database::get_course_table(TABLE_LEARNPATH_MAIN);
-//$tbl_learnpath_item = Database::get_course_table(TABLE_LEARNPATH_ITEM);
-//$tbl_learnpath_chapter = Database::get_course_table(TABLE_LEARNPATH_CHAPTER);
+$TABLECOURSE_LINKS      	= Database::get_course_table(TABLE_LINK);
+$tbl_learnpath_main 		= Database::get_course_table(TABLE_LP_MAIN);
+$tbl_learnpath_item 		= Database::get_course_table(TABLE_LP_ITEM);
+$tbl_learnpath_view 		= Database::get_course_table(TABLE_LP_VIEW);
+$tbl_learnpath_item_view 	= Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
-$tbl_learnpath_main = Database::get_course_table(TABLE_LP_MAIN);
-$tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
-$tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+$course_id = api_get_course_int_id(); 
 
 $view = $_REQUEST['view'];
 
@@ -111,23 +107,26 @@ if ($is_allowedToTrack) {
             $line='';
             $title_line = get_lang('Name').";".get_lang('FirstAccess').";".get_lang('LastAccess').";".get_lang('Visited')."\n";
 
-            for($j = 0 ; $j < count($results) ; $j++)
-            {
-
-
+            for($j = 0 ; $j < count($results) ; $j++) {
                 // BEGIN % visited
                 // sum of all items (= multiple learningpaths + SCORM imported paths)
-                $sql = "SELECT COUNT(DISTINCT(iv.lp_item_id)) " .
-                        "FROM $tbl_learnpath_item_view iv " .
-                        "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id = v.id " .
-                        "WHERE v.user_id = ".$results[$j][0];
+                $sql = "SELECT COUNT(DISTINCT(iv.lp_item_id)) FROM $tbl_learnpath_item_view iv " .
+                        "INNER JOIN $tbl_learnpath_view v 
+                        ON iv.lp_view_id = v.id " .
+                        "WHERE
+                        	v.c_id = $course_id AND
+                        	iv.c_id = $course_id AND                        	 
+                		v.user_id = ".$results[$j][0];
                 $total_lpath_items = getOneResult($sql);
 
                 // sum of all completed items (= multiple learningpaths + SCORM imported paths)
                 $sql = "SELECT COUNT(DISTINCT(iv.lp_item_id)) " .
                         "FROM $tbl_learnpath_item_view iv " .
                         "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id = v.id " .
-                        "WHERE v.user_id = ".$results[$j][0]." " .
+                        "WHERE 
+                        	v.c_id = $course_id AND
+                        	iv.c_id = $course_id AND
+                        	v.user_id = ".$results[$j][0]." " .
                             "AND (status = 'completed' OR status='passed')";
                 $total_lpath_items_completed = getOneResult($sql);
 
@@ -287,8 +286,10 @@ if ($is_allowedToTrack) {
 
         $sql = "SELECT cl.title, cl.url,count(DISTINCT sl.links_user_id), count(cl.title)
                     FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
-                    WHERE sl.links_link_id = cl.id
-                        AND sl.links_cours_id = '$_cid'
+                    WHERE
+                    	cl.c_id = $course_id AND
+                    	sl.links_link_id = cl.id AND 
+                    	sl.links_cours_id = '$_cid'
                     GROUP BY cl.title, cl.url";
 
         $results = getManyResultsXCol($sql,4);
@@ -353,9 +354,7 @@ if ($is_allowedToTrack) {
 
         $tempView[5] = '0';
 
-        $sql = "SELECT id, name
-                    FROM $tbl_learnpath_main";
-                    //WHERE dokeosCourse='$_cid'"; we are using a table inside the course now, so no need for course id
+        $sql = "SELECT id, name FROM $tbl_learnpath_main WHERE c_id = $course_id ";
         $result=Database::query($sql);
 
         $ar=Database::fetch_array($result);
@@ -378,7 +377,7 @@ if ($is_allowedToTrack) {
                             "FROM  $tbl_learnpath_view sd " .
                             "INNER JOIN $table_user u " .
                             "ON u.user_id = sd.user_id " .
-                            "WHERE sd.lp_id=$contentId group by u.user_id";
+                            "WHERE sd.c_id = $course_id AND sd.lp_id=$contentId group by u.user_id";
                     //error_log($sql2,0);
                     $result2=Database::query($sql2);
 
@@ -396,14 +395,15 @@ if ($is_allowedToTrack) {
 
 
                             if ($ar2['user_id']==$scormstudentopen) { //have to list the student's results
-
-
                                 $studentId=$ar2['user_id'];
                                 $sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
                                         "FROM $tbl_learnpath_item i " .
                                         "INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
                                         "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
-                                        "WHERE (v.user_id=$studentId and v.lp_id=$contentId) ORDER BY v.id, i.id";
+                                        "WHERE 	i.c_id = $course_id AND 
+                                        		iv.c_id = $course_id AND
+                                        		v.c_id = $course_id AND
+                                				v.user_id=$studentId and v.lp_id=$contentId ORDER BY v.id, i.id";
                                 $result3=Database::query($sql3);
                                 $ar3=Database::fetch_array($result3);
                                 $title_line .= get_lang('ScormTitleColumn').";".get_lang('ScormStatusColumn').";".get_lang('ScormScoreColumn').";".get_lang('ScormTimeColumn');

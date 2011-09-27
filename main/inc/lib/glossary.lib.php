@@ -59,7 +59,7 @@ class GlossaryManager {
 		$glossary_table  = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = intval($session_id);
         $sql_filter = api_get_session_condition($session_id);
-		$sql = 'SELECT description FROM '.$glossary_table.' WHERE name like trim("'.Database::escape_string($glossary_name).'")'.$sql_filter;
+		$sql = 'SELECT description FROM '.$glossary_table.' WHERE name LIKE trim("'.Database::escape_string($glossary_name).'")'.$sql_filter;
 		$rs = Database::query($sql);
 		if (Database::num_rows($rs) > 0) {
 		     $row = Database::fetch_array($rs);
@@ -91,14 +91,14 @@ class GlossaryManager {
 		$session_id = api_get_session_id();
 
 		// check if the glossary term already exists
-		if (GlossaryManager::glossary_exists($values['glossary_title']))
-		{
+		if (GlossaryManager::glossary_exists($values['glossary_title'])) {
 			// display the feedback message
 			Display::display_error_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'));
 			return false;
 		} else {
-			$sql = "INSERT INTO $t_glossary (name, description, display_order, session_id)
+			$sql = "INSERT INTO $t_glossary (c_id, name, description, display_order, session_id)
 					VALUES(
+						".api_get_course_int_id().",
 						'".Database::escape_string($values['glossary_title'])."',
 						'".Database::escape_string($values['glossary_comment'])."',
 						'".(int)($max_glossary_item + 1)."',
@@ -128,9 +128,11 @@ class GlossaryManager {
 	function update_glossary($values) {
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
+		
+		$course_id = api_get_course_int_id();
+		
 		// check if the glossary term already exists
-		if (GlossaryManager::glossary_exists($values['glossary_title'],$values['glossary_id']))
-		{
+		if (GlossaryManager::glossary_exists($values['glossary_title'],$values['glossary_id'])) {
 			// display the feedback message
 			Display::display_error_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'));
 			return false;
@@ -138,7 +140,7 @@ class GlossaryManager {
 			$sql = "UPDATE $t_glossary SET
 							name 		= '".Database::escape_string($values['glossary_title'])."',
 							description	= '".Database::escape_string($values['glossary_comment'])."'
-					WHERE glossary_id = ".Database::escape_string($values['glossary_id']);
+					WHERE c_id = $course_id AND glossary_id = ".Database::escape_string($values['glossary_id']);
 			$result = Database::query($sql);
 			if ($result === false) { return false; }
 			//update glossary into item_property
@@ -159,7 +161,8 @@ class GlossaryManager {
 	function get_max_glossary_item() {
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
-		$get_max = "SELECT MAX(display_order) FROM $t_glossary";
+		$course_id = api_get_course_int_id();
+		$get_max = "SELECT MAX(display_order) FROM $t_glossary WHERE c_id = $course_id ";
 		$res_max = Database::query($get_max);
 		if (Database::num_rows($res_max)==0) {
 			return 0;
@@ -186,8 +189,7 @@ class GlossaryManager {
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 
 		$sql = "SELECT name FROM $t_glossary WHERE name = '".Database::escape_string($term)."'";
-		if ($not_id<>'')
-		{
+		if ($not_id<>'') {
 			$sql .= " AND glossary_id <> '".Database::escape_string($not_id)."'";
 		}
 		$result = Database::query($sql);
@@ -219,7 +221,12 @@ class GlossaryManager {
                         ip.lastedit_date    as update_date,						 
 						g.session_id 
 				   FROM $t_glossary g, $t_item_propery ip
-                   WHERE g.glossary_id = ip.ref AND tool = '".TOOL_GLOSSARY."' AND g.glossary_id = '".intval($glossary_id)."' ";
+                   WHERE 	g.glossary_id 	= ip.ref AND 
+                   			tool 			= '".TOOL_GLOSSARY."' AND 
+							g.glossary_id 	= '".intval($glossary_id)."' AND
+							g.c_id			= ".api_get_course_int_id()." AND
+							ip.c_id			= ".api_get_course_int_id()."
+					";
 		$result = Database::query($sql);
 		if ($result === false || Database::num_rows($result) != 1) {
 			return false;
@@ -238,9 +245,11 @@ class GlossaryManager {
 	function delete_glossary($glossary_id) {
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
+		$course_id = api_get_course_int_id();
+		
 		if (empty($glossary_id)) { return false; }
 
-		$sql = "DELETE FROM $t_glossary WHERE glossary_id='".Database::escape_string($glossary_id)."'";
+		$sql = "DELETE FROM $t_glossary WHERE c_id = $course_id AND glossary_id='".Database::escape_string($glossary_id)."'";
 		$result = Database::query($sql);
         if ($result === false or Database::affected_rows() < 1) { return false; }
 		//update item_property (delete)
@@ -328,9 +337,11 @@ class GlossaryManager {
 	function get_number_glossary_terms($session_id=0) {
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
+		$course_id = api_get_course_int_id();
+		
 		$session_id = intval($session_id);
 		$sql_filter = api_get_session_condition($session_id, true, true);
-		$sql = "SELECT count(glossary_id) as total FROM $t_glossary WHERE 1=1 $sql_filter";
+		$sql = "SELECT count(glossary_id) as total FROM $t_glossary WHERE 1=1 AND c_id = $course_id $sql_filter";
 		$res = Database::query($sql);
 		if ($res === false) { return 0; }
 		$obj = Database::fetch_object($res);
@@ -377,8 +388,10 @@ class GlossaryManager {
 					   $col2
 					   glossary.session_id as session_id
 				FROM $t_glossary glossary, $t_item_propery ip
-				WHERE glossary.glossary_id = ip.ref
-				AND tool = '".TOOL_GLOSSARY."' $condition_session
+				WHERE 	glossary.glossary_id = ip.ref AND 
+						tool = '".TOOL_GLOSSARY."' $condition_session AND
+						glossary.c_id = ".api_get_course_int_id()." AND
+						ip.c_id = ".api_get_course_int_id()."
 		        ORDER BY col$column $direction 
 		        LIMIT $from,$number_of_items";
         $res = Database::query($sql);
@@ -489,7 +502,8 @@ class GlossaryManager {
 
 		$i = 1;
 		while ($data = Database::fetch_array($res)) {
-			$sql_reorder = "UPDATE $t_glossary SET display_order = $i WHERE glossary_id = '".Database::escape_string($data['glossary_id'])."'";
+			$sql_reorder = "UPDATE $t_glossary SET display_order = $i 
+							WHERE glossary_id = '".Database::escape_string($data['glossary_id'])."'";
 			Database::query($sql_reorder);
 			$i++;
 		}

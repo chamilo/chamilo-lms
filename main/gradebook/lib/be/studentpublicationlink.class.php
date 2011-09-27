@@ -102,9 +102,10 @@ class StudentPublicationLink extends AbstractLink
      		die('Error in get_not_created_links() : course code not set');
     	}
     	$course_info = api_get_course_info($this->course_code);
-    	$tbl_grade_links = Database :: get_course_table(TABLE_STUDENT_PUBLICATION,$course_info['dbName']);
+    	$tbl_grade_links = Database :: get_course_table(TABLE_STUDENT_PUBLICATION, $course_info['dbName']);
 
-		$sql = "SELECT id,url FROM $tbl_grade_links WHERE has_properties != '' AND filetype='folder' AND session_id = ".api_get_session_id()."";
+		$sql = "SELECT id, url FROM $tbl_grade_links 
+				WHERE c_id = {$course_info['real_id']} AND has_properties != '' AND filetype='folder' AND session_id = ".api_get_session_id()."";
 		$result = Database::query($sql);
 		while ($data=Database::fetch_array($result)) {
 			$cats[] = array ($data['id'], basename($data['url']));
@@ -119,7 +120,10 @@ class StudentPublicationLink extends AbstractLink
     public function has_results() {
     	$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_course_table(TABLE_STUDENT_PUBLICATION,$course_info['dbName']);
-		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links." WHERE parent_id = '".intval($this->get_ref_id())."' AND session_id=".api_get_session_id()."";
+		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links." 
+				WHERE 	c_id 		= {$course_info['real_id']} AND 
+						parent_id 	= '".intval($this->get_ref_id())."' AND 
+						session_id	=".api_get_session_id()."";
     	$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
@@ -133,7 +137,10 @@ class StudentPublicationLink extends AbstractLink
 		if (is_null($database_name)===true) {
 			return false;
 		}
-    	$sql = 'SELECT * FROM '.$tbl_stats." WHERE id = '".intval($this->get_ref_id())."' AND session_id=".api_get_session_id()."";
+    	$sql = 'SELECT * FROM '.$tbl_stats." 
+    			WHERE 	c_id 		= {$course_info['real_id']} AND  
+    					id 			= '".intval($this->get_ref_id())."' AND 
+    					session_id	= ".api_get_session_id()."";
 		$query = Database::query($sql);
 		$assignment = Database::fetch_array($query);
 

@@ -475,22 +475,19 @@ if (isset($_GET['message'])) {
 
 if ($newQuestion || $editQuestion) {
 	// statement management
-	$type = $_REQUEST['answerType'];    
-	?><input type="hidden" name="Type" value="<?php echo $type; ?>" />
-	<?php	
-   require 'question_admin.inc.php';
+	$type = Security::remove_XSS($_REQUEST['answerType']);
+	echo '<input type="hidden" name="Type" value="'.$type.'" />';	
+	require 'question_admin.inc.php';
 }
  
-if (isset($_GET['hotspotadmin'])) {
-    
+if (isset($_GET['hotspotadmin'])) {    
     if (!is_object($objQuestion)) {
         $objQuestion = Question :: read($_GET['hotspotadmin']);
     }
     if (!$objQuestion) {
         api_not_allowed();
     }    
-	require 'hotspot_admin.inc.php';
-}
+	require 'hotspot_admin.inc.php';}
 if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
 	// question list management
 	require 'question_list_admin.inc.php';

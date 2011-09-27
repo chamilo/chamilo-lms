@@ -34,16 +34,13 @@ define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
 
 $TABLECOURSE 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $TABLEFACULTY 				= Database :: get_main_table(TABLE_MAIN_CATEGORY);
-$TABLECOURSEHOME 			= Database :: get_course_table(TABLE_TOOL_LIST);
 $TABLELANGUAGES 			= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-$TABLEBBCONFIG 				= Database :: get_course_table(TOOL_FORUM_CONFIG_TABLE);
 $currentCourseID 			= $_course['sysCode'];
 $currentCourseRepository    = $_course['path'];
 $is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
-$course_setting_table 		= Database::get_course_table(TABLE_COURSE_SETTING);
 
-$course_code = $_course['sysCode'];
-$course_access_settings = CourseManager :: get_access_settings($course_code);
+$course_code 				= $_course['sysCode'];
+$course_access_settings 	= CourseManager :: get_access_settings($course_code);
 
 //LOGIC FUNCTIONS
 function is_settings_editable() {

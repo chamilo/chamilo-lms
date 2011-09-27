@@ -157,7 +157,7 @@ if ($action_forums != 'add') {
 
     // The groups of the user.
     $groups_of_user = array();
-    $groups_of_user = GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
+    $groups_of_user = GroupManager::get_group_ids($_course['real_id'], $_user['user_id']);
     // All groups in the course (and sorting them as the id of the group = the key of the array.
     $all_groups = GroupManager::get_group_list();
     if (is_array($all_groups)) {

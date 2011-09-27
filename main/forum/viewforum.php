@@ -73,10 +73,11 @@ if (!empty($my_forum_group)) {
         $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
     }
 } else {
-    $result = get_forum_information($my_forum);
+    $result = get_forum_information($my_forum);    
     if ($result['forum_of_group'] == 0) {
-        $current_forum = get_forum_information($my_forum); // Note: This has to be validated that it is an existing forum.
+        $current_forum = get_forum_information($my_forum); // Note: This has to be validated that it is an existing forum.        
         $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
+        
     }
 }
 
@@ -242,11 +243,8 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 
 // If the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit(false, true) AND ($current_forum_category['visibility'] == 0 OR $current_forum['visibility'] == 0)) {
-    $forum_allow = forum_not_allowed_here();
-    if ($forum_allow === false) {
-        exit;
-    }
+if (!api_is_allowed_to_edit(false, true) AND ($current_forum_category['visibility'] == 0 OR $current_forum['visibility'] == 0)) {	
+ 	api_not_allowed();
 }
 
 if ($origin == 'learnpath') {

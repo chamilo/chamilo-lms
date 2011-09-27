@@ -81,6 +81,7 @@ $form->add_html_editor('intro_content', null, null, false, $editor_config);
 $form->addElement('style_submit_button', 'intro_cmdUpdate', get_lang('SaveIntroText'), 'class="save"');
 
 /*	INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
+$course_id = api_get_course_int_id();
 
 if ($intro_editAllowed) {
 	$moduleId = Database::escape_string($moduleId);
@@ -91,7 +92,7 @@ if ($intro_editAllowed) {
 			$form_values = $form->exportValues();
 			$intro_content = Security::remove_XSS(stripslashes(api_html_entity_decode($form_values['intro_content'])), COURSEMANAGERLOWSECURITY);			
 			if (!empty($intro_content)) {
-				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".Database::escape_string($intro_content)."', session_id='".intval($session_id)."'";				
+				$sql = "REPLACE $TBL_INTRODUCTION SET c_id = $course_id, id='$moduleId',intro_text='".Database::escape_string($intro_content)."', session_id='".intval($session_id)."'";				
 				Database::query($sql);
 				Display::display_confirmation_message(get_lang('IntroductionTextUpdated'), false);
 			} else {

@@ -32,10 +32,10 @@ function get_myagendaitems($user_id, $courses_dbs, $month, $year) {
 	// get agenda-items for every course
 	foreach ($courses_dbs as $key => $array_course_info) {
 		//databases of the courses
-		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info["db_name"]);
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info["db_name"]);
+		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
-		$group_memberships = GroupManager :: get_group_ids($array_course_info["db_name"], $user_id);
+		$group_memberships = GroupManager :: get_group_ids($array_course_info["real_id"], $user_id);
 		$course_user_status = CourseManager::get_user_in_course_status($user_id, $array_course_info["code"]);
 		// if the user is administrator of that course we show all the agenda items
 		if ($course_user_status == '1') {

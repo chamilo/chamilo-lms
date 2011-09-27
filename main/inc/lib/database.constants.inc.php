@@ -14,6 +14,9 @@
  * CONSTANTS 
  */
 
+//See #3910 defines the default prefix for the single course database
+define('DB_COURSE_PREFIX', 'c_');
+
 // Main database tables
 define('TABLE_MAIN_COURSE',                 'course');
 define('TABLE_MAIN_USER',                   'user');
@@ -194,6 +197,7 @@ define('TABLE_QUIZ_TEST_QUESTION',  'quiz_rel_question');
 define('TABLE_QUIZ_QUESTION_OPTION','quiz_question_option');
 
 // Linked resource table
+//@todo table exists?
 define('TABLE_LINKED_RESOURCES', 'resource');
 
 // New SCORM tables

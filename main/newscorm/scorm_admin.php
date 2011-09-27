@@ -52,6 +52,8 @@ $newDirName				= (!empty($_POST['newDirName']) ? $_POST['newDirName'] : null);
 // Initialising internal variables.
 $dialogbox = '';
 
+$course_id = api_get_course_int_id();
+
 if (! $is_allowed_in_course) api_not_allowed();
 $is_allowedToUnzip = $is_courseAdmin;
 
@@ -115,12 +117,13 @@ switch ($action) {
             if (($set_visibility == 'i') && ($num > 0)) {
                 // It is visible or hidden but once was published.
                 if (($row2['visibility']) == 1) {
-                    $sql = "DELETE FROM $tbl_tool WHERE (name='$name' and image='scormbuilder.gif')";
+                    $sql = "DELETE FROM $tbl_tool WHERE (name='$name' and image='scormbuilder.gif' AND c_id = $course_id )";
                 } else {
-                    $sql = "UPDATE $tbl_tool set visibility=1 WHERE (name='$name' and image='scormbuilder.gif')";
+                    $sql = "UPDATE $tbl_tool set visibility=1 WHERE (name='$name' and image='scormbuilder.gif' AND c_id = $course_id)";
                 }
             } elseif (($set_visibility == 'v') && ($num == 0)) {
-                $sql ="INSERT INTO $tbl_tool (id, name, link, image, visibility, admin, address, added_tool) VALUES ('$theid','$name','learnpath/learnpath_handler.php?learnpath_id=$id','scormbuilder.gif','$v','0','pastillegris.gif',0)";
+                $sql ="INSERT INTO $tbl_tool (c_id, id, name, link, image, visibility, admin, address, added_tool) VALUES 
+                		($course_id, '$theid','$name','learnpath/learnpath_handler.php?learnpath_id=$id','scormbuilder.gif','$v','0','pastillegris.gif',0)";
             } else {
                 // Parameter and database incompatible, do nothing.
             }
@@ -141,10 +144,10 @@ switch ($action) {
     case 'add':
         /* ADDING A NEW LEARNPATH : treating the form */
         if (!empty($Submit)) {
-            $sql = "INSERT INTO $tbl_learnpath_main (learnpath_name, learnpath_description) VALUES ('".domesticate($learnpath_name)."','".domesticate($learnpath_description)."')";
+            $sql = "INSERT INTO $tbl_learnpath_main (c_id, learnpath_name, learnpath_description) VALUES ($course_id , '".domesticate($learnpath_name)."','".domesticate($learnpath_description)."')";
             Database::query($sql);
             $my_lp_id = Database::insert_id();
-            $sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool) VALUES ('".domesticate($learnpath_name)."','learnpath/learnpath_handler.php?learnpath_id=$my_lp_id','scormbuilder.gif','1','0','pastillegris.gif',0)";
+            $sql = "INSERT INTO $tbl_tool (c_id, name, link, image, visibility, admin, address, added_tool) VALUES ($course_id , '".domesticate($learnpath_name)."','learnpath/learnpath_handler.php?learnpath_id=$my_lp_id','scormbuilder.gif','1','0','pastillegris.gif',0)";
             Database::query($sql);
             // Instead of displaying this info text, get the user directly to the learnpath edit page.
             //$dialogBox = get_lang('_learnpath_added');
@@ -155,7 +158,7 @@ switch ($action) {
     case 'editscorm':
         /* EDITING A SCORM PACKAGE */
         if (!empty($Submit)) {
-            $sql = "UPDATE $tbl_document SET comment='".domesticate($learnpath_description)."', name='".domesticate($learnpath_name)."' WHERE path='$path'";
+            $sql = "UPDATE $tbl_document SET comment='".domesticate($learnpath_description)."', name='".domesticate($learnpath_name)."' WHERE path='$path' AND c_id = $course_id ";
             $result = Database::query($sql);
             $dialogBox = get_lang('_learnpath_edited');
         }
@@ -296,7 +299,7 @@ if ($is_allowedToEdit) { // TEACHER ONLY
               $visibilityPath = $make_directory_visible.$make_directory_invisible;
             // At least one of these variables are empty. So it's okay to proceed this way
             /* Check if there is yet a record for this file in the DB */
-            $result = Database::query ("SELECT * FROM $tbl_document WHERE path LIKE '".$visibilityPath."'");
+            $result = Database::query ("SELECT * FROM $tbl_document WHERE path LIKE '".$visibilityPath."' ");
             while($row = Database::fetch_array($result, 'ASSOC')) {
                 $attribute['path'      ] = $row['path'      ];
                 $attribute['visibility'] = $row['visibility'];
@@ -308,10 +311,13 @@ if ($is_allowedToEdit) { // TEACHER ONLY
             } elseif ($make_directory_invisible) {
                 $newVisibilityStatus = 'i';
             }
-            $query = "UPDATE $tbl_document SET visibility='$newVisibilityStatus' WHERE path=\"".$visibilityPath."\""; // Added by Toon.
+            $query = "UPDATE $tbl_document SET visibility='$newVisibilityStatus' WHERE path=\"".$visibilityPath."\" AND c_id = $course_id "; // Added by Toon.
             Database::query($query);
             if (Database::affected_rows() == 0) { // Extra check added by Toon, normally not necessary anymore because all files are in the db.
-                Database::query("INSERT INTO $tbl_document SET path=\"".$visibilityPath."\", visibility=\"".$newVisibilityStatus."\"");
+                Database::query("INSERT INTO $tbl_document SET
+                				c_id = $course_id,  
+                				path=\"".$visibilityPath."\", 
+                				visibility=\"".$newVisibilityStatus."\"");
             }
             unset($attribute);
             $dialogBox = get_lang('ViMod');

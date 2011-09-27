@@ -723,10 +723,8 @@ if (empty($_GET['details'])) {
 			get_lang('LastConnexion')
 		);
 
-		$t_lp 					= Database :: get_course_table(TABLE_LP_MAIN, $info_course['db_name']);
-		$tbl_stats_exercices 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		$tbl_quiz_questions 	= Database :: get_course_table(TABLE_QUIZ_QUESTION, $info_course['db_name']);
-
+		$t_lp = Database :: get_course_table(TABLE_LP_MAIN, $info_course['db_name']);
+				
 		// csv export headers
 		$csv_content[] = array ();
 		$csv_content[] = array (
@@ -739,9 +737,9 @@ if (empty($_GET['details'])) {
 		);
 
         if (empty($session_id)) {
-            $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE session_id = 0 ORDER BY lp.display_order";
+            $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE session_id = 0 AND c_id = {$info_course['real_id']} ORDER BY lp.display_order";
         } else {
-        	$sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp ORDER BY lp.display_order";
+        	$sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = {$info_course['real_id']}  ORDER BY lp.display_order";
         }
 		$rs_lp = Database::query($sql_lp);
 		$token = Security::get_token();        
@@ -878,7 +876,10 @@ if (empty($_GET['details'])) {
 
 		$t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST, $info_course['db_name']);
 		$sql_exercices = "SELECT quiz.title, id FROM " . $t_quiz . " AS quiz
-						  WHERE active='1' AND quiz.session_id = $session_id ORDER BY quiz.title ASC ";
+						  WHERE quiz.c_id =  ".$info_course['real_id']." AND
+						  		active='1' AND 
+								quiz.session_id = $session_id 
+							ORDER BY quiz.title ASC ";
 
 		$result_exercices = Database::query($sql_exercices);
 		$i = 0;

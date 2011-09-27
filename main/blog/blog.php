@@ -373,8 +373,7 @@ if (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) {
 		$user_task = true;
 }
 
-switch ($current_page)
-{
+switch ($current_page) {
 	case 'new_post' :
 		if (api_is_allowed('BLOG_'.$blog_id, 'article_add', $user_task ? $task_id : 0))
 		{
@@ -512,8 +511,6 @@ switch ($current_page)
 	</td>
 </tr>
 </table>
-
 <?php
 // Display the footer
 Display::display_footer();
-?>

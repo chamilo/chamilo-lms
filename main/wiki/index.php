@@ -25,6 +25,8 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once 'wiki.inc.php';
 
+$course_id = api_get_course_int_id();
+
 // additional style information
 $htmlHeadXtra[] ='<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'wiki/css/default.css"/>';
 
@@ -151,7 +153,7 @@ Display::display_introduction_section(TOOL_WIKI);
 
 
 //release of blocked pages to prevent concurrent editions
-$sql='SELECT * FROM '.$tbl_wiki.'WHERE is_editing!="0" '.$condition_session;
+$sql = 'SELECT * FROM '.$tbl_wiki.'WHERE is_editing!="0" '.$condition_session;
 $result=Database::query($sql);
 while ($is_editing_block=Database::fetch_array($result)) {
     $max_edit_time	= 1200; // 20 minutes
@@ -497,7 +499,7 @@ if ($_GET['action']=='more') {
 	//echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=whoandwhere&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('WhoAndWhere').'</a></li>';//TODO:Who and where everyone is working now?
 }
 
-/////////////////////// Statistics /////////////////////// Juan Carlos Raña Trabado
+// Statistics Juan Carlos Raña Trabado
 
 if ($_GET['action']=='statistics' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin())) {
 	echo '<div class="actions">'.get_lang('Statistics').'</div>';
@@ -535,14 +537,15 @@ if ($_GET['action']=='statistics' && (api_is_allowed_to_edit(false,true) || api_
     }
 	
 	//check only last version of all pages (current page)
-	$sql='SELECT  *, COUNT(*) AS TOTAL_PAGES, SUM(hits) AS TOTAL_VISITS_LV  FROM  '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
+	$sql =' SELECT  *, COUNT(*) AS TOTAL_PAGES, SUM(hits) AS TOTAL_VISITS_LV  FROM  '.$tbl_wiki.' s1 
+			WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
 	$allpages=Database::query($sql);
 	 while ($row=Database::fetch_array($allpages)) {
 		$total_pages	 		= $row['TOTAL_PAGES'];
 		$total_visits_lv 		= $row['TOTAL_VISITS_LV'];
 	 }
 	
-	$sql='SELECT  * FROM  '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
+	$sql='SELECT  * FROM  '.$tbl_wiki.' s1 WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
 	$allpages=Database::query($sql);	
 
     while ($row=Database::fetch_array($allpages)) {		
@@ -569,7 +572,9 @@ if ($_GET['action']=='statistics' && (api_is_allowed_to_edit(false,true) || api_
 //Total pages edited at this time
 
 $total_editing_now=0;
-$sql='SELECT  *, COUNT(*) AS TOTAL_EDITING_NOW FROM  '.$tbl_wiki.' s1 WHERE is_editing!=0 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';//Can not use group by because the mark is set in the latest version
+$sql='SELECT  *, COUNT(*) AS TOTAL_EDITING_NOW FROM  '.$tbl_wiki.' s1 
+		WHERE is_editing!=0 AND s1.c_id = '.$course_id.' AND 
+		id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';//Can not use group by because the mark is set in the latest version
 	$allpages=Database::query($sql);
 while ($row=Database::fetch_array($allpages)) {
 		$total_editing_now	= $row['TOTAL_EDITING_NOW'];
@@ -607,7 +612,8 @@ while ($row=Database::fetch_array($allpages)) {
 //Total empty pages (last version)
 
 $total_empty_content_lv=0;
-$sql='SELECT  * FROM  '.$tbl_wiki.' s1 WHERE content="" AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
+$sql = 'SELECT  * FROM  '.$tbl_wiki.' s1 
+		WHERE s1.c_id = '.$course_id.' AND content="" AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
 	$allpages=Database::query($sql);
 while ($row=Database::fetch_array($allpages)) {
 		$total_empty_content_lv	= $total_empty_content_lv+1;
@@ -665,7 +671,7 @@ $allpages=Database::query($sql);
 //Total pages identified as teacher page (wiki portfolio mode - individual assignment)
 
 $total_teacher_assignment=0;
-$sql='SELECT  * FROM  '.$tbl_wiki.' s1 WHERE assignment=1 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';//mark all versions, but do not use group by reflink because y want the pages not versions
+$sql='SELECT  * FROM  '.$tbl_wiki.' s1 WHERE s1.c_id = '.$course_id.' AND assignment=1 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';//mark all versions, but do not use group by reflink because y want the pages not versions
 $allpages=Database::query($sql);
 	while ($row=Database::fetch_array($allpages)) {
 		$total_teacher_assignment=$total_teacher_assignment+1;
@@ -674,7 +680,9 @@ $allpages=Database::query($sql);
 //Total pages identifies as student page (wiki portfolio mode - individual assignment)
 
 $total_student_assignment=0;
-$sql='SELECT  * FROM  '.$tbl_wiki.' s1 WHERE assignment=2 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';//mark all versions, but do not use group by reflink because y want the pages not versions
+$sql = 'SELECT  * FROM  '.$tbl_wiki.' s1 
+		WHERE s1.c_id = '.$course_id.' AND assignment=2 AND 
+		id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';//mark all versions, but do not use group by reflink because y want the pages not versions
 $allpages=Database::query($sql);
 	while ($row=Database::fetch_array($allpages)) {
 		$total_student_assignment=$total_student_assignment+1;
@@ -714,23 +722,28 @@ $allpages=Database::query($sql);
 
 //Average score of all wiki pages. (If a page has not scored zero rated)
 
-$sql="SELECT *, SUM(score) AS TOTAL_SCORE FROM ".$tbl_wiki."WHERE ".$groupfilter.$condition_session." GROUP BY reflink ";//group by because mark in all versions, then always is ok. Do not use "count" because using "group by", would give a wrong value
+$sql="SELECT *, SUM(score) AS TOTAL_SCORE FROM ".$tbl_wiki." WHERE ".$groupfilter.$condition_session." GROUP BY reflink ";//group by because mark in all versions, then always is ok. Do not use "count" because using "group by", would give a wrong value
 	$allpages=Database::query($sql);
 	while ($row=Database::fetch_array($allpages)) {
 		$total_score=$total_score+$row['TOTAL_SCORE'];
 	}
 		
-$media_score=$total_score/$total_pages;//put always this line alfter check num all pages
+if (!empty($total_pages)) {
+	$media_score = $total_score/$total_pages;//put always this line alfter check num all pages
+}
 
 //Average user progress in his pages
 	
-$sql='SELECT  *, SUM(progress) AS TOTAL_PROGRESS FROM  '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';//As the value is only the latest version I can not use group by
+$sql='SELECT  *, SUM(progress) AS TOTAL_PROGRESS FROM  '.$tbl_wiki.' s1 WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';//As the value is only the latest version I can not use group by
 	$allpages=Database::query($sql);	
 
     while ($row=Database::fetch_array($allpages)) {		
 	$total_progress			= $row['TOTAL_PROGRESS'];
- }
- $media_progress=$total_progress/$total_pages;//put always this line alfter check num all pages
+}
+
+if (!empty($total_pages)) {
+	$media_progress=$total_progress/$total_pages;//put always this line alfter check num all pages
+}
  
 //Total users that have participated in the Wiki
 
@@ -1120,7 +1133,8 @@ if ($_GET['action']=='wanted') {
     }
 
     //get name refs in last pages
-    $sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.$condition_session.')';
+    $sql = 'SELECT  *  FROM   '.$tbl_wiki.' s1 
+    		WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.$condition_session.')';
 
     $allpages=Database::query($sql);
 	
@@ -1173,7 +1187,8 @@ if ($_GET['action']=='orphaned') {
     }
 
     //get name refs in last pages and make a unique list
-    $sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.$condition_session.')';
+    $sql = 'SELECT  *  FROM   '.$tbl_wiki.' s1  
+    		WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.$condition_session.')';
 
     $allpages=Database::query($sql);
     while ($row=Database::fetch_array($allpages)) {
@@ -1241,7 +1256,7 @@ if ($_GET['action']=='mostlinked') {
     }
 
     //get name refs in last pages
-    $sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.$condition_session.')';
+    $sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.$condition_session.')';
 
     $allpages=Database::query($sql);
 	
@@ -1426,9 +1441,9 @@ if ($_GET['action']=='links') {
 
         //table
         if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden 	
-			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE linksto LIKE '%".Database::escape_string($page)." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";//add blank space after like '%" " %' to identify each word			
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE s1.c_id = '.$course_id.' AND linksto LIKE '%".Database::escape_string($page)." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";//add blank space after like '%" " %' to identify each word			
         } else {
-            $sql="SELECT * FROM ".$tbl_wiki." s1 WHERE visibility=1 AND linksto LIKE '%".Database::escape_string($page)." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";//add blank space after like '%" " %' to identify each word		
+            $sql="SELECT * FROM ".$tbl_wiki." s1 WHERE s1.c_id = '.$course_id.' AND visibility=1 AND linksto LIKE '%".Database::escape_string($page)." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";//add blank space after like '%" " %' to identify each word		
         }
 
         $allpages=Database::query($sql);
@@ -1536,8 +1551,15 @@ if ($_GET['action']=='edit') {
 
     $_clean['group_id']=(int)$_SESSION['_gid'];
 
-    $sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.Database::escape_string($page).'" AND '.$tbl_wiki.'.'.$groupfilter.$condition_session.' ORDER BY id DESC';
-     $result=Database::query($sql);
+    $sql = 'SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' 
+    		WHERE 
+    		'.$tbl_wiki.'.c_id = '.$course_id.' AND
+    		'.$tbl_wiki_conf.'.c_id = '.$course_id.' AND
+    		'.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND 
+    		'.$tbl_wiki.'.reflink="'.Database::escape_string($page).'" AND 
+    		'.$tbl_wiki.'.'.$groupfilter.$condition_session.' 
+    		ORDER BY id DESC';
+    $result=Database::query($sql);
     $row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
 
 
@@ -1713,7 +1735,7 @@ if ($_GET['action']=='edit') {
                 echo '<form name="form1" method="post" action="'.api_get_self().'?action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">';
 
 
-                echo '<div id="wikititle" >';
+                echo '<div id="wikititle">';
                 echo '<div style="width:70%;float:left;">'.$icon_assignment.str_repeat('&nbsp;',3).api_htmlentities($title).'</div>';
 
                 if ((api_is_allowed_to_edit(false,true) || api_is_platform_admin()) && $row['reflink']!='index') {
@@ -2092,14 +2114,14 @@ if ($_GET['action']=='recentchanges') {
 
 
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden
-        //$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' ORDER BY dtime DESC'; // old version TODO: Replace by the bottom line
-
-        $sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.$condition_session.' ORDER BY dtime DESC'; // new version
-
+        $sql = 'SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' 
+        		WHERE 	'.$tbl_wiki_conf.'.c_id= '.$course_id.' AND
+        				'.$tbl_wiki.'.c_id= '.$course_id.' AND
+        				'.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND 
+        				'.$tbl_wiki.'.'.$groupfilter.$condition_session.' 
+        		ORDER BY dtime DESC'; // new version
     } else {
         $sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.$condition_session.' AND visibility=1 ORDER BY dtime DESC';	// old version TODO: Replace by the bottom line
-
-        //$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND visibility=1 AND '.$tbl_wiki.'.'.$groupfilter.' ORDER BY dtime DESC'; // new version
     }
 
     $allpages=Database::query($sql);
@@ -2158,18 +2180,23 @@ if ($_GET['action']=='allpages') {
     $_clean['group_id']=(int)$_SESSION['_gid'];
 
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden 
-        $sql='SELECT  *  FROM  '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')'; // warning don't use group by reflink because does not return the last version
+        $sql = 'SELECT  *  FROM  '.$tbl_wiki.' s1 
+        		WHERE s1.c_id = '.$course_id.' AND id=(
+        					SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 
+        					WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')'; // warning don't use group by reflink because does not return the last version
 
     } else {        
-		$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE visibility=1 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')'; // warning don't use group by reflink because does not return the last version
+		$sql = 'SELECT  *  FROM   '.$tbl_wiki.' s1 
+				WHERE visibility=1 AND s1.c_id = '.$course_id.' AND id=(
+						SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')'; // warning don't use group by reflink because does not return the last version
     }
-
+	
     $allpages=Database::query($sql);
 
     //show table
     if (Database::num_rows($allpages) > 0) {
         $row = array ();
-        while ($obj = Database::fetch_object($allpages)) {
+        while ($obj = Database::fetch_object($allpages)) { 
             //get author
             $userinfo=Database::get_user_info_from_id($obj->user_id);
 
@@ -2203,7 +2230,7 @@ if ($_GET['action']=='allpages') {
             }
             $rows[] = $row;
         }
-
+		
         $table = new SortableTableFromArrayConfig($rows,1,10,'AllPages_table','','','ASC');
         $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
         $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
@@ -2377,7 +2404,8 @@ if ($_GET['action']=='discuss') {
                     $dtime = date( "Y-m-d H:i:s" );
                     $message_author=api_get_user_id();
 
-                    $sql="INSERT INTO $tbl_wiki_discuss (publication_id, userc_id, comment, p_score, dtime) VALUES ('".$id."','".$message_author."','".Database::escape_string($_POST['comment'])."','".Database::escape_string($_POST['rating'])."','".$dtime."')";
+                    $sql="INSERT INTO $tbl_wiki_discuss (c_id, publication_id, userc_id, comment, p_score, dtime) VALUES 
+                    	($course_id, '".$id."','".$message_author."','".Database::escape_string($_POST['comment'])."','".Database::escape_string($_POST['rating'])."','".$dtime."')";
                     $result=Database::query($sql) or die(Database::error());
 
                     check_emailcue($id, 'D', $dtime, $message_author);

@@ -73,10 +73,17 @@ class ForumThreadLink extends AbstractLink
     	if (empty($this->course_code)) {
     		die('Error in get_not_created_links() : course code not set');
     	}
-    	$course_info = api_get_course_info($this->course_code);
-    	$tbl_grade_links = Database :: get_course_table(TABLE_FORUM_THREAD,$course_info['dbName']);
-    	$tbl_item_property=Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
-		$sql = 'SELECT tl.thread_id,tl.thread_title,tl.thread_title_qualify FROM '.$tbl_grade_links.' tl ,'.$tbl_item_property.' ip WHERE tl.thread_id=ip.ref AND ip.tool="forum_thread" AND ip.visibility<>2 AND tl.session_id='.api_get_session_id().' GROUP BY ip.ref ';
+    	$course_info 		= api_get_course_info($this->course_code);
+    	$tbl_grade_links 	= Database :: get_course_table(TABLE_FORUM_THREAD,$course_info['dbName']);
+    	$tbl_item_property	= Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
+    	
+		$sql = 'SELECT tl.thread_id, tl.thread_title, tl.thread_title_qualify 
+				FROM '.$tbl_grade_links.' tl ,'.$tbl_item_property.' ip 
+				WHERE 	tl.c_id 		= '.$course_info['real_id'].' AND
+						ip.c_id 		= '.$course_info['real_id'].' AND 
+						tl.thread_id	= ip.ref AND 
+						ip.tool			= "forum_thread" AND 
+						ip.visibility<>2 AND tl.session_id='.api_get_session_id().' GROUP BY ip.ref ';
 		$result = Database::query($sql);
 
 		while ($data=Database::fetch_array($result)) {
@@ -97,7 +104,8 @@ class ForumThreadLink extends AbstractLink
     public function has_results() {
     	$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_course_table(TABLE_FORUM_POST,$course_info['dbName']);
-		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links." WHERE thread_id = '".$this->get_ref_id()."'";
+		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links." 
+				WHERE c_id = ".$course_info['real_id']." AND thread_id = '".$this->get_ref_id()."'";
     	$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
@@ -110,12 +118,12 @@ class ForumThreadLink extends AbstractLink
 		if (!empty($database_name)) {
 			$thread_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY, $database_name);
 
-	  		$sql = 'SELECT thread_qualify_max FROM '.Database :: get_course_table(TABLE_FORUM_THREAD, $database_name)." WHERE thread_id = '".$this->get_ref_id()."'";
+	  		$sql = 'SELECT thread_qualify_max FROM '.Database :: get_course_table(TABLE_FORUM_THREAD, $database_name)." 
+	  				WHERE c_id = ".$course_info['real_id']." AND thread_id = '".$this->get_ref_id()."'";
 			$query = Database::query($sql);
 			$assignment = Database::fetch_array($query);
 
-	  	    $sql = 'SELECT * FROM '.$thread_qualify.' WHERE thread_id = '.$this->get_ref_id();
-
+	  	    $sql = "SELECT * FROM $thread_qualify WHERE c_id = ".$course_info['real_id']." AND thread_id = ".$this->get_ref_id();
 	    	if (isset($stud_id)) {
 	    		$sql .= ' AND user_id = '."'".intval($stud_id)."'";
 	    	}

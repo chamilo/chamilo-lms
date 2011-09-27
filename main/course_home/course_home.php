@@ -202,11 +202,12 @@ if (!empty($auto_lunch)) {
             }
         }        
     } else {
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);        
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);   
+        $course_id = api_get_course_int_id();
         $condition = '';        
         if (!empty($session_id)) {
             $condition =  api_get_session_condition($session_id);
-            $sql = "SELECT id FROM $lp_table WHERE autolunch = 1 $condition LIMIT 1";
+            $sql = "SELECT id FROM $lp_table WHERE c_id = $course_id AND autolunch = 1 $condition LIMIT 1";
             $result = Database::query($sql);
             //If we found nothing in the session we just called the session_id =  0 autolunch
             if (Database::num_rows($result) ==  0) {

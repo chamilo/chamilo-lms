@@ -9,16 +9,15 @@
  * Code
  */
 set_time_limit(0);
-
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
-$path          = $document_data['path']; 
-
-if (empty($document_data)) {
-    api_not_allowed();
-}
+$path          = $document_data['path'];
+ 
 if (empty($path)) {
-    $path = '/';
-} 
+	$path = '/';
+}
+if (empty($document_data)) {
+    //api_not_allowed();
+}
 
 //a student should not be able to download a root shared directory
 if (($path == '/shared_folder' || $path=='/shared_folder_session_'.api_get_session_id()) && (!api_is_allowed_to_edit() || !api_is_platform_admin())){		
@@ -59,8 +58,13 @@ if (api_is_allowed_to_edit()) {
 	}
 	$querypath = Database::escape_string($querypath);
 	// Search for all files that are not deleted => visibility != 2
-	$sql = "SELECT path FROM $doc_table AS docs,$prop_table AS props  
-			WHERE props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$querypath."/%' AND docs.filetype='file' AND props.visibility<>'2' AND props.to_group_id=".$to_group_id."";
+	$sql = "SELECT path FROM $doc_table AS docs, $prop_table AS props  
+			WHERE 	props.tool='".TOOL_DOCUMENT."' AND 
+					docs.id				= props.ref 	AND 
+					docs.path 			LIKE '".$querypath."/%' AND 
+					docs.filetype		= 'file' AND props.visibility<>'2' AND 
+					props.to_group_id	= ".$to_group_id." AND 
+					docs.c_id 			= ".api_get_course_int_id()." ";
 	$query = Database::query($sql);
 	// Add tem to the zip file
 	while ($not_deleted_file = Database::fetch_assoc($query)) {

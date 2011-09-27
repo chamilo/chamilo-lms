@@ -83,12 +83,12 @@ class LearnpathLink extends AbstractLink
     /**
      * Has anyone used this learnpath yet ?
      */
-    public function has_results()
-    {
+    public function has_results() {
+    	
     	$course_info = api_get_course_info($this->get_course_code());
     	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
-		$sql = 'SELECT count(id) AS number FROM '.$tbl_stats
-				." WHERE lp_id = '".$this->get_ref_id()."'";
+		$sql = "SELECT count(id) AS number FROM $tbl_stats
+				WHERE c_id = {$course_info['real_id']} AND lp_id = ".$this->get_ref_id();
     	$result = Database::query($sql);
 		$number=Database::fetch_array($result,'NUM');
 		return ($number[0] != 0);
@@ -104,12 +104,11 @@ class LearnpathLink extends AbstractLink
     public function calc_score($stud_id = null)
     {
     	$course_info = api_get_course_info($this->get_course_code());
-    	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
+    	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW);
     	if (is_null($course_info['dbName'])===true) {
 			return false;
 		}
-    	$sql = 'SELECT * FROM '.$tbl_stats
-    			." WHERE lp_id = ".$this->get_ref_id();
+    	$sql = "SELECT * FROM $tbl_stats WHERE c_id = {$course_info['real_id']} AND lp_id = ".$this->get_ref_id();
 
     	if (isset($stud_id))
     		$sql .= ' AND user_id = '.intval($stud_id);

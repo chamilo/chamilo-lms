@@ -142,7 +142,7 @@ if (api_get_setting('youtube_for_students') == 'true') {
     }
 }
 
-// googlemaps : Adds a dilog for inserting Google maps.
+// googlemaps : Adds a dialog for inserting Google maps.
 if ((api_get_setting('enabled_googlemaps') == 'true')) {
     $config['LoadPlugin'][] = 'googlemaps';
 

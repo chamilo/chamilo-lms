@@ -1,5 +1,4 @@
 <!-- Topbar -->
-
 {if $_u.status == 1}
     <div class="topbar">
         <div class="topbar-inner">
@@ -44,7 +43,7 @@
                             <a class="dropdown-toggle" href="#">{$_u.complete_name}</a>
                             <ul class="dropdown-menu">
                                 <li><a href="{'WEB_CODE_PATH'|get_path}social/home.php">{"Profile"|get_lang}</a></li>
-                                <li><a href="{'WEB_CODE_PATH'|get_path}calendar/myagenda.php?view=month">{"MyAgenda"|get_lang}</a></li>
+                                <li><a href="{'WEB_CODE_PATH'|get_path}calendar/agenda_js.php?type=personal">{"MyAgenda"|get_lang}</a></li>
                                 <li><a href="{'WEB_CODE_PATH'|get_path}messages/inbox.php">{"Messages"|get_lang}</a></li>
                                 <li><a href="{'WEB_CODE_PATH'|get_path}auth/my_progress.php">{"MyReporting"|get_lang}</a></li>
                                 <li class="divider"></li>

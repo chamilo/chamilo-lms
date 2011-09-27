@@ -12,33 +12,26 @@ class Template extends Smarty {
 	
 	function __construct($title = '') {
 		$this->title = $title;
-				
-		/*
-		 * 
-		 * For smarty 3.1 use 
-		 * 
-		$this->setPluginsDir(INCLUDES.'smarty/plugins/');
-		$this->setCacheDir(CACHE_PATH);
-		$this->setCompileDir(CACHE_PATH);
-		$this->setTemplateDir(INCLUDES.'tpl/');
-		$this->setConfigDir(CACHE_PATH);
 		
-		*/
-		
-		$this->template_dir 	= api_get_path(SYS_CODE_PATH).'template/';	
-		$this->compile_dir  	= api_get_path(SYS_ARCHIVE_PATH); 	
-		//@todo check this config fir
-		$this->config_dir   	= api_get_path(SYS_ARCHIVE_PATH);	// main/inc/conf/config?
-		$this->cache_dir    	= api_get_path(SYS_ARCHIVE_PATH);			
-		$this->plugins_dir		= api_get_path(LIBRARY_PATH).'smarty/plugins';		
+		$this->setPluginsDir(api_get_path(LIBRARY_PATH).'smarty/plugins');
+		$this->setCacheDir(api_get_path(SYS_ARCHIVE_PATH));
+		$this->setCompileDir(api_get_path(SYS_ARCHIVE_PATH));
+		$this->setTemplateDir(api_get_path(SYS_CODE_PATH).'template/');
+		$this->setConfigDir(api_get_path(SYS_ARCHIVE_PATH));
 		
 		$this->caching 			= true;
 		$this->cache_lifetime 	= Smarty::CACHING_OFF; // no caching
 		//$this->cache_lifetime 	= 120;
 		
+		//By default we show the header and footer
+		$this->set_footer(true);
+		$this->set_header(true);
+		
 		$this->set_system_parameters();
 		
 		$this->set_user_parameters();
+		
+		
 		
 		$this->set_header_parameters();		
 		
@@ -178,6 +171,7 @@ class Template extends Smarty {
 			'jquery.menu.js',
 			'dtree/dtree.js',
 			'email_links.lib.js.php',
+			'bootstrap/bootstrap-dropdown.js'
 		);
 		
 		if (api_get_setting('accessibility_font_resize') == 'true') {

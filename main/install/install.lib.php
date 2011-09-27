@@ -1651,7 +1651,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
       <?php endif; ?>
     </tr>
     <?php
-
+echo '<tr>';
     //database user username
     $example_login = get_lang('EG').' root';
     display_database_parameter($installType, get_lang('DBLogin'), 'dbUsernameForm', $dbUsernameForm, $example_login);
@@ -1659,35 +1659,24 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     //database user password
     $example_password = get_lang('EG').' '.api_generate_password();
     display_database_parameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
-    ?>
     
-    <tr id="optional_param6">
-    	<td><?php echo get_lang('SingleDb'); ?> </td>
-        <?php if ($installType == INSTALL_TYPE_UPDATE): ?>
-        <td><input type="hidden" name="singleDbForm" value="<?php echo $singleDbForm; ?>" /><?php echo $singleDbForm ? get_lang('One') : get_lang('Several'); ?></td>
-        <?php else: ?>
-        <td>
-        	<input class="checkbox" type="radio" name="singleDbForm" value="1" id="singleDb1" <?php echo $singleDbForm ? 'checked="checked" ' : ''; ?> onclick="javascript: show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb1"><?php echo get_lang('One'); ?></label>
-            <input class="checkbox" type="radio" name="singleDbForm" value="0" id="singleDb0" <?php echo $singleDbForm ? '' : 'checked="checked" '; ?> onclick="javascript: show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb0"><?php echo get_lang('Several'); ?></label>
-		</td>
-        <?php endif; ?>
-        <td>&nbsp;</td>
-	</tr>
+    ?>
+
         
 	<?php 
 
     //Fields for the four standard Chamilo databases    
     if ($installType != INSTALL_TYPE_UPDATE) {        
-        echo '<tr><td colspan="3">';
+        /*echo '<tr><td colspan="3">';
         echo '<a href="#;" onclick="javascript:show_hide_option();" id="optionalparameters">
         	  <img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters').'</a>';
-        echo '</td></tr>';
+        echo '</td></tr>';*/
     }
     ?>    
     <input type="hidden" name="enableTrackingForm" value="1" />
     <?php   
     
-    $style = 'style="display:none;"';    
+    $style = '';    
     if ($installType == INSTALL_TYPE_UPDATE) {
         $style = '';
     } 

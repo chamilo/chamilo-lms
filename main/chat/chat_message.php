@@ -97,6 +97,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
 	$chat_path = $document_path.$basepath_chat.'/';
 
 	$TABLEITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	$course_id = api_get_course_int_id();
 
 	if (!is_dir($chat_path)) {
 		if (is_file($chat_path)) {
@@ -107,8 +108,8 @@ if (!empty($course) && !empty($_user['user_id'])) {
 			// save chat files document for group into item property
 			if (!empty($group_id)) {
 				$doc_id = add_document($_course,$basepath_chat, 'folder', 0, 'chat_files');
-				$sql = "INSERT INTO $TABLEITEMPROPERTY (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-						VALUES ('document',1,NOW(),NOW(),$doc_id,'FolderCreated',1,$group_id,NULL,0)";
+				$sql = "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
+						VALUES ($course_id, 'document',1,NOW(),NOW(),$doc_id,'FolderCreated',1,$group_id,NULL,0)";
 				Database::query($sql);
 			}
 		}

@@ -158,7 +158,7 @@ $(function() {
 echo '<div class="actionsbig">';
 //we filter the type of questions we can add
 Question :: display_type_menu ($objExercise->feedbacktype);
-echo '</div><div style="clear:both;">';
+echo '</div><div style="clear:both;"></div>';
 echo '<div id="message"></div>';
 $token = Security::get_token();
 //deletes a session when using don't know question type (ugly fix)
@@ -212,17 +212,15 @@ if ($nbrQuestions) {
                         echo '<br />';
                         showQuestion($id, false, '', '',false, true);                   
                     echo '</p>';                        
-                 echo '</div>';
-                 
-            echo '</div>';
-            
+                 echo '</div>';                 
+            echo '</div>';            
                 
             unset($objQuestionTmp);
 		}
         echo '</div>';
 	}
 }
-echo '</table></div>';
+echo '</div>';
 if(!$nbrQuestions) {	
   	echo Display::display_warning_message(get_lang('NoQuestion'));
 }

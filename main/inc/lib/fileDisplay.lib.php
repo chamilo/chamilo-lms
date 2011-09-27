@@ -228,33 +228,28 @@ function folder_size($dir_name)
  * @param 	boolean $can_see_invisible
  * @return 	Total size
  */
-function get_total_folder_size($path, $can_see_invisible = false)
-{
+function get_total_folder_size($path, $can_see_invisible = false) {
     $table_itemproperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $table_document = Database::get_course_table(TABLE_DOCUMENT);
-    $tool_document = TOOL_DOCUMENT;
+    $table_document 	= Database::get_course_table(TABLE_DOCUMENT);
+    $tool_document 		= TOOL_DOCUMENT;
+    
+    $course_id 			= api_get_course_int_id();
 
     $visibility_rule = 'props.visibility ' . ($can_see_invisible ? '<> 2' : '= 1');
 
-    $sql = <<<EOQ
-SELECT SUM(size)
-    FROM $table_itemproperty AS props, $table_document AS docs
-    WHERE docs.id = props.ref
-        AND props.tool = '$tool_document'
-        AND path LIKE '$path/%'
-        AND $visibility_rule
-EOQ;
+    $sql = "SELECT SUM(size) FROM $table_itemproperty AS props, $table_document AS docs
+    		WHERE 	docs.c_id 	= $course_id AND
+    				props.c_id 	= $course_id AND    		
+    				docs.id 	= props.ref AND 
+    				props.tool 	= '$tool_document' AND 
+    				path LIKE '$path/%' AND 
+    				$visibility_rule";
 
     $result = Database::query($sql);
-
-    if($result && Database::num_rows($result) != 0)
-    {
+    if($result && Database::num_rows($result) != 0) {
         $row = Database::fetch_row($result);
         return $row[0] == null ? 0 : $row[0];
-    }
-    else
-    {
+    } else {
         return 0;
     }
 }
-?>

@@ -47,9 +47,7 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
 
 <script type="text/javascript">
 $(document).ready(function(){	
-	$(".dropdown-toggle, .menu").click(function (e) {
-    	var $li = $(this).parent("li").toggleClass('open'); 
-  	});
+	$('.topbar').dropdown();	
 });
 </script>
 

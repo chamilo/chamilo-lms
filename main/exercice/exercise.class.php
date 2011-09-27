@@ -121,7 +121,12 @@ class Exercise {
 			}
 			$this->expired_time 	= $object->expired_time; //control time
 
-			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
+			$sql = "SELECT e.question_id, e.question_order FROM $TBL_EXERCICE_QUESTION e, $TBL_QUESTIONS  q
+					WHERE 	e.question_id	= q.id AND 
+							e.exercice_id	= '".Database::escape_string($id)."' AND
+							e.c_id = ".api_get_course_int_id()." AND
+							q.c_id = ".api_get_course_int_id()." 														 
+					ORDER BY question_order";
 				
 			$result = Database::query($sql);
 
@@ -288,7 +293,12 @@ class Exercise {
 			$TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION, $this->course['db_name']);
 			$TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION, $this->course['db_name']);
 
-			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS WHERE question_id = id AND exercice_id='".$this->id."' ORDER BY question_order";
+			$sql = "SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION eq , $TBL_QUESTIONS q 
+					WHERE 	eq.question_id = q.id AND 
+							exercice_id='".$this->id."' AND
+							eq.c_id = {$this->course['real_id']} AND
+							q.c_id = {$this->course['real_id']}
+					ORDER BY question_order";			
 			$result = Database::query($sql);
 			$question_list = array();
 			while ($new_object = Database::fetch_object($result)) {
@@ -438,16 +448,6 @@ class Exercise {
 					 ." ('".str_replace($documentPath,'',$audioPath).'/'.$this->sound."','file')";
 					Database::query($query);*/
 					$id = add_document($this->course,str_replace($documentPath,'',$audioPath).'/'.$this->sound,'file',$sound['size'],$sound['name']);
-						
-					//$id = Database::insert_id();
-					//$time = time();
-					//$time = date("Y-m-d H:i:s", $time);
-					// insert into the item_property table, using default visibility of "visible"
-					/*$query = "INSERT INTO $TBL_ITEM_PROPERTY "
-					 ."(tool, ref, insert_user_id,to_group_id, insert_date, lastedit_date, lastedit_type) "
-					." VALUES "
-					."('".TOOL_DOCUMENT."', $id, $_user['user_id'], 0, '$time', '$time', 'DocumentAdded' )";
-					Database::query($query);*/
 					api_item_property_update($this->course, TOOL_DOCUMENT, $id, 'DocumentAdded',api_get_user_id());
 					item_property_update_on_folder($this->course,str_replace($documentPath,'',$audioPath),api_get_user_id());
 				}
@@ -588,8 +588,9 @@ class Exercise {
 			}
 		} else {
 			// creates a new exercise
-			$sql="INSERT INTO $TBL_EXERCICES (start_time, end_time, title, description, sound, type, random, random_answers,active, results_disabled, max_attempt, feedback_type, expired_time, session_id)
+			$sql="INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers,active, results_disabled, max_attempt, feedback_type, expired_time, session_id)
 					VALUES(
+						".api_get_course_int_id().",
 						'$start_time','$end_time',
 						'".Database::escape_string($exercise)."',
 						'".Database::escape_string($description)."',
@@ -1803,8 +1804,8 @@ class Exercise {
 		$table_ans              = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 		// Creates a temporary Question object
-		$objQuestionTmp         = Question::read($questionId);
-
+		$objQuestionTmp         = Question::read($questionId, api_get_course_int_id());
+		
 		$questionName 			= $objQuestionTmp->selectTitle();
 		$questionDescription 	= $objQuestionTmp->selectDescription();
 		$questionWeighting 		= $objQuestionTmp->selectWeighting();
@@ -1874,7 +1875,7 @@ class Exercise {
 				case UNIQUE_ANSWER :
 				case UNIQUE_ANSWER_NO_OPTION :
 					if ($from_database) {
-						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
+						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' and question_id= '".$questionId."'";
 						$resultans = Database::query($queryans);
 						$choice = Database::result($resultans,0,"answer");
 
@@ -2259,7 +2260,7 @@ class Exercise {
 						
 						if ($show_result) {
 							$TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-							$query = "SELECT hotspot_correct FROM ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = '".$exeId."' and hotspot_question_id= '".$questionId."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
+							$query = "SELECT hotspot_correct FROM ".$TBL_TRACK_HOTSPOT." WHERE hotspot_exe_id = '".$exeId."' and hotspot_question_id= '".$questionId."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
 							$resq = Database::query($query);
 							$studentChoice = Database::result($resq,0,"hotspot_correct");							
 						}
@@ -2731,7 +2732,7 @@ class Exercise {
 		// destruction of Answer
 
 		if (!$saved_results && $answerType == HOT_SPOT) {
-			$queryfree      = "SELECT marks FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($exeId)."' and question_id= '".Database::escape_string($questionId)."'";
+			$queryfree      = "SELECT marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($exeId)."' and question_id= '".Database::escape_string($questionId)."'";
 			$resfree        = Database::query($queryfree);
 			$questionScore  = Database::result($resfree,0,"marks");
 		}
@@ -3298,7 +3299,7 @@ class Exercise {
 		// 4. We check if the student have attempts
 		if ($is_visible) {
 			if ($this->selectAttempts()) {
-				$attempt_count = get_attempt_count(api_get_user_id(), $this->id, $lp_id, $lp_item_id, $lp_item_view_id);
+				$attempt_count = get_attempt_count_not_finished(api_get_user_id(), $this->id, $lp_id, $lp_item_id, $lp_item_view_id);
 				if ($attempt_count >= $this->selectAttempts()) {
 					//Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);
 					$is_visible = false;

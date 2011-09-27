@@ -24,20 +24,14 @@ $this_section = "session_my_space";
 
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
 
-if(!$is_allowedToTrack) {
-	Display :: display_header(null);
-	api_not_allowed();
-	Display :: display_footer();
+if(!$is_allowedToTrack) {	
+	api_not_allowed(true);	
 }
 
 $export_to_xls = false;
 if (isset($_GET['export'])) {
 	$export_to_xls = true;
 }
-
-$TBL_EXERCICES			= Database::get_course_table(TABLE_QUIZ_TEST);
-$tbl_stats_exercices 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-
 if (api_is_platform_admin() ) {	
 	$global = true;
 } else {
@@ -74,14 +68,11 @@ if (empty($session_id)) {
 $form->setDefaults(array('session_id'=>$session_id));
 $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
-
-
 if (!$export_to_xls) {
 	Display :: display_header(get_lang("MySpace"));
 	echo '<div class="actions" style ="font-size:10pt;" >';	
     
-	if ($global) {		
-		
+	if ($global) {	
 		
 		$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',32),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
 		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher');
@@ -131,24 +122,23 @@ $users = SessionManager::get_users_by_session($session_id);
 $course_average = $course_average_counter = array();
 
 $counter = 0;
-
 $main_result = array();
 //Getting course list
-foreach($course_list  as $current_course ) {
+foreach ($course_list  as $current_course ) {
 	$course_info = api_get_course_info($current_course['code']);
 	$_course = $course_info; 
 	$attempt_result = array();
 	
 	//Getting LP list
 	$list = new learnpathList('', $current_course['code'], $session_id);
-	$lp_list = $list->get_flat_list();	
+	$lp_list = $list->get_flat_list();
 		
 	// Looping LPs
 	foreach ($lp_list as $lp_id =>$lp) {		
-		$exercise_list = get_all_exercises_from_lp($lp_id, $current_course['db_name']);		
+		$exercise_list = get_all_exercises_from_lp($lp_id, $course_info['real_id']);		
 		//Looping Chamilo Exercises in LP
 		foreach ($exercise_list as $exercise) {
-			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'],$course_info['id'], $session_id);
+			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'], $course_info['id'], $session_id);
 			//Looping Exercise Attempts
 			foreach($exercise_stats as $stats) {
 				$attempt_result[$stats['exe_user_id']]['result'] += $stats['exe_result'] / $stats['exe_weighting'];		

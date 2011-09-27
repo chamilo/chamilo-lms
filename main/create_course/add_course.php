@@ -251,10 +251,8 @@ if ($form->validate()) {
                 
                 prepare_course_repository($directory, $code);
                 //update_Db_course($db_name);
-                $pictures_array = fill_course_repository($directory,  $exemplary_content);
-                
-                $course_id = register_course($code, $visual_code, $directory, '', $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);
-                                
+                $pictures_array = fill_course_repository($directory,  $exemplary_content);                
+                $course_id = register_course($code, $visual_code, $directory, '', $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);                                
                 fill_Db_course($course_id, $directory, $course_language, $pictures_array, $exemplary_content);
                 
 

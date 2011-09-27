@@ -692,7 +692,7 @@ class Database {
             $file = $connection;
             $connection = null;
         }        
-        error_log($query);
+        //error_log($query);
         //Check if the table contains a c_ (means a course id)
         if (strpos($query, 'c_')) {        	
         	//Check if the table contains inner joins 
@@ -701,6 +701,8 @@ class Database {
         		strpos($query, 'inner join') === false &&
         		strpos($query, 'left join') === false &&
         		strpos($query, 'LEFT JOIN') === false &&
+        		strpos($query, 'insert') 	=== false &&
+        		strpos($query, 'INSERT') === false &&
         		strpos($query, 'c_id') === false
         	) {        		
         		$limit_list = explode('LIMIT', $query);

@@ -149,17 +149,17 @@ if ($form->validate()) {
     }
     $keys = define_course_keys($code, '', $_configuration['db_prefix']);
     if (count($keys)) {
-        $current_course_code = $keys['currentCourseCode'];
-        $current_course_id = $keys['currentCourseId'];
-        $current_course_db_name = $keys['currentCourseDbName'];
+        $current_course_code 		= $keys['currentCourseCode'];
+        $current_course_id 			= $keys['currentCourseId'];                
+        $current_course_repository 	= $keys['currentCourseRepository'];
+        $expiration_date 			= time() + $firstExpirationDelay;
         
-        $current_course_repository = $keys['currentCourseRepository'];
-        $expiration_date = time() + $firstExpirationDelay;
         prepare_course_repository($current_course_repository, $current_course_id);
-        update_Db_course($current_course_db_name);
-        $pictures_array = fill_course_repository($current_course_repository, $exemplary_content);
-        fill_Db_course($current_course_db_name, $current_course_repository, $course_language, $pictures_array, $exemplary_content);
-        register_course($current_course_id, $current_course_code, $current_course_repository, $current_course_db_name, $tutor_name, $category, $title, $course_language, $teacher_id, $expiration_date, $course_teachers);
+        //update_Db_course($current_course_db_name);
+        $pictures_array = fill_course_repository($current_course_repository, $exemplary_content);        
+        $course_id = register_course($current_course_id, $current_course_code, $current_course_repository, '', $tutor_name, $category, $title, $course_language, $teacher_id, $expiration_date, $course_teachers);
+        fill_Db_course($course_id, $current_course_repository, $course_language, $pictures_array, $exemplary_content);
+        
         $sql = "UPDATE $table_course SET disk_quota = '".$disk_quota."', visibility = '".Database::escape_string($course['visibility'])."', subscribe = '".Database::escape_string($course['subscribe'])."', unsubscribe='".Database::escape_string($course['unsubscribe'])."' WHERE code = '".$current_course_id."'";
         Database::query($sql);
         header('Location: course_list.php');

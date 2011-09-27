@@ -2160,6 +2160,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
     $TABLETOOLANNOUNCEMENTS = Database::get_course_table(TABLE_ANNOUNCEMENT);
     $TABLEADDEDRESOURCES 	= Database::get_course_table(TABLE_LINKED_RESOURCES);
     $TABLETOOLWORKS 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    //table not found
     //$TABLETOOLWORKSUSER 	= Database::get_course_table(TABLE_TOOL_LIST)$course_db_name . 'stud_pub_rel_user';
     $TABLETOOLDOCUMENT 		= Database::get_course_table(TABLE_DOCUMENT);
     $TABLETOOLWIKI 			= Database::get_course_table(TABLE_WIKI);

@@ -108,7 +108,7 @@ class session_handler {
 
 		if ($this->sqlConnect()) {
 
-			$result = $this->sqlQuery("INSERT IGNORE INTO ".$this->connection['base'].".php_session(session_id,session_name,session_time,session_start,session_value) VALUES('$sess_id','".$this->session_name."','$time','$time','".addslashes($sess_value)."')", false);
+			$result = $this->sqlQuery("INSERT INTO ".$this->connection['base'].".php_session(session_id,session_name,session_time,session_start,session_value) VALUES('$sess_id','".$this->session_name."','$time','$time','".addslashes($sess_value)."')", false);
 
 			if (!$result) {
 				$this->sqlQuery("UPDATE ".$this->connection['base'].".php_session SET session_name='".$this->session_name."',session_time='$time',session_value='".addslashes($sess_value)."' WHERE session_id='$sess_id'");

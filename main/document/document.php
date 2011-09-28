@@ -44,7 +44,6 @@ $lib_path = api_get_path(LIBRARY_PATH);
 /* Libraries */
 require_once $lib_path.'document.lib.php';
 require_once $lib_path.'fileUpload.lib.php';
-require_once $lib_path.'formvalidator/FormValidator.class.php';
 require_once $lib_path.'fileDisplay.lib.php';
 require_once $lib_path.'tablesort.lib.php';
 
@@ -590,7 +589,6 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         $document_to_move = DocumentManager::get_document_data_by_id($_POST['move_file'], api_get_course_id());            
         require_once $lib_path.'fileManage.lib.php';
         // This is needed for the update_db_info function
-        //$dbTable = $_course['dbNameGlu'].'document';
         $dbTable = Database::get_course_table(TABLE_DOCUMENT);
         // Security fix: make sure they can't move files that are not in the document table
         if (!empty($document_to_move)) {

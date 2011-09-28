@@ -17,8 +17,6 @@ if (!api_get_multiple_access_url()) {
 	exit;
 }
 
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'security.lib.php';
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 
 // Create the form

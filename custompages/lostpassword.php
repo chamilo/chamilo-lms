@@ -32,10 +32,16 @@ require_once('language.php');
 		<div id="header">
 			<img src="../../custompages/images/header.png" alt="Ambassador logo" />
 		</div> <!-- #header -->
-<?php echo '<div id="registration-form-info" class="form-info">'.cblue_get_lang('lang_enter_email_and_well_send_you_password').'</div>'; ?>
+      <div id="registration-form-info" class="form-info">
+        <?php if(isset($content['error']) && !empty($content['error'])){
+          echo $content['info'];
+        } else {
+          echo cblue_get_lang('lang_enter_email_and_well_send_you_password');
+        }?>
+      </div>
 		<div id="lostpassword-form-box" class="form-box">
-		<?php if (isset($form_error) && !empty($form_error)) {
-			echo '<div id="registration-form-error" class="form-error"><ul>'.$form_error.'</ul></div>';
+		<?php if (isset($content['error']) && !empty($content['error'])) {
+			echo '<div id="registration-form-error" class="form-error"><ul>'.$content['error'].'</ul></div>';
 		}?>
 			<form id="lostpassword-form" class="form" action="lostPassword.php" method="post">
 				<div>

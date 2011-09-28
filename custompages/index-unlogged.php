@@ -52,20 +52,22 @@ if (isset($_GET['loginFailed'])){
 </head>
 <body>
 	<div id="backgroundimage">
-		<img src="/custompages/images/page-background.png" class="backgroundimage" />
+		<img src="<?php echo api_get_path(WEB_PATH)?>/custompages/images/page-background.png" class="backgroundimage" />
 	</div>
 	<div id="wrapper">
 		<div id="header">
-			<img src="/custompages/images/header.png" alt="Logo" />
+			<img src="<?php echo api_get_path(WEB_PATH)?>/custompages/images/header.png" alt="Logo" />
 		</div> <!-- #header -->
 		<div id="login-form-box" class="form-box">
-		<?php if ($values['reset_password']) {
-			echo '<div id="login-form-info" class="form-info">'.cblue_get_lang('your_password_has_been_reset').'</div>';
-		}?> 
+      <div id="login-form-info" class="form-info">
+        <?php if (isset($content['info']) && !empty($content['info'] )) {
+          echo $content['info'];
+        }?>
+      </div>
 		<?php if (isset($error_message)) {
 			echo '<div id="login-form-info" class="form-error">'.$error_message.'</div>';
 		}?> 
-			<form id="login-form" class="form" action="/index.php" method="post">
+			<form id="login-form" class="form" action="<?php echo api_get_path(WEB_PATH)?>index.php" method="post">
 				<div>
         <label for="login">*<?php echo cblue_get_lang('User');?></label>
 					<input name="login" type="text" /><br />
@@ -77,11 +79,12 @@ if (isset($_GET['loginFailed'])){
       <span><?php echo cblue_get_lang('LoginEnter');?></span>
 			</div> <!-- #form-submit -->
 			<div id="links">
-      <a href="main/auth/lostPassword.php"><?php echo cblue_get_lang('langLostPassword')?></a>
+      <a href="<?php echo api_get_path(WEB_PATH)?>main/auth/inscription.php"><?php echo cblue_get_lang('langReg')?></a><br />
+      <a href="<?php echo api_get_path(WEB_PATH)?>main/auth/lostPassword.php"><?php echo cblue_get_lang('langLostPassword')?></a>
 			</div>
 		</div> <!-- #form -->
 		<div id="footer">
-			<img src="/custompages/images/footer.png" />
+			<img src="<?php echo api_get_path(WEB_PATH)?>/custompages/images/footer.png" />
 		</div> <!-- #footer -->
 	</div> <!-- #wrapper -->
 </body>

@@ -1107,4 +1107,6 @@ $SelectFilter = "Sélectionner le filtre";
 $ThereIsNoClassScheduledTodayTryPickingAnotherDay = "Aucune classe n'a été programmée aujourd'hui. Choisissez un autre you ou ajoutez votre classe vous-même en utilisant les icônes d'action.";
 $AddToCalendar = "Ajouter au calendrier";
 $RandomPick = "Sélection aléatoire";
+$FirstLogin = "Première connexion";
+$FirstLoginChangePassword = "C'est votre première connexion, veuillez changer votre mot de passe";
 ?>

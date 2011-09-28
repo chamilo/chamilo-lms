@@ -67,7 +67,7 @@ if (isset($_GET['loginFailed'])){
 		}?> 
 			<form id="login-form" class="form" action="/index.php" method="post">
 				<div>
-        <label for="login">*<?php echo cblue_get_lang('Username');?></label>
+        <label for="login">*<?php echo cblue_get_lang('User');?></label>
 					<input name="login" type="text" /><br />
           <label for="password">*<?php echo cblue_get_lang('langPass');?></label>
 					<input name="password" type="password" /><br />

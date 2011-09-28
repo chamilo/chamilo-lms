@@ -216,9 +216,7 @@ ul#navigation .student-connect a {
     min-height: 300px;
     background-color: #fff;
 }
-.invisible {
-    color: #999;
-}
+
 .courseadminview table td a, .Authoringview table td a {
     font-weight: bold;
     font-size:13px;

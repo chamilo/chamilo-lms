@@ -767,7 +767,9 @@ if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
 }
 
 
-Display :: display_header($tool_name, "");
+//Display :: display_header($tool_name, "");
+
+$message = '';
 
 //api_display_tool_title($tool_name);
 if (isset ($_GET['action'])) {
@@ -780,32 +782,32 @@ if (isset ($_GET['action'])) {
                 	if ($_GET['warn'] == 'session_message'){
                 		$_GET['warn'] = $_SESSION['session_message_import_users'];
                 	}
-                	Display::display_warning_message(urldecode($_GET['warn']),false);
+                	$message = Display::return_message(urldecode($_GET['warn']),'warning', false);
                 }
                 if (!empty($_GET['message'])) {
-                    Display :: display_confirmation_message(stripslashes($_GET['message']));
+                    $message = Display :: return_message(stripslashes($_GET['message']), 'confirmation');
                 }
 				break;
 			case 'delete_user' :
 				if (api_is_platform_admin()) {
 					if ($delete_user_available) {
 						if ($user_id != $_user['user_id'] && UserManager :: delete_user($_GET['user_id'])) {
-							Display :: display_confirmation_message(get_lang('UserDeleted'));
+							$message = Display :: return_message(get_lang('UserDeleted'), 'confirmation');
 						} else {
-							Display :: display_error_message(get_lang('CannotDeleteUserBecauseOwnsCourse'));
+							$message = Display :: return_message(get_lang('CannotDeleteUserBecauseOwnsCourse'), 'error');
 						}
 					} else {
-						Display :: display_error_message(get_lang('CannotDeleteUser'));
+						$message = Display :: return_message(get_lang('CannotDeleteUser'),'error');
 					}
 				}
 				break;
 			case 'lock' :
 				$message=lock_unlock_user('lock',$_GET['user_id']);
-				Display :: display_normal_message($message);
+				$message =Display :: return_message($message);
 				break;
 			case 'unlock';
 				$message=lock_unlock_user('unlock',$_GET['user_id']);
-				Display :: display_normal_message($message);
+				$message =Display :: return_message($message);
 				break;
 
 		}
@@ -822,23 +824,17 @@ if (isset ($_POST['action'])) {
 					$number_of_selected_users = count($_POST['id']);
 					$number_of_deleted_users = 0;
 					if (is_array($_POST['id'])) {
-						foreach ($_POST['id'] as $index => $user_id)
-						{
-							if($user_id != $_user['user_id'])
-							{
-								if(UserManager :: delete_user($user_id))
-								{
+						foreach ($_POST['id'] as $index => $user_id) {
+							if($user_id != $_user['user_id']) {
+								if(UserManager :: delete_user($user_id)) {
 									$number_of_deleted_users++;
 								}
 							}
 						}
 					}
-					if($number_of_selected_users == $number_of_deleted_users)
-					{
+					if($number_of_selected_users == $number_of_deleted_users) {
 						Display :: display_confirmation_message(get_lang('SelectedUsersDeleted'));
-					}
-					else
-					{
+					} else {
 						Display :: display_error_message(get_lang('SomeUsersNotDeleted'));
 					}
 				}
@@ -854,18 +850,17 @@ $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->addElement('text','keyword',get_lang('keyword'), 'size="25"');
 $form->addElement('style_submit_button', 'submit',get_lang('Search'),'class="search"');
-//$form->addElement('static','search_advanced_link',null,'<a href="user_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
+$form->addElement('static','search_advanced_link',null,'<a href="javascript://" class = "advanced_parameters" onclick="display_advanced_search_form();"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'</span></a>');
 
-    $form->addElement('static','search_advanced_link',null,'<a href="javascript://" class = "advanced_parameters" onclick="display_advanced_search_form();"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'</span></a>');
-
-echo '<div class="actions" style="width:100%;">';
+$actions  = '';
 if (api_is_platform_admin()) {
-	echo '<span style="float:right;">'.
+	$actions .= '<span style="float:right;">'.
 		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('new_user.png',get_lang('AddUsers'),'','32').'</a>'.
 		 '</span>';
 }
-$form->display();
-echo '</div>';
+$actions .=$form->return_form();
+
+
 if (isset ($_GET['keyword'])) {
 	$parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));
 } elseif (isset ($_GET['keyword_firstname'])) {
@@ -970,7 +965,7 @@ $defaults['keyword_inactive'] = 1;
 $form->setDefaults($defaults);
 $form->addElement('html','</div>');
 
-$form->display();
+$form = $form->return_form();
 
 $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 $table->set_additional_parameters($parameters);
@@ -1000,6 +995,13 @@ $table->set_column_filter(9, 'modify_filter');
 
 if (api_is_platform_admin())
 	$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
-$table->display();
+$table = $table->return_table();
 
-Display :: display_footer();
+
+$tpl = new Template($tool_name);
+
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $message);
+$tpl->assign('content', $form.$table);
+$template = $tpl->get_template('layout/layout_1_col.tpl');
+$tpl->display($template);

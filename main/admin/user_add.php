@@ -409,13 +409,14 @@ if( $form->validate()) {
 	$form->setConstants(array('sec_token' => $token));
 }
 
-// Display form
-Display::display_header($tool_name);
-//api_display_tool_title($tool_name);
 if(!empty($message)){
-	Display::display_normal_message(stripslashes($message));
+	$message = Display::return_message(stripslashes($message));
 }
-$form->display();
+$content .= $form->return_form();
 
-// Footer
-Display::display_footer();
+$tpl = new Template($tool_name);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $message);
+$tpl->assign('content', $content);
+$template = $tpl->get_template('layout/layout_1_col.tpl');
+$tpl->display($template);

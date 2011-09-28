@@ -3788,3 +3788,12 @@ form div.error input, form div.error textarea {
 .label_tag.notice {
   background-color: #62cffc;
 }
+
+
+.invisible {
+    color: #999;
+}
+
+.invisible h2 {
+    color: #999;
+}

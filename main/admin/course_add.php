@@ -167,12 +167,12 @@ if ($form->validate()) {
     }
 }
 
-// The header.
-Display::display_header($tool_name);
-
 // Display the form.
-$form->display();
+$content = $form->return_form();
 
-/* FOOTER */
-
-Display :: display_footer();
+$tpl = new Template($tool_name);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $message);
+$tpl->assign('content', $content);
+$template = $tpl->get_template('layout/layout_1_col.tpl');
+$tpl->display($template);

@@ -424,11 +424,9 @@ if ( $form->validate()) {
 	}
 }
 
-Display::display_header($tool_name);
-
 if ($error_drh) {
 	$err_msg = get_lang('StatusCanNotBeChangedToHumanResourcesManager');
-	Display::display_error_message($err_msg);
+	$message = Display::return_message($err_msg, 'error');
 }
 
 // USER PICTURE
@@ -454,13 +452,17 @@ $big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
 
 if ($image == '') {
-	echo '<img '.$img_attributes.' />';
+	$content .= '<img '.$img_attributes.' />';
 } else {
-	echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+	$content .= '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 }
 
 // Display form
-$form->display();
+$content .= $form->return_form();
 
-// Footer
-Display::display_footer();
+$tpl = new Template($tool_name);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $message);
+$tpl->assign('content', $content);
+$template = $tpl->get_template('layout/layout_1_col.tpl');
+$tpl->display($template);

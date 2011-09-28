@@ -6,7 +6,12 @@
 	{/if}	
 {/block}
 
-{block name=body}	
+{block name=body}
+	{if (!empty($actions) ) }
+		<div class="actions">
+		{$actions}	
+		</div>
+	{/if}
 	{$message}
 	{$content}
 {/block}

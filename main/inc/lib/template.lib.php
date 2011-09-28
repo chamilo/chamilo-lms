@@ -13,13 +13,16 @@ class Template extends Smarty {
 	function __construct($title = '') {
 		$this->title = $title;
 		
+		//Smarty 3 configuration
 		$this->setPluginsDir(api_get_path(LIBRARY_PATH).'smarty/plugins');
 		$this->setCacheDir(api_get_path(SYS_ARCHIVE_PATH));
 		$this->setCompileDir(api_get_path(SYS_ARCHIVE_PATH));
 		$this->setTemplateDir(api_get_path(SYS_CODE_PATH).'template/');
 		$this->setConfigDir(api_get_path(SYS_ARCHIVE_PATH));
 		
+		//Caching settings
 		$this->caching 			= true;
+		//$this->caching = Smarty::CACHING_LIFETIME_CURRENT;		
 		$this->cache_lifetime 	= Smarty::CACHING_OFF; // no caching
 		//$this->cache_lifetime 	= 120;
 		
@@ -27,11 +30,9 @@ class Template extends Smarty {
 		$this->set_footer(true);
 		$this->set_header(true);
 		
-		$this->set_system_parameters();
+		$this->set_system_parameters();		
 		
 		$this->set_user_parameters();
-		
-		
 		
 		$this->set_header_parameters();		
 		
@@ -45,7 +46,7 @@ class Template extends Smarty {
 		//To load a smarty plugin				
 		//$this->loadPlugin('smarty_function_get_lang');
 
-		//$this->caching = Smarty::CACHING_LIFETIME_CURRENT;				
+				
 		$this->assign('style', $this->style);	
 		//$this->testInstall();	
 	}

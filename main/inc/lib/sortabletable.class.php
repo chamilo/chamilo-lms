@@ -204,12 +204,15 @@ class SortableTable extends HTML_Table {
 		}
 		return $this->pager;
 	}
-
+	
+	public function display() {
+		echo $this->return_table();
+	}
 	/**
 	 * Displays the table, complete with navigation buttons to browse through
 	 * the data-pages.
 	 */
-	public function display() {
+	public function return_table() {
 		$empty_table = false;
 		$content = $this->get_table_html();
 		
@@ -294,7 +297,7 @@ class SortableTable extends HTML_Table {
 				$html .= '</form>';
 			}
 		}
-		echo $html;
+		return $html;
 	}
 
 	/**

@@ -30,7 +30,9 @@ class PDF {
         if(!in_array($orientation,array('P','L'))) {
             $orientation = 'P';
         }
-        $this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', 30, 20, 27, 25, 16, 13, $orientation); 
+        //$this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', 30, 20, 27, 25, 16, 13, $orientation);
+        //left, right, top, bottom, margin_header, margin footer
+        $this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', 15, 15, 20, 15, 8, 8, $orientation); 
     } 
     
     /**
@@ -150,12 +152,12 @@ class PDF {
                 api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.        
                 $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
                                                                                 // $_GET[] too, as it is done with file name.
-                                                                                // At the moment the title is retrieved from the html document itself.
+                                                                              // At the moment the title is retrieved from the html document itself.
                 if (empty($title)) {
                     $title = $filename; // Here file name is expected to contain ASCII symbols only.
                 }
                 
-                if (!empty($document_html)) {
+                if (!empty($document_html)) {                	
                     $this->pdf->WriteHTML($document_html,2);
                 }
             } elseif (in_array($extension, array('jpg','jpeg','png','gif'))) {
@@ -164,7 +166,7 @@ class PDF {
                 $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>',2);
             } 
         }
-        
+       
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
         } else {
@@ -197,17 +199,16 @@ class PDF {
             );
             
         //Formatting the pdf
-        self::format_pdf($course_code);  
-        
-        if (!empty($course_code)) {
-            $course_data = api_get_course_info($course_code);
-        }                    
+          
+       	$course_data = api_get_course_info($course_code);
+
+        self::format_pdf($course_data);
         
         $document_html = preg_replace($clean_search, '', $document_html);   
         
         //absolute path for frames.css //TODO: necessary?
-        $absolute_css_path=api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css';
-        $document_html=str_replace('href="./css/frames.css"',$absolute_css_path, $document_html);
+        $absolute_css_path 	= api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css';
+        $document_html		= str_replace('href="./css/frames.css"',$absolute_css_path, $document_html);
         
         //$document_html=str_replace('<link rel="stylesheet" http://my.chamilo.net/main/css/chamilo/frames.css type="text/css" />','', $document_html);
     
@@ -412,7 +413,18 @@ class PDF {
                 }
             }
            
-            $left_content    = '';
+            
+            /*$img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
+            		if (file_exists($img)) {
+            $img = api_get_path(WEB_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
+            			$left_content = '<img src="'.$img.'">';			
+            		} else {
+            if (!empty($organization)) {
+            $html .= '<h2 align="left">'.$organization.'</h2>';
+            }
+            }*/
+            
+            //$left_content    = '';
             $center_content  = '';
             $right_content   = $teachers;
         
@@ -464,7 +476,7 @@ class PDF {
         $this->pdf->mirrorMargins = 1;            // Use different Odd/Even headers and footers and mirror margins       
         
         //Adding watermark
-        if (api_get_setting('pdf_export_watermark_enable') == 'true') {            
+        if (api_get_setting('pdf_export_watermark_enable') == 'true') {
             $watermark_file = self::get_watermark($course_code);      
                   
             if ($watermark_file) {                
@@ -491,6 +503,7 @@ class PDF {
                 $this->pdf->showWatermarkText = true;
             }
         }        
+        
         if (empty($this->custom_header)) {
             self::set_header($course_data);   
         } else {

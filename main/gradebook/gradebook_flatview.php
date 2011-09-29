@@ -129,11 +129,17 @@ if (isset ($_GET['exportpdf']))	{
 
 		$html = '';
 
-		if (!empty($organization)) {
-			$html .= '<h2 align="center">'.$organization.'</h2>';
+		
+		$img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
+		if (file_exists($img)) {
+			$img = api_get_path(WEB_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
+			$html .= "<img src='$img'>";			
+		} else {
+			if (!empty($organization)) {			  
+				$html .= '<h2 align="left">'.$organization.'</h2>';
+			}
 		}
 		$html .= '<h1 align="center">'.get_lang('FlatView').'</h1>';
-
 		$html .= '<p><strong>'.$report_name.'</strong></p>';
 		$html .= '<p><strong>'.api_convert_and_format_date(date('Y-m-d', time()), 2).'</strong></p>';
 		$html .= '<p><strong>'.get_lang('By').': '.$creator.'</strong></p>';
@@ -177,9 +183,7 @@ if (isset ($_GET['exportpdf']))	{
 		}
 
 		$html .= $table->toHtml();
-
-		$html .= '<pagefooter name="myFooter1" content-left="My Book Title" content-center="myFooter1" content-right="{PAGENO}" footer-style="font-family:sans-serif; font-size:8pt; font-weight:bold; color:#008800;" footer-style-left="" line="on" />';
-
+		
 		// Memory release
 
 		unset($printable_data);
@@ -203,15 +207,8 @@ if (isset ($_GET['exportpdf']))	{
             $file_name .= $course_code.'_';
         }
         $file_name .= get_lang('FlatView').'.pdf';
-        $pdf->content_to_pdf($html, $css, $file_name);
-        exit;
-		
-		/*
-		$pdf->SetAuthor($creator_pdf);
-		$pdf->SetTitle($title_pdf);
-		$pdf->SetSubject($subject_pdf);
-		$pdf->SetKeywords($keywods_pdf);*/
-
+        $pdf->content_to_pdf($html, $css, $file_name, api_get_course_id());
+        exit;	
 	} else {
 		Display :: display_header(get_lang('ExportPDF'));
 	}

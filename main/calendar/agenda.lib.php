@@ -1,34 +1,41 @@
 <?php 
+/* For licensing terms, see /license.txt */
+
+/**
+ *  @author: Julio Montoya <gugli100@gmail.com> Implementing a real agenda lib
+ */
 
 class Agenda {
+	var $events = array();
+	var $type   = 'personal'; // personal, admin or course
+	 
 	
 	function __construct() {
+		//Table definitions
 		$this->tbl_global_agenda 	= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);  
-		$this->tbl_personal_agenda 	= Database::get_user_personal_table(TABLE_PERSONAL_AGENDA);
+		$this->tbl_personal_agenda 	= Database::get_user_personal_table(TABLE_PERSONAL_AGENDA);		
+		$this->tbl_course_agenda 	= Database::get_course_table(TABLE_AGENDA);
 		
+		//Setting the course object if we are in a course
 		$this->course = null;
-		$this->tbl_course_agenda = null;
-		
 		$course_info = api_get_course_info();
-		if (!empty($course_info)) {
-			$this->course = $course_info;
-			$this->tbl_course_agenda 	= Database::get_course_table(TABLE_AGENDA, $course_info['db_name']);
+		if (!empty($course_info)) {			
+			$this->course = $course_info;			
 		}
 		
 		$this->events				= array();
 		
+		//Event colors
 		$this->event_platform_color = 'red';//red
 		$this->event_course_color 	= '#458B00'; //green
 		$this->event_group_color 	= '#A0522D'; //siena
 		$this->event_session_color 	= '#000080'; // blue
 		$this->event_personal_color = 'steel blue'; //steel blue
-		$this->type 				= 'personal';
-		
 	}
 	
 	/**
 	 * 
-	 * Add an event
+	 * Adds an event
 	 * @param 	int		start tms
 	 * @param 	int		end tms
 	 * @param 	string	agendaDay, agendaWeek, month
@@ -43,7 +50,7 @@ class Agenda {
 		$all_day 	= isset($all_day) && $all_day == 'true' ? 1:0;
 		
 		$attributes = array();
-		$id = null;		
+		$id = null;
 		switch ($this->type) {
 			case 'personal':
 				$attributes['user'] 	= api_get_user_id();
@@ -82,8 +89,7 @@ class Agenda {
 		return $id;				
 	}
 	
-	function edit_event($id, $start, $end, $all_day, $view, $title, $content) {
-		
+	function edit_event($id, $start, $end, $all_day, $view, $title, $content) {		
 		$start 		= date('Y-m-d H:i:s', $start);
 		$start 		= api_get_utc_datetime($start);
 		
@@ -94,7 +100,7 @@ class Agenda {
 		$all_day 	= isset($all_day) && $all_day == '1' ? 1:0;
 		
 		$attributes = array();
-		
+
 		switch($this->type) {
 			case 'personal':
 				$attributes['title'] 	= $title;
@@ -199,7 +205,7 @@ class Agenda {
 					break;
 				case 'course':
 					$sql = "UPDATE $this->tbl_course_agenda SET start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE), end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
-							WHERE id=".intval($id);
+							WHERE c_id = ".$this->course['real_id']." AND id=".intval($id);
 					$result = Database::query($sql);					
 					break;
 				case 'admin':
@@ -213,7 +219,7 @@ class Agenda {
 	}
 	
 	/**
-	 * Gets a single personal event	 
+	 * Gets a single event	 
 	 * @param int event id
 	 */
 	function get_event($id) {
@@ -304,9 +310,7 @@ class Agenda {
 	                		( ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) AND 
 	                		ip.visibility	= '1' AND
 	                		agenda.c_id = $course_id AND
-	                		ip.c_id = $course_id
-	                		
-	            	";
+	                		ip.c_id = $course_id";
 		} else {
 			if (api_get_user_id()) {
 				$sql="SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
@@ -346,6 +350,7 @@ class Agenda {
 				$event['title'] 		= $row['title'];
 				$event['className'] 	= 'course';
 				$event['allDay'] 	  	= 'false';
+				
 				//	var_dump($row);
 				$event['borderColor'] 	= $event['backgroundColor'] = $this->event_course_color;
 				if (isset($row['session_id']) && !empty($row['session_id'])) {
@@ -421,12 +426,10 @@ class Agenda {
 				$this->events[]= $event;
 			}
 		}
-		return $my_events;
-		
+		return $my_events;		
 	}
 	
-	
-	
+	//Format needed for the js lib	
 	function format_event_date($utc_time) {		
 		return date('c', api_strtotime(api_get_local_time($utc_time)));
 	}

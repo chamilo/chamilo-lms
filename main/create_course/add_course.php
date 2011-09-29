@@ -63,8 +63,6 @@ function setFocus(){
             document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
         }
     }
-    
-    
 </script>';
 
 $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'user_portal.php', 'name' => get_lang('MyCourses'));
@@ -75,12 +73,10 @@ $tool_name = $course_validation_feature ? get_lang('CreateCourseRequest') : get_
 if (api_get_setting('allow_users_to_create_courses') == 'false' && !api_is_platform_admin()) {
     api_not_allowed(true);
 }
-Display :: display_header($tool_name);
 
 // Check access rights.
 if (!api_is_allowed_to_create_course()) {
-    Display :: display_error_message(get_lang('NotAllowed'));
-    Display::display_footer();
+    api_not_allowed(true);
     exit;
 }
 
@@ -153,8 +149,6 @@ $form->applyFilter('select_language', 'html_filter');
 
 // Exemplary content checkbox.
 $form->addElement('checkbox', 'exemplary_content', get_lang('FillWithExemplaryContent'));
-
-
 
 if ($course_validation_feature) {
 
@@ -260,15 +254,15 @@ if ($form->validate()) {
                 $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
                 $message = get_lang('JustCreated');
                 $message .= ' <a href="'.$link.'">'.$title.'</a>';
-
-                Display :: display_confirmation_message($message, false);
-                echo '<div style="float: right; margin:0px; padding: 0px;">' .
+                
+                $message = Display :: return_message($message, 'confirmation', false);
+                $message .= '<div style="float: right; margin:0px; padding: 0px;">' .
                     '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>' .
                     '</div>';
-            } else {
-                Display :: display_error_message(get_lang('CourseCreationFailed'), false);
+            } else {                
+                $message = Display :: return_message(get_lang('CourseCreationFailed'), 'error', false);
                 // Display the form.
-                $form->display();
+                $content = $form->return_form();
 
             }
 
@@ -282,34 +276,34 @@ if ($form->validate()) {
 
                 $course_request_info = CourseRequestManager::get_course_request_info($request_id);
                 $message = (is_array($course_request_info) ? '<strong>'.$course_request_info['code'].'</strong> : ' : '').get_lang('CourseRequestCreated');
-                Display :: display_confirmation_message($message, false);
-                echo '<div style="float: right; margin:0px; padding: 0px;">' .
+                $message = Display :: return_message($message, 'confirmation', false);
+                $message .=  '<div style="float: right; margin:0px; padding: 0px;">' .
                     '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>' .
                     '</div>';
-
             } else {
-
-                Display :: display_error_message(get_lang('CourseRequestCreationFailed'), false);
+                $message = Display :: return_message(get_lang('CourseRequestCreationFailed'), 'error', false);
                 // Display the form.
-                $form->display();
-
+                $content = $form->return_form();
             }
         }
 
     } else {
-        Display :: display_error_message(get_lang('CourseCodeAlreadyExists'), false);
+        $message = Display :: return_message(get_lang('CourseCodeAlreadyExists'), 'error', false);
         // Display the form.
-        $form->display();
-        //echo '<p>'.get_lang('CourseCodeAlreadyExistExplained').'</p>';
+        $content = $form->return_form();
     }
 
 } else {
     if (!$course_validation_feature) {
-        Display::display_normal_message(get_lang('Explanation'));
+        $message = Display :: return_message(get_lang('Explanation'));
     }    
     // Display the form.
-    $form->display();    
+    $content = $form->return_form();    
 }
 
-// Footer
-Display :: display_footer();
+$tpl = new Template($tool_name);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $message);
+$tpl->assign('content', $content);
+$template = $tpl->get_template('layout/layout_1_col.tpl');
+$tpl->display($template);

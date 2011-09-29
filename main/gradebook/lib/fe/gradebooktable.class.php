@@ -51,11 +51,14 @@ class GradebookTable extends SortableTable {
 		if (api_is_allowed_to_edit(null, true)) {
 			$this->set_header($column++, get_lang('Weight'),'','width="50px"');
 		} else {
+			$this->set_header($column++, get_lang('Weight'), false);
+			$this->set_header($column++, get_lang('Evaluation'), false);
+			/*
 			if (empty($_GET['selectcat']) ) {
 				$this->set_header($column++, get_lang('Evaluation'), false);
 			} else {
 			    $this->set_header($column++, get_lang('Weight'), false);
-			}
+			}*/
 		}
 		
 		if (api_is_allowed_to_edit(null, true)) {
@@ -265,7 +268,7 @@ class GradebookTable extends SortableTable {
 						$eval_n_links = array_merge($alleval, $alllink);
 						
 						if (count($eval_n_links)> 0 && $status_user!=1 ) {
-							$value_data = isset($data[5]) ? $data[5] : null;							
+							$value_data = isset($data[4]) ? $data[4] : null;							
 							if (!is_null($value_data)) {
 								$row[] = $value_data;
 							}

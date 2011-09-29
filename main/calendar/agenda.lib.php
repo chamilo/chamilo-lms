@@ -43,8 +43,8 @@ class Agenda {
 		$all_day 	= isset($all_day) && $all_day == 'true' ? 1:0;
 		
 		$attributes = array();
-		$id = null;
-		switch($this->type) {
+		$id = null;		
+		switch ($this->type) {
 			case 'personal':
 				$attributes['user'] 	= api_get_user_id();
 				$attributes['title'] 	= $title;
@@ -75,7 +75,7 @@ class Agenda {
 				$attributes['start_date'] 	= $start;
 				$attributes['end_date'] 	= $end;
 				$attributes['all_day'] 		= $all_day;
-				$attributes['access_url_id'] 	= api_get_current_access_url_id();
+				$attributes['access_url_id']= api_get_current_access_url_id();				
 				$id = Database::insert($this->tbl_global_agenda, $attributes);
 				break;
 		}				

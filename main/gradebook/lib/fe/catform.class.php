@@ -167,9 +167,11 @@ class CatForm extends FormValidator {
 		$this->addElement('textarea', 'description', get_lang('Description'),array('rows'=>'3','cols' => '34'));
 		$this->addElement('checkbox', 'visible',get_lang('Visible'));
 		$this->addElement('style_submit_button', null, get_lang('EditCategory'), 'class="save"');
-		$this->addRule('weight',get_lang('OnlyNumbers'),'numeric');
-		$this->addRule('weight',get_lang('NoDecimals'),'nopunctuation');
-		$this->addRule(array ('weight', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
+		if (!empty($grading_contents)) {
+			$this->addRule('weight',get_lang('OnlyNumbers'),'numeric');
+			$this->addRule('weight',get_lang('NoDecimals'),'nopunctuation');
+			$this->addRule(array ('weight', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
+		}
 		$this->addRule('certif_min_score',get_lang('OnlyNumbers'),'numeric');
 		$this->addRule('certif_min_score',get_lang('NoDecimals'),'nopunctuation');
 		$this->addRule(array ('certif_min_score', 'zero'), get_lang('NegativeValue'), 'compare', '>=');

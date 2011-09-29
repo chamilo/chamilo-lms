@@ -366,15 +366,19 @@ if (defined('SYSTEM_INSTALLATION')) {
                     		Database::select_db($row_course['db_name']);
                     	} else {
                     		Database::select_db($dbNameForm);
-                    	}
-                    	
+                    	}                    	
                     	
                     	//Count of rows
-                    	$sql = "SELECT count(*) FROM $old_table";
+                    	$sql 	= "SELECT count(*) FROM $old_table";
                     	$result = Database::query($sql);
-                    	$row = Database::fetch_row($result);
-                    	$old_count = $row[0];
                     	
+                    	$old_count = 0;
+                    	if ($result) {
+                    		$row 		= Database::fetch_row($result);
+                    		$old_count = $row[0];
+                    	} else {
+                    		error_log("Seems that the table $old_table doesn't exists ");
+                    	}                    	
                     	error_log("#rows in $old_table: $old_count");
                     	
                     	$sql = "SELECT * FROM $old_table";
@@ -384,14 +388,16 @@ if (defined('SYSTEM_INSTALLATION')) {
                     	while($row = Database::fetch_array($result, 'ASSOC')) {
                     		$row['c_id'] = $course_id;
                     		Database::select_db($dbNameForm);
-                    		$id = Database::insert($new_table, $row, true);
+                    		$id = Database::insert($new_table, $row);
                     		if (is_numeric($id)) {
                     			$count++;
                     		} else {
                     			$errors[$old_table][] = $row;                    			
                     		}
                     	}
+                    	
                     	error_log("# rows inserted in $new_table: $count");
+                    	
                     	if ($old_count != $count) {
                     		error_log("ERROR count of new and old table doesn't match: $old_count - $new_table");
                     		error_log("Check the results: ");
@@ -401,8 +407,6 @@ if (defined('SYSTEM_INSTALLATION')) {
                     error_log('<<<------- end  -------->>');
                     
                     //error
-                    
-                     
                     /*
                      //Adding all_day to the calendar event table
                     $calendar_event_table = $row_course['db_name'].".calendar_event";

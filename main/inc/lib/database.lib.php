@@ -703,6 +703,8 @@ class Database {
         		strpos($query, 'LEFT JOIN') === false &&
         		strpos($query, 'insert') 	=== false &&
         		strpos($query, 'INSERT') === false &&
+        		strpos($query, 'ALTER') === false &&
+        		strpos($query, 'alter') === false &&
         		strpos($query, 'c_id') === false
         	) {        		
         		$limit_list = explode('LIMIT', $query);

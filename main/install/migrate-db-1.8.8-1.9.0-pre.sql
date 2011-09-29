@@ -124,5 +124,5 @@ ALTER TABLE stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, 
 ALTER TABLE lp ADD COLUMN hide_toc_frame TINYINT NOT NULL DEFAULT 0;
 ALTER TABLE lp ADD COLUMN seriousgame_mode TINYINT NOT NULL DEFAULT 0;
 ALTER TABLE lp_item_view modify column suspend_data longtext;
-INSERT INTO course_setting(c_id, variable,value,category) VALUES ('course_grading_model','','gradebook');
+INSERT INTO course_setting(variable,value,category) VALUES ('course_grading_model','','gradebook');
 

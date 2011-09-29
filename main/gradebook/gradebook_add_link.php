@@ -18,22 +18,15 @@ require_once '../forum/forumfunction.inc.php';
 api_block_anonymous_users();
 block_students();
 
-$course_info =isset($_GET['course_code'])? api_get_course_info($_GET['course_code']) : api_get_course_info();
-$my_db_course=isset($_GET['course_code'])?$course_info['dbName']:'';
+$course_info = api_get_course_info($_GET['course_code']);
 
-$tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_course);
+$tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
 $tbl_link=Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+$all_categories = Category :: load();
+
 $category = Category :: load($_GET['selectcat']);
-$typeform = new LinkForm(LinkForm :: TYPE_CREATE,
-						$category[0],
-						null,
-						'create_link',
-						null,
-						api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
-						. '&newtypeselected=' . (isset($_GET['typeselected']) ? Security::remove_XSS($_GET['typeselected']) : '')
-						. '&course_code=' . (empty($_GET['course_code'])?'':Security::remove_XSS($_GET['course_code'])),
-						$_GET['typeselected'])
-						;
+$url = api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']). '&newtypeselected=' . (isset($_GET['typeselected']) ? Security::remove_XSS($_GET['typeselected']) : ''). '&course_code=' . (empty($_GET['course_code'])?'':Security::remove_XSS($_GET['course_code']));
+$typeform = new LinkForm(LinkForm :: TYPE_CREATE, $category[0], null, 'create_link', null, $url , $_GET['typeselected']);
 
 // if user selected a link type
 if ($typeform->validate() && isset($_GET['newtypeselected'])) {
@@ -46,23 +39,21 @@ if ($typeform->validate() && isset($_GET['newtypeselected'])) {
 
 // link type selected, show 2nd form to retrieve the link data
 if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
-	$addform = new LinkAddEditForm(LinkAddEditForm :: TYPE_ADD,
-								   $category[0],
-								   intval($_GET['typeselected']),
-								   null,
-								   'add_link',
-								   api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
-														. '&typeselected=' . Security::remove_XSS($_GET['typeselected']) . '&course_code=' . Security::remove_XSS($_GET['course_code']));
+	$url = api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']).'&typeselected=' . Security::remove_XSS($_GET['typeselected']) . '&course_code=' . Security::remove_XSS($_GET['course_code']);
+	$addform = new LinkAddEditForm(LinkAddEditForm :: TYPE_ADD, $all_categories, intval($_GET['typeselected']),null, 'add_link', $url);
 	if ($addform->validate()) {
 		$addvalues = $addform->exportValues();
 		$link= LinkFactory :: create($_GET['typeselected']);
 		$link->set_user_id(api_get_user_id());
-		if($category[0]->get_course_code() == '' && !empty($_GET['course_code'])) {
+		/*
+		if ($category[0]->get_course_code() == '' && !empty($_GET['course_code'])) {
 			$link->set_course_code($_GET['course_code']);
 		} else {
 			$link->set_course_code($category[0]->get_course_code());
-		}
-		$link->set_category_id($category[0]->get_id());
+		}*/
+		$link->set_course_code(api_get_course_id());
+		
+		$link->set_category_id($addvalues['select_gradebook']);
 
 		if ($link->needs_name_and_description()) {
 			$link->set_name($addvalues['name']);
@@ -81,27 +72,25 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 		$link->set_visible(empty ($addvalues['visible']) ? 0 : 1);
 
 		//update view_properties		
-		if ( isset($_GET['typeselected']) && 5==$_GET['typeselected'] && (isset($addvalues['select_link']) && $addvalues['select_link']<>"")) {
+		if (isset($_GET['typeselected']) && 5 == $_GET['typeselected'] && (isset($addvalues['select_link']) && $addvalues['select_link']<>"")) {
 
 			$sql1 = 'SELECT thread_title from '.$tbl_forum_thread.' 
 					 WHERE c_id = '.$course_info['real_id'].' AND thread_id='.$addvalues['select_link'];
-			$res1=Database::query($sql1);
-			$rowtit=Database::fetch_row($res1);
-			$course_id=api_get_course_id();
+			$res1	= Database::query($sql1);
+			$rowtit	= Database::fetch_row($res1);
+			$course_id = api_get_course_id();
 			$sql_l='SELECT count(*) FROM '.$tbl_link.' WHERE c_id = '.$course_info['real_id'].' AND ref_id='.$addvalues['select_link'].' and course_code="'.$course_id.'" and type=5;';
 			$res_l=Database::query($sql_l);
 			$row=Database::fetch_row($res_l);
-
 			if ( $row[0]==0 ) {
 				$link->add();
 				$sql = 'UPDATE '.$tbl_forum_thread.' SET thread_qualify_max='.$addvalues['weight'].',thread_weight='.$addvalues['weight'].',thread_title_qualify="'.$rowtit[0].'" 
 						WHERE thread_id='.$addvalues['select_link'].' AND c_id = '.$course_info['real_id'].' ';
 				Database::query($sql);
-				//$sql_l='UPDATE '.$tbl_link.' SET weight='.$addvalues['weight'].' WHERE ref_id='.$addvalues['select_link'].' AND type=5;';
-				//Database::query($sql_l);
 			}
 		}
 		$link->add();
+				
 		$addvalue_result=!empty($addvalues['addresult'])?$addvalues['addresult']:array();
 		if ($addvalue_result == 1) {
 			header('Location: gradebook_add_result.php?selecteval=' . $link->get_ref_id());

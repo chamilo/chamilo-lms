@@ -27,14 +27,9 @@ $link = $linkarray[0];
 $linkcat  = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']):'';
 $linkedit = isset($_GET['editlink']) ? Security::remove_XSS($_GET['editlink']):'';
 
-$form = new LinkAddEditForm(LinkAddEditForm :: TYPE_EDIT,
-							null,
-							null,
-							$link,
-							'edit_link_form',
-							api_get_self() . '?selectcat=' . $linkcat
-												 . '&editlink=' . $linkedit);
+$cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
 
+$form = new LinkAddEditForm(LinkAddEditForm :: TYPE_EDIT, $cats, null, $link, 'edit_link_form', api_get_self() . '?selectcat=' . $linkcat. '&editlink=' . $linkedit);
 if ($form->validate()) {
 	$values = $form->exportValues();
 	$link->set_weight($values['weight']);

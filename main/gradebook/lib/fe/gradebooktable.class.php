@@ -32,32 +32,38 @@ class GradebookTable extends SortableTable {
     	parent :: __construct ('gradebooklist', null, null, (api_is_allowed_to_create_course()?1:0));
 		$this->evals_links = array_merge($evals, $links);
 		$this->currentcat = $currentcat;
+		
 		$this->datagen = new GradebookDataGenerator($cats, $evals, $links);
+				
 		if (isset($addparams)) {
 			$this->set_additional_parameters($addparams);
 		}
+		
 		$column= 0;
 		if (api_is_allowed_to_edit(null, true)) {
 			$this->set_header($column++,'','','width="25px"');
 		}
+		
 		$this->set_header($column++, get_lang('Type'),'','width="35px"');
-		$this->set_header($column++, get_lang('Name'));
-		$this->set_header($column++, get_lang('Description'));
+		$this->set_header($column++, get_lang('Name'), false);
+		//$this->set_header($column++, get_lang('Description'));
 
 		if (api_is_allowed_to_edit(null, true)) {
 			$this->set_header($column++, get_lang('Weight'),'','width="50px"');
 		} else {
 			if (empty($_GET['selectcat']) ) {
-				$this->set_header($column++, get_lang('Evaluation'));
+				$this->set_header($column++, get_lang('Evaluation'), false);
 			} else {
-			    $this->set_header($column++, get_lang('Weight'));
+			    $this->set_header($column++, get_lang('Weight'), false);
 			}
 		}
+		
 		if (api_is_allowed_to_edit(null, true)) {
-			$this->set_header($column++, get_lang('CreationDate'),true, 'width="100px"');
+			//$this->set_header($column++, get_lang('CreationDate'),true, 'width="100px"');
 		} elseif (($status<>1)  && !api_is_allowed_to_create_course() && (!isset($_GET['selectcat']) || $_GET['selectcat']==0)) {
-			$this->set_header($column++, get_lang('Date'),true, 'width="100px"');
+			//$this->set_header($column++, get_lang('Date'),true, 'width="100px"');
 		}
+		
 		//admins get an edit column
 		if (api_is_allowed_to_edit(null, true)) {
 			$this->set_header($column++, get_lang('Modify'), false, 'width="120px"');
@@ -70,10 +76,10 @@ class GradebookTable extends SortableTable {
 	 	    if (empty($_GET['selectcat']) &&  !api_is_allowed_to_create_course()) {
 			    $this->set_header($column++, get_lang('Certificates'),false);
 	 	    } else {
-	 	    	$evals_links = array_merge($evals, $links);
-	 	    	if(count($evals_links)>0) {
-             	    $this->set_header($column++, get_lang('Results'), false);
-             	}
+	 	    	//$evals_links = array_merge($evals, $links);	 	    	
+	 	    	//if (count($evals_links)>0) {
+             	    //$this->set_header($column++, get_lang('Results'), false);
+             	//}
 	 	    }
 		}
     }
@@ -114,27 +120,36 @@ class GradebookTable extends SortableTable {
 				$sorting = GradebookDataGenerator :: GDG_SORT_DATE;
 				break;
 		}
+		
 		if ($this->direction == 'DESC') {
 			$sorting |= GradebookDataGenerator :: GDG_SORT_DESC;
 		} else {
 			$sorting |= GradebookDataGenerator :: GDG_SORT_ASC;
-		}
+		}		
+		
+		$sorting = GradebookDataGenerator :: GDG_SORT_DATE;
+		$sorting |= GradebookDataGenerator :: GDG_SORT_DESC;
+		
 		//status of user in course
 	    $user_id     = api_get_user_id();
 		$course_code = api_get_course_id();
-		$status_user = api_get_status_of_user_in_course ($user_id,$course_code);
+		$status_user = api_get_status_of_user_in_course($user_id, $course_code);
 		$data_array  = $this->datagen->get_data($sorting, $from, $this->per_page);
+		
 
 		// generate the data to display
 		$sortable_data = array();
-		$weight_total_links = 0;
+		$weight_total_links = 0;		
+		
 
-		foreach ($data_array as $data) {
-            // list of items inside the gradebook (exercises, lps, fora, etc)
-			$row  = array ();
-			$item = $data[0];
-			$id   = $item->get_id();   
+		foreach ($data_array as $data) {			
 			
+            // list of items inside the gradebook (exercises, lps, forums, etc)
+			$row  = array();
+			$item = $data[0];
+			
+			$id   = $item->get_id();							
+						
 			//if the item is invisible, wrap it in a span with class invisible
 			$invisibility_span_open  = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
 			$invisibility_span_close = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '</span>' : '';
@@ -142,22 +157,31 @@ class GradebookTable extends SortableTable {
 			if (api_is_allowed_to_edit(null, true)) {
 				$row[] = $this->build_id_column($item);
 			}
-
 			$row[] = $this->build_type_column($item);
-			$row[] = $invisibility_span_open.$this->build_name_link ($item) . $invisibility_span_close;
-			$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;
+			
+			//Name
+			if (get_class($item) == 'Category') {
+				$row[] = $invisibility_span_open.'<h2>'.$item->get_name().'</h2>'.$invisibility_span_close;
+			} else {
+				$row[] = $invisibility_span_open.$this->build_name_link ($item) . $invisibility_span_close;
+			}
+			
+			//Description
+			//$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
+			
+			//Weight
+			$row[] = $invisibility_span_open .'<h3>'.$data[3] .'% </h3>'.$invisibility_span_close;			
 			if (api_is_allowed_to_edit(null, true)) {
-				$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
 				$weight_total_links += intval($data[3]);
 			} else {
 				$cattotal   = Category :: load($_GET['selectcat']);
                 $scoretotal = $cattotal[0]->calc_score(api_get_user_id());                    
                 $item_value = $scoretotal[0];
-                $item_value = number_format($item_value, 2, '.', ' ');
-			   	$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;			  			   	
+                $item_value = number_format($item_value, 2, '.', ' ');			   				  			   	
 			}
-			
-    		$row[] = $invisibility_span_open.$data[4].$invisibility_span_close;
+						
+			//Date
+    		//$row[] = $invisibility_span_open.$data[4].$invisibility_span_close;
 
 			//Admins get an edit column
 			if (api_is_allowed_to_edit(null, true)) {
@@ -169,13 +193,88 @@ class GradebookTable extends SortableTable {
 			} else {
 				//students get the results and certificates columns
 				if (count($this->evals_links)>0 && $status_user!=1 ) {
-					$value_data=isset($data[5]) ? $data[5] : null;
+					$value_data = isset($data[4]) ? $data[4] : null;
+					
 					if (!is_null($value_data)) {
 						$row[] = $value_data;
 					}
 				}    
 			}
 			$sortable_data[] = $row;
+						
+			// Loading childrens
+			
+			if (get_class($item) == 'Category') {
+				$stud_id		= api_get_user_id();
+				$course_code	= api_get_course_id();
+				$session_id		= api_get_session_id();
+				
+				$cats = Category :: load ($item->get_id(), null, null, null, null, null, true);
+			
+				$allcat  = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);				
+				$alleval = $cats[0]->get_evaluations($stud_id);			
+				$alllink = $cats[0]->get_links($stud_id);
+				
+				$sub_cat_info = new GradebookDataGenerator($allcat, $alleval, $alllink);
+				$data_array  =  $sub_cat_info->get_data($sorting, $from, $this->per_page);				
+				
+				foreach ($data_array as $data) {
+					$row  = array();
+					$item = $data[0];
+					$id   = $item->get_id();							
+								
+					//if the item is invisible, wrap it in a span with class invisible
+					$invisibility_span_open  = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
+					$invisibility_span_close = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '</span>' : '';
+		
+					if (api_is_allowed_to_edit(null, true)) {
+						$row[] = $this->build_id_column($item);
+					}
+					$row[] = $this->build_type_column($item);
+					
+					//Name
+					$row[] = $invisibility_span_open."&nbsp;&nbsp;&nbsp;  ".$this->build_name_link($item) . $invisibility_span_close;
+					
+					//Description
+					//$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
+					
+					//Weight
+					$row[] = $invisibility_span_open . $data[3] .'%'.$invisibility_span_close;
+					
+					if (api_is_allowed_to_edit(null, true)) {						
+						//$weight_total_links += intval($data[3]);
+					} else {
+						$cattotal   = Category :: load($_GET['selectcat']);
+		                $scoretotal = $cattotal[0]->calc_score(api_get_user_id());                    
+		                $item_value = $scoretotal[0];
+		                $item_value = number_format($item_value, 2, '.', ' ');					   				  			   	
+					}
+					
+					//Date
+		    		//$row[] = $invisibility_span_open.$data[4].$invisibility_span_close;
+		
+					//Admins get an edit column
+					if (api_is_allowed_to_edit(null, true)) {
+						$cat = new Category();
+						$show_message = $cat->show_message_resource_delete($item->get_course_code());
+						if ($show_message===false) {
+							$row[] = $this->build_edit_column($item); 
+						}
+					} else {
+						//students get the results and certificates columns
+						$eval_n_links = array_merge($alleval, $alllink);
+						
+						if (count($eval_n_links)> 0 && $status_user!=1 ) {
+							$value_data = isset($data[5]) ? $data[5] : null;							
+							if (!is_null($value_data)) {
+								$row[] = $value_data;
+							}
+						}    
+					}					
+					$sortable_data[] = $row;
+				}
+				//add elements			
+			}
 		}
 
 		// warning messages

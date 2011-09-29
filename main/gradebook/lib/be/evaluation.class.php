@@ -178,6 +178,7 @@ class Evaluation implements GradebookItem
 			$sql .= ' visible = '.intval($locked);
 			$paramcount ++;
 		}
+		//echo $sql;
 		$result = Database::query($sql);
 		$alleval = Evaluation::create_evaluation_objects_from_sql_result($result);
 		return $alleval;

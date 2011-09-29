@@ -61,11 +61,10 @@ class ExerciseLink extends AbstractLink
     	if (empty($this->course_code)) {
     		die('Error in get_not_created_links() : course code not set');
     	}
-    	$course_info = api_get_course_info($this->course_code);
-    	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK,$course_info['dbName']);
-		$sql = 'SELECT id,title from '.$this->get_exercise_table().' WHERE active=1 AND session_id='.api_get_session_id().'';
+    	$course_info 		= api_get_course_info($this->course_code);    	
+		$sql = 'SELECT id,title from '.$this->get_exercise_table().' 
+				WHERE c_id = '.$course_info['real_id'].' AND active=1 AND session_id='.api_get_session_id().'';
 		$result = Database::query($sql);
-
 		$cats=array();
 		while ($data=Database::fetch_array($result)) {
 			$cats[] = array ($data['id'], $data['title']);
@@ -214,16 +213,8 @@ class ExerciseLink extends AbstractLink
      * Lazy load function to get the database table of the exercise
      */
     private function get_exercise_table () {
-    	$course_info = Database :: get_course_info($this->get_course_code());
-		$database_name = isset($course_info['db_name']) ? $course_info['db_name'] : '';
-		if ($database_name!='') {
-    		if (!isset($this->exercise_table)) {
-				$this->exercise_table = Database :: get_course_table(TABLE_QUIZ_TEST, $database_name);
-    		}
-   			return $this->exercise_table;
-   		} else {
-   			return '';
-   		}
+    	$this->exercise_table = Database :: get_course_table(TABLE_QUIZ_TEST);
+    	return $this->exercise_table;   		
     }
 
     /**

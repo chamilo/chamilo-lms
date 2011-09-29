@@ -74,8 +74,8 @@ class ForumThreadLink extends AbstractLink
     		die('Error in get_not_created_links() : course code not set');
     	}
     	$course_info 		= api_get_course_info($this->course_code);
-    	$tbl_grade_links 	= Database :: get_course_table(TABLE_FORUM_THREAD,$course_info['dbName']);
-    	$tbl_item_property	= Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
+    	$tbl_grade_links 	= Database :: get_course_table(TABLE_FORUM_THREAD);
+    	$tbl_item_property	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
     	
 		$sql = 'SELECT tl.thread_id, tl.thread_title, tl.thread_title_qualify 
 				FROM '.$tbl_grade_links.' tl ,'.$tbl_item_property.' ip 

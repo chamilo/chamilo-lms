@@ -159,17 +159,8 @@ class AttendanceLink extends AbstractLink
      * Lazy load function to get the database table of the student publications
      */
     private function get_attendance_table() {
-    	$course_info = Database :: get_course_info($this->get_course_code());
-		$database_name = isset($course_info['db_name']) ? $course_info['db_name'] : '';
-		if ($database_name!='') {
-			if (!isset($this->attendance_table)) {
-				$this->attendance_table = Database :: get_course_table(TABLE_ATTENDANCE, $database_name);
-    		}
-   			return $this->attendance_table;
-		} else {
-			return '';
-		}
-
+    	$this->attendance_table = Database :: get_course_table(TABLE_ATTENDANCE);
+    	return $this->attendance_table;
     }
 
     /**

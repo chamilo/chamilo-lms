@@ -1279,7 +1279,7 @@ class Database {
             }
             if (!empty($update_sql)) {
                 //Parsing and cleaning the where conditions
-                $where_return = self::parse_where_conditions($where_conditions);
+                $where_return = self::parse_where_conditions($where_conditions);                
                 $sql    = "UPDATE $table_name SET $update_sql $where_return ";
                 if ($show_query) { echo $sql; echo '<br />'; }
                 $result = self::query($sql);

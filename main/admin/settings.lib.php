@@ -11,20 +11,7 @@
  * @package chamilo.admin
  */
 
-/**
- * The function that retrieves all the possible settings for a certain config setting
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- */
-function get_settings_options($var) {
-    $table_settings_options = Database :: get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
-    $sql = "SELECT * FROM $table_settings_options WHERE variable='$var'";
-    $result = Database::query($sql);
-    while ($row = Database::fetch_array($result)) {
-        $temp_array = array ('value' => $row['value'], 'display_text' => $row['display_text']);
-        $settings_options_array[] = $temp_array;
-    }
-    return $settings_options_array;
-}
+
 
 /**
  * This function allows easy activating and inactivating of plugins
@@ -512,7 +499,7 @@ function handle_search() {
     
     
     
-    $values = get_settings_options('search_enabled');   
+    $values = api_get_settings_options('search_enabled');   
     $form->addElement('header', null, get_lang('SearchEnabledTitle'));    
      
     $group = array ();
@@ -549,7 +536,7 @@ function handle_search() {
         // Search_show_unlinked_results.
         //$form->addElement('header', null, get_lang('SearchShowUnlinkedResultsTitle'));
         //$form->addElement('label', null, get_lang('SearchShowUnlinkedResultsComment'));
-        $values = get_settings_options('search_show_unlinked_results');
+        $values = api_get_settings_options('search_show_unlinked_results');
         $group = array ();
         foreach ($values as $key => $value) {
             $element = & $form->createElement('radio', 'search_show_unlinked_results', '', get_lang($value['display_text']), $value['value']);

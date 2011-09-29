@@ -33,9 +33,14 @@ if ($form->validate()) {
 	$eval->set_name($values['name']);
 	$eval->set_description($values['description']);
 	$eval->set_user_id($values['hid_user_id']);
+	
 	if (!empty ($values['hid_course_code'])) {
 		$eval->set_course_code($values['hid_course_code']);
 	}
+	
+	//Always add the gradebook to the course
+	$eval->set_course_code(api_get_course_id());
+	
 	$eval->set_category_id($values['hid_category_id']);
 	$eval->set_weight($values['weight']);
 	

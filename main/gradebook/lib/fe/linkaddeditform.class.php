@@ -38,44 +38,36 @@ class LinkAddEditForm extends FormValidator
 			$link = $link_object;
 		} elseif (isset ($link_type) && isset ($category_object)) {
 			$link = LinkFactory :: create ($link_type);
+			$link->set_course_code(api_get_course_id());
+			/*
 			$cc = $category_object->get_course_code();
 			if (empty($cc) && !empty($_GET['course_code'])) {
 				$link->set_course_code(Database::escape_string($_GET['course_code']));
 			} else {
 				$link->set_course_code($category_object->get_course_code());
-			}
+			}*/
 		} else {
 			die ('LinkAddEditForm error: define link_type/category_object or link_object');
 		}
 		$defaults = array();
 		$this->addElement('hidden', 'zero', 0);
 
-		if (!empty($_GET['editlink']))
-		{
+		if (!empty($_GET['editlink'])) {
 			$this->addElement('header', '', get_lang('EditLink'));
 		}
 
 		// ELEMENT: name
 		if ($form_type == self :: TYPE_ADD || $link->is_allowed_to_change_name()) {
 			if ($link->needs_name_and_description()) {
-				$this->add_textfield('name',
-									  get_lang('Name'),
-									  true,
-									  array('size'=>'40',
-											'maxlength'=>'40'));
+				$this->add_textfield('name', get_lang('Name'), true, array('size'=>'40', 'maxlength'=>'40'));
 			} else {
-				$select = $this->addElement('select',
-											'select_link',
-											get_lang('ChooseItem'));
+				$select = $this->addElement('select', 'select_link', get_lang('ChooseItem'));				
 				foreach ($link->get_all_links() as $newlink) {
 					$select->addoption($newlink[1],$newlink[0]);
 				}
 			}
 		} else {
-			$this->addElement('static',
-								'label',
-								get_lang('Name'),
-								$link->get_name().' ['.$link->get_type_name().']');
+			$this->addElement('static','label',get_lang('Name'), $link->get_name().' ['.$link->get_type_name().']');
 			$this->addElement('hidden','name_link',$link->get_name(),array('id'=>'name_link'));
 		}
 
@@ -120,6 +112,21 @@ class LinkAddEditForm extends FormValidator
 		if ($form_type == self :: TYPE_EDIT) {
 			$defaults['visible'] = $link->is_visible();
 		}
+		
+		$select_gradebook = $this->addElement('select', 'select_gradebook', get_lang('SelectGradebook'));
+		
+		if (!empty($category_object)) {
+			foreach($category_object as $my_cat) {
+				if ($my_cat->get_course_code() == api_get_course_id()) {
+					if ($my_cat->get_parent_id() == 0 ) {
+						$select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+					} else {
+						$select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+					}
+				}			
+			}
+		}
+		
 		// ELEMENT: add results
 		if ($form_type == self :: TYPE_ADD && $link->needs_results()) {
 			$this->addElement('checkbox', 'addresult', get_lang('AddResult'));

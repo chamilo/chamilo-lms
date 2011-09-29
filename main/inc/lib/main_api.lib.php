@@ -1016,10 +1016,9 @@ function api_get_course_path($course_code = null) {
  */
 function api_get_course_setting($setting_name, $course_code = null) {    
     $course_info = api_get_course_info($course_code);    
-	$table 		 = Database::get_course_table(TABLE_COURSE_SETTING);
-    
+	$table 		 = Database::get_course_table(TABLE_COURSE_SETTING);    
     $setting_name = Database::escape_string($setting_name);
-    $sql = "SELECT value FROM $table WHERE c_id = {$course_info['real_id']} AND variable = '$setting_name'";
+    $sql = "SELECT value FROM $table WHERE c_id = {$course_info['real_id']} AND variable = '$setting_name'";    
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_array($res);
@@ -3675,6 +3674,38 @@ function api_get_status_langvars() {
     );
 }
 
+
+/**
+* The function that retrieves all the possible settings for a certain config setting
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+*/
+function api_get_settings_options($var) {
+	$table_settings_options = Database :: get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
+	$sql = "SELECT * FROM $table_settings_options WHERE variable = '$var' ORDER BY id";
+	$result = Database::query($sql);
+	while ($row = Database::fetch_array($result, 'ASSOC')) {
+		//$temp_array = array ('value' => $row['value'], 'display_text' => $row['display_text']);
+		$settings_options_array[] = $row;
+	}
+	return $settings_options_array;
+}
+
+function api_set_setting_option($params) {
+	$table = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
+	if (empty($params['id'])) {
+		Database::insert($table, $params);
+	} else {
+		Database::update($table, $params, array('id = ? '=> $params['id']));
+	}		
+}
+
+function api_delete_setting_option($id) {
+	$table = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
+	if (!empty($id)) {
+		Database::delete($table, array('id = ? '=> $id));
+	}	
+}
+
 /**
  * Sets a platform configuration setting to a given value
  * @param string    The variable we want to update
@@ -5361,4 +5392,50 @@ function api_get_course_table_condition($and = true) {
 		$condition = " $condition_add c_id = $course_id";
 	}
 	return $condition;
+}
+
+function api_grading_model_functions($grading_model, $action = 'to_array') {
+	$return = null;
+	if (empty($grading_model)) {
+		return null;
+	}
+	$elements = array('A','B','C','D','E', 'F', 'G', 'H','I','J', 'K');
+	
+	if (in_array($action, array('to_array', 'decorate'))) {	
+		$parts = explode('/', $grading_model);
+		$return['denominator'] = $parts[1];
+		$sums = explode('+', $parts[0]);
+
+		$j = 0;
+		foreach($sums as $item) {
+			$item = explode('*', $item);
+			$per = 0;
+			if (!empty($return['denominator'])) {
+				$per = $item[0]/$return['denominator']*100;
+			}
+			$return['items'][] =array(	'letter'	=> $elements[$j], 
+										'value'		=> $item[0], 
+										'percentage'=> $per.'%');
+			$j++;
+		}
+		
+		if ($action == 'decorate') {			
+			$return_value = '';
+			$items = $return['items'];
+			$j = 1;
+			foreach ($items as $item) {
+				$letter = $item['letter'];
+				$value  = $item['value'];
+				
+				$sum = '+';
+				if (count($items) == $j){
+					$sum = '';
+				}
+				$return_value = $return_value.' '.$value.'*'.$letter." $sum ";
+				$j++;							
+			}			
+			$return = ' ('.$return_value.') / '.$return['denominator'];
+		}
+	}
+	return $return;	
 }

@@ -350,29 +350,33 @@ if (is_array($flat_list)) {
                 $dsp_publish = Display::return_icon('lp_publish_na.png', get_lang('_no_publish'),'','22');
             }
 
-			/*  MULTIPLE ATTEMPTS OR SERIOUS GAME MODE */
+      /*  MULTIPLE ATTEMPTS OR SERIOUS GAME MODE 
 
+        SERIOUSGAME MODE is a special mode where : 
+           * If a user exits the learning path before finishing it, he comes back where he left next time he tries
+           * When lp status is completed, user can still modify the attempt (adds/time change score, and browse it)
+           * It is thus a mix betwenn multiple attempt and mono attempt
+      */
             if ($current_session == $details['lp_session']) {
-        if ($details['seriousgame_mode'] == 1 && $details['lp_prevent_reinit'] == 1) { //seriousgame mode | next = single
-          dir('serious');
-                        Display::return_icon('reload_na.png', get_lang('AllowMultipleAttempts'),'','22').'</a>';
-            '<img src="../img/gamepad.gif" border="0" alt="Prevent reinit" title="'.get_lang("PreventMultipleAttempts").'"/>' .
-            '</a>&nbsp;';
-        }
-        if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 1) { //single mode | next = multiple
-          $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .
-            '<img src="../img/kaboodleloop_gray.gif" border="0" alt="Allow reinit" title="'.get_lang("AllowMultipleAttempts").'"/>' .
-            '</a>&nbsp;';
-        }
-        if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 0) { //multiple mode | next = seriousgame
-          $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .
-            '<img src="../img/kaboodleloop.gif" border="0" alt="Serious game mode" title="'.get_lang("SeriousGameMode").'"/>' .
-							'</a>&nbsp;';
-            '</a>&nbsp;';
-        }
+              if ($details['seriousgame_mode'] == 1 && $details['lp_prevent_reinit'] == 1) { //seriousgame mode | next = single
+                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .
+                  '<img src="../img/gamepad.gif" border="0" alt="Prevent reinit" title="'.get_lang("PreventMultipleAttempts").'"/>' .
+                  '</a>&nbsp;';
+              }
+              if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 1) { //single mode | next = multiple
+                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .
+                  '<img src="../img/kaboodleloop_gray.gif" border="0" alt="Allow reinit" title="'.get_lang("AllowMultipleAttempts").'"/>' .
+                  '</a>&nbsp;';
+              }
+              if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 0) { //multiple mode | next = seriousgame
+                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .
+                  '<img src="../img/kaboodleloop.gif" border="0" alt="Serious game mode" title="'.get_lang("SeriousGameMode").'"/>' .
+                  '</a>&nbsp;';
+              }
             } else {
-                $dsp_reinit = Display::return_icon('reload_na.png', get_lang('AllowMultipleAttempts'),'','22');
+              $dsp_reinit .= '<img src="../img/kaboodleloop_gray.gif" border="0" alt="" title="'.get_lang("AllowMultipleAttempts").'"/>';
             }
+
 
             /* FUll screen VIEW */
 

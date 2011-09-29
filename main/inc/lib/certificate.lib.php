@@ -156,7 +156,7 @@ class Certificate extends Model {
 				if (!empty($this->certificate_data)) {	
 					$new_content_html = get_user_certificate_content($this->user_id, $my_category[0]->get_course_code(), false);
 				
-					if ($cat_id = strval(intval($this->certificate_data['cat_id']))) {
+					if ($my_category[0]->get_id() == strval(intval($this->certificate_data['cat_id']))) {
 						$name = $this->certificate_data['path_certificate'];
 						$my_path_certificate = $this->certification_user_path.basename($name);
 						if (file_exists($my_path_certificate) && !empty($name) && !is_dir($my_path_certificate) && $this->force_certificate_generation == false) {

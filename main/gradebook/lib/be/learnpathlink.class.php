@@ -60,15 +60,12 @@ class LearnpathLink extends AbstractLink
 	 * Generate an array of all learnpaths available.
 	 * @return array 2-dimensional array - every element contains 2 subelements (id, name)
 	 */
-    public function get_all_links()
-    {
+    public function get_all_links() {
     	if (empty($this->course_code))
     		die('Error in get_not_created_links() : course code not set');
 
 		$course_info = api_get_course_info($this->course_code);
-    	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK,$course_info['dbName']);
-
-		$sql = 'SELECT id,name FROM '.$this->get_learnpath_table().' WHERE session_id = '.api_get_session_id().' ';
+    	$sql = 'SELECT id,name FROM '.$this->get_learnpath_table().' WHERE session_id = '.api_get_session_id().' ';
 		$result = Database::query($sql);
 
 		$cats=array();
@@ -83,12 +80,12 @@ class LearnpathLink extends AbstractLink
     /**
      * Has anyone used this learnpath yet ?
      */
-    public function has_results()
-    {
+    public function has_results() {
+    	
     	$course_info = api_get_course_info($this->get_course_code());
     	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
-		$sql = 'SELECT count(id) AS number FROM '.$tbl_stats
-				." WHERE lp_id = '".$this->get_ref_id()."'";
+		$sql = "SELECT count(id) AS number FROM $tbl_stats
+				WHERE c_id = {$course_info['real_id']} AND lp_id = ".$this->get_ref_id();
     	$result = Database::query($sql);
 		$number=Database::fetch_array($result,'NUM');
 		return ($number[0] != 0);
@@ -104,12 +101,11 @@ class LearnpathLink extends AbstractLink
     public function calc_score($stud_id = null)
     {
     	$course_info = api_get_course_info($this->get_course_code());
-    	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
+    	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW);
     	if (is_null($course_info['dbName'])===true) {
 			return false;
 		}
-    	$sql = 'SELECT * FROM '.$tbl_stats
-    			." WHERE lp_id = ".$this->get_ref_id();
+    	$sql = "SELECT * FROM $tbl_stats WHERE c_id = {$course_info['real_id']} AND lp_id = ".$this->get_ref_id();
 
     	if (isset($stud_id))
     		$sql .= ' AND user_id = '.intval($stud_id);
@@ -232,15 +228,8 @@ class LearnpathLink extends AbstractLink
     /**
      * Lazy load function to get the database table of the learnpath
      */
-    private function get_learnpath_table ()
-    {
-    	$course_info = api_get_course_info($this->get_course_code());
-		$database_name = isset($course_info['dbName']) ? $course_info['dbName'] : '';
-		if ($database_name=='') {
-			return '';
-		} elseif (!isset($this->learnpath_table)) {
-			$this->learnpath_table = Database :: get_course_table(TABLE_LP_MAIN, $database_name);
-    	}
+    private function get_learnpath_table () {
+    	$this->learnpath_table = Database :: get_course_table(TABLE_LP_MAIN);
    		return $this->learnpath_table;
     }
 

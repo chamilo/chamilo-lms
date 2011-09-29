@@ -202,14 +202,18 @@ function build_edit_icons_cat($cat, $selectcat) {
 		$visibility_icon= ($cat->is_visible() == 0) ? 'invisible' : 'visible';
 		$visibility_command= ($cat->is_visible() == 0) ? 'set_visible' : 'set_invisible';
 		$modify_icons= '<a href="gradebook_edit_cat.php?editcat=' . $cat->get_id() . ' &amp;cidReq='.$cat->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'','22').'</a>';
-		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq='.$cat->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'','22').'</a>';
+		
+		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'','22').'</a>';
+		
 		//no move ability for root categories
 		if ($cat->is_movable()) {
-			$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$cat->get_course_code().'"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
+			/*$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$cat->get_course_code().'">
+								<img src="../img/icons/22/move.png" border="0" title="' . get_lang('Move') . '" alt="" /></a>';*/
 		} else {
 			//$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
 		}
-		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'','22').'</a>';
+
+		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq='.$cat->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'','22').'</a>';
 
 		return $modify_icons;
 	}
@@ -359,12 +363,28 @@ function remove_resource_from_course_gradebook($link_id) {
  * @return   String
  */
 function get_database_name_by_link_id($id_link) {
-	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-	$res=Database::query('SELECT db_name FROM '.$course_table.' c INNER JOIN '.$tbl_grade_links.' l
-			ON c.code=l.course_code WHERE l.id='.intval($id_link).' OR l.category_id='.intval($id_link));
+	$course_table 		= Database::get_main_table(TABLE_MAIN_COURSE);
+	$tbl_grade_links 	= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+	$sql = 'SELECT db_name FROM '.$course_table.' c INNER JOIN '.$tbl_grade_links.' l
+			ON c.code=l.course_code WHERE l.id='.intval($id_link).' OR l.category_id='.intval($id_link);	
+	$res=Database::query($sql);
 	$my_db_name=Database::fetch_array($res,'ASSOC');
 	return $my_db_name['db_name'];
+}
+
+/**
+* Return the course id
+* @param    int
+* @return   String
+*/
+function get_course_id_by_link_id($id_link) {
+	$course_table 		= Database::get_main_table(TABLE_MAIN_COURSE);
+	$tbl_grade_links 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+	$sql = 'SELECT c.id FROM '.$course_table.' c INNER JOIN '.$tbl_grade_links.' l
+			ON c.code = l.course_code WHERE l.id='.intval($id_link).' OR l.category_id='.intval($id_link);	
+	$res = Database::query($sql);
+	$array = Database::fetch_array($res,'ASSOC');
+	return $array['id'];
 }
 
 function get_table_type_course($type,$course) {

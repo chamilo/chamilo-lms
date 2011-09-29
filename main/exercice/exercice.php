@@ -202,7 +202,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 		Database::query($recording_changes);
 	}
 	
-	$qry = 'SELECT DISTINCT question_id, marks FROM ' . $TBL_TRACK_ATTEMPT . ' where exe_id = '.$id .' GROUP BY question_id';
+	$qry = 'SELECT DISTINCT question_id, marks FROM ' . $TBL_TRACK_ATTEMPT . ' WHERE exe_id = '.$id .' GROUP BY question_id';
 	$res = Database::query($qry);
 	$tot = 0;
 	while ($row = Database :: fetch_array($res, 'ASSOC')) {

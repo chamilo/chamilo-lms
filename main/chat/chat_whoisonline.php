@@ -36,7 +36,7 @@ if (!empty($course)) {
 	$tbl_session				= Database::get_main_table(TABLE_MAIN_SESSION);
 	$tbl_session_course			= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 	$tbl_user					= Database::get_main_table(TABLE_MAIN_USER);
-	$tbl_chat_connected			= Database::get_course_table(CHAT_CONNECTED_TABLE, $_course['dbName']);
+	$tbl_chat_connected			= Database::get_course_table(CHAT_CONNECTED_TABLE);
 
 	$query = "SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 	$result = Database::query($query);
@@ -49,9 +49,18 @@ if (!empty($course)) {
 	$date_inter = date('Y-m-d H:i:s', time() - 120);
 
 	$users = array();
-
+	$course_id = api_get_course_int_id();
+	
 	if (empty($session_id)) {
-		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,t3.status FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t2.user_id AND t3.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
+		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,t3.status 
+				  FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 
+				  WHERE t2.c_id = $course_id, 
+				  		t1.user_id=t2.user_id AND 
+				  		t3.user_id=t2.user_id AND 
+						t3.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND 
+						t3.course_code = '".$_course['sysCode']."' AND 
+						t2.last_connection>'".$date_inter."' $extra_condition 
+						ORDER BY username";
 		$result = Database::query($query);
 		$users = Database::store_result($result);
 	} else {

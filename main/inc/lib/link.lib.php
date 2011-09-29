@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -79,11 +78,12 @@ function addlinkcategory($type) {
 
 			$session_id = api_get_session_id();
 
-			$sql = "INSERT INTO " . $tbl_link . " (url, title, description, category_id, display_order, on_homepage, target, session_id)
-			        VALUES ('" . Database :: escape_string($urllink) . "','" . Database :: escape_string($title) . "','" . Database :: escape_string($description) . "','" .
+			$sql = "INSERT INTO " . $tbl_link . " (c_id, url, title, description, category_id, display_order, on_homepage, target, session_id)
+			        VALUES (".api_get_course_int_id().", '".Database :: escape_string($urllink) . "','" . Database :: escape_string($title) . "','" . Database :: escape_string($description) . "','" .			        
 			Database :: escape_string($selectcategory) . "','" . Database :: escape_string($order) . "', '" . Database :: escape_string($onhomepage) . "','" .
 			Database :: escape_string($target) . "','" . Database :: escape_string($session_id) . "')";
-			$catlinkstatus = get_lang('LinkAdded');
+			
+			$catlinkstatus = get_lang('LinkAdded');			
 			Database :: query($sql);
 			$link_id = Database :: insert_id();
 
@@ -151,9 +151,9 @@ function addlinkcategory($type) {
 				if ($did) {
 					// Save it to db.
 					$tbl_se_ref = Database :: get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-					$sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
+					$sql = 'INSERT INTO %s (c_id, id, course_code, tool_id, ref_id_high_level, search_did)
 					                        VALUES (NULL , \'%s\', \'%s\', %s, %s)';
-					$sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_LINK, $link_id, $did);
+					$sql = sprintf($sql, $tbl_se_ref, api_get_course_int_id(), $courseid, TOOL_LINK, $link_id, $did);
 					Database :: query($sql);
 				}
 			}
@@ -177,8 +177,8 @@ function addlinkcategory($type) {
 			$order = $orderMax +1;
 			$order = intval($order);
 			$session_id = api_get_session_id();
-			$sql = "INSERT INTO ".$tbl_categories." (category_title, description, display_order, session_id) 
-			        VALUES ('" .Database::escape_string($category_title) . "', '" . Database::escape_string($description) . "', '$order', '$session_id')";
+			$sql = "INSERT INTO ".$tbl_categories." (c_id, category_title, description, display_order, session_id) 
+			        VALUES (".api_get_course_int_id().", '" .Database::escape_string($category_title) . "', '" . Database::escape_string($description) . "', '$order', '$session_id')";
 			Database :: query($sql);
 
 			$catlinkstatus = get_lang('CategoryAdded');
@@ -216,12 +216,10 @@ function deletelinkcategory($type) {
 			$sql = "UPDATE $tbl_link SET on_homepage='0' WHERE id='" . intval($_GET['id']) . "'";
 			Database :: query($sql);
 		}
-
 		api_item_property_update($_course, TOOL_LINK, $id, 'delete', api_get_user_id());
 		delete_link_from_search_engine(api_get_course_id(), $id);
 		$catlinkstatus = get_lang('LinkDeleted');
 		unset ($id);
-
 		Display :: display_confirmation_message(get_lang('LinkDeleted'));
 	}
 
@@ -460,9 +458,9 @@ function editlinkcategory($type) {
 						$sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=\'%s\'';
 						$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
 						Database :: query($sql);
-						$sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
+						$sql = 'INSERT INTO %s (c_id, id, course_code, tool_id, ref_id_high_level, search_did)
 						        VALUES (NULL , \'%s\', \'%s\', %s, %s)';
-						$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id, $did);
+						$sql = sprintf($sql, $tbl_se_ref, api_get_course_int_id(), $course_id, TOOL_LINK, $link_id, $did);
 						Database :: query($sql);
 					}
 				}
@@ -537,7 +535,14 @@ function showlinksofcategory($catid) {
 	$condition_session = api_get_session_condition($session_id, true, true);
 	$catid = intval($catid);
 
-	$sqlLinks = "SELECT * FROM " . $tbl_link . " link, " . $TABLE_ITEM_PROPERTY . " itemproperties WHERE itemproperties.tool='" . TOOL_LINK . "' AND link.id=itemproperties.ref AND link.category_id='" . $catid . "' AND (itemproperties.visibility='0' OR itemproperties.visibility='1') $condition_session ORDER BY link.display_order DESC";
+	$sqlLinks = "SELECT * FROM " . $tbl_link . " link, " . $TABLE_ITEM_PROPERTY . " itemproperties 
+				 WHERE  itemproperties.tool='" . TOOL_LINK . "' AND 
+						link.id=itemproperties.ref AND 
+						link.category_id='" . $catid . "' AND 
+						(itemproperties.visibility='0' OR itemproperties.visibility='1') 
+						$condition_session AND
+						link.c_id = ".api_get_course_int_id()." 
+						ORDER BY link.display_order DESC";
 	$result = Database :: query($sqlLinks);
 	$numberoflinks = Database :: num_rows($result);
 	if ($numberoflinks > 0) {
@@ -585,7 +590,9 @@ function showlinksofcategory($catid) {
     
     				echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;sec_token='.$token.'&amp;action=editlink&amp;category=' . (!empty ($category) ? $category : '') . '&amp;id=' . $myrow[0] . '&amp;urlview=' . $urlview . '" title="' . get_lang('Modify') . '">' . 
     						Display :: return_icon('edit.png', get_lang('Modify'), array (), 22) . '</a>';
+    				
     				// DISPLAY MOVE UP COMMAND only if it is not the top link.
+    				/*
     				if ($i != 1) {
     					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;urlview=' . $urlview . '&amp;up=', $myrow[0], '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), 22) . '', "</a>\n";
     				} else {
@@ -597,7 +604,7 @@ function showlinksofcategory($catid) {
     					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;urlview=' . $urlview . '&amp;down=' . $myrow[0] . '" title="' . get_lang('Down') . '">' . Display :: return_icon('down.png', get_lang('Down'), array (), 22) . '', "</a>\n";
     				} else {
     					echo Display :: return_icon('down_na.png', get_lang('Down'), array (), 22) . '', "</a>\n";
-    				}
+    				}*/
     
     				if ($myrow['visibility'] == '1') {
     					echo '<a href="link.php?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=invisible&amp;id=' . $myrow[0] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Hide') . '">' . Display :: return_icon('visible.png', get_lang('Hide'), array (), 22) . '</a>';
@@ -738,7 +745,8 @@ function get_cat($catname) {
 
 	$result = Database :: query("SELECT MAX(display_order) FROM " . $tbl_categories);
 	list ($max_order) = Database :: fetch_row($result);
-	Database :: query("INSERT INTO " . $tbl_categories . " (category_title, description, display_order) VALUES ('" . Database::escape_string($catname) . "','','" . ($max_order +1) . "')");
+	Database :: query("INSERT INTO " . $tbl_categories . " (c_id, category_title, description, display_order) 
+					   VALUES (".api_get_course_int_id().", '" . Database::escape_string($catname) . "','','" . ($max_order +1) . "')");
 	return Database :: insert_id();
 }
 
@@ -764,13 +772,13 @@ function put_link($url, $cat, $title, $description, $on_homepage, $hidden) {
 		$result = Database :: query("SELECT MAX(display_order) FROM  $tbl_link WHERE category_id='" . intval($cat) . "'");
 		list ($max_order) = Database :: fetch_row($result);
 
-		Database :: query("INSERT INTO $tbl_link (url, title, description, category_id, display_order, on_homepage) VALUES ('" . Database :: escape_string($url) . "','" . Database :: escape_string($title) . "','" . Database :: escape_string($description) . "','" . intval($cat) . "','" . (intval($max_order) + 1) . "','" . intval($on_homepage) . "')");
+		Database :: query("INSERT INTO $tbl_link (c_id, url, title, description, category_id, display_order, on_homepage) 
+						   VALUES (".api_get_course_int_id().", '" . Database :: escape_string($url) . "','" . Database :: escape_string($title) . "','" . Database :: escape_string($description) . "','" . intval($cat) . "','" . (intval($max_order) + 1) . "','" . intval($on_homepage) . "')");
 
 		$id = Database :: insert_id();
 		$ipu = 'LinkAdded';
 		$rv = 2; // 2 = new
 	}
-
 	global $_course, $nameTools, $_user;
 	api_item_property_update($_course, TOOL_LINK, $id, $ipu, $_user['user_id']);
 

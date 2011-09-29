@@ -187,7 +187,7 @@ class CourseDescriptionController { // extends Controller {
 		        		$course_description->set_description_type($description_type);
 		        		$course_description->set_title($title);
 		        		$course_description->set_content($content);
-						$affected_rows = $course_description->insert();
+						$affected_rows = $course_description->insert(api_get_course_int_id());
 		        	}
 		        	Security::clear_token();	
         		} 

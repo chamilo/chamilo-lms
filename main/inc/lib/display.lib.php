@@ -1037,21 +1037,25 @@ class Display {
      * @param array     Course information array, containing at least elements 'db' and 'k'
      * @return string   The HTML link to be shown next to the course
      */
-    function show_notification($my_course) {
-        $statistic_database = Database :: get_statistic_database();
+    function show_notification($my_course) {        
+        $t_track_e_access 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        
         $user_id = api_get_user_id();
-        $course_database = $my_course['db'];
-        $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST, $course_database);
-        $tool_edit_table = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_database);
-        $course_group_user_table = Database :: get_course_table(TABLE_GROUP_USER, $course_database);
-        $t_track_e_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        $my_course['k'] = Database::escape_string($my_course['k']);
+        $course_database 			= $my_course['db'];
+        $course_tool_table			= Database::get_course_table(TABLE_TOOL_LIST);
+        $tool_edit_table 			= Database::get_course_table(TABLE_ITEM_PROPERTY);
+                
+        $course_code 	= Database::escape_string($my_course['k']);
+        $course_info	= api_get_course_info($course_code);
+        $course_id 		= $course_info['real_id'];
+        
         $my_course['id_session'] = intval($my_course['id_session']);
         // Get the user's last access dates to all tools of this course
         $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access ".
                                          " USE INDEX (access_cours_code, access_user_id) ".
-                                         "WHERE access_cours_code = '".$my_course['k']."' ".
-                                         "AND access_user_id = '$user_id' AND access_session_id ='".$my_course['id_session']."'";
+                                         "WHERE access_cours_code = '".$course_code."' AND 
+        										access_user_id = '$user_id' AND 
+        										access_session_id ='".$my_course['id_session']."'";
         $resLastTrackInCourse = Database::query($sqlLastTrackInCourse);
 
         $oldestTrackDate = $oldestTrackDateOrig = '3000-01-01 00:00:00';
@@ -1067,7 +1071,7 @@ class Display {
             $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
             $sql = "SELECT course.creation_date ".
                  "FROM $course_table course ".
-                 "WHERE course.code = '".$my_course['k']."'";
+                 "WHERE course.code = '".$course_code."'";
             $res = Database::query($sql);
             if ($res && Database::num_rows($res)>0) {
                 $row = Database::fetch_array($res);
@@ -1080,14 +1084,16 @@ class Display {
                             " tet.lastedit_type type, tet.to_group_id group_id, ".
                             " ctt.image image, ctt.link link ".
                         " FROM $tool_edit_table tet, $course_tool_table ctt ".
-                        " WHERE tet.lastedit_date > '$oldestTrackDate' ".
+                        " WHERE tet.c_id = $course_id AND
+                        		ctt.c_id = $course_id AND 
+                        		tet.lastedit_date > '$oldestTrackDate' ".
                         " AND ctt.name = tet.tool ".
                         " AND ctt.visibility = '1' ".
                         " AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$my_course['id_session']."' ".
                         " ORDER BY tet.lastedit_date";
         $res = Database::query($sql);
         // Get the group_id's with user membership.
-        $group_ids = GroupManager :: get_group_ids($course_database, $user_id);
+        $group_ids = GroupManager :: get_group_ids($my_course['real_id'], $user_id);
         $group_ids[] = 0; //add group 'everyone'
         $notifications = array();
         // Filter all last edits of all tools of the course
@@ -1120,14 +1126,14 @@ class Display {
                 }
                 // If it's a survey, make sure the user's invited. Otherwise drop it.
                 if ($item_property['tool'] == TOOL_SURVEY) {
-                    $survey_info = survey_manager::get_survey($item_property['ref'], 0, $my_course['k']);
+                    $survey_info = survey_manager::get_survey($item_property['ref'], 0, $course_code);
                     $invited_users = SurveyUtil::get_invited_users($survey_info['code'], $course_database);
                     if (!in_array($user_id, $invited_users['course_users'])) continue;
                 }
                 // If it's a learning path, ensure it is currently visible to the user
                 if ($item_property['tool'] == TOOL_LEARNPATH) {
                     require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-                    if (!learnpath::is_lp_visible_for_student($item_property['ref'],$user_id, $my_course['k'])) {
+                    if (!learnpath::is_lp_visible_for_student($item_property['ref'],$user_id, $course_code)) {
                         continue;
                     }
 
@@ -1143,7 +1149,7 @@ class Display {
             if (empty($my_course['id_session'])) {
                 $my_course['id_session'] = 0;
             }
-            $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$my_course['k'].'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'&amp;id_session='.$my_course['id_session'].'">'.'<img title="-- '.get_lang(ucfirst($notification['tool'])).' -- '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" /></a>&nbsp;';
+            $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$course_code.'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'&amp;id_session='.$my_course['id_session'].'">'.'<img title="-- '.get_lang(ucfirst($notification['tool'])).' -- '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" /></a>&nbsp;';
         }
         return $retvalue;
     }

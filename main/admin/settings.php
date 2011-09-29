@@ -26,7 +26,6 @@ $cidReset = true;
 
 // Including some necessary library files.
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'dashboard.lib.php';
@@ -63,15 +62,44 @@ if (isset($_GET['delete_watermark'])) {
     $watermark_deleted = PDF::delete_watermark();    
 }
 
+if (isset($_POST['new_model']) && isset($_POST['number_evaluations']) && !empty($_POST['new_model'])) {
+	$count = intval($_POST['number_evaluations']);
+	$string_to_save = '';
+	for ($i = 1; $i<=$count;$i++) {
+		$sum = "+";
+		if ($i == $count) {
+			$sum = "";
+		}
+		//Note: We use rand here because there is a unique index in the settings_options table. The 'variable' and 'value' fields must be unique 
+		$string_to_save .= rand(1, 3).'*X'.$sum;
+	}
+	$string_to_save .= "/".$count;
+	$array_to_save = array();
+	
+	$array_to_save['variable'] 		= 'grading_model';
+	$array_to_save['display_text'] 	= $_POST['new_model'];
+	$array_to_save['value']		 	= $string_to_save;
+	var_dump($array_to_save);
+	$result = api_set_setting_option($array_to_save);
+}
+
+if (isset($_GET['action']) &&  $_GET['action'] == 'delete_grading') {
+	$id = intval($_GET['id']);
+	api_delete_setting_option($id);
+}
+
+
 // Build the form.
 if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {
     $form = new FormValidator('settings', 'post', 'settings.php?category='.$_GET['category']);
+    
     $renderer = & $form->defaultRenderer();
+    $renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 --></div></div>');
+    
     /*$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>');
     $renderer->setElementTemplate('<div class="sectionvalue">{element}</div><div class="sectioncomment">{label}</div>'."\n");*/
     
     //$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>');
-    $renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 --></div></div>');
     
     $my_category = Database::escape_string($_GET['category']);
 
@@ -109,6 +137,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
     $default_values = array();
     foreach ($settings as $row) {
+    	
         // Settings to avoid
         $rows_to_avoid = array('gradebook_enable');
         if (in_array($row['variable'], $rows_to_avoid)) { continue; }
@@ -155,7 +184,9 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 // There is no else{} statement because we load the default $row['selected_value'] of the main Chamilo site.
             }
         }
-
+		
+          
+        
         switch ($row['type']) {
             case 'textfield':            	
                 if ($row['variable'] == 'account_valid_duration') {
@@ -219,7 +250,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             	}
                 break;
             case 'radio':
-                $values = get_settings_options($row['variable']);
+                $values = api_get_settings_options($row['variable']);
                 $group = array ();
                 if (is_array($values )) {
                     foreach ($values as $key => $value) {
@@ -284,6 +315,69 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), call_user_func('select_'.$row['variable']), $hideme);
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
+
+            case 'custom_gradebook':
+            case 'custom':
+            	$values = api_get_settings_options($row['variable']);
+            	
+            	//$renderer = & $form->defaultRenderer();
+            	//$renderer->setElementTemplate('{label} - {element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 -->');
+            	
+            	$numbers = array();
+            	for($j=1;$j<=20;$j++) {
+            		$numbers[$j] = $j;
+            	}
+            	
+            	if (!empty($values)) {            		
+            		foreach($values as $option) {
+            			$group = array();
+            			$id = $option['id'];            			            			
+            			$option_id = $row['variable']."[$id]";            			
+            			$group[] = $form->createElement('text', $option_id.'[display_text]', array(get_lang($row['title']), get_lang($row['comment'])),'class="begin_model"');
+            			
+            			$default_values[$option_id.'[display_text]'] = $option['display_text'];
+            			$parts = api_grading_model_functions($option['value'], 'to_array');            			
+            			$denominator = $parts['denominator'];            			
+            			$j = 1;            			
+            			foreach($parts['items'] as $item) {  
+            				$letter = $item['letter'];
+            				$value  = $item['value'];
+            				$group[] =$form->createElement('static','<div>');
+            				$class = 'number';
+            				if ($j == 1) {
+            					$class = 'first_number'; 
+            				}
+            				$group[] = $form->createElement('select', $option_id.'[items]['.$j.']', array('dd'), $numbers, array('class'=>$class));
+            				$sum = ' ';
+            				if ($j != count($parts['items'])) {
+            					$sum = ' + ';
+            				}
+            				//$group[] =$form->createElement('static',' * '.$letter.$sum);
+            				
+            				$default_values[$option_id.'[items]['.$j.']'] = $value;            				
+            				$j++;            				
+            			}
+            			
+            			$group[] = $form->createElement('select', $option_id.'[denominator]', array('/'), $numbers,'class="denominator"');            			
+            			$group[] = $form->createElement('button', "delete", get_lang('Delete'), array('type'=>'button', 'id'=>$id, 'onclick'=>"delete_grading_model('$id');"));
+            			
+            			$default_values[$option_id.'[denominator]'] = $denominator;
+            			$form->addGroup($group, '', get_lang($row['title']), ' ');
+            		}     		
+            	}
+            	
+            	//New Grading Model form
+            	$group = array();
+            	
+            	$group[] = $form->createElement('text',   'new_model', array(get_lang('AddNewModel')));            	
+            	$group[] = $form->createElement('select', 'number_evaluations', array(''), $numbers,''); 
+            	
+            	$form->addGroup($group, '', get_lang('AddNewModel'), "&nbsp;&nbsp;".get_lang('NumberOfSubEvalidations')."&nbsp;");
+            	
+            	$form->addElement('style_submit_button', null, get_lang('Add'), 'class="add"');
+            	
+            	
+            	break;
             /*
              * Used to display custom values for the gradebook score display
              */
@@ -348,8 +442,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 }
                 break;
                 */
-        }
-        
+        }        
         
         if ($row['variable'] == 'pdf_export_watermark_enable') {
         	$url =  PDF::get_watermark($course_code);
@@ -363,9 +456,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         }
         if ($row['variable'] == 'timezone_value') {
             $form->addElement('html', sprintf(get_lang('LocalTimeUsingPortalTimezoneXIsY'),$row['selected_value'],api_get_local_time()));
-        }
-
-        	
+        }       	
     }
 
     $form->addElement('html', '<div style="text-align: right; clear: both;">');
@@ -413,14 +504,13 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         //$result = Database::query($sql);
         // Save the settings.
         $keys = array();
-        //$gradebook_score_display_custom_values = array();
-        foreach ($values as $key => $value) {
+        //$gradebook_score_display_custom_values = array();        
+        foreach ($values as $key => $value) { 	
             // Treat gradebook values in separate function.
             //if (strpos($key, 'gradebook_score_display_custom_values') === false) {
                 if (!is_array($value)) {
-                    $old_value = api_get_setting($key);
-
-                    switch ($key) {
+                    $old_value = api_get_setting($key);                    
+                    switch ($key) {                    	
                     	case 'header_extra_content':
                     		file_put_contents(api_get_path(SYS_PATH).api_get_home_path().'/header_extra_content.txt', $value);                    		
                     		$value = api_get_home_path().'/header_extra_content.txt';
@@ -455,34 +545,42 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                                 $value = $old_value;
                             }
                             break;
-
                     }
-
                     if ($old_value != $value) $keys[] = $key;
                     $result = api_set_setting($key, $value, null, null, $_configuration['access_url']);
-
                 } else {
-
-                    $sql = "SELECT subkey FROM $table_settings_current WHERE variable = '$key'";
-                    $res = Database::query($sql);
-                    $subkeys = array();
-                    while ($row_subkeys = Database::fetch_array($res)) {
-                        // If subkey is changed:
-                        if ((isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'false') ||
-                            (!isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'true')) {
-                            $keys[] = $key;
-                            break;
-                        }
-                    }
-
-                    foreach ($value as $subkey => $subvalue) {
-
-                        //$sql = "UPDATE $table_settings_current SET selected_value='true' WHERE variable='$key' AND subkey = '$subkey'";
-                        //$result = Database::query($sql);
-
-                        $result = api_set_setting($key, 'true', $subkey, null, $_configuration['access_url']);
-
-                    }
+                	if ($key == 'grading_model') {            		
+                		foreach ($value as $my_key => $option) {
+                			$array_to_save = array();               			
+                			//build this: 1*X+2*X+3*X/4
+                			$string_to_save = '';
+                			foreach ($option['items'] as $item) {
+                				$string_to_save .= $item.'*X+';
+                			}
+                			$string_to_save = substr($string_to_save, 0, strlen($string_to_save)- 1) . '/'.$option['denominator'];
+                			
+                			$array_to_save['display_text'] 	= $option['display_text'];
+                			$array_to_save['value'] 		= $string_to_save;
+                			$array_to_save['id'] 			= $my_key;               			
+                			
+                			$result = api_set_setting_option($array_to_save);
+                		}
+                	} else {
+	                    $sql = "SELECT subkey FROM $table_settings_current WHERE variable = '$key'";
+	                    $res = Database::query($sql);
+	                    $subkeys = array();
+	                    while ($row_subkeys = Database::fetch_array($res)) {
+	                        // If subkey is changed:
+	                        if ((isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'false') ||
+	                            (!isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'true')) {
+	                            $keys[] = $key;
+	                            break;
+	                        }
+	                    }	
+	                    foreach ($value as $subkey => $subvalue) {	             
+	                        $result = api_set_setting($key, 'true', $subkey, null, $_configuration['access_url']);	
+	                    }
+                	}
                 }
         }
 
@@ -500,6 +598,34 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         }
     }
 }
+
+
+$htmlHeadXtra[] = '<script language="javascript">
+
+function delete_grading_model(id) {
+	window.location = "settings.php?category=Gradebook&action=delete_grading&id=" + id;
+}
+
+	$(document).ready(function() {
+		var elements = ["B","C","D","E","F","G","H","I", "J", "K", "L","M","N","O","P","Q","R"];		
+		var i = 0;		
+		$(".formw").each(function(index) {
+			 $(this).find("*").each(function(index2) {			 		
+				if ($(this).hasClass("first_number")) {
+					$(this).before("<b>( A * </b>");	
+				}
+				if ($(this).hasClass("denominator")) {
+					$(this).before("<b> \) /  </b>");						
+				}
+				if ($(this).hasClass("number")) {
+					$(this).before("<b> + " + elements[i] + " * </b>");
+					i++;
+				}					
+			});
+			i = 0;
+		});
+	});
+</script>';
 
 // Including the header (banner).
 Display :: display_header($tool_name);
@@ -525,6 +651,8 @@ $action_images['editor']        = 'html_editor.png';
 $action_images['timezones']     = 'timezone.png';
 $action_images['extra']     	= 'wizard.png';
 $action_images['tracking']     	= 'statistics.png';
+
+$action_images['gradebook2']    = 'gradebook.png';
 
 // Grabbing the categories.
 $resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 'Templates', 'Search'));

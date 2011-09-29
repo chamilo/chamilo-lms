@@ -65,11 +65,7 @@ class DropboxLink extends EvalLink
      * Lazy load function to get the dropbox database table
      */
     private function get_dropbox_table () {
-    	if (!isset($this->dropbox_table)) {
-	    	$course_info = Database :: get_course_info($this->get_course_code());
-			$database_name = $course_info['db_name'];
-			$this->dropbox_table = Database :: get_course_table(TABLE_DROPBOX_FILE, $database_name);
-    	}
+    	$this->dropbox_table = Database :: get_course_table(TABLE_DROPBOX_FILE);
    		return $this->dropbox_table;
     }
 

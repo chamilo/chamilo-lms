@@ -364,7 +364,7 @@ class ScoreDisplay
 	}
 
 	private function load_int_setting ($property, $default = 0) {
-    	$tbl_setting = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    	$tbl_setting = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         $property    = Database::escape_string($property);
         $default     = Database::escape_string($default);
 		$sql = "SELECT selected_value FROM $tbl_setting WHERE category = 'Gradebook' AND variable = '".$property."'";

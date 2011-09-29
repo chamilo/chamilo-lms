@@ -27,8 +27,11 @@ class Thematic
 	private $thematic_advance_content;
 	private	$start_date;
 	private $duration;
+	private $course_int_id;
 
-	public function __construct() {}
+	public function __construct() {
+		$this->course_int_id = api_get_course_int_id();
+	}
 	
 	
 	/**
@@ -278,7 +281,8 @@ class Thematic
 		
 		if (empty($id)) {
 			// insert
-			$sql = "INSERT INTO $tbl_thematic(title, content, active, display_order, session_id) VALUES ('$title', '$content', 1, ".(intval($max_thematic_item)+1).", $session_id) ";
+			$sql = "INSERT INTO $tbl_thematic (c_id, title, content, active, display_order, session_id) 
+					VALUES ($this->course_int_id, '$title', '$content', 1, ".(intval($max_thematic_item)+1).", $session_id) ";
 			Database::query($sql);
 			$last_id = Database::insert_id();
 			if (Database::affected_rows()) {
@@ -631,7 +635,8 @@ class Thematic
 
 		if (empty($id)) {			
 			// Insert
-			$sql = "INSERT INTO $tbl_thematic_advance (thematic_id, attendance_id, content, start_date, duration) VALUES ($tematic_id, $attendance_id, '$content', '".api_get_utc_datetime($start_date)."', '$duration') ";
+			$sql = "INSERT INTO $tbl_thematic_advance (c_id, thematic_id, attendance_id, content, start_date, duration) 
+					VALUES ($this->course_int_id, $tematic_id, $attendance_id, '$content', '".api_get_utc_datetime($start_date)."', '$duration') ";
 			Database::query($sql);
 			$last_id = Database::insert_id();
             if (Database::affected_rows()) {
@@ -813,7 +818,8 @@ class Thematic
                 }                
             } else {            
                 // insert
-    			$ins = "INSERT INTO $tbl_thematic_plan(thematic_id, title, description, description_type) VALUES($thematic_id, '$title', '$description', $description_type) ";    		
+    			$ins = "INSERT INTO $tbl_thematic_plan (c_id, thematic_id, title, description, description_type) 
+    					VALUES ($this->course_int_id, $thematic_id, '$title', '$description', $description_type) ";    		
     			Database::query($ins);
                 $last_id = Database::insert_id();
     			$affected_rows = Database::affected_rows();
@@ -823,7 +829,8 @@ class Thematic
             }            
 		} else {		    
 			// insert
-			$ins = "INSERT INTO $tbl_thematic_plan(thematic_id, title, description, description_type) VALUES($thematic_id, '$title', '$description', $description_type) ";			
+			$ins = "INSERT INTO $tbl_thematic_plan (c_id, thematic_id, title, description, description_type) 
+					VALUES($this->course_int_id, $thematic_id, '$title', '$description', $description_type) ";			
 			Database::query($ins);
             $last_id = Database::insert_id();
 			$affected_rows = Database::affected_rows();

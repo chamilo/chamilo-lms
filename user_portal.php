@@ -221,13 +221,13 @@ ob_get_clean();
 //
 $controller->tpl->assign('content', 					$courses_and_sessions);
 
-$controller->tpl->assign('show_sniff', 					1);
+$controller->tpl->assign('show_sniff', 					0);
 
 $sniff_notification = '';
 //check for flash and message
 if (stripos("flash_yes", $_SESSION['sniff_check_some_activex'])===0 || stripos("flash_yes", $_SESSION['sniff_check_some_plugins'])===0){
 	$sniff_notification = Display::return_message(get_lang('NoFlash'), 'warning', false);
-	$controller->tpl->assign('sniff_notification', 					$sniff_notification);
+	//$controller->tpl->assign('sniff_notification', 					$sniff_notification);
 }
 
 $controller->tpl->assign('plugin_courses_block', 		$controller->return_courses_main_plugin());

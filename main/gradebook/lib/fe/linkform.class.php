@@ -74,14 +74,10 @@ class LinkForm extends FormValidator
 
 	protected function build_create() {
 		$this->addElement('header', '', get_lang('MakeLink'));
-		$select = $this->addElement('select',
-									'select_link',
-									get_lang('ChooseLink'),
-									null,
-									array('onchange' => 'document.create_link.submit()'));
+		$select = $this->addElement('select', 'select_link', get_lang('ChooseLink'), null, array('onchange' => 'document.create_link.submit()'));
 
 		$linktypes = LinkFactory :: get_all_types();
-
+		
 		$select->addoption('['.get_lang('ChooseLink').']', 0);
 
 		$cc = $this->category_object->get_course_code();
@@ -92,13 +88,13 @@ class LinkForm extends FormValidator
 			} elseif(!empty($_GET['course_code'])) {
 				$link->set_course_code(Database::escape_string($_GET['course_code']));
 			}
+			
 			// disable this element if the link works with a dropdownlist
 			// and if there are no links left
-			if (!$link->needs_name_and_description()
-				&& count($link->get_all_links()) == '0') {
+			if (!$link->needs_name_and_description() && count($link->get_all_links()) == '0') {
 				$select->addoption($link->get_type_name(), $linktype, 'disabled');
 			} else {
-					$select->addoption($link->get_type_name(), $linktype);
+				$select->addoption($link->get_type_name(), $linktype);
 			}
 		}
 

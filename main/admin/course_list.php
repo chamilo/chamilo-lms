@@ -167,6 +167,9 @@ if (isset ($_POST['action'])) {
             break;
     }
 }
+$content = '';
+$message = '';
+$actions = '';
 
 if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     // Get all course categories
@@ -174,7 +177,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
     $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
     $tool_name = get_lang('SearchACourse');
-    Display :: display_header($tool_name);
+    
     //api_display_tool_title($tool_name);
     $form = new FormValidator('advanced_course_search', 'get');
     $form->addElement('header', '', $tool_name);
@@ -202,19 +205,19 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $defaults['keyword_subscribe'] = '%';
     $defaults['keyword_unsubscribe'] = '%';
     $form->setDefaults($defaults);
-    $form->display();
+    $content .= $form->return_form();
 } else {
     $interbreadcrumb[] = array ('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
     $tool_name = get_lang('CourseList');
-    Display :: display_header($tool_name);
+    
     if (isset($_GET['action'])) {
         switch ($_GET['action']) {
             case 'show_msg':
                 if (!empty($_GET['warn'])) {
-                    Display::display_warning_message(urldecode($_GET['warn']));
+                    $message = Display::return_message(urldecode($_GET['warn']), 'warning');
                 }
                 if (!empty($_GET['msg'])) {
-                    Display::display_normal_message(urldecode($_GET['msg']));
+                    $message = Display::return_message(urldecode($_GET['msg']));
                 }
                 break;
             default:
@@ -235,17 +238,15 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="search"');
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
     
-    echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';    
-    echo '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'','32').'</a> ';
+    $actions .= '<div style="float: right; margin-top: 5px; margin-right: 5px;">';    
+    $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'','32').'</a> ';
     
     if (api_get_setting('course_validation') == 'true') {    
-        echo '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'),'','32').'</a>';
+        $actions .= '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'),'','32').'</a>';
     }
-    echo '</div>';
-
-    echo '<div class="actions">';
-        $form->display();
-    echo '</div>';
+    $actions .= '</div>';    
+    $actions .= $form->return_form();
+    
     // Create a sortable table with the course data
     $table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data', 2);
     $parameters=array();
@@ -276,9 +277,12 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $table->set_header(8, get_lang('Action'), false, 'width="150px"');
     $table->set_column_filter(8, 'modify_filter');
     $table->set_form_actions(array('delete_courses' => get_lang('DeleteCourse')), 'course');
-    $table->display();
+    $content .= $table->return_table();
 }
 
-/* FOOTER */
-
-Display :: display_footer();
+$tpl = new Template($tool_name);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $message);
+$tpl->assign('content', $content);
+$template = $tpl->get_template('layout/layout_1_col.tpl');
+$tpl->display($template);

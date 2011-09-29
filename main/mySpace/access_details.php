@@ -162,9 +162,7 @@ $(function() {
 //Changes END
 
 Display :: display_header('');
-$tbl_userinfo_def = Database :: get_course_table(TABLE_USER_INFO);
 $main_user_info = api_get_user_info($user_id);
-
 $result_to_print = '';
 $main_date_array = array();
 

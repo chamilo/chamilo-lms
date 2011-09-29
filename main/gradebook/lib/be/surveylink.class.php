@@ -59,7 +59,8 @@ class SurveyLink extends AbstractLink
     	}
     	$tbl_survey = $this->get_survey_table();
     	$session_id = api_get_session_id();
-    	$sql = 'SELECT survey_id, title, code FROM '.$tbl_survey.' WHERE session_id = '.intval($session_id).'';
+    	$course_id = api_get_course_int_id();
+    	$sql = 'SELECT survey_id, title, code FROM '.$tbl_survey.' WHERE c_id = '.$course_id.' AND session_id = '.intval($session_id).'';
 		$result = Database::query($sql);
 		while ($data = Database::fetch_array($result)) {
 			$links[] = array($data['survey_id'], api_trunc_str($data['code'].': '.self::html_to_text($data['title']), 80));
@@ -107,9 +108,11 @@ class SurveyLink extends AbstractLink
 
 			$get_individual_score = !is_null($stud_id);
 
-			$sql = 'SELECT COUNT(i.answered) FROM '.$tbl_survey.' AS s JOIN '.$tbl_survey_invitation.' AS i
-				ON s.code = i.survey_code
-				WHERE s.survey_id = '.$ref_id.' AND i.session_id = '.$session_id;
+			$sql = "SELECT COUNT(i.answered) FROM $tbl_survey AS s JOIN $tbl_survey_invitation AS i ON s.code = i.survey_code
+					WHERE 	s.c_id = {$course_info['real_id']} AND
+							i.c_id = {$course_info['real_id']} AND 
+							s.survey_id = $ref_id AND 
+							i.session_id = $session_id";
 
 			$sql_result = Database::query($sql);
 			$data = Database::fetch_array($sql_result);
@@ -136,9 +139,11 @@ class SurveyLink extends AbstractLink
 
 			$get_individual_score = !is_null($stud_id);
 
-			$sql = 'SELECT i.answered FROM '.$tbl_survey.' AS s JOIN '.$tbl_survey_invitation.' AS i
+			$sql = "SELECT i.answered FROM $tbl_survey AS s JOIN $tbl_survey_invitation AS i
 				ON s.code = i.survey_code
-				WHERE s.survey_id = '.$ref_id.' AND i.session_id = '.$session_id;
+				WHERE 	s.c_id = {$course_info['real_id']} AND
+						i.c_id = {$course_info['real_id']} AND 
+						s.survey_id = $ref_id AND i.session_id = $session_id";
 
 			if ($get_individual_score) {
 	    		$sql .= ' AND i.user = '.intval($stud_id);
@@ -183,16 +188,8 @@ class SurveyLink extends AbstractLink
      * Lazy load function to get the database table of the surveys
      */
     private function get_survey_table() {
-    	$course_info = Database :: get_course_info($this->get_course_code());
-		$database_name = isset($course_info['db_name']) ? $course_info['db_name'] : '';
-		if ($database_name != '') {
-			if (!isset($this->survey_table)) {
-				$this->survey_table = Database :: get_course_table(TABLE_SURVEY, $database_name);
-    		}
-   			return $this->survey_table;
-		} else {
-			return '';
-		}
+    	$this->survey_table = Database :: get_course_table(TABLE_SURVEY);
+   		return $this->survey_table;		
     }
 
     /**

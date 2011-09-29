@@ -225,14 +225,12 @@ class CourseSelectForm
 		//Loading the results from the checkboxes of the javascript
 		$resource = $_POST['resource'][RESOURCE_DOCUMENT];
 
-		if (!empty($course_code)) {
-			$course_info = api_get_course_info($course_code);
-			$table_doc = Database :: get_course_table(TABLE_DOCUMENT,$course_info['dbName']);
-			$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
-		} else {
-			$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
-			$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-		}
+		$course_info 	= api_get_course_info($course_code);
+		$table_doc 		= Database::get_course_table(TABLE_DOCUMENT);
+		$table_prop 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
+		
+		$course_id 		= $course_info['real_id'];
+		
 
 		// Searching the documents resource that have been set to null because $avoid_serialize is true in the display_form() function
 
@@ -247,13 +245,20 @@ class CourseSelectForm
 						$condition_session = ' AND d.session_id ='.$session_id;
 					}
 
-					$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size  FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND d.id = '.$resource_item.$condition_session.' ORDER BY path';
+					$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size 
+							FROM '.$table_doc.' d, '.$table_prop.' p 
+							WHERE 	d.c_id = '.$course_id.' AND
+									p.c_id = '.$course_id.' AND
+									tool 	= \''.TOOL_DOCUMENT.'\' AND 
+									p.ref 	= d.id AND p.visibility != 2 AND 
+									d.id 	= '.$resource_item.$condition_session.' 
+							ORDER BY path';
 					$db_result = Database::query($sql);
 					while ($obj = Database::fetch_object($db_result)) {
 						$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);
 						$course->add_resource($doc);
 						// adding item property
-						$sql = "SELECT * FROM $table_prop WHERE TOOL = '".RESOURCE_DOCUMENT."' AND ref='".$resource_item."'";
+						$sql = "SELECT * FROM $table_prop WHERE c_id = '.$course_id.'  AND TOOL = '".RESOURCE_DOCUMENT."' AND ref='".$resource_item."'";
 						$res = Database::query($sql);
 						$all_properties = array ();
 						while ($item_property = Database::fetch_array($res,'ASSOC')) {

@@ -18,7 +18,6 @@
 /*	CONSTANTS */
 require_once 'database.constants.inc.php';
 
-
 /*		DATABASE CLASS
         The class and its methods
 */
@@ -164,7 +163,8 @@ class Database {
      * - if you don't specify this, you work on the current course.
      */
     public static function get_course_table($short_table_name, $database_name = '') {
-        return self::format_glued_course_table_name(self::fix_database_parameter($database_name), $short_table_name);
+    	return self::format_table_name(self::get_main_database(), DB_COURSE_PREFIX.$short_table_name);
+        //return self::format_glued_course_table_name(self::fix_database_parameter($database_name), $short_table_name);
     }
 
     /**
@@ -239,7 +239,7 @@ class Database {
      */
     public static function get_course_list() {
         $table = self::get_main_table(TABLE_MAIN_COURSE);
-        return self::store_result(self::query("SELECT * FROM $table"));
+        return self::store_result(self::query("SELECT *, id as real_id FROM $table"));
     }
 
     /**
@@ -252,7 +252,7 @@ class Database {
         $course_code = self::escape_string($course_code);
         $table = self::get_main_table(TABLE_MAIN_COURSE);
         $result = self::generate_abstract_course_field_names(
-            self::fetch_array(self::query("SELECT * FROM $table WHERE code = '$course_code'")));
+            self::fetch_array(self::query("SELECT *, id as real_id FROM $table WHERE code = '$course_code'")));
         return $result === false ? array('db_name' => '') : $result;
     }
 
@@ -691,7 +691,51 @@ class Database {
             $line = $file;
             $file = $connection;
             $connection = null;
+        }        
+        //error_log($query);
+        //Check if the table contains a c_ (means a course id)
+        if (strpos($query, 'c_')) {        	
+        	//Check if the table contains inner joins 
+        	if (	
+        		strpos($query, 'INNER JOIN') === false &&  
+        		strpos($query, 'inner join') === false &&
+        		strpos($query, 'left join') === false &&
+        		strpos($query, 'LEFT JOIN') === false &&
+        		strpos($query, 'insert') 	=== false &&
+        		strpos($query, 'INSERT') === false &&
+        		strpos($query, 'c_id') === false
+        	) {        		
+        		$limit_list = explode('LIMIT', $query);
+        		$limit = '';
+        		if (isset($limit_list[1])) {
+        			$limit = ' LIMIT '.$limit_list[1];
+        		}
+        		$group_list = explode('GROUP', $limit_list[0]);
+        		$group = '';
+        		if (isset($group_list[1])) {
+        			$group = ' GROUP '.$group_list[1];
+        		}
+        		$order_list = explode('ORDER', $group_list[0]);
+        		$order = '';
+        		if (isset($order_list[1])) {
+        			$order = ' ORDER '.$order_list[1];
+        		}
+	        	$where_list = explode('WHERE', $order_list[0]);
+	        	$select = $where_list[0];
+	        	if (isset($where_list[1])) {	        		
+	        		$where  = $where_list[1].' AND c_id = '.api_get_course_int_id().' ';	        		
+	        		$query 	= $select.' WHERE '.$where.' '.$order.$group.$limit;	        		
+	        		//echo ($query );var_dump('julio');
+	        		//exit;
+	        	} else {
+	        		//check if order ?
+	        		$query = $select. ' WHERE 1 AND c_id = '.api_get_course_int_id().' '.$order.$group.$limit;	    
+	        	}	        	        	
+        	}
+        	//echo ($query);var_dump('d');
         }
+        
+        
         if (!($result = $use_default_connection ? @mysql_query($query) : @mysql_query($query, $connection))) {
             $backtrace = debug_backtrace(); // Retrieving information about the caller statement.
             if (isset($backtrace[0])) {
@@ -738,10 +782,6 @@ class Database {
                 echo $info;
             }
         }
-		if(mysql_error()) {
-			error_log($query."\n".mysql_error());
-		}
-		// error_log($query);
         return $result;
     }
 
@@ -1239,7 +1279,7 @@ class Database {
             }
             if (!empty($update_sql)) {
                 //Parsing and cleaning the where conditions
-                $where_return = self::parse_where_conditions($where_conditions);
+                $where_return = self::parse_where_conditions($where_conditions);                
                 $sql    = "UPDATE $table_name SET $update_sql $where_return ";
                 if ($show_query) { echo $sql; echo '<br />'; }
                 $result = self::query($sql);

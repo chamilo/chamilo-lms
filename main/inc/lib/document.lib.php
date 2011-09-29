@@ -474,8 +474,8 @@ return 'application/octet-stream';
      * @return array with all document data
      */
     public static function get_all_document_data($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false, $search = false) {
-        $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
-        $TABLE_DOCUMENT     = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+        $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $TABLE_DOCUMENT     = Database::get_course_table(TABLE_DOCUMENT);
         $TABLE_COURSE       = Database::get_main_table(TABLE_MAIN_COURSE);
 
         //if to_user_id = NULL -> change query (IS NULL)
@@ -519,7 +519,9 @@ return 'application/octet-stream';
                         WHERE docs.id = last.ref
                         AND last.tool = '".TOOL_DOCUMENT."'
                         AND ".$to_field." = ".$to_value."
-                        AND last.visibility".$visibility_bit . $condition_session;
+                        AND last.visibility".$visibility_bit . $condition_session." AND 
+            			docs.c_id = {$_course['real_id']} AND 
+            			last.c_id = {$_course['real_id']}  ";
         } else {
             $sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.id_session item_property_session_id, last.lastedit_date, last.visibility, last.insert_user_id
                         FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
@@ -528,7 +530,9 @@ return 'application/octet-stream';
                         AND docs.path NOT LIKE '".$path.$added_slash."%/%'
                         AND last.tool = '".TOOL_DOCUMENT."'
                         AND ".$to_field." = ".$to_value."
-                        AND last.visibility".$visibility_bit.$condition_session;
+                        AND last.visibility".$visibility_bit.$condition_session." AND 
+            			docs.c_id = {$_course['real_id']} AND 
+            			last.c_id = {$_course['real_id']}  ";
         }
 		
         $result = Database::query($sql);
@@ -649,8 +653,8 @@ return 'application/octet-stream';
      * @return array with paths
      */
     public static function get_all_document_folders ($_course, $to_group_id = '0', $can_see_invisible = false) {
-        $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
-        $TABLE_DOCUMENT     = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+        $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $TABLE_DOCUMENT     = Database::get_course_table(TABLE_DOCUMENT);
 
         $to_group_id = intval($to_group_id);
 
@@ -659,11 +663,12 @@ return 'application/octet-stream';
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
             $sql = "SELECT DISTINCT path FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
-                                WHERE docs.id = last.ref
-                                AND docs.filetype = 'folder'
-                                AND last.tool = '".TOOL_DOCUMENT."'
-                                AND last.to_group_id = ".$to_group_id."
-                                AND last.visibility <> 2 $condition_session";
+					WHERE 	docs.id 			= last.ref AND 
+							docs.filetype 		= 'folder' AND 
+							last.tool 			= '".TOOL_DOCUMENT."' AND 
+							last.to_group_id	= ".$to_group_id." AND 
+            				last.visibility 	<> 2 $condition_session AND 
+            				docs.c_id 			= {$_course['real_id']} ";
 
             $result = Database::query($sql);
 
@@ -692,7 +697,7 @@ return 'application/octet-stream';
                         AND docs.filetype = 'folder'
                         AND last.tool = '".TOOL_DOCUMENT."'
                         AND last.to_group_id = ".$to_group_id."
-                        AND last.visibility = 1 $condition_session";
+                        AND last.visibility = 1 $condition_session AND docs.c_id = {$_course['real_id']} ";
             $visibleresult = Database::query($visible_sql);
             while ($all_visible_folders = Database::fetch_array($visibleresult, 'ASSOC')) {
                 $visiblefolders[] = $all_visible_folders['path'];
@@ -707,7 +712,7 @@ return 'application/octet-stream';
                         AND docs.filetype = 'folder'
                         AND last.tool = '".TOOL_DOCUMENT."'
                         AND last.to_group_id = ".$to_group_id."
-                        AND last.visibility = 0 $condition_session";
+                        AND last.visibility = 0 $condition_session AND docs.c_id = {$_course['real_id']} ";
             $invisibleresult = Database::query($invisible_sql);
             while ($invisible_folders = Database::fetch_array($invisibleresult, 'ASSOC')) {
                 //condition for the session
@@ -721,7 +726,7 @@ return 'application/octet-stream';
                                 AND docs.filetype = 'folder'
                                 AND last.tool = '".TOOL_DOCUMENT."'
                                 AND last.to_group_id = ".$to_group_id."
-                                AND last.visibility = 1 $condition_session";
+                                AND last.visibility = 1 $condition_session AND docs.c_id = {$_course['real_id']}  ";
                 $folder_in_invisible_result = Database::query($folder_in_invisible_sql);
                 while ($folders_in_invisible_folder = Database::fetch_array($folder_in_invisible_result, 'ASSOC')) {
                     $invisiblefolders[] = $folders_in_invisible_folder['path'];
@@ -730,20 +735,15 @@ return 'application/octet-stream';
             //if both results are arrays -> //calculate the difference between the 2 arrays -> only visible folders are left :)
             if (is_array($visiblefolders) && is_array($invisiblefolders)) {
                 $document_folders = array_diff($visiblefolders, $invisiblefolders);
-
-                //sort($document_folders);
                 natsort($document_folders);
-
                 return $document_folders;
-            }
-            //only visible folders found
-            elseif (is_array($visiblefolders)) {
+            } elseif (is_array($visiblefolders)) {
+            	//only visible folders found
                 //sort($visiblefolders);
                 natsort($visiblefolders);
                 return $visiblefolders;
-            }
-            //no visible folders found
-            else {
+            } else {
+            	//no visible folders found
                 return false;
             }
         }
@@ -763,16 +763,19 @@ return 'application/octet-stream';
         if (!(!empty($document_id) && is_numeric($document_id))) {
             $document_id = self::get_document_id($_course, $file);
         }
-
-        $TABLE_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-
+        $TABLE_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+		$course_id 		= $_course['real_id'];
+		
         if ($to_delete) {
             if (self::is_folder($_course, $document_id)) {
                 if (!empty($file)) {
                     $path = Database::escape_string($file);
                     $what_to_check_sql = "SELECT td.id, readonly, tp.insert_user_id FROM ".$TABLE_DOCUMENT." td , $TABLE_PROPERTY tp
-                                          WHERE tp.ref= td.id and (path='".$path."' OR path LIKE BINARY '".$path."/%' ) ";
+                                          WHERE td.c_id = $course_id AND
+                                          		tp.c_id = $course_id AND
+                    							tp.ref= td.id AND 
+                    							(path='".$path."' OR path LIKE BINARY '".$path."/%' ) ";
                     //get all id's of documents that are deleted
                     $what_to_check_result = Database::query($what_to_check_sql);
 
@@ -800,7 +803,10 @@ return 'application/octet-stream';
 
         if (!empty($document_id)) {
             $sql= 'SELECT a.insert_user_id, b.readonly FROM '.$TABLE_PROPERTY.' a,'.$TABLE_DOCUMENT.' b
-                   WHERE a.ref = b.id and a.ref='.$document_id.' LIMIT 1';
+                   WHERE 
+            			a.c_id = $course_id AND
+                        b.c_id = $course_id AND
+            			a.ref = b.id and a.ref='.$document_id.' LIMIT 1';
             $resultans   =  Database::query($sql);
             $doc_details =  Database ::fetch_array($resultans, 'ASSOC');
 
@@ -818,10 +824,10 @@ return 'application/octet-stream';
      * @return boolean true/false
      **/
     public static function is_folder($_course, $document_id) {
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-        //if (!empty($document_id))
+        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+		$course_id = $_course['real_id'];
         $document_id = Database::escape_string($document_id);
-        $result = Database::fetch_array(Database::query('SELECT filetype FROM '.$TABLE_DOCUMENT.' WHERE id='.$document_id.''), 'ASSOC');
+        $result = Database::fetch_array(Database::query("SELECT filetype FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND id= $document_id"), 'ASSOC');
         return $result['filetype'] == 'folder';
     }
 
@@ -836,15 +842,18 @@ return 'application/octet-stream';
      * @todo now only files/folders in a folder get visibility 2, we should rename them too.
      */
     public static function delete_document($_course, $path, $base_work_dir) {
-        $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-        $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
+        $TABLE_DOCUMENT 	= Database :: get_course_table(TABLE_DOCUMENT);
+        $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+        
+        $course_id = $_course['real_id'];
+        
         //first, delete the actual document...
         $document_id = self :: get_document_id($_course, $path);
         $new_path = $path.'_DELETED_'.$document_id;
         $current_session_id = api_get_session_id();
         if ($document_id) {
             if (api_get_setting('permanently_remove_deleted_files') == 'true') { //deleted files are *really* deleted
-                $what_to_delete_sql = "SELECT id FROM ".$TABLE_DOCUMENT." WHERE path='".$path."' OR path LIKE BINARY '".$path."/%'";
+                $what_to_delete_sql = "SELECT id FROM ".$TABLE_DOCUMENT." WHERE c_id = $course_id AND path='".$path."' OR path LIKE BINARY '".$path."/%'";
                 //get all id's of documents that are deleted
                 $what_to_delete_result = Database::query($what_to_delete_sql);
 
@@ -890,10 +899,10 @@ return 'application/octet-stream';
                     if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path)) {
                         if(rename($base_work_dir.$path, $base_work_dir.$new_path)) {
                             self::unset_document_as_template($document_id, api_get_course_id(), api_get_user_id());
-                            $sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE id='".$document_id."'";
+                            $sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE c_id = $course_id AND id='".$document_id."'";
                             if (Database::query($sql)) {
                                 //if it is a folder it can contain files
-                                $sql = "SELECT id,path FROM ".$TABLE_DOCUMENT." WHERE path LIKE BINARY '".$path."/%'";
+                                $sql = "SELECT id,path FROM ".$TABLE_DOCUMENT." WHERE c_id = $course_id AND path LIKE BINARY '".$path."/%'";
                                 $result = Database::query($sql);
                                 if ($result && Database::num_rows($result) > 0) {
                                     while ($deleted_items = Database::fetch_array($result, 'ASSOC')) {
@@ -933,7 +942,7 @@ return 'application/octet-stream';
                         // item_property and the document table.
                         error_log(__FILE__.' '.__LINE__.': System inconsistency detected. The file or directory '.$base_work_dir.$path.' seems to have been removed from the filesystem independently from the web platform. To restore consistency, the elements using the same path will be removed from the database',0);
 
-                        $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path='".$path."' OR path LIKE BINARY '".$path."/%'";
+                        $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND path='".$path."' OR path LIKE BINARY '".$path."/%'";
                         $res = Database::query($sql);
 
                         self::delete_document_from_search_engine(api_get_course_id(), $document_id);
@@ -991,9 +1000,10 @@ return 'application/octet-stream';
      * @return int id of document / false if no doc found
      */
     public static function get_document_id($course_info, $path) {
-        $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
+        $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
+        $course_id = $course_info['real_id'];
         $path = Database::escape_string($path);
-        $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path LIKE BINARY '$path'";
+        $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND path LIKE BINARY '$path'";
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result);
@@ -1012,14 +1022,16 @@ return 'application/octet-stream';
      */
     public static function get_document_data_by_id($id, $course_code, $load_parents = false) {
         $course_info = api_get_course_info($course_code);
+        $course_id 	 = $course_info['real_id'];
+        
         if (empty($course_info)) {
             return false;
         }
         $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
         
-        $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
+        $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $id = intval($id);
-        $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE id = $id ";
+        $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND id = $id ";
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result,'ASSOC');
@@ -1137,8 +1149,10 @@ return 'application/octet-stream';
      * @param array  $course the _course array info of the document's course
      */
     public static function is_visible($doc_path, $course, $session_id = 0, $file_type = 'file') {
-        $docTable  = Database::get_course_table(TABLE_DOCUMENT, $course['dbName']);
-        $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);
+        $docTable  = Database::get_course_table(TABLE_DOCUMENT);
+        $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        
+        $course_id = $course['real_id'];
         //note the extra / at the end of doc_path to match every path in the document table that is part of the document path
         $doc_path = Database::escape_string($doc_path);
 
@@ -1156,7 +1170,12 @@ return 'application/octet-stream';
             $file_type = 'file';
         }
 
-        $sql  = "SELECT visibility FROM $docTable d, $propTable ip WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND filetype='$file_type' AND locate(concat(path,'/'),'".$doc_path."/')=1";
+        $sql  = "SELECT visibility FROM $docTable d, $propTable ip
+        		 WHERE 	d.c_id  = $course_id  AND
+        		 		ip.c_id = $course_id AND        		  
+        				d.id = ip.ref AND 
+        				ip.tool = '".TOOL_DOCUMENT."' $condition AND 
+        				filetype = '$file_type' AND locate(concat(path,'/'),'".$doc_path."/')=1";
 
         $result = Database::query($sql);
         $is_visible = false;
@@ -1258,33 +1277,8 @@ return 'application/octet-stream';
     		}
     	} elseif ($admins_can_see_everything && api_is_platform_admin()) {
             return true;
-        }
-    	
+        }    	
     	return false;
-    	
-    	/*
-        $docTable  = Database::get_course_table(TABLE_DOCUMENT, 	 $course['dbName']);
-        $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);        
-        $condition = "AND id_session IN  ('$session_id', '0') ";
-        if (!in_array($file_type, array('file','folder'))) {
-            $file_type = 'file';
-        }
-
-        // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
-        $sql  = "SELECT visibility FROM $docTable d, $propTable ip WHERE d.id = ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND filetype='$file_type' AND d.id = $id";
-        $result = Database::query($sql);
-        $is_visible = false;
-        if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_array($result,'ASSOC');
-            if ($row['visibility'] == 1) {            	
-                $is_visible = $_SESSION['is_allowed_in_course'] || api_is_platform_admin();
-            }
-        }
-        
-        //improved protection of documents viewable directly through the url: incorporates the same protections of the course at the url of documents:  access allowed for the whole world Open, access allowed for users registered on the platform Private access, document accessible only to course members (see the Users list), Completely closed; the document is only accessible to the course admin and teaching assistants.
-        //return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
-        return $is_visible;
-        */
     }
 
 
@@ -1332,28 +1326,28 @@ return 'application/octet-stream';
 
     /**
      * allow replace user info in file html
-     * @param string The course id
+     * @param string The course code
      * @return string The html content of the certificate
      */
-    function replace_user_info_into_html($user_id, $course_id, $is_preview = false) {
-        $user_id = intval($user_id);
-        $course_info = api_get_course_info($course_id);
-        $tbl_document = Database::get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
-        $document_id = self::get_default_certificate_id($course_id);
+    function replace_user_info_into_html($user_id, $course_code, $is_preview = false) {
+        $user_id 		= intval($user_id);
+        $course_info 	= api_get_course_info($course_code);
+        $tbl_document 	= Database::get_course_table(TABLE_DOCUMENT);
+        $course_id 		= $course_info['real_id']; 
+        $document_id 	= self::get_default_certificate_id($course_code);
 
-        $sql = 'SELECT path FROM '.$tbl_document.' WHERE id="'.Database::escape_string($document_id).'" ';
+        $sql = "SELECT path FROM $tbl_document WHERE c_id = $course_id AND id = $document_id";
 
         $rs = Database::query($sql);
         $new_content = '';
         $all_user_info = array();
         if (Database::num_rows($rs)) {
             $row=Database::fetch_array($rs);
-           $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
-
+            $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
             if (is_file($filepath)) {
                 $my_content_html = file_get_contents($filepath);
             }
-            $all_user_info = self::get_all_info_to_certificate($user_id, $course_id, $is_preview);            
+            $all_user_info = self::get_all_info_to_certificate($user_id, $course_code, $is_preview);            
             $info_to_be_replaced_in_content_html=$all_user_info[0];
             $info_to_replace_in_content_html=$all_user_info[1];
             $new_content=str_replace($info_to_be_replaced_in_content_html,$info_to_replace_in_content_html, $my_content_html);
@@ -1502,7 +1496,8 @@ return 'application/octet-stream';
      */
     function get_document_id_of_directory_certificate () {
         $tbl_document=Database::get_course_table(TABLE_DOCUMENT);
-        $sql='SELECT id FROM '.$tbl_document.' WHERE path="/certificates" ';
+        $course_id = api_get_course_int_id();
+        $sql = "SELECT id FROM $tbl_document WHERE c_id = $course_id AND path='/certificates' ";
         $rs=Database::query($sql);
         $row=Database::fetch_array($rs);
         return $row['id'];
@@ -1994,7 +1989,7 @@ return 'application/octet-stream';
         } else {
             $destination = $destiny_path.'/'.$file_name;
         }
-        var_dump("From $original ", "to $destination");
+        //var_dump("From $original ", "to $destination");
         $original_count     = count(explode('/', $original));
         $destination_count  = count(explode('/', $destination));
         if ($original_count == $destination_count) {
@@ -2008,8 +2003,7 @@ return 'application/octet-stream';
         } else {
             $mode = 'inside';
         }
-        echo $original_count.' '.$destination_count;
-        var_dump($mode);
+        //echo $original_count.' '.$destination_count; var_dump($mode);
         //We do not select the $original_path becayse the file was already moved 
         $content_html = file_get_contents($destiny_path.'/'.$file_name);
         $destination_file = $destiny_path.'/'.$file_name;
@@ -2018,14 +2012,14 @@ return 'application/octet-stream';
         $pre_original = strstr($original_path, 'document');
         $pre_destin   = strstr($destiny_path, 'document');
         
-        var_dump ("pre_original $pre_original");
-        var_dump ("pre_destin $pre_destin");
+        //var_dump ("pre_original $pre_original");
+        //var_dump ("pre_destin $pre_destin");
 
         $pre_original = substr($pre_original, 8, strlen($pre_original));
         $pre_destin = substr($pre_destin, 8, strlen($pre_destin));
         
-        var_dump ("pre_original $pre_original");
-        var_dump ("pre_destin $pre_destin");
+        //var_dump ("pre_original $pre_original");
+        //var_dump ("pre_destin $pre_destin");
 
         $levels = count(explode('/', $pre_destin)) - 1 ;
         $link_to_add = '';
@@ -2049,10 +2043,10 @@ return 'application/octet-stream';
             $pre_destin = '..'.$pre_destin.'/';
         }
 
-        var_dump($pre_original);
+        //var_dump($pre_original);
         
         $levels = explode('/', $pre_original);
-        var_dump($levels);
+        //var_dump($levels);
         
         $count_pre_destination_levels = 0;
         foreach($levels as $item) {
@@ -2065,17 +2059,17 @@ return 'application/octet-stream';
         if ($count_pre_destination_levels == 0 ) {
             $count_pre_destination_levels = 1;
         }
-        echo '$count_pre_destination_levels '. $count_pre_destination_levels;
+        //echo '$count_pre_destination_levels '. $count_pre_destination_levels;
         $pre_remove = '';
         for ($i=1; $i <= $count_pre_destination_levels; $i++) {
             $pre_remove .='..\/';
         }
          
-        var_dump(' link to add '.$link_to_add.'  -- remove '.$pre_remove);
+        //var_dump(' link to add '.$link_to_add.'  -- remove '.$pre_remove);
 
         $orig_source_html   = DocumentManager::get_resources_from_source_html($content_html);
 
-        var_dump($orig_source_html);
+        //var_dump($orig_source_html);
          
         foreach ($orig_source_html as $source) {
 
@@ -2300,14 +2294,16 @@ return 'application/octet-stream';
      */
     function documents_total_space($to_group_id = '0') {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-
-        $sql = "SELECT SUM(size)
-        FROM  ".$TABLE_ITEMPROPERTY."  AS props, ".$TABLE_DOCUMENT."  AS docs
-        WHERE docs.id = props.ref
-        AND props.tool = '".TOOL_DOCUMENT."'
-        AND props.to_group_id='".$to_group_id."'
-        AND props.visibility <> 2";
+        $TABLE_DOCUMENT 	= Database::get_course_table(TABLE_DOCUMENT);
+		$course_id = api_get_course_int_id();
+		
+        $sql = "SELECT SUM(size) FROM  ".$TABLE_ITEMPROPERTY."  AS props, ".$TABLE_DOCUMENT."  AS docs
+		        WHERE 	props.c_id 	= $course_id AND
+		        		docs.c_id 	= $course_id AND		        
+		        		docs.id 	= props.ref AND 
+		        		props.tool 	= '".TOOL_DOCUMENT."' AND 
+		        		props.to_group_id='".$to_group_id."' AND 
+        				props.visibility <> 2";
 
         $result = Database::query($sql);
 
@@ -2327,10 +2323,8 @@ return 'application/octet-stream';
         $course_quota_m = round($course_quota / 1000000);
         $already_consumed_space_m = round($already_consumed_space / 1000000);
 
-
         $message = get_lang('MaximumAllowedQuota') . ' <strong>'.$course_quota_m.' megabyte</strong>.<br />';
         $message .= get_lang('CourseCurrentlyUses') . ' <strong>' . $already_consumed_space_m . ' megabyte</strong>.<br />';
-
 
         $percentage = $already_consumed_space / $course_quota * 100;
 
@@ -2462,9 +2456,7 @@ return 'application/octet-stream';
     
     function get_document_preview($course_info, $lp_id = false, $target = '', $session_id = 0) {
     	
-    	if (!isset($course_info['dbName'])) {
-    		$course_info = api_get_course_info($course_info['code']);
-    	}  
+    	$course_info = api_get_course_info($course_info['code']);    	  
     	
     	if (empty($course_info) || !is_array($course_info)) {
     		return '';
@@ -2504,8 +2496,8 @@ return 'application/octet-stream';
         }
             	
     	$tbl_course 	= Database::get_main_table(TABLE_MAIN_COURSE);
-    	$tbl_doc 		= Database::get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
-    	$tbl_item_prop 	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_info['dbName']);
+    	$tbl_doc 		= Database::get_course_table(TABLE_DOCUMENT);
+    	$tbl_item_prop 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
     	
     	$path = '/';
     	$path = Database::escape_string(str_replace('_', '\_', $path));
@@ -2515,13 +2507,15 @@ return 'application/octet-stream';
     	//$condition_session = " AND (id_session = '$session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '".$course_info['code']."' )))";
     	$condition_session = " AND (id_session = '$session_id' OR  id_session = '0' )";
     	
-		$sql_doc = "SELECT last.visibility, docs.* ".
-    				" FROM  $tbl_item_prop AS last, $tbl_doc AS docs ".
-    	            " WHERE docs.id = last.ref ".
+		$sql_doc = "SELECT last.visibility, docs.*  
+					FROM  $tbl_item_prop AS last, $tbl_doc AS docs 
+    	            WHERE docs.id = last.ref ".
     	            "   AND docs.path LIKE '".$path.$added_slash."%' ".
     	            "   AND docs.path NOT LIKE '%_DELETED_%' ".
     	            "   AND last.tool = '".TOOL_DOCUMENT."' $condition_session ". 
-    	            "   AND last.visibility = '1' ".
+    	            "   AND last.visibility = '1' AND ".
+    	            "	docs.c_id = {$course_info['real_id']} AND 
+    	            	last.c_id = {$course_info['real_id']} ".
 					"ORDER BY docs.path ASC";
     	$res_doc 	= Database::query($sql_doc);
     	$resources  = Database::store_result($res_doc, 'ASSOC');
@@ -2580,7 +2574,6 @@ return 'application/octet-stream';
 		    		if (empty($resource['title'])) {
 		    			$resource['title'] = basename($resource['path']);
 		    		}
-		    		//eval ('$resources_sorted'.$path_to_eval.'['.$resource['id'].'] = "'.$resource['title']."/". $last_path.'";');
 		    		eval ('$resources_sorted'.$path_to_eval.'['.$resource['id'].'] = "'.$data.'" ; ');
 		    	} else {
 		    		eval ('$resources_sorted'.$path_to_eval.'["'.$last_path.'"]["id"]='.$resource['id'].';');
@@ -2589,7 +2582,7 @@ return 'application/octet-stream';
     	}
     	
     	$label = get_lang('Documents');
-    	//var_dump($resources_sorted);
+
     	$new_array[$label] = array('id' => 0, 'files' => $resources_sorted);
     	
     	$write_result = self::write_resources_tree($course_info, $session_id, $new_array, 0, $lp_id, $target);
@@ -2645,9 +2638,9 @@ return 'application/octet-stream';
     public function write_resources_tree($course_info, $session_id, $resources_sorted, $num = 0, $lp_id = false, $target = '') {
     	require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
     	
-    	$img_path = api_get_path(WEB_IMG_PATH);
-    	$img_sys_path = api_get_path(SYS_CODE_PATH).'img/';
-    	$web_code_path = api_get_path(WEB_CODE_PATH);
+    	$img_path 		= api_get_path(WEB_IMG_PATH);
+    	$img_sys_path 	= api_get_path(SYS_CODE_PATH).'img/';
+    	$web_code_path 	= api_get_path(WEB_CODE_PATH);
     	
     	$return = '';
     	if (count($resources_sorted) > 0) {
@@ -2762,6 +2755,7 @@ return 'application/octet-stream';
     		return false;
     	}    	
     }
+    
     /**
      * Index a given document.
      * @param   int     Document ID inside its corresponding course
@@ -2788,8 +2782,10 @@ return 'application/octet-stream';
         $sys_course_path  = api_get_path(SYS_COURSE_PATH);
         $base_work_dir    = $sys_course_path.$course_dir;
         
-        $table_document = Database::get_course_table(TABLE_DOCUMENT,$course_info['db_name']);
-        $qry = "SELECT path, title FROM $table_document WHERE id = '$docid' LIMIT 1";
+        $course_id = $course_info['real_id'];
+        $table_document = Database::get_course_table(TABLE_DOCUMENT);
+        
+        $qry = "SELECT path, title FROM $table_document WHERE c_id = $course_id AND id = '$docid' LIMIT 1";
         $result = Database::query($qry);
         if (Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result);

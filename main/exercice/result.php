@@ -114,7 +114,7 @@ $counter = 1;
 if (!empty($question_list)) {
 
 	foreach ($question_list as $question_item) {
-    	$objQuestionTmp     = Question::read($question_item['question_id']);
+    	$objQuestionTmp     = Question::read($question_item['question_id'], api_get_course_int_id());
     	$total_weighting   += $objQuestionTmp->selectWeighting();        
 	}
 
@@ -124,7 +124,7 @@ if (!empty($question_list)) {
 			
 		// creates a temporary Question object
 		$questionId 		= $question_item['question_id'];
-		$objQuestionTmp 	= Question::read($questionId);
+		$objQuestionTmp 	= Question::read($questionId, api_get_course_int_id());		
 		
 		$questionName		= $objQuestionTmp->selectTitle();
 		$questionDescription= $objQuestionTmp->selectDescription();

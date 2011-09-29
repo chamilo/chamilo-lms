@@ -102,20 +102,22 @@ if (isset($_REQUEST['load_ajax'])) {
                            
                 //Begin with the import process
                 $course_info                = api_get_course_info($origin_course_code);
+                $course_id 					= $course_info['real_id'];
+                
                 $TABLETRACK_EXERCICES       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
                 $TBL_TRACK_ATTEMPT          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
                 $TBL_TRACK_E_COURSE_ACCESS  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
                 $TBL_TRACK_E_LAST_ACCESS    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
                                 
-                $TBL_LP_VIEW                = Database::get_course_table(TABLE_LP_VIEW, $course_info['dbName']);
-                $TBL_NOTEBOOK               = Database::get_course_table(TABLE_NOTEBOOK, $course_info['dbName']);
-                $TBL_STUDENT_PUBLICATION    = Database::get_course_table(TABLE_STUDENT_PUBLICATION, $course_info['dbName']);
-                $TBL_STUDENT_PUBLICATION_ASSIGNMENT    = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT, $course_info['dbName']);
-                $TBL_ITEM_PROPERTY          = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_info['dbName']);
+                $TBL_LP_VIEW                = Database::get_course_table(TABLE_LP_VIEW);
+                $TBL_NOTEBOOK               = Database::get_course_table(TABLE_NOTEBOOK);
+                $TBL_STUDENT_PUBLICATION    = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+                $TBL_STUDENT_PUBLICATION_ASSIGNMENT    = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+                $TBL_ITEM_PROPERTY          = Database::get_course_table(TABLE_ITEM_PROPERTY);
                 
-                $TBL_DROPBOX_FILE           = Database::get_course_table(TABLE_DROPBOX_FILE, $course_info['dbName']);
-                $TBL_DROPBOX_POST           = Database::get_course_table(TABLE_DROPBOX_POST, $course_info['dbName']);
-                $TBL_AGENDA                 = Database::get_course_table(TABLE_AGENDA, $course_info['dbName']);
+                $TBL_DROPBOX_FILE           = Database::get_course_table(TABLE_DROPBOX_FILE);
+                $TBL_DROPBOX_POST           = Database::get_course_table(TABLE_DROPBOX_POST);
+                $TBL_AGENDA                 = Database::get_course_table(TABLE_AGENDA);
                 
                 //$TBL_DROPBOX_CATEGORY       = Database::get_course_table(TABLE_DROPBOX_CATEGORY, $course_info['dbName']);
               
@@ -223,7 +225,7 @@ if (isset($_REQUEST['load_ajax'])) {
                  
                //CHECK ORIGIN
                
-                $sql = "SELECT * FROM $TBL_LP_VIEW WHERE user_id = $user_id AND session_id = $origin_session_id ";
+                $sql = "SELECT * FROM $TBL_LP_VIEW WHERE user_id = $user_id AND session_id = $origin_session_id AND c_id = $course_id ";
                 $res = Database::query($sql);
                 
                 //Getting the list of LPs in the new session 
@@ -241,7 +243,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 if (!empty($list))
                 foreach ($list as $id=>$data) {
                     if ($update_database) {
-                        $sql = "UPDATE $TBL_LP_VIEW SET session_id = '$new_session_id' WHERE id = $id";
+                        $sql = "UPDATE $TBL_LP_VIEW SET session_id = '$new_session_id' WHERE id = $id ";
                         if ($debug) var_dump($sql); 
                         $res = Database::query($sql);          
                         if ($debug) var_dump($res);   
@@ -257,7 +259,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 
                 //CHECk DESTINY
                 if (!$update_database) {
-                         $sql = "SELECT * FROM $TBL_LP_VIEW WHERE user_id = $user_id AND session_id = $new_session_id ";
+                         $sql = "SELECT * FROM $TBL_LP_VIEW WHERE user_id = $user_id AND session_id = $new_session_id AND c_id = $course_id";
                         $res = Database::query($sql);
                         
                         //Getting the list of LPs in the new session 
@@ -285,7 +287,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 //6. Agenda
                 
                 //calendar_event_attachment no problems no session_id
-                $sql = "SELECT ref FROM $TBL_ITEM_PROPERTY WHERE tool = 'calendar_event' AND insert_user_id = $user_id";
+                $sql = "SELECT ref FROM $TBL_ITEM_PROPERTY WHERE tool = 'calendar_event' AND insert_user_id = $user_id AND c_id = $course_id ";
                 $res = Database::query($sql);
                 while($row = Database::fetch_array($res,'ASSOC')) {
                      $id = $row['ref'];
@@ -304,12 +306,12 @@ if (isset($_REQUEST['load_ajax'])) {
                 
                 //echo '<h1>Student publication</h1>';
                 
-                $sql = "SELECT ref FROM $TBL_ITEM_PROPERTY WHERE tool = 'work' AND insert_user_id = $user_id";
+                $sql = "SELECT ref FROM $TBL_ITEM_PROPERTY WHERE tool = 'work' AND insert_user_id = $user_id AND c_id = $course_id";
                 if ($debug) echo $sql;
                 $res = Database::query($sql);
                 while($row = Database::fetch_array($res,'ASSOC')) {
                     $id = $row['ref'];
-                    $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION WHERE id = $id AND session_id = $origin_session_id ";
+                    $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION WHERE id = $id AND session_id = $origin_session_id AND c_id = $course_id";
                     if ($debug) var_dump($sql); 
                     $sub_res = Database::query($sql);
                     if (Database::num_rows($sub_res) > 0 ) {
@@ -317,7 +319,7 @@ if (isset($_REQUEST['load_ajax'])) {
                         if ($debug) var_dump($data);                  
                         $parent_id = $data['parent_id'];
                         if (isset($data['parent_id']) && !empty($data['parent_id'])) {
-                            $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION WHERE id = $parent_id";
+                            $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION WHERE id = $parent_id AND c_id = $course_id";
                             $select_res     = Database::query($sql);
                             $parent_data    = Database::fetch_array($select_res,'ASSOC');
                             if ($debug)     var_dump($parent_data);
@@ -332,7 +334,9 @@ if (isset($_REQUEST['load_ajax'])) {
                             //@todo ugly fix
                             $search_this = "folder_moved_from_session_id_$origin_session_id";
                             $search_this2 = $parent_data['url'];
-                            $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION WHERE description like '%$search_this%' AND url LIKE '%$search_this2%' AND session_id = $new_session_id ORDER BY id desc  LIMIT 1";
+                            $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION 
+                            		WHERE description like '%$search_this%' AND url LIKE '%$search_this2%' AND session_id = $new_session_id AND c_id = $course_id 
+                            		ORDER BY id desc  LIMIT 1";
                             if ($debug) echo $sql;
                             $sub_res = Database::query($sql);
                             $num_rows = Database::num_rows($sub_res);
@@ -345,46 +349,48 @@ if (isset($_REQUEST['load_ajax'])) {
                                 
                                 if ($update_database) {
                                     
-                                $dir_name = substr($parent_data['url'], 1);
-                                $created_dir = create_unexisting_work_directory($base_work_dir, $dir_name);
-                                $created_dir = '/'.$created_dir;                                
-                                $now = api_get_utc_datetime();
-                                //Creating directory                                
-                                $sql_add_publication = "INSERT INTO " . $TBL_STUDENT_PUBLICATION . " SET " .         
-                                       "url         = '".$created_dir."',
-                                       title        = '".$parent_data['title']."',
-                                       description  = '".$parent_data['description']." folder_moved_from_session_id_$origin_session_id ',
-                                       author       = '',
-                                       active       = '0',
-                                       accepted     = '1',
-                                       filetype     = 'folder',                                   
-                                       sent_date    = '".$now."',
-                                       qualification    = '".$parent_data['qualification'] ."',
-                                       parent_id    = '',
-                                       qualificator_id  = '',
-                                       date_of_qualification    = '0000-00-00 00:00:00',
-                                       session_id   = ".$new_session_id;                                       
-                                $rest_insert     = Database::query($sql_add_publication);
-                                if ($debug) echo ($sql_add_publication);
-                                // add the directory
-                                $id = Database::insert_id();
-                                 //Folder created
-                                api_item_property_update($course_info, 'work', $id, 'DirectoryCreated', api_get_user_id());      
-                                if ($debug) var_dump($rest_insert);
-                                $new_parent_id = $id;                                
-                                $result_message[$TBL_STUDENT_PUBLICATION.' - new folder created called: '.$created_dir]++;
+	                                $dir_name = substr($parent_data['url'], 1);
+	                                $created_dir = create_unexisting_work_directory($base_work_dir, $dir_name);
+	                                $created_dir = '/'.$created_dir;                                
+	                                $now = api_get_utc_datetime();
+	                                //Creating directory                                
+	                                $sql_add_publication = "INSERT INTO " . $TBL_STUDENT_PUBLICATION . " SET " .         
+	                                       "url         = '".$created_dir."',
+	                                       c_id        = '".$course_id."',
+	                                       title        = '".$parent_data['title']."',
+	                                       description  = '".$parent_data['description']." folder_moved_from_session_id_$origin_session_id ',
+	                                       author       = '',
+	                                       active       = '0',
+	                                       accepted     = '1',
+	                                       filetype     = 'folder',                                   
+	                                       sent_date    = '".$now."',
+	                                       qualification    = '".$parent_data['qualification'] ."',
+	                                       parent_id    = '',
+	                                       qualificator_id  = '',
+	                                       date_of_qualification    = '0000-00-00 00:00:00',
+	                                       session_id   = ".$new_session_id;                                       
+	                                $rest_insert     = Database::query($sql_add_publication);
+	                                if ($debug) echo ($sql_add_publication);
+	                                // add the directory
+	                                $id = Database::insert_id();
+	                                 //Folder created
+	                                api_item_property_update($course_info, 'work', $id, 'DirectoryCreated', api_get_user_id());      
+	                                if ($debug) var_dump($rest_insert);
+	                                $new_parent_id = $id;                                
+	                                $result_message[$TBL_STUDENT_PUBLICATION.' - new folder created called: '.$created_dir]++;
                                 }                                                        
                             }                            
                                    
                             //Creating student_publication_assignment if exists
-                            $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION_ASSIGNMENT WHERE publication_id = $parent_id";
+                            $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION_ASSIGNMENT WHERE publication_id = $parent_id AND c_id = $course_id";
                             if ($debug) var_dump($sql);
                             $rest_select     = Database::query($sql);
                             if (Database::num_rows($rest_select) > 0 ) {
                                 if ($update_database) {
                                     $assignment_data = Database::fetch_array($rest_select,'ASSOC');
-                                    $sql_add_publication = "INSERT INTO " . $TBL_STUDENT_PUBLICATION_ASSIGNMENT . " SET " .         
-                                       "expires_on          = '".$assignment_data['expires_on']."',
+                                    $sql_add_publication = "INSERT INTO " . $TBL_STUDENT_PUBLICATION_ASSIGNMENT . " SET 
+                                    	c_id = '$course_id',          
+                                       expires_on          = '".$assignment_data['expires_on']."',
                                        ends_on              = '".$assignment_data['ends_on']."',
                                        add_to_calendar      = '".$assignment_data['add_to_calendar']."',
                                        enable_qualification = '".$assignment_data['enable_qualification']."',
@@ -413,6 +419,7 @@ if (isset($_REQUEST['load_ajax'])) {
                                 //Creating a new work                                  
                                 $sql_add_publication = "INSERT INTO " . $TBL_STUDENT_PUBLICATION . " SET " .
                                                "url         = '" . $new_url . "',
+                                               c_id        = '".$course_id."',
                                                title       = '" . $data['title']. "',
                                                description = '" . $data['description'] . " file moved',
                                                author      = '" . $data['author'] . "',
@@ -454,7 +461,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 
                 //10. Dropbox - not neccesary to move categories (no presence of session_id)
                
-                $sql = "SELECT id FROM $TBL_DROPBOX_FILE WHERE uploader_id = $user_id AND session_id = $origin_session_id ";
+                $sql = "SELECT id FROM $TBL_DROPBOX_FILE WHERE uploader_id = $user_id AND session_id = $origin_session_id AND c_id = $course_id";
                 if ($debug) var_dump($sql); 
                 $res = Database::query($sql);
                 while($row = Database::fetch_array($res,'ASSOC')) {
@@ -475,7 +482,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 
                 //11. Notebook
                 
-                $sql = "SELECT notebook_id FROM $TBL_NOTEBOOK WHERE user_id = $user_id AND session_id = $origin_session_id AND course =  '$origin_course_code' ";
+                $sql = "SELECT notebook_id FROM $TBL_NOTEBOOK WHERE user_id = $user_id AND session_id = $origin_session_id AND course = '$origin_course_code' AND c_id = $course_id";
                 if ($debug) var_dump($sql); 
                 $res = Database::query($sql);
                 while($row = Database::fetch_array($res,'ASSOC')) {

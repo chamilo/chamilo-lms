@@ -83,11 +83,14 @@ $output .= '<tr><td><table border="0" class="data_table"><tr>'.
 // the database table.
 
 $course_info            = api_get_course_info($course_code);
-$TBL_LP_ITEM            = Database :: get_course_table(TABLE_LP_ITEM, $course_info['db_name']);
-$TBL_LP_ITEM_VIEW       = Database :: get_course_table(TABLE_LP_ITEM_VIEW, $course_info['db_name']);
-$TBL_LP_VIEW            = Database :: get_course_table(TABLE_LP_VIEW, $course_info['db_name']);
-$tbl_quiz_questions     = Database :: get_course_table(TABLE_QUIZ_QUESTION, $course_info['db_name']);
-$TBL_QUIZ               = Database :: get_course_table(TABLE_QUIZ_TEST, $course_info['db_name']);
+
+$course_id = $course_info['real_id']; 
+
+$TBL_LP_ITEM            = Database :: get_course_table(TABLE_LP_ITEM);
+$TBL_LP_ITEM_VIEW       = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+$TBL_LP_VIEW            = Database :: get_course_table(TABLE_LP_VIEW);
+$tbl_quiz_questions     = Database :: get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_QUIZ               = Database :: get_course_table(TABLE_QUIZ_TEST);
 $tbl_stats_exercices    = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $tbl_stats_attempts     = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
@@ -127,9 +130,11 @@ if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
 
     if (Database::num_rows($res_path) > 0) {
         if ($origin != 'tracking') {
-            $sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '"   AND status <> "incomplete"  AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '"  AND session_id = '.$session_id.' ORDER BY exe_date';
+            $sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' 
+            				 WHERE exe_exo_id="' . (int)$row_path['path'] . '"   AND status <> "incomplete"  AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '"  AND session_id = '.$session_id.' ORDER BY exe_date';
         } else {
-            $sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '"   AND status <> "incomplete"  AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '"  AND session_id = '.$session_id.' ORDER BY exe_date';
+            $sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' 
+            				 WHERE exe_exo_id="' . (int)$row_path['path'] . '"   AND status <> "incomplete"  AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '"  AND session_id = '.$session_id.' ORDER BY exe_date';
         }
     }
 }
@@ -154,7 +159,11 @@ if (is_array($list) && count($list) > 0) {
             " i.item_type as item_type, iv.view_count as iv_view_count, " .
             " iv.id as iv_id, path as path" .
             " FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v" .
-            " WHERE i.id = iv.lp_item_id " .
+            " WHERE
+            	i.c_id = $course_id AND
+            	iv.c_id = $course_id AND
+            	v.c_id = $course_id AND            	 
+            	i.id = iv.lp_item_id " .
             " AND i.id = $my_item_id " .
             " AND iv.lp_view_id = v.id " .
             " AND i.lp_id = $lp_id " .
@@ -170,7 +179,11 @@ if (is_array($list) && count($list) > 0) {
             " i.item_type as item_type, iv.view_count as iv_view_count, " .
             " iv.id as iv_id, path as path " .
             " FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v " .
-            " WHERE i.id = iv.lp_item_id " .
+            " WHERE i.id = iv.lp_item_id
+            	i.c_id = $course_id AND
+            	iv.c_id = $course_id AND
+            	v.c_id = $course_id AND        
+            " .
             " AND i.id = $my_item_id " .
             " AND iv.lp_view_id = v.id " .
             " AND i.lp_id = $lp_id " .
@@ -475,8 +488,10 @@ if (is_array($list) && count($list) > 0) {
                         //echo $subtotal_time ;
                         //$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
                         // Selecting the max score from an attempt.
-                        $sql = "SELECT SUM(t.ponderation) as maxscore from ( SELECT distinct question_id, marks,ponderation FROM $tbl_stats_attempts as at " .
-                              "INNER JOIN  $tbl_quiz_questions as q  on(q.id = at.question_id) where exe_id ='$id_last_attempt' ) as t";
+                        $sql = "SELECT SUM(t.ponderation) as maxscore FROM ( 
+                        			SELECT distinct question_id, marks,ponderation FROM $tbl_stats_attempts as at INNER JOIN  $tbl_quiz_questions as q 
+                        			ON(q.id = at.question_id) 
+                        			WHERE exe_id ='$id_last_attempt' ) as t";
 
                         $result = Database::query($sql);
                         $row_max_score = Database :: fetch_array($result);

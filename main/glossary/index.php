@@ -94,18 +94,12 @@ if (api_is_allowed_to_edit(null, true)) {
         $form->addElement('hidden', 'glossary_id');
         $form->addElement('text', 'glossary_title', get_lang('TermName'),array('size'=>'80'));
         //$form->applyFilter('glossary_title', 'html_filter');
-        $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));
-        
-        
-        
+        $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));        
         $element = $form->addElement('text', 'insert_date', get_lang('CreationDate'),array('size'=>'100'));
         $element ->freeze();        
         $element = $form->addElement('text', 'update_date', get_lang('UpdateDate'),array('size'=>'100'));
-        $element ->freeze();
-       
+        $element ->freeze();       
         $form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermUpdateButton'), 'class="save"');
-        
-        
 
         // setting the defaults
         $glossary_data = GlossaryManager::get_glossary_information($_GET['glossary_id']);

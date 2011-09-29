@@ -822,10 +822,10 @@ function add_document($_course, $path, $filetype, $filesize, $title, $comment = 
 	$filetype      = Database::escape_string($filetype);
 	$filesize      = intval($filesize);
 	
-	$table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-	$sql = "INSERT INTO $table_document (path, filetype, size, title, comment, readonly, session_id)
-	        VALUES ('$path','$filetype','$filesize','".
-	Database::escape_string($title)."', '$comment', $readonly, $session_id)";
+	$table_document = Database::get_course_table(TABLE_DOCUMENT);
+	$sql = "INSERT INTO $table_document (c_id, path, filetype, size, title, comment, readonly, session_id)
+	        VALUES ({$_course['real_id']}, '$path','$filetype','$filesize','".Database::escape_string($title)."', '$comment', $readonly, $session_id)";
+	
 	if (Database::query($sql)) {
 		//display_message("Added to database (id ".Database::insert_id().")!");
 		return Database::insert_id();
@@ -846,11 +846,14 @@ function add_document($_course, $path, $filetype, $filesize, $title, $comment = 
  * @return boolean true /false
  */
 function update_existing_document($_course, $document_id, $filesize, $readonly = 0) {
-	$document_table = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-	$document_id = intval($document_id);
-	$filesize = intval($filesize);
-	$readonly = intval($readonly);
-	$sql = "UPDATE $document_table SET size = '$filesize' , readonly = '$readonly' WHERE id = $document_id";
+	$document_table = Database::get_course_table(TABLE_DOCUMENT);
+	$document_id 	= intval($document_id);
+	$filesize 		= intval($filesize);
+	$readonly 		= intval($readonly);
+	$course_id 		= $_course['real_id'];
+	
+	$sql = "UPDATE $document_table SET size = '$filesize' , readonly = '$readonly' 
+			WHERE c_id = $course_id AND id = $document_id";
 	if (Database::query($sql)) {
 		return true;
 	} else {
@@ -880,7 +883,7 @@ function item_property_update_on_folder($_course, $path, $user_id) {
 		$path = substr($path, 0, strlen($path) - 1);
 	}
 
-	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
+	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	// Get the time
 	$time = date('Y-m-d H:i:s', time());
@@ -890,7 +893,7 @@ function item_property_update_on_folder($_course, $path, $user_id) {
 	// if file is updated, subsubfolder, subfolder and folder are updated
 
 	$exploded_path = explode('/', $path);
-
+	$course_id = api_get_course_int_id();
 	foreach ($exploded_path as $key => & $value) {
 		// We don't want a slash before our first slash
 		if ($key != 0) {
@@ -901,7 +904,8 @@ function item_property_update_on_folder($_course, $path, $user_id) {
 			$folder_id = DocumentManager::get_document_id($_course, $newpath);
 
 			if ($folder_id) {
-				$sql = "UPDATE $TABLE_ITEMPROPERTY SET lastedit_date='$time',lastedit_type='DocumentInFolderUpdated', lastedit_user_id='$user_id' WHERE tool='".TOOL_DOCUMENT."' AND ref='$folder_id'";
+				$sql = "UPDATE $TABLE_ITEMPROPERTY SET lastedit_date='$time',lastedit_type='DocumentInFolderUpdated', lastedit_user_id='$user_id' 
+						WHERE c_id = $course_id AND tool='".TOOL_DOCUMENT."' AND ref='$folder_id'";
 				Database::query($sql);
 			}
 		}
@@ -1044,13 +1048,16 @@ function create_unexisting_directory($_course, $user_id, $session_id, $to_group_
 	if ($title == null) {
 		$title = basename($desired_dir_name);
 	}
+	$course_id = $_course['real_id'];
+	
 	if (mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories(), true)) {
 		// Check if pathname already exists inside document table
-		$tbl_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-		$sql = "SELECT path FROM $tbl_document WHERE path='".$desired_dir_name.$nb."'";
+		$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
+		$sql = "SELECT path FROM $tbl_document WHERE c_id = $course_id AND path='".$desired_dir_name.$nb."'";
+	
 		$rs = Database::query($sql);
 		if (Database::num_rows($rs) == 0) {
-			$document_id = add_document($_course, $desired_dir_name.$nb, 'folder', 0, $title);
+			$document_id = add_document($_course, $desired_dir_name.$nb, 'folder', 0, $title);			
 			if ($document_id) {
 				// Update document item_property					
 				if ($visibility !== '') {

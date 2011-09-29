@@ -56,14 +56,12 @@ function confirmation ()
 </script>';
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
-// --------------------------------------------------------------------------------
-// -                                  ACTIONS                                     -
-// --------------------------------------------------------------------------------
+// ACTIONS
 
 $my_selectcat =isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
 if ($my_selectcat!='') {
-	$my_db_name       = get_database_name_by_link_id($my_selectcat);
-	$tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
+	$course_id        = get_course_id_by_link_id($my_selectcat);
+	$tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
 	$tbl_grade_links  = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 }
 
@@ -264,7 +262,8 @@ if (isset ($_GET['deletelink'])) {
 	if (!empty($_GET['deletelink'])) {	
 		$link= LinkFactory :: load($_GET['deletelink']);
 		if ($link[0] != null) {
-			$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.intval($_GET['deletelink']).');';
+			$sql = 'UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" 
+					WHERE c_id = '.$course_id.' AND thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' WHERE c_id = '.$course_id.' AND id='.intval($_GET['deletelink']).');';
 			Database::query($sql);
 			$link[0]->delete();
 		}

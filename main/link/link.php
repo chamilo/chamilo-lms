@@ -203,7 +203,6 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 			
 			$clean_link_id = trim(Security::remove_XSS($_GET['id']));
 		}
-
 		echo '	<div class="row">
 					<div class="label">
 						<span class="form_required">*</span> '.get_lang('Url').'
@@ -212,7 +211,6 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						<input type="text" name="urllink" size="50" value="' . (empty($urllink) ? 'http://' : Security::remove_XSS($urllink)) . '" />
 					</div>
 				</div>';
-
 		echo '	<div class="row">
 					<div class="label">
 						'.get_lang('LinkName').'
@@ -260,7 +258,6 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 			echo '		</div>
 					</div>';
 		}
-
 		echo '	<div class="row">
 					<div class="label">
 						'.get_lang('OnHomepage').'?
@@ -429,8 +426,7 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 	$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE category_id=0 OR category_id IS NULL";
 	$result = Database::query($sqlLinks);
 	$numberofzerocategory = Database::num_rows($result);
-	echo '<table class="data_table">';
-	
+	echo '<table class="data_table">';	
 	if ($numberofzerocategory !== 0) {	    
 		echo '<tr><th style="font-weight: bold; text-align:left;padding-left: 10px;">'.get_lang('General').'</th></tr>';
 		echo '</table>';

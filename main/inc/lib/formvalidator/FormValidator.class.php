@@ -335,10 +335,11 @@ EOT;
 				break;
 			}
 		}
+		$return_value = '';
 		if ($error) {
-			Display::display_warning_message(get_lang('FormHasErrorsPleaseComplete'));
+			$return_value = Display::return_message(get_lang('FormHasErrorsPleaseComplete'),'warning');
 		}
-		$return_value = parent::toHtml();
+		$return_value .= parent::toHtml();
 		// Add div-element which is to hold the progress bar
 		if (isset($this->with_progress_bar) && $this->with_progress_bar) {
 			$return_value .= '<div id="dynamic_div" style="display:block; margin-left:40%; margin-top:10px; height:50px;"></div>';

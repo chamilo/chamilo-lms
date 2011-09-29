@@ -93,7 +93,8 @@ class AttendanceLink extends AbstractLink
     public function has_results() {
     	$course_info = api_get_course_info($this->course_code);
     	$tbl_attendance_result = Database :: get_course_table(TABLE_ATTENDANCE_RESULT,$course_info['dbName']);
-		$sql = 'SELECT count(*) AS number FROM '.$tbl_attendance_result." WHERE attendance_id = '".intval($this->get_ref_id())."'";
+		$sql = 'SELECT count(*) AS number FROM '.$tbl_attendance_result." 
+				WHERE c_id = {$course_info['real_id']} AND attendance_id = '".intval($this->get_ref_id())."'";
     	$result = Database::query($sql);
 		$number = Database::fetch_row($result);
 		return ($number[0] != 0);
@@ -108,12 +109,14 @@ class AttendanceLink extends AbstractLink
 			$session_id = api_get_session_id();
 
 			// get attendance qualify max
-	  		$sql = 'SELECT att.attendance_qualify_max FROM '.$this->get_attendance_table().' att WHERE att.id = '.intval($this->get_ref_id()).' AND att.session_id='.intval($session_id).'';
+	  		$sql = 'SELECT att.attendance_qualify_max FROM '.$this->get_attendance_table().' att 
+	  				WHERE att.c_id = '.$course_info['real_id'].' AND att.id = '.intval($this->get_ref_id()).' AND att.session_id='.intval($session_id).'';
 			$query = Database::query($sql);
 			$attendance = Database::fetch_array($query);
 
 			// get results
-	  	    $sql = 'SELECT * FROM '.$tbl_attendance_result.' WHERE attendance_id = '.intval($this->get_ref_id());
+	  	    $sql = 'SELECT * FROM '.$tbl_attendance_result.' 
+	  	    		WHERE c_id = '.$course_info['real_id'].' AND attendance_id = '.intval($this->get_ref_id());
 	    	if (isset($stud_id)) {
 	    		$sql .= ' AND user_id = '.intval($stud_id);
 	    	}
@@ -156,17 +159,8 @@ class AttendanceLink extends AbstractLink
      * Lazy load function to get the database table of the student publications
      */
     private function get_attendance_table() {
-    	$course_info = Database :: get_course_info($this->get_course_code());
-		$database_name = isset($course_info['db_name']) ? $course_info['db_name'] : '';
-		if ($database_name!='') {
-			if (!isset($this->attendance_table)) {
-				$this->attendance_table = Database :: get_course_table(TABLE_ATTENDANCE, $database_name);
-    		}
-   			return $this->attendance_table;
-		} else {
-			return '';
-		}
-
+    	$this->attendance_table = Database :: get_course_table(TABLE_ATTENDANCE);
+    	return $this->attendance_table;
     }
 
     /**

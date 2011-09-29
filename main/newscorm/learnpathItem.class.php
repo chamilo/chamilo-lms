@@ -75,6 +75,7 @@ class learnpathItem {
 		// Get items table.
 		if (self::debug > 0) { error_log('New LP - In learnpathItem constructor: '.$db_id.','.$user_id, 0); }
 		$items_table = Database::get_course_table(TABLE_LP_ITEM, $course_db);
+		$this->course_id = api_get_course_int_id();
 		$id = (int) $db_id;
 		$sql = "SELECT * FROM $items_table WHERE id = $id";
 		//error_log('New LP - Creating item object from DB: '.$sql, 0);
@@ -2219,9 +2220,9 @@ class learnpathItem {
 		 			}else{
 		 				// Insert new one.
 		 				$ivai_sql = "INSERT INTO $iva_table " .
-		 						"(lp_iv_id, order_id, objective_id, status, score_raw, score_min, score_max )" .
+		 						"(c_id, lp_iv_id, order_id, objective_id, status, score_raw, score_min, score_max )" .
 		 						"VALUES" .
-		 						"(".$lp_iv_id.", ".$index.",'".Database::escape_string($objective[0])."','".Database::escape_string($objective[1])."'," .
+		 						"($this->course_id, ".$lp_iv_id.", ".$index.",'".Database::escape_string($objective[0])."','".Database::escape_string($objective[1])."'," .
 		 						"'".Database::escape_string($objective[2])."','".Database::escape_string($objective[4])."','".Database::escape_string($objective[3])."')";
 		 				$ivai_res = Database::query($ivai_sql);
 		 				//error_log($ivai_sql);
@@ -2274,7 +2275,7 @@ class learnpathItem {
 	  			$this->restart();
 
 	  			$sql = "INSERT INTO $item_view_table " .
-			 			"(total_time, " .
+			 			"(c_id, total_time, " .
 			 			"start_time, " .
 			 			"score, " .
 			 			"status, " .
@@ -2286,7 +2287,7 @@ class learnpathItem {
 			 			//"max_time_allowed," .
 			 			"lesson_location)" .
 			 			"VALUES" .
-			 			"(".$this->get_total_time()."," .
+			 			"($this->course_id, ".$this->get_total_time()."," .
 			 			"".$this->current_start_time."," .
 			 			"".$this->get_score()."," .
 			 			"'".$this->get_status(false)."'," .
@@ -2320,7 +2321,7 @@ class learnpathItem {
 		 		}*/
 
 			 	$sql = "INSERT INTO $item_view_table " .
-			 			"(total_time, " .
+			 			"(c_id, total_time, " .
 			 			"start_time, " .
 			 			"score, " .
 			 			"status, " .
@@ -2332,7 +2333,7 @@ class learnpathItem {
 			 			//"max_time_allowed," .
 			 			"lesson_location)" .
 			 			"VALUES" .
-			 			"(".$this->get_total_time()."," .
+			 			"($this->course_id, ".$this->get_total_time()."," .
 			 			"".$this->current_start_time."," .
 			 			"".$this->get_score()."," .
 			 			"'".$this->get_status(false)."'," .
@@ -2534,12 +2535,11 @@ class learnpathItem {
 			 				$ivau_res = Database::query($ivau_sql);
 			 			} else {
 			 				// Insert new one.
-			 				$ivai_sql = "INSERT INTO $iva_table " .
-			 						"(order_id, lp_iv_id, interaction_id, interaction_type, " .
+			 				$ivai_sql = "INSERT INTO $iva_table (c_id, order_id, lp_iv_id, interaction_id, interaction_type, " .
 			 						"weighting, completion_time, correct_responses, " .
 			 						"student_response, result, latency)" .
 			 						"VALUES" .
-			 						"(".$index.",".$lp_iv_id.",'".Database::escape_string($interaction[0])."','".Database::escape_string($interaction[1])."'," .
+			 						"($this->course_id, ".$index.",".$lp_iv_id.",'".Database::escape_string($interaction[0])."','".Database::escape_string($interaction[1])."'," .
 			 						"'".Database::escape_string($interaction[3])."','".Database::escape_string($interaction[2])."','".Database::escape_string($correct_resp)."'," .
 			 						"'".Database::escape_string($interaction[5])."','".Database::escape_string($interaction[6])."','".Database::escape_string($interaction[7])."'" .
 			 						")";

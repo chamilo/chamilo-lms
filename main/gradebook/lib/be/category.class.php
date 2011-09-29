@@ -97,7 +97,7 @@ class Category implements GradebookItem
 	}
 
 	public function set_parent_id ($parent) {
-		$this->parent = $parent;
+		$this->parent = intval($parent);
 	}
 	/**
      * Filters to int and sets the session ID
@@ -196,7 +196,7 @@ class Category implements GradebookItem
 			$sql .= ' visible = '.intval($visible);
 			$paramcount ++;
 		}
-
+		//echo $sql;
 		$result = Database::query($sql);		
 		if (Database::num_rows($result) > 0) {
 			$allcat = Category::create_category_objects_from_sql_result($result);
@@ -961,22 +961,21 @@ class Category implements GradebookItem
 	public function get_subcategories ($stud_id = null, $course_code = null, $session_id = null) {
 		$cats = array();
 		// 1 student
- 		if (isset($stud_id)) {
+ 		if (isset($stud_id)) { 
 			// special case: this is the root
 			if ($this->id == 0) {
 				return Category::get_root_categories_for_student ($stud_id, $course_code, $session_id);
-			} else {
-				return Category::load(null,null,$course_code,$this->id,
-				api_is_allowed_to_create_course() ? null : 1, $session_id );
+			} else {				
+				return Category::load(null,null,$course_code,$this->id, api_is_allowed_to_create_course() ? null : 1, $session_id );
 			}
 		} else {// all students
 			// course admin
 			if (api_is_allowed_to_create_course() && !api_is_platform_admin()) {
 				// root
 				if ($this->id == 0) {
-					return $this->get_root_categories_for_teacher (api_get_user_id(), $course_code, $session_id, false);
+					return $this->get_root_categories_for_teacher(api_get_user_id(), $course_code, $session_id, false);
 				// inside a course
-                } elseif (!empty($this->course_code)) {
+                } elseif (!empty($this->course_code)) {                	
 					return Category::load(null, null, $this->course_code, $this->id, null, $session_id, false);
                 } elseif (!empty($course_code)) {
                     return Category::load(null, null, $course_code, $this->id, null, $session_id, false);
@@ -1011,9 +1010,9 @@ class Category implements GradebookItem
 			// special case: this is the root
 			if ($this->id == 0) {
 				$evals = Evaluation::get_evaluations_with_result_for_student(0,$stud_id);
-			} else {
-					$evals = Evaluation::load(null,null,$course_code,$this->id,
-					api_is_allowed_to_create_course() ? null : 1);
+			} else { 
+					$evals = Evaluation::load(null,null,$course_code,$this->id, api_is_allowed_to_create_course() ? null : 1);
+					
 			}
 		} else {// all students
 			// course admin

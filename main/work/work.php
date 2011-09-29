@@ -60,6 +60,8 @@ require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php';
 
+$course_id = api_get_course_int_id();
+
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
 $ctok = $_SESSION['sec_token'];
@@ -329,12 +331,15 @@ if (!empty ($_POST['changeProperties'])) {
 	$query = "SELECT * FROM " . $table_course_setting . " WHERE variable = 'student_delete_own_publication'";
 	$result = Database::query($query);
 	$number_of_setting = Database::num_rows($result);
+	
+	
 
 	if ($number_of_setting == 1) {
-		$query = "UPDATE " . $table_course_setting . " SET value='" . Database::escape_string($_POST['student_delete_own_publication']) . "' WHERE variable='student_delete_own_publication'";
+		$query = "UPDATE " . $table_course_setting . " SET value='" . Database::escape_string($_POST['student_delete_own_publication']) . "' WHERE variable='student_delete_own_publication' and c_id = $course_id";
 		Database::query($query);
 	} else {
-		$query = "INSERT INTO " . $table_course_setting . " (variable, value, category) VALUES ('student_delete_own_publication','" . Database::escape_string($_POST['student_delete_own_publication']) . "','work')";
+		$query = "INSERT INTO " . $table_course_setting . " (c_id, variable, value, category) VALUES 
+		($course_id, 'student_delete_own_publication','" . Database::escape_string($_POST['student_delete_own_publication']) . "','work')";
 		Database::query($query);
 	}
 
@@ -450,7 +455,8 @@ if (!empty($_REQUEST['new_dir'])) {
 			$time = time();
 			$today = api_get_utc_datetime($time);
 						
-			$sql_add_publication = "INSERT INTO " . $work_table . " SET 
+			$sql_add_publication = "INSERT INTO " . $work_table . " SET
+									   c_id				= $course_id,  
 									   url         		= '".Database::escape_string($dir_name_sql)."',
 								       title        	= '".Database::escape_string($_POST['new_dir'])."',
 					                   description 		= '".Database::escape_string($_POST['description'])."',
@@ -511,6 +517,7 @@ if (!empty($_REQUEST['new_dir'])) {
 
 				$enable_calification = isset($_POST['enable_calification']) ? (int)$_POST['enable_calification'] : null;
 				$sql_add_homework = "INSERT INTO $TSTDPUBASG SET
+										c_id = $course_id ,
     								    expires_on       		= '".((isset($_POST['type1']) && $_POST['type1']==1) ? api_get_utc_datetime(get_date_from_select('expires')) : '0000-00-00 00:00:00'). "',
     							        ends_on        	 		= '".((isset($_POST['type2']) && $_POST['type2']==1) ? api_get_utc_datetime(get_date_from_select('ends')) : '0000-00-00 00:00:00')."',
     				                    add_to_calendar  		= '$agenda_id',
@@ -522,6 +529,7 @@ if (!empty($_REQUEST['new_dir'])) {
 				Database::query($sql_add_publication);
 			} else {
 				$sql_add_homework = "INSERT INTO $TSTDPUBASG SET 
+										c_id = $course_id ,
     								    expires_on     = '0000-00-00 00:00:00',
     							        ends_on        = '0000-00-00 00:00:00',
     				                    add_to_calendar  = '$agenda_id',
@@ -861,6 +869,7 @@ if (isset($_POST['sec_token']) && $ctok == $_POST['sec_token']) { //check the to
 				
 				
 				$sql_add_publication = "INSERT INTO " . $work_table . " SET
+										   c_id = $course_id ,
 									       url         = '" . $url . "',
 									       title       = '" . Database::escape_string($title) . "',
 						                   description = '" . Database::escape_string($description) . "',
@@ -907,8 +916,9 @@ if (isset($_POST['sec_token']) && $ctok == $_POST['sec_token']) { //check the to
 			if (!Database::num_rows($result)) {
 				Database::query("ALTER TABLE " . $work_table . " ADD sent_date DATETIME NOT NULL");
 			}			
-			$sql = "INSERT INTO  " . $work_table . "
-					        	SET url        	= '" . $url . "',
+			$sql = "INSERT INTO  " . $work_table . " SET
+								c_id = $course_id,
+								url        	= '" . $url . "',
 					            title       	= '" . Database::escape_string($title) . "',
 					            description 	= '" . Database::escape_string($description) . "',
 					            author      	= '" . Database::escape_string($authors) . "',

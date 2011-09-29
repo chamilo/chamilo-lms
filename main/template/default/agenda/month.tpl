@@ -29,17 +29,26 @@ $(document).ready(function() {
 		select: function(start, end, allDay, jsEvent, view) {
 			/* When selecting one day or several days */
 			
-			if ({$can_add_events} == 1) {
+			var start_date 	= Math.round(start.getTime() / 1000);
+			var end_date 	= Math.round(end.getTime() / 1000);
 			
-				var start_date 	= Math.round(start.getTime() / 1000);
-				var end_date 	= Math.round(end.getTime() / 1000);
-				
+			if ({$can_add_events} == 1) {							
 				var url = '{$web_agenda_ajax_url}a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
 				
-				$('#start_date').html(start.getDate() +"/"+ start.getMonth() +"/"+start.getFullYear());
-				$('#end_date').html('- '+ end.getDate() +"/"+ end.getMonth() +"/"+end.getFullYear());
-
-				$('#color_calendar').addClass('background_color_{$type}');
+				$('#start_date').html(start.toDateString() + " " +  start.toTimeString().substr(0, 8));
+				if (view.name != 'month') {
+					$('#start_date').html(start.toDateString() + " " +  start.toTimeString().substr(0, 8));
+					if (start.toDateString() == end.toDateString()) {					
+						$('#end_date').html(' - '+end.toTimeString().substr(0, 8));
+					} else {
+						$('#end_date').html(' - '+end.toDateString()+" " + end.toTimeString().substr(0, 8));
+					}
+				} else {
+					$('#start_date').html(start.toDateString());					
+				}
+				$('#color_calendar').html('{$type_label}');
+				$('#color_calendar').addClass('label_tag');
+				$('#color_calendar').addClass('{$type}_event');
 											
 				$("#dialog-form").dialog("open");		
 				
@@ -77,21 +86,22 @@ $(document).ready(function() {
 	    },
 		eventClick: function(calEvent, jsEvent, view) {
 			
-			if (calEvent.editable) {
-									
+			if (calEvent.editable) {									
 				var start_date 	= Math.round(calEvent.start.getTime() / 1000);
 				if (calEvent.allDay == 1) {				
 					var end_date 	= '';				
 				} else {			
 					var end_date 	= Math.round(calEvent.end.getTime() / 1000);				
 				}
-
-				$('#color_calendar').addClass('background_color_{$type}');
+				
+				$('#color_calendar').html('{$type_label}');
+				$('#color_calendar').addClass('label_tag');
+				$('#color_calendar').addClass('{$type}_event');
 				
 				$('#start_date').html(calEvent.start.getDate() +"/"+ calEvent.start.getMonth() +"/"+calEvent.start.getFullYear());
 				
 				if (end_date != '') {
-					$('#end_date').html(calEvent.end.getDate() +"/"+ calEvent.end.getMonth() +"/"+calEvent.end.getFullYear());
+					$('#end_date').html(' '+calEvent.end.getDate() +"/"+ calEvent.end.getMonth() +"/"+calEvent.end.getFullYear());
 				}			
 	
 				$("#title").attr('value', calEvent.title);
@@ -104,7 +114,7 @@ $(document).ready(function() {
 				
 				$("#dialog-form").dialog({				
 					buttons: {
-						"Edit event" : function() {
+						"Edit" : function() {
 							var params = $("#add_event_form").serialize();						
 							$.ajax({
 								url: url+'&'+params,
@@ -123,7 +133,7 @@ $(document).ready(function() {
 								}							
 							});
 						},
-						"Delete": function() {
+						"Delete": function() { 
 							$.ajax({
 								url: delete_url,
 								success:function() {
@@ -159,27 +169,22 @@ $(document).ready(function() {
 		loading: function(bool) {
 			if (bool) $('#loading').show();
 			else $('#loading').hide();
-		}
-		
-	});
-	
+		}		
+	});	
 });
 </script>
 
 <div id="dialog-form" style="display:none;">
 	<div style="width:500px">			
-	<form id="add_event_form" name="form">
-	
+	<form id="add_event_form" name="form">	
 		<div class="row">		
 			<div class="label">
-				<label for="date">{"Calendar"|get_lang}</label>
+				<label for="date">{"Agenda"|get_lang}</label>
 			</div>
 			<div class="formw">
-				<span id="color_calendar" style="width:100px;"></span>
+				<div id="color_calendar"></div>
 			</div>					
 		</div>
-		
-	
 		<div class="row">		
 			<div class="label">
 				<label for="date">{"Date"|get_lang}</label>
@@ -203,8 +208,7 @@ $(document).ready(function() {
 			<div class="formw">
 				<textarea name="content" id="content" cols="40" rows="7"></textarea>
 			</div>
-		</div>
-	
+		</div>	
 	</form>
 	</div>
 </div>

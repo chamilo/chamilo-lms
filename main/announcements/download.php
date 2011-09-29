@@ -60,8 +60,10 @@ $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATT
 // launch event
 event_download($doc_url);
 
-$sql='SELECT filename FROM '.$tbl_announcement_attachment.'
-  	  WHERE path LIKE BINARY "'.$doc_url.'"';
+$course_id = api_get_course_int_id();
+
+$sql = "SELECT filename FROM $tbl_announcement_attachment
+  	  	WHERE c_id = $course_id AND path LIKE BINARY $doc_url";
 
 $result= Database::query($sql);
 if (Database::num_rows($result) > 0) {

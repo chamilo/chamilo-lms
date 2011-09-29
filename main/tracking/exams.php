@@ -16,7 +16,6 @@ require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.ph
 
 $this_section = SECTION_TRACKING;
 
-
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
 
 if(!$is_allowedToTrack) {
@@ -30,7 +29,6 @@ if (isset($_GET['export'])) {
 	$export_to_xls = true;
 }
 
-$TBL_EXERCICES			= Database::get_course_table(TABLE_QUIZ_TEST);
 $tbl_stats_exercices 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
 if (api_is_platform_admin() ) {	
@@ -43,10 +41,14 @@ if ($global) {
 	$temp_course_list = CourseManager :: get_courses_list();	
 	foreach($temp_course_list  as $temp_course_item) {
 		$course_item = CourseManager ::get_course_information($temp_course_item['code']);		
-		$course_list[]= array('db_name' =>$course_item['db_name'],'code'=>$course_item['code'], 'title'=>$course_item['title']);	
+		$course_list[]= array(	'db_name' 	=> $course_item['db_name'],
+								'code'		=> $course_item['code'],
+								'real_id'	=> $course_item['real_id'],
+								'title'		=> $course_item['title']);	
 	}
 } else {	
 	$current_course['db_name'] 	= $_course['dbName'];
+	$current_course['real_id'] 	= $_course['real_id'];
 	$current_course['code'] 	= $_course['id'];	
 	$course_list = array($current_course);
 }
@@ -90,9 +92,6 @@ if (!$export_to_xls) {
         echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">'.Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'','32').'</a>';
         echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.Display::return_icon('printer.png',get_lang('Print'),'','32').'</a>';        
         echo '</span>';
-        
-        
-        
 	
         $menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher');
         if (api_is_platform_admin()) {
@@ -145,14 +144,14 @@ if ($global) {
 
 $export_array_global = $export_array =  array();
 if(!empty($course_list) && is_array($course_list))
-foreach($course_list as $current_course ) {
+foreach($course_list as $current_course) {
 	$global_row = $row_not_global = array();
     
 	$a_students = CourseManager :: get_student_list_from_course_code($current_course['code'], false);	
 	$total_students = count($a_students);
 	$t_quiz = Database::get_course_table(TABLE_QUIZ_TEST,$current_course['db_name']);
 	
-	$sqlExercices		= "SELECT count(id) as count FROM ".$t_quiz." AS quiz WHERE active='1' ";
+	$sqlExercices		= "SELECT count(id) as count FROM ".$t_quiz." AS quiz WHERE active='1' AND c_id = {$current_course['real_id']}";
 	$resultExercices 	= Database::query($sqlExercices);
 	$data_exercises  	= Database::store_result($resultExercices);
 	$exercise_count 	= $data_exercises[0]['count'];	

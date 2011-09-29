@@ -370,8 +370,9 @@ class EvalForm extends FormValidator
 	 * Builds a form to add an evaluation
 	 */
 	protected function build_add_form() {
-		$this->setDefaults(array (
-		'hid_user_id' => $this->evaluation_object->get_user_id(), 'hid_category_id' => $this->evaluation_object->get_category_id(), 'hid_course_code' => $this->evaluation_object->get_course_code(), 'created_at' => api_get_utc_datetime()));
+		$this->setDefaults(array (	'hid_user_id' => $this->evaluation_object->get_user_id(), 
+									'hid_category_id' => $this->evaluation_object->get_category_id(), 
+									'hid_course_code' => $this->evaluation_object->get_course_code(), 'created_at' => api_get_utc_datetime()));
 		$this->build_basic_form(0);
 		if ($this->evaluation_object->get_course_code() == null) {
 			$this->addElement('checkbox', 'adduser', get_lang('AddUserToEval'));
@@ -384,8 +385,14 @@ class EvalForm extends FormValidator
 	 * Builds a form to edit an evaluation
 	 */
 	protected function build_editing_form() {
-		$this->setDefaults(array (
-		'hid_id' => $this->evaluation_object->get_id(), 'name' => $this->evaluation_object->get_name(), 'description' => $this->evaluation_object->get_description(), 'hid_user_id' => $this->evaluation_object->get_user_id(), 'hid_course_code' => $this->evaluation_object->get_course_code(), 'hid_category_id' => $this->evaluation_object->get_category_id(), 'created_at' => api_get_utc_datetime($this->evaluation_object->get_date()), 'weight' => $this->evaluation_object->get_weight(), 'max' => $this->evaluation_object->get_max(), 'visible' => $this->evaluation_object->is_visible()));
+		$this->setDefaults(array (	'hid_id' => $this->evaluation_object->get_id(), 
+									'name' 	 => $this->evaluation_object->get_name(), 
+									'description' => $this->evaluation_object->get_description(), 
+									'hid_user_id' => $this->evaluation_object->get_user_id(), 
+									'hid_course_code' => $this->evaluation_object->get_course_code(), 
+									'hid_category_id' => $this->evaluation_object->get_category_id(), 
+									'created_at' => api_get_utc_datetime($this->evaluation_object->get_date()), 
+									'weight' => $this->evaluation_object->get_weight(), 'max' => $this->evaluation_object->get_max(), 'visible' => $this->evaluation_object->is_visible()));
 		$id_current=isset($this->id)?$this->id :null;
 		$this->addElement('hidden', 'hid_id',$id_current);
 		$this->build_basic_form(1);
@@ -404,7 +411,7 @@ class EvalForm extends FormValidator
 		$this->addElement('header', '', $form_title);
 		$this->addElement('hidden', 'zero', 0);
 		$this->addElement('hidden', 'hid_user_id');
-		$this->addElement('hidden', 'hid_category_id');
+		//$this->addElement('hidden', 'hid_category_id');
 		$this->addElement('hidden', 'hid_course_code');
 		$this->add_textfield('name', get_lang('EvaluationName'), true, array (
 			'size' => '54',
@@ -444,6 +451,23 @@ class EvalForm extends FormValidator
 		$this->addRule(array ('weight', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
 		$this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
 		$this->addRule(array ('max', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
+		
+		$select_gradebook = $this->addElement('select', 'hid_category_id', get_lang('SelectGradebook'));
+		
+		$all_categories = Category :: load();
+		
+		if (!empty($all_categories)) {
+			foreach($all_categories as $my_cat) {
+				if ($my_cat->get_course_code() == api_get_course_id()) {
+					if ($my_cat->get_parent_id() == 0 ) {
+						$select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+					} else {
+						$select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+					}
+				}			
+			}
+		}
+		
 	}
 	function display() {
 		parent :: display();

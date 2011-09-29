@@ -50,9 +50,11 @@ class NotebookManager
 		}
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+		$course_id = api_get_course_int_id();
 
-		$sql = "INSERT INTO $t_notebook (user_id, course, session_id, title, description, creation_date,update_date,status)
+		$sql = "INSERT INTO $t_notebook (c_id, user_id, course, session_id, title, description, creation_date,update_date,status)
 				VALUES(
+					 $course_id,
 					'".api_get_user_id()."',
 					'".Database::escape_string(api_get_course_id())."',
 					'".Database::escape_string($_SESSION['id_session'])."',
@@ -198,8 +200,9 @@ class NotebookManager
 		$condition_session = api_get_session_condition($session_id);
 
 		$cond_extra = ($_SESSION['notebook_view']== 'update_date')?" AND update_date <> '0000-00-00 00:00:00'":" ";
-
-		$sql = "SELECT * FROM $t_notebook WHERE user_id = '".api_get_user_id()."' $condition_session $cond_extra $order_by";
+		$course_id = api_get_course_int_id();
+		
+		$sql = "SELECT * FROM $t_notebook WHERE c_id = $course_id AND user_id = '".api_get_user_id()."' $condition_session $cond_extra $order_by";
 		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			//validacion when belongs to a session

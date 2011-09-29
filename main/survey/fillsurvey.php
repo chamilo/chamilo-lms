@@ -57,6 +57,7 @@ if ((!isset($_GET['course']) || !isset($_GET['invitationcode']))&& !isset($_GET[
 	exit;
 }
 $invitationcode = $_GET['invitationcode'];
+$course_id = api_get_course_int_id();
 
 // Start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
 if ($invitationcode == 'auto' && isset($_GET['scode'])){
@@ -68,7 +69,7 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])){
     $scode = Database::escape_string($_GET['scode']); // Survey_code of the survey
     $autoInvitationcode = "auto-$userid-$scode"; // New invitation code from userid
     // The survey code must exist in this course, or the URL is invalid
-    $sql = "SELECT * FROM $table_survey WHERE code='" . $scode . "'";
+    $sql = "SELECT * FROM $table_survey WHERE code ='" . $scode . "'";
     $result = Database::query($sql);
     if (Database :: num_rows($result) > 0) { // Ok
         // Check availability
@@ -76,11 +77,11 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])){
         $tempdata  = survey_manager :: get_survey($row['survey_id']);
         check_time_availability($tempdata); //exit if survey not available anymore
         // Check for double invitation records (insert should be done once)
-        $sql = "SELECT user from $table_survey_invitation where invitation_code = '".Database::escape_string($autoInvitationcode)."'";
+        $sql = "SELECT user from $table_survey_invitation WHERE invitation_code = '".Database::escape_string($autoInvitationcode)."'";
         $result = Database::query($sql);
         if (Database :: num_rows($result) == 0) { // Ok
-            $sql = "insert into $table_survey_invitation (survey_code,user, invitation_code, invitation_date) ";
-            $sql .= " values (\"$scode\", \"$userid\", \"$autoInvitationcode\", now())";
+            $sql = "INSERT INTO $table_survey_invitation (c_id, survey_code,user, invitation_code, invitation_date) ";
+            $sql .= " values ($course_id, \"$scode\", \"$userid\", \"$autoInvitationcode\", now())";
             Database::query($sql);
         }
         // From here we use the new invitationcode auto-userid-surveycode string
@@ -134,10 +135,8 @@ if (Database::num_rows($result) > 1) {
 
 // Getting the survey information
 $survey_data = survey_manager::get_survey($survey_invitation['survey_id']);
-//echo '<pre>';print_r($survey_data);echo '</pre>';
-//echo $survey_data['form_fields'];echo '-<br>-';echo $survey_data['show_form_profile'];
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
-//print_r($survey_data);
+
 // Storing the answers
 if (count($_POST) > 0) {
     if ($survey_data['survey_type'] === '0') {
@@ -202,8 +201,7 @@ if (count($_POST) > 0) {
 		}
 		$sql = "SELECT * FROM $table_survey_question
 				WHERE survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'
-				AND survey_group_pri='0' $shuffle
-				";
+				AND survey_group_pri='0' $shuffle";
 		$result = Database::query($sql);
         // There is only one question type for conditional surveys
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -217,8 +215,7 @@ if (count($_POST) > 0) {
 				// Finding the question id by removing 'question'
 				$survey_question_id = str_replace('question', '', $key);
 				// We select the correct answer and the puntuacion
-				$sql = "SELECT value FROM $table_survey_question_option " .
-                        " WHERE question_option_id='".Database::escape_string($value)."'";
+				$sql = "SELECT value FROM $table_survey_question_option WHERE question_option_id='".Database::escape_string($value)."'";
 				$result = Database::query($sql);
 				$row = Database::fetch_array($result, 'ASSOC');
 				$option_value = $row['value'];
@@ -591,6 +588,8 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
         } else {
         	$paged_questions = $_SESSION['paged_questions'];
         }
+        
+        $course_id = api_get_course_int_id();
 
 		if (key_exists($_GET['show'], $paged_questions)) {
 			if (isset($_GET['user_id'])) {
@@ -605,18 +604,21 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
 					LEFT JOIN $table_survey_question_option survey_question_option
 					ON survey_question.question_id = survey_question_option.question_id
 					WHERE survey_question.survey_id = '" . Database :: escape_string($survey_invitation['survey_id']) . "'
-					AND survey_question.question_id NOT IN (SELECT sa.question_id FROM ".$table_survey_answer." sa WHERE sa.user='".$my_user_id."')
+					AND survey_question.question_id NOT IN (SELECT sa.question_id FROM ".$table_survey_answer." sa WHERE sa.user='".$my_user_id."') AND
+					survey_question_option.c_id = $course_id AND
+					survey_question.c_id =  $course_id 
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 			} else {
-
 				$sql = "SELECT survey_question.survey_group_sec1, survey_question.survey_group_sec2, survey_question.survey_group_pri,
 					survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
 					survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
 					FROM $table_survey_question survey_question
 					LEFT JOIN $table_survey_question_option survey_question_option
 					ON survey_question.question_id = survey_question_option.question_id
-					WHERE survey_question.survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'
-					AND survey_question.question_id IN (".implode(',',$paged_questions[$_GET['show']]).")
+					WHERE survey_question.survey_id = '".Database::escape_string($survey_invitation['survey_id'])."' AND 
+					survey_question.question_id IN (".implode(',',$paged_questions[$_GET['show']]).") AND
+					survey_question_option.c_id = $course_id AND
+					survey_question.c_id =  $course_id 
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 			}
 

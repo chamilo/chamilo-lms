@@ -83,6 +83,8 @@ if ($from_learnpath == 'yes') {
     unset ($_SESSION['addedresourceassigned']);
 }
 
+$course_id = api_get_course_int_id();
+
 // Process a new chapter?
 if (!empty ($_POST['add_chapter']) && !empty ($_POST['title'])) {
     $title = $_POST['title'];
@@ -110,8 +112,8 @@ if (!empty ($_POST['add_chapter']) && !empty ($_POST['title'])) {
     }
     $order = $lastorder_item + 1;
 
-    $sql = "INSERT INTO $tbl_lp_item "."(lp_id,item_type,title,parent_item_id,previous_item_id, next_item_id, display_order) " .
-            "VALUES "."($learnpath_id,'dokeos_chapter','$title', $chapter_id, $previous, 0, $order )";
+    $sql = "INSERT INTO $tbl_lp_item "."(c_id, lp_id,item_type,title,parent_item_id,previous_item_id, next_item_id, display_order) " .
+            "VALUES "."($course_id, $learnpath_id,'dokeos_chapter','$title', $chapter_id, $previous, 0, $order )";
     //error_log('New LP - Inserting new resource: '.$sql, 0);
     $res = Database::query($sql);
     $my_id = Database::insert_id($res);
@@ -139,7 +141,7 @@ if (!empty ($_POST['external_link_submit'])) {
                 $external_link = 'http://'.$external_link;
             }
 
-            $sql = "INSERT INTO $link_table (url, title, category_id) VALUES ('$external_link','$external_link','$add_2_links')";
+            $sql = "INSERT INTO $link_table (c_id, url, title, category_id) VALUES ($course_id, '$external_link','$external_link','$add_2_links')";
             $result = Database::query($sql);
             $addedresource[] = "Link";
             $addedresourceid[] = Database::insert_id();
@@ -199,8 +201,8 @@ if ($add) {
             // In the case we added a chapter, add this into the chapters list with the correct parent_id.
             if ($addedresource_item == 'Chap') {
                 $sql = "INSERT INTO $tbl_lp_item " .
-                        "(lp_id,item_type,title,parent_item_id,previous_item_id,next_item_id,display_order) " .
-                        "VALUES (".$learnpath_id.",'dokeos_chapter','".$learnpath_chapter_name."',".$chapter_id.",$previous,0,".$lastorder.")";
+                        "(c_id, lp_id,item_type,title,parent_item_id,previous_item_id,next_item_id,display_order) " .
+                        "VALUES ($course_id, ".$learnpath_id.",'dokeos_chapter','".$learnpath_chapter_name."',".$chapter_id.",$previous,0,".$lastorder.")";
                 //error_log('New LP - Inserting new resource: '.$sql, 0);
                 $res = Database::query($sql);
                 $my_id = Database::insert_id($res);
@@ -293,8 +295,8 @@ if ($add) {
                         break;
 
                 }
-                $sql = "INSERT INTO $tbl_lp_item (lp_id, title, parent_item_id, item_type, ref, previous_item_id, next_item_id, display_order) " .
-                        "VALUES ($learnpath_id, '$title','$chapter_id', '$addedresource_item','$addedresourceid[$i]',$previous,0,'".$lastorder."')";
+                $sql = "INSERT INTO $tbl_lp_item (c_id, lp_id, title, parent_item_id, item_type, ref, previous_item_id, next_item_id, display_order) " .
+                        "VALUES ($course_id, $learnpath_id, '$title','$chapter_id', '$addedresource_item','$addedresourceid[$i]',$previous,0,'".$lastorder."')";
                 //error_log('New LP - Inserting new resource: '.$sql, 0);
                 $result = Database::query($sql);
                 $my_id = Database::insert_id($result);

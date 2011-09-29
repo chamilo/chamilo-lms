@@ -91,14 +91,17 @@ class CourseDescription
 	public function get_description_history($description_type) {
 		$tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
 		$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-		$course_id = api_get_real_course_id();
-
+		
 		$description_id = $this->get_id_by_description_type($description_type);
 		$item_property_id = api_get_item_property_id($course_id, TOOL_COURSE_DESCRIPTION, $description_id);
+		
+		$course_id = api_get_course_int_id();
 
-		$sql = "SELECT tip.id, tip.course_id, tip.item_property_id, tip.title, tip.content, tip.progress, tip.lastedit_date, tip.session_id FROM $tbl_stats_item_property tip
-				INNER JOIN $tbl_item_property ip ON ip.tool = '".TOOL_COURSE_DESCRIPTION."' AND ip.id = tip.item_property_id
-				WHERE tip.course_id = '$course_id' AND tip.session_id = '".intval($this->session_id)."' ORDER BY tip.lastedit_date DESC";
+		$sql = "SELECT tip.id, tip.course_id, tip.item_property_id, tip.title, tip.content, tip.progress, tip.lastedit_date, tip.session_id 
+				FROM $tbl_stats_item_property tip INNER JOIN $tbl_item_property ip 
+				ON ip.tool = '".TOOL_COURSE_DESCRIPTION."' AND ip.id = tip.item_property_id
+				WHERE ip.c_id = $course_id AND tip.course_id = '$course_id' AND tip.session_id = '".intval($this->session_id)."' 
+				ORDER BY tip.lastedit_date DESC";
 
 		$rs = Database::query($sql);
 		$data = array();
@@ -161,13 +164,16 @@ class CourseDescription
      * first you must set description_type, title, content, progress and session_id properties with the object CourseDescription
      * @return  int  affected rows
      */
-	public function insert($course_db = null) {
-		if($course_db === null) {
-			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-		} else {
-			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_db);
-		}
-		$sql = "INSERT IGNORE INTO $tbl_course_description SET description_type='".intval($this->description_type)."', title = '".Database::escape_string($this->title)."', content = '".Database::escape_string($this->content)."', progress = '".intval($this->progress)."', session_id = '".intval($this->session_id)."' ";
+	public function insert() {		
+		$course_id = api_get_course_int_id();
+		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);		
+		$sql = "INSERT IGNORE INTO $tbl_course_description SET
+				c_id 				=  $course_id, 
+				description_type	= '".intval($this->description_type)."', 
+				title 				= '".Database::escape_string($this->title)."', 
+				content 			= '".Database::escape_string($this->content)."', 
+				progress 			= '".intval($this->progress)."', 
+				session_id = '".intval($this->session_id)."' ";
 		Database::query($sql);
 		$last_id = Database::insert_id();
 		$affected_rows = Database::affected_rows();
@@ -192,14 +198,15 @@ class CourseDescription
 		$course_code = api_get_course_id();
 		$item_property_id = api_get_item_property_id($course_code, TOOL_COURSE_DESCRIPTION, $description_id);
 		$sql = "INSERT IGNORE INTO $tbl_stats_item_property SET
-				course_id = '$course_id',
-			 	item_property_id = '$item_property_id',
-			 	title = '".Database::escape_string($this->title)."',
-			 	content = '".Database::escape_string($this->content)."',
-			 	progress = '".intval($this->progress)."',
-			 	lastedit_date = '".date('Y-m-d H:i:s')."',
-			 	lastedit_user_id = '".api_get_user_id()."',
-			 	session_id	= '".intval($this->session_id)."'";
+				c_id				= ".api_get_course_int_id().",
+				course_id 			= '$course_id',
+			 	item_property_id 	= '$item_property_id',
+			 	title 				= '".Database::escape_string($this->title)."',
+			 	content 			= '".Database::escape_string($this->content)."',
+			 	progress 			= '".intval($this->progress)."',
+			 	lastedit_date 		= '".date('Y-m-d H:i:s')."',
+			 	lastedit_user_id 	= '".api_get_user_id()."',
+			 	session_id			= '".intval($this->session_id)."'";
 		Database::query($sql);
 		$affected_rows = Database::affected_rows();
 		return $affected_rows;
@@ -210,13 +217,16 @@ class CourseDescription
      * and session_id properties with the object CourseDescription
      * @return int	affected rows
      */
-	public function update($course_db = null) {
-		if($course_db === null) {
-			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-		} else {
-			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_db);
-		}
-		$sql = "UPDATE $tbl_course_description SET  title = '".Database::escape_string($this->title)."', content = '".Database::escape_string($this->content)."', progress = '".$this->progress."' WHERE description_type='".intval($this->description_type)."' AND session_id = '".$this->session_id."'";
+	public function update($course_db = null) {		
+		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);		
+		$sql = "UPDATE $tbl_course_description SET  
+						title = '".Database::escape_string($this->title)."', 
+						content = '".Database::escape_string($this->content)."', 
+						progress = '".$this->progress."' 
+				WHERE 	description_type='".intval($this->description_type)."' AND 
+						session_id = '".$this->session_id."' AND
+						c_id = ".api_get_course_int_id()."
+						";
 		Database::query($sql);
 		$affected_rows = Database::affected_rows();
 		$description_id = $this->get_id_by_description_type($this->description_type);
@@ -232,11 +242,7 @@ class CourseDescription
      * @return int	affected rows
      */
 	public function delete($course_db = null) {
-		if($course_db === null) {
-			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-		} else {
-			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_db);
-		}
+		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);		
 		$description_id = $this->get_id_by_description_type($this->description_type);
 		$sql = "DELETE FROM $tbl_course_description WHERE description_type = '".intval($this->description_type)."' AND session_id = '".intval($this->session_id)."'";
 		Database::query($sql);

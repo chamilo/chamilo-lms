@@ -77,6 +77,7 @@ if ($dokeos_chapter) {
             break;
     }
 }
+
 if ($debug > 0) { error_log('New lp - In lp_content.php - File url is '.$src, 0); }
 $_SESSION['oLP']->set_previous_item($lp_item_id);
 

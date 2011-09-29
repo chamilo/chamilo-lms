@@ -155,7 +155,6 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 
 //I'm in the certification module?
@@ -393,6 +392,7 @@ $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is
 
 if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $current_session_id)) {
 	$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
+	
 	//$parent_select -> addOption(get_lang('HomeDirectory'), '/');
 	$parent_select = $form->addElement('select', 'curdirpath', get_lang('DestinationDirectory'));
 	
@@ -501,7 +501,7 @@ $form->setDefaults($default);
 if ($form->validate()) {
 	$values = $form->exportValues();
 	$readonly = isset($values['readonly']) ? 1 : 0;
-
+	
 	$values['title'] = trim($values['title']);	
 	
 	if (!empty($values['curdirpath'])) {

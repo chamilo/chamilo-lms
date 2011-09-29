@@ -34,16 +34,12 @@ define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
 
 $TABLECOURSE 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $TABLEFACULTY 				= Database :: get_main_table(TABLE_MAIN_CATEGORY);
-$TABLECOURSEHOME 			= Database :: get_course_table(TABLE_TOOL_LIST);
 $TABLELANGUAGES 			= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-$TABLEBBCONFIG 				= Database :: get_course_table(TOOL_FORUM_CONFIG_TABLE);
-$currentCourseID 			= $_course['sysCode'];
 $currentCourseRepository    = $_course['path'];
 $is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
-$course_setting_table 		= Database::get_course_table(TABLE_COURSE_SETTING);
 
-$course_code = $_course['sysCode'];
-$course_access_settings = CourseManager :: get_access_settings($course_code);
+$course_code 				= $_course['sysCode'];
+$course_access_settings 	= CourseManager :: get_access_settings($course_code);
 
 //LOGIC FUNCTIONS
 function is_settings_editable() {
@@ -235,6 +231,27 @@ $form->addElement('html', '</div></div>');
 
 
 
+
+// Gradebook SETTINGS
+//$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="chatsettings" id="chatsettings"></a>'.Display::return_icon('chat.png', get_lang('ConfigChat'),'','22').' '.get_lang('ConfigChat').'</div>');
+$form->addElement('html', '<div> <h3>'.Display::return_icon('gradebook.png', get_lang('Gradebook'),'','22').' '.get_lang('Gradebook').'</h3><div>');
+$group = array();
+$models = api_get_settings_options('grading_model');
+foreach ($models as $option) {
+	$grading_parsed = api_grading_model_functions($option['value'], 'decorate');
+	$element = $form->createElement('radio', 'course_grading_model', '', $option['display_text'].': '.$grading_parsed, $option['id']);		
+	$group[] = $element;
+}
+
+$element = $form->createElement('radio', 'course_grading_model', '', get_lang('None'), 0);
+$group[] = $element;
+
+
+$form->addGroup($group, '', array(get_lang('GradingModelTitle')), '', 'li', false); //julio
+
+$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+$form->addElement('html', '</div></div>');
+
 // USER RIGHTS
 //$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="userrights" id="userrights"></a>'.Display::return_icon('user.png', get_lang('UserRights'),'','22').' '.get_lang('UserRights').'</div>');
 $form->addElement('html', '<div> <h3>'.Display::return_icon('user.png', get_lang('UserRights'),'','22').' '.get_lang('UserRights').'</h3><div>');
@@ -262,12 +279,9 @@ $form->addElement('html', '</div></div>');
 // CHAT SETTINGS
 //$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="chatsettings" id="chatsettings"></a>'.Display::return_icon('chat.png', get_lang('ConfigChat'),'','22').' '.get_lang('ConfigChat').'</div>');
 $form->addElement('html', '<div> <h3>'.Display::return_icon('chat.png', get_lang('ConfigChat'),'','22').' '.get_lang('ConfigChat').'</h3><div>');
-
 $form->addElement('radio', 'allow_open_chat_window', get_lang('AllowOpenchatWindow'), get_lang('AllowOpenChatWindowActivate'), 1);
 $form->addElement('radio', 'allow_open_chat_window', null, get_lang('AllowOpenChatWindowDeactivate'), 0);
-
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-
 $form->addElement('html', '</div></div>');
 
 
@@ -367,11 +381,15 @@ $values['enable_lp_auto_launch']                    = api_get_course_setting('en
 
 $values['pdf_export_watermark_text']                = api_get_course_setting('pdf_export_watermark_text');
 
+$values['course_grading_model']                		= api_get_course_setting('course_grading_model');
+
+
 $form->setDefaults($values);
 
 // Validate form
 if ($form->validate() && is_settings_editable()) {
 	$update_values = $form->exportValues();
+	
 /*
     // update course picture
     $picture = $_FILES['picture'];
@@ -387,7 +405,8 @@ if ($form->validate() && is_settings_editable()) {
     }
     
     //Variables that will be saved in the TABLE_MAIN_COURSE table
-    $update_in_course_table = array('title','visual_code', 'course_language','category_code','department_name', 'department_url','visibility',  'subscribe', 'unsubscribe','tutor_name','course_registration_password');
+    $update_in_course_table = array('title','visual_code', 'course_language','category_code','department_name', 'department_url','visibility',  
+    								'subscribe', 'unsubscribe','tutor_name','course_registration_password');
 
 	foreach ($update_values as $index =>$value) {
 		$update_values[$index] = Database::escape_string($value);
@@ -415,10 +434,10 @@ if ($form->validate() && is_settings_editable()) {
     
     foreach($update_values as $key =>$value) {
         //We do not update variables that were already saved in the TABLE_MAIN_COURSE table
-        if (!in_array($key, $update_in_course_table)) {            
-            Database::update($table_course_setting, array('value' => $update_values[$key]), array('variable = ? ' =>$key));
+        if (!in_array($key, $update_in_course_table)) {
+            Database::update($table_course_setting, array('value' => $update_values[$key]), array('variable = ? AND c_id = ?' => array($key, api_get_course_int_id()), true));
         }    	
-    }
+    }    
 	$cidReset = true;
 	$cidReq = $course_code;
 	require '../inc/local.inc.php';
@@ -439,20 +458,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
 	Display :: display_normal_message(get_lang('ModifDone'));
 }
 
-// actions bar
-/*
-echo '<div class="actions">';
-echo '<a href="#coursesettings">'.Display::return_icon('settings.png', get_lang('CourseSettings'),'','32').'</a>';
-echo '<a href="#coursesaccess">'.Display::return_icon('course.png', get_lang('CourseAccess'),'','32').'</a>';
-echo '<a href="#emailnotifications">'.Display::return_icon('mail.png', get_lang('EmailNotifications'),'','32').'</a>';
-echo '<a href="#userrights">'.Display::return_icon('user.png', get_lang('UserRights'),'','32').'</a>';
-echo '<a href="#chatsettings">'.Display::return_icon('chat.png', get_lang('ConfigChat'),'','32').'</a>';
-if (api_get_setting('allow_course_theme') == 'true') {
-	echo '<a href="#learnpath">'.Display::return_icon('scorms.png', get_lang('ConfigLearnpath'),'','32').'</a>';
-}
-echo '<a href="#thematicadvance">'.Display::return_icon('course_progress.png', get_lang('ThematicAdvanceConfiguration'),'','32').'</a>';
-echo '</div>';
-*/
 echo '<script>
 $(function() {
 	$("#course_settings").accordion({

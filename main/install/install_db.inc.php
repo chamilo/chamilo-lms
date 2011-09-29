@@ -146,6 +146,12 @@ $installation_settings['{ADMINLANGUAGE}'] = $languageForm;
 $installation_settings['{HASHFUNCTIONMODE}'] = $encryptPassForm;
 load_main_database($installation_settings);
 
+
+//Adds the c_XXX courses tables see #3910
+require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php'; 
+update_Db_course();
+
+
 /**
  * Creating the tables of the tracking database
  */

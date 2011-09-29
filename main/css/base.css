@@ -3740,28 +3740,6 @@ form div.error input, form div.error textarea {
     width:400px;
 }
 
-.background_color_personal {
-    background:#3366CC;
-    width:100px;
-    display:block;
-    height:15px;
-}
-
-.background_color_admin {
-    background:red;
-    width:100px;
-    display:block;
-    height:15px;
-}
-
-.background_color_course {
-    background:#458B00;
-    width:100px;
-    display:block;
-    height:15px;
-}
-
-
 .tag {
     background-color: #D3E6EF;
     border-radius: 3px 3px 3px 3px;
@@ -3771,4 +3749,51 @@ form div.error input, form div.error textarea {
     font-weight: 700;
     margin: 0 10px 5px 0;
     padding: 0.4em 0.6em;
+}
+
+.label_tag {
+  /* padding: 1px 3px 2px; */
+  padding:5px;
+  background-color: #bfbfbf;
+  font-size: 9.75px;
+  font-weight: bold;
+  color: #ffffff;
+  text-transform: uppercase;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  width:120px;
+}
+
+.label_tag.personal_event {	
+	 background:#3366CC;
+}
+.label_tag.admin_event { 
+     background:red;
+}
+.label_tag.course_event { 
+     background:#458B00;
+}
+
+
+.label_tag.important {
+  background-color: #c43c35;
+}
+.label_tag.warning {
+  background-color: #f89406;
+}
+.label_tag.success {
+  background-color: #46a546;
+}
+.label_tag.notice {
+  background-color: #62cffc;
+}
+
+
+.invisible {
+    color: #999;
+}
+
+.invisible h2 {
+    color: #999;
 }

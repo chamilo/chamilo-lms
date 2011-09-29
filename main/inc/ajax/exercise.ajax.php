@@ -50,12 +50,7 @@ switch ($action) {
             
             //There is a reminder?
             $remind_list             = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
-            /*
-            //Lp ids
-            $safe_lp_id              = $_REQUEST['learnpath_id'];  
-            $safe_lp_item_id         = $_REQUEST['learnpath_item_id'];
-            $safe_lp_item_view_id    = $_REQUEST['learnpath_item_view_id'];*/
-            
+               
             $exe_id = $_REQUEST['exe_id'];
             
             //Exercise information            
@@ -66,13 +61,9 @@ switch ($action) {
             if (empty($question_list) || empty($objExercise)) {
                 echo 0;
                 exit;
-            }          
-                 
-            
+            }            
             //Getting information of the current exercise    
-            //$exercise_stat_info = $objExercise->get_stat_track_exercise_info($safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);
-            $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
-            
+            $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);           
             
             $attempt_list = array();
               

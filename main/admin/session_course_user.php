@@ -136,7 +136,7 @@ WHERE id_user = $id_user and session_rel_course.id_session = $id_session";
 // actual user
 $sql="SELECT code, title, visual_code, srcru.id_session " .
 			"FROM $tbl_course course inner JOIN $tbl_session_rel_course_rel_user   as srcru  " .
-			"ON course.code = srcru.course_code  where srcru.id_user = $id_user AND id_session = $id_session";
+			"ON course.code = srcru.course_code  WHERE srcru.id_user = $id_user AND id_session = $id_session";
 
 //all
 $sql_all="SELECT code, title, visual_code, src.id_session " .

@@ -62,6 +62,7 @@ class Agenda {
 				$attributes['end_date'] 	= $end;
 				$attributes['all_day'] 		= $all_day;
 				$attributes['session_id'] 	= api_get_session_id();
+				$attributes['c_id'] 		= $this->course['real_id'];
 				
 				//simple course event
 				$id = Database::insert($this->tbl_course_agenda, $attributes);				
@@ -144,12 +145,14 @@ class Agenda {
 	 * @param	int		course id *integer* not the course code 
 	 * 
 	 */
-	function get_events($start, $end, $user_id, $course_id = null) {				
-		switch($this->type) {
+	function get_events($start, $end, $user_id, $course_id = null) {	
+					
+		switch ($this->type) {
 			case 'admin':
 				$this->get_platform_events($start, $end);
 				break;
 			case 'course':
+				
 				$course_info = api_get_course_info_by_id($course_id);				
 				$this->get_course_events($start, $end, $course_info);
 				break;
@@ -285,40 +288,49 @@ class Agenda {
 	}
 	
 	function get_course_events($start, $end, $course_info, $group_id = 0) {
-		$group_memberships 	= GroupManager::get_group_ids($course_info['db_name'], api_get_user_id());
+		$course_id = $course_info['real_id'];
+		$group_memberships 	= GroupManager::get_group_ids($course_id, api_get_user_id());
 	
-		$tlb_course_agenda	= Database::get_course_table(TABLE_AGENDA, $course_info['db_name']);
-		$tbl_property 		= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_info['db_name']);
+		$tlb_course_agenda	= Database::get_course_table(TABLE_AGENDA);
+		$tbl_property 		= Database::get_course_table(TABLE_ITEM_PROPERTY);
 	
 		$user_id = api_get_user_id();
 	
 		if (is_array($group_memberships) && count($group_memberships)>0) {
 			$sql = "SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
-						FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
-	                    WHERE agenda.id = ip.ref   ".$show_all_current."
-	                    AND ip.tool='".TOOL_CALENDAR_EVENT."'
-	                    AND ( ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-	                    AND ip.visibility='1'
+					FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
+	                WHERE 	agenda.id 		= ip.ref  AND 
+	                		ip.tool			='".TOOL_CALENDAR_EVENT."' AND 
+	                		( ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) AND 
+	                		ip.visibility	= '1' AND
+	                		agenda.c_id = $course_id AND
+	                		ip.c_id = $course_id
+	                		
 	            	";
 		} else {
 			if (api_get_user_id()) {
 				$sql="SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 	                		FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
-	            			WHERE agenda.id = ip.ref   ".$show_all_current." 
+	            			WHERE agenda.id = ip.ref 
 	            				AND ip.tool='".TOOL_CALENDAR_EVENT."'
 	            				AND ( ip.to_user_id=$user_id OR ip.to_group_id='0')
-	                            AND ip.visibility='1'
+	                            AND ip.visibility='1' AND 
+	                            agenda.c_id = $course_id AND
+	                			ip.c_id = $course_id
 	                        ";
 			} else {
 				$sql="SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 	                                FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
-	                                WHERE agenda.id = ip.ref   ".$show_all_current."
+	                                WHERE agenda.id = ip.ref
 	                                AND ip.tool='".TOOL_CALENDAR_EVENT."'
 	                                AND ip.to_group_id='0'
-	                                AND ip.visibility='1'
+	                                AND ip.visibility='1' AND 
+	                                agenda.c_id = $course_id AND
+	                				ip.c_id = $course_id
 	                                ";
 			}
 		}
+		
 		$result = Database::query($sql);
 		$events = array();
 		if (Database::num_rows($result)) {

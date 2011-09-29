@@ -68,11 +68,15 @@ class GradeBookResult
 		$return = array();
     	$TBL_EXERCISE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+    	$course_id = api_get_course_int_id();
 		$sql="SELECT q.id, q.question, q.ponderation, q.position, q.type, q.picture " .
 			" FROM $TBL_EXERCISE_QUESTION eq, $TBL_QUESTIONS q " .
-			" WHERE eq.question_id=q.id AND eq.exercice_id='$e_id' " .
+			" WHERE eq.c_di = $course_id AND
+					q.c_di = $course_id AND					
+					eq.question_id=q.id AND 
+					eq.exercice_id='$e_id' " .
 			" ORDER BY q.position";
-		$result=Database::query($sql);
+		$result = Database::query($sql);
 
 		// fills the array with the question ID for this exercise
 		// the key of the array is the question position
@@ -89,23 +93,21 @@ class GradeBookResult
 	function _getGradeBookReporting($document_path,$user_id=null) {
 		$return = array();
     	$TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
-    	$TBL_EXERCISE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-    	$TBL_QUESTIONS 			= Database::get_course_table(TABLE_QUIZ_QUESTION);
-		$TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
-		$TBL_DOCUMENT          	= Database::get_course_table(TABLE_DOCUMENT);
-		$TBL_ITEM_PROPERTY      = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    	$TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);		
 		$TBL_TRACK_EXERCISES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-		$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
+		
     	$cid = api_get_course_id();
+    	$course_id = api_get_course_int_id();
 		if (empty($user_id)) {
 			//get all results (ourself and the others) as an admin should see them
 			//AND exe_user_id <> $_user['user_id']  clause has been removed
 			$sql="SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)").", ce.title, te.exe_result ,
 						te.exe_weighting, te.exe_date,te.exe_id, user.email, user.user_id
 				  FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te, $TBL_USER user
-				  WHERE te.exe_exo_id = ce.id AND user_id=te.exe_user_id AND te.exe_cours_id='$cid'
+				  WHERE ce.c_id = $course_id AND
+				  		te.exe_exo_id = ce.id AND 
+				  		user_id=te.exe_user_id AND te.exe_cours_id='$cid'
 				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT ".(api_is_western_name_order() ? "CONCAT(tu.firstname,' ',tu.lastname)" : "CONCAT(tu.lastname,' ',tu.firstname)").", tth.exe_name,
@@ -115,11 +117,13 @@ class GradeBookResult
 					ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
 
 		} else { // get only this user's results
-			  $sql="SELECT '',ce.title, te.exe_result , te.exe_weighting, " .
-			  		"te.exe_date,te.exe_id
-				  FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te
-				  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$user_id."' AND te.exe_cours_id='$cid'
-				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
+			  $sql = "SELECT '',ce.title, te.exe_result , te.exe_weighting, te.exe_date,te.exe_id
+						FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te
+				  		WHERE 	ce.c_id 		= $course_id AND
+				  				te.exe_exo_id 	= ce.id AND 
+				  				te.exe_user_id 	= '".$user_id."' AND 
+				  				te.exe_cours_id = '$cid'
+				  		ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT '',exe_name, exe_result , exe_weighting, exe_date
 					FROM $TBL_TRACK_HOTPOTATOES

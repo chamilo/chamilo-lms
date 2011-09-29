@@ -68,9 +68,11 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 		} else {
 			$Resource = $_POST['resource'];
 			foreach($Resource as $Code_course => $Sessions) {
-				$_course = Database::get_course_info(Security::remove_XSS($Code_course));
-				$tbl_document = Database::get_course_table(TABLE_DOCUMENT, $_course['db_name']);
-				$tbl_property = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['db_name']);
+				$_course 		= Database::get_course_info($Code_course);
+				$tbl_document 	= Database::get_course_table(TABLE_DOCUMENT);
+				$tbl_property 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
+				$course_id 		= $_course['real_id'];
+				
 				//Add tem to the zip file course
 				$sql = "SELECT path FROM $tbl_document AS docs, $tbl_property AS props
 					WHERE props.tool='".TOOL_DOCUMENT."'
@@ -79,7 +81,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 						AND docs.filetype='file'
 						AND docs.session_id = '0'
 						AND props.visibility<>'2'
-						AND props.to_group_id=".$to_group_id."";
+						AND props.to_group_id=".$to_group_id." AND docs.c_id = $course_id AND props.c_id = $course_id";
 				$query = Database::query($sql );
 				while ($rows_course_file = Database::fetch_assoc($query)) {
 					$zip_folder->add($FileZip['PATH_COURSE'].$_course['directory']."/document".$rows_course_file['path'],
@@ -210,15 +212,20 @@ function fullexportspecial(){
     $list_course = array();
     $zip_folder = new PclZip($FileZip['TEMP_FILE_ZIP']);
     $list_course = Database::get_course_list();
-    if(count($list_course) >0 ) {
+    
+    $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
+    $tbl_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    
+    
+    if (count($list_course) >0 ) {
         foreach($list_course as $_course) {
             if($FileZip['PATH'] == '/') {
                 $querypath=''; // to prevent ...path LIKE '//%'... in query
             } else {
                 $querypath = $FileZip['PATH'];
             }
-            $tbl_document = Database::get_course_table(TABLE_DOCUMENT, $_course['db_name']);
-            $tbl_property = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['db_name']);
+            $course_id 		= $_course['real_id'];            
+            
             //Add tem to the zip file course
             $sql = "SELECT path FROM $tbl_document AS docs, $tbl_property AS props
                 WHERE props.tool='".TOOL_DOCUMENT."'
@@ -227,7 +234,7 @@ function fullexportspecial(){
                     AND docs.filetype='file'
                     AND docs.session_id = '0'
                     AND props.visibility<>'2'
-                    AND props.to_group_id=".$to_group_id."";
+                    AND props.to_group_id=".$to_group_id." AND docs.c_id = $course_id AND props.c_id = $course_id";
             $query = Database::query($sql );
             while ($rows_course_file = Database::fetch_assoc($query)) {
                 $rows_course_file['path'];
@@ -238,20 +245,20 @@ function fullexportspecial(){
             }
             //Add tem to the zip file session course
             $code_course = $_course['code'];
-            $sql_session = "SELECT id, name, course_code  FROM $tbl_session_course
+            $sql_session = "SELECT id, name, course_code FROM $tbl_session_course
                 INNER JOIN  $tbl_session ON id_session = id
                 WHERE course_code = '$code_course' ";
             $query_session = Database::query($sql_session);
             while ($rows_session = Database::fetch_assoc($query_session)) {
                 $session_id = $rows_session['id'];
-                $sql_session_doc = "SELECT path FROM $tbl_document AS docs,$tbl_property AS props
+                $sql_session_doc = "SELECT path FROM $tbl_document AS docs, $tbl_property AS props
                     WHERE props.tool='".TOOL_DOCUMENT."'
                         AND docs.id=props.ref
                         AND docs.path LIKE '".$querypath."/%'
                         AND docs.filetype='file'
                         AND docs.session_id = '$session_id'
                         AND props.visibility<>'2'
-                        AND props.to_group_id=".$to_group_id."";
+                        AND props.to_group_id=".$to_group_id." AND docs.c_id = $course_id AND props.c_id = $course_id ";
                 $query_session_doc = Database::query($sql_session_doc);
                 while ($rows_course_session_file = Database::fetch_assoc($query_session_doc)) {
                     $zip_folder->add($FileZip['PATH_COURSE'].$_course['directory'].'/document'.$rows_course_session_file['path'],

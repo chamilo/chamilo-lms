@@ -774,10 +774,9 @@ class CourseHome {
         foreach($items as $item) {         
             switch($theme) {
                 case 'activity_big':
-                    $data = '';
-                    
+                    $data = '';                    
                     if ($i == 0) {
-                         echo '<table class="100%">';
+                         echo '<table style="width:100%">';
                     }
                     $row_per = 33;
                     $mod = 3;                    
@@ -794,8 +793,11 @@ class CourseHome {
                     echo '<td width="'.$row_per.'%">';
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
                         $image = Display::tag('center', Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), 64));
+                        //experimental changes nothing serious
+                        //$my_icon = api_get_path(WEB_CODE_PATH).'img/icons/64/'.$image;
+                        //$image = Display::tag('span', Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id'],'style'=>'opacity:0'), 64),array('class'=>'image-wrap','style'=>'background:url('.$my_icon.')'));                        
                         $data .= Display::url($image , $item['url_params']['href'], $item['url_params']);
-                        echo Display::div($data, array('class'=>'big_icon'));
+                        echo Display::div($data, array('class'=>'big_icon')); //box-image reflection
 						echo Display::tag('center', Display::div($item['visibility'].$item['extra'].$item['link'], array('class'=>'content')));
                     echo '</td>';
                     

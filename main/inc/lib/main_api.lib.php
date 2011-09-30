@@ -1874,6 +1874,10 @@ function api_is_course_tutor() {
  * @return boolean True if current user is a course or session coach
  */
 function api_is_coach($session_id = 0, $course_code = '') {
+	//@todo Not sure about this one
+	/*if (api_is_platform_admin()) {
+		return true;
+	}*/
     if (!empty($session_id)) {
         $session_id = intval($session_id);
     } else {
@@ -1884,33 +1888,34 @@ function api_is_coach($session_id = 0, $course_code = '') {
         $course_code = Database::escape_string($course_code);
     } else {
         $course_code = api_get_course_id();
-    }
-    
-	if (!empty($course_code)) {
+    }    
+    $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
+    $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $sessionIsCoach = null;
+	if (!empty($course_code)) {		
 	    $sql = "SELECT DISTINCT id, name, date_start, date_end
-				FROM session INNER JOIN session_rel_course_rel_user session_rc_ru
+				FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
 	            ON session_rc_ru.id_user = '".api_get_user_id()."'
 	            WHERE session_rc_ru.course_code = '$course_code' AND session_rc_ru.status = 2 AND session_rc_ru.id_session = '$session_id'
 	            ORDER BY date_start, date_end, name";
 	
 	    $result = Database::query($sql);
-	    $sessionIsCoach = Database::store_result($result);
+	    $sessionIsCoach = Database::store_result($result);	    
 	}
 	
 	if (!empty($session_id)) {
 	    $sql = "SELECT DISTINCT id, name, date_start, date_end
-	         	FROM session
+	         	FROM $session_table
 	         	WHERE session.id_coach =  '".api_get_user_id()."' AND id = '$session_id'
 				ORDER BY date_start, date_end, name";
 	
-	    $result = Database::query($sql);
+	    $result = Database::query($sql);	    
 	    if (!empty($sessionIsCoach)) {
 	    	$sessionIsCoach = array_merge($sessionIsCoach , Database::store_result($result));
 	    } else {
-	    	$sessionIsCoach = Database::store_result($result);
+	    	$sessionIsCoach = Database::store_result($result);	    	
 	    }
 	}
-
     return (count($sessionIsCoach) > 0);
 }
 
@@ -2152,6 +2157,7 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
     $session_visibility 		= api_get_session_visibility($my_session_id);
     
     $is_courseAdmin = api_is_course_admin() || api_is_platform_admin();
+    
     if (!$is_courseAdmin && $tutor) {   // If we also want to check if the user is a tutor...
         $is_courseAdmin = $is_courseAdmin || api_is_course_tutor();
     }

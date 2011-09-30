@@ -56,7 +56,8 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 		$form->addElement('html', '<div id="div_datetime_by_attendance" style="display:block">');	
 	}
 
-	if (count($attendance_select) > 1) {	
+	if (count($attendance_select) > 1) {
+		
 		$form->addElement('select', 'attendance_select', get_lang('Attendances'), $attendance_select, array('id' => 'id_attendance_select', 'onchange' => 'datetime_by_attendance(this.value)'));
 	} else {
 		$form->addElement('html', '<div class="row"><div class="label">'.get_lang('Attendances').'</div><div class="formw"><strong><em>'.get_lang('ThereAreNoAttendancesInsideCourse').'</em></strong></div></div>');
@@ -64,13 +65,13 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	
 	$form->addElement('html', '<div id="div_datetime_attendance">');
 	if (!empty($calendar_select)) {
-		$form->addElement('select', 'start_date_by_attendance', get_lang('StartDate'), $calendar_select);
+		$form->addElement('select', 'start_date_by_attendance', get_lang('StartDate'), $calendar_select, array('id'=>'start_date_select_calendar'));
 	}
 	$form->addElement('html', '</div>');
 		
 	$form->addElement('html', '</div>');
 
-	$form->add_textfield('duration_in_hours', get_lang('DurationInHours'), false, array('size'=>'3'));
+	$form->add_textfield('duration_in_hours', get_lang('DurationInHours'), false, array('size'=>'3','id'=>'duration_in_hours_element'));
 	
 	$form->add_html_editor('content', get_lang('Content'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));	
 	//$form->addElement('textarea', 'content', get_lang('Content'));
@@ -83,6 +84,22 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'id="update_button" class="save"');
 	}
 	//$form->addElement('html', '<a href="#" id="save_button" onclick="save();">Save</a>');
+	$attendance_select_item_id = null;
+	if (count($attendance_select) > 1) {
+		$i = 1;
+		foreach($attendance_select as $key => $attendance_select_item) {
+			if ($i == 2) {
+				$attendance_select_item_id = $key;
+				break;
+			}
+			$i++;
+		}
+		if (!empty($attendance_select_item_id)) {
+			$default['attendance_select'] = $attendance_select_item_id;
+			echo '<script> datetime_by_attendance("'.$attendance_select_item_id.'"); </script>';
+			
+		}
+	}
 	
 	$default['start_date_type'] = 1;	
 	$default['custom_start_date'] = date('d-F-Y H:i',api_strtotime(api_get_local_time()));
@@ -100,6 +117,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 			if (!empty($thematic_advance_data['start_date'])) {
 		        $default['start_date_by_attendance'] = api_get_local_time($thematic_advance_data['start_date']);
 			}						
+
 			$default['attendance_select'] = $thematic_advance_data['attendance_id'];
 		}		
 	}
@@ -117,7 +135,6 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	if (!empty($msg_error)) {
 		Display::display_error_message($msg_error,false);	
 	}
-
 	$form->display();
 	
 } else if ($action == 'thematic_advance_list') {

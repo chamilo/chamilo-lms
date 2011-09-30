@@ -117,7 +117,7 @@ switch ($action) {
 			$calendar_select = array();
 			$label = get_lang('StartDate');
 			if (!empty($attendance_calendar)) {
-				$input_select .= '<select name="start_date_by_attendance" UNIQUE size="5">';				
+				$input_select .= '<select id="start_date_select_calendar" name="start_date_by_attendance" UNIQUE size="5">';				
 				foreach ($attendance_calendar as $calendar) {
 					$insert = true;
 					//checking if was already taken						

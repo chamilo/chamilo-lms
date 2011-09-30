@@ -168,7 +168,10 @@ function datetime_by_attendance(selected_value) {
 		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=get_datetime_by_attendance",
 		data: "attendance_id="+selected_value+"&thematic_advance_id='.$thematic_id.'",
 		success: function(datos) {
-		 $("#div_datetime_attendance").html(datos);
+			$("#div_datetime_attendance").html(datos);			
+			$("#start_date_select_calendar").val($("#start_date_select_calendar option:first").val());
+			// $("#duration_in_hours_element").focus();
+
 		}
 	});
 }

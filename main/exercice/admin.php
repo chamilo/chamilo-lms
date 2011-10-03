@@ -465,6 +465,13 @@ if ($show_quiz_edition) {
     echo '<a href="">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'','32').'</a>';
 }
 
+$maxScoreAllQuestions = 0;
+foreach ($objExercise->questionList as $q) {
+  $oQ = Question::read($q);
+  $maxScoreAllQuestions += $oQ->selectWeighting();
+}
+echo '<span style="float:right">'.sprintf(get_lang('XQuestionsWithTotalScoreY'),$objExercise->selectNbrQuestions(),$maxScoreAllQuestions).'</span>';
+
 echo '</div>';
 
 if (isset($_GET['message'])) {

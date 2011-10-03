@@ -1,3 +1,75 @@
+/* Color easy change */
+body, .form, #links a, .form-info {
+  color: #DF002A;
+}
+.form-submit, input, select {
+  background-color: #DF002A;
+}
+.form-error {
+	color: red;
+	font-size: 9pt;
+}
+.form-submit {
+	margin: 0;
+	padding: 0;
+	width: 310px;
+	height: 27px;
+	background-color: #DF002A;
+	/*background-image: url(/custompages/images/login-form-submit-bg.jpg);*/
+	color: white;
+	cursor: pointer;
+	cursor: hand;
+}
+/* end easy change */
+/* Registration form */
+#registration-form-box {
+	width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 50px;
+	border: solid 1px #CCCCCC;
+	text-align: left;
+	background-color: white;
+}
+#registration-form-box .form-submit{
+  width: 400px;
+}
+div.row {
+  clear: both;
+  padding-top: 5px;
+}
+div.row div.form_header {
+  white-space: nowrap;
+  padding: 2px;
+  background-color: #f0f0f0;
+  border: 1px solid #bbb;
+}
+div.row div.label {
+  float: left;
+  width: 53%;
+  text-align: right;
+  padding-right:1%
+}
+div.row div.formw {
+  width: 46%;
+  float:left;
+}
+[dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
+  float: left;
+  text-align: right;
+}
+[dir=rtl] div.row div.label, [dir=ltr] div.row div.formw {
+  float: right;
+  text-align: left;
+}
+span.form_required {
+  color: #f00;
+}
+span.form_error {
+  color: #f00;
+  font-size: x-small;
+  margin: 2px;
+}
 html, body {
 	margin: 0;
 	padding: 0;
@@ -8,7 +80,7 @@ body {
 	font-size: 10pt;
 	width: 100%;
 	text-align: center;
-	color: #1F3660;
+	/*color: #1F3660;*/
 	/*background-image: url(images/page-background.png);
 	background-repeat: no-repeat;
 	background-size: 100%;
@@ -65,22 +137,11 @@ body {
 	margin-left: 15px;
 	margin-right: 15px;
 	margin-top: 30px;
-	color: #1F3660;
+	/*color: #1F3660;*/
 	position: relative;
 	text-align: left;
 }
 
-.form-submit {
-	margin: 0;
-	padding: 0;
-	width: 310px;
-	height: 27px;
-	background-color: #1F3660;
-	background-image: url(/custompages/images/login-form-submit-bg.jpg);
-	color: white;
-	cursor: pointer;
-	cursor: hand;
-}
 
 label {
 	width: 100px;
@@ -97,14 +158,14 @@ input {
 	margin-bottom: 2em;
 	width: 150px;
 	color: white;
-	background-color: #1F3660;
+	/*background-color: #1F3660;*/
 	border: none;
 }
 
 select {
 	width: 150px;
 	color: white;
-	background-color: #1F3660;
+	/*background-color: #1F3660;*/
 	border: none;
 	margin-bottom: 2em;
 }
@@ -113,12 +174,9 @@ select {
 	margin-right: 15px;
 	margin-top: 10px;
 	margin-bottom: 50px;
-	color: #1F3660;
+	/*color: #1F3660;*/
 }
 
-#links a, #links a:hover, #links a:active, #links a:visited {
-	color: #1F3660;
-}
 
 #links a {
 	text-decoration: none;
@@ -135,10 +193,6 @@ span {
 }
 
 .form-info {
-	color: #1F3660;
-	font-size: 9pt;
-}
-.form-error {
-	color: red;
+	/*color: #1F3660;*/
 	font-size: 9pt;
 }

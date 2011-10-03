@@ -1,7 +1,20 @@
 <?php 
-require_once('../inc/global.inc.php');
-require_once('../inc/lib/group_portal_manager.lib.php');
 require_once('language.php');
+require_once('../inc/global.inc.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+//Removes some unwanted elementend of the form object
+$content['form']->removeElement('extra_mail_notify_invitation');
+$content['form']->removeElement('extra_mail_notify_message');
+$content['form']->removeElement('extra_mail_notify_group_message');
+$content['form']->removeElement('official_code');
+$content['form']->removeElement('phone');
+$content['form']->removeElement('submit');
+$content['form']->removeElement('status');
+$content['form']->removeElement('status');
+
 ?>
 <html>
 <head>
@@ -27,26 +40,10 @@ require_once('language.php');
 		<?php if (isset($form_error) && !empty($form_error)) {
 			echo '<div id="registration-form-error" class="form-error"><ul>'.$form_error.'</ul></div>';
 		}?>
-			<form id="registration-form" class="form" action="inscription.php" method="post">
-				<div>
-        <label for="email"><?php echo cblue_get_lang('langEmail');?>*</label>
-					<input name="email" type="text"  value="<?php echo $values['email']?>" /><br />
-					<label for="username"><?php echo cblue_get_lang('Username');?>*</label>
-					<input name="username" type="text" value="<?php echo $values['username']?>" /><br />
-          <p class="forminfo"><?php echo cblue_get_lang('UsernameWrong')?></p>
-					<label for="pass1"><?php echo cblue_get_lang('Pass');?>*</label>
-					<input name="pass1" type="password" value="<?php echo $values['pass1']?>" /><br />
-					<label for="pass2"><?php echo cblue_get_lang('Confirmation');?>*</label>
-					<input name="pass2" type="password"  value="<?php echo $values['pass2']?>" /><br />
-					<!--
-					<label for="phone">*Phone number</label>
-					<input name="phone" type="text" /><br />
-					-->
-          <input name="language" type="hidden" value="<?php echo $_SESSION['user_language_choice']?>" />
-					<input name="status" type="hidden" value="5" /> <!-- learner -->
-				</div>
-			</form>
-			<div id="registration-form-submit" class="form-submit" onclick="document.forms['registration-form'].submit();">
+      <?php
+      $content['form']->display();
+      ?>
+			<div id="registration-form-submit" class="form-submit" onclick="document.forms['registration'].submit();">
 				<span><?php echo cblue_get_lang('Subscribe');?></span>
 			</div> <!-- #form-submit -->
 			<div id="links">

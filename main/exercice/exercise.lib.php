@@ -1108,10 +1108,16 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                             $html_link.='&nbsp;';
                         }
                     } else {
+                    	
+                    	$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$results[$i]['exid'].'&id_session='.api_get_session_id().'&height=500&width=750';
+                    	$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'thickbox'))."&nbsp;&nbsp;&nbsp;";
+                    	
+                    	$html_link.= $attempt_link;
+                    	
                         if ($revised) {
-                            $html_link.="<a href='exercise_show.php?".api_get_cidreq()."&id=$id'>" . get_lang('Show') . "</a> ";
+                        	$html_link.= Display::span(get_lang('Validated'), array('class'=>'label_tag notice'));                            
                         } else {
-                            $html_link.='&nbsp;' . get_lang('NoResult');
+                        	$html_link.= Display::span(get_lang('NotValidated'), array('class'=>'label_tag notice'));                            
                         }
                     }
                     $more_details_list = $html_link;

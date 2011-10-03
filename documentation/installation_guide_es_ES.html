@@ -684,58 +684,59 @@ Usted puede habilitar la escritura de ecuaciones matemáticas dentro del editor 
 
 	<li>3. Editar <i>chamilo/main/inc/lib/fckeditor/myconfig.js</i> y
 
-    <ul>
-
-			<li>3.1. Agregar <b>FCKConfig.Plugins.Add("mimetex", "en", sOtherPluginPath ) ;</b> al final del archivo</li>
-
+	    <ul>
+	        <li>3.1. Agregar <b>FCKConfig.Plugins.Add("mimetex", "en", sOtherPluginPath ) ;</b> al final del archivo</li>
 			<li>3.2. Agregar <b>'mimetex'</b> al final de las lineas
-FCKConfig.ToolbarSets donde usted desee que el icono de LaTeX aparezca
-(existe un FCKConfig.ToolbarSets por herramienta). Por ejemplo:
-        <div class="code">FCKConfig.ToolbarSets["Test"] = [<br />
-['Bold','Italic','Underline','StrikeThrough','Subscript','Superscript','Link','Unlink','ImageManager','MP3','OrderedList','UnorderedList','Table','mimetex']<br />
-
-] ;</div>
-
-				Usted puede agregarlo a todas las herramientas, o sólo a alguna de ellas (por ej., documentos y ejercicios)<br />
-        <br />
+	FCKConfig.ToolbarSets donde usted desee que el icono de LaTeX aparezca
+	(existe un FCKConfig.ToolbarSets por herramienta). Por ejemplo:
+	        <div class="code">FCKConfig.ToolbarSets["Test"] = [<br />
+	['Bold','Italic','Underline','StrikeThrough','Subscript','Superscript','Link','Unlink','ImageManager','MP3','OrderedList','UnorderedList','Table','mimetex']<br />
+	
+	] ;</div>
+	
+	        Usted puede agregarlo a todas las herramientas, o sólo a alguna de ellas (por ej., documentos y ejercicios)<br />
+	        <br />
 			</li>
-    </ul>
-	  </li>
+	    </ul>
+    </li>
 
 	<li>4. En raras ocasiones puede ser necesario realizar ajustes manuales editando el fichero /chamilo/main/inc/lib/fckeditor/fckeditor.php</li>
-
 	<li>5. Limpiar la cache de su navegador para probarlo (muy importante). Esto se puede hacer mediante el uso de la página de configuraciones de su navegador</li>
+    <li>6. Realice estos cambios:
 
-    <li>6. Realice estos cambios:</li>
+	<i>Agregar el directorio cgi-bin correspondiente a su configuración de Apache puede ser realizada de esta manera, en Apache 2:</i>
+	
+	<div class="code">
+			  ScriptAlias /cgi-bin/ /var/www/cgi-bin/<br />
+	
+	  &lt;Directory "/var/www/cgi-bin"&gt;<br />
+	
+	        &nbsp;&nbsp;AllowOverride None<br />
+	
+	        &nbsp;&nbsp;Options ExecCGI -MultiViews +SymLinksIfOwnerMatch<br />
+	
+	        &nbsp;&nbsp;Order allow,deny<br />
+	
+	        &nbsp;&nbsp;Allow from all<br />
+	
+	  &lt;/Directory&gt;<br />
+	
+		</div>
+	
+	
+	<i>Agregar un enlace simbólico bajo Windows, puede ser realizado mediante la creación de un
+	acceso directo al archivo mimetex.exe desde el directorio cgi-bin, o bajo
+	Linux usando el siguiente comando:</i>
+	
+	<div class="code">ln -s /var/www/chamilo/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</div>
+	<p>Si no quiere modificar su Apache, alternativamente a  este punto 6: copie mimetex.exe (para Windows) o mimetex.cgi (para Linux) en su cgi-bin/ </p>
+	<p>&nbsp;</p>
+	</li>
+	
+	<li>7. Asegurarse que el archivo mimetex.cgi (o mimetex.exe) ha sido subido al servidor usando el formato BINARY. Es posible que el servidor de un error 500 cuando se intenta entrar a cgi-bin/mimetex.cgi a pesar de que los permisos están correctos.
+	   Probar volviendo a subir el archivo usando FTP (ASCII format) o si no usando el "administrador de archivos" o CPanel. Si el error persiste contactar con el administrador del servidor para habilitar el acceso público del archivo cgi-bin/mimetex.cgi.
+	</li>
 </ul>
-
-<i>Agregar el directorio cgi-bin correspondiente a su configuración de Apache puede ser realizada de esta manera, en Apache 2:</i>
-
-<div class="code">
-		  ScriptAlias /cgi-bin/ /var/www/cgi-bin/<br />
-
-  &lt;Directory "/var/www/cgi-bin"&gt;<br />
-
-        &nbsp;&nbsp;AllowOverride None<br />
-
-        &nbsp;&nbsp;Options ExecCGI -MultiViews +SymLinksIfOwnerMatch<br />
-
-        &nbsp;&nbsp;Order allow,deny<br />
-
-        &nbsp;&nbsp;Allow from all<br />
-
-  &lt;/Directory&gt;<br />
-
-	</div>
-
-
-<i>Agregar un enlace simbólico bajo Windows, puede ser realizado mediante la creación de un
-acceso directo al archivo mimetex.exe desde el directorio cgi-bin, o bajo
-Linux usando el siguiente comando:</i>
-
-<div class="code">ln -s /var/www/chamilo/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</div>
-<p>Si no quiere modificar su Apache, alternativamente a  este punto 6: copie mimetex.exe (para Windows) o mimetex.cgi (para Linux) en su cgi-bin/ </p>
-<p>&nbsp;</p>
 <p>Este procedimiento creará un nuevo icono en su editor en línea de Chamilo, el cual hará posible la inserción de fórmulas matemáticas en sus documentos.</p>
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="8._ASCIIMathML_mathematical_formulas"></a>8. Fórmulas matemáticas con ASCIIMathML</h2>

@@ -616,6 +616,7 @@ You can enable mathematical equations writing inside the Chamilo online editor (
     <li>1. Configure your Apache installation to add a cgi-bin directory that contains a symbolic link to the mimetex.cgi in <i>chamilo/main/inc/lib/mimetex/</i> (*see below, step 4)</li>
     <li>2. Reload your Apache configuration</li>
     <li>3. Edit the online editor's configuration file <i>chamilo/main/inc/lib/fckeditor/myconfig.php</i> and</li>
+    <ul>
     <li>3.1. Enable the mimetex plugin, find the line //$config['LoadPlugin'][] = 'mimetex'; and modify it to be: <b>$config['LoadPlugin'][] = 'mimetex';</b> (remove the double slash)</li>
     <li>3.2. The additional settings <b>$config['MimetexExecutableInstalled']</b> , <b>$config['MimetexExecutableDetectionMethod']</b>
 and <b>$config['MimetexExecutableDetectionTimeout']</b> are configured for best probability of automatic detection of the installed on the server file <i>mimetex.cgi</i> or <i>mimetex.exe</i>.
@@ -627,40 +628,47 @@ Here is an example:
     <div class="code">$config['ToolbarSets']['Normal'] = array(<br /> &nbsp;&nbsp;array('FitWindow','Bold','Image','Link','PasteWord','MP3',<b>'mimetex'</b>,'Table','Subscript','Superscript','ShowBlocks')<br />);</div>
     The item <b>'mimetex'</b> represents the button, you may add it to or remove it from any toolbar.<br /><br />
     </li>
-    <li>4. To install mimetex executable file, make these changes:</li>
-</ul>
+    </ul>
+    <li>4. To install mimetex executable file, make these changes:
+		<p>Add the corresponding cgi-bin directory to your Apache configuration could be done, in Apache 2, like this:</p>
+		<div class="code">
+		      ScriptAlias /cgi-bin/ /var/www/cgi-bin/<br />
+		&lt;Directory "/var/www/cgi-bin"&gt;<br />
+		&nbsp;&nbsp;AllowOverride None<br />
+		&nbsp;&nbsp;Options ExecCGI -MultiViews +SymLinksIfOwnerMatch<br />
+		&nbsp;&nbsp;Order allow,deny<br />
+		&nbsp;&nbsp;Allow from all<br />
+		&lt;/Directory&gt;<br />
+		</div>
+		
+		
+		<p>Adding a symbolic link can be done, under Windows, by creating a
+		  shortcut to the mimetex.exe file from the cgi-bin directory, or under
+		  Linux by issuing the following command:</p>
+		<div class="code">
+		  <p>ln -s /var/www/chamilo/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</p>
+		</div>
+		<p>If you are reluctant to modify your Apache configuration, alternately you may do at step 4 the following:
+		copy mimetex.exe (for windows) or mimetex.cgi (for linux) from <i>chamilo/main/inc/lib/mimetex/</i> directory to your <i>cgi-bin/</i></p>
 
-
-<p>Add the corresponding cgi-bin directory to your Apache configuration could be done, in Apache 2, like this:
-
-    </p>
-<div class="code">
-      ScriptAlias /cgi-bin/ /var/www/cgi-bin/<br />
-&lt;Directory "/var/www/cgi-bin"&gt;<br />
-&nbsp;&nbsp;AllowOverride None<br />
-&nbsp;&nbsp;Options ExecCGI -MultiViews +SymLinksIfOwnerMatch<br />
-&nbsp;&nbsp;Order allow,deny<br />
-&nbsp;&nbsp;Allow from all<br />
-&lt;/Directory&gt;<br />
-    </div>
-
-
-<p>Adding a symbolic link can be done, under Windows, by creating a
-  shortcut to the mimetex.exe file from the cgi-bin directory, or under
-  Linux by issuing the following command:
-
-</p>
-<div class="code">
-  <p>ln -s /var/www/chamilo/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</p>
-</div>
-<p>If you are reluctant to modify your Apache configuration, alternately you may do at step 4 the following:
-copy mimetex.exe (for windows) or mimetex.cgi (for linux) from <i>chamilo/main/inc/lib/mimetex/</i> directory to your <i>cgi-bin/</i></p>
-<ul>
-    <li>5. Make sure that the file mimetex.cgi (or mimetex.exe) has right to be executed by the web-server process. For example, on a Ubuntu Linux system you may write a command like the following:
-        <div class="code">
-            sudo chmod a+x mimetex.cgi
-        </div>
     </li>
+
+	
+	<li>5. Make sure that the file mimetex.cgi (or mimetex.exe) has right to be executed by the web-server process. For example, on a Ubuntu Linux system you may write a command like the following:
+	    <div class="code">
+	        sudo chmod a+x mimetex.cgi
+	    </div>
+	</li>
+	<li>6. Make sure that the file mimetex.cgi (or mimetex.exe) has been uploaded in <b>BINARY</b> format.
+	
+	       This is another common problem; the fix is just to re-upload the file in ASCII format. 
+	       You'll need to consult your FTP program's documentation to figure out how to switch modes.
+           BINARY mode is used for non-text items, such as executables (*.exe), zip files (*.zip), image files (*.jpg, *.gif) and the like. 
+           ASCII mode needs to be used for text only documents, which includes *.txt, *.cgi, *.pl *.css, *.html, etc.
+           <br />
+           You can also try to re upload the mimetex file using the "Upload file" in the "Filemanager" tool in CPanel/Plesk 
+    </li>
+    
 </ul>
 
 <p>As a result of this procedure, a new button becomes available in your Chamilo online editor, that gives you possibility

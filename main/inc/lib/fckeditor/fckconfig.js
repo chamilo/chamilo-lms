@@ -73,7 +73,7 @@ FCKConfig.AdditionalNumericEntities = ''  ;		// Single Quote: "'"
 FCKConfig.FillEmptyBlocks	= true ;
 
 FCKConfig.FormatSource		= true ;
-FCKConfig.FormatOutput		= true ;
+FCKConfig.FormatOutput		= false; //Do not insert \r\n in HTMLs
 FCKConfig.FormatIndentator	= '    ' ;
 
 FCKConfig.EMailProtection = 'none' ; // none | encode | function

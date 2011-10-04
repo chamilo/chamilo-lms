@@ -114,10 +114,9 @@ if (api_get_setting('use_custom_pages') == 'true') {
 				@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
 			}
 			CustomPages::displayPage('registration-feedback');
-	}
-	}
-	else {
-	CustomPages::displayPage('registration');
+		}
+	} else {
+		CustomPages::displayPage('registration');
 	}
 }
 $tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));

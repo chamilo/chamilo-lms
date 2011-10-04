@@ -77,10 +77,11 @@ class UserManager {
 	public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language = '', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id = 0, $extra = null, $encrypt_method = '') {
 		global $_user, $userPasswordCrypted;
 
-		$firstName = Security::remove_XSS($firstName);
-		$lastName = Security::remove_XSS($lastName);
-		$loginName = Security::remove_XSS($loginName);
-		$phone = Security::remove_XSS($phone);
+		$firstName 	= Security::remove_XSS($firstName);
+		$lastName	= Security::remove_XSS($lastName);
+		$loginName 	= Security::remove_XSS($loginName);
+		$phone 		= Security::remove_XSS($phone);
+		
 		// database table definition
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -100,7 +101,7 @@ class UserManager {
 			return api_set_failure('login-pass already taken');
 		}
 		//$password = "PLACEHOLDER";
-		if($encrypt_method == '') {
+		if ($encrypt_method == '') {
 			$password = api_get_encrypted_password($password);
 		} else {
 			if ($userPasswordCrypted === $encrypt_method ) {
@@ -153,7 +154,7 @@ class UserManager {
 
 		} else {
 			//echo "false - failed" ;
-			$return=false;
+			$return = false;
 		}
 
 		if (is_array($extra) && count($extra) > 0) {
@@ -162,7 +163,7 @@ class UserManager {
 				$res = $res && self::update_extra_field_value($return, $fname, $fvalue);
 			}
 		}
-                self::update_extra_field_value($return, 'already_logged_in', 'false');
+		self::update_extra_field_value($return, 'already_logged_in', 'false');
 		return $return;
 	}
 

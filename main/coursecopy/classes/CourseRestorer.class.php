@@ -1034,6 +1034,13 @@ class CourseRestorer
 
 					// check resources inside html from fckeditor tool and copy correct urls into recipient course
 					$quiz->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($quiz->description, $this->course->code, $this->course->destination_path);
+					
+					global $_custom;					
+					if (isset($_custom['exercises_clean_dates_when_restoring']) && $_custom['exercises_clean_dates_when_restoring']) {
+						$quiz->start_time = null;
+						$quiz->end_time   = null;
+					}
+					
 
 					// Normal tests are stored in the database.
 					$sql = "INSERT INTO ".$table_qui." SET

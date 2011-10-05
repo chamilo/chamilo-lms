@@ -129,7 +129,7 @@ if (!empty($my_courses)) {
 		if (!empty($student_count)) {
 			$array[$i]['count_students_accessing'] = $count_students_accessing;
 			$array[$i]['count_students_accessing_percentage'] = round($count_students_accessing / $student_count *100 , 0);
-			$array[$i]['count_students_complete_all_activities_at_50'] = $count_students_complete_all_activities_at_50;
+			$array[$i]['count_students_complete_all_activities_at_50'] = $count_students_complete_all_activities;
 			$array[$i]['count_students_complete_all_activities'] = round($count_students_complete_all_activities / $student_count *100 , 0);;			
 			$array[$i]['average_percentage_activities_completed_per_student'] = round($count_students_complete_all_activities/$student_count*100,2);			
 			$array[$i]['total_time_spent'] = 0;

@@ -191,6 +191,8 @@ if (api_is_allowed_to_edit(false, true)) {
         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=add&amp;content=forum&amp;lp_id='.$lp_id.'"> '.Display::return_icon('new_forum.png', get_lang('AddForum'),'','32').'</a>';
     }
 }
+
+var_dump(api_is_coach());
 echo '</div>';
 
 /* Display Forum Categories and the Forums in it */

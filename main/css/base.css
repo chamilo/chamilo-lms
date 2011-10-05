@@ -3416,7 +3416,7 @@ div.admin_section h4 {
     display: block;
     font-size: 100%;
     line-height: 150%;
-    margin: -27px 0 0 23px;
+    margin: -16px 0 0 23px;
     padding: 0 0 5px;
     width: 88%;
 }
@@ -3797,3 +3797,58 @@ form div.error input, form div.error textarea {
 .invisible h2 {
     color: #999;
 }
+
+
+
+/************************************************************************************
+REFLECTION
+*************************************************************************************/
+
+
+.image-wrap {
+    margin-right: 10px;
+    position: relative; 
+    display: inline-block; 
+    width: 64px; 
+    height: 64px;'
+}
+.box-image {
+    margin: 0 0 50px;
+    border-top: solid 1px #ccc;
+}
+
+
+
+.reflection .image-wrap {
+    -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 2px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.5);
+    -moz-box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 2px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.5);
+    box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 2px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.5);
+    -webkit-transition: .5s;
+    -moz-transition: .5s;
+    transition: .5s;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+}
+.reflection .image-wrap:after {
+    position: absolute;
+    content: ' ';
+    width: 100%;
+    height: 30px;
+    bottom: -31px;
+    left: 0;
+    -webkit-border-top-left-radius: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -moz-border-radius-topleft: 20px;
+    -moz-border-radius-topright: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background: -moz-linear-gradient(top, rgba(0,0,0,.3) 0%, rgba(255,255,255,0) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,.3)), color-stop(100%,rgba(255,255,255,0)));
+    background: linear-gradient(top, rgba(0,0,0,.3) 0%,rgba(255,255,255,0) 100%);
+}
+.reflection .image-wrap:hover {
+    position: relative;
+    top: -8px;
+}
+

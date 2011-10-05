@@ -290,6 +290,8 @@ class SystemAnnouncementManager {
 	 * @return mixed  insert_id on success, false on failure
 	 */
 	public static function add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null, $send_mail = 0, $add_to_calendar = false ) {
+		
+		$original_content = $content;
 		$a_dateS = explode(' ',$date_start);
 		$a_arraySD = explode('-',$a_dateS[0]);
 		$a_arraySH = explode(':',$a_dateS[1]);
@@ -345,7 +347,8 @@ class SystemAnnouncementManager {
 		}
 		if ($add_to_calendar) {
 		    require_once 'calendar.lib.php';
-		    $agenda_id = agenda_add_item($title, $content, $date_start, $date_end);
+		    
+		    $agenda_id = agenda_add_item($title, $original_content, $date_start, $date_end);
 		}		
 		return Database::insert_id();
 	}

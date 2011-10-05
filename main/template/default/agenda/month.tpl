@@ -79,7 +79,8 @@ $(document).ready(function() {
 		eventRender: function(event, element) {
 			if (event.description) {
 				element.qtip({
-		            content: event.description
+		            content: event.description,
+		            position: { at:'bottom left'},	
 		        });
 			}
 	        

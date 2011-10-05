@@ -31,13 +31,16 @@ class FlatViewTable extends SortableTable
 	function FlatViewTable ($selectcat, $users= array (), $evals= array (), $links= array (), $limit_enabled = false, $offset = 0, $addparams = null) {
 		parent :: __construct ('flatviewlist', null, null, (api_is_western_name_order() xor api_sort_by_first_name()) ? 1 : 0);
 		$this->datagen = new FlatViewDataGenerator($users, $evals, $links);
-
+		
 		$this->selectcat = $selectcat;
 		$this->limit_enabled = $limit_enabled;
 		$this->offset = $offset;
 		if (isset ($addparams)) {
 			$this->set_additional_parameters($addparams);
 		}
+		
+		// step 2: generate rows: students
+		$this->datagen->category = $this->selectcat;
 	}
 
 	/**
@@ -416,7 +419,6 @@ class FlatViewTable extends SortableTable
 		$is_western_name_order = api_is_western_name_order();
 
 		// create page navigation if needed
-
 		$totalitems = $this->datagen->get_total_items_count();
 		if ($this->limit_enabled && $totalitems > LIMIT) {
 			$selectlimit = LIMIT;
@@ -493,8 +495,7 @@ class FlatViewTable extends SortableTable
 
 		//$this->set_header($column++, get_lang('Total'));
 
-		// step 2: generate rows: students
-
+		
 		$data_array = $this->datagen->get_data($users_sorting, $from, $this->per_page, $this->offset, $selectlimit);
 
 		$table_data = array();

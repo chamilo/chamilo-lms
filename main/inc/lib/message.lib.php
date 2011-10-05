@@ -558,7 +558,7 @@ class MessageManager
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $current_uid = api_get_user_id();
         $group_id = intval($group_id);
-        $query = "SELECT * FROM $table_message WHERE group_id=$group_id AND msg_status <> ".MESSAGE_STATUS_OUTBOX." ORDER BY id";
+        $query = "SELECT * FROM $table_message WHERE group_id = $group_id AND msg_status <> ".MESSAGE_STATUS_OUTBOX." ORDER BY id ";
         $rs = Database::query($query);
         $data = array();
         $parents = array();
@@ -1004,7 +1004,8 @@ class MessageManager
         $main_message 	= self::get_message_by_id($topic_id);                
         $group_info		= GroupPortalManager::get_group_data($group_id);
         $rows 			= self::get_messages_by_group_by_message($group_id, $topic_id);            
-        $rows 			= self::calculate_children($rows, $topic_id);                
+        $rows 			= self::calculate_children($rows, $topic_id);
+        
         
         $current_user_id  = api_get_user_id();
         

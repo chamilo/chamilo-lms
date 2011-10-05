@@ -107,19 +107,22 @@ abstract class Question
         } else {
             global $course;
             $course_info = api_get_course_info();
-        }
+        }        
+        $course_id = $course_info['real_id'];
 
 		$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST,          $course_info['db_name']);
 		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION,      $course_info['db_name']);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION, $course_info['db_name']);
         
-		$sql="SELECT question,description,ponderation,position,type,picture,level,extra FROM $TBL_QUESTIONS WHERE id= $id ";
+		$sql = "SELECT question,description,ponderation,position,type,picture,level,extra FROM $TBL_QUESTIONS WHERE c_id = $course_id AND id = $id ";
         
-		$result=Database::query($sql);
+		$result = Database::query($sql);
 
 		// if the question has been found
 		if ($object = Database::fetch_object($result)) {
+			
 			$objQuestion 				= Question::getInstance($object->type);
+			
 			$objQuestion->id			= $id;
 			$objQuestion->question		= $object->question;
 			$objQuestion->description	= $object->description;
@@ -130,13 +133,15 @@ abstract class Question
 			$objQuestion->level			= (int) $object->level;
             $objQuestion->extra         = $object->extra;
             $objQuestion->course        = $course_info;
-
-			$sql="SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE question_id='".$id."'";
-			$result=Database::query($sql);
+            
+			$sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
+			$result_exercise_list = Database::query($sql);
 
 			// fills the array with the exercises which this question is in
-			while($object=Database::fetch_object($result)) {
-				$objQuestion->exerciseList[]=$object->exercice_id;
+			if ($result_exercise_list) {
+				while ($obj = Database::fetch_object($result_exercise_list)) {
+					$objQuestion->exerciseList[] = $obj->exercice_id;
+				}
 			}
 			return $objQuestion;
 		}
@@ -473,6 +478,7 @@ abstract class Question
 	 * @return - boolean - true if copied, otherwise false
 	 */
 	function exportPicture($questionId, $course_info) {
+		$course_id = $course_info['real_id'];
         $TBL_QUESTIONS  = Database::get_course_table(TABLE_QUIZ_QUESTION, $course_info['db_name']);
         $destination_path    = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document/images';
         $source_path         = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/document/images';        		
@@ -482,7 +488,7 @@ abstract class Question
 			$picture=explode('.',$this->picture);
 			$Extension=$picture[sizeof($picture)-1];
 			$picture='quiz-'.$questionId.'.'.$Extension;
-			$sql="UPDATE $TBL_QUESTIONS SET picture='".Database::escape_string($picture)."' WHERE id='".intval($questionId)."'";            
+			$sql="UPDATE $TBL_QUESTIONS SET picture='".Database::escape_string($picture)."' WHERE c_id = $course_id AND id='".intval($questionId)."'";            
 			Database::query($sql);            
 			return @copy($source_path.'/'.$this->picture, $destination_path.'/'.$picture)?true:false;
 		}
@@ -946,20 +952,24 @@ abstract class Question
             $description  = DocumentManager::replace_urls_inside_content_html_from_copy_course($description, $this->course['id'], $course_info['id']);
             $question     = DocumentManager::replace_urls_inside_content_html_from_copy_course($question, $this->course['id'], $course_info['id']);
         }
+        
+        $course_id = $course_info['real_id'];
                 
         $options = self::readQuestionOption($this->id);  
         //Inserting in the new course db / or the same course db
-		$sql="INSERT INTO $TBL_QUESTIONS(question, description, ponderation, position, type, level, extra ) VALUES('".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."' ,'".Database::escape_string($level)."' ,'".Database::escape_string($extra)."'  )";
+		$sql = "INSERT INTO $TBL_QUESTIONS (c_id, question, description, ponderation, position, type, level, extra ) 
+				VALUES('$course_id', '".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."' ,'".Database::escape_string($level)."' ,'".Database::escape_string($extra)."'  )";
 		Database::query($sql);    
             
-		$new_question_id =Database::insert_id();        
+		$new_question_id = Database::insert_id();        
         
         if (!empty($options)) {
             //Saving the quiz_options      
             foreach ($options as $item) {
-                $item['question_id'] = $new_question_id;
+                $item['question_id'] 	= $new_question_id;
+                $item['c_id'] 			= $course_id;
                 unset($item['id']); 
-                Database::insert($TBL_QUESTION_OPTIONS,$item);	
+                Database::insert($TBL_QUESTION_OPTIONS, $item);	
             }
         }
         

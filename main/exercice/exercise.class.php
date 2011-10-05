@@ -47,6 +47,7 @@ class Exercise {
 	public $expired_time;
 	public $course;
 	public $propagate_neg;
+	public $review_answers; //
 
 	 
 	/**
@@ -70,12 +71,13 @@ class Exercise {
 		$this->results_disabled = 1;
 		$this->expired_time 	= '0000-00-00 00:00:00';
 		$this->propagate_neg    = 0;
+		$this->review_answers	= false;
 
 		if (!empty($course_id)) {
-			$this->course_id        =  intval($course_id);
-			$course_info            =  api_get_course_info_by_id($this->course_id);
+			$this->course_id    =  intval($course_id);
+			$course_info        =  api_get_course_info_by_id($this->course_id);
 		} else {
-			$course_info = api_get_course_info();
+			$course_info 		= api_get_course_info();
 		}
 		$this->course   = $course_info;
 
@@ -92,7 +94,6 @@ class Exercise {
 		$TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION,$this->course['db_name']);
 		$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST,$this->course['db_name']);
 		$TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION,$this->course['db_name']);
-		#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 		$id  = intval($id);
 		$sql = "SELECT * FROM $TBL_EXERCICES WHERE id = ".$id;
 		$result = Database::query($sql);
@@ -112,7 +113,9 @@ class Exercise {
 			$this->attempts 		= $object->max_attempt;
 			$this->feedbacktype 	= $object->feedback_type;
 			$this->propagate_neg    = $object->propagate_neg;
-				
+		
+			$this->review_answers   = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;  
+			
 			if ($object->end_time != '0000-00-00 00:00:00') {
 				$this->end_time 	= api_get_local_time($object->end_time);
 			}
@@ -423,6 +426,9 @@ class Exercise {
 	function updatePropagateNegative($value) {
 		$this->propagate_neg = $value;
 	}
+	function updateReviewAnswers($value) {
+		$this->review_answers = (isset($value) && $value) ? true : false;
+	}
 
 	/**
 	 * changes the exercise sound file
@@ -543,6 +549,8 @@ class Exercise {
 		$random_answers = $this->random_answers;
 		$active 		= $this->active;
 		$propagate_neg  = $this->propagate_neg;
+		$review_answers = (isset($this->review_answers) && $this->review_answers) ? 1 : 0;
+		
 		$session_id 	= api_get_session_id();
 		 
 		//If direct we do not show results
@@ -574,10 +582,11 @@ class Exercise {
 					max_attempt    ='".Database::escape_string($attempts)."',
         			expired_time   ='".Database::escape_string($expired_time)."',
         			propagate_neg  ='".Database::escape_string($propagate_neg)."',
+        			review_answers  ='".Database::escape_string($review_answers)."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
 			}
+			
 			$sql .= " WHERE id='".Database::escape_string($id)."'";
-
 			Database::query($sql);
 
 			// update into the item_property table
@@ -588,7 +597,8 @@ class Exercise {
 			}
 		} else {
 			// creates a new exercise
-			$sql="INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers,active, results_disabled, max_attempt, feedback_type, expired_time, session_id)
+			$sql="INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers,
+											  active, results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers)
 					VALUES(
 						".api_get_course_int_id().",
 						'$start_time','$end_time',
@@ -603,10 +613,11 @@ class Exercise {
 						'".Database::escape_string($attempts)."',
 						'".Database::escape_string($feedbacktype)."',
 						'".Database::escape_string($expired_time)."',
-						'".Database::escape_string($session_id)."'
+						'".Database::escape_string($session_id)."',
+						'".Database::escape_string($review_answers)."'
 						)";
 			Database::query($sql);
-			$this->id=Database::insert_id();
+			$this->id = Database::insert_id();
 			// insert into the item_property table
 
 			api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizAdded',api_get_user_id());
@@ -883,7 +894,6 @@ class Exercise {
 		$form->add_html_editor('exerciseDescription', get_lang('langExerciseDescription'), false, false, $editor_config);
 		$form->addElement ('html','</div>');
 
-
 		$form->addElement('html','<div class="row">
 			<div class="label">&nbsp;</div>
 			<div class="formw">
@@ -980,8 +990,6 @@ class Exercise {
 				}
 			}
 
-
-
 			$random = array();
 			$option=array();
 			$max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
@@ -1029,6 +1037,9 @@ class Exercise {
 			//$check_option=$this->selectType();
 			$diplay = 'block';							
 			$form->addElement('checkbox', 'propagate_neg',get_lang('PropagateNegativeResults'),null);
+			
+			$form->addElement('checkbox', 'review_answers',get_lang('ReviewAnswers'),null);
+			
 				
 			$form->addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');
 
@@ -1112,6 +1123,9 @@ class Exercise {
 				$defaults['exerciseFeedbackType'] = $this->selectFeedbackType();
 				$defaults['results_disabled'] = $this->selectResultsDisabled();
 				$defaults['propagate_neg'] = $this->selectPropagateNeg();
+				
+				$defaults['review_answers'] = $this->review_answers;
+				
 
 				if (($this->start_time!='0000-00-00 00:00:00'))
 				$defaults['activate_start_date_check'] = 1;
@@ -1169,6 +1183,8 @@ class Exercise {
 		$this->updateResultsDisabled($form->getSubmitValue('results_disabled'));
 		$this->updateExpiredTime($form->getSubmitValue('enabletimercontroltotalminutes'));
 		$this->updatePropagateNegative($form->getSubmitValue('propagate_neg'));
+		
+		$this->updateReviewAnswers($form->getSubmitValue('review_answers'));
 
 		if ($form->getSubmitValue('activate_start_date_check') == 1) {
 			$start_time = $form->getSubmitValue('start_time');
@@ -1429,19 +1445,25 @@ class Exercise {
 
 		$new_exercise_id = $exercise_obj->selectId();
 		$question_list 	 = $exercise_obj->selectQuestionList();
-
-		//Question creation
-		foreach ($question_list as $old_question_id) {
-			$old_question_obj = Question::read($old_question_id);
-			$new_id = $old_question_obj->duplicate();
-
-			$new_question_obj = Question::read($new_id);
-
-			$new_question_obj->addToList($new_exercise_id);
-			// This should be moved to the duplicate function
-			$new_answer_obj = new Answer($old_question_id);
-			$new_answer_obj->read();
-			$new_answer_obj->duplicate($new_id);
+		
+		if (!empty($question_list)) {
+			//Question creation
+			
+			foreach ($question_list as $old_question_id) {
+				$old_question_obj = Question::read($old_question_id);
+				$new_id = $old_question_obj->duplicate();
+				if ($new_id) {
+					$new_question_obj = Question::read($new_id);
+					
+					if (isset($new_question_obj) && $new_question_obj) {	
+						$new_question_obj->addToList($new_exercise_id);
+						// This should be moved to the duplicate function
+						$new_answer_obj = new Answer($old_question_id);
+						$new_answer_obj->read();
+						$new_answer_obj->duplicate($new_id);
+					}
+				}
+			}
 		}
 	}
 
@@ -1563,11 +1585,16 @@ class Exercise {
 			//User
 			if (api_is_allowed_to_session_edit()) {
 				if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
-					$label = get_lang('ReviewQuestions');
-					$class = 'accept';
+					if ($this->review_answers) {
+						$label = get_lang('ReviewQuestions');
+						$class = 'a_button blue medium';
+					} else {
+						$label = get_lang('ValidateAnswers');
+						$class = 'a_button green';
+					}
 				} else {
 					$label = get_lang('NextQuestion');
-					$class = 'next';
+					$class = 'a_button blue medium';
 				}
 				if ($this->type == ONE_PER_PAGE) {	
 
@@ -1577,18 +1604,24 @@ class Exercise {
 					}
 					
 					//Next question
-					$all_button .= '<a href="javascript://" class="a_button blue medium" onclick="save_now('.$question_id.'); ">'.$label.'</a>';
-					
-				
+					$all_button .= '<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.'); ">'.$label.'</a>';
 					
 					//$all_button .= '&nbsp;<span id="save_all_reponse"></span>';
 					$all_button .= '<span id="save_for_now_'.$question_id.'"></span>&nbsp;';
 					
 					
 					$html .= $all_button;
-				} else {
-					$all_button = '<a href="javascript://" class="a_button green" onclick="validate_all(); ">'.get_lang('ReviewQuestions').'</a>';
+				} else {					
+					if ($this->review_answers) {
+						$all_label = get_lang('ReviewQuestions');
+						$class = 'a_button blue medium';
+					} else {
+						$all_label = get_lang('ValidateAnswers');
+						$class = 'a_button green';
+					}
+					$all_button = '<a href="javascript://" class="'.$class.'" onclick="validate_all(); ">'.$all_label.'</a>';
 					$all_button .= '&nbsp;<span id="save_all_reponse"></span>';
+					
 					$html .= $all_button;
 				}
 	

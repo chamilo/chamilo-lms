@@ -105,11 +105,6 @@ $safe_lp_id             = ($learnpath_id == '')             ? 0 : $learnpath_id;
 $safe_lp_item_id        = ($learnpath_item_id == '')        ? 0 : $learnpath_item_id;
 $safe_lp_item_view_id   = ($learnpath_item_view_id == '')   ? 0 : $learnpath_item_view_id;
 
-//if reminder ends we jump to the exexrcise_reminder
-if ($remind_question_id == -1) {
-	header('Location: exercise_reminder.php?origin='.$origin.'&exerciseId='.$exerciseId);
-	exit;
-}
 
 //Table calls
 $stat_table 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
@@ -152,6 +147,16 @@ if (!is_object($objExercise)) {
     header('Location: exercice.php');
     exit;
 }
+
+
+//if reminder ends we jump to the exercise_reminder
+if ($objExercise->review_answers) {
+	if ($remind_question_id == -1) {
+		header('Location: exercise_reminder.php?origin='.$origin.'&exerciseId='.$exerciseId);
+		exit;
+	}
+}
+
 
 $current_timestamp 	= time();
 $my_remind_list 	= array();
@@ -509,10 +514,13 @@ if ($question_count != 0) {
 	                
 	                //if ($debug) { error_log('Updating track_e_exercises '.$update_query); }                    
 	                Database::query($update_query);*/
-	            }                           
-	            header('Location: exercise_reminder.php?'.$params);
-	            exit;
-	            //header("Location: exercise_submit.php?exerciseId=$exerciseId");
+	            }        
+	            if ($objExercise->review_answers) {                   
+	            	header('Location: exercise_reminder.php?'.$params);
+	            	exit;
+	            } else {
+	            	header("Location: exercise_result.php?exe_id=$exe_id&origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");	            	
+	            }
 	        }            
 	    } else {
 	        if ($debug) { error_log('Redirecting to exercise_submit.php'); }
@@ -718,12 +726,19 @@ if ($reminder == 2)  {
 			}  
         }
     } else {    	
-    	header("Location: exercise_reminder.php?$params");
-    	exit;
+    	if ($objExercise->review_answers) {
+	    	header("Location: exercise_reminder.php?$params");
+	    	exit;
+    	}
     }
     //var_dump($remind_question_id, $my_remind_list, $data_tracking, $current_question);
 }
 
+if ($objExercise->review_answers) {
+	$script_php = 'exercise_reminder.php';
+} else {
+	$script_php = 'exercise_result.php';
+}
 
 if (!empty($error)) {
     Display :: display_error_message($error, false);
@@ -887,7 +902,7 @@ if (!empty($error)) {
                     	if (return_value == "ok") {                                  
                     		//$("#save_all_reponse").html("'.addslashes(Display::return_icon('accept.png')).'");
                     		if (validate == "validate") {
-                            	window.location = "exercise_reminder.php?'.$params.'&" + lp_data;
+                            	window.location = "'.$script_php.'?'.$params.'&" + lp_data;
                             } else {
                             	$("#save_all_reponse").html("'.addslashes(Display::return_icon('accept.png')).'");
                             }
@@ -988,11 +1003,13 @@ if (!empty($error)) {
 	            $button  = '<a href="javascript://" class="a_button orange medium" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
 	            $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
 	            $exercise_actions  .= Display::span($button, array('class'=>'exercise_save_now_button'));                			      
-			}		
-			
-			$remind_question_div  = Display::input('checkbox', 'remind_list['.$questionId.']',  '', $attributes);
-			$remind_question_div .= Display::tag('label', get_lang('ReviewQuestionLater'), array('for' =>'remind_list['.$questionId.']'));
-			$exercise_actions    .= Display::span($remind_question_div, array('class'=>'exercise_save_now_button'));		
+			}
+					
+			if ($objExercise->review_answers) {
+				$remind_question_div  = Display::input('checkbox', 'remind_list['.$questionId.']',  '', $attributes);
+				$remind_question_div .= Display::tag('label', get_lang('ReviewQuestionLater'), array('for' =>'remind_list['.$questionId.']'));
+				$exercise_actions    .= Display::span($remind_question_div, array('class'=>'exercise_save_now_button'));		
+			}
 			
 			echo Display::div($exercise_actions, array('class'=>'exercise_actions'));		
 		

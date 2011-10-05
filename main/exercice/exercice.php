@@ -815,10 +815,14 @@ if ($show == 'test') {
 
                     $random_label = '';                    
                     if ($row['random'] > 0) {
-                       $random_label = ' ('.get_lang('Random').') ';
-                       $number_of_questions = $row['random'] . ' ' . api_strtolower(get_lang(($row['random'] > 1  ? 'Questions' : 'Question'))) .$random_label;
+                       	$random_label = ' ('.get_lang('Random').') ';                       	
+                       	$number_of_questions = $row['random'] . ' ' .$random_label;
+                       	//Bug if we set a random value bigger than the real number of questions 
+                       	if ($row['random'] > $rowi) {
+							$number_of_questions = $rowi. ' ' .$random_label;							
+                       	}
                     } else {                    
-                       $number_of_questions = $rowi . ' ' . api_strtolower(get_lang(($rowi > 1 || $rowi == 0 ? 'Questions' : 'Question')));
+                       $number_of_questions = $rowi;
                     }                
      
                     //Attempts                    

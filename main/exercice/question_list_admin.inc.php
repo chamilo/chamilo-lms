@@ -16,19 +16,20 @@
 */
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
-if(!defined('ALLOWED_TO_INCLUDE')) {
+if (!defined('ALLOWED_TO_INCLUDE')) {
 	exit();
 }
 // deletes a question from the exercise (not from the data base)
 if ($deleteQuestion) {
 	// if the question exists
-	if($objQuestionTmp = Question::read($deleteQuestion)) {
+	if ($objQuestionTmp = Question::read($deleteQuestion)) {
 		$objQuestionTmp->delete($exerciseId);
 
 		// if the question has been removed from the exercise
-		if($objExercise->removeFromList($deleteQuestion)) {
+		if ($objExercise->removeFromList($deleteQuestion)) {
 			$nbrQuestions--;
-		}
+		}		
+		//Random -1 if 
 	}
 	// destruction of the Question object
 	unset($objQuestionTmp);

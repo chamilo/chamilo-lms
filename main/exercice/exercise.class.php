@@ -827,12 +827,18 @@ class Exercise {
 	 */
 	function removeFromList($questionId) {
 		// searches the position of the question ID in the list
-		$pos=array_search($questionId,$this->questionList);
+		$pos = array_search($questionId,$this->questionList);
 
 		// question not found
-		if($pos === false) {
+		if ($pos === false) {
 			return false;
 		} else {
+			if ($this->isRandom()) {
+                if (count($this->questionList) >= $this->random) {
+    				$this->random -= 1; 
+                    $this->save();
+                }
+			}
 			// deletes the position from the array containing the wanted question ID
 			unset($this->questionList[$pos]);
 

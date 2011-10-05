@@ -810,14 +810,6 @@ div.row div.label {
 * html .row .formw input {
     margin-left: -1em;
 }
-[dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
-    float: left;
-    text-align: right;
-}
-[dir=rtl] div.row div.label, [dir=ltr] div.row div.formw {
-    float: right;
-    text-align: left;
-}
 /* Specific forms: profile,add course,advanced search,advanced course search,etc.. */
 #add_course, #profile, #advanced_course_search, #advanced_search, #category, #course_user_import, #export_users, #update_course, #user_add, #user_import {
     border: 1px solid #ddd;

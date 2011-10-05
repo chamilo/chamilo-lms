@@ -502,23 +502,6 @@ form div.row {
 	border: 1px solid #bbb;
 	font-weight: bold;
 }
-form div.row div.label {
-	float: left;
-	width: 18%;
-	text-align: right;
-}
-form div.row div.formw {
-	width: 80%;
-	float:left;
-}
-[dir=ltr] form div.row div.label, [dir=rtl] form div.row div.formw {
-	float: left;
-	text-align: right;
-}
-[dir=rtl] form div.row div.label, [dir=ltr] form div.row div.formw {
-	float: right;
-	text-align: left;
-}
 form span.form_required {
 	color: #f00;
 }

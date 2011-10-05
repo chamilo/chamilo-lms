@@ -1214,10 +1214,6 @@ a.nobold:hover {
 /*****************************************************
  *  FORM STYLES                                      *
  *****************************************************/
-div.row {
-	clear: both;
-	padding-top: 8px;
-}
 div.row div.form_header {
 	white-space: nowrap;
 	padding: 2px;
@@ -1226,23 +1222,6 @@ div.row div.form_header {
 	background-position:bottom;
 	color: #FFFFFF;
 	font-weight: bold;
-}
-div.row div.label {
-	float: left;
-	width: 18%;
-	text-align: right;
-}
-div.row div.formw {
-	width: 80%;
-	float:left;
-}
-[dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
-	float: left;
-	text-align: right;
-}
-[dir=rtl] div.row div.label, [dir=ltr] div.row div.formw {
-	float: right;
-	text-align: left;
 }
 span.form_required {
 	color: #f00;

@@ -630,34 +630,6 @@ a.nobold:hover {
 /*****************************************************
  *  FORM STYLES                                      *
  *****************************************************/
-div.row {
-	clear: both;
-	padding-top: 5px;
-}
-div.row div.form_header {
-	white-space: nowrap;
-	padding: 2px;
-	background-color: #E5EDF9;
-	border: 1px solid #4271B5;
-}
-div.row div.label {
-	display: inline;
-	float: left;
-	width: 18%;
-	text-align: right;
-}
-div.row div.formw {
-	display: inline;
-	width: 80%;
-}
-[dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
-	float: left;
-	text-align: right;
-}
-[dir=rtl] div.row div.label, [dir=ltr] div.row div.formw {
-	float: right;
-	text-align: left;
-}
 span.form_required {
 	color: #f00;
 }

@@ -1045,23 +1045,6 @@ div.row div.form_header {
 	background-color: #E5EDF9;
 	border: 1px solid #4271B5;
 }
-div.row div.label {
-	float: left;
-	width: 18%;
-	text-align: right;
-}
-div.row div.formw {
-	width: 80%;
-	float:left;
-}
-[dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
-	float: left;
-	text-align: right;
-}
-[dir=rtl] div.row div.label, [dir=ltr] div.row div.formw {
-	float: right;
-	text-align: left;
-}
 span.form_required {
 	color: #f00;
 }

@@ -132,29 +132,34 @@ if (file_exists($course_path.'/course-pic85x85.png')) {
 }
 $form->addElement('html', $image_html);
 
-$visual_code=$form->addElement('text', 'visual_code', get_lang('Code'));
-$visual_code->freeze();
-$form->applyFilter('visual_code', 'strtoupper');
-//$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
-$prof = &$form->addElement('select', 'tutor_name', get_lang('Teacher'), $a_profs, array('style'=>'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_name'));
-$form->applyFilter('tutor_name', 'html_filter');
 
-$prof -> setSelected($s_selected_tutor);
 $form->add_textfield('title', get_lang('Title'), true, array('size' => '60'));
 //$form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
+//$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
+$prof = &$form->addElement('select', 'tutor_name', get_lang('Teacher'), $a_profs, array('style'=>'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_name'));
+$form->applyFilter('tutor_name', 'html_filter');
+$prof -> setSelected($s_selected_tutor);
+
+/*$visual_code=$form->addElement('text', 'visual_code', get_lang('Code'));
+$visual_code->freeze();
+$form->applyFilter('visual_code', 'strtoupper');*/
+
+
 $form->addElement('select', 'category_code', get_lang('Fac'), $categories, array('style'=>'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
+
+
+$form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
+
+
+
 $form->add_textfield('department_name', get_lang('Department'), false, array('size' => '60'));
-//$form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
 $form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array('size' => '60'));
-//$form->applyFilter('department_url', 'html_filter');
-
 $form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
-$form->addElement('select_language', 'course_language', get_lang('Ln'));
-$form->addElement('static', null, '&nbsp;', get_lang('TipLang'));
+
 
 // Picture
 $form->addElement('file', 'picture', get_lang('AddPicture'));

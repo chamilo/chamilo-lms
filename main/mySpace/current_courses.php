@@ -25,6 +25,11 @@ $array = array();
 $i = 0;
 if (!empty($my_courses)) {
 	foreach ($my_courses as $course) {
+		
+		//Only show open courses
+		if ($course_info['visibility'] == 0) {
+			continue;
+		}
 		//$array[$i]['course'] = $course;
 		
 		$course_code = $course['course_code'];

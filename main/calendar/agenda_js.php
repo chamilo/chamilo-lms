@@ -21,9 +21,7 @@ $htmlHeadXtra[] = api_get_js('fullcalendar/fullcalendar.min.js');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/fullcalendar/fullcalendar.css');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/jquery.qtip.min.css');
 
-$tpl	= new Template(get_lang('Agenda'));
 $type  	= isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ?  $_REQUEST['type'] : 'personal';
-
 if (api_is_platform_admin() && $type == 'admin') {	
 	$type = 'admin';
 }
@@ -31,7 +29,19 @@ if (api_is_platform_admin() && $type == 'admin') {
 if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {	
 	$type = 'course';
 }
+switch($type) {
+	case 'admin':		
+		$this_section = SECTION_PLATFORM_ADMIN;
+		break;
+	case 'course':
+		$this_section = SECTION_COURSES;
+		break;
+	case 'personal':
+		$this_section = SECTION_MYAGENDA;
+		break;
+}
 
+$tpl	= new Template(get_lang('Agenda'));
 $can_add_events = 0;
 if (api_is_platform_admin() && $type == 'admin') {
 	$can_add_events = 1;

@@ -125,4 +125,6 @@ ALTER TABLE lp ADD COLUMN hide_toc_frame TINYINT NOT NULL DEFAULT 0;
 ALTER TABLE lp ADD COLUMN seriousgame_mode TINYINT NOT NULL DEFAULT 0;
 ALTER TABLE lp_item_view modify column suspend_data longtext;
 INSERT INTO course_setting(variable,value,category) VALUES ('course_grading_model','','gradebook');
+ALTER TABLE quiz ADD COLUMN review_answers INT NOT NULL DEFAULT 0;
+
 

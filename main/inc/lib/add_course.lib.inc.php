@@ -626,8 +626,7 @@ function update_Db_course($course_db_name = null) {
     */
 
     // Exercise tool - Tests/exercises
-    $sql = "
-        CREATE TABLE `".$TABLEQUIZ . "` (
+    $sql = "CREATE TABLE `".$TABLEQUIZ . "` (
         $add_to_all_tables        
         id mediumint unsigned NOT NULL auto_increment,
         title varchar(255) NOT NULL,
@@ -646,6 +645,7 @@ function update_Db_course($course_db_name = null) {
         expired_time int NOT NULL default '0',
         session_id smallint default 0,
         propagate_neg INT NOT NULL DEFAULT 0,
+        review_answers INT NOT NULL DEFAULT 0,
         PRIMARY KEY (c_id, id)
         )" . $charset_clause;
     Database::query($sql);

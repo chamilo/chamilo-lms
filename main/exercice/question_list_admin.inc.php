@@ -19,30 +19,8 @@
 if(!defined('ALLOWED_TO_INCLUDE')) {
 	exit();
 }
-/*
-// moves a question up in the list
-if(isset($_GET['moveUp'])) {
-	$check = Security::get_token('get');
-	if ($check) {
-		$objExercise->moveUp(intval($_GET['moveUp']));
-		$objExercise->save();
-	}
-	Security::clear_token();
-}
-
-// moves a question down in the list
-if(isset($_GET['moveDown'])) {
-	$check = Security::get_token('get');
-	if ($check) {
-		$objExercise->moveDown(intval($_GET['moveDown']));
-		$objExercise->save();
-	}
-	Security::clear_token();
-}
-*/
 // deletes a question from the exercise (not from the data base)
-if($deleteQuestion) {
-
+if ($deleteQuestion) {
 	// if the question exists
 	if($objQuestionTmp = Question::read($deleteQuestion)) {
 		$objQuestionTmp->delete($exerciseId);
@@ -74,8 +52,7 @@ if($deleteQuestion) {
 
 <script>
 $(function() {    
-    $( "#dialog:ui-dialog" ).dialog( "destroy" );
-        
+    $( "#dialog:ui-dialog" ).dialog( "destroy" );        
     $( "#dialog-confirm" ).dialog({
             autoOpen: false,
             show: "blind",                
@@ -162,7 +139,9 @@ echo '</div><div style="clear:both;"></div>';
 echo '<div id="message"></div>';
 $token = Security::get_token();
 //deletes a session when using don't know question type (ugly fix)
-unset($_SESSION['less_answer']); 
+unset($_SESSION['less_answer']);
+ 
+echo '<div id="question_list">';
 
 if ($nbrQuestions) {
     $my_exercise = new Exercise();
@@ -170,9 +149,7 @@ if ($nbrQuestions) {
     $my_exercise->read($_GET['exerciseId']);
 	$questionList=$my_exercise->selectQuestionList();    
         
-	if (is_array($questionList)) {      
-	      
-        echo '<div id="question_list">';        		
+	if (is_array($questionList)) {		
 		foreach($questionList as $id) {
 			//To avoid warning messages
 			if (!is_numeric($id)) {
@@ -220,7 +197,8 @@ if ($nbrQuestions) {
         echo '</div>';
 	}
 }
-echo '</div>';
 if(!$nbrQuestions) {	
   	echo Display::display_warning_message(get_lang('NoQuestion'));
 }
+
+echo '</div>';

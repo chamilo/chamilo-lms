@@ -22,7 +22,8 @@ class FlatViewDataGenerator
 	private $users;
 	private $evals;
 	private $links;
-	private $evals_links;
+	private $evals_links;	
+	public  $category = array();
 
 	/**
 	 * Constructor
@@ -59,10 +60,24 @@ class FlatViewDataGenerator
 		$headers[] = get_lang('FirstName');
 		if (!isset($items_count)) {
 			$items_count = count($this->evals_links) - $items_start;
+		}		
+		
+		$count_categories = 1;
+		
+		if (isset($this->category)) {
+			$categories = Category::load(null, null, null, $this->category->get_id());				
+			if (!empty($categories)) {
+				$count_categories = count($categories) ;
+			}
 		}
+		
+		
 		for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
 			$item = $this->evals_links [$count + $items_start];
-			$headers[] = $item->get_name();
+			
+			//$headers[] = $item->get_name().' <br /> '.get_lang('Max').' '.$this->get_max_result_by_link($count + $items_start).' ';
+			$weight = round($item->get_weight()/($count_categories*100), 2);
+			$headers[] = $item->get_name().' <br />'.$weight.' ';
 			if ($show_detail) {
 				$headers[] = $item->get_name().' ('.get_lang('Detail').')';
 			}
@@ -73,6 +88,26 @@ class FlatViewDataGenerator
 			$headers[] = get_lang('GradebookQualificationTotal').' ('.get_lang('Detail').')';
 		}
 		return $headers;
+	}
+	
+	function get_max_result_by_link($id) {		
+		$usertable = array ();
+		
+		$items_count = count ($this->evals) + count ($this->links);
+		
+		$item_value = 0;
+		$item_total = 0;
+		$max = 0;
+		foreach ($this->users as $user) {
+			$item  = $this->evals_links [$id];					
+			$score = $item->calc_score($user[0]);			
+			$divide=( ($score[1])==0 ) ? 1 : $score[1];
+			//$item_value = round($score[0]/$divide*$item->get_weight(),2);			
+			if ($score[0] > $max) {
+				$max = $score[0];
+			}			
+		}		
+		return $max ;
 	}
 
 	/**
@@ -91,7 +126,8 @@ class FlatViewDataGenerator
 		}
 		return $headers;
 	}
-
+	
+	
 
 	/**
 	 * Get actual array data
@@ -140,12 +176,23 @@ class FlatViewDataGenerator
 
 		$scoredisplay = ScoreDisplay :: instance();
 
-		$data= array ();
+		$data = array ();
 		$displaytype = SCORE_DIV;
 		if ($ignore_score_color) {
 			$displaytype |= SCORE_IGNORE_SPLIT;
 		}
-
+		
+		$count_categories = 1;
+		
+		if (isset($this->category)) {
+			
+			$categories = Category::load(null, null, null, $this->category->get_id());
+			
+			if (!empty($categories)) {				
+				$count_categories = count($categories);				
+			}			
+		}
+		
 		foreach ($selected_users as $user) {
 			$row = array ();
 			$row[] = $user[0];	// user id
@@ -156,7 +203,7 @@ class FlatViewDataGenerator
 			$item_total=0;
 
 			for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
-				$item = $this->evals_links [$count + $items_start];
+				$item  = $this->evals_links [$count + $items_start];
 				$score = $item->calc_score($user[0]);
 				$divide=( ($score[1])==0 ) ? 1 : $score[1];
 				$item_value+=round($score[0]/$divide*$item->get_weight(),2);
@@ -175,8 +222,11 @@ class FlatViewDataGenerator
 					$row[] = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
 				}
 			}
-
-			$total_score = array($item_value,$item_total);
+			
+			$item_value = round($item_value / $count_categories, 2);
+			$item_total = round($item_total / $count_categories, 2);
+			
+			$total_score = array($item_value, $item_total);
 			if (!$show_all) {
 				$row[] = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT_WITH_CUSTOM);
 			} else {

@@ -116,7 +116,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
     if ($use_document_title == 'true' && $document_data['title'] != '') {
         $title = $document_data['title'];
     } else {
-        $title = basename($document_data['title']);
+        $title = basename($document_data['path']);    
     }
     
     $filetype = $document_data['filetype'];

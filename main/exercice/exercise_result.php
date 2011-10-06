@@ -67,16 +67,6 @@ if (empty($objExercise)) {
     api_not_allowed();
 }
 
-// set admin name as person who sends the results e-mail (lacks policy about whom should really send the results)
-
-$query      = "SELECT user_id FROM $main_admin_table LIMIT 1"; //get all admins from admin table
-$admin_id   = Database::result(Database::query($query),0,"user_id");
-$uinfo      = api_get_user_info($admin_id);
-$from       = $uinfo['mail'];
-$from_name  = api_get_person_name($uinfo['firstname'], $uinfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-$str        = $_SERVER['REQUEST_URI'];
-$url        = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
-
 $gradebook = '';
 if (isset($_SESSION['gradebook'])) {
 	$gradebook=	$_SESSION['gradebook'];

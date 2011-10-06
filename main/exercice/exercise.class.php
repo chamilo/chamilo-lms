@@ -3036,8 +3036,16 @@ class Exercise {
 		$return_array = array('score'=>$questionScore, 'weight'=>$questionWeighting,'extra'=>$extra_data);
 		return $return_array;
 	} //End function
-
-	function send_notification($arrques, $arrans, $origin) {
+	
+	/**
+	 * Sends a notification when a user ends an examn
+	 * 
+	 */
+	function send_notification($arrques, $arrans, $origin) {		
+		
+		if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
+			return '';
+		}
 
 		// Email configuration settings
 		$coursecode     = api_get_course_id();
@@ -3064,12 +3072,7 @@ class Exercise {
 		}
 
 		$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&show=result&exerciseId='.$this->id;
-
 		$user_info = UserManager::get_user_info_by_id(api_get_user_id());
-
-		if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
-			return '';
-		}
 
 		$mycharset = api_get_system_encoding();
 		$msg = '<html><head>
@@ -3173,15 +3176,14 @@ class Exercise {
 			}
 			$msg .= '</body></html>';
 
-			$msg = str_replace("#url#",$url_email,$msg);
+			$msg = str_replace("#url#", $url_email, $msg);
 			$mail_content = $msg;
-
 			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 			$email_admin = api_get_setting('emailAdministrator');
-
 			$subject = get_lang('ExerciseAttempted');
 			$result = @api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
 		}
+		var_dump($result);exit;
 	}
 
 	function show_exercise_result_header($user_data, $date = null) {

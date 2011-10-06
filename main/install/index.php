@@ -484,16 +484,17 @@ if ($encryptPassForm == '1') {
 	</tr>
 <tr>
   <td>
-    <?php     
-    echo '<h1>';
-    echo get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version; 
-    echo '</h1>';
-    echo '<h2>';
+    <?php
+    echo '<h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1>';
+    
+    $instalation_type_label = '';
     if ($installType == 'new') 
-        echo get_lang('NewInstallation'); 
+        $instalation_type_label  = get_lang('NewInstallation'); 
     elseif ($installType == 'update') 
-        echo get_lang('UpdateFromDokeosVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : ''); 
-    echo '</h2><hr />';    
+        $instalation_type_label = get_lang('UpdateFromDokeosVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
+    if (!empty($instalation_type_label)) {
+    	echo "<h2>$instalation_type_label</h2><hr />";
+    }        
     ?>
 	<input type="hidden" name="updatePath"           value="<?php if (!$badUpdatePath) echo api_htmlentities($proposedUpdatePath, ENT_QUOTES); ?>" />
 	<input type="hidden" name="urlAppendPath"        value="<?php echo api_htmlentities($urlAppendPath, ENT_QUOTES); ?>" />
@@ -685,8 +686,11 @@ if ($_POST['step2']) {
 
 	<?php if ($installType == 'new'): ?>
 	<div style="background-color:#FFFFFF">	
-		<div class="warning-message"><center><h2><?php echo get_lang('Warning'); ?> !</h2></center><br />
-		<?php echo get_lang('TheInstallScriptWillEraseAllTables'); ?>
+		<div class="warning-message">
+		<center>
+			<h3><?php echo get_lang('Warning'); ?> !</h3>
+			<?php echo get_lang('TheInstallScriptWillEraseAllTables'); ?>
+		</center>
 		</div>	
 	</div>
 	<?php endif; ?>

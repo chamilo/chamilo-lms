@@ -168,20 +168,22 @@ if (api_get_setting('display_categories_on_homepage') == 'true') {
 	echo '</div>';
 }
 
-
-$tpl = $controller->tpl->get_template('layout/layout_2_col.tpl');
 $controller->set_login_form();
 
 //@todo move this inside the IndexManager
 if (!api_is_anonymous()) {
-	$controller->tpl->assign('profile_block', 			$controller->return_profile_block());
-	$controller->tpl->assign('teacher_block', 			$controller->return_teacher_link());
+	$controller->tpl->assign('profile_block', $controller->return_profile_block());
+	
+	if (api_is_platform_admin()) {
+		$controller->tpl->assign('account_block',			$controller->return_account_block());
+	} else {		
+		$controller->tpl->assign('teacher_block', 			$controller->return_teacher_link());
+	}
 }
 
 $controller->tpl->assign('announcements_block', 	$controller->return_announcements());
-
 $controller->tpl->assign('home_page_block', 		$controller->return_home_page());
 $controller->tpl->assign('notice_block',			$controller->return_notice());
 $controller->tpl->assign('plugin_campushomepage', 	$controller->return_plugin_campushomepage());
 
-$controller->tpl->display($tpl);
+$controller->tpl->display_two_col_template();

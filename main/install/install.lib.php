@@ -719,9 +719,9 @@ function load_database_script($db_script) {
     //execute the sql instructions
     $count = count($sql_instructions);
     for ($i = 0; $i < $count; $i++) {
-        $this_sql_query = $sql_instructions[$i]['query'];
+        $this_sql_query = $sql_instructions[$i]['query'];    
         Database::query($this_sql_query);
-    }
+    }    
 }
 
 /**
@@ -1346,7 +1346,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 
         // And now display the choice buttons (go back or install)
         ?>
-        <p align="center">
+        <p align="center" style="padding-top:15px">
         <button type="submit" name="step1" class="back" onclick="javascript: window.location='index.php'; return false;" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
         <button type="submit" name="step2_install" class="add" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) echo 'disabled="disabled"'; ?> ><?php echo get_lang('NewInstallation'); ?></button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
@@ -1380,7 +1380,10 @@ function display_license_agreement() {
     ?>
     <table>
 		<tr><td>
-            <p style="font-size:75%"><textarea cols="80" rows="10" readonly><?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?></textarea></p>
+            <p style="font-size:90%">
+            <textarea cols="90" rows="7" readonly>
+            	<?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?>
+            </textarea></p>
         </td>
         </tr>
         <tr><td>
@@ -1388,7 +1391,7 @@ function display_license_agreement() {
             <label for="accept_licence"><?php echo get_lang('IAccept'); ?></label>
             </td>
 		</tr>
-        <tr><td><p><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>
+        <tr><td><p style="color:#666"><br /><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>
         <tr>
         	<td>
             <table width="100%">
@@ -1515,13 +1518,13 @@ function get_contact_registration_form() {
                             <option value="german">Deutsch</option>
                             <option selected="selected" value="english">English</option>
                             <option value="spanish">Spanish</option>
-                            <option value="french">Fran??ais</option>
+                            <option value="french">Français</option>
                             <option value="italian">Italian</option>
                             <option value="hungarian">Magyar</option>
                             <option value="dutch">Nederlands</option>
-                            <option value="brazilian">Portugu??s do Brasil</option>
-                            <option value="portuguese">Portugu??s europeu</option>
-                            <option value="slovenian">Sloven????ina</option>
+                            <option value="brazilian">Português do Brasil</option>
+                            <option value="portuguese">Português europeu</option>
+                            <option value="slovenian">Slovenčina</option>
                     </select>
             </div>
     </div>
@@ -1639,7 +1642,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     </tr>
     <tr>
     <td>    
-    <table width="100%">
+    <table class="data_table_no_border">
     <tr>
       <td width="40%"><?php echo get_lang('DBHost'); ?> </td>
       <?php if ($installType == 'update'): ?>
@@ -1779,7 +1782,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
     echo '</div>';
 
     echo "</td></tr> <tr><td>";
-    echo "<table width=\"100%\">";
+    echo '<table class="data_table_no_border">';
 
     //First parameter: language
     echo "<tr>\n";
@@ -1928,10 +1931,9 @@ function display_after_install_message($installType, $nbr_courses) {
     echo ': ';
     printf(get_lang('ToProtectYourSiteMakeXAndYReadOnly'), 'main/inc/conf/configuration.php', 'main/install/index.php');
     echo '</div>';
-    ?>
-
-    </form>
-    <a class="portal" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
+    ?></form>
+    <br /><br />
+    <a class="a_button green" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
     <?php
 }
 

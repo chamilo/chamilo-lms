@@ -640,10 +640,10 @@ class CourseBuilder {
 			$sql = 'SELECT * FROM '.$table_main.' WHERE c_id = '.$course_id.' AND session_id = 0';
 		}		 
 		$db_result = Database::query($sql);
-
+		if ($db_result)
 		while ($obj = Database::fetch_object($db_result)) {
 			$items = array();
-			$sql_items = "SELECT * FROM ".$table_item." WHERE c_id = '$course_id' AND lp_id = ".$obj->id."";
+			$sql_items = "SELECT * FROM ".$table_item." WHERE c_id = '$course_id' AND lp_id = ".$obj->id;
 			$db_items = Database::query($sql_items);
 			while ($obj_item = Database::fetch_object($db_items)) {
 				$item['id']				   = $obj_item->id;

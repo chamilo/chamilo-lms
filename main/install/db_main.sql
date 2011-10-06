@@ -1400,6 +1400,33 @@ CREATE TABLE user_field_values(
 
 ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
 
+
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'legal_accept','Legal',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'already_logged_in','Already logged in',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'update_type','Update script type',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (10, 'tags','tags',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'rssfeeds','RSS',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'dashboard', 'Dashboard', 0, 0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (11, 'timezone', 'Timezone', 0, 0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_invitation',   'MailNotifyInvitation',1,1,'1');
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_message',      'MailNotifyMessage',1,1,'1');
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_group_message','MailNotifyGroupMessage',1,1,'1');
+
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '1', 'AtOnce',1);
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '8', 'Daily',2);
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '0', 'No',3);
+
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (9, '1', 'AtOnce',1);
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (9, '8', 'Daily',2);
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (9, '0', 'No',3);
+
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '1', 'AtOnce',1);
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '8', 'Daily',2);
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '0', 'No',3);
+
+
+
+
 DROP TABLE IF EXISTS gradebook_result_log;
 CREATE TABLE gradebook_result_log (
     id int NOT NULL auto_increment,
@@ -2450,10 +2477,6 @@ CREATE TABLE legal (
   PRIMARY KEY (legal_id,language_id)
 );
 
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'legal_accept','Legal',0,0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'already_logged_in','Already logged in',0,0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'update_type','Update script type',0,0);
-
 --
 -- Table structure for certificate with gradebook
 --
@@ -2606,8 +2629,8 @@ CREATE TABLE IF NOT EXISTS message_attachment (
     PRIMARY KEY  (id)
 );
 
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10, 'tags','tags',0,0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'rssfeeds','RSS',0,0);
+
+
 INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','Special course', 'Yes', 1 , 1);
 
 --
@@ -2624,9 +2647,6 @@ CREATE TABLE IF NOT EXISTS block (
     PRIMARY KEY(id)
 );
 ALTER TABLE block ADD UNIQUE(path);
-
-INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(1, 'dashboard', 'Dashboard', 0, 0);
-INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(11, 'timezone', 'Timezone', 0, 0);
 
 --
 -- Structure for table 'course_request' ("Course validation" feature)
@@ -2721,23 +2741,6 @@ CREATE TABLE notification (
 
 ALTER TABLE notification ADD index mail_notify_sent_index (sent_at);
 ALTER TABLE notification ADD index mail_notify_freq_index (sent_at, send_freq, created_at);
-
-
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_invitation',   'MailNotifyInvitation',1,1,'1');
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_message',		 'MailNotifyMessage',1,1,'1');
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_group_message','MailNotifyGroupMessage',1,1,'1');
-
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (6, '1', 'AtOnce',1);
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (6, '8', 'Daily',2);
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (6, '0', 'No',3);
-
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (7, '1', 'AtOnce',1);
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (7, '8', 'Daily',2);
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (7, '0', 'No',3);
-
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '1', 'AtOnce',1);
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '8', 'Daily',2);
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '0', 'No',3);
 
 --
 -- Table structure for event alert sending

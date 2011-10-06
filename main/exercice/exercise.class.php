@@ -1002,10 +1002,7 @@ class Exercise {
 			$option = range(0,$max);
 			$option[0]=get_lang('No');
 
-			$random[] = FormValidator :: createElement ('select', 'randomQuestions',null, $option, array('id'=>'randomQuestions','class'=>'chzn-select'));
-			$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');
-			//$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
-			$form->addGroup($random,null,get_lang('RandomQuestions'),'<br />');
+			$form->addElement('select', 'randomQuestions',array(get_lang('RandomQuestions'), get_lang('RandomQuestionsHelp')), $option, array('id'=>'randomQuestions','class'=>'chzn-select'));			
 
 			//random answers
 			$radios_random_answers = array();
@@ -1042,9 +1039,9 @@ class Exercise {
 
 			//$check_option=$this->selectType();
 			$diplay = 'block';							
-			$form->addElement('checkbox', 'propagate_neg',get_lang('PropagateNegativeResults'),null);
+			$form->addElement('checkbox', 'propagate_neg', get_lang('PropagateNegativeResults'),null);
 			
-			$form->addElement('checkbox', 'review_answers',get_lang('ReviewAnswers'),null);
+			$form->addElement('checkbox', 'review_answers', get_lang('ReviewAnswers'),null);
 			
 				
 			$form->addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');

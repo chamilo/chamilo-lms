@@ -1544,3 +1544,38 @@ function get_exercises_to_be_taken($course_code, $session_id) {
 	}
 	return $result;
 }
+
+/**
+ * Get student results (only in completed exercises) stats by question
+ * @param 	int		question id
+ * @param 	int		exercise id
+ * @param 	string	course code
+ * @param 	int		session id
+ *  
+ * */
+function get_student_stats_by_question($question_id,  $exercise_id, $course_code, $session_id) {
+	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+	
+	$question_id 		= intval($question_id);
+	$exercise_id 		= intval($exercise_id);
+	$course_code 		= Database::escape_string($course_code);
+	$session_id 		= intval($session_id);
+	 
+	$sql = "SELECT count(exe_user_id) as users, MAX(marks) as max , MIN(marks) as min, AVG(marks) as average 
+			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+			WHERE 	exe_exo_id 		= $exercise_id AND 
+					course_code 	= '$course_code' AND 
+					e.session_id 	= $session_id AND
+					question_id 	= $question_id AND status = '' LIMIT 1";	
+	$result = Database::query($sql);	
+	$return = array();
+	if ($result) {
+		$return = Database::fetch_array($result, 'ASSOC');	
+			
+	}
+	return $return; 	
+}
+
+
+

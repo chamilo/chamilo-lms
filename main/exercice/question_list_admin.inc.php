@@ -177,7 +177,7 @@ if ($nbrQuestions) {
                     if (!empty($objQuestionTmp->level)) {
                     	$level = '('.get_lang('Difficulty').' '.$objQuestionTmp->level.')';
                     }            
-        		    echo Display::tag('span','<a href="#">'.$move.' '.cut($objQuestionTmp->selectTitle(), 110).' '. Display::tag('span',$level.' ['.get_lang('QualificationNumeric').': '.$objQuestionTmp->selectWeighting().']', array('style'=>"right:110px; position: absolute;padding-top: 0.3em;")).'</a>', array('style'=>''));
+        		    echo Display::tag('span','<a href="#">'.$move.' '.cut($objQuestionTmp->selectTitle(), 80).' '. Display::tag('span',$level.' ['.get_lang('QualificationNumeric').': '.$objQuestionTmp->selectWeighting().']', array('style'=>"right:110px; position: absolute;padding-top: 0.3em;")).'</a>', array('style'=>''));
                     echo $actions;
                 echo '</div>';
             

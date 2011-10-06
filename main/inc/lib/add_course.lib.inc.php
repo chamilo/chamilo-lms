@@ -1163,7 +1163,7 @@ function update_Db_course($course_db_name = null) {
         feedback text default '',
         cat_id int NOT NULL default 0,
         session_id SMALLINT UNSIGNED NOT NULL,
-        PRIMARY KEY (c_id, file_id,dest_user_id)
+        PRIMARY KEY (c_id, file_id, dest_user_id)
         )" . $charset_clause);
 
     Database::query("ALTER TABLE `$TABLETOOLDROPBOXPOST` ADD INDEX ( session_id )");
@@ -1173,7 +1173,7 @@ function update_Db_course($course_db_name = null) {
         $add_to_all_tables
         file_id int unsigned NOT NULL,
         user_id int unsigned NOT NULL default 0,
-        PRIMARY KEY (c_id, file_id,user_id)
+        PRIMARY KEY (c_id, file_id, user_id)
         )" . $charset_clause);
 
     $sql = "CREATE TABLE `".$TABLETOOLDROPBOXCATEGORY."` (
@@ -1205,9 +1205,7 @@ function update_Db_course($course_db_name = null) {
     Database::query($sql);
 
     /*
-    -----------------------------------------------------------
         New learning path tool
-    -----------------------------------------------------------
     */
 
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELP` (
@@ -1233,17 +1231,17 @@ function update_Db_course($course_db_name = null) {
         "preview_image  varchar(255)        not null default '', " .        // stores the theme of the LP
         "author         varchar(255)        not null default '', " .        // stores the theme of the LP
         "session_id     int unsigned        not null default 0, " .         // the session_id
-		"prerequisite  	int	unsigned not null  default 0," . // pre requisite for next lp
-		"hide_toc_frame tinyint NOT NULL DEFAULT 0, ".
-        "seriousgame_mode tinyint NOT NULL DEFAULT 0, ".
+		"prerequisite  	int	unsigned 		not null default 0," .			// pre requisite for next lp
+		"hide_toc_frame tinyint 			NOT NULL DEFAULT 0, ".
+        "seriousgame_mode tinyint 			NOT NULL DEFAULT 0, ".
         "use_max_score  int unsigned        not null default 1, " .
         "autolunch      int unsigned        not null default 0, " .          // auto lunch LP
-        "created_on     DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', " .   
-        "modified_on    DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', " .   
-        "publicated_on  DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', " .   
-        "expired_on     DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',          
-    	 PRIMARY KEY  (c_id, id),
-        	)" . $charset_clause;
+        "created_on     DATETIME 			NOT NULL DEFAULT '0000-00-00 00:00:00', " .   
+        "modified_on    DATETIME 			NOT NULL DEFAULT '0000-00-00 00:00:00', " .   
+        "publicated_on  DATETIME 			NOT NULL DEFAULT '0000-00-00 00:00:00', " .   
+        "expired_on     DATETIME 			NOT NULL DEFAULT '0000-00-00 00:00:00',          
+    	 PRIMARY KEY  (c_id, id)
+        )" . $charset_clause;
 
     if (!Database::query($sql)) {
         error_log($sql, 0);
@@ -1258,8 +1256,7 @@ function update_Db_course($course_db_name = null) {
         "last_item      int unsigned        not null default 0," .          // last item seen in this view
         "progress       int unsigned        default 0," .
         "session_id     int                 not null default 0,
-         PRIMARY KEY  (c_id, id),
-        
+         PRIMARY KEY  (c_id, id)        
     	)" . $charset_clause; // lp's progress for this user
 
     if (!Database::query($sql)) {
@@ -1305,7 +1302,7 @@ function update_Db_course($course_db_name = null) {
         "terms          TEXT                NULL," .                        // contains the indexing tags (search engine)
         "search_did     INT                 NULL,".                         // contains the internal search-engine id of this element
         "audio          VARCHAR(250),
-        PRIMARY KEY  (c_id, id),
+        PRIMARY KEY  (c_id, id)
     
     	)" . $charset_clause;                   // contains the audio file that goes with the learning path step
 
@@ -1333,7 +1330,7 @@ function update_Db_course($course_db_name = null) {
         "lesson_location    text        null default ''," .
         "core_exit      varchar(32)     not null default 'none'," .
         "max_score      varchar(8)      default '',
-        PRIMARY KEY  (c_id, id),        
+        PRIMARY KEY  (c_id, id)        
         )" . $charset_clause;
 
     if (!Database::query($sql)) {
@@ -1363,7 +1360,7 @@ function update_Db_course($course_db_name = null) {
         "student_response   text            not null default ''," .         // student response (format depends on type)
         "result         varchar(255)        not null default ''," .         // textual result
         "latency        varchar(16)         not null default ''," .          // time necessary for completion of the interaction
-    	"PRIMARY KEY  (c_id, id),".
+    	"PRIMARY KEY  (c_id, id)".
         ")" . $charset_clause;
 
     if (!Database::query($sql)) {
@@ -1385,7 +1382,7 @@ function update_Db_course($course_db_name = null) {
         "score_max      float unsigned      not null default 0," .          // max score
         "score_min      float unsigned      not null default 0," .          // min score
         "status         char(32)            not null default 'not attempted', " . //status, just as sco status
-    	"PRIMARY KEY  (c_id, id),".
+    	"PRIMARY KEY  (c_id, id) ".
         ")" . $charset_clause;
 
     if (!Database::query($sql)) {
@@ -2255,7 +2252,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_on_new_doc_dropbox',0,'dropbox')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_edit_agenda',0,'agenda')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_edit_announcement',0,'announcement')");
-    Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_manager_on_new_quiz',0,'quiz')");
+    Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_manager_on_new_quiz',1,'quiz')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_image_forum',1,'forum')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'course_theme','','theme')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_learning_path_theme','1','theme')");

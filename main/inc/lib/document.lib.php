@@ -1890,15 +1890,18 @@ return 'application/octet-stream';
         if (!is_string($content_html)) {
             return false;
         }
-
+        $table = Database :: get_course_table(TABLE_DOCUMENT);
         $orig_source_html 	= DocumentManager::get_resources_from_source_html($content_html);
         $orig_course_info 	= api_get_course_info($origin_course_code);
         $orig_course_path 	= api_get_path(SYS_PATH).'courses/'.$orig_course_info['path'].'/';
         $destination_course_code = CourseManager::get_course_id_from_path ($destination_course_directory);
         $dest_course_path 	= api_get_path(SYS_COURSE_PATH).$destination_course_directory.'/';
 
-         
+        $destination_course_info = api_get_course_info($destination_course_code);
+        
         foreach ($orig_source_html as $source) {
+        	
+        	
 
             // get information about source url
             $real_orig_url	= $source[0];	// url
@@ -1923,20 +1926,89 @@ return 'application/octet-stream';
             if ($scope_url == 'local') {
                 if ( $type_url == 'abs' || $type_url == 'rel') {
                     $document_file = strstr($real_orig_path, 'document');
-                    if (strpos($real_orig_path,$document_file) !== false) {
+                    //var_dump($real_orig_path.' -  '.$document_file);
+                    if (strpos($real_orig_path, $document_file) !== false) {
+                    	
                         $origin_filepath        = $orig_course_path.$document_file;
                         $destination_filepath   = $dest_course_path.$document_file;
-
-                        // copy origin file inside destination course
+                        
+                        // copy origin file inside destination course                        
+                        $pos = strpos($document_file, '&amp;');
+                        if ($pos !== false ) {
+                        	$document_file_fixed = substr($document_file,0, $pos);                        	                        	                  	
+                        } else {
+                        	$document_file_fixed = $document_file;
+                        }                        
+                        $pos = strpos($origin_filepath, '&amp;');
+                        if ($pos !== false ) {                        	
+                        	$origin_filepath = substr($origin_filepath, 0, $pos);
+                        }
+                        
+                        $pos = strpos($destination_filepath, '&amp;');
+                        if ($pos !== false ) {
+                        	$destination_filepath = substr($destination_filepath, 0, $pos);
+                        }                        
+                        
                         if (file_exists($origin_filepath)) {
 
-                            $filepath_dir = dirname($destination_filepath);
+                            $filepath_dir = dirname($destination_filepath);                          
+                            
                             if (!is_dir($filepath_dir)) {
                                 $perm = api_get_permissions_for_new_directories();
-                                @mkdir($filepath_dir, $perm, true);
-                            }
+                                
+                                $result = @mkdir($filepath_dir, $perm, true);
+                                
+                                $pos = strpos($filepath_dir, 'document');
+                                if ($pos !== false ) {
+                                	$filepath_dir = substr($filepath_dir, $pos+8);                                	
+                                	$parts = explode('/', $filepath_dir );                                	
+                                }                                
+                                if ($result) {
+                                	$my_path = '/';
+                                	foreach($parts as $part) {      
+	                                	if (empty($part)) {
+	                                		continue;
+	                                	}	                
+	                                	$my_path .= $part;	                                	               
+	                                	$file_info = pathinfo($filepath_dir);	                                	
+	                                	
+	                                	$sql = "INSERT INTO ".$table." SET
+													c_id 		= ".$destination_course_info['real_id'].",    
+	                                				path 		= '".Database::escape_string($my_path)."', 
+	                                				comment 	= '', 
+	                                				title 		= '".Database::escape_string(basename($my_path))."' ,
+	                                				filetype	= 'folder', 
+	                                				size		= '0', 
+	                                				session_id 	= '0'";
+	                                	
+	                                	Database::query($sql);
+	                                	$document_id = Database::insert_id();	                                	
+	                                	api_item_property_update($destination_course_info, TOOL_DOCUMENT, $document_id, 'ForderAdded', api_get_user_id(), 0,0, null, null, 0);
+	                                	$my_path = $my_path.'/';
+		                            }
+                                }
+                            }                            
+                            //var_dump($destination_filepath);
                             if (!file_exists($destination_filepath)) {
-                                @copy($origin_filepath, $destination_filepath);
+                                $result = @copy($origin_filepath, $destination_filepath);
+                                
+                                if ($result) {
+                                	$file_info = pathinfo($destination_filepath);
+                                	$size = filesize($destination_filepath);
+                                
+	                                $sql = "INSERT INTO ".$table." SET
+				                                c_id 		= ".$destination_course_info['real_id'].",    
+												path 		= '".Database::escape_string(substr($document_file_fixed,8))."', 
+												comment 	= '', 
+												title 		= '".Database::escape_string($file_info['basename'])."' ,
+												filetype	= 'file', 
+												size		= '".$size."', 
+												session_id 	= '0'";
+	                                Database::query($sql);	                                	
+	                                $document_id = Database::insert_id();	                                
+	                                api_item_property_update($destination_course_info, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id(), 0,0, null, null, 0);
+                                }
+                                
                             }
                         }
 

@@ -177,7 +177,8 @@ if ($nbrQuestions) {
                     if (!empty($objQuestionTmp->level)) {
                     	$level = '('.get_lang('Difficulty').' '.$objQuestionTmp->level.')';
                     }            
-        		    echo Display::tag('span','<a href="#">'.$move.' '.cut($objQuestionTmp->selectTitle(), 80).' '. Display::tag('span',$level.' ['.get_lang('QualificationNumeric').': '.$objQuestionTmp->selectWeighting().']', array('style'=>"right:110px; position: absolute;padding-top: 0.3em;")).'</a>', array('style'=>''));
+                    $title = Security::remove_XSS($objQuestionTmp->selectTitle());
+        		    echo Display::tag('span', '<a href="#" title = "'.$title.'">'.$move.' '.cut($title, 80).' '.Display::tag('span', $level.' ['.get_lang('QualificationNumeric').': '.$objQuestionTmp->selectWeighting().']', array('style'=>"right:110px; position: absolute;padding-top: 0.3em;")).'</a>', array('style'=>''));
                     echo $actions;
                 echo '</div>';
             

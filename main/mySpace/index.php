@@ -123,10 +123,17 @@ if ($is_platform_admin) {
 		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32), api_get_self().'?view=teacher');
 		$menu_items[] = Display::url(Display::return_icon('star_na.png', get_lang('AdminInterface'), array(), 32), api_get_self().'?view=admin');		
         $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
+        
+        //$menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('CurrentCoursesReport'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
+        
+        
+        
+        
 	} else {		
 		$menu_items[] = Display::return_icon('teacher_na.png', get_lang('TeacherInterface'), array(), 32);		
 		$menu_items[] = Display::url(Display::return_icon('star.png', get_lang('AdminInterface'), array(), 32), api_get_self().'?view=admin');
         $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
+        //$menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('CurrentCoursesReport'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
 	}
 }
 

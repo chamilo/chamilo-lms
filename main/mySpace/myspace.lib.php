@@ -210,7 +210,7 @@ class MySpace {
 		MySpace::display_user_overview_export_options();
 
 		$t_head .= '	<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-		$t_head .= '	<caption>'.get_lang('CourseInformation').'</caption>';
+		//$t_head .= '	<caption>'.get_lang('CourseInformation').'</caption>';
 		$t_head .=		'<tr>';
 		$t_head .= '		<th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
 		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
@@ -337,7 +337,7 @@ class MySpace {
 		//MySpace::display_user_overview_export_options();
 
 		$t_head .= '	<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-		$t_head .= '	<caption>'.get_lang('CourseInformation').'</caption>';
+		//$t_head .= '	<caption>'.get_lang('CourseInformation').'</caption>';
 		$t_head .=		'<tr>';
 		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
 		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
@@ -684,7 +684,7 @@ class MySpace {
 		//MySpace::display_user_overview_export_options();
 
 		$t_head .= '	<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-		$t_head .= '	<caption>'.get_lang('CourseInformation').'</caption>';
+		//$t_head .= '	<caption>'.get_lang('CourseInformation').'</caption>';
 		$t_head .=		'<tr>';
 		$t_head .= '		<th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
 		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';

@@ -44,7 +44,8 @@ $(document).ready(function() {
 						$('#end_date').html(' - '+end.toDateString()+" " + end.toTimeString().substr(0, 8));
 					}
 				} else {
-					$('#start_date').html(start.toDateString());					
+					$('#start_date').html(start.toDateString());
+					$('#end_date').html(' - ' + end.toDateString());					
 				}
 				$('#color_calendar').html('{$type_label}');
 				$('#color_calendar').addClass('label_tag');
@@ -191,7 +192,7 @@ $(document).ready(function() {
 				<label for="date">{"Date"|get_lang}</label>
 			</div>
 			<div class="formw">
-				<span id="start_date" class="label"></span><span id="end_date" class="label"></span>
+				<span id="start_date"></span><span id="end_date"></span>
 			</div>					
 		</div>
 		<div class="row">

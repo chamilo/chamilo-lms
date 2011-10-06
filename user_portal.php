@@ -150,10 +150,8 @@ if ($load_dirs) {
 	
 	$htmlHeadXtra[] =  '<script type="text/javascript">
 	
-	$(document).ready( function() {
-		
-		$(".document_preview_container").hide();
-		
+	$(document).ready( function() {		
+		$(".document_preview_container").hide();		
 		$(".document_preview").click(function() {
 			var my_id = this.id;
 			var course_id  = my_id.split("_")[2];
@@ -201,9 +199,6 @@ $_SESSION['sniff_java_sun_ver']=Security::remove_XSS($_POST['sniff_navigator_jav
 
 $controller = new IndexManager(get_lang('MyCourses'));
 
-$tpl = $controller->tpl->get_template('layout/layout_2_col.tpl');
-
-
 //if (!$$controllerl->tpl->isCached($tpl, api_get_user_id())) {
 
 //@todo all this could be moved in the IndexManager
@@ -227,7 +222,9 @@ $sniff_notification = '';
 //check for flash and message
 if (stripos("flash_yes", $_SESSION['sniff_check_some_activex'])===0 || stripos("flash_yes", $_SESSION['sniff_check_some_plugins'])===0){
 	$sniff_notification = Display::return_message(get_lang('NoFlash'), 'warning', false);
-	//$controller->tpl->assign('sniff_notification', 					$sniff_notification);
+	
+	//js verification - To annoying of redirecting every time the page
+	//$controller->tpl->assign('sniff_notification',  $sniff_notification);
 }
 
 $controller->tpl->assign('plugin_courses_block', 		$controller->return_courses_main_plugin());
@@ -238,10 +235,8 @@ $controller->tpl->assign('plugin_courses_right_block', 	$controller->return_plug
 $controller->tpl->assign('reservation_block', 			$controller->return_reservation_block());
 $controller->tpl->assign('search_block', 				$controller->return_search_block());
 $controller->tpl->assign('classes_block', 				$controller->return_classes_block());
-/*} else {
-}*/
-$controller->tpl->display($tpl);
+
+$controller->tpl->display_two_col_template();
 
 // Deleting the session_id.
 api_session_unregister('session_id');
-

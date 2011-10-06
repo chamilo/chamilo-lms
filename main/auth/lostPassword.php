@@ -91,7 +91,7 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 	echo '<br /><br /><div class="actions" >'.$msg1.'</div>';
 } else {
 	$form = new FormValidator('lost_password');
-	$form->addElement('text', 'user', get_lang('LoginOrEmailAddress'), array('size'=>'40'));
+	$form->addElement('text', 'user', array(get_lang('LoginOrEmailAddress'), get_lang('EnterEmailUserAndWellSendYouPassword')), array('size'=>'40'));
 
 	//$form->applyFilter('email','strtolower');
 	$form->addElement('style_submit_button', 'submit', get_lang('Send'),'class="save"');
@@ -138,14 +138,9 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
                 }
             }
 		} else {
-			Display::display_error_message(get_lang('NoUserAccountWithThisEmailAddress'));			
+			Display::display_warning_message(get_lang('NoUserAccountWithThisEmailAddress'));			
 		}
-		//$msg .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
-		//echo '<br /><br /><div class="actions" >'.$msg.'</div>';
-
-	} else {		
-		echo get_lang('EnterEmailUserAndWellSendYouPassword');
-		echo '<br /><br />';				
+	} else {						
 		$form->display();
 	}
 }

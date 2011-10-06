@@ -45,10 +45,26 @@ class Template extends Smarty {
 		
 		//To load a smarty plugin				
 		//$this->loadPlugin('smarty_function_get_lang');
-
 				
 		$this->assign('style', $this->style);	
 		//$this->testInstall();	
+	}
+	
+	/**
+	 * Shortcut to display a 1 col layout
+	 * */
+	function display_one_col_template() {
+		$tpl = $this->get_template('layout/layout_1_col.tpl');
+		$this->display($tpl);
+	}
+	
+	/**
+	* Shortcut to display a 2 col layout
+	* */
+	
+	function display_two_col_template() {
+		$tpl = $this->get_template('layout/layout_2_col.tpl');
+		$this->display($tpl);
 	}
 	
 	/**	  

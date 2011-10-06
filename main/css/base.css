@@ -2997,12 +2997,8 @@ div.system_announcement {
 
 .RequirementHeading, .RequirementText, .RequirementContent  {
     margin-top:12px;
+    line-height: 18px;
 }
-
-#formLogin {
-    height:160px;
-}
-
 
 #toolshortcuts_horizontal {    
     padding: 8px 20px 2px 0px;
@@ -3524,6 +3520,7 @@ div.row div.form_header {
     font-size:20px;
 }
 
+/*
 [dir=ltr] div.row div.label, [dir=ltl] div.row div.formw {
     float: left;
     text-align: right;
@@ -3531,7 +3528,8 @@ div.row div.form_header {
 [dir=rtl] div.row div.label, [dir=rtr] div.row div.formw {
     float: right;
     text-align: left;
-}
+}*/
+
 span.form_required {
     color: #f00;header2
 }
@@ -3541,30 +3539,23 @@ span.form_error {
     margin: 2px;
 }
 
-
-div.row {
-    clear: both;    
+form .row {
     margin-bottom: 18px;
-    
 }
 
-div.row div.label {
-   color: #404040;
+form .label {
+    color: #404040;
     float: left;
     font-size: 13px;
     line-height: 18px;
     padding-top: 6px;
     text-align: right;
-    width: 130px !important;    
+    width: 130px;    
+}
+form .formw {
+	margin-left: 150px;
 }
 
-div.row div.formw {
-    margin-left: 150px;
-}
-
-.formw {
-/*    width:85%; */
-}
 .formw iframe {
    text-align: left;
 }
@@ -3799,56 +3790,41 @@ form div.error input, form div.error textarea {
 }
 
 
-
-/************************************************************************************
-REFLECTION
-*************************************************************************************/
-
-
-.image-wrap {
-    margin-right: 10px;
-    position: relative; 
-    display: inline-block; 
-    width: 64px; 
-    height: 64px;'
-}
-.box-image {
-    margin: 0 0 50px;
-    border-top: solid 1px #ccc;
+.requirements td {
+	padding:5px;
 }
 
-
-
-.reflection .image-wrap {
-    -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 2px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.5);
-    -moz-box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 2px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.5);
-    box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 2px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.5);
-    -webkit-transition: .5s;
-    -moz-transition: .5s;
-    transition: .5s;
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
-    border-radius: 20px;
-}
-.reflection .image-wrap:after {
-    position: absolute;
-    content: ' ';
-    width: 100%;
-    height: 30px;
-    bottom: -31px;
-    left: 0;
-    -webkit-border-top-left-radius: 20px;
-    -webkit-border-top-right-radius: 20px;
-    -moz-border-radius-topleft: 20px;
-    -moz-border-radius-topright: 20px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    background: -moz-linear-gradient(top, rgba(0,0,0,.3) 0%, rgba(255,255,255,0) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,.3)), color-stop(100%,rgba(255,255,255,0)));
-    background: linear-gradient(top, rgba(0,0,0,.3) 0%,rgba(255,255,255,0) 100%);
-}
-.reflection .image-wrap:hover {
-    position: relative;
-    top: -8px;
+.data_table_no_border {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 12px;
+    margin-bottom: 15px;
+    margin-top: 8px;
+    text-align: left;
+    width: 100%;	
 }
 
+.data_table_no_border td {
+    line-height: normal;
+    padding: 6px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.form-stacked .label {
+    display: block;
+    float: none;
+    font-weight: bold;
+    line-height: 20px;
+    padding-top: 0;
+    text-align: left;
+    width: auto;
+}
+
+.form-stacked .row div.formw {
+    margin-left: 0;
+}
+
+.form-stacked .row {
+    margin-bottom: 9px;
+}

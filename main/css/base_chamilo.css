@@ -753,25 +753,18 @@ input.link_alike:hover {
 }
 #formLogin label {
     font-size: 12px;
-    margin: 4px 6px;
     font-family:Tahoma, Geneva, sans-serif;
     color:#666666;
 }
 
-#formLogin input {
-    font-size: 13px;
-    margin: 4px 6px;
-    padding:6px;
-
-}
-
 #login_fail {
-    margin: 0 6px 6px 6px;
+/*    margin: 0 6px 6px 6px; */
     padding: 4px;
     border: 1px solid #f00;
     background-color: #fff;
     font-size: 12px;
     color: #f00;
+    width:185px;
 }
 input.mainoption {
     font-weight : bold;

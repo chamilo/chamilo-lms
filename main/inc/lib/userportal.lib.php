@@ -18,8 +18,6 @@ class IndexManager {
 		if ($load_template) {			
 			$this->tpl = new Template($title);					
 		}
-				
-		
 		$this->home = api_get_home_path();
 		$this->user_id = api_get_user_id();
 		$this->load_directories_preview = false;
@@ -734,12 +732,12 @@ class IndexManager {
 	 * @version 1.1
 	 */
 	function display_login_form() {
-		$form = new FormValidator('formLogin');
+		$form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-stacked'));
 		$form->addElement('text', 'login', get_lang('UserName'), array('size' => 17));
 		$form->addElement('password', 'password', get_lang('Pass'), array('size' => 17));
-		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'login'));
+		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'a_button blue '));
 		$renderer =& $form->defaultRenderer();
-		$renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
+		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>');
 		$html = $form->return_form();
 		if (api_get_setting('openid_authentication') == 'true') {
 			include_once 'main/auth/openid/login.php';

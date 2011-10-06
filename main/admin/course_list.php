@@ -66,7 +66,8 @@ function get_course_data($from, $number_of_items, $column, $direction) {
     $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
     $users_table = Database :: get_main_table(TABLE_MAIN_USER);
     $course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    $sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, tutor_name as col7, code AS col8, visibility AS col9,directory as col10 FROM $course_table";
+    $sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, tutor_name as col7, code AS col8, visibility AS col9,directory as col10 
+    		FROM $course_table";
     //$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, tutor_name as col8, code AS col9, visibility AS col10,directory as col11 FROM $course_table";
     global $_configuration;
     
@@ -105,8 +106,7 @@ function get_course_data($from, $number_of_items, $column, $direction) {
         $course[1] = '<nobr>'.get_course_visibility_icon($course[9]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[10].'/index.php">'.$course[1].'</a></nobr>';
         $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
         $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
-        //$course[7] = CourseManager :: is_virtual_course_from_system_code($course[7]) ? get_lang('Yes') : get_lang('No');
-        //$course_rem = array($course[0], $course[1], $course[2], $course[3], $course[4], $course[5], $course[6], $course[7], $course[8], $course[9]);
+
         $course_rem = array($course[0], $course[1], $course[2], $course[3], $course[4], $course[5], $course[6], $course[7], $course[8]);
         $courses[] = $course_rem;
     }

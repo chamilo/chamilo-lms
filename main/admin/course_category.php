@@ -18,16 +18,17 @@ $this_section=SECTION_PLATFORM_ADMIN;
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 api_protect_admin_script();
-$category=$_GET['category'];
-$action=$_GET['action'];
+$category = $_GET['category'];
+$category = Database::escape_string($category);
+
+$action = $_GET['action'];
 
 $tbl_course  = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
 $errorMsg='';
 
-if(!empty($action))
-{
+if(!empty($action)) {
 	if($action == 'delete')
 	{
 		deleteNode($_GET['id']);
@@ -91,60 +92,43 @@ $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'
 
 Display::display_header($tool_name);
 
-//api_display_tool_title($tool_name);
-
-if(!empty($category))
-{
+if(!empty($category)) {	
 	$myquery = "SELECT * FROM $tbl_category WHERE code ='$category'";
 	$result	= Database::query($myquery);
-	if(Database::num_rows($result)==0)
-	{
+	if(Database::num_rows($result)==0) {
 		$category = '';
 	}
 }
 
-if(empty($action))
-{
-	$myquery="SELECT t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count,COUNT(DISTINCT t3.code) AS nbr_courses FROM $tbl_category t1 LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code WHERE t1.parent_id ".(empty($category)?"IS NULL":"='$category'")." GROUP BY t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count ORDER BY t1.tree_pos";
-	$result=Database::query($myquery);
-
+if(empty($action)) {
+	$myquery = "SELECT t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count,COUNT(DISTINCT t3.code) AS nbr_courses 
+			 	FROM $tbl_category t1 LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code 
+				WHERE t1.parent_id ".(empty($category)?"IS NULL":"='$category'")." 
+				GROUP BY t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count ORDER BY t1.tree_pos";
+	$result = Database::query($myquery);
 	$Categories=Database::store_result($result);
 }
 
-
-
-
-if($action == 'add' || $action == 'edit')
-{
+if($action == 'add' || $action == 'edit') {
 	?>
 	<div class="actions">
 	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>"><?php echo Display::return_icon('folder_up.png',get_lang("Back"),'','32'); if(!empty($category)) echo ' ('.Security::remove_XSS($category).')'; ?></a>
 	</div>
-
-
-
 	<?php
 	$form_title = ($action == 'add')?get_lang('AddACategory'):get_lang('EditNode');
-	if(!empty($category))
-	{
+	if(!empty($category)) {
 		$form_title .= ' '.get_lang('Into').' '.Security::remove_XSS($category);
 	}
-
 	$form = new FormValidator('course_category');
 	$form->addElement('header', '', $form_title);
 	$form->display();
-
 	?>
-
 	<form method="post" action="<?php echo api_get_self(); ?>?action=<?php echo Security::remove_XSS($action); ?>&category=<?php echo Security::remove_XSS($category); ?>&amp;id=<?php echo Security::remove_XSS($_GET['id']); ?>">
 	<input type="hidden" name="formSent" value="1" />
 	<table border="0" cellpadding="5" cellspacing="0">
-
 	<?php
-	if(!empty($errorMsg))
-	{
+	if(!empty($errorMsg)) {
 	?>
-
 	<tr>
 	  <td colspan="2">
 
@@ -191,14 +175,11 @@ if($action == 'add' || $action == 'edit')
 	</form>
 
 	<?php
-}
-else
-{
+} else {
 ?>
 <div class="actions">
 <?php
-if(!empty($category) && empty($action))
-{
+if(!empty($category) && empty($action))  {
 	$myquery = "SELECT parent_id FROM $tbl_category WHERE code='$category'";
 	$result=Database::query($myquery);
 	$parent_id = 0;
@@ -256,11 +237,6 @@ else
 <?php
 }
 
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display::display_footer();
 
 /******** Functions ********/
@@ -306,8 +282,7 @@ function addNode($code,$name,$canHaveCourses,$parent_id)
 
 	$result=Database::query("SELECT 1 FROM $tbl_category WHERE code='$code'");
 
-	if(Database::num_rows($result))
-	{
+	if (Database::num_rows($result))  {
 		return false;
 	}
 
@@ -316,7 +291,8 @@ function addNode($code,$name,$canHaveCourses,$parent_id)
 	$row=Database::fetch_array($result);
 
 	$tree_pos=$row['maxTreePos']+1;
-
+	
+	$code = generate_course_code($code);
 	Database::query("INSERT INTO $tbl_category(name,code,parent_id,tree_pos,children_count,auth_course_child) VALUES('$name','$code',".(empty($parent_id)?"NULL":"'$parent_id'").",'$tree_pos','0','$canHaveCourses')");
 
 	updateFils($parent_id);
@@ -326,24 +302,23 @@ function addNode($code,$name,$canHaveCourses,$parent_id)
 
 function editNode($code,$name,$canHaveCourses,$old_code)
 {
-	global $tbl_category;
+	global $tbl_category, $tbl_course;
 
 	$canHaveCourses=$canHaveCourses?'TRUE':'FALSE';
 	$code 			= Database::escape_string($code);
 	$name 			= Database::escape_string($name);
 	$old_code 		= Database::escape_string($old_code);
 
-	if($code != $old_code)
-	{
+	if($code != $old_code) {
 		$result=Database::query("SELECT 1 FROM $tbl_category WHERE code='$code'");
-
-		if(Database::num_rows($result))
-		{
+		if(Database::num_rows($result)) {
 			return false;
 		}
 	}
-
-	Database::query("UPDATE $tbl_category SET name='$name',code='$code',auth_course_child='$canHaveCourses' WHERE code='$old_code'");
+	$code = generate_course_code($code);
+	Database::query("UPDATE $tbl_category SET name='$name', code='$code',auth_course_child='$canHaveCourses' WHERE code='$old_code'");
+	$sql = "UPDATE $tbl_course SET category_code = '$code' WHERE category_code = '$old_code' ";	
+	Database::query($sql);
 
 	return true;
 }
@@ -400,4 +375,3 @@ function compterFils($pere,$cpt)
 
 	return ($cpt+1);
 }
-?>

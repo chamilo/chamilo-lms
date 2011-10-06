@@ -18,7 +18,6 @@ api_protect_admin_script();
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name = get_lang('AddCourse');
@@ -62,8 +61,7 @@ $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$form->add_textfield('visual_code', get_lang('CourseCode'), false, array('size' => '20', 'maxlength' => 20));
-$form->addElement('static', null, null, get_lang('OnlyLettersAndNumbers'));
+$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')) , false, array('size' => '20', 'maxlength' => 20));
 
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');

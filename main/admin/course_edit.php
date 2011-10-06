@@ -95,13 +95,12 @@ $form->add_textfield( 'title', get_lang('Title'),true, array ('size' => '60'));
 $form->applyFilter('title','html_filter');
 $form->applyFilter('title','trim');
 // code
-$form->add_textfield('visual_code', get_lang('CourseCode'));
-$form->addElement('static', null, null, get_lang('OnlyLettersAndNumbers'));
+$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')));
 
 $form->applyFilter('visual_code','strtoupper');
 $form->applyFilter('visual_code','html_filter');
 //$form->add_textfield('tutor_name', get_lang('CourseTitular'));
-$form->addElement('select', 'tutor_name', get_lang('CourseTitular'), $platform_teachers, array('style'=>'width:350px'));
+$form->addElement('select', 'tutor_name', get_lang('CourseTitular'), $platform_teachers, array('style'=>'width:350px','id'=>'tutor_name_id', 'class'=>'chzn-select'));
 $form->applyFilter('tutor_name','html_filter');
 
 //$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple size="4" style="width: 150px;"');
@@ -115,7 +114,7 @@ $element_template = <<<EOT
 		<div class="label">
 			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
 		</div>
-		<div class="formw" style="display:inline">
+		<div class="formw">
 			<table cellpadding="0" cellspacing="0">
 				<tr>
 					<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<td>{element}</td>
@@ -132,7 +131,7 @@ $form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="80"
 		'<input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" ></td><td>');
 
 
-$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories , array('style'=>'width:350px'));
+$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories , array('style'=>'width:350px','id'=>'category_code_id', 'class'=>'chzn-select'));
 CourseManager::select_and_sort_categories($categories_select);
 
 $form->add_textfield( 'department_name', get_lang('CourseDepartment'), false,array ('size' => '60'));

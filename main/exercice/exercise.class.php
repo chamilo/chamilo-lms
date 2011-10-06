@@ -481,7 +481,10 @@ class Exercise {
 	 * @param - integer $random - 0 if not random, otherwise the draws
 	 */
 	function setRandom($random) {
-		$this->random=$random;
+		/*if ($random == 'all') {
+			$random = $this->selectNbrQuestions();
+		}*/
+		$this->random = $random;
 	}
 
 
@@ -492,7 +495,7 @@ class Exercise {
 	 * @param - integer $random_answers - random answers
 	 */
 	function updateRandomAnswers($random_answers) {
-		$this->$random_answers = $random_answers;
+		$this->random_answers = $random_answers;
 	}
 
 	/**
@@ -995,13 +998,12 @@ class Exercise {
 					$form->addElement('hidden', 'exerciseType', ONE_PER_PAGE);
 				}
 			}
-
-			$random = array();
-			$option=array();
+			
+			$option = array();
 			$max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
 			$option = range(0,$max);
-			$option[0]=get_lang('No');
-
+			$option[0] = get_lang('No');
+			
 			$form->addElement('select', 'randomQuestions',array(get_lang('RandomQuestions'), get_lang('RandomQuestionsHelp')), $option, array('id'=>'randomQuestions','class'=>'chzn-select'));			
 
 			//random answers
@@ -1112,7 +1114,7 @@ class Exercise {
 
 		// defaults
 		if ($type=='full') {
-			if($this->id > 0) {
+			if ($this->id > 0) {
 				if ($this->random > $this->selectNbrQuestions()) {
 					$defaults['randomQuestions'] =  $this->selectNbrQuestions();
 				} else {

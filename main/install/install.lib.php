@@ -1432,10 +1432,11 @@ function display_license_agreement() {
  */
 function get_contact_registration_form() {
 
-    $html ='    
-    <fieldset style="width:95%;padding:15px;border:1pt solid #eee">
+    $html ='
+   <form>    
+   <fieldset style="width:95%;padding:15px;border:1pt solid #eee">
     <div id="div_sent_information"></div>
-    <form>
+  
     <div class="row">
             <div class="label"><span class="form_required">*</span>'.get_lang('Name').'</div>
             <div class="formw"><input id="person_name" type="text" name="person_name" size="30" /></div>
@@ -1535,9 +1536,8 @@ function get_contact_registration_form() {
     <div class="row">
             <div class="label">&nbsp;</div>
             <div class="formw"><span class="form_required">*</span><small>'.get_lang('FieldRequired').'</small></div>
-    </div>
-    </form>
-</fieldset>';
+    </div>    
+</fieldset></form>';
 
 return $html;
 }

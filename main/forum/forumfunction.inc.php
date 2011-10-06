@@ -233,9 +233,9 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
                 document.getElementById('plus').innerHTML='&nbsp;'.Display::return_icon('div_show.gif').'&nbsp;".get_lang('AddAnAttachment')."';
                 }*/
 
-    $form->addElement('html', '<div class="row"><div class="label">');
-    $form->addElement('html', '<br /><div id="plus"><a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a></div>','');
-    $form->addElement('html', '</div><div class="formw"></div></div>');
+    $form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">');
+    $form->addElement('html', '<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>','');
+    $form->addElement('html', '</div></div>');
     $form->addElement('html', '<div id="options" style="display:none">');
 
     $group = '';
@@ -276,7 +276,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
     $group[] =& HTML_QuickForm::createElement('radio', 'default_view_type', null, get_lang('Nested'), 'nested');
     $form->addGroup($group, 'default_view_type_group', get_lang('DefaultViewType'), '&nbsp;');
 
-    $form->addElement('static','Group', '<br /><strong>'.get_lang('GroupSettings').'</strong>');
+    //$form->addElement('static','Group', '<br /><strong>'.get_lang('GroupSettings').'</strong>');
 
     // Dropdown list: Groups.
     $groups = GroupManager::get_group_list();
@@ -2009,22 +2009,23 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     //$form->applyFilter('post_title', 'html_filter');
     $form->addElement('html_editor', 'post_text', get_lang('Text'), null,
         api_is_allowed_to_edit(null, true)
-            ? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '400')
-            : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
+            ? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '300')
+            : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
     );
     //$form->applyFilter('post_text', 'html_filter');
 
-    $form->addElement('html', '<div class="row"><div class="label">');
-
-    $form->addElement('html', '</div><div class="formw"><a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a></div></div>');
+    $form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">');
+    $form->addElement('html', '<a href="javascript://" onclick="return advanced_parameters()">
+    						  <span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a></div></div>');
+    
     $form->addElement('html', '<div id="id_qualify" style="display:none">');
 
     if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ) {
 
-        // Thread qualify
-        $form->addElement('static', 'Group', '<br /><strong>'.get_lang('AlterQualifyThread').'</strong>');
+        // Thread qualify        
         $form->applyFilter('numeric_calification', 'html_filter');
         $form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'), 'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+        
         $form -> addElement('html', '<div id="options_field" style="display:none">');
         $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'),'Style="width:40px"');
         $form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
@@ -2048,7 +2049,7 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     }
 
     // User upload
-    $form->addElement('html', '<br /><b><div class="row"><div class="label">'.get_lang('AddAnAttachment').'</div></div></b><br /><br />');
+    $form->addElement('html', '<b><div class="row"><div class="label">'.get_lang('AddAnAttachment').'</div></div></b><br /><br />');
     $form->addElement('file', 'user_upload',get_lang('FileName'),'');
     $form->addElement('textarea', 'file_comment', get_lang('FileComment'), array ('rows' => 4, 'cols' => 34));
     $form->applyFilter('file_comment', 'html_filter');

@@ -192,7 +192,6 @@ if (api_is_allowed_to_edit(false, true)) {
     }
 }
 
-var_dump(api_is_coach());
 echo '</div>';
 
 /* Display Forum Categories and the Forums in it */

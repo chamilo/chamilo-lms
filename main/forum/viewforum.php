@@ -259,34 +259,39 @@ if (!empty($message)) {
 
 /* Action links */
 
+echo '<div class="actions">';
+
 if ($origin != 'learnpath') {
-    echo '<div class="actions">';
+    
     if ($origin=='group') {
         echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'','32').'</a>';
     } else {
         echo '<span style="float:right;">'.search_link().'</span>';
         echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', '32').'</a>';
-    }
-    // The link should appear when
-    // 1. the course admin is here
-    // 2. the course member is here and new threads are allowed
-    // 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
-    if (api_is_allowed_to_edit(false, true) OR ($current_forum['allow_new_threads'] == 1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads'] == 1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous'] == 1)) {
-        if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
-            if (!api_is_anonymous()) {
-                if ($my_forum == strval(intval($my_forum))) {
-                    echo '<a href="newthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.Security::remove_XSS($my_forum).$origin_string.'">'.Display::return_icon('new_thread.png',get_lang('NewTopic'),'','32').'</a>';
-                } else {
-                    $my_forum = strval(intval($my_forum));
-                    echo '<a href="newthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.$my_forum.$origin_string.'">'.Display::return_icon('new_thread.png',get_lang('NewTopic'),'','32').'</a>';
-                }
-             }
-        } else {
-            echo get_lang('ForumLocked');
-        }
-    }
-    echo '</div>';
+    }    
 }
+
+
+// The link should appear when
+// 1. the course admin is here
+// 2. the course member is here and new threads are allowed
+// 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
+if (api_is_allowed_to_edit(false, true) OR ($current_forum['allow_new_threads'] == 1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads'] == 1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous'] == 1)) {
+	if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
+		if (!api_is_anonymous()) {
+			if ($my_forum == strval(intval($my_forum))) {
+				echo '<a href="newthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.Security::remove_XSS($my_forum).$origin_string.'">'.Display::return_icon('new_thread.png',get_lang('NewTopic'),'','32').'</a>';
+		    } else {
+		    	$my_forum = strval(intval($my_forum));
+				echo '<a href="newthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.$my_forum.$origin_string.'">'.Display::return_icon('new_thread.png',get_lang('NewTopic'),'','32').'</a>';
+			}
+		}
+	} else {
+		echo get_lang('ForumLocked');
+	}
+}
+echo '</div>';
+
 
 /* Display */
 
@@ -294,19 +299,14 @@ echo '<table class="forum_table" >';
 
 // The current forum
 if ($origin != 'learnpath') {
-
     echo '<thead><tr><th class="forum_head" colspan="7">';
-
     if (!empty ($current_forum_category['cat_title'])) {
         //echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])."</span><br />";
     }
-
     echo '<span class="forum_title">'.prepare4display($current_forum['forum_title']).'</span>';
-
     if (!empty ($current_forum['forum_comment'])) {
         echo '<br /><span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';
     }
-
     echo '</th></tr></thead>';
 }
 

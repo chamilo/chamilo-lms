@@ -174,7 +174,7 @@ if ($origin == 'group') {
 } else {
     echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview'),'','32').'</a>';
 }*/
-echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'">'.Display::return_icon('back.png',get_lang('BackToForum'),'','32').'</a>';
+echo '<a href="viewforum.php?origin='.$origin.'&forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'">'.Display::return_icon('back.png',get_lang('BackToForum'),'','32').'</a>';
 echo '</div>';
 
 /* Display Forum Category and the Forum information */

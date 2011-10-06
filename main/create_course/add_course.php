@@ -92,17 +92,14 @@ $form = new FormValidator('add_course');
 $form->addElement('header', '', $tool_name);
 
 // Title
-$form->addElement('text', 'title', get_lang('CourseName'), array('size' => '60', 'id' => 'title'));
+$form->addElement('text', 'title', array(get_lang('CourseName'), get_lang('Ex')), array('size' => '60', 'id' => 'title'));
 $form->applyFilter('title', 'html_filter');
-$form->addElement('static', null, null, get_lang('Ex'));
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
 // Course category.
-$categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), array(), array('id'=> 'category_code','class'=>'chzn-select', 'style'=>'width:350px'));
+$categories_select = $form->addElement('select', 'category_code', array(get_lang('Fac'), get_lang('TargetFac')), array(), array('id'=> 'category_code','class'=>'chzn-select', 'style'=>'width:350px'));
 $form->applyFilter('category_code', 'html_filter');
 CourseManager::select_and_sort_categories($categories_select);
-$form->addElement('static', null, null, get_lang('TargetFac'));
-
 
 $form -> addElement('html','<div class="row">
     <div class="label">&nbsp;</div>
@@ -114,8 +111,7 @@ $form -> addElement('html','<div class="row">
 $form -> addElement('html','<div id="options" style="display:none">');
 
 // Course code.
-$form->add_textfield('wanted_code', get_lang('Code'), '', array('size' => $maxlength, 'maxlength' => $maxlength));
-$form->addElement('static', null, null, get_lang('OnlyLettersAndNumbers'));
+$form->add_textfield('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('size' => $maxlength, 'maxlength' => $maxlength));
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule('wanted_code', get_lang('Max'), 'maxlength', $maxlength);
 
@@ -124,8 +120,7 @@ $form->addRule('wanted_code', get_lang('Max'), 'maxlength', $maxlength);
 }*/
 
 // The teacher.
-$titular = & $form->add_textfield('tutor_name', get_lang('Professor'), null, array('size' => '60', 'disabled' => 'disabled'));
-$form->addElement('static', null, null, get_lang('ExplicationTrainers'));
+$titular = & $form->add_textfield('tutor_name', array(get_lang('Professor'), get_lang('ExplicationTrainers')), null, array('size' => '60', 'disabled' => 'disabled'));
 //$form->applyFilter('tutor_name', 'html_filter');
 
 if ($course_validation_feature) {

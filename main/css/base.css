@@ -3561,8 +3561,8 @@ form .formw {
 }
 
 .formw table {
-    float: left;
-    margin-left: 24px;
+/*    float: left;
+    margin-left: 24px;*/
 }
 
 form div.form_error {

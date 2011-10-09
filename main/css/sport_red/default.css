@@ -75,8 +75,10 @@ ul.medios li {
     font-size:11px;
 }
 
-
-
+.actions {
+    margin: 10px;
+    -moz-border-radius: 5px;
+}
 
 /* the following for regular <a> elements */
 a:link {

@@ -1708,7 +1708,59 @@ button:hover {
 /* padding:0px 15px 4px 8px; might show better in IE7 & 8 */
 }    
 
+/* Warning and error messages to the user */
 
+.confirmation-message, .error-message, .normal-message, .warning-message {
+	min-height: 15px;
+	position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+	border-width: 1px;
+    border-style: solid;
+	padding:6px;
+}
+.confirmation-message img, .error-message img, .normal-message img, .warning-message img {
+	position: relative;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	float:left;
+}
+.confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link {
+	position: absolute;
+	bottom: 0.2em;
+	right: 0.5em;
+}
+
+/* New training message link */
+.bottom-link {
+	border: 2px outset;
+	text-decoration: none;
+	background-color:#E5EDF9;
+	border-color: #D4E2F6;
+	background-position:10px 50%;
+	background-repeat:no-repeat;
+	font-size:100%;
+	margin-top:1px;
+	padding:5px 20px;
+	vertical-align:middle;
+	padding-left:35px;
+	display:block;
+}
+.bottom-link:active {
+	border: 2px inset;
+}
+.bottom-link:link {
+	border-style: solid;
+	border-width : 1px 2px 2px 1px;
+	text-decoration : none;
+	border-color : #69f #00f #00f #69f;
+}
+.bottom-link:hover {
+	border-color: #ccc;
+	color: #111;
+}
 
 /* Categories courses*/
 

@@ -110,46 +110,10 @@ a:active {
     color: #440000;
 	background: url("images/background_message.png") repeat-x scroll 0 0 #FFD1D1;
 }
-.confirmation-message, .error-message, .normal-message, .warning-message {
-	min-height: 30px;
-	position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;	
-    -moz-border-radius: 10px;
-    border-radius: 10px;    
-	border-width: 1px;
-    border-style: solid;
-	padding:6px;	
-}
 
 /* New training */
 .bottom-link {
-    border: 2px outset;
-    text-decoration: none;
-    background-color:#9fd854;
-    border-color: #D4E2F6;
     background-image:url(images/button_back.jpg);
-    background-position:10px 50%;
-    background-repeat:no-repeat;
-    font-size:100%;
-    margin-top:1px;
-    padding:5px 20px;
-    vertical-align:middle;
-    padding-left:35px;
-    display:block;
-}
-.bottom-link:active {
-    border: 2px inset;
-}
-.bottom-link:link {
-    border-style: solid;
-    border-width : 1px 2px 2px 1px;
-    text-decoration : none;
-    border-color : #69f #00f #00f #69f;
-}
-.bottom-link:hover {
-    border-color: #ccc;
-    color: #111;
 }
 
 .social-menu-title {

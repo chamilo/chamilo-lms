@@ -1,6 +1,9 @@
 /*****************************************************
  *  MAIN - DOKEOS CLASSIC 2D                         *
  *****************************************************/
+/* Adding default generic style for non chamilo_X themes */
+@import url('../base.css');
+
 html {
 	height: 100%;
 }
@@ -822,41 +825,6 @@ input.liteoption {
 ==============================================================================
 */
 
-/* Common message styles */
-
-.warning-message, .error-message {
-	border-width: 1px;
-	border-style: solid;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	min-height: 30px;
-	padding: 6px;
-	position: relative;
-}
-.normal-message {
-	position: relative;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	border-width: 1px;
-	border-style: solid;
-	padding: 6px;
-	border: 1px solid #dcdcdc;
-	color: #0055d1;
-	background-color: #E5EDF9;
-	min-height: 30px;
-}
-.confirmation-message {
-	position: relative;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	border-width: 1px;
-	border-style: solid;
-	padding: 6px;
-	border: 1px solid #1F8323;
-	color: #1F8323;
-	background-color: #CAF0C7;
-	min-height: 30px;
-}
 /* Specific message styles */
 .normal-message {
 	background-color: #E5EDF9;
@@ -878,40 +846,11 @@ input.liteoption {
 	border-color: #FF0000;
 	color: #000;
 }
-.confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link {
-	position: absolute;
-	bottom: 0.2em;
-	right: 0.5em;
-}
 /* New training */
 .bottom-link {
-	border: 2px outset;
-	text-decoration: none;
-	background-color:#E5EDF9;
-	border-color: #D4E2F6;
 	background-image:url(images/button_back.jpg);
-	background-position:10px 50%;
-	background-repeat:no-repeat;
-	font-size:100%;
-	margin-top:1px;
-	padding:5px 20px;
-	vertical-align:middle;
-	padding-left:35px;
-	display:block;
 }
-.bottom-link:active {
-	border: 2px inset;
-}
-.bottom-link:link {
-	border-style: solid;
-	border-width : 1px 2px 2px 1px;
-	text-decoration : none;
-	border-color : #69f #00f #00f #69f;
-}
-.bottom-link:hover {
-	border-color: #ccc;
-	color: #111;
-}
+
 /*
 ==============================================================================
     DOCUMENT MODULE

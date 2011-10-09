@@ -1,0 +1,339 @@
+/*****************************************************
+ *  MAIN  - SPORT RED - BASED ON CHAMILO RED CSS
+ *****************************************************/
+/* Adding default generic style for non chamilo_X themes */
+@import url('../base_chamilo.css');
+
+/**********************/
+/*** ADICIONAL CODE ***/
+/**********************/
+#logo {
+ padding-top:25px;
+ width: 420px;
+ float:left;
+}
+div#header3 ul li a span {
+    font-size:13px;
+}
+#header3 {
+    border-bottom: 0px;
+}
+#current #tab_active {
+    color: #EDDD00;
+}
+.bread {
+    background:#222222;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+}
+.bread li a {
+    background: url(images/crumbs.png) no-repeat right center;
+}
+.userportal-course-item {
+    background-color: #ededed;
+}
+#submain {
+    -moz-border-radius:22px;
+    -webkit-border-radius:22px;
+    border-radius:22px;
+}
+
+ul.bread li a span {
+    color:#CCC;
+}
+
+/*** medios ***/
+p#medios {
+    border-bottom:1px solid #CCC;
+    padding-bottom:10px;
+    color:#999;
+    width:85%;
+}
+ul.medios {
+    padding:0;    
+}
+ul.medios li a {
+    border: 1px solid #999999;
+    -webkit-border-radius: 4px 4px 4px 4px;
+    -moz-border-radius: 4px 4px 4px 4px;
+    border-radius: 4px 4px 4px 4px;
+    color: #999;
+    padding: 1px 4px 0;
+    height: 16px;
+}
+ul.medios li a:hover {
+    background:#DD0000;
+    border: 1px solid #DD0000;
+    color:#FFF;
+}
+ul.medios li {
+    display:inline;
+    font-size:11px;
+}
+
+
+
+
+/* the following for regular <a> elements */
+a:link {
+    text-decoration: none;
+    color :#B50018;
+}
+a:visited {
+    text-decoration: none;
+    color : #ff0000;
+}
+a:hover {
+    text-decoration: none;
+    color: #f3840d;
+}
+a:active {
+    text-decoration: none;
+    color : #ff0000;
+}
+
+#header1 {
+    background-image: url("images/bg-header1.gif");
+    border-top: 5px solid #900217;
+    height: 47px;
+    margin-bottom: 43px;
+}
+#header3 {
+    background-image:url(images/bg-header4.png);
+}
+#header4 {
+    /*background-image:url(images/bg-header4.png);*/
+}
+
+#header3  a {
+    background:transparent url(images/tab_left.png) no-repeat scroll left top;
+}
+
+#header3 li a span {
+    background:transparent url(images/tab_right.png) no-repeat scroll right top;
+}
+
+#current a {
+    background:transparent url(images/tab_left-active.png) no-repeat scroll left top;
+}
+#current {
+    /*background:transparent url(images/tab_center-active.png) no-repeat scroll right top;*/
+}   
+
+#current #tab_active {
+    background:transparent url(images/tab_right-active.png) no-repeat scroll right top;
+}
+.maincontent {
+    /*background:url(images/maincontent-bg.png) no-repeat 0% 0%;*/
+    width:63%;
+}
+#menu {
+    background:#FFF;
+    padding-top:16px;
+}
+#formLogin label {
+color: #9E0000;
+font-family: helvetica;
+font-size: 15px;
+}
+#footer a {
+    color:#FFC721;
+}
+
+
+/*****************************************************
+ *  FOOTER STYLES                                    *
+ *****************************************************/
+#footer {
+    background-color: #000;
+    background-image: url(images/bg-footer.gif);
+    background-repeat:repeat-x;
+    font-size: 12px;
+    color:#ffffff;
+    /*height: 10em;*/	 /* Do not change this value */
+    overflow:hidden;
+    width: 100%;
+    padding-bottom:18px;
+}
+/* Sticky footer*/
+.push {
+    height: 9em; /* Very important */
+}
+#footer .copyright {
+    float: right;
+    padding-top:60px;
+    margin-right:5%;
+    background-color: #a90a0e;
+    background-image: url(images/bg-footer.gif);
+    background-repeat:repeat-x;
+}
+
+.footer_emails{
+    float: left;
+    padding-top:60px;
+    margin-right:5%;
+    background-color: #a90a0e;
+    background-image: url(images/bg-footer.gif);
+    background-repeat:repeat-x;
+}
+
+/*****************************************************
+ *  DISPLAY MESSAGES	                             *
+ *****************************************************/
+.normal-message {    
+    color: #00407F;	
+    border: 1px solid #CDE6F5;	
+    background: url("images/background_message.png") repeat-x scroll 0 0 #EAF8FE;
+}
+.warning-message {    
+    border: 1px solid #FFB30F;
+    color: #000;    
+	background: url("images/background_message.png") repeat-x scroll 0 0 #FFEFA7;
+}
+.confirmation-message {
+	border: 1px solid #1F8323;
+    color:#1F8323;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #CAF0C7;
+}
+.error-message {        
+    border: 1px solid #FF0000;
+    color: #440000;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #FFD1D1;
+}
+
+/* New training */
+.bottom-link {
+    background-color:#fbc0c9;
+    border-color: #D4E2F6;
+    background-image:url(images/button_back.jpg);
+}
+
+.social-menu-title {
+    background-color:#ff0000;
+}
+
+#social-content-online {
+    background-color:#ff0000;
+}
+        
+.admin_section li {
+    background-image:url(images/bullet.gif);
+}
+
+.system_announcements {
+    background: transparent url('images/systemenouvelles.jpg') no-repeat top  left;
+}
+
+.topa {
+    background:transparent url('images/logoa4.gif') no-repeat;
+}
+.topb {
+    background:transparent url('images/logob4.gif') no-repeat;
+}
+
+#bottomhellomindfactory {    
+    background:transparent url('images/textologo.jpg') no-repeat;
+}
+
+
+#exercise_close_link {
+    background: url(images/close.gif) no-repeat;
+}
+
+#exercise_close_link:hover {
+    background: url(images/close_highlight.gif) no-repeat;
+}
+
+/*including "login" image*/
+button.login {
+    background:url(images/login-button.png) no-repeat 0 0;
+    width: 114px;
+    height:30px;
+    -moz-border-radius:0;
+    -webkit-border-radius:0;
+    border-radius:0;
+    border:none;
+    -moz-box-shadow:none;
+    -webkit-box-shadow:none;
+    box-shadow:none;
+    padding:0px 0px 0px 11px;
+    text-align:left;
+    text-transform:lowercase;
+    text-shadow:1px 1px 0px #FFF;
+    font-family:helvetica,sans-serif;
+    color:#990000;
+    margin:0px 0px 19px 0px!important;
+}
+
+button.login:hover {
+    background:url(images/login-button.png) no-repeat 0 -31px;
+    color:#333;
+}
+
+/*including "save" image*/
+button.save {
+    background-image:url(images/button_accept.gif);
+}
+/*including "add" image*/
+button.add {
+    background-image:url(images/button_add.gif);
+}
+/*including "cancel" image*/
+button.cancel {
+    background-image:url(images/button_delete.gif);
+}
+/*including "search" image*/
+button.search {
+    background-image:url(images/bg-button.gif);
+}
+/*including "plus" image*/
+button.plus {
+    background-image:url(images/button_plus.gif);
+}
+/*including "minus" image*/
+button.minus {
+    background-image:url(images/button_minus.gif);
+}
+/*including "next" image*/
+button.next {
+    background-image:url(images/button_next.gif);
+}
+/*including "back" image*/
+button.back {
+    background-image:url(images/button_back.gif);
+}
+/*including "refresh" image*/
+button.refresh {
+    background-image:url(images/button_refresh.gif);
+}
+/*including "upload" image*/
+button.upload {
+    background-image:url(images/button_upload.gif);
+}
+
+.fake_button_back {
+    background-image:url(images/button_back.gif);
+}
+button.arrowr {
+    background-image:url(images/2rightarrow.gif);
+}
+
+button.arrowl {
+    background-image:url(images/2leftarrow.gif);
+}
+
+input.arrowr {
+    background-image:url(images/2rightarrow.gif);
+}
+
+input.arrowl {
+    background-image:url(images/2leftarrow.gif);
+}
+.refresh {
+    background-image:url(images/refresh.png);
+}
+
+.portal {
+    background-image:url(images/portal.png);
+}

@@ -301,11 +301,11 @@ function write_system_config_file($path) {
     $config['SINGLE_DATABASE']          = true_false($singleDbForm);
     $config['{COURSE_TABLE_PREFIX}']    = ($singleDbForm ? 'crs_' : '');    
     $config['{DATABASE_GLUE}']          = ($singleDbForm ? '_' : '`.`');  
-    $config['{DATABASE_PREFIX}']        = $dbPrefixForm;
+    $config['{DATABASE_PREFIX}']        = '';
     $config['{DATABASE_MAIN}']          = $dbNameForm;
-    $config['{DATABASE_STATS}']         = (($singleDbForm && empty($dbStatsForm)) ? $dbNameForm : $dbStatsForm);
-    $config['{DATABASE_SCORM}']         = (($singleDbForm && empty($dbScormForm)) ? $dbNameForm : $dbScormForm);
-    $config['{DATABASE_PERSONAL}']      = (($singleDbForm && empty($dbUserForm)) ?  $dbNameForm : $dbUserForm);
+    $config['{DATABASE_STATS}']         = $dbNameForm;
+    $config['{DATABASE_SCORM}']         = $dbNameForm;
+    $config['{DATABASE_PERSONAL}']      = $dbNameForm;
     $config['{ROOT_WEB}']               = $urlForm;
     $config['{ROOT_SYS}']               = $root_sys;
     $config['{URL_APPEND_PATH}']        = $urlAppendPath;
@@ -1410,11 +1410,11 @@ function display_license_agreement() {
 
     <!-- Contact information form -->
 	<div>
-    	<div class="formw">
+    	
         	<a href="javascript://" class = "advanced_parameters" >
             	<span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" />&nbsp;<?php echo get_lang('ContactInformation') ?></span>
            	</a>
-		</div>
+		
 	</div>
                     
     <div id="id_contact_form" style="display:block">
@@ -1588,29 +1588,29 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         global $_configuration, $update_from_version_6;
 
         if (in_array($_POST['old_version'], $update_from_version_6)) {
-            $dbHostForm     = get_config_param('dbHost');
-            $dbUsernameForm = get_config_param('dbLogin');
-            $dbPassForm     = get_config_param('dbPass');
-            $dbPrefixForm   = get_config_param('dbNamePrefix');
+            $dbHostForm     	= get_config_param('dbHost');
+            $dbUsernameForm 	= get_config_param('dbLogin');
+            $dbPassForm     	= get_config_param('dbPass');
+            $dbPrefixForm   	= get_config_param('dbNamePrefix');
             $enableTrackingForm = get_config_param('is_trackingEnabled');
-            $singleDbForm   = get_config_param('singleDbEnabled');
-            $dbNameForm     = get_config_param('mainDbName');
-            $dbStatsForm    = get_config_param('statsDbName');
-            $dbScormForm    = get_config_param('scormDbName');
-            $dbUserForm     = get_config_param('user_personal_database');
-            $dbScormExists  = true;
+            $singleDbForm   	= get_config_param('singleDbEnabled');
+            $dbNameForm     	= get_config_param('mainDbName');
+            $dbStatsForm    	= get_config_param('statsDbName');
+            $dbScormForm    	= get_config_param('scormDbName');
+            $dbUserForm     	= get_config_param('user_personal_database');
+            $dbScormExists  	= true;
         } else {
-            $dbHostForm     = $_configuration['db_host'];
-            $dbUsernameForm = $_configuration['db_user'];
-            $dbPassForm     = $_configuration['db_password'];
-            $dbPrefixForm   = $_configuration['db_prefix'];
+            $dbHostForm     	= $_configuration['db_host'];
+            $dbUsernameForm 	= $_configuration['db_user'];
+            $dbPassForm     	= $_configuration['db_password'];
+            $dbPrefixForm   	= $_configuration['db_prefix'];
             $enableTrackingForm = $_configuration['tracking_enabled'];
-            $singleDbForm   = $_configuration['single_database'];
-            $dbNameForm     = $_configuration['main_database'];
-            $dbStatsForm    = $_configuration['statistics_database'];
-            $dbScormForm    = $_configuration['scorm_database'];
-            $dbUserForm     = $_configuration['user_personal_database'];
-            $dbScormExists  = true;
+            $singleDbForm   	= $_configuration['single_database'];
+            $dbNameForm     	= $_configuration['main_database'];
+            $dbStatsForm    	= $_configuration['statistics_database'];
+            $dbScormForm    	= $_configuration['scorm_database'];
+            $dbUserForm     	= $_configuration['user_personal_database'];
+            $dbScormExists  	= true;
         }
 
         if (empty($dbScormForm)) {
@@ -1628,9 +1628,9 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingUpgradeIntro');
         echo '</div>';
-    } else {        
+    } else {
         if (empty($dbPrefixForm)) { //make sure there is a default value for db prefix
-            $dbPrefixForm = 'chamilo_';
+            $dbPrefixForm = '';
         }
         echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2></div>';
         echo '<div class="RequirementContent">';
@@ -1653,8 +1653,8 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
       <td width="30%"><?php echo get_lang('EG').' localhost'; ?></td>
       <?php endif; ?>
     </tr>
-    <?php
-echo '<tr>';
+    <tr>
+    <?php	
     //database user username
     $example_login = get_lang('EG').' root';
     display_database_parameter($installType, get_lang('DBLogin'), 'dbUsernameForm', $dbUsernameForm, $example_login);
@@ -1662,11 +1662,6 @@ echo '<tr>';
     //database user password
     $example_password = get_lang('EG').' '.api_generate_password();
     display_database_parameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
-    
-    ?>
-
-        
-	<?php 
 
     //Fields for the four standard Chamilo databases    
     if ($installType != INSTALL_TYPE_UPDATE) {        
@@ -1688,17 +1683,16 @@ echo '<tr>';
     display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm',  $dbNameForm,  '&nbsp;', null, 'id="optional_param1" '.$style);
     
     //Only for updates we show this options
-    if ($installType == INSTALL_TYPE_UPDATE) {    
-    	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" '.$style);    
-    
+    if ($installType == INSTALL_TYPE_UPDATE) {
+    	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" '.$style);
 	    if ($installType == INSTALL_TYPE_UPDATE && in_array($_POST['old_version'], $update_from_version_6)) {
-        display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" '.$style);
+        	display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" '.$style);
     	}    
     	display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" '.$style);
     }
     
     //Database Prefix
-    display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, '', null, 'id="optional_param5" '.$style); //get_lang('DbPrefixCom')
+    //display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, '', null, 'id="optional_param5" '.$style); //get_lang('DbPrefixCom')
     
     /*  Tracking is always available see #2066
      *
@@ -1724,7 +1718,7 @@ echo '<tr>';
         if ($dbConnect == 1): ?>
         <td colspan="2">
             <div class="confirmation-message">                
-                Database host info: <strong><?php echo Database::get_host_info(); ?></strong><br />
+                Database host: <strong><?php echo Database::get_host_info(); ?></strong><br />
                 Database server version: <strong><?php echo Database::get_server_info(); ?></strong><br />
                 Database client version: <strong><?php echo Database::get_client_info(); ?></strong><br />
                 Database protocol version: <strong><?php echo Database::get_proto_info(); ?></strong>
@@ -1785,34 +1779,28 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
     echo '<table class="data_table_no_border">';
 
     //First parameter: language
-    echo "<tr>\n";
-    echo '<td>'.get_lang('MainLang')."&nbsp;&nbsp;</td>\n";
-
+    echo "<tr>";
+    echo '<td>'.get_lang('MainLang')."&nbsp;&nbsp;</td>";
     if ($installType == 'update') {
-
-        echo '<td><input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES).'" />'.$languageForm."</td>\n";
+        echo '<td><input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES).'" />'.$languageForm."</td>";
 
     } else { // new installation
-
         echo '<td>';
-
         display_language_selection_box('languageForm', $languageForm);
-
         echo "</td>\n";
     }
     echo "</tr>\n";
 
     //Second parameter: Chamilo URL
     echo "<tr>\n";
-    echo '<td>'.get_lang('ChamiloURL').' (<font color="red">'.get_lang('ThisFieldIsRequired')."</font>)&nbsp;&nbsp;</td>\n";
+    echo '<td>'.get_lang('ChamiloURL').' (<font color="red">'.get_lang('ThisFieldIsRequired')."</font>)&nbsp;&nbsp;</td>";
 
     if ($installType == 'update') {
         echo '<td>'.api_htmlentities($urlForm, ENT_QUOTES)."</td>\n";
     } else {
-        echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.api_htmlentities($urlForm, ENT_QUOTES).'" />'."</td>\n";
+        echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.api_htmlentities($urlForm, ENT_QUOTES).'" />'."</td>";
     }
-
-    echo "</tr>\n";
+    echo "</tr>";
 
     //Parameter 3: administrator's email
     display_configuration_parameter($installType, get_lang('AdminEmail'), 'emailForm', $emailForm);
@@ -1861,15 +1849,14 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
       <?php endif; ?>
     </tr>
 
-     */
+    */
 
     ?>
     <tr>
       <td><?php echo get_lang("EncryptMethodUserPass"); ?> :</td>
-
-      <?php if ($installType == 'update'){ ?>
+      <?php if ($installType == 'update') { ?>
       <td><input type="hidden" name="encryptPassForm" value="<?php echo $encryptPassForm; ?>" /><?php echo $encryptPassForm; ?></td>
-      <?php }else{ ?>
+      <?php } else { ?>
       <td>
         <input class="checkbox" type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo ($encryptPassForm == 'sha1') ? 'checked="checked" ': ''; ?>/> <label for="encryptPass1"><?php echo 'sha1'; ?></label>
         <input class="checkbox" type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm == 1 ? 'checked="checked" ' : ''; ?>/> <label for="encryptPass0"><?php echo 'md5'; ?></label>
@@ -1877,7 +1864,6 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
       </td>
       <?php } ?>
     </tr>
-
     <tr>
       <td><?php echo get_lang('AllowSelfReg'); ?> :</td>
 

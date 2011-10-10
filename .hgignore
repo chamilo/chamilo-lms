@@ -114,3 +114,6 @@ searchdb/*
 
 syntax: regexp
 ^main/upload/users$
+
+syntax: regexp
+^\.settings$

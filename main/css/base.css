@@ -3880,3 +3880,7 @@ form div.error input, form div.error textarea {
 .form-stacked .row {
     margin-bottom: 9px;
 }
+
+#install_form blockquote {
+	line-height: 16px;
+}

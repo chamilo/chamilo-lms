@@ -126,13 +126,13 @@ $software_name 		= 'Chamilo';
 $software_url 		= 'http://www.chamilo.org/';
 
 // A protection measure for already installed systems.
-
+/*
 if (is_already_installed_system()) {
 	// The system has already been installed, so block re-installation.
 	$global_error_code = 6;
 	require '../inc/global_error_message.inc.php';
 	die();
-}
+}*/
 
 /*		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
 
@@ -214,9 +214,9 @@ if (!isset($_GET['running'])) {
 	$dbPassForm		= '';
  	$dbPrefixForm   = '';
 	$dbNameForm		= 'main';
-	$dbStatsForm    = 'chamilo_main';
-	$dbScormForm    = 'chamilo_main';
-	$dbUserForm		= 'chamilo_main';
+	$dbStatsForm    = 'main';
+	$dbScormForm    = 'main';
+	$dbUserForm		= 'main';
 
 	// Extract the path to append to the url if Chamilo is not installed on the web root directory.
 	$urlAppendPath  = api_remove_trailing_slash(api_get_path(REL_PATH));
@@ -623,23 +623,23 @@ if ($_POST['step2']) {
 	</div>
     <div class="RequirementContent">
 		<?php echo get_lang('HereAreTheValuesYouEntered'); ?>
-	</div>
-	<strong><?php echo get_lang('PrintThisPageToRememberPassAndOthers'); ?></strong>
-
+	</div><br />
+	
 	<blockquote>
 
 	<?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
 	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
 	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
 	<?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
-	<?php echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
+	<?php //echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
 	<?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong>
-	<?php if ($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br />
+	
 	<?php
 	if (!$singleDbForm) {
 		//Showing this data only in case a user migrates from a 3 main databases (main, user, tracking)
 		//@todo should be removed
 		if ($installType == 'update') {
+			echo '<br />';
 			echo get_lang('StatDB').' : <strong>'.$dbStatsForm.'</strong>';
 			if ($installType == 'new') {
 				echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
@@ -652,9 +652,9 @@ if ($_POST['step2']) {
 			echo '<br />';
 		}
 	}
-	?>
-	<?php //echo get_lang('EnableTracking').' : '.($enableTrackingForm ? get_lang('Yes') : get_lang('No')); ?>
-	<?php echo get_lang('SingleDb').' : '.($singleDbForm ? get_lang('One') : get_lang('Several')); ?><br /><br />
+	
+	//echo get_lang('EnableTracking').' : '.($enableTrackingForm ? get_lang('Yes') : get_lang('No')); ?>
+	<?php //echo get_lang('SingleDb').' : '.($singleDbForm ? get_lang('One') : get_lang('Several')); ?><br /><br />
 	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />
 	<?php echo get_lang('EncryptMethodUserPass').' : ';
   	echo $encryptPassForm;
@@ -673,10 +673,8 @@ if ($_POST['step2']) {
 	<?php if ($installType == 'new'): ?>
 	<?php echo get_lang('AdminLogin').' : <strong>'.$loginForm; ?></strong><br />
 	<?php echo get_lang('AdminPass').' : <strong>'.$passForm; /* TODO: Maybe this password should be hidden too? */ ?></strong><br /><br />
-	<?php else: ?>
-	<br />
+	<?php else: ?>	
 	<?php endif; ?>
-
 	<?php echo get_lang('CampusName').' : '.$campusForm; ?><br />
 	<?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br />
 	<?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br />

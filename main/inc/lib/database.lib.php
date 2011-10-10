@@ -40,6 +40,7 @@ class Database {
 
     /**
      *	Returns the name of the statistics database.
+     *  @todo use main_database
      */
     public static function get_statistic_database() {
         global $_configuration;
@@ -48,6 +49,7 @@ class Database {
 
     /**
      *	Returns the name of the SCORM database.
+     *  @todo use main_database
      *	@deprecated
      */
     public static function get_scorm_database() {
@@ -57,6 +59,7 @@ class Database {
 
     /**
      *	Returns the name of the database where all the personal stuff of the user is stored
+     *  @todo use main_database
      */
     public static function get_user_personal_database() {
         global $_configuration;

@@ -83,13 +83,15 @@ if (!defined('CLI_INSTALLATION')) {
 	if ($create_database) {
 		$sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`";
 		Database::query($sql) or die(Database::error());
-	}
-	
+	}	
 }
 
 /**
  * CREATING THE STATISTICS DATABASE
  */
+
+$mysqlStatsDb = $mysqlMainDb;
+/*
 if ($mysqlStatsDb != $mysqlMainDb) {
 	if (!$singleDbForm) {
 		// multi DB mode AND tracking has its own DB so create it
@@ -99,11 +101,14 @@ if ($mysqlStatsDb != $mysqlMainDb) {
 		// single DB mode so $mysqlStatsDb MUST BE the SAME than $mysqlMainDb
 		$mysqlStatsDb = $mysqlMainDb;
 	}
-}
+}*/
 
 /**
  * CREATING THE USER DATABASE
  */
+
+$mysqlUserDb = $mysqlMainDb;
+/*
 if ($mysqlUserDb != $mysqlMainDb) {
 	if (!$singleDbForm) {
 		// multi DB mode AND user data has its own DB so create it
@@ -113,10 +118,10 @@ if ($mysqlUserDb != $mysqlMainDb) {
 		// single DB mode so $mysqlUserDb MUST BE the SAME than $mysqlMainDb
 		$mysqlUserDb = $mysqlMainDb;
 	}
-}
+}*/
 
 // This parameter is needed to run a command line install of Chamilo (needed for Phing)
-if(!defined('CLI_INSTALLATION')) {
+if (!defined('CLI_INSTALLATION')) {
 	include api_get_path(SYS_LANG_PATH).'english/create_course.inc.php';
 
 	if ($languageForm != 'english') {
@@ -156,7 +161,7 @@ update_Db_course();
  * Creating the tables of the tracking database
  */
 
-Database::select_db($mysqlStatsDb) or die(Database::error());
+//Database::select_db($mysqlMainDb) or die(Database::error());
 
 load_database_script('db_stats.sql');
 
@@ -168,6 +173,6 @@ fill_track_countries_table($track_countries_table);
  * This is where the personal agenda items are storen, the user defined course categories (sorting of my courses)
  */
 
-Database::select_db($mysqlUserDb) or die(Database::error());
+//Database::select_db($mysqlMainDb) or die(Database::error());
 
 load_database_script('db_user.sql');

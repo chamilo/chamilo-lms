@@ -35,9 +35,9 @@ if (defined('SYSTEM_INSTALLATION')) {
     $_configuration['db_glue'] = get_config_param('dbGlu');
 
     if ($singleDbForm) {
-        $_configuration['table_prefix'] = get_config_param('courseTablePrefix');
-        $_configuration['main_database'] = get_config_param('mainDbName');
-        $_configuration['db_prefix'] = get_config_param('dbNamePrefix');
+        $_configuration['table_prefix'] 	= get_config_param('courseTablePrefix');
+        $_configuration['main_database'] 	= get_config_param('mainDbName');
+        $_configuration['db_prefix'] 		= get_config_param('dbNamePrefix');
     }
 
 	$dbScormForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbScormForm);
@@ -57,24 +57,22 @@ if (defined('SYSTEM_INSTALLATION')) {
     $only_test = false;
     $log = 0;
     if (defined('SYSTEM_INSTALLATION')) {
-
         if ($singleDbForm) {
             $dbStatsForm = $dbNameForm;
             $dbScormForm = $dbNameForm;
-            $dbUserForm = $dbNameForm;
-        }
+            $dbUserForm  = $dbNameForm;
+        }        
         /**
          * Update the databases "pre" migration
          */
         include '../lang/english/create_course.inc.php';
-
         if ($languageForm != 'english') {
             // languageForm has been escaped in index.php
             include '../lang/'.$languageForm.'/create_course.inc.php';
         }
-
         // Get the main queries list (m_q_list)
         $m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'main');
+        
         if (count($m_q_list) > 0) {
             // Now use the $m_q_list
             /**
@@ -102,33 +100,6 @@ if (defined('SYSTEM_INSTALLATION')) {
                 }
             }
         }
-
-        /* // This fragment of code is not necessary so far.
-        // Get the main queries list (m_q_list)
-        $m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-post.sql', 'main');
-        if (count($m_q_list) > 0) {
-            // Now use the $m_q_list
-            // We connect to the right DB first to make sure we can use the queries
-            // without a database name.
-            if (strlen($dbNameForm) > 40) {
-                error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
-            } elseif (!in_array($dbNameForm,$dblist)) {
-                error_log('Database '.$dbNameForm.' was not found, skipping', 0);
-            } else {
-                Database::select_db($dbNameForm);
-                foreach ($m_q_list as $query) {
-                    if ($only_test) {
-                        error_log("Database::query($dbNameForm,$query)", 0);
-                    } else {
-                        $res = Database::query($query);
-                        if ($log) {
-                            error_log("In $dbNameForm, executed: $query", 0);
-                        }
-                    }
-                }
-            }
-        }
-        */
 
         // Get the stats queries list (s_q_list)
         $s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'stats');
@@ -158,13 +129,53 @@ if (defined('SYSTEM_INSTALLATION')) {
                         }
                     }
                 }
-
             }
+        }
+        
+        //Moving Stats DB to the main database
+        
+        $stats_table = array(        
+			"track_c_browsers",
+			"track_c_countries",
+			"track_c_os",
+			"track_c_providers",
+			"track_c_referers",
+			"track_e_access",
+			"track_e_attempt",
+			"track_e_attempt_recording",
+			"track_e_course_access",
+			"track_e_default",
+			"track_e_downloads",
+			"track_e_exercices",
+			"track_e_hotpotatoes",
+			"track_e_hotspot",
+			"track_e_item_property",
+			"track_e_lastaccess",
+			"track_e_links",
+			"track_e_login",
+			"track_e_online",
+			"track_e_open",
+			"track_e_uploads",
+			"report_keys", //@todo add the "track_" prefix see #3967
+        	"report_values",
+        	"report_keys",
+        	"stored_values",
+        	"stored_values_stack",
+        );
+        
+        if ($dbNameForm != $dbStatsForm) {
+        	Database::select_db($dbStatsForm);
+	        foreach($stats_table as $stat_table) {
+	        	$sql = "ALTER TABLE $dbStatsForm.$stat_table RENAME $dbNameForm.$stat_table";
+	        	Database::query($sql);
+	        }
+	        Database::select_db($dbNameForm);
         }
 
 
         // Get the user queries list (u_q_list)
         $u_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'user');
+        
         if (count($u_q_list) > 0) {
             // Now use the $u_q_list
             /**
@@ -190,7 +201,23 @@ if (defined('SYSTEM_INSTALLATION')) {
                 }
             }
         }
-        // The SCORM database doesn't need a change in the pre-migrate part - ignore
+        
+        //Moving User DB to the main database
+        $users_table = array(
+        			"personal_agenda",
+        			"personal_agenda_repeat",
+        			"personal_agenda_repeat_not",
+        			"user_course_category"        			        
+        );
+        
+        if ($dbNameForm != $dbUserForm) {
+        	Database::select_db($dbUserForm);
+        	foreach($users_table as $table) {
+        		$sql = "ALTER TABLE $dbUserForm.$table RENAME  $dbNameForm.$table";
+        		Database::query($sql);
+        	}
+        	Database::select_db($dbNameForm);
+        }                
     }
     
     
@@ -201,7 +228,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     
     $prefix = '';
     if ($singleDbForm) {
-        $prefix =  get_config_param ('table_prefix');
+        $prefix =  get_config_param('table_prefix');
     }
 
     // Get the courses databases queries list (c_q_list)
@@ -235,10 +262,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                 
                 foreach ($list as $row_course) {
                     // Now use the $c_q_list
-                    /**
-                     * We connect to the right DB first to make sure we can use the queries
-                     * without a database name
-                     */
+                    
                     if (!$singleDbForm) { // otherwise just use the main one
                         Database::select_db($row_course['db_name']);
                     }
@@ -260,6 +284,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                         }
                     }                    
                     
+                    //Course tables to be migrated
                     $table_list = array(
                     					'announcement',
                                         'announcement_attachment',
@@ -394,8 +419,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     		} else {
                     			$errors[$old_table][] = $row;                    			
                     		}
-                    	}
-                    	
+                    	}                    	
                     	error_log("# rows inserted in $new_table: $count");
                     	
                     	if ($old_count != $count) {
@@ -424,13 +448,6 @@ if (defined('SYSTEM_INSTALLATION')) {
             }
         }
     }
-
-  
-    
-
-
 } else {
-
     echo 'You are not allowed here !';
-
 }

@@ -30,9 +30,6 @@ if (defined('SYSTEM_INSTALLATION')) {
 	copy(api_get_path(CONFIGURATION_PATH).'course_info.conf.dist.php', api_get_path(CONFIGURATION_PATH).'course_info.conf.php');
 	copy(api_get_path(CONFIGURATION_PATH).'mail.conf.dist.php', api_get_path(CONFIGURATION_PATH).'mail.conf.php');
 	copy(api_get_path(CONFIGURATION_PATH).'profile.conf.dist.php', api_get_path(CONFIGURATION_PATH).'profile.conf.php');
-
 } else {
-
 	echo 'You are not allowed here !';
-
 }

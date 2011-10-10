@@ -738,17 +738,6 @@ input.link_alike:hover {
 
 /* Warning and error messages to the user */
 
-.confirmation-message, .error-message, .normal-message, .warning-message {
-	min-height: 15px;
-	position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-	border-width: 1px;
-    border-style: solid;
-	padding:6px;
-}
 .confirmation-message img, .error-message img, .normal-message img, .warning-message img {
 	position: relative;
 	margin-top: 10px;

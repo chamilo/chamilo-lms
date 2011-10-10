@@ -17,7 +17,7 @@
  * same as the current one. If it isn't it will update session information from
  * the database. You can also force the course reset if you want ($gidReset).
  *
- The course id is stored in $_cid session variable.
+ * The course id is stored in $_cid session variable.
  * The group  id is stored in $_gid session variable.
  *
  *
@@ -79,61 +79,63 @@
 *
 *
 * GROUP VARIABLES
-	*
+*
 * int     $_gid (the group id)
-	*
-	*
-	*                       IMPORTANT ADVICE FOR DEVELOPERS
-	*
-	* We strongly encourage developers to use a connection layer at the top of
-	* their scripts rather than use these variables, as they are, inside the core
-	* of their scripts. It will make code maintenance much easier.
-	*
-	*    Many if the functions you need you can already find in the
-	*    main_api.lib.php
-	*
-	* We encourage you to use functions to access these global "kernel" variables.
-	* You can add them to e.g. the main API library.
-	*
-	*
-	*                               SCRIPT STRUCTURE
-	*
-	* 1. The script determines if there is an authentication attempt. This part
-	* only chek if the login name and password are valid. Afterwards, it set the
-	* $_user['user_id'] (user id) and the $uidReset flag. Other user informations are retrieved
-	* later. It's also in this section that optional external authentication
-	* devices step in.
-	*
-	* 2. The script determines what other session informations have to be set or
-	* reset, setting correctly $cidReset (for course) and $gidReset (for group).
-	*
-	* 3. If needed, the script retrieves the other user informations (first name,
-			* last name, ...) and stores them in session.
-	*
-	* 4. If needed, the script retrieves the course information and stores them
-	* in session
-	*
-	* 5. The script initializes the user permission status and permission for the
-	* course level
-	*
-	* 6. If needed, the script retrieves group informations an store them in
-	* session.
-	*
-	* 7. The script initializes the user status and permission for the group level.
-	*
-	*    @package chamilo.include
-	*/
-	/*
-		 INIT SECTION
-		 variables should be initialised here
-	 */
+*
+*
+*                       IMPORTANT ADVICE FOR DEVELOPERS
+*
+* We strongly encourage developers to use a connection layer at the top of
+* their scripts rather than use these variables, as they are, inside the core
+* of their scripts. It will make code maintenance much easier.
+*
+*    Many if the functions you need you can already find in the
+*    main_api.lib.php
+*
+* We encourage you to use functions to access these global "kernel" variables.
+* You can add them to e.g. the main API library.
+*
+*
+*                               SCRIPT STRUCTURE
+*
+* 1. The script determines if there is an authentication attempt. This part
+* only chek if the login name and password are valid. Afterwards, it set the
+* $_user['user_id'] (user id) and the $uidReset flag. Other user informations are retrieved
+* later. It's also in this section that optional external authentication
+* devices step in.
+*
+* 2. The script determines what other session informations have to be set or
+* reset, setting correctly $cidReset (for course) and $gidReset (for group).
+*
+* 3. If needed, the script retrieves the other user informations (first name,
+		* last name, ...) and stores them in session.
+*
+* 4. If needed, the script retrieves the course information and stores them
+* in session
+*
+* 5. The script initializes the user permission status and permission for the
+* course level
+*
+* 6. If needed, the script retrieves group informations an store them in
+* session.
+*
+* 7. The script initializes the user status and permission for the group level.
+*
+*    @package chamilo.include
+*/
 
-	require_once (api_get_path(LIBRARY_PATH).'conditionallogin.lib.php');
-	// verified if exists the username and password in session current
-	if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
-		require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-		require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
-	}
+/*
+	 INIT SECTION
+	 variables should be initialised here
+ */
+
+require_once (api_get_path(LIBRARY_PATH).'conditionallogin.lib.php');
+// verified if exists the username and password in session current
+if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
+	require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+	require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
+}
+
 //Conditional login
 if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login']['can_login']=== true){
 	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
@@ -190,7 +192,6 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 	//$_SESSION['update_term_and_condition'][1] is current user id, of user in session
 	if (api_get_setting('allow_terms_conditions')=='true') {
 		if (isset($_POST['login']) && isset($_POST['password']) && isset($_SESSION['update_term_and_condition'][1])) {
-
 			$user_id=$_SESSION['update_term_and_condition'][1];    // user id
 			// update the terms & conditions
 
@@ -289,7 +290,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
           $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
           $update_type= $update_type['update_type'];
           if (!empty($extAuthSource[$update_type]['updateUser']) && file_exists($extAuthSource[$update_type]['updateUser'])) {
-            include_once($extAuthSource[$update_type]['updateUser']);
+			include_once($extAuthSource[$update_type]['updateUser']);
           }
 					// Check if the account is active (not locked)
 					if ($uData['active']=='1') {
@@ -303,7 +304,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 
 								//Check if user is an admin
 								$sql = "SELECT user_id FROM $admin_table
-									WHERE user_id = '".intval($uData['user_id'])."' LIMIT 1";
+										WHERE user_id = '".intval($uData['user_id'])."' LIMIT 1";
 								$result = Database::query($sql);
 
 								$my_user_is_admin = false;

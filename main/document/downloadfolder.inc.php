@@ -22,7 +22,7 @@ if (empty($document_data)) {
 //a student should not be able to download a root shared directory
 if (($path == '/shared_folder' || $path=='/shared_folder_session_'.api_get_session_id()) && (!api_is_allowed_to_edit() || !api_is_platform_admin())){		
 	echo '<div align="center">';
-	Display::display_error_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br />', false);
+	Display::display_error_message(get_lang('NotAllowedClickBack'));
 	echo '</div>';
 	exit;
 }

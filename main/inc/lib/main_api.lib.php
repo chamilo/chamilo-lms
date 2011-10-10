@@ -2381,7 +2381,8 @@ function api_not_allowed($print_headers = false) {
 	                </style>';
     }
     
-    $msg = Display::return_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br />', 'error', false);
+    //$msg = Display::return_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br />', 'error', false);
+    $msg = Display::return_message(get_lang('NotAllowedClickBack'), 'error', false);
     $msg = Display::div($msg, array('align'=>'center'));
 	$tpl->assign('content', $msg);
 	    

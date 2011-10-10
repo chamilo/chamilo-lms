@@ -30,7 +30,7 @@ $message = '';
 
 if (api_is_platform_admin()) {
     if (is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php')) {
-        $message = Display::return_message(get_lang('InstallDirAccessibleSecurityThreat'),'warning');
+        $message = Display::return_message(get_lang('InstallDirAccessibleSecurityThreat'),'warning');        
     }
     /* ACTION HANDLING */
     if (!empty($_POST['Register'])) {
@@ -268,9 +268,8 @@ $tpl->assign('blocks', $blocks);
 $admin_template = $tpl->get_template('admin/settings_index.tpl');
 $content = $tpl->fetch($admin_template);
 $tpl->assign('content', $content);
-$template = $tpl->get_template('layout/layout_1_col.tpl');
-$tpl->display($template);
-
+$tpl->assign('message', $message);
+$tpl->display_one_col_template();
 
 /**
  * Displays either the text for the registration or the message that the installation is (not) up to date

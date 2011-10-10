@@ -349,7 +349,8 @@ if ($origin != 'learnpath') {
 		}
 	}
 } else {
-	echo '<link rel="stylesheet" type="text/css" href="' . api_get_path(WEB_CODE_PATH) . 'css/default.css"/>';
+	//echo '<link rel="stylesheet" type="text/css" href="' . api_get_path(WEB_CODE_PATH) . 'css/default.css"/>';
+	Display :: display_reduced_header();
 }
 
 event_access_tool(TOOL_QUIZ);
@@ -581,8 +582,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
                 $filter = 1;
             } else {
             	$filter = 2;
-            } 
-            
+            }
 			echo '<a id="export_opener" href="'.api_get_self().'?export_report=1&show=result&export_filter='.$filter.'&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval($_GET['exerciseId']).'" >'.
 				  Display::return_icon('save.png',   get_lang('Export'),'',32).'</a>';			
 		}

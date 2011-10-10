@@ -92,12 +92,17 @@ $html .= $message;
 $exercise_url_button = Display::url($label, $exercise_url, array('class'=>'a_button blue bigger round'));
 
 if (!$objExercise->is_visible($learnpath_id, $learnpath_item_id)) {
-	$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result&exerciseId='.$objExercise->id;
-	$exercise_url_button = Display::url(get_lang('SeeResults'), $exercise_url, array('class'=>'a_button white bigger round no_link'));
+	$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result&exerciseId='.$objExercise->id;	
+	//$exercise_url_button = Display::url(get_lang('SeeResults'), $exercise_url, array('class'=>'a_button white bigger round no_link'));
+	if ($origin == 'learnpath') {
+		$exercise_url_button = Display::return_message(sprintf(get_lang('ReachedMaxAttempts'), $objExercise->title, $objExercise->selectAttempts()), 'warning');
+	}
+	$exercise_url_button = sprintf(get_lang('ReachedMaxAttempts'), $objExercise->title, $objExercise->selectAttempts());
 }
-
 $options  = Display::div('', array('class'=>'left_option'));
-$options .= Display::div($exercise_url_button, array('class'=>'center_option'));
+if (!empty($exercise_url_button)) {
+	$options .= Display::div($exercise_url_button, array('class'=>'center_option'));
+}
 
 $attempts = get_exercise_results_by_user(api_get_user_id(), $objExercise->id, api_get_course_id(), api_get_session_id(), $learnpath_id, $learnpath_item_id);
 
@@ -175,14 +180,16 @@ if (!empty($attempts)) {
 
 if ($objExercise->selectAttempts()) {
 	if ($is_allowed_to_edit) {
-		$options.= Display::div(get_lang('ExerciseAttempts').' '.$objExercise->selectAttempts(), array('class'=>'right_option'));
-	} else {
-		$red_class = '';
-		if ($counter == $objExercise->selectAttempts()) {
-			$class = 'red_alert';
-		}
-		$options.= Display::div(get_lang('Attempts').' '.$counter.' / '.$objExercise->selectAttempts(), array('class'=>"right_option $class"));
+		//$options.= Display::div(get_lang('ExerciseAttempts').' '.$objExercise->selectAttempts(), array('class'=>'right_option'));
+	} else {		
 	}
+	
+	$red_class = '';
+	if ($counter == $objExercise->selectAttempts()) {
+		$class = 'red_alert';
+	}
+	$options.= Display::div(get_lang('Attempts').' '.$counter.' / '.$objExercise->selectAttempts(), array('class'=>"right_option $class"));
+	
 }
 if ($time_control) {
 	$html.=  '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';

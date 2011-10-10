@@ -3182,8 +3182,7 @@ class Exercise {
 			$email_admin = api_get_setting('emailAdministrator');
 			$subject = get_lang('ExerciseAttempted');
 			$result = @api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
-		}
-		var_dump($result);exit;
+		}		
 	}
 
 	function show_exercise_result_header($user_data, $date = null) {
@@ -3303,10 +3302,13 @@ class Exercise {
 		//1. By default the exercise is visible
 		$is_visible = true;
 		
+		
 		//1.1 Admins and teachers can access to the exercise
+		
 		if (api_is_platform_admin() || api_is_course_admin()) {
-			return true;
+			$is_visible = true;
 		}
+		
 		
 		//2. If the exercise is not active 
 		if ($this->active == 0) {
@@ -3347,6 +3349,7 @@ class Exercise {
 			}
 		}
 		
+	
 		return $is_visible;
 	}
 	

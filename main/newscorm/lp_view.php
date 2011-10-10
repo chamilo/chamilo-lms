@@ -172,6 +172,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
     $safe_item_id           = Database::escape_string($_GET['lp_item_id']);
     $safe_id                = $lp_id;
     $safe_exe_id            = intval($_REQUEST['exeId']);
+    $course_id 				= api_get_course_int_id();
 
     if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
 		
@@ -190,13 +191,13 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         if ($debug) error_log($sql_upd_max_score);
         Database::query($sql_upd_max_score);
 
-        $sql_last_attempt = "SELECT id FROM $TBL_LP_ITEM_VIEW  WHERE lp_item_id = '$safe_item_id' AND lp_view_id = '".$_SESSION['oLP']->lp_view_id."' order by id desc limit 1";
+        $sql_last_attempt = "SELECT id FROM $TBL_LP_ITEM_VIEW  WHERE c_id = $course_id AND lp_item_id = '$safe_item_id' AND lp_view_id = '".$_SESSION['oLP']->lp_view_id."' order by id desc limit 1";
         $res_last_attempt = Database::query($sql_last_attempt);
-        $row_last_attempt = Database::fetch_row($res_last_attempt);
-        $lp_item_view_id = $row_last_attempt[0];
-
-        if (Database::num_rows($res_last_attempt) > 0) {
-            $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' , score = $score, total_time = $mytime WHERE id='".$lp_item_view_id."'";
+        
+        if (Database::num_rows($res_last_attempt)) {
+        	$row_last_attempt = Database::fetch_row($res_last_attempt);
+        	$lp_item_view_id  = $row_last_attempt[0];
+            $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' , score = $score, total_time = $mytime WHERE id='".$lp_item_view_id."' AND c_id = $course_id ";
             if ($debug) error_log($sql_upd_score);
             Database::query($sql_upd_score);
 

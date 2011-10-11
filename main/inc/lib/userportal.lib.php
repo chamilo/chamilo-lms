@@ -735,7 +735,7 @@ class IndexManager {
 		$form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-stacked'));
 		$form->addElement('text', 'login', get_lang('UserName'), array('size' => 17));
 		$form->addElement('password', 'password', get_lang('Pass'), array('size' => 17));
-		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'a_button blue '));
+		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'a_button gray'));
 		$renderer =& $form->defaultRenderer();
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>');
 		$html = $form->return_form();

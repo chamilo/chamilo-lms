@@ -12,6 +12,22 @@ $(document).ready(function() {
 		width	: 550, 
 		height	: 350
    	});
+
+	var title = $( "#title" ),
+	content = $( "#content" ),	
+	allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");
+	
+
+	function checkLength( o, n, min, max ) {
+		if ( o.val().length > max || o.val().length < min ) {
+			o.addClass( "ui-state-error" );
+			updateTips( "Length of " + n + " must be between " +
+				min + " and " + max + "." );
+			return false;
+		} else {
+			return true;
+		}
+	}
 	
 	var calendar = $('#calendar').fullCalendar({
 		header: {
@@ -50,12 +66,17 @@ $(document).ready(function() {
 				$('#color_calendar').html('{$type_label}');
 				$('#color_calendar').addClass('label_tag');
 				$('#color_calendar').addClass('{$type}_event');
-											
+				
+				allFields.removeClass( "ui-state-error" );		
 				$("#dialog-form").dialog("open");		
 				
 				$("#dialog-form").dialog({				
 					buttons: {
 						"Add event": function() {
+							var bValid = true;
+							bValid = bValid && checkLength( title, "title", 1, 255 );
+							//bValid = bValid && checkLength( content, "content", 1, 255 );
+							
 							var params = $("#add_event_form").serialize();						
 							$.ajax({
 								url: url+'&'+params,
@@ -108,6 +129,7 @@ $(document).ready(function() {
 	
 				$("#title").attr('value', calEvent.title);
 				$("#content").attr('value', calEvent.description);
+				allFields.removeClass( "ui-state-error" );
 				
 				$("#dialog-form").dialog("open");
 	
@@ -117,6 +139,11 @@ $(document).ready(function() {
 				$("#dialog-form").dialog({				
 					buttons: {
 						"Edit" : function() {
+							
+							var bValid = true;
+							bValid = bValid && checkLength( title, "title", 1, 255 );
+							//bValid = bValid && checkLength( content, "content", 1, 255 );
+							
 							var params = $("#add_event_form").serialize();						
 							$.ajax({
 								url: url+'&'+params,
@@ -177,7 +204,7 @@ $(document).ready(function() {
 </script>
 
 <div id="dialog-form" style="display:none;">
-	<div style="width:500px">			
+	<div style="width:500px">
 	<form id="add_event_form" name="form">	
 		<div class="row">		
 			<div class="label">

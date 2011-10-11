@@ -94,7 +94,7 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 	$form->addElement('text', 'user', array(get_lang('LoginOrEmailAddress'), get_lang('EnterEmailUserAndWellSendYouPassword')), array('size'=>'40'));
 
 	//$form->applyFilter('email','strtolower');
-	$form->addElement('style_submit_button', 'submit', get_lang('Send'),'class="save"');
+	$form->addElement('style_submit_button', 'submit', get_lang('Send'),'class="a_button gray"');
 
 	// setting the rules
 	$form->addRule('user', get_lang('ThisFieldIsRequired'), 'required');

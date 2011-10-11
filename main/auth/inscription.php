@@ -426,7 +426,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
-$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), 'class="save"');
+$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), 'class="a_button gray"');
 
 if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
     $defaults['language'] = $_SESSION['user_language_choice'];

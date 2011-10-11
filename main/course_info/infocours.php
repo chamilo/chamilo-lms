@@ -346,7 +346,7 @@ $all_course_information =  CourseManager::get_course_information($_course['sysCo
 // Set the default values of the form
 
 $values['title']                        = $_course['name'];
-$values['visual_code']                  = $_course['official_code'];
+//$values['visual_code']                  = $_course['official_code'];
 $values['category_code']                = $_course['categoryCode'];
 //$values['tutor_name']                 = $_course['titular'];
 $values['course_language']              = $_course['language'];
@@ -413,18 +413,17 @@ if ($form->validate() && is_settings_editable()) {
     }
     
     //Variables that will be saved in the TABLE_MAIN_COURSE table
-    $update_in_course_table = array('title','visual_code', 'course_language','category_code','department_name', 'department_url','visibility',  
+    $update_in_course_table = array('title', 'course_language','category_code','department_name', 'department_url','visibility',  
     								'subscribe', 'unsubscribe','tutor_name','course_registration_password');
 
 	foreach ($update_values as $index =>$value) {
 		$update_values[$index] = Database::escape_string($value);
 	}
 	unset($value);
-    
+	//visual_code 		    = '".$update_values['visual_code']."',
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "UPDATE $table_course SET
-				title 				    = '".Security::remove_XSS($update_values['title'])."',
-				visual_code 		    = '".$update_values['visual_code']."',
+				title 				    = '".Security::remove_XSS($update_values['title'])."',				
 				course_language 	    = '".$update_values['course_language']."',
 				category_code 		    = '".$update_values['category_code']."',
 				department_name  	    = '".Security::remove_XSS($update_values['department_name'])."',
@@ -449,7 +448,7 @@ if ($form->validate() && is_settings_editable()) {
 	$cidReset = true;
 	$cidReq = $course_code;
 	require '../inc/local.inc.php';
-	header('Location: infocours.php?action=show_message&amp;cidReq='.$course_code);
+	header('Location: infocours.php?action=show_message&cidReq='.$course_code);
 	exit;
 }
 

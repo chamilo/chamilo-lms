@@ -64,60 +64,54 @@ class manager {
 		 * @path the path to a folder
 		 * @calculateSubdir force to get the subdirectories information
 		 */		
-	function __construct($path = null, $calculateSubdir=true)
-	{
-
+	function __construct($path = null, $calculateSubdir=true) {
 		$this->calculateSubdir = $calculateSubdir;
-		if(defined('CONFIG_SYS_FOLDER_SHOWN_ON_TOP'))
-		{
+		if(defined('CONFIG_SYS_FOLDER_SHOWN_ON_TOP')) {
 			$this->forceFolderOnTop = CONFIG_SYS_FOLDER_SHOWN_ON_TOP;
 		}
-		if(!is_null($path))
-		{
+		
+		if (!is_null($path)) {
 			$this->currentFolderPath = $path;
-
-		}elseif(isset($_GET[$this->folderPathIndex]) && file_exists($_GET[$this->folderPathIndex]) && !is_file($_GET[$this->folderPathIndex]) )
-		{
-			$this->currentFolderPath = api_htmlentities(Security::remove_XSS($_GET[$this->folderPathIndex]));
-		}
-		elseif(isset($_SESSION[$this->lastVisitedFolderPathIndex]) && file_exists($_SESSION[$this->lastVisitedFolderPathIndex]) && !is_file($_SESSION[$this->lastVisitedFolderPathIndex]))
-		{
+		} elseif(isset($_GET[$this->folderPathIndex]) && file_exists(base64_decode($_GET[$this->folderPathIndex])) && !is_file(base64_decode($_GET[$this->folderPathIndex]))) {			
+			$this->currentFolderPath = api_htmlentities(Security::remove_XSS($_GET[$this->folderPathIndex]));		
+							
+		} elseif(isset($_SESSION[$this->lastVisitedFolderPathIndex]) && file_exists($_SESSION[$this->lastVisitedFolderPathIndex]) && !is_file($_SESSION[$this->lastVisitedFolderPathIndex])) {
 			$this->currentFolderPath = $_SESSION[$this->lastVisitedFolderPathIndex];
-		}else
-		{
+		} else {
 			$this->currentFolderPath = CONFIG_SYS_DEFAULT_PATH;
-		}
+		}	
 		
-		$this->currentFolderPath = (isUnderRoot($this->currentFolderPath)?backslashToSlash((addTrailingSlash($this->currentFolderPath))):CONFIG_SYS_DEFAULT_PATH);
+		$this->currentFolderPath = (isUnderRoot($this->getCurrentFolderPath())?backslashToSlash((addTrailingSlash($this->getCurrentFolderPath()))):CONFIG_SYS_DEFAULT_PATH);
 		
-		if($this->calculateSubdir)
-		{// keep track of this folder path in session 
+		
+		$this->currentFolderPath = base64_encode($this->currentFolderPath);
+		
+		if($this->calculateSubdir) {
+			// keep track of this folder path in session 
 			$_SESSION[$this->lastVisitedFolderPathIndex] = $this->currentFolderPath;
 		}
-		if(is_dir($this->currentFolderPath))
-		{
-						  
-			$file = new file($this->currentFolderPath);
+		
+		if (is_dir($this->getCurrentFolderPath())) {						  
+			$file = new file($this->getCurrentFolderPath());
 			$folderInfo = $file->getFileInfo();
-			if(sizeof($folderInfo))
-			{
+			if(sizeof($folderInfo)) {
 				//for Chamilo in a name folder, replace num user by user names
-				if(preg_match('/sf_user_/',basename($this->currentFolderPath)))
+				if(preg_match('/sf_user_/',basename($this->getCurrentFolderPath())))
 				{
-					$userinfo=Database::get_user_info_from_id(substr(basename($this->currentFolderPath), 8));
+					$userinfo=Database::get_user_info_from_id(substr(basename($this->getCurrentFolderPath()), 8));
 					$this->currentFolderInfo['name']=api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 				}
 				else
 				{
-					$this->currentFolderInfo['name']=str_replace('_',' ',basename($this->currentFolderPath));//for Chamilo. Prevent long directory name
+					$this->currentFolderInfo['name']=str_replace('_',' ',basename($this->getCurrentFolderPath()));//for Chamilo. Prevent long directory name
 				}				
-				if(preg_match('/shared_folder/', basename($this->currentFolderPath)))
+				if(preg_match('/shared_folder/', basename($this->getCurrentFolderPath())))
 				{
 					$this->currentFolderInfo['name']=get_lang('UserFolders');
 				}
-				if(preg_match('/shared_folder_session_/',basename($this->currentFolderPath)))
+				if(preg_match('/shared_folder_session_/',basename($this->getCurrentFolderPath())))
 				{
-					$session = explode('_', basename($this->currentFolderPath));
+					$session = explode('_', basename($this->getCurrentFolderPath()));
 					$session = strtolower($session[sizeof($session) - 1]);
 					$this->currentFolderInfo['name']=get_lang('UserFolders').' ('.api_get_session_name($session).')*';
 				}
@@ -129,20 +123,20 @@ class manager {
 				$this->currentFolderInfo['mtime']=$folderInfo['mtime'];
 				$this->currentFolderInfo['is_readable']=$folderInfo['is_readable'];
 				$this->currentFolderInfo['is_writable']=$folderInfo['is_writable'];
-				$this->currentFolderInfo['path']  		 = $this->currentFolderPath;
-				$this->currentFolderInfo['path_base64']  = base64_encode($this->currentFolderPath);
+				$this->currentFolderInfo['path']  		 = $this->getCurrentFolderPath();
+				$this->currentFolderInfo['path_base64']  = base64_encode($this->getCurrentFolderPath());
 				
-				$this->currentFolderInfo['friendly_path'] = transformFilePath($this->currentFolderPath);
+				$this->currentFolderInfo['friendly_path'] = transformFilePath($this->getCurrentFolderPath());
 				$this->currentFolderInfo['type'] = "folder";
 				$this->currentFolderInfo['cssClass']='folder';
 				
 				//$this->currentFolderInfo['flag'] = $folderInfo['flag'];
 			}			
 		}
-		if($calculateSubdir && !file_exists($this->currentFolderPath))
+		if($calculateSubdir && !file_exists($this->getCurrentFolderPath()))
 		{
-			die(ERR_FOLDER_NOT_FOUND . $this->currentFolderPath);
-		}
+			die(ERR_FOLDER_NOT_FOUND . $this->getCurrentFolderPath());
+		}		
 	}
 	
 	function setSessionAction(&$session)
@@ -160,28 +154,27 @@ class manager {
 		 * get current folder path
 		 * @return  string
 		 */
-	function getCurrentFolderPath()
-	{
-		return $this->currentFolderPath;
+	function getCurrentFolderPath() {
+		return base64_decode($this->currentFolderPath);
 	}
 	/**
-		 * get the list of files and folders under this current fold
-		 *	@return array
-		 */
-	function getFileList()
-	{
+	 * get the list of files and folders under this current fold
+	 *	@return array
+	 */
+	function getFileList() {
 		$outputs = array();
 		$files = array();
 		$folders = array();
 		$tem = array();
-		$dirHandler = @opendir($this->currentFolderPath);
+		//var_dump($this->getCurrentFolderPath());
+		$dirHandler = @opendir($this->getCurrentFolderPath());
 		if ($dirHandler) {
 			while(false !== ($file = readdir($dirHandler))) {
 				if($file != '.' && $file != '..') {
 					$flag = $this->flags['no'];				
-					if ($this->sessionAction->getFolder() == $this->currentFolderPath) {
+					if ($this->sessionAction->getFolder() == $this->getCurrentFolderPath()) {
 						//check if any flag associated with this folder or file
-						$folder = addTrailingSlash(backslashToSlash($this->currentFolderPath));
+						$folder = addTrailingSlash(backslashToSlash($this->getCurrentFolderPath()));
 						if(in_array($folder . $file, $this->sessionAction->get())) {
 							if($this->sessionAction->getAction() == "copy") {
 								$flag = $this->flags['copy'];
@@ -191,7 +184,7 @@ class manager {
 						}
 					}				
 						
-					$path=$this->currentFolderPath.$file;
+					$path = $this->getCurrentFolderPath().$file;
 					if (is_dir($path) && isListingDocument($path) ) {
 						$this->currentFolderInfo['subdir']++;
 						//fix count left folders for Chamilo
@@ -245,8 +238,8 @@ class manager {
 							}
 							///end fix for Chamilo
 							$tem['path'] = backslashToSlash($path);
-							$pos = strpos($this->currentFolderPath, 'courses/');
-							$tem['public_path'] = api_get_path(WEB_PATH).substr($this->currentFolderPath, $pos, strlen($this->currentFolderPath)).$file;
+							$pos = strpos($this->getCurrentFolderPath(), 'courses/');
+							$tem['public_path'] = api_get_path(WEB_PATH).substr($this->getCurrentFolderPath(), $pos, strlen($this->getCurrentFolderPath())).$file;
 							//error_log($tem['public_path'] );
 							$tem['type'] = "file";
 							$tem['flag'] = $flag;
@@ -279,7 +272,7 @@ class manager {
 			
 			@closedir($dirHandler);
 		} else {
-			trigger_error('Unable to locate the folder ' . $this->currentFolderPath, E_NOTICE);
+			trigger_error('Unable to locate the folder ' . $this->getCurrentFolderPath(), E_NOTICE);
 		}
 		return $outputs;
 	}
@@ -293,11 +286,10 @@ class manager {
 	 */
 	function getFolderInfo($path=null)
 	{
-		if(is_null($path))
-		{
+		if(is_null($path)) {
 			return $this->currentFolderInfo;
-		}else 
-		{
+		} else {
+			$path = base64_encode($path);
 			$obj = new manager($path, false);
 			$obj->setSessionAction($this->sessionAction);
 			$obj->getFileList();

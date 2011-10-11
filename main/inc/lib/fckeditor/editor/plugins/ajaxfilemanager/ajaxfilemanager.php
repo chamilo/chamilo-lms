@@ -302,13 +302,13 @@ if(!empty($_GET['view'])) {
     <div id="body">        
       <div id="rightCol">
 	      	<?php
-			if(CONFIG_LOAD_DOC_LATTER )
-			{
+			if(CONFIG_LOAD_DOC_LATTER ) {
 				$currentPath = getCurrentFolderPath();
 				?>
                 
 				<script type="text/javascript">
-				parentFolder = {'path':'<?php echo getParentFolderPath($currentPath); ?>'}; 
+				parentFolder = {'path_base64':'<?php echo base64_encode(getParentFolderPath($currentPath)); ?>', 'path':'<?php echo getParentFolderPath($currentPath); ?>'};
+				 
 				currentFolder = {'friendly_path':'<?php echo transformFilePath($currentPath); ?>'};
 					$(document).ready(
 						function()
@@ -329,7 +329,7 @@ if(!empty($_GET['view'])) {
 				</script>
 				<?php
 			} else {
-				include_once(CONFIG_URL_LIST_LISTING);
+				include_once CONFIG_URL_LIST_LISTING;
 			}
 	      	?>
       </div> 

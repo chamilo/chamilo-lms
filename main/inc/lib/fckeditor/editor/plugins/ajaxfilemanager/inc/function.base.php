@@ -1052,19 +1052,16 @@ function getRootPath() {
    * @param string $path
    * @return string
    */
-  function getParentFolderPath($path)
-  {
-      $realPath = addTrailingSlash(backslashToSlash(getRealPath($path)));
-      $parentRealPath =  addTrailingSlash(backslashToSlash(dirname($realPath)));
-      $differentPath = addTrailingSlash(substr($realPath, strlen($parentRealPath)));
-      $parentPath = substr($path, 0, strlen(addTrailingSlash(backslashToSlash($path))) - strlen($differentPath));
-      if(isUnderRoot($parentPath))
-      {
-          return $parentPath;
-      }else
-      {
+  function getParentFolderPath($path) {
+      	$realPath 		= addTrailingSlash(backslashToSlash(getRealPath($path)));
+      	$parentRealPath = addTrailingSlash(backslashToSlash(dirname($realPath)));
+      	$differentPath 	= addTrailingSlash(substr($realPath, strlen($parentRealPath)));
+      	$parentPath 	= substr($path, 0, strlen(addTrailingSlash(backslashToSlash($path))) - strlen($differentPath));
+		if (isUnderRoot($parentPath)) {
+			return $parentPath;
+      	} else {
           return CONFIG_SYS_DEFAULT_PATH;
-      }
+      	}
   }
 
     function getCurrentFolderPath() {

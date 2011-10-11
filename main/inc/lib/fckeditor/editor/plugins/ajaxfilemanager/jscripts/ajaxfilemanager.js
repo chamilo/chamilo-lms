@@ -273,14 +273,13 @@ function changeView()
 
 function goParentFolder() {
 		searchRequired = false;
-		var url = appendQueryString(getUrl('view', true, true), 'path=' + parentFolder.path , ['path']);
+		var url = appendQueryString(getUrl('view', true, true), 'path=' + parentFolder.path_base64 , ['path']);
 		$('#rightCol').empty();
 		ajaxStart('#rightCol');		
-		
 		$('#rightCol').load(url, 
 					{},
 					function(){
-							urls.present = appendQueryString(getUrl('home', true, true), 'path=' + parentFolder.path , ['path']);
+							urls.present = appendQueryString(getUrl('home', true, true), 'path=' + parentFolder.path_base64 , ['path']);
 							ajaxStop('#rightCol img.ajaxLoadingImg');
 							initAfterListingLoaded();
 						});
@@ -438,15 +437,10 @@ function initAfterListingLoaded()
 	
 };
 
-function enableFolderBrowsable(num, debug)
-{
-	
-	switch(getView())
-	{
+function enableFolderBrowsable(num, debug) {	
+	switch(getView()) {
 		case 'thumbnail':
-			$('#dt'+ num + ' , #dd' + num + ' a').each(function()
-																						 
-				{		
+			$('#dt'+ num + ' , #dd' + num + ' a').each(function() {		
 /*					if(typeof(debug) != 'undefined' && debug)
 					{
 						alert(this.tagName  + ' ' +  files[num].path);
@@ -457,53 +451,38 @@ function enableFolderBrowsable(num, debug)
 			break;
 		case 'detail':
 		default:
-		$('#row' + num + ' td[a]').each(function()
-																						 
-				{		
+			$('#row' + num + ' td[a]').each(function(){		
 					doEnableFolderBrowsable(this, num );
 				}
-			);
-			
-	}
-	
-		
-		
-	
+			);		
+	}	
 };
 
-function doEnableFolderBrowsable(elem, num)
-{
-									 $(elem).click(function()
-									{
-									 {
-									 	searchRequired = false;
-									 	var typeNum = typeof(num);
-									 	if(typeNum.toUpperCase() == 'STRING')
-									 	{
-									 		var fpath = (num.indexOf(urls.view) >=0?num:files[num].path);
-									 	}else
-									 	{
-									 		var fpath = files[num].path;
-									 	}								 	
-									 	
-									 	
-										 var url = appendQueryString(getUrl('view', true, true), 'path=' + fpath, ['path']);
-										 
-										 
-										 $('#rightCol').empty();	
-										 ajaxStart('#rightCol');
-										$('#rightCol').load(url, 
-													{},
-													function(){
-														    urls.present = appendQueryString(getUrl('home', true, true), 'path=' + fpath, ['path']);
-															ajaxStop('#rightCol img.ajaxLoadingImg');
-															initAfterListingLoaded();
-														});																									 
-									 };
-									 return false;	
-
-								}
-								);									 
+function doEnableFolderBrowsable(elem, num) {
+	$(elem).click(function() {
+		 {
+		 	searchRequired = false;
+		 	var typeNum = typeof(num);
+		 	if (typeNum.toUpperCase() == 'STRING') {
+		 		var fpath = (num.indexOf(urls.view) >=0?num:files[num].path_base64);
+		 	} else {
+		 		var fpath = files[num].path_base64;
+		 	}
+		 	
+			var url = appendQueryString(getUrl('view', true, true), 'path=' + fpath, ['path']);
+			$('#rightCol').empty();	
+			ajaxStart('#rightCol');
+			$('#rightCol').load(url, 
+				{},
+				function(){
+					    urls.present = appendQueryString(getUrl('home', true, true), 'path=' + fpath, ['path']);
+						ajaxStop('#rightCol img.ajaxLoadingImg');
+						initAfterListingLoaded();
+					});																									 
+		 };
+		 return false;		 
+	}
+	);									 
 };
 
 /**
@@ -547,7 +526,7 @@ function changePaginationLimit(elem)
 		$('#rightCol').load(url, 
 					{},
 					function(){
-							urls.present = appendQueryString(getUrl('home', true, true), 'path=' + parentFolder.path , ['path'])
+							urls.present = appendQueryString(getUrl('home', true, true), 'path=' + parentFolder.path_base64 , ['path'])
 							ajaxStop('#rightCol img.ajaxLoadingImg');
 							initAfterListingLoaded();
 						});	
@@ -1180,20 +1159,13 @@ function doCreateFolder()
 	
 	var folder = $('div#TB_window #new_folder');
 	//alert($('#new_folder').val());
-	if(!pattern.test($(folder).val()))
-	{
-		
-		
+	if(!pattern.test($(folder).val())) {
 		alert(msgInvalidFolderName);	
-	}else
-	{	
-			var options = 
-			{ 
+	} else {	
+			var options = { 
 				dataType: 'json',
 				url:getUrl('create_folder'),
-				error: function (data, status, e) 
-				{
-
+				error: function (data, status, e) {
 					alert(e);
 				},				
 				success:   function(data) 

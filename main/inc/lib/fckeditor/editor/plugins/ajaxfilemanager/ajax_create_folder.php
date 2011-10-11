@@ -51,8 +51,7 @@
 					$pathInfo = $manager->getFolderInfo(addTrailingSlash($_POST['currentFolderPath']) . $_POST['new_folder']);
 								
 					//bridge to Chamilo
-					if(!empty($_course['path']))
-					{
+					if(!empty($_course['path'])) {
 					//only inside courses
 						$mainPath='../../../../../../../courses/'.$_course['path'].'/document/';//get Chamilo
 						$fullPath = $_POST['currentFolderPath'].$_POST['new_folder']; //get Ajaxfilemanager
@@ -96,4 +95,3 @@
 	echo "error:'" . $error . "'";
 	echo $info;
 	echo "}";
-?>

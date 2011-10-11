@@ -98,6 +98,7 @@ while ($a_titulars = Database::fetch_array($q_result_titulars)) {
 	$a_profs[api_get_person_name($s_firstname, $s_lastname)] = api_get_person_name($s_lastname, $s_firstname).' ('.$s_username.')';
 }
 
+$categories[''] = '-';
 while ($cat = Database::fetch_array($res)) {
 	$categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
 	ksort($categories);
@@ -242,10 +243,12 @@ $form->addElement('html', '</div></div>');
 $form->addElement('html', '<div> <h3>'.Display::return_icon('gradebook.png', get_lang('Gradebook'),'','22').' '.get_lang('Gradebook').'</h3><div>');
 $group = array();
 $models = api_get_settings_options('grading_model');
-foreach ($models as $option) {
-	$grading_parsed = api_grading_model_functions($option['value'], 'decorate');
-	$element = $form->createElement('radio', 'course_grading_model', '', $option['display_text'].': '.$grading_parsed, $option['id']);		
-	$group[] = $element;
+if (!empty($models )) {
+	foreach ($models as $option) {
+		$grading_parsed = api_grading_model_functions($option['value'], 'decorate');
+		$element = $form->createElement('radio', 'course_grading_model', '', $option['display_text'].': '.$grading_parsed, $option['id']);		
+		$group[] = $element;
+	}
 }
 
 $element = $form->createElement('radio', 'course_grading_model', '', get_lang('None'), 0);

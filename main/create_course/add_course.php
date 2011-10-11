@@ -96,10 +96,7 @@ $form->addElement('text', 'title', array(get_lang('CourseName'), get_lang('Ex'))
 $form->applyFilter('title', 'html_filter');
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
-// Course category.
-$categories_select = $form->addElement('select', 'category_code', array(get_lang('Fac'), get_lang('TargetFac')), array(), array('id'=> 'category_code','class'=>'chzn-select', 'style'=>'width:350px'));
-$form->applyFilter('category_code', 'html_filter');
-CourseManager::select_and_sort_categories($categories_select);
+
 
 $form -> addElement('html','<div class="row">
     <div class="label">&nbsp;</div>
@@ -109,6 +106,14 @@ $form -> addElement('html','<div class="row">
     </div>');
 
 $form -> addElement('html','<div id="options" style="display:none">');
+
+
+// Course category.
+$categories_select = $form->addElement('select', 'category_code', array(get_lang('Fac'), get_lang('TargetFac')), array(), array('id'=> 'category_code','class'=>'chzn-select', 'style'=>'width:350px'));
+$form->applyFilter('category_code', 'html_filter');
+$categories_select->addOption('-','');
+CourseManager::select_and_sort_categories($categories_select);
+
 
 // Course code.
 $form->add_textfield('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('size' => $maxlength, 'maxlength' => $maxlength));

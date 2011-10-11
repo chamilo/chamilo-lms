@@ -132,6 +132,7 @@ $form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="80"
 
 
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories , array('style'=>'width:350px','id'=>'category_code_id', 'class'=>'chzn-select'));
+$categories_select->addOption('-','');
 CourseManager::select_and_sort_categories($categories_select);
 
 $form->add_textfield( 'department_name', get_lang('CourseDepartment'), false,array ('size' => '60'));

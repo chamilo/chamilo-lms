@@ -74,6 +74,7 @@ $form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teac
 $form->applyFilter('course_teachers', 'html_filter');
 
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
+$categories_select->addOption('-','');
 $form->applyFilter('category_code', 'html_filter');
 //This function fills the category_code select ...
 CourseManager::select_and_sort_categories($categories_select);

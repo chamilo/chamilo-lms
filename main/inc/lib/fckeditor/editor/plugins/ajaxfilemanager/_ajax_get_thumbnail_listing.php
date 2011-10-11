@@ -1,10 +1,8 @@
 <div id="content">
-<?php 
-
+<?php
 		$count = 1;
 		$thumbnailBaseUrl = appendQueryString(CONFIG_URL_IMG_THUMBNAIL, makeQueryString(array('path')));
-		foreach($fileList as $file)
-		{
+		foreach($fileList as $file) {
 			
 			///First step for hidden some type of Chamilo files and folders
 			//Juan Carlos Ra�a
@@ -70,8 +68,8 @@
 					switch($file['cssClass'])
 					{
 						case 'filePicture':
-								echo '<a id="thumbUrl' . $count . '" rel="thumbPhotos" href="' . $file['path'] . '">';
-								echo '<img src="' . appendQueryString($thumbnailBaseUrl, 'path=' . $file['path']) . '" id="thumbImg' . $count . '"></a>' . "\n";
+								echo '<a id="thumbUrl' . $count . '" rel="thumbPhotos" href="' . $file['public_path'] . '">';
+								echo '<img src="' . appendQueryString($thumbnailBaseUrl, 'path=' . base64_encode($file['path'])) . '" id="thumbImg' . $count . '"></a>' . "\n";
 								break;
 						case 'fileFlash':
 						case 'fileVideo':

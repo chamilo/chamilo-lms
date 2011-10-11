@@ -11,8 +11,7 @@
 	 */
 	 
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.file.php");
-class manager
-{
+class manager {
 	var $currentFolderPath;
 	var $sessionAction = null; //object to session action
 	var $flags = array('no'=>'noFlag', 'cut'=>'cutFlag', 'copy'=>'copyFlag');
@@ -129,8 +128,10 @@ class manager
 				$this->currentFolderInfo['ctime']=$folderInfo['ctime'];
 				$this->currentFolderInfo['mtime']=$folderInfo['mtime'];
 				$this->currentFolderInfo['is_readable']=$folderInfo['is_readable'];
-				$this->currentFolderInfo['is_writable']=$folderInfo['is_writable'];	
-				$this->currentFolderInfo['path']  = $this->currentFolderPath;
+				$this->currentFolderInfo['is_writable']=$folderInfo['is_writable'];
+				$this->currentFolderInfo['path']  		 = $this->currentFolderPath;
+				$this->currentFolderInfo['path_base64']  = base64_encode($this->currentFolderPath);
+				
 				$this->currentFolderInfo['friendly_path'] = transformFilePath($this->currentFolderPath);
 				$this->currentFolderInfo['type'] = "folder";
 				$this->currentFolderInfo['cssClass']='folder';
@@ -141,7 +142,7 @@ class manager
 		if($calculateSubdir && !file_exists($this->currentFolderPath))
 		{
 			die(ERR_FOLDER_NOT_FOUND . $this->currentFolderPath);
-		}			
+		}
 	}
 	
 	function setSessionAction(&$session)
@@ -174,31 +175,24 @@ class manager
 		$folders = array();
 		$tem = array();
 		$dirHandler = @opendir($this->currentFolderPath);
-		if($dirHandler)
-		{
-			while(false !== ($file = readdir($dirHandler)))
-			{
-				if($file != '.' && $file != '..')
-				{
-					$flag = $this->flags['no'];
-				
-					if($this->sessionAction->getFolder() == $this->currentFolderPath)
-					{//check if any flag associated with this folder or file
+		if ($dirHandler) {
+			while(false !== ($file = readdir($dirHandler))) {
+				if($file != '.' && $file != '..') {
+					$flag = $this->flags['no'];				
+					if ($this->sessionAction->getFolder() == $this->currentFolderPath) {
+						//check if any flag associated with this folder or file
 						$folder = addTrailingSlash(backslashToSlash($this->currentFolderPath));
-						if(in_array($folder . $file, $this->sessionAction->get()))
-						{
-							if($this->sessionAction->getAction() == "copy")
-							{
+						if(in_array($folder . $file, $this->sessionAction->get())) {
+							if($this->sessionAction->getAction() == "copy") {
 								$flag = $this->flags['copy'];
-							}else 
-							{
+							} else {
 								$flag = $this->flags['cut'];
 							}
 						}
-					}					
+					}				
+						
 					$path=$this->currentFolderPath.$file;
-					if(is_dir($path) && isListingDocument($path) )
-					{
+					if (is_dir($path) && isListingDocument($path) ) {
 						$this->currentFolderInfo['subdir']++;
 						//fix count left folders for Chamilo
 						$deleted_by_Chamilo_folder='_DELETED_';
@@ -225,56 +219,48 @@ class manager
 						}
 						//end fix for Chamilo						
 
-						if(!$this->calculateSubdir)
-						{			
-						}else 
-						{
-							
-								$folder = $this->getFolderInfo($path);
-								$folder['flag'] = $flag;
-								$folders[$file] = $folder;
-								$outputs[$file] = $folders[$file];							
-						}
-
-						
-					}elseif(is_file($path) && isListingDocument($path))
-					{
-
-							$obj = new file($path);
-							$tem = $obj->getFileInfo();
-							if(sizeof($tem))
+						if(!$this->calculateSubdir) {			
+						} else  {							
+							$folder = $this->getFolderInfo($path);
+							$folder['flag'] = $flag;
+							$folders[$file] = $folder;
+							$outputs[$file] = $folders[$file];							
+						}						
+					} elseif(is_file($path) && isListingDocument($path)) {
+						$obj = new file($path);
+						$tem = $obj->getFileInfo();
+						if (sizeof($tem)) {
+							$fileType = $this->getFileType($file);
+							foreach($fileType as $k=>$v)
 							{
-								$fileType = $this->getFileType($file);
-								foreach($fileType as $k=>$v)
-								{
-									$tem[$k] = $v;
-								}
-								$this->currentFolderInfo['size'] += $tem['size'];
-								$this->currentFolderInfo['file']++;
-								//fix count left files for Chamilo
-								$deleted_by_Chamilo_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
-								if(ereg($deleted_by_Chamilo_file, $tem['name']) || $tem['name'][0]=='.')
-								{
-									$this->currentFolderInfo['file']=$this->currentFolderInfo['file']-1;
-								}
-								///end fix for Chamilo
-								$tem['path'] = backslashToSlash($path);		
-								$tem['type'] = "file";
-								$tem['flag'] = $flag;
-								$files[$file] = $tem;
-								$outputs[$file] = $tem;
-								$tem = array();
-								$obj->close();
-								
-							}							
-
-				
+								$tem[$k] = $v;
+							}
+							$this->currentFolderInfo['size'] += $tem['size'];
+							$this->currentFolderInfo['file']++;
+							//fix count left files for Chamilo
+							$deleted_by_Chamilo_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
+							if(ereg($deleted_by_Chamilo_file, $tem['name']) || $tem['name'][0]=='.')
+							{
+								$this->currentFolderInfo['file']=$this->currentFolderInfo['file']-1;
+							}
+							///end fix for Chamilo
+							$tem['path'] = backslashToSlash($path);
+							$pos = strpos($this->currentFolderPath, 'courses/');
+							$tem['public_path'] = api_get_path(WEB_PATH).substr($this->currentFolderPath, $pos, strlen($this->currentFolderPath)).$file;
+							//error_log($tem['public_path'] );
+							$tem['type'] = "file";
+							$tem['flag'] = $flag;
+							$files[$file] = $tem;
+							$outputs[$file] = $tem;
+							$tem = array();
+							$obj->close();								
+						}									
 					}
 					
 				}
 			}
-			if($this->forceFolderOnTop)
-			{
+			
+			if($this->forceFolderOnTop) {
 				uksort($folders, "strnatcasecmp");
 				uksort($files, "strnatcasecmp");
 				$outputs = array();
@@ -292,8 +278,7 @@ class manager
 			}
 			
 			@closedir($dirHandler);
-		}else
-		{
+		} else {
 			trigger_error('Unable to locate the folder ' . $this->currentFolderPath, E_NOTICE);
 		}
 		return $outputs;

@@ -1,57 +1,57 @@
 <?php
-	/**
-	 * file manager platform
-	 * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
-	 * @link www.phpletter.com
-	 * @since 22/May/2007
-	 *
-	 * Modify system config setting for Chamilo
-	 * @author Juan Carlos Raña Trabado
-	 * @since 31/December/2008
-	 */
+/**
+* file manager platform
+* @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
+* @link www.phpletter.com
+* @since 22/May/2007
+*
+* Modify system config setting for Chamilo
+* @author Juan Carlos Raña Trabado
+* @since 31/December/2008
+*/
 
-	include '../../../../../../inc/global.inc.php'; // Integrating with Chamilo
-	api_block_anonymous_users();// from Chamilo
+include '../../../../../../inc/global.inc.php'; // Integrating with Chamilo
+api_block_anonymous_users();// from Chamilo
 
-	require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php";
-	//$session->gc(); // Disabled for integration with Chamilo
-	require_once CLASS_SESSION_ACTION;
-	$sessionAction = new SessionAction();	
-	
-	if (CONFIG_LOAD_DOC_LATTER) {
-		$fileList = array();
-		$folderInfo = array('path'=>getCurrentFolderPath());
-	} else {
-		require_once(CLASS_MANAGER);
-		$manager = new manager();
-		$manager->setSessionAction($sessionAction);
-		$fileList = $manager->getFileList();
-		$folderInfo = $manager->getFolderInfo();		
-	}
-	
-	if(CONFIG_SYS_THUMBNAIL_VIEW_ENABLE) {
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php";
+//$session->gc(); // Disabled for integration with Chamilo
+require_once CLASS_SESSION_ACTION;
+$sessionAction = new SessionAction();
+
+if (CONFIG_LOAD_DOC_LATTER) {
+	$fileList = array();
+	$folderInfo = array('path'=>getCurrentFolderPath());
+} else {
+	require_once(CLASS_MANAGER);
+	$manager = new manager();
+	$manager->setSessionAction($sessionAction);
+	$fileList = $manager->getFileList();
+	$folderInfo = $manager->getFolderInfo();
+}
+
+if(CONFIG_SYS_THUMBNAIL_VIEW_ENABLE) {
 	$views = array(
 		'detail'=>LBL_BTN_VIEW_DETAILS,
 		'thumbnail'=>LBL_BTN_VIEW_THUMBNAIL,
-	);		
-	} else {
-	   $views = array(
-		  'detail'=>LBL_BTN_VIEW_DETAILS,
-    	);		
-	}
+	);
+} else {
+	$views = array(
+	  'detail'=>LBL_BTN_VIEW_DETAILS,
+	);
+}
 
-	if(!empty($_GET['view'])) {
-		switch($_GET['view']) {
-			case 'detail':
-			case 'thumbnail':
-				$view = Security::remove_XSS($_GET['view']);
-				break;
-			default:
-				$view = CONFIG_DEFAULT_VIEW;
-		}
-	} else {
-		$view = CONFIG_DEFAULT_VIEW;
-	}    
+if(!empty($_GET['view'])) {
+	switch($_GET['view']) {
+		case 'detail':
+		case 'thumbnail':
+			$view = Security::remove_XSS($_GET['view']);
+			break;
+		default:
+			$view = CONFIG_DEFAULT_VIEW;
+	}
+} else {
+	$view = CONFIG_DEFAULT_VIEW;
+}   
 	
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -59,8 +59,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Ajax File Manager</title>
-<script type="text/javascript" src="jscripts/ajaxfilemanager_c.js"></script>
-<!--<script type="text/javascript" src="jscripts/jquery.js"></script>
+
+<script type="text/javascript" src="jscripts/jquery.js"></script>
 <script type="text/javascript" src="jscripts/form.js"></script>
 <script type="text/javascript" src="jscripts/select.js"></script>
 <script type="text/javascript" src="jscripts/thickbox.js"></script>
@@ -68,7 +68,7 @@
 <script type="text/javascript" src="jscripts/contextmenu.js"></script>
 <script type="text/javascript" src="jscripts/media.js"></script>
 <script type="text/javascript" src="jscripts/ajaxfileupload.js"></script>
-<script type="text/javascript" src="jscripts/ajaxfilemanager.js"></script>-->
+<script type="text/javascript" src="jscripts/ajaxfilemanager.js"></script>
 <script type="text/javascript">
 
 	var mode_editor = '<?php echo Security::remove_XSS($_GET['editor']);?>';<!-- Chamilo hack for general my files users  -->
@@ -121,7 +121,14 @@
 			'home':'<?php echo CONFIG_URL_HOME; ?>',
 			'view':'<?php echo CONFIG_URL_LIST_LISTING; ?>'			
 		};
-	var permits = {'del':<?php echo (CONFIG_OPTIONS_DELETE?1:0); ?>, 'cut':<?php echo (CONFIG_OPTIONS_CUT?'1':'0'); ?>, 'copy':<?php echo (CONFIG_OPTIONS_COPY?1:0); ?>, 'newfolder':<?php echo (CONFIG_OPTIONS_NEWFOLDER?1:0); ?>, 'rename':<?php echo (CONFIG_OPTIONS_RENAME?1:0); ?>, 'upload':<?php echo (CONFIG_OPTIONS_UPLOAD?1:0); ?>, 'edit':<?php echo (CONFIG_OPTIONS_EDITABLE?1:0); ?>, 'view_only':<?php echo (CONFIG_SYS_VIEW_ONLY?1:0); ?>};
+	var permits = {	'del':<?php echo (CONFIG_OPTIONS_DELETE?1:0); ?>, 
+					'cut':<?php echo (CONFIG_OPTIONS_CUT?'1':'0'); ?>, 
+					'copy':<?php echo (CONFIG_OPTIONS_COPY?1:0); ?>, 
+					'newfolder':<?php echo (CONFIG_OPTIONS_NEWFOLDER?1:0); ?>, 
+					'rename':<?php echo (CONFIG_OPTIONS_RENAME?1:0); ?>, 
+					'upload':<?php echo (CONFIG_OPTIONS_UPLOAD?1:0); ?>,
+					'edit':<?php echo (CONFIG_OPTIONS_EDITABLE?1:0); ?>, 
+					'view_only':<?php echo (CONFIG_SYS_VIEW_ONLY?1:0); ?>};
 	var currentFolder = {};
 	var warningDelete = '<?php echo WARNING_DELETE; ?>';
 	var newFile = {'num':1, 'label':'<?php echo FILE_LABEL_SELECT; ?>', 'upload':'<?php echo FILE_LBL_UPLOAD; ?>'};
@@ -163,27 +170,21 @@
 	var files = {};
 	
     $(document).ready(
-	function()
-	{
+	function() {
 		jQuery(document).bind('keypress', function(event) {
 			var code=event.charCode || event.keyCode;
 			if(code && code == 13) {// if enter is pressed
 	  			event.preventDefault(); //prevent browser from following the actual href
 			};
 		});		
-		if(typeof(cancelSelectFile) != 'undefined')
-		{
+		if(typeof(cancelSelectFile) != 'undefined') {
 			$('#linkClose').show();
 		}
 		$('input[@name=view]').each(
-			function()
-			{
-
-				if(this.value == '<?php echo $view; ?>')
-				{
+			function() {
+				if(this.value == '<?php echo $view; ?>') {
 					this.checked = true;
-				}else
-				{
+				} else {
 					this.checked = false;
 				}
 			}
@@ -198,20 +199,15 @@
 		popUpCal.dayNames = new Array('<?php echo CALENDAR_SUN; ?>','<?php echo CALENDAR_MON; ?>','<?php echo CALENDAR_TUE; ?>','<?php echo CALENDAR_WED; ?>','<?php echo CALENDAR_THU; ?>','<?php echo CALENDAR_FRI; ?>','<?php echo CALENDAR_SAT; ?>');
 		popUpCal.monthNames = new Array('<?php echo CALENDAR_JAN; ?>','<?php echo CALENDAR_FEB; ?>','<?php echo CALENDAR_MAR; ?>','<?php echo CALENDAR_APR; ?>','<?php echo CALENDAR_MAY; ?>','<?php echo CALENDAR_JUN; ?>','<?php echo CALENDAR_JUL; ?>','<?php echo CALENDAR_AUG; ?>','<?php echo CALENDAR_SEP; ?>','<?php echo CALENDAR_OCT; ?>','<?php echo CALENDAR_NOV; ?>','<?php echo CALENDAR_DEC; ?>');
 		popUpCal.dateFormat = 'YMD-';
-		$('.inputMtime').calendar({autoPopUp:'both', buttonImage:'theme/<?php echo CONFIG_THEME_NAME; ?>/images/date_picker.png'});
-		
-		
+		$('.inputMtime').calendar({autoPopUp:'both', buttonImage:'theme/<?php echo CONFIG_THEME_NAME; ?>/images/date_picker.png'});		
 		initAfterListingLoaded();
 		//addMoreFile();
-
 	} );
 </script>
-
 <?php
-	if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY_SEPARATOR . 'for_' . CONFIG_EDITOR_NAME . ".js")
-	{
+	if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY_SEPARATOR . 'for_' . CONFIG_EDITOR_NAME . ".js") {
 	?>
-	<script type="text/javascript" src="jscripts/<?php echo 'for_' . CONFIG_EDITOR_NAME . '.js'; ?>"></script>
+		<script type="text/javascript" src="jscripts/<?php echo 'for_' . CONFIG_EDITOR_NAME . '.js'; ?>"></script>
 	<?php
 	}
 ?>
@@ -290,11 +286,6 @@
 							<?php
 						}
 					?>
-																	
-					
-					
-					
-		
 					
 <!--					<li><a href="#" id="actionClose" onclick="closeWindow('<?php echo IMG_WARING_WIN_CLOSE; ?>');"><?php echo IMG_BTN_CLOSE; ?></a></li>-->
 					<!--<li><a href="#" class="thickbox" id="actionInfo" onclick="return infoWin(this);"><span>Info</span></a></li> -->
@@ -302,11 +293,13 @@
  					<li ><a href="#" id="actionZip"><span>Zip</span></a><li>
 					<li ><a href="#" id="actionUnzip"><span>Unzip</span></a><li>-->
 				</ul>    
-<form action="" method="post" name="formAction" id="formAction"><input type="hidden" name="currentFolderPath" id="currentFolderPathVal" value="" /><select name="selectedDoc[]" id="selectedDoc" style="display:none;" multiple="multiple"></select><input type="hidden" name="action_value" value="" id="action_value" /></form>				  
-    </div>
-    
-    <div id="body">
-        
+<form action="" method="post" name="formAction" id="formAction">
+	<input type="hidden" name="currentFolderPath" id="currentFolderPathVal" value="" />
+	<select name="selectedDoc[]" id="selectedDoc" style="display:none;" multiple="multiple"></select>
+	<input type="hidden" name="action_value" value="" id="action_value" />
+</form>				  
+</div>    
+    <div id="body">        
       <div id="rightCol">
 	      	<?php
 			if(CONFIG_LOAD_DOC_LATTER )
@@ -315,7 +308,7 @@
 				?>
                 
 				<script type="text/javascript">
-				parentFolder = {path:'<?php echo getParentFolderPath($currentPath); ?>'}; 
+				parentFolder = {'path':'<?php echo getParentFolderPath($currentPath); ?>'}; 
 				currentFolder = {'friendly_path':'<?php echo transformFilePath($currentPath); ?>'};
 					$(document).ready(
 						function()
@@ -424,22 +417,17 @@
 					</tbody>
 				</table>
 		
-        <p class="searchButtons" id="returnCurrentUrl">
-  
+        <p class="searchButtons" id="returnCurrentUrl">  
         	<span class="right" id="linkSelect">
-        		<input type="button" value="<?php echo MENU_SELECT; ?>"  id="selectCurrentUrl" class="select_button"><!-- Change button class by Chamilo select_button class -->
-        	</span>
-        	
+        		<input type="button" value="<?php echo MENU_SELECT; ?>" id="selectCurrentUrl" class="select_button">
+        		<!-- Change button class by Chamilo select_button class -->
+        	</span>        	
         </p>				
-			</fieldset>
-			
+		</fieldset>		
      
       
       	<fieldset class="boxSearch">
       		<legend><?php echo LBL_SEARCH; ?></legend>
-
-
-
           <table cellpadding="0" cellspacing="0" class="tableSearch">
           	<tbody>
 	          <tr>
@@ -533,11 +521,16 @@
     </div>  
   </div>
   <div class="clear"></div>  
-  <div id="ajaxLoading" style="display:none"><img class="ajaxLoadingImg" src="theme/<?php echo CONFIG_THEME_NAME; ?>/images/ajaxLoading.gif" /></div>
+  <div id="ajaxLoading" style="display:none">
+  	<img class="ajaxLoadingImg" src="theme/<?php echo CONFIG_THEME_NAME; ?>/images/ajaxLoading.gif" /></div>
   <div id="winUpload" style="display:none">
   	<div class="jqmContainer">
   		<div class="jqmHeader">
-  			<a href="#" onclick="tb_remove();"><img src="theme/default/images/flagno.png"title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?></a><!-- Add close image for Chamilo -->
+  			<a href="#" onclick="tb_remove();">
+  				<img src="theme/default/images/flagno.png"title="<?php echo LBL_ACTION_CLOSE; ?>">
+  				<?php echo LBL_ACTION_CLOSE; ?>
+  			</a>
+  			<!-- Add close image for Chamilo -->
   		</div>
   		<div class="jqmBody">
 		  	<form id="formUpload" name="formUpload" method="post" enctype="multipart/form-data" action="">
@@ -570,19 +563,11 @@
 		  					</a>
 		  					<span class="uploadProcessing" style="display:none">&nbsp;</span>
 		  				</td>
-
 		  			</tr>		
-		  		</tbody>
-		  		<tfoot>
-		  			<tr>
-		  				<th>&nbsp;</th>
-		  				<td></td>
-		  			</tr>
-		  		</tfoot>
+		  		</tbody>		  
 		  	</table>
 		  	</form>  		
   		</div>
-
   	</div>
   </div> 
   <div id="winNewFolder" style="display:none">
@@ -614,9 +599,6 @@
 	  	</table>	
 	  	</form>	
   		</div>
-
-  	
-  	
   	</div>
   </div>   
   <div id="winPlay" style="display:none">

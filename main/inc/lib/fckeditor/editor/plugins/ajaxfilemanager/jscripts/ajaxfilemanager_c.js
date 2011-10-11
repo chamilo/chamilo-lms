@@ -321,7 +321,7 @@ var supportedExts=supportedUploadExts.split(",");var isSupportedExt=false;for(i 
 if(!isSupportedExt)
 {alert(msgInvalidExt);return false;}
 $('#ajax'+elementId).hide();$('#ajax'+elementId).show();$.ajaxFileUpload
-({url:appendQueryString(getUrl('upload',false,false),'folder='+currentFolder.path,['folder']),secureuri:false,fileElementId:elementId,dataType:'json',success:function(data,status)
+({url:appendQueryString(getUrl('upload',false,false),'folder='+currentFolder.path_base64,['folder']),secureuri:false,fileElementId:elementId,dataType:'json',success:function(data,status)
 {if(typeof(data.error)!='undefined')
 {if(data.error!='')
 {alert(data.error);$('#ajax'+elementId).hide();}else

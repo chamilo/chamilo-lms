@@ -8,16 +8,17 @@
      */
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "config.php";
 
-/**
- * force to ensure existence of stripos
- */
-if (!function_exists("stripos"))
-{
-  function stripos($str,$needle,$offset=0)
-  {
-      return @strpos(strtolower($str),strtolower($needle),$offset);
-  }
-}
+	/**
+	 * force to ensure existence of stripos
+	 */
+	if (!function_exists("stripos"))
+	{
+	  function stripos($str,$needle,$offset=0)
+	  {
+	      return @strpos(strtolower($str),strtolower($needle),$offset);
+	  }
+	}
+	
     /**
      * get the current Url but not the query string specified in $excls
      *
@@ -28,7 +29,7 @@ if (!function_exists("stripos"))
         $output = $_SERVER['PHP_SELF'];
         $count = 1;
         foreach($_GET as $k=>$v) {
-            if(array_search($k, $excls) ===false) {
+            if (array_search($k, $excls) ===false) {
                 $v = api_htmlentities(Security::remove_XSS($v));      
                 $strAppend = "&";
                 if($count == 1) {
@@ -37,7 +38,7 @@ if (!function_exists("stripos"))
                 }
                 $output .= $strAppend . $k . "=" . $v;
             }
-        }
+        }        
         return $output;
     }
     

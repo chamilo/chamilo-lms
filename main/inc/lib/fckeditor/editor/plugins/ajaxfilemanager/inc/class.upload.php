@@ -1,15 +1,13 @@
 <?php
-	/**
-	 * This class provide all file upload functionalities
-	 * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
-	 * @link www.phpletter.com
-	 * @since 22/April/2007
-	 *
-	 */
+/**
+ * This class provide all file upload functionalities
+ * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
+ * @link www.phpletter.com
+ * @since 22/April/2007
+ *
+ */
  require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';//from Dokeos
- class Upload
-
-{
+ class Upload {
 	var $fileType = ""; //the file type
 	var $originalFileName = "";
 	var $fileName = ""; //the file final name

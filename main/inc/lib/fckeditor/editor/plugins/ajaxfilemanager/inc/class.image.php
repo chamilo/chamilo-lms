@@ -11,74 +11,74 @@
 	
 class ImageAjaxFileManager
 {
-		var $_debug = false; 
-		var $_errors = array();
-		var $gdInfo = array(); //keep all information of GD extension
-		var $_imgOrig = null; //the hanlder of original image
-		var $_imgFinal = null; //the handler of final image
-		var $imageFile  = null;  
-    var $transparentColorRed = null;
-    var $transparentColorGreen = null;
-    var $transparentColorBlue = null;		 
-    var $chmod = 0755;
-    var $_imgInfoOrig = array(
-    	'name'=>'',
-    	'ext'=>'',
-    	'size'=>'',
-    	'width'=>'',
-    	'height'=>'',
-    	'type'=>'',
-    	'path'=>'',
-    );    
-    var $_imgInfoFinal = array(
-    	'name'=>'',
-    	'ext'=>'',
-    	'size'=>'',
-    	'width'=>'',
-    	'height'=>'', 
-    	'type'=>'',   
-    	'path'=>'',
-    );		
-		var $_imgQuality = 90;
-		/**
-		 * constructor
-		 *
-		 * @param boolean $debug
-		 * @return Image
-		 */
-		
-		function __construct($debug = false)
-		{
-			$this->enableDebug($debug);
-			$this->gdInfo = $this->getGDInfo();			
-		}
-		function Image($debug = false)
-		{
-			$this->__construct($debug);
-		}
-		/**
-		 * enable to debug
-		 *
-		 * @param boolean $value
-		 */
-		function enableDebug($value)
-		{
-			$this->_debug = ($value?true:false);
-		}
-		/**
-		 * check if debug enable
-		 * @return boolean
-		 */
-		function _isDebugEnable()
-		{
-			return $this->_debug;
-		}
-
-	    /**
-		 * append to errors array and shown the each error when the debug turned on  
-		 * 
-		 * @param  string $string
-		 * @return void
+	var $_debug = false;
+	var $_errors = array();
+	var $gdInfo = array(); //keep all information of GD extension
+	var $_imgOrig = null; //the hanlder of original image
+	var $_imgFinal = null; //the handler of final image
+	var $imageFile  = null;
+	var $transparentColorRed = null;
+	var $transparentColorGreen = null;
+	var $transparentColorBlue = null;
+	var $chmod = 0755;
+	var $_imgInfoOrig = array(
+	    	'name'=>'',
+	    	'ext'=>'',
+	    	'size'=>'',
+	    	'width'=>'',
+	    	'height'=>'',
+	    	'type'=>'',
+	    	'path'=>'',
+	);
+	var $_imgInfoFinal = array(
+		'name'=>'',
+		'ext'=>'',
+		'size'=>'',
+		'width'=>'',
+		'height'=>'', 
+		'type'=>'',   
+		'path'=>'',
+	);
+	var $_imgQuality = 90;
+	/**
+	 * constructor
+	 *
+	 * @param boolean $debug
+	 * @return Image
+	 */
+	
+	function __construct($debug = false)
+	{
+		$this->enableDebug($debug);
+		$this->gdInfo = $this->getGDInfo();
+	}
+	function Image($debug = false)
+	{
+		$this->__construct($debug);
+	}
+	/**
+	 * enable to debug
+	 *
+	 * @param boolean $value
+	 */
+	function enableDebug($value)
+	{
+		$this->_debug = ($value?true:false);
+	}
+	/**
+	 * check if debug enable
+	 * @return boolean
+	 */
+	function _isDebugEnable()
+	{
+		return $this->_debug;
+	}
+	
+	/**
+	 * append to errors array and shown the each error when the debug turned on
+	 *
+	 * @param  string $string
+	 * @return void
      * @access private
      * @copyright this function originally come from Andy's php 
 	 */
@@ -112,16 +112,13 @@ class ImageAjaxFileManager
      * @access public
      * @copyright this function originally come from Andy's php 
      */
-    function loadImage($filename)
-    {
+    function loadImage($filename) {
         $ext  = strtolower($this->_getExtension($filename));
         $func = 'imagecreatefrom' . ($ext == 'jpg' ? 'jpeg' : $ext);
         if (!$this->_isSupported($filename, $ext, $func, false)) {
-
             return false;
         }
-        if($ext == "gif")
-        {
+        if($ext == "gif") {
              // the following part gets the transparency color for a gif file
             // this code is from the PHP manual and is written by
             // fred at webblake dot net and webmaster at webnetwizard dotco dotuk, thanks!
@@ -795,6 +792,4 @@ class ImageAjaxFileManager
         }
         
     }	
-	}
-	
-?>
+}

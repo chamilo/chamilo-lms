@@ -8,6 +8,7 @@
  */
 
 $path = $_GET['path'];
+
 //prevent some stuff
 if (empty($path)) {
 	$path = '/';
@@ -19,7 +20,7 @@ if (empty($_course) || empty($_course['path'])) {
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 
 //zip library for creation of the zipfile
-require api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
+require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 
 //Creating a ZIP file
 $temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
@@ -34,6 +35,9 @@ $prop_table              = Database::get_course_table(TABLE_ITEM_PROPERTY);
 //normal users get only visible files that are in visible folders
 
 //admins are allowed to download invisible files
+$files = array();
+$course_id = api_get_course_int_id();
+
 if (api_is_allowed_to_edit()) {
 	//set the path that will be used in the query
 	if ($path == '/') {
@@ -43,15 +47,18 @@ if (api_is_allowed_to_edit()) {
 	}
 	//search for all files that are not deleted => visibility != 2
     $querypath = Database::escape_string($querypath);
-	$query = Database::query("SELECT url FROM $tbl_student_publication AS work, $prop_table AS props  
-							  WHERE props.tool='work' AND work.id=props.ref AND work.url LIKE 'work".$querypath."/%' AND work.filetype='file' AND props.visibility<>'2'");
+    $sql = "SELECT url, title FROM $tbl_student_publication AS work, $prop_table AS props  
+ 			WHERE props.c_id = $course_id AND work.c_id = $course_id AND props.tool='work' AND work.id=props.ref AND work.url LIKE 'work".$querypath."/%' AND work.filetype='file' AND props.visibility<>'2'";
+	$query = Database::query($sql);
 	//add tem to the zip file
 	while ($not_deleted_file = Database::fetch_assoc($query)) {
-	    $zip_folder->add($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/work');
-    }
+		if (file_exists($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'])) {
+			$files[basename($not_deleted_file['url'])] = $not_deleted_file['title'];
+		    $zip_folder->add($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/work', PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
+		}
+    }    
 } else {
-    //for other users, we need to create a zipfile with only visible files and folders
-    
+    //for other users, we need to create a zipfile with only visible files and folders    
 	if ($path == '/') {
 		$querypath = ''; // to prevent ...path LIKE '//%'... in query
 	} else {
@@ -95,7 +102,8 @@ if (api_is_allowed_to_edit()) {
 	}
 	//add all files in our final array to the zipfile
 	for ($i=0;$i<count($files_for_zipfile);$i++) {
-		$zip_folder->add($sys_course_path.$_course['path'].'/'.$files_for_zipfile[$i], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/work'.$remove_dir);
+		$files[$files_for_zipfile[$i]] = 'julio';
+		//$zip_folder->add($sys_course_path.$_course['path'].'/'.$files_for_zipfile[$i], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/work'.$remove_dir, PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
 	}
 }//end for other users
 
@@ -111,8 +119,18 @@ if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
     exit;    
 }
 
-
 /*	Extra function (only used here) */
+
+function my_pre_add_callback($p_event, &$p_header) {
+	global $files;	
+	if (isset($files[basename($p_header['stored_filename'])])) {
+		$p_header['stored_filename'] = $files[basename($p_header['stored_filename'])];
+		return 1;
+	}
+	return 0;	
+}
+
+
 
 /**
  * Return the difference between two arrays, as an array of those key/values

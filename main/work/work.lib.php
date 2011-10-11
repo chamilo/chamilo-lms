@@ -822,16 +822,16 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				} else {
 					$add_to_name = '';
 				}
+				
 				$show_as_icon = get_work_id($mydir); //true or false
 				$work_title = !empty($work_data['title']) ? $work_data['title'] : basename($work_data['url']);
-
-				if ($show_as_icon) {
+				
+				if (!empty($show_as_icon)) {					
 					if (api_is_allowed_to_edit()) {
 						$zip = '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&gradebook='.$gradebook.'&action=downloadfolder&path=/'.$mydir.'">
 						'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), 22).'</a>';
 					}
-					$row[] = $zip.
-							'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&id='.$work_data['id'].'"'.$class.'>'.
+					$row[] = $zip.'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&id='.$work_data['id'].'"'.$class.'>'.
 					$work_title.'</a>'.
 					$add_to_name.'<br />'.$cant_files.' '.$text_file.$dirtext;
 				} else {
@@ -1613,11 +1613,14 @@ function to_javascript_work() {
 function get_work_id($path) {
 	$TBL_STUDENT_PUBLICATION = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 	$TBL_PROP_TABLE = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	$course_id = api_get_course_int_id();
 	if (api_is_allowed_to_edit()) {
-		$sql = "SELECT work.id FROM $TBL_STUDENT_PUBLICATION AS work,$TBL_PROP_TABLE AS props  WHERE props.tool='work' AND work.id=props.ref AND work.url LIKE 'work/".$path."%' AND work.filetype='file' AND props.visibility<>'2'";
+		$sql = "SELECT work.id FROM $TBL_STUDENT_PUBLICATION AS work, $TBL_PROP_TABLE AS props  
+				WHERE props.c_id = $course_id AND work.c_id = $course_id AND props.tool='work' AND work.id=props.ref AND work.url LIKE 'work/".$path."%' AND work.filetype='file' AND props.visibility<>'2'";
 	} else {
-		$sql = "SELECT work.id FROM $TBL_STUDENT_PUBLICATION AS work,$TBL_PROP_TABLE AS props  WHERE props.tool='work' AND work.id=props.ref AND work.url LIKE 'work/".$path."%' AND work.filetype='file' AND props.visibility<>'2' AND props.lastedit_user_id='".api_get_user_id()."'";
-	}
+		$sql = "SELECT work.id FROM $TBL_STUDENT_PUBLICATION AS work,$TBL_PROP_TABLE AS props  
+				WHERE props.c_id = $course_id AND work.c_id = $course_id AND props.tool='work' AND work.id=props.ref AND work.url LIKE 'work/".$path."%' AND work.filetype='file' AND props.visibility<>'2' AND props.lastedit_user_id='".api_get_user_id()."'";
+	}	
 	$result = Database::query($sql);
 	$num_rows = Database::num_rows($result);
 

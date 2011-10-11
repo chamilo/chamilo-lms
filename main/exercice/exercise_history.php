@@ -48,12 +48,12 @@ $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXE
 $TBL_TRACK_ATTEMPT_RECORDING= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 Display::display_header($nameTools,get_lang('Exercise'));
 
-	if(isset($_GET['message'])) {
-		if (in_array($_GET['message'], array('ExerciseEdited'))) {
-			$my_message_history=Security::remove_XSS($_GET['message']);
-			Display::display_confirmation_message(get_lang($my_message_history));
-		}
+if (isset($_GET['message'])) {
+	if (in_array($_GET['message'], array('ExerciseEdited'))) {
+		$my_message_history=Security::remove_XSS($_GET['message']);
+		Display::display_confirmation_message(get_lang($my_message_history));
 	}
+}
 
 echo '<div class="actions">';
 echo '<a href="exercice.php?' . api_get_cidreq() . '&show=result&filter=2">' . Display :: return_icon('back.png', get_lang('BackToResultList'),'','32').'</a>';
@@ -62,16 +62,17 @@ echo '</div>';
 ?>
 
 <table class="data_table">
-		 <tr class="row_odd">
-		  <th><?php echo get_lang('Question'); ?></th>
-		  <th width="50px"><?php echo get_lang('Value'); ?></th>
-		  <th><?php echo get_lang('Feedback'); ?></th>		  
-		  <th ><?php echo get_lang('Author'); ?></th>
-          <th width="150px"><?php echo get_lang('Date'); ?></th>
-		 </tr>
+	<tr class="row_odd">
+		<th><?php echo get_lang('Question'); ?></th>
+		<th width="50px"><?php echo get_lang('Value'); ?></th>
+		<th><?php echo get_lang('Feedback'); ?></th>		  
+		<th><?php echo get_lang('Author'); ?></th>
+		<th width="160px"><?php echo get_lang('Date'); ?></th>
+	</tr>
 <?php
 
-$sql = "SELECT *, quiz_question.question, firstname, lastname FROM $TBL_TRACK_ATTEMPT_RECORDING t,$TBL_USER,$TBL_EXERCICES_QUESTION quiz_question WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY position";
+$sql = "SELECT *, quiz_question.question, firstname, lastname FROM $TBL_TRACK_ATTEMPT_RECORDING t, $TBL_USER,$TBL_EXERCICES_QUESTION quiz_question
+		WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY position";
 $query = Database::query($sql);
 while($row = Database::fetch_array($query)){
 	echo '<tr';
@@ -85,7 +86,7 @@ while($row = Database::fetch_array($query)){
 		echo '<td>'.get_lang('WithoutComment').'</td>';
 	}
     echo '<td>'.(empty($row['firstname']) && empty($row['lastname']) ? '<i>'.get_lang('OriginalValue').'</i>' : api_get_person_name($row['firstname'], $row['lastname'])).'</td>';
-	echo '<td>'.api_get_local_time($row['insert_date']).'</td>';
+	echo '<td>'.api_convert_and_format_date($row['insert_date'], DATE_TIME_FORMAT_LONG).'</td>';
     echo '</tr>';
 }
 echo '</table>';

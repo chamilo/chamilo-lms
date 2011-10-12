@@ -163,9 +163,6 @@ if ($time_control) {
 }
 
 
-
-
-
 $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {
@@ -231,7 +228,7 @@ if ($debug) { error_log("4. Setting the exe_id $exe_id");} ;
 //5. Getting user exercise info (if the user took the exam before) - generating exe_id
 //var_dump($safe_lp_id.' - '.$safe_lp_item_id.' - '.$safe_lp_item_view_id);
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);
-//var_dump($exercise_stat_info);
+
 
 if (empty($exercise_stat_info)) {
 	$total_weight = 0;
@@ -373,10 +370,15 @@ $exercise_sound 		= $objExercise->selectSound();
 
 if (!isset($_SESSION['questionList'])) {    
     // selects the list of question ID        
-    $questionList = $objExercise->get_validated_question_list();
+    $questionList = $objExercise->get_validated_question_list();    
+    if ($objExercise->isRandom() && !empty($exercise_stat_info['data_tracking'])) {
+    	$questionList = explode(',', $exercise_stat_info['data_tracking']);    	
+    }     
     api_session_register('questionList');    
     if ($debug > 0) { error_log('$_SESSION[questionList] was set'); }
-} else {	
+} else {
+	echo '222';
+	var_dump($questionList);
 	if (isset($objExercise) && isset($_SESSION['objExercise'])) {		
     	$questionList = $_SESSION['questionList'];
 	}

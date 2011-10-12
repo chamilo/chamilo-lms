@@ -23,7 +23,7 @@ require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
-$is_allowedToEdit=api_is_allowed_to_edit(null,true);
+$is_allowedToEdit = api_is_allowed_to_edit(null,true);
 
 if (empty($delete)) {
     $delete = intval($_GET['delete']);
@@ -34,6 +34,8 @@ if ( empty ( $recup ) ) {
 if ( empty ( $fromExercise ) ) {
     $fromExercise = intval($_REQUEST['fromExercise']);
 }
+
+$exerciseId = null;
 if(isset($_GET['exerciseId'])){
 	$exerciseId = intval($_GET['exerciseId']);
 }
@@ -128,12 +130,10 @@ if ($is_allowedToEdit) {
 	if ($delete) {
 		// construction of the Question object
 		// if the question exists
-		if($objQuestionTmp = Question::read($delete))
-		{
+		if($objQuestionTmp = Question::read($delete)) {
 			// deletes the question from all exercises
 			$objQuestionTmp->delete();
 		}
-
 		// destruction of the Question object
 		unset($objQuestionTmp);
 	} elseif($recup && $fromExercise) {
@@ -272,9 +272,10 @@ $select_session_html =  Display::select('session_id', $session_select_list, $ses
 echo Display::form_row(get_lang('Session'), $select_session_html);
 
 //Course list
-if (!empty($session_id) && $session_id != '-1') {
+
+if (!empty($session_id) && $session_id != '-1') {	
     $course_list = SessionManager::get_course_list_by_session_id($session_id);
-} else {        
+} else {
     $course_list = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());        
 }    
 
@@ -287,20 +288,20 @@ $select_course_html =  Display::select('selected_course', $course_select_list, $
 echo Display::form_row(get_lang('Course'), $select_course_html);    
 
 if (empty($selected_course) || $selected_course == '-1') {
-    $course_info = api_get_course_info();
-    $db_name = $course_info['db_name'];
+    $course_info = api_get_course_info();    
 } else {        
-	$course_info = CourseManager::get_course_information_by_id($selected_course);                
-    $db_name = $course_info['db_name'];
+	$course_info = CourseManager::get_course_information_by_id($selected_course);
 }
+$course_id = $course_info['real_id'];
 
 //Redefining table calls
-$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION,   $db_name);
-$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST,            $db_name);
-$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION,        $db_name);
-$TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER,          $db_name);
+$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
+$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 $exercise_list         = get_all_exercises($course_info, $session_id);
+
 
 //Exercise List
 $my_exercise_list = array();
@@ -314,6 +315,7 @@ if (is_array($exercise_list)) {
         }
     }
 }    
+
 $select_exercise_html =  Display::select('exerciseId', $my_exercise_list, $exerciseId, array('class'=>'chzn-select','onchange'=>'submit_form(this);'), false);
 echo Display::form_row(get_lang('Exercise'), $select_exercise_html);
 
@@ -359,107 +361,73 @@ $show_pagination = true;
 
 // if we have selected an exercise in the list-box 'Filter'
 if ($exerciseId > 0) {
-	//$sql="SELECT id,question,type FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($exerciseId)."' ORDER BY question_order LIMIT $from, ".($limitQuestPage + 1);
+	//Specific exercise
 	$where = '';
 	if (isset($type) && $type==1) {
 		$where = ' type = 1 AND ';
 	}
-
 	if (isset($exerciseLevel) && $exerciseLevel != -1) {
 		$where .= ' level='.$exerciseLevel.' AND ';
 	}
-
 	if (isset($answerType) && $answerType != -1) {
 		$where .= ' type='.$answerType.' AND ';
 	}
-
-	$sql = "SELECT id,question,type,level
-			FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS
-		  	WHERE $where question_id=id AND exercice_id='".$exerciseId."'
-			ORDER BY question_order";
-            
+	$sql = "SELECT id, question, type, level
+			FROM $TBL_EXERCICE_QUESTION eq, $TBL_QUESTIONS q
+		  	WHERE $where question_id=id AND exercice_id='".$exerciseId."' AND eq.c_id = $course_id AND q.c_id = $course_id
+			ORDER BY question_order";            
     $result=Database::query($sql);
     while($row = Database::fetch_array($result, 'ASSOC')) {
     	$main_question_list[] = $row;
     }    
 } elseif($exerciseId == -1) {
-
-	// if we have selected the option 'Orphan questions' in the list-box 'Filter'
-
-	// 1. Old logic: When a test is deleted, the correspondent records in 'quiz' and 'quiz_rel_question' tables are deleted.
-	//$sql='SELECT id, question, type, exercice_id FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions ON questions.id=quizz_questions.question_id WHERE exercice_id IS NULL LIMIT $from, '.($limitQuestPage + 1);
-
-	// 2. New logic: When a test is deleted, the field 'active' takes value -1 (it is in the correspondent record in 'quiz' table).
-	//$sql='SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id FROM '.$TBL_QUESTIONS.
-	//	' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions ON questions.id=quizz_questions.question_id LEFT JOIN '.$TBL_EXERCICES.
-	//	' as exercices ON exercice_id=exercices.id WHERE exercices.active = -1 LIMIT $from, '.($limitQuestPage + 1);
-
-	// 3. This is more safe to changes, it is a mix between old and new logic.
-
-	/*$sql='SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id FROM '.$TBL_QUESTIONS.
-		' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions ON questions.id=quizz_questions.question_id LEFT JOIN '.$TBL_EXERCICES.
-		' as exercices ON exercice_id=exercices.id WHERE quizz_questions.exercice_id IS NULL OR exercices.active = -1 LIMIT '.$from.', '.($limitQuestPage + 1);
-	*/
-
-	/*	4. Query changed because of the Level feature implemented
-	$sql='SELECT id, question, type, exercice_id,level FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions
-		ON questions.id=quizz_questions.question_id AND exercice_id IS NULL '.
-		(!is_null($exerciseLevel) && $exerciseLevel >= 0 ? 'WHERE level=\''.$exerciseLevel.'\' ' : '');
-	*/
-	// 5. this is the combination of the 3 and 4 query because of the level feature implementation
-
-	// we filter the type of question, because in the DirectFeedback we can only add questions with type=1 = UNIQUE_ANSWER
+	//Orphan	
 	$type_where= '';
 	if (isset($type) && $type==1) {
 		$type_where = ' AND questions.type = 1 ';
 	}
-
 	$level_where = '';
 	if (isset($exerciseLevel) && $exerciseLevel!= -1 ) {
 		$level_where = ' level='.$exerciseLevel.' AND ';
 	}
-
 	$answer_where = '';
 	if (isset($answerType) && $answerType != -1 ) {
 		$answer_where = ' questions.type='.$answerType.' AND ';
 	}
-
 	$sql = 'SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id , level, session_id
 			FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions
 			ON questions.id=quizz_questions.question_id LEFT JOIN '.$TBL_EXERCICES.' as exercices
 			ON exercice_id=exercices.id
-			WHERE '.$answer_where.' '.$level_where.' (quizz_questions.exercice_id IS NULL OR exercices.active = -1 )  '.$type_where.'
+			WHERE '.$answer_where.' '.$level_where.' (quizz_questions.exercice_id IS NULL OR exercices.active = -1 )  '.$type_where.' AND 
+					questions.c_id = '.$course_id.'
+							
 			LIMIT '.$from.', '.($limitQuestPage + 1);
     $result = Database::query($sql);
     
     while($row = Database::fetch_array($result, 'ASSOC')) {
         $main_question_list[] = $row;
     }
-
 } else {
+	//All tests
 	$show_pagination = false;
+	
 	// if we have not selected any option in the list-box 'Filter'
 	$filter = '';
-
 	if (isset($type) && $type==1){
 		$filter  .= ' AND qu.type = 1 ';
 	}
-
 	if (isset($exerciseLevel) && $exerciseLevel != -1) {
 		$filter .= ' AND level='.$exerciseLevel.' ';
 	}
-
 	if (isset($answerType) && $answerType != -1) {
 		$filter .= ' AND qu.type='.$answerType.' ';
-	}
-	
+	}	
     if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {
         $filter .= ' AND qu.type <> '.HOT_SPOT_DELINEATION.' ';
     }
-    
-	$new_limit_page = $limitQuestPage + 1;
+    $new_limit_page = $limitQuestPage + 1;	
 	
-    if ($session_id != 0) {
+    if (!empty($session_id) && $session_id != '-1') {
         $main_question_list = array();
         if (!empty($course_list))
         foreach ($course_list as $course_item) {    
@@ -468,14 +436,16 @@ if ($exerciseId > 0) {
                 	continue;
                 }
             }        
-            $exercise_list = get_all_exercises($course_item, $session_id);
+            $exercise_list = get_all_exercises($course_item, $session_id);           
 
             if (!empty($exercise_list)) {        
                 foreach ($exercise_list as $exercise) {                    
                     $my_exercise = new Exercise($course_item['id']);
                     $my_exercise->read($exercise['id']);
+                    
             
                     if (!empty($my_exercise)) {
+                    	
                         if (!empty($my_exercise->questionList)) {                            
                             foreach ($my_exercise->questionList as $question_id) {  
                                                               
@@ -511,8 +481,15 @@ if ($exerciseId > 0) {
         }      
     } else {
         //By default
-    	$sql="SELECT qu.id, question, qu.type, level, q.session_id FROM $TBL_QUESTIONS as qu, $TBL_EXERCICE_QUESTION as qt, $TBL_EXERCICES as q
-              WHERE q.id=qt.exercice_id AND qu.id=qt.question_id AND qt.exercice_id<>".$fromExercise." $filter ORDER BY session_id ASC LIMIT $from, $new_limit_page";
+    	$sql = "SELECT qu.id, question, qu.type, level, q.session_id 
+    			FROM $TBL_QUESTIONS as qu, $TBL_EXERCICE_QUESTION as qt, $TBL_EXERCICES as q
+              	WHERE 	qu.c_id = $course_id AND 
+              			qu.c_id = $course_id AND
+              			q.id=qt.exercice_id AND 
+    					qu.id=qt.question_id AND 
+    					qt.exercice_id <> ".$fromExercise." $filter 
+    			ORDER BY session_id ASC 
+    			LIMIT $from, $new_limit_page";
     	$result = Database::query($sql);
     	
     	while($row = Database::fetch_array($result, 'ASSOC')) {
@@ -607,7 +584,7 @@ foreach ($main_question_list as $row) {
             echo '</a> ';
 			if ($row['session_id'] == $session_id) {
 			    if ($selected_course == api_get_course_int_id()) {
-				    echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" title="'.get_lang('InsertALinkToThisQuestionInTheExercise').'" alt="'.get_lang('InsertALinkToThisQuestionInTheExercise').'"></a>';
+				    //echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" title="'.get_lang('InsertALinkToThisQuestionInTheExercise').'" alt="'.get_lang('InsertALinkToThisQuestionInTheExercise').'"></a>';
 			    }
 			}
 		}

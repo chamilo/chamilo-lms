@@ -73,13 +73,14 @@ class Exercise {
 		$this->propagate_neg    = 0;
 		$this->review_answers	= false;
 
-		if (!empty($course_id)) {
-			$this->course_id    =  intval($course_id);
+		if (!empty($course_id)) {			
 			$course_info        =  api_get_course_info_by_id($this->course_id);
 		} else {
 			$course_info 		= api_get_course_info();
 		}
-		$this->course   = $course_info;
+		$this->course_id    = $course_info['real_id'];
+		
+		$this->course   	= $course_info;
 
 	}
 
@@ -91,11 +92,11 @@ class Exercise {
 	 * @return - boolean - true if exercise exists, otherwise false
 	 */
 	function read($id) {
-		$TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION,$this->course['db_name']);
-		$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST,$this->course['db_name']);
-		$TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION,$this->course['db_name']);
+		$TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+		$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST);
+		$TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$id  = intval($id);
-		$sql = "SELECT * FROM $TBL_EXERCICES WHERE id = ".$id;
+		$sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = ".$this->course_id." AND id = ".$id;
 		$result = Database::query($sql);
 
 		// if the exercise has been found
@@ -127,8 +128,8 @@ class Exercise {
 			$sql = "SELECT e.question_id, e.question_order FROM $TBL_EXERCICE_QUESTION e, $TBL_QUESTIONS  q
 					WHERE 	e.question_id	= q.id AND 
 							e.exercice_id	= '".Database::escape_string($id)."' AND
-							e.c_id = ".api_get_course_int_id()." AND
-							q.c_id = ".api_get_course_int_id()." 														 
+							e.c_id = ".$this->course_id." AND
+							q.c_id = ".$this->course_id." 														 
 					ORDER BY question_order";
 				
 			$result = Database::query($sql);
@@ -293,14 +294,14 @@ class Exercise {
 	 */
 	function selectQuestionList($from_db = false) {
 		if ($from_db && !empty($this->id)) {
-			$TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION, $this->course['db_name']);
-			$TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION, $this->course['db_name']);
+			$TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+			$TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
 			$sql = "SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION eq , $TBL_QUESTIONS q 
 					WHERE 	eq.question_id = q.id AND 
 							exercice_id='".$this->id."' AND
-							eq.c_id = {$this->course['real_id']} AND
-							q.c_id = {$this->course['real_id']}
+							eq.c_id = {$this->course_id} AND
+							q.c_id = {$this->course_id}
 					ORDER BY question_order";			
 			$result = Database::query($sql);
 			$question_list = array();
@@ -439,14 +440,14 @@ class Exercise {
 	 */
 	function updateSound($sound,$delete) {
 		global $audioPath, $documentPath;
-		$TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $this->course['db_name']);
-		$TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$this->course['db_name']);
+		$TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+		$TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 		if ($sound['size'] && (strstr($sound['type'],'audio') || strstr($sound['type'],'video'))) {
 			$this->sound=$sound['name'];
 
 			if (@move_uploaded_file($sound['tmp_name'],$audioPath.'/'.$this->sound)) {
-				$query="SELECT 1 FROM $TBL_DOCUMENT  WHERE path='".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
+				$query="SELECT 1 FROM $TBL_DOCUMENT  WHERE c_id = ".$this->course_id." AND path='".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
 				$result=Database::query($query);
 
 				if(!Database::num_rows($result)) {
@@ -589,7 +590,7 @@ class Exercise {
 					results_disabled='".Database::escape_string($results_disabled)."'";
 			}
 			
-			$sql .= " WHERE id='".Database::escape_string($id)."'";
+			$sql .= " WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($id)."'";
 			Database::query($sql);
 
 			// update into the item_property table
@@ -603,7 +604,7 @@ class Exercise {
 			$sql="INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers,
 											  active, results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers)
 					VALUES(
-						".api_get_course_int_id().",
+						".$this->course_id.",
 						'$start_time','$end_time',
 						'".Database::escape_string($exercise)."',
 						'".Database::escape_string($description)."',
@@ -623,7 +624,7 @@ class Exercise {
 			$this->id = Database::insert_id();
 			// insert into the item_property table
 
-			api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizAdded',api_get_user_id());
+			api_item_property_update($this->course, TOOL_QUIZ, $this->id,'QuizAdded',api_get_user_id());
 			if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
 				$this->search_engine_save();
 			}
@@ -642,164 +643,14 @@ class Exercise {
 		if (!empty($question_list)) {
 			foreach ($question_list as $position => $questionId) {
 				$sql="UPDATE $quiz_question_table SET question_order ='".intval($position)."'".
-                     "WHERE question_id = ".intval($questionId)." AND exercice_id=".intval($this->id);                
+                     "WHERE c_id = ".$this->course_id." AND question_id = ".intval($questionId)." AND exercice_id=".intval($this->id);                
 				Database::query($sql);
 			}
 		}
 	}
-
-
+	
 	/**
-	 * moves a question up in the list
-	 *
-	 * @author - Olivier Brouckaert
-	 * @author - Julio Montoya (rewrote the code)
-	 * @param - integer $id - question ID to move up
-	 */
-	function moveUp($id) {
-		// there is a bug with some version of PHP with the key and prev functions
-		// the script commented was tested in dev.dokeos.com with no success
-		// Instead of using prev and next this was change with arrays.
-		/*
-		foreach($this->questionList as $position=>$questionId)
-		{
-		// if question ID found
-		if($questionId == $id)
-		{
-		// position of question in the array
-		echo $pos1=$position; //1
-		echo "<br>";
-
-		prev($this->questionList);
-		prev($this->questionList);
-
-		// position of previous question in the array
-		$pos2=key($this->questionList);
-		//if the cursor of the array hit the end
-		// then we must reset the array to get the previous key
-
-		if($pos2===null)
-		{
-		end($this->questionList);
-		prev($this->questionList);
-		$pos2=key($this->questionList);
-		}
-
-		// error, can't move question
-		if(!$pos2)
-		{
-		//echo 'cant move!';
-		$pos2=key($this->questionList);
-		reset($this->questionList);
-		}
-		$id2=$this->questionList[$pos2];
-		// exits foreach()
-		break;
-		}
-		$i++;
-		}
-		*/
-		$question_list =array();
-	foreach($this->questionList as $position=>$questionId)
-	{
-		$question_list[]=	$questionId;
-	}
-	$len=count($question_list);
-	$orderlist=array_keys($this->questionList);
-	for($i=0;$i<$len;$i++)
-	{
-		$questionId = $question_list[$i];
-		if($questionId == $id)
-		{
-			// position of question in the array
-			$pos1=$orderlist[$i];
-			$pos2=$orderlist[$i-1];
-			if($pos2===null)
-			{
-				$pos2 =		$orderlist[$len-1];
-			}
-			// error, can't move question
-			if(!$pos2)
-			{
-				$pos2=$orderlist[0];
-				$i=0;
-			}
-			break;
-		}
-	}
-	// permutes questions in the array
-	$temp=$this->questionList[$pos2];
-	$this->questionList[$pos2]=$this->questionList[$pos1];
-	$this->questionList[$pos1]=$temp;
-	}
-
-	/**
-	 * moves a question down in the list
-	 *
-	 * @author - Olivier Brouckaert
-	 * @param - integer $id - question ID to move down
-	 */
-	function moveDown($id) {
-		// there is a bug with some version of PHP with the key and prev functions
-		// the script commented was tested in dev.dokeos.com with no success
-		// Instead of using prev and next this was change with arrays.
-
-		/*
-		 foreach($this->questionList as $position=>$questionId)
-		{
-		// if question ID found
-		if($questionId == $id)
-		{
-		// position of question in the array
-		$pos1=$position;
-
-		//next($this->questionList);
-
-		// position of next question in the array
-		$pos2=key($this->questionList);
-
-		// error, can't move question
-		if(!$pos2)
-		{
-		//echo 'cant move!';
-		return;
-		}
-
-		$id2=$this->questionList[$pos2];
-
-		// exits foreach()
-		break;
-		}
-		}
-		*/
-
-		$question_list =array();
-		foreach($this->questionList as $position=>$questionId) {
-			$question_list[]=	$questionId;
-		}
-		$len=count($question_list);
-		$orderlist=array_keys($this->questionList);
-
-		for($i=0;$i<$len;$i++) {
-			$questionId = $question_list[$i];
-			if($questionId == $id) {
-				$pos1=$orderlist[$i+1];
-				$pos2 =$orderlist[$i];
-				if(!$pos2) {
-					//echo 'cant move!';
-				}
-				break;
-			}
-		}
-
-		// permutes questions in the array
-		$temp=$this->questionList[$pos2];
-		$this->questionList[$pos2]=$this->questionList[$pos1];
-		$this->questionList[$pos1]=$temp;
-	}
-
-	/**
-	 * adds a question into the question list
+	 * Adds a question into the question list
 	 *
 	 * @author - Olivier Brouckaert
 	 * @param - integer $questionId - question ID
@@ -858,9 +709,9 @@ class Exercise {
 	function delete() {
 		global $_course;
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-		$sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE id='".Database::escape_string($this->id)."'";
+		$sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($this->id)."'";
 		Database::query($sql);
-		api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizDeleted',api_get_user_id());
+		api_item_property_update($this->course, TOOL_QUIZ, $this->id,'QuizDeleted',api_get_user_id());
 
 		if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian') ) {
 			$this->search_engine_delete();
@@ -1041,10 +892,8 @@ class Exercise {
 
 			//$check_option=$this->selectType();
 			$diplay = 'block';							
-			$form->addElement('checkbox', 'propagate_neg', get_lang('PropagateNegativeResults'),null);
-			
-			$form->addElement('checkbox', 'review_answers', get_lang('ReviewAnswers'),null);
-			
+			$form->addElement('checkbox', 'propagate_neg', get_lang('PropagateNegativeResults'), null);			
+			$form->addElement('checkbox', 'review_answers', get_lang('ReviewAnswers'), null);			
 				
 			$form->addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');
 
@@ -1064,8 +913,7 @@ class Exercise {
 			$form->addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px','id' => 'enabletimercontroltotalminutes'));
 			$form->addElement('html','</div>');
 			//$form->addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
-				
-				
+								
 			$defaults = array();
 
 			if (api_get_setting('search_enabled') === 'true') {
@@ -1147,7 +995,6 @@ class Exercise {
 				} else {
 					$defaults['enabletimercontroltotalminutes'] = 0;
 				}
-
 			} else {
 				$defaults['exerciseType'] = 2;
 				$defaults['exerciseAttempts'] = 0;
@@ -1164,11 +1011,9 @@ class Exercise {
 			$defaults['exerciseTitle'] = $this->selectTitle();
 			$defaults['exerciseDescription'] = $this->selectDescription();
 		}
-
 		if (api_get_setting('search_enabled') === 'true') {
 			$defaults['index_document'] = 'checked="checked"';
 		}
-
 		$form->setDefaults($defaults);
 	}
 
@@ -1407,7 +1252,11 @@ class Exercise {
 		$table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 		$sql_select = "SELECT exe_id FROM $table_track_e_exercises
-					   WHERE exe_cours_id = '".api_get_course_id()."' AND exe_exo_id = ".$this->id." AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id = ".api_get_session_id()."";
+					   WHERE 	exe_cours_id = '".api_get_course_id()."' AND 
+								exe_exo_id = ".$this->id." AND 
+								orig_lp_id = 0 AND 
+								orig_lp_item_id = 0 AND 
+								session_id = ".api_get_session_id()."";
 
 		$result   = Database::query($sql_select);
 		$exe_list = Database::store_result($result);
@@ -3226,6 +3075,7 @@ class Exercise {
         <br />';
 		return $html;
 	}
+	
 	/**
 	 * Create a quiz from quiz data
 	 * @param string  Title
@@ -3359,7 +3209,7 @@ class Exercise {
 	
 	function added_in_lp() {
 		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
-		$sql = "SELECT max_score FROM $TBL_LP_ITEM WHERE item_type = '".TOOL_QUIZ."' AND path = '".$this->id."'";
+		$sql = "SELECT max_score FROM $TBL_LP_ITEM WHERE c_id = ".$this->course_id." AND item_type = '".TOOL_QUIZ."' AND path = '".$this->id."'";
 		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) {
 			return true;
@@ -3430,17 +3280,11 @@ class Exercise {
 		}
 	}
 	
-	public function fill_in_blank_answer_to_string($answer) {
-				
-		api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);
-		
-				
-		$result = '';
-		
+	public function fill_in_blank_answer_to_string($answer) {				
+		api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);			
+		$result = '';		
 		if (!empty($teacher_answer_list)) {
 			$teacher_answer_list = $teacher_answer_list[0];
-			
-		
 			$i = 0;
 			foreach($teacher_answer_list as $teacher_item) {
 				$value = null;				

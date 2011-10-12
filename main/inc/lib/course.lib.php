@@ -136,7 +136,7 @@ class CourseManager {
 
      */
     public static function get_course_information_by_id($course_id) {
-        return Database::select('*', Database::get_main_table(TABLE_MAIN_COURSE), array('where'=>array('id = ?' =>intval($course_id))),'first');        
+        return Database::select('*, id as real_id', Database::get_main_table(TABLE_MAIN_COURSE), array('where'=>array('id = ?' =>intval($course_id))),'first');        
     }
     
 

@@ -207,35 +207,6 @@ function display_studentsdelete_form() {
 }
 
 /**
- * This function displays the firstname and lastname of the user as a link to the user tool.
- *
- * @see this is the same function as in the new forum, so this probably has to move to a user library.
- *
- * @todo move this function to the user library (remove duplicate in dropbox_functions.inc.php)
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version march 2006
- */
-function display_user_link_work($user_id, $name = '', $gradebook='') {
-	global $_otherusers;
-	$user_id = intval($user_id);
-
-	if ($user_id != 0) {
-		$table_user = Database::get_main_table(TABLE_MAIN_USER);
-		$sql	= "SELECT user_id, firstname, lastname  FROM $table_user WHERE user_id='".Database::escape_string($user_id)."'";
-		$result	= Database::query($sql);
-		$row	= Database::fetch_array($result);
-		if ($name == '') {
-			return '<a href="../user/userInfo.php?cidReq='.api_get_course_id().'&amp;gradebook='.$gradebook.'&amp;origin=&amp;uInfo='.$row['user_id'].'">'.api_get_person_name($row['firstname'], $row['lastname']).'</a>';
-		} else {
-			return '<a href="../user/userInfo.php?cidReq='.api_get_course_id().'&amp;gradebook='.$gradebook.'&amp;origin=&amp;uInfo='.$user_id.'">'.$name.'</a>';
-		}
-	} else {
-		return $name.' ('.get_lang('Anonymous').')';
-	}
-}
-
-/**
  * converts 2008-10-06 12:45:00 to timestamp
  * @deprecated any calls found
  */
@@ -880,8 +851,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			
 			if (!$is_allowed_to_edit && $item_property_data['insert_user_id'] == api_get_user_id()) {
 				$is_author = true;
-			}
-			
+			}			
 			$user_info = api_get_user_info($item_property_data['insert_user_id']);
 				
 			//display info depending on the permissions
@@ -919,6 +889,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				if ($qualification_exists) {
 					$row[] = $qualification_string;
 				}
+				
 				$work_sent_date_local = api_get_local_time($work->sent_date);
 				$row[] = date_to_str_ago($work_sent_date_local).$add_string.'<br /><span class="dropbox_date">'.api_format_date($work_sent_date_local).'</span>';
 
@@ -937,12 +908,11 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'" >'.Display::return_icon('delete.png', get_lang('WorkDelete'),'',22).'</a>';
 					$row[] = $action;
 					// the user that is not course admin can only edit/delete own document
-				} elseif ($is_author && empty($work->qualification)) {
+				} elseif ($is_author && empty($work->qualificator_id)) {					
 					if (!$table_has_actions_column) {
 						$table_header[] = array(get_lang('Actions'), false, 'style="width:90px"');
 						$table_has_actions_column = true;
-					}
-					
+					}					
 					$action = '';
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), 22).'</a>';
 					if (api_get_course_setting('student_delete_own_publication') == 1) {

@@ -318,9 +318,9 @@ $is_allowed_to_edit = api_is_allowed_to_edit(); //has to come after display_tool
 
 /*		MAIN CODE */
 
-if (!empty ($_POST['changeProperties'])) {
+if (!empty($_POST['changeProperties'])) {
 	// changing the tool setting: default visibility of an uploaded document
-	$query = "UPDATE " . $main_course_table . " SET show_score='" . $uploadvisibledisabled . "' WHERE code='" . $_course['sysCode'] . "'";
+	$query = "UPDATE " . $main_course_table . " SET show_score='" . $uploadvisibledisabled . "' WHERE code='" . api_get_course_id() . "'";
 	Database::query($query);
 
 	// changing the tool setting: is a student allowed to delete his/her own document
@@ -328,19 +328,19 @@ if (!empty ($_POST['changeProperties'])) {
 	$table_course_setting = Database :: get_course_table(TOOL_COURSE_SETTING);
 
 	// counting the number of occurrences of this setting (if 0 => add, if 1 => update)
-	$query = "SELECT * FROM " . $table_course_setting . " WHERE variable = 'student_delete_own_publication'";
+	$query = "SELECT * FROM " . $table_course_setting . " WHERE c_id = $course_id AND variable = 'student_delete_own_publication'";
 	$result = Database::query($query);
 	$number_of_setting = Database::num_rows($result);
 	
 	if ($number_of_setting == 1) {
-		$query = "UPDATE " . $table_course_setting . " SET value='" . Database::escape_string($_POST['student_delete_own_publication']) . "' WHERE variable='student_delete_own_publication' and c_id = $course_id";
+		$query = "UPDATE " . $table_course_setting . " SET value='" . Database::escape_string($_POST['student_delete_own_publication']) . "' 
+				WHERE variable='student_delete_own_publication' AND c_id = $course_id";
 		Database::query($query);
 	} else {
 		$query = "INSERT INTO " . $table_course_setting . " (c_id, variable, value, category) VALUES 
 		($course_id, 'student_delete_own_publication','" . Database::escape_string($_POST['student_delete_own_publication']) . "','work')";
 		Database::query($query);
 	}
-
 	$_course['show_score'] = $uploadvisibledisabled;
 } else {
 	$query = "SELECT * FROM " . $main_course_table . " WHERE code=\"" . $_course['sysCode'] . "\"";
@@ -740,8 +740,7 @@ else {
             $file_deleted = false;
 			//Get the author ID for that document from the item_property table
 			$author_sql = "SELECT * FROM $iprop_table WHERE c_id = $course_id AND tool = 'work' AND insert_user_id='$user_id' AND ref=" .Database::escape_string($delete);
-			$author_qry = Database::query($author_sql);
-            
+			$author_qry = Database::query($author_sql);            
 
 			if ((Database :: num_rows($author_qry) == 1 AND api_get_course_setting('student_delete_own_publication') == 1) || api_is_allowed_to_edit(null,true)) {
 				//we found the current user is the author
@@ -1150,7 +1149,6 @@ if ($is_course_member) {
 
 		//require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 		require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-
 		$form = new FormValidator('form', 'POST', api_get_self() . "?id=".$work_id."curdirpath=" . rtrim(Security :: remove_XSS($curdirpath),'/') . "&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', 'enctype="multipart/form-data"');
 
 		// form title
@@ -1194,12 +1192,7 @@ if ($is_course_member) {
 		$titleWork = $form->addElement('text', 'title', get_lang('TitleWork'), 'id="file_upload"  style="width: 350px;"');
 		$defaults['title'] = $edit ? stripslashes($workTitle) : stripslashes($title);
 
-		//Removed to avoid incoherences
-		//$titleAuthors = $form->addElement('text', 'authors', get_lang("Authors"), 'style="width: 350px;"');
-
-		//if (empty ($authors)) {
 		$authors = api_get_person_name($_user['firstName'], $_user['lastName']);
-		//}
 
 		//$defaults["authors"] = ($edit ? stripslashes($workAuthor) : stripslashes($authors));
 		$titleAuthors = $form->addElement('textarea', 'description', get_lang("Description"), 'style="width: 350px; height: 60px;"');
@@ -1247,7 +1240,10 @@ if ($is_course_member) {
 			$form->add_real_progress_bar('uploadWork', 'file');
 		}
 		$form->setDefaults($defaults);
-		$form->display();
+		//fixes bug when showing modification form
+		if (empty($edit) || (!empty($edit) && ($is_allowed_to_edit or $is_author))) {
+			$form->display();
+		}
 	}
 
 

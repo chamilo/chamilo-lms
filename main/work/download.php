@@ -36,21 +36,25 @@ if (!isset($_course)) {
 	api_not_allowed(true);
 }
 
-$full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$doc_url;
+$full_file_name 		 = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$doc_url;
 $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 // launch event
+$doc_url = Database::escape_string($doc_url);
 event_download($doc_url);
 
-$doc_url = Database::escape_string($doc_url);
-$sql = 'SELECT title FROM '.$tbl_student_publication.'WHERE url LIKE BINARY "'.$doc_url.'"';
-
-$result = Database::query($sql);
-if (Database::num_rows($result) > 0) {
-    $row = Database::fetch_array($result);
-    $title = str_replace(' ', '_', $row['title']);
-    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')) {
-        DocumentManager::file_send_for_download($full_file_name, true, $title);
-    }
+if (!empty($_course['real_id'])) {
+	$sql = 'SELECT * FROM '.$tbl_student_publication.'WHERE c_id = '.$_course['real_id'].' AND url LIKE BINARY "'.$doc_url.'"';
+	$result = Database::query($sql);
+	if ($result && Database::num_rows($result)) {
+	    $row = Database::fetch_array($result, 'ASSOC');	    
+	    $course_info = CourseManager::get_course_information(api_get_course_id());	    
+	    if (($row['user_id'] == api_get_user_id() || api_is_allowed_to_edit()) || (!empty($course_info) && $course_info['show_score'] == 0)  ) {
+		    $title = str_replace(' ', '_', $row['title']);
+		    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')) {
+		        DocumentManager::file_send_for_download($full_file_name, true, $title);
+		    }
+	    }	    
+	}
 }
 exit;

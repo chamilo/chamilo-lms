@@ -18,4 +18,5 @@ RewriteCond %{REQUEST_URI} !^{CHAMILO_URL_APPEND_PATH}/main/
 RewriteRule ([^/]+)/document/(.*)&(.*)$ $1/document/$2///$3 [N]
 #rewrite everything in the document folder of a course to the download script
 RewriteRule ([^/]+)/document/(.*)$ {CHAMILO_URL_APPEND_PATH}/main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+RewriteRule ([^/]+)/work/(.*)$ {CHAMILO_URL_APPEND_PATH}/main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
 </IfModule>

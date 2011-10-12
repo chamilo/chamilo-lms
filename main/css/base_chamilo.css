@@ -612,9 +612,7 @@ input.link_alike:hover {
     padding-left: 12px;
 }
 .menusection {
-    margin: 20px 0px 0 6px;
-    padding-left: 3px;
-    width: auto;
+    margin: 20px 0px 0 0px;
 }
 .menusectioncaption {
     font-weight:bold;
@@ -787,7 +785,6 @@ input.link_alike:hover {
     text-align: left;
     font-size: 12px;
     margin: 2px 0 10px 0;
-    padding: 2px;
 }
 #lang_form input, #lang_form select {
     font-size: 12px;

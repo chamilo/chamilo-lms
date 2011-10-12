@@ -298,73 +298,40 @@ class Display {
      * Displays a normal message. It is recommended to use this public function
      * to display any normal information messages.
      *
-     * @author Roan Embrechts
-     * @param string $message - include any additional html
-     *                          tags if you need them
      * @param bool	Filter (true) or not (false)
      * @return void
      */
     public static function display_normal_message($message, $filter = true) {
-        if ($filter) {
-            // Filter message
-            $message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
-        }
-        echo '<div class="normal-message">';        
-        echo $message.'</div>';
+    	echo self::return_message($message, 'normal', $filter);
     }
 
     /**
      * Displays an warning message. Use this if you want to draw attention to something
      * This can also be used for instance with the hint in the exercises
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @param string $message
-     * @param bool	Filter (true) or not (false)
-     * @return void
+     *     
      */
     public static function display_warning_message($message, $filter = true) {
-        if ($filter){
-            // Filter message
-            $message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
-        }
-        echo '<div class="warning-message">';
-        echo $message.'</div>';
+    	echo self::return_message($message, 'warning', $filter);
     }
 
     /**
      * Displays an confirmation message. Use this if something has been done successfully
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @param string $message
      * @param bool	Filter (true) or not (false)
      * @return void
      */
     public static function display_confirmation_message ($message, $filter = true) {
-        if ($filter){
-            // Filter message
-            $message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
-        }
-        echo '<div class="confirmation-message">';
-        echo $message.'</div>';
+        echo self::return_message($message, 'confirm', $filter);
     }
 
     /**
      * Displays an error message. It is recommended to use this public function if an error occurs
-     *
-     * @author Hugues Peeters
-     * @author Roan Embrechts
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @param string $message - include any additional html
      *                          tags if you need them
      * @param bool	Filter (true) or not (false)
      * @return void
      */
     public static function display_error_message ($message, $filter = true) {
-        if($filter){
-            // Filter message
-            $message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
-        }
-        echo '<div class="error-message">'.$message.'</div>';
+        echo self::return_message($message, 'error', $filter);
     }
 
     /**
@@ -376,21 +343,24 @@ class Display {
      */
     public function return_message($message, $type='normal', $filter = true) {
         if ($filter) {
-            $message = Security::remove_XSS($message);
+        	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());        	
+            //$message = Security::remove_XSS($message);
         }
+        $class = "  ";
         switch($type) {
             case 'warning':
-               $class = 'warning-message';
+               $class .= 'warning-message';
                break;
             case 'error':
-               $class = 'error-message';
+               $class .= 'error-message';
                break;
+            case 'confirmation':
             case 'confirm':
-                $class = 'confirmation-message';
+                $class .= 'confirmation-message';
                break;
             case 'normal':
             default:
-                $class = 'normal-message';
+                $class .= 'normal-message';
         }
         return self::div($message, array('class'=>$class));
     }

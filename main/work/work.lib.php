@@ -488,11 +488,11 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 									 WHERE ";
 			
 			if (!empty($_SESSION['toolgroup'])) {
-				$sql_select_directory .= " prop.c_id = $course_id AND work.c_id = $course_id AND work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
+				$sql_select_directory .= " work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
 			} else {
-				$sql_select_directory .= " prop.c_id = $course_id AND work.c_id = $course_id AND work.post_group_id = '0' ";
+				$sql_select_directory .= " work.post_group_id = '0' ";
 			}
-			$sql_select_directory .= " AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $condition_session";
+			$sql_select_directory .= "  AND  prop.c_id = $course_id AND work.c_id = $course_id AND  work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $condition_session";
 
 			$result = Database::query($sql_select_directory);
 			$row = Database::fetch_array($result);

@@ -332,8 +332,6 @@ if (!empty ($_POST['changeProperties'])) {
 	$result = Database::query($query);
 	$number_of_setting = Database::num_rows($result);
 	
-	
-
 	if ($number_of_setting == 1) {
 		$query = "UPDATE " . $table_course_setting . " SET value='" . Database::escape_string($_POST['student_delete_own_publication']) . "' WHERE variable='student_delete_own_publication' and c_id = $course_id";
 		Database::query($query);
@@ -863,29 +861,29 @@ if (isset($_POST['sec_token']) && $ctok == $_POST['sec_token']) { //check the to
 				$result = Database::query("SHOW FIELDS FROM " . $work_table . " LIKE 'sent_date'");
 
 				if (!Database::num_rows($result)) {
-					Database::query("ALTER TABLE " . $work_table . " ADD sent_date DATETIME NOT NULL");
+					Database::query("ALTER TABLE " . $work_table . " ADD sent_date DATETIME NOT NULL WHERE c_id = $course_id ");
 				}
 				$active = '1';
 				
 				
 				$sql_add_publication = "INSERT INTO " . $work_table . " SET
-										   c_id = $course_id ,
-									       url         = '" . $url . "',
-									       title       = '" . Database::escape_string($title) . "',
-						                   description = '" . Database::escape_string($description) . "',
-						                   author      = '" . Database::escape_string($authors) . "',
+										   c_id 		= $course_id ,
+									       url         	= '" . $url . "',
+									       title       	= '" . Database::escape_string($title) . "',
+						                   description	= '" . Database::escape_string($description) . "',
+						                   author      	= '" . Database::escape_string($authors) . "',
 										   active		= '" . $active . "',
 										   accepted		= '1',
 										   post_group_id = '".$post_group_id."',
 										   sent_date	=  '".api_get_utc_datetime()."',
 										   parent_id 	=  '".$work_id."' ,
-                                           session_id = '".intval($id_session)."' ,
-                                           user_id = '".$user_id."'";
+                                           session_id	= '".intval($id_session)."' ,
+                                           user_id 		= '".$user_id."'";
 
 				Database::query($sql_add_publication);
 
-				$Id = Database::insert_id();
-				api_item_property_update($_course, 'work', $Id, 'DocumentAdded', $user_id);
+				$id = Database::insert_id();
+				api_item_property_update($_course, 'work', $id, 'DocumentAdded', $user_id);
 				$succeed = true;
 
 				// update all the parents in the table item propery

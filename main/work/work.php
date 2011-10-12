@@ -652,11 +652,8 @@ if (isset ($_POST['move_to']) && isset ($_POST['move_file'])) {
 		Display :: display_error_message(get_lang('Impossible'));
 	}
 }
-
 /*	COMMANDS SECTION (reserved for others - check they're authors each time) */
-
-else {
-	$iprop_table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+else {	
 	$user_id = api_get_user_id();
 
 	/*	DELETE WORK COMMAND */
@@ -742,7 +739,7 @@ else {
 		} else {
             $file_deleted = false;
 			//Get the author ID for that document from the item_property table
-			$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" .Database::escape_string($delete);
+			$author_sql = "SELECT * FROM $iprop_table WHERE c_id = $course_id AND tool = 'work' AND insert_user_id='$user_id' AND ref=" .Database::escape_string($delete);
 			$author_qry = Database::query($author_sql);
             
 
@@ -794,7 +791,7 @@ else {
 		}
 
 		//Get the author ID for that document from the item_property table
-		$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" . $edit;
+		$author_sql = "SELECT * FROM $iprop_table WHERE c_id = $course_id AND tool = 'work' AND insert_user_id='$user_id' AND ref=" . $edit;
 		$author_qry = Database::query($author_sql);
 		if (Database :: num_rows($author_qry) == 1) {
 			//we found the current user is the author
@@ -1138,17 +1135,17 @@ if ($is_course_member) {
 		
 		if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 			api_not_allowed();
-		}
+		}		
 		
-
+		$is_author = false;
 		if ($edit) {
-			//Get the author ID for that document from the item_property table
-			$is_author = false;
-			$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" . $edit;
-			$author_qry = Database::query($author_sql);
-			if (Database :: num_rows($author_qry) == 1) {
+			//Get the author ID for that document from the item_property table			
+			$author_sql = "SELECT * FROM $iprop_table 
+						   WHERE c_id = $course_id AND tool = 'work' AND insert_user_id = '$user_id' AND ref=" . $edit;
+			$author_qry = Database::query($author_sql);					
+			if (Database :: num_rows($author_qry)) {
 				$is_author = true;
-			}
+			}			
 		}
 
 		//require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
@@ -1210,7 +1207,7 @@ if ($is_course_member) {
 
 		if ($is_allowed_to_edit && !empty($edit)) {
 			// Get qualification from parent_id that'll allow the validation qualification over
-			$sql = "SELECT qualification FROM $work_table WHERE id='$work_id'";
+			$sql = "SELECT qualification FROM $work_table WHERE c_id = $course_id AND id='$work_id'";
 			$result = Database::query($sql);
 			$row = Database::fetch_array($result);
 			$qualification_over = $row['qualification'];
@@ -1222,10 +1219,8 @@ if ($is_course_member) {
 		$defaults['qualification'] = $qualification_number;//($edit ? stripslashes($qualification_number) : stripslashes($qualification_number));
 		$form->addElement('hidden', 'active', 1);
 		$form->addElement('hidden', 'accepted', 1);
-		$form->addElement('hidden', 'item_to_edit', $edit);
-		
+		$form->addElement('hidden', 'item_to_edit', $edit);		
 		$form->addElement('hidden', 'sec_token', $stok);
-
 		if (isset($_GET['edit'])) {
 			$text = get_lang('UpdateWork');
 			$class = 'save';
@@ -1251,9 +1246,7 @@ if ($is_course_member) {
 		if ($show_progress_bar) {
 			$form->add_real_progress_bar('uploadWork', 'file');
 		}
-
 		$form->setDefaults($defaults);
-		//$form->addRule('file', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 		$form->display();
 	}
 
@@ -1405,12 +1398,11 @@ if (!$display_upload_form && !$display_tool_options) {
 			$form_filter .= make_select('filter', array(0 => get_lang('SelectAFilter'), 1 => get_lang('FilterByNotRevised'), 2 => get_lang('FilterByRevised'), 3 => get_lang('FilterByNotExpired')), $filter).'&nbsp&nbsp';
 			$form_filter .= '<button type="submit" class="save" value="'.get_lang('FilterAssignments').'">'.get_lang('FilterAssignments').'</button></form>';
 			echo $form_filter;
-
 		}
 	}
 
 	if (!empty($my_folder_data['description'])) {
-			echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).'</p></div></p>';
+		echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).'</p></div></p>';
 	}
 	if ($display_list_users_without_publication) {
 		display_list_users_without_publication($my_folder_data['id']);

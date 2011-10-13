@@ -655,12 +655,6 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
 if (api_get_setting('allow_user_headings') == 'true' && $is_courseAdmin && api_is_allowed_to_edit() && $origin != 'learnpath') { // only course administrators see this line
 	echo "<div align=\"right\">", "<form method=\"post\" action=\"userInfo.php\">", get_lang("CourseAdministratorOnly"), " : ", "<input type=\"submit\" class=\"save\" name=\"viewDefList\" value=\"".get_lang("DefineHeadings")."\" />", "</form>", "</div>\n";
 }
-
-//User list of the virtual courses linked to this course.
-//@todo 
-//show_users_in_virtual_courses($is_allowed_to_track);
-
-/*		FOOTER  */
 if ($origin != 'learnpath') {
 	Display::display_footer();
 }

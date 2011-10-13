@@ -329,6 +329,8 @@ function get_group_user_data($from, $number_of_items, $column, $direction) {
 	// Database table definition
 	$table_group_user 	= Database :: get_course_table(TABLE_GROUP_USER);
 	$table_user 		= Database :: get_main_table(TABLE_MAIN_USER);
+	
+	$course_id = api_get_course_int_id();
 
 	// Query
 	if (api_get_setting('show_email_addresses') == 'true') {
@@ -343,7 +345,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction) {
 				)."
 					user.email		AS col3
 					FROM ".$table_user." user, ".$table_group_user." group_rel_user
-					WHERE group_rel_user.user_id = user.user_id
+					WHERE group_rel_user.c_id = $course_id group_rel_user.user_id = user.user_id
 					AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";

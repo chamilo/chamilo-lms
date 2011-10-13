@@ -199,6 +199,7 @@ class GDWrapper extends ImageWrapper {
     public function set_image_wrapper() {   
         $handler = null;
         $this->fill_image_info();     
+        
         switch ($this->type) {
         	case 0:
         		$handler = false;
@@ -233,7 +234,7 @@ class GDWrapper extends ImageWrapper {
 	
     public function fill_image_info() { 
     	if (file_exists($this->path)) {   
-	        $image_info     = getimagesize($this->path);
+	        $image_info     = getimagesize($this->path);	        
 			$this->width    = $image_info[0];
 			$this->height   = $image_info[1];
 			$this->type     = $image_info[2];	

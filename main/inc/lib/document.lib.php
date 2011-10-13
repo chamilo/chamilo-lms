@@ -533,19 +533,19 @@ return 'application/octet-stream';
                         AND last.visibility".$visibility_bit.$condition_session." AND 
             			docs.c_id = {$_course['real_id']} AND 
             			last.c_id = {$_course['real_id']}  ";
-        }
-		
+        }		
+        
         $result = Database::query($sql);
 
         $doc_list = array();
         $document_data = array();
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-        if ($result!==false && Database::num_rows($result) != 0) {
+        if ($result !== false && Database::num_rows($result) != 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
 
                 if (api_is_coach()) {
-                    //Looking for course items that are invisible  to hide it in the session
+                    //Looking for course items that are invisible to hide it in the session
                     if (in_array($row['id'], array_keys($doc_list))) {
                         if ($doc_list[$row['id']]['item_property_session_id'] == 0 && $doc_list[$row['id']]['session_id'] == 0) {
                             if ($doc_list[$row['id']]['visibility'] == 0) {
@@ -554,10 +554,11 @@ return 'application/octet-stream';
                             }
                         }
                     }
+                    
                     $doc_list[$row['id']] = $row;
                 }
 
-                if (!api_is_coach() && !$is_allowed_to_edit) {
+                if (!api_is_coach() && !$is_allowed_to_edit) {                	
                     $doc_list[] = $row;
                 }
 
@@ -572,8 +573,10 @@ return 'application/octet-stream';
                     $template_result = Database::query($sql_is_template);
                     $row['is_template'] = (Database::num_rows($template_result) > 0) ? 1 : 0;
                 }
+                //just filling $document_data
                 $document_data[$row['id']] = $row;
             }
+            
 
 
             //Only for the student we filter the results see BT#1652

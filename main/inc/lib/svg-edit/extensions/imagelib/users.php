@@ -10,10 +10,9 @@ require_once '../../../../../inc/global.inc.php';
 //Add security from Chamilo
 api_protect_course_script();
 api_block_anonymous_users();
-//
 
 $user_disk_path = api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
-$user_web_path = api_get_path(WEB_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
+$user_web_path  = api_get_path(WEB_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
 //get all files and folders
 $scan_files = scandir($user_disk_path);
 
@@ -29,33 +28,44 @@ if (is_array($scan_files) && count($scan_files) > 0) {
 		}
 	}
 }
+$style = '<style>';
+$style .= '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
+$style .= '@import "'.api_get_path(WEB_CSS_PATH).api_get_visual_theme().'/default.css";';
+$style .='</style>';
 
 ?>
 <!doctype html>
 <script src="../../jquery.js"></script><!--Chamilo TODO: compress this file and changing loads -->
+<?php echo $style ?>
 
 <body>
 
 <?php
 
-echo '<h1>'.get_lang('SocialNetwork').': '.get_lang('MyFiles').'</h1>';
-echo '<h2>'.get_lang('SelectSVGEditImage').'</h2>';
-echo '<ul>';
-foreach($png_svg_files as $filename) {
-	$image=$user_disk_path.$filename;
-	$new_sizes = api_resize_image($image, 60, 60);
-	if (strpos($filename, "svg")){
-		echo '<li style="display:inline; padding:8px;"><a href="'.$user_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.api_get_path(WEB_IMG_PATH).'svg_medium.png" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
-	}else{
-		echo '<li style="display:inline; padding:8px;"><a href="'.$user_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$user_web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
+echo '<h2>'.get_lang('SocialNetwork').': '.get_lang('MyFiles').'</h2>';
+
+if (!empty($png_svg_files)) {
+	echo '<h3>'.get_lang('SelectSVGEditImage').'</h3>';
+	echo '<ul>';
+	foreach($png_svg_files as $filename) {
+		$image=$user_disk_path.$filename;
+		//$new_sizes = api_resize_image($image, 60, 60);
+		$new_sizes['width'] = 60;
+		$new_sizes['height'] = 60;
+		
+		if (strpos($filename, "svg")){
+			echo '<li style="display:inline; padding:8px;"><a href="'.$user_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.api_get_path(WEB_IMG_PATH).'svg_medium.png" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
+		} else {
+			echo '<li style="display:inline; padding:8px;"><a href="'.$user_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$user_web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
+		}
 	}
+	echo '</ul>';	
+} else {
+	Display::display_warning_message(get_lang('NoSVGImages'));
 }
-echo '</ul>';
 ?>
 </body>
-
 <script>
-
 $('a').click(function() {
 	var href = this.href;
 	
@@ -104,5 +114,4 @@ $('a').click(function() {
 	}
 	return false;
 });
-
 </script>

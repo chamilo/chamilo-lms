@@ -511,14 +511,15 @@ function store_forumcategory($values) {
 function store_forum($values) {
     global $_course;
     global $_user;
-
+    $course_id = api_get_course_int_id();
     $table_forums = Database::get_course_table(TABLE_FORUM);
 
     // Find the max forum_order for the given category. The new forum is added at the end => max cat_order + &
     if (is_null($values['forum_category'])) {
         $new_max = null;
     } else {
-        $sql = "SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category='".Database::escape_string(stripslashes($values['forum_category']))."'";
+        $sql = "SELECT MAX(forum_order) as sort_max FROM ".$table_forums." 
+        		WHERE c_id = $course_id AND forum_category='".Database::escape_string(stripslashes($values['forum_category']))."'";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $new_max = $row['sort_max'] + 1;
@@ -611,8 +612,8 @@ function store_forum($values) {
             	".api_get_course_int_id().",
             	'".$clean_title."',
                 ".$sql_image."
-                '".Database::escape_string(stripslashes(isset($values['forum_comment'])?$values['forum_comment']:null))."',
-                '".Database::escape_string(stripslashes(isset($values['forum_category'])?$values['forum_category']:null))."',
+                '".Database::escape_string(isset($values['forum_comment'])?$values['forum_comment']:null)."',
+                '".Database::escape_string(isset($values['forum_category'])?$values['forum_category']:null)."',
                 '".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
                 '".Database::escape_string(isset($values['students_can_edit_group']['students_can_edit'])?$values['students_can_edit_group']['students_can_edit']:null)."',
                 '".Database::escape_string(isset($values['approval_direct_group']['approval_direct'])?$values['approval_direct_group']['approval_direct']:null)."',
@@ -623,9 +624,7 @@ function store_forum($values) {
                 '".Database::escape_string(isset($values['public_private_group_forum_group']['public_private_group_forum'])?$values['public_private_group_forum_group']['public_private_group_forum']:null)."',
                 '".Database::escape_string(isset($new_max)?$new_max:null)."',
                 ".intval($session_id).")";
-
         Database::query($sql);
-
         $last_id = Database::insert_id();
         if ($last_id > 0) {
             api_item_property_update($_course, TOOL_FORUM, $last_id, 'ForumAdded', api_get_user_id());

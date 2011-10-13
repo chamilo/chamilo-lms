@@ -41,14 +41,18 @@ $nameTools = get_lang('GroupManagement');
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
+$course_id = api_get_course_int_id();
+
 // Create default category if it doesn't exist when group categories aren't allowed
 if (api_get_setting('allow_group_categories') == 'false') {
 	$cat_table = Database::get_course_table(TABLE_GROUP_CATEGORY);
-	$sql = "SELECT * FROM $cat_table WHERE id = '".DEFAULT_GROUP_CATEGORY."'";
+	$sql = "SELECT * FROM $cat_table WHERE c_id = $course_id AND id = '".DEFAULT_GROUP_CATEGORY."'";
 	$res = Database::query($sql);
 	$num = Database::num_rows($res);
 	if ($num == 0) {
-		Database::query("INSERT INTO ".$cat_table." ( id , title , description , forum_state , wiki_state, max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db($DefaultGroupCategory)."', '', '1', '1', '8', '0', '0', '0', '0');");
+		$sql = "INSERT INTO ".$cat_table." ( c_id, id , title , description , forum_state, wiki_state, max_student, self_reg_allowed, self_unreg_allowed, groups_per_user, display_order) 
+		VALUES ($course_id, '2', '".lang2db($DefaultGroupCategory)."', '', '1', '1', '8', '0', '0', '0', '0');";
+		Database::query ($sql);
 	}
 }
 
@@ -183,10 +187,12 @@ echo '</div>';
 /*
  * List all categories
  */
+
 foreach ($group_cats as $index => $category) {
 	$group_list = array ();
 	$in_category = false;
 	if (api_get_setting('allow_group_categories') == 'true') {
+		
 		if (isset ($_GET['show_all']) || (isset ($_GET['category']) && $_GET['category'] == $category['id'])) {
 			echo '<img src="../img/folder_group_category.gif" alt=""/>';
 			echo '<a href="group.php?'.api_get_cidreq().'&origin='.Security::remove_XSS($_GET['origin']).'">'.$category['title'].'</a>';
@@ -215,11 +221,14 @@ foreach ($group_cats as $index => $category) {
 	}
 
 	//if (count($group_list) > 0 && $in_category)
+	
 	if ($in_category) {
 		$totalRegistered = 0;
 		// Determine wether current user is tutor for this course
-		$user_is_tutor = GroupManager :: is_tutor($_user['user_id']);
+		$user_is_tutor = GroupManager :: is_tutor(api_get_user_id());
+		
 		$group_data = array();
+		
 		foreach ($group_list as $index => $this_group) {
 
 			// Validacion when belongs to a session

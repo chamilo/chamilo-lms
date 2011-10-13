@@ -15,7 +15,6 @@ $this_section = SECTION_COURSES;
 
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 /*	Create the groups */
@@ -45,7 +44,7 @@ if (isset ($_POST['action'])) {
 				} elseif ($_POST['same_category']) {
 					$group['category'] = $_POST['group_0_category'];
 				}
-				GroupManager :: create_group(strip_tags($group['name']), $group['category'], $group['tutor'], $group['places']);
+				GroupManager :: create_group($group['name'], $group['category'], $group['tutor'], $group['places']);
 			}
 			$msg = urlencode(count($groups).' '.get_lang('GroupsAdded'));
 			header('Location: group.php?action=show_msg&msg='.$msg);

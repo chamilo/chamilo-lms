@@ -1867,6 +1867,86 @@ function api_is_course_tutor() {
     return $_SESSION['is_courseTutor'];
 }
 
+function api_get_user_platform_status($user_id = false) {
+	$status     = array();
+    $user_id    = intval($user_id);
+    if (empty($user_id)) {
+    	$user_id    = api_get_user_id();
+    }
+
+	if (empty($user_id)) {
+		return false;
+	}	
+	$group_id   = api_get_group_id();
+	$course_id  = api_get_course_int_id();
+	$course_code= api_get_course_id();
+	$session_id = api_get_session_id();
+	
+	//Group (in course)
+    if ($group_id && $course_id) {
+        $group_status = array();
+        require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+        $is_subscribed = GroupManager::is_subscribed($user_id, $group_id);
+        if ($is_subscribed) {
+            $group_status = array('id'=> $group_id , 'status' => 'student');
+            $is_tutor = GroupManager::is_tutor_of_group($user_id, $group_id);
+            if ($is_tutor) {
+                $group_status['status'] = 'tutor';            
+            } else {
+                $group_status['status'] = 'student';            
+            }
+        }
+        $status['group'] = $group_status;
+    }	
+
+	//Session	
+	if ($session_id && $course_id) {	
+        $session_status = array();
+        $session_status = array('id' => $session_id, 'course_id' => $course_id);
+        $session_user_status = SessionManager::get_user_status_in_session($user_id, $course_code, $session_id);
+        switch ($session_user_status) {
+            case 0:
+                $session_status['status'] = 'student';                 
+               break;
+            case 2:
+                $session_status['status'] = 'coach';
+            break;
+        }
+        $is_general_coach = SessionManager::user_is_general_coach($user_id, $session_id);
+        if ($is_general_coach) {
+            $session_status['status'] = 'general_coach';
+        } 
+    	$status['session'] = $session_status;
+
+	} elseif($course_id) {
+	    //Course
+	    $course_status = array();
+	    if ($course_id) {
+            $user_course_status = CourseManager::get_user_in_course_status($user_id, $course_code);
+
+            if ($user_course_status) {
+                $course_status = array('id'=> $course_id);
+                switch($user_course_status) {
+                    case 1;
+                        $course_status['status'] = 'teacher';
+                    break;
+                    case 5;
+                        $course_status['status'] = 'student';
+                        //check if tutor
+                        $tutor_course_status = CourseManager::get_tutor_in_course_status($user_id, $course_code);
+                        if ($tutor_course_status) {
+                            $course_status['status'] = 'tutor';
+                        }
+                    break;
+                } 
+            }
+	    }
+	    $status['course'] = $course_status;
+    }
+
+    return $status;
+}
+
 /**
  * Checks whether the current user is a course or session coach
  * @param int - optional, session id
@@ -1889,17 +1969,16 @@ function api_is_coach($session_id = 0, $course_code = '') {
     } else {
         $course_code = api_get_course_id();
     }    
-    $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-    $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $session_table 						= Database::get_main_table(TABLE_MAIN_SESSION);
+    $session_rel_course_rel_user_table  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $sessionIsCoach = null;
 	if (!empty($course_code)) {		
 	    $sql = "SELECT DISTINCT id, name, date_start, date_end
 				FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
 	            ON session_rc_ru.id_user = '".api_get_user_id()."'
-	            WHERE session_rc_ru.course_code = '$course_code' AND session_rc_ru.status = 2 AND session_rc_ru.id_session = '$session_id'
-	            ORDER BY date_start, date_end, name";
-	
+	            WHERE session_rc_ru.course_code = '$course_code' AND session_rc_ru.status = 2 AND session_rc_ru.id_session = '$session_id'";		
 	    $result = Database::query($sql);
+	    
 	    $sessionIsCoach = Database::store_result($result);	    
 	}
 	
@@ -1907,8 +1986,7 @@ function api_is_coach($session_id = 0, $course_code = '') {
 	    $sql = "SELECT DISTINCT id, name, date_start, date_end
 	         	FROM $session_table
 	         	WHERE session.id_coach =  '".api_get_user_id()."' AND id = '$session_id'
-				ORDER BY date_start, date_end, name";
-	
+				ORDER BY date_start, date_end, name";	
 	    $result = Database::query($sql);	    
 	    if (!empty($sessionIsCoach)) {
 	    	$sessionIsCoach = array_merge($sessionIsCoach , Database::store_result($result));
@@ -4690,7 +4768,7 @@ function api_getimagesize($path) {
  * @return array                Calculated new width and height
  */
 function api_resize_image($image, $target_width, $target_height) {
-    $image_properties = api_getimagesize($image);    
+    $image_properties = api_getimagesize($image);       
     return api_calculate_image_size($image_properties['width'], $image_properties['height'], $target_width, $target_height);
 }
 

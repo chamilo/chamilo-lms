@@ -55,6 +55,8 @@ if (api_get_setting('allow_group_categories') == 'true') {
 
 $interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
 
+$course_id = api_get_course_int_id();
+
 // Build the form
 if (isset ($_GET['id'])) {
 	// Update settings of existing category
@@ -65,8 +67,8 @@ if (isset ($_GET['id'])) {
 } else {
     // Checks if the field was created in the table Category. It creates it if is neccesary
     $table_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
-	if (!Database::query("SELECT wiki_state FROM $table_category")) {
-    	Database::query("ALTER TABLE $table_category ADD wiki_state tinyint(3) UNSIGNED NOT NULL default '1';");
+	if (!Database::query("SELECT wiki_state FROM $table_category WHERE c_id = $course_id")) {
+    	Database::query("ALTER TABLE $table_category ADD wiki_state tinyint(3) UNSIGNED NOT NULL default '1' WHERE c_id = $course_id");
     }
 	// Create a new category
 	$action = 'add_category';

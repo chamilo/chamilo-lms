@@ -1,6 +1,6 @@
 <?php
 /* Integrate svg-edit libraries with Chamilo default documents
- * @author Juan Carlos Raña Trabado
+ * @author Juan Carlos Raï¿½a Trabado
  * @since 25/september/2010
 */
 //Chamilo load libraries
@@ -11,17 +11,19 @@ require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 //Add security from Chamilo
 api_protect_course_script();
 api_block_anonymous_users();
-//
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
-$groupdirpath = $group_properties['directory'];
-$group_disk_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$groupdirpath.'/';
-$group_web_path  = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$groupdirpath.'/';
+$course_info = api_get_course_info();
+
+
+$group_properties 	= GroupManager::get_group_properties(api_get_group_id());
+$groupdirpath 		= $group_properties['directory'];
+$group_disk_path 	= api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$groupdirpath.'/';
+$group_web_path  	= api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$groupdirpath.'/';
 
 //get all group files and folders
-$docs_and_folders = DocumentManager::get_all_document_data($_course, $groupdirpath, $_SESSION['_gid'], null, $is_allowed_to_edit, false);
+$docs_and_folders = DocumentManager::get_all_document_data($course_info, $groupdirpath, api_get_group_id(), null, $is_allowed_to_edit, false);
 	
 //get all group filenames
 $array_to_search = is_array($docs_and_folders) ? $docs_and_folders : array();
@@ -45,31 +47,49 @@ if (is_array($all_files) && count($all_files) > 0) {
 	}
 }
 
+$style = '<style>';
+$style .= '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
+$style .= '@import "'.api_get_path(WEB_CSS_PATH).api_get_visual_theme().'/default.css";';
+$style .='</style>';
+
 ?>
 <!doctype html>
 <script src="../../jquery.js"></script><!--Chamilo TODO: compress this file and changing loads -->
-
+<?php echo $style ?>
 <body>
-
 <?php
+echo '<h2>'.get_lang('GroupSingle').': '.$group_properties['name'].'</h2>';
 
-if(($group_properties['doc_state'] == 2 && ($is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'], $_SESSION['_gid']))) || $group_properties['doc_state'] == 1){
-	echo '<h1>'.get_lang('GroupSingle').': '.$group_properties['name'].'</h1>';
-	echo '<h2>'.get_lang('SelectSVGEditImage').'</h2>';
-	echo '<ul>';
-	foreach($png_svg_files as $filename) {
-		$image=$group_disk_path.$filename;
-		$new_sizes = api_resize_image($image, 60, 60);			
-		if (strpos($filename, "svg")){
-			echo '<li style="display:inline; padding:8px;"><a href="'.$group_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.api_get_path(WEB_IMG_PATH).'svg_medium.png" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
-		}else{
-			echo '<li style="display:inline; padding:8px;"><a href="'.$group_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$group_web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
-		}		
+if (($group_properties['doc_state'] == 2 && ($is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'], $_SESSION['_gid']))) || $group_properties['doc_state'] == 1){
+		
+	if (!empty($png_svg_files)) {
+		echo '<h3>'.get_lang('SelectSVGEditImage').'</h3>';
+		echo '<ul>';
+		foreach($png_svg_files as $filename) {			
+			$image = $group_disk_path.$filename;			
+			//$new_sizes = api_resize_image($image, 60, 60); Bug when trying to load svg files
+			$new_sizes['width'] = 60;
+			$new_sizes['height'] = 60;
+			
+			$pos = strpos($filename, "svg");						
+			if ($pos === false) {
+				//no svg			
+				echo '<li style="display:inline; padding:8px;">';
+				echo '<a href = "'.$group_web_path.$filename.'" alt="'.$filename.'" title="'.$filename.'">';
+				echo '<img src = "'.$group_web_path.$filename.'" width = "'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';				
+			} else {	
+				//svg			
+				echo '<li style="display:inline; padding:8px;">';
+				echo '<a href = "'.$group_web_path.$filename.'" alt="'.$filename.'" title="'.$filename.'">';
+				echo '<img src="'.api_get_path(WEB_IMG_PATH).'svg_medium.png" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0">';
+				echo '</a></li>';
+				
+			}		
+		}
+		echo '</ul>';
 	}
-	echo '</ul>';
-}
-else{
-	echo '<h1>'.get_lang('OnlyAccessFromYourGroup').'</h1>';
+} else {
+	echo Display::display_warning_message(get_lang('OnlyAccessFromYourGroup'));
 }
 ?>
 </body>

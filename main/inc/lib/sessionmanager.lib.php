@@ -1391,7 +1391,7 @@ class SessionManager {
     public function get_user_status_in_session($user_id, $course_code, $session_id) {
         $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);        
-        $sql = "SELECT session_rcru.status
+        echo $sql = "SELECT session_rcru.status
                 FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
                 WHERE session_rcru.id_user = user.user_id AND 
                 session_rcru.id_session = '".intval($session_id)."' AND 
@@ -1560,4 +1560,18 @@ class SessionManager {
         }
     	return $sid;
     }
+    
+    function user_is_general_coach($user_id, $session_id) {
+    	$session_id = intval($session_id);
+    	$user_id = intval($user_id);
+    	$session_table = Database::get_main_table(TABLE_MAIN_SESSION);    	
+    	$sql = "SELECT DISTINCT id
+	         	FROM $session_table
+	         	WHERE session.id_coach =  '".$user_id."' AND id = '$session_id'";
+    	$result = Database::query($sql);	
+    	if ($result && Database::num_rows($result)) {
+    		return true;
+    	}
+    	return false;
+    }    
 }

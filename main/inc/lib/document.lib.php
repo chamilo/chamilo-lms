@@ -2516,7 +2516,7 @@ return 'application/octet-stream';
     	            "   AND last.visibility = '1' AND ".
     	            "	docs.c_id = {$course_info['real_id']} AND 
     	            	last.c_id = {$course_info['real_id']} ".
-					"ORDER BY docs.path ASC";
+					"ORDER BY docs.title ASC";
     	$res_doc 	= Database::query($sql_doc);
     	$resources  = Database::store_result($res_doc, 'ASSOC');
     	$return 	= '';
@@ -2577,7 +2577,7 @@ return 'application/octet-stream';
 		    		eval ('$resources_sorted'.$path_to_eval.'['.$resource['id'].'] = "'.$data.'" ; ');
 		    	} else {		    		
 		    		eval ('$resources_sorted'.$path_to_eval.'["'.$last_path.'"]["id"]='.$resource['id'].';');
-		    		eval ('$resources_sorted'.$path_to_eval.'["'.$last_path.'"]["title"]= "'.$resource['title'].'";');
+		    		eval ('$resources_sorted'.$path_to_eval.'["'.$last_path.'"]["title"]= "'.api_htmlentities($resource['title']).'";');
 		    	}
 	    	}
     	}

@@ -2575,8 +2575,9 @@ return 'application/octet-stream';
 		    			$resource['title'] = basename($resource['path']);
 		    		}
 		    		eval ('$resources_sorted'.$path_to_eval.'['.$resource['id'].'] = "'.$data.'" ; ');
-		    	} else {
+		    	} else {		    		
 		    		eval ('$resources_sorted'.$path_to_eval.'["'.$last_path.'"]["id"]='.$resource['id'].';');
+		    		eval ('$resources_sorted'.$path_to_eval.'["'.$last_path.'"]["title"]= "'.$resource['title'].'";');
 		    	}
 	    	}
     	}
@@ -2644,7 +2645,12 @@ return 'application/octet-stream';
     	
     	$return = '';
     	if (count($resources_sorted) > 0) {
-    		foreach ($resources_sorted as $key => $resource) {
+    		foreach ($resources_sorted as $key => $resource) {    	
+    			$title = $resource['title'];
+    			if (empty($title)) {
+    				$title = $key;
+    			}
+    			//echo '<pre>'; print_r($resource);
     			if (isset($resource['id']) && is_int($resource['id'])) {
     				// It's a folder.
     				//hide some folders
@@ -2674,8 +2680,8 @@ return 'application/octet-stream';
     				$onclick = '';
     				if ($lp_id) {
     					$onclick = 'onclick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"';
-    				}    				
-    
+    				}
+    				    
     				$return .= '<div class="doc_resource">';    				
     				$return .= '<div class="doc_folder"  id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; margin-right:5px;">';
     				if ($lp_id) {    				    				
@@ -2684,7 +2690,7 @@ return 'application/octet-stream';
     					$return .= '<span style="margin-left:16px">&nbsp;</span>';
     				}
     				$return .= '<img alt="" src="'.$img_path.'lp_folder.gif" title="" align="absmiddle" />&nbsp;';    				
-    				$return .= '<span '.$onclick.' style="cursor: pointer;" >'.$key.'</span>';    				
+    				$return .= '<span '.$onclick.' style="cursor: pointer;" >'.$title.'</span>';    				
     				$return .= '</div>
     							<div style="display: none;" id="'.$resource['id'].'">';
     				

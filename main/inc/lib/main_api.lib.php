@@ -359,8 +359,8 @@ function api_get_path($path_type, $path = null) {
         FLASH_PLAYER_AUDIO      => 'inc/lib/mediaplayer/player.swf',
         FLASH_PLAYER_VIDEO      => 'inc/lib/mediaplayer/player.swf',
         SCRIPT_SWFOBJECT        => 'inc/lib/swfobject/swfobject.js',
-        SCRIPT_ASCIIMATHML      => 'inc/lib/asciimath/ASCIIMathML.js',
-        DRAWING_ASCIISVG        => 'inc/lib/asciimath/d.svg'
+        SCRIPT_ASCIIMATHML      => 'inc/lib/javascript/asciimath/ASCIIMathML.js',
+        DRAWING_ASCIISVG        => 'inc/lib/javascript/asciimath/d.svg'
     );
 
     static $is_this_function_initialized;

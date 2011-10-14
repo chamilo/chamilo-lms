@@ -71,6 +71,7 @@ function event_open() {
  * (when an user identifies himself with username & password)
  */
 function event_login() {	
+	
 	global $_user;
 	global $TABLETRACK_LOGIN;
 

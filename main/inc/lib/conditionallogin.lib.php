@@ -7,7 +7,7 @@ class ConditionalLogin {
 
   public static function check_conditions($user) {
 		if (file_exists(api_get_path(SYS_PATH).'main/auth/conditional_login/conditional_login.php')) {
-			include_once(api_get_path(SYS_PATH).'main/auth/conditional_login/conditional_login.php');
+			include_once api_get_path(SYS_PATH).'main/auth/conditional_login/conditional_login.php';
 			if (isset($dc_conditions)){
 				foreach ($dc_conditions as $dc_condition) {
 					if ($dc_condition['conditional_function']($user)) {
@@ -21,11 +21,10 @@ class ConditionalLogin {
 		}
   }
 
-  public static function login(){
-    require_once (api_get_path(LIBRARY_PATH).'loginredirection.lib.php');
-    $_SESSION['conditional_login']['can_login'] = true;
+	public static function login(){
+		require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';
+	    $_SESSION['conditional_login']['can_login'] = true;
 		LoginRedirection::redirect();
-    exit();
-  }
+	    exit();
+	}
 }
-?>

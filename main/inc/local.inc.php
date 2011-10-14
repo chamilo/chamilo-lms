@@ -129,24 +129,26 @@
 	 variables should be initialised here
  */
 
-require_once (api_get_path(LIBRARY_PATH).'conditionallogin.lib.php');
+require_once api_get_path(LIBRARY_PATH).'conditionallogin.lib.php';
 // verified if exists the username and password in session current
-if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
-	require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+
+if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {	
 	require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 }
 
 //Conditional login
-if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login']['can_login']=== true){
-	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login']['can_login']=== true){	
 	$uData = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
 	ConditionalLogin::check_conditions($uData);
+	
 	$_user['user_id'] = $_SESSION['conditional_login']['uid'];
+	$_user['status']  = $uData['status'];
 	api_session_register('_user');
 	api_session_unregister('conditional_login');
 	$uidReset=true;
 	event_login();
 } 
+
 // parameters passed via GET
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
 $gidReq = isset($_GET["gidReq"]) ? Database::escape_string($_GET["gidReq"]) : '';
@@ -319,7 +321,6 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 								//Getting the current access_url_id of the platform
 								$current_access_url_id = api_get_current_access_url_id();
 
-
 								if ($my_user_is_admin === false) {
 
 									if (is_array($my_url_list) && count($my_url_list)>0 ){
@@ -327,7 +328,8 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 										if (in_array($current_access_url_id, $my_url_list)) {
 											ConditionalLogin::check_conditions($uData);
 											$_user['user_id'] = $uData['user_id'];
-                                                                                        session_regenerate_id();
+											$_user['status']  = $uData['status'];
+                                            session_regenerate_id();
 											api_session_register('_user');
 											event_login();
 										} else {
@@ -347,14 +349,16 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 									if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
 										ConditionalLogin::check_conditions($uData);
 										$_user['user_id'] = $uData['user_id'];
-                                                                                session_regenerate_id();
+										$_user['status']  = $uData['status'];
+										session_regenerate_id();
 										api_session_register('_user');
 										event_login();
 									} else {
 										//This means a secondary admin wants to login so we check as he's a normal user
 										if (in_array($current_access_url_id, $my_url_list)) {
 											$_user['user_id'] = $uData['user_id'];
-                                                                                        session_regenerate_id();
+											$_user['status']  = $uData['status'];
+											session_regenerate_id();
 											api_session_register('_user');
 											event_login();
 										} else {
@@ -367,7 +371,8 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 								}
                             } else {                                
 								ConditionalLogin::check_conditions($uData);
-                                $_user['user_id'] = $uData['user_id'];                                
+                                $_user['user_id'] = $uData['user_id'];
+                                $_user['status']  = $uData['status'];
                                 session_regenerate_id();                                
                                 api_session_register('_user');
                                 event_login();                                
@@ -527,7 +532,8 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 								// check if the expiration date has not been reached
 								if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
 									$_user['user_id'] = $uData['user_id'];
-                                                                        session_regenerate_id();
+									$_user['status']  = $uData['status'];
+									session_regenerate_id();
 									api_session_register('_user');
 									event_login();
 								} else {

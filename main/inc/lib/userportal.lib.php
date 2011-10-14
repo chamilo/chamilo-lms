@@ -105,13 +105,13 @@ class IndexManager {
 			if ($show_slide) {
 				$announcements = SystemAnnouncementManager :: display_announcements_slider($visibility, $announcement);
 			} else {
-				$announcements = SystemAnnouncementManager :: get_all_announcements($visibility, $announcement);
+				$announcements = SystemAnnouncementManager :: display_all_announcements($visibility, $announcement);
 			}
 		} else {
 			if ($show_slide) {
 				$announcements = SystemAnnouncementManager :: display_announcements_slider(VISIBLE_GUEST, $announcement);
 			} else {
-				$announcements = SystemAnnouncementManager :: get_all_announcements(VISIBLE_GUEST, $announcement);
+				$announcements = SystemAnnouncementManager :: display_all_announcements(VISIBLE_GUEST, $announcement);
 			}
 		}
 		return $announcements;

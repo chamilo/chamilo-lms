@@ -31,12 +31,5 @@ if (api_is_platform_admin()) {
 }
 
 $start = isset($_GET['start']) ? (int)$_GET['start'] : $start = 0;
-/*
-if (isset($_user['user_id'])) {
-	$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
-	SystemAnnouncementManager :: display_all_announcements($visibility, $announcement, $start, $_user['user_id']);
-} else {
-	SystemAnnouncementManager :: display_all_announcements(VISIBLE_GUEST, $announcement, $start);
-}*/
 SystemAnnouncementManager ::display_announcements_slider($visibility);
 Display::display_footer();

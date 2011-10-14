@@ -106,19 +106,19 @@ class SystemAnnouncementManager {
 		$user_selected_language = api_get_interface_language();
 		$start	= intval($start);				
 
-    $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
-    $temp_user_groups = GroupPortalManager::get_groups_by_user(api_get_user_id(),0);
-    $groups =array();
-    foreach ($temp_user_groups as $user_group) {
-      $groups = array_merge($groups, array($user_group['id']));
-      $groups = array_merge($groups, GroupPortalManager::get_parent_groups($user_group['id']));
-    }
-    //checks if tables exists to not break platform not updated
-    $ann_group_db_ok =false;
-    if( Database::num_rows(Database::query("SHOW TABLES LIKE 'announcement_rel_group'")) > 0)
-       $ann_group_db_ok =true;
-    $groups_string = '('.implode($groups,',').')';
-
+	    $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+	    $temp_user_groups = GroupPortalManager::get_groups_by_user(api_get_user_id(),0);
+	    $groups =array();
+	    foreach ($temp_user_groups as $user_group) {
+	      $groups = array_merge($groups, array($user_group['id']));
+	      $groups = array_merge($groups, GroupPortalManager::get_parent_groups($user_group['id']));
+	    }
+	    //checks if tables exists to not break platform not updated
+	    $ann_group_db_ok =false;
+	    if( Database::num_rows(Database::query("SHOW TABLES LIKE 'announcement_rel_group'")) > 0)
+	       $ann_group_db_ok =true;
+	    $groups_string = '('.implode($groups,',').')';
+	
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$now  = api_get_utc_datetime();
 		
@@ -136,10 +136,10 @@ class SystemAnnouncementManager {
 				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}
-    if (count($groups) > 0 and $ann_group_db_ok ) {
-      $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group "
-        ." WHERE group_id in $groups_string) ";
-    }
+	    if (count($groups) > 0 and $ann_group_db_ok ) {
+	      $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group "
+	        ." WHERE group_id in $groups_string) ";
+	    }
 		
 		global $_configuration;
 		$current_access_url_id = 1;
@@ -154,45 +154,46 @@ class SystemAnnouncementManager {
 			$sql .= " ORDER BY date_start DESC LIMIT ".($start+1).",20";
 		}
 		$announcements = Database::query($sql);
-
+		$content = '';
 		if (Database::num_rows($announcements) > 0) {
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
 			$query_string = ereg_replace('&$', '', $query_string);
 			$url = api_get_self();
-			echo '<div class="system_announcements">';
-			echo '<h3>'.get_lang('SystemAnnouncements').'</h3>';
-			echo '<table align="center">';
-				echo '<tr>';
-					echo '<td>';
-						SystemAnnouncementManager :: display_arrow($user_id);
-					echo '</td>';
-				echo '</tr>';
-			echo '</table>';
-			echo '<table align="center" border="0" width="900px">';			
+			$content .= '<div class="system_announcements">';
+			$content .= '<h3>'.get_lang('SystemAnnouncements').'</h3>';
+			$content .= '<table align="center">';
+				$content .= '<tr>';
+					$content .= '<td>';
+						$content .= SystemAnnouncementManager :: display_arrow($user_id);
+					$content .= '</td>';
+				$content .= '</tr>';
+			$content .= '</table>';
+			$content .= '<table align="center" border="0" width="900px">';			
 			while ($announcement = Database::fetch_object($announcements)) {
 				$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG);
-				echo '<tr><td>';
-				echo '<a name="'.$announcement->id.'"></a>
+				$content .= '<tr><td>';
+				$content .= '<a name="'.$announcement->id.'"></a>
 						<div class="system_announcement">
-						<div class="system_announcement_title">'.$announcement->title.'</div><div class="system_announcement_date">'.$display_date.'</div>
+						<h2>'.$announcement->title.'</h2><div class="system_announcement_date">'.$display_date.'</div>
 						<br />
 					  	<div class="system_announcement_content">'
 					  			.$announcement->content.'
 						</div>
 					  </div><br />';
-				echo '</tr></td>';
+				$content .= '</tr></td>';
 			}
-			echo '</table>';
+			$content .= '</table>';
 			
-			echo '<table align="center">';
-				echo '<tr>';
-					echo '<td>';
-						SystemAnnouncementManager :: display_arrow($user_id);
-					echo '</td>';
-				echo '</tr>';
-			echo '</table>';
-			echo '</div>';
+			$content .= '<table align="center">';
+				$content .= '<tr>';
+					$content .= '<td>';
+						$content .= SystemAnnouncementManager :: display_arrow($user_id);
+					$content .= '</td>';
+				$content .= '</tr>';
+			$content .= '</table>';
+			$content .= '</div>';
 		}
+		return $content;
 	}
 
 	public static function display_arrow($user_id) {
@@ -200,17 +201,18 @@ class SystemAnnouncementManager {
 		$nb_announcement = SystemAnnouncementManager :: count_nb_announcement($start,$user_id);
 		$next = ((int)$_GET['start']+19);
 		$prev = ((int)$_GET['start']-19);
-
+		$content = '';
 		if(!isset($_GET['start']) || $_GET['start'] == 0) {
 			if($nb_announcement > 20) {
-				echo '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
+				$content .= '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
 		} else {
 			echo '<a href="news_list.php?start='.$prev.'"> << '.get_lang('Prev').'</a>';
 			if ($nb_announcement > 20) {
-				echo '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
+				$content .= '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
 		}
+		return $content;
 	}
 
 	public static function count_nb_announcement($start = 0, $user_id = '') {

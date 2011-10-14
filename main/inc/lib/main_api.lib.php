@@ -2483,7 +2483,7 @@ function api_not_allowed($print_headers = false) {
 		//only display form and return to the previous URL if there was a course ID included
 		if (!empty($user) && !api_is_anonymous()) {
 			$tpl->assign('content', $msg);
-			$tpl->display($template_file);
+			$tpl->display_one_col_template();
 			exit;
 		}
 		require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';

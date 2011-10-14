@@ -38,18 +38,18 @@ function display_action_links($id, $cur_dir_path, $always_show_tool_options, $al
 	if (!$always_show_tool_options && api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
 		// Create dir
 		if (empty($cur_dir_path)) {
-			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'">';
+			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;action=create_dir&origin='.$origin.'&gradebook='.$gradebook.'">';
 			$display_output .= Display::return_icon('new_work.png', get_lang('CreateAssignment'),'','32').'</a>';
 		}
 		if (empty($cur_dir_path)) {
 			// Options
-			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;display_tool_options=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">';
+			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=settings&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">';
 			$display_output .= Display::return_icon('settings.png', get_lang('EditToolOptions'),'','32').'</a>';
 		}
 	}
 
 	if (!$always_show_upload_form && api_is_allowed_to_session_edit(false, true) && (isset($cur_dir_path) && (!empty($cur_dir_path) && $cur_dir_path != '/') )) {
-		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;display_upload_form=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">';
+		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;action=upload_form&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">';
 		$display_output .= Display::return_icon('upload_file.png', get_lang('UploadADocument'),'','32').'</a>';
 	}
 
@@ -110,11 +110,9 @@ function display_action_links($id, $cur_dir_path, $always_show_tool_options, $al
  *
  * @param $uploadvisibledisabled
  * @param $origin
- * @param $base_work_dir Base working directory (up to '/work')
- * @param $cur_dir_path	Current subdirectory of 'work/'
- * @param $cur_dir_path_url Current subdirectory of 'work/', url-encoded
+ 
  */
-function display_tool_options($uploadvisibledisabled, $origin, $base_work_dir, $cur_dir_path, $cur_dir_path_url) {
+function display_tool_options($uploadvisibledisabled, $origin) {
 	global $group_properties, $gradebook;
 	$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 	$work_table 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -122,7 +120,7 @@ function display_tool_options($uploadvisibledisabled, $origin, $base_work_dir, $
 	if (!$is_allowed_to_edit) {
 		return;
 	}
-	echo '<form method="post" action="'.api_get_self().'?origin='.$origin.'&gradebook='.$gradebook.'&display_tool_options=true">';
+	echo '<form method="post" action="'.api_get_self().'?origin='.$origin.'&gradebook='.$gradebook.'&action=settings">';
 	echo '<div class="row"><div class="form_header">'.get_lang('EditToolOptions').'</div></div>';
 	display_default_visibility_form($uploadvisibledisabled);
 	display_studentsdelete_form();
@@ -144,26 +142,22 @@ function display_tool_options($uploadvisibledisabled, $origin, $base_work_dir, $
  */
 function display_default_visibility_form($uploadvisibledisabled) {
 	?>
-<div class="row">
-	<div class="label">
-
-
-	<?php echo get_lang('_default_upload'); ?>
-	</div>
-	<div class="formw">
-		<input class="checkbox" type="radio" name="uploadvisibledisabled"
-			value="0"   <?php if ($uploadvisibledisabled == 0) echo 'checked'; ?> />
-		
-		
-		
-		
-				<?php echo get_lang('_new_visible'); ?><br />
-			<input class="checkbox" type="radio" name="uploadvisibledisabled" value="1" <?php if ($uploadvisibledisabled == 1) echo 'checked'; ?> />
-				<?php echo get_lang('_new_unvisible'); ?>
+	<div class="row">
+		<div class="label">
+		<?php echo get_lang('_default_upload'); ?>
 		</div>
-</div>
-
-<?php
+		<div class="formw">
+		<input id="uploadvisibledisabled_1" class="checkbox" type="radio" name="uploadvisibledisabled" value="0"   <?php if ($uploadvisibledisabled == 0) echo 'checked'; ?> />
+<label for="uploadvisibledisabled_1">
+				<?php echo get_lang('_new_visible'); ?></label>
+<div></div>
+		<input id="uploadvisibledisabled_2" class="checkbox" type="radio" name="uploadvisibledisabled" value="1" <?php if ($uploadvisibledisabled == 1) echo 'checked'; ?> />
+<label for="uploadvisibledisabled_2">
+				<?php echo get_lang('_new_unvisible'); ?>
+</label>
+		</div>
+	</div>
+	<?php
 }
 
 /**
@@ -182,24 +176,21 @@ function display_studentsdelete_form() {
 		$current_course_setting_value = 0;
 	}
 	?>
-<div class="row">
-	<div class="label">
-
-
-	<?php echo get_lang('StudentAllowedToDeleteOwnPublication'); ?>
-	</div>
+	<div class="row">
+	<div class="label"><?php echo get_lang('StudentAllowedToDeleteOwnPublication'); ?></div>
 	<div class="formw">
-		<input class="checkbox" type="radio"
-			name="student_delete_own_publication" value="0"
-				
-			<?php if ($current_course_setting_value == 0) echo 'checked'; ?> />
-		
-		
-		
-		
-				<?php echo get_lang('No'); ?><br />
-			<input class="checkbox" type="radio" name="student_delete_own_publication" value="1" <?php if ($current_course_setting_value == 1) echo 'checked'; ?> />
+<input id="student_delete_own_publication_2" class="checkbox" type="radio" name="student_delete_own_publication" value="1" <?php if ($current_course_setting_value == 1) echo 'checked'; ?> />
+<label for="student_delete_own_publication_2">
 				<?php echo get_lang('Yes'); ?>
+</label>
+<div></div>
+		<input id="student_delete_own_publication_1" class="checkbox" type="radio" name="student_delete_own_publication" value="0"		
+			<?php if ($current_course_setting_value == 0) echo 'checked'; ?> />
+<label for="student_delete_own_publication_1">
+				<?php echo get_lang('No'); ?>
+</label>
+
+			
 		</div>
 </div>
 
@@ -349,9 +340,9 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	$work_in_gradebook_link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $id, api_get_session_id());
 	if ($work_in_gradebook_link_id) {
 		if ($is_allowed_to_edit)
-		if (intval($my_folder_data['qualification']) == 0) {
-			Display::display_warning_message(get_lang('MaxWeightNeedToBeProvided'));
-		}
+			if (intval($my_folder_data['qualification']) == 0) {
+				Display::display_warning_message(get_lang('MaxWeightNeedToBeProvided'));
+			}
 	}
 
 	$qualification_exists = false;
@@ -376,20 +367,28 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	$session_id 		= api_get_session_id();
 	$condition_session  = api_get_session_condition($session_id);
 	
-	$course_id = api_get_course_int_id();
-
+	$course_id 			= api_get_course_int_id();
+	
+	$contains_file_query = '';	
+	$parent_id = isset($my_folder_data['id']) ? $my_folder_data['id'] : 0;	
+	
+	if (!empty($sub_course_dir)) {		
+		$contains_file_query = "  OR (url = '' AND contains_file = 0 AND parent_id = $parent_id ) ";
+	}
+	
 	//Get list from database
 	if ($is_allowed_to_edit) {
-		$sql_get_publications_list = "SELECT *  FROM  ".$work_table."
-									  WHERE c_id = $course_id AND 
-									  		url LIKE BINARY '$sub_course_dir%' AND 
-									  		url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.$condition_session.
-	                 				" ORDER BY sent_date DESC";
+		$sql_get_publications_list = "SELECT *  FROM  $work_table
+									  WHERE c_id = $course_id $add_in_where_query $condition_session AND
+									  	    ( url LIKE BINARY '$sub_course_dir%' AND url NOT LIKE BINARY '$sub_course_dir%/%' AND contains_file = 1 AND parent_id = $parent_id) 
+									  		$contains_file_query                   				
+									  		ORDER BY sent_date DESC";
 
 		$sql_get_publications_num = "SELECT count(*) FROM  ".$work_table." 
-									WHERE 	c_id = $course_id AND  
-											url LIKE BINARY '$sub_course_dir%' AND 
-											url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.$condition_session." ORDER BY id";
+									WHERE 	c_id = $course_id $add_in_where_query $condition_session AND
+									  	    ( url LIKE BINARY '$sub_course_dir%' AND url NOT LIKE BINARY '$sub_course_dir%/%' AND contains_file = 1  AND parent_id = $parent_id ) 
+									  		$contains_file_query                  				
+									  		ORDER BY sent_date DESC";
 
 	} else {
 		if (!empty($_SESSION['toolgroup'])) {
@@ -424,6 +423,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			$table_header[] = array(get_lang('Qualification'), true);
 		}
 	}
+	
 	$table_header[] = array(get_lang('Date'), true, 'style="width:160px"');
 
 	if ($is_allowed_to_edit) {
@@ -454,7 +454,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				$mydir_temp = '/'.$my_sub_dir.$dir;
 			}
 
-			$sql_select_directory = "SELECT prop.insert_date, prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight 
+			$sql_select_directory = "SELECT prop.insert_date, prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight, allow_text_assignment
 									 FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) 
 									 WHERE ";
 			
@@ -591,7 +591,10 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 
 					if ($there_is_a_expire_date && $there_is_a_end_date) {
 						$form_folder -> addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
-					}
+					}					
+					
+					$form_folder -> addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));
+					
 						
 					$form_folder -> addElement('html', '</div>');
 
@@ -613,6 +616,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					if (!empty($row['weight'])) {
 						$defaults = array_merge($defaults, array('weight[weight]' => $row['weight']));
 					}
+					$defaults['allow_text_assignment'] = $row['allow_text_assignment'];
 					$form_folder -> setDefaults($defaults);
 					$display_edit_form = true;
 
@@ -657,7 +661,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
 							Database::query($sql_add_publication);
 				
-							Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'");
+							Database::query('UPDATE '.$work_table.' SET allow_text_assignment = '."'".intval($_POST['allow_text_assignment'])."'".' , description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'");
 								
 							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 							$link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $row['id'], api_get_session_id());
@@ -720,9 +724,10 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			$cant_dir   = 0;
 			
 			$course_id = api_get_course_int_id();
+			$session_id = api_get_session_id();
 				
 			if (api_is_allowed_to_edit()) {
-				$sql_document = "SELECT count(*) FROM $work_table WHERE url LIKE 'work/".$dir."/%'";
+				$sql_document = "SELECT count(*) FROM $work_table WHERE parent_id = ".$work_data['id']." ";
 			} else {
 				// gets admin_course
 				$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -736,40 +741,49 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				}
 				if ($course_info['show_score'] == 1) {
 					$sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p
-									 WHERE s.c_id = $course_id  AND p.c_id = $course_id AND s.c_id = $course_id AND s.id = p.ref AND p.tool='work' AND s.accepted='1' AND user_id = ".api_get_user_id()." AND url LIKE 'work/".$dir."/%'";
+									 WHERE 	s.c_id = $course_id  AND 
+											p.c_id = $course_id AND 
+											s.c_id = $course_id AND 
+											s.id = p.ref AND 
+											p.tool='work' AND 
+											s.accepted='1' AND 
+											user_id = ".api_get_user_id()." AND
+											parent_id = ".$work_data['id']." AND  
+											url LIKE 'work/".$dir."/%'";
 				} else {
 					$sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p
-									 WHERE s.c_id = $course_id  AND p.c_id = $course_id AND s.c_id = $course_id AND s.id = p.ref AND p.tool='work' AND s.accepted='1' AND url LIKE 'work/".$dir."/%'";
+									 WHERE 	s.c_id = $course_id  AND 
+											p.c_id = $course_id AND 
+											s.c_id = $course_id AND 
+											s.id = p.ref AND 
+											p.tool='work' AND 
+											s.accepted='1' AND
+											parent_id = ".$work_data['id']." AND 
+											url LIKE 'work/".$dir."/%'";
 				}
 			}
 				
-			//count documents
+			//count documents			
 			$res_document   = Database::query($sql_document);
 			$count_document = Database::fetch_row($res_document);
 			$cant_files = $count_document[0];
 				
-			//count directories
-				
-			$sql_directory   = "SELECT count(*) FROM $work_table s WHERE  s.c_id = $course_id AND url NOT LIKE '/".$mydir."/%/%' AND url LIKE '/".$mydir."/%'";
+			//count directories				
+			/*
+			$sql_directory   = "SELECT count(*) FROM $work_table WHERE session_id = $session_id AND c_id = $course_id AND (url NOT LIKE '/".$mydir."/%/%' AND url LIKE '/".$mydir."/%') OR (parent_id = ".$work_data['id']." )";
 			$res_directory   = Database::query($sql_directory);
 			$count_directory = Database::fetch_row($res_directory);
-			$cant_dir = $count_directory[0];
-
+			$cant_dir 		 = $count_directory[0];
+*/
 			$text_file = get_lang('FilesUpload');
-			$text_dir  = get_lang('Directories');
+			//$text_dir  = get_lang('Directories');
 
 			if ($cant_files == 1) {
 				$text_file = api_strtolower(get_lang('FileUpload'));
 			}
 
 			if ($cant_dir == 1) {
-				$text_dir = get_lang('directory');
-			}
-
-			if ($cant_dir != 0) {
-				$dirtext = ' ('.$cant_dir.' '.$text_dir.')';
-			} else {
-				$dirtext = '';
+				//$text_dir = get_lang('directory');
 			}
 
 			$icon = Display::return_icon('work.png', get_lang('Assignment'), array(), 22);
@@ -797,18 +811,22 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				$show_as_icon = get_work_id($mydir); //true or false
 				$work_title = !empty($work_data['title']) ? $work_data['title'] : basename($work_data['url']);
 				
-				if (!empty($show_as_icon)) {					
+				//Work name
+				
+				if (!empty($show_as_icon))  {
 					if (api_is_allowed_to_edit()) {
 						$zip = '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&gradebook='.$gradebook.'&action=downloadfolder&path=/'.$mydir.'">
 						'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), 22).'</a>';
-					}
-					$row[] = $zip.'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&id='.$work_data['id'].'"'.$class.'>'.
-					$work_title.'</a>'.
-					$add_to_name.'<br />'.$cant_files.' '.$text_file.$dirtext;
+					}				
+					$url = $zip.'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&id='.$work_data['id'].'"'.$class.'>'.
+							$work_title.'</a>'.					
+							$add_to_name.'<br />'.$cant_files.' '.$text_file.$dirtext;
+								
+					$row[] = $url;
 				} else {
-					$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&id='.$work_data['id'].'"'.$class.'>'.
-					$work_title.'</a>'.
+					$url = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&id='.$work_data['id'].'"'.$class.'>'.$work_title.'</a>'.
 					$add_to_name.'<br />'.$cant_files.' '.$text_file.$dirtext;
+					$row[] = $url;
 				}
 			}
 			if ($count_files != 0) {
@@ -856,6 +874,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				
 			//display info depending on the permissions
 			if ($is_author && $work->accepted == '1' || $is_allowed_to_edit) {
+							
 				$row = array();
 				if ($work->accepted == '0') {
 					$class = 'class="invisible"';
@@ -882,7 +901,11 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				$url = implode('/', array_map('rawurlencode', explode('/', $work->url)));
 
 				$row[] = '<a href="download.php?file='.$url.'">'.build_document_icon_tag('file', substr(basename($work->url), 13)).'</a>';
-				$row[] = '<a href="download.php?file='.$url.'"'.$class.'>'.Display::return_icon('save.png', get_lang('Save'),array('style' => 'float:right;'), 22).' '.$work->title.'</a><br />'.$work->description;
+				if ($work->contains_file) {
+					$row[] = '<a href="download.php?file='.$url.'"'.$class.'>'.Display::return_icon('save.png', get_lang('Save'),array('style' => 'float:right;'), 22).' '.$work->title.'</a><br />'.$work->description;
+				} else {
+					$row[] = '<a href="view.php?id='.$work->id.'"'.$class.'>'.$work->title.'</a><br />'.$work->description;
+				}
 				$row[] = $user_info['firstname']; // $work->author;
 				$row[] = $user_info['lastname'];
 
@@ -899,11 +922,13 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  >'.
 						Display::return_icon('rate_work.png', get_lang('CorrectAndRate'),array(), 22).'</a>';
 					}
-					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;move='.$work->id.'" title="'.get_lang('Move').'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
+					if ($work->contains_file) {
+						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;action=move&item_id='.$work->id.'" title="'.get_lang('Move').'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
+					}
 					if ($work->accepted == '1') {
-						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;make_invisible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Invisible').'" >'.Display::return_icon('visible.png', get_lang('Invisible'),array(), 22).'</a>';
+						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;action=make_invisible&item_id='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Invisible').'" >'.Display::return_icon('visible.png', get_lang('Invisible'),array(), 22).'</a>';
 					} else {
-						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;make_visible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Visible').'" >'.Display::return_icon('invisible.png', get_lang('Visible'),array(), 22).'</a> ';
+						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;action=make_visible&item_id='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Visible').'" >'.Display::return_icon('invisible.png', get_lang('Visible'),array(), 22).'</a> ';
 					}
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'" >'.Display::return_icon('delete.png', get_lang('WorkDelete'),'',22).'</a>';
 					$row[] = $action;
@@ -927,6 +952,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			}
 		}
 	}
+	
 	$sorting_options = array();
 	$sorting_options['column'] = 1;
 
@@ -1072,19 +1098,20 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
 	$move_file	= intval($move_file);
 	$tbl_work	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql 		= "SELECT title FROM $tbl_work WHERE id ='".$move_file."'";
-	$result = Database::query($sql);
-	$title = Database::fetch_row($result);
+	$result 	= Database::query($sql);
+	$title 		= Database::fetch_row($result);
 	global $gradebook;
 
-	$form = '<form name="move_to" action="'.api_get_self().'?gradebook='.$gradebook.'&curdirpath='.Security::remove_XSS($curdirpath).'" method="POST">';
+	$form = '<form name="move_to_form" action="'.api_get_self().'?gradebook='.$gradebook.'&curdirpath='.Security::remove_XSS($curdirpath).'" method="POST">';
 	$form .= '<div class="row"><div class="form_header">'.get_lang('MoveFile').' - '.Security::remove_XSS($title[0]).'</div></div>';
-	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />';
+	$form .= '<input type="hidden" name="item_id" value="'.$move_file.'" />';
+	$form .= '<input type="hidden" name="action" value="move_to" />';
 	$form .= '<div class="row">
 				<div class="label">
 					<span class="form_required">*</span>'.get_lang('Select').'
 				</div>
 				<div class="formw">';
-	$form .= ' <select name="move_to">';
+	$form .= ' <select name="move_to_id">';
 
 	//group documents cannot be uploaded in the root
 	if ($group_dir == '') {
@@ -1222,9 +1249,10 @@ function del_dir($base_work_dir, $dir, $id) {
  * @return	string	Path (or -1 on error)
  */
 function get_work_path($id) {
-	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = 'SELECT url FROM '.$table.' WHERE id='.intval($id);
-	$res = Database::query($sql);
+	$table 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+	$course_id 	= api_get_course_int_id();
+	$sql 		= 'SELECT url FROM '.$table.' WHERE c_id = '.$course_id.' AND id='.intval($id);
+	$res 		= Database::query($sql);
 	if (Database::num_rows($res)) {
 		$row = Database::fetch_array($res);
 		return $row['url'];
@@ -1241,7 +1269,8 @@ function get_work_path($id) {
 function update_work_url($id, $new_path, $parent_id) {
 	if (empty($id)) return -1;
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "SELECT * FROM $table WHERE id=$id";
+	$course_id = api_get_course_int_id();
+	$sql = "SELECT * FROM $table WHERE c_id = $course_id AND id = $id";
 	$res = Database::query($sql);
 	if (Database::num_rows($res) != 1) {
 		return -1;
@@ -1249,7 +1278,7 @@ function update_work_url($id, $new_path, $parent_id) {
 		$row = Database::fetch_array($res);
 		$filename = basename($row['url']);
 		$new_url = $new_path .$filename;
-		$sql2 = "UPDATE $table SET url = '$new_url', parent_id = '$parent_id' WHERE id=$id";
+		$sql2 = "UPDATE $table SET url = '$new_url', parent_id = '$parent_id' WHERE c_id = $course_id  AND id = $id";
 		$res2 = Database::query($sql2);
 		return $res2;
 	}
@@ -1261,12 +1290,11 @@ function update_work_url($id, $new_path, $parent_id) {
  * @param	string new path
  */
 function update_dir_name($path, $new_name) {
-
-	if (!empty($new_name)) {
-
+	$course_id = api_get_course_int_id();
+	
+	if (!empty($new_name)) {		
 		global $base_work_dir;
-		include_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-		include_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+		
 		$path_to_dir = dirname($path);
 		if ($path_to_dir == '.') {
 			$path_to_dir = '';
@@ -1281,7 +1309,7 @@ function update_dir_name($path, $new_name) {
 		$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 		//update all the files in the other directories according with the next query
-		$sql = 'SELECT id, url FROM '.$table.' WHERE url LIKE BINARY "work/'.$path.'/%"'; // like binary (Case Sensitive)
+		$sql = 'SELECT id, url FROM '.$table.' WHERE c_id = '.$course_id.' AND url LIKE BINARY "work/'.$path.'/%"'; // like binary (Case Sensitive)
 
 		$rs = Database::query($sql);
 		$work_len = strlen('work/'.$path);
@@ -1289,19 +1317,19 @@ function update_dir_name($path, $new_name) {
 		while ($work = Database :: fetch_array($rs)) {
 			$new_dir = $work['url'];
 			$name_with_directory = substr($new_dir, $work_len, strlen($new_dir));
-			$sql = 'UPDATE '.$table.' SET url="work/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE id= '.$work['id'];
+			$sql = 'UPDATE '.$table.' SET c_id = '.$course_id.' AND url="work/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE id= '.$work['id'];
 			Database::query($sql);
 		}
 
 		//update all the directory's children according with the next query
-		$sql = 'SELECT id, url FROM '.$table.' WHERE url LIKE BINARY "/'.$path.'%"';
+		$sql = 'SELECT id, url FROM '.$table.' WHERE c_id = '.$course_id.' AND url LIKE BINARY "/'.$path.'%"';
 		$rs = Database::query($sql);
 		$work_len = strlen('/'.$path);
 		while ($work = Database :: fetch_array($rs)) {
 			$new_dir = $work['url'];
 			$name_with_directory = substr($new_dir, $work_len, strlen($new_dir));
 			$url = $path_to_dir.$new_name.$name_with_directory;
-			$sql = 'UPDATE '.$table.' SET url="/'.$url.'" WHERE id= '.$work['id'];
+			$sql = 'UPDATE '.$table.' SET url="/'.$url.'" WHERE c_id = '.$course_id.' AND id= '.$work['id'];
 			Database::query($sql);
 		}
 	}
@@ -1325,7 +1353,7 @@ function get_parent_directories($my_cur_dir_path) {
 			$item = Database::escape_string($list_parents[$i]);
 			$where_sentence = "url  LIKE BINARY '" . $dir_acum . "/" . $item."'";
 			$dir_acum .= '/' . $list_parents[$i];
-			$sql = "SELECT id FROM ". $work_table . " WHERE ". $where_sentence;
+			$sql = "SELECT id FROM ". $work_table . " WHERE c_id = '.$course_id.' ". $where_sentence;
 			$result = Database::query($sql);
 			$row = Database::fetch_array($result);
 			$list_id[] = $row['id'];
@@ -1439,23 +1467,19 @@ function to_javascript_work() {
 				}
 			}
 
-			function updateDocumentTitle(value){
-
+			function updateDocumentTitle(value) {
 				var temp = value.indexOf("/");
-
 				//linux path
 				if(temp!=-1){
 					var temp=value.split("/");
-				}
-				else{
+				} else {
 					var temp=value.split("\\\");
 				}
-
 				document.getElementById("file_upload").value=temp[temp.length-1];
+				$("#contains_file_id").attr("checked", true);
 			}
 
-			function checkDate(month, day, year)
-			{
+			function checkDate(month, day, year) {
 			  var monthLength =
 			    new Array(31,28,31,30,31,30,31,31,30,31,30,31);
 
@@ -1776,8 +1800,12 @@ function make_select($name, $values, $checked = '') {
 	return $output;
 }
 
-function make_checkbox($name, $checked = '') {
-	return '<input type="checkbox" value="1" name="'.$name.'" '.((!empty($checked))?'checked="checked"':'').'/>';
+function make_checkbox($name, $checked = '', $label = null) {
+	$check = '<input id ="'.$name.'" type="checkbox" value="1" name="'.$name.'" '.((!empty($checked))?'checked="checked"':'').'/>';
+	if (!empty($label)) {
+		$check .="<label for ='$name'>$label</label>";
+	}
+	return $check;
 }
 
 function draw_date_picker($prefix, $default = '') {

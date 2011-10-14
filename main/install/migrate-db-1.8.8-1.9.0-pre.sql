@@ -126,5 +126,6 @@ ALTER TABLE lp ADD COLUMN seriousgame_mode TINYINT NOT NULL DEFAULT 0;
 ALTER TABLE lp_item_view modify column suspend_data longtext;
 INSERT INTO course_setting(variable,value,category) VALUES ('course_grading_model','','gradebook');
 ALTER TABLE quiz ADD COLUMN review_answers INT NOT NULL DEFAULT 0;
-
+ALTER TABLE student_publication ADD COLUMN contains_file INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE student_publication ADD COLUMN allow_text_assignment INTEGER NOT NULL DEFAULT 0;
 

@@ -856,7 +856,9 @@ function update_Db_course($course_db_name = null) {
         qualificator_id INT UNSIGNED NOT NULL DEFAULT 0,
         weight float(6,2) UNSIGNED NOT NULL default 0,
         session_id INT UNSIGNED NOT NULL default 0,
-        user_id INTEGER  NOT NULL,
+        user_id INTEGER  NOT NULL,        
+		allow_text_assignment INTEGER NOT NULL DEFAULT 0,
+		contains_file INTEGER NOT NULL DEFAULT 0,
         PRIMARY KEY (c_id, id)
         )" . $charset_clause;
     Database::query($sql);
@@ -869,7 +871,7 @@ function update_Db_course($course_db_name = null) {
         ends_on datetime NOT NULL default '0000-00-00 00:00:00',
         add_to_calendar tinyint NOT NULL,
         enable_qualification tinyint NOT NULL,
-        publication_id int NOT NULL,
+        publication_id int NOT NULL,        
         PRIMARY KEY (c_id, id)
         )" . $charset_clause;
     Database::query($sql);

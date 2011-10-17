@@ -868,7 +868,7 @@ class SortableTableFromArray extends SortableTable {
 	 * Get table data to show on current page
 	 * @see SortableTable#get_table_data
 	 */
-	public function get_table_data($from = 1, $sort = true) {
+	public function get_table_data ($from = 1, $per_page = null, $column = null, $direction = null, $sort = true) {
 		if ($sort) {
 			$content = TableSort :: sort_table($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC);
 		} else {
@@ -937,7 +937,7 @@ class SortableTableFromArrayConfig extends SortableTable {
 	 * Get table data to show on current page
 	 * @see SortableTable#get_table_data
 	 */
-	public function get_table_data($from = 1) {
+	public function get_table_data ($from = 1, $per_page = null, $column = null, $direction = null, $sort = true) {
 		$content = TableSort :: sort_table_config($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC, $this->column_show, $this->column_order, SORT_REGULAR, $this->doc_filter);
 		return array_slice($content, $from, $this->per_page);
 	}

@@ -104,15 +104,15 @@ if (!empty($exercise_url_button)) {
 	$options .= Display::div($exercise_url_button, array('class'=>'center_option'));
 }
 
-$attempts = get_exercise_results_by_user(api_get_user_id(), $objExercise->id, api_get_course_id(), api_get_session_id(), $learnpath_id, $learnpath_item_id);
+$attempts = get_exercise_results_by_user(api_get_user_id(), $objExercise->id, api_get_course_id(), api_get_session_id(), $learnpath_id, $learnpath_item_id, 'desc');
 
 $my_attempt_array = array();
-$counter = 0;
+$counter = count($attempts)+1;
 $table_content = '';
 
 if (!empty($attempts)) {
-	foreach($attempts as $attempt_result) {	
-		$counter++;
+	foreach ($attempts as $attempt_result) {	
+		$counter--;
 		$score = show_score($attempt_result['exe_result'], $attempt_result['exe_weighting']);
 		$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$attempt_result['exe_id'].'&id_session='.api_get_session_id().'&height=500&width=750';
 		$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'thickbox'));

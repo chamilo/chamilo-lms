@@ -377,8 +377,6 @@ if (!isset($_SESSION['questionList'])) {
     api_session_register('questionList');    
     if ($debug > 0) { error_log('$_SESSION[questionList] was set'); }
 } else {
-	echo '222';
-	var_dump($questionList);
 	if (isset($objExercise) && isset($_SESSION['objExercise'])) {		
     	$questionList = $_SESSION['questionList'];
 	}

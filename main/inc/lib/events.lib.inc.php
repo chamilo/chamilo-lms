@@ -996,14 +996,18 @@ function get_exercise_results_by_attempt($exe_id) {
 }
 
 /**
- * Gets exercise results (NO Exercises in LPs) from a given exercise id, course, session
+ * Gets exercise results (NO Exercises in LPs) from a given user, exercise id, course, session, lp_id, lp_item_id
+ * @param   int     user id
  * @param   int     exercise id
  * @param   string  course code
  * @param   int     session id
+ * @param   int     lp id
+ * @param   int     lp item id
+ * @param   string 	order asc or desc 
  * @return  array   with the results
  * 
  */
-function get_exercise_results_by_user($user_id, $exercise_id, $course_code, $session_id = 0, $lp_id = 0, $lp_item_id = 0) {
+function get_exercise_results_by_user($user_id, $exercise_id, $course_code, $session_id = 0, $lp_id = 0, $lp_item_id = 0, $order = null) {
 	$table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 	$table_track_attempt_recording   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
@@ -1014,8 +1018,19 @@ function get_exercise_results_by_user($user_id, $exercise_id, $course_code, $ses
     $lp_id			= intval($lp_id);
     $lp_item_id		= intval($lp_item_id);
     
+    if (!in_array(strtolower($order), array('asc', 'desc'))) {
+    	$order = 'asc'; 
+    }
+    
     $sql = "SELECT * FROM $table_track_exercises 
-    		WHERE status = '' AND exe_user_id = $user_id AND exe_cours_id = '$course_code' AND exe_exo_id = $exercise_id AND session_id = $session_id AND orig_lp_id = $lp_id AND orig_lp_item_id = $lp_item_id ORDER by exe_id";    
+    		WHERE 	status 			= '' AND 
+    				exe_user_id 	= $user_id AND 
+    				exe_cours_id 	= '$course_code' AND 
+    				exe_exo_id 		= $exercise_id AND 
+    				session_id 		= $session_id AND 
+    				orig_lp_id 		= $lp_id AND 
+    				orig_lp_item_id = $lp_item_id 
+    				ORDER by exe_id $order ";    
     
     $res = Database::query($sql);
     $list = array();    
@@ -1033,8 +1048,7 @@ function get_exercise_results_by_user($user_id, $exercise_id, $course_code, $ses
         while ($row_q = Database::fetch_array($res_question,'ASSOC')) {
             $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
         }       
-    }
-    //echo '<pre>'; print_r($list);
+    }    
     return $list;
 }
 

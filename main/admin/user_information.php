@@ -15,12 +15,13 @@ api_protect_admin_script();
 
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
-if ( ! isset($_GET['user_id'])) {
+if (!isset($_GET['user_id'])) {
     api_not_allowed();
 }
 $user = api_get_user_info($_GET['user_id']);
 $tool_name = api_get_person_name($user['firstName'], $user['lastName']).(empty($user['official_code'])?'':' ('.$user['official_code'].')');
 Display::display_header($tool_name);
+
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 if ( isset($_GET['action']) ) {
@@ -35,14 +36,15 @@ if ( isset($_GET['action']) ) {
             break;
     }
 }
-api_display_tool_title($tool_name);
 //only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
 $statusname = api_get_status_langvars();
 $login_as_icon = '';
 if (api_is_platform_admin() || (api_is_session_admin() && $row['6'] == $statusname[STUDENT])) {
         $login_as_icon = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user['user_id'].'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>';
 }
-echo '<div class="actions"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.intval($_GET['user_id']).'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.gif',get_lang('Reporting')).'</a>'.$login_as_icon.'</div>';
+echo '<div class="actions"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.intval($_GET['user_id']).'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.png',get_lang('Reporting'),'',  32).'</a>'.$login_as_icon.'</div>';
+
+api_display_tool_title($tool_name);
 
 //getting the user image
 $sysdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'system',false,true);
@@ -65,8 +67,7 @@ echo '<p>'.Display :: encrypted_mailto_link($user['mail'], $user['mail']).'</p>'
  * Show the sessions and the courses in wich this user is subscribed
  */
 
-echo '<p><b>'.get_lang('SessionList').'</b></p>';
-echo '<blockquote>';
+echo '<p><h3>'.get_lang('SessionList').'</h3></p>';
 
 $main_user_table            = Database :: get_main_table(TABLE_MAIN_USER);
 $main_course_table          = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -86,18 +87,6 @@ $result = Database::query("SELECT DISTINCT id, name, date_start, date_end ".
     " ORDER BY date_start, date_end, name");
 
 $sessions = Database::store_result($result);
-
-/*
-// Get the list of sessions where the user is subscribed as coach in a course
-$sql = "SELECT DISTINCT id, name, date_start, date_end FROM $tbl_session as session ".
-    " INNER JOIN $tbl_session_course_user as session_rel_course_rel_user ".
-    " ON session_rel_course_rel_user.id_user = $user_id AND status = 2 ".
-    " AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00') ".
-    " ORDER BY date_start, date_end, name";
-
-$result = Database::query($sql);
-$session_is_coach = Database::store_result($result);
-*/
 
 $personal_course_list = array();
 if (count($sessions)>0) {
@@ -135,9 +124,9 @@ if (count($sessions)>0) {
             $row[] = $my_course['k'];
             $row[] = $my_course['i'];
             $row[] = $my_course['s'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
+            
             $tools = '<a href="course_information.php?code='.$my_course['k'].'&id_session='.$id_session.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
-                    '<a href="'.api_get_path(WEB_COURSE_PATH).$my_course['d'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
-                    '<a href="session_course_edit.php?id_session='.$id_session.'&course_code='.$my_course['k'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+                    '<a href="'.api_get_path(WEB_COURSE_PATH).$my_course['d'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
 
             if( $my_course->status == STUDENT ){
                 $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$my_course['k'].'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
@@ -146,16 +135,14 @@ if (count($sessions)>0) {
             $row[] = $tools;
             $data[] = $row;
         }
-        echo $enreg['name'];
-        Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));
-        echo '<br><br><br>';
+        echo Display::tag('h4',$enreg['name']);
+        Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));        
 
     }
 } else {
     echo '<p>'.get_lang('NoSessionsForThisUser').'</p>';
 }
 
-echo '</blockquote>';
 
 /**
  * Show the courses in which this user is subscribed
@@ -187,10 +174,8 @@ if (Database::num_rows($res) > 0) {
         $data[] = $row;
     }
 
-    echo '<p><b>'.get_lang('Courses').'</b></p>';
-    echo '<blockquote>';
-    Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));
-    echo '</blockquote>';
+    echo '<p><h3>'.get_lang('Courses').'</b></h3>';    
+    Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));    
 } else {
     echo '<p>'.get_lang('NoCoursesForThisUser').'</p>';
 }
@@ -238,13 +223,12 @@ if ($_configuration['multiple_access_urls']) {
             $row[] = $url['url'];
             $data[] = $row;
         }
-        echo '<p><b>'.get_lang('URLList').'</b></p>';
-        echo '<blockquote>';
-        Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));
-        echo '</blockquote>';
+        echo '<p><b>'.get_lang('URLList').'</b></p>';        
+        Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));        
     } else {
         echo '<p>'.get_lang('NoUrlForThisUser').'</p>';
     }
 }
+
 /* FOOTER */
 Display::display_footer();

@@ -80,7 +80,6 @@ if(api_get_setting('server_type') == 'test') {
 <?php
 
 echo '<h4>'.get_lang('CourseUsage').'</h4>';
-echo '<blockquote>';
 
 $id_session = intval($_GET['id_session']);
 $table = new SortableTableFromArray(get_course_usage($course->code,$id_session),0,20,'usage_table');
@@ -89,12 +88,10 @@ $table->set_other_tables(array('user_table','class_table'));
 $table->set_header(0,get_lang('Tool'), true);
 $table->set_header(1,get_lang('NumberOfItems'), true);
 $table->display();
-echo '</blockquote>';
 /**
  * Show all users subscribed in this course
  */
 echo '<h4>'.get_lang('Users').'</h4>';
-echo '<blockquote>';
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT *,cu.status as course_status FROM $table_course_user cu, $table_user u WHERE cu.user_id = u.user_id AND cu.course_code = '".$code."' AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH." ";
@@ -139,12 +136,9 @@ if (Database::num_rows($res) > 0)
 	$table->set_header(4,get_lang('Status'), true);
 	$table->set_header(5,'', false);
 	$table->display();
-}
-else
-{
+} else {
 	echo get_lang('NoUsersInCourse');
 }
-echo '</blockquote>';
 
 /*@todo This should be dissapear classes are a deprecated feature*/ 
 /**

@@ -31,12 +31,7 @@ class Template extends Smarty {
 		$this->set_header(true);
 		
 		$this->set_system_parameters();		
-		
 		$this->set_user_parameters();
-		
-		$this->set_header_parameters();		
-		
-		$this->set_footer_parameters();	
 		
 		//Creating a Smarty modifier - Now we can call the get_lang from a template!!! Just use {"MyString"|get_lang} 
 		$this->registerPlugin("modifier","get_lang", "get_lang");
@@ -46,14 +41,21 @@ class Template extends Smarty {
 		//To load a smarty plugin				
 		//$this->loadPlugin('smarty_function_get_lang');
 				
-		$this->assign('style', $this->style);	
+		
 		//$this->testInstall();	
+	}
+	
+	function set_template_parameters() {		
+		$this->set_header_parameters();		
+		$this->set_footer_parameters();		
+		$this->assign('style', $this->style);		
 	}
 	
 	/**
 	 * Shortcut to display a 1 col layout
 	 * */
 	function display_one_col_template() {
+		$this->set_template_parameters();
 		$tpl = $this->get_template('layout/layout_1_col.tpl');
 		$this->display($tpl);
 	}
@@ -63,7 +65,14 @@ class Template extends Smarty {
 	* */
 	
 	function display_two_col_template() {
+		$this->set_template_parameters();
 		$tpl = $this->get_template('layout/layout_2_col.tpl');
+		$this->display($tpl);
+	}
+	
+	function display_blank_template() {
+		$this->set_template_parameters();
+		$tpl = $this->get_template('layout/blank.tpl');
 		$this->display($tpl);
 	}
 	
@@ -72,13 +81,15 @@ class Template extends Smarty {
 	 * @param bool true if we show the footer
 	 */
 	function set_footer($status) {
+		$this->show_footer = $status;
 		$this->assign('show_footer', $status);
 	}
 	/**
 	 * Sets the header visibility
 	 * 
 	 */
-	function set_header($status) {		
+	function set_header($status) {
+		$this->show_header = $status;
 		$this->assign('show_header', $status);	
 	}
 		
@@ -313,8 +324,10 @@ class Template extends Smarty {
 			}		
 		}
 		
-		header('Content-Type: text/html; charset='.api_get_system_encoding());
-		header('X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'],0,1));
+		if ($this->show_header == 1) {
+			header('Content-Type: text/html; charset='.api_get_system_encoding());
+			header('X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'],0,1));
+		}
 	}
 
 	private function set_footer_parameters() {

@@ -719,12 +719,37 @@ function api_valid_email($address) {
  * @author Roan Embrechts
  */
 function api_protect_course_script($print_headers = false) {
-    global $is_allowed_in_course;    
+    global $is_allowed_in_course;
+    $is_visible = false;
+    if (api_is_platform_admin()) {
+    	return true;
+    }
     $course_info = api_get_course_info();
-    if (isset($course_info) && in_array($course_info['visibility'], array(2,3))) {    	
-    	return true;    	
-    }    
-    if (!$is_allowed_in_course) {
+    if (isset($course_info) && !empty($course_info['visibility'])) {
+    	switch($course_info['visibility']) {
+    		default:
+    		case 0: //Completely closed: the course is only accessible to the teachers.
+    			if (api_get_user_id() && !api_is_anonymous() && (api_is_allowed_to_edit())) {
+    				$is_visible = true;
+    			}
+    			break;    		
+    		case 1: //Private - access authorized to course members only
+    			if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
+    				$is_visible = true;
+    			}
+    			break;   			
+    		case 2: // Open - access allowed for users registered on the platform
+    			if (api_get_user_id() && !api_is_anonymous()) {
+    				$is_visible = true;    				
+    			}    			
+    			break;
+    		case 3: //Open - access allowed for the whole world
+    			$is_visible = true;    			
+    			break;
+    	}
+    }    	    	
+        
+    if (!$is_visible) {
         api_not_allowed($print_headers);
         return false;
     }
@@ -2472,10 +2497,10 @@ function api_not_allowed($print_headers = false) {
 	$tpl->set_footer($show_headers);
 
 	if ((isset($user) && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
-		//if the access is not authorized and there is some login information
+		// if the access is not authorized and there is some login information
 		// but the cidReq is not found, assume we are missing course data and send the user
 		// to the user_portal		
-		$tpl->display_one_col_template();
+		$tpl->display_blank_template();
 		exit;
 	}
 

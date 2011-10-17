@@ -158,8 +158,6 @@ if (!api_is_allowed_to_create_course() && !api_is_session_admin() && !api_is_drh
 	api_not_allowed(true);
 }
 
-Display :: display_header($nameTools);
-
 /*
  *	MAIN CODE
 */
@@ -270,13 +268,14 @@ if (empty($courses_in_session)) {
 	exit;
 }
 
+Display :: display_header($nameTools);
 
-if (!empty($_GET['student'])) {
+
+if (!empty($student_id)) {
 	
-	if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, $_user['user_id'])) {
-		api_not_allowed();
+	if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())) {
+		api_not_allowed(false);
 	}
-
 	$info_user['name'] = api_get_person_name($info_user['firstname'], $info_user['lastname']);
 
 	// Actions bar
@@ -291,12 +290,10 @@ if (!empty($_GET['student'])) {
 		$send_mail = Display :: return_icon('mail_send_na.png', get_lang('SendMail'),'','32');
 	}
 	echo $send_mail;
-	if (!empty ($_GET['student']) && !empty ($_GET['course'])) { //only show link to connection details if course and student were defined in the URL
-		echo '<a href="access_details.php?student=' . Security :: remove_XSS($_GET['student']) . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$session_id.'">' . Display :: return_icon('statistics.png', get_lang('AccessDetails'),'','32').'</a>';
+	if (!empty($student_id) && !empty ($_GET['course'])) { //only show link to connection details if course and student were defined in the URL
+		echo '<a href="access_details.php?student=' . $student_id . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$session_id.'">' . Display :: return_icon('statistics.png', get_lang('AccessDetails'),'','32').'</a>';
 	}
-	echo '</div>';
-    
-	
+	echo '</div>';	
 
 	// is the user online ?
 	$student_online = intval($_GET['student']);

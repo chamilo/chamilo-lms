@@ -709,6 +709,7 @@ if ($_POST['step2']) {
 } elseif ($_POST['step6']) {
 
 	//STEP 6 : INSTALLATION PROCESS
+	Database::query("SET storage_engine MYISAM;");
 
 	if ($installType == 'update') {
 

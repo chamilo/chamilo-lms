@@ -699,7 +699,7 @@ class Database {
         //Check if the table contains a c_ (means a course id)
         if (strpos($query, 'c_')) {        	
         	//Check if the table contains inner joins 
-        	if (	
+        	if (
         		strpos($query, 'INNER JOIN') === false &&  
         		strpos($query, 'inner join') === false &&
         		strpos($query, 'left join') === false &&
@@ -708,7 +708,11 @@ class Database {
         		strpos($query, 'INSERT') === false &&
         		strpos($query, 'ALTER') === false &&
         		strpos($query, 'alter') === false &&
-        		strpos($query, 'c_id') === false
+        		strpos($query, 'c_id') === false &&
+        		strpos($query, 'create table') === false &&
+        		strpos($query, 'CREATE TABLE') === false &&
+        		strpos($query, 'AUTO_INCREMENT') === false
+        	
         	) {        		
         		$limit_list = explode('LIMIT', $query);
         		$limit = '';
@@ -730,8 +734,7 @@ class Database {
 	        	if (isset($where_list[1])) {	        		
 	        		$where  = $where_list[1].' AND c_id = '.api_get_course_int_id().' ';	        		
 	        		$query 	= $select.' WHERE '.$where.' '.$order.$group.$limit;	        		
-	        		//echo ($query );var_dump('julio');
-	        		//exit;
+	        		//echo ($query ); exit;
 	        	} else {
 	        		//check if order ?
 	        		$query = $select. ' WHERE 1 AND c_id = '.api_get_course_int_id().' '.$order.$group.$limit;	    

@@ -1391,7 +1391,7 @@ class SessionManager {
     public function get_user_status_in_session($user_id, $course_code, $session_id) {
         $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);        
-        echo $sql = "SELECT session_rcru.status
+        $sql = "SELECT session_rcru.status
                 FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
                 WHERE session_rcru.id_user = user.user_id AND 
                 session_rcru.id_session = '".intval($session_id)."' AND 

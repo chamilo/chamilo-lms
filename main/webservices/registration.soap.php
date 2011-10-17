@@ -1056,6 +1056,88 @@ $server->wsdl->addComplexType(
     )
 );
 
+/* Register WSEditUserCredentials function */
+// Register the data structures used by the service
+$server->wsdl->addComplexType(
+    'editUserCredentials',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'username' => array('name' => 'username', 'type' => 'xsd:string'),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
+        'password' => array('name' => 'password', 'type' => 'xsd:string'),
+        'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string')
+    )
+);
+
+// Register the method to expose
+$server->register('WSEditUserCredentials',                    // method name
+    array('editUserCredentials' => 'tns:editUserCredentials'),                      // input parameters
+    array('return' => 'xsd:string'),                // output parameters
+    'urn:WSRegistration',                                                       // namespace
+    'urn:WSRegistration#WSEditUserCredentials',          // soapaction
+    'rpc',                                                                                      // style
+    'encoded',                                                                          // use
+    'This service edits the username and password of a user'                     // documentation
+);
+
+// Define the method WSEditUser
+function WSEditUserCredentials($params) {
+    global $userPasswordCrypted;
+
+    if(!WSHelperVerifyKey($params)) {
+        return -1;
+    }
+
+    $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+
+    $original_user_id_value = $params['original_user_id_value'];
+    $original_user_id_name = $params['original_user_id_name'];
+    $username = $params['username'];
+    $password = null;
+
+    if (!empty($params['password'])) { $password = $params['password']; }
+
+    // Get user id from id wiener
+
+    $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+
+    if ($user_id == 0) {
+        return 0;
+    } else {
+        $sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
+        $resu = Database::query($sql);
+        $r_check_user = Database::fetch_row($resu);
+        if (!empty($r_check_user[0])) {
+            return 0;
+        }
+    }
+
+    // Check whether username already exits.
+    $sql = "SELECT username FROM $table_user WHERE username = '$username' AND user_id <> '$user_id'";
+    $res_un = Database::query($sql);
+    $r_username = Database::fetch_row($res_un);
+
+    if (!empty($r_username[0])) {
+        return 0;
+    }
+    $sql = "UPDATE $table_user SET
+            username='".Database::escape_string($username)."'";
+    if (!is_null($password)) {
+        $password = $userPasswordCrypted ? api_get_encrypted_password($password) : $password;
+        $sql .= ", password='".Database::escape_string($password)."' ";
+    }
+    $sql .=     " WHERE user_id='$user_id'";
+    $return = @Database::query($sql);
+
+    return  $return;
+}
+
 // Prepare output params, in this case will return an array
 $server->wsdl->addComplexType(
 'result_editUsers',

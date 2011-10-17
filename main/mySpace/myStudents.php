@@ -154,9 +154,7 @@ if (isset ($_GET['details'])) {
 
 api_block_anonymous_users();
 
-
-
-if (!api_is_allowed_to_create_course() && !api_is_session_admin()) {	
+if (!api_is_allowed_to_create_course() && !api_is_session_admin() && !api_is_drh()) {	
 	api_not_allowed(true);
 }
 
@@ -217,30 +215,12 @@ if ($check) {
 $info_user = UserManager::get_user_info_by_id($student_id);
 
 $courses_in_session = array();
-
-/*if (!isset ($_GET['id_coach'])) {
- $sessions_coached_by_user = Tracking::get_sessions_coached_by_user($_user['user_id']);
-foreach ($sessions_coached_by_user as $session_coached_by_user) {
-$sid = intval($session_coached_by_user['id']);
-$courses_followed_by_coach = Tracking :: get_courses_followed_by_coach($_user['user_id'], $sid);
-$courses_in_session[$sid] = $courses_followed_by_coach;
-}
-} else {
-$sessions_coached_by_user = Tracking::get_sessions_coached_by_user(intval($_GET['id_coach']));
-foreach ($sessions_coached_by_user as $session_coached_by_user) {
-$sid = intval($session_coached_by_user['id']);
-$courses_followed_by_coach = Tracking :: get_courses_followed_by_coach(intval($_GET['id_coach']), $sid);
-$courses_in_session[$sid] = $courses_followed_by_coach;
-}
-}*/
-
 $courses = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
 $courses_in_session_by_coach = array();
 $sessions_coached_by_user = Tracking::get_sessions_coached_by_user(api_get_user_id());
 
 //RRHH or session admin
-if (api_is_session_admin()) {
-	
+if (api_is_session_admin() || api_is_drh()) {	
 	$session_by_session_admin = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
 	if (!empty($session_by_session_admin)) {
 		foreach ($session_by_session_admin as $session_coached_by_user) {		

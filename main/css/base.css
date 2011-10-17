@@ -3874,3 +3874,8 @@ form div.error input, form div.error textarea {
 #install_form blockquote {
 	line-height: 16px;
 }
+
+.lp_content_type_label {
+	font-style: italic;
+	color:#999;
+}

@@ -211,8 +211,8 @@ if (is_array($flat_list)) {
         $name = Security::remove_XSS($details['lp_name']);
         if ($is_allowed_to_edit) {
         	//&nbsp;'.$details['lp_proximity'].'
-            $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.(learnpath::is_lp_visible_for_student($id, api_get_user_id())?'':' - ('.get_lang('LPNotVisibleToStudent').')');
-            $extra = '<br /><font color="#999"><i>'.$dsp_desc .'</i></font>';
+            $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.(learnpath::is_lp_visible_for_student($id, api_get_user_id())?'':' - ('.get_lang('LPNotVisibleToStudent').')');            
+            $extra = '<div class ="lp_content_type_label">'.$dsp_desc .'</div>';
         }
         
         /*$image = '<img src="../img/icons/22/learnpath.png" border="0" align="absmiddle" alt="' . $name . '">';

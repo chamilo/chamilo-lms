@@ -709,8 +709,7 @@ if ($_POST['step2']) {
 } elseif ($_POST['step6']) {
 
 	//STEP 6 : INSTALLATION PROCESS
-	Database::query("SET storage_engine MYISAM;");
-
+	
 	if ($installType == 'update') {
 
 		require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
@@ -734,6 +733,8 @@ if ($_POST['step2']) {
 		} elseif ($userPasswordCrypted == '0') {
 			$userPasswordCrypted = 'none';
 		}
+		
+		Database::query("SET storage_engine = MYISAM;");
 
 		if (version_compare($my_old_version, '1.8.7', '>=')) {
 			Database::query("SET SESSION character_set_server='utf8';");
@@ -808,6 +809,7 @@ if ($_POST['step2']) {
 		database_server_connect();
 
 		// Initialization of the database encoding to be used.
+		Database::query("SET storage_engine = MYISAM;");
 		Database::query("SET SESSION character_set_server='utf8';");
 		Database::query("SET SESSION collation_server='utf8_general_ci';");
 		//Database::query("SET CHARACTER SET 'utf8';"); // See task #1802.

@@ -848,23 +848,23 @@ VALUES
 ('scorm_cumulative_session_time', NULL, 'radio', 'Course', 'true', 'ScormCumulativeSessionTimeTitle', 'ScormCumulativeSessionTimeComment', NULL, NULL, 0),
 ('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.15858','DokeosDatabaseVersion','', NULL, NULL, 0);
 
-
--- ('use_custom_pages',NULL,'radio','Platform','false','UseCustomPages','useCustomPagesComment','platform',NULL,0),
---('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
---('show_tabs', 'custom_tab_2', 'checkbox', 'Platform', 'false', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom2', 1),
---('show_tabs', 'custom_tab_3', 'checkbox', 'Platform', 'false', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom3', 1),
---('custom_tab_1_name', NULL, 'textfield', 'Platform', 'Reports', 'CustomTab1NameTitle', 'CustomTab1NameComment', NULL, NULL, 0),
---('custom_tab_1_url', NULL, 'textfield', 'Platform', '/main/reports/', 'CustomTab1URLTitle', 'CustomTab1URLComment', NULL, NULL, 0),
---('custom_tab_2_name', NULL, 'textfield', 'Platform', '', 'CustomTab2NameTitle', 'CustomTab2NameComment', NULL, NULL, 0),
---('custom_tab_2_url', NULL, 'textfield', 'Platform', '', 'CustomTab2URLTitle', 'CustomTab2URLComment', NULL, NULL, 0),
---('custom_tab_3_name', NULL, 'textfield', 'Platform', '', 'CustomTab3NameTitle', 'CustomTab3NameComment', NULL, NULL, 0),
---('custom_tab_3_url', NULL, 'textfield', 'Platform', '', 'CustomTab3URLTitle', 'CustomTab3URLComment', NULL, NULL, 0),
---('languagePriority1', NULL, 'radio', 'Languages', 'course_lang', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0),
---('languagePriority2', NULL, 'radio', 'Languages','user_profil_lang', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0),
---('languagePriority3', NULL, 'radio', 'Languages','user_selected_lang', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0),
---('languagePriority4', NULL, 'radio', 'Languages', 'platform_lang','LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0),
--- ('activate_send_event_by_mail', NULL, 'radio', 'Platform', 'false', 'ActivateSendEventByMailTitle', 'ActivateSendEventByMailComment', NULL, NULL, 0),
-
+/*
+('use_custom_pages',NULL,'radio','Platform','false','UseCustomPages','useCustomPagesComment','platform',NULL,0),
+('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
+('show_tabs', 'custom_tab_2', 'checkbox', 'Platform', 'false', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom2', 1),
+('show_tabs', 'custom_tab_3', 'checkbox', 'Platform', 'false', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom3', 1),
+('custom_tab_1_name', NULL, 'textfield', 'Platform', 'Reports', 'CustomTab1NameTitle', 'CustomTab1NameComment', NULL, NULL, 0),
+('custom_tab_1_url', NULL, 'textfield', 'Platform', '/main/reports/', 'CustomTab1URLTitle', 'CustomTab1URLComment', NULL, NULL, 0),
+('custom_tab_2_name', NULL, 'textfield', 'Platform', '', 'CustomTab2NameTitle', 'CustomTab2NameComment', NULL, NULL, 0),
+('custom_tab_2_url', NULL, 'textfield', 'Platform', '', 'CustomTab2URLTitle', 'CustomTab2URLComment', NULL, NULL, 0),
+('custom_tab_3_name', NULL, 'textfield', 'Platform', '', 'CustomTab3NameTitle', 'CustomTab3NameComment', NULL, NULL, 0),
+('custom_tab_3_url', NULL, 'textfield', 'Platform', '', 'CustomTab3URLTitle', 'CustomTab3URLComment', NULL, NULL, 0),
+('languagePriority1', NULL, 'radio', 'Languages', 'course_lang', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0),
+('languagePriority2', NULL, 'radio', 'Languages','user_profil_lang', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0),
+('languagePriority3', NULL, 'radio', 'Languages','user_selected_lang', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0),
+('languagePriority4', NULL, 'radio', 'Languages', 'platform_lang','LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0),
+('activate_send_event_by_mail', NULL, 'radio', 'Platform', 'false', 'ActivateSendEventByMailTitle', 'ActivateSendEventByMailComment', NULL, NULL, 0),
+*/
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -1143,27 +1143,28 @@ VALUES
 ('cas_add_user_activate', 'false', 'No'),
 ('scorm_cumulative_session_time','true','Yes'),
 ('scorm_cumulative_session_time','false','No');
---('use_custom_pages','true','Yes'),
---('use_custom_pages','false','No'),
---('languagePriority1','platform_lang','PlatformLanguage'),
---('languagePriority1','user_profil_lang','UserLanguage'),
---('languagePriority1','user_selected_lang','UserSelectedLanguage'),
---('languagePriority1','course_lang','CourseLanguage'),
---('languagePriority2','platform_lang','PlatformLanguage'),
---('languagePriority2','user_profil_lang','UserLanguage'),
---('languagePriority2','user_selected_lang','UserSelectedLanguage'),
---('languagePriority2','course_lang','CourseLanguage'),
---('languagePriority3','platform_lang','PlatformLanguage'),
---('languagePriority3','user_profil_lang','UserLanguage'),
---('languagePriority3','user_selected_lang','UserSelectedLanguage'),
---('languagePriority3','course_lang','CourseLanguage'),
---('languagePriority4','platform_lang','PlatformLanguage'),
---('languagePriority4','user_profil_lang','UserLanguage'),
---('languagePriority4','user_selected_lang','UserSelectedLanguage'),
---('languagePriority4','course_lang','CourseLanguage'),
---('activate_send_event_by_mail', 'true', 'Yes'),
---('activate_send_event_by_mail', 'false', 'No'),
-
+/*
+('use_custom_pages','true','Yes'),
+('use_custom_pages','false','No'),
+('languagePriority1','platform_lang','PlatformLanguage'),
+('languagePriority1','user_profil_lang','UserLanguage'),
+('languagePriority1','user_selected_lang','UserSelectedLanguage'),
+('languagePriority1','course_lang','CourseLanguage'),
+('languagePriority2','platform_lang','PlatformLanguage'),
+('languagePriority2','user_profil_lang','UserLanguage'),
+('languagePriority2','user_selected_lang','UserSelectedLanguage'),
+('languagePriority2','course_lang','CourseLanguage'),
+('languagePriority3','platform_lang','PlatformLanguage'),
+('languagePriority3','user_profil_lang','UserLanguage'),
+('languagePriority3','user_selected_lang','UserSelectedLanguage'),
+('languagePriority3','course_lang','CourseLanguage'),
+('languagePriority4','platform_lang','PlatformLanguage'),
+('languagePriority4','user_profil_lang','UserLanguage'),
+('languagePriority4','user_selected_lang','UserSelectedLanguage'),
+('languagePriority4','course_lang','CourseLanguage'),
+('activate_send_event_by_mail', 'true', 'Yes'),
+('activate_send_event_by_mail', 'false', 'No'),
+*/
 UNLOCK TABLES;
 
 /*!40000 ALTER TABLE settings_options ENABLE KEYS */;
@@ -1186,16 +1187,6 @@ CREATE TABLE sys_announcement (
   access_url_id INT NOT NULL default 1,
   PRIMARY KEY  (id)
 );
-
---
--- Dumping data for table sys_announcement
---
-
-
-/*!40000 ALTER TABLE sys_announcement DISABLE KEYS */;
-LOCK TABLES sys_announcement WRITE;
-UNLOCK TABLES;
-/*!40000 ALTER TABLE sys_announcement ENABLE KEYS */;
 
 --
 -- Table structure for shared_survey

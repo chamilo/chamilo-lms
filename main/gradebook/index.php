@@ -310,8 +310,10 @@ if (isset ($_GET['visiblelink'])) {
 		$visibility_command= 0;
 	}
 	$link= LinkFactory :: load($_GET['visiblelink']);
-	$link[0]->set_visible($visibility_command);
-	$link[0]->save();
+	if (isset($link) && isset($link[0])) {
+		$link[0]->set_visible($visibility_command);
+		$link[0]->save();
+	}
 	unset ($link);
 	if ($visibility_command) {
 		$confirmation_message = get_lang('ViMod');
@@ -793,11 +795,7 @@ if ($first_time==1 && api_is_allowed_to_edit(null,true)) {
 			$alllink = $cat->get_links($stud_id);
 			
 			if ($cat->get_parent_id() != 0 ) {
-				/*echo Display::tag('h2', $cat->get_name().' ( '.$items[$i]['percentage'].') ');				
-				DisplayGradebook::display_header_gradebook_per_gradebook($cat, 0, $cat->get_id(), $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
-
-				$gradebooktable = new GradebookTable($cat, $allcat, $alleval,$alllink, $addparams);
-				$gradebooktable->display();*/
+			
 				$i++;
 			} else {
 				//This is the father
@@ -813,9 +811,8 @@ if ($first_time==1 && api_is_allowed_to_edit(null,true)) {
 				}
 				
 				$gradebooktable = new GradebookTable($cat, $allcat, $alleval, $alllink, $addparams);
-				$gradebooktable->display();
-				
-				//DisplayGradebook :: display_reduce_header_gradebook($cat,$is_course_admin, $is_platform_admin, $simple_search_form, false, false);
+				$gradebooktable->display();				
+				//
 			}
 		}
 	}

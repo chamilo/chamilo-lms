@@ -242,10 +242,12 @@ class Category implements GradebookItem
 		if ( isset($this->name) && '-1'==$this->name) {
 			return false;
 		}
-		if (isset($this->name) && isset($this->user_id) && isset($this->weight) && isset($this->visible)) {
+		
+		if (isset($this->name) && isset($this->user_id)) {
+			
+			
 			$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-			$sql = 'INSERT INTO '.$tbl_grade_categories
-					.' (name,user_id,weight,visible';
+			$sql = 'INSERT INTO '.$tbl_grade_categories.' (name,user_id,weight,visible';
 			if (isset($this->description)) {
 				$sql .= ',description';
 			}
@@ -274,12 +276,11 @@ class Category implements GradebookItem
             if (!empty($this->session_id)) {
             $sql .= ', '.intval($this->get_session_id());
             }
-			$sql .= ')';
-
+			$sql .= ')';			
 			Database::query($sql);
-			$this->set_id(Database::insert_id());
-		} else {
-			die('Error in Category add: required field empty');
+			$id = Database::insert_id();
+			$this->set_id($id);
+			return $id;
 		}
 	}
 	/**

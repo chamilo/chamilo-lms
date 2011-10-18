@@ -29,7 +29,7 @@ $_course['name'] = $course_title;
 $_course['official_code'] = $course_code;
 
 if (isset($_GET['doexercise'])) {
-	header('Location: ../exercice/exercise_submit.php?cidReq='.$cidReq.'&gradebook='.$gradebook.'&origin=&learnpath_id=&learnpath_item_id=&exerciseId='.Security::remove_XSS($_GET['doexercise']));
+	header('Location: ../exercice/overview.php?cidReq='.$cidReq.'&gradebook='.$gradebook.'&origin=&learnpath_id=&learnpath_item_id=&exerciseId='.intval($_GET['doexercise']));
 	exit;
 } else {
 	if (isset($_GET['gradebook'])) {

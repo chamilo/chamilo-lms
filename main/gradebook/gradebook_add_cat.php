@@ -67,7 +67,7 @@ if ($form->validate()) {
 		$visible = 1;
 	}
 	$cat->set_visible($visible);
-	$cat->add();
+	$result = $cat->add();	
 	header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?addcat=&selectcat=' . $cat->get_parent_id());
 	exit;
 }

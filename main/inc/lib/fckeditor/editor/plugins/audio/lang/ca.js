@@ -5,4 +5,3 @@
 FCKLang['DlgAudioTitle'] = 'Insert audio / Audio properties' ;
 FCKLang['DlgAudioPlayback'] = 'Playback' ;
 FCKLang['DlgAudioAutoplay'] = 'Autoplay' ;
-﻿

@@ -1007,8 +1007,7 @@ abstract class Question
 		echo '<script>
 			// hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700
 
-			function FCKeditor_OnComplete( editorInstance )
-			{
+			function FCKeditor_OnComplete( editorInstance ) {
 			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
 			      HideFCKEditorByInstanceName (editorInstance.Name);
 			   }
@@ -1019,16 +1018,14 @@ abstract class Question
 			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
 			      }
 			}
-
-			function show_media()
-			{
+			function show_media() {
 				var my_display = document.getElementById(\'HiddenFCKquestionDescription\').style.display;
 				if(my_display== \'none\' || my_display == \'\') {
 				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'block\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
+				document.getElementById(\'media_icon\').innerHTML=\' <img style="vertical-align: middle;" src="../img/looknfeelna.png" alt="" /> '.addslashes(api_htmlentities(get_lang('EnrichQuestion'))).'\';
 			} else {
 				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'none\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
+				document.getElementById(\'media_icon\').innerHTML=\' <img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" /> '.addslashes(api_htmlentities(get_lang('EnrichQuestion'))).'\';
 			}
 		}
 		</script>';
@@ -1074,7 +1071,10 @@ abstract class Question
 		$form -> addElement('html','<div class="row">
 		<div class="label"></div>
 		<div class="formw" style="height:50px">
-			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>
+			<a href="javascript://" onclick=" return show_media()">
+				<span id="media_icon">
+				<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" /> '.addslashes(api_htmlentities(get_lang('EnrichQuestion'))).'
+				</span></a>
 		</div>
 		</div>');
 

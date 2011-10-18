@@ -28,10 +28,10 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 		function advanced_parameters() {
 			if(document.getElementById(\'options\').style.display == \'none\') {
 				document.getElementById(\'options\').style.display = \'block\';
-				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\' <img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
 			} else {
 				document.getElementById(\'options\').style.display = \'none\';
-				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\' <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
 			}
 		}
 
@@ -50,13 +50,12 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 		
 		function show_media() {
 			var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display;
-				if(my_display== \'none\' || my_display == \'\')
-				{
+				if(my_display== \'none\' || my_display == \'\') {
 					document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'block\';
-					document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
+					document.getElementById(\'media_icon\').innerHTML=\' <img src="../img/looknfeelna.png" alt="" /> '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'\';
 				} else {
 					document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'none\';
-					document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
+					document.getElementById(\'media_icon\').innerHTML=\' <img src="../img/looknfeel.png" alt="" /> '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'\';
 				}
 		}
 

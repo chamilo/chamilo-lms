@@ -2464,7 +2464,6 @@ function api_not_allowed($print_headers = false) {
 	$course     = api_get_course_id();
 	
 	global $this_section;
-	$tpl = new Template();
 	
 	if (api_get_setting('use_custom_pages') == 'true') {
     	$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
@@ -2486,15 +2485,14 @@ function api_not_allowed($print_headers = false) {
     //$msg = Display::return_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br />', 'error', false);
     $msg = Display::return_message(get_lang('NotAllowedClickBack'), 'error', false);
     $msg = Display::div($msg, array('align'=>'center'));
-	$tpl->assign('content', $msg);	    
 	
 	$show_headers = 0;
     if ((!headers_sent() || $print_headers) && $origin != 'learnpath') {
 		$show_headers = 1;
 	}
 	
-	$tpl->set_header($show_headers);
-	$tpl->set_footer($show_headers);
+	$tpl = new Template(null, $show_headers, $show_headers);
+	$tpl->assign('content', $msg);	
 
 	if ((isset($user) && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
 		// if the access is not authorized and there is some login information

@@ -7,10 +7,10 @@ require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
 class Template extends Smarty {
 	
 	var $style = 'default'; //see the template folder 
-	var $show_header = true;
-	var $show_footer = true;
+	var $show_header;
+	var $show_footer;
 	
-	function __construct($title = '') {
+	function __construct($title = '', $show_header = true, $show_footer = true) {
 		$this->title = $title;
 		
 		//Smarty 3 configuration
@@ -27,8 +27,8 @@ class Template extends Smarty {
 		//$this->cache_lifetime 	= 120;
 		
 		//By default we show the header and footer
-		$this->set_footer(true);
-		$this->set_header(true);
+		$this->set_footer($show_footer);
+		$this->set_header($show_header);
 		
 		$this->set_system_parameters();		
 		$this->set_user_parameters();
@@ -40,36 +40,31 @@ class Template extends Smarty {
 		
 		//To load a smarty plugin				
 		//$this->loadPlugin('smarty_function_get_lang');
-				
-		
-		//$this->testInstall();	
-	}
-	
-	function set_template_parameters() {		
-		$this->set_header_parameters();		
+		//$this->testInstall();			
+		$this->set_header_parameters();
 		$this->set_footer_parameters();		
-		$this->assign('style', $this->style);		
+		$this->assign('style', $this->style);
 	}
-	
+		
 	/**
 	 * Shortcut to display a 1 col layout
 	 * */
-	function display_one_col_template() {
-		$this->set_template_parameters();
+	function display_one_col_template() {		
 		$tpl = $this->get_template('layout/layout_1_col.tpl');
 		$this->display($tpl);
 	}
 	
 	/**
 	* Shortcut to display a 2 col layout
-	* */
-	
-	function display_two_col_template() {
-		$this->set_template_parameters();
+	* */	
+	function display_two_col_template() {		
 		$tpl = $this->get_template('layout/layout_2_col.tpl');
 		$this->display($tpl);
 	}
 	
+	/**
+	 * Displays an empty template
+	 */
 	function display_blank_template() {
 		$this->set_template_parameters();
 		$tpl = $this->get_template('layout/blank.tpl');

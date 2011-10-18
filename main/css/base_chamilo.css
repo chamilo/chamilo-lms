@@ -2136,11 +2136,9 @@ button {
     vertical-align:middle;
 }
 button:hover {
-
     color:#545454;
-    border-style: inset;
-    background-color:#DFF4FF;
-    border:1px solid #C2E1EF;
+    /* border-style: inset; */
+    /*background-color:#DFF4FF; */
 }
 /* button with image */
 button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {

@@ -310,7 +310,7 @@ class Category implements GradebookItem
 			$sql .= 'null';
 		}
 		$sql .= ', certif_min_score = ';
-		if (isset ($this->certificate_min_score) && strcmp($this->certificate_min_score,'')!==0) {
+		if (isset($this->certificate_min_score) && !empty($this->certificate_min_score)) {
 			$sql .= Database::escape_string($this->get_certificate_min_score());
 		} else {
 			$sql .= 'null';
@@ -318,7 +318,6 @@ class Category implements GradebookItem
 		$sql .= ', weight = '.Database::escape_string($this->get_weight())
 			.', visible = '.intval($this->is_visible())
 			.' WHERE id = '.intval($this->id);
-
 		Database::query($sql);
 	}
 

@@ -696,9 +696,8 @@ if ($category != '0') {
 		//student
 		if (!api_is_allowed_to_edit()) {
 
-			// generating the total score for a course
-			
-			$cats_course     = Category :: load ($category_id, null, null, null, null, null, false);
+			// generating the total score for a course			
+			$cats_course     = Category :: load ($category_id, null, null, null, null, null, false);			
 			$alleval_course  = $cats_course[0]->get_evaluations($stud_id,true);
 			$alllink_course  = $cats_course[0]->get_links($stud_id,true);
 			
@@ -714,6 +713,10 @@ if ($category != '0') {
 				$item_value+=$score[0]/$score_denom*$item->get_weight();
 				$item_total+=$item->get_weight();
 			}			
+			if (!empty($allcat)) {
+				$count_categories = count($allcat);
+				$item_value = $item_value/$count_categories; 				
+			}
 			$item_value = number_format($item_value, 2, '.', ' ');
 			
 			$cattotal = Category :: load($category_id);
@@ -723,13 +726,13 @@ if ($category != '0') {
 			$my_score_in_gradebook =  round($scoretotal[0],2);
 			
 			//Show certificate
-			$certificate_min_score = $cats[0]->get_certificate_min_score();
+			$certificate_min_score = $cats[0]->get_certificate_min_score();			
 			$scoredisplay = ScoreDisplay :: instance();
 			$scoretotal_display = $scoredisplay->display_score($scoretotal,SCORE_DIV_PERCENT); //a student always sees only the teacher's repartition
 			
 			if (isset($certificate_min_score) && $item_value >= $certificate_min_score) {
 				$my_certificate = get_certificate_by_user_id($cats[0]->get_id(), api_get_user_id());
-
+								
 				if (empty($my_certificate)) {
 					register_user_info_about_certificate($category_id, api_get_user_id(), $my_score_in_gradebook, api_get_utc_datetime());
 					$my_certificate = get_certificate_by_user_id($cats[0]->get_id(), api_get_user_id());

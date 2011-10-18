@@ -64,7 +64,7 @@ class FlatViewDataGenerator
 		
 		$count_categories = 1;
 		
-		if (isset($this->category)) {
+		if (isset($this->category) && !empty($this->category)) {
 			$categories = Category::load(null, null, null, $this->category->get_id());				
 			if (!empty($categories)) {
 				$count_categories = count($categories) ;
@@ -76,16 +76,16 @@ class FlatViewDataGenerator
 			$item = $this->evals_links [$count + $items_start];
 			
 			//$headers[] = $item->get_name().' <br /> '.get_lang('Max').' '.$this->get_max_result_by_link($count + $items_start).' ';
-			$weight = round($item->get_weight()/($count_categories*100), 2);
-			$headers[] = $item->get_name().' <br />'.$weight.' ';
+			$weight = round($item->get_weight()/($count_categories*100), 2)*100;
+			$headers[] = $item->get_name().' <br />'.$weight.'% ';
 			if ($show_detail) {
-				$headers[] = $item->get_name().' ('.get_lang('Detail').')';
+				//$headers[] = $item->get_name().' ('.get_lang('Detail').')';
 			}
 		}
 
 		$headers[] = get_lang('GradebookQualificationTotal');
 		if ($show_detail) {
-			$headers[] = get_lang('GradebookQualificationTotal').' ('.get_lang('Detail').')';
+			//$headers[] = get_lang('GradebookQualificationTotal').' ('.get_lang('Detail').')';
 		}
 		return $headers;
 	}
@@ -140,6 +140,7 @@ class FlatViewDataGenerator
 	public function get_data ($users_sorting = 0, $users_start = 0, $users_count = null,
 							  $items_start = 0, $items_count = null,
 							  $ignore_score_color = false, $show_all = false) {
+		
 		// do some checks on users/items counts, redefine if invalid values
 		if (!isset($users_count)) {
 			$users_count = count ($this->users) - $users_start;
@@ -184,10 +185,8 @@ class FlatViewDataGenerator
 		
 		$count_categories = 1;
 		
-		if (isset($this->category)) {
-			
-			$categories = Category::load(null, null, null, $this->category->get_id());
-			
+		if (isset($this->category) && !empty($this->category)) {			
+			$categories = Category::load(null, null, null, $this->category->get_id());			
 			if (!empty($categories)) {				
 				$count_categories = count($categories);				
 			}			
@@ -203,35 +202,39 @@ class FlatViewDataGenerator
 			$item_total=0;
 
 			for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
-				$item  = $this->evals_links [$count + $items_start];
-				$score = $item->calc_score($user[0]);
-				$divide=( ($score[1])==0 ) ? 1 : $score[1];
-				$item_value+=round($score[0]/$divide*$item->get_weight(),2);
-				$item_total+=$item->get_weight();
+				$item  			= $this->evals_links [$count + $items_start];
+				$score 			= $item->calc_score($user[0]);
+				$divide			= ( ($score[1])==0 ) ? 1 : $score[1];
+				
+				$item_value		+= round($score[0]/$divide*$item->get_weight(),2);				
+				$item_total		+= $item->get_weight();
+				
 				if (!$show_all) {
 					//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
-					if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, LINK_LEARNPATH,LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {																		
+					if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {																		
 						$row[] = $score[0];
                         //$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);	
 					} else {
 						//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
-                        $row[] = $score[0];                        
+                        $row[] = $score[0];                      
 					}					
 				} else {
-					$row[] = $scoredisplay->display_score($score, SCORE_DECIMAL);
-					$row[] = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
+					//$row[] = $scoredisplay->display_score($score, SCORE_DECIMAL);
+					$row[] = $score[0];
+					//$row[] = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
 				}
-			}
+			}		
 			
 			$item_value = round($item_value / $count_categories, 2);
 			$item_total = round($item_total / $count_categories, 2);
 			
 			$total_score = array($item_value, $item_total);
-			if (!$show_all) {
-				$row[] = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT_WITH_CUSTOM);
+			
+			if (!$show_all) {				
+				$row[] = $scoredisplay->display_score($total_score);
 			} else {
-				$row[] = $scoredisplay->display_score($total_score, SCORE_DECIMAL);
-				$row[] = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
+				$row[] = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT_WITH_CUSTOM);
+				//$row[] = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 			}
 			unset($score);
 			$data[] = $row;

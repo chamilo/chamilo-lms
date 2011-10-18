@@ -116,13 +116,13 @@ class CatForm extends FormValidator {
 	 */
    	protected function build_editing_form() {
    		$this->setDefaults(array(
-			'name' => $this->category_object->get_name(),
-    		'description' => $this->category_object->get_description(),
-    		'hid_user_id' => $this->category_object->get_user_id(),
-    		'hid_parent_id' => $this->category_object->get_parent_id(),
-   	 		'weight' => $this->category_object->get_weight(),
-   	 		'visible' => $this->category_object->is_visible(),
-   	 		'certif_min_score' => $this->category_object->get_certificate_min_score(),
+			'name' 				=> $this->category_object->get_name(),
+    		'description' 		=> $this->category_object->get_description(),
+    		'hid_user_id' 		=> $this->category_object->get_user_id(),
+    		'hid_parent_id' 	=> $this->category_object->get_parent_id(),
+   	 		'weight' 			=> $this->category_object->get_weight(),
+   	 		'visible' 			=> $this->category_object->is_visible(),
+   	 		'certif_min_score'  => $this->category_object->get_certificate_min_score(),
     		));
    		$this->addElement('hidden','hid_id', $this->category_object->get_id());
    		$this->addElement('hidden','course_code', $this->category_object->get_course_code());
@@ -133,6 +133,11 @@ class CatForm extends FormValidator {
 		$this->addElement('hidden', 'zero', 0);
 		$this->add_textfield('name', get_lang('CategoryName'), true,array('size'=>'54','maxlength'=>'50'));
 		$this->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+		
+		if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {
+			//we can't change the root category
+			$this->freeze('name');
+		}
 		$models = api_get_settings_options('grading_model');
 		$course_grading_model_id = api_get_course_setting('course_grading_model');
 		$grading_model = '';
@@ -167,23 +172,32 @@ class CatForm extends FormValidator {
 		
 		$this->addElement('static', null, null, '<i>'.get_lang('TotalSumOfWeights').'</i>');
 		
-		$this->add_textfield('certif_min_score', get_lang('CertificateMinScore'),false,array('size'=>'4','maxlength'=>'5'));
-		$this->addRule('certif_min_score', get_lang('ThisFieldIsRequired'), 'required');
-		
+		if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {						
+			$this->add_textfield('certif_min_score', get_lang('CertificateMinScore'),false,array('size'=>'4','maxlength'=>'5'));
+			$this->addRule('certif_min_score', get_lang('ThisFieldIsRequired'), 'required');
+			$this->addRule('certif_min_score',get_lang('OnlyNumbers'),'numeric');
+			$this->addRule('certif_min_score',get_lang('NoDecimals'),'nopunctuation');
+			$this->addRule(array('certif_min_score', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
+		}		
 		
    		$this->addElement('hidden','hid_user_id');
    		$this->addElement('hidden','hid_parent_id');
 		$this->addElement('textarea', 'description', get_lang('Description'),array('rows'=>'3','cols' => '34'));
 		$this->addElement('checkbox', 'visible',get_lang('Visible'));
-		$this->addElement('style_submit_button', null, get_lang('EditCategory'), 'class="save"');
+		if ($this->form_type == self :: TYPE_ADD) {
+			$this->addElement('style_submit_button', null, get_lang('AddCategory'), 'class="save"');
+		} else {
+			
+			$this->addElement('hidden','editcat', intval($_GET['editcat']));
+			$this->addElement('style_submit_button', null, get_lang('EditCategory'), 'class="save"');
+		}
+		
 		if (!empty($grading_contents)) {
 			$this->addRule('weight',get_lang('OnlyNumbers'),'numeric');
 			$this->addRule('weight',get_lang('NoDecimals'),'nopunctuation');
 			$this->addRule(array ('weight', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
 		}
-		$this->addRule('certif_min_score',get_lang('OnlyNumbers'),'numeric');
-		$this->addRule('certif_min_score',get_lang('NoDecimals'),'nopunctuation');
-		$this->addRule(array ('certif_min_score', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
+		
    	}
 	/**
 	 * This function builds an 'select course' form in the add category process,

@@ -365,6 +365,7 @@ class DisplayGradebook
 		}
 		$header .= '</div>';
 		echo $header;		
+		
 		/*
 		if (api_is_allowed_to_edit(null, true)) {
 			$weight = ((intval($catobj->get_weight())>0) ? $catobj->get_weight() : 0);
@@ -545,7 +546,7 @@ class DisplayGradebook
 			        
 					//Right icons
 					
-            		$modify_icons  = '<a href="gradebook_edit_cat.php?editcat=' . $catobj->get_id() . ' &amp;cidReq='.$catobj->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Edit'),'','32').'</a>';
+            		$modify_icons  = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&amp;cidReq='.$catobj->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Edit'),'','32').'</a>';
             		$modify_icons .= '<a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.
             							Display::return_icon('certificate.png', get_lang('AttachCertificate'),'','32').'</a>';
             		

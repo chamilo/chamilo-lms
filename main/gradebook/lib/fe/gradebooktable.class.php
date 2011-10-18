@@ -34,7 +34,7 @@ class GradebookTable extends SortableTable {
 		$this->currentcat = $currentcat;
 		
 		$this->datagen = new GradebookDataGenerator($cats, $evals, $links);
-				
+								
 		if (isset($addparams)) {
 			$this->set_additional_parameters($addparams);
 		}
@@ -46,19 +46,12 @@ class GradebookTable extends SortableTable {
 		
 		$this->set_header($column++, get_lang('Type'),'','width="35px"');
 		$this->set_header($column++, get_lang('Name'), false);
-		//$this->set_header($column++, get_lang('Description'));
 
 		if (api_is_allowed_to_edit(null, true)) {
 			$this->set_header($column++, get_lang('Weight'),'','width="50px"');
 		} else {
 			$this->set_header($column++, get_lang('Weight'), false);
 			$this->set_header($column++, get_lang('Evaluation'), false);
-			/*
-			if (empty($_GET['selectcat']) ) {
-				$this->set_header($column++, get_lang('Evaluation'), false);
-			} else {
-			    $this->set_header($column++, get_lang('Weight'), false);
-			}*/
 		}
 		
 		if (api_is_allowed_to_edit(null, true)) {
@@ -137,7 +130,7 @@ class GradebookTable extends SortableTable {
 	    $user_id     = api_get_user_id();
 		$course_code = api_get_course_id();
 		$status_user = api_get_status_of_user_in_course($user_id, $course_code);
-		$data_array  = $this->datagen->get_data($sorting, $from, $this->per_page);
+		$data_array  = $this->datagen->get_data($sorting, $from, $this->per_page);		
 		
 
 		// generate the data to display
@@ -160,13 +153,14 @@ class GradebookTable extends SortableTable {
 			if (api_is_allowed_to_edit(null, true)) {
 				$row[] = $this->build_id_column($item);
 			}
+			
 			$row[] = $this->build_type_column($item);
 			
 			//Name
 			if (get_class($item) == 'Category') {
 				$row[] = $invisibility_span_open.'<h2>'.$item->get_name().'</h2>'.$invisibility_span_close;
 			} else {
-				$row[] = $invisibility_span_open.$this->build_name_link ($item) . $invisibility_span_close;
+				$row[] = $invisibility_span_open.$this->build_name_link($item) . $invisibility_span_close;
 			}
 			
 			//Description
@@ -384,7 +378,13 @@ class GradebookTable extends SortableTable {
 	private function build_type_column ($item) {
 		return build_type_icon_tag($item->get_icon_name());
 	}
-
+	
+	/**
+	 * 
+	 * Generate name column
+	 * @param unknown_type $item
+	 * @return string
+	 */
 	private function build_name_link ($item) {
 
 		switch ($item->get_item_type()) {
@@ -417,23 +417,12 @@ class GradebookTable extends SortableTable {
 				// course/platform admin can go to the view_results page
 
 				if (api_is_allowed_to_create_course() && $show_message===false) {
-
-					if ($item->get_type() == 'presence')
-					{
+					if ($item->get_type() == 'presence') {
 						return '&nbsp;'
 							. '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
 							. $item->get_name()
-							. '</a>';
-						/*return '&nbsp;'
-							. '<a href="gradebook_add_result.php?selectcat'.Security::remove_XSS($_GET['selectcat']).'&amp;selecteval=' . $item->get_id() . '">'
-							. $item->get_name()
-							. '</a>';
-							*/
-					}
-					else
-					{
-
-
+							. '</a>';						
+					} else {
 						return '&nbsp;'
 							. '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
 							. $item->get_name()
@@ -457,15 +446,16 @@ class GradebookTable extends SortableTable {
 				}
 			// link
 			case 'L' :
-				$cat=new Category();
-				//$dblib=new Database();
-
-				$category_id=Security::remove_XSS($_GET['selectcat']);
-				$course_id=Database::get_course_by_category($category_id);
-				$show_message=$cat->show_message_resource_delete($course_id);
+				$cat 			= new Category();
+				$category_id 	= intval($_GET['selectcat']);
+				$course_id	 	= Database::get_course_by_category($category_id);				
+				$show_message	= $cat->show_message_resource_delete($course_id);
+				
 
 				$url = $item->get_link();
+				
 				if (isset($url) && $show_message===false) {
+					
 					$text = '&nbsp;<a href="' . $item->get_link() . '">'
 							. $item->get_name()
 							. '</a>';
@@ -493,7 +483,6 @@ class GradebookTable extends SortableTable {
 			// link
 			case 'L' :
 				return build_edit_icons_link($item, $this->currentcat->get_id());
-
 		}
 	}
 }

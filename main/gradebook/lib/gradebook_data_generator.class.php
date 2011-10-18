@@ -36,17 +36,13 @@ class GradebookDataGenerator
 		$this->evals_links = array_merge($allevals, $alllinks);
     }
 
-
 	/**
 	 * Get total number of items (rows)
 	 */
 	public function get_total_items_count() {
 		return count($this->items);
 	}
-
-
-
-
+	
 	/**
 	 * Get actual array data
 	 * @return array 2-dimensional array - each array contains the elements:
@@ -87,7 +83,7 @@ class GradebookDataGenerator
 		//status de user in course
 	    $user_id      = api_get_user_id();
 		$course_code  = api_get_course_id();
-		$status_user  = api_get_status_of_user_in_course ($user_id,$course_code);
+		$status_user  = api_get_status_of_user_in_course($user_id, $course_code);
 		// generate the data to display
 		$data = array();
 		foreach ($visibleitems as $item) {

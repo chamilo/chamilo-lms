@@ -811,7 +811,8 @@ if ($first_time==1 && api_is_allowed_to_edit(null,true)) {
 						Display::display_normal_message($grading_string);
 					}
 				}
-				$gradebooktable = new GradebookTable($cat, $allcat, $alleval,$alllink, $addparams);
+				
+				$gradebooktable = new GradebookTable($cat, $allcat, $alleval, $alllink, $addparams);
 				$gradebooktable->display();
 				
 				//DisplayGradebook :: display_reduce_header_gradebook($cat,$is_course_admin, $is_platform_admin, $simple_search_form, false, false);

@@ -21,16 +21,12 @@ $this_section = SECTION_COURSES;
 
 /*	Libraries & settings */
 
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 /*	Constants & variables */
-
-$current_group = GroupManager :: get_group_properties($_SESSION['_gid']);
+$current_group = GroupManager :: get_group_properties(api_get_group_id());
 
 /*	Header */
-
 $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
 
@@ -112,6 +108,7 @@ function check_group_members($value) {
 
 // Build form
 $form = new FormValidator('group_edit');
+
 $form->addElement('header', '', $nameTools);
 $form->addElement('hidden', 'action');
 $form->addElement('hidden', 'referer');
@@ -254,11 +251,9 @@ $group_tutors_element->setButtonAttributes('remove', array('class' => 'arrowl'))
 $group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
 $selected_users = array ();
 foreach ($group_member_list as $index => $user) {
-    //$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
-    
+    //$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);    
     $selected_users[] = $user['user_id'];
 }
-
 
 // possible : number_groups_left > 0 and is group member
 $possible_users = array();
@@ -279,8 +274,7 @@ $group_members_element->setElementTemplate('
   <td align="center">{add}<br /><br />{remove}</td>
   <td valign="top">{selected}</td>
 </tr>
-</table>
-');
+</table>');
 
 $group_members_element->setButtonAttributes('add', array('class' => 'arrowr'));
 $group_members_element->setButtonAttributes('remove', array('class' => 'arrowl'));
@@ -348,11 +342,9 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
 
 Display :: display_header($nameTools, 'Group');
 ?>
-
 <div class="actions">
 <a href="group_space.php"><?php echo Display::return_icon('back.png', get_lang('ReturnTo').' '.get_lang('GroupSpace'),'',32); ?></a>
 </div>
-
 <?php
 
 if (isset($_GET['show_message'])) {
@@ -363,5 +355,4 @@ $form->setDefaults($defaults);
 $form->display();
 
 /*	FOOTER */
-
 Display :: display_footer();

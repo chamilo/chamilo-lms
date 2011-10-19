@@ -1180,8 +1180,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
     }
 }
 
-/* @todo this fires an PHP notice 
+// @todo this fires an PHP notice, needed in order to parse the advmultiselect test it in main/group/group_edit.php
 if (class_exists('HTML_QuickForm')) {
-    HTML_QuickForm::registerElementType('advmultiselect',
-        'HTML/QuickForm/advmultiselect.php', 'HTML_QuickForm_advmultiselect');
-}*/
+    HTML_QuickForm::registerElementType('advmultiselect','HTML/QuickForm/advmultiselect.php', 'HTML_QuickForm_advmultiselect');
+}

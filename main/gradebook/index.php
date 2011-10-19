@@ -773,9 +773,11 @@ if ($first_time==1 && api_is_allowed_to_edit(null,true)) {
 	$course_grading_model_id = api_get_course_setting('course_grading_model');
 	$grading_model = '';
 	if (!empty($course_grading_model_id)) {
-		foreach($models as $option) {			
-			if (intval($option['id']) == $course_grading_model_id) {
-				$grading_model = $option['value'];
+		if (!empty($models)) {
+			foreach($models as $option) {			
+				if (intval($option['id']) == $course_grading_model_id) {
+					$grading_model = $option['value'];
+				}
 			}
 		}
 	}

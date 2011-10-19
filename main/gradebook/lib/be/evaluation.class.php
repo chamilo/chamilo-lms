@@ -26,7 +26,8 @@ class Evaluation implements GradebookItem
 
 // CONSTRUCTORS
 
-    function Evaluation() {
+    function __construct() {
+    	parent::__construct();
     }
 
 // GETTERS AND SETTERS

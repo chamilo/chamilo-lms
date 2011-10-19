@@ -26,10 +26,12 @@ abstract class AbstractLink implements GradebookItem {
 	protected $weight;
 	protected $visible;
 	protected $session_id;
+	public    $course_id;
 
 	// CONSTRUCTORS
 
-    function AbstractLink() {
+    function __construct() {    	
+    	$this->course_id = api_get_course_int_id();    	
     }
 
 	// GETTERS AND SETTERS

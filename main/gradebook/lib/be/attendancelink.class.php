@@ -20,8 +20,9 @@ class AttendanceLink extends AbstractLink
 
 // CONSTRUCTORS
 
-    function AttendanceLink() {
-    	$this->set_type(LINK_ATTENDANCE);
+    function __construct() {
+    	parent::__construct();
+    	$this->set_type(LINK_ATTENDANCE);    	
     }
 
     public function get_type_name() {
@@ -45,10 +46,10 @@ class AttendanceLink extends AbstractLink
     		die('Error in get_not_created_links() : course code not set');
     	}
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-
+    	
 		$sql = 'SELECT att.id, att.name, att.attendance_qualify_title
 				FROM '.$this->get_attendance_table().' att
-				WHERE att.id NOT IN (SELECT ref_id FROM '.$tbl_grade_links.' WHERE type = '.LINK_ATTENDANCE.' AND course_code = "'.Database::escape_string($this->get_course_code()).'")
+				WHERE att.c_id = '.$this->course_id.' AND att.id NOT IN (SELECT ref_id FROM '.$tbl_grade_links.' WHERE type = '.LINK_ATTENDANCE.' AND course_code = "'.Database::escape_string($this->get_course_code()).'")
 				AND att.session_id='.api_get_session_id().'';
 		$result = Database::query($sql);
 
@@ -73,7 +74,9 @@ class AttendanceLink extends AbstractLink
     	}
     	$tbl_attendance = $this->get_attendance_table();
     	$session_id = api_get_session_id();
-    	$sql = 'SELECT att.id, att.name, att.attendance_qualify_title FROM '.$tbl_attendance.' att WHERE att.active = 1 AND att.session_id = '.intval($session_id).'';
+    	$sql = 'SELECT att.id, att.name, att.attendance_qualify_title 
+    			FROM '.$tbl_attendance.' att 
+    			WHERE att.c_id = '.$this->course_id.' AND att.active = 1 AND att.session_id = '.intval($session_id).'';
 		$result = Database::query($sql);
 		while ($data=Database::fetch_array($result)) {
 			if (isset($data['attendance_qualify_title']) && $data['attendance_qualify_title'] != ''){
@@ -91,69 +94,63 @@ class AttendanceLink extends AbstractLink
      * Has anyone done this exercise yet ?
      */
     public function has_results() {
-    	$course_info = api_get_course_info($this->course_code);
+    	
     	$tbl_attendance_result = Database :: get_course_table(TABLE_ATTENDANCE_RESULT,$course_info['dbName']);
 		$sql = 'SELECT count(*) AS number FROM '.$tbl_attendance_result." 
-				WHERE c_id = {$course_info['real_id']} AND attendance_id = '".intval($this->get_ref_id())."'";
+				WHERE c_id = '.$this->course_id.' AND attendance_id = '".intval($this->get_ref_id())."'";
     	$result = Database::query($sql);
 		$number = Database::fetch_row($result);
 		return ($number[0] != 0);
     }
 
-  public function calc_score($stud_id = null) {
-    	$course_info = Database :: get_course_info($this->get_course_code());
-		$database_name = (empty($course_info['db_name']))?$course_info['dbName']:$course_info['db_name'];
+  	public function calc_score($stud_id = null) {    	    	
+		$tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
+		$session_id = api_get_session_id();
 
-		if ($database_name!="") {
-			$tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT, $database_name);
-			$session_id = api_get_session_id();
+		// get attendance qualify max
+  		$sql = 'SELECT att.attendance_qualify_max FROM '.$this->get_attendance_table().' att 
+  				WHERE att.c_id = '.$this->course_id.' AND att.id = '.intval($this->get_ref_id()).' AND att.session_id='.intval($session_id).'';
+		$query = Database::query($sql);
+		$attendance = Database::fetch_array($query);
 
-			// get attendance qualify max
-	  		$sql = 'SELECT att.attendance_qualify_max FROM '.$this->get_attendance_table().' att 
-	  				WHERE att.c_id = '.$course_info['real_id'].' AND att.id = '.intval($this->get_ref_id()).' AND att.session_id='.intval($session_id).'';
-			$query = Database::query($sql);
-			$attendance = Database::fetch_array($query);
-
-			// get results
-	  	    $sql = 'SELECT * FROM '.$tbl_attendance_result.' 
-	  	    		WHERE c_id = '.$course_info['real_id'].' AND attendance_id = '.intval($this->get_ref_id());
-	    	if (isset($stud_id)) {
-	    		$sql .= ' AND user_id = '.intval($stud_id);
-	    	}
-	    	$scores = Database::query($sql);
-			// for 1 student
-	    	if (isset($stud_id))
-	    	{
-	    		if ($data=Database::fetch_array($scores)) {
-	    			return array ($data['score'], $attendance['attendance_qualify_max']);
-	    		} else {
-	    			//We sent the 0/attendance_qualify_max instead of null for correct calculations
-	      			return array (0, $attendance['attendance_qualify_max']);
-	    		}
-	    	} else {// all students -> get average
-	    		$students=array();  // user list, needed to make sure we only
-	    							// take first attempts into account
-				$rescount = 0;
-				$sum = 0;
-				while ($data=Database::fetch_array($scores)) {
-					if (!(array_key_exists($data['user_id'],$students))) {
-						if ($attendance['attendance_qualify_max'] != 0) {
-							$students[$data['user_id']] = $data['score'];
-							$rescount++;
-							$sum += ($data['score'] / $attendance['attendance_qualify_max']);
-						}
+		// get results
+  	    $sql = 'SELECT * FROM '.$tbl_attendance_result.' 
+  	    		WHERE c_id = '.$this->course_id.' AND attendance_id = '.intval($this->get_ref_id());
+    	if (isset($stud_id)) {
+    		$sql .= ' AND user_id = '.intval($stud_id);
+    	}
+    	$scores = Database::query($sql);
+		// for 1 student
+    	if (isset($stud_id)) {    		
+    		if ($data = Database::fetch_array($scores)) {
+    			return array ($data['score'], $attendance['attendance_qualify_max']);
+    		} else {
+    			//We sent the 0/attendance_qualify_max instead of null for correct calculations
+      			return array (0, $attendance['attendance_qualify_max']);
+    		}
+    	} else {// all students -> get average
+    		$students=array();  // user list, needed to make sure we only
+    							// take first attempts into account
+			$rescount = 0;
+			$sum = 0;
+			while ($data=Database::fetch_array($scores)) {
+				if (!(array_key_exists($data['user_id'],$students))) {
+					if ($attendance['attendance_qualify_max'] != 0) {
+						$students[$data['user_id']] = $data['score'];
+						$rescount++;
+						$sum += ($data['score'] / $attendance['attendance_qualify_max']);
 					}
 				}
-				if ($rescount == 0) {
-					return null;
-				  } else {
-					return array ($sum , $rescount);
-				 }
-	    	}
-		}
+			}
+			if ($rescount == 0) {
+				return null;
+			  } else {
+				return array ($sum , $rescount);
+			 }
+    	}		
     }
 
-// INTERNAL FUNCTIONS
+	// INTERNAL FUNCTIONS
 
     /**
      * Lazy load function to get the database table of the student publications
@@ -166,12 +163,8 @@ class AttendanceLink extends AbstractLink
     /**
      * Lazy load function to get the database table of the item properties
      */
-    private function get_itemprop_table () {
-    	if (!isset($this->itemprop_table)) {
-	    	$course_info = Database :: get_course_info($this->get_course_code());
-			$database_name = $course_info['db_name'];
-			$this->itemprop_table = Database :: get_course_table(TABLE_ITEM_PROPERTY, $database_name);
-    	}
+    private function get_itemprop_table () {    	
+    	$this->itemprop_table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
    		return $this->itemprop_table;
     }
 
@@ -206,7 +199,7 @@ class AttendanceLink extends AbstractLink
     public function is_valid_link() {
     	$session_id = api_get_session_id();
         $sql = 'SELECT count(att.id) FROM '.$this->get_attendance_table().' att
-        		 WHERE att.id = '.intval($this->get_ref_id()).' AND att.session_id='.intval($session_id).'';
+        		 WHERE att.c_id = '.$this->course_id.' AND att.id = '.intval($this->get_ref_id()).' AND att.session_id='.intval($session_id).'';
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
         return ($number[0] != 0);
@@ -222,7 +215,7 @@ class AttendanceLink extends AbstractLink
    		$session_id = api_get_session_id();
    		if ($tbl_name != '') {
     	$sql = 'SELECT * FROM '.$this->get_attendance_table().' att
-    			WHERE att.id = '.intval($this->get_ref_id()).' AND att.session_id = '.intval($session_id).' ';
+    			WHERE att.c_id = '.$this->course_id.' AND att.id = '.intval($this->get_ref_id()).' AND att.session_id = '.intval($session_id).' ';
 		$result = Database::query($sql);
 		$row    = Database::fetch_array($result,'ASSOC');
 		$attendance_id = $row['id'];
@@ -237,7 +230,8 @@ class AttendanceLink extends AbstractLink
 		if ($tbl_name == '') {
 			return false;
 		} elseif (!isset($this->attendance_data)) {
-			$sql = 'SELECT * FROM '.$this->get_attendance_table().' att WHERE att.id = '.intval($this->get_ref_id()).' AND att.session_id='.intval($session_id).'';
+			$sql = 'SELECT * FROM '.$this->get_attendance_table().' att 
+					WHERE att.c_id = '.$this->course_id.' AND att.id = '.intval($this->get_ref_id()).' AND att.session_id='.intval($session_id).'';
 			$query = Database::query($sql);
 			$this->attendance_data = Database::fetch_array($query);
     	}
@@ -247,6 +241,4 @@ class AttendanceLink extends AbstractLink
     public function get_icon_name() {
 		return 'attendance';
 	}
-
 }
-?>

@@ -21,8 +21,8 @@ class LearnpathLink extends AbstractLink
 
 // CONSTRUCTORS
 
-    function LearnpathLink()
-    {
+    function __construct() {
+    	parent::__construct();
     	$this->set_type(LINK_LEARNPATH);
     }
 
@@ -40,8 +40,8 @@ class LearnpathLink extends AbstractLink
 
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
-		$sql = 'SELECT id,name from '.$this->get_learnpath_table()
-				.' lp WHERE id NOT IN'
+		$sql = 'SELECT id, name from '.$this->get_learnpath_table().' lp 
+				WHERE c_id = '.$this->course_id.' AND id NOT IN '
 				.' (SELECT ref_id FROM '.$tbl_grade_links
 				.' WHERE type = '.LINK_LEARNPATH
 				." AND course_code = '".$this->get_course_code()."'"
@@ -50,8 +50,7 @@ class LearnpathLink extends AbstractLink
 		$result = Database::query($sql);
 
 		$cats=array();
-		while ($data=Database::fetch_array($result))
-		{
+		while ($data=Database::fetch_array($result)) {
 			$cats[] = array ($data['id'], $data['name']);
 		}
 		return $cats;
@@ -64,13 +63,11 @@ class LearnpathLink extends AbstractLink
     	if (empty($this->course_code))
     		die('Error in get_not_created_links() : course code not set');
 
-		$course_info = api_get_course_info($this->course_code);
-    	$sql = 'SELECT id,name FROM '.$this->get_learnpath_table().' WHERE session_id = '.api_get_session_id().' ';
+		$sql = 'SELECT id, name FROM '.$this->get_learnpath_table().' WHERE c_id = '.$this->course_id.' AND  session_id = '.api_get_session_id().' ';
 		$result = Database::query($sql);
 
-		$cats=array();
-		while ($data=Database::fetch_array($result))
-		{
+		$cats = array();
+		while ($data=Database::fetch_array($result)) {
 			$cats[] = array ($data['id'], $data['name']);
 		}
 		return $cats;
@@ -81,13 +78,11 @@ class LearnpathLink extends AbstractLink
      * Has anyone used this learnpath yet ?
      */
     public function has_results() {
-    	
-    	$course_info = api_get_course_info($this->get_course_code());
-    	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
+    	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW);
 		$sql = "SELECT count(id) AS number FROM $tbl_stats
-				WHERE c_id = {$course_info['real_id']} AND lp_id = ".$this->get_ref_id();
+				WHERE c_id = ".$this->course_id." AND lp_id = ".$this->get_ref_id();
     	$result = Database::query($sql);
-		$number=Database::fetch_array($result,'NUM');
+		$number = Database::fetch_array($result,'NUM');
 		return ($number[0] != 0);
     }
 
@@ -98,44 +93,32 @@ class LearnpathLink extends AbstractLink
 	 * 			array (sum of scores, number of scores) otherwise
 	 * 			or null if no scores available
 	 */
-    public function calc_score($stud_id = null)
-    {
-    	$course_info = api_get_course_info($this->get_course_code());
-    	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW);
-    	if (is_null($course_info['dbName'])===true) {
-			return false;
-		}
-    	$sql = "SELECT * FROM $tbl_stats WHERE c_id = {$course_info['real_id']} AND lp_id = ".$this->get_ref_id();
+    public function calc_score($stud_id = null) {    	
+    	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW);    	
+    	$sql = "SELECT * FROM $tbl_stats WHERE c_id = ".$this->course_id." AND lp_id = ".$this->get_ref_id();
 
     	if (isset($stud_id))
     		$sql .= ' AND user_id = '.intval($stud_id);
 
     	// order by id, that way the student's first attempt is accessed first
-		$sql .= ' ORDER BY view_count DESC';
+		$sql .= ' ORDER BY view_count DESC';		
     	$scores = Database::query($sql);
 		// for 1 student
-    	if (isset($stud_id))
-    	{
-    		if ($data=Database::fetch_array($scores))
-    		{
+    	if (isset($stud_id)) {
+    		if ($data=Database::fetch_array($scores)) {
     			return array ($data['progress'], 100);
-    		}
-    		else
+    		} else
     			return null;
     	}
-
     	// all students -> get average
-    	else
-    	{
+    	else {
     		$students=array();  // user list, needed to make sure we only
     							// take first attempts into account
 			$rescount = 0;
 			$sum = 0;
 
-			while ($data=Database::fetch_array($scores))
-			{
-				if (!(array_key_exists($data['user_id'],$students)))
-				{
+			while ($data=Database::fetch_array($scores)) {
+				if (!(array_key_exists($data['user_id'], $students))) {
 					$students[$data['user_id']] = $data['progress'];
 					$rescount++;
 					$sum += ($data['progress'] / 100);
@@ -189,37 +172,31 @@ class LearnpathLink extends AbstractLink
     /**
      * Check if this still links to a learnpath
      */
-    public function is_valid_link()
-    {
+    public function is_valid_link() {
     	$sql = 'SELECT count(id) FROM '.$this->get_learnpath_table()
-				.' WHERE id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
+				.' WHERE c_id = '.$this->course_id.' AND id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
 		$result = Database::query($sql);
-		$number=Database::fetch_row($result,'NUM');
+		$number = Database::fetch_row($result,'NUM');
 		return ($number[0] != 0);
     }
 
-    public function get_type_name()
-    {
-    	return get_lang('DokeosLearningPaths');
+    public function get_type_name() {
+    	return get_lang('LearningPaths');
     }
 
-	public function needs_name_and_description()
-	{
+	public function needs_name_and_description() {
 		return false;
 	}
 
-	public function needs_max()
-	{
+	public function needs_max() {
 		return false;
 	}
 
-	public function needs_results()
-	{
+	public function needs_results() {
 		return false;
 	}
 
-	public function is_allowed_to_change_name()
-	{
+	public function is_allowed_to_change_name() {
 		return false;
 	}
 
@@ -228,7 +205,7 @@ class LearnpathLink extends AbstractLink
     /**
      * Lazy load function to get the database table of the learnpath
      */
-    private function get_learnpath_table () {
+    private function get_learnpath_table() {
     	$this->learnpath_table = Database :: get_course_table(TABLE_LP_MAIN);
    		return $this->learnpath_table;
     }
@@ -237,10 +214,7 @@ class LearnpathLink extends AbstractLink
      * Lazy load function to get the database contents of this learnpath
      */
     private function get_learnpath_data() {
-    	$tb_learnpath=$this->get_learnpath_table();
-    	if ($tb_learnpath=='') {
-    		return false;
-    	} elseif (!isset($this->learnpath_data)) {
+    	if (!isset($this->learnpath_data)) {
 			$sql = 'SELECT * from '.$this->get_learnpath_table()
 					.' WHERE id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
 			$result = Database::query($sql);
@@ -252,5 +226,4 @@ class LearnpathLink extends AbstractLink
     public function get_icon_name() {
 		return 'learnpath';
 	}
-
 }

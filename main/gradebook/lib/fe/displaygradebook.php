@@ -401,9 +401,9 @@ class DisplayGradebook
 			$user_id = api_get_user_id();
 			$user= get_user_info_from_id($user_id);
 
-			$catcourse= Category::load($catobj->get_id());
+			$catcourse	  = Category::load($catobj->get_id());
 			$scoredisplay = ScoreDisplay :: instance();
-			$scorecourse = $catcourse[0]->calc_score($user_id);
+			$scorecourse  = $catcourse[0]->calc_score($user_id);
 
 			// generating the total score for a course
 			$allevals= $catcourse[0]->get_evaluations($user_id,true);
@@ -415,21 +415,24 @@ class DisplayGradebook
 				$item = $evals_links[$count];
 				$score = $item->calc_score($user_id);
 				$my_score_denom=($score[1]==0) ? 1 : $score[1];
-				$item_value+=$score[0]/$my_score_denom*$item->get_weight();
-				$item_total+=$item->get_weight();
+				$item_value +=$score[0]/$my_score_denom*$item->get_weight();
+				$item_total +=$item->get_weight();
 				//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
+				//var_dump($item_value.' - '.$item_total);
 			}
 			$children = $catcourse[0]->get_subcategories(api_get_user_id(), api_get_course_id(), api_get_session_id());
+			
 			$count = 1;
 			if (!empty($children)) {
 				$count = count($children);
 			}
+			
 			$item_value = $item_value/$count;
-			$item_total = $item_total / $count;
+			$item_total = $item_total/$count;
 			
 			$item_value = number_format($item_value, 2, '.', ' ');
 			$total_score = array($item_value, $item_total);
-			
+		
 			$scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 
 			$cattotal = Category :: load(0);

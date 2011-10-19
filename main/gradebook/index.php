@@ -740,16 +740,14 @@ if ($category != '0') {
 				
 				if (!empty($my_certificate)) {
 					$url  = api_get_path(WEB_PATH) .'certificates/?id='.$my_certificate['id'];	
-					$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 48), $url, array('target'=>'_blank'));					
-					echo '<div class="actions" align="right">';
+					$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 32), $url, array('target'=>'_blank'));					
+					echo '<div class="actions" align="right">';					
+					echo Display::url($url, $url, array('target'=>'_blank'));
 					echo $certificates;
-					echo '<br />'.Display::url($url, $url, array('_blank'));
 					echo '</div>';
 				}
 			}
 		} //end hack
-		
-		
 	}
 }
 
@@ -759,12 +757,10 @@ if (api_is_allowed_to_edit(null, true)) {
 
 	if ( (isset ($_GET['selectcat']) && $_GET['selectcat']<>0) ) {	    
 	//
-	} else {
-	    
+	} else {	    
         if (((isset ($_GET['selectcat']) && $_GET['selectcat']==0) || ((isset($_GET['cidReq']) && $_GET['cidReq']!==''))) || isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {
             $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
-			if (!$first_time=1) {
-                
+			if (!$first_time=1) {                
             }
 		}
 	}
@@ -772,8 +768,7 @@ if (api_is_allowed_to_edit(null, true)) {
 if ($first_time==1 && api_is_allowed_to_edit(null,true)) {
 	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
 } else {		
-	$cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
-	
+	$cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init	
 	$models = api_get_settings_options('grading_model');
 	$course_grading_model_id = api_get_course_setting('course_grading_model');
 	$grading_model = '';
@@ -801,8 +796,7 @@ if ($first_time==1 && api_is_allowed_to_edit(null,true)) {
 			
 				$i++;
 			} else {
-				//This is the father
-				
+				//This is the father				
 				//Create gradebook/add gradebook links
 				DisplayGradebook::display_header_gradebook($cat, 0, $cat->get_id(), $is_course_admin, $is_platform_admin, $simple_search_form, false, true);				
 				
@@ -811,11 +805,9 @@ if ($first_time==1 && api_is_allowed_to_edit(null,true)) {
 					if (!empty($grading_string)) {
 						Display::display_normal_message($grading_string);
 					}
-				}
-				
+				}				
 				$gradebooktable = new GradebookTable($cat, $allcat, $alleval, $alllink, $addparams);
 				$gradebooktable->display();				
-				//
 			}
 		}
 	}

@@ -17,8 +17,8 @@ abstract class EvalLink extends AbstractLink
 	/**
 	 * Constructor
 	 */
-    function EvalLink() {
-
+    function __construct() {
+    	parent::__construct();
     }
 // Functions implementing AbstractLink
 

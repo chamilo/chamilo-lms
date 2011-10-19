@@ -20,7 +20,8 @@ class StudentPublicationLink extends AbstractLink
 
 // CONSTRUCTORS
 
-    function StudentPublicationLink() {
+    public function __construct() {
+    	parent::__construct();
     	$this->set_type(LINK_STUDENTPUBLICATION);
     }
 
@@ -40,7 +41,10 @@ class StudentPublicationLink extends AbstractLink
         $stud_id = intval($stud_id);
 
 		$sql = 'SELECT pub.url FROM '.$this->get_itemprop_table().' prop, '.$this->get_studpub_table().' pub'
-				." WHERE prop.tool = 'work'"
+				." WHERE
+					prop.c_id = ".$this->course_id." AND
+					pub.c_id = ".$this->course_id." AND  
+					prop.tool = 'work'"
 				.' AND prop.insert_user_id = '.$stud_id
 				.' AND prop.ref = pub.id'
 				." AND pub.title = '".Database::escape_string($eval->get_name())."' AND pub.session_id=".api_get_session_id()."";
@@ -79,7 +83,7 @@ class StudentPublicationLink extends AbstractLink
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 		$sql = 'SELECT id,url from '.$this->get_studpub_table()
-				.' pup WHERE has_properties != '."''".' AND id NOT IN'
+				.' pup WHERE c_id = '.$this->course_id.' AND has_properties != '."''".' AND id NOT IN'
 				.' (SELECT ref_id FROM '.$tbl_grade_links
 				.' WHERE type = '.LINK_STUDENTPUBLICATION
 				." AND course_code = '".Database::escape_string($this->get_course_code())."'"
@@ -100,12 +104,11 @@ class StudentPublicationLink extends AbstractLink
     public function get_all_links() {
     	if (empty($this->course_code)) {
      		die('Error in get_not_created_links() : course code not set');
-    	}
-    	$course_info = api_get_course_info($this->course_code);
+    	}    	
     	$tbl_grade_links = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
 		$sql = "SELECT id, url FROM $tbl_grade_links 
-				WHERE c_id = {$course_info['real_id']} AND has_properties != '' AND filetype='folder' AND session_id = ".api_get_session_id()."";
+				WHERE c_id = {$this->course_id} AND has_properties != '' AND filetype='folder' AND session_id = ".api_get_session_id()."";
 		$result = Database::query($sql);
 		while ($data = Database::fetch_array($result)) {
 			$cats[] = array ($data['id'], basename($data['url']));
@@ -118,25 +121,22 @@ class StudentPublicationLink extends AbstractLink
      * Has anyone done this exercise yet ?
      */
     public function has_results() {
-    	$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links." 
-				WHERE 	c_id 		= {$course_info['real_id']} AND 
+				WHERE 	c_id 		= {$this->course_id} AND 
 						parent_id 	= '".intval($this->get_ref_id())."' AND 
 						session_id	=".api_get_session_id()."";
     	$result = Database::query($sql);
-		$number=Database::fetch_row($result);
+		$number = Database::fetch_row($result);
 		return ($number[0] != 0);
     }
 
 
     public function calc_score($stud_id = null) {
-    	$stud_id = intval($stud_id);
-    	
-    	$course_info 	= Database::get_course_info($this->get_course_code());		
-		$tbl_stats 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);		
+    	$stud_id 	= intval($stud_id);
+		$tbl_stats 	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);		
     	$sql = 'SELECT * FROM '.$tbl_stats." 
-    			WHERE 	c_id 		= {$course_info['real_id']} AND  
+    			WHERE 	c_id 		= {$this->course_id} AND  
     					id 			= '".intval($this->get_ref_id())."' AND 
     					session_id	= ".api_get_session_id()."";
 		$query = Database::query($sql);
@@ -147,7 +147,9 @@ class StudentPublicationLink extends AbstractLink
     	} else {
     		 $v_assigment_id = $assignment['id'];
     	}
-    	$sql = 'SELECT * FROM '.$tbl_stats.' WHERE parent_id ="'.$v_assigment_id.'" AND session_id='.api_get_session_id().'';
+    	$sql = 'SELECT * FROM '.$tbl_stats.' 
+    			WHERE c_id = '.$this->course_id.' AND parent_id ="'.$v_assigment_id.'" AND session_id='.api_get_session_id().'';
+    	
     	if (!empty($stud_id)) {
     		$sql .= " AND user_id = $stud_id ";
     	}
@@ -245,13 +247,11 @@ class StudentPublicationLink extends AbstractLink
 		return false;
 	}
 
-    public function is_valid_link() {
-    	$course_info = Database :: get_course_info($this->get_course_code());
-    	
+    public function is_valid_link() {    	    	
     	$sql = 'SELECT count(id) from '.$this->get_studpub_table().' 
-    			WHERE c_id = "'.$course_info['real_id'].'" AND id = '.intval($this->get_ref_id()).' AND session_id='.api_get_session_id();
+    			WHERE c_id = "'.$this->course_id.'" AND id = '.intval($this->get_ref_id()).' AND session_id='.api_get_session_id();
 		$result = Database::query($sql);
-		$number=Database::fetch_row($result);
+		$number = Database::fetch_row($result);
 		return ($number[0] != 0);
     }
 

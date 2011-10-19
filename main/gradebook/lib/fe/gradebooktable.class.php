@@ -33,8 +33,7 @@ class GradebookTable extends SortableTable {
 		$this->evals_links = array_merge($evals, $links);
 		$this->currentcat = $currentcat;
 		
-		$this->datagen = new GradebookDataGenerator($cats, $evals, $links);
-								
+		$this->datagen = new GradebookDataGenerator($cats, $evals, $links);								
 		if (isset($addparams)) {
 			$this->set_additional_parameters($addparams);
 		}
@@ -137,7 +136,6 @@ class GradebookTable extends SortableTable {
 		$sortable_data = array();
 		$weight_total_links = 0;		
 		
-
 		foreach ($data_array as $data) {			
 			
             // list of items inside the gradebook (exercises, lps, forums, etc)
@@ -167,7 +165,7 @@ class GradebookTable extends SortableTable {
 			//$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
 			
 			//Weight
-			$row[] = $invisibility_span_open .'<h3>'.$data[3] .'% </h3>'.$invisibility_span_close;			
+			$row[] = $invisibility_span_open .'<h4>'.$data[3] .'% </h4>'.$invisibility_span_close;			
 			if (api_is_allowed_to_edit(null, true)) {
 				$weight_total_links += intval($data[3]);
 			} else {
@@ -190,10 +188,9 @@ class GradebookTable extends SortableTable {
 			} else {
 				//students get the results and certificates columns
 				if (count($this->evals_links)>0 && $status_user!=1 ) {
-					$value_data = isset($data[4]) ? $data[4] : null;
-					
+					$value_data = isset($data[4]) ? $data[4] : null;					
 					if (!is_null($value_data)) {
-						$row[] = $value_data;
+						$row[] = Display::tag('h4', $value_data);
 					}
 				}    
 			}

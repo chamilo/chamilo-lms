@@ -15,7 +15,8 @@ class SurveyLink extends AbstractLink
 {
     private $survey_table = null;
 
-    function SurveyLink() {
+    public function __construct() {
+    	parent::__construct();
     	$this->set_type(LINK_SURVEY);
     }
 
@@ -97,29 +98,21 @@ class SurveyLink extends AbstractLink
      * Has anyone done this survey yet?
      */
     public function has_results($stud_id=null) {
-    	$course_info = Database :: get_course_info($this->get_course_code());
-		$database_name = (empty($course_info['db_name'])) ? $course_info['dbName'] : $course_info['db_name'];
+    	$ref_id = intval($this->get_ref_id());
+		$session_id = api_get_session_id();
+		$tbl_survey = Database::get_course_table(TABLE_SURVEY);
+		$tbl_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
+		$get_individual_score = !is_null($stud_id);
+		$sql = "SELECT COUNT(i.answered) FROM $tbl_survey AS s JOIN $tbl_survey_invitation AS i ON s.code = i.survey_code
+				WHERE 	s.c_id = {$this->course_id} AND
+						i.c_id = {$this->course_id} AND 
+						s.survey_id = $ref_id AND 
+						i.session_id = $session_id";
 
-		if ($database_name != '') {
-			$ref_id = intval($this->get_ref_id());
-			$session_id = api_get_session_id();
-			$tbl_survey = Database::get_course_table(TABLE_SURVEY, $database_name);
-			$tbl_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION, $database_name);
-
-			$get_individual_score = !is_null($stud_id);
-
-			$sql = "SELECT COUNT(i.answered) FROM $tbl_survey AS s JOIN $tbl_survey_invitation AS i ON s.code = i.survey_code
-					WHERE 	s.c_id = {$course_info['real_id']} AND
-							i.c_id = {$course_info['real_id']} AND 
-							s.survey_id = $ref_id AND 
-							i.session_id = $session_id";
-
-			$sql_result = Database::query($sql);
-			$data = Database::fetch_array($sql_result);
-			return ($data[0] != 0);
-		}
-
-		return false;
+		$sql_result = Database::query($sql);
+		$data = Database::fetch_array($sql_result);
+		return ($data[0] != 0);
+	
     }
 
     public function calc_score($stud_id = null) {
@@ -127,61 +120,47 @@ class SurveyLink extends AbstractLink
     	// Note: Max score is assumed to be always 1 for surveys,
     	// only student's participation is to be taken into account.
     	$max_score = 1;
+    	
+    	$ref_id = intval($this->get_ref_id());
+		$session_id = api_get_session_id();
+		$tbl_survey = Database::get_course_table(TABLE_SURVEY, $database_name);
+		$tbl_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION, $database_name);
 
-    	$course_info = Database :: get_course_info($this->get_course_code());
-		$database_name = (empty($course_info['db_name'])) ? $course_info['dbName'] : $course_info['db_name'];
+		$get_individual_score = !is_null($stud_id);
 
-		if ($database_name != '') {
-			$ref_id = intval($this->get_ref_id());
-			$session_id = api_get_session_id();
-			$tbl_survey = Database::get_course_table(TABLE_SURVEY, $database_name);
-			$tbl_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION, $database_name);
-
-			$get_individual_score = !is_null($stud_id);
-
-			$sql = "SELECT i.answered FROM $tbl_survey AS s JOIN $tbl_survey_invitation AS i
+		$sql = "SELECT i.answered FROM $tbl_survey AS s JOIN $tbl_survey_invitation AS i
 				ON s.code = i.survey_code
-				WHERE 	s.c_id = {$course_info['real_id']} AND
-						i.c_id = {$course_info['real_id']} AND 
+				WHERE 	s.c_id = {$this->course_id} AND
+						i.c_id = {$this->course_id} AND 
 						s.survey_id = $ref_id AND i.session_id = $session_id";
 
-			if ($get_individual_score) {
-	    		$sql .= ' AND i.user = '.intval($stud_id);
-	    	}
+		if ($get_individual_score) {
+	    	$sql .= ' AND i.user = '.intval($stud_id);
+	    }
 
-			$sql_result = Database::query($sql);
+		$sql_result = Database::query($sql);
 
-			if ($get_individual_score) {
-
+		if ($get_individual_score) {
 				// for 1 student
-
-				if ($data = Database::fetch_array($sql_result)) {
-					return array ($data['answered'] ? $max_score : 0, $max_score);
-				}
-				return array(0, $max_score);
-
-			} else {
-
-				// for all the students -> get average
-
-				$students = array();
-				$rescount = 0;
-				$sum = 0;
-
-				while ($data = Database::fetch_array($sql_result)) {
-					$sum += $data['answered'] ? $max_score : 0;
-					$rescount++;
-				}
-				$sum = $sum / $max_score;
-
-				if ($rescount == 0) {
-					return null;
-				}
-				return array($sum, $rescount);
+			if ($data = Database::fetch_array($sql_result)) {
+				return array ($data['answered'] ? $max_score : 0, $max_score);
 			}
-		}
-
-		return null;
+			return array(0, $max_score);
+		} else {
+			// for all the students -> get average
+			$students = array();
+			$rescount = 0;
+			$sum = 0;
+			while ($data = Database::fetch_array($sql_result)) {
+				$sum += $data['answered'] ? $max_score : 0;
+				$rescount++;
+			}
+			$sum = $sum / $max_score;
+			if ($rescount == 0) {
+				return null;
+			}
+			return array($sum, $rescount);
+		}		
     }
 
     /**
@@ -198,7 +177,7 @@ class SurveyLink extends AbstractLink
     public function is_valid_link() {
     	$session_id = api_get_session_id();
         $sql = 'SELECT count(survey_id) FROM '.$this->get_survey_table().'
-        		 WHERE survey_id = '.intval($this->get_ref_id()).' AND session_id='.intval($session_id).'';
+        		 WHERE c_id = '.$this->course_id.' AND survey_id = '.intval($this->get_ref_id()).' AND session_id='.intval($session_id).'';
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
         return ($number[0] != 0);
@@ -214,7 +193,7 @@ class SurveyLink extends AbstractLink
    			$session_id = api_get_session_id();
    			if ($tbl_name != '') {
    				$sql = 'SELECT survey_id FROM '.$this->get_survey_table().'
-    				WHERE survey_id = '.intval($this->get_ref_id()).' AND session_id = '.intval($session_id).' ';
+    					WHERE c_id = '.$this->course_id.' AND survey_id = '.intval($this->get_ref_id()).' AND session_id = '.intval($session_id).' ';
    				$result = Database::query($sql);
    				$row = Database::fetch_array($result, 'ASSOC');
    				$survey_id = $row['survey_id'];
@@ -230,7 +209,7 @@ class SurveyLink extends AbstractLink
 		if ($tbl_name == '') {
 			return false;
 		} elseif (!isset($this->survey_data)) {
-			$sql = 'SELECT * FROM '.$tbl_name.' WHERE survey_id = '.intval($this->get_ref_id()).' AND session_id='.intval($session_id).'';
+			$sql = 'SELECT * FROM '.$tbl_name.' WHERE c_id = '.$this->course_id.' AND survey_id = '.intval($this->get_ref_id()).' AND session_id='.intval($session_id).'';
 			$query = Database::query($sql);
 			$this->survey_data = Database::fetch_array($query);
     	}
@@ -244,6 +223,4 @@ class SurveyLink extends AbstractLink
 	private static function html_to_text($string) {
 		return trim(api_html_entity_decode(strip_tags(str_ireplace(array('<p>', '</p>', '<br />', '<br/>', '<br>'), array('', ' ', ' ', ' ', ' '), $string)), ENT_QUOTES));
 	}
-
 }
-?>

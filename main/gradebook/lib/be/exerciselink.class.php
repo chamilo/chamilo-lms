@@ -22,7 +22,8 @@ class ExerciseLink extends AbstractLink
 
 // CONSTRUCTORS
 
-    function ExerciseLink() {
+    function __construct() {
+    	parent::__construct();
     	$this->set_type(LINK_EXERCISE);
     }
 
@@ -39,12 +40,12 @@ class ExerciseLink extends AbstractLink
     	}
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
-		$sql = 'SELECT id,title from '.$this->get_exercise_table()
+		$sql = 'SELECT id, title from '.$this->get_exercise_table()
 				.' exe WHERE id NOT IN'
 				.' (SELECT ref_id FROM '.$tbl_grade_links
 				.' WHERE type = '.LINK_EXERCISE
 				." AND course_code = '".$this->get_course_code()."'"
-				.') AND exe.session_id='.api_get_session_id().'';
+				.') AND exe.session_id='.api_get_session_id().' AND exe.c_id =  '.$this->course_id.' ';
 
 		$result = Database::query($sql);
 		$cats=array();
@@ -60,10 +61,9 @@ class ExerciseLink extends AbstractLink
     public function get_all_links() {
     	if (empty($this->course_code)) {
     		die('Error in get_not_created_links() : course code not set');
-    	}
-    	$course_info 		= api_get_course_info($this->course_code);    	
+    	}    	    	
 		$sql = 'SELECT id,title from '.$this->get_exercise_table().' 
-				WHERE c_id = '.$course_info['real_id'].' AND active=1 AND session_id='.api_get_session_id().'';
+				WHERE c_id = '.$this->course_id.' AND active=1 AND session_id='.api_get_session_id().'';
 		$result = Database::query($sql);
 		$cats=array();
 		while ($data=Database::fetch_array($result)) {
@@ -98,10 +98,7 @@ class ExerciseLink extends AbstractLink
         //the following query should be similar (in conditions) to the one used in exercice/exercice.php, look for note-query-exe-results marker
 		$sql = 'SELECT * FROM '.$tbl_stats.' WHERE exe_exo_id = '.(int)$this->get_ref_id().' AND orig_lp_id = 0 AND orig_lp_item_id = 0  AND status <>\'incomplete\'';
 
-		if (isset($stud_id)){
-
-			//$currect_course=api_get_course_id();
-			//$course_code_exe = (strlen($currect_course)===0) ? $this->get_course_code() : api_get_course_id();
+		if (isset($stud_id)) {
     		$course_code_exe = $this->get_course_code();
     		$sql .= ' AND exe_cours_id="'.$course_code_exe.'" AND exe_user_id = '."'".$stud_id."'";
     	}
@@ -150,11 +147,9 @@ class ExerciseLink extends AbstractLink
 		$user_id=api_get_user_id();
 		$course_code=$this->get_course_code();
 		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
-		$url = api_get_path(WEB_PATH)
-			.'main/gradebook/exercise_jump.php?cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$this->get_ref_id();
-		if ((!api_is_allowed_to_create_course()
-			&& $this->calc_score(api_get_user_id()) == null) || $status_user!=1) {
-		  $url .= '&amp;doexercise='.$this->get_ref_id();
+		$url = api_get_path(WEB_PATH).'main/gradebook/exercise_jump.php?cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$this->get_ref_id();
+		if ((!api_is_allowed_to_create_course() && $this->calc_score(api_get_user_id()) == null) || $status_user!=1) {
+			$url .= '&amp;doexercise='.$this->get_ref_id();
         }
 		return $url;
 	}
@@ -179,15 +174,15 @@ class ExerciseLink extends AbstractLink
      * Check if this still links to an exercise
      */
     public function is_valid_link() {
-    	$sql = 'SELECT count(id) from '.$this->get_exercise_table()
-				.' WHERE id = '.(int)$this->get_ref_id().' AND session_id='.api_get_session_id().'';
+    	$sql = 'SELECT count(id) from '.$this->get_exercise_table().' 
+    			WHERE c_id = '.$this->course_id.' AND id = '.(int)$this->get_ref_id().' AND session_id='.api_get_session_id().'';
 		$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
     }
 
     public function get_type_name() {
-    	return get_lang('DokeosExercises');
+    	return get_lang('Exercises');
     }
 
 	public function needs_name_and_description() {
@@ -225,8 +220,9 @@ class ExerciseLink extends AbstractLink
     	if ($tbl_exercise=='') {
     		return false;
     	} elseif (!isset($this->exercise_data)) {
-			$sql = 'SELECT * from '.$this->get_exercise_table()
-					.' WHERE id = '.(int)$this->get_ref_id().' AND session_id ='.api_get_session_id().'';
+			$sql = 'SELECT * from '.$this->get_exercise_table().' 
+					WHERE c_id = '.$this->course_id.' AND id = '.(int)$this->get_ref_id().' AND session_id ='.api_get_session_id().'';
+			
 			$result = Database::query($sql);
 			$this->exercise_data=Database::fetch_array($result);
     	}

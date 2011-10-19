@@ -20,7 +20,8 @@ class ForumThreadLink extends AbstractLink
 
 // CONSTRUCTORS
 
-    function ForumThreadLink() {
+    function __construct() {
+    	parent::__construct();
     	$this->set_type(LINK_FORUM_THREAD);
     }
 
@@ -72,15 +73,14 @@ class ForumThreadLink extends AbstractLink
     public function get_all_links() {
     	if (empty($this->course_code)) {
     		die('Error in get_not_created_links() : course code not set');
-    	}
-    	$course_info 		= api_get_course_info($this->course_code);
+    	}    	
     	$tbl_grade_links 	= Database :: get_course_table(TABLE_FORUM_THREAD);
     	$tbl_item_property	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
     	
 		$sql = 'SELECT tl.thread_id, tl.thread_title, tl.thread_title_qualify 
 				FROM '.$tbl_grade_links.' tl ,'.$tbl_item_property.' ip 
-				WHERE 	tl.c_id 		= '.$course_info['real_id'].' AND
-						ip.c_id 		= '.$course_info['real_id'].' AND 
+				WHERE 	tl.c_id 		= '.$this->course_id.' AND
+						ip.c_id 		= '.$this->course_id.' AND 
 						tl.thread_id	= ip.ref AND 
 						ip.tool			= "forum_thread" AND 
 						ip.visibility<>2 AND tl.session_id='.api_get_session_id().' GROUP BY ip.ref ';
@@ -101,29 +101,25 @@ class ForumThreadLink extends AbstractLink
     /**
      * Has anyone done this exercise yet ?
      */
-    public function has_results() {
-    	$course_info = api_get_course_info($this->course_code);
-    	$tbl_grade_links = Database :: get_course_table(TABLE_FORUM_POST,$course_info['dbName']);
+    public function has_results() {    	
+    	$tbl_grade_links = Database :: get_course_table(TABLE_FORUM_POST);
 		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links." 
-				WHERE c_id = ".$course_info['real_id']." AND thread_id = '".$this->get_ref_id()."'";
+				WHERE c_id = ".$this->course_id." AND thread_id = '".$this->get_ref_id()."'";
     	$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
     }
 
-    public function calc_score($stud_id = null) {
-    	$course_info = Database :: get_course_info($this->get_course_code());    	
-		$database_name = (empty($course_info['db_name']))?$course_info['dbName']:$course_info['db_name'];
-		
+    public function calc_score($stud_id = null) {    			
 		if (!empty($database_name)) {
-			$thread_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY, $database_name);
+			$thread_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
 
-	  		$sql = 'SELECT thread_qualify_max FROM '.Database :: get_course_table(TABLE_FORUM_THREAD, $database_name)." 
-	  				WHERE c_id = ".$course_info['real_id']." AND thread_id = '".$this->get_ref_id()."'";
+	  		$sql = 'SELECT thread_qualify_max FROM '.Database :: get_course_table(TABLE_FORUM_THREAD)." 
+	  				WHERE c_id = ".$this->course_id." AND thread_id = '".$this->get_ref_id()."'";
 			$query = Database::query($sql);
 			$assignment = Database::fetch_array($query);
 
-	  	    $sql = "SELECT * FROM $thread_qualify WHERE c_id = ".$course_info['real_id']." AND thread_id = ".$this->get_ref_id();
+	  	    $sql = "SELECT * FROM $thread_qualify WHERE c_id = ".$this->course_id." AND thread_id = ".$this->get_ref_id();
 	    	if (isset($stud_id)) {
 	    		$sql .= ' AND user_id = '."'".intval($stud_id)."'";
 	    	}
@@ -175,34 +171,21 @@ class ForumThreadLink extends AbstractLink
      * Lazy load function to get the database table of the student publications
      */
     private function get_forum_thread_table () {
-    	$course_info = Database :: get_course_info($this->get_course_code());
-		$database_name = isset($course_info['db_name']) ? $course_info['db_name'] : '';
-		if ($database_name!='') {
-			if (!isset($this->forum_thread_table)) {
-				$this->forum_thread_table = Database :: get_course_table(TABLE_FORUM_THREAD, $database_name);
-    		}
-   			return $this->forum_thread_table;
-		} else {
-			return '';
-		}
-
+    	return $this->forum_thread_table = Database :: get_course_table(TABLE_FORUM_THREAD);
     }
 
     /**
      * Lazy load function to get the database table of the item properties
      */
     private function get_itemprop_table () {
-    	if (!isset($this->itemprop_table)) {
-	    	$course_info = Database :: get_course_info($this->get_course_code());
-			$database_name = $course_info['db_name'];
-			$this->itemprop_table = Database :: get_course_table(TABLE_ITEM_PROPERTY, $database_name);
-    	}
+    	$this->itemprop_table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
    		return $this->itemprop_table;
     }
 
    	public function needs_name_and_description() {
 		return false;
 	}
+	
     public function needs_max() {
         return false;
     }
@@ -229,10 +212,10 @@ class ForumThreadLink extends AbstractLink
      * Check if this still links to an exercise
      */
     public function is_valid_link() {
-        $sql = 'SELECT count(id) from '.$this->get_forum_thread_table()
-                .' WHERE thread_id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
+        $sql = 'SELECT count(id) from '.$this->get_forum_thread_table().' 
+        		WHERE c_id = '.$this->course_id.' AND thread_id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
         $result = Database::query($sql);
-        $number=Database::fetch_row($result);
+        $number = Database::fetch_row($result);
         return ($number[0] != 0);
     }
 
@@ -242,26 +225,22 @@ class ForumThreadLink extends AbstractLink
 
     public function get_link() {
     	//it was extracts the forum id
-   		$tbl_name=$this->get_forum_thread_table();
-   		if ($tbl_name!="") {
-    	$sql = 'SELECT * FROM '.$this->get_forum_thread_table()." WHERE thread_id = '".$this->get_ref_id()."' AND session_id = ".api_get_session_id()."";
+    	$sql = 'SELECT * FROM '.$this->get_forum_thread_table()." 
+    			WHERE c_id = '.$this->course_id.' AND thread_id = '".$this->get_ref_id()."' AND session_id = ".api_get_session_id()."";
 		$result = Database::query($sql);
 		$row    = Database::fetch_array($result,'ASSOC');
 		$forum_id=$row['forum_id'];
 
-    	$url = api_get_path(WEB_PATH)
-		.'main/forum/viewthread.php?cidReq='.$this->get_course_code().'&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
+    	$url = api_get_path(WEB_PATH).'main/forum/viewthread.php?cidReq='.$this->get_course_code().'&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
 		return $url;
-   		}
+   		
 	}
 	private function get_exercise_data() {
-		$tbl_name=$this->get_forum_thread_table();
-		if ($tbl_name=='') {
-			return false;
-		}elseif (!isset($this->exercise_data)) {
-    			$sql = 'SELECT * FROM '.$this->get_forum_thread_table()." WHERE thread_id = '".$this->get_ref_id()."' AND session_id=".api_get_session_id()."";
-				$query = Database::query($sql);
-				$this->exercise_data = Database::fetch_array($query);
+		if (!isset($this->exercise_data)) {
+    		$sql = 'SELECT * FROM '.$this->get_forum_thread_table()." 
+    				WHERE c_id = '.$this->course_id.' AND  thread_id = '".$this->get_ref_id()."' AND session_id=".api_get_session_id()."";
+			$query = Database::query($sql);
+			$this->exercise_data = Database::fetch_array($query);
     	}
     	return $this->exercise_data;
     }
@@ -269,5 +248,4 @@ class ForumThreadLink extends AbstractLink
     public function get_icon_name() {
 		return 'forum';
 	}
-
 }

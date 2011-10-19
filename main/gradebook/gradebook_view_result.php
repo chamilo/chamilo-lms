@@ -238,61 +238,60 @@ if (isset ($_GET['export'])) {
     		} else {
     			$head_ape_name = get_lang('LastName').', '.get_lang('FirstName');
     		}
-    	
-    		if ($number_decimals == null) {
-    			$head_letter = get_lang('Letters');
-    		}
+    		
     		$head_table = array(
-    							array('#',3),
+    							array('#',	3),
     							array(get_lang('Code'),12),
     							array($head_ape_name, 40),
-    							array(get_lang('Score'),12),
-    							array($head_letter,15)							
+    							array(get_lang('Score'),12)    											
     						);
-            
+    		if ($number_decimals == null) {
+    			$head_table[]  = array(get_lang('Letters'), 15);
+    		}    
             $head_display_score = '';
             $scoredisplay = ScoreDisplay :: instance();
+            
             if ($scoredisplay->is_custom()) {
                 $head_display_score = get_lang('Display');
                 $head_table[] = array($head_display_score,15);
             }
-            
+                
     		// get data table
     		if (api_sort_by_first_name()) {
-    			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, true, true);
+     			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, false, true);
     		} else {
-    			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null, true, true);
+    			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME, 0,  null, false, true);
     		}
     		$data_table = array();
+    		
     		foreach ($data_array as $data) {
-    			$result = array();
-    			$user_info = api_get_user_info($data['id']);
-    			$result[] = $user_info['username'];
+    			$result 	= array();
+    			$user_info	= api_get_user_info($data['id']);    			
+    			$result[] 	= $user_info['username'];
+    			
     			if (api_is_western_name_order()) {
                     $result[] = $user_info['firstname'].', '.$user_info['lastname'];                				
     			} else {
     				$result[] = $user_info['lastname'].', '.$user_info['firstname'];
     			}
-                
-                if (empty($data['score']) && !is_numeric($data['score'])) {
-                    $result[] = get_lang('DidNotTakeTheExamAcronym');
+                if ($number_decimals == null) {
+	                if (empty($data['scoreletter']) && !is_numeric($data['score'])) {
+	                    $result[] = get_lang('DidNotTakeTheExam');
+	                } else {
+						$result[] = api_strtoupper(get_lang('Literal'.$data['scoreletter']));	                    
+	                }           
                 } else {
-                    $result[] = $data['score']; 
+                	if (empty($data['score']) && !is_numeric($data['score'])) {
+                		$result[] = get_lang('DidNotTakeTheExamAcronym');
+                	} else {
+                		$result[] = $data['score'];
+                	}	
                 }
-                if (empty($data['scoreletter']) && !is_numeric($data['score'])) {
-                    $result[] = get_lang('DidNotTakeTheExam');
-                } else {
-                    if ($number_decimals == null) {
-                        $result[] = api_strtoupper(get_lang('Literal'.$data['scoreletter']));
-                    } else {
-                        $result[] = '';
-                    }
-                }           
                 if ($scoredisplay->is_custom()) {
-                    $result[] = $data['display'];
+                    $result[] = $data['display'];                    
                 }
     			$data_table[] = $result;
-    		}        
+    		}
     		export_pdf_with_html($head_table, $data_table, $header_pdf, $footer_pdf, $title_pdf);
     	}
     

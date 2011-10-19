@@ -227,19 +227,15 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 	if (is_array($headers_pdf)) {
 		// preparing headers pdf
 		$header = '<br/><br/><table width="100%" cellspacing="1" cellpadding="5" border="0" class="strong">							
-					        <tr><td width="100%" style="text-align: center;" class="title" colspan="4"><h1>'.$title_pdf.'</h1></td></tr>
-					        <tr><td><strong>'.$headers_pdf[0][0].'</strong> </td><td> <strong>'.$headers_pdf[0][1].'</strong></td>
-					            <td><strong>'.$headers_pdf[1][0].'</strong> </td><td> <strong>'.$headers_pdf[1][1].'</strong></td>
-					        </tr>
-					        <tr><td><strong>'.$headers_pdf[2][0].'</strong> </td><td> <strong>'.$headers_pdf[2][1].'</strong></td>
-					            <td><strong>'.$headers_pdf[3][0].' </strong></td><td> <strong>'.$headers_pdf[3][1].'</strong></td>
-					        </tr>
-					        <tr><td><strong>'.$headers_pdf[4][0].'</strong></td><td> <strong>'.$headers_pdf[4][1].'</strong></td>
-					            <td><strong>'.$headers_pdf[5][0].'</strong> </td><td> <strong>'.$headers_pdf[5][1].'</strong></td>
-					        </tr>
-					</table>';
+					        <tr><td width="100%" style="text-align: center;" class="title" colspan="4"><h1>'.$title_pdf.'</h1></td></tr>';		
+		foreach($headers_pdf as $header_pdf) {			
+			if (!empty($header_pdf[0]) && !empty($header_pdf[1])) {
+				$header.= '<tr><td><strong>'.$header_pdf[0].'</strong> </td><td>'.$header_pdf[1].'</td></tr>';
+			}
+		}		
+		$header.='</table><br />';
 	}
-	
+		
 	// preparing footer pdf
 	$footer = '<table width="100%" cellspacing="2" cellpadding="10" border="0">';
 	if (is_array($footers_pdf)) {
@@ -276,7 +272,8 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 			}		
 		}	
 		$content_table .= '</tr>';			
-		// body table	
+		// body table
+		
 		if (is_array($data_table) && count($data_table) > 0) {
 			$offset = $x*$items_per_page;				
 			$data_table = array_slice ($data_table, $offset, count($data_table));
@@ -301,8 +298,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 		}	
 		$content_table .= '</table>';				
 		if ($x < ($count_pages - 1)) { $content_table .= '<pagebreak />'; }		
-	}
-	
+	}	
 	$pdf = new PDF();
     $pdf->set_custom_footer($footer);
     $pdf->set_custom_header($headers_in_pdf);

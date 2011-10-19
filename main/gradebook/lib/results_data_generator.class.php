@@ -86,12 +86,13 @@ class ResultsDataGenerator
 			} else {
 				$user['score'] = $this->get_score_display($result->get_score(),true, $ignore_score_color);
 			}
-			if ($pdf && $number_decimals == null){
+			if ($pdf && $number_decimals == null){				
 				$user['scoreletter'] = $result->get_score();
 			}
-			if ($scoredisplay->is_custom()) {
+			
+			if ($scoredisplay->is_custom()) {				
 				$user['display'] = $this->get_score_display($result->get_score(), false, $ignore_score_color);				
-			}
+			}			
 			$table[] = $user;
 		}
 
@@ -109,7 +110,8 @@ class ResultsDataGenerator
 		if ($sorting & self :: RDG_SORT_DESC) {
 			$table = array_reverse($table);
 		}
-		return array_slice($table, $start, $count);
+		$return = array_slice($table, $start, $count);		
+		return $return;
 
 	}
 
@@ -120,7 +122,7 @@ class ResultsDataGenerator
 			if ($realscore === true) {
 			    $type = SCORE_DIV_PERCENT ; 
 			}			
-			return $scoredisplay->display_score(array($score, $this->evaluation->get_max()), $type );
+			return $scoredisplay->display_score(array($score, $this->evaluation->get_max()), $type, SCORE_BOTH, $ignore_score_color);
         }
         return '';		
 	}

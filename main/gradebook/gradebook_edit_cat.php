@@ -37,12 +37,12 @@ if ($form->validate()) {
 	if ($values['hid_parent_id'] == 0 ) {
 		$cat->set_certificate_min_score($values['certif_min_score']);
 	}
-	/*if (empty ($values['visible'])) {
+	if (empty ($values['visible'])) {
 		$visible = 0;
 	} else {
 		$visible = 1;
 	}
-	$cat->set_visible($visible);*/
+	$cat->set_visible($visible);
 	$cat->save();
 	header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?editcat=&selectcat=' . $cat->get_parent_id());
 	exit;

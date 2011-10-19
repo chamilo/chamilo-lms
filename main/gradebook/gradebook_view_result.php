@@ -249,9 +249,10 @@ if (isset ($_GET['export'])) {
     			$head_table[]  = array(get_lang('Letters'), 15);
     		}    
             $head_display_score = '';
-            $scoredisplay = ScoreDisplay :: instance();
+            $scoredisplay = ScoreDisplay :: instance();            
+            $customdisplays = $scoredisplay->get_custom_score_display_settings();            
             
-            if ($scoredisplay->is_custom()) {
+            if (!empty($customdisplays) && $scoredisplay->is_custom()) {
                 $head_display_score = get_lang('Display');
                 $head_table[] = array($head_display_score,15);
             }

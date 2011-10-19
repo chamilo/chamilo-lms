@@ -52,11 +52,8 @@ class AnnouncementManager  {
 	 * @return	array html with the content and count of announcements or false otherwise
 	 */
 	public static function get_all_annoucement_by_course($course_info, $session_id = 0) {
-		if (empty($course_db)) {
-			return false;
-		}
 		$session_id = intval($session_id);
-		$course_id = $course_info['real_id'];
+		$course_id  = $course_info['real_id'];
 		
 		$tbl_announcement	= Database::get_course_table(TABLE_ANNOUNCEMENT);
 		$tbl_item_property  = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -141,13 +138,18 @@ class AnnouncementManager  {
 							toolitemproperties.c_id = $course_id                                       
                             ORDER BY display_order DESC";   
 		} else {
-    		if (api_get_user_id() != 0) {
+			
+			$group_list = GroupManager::get_group_ids($course_id, api_get_user_id());
+			if (empty($group_list)) {
+				$group_list[] = 0;
+			}
+    		if (api_get_user_id() != 0) {    			
     			$sql_query = "	SELECT announcement.*, toolitemproperties.*
     							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
     							WHERE announcement.id = toolitemproperties.ref
     							AND announcement.id = '$announcement_id'
     							AND toolitemproperties.tool='announcement'
-    							AND (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id='0')
+    							AND (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id IN ('0', '".implode("', '",$group_list)."'))
     							AND toolitemproperties.visibility='1' AND
     							announcement.c_id = $course_id AND
 								toolitemproperties.c_id = $course_id
@@ -166,6 +168,7 @@ class AnnouncementManager  {
     							";
     		}
 		}		
+		
 		$sql_result = Database::query($sql_query);
 		if (Database::num_rows($sql_result) > 0 ) {
     		$result		= Database::fetch_array($sql_result, 'ASSOC');    		    	
@@ -207,8 +210,10 @@ class AnnouncementManager  {
             if ($result['to_group_id']!== '0' and $result['to_group_id']!== 'NULL') {
                 $sent_to_icon = Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'));
             }            
-            $sent_to        = self::sent_to('announcement', $announcement_id);            
+            $sent_to        = self::sent_to('announcement', $announcement_id);
+                        
             $sent_to_form   = self::sent_to_form($sent_to);
+            
             echo Display::tag('td', get_lang('SentTo').' : '.$sent_to_form, array('class'=>'announcements_datum'));     
                 		
     	    $attachment_list = self::get_attachment($announcement_id);
@@ -226,7 +231,7 @@ class AnnouncementManager  {
             }           
     		echo "</table>";
 		} else {
-		    api_not_allowed();
+		    return false;
 		}
 	}	
 	
@@ -256,11 +261,11 @@ class AnnouncementManager  {
 	    
 		// store in the table announcement
 		$sql = "INSERT INTO $tbl_announcement SET 
-				c_id = '$course_id',  
-				content = '$newContent', 
-				title = '$emailTitle', end_date = '$now', 
-				display_order ='$order', 
-				session_id=".api_get_session_id();
+				c_id 			= '$course_id',  
+				content 		= '$newContent', 
+				title 			= '$emailTitle', end_date = '$now', 
+				display_order 	= '$order', 
+				session_id		= ".api_get_session_id();
 		$result = Database::query($sql);
 		if ($result === false) {
 			return false;
@@ -315,7 +320,13 @@ class AnnouncementManager  {
 		$course_id = api_get_course_int_id();
 	
 		// store in the table announcement
-		$sql = "INSERT INTO $tbl_announcement SET c_id = '$course_id', content = '$newContent', title = '$emailTitle', end_date = '$now', display_order ='$order', session_id=".api_get_session_id();
+		$sql = "INSERT INTO $tbl_announcement SET 
+					c_id 			= '$course_id', 
+					content 		= '$newContent', 
+					title 			= '$emailTitle', 
+					end_date 		= '$now', 
+					display_order 	= '$order', 
+					session_id		= ".api_get_session_id();
 		$result = Database::query($sql);
 		if ($result === false) {
 			return false;
@@ -368,6 +379,8 @@ class AnnouncementManager  {
 	*/
 	public static function edit_announcement($id, $emailTitle, $newContent, $to, $file = array(), $file_comment='') {	
 		global $_course;	
+		
+		$course_id = api_get_course_int_id();
 		$tbl_item_property  = Database::get_course_table(TABLE_ITEM_PROPERTY);	
 		$tbl_announcement 	= Database::get_course_table(TABLE_ANNOUNCEMENT);
 	
@@ -376,7 +389,7 @@ class AnnouncementManager  {
 		$id = intval($id);
 		
 		// store the modifications in the table announcement
-	 	$sql = "UPDATE $tbl_announcement SET content='$newContent', title = '$emailTitle' WHERE id='$id'";
+	 	$sql = "UPDATE $tbl_announcement SET content = '$newContent', title = '$emailTitle' WHERE c_id = $course_id AND id='$id'";
 		$result = Database::query($sql);
 	
 		// save attachment file
@@ -392,7 +405,7 @@ class AnnouncementManager  {
 		}
 	
 		// we remove everything from item_property for this
-		$sql_delete="DELETE FROM $tbl_item_property WHERE ref='$id' AND tool='announcement'";
+		$sql_delete="DELETE FROM $tbl_item_property WHERE c_id = $course_id AND ref='$id' AND tool='announcement'";
 		$result = Database::query($sql_delete);
 	
 		// store in item_property (first the groups, then the users
@@ -430,8 +443,7 @@ class AnnouncementManager  {
 	*/
 	public static function send_announcement_email($user_list, $course_code, $_course, $mail_title, $mail_content) {
 		global $_user;
-		foreach ($user_list as $this_user) {
-			
+		foreach ($user_list as $this_user) {						
 			$mail_subject = get_lang('professorMessage').' - '.$_course['official_code'].' - '.$mail_title;
 			$mail_body = '['.$_course['official_code'].'] - ['.$_course['name']."]\n";
 			$mail_body .= api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).' <'.$this_user["email"]."> \n\n".stripslashes($mail_title)."\n\n".trim(stripslashes(api_html_entity_decode(strip_tags(str_replace(array('<p>','</p>','<br />'),array('',"\n","\n"),$mail_content)), ENT_QUOTES, api_get_system_encoding())))." \n\n-- \n";
@@ -730,8 +742,9 @@ class AnnouncementManager  {
 		$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);	
 		$tool 	= Database::escape_string($tool);
 		$id		= Database::escape_string($id);
-	
-		$sql = "SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
+		$course_id = api_get_course_int_id();
+		
+		$sql = "SELECT * FROM $tbl_item_property WHERE c_id = $course_id AND tool='$tool' AND ref='$id'";
 		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			$to_group=$row['to_group_id'];
@@ -942,20 +955,20 @@ class AnnouncementManager  {
 	*			containing all the id's of the groups (resp. users) who have received this message.
 	* @author Patrick Cool <patrick.cool@>
 	*/
-	public static function sent_to_form($sent_to_array) {
+	public static function sent_to_form($sent_to_array) {		
 		// we find all the names of the groups
 		$group_names = self::get_course_groups();		
 	
 		// we count the number of users and the number of groups
 		if (isset($sent_to_array['users'])) {
-			$number_users=count($sent_to_array['users']);
+			$number_users = count($sent_to_array['users']);
 		} else {
-			$number_users=0;
+			$number_users = 0;
 		}
 		if (isset($sent_to_array['groups'])) {
-			$number_groups=count($sent_to_array['groups']);
+			$number_groups = count($sent_to_array['groups']);
 		} else {
-				$number_groups=0;
+			$number_groups = 0;
 		}
 		$total_numbers = $number_users + $number_groups;
 	
@@ -1052,8 +1065,9 @@ class AnnouncementManager  {
 	
 		$sent_to_group = array();
 		$sent_to = array();
-	
-		$sql="SELECT to_group_id, to_user_id FROM $tbl_item_property WHERE tool = '$tool' AND ref=".$id;
+		$course_id = api_get_course_int_id();
+		
+		$sql="SELECT to_group_id, to_user_id FROM $tbl_item_property WHERE c_id = $course_id AND tool = '$tool' AND ref=".$id;
 		$result = Database::query($sql);	
 	
 		while ($row = Database::fetch_array($result)) {
@@ -1090,8 +1104,10 @@ class AnnouncementManager  {
 	public static function get_attachment($announcement_id) {
 		$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 		$announcement_id= intval($announcement_id);
+		$course_id = api_get_course_int_id();
 		$row=array();
-		$sql = 'SELECT id,path, filename,comment FROM '. $tbl_announcement_attachment.' WHERE announcement_id = '.$announcement_id.'';
+		$sql = 'SELECT id, path, filename, comment FROM '. $tbl_announcement_attachment.' 
+				WHERE c_id = '.$course_id.' AND announcement_id = '.$announcement_id.'';
 		$result=Database::query($sql);
 		if (Database::num_rows($result)!=0) {
 			$row = Database::fetch_array($result,'ASSOC');
@@ -1155,6 +1171,7 @@ class AnnouncementManager  {
 		global $_course;
 		$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 	    $return = 0;
+	    $course_id = api_get_course_int_id();
 	
 		if (is_array($file) && $file['error'] == 0 ) {
 			$courseDir   = $_course['path'].'/upload/announcements'; // TODO: This path is obsolete. The new document repository scheme should be kept in mind here.
@@ -1178,7 +1195,7 @@ class AnnouncementManager  {
 				$safe_new_file_name = Database::escape_string($new_file_name);
 				$id_attach = intval($id_attach);
 				$sql = "UPDATE $tbl_announcement_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', size ='".intval($file['size'])."'
-					 	WHERE id = '$id_attach'";
+					 	WHERE c_id $course_id AND id = '$id_attach'";
 				$result = Database::query($sql);
 				if ($result === false) {
 					$return = -1;
@@ -1196,11 +1213,11 @@ class AnnouncementManager  {
 	 * @param integer attachment file Id
 	 *
 	 */
-	public static function delete_announcement_attachment_file($id) {
-		global $_course;
+	public static function delete_announcement_attachment_file($id) {		
 		$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 		$id = intval($id);
-		$sql = "DELETE FROM $tbl_announcement_attachment WHERE id = $id";
+		$course_id = api_get_course_int_id();
+		$sql = "DELETE FROM $tbl_announcement_attachment WHERE c_id $course_id AND id = $id";
 		$result = Database::query($sql);
 		// update item_property
 		//api_item_property_update($_course, 'announcement_attachment',  $id,'AnnouncementAttachmentDeleted', api_get_user_id());

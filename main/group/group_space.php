@@ -83,9 +83,9 @@ echo '<a href="group.php">'.Display::return_icon('back.png',get_lang('BackToGrou
 /*
  * Edit the group
  */
-if (api_is_allowed_to_edit(false, true) or GroupManager :: is_tutor($_user['user_id'])) {
+if (api_is_allowed_to_edit(false, true) or GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id())) {
 	$my_origin = isset($origin) ? $origin : '';
-	echo '<a href="group_edit.php?origin=$my_origin">'.Display::return_icon('settings.png', get_lang('EditGroup'),'','32').'</a>';
+	echo '<a href="group_edit.php?origin='.$my_origin.'&gidReq='.api_get_group_id().'">'.Display::return_icon('settings.png', get_lang('EditGroup'),'','32').'</a>';
 }
 
 /*
@@ -114,22 +114,22 @@ if (isset($_GET['action'])) {
 /*	Main Display Area */
 
 $course_code = $_course['sysCode'];
-$is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course($_SESSION['_user']['user_id'], $course_code);
+$is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course(api_get_user_id(), $course_code);
 
 /*
  * Group title and comment
  */
-//api_display_tool_title($nameTools.' '.stripslashes($current_group['name']));
+echo Display::tag('h2', stripslashes($current_group['name']));
 
 if (!empty($current_group['description'])) {
-	echo '<blockquote>'.stripslashes($current_group['description']).'</blockquote>';
+	echo '<p>'.stripslashes($current_group['description']).'</p>';
 }
 
 /*
  * Group Tools
  */
 // If the user is subscribed to the group or the user is a tutor of the group then
-if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group($_SESSION['_user']['user_id'], $current_group['id'])) {
+if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_get_user_id(), $current_group['id'])) {
 	echo '<ul>';
 	$tools = '';
 	// Link to the forum of this group

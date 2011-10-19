@@ -224,9 +224,7 @@ foreach ($group_cats as $index => $category) {
 	
 	if ($in_category) {
 		$totalRegistered = 0;
-		// Determine wether current user is tutor for this course
-		$user_is_tutor = GroupManager :: is_tutor(api_get_user_id());
-		
+				
 		$group_data = array();
 		
 		foreach ($group_list as $index => $this_group) {
@@ -235,7 +233,7 @@ foreach ($group_cats as $index => $category) {
 			$session_img = api_get_session_image($this_group['session_id'], $_user['status']);
 
 			// All the tutors of this group
-			$tutorsids_of_group=GroupManager::get_subscribed_tutors($this_group['id'], true);
+			$tutorsids_of_group = GroupManager::get_subscribed_tutors($this_group['id'], true);
 
 			// Create a new table-row
 			$row = array ();

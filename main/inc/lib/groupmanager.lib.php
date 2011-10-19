@@ -1127,7 +1127,7 @@ class GroupManager {
 		foreach ($user_ids as $index => $user_id) {			
 			$user_id = Database::escape_string($user_id);
 			$group_id = Database::escape_string($group_id);
-			$sql = "INSERT INTO ".$table_group_tutor." (c_id, user_id, group_id) VALUES ('$course_id', '".$user_id."', '".$group_id."')";
+			echo $sql = "INSERT INTO ".$table_group_tutor." (c_id, user_id, group_id) VALUES ('$course_id', '".$user_id."', '".$group_id."')";
 			$result &= Database::query($sql);
 		}
 		return $result;
@@ -1294,20 +1294,30 @@ class GroupManager {
 	public static function get_group_ids ($course_id, $user_id) {
 		$groups = array();
 		$tbl_group 	= Database::get_course_table(TABLE_GROUP_USER);
+		$tbl_group_tutor 	= Database::get_course_table(TABLE_GROUP_TUTOR);
 		$user_id 	= intval($user_id);
 		$course_id 	= intval($course_id);
 		
 		$sql = "SELECT group_id FROM $tbl_group WHERE c_id = $course_id AND user_id = '$user_id'";
 		$groupres = Database::query($sql);
-
-		// uncommenting causes a bug in Agenda AND announcements because there we check if the return value of this function is an array or not
-		//$groups=array();
-
-		if($groupres) {
+		
+		if ($groupres) {
 			while ($myrow= Database::fetch_array($groupres))
 				$groups[]=$myrow['group_id'];
 		}
-
+		
+		//Also loading if i'm the tutor
+		$sql = "SELECT group_id FROM $tbl_group_tutor WHERE c_id = $course_id AND user_id = '$user_id'";
+		$groupres = Database::query($sql);
+		if ($groupres) {
+			while ($myrow= Database::fetch_array($groupres)) {
+				$groups[]=$myrow['group_id'];				
+			}
+		}
+		if (!empty($groups)) {
+			 array_filter($groups);
+		}
+		
 		return $groups;
 	}
 	/*	

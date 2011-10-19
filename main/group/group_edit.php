@@ -30,7 +30,9 @@ $current_group = GroupManager :: get_group_properties(api_get_group_id());
 $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
 
-if (!api_is_allowed_to_edit(false,true)) {
+$is_group_member = GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id());
+
+if (!api_is_allowed_to_edit(false,true) && !$is_group_member) {
 	api_not_allowed(true);
 }
 

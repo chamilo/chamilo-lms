@@ -52,7 +52,7 @@ $tbl_user          		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_courses			= Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_sessions			= Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_group     			= Database::get_course_table(TABLE_GROUP);
+
 $tbl_groupUser  		= Database::get_course_table(TABLE_GROUP_USER);
 $tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
@@ -68,6 +68,9 @@ require_once $lib.'tracking.lib.php';
 require_once $lib.'fckeditor/fckeditor.php';
 require_once $lib.'fileUpload.lib.php';
 require_once 'announcements.inc.php';
+
+
+$course_id = api_get_course_int_id();
 
 /*	Tracking	*/
 event_access_tool(TOOL_ANNOUNCEMENT);
@@ -113,8 +116,7 @@ if (!empty($_POST['To']) and ($select_groupusers_status=="show")) {
 /* 	Action handling */
 
 // display the form
-if (((!empty($_GET['action']) && $_GET['action'] == 'add') && $_GET['origin'] == "") || (!empty($_GET['action']) && $_GET['action'] == 'edit') || !empty($_POST['To']))
-{
+if (((!empty($_GET['action']) && $_GET['action'] == 'add') && $_GET['origin'] == "") || (!empty($_GET['action']) && $_GET['action'] == 'edit') || !empty($_POST['To'])) {
 	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 		api_not_allowed();
 	}
@@ -207,7 +209,6 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		Delete announcement
 	*/
 	if (!empty($_GET['action']) && $_GET['action']=='delete' && isset($_GET['id'])) {
-		//Database::query("DELETE FROM  $tbl_announcement WHERE id='$delete'");
 		$id=intval($_GET['id']);
 		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
@@ -309,7 +310,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		$my_sql = "SELECT announcement.id, announcement.display_order " .
 				"FROM $tbl_announcement announcement, " .
 				"$tbl_item_property itemproperty " .
-				"WHERE itemproperty.ref=announcement.id " .
+				"WHERE
+				announcement.c_id =  $course_id AND
+				itemproperty.c_id =  $course_id AND 
+					itemproperty.ref=announcement.id " .
 				"AND itemproperty.tool='".TOOL_ANNOUNCEMENT."' " .
 				"AND itemproperty.visibility<>2 " .
 				"ORDER BY display_order $sortDirection";
@@ -401,7 +405,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 						$grouplist = "'".implode("', '",$grouplist)."'";	//protect individual elements with surrounding quotes
 						$sql = "SELECT user_id
 								FROM $tbl_groupUser gu
-								WHERE gu.group_id IN (".$grouplist.")";
+								WHERE c_id = $course_id AND gu.group_id IN (".$grouplist.")";
 						$groupMemberResult = Database::query($sql);
 						if ($groupMemberResult) {
 							while ($u = Database::fetch_array($groupMemberResult)) {
@@ -537,9 +541,12 @@ if(api_is_allowed_to_edit(false,true))  {
 		}
 		$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
 				FROM $tbl_announcement announcement, $tbl_item_property ip
-				WHERE announcement.id = ip.ref
-				AND ip.tool='announcement'
-				AND ip.visibility<>'2'
+				WHERE
+				announcement.c_id = $course_id AND
+				ip.c_id = $course_id AND				
+				announcement.id = ip.ref AND 
+				ip.tool='announcement' AND 
+				ip.visibility<>'2'
 				$group_condition
 				$condition_session
 				GROUP BY ip.ref
@@ -574,8 +581,11 @@ if(api_is_allowed_to_edit(false,true))  {
 			if (is_array($group_memberships) && count($group_memberships)>0) {
 				$sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
 					FROM $tbl_announcement announcement, $tbl_item_property ip
-					WHERE announcement.id = ip.ref
-					AND ip.tool='announcement'
+					WHERE 
+					announcement.c_id = $course_id AND
+					ip.c_id = $course_id AND			
+					announcement.id = ip.ref AND 
+					ip.tool='announcement'
 					AND ip.visibility='1'
 					$cond_user_id
 					$condition_session
@@ -594,7 +604,10 @@ if(api_is_allowed_to_edit(false,true))  {
 					}
 					$sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
 						FROM $tbl_announcement announcement, $tbl_item_property ip
-						WHERE announcement.id = ip.ref
+						WHERE
+						announcement.c_id = $course_id AND
+						ip.c_id = $course_id AND
+						announcement.id = ip.ref
 						AND ip.tool='announcement'
 						AND ip.visibility='1'
 						$cond_user_id
@@ -613,7 +626,10 @@ if(api_is_allowed_to_edit(false,true))  {
 					// the user is not identiefied => show only the general announcements
 					$sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
 						FROM $tbl_announcement announcement, $tbl_item_property ip
-						WHERE announcement.id = ip.ref
+						WHERE 
+						announcement.c_id = $course_id AND
+						ip.c_id = $course_id AND			
+						announcement.id = ip.ref
 						AND ip.tool='announcement'
 						AND ip.visibility='1'
 						AND ip.to_group_id='0'
@@ -875,13 +891,16 @@ if ($display_announcement_list) {
 		//$group_id=$_SESSION['group'];
 	}
 	$group_id = api_get_group_id();
-	$group_memberships = GroupManager::get_group_ids($_course['real_id'],api_get_user_id());
+	
+	$group_memberships = GroupManager::get_group_ids($course_id, api_get_user_id());
+	
+	//$is_group_member = GroupManager :: is_tutor(api_get_user_id());	
 
 	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 		// A.1. you are a course admin with a USER filter
 		// => see only the messages of this specific user + the messages of the group (s)he is member of.
 		if (!empty($_SESSION['user'])) {
-
+			
 			if (is_array($group_memberships) && count($group_memberships)>0) {
 				$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
@@ -922,6 +941,7 @@ if ($display_announcement_list) {
 				GROUP BY ip.ref
 				ORDER BY display_order DESC";
 		} else {
+			
 			// A.3 you are a course admin without any group or user filter
 			// A.3.a you are a course admin without user or group filter but WITH studentview
 			// => see all the messages of all the users and groups without editing possibilities
@@ -954,7 +974,9 @@ if ($display_announcement_list) {
 			}
 		}
 	} else {
+		
 		//STUDENT
+		
 			if (is_array($group_memberships) && count($group_memberships)>0) {
 				if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 					if (api_get_group_id() == 0) {

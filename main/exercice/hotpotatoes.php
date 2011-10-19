@@ -109,8 +109,8 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     // Generate new test folder if on first step of file upload.
                     $filename = replace_dangerous_char(trim($_FILES['userFile']['name']), 'strict');
                     $fld = GenerateHpFolder($document_sys_path.$uploadPath.'/');
-                    $doc_id = add_document($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
-                    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
+                    //$doc_id = add_document($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
+                    //api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
                     @mkdir($document_sys_path.$uploadPath.'/'.$fld, api_get_permissions_for_new_directories());
                     $doc_id = add_document($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
                     api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());

@@ -27,7 +27,7 @@ class Category implements GradebookItem
 
 // CONSTRUCTORS
 
-    function Category() {
+    function __construct() {
     }
 
 

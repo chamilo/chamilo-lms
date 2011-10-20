@@ -111,7 +111,7 @@ if (!isset($cidReq)) {
 	$classError = 'init';
 	$error_no[$classError][] = '2';
 	$error_level[$classError][] = 'info';
-	$error_msg[$classError][] = "[".__FILE__."][".__LINE__."] cidReq was Missing $cidReq take $dbname;";
+	$error_msg[$classError][] = "[".__FILE__."][".__LINE__."] cidReq was missing $cidReq take $dbname;";
 }
 
 if (isset($_SESSION['_gid'])) {

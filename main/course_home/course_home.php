@@ -134,7 +134,7 @@ define('TOOL_AUTHORING', 			'toolauthoring');
 define('TOOL_INTERACTION',			'toolinteraction');
 define('TOOL_COURSE_PLUGIN',		'toolcourseplugin'); //all plugins that can be enabled in courses
 define('TOOL_ADMIN', 				'tooladmin');
-define('TOOL_ADMIN_PLATEFORM', 		'tooladminplatform');
+define('TOOL_ADMIN_PLATFORM', 		'tooladminplatform');
 
 //define('TOOL_ADMIN_PLATFORM_VISIBLE', 'tooladminplatformvisible');
 //define('TOOL_ADMIN_PLATFORM_INVISIBLE', 'tooladminplatforminvisible');

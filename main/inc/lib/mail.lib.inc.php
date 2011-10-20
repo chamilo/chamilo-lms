@@ -88,7 +88,7 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
 
     // Send the mail message.
     if (!$mail->Send()) {
-        //echo 'ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />';
+        error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
         return 0;
     }
 

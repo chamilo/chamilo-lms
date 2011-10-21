@@ -183,7 +183,6 @@ function wc_isMeetingRunningURL($myIP,$mySecuritySalt,$myMeetingID) {
     $queryStr = "meetingID=".$myMeetingID;
     $checksum = sha1('isMeetingRunning'.$queryStr.$mySecuritySalt);
     $secQueryURL = "http://".$myIP.$checkAPI.$queryStr."&checksum=".$checksum;
-    
     return $secQueryURL;
 }
 
@@ -276,8 +275,35 @@ function wc_listAttendees() {
 /**
  * This API is not yet supported in bigbluebutton
  */
-function wc_getMeetingInfo() {
-    return false;
+function wc_getMeetingInfo($myIP,$mySecuritySalt,$meetingID,$modPW) {
+    $checkAPI = "/bigbluebutton/api/getMeetingInfo?";
+    $queryStr = 'meetingID='.$meetingID.'&password='.$modPW;
+    $checksum = sha1('getMeetingInfo'.$queryStr.$mySecuritySalt);
+    $secQueryURL = "http://".$myIP.$checkAPI.$queryStr."&checksum=".$checksum;
+    $myResponse = @file_get_contents($secQueryURL);
+    if ($myResponse === false) { return false;}
+    $doc = new DOMDocument();
+    $doc->loadXML($myResponse);
+    $returnCodeNode = $doc->getElementsByTagName("returncode");
+    $returnCode = $returnCodeNode->item(0)->nodeValue;
+    $createTimeNode = $doc->getElementsByTagName("createTime");
+    $createTime = $createTimeNode->item(0)->nodeValue;
+    $runningNode = $doc->getElementsByTagName("running");
+    $running = $runningNode->item(0)->nodeValue;
+    $attendeesNode = $doc->getElementsByTagName("attendee");
+    $attendees = array();
+    foreach ($attendeesNode as $attendeeNode) {
+        $attendee = array();
+        if ($attendeeNode->childNodes->length) {
+            foreach ($attendeeNode->childNodes as $i) {
+                //see http://code.google.com/p/bigbluebutton/wiki/API#Get_Meeting_Info for details
+                $attendee[$i->nodeName] = $i->nodeValue;
+            }
+        }
+        $attendees[] = $attendee;
+    }
+    $info = array('returnCode'=>$returnCode,'createTime'=>$createTime,'attendees'=>$attendees,'running'=>$running);
+    return $info;
 }
 
 /**
@@ -312,4 +338,33 @@ function wc_needUpgrade() {
       $returnValue = true;
   }
   return $returnValue;
+}
+
+/**
+ * Gets a list of all meetings currently running 
+ */
+function wc_getRunningMeetings($myIP,$mySecuritySalt) {
+    $checkAPI = "/bigbluebutton/api/getMeetings?";
+    $queryStr = '';
+    $checksum = sha1('getMeetings'.$queryStr.$mySecuritySalt);
+    $secQueryURL = "http://".$myIP.$checkAPI.$queryStr."&checksum=".$checksum;
+    $myResponse = @file_get_contents($secQueryURL);
+    if ($myResponse === false) { return false;}
+    $doc = new DOMDocument();
+    $doc->loadXML($myResponse);
+    $returnCodeNode = $doc->getElementsByTagName("returncode");
+    $returnCode = $returnCodeNode->item(0)->nodeValue;
+    $meetingsNode = $doc->getElementsByTagName("meeting");
+    $meetings = array();
+    foreach ($meetingsNode as $meetingNode) {
+        $meeting = array();
+        if ($meetingNode->childNodes->length) {
+            foreach ($meetingNode->childNodes as $i) {
+                //see http://code.google.com/p/bigbluebutton/wiki/API#Get_Meetings for details
+                $meeting[$i->nodeName] = $i->nodeValue;
+            }
+        }
+        $meetings[] = $meeting;
+    }
+    return $meetings;
 }

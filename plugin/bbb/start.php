@@ -44,12 +44,40 @@ $user_id = api_get_user_id();
 
 $is_running = wc_isMeetingRunning($bbb_host,$bbb_salt,$meeting_name);
 if ($is_running == 'true') {
+    // The conference is running, everything is fine, join
     header('location: '.wc_joinMeetingURL($bbb_host,$bbb_salt,$full_user_name,$meeting_name,($teacher?$meeting_mod_pw:$meeting_att_pw),$user_id));
+    exit;
 } else { //$is_running = false or 'false'
+    // The conference room does not seem to be running...
+    // First, try harder and ignore the "running" status
+    $meetings = wc_getRunningMeetings($bbb_host,$bbb_salt);
+    $found = false;
+    foreach ($meetings as $meeting) {
+        //Try to find our meeting room in the list...
+        if ($meeting['meetingID'] == $meeting_name) {
+            $meeting_info = wc_getMeetingInfo($bbb_host,$bbb_salt,$meeting_name,$meeting_mod_pw);
+            error_log('Found passive meeting created '.($meeting_info['createTime']).' seconds ago with '.count($meeting_info['attendees']).' attendees - joining as '.($teacher?'teacher':'student'));
+            //if the user is a teacher, or if there are already attendees in
+            // the conference room, then allow joining it
+            if ($teacher or count($meeting_info['attendees'])>0) {
+                header('location: '.wc_joinMeetingURL($bbb_host,$bbb_salt,$full_user_name,$meeting_name,($teacher?$meeting_mod_pw:$meeting_att_pw),$user_id));
+                exit; 
+            }
+        }
+    }
+    // That conference room is really not running or it has no
+    // accompanying moderator subscribed
     if ($teacher) {
+        // The user is a teacher, so he has the right to create the
+        //  room, so create it and join it
         wc_createMeeting($bbb_host,$bbb_salt,$meeting_name,$meeting_name,$meeting_att_pw,$meeting_mod_pw,$meeting_wel_ms,api_get_path(WEB_COURSE_PATH).'/'.$ccode);
-        header('location: '.wc_joinMeetingURL($bbb_host,$bbb_salt,$full_user_name,$meeting_name,$meeting_mod_pw,$user_id));
+        header('location: '.wc_joinMeetingURL($bbb_host,$bbb_salt,$full_user_name,$meeting_name,($teacher?$meeting_mod_pw:$meeting_att_pw),$user_id));
+        exit;
     } else {
+        // There is no conference room for this course and the user
+        // is a mere student, so he cannot start a conference room by
+        // himself: a teacher has to launch it first
         header('location: '.api_get_path(WEB_COURSE_PATH).'/'.$ccode);
+        exit;
     }
 }

@@ -15,6 +15,7 @@
  */
 
 //See #3910 defines the default prefix for the single course database
+// Modified by hubert.borderiou 2011-10-21 Add course category
 define('DB_COURSE_PREFIX', 'c_');
 
 // Main database tables
@@ -195,6 +196,8 @@ define('TABLE_QUIZ_TEST',           'quiz');
 define('TABLE_QUIZ_ANSWER',         'quiz_answer');
 define('TABLE_QUIZ_TEST_QUESTION',  'quiz_rel_question');
 define('TABLE_QUIZ_QUESTION_OPTION','quiz_question_option');
+define('TABLE_QUIZ_QUESTION_CATEGORY', 'quiz_question_category');
+define('TABLE_QUIZ_QUESTION_REL_CATEGORY', 'quiz_question_rel_category');
 
 // Linked resource table
 //@todo table exists?

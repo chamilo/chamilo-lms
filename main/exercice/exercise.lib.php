@@ -8,6 +8,7 @@
  * @package chamilo.exercise
  * @author Olivier Brouckaert <oli.brouckaert@skynet.be>
  * @version $Id: exercise.lib.php 22247 2009-07-20 15:57:25Z ivantcholakov $
+ * Modified by Hubert Borderiou 2011-10-21 Question Category
  */
 /**
  * Code
@@ -51,6 +52,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			$questionDescription = $objQuestionTmp->selectDescription();
 			
 			if ($show_title) {
+				Testcategory::displayCategoryAndTitle($objQuestionTmp->id);	// 				
 				echo Display::div($current_item.'. '.$objQuestionTmp->selectTitle(), array('class'=>'question_title'));
 			}
 			if (!empty($questionDescription)) {
@@ -501,6 +503,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
 		if (!$only_questions) {
             if ($show_title) {
+								Testcategory::displayCategoryAndTitle($objQuestionTmp->id);	//             	
                 echo '<div class="question_title">'.$current_item.'. '.$questionName.'</div>';
             }
 			//@todo I need to the get the feedback type
@@ -1254,6 +1257,29 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_dates = 
     	$conditions = array('where'=>array('active = ? AND  (session_id = 0 OR session_id = ? ) AND c_id = ? ' => array('1', $session_id, $course_id)), 'order'=>'title');
     }
     //var_dump($conditions);
+    return Database::select('*',$TBL_EXERCICES, $conditions);
+}
+
+
+/**
+ * Getting all active exercises from a course from a session (if a session_id is provided we will show all the exercises in the course + all exercises in the session)
+ * @param   array   course data
+ * @param   int     session id
+ * @param		int			course c_id
+ * @return  array   array with exercise data
+ * modified by Hubert Borderiou 
+ */
+function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $course_id=0) {
+   	$TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
+    if ($session_id == -1) {
+    	$session_id  = 0;
+    }
+    if ($session_id == 0) {
+    	$conditions = array('where'=>array('active = ? AND session_id = ? AND c_id=?'=>array('1', $session_id, $course_id)), 'order'=>'title');
+    } else {
+        //All exercises
+    	$conditions = array('where'=>array('active = ? AND (session_id = 0 OR session_id = ? ) AND c_id=?' =>array('1', $session_id, $course_id)), 'order'=>'title');
+    }
     return Database::select('*',$TBL_EXERCICES, $conditions);
 }
 

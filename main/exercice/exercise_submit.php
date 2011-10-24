@@ -22,6 +22,7 @@
 * 			Cleaning exercises (2010), 
 * 			Adding hotspot delineation support (2011)
 * 			Adding reminder + ajax support (2011)
+*   Modified by hubert.borderiou (2011-10-21 question category)
 */
 /**
  * Code
@@ -585,6 +586,10 @@ if ($question_count != 0) {
 	}
 } else {
 	$error = get_lang('ThereAreNoQuestionsForThisExercise');
+	// if we are in the case where user select random by category, but didn't choose the number of random question
+	if ($objExercise->selectRandomByCat() > 0 && $objExercise->random <= 0) {
+		$error .= "<br/>".get_lang('pleaseSelectSomeRandomQuestion');
+	}
 }
 
 if (!empty ($_GET['gradebook']) && $_GET['gradebook'] == 'view') {

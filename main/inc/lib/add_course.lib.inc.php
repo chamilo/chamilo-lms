@@ -297,6 +297,9 @@ function update_Db_course($course_db_name = null) {
     $TABLEQUIZQUESTIONLIST      = $course_db_name . 'quiz_question';
     $TABLEQUIZANSWERSLIST       = $course_db_name . 'quiz_answer';
     $TABLEQUIZQUESTIONOPTION    = $course_db_name . 'quiz_question_option';
+	
+	$table_quiz_question_category    	 = $course_db_name . 'quiz_question_category';
+	$table_quiz_question_rel_category    = $course_db_name . 'quiz_question_rel_category';
 
     // Dropbox
     $TABLETOOLDROPBOXPOST       = $course_db_name . 'dropbox_post';
@@ -646,6 +649,7 @@ function update_Db_course($course_db_name = null) {
         session_id smallint default 0,
         propagate_neg INT NOT NULL DEFAULT 0,
         review_answers INT NOT NULL DEFAULT 0,
+        random_by_category INT NOT NULL DEFAULT 0,
         PRIMARY KEY (c_id, id)
         )" . $charset_clause;
     Database::query($sql);
@@ -693,8 +697,6 @@ function update_Db_course($course_db_name = null) {
         )" . $charset_clause;
     Database::query($sql);
     
-    
-    
     // Exercise tool - answer options
     $sql = "
         CREATE TABLE `".$TABLEQUIZQUESTIONOPTION . "` (
@@ -718,7 +720,28 @@ function update_Db_course($course_db_name = null) {
         PRIMARY KEY (c_id, question_id,exercice_id)
         )" . $charset_clause;
     Database::query($sql);
-
+    
+    
+    
+    $sql = "CREATE TABLE `".$table_quiz_question_category . "` (
+	  $add_to_all_tables
+	  id int NOT NULL AUTO_INCREMENT,
+	  name varchar(255) NOT NULL,
+	  description text NOT NULL,
+	  PRIMARY KEY (c_id,id)
+	)" . $charset_clause;
+    Database::query($sql);
+    
+	
+	$sql = "CREATE TABLE `".$table_quiz_question_rel_category . "` (
+	  $add_to_all_tables	  
+	  question_id int NOT NULL,
+	  category_id int NOT NULL,
+	  PRIMARY KEY (c_id,question_id)
+    )" . $charset_clause;
+    Database::query($sql);
+    
+    
     /*        Course description	*/
 
     $sql = "

@@ -7,6 +7,7 @@
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
 *	@author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
+* Modified by hubert.borderiou (question category)
 */
 /**
  * Code
@@ -197,8 +198,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 		Database::query($query);
 		
 		//Saving results in the track recording table
-		$recording_changes = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment) 
-							  VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
+		$recording_changes = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment) VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
 		Database::query($recording_changes);
 	}
 	
@@ -520,6 +520,14 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 	if ($show != 'result') {
 		echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_exercice.png', get_lang('NewEx'),'','32').'</a>';
 		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_question.png', get_lang('AddQ'),'','32').'</a>';
+		// Question category
+		echo '<a href="tests_category.php">';
+		echo Display::return_icon('question_category.gif', get_lang('QuestionCategory'));
+		echo '</a>';		
+		echo '<a href="question_pool.php">';
+		echo Display::return_icon('database.png', get_lang('langQuestionPool'), array('style'=>'width:32px'));
+		echo '</a>';
+		// end question category
 		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'),'','32').'</a>';
 		// link to import qti2 ...
 		echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'),'','32') .'</a>';

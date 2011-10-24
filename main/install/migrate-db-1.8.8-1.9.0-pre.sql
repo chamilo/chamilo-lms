@@ -128,4 +128,5 @@ INSERT INTO course_setting(variable,value,category) VALUES ('course_grading_mode
 ALTER TABLE quiz ADD COLUMN review_answers INT NOT NULL DEFAULT 0;
 ALTER TABLE student_publication ADD COLUMN contains_file INTEGER NOT NULL DEFAULT 1;
 ALTER TABLE student_publication ADD COLUMN allow_text_assignment INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE quiz ADD COLUMN random_by_category INT NOT NULL DEFAULT 0;
 

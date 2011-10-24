@@ -1006,6 +1006,11 @@ a.nobold:hover {
     vertical-align: middle;
 }
 
+
+.data_table_no_border td .highlight{
+    font-weight: bold;
+}
+
 .data_table_pagination {
     width:100%;
     margin-top: 8px;    

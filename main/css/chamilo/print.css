@@ -763,26 +763,52 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	padding: 5px;
 }
 .data_table th {
-	padding-right: 20px;
+	/*padding-right: 20px;*/
 	border: 1px solid gray;
 	background-color: #E5EDF9;
+	text-align: left;
 }
 .data_table tr.row_odd {
-	background-color: #fafafa;
+	background-color: #fafafa;	
 }
 .data_table tr.row_odd:hover, .data_table tr.row_even:hover {
 	background-color: #f0f0f0;
 }
 .data_table tr.row_even {
-	background-color: #fff;
+	background-color: #fff;	
+}
+.data_table td .highlight {
+    font-weight: bold;
 }
 .data_table td {
-	padding: 5px;
-	vertical-align: top;
+	padding: 5px;	
 	border-bottom: 1px solid #b0b0b0;
 	border-right: 1px dotted #e1e1e1;
 	border-left: 1px dotted #e1e1e1;
+	text-align: left;
 }
+
+
+.data_table_no_border {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 12px;
+    margin-bottom: 15px;
+    margin-top: 8px;
+    text-align: left;
+    width: 100%;    
+}
+
+.data_table_no_border td {
+    line-height: normal;
+    padding: 6px;
+    text-align: left;
+    vertical-align: middle;
+}
+.data_table_no_border .highlight {
+    font-weight: bold;
+}
+
 /* admin page tool list definitions */
 .tool_list dt {
 	font-weight: bold;

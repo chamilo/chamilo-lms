@@ -283,7 +283,7 @@ class Security {
             $config->set('Core.ConvertDocumentToFragment', false);
             $config->set('Core.RemoveProcessingInstructions', true);
             //Shows _target attribute in anchors
-            $config->set('Attr.AllowedFrameTargets', array('_blank')); 
+            $config->set('Attr.AllowedFrameTargets', array('_blank','_top','_self', '_parent')); 
             if ($user_status == STUDENT) {
                 global $allowed_html_student;
                 $config->set('HTML.SafeEmbed', true);

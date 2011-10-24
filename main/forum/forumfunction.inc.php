@@ -1824,7 +1824,7 @@ function store_thread($values) {
     }
     if ($upload_ok) {
 
-        $post_date = date('Y-m-d H:i:s');
+        $post_date = api_get_utc_datetime();
 
         if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(null, true)) {
             $visible = 0; // The post has not been approved yet.

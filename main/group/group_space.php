@@ -134,6 +134,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
 	$tools = '';
 	// Link to the forum of this group
 	$forums_of_groups = get_forums_of_group($current_group['id']);
+    
 	if (is_array($forums_of_groups)) {
 		if ($current_group['forum_state'] != TOOL_NOT_AVAILABLE ) {
 			foreach ($forums_of_groups as $key => $value) {

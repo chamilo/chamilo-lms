@@ -21,7 +21,7 @@ set_time_limit(0);
 class FlatViewTable extends SortableTable
 {
 	private $selectcat;
-	private $datagen;
+	public  $datagen;
 	private $limit_enabled;
 	private $offset;
 
@@ -188,7 +188,7 @@ class FlatViewTable extends SortableTable
 				$pre_result = $new_result = array();
 				$DataSet = new pData();
 				//filling the Dataset
-				foreach($user_results as $result) {
+				foreach ($user_results as $result) {
 					//print_r($result);
 					for($i=0; $i< count($header_name); $i++) {
 						$pre_result[$i+3][]= $result[$i+1];

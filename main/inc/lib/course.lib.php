@@ -1291,6 +1291,21 @@ class CourseManager {
         }
         return $teachers;
     }
+    
+    public static function get_teacher_list_from_course_code_to_string($course_code) {
+    	$teacher_list = self::get_teacher_list_from_course_code($course_code);
+    	$teacher_string = '';
+    	$list = array();
+    	if (!empty($teacher_list)) {
+    		foreach($teacher_list as $teacher) {
+     			$list[]= api_get_person_name($teacher['firstname'], $teacher['lastname']);    			
+    		}
+    		if (!empty($list)) {
+    			$teacher_string = implode (', ', $list);
+    		}
+    	}
+    	return $teacher_string;
+    }
 
     /**
      *	Return user info array of all users registered in the specified course

@@ -2298,7 +2298,7 @@ return 'application/octet-stream';
     function documents_total_space($to_group_id = '0') {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT 	= Database::get_course_table(TABLE_DOCUMENT);
-		$course_id = api_get_course_int_id();
+		$course_id 			= api_get_course_int_id();
 		
         $sql = "SELECT SUM(size) FROM  ".$TABLE_ITEMPROPERTY."  AS props, ".$TABLE_DOCUMENT."  AS docs
 		        WHERE 	props.c_id 	= $course_id AND

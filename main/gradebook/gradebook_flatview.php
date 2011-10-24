@@ -93,6 +93,10 @@ if (!empty($keyword)) {
 	}
 }
 
+$offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
+$flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset, $addparams);
+
+
 if (isset ($_GET['exportpdf']))	{
 
 	$interbreadcrumb[] = array (
@@ -120,15 +124,23 @@ if (isset ($_GET['exportpdf']))	{
 		$time = time();
 		$cat_name = trim($cat[0]->get_name());
 		$course_code = trim($cat[0]->get_course_code());
-		$report_name = $course_code;
-		if (!empty($cat_name) && $report_name != $cat_name) {
-			$report_name .= ' - '.$cat_name;
-		}
 		$organization = api_get_setting('Institution');
-		$creator = api_get_person_name($GLOBALS['_user']['firstName'], $GLOBALS['_user']['lastName']);
-
+		
+		$displayscore = ScoreDisplay :: instance();
+		$customdisplays = $displayscore->get_custom_score_display_settings();
+		
+		if (is_array($customdisplays) && count(($customdisplays))) {
+			$total = array();
+			foreach($customdisplays  as $custom) {
+				$total[$custom['display']]  = 0; 
+ 			}			
+			$user_results = $flatviewtable->datagen->get_data_to_graph2();
+			foreach($user_results  as $user_result) {
+				$total[$user_result[count($user_result)-1][1]]++;
+			}
+		}
+		
 		$html = '';
-
 		
 		$img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
 		if (file_exists($img)) {
@@ -139,10 +151,41 @@ if (isset ($_GET['exportpdf']))	{
 				$html .= '<h2 align="left">'.$organization.'</h2>';
 			}
 		}
-		$html .= '<h1 align="center">'.get_lang('FlatView').'</h1>';
-		$html .= '<p><strong>'.$report_name.'</strong></p>';
-		$html .= '<p><strong>'.api_convert_and_format_date(date('Y-m-d', time()), 2).'</strong></p>';
-		$html .= '<p><strong>'.get_lang('By').': '.$creator.'</strong></p>';
+		$html .= '<h2 align="center">'.get_lang('FlatView').'</h2>';
+		
+		$html .= '<table align="center" width="100%"><tr><td valign="top">';
+		
+		$html .= '<table align="left" width="33%">';		
+		$session_name = api_get_session_name(api_get_session_id());
+		$teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_code);
+		if (!empty($session_name)) {
+			$html .= Display::tag('tr', Display::tag('td', get_lang('Session')).Display::tag('td', Display::tag('strong', $session_name)));
+		}		
+		$html .= Display::tag('tr', Display::tag('td', get_lang('Course')).Display::tag('td', Display::tag('strong', $course_code)));
+		$html .= Display::tag('tr', Display::tag('td', get_lang('Date')).Display::tag('td', Display::tag('strong', api_convert_and_format_date(date('Y-m-d', time()), DATE_TIME_FORMAT_LONG))));
+		$html .= Display::tag('tr', Display::tag('td', get_lang('Teacher')).Display::tag('td', Display::tag('strong', $teacher_list)));
+		$html .= '</table></td>';
+		
+		$html .= '<td valign="top"><table align="left" width="33%">';
+		
+		if (!empty($total)) {			
+			foreach($total as $label => $count) {
+				$total_custom_score = round($count/count($user_results), 2) *100;
+				$html .= Display::tag('tr', Display::tag('td', $label).Display::tag('td', Display::tag('strong', $total_custom_score.' %')));
+			}
+		}
+		$html .= '</table></td>';
+		
+		$html .= '<td valign="top"><table align="left" width="33%">';
+		$headers = $printable_data[0];
+		unset($headers[0]);
+		unset($headers[1]);
+		unset($headers[count($headers)+1]);
+		
+		foreach ($headers as $head) {
+			$html .= Display::tag('tr', Display::tag('td', 'P1').Display::tag('td', Display::tag('strong', $head)));		
+		}		
+		$html .= '</table></td></table><br />';		
 
 		$columns = count($printable_data[0]);
 		$has_data = is_array($printable_data[1]) && count($printable_data[1]) > 0;
@@ -184,6 +227,7 @@ if (isset ($_GET['exportpdf']))	{
 
 		$html .= $table->toHtml();
 		
+		//echo $html;exit;
 		// Memory release
 
 		unset($printable_data);
@@ -261,8 +305,7 @@ if (isset($_GET['search'])) {
 	$addparams['search'] = $keyword;
 }
 
-$offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
-$flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset, $addparams);
+
 $this_section = SECTION_COURSES;
 
 if (isset($_GET['exportpdf'])) {

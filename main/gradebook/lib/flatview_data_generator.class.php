@@ -77,7 +77,7 @@ class FlatViewDataGenerator
 			
 			//$headers[] = $item->get_name().' <br /> '.get_lang('Max').' '.$this->get_max_result_by_link($count + $items_start).' ';
 			$weight = round($item->get_weight()/($count_categories*100), 2)*100;
-			$headers[] = $item->get_name().' <br />'.$weight.'% ';
+			$headers[] = $item->get_name().'  '.$weight.'% ';
 			if ($show_detail) {
 				//$headers[] = $item->get_name().' ('.get_lang('Detail').')';
 			}

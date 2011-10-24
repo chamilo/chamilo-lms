@@ -1244,7 +1244,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 
     if ($installType == 'update' && (empty($updatePath) || $badUpdatePath)) {
         if ($badUpdatePath) { ?>
-            <div style="color:red; background-color:white; font-weight:bold; text-align:center;">
+            <div class="error-message">
                 <?php echo get_lang('Error'); ?>!<br />
                 Chamilo <?php echo (isset($_POST['step2_update_6']) ? implode('|', $update_from_version_6) : implode('|', $update_from_version_8)).' '.get_lang('HasNotBeenFoundInThatDir'); ?>.
             </div>
@@ -1326,15 +1326,18 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
         //--> The user would have to adjust the permissions manually
         if (count($notwritable) > 0) {
             $error = true;
-            echo '<div style="color:red; background-color:white; font-weight:bold; text-align:center;">';
-            echo get_lang('Warning').':<br />';
-            printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '</font><a href="../../documentation/installation_guide.html" target="blank">', '</a> <font color="red">');
+            echo '<div class="error-message">';
+	            echo '<center><h3>'.get_lang('Warning').'</h3></center>';
+	            printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '</font>
+	            <a href="../../documentation/installation_guide.html" target="blank">', '</a> <font color="red">');
+			echo '</div>';
+				
             echo '<ul>';
             foreach ($notwritable as $value) {
                 echo '<li>'.$value.'</li>';
             }
             echo '</ul>';
-            echo '</div>';
+            
         }
 
         // Check wether a Chamilo configuration file already exists.

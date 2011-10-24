@@ -119,6 +119,8 @@ $learnpath_id       = intval($_REQUEST['learnpath_id']);
 $learnpath_item_id  = intval($_REQUEST['learnpath_item_id']);
 $page               = intval($_REQUEST['page']);
 
+$course_info        = api_get_course_info();
+
 if ($page < 0) {
     $page = 1;
 }
@@ -214,7 +216,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
     
     //@todo move this somewhere else
 	$subject = get_lang('ExamSheetVCC');	
-	$course_info = api_get_course_info();
+	
 	$message  = '<p>'.get_lang('DearStudentEmailIntroduction') . '</p><p>'.get_lang('AttemptVCC');
 	$message .= '<h3>'.get_lang('CourseName'). '</h3><p>'.Security::remove_XSS($course_info['name']).'';
 	$message .= '<h3>'.get_lang('Exercise') . '</h3><p>'.Security::remove_XSS($test);
@@ -383,6 +385,8 @@ if ($is_allowedToEdit) {
 					case 'enable' : // enables an exercise
 						$objExerciseTmp->enable();
 						$objExerciseTmp->save();
+                        
+                        api_item_property_update($course_info, TOOL_QUIZ, $objExerciseTmp->id,'visible', api_get_user_id());
 						// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
 						Display :: display_confirmation_message(get_lang('VisibilityChanged'));
 
@@ -390,6 +394,7 @@ if ($is_allowedToEdit) {
 					case 'disable' : // disables an exercise
 						$objExerciseTmp->disable();
 						$objExerciseTmp->save();
+                        api_item_property_update($course_info, TOOL_QUIZ, $objExerciseTmp->id,'invisible', api_get_user_id());
 						Display :: display_confirmation_message(get_lang('VisibilityChanged'));
 						break;
 					case 'disable_results' : //disable the results for the learners

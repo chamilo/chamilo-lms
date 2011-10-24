@@ -636,10 +636,10 @@ class Exercise {
 					start_time     = '$start_time',
 					end_time       = '$end_time',
 					max_attempt    ='".Database::escape_string($attempts)."',
-     			expired_time   ='".Database::escape_string($expired_time)."',
-     			propagate_neg  ='".Database::escape_string($propagate_neg)."',
-     			review_answers  ='".Database::escape_string($review_answers)."',
-        	random_by_category	='".Database::escape_string($randomByCat)."',
+     			    expired_time   ='".Database::escape_string($expired_time)."',
+         			propagate_neg  ='".Database::escape_string($propagate_neg)."',
+         			review_answers  ='".Database::escape_string($review_answers)."',
+        	        random_by_category	='".Database::escape_string($randomByCat)."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
 			}
 			

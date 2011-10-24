@@ -132,7 +132,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	<div class="courseadminview-activity-3col">
 		<span class="viewcaption"><?php echo get_lang('Administration'); ?></span>	
 <?php
-			$my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATEFORM);
+			$my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
 			CourseHome::show_tools_category($my_list);
 ?>
 	</div>

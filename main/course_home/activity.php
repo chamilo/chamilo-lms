@@ -20,13 +20,13 @@ require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 if (api_is_allowed_to_edit(null, true)) {
 	// HIDE
 	if (!empty($_GET['hide'])) {
-		$sql = "UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."'";
+		$sql = "UPDATE $tool_table SET visibility=0 WHERE id=".intval($_GET['id']);
 		Database::query($sql);
 		Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 	} elseif (!empty($_GET['restore'])) {
 		// visibility 0,2 -> 1
 		// REACTIVATE
-		$sql = "UPDATE $tool_table SET visibility=1 WHERE id='".intval($_GET["id"])."'";
+		$sql = "UPDATE $tool_table SET visibility=1 WHERE id=".intval($_GET['id']);
 		Database::query($sql);
 		Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
 	}
@@ -120,7 +120,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
         if ($theme  == 'activity_big') {
             $rows = 4;
         }
-        $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATEFORM);
+        $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
         CourseHome::show_tools_category($my_list, $rows);
 ?>	
 	</div>

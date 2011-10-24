@@ -111,7 +111,7 @@ if (!isset($cidReq)) {
 	$classError = 'init';
 	$error_no[$classError][] = '2';
 	$error_level[$classError][] = 'info';
-	$error_msg[$classError][] = "[".__FILE__."][".__LINE__."] cidReq was Missing $cidReq take $dbname;";
+	$error_msg[$classError][] = "[".__FILE__."][".__LINE__."] cidReq was missing $cidReq take $dbname;";
 }
 
 if (isset($_SESSION['_gid'])) {
@@ -134,7 +134,7 @@ define('TOOL_AUTHORING', 			'toolauthoring');
 define('TOOL_INTERACTION',			'toolinteraction');
 define('TOOL_COURSE_PLUGIN',		'toolcourseplugin'); //all plugins that can be enabled in courses
 define('TOOL_ADMIN', 				'tooladmin');
-define('TOOL_ADMIN_PLATEFORM', 		'tooladminplatform');
+define('TOOL_ADMIN_PLATFORM', 		'tooladminplatform');
 
 //define('TOOL_ADMIN_PLATFORM_VISIBLE', 'tooladminplatformvisible');
 //define('TOOL_ADMIN_PLATFORM_INVISIBLE', 'tooladminplatforminvisible');
@@ -159,11 +159,11 @@ api_session_unregister('toolgroup');
 
 $is_speacialcourse = CourseManager::is_special_course($course_code);
 
-if ($is_speacialcourse){
-	$autoreg = Security::remove_XSS($_GET['autoreg']);
-	if ($autoreg == 1) {
-		CourseManager::subscribe_user($user_id, $course_code, $status = STUDENT);
-	}
+if ($is_speacialcourse) {
+    $autoreg = Security::remove_XSS($_GET['autoreg']);
+    if ($autoreg == 1) {
+        CourseManager::subscribe_user($user_id, $course_code, $status = STUDENT);
+    }
 }
 
 /*	Is the user allowed here? */

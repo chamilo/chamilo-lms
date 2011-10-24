@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Chamilo Migration Checklist</title><link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
+	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+	<style type="text/css">
+	<!--
+		page { width: 21cm; height: 29.7cm; margin: 2cm }
+		pre { font-family: "Courier New", monospace }
+		p { margin-bottom: 0.21cm }
+		.code {margin: 1em 1em 1em 2em; padding: 0.5em; background-color: rgb(229, 229, 229); vertical-align: top; border: 1px solid #999999;}
+	-->
+	</style>
+	</head>
+<body>
+
+<div id="header1">
+	<h1>Chamilo Migration Checklist</h1>
+</div>
+
+<a href="index.html">Documentation</a> &gt; Migration checklist
+<div id="outerframe">
+<div id="main">
+
+<p>In seldom cases, Chamilo will generate a series of problems after a migration. This list is a helper designed mainly by <a href="http://www.beeznest.com/" target="_blank">BeezNest</a> after its many migration jobs assisting large companies to migrate this critical piece of software.</p>
+
+
+<h2><b>Contents</b></h2>
+
+<ol>
+
+  <li><a href="#1.Version-specific-issues">Version specific issues</a></li>
+  <li><a href="#2.Documents">Documents</a></li>
+  <li><a href="#3.Database-entries">Database entries</a></li>
+</ol>
+
+<h2><a name="1.Version-specific-issues"></a>1. Version specific issues</h2>
+<p>Sadly, some issues happen over certain migrations and, so far, the difficulty of fixing things is still less than the difficulty of knowing exactly what to do to improve the migration script for all scenarios</p>
+<h2><a name="2.Documents"></a>2. Documents</h2>
+    <ul>
+        <li>The worst that could happen is a change of codification while migrating from 1.8.5 to 1.8.8.4. Codification problems are nightmares because you generally get a limited number of characters you can freely change without affecting already existing files. Scrips can be made to ananlyse and fix most of the problems, but you will still need a lot of manual review before you can be sure you eliminated all problems</li>
+    </ul>
+<h2><a name="3.Database-entries"></a>3. Database entries</h2>
+    <ul>
+        <li>Some users reported problems with quizzes: when migrating from 1.8.5 to 1.8.8.4, the quiz_question table has a question_order field filled with 1's. This generates a bug when using exercises marked random, as you only ever get one question to the test. <b>Solution:</b> update the question_order field to have sequential numbers.</li>
+        <li></li>
+    </ul>
+
+
+<hr />
+Don't have time or resources to optimize your Chamilo installation yourself? Hire an <a href="http://www.chamilo.org/en/providers">official Chamilo provider</a> and get it sorted out professionally by specialists.
+    <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
+	<a href="http://jigsaw.w3.org/css-validator/">
+		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
+	</a>
+<hr />
+<h2>Authors</h2>
+<ul>
+<li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL, <a href="mailto:ywarnier@beeznest.net">ywarnier@beeznest.net</a></li>
+</ul>
+</body></html>

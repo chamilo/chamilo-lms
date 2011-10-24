@@ -461,7 +461,7 @@ class CourseHome {
                     $result = Database::query($sql);
                     $col_link ="##003399";
                     break;
-            case TOOL_ADMIN_PLATEFORM:
+            case TOOL_ADMIN_PLATFORM:
                     $sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' $condition_session ORDER BY id";
                     $result = Database::query($sql);
                     $col_link ="##003399";

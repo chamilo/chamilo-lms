@@ -268,42 +268,51 @@ foreach ($group_cats as $index => $category) {
 			} else {
 				$row[] = $this_group['name'].'<br />'.stripslashes(trim($this_group['description']));
 			}
-			// Self-registration / unregistration
-			if (!api_is_allowed_to_edit(false, true)) {
-				if (GroupManager :: is_self_registration_allowed($_user['user_id'], $this_group['id'])) {
-					$row[] = '<a href="group.php?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=self_reg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfRegInf').'</a>';
-				} elseif (GroupManager :: is_self_unregistration_allowed($_user['user_id'], $this_group['id'])) {
-					$row[] = '<a href="group.php?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=self_unreg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfUnRegInf').'</a>';
-				} else {
-					$row[] = '-';
-				}
-			}
-			// Number of members in group
-			$row[] = $this_group['number_of_members'];
-			// Max number of members in group
-			$row[] = ($this_group['maximum_number_of_members'] == MEMBER_PER_GROUP_NO_LIMIT ? '-' : $this_group['maximum_number_of_members']);
-			// Tutor name
-			$tutor_info = '';
+            
+            
+            
+            // Tutor name
+            $tutor_info = '';
 
-			if (count($tutorsids_of_group) > 0) {
-				foreach ($tutorsids_of_group as $tutor_id) {
-					$tutor = api_get_user_info($tutor_id);
-					if (api_get_setting('show_email_addresses') == 'true') {
-						$tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])).', ';
-					} else {
-						if (api_is_allowed_to_edit()) {
-							$tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])).', ';
-						} else {
-							$tutor_info .= api_get_person_name($tutor['firstName'], $tutor['lastName']).', ';
-						}
-					}
-				}
-			}
-			$tutor_info = api_substr($tutor_info, 0, api_strlen($tutor_info) - 2);
-			$row[] = $tutor_info;
+            if (count($tutorsids_of_group) > 0) {
+                foreach ($tutorsids_of_group as $tutor_id) {
+                    $tutor = api_get_user_info($tutor_id);
+                    if (api_get_setting('show_email_addresses') == 'true') {
+                        $tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])).', ';
+                    } else {
+                        if (api_is_allowed_to_edit()) {
+                            $tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])).', ';
+                        } else {
+                            $tutor_info .= api_get_person_name($tutor['firstName'], $tutor['lastName']).', ';
+                        }
+                    }
+                }
+            }
+            $tutor_info = api_substr($tutor_info, 0, api_strlen($tutor_info) - 2);
+            $row[] = $tutor_info;
+            
+		
+            // Max number of members in group
+            $max_members = ($this_group['maximum_number_of_members'] == MEMBER_PER_GROUP_NO_LIMIT ? '-' : $this_group['maximum_number_of_members']);
+            
+            
+			// Number of members in group
+			$row[] = $this_group['number_of_members'].'/'.$max_members;
+			
+                // Self-registration / unregistration
+            if (!api_is_allowed_to_edit(false, true)) {
+                if (GroupManager :: is_self_registration_allowed($_user['user_id'], $this_group['id'])) {
+                    $row[] = '<a class = "a_button gray small" href="group.php?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=self_reg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfRegInf').'</a>';
+                } elseif (GroupManager :: is_self_unregistration_allowed($_user['user_id'], $this_group['id'])) {
+                    $row[] = '<a class = "a_button gray small" href="group.php?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=self_unreg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfUnRegInf').'</a>';
+                } else {
+                    $row[] = '-';
+                }
+            }
+
 			// Edit-links
 			if (api_is_allowed_to_edit(false, true)  && !(api_is_course_coach() && intval($this_group['session_id']) != intval($_SESSION['id_session']))) {
-				$edit_actions = '<a href="group_edit.php?'.api_get_cidreq().'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'">'.Display::return_icon('settings.png', get_lang('EditGroup'),'','22').'</a>&nbsp;';								
+				$edit_actions = '<a href="group_edit.php?'.api_get_cidreq().'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'">'.Display::return_icon('edit.png', get_lang('EditGroup'),'','22').'</a>&nbsp;';								
 				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=empty_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('EmptyGroup').'">'.Display::return_icon('clean.png',get_lang('EmptyGroup'),'','22').'</a>&nbsp;';				
 				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=fill_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('FillGroup').'">'.Display::return_icon('fill.png',get_lang('FillGroup'),'','22').'</a>&nbsp;';
 				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=delete_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'">'.Display::return_icon('delete.png', get_lang('Delete'),'','22').'</a>&nbsp;';
@@ -327,13 +336,16 @@ foreach ($group_cats as $index => $category) {
 		if (api_is_allowed_to_edit(false, true) and count($group_list) > 1) {
 			$table->set_header($column++, '', false);
 		}
-		$table->set_header($column++, get_lang('ExistingGroups'));
+		$table->set_header($column++, get_lang('Groups'));
+        $table->set_header($column++, get_lang('GroupTutor'));
+        		
+		$table->set_header($column++, get_lang('Registered'), false);
+		
 		if (!api_is_allowed_to_edit(false, true)) { // If self-registration allowed
-			$table->set_header($column++, get_lang('GroupSelfRegistration'));
-		}
-		$table->set_header($column++, get_lang('Registered'));
-		$table->set_header($column++, get_lang('MaximumOfParticipants'));
-		$table->set_header($column++, get_lang('GroupTutor'));
+            $table->set_header($column++, get_lang('GroupSelfRegistration'), false);
+        }
+		//$table->set_header($column++, get_lang('MaximumOfParticipants'));
+		
 		if (api_is_allowed_to_edit(false, true)) { // Only for course administrator
 			$table->set_header($column++, get_lang('Modify'), false);
 			$form_actions = array();

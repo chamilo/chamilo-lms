@@ -80,26 +80,21 @@ if (!empty($_GET['selfUnReg']) && GroupManager :: is_self_unregistration_allowed
 }
 echo '<div class="actions">';
 echo '<a href="group.php">'.Display::return_icon('back.png',get_lang('BackToGroupList'),'','32').'</a>';
-/*
- * Edit the group
- */
-if (api_is_allowed_to_edit(false, true) or GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id())) {
-	$my_origin = isset($origin) ? $origin : '';
-	echo '<a href="group_edit.php?origin='.$my_origin.'&gidReq='.api_get_group_id().'">'.Display::return_icon('settings.png', get_lang('EditGroup'),'','32').'</a>';
-}
 
 /*
  * Register to group
  */
+$subscribe_group = '';
 if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {
-	echo '<a href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.Display::return_icon('groupadd.gif').get_lang("RegIntoGroup").'</a>';
+	$subscribe_group = '<a class="a_button gray small" href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.get_lang("RegIntoGroup").'</a>';
 }
 
 /*
  * Unregister from group
  */
+$unsubscribe_group = '';
 if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {
-	echo '<a href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.Display::return_icon('group_delete.gif').get_lang("StudentUnsubscribe").'</a>';
+	$unsubscribe_group = '<a class="a_button gray small" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.get_lang("StudentUnsubscribe").'</a>';
 }
 echo '&nbsp;</div>';
 
@@ -119,10 +114,20 @@ $is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course
 /*
  * Group title and comment
  */
-echo Display::tag('h2', stripslashes($current_group['name']));
+
+ /*
+ * Edit the group
+ */
+$edit_url = '';
+if (api_is_allowed_to_edit(false, true) or GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id())) {
+    $my_origin = isset($origin) ? $origin : '';
+    $edit_url =  '<a href="group_edit.php?origin='.$my_origin.'&gidReq='.api_get_group_id().'">'.Display::return_icon('edit.png', get_lang('EditGroup'),'','22').'</a>';
+}
+
+echo Display::tag('h2', Security::remove_XSS($current_group['name']).' '.$edit_url.' '.$subscribe_group.' '.$unsubscribe_group);
 
 if (!empty($current_group['description'])) {
-	echo '<p>'.stripslashes($current_group['description']).'</p>';
+	echo '<p>'.Security::remove_XSS($current_group['description']).'</p>';
 }
 
 /*

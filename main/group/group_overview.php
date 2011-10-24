@@ -78,38 +78,47 @@ if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
 
 // Action links
 echo '<div class="actions">';
-echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('new_group.png', get_lang('NewGroupCreate'),'','32').'</a>';
-echo '<a href="group.php?'.api_get_cidreq().'">'.Display::return_icon('group.png', get_lang('Groups'),'','32').'</a>';
-if (api_get_setting('allow_group_categories') == 'true') {
-	echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.Display::return_icon('new_folder.png', get_lang('AddCategory'),'','32').'</a>';
-} else {
-	//echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
-	echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('settings.png', get_lang('PropModify'),'','32').'</a>';
-}
-//echo Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
-echo '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a>';
+    echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('new_group.png', get_lang('NewGroupCreate'),'','32').'</a>';
+    echo '<a href="group.php?'.api_get_cidreq().'">'.Display::return_icon('group.png', get_lang('Groups'),'','32').'</a>';
+    if (api_get_setting('allow_group_categories') == 'true') {
+    	echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.Display::return_icon('new_folder.png', get_lang('AddCategory'),'','32').'</a>';
+    } else {
+    	//echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
+    	echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('settings.png', get_lang('PropModify'),'','32').'</a>';
+    }
+    //echo Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
+    echo '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a>';
 echo '</div>';
 
 $categories = GroupManager::get_categories();
+
 foreach ($categories as $index => $category) {
 	if (api_get_setting('allow_group_categories') == 'true') {
-		echo '<h3>'.$category['title'].'</h3>';
+		echo '<h2>'.$category['title'].'</h2>';
 	}
 	$groups = GroupManager::get_group_list($category['id']);
-	echo '<ul>';
-	foreach ($groups as $index => $group) {
-		echo '<li>';
-		echo stripslashes($group['name']);
-		echo '<ul>';
-		$users = GroupManager::get_users($group['id']);
-		foreach ($users as $index => $user) {
-			$user_info = api_get_user_info($user);
-			echo '<li>'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</li>';
-		}
-		echo '</ul>';
-		echo '</li>';
-	}
-	echo '</ul>';
+    echo '<ul>';
+	if (!empty($groups)) {    	
+    	foreach ($groups as $index => $group) {
+    		echo '<li>';
+        		echo Display::tag('h3', Security::remove_XSS($group['name']));
+        		echo '<ul>';
+        		$users = GroupManager::get_users($group['id']);
+                if (!empty($users)) {
+            		foreach ($users as $index => $user) {
+            			$user_info = api_get_user_info($user);
+            			echo '<li>'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</li>';
+            		}            	
+                } else {
+                    //echo Display::tag('li', get_lang('NoStudents'));            
+                }
+                echo '</ul>';
+    		echo '</li>';
+    	}    	
+    } else {        
+        //echo Display::tag('li', get_lang('NoData'));   
+    }    
+    echo '</ul>';
 }
 
 /*	FOOTER */

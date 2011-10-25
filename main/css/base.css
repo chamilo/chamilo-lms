@@ -1448,9 +1448,9 @@ button:hover {
 /* Nice buttons v2 */
 
 .a_button {
+	cursor: pointer;
     display: inline-block;
-    zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
-    display: inline;
+    zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */    
     vertical-align: baseline;
     /* margin: 0 2px; */
     outline: none;

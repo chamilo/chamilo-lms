@@ -94,7 +94,8 @@ if ($action == "list")
 	// adding download link to files
 	foreach($files as $k=>$f) 
 		if ($f['filetype'] == 'file')
-			$files[$k]['download'] = api_get_path(WEB_CODE_PATH)."/document/document.php?cidReq=$cidReq&action=download&id=".urlencode($f['path']);
+//			$files[$k]['download'] = api_get_path(WEB_CODE_PATH)."/document/document.php?cidReq=$cidReq&action=download&id=".urlencode($f['path']);
+			$files[$k]['download'] = api_get_path(WEB_COURSE_PATH).$cidReq."/document".$f['path'];
 	print json_encode($files);
 	exit;
 }

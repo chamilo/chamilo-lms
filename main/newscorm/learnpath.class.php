@@ -236,7 +236,7 @@ class learnpath {
                     $oItem = new aiccItem('db', $row['id'], $course_db);
                     if (is_object($oItem)) {
                         $my_item_id = $oItem->get_id();
-                        $oItem->set_lp_view($this->lp_view_id, $course_db);
+                        $oItem->set_lp_view($this->lp_view_id, $this->course_id);
                         $oItem->set_prevent_reinit($this->prevent_reinit);
                         // Don't use reference here as the next loop will make the pointed object change.
                         $this->items[$my_item_id] = $oItem;
@@ -252,7 +252,7 @@ class learnpath {
                     $oItem = new scormItem('db', $row['id'], $course_db);
                     if (is_object($oItem)) {
                         $my_item_id = $oItem->get_id();
-                        $oItem->set_lp_view($this->lp_view_id, $course_db);
+                        $oItem->set_lp_view($this->lp_view_id, $this->course_id);
                         $oItem->set_prevent_reinit($this->prevent_reinit);
                         // Don't use reference here as the next loop will make the pointed object change.
 
@@ -267,7 +267,7 @@ class learnpath {
 
                 default:
                     require_once 'learnpathItem.class.php';
-                    $oItem = new learnpathItem($row['id'], $user_id, $course_db);
+                    $oItem = new learnpathItem($row['id'], $user_id, $this->course_id);
                     if (is_object($oItem)) {
                         $my_item_id = $oItem->get_id();
                         //$oItem->set_lp_view($this->lp_view_id); // Moved down to when we are sure the item_view exists.
@@ -346,7 +346,7 @@ class learnpath {
             }
             // Setting the view in the item object.
             if (is_object($this->items[$row['id']])) {
-              $this->items[$row['id']]->set_lp_view($this->lp_view_id, $course_db);
+              $this->items[$row['id']]->set_lp_view($this->lp_view_id, $this->course_id);
             }
         }
         $this->ordered_items = $this->get_flat_ordered_items_list($this->get_id(), 0, $course_db);

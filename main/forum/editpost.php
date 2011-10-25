@@ -153,24 +153,30 @@ if (!api_is_allowed_to_edit(null, true) AND (($current_forum_category['visibilit
         exit;
     }
 }
+ 
 if (!api_is_allowed_to_edit(null, true) AND ($current_forum_category['locked'] <> 0 OR $current_forum['locked'] <> 0 OR $current_thread['locked'] <> 0)) {
     $forum_allow = forum_not_allowed_here();
     if ($forum_allow === false) {
         exit;
     }
 }
+
 if (!$_user['user_id'] AND $current_forum['allow_anonymous'] == 0) {
     $forum_allow = forum_not_allowed_here();
     if ($forum_allow === false) {
         exit;
     }
 }
-if (!api_is_allowed_to_edit(null, true) AND $current_forum['allow_edit'] == 0) {
+$group_id = api_get_group_id();
+
+if (!api_is_allowed_to_edit(null, true) AND $current_forum['allow_edit'] == 0 && !GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)) {
     $forum_allow = forum_not_allowed_here();
     if ($forum_allow === false) {
         exit;
     }
 }
+
+
 
 // Action links
 if ($origin != 'learnpath') {

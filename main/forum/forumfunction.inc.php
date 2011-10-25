@@ -519,14 +519,14 @@ function store_forum($values) {
         $new_max = null;
     } else {
         $sql = "SELECT MAX(forum_order) as sort_max FROM ".$table_forums." 
-        		WHERE c_id = $course_id AND forum_category='".Database::escape_string(stripslashes($values['forum_category']))."'";
+        		WHERE c_id = $course_id AND forum_category='".Database::escape_string($values['forum_category'])."'";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $new_max = $row['sort_max'] + 1;
     }
 
     $session_id = api_get_session_id();
-    $clean_title = Database::escape_string(stripslashes($values['forum_title']));
+    $clean_title = Database::escape_string($values['forum_title']);
 
     // Forum images
     $image_moved = false;
@@ -597,6 +597,7 @@ function store_forum($values) {
                 forum_of_group='".	Database::escape_string($values['group_forum'])."'
             WHERE forum_id='".Database::escape_string($values['forum_id'])."'";
             Database::query($sql);
+         
             api_item_property_update($_course, TOOL_FORUM, Database::escape_string($values['forum_id']), 'ForumUpdated', api_get_user_id());
             $return_message = get_lang('ForumEdited');
     } else {
@@ -623,7 +624,7 @@ function store_forum($values) {
                 '".Database::escape_string(isset($values['group_forum'])?$values['group_forum']:null)."',
                 '".Database::escape_string(isset($values['public_private_group_forum_group']['public_private_group_forum'])?$values['public_private_group_forum_group']['public_private_group_forum']:null)."',
                 '".Database::escape_string(isset($new_max)?$new_max:null)."',
-                ".intval($session_id).")";
+                ".intval($session_id).")";                   
         Database::query($sql);
         $last_id = Database::insert_id();
         if ($last_id > 0) {
@@ -1824,7 +1825,7 @@ function store_thread($values) {
     }
     if ($upload_ok) {
 
-        $post_date = date('Y-m-d H:i:s');
+        $post_date = api_get_utc_datetime();
 
         if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(null, true)) {
             $visible = 0; // The post has not been approved yet.
@@ -3611,25 +3612,33 @@ function get_forums_of_group($group_id) {
     $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
     $table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
-
+    $course_id              = api_get_course_int_id();
+    
     //-------------- Student -----------------//
     // Select all the forum information of all forums (that are visible to students).
     $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
-                WHERE forum.forum_of_group = '".Database::escape_string($group_id)."'
-                AND forum.forum_id=item_properties.ref
-                AND item_properties.visibility=1
-                AND item_properties.tool='".TOOL_FORUM."'
+                WHERE forum.forum_of_group = '".Database::escape_string($group_id)."' AND
+                forum.c_id = $course_id AND
+                item_properties.c_id = $course_id AND                 
+                forum.forum_id=item_properties.ref AND 
+                item_properties.visibility=1 AND
+                item_properties.tool='".TOOL_FORUM."'
                 ORDER BY forum.forum_order ASC";
     // Select the number of threads of the forums (only the threads that are visible).
     $sql2 = "SELECT count(thread_id) AS number_of_threads, threads.forum_id FROM $table_threads threads, ".$table_item_property." item_properties
-                    WHERE threads.thread_id=item_properties.ref
-                    AND item_properties.visibility=1
-                    AND item_properties.tool='".TOOL_FORUM_THREAD."'
+                    WHERE threads.thread_id=item_properties.ref AND
+                    forum.c_id = $course_id AND
+                    item_properties.c_id = $course_id AND 
+                    item_properties.visibility=1 AND
+                    item_properties.tool='".TOOL_FORUM_THREAD."'
                     GROUP BY threads.forum_id";
     // Select the number of posts of the forum (post that are visible and that are in a thread that is visible).
     $sql3 = "SELECT count(post_id) AS number_of_posts, posts.forum_id FROM $table_posts posts, $table_threads threads, ".$table_item_property." item_properties
-            WHERE posts.visible=1
-            AND posts.thread_id=threads.thread_id
+            WHERE posts.visible=1 AND
+            posts.c_id = $course_id AND
+            item_properties.c_id = $course_id AND
+            threads.c_id = $course_id
+            AND posts.thread_id=threads.thread_id            
             AND threads.thread_id=item_properties.ref
             AND item_properties.visibility=1
             AND item_properties.tool='".TOOL_FORUM_THREAD."'
@@ -3639,25 +3648,29 @@ function get_forums_of_group($group_id) {
     if (is_allowed_to_edit()) {
         // Select all the forum information of all forums (that are not deleted).
         $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
-                    WHERE forum.forum_of_group = '".Database::escape_string($group_id)."'
-                    AND forum.forum_id=item_properties.ref
-                    AND item_properties.visibility<>2
-                    AND item_properties.tool='".TOOL_FORUM."'
+                    WHERE forum.forum_of_group = '".Database::escape_string($group_id)."' AND
+                    forum.c_id = $course_id AND
+                    item_properties.c_id = $course_id AND         
+                    forum.forum_id=item_properties.ref AND
+                    item_properties.visibility<>2 AND 
+                    item_properties.tool='".TOOL_FORUM."' 
                     ORDER BY forum_order ASC";
-        //echo $sql.'<hr />';
+
         // Select the number of threads of the forums (only the threads that are not deleted).
         $sql2 = "SELECT count(thread_id) AS number_of_threads, threads.forum_id FROM $table_threads threads, ".$table_item_property." item_properties
-                        WHERE threads.thread_id=item_properties.ref
-                        AND item_properties.visibility<>2
-                        AND item_properties.tool='".TOOL_FORUM_THREAD."'
+                        WHERE threads.thread_id=item_properties.ref AND
+                        threads.c_id = $course_id AND
+                        item_properties.c_id = $course_id AND 
+                        item_properties.visibility<>2 AND
+                        item_properties.tool='".TOOL_FORUM_THREAD."'
                         GROUP BY threads.forum_id";
-        //echo $sql2.'<hr />';
         // Select the number of posts of the forum.
-        $sql3 = "SELECT count(post_id) AS number_of_posts, forum_id FROM $table_posts GROUP BY forum_id";
-        //echo $sql3.'<hr />';
+        $sql3 = "SELECT count(post_id) AS number_of_posts, forum_id FROM $table_posts WHERE c_id = $course_id GROUP BY forum_id";
+
     }
 
     // Handling all the forum information.
+    
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         $forum_list[$row['forum_id']] = $row;

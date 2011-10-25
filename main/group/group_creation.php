@@ -161,7 +161,7 @@ elseif (isset($_POST['number_of_groups'])) {
 
 EOT;
 		$renderer->setElementTemplate($element_template);
-		$form->addElement('header', '', $nameTools);
+		//$form->addElement('header', '', $nameTools);
 
 		$form->addElement('hidden', 'action');
 		$form->addElement('hidden', 'number_of_groups');
@@ -216,6 +216,7 @@ EOT;
 		$defaults['number_of_groups'] = intval($_POST['number_of_groups']);
 		$form->setDefaults($defaults);
 		$form->addElement('style_submit_button', 'submit', get_lang('CreateGroup'), 'class="save"');
+        echo Display::tag('h2',$nameTools);
 		$form->display();
 	}
 } else {

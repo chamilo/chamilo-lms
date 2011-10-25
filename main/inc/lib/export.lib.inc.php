@@ -12,6 +12,8 @@
  * Code
  */
 require_once 'document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+
 /**
  *
  * @package chamilo.library
@@ -143,6 +145,49 @@ class Export {
             }
         }
         return $string;
+    }
+
+    public static function export_table_pdf($data, $file_name = 'export', $header, $description) {
+        $headers = $data[0];
+        unset($data[0]);
+        $html = '';
+        
+        $headers_in_pdf = '<img src="'.api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/images/header-logo.png">';
+        
+        $html = '<br/><br/><table width="100%" cellspacing="1" cellpadding="5" border="0">                         
+                 <tr><td width="100%" style="text-align: center;" class="title" colspan="4"><h1>'.$header.'</h1></td></tr></table><br />';
+        $html .= $description.'<br />';
+        
+        $table = new HTML_Table(array('class' => 'data_table'));
+        $row = 0;
+        $column = 0;
+        foreach ($headers as $header) {
+            $table->setHeaderContents($row, $column, $header);
+            $column++;
+        }
+        $row++;
+ 
+        foreach ($data as &$printable_data_row) {
+            $column = 0;
+            foreach ($printable_data_row as &$printable_data_cell) {
+                $table->setCellContents($row, $column, $printable_data_cell);
+                $table->updateCellAttributes($row, $column);
+                $column++;
+            }
+            $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
+            $row++;
+        }
+       
+        $html .= $table->toHtml();        
+        $html  = api_utf8_encode($html);        
+        
+        $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
+        $css = file_exists($css_file) ? @file_get_contents($css_file) : '';        
+        
+        $pdf = new PDF(); 
+        $pdf->set_custom_header($headers_in_pdf);       
+        $pdf->content_to_pdf($html, $css, $file_name, api_get_course_id());
+        exit;
     }
 
 }

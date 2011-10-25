@@ -7,6 +7,7 @@
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
 *	@author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
+* Modified by hubert.borderiou (question category)
 */
 /**
  * Code
@@ -118,6 +119,8 @@ $learnpath_id       = intval($_REQUEST['learnpath_id']);
 $learnpath_item_id  = intval($_REQUEST['learnpath_item_id']);
 $page               = intval($_REQUEST['page']);
 
+$course_info        = api_get_course_info();
+
 if ($page < 0) {
     $page = 1;
 }
@@ -197,8 +200,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 		Database::query($query);
 		
 		//Saving results in the track recording table
-		$recording_changes = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment) 
-							  VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
+		$recording_changes = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment) VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
 		Database::query($recording_changes);
 	}
 	
@@ -214,7 +216,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
     
     //@todo move this somewhere else
 	$subject = get_lang('ExamSheetVCC');	
-	$course_info = api_get_course_info();
+	
 	$message  = '<p>'.get_lang('DearStudentEmailIntroduction') . '</p><p>'.get_lang('AttemptVCC');
 	$message .= '<h3>'.get_lang('CourseName'). '</h3><p>'.Security::remove_XSS($course_info['name']).'';
 	$message .= '<h3>'.get_lang('Exercise') . '</h3><p>'.Security::remove_XSS($test);
@@ -383,6 +385,8 @@ if ($is_allowedToEdit) {
 					case 'enable' : // enables an exercise
 						$objExerciseTmp->enable();
 						$objExerciseTmp->save();
+                        
+                        api_item_property_update($course_info, TOOL_QUIZ, $objExerciseTmp->id,'visible', api_get_user_id());
 						// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
 						Display :: display_confirmation_message(get_lang('VisibilityChanged'));
 
@@ -390,6 +394,7 @@ if ($is_allowedToEdit) {
 					case 'disable' : // disables an exercise
 						$objExerciseTmp->disable();
 						$objExerciseTmp->save();
+                        api_item_property_update($course_info, TOOL_QUIZ, $objExerciseTmp->id,'invisible', api_get_user_id());
 						Display :: display_confirmation_message(get_lang('VisibilityChanged'));
 						break;
 					case 'disable_results' : //disable the results for the learners
@@ -520,6 +525,14 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 	if ($show != 'result') {
 		echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_exercice.png', get_lang('NewEx'),'','32').'</a>';
 		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_question.png', get_lang('AddQ'),'','32').'</a>';
+		// Question category
+		echo '<a href="tests_category.php">';
+		echo Display::return_icon('question_category.gif', get_lang('QuestionCategory'));
+		echo '</a>';		
+		echo '<a href="question_pool.php">';
+		echo Display::return_icon('database.png', get_lang('langQuestionPool'), array('style'=>'width:32px'));
+		echo '</a>';
+		// end question category
 		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'),'','32').'</a>';
 		// link to import qti2 ...
 		echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'),'','32') .'</a>';

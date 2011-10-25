@@ -5,6 +5,7 @@
  * @package chamilo.exercise
  * @author Olivier Brouckaert
  * @author Julio Montoya Cleaning exercises
+ * Modified by Hubert Borderiou 2011-10-21 (question category)
  */
 /**
  * Code
@@ -48,6 +49,7 @@ class Exercise {
 	public $course;
 	public $propagate_neg;
 	public $review_answers; //
+	public $randomByCat;
 
 	 
 	/**
@@ -72,6 +74,7 @@ class Exercise {
 		$this->expired_time 	= '0000-00-00 00:00:00';
 		$this->propagate_neg    = 0;
 		$this->review_answers	= false;
+		$this->randomByCat = 0;	//
 
 		if (!empty($course_id)) {			
 			$course_info        =  api_get_course_info_by_id($this->course_id);
@@ -114,6 +117,7 @@ class Exercise {
 			$this->attempts 		= $object->max_attempt;
 			$this->feedbacktype 	= $object->feedback_type;
 			$this->propagate_neg    = $object->propagate_neg;
+			$this->randomByCat = $object->random_by_category; //
 		
 			$this->review_answers   = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;  
 			
@@ -233,6 +237,53 @@ class Exercise {
 	function selectType() {
 		return $this->type;
 	}
+
+
+	/**
+	 * return 1 or 2 if randomByCat 
+	 * @author - hubert borderiou
+	 * @return - integer - quiz random by category
+	 */
+	function selectRandomByCat() {
+	 	return $this->randomByCat;
+	}
+
+	/**
+	 * return 0 if no random by cat
+	 * return 1 if rendom by cat, categories shuffled
+	 * return 2 if random by cat, categories sorted by alphabetic order
+	 * @author - hubert borderiou
+	 * @return - integer - quiz random by category
+	 */
+	function isRandomByCat() {
+		$res = 0;
+		if ($this->randomByCat == 1) {
+			$res = 1;
+		}
+		else if ($this->randomByCat == 2) {
+			$res = 2;
+		}
+		return $res;
+	}
+
+	/**
+	 * return nothing
+	 * update randomByCat value for object
+	 * @author - hubert borderiou
+	 */
+	function updateRandomByCat($in_randombycat) {
+	 if ($in_randombycat == 1) {
+	 		$this->randomByCat = 1;
+		}
+		else if ($in_randombycat == 2) {
+	 		$this->randomByCat = 2;
+		}
+		else {
+			$this->randomByCat = 0;
+		}
+	}
+
+
 
 	/**
 	 * tells if questions are selected randomly, and if so returns the draws
@@ -554,6 +605,7 @@ class Exercise {
 		$active 		= $this->active;
 		$propagate_neg  = $this->propagate_neg;
 		$review_answers = (isset($this->review_answers) && $this->review_answers) ? 1 : 0;
+		$randomByCat = $this->randomByCat; //
 		
 		$session_id 	= api_get_session_id();
 		 
@@ -584,9 +636,10 @@ class Exercise {
 					start_time     = '$start_time',
 					end_time       = '$end_time',
 					max_attempt    ='".Database::escape_string($attempts)."',
-        			expired_time   ='".Database::escape_string($expired_time)."',
-        			propagate_neg  ='".Database::escape_string($propagate_neg)."',
-        			review_answers  ='".Database::escape_string($review_answers)."',
+     			    expired_time   ='".Database::escape_string($expired_time)."',
+         			propagate_neg  ='".Database::escape_string($propagate_neg)."',
+         			review_answers  ='".Database::escape_string($review_answers)."',
+        	        random_by_category	='".Database::escape_string($randomByCat)."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
 			}
 			
@@ -601,8 +654,7 @@ class Exercise {
 			}
 		} else {
 			// creates a new exercise
-			$sql="INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers,
-											  active, results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers)
+			$sql="INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active, results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category)
 					VALUES(
 						".$this->course_id.",
 						'$start_time','$end_time',
@@ -618,7 +670,8 @@ class Exercise {
 						'".Database::escape_string($feedbacktype)."',
 						'".Database::escape_string($expired_time)."',
 						'".Database::escape_string($session_id)."',
-						'".Database::escape_string($review_answers)."'
+						'".Database::escape_string($review_answers)."',
+						'".Database::escape_string($randomByCat)."'
 						)";
 			Database::query($sql);
 			$this->id = Database::insert_id();
@@ -868,6 +921,15 @@ class Exercise {
 			$radios_random_answers[] = FormValidator :: createElement ('radio', 'randomAnswers', null, get_lang('No'),'0');
 			$form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'));
 
+			//randow by category
+			$form->addElement('html','<div class="clear">&nbsp;</div>');
+			$radiocat = array();
+			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('yesWithCategoriesShuffled'),'1');
+			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('yesWithCategoriesSorted'),'2');
+			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('No'),'0');
+			$form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'));
+			$form->addElement('html','<div class="clear">&nbsp;</div>');
+			
 			//Attempts
 			$attempt_option=range(0,10);
 			$attempt_option[0]=get_lang('Infinite');
@@ -898,6 +960,7 @@ class Exercise {
 			//$check_option=$this->selectType();
 			$diplay = 'block';							
 			$form->addElement('checkbox', 'propagate_neg', get_lang('PropagateNegativeResults'), null);			
+			$form->addElement('html','<div class="clear">&nbsp;</div>');
 			$form->addElement('checkbox', 'review_answers', get_lang('ReviewAnswers'), null);			
 				
 			$form->addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');
@@ -981,9 +1044,8 @@ class Exercise {
 				$defaults['exerciseFeedbackType'] = $this->selectFeedbackType();
 				$defaults['results_disabled'] = $this->selectResultsDisabled();
 				$defaults['propagate_neg'] = $this->selectPropagateNeg();
-				
 				$defaults['review_answers'] = $this->review_answers;
-				
+				$defaults['randomByCat'] = $this->selectRandomByCat(); //
 
 				if (($this->start_time!='0000-00-00 00:00:00'))
 				$defaults['activate_start_date_check'] = 1;
@@ -1008,7 +1070,7 @@ class Exercise {
 				$defaults['exerciseDescription'] = '';
 				$defaults['exerciseFeedbackType'] = 0;
 				$defaults['results_disabled'] = 0;
-
+				$defaults['randomByCat'] = 0;	// 
 				$defaults['start_time'] = date('Y-m-d 12:00:00');
 				$defaults['end_time']   = date('Y-m-d 12:00:00',time()+84600);
 			}
@@ -1038,7 +1100,7 @@ class Exercise {
 		$this->updateResultsDisabled($form->getSubmitValue('results_disabled'));
 		$this->updateExpiredTime($form->getSubmitValue('enabletimercontroltotalminutes'));
 		$this->updatePropagateNegative($form->getSubmitValue('propagate_neg'));
-		
+		$this->updateRandomByCat($form->getSubmitValue('randomByCat'));			//
 		$this->updateReviewAnswers($form->getSubmitValue('review_answers'));
 
 		if ($form->getSubmitValue('activate_start_date_check') == 1) {
@@ -3223,8 +3285,62 @@ class Exercise {
 	}
 	
 	function get_validated_question_list() {
-		return  ($this->isRandom() ? $this->selectRandomList() : $this->selectQuestionList());
-	}
+		$tabres = array();
+		$isRandomByCategory = $this->isRandomByCat();
+		if (!$isRandomByCategory) {
+			if ($this->isRandom()) {
+				$tabres = $this->selectRandomList();
+			}
+			else {
+				$tabres = $this->selectQuestionList();
+			}
+		}
+		else {
+			if ($this->isRandom()) {
+				if (!class_exists("Testcategory")) {
+					require_once("testcategory.class.php");
+				}
+				// -----------------------------
+				// USE question categories hub 13-10-2011
+				// -----------------------------
+				// get questions by category for this exercice
+				// we have to choice $objExercise->random question in each array values of $tabCategoryQuestions
+				// key of $tabCategoryQuestions are the categopy id (0 for not in a category)
+				// value is the array of question id of this category
+				$questionList = array();
+				$tabCategoryQuestions = array();
+				$tabCategoryQuestions = Testcategory::getQuestionsByCat($this->id);
+				$isRandomByCategory = $this->selectRandomByCat();
+				// on tri les catégories en fonction du terme entre [] en tête de la description de la catégorie
+				/*
+				 * ex de catégories :
+				 * [biologie] Maîtriser les mécanismes de base de la génétique
+				 * [biologie] Relier les moyens de défenses et les agents infectieux
+				 * [biologie] Savoir où est produite l'énergie dans les cellules et sous quelle forme
+				 * [chimie] Classer les molécules suivant leur pouvoir oxydant ou réducteur
+				 * [chimie] Connaître la définition de la théorie acide/base selon Brönsted
+				 * [chimie] Connaître les charges des particules
+				 * On veut dans l'ordre des groupes définis par le terme entre crochet au début du titre de la catégorie
+				*/
+				// If test option is Grouped By Categories
+				if ($isRandomByCategory == 2) {
+					$tabCategoryQuestions = Testcategory::sortTabByBracketLabel($tabCategoryQuestions); // 24-02-2011 hub pour projet Bernard Ycard
+				}
+				while (list($cat_id, $tabquestion) = each($tabCategoryQuestions)) {
+					$questionList = array_merge($questionList, Testcategory::getNElementsFromArray($tabquestion, $this->random));
+				}
+				// shuffle the question list if test is not grouped by categories
+				if ($isRandomByCategory == 1) {
+					shuffle($questionList); // or not
+				}			
+				$tabres = $questionList;
+			}
+			else {
+				// Problem, random by category has been selected and we have no $this->isRandom nnumber of question selected
+				// Should not happened
+			}
+		}
+		return $tabres;	}
 	
 	public function get_stat_track_exercise_info_by_exe_id($exe_id) {
 		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);

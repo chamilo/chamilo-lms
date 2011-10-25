@@ -205,7 +205,7 @@ class GroupManager {
 			//if the amount of users per group is not filled in, use the setting from the category
 			$places = $category['max_student'];
 		}
-		echo $sql = "INSERT INTO ".$table_group." SET
+		 $sql = "INSERT INTO ".$table_group." SET
 				c_id = $course_id , 
 				category_id='".Database::escape_string($category_id)."', 
 				max_student = '".$places."', 

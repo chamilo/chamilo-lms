@@ -143,43 +143,60 @@ $form->addGroup($group, 'max_member_group', null, '', false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
 
 // Self registration
-$form->addElement('checkbox', 'self_registration_allowed', get_lang('GroupSelfRegistration'), get_lang('GroupAllowStudentRegistration'), 1);
-$form->addElement('checkbox', 'self_unregistration_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1);
+$group = array();
+$group[] = $form->createElement('checkbox', 'self_registration_allowed', get_lang('GroupSelfRegistration'), get_lang('GroupAllowStudentRegistration'), 1);
+$group[] = $form->createElement('checkbox', 'self_unregistration_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1);
+$form->addGroup($group, '', get_lang('GroupSelfRegistration'), '<div></div>', false);
 
 // Documents settings
-$form->addElement('radio', 'doc_state', get_lang('GroupDocument'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'doc_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'doc_state', null, get_lang('Private'), TOOL_PRIVATE);
+$group = array();
+$group[] = $form->createElement('radio', 'doc_state', get_lang('GroupDocument'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
+$group[] = $form->createElement('radio', 'doc_state', null, get_lang('Public'), TOOL_PUBLIC);
+$group[] = $form->createElement('radio', 'doc_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addGroup($group, '', get_lang('GroupDocument'), '<div></div>', false);
 
 // Work settings
-$form->addElement('radio', 'work_state', get_lang('GroupWork'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'work_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'work_state', null, get_lang('Private'), TOOL_PRIVATE);
+$group = array();
+$group[] = $form->createElement('radio', 'work_state', get_lang('GroupWork'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
+$group[] = $form->createElement('radio', 'work_state', null, get_lang('Public'), TOOL_PUBLIC);
+$group[] = $form->createElement('radio', 'work_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addGroup($group, '', get_lang('GroupWork'), '<div></div>', false);
+
 
 // Calendar settings
-$form->addElement('radio', 'calendar_state', get_lang('GroupCalendar'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'calendar_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'calendar_state', null, get_lang('Private'), TOOL_PRIVATE);
+$group = array();
+$group[] = $form->createElement('radio', 'calendar_state', get_lang('GroupCalendar'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
+$group[] = $form->createElement('radio', 'calendar_state', null, get_lang('Public'), TOOL_PUBLIC);
+$group[] = $form->createElement('radio', 'calendar_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addGroup($group, '', get_lang('GroupCalendar'), '<div></div>', false);
 
 // Announcements settings
-$form->addElement('radio', 'announcements_state', get_lang('GroupAnnouncements'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'announcements_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'announcements_state', null, get_lang('Private'), TOOL_PRIVATE);
+$group = array();
+$group[] = $form->createElement('radio', 'announcements_state', get_lang('GroupAnnouncements'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
+$group[] = $form->createElement('radio', 'announcements_state', null, get_lang('Public'), TOOL_PUBLIC);
+$group[] = $form->createElement('radio', 'announcements_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addGroup($group, '', get_lang('GroupAnnouncements'), '<div></div>', false);
 
 //Forum settings
-$form->addElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'forum_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'forum_state', null, get_lang('Private'), TOOL_PRIVATE);
+$group = array();
+$group[] = $form->createElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
+$group[] = $form->createElement('radio', 'forum_state', null, get_lang('Public'), TOOL_PUBLIC);
+$group[] = $form->createElement('radio', 'forum_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addGroup($group, '', get_lang('GroupForum'), '<div></div>', false);
 
 // Wiki settings
-$form->addElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'wiki_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'wiki_state', null, get_lang('Private'), TOOL_PRIVATE);
+$group = array();
+$group[] = $form->createElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
+$group[] = $form->createElement('radio', 'wiki_state', null, get_lang('Public'), TOOL_PUBLIC);
+$group[] = $form->createElement('radio', 'wiki_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addGroup($group, '', get_lang('GroupWiki'), '<div></div>', false);
 
 // Chat settings
-$form->addElement('radio', 'chat_state', get_lang('Chat'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'chat_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'chat_state', null, get_lang('Private'), TOOL_PRIVATE);
+$group = array();
+$group[] = $form->createElement('radio', 'chat_state', get_lang('Chat'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
+$group[] = $form->createElement('radio', 'chat_state', null, get_lang('Public'), TOOL_PUBLIC);
+$group[] = $form->createElement('radio', 'chat_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addGroup($group, '', get_lang('Chat'), '<div></div>', false);
 
 // Search Members of group
 //$form = new FormValidator('search_member', 'get', 'group_edit', '', null, false);

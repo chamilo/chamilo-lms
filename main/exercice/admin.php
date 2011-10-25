@@ -42,6 +42,7 @@
 *
 *	@package chamilo.exercise
 * 	@author Olivier Brouckaert
+* Modified by Hubert Borderiou 21-10-2011 Question by category
 */
 /**
  * Code
@@ -234,7 +235,6 @@ if ($cancelQuestion) {
 	} else {
 		// goes back to the question viewing
 		$editQuestion=$modifyQuestion;
-
 		unset($newQuestion,$modifyQuestion);
 	}
 }
@@ -448,6 +448,9 @@ if (isset($exerciseId) && !empty($exerciseId)) {
 	}
 }
 
+// If we are in a test
+$inATest = isset($exerciseId) && $exerciseId > 0;
+if ($inATest) {
 echo '<div class="actions">';
 if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
     echo '<a href="admin.php?exerciseId='.$exerciseId.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
@@ -473,20 +476,33 @@ foreach ($objExercise->questionList as $q) {
 echo '<span style="float:right">'.sprintf(get_lang('XQuestionsWithTotalScoreY'),$objExercise->selectNbrQuestions(),$maxScoreAllQuestions).'</span>';
 
 echo '</div>';
+}
+else if (isset($_GET['newQuestion'])) {
+	// we are in create a new question from question pool not in a test
+	echo '<div class="actions">';
+	echo '<a href="admin.php?'.api_get_cidreq().'">.'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+	echo '</div>';
+}
+else {
+	// If we are in question_poolbut not in an test, go back to question create in pool
+	echo '<div class="actions">';
+	echo '<a href="question_pool.php">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+	echo '</div>';
+	
+}
 
 if (isset($_GET['message'])) {
 	if (in_array($_GET['message'], array('ExerciseStored', 'ItemUpdated', 'ItemAdded'))) {
 		Display::display_confirmation_message(get_lang($_GET['message']));
 	}
 }
-
 if ($newQuestion || $editQuestion) {
 	// statement management
 	$type = Security::remove_XSS($_REQUEST['answerType']);
 	echo '<input type="hidden" name="Type" value="'.$type.'" />';	
 	require 'question_admin.inc.php';
 }
- 
+
 if (isset($_GET['hotspotadmin'])) {    
     if (!is_object($objQuestion)) {
         $objQuestion = Question :: read($_GET['hotspotadmin']);
@@ -495,6 +511,7 @@ if (isset($_GET['hotspotadmin'])) {
         api_not_allowed();
     }    
 	require 'hotspot_admin.inc.php';}
+
 if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
 	// question list management
 	require 'question_list_admin.inc.php';
@@ -503,5 +520,4 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 api_session_register('objExercise');
 api_session_register('objQuestion');
 api_session_register('objAnswer');
-
 Display::display_footer();

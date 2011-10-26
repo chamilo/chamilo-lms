@@ -65,7 +65,7 @@ function external_get_user_info($login, $password){
     'status' => $status,
     'admin' => $admin,
     'email' => $user_info['email'],
-    'login' => $user_info['username'],
+    'username' => $user_info['username'],
     'language' => $language,
     'password' => DEFAULT_PASSWORD,
     'courses' => $user_info['courses'],
@@ -116,14 +116,14 @@ function external_add_user($u){
   if (! isset($u['encrypt_method']) )
     $u['encrypt_method'] = '';
   
-  $chamilo_uid = UserManager::create_user($u['firstname'], $u['lastname'],$u['status'], $u['email'], $u['login'], $u['password'], $u['official_code'], $u['language'], $u['phone'],$u['picture_uri'], $u['auth_source'], $u['expiration_date'], $u['active'], $u['hr_dept_id'], $u['extra'], $u['encrypt_method']);
+  $chamilo_uid = UserManager::create_user($u['firstname'], $u['lastname'],$u['status'], $u['email'], $u['username'], $u['password'], $u['official_code'], $u['language'], $u['phone'],$u['picture_uri'], $u['auth_source'], $u['expiration_date'], $u['active'], $u['hr_dept_id'], $u['extra'], $u['encrypt_method']);
   return $chamilo_uid;
 }
 /**
  * update user info in database
  **/
 function external_update_user($u){
-  $updated = UserManager::update_user($u['user_id'], $u['firstname'], $u['lastname'], $u['login'], null, $u['auth_source'], $u['email'], $u['status'], $u['official_code'], $u['phone'], $u['picture_uri'], $u['expiration_date'], $u['active'], $u['creator_id'], $u['hr_dept_id'], $u['extra'], $u['language'],'');
+  $updated = UserManager::update_user($u['user_id'], $u['firstname'], $u['lastname'], $u['username'], null, $u['auth_source'], $u['email'], $u['status'], $u['official_code'], $u['phone'], $u['picture_uri'], $u['expiration_date'], $u['active'], $u['creator_id'], $u['hr_dept_id'], $u['extra'], $u['language'],'');
   if(!empty($user['courses'])){
     $autoSubscribe = explode('|', $u['courses']);
     foreach ($autoSubscribe as $code) {

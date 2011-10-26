@@ -26,7 +26,10 @@ if ($user !== false && ($chamilo_uid = external_add_user($user)) !== false) {
     //log in the user
     $loginFailed = false;
     $_user['user_id'] = $chamilo_uid;
+    $_user['uidReset'] = true;  
     api_session_register('_user');
+    $uidReset=true;
+
     //Autosubscribe to courses
     if(!empty($user['courses'])){
       $autoSubscribe = explode('|', $user['courses']);

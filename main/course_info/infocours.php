@@ -322,8 +322,8 @@ if (api_get_setting('allow_course_theme') == 'true') {
     $form->addGroup($group, '', array(get_lang("AllowLearningPathTheme")), '<div></div>');
     
 	$group = array();
-	$group[]=$form->createElement('select_theme', 'course_theme', get_lang('Theme'));
-    $form->addGroup($group, '', array(get_lang("Theme")), '<div></div>');
+	$group[]=$form->createElement('select_theme', 'course_theme', null);
+    $form->addGroup($group, '', array(get_lang("Stylesheets")), '<div></div>');
 }
 
 if (is_settings_editable()) {

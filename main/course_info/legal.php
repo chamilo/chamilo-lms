@@ -2,9 +2,11 @@
 
 // Language files that need to be included
 $language_file = array('create_course', 'course_info', 'admin');
+
+$cidReset = true;
+
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
-
 
 
 $course_code    = isset($_REQUEST['course_code'])  ? $_REQUEST['course_code'] : null;
@@ -69,4 +71,4 @@ Display :: display_header($nameTools);
 echo '<h2>'.get_lang('CourseLegalAgreement').'</h2>';
 echo $course_legal;
 $form->display();
-
+Display :: display_footer();

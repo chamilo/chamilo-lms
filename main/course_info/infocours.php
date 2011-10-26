@@ -320,9 +320,10 @@ if (api_get_setting('allow_course_theme') == 'true') {
 	$group[]=$form->createElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
 	$group[]=$form->createElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
     $form->addGroup($group, '', array(get_lang("AllowLearningPathTheme")), '<div></div>');
-	
-	$form->addElement('select_theme', 'course_theme', get_lang('Theme'), '');
-	$form->applyFilter('course_theme', 'trim');
+    
+	$group = array();
+	$group[]=$form->createElement('select_theme', 'course_theme', get_lang('Theme'));
+    $form->addGroup($group, '', array(get_lang("Theme")), '<div></div>');
 }
 
 if (is_settings_editable()) {

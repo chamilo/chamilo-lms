@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once ('HTML/QuickForm/select.php');
+require_once 'HTML/QuickForm/select.php';
 /**
 * A dropdownlist with all languages to use with QuickForm
 */

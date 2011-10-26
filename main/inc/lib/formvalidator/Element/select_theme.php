@@ -1,26 +1,6 @@
 <?php
-// $Id: $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+/* For licensing terms, see /license.txt */
 
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
 require_once ('HTML/QuickForm/select.php');
 /**
 * A dropdownlist with all themes to use with QuickForm
@@ -30,8 +10,10 @@ class HTML_QuickForm_Select_Theme extends HTML_QuickForm_select
 	/**
 	 * Class constructor
 	 */
-	function HTML_QuickForm_Select_Theme($elementName=null, $elementLabel=null, $options=null, $attributes=null)
-	{
+	function HTML_QuickForm_Select_Theme($elementName=null, $elementLabel=null, $options=null, $attributes=null) {
+	    if (!isset($attributes['class'])) {
+            $attributes['class'] = 'chzn-select';
+        }           
 		parent::HTML_QuickForm_Select($elementName, $elementLabel, $options, $attributes);
 		// Get all languages
 		$themes = api_get_themes();

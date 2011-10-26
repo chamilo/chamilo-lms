@@ -150,7 +150,6 @@ $form->applyFilter('visual_code', 'strtoupper');*/
 $form->addElement('select', 'category_code', get_lang('Fac'), $categories, array('style'=>'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
 $form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
 
-
 $form->add_textfield('department_name', get_lang('Department'), false, array('size' => '60'));
 $form->applyFilter('department_name', 'trim');
 
@@ -322,7 +321,7 @@ if (api_get_setting('allow_course_theme') == 'true') {
 	$group[]=$form->createElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
     $form->addGroup($group, '', array(get_lang("AllowLearningPathTheme")), '<div></div>');
 	
-	$form->addElement('select_theme', 'course_theme', get_lang('Theme'), '', array('class'=>'chzn-select', 'id'=>'theme'));
+	$form->addElement('select_theme', 'course_theme', get_lang('Theme'), '');
 	$form->applyFilter('course_theme', 'trim');
 }
 

@@ -109,7 +109,7 @@ $table_title = ($session_name? Display::return_icon('session.png', get_lang('Ses
 echo '<h2>'.$table_title.'</h2>';
 echo '<h3>'.Display::return_icon('learnpath.png', get_lang('ToolLearnpath'), array(), 22).' '.$lp_title.'</h3>';
     
-$list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $course_info['db_name']);
+$list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $course_info['real_id']);
 $origin = 'tracking';
 if ($export_csv) {
 	require_once api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';

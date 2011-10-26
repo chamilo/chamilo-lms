@@ -2643,13 +2643,13 @@ return 'application/octet-stream';
     	require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
     	
     	$img_path 		= api_get_path(WEB_IMG_PATH);
-    	$img_sys_path 	= api_get_path(SYS_CODE_PATH).'img/';
+    	$img_sys_path 	= api_get_path(SYS_CODE_PATH).'img/';   
     	$web_code_path 	= api_get_path(WEB_CODE_PATH);
     	
     	$return = '';
     	if (count($resources_sorted) > 0) {
     		foreach ($resources_sorted as $key => $resource) {    	
-    			$title = $resource['title'];
+    			$title = isset($resource['title']) ? $resource['title'] : null;
     			if (empty($title)) {
     				$title = $key;
     			}

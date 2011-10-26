@@ -138,6 +138,8 @@ if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !emp
 	exit;
 }
 
+$course_id = api_get_course_int_id();
+
 //Send student email @todo move this code in a class, library
 if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid']== strval(intval($_GET['exeid']))) {
 	$id 		= intval($_GET['exeid']); //filtered by post-condition    
@@ -147,7 +149,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
     }
 	$test 		       = $track_exercise_info['title'];
 	$student_id        = $track_exercise_info['exe_user_id'];
-    $course_id         = $track_exercise_info['exe_cours_id'];
+//    $course_id         = $track_exercise_info['exe_cours_id'];
     $session_id        = $track_exercise_info['session_id'];
     $lp_id             = $track_exercise_info['orig_lp_id'];
     $lp_item_id        = $track_exercise_info['orig_lp_item_id'];
@@ -965,13 +967,21 @@ if ($show == 'test') {
     if ($is_allowedToEdit) {
         $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
                 FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
-                WHERE   d.id = ip.ref AND ip.tool = '" . TOOL_DOCUMENT . "' AND (d.path LIKE '%htm%')
-                AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' LIMIT " .$from . "," .$limit; // only .htm or .html files listed
+                WHERE   d.c_id = $course_id AND
+                        ip.c_id = $course_id AND
+                        d.id = ip.ref AND 
+                        ip.tool = '" . TOOL_DOCUMENT . "' AND 
+                        (d.path LIKE '%htm%') AND 
+                        d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' 
+                        LIMIT " .$from . "," .$limit; // only .htm or .html files listed
     } else {
         $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
                 FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
-                WHERE d.id = ip.ref AND ip.tool = '" . TOOL_DOCUMENT . "' AND (d.path LIKE '%htm%')
-                AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' AND ip.visibility='1' LIMIT " .$from . "," .$limit;
+                WHERE d.c_id = $course_id AND
+                        ip.c_id = $course_id AND 
+                d.id = ip.ref AND ip.tool = '" . TOOL_DOCUMENT . "' AND (d.path LIKE '%htm%')
+                AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' AND ip.visibility='1' 
+                LIMIT " .$from . "," .$limit;
     }
     
     $result = Database::query($sql);

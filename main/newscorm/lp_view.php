@@ -35,6 +35,7 @@ if (!$is_allowed_in_course) api_not_allowed();
 
 $oLearnpath     = false;
 $course_code    = api_get_course_id();
+$course_id      = api_get_course_int_id();
 $user_id        = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Plataform's css.
 $my_style       = $platform_theme;
@@ -172,8 +173,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
     $safe_item_id           = Database::escape_string($_GET['lp_item_id']);
     $safe_id                = $lp_id;
     $safe_exe_id            = intval($_REQUEST['exeId']);
-    $course_id 				= api_get_course_int_id();
-
+    
     if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
 		
         $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.$safe_exe_id;
@@ -187,7 +187,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         $score 		= (float)$row_dates['exe_result'];
         $max_score 	= (float)$row_dates['exe_weighting'];
         
-        $sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE id = '".(int)$safe_item_id."'";
+        $sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE c_id = $course_id AND id = '".(int)$safe_item_id."'";
         if ($debug) error_log($sql_upd_max_score);
         Database::query($sql_upd_max_score);
 
@@ -197,7 +197,8 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         if (Database::num_rows($res_last_attempt)) {
         	$row_last_attempt = Database::fetch_row($res_last_attempt);
         	$lp_item_view_id  = $row_last_attempt[0];
-            $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' , score = $score, total_time = $mytime WHERE id='".$lp_item_view_id."' AND c_id = $course_id ";
+            $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' , score = $score, total_time = $mytime 
+                              WHERE id='".$lp_item_view_id."' AND c_id = $course_id ";
             if ($debug) error_log($sql_upd_score);
             Database::query($sql_upd_score);
 
@@ -232,8 +233,8 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
 require_once '../inc/reduced_header.inc.php';
 //$displayAudioRecorder = (api_get_setting('service_visio', 'active') == 'true') ? true : false;
 // Check if audio recorder needs to be in studentview.
-$course_id = $_SESSION['_course']['id'];
-if ($_SESSION['status'][$course_id] == 5) {
+//$course_id = $_SESSION['_course']['id'];
+if ($_SESSION['status'][$course_code] == 5) {
 	$audio_recorder_studentview = true;
 } else {
 	$audio_recorder_studentview = false;
@@ -314,7 +315,7 @@ if ($_SESSION['oLP']->mode == 'embedframe' ||$_SESSION['oLP']->get_hide_toc_fram
                         $tbl_lp_item    = Database::get_course_table(TABLE_LP_ITEM);
                         $show_audioplayer = false;
                         // Getting all the information about the item.
-                        $sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
+                        $sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE c_id = $course_id AND lp_id = '" . $_SESSION['oLP']->lp_id."'";
                         $res_media= Database::query($sql);
 
                         if (Database::num_rows($res_media) > 0) {

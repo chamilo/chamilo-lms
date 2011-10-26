@@ -419,7 +419,7 @@ class learnpathItem {
 			$lp_iv_id = $row[0];
 			$iva_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
 			$iva_sql = "SELECT * FROM $iva_table " .
-							"WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id ";
+					   "WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id ";
 			$res_sql = Database::query($iva_sql);
 			while ($row = Database::fetch_array($res_sql)) {
 				$this->interactions[$row['interaction_id']] = array($row['interaction_id'], $row['interaction_type'], $row['weighting'], $row['completion_time'], $row['correct_responses'], $row['student_responses'], $row['result'], $row['latency']);
@@ -2034,7 +2034,8 @@ class learnpathItem {
 		$new_terms_string = implode(',', $new_terms);
 		$terms_update_sql = '';
 		// TODO: Validate csv string.
-		$terms_update_sql = "UPDATE $lp_item SET terms = '". Database::escape_string(api_htmlentities($new_terms_string, ENT_QUOTES, $charset)) . "' WHERE c_id = $course_id AND id=".$this->get_id();
+		$terms_update_sql = "UPDATE $lp_item SET terms = '". Database::escape_string(api_htmlentities($new_terms_string, ENT_QUOTES, $charset)) . "' 
+		                      WHERE c_id = $course_id AND id=".$this->get_id();
 		$res = Database::query($terms_update_sql);
 		// Save it to search engine.
 		if (api_get_setting('search_enabled') == 'true') {
@@ -2169,7 +2170,8 @@ class learnpathItem {
 	/**
      * Special scorm update time function. This function will update time directly into db for scorm objects
      **/
-    public function scorm_update_time($total_sec=0){
+    public function scorm_update_time($total_sec=0) {
+        $course_id = api_get_course_int_id();
         //Step 1 : get actual total time stored in db
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         
@@ -2259,7 +2261,7 @@ class learnpathItem {
 		 				$ivai_sql = "INSERT INTO $iva_table " .
 		 						"(c_id, lp_iv_id, order_id, objective_id, status, score_raw, score_min, score_max )" .
 		 						"VALUES" .
-		 						"($this->course_id, ".$lp_iv_id.", ".$index.",'".Database::escape_string($objective[0])."','".Database::escape_string($objective[1])."'," .
+		 						"($course_id, ".$lp_iv_id.", ".$index.",'".Database::escape_string($objective[0])."','".Database::escape_string($objective[1])."'," .
 		 						"'".Database::escape_string($objective[2])."','".Database::escape_string($objective[4])."','".Database::escape_string($objective[3])."')";
 		 				$ivai_res = Database::query($ivai_sql);
 		 				//error_log($ivai_sql);
@@ -2492,33 +2494,33 @@ class learnpathItem {
 
             
             if ($this->type == 'sco'){ //IF scorm scorm_update_time has already updated total_tim in db
-			     	$sql = "UPDATE $item_view_table " .
-			     			" SET ".//start_time = ".$this->get_current_start_time().", " . //scorm_init_time does it
-			     			" score = ".$this->get_score().", " .
-			     			$my_status.
-			     			" max_score = '".$this->get_max()."'," .
-			     			" suspend_data = '".Database::escape_string($this->current_data)."'," .
-			     			//" max_time_allowed = '".$this->get_max_time_allowed()."'," .
-			     			" lesson_location = '".$this->lesson_location."' " .
-			     			"WHERE c_id = '.$course_id.' AND lp_item_id = ".$this->db_id." " .
-			     			"AND lp_view_id = ".$this->view_id." " .
-			     			"AND view_count = ".$this->attempt_id;
+		     	$sql = "UPDATE $item_view_table " .
+		     			" SET ".//start_time = ".$this->get_current_start_time().", " . //scorm_init_time does it
+		     			" score = ".$this->get_score().", " .
+		     			$my_status.
+		     			" max_score = '".$this->get_max()."'," .
+		     			" suspend_data = '".Database::escape_string($this->current_data)."'," .
+		     			//" max_time_allowed = '".$this->get_max_time_allowed()."'," .
+		     			" lesson_location = '".$this->lesson_location."' " .
+		     			"WHERE c_id = $course_id AND lp_item_id = ".$this->db_id." " .
+		     			"AND lp_view_id = ".$this->view_id." " .
+		     			"AND view_count = ".$this->attempt_id;
             } else {
-				 	$sql = "UPDATE $item_view_table " .
-				 			"SET " .$total_time.
-				 			" start_time = ".$this->get_current_start_time().", " .
-				 			" score = ".$this->get_score().", " .
-				 			$my_status.
-				 			" max_score = '".$this->get_max()."'," .
-				 			" suspend_data = '".Database::escape_string($this->current_data)."'," .
-				 			//" max_time_allowed = '".$this->get_max_time_allowed()."'," .
-				 			" lesson_location = '".$this->lesson_location."' " .
-				 			"WHERE c_id = '.$course_id.' AND lp_item_id = ".$this->db_id." " .
-				 			"AND lp_view_id = ".$this->view_id." " .
-				 			"AND view_count = ".$this->attempt_id;
+			 	$sql = "UPDATE $item_view_table " .
+			 			"SET " .$total_time.
+			 			" start_time = ".$this->get_current_start_time().", " .
+			 			" score = ".$this->get_score().", " .
+			 			$my_status.
+			 			" max_score = '".$this->get_max()."'," .
+			 			" suspend_data = '".Database::escape_string($this->current_data)."'," .
+			 			//" max_time_allowed = '".$this->get_max_time_allowed()."'," .
+			 			" lesson_location = '".$this->lesson_location."' " .
+			 			"WHERE c_id = $course_id AND lp_item_id = ".$this->db_id." " .
+			 			"AND lp_view_id = ".$this->view_id." " .
+			 			"AND view_count = ".$this->attempt_id;
             }
 
-				 	$this->current_start_time = time();
+			 	$this->current_start_time = time();
 		 		}
 			 	if (self::debug > 2) { error_log('New LP - In learnpathItem::write_to_db() - Updating item_view: '.$sql, 0); }
 			 	$res = Database::query($sql);
@@ -2531,7 +2533,7 @@ class learnpathItem {
 		 		// Save interactions.
 		 		$tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 		 		$sql = "SELECT id FROM $tbl " .
-		 				"WHERE c_id = '.$course_id.' AND lp_item_id = ".$this->db_id." " .
+		 				"WHERE c_id = $course_id AND lp_item_id = ".$this->db_id." " .
 		 				"AND   lp_view_id = ".$this->view_id." " .
 		 				"AND   view_count = ".$this->attempt_id;
 		 		$res = Database::query($sql);
@@ -2549,7 +2551,7 @@ class learnpathItem {
 			 			}
 			 			$iva_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
 			 			$iva_sql = "SELECT id FROM $iva_table " .
-			 					"WHERE c_id = '.$course_id.' AND lp_iv_id = $lp_iv_id " .
+			 					"WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id " .
 //			 					"AND order_id = $index";
 								//also check for the interaction ID as it must be unique for this SCO view
 			 					"AND (order_id = $index " .
@@ -2569,7 +2571,7 @@ class learnpathItem {
 			 					"student_response = '".Database::escape_string($interaction[5])."'," .
 			 					"result = '".Database::escape_string($interaction[6])."'," .
 			 					"latency = '".Database::escape_string($interaction[7])."'" .
-			 					"WHERE c_id = '.$course_id.' AND id = $iva_id";
+			 					"WHERE c_id = $course_id AND id = $iva_id";
 			 				$ivau_res = Database::query($ivau_sql);
 			 			} else {
 			 				// Insert new one.

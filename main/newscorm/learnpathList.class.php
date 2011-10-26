@@ -31,18 +31,14 @@ class learnpathList {
      * @return	void
      */
     function __construct($user_id, $course_code = '', $session_id = null, $order_by = null) {
-
-        if (!empty($course_code)){
-            $course_info = api_get_course_info($course_code);
-            $lp_table = Database::get_course_table(TABLE_LP_MAIN, $course_info['db_name']);
-            $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST, $course_info['db_name']);
-        } else {
-            $course_code = api_get_course_id();
-            $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-            $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-        }
-        $this->course_code = $course_code;
+        $course_info = api_get_course_info($course_code);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
+                
+        $this->course_code = $course_code;        
         $this->user_id = $user_id;
+        
+        $course_id = $course_info['real_id'];
 
         // Condition for the session.
         if (isset($session_id)) {
@@ -50,12 +46,12 @@ class learnpathList {
         } else {
             $session_id = api_get_session_id();
         }
-        $condition_session = api_get_session_condition($session_id, false, true);
+        $condition_session = api_get_session_condition($session_id, true, true);
         $order = "ORDER BY display_order ASC, name ASC";
         if (isset($order_by)) {
             $order =  Database::parse_conditions(array('order'=>$order_by));            
         }
-        $sql = "SELECT * FROM $lp_table $condition_session $order";
+        $sql = "SELECT * FROM $lp_table WHERE c_id = $course_id $condition_session $order";
         $res = Database::query($sql);
         $names = array();
         while ($row = Database::fetch_array($res,'ASSOC')) {
@@ -66,7 +62,7 @@ class learnpathList {
             // is done using domesticate()
             $myname = domesticate($row['name']);
             $mylink = 'newscorm/lp_controller.php?action=view&lp_id='.$row['id'].'&id_session='.$session_id;
-            $sql2="SELECT * FROM $tbl_tool where (name='$myname' and image='scormbuilder.gif' and link LIKE '$mylink%')";
+            $sql2="SELECT * FROM $tbl_tool WHERE c_id = $course_id AND (name='$myname' and image='scormbuilder.gif' and link LIKE '$mylink%')";
             //error_log('New LP - learnpathList::__construct - getting visibility - '.$sql2, 0);
             $res2 = Database::query($sql2);
             if (Database::num_rows($res2) > 0) {

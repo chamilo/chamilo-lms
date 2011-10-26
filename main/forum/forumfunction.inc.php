@@ -1183,7 +1183,7 @@ function get_forums($id='', $course_code = '') {
     $condition_session = api_get_session_condition($session_id);
     $course_id = $course_info['real_id'];
     
-    $condition_course .= " AND forum.c_id = $course_id";
+    $condition_course = " AND forum.c_id = $course_id";
 
     $forum_list = array();
     if ($id == '') {
@@ -1310,7 +1310,7 @@ function get_forums($id='', $course_code = '') {
     if ($id == '') {
         if (is_array($forum_list)) {
             foreach ($forum_list as $key => $value) {
-                $last_post_info_of_forum = get_last_post_information($key, api_is_allowed_to_edit(), $course_db_name);
+                $last_post_info_of_forum = get_last_post_information($key, api_is_allowed_to_edit(), $course_id);
                 $forum_list[$key]['last_post_id'] = $last_post_info_of_forum['last_post_id'];
                 $forum_list[$key]['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
                 $forum_list[$key]['last_post_date'] = $last_post_info_of_forum['last_post_date'];
@@ -1322,7 +1322,7 @@ function get_forums($id='', $course_code = '') {
             $forum_list = array();
         }
     } else {
-        $last_post_info_of_forum = get_last_post_information($id, api_is_allowed_to_edit(), $course_db_name);
+        $last_post_info_of_forum = get_last_post_information($id, api_is_allowed_to_edit(), $course_id);
         $forum_list['last_post_id'] = $last_post_info_of_forum['last_post_id'];
         $forum_list['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
         $forum_list['last_post_date'] = $last_post_info_of_forum['last_post_date'];
@@ -1344,15 +1344,17 @@ function get_forums($id='', $course_code = '') {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function get_last_post_information($forum_id, $show_invisibles = false, $course_db_name = '') {
-    if (!isset($course_db_name)) {
-        $course_db_name = '';
+function get_last_post_information($forum_id, $show_invisibles = false, $course_id = null) {
+    if (!isset($course_id)) {
+        $course_id = api_get_course_int_id();
+    } else {
+        $course_id = intval($course_id);
     }
 
-    $table_forums 			= Database :: get_course_table(TABLE_FORUM, $course_db_name);
-    $table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD, $course_db_name);
-    $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST, $course_db_name);
-    $table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_db_name);
+    $table_forums 			= Database :: get_course_table(TABLE_FORUM);
+    $table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
+    $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
+    $table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 
     $sql = "SELECT post.post_id, post.forum_id, post.poster_id, post.poster_name, post.post_date, users.lastname, users.firstname, post.visible, thread_properties.visibility AS thread_visibility, forum_properties.visibility AS forum_visibility
@@ -1363,6 +1365,9 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
                 AND thread_properties.tool='".TOOL_FORUM_THREAD."'
                 AND post.forum_id=forum_properties.ref
                 AND forum_properties.tool='".TOOL_FORUM."'
+                AND post.c_id = $course_id AND 
+                thread_properties.c_id = $course_id AND
+                forum_properties.c_id = $course_id 
                 ORDER BY post.post_id DESC";
     $result = Database::query($sql);
 

@@ -16,12 +16,13 @@ require_once 'resourcelinker.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once '../exercice/exercise.lib.php';
 
-$course_id = api_get_course_id();
-if (empty($course_id ) && isset($_GET['course'])) {
+$course_code = api_get_course_id();
+if (isset($_GET['course'])) {
     $course_code = Security::remove_XSS($_GET['course']);    
-} else {
-    $course_code = $course_id;
-}
+} 
+
+$course_info = api_get_course_info($course_code);
+$course_id = $course_info['real_id']; 
 
 if (isset($_GET['student_id'])) {
     $student_id = intval($_GET['student_id']);
@@ -81,10 +82,6 @@ $output .= '<tr><td><table border="0" class="data_table"><tr>'.
 // Going through the items using the $items[] array instead of the database order ensures
 // we get them in the same order as in the imsmanifest file, which is rather random when using
 // the database table.
-
-$course_info            = api_get_course_info($course_code);
-
-$course_id = $course_info['real_id']; 
 
 $TBL_LP_ITEM            = Database :: get_course_table(TABLE_LP_ITEM);
 $TBL_LP_ITEM_VIEW       = Database :: get_course_table(TABLE_LP_ITEM_VIEW);

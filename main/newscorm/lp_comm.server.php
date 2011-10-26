@@ -139,11 +139,12 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         return $objResponse;
     }
 
-    $mystatus = $mylpi->get_status(false);
-    $mytotal = $mylp->get_total_items_count_without_chapters();
-    $mycomplete = $mylp->get_complete_items_count();
-    $myprogress_mode = $mylp->get_progress_bar_mode();
-    $myprogress_mode = ($myprogress_mode == '' ? '%' : $myprogress_mode);
+    $mystatus           = $mylpi->get_status(false);
+    $mytotal            = $mylp->get_total_items_count_without_chapters();
+    $mycomplete         = $mylp->get_complete_items_count();
+    $myprogress_mode    = $mylp->get_progress_bar_mode();
+    $myprogress_mode    = ($myprogress_mode == '' ? '%' : $myprogress_mode);
+    
     //$mylpi->write_to_db();
     $_SESSION['lpobject'] = serialize($mylp);
     if ($mylpi->get_type()!='sco'){
@@ -169,7 +170,8 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
 
         $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".api_get_user_id()."' ORDER BY login_date DESC LIMIT 0,1";
+        $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login 
+                                WHERE login_user_id='".api_get_user_id()."' ORDER BY login_date DESC LIMIT 0,1";
 
         $q_last_connection = Database::query($sql_last_connection);
         if (Database::num_rows($q_last_connection) > 0) {

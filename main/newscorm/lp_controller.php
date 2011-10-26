@@ -121,6 +121,8 @@ if (isset($_SESSION['lpobject'])) {
     }
 }
 
+$course_id = api_get_course_int_id();
+
 if ($debug>0) error_log('New LP - Passed data remains check', 0);
 
 if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])) {
@@ -138,7 +140,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
         }
         if (is_numeric($lp_id)) {
             $lp_id = Database::escape_string($lp_id);
-            $sel = "SELECT * FROM $lp_table WHERE id = $lp_id";
+            $sel = "SELECT * FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
 
             if ($debug > 0) error_log('New LP - querying '.$sel, 0);
             $res = Database::query($sel);
@@ -325,7 +327,7 @@ switch ($action) {
 
     case 'build':
         if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
+            api_not_allowed(true);  
         }
         if ($debug > 0) error_log('New LP - build action triggered', 0);
 

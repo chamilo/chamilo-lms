@@ -1831,7 +1831,15 @@ function api_get_setting($variable, $key = null) {
             return '';
         }
     }
-    return is_null($key) ? ((isset($_setting[$variable]) && $_setting[$variable] != '') ? $_setting[$variable] : null) : $_setting[$variable][$key];
+    $value = null;
+    if (is_null($key)) {
+        $value = ((isset($_setting[$variable]) && $_setting[$variable] != '') ? $_setting[$variable] : null);         
+    } else {
+        if (isset($_setting[$variable][$key])) {
+            $value = $_setting[$variable][$key];
+        }
+    }
+    return $value;
 }
 
 /**

@@ -249,9 +249,8 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 
 		//lookup the user in the main database
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
-		$sql = "SELECT user_id, username, password, auth_source, active, expiration_date
-			FROM $user_table
-			WHERE username = '".Database::escape_string($login)."'";
+		$sql = "SELECT user_id, username, password, auth_source, active, expiration_date FROM $user_table
+			    WHERE username = '".Database::escape_string($login)."'";
 		$result = Database::query($sql);
 
 		if (Database::num_rows($result) > 0) {
@@ -288,12 +287,12 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 
 				// Check the user's password
 				if ( ($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {
-          require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-          $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
-          $update_type= $update_type['update_type'];
-          if (!empty($extAuthSource[$update_type]['updateUser']) && file_exists($extAuthSource[$update_type]['updateUser'])) {
-			include_once($extAuthSource[$update_type]['updateUser']);
-          }
+                    require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+                    $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
+                    $update_type= $update_type['update_type'];
+                    if (!empty($extAuthSource[$update_type]['updateUser']) && file_exists($extAuthSource[$update_type]['updateUser'])) {
+                        include_once($extAuthSource[$update_type]['updateUser']);
+                    }
 					// Check if the account is active (not locked)
 					if ($uData['active']=='1') {
                         
@@ -323,10 +322,11 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 
 								if ($my_user_is_admin === false) {
 
-									if (is_array($my_url_list) && count($my_url_list)>0 ){
+									if (is_array($my_url_list) && count($my_url_list)>0 ) {
 										// the user have the permissions to enter at this site
 										if (in_array($current_access_url_id, $my_url_list)) {
 											ConditionalLogin::check_conditions($uData);
+                                            
 											$_user['user_id'] = $uData['user_id'];
 											$_user['status']  = $uData['status'];
                                             session_regenerate_id();
@@ -718,6 +718,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 			$_course['visibility']          = $course_data['visibility'];
 			$_course['subscribe_allowed']   = $course_data['subscribe'];
 			$_course['unubscribe_allowed']  = $course_data['unsubscribe'];
+            $_course['activate_legal']      = $course_data['activate_legal'];
 
 			api_session_register('_cid');
 			api_session_register('_course');
@@ -728,8 +729,8 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 			if (api_get_setting('use_session_mode')=='true') {
 				// Database Table Definitions
 				$tbl_session                 = Database::get_main_table(TABLE_MAIN_SESSION);
-				$tbl_user                     = Database::get_main_table(TABLE_MAIN_USER);
-				$tbl_session_course         = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+				$tbl_user                    = Database::get_main_table(TABLE_MAIN_USER);
+				$tbl_session_course          = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 				$tbl_session_course_user     = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 				if (!empty($_GET['id_session'])) {
@@ -838,19 +839,22 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 
 /*  COURSE / USER REL. INIT */
 
+$session_id = api_get_session_id();
+
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested
     if (isset($_user['user_id']) && $_user['user_id'] && isset($_cid) && $_cid) { // have keys to search data
         if (api_get_setting('use_session_mode') != 'true') {
 
             $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
             $sql = "SELECT * FROM $course_user_table
-                   WHERE user_id  = '".$_user['user_id']."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                   WHERE user_id  = '".$_user['user_id']."' AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
                    AND course_code = '$cidReq'";
 
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
                 $cuData = Database::fetch_array($result);
+       
 
                 $is_courseMember     = true;
                 $is_courseTutor      = (bool) ($cuData['tutor_id' ] == 1 );
@@ -869,33 +873,46 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 
             $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
-             $sql = "SELECT * FROM ".$tbl_course_user."
-               WHERE user_id  = '".$_user['user_id']."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."
-               AND course_code = '$cidReq'";
-
+            $sql = "SELECT * FROM ".$tbl_course_user."
+                     WHERE  user_id  = '".$_user['user_id']."' AND 
+                            relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+                            course_code = '$cidReq'";
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
-                $cuData = Database::fetch_array($result);
+                $cuData = Database::fetch_array($result);                
+                
+                if ($_course['activate_legal'] == 1) {                    
+                    $user_is_subscribed = CourseManager::is_user_subscribed_in_course($_user['user_id'], $_course['id'], $session_id);                    
+                    if (!$user_is_subscribed) {
+                        $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;
+                        header('Location: '.$url);
+                        exit;
+                    }
+                }
 
-                $_courseUser['role'] = $cuData['role'  ];
+                $_courseUser['role'] = $cuData['role'];
                 $is_courseMember     = true;
                 $is_courseTutor      = (bool) ($cuData['tutor_id' ] == 1 );
                 $is_courseAdmin      = (bool) ($cuData['status'] == 1 );
 
                 api_session_register('_courseUser');
             }
+            
             if (!isset($is_courseAdmin)) { // this user has no status related to this course
                 // is it the session coach or the session admin ?
 
-                $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-                $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+                $tbl_session             = Database :: get_main_table(TABLE_MAIN_SESSION);
+                $tbl_session_course      = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
                 $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 				//Session coach, session admin, course coach admin 
-                $sql = " SELECT session.id_coach, session_admin_id, session_rcru.id_user
+                $sql = "SELECT session.id_coach, session_admin_id, session_rcru.id_user
                 		FROM $tbl_session session,$tbl_session_course_user session_rcru
-					WHERE session_rcru.id_session = session.id AND session_rcru.course_code = '$_cid' AND session_rcru.id_user='{$_user['user_id']}' AND session_rcru.status = 2";
+					    WHERE  session_rcru.id_session = session.id AND 
+					           session_rcru.course_code = '$_cid' AND 
+					           session_rcru.id_user = '{$_user['user_id']}' AND 
+					           session_rcru.status = 2";
 
 				$result = Database::query($sql);
                 $row 	= Database::store_result($result);
@@ -920,16 +937,13 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 	                $is_courseAdmin      = false;
 	                $is_courseCoach      = false;
 	                $is_sessionAdmin     = true;
-				} else {
-				
+				} else {				
 					// Check if the current user is the course coach
-					$sql = "SELECT 1
-						FROM ".$tbl_session_course_user."
-						WHERE course_code='$_cid'
-						AND id_user = '".$_user['user_id']."'
-						AND id_session = '".api_get_session_id()."'
-						AND status = 2";
-
+					$sql = "SELECT 1 FROM ".$tbl_session_course_user."
+                            WHERE   course_code='$_cid' AND 
+                                    id_user = '".$_user['user_id']."' AND
+                                    id_session = '".$session_id."' AND
+                                    status = 2";
 					$result = Database::query($sql);
 					if ($row = Database::fetch_array($result)) {
 						$_courseUser['role'] = 'Professor';
@@ -945,15 +959,16 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 						}
 						api_session_register('_courseUser');
 					} else {
-						if (api_get_session_id() != 0) {
+						if ($session_id != 0) {
 							// Check if the user is a student is this session
 							$sql = "SELECT * FROM ".$tbl_session_course_user."
-								WHERE id_user  = '".$_user['user_id']."'
-								AND id_session = '".api_get_session_id()."'
-								AND course_code = '$cidReq' AND status NOT IN(2)";
+								    WHERE   id_user      = '".$_user['user_id']."' AND
+								            id_session   = '".$session_id."' AND
+								            course_code  = '$cidReq' AND status NOT IN(2)";
 							$result = Database::query($sql);
 							if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
-								while($row = Database::fetch_array($result)){
+								while($row = Database::fetch_array($result)) {
+								    
 									$is_courseMember     = true;
 									$is_courseTutor      = false;
 									$is_courseAdmin      = false;

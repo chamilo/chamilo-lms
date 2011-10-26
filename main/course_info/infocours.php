@@ -181,6 +181,7 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 $form->addElement('html', '</div></div>');
 
 // COURSE ACCESS
+
 $form->addElement('html', '<div> <h3>'.Display::return_icon('course.png', addslashes(get_lang('CourseAccess')),'','22').' '.addslashes(get_lang('CourseAccess')).'</h3><div>');
 
 $form->addElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
@@ -200,8 +201,13 @@ $form->addElement('html', $linebreak);
 
 $form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array('size' => '60'));
 
+$form->addElement('checkbox', 'activate_legal', get_lang('ActivateLegal'));
+$form->addElement('textarea', 'legal', get_lang('CourseLegal'), false, array('size' => '60'));
+
+
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 $form->addElement('html', '</div></div>');
+
 
 // EMAIL NOTIFICATIONS
 $form->addElement('html', '<div><h3>'.Display::return_icon('mail.png', addslashes(get_lang('EmailNotifications')),'','22').' '.addslashes(get_lang('EmailNotifications')).'</h3><div>');
@@ -229,8 +235,6 @@ $form->addElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('Qu
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
 $form->addElement('html', '</div></div>');
-
-
 
 
 // Gradebook SETTINGS
@@ -345,6 +349,9 @@ $values['subscribe']                    = $course_access_settings['subscribe'];
 $values['unsubscribe']                  = $course_access_settings['unsubscribe'];
 $values['course_registration_password'] = $all_course_information['registration_code'];
 
+$values['legal']                        = $all_course_information['legal'];
+$values['activate_legal']               = $all_course_information['activate_legal'];
+
 
 
 // Get send_mail_setting (auth)from table
@@ -402,7 +409,7 @@ if ($form->validate() && is_settings_editable()) {
     
     //Variables that will be saved in the TABLE_MAIN_COURSE table
     $update_in_course_table = array('title', 'course_language','category_code','department_name', 'department_url','visibility',  
-    								'subscribe', 'unsubscribe','tutor_name','course_registration_password');
+    								'subscribe', 'unsubscribe','tutor_name','course_registration_password', 'legal', 'activate_legal');
 
 	foreach ($update_values as $index =>$value) {
 		$update_values[$index] = Database::escape_string($value);
@@ -411,15 +418,17 @@ if ($form->validate() && is_settings_editable()) {
 	//visual_code 		    = '".$update_values['visual_code']."',
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "UPDATE $table_course SET
-				title 				    = '".Security::remove_XSS($update_values['title'])."',				
+				title 				    = '".$update_values['title']."',				
 				course_language 	    = '".$update_values['course_language']."',
 				category_code 		    = '".$update_values['category_code']."',
-				department_name  	    = '".Security::remove_XSS($update_values['department_name'])."',
-				department_url  	    = '".Security::remove_XSS($update_values['department_url'])."',
+				department_name  	    = '".$update_values['department_name']."',
+				department_url  	    = '".$update_values['department_url']."',
 				visibility  		    = '".$update_values['visibility']."',
 				subscribe  			    = '".$update_values['subscribe']."',
 				unsubscribe  		    = '".$update_values['unsubscribe']."',
-				tutor_name     		    = '".$update_values['tutor_name']."',      
+				tutor_name     		    = '".$update_values['tutor_name']."',
+				legal                   = '".$update_values['legal']."',
+				activate_legal          = '".$update_values['activate_legal']."',                        
 				registration_code 	    = '".$update_values['course_registration_password']."'
 			WHERE code = '".$course_code."'";
 	Database::query($sql);

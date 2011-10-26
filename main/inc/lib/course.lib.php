@@ -3370,5 +3370,54 @@ class CourseManager {
         return false;            
     } 
 
+    function is_user_accepted_legal($user_id, $course_code, $session_id = null) {
+        $user_id    = intval($user_id); 
+        $course_code = Database::escape_string($course_code);
+        $session_id = intval($session_id);
+        if (empty($session_id)) {
+            $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+            $sql = "SELECT legal_agreement FROM $table 
+                    WHERE user_id =  $user_id AND course_code  ='$course_code' ";           
+            $result = Database::query($sql);
+            if (Database::num_rows($result) > 0 ) {
+                $result = Database::fetch_array($result);
+                if ($result['legal_agreement'] == 1 ) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+            $sql = "SELECT legal_agreement FROM $table 
+                    WHERE id_user =  $user_id AND course_code  ='$course_code' AND id_session = $session_id";           
+            $result = Database::query($sql);
+            if (Database::num_rows($result) > 0 ) {
+                $result = Database::fetch_array($result);
+                if ($result['legal_agreement'] == 1 ) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+    
+    function save_user_legal($user_id, $course_code, $session_id = null) {
+        
+        $user_id    = intval($user_id); 
+        $course_code = Database::escape_string($course_code);
+        $session_id = intval($session_id);
+        if (empty($session_id)) {
+            $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+            $sql = "UPDATE $table SET legal_agreement = '1' 
+                    WHERE user_id =  $user_id AND course_code  ='$course_code' ";           
+            $result = Database::query($sql);
+        } else {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+            $sql = "UPDATE  $table SET legal_agreement = '1' 
+                    WHERE id_user =  $user_id AND course_code  = '$course_code' AND id_session = $session_id";           
+            $result = Database::query($sql);            
+        }
+    }
     
 } //end class CourseManager

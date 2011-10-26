@@ -157,6 +157,8 @@ CREATE TABLE course (
   subscribe tinyint NOT NULL default '1',
   unsubscribe tinyint NOT NULL default '1',
   registration_code varchar(255) NOT NULL default '',
+  legal TEXT  NOT NULL,
+  activate_legal INT NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   UNIQUE KEY code (code)
 );
@@ -330,6 +332,7 @@ CREATE TABLE course_rel_user (
   sort int default NULL,
   user_course_cat int default '0',
   relation_type int default 0,
+  legal_agreement INTEGER DEFAULT 0,
   PRIMARY KEY  (course_code,user_id,relation_type)
 );
 ALTER TABLE course_rel_user ADD INDEX (user_id);
@@ -494,6 +497,7 @@ CREATE TABLE session_rel_course_rel_user (
   id_user int unsigned NOT NULL default '0',
   visibility int NOT NULL default 1,
   status int NOT NULL default 0,
+  legal_agreement INTEGER DEFAULT 0, 
   PRIMARY KEY  (id_session,course_code,id_user),
   KEY id_user (id_user),
   KEY course_code (course_code)

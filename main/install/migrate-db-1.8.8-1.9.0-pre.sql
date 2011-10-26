@@ -105,6 +105,10 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_mo
 INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+1*X+1*X+1*X/4', 'Model 3');
 
 
+ALTER TABLE course_rel_user ADD COLUMN legal_agreement INTEGER DEFAULT 0;
+ALTER TABLE session_rel_course_rel_user ADD COLUMN legal_agreement INTEGER DEFAULT 0;
+ALTER TABLE course ADD COLUMN legal TEXT NOT NULL;
+ALTER TABLE course ADD COLUMN activate_legal INT NOT NULL DEFAULT 0;
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';

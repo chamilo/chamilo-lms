@@ -883,7 +883,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
                 $cuData = Database::fetch_array($result);                
                 
                 if ($_course['activate_legal'] == 1) {                    
-                    $user_is_subscribed = CourseManager::is_user_subscribed_in_course($_user['user_id'], $_course['id'], $session_id);                    
+                    $user_is_subscribed = CourseManager::is_user_accepted_legal($_user['user_id'], $_course['id'], $session_id);                    
                     if (!$user_is_subscribed) {
                         $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;
                         header('Location: '.$url);

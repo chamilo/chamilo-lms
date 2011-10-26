@@ -144,7 +144,7 @@ function get_lang($variable, $reserved = null, $language = null) {
     if (empty($language)) {
         $language = $language_interface;
     }
-    $lang_postfix = $is_interface_language ? '' : '('.$language.')';
+    $lang_postfix = isset($is_interface_language) && $is_interface_language ? '' : '('.$language.')';
     
     $is_interface_language = $language == $language_interface_initial_value;
 

@@ -200,7 +200,7 @@ $form->addGroup($group, '', array(get_lang("Unsubscription")), '<div></div>');
 $form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array('size' => '60'));
 
 $form->addElement('checkbox', 'activate_legal', get_lang('ActivateLegal'));
-$form->addElement('textarea', 'legal', get_lang('CourseLegal'), false, array('size' => '60'));
+$form->addElement('textarea', 'legal', get_lang('CourseLegal'), array('cols'=>75, 'rows' => 10));
 
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');

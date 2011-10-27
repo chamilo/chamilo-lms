@@ -199,7 +199,7 @@ $form->addGroup($group, '', array(get_lang("Unsubscription")), '<div></div>');
 
 $form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array('size' => '60'));
 
-$form->addElement('checkbox', 'activate_legal', get_lang('ActivateLegal'));
+$form->addElement('checkbox', 'activate_legal', array(null, get_lang('ShowALegalNoticeWhenEnteringTheCourse')), get_lang('ActivateLegal'));
 $form->addElement('textarea', 'legal', get_lang('CourseLegal'), array('cols'=>75, 'rows' => 10));
 
 

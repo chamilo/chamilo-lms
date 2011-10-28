@@ -1519,7 +1519,8 @@ class GroupManager {
 		$table_group=Database::get_course_table(TABLE_GROUP);
 		$user_id = Database::escape_string($user_id);
 		$course_id = api_get_course_int_id();
-		$sql_groups = 'SELECT name FROM '.$table_group.' g,'.$table_group_user.' gu WHERE g.c_id '.$course_id.' AND  gu.user_id="'.$user_id.'" AND gu.group_id=g.id';
+		$sql_groups = 'SELECT name FROM '.$table_group.' g,'.$table_group_user.' gu 
+		               WHERE g.c_id = '.$course_id.' AND  gu.user_id = "'.$user_id.'" AND gu.group_id = g.id';
 		$res = Database::query($sql_groups);
 
 		$groups=array();

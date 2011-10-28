@@ -1354,6 +1354,54 @@ class Tracking {
 			return $a_courses;
 		}
 
+		/**
+		 * Count the number of documents that an user has uploaded to a course
+		 * @param    int|array   Student id(s)
+		 * @param    string      Course code
+		 * @param    int         Session id (optional), if param $session_id is null(default) return count of assignments including sessions, 0 = session is not filtered
+		 * @return    int        Number of documents
+		 */
+
+		public static function count_student_uploaded_documents($student_id, $course_code, $session_id = null){
+			// protect datas
+			$course_code = Database::escape_string($course_code);
+			// get the informations of the course
+			$a_course = CourseManager :: get_course_information($course_code);
+			if (!empty($a_course)) {
+				// table definition
+				$tbl_item_property          = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+				$tbl_document 				= Database :: get_course_table(TABLE_DOCUMENT);
+				
+				$course_id	 = $a_course['real_id'];
+
+				$condition_user = "";
+				if (is_array($student_id)) {
+					$condition_user = " AND ip.insert_user_id IN (".implode(',',$student_id).") ";
+				} else {
+					$condition_user = " AND ip.insert_user_id = '$student_id' ";
+				}
+
+				$condition_session = "";
+				if (isset($session_id)) {
+					$session_id = intval($session_id);
+					$condition_session = " AND pub.session_id = $session_id ";
+				}
+
+				$sql = "SELECT count(ip.tool) 
+						FROM $tbl_item_property ip INNER JOIN $tbl_document pub 
+								ON ip.ref = pub.id 
+						WHERE 	ip.c_id  = $course_id AND 
+								pub.c_id  = $course_id AND
+								pub.filetype ='file' AND
+								ip.tool = 'document' 
+								$condition_user $condition_session ";
+				$rs = Database::query($sql);
+				$row = Database::fetch_row($rs);
+				return $row[0];
+			}
+			return null;
+		}
+
 
 		/**
 		 * Count assignments per student

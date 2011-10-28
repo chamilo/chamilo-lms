@@ -925,7 +925,9 @@ if (empty($_GET['details'])) {
 		$links 					= Tracking::count_student_visited_links($student_id, $course_code, $session_id);
 		$chat_last_connection 	= Tracking::chat_last_connection($student_id, $course_code, $session_id);			
 		$documents				= Tracking::count_student_downloaded_documents($student_id, $course_code, $session_id);
-
+		$uploaded_documents		= Tracking::count_student_uploaded_documents($student_id, $course_code, $session_id);
+		
+		
 		$csv_content[] = array (
 			get_lang('Student_publication'),
 			$nb_assignments
@@ -941,6 +943,10 @@ if (empty($_GET['details'])) {
 		$csv_content[] = array (
 			get_lang('DocumentsDetails'),
 			$documents
+		);
+		$csv_content[] = array (
+			get_lang('UploadedDocuments'),
+			$uploaded_documents
 		);
 		$csv_content[] = array (
 			get_lang('ChatLastConnection'),
@@ -962,9 +968,13 @@ if (empty($_GET['details'])) {
 			<td><?php echo get_lang('LinksDetails') ?></td>
 			<td><?php echo $links ?></td>
 		</tr>
-		<tr><!-- documents -->
+		<tr><!-- downloaded documents -->
 			<td><?php echo get_lang('DocumentsDetails') ?></td>
 			<td><?php echo $documents ?></td>
+		</tr>
+        <tr><!-- uploaded documents -->
+			<td><?php echo get_lang('UploadedDocuments') ?></td>
+			<td><?php echo $uploaded_documents ?></td>
 		</tr>
 		<tr><!-- Chats -->
 			<td><?php echo get_lang('ChatLastConnection') ?></td>

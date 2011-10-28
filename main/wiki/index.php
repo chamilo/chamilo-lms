@@ -504,13 +504,32 @@ if ($_GET['action']=='more') {
 if ($_GET['action']=='statistics' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin())) {
 	echo '<div class="actions">'.get_lang('Statistics').'</div>';
 	
+	
 	//check all versions of all pages
+	
+	$total_words 			= 0;
+	$total_links 			= 0;
+	$total_links_anchors 	= 0;
+	$total_links_mail		= 0;
+	$total_links_ftp 		= 0;
+	$total_links_irc		= 0;
+	$total_links_news 		= 0;
+	$total_wlinks 			= 0;
+	$total_images 			= 0;
+	$clean_total_flash 		= 0;
+	$total_flash			= 0;
+	$total_mp3				= 0;
+	$total_flv_p 			= 0;
+	$total_flv				= 0;
+	$total_youtube			= 0;
+	$total_multimedia		= 0;
+	$total_tables			= 0;
 	
 	$sql="SELECT *, COUNT(*) AS TOTAL_VERS, SUM(hits) AS TOTAL_VISITS FROM ".$tbl_wiki."WHERE ".$groupfilter.$condition_session."";
 	$allpages=Database::query($sql);
 	while ($row=Database::fetch_array($allpages)) {
 		$total_versions			= $row['TOTAL_VERS'];
-		$total_visits			= $row['TOTAL_VISITS'];
+		$total_visits			= intval($row['TOTAL_VISITS']);
 	}
 	
 	$sql="SELECT * FROM ".$tbl_wiki."WHERE ".$groupfilter.$condition_session."";
@@ -537,14 +556,35 @@ if ($_GET['action']=='statistics' && (api_is_allowed_to_edit(false,true) || api_
     }
 	
 	//check only last version of all pages (current page)
+	
 	$sql =' SELECT  *, COUNT(*) AS TOTAL_PAGES, SUM(hits) AS TOTAL_VISITS_LV  FROM  '.$tbl_wiki.' s1 
 			WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
 	$allpages=Database::query($sql);
 	 while ($row=Database::fetch_array($allpages)) {
 		$total_pages	 		= $row['TOTAL_PAGES'];
-		$total_visits_lv 		= $row['TOTAL_VISITS_LV'];
+		$total_visits_lv 		= intval($row['TOTAL_VISITS_LV']);
 	 }
 	
+
+	$total_words_lv			= 0;
+	$total_links_lv			= 0;
+	$total_links_anchors_lv	= 0;
+	$total_links_mail_lv 	= 0;
+	$total_links_ftp_lv 	= 0;
+	$total_links_irc_lv 	= 0;
+	$total_links_news_lv 	= 0;		
+	$total_wlinks_lv 		= 0;
+	$total_images_lv 		= 0;
+	$clean_total_flash_lv 	= 0;
+	$total_flash_lv			= 0;
+	$total_mp3_lv			= 0;
+	$total_flv_p_lv		    = 0;
+	$total_flv_lv			= 0;
+	$total_youtube_lv		= 0;
+	$total_multimedia_lv	= 0;
+	$total_tables_lv		= 0;
+
+
 	$sql='SELECT  * FROM  '.$tbl_wiki.' s1 WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
 	$allpages=Database::query($sql);	
 
@@ -706,6 +746,7 @@ else{
 
 //Creation date of the oldest wiki page and version
 
+$first_wiki_date='0000-00-00 00:00:00';
 $sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.$condition_session.' ORDER BY dtime ASC LIMIT 1'; 
 $allpages=Database::query($sql);
 	while ($row=Database::fetch_array($allpages)) {
@@ -714,6 +755,7 @@ $allpages=Database::query($sql);
 
 //Date of publication of the latest wiki version
 
+$last_wiki_date='0000-00-00 00:00:00';
 $sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.$condition_session.' ORDER BY dtime DESC LIMIT 1'; 
 $allpages=Database::query($sql);
 	while ($row=Database::fetch_array($allpages)) {
@@ -722,6 +764,7 @@ $allpages=Database::query($sql);
 
 //Average score of all wiki pages. (If a page has not scored zero rated)
 
+$media_score =0;
 $sql="SELECT *, SUM(score) AS TOTAL_SCORE FROM ".$tbl_wiki." WHERE ".$groupfilter.$condition_session." GROUP BY reflink ";//group by because mark in all versions, then always is ok. Do not use "count" because using "group by", would give a wrong value
 	$allpages=Database::query($sql);
 	while ($row=Database::fetch_array($allpages)) {
@@ -733,7 +776,8 @@ if (!empty($total_pages)) {
 }
 
 //Average user progress in his pages
-	
+
+$media_progress=0;	
 $sql='SELECT  *, SUM(progress) AS TOTAL_PROGRESS FROM  '.$tbl_wiki.' s1 WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';//As the value is only the latest version I can not use group by
 	$allpages=Database::query($sql);	
 
@@ -756,16 +800,33 @@ while ($row=Database::fetch_array($allpages)) {
  
 //Total of different IP addresses that have participated in the wiki
 
+$total_ip=0;
  $sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.$condition_session.' GROUP BY user_ip';
     $allpages=Database::query($sql);
 while ($row=Database::fetch_array($allpages)) {
 		$total_ip	= $total_ip+1;
  }
+ ?>
+<style>
+thead {background:#E2E2E2}
+tbody tr:hover {
+  background: #F9F9F9;
+  border-top-width:thin;
+  border-bottom-width:thin;
+  border-top-style:dotted;
+  border-bottom-style:dotted;
+  cursor:default;
+  }
+
+</style>
+<?php
 
 echo '<table width="100%" border="1">';
+echo '<thead>';
 echo '<tr>';
-echo '<td colspan="2" bgcolor="#EFEFEF">'.get_lang('General').'</td>';
+echo '<td colspan="2">'.get_lang('General').'</td>';
 echo '</tr>';
+echo '</thead>';
 echo '<tr>';
 echo '<td>'.get_lang('StudentAddNewPages').'</td>';
 echo '<td>'.$status_add_new_pag.'</td>';
@@ -798,9 +859,11 @@ echo '</table>';
 echo '<br/>';
 
 echo '<table width="100%" border="1">';
+echo '<thead>';
 echo '<tr>';
-echo '<td colspan="2" bgcolor="#EFEFEF">'.get_lang('Pages').' '.get_lang('And').' '.get_lang('Versions').'</td>';
+echo '<td colspan="2">'.get_lang('Pages').' '.get_lang('And').' '.get_lang('Versions').'</td>';
 echo '</tr>';
+echo '</thead>';
 echo '<tr>';
 echo '<td>'.get_lang('Pages').' - '.get_lang('NumContributions').'</td>';
 echo '<td>'.$total_pages.' ('.get_lang('Versions').': '.$total_versions.')</td>';
@@ -861,14 +924,16 @@ echo '</table>';
 echo '<br/>';
 
 echo '<table width="100%" border="1">';
+echo '<thead>';
 echo '<tr>';
-echo '<td colspan="3" bgcolor="#EFEFEF">'.get_lang('ContentPagesInfo').'</td>';
+echo '<td colspan="3">'.get_lang('ContentPagesInfo').'</td>';
 echo '</tr>';
 echo '<tr>';
-echo '<td bgcolor="#EFEFEF"></td>';
-echo '<td bgcolor="#EFEFEF">'.get_lang('InTheLastVersion').'</td>';
-echo '<td bgcolor="#EFEFEF">'.get_lang('InAllVersions').'</td>';
+echo '<td></td>';
+echo '<td>'.get_lang('InTheLastVersion').'</td>';
+echo '<td>'.get_lang('InAllVersions').'</td>';
 echo '</tr>';
+echo '</thead>';
 echo '<tr>';
 echo '<td>'.get_lang('NumWords').'</td>';
 echo '<td>'.$total_words_lv.'</td>';

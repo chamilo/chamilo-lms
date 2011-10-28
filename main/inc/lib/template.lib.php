@@ -65,8 +65,7 @@ class Template extends Smarty {
 	/**
 	 * Displays an empty template
 	 */
-	function display_blank_template() {
-		$this->set_template_parameters();
+	function display_blank_template() {		
 		$tpl = $this->get_template('layout/blank.tpl');
 		$this->display($tpl);
 	}

@@ -2483,7 +2483,7 @@ function api_not_allowed($print_headers = false) {
     $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
     
     if ($origin == 'learnpath') {
-	$htmlHeadXtra[]= '<style type="text/css" media="screen, projection">
+	   $htmlHeadXtra[]= '<style type="text/css" media="screen, projection">
 					/*<![CDATA[*/
 	                @import "'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css";
 	                /*]]>*/
@@ -2499,6 +2499,7 @@ function api_not_allowed($print_headers = false) {
 		$show_headers = 1;
 	}
 	
+
 	$tpl = new Template(null, $show_headers, $show_headers);
 	$tpl->assign('content', $msg);	
 
@@ -2506,7 +2507,7 @@ function api_not_allowed($print_headers = false) {
 		// if the access is not authorized and there is some login information
 		// but the cidReq is not found, assume we are missing course data and send the user
 		// to the user_portal		
-		$tpl->display_blank_template();
+		$tpl->display_one_col_template();
 		exit;
 	}
 

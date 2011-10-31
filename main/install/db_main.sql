@@ -850,6 +850,7 @@ VALUES
 ('drh_autosubscribe', NULL, 'textfield', 'Platform', '', 'DRHAutosubscribeTitle', 'DRHAutosubscribeComment', NULL, NULL, 0),
 ('sessionadmin_autosubscribe', NULL, 'textfield', 'Platform', '', 'SessionadminAutosubscribeTitle', 'SessionadminAutosubscribeComment', NULL, NULL, 0),
 ('scorm_cumulative_session_time', NULL, 'radio', 'Course', 'true', 'ScormCumulativeSessionTimeTitle', 'ScormCumulativeSessionTimeComment', NULL, NULL, 0),
+('allow_hr_skills_management', NULL, 'radio', 'Gradebook', 'true', 'AllowHRSkillsManagementTitle', 'AllowHRSkillsManagementComment', NULL, NULL, 1),
 ('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.15858','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 /*
@@ -1146,7 +1147,10 @@ VALUES
 ('cas_add_user_activate', 'true', 'Yes'),
 ('cas_add_user_activate', 'false', 'No'),
 ('scorm_cumulative_session_time','true','Yes'),
-('scorm_cumulative_session_time','false','No');
+('scorm_cumulative_session_time','false','No'),
+('allow_hr_skills_management', 'true', 'Yes'),
+('allow_hr_skills_management', 'false', 'No');
+
 /*
 ('use_custom_pages','true','Yes'),
 ('use_custom_pages','false','No'),
@@ -2736,6 +2740,48 @@ CREATE TABLE notification (
 
 ALTER TABLE notification ADD index mail_notify_sent_index (sent_at);
 ALTER TABLE notification ADD index mail_notify_freq_index (sent_at, send_freq, created_at);
+
+-- Skills management
+
+CREATE TABLE skill (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
+  short_code varchar(100) NOT NULL,
+  description TEXT NOT NULL,
+  access_url_id int NOT NULL,
+  icon varchar(255) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+INSERT INTO skill VALUES('Root');
+
+CREATE TABLE skill_rel_gradebook (
+  id int NOT NULL AUTO_INCREMENT,
+  gradebook_id int NOT NULL,
+  skill_id int NOT NULL,
+  type varchar(10) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE skill_rel_skill (
+  skill_id int NOT NULL,
+  parent_id int NOT NULL,
+  relation_type int NOT NULL,
+  level int NOT NULL,
+);
+
+INSERT INTO skill_rel_skill VALUES(1, 0, 0);
+
+CREATE TABLE skill_rel_user (
+  id int NOT NULL AUTO_INCREMENT,
+  user_id int NOT NULL,
+  skill_id int NOT NULL,
+  acquired_skill_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  assigned_by int NOT NULL, 
+  PRIMARY KEY (id)
+);
+
+
 
 --
 -- Table structure for event alert sending

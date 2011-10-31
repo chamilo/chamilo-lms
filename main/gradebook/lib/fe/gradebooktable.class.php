@@ -272,10 +272,10 @@ class GradebookTable extends SortableTable {
 		}
 
 		// warning messages
-
+        $view = isset($_GET['view']) ? $_GET['view']: null; 
 		if (api_is_allowed_to_edit()) {
 			
-			if (isset($_GET['selectcat']) && $_GET['selectcat'] > 0 && $_GET['view'] <> 'presence') {
+			if (isset($_GET['selectcat']) && $_GET['selectcat'] > 0 && $view <> 'presence') {
 				$id_cat = intval($_GET['selectcat']);
 				$category = Category :: load($id_cat);
 				$weight_category = intval($this->build_weight($category[0]));
@@ -292,8 +292,9 @@ class GradebookTable extends SortableTable {
 				}
 
 				$content_html = DocumentManager::replace_user_info_into_html(api_get_user_id(), $course_code);
-				
-				$new_content = explode('</head>',$content_html['content']);
+				if (!empty($content_html)) {
+				    $new_content = explode('</head>',$content_html['content']);
+                }
 
 				if (empty($new_content[0])) {
 					$warning_message = get_lang('ThereIsNotACertificateAvailableByDefault');

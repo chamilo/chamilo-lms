@@ -1,12 +1,14 @@
 /* TextboxList sample CSS */
 ul.holder {
 		-moz-border-radius:5px 5px 5px 5px;
-	-web-kit-border-radius:5px 5px 5px 5px;
-	 
+	-web-kit-border-radius:5px 5px 5px 5px;	 
 	margin: 0; border: 1px solid #ccc; overflow: hidden; height: auto !important; height: 1%; padding: 4px 5px 0; }
 *:first-child+html ul.holder { padding-bottom: 2px; } * html ul.holder { padding-bottom: 2px; } /* ie7 and below */
 ul.holder li { float: left; list-style-type: none; margin: 0 5px 4px 0; white-space:nowrap;}
-ul.holder li.bit-box, ul.holder li.bit-input input { font: 11px "Lucida Grande", "Verdana"; }
+ul.holder li.bit-box, ul.holder li.bit-input input { 
+    font: 11px "Lucida Grande", "Verdana";
+    box-shadow: none;
+}
 ul.holder li.bit-box { -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; border: 1px solid #CAD8F3; background: #DEE7F8; padding: 1px 5px 2px; }
 ul.holder li.bit-box-focus { border-color: #598BEC; background: #598BEC; color: #fff; }
 ul.holder li.bit-input input {	 
@@ -56,3 +58,7 @@ ul.holder li.bit-box-focus a.closebutton, ul.holder li.bit-box-focus a.closebutt
 
 #demo ul.holder li.bit-input input { padding: 2px 0 1px; border: 1px solid #999; }
 .ie6fix {height:1px;width:1px; position:absolute;top:0px;left:0px;z-index:1;}
+
+.holder_simple {
+    border:none !important;    
+}

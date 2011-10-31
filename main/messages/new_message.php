@@ -21,11 +21,10 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 api_block_anonymous_users();
 
-if (api_get_setting('allow_message_tool') !='true' ){
+if (api_get_setting('allow_message_tool') !='true') {
 	api_not_allowed();
 }
 
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 $nameTools = api_xml_http_response_encode(get_lang('Messages'));
@@ -120,16 +119,7 @@ function add_image_form() {
 		}
 	}
 }
-</script>
-
-<style>
-div.row div.label {
-    width:15%;
-}
-div.row div.formw {
-    width:80%;
-}
-</style>';
+</script>';
 $nameTools = get_lang('ComposeMessage');
 /*		FUNCTIONS  */
 

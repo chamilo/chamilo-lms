@@ -19,10 +19,11 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 class CatForm extends FormValidator {
 
-    const TYPE_ADD = 1;
-    const TYPE_EDIT = 2;
-    const TYPE_MOVE = 3;
-    const TYPE_SELECT_COURSE = 4;
+    const TYPE_ADD              = 1;
+    const TYPE_EDIT             = 2;
+    const TYPE_MOVE             = 3;
+    const TYPE_SELECT_COURSE    = 4;
+    
     private $category_object;
 
 	/**
@@ -115,11 +116,14 @@ class CatForm extends FormValidator {
 	 * Builds an form to edit a category
 	 */
    	protected function build_editing_form() {
+   	    $skills = $this->category_object->get_skills_for_select();        
+    
    		$this->setDefaults(array(
 			'name' 				=> $this->category_object->get_name(),
     		'description' 		=> $this->category_object->get_description(),
     		'hid_user_id' 		=> $this->category_object->get_user_id(),
     		'hid_parent_id' 	=> $this->category_object->get_parent_id(),
+    		'skills'            => $skills,
    	 		'weight' 			=> $this->category_object->get_weight(),
    	 		'visible' 			=> $this->category_object->is_visible(),
    	 		'certif_min_score'  => $this->category_object->get_certificate_min_score(),
@@ -138,7 +142,7 @@ class CatForm extends FormValidator {
 			//we can't change the root category
 			$this->freeze('name');
 		}
-		$models = api_get_settings_options('grading_model');
+		$models                  = api_get_settings_options('grading_model');
 		$course_grading_model_id = api_get_course_setting('course_grading_model');
 		$grading_model = '';
 		if (!empty($course_grading_model_id)) {
@@ -165,13 +169,26 @@ class CatForm extends FormValidator {
 			//$this->addRule('weight',get_lang('ThisFieldIsRequired'),'required');
 			$this->freeze('weight');			
 		} else {
-			$this->add_textfield('weight', get_lang('TotalWeight'),true,array('value'=>$value,'size'=>'4','maxlength'=>'5'));
+			$this->add_textfield('weight', array(get_lang('TotalWeight'), get_lang('TotalSumOfWeights')), true, array('value'=>$value,'size'=>'4','maxlength'=>'5'));
 			$this->addRule('weight',get_lang('ThisFieldIsRequired'),'required');
 		}
-		
-		
-		$this->addElement('static', null, null, '<i>'.get_lang('TotalSumOfWeights').'</i>');
-		
+        
+        if (api_is_platform_admin() || api_is_drh()) {
+            //the magic should be here
+            
+            $skills = $this->category_object->get_skills();    
+            $this->addElement('select', 'skills', array(get_lang('SkillsAchievedWhenAchievingThisGradebook')), null, array('id'=>'skills', 'multiple'=>'multiple'));
+            $content = '';
+            if (!empty($skills)) {
+                foreach($skills as $skill) {                    
+                    $content .= Display::tag('li', $skill['name'].'<a id="deleteskill_'.$skill['id'].'" class="closebutton" href="#"></a>', array('id'=>'skill_'.$skill['id'], 'class'=>'bit-box')); 
+                }
+            }
+            $this->addElement('html', '<div class="row"><div class="label "></div><div class="formw">'.
+                                Display::tag('ul', $content, array('class'=>'holder holder_simple')).'</div></div>'
+            );
+        }
+        
 		if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {						
 			$this->add_textfield('certif_min_score', get_lang('CertificateMinScore'),false,array('size'=>'4','maxlength'=>'5'));
 			$this->addRule('certif_min_score', get_lang('ThisFieldIsRequired'), 'required');
@@ -191,7 +208,7 @@ class CatForm extends FormValidator {
 			$this->addElement('hidden','editcat', intval($_GET['editcat']));
 			$this->addElement('style_submit_button', null, get_lang('EditCategory'), 'class="save"');
 		}
-		
+        
 		if (!empty($grading_contents)) {
 			$this->addRule('weight',get_lang('OnlyNumbers'),'numeric');
 			$this->addRule('weight',get_lang('NoDecimals'),'nopunctuation');

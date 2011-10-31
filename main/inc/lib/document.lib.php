@@ -1338,24 +1338,27 @@ return 'application/octet-stream';
         $tbl_document 	= Database::get_course_table(TABLE_DOCUMENT);
         $course_id 		= $course_info['real_id']; 
         $document_id 	= self::get_default_certificate_id($course_code);
-
-        $sql = "SELECT path FROM $tbl_document WHERE c_id = $course_id AND id = $document_id";
-
-        $rs = Database::query($sql);
-        $new_content = '';
-        $all_user_info = array();
-        if (Database::num_rows($rs)) {
-            $row=Database::fetch_array($rs);
-            $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
-            if (is_file($filepath)) {
-                $my_content_html = file_get_contents($filepath);
+        if ($document_id) {
+    
+            $sql = "SELECT path FROM $tbl_document WHERE c_id = $course_id AND id = $document_id";
+    
+            $rs = Database::query($sql);
+            $new_content = '';
+            $all_user_info = array();
+            if (Database::num_rows($rs)) {
+                $row=Database::fetch_array($rs);
+                $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
+                if (is_file($filepath)) {
+                    $my_content_html = file_get_contents($filepath);
+                }
+                $all_user_info = self::get_all_info_to_certificate($user_id, $course_code, $is_preview);            
+                $info_to_be_replaced_in_content_html=$all_user_info[0];
+                $info_to_replace_in_content_html=$all_user_info[1];
+                $new_content=str_replace($info_to_be_replaced_in_content_html,$info_to_replace_in_content_html, $my_content_html);
             }
-            $all_user_info = self::get_all_info_to_certificate($user_id, $course_code, $is_preview);            
-            $info_to_be_replaced_in_content_html=$all_user_info[0];
-            $info_to_replace_in_content_html=$all_user_info[1];
-            $new_content=str_replace($info_to_be_replaced_in_content_html,$info_to_replace_in_content_html, $my_content_html);
+            return array('content' => $new_content, 'variables' => $all_user_info);
         }
-        return array('content' => $new_content, 'variables' => $all_user_info);
+        return array();
     }
 
     /**

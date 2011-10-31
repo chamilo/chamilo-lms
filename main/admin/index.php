@@ -115,6 +115,10 @@ if (api_is_platform_admin()) {
 	$items[] = array('url'=>'course_category.php', 			'label' => get_lang('AdminCategories'));
 	$items[] = array('url'=>'subscribe_user2course.php', 	'label' => get_lang('AddUsersToACourse'));
 	$items[] = array('url'=>'course_user_import.php', 		'label' => get_lang('ImportUsersToACourse'));
+    
+    $items[] = array('url'=>'skills.php',                   'label' => get_lang('SkillsTree'));
+    $items[] = array('url'=>'skills_gradebook.php',         'label' => get_lang('SkillsGradebook'));
+    
 
     if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) { 
     	$items[] = array('url'=>'ldap_import_students.php', 	'label' => get_lang('ImportLDAPUsersIntoCourse'));

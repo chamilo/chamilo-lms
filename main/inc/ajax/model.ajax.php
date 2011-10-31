@@ -20,10 +20,16 @@ if (!in_array($sord, array('asc','desc'))) {
 }
 // get index row - i.e. user click to sort $sord = $_GET['sord']; 
 // get the direction 
-if(!$sidx) $sidx = 1;
+if (!$sidx) $sidx = 1;
  
 //2. Selecting the count FIRST
+//@todo rework this
 switch ($action) {
+    case 'get_gradebooks':
+        require_once $libpath.'gradebook.lib.php';
+        $obj        = new Gradebook();
+        $count      = $obj->get_count();
+        break;
     case 'get_careers':        
         require_once $libpath.'career.lib.php';
         $obj        = new Career();
@@ -66,12 +72,35 @@ if ($_REQUEST['oper'] == 'del') {
     $obj->delete($_REQUEST['id']);
 }
 
-
-
 //4. Querying the DB for the elements
 $columns = array();
 switch ($action) {
-    case 'get_careers':  
+    case 'get_gradebooks': 
+        $columns = array('name', 'skills', 'actions');                
+        if(!in_array($sidx, $columns)) {
+            $sidx = 'name';
+        }
+        $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        $new_result = array();
+        foreach($result as $item) {
+            $skills = $obj->get_skills_by_gradebook($item['id']);
+            
+            if (!empty($item['certif_min_score']) && !empty($item['document_id'])) {
+                $item['name'] .= '* (with_certificate)'; 
+            } else {
+                $item['name'] .= ' (No certificate)';
+            }
+            $skills_string = '';
+            if (!empty($skills)) {
+                foreach($skills as $skill) {
+                    $item['skills'] .= Display::span($skill['name'], array('class' => 'label_tag success'));  
+                }
+            }          
+            $new_result[] = $item;
+        } 
+        $result = $new_result;
+        break;
+    case 'get_careers': 
         $columns = array('name', 'description', 'actions');                
         if(!in_array($sidx, $columns)) {
         	$sidx = 'name';
@@ -84,7 +113,7 @@ switch ($action) {
             }
             $new_result[] = $item;
         } 
-        $result = $new_result;  
+        $result = $new_result;
         
     break;
     case 'get_promotions':        
@@ -129,7 +158,7 @@ switch ($action) {
 //var_dump($result);
 
 //5. Creating an obj to return a json
-if (in_array($action, array('get_careers','get_promotions','get_usergroups'))) { 
+if (in_array($action, array('get_careers','get_promotions','get_usergroups','get_gradebooks'))) { 
     $response = new stdClass();           
     $response->page     = $page; 
     $response->total    = $total_pages; 

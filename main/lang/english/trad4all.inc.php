@@ -1143,4 +1143,7 @@ $NoJava = "Your browser does not support Java";
 $JavaSun24 = "Your browser has a Java version not supported by this tool.
 To use it you have to install a Java Sun version higher than 24";
 $NoMessageAnywere = "If you do not like see this message again during this session click here";
+
+$SkillsAchievedWhenAchievingThisGradebook = 'Skills Achieved When Achieving This Gradebook';
+
 ?>

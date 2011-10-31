@@ -1,4 +1,7 @@
 <?php
+
+require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
+
 /**
 * @package chamilo.library
 */
@@ -19,7 +22,8 @@ class Certificate extends Model {
     var $qr_file 	= null;
     var $user_id;
     
-    var $force_certificate_generation = false; //If true every time we enter to the certificate URL we would generate a new certificate
+    //If true every time we enter to the certificate URL we would generate a new certificate
+    var $force_certificate_generation = true; 
     
 	public function __construct($certificate_id = null) {
         $this->table 			=  Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
@@ -118,8 +122,6 @@ class Certificate extends Model {
 	 * */
 	
 	public function generate() {
-		
-		
 		//The user directory should be set
 		if (empty($this->certification_user_path) && $this->force_certificate_generation == false) {
 			return false;
@@ -155,7 +157,7 @@ class Certificate extends Model {
 			if (is_dir($this->certification_user_path)) {
 				if (!empty($this->certificate_data)) {	
 					$new_content_html = get_user_certificate_content($this->user_id, $my_category[0]->get_course_code(), false);
-				
+                    
 					if ($my_category[0]->get_id() == strval(intval($this->certificate_data['cat_id']))) {
 						$name = $this->certificate_data['path_certificate'];
 						$my_path_certificate = $this->certification_user_path.basename($name);
@@ -180,8 +182,15 @@ class Certificate extends Model {
 							$result = @file_put_contents($my_path_certificate, $my_new_content_html);
 							if ($result) {						
 								
-								//@todo move function in this class
-								update_user_info_about_certificate($this->certificate_data['cat_id'], $this->user_id, $path_certificate);
+                                //Updating the path
+								self::update_user_info_about_certificate($this->certificate_data['cat_id'], $this->user_id, $path_certificate);
+                                
+                                //If the gradebook is related to skills we added the skills to the user
+                                
+                                $skill = new Skill();                                
+                                $skill->add_skill_to_user($this->user_id, $this->certificate_data['cat_id']);
+                                
+                                
 								$this->certificate_data['path_certificate'] = $path_certificate;
 								
 								if ($this->html_file_is_generated()) {
@@ -199,6 +208,23 @@ class Certificate extends Model {
 		}
 		return false;
 	}
+
+    /**
+    * update user info about certificate
+    * @param int The category id
+    * @param int The user id
+    * @param string the path name of the certificate
+    * @return void()
+    */
+    function update_user_info_about_certificate ($cat_id,$user_id,$path_certificate) {
+        $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        if (!UserManager::is_user_certified($cat_id,$user_id)) {
+            $sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"
+                 WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
+            $rs = Database::query($sql);
+        }
+    }
+
 	
 	/**
 	 * 

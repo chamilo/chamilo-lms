@@ -322,3 +322,11 @@ define('TABLE_MAIN_STORED_VALUES_STACK',	'stored_values_stack');
 define('TABLE_MAIN_EVENT_TYPE','event_type');
 define('TABLE_MAIN_EVENT_TYPE_MESSAGE','event_type_message');
 define('TABLE_MAIN_EVENT_TYPE_REL_USER','user_rel_event_type');
+
+define('TABLE_MAIN_SKILL',                  'skill');
+define('TABLE_MAIN_SKILL_REL_SKILL',        'skill_rel_skill');
+define('TABLE_MAIN_SKILL_REL_GRADEBOOK',    'skill_rel_gradebook');
+define('TABLE_MAIN_SKILL_REL_USER',         'skill_rel_user');
+
+
+

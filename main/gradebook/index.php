@@ -63,7 +63,7 @@ $filter_warning_msg = true;
 
 ///direct access to one evaluation
 $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
-
+$first_time = null; 
 if (empty($cats)) {
 	$cats = Category :: load(0, null, $course_code, null, null, $session_id, false);//first time
 	$first_time=1;
@@ -618,7 +618,7 @@ if (isset ($_GET['studentoverview'])) {
         // one) category for this course or for this session.
 
 		//hack for delete a gradebook from inside course
-		$clean_deletecat=Security::remove_XSS($_GET['deletecat']);
+		$clean_deletecat = isset($_GET['deletecat']) ? intval($_GET['deletecat']) : null;
 		if (!empty($clean_deletecat)) {
 			exit;
 		}
@@ -765,7 +765,7 @@ if (api_is_allowed_to_edit(null, true)) {
 		}
 	}
 }
-if ($first_time==1 && api_is_allowed_to_edit(null,true)) {
+if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
 } else {		
 	$cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init	

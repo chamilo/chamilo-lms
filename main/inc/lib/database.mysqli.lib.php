@@ -1132,15 +1132,19 @@ class Database {
                             $clean_values = array();
                             foreach($value_array as $item) {
                                 $item = Database::escape_string($item);
-                                $clean_values[]= "'$item'";
+                                $clean_values[]= $item;
                             }
                         } else {
                             $value_array = Database::escape_string($value_array);
-                            $clean_values = "'$value_array'";
+                            $clean_values = $value_array;
                         }
-                        if (!empty($condition) && !empty($clean_values)) {
-                            $condition = str_replace('?','%s', $condition); //we treat everything as string
-                            $condition = vsprintf($condition, $clean_values);
+                        if (!empty($condition) && $clean_values != '') {
+                            $condition = str_replace('%',"'@percentage@'", $condition); //replace "%"
+                            $condition = str_replace("'?'","%s", $condition); //we treat everything as string                            
+                            //just in case
+                            $condition = str_replace("?","%s", $condition); //we treat everything as string
+                            $condition = vsprintf($condition, $clean_values);                            
+                            $condition = str_replace('@percentage@','%', $condition); //replace "%"
                             $where_return .= $condition;
                         }
                     }

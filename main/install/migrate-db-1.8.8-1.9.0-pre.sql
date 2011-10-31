@@ -122,6 +122,14 @@ CREATE TABLE stored_values_stack (user_id INT NOT NULL, sco_id INT NOT NULL, sta
 ALTER TABLE stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
 ALTER TABLE stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_hr_skills_management', NULL, 'radio', 'Gradebook', 'true', 'AllowHRSkillsManagementTitle', 'AllowHRSkillsManagementComment', NULL, NULL, 1);
+
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_skills_management', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_skills_management', 'false', 'No');
+
+
+
+
 -- xxUSERxx
 
 -- xxCOURSExx

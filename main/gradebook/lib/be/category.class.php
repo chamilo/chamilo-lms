@@ -8,10 +8,14 @@
  * Class
  * @package chamilo.gradebook
  */
+
+require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
+require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
+
 class Category implements GradebookItem
 {
 
-// PROPERTIES
+    // PROPERTIES
 
 	private $id;
 	private $name;
@@ -23,15 +27,12 @@ class Category implements GradebookItem
 	private $visible;
 	private $certificate_min_score;
     private $session_id;
-
-
-// CONSTRUCTORS
+    private $skills = array();
 
     function __construct() {
     }
 
-
-// GETTERS AND SETTERS
+    // GETTERS AND SETTERS
 
 	public function get_id() {
 		return $this->id;
@@ -54,8 +55,9 @@ class Category implements GradebookItem
 			return $this->certificate_min_score;
 		} else {
 			return null;
-		}
+		}        
 	}
+    
 	public function get_course_code() {
 		return $this->course_code;
 	}
@@ -114,13 +116,34 @@ class Category implements GradebookItem
 		$this->visible = $visible;
 	}
 	
-	public function get_type()
-	{
+	public function get_type() {
 		return 'category';
 	}
+    
+    public function get_skills($from_db = true) {
+        if ($from_db) {
+            $cat_id = $this->get_id();        
+            
+            $gradebook = new Gradebook();
+            $skills = $gradebook->get_skills_by_gradebook($cat_id);
+        } else {
+            $skills = $this->skills;
+        }
+        return $skills;        
+    }
+    
+    function get_skills_for_select() {
+        $skills = $this->get_skills();
+        $skill_select = array();
+        if (!empty($skills)) {            
+            foreach($skills as $skill) {                
+                $skill_select[$skill['id']] = $skill['name'];
+            }
+        }
+        return $skill_select;
+    }
 
-
-// CRUD FUNCTIONS
+    // CRUD FUNCTIONS
 
 	/**
 	 * Retrieve categories and return them as an array of Category objects
@@ -197,7 +220,8 @@ class Category implements GradebookItem
 			$paramcount ++;
 		}
 		//echo $sql;
-		$result = Database::query($sql);		
+		$result = Database::query($sql);
+        $allcat = array();		
 		if (Database::num_rows($result) > 0) {
 			$allcat = Category::create_category_objects_from_sql_result($result);
 		}
@@ -280,6 +304,10 @@ class Category implements GradebookItem
 			Database::query($sql);
 			$id = Database::insert_id();
 			$this->set_id($id);
+            
+            $gradebook= new Gradebook();
+            $res    = $gradebook->update_skills_to_gradebook($this->id, $this->get_skills(false));
+        
 			return $id;
 		}
 	}
@@ -319,6 +347,10 @@ class Category implements GradebookItem
 			.', visible = '.intval($this->is_visible())
 			.' WHERE id = '.intval($this->id);
 		Database::query($sql);
+        
+        $gradebook= new Gradebook();
+        $res    = $gradebook->update_skills_to_gradebook($this->id, $this->get_skills(false));
+
 	}
 
 	/**
@@ -1097,6 +1129,10 @@ class Category implements GradebookItem
 	public function get_item_type() {
 		return 'C';
 	}
+        
+    public function set_skills($skills) {
+        $this->skills = $skills;
+    }
 
 	public function get_date() {
 		return null;

@@ -31,6 +31,7 @@
 		{$reservation_block}
 		{$search_block}
 		{$classes_block}
+		{$skills_block}
 	</div>
 {/block}
 

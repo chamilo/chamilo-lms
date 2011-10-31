@@ -14,8 +14,9 @@ switch ($action) {
         } else {   
             if (UserManager::is_user_id_valid($_GET['user_id'])) {
                 echo 1;
+            } else {
+                echo 0;
             }
-            echo 0;
         }
         break;        
 	case 'search_tags':

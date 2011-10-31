@@ -1138,7 +1138,7 @@ class Database {
 
     public static function select($columns = '*' , $table_name,  $conditions = array(), $type_result = 'all', $option = 'ASSOC') {
         $conditions = self::parse_conditions($conditions);
-
+        
         //@todo we could do a describe here to check the columns ...
         $clean_columns = '';
         if (is_array($columns)) {
@@ -1152,7 +1152,7 @@ class Database {
         }
 
         $sql    = "SELECT $clean_columns FROM $table_name $conditions";
-		//echo $sql.'<br />';
+	    //echo $sql.'<br />';
         $result = self::query($sql);
         $array = array();
         //if (self::num_rows($result) > 0 ) {
@@ -1176,7 +1176,7 @@ class Database {
      * @param   array
      * @todo lot of stuff to do here
     */
-    public function parse_conditions($conditions) {
+    public function parse_conditions($conditions) {        
         if (empty($conditions)) {
             return '';
         }
@@ -1187,23 +1187,26 @@ class Database {
             }
             $type_condition = strtolower($type_condition);
             switch($type_condition) {
-                case 'where':                    
-                    foreach ($condition_data as $condition => $value_array) {
+                case 'where':                                       
+                    foreach ($condition_data as $condition => $value_array) {                        
                         if (is_array($value_array)) {
                             $clean_values = array();
                             foreach($value_array as $item) {
                                 $item = Database::escape_string($item);
-                                $clean_values[]= "'$item'";
+                                $clean_values[]= $item;
                             }
                         } else {
                             $value_array = Database::escape_string($value_array);
-                            $clean_values = "'$value_array'";
+                            $clean_values = $value_array;                            
                         }
-                        if (!empty($condition) && !empty($clean_values)) {
-                            //$condition = str_replace('%','@percentage@', $condition);
-                            $condition = str_replace('?','%s', $condition); //we treat everything as string
-                            $condition = vsprintf($condition, $clean_values);
-                            //$condition = str_replace('@percentage@','%', $condition);
+                       
+                        if (!empty($condition) && $clean_values != '') {                            
+                            $condition = str_replace('%',"'@percentage@'", $condition); //replace "%"
+                            $condition = str_replace("'?'","%s", $condition); //we treat everything as string                            
+                            //just in case
+                            $condition = str_replace("?","%s", $condition); //we treat everything as string
+                            $condition = vsprintf($condition, $clean_values);                            
+                            $condition = str_replace('@percentage@','%', $condition); //replace "%"
                             $where_return .= $condition;
                         }
                     }

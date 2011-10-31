@@ -484,21 +484,7 @@ function parse_xml_data($file) {
 	return $users;
 }
 
-/**
-* update user info about certificate
-* @param int The category id
-* @param int The user id
-* @param string the path name of the certificate
-* @return void()
-*/
-function update_user_info_about_certificate ($cat_id,$user_id,$path_certificate) {
-    $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-    if (!UserManager::is_user_certified($cat_id,$user_id)) {
-    	$sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"
-    		 WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
-    	$rs=Database::query($sql);
-    }
-}
+
 
 /**
 * register user info about certificate

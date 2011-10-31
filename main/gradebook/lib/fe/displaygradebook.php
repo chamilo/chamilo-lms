@@ -553,7 +553,7 @@ class DisplayGradebook
             		$modify_icons .= '<a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.
             							Display::return_icon('certificate.png', get_lang('AttachCertificate'),'','32').'</a>';
             		
-            		$modify_icons .= '<a href="gradebook_edit_all.php?id_session='.intval($_SESSION['id_session']).'&amp;'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('percentage.png', get_lang('EditAllWeights'),'','32').'</a>';
+            		$modify_icons .= '<a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&amp;'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('percentage.png', get_lang('EditAllWeights'),'','32').'</a>';
             		
             		$modify_icons .= '<a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('ranking.png', get_lang('ScoreEdit'),'','32').'</a>';
             		

@@ -73,7 +73,7 @@ class GradebookDataGenerator
 		} elseif ($sorting & self :: GDG_SORT_WEIGHT) {
 			usort($allitems, array('GradebookDataGenerator', 'sort_by_weight'));
 		} elseif ($sorting & self :: GDG_SORT_DATE) {
-			usort($allitems, array('GradebookDataGenerator', 'sort_by_date'));
+			//usort($allitems, array('GradebookDataGenerator', 'sort_by_date'));
 		}
 		if ($sorting & self :: GDG_SORT_DESC) {
 			$allitems = array_reverse($allitems);
@@ -154,7 +154,12 @@ class GradebookDataGenerator
 		if(is_int($item1->get_date())) {
 			$timestamp1 = $item1->get_date();
 		} else {
-			$timestamp1 = api_strtotime($item1->get_date());
+		    $date = $item1->get_date();
+            if (!empty($date)) {
+			 $timestamp1 = api_strtotime($date);
+            } else {
+                $timestamp1 = null;
+            }
 		}
 		
 		if(is_int($item2->get_date())) {

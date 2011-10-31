@@ -236,6 +236,11 @@ $controller->tpl->assign('reservation_block', 			$controller->return_reservation
 $controller->tpl->assign('search_block', 				$controller->return_search_block());
 $controller->tpl->assign('classes_block', 				$controller->return_classes_block());
 
+if (api_is_platform_admin() || api_is_drh()) {
+    $controller->tpl->assign('skills_block',            $controller->return_skills_links());
+}
+
+
 $controller->tpl->display_two_col_template();
 
 // Deleting the session_id.

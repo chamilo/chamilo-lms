@@ -3240,7 +3240,7 @@ div.admin_section h4 {
 
 /* chosen javascript checkbox select width fix */
 .chzn-select {
-    width: 200px;	
+    min-width: 250px;	
 }
 #lp_item_list {
 	width:90%;
@@ -3785,8 +3785,9 @@ form div.error input, form div.error textarea {
 }
 
 .label_tag {
-  /* padding: 1px 3px 2px; */
-  padding:5px;
+  padding: 1px 3px 2px;
+  margin-right:3px; 
+  /* padding:5px;*/
   background-color: #bfbfbf;
   font-size: 9.75px;
   font-weight: bold;
@@ -3878,4 +3879,55 @@ form div.error input, form div.error textarea {
 .lp_content_type_label {
 	font-style: italic;
 	color:#999;
+}
+
+
+/* Plumb */
+
+.window { 
+    cursor:pointer;
+    box-shadow: 2px 2px 19px #aaa;
+   -o-box-shadow: 2px 2px 19px #aaa;
+   -webkit-box-shadow: 2px 2px 19px #aaa;
+   -moz-box-shadow: 2px 2px 19px #aaa;
+}
+
+.window {
+    background-color: white;
+    border: 0.1em dotted #D4E06B;
+    color: black;
+    font-family: helvetica,sans;
+    font-size: 0.9em;
+    height: 4em;
+    opacity: 0.8;
+    padding-top: 0.9em;
+    position: absolute;
+    text-align: center;
+    width: 100px;
+    z-index: 40;
+}
+
+.done_window {
+    background-color: #73982C;
+}
+
+._jsPlumb_endpoint {
+    z-index: 50;
+}
+
+.drag-locked {
+    border: 1px solid red;
+}
+._jsPlumb_endpoint {
+    z-index: 50;
+}
+._jsPlumb_connector {
+    z-index: 1;
+}
+.dropHover {
+    border: 1px dotted red;
+}
+
+.dragActive {
+    border: 2px dotted orange;
 }

@@ -51,6 +51,17 @@ class SkillRelSkill extends Model {
         }
         return $parents;
     }
+    
+    public function get_children($skill_id, $add_child_info = true) {
+        $skills = $this->find('all', array('where'=> array('parent_id = ? '=> $skill_id)));
+        $skill_obj = new Skill();
+        if (!empty($skills)) {
+            foreach ($skills as &$skill) {
+              $skill['data'] = $skill_obj->get($skill['skill_id']);
+            }
+        }
+        return $skills;
+    }
 }
 
  /**
@@ -116,11 +127,12 @@ class Skill extends Model {
                     ON skill.id = skill_rel_skill.skill_id ";
         $result = Database::query($sql);
         $skills = array();        
+        
         if (Database::num_rows($result)) {        
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $skill_rel_skill = new SkillRelSkill();
                 $a = $skill_rel_skill->get_skill_parents($row['id']);                              
-                $row['level'] = count($a)-1;
+                $row['level'] = count($a)-1;                
                 $row['gradebooks'] = self::get_gradebooks_by_skill($row['id']);                    
                 $skills[$row['id']] = $row;            
             }        
@@ -150,6 +162,11 @@ class Skill extends Model {
         return $result;
     }
     
+    function get_children($skill_id) {
+        $skill_rel_skill = new SkillRelSkill();
+        $skills = $skill_rel_skill->get_children($skill_id, true);
+        return $skills;
+    }    
     public function add($params) {
         if (!isset($params['parent_id'])) {
             $params['parent_id'] = 1;
@@ -179,8 +196,6 @@ class Skill extends Model {
             }                                 
         }
     }
-    
-    
     
     /**
     * Return true if the user has the skill
@@ -255,38 +270,45 @@ class Skill extends Model {
     }
 
         
-    public static function get_skills_tree($user_id = null) {
-        $skills = self::get_all();    
+    public function get_skills_tree($user_id = null, $return_flat_array = false) {
+        $skills = $this->get_all();    
         $refs = array();        
         $skills_tree = null;
         
         // Create references for all nodes
+        $flat_array = array();
         if (!empty($skills)) {
             foreach($skills as &$skill) {
-                if ($skill['parent'] == null) {
-                    $skill['parent'] = 'root';
+                if ($skill['parent_id'] == 0) {
+                    $skill['parent_id'] = 'root';
                 }
                 
-                $skill['data'] = array('parent' => $skill['parent']); // because except main keys (id, name, children) others keys are not saved while in the space tree
+                $skill['data'] = array('parent_id' => $skill['parent_id']); // because except main keys (id, name, children) others keys are not saved while in the space tree
                 
                 if ($user_id) {
-                    $skill['data']['achieved'] = self::user_has_skill($user_id, $skill['id']);
+                    $skill['data']['achieved'] = $this->user_has_skill($user_id, $skill['id']);
                 }                
                 $refs[$skill['id']] = &$skill;
+                $flat_array[$skill['id']] =  &$skill;
             }
         
             // Moving node to the children index of their parents
             foreach($skills as $skillInd => &$skill) {
-                $refs[$skill['parent']]['children'][] = &$skill;                
+                $refs[$skill['parent_id']]['children'][] = &$skill;
+                $flat_array[$skillInd] =  $skill;                                
             }
             
             $skills_tree = array(
-                'name' => get_lang('SkillRootName'),
-                'id' => 'root',
-                'children' => $refs['root']['children'],
-                'data' => array()
-                );
-        }        
+                'name'      => get_lang('SkillRootName'),
+                'id'        => 'root',
+                'children'  => $refs['root']['children'],
+                'data'      => array()
+            );
+        }    
+//var_dump($flat_array);exit;    
+        if ($return_flat_array) {
+            return $flat_array;
+        }
         unset($skills);        
         return $skills_tree;
     }    

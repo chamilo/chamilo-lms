@@ -3240,7 +3240,7 @@ div.admin_section h4 {
 
 /* chosen javascript checkbox select width fix */
 .chzn-select {
-    min-width: 250px;	
+    min-width: 200px;	
 }
 #lp_item_list {
 	width:90%;
@@ -3930,4 +3930,13 @@ form div.error input, form div.error textarea {
 
 .dragActive {
     border: 2px dotted orange;
+}
+
+
+.edit_block {
+    z-index: 100;    
+}
+
+#language_list {
+    width:100px !important;
 }

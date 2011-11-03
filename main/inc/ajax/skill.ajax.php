@@ -52,6 +52,16 @@ switch ($action) {
         $skills = $skill->get_all($load_user_data);                    
         echo json_encode($skills);
         break;   
+        
+    case 'load_children':
+        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+        $skills = $skill->get_children($id);
+        $return = array();
+        foreach($skills as $skill) {
+            $return [$skill['data']['id']] = array('name' => $skill['data']['name'], 'id'=>$skill['data']['id']);
+        }
+        echo json_encode($return);
+        break;        
     case 'skill_exists':
         $skill_data = $skill->get($_REQUEST['skill_id']);        
         if (!empty($skill_data)) {

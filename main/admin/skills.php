@@ -20,13 +20,18 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 
-Display::display_header();
-//Display::display_reduced_header();
+//Display::display_header();
+Display::display_reduced_header();
 
 $skill = new Skill();
 $skills = $skill->get_all(true);
 $type = 'edit'; //edit
-$skill_visualizer = new SkillVisualizer($skills, $type);
+
+$tree = $skill->get_skills_tree(null, true);
+
+$skill_visualizer = new SkillVisualizer($tree, $type);
+
+echo '<a class="a_button gray" id="add_item_link" href="#">Add item</a>';
 
 $skill_visualizer->display_html();
 
@@ -35,6 +40,13 @@ $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 ?>
 
 <script>
+
+var url     = '<?php echo $url; ?>';
+var skills  = [];
+var parents = [];
+
+var parents = ['block_1'];
+
 jsPlumb.bind("ready", function() {
     $("#dialog-form").dialog({
         autoOpen: false,
@@ -43,6 +55,7 @@ jsPlumb.bind("ready", function() {
         height  : 380
     });
     
+    //Filling skills select
     $.getJSON( "<?php echo $url.'&a=get_skills' ?>", {},     
         function(data) {
             $.each(data, function(n, parent) {
@@ -52,6 +65,7 @@ jsPlumb.bind("ready", function() {
         }
     );
     
+    //Filling gradebook select
     $.getJSON( "<?php echo $url.'&a=get_gradebooks' ?>", {},     
         function(data) {
             $.each(data, function(n, gradebook) {
@@ -61,23 +75,80 @@ jsPlumb.bind("ready", function() {
         }
     );
     
+    //On click box
+    $(".open_block").live('click', function() {
+       var original_id = $(this).attr('id');
+       var id = $(this).attr('id');
+       
+       if (jQuery.inArray(id, parents) == -1) {
+        parents.push(id);
+       }
+       console.log(parents);
+       open_block(original_id, id);       
+    });
+    
+    //open block function
+    function open_block(original_id, id) {         
+        my_id = original_id.split('_')[1];  
+        for (var i = 0; i < skills.length; i++) {            
+            window_id = id.split('_')[1];
+            if (jQuery.inArray(skills[i].element, parents) == -1) {
+                 jsPlumb.deleteEndpoint(skills[i].endp);
+                 $("#"+skills[i].element).remove();
+            }
+        }
+        jsPlumb.animate(original_id, {left: 900}, { duration:1000 });
+        
+        pos = $('#'+original_id).position();
+        top_value = pos.top + 200 ;     
+        load_children(my_id, top_value);   
+    }
     
     
+    function load_children(my_id, top_value) {
+        
+        // var a = '<div style="top:300px; left:100px;" class="window edit_window ui-draggable" id="block_15">aaaa</div>';
+        //Loading children
+        var ix = 1;
+        $.getJSON(url+'&a=load_children&id='+my_id, {},         
+            function(json) {
+                $.each(json,function(i,item) {
+                    left_value  = 130*ix+500;
+                    //top_value   = 300;
+                    $('body').append('<div id="block_'+item.id+ '" class="open_block window " >'+item.name+i+'</div>')
+                    
+                    
+                    var es = prepare("block_" + item.id,  jsPlumbDemo.editEndpoint);    
+                    jsPlumb.connect({source: es, target:"block_"+my_id});
+                    
+                    jsPlumb.animate("block_" + item.id, {left: left_value, top : top_value}, { duration:1000 });                     
+                    
+                    ix++;   
+                });
+            }
+        ); 
+        
+        
+    }
+    
+    
+    $(".edit_block").click(function() {
+        var my_id = $(this).attr('id');
+        my_id = my_id.split('_')[2];
+        return false;
+    });
+        
     //Filling select
     $("#add_item_link").click(function() {
         $("#dialog-form").dialog("open");
-        $("#gradebook_id").addClass('chzn-select');
-        
+        $("#gradebook_id").addClass('chzn-select');               
         $("#gradebook_id").chosen();
-        $("#parent_id").chosen();
-    });
-
-    var url = '<?php echo $url; ?>';
+        $("#parent_id").chosen();                
+    });    
     
     var name = $( "#name" ),
     description = $( "#description" ),  
-    allFields = $( [] ).add( name ).add( description ), tips = $(".validateTips");
-    
+    allFields = $( [] ).add( name ).add( description ), tips = $(".validateTips");    
     
     $("#dialog-form").dialog({              
         buttons: {
@@ -116,8 +187,7 @@ jsPlumb.bind("ready", function() {
             $("#name").attr('value', '');
             $("#description").attr('value', '');                
         }
-    });
-    
+    });    
  
     $(".window").bind('click', function() {
         var id = $(this).attr('id');
@@ -133,36 +203,31 @@ jsPlumb.bind("ready", function() {
         var newMode = jsPlumb.setRenderMode(desiredMode);        
         jsPlumbDemo.init();
     };    
-    resetRenderMode(jsPlumb.CANVAS);
-       
+    resetRenderMode(jsPlumb.CANVAS);       
 });
 
 ;(function() {
-     
+         
     prepare = function(elId, endpoint) {
         jsPlumbDemo.initHover(elId);
         //jsPlumbDemo.initAnimation(elId);        
         var e = jsPlumb.addEndpoint(elId, endpoint);
         jsPlumbDemo.initjulio(e);
-        
+        skills.push({element:elId, endp:e});        
         return e;
     },    
     
     window.jsPlumbDemo = {    
-         initjulio :function(e) {             
-              
+        initjulio :function(e) {
         },      
         initHover :function(elId) {            
             
             $("#" + elId).click(function() {
                 var  all = jsPlumb.getConnections({source:elId});
-                for (var i = 0; i < discs.length; i++) {
-                    var d = document.getElementById(discs[i]);
-                    if (d) d.parentNode.removeChild(d);
-                }
+               
                 //var all  = jsPlumb.getConnections({scope:"DEFAULT", source:elId});     
                    
-                console.log(all);
+                //console.log(all);
             
                 //alert(elId);
                // jsPlumb.hide(elId);
@@ -239,8 +304,7 @@ jsPlumb.bind("ready", function() {
            var connectorHoverStyle = {
                 lineWidth:7,
                 strokeStyle:"#2e2aF8"
-            };
-            
+            };            
             
             jsPlumb.Defaults.Overlays = [
                 [ "Arrow", { location:0.9 } ], 
@@ -258,26 +322,25 @@ jsPlumb.bind("ready", function() {
             var edit_arrow_color = '#ccc';            
             var editEndpoint = {  
                 //connectorStyle:connectorPaintStyle,
-                connector:[ "Flowchart", { stub:40 } ],
+                connector:[ "Flowchart", { stub:35 } ],
                 hoverPaintStyle:connectorHoverStyle,
                 connectorHoverStyle:connectorHoverStyle,
                 anchors: ['BottomCenter','TopCenter'],                
                 endpoint:"Rectangle",
-                paintStyle:{ width:25, height:21, fillStyle:edit_arrow_color },
+                paintStyle:{ width:20, height:20, fillStyle:edit_arrow_color },
                 isSource:true,
                 scope:'blue rectangle',
                 maxConnections:10,
                 connectorStyle : {
                     gradient:{stops:[[0, edit_arrow_color], [0.5, edit_arrow_color], [1, edit_arrow_color]]}, //gradient stuff
-                    lineWidth:5,
+                    lineWidth:2,
                     strokeStyle: edit_arrow_color
                 },
                 isTarget:true,
                 dropOptions : exampleDropOptions
             };
                            
-            jsPlumb.setMouseEventsEnabled(true);
-            
+            jsPlumb.setMouseEventsEnabled(true);            
             
             //Default
             var default_arrow_color = '#ccc';            
@@ -295,8 +358,7 @@ jsPlumb.bind("ready", function() {
                 },
                 isTarget:false,          
                 setDraggableByDefault : false,      
-            };
-            
+            };            
             
             // Done end point 
             var done_arrow_color = '#73982C';   
@@ -312,12 +374,8 @@ jsPlumb.bind("ready", function() {
                     strokeStyle:done_arrow_color
                 },
                 isTarget:false,
-                setDraggableByDefault : false,
-                         
+                setDraggableByDefault : false,                         
             };
-            
-            
-
 
             <?php $skill_visualizer->display_js();?>
             // three ways to do this - an id, a list of ids, or a selector (note the two different types of selectors shown here...anything that is valid jquery will work of course)
@@ -335,17 +393,13 @@ jsPlumb.bind("ready", function() {
             jsPlumbDemo.attachBehaviour();          
         }
     };
-    
 })();
-
-
-
 
 $(document).ready( function() {     
     //When creating a connection see
     //http://jsplumb.org/apidocs/files/jsPlumb-1-3-2-all-js.html#bind 
     jsPlumb.bind("jsPlumbConnection", function(conn) {
-        alert("Connection created " + conn.sourceId + " to " + conn.targetId + " ");
+        //alert("Connection created " + conn.sourceId + " to " + conn.targetId + " ");
             //jsPlumb.detach(conn); 
     });
     //When double clicking a connection
@@ -359,9 +413,6 @@ $(document).ready( function() {
         if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
             jsPlumb.detach(conn); 
     })
-    
-    
-    
 });
 
 ;(function() {
@@ -414,8 +465,6 @@ function checkLength( o, n, min, max ) {
 }
 </script>
 
-<a class="a_button gray" id="add_item_link" href="#">Add item</a>
-
 <div id="dialog-form" style="display:none;">
     <div style="width:500px">
     <form id="add_item" name="form">
@@ -433,7 +482,7 @@ function checkLength( o, n, min, max ) {
             </div>      
             <div class="formw">
                 <select id="parent_id" name="parent_id" />
-                </select>             
+                </select>                  
             </div>
         </div>
         
@@ -444,6 +493,9 @@ function checkLength( o, n, min, max ) {
             <div class="formw">
                 <select id="gradebook_id" name="gradebook_id[]" multiple="multiple" />
                 </select>             
+                <span class="help-block">
+                Gradebook Description
+                </span>           
             </div>
         </div>
         <div class="row">
@@ -459,7 +511,7 @@ function checkLength( o, n, min, max ) {
 </div>
 <?php    
 
-Display::display_footer();
+//Display::display_footer();
 
 // The header.
 /*

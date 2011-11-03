@@ -77,14 +77,12 @@ class Exercise {
 		$this->randomByCat = 0;	//
 
 		if (!empty($course_id)) {			
-			$course_info        =  api_get_course_info_by_id($this->course_id);
+			$course_info        =  api_get_course_info_by_id($course_id);
 		} else {
 			$course_info 		= api_get_course_info();
 		}
 		$this->course_id    = $course_info['real_id'];
-		
 		$this->course   	= $course_info;
-
 	}
 
 	/**

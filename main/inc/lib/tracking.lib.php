@@ -2193,8 +2193,8 @@ class Tracking {
 							 
 							$exercise_list = get_all_exercises($course_data, $my_session_id);
 							
-							foreach($exercise_list as $exercise_data) {
-								$exercise_obj = New Exercise($course_data['id']);
+							foreach($exercise_list as $exercise_data) {							    
+								$exercise_obj = new Exercise($course_data['id']);
 								$exercise_obj->read($exercise_data['id']);
 								if ($exercise_obj->is_visible()) {
 									$best_average = intval(get_best_average_score_by_exercise($exercise_data['id'], $course_data['code'], $my_session_id, $user_count));

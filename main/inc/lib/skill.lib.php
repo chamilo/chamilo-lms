@@ -86,7 +86,7 @@ class SkillRelGradebook extends Model {
     var $columns = array('id', 'gradebook_id','skill_id');
     
     public function __construct() {
-        $this->table                      = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK);
+        $this->table = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK);
     }
     
     public function exists_gradebook_skill($gradebook_id, $skill_id) {
@@ -104,8 +104,7 @@ class SkillRelGradebook extends Model {
         if (empty($skill_id)) { return array(); }     
         $result = Database::select('*',$this->table, array('where'=>array('skill_id = ? AND gradebook_id = ? '=>array($skill_id, $gradebook_id))),'first');
         return $result;
-    }
-    
+    }    
 }
 
  /**
@@ -129,6 +128,16 @@ class Skill extends Model {
         $this->table_course               = Database::get_main_table(TABLE_MAIN_COURSE);
         $this->table_skill_rel_skill      = Database::get_main_table(TABLE_MAIN_SKILL_REL_SKILL);
         $this->table_gradebook            = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+    }
+    
+    function get_skill_info($id) {
+        $skill_rel_skill = new SkillRelSkill();
+        $skill_info = $this->get($id);
+        if (!empty($skill_info)) {
+            $skill_info['extra'] = $skill_rel_skill->get_skill_info($id);            
+            $skill_info['gradebooks'] = self::get_gradebooks_by_skill($id);            
+        }
+        return $skill_info;
     }
     
     public function skill_exists($skill_id) {
@@ -233,6 +242,38 @@ class Skill extends Model {
                     $attributes['gradebook_id'] = $gradebook_id;
                     $attributes['skill_id']     = $skill_id;                    
                     $skill_rel_gradebook->save($attributes);
+                }            
+            }                                 
+        }
+    }
+
+    public function edit($params) {
+        if (!isset($params['parent_id'])) {
+            $params['parent_id'] = 1;
+        }
+        $skill_rel_skill     = new SkillRelSkill();
+        $skill_rel_gradebook = new SkillRelGradebook();
+        
+        //Saving name, description
+        $this->update($params);
+        $skill_id = $params['id'];
+        
+        if ($skill_id) {
+            //Saving skill_rel_skill (parent_id, relation_type)
+            $attributes = array(
+                            'skill_id'      => $skill_id,
+                            'parent_id'     => $params['parent_id'],
+                            'relation_type' => $params['relation_type'],
+                            //'level'         => $params['level'],
+            );            
+            $skill_rel_skill->update($attributes);            
+            
+            if (!empty($params['gradebook_id'])) {
+                foreach ($params['gradebook_id'] as $gradebook_id) {
+                    $attributes = array();
+                    $attributes['gradebook_id'] = $gradebook_id;
+                    $attributes['skill_id']     = $skill_id;                    
+                    $skill_rel_gradebook->update($attributes);
                 }            
             }                                 
         }

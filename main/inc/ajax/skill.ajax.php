@@ -17,8 +17,13 @@ $skill_gradebook = new SkillRelGradebook();
 $skill_rel_skill = new SkillRelSkill();
 
 switch ($action) {
-    case 'add':     
-        $skill->add($_REQUEST);
+    case 'add':  
+        if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
+            $skill->edit($_REQUEST);    
+        } else {
+            $skill->add($_REQUEST);    
+        }
+        
         break;      
     case 'find_skills':
         $tag    = Database::escape_string($_REQUEST['tag']);
@@ -52,8 +57,12 @@ switch ($action) {
         $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         $skills = $skill->get_all($load_user_data);                    
         echo json_encode($skills);
-        break;   
-        
+        break;
+    case 'get_skill_info':
+        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+        $skill_info = $skill->get_skill_info($id);                    
+        echo json_encode($skill_info);
+        break;        
     case 'load_children':
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
         $skills = $skill->get_children($id);
@@ -85,8 +94,7 @@ switch ($action) {
         }
         break;
     case 'remove_skill':
-        if (!empty($_REQUEST['skill_id']) && !empty($_REQUEST['gradebook_id'])) {
-            
+        if (!empty($_REQUEST['skill_id']) && !empty($_REQUEST['gradebook_id'])) {            
             $skill_item = $skill_gradebook->get_skill_info($_REQUEST['skill_id'], $_REQUEST['gradebook_id']);
             if (!empty($skill_item)) {
                 $skill_gradebook->delete($skill_item['id']);

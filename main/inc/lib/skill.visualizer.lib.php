@@ -40,9 +40,9 @@
         $this->html .= '<div id="block_'.$block_id.'" class = " open_block window '.$extra_class.'  '.$class.'" style = "top:' . $position['y'] . 'px; left:' . $position['x'] . 'px;">';
         $gradebook_string = '';
         if (!empty($skill['gradebooks'])) {
-            foreach($skill['gradebooks'] as $gradebook) {
+            foreach ($skill['gradebooks'] as $gradebook) {
                 //uncomment this to show the gradebook tags
-                //$gradebook_string .= Display::span($gradebook['name'], array('class'=>'label_tag notice','style'=>'width:50px')).'<br />';    
+                $gradebook_string .= Display::span($gradebook['name'], array('class'=>'label_tag notice','style'=>'width:50px')).'<br />';    
             }
         }        
         $skill['name'] = Display::url($skill['name'], '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block'));
@@ -147,10 +147,8 @@
             //$skill['description']  = "{$brothers[$skill['parent_id']]} $x - $y";
             //$skill['name']  =  $skill['name']."  |  $x = $my_count * 150  +  $parent_x - (150* $max/2) - 10*$childs ";
             $this->add_item($skill, array('x' => $this->offset_x + $x, 'y' => $this->offset_y +$y));            
-        }
-                
-        echo $this->get_html();
-        
+        }                
+        echo $this->get_html();        
     }
     
     /**
@@ -158,8 +156,7 @@
      */
     public function display_js() {
         echo $this->get_js();
-    }  
-   
+    }
 
     private function get_html() {
         return $this->html;

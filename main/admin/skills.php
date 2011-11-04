@@ -28,31 +28,36 @@ $skills = $skill->get_all(true);
 $type   = 'edit'; //edit
 
 $tree   = $skill->get_skills_tree(null, true);
-
 $skill_visualizer = new SkillVisualizer($tree, $type);
 
 echo '<a class="a_button gray" id="add_item_link" href="#">Add item</a>';
 
 $skill_visualizer->display_html();
-
 $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 ?>
 <script>
 
-var url     = '<?php echo $url; ?>';
-var skills  = []; //current window divs
-var parents = []; //list of parents normally there should be only 2
-var hidden_parent = '';
+//js settings
+var url             = '<?php echo $url; ?>';
+var skills          = []; //current window divs
+var parents         = []; //list of parents normally there should be only 2
+var hidden_parent   = '';
+var duration_value  = 500;
 
 
+//Block settings see the SkillVisualizer Class
 var offset_x                = <?php echo $skill_visualizer->offset_x; ?>;
 var offset_y                = <?php echo $skill_visualizer->offset_y; ?>;
 var space_between_blocks_x  = <?php echo $skill_visualizer->space_between_blocks_x; ?>;
 var space_between_blocks_y  = <?php echo $skill_visualizer->space_between_blocks_y; ?>;
 var center_x                = <?php echo $skill_visualizer->center_x; ?>;
+var block_size              = <?php echo $skill_visualizer->block_size; ?>;
 
+
+//Setting the parent by default 
 var parents = ['block_1'];
 
+/* Clean window block classes*/
 function cleanclass(obj) {
     obj.removeClass('first_window');
     obj.removeClass('second_window');
@@ -61,6 +66,7 @@ function cleanclass(obj) {
 
 jsPlumb.bind("ready", function() {
     
+    //Open dialog
     $("#dialog-form").dialog({
         autoOpen: false,
         modal   : true, 
@@ -88,21 +94,16 @@ jsPlumb.bind("ready", function() {
         }
     );
     
-    //On click box
+    //On box click -(we use live instead of bind because we're creating divs on the fly )
     $(".open_block").live('click', function() {        
         var id = $(this).attr('id');
-        
-        
-         
         
         //if is root
         if (parents[0] == id) {
             parents = [id];
         }     
         
-        if (parents[1] != id) {
-            //means that we have 2 parents   
-            
+        if (parents[1] != id) {            
             if (parents.length == 2 ) {
                 hidden_parent = parents[0];   
                 //console.log('deleting: '+parents[0]);        
@@ -126,8 +127,7 @@ jsPlumb.bind("ready", function() {
                    parents = [hidden_parent, id];
                    //    console.log(parents);
                    open_parent(hidden_parent, id);
-                //}                
-            
+                //}
             }
             if (jQuery.inArray(id, parents) == -1) {                              
                 parents.push(id);
@@ -137,8 +137,7 @@ jsPlumb.bind("ready", function() {
         
         //Setting class       
         cleanclass($(this));
-        $(this).addClass('second_window');
-        
+        $(this).addClass('second_window');        
         
         parent_div = $("#"+parents[0]);
         cleanclass(parent_div);
@@ -146,8 +145,7 @@ jsPlumb.bind("ready", function() {
         
         parent_div = $("#"+parents[1]);        
         cleanclass(parent_div);
-        parent_div.addClass('second_window');        
-       
+        parent_div.addClass('second_window');
        
         console.log(parents);
        // console.log(skills);        
@@ -187,11 +185,11 @@ jsPlumb.bind("ready", function() {
         } else {
             top_value = pos.left;
         }
-        jsPlumb.animate(id, {left: left_value, top:top_value}, { duration:1000 });       
+        jsPlumb.animate(id, {left: left_value, top:top_value}, { duration:duration_value });       
         
         //Modifying root block position
         pos_parent = $('#'+parents[0]).position();
-        jsPlumb.animate(parents[0], {left: center_x, top:offset_y}, { duration:1000 });        
+        jsPlumb.animate(parents[0], {left: center_x, top:offset_y}, { duration:duration_value });        
         
         top_value = parents.length * space_between_blocks_y; 
         load_children(numeric_id, top_value);   
@@ -199,12 +197,10 @@ jsPlumb.bind("ready", function() {
     
     function load_parent(parent_id, id) {
         var ix= 0;         
-         
         $.ajax({
             url: url+'&a=load_direct_parents&id='+id,
             async: false, 
-            success: function(json) {
-                console.log(json);
+            success: function(json) {                
                 var json = jQuery.parseJSON(json);
                 
                 $.each(json,function(i,item) {
@@ -216,7 +212,7 @@ jsPlumb.bind("ready", function() {
                     var es2 = prepare("block_" + id,  editEndpoint);
                       
                     jsPlumb.connect({source: es, target:es2 });                    
-                    jsPlumb.animate("block_" + item.id, {left: left_value, top : top_value}, { duration:1000 });
+                    jsPlumb.animate("block_" + item.id, {left: left_value, top : top_value}, { duration : duration_value});
                     
                     if (item.parent_id) {
                         console.log('setting hidden_parent '+item.parent_id);
@@ -238,24 +234,44 @@ jsPlumb.bind("ready", function() {
         $.getJSON(url+'&a=load_children&id='+my_id, {},         
             function(json) {                
                 $.each(json,function(i,item) {                    
-                    left_value  = offset_x+space_between_blocks_x * ix;
+                    left_value  = ix*space_between_blocks_x +  center_x/2 + block_size / 2;
                     //top_value   = 300;
-                    $('body').append('<div id="block_'+item.id+ '" class="third_window open_block window " >'+item.name+i+'</div>');                    
+                    //Display::url($skill['name'], '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block'))
+                    item.name = '<a href="#" class="edit_block" id="edit_block_'+item.id+'">'+item.name+'</a>'; 
+                    
+                    $('body').append('<div id="block_'+item.id+ '" class="third_window open_block window " >'+item.name+'</div>');                    
                     
                     var es = prepare("block_" + item.id,  editEndpoint);
                     var e2 = prepare("block_" + my_id,  editEndpoint);
                      
                     jsPlumb.connect({source: es, target:e2});                    
-                    jsPlumb.animate("block_" + item.id, {left: left_value, top : top_value}, { duration:1000 });
+                    jsPlumb.animate("block_" + item.id, {left: left_value, top : top_value}, { duration:duration_value});
                     ix++;   
                 });
             }
         );
     }    
     
-    $(".edit_block").click(function() {
+    $(".edit_block").live('click',function() {        
         var my_id = $(this).attr('id');
         my_id = my_id.split('_')[2];
+        
+        $.ajax({
+            url: url+'&a=get_skill_info&id='+my_id,             
+            success: function(json) {
+                var skill = jQuery.parseJSON(json);
+                $("#name").attr('value', skill.name);
+                $("#id").attr('value',   skill.id);                        
+                $("#description").attr('value', skill.description);                
+                //filling parent_id
+                $("#parent_id option[value='"+skill.extra.parent_id+"']").attr('selected', 'selected');
+                //filling the gradebook_id         
+                jQuery.each(skill.gradebooks, function(index, data) {
+                    $("#gradebook_id option[value='"+data.id+"']").attr('selected', 'selected');            
+                });
+            },
+        });            
+        $("#dialog-form").dialog("open");
         return false;
     });
         
@@ -326,13 +342,14 @@ jsPlumb.bind("ready", function() {
     };    
     resetRenderMode(jsPlumb.CANVAS);       
 });
-var exampleDropOptions = {
+
+            var exampleDropOptions = {
                 tolerance:'touch',
                 hoverClass:'dropHover',
                 activeClass:'dragActive'
             };
 
-var connectorPaintStyle = {
+            var connectorPaintStyle = {
                 lineWidth:5,
                 strokeStyle:"#deea18",
                 joinstyle:"round"
@@ -349,7 +366,7 @@ var connectorPaintStyle = {
                 
             var editEndpoint = {  
                 //connectorStyle:connectorPaintStyle,
-                connector:[ "Flowchart", { stub:35 } ],
+                connector:[ "Flowchart", { stub:10 } ],
                 hoverPaintStyle:connectorHoverStyle,
                 connectorHoverStyle:connectorHoverStyle,
                 anchors: ['BottomCenter','TopCenter'],                
@@ -394,11 +411,11 @@ var connectorPaintStyle = {
         },        
         init : function() {
         
-            jsPlumb.Defaults.DragOptions = { cursor: 'pointer', zIndex:2000 };
-            jsPlumb.Defaults.PaintStyle = { strokeStyle:'#666' };
-            jsPlumb.Defaults.EndpointStyle = { width:20, height:16, strokeStyle:'#666' };
-            jsPlumb.Defaults.Endpoint = "Rectangle";
-            jsPlumb.Defaults.Anchors = ["TopCenter", "TopCenter"];
+            jsPlumb.Defaults.DragOptions    = { cursor: 'pointer', zIndex:2000 };
+            jsPlumb.Defaults.PaintStyle     = { strokeStyle:'#666' };
+            jsPlumb.Defaults.EndpointStyle  = { width:20, height:16, strokeStyle:'#666' };
+            jsPlumb.Defaults.Endpoint       = "Rectangle";
+            jsPlumb.Defaults.Anchors        = ["TopCenter", "TopCenter"];
 
             var connections = [];
             var updateConnections = function(conn, remove) {
@@ -571,7 +588,6 @@ $(document).ready( function() {
             jsPlumb.detachEverything(); showConnections(); 
         });
     };
-
 })();
 
 function checkLength( o, n, min, max ) {
@@ -589,6 +605,7 @@ function checkLength( o, n, min, max ) {
 <div id="dialog-form" style="display:none;">
     <div style="width:500px">
     <form id="add_item" name="form">
+        <input type="hidden" name="id" id="id"/>
         <div class="row">
             <div class="label">
                 <label for="name">Name</label>

@@ -101,12 +101,6 @@ class Gradebook extends Model {
         return $form;                                
     }
 
-     
-    
-    
-    function get_children() {
-    }
-    
     function get_skills_by_gradebook($gradebook_id) {
         $gradebook_id = intval($gradebook_id);
         $sql = "SELECT skill.id, skill.name FROM {$this->table_skill} skill INNER JOIN {$this->table_skill_rel_gradebook} skill_rel_gradebook

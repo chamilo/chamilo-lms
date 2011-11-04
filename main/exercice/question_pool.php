@@ -225,6 +225,8 @@ if (!empty($gradebook) && $gradebook=='view') {
 
 // if admin of course
 if (!$is_allowedToEdit) {
+        echo "HUBC ".__LINE__." ".__FILE__;
+
     api_not_allowed(true);
 }
 
@@ -289,7 +291,6 @@ echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 // Session list, if sessions are used.
 // ----------------------------------------------------
 $session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
-// hub 13-10-2011
 $tabAttrParam = array('class'=>'chzn-select', 'onchange'=>'submit_form(this)');	// when sessions are used
 $labelFormRow = get_lang('Session');
 if (api_get_setting('use_session_mode') == 'false') {
@@ -300,7 +301,7 @@ $session_select_list = array();
 foreach($session_list as $item) {
 	$session_select_list[$item['id']] = $item['name'];
 }
-$select_session_html =  Display::select('session_id', $session_select_list, $session_id, $tabAttrParam);	// hub 13-10-2011
+$select_session_html =  Display::select('session_id', $session_select_list, $session_id, $tabAttrParam);
 echo Display::form_row($labelFormRow, $select_session_html);	// hub 13-10-2011
 
 // -----------------------------------------------------------------------------
@@ -389,7 +390,8 @@ echo Display::form_row(get_lang('Difficulty'), $select_difficulty_html);
 $question_list = Question::get_types_information();
 $new_question_list = array();
 $new_question_list['-1']  = get_lang('All');
-$objExercise->feedbacktype;
+$objExercise = new Exercise();
+$objExercise->read($fromExercise);
 foreach ($question_list as $key=>$item) {
     if ($objExercise->feedbacktype == EXERCISE_FEEDBACK_TYPE_DIRECT) {
         if (!in_array($key, array(HOT_SPOT_DELINEATION, UNIQUE_ANSWER))) {
@@ -409,8 +411,8 @@ $select_answer_html = Display::select('answerType', $new_question_list, $answerT
 echo Display::form_row(get_lang('AnswerType'), $select_answer_html);
 $button = '<button class="save" type="submit" name="name" value="'.get_lang('Filter').'">'.get_lang('Filter').'</button>'; 
 echo Display::form_row('', $button);
-echo "<input type='hidden' id='course_id_changed' name='course_id_changed' value='0' />"; // hub 13-10-2011
-echo "<input type='hidden' id='exercice_id_changed' name='exercice_id_changed' value='0' />"; // hub 13-10-2011
+echo "<input type='hidden' id='course_id_changed' name='course_id_changed' value='0' />"; 
+echo "<input type='hidden' id='exercice_id_changed' name='exercice_id_changed' value='0' />";
 ?>
 </form>
 <div class="clear"></div>
@@ -457,11 +459,11 @@ elseif ($exerciseId == -1) {
 	if (isset($answerType) && $answerType != -1 ) {
 		$answer_where = ' AND type='.$answerType;
 	}
-	$sql = "SELECT DISTINCT * FROM `chamilo19_main`.`c_quiz_question` AS qu $from WHERE qu.c_id=$selected_course AND qu.id NOT IN (SELECT question_id FROM `chamilo19_main`.`c_quiz_rel_question` WHERE c_id=$selected_course ) $level_where $answer_where";
-  $result = Database::query($sql);
-  while($row = Database::fetch_array($result, 'ASSOC')) {
-      $main_question_list[] = $row;
-  }
+	$sql = "SELECT DISTINCT * FROM $TBL_QUESTIONS qu $from WHERE qu.c_id=$selected_course AND qu.id NOT IN (SELECT question_id FROM $TBL_EXERCICE_QUESTION WHERE c_id=$selected_course ) $level_where $answer_where";
+    $result = Database::query($sql);
+    while($row = Database::fetch_array($result, 'ASSOC')) {
+        $main_question_list[] = $row;
+    }
 } 
 else {
 	// ---------------------------------
@@ -574,27 +576,27 @@ $nbrQuestions = count($main_question_list);
 // ----------------------------------------------------------------------------------------
 if ($fromExercise <= 0) { // NOT IN A TEST - IN THE COURSE
 	if ($selected_course == api_get_course_int_id()) {
-		$actionLabel = get_lang('Action');
+		$actionLabel = get_lang('Modify');
 		$actionIcon1 = "edit";
 		$actionIcon2 = "delete";
 		$questionTagA = 1;	// we are in the course, question title can be a link to the question edit page
 	}
 	else { // NOT IN A TEST - NOT IN THE COURSE
-		$actionLabel = get_lang('Reuse');
+		$actionLabel = get_lang('langReuse');
 		$actionIcon1 = get_lang('mustBeInATest');
 		$actionIcon2 = "";
-		$questionTagA = 0;	// we are not in  this course, to messy if we link to the question in another course
+		$questionTagA = 0;	// we are not in this course, to messy if we link to the question in another course
 	}
 }
 else { // IN A TEST - IN THE COURSE
 	if ($selected_course == api_get_course_int_id()) {
-		$actionLabel = get_lang('Reuse');
+		$actionLabel = get_lang('langReuse');
 		$actionIcon1 = "add";
 		$actionIcon2 = "";
 		$questionTagA = 1;
 	}
 	else { // IN A TEST - NOT IN THE COURSE
-		$actionLabel = get_lang('Reuse');
+		$actionLabel = get_lang('langReuse');
 		$actionIcon1 = "clone";
 		$actionIcon2 = "";
 		$questionTagA = 0;
@@ -604,11 +606,12 @@ else { // IN A TEST - IN THE COURSE
 // display table
 // -------------------
 $header = array();
-$header[] = array(get_lang('Question'), false, array("style"=>"text-align:center"));
-$header[] = array(get_lang('Type'), false, array("style"=>"text-align:center"), array("style"=>"text-align:center"));
-$header[] = array(get_lang('QuestionCategory'), false, array("style"=>"text-align:center"), array("style"=>"text-align:center"));
-$header[] = array(get_lang('Difficulty'), false, array("style"=>"text-align:center"), array("style"=>"text-align:center"));
-$header[] = array($actionLabel, false, array("style"=>"text-align:center"), array("style"=>"text-align:center"));
+$header[] = array(get_lang('QuestionUpperCaseFirstLetter'), false, array("style"=>"text-align:center"), '');
+$header[] = array(get_lang('Type'), false, array("style"=>"text-align:center"), array("style"=>"text-align:center"), '');
+$header[] = array(get_lang('QuestionCategory'), false, array("style"=>"text-align:center"), array("style"=>"text-align:center"), '');
+$header[] = array(get_lang('Difficulty'), false, array("style"=>"text-align:center"), array("style"=>"text-align:center"), '');
+$header[] = array($actionLabel, false, array("style"=>"text-align:center"), array("style"=>"text-align:center"), '');
+
 $data = array();
 foreach ($main_question_list as $tabQuestion) {
 	$row = array();
@@ -616,18 +619,26 @@ foreach ($main_question_list as $tabQuestion) {
 	$row[] = get_question_type_for_question($selected_course, $tabQuestion['id']);
 	$row[] = get_question_categorie_for_question($selected_course, $tabQuestion['id']);
 	$row[] = $tabQuestion['level'];
-	$row[] = get_action_icon_for_question($actionIcon1, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseId, $exerciseLevel, $answerType, $session_id)."&nbsp;".get_action_icon_for_question($actionIcon2, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], $tabQuestion['question'], $selected_course, $courseCategoryId, $exercice_id, $exerciseLevel, $answerType, $session_id);
+	$row[] = get_action_icon_for_question($actionIcon1, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], 
+                $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseLevel, 
+                $answerType, $session_id).
+                "&nbsp;".
+                get_action_icon_for_question($actionIcon2, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], 
+                $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseLevel, $answerType, 
+                $session_id);
 	$data[] = $row;
 }
-Display :: display_sortable_table($header, $data, array(), array('per_page_default'=>999,'per_page'=>999,'page_nr'=>1));
+Display :: display_sortable_table($header, $data, '', array('per_page_default'=>999,'per_page'=>999,'page_nr'=>1));
 
 if (!$nbrQuestions) {
 	echo get_lang('NoQuestion');
 }
 
-if (api_get_session_id() == 0 ){
-	echo '<div style="width:100%; border-top:1px dotted #4171B5;"><button class="save" type="submit">'.get_lang('Reuse').'</button></div></form>';
-}
+// The (+) system as now make this button useless
+// Hubert Borderiou 27-10-2011
+//if (api_get_session_id() == 0){
+//	echo '<div style="width:100%; border-top:1px dotted #4171B5;"><button class="save" type="submit">'.get_lang('Reuse').'</button></div></form>';
+//}
 Display::display_footer();
 
 
@@ -673,9 +684,11 @@ function get_a_tag_for_question($in_addA, $in_fromex, $in_questionid, $in_questi
 // 
 // return the <a> html code for delete, add, clone, edit a question
 // hubert.borderiou 13-10-2011
-function get_action_icon_for_question($in_action, $from_exercice, $in_questionid, $in_questiontype, $in_questionname, $in_selected_course, $in_courseCategoryId, $in_exercise_id, $in_exerciseLevel, $in_answerType, $in_session_id) {
+function get_action_icon_for_question($in_action, $from_exercice, $in_questionid, $in_questiontype, $in_questionname, 
+    $in_selected_course, $in_courseCategoryId, $in_exerciseLevel, $in_answerType, $in_session_id
+) {
 	$res = "";
-	$getParams = "&selected_course=$in_selected_course&courseCategoryId=$in_courseCategoryId&exerciseId=$in_exercise_id&exerciseLevel=$in_exerciseLevel&answerType=$in_answerType&session_id=$in_session_id";
+	$getParams = "&selected_course=$in_selected_course&courseCategoryId=$in_courseCategoryId&exerciseId=$from_exercice&exerciseLevel=$in_exerciseLevel&answerType=$in_answerType&session_id=$in_session_id";
 	switch ($in_action) {
 		case "delete" :	
 			$res = "<a href='".api_get_self()."?".api_get_cidreq()."&exerciseId=$from_exercice&delete=$in_questionid$getParams' onclick='return confirm_your_choice()'>";

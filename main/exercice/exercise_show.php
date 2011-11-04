@@ -608,7 +608,7 @@ if ($is_allowedToEdit) {
 		echo '<input type = "hidden" name="total_score"      value="'.$totalScore.'"> ';
 		echo '<input type = "hidden" name="my_exe_exo_id"    value="'.$exercise_id.'"> ';					
 	} else {
-		echo ' <form name="myform" id="myform" action="exercice.php?show=result&action=qualify&exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'" method="post">';
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&action=qualify&exerciseId='.$exercise_id.'&filter=1&comments=update&exeid='.$id.'" method="post">';
 	}
 	if ($origin!='learnpath' && $origin!='student_progress') {
 		?>

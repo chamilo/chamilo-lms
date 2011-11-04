@@ -146,7 +146,7 @@ unset($_SESSION['less_answer']);
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
 if (!$inATest) {
-	echo get_lang("ChoiceQuestionType");
+	echo "<p class='warning-message'>".get_lang("ChoiceQuestionType")."</p>";
 }
 else {
 	echo '<div id="question_list">';

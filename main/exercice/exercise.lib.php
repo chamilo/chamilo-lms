@@ -71,7 +71,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         }
         
 		//$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;">';
-		
+		$s = '';
 		$s .= '<table class="exercise_options">';
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp = new Answer($questionId);
@@ -142,6 +142,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         $question_list = array();
             
         if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {            
+            $header = '';
             $header .= Display::tag('th', get_lang('Options'));   
             foreach ($objQuestionTmp->options as $key=>$item) {                
                 $header .= Display::tag('th', $item);                           
@@ -1157,6 +1158,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     }
     return $list_info;
 }
+
 
 /**
  * Converts the score with the exercise_max_note and exercise_min_score the platform settings + formats the results using the float_format function

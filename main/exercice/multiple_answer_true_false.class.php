@@ -280,20 +280,25 @@ class MultipleAnswerTrueFalse extends Question {
 	}
 	
 	function return_header($feedback_type, $counter = null) {
-	    parent::return_header($feedback_type, $counter);
-	    $header = '<table width="100%" border="0" cellspacing="3" cellpadding="3">
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><i>'.get_lang("Choice").'</i> </td>
-				<td><i>'. get_lang("ExpectedChoice").'</i></td>
-				<td><i>'. get_lang("Answer").'</i></td>';
-				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
-    				$header .= '<td><i>'.get_lang("Comment").'</i></td>';
-				} else { 
-					$header .= '<td>&nbsp;</td>';
-				}
+	    $header = "";
+	    if ($in_echo == 1) {
+	        parent::return_header($feedback_type, $counter, $in_echo);
+	    } else {
+	        $header = parent::return_header($feedback_type, $counter, $in_echo) . $header;
+	    }    	
+  	    $header .= '<table width="100%" border="0" cellspacing="3" cellpadding="3">
+		<tr>
+		<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td><i>'.get_lang("Choice").'</i> </td>
+			<td><i>'. get_lang("ExpectedChoice").'</i></td>
+			<td><i>'. get_lang("Answer").'</i></td>';
+			if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
+				$header .= '<td><i>'.get_lang("Comment").'</i></td>';
+			} else { 
+				$header .= '<td>&nbsp;</td>';
+			}
         $header .= '
 			</tr>
 			<tr>

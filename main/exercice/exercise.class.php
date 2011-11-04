@@ -39,14 +39,15 @@ class Exercise {
 	public $random_answers;
 	public $active;
 	public $timeLimit;
-	public $attempts;
-	public $feedbacktype;
+    public $attempts;
+    public $feedbacktype;
 	public $end_time;
 	public $start_time;
 	public $questionList;  // array with the list of this exercise's questions
 	public $results_disabled;
 	public $expired_time;
 	public $course;
+	public $course_id;
 	public $propagate_neg;
 	public $review_answers; //
 	public $randomByCat;
@@ -74,7 +75,7 @@ class Exercise {
 		$this->expired_time 	= '0000-00-00 00:00:00';
 		$this->propagate_neg    = 0;
 		$this->review_answers	= false;
-		$this->randomByCat = 0;	//
+		$this->randomByCat      = 0;	//
 
 		if (!empty($course_id)) {			
 			$course_info        =  api_get_course_info_by_id($course_id);

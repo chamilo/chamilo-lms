@@ -172,6 +172,8 @@ if (!empty($question_list)) {
 		//$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$quesId]; 
 		
 		if ($show_results) {
+		    // show category
+		    Testcategory::displayCategoryAndTitle($objQuestionTmp->id);
 	    	// show titles    	
 	    	echo $objQuestionTmp->return_header($objExercise->feedback_type, $counter);
 	    	$counter++;    	

@@ -6,26 +6,37 @@
  */
 
  class SkillVisualizer {
-
-    private $offsetX = 400;
-    private $offsetY = 0;
+    
+    public $block_size = 80; //see CSS window class
+    public $canvas_x   = 1024;
+    public $canvas_y   = 800;
+    
+    public $offset_x   = 0;
+    public $offset_y   = 50;
+    
+    public $space_between_blocks_x = 100;
+    public $space_between_blocks_y = 150;
+    
+    public $center_x = null;
    
     private $html    = '';
     private $type    = 'read';
     private $js      = '';
        
     function __construct($skills, $type = 'read') {
-        $this->skills = $skills;       
-        $this->type = $type; 
+        $this->skills   = $skills;       
+        $this->type     = $type; 
+        $this->center_x = intval($offset_x + $this->canvas_x/2 - $this->block_size/2); 
     }
     
     function prepare_skill_box($skill, $position, $class) {
         $block_id = $skill['id'];
-        $this->html .= '<div id="block_'.$block_id.'" class="open_block window '.$class.'" style="top:' . $position['y'] . 'px; left:' . $position['x'] . 'px;">';
+        $this->html .= '<div id="block_'.$block_id.'" class = "open_block window '.$class.'" style = "top:' . $position['y'] . 'px; left:' . $position['x'] . 'px;">';
         $gradebook_string = '';
         if (!empty($skill['gradebooks'])) {
             foreach($skill['gradebooks'] as $gradebook) {
-                $gradebook_string .= Display::span($gradebook['name'], array('class'=>'label_tag notice','style'=>'width:50px')).'<br />';    
+                //uncomment this to show the gradebook tags
+                //$gradebook_string .= Display::span($gradebook['name'], array('class'=>'label_tag notice','style'=>'width:50px')).'<br />';    
             }
         }        
         $skill['name'] = Display::url($skill['name'], '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block'));
@@ -47,19 +58,16 @@
      * Adds a node using jplumb
      */
     private function add_item($skill, $position) {
-        $block_id = $skill['id'];                        
-       
-        $end_point = 'readEndpoint';
-        //var_dump($skill);
-        $class = 'default_window';
-        
+        $block_id = $skill['id'];
+        $end_point = 'readEndpoint';        
+        $class = 'default_window';        
         if ($this->type == 'edit') {
-            $end_point = 'editEndpoint';
             $class = 'edit_window';
+            $end_point = 'editEndpoint';            
         } else {
             if ($skill['done_by_user'] == 1) {
-                $end_point = 'doneEndpoint';
                 $class = 'done_window';
+                $end_point = 'doneEndpoint';                
             } else {
                 $end_point = 'defaultEndpoint';
             }
@@ -69,13 +77,11 @@
         if ($skill['parent_id'] == 0) {
             return;
         }
-
-       //default_arrow_color
-        
-       $this->js .= 'var e'.$block_id.' = prepare("block_' . $block_id.'",  '.$end_point.');'."\n";
-       $this->js .= 'var e'.$skill['parent_id'].' = prepare("block_' . $skill['parent_id'].'",  '.$end_point.');'."\n";;
-                        
-       $this->js .= 'jsPlumb.connect({source: e'.$block_id.', target:e'.$skill['parent_id'].'});'."\n";;
+        //default_arrow_color
+            
+        $this->js .= 'var e'.$block_id.' = prepare("block_' . $block_id.'",  '.$end_point.');'."\n";
+        $this->js .= 'var e'.$skill['parent_id'].' = prepare("block_' . $skill['parent_id'].'",  '.$end_point.');'."\n";                        
+        $this->js .= 'jsPlumb.connect({source: e'.$block_id.', target:e'.$skill['parent_id'].'});'."\n";;
     }
     
     /**
@@ -91,17 +97,11 @@
         
         $brothers = array();
         
-        $constant = 100;
-        
-        $canvas = 1000;
-        
-        //$this->add_item($skill, array('x' => $x + $this->offsetX, 'y' => $y + $this->offsetY));        
         foreach ($this->skills as &$skill) {
             if (!in_array($skill['parent_id'], array(0,1))) {
                 continue;
             }
-            $childs = isset($skill['children']) ? count($skill['children']) : 0 ;   
-            
+            $childs = isset($skill['children']) ? count($skill['children']) : 0 ;               
               
             //$x = round($this->offsetX * sin(deg2rad($corner * $count)));
             //$y = round($this->offsetY * cos(deg2rad($corner * $count)));
@@ -110,17 +110,15 @@
                 $brothers[$skill['parent_id']] +=2;
             } else {
                 $brothers[$skill['parent_id']] = 1;
-            }*/
-           $my_count = 0;
-           $brother_count = $brothers[$skill['id']];
-           
+            }*/            
+            $brother_count = $brothers[$skill['id']];            
+            $my_count = 0;
             $parent_x = 0; 
-            if ($skill['parent_id'] == 0) {
-                
-                $x = $constant*$childs/2;
-                //$this->offsetX = $constant*$childs;     
-            } else {
-                
+            if ($skill['parent_id'] == 0) {                
+                //$x = 130*$childs/2;     
+                //$x = $this->space_between_blocks_x*$childs/2;
+                $x = $this->canvas_x/2  - $this->block_size/2;
+            } else {                
                 $max = isset($this->skills[$skill['parent_id']]['children']) ? count($this->skills[$skill['parent_id']]['children']) : 0;
                 foreach($this->skills[$skill['parent_id']]['children'] as  $id => $sk) {                    
                     if ($skill['id'] == $sk['id']) {                                                
@@ -129,12 +127,11 @@
                     $my_count++;                        
                 }
                 $parent_x = isset($this->skills[$skill['parent_id']]['x']) ? $this->skills[$skill['parent_id']]['x'] : 0;
-                $x = $my_count*150 + $parent_x - (150*$max/2) ;
-                //$x = $my_count*150 + $parent_x - (150*$max/2) -  20*$childs;
-                //$x = $my_count*150 + $parent_x - 100*$childs;
+                //$x = $my_count*$this->space_between_blocks_x + $parent_x  + $this->block_size - ($this->space_between_blocks_x*$max/2) ;
+                $x = $my_count*$this->space_between_blocks_x + $parent_x  + $this->block_size - ($this->canvas_x/2 ) ;
             }
                     
-            $y = $skill['level']*150;   
+            $y = $skill['level']*$this->space_between_blocks_y;   
               
             $skill['x'] = $x;
             $skill['y'] = $y;
@@ -143,7 +140,7 @@
         //    var_dump($skill);                   
             //$skill['description']  = "{$brothers[$skill['parent_id']]} $x - $y";
             //$skill['name']  =  $skill['name']."  |  $x = $my_count * 150  +  $parent_x - (150* $max/2) - 10*$childs ";
-            $this->add_item($skill, array('x' => $this->offsetX + $x, 'y' => $this->offsetY +$y));            
+            $this->add_item($skill, array('x' => $this->offset_x + $x, 'y' => $this->offset_y +$y));            
         }
                 
         echo $this->get_html();

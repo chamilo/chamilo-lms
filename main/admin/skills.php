@@ -23,11 +23,11 @@ $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 //Display::display_header();
 Display::display_reduced_header();
 
-$skill = new Skill();
+$skill  = new Skill();
 $skills = $skill->get_all(true);
-$type = 'edit'; //edit
+$type   = 'edit'; //edit
 
-$tree = $skill->get_skills_tree(null, true);
+$tree   = $skill->get_skills_tree(null, true);
 
 $skill_visualizer = new SkillVisualizer($tree, $type);
 
@@ -36,16 +36,20 @@ echo '<a class="a_button gray" id="add_item_link" href="#">Add item</a>';
 $skill_visualizer->display_html();
 
 $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
-//$url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?load_user_data=1';
 ?>
-
 <script>
 
 var url     = '<?php echo $url; ?>';
 var skills  = []; //current window divs
 var parents = []; //list of parents normally there should be only 2
-
 var hidden_parent = '';
+
+
+var offset_x                = <?php echo $skill_visualizer->offset_x; ?>;
+var offset_y                = <?php echo $skill_visualizer->offset_y; ?>;
+var space_between_blocks_x  = <?php echo $skill_visualizer->space_between_blocks_x; ?>;
+var space_between_blocks_y  = <?php echo $skill_visualizer->space_between_blocks_y; ?>;
+var center_x                = <?php echo $skill_visualizer->center_x; ?>;
 
 var parents = ['block_1'];
 
@@ -79,9 +83,9 @@ jsPlumb.bind("ready", function() {
     );
     
     //On click box
-    $(".open_block").live('click', function() {
-        
+    $(".open_block").live('click', function() {        
         var id = $(this).attr('id');
+        
         //console.log(skills);
         //console.log('parents : '+parents[1] + ' id: '+id);
         
@@ -90,20 +94,27 @@ jsPlumb.bind("ready", function() {
             parents = [id];
         }
         
+        
         if (parents[1] != id) {
             //means that we have 2 parents   
-            if (parents.length == 2) {            
+         
+            if (parents.length == 2 ) {
+                hidden_parent = parents[0];   
+                //console.log('deleting: '+parents[0]);        
                 //removing father
-                for (var i = 0; i < skills.length; i++) {           
-                    if ( skills[i].element == parents[0] ) {                         
+                for (var i = 0; i < skills.length; i++) {
+                               
+                    if ( skills[i].element == parents[0] ) {
+                         //console.log('deleting :'+ skills[i].element + ' here ');                             
                          jsPlumb.deleteEndpoint(skills[i].endp);
                          $("#"+skills[i].element).remove();
+                         //skills.splice(i,1)
                     }
                 }
-                hidden_parent = parents[0];
                                 
                 parents.splice(0,1);                
-                parents.push(id);                
+                parents.push(id); 
+                console.log('addded : ' + id);               
             }
               
             if (parents.length == 1 && hidden_parent != ''){
@@ -118,14 +129,11 @@ jsPlumb.bind("ready", function() {
             if (jQuery.inArray(id, parents) == -1) {                              
                 parents.push(id);
             }
-            
-           console.log(parents);
-           open_block(id);  
-                
-            
+            open_block(id);
         }
-        console.log('hidden_parent : ' + hidden_parent);
-         
+        console.log(parents);
+       // console.log(skills);        
+        console.log('hidden_parent : ' + hidden_parent);         
     });
     
     function open_parent(parent_id, id) {                 
@@ -135,66 +143,86 @@ jsPlumb.bind("ready", function() {
     }
     
     //open block function
-    function open_block(id) {         
+    function open_block(id) {
+        console.log("open_block id : " + id);      
         var numeric_id = id.split('_')[1];  
         for (var i = 0; i < skills.length; i++) {
             //Remove everything except parents
             if (jQuery.inArray(skills[i].element, parents) == -1) {
+                 //console.log('deleting this'+ skills[i].element);
                  jsPlumb.deleteEndpoint(skills[i].endp);
                  $("#"+skills[i].element).remove();
+                 //skills.splice(i,1);
                  //console.log('Removing '+skills[i].element);
             }
         }
         /*if ($('#'+id).length == 0) {
             $('body').append('<div id="'+id+'" class="open_block window " >'+id+'</div>'); 
         }*/
-        jsPlumb.animate(id, {left: 900}, { duration:1000 });        
+       
+        //Modifying current block position
         pos = $('#'+id).position();        
-        top_value = pos.top + 200 ;     
+        left_value  = center_x; 
+                
+        if (parents.length == 2) { 
+            top_value  = space_between_blocks_y + offset_y;
+        } else {
+            top_value = pos.left;
+        }
+        jsPlumb.animate(id, {left: left_value, top:top_value}, { duration:1000 });       
+        
+        //Modifying root block position
+        pos_parent = $('#'+parents[0]).position();
+        jsPlumb.animate(parents[0], {left: center_x, top:offset_y}, { duration:1000 });
+        
+        
+        top_value = parents.length * space_between_blocks_y; 
         load_children(numeric_id, top_value);   
     }
     
     function load_parent(parent_id, id) {
-         var ix = 1;
+         var ix= 0;
          $.getJSON(url+'&a=load_direct_parents&id='+id, {},         
              function(json) {
                 $.each(json,function(i,item) {
-                    //top_value   = 300;
+                    left_value  = center_x + space_between_blocks_x * ix;
+                    top_value   = offset_y;
+                    
                     $('body').append('<div id="block_'+item.id+ '" class="open_block window " >'+item.name+'</div>');                
-                    var es = prepare("block_" + item.id,  jsPlumbDemo.editEndpoint);    
-                    jsPlumb.connect({source: es, target:"block_"+id});                    
-                    jsPlumb.animate("block_" + item.id, {left: 900, top : 0}, { duration:1000 });
-                    hidden_parent = "block_" + item.parent_id;
+                    var es = prepare("block_" + item.id,  editEndpoint);
+                    var es2 = prepare("block_" + id,  editEndpoint);
+                      
+                    jsPlumb.connect({source: es, target:es2 });                    
+                    jsPlumb.animate("block_" + item.id, {left: left_value, top : top_value}, { duration:1000 });              
+                    if (item.parent_id) {
+                        hidden_parent = "block_" + item.parent_id;
+                    }
                     ix++;   
                 });
             }
-        ); 
-        
+        );
     }
     
     function load_children(my_id, top_value) {        
         //Loading children
-        var ix = 1;
+        var ix = 0;
         $.getJSON(url+'&a=load_children&id='+my_id, {},         
-            function(json) {
-                $.each(json,function(i,item) {
-                    left_value  = 130*ix+500;
+            function(json) {                
+                $.each(json,function(i,item) {                    
+                    left_value  = offset_x+space_between_blocks_x * ix;
                     //top_value   = 300;
                     $('body').append('<div id="block_'+item.id+ '" class="open_block window " >'+item.name+i+'</div>');                    
                     
-                    var es = prepare("block_" + item.id,  jsPlumbDemo.editEndpoint);    
-                    jsPlumb.connect({source: es, target:"block_"+my_id});                    
+                    var es = prepare("block_" + item.id,  editEndpoint);
+                    var e2 = prepare("block_" + my_id,  editEndpoint);
+                     
+                    jsPlumb.connect({source: es, target:e2});                    
                     jsPlumb.animate("block_" + item.id, {left: left_value, top : top_value}, { duration:1000 });
-                                         
-                    
                     ix++;   
                 });
             }
-        ); 
-        
-        
-    }
-    
+        );
+    }    
     
     $(".edit_block").click(function() {
         var my_id = $(this).attr('id');
@@ -269,17 +297,58 @@ jsPlumb.bind("ready", function() {
     };    
     resetRenderMode(jsPlumb.CANVAS);       
 });
+var exampleDropOptions = {
+                tolerance:'touch',
+                hoverClass:'dropHover',
+                activeClass:'dragActive'
+            };
 
+var connectorPaintStyle = {
+                lineWidth:5,
+                strokeStyle:"#deea18",
+                joinstyle:"round"
+            };
+            // .. and this is the hover style. 
+            var connectorHoverStyle = {
+                lineWidth:7,
+                strokeStyle:"#2e2aF8"
+            };
+            
+            
+            //Settings when editing stuff
+            var edit_arrow_color = '#ccc';        
+                
+            var editEndpoint = {  
+                //connectorStyle:connectorPaintStyle,
+                connector:[ "Flowchart", { stub:35 } ],
+                hoverPaintStyle:connectorHoverStyle,
+                connectorHoverStyle:connectorHoverStyle,
+                anchors: ['BottomCenter','TopCenter'],                
+                endpoint:"Rectangle",
+                paintStyle:{ width:20, height:20, fillStyle:edit_arrow_color },
+                isSource:true,
+                scope:'blue rectangle',
+                maxConnections:10,
+                connectorStyle : {
+                    gradient:{stops:[[0, edit_arrow_color], [0.5, edit_arrow_color], [1, edit_arrow_color]]}, //gradient stuff
+                    lineWidth:2,
+                    strokeStyle: edit_arrow_color
+                },
+                isTarget:true,
+                dropOptions : exampleDropOptions
+            };
+            
 ;(function() {
          
     prepare = function(elId, endpoint) {
         jsPlumbDemo.initHover(elId);
         //jsPlumbDemo.initAnimation(elId);        
         var e = jsPlumb.addEndpoint(elId, endpoint);
-        jsPlumbDemo.initjulio(e);
-        skills.push({element:elId, endp:e});
+        jsPlumbDemo.initjulio(e);        
+        skills.push({element:elId, endp:e});        
         return e;
     },
+    
     window.jsPlumbDemo = {    
         initjulio :function(e) {
         },      
@@ -331,11 +400,7 @@ jsPlumb.bind("ready", function() {
                 updateConnections(e.connection, true);
             });
 
-            var exampleDropOptions = {
-                tolerance:'touch',
-                hoverClass:'dropHover',
-                activeClass:'dragActive'
-            };
+            
 
             /**
                 first example endpoint.  it's a 25x21 rectangle (the size is provided in the 'style' arg to the Endpoint), and it's both a source
@@ -351,16 +416,7 @@ jsPlumb.bind("ready", function() {
 
             */
                 // this is the paint style for the connecting lines..
-            var connectorPaintStyle = {
-                lineWidth:5,
-                strokeStyle:"#deea18",
-                joinstyle:"round"
-            };
-            // .. and this is the hover style. 
-           var connectorHoverStyle = {
-                lineWidth:7,
-                strokeStyle:"#2e2aF8"
-            };            
+                        
             
             jsPlumb.Defaults.Overlays = [
                 [ "Arrow", { location:0.9 } ], 
@@ -374,32 +430,12 @@ jsPlumb.bind("ready", function() {
                 }] 
             ];
             
-            //Settings when editing stuff
-            var edit_arrow_color = '#ccc';            
-            var editEndpoint = {  
-                //connectorStyle:connectorPaintStyle,
-                connector:[ "Flowchart", { stub:35 } ],
-                hoverPaintStyle:connectorHoverStyle,
-                connectorHoverStyle:connectorHoverStyle,
-                anchors: ['BottomCenter','TopCenter'],                
-                endpoint:"Rectangle",
-                paintStyle:{ width:20, height:20, fillStyle:edit_arrow_color },
-                isSource:true,
-                scope:'blue rectangle',
-                maxConnections:10,
-                connectorStyle : {
-                    gradient:{stops:[[0, edit_arrow_color], [0.5, edit_arrow_color], [1, edit_arrow_color]]}, //gradient stuff
-                    lineWidth:2,
-                    strokeStyle: edit_arrow_color
-                },
-                isTarget:true,
-                dropOptions : exampleDropOptions
-            };
+            
                            
             jsPlumb.setMouseEventsEnabled(true);            
             
             //Default
-            var default_arrow_color = '#ccc';            
+            var default_arrow_color = '#ccc';       
             var defaultEndpoint = {
                 anchors: ['BottomCenter','TopCenter'],            
                 endpoint:"Rectangle",

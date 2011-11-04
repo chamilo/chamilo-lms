@@ -3903,7 +3903,7 @@ form div.error input, form div.error textarea {
     padding-top: 0.9em;
     position: absolute;
     text-align: center;
-    width: 100px;
+    width: 80px;
     z-index: 40;
 }
 

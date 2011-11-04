@@ -34,7 +34,8 @@ class SkillRelSkill extends Model {
     
     public function get_skill_parents($skill_id, $add_child_info = true) {
         $skill_id = intval($skill_id);        
-        $sql = 'SELECT child.* FROM '.$this->table.' child LEFT JOIN '.$this->table.' parent ON child.parent_id = parent.skill_id
+        $sql = 'SELECT child.* FROM '.$this->table.' child LEFT JOIN '.$this->table.' parent 
+                ON child.parent_id = parent.skill_id
                 WHERE child.skill_id = '.$skill_id.' ';
         $result = Database::query($sql);
         $skill  = Database::store_result($result,'ASSOC');
@@ -49,6 +50,20 @@ class SkillRelSkill extends Model {
                 $parents[] = $skill;
             }        
         }
+        return $parents;
+    }
+    
+    public function get_direct_parents($skill_id) {
+        $skill_id = intval($skill_id);        
+        $sql = 'SELECT parent_id as skill_id FROM '.$this->table.'
+                WHERE skill_id = '.$skill_id.' ';
+        $result = Database::query($sql);
+        $skill  = Database::store_result($result,'ASSOC');
+        $skill  = isset($skill[0]) ? $skill[0] : null;
+        $parents = array();
+        if (!empty($skill)) {
+            $parents[] = $skill;            
+        }        
         return $parents;
     }
     
@@ -118,7 +133,6 @@ class Skill extends Model {
     
     public function skill_exists($skill_id) {
         
-        
     }
      
     function get_all($load_user_data = false) {
@@ -167,6 +181,31 @@ class Skill extends Model {
         $skills = $skill_rel_skill->get_children($skill_id, true);
         return $skills;
     }    
+    
+    /**
+     * All parents from root to n
+     */
+    function get_parents($skill_id) {
+        $skill_rel_skill = new SkillRelSkill();
+        $skills = $skill_rel_skill->get_skill_parents($skill_id, true);        
+        foreach($skills as &$skill) {
+            $skill['data'] = self::get($skill['skill_id']);             
+        }
+        return $skills;
+    }
+    
+    /**
+     * All direct parents
+     */
+    function get_direct_parents($skill_id) {
+        $skill_rel_skill = new SkillRelSkill();
+        $skills = $skill_rel_skill->get_direct_parents($skill_id, true);        
+        foreach($skills as &$skill) {
+            $skill['data'] = self::get($skill['skill_id']);             
+        }
+        return $skills;
+    }
+       
     public function add($params) {
         if (!isset($params['parent_id'])) {
             $params['parent_id'] = 1;

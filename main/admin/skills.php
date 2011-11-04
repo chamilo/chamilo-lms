@@ -42,12 +42,15 @@ $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 <script>
 
 var url     = '<?php echo $url; ?>';
-var skills  = [];
-var parents = [];
+var skills  = []; //current window divs
+var parents = []; //list of parents normally there should be only 2
+
+var hidden_parent = '';
 
 var parents = ['block_1'];
 
 jsPlumb.bind("ready", function() {
+    
     $("#dialog-form").dialog({
         autoOpen: false,
         modal   : true, 
@@ -77,37 +80,99 @@ jsPlumb.bind("ready", function() {
     
     //On click box
     $(".open_block").live('click', function() {
-       var original_id = $(this).attr('id');
-       var id = $(this).attr('id');
-       
-       if (jQuery.inArray(id, parents) == -1) {
-        parents.push(id);
-       }
-       console.log(parents);
-       open_block(original_id, id);       
+        
+        var id = $(this).attr('id');
+        //console.log(skills);
+        //console.log('parents : '+parents[1] + ' id: '+id);
+        
+        //if is root
+        if (parents[0] == id) {
+            parents = [id];
+        }
+        
+        if (parents[1] != id) {
+            //means that we have 2 parents   
+            if (parents.length == 2) {            
+                //removing father
+                for (var i = 0; i < skills.length; i++) {           
+                    if ( skills[i].element == parents[0] ) {                         
+                         jsPlumb.deleteEndpoint(skills[i].endp);
+                         $("#"+skills[i].element).remove();
+                    }
+                }
+                hidden_parent = parents[0];
+                                
+                parents.splice(0,1);                
+                parents.push(id);                
+            }
+              
+            if (parents.length == 1 && hidden_parent != ''){
+                //show the hidden_parent
+                
+                parents = [hidden_parent, id];
+               //    console.log(parents);
+                open_parent(hidden_parent, id);
+                hidden_parent = '';
+            } 
+            
+            if (jQuery.inArray(id, parents) == -1) {                              
+                parents.push(id);
+            }
+            
+           console.log(parents);
+           open_block(id);  
+                
+            
+        }
+        console.log('hidden_parent : ' + hidden_parent);
+         
     });
     
+    function open_parent(parent_id, id) {                 
+        var numeric_parent_id = parent_id.split('_')[1];
+        var numeric_id = id.split('_')[1];        
+        load_parent(numeric_parent_id, numeric_id);               
+    }
+    
     //open block function
-    function open_block(original_id, id) {         
-        my_id = original_id.split('_')[1];  
-        for (var i = 0; i < skills.length; i++) {            
-            window_id = id.split('_')[1];
+    function open_block(id) {         
+        var numeric_id = id.split('_')[1];  
+        for (var i = 0; i < skills.length; i++) {
+            //Remove everything except parents
             if (jQuery.inArray(skills[i].element, parents) == -1) {
                  jsPlumb.deleteEndpoint(skills[i].endp);
                  $("#"+skills[i].element).remove();
+                 //console.log('Removing '+skills[i].element);
             }
         }
-        jsPlumb.animate(original_id, {left: 900}, { duration:1000 });
-        
-        pos = $('#'+original_id).position();
+        /*if ($('#'+id).length == 0) {
+            $('body').append('<div id="'+id+'" class="open_block window " >'+id+'</div>'); 
+        }*/
+        jsPlumb.animate(id, {left: 900}, { duration:1000 });        
+        pos = $('#'+id).position();        
         top_value = pos.top + 200 ;     
-        load_children(my_id, top_value);   
+        load_children(numeric_id, top_value);   
     }
     
-    
-    function load_children(my_id, top_value) {
+    function load_parent(parent_id, id) {
+         var ix = 1;
+         $.getJSON(url+'&a=load_direct_parents&id='+id, {},         
+             function(json) {
+                $.each(json,function(i,item) {
+                    //top_value   = 300;
+                    $('body').append('<div id="block_'+item.id+ '" class="open_block window " >'+item.name+'</div>');                
+                    var es = prepare("block_" + item.id,  jsPlumbDemo.editEndpoint);    
+                    jsPlumb.connect({source: es, target:"block_"+id});                    
+                    jsPlumb.animate("block_" + item.id, {left: 900, top : 0}, { duration:1000 });
+                    hidden_parent = "block_" + item.parent_id;
+                    ix++;   
+                });
+            }
+        ); 
         
-        // var a = '<div style="top:300px; left:100px;" class="window edit_window ui-draggable" id="block_15">aaaa</div>';
+    }
+    
+    function load_children(my_id, top_value) {        
         //Loading children
         var ix = 1;
         $.getJSON(url+'&a=load_children&id='+my_id, {},         
@@ -115,13 +180,12 @@ jsPlumb.bind("ready", function() {
                 $.each(json,function(i,item) {
                     left_value  = 130*ix+500;
                     //top_value   = 300;
-                    $('body').append('<div id="block_'+item.id+ '" class="open_block window " >'+item.name+i+'</div>')
-                    
+                    $('body').append('<div id="block_'+item.id+ '" class="open_block window " >'+item.name+i+'</div>');                    
                     
                     var es = prepare("block_" + item.id,  jsPlumbDemo.editEndpoint);    
-                    jsPlumb.connect({source: es, target:"block_"+my_id});
-                    
-                    jsPlumb.animate("block_" + item.id, {left: left_value, top : top_value}, { duration:1000 });                     
+                    jsPlumb.connect({source: es, target:"block_"+my_id});                    
+                    jsPlumb.animate("block_" + item.id, {left: left_value, top : top_value}, { duration:1000 });
+                                         
                     
                     ix++;   
                 });
@@ -213,24 +277,16 @@ jsPlumb.bind("ready", function() {
         //jsPlumbDemo.initAnimation(elId);        
         var e = jsPlumb.addEndpoint(elId, endpoint);
         jsPlumbDemo.initjulio(e);
-        skills.push({element:elId, endp:e});        
+        skills.push({element:elId, endp:e});
         return e;
-    },    
-    
+    },
     window.jsPlumbDemo = {    
         initjulio :function(e) {
         },      
         initHover :function(elId) {            
             
             $("#" + elId).click(function() {
-                var  all = jsPlumb.getConnections({source:elId});
-               
-                //var all  = jsPlumb.getConnections({scope:"DEFAULT", source:elId});     
-                   
-                //console.log(all);
-            
-                //alert(elId);
-               // jsPlumb.hide(elId);
+                var  all = jsPlumb.getConnections({source:elId});               
             });
             
             /*$("#" + elId).hover(

@@ -11,9 +11,10 @@ require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 
-$skill = new Skill();
-$gradebook = new Gradebook();
+$skill           = new Skill();
+$gradebook       = new Gradebook();
 $skill_gradebook = new SkillRelGradebook();
+$skill_rel_skill = new SkillRelSkill();
 
 switch ($action) {
     case 'add':     
@@ -61,7 +62,16 @@ switch ($action) {
             $return [$skill['data']['id']] = array('name' => $skill['data']['name'], 'id'=>$skill['data']['id']);
         }
         echo json_encode($return);
-        break;        
+        break;
+    case 'load_direct_parents':
+        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+        $skills = $skill->get_direct_parents($id);
+        $return = array();
+        foreach($skills as $skill) {
+            $return [$skill['data']['id']] = array('name' => $skill['data']['name'], 'id'=>$skill['data']['id']);
+        }
+        echo json_encode($return);        
+        break;    
     case 'skill_exists':
         $skill_data = $skill->get($_REQUEST['skill_id']);        
         if (!empty($skill_data)) {

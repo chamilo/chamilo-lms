@@ -1520,7 +1520,8 @@ class GroupManager {
 		$user_id = Database::escape_string($user_id);
 		$course_id = api_get_course_int_id();
 		$sql_groups = 'SELECT name FROM '.$table_group.' g,'.$table_group_user.' gu 
-		               WHERE g.c_id = '.$course_id.' AND  gu.user_id = "'.$user_id.'" AND gu.group_id = g.id';
+		               WHERE gu.c_id= '.$course_id.' AND g.c_id='.$course_id.' AND  gu.user_id="'.$user_id.'" AND gu.group_id=g.id';
+		               
 		$res = Database::query($sql_groups);
 
 		$groups=array();
@@ -1598,6 +1599,5 @@ class GroupManager {
         $complete_user_list = self :: filter_only_students($complete_user_list);
         //now sort by # of group left
         $complete_user_list = TableSort :: sort_table($complete_user_list, 'number_groups_left', SORT_DESC);           
-        return $complete_user_list;
-    }		
+        return $complete_user_list;    }		
 }

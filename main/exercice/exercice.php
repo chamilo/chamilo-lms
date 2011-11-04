@@ -39,7 +39,7 @@ require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 require_once 'hotpotatoes.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
-
+require_once api_get_path(LIBRARY_PATH)."groupmanager.lib.php"; // for group filtering
 
 /*	Constants and variables */
 $is_allowedToEdit 			= api_is_allowed_to_edit(null,true);
@@ -60,6 +60,7 @@ $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TR
 $TBL_LP_ITEM_VIEW 			= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 $TBL_LP_ITEM 				= Database :: get_course_table(TABLE_LP_ITEM);
 $TBL_LP_VIEW 				= Database :: get_course_table(TABLE_LP_VIEW);
+$TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);	
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
@@ -517,11 +518,12 @@ if ($show == 'test') {
         $res = Database::query("SELECT * FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
                                 WHERE d.id = ip.ref  AND ip.tool = '" . TOOL_DOCUMENT . "'
                                 AND d.path LIKE '" . Database :: escape_string($uploadPath) . "/%/%'
-                                AND ip.visibility='1'");
+                                AND ip.visibility='1' AND d.c_id=".api_get_course_int_id()." AND ip.c_id=".api_get_course_int_id());
         $hp_count = Database :: num_rows($res);    
 	}
 	$total = $total_exercises + $hp_count;		
 }
+
 
 if ($is_allowedToEdit && $origin != 'learnpath') {
 	if ($show != 'result') {
@@ -529,7 +531,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_question.png', get_lang('AddQ'),'','32').'</a>';
 		// Question category
 		echo '<a href="tests_category.php">';
-		echo Display::return_icon('question_category.gif', get_lang('QuestionCategory'));
+		echo Display::return_icon('question_category_show.gif', get_lang('QuestionCategory'));
 		echo '</a>';		
 		echo '<a href="question_pool.php">';
 		echo Display::return_icon('database.png', get_lang('langQuestionPool'), array('style'=>'width:32px'));
@@ -806,7 +808,7 @@ if ($show == 'test') {
                         $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',22), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);                        
                         $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
                         //Export
-                        $actions .= Display::url(Display::return_icon('cd.gif',          get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
+                        $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
                         //Clean exercise                    
                         $actions .= Display::url(Display::return_icon('clean.png', get_lang('CleanStudentResults'),'',22),'', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id']));                      
                         //Visible / invisible
@@ -828,16 +830,26 @@ if ($show == 'test') {
                         $actions .= Display::url(Display::return_icon('delete.png', get_lang('Delete'),'',22), '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id']));            
                     }
 
+					// Number of questions
                     $random_label = '';                    
                     if ($row['random'] > 0) {
-                       	$random_label = ' ('.get_lang('Random').') ';                       	
-                       	$number_of_questions = $row['random'] . ' ' .$random_label;
-                       	//Bug if we set a random value bigger than the real number of questions 
-                       	if ($row['random'] > $rowi) {
-							$number_of_questions = $rowi. ' ' .$random_label;							
+						if ($row['random_by_category'] > 0) {	
+							if (!class_exists("testcategory.class.php")) include_once "testcategory.class.php" ;
+							$nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($exid, $row['random']);
+							$number_of_questions .= $nbQuestionsTotal." ";
+							$number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase") ;
+							$number_of_questions .= " - ";
+							$number_of_questions .= $row['random'].' '.get_lang('QuestionByCategory');
+						} else {
+                       		$random_label = ' ('.get_lang('Random').') ';                       	
+                       	    $number_of_questions = $row['random'] . ' ' .$random_label.' '.$textByCategory;
+                       	    //Bug if we set a random value bigger than the real number of questions 
+                       	    if ($row['random'] > $rowi) {
+    							$number_of_questions = $rowi. ' ' .$random_label;							
+                       	    }
                        	}
                     } else {                    
-                       $number_of_questions = $rowi;
+                        $number_of_questions = $rowi;
                     }                
      
                     //Attempts                    
@@ -961,8 +973,12 @@ if ($show == 'test') {
         } 
     }
     // end exercise list
-        
+
+
+       
     //Hotpotatoes results        
+    
+    
     
     if ($is_allowedToEdit) {
         $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
@@ -1056,7 +1072,8 @@ if ($show == 'test') {
 
 // if tracking is enabled
 if ($show == 'result') {
-	$parameters=array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'show'=>Security::remove_XSS($_GET['show']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
+	$parameters = array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'show'=>Security::remove_XSS($_GET['show']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
+	
     $exercise_id = intval($_GET['exerciseId']);
     if (!empty($exercise_id))
         $parameters['exerciseId'] = $exercise_id;
@@ -1074,11 +1091,12 @@ if ($show == 'result') {
 			$table->set_header(0, get_lang('LastName'));
 			$table->set_header(1, get_lang('FirstName'));    			
 		}		
-		$table->set_header(2, get_lang('Exercice'));
-    	$table->set_header(3, get_lang('Duration'),false);
-    	$table->set_header(4, get_lang('Date'));
-    	$table->set_header(5, get_lang('Score'),false);
-    	$table->set_header(6, get_lang('CorrectTest'), false);   
+		$table->set_header(2, get_lang('Group'));
+		$table->set_header(3, get_lang('Exercice'));
+    	$table->set_header(4, get_lang('Duration'),false);
+    	$table->set_header(5, get_lang('Date'));
+    	$table->set_header(6, get_lang('Score'),false);
+    	$table->set_header(7, get_lang('CorrectTest'), false);   
     	
     } else {
         $table->set_header(0, get_lang('Exercice'));
@@ -1092,4 +1110,49 @@ if ($show == 'result') {
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
 	Display :: display_footer();
+}
+
+
+// ===========================================================================
+// some functions
+// ===========================================================================
+
+// ---------------------------------------------------------
+// return the HTML code for a menu with students group
+// @input : $in_name : is the name and the id of the <select>
+//          $in_default : default value for option
+// @return : the html code of the <select>
+// ---------------------------------------------------------
+function displayGroupMenu($in_name, $in_default) {
+	// check the default value of option
+	$tabSelected = array($in_default => " selected='selected' ");
+	$res = "";
+	$res .= "<select name='$in_name' id='$in_name' >";
+	$res .= "<option value='-1'".$tabSelected["-1"].">-- ".get_lang('AllGroups')." --</option>";
+	$res .= "<option value='0'".$tabSelected["0"].">- ".get_lang('NotInAGroup')." -</option>";
+	$tabGroups = GroupManager::get_group_list();
+	$currentCatId = 0;
+	for ($i=0; $i < count($tabGroups); $i++) {
+		$tabCategory = GroupManager::get_category_from_group($tabGroups[$i]["id"]);
+		if ($tabCategory["id"] != $currentCatId) {
+			$res .= "<option value='-1' disabled='disabled'>".$tabCategory["title"]."</option>";
+			$currentCatId = $tabCategory["id"];
+		}
+		$res .= "<option ".$tabSelected[$tabGroups[$i]["id"]]."style='margin-left:40px' value='".$tabGroups[$i]["id"]."'>".$tabGroups[$i]["name"]."</option>";
+	}
+	$res .= "</select>";
+	return $res;
+}
+
+
+// ------------------------------------------------------
+// return a list of group for user with user_id=in_userid
+// separated with in_separator
+// --------------------------------------------------
+function displayGroupsForUser($in_separator, $in_userid) {
+	$res = implode($in_separator, GroupManager::get_user_group_name($in_userid));
+	if ($res == "") {
+		$res = "<div style='text-align:center'>-</div>";
+	}
+	return $res;
 }

@@ -40,7 +40,7 @@ class Testcategory {
 		if ($numrows > 0) {
 			$row = Database::fetch_array($res);
 			$this->id = $row['id'];
-			$this->name = $row['name'];
+			$this->name = $row['title'];
 			$this->description  = $row['description'];
 		}
 	}
@@ -54,7 +54,7 @@ class Testcategory {
 		$v_description = $this->description;
 		$v_description = Database::escape_string($v_description);
 		// check if name already exists
-		$sql_verif = "SELECT count(*) AS nb FROM $t_cattable WHERE name = '$v_name' AND c_id=".api_get_course_int_id();
+		$sql_verif = "SELECT count(*) AS nb FROM $t_cattable WHERE title = '$v_name' AND c_id=".api_get_course_int_id();
 		$result_verif = Database::query($sql_verif, __FILE__, __LINE__);
 		$data_verif = Database::fetch_array($result_verif);
 		// lets add in BDD if not the same name
@@ -92,7 +92,7 @@ class Testcategory {
 		$v_id = Database::escape_string($this->id);
 		$v_name = Database::escape_string($this->name);
 		$v_description = Database::escape_string($this->description);
-		$sql = "UPDATE $t_cattable SET name='$v_name', description='$v_description' WHERE id='$v_id' AND c_id=".api_get_course_int_id();
+		$sql = "UPDATE $t_cattable SET title='$v_name', description='$v_description' WHERE id='$v_id' AND c_id=".api_get_course_int_id();
 		$res = Database::query($sql);
 		if (Database::affected_rows() <= 0) {
 			return false;
@@ -134,10 +134,10 @@ class Testcategory {
 		$in_field = Database::escape_string($in_field);
 		$tabres = array();
 		if ($in_field=="") {
-			$sql = "SELECT * FROM $t_cattable WHERE c_id=$in_courseid ORDER BY name ASC";
+			$sql = "SELECT * FROM $t_cattable WHERE c_id=$in_courseid ORDER BY title ASC";
 			$res = Database::query($sql);
 			while ($row = Database::fetch_array($res)) {
-				$tmpcat = new Testcategory($row['id'], $row['name'], $row['description']);
+				$tmpcat = new Testcategory($row['id'], $row['title'], $row['description']);
 				$tabres[] = $tmpcat;
 			}
 		}
@@ -198,11 +198,11 @@ class Testcategory {
 		$result = "";	// result
 		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);		
 		$catid = Database::escape_string($catid);
-		$sql = "SELECT name FROM $t_cattable WHERE id='$catid' AND c_id=$in_courseid";
+		$sql = "SELECT title FROM $t_cattable WHERE id='$catid' AND c_id=$in_courseid";
 		$res = Database::query($sql);
 		$data = Database::fetch_array($res);
 		if (Database::num_rows($res) > 0) {
-			$result = $data['name'];
+			$result = $data['title'];
 		}
 		return $result;
 	}
@@ -353,7 +353,7 @@ class Testcategory {
 	}
 	
 	/**
-	 * display the category
+	 * display the category and the title
 	 */
 	function displayCategoryAndTitle($in_questionID) {
 		if (Testcategory::getCategoryNameForQuestion($in_questionID) != "") {
@@ -364,6 +364,7 @@ class Testcategory {
 			echo "</div>";
 		}
 	}
+	
 	
 	/**
 		* Display signs [+] and/or (>0) after question title if question has options

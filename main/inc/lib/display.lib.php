@@ -693,6 +693,7 @@ class Display {
      *
      */
     public function select($name, $values, $default = -1, $extra_attributes = array(), $show_blank_item = true) {
+        $html = '';
         $extra = '';
         $default_id =  'id="'.$name.'" ';
         foreach($extra_attributes as $key=>$parameter) {

@@ -220,7 +220,7 @@ function display_add_category() {
 // ------------------------------------------------------------------------
 function display_categories() {
 	$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-	$sql = "SELECT * FROM $t_cattable ORDER BY name";
+	$sql = "SELECT * FROM $t_cattable ORDER BY title";
 	$res = Database::query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($res)) {
 		// le titre avec le nombre de questions qui sont dans cette catégorie
@@ -228,7 +228,7 @@ function display_categories() {
 		$nb_question = $tmpobj->getCategoryQuestionsNumber();
 		echo '<div class="sectiontitle" id="id_cat'.$row['id'].'">';
 		echo "<span style='float:right'>".$nb_question.get_lang('NbCategory')."</span>";
-		echo $row['name'];
+		echo $row['title'];
 		echo '</div>';
 		echo '<div class="sectioncomment">';
 		echo $row['description'];
@@ -241,7 +241,7 @@ function display_categories() {
 			echo '</a>';
 		}
 		else {
-			$rowname = protectJSDialogQuote($row['name']);
+			$rowname = protectJSDialogQuote($row['title']);
 			echo '<a href="'.api_get_self().'?action=deletecategory&amp;category_id='.$row['id'].'" ';
 			echo 'onclick="return confirmDelete(\''.protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$row['id'].'\');">';
 			echo Display::return_icon('delete.gif', get_lang('Delete')).'</a>';

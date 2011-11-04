@@ -31,7 +31,13 @@
     
     function prepare_skill_box($skill, $position, $class) {
         $block_id = $skill['id'];
-        $this->html .= '<div id="block_'.$block_id.'" class = "open_block window '.$class.'" style = "top:' . $position['y'] . 'px; left:' . $position['x'] . 'px;">';
+        
+        $extra_class = 'third_window';
+        if ($skill['parent_id'] == 0) {
+            $extra_class = 'second_window';
+        }
+        
+        $this->html .= '<div id="block_'.$block_id.'" class = " open_block window '.$extra_class.'  '.$class.'" style = "top:' . $position['y'] . 'px; left:' . $position['x'] . 'px;">';
         $gradebook_string = '';
         if (!empty($skill['gradebooks'])) {
             foreach($skill['gradebooks'] as $gradebook) {

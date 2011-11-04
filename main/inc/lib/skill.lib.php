@@ -28,7 +28,7 @@ class SkillRelSkill extends Model {
      */
     public function get_skill_info($id) {
         if (empty($id)) { return array(); }     
-        $result = Database::select('*',$this->table, array('where'=>array('skill_id = ?'=>intval($id))));
+        $result = Database::select('*',$this->table, array('where'=>array('skill_id = ?'=>intval($id))), 'first');
         return $result;
     }
     
@@ -201,7 +201,9 @@ class Skill extends Model {
         $skill_rel_skill = new SkillRelSkill();
         $skills = $skill_rel_skill->get_direct_parents($skill_id, true);        
         foreach($skills as &$skill) {
-            $skill['data'] = self::get($skill['skill_id']);             
+            $skill['data'] = self::get($skill['skill_id']);
+            $skill_info2 = $skill_rel_skill->get_skill_info($skill['skill_id']);                        
+            $skill['data']['parent_id'] = $skill_info2['parent_id'];                         
         }
         return $skills;
     }

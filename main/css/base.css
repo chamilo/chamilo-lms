@@ -3911,6 +3911,19 @@ form div.error input, form div.error textarea {
     background-color: #73982C;
 }
 
+
+.first_window {
+    border: 1px solid red;
+}
+
+.second_window {
+    border: 1px solid black;    
+}
+
+.third_window {    
+    border: 1px solid blue;
+}
+
 ._jsPlumb_endpoint {
     z-index: 50;
 }

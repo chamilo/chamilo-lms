@@ -53,6 +53,12 @@ var center_x                = <?php echo $skill_visualizer->center_x; ?>;
 
 var parents = ['block_1'];
 
+function cleanclass(obj) {
+    obj.removeClass('first_window');
+    obj.removeClass('second_window');
+    obj.removeClass('third_window');
+}
+
 jsPlumb.bind("ready", function() {
     
     $("#dialog-form").dialog({
@@ -86,18 +92,17 @@ jsPlumb.bind("ready", function() {
     $(".open_block").live('click', function() {        
         var id = $(this).attr('id');
         
-        //console.log(skills);
-        //console.log('parents : '+parents[1] + ' id: '+id);
+        
+         
         
         //if is root
         if (parents[0] == id) {
             parents = [id];
-        }
-        
+        }     
         
         if (parents[1] != id) {
             //means that we have 2 parents   
-         
+            
             if (parents.length == 2 ) {
                 hidden_parent = parents[0];   
                 //console.log('deleting: '+parents[0]);        
@@ -110,27 +115,40 @@ jsPlumb.bind("ready", function() {
                          $("#"+skills[i].element).remove();
                          //skills.splice(i,1)
                     }
-                }
-                                
+                }                                
                 parents.splice(0,1);                
-                parents.push(id); 
-                console.log('addded : ' + id);               
-            }
-              
-            if (parents.length == 1 && hidden_parent != ''){
-                //show the hidden_parent
+                parents.push(id);
+            }     
                 
-                parents = [hidden_parent, id];
-               //    console.log(parents);
-                open_parent(hidden_parent, id);
-                hidden_parent = '';
-            } 
+            if ($(this).hasClass('first_window')) {                
+                 //show the hidden_parent
+                //if (hidden_parent != '') {
+                   parents = [hidden_parent, id];
+                   //    console.log(parents);
+                   open_parent(hidden_parent, id);
+                //}                
             
+            }
             if (jQuery.inArray(id, parents) == -1) {                              
                 parents.push(id);
             }
             open_block(id);
         }
+        
+        //Setting class       
+        cleanclass($(this));
+        $(this).addClass('second_window');
+        
+        
+        parent_div = $("#"+parents[0]);
+        cleanclass(parent_div);
+        parent_div.addClass('first_window');
+        
+        parent_div = $("#"+parents[1]);        
+        cleanclass(parent_div);
+        parent_div.addClass('second_window');        
+       
+       
         console.log(parents);
        // console.log(skills);        
         console.log('hidden_parent : ' + hidden_parent);         
@@ -139,7 +157,7 @@ jsPlumb.bind("ready", function() {
     function open_parent(parent_id, id) {                 
         var numeric_parent_id = parent_id.split('_')[1];
         var numeric_id = id.split('_')[1];        
-        load_parent(numeric_parent_id, numeric_id);               
+        load_parent(numeric_parent_id, numeric_id);
     }
     
     //open block function
@@ -173,34 +191,45 @@ jsPlumb.bind("ready", function() {
         
         //Modifying root block position
         pos_parent = $('#'+parents[0]).position();
-        jsPlumb.animate(parents[0], {left: center_x, top:offset_y}, { duration:1000 });
-        
+        jsPlumb.animate(parents[0], {left: center_x, top:offset_y}, { duration:1000 });        
         
         top_value = parents.length * space_between_blocks_y; 
         load_children(numeric_id, top_value);   
     }
     
     function load_parent(parent_id, id) {
-         var ix= 0;
-         $.getJSON(url+'&a=load_direct_parents&id='+id, {},         
-             function(json) {
+        var ix= 0;         
+         
+        $.ajax({
+            url: url+'&a=load_direct_parents&id='+id,
+            async: false, 
+            success: function(json) {
+                console.log(json);
+                var json = jQuery.parseJSON(json);
+                
                 $.each(json,function(i,item) {
                     left_value  = center_x + space_between_blocks_x * ix;
                     top_value   = offset_y;
                     
                     $('body').append('<div id="block_'+item.id+ '" class="open_block window " >'+item.name+'</div>');                
-                    var es = prepare("block_" + item.id,  editEndpoint);
+                    var es  = prepare("block_" + item.id,  editEndpoint);
                     var es2 = prepare("block_" + id,  editEndpoint);
                       
                     jsPlumb.connect({source: es, target:es2 });                    
-                    jsPlumb.animate("block_" + item.id, {left: left_value, top : top_value}, { duration:1000 });              
+                    jsPlumb.animate("block_" + item.id, {left: left_value, top : top_value}, { duration:1000 });
+                    
                     if (item.parent_id) {
-                        hidden_parent = "block_" + item.parent_id;
+                        console.log('setting hidden_parent '+item.parent_id);
+                        hidden_parent = "block_" + item.parent_id;                        
+                    } else {
+                        console.log('setting NO--- hidden_parent ');
                     }
                     ix++;   
                 });
+                
             }
-        );
+         });
+
     }
     
     function load_children(my_id, top_value) {        
@@ -211,7 +240,7 @@ jsPlumb.bind("ready", function() {
                 $.each(json,function(i,item) {                    
                     left_value  = offset_x+space_between_blocks_x * ix;
                     //top_value   = 300;
-                    $('body').append('<div id="block_'+item.id+ '" class="open_block window " >'+item.name+i+'</div>');                    
+                    $('body').append('<div id="block_'+item.id+ '" class="third_window open_block window " >'+item.name+i+'</div>');                    
                     
                     var es = prepare("block_" + item.id,  editEndpoint);
                     var e2 = prepare("block_" + my_id,  editEndpoint);

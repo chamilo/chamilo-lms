@@ -62,7 +62,7 @@ $(document).ready(function() {
 				$("#id_confirmation_message").hide();
 			},
 			type: "GET",
-			url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=set_visibility",
+			url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?'.api_get_cidreq().'&a=set_visibility",
 			data: "id=" + my_tool_id + "&sent_http_request=1",
 			success: function(data) {
 				eval("var info=" + data);

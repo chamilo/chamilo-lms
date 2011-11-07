@@ -2783,6 +2783,24 @@ CREATE TABLE skill_rel_user (
 
 
 
+CREATE TABLE skill_profile (
+  id INTEGER  NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255)  NOT NULL,
+  description TEXT  NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE skill_rel_profile (
+  id INTEGER  NOT NULL AUTO_INCREMENT,
+  skill_id INTEGER  NOT NULL,
+  profile_id INTEGER  NOT NULL,
+  PRIMARY KEY (id)
+);
+
+
+
+
+
 --
 -- Table structure for event alert sending
 -- Pending check and approval

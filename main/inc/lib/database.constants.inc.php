@@ -328,5 +328,8 @@ define('TABLE_MAIN_SKILL_REL_SKILL',        'skill_rel_skill');
 define('TABLE_MAIN_SKILL_REL_GRADEBOOK',    'skill_rel_gradebook');
 define('TABLE_MAIN_SKILL_REL_USER',         'skill_rel_user');
 
+define('TABLE_MAIN_SKILL_PROFILE',          'skill_profile');
+define('TABLE_MAIN_SKILL_REL_PROFILE',         'skill_rel_profile');
+
 
 

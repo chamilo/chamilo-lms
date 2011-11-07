@@ -17,10 +17,24 @@ define ('SKILL_TYPE_REQUIREMENT',   'required');
 define ('SKILL_TYPE_ACQUIRED',      'acquired');
 define ('SKILL_TYPE_BOTH',          'both');
 
+class SkillProfile extends Model {
+    var $columns = array('id', 'name','description');
+    public function __construct() {
+        $this->table = Database::get_main_table(TABLE_MAIN_SKILL_PROFILE);
+    }
+}
+
+class SkillRelProfile extends Model {
+    var $columns = array('id', 'skill_id', 'profile_id');
+    public function __construct() {
+        $this->table = Database::get_main_table(TABLE_MAIN_SKILL_REL_PROFILE);
+    }
+}
+
 class SkillRelSkill extends Model {
     var $columns = array('skill_id', 'parent_id','relation_type', 'level');
     public function __construct() {
-        $this->table                      = Database::get_main_table(TABLE_MAIN_SKILL_REL_SKILL);
+        $this->table = Database::get_main_table(TABLE_MAIN_SKILL_REL_SKILL);
     }
     
     /**

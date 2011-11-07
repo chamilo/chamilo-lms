@@ -367,7 +367,7 @@ if (api_get_setting('server_type') == 'test') {
         $_SERVER = array();
         foreach ($HTTP_SERVER_VARS as $key => $val) {
             $_SERVER[$key] = $HTTP_SERVER_VARS[$key];
-            if (!isset($_SESSION[$key]) && $key != 'includePath' && $key != 'rootSys' && $key!= 'clarolineRepositorySys' && $key!= 'lang_path' && $key!= 'extAuthSource' && $key!= 'thisAuthSource' && $key!= 'main_configuration_file_path' && $key!= 'phpDigIncCn' && $key!= 'drs') {
+            if (!isset($_SESSION[$key]) && $key != 'includePath' && $key != 'rootSys' && $key!= 'lang_path' && $key!= 'extAuthSource' && $key!= 'thisAuthSource' && $key!= 'main_configuration_file_path' && $key!= 'phpDigIncCn' && $key!= 'drs') {
                 $GLOBALS[$key]=$HTTP_SERVER_VARS[$key];
             }
         }

@@ -389,12 +389,21 @@ if (empty($document_data['parents'])) {
 	} else {
 		$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
 	}	
-} else {	
+} else {
+    $counter = 0;	
 	foreach($document_data['parents'] as $document_sub_data) {
+	    //fixing double group folder in breadcrumb
+	    if (api_get_group_id()) {
+	        if ($counter == 0) {
+	            $counter++;
+	            continue;  
+	        }
+	    }
 		if (!isset($_GET['createdir']) && $document_sub_data['id'] ==  $document_data['id']) {
 			$document_sub_data['document_url'] = '#';
 		}
 		$interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+        $counter++;
 	}
 }
 

@@ -2,7 +2,7 @@
 /**
  * A simple set of tests for the main API.
  * @author Ivan Tcholakov, 2009.
- * For licensing terms, see /dokeos_license.txt
+ * For licensing terms, see /license.txt
  */
 
 class TestMainApi extends UnitTestCase {
@@ -351,31 +351,31 @@ class TestMainApi extends UnitTestCase {
  *	SYS_LANG_PATH, WEB_IMG_PATH, GARBAGE_PATH, WEB_PLUGIN_PATH, SYS_PLUGIN_PATH, WEB_ARCHIVE_PATH, SYS_ARCHIVE_PATH,
  *	INCLUDE_PATH, WEB_LIBRARY_PATH, LIBRARY_PATH, CONFIGURATION_PATH
  *
- * 	@example assume that your server root is /var/www/ dokeos is installed in a subfolder dokeos/ and the URL of your campus is http://www.mydokeos.com
+ * 	@example assume that your server root is /var/www/ chamilo is installed in a subfolder chamilo/ and the URL of your campus is http://www.mychamilo.com
  * 	The other configuration paramaters have not been changed.
  * 	The different api_get_paths will give
- *	WEB_SERVER_ROOT_PATH	http://www.mydokeos.com/
+ *	WEB_SERVER_ROOT_PATH	http://www.mychamilo.com/
  *	SYS_SERVER_ROOT_PATH	/var/www/ - This is the physical folder where the system Dokeos has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
- * 	WEB_PATH				http://www.mydokeos.com/dokeos/
- * 	SYS_PATH				/var/www/dokeos/
- * 	REL_PATH				dokeos/
- * 	WEB_COURSE_PATH			http://www.mydokeos.com/dokeos/courses/
- * 	SYS_COURSE_PATH			/var/www/dokeos/courses/
- *	REL_COURSE_PATH			/dokeos/courses/
- * 	REL_CODE_PATH			/dokeos/main/
- * 	WEB_CODE_PATH			http://www.mydokeos.com/dokeos/main/
- * 	SYS_CODE_PATH			/var/www/dokeos/main/
- * 	SYS_LANG_PATH			/var/www/dokeos/main/lang/
- * 	WEB_IMG_PATH			http://www.mydokeos.com/dokeos/main/img/
+ * 	WEB_PATH				http://www.mychamilo.com/chamilo/
+ * 	SYS_PATH				/var/www/chamilo/
+ * 	REL_PATH				chamilo/
+ * 	WEB_COURSE_PATH			http://www.mychamilo.com/chamilo/courses/
+ * 	SYS_COURSE_PATH			/var/www/chamilo/courses/
+ *	REL_COURSE_PATH			/chamilo/courses/
+ * 	REL_CODE_PATH			/chamilo/main/
+ * 	WEB_CODE_PATH			http://www.mychamilo.com/chamilo/main/
+ * 	SYS_CODE_PATH			/var/www/chamilo/main/
+ * 	SYS_LANG_PATH			/var/www/chamilo/main/lang/
+ * 	WEB_IMG_PATH			http://www.mychamilo.com/chamilo/main/img/
  * 	GARBAGE_PATH
- * 	WEB_PLUGIN_PATH			http://www.mydokeos.com/dokeos/plugin/
- * 	SYS_PLUGIN_PATH			/var/www/dokeos/plugin/
- * 	WEB_ARCHIVE_PATH		http://www.mydokeos.com/dokeos/archive/
- * 	SYS_ARCHIVE_PATH		/var/www/dokeos/archive/
- *	INCLUDE_PATH			/var/www/dokeos/main/inc/
- * 	WEB_LIBRARY_PATH		http://www.mydokeos.com/dokeos/main/inc/lib/
- * 	LIBRARY_PATH			/var/www/dokeos/main/inc/lib/
- * 	CONFIGURATION_PATH		/var/www/dokeos/main/inc/conf/
+ * 	WEB_PLUGIN_PATH			http://www.mychamilo.com/chamilo/plugin/
+ * 	SYS_PLUGIN_PATH			/var/www/chamilo/plugin/
+ * 	WEB_ARCHIVE_PATH		http://www.mychamilo.com/chamilo/archive/
+ * 	SYS_ARCHIVE_PATH		/var/www/chamilo/archive/
+ *	INCLUDE_PATH			/var/www/chamilo/main/inc/
+ * 	WEB_LIBRARY_PATH		http://www.mychamilo.com/chamilo/main/inc/lib/
+ * 	LIBRARY_PATH			/var/www/chamilo/main/inc/lib/
+ * 	CONFIGURATION_PATH		/var/www/chamilo/main/inc/conf/
  */
 function api_get_path_1_8_6_1($path_type) {
 
@@ -400,7 +400,7 @@ function api_get_path_1_8_6_1($path_type) {
     switch ($path_type) {
 
         case WEB_SERVER_ROOT_PATH:
-            // example: http://www.mydokeos.com/
+            // example: http://www.mychamilo.com/
             $result = preg_replace('@'.api_get_path(REL_PATH).'$@', '', api_get_path(WEB_PATH));
             if (substr($result, -1) == '/') {
                 return $result;
@@ -419,7 +419,7 @@ function api_get_path_1_8_6_1($path_type) {
             break;
 
         case WEB_PATH :
-            // example: http://www.mydokeos.com/ or http://www.mydokeos.com/dokeos/ if you're using
+            // example: http://www.mychamilo.com/ or http://www.mychamilo.com/chamilo/ if you're using
             // a subdirectory of your document root for Dokeos
             if (substr($root_web,-1) == '/') {
                 return $root_web;
@@ -429,7 +429,7 @@ function api_get_path_1_8_6_1($path_type) {
             break;
 
         case SYS_PATH :
-            // example: /var/www/dokeos/
+            // example: /var/www/chamilo/
             if (substr($_configuration['root_sys'],-1) == '/') {
                 return $_configuration['root_sys'];
             } else {
@@ -438,7 +438,7 @@ function api_get_path_1_8_6_1($path_type) {
             break;
 
         case REL_PATH :
-            // example: dokeos/
+            // example: chamilo/
             if (substr($_configuration['url_append'], -1) === '/') {
                 return $_configuration['url_append'];
             } else {
@@ -447,86 +447,85 @@ function api_get_path_1_8_6_1($path_type) {
             break;
 
         case WEB_COURSE_PATH :
-            // example: http://www.mydokeos.com/courses/
+            // example: http://www.mychamilo.com/courses/
             return $root_web.$_configuration['course_folder'];
             break;
 
         case SYS_COURSE_PATH :
-            // example: /var/www/dokeos/courses/
+            // example: /var/www/chamilo/courses/
             return $_configuration['root_sys'].$_configuration['course_folder'];
             break;
 
         case REL_COURSE_PATH :
-            // example: courses/ or dokeos/courses/
+            // example: courses/ or chamilo/courses/
             return api_get_path(REL_PATH).$_configuration['course_folder'];
             break;
 
         case REL_CODE_PATH :
-            // example: main/ or dokeos/main/
+            // example: main/ or chamilo/main/
             return api_get_path(REL_PATH).$_configuration['code_append'];
             break;
 
         case WEB_CODE_PATH :
-            // example: http://www.mydokeos.com/main/
-            //return $GLOBALS['clarolineRepositoryWeb']; // this was changed
+            // example: http://www.mychamilo.com/main/
             return $root_web.$_configuration['code_append'];
             break;
 
         case SYS_CODE_PATH :
-            // example: /var/www/dokeos/main/
-            return $GLOBALS['clarolineRepositorySys'];
+            // example: /var/www/chamilo/main/
+            return $_configuration['root_sys'].$_configuration['code_append'];
             break;
 
         case SYS_LANG_PATH :
-            // example: /var/www/dokeos/main/lang/
+            // example: /var/www/chamilo/main/lang/
             return api_get_path(SYS_CODE_PATH).'lang/';
             break;
 
         case WEB_IMG_PATH :
-            // example: http://www.mydokeos.com/main/img/
+            // example: http://www.mychamilo.com/main/img/
             return api_get_path(WEB_CODE_PATH).'img/';
             break;
 
         case SYS_PLUGIN_PATH :
-            // example: /var/www/dokeos/plugin/
+            // example: /var/www/chamilo/plugin/
             return api_get_path(SYS_PATH).'plugin/';
             break;
 
         case WEB_PLUGIN_PATH :
-            // example: http://www.mydokeos.com/plugin/
+            // example: http://www.mychamilo.com/plugin/
             return api_get_path(WEB_PATH).'plugin/';
             break;
 
         case GARBAGE_PATH : //now set to be same as archive
         case SYS_ARCHIVE_PATH :
-            // example: /var/www/dokeos/archive/
+            // example: /var/www/chamilo/archive/
             return api_get_path(SYS_PATH).'archive/';
             break;
 
         case WEB_ARCHIVE_PATH :
-            // example: http://www.mydokeos.com/archive/
+            // example: http://www.mychamilo.com/archive/
             return api_get_path(WEB_PATH).'archive/';
             break;
 
         case INCLUDE_PATH :
             // Generated by main/inc/global.inc.php
-            // example: /var/www/dokeos/main/inc/
+            // example: /var/www/chamilo/main/inc/
             $incpath = realpath(dirname(__FILE__).'/../');
             return str_replace('\\', '/', $incpath).'/';
             break;
 
         case LIBRARY_PATH :
-            // example: /var/www/dokeos/main/inc/lib/
+            // example: /var/www/chamilo/main/inc/lib/
             return api_get_path(INCLUDE_PATH).'lib/';
             break;
 
         case WEB_LIBRARY_PATH :
-            // example: http://www.mydokeos.com/main/inc/lib/
+            // example: http://www.mychamilo.com/main/inc/lib/
             return api_get_path(WEB_CODE_PATH).'inc/lib/';
             break;
 
         case CONFIGURATION_PATH :
-            // example: /var/www/dokeos/main/inc/conf/
+            // example: /var/www/chamilo/main/inc/conf/
             return api_get_path(INCLUDE_PATH).'conf/';
             break;
 

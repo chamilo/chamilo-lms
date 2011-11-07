@@ -16,16 +16,15 @@ install time.
 */
 
 /**
- * @todo change these into a $_configuration array. $_configuration will use only the bare essential variables
- * 		for configuring the platform (paths, database connections, ...). Changing a $_configuration variable
- * 		CAN break the installation.
- * 		Besides the $_configuration array there is also a $_settings array that contains variables that
- * 		can be changed and will not break the platform.
- * 		Some of the variables that are used here can move to the $_settings array (and thus be stored in the database)
- * 		example: $_configuration['tracking_enabled'] (assuming that the install script creates the necessary tables anyway.
- * 				 $phpMyAdminPath
- *
- * 		@todo use more obvious names for the variables and respect the code guidelines
+ * $_configuration define only the bare essential variables
+ * for configuring the platform (paths, database connections, ...). 
+ * Changing a $_configuration variable CAN generally break the installation.
+ * Besides the $_configuration, a $_settings array also exists, that 
+ * contains variables that can be changed and will not break the platform.
+ * These optional settings are defined in the database, now 
+ * (table settings_current).
+ * example: $_configuration['tracking_enabled'] (assuming that the install 
+ * script creates the necessary tables anyway).
  */
 
 //============================================================================

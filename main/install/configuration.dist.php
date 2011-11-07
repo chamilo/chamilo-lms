@@ -80,7 +80,7 @@ $_configuration['course_folder']  = "courses/";
 
 // URL to your phpMyAdmin installation.
 // If not empty, a link will be available in the Platform Administration
-$phpMyAdminPath         = '';
+$_configuration['db_admin_path']  = '';
 
 //============================================================================
 //   Login modules settings

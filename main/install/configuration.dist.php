@@ -121,7 +121,7 @@ $_configuration['security_key']      = '{SECURITY_KEY}';
 // Hash function method
 $_configuration['password_encryption']      = '{ENCRYPT_PASSWORD}';
 // You may have to restart your web server if you change this
-$storeSessionInDb                    = false;
+$_configuration['session_stored_in_db']     = false;
 // Session lifetime
 $_configuration['session_lifetime']  = SESSION_LIFETIME;
 // Activation for multi-url access

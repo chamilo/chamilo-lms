@@ -1221,7 +1221,6 @@ function api_get_course_info_by_id($id = null) {
  * @param  string variable - the variable name to save into the session
  */
 function api_session_start($already_installed = true) {
-    global $storeSessionInDb;
     global $_configuration;
 
     /* Causes too many problems and is not configurable dynamically.
@@ -1234,10 +1233,10 @@ function api_session_start($already_installed = true) {
     }
     */
 
-    if (is_null($storeSessionInDb)) {
-        $storeSessionInDb = false;
+    if (is_null($_configuration['session_stored_in_db'])) {
+        $_configuration['session_stored_in_db'] = false;
     }
-    if ($storeSessionInDb && function_exists('session_set_save_handler')) {
+    if ($_configuration['session_stored_in_db'] && function_exists('session_set_save_handler')) {
         require_once api_get_path(LIBRARY_PATH).'session_handler.class.php';
         $session_handler = new session_handler();
         @session_set_save_handler(array(& $session_handler, 'open'), array(& $session_handler, 'close'), array(& $session_handler, 'read'), array(& $session_handler, 'write'), array(& $session_handler, 'destroy'), array(& $session_handler, 'garbage'));

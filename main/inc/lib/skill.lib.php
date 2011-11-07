@@ -77,6 +77,22 @@ class SkillRelSkill extends Model {
         }
         return $skills;
     }
+    
+    function update_by_skill($params) {        
+        $result = Database::update($this->table, $params, array('skill_id = ? '=> $params['skill_id']));             
+        if ($result) {
+            return true;
+        }
+        return false;
+    }
+    
+    function relation_exists($skill_id, $parent_id) {
+        $result = $this->find('all', array('where'=>array('skill_id = ? AND parent_id = ?' => array($skill_id, $parent_id))));
+        if (!empty($result)) {
+            return true;
+        }
+        return false; 
+    }
 }
 
  /**
@@ -104,7 +120,55 @@ class SkillRelGradebook extends Model {
         if (empty($skill_id)) { return array(); }     
         $result = Database::select('*',$this->table, array('where'=>array('skill_id = ? AND gradebook_id = ? '=>array($skill_id, $gradebook_id))),'first');
         return $result;
-    }    
+    }
+    
+    public function update_gradebooks_by_skill($skill_id, $gradebook_list) {
+        $original_gradebook_list = $this->find('all', array('where'=>array('skill_id = ?' => array($skill_id))));
+        var_dump($original_gradebook_list);
+        $gradebooks_to_remove = array();
+        $gradebooks_to_add = array();
+        
+        if (!empty($original_gradebook_list))
+        foreach ($original_gradebook_list as $gradebook) {
+            if (!in_array($gradebook['gradebook_id'], $gradebook_list)) {
+                $gradebooks_to_remove[] = $gradebook['id'];
+            }
+        }
+
+        if (!empty($gradebook_list))
+        foreach($gradebook_list as $gradebook_id) {
+            if (!in_array($gradebook_id, array_keys($original_gradebook_list))) {
+                $gradebooks_to_add[] = $gradebook_id;
+            }
+        }
+                
+        if (!empty($gradebooks_to_remove)) {
+            foreach($gradebooks_to_remove as $id) {
+               $this->delete($id); 
+            }
+        }
+        
+        if (!empty($gradebooks_to_add)) {
+            foreach($gradebooks_to_add as $gradebook_id) {
+               $attributes = array('skill_id' => $skill_id, 'gradebook_id' => $gradebook_id);
+               $this->save($attributes); 
+            }
+        }
+    }
+
+    function update_by_skill($params) {
+        $skill_info = $this->exists_gradebook_skill($params['gradebook_id'], $params['skill_id']); 
+        
+        if ($skill_info) {
+            return;            
+        } else {
+            $result = $this->save($params);
+        }
+        if ($result) {
+            return true;
+        }
+        return false;
+    }       
 }
 
  /**
@@ -255,6 +319,7 @@ class Skill extends Model {
         $skill_rel_gradebook = new SkillRelGradebook();
         
         //Saving name, description
+        var_dump($params);
         $this->update($params);
         $skill_id = $params['id'];
         
@@ -266,16 +331,9 @@ class Skill extends Model {
                             'relation_type' => $params['relation_type'],
                             //'level'         => $params['level'],
             );            
-            $skill_rel_skill->update($attributes);            
+            $skill_rel_skill->update_by_skill($attributes);
             
-            if (!empty($params['gradebook_id'])) {
-                foreach ($params['gradebook_id'] as $gradebook_id) {
-                    $attributes = array();
-                    $attributes['gradebook_id'] = $gradebook_id;
-                    $attributes['skill_id']     = $skill_id;                    
-                    $skill_rel_gradebook->update($attributes);
-                }            
-            }                                 
+            $skill_rel_gradebook->update_gradebooks_by_skill($skill_id, $params['gradebook_id']);                                 
         }
     }
     

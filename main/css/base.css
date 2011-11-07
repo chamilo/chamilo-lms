@@ -3947,7 +3947,8 @@ form div.error input, form div.error textarea {
 
 
 .edit_block {
-    z-index: 100;    
+    font-size:14px;
+    z-index: 200;    
 }
 
 #language_list {

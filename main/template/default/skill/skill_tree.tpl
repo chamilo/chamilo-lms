@@ -16,7 +16,6 @@ var space_between_blocks_y  = {$skill_visualizer->space_between_blocks_y};
 var center_x                = {$skill_visualizer->center_x};
 var block_size              = {$skill_visualizer->block_size};
 
-
 //Setting the parent by default 
 var parents = ['block_1'];
 
@@ -115,7 +114,8 @@ jsPlumb.bind("ready", function() {
         console.log('hidden_parent : ' + hidden_parent);         
     });
     
-    function open_parent(parent_id, id) {                 
+    function open_parent(parent_id, id) {   
+        console.log("open_parent call : id " + id + " parent_id:" + parent_id);                
         var numeric_parent_id = parent_id.split('_')[1];
         var numeric_id = id.split('_')[1];        
         load_parent(numeric_parent_id, numeric_id);
@@ -148,26 +148,18 @@ jsPlumb.bind("ready", function() {
         } else {
             top_value = pos.left;
         }
-        jsPlumb.animate(id, {
-            left: left_value, 
-            top:top_value
-            }, 
-            { 
-                duration:duration_value 
-            });       
+        jsPlumb.animate(id, { left: left_value, top:top_value }, { duration:duration_value });       
         
         //Modifying root block position
         pos_parent = $('#'+parents[0]).position();
-        jsPlumb.animate(parents[0], {
-            left: center_x, top:offset_y
-            }, 
-            { duration:duration_value });        
+        jsPlumb.animate(parents[0], { left: center_x, top:offset_y }, { duration:duration_value });       
         
-        top_value = parents.length * space_between_blocks_y; 
+        top_value = 2*space_between_blocks_y +offset_y ; 
         load_children(numeric_id, top_value);   
     }
     
     function load_parent(parent_id, id) {
+        console.log("load_parent call : id " + id + " parent_id:" + parent_id);
         var ix= 0;         
         $.ajax({
             url: url+'&a=load_direct_parents&id='+id,
@@ -186,9 +178,7 @@ jsPlumb.bind("ready", function() {
                     jsPlumb.connect({
                         source: es, target:es2 
                     });                    
-                    jsPlumb.animate("block_" + item.id, {
-                        left: left_value, top : top_value
-                        }, { duration : duration_value});
+                    jsPlumb.animate("block_" + item.id, { left: left_value, top : top_value }, { duration : duration_value});
                     
                     if (item.parent_id) {
                         console.log('setting hidden_parent '+item.parent_id);
@@ -203,13 +193,14 @@ jsPlumb.bind("ready", function() {
          });
     }
     
-    function load_children(my_id, top_value) {        
+    function load_children(my_id, top_value) {
+        console.log("load_children call : my_id " + my_id + " top_value:" + top_value);        
         //Loading children
         var ix = 0;
         $.getJSON(url+'&a=load_children&id='+my_id, {},         
             function(json) {                
                 $.each(json,function(i,item) {                    
-                    left_value  = ix*space_between_blocks_x +  center_x/2 + block_size / 2;
+                    left_value  = ix*space_between_blocks_x +  center_x/2 - block_size / 2;
                     //top_value   = 300;
                     //Display::url($skill['name'], '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block'))
                     item.name = '<a href="#" class="edit_block" id="edit_block_'+item.id+'">'+item.name+'</a>'; 
@@ -235,6 +226,10 @@ jsPlumb.bind("ready", function() {
         var my_id = $(this).attr('id');
         my_id = my_id.split('_')[2];
         
+        //Cleaning selected
+        $("#parent_id option:selected").removeAttr('selected');
+        $("#gradebook_id option:selected").removeAttr('selected');
+        
         $.ajax({
             url: url+'&a=get_skill_info&id='+my_id,             
             success: function(json) {
@@ -245,21 +240,32 @@ jsPlumb.bind("ready", function() {
                 //filling parent_id
                 $("#parent_id option[value='"+skill.extra.parent_id+"']").attr('selected', 'selected');
                 //filling the gradebook_id         
-                jQuery.each(skill.gradebooks, function(index, data) {
+                jQuery.each(skill.gradebooks, function(index, data) {                    
                     $("#gradebook_id option[value='"+data.id+"']").attr('selected', 'selected');            
                 });
             },
-        });            
+        });
+        
+                
+        $("#gradebook_id").trigger("liszt:updated");
+        $("#parent_id").trigger("liszt:updated");
+        
+                
         $("#dialog-form").dialog("open");
         return false;
     });
         
     //Filling select
-    $("#add_item_link").click(function() {
+    $("#add_item_link").click(function() {        
+        
+        $("#name").attr('value', '');
+        $("#description").attr('value', '');
+        
+        $("#parent_id option:selected").removeAttr('selected');
+        $("#gradebook_id option:selected").removeAttr('selected');       
+        
         $("#dialog-form").dialog("open");
-        $("#gradebook_id").addClass('chzn-select');               
-        $("#gradebook_id").chosen();
-        $("#parent_id").chosen();                
+                      
     });    
     
     var name = $( "#name" ),
@@ -345,12 +351,12 @@ jsPlumb.bind("ready", function() {
                 
             var editEndpoint = {  
                 //connectorStyle:connectorPaintStyle,
-                connector:[ "Flowchart", { stub:10 } ],
+                connector:[ "Flowchart", { stub:28 } ],
                 hoverPaintStyle:connectorHoverStyle,
                 connectorHoverStyle:connectorHoverStyle,
                 anchors: ['BottomCenter','TopCenter'],                
                 endpoint:"Rectangle",
-                paintStyle:{ width:20, height:20, fillStyle:edit_arrow_color },
+                paintStyle:{ width:10, height:10, fillStyle:edit_arrow_color },
                 isSource:true,
                 scope:'blue rectangle',
                 maxConnections:10,
@@ -450,15 +456,7 @@ jsPlumb.bind("ready", function() {
                         
             
             jsPlumb.Defaults.Overlays = [
-                [ "Arrow", { location:0.9 } ], 
-                [ "Label", { 
-                    location:0.1,
-                    label:function(label) {
-                        return label.connection.labelText || ""; 
-                    },
-                    cssClass:"aLabel",
-         
-                }] 
+                //[ "Arrow", { location:0.5 } ],  if you want to add an arrow in the connection          
             ];
             
             
@@ -536,7 +534,8 @@ $(document).ready( function() {
     jsPlumb.bind("click", function(endpoint) {
         if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
             jsPlumb.detach(conn); 
-    })
+    });
+    $(".chzn-select").chosen();
 });
 
 ;(function() {
@@ -609,7 +608,7 @@ function checkLength( o, n, min, max ) {
                 <label for="name">Parent</label>
             </div>      
             <div class="formw">
-                <select id="parent_id" name="parent_id" class="chzn-select" />
+                <select id="parent_id" name="parent_id" />
                 </select>                  
             </div>
         </div>                
@@ -618,7 +617,7 @@ function checkLength( o, n, min, max ) {
                 <label for="name">Gradebook</label>
             </div>      
             <div class="formw">
-                <select id="gradebook_id" name="gradebook_id[]" multiple="multiple" class="chzn-select" />
+                <select id="gradebook_id" name="gradebook_id[]" multiple="multiple"/>
                 </select>             
                 <span class="help-block">
                 Gradebook Description

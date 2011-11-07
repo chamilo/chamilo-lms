@@ -18,12 +18,11 @@ $skill_rel_skill = new SkillRelSkill();
 
 switch ($action) {
     case 'add':  
-        if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
+        if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {            
             $skill->edit($_REQUEST);    
         } else {
             $skill->add($_REQUEST);    
-        }
-        
+        }        
         break;      
     case 'find_skills':
         $tag    = Database::escape_string($_REQUEST['tag']);

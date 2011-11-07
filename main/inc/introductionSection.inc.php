@@ -105,7 +105,7 @@ if ($intro_editAllowed) {
 
 	/* Delete Command */
 	if ($intro_cmdDel) {
-		Database::query("DELETE FROM $TBL_INTRODUCTION WHERE id='".$moduleId."' AND session_id='".intval($session_id)."'");
+		Database::query("DELETE FROM $TBL_INTRODUCTION WHERE c_id = $course_id AND id='".$moduleId."' AND session_id='".intval($session_id)."'");
 		Display::display_confirmation_message(get_lang('IntroductionTextDeleted'));
 	}
 }
@@ -115,7 +115,8 @@ if ($intro_editAllowed) {
 
 /* Retrieves the module introduction text, if exist */
 
-$sql = "SELECT intro_text FROM $TBL_INTRODUCTION WHERE id='".Database::escape_string($moduleId)."' AND session_id='".intval($session_id)."'";
+$sql = "SELECT intro_text FROM $TBL_INTRODUCTION 
+        WHERE c_id = $course_id AND id='".Database::escape_string($moduleId)."' AND session_id='".intval($session_id)."'";
 $intro_dbQuery = Database::query($sql);
 if (Database::num_rows($intro_dbQuery) > 0) {
 	$intro_dbResult = Database::fetch_array($intro_dbQuery);

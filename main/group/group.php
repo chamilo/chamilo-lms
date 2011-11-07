@@ -73,12 +73,12 @@ Display::display_introduction_section(TOOL_GROUP);
 /*
  * Self-registration and unregistration
  */
- $my_group_id = Security::remove_XSS($_GET['group_id']);
- $my_msg	  = Security::remove_XSS($_GET['msg']);
- $my_group    = $_POST['group'];
- $my_get_id1  = Security::remove_XSS($_GET['id1']);
- $my_get_id2  = Security::remove_XSS($_GET['id2']);
- $my_get_id   = Security::remove_XSS($_GET['id']);
+ $my_group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
+ $my_msg	  = isset($_GET['msg']) ? Security::remove_XSS($_GET['msg']) : null;
+ $my_group    = isset($_GET['group']) ? Security::remove_XSS($_POST['group']) : null;
+ $my_get_id1  = isset($_GET['id1']) ? Security::remove_XSS($_GET['id1']) : null;
+ $my_get_id2  = isset($_GET['id2']) ? Security::remove_XSS($_GET['id2']) : null;
+ $my_get_id   = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 
 if (isset($_GET['action'])) {
 	switch ($_GET['action']) {

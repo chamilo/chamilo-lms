@@ -59,7 +59,7 @@ Display::display_header($nameTools.' '.stripslashes($current_group['name']), 'Gr
 
 /*	Introduction section (editable by course admin) */
 
-Display::display_introduction_section(group_space_.$_SESSION['_gid']);
+Display::display_introduction_section(TOOL_GROUP);
 
 /*	Actions and Action links */
 

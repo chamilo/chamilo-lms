@@ -78,13 +78,6 @@ $_configuration['code_append']    = "main/";
 // Directory to store all course-related files. You could change this but it is not advised since this has not been tested yet.
 $_configuration['course_folder']  = "courses/";
 
-// @todo this shouldn't be here.
-// Directory of the admin-area
-$_configuration['admin_append_path'] = "admin/";
-
-// directory to store archived courses
-$archiveDirName         = "archive";
-
 // URL to your phpMyAdmin installation.
 // If not empty, a link will be available in the Platform Administration
 $phpMyAdminPath         = '';

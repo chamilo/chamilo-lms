@@ -122,7 +122,7 @@ class TestDisplay extends UnitTestCase {
 	// [/var/www/chamilo/main/inc/reduced_header.inc.php line 30] - exception
 /*	public function testdisplay_reduced_header() {
 		global $_plugins,$lp_theme_css,$mycoursetheme,$user_theme,$platform_theme;
-		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF, $language_interface;
+		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF, $language_interface;
 		global $menu_navigation;
 		ob_start();
 		$res=Display::display_reduced_header();
@@ -189,7 +189,7 @@ class TestDisplay extends UnitTestCase {
 	// [/var/www/chamilo/main/inc/header.inc.php line 31] - exception
 /*	public function testdisplay_header() {
 		global $_plugins,$lp_theme_css,$mycoursetheme,$user_theme,$platform_theme;
-		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
+		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
 		global $menu_navigation;
 		$tool_name = '';
 		$help = NULL;

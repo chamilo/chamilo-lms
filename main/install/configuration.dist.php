@@ -84,8 +84,6 @@ $rootAdminAppend        = "admin/";
 
 // Do not change the following values
 // @todo should be moved to api_get_path
-$_configuration['sys_code_path'] = $_configuration['root_sys'].$_configuration['code_append'];
-$clarolineRepositoryWeb = $_configuration['root_web'].$_configuration['code_append'];
 $rootAdminSys           = $clarolineRepositorySys.$rootAdminAppend;
 $rootAdminWeb           = $clarolineRepositoryWeb.$rootAdminAppend;
 

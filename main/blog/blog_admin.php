@@ -49,7 +49,6 @@ if (api_is_allowed_to_edit()) {
 		);
 		Display::display_header('');
 	} else {		
-		//echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".$clarolineRepositoryWeb."css/default.css\"/>"; //@todo this line should be deprecated
 	}	
 	echo '<div class="actions">';
 	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>",Display::return_icon('new_blog.png',get_lang('AddBlog'),'','32')."</a>";

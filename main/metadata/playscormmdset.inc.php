@@ -173,7 +173,7 @@ else
     <link rel="stylesheet" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css" type="text/css" media="screen,projection" />
     <style type="text/css" media="screen, projection">
     /*<![CDATA[*/
-    @import "<?php echo $clarolineRepositoryWeb ?>css/default.css";
+    @import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css";
     /*]]>*/
     </style>
     <?php

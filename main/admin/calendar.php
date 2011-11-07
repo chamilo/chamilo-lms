@@ -108,18 +108,9 @@ $nameTools = get_lang('GlobalAgenda'); // language variable in trad4all.inc.php
 // showing the header if we are not in the learning path, if we are in
 // the learning path, we do not include the banner so we have to explicitly
 // include the stylesheet, which is normally done in the header
-/*if (empty($_GET['origin']) or $_GET['origin'] != 'learnpath')
-{*/
 Display::display_header($nameTools,'Agenda');
-/*}
-else
-{
-	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".$clarolineRepositoryWeb."css/default.css\"/>";
-}*/
 
-/* 
-  			SETTING SOME VARIABLES
-*/
+/* SETTING SOME VARIABLES */
 // Variable definitions
 // Defining the shorts for the days. We use camelcase because these are arrays of language variables
 $DaysShort = api_get_week_days_short();

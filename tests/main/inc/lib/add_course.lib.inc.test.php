@@ -123,7 +123,7 @@ class TestAddCourse extends UnitTestCase {
     }
 
     function TestFillDbCourse(){
-        global $_configuration, $clarolineRepositoryWeb, $_user;
+        global $_configuration, $_user;
         $courseDbName = $_configuration['table_prefix'].$courseDbName.$_configuration['db_glue'];
         $courseRepository = (api_get_path(SYS_COURSE_PATH).$courseRepository . "/dropbox/.htaccess");
         $language = 'english';

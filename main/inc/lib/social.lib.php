@@ -936,7 +936,6 @@ class SocialManager extends UserManager {
 	/**
 	 * Display productions in whoisonline
 	 * @param int $user_id User id
-	 * @todo use the correct api_get_path instead of $clarolineRepositoryWeb
 	 */
 	public static function display_productions($user_id) {
 		$sysdir_array = UserManager::get_user_picture_path_by_id($user_id, 'system', true);

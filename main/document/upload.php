@@ -118,7 +118,7 @@ if (empty($document_data)) {
     $path           = $document_data['path'];
     $parent_id      = DocumentManager::get_document_id(api_get_course_info(), dirname($path));
 }
-
+$group_properties = array();
 // This needs cleaning!
 if (api_get_group_id()) { 
     // If the group id is set, check if the user has the right to be here
@@ -218,14 +218,16 @@ echo '</div>';
 // Form to select directory
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
 if (!$is_certificate_mode) {
-	echo(build_directory_selector($folders, $path, $group_properties['directory']));
+	echo build_directory_selector($folders, $path, $group_properties['directory']);
 }
 
 $form = new FormValidator('upload', 'POST', api_get_self(), '', 'enctype="multipart/form-data"');
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
-$form->addElement('file', 'file', get_lang('File'), 'id="user_upload" size="45"');
-$form->addElement('html', '<div class="row" style="font-size:smaller;font-style:italic;"><div class="label">&nbsp;</div><div class="formw">'.get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.(round(DocumentManager::get_course_quota()/1000000)-round(DocumentManager::documents_total_space($_course)/1000000)).' M</div></div>');
+$label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.(round(DocumentManager::get_course_quota()/1000000)-round(DocumentManager::documents_total_space($_course)/1000000)).' M';
+
+$form->addElement('file', 'file', array(get_lang('File'), $label), 'id="user_upload" size="45"');
+
 if (api_get_setting('use_document_title') == 'true') {
 	$form->addElement('text', 'title', get_lang('Title'), array('size' => '20', 'style' => 'width:300px', 'id' => 'title_file'));
 	$form->addElement('textarea', 'comment', get_lang('Comment'), 'wrap="virtual" style="width:300px;"');

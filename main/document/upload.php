@@ -109,6 +109,9 @@ $courseDir = $_course['path'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
 
+$selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
+
+
 $document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     $document_id  = $parent_id =  0;
@@ -203,7 +206,7 @@ if (!empty($_FILES)) {
 echo '<div class="actions">';
 // Link back to the documents overview
 if ($is_certificate_mode) {
-	echo '<a href="document.php?id='.$document_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'','32').'</a>';
+	echo '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'','32').'</a>';
 } else {
 	echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 }
@@ -218,7 +221,7 @@ echo '</div>';
 // Form to select directory
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
 if (!$is_certificate_mode) {
-	echo build_directory_selector($folders, $path, $group_properties['directory']);
+	echo build_directory_selector($folders, $document_id, (isset($group_properties['directory']) ? $group_properties['directory'] : array()));
 }
 
 $form = new FormValidator('upload', 'POST', api_get_self(), '', 'enctype="multipart/form-data"');

@@ -63,6 +63,8 @@ $base_work_dir   = $sys_course_path.$course_dir;
 $http_www        = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document';
 $dbl_click_id    = 0; // Used for avoiding double-click
 
+$selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
+
 /*	Constants and variables */
 $session_id  = api_get_session_id();
 $course_code = api_get_course_id();
@@ -869,6 +871,7 @@ if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
 }
 
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
+
 if ($folders === false) {
     $folders = array();
 }
@@ -1075,7 +1078,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     // Create new certificate
     if ($is_certificate_mode) {
 ?>
-    <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id.$req_gid; ?>&certificate=true&<?php echo 'selectcat='.Security::remove_XSS($_GET['selectcat']); ?>">
+    <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id.$req_gid; ?>&certificate=true&selectcat=<?php echo $selectcat; ?>">
         <?php Display::display_icon('new_certificate.png', get_lang('CreateCertificate'),'','32'); ?></a>
 <?php
     }
@@ -1117,7 +1120,7 @@ if ($image_present && !isset($_GET['keyword'])  ) {
 echo '</div>';
 
 if (!$is_certificate_mode) {
-    echo build_directory_selector($folders, $curdirpath, (isset($group_properties['directory']) ? $group_properties['directory'] : array()), true);
+    echo build_directory_selector($folders, $document_id, (isset($group_properties['directory']) ? $group_properties['directory'] : array()), true);
 }
 
 if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {

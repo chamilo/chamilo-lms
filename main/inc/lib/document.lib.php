@@ -665,19 +665,20 @@ return 'application/octet-stream';
             //condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
-            $sql = "SELECT DISTINCT path FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
+            $sql = "SELECT DISTINCT docs.id, path FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 					WHERE 	docs.id 			= last.ref AND 
 							docs.filetype 		= 'folder' AND 
 							last.tool 			= '".TOOL_DOCUMENT."' AND 
 							last.to_group_id	= ".$to_group_id." AND 
             				last.visibility 	<> 2 $condition_session AND 
+                            last.c_id           = {$_course['real_id']} AND 
             				docs.c_id 			= {$_course['real_id']} ";
 
             $result = Database::query($sql);
 
             if ($result && Database::num_rows($result) != 0) {
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    $document_folders[] = $row['path'];
+                    $document_folders[$row['id']] = $row['path'];
                 }
                 //sort($document_folders);
                 natsort($document_folders);
@@ -694,47 +695,54 @@ return 'application/octet-stream';
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
             //get visible folders
-            $visible_sql = "SELECT DISTINCT path
+            $visible_sql = "SELECT DISTINCT docs.id, path
                         FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
                         WHERE docs.id = last.ref
                         AND docs.filetype = 'folder'
                         AND last.tool = '".TOOL_DOCUMENT."'
                         AND last.to_group_id = ".$to_group_id."
-                        AND last.visibility = 1 $condition_session AND docs.c_id = {$_course['real_id']} ";
+                        AND last.visibility = 1 $condition_session AND                        
+                        last.c_id = {$_course['real_id']}  AND 
+                        docs.c_id = {$_course['real_id']} ";
             $visibleresult = Database::query($visible_sql);
             while ($all_visible_folders = Database::fetch_array($visibleresult, 'ASSOC')) {
-                $visiblefolders[] = $all_visible_folders['path'];
+                $visiblefolders[$all_visible_folders['id']] = $all_visible_folders['path'];
             }
             //condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
             //get invisible folders
-            $invisible_sql = "SELECT DISTINCT path
+            $invisible_sql = "SELECT DISTINCT docs.id, path
                         FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
                         WHERE docs.id = last.ref
                         AND docs.filetype = 'folder'
                         AND last.tool = '".TOOL_DOCUMENT."'
                         AND last.to_group_id = ".$to_group_id."
-                        AND last.visibility = 0 $condition_session AND docs.c_id = {$_course['real_id']} ";
+                        AND last.visibility = 0 $condition_session AND
+                        last.c_id = {$_course['real_id']}  AND  
+                        docs.c_id = {$_course['real_id']} ";
             $invisibleresult = Database::query($invisible_sql);
             while ($invisible_folders = Database::fetch_array($invisibleresult, 'ASSOC')) {
                 //condition for the session
                 $session_id = api_get_session_id();
                 $condition_session = api_get_session_condition($session_id);
                 //get visible folders in the invisible ones -> they are invisible too
-                $folder_in_invisible_sql = "SELECT DISTINCT path
+                $folder_in_invisible_sql = "SELECT DISTINCT docs.id, path
                                 FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
                                 WHERE docs.id = last.ref
                                 AND docs.path LIKE '".Database::escape_string($invisible_folders['path'])."/%'
                                 AND docs.filetype = 'folder'
                                 AND last.tool = '".TOOL_DOCUMENT."'
                                 AND last.to_group_id = ".$to_group_id."
-                                AND last.visibility = 1 $condition_session AND docs.c_id = {$_course['real_id']}  ";
+                                AND last.visibility = 1 $condition_session AND
+                                last.c_id = {$_course['real_id']}  AND  
+                                docs.c_id = {$_course['real_id']}  ";
                 $folder_in_invisible_result = Database::query($folder_in_invisible_sql);
                 while ($folders_in_invisible_folder = Database::fetch_array($folder_in_invisible_result, 'ASSOC')) {
-                    $invisiblefolders[] = $folders_in_invisible_folder['path'];
+                    $invisiblefolders[$folders_in_invisible_folder['id']] = $folders_in_invisible_folder['path'];
                 }
             }
+            
             //if both results are arrays -> //calculate the difference between the 2 arrays -> only visible folders are left :)
             if (is_array($visiblefolders) && is_array($invisiblefolders)) {
                 $document_folders = array_diff($visiblefolders, $invisiblefolders);

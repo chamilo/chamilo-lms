@@ -12,10 +12,12 @@
  * @param string	The current folder (path inside of the "document" directory, including the prefix "/")
  * @param string	Group directory, if empty, prevents documents to be uploaded (because group documents cannot be uploaded in root)
  * @param	boolean	Whether to change the renderer (this will add a template <span> to the QuickForm object displaying the form)
+ * @todo this funcionality is really bad : jmontoya
  * @return string html form
  */
 
-function build_directory_selector($folders, $curdirpath, $group_dir = '', $change_renderer = false) {
+function build_directory_selector($folders, $document_id, $group_dir = '', $change_renderer = false) {
+    $course_id = api_get_course_int_id();
     $folder_titles = array();
     if (api_get_setting('use_document_title') == 'true') {
         if (is_array($folders)) {
@@ -25,7 +27,7 @@ function build_directory_selector($folders, $curdirpath, $group_dir = '', $chang
             }
             $folder_sql = implode("','", $escaped_folders);
             $doc_table = Database::get_course_table(TABLE_DOCUMENT);
-            $sql = "SELECT * FROM $doc_table WHERE filetype='folder' AND path IN ('".$folder_sql."')";
+            $sql = "SELECT * FROM $doc_table WHERE filetype = 'folder' AND c_id = $course_id AND path IN ('".$folder_sql."')";
             $res = Database::query($sql);
             $folder_titles = array();
             while ($obj = Database::fetch_object($res)) {
@@ -39,11 +41,10 @@ function build_directory_selector($folders, $curdirpath, $group_dir = '', $chang
             }
         }
     }
-
-    require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-    $form = new FormValidator('selector', 'POST', api_get_self());
-
-    $parent_select = $form->addElement('select', 'curdirpath', get_lang('CurrentDirectory'), '', 'onchange="javascript: document.selector.submit();"');
+    
+    $form = new FormValidator('selector', 'GET', api_get_self().'?'.api_get_cidreq());    
+    $form->addElement('hidden', 'cidReq', api_get_course_id());    
+    $parent_select = $form->addElement('select', 'id', get_lang('CurrentDirectory'), '', 'onchange="javascript: document.selector.submit();"');
 
     if ($change_renderer) {
         $renderer = $form->defaultRenderer();
@@ -53,21 +54,23 @@ function build_directory_selector($folders, $curdirpath, $group_dir = '', $chang
     // Group documents cannot be uploaded in the root
     if (empty($group_dir)) {
         $parent_select -> addOption(get_lang('Documents'), '/');
+        
         if (is_array($folders)) {
-            foreach ($folders as & $folder) {
-                $selected = ($curdirpath == $folder) ? ' selected="selected"' : '';
+            
+            foreach ($folders as $folder_id => & $folder) {                
+                $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
                 $path_parts = explode('/', $folder);
                 $folder_titles[$folder] = cut($folder_titles[$folder], 80);
                 $label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$folder_titles[$folder];
-                $parent_select -> addOption($label, $folder);
+                $parent_select -> addOption($label, $folder_id);
                 if ($selected != '') {
-                    $parent_select->setSelected($folder);
+                    $parent_select->setSelected($folder_id);
                 }
             }
         }
-    } else {
-        foreach ($folders as & $folder) {
-            $selected = ($curdirpath==$folder) ? ' selected="selected"' : '';
+    } else {        
+        foreach ($folders as $folder_id => & $folder) {
+            $selected = ($document_id == $folder) ? ' selected="selected"' : '';
             $label = $folder_titles[$folder];
             if ($folder == $group_dir) {
                 $label = get_lang('Documents');
@@ -76,15 +79,13 @@ function build_directory_selector($folders, $curdirpath, $group_dir = '', $chang
                 $label = cut($label, 80);
                 $label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
             }
-            $parent_select -> addOption($label, $folder);
+            $parent_select -> addOption($label, $folder_id);
             if ($selected != '') {
-                $parent_select->setSelected($folder);
+                $parent_select->setSelected($folder_id);
             }
         }
     }
-
     $form = $form->toHtml();
-
     return $form;
 }
 
@@ -611,7 +612,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
 
 function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = '') {
     
-    $form = '<form name="move_to" action="'.api_get_self().'" method="post">';
+    $form = '<form name="move_to" action="'.api_get_self().'" method="POST">';
     $form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />';
     
     $form .= '<div class="row">';

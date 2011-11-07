@@ -85,5 +85,4 @@ $content = $tpl->fetch('default/agenda/month.tpl');
 $tpl->assign('content', $content);
 
 //Loading main Chamilo 1 col template
-$template_file = $tpl->get_template('layout/layout_1_col.tpl');
-$tpl->display($template_file);
+$tpl->display_one_col_template();

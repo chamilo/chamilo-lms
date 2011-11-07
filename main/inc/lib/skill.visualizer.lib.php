@@ -93,8 +93,23 @@
     /**
      * Displays the HTMl part of jplumb
      */
-    public function display_html() {
-        if (empty($this->skills)) {
+    public function display_html() {                     
+        echo $this->return_html();        
+    }
+    
+    /**
+     * Displays the Javascript part of jplumb
+     */
+    public function display_js() {
+        echo $this->return_js();
+    }
+    
+    public function return_js() {
+        return $this->get_js();
+    }
+    
+    public function return_html() {
+         if (empty($this->skills)) {
             return '';
         }
         $skill_count = sizeof($this->skills);
@@ -147,16 +162,10 @@
             //$skill['description']  = "{$brothers[$skill['parent_id']]} $x - $y";
             //$skill['name']  =  $skill['name']."  |  $x = $my_count * 150  +  $parent_x - (150* $max/2) - 10*$childs ";
             $this->add_item($skill, array('x' => $this->offset_x + $x, 'y' => $this->offset_y +$y));            
-        }                
-        echo $this->get_html();        
+        }
+        return $this->get_html();        
     }
     
-    /**
-     * Displays the Javascript part of jplumb
-     */
-    public function display_js() {
-        echo $this->get_js();
-    }
 
     private function get_html() {
         return $this->html;

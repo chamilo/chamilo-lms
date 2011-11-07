@@ -45,7 +45,7 @@ class Template extends Smarty {
 		$this->set_footer_parameters();		
 		$this->assign('style', $this->style);
 	}
-		
+
 	/**
 	 * Shortcut to display a 1 col layout
 	 * */
@@ -69,6 +69,16 @@ class Template extends Smarty {
 		$tpl = $this->get_template('layout/blank.tpl');
 		$this->display($tpl);
 	}
+    
+    /**
+     * Displays an empty template
+     */
+    function display_no_layout_template() {     
+        $tpl = $this->get_template('layout/no_layout.tpl');
+        $this->display($tpl);
+    }
+    
+    
 	
 	/**	  
 	 * Sets the footer visibility 

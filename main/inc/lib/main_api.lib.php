@@ -1233,7 +1233,7 @@ function api_session_start($already_installed = true) {
     }
     */
 
-    if (is_null($_configuration['session_stored_in_db'])) {
+    if (!isset($_configuration['session_stored_in_db'])) {
         $_configuration['session_stored_in_db'] = false;
     }
     if ($_configuration['session_stored_in_db'] && function_exists('session_set_save_handler')) {

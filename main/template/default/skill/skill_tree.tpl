@@ -33,7 +33,7 @@ jsPlumb.bind("ready", function() {
         autoOpen: false,
         modal   : true, 
         width   : 550, 
-        height  : 380
+        height  : 480,
     });
     
     //Filling skills select
@@ -592,7 +592,7 @@ function checkLength( o, n, min, max ) {
 {$html}
 
 <div id="dialog-form" style="display:none;">
-    <div style="width:500px">
+    
     <form id="add_item" name="form">
         <input type="hidden" name="id" id="id"/>
         <div class="row">
@@ -632,6 +632,5 @@ function checkLength( o, n, min, max ) {
                 <textarea name="description" id="description" cols="40" rows="7"></textarea>
             </div>
         </div>  
-    </form>
-    </div>
+    </form>    
 </div>

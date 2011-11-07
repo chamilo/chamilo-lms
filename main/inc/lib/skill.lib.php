@@ -124,24 +124,29 @@ class SkillRelGradebook extends Model {
     
     public function update_gradebooks_by_skill($skill_id, $gradebook_list) {
         $original_gradebook_list = $this->find('all', array('where'=>array('skill_id = ?' => array($skill_id))));
-        var_dump($original_gradebook_list);
+        //var_dump($original_gradebook_list);
         $gradebooks_to_remove = array();
         $gradebooks_to_add = array();
+        $original_gradebook_list_ids = array();
         
-        if (!empty($original_gradebook_list))
-        foreach ($original_gradebook_list as $gradebook) {
-            if (!in_array($gradebook['gradebook_id'], $gradebook_list)) {
-                $gradebooks_to_remove[] = $gradebook['id'];
+        if (!empty($original_gradebook_list)) {
+            foreach ($original_gradebook_list as $gradebook) {
+                if (!in_array($gradebook['gradebook_id'], $gradebook_list)) {
+                    $gradebooks_to_remove[] = $gradebook['id'];
+                }
+            }
+            foreach($original_gradebook_list as $gradebook_item) {
+                $original_gradebook_list_ids[] = $gradebook_item['gradebook_id'];
             }
         }
 
         if (!empty($gradebook_list))
         foreach($gradebook_list as $gradebook_id) {
-            if (!in_array($gradebook_id, array_keys($original_gradebook_list))) {
+            if (!in_array($gradebook_id, $original_gradebook_list_ids)) {
                 $gradebooks_to_add[] = $gradebook_id;
             }
         }
-                
+        //var_dump($gradebooks_to_add, $gradebooks_to_remove);
         if (!empty($gradebooks_to_remove)) {
             foreach($gradebooks_to_remove as $id) {
                $this->delete($id); 

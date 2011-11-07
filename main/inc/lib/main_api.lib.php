@@ -4667,17 +4667,16 @@ function api_is_in_group($group_id = null, $course_code = null) {
  * @return string password with the applied hash
  */
 function api_get_encrypted_password($password, $salt = '') {
-
     global $_configuration;
-    switch ($_configuration['password_encryption']){
-        case 'md5':
-            return empty($salt) ? md5($password) : md5($password.$salt);
+    $password_encryption = isset($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'md5';
+    switch ($password_encryption) {
         case 'sha1':
             return empty($salt) ? sha1($password) : sha1($password.$salt);
         case 'none':
             return $password;
+        case 'md5':
         default:
-            return empty($salt) ? md5($password) : md5($password.$salt);
+            return empty($salt) ? md5($password)  : md5($password.$salt);
     }
 }
 

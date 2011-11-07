@@ -4668,7 +4668,8 @@ function api_is_in_group($group_id = null, $course_code = null) {
  */
 function api_get_encrypted_password($password, $salt = '') {
     global $_configuration;
-    $password_encryption = isset($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'md5';
+    $password_encryption = isset($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1';
+    
     switch ($password_encryption) {
         case 'sha1':
             return empty($salt) ? sha1($password) : sha1($password.$salt);

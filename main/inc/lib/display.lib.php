@@ -425,7 +425,7 @@ class Display {
     public static function display_header($tool_name ='', $help = null) {
         $nameTools = $tool_name;
         global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
-        global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
+        global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
         global $menu_navigation;        
 		global $htmlCSSXtra;
         require api_get_path(INCLUDE_PATH).'header.inc.php';
@@ -436,7 +436,7 @@ class Display {
      */
     public static function display_reduced_header () {
         global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
-        global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF, $language_interface;
+        global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF, $language_interface;
         global $menu_navigation;
         require api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
     }

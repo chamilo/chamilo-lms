@@ -13,7 +13,6 @@
  * @todo Shouldn't the SCRIPTVAL_ and CONFVAL_ constant be moved to the config page? Has anybody any idea what the are used for?
  *       If these are really configuration settings then we can add those to the dokeos config settings.
  * @todo move display_courses and some other functions to a more appripriate place course.lib.php or user.lib.php
- * @todo use api_get_path instead of $rootAdminWeb
  * @todo check for duplication of functions with index.php (user_portal.php is orginally a copy of index.php)
  * @todo display_digest, shouldn't this be removed and be made into an extension?
  */

@@ -129,7 +129,7 @@ class Template extends Smarty {
 		$nameTools = $this->title;
 		global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
 		global $httpHeadXtra, $htmlHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, 
-				$rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;		
+				$_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;		
 		global $menu_navigation;
 		global $_configuration, $show_learn_path;
 		

@@ -360,13 +360,5 @@ else
     IMPORT XML/CSV USER LIST
   ==========================*/
 
-if($is_platformAdmin)
-{
-    echo "<a href=\"".$rootAdminWeb."importUserList.php\">".get_lang('UserMany')."</a>";
-} // if is_platformAdmin
-else
-{
-    echo "<p>".get_lang('IfYouWantToAddManyUsers')."</p>";
-}
-
+echo "<p>".get_lang('IfYouWantToAddManyUsers')."</p>";
 Display::display_footer();

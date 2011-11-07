@@ -80,12 +80,7 @@ $_configuration['course_folder']  = "courses/";
 
 // @todo this shouldn't be here.
 // Directory of the admin-area
-$rootAdminAppend        = "admin/";
-
-// Do not change the following values
-// @todo should be moved to api_get_path
-$rootAdminSys           = $clarolineRepositorySys.$rootAdminAppend;
-$rootAdminWeb           = $clarolineRepositoryWeb.$rootAdminAppend;
+$_configuration['admin_append_path'] = "admin/";
 
 // directory to store archived courses
 $archiveDirName         = "archive";

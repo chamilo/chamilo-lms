@@ -104,7 +104,6 @@ function get_tabs() {
 
 	// Platform administration
 	if (api_is_platform_admin(true)) {
-		//$navigation['platform_admin']['url'] = $rootAdminWeb;
 		$navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
 		$navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
 	}

@@ -7,7 +7,7 @@ class TestBanner extends UnitTestCase{
     }
 
 	public function testGetTabs(){
-		global $_course, $rootAdminWeb, $_user;
+		global $_course, $_user;
     	$res = get_tabs();
 		$this->assertTrue(is_array($res));
 		$this->assertTrue($res);

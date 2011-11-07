@@ -6,7 +6,7 @@ class TestBanner extends UnitTestCase{
 		$this->UnitTestCase('Banners library - main/inc/banner.inc.test.php');
 	}
 	public function testGetTabs(){
-		global $_course, $rootAdminWeb, $_user;
+		global $_course, $_user;
 		ob_start();
     	require_once(api_get_path(SYS_CODE_PATH).'inc/banner.inc.php');
     	ob_end_clean();

@@ -18,7 +18,7 @@ class TestUserManager extends UnitTestCase {
     		$language='english';
     		$phone = '';
     		$picture_uri ='';
-    		global $_user, $userPasswordCrypted;
+    		global $_user;
     		ob_start();
     		$res= ob_get_contents();
     		UserManager::create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code, $language, $phone, $picture_uri);

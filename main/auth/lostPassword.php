@@ -27,7 +27,9 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
 
 // Custom pages
-// Had to move the form handling in here, because otherwise there would already be some display output.
+// Had to move the form handling in here, because otherwise there would 
+// already be some display output.
+global $_configuration;
 if (api_get_setting('use_custom_pages') == 'true') {
 	if (isset ($_POST['user']) && isset ($_POST['email'])) {
 		$user = $_POST['user'];
@@ -58,7 +60,7 @@ if (api_get_setting('use_custom_pages') == 'true') {
 				$by_username = true; // single user (valid user + email)
 				$user = Database::fetch_array($result);
 			}
-			if ($userPasswordCrypted != 'none') {
+			if ($_configuration['password_encryption'] != 'none') {
 				Login::handle_encrypted_password($user, $by_username);
 			} else {
 				Login::send_password_to_user($user, $by_username);
@@ -131,7 +133,7 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
             $by_username = true;
             $users = Database::store_result($result);
             foreach( $users as $user ) {
-                if ($userPasswordCrypted != 'none') {
+                if ($_configuration['password_encryption'] != 'none') {
                     Login::handle_encrypted_password($user, $by_username);
                 } else {
                     Login::send_password_to_user($user, $by_username);

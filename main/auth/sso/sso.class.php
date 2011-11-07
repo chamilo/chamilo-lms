@@ -52,7 +52,7 @@ class sso {
      * @return	bool	Return the loginFailed variable value to local.inc.php
      */
     public function check_user() {
-        global $_user, $userPasswordCrypted, $_configuration;
+        global $_user, $_configuration;
         $loginFailed = false;
 	//change the way we recover the cookie depending on how it is formed
         $sso = $this->decode_cookie($_GET['sso_cookie']);
@@ -68,7 +68,7 @@ class sso {
             //Check the user's password
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
                 // Make sure password is encrypted with md5
-                if (!$userPasswordCrypted) {
+                if (!$_configuration['password_encryption']) {
                     $uData['password'] = md5($uData['password']);
                 }
                 //the authentification of this user is managed by Chamilo itself

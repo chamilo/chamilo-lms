@@ -584,6 +584,9 @@ if ($_POST['step2']) {
 		if (in_array($my_old_version, $update_from_version_6)) {   //for version 1.6
 			$urlForm = get_config_param('rootWeb');
 			$encryptPassForm = get_config_param('userPasswordCrypted');
+			if (empty($encryptPassForm)) {
+				$encryptPassForm = get_config_param('password_encryption');
+			}
 			// Managing the $encryptPassForm
 			if ($encryptPassForm == '1') {
 				$encryptPassForm = 'sha1';
@@ -726,9 +729,9 @@ if ($_POST['step2']) {
 		if (empty($my_old_version)) { $my_old_version = '1.8.6.2'; } //we guess
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
-        error_log('Starting migration process from '.$my_old_version.' ('.time().')', 0);
+        	error_log('Starting migration process from '.$my_old_version.' ('.time().')', 0);
 
-    	if ($userPasswordCrypted == '1') {
+    		if ($userPasswordCrypted == '1') {
 			$userPasswordCrypted = 'md5';
 		} elseif ($userPasswordCrypted == '0') {
 			$userPasswordCrypted = 'none';

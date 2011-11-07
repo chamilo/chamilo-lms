@@ -23,7 +23,7 @@ class TestSoapWebService extends UnitTestCase {
 		$security_key = $configuration['security_key'];
 		$ip_address = '::1';
 		$this->_secret_key = sha1($ip_address.$security_key);
-		$this->_encrypt_method = $GLOBALS['userPasswordCrypted'];
+		$this->_encrypt_method = $configuration['password_encryption'];
 		$this->_client = new SoapClient($configuration['root_web'].'main/webservices/soap.php?wsdl');
 	}
 	

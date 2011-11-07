@@ -61,7 +61,7 @@ $form->setDefaults(array('file_type'=>'csv'));
 
 if ($form->validate())
 {
-	global $userPasswordCrypted;
+	global $_configuration;
 
 	$export = $form->exportValues();
 	$file_type = $export['file_type'];
@@ -72,7 +72,7 @@ if ($form->validate())
 					u.firstname 	AS FirstName,
 					u.email 		AS Email,
 					u.username	AS UserName,
-					".(($userPasswordCrypted!='none')?" ":"u.password AS Password, ")."
+					".(($_configuration['password_encryption']!='none')?" ":"u.password AS Password, ")."
 					u.auth_source	AS AuthSource,
 					u.status		AS Status,
 					u.official_code	AS OfficialCode,
@@ -99,9 +99,8 @@ if ($form->validate())
 	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 	$data = array();
 	$extra_fields = Usermanager::get_extra_fields(0, 0, 5, 'ASC',false);
-	if ($export['addcsvheader']=='1' AND $export['file_type']=='csv')
-	{
-		if($userPasswordCrypted!='none') {
+	if ($export['addcsvheader']=='1' AND $export['file_type']=='csv') {
+		if($_configuration['password_encryption']!='none') {
 			$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName', 'AuthSource', 'Status', 'OfficialCode', 'PhoneNumber');
 		} else {
 			$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName','Password',  'AuthSource', 'Status', 'OfficialCode', 'PhoneNumber');

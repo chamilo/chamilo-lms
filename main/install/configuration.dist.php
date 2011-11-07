@@ -119,7 +119,7 @@ $_configuration['verbose_backup']    = false;
 // security word for password recovery
 $_configuration['security_key']      = '{SECURITY_KEY}';
 // Hash function method
-$userPasswordCrypted                 = '{ENCRYPT_PASSWORD}';
+$_configuration['password_encryption']      = '{ENCRYPT_PASSWORD}';
 // You may have to restart your web server if you change this
 $storeSessionInDb                    = false;
 // Session lifetime

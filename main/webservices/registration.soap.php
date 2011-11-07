@@ -143,7 +143,7 @@ $server->register('WSCreateUsers',			// method name
 // Define the method WSCreateUsers
 function WSCreateUsers($params) {
 
-    global $_user, $userPasswordCrypted, $_configuration;
+    global $_user, $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -197,7 +197,7 @@ function WSCreateUsers($params) {
                 firstname='".Database::escape_string($firstName)."',
                 username='".Database::escape_string($loginName)."',";
                 if (!is_null($password)) {
-                    $password = $userPasswordCrypted ? api_get_encrypted_password($password) : $password;
+                    $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
                     $sql .= " password='".Database::escape_string($password)."',";
                 }
                 if (!is_null($auth_source)) {
@@ -243,7 +243,7 @@ function WSCreateUsers($params) {
             }
         }
 
-        $password = ($userPasswordCrypted ? api_get_encrypted_password($password) : $password);
+        $password = ($_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password);
         $sql = "INSERT INTO $table_user
                                     SET lastname = '".Database::escape_string(trim($lastName))."',
                                     firstname = '".Database::escape_string(trim($firstName))."',
@@ -353,7 +353,7 @@ $server->register('WSCreateUser',				// method name
 // Define the method WSCreateUser
 function WSCreateUser($params) {
 
-    global $_user, $userPasswordCrypted, $_configuration;
+    global $_user, $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -400,7 +400,7 @@ function WSCreateUser($params) {
             firstname='".Database::escape_string($firstName)."',
             username='".Database::escape_string($loginName)."',";
             if (!is_null($password)) {
-                $password = $userPasswordCrypted ? api_get_encrypted_password($password) : $password;
+                $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
                 $sql .= " password='".Database::escape_string($password)."',";
             }
             if (!is_null($auth_source)) {
@@ -443,7 +443,7 @@ function WSCreateUser($params) {
         }
     }
 
-    $password = ($userPasswordCrypted ? api_get_encrypted_password($password) : $password);
+    $password = ($_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password);
     $sql = "INSERT INTO $table_user
                                 SET lastname = '".Database::escape_string(trim($lastName))."',
                                 firstname = '".Database::escape_string(trim($firstName))."',
@@ -592,7 +592,7 @@ $server->register('WSCreateUsersPasswordCrypted',						    // method name
 // Define the method WSCreateUsersPasswordCrypted
 function WSCreateUsersPasswordCrypted($params) {
 
-    global $_user, $userPasswordCrypted, $_configuration;
+    global $_user, $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -633,7 +633,7 @@ function WSCreateUsersPasswordCrypted($params) {
         $extra_list = $user_param['extra'];
         $salt = '';
 
-        if ($userPasswordCrypted === $encrypt_method ) {
+        if ($_configuration['password_encryption'] === $encrypt_method ) {
             if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
                 $msg = "Encryption $encrypt_method is invalid";
                 $results[] = $msg;
@@ -837,7 +837,7 @@ $server->register('WSCreateUserPasswordCrypted',						// method name
 // Define the method WSCreateUserPasswordCrypted
 function WSCreateUserPasswordCrypted($params) {
 
-    global $_user, $userPasswordCrypted, $_configuration, $debug;
+    global $_user, $_configuration, $debug;
 
     if (!WSHelperVerifyKey($params)) {        
         return -1;
@@ -871,7 +871,7 @@ function WSCreateUserPasswordCrypted($params) {
     $extra_list             = $params['extra'];
     $salt = '';
 
-    if ($userPasswordCrypted === $encrypt_method ) {
+    if ($_configuration['password_encryption'] === $encrypt_method ) {
         if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
             $msg = "Encryption $encrypt_method is invalid";
             return $msg;
@@ -1086,7 +1086,7 @@ $server->register('WSEditUserCredentials',                    // method name
 
 // Define the method WSEditUser
 function WSEditUserCredentials($params) {
-    global $userPasswordCrypted;
+    global $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -1129,7 +1129,7 @@ function WSEditUserCredentials($params) {
     $sql = "UPDATE $table_user SET
             username='".Database::escape_string($username)."'";
     if (!is_null($password)) {
-        $password = $userPasswordCrypted ? api_get_encrypted_password($password) : $password;
+        $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
         $sql .= ", password='".Database::escape_string($password)."' ";
     }
     $sql .=     " WHERE user_id='$user_id'";
@@ -1175,7 +1175,7 @@ $server->register('WSEditUsers',				// method name
 
 // Define the method WSEditUsers
 function WSEditUsers($params) {
-    global $userPasswordCrypted;
+    global $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -1245,7 +1245,7 @@ function WSEditUsers($params) {
                 firstname='".Database::escape_string($firstname)."',
                 username='".Database::escape_string($username)."',";
         if (!is_null($password)) {
-            $password = $userPasswordCrypted ? api_get_encrypted_password($password) : $password;
+            $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
             $sql .= " password='".Database::escape_string($password)."',";
         }
         if (!is_null($auth_source)) {
@@ -1326,7 +1326,7 @@ $server->register('WSEditUser',		        // method name
 
 // Define the method WSEditUser
 function WSEditUser($params) {
-    global $userPasswordCrypted;
+    global $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -1386,7 +1386,7 @@ function WSEditUser($params) {
             firstname='".Database::escape_string($firstname)."',
             username='".Database::escape_string($username)."',";
     if (!is_null($password)) {
-        $password = $userPasswordCrypted ? api_get_encrypted_password($password) : $password;
+        $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
         $sql .= " password='".Database::escape_string($password)."',";
     }
     if (!is_null($auth_source)) {
@@ -1504,7 +1504,7 @@ $server->register('WSEditUsersPasswordCrypted',					// method name
 
 // Define the method WSEditUsersPasswordCrypted
 function WSEditUsersPasswordCrypted($params) {
-    global $userPasswordCrypted, $userPasswordCrypted;
+    global $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -1546,7 +1546,7 @@ function WSEditUsersPasswordCrypted($params) {
 
             $password = $user_param['password'];
             $encrypt_method = $user_param['encrypt_method'];
-            if ($userPasswordCrypted === $encrypt_method ) {
+            if ($_configuration['password_encryption'] === $encrypt_method ) {
                 if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
                     $msg = "Encryption $encrypt_method is invalid";
                     $results[] = $msg;
@@ -1682,7 +1682,7 @@ $server->register('WSEditUserPasswordCrypted',					// method name
 
 // Define the method WSEditUserPasswordCrypted
 function WSEditUserPasswordCrypted($params) {
-    global $userPasswordCrypted, $userPasswordCrypted;
+    global $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -1715,7 +1715,7 @@ function WSEditUserPasswordCrypted($params) {
 
         $password = $params['password'];
         $encrypt_method = $params['encrypt_method'];
-        if ($userPasswordCrypted === $encrypt_method ) {
+        if ($_configuration['password_encryption'] === $encrypt_method ) {
             if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
                 $msg = "Encryption $encrypt_method is invalid";
                 return $msg;

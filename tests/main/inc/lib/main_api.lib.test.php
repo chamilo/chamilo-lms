@@ -787,7 +787,6 @@ class TestMainApi extends UnitTestCase {
 	}
 
 	function testApiGetEncryptedPassword(){
-		global $userPasswordCrypted;
 		$pass= array ('password'=> '2222');
 		$res=api_get_encrypted_password($pass['password'],null);
 		$this->assertTrue($res);

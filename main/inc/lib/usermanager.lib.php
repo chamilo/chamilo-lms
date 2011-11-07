@@ -75,7 +75,7 @@ class UserManager {
 	  * it stores the error message in global $api_failureList
 	  */
 	public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language = '', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id = 0, $extra = null, $encrypt_method = '') {
-		global $_user, $userPasswordCrypted;
+		global $_user, $_configuration;
 
 		$firstName 	= Security::remove_XSS($firstName);
 		$lastName	= Security::remove_XSS($lastName);
@@ -104,7 +104,7 @@ class UserManager {
 		if ($encrypt_method == '') {
 			$password = api_get_encrypted_password($password);
 		} else {
-			if ($userPasswordCrypted === $encrypt_method ) {
+			if ($_configuration['password_encryption'] === $encrypt_method ) {
 				if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
 					return api_set_failure('encrypt_method invalid');
 				} else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
@@ -114,7 +114,6 @@ class UserManager {
 				return api_set_failure('encrypt_method invalid');
 			}
 		}
-		//$password = ($userPasswordCrypted ? md5($password) : $password);
 		//@todo replace this date with the api_get_utc_date function big problem with users that are already registered
 		$current_date = date('Y-m-d H:i:s', time());
 		$sql = "INSERT INTO $table_user
@@ -341,7 +340,7 @@ class UserManager {
 	 * @return boolean true if the user information was updated
 	 */
 	public static function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id = null, $hr_dept_id = 0, $extra = null, $language = 'english', $encrypt_method = '') {
-		global $userPasswordCrypted;
+		global $_configuration;
 		if ($user_id != strval(intval($user_id))) return false;
 		if ($user_id === false) return false;
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -359,11 +358,10 @@ class UserManager {
 				username='".Database::escape_string($username)."',
 				language='".Database::escape_string($language)."',";
 		if (!is_null($password)) {
-			//$password = $userPasswordCrypted ? md5($password) : $password;
 			if($encrypt_method == '') {
 				$password = api_get_encrypted_password($password);
 			} else {
-				if ($userPasswordCrypted === $encrypt_method ) {
+				if ($_configuration['password_encryption'] === $encrypt_method ) {
 					if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
 						return api_set_failure('encrypt_method invalid');
 					} else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {

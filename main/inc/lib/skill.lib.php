@@ -196,7 +196,25 @@ class SkillRelGradebook extends Model {
 class SkillRelUser extends Model {
     var $columns = array('id', 'user_id','skill_id','acquired_skill_at','assigned_by');
     public function __construct() {
-        $this->table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
+        $this->table        = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
+        //$this->table_user   = Database::get_main_table(TABLE_MAIN_USER);
+    }
+    
+    public function get_user_by_skills($skill_list) {
+        $skill_list = array_map('intval', $skill_list);
+        $skill_list = implode("', ", $skill_list);
+        
+        $sql = "SELECT user_id FROM {$this->table}  WHERE skill_id IN ($skill_list) ";
+        
+        $result = Database::query($sql); 
+        $users  = Database::store_result($result, 'ASSOC');
+        return $users;
+    }
+    
+    public function get_user_skills($user_id) {
+        if (empty($user_id)) { return array(); }     
+        $result = Database::select('skill_id',$this->table, array('where'=>array('user_id = ?'=>intval($user_id))), 'all');
+        return $result;
     }
 }
    

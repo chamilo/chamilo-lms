@@ -55,8 +55,7 @@ function build_directory_selector($folders, $document_id, $group_dir = '', $chan
     if (empty($group_dir)) {
         $parent_select -> addOption(get_lang('Documents'), '/');
         
-        if (is_array($folders)) {
-            
+        if (is_array($folders)) {            
             foreach ($folders as $folder_id => & $folder) {                
                 $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
                 $path_parts = explode('/', $folder);
@@ -70,7 +69,7 @@ function build_directory_selector($folders, $document_id, $group_dir = '', $chan
         }
     } else {        
         foreach ($folders as $folder_id => & $folder) {
-            $selected = ($document_id == $folder) ? ' selected="selected"' : '';
+            $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
             $label = $folder_titles[$folder];
             if ($folder == $group_dir) {
                 $label = get_lang('Documents');

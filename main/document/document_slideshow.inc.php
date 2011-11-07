@@ -47,7 +47,7 @@ if (count($array_to_search) > 0) {
 
 $image_present = 0;
 
-if (is_array($all_files) && count($all_files) > 0) {
+if (isset($all_files) && is_array($all_files) && count($all_files) > 0) {
 	foreach ($all_files as & $file) {
 		$slideshow_extension = strrchr($file, '.');
 		$slideshow_extension = strtolower($slideshow_extension);

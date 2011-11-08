@@ -2753,7 +2753,7 @@ CREATE TABLE skill (
   PRIMARY KEY (id)
 );
 
-INSERT INTO skill VALUES('Root');
+INSERT INTO skill (name) VALUES ('Root');
 
 CREATE TABLE skill_rel_gradebook (
   id int NOT NULL AUTO_INCREMENT,
@@ -2767,10 +2767,10 @@ CREATE TABLE skill_rel_skill (
   skill_id int NOT NULL,
   parent_id int NOT NULL,
   relation_type int NOT NULL,
-  level int NOT NULL,
+  level int NOT NULL
 );
 
-INSERT INTO skill_rel_skill VALUES(1, 0, 0);
+INSERT INTO skill_rel_skill VALUES(1, 0, 0, 0);
 
 CREATE TABLE skill_rel_user (
   id int NOT NULL AUTO_INCREMENT,

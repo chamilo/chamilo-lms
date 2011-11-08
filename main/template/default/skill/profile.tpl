@@ -55,27 +55,53 @@ function checkLength( o, n, min, max ) {
 </script>
 {$form}
 
-{foreach $user_list as $user}
-    <div class="ui-widget">
-        <div class="ui-widget-header">
-            {$user['user'].username}
-        </div>
-        <div class="ui-widget-content">
-    
-        {$user['user'].firstname}
-        {$user['user'].lastname}
-        
-        
-    
-        <h3>Skills</h3>
-        <ul>
-        {foreach $user['skills'] as $skill}            
-            <li>{$skill.skill_id} </li>
+{if !empty($search_skill_list) }
+     <ul class="holder">
+        {foreach $search_skill_list as $search_skill_id}        
+            <li class="bit-box">
+                {$skill_list[$search_skill_id].name}
+                <a class="closebutton" href="?a=remove_skill&id={$search_skill_id}"></a>
+            </li>        
         {/foreach}
-        </ul>
-    </div>    
-    </div>  
-{/foreach}
+    </ul>
+    <a class="a_button gray small" href="?a=save_profile"> {"SaveThisSearch"|get_lang}</a>
+{/if}
+
+
+{if !empty($user_list) }
+    {foreach $user_list as $user}
+        <div class="ui-widget">
+            <div class="ui-widget-header">
+                {$user['user'].username}
+            </div>
+            <div class="ui-widget-content ">
+                
+                <img src="{$user['user'].avatar_small}" />
+                {$user['user'].complete_name}
+                
+                <h3>Skills</h3>
+                <ul>    
+                    {$user.total_found_skills} / {$total_search_skills}                
+                {foreach $user['skills'] as $skill_data}                 
+                    <li>
+                        <span class="label_tag notice">{$skill_list[$skill_data.skill_id].name}</span>
+                        {if $skill_data.found}
+                             * I have this skill * 
+                        {/if} 
+                        
+                    </li>                    
+                {/foreach}
+                </ul>
+            </div>    
+        </div>  
+    {/foreach}
+{else}
+    {"No results"|get_lang}
+{/if}
+
+
+    
+
 
 <div id="dialog-form" style="display:none;">    
     <form id="add_item" name="form">

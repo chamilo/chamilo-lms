@@ -202,9 +202,9 @@ class SkillRelUser extends Model {
     
     public function get_user_by_skills($skill_list) {
         $skill_list = array_map('intval', $skill_list);
-        $skill_list = implode("', ", $skill_list);
+        $skill_list = implode("', '", $skill_list);
         
-        $sql = "SELECT user_id FROM {$this->table}  WHERE skill_id IN ($skill_list) ";
+        $sql = "SELECT user_id FROM {$this->table}  WHERE skill_id IN ('$skill_list') ";
         
         $result = Database::query($sql); 
         $users  = Database::store_result($result, 'ASSOC');
@@ -235,8 +235,8 @@ class Skill extends Model {
         $skill_rel_skill = new SkillRelSkill();
         $skill_info = $this->get($id);
         if (!empty($skill_info)) {
-            $skill_info['extra'] = $skill_rel_skill->get_skill_info($id);            
-            $skill_info['gradebooks'] = self::get_gradebooks_by_skill($id);            
+            $skill_info['extra']        = $skill_rel_skill->get_skill_info($id);            
+            $skill_info['gradebooks']   = self::get_gradebooks_by_skill($id);            
         }
         return $skill_info;
     }
@@ -244,7 +244,19 @@ class Skill extends Model {
     public function skill_exists($skill_id) {
         
     }
-     
+    
+    
+    function get_skills_info($skill_list) {
+        $skill_list = array_map('intval', $skill_list);
+        $skill_list = implode("', '", $skill_list);
+        
+        $sql = "SELECT * FROM {$this->table}  WHERE id IN ('$skill_list') ";
+        
+        $result = Database::query($sql); 
+        $users  = Database::store_result($result, 'ASSOC');
+        return $users;
+        
+    }
     function get_all($load_user_data = false) {
         $sql = "SELECT id, name, description, parent_id, relation_type 
                     FROM {$this->table} skill INNER JOIN {$this->table_skill_rel_skill} skill_rel_skill

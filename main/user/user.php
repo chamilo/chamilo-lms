@@ -34,7 +34,6 @@ api_protect_course_script(true);
 
 /*		Libraries	*/
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 global $_configuration;

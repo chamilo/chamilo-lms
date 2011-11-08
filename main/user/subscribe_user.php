@@ -21,9 +21,6 @@ if (!api_is_allowed_to_edit()) {
 	 api_not_allowed(true);
 }
 
-// including additional libraries
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-
 $tool_name = get_lang("SubscribeUserToCourse");
 if ($_REQUEST['type']=='teacher') {
 	$tool_name = get_lang("SubscribeUserToCourseAsTeacher");
@@ -247,7 +244,7 @@ function get_number_of_users() {
 				$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 			}
 
-			if ($_configuration['multiple_access_urls']) {
+			if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
 				$url_access_id = api_get_current_access_url_id();
 
 				if ($url_access_id !=-1) {
@@ -470,7 +467,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 			//showing only the courses of the current Dokeos access_url_id
 			global $_configuration;
-			if ($_configuration['multiple_access_urls']) {
+			if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
 				$url_access_id = api_get_current_access_url_id();
 				if ($url_access_id !=-1) {
 
@@ -614,10 +611,10 @@ $sort_by_first_name = api_sort_by_first_name();
 // Build search-form
 echo '<div class="actions">';
 
-if ($_GET['keyword']) {
+if (isset($_GET['keyword'])) {
 	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_REQUEST['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';
 }
-if ($_GET['subscribe_user_filter_value'] AND !empty($_GET['subscribe_user_filter_value'])) {
+if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])) {
 	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_REQUEST['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
 }
 if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {

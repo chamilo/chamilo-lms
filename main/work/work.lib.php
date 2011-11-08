@@ -70,13 +70,6 @@ function display_action_links($id, $cur_dir_path, $always_show_tool_options, $al
 				Display::return_icon('delete.png', get_lang('Delete'),'','32').'</a>';*/
 		}
 		// make all files visible or invisible
-		$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-		$sql_query = "SHOW COLUMNS FROM ".$work_table." LIKE 'accepted'";
-		$sql_result = Database::query($sql_query);
-
-		if ($sql_result) {
-			$columnStatus = Database::fetch_array($sql_result);
-		}
 	}
 
 	if (api_is_allowed_to_edit(null, true)) {

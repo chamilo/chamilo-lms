@@ -260,12 +260,14 @@ class Certificate extends Model {
 		$headers = $array[0];
 		$content = $array[1];
 		$final_content = array();
-		
-		foreach($content as $key => $value) {
-			$my_header = $headers[$key];
-			$my_header = str_replace(array('((', '))') , '', $my_header);
-			$final_content[$my_header] = $value;
-		}
+        
+		if (!empty($content)) {
+    		foreach($content as $key => $value) {
+    			$my_header = $headers[$key];
+    			$my_header = str_replace(array('((', '))') , '', $my_header);
+    			$final_content[$my_header] = $value;
+    		}
+        }
 		
 		/* Certificate tags
 		 * 

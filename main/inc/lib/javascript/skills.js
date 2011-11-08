@@ -105,8 +105,10 @@
         load_parent(numeric_parent_id, numeric_id);
     }
     
-    /* When clicking a children block */
-   
+    /* When clicking a children block 
+        @param string block id i.e "block_1" 
+     * */
+    
     function open_block(id) {
         console.log("open_block id : " + id);      
         var numeric_id = id.split('_')[1];  
@@ -217,10 +219,19 @@
     function checkLength( o, n, min, max ) {
         if ( o.val().length > max || o.val().length < min ) {
             o.addClass( "ui-state-error" );
-            updateTips( "Length of " + n + " must be between " +
-                min + " and " + max + "." );
+            updateTips( "Length of " + n + " must be between " +min + " and " + max + "." );
             return false;
         } else {
             return true;
         }
+    }
+    
+    function updateTips( t ) {
+        tips = $( ".validateTips" )
+        tips
+            .text( t )
+            .addClass( "ui-state-highlight" );
+        setTimeout(function() {
+            tips.removeClass( "ui-state-highlight", 1500 );
+        }, 500 );
     }

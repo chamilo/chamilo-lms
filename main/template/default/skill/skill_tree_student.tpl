@@ -33,9 +33,8 @@ jsPlumb.bind("ready", function() {
         autoOpen: false,
         modal   : true, 
         width   : 550, 
-        height  : 480,
+        height  : 350,
     });
-   
     
     //On box click -(we use live instead of bind because we're creating divs on the fly )
     $(".open_block").live('click', function() {        
@@ -109,9 +108,9 @@ jsPlumb.bind("ready", function() {
             url: url+'&a=get_skill_info&id='+my_id,             
             success: function(json) {
                 var skill = jQuery.parseJSON(json);
-                $("#name").attr('value', skill.name);
+                $("#name").html(skill.name);
                 $("#id").attr('value',   skill.id);                        
-                $("#description").attr('value', skill.description);                
+                $("#description").html(skill.description);                
                 //filling parent_id
                 $("#parent_id option[value='"+skill.extra.parent_id+"']").attr('selected', 'selected');
                 //filling the gradebook_id         
@@ -123,30 +122,16 @@ jsPlumb.bind("ready", function() {
         
                 
         $("#gradebook_id").trigger("liszt:updated");
-        $("#parent_id").trigger("liszt:updated");
-        
+                
                 
         $("#dialog-form").dialog("open");
         return false;
     });
-        
-    //Filling select
-    $("#add_item_link").click(function() {        
-        
-        $("#name").attr('value', '');
-        $("#description").attr('value', '');
-          
-        
-        $("#dialog-form").dialog("open");
-                      
-    });    
-    
-      
     
     $("#dialog-form").dialog({
         close: function() {     
-            $("#name").attr('value', '');
-            $("#description").attr('value', '');                
+            $("#name").html('');
+            $("#description").html('');                
         }
     });    
     
@@ -160,14 +145,9 @@ jsPlumb.bind("ready", function() {
     };    
     resetRenderMode(jsPlumb.CANVAS);       
 });
-
-         
+        
             
-;(function() {
-    
-    
-    
-         
+;(function() {         
     prepare = function(elId, endpoint) {
         jsPlumbDemo.initHover(elId);
         //jsPlumbDemo.initAnimation(elId);        
@@ -203,24 +183,7 @@ jsPlumb.bind("ready", function() {
             jsPlumb.Defaults.Endpoint       = "Rectangle";
             jsPlumb.Defaults.Anchors        = ["TopCenter", "TopCenter"];
 
-            
-
-            /**
-                first example endpoint.  it's a 25x21 rectangle (the size is provided in the 'style' arg to the Endpoint), and it's both a source
-                and target.  the 'scope' of this Endpoint is 'exampleConnection', meaning any connection starting from this Endpoint is of type
-                'exampleConnection' and can only be dropped on an Endpoint target that declares 'exampleEndpoint' as its drop scope, and also that
-                only 'exampleConnection' types can be dropped here.
-
-                the connection style for this endpoint is a Bezier curve (we didn't provide one, so we use the default), with a lineWidth of
-                5 pixels, and a gradient.
-
-                note the use of the '$.extend' function to setup generic connection types.  this will save you a lot of typing, and probably
-                errors.
-
-            */
-                // this is the paint style for the connecting lines..
-                        
-            
+              
             jsPlumb.Defaults.Overlays = [
                 //[ "Arrow", { location:0.5 } ],  if you want to add an arrow in the connection          
             ];
@@ -228,18 +191,10 @@ jsPlumb.bind("ready", function() {
             jsPlumb.setMouseEventsEnabled(true);            
             
             {$js}
-            // three ways to do this - an id, a list of ids, or a selector (note the two different types of selectors shown here...anything that is valid jquery will work of course)
-            //jsPlumb.draggable("window1");
-            //jsPlumb.draggable(["window1", "window2"]);
-            //jsPlumb.draggable($("#window1"));
+  
             var divsWithWindowClass = jsPlumbDemo.getSelector(".window");
             jsPlumb.draggable(divsWithWindowClass);
-
-            // add the third example using the '.window' class.             
-            //jsPlumb.addEndpoint(divsWithWindowClass, exampleEndpoint3);
-
-            // each library uses different syntax for event stuff, so it is handed off
-            // to the draggableConnectorsDemo-<library>.js files.
+            
             jsPlumbDemo.attachBehaviour();          
         }
     };
@@ -292,7 +247,6 @@ $(document).ready( function() {
             //jsPlumb.detach(conn); 
     });
 });
-
 </script>
 
 {$html}
@@ -305,8 +259,8 @@ $(document).ready( function() {
             <div class="label">
                 <label for="name">Name</label>
             </div>      
-            <div class="formw">
-                <input type="text" name="name" id="name" size="40" />             
+            <div class="formw">                
+                <span id="name"></span>             
             </div>
         </div>
         <div class="row">
@@ -323,7 +277,7 @@ $(document).ready( function() {
                 <label for="name">Description</label>
             </div>      
             <div class="formw">
-                <textarea name="description" id="description" cols="40" rows="7"></textarea>
+                <span id="description"></span>                
             </div>
         </div>  
     </form>    

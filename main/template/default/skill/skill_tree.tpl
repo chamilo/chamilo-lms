@@ -49,7 +49,57 @@ jsPlumb.bind("ready", function() {
         }
     );
     
-    //On box click -(we use live instead of bind because we're creating divs on the fly )
+    //Add button
+    
+    $("#add_item_link").click(function() {        
+        $("#name").attr('value', '');
+        $("#description").attr('value', '');
+        
+        $("#parent_id option:selected").removeAttr('selected');
+        $("#gradebook_id option:selected").removeAttr('selected');       
+        
+        $("#dialog-form").dialog("open");                      
+    });    
+    
+    var name = $( "#name" ),
+    description = $( "#description" ),  
+    allFields = $( [] ).add( name ).add( description ), tips = $(".validateTips");    
+    
+    //Add button process
+    
+    $("#dialog-form").dialog({              
+        buttons: {
+            "Add" : function() {                
+                var bValid = true;
+                bValid = bValid && checkLength( name, "name", 1, 255 );
+                
+                if (bValid) {
+                    var params = $("#add_item").serialize();
+                          
+                    $.ajax({
+                        url: url+'&a=add&'+params,
+                        success:function(data) {
+                            
+                            //new window
+                            parent_id = $("#parent_id option:selected").attr('value');
+                            
+                        
+                            //Great stuff                         
+                            open_block('block_'+parent_id);
+                                                                     
+                            $("#dialog-form").dialog("close");                                      
+                        }                           
+                    });
+                }
+            },            
+        },              
+        close: function() {     
+            $("#name").attr('value', '');
+            $("#description").attr('value', '');                
+        }
+    });   
+    
+    //Clicking a box skill (we use live instead of bind because we're creating divs on the fly )
     $(".open_block").live('click', function() {        
         var id = $(this).attr('id');
         
@@ -107,6 +157,7 @@ jsPlumb.bind("ready", function() {
         console.log('hidden_parent : ' + hidden_parent);         
     });
     
+    //Skill title click  
     $(".edit_block").live('click',function() {        
         var my_id = $(this).attr('id');
         my_id = my_id.split('_')[2];
@@ -138,62 +189,8 @@ jsPlumb.bind("ready", function() {
         return false;
     });
         
-    //Filling select
-    $("#add_item_link").click(function() {        
-        
-        $("#name").attr('value', '');
-        $("#description").attr('value', '');
-        
-        $("#parent_id option:selected").removeAttr('selected');
-        $("#gradebook_id option:selected").removeAttr('selected');       
-        
-        $("#dialog-form").dialog("open");
-                      
-    });    
     
-    var name = $( "#name" ),
-    description = $( "#description" ),  
-    allFields = $( [] ).add( name ).add( description ), tips = $(".validateTips");    
-    
-    $("#dialog-form").dialog({              
-        buttons: {
-            "Add" : function() {                
-                var bValid = true;
-                bValid = bValid && checkLength( name, "name", 1, 255 );
-                var params = $("#add_item").serialize();          
-                      
-                $.ajax({
-                    url: url+'&a=add&'+params,
-                    success:function(data) {
-                             
-                        /*jsPlumb.connect({
-                            source : "block_2", 
-                            target : "block_1",
-                            overlays : overlays            
-                        });*/
-                        
-                        /*
-                        calEvent.title          = $("#name").val();
-                        calEvent.start          = calEvent.start;
-                        calEvent.end            = calEvent.end;
-                        calEvent.allDay         = calEvent.allDay;
-                        calEvent.description    = $("#content").val();                              
-                        calendar.fullCalendar('updateEvent', 
-                                calEvent,
-                                true // make the event "stick"
-                        );*/
-                        
-                        $("#dialog-form").dialog("close");                                      
-                    }                           
-                });
-            },            
-        },              
-        close: function() {     
-            $("#name").attr('value', '');
-            $("#description").attr('value', '');                
-        }
-    });    
- 
+    //
     $(".window").bind('click', function() {
         var id = $(this).attr('id');
         id = id.split('_')[1];        
@@ -249,74 +246,26 @@ jsPlumb.bind("ready", function() {
             jsPlumb.Defaults.Endpoint       = "Rectangle";
             jsPlumb.Defaults.Anchors        = ["TopCenter", "TopCenter"];
 
-            var connections = [];
-            var updateConnections = function(conn, remove) {
-                if (!remove) connections.push(conn);
-                else {
-                    var idx = -1;
-                    for (var i = 0; i < connections.length; i++) {
-                        if (connections[i] == conn) {
-                            idx = i; break;
-                        }
-                    }
-                    if (idx != -1) connections.splice(idx, 1);
-                }
-                if (connections.length > 0) {
-                    var s = "<span>current connections</span><br/><br/><table><tr><th>scope</th><th>source</th><th>target</th></tr>";
-                    for (var j = 0; j < connections.length; j++) {
-                        s = s + "<tr><td>" + connections[j].scope + "</td>" + "<td>" + connections[j].sourceId + "</td><td>" + connections[j].targetId + "</td></tr>";
-                    }
-                    jsPlumbDemo.showConnectionInfo(s);
-                } else 
-                    jsPlumbDemo.hideConnectionInfo();
-            };              
-
-            jsPlumb.bind("jsPlumbConnection", function(e) {
-                updateConnections(e.connection);
-            });
-            jsPlumb.bind("jsPlumbConnectionDetached", function(e) {
-                updateConnections(e.connection, true);
-            });
-
             
 
-            /**
-                first example endpoint.  it's a 25x21 rectangle (the size is provided in the 'style' arg to the Endpoint), and it's both a source
-                and target.  the 'scope' of this Endpoint is 'exampleConnection', meaning any connection starting from this Endpoint is of type
-                'exampleConnection' and can only be dropped on an Endpoint target that declares 'exampleEndpoint' as its drop scope, and also that
-                only 'exampleConnection' types can be dropped here.
-
-                the connection style for this endpoint is a Bezier curve (we didn't provide one, so we use the default), with a lineWidth of
-                5 pixels, and a gradient.
-
-                note the use of the '$.extend' function to setup generic connection types.  this will save you a lot of typing, and probably
-                errors.
-
-            */
-                // this is the paint style for the connecting lines..
-                        
+            jsPlumb.bind("jsPlumbConnection", function(e) {
+                //updateConnections(e.connection);
+            });
+            jsPlumb.bind("jsPlumbConnectionDetached", function(e) {
+                //updateConnections(e.connection, true);
+            });                        
             
             jsPlumb.Defaults.Overlays = [
                 //[ "Arrow", { location:0.5 } ],  if you want to add an arrow in the connection          
             ];
-            
-            
                            
             jsPlumb.setMouseEventsEnabled(true);
             
             {$js}
-            // three ways to do this - an id, a list of ids, or a selector (note the two different types of selectors shown here...anything that is valid jquery will work of course)
-            //jsPlumb.draggable("window1");
-            //jsPlumb.draggable(["window1", "window2"]);
-            //jsPlumb.draggable($("#window1"));
+
             var divsWithWindowClass = jsPlumbDemo.getSelector(".window");
             jsPlumb.draggable(divsWithWindowClass);
 
-            // add the third example using the '.window' class.             
-            //jsPlumb.addEndpoint(divsWithWindowClass, exampleEndpoint3);
-
-            // each library uses different syntax for event stuff, so it is handed off
-            // to the draggableConnectorsDemo-<library>.js files.
             jsPlumbDemo.attachBehaviour();          
         }
     };
@@ -344,15 +293,6 @@ $(document).ready( function() {
 });
 
 ;(function() {
-    
-    jsPlumbDemo.showConnectionInfo = function(s) {
-        $("#list").html(s);
-        $("#list").fadeIn({ complete:function() { jsPlumb.repaintEverything(); }});
-    };
-    
-    jsPlumbDemo.hideConnectionInfo = function() {
-        $("#list").fadeOut({ complete:function() { jsPlumb.repaintEverything(); }});
-    };
     
     jsPlumbDemo.getSelector = function(spec) {
         return $(spec);
@@ -389,6 +329,7 @@ $(document).ready( function() {
 
 <div id="dialog-form" style="display:none;">
     
+    <p class="validateTips"></p>
     <form id="add_item" name="form">
         <input type="hidden" name="id" id="id"/>
         <div class="row">

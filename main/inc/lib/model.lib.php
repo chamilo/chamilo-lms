@@ -13,6 +13,8 @@ class Model {
     
     var $table;
     var $columns;
+    var $required;
+    
     // var $pk; some day this will be implemented
     
 	public function __construct() {        
@@ -102,6 +104,20 @@ class Model {
 	 */
 	public function save($params, $show_query = false) {
         $params = $this->clean_parameters($params);
+        
+        
+        if (!empty($this->required)) {
+            $require_ok = true;     
+            $kay_params = array_keys($params);
+            foreach ($this->required as $field) {
+                if (!in_array($field, $kay_params)) {
+                    $require_ok = false;
+                }
+            }
+            if (!$require_ok) {
+                return false;                
+            }
+        }
         
         if (in_array('created_at', $this->columns)) {        	
             $params['created_at'] = api_get_utc_datetime();

@@ -272,7 +272,8 @@ class SkillRelUser extends Model {
    
 
 class Skill extends Model {    
-    var $columns = array('id', 'name','description', 'access_url_id');
+    var $columns  = array('id', 'name','description', 'access_url_id');
+    var $required = array('name');
     
     public function __construct() {
         $this->table                      = Database::get_main_table(TABLE_MAIN_SKILL);
@@ -384,6 +385,7 @@ class Skill extends Model {
         $skill_rel_gradebook = new SkillRelGradebook();
         
         //Saving name, description
+        
         $skill_id = $this->save($params);
         if ($skill_id) {
             //Saving skill_rel_skill (parent_id, relation_type)

@@ -1495,13 +1495,7 @@ function get_contact_registration_form() {
                     </select>
             </div>
     </div>
-    <div class="row">
-            <div class="label">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</div>
-            <div class="formw">
-                    <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked />'.get_lang('Yes').'
-                    <input type="radio" name="financial_decision" id="financial_decision2" value="0" />'.get_lang('No').'
-            </div>
-    </div>
+    
     <div class="row">
             <div class="label"><span class="form_required">*</span>'.get_lang('CompanyCountry').'</div>
             <div class="formw">'.get_countries_list_from_array(true).'</div>
@@ -1532,6 +1526,15 @@ function get_contact_registration_form() {
                     </select>
             </div>
     </div>
+    
+    <div class="row">
+            <div class="label">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</div>
+            <div class="formw">
+                    <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked />'.get_lang('Yes').'
+                    <input type="radio" name="financial_decision" id="financial_decision2" value="0" />'.get_lang('No').'
+            </div>
+    </div>
+    <div class="clear"></div>
     <div class="row">
             <div class="label">&nbsp;</div>
             <div class="formw"><button type="button" class="save" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" >'.get_lang('SendInformation').'</button></div>

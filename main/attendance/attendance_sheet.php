@@ -286,7 +286,10 @@ if (api_is_allowed_to_edit(null, true)) {
         </div>  
     </div>
     <div class="clear"></div>
-    <div style="margin-top:20px;"><?php if (!$is_locked_attendance || api_is_platform_admin()) { ?><button type="submit" class="save"><?php echo get_lang('Save') ?></button><?php } ?></div>
+    <div style="margin-top:20px;">
+        <?php if (!$is_locked_attendance || api_is_platform_admin()) { ?>
+            <button type="submit" class="save"><?php echo get_lang('Save') ?></button><?php } ?>
+    </div>
     </form> 
     <?php 
     } else {  
@@ -301,36 +304,50 @@ if (api_is_allowed_to_edit(null, true)) {
             <table width="250px;">
             <tr>
                 <td><?php echo get_lang('ToAttend').': ' ?></td>
-                <td><center><div class="attendance-faults-bar" style="background-color:<?php echo (!empty($faults['color_bar'])?$faults['color_bar']:'none') ?>"><?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)' ?></div></center></td>
+                <td><center><div class="attendance-faults-bar" style="background-color:<?php echo (!empty($faults['color_bar'])?$faults['color_bar']:'none') ?>">
+                    <?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)' ?></div></center>
+                </td>
             </tr>
             </table>
         </div>
     <?php } ?>
-    <div>
-    <br />
-    <center>
-        <table class="data_table">
-                <tr class="row_odd" >   
-                    <th><?php echo get_lang('AttendanceCalendar')?></th>
-                    <th><?php echo get_lang('Attendance')?></th>                
-                </tr>
-                <?php 
-                
-                if (!empty($users_presence)) {
-                    $i = 0;
-                    foreach($users_presence[$user_id] as $presence) { 
-                        $class = '';
-                        if ($i%2==0) {$class = 'row_even';}
-                        else {$class = 'row_odd';}  
-                    ?>
-                    <tr class="<?php echo $class ?>"><td><?php echo Display::return_icon('lp_calendar_event.png',get_lang('DateTime')).' '.$presence['date_time'] ?></td><td><center><?php echo $presence['presence']?Display::return_icon('checkbox_on.gif',get_lang('Presence')):Display::return_icon('checkbox_off.gif',get_lang('Presence')) ?></center></td></tr>                  
-                <?php } 
-                } else { ?>
-                <tr><td colspan="2"><center><?php echo get_lang('YouDoNotHaveDoneAttendances')?></center></td></tr> 
-                <?php }
-                
+    <table class="data_table">
+            <tr class="row_odd" >
+                <th><?php echo get_lang('Attendance')?></th>          
+                <th><?php echo get_lang('AttendanceCalendar')?></th>                         
+            </tr>
+            <?php 
+            
+            if (!empty($users_presence)) {
+                $i = 0;
+                foreach($users_presence[$user_id] as $presence) { 
+                    $class = '';
+                    if ($i%2==0) {$class = 'row_even';}
+                    else {$class = 'row_odd';}  
                 ?>
-        </table>            
-    </center>
-    </div>
+                <tr class="<?php echo $class ?>">
+                     <td>
+                        <center>
+                        <?php echo $presence['presence']?Display::return_icon('checkbox_on.gif',get_lang('Presence')):Display::return_icon('checkbox_off.gif',get_lang('Presence')) ?>
+                        </center>
+                    </td>
+                    <td>
+                        <center>
+                        <?php echo Display::return_icon('lp_calendar_event.png',get_lang('DateTime')).' '.$presence['date_time'] ?>
+                        </center>
+                                                
+                    </td>
+                        
+                   
+                </tr>                  
+            <?php } 
+            } else { ?>
+                <tr><td colspan="2">
+                    <center><?php echo get_lang('YouDoNotHaveDoneAttendances')?></center></td>
+                </tr> 
+            <?php }
+            
+            ?>
+    </table>            
+
 <?php } ?>

@@ -235,9 +235,10 @@
 				$user_id = intval($student_id);
 			} else {
 				$user_id = api_get_user_id();	
-			}						
-			$data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, $user_id);
-			$data['faults'] = $attendance->get_faults_of_user($user_id, $attendance_id);
+			}            
+			$data['users_presence']  = $attendance->get_users_attendance_sheet($attendance_id, $user_id);            
+			$data['faults']          = $attendance->get_faults_of_user($user_id, $attendance_id);
+            
 			$data['user_id'] = $user_id;			
 		}
 				

@@ -67,14 +67,16 @@ switch ($action) {
         $skills = $skill->get_children($id);
         $return = array();
         foreach($skills as $skill) {
-            $return [$skill['data']['id']] = array('name' => $skill['data']['name'], 'id'=>$skill['data']['id']);
+            $return [$skill['data']['id']] = array(
+                                                    'id'    => $skill['data']['id'],
+                                                    'name'  => $skill['data']['name'], 
+                                                    'passed'=> $skill['data']['passed']);
         }
         echo json_encode($return);
         break;
     case 'load_direct_parents':
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-        $skills = $skill->get_direct_parents($id);
-        
+        $skills = $skill->get_direct_parents($id);        
         $return = array();
         foreach($skills as $skill) {
             $return [$skill['data']['id']] = array (

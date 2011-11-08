@@ -1,3 +1,5 @@
+// Arrow settings
+
     var exampleDropOptions = {
         tolerance:'touch',
         hoverClass:'dropHover',
@@ -16,7 +18,7 @@
     };
     
     
-    //Settings when editing stuff
+    //Admin arrows
     var edit_arrow_color = '#ccc';        
         
     var editEndpoint = {  
@@ -42,8 +44,51 @@
     };
     
     
+    //Student arrows    
     
-
+    //If user does not completed the skill
+    var default_arrow_color = '#ccc';     //gray  
+    var defaultEndpoint = {
+        connector:[ "Flowchart", { stub:28 } ],
+        anchors: ['BottomCenter','TopCenter'],            
+        endpoint:"Rectangle",
+        paintStyle:{ width:1, height:1, fillStyle:default_arrow_color },
+        isSource:false,
+        scope:'blue rectangle',
+        maxConnections:10,
+        connectorStyle : {
+            gradient:{ stops:[[0, default_arrow_color], [0.5, default_arrow_color], [1, default_arrow_color]] },
+            lineWidth:5,
+            strokeStyle:default_arrow_color
+        },
+        isTarget:false,          
+        setDraggableByDefault : false,      
+    };            
+    
+    // If user completed the skill 
+    var done_arrow_color = '#73982C'; //green   
+    var doneEndpoint = {                
+        connector:[ "Flowchart", { stub:28 } ],
+        anchors: ['BottomCenter','TopCenter'],    
+        endpoint:"Rectangle",
+        paintStyle:{ width:1, height:1, fillStyle:done_arrow_color},
+        isSource:false,
+        scope:'blue rectangle',
+        maxConnections:10,
+        connectorStyle : {
+            gradient:{ stops:[[0, done_arrow_color], [0.5, done_arrow_color], [1, done_arrow_color]] },
+            lineWidth:5,
+            strokeStyle:done_arrow_color
+        },
+        isTarget:false,
+        setDraggableByDefault : false,                         
+    };
+    
+    
+        
+    
+    //Functions   
+    
 
     /* Clean window block classes*/
     function cleanclass(obj) {
@@ -51,7 +96,8 @@
         obj.removeClass('second_window');
         obj.removeClass('third_window');
     }
-
+    
+    /* When clicking the red block */
     function open_parent(parent_id, id) {   
         console.log("open_parent call : id " + id + " parent_id:" + parent_id);                
         var numeric_parent_id = parent_id.split('_')[1];
@@ -59,7 +105,8 @@
         load_parent(numeric_parent_id, numeric_id);
     }
     
-    //open block function
+    /* When clicking a children block */
+   
     function open_block(id) {
         console.log("open_block id : " + id);      
         var numeric_id = id.split('_')[1];  
@@ -96,6 +143,7 @@
         load_children(numeric_id, top_value);   
     }
     
+    /* Loads parent blocks */
     function load_parent(parent_id, id) {
         console.log("load_parent call : id " + id + " parent_id:" + parent_id);
         var ix= 0;         
@@ -125,8 +173,7 @@
                         console.log('setting NO--- hidden_parent ');
                     }
                     ix++;   
-                });
-                
+                });                
             }
          });
     }
@@ -143,14 +190,21 @@
                     //Display::url($skill['name'], '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block'))
                     item.name = '<a href="#" class="edit_block" id="edit_block_'+item.id+'">'+item.name+'</a>'; 
                     
-                    $('body').append('<div id="block_'+item.id+ '" class="third_window open_block window " >'+item.name+'</div>');                    
+                                        
+                    var status_class = ' ';
+                    my_edit_point = editEndpoint;
                     
-                    var es = prepare("block_" + item.id,  editEndpoint);
-                    var e2 = prepare("block_" + my_id,  editEndpoint);
+                    if (item.passed == 1) {
+                        my_edit_point = doneEndpoint;
+                        status_class = 'done_window';
+                    }
+                    
+                    $('body').append('<div id="block_'+item.id+ '" class="third_window open_block window '+status_class+'" >'+item.name+'</div>');
+                    
+                    var es = prepare("block_" + item.id,  my_edit_point);
+                    var e2 = prepare("block_" + my_id,  my_edit_point);
                      
-                    jsPlumb.connect({
-                            source: es, target:e2
-                    });                    
+                    jsPlumb.connect({source: es, target:e2});                    
                     jsPlumb.animate("block_" + item.id, {
                         left: left_value, top : top_value
                         }, { duration:duration_value});
@@ -170,4 +224,3 @@
             return true;
         }
     }
-    

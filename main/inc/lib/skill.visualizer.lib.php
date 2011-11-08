@@ -71,7 +71,8 @@
             $class = 'edit_window';
             $end_point = 'editEndpoint';            
         } else {
-            if ($skill['done_by_user'] == 1) {
+            
+            if ($skill['done_by_user'] == 1) {                
                 $class = 'done_window';
                 $end_point = 'doneEndpoint';                
             } else {

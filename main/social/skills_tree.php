@@ -15,7 +15,7 @@ require_once api_get_path(LIBRARY_PATH).'skill.visualizer.lib.php';
 
 $this_section = SECTION_MYPROFILE;
 
-//api_protect_admin_script();
+api_block_anonymous_users();
 
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jquery_ui_js(true);
@@ -23,10 +23,9 @@ $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 $htmlHeadXtra[] = api_get_js('skills.js');
 
 $skill  = new Skill();
-$skills = $skill->get_all(true);
-$type   = 'edit'; //edit
+$type   = 'read'; //edit
 
-$tree   = $skill->get_skills_tree(null, true);
+$tree   = $skill->get_skills_tree(api_get_user_id(), true);
 $skill_visualizer = new SkillVisualizer($tree, $type);
 
 $html = $skill_visualizer->return_html();
@@ -39,8 +38,7 @@ $tpl->assign('html', $html);
 $tpl->assign('skill_visualizer', $skill_visualizer);
 $tpl->assign('js', $skill_visualizer->return_js());
 
-//
+
 $content = $tpl->fetch('default/skill/skill_tree_student.tpl');
 $tpl->assign('content', $content);
 $tpl->display_no_layout_template();
-  

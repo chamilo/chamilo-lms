@@ -164,6 +164,9 @@ jsPlumb.bind("ready", function() {
          
             
 ;(function() {
+    
+    
+    
          
     prepare = function(elId, endpoint) {
         jsPlumbDemo.initHover(elId);
@@ -200,35 +203,6 @@ jsPlumb.bind("ready", function() {
             jsPlumb.Defaults.Endpoint       = "Rectangle";
             jsPlumb.Defaults.Anchors        = ["TopCenter", "TopCenter"];
 
-            var connections = [];
-            var updateConnections = function(conn, remove) {
-                if (!remove) connections.push(conn);
-                else {
-                    var idx = -1;
-                    for (var i = 0; i < connections.length; i++) {
-                        if (connections[i] == conn) {
-                            idx = i; break;
-                        }
-                    }
-                    if (idx != -1) connections.splice(idx, 1);
-                }
-                if (connections.length > 0) {
-                    var s = "<span>current connections</span><br/><br/><table><tr><th>scope</th><th>source</th><th>target</th></tr>";
-                    for (var j = 0; j < connections.length; j++) {
-                        s = s + "<tr><td>" + connections[j].scope + "</td>" + "<td>" + connections[j].sourceId + "</td><td>" + connections[j].targetId + "</td></tr>";
-                    }
-                    jsPlumbDemo.showConnectionInfo(s);
-                } else 
-                    jsPlumbDemo.hideConnectionInfo();
-            };              
-
-            jsPlumb.bind("jsPlumbConnection", function(e) {
-                updateConnections(e.connection);
-            });
-            jsPlumb.bind("jsPlumbConnectionDetached", function(e) {
-                updateConnections(e.connection, true);
-            });
-
             
 
             /**
@@ -250,46 +224,8 @@ jsPlumb.bind("ready", function() {
             jsPlumb.Defaults.Overlays = [
                 //[ "Arrow", { location:0.5 } ],  if you want to add an arrow in the connection          
             ];
-            
-            
                            
             jsPlumb.setMouseEventsEnabled(true);            
-            
-            //Default
-            var default_arrow_color = '#ccc';       
-            var defaultEndpoint = {
-                anchors: ['BottomCenter','TopCenter'],            
-                endpoint:"Rectangle",
-                paintStyle:{ width:1, height:1, fillStyle:default_arrow_color },
-                isSource:false,
-                scope:'blue rectangle',
-                maxConnections:10,
-                connectorStyle : {
-                    gradient:{ stops:[[0, default_arrow_color], [0.5, default_arrow_color], [1, default_arrow_color]] },
-                    lineWidth:5,
-                    strokeStyle:default_arrow_color
-                },
-                isTarget:false,          
-                setDraggableByDefault : false,      
-            };            
-            
-            // Done end point 
-            var done_arrow_color = '#73982C';   
-            var doneEndpoint = {                
-                endpoint:"Rectangle",
-                paintStyle:{ width:1, height:1, fillStyle:done_arrow_color},
-                isSource:false,
-                scope:'blue rectangle',
-                maxConnections:10,
-                connectorStyle : {
-                    gradient:{ stops:[[0, done_arrow_color], [0.5, done_arrow_color], [1, done_arrow_color]] },
-                    lineWidth:5,
-                    strokeStyle:done_arrow_color
-                },
-                isTarget:false,
-                setDraggableByDefault : false,                         
-            };
-
             
             {$js}
             // three ways to do this - an id, a list of ids, or a selector (note the two different types of selectors shown here...anything that is valid jquery will work of course)
@@ -309,26 +245,6 @@ jsPlumb.bind("ready", function() {
     };
 })();
 
-$(document).ready( function() {     
-    //When creating a connection see
-    //http://jsplumb.org/apidocs/files/jsPlumb-1-3-2-all-js.html#bind 
-    jsPlumb.bind("jsPlumbConnection", function(conn) {
-        //alert("Connection created " + conn.sourceId + " to " + conn.targetId + " ");
-            //jsPlumb.detach(conn); 
-    });
-    //When double clicking a connection
-    jsPlumb.bind("click", function(conn) {        
-        if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
-            jsPlumb.detach(conn); 
-    });
-    
-     //When double clicking a connection
-    jsPlumb.bind("click", function(endpoint) {
-        if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
-            jsPlumb.detach(conn); 
-    });
-    $(".chzn-select").chosen();
-});
 
 ;(function() {
     
@@ -367,6 +283,16 @@ $(document).ready( function() {
     };
 })();
 
+
+$(document).ready( function() {     
+    //When creating a connection see
+    //http://jsplumb.org/apidocs/files/jsPlumb-1-3-2-all-js.html#bind 
+    jsPlumb.bind("jsPlumbConnection", function(conn) {
+        //alert("Connection created " + conn.sourceId + " to " + conn.targetId + " ");
+            //jsPlumb.detach(conn); 
+    });
+});
+
 </script>
 
 {$html}
@@ -382,26 +308,14 @@ $(document).ready( function() {
             <div class="formw">
                 <input type="text" name="name" id="name" size="40" />             
             </div>
-        </div>        
-        <div class="row">
-            <div class="label">
-                <label for="name">Parent</label>
-            </div>      
-            <div class="formw">
-                <select id="parent_id" name="parent_id" />
-                </select>                  
-            </div>
-        </div>                
+        </div>
         <div class="row">
             <div class="label">
                 <label for="name">Gradebook</label>
             </div>      
             <div class="formw">
                 <select id="gradebook_id" name="gradebook_id[]" multiple="multiple"/>
-                </select>             
-                <span class="help-block">
-                Gradebook Description
-                </span>           
+                </select>
             </div>
         </div>
         <div class="row">

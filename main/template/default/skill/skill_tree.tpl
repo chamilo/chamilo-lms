@@ -19,8 +19,6 @@ var block_size              = {$skill_visualizer->block_size};
 //Setting the parent by default 
 var parents = ['block_1'];
 
-
-
 jsPlumb.bind("ready", function() {
     
     //Open dialog
@@ -304,43 +302,7 @@ jsPlumb.bind("ready", function() {
             
             
                            
-            jsPlumb.setMouseEventsEnabled(true);            
-            
-            //Default
-            var default_arrow_color = '#ccc';       
-            var defaultEndpoint = {
-                anchors: ['BottomCenter','TopCenter'],            
-                endpoint:"Rectangle",
-                paintStyle:{ width:1, height:1, fillStyle:default_arrow_color },
-                isSource:false,
-                scope:'blue rectangle',
-                maxConnections:10,
-                connectorStyle : {
-                    gradient:{ stops:[[0, default_arrow_color], [0.5, default_arrow_color], [1, default_arrow_color]] },
-                    lineWidth:5,
-                    strokeStyle:default_arrow_color
-                },
-                isTarget:false,          
-                setDraggableByDefault : false,      
-            };            
-            
-            // Done end point 
-            var done_arrow_color = '#73982C';   
-            var doneEndpoint = {                
-                endpoint:"Rectangle",
-                paintStyle:{ width:1, height:1, fillStyle:done_arrow_color},
-                isSource:false,
-                scope:'blue rectangle',
-                maxConnections:10,
-                connectorStyle : {
-                    gradient:{ stops:[[0, done_arrow_color], [0.5, done_arrow_color], [1, done_arrow_color]] },
-                    lineWidth:5,
-                    strokeStyle:done_arrow_color
-                },
-                isTarget:false,
-                setDraggableByDefault : false,                         
-            };
-
+            jsPlumb.setMouseEventsEnabled(true);
             
             {$js}
             // three ways to do this - an id, a list of ids, or a selector (note the two different types of selectors shown here...anything that is valid jquery will work of course)

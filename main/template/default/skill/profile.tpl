@@ -13,6 +13,70 @@ $(document).ready( function() {
         filter_selected: true,
         newel: true
     });
+    
+    
+    //Open dialog
+    $("#dialog-form").dialog({
+        autoOpen: false,
+        modal   : true, 
+        width   : 550, 
+        height  : 350,
+    });
+    
+    var name = $( "#name" ),
+    description = $( "#description" ),  
+    allFields = $( [] ).add( name ).add( description ), tips = $(".validateTips");    
+        
+    
+    $("#dialog-form").dialog({              
+        buttons: {
+            "Add" : function() {                
+                var bValid = true;
+                bValid = bValid && checkLength( name, "name", 1, 255 );
+                var params = $("#save_profile_form").serialize();          
+                      
+                $.ajax({
+                    url: '{$url}?a=save_profile&'+params,
+                    success:function(data) {
+                             
+                        /*jsPlumb.connect({
+                            source : "block_2", 
+                            target : "block_1",
+                            overlays : overlays            
+                        });*/
+                        
+                        /*
+                        calEvent.title          = $("#name").val();
+                        calEvent.start          = calEvent.start;
+                        calEvent.end            = calEvent.end;
+                        calEvent.allDay         = calEvent.allDay;
+                        calEvent.description    = $("#content").val();                              
+                        calendar.fullCalendar('updateEvent', 
+                                calEvent,
+                                true // make the event "stick"
+                        );*/
+                        
+                        $("#dialog-form").dialog("close");                                      
+                    }                           
+                });
+            },            
+        },              
+        close: function() {     
+            $("#name").attr('value', '');
+            $("#description").attr('value', '');                
+        }
+    });
+
+    $("#add_profile").click(function() { 
+        
+        $("#name").attr('value', '');
+        $("#description").attr('value', '');
+            
+        $("#dialog-form").dialog("open");
+                      
+    });  
+    
+    
 });
 
 function check_skills() {
@@ -51,11 +115,15 @@ function checkLength( o, n, min, max ) {
     } else {
         return true;
     }
-}
+}    
 </script>
+
+<h1>{"SearchSkills"|get_lang}</h1>
+
 {$form}
 
 {if !empty($search_skill_list) }
+    <h3>{"Skills"|get_lang}</h3>
      <ul class="holder">
         {foreach $search_skill_list as $search_skill_id}        
             <li class="bit-box">
@@ -64,48 +132,57 @@ function checkLength( o, n, min, max ) {
             </li>        
         {/foreach}
     </ul>
-    <a class="a_button gray small" href="?a=save_profile"> {"SaveThisSearch"|get_lang}</a>
+    <a id="add_profile" class="a_button gray small" href="#"> {"SaveThisSearch"|get_lang}</a>
 {/if}
 
 
-{if !empty($user_list) }
-    {foreach $user_list as $user}
-        <div class="ui-widget">
-            <div class="ui-widget-header">
-                {$user['user'].username}
-            </div>
-            <div class="ui-widget-content ">
-                
-                <img src="{$user['user'].avatar_small}" />
-                {$user['user'].complete_name}
-                
-                <h3>Skills</h3>
-                <ul>    
-                    {$user.total_found_skills} / {$total_search_skills}                
-                {foreach $user['skills'] as $skill_data}                 
-                    <li>
-                        <span class="label_tag notice">{$skill_list[$skill_data.skill_id].name}</span>
-                        {if $skill_data.found}
-                             * I have this skill * 
-                        {/if} 
-                        
-                    </li>                    
-                {/foreach}
-                </ul>
-            </div>    
-        </div>  
-    {/foreach}
+{if !empty($profiles) }
+    <h3>{"SkillProfiles"|get_lang}</h3>
+    <ul class="holder">
+        {foreach $profiles as $profile}        
+            <li class="bit-box">
+                <a href="?a=load_profile&id={$profile.id}">{$profile.name}</a>                
+            </li>        
+        {/foreach}
+    </ul>    
+{/if}
+
+
+{if !empty($order_user_list) }
+    {foreach $order_user_list as $count => $user_list}
+        <h2> {"Matches"|get_lang} {$count}/{$total_search_skills} </h2>
+        {foreach $user_list as $user}
+            <div class="ui-widget">
+                <div class="ui-widget-header">                    
+                    <h3>
+                        <img src="{$user['user'].avatar_small}" /> {$user['user'].complete_name} ({$user['user'].username})
+                    </h3>
+                </div>
+                <div class="ui-widget-content ">
+                    <h4>Skills</h4>
+                    <ul>    
+                        {$user.total_found_skills} / {$total_search_skills}                
+                    {foreach $user['skills'] as $skill_data}                 
+                        <li>
+                            <span class="label_tag notice">{$skill_list[$skill_data.skill_id].name}</span>
+                            {if $skill_data.found}
+                                 * I have this skill * 
+                            {/if} 
+                            
+                        </li>                    
+                    {/foreach}
+                    </ul>
+                </div>    
+            </div>  
+        {/foreach}
+    {/foreach}        
 {else}
     {"No results"|get_lang}
 {/if}
 
 
-    
-
-
 <div id="dialog-form" style="display:none;">    
-    <form id="add_item" name="form">
-        <input type="hidden" name="id" id="id"/>
+    <form id="save_profile_form" name="form">        
         <div class="row">
             <div class="label">
                 <label for="name">Name</label>
@@ -114,27 +191,6 @@ function checkLength( o, n, min, max ) {
                 <input type="text" name="name" id="name" size="40" />             
             </div>
         </div>        
-        <div class="row">
-            <div class="label">
-                <label for="name">Parent</label>
-            </div>      
-            <div class="formw">
-                <select id="parent_id" name="parent_id" />
-                </select>                  
-            </div>
-        </div>                
-        <div class="row">
-            <div class="label">
-                <label for="name">Gradebook</label>
-            </div>      
-            <div class="formw">
-                <select id="gradebook_id" name="gradebook_id[]" multiple="multiple"/>
-                </select>             
-                <span class="help-block">
-                Gradebook Description
-                </span>           
-            </div>
-        </div>
         <div class="row">
             <div class="label">
                 <label for="name">Description</label>

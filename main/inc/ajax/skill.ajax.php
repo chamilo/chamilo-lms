@@ -77,20 +77,13 @@ switch ($action) {
         
         $return = array();
         foreach($skills as $skill) {
-            $return [$skill['data']['id']] = array(
+            $return [$skill['data']['id']] = array (
+                                                'id'        => $skill['data']['id'],
                                                 'parent_id' => $skill['data']['parent_id'],
-                                                'name' => $skill['data']['name'], 
-                                                'id'   => $skill['data']['id']);
+                                                'name'      => $skill['data']['name']
+                                                );
         }
         echo json_encode($return);        
-        break;    
-    case 'skill_exists':
-        $skill_data = $skill->get($_REQUEST['skill_id']);        
-        if (!empty($skill_data)) {
-            echo 1;
-        } else {
-            echo 0;
-        }
         break;
     case 'remove_skill':
         if (!empty($_REQUEST['skill_id']) && !empty($_REQUEST['gradebook_id'])) {            
@@ -102,7 +95,26 @@ switch ($action) {
         } else {
             echo 0;
         }
-        break;    
+        break; 
+    case 'save_profile':
+        $skill_profile = new SkillProfile();
+        $params = $_REQUEST;
+        $params['skills'] = isset($_SESSION['skills']) ? $_SESSION['skills'] : null; 
+        $skill_data = $skill_profile->save($params);        
+        if (!empty($skill_data)) {
+            echo 1;
+        } else {
+            echo 0;
+        }
+        break;        
+    case 'skill_exists':
+        $skill_data = $skill->get($_REQUEST['skill_id']);        
+        if (!empty($skill_data)) {
+            echo 1;
+        } else {
+            echo 0;
+        }
+        break;   
     default:
         echo '';
 }

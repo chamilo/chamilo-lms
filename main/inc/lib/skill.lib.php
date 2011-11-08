@@ -21,13 +21,51 @@ class SkillProfile extends Model {
     var $columns = array('id', 'name','description');
     public function __construct() {
         $this->table = Database::get_main_table(TABLE_MAIN_SKILL_PROFILE);
+        $this->table_rel_profile = Database::get_main_table(TABLE_MAIN_SKILL_REL_PROFILE);
     }
+    
+    public function get_profiles() {
+        $sql = "SELECT * FROM $this->table p INNER JOIN $this->table_rel_profile sp ON(p.id = sp.profile_id) ";
+        
+        $result = Database::query($sql);
+        $profiles  = Database::store_result($result,'ASSOC');
+        return $profiles;
+    }
+    
+    public function save($params) {
+        if (!empty($params)) {
+           $profile_id = parent::save($params);
+            if ($profile_id) {
+                $skill_rel_profile = new SkillRelProfile();
+                if (isset($params['skills'])) {
+                    foreach($params['skills'] as $skill_id) {
+                        $attributes = array('skill_id' => $skill_id, 'profile_id'=>$profile_id);
+                        $skill_rel_profile->save($attributes);                        
+                    }
+                }
+                return $profile_id;                
+            }             
+        }
+        return false;
+       
+    } 
 }
 
 class SkillRelProfile extends Model {
     var $columns = array('id', 'skill_id', 'profile_id');
     public function __construct() {
         $this->table = Database::get_main_table(TABLE_MAIN_SKILL_REL_PROFILE);
+    }
+    
+    public function get_skills_by_profile($profile_id) {
+        $skills =  $this->get_all(array('where'=>array('profile_id = ? ' => $profile_id)));
+        $return_array = array();
+        if (!empty($skills)) {
+            foreach($skills as $skill_data) {
+                $return_array[] = $skill_data['skill_id'];
+            }
+        }
+        return $return_array;        
     }
 }
 
@@ -201,13 +239,16 @@ class SkillRelUser extends Model {
     }
     
     public function get_user_by_skills($skill_list) {
-        $skill_list = array_map('intval', $skill_list);
-        $skill_list = implode("', '", $skill_list);
-        
-        $sql = "SELECT user_id FROM {$this->table}  WHERE skill_id IN ('$skill_list') ";
-        
-        $result = Database::query($sql); 
-        $users  = Database::store_result($result, 'ASSOC');
+        $users = array();
+        if (!empty($skill_list)) {
+            $skill_list = array_map('intval', $skill_list);
+            $skill_list = implode("', '", $skill_list);
+            
+            $sql = "SELECT user_id FROM {$this->table}  WHERE skill_id IN ('$skill_list') ";
+            
+            $result = Database::query($sql); 
+            $users  = Database::store_result($result, 'ASSOC');
+        }
         return $users;
     }
     

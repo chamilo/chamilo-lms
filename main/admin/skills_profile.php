@@ -17,6 +17,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+
 $htmlHeadXtra[] = api_get_jquery_ui_js();
 
 $skill  = new Skill();
@@ -32,6 +33,10 @@ $form = new FormValidator('profile_search');
 $form->addElement('select', 'skills', null, null, array('id'=>'skills'));
 $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="a_button blue "');
 
+
+$profiles = $skill_profile->get_all();
+
+$tpl->assign('profiles', $profiles);
 
 
 $total_skills_to_search = array();
@@ -85,35 +90,16 @@ if (!empty($users)) {
     foreach($user_list as $user_id => $user_data) {
         $ordered_user_list[$user_data['total_found_skills']][] = $user_data;
     }
-    //sort($ordered_user_list);
-    var_dump($ordered_user_list);
-    
+    if (!empty($ordered_user_list)) {
+        asort($ordered_user_list);
+    }
 }
 
 //var_dump($user_list);
 
-$tpl->assign('user_list', $user_list);
+//$tpl->assign('user_list', $user_list);
+$tpl->assign('order_user_list', $ordered_user_list);
 $tpl->assign('total_search_skills', $count_skills);
-
-
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
-$id     = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
-
-switch ($action) {
-    case 'remove_skill':
-        $new_skill = array();      
-        foreach($skills as $skill_id) {
-            if ($id != $skill_id) {
-                $new_skill[] = $skill_id;
-            }            
-        }  
-        $skills = $_SESSION['skills'] = $new_skill;
-        break;
-    
-    case 'save_profile':
-        
-        break;
-}
 
 if (!empty($skills)) {
     $counter = 0;
@@ -133,6 +119,29 @@ $total_skills_to_search = $skill->get_skills_info($total_skills_to_search);
 $skill_list = array();
 foreach($total_skills_to_search as &$skill_info) {
     $skill_list[$skill_info['id']] = $skill_info;        
+}
+
+
+
+$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
+$id     = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
+
+switch ($action) {
+    case 'remove_skill':
+        $new_skill = array();      
+        foreach($skills as $skill_id) {
+            if ($id != $skill_id) {
+                $new_skill[] = $skill_id;
+            }            
+        }  
+        $skills = $_SESSION['skills'] = $new_skill;
+        break;
+    
+    case 'load_profile':
+        $skill_profile = new SkillRelProfile();
+        $skills = $skill_profile->get_skills_by_profile($id);        
+        
+        break;
 }
 
 

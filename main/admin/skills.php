@@ -19,6 +19,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
+$htmlHeadXtra[] = api_get_js('skills.js');
 
 //Display::display_header();
 //Display::display_reduced_header();

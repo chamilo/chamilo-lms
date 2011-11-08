@@ -19,7 +19,12 @@ var block_size              = {$skill_visualizer->block_size};
 //Setting the parent by default 
 var parents = ['block_1'];
 
-
+/* Clean window block classes*/
+function cleanclass(obj) {
+    obj.removeClass('first_window');
+    obj.removeClass('second_window');
+    obj.removeClass('third_window');
+}
 
 jsPlumb.bind("ready", function() {
     
@@ -30,26 +35,7 @@ jsPlumb.bind("ready", function() {
         width   : 550, 
         height  : 480,
     });
-    
-    //Filling skills select
-    $.getJSON( "{$url}&a=get_skills", {},     
-        function(data) {
-            $.each(data, function(n, parent) {
-                // add a new option with the JSON-specified value and text
-                $("<option />").attr("value", parent.id).text(parent.name).appendTo("#parent_id");
-            });
-        }
-    );
-    
-    //Filling gradebook select
-    $.getJSON( "{$url}&a=get_gradebooks", {},     
-        function(data) {
-            $.each(data, function(n, gradebook) {
-                // add a new option with the JSON-specified value and text
-                $("<option />").attr("value", gradebook.id).text(gradebook.name).appendTo("#gradebook_id");
-            });
-        }
-    );
+   
     
     //On box click -(we use live instead of bind because we're creating divs on the fly )
     $(".open_block").live('click', function() {        
@@ -109,6 +95,8 @@ jsPlumb.bind("ready", function() {
         console.log('hidden_parent : ' + hidden_parent);         
     });
     
+    
+    
     $(".edit_block").live('click',function() {        
         var my_id = $(this).attr('id');
         my_id = my_id.split('_')[2];
@@ -131,10 +119,12 @@ jsPlumb.bind("ready", function() {
                     $("#gradebook_id option[value='"+data.id+"']").attr('selected', 'selected');            
                 });
             },
-        });        
+        });
+        
                 
         $("#gradebook_id").trigger("liszt:updated");
-        $("#parent_id").trigger("liszt:updated");        
+        $("#parent_id").trigger("liszt:updated");
+        
                 
         $("#dialog-form").dialog("open");
         return false;
@@ -145,63 +135,21 @@ jsPlumb.bind("ready", function() {
         
         $("#name").attr('value', '');
         $("#description").attr('value', '');
-        
-        $("#parent_id option:selected").removeAttr('selected');
-        $("#gradebook_id option:selected").removeAttr('selected');       
+          
         
         $("#dialog-form").dialog("open");
                       
     });    
     
-    var name = $( "#name" ),
-    description = $( "#description" ),  
-    allFields = $( [] ).add( name ).add( description ), tips = $(".validateTips");    
+      
     
-    $("#dialog-form").dialog({              
-        buttons: {
-            "Add" : function() {                
-                var bValid = true;
-                bValid = bValid && checkLength( name, "name", 1, 255 );
-                var params = $("#add_item").serialize();          
-                      
-                $.ajax({
-                    url: url+'&a=add&'+params,
-                    success:function(data) {
-                             
-                        /*jsPlumb.connect({
-                            source : "block_2", 
-                            target : "block_1",
-                            overlays : overlays            
-                        });*/
-                        
-                        /*
-                        calEvent.title          = $("#name").val();
-                        calEvent.start          = calEvent.start;
-                        calEvent.end            = calEvent.end;
-                        calEvent.allDay         = calEvent.allDay;
-                        calEvent.description    = $("#content").val();                              
-                        calendar.fullCalendar('updateEvent', 
-                                calEvent,
-                                true // make the event "stick"
-                        );*/
-                        
-                        $("#dialog-form").dialog("close");                                      
-                    }                           
-                });
-            },            
-        },              
+    $("#dialog-form").dialog({
         close: function() {     
             $("#name").attr('value', '');
             $("#description").attr('value', '');                
         }
     });    
- 
-    $(".window").bind('click', function() {
-        var id = $(this).attr('id');
-        id = id.split('_')[1];        
-        //$("#dialog-form").dialog("open");
-    });    
-
+    
     // chrome fix.
     document.onselectstart = function () { return false; };             
 
@@ -213,7 +161,8 @@ jsPlumb.bind("ready", function() {
     resetRenderMode(jsPlumb.CANVAS);       
 });
 
-    
+         
+            
 ;(function() {
          
     prepare = function(elId, endpoint) {
@@ -418,10 +367,7 @@ $(document).ready( function() {
     };
 })();
 
-
 </script>
-
-<a class="a_button gray" id="add_item_link" href="#">Add item</a>
 
 {$html}
 

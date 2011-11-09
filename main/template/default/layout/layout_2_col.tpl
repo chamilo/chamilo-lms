@@ -18,7 +18,8 @@
 		{$announcements_block}
 	</div>
 	
-	<div id="menu-wrapper">		
+	<div id="menu-wrapper">
+	    
 		{if $_u.logged == 0}
 			{include file="default/layout/login_form.tpl"}
 		{/if}			

@@ -4,8 +4,10 @@
 	{if $show_header == 1}
 		{include file="default/layout/header.tpl"}
 	{/if}	
+	
 {/block}
 
+    
 {block name=body}
 	{if (!empty($actions) ) }
 		<div class="actions">

@@ -795,38 +795,39 @@ function api_block_anonymous_users($print_headers = true) {
 function api_get_navigator() {
     $navigator = 'Unknown';
     $version = 0;
+    
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'Opera') !== false) {
         $navigator = 'Opera';
         list (, $version) = explode('Opera', $_SERVER['HTTP_USER_AGENT']);
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
         $navigator = 'Internet Explorer';
         list (, $version) = explode('MSIE', $_SERVER['HTTP_USER_AGENT']);
+    } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== false) {
+        $navigator = 'Chrome';
+        list (, $version) = explode('Chrome', $_SERVER['HTTP_USER_AGENT']);   
+             
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Gecko') !== false) {
-        $navigator = 'Mozilla';
-        list (, $version) = explode('; rv:', $_SERVER['HTTP_USER_AGENT']);
+        $navigator = 'Mozilla';        
+        list (, $version) = explode('; rv:', $_SERVER['HTTP_USER_AGENT']);        
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Netscape') !== false) {
         $navigator = 'Netscape';
         list (, $version) = explode('Netscape', $_SERVER['HTTP_USER_AGENT']);
-    }
-    // Added by Ivan Tcholakov, 23-AUG-2008.
-    if (strpos($_SERVER['HTTP_USER_AGENT'], 'Konqueror') !== false) {
+    } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Konqueror') !== false) {
         $navigator = 'Konqueror';
         list (, $version) = explode('Konqueror', $_SERVER['HTTP_USER_AGENT']);
-    }
-    if (stripos($_SERVER['HTTP_USER_AGENT'], 'applewebkit') !== false) {
-        $navigator = 'AppleWebKit';
-        list (, $version) = explode('Version/', $_SERVER['HTTP_USER_AGENT']);
-    }
-    if (stripos($_SERVER['HTTP_USER_AGENT'], 'safari') !== false) {
+    } elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'applewebkit') !== false) {
+        $navigator = 'AppleWebKit';        
+        list (, $version) = explode('Version/', $_SERVER['HTTP_USER_AGENT']);        
+    } elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'safari') !== false) {
         $navigator = 'Safari';
         list (, $version) = explode('Version/', $_SERVER['HTTP_USER_AGENT']);
     }
-    //
-    $version = doubleval($version);
+    $version = str_replace('/', '', $version);    
     if (strpos($version, '.') === false) {
         $version = number_format(doubleval($version), 1);
-    }
-    return array ('name' => $navigator, 'version' => $version);
+    }    
+    $return_array = array ('name' => $navigator, 'version' => $version);        
+    return $return_array;
 }
 
 /**

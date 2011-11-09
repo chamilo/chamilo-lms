@@ -318,7 +318,7 @@ class Template extends Smarty {
 		
 		$this->assign('header1', $header1);
 		$this->assign('header2', $header2);
-		$this->assign('header3', $header3);
+		$this->assign('header3', $header3);        
 		$this->assign('header4', $header4);
 		
 		if (!api_is_platform_admin()) {

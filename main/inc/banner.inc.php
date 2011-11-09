@@ -39,10 +39,8 @@ echo'</ul>';
 echo '<div id="header">';
 
 show_header_1($language_file, $nameTools);
-
 show_header_2();
 $menu_navigation = show_header_3();
-echo show_header_4($interbreadcrumb, $language_file, $nameTools);
     
 if (isset($database_connection)) {
     // connect to the main database.
@@ -53,6 +51,7 @@ if (isset($database_connection)) {
     // (ex. SELECT * FROM table_from_main_db  -  SELECT * FROM courseDB.table_from_course_db)
     Database::select_db($_configuration['main_database'], $database_connection);
 }
+
 echo '</div>'; // <!-- end of the whole #header section -->
   
 if (api_get_setting('show_toolshortcuts') == 'true') {        
@@ -61,6 +60,9 @@ if (api_get_setting('show_toolshortcuts') == 'true') {
 }
 
 echo '<div id="main">';
+
+echo show_header_4($interbreadcrumb, $language_file, $nameTools);
+
 echo '<div id="submain">';
 
 

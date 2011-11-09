@@ -81,8 +81,7 @@ jsPlumb.bind("ready", function() {
                         success:function(data) {
                             
                             //new window
-                            parent_id = $("#parent_id option:selected").attr('value');
-                            
+                            parent_id = $("#parent_id option:selected").attr('value');                            
                         
                             //Great stuff                         
                             open_block('block_'+parent_id);

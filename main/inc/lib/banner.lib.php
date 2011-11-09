@@ -113,8 +113,7 @@ function get_tabs() {
 function show_header_1($language_file, $nameTools) {
     global $noPHP_SELF;
     $_course = api_get_course_info();        
-    echo '<div id="header1">';
-        echo '<div id="top_corner"></div>';        
+    echo '<div id="header1">';               
             $logo = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';            
             $site_name = api_get_setting('siteName');
             if (file_exists($logo)) {
@@ -608,15 +607,7 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
         $html .= Display::tag('ul',$lis, array('class'=>'bread'));
         $html .= '</div>';        
     } else {
-        $html .= '<div id="header4">';
-        $html .= '</div>';
-    } 
-    $html .= '<div class="clear"></div>';
-    
+        //$html .= '<div id="header4"></div>';        
+    }   
     return $html ;
-}
-
-
-function load_navigation_menu() {
-    
 }

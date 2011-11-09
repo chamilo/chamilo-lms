@@ -1,4 +1,17 @@
-samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li{
+#container-slider samp, 
+#container-slider small, 
+#container-slider strike, 
+#container-slider strong, 
+#container-slider sub, 
+#container-slider sup, 
+#container-slider tt, 
+#container-slider var, 
+#container-slider dl, 
+#container-slider dt, 
+#container-slider dd, 
+#container-slider  ol, 
+#container-slider  ul,
+#container-slider li {
     border: 0 none;
     font-family: inherit;
     font-size: 100%;
@@ -8,6 +21,7 @@ samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li{
     outline: 0 none;
     padding: 0;
     vertical-align: baseline;
+    overflow: hidden;
 }
 #bx-wrapper {
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);

@@ -23,6 +23,8 @@
 	</ul>	
 	{block name="header"}{/block}
 	<div id="main">
+	    {* breadcrumb *}
+        {$header4}
 		<div id="submain">			
 			{block name="body"}{/block}
 			<div class="clear">&nbsp;</div> <!-- 'clearing' div to make sure that footer stays below the main and right column sections -->

@@ -46,7 +46,7 @@ body {
 }
 
 #submain {
-    padding:10px;
+    padding:0 10px;
     border: 1px solid #ddd;
     
     position: relative; /* to avoid the IE peekabo bug*/
@@ -320,8 +320,6 @@ input.link_alike:hover {
 #sitename {
     margin: 0;
 }
-#top_corner {
-}
 #institution {
     background-repeat:no-repeat;
     height:80px;
@@ -385,70 +383,38 @@ input.link_alike:hover {
  *  HEADER 3: TABS OF THE HEADER                     *
  *****************************************************/
 #header3 {
-	background:none;                    
-    border-bottom:1px solid #ccc;
-    width: 92%;
-    margin-bottom:0px;
-    padding:0px;	
-    background-repeat:repeat-x;    
-    margin-left:auto;
-    margin-right:auto;
-    font-size: 1.0em;
-    color: #006;    
-    overflow:hidden;        
-    height:36px;
+
 }
 
 #header3 a:hover {
-    color:#fffc00D;
+    //color:#fffc00D;
 }
 
 #header3 li {
-    float:left; /* important for ieX*/
+    //float:left; /* important for ieX*/
 }
 #header3 li a span:hover {
-    color:#fffc00;
+    //color:#fffc00;
 }
 
 #header3 ul {
-    padding-left:0px;
+    /*padding-left:0px;
     list-style-type:none;
     height:25px;
     margin-left:0px;
-    margin: 11px 0px 0px 0px ;
+    margin: 11px 0px 0px 0px ;*/
 }
 
 #header3  a {
-    -moz-background-clip:border;
-    -moz-background-inline-policy:continuous;
-    -moz-background-origin:padding;
-    color:#fff;
-    cursor:pointer;
-    float:left;
-    height:25px;
-    padding-left:9px;
-    padding-right:2px;
-    text-decoration:none;
+
 }
 
 #header3 li a span {
-    color:#fff;
-    cursor:pointer;
-    display:block;
-    float:left;
-    height:20px;
-    padding-right:10px;
-    padding-top:5px;
+    
 }
 
 #current a {
-    color:#FFFFFF;
-    cursor:pointer;
-    float:left;
-    height:25px;
-    padding-left:9px;
-    padding-right:2px;
-    text-decoration:none;
+    
 }
 
 #header3 li {
@@ -460,7 +426,7 @@ input.link_alike:hover {
     cursor:pointer;
     display:block;
     float:left;
-    height:20px;
+
     overflow:hidden;
     padding-bottom:6px;
     margin-right:-3px;    
@@ -468,14 +434,7 @@ input.link_alike:hover {
 }
 
 #current #tab_active {
-    color:#fff;
-    cursor:pointer;
-    display:block;
-    float:left;
-    height:20px;
-    padding-right:10px;
-    padding-top:5px;
-    margin-right:-2px;
+
 }
 
 #header3 .banner_links {
@@ -526,7 +485,6 @@ input.link_alike:hover {
     float: right;
     width: auto;
     text-align: right;
-    font-size: 1.0em;
     height:25px;
 }
 
@@ -537,12 +495,12 @@ input.link_alike:hover {
 	height:26px;
     padding:0px;
     background:none;                    
-    width: 92%;	
-    margin-left:auto;
-    margin-right:auto;    
+    width: 100%;	
+    /*margin-top:35px;*/
+    margin-bottom:5px;    
     background-repeat:repeat-x;
     color: #009;    
-    clear:right;    
+    border: 1px solid #EEEEEE;
 }
 #header4 a {
     color: #666;
@@ -580,30 +538,25 @@ input.link_alike:hover {
 ==============================================================================
 */
 #menu-wrapper {
-    width:250px;
+    display: block;
     float: right;
+    width: 200px;
+    
+    
+     background-color: #F3F4F5;
+    border-bottom: 1px solid #CCCCCC;
+    border-bottom-left-radius: 5px;
+    border-left: 1px solid #CCCCCC;
+    box-shadow: -3px 3px 32px 0 #E8E8E8;
+    color: #595959;
+    margin-bottom: 1em;
+    margin-left: 15px;
+    min-height: 20px;
+    padding-bottom: 20px;
 }
 
 #menu {    
-    border: 1px solid #e1e1e0;
-    -moz-border-radius: 10px; 
-    -webkit-border-radius: 10px;
-    border-radius:10px;
 
-    margin-top:20px;
-    margin-right:10px;
-    margin-bottom:0px;
-
-    padding-left:10px;
-    padding-right:10px;
-    padding-top:5px;
-    padding-bottom:30px;
-
-    width:200px;
-    float: right;
-    min-height: 80px;   
-    border:1px solid #E1E1E0;    
-    padding:5px 10px 0;
 }
 
 .menucaption {
@@ -612,17 +565,22 @@ input.link_alike:hover {
     padding-left: 12px;
 }
 .menusection {
-    margin: 20px 0px 0 0px;
+    width:100%;
 }
 .menusectioncaption {
-    font-weight:bold;
-    font-size: 12px;
-    position: relative;
-    top: -5px;
+    background-color: #8A8A8A;
+    color: #FFFFFF;
+    font-size: 1.12em;
+    font-weight: normal;
+    margin-bottom: 8px;
+    padding: 7px 10px 7px 15px;
+    width: 185px;
+    display:block;
 }
 .menulist {
+    margin: 0 20px;
     list-style: none;
-    margin: 0 0 10px 0;
+    
     padding: 0;
 
     list-style-image:none;
@@ -775,51 +733,6 @@ input.link_alike:hover {
 .bottom-link:hover {
 	border-color: #ccc;
 	color: #111;
-}
-
-/*****************************************************
- *  LOGIN AND LANGUAGE FORM                          *
- *****************************************************/
-
-#lang_form {
-    text-align: left;
-    font-size: 12px;
-    margin: 2px 0 10px 0;
-}
-#lang_form input, #lang_form select {
-    font-size: 12px;
-    /* width:100%; */
-}
-#formLogin label {
-    font-size: 12px;
-    font-family:Tahoma, Geneva, sans-serif;
-    color:#666666;
-}
-
-#login_fail {
-/*    margin: 0 6px 6px 6px; */
-    padding: 4px;
-    border: 1px solid #f00;
-    background-color: #fff;
-    font-size: 12px;
-    color: #f00;
-    width:185px;
-}
-input.mainoption {
-    font-weight : bold;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
-input.liteoption {
-    font-weight : normal;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
 }
 
 /*****************************************************
@@ -2683,4 +2596,43 @@ abbr {
 
 .chzn-search input {
 
+}
+#header3 {    
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 10px 0;    
+    position: relative;
+    width: 92%;
+    margin: 0 auto 34px auto;
+}
+
+#header3 ul {
+    margin: 0px;
+}
+
+#header3 li {
+    list-style: none;
+    float: left;
+    margin-right: 5px;
+}    
+
+#header3 li a {
+    background: none repeat scroll 0 0 #D9E4F0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: #277098;
+    display: block;
+    padding: 8px 12px 9px;
+    text-decoration: none;
+}
+
+#header3 li a:hover {
+    background: none repeat scroll 0 0 #8ECB50;
+    color: #FFFFFF;
+}
+#header #current a {
+    background: none repeat scroll 0 0 #FFFFFF;        
+}
+#header #current a:hover {
+    color: #277098;
 }

@@ -872,7 +872,7 @@ class IndexManager {
 				$cant_msg = ' ('.$number_of_new_messages.')';
 			}
 			$profile_content .= '<div class="clear"></div>';
-			$profile_content .= '<div class="message-content"><ul class="menulist">';
+			$profile_content .= '<ul class="menulist">';
 			$link = '';
 			if (api_get_setting('allow_social_tool') == 'true') {
 				$link = '?f=social';
@@ -888,8 +888,7 @@ class IndexManager {
 				}
 				$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' '.$total_invitations.' </a></li>';
 			}
-			$profile_content .= '</ul>';
-			$profile_content .= '</div>';
+			$profile_content .= '</ul>';			
 		}
 		$html = self::show_right_block(get_lang('Profile'), $profile_content);
 		return $html;

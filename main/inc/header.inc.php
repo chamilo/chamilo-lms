@@ -9,6 +9,7 @@
 /*  HEADERS SECTION */
 
 // Server mode indicator.
+/*
 if (api_is_platform_admin()) {
     if (api_get_setting('server_type') == 'test') {
         error_reporting(E_ALL);
@@ -18,7 +19,7 @@ if (api_is_platform_admin()) {
         $starttime = $mtime;
         $_SESSION['page_start_time_execution'] = $starttime;
     }
-}
+}*/
 header('Content-Type: text/html; charset='.api_get_system_encoding());
 //show the X-Powered-By header so that parsers can find it
 global $_configuration;

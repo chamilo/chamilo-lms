@@ -71,9 +71,10 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-ol, ul {
-  list-style: none;
+ol, ul {  
+  list-style: none outside none;
 }
+
 q:before,
 q:after,
 blockquote:before,
@@ -825,10 +826,6 @@ footer {
 /* Begin of proper */
 
 
-#menu {
-    width:180px;
-}
-
 #header4 {
     height: 26px !important; /* breadcrumb fix */
 }
@@ -1308,19 +1305,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 
 .menulist li {
     margin-top: 10px;
-}
-
-.menusection {
-    margin: 15px 0 0 6px;
-}
-
-.maincontent {
-    margin-top: 5px;
-}
-
-#menu {
-    margin-top: 8px;
-    margin-bottom: 10px;
 }
 
 .social-background-content {
@@ -2583,10 +2567,7 @@ div.image-social-content center.friend {
 
 /* styles from the my.profile.php file */
 #social_widget  {	
-    padding:1px;
-    margin-bottom:10px;
-    margin-left:0px;
-    margin-right:0px;
+    margin: 0 20px;
 }
 
 #social_widget_image {
@@ -3615,9 +3596,8 @@ form div.form_error {
 }
 
 fieldset {
-/*    margin-bottom: 18px;
-    padding-top: 18px;
-    */
+    margin-top: 12px;
+ 
 }
 
 
@@ -3954,3 +3934,57 @@ form div.error input, form div.error textarea {
 #language_list {
     width:100px !important;
 }
+
+
+#formLogin {
+    margin-left:20px;    
+}
+
+
+/*****************************************************
+ *  LOGIN AND LANGUAGE FORM                          *
+ *****************************************************/
+
+#lang_form {
+    text-align: left;
+    font-size: 12px;
+    margin: 2px 0 10px 20px;
+        width: 50px !important;
+}
+#lang_form input, #lang_form select {
+    font-size: 12px;
+    /* width:100%; */
+}
+#formLogin label {
+    font-size: 12px;
+    font-family:Tahoma, Geneva, sans-serif;
+    color:#666666;
+}
+
+#login_fail {
+/*    margin: 0 6px 6px 6px; */
+    padding: 4px;
+    border: 1px solid #f00;
+    background-color: #fff;
+    font-size: 12px;
+    color: #f00;
+    width:185px;
+}
+input.mainoption {
+    font-weight : bold;
+    -moz-border-radius-bottomleft:5px;
+    -moz-border-radius-bottomright:5px;
+    -moz-border-radius-topleft:5px;
+    -moz-border-radius-topright:5px;
+    border:1px solid #E1E1E0;
+}
+input.liteoption {
+    font-weight : normal;
+    -moz-border-radius-bottomleft:5px;
+    -moz-border-radius-bottomright:5px;
+    -moz-border-radius-topleft:5px;
+    -moz-border-radius-topright:5px;
+    border:1px solid #E1E1E0;
+}
+
+

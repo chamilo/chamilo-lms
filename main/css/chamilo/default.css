@@ -34,22 +34,22 @@ a:active {
 }
 
 #header3  a {
-    background:transparent url(images/tab_left.gif) no-repeat scroll left top;
+    //background:transparent url(images/tab_left.gif) no-repeat scroll left top;
 }
 
 #header3 li a span {
-    background:transparent url(images/tab_right.gif) no-repeat scroll right top;
+//    background:transparent url(images/tab_right.gif) no-repeat scroll right top;
 }
 
 #current a {
-    background:transparent url(images/tab_left-active.gif) no-repeat scroll left top;
+//    background:transparent url(images/tab_left-active.gif) no-repeat scroll left top;
 }
 #current {
-    background:transparent url(images/tab_center-active.gif) no-repeat scroll right top;
+    //background:transparent url(images/tab_center-active.gif) no-repeat scroll right top;
 }	
 
 #current #tab_active {
-    background:transparent url(images/tab_right-active.gif) no-repeat scroll right top;
+    //background:transparent url(images/tab_right-active.gif) no-repeat scroll right top;
 }
 /*****************************************************
  *  FOOTER STYLES                                    *

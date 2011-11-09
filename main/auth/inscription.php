@@ -12,7 +12,6 @@ if (!empty($_POST['language'])) { //quick hack to adapt the registration form re
     $_GET['language'] = $_POST['language'];
 }
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
@@ -122,7 +121,6 @@ if (api_get_setting('use_custom_pages') == 'true') {
 $tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
 Display :: display_header($tool_name);
 
-echo Display::tag('h1', $tool_name);
 
 $home = api_get_path(SYS_PATH).'home/';
 if ($_configuration['multiple_access_urls']) {
@@ -170,6 +168,8 @@ if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 }
 
 $form = new FormValidator('registration');
+$form->addElement('header', '', $tool_name);
+
 if (api_get_setting('allow_terms_conditions') == 'true') {
     $display_all_form = !isset($_SESSION['update_term_and_condition'][1]);
 } else {
@@ -665,18 +665,5 @@ if ($form->validate()) {
 
 } else {
     $form->display();
-}
-?>
-<br />
-<?php
-if (!isset($_POST['username'])) {
-/*    
-    <div class="actions">
-<a href="<?php echo api_get_path(WEB_PATH); ?>" class="fake_button_back" ><?php echo get_lang('Back'); ?></a>
-</div>
-*/
-?>
-
-<?php
 }
 Display :: display_footer();

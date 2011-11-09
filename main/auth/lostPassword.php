@@ -22,7 +22,6 @@ $language_file = 'registration';
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'login.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
 
@@ -85,7 +84,6 @@ $tool_name 		= get_lang('LostPass');
 if (api_get_setting('allow_lostpassword') == 'false') {
 	api_not_allowed();
 }
-echo Display::tag('h1', $tool_name);
 
 if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 	//$msg = Login::reset_password($_GET["reset"], $_GET["id"], true);
@@ -93,6 +91,7 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 	echo '<br /><br /><div class="actions" >'.$msg1.'</div>';
 } else {
 	$form = new FormValidator('lost_password');
+    $form->addElement('header', '', $tool_name);
 	$form->addElement('text', 'user', array(get_lang('LoginOrEmailAddress'), get_lang('EnterEmailUserAndWellSendYouPassword')), array('size'=>'40'));
 
 	//$form->applyFilter('email','strtolower');

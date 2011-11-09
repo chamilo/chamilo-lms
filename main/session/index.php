@@ -12,10 +12,6 @@
 $language_file = array('courses', 'index','tracking','exercice', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
-$libpath = api_get_path(LIBRARY_PATH);
-
-require_once $libpath.'formvalidator/FormValidator.class.php';
-
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
@@ -132,7 +128,11 @@ if (!empty($course_list)) {
     }
 }*/
 
-
+if (empty($session_id)) {
+    $user_list  = UserManager::get_user_list();
+} else {        
+    $user_list = SessionManager::get_users_by_session($session_id);        
+}
 
 //Final data to be show
 $my_real_array = $new_exercises = array();
@@ -177,7 +177,7 @@ foreach($final_array as $session_data) {
                             if(!empty($exercise_result['exe_weighting']) && intval($exercise_result['exe_weighting']) != 0) {                        
                                 $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
                             }
-                            $position       = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id,  $my_course_code,$session_id);
+                            $position       = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id, $my_course_code, $session_id, $user_list);
                             //$exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/exercice.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id&show=result", array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link'));
                             $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/result.php?cidReq=$my_course_code&id={$exercise_result['exe_id']}&id_session=$session_id&show_headers=1", array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link'));
                             

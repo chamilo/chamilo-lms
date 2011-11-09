@@ -2530,6 +2530,15 @@ class Tracking {
 				}
 				$result_exercices = Database::query($sql_exercices);
 				$to_graph_exercise_result = array();
+                
+                
+                if (empty($session_id)) {
+                    $user_list  = UserManager::get_user_list();
+                } else {        
+                    $user_list  = SessionManager::get_users_by_session($session_id);        
+                }
+                                
+                                
 				if (Database::num_rows($result_exercices) > 0) {
 					$score = $weighting = $exe_id = 0;
 					while ($exercices = Database::fetch_array($result_exercices)) {
@@ -2572,7 +2581,7 @@ class Tracking {
 									if (!empty($weighting) && intval($weighting) != 0) {
 										$my_score = $score/$weighting;
 									}
-									$position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id);
+									$position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id, $user_list);
 				
 									$graph         = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);
 									$normal_graph  = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);

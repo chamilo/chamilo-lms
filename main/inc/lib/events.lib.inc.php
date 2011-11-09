@@ -862,23 +862,26 @@ function delete_all_incomplete_attempts($user_id, $exercise_id, $course_code, $s
  * @return  array   with the results
  * 
  */
-function get_all_exercise_results($exercise_id, $course_code, $session_id = 0) {
+function get_all_exercise_results($exercise_id, $course_code, $session_id = 0, $load_question_list = true) {
 	$TABLETRACK_EXERCICES  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$TBL_TRACK_ATTEMPT     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 	$course_code           = Database::escape_string($course_code);
 	$exercise_id           = intval($exercise_id);
 	$session_id            = intval($session_id);
 	
-	$sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";	
+	$sql = "SELECT * FROM $TABLETRACK_EXERCICES 
+	        WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";	
 	$res = Database::query($sql);
 	$list = array();	
 	while($row = Database::fetch_array($res,'ASSOC')) {		
 		$list[$row['exe_id']] = $row;		
-		$sql = "SELECT * FROM $TBL_TRACK_ATTEMPT WHERE exe_id = {$row['exe_id']}";
-		$res_question = Database::query($sql);
-		while($row_q = Database::fetch_array($res_question,'ASSOC')) {
-			$list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
-		}		
+        if ($load_question_list) {
+    		$sql = "SELECT * FROM $TBL_TRACK_ATTEMPT WHERE exe_id = {$row['exe_id']}";
+    		$res_question = Database::query($sql);
+    		while($row_q = Database::fetch_array($res_question,'ASSOC')) {
+    			$list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
+            }
+        }
 	}
 	return $list;
 }

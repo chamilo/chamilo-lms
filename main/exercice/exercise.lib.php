@@ -1295,22 +1295,19 @@ function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $
  * @param   int     session id
  * @return  int     the position of the user between his friends in a course (or course within a session)
  */
-function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $course_code, $session_id = 0, $return_string = true) {
-    if (empty($session_id)) {
-    	$session_id = 0;    	
-    	$user_list  = UserManager::get_user_list();
-    } else {        
-        $user_list = SessionManager::get_users_by_session($session_id);        
-    }
+function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $course_code, $session_id = 0, $user_list, $return_string = true) { 
     //No score given we return 
     if (is_null($my_score)) {
         return '-';
     }   
+    if (empty($user_list)) {
+        return '-';
+    }
     $best_attempts = array(); 
    
     foreach($user_list as $user_data) {
         $user_id = $user_data['user_id'];        
-        $best_attempts[$user_id]= get_best_attempt_by_user($user_id,$exercise_id,$course_code,$session_id);   
+        $best_attempts[$user_id]= get_best_attempt_by_user($user_id, $exercise_id, $course_code, $session_id);   
     }
 
     $position_data = array();
@@ -1374,7 +1371,7 @@ function get_exercise_result_ranking_by_attempt($my_score, $my_exe_id, $exercise
     if (is_null($my_score)) {
         return '-';
     }    
-    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
+    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id, false);
     $position_data = array();
     if (empty($user_results)) {
     	return 1;
@@ -1421,7 +1418,7 @@ function get_exercise_result_ranking_by_attempt($my_score, $my_exe_id, $exercise
  */
 
 function get_best_attempt_in_course($exercise_id, $course_code, $session_id) { 
-    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
+    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id, false);
     $best_score_data = array();
     $best_score = 0;
     if (!empty($user_results)) {
@@ -1442,7 +1439,7 @@ function get_best_attempt_in_course($exercise_id, $course_code, $session_id) {
  *  Get the best score in a exercise (NO Exercises in LPs )
  */
 function get_best_attempt_by_user($user_id, $exercise_id, $course_code, $session_id) { 
-    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
+    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id, false);
     $best_score_data = array();
     $best_score = 0;
     if (!empty($user_results)) {       
@@ -1514,7 +1511,7 @@ function get_average_score_by_course($course_code, $session_id) {
 }
 
 function get_average_score_by_course_by_user($user_id, $course_code, $session_id) {
-	$user_results = get_all_exercise_results_by_user($user_id, $course_code, $session_id, false);
+	$user_results = get_all_exercise_results_by_user($user_id, $course_code, $session_id);
 	$avg_score = 0;
 	if (!empty($user_results)) {
 		foreach($user_results as $result) {

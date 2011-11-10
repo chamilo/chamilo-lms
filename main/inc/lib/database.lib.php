@@ -155,6 +155,7 @@ class Database {
     }
 
     /**
+
      * A more generic method than the older get_course_xxx_table methods,
      * This one can return the correct complete name of any course table of which you pass
      * the short name as a parameter.
@@ -165,7 +166,9 @@ class Database {
      * @param string $database_name, optional, name of the course database
      * - if you don't specify this, you work on the current course.
      */
-    public static function get_course_table($short_table_name, $database_name = '') {
+    //public static function get_course_table($short_table_name, $database_name = '') {
+    //forces fatal errors so we can debug more easily        
+    public static function get_course_table($short_table_name) {
     	return self::format_table_name(self::get_main_database(), DB_COURSE_PREFIX.$short_table_name);
         //return self::format_glued_course_table_name(self::fix_database_parameter($database_name), $short_table_name);
     }

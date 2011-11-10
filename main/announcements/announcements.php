@@ -760,11 +760,13 @@ if ($display_form) {
 		if (!isset($announcement_to_modify) ) $announcement_to_modify ='';
 		if ($announcement_to_modify=='') {
 			($email_ann=='1')?$checked='checked':$checked='';
+            
 			echo '	<div class="row">
-						<div class="label">
-							<input class="checkbox" type="checkbox" value="1" name="email_ann" checked>
+						<div class="label">							
 						</div>
-						<div class="formw">'.get_lang('EmailOption').'
+						<div class="formw">
+						<input id="email_ann" class="checkbox" type="checkbox" value="1" name="email_ann" checked>
+						<label for="email_ann">'.get_lang('EmailOption').'</label>
 						</div>
 					</div>';
 

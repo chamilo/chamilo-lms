@@ -726,7 +726,7 @@ function update_Db_course($course_db_name = null) {
     $sql = "CREATE TABLE `".$table_quiz_question_category . "` (
 	  $add_to_all_tables
 	  id int NOT NULL AUTO_INCREMENT,
-	  name varchar(255) NOT NULL,
+	  title varchar(255) NOT NULL,
 	  description text NOT NULL,
 	  PRIMARY KEY (c_id,id)
 	)" . $charset_clause;

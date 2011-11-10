@@ -31,15 +31,6 @@ define('MATCHING',		4);
 define('FREE_ANSWER', 5);
 define('MULTIPLE_ANSWER_COMBINATION', 9);
 
-
-
-
-/** @todo use the Database:: functions */
-$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
-$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
-
 //debug param. 0: no display - 1: debug display
 $debug=0;
 if($debug>0){echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);}
@@ -106,24 +97,23 @@ if ($action == 'mark') {
 		//mark the user mark into the database using something similar to the following function:
 
 		$exercise_table = Database::get_statistic_table('track_e_exercices');
-		#$tbl_learnpath_user = Database::get_course_table('learnpath_user');
 		#global $origin, $tbl_learnpath_user, $learnpath_id, $learnpath_item_id;
 		$sql = "SELECT * FROM $exercise_table
-			WHERE exe_user_id = '".Database::escape_string($my_usr)."' AND exe_cours_id = '".Database::escape_string($my_cid)."' AND exe_exo_id = '".Database::escape_string($my_exe)."'
-			ORDER BY exe_date DESC";
+			    WHERE exe_user_id = '".Database::escape_string($my_usr)."' AND exe_cours_id = '".Database::escape_string($my_cid)."' AND exe_exo_id = '".Database::escape_string($my_exe)."'
+			    ORDER BY exe_date DESC";
 		#echo $sql;
 		$res = Database::query($sql);
-		if(Database::num_rows($res)>0){
+		if (Database::num_rows($res)>0){
 			$row = Database::fetch_array($res);
 			//@todo Check that just summing past score and the new free answer mark doesn't come up
 			// with a score higher than the possible score for that exercise
 			$my_score = $row['exe_result'] + $_POST['score'];
 			$sql = "UPDATE $exercise_table SET exe_result = '$my_score'
-				WHERE exe_id = '".$row['exe_id']."'";
+				    WHERE exe_id = '".$row['exe_id']."'";
 			#echo $sql;
 			$res = Database::query($sql);
 			$my_msg = get_lang('MarkIsUpdated');
-		}else{
+		} else {
 			$my_score = $_POST['score'];
 			$reallyNow = time();
 			$sql = "INSERT INTO $exercise_table (

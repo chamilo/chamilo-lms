@@ -232,7 +232,8 @@ class ExerciseShowFunctions {
         <?php   
         
         $question 	 = new MultipleAnswerTrueFalse();        
-        $new_options = Question::readQuestionOption($questionId);
+        $course_id   = api_get_course_int_id();
+        $new_options = Question::readQuestionOption($questionId, $course_id);
         
         //Your choice        
         if (isset($new_options[$studentChoice])) {

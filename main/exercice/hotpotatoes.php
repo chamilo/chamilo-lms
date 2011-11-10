@@ -46,6 +46,7 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 // Database table definitions.
 $dbTable        = Database::get_course_table(TABLE_DOCUMENT);
+$course_id = api_get_course_int_id();
 
 // Setting some variables.
 $document_sys_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -149,7 +150,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     }
 
                     $title = @htmlspecialchars(GetQuizName($filename, $document_sys_path.$uploadPath.'/'.$fld.'/'), ENT_COMPAT, api_get_system_encoding());
-                    $query = "UPDATE $dbTable SET comment='".Database::escape_string($title)."' WHERE path=\"".$uploadPath."/".$fld."/".$filename."\"";
+                    $query = "UPDATE $dbTable SET comment='".Database::escape_string($title)."' WHERE c_id = $course_id AND path=\"".$uploadPath."/".$fld."/".$filename."\"";
                     Database::query($query);
                     api_item_property_update($_course, TOOL_QUIZ, $id, 'QuizAdded', api_get_user_id());
 

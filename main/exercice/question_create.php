@@ -45,7 +45,9 @@ $session_id  = api_get_session_id();
 
 // the exercices
 $tbl_exercices = Database :: get_course_table(TABLE_QUIZ_TEST);
-$sql = "SELECT id,title,type,description, results_disabled FROM $tbl_exercices WHERE active<>'-1' AND session_id=".$session_id." ORDER BY title ASC";
+$course_id = api_get_course_int_id();
+
+$sql = "SELECT id,title,type,description, results_disabled FROM $tbl_exercices WHERE c_id = $course_id AND active<>'-1' AND session_id=".$session_id." ORDER BY title ASC";
 $result = Database::query($sql);
 $exercises['-'] = '-'.get_lang('SelectExercice').'-';
 while ($row = Database :: fetch_array($result)) {
@@ -77,7 +79,7 @@ if ($form->validate()) {
 	
 	// check feedback_type from current exercise for type of question delineation
 	$exercise_id = intval($values['exercice']);	
-	$sql = "SELECT feedback_type FROM $tbl_exercices WHERE id = '$exercise_id'";
+	$sql = "SELECT feedback_type FROM $tbl_exercices WHERE c_id = $course_id AND id = '$exercise_id'";
 	$rs_feedback_type = Database::query($sql,__FILE__,__LINE__);
 	$row_feedback_type = Database::fetch_row($rs_feedback_type);
 	$feedback_type = $row_feedback_type[0];

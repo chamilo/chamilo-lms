@@ -85,10 +85,7 @@ function lp_upload_quiz_secondary_actions() {
 }
 
 function lp_upload_quiz_main() {
-    // Database table definition
-    global $_course;
-    $table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-    $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        
     // variable initialisation
     $lp_id = Security::remove_XSS($_GET['lp_id']);
     

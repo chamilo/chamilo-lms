@@ -1134,11 +1134,13 @@ class CourseRestorer
 					$sql = "INSERT INTO ".$table_ans." SET c_id = ".$this->destination_course_id." , id= '". ($index +1)."',question_id = '".$new_id."', answer = '".self::DBUTF8escapestring($answer['answer'])."', correct = '".$answer['correct']."', comment = '".self::DBUTF8escapestring($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";
 					Database::query($sql);
 				}
-			}           
+			}         
+            //@todo check this  
+            $course_id = api_get_course_int_id();
             
             //Moving quiz_question_options
             if ($question->quiz_type == MULTIPLE_ANSWER_TRUE_FALSE) {                
-                $question_option_list = Question::readQuestionOption($id);                
+                $question_option_list = Question::readQuestionOption($id, $course_id);                
                 $old_option_ids = array();            
                 foreach ($question_option_list  as $item) {
                     $old_id = $item['id'];                    

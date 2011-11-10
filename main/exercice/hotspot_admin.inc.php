@@ -297,8 +297,7 @@ if ($modifyAnswers) {
     $objAnswer=new Answer($objQuestion -> id);        
     api_session_register('objAnswer');
 	if($debug>0){echo str_repeat('&nbsp;',2).'$answerType is HOT_SPOT'."<br />\n";}
-	$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-	
+		
 	if ($answerType == HOT_SPOT_DELINEATION) {
 		$try=$_POST['try'];
 		
@@ -344,8 +343,7 @@ if ($modifyAnswers) {
             $hotspot_type[$i]=$objAnswer->selectHotspotType($i);
             
             if ($answerType==HOT_SPOT_DELINEATION) {            
-            	$destination[$i]=$objAnswer->selectDestination($i);
-            	
+            	$destination[$i]=$objAnswer->selectDestination($i);            	
 	                 
 	            $destination_items= explode('@@', $destination[$i]);                        
 	            $threadhold_total = $destination_items[0];            

@@ -62,13 +62,13 @@ class Answer {
 		// clears $new_* arrays
 		$this->cancel();
         
-        if (!empty($course_id)) {
-            $this->course_id        = intval($course_id);
-            $course_info            =  api_get_course_info_by_id($this->course_id);
+        if (!empty($course_id)) {            
+            $course_info            =  api_get_course_info_by_id($course_id);
         } else {            
             $course_info = api_get_course_info();
         }
-        $this->course   = $course_info; 
+        $this->course    = $course_info;
+        $this->course_id = $course_info['real_id'];
         
 
 		// fills arrays
@@ -104,16 +104,13 @@ class Answer {
 	 * @author - Olivier Brouckaert
 	 */
 	function read() {		
-		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER, $this->course['db_name']);
-
+		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
 		$questionId=$this->questionId;
-		//$answerType=$this->selectType();
-
+        
 		$sql="SELECT id,answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination, id_auto FROM
-		      $TBL_ANSWER WHERE question_id ='".$questionId."' ORDER BY position";
+		      $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
 
 		$result=Database::query($sql);
-
 		$i=1;
 
 		// while a record is found
@@ -138,7 +135,7 @@ class Answer {
 	 * @param	string	DESC or ASC
 	 * @author 	Frederic Vauthier
 	 */
-	function readOrderedBy($field,$order='ASC') {		
+	function readOrderedBy($field, $order='ASC') {		
 		$field = Database::escape_string($field);
 		if (empty($field)) {
 			$field = 'position';
@@ -147,18 +144,20 @@ class Answer {
 		if ($order != 'ASC' && $order!='DESC') {
 			$order = 'ASC';
 		}
-		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER, $this->course['db_name']);
-		$TBL_QUIZ= Database::get_course_table(TABLE_QUIZ_QUESTION, $this->course['db_name']);
+        
+                
+		$TBL_ANSWER   = Database::get_course_table(TABLE_QUIZ_ANSWER);
+		$TBL_QUIZ     = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$questionId=intval($this->questionId);
 		
-		$sql = "SELECT type FROM $TBL_QUIZ WHERE id = $questionId";
+		$sql = "SELECT type FROM $TBL_QUIZ WHERE c_id = {$this->course_id} AND id = $questionId";
 		$result_question=Database::query($sql);
 		$question_type=Database::fetch_array($result_question);
 		$remove_doubt_answer = ''; //
 	
 		
 		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto " .
-				"FROM $TBL_ANSWER WHERE question_id='".$questionId."'   " .
+				"FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id='".$questionId."'   " .
 				"ORDER BY $field $order";		
 		$result=Database::query($sql);	
 		
@@ -190,9 +189,7 @@ class Answer {
 			$this->autoId[$i]		= $doubt_data->id_auto;
 			$i++;		     
 	    }
-	
-		
-		$this->nbrAnswers=$i-1;
+        $this->nbrAnswers=$i-1;
 	}
 
 
@@ -257,9 +254,10 @@ class Answer {
 	 * return array answer by id else return a bool
 	 */
 	function selectAnswerByAutoId($auto_id) {
-		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER, $this->course['db_name']);
+		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);        
+        
 		$auto_id = intval($auto_id);
-		$sql="SELECT id, answer FROM $TBL_ANSWER WHERE id_auto='$auto_id'";
+		$sql="SELECT id, answer FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
 		$rs = Database::query($sql);
 
 		if (Database::num_rows($rs)>0) {
@@ -267,7 +265,6 @@ class Answer {
 			return $row;
 		}
 		return false;
-
 	}
 
 	/**
@@ -336,10 +333,9 @@ class Answer {
 	  * @author	Yannick Warnier <ywarnier@beeznest.org>
 	  * @return	integer	The type of the question this answer is bound to
 	  */
-	 function getQuestionType()
-	 {
-	 	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION, $this->course['db_name']);
-	 	$sql = "SELECT type FROM $TBL_QUESTIONS WHERE id = '".$this->questionId."'";
+	 function getQuestionType() {
+	 	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+	 	$sql = "SELECT type FROM $TBL_QUESTIONS WHERE c_id = {$this->course_id} AND id = '".$this->questionId."'";
 	 	$res = Database::query($sql);
 	 	if(Database::num_rows($res)<=0){
 	 		return null;
@@ -456,9 +452,8 @@ class Answer {
 	 * @param	integer	Answer weighting
 	 * @param	integer	Answer position
 	 */
-	function updateAnswers($answer,$comment,$weighting,$position,$destination)
-	{
-		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER, $this->course['db_name']);
+	function updateAnswers($answer,$comment,$weighting,$position,$destination) {
+		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 
 		$questionId=$this->questionId;
 		$sql = "UPDATE $TBL_REPONSES SET " .
@@ -467,7 +462,7 @@ class Answer {
 				"ponderation = '".Database::escape_string($weighting)."', " .
 				"position = '".Database::escape_string($position)."', " .
 				"destination = '".Database::escape_string($destination)."' " .
-				"WHERE id = '".Database::escape_string($position)."' " .
+				"WHERE c_id = {$this->course_id} AND id = '".Database::escape_string($position)."' " .
 				"AND question_i = '".Database::escape_string($questionId)."'";
 
 		Database::query($sql);
@@ -479,12 +474,11 @@ class Answer {
 	 * @author - Olivier Brouckaert
 	 */
 	function save() {
-		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER, $this->course['db_name']);
-
-		$questionId=$this->questionId;
+		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
+		$questionId   = intval($this->questionId);
 
 		// removes old answers before inserting of new ones
-		$sql = "DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($questionId)."'";
+		$sql = "DELETE FROM $TBL_REPONSES WHERE c_id = {$this->course_id} AND question_id = '".($questionId)."'";
 		Database::query($sql);
 		$c_id = $this->course['real_id'];
 		// inserts new answers into data base
@@ -535,12 +529,12 @@ class Answer {
             $course_info = $course_info;
         }
         
-		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER, $course_info['db_name']);
+		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
         
         if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {                
                            
             //Selecting origin options
-            $origin_options = Question::readQuestionOption($this->selectQuestionId(),$this->course['db_name']);
+            $origin_options = Question::readQuestionOption($this->selectQuestionId(), $course_info['real_id']);
             //var_dump($origin_options);
             if (!empty($origin_options)) {
                 foreach($origin_options as $item) {
@@ -548,7 +542,7 @@ class Answer {
                 }
             }            
             
-            $destination_options = Question::readQuestionOption($newQuestionId,$course_info['db_name']);
+            $destination_options = Question::readQuestionOption($newQuestionId, $course_info['real_id']);
             $i=0;
             $fixed_list = array();
             if (!empty($destination_options)) {

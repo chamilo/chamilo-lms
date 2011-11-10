@@ -17,7 +17,6 @@ include('../inc/global.inc.php');
 $questionId    = intval($_GET['modifyAnswers']);
 $objQuestion   = Question::read($questionId);
 
-$TBL_ANSWERS   = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $documentPath  = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 $picturePath   = $documentPath.'/images';
@@ -30,9 +29,6 @@ $courseLang    = $_course['language'];
 $courseCode    = $_course['sysCode'];
 $coursePath    = $_course['path'];
 
-// Query db for answers
-//$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS WHERE question_id = '$questionId' ORDER BY id";
-//$result = Database::query($sql);
 
 // Init
 $output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&courseCode=$coursePath";
@@ -40,7 +36,7 @@ $i = 0;
 $nmbrTries = 0;
 
 
-$answers=$_SESSION['tmp_answers'];
+$answers = $_SESSION['tmp_answers'];
 $nbrAnswers = count($answers['answer']);
 
 for($i=1;$i <= $nbrAnswers;$i++) {

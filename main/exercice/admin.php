@@ -132,9 +132,10 @@ $picturePath = $documentPath.'/images';
 $audioPath=$documentPath.'/audio';
 
 // the 5 types of answers
-$aType=array(get_lang('UniqueSelect'),get_lang('MultipleSelect'),get_lang('FillBlanks'),get_lang('Matching'),get_lang('FreeAnswer'));
+$aType = array(get_lang('UniqueSelect'),get_lang('MultipleSelect'),get_lang('FillBlanks'),get_lang('Matching'),get_lang('FreeAnswer'));
 
 // tables used in the exercise tool
+//@todo remove if this declarations are not used
 $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);

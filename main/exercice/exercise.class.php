@@ -1757,7 +1757,8 @@ class Exercise {
 		$table_ans              = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 		// Creates a temporary Question object
-		$objQuestionTmp         = Question::read($questionId, api_get_course_int_id());
+		$course_id              = api_get_course_int_id();
+		$objQuestionTmp         = Question::read($questionId, $course_id);
 		
 		$questionName 			= $objQuestionTmp->selectTitle();
 		$questionDescription 	= $objQuestionTmp->selectDescription();
@@ -1798,7 +1799,7 @@ class Exercise {
 		$user_answer = '';
 
 		// Get answer list for matching
-		$sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id = "'.$questionId.'" ';
+		$sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id = "'.$questionId.'" ';
 		$res_answer = Database::query($sql_answer);
 		$answer_matching =array();
 		while ($real_answer = Database::fetch_array($res_answer)) {
@@ -1806,7 +1807,7 @@ class Exercise {
 		}
 
 		$real_answers = array();
-		$quiz_question_options = Question::readQuestionOption($questionId);
+		$quiz_question_options = Question::readQuestionOption($questionId, $course_id);
 		
 		$organs_at_risk_hit = 0;
 

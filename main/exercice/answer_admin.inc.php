@@ -780,23 +780,15 @@ if($modifyAnswers)
         {
             $nbrMatches=2;
         }
-
-    }
-    elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER)
-    {
+    } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
 		if($debug>0){echo str_repeat('&nbsp;',2).'$answerType is HOT_SPOT'."<br />\n";}
 
-		$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-
-		if(!$nbrAnswers)
-        {
-
+		if(!$nbrAnswers) {
             $nbrAnswers=$objAnswer->selectNbrAnswers();
-
-            $reponse=Array();
-            $comment=Array();
-            $weighting=Array();
-            $hotspot_coordinates=Array();
+            $reponse=array();
+            $comment=array();
+            $weighting=array();
+            $hotspot_coordinates=array();
             $hotspot_type=array();
 
 

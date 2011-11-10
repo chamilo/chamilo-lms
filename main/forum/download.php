@@ -54,14 +54,17 @@ if (is_dir($full_file_name)) {
     header('Location: '.$document_explorer);
 }
 
-$tbl_forum_attachment 	= Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-$tbl_forum_post 	= Database::get_course_table(TABLE_FORUM_POST);
+$tbl_forum_attachment  = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
+$tbl_forum_post 	   = Database::get_course_table(TABLE_FORUM_POST);
+
+$course_id = api_get_course_int_id();
 
 // launch event
 event_download($doc_url);
 
 $sql='SELECT thread_id, forum_id,filename FROM '.$tbl_forum_post.'  f  INNER JOIN '.$tbl_forum_attachment.' a
-        ON a.post_id=f.post_id WHERE path LIKE BINARY "'.$doc_url.'"';
+        ON a.post_id=f.post_id 
+      WHERE f.c_id = '.$course_id.' AND a.c_id = '.$course_id.' AND path LIKE BINARY "'.$doc_url.'"';
 
 $result = Database::query($sql);
 $row    = Database::fetch_array($result);
@@ -71,7 +74,7 @@ $forum_forum_visibility  = api_get_item_visibility(api_get_course_info($course_c
 
 if ($forum_thread_visibility==1 && $forum_forum_visibility==1) {
     if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/')) {
-       DocumentManager::file_send_for_download($full_file_name,TRUE, $row['filename']);
+       DocumentManager::file_send_for_download($full_file_name, TRUE, $row['filename']);
     }
 }
 exit;

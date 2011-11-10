@@ -51,16 +51,7 @@ $picturePath=$documentPath.'/images';
 // audio path
 $audioPath=$documentPath.'/audio';
 
-
-
 // Database table definitions
-$TBL_EXERCICE_QUESTION		= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-$TBL_EXERCICES				= Database::get_course_table(TABLE_QUIZ_TEST);
-$TBL_QUESTIONS				= Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_REPONSES				= Database::get_course_table(TABLE_QUIZ_ANSWER);
-$TBL_DOCUMENT				= Database::get_course_table(TABLE_DOCUMENT);
-$dbTable					= $TBL_DOCUMENT;
-
 if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }

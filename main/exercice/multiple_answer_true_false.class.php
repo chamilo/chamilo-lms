@@ -117,11 +117,12 @@ class MultipleAnswerTrueFalse extends Question {
 			$nb_answers = 1;
 			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
 		}
+		
+        $course_id = api_get_course_int_id();
         
         // Can be more options        
-        $option_data = Question::readQuestionOption($this->id);    
-                  
-  
+        $option_data = Question::readQuestionOption($this->id, $course_id);
+          
 		for ($i = 1 ; $i <= $nb_answers ; ++$i) {
             
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{label} &nbsp;&nbsp;{element}</td>');            
@@ -220,30 +221,29 @@ class MultipleAnswerTrueFalse extends Question {
 	function processAnswersCreation($form) {
 		$questionWeighting = $nbrGoodAnswers = 0;
 		$objAnswer        = new Answer($this->id);
-		$nb_answers       = $form->getSubmitValue('nb_answers');     
-	 
-        $options_count    = $form->getSubmitValue('options_count');        
-            
+		$nb_answers       = $form->getSubmitValue('nb_answers');
+        $options_count    = $form->getSubmitValue('options_count');
+        $course_id        = api_get_course_int_id();
        
         $correct = array();
-        $options = Question::readQuestionOption($this->id);
+        $options = Question::readQuestionOption($this->id, $course_id);
         	
         
         if (!empty($options)) {
             foreach ($options as $option_data) {
                 $id = $option_data['id'];
                 unset($option_data['id']);
-                Question::updateQuestionOption($id, $option_data);
+                Question::updateQuestionOption($id, $option_data, $course_id);
             }
         } else {            
             for ($i=1 ; $i <= 3 ; $i++) {                
-        	   $last_id = Question::saveQuestionOption($this->id, $this->options[$i], $i);
+        	   $last_id = Question::saveQuestionOption($this->id, $this->options[$i], $course_id, $i);
                $correct[$i] = $last_id;
             }            
         }
   
         //Getting quiz_question_options (true, false, doubt) because it's possible that there are more options in the future
-        $new_options = Question::readQuestionOption($this->id);
+        $new_options = Question::readQuestionOption($this->id, $course_id);
         
         $sorted_by_position = array();
         foreach($new_options as $item) {

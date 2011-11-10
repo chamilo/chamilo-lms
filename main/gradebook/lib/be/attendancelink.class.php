@@ -93,9 +93,8 @@ class AttendanceLink extends AbstractLink
     /**
      * Has anyone done this exercise yet ?
      */
-    public function has_results() {
-    	
-    	$tbl_attendance_result = Database :: get_course_table(TABLE_ATTENDANCE_RESULT,$course_info['dbName']);
+    public function has_results() {    	
+    	$tbl_attendance_result = Database :: get_course_table(TABLE_ATTENDANCE_RESULT);
 		$sql = 'SELECT count(*) AS number FROM '.$tbl_attendance_result." 
 				WHERE c_id = '.$this->course_id.' AND attendance_id = '".intval($this->get_ref_id())."'";
     	$result = Database::query($sql);

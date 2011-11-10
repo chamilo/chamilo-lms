@@ -162,15 +162,15 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 
     switch($_GET['list']) {
         case 'qualify':
-            $student_list = get_thread_users_qualify($_GET['id']);
+            $student_list = get_thread_users_qualify($_GET['id'], api_get_course_int_id());
             $nrorow3 = -2;
             break;
         case 'notqualify':
-            $student_list = get_thread_users_not_qualify($_GET['id']);
+            $student_list = get_thread_users_not_qualify($_GET['id'], api_get_course_int_id());
             $nrorow3 = -2;
             break;
         default:
-            $student_list = get_thread_users_details($_GET['id']);
+            $student_list = get_thread_users_details($_GET['id'], api_get_course_int_id());
             $nrorow3 = Database::num_rows($student_list);
             break;
     }

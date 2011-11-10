@@ -735,142 +735,17 @@ function get_session_time_control_key($exercise_id) {
     return $return_value;
 }
 
-
-
-
 /**
  * Gets count of exam results
  * @todo this function should be moved in a library  + no global calls 
+ * Modified by hubert borderiou 08-11-2011
  */
-function get_count_exam_results($exercise_id = null) {
-    //@todo replace all this globals
-    global $is_allowedToEdit, $is_tutor,$TBL_USER, $TBL_EXERCICES,$TBL_TRACK_EXERCICES, $TBL_TRACK_HOTPOTATOES, $TBL_TRACK_ATTEMPT_RECORDING,$filter_by_not_revised,$filter_by_revised,$documentPath;
-    $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
-    
-    $exercise_id = intval($_GET['exerciseId']);
-    $exercise_where = '';
-    if (!empty($exercise_id)) {
-        $exercise_where = ' AND te.exe_exo_id = '.$exercise_id.'  ';
-    }
-    
-    $hotpotatoe_where = '';
-    if (!empty($_GET['path'])) {
-        $hotpotatoe_path = Database::escape_string($_GET['path']);
-        $hotpotatoe_where .= ' AND exe_name = "'.$hotpotatoe_path.'"  ';
-    }
-         
-    $user_id_hotpotato_and = ' AND exe_user_id = ' . api_get_user_id() . ' ';
-    
-    if ($is_allowedToEdit || $is_tutor) {
-        $user_id_and = '';
-        if (!empty ($_POST['filter_by_user'])) {
-            if ($_POST['filter_by_user'] == 'all') {
-                $user_id_and = " AND user_id like '%'";
-            } else {
-                $user_id_and = " AND user_id = '" . Database :: escape_string((int) $_POST['filter_by_user']) . "' ";
-            }
-        }
-        if ($_GET['gradebook'] == 'view') {
-            $exercise_where_query = 'te.exe_exo_id =ce.id AND ';
-        }        
-
-
-        //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
-
-        /*$sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname col1" : "lastname as userpart1, firstname as col1").", ce.title as extitle, te.exe_result as exresult ,
-                             te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, te.start_date as exstart, steps_counter as exstep,cuser.user_id as excruid,te.exe_duration as exduration
-                      FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
-                      WHERE  user.user_id=cuser.user_id AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'
-                      $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0
-                      AND cuser.course_code=te.exe_cours_id ORDER BY col1, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";*/
-        
-        $sql="SELECT DISTINCT te.exe_id
-                FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-                WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 $exercise_where ";
-                
-        //Seems that the $TBL_TRACK_HOTPOTATOES does not have an exercise id that's weird ... we are removing $exercise_where
-        $hpsql="SELECT  count(*) as count
-                    FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . api_get_course_id() . "' $user_id_hotpotato_and  $hotpotatoe_where
-                    ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
-
-    } else {
-        // get only this user's results
-        $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';        
-
-        /*$sql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", ce.title as extitle, te.exe_result as exresult, " .
-                            "te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
-                            "te.start_date as exstart, steps_counter as exstep, cuser.user_id as excruid, te.exe_duration as exduration, ce.results_disabled as exdisabled
-                            FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
-                    WHERE  user.user_id=cuser.user_id AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id 
-                    AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'
-                    AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." $user_id_and $session_id_and AND ce.active <>-1 AND" .
-                    " orig_lp_id = 0 AND orig_lp_item_id = 0 AND cuser.course_code=te.exe_cours_id ORDER BY col1, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";*/
-
-      $sql="SELECT count(*) as count
-            FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-            WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 $exercise_where";
-
-      $hpsql = "SELECT count(*) as count
-                FROM $TBL_TRACK_HOTPOTATOES
-                WHERE exe_user_id = '" . api_get_user_id() . "' AND exe_cours_id = '" . api_get_course_id() . "' $user_id_hotpotato_and $hotpotatoe_where
-                ORDER BY exe_cours_id ASC, exe_date DESC";
-    }
-    
-    $count = 0;
-    //Chamilo results
-    if (empty($hotpotatoe_where)) {
-        $resx = Database::query($sql);
-        if (Database::num_rows($resx) > 0) {
-            if ($is_allowedToEdit || $is_tutor) {
-                while ($rowx = Database::fetch_array($resx,'ASSOC')) {
-                    $results[] = $rowx;
-                }
-                //Special modification to show corretly the pagination
-                if (is_array($results)) {          
-                    if ($_GET['gradebook'] == 'view') {
-                        $filter_by_no_revised = true;
-                        $from_gradebook = true;
-                    }
-                    $sizeof = count($results);        
-                    $user_list_id = array ();
-                    $user_last_name = '';
-                    $user_first_name = '';
-                    $quiz_name_list = '';
-                    $duration_list = '';
-                    $date_list = '';
-                    $result_list = '';
-                    $more_details_list = '';
-                    for ($i = 0; $i < $sizeof; $i++) {
-                        $revised = false;                
-                        $sql_exe = 'SELECT exe_id FROM ' . $TBL_TRACK_ATTEMPT_RECORDING . ' WHERE author != "" AND exe_id = ' . Database :: escape_string($results[$i]['exe_id']) .' LIMIT 1';            
-                        $query = Database::query($sql_exe);
-                        if (Database :: num_rows($query) > 0) {
-                            $revised = true;
-                        }
-                        if ($filter_by_not_revised && $revised) {
-                            continue;
-                        }
-                        if ($filter_by_revised && !$revised) {
-                            continue;
-                        }
-                        $count++;           
-                    }
-                }        
-            } else {            
-            	$rowx = Database::fetch_array($resx,'ASSOC');
-                $count = $rowx['count'];
-            }
-        }
-    } else {
-        //Hotpotatoes results
-        $hpres = Database::query($hpsql);
-        if (Database::num_rows($hpres) > 0) {
-            $rowx = Database::fetch_array($hpres,'ASSOC');
-            $count += $rowx['count'];
-        }
-    }
-    return $count;
+function get_count_exam_results() {
+    // I know it's bad to add a static integer here... but
+    // it factorise function get_exam_results_data
+    // and I think it worths it.
+    $tabres = get_exam_results_data(0, 9999999, 0, "ASC");
+    return count($tabres);
 }
 
 
@@ -880,7 +755,11 @@ function get_count_exam_results($exercise_id = null) {
  */
 function get_exam_results_data($from, $number_of_items, $column, $direction) {
     //@todo replace all this globals
-    global $is_allowedToEdit, $is_tutor,$TBL_USER, $TBL_EXERCICES,$TBL_TRACK_HOTPOTATOES, $TBL_TRACK_EXERCICES, $TBL_TRACK_ATTEMPT_RECORDING,$filter_by_not_revised,$filter_by_revised,$documentPath,$filter;
+    global  $is_allowedToEdit, $is_tutor,$TBL_USER, $TBL_EXERCICES,$TBL_TRACK_HOTPOTATOES, 
+            $TBL_TRACK_EXERCICES, $TBL_TRACK_ATTEMPT_RECORDING,
+            $filter_by_not_revised, $filter_by_revised, $documentPath, $filter, 
+            $filterByGroup, $TBL_GROUP_REL_USER;
+    
     $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
     
     $exercise_id = intval($_GET['exerciseId']);
@@ -911,24 +790,123 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
             $exercise_where_query = ' te.exe_exo_id =ce.id AND ';
         }
 
+		$sqlFromOption = "";
+		$sqlWhereOption = "";           // for hpsql
+	    $sql_inner_join_tbl_user = "";    
+	    $sql_inner_join_tbl_track_exercices = "";
+		$filterByGroup = intval($filterByGroup);
+		
         //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
 
-        /*$sql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", ce.title as extitle, te.exe_result as exresult ,
-                             te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, te.start_date as exstart, steps_counter as exstep,cuser.user_id as excruid,te.exe_duration as exduration
-                      FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
-                      WHERE  user.user_id=cuser.user_id AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string(api_get_course_id()) . "'
-                      $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0
-                      AND cuser.course_code=te.exe_cours_id ORDER BY col1, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";*/
-        $sql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", ce.title as col2, te.exe_result as exresult , te.exe_weighting as exweight,
-                te.exe_date as exdate, te.exe_id as exid, email as exemail, te.start_date as col4, steps_counter as exstep, exe_user_id as excruid,te.exe_duration as exduration, propagate_neg
-                FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-                WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 $exercise_where ";
+        // -----------------------------
+        // Filter by test revised or not
+        // -----------------------------
+        switch ($filter) {
+            case 0 :    // filter_by_not_revised
+            case 1 :
+                $sql_inner_join_tbl_track_exercices = "
+                    (SELECT * FROM $TBL_TRACK_EXERCICES AS tte
+                    WHERE tte.exe_id NOT IN (SELECT DISTINCT exe_id FROM $TBL_TRACK_ATTEMPT_RECORDING))";
+                break;
+            case 2 :    // filter_by_revised
+                $sql_inner_join_tbl_track_exercices = "
+                    (SELECT * FROM $TBL_TRACK_EXERCICES AS tte
+                    WHERE tte.exe_id IN (SELECT DISTINCT exe_id FROM $TBL_TRACK_ATTEMPT_RECORDING))";
+                break;
+           default :    // no filter for revised
+                $sql_inner_join_tbl_track_exercices = $TBL_TRACK_EXERCICES;
+                break;
+        }
+		
+		// -----------------------------
+		// Filter by group
+		// -----------------------------
+		switch ($filterByGroup) {
+		    case -1 : // no filter
+        	    $sql_inner_join_tbl_user = $TBL_USER;    
+		        break;
+		    case 0 : // user not in any group
+    		    $sql_inner_join_tbl_user = " 
+                    (SELECT u.user_id, firstname, lastname, email 
+                    FROM $TBL_USER u 
+                    WHERE 
+                    u.user_id NOT IN (
+                        SELECT user_id 
+                        FROM $TBL_GROUP_REL_USER
+                        WHERE c_id=".api_get_course_int_id()."))";
+    			$sqlFromOption = " ,$TBL_GROUP_REL_USER AS gru ";
+    			$sqlWhereOption = " AND user.user_id NOT IN	( SELECT user_id FROM $TBL_GROUP_REL_USER WHERE c_id=".api_get_course_int_id().") ";
+		        break;
+		    default : // user in group $filterByGroup
+    		    $sql_inner_join_tbl_user = " 
+                    (SELECT u.user_id, firstname, lastname, email 
+                    FROM $TBL_USER u 
+                    INNER JOIN $TBL_GROUP_REL_USER gru ON (
+                        gru.user_id=u.user_id 
+                        AND gru.group_id=$filterByGroup 
+                        AND gru.c_id=".api_get_course_int_id()."))";
+    			$sqlFromOption = " ,$TBL_GROUP_REL_USER AS gru ";
+    			$sqlWhereOption = "  AND gru.c_id=".api_get_course_int_id()." AND gru.user_id=user.user_id AND gru.group_id=".Database :: escape_string($filterByGroup);
+		        break;
+		}
+		
+        $first_and_last_name = api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1";
+        
+        // ---------------------------------------------------
+        // sql for chamilo-type tests for teacher / tutor view
+        // ---------------------------------------------------
+        $sql="  
+                SELECT
+                    user_id, 
+                    $first_and_last_name, 
+                    ce.title as col2, 
+                    te.exe_result as exresult , 
+                    te.exe_weighting as exweight,
+                    te.exe_date as exdate, 
+                    te.exe_id as exid, 
+                    email as exemail, 
+                    te.start_date as col4, 
+                    steps_counter as exstep, 
+                    exe_user_id as excruid,
+                    te.exe_duration as exduration, 
+                    propagate_neg
+                FROM 
+                    $TBL_EXERCICES  AS ce 
+                INNER JOIN $sql_inner_join_tbl_track_exercices AS te ON (te.exe_exo_id = ce.id) 
+                INNER JOIN $sql_inner_join_tbl_user  AS user ON (user.user_id = exe_user_id)
+                WHERE 
+                    te.status != 'incomplete' 
+                    AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and  $session_id_and 
+                    AND ce.active <>-1 
+                    AND orig_lp_id = 0 
+                    AND orig_lp_item_id = 0
+                    AND ce.c_id=".api_get_course_int_id()."
+                    $exercise_where ";
 
-        $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
-                FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . api_get_course_id()."'  $hotpotatoe_where
-                ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
-    } else {
+        // --------------------------------------------------
+        // sql for hotpotatoes tests for teacher / tutor view
+        // --------------------------------------------------
+        $hpsql="
+                SELECT 
+                    $first_and_last_name , 
+                    tth.exe_name, 
+                    tth.exe_result , 
+                    tth.exe_weighting, 
+                    tth.exe_date
+                FROM 
+                    $TBL_TRACK_HOTPOTATOES tth, 
+                    $TBL_USER user
+                    $sqlFromOption
+                WHERE  
+                    user.user_id=tth.exe_user_id 
+                    AND tth.exe_cours_id = '" . api_get_course_id()."'  
+                    $hotpotatoe_where 
+                    $sqlWhereOption
+                ORDER BY 
+                    tth.exe_cours_id ASC, 
+                    tth.exe_date DESC";
+    } 
+    else {
         // get only this user's results
         $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
    
@@ -941,10 +919,36 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
             AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." $user_id_and $session_id_and AND ce.active <>-1 AND" .
             " orig_lp_id = 0 AND orig_lp_item_id = 0 AND cuser.course_code=te.exe_cours_id ORDER BY col1, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";*/
 
-        $sql="SELECT ce.title as col0, ce.title as col1, te.exe_duration as exduration, firstname, lastname, te.exe_result as exresult, te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
-            "te.start_date as col2, steps_counter as exstep, exe_user_id as excruid,  ce.results_disabled as exdisabled, propagate_neg
-              FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-              WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0  $exercise_where";
+        $sql="
+                SELECT 
+                    ce.title as col0, 
+                    ce.title as col1, 
+                    te.exe_duration as exduration, 
+                    firstname, 
+                    lastname, 
+                    te.exe_result as exresult, 
+                    te.exe_weighting as exweight, 
+                    te.exe_date as exdate, 
+                    te.exe_id as exid, 
+                    email as exemail,
+                    te.start_date as col2, 
+                    steps_counter as exstep, 
+                    exe_user_id as excruid,  
+                    ce.results_disabled as exdisabled, 
+                    propagate_neg
+                FROM 
+                    $TBL_EXERCICES  AS ce 
+                    INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) 
+                    INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
+                WHERE 
+                    te.status != 'incomplete' 
+                    AND te.exe_cours_id='" . api_get_course_id() . "'  
+                    $user_id_and $session_id_and 
+                    AND ce.active <>-1 
+                    AND orig_lp_id = 0 
+                    AND orig_lp_item_id = 0  
+                    AND ce.c_id= ".api_get_course_int_id()."
+                    $exercise_where";
 
         $hpsql = "SELECT '', '', exe_name, exe_result , exe_weighting, exe_date
                   FROM $TBL_TRACK_HOTPOTATOES
@@ -1000,13 +1004,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                 if (Database :: num_rows($query) > 0) {
                     $revised = true;
                 }
-                if ($filter_by_not_revised && $revised) {
-                    continue;
-                }
-                if ($filter_by_revised && !$revised) {
-                    continue;
-                }
-                
                 if ($from_gradebook && ($is_allowedToEdit || $is_tutor)) {
                     if (in_array($results[$i]['col2'] . $results[$i]['col0'] . $results[$i]['col1'], $users_array_id)) {
                         continue;
@@ -1018,6 +1015,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                     $user_last_name = $results[$i]['col1'];
                     $user = $results[$i]['col0'] . $results[$i]['col1'];
                     $test = $results[$i]['col2'];                    
+                    $user_groups = displayGroupsForUser('<br/>', $results[$i]['user_id']);
                 } else {
                     $user_first_name = $results[$i]['firstname'];
                     $user_last_name = $results[$i]['lastname'];
@@ -1126,7 +1124,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                     }
                     $more_details_list = $html_link;
                     if ($is_allowedToEdit || $is_tutor) {
-                        $list_info[] = array($user_first_name,$user_last_name,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
+                        $list_info[] = array($user_first_name,$user_last_name,$user_groups,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
                     } else {
                         $list_info[] = array($quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
                     }

@@ -116,6 +116,20 @@ if (empty ($exerciseId)) {
 if (empty ($file)) {
 	$file = Database :: escape_string($_REQUEST['file']);
 }
+// ------------------------------- hubr
+// filter display by student group
+// if $_GET['filterByGroup'] = -1 => do not filter
+// else, filter by group_id (0 for no group)
+// -------------------------------
+$filterByGroup = -1;
+if (isset($_GET['filterByGroup']) && is_numeric($_GET['filterByGroup'])) {
+	$filterByGroup = Security::remove_XSS($_GET['filterByGroup']);
+	api_session_register('filterByGroup');
+}
+else if (isset($_SESSION['filterByGroup'])) {
+	$filterByGroup = $_SESSION['filterByGroup'];
+}
+// -------------------------------
 $learnpath_id       = intval($_REQUEST['learnpath_id']);
 $learnpath_item_id  = intval($_REQUEST['learnpath_item_id']);
 $page               = intval($_REQUEST['page']);
@@ -638,6 +652,21 @@ if ($show == 'result') {
     			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_uncheck.png', get_lang('ShowUnCorrectedOnly'),'','32').'</a>';
     		}
     		echo $view_result;
+			// -----------------------------hubr
+			// filter by student group menu
+			// -----------------------------
+			$exercice_id = intval($_GET['exerciseId']);
+            echo "<script type='text/javascript'>";
+			echo "	    function doFilterByGroup() {";
+    		echo "			var IdGroup = document.getElementById('groupFilter').value;";
+    		echo "			var goToUrl = \"".api_get_self()."?".api_get_cidreq()."&show=result&filter=$filter&gradebook=$gradebook&exerciseId=$exercice_id;$quiz_results_per_page&filterByGroup=\"+IdGroup;";
+    		echo "			self.location.href=goToUrl;";
+			echo "	    }";
+			echo "        </script>";
+			echo "&nbsp;&nbsp;";
+			echo Display::return_icon('group.gif', '');
+			echo get_lang("FilterByGroup")."&nbsp;".displayGroupMenu("groupFilter", $filterByGroup, "doFilterByGroup()")."&nbsp;";
+			// -----------------------------    		
 		}
 	}
 }
@@ -1080,7 +1109,8 @@ if ($show == 'result') {
     if (!empty($_GET['path'])) {
         $parameters['path'] = Security::remove_XSS($_GET['path']);
     }
-	$table = new SortableTable('quiz_results', 'get_count_exam_results', 'get_exam_results_data');
+    
+	$table = new SortableTable('quiz_results', 'get_count_exam_results', 'get_exam_results_data', 1, 10);
 	$table->set_additional_parameters($parameters);
     
     if ($is_allowedToEdit || $is_tutor) {
@@ -1123,11 +1153,11 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 //          $in_default : default value for option
 // @return : the html code of the <select>
 // ---------------------------------------------------------
-function displayGroupMenu($in_name, $in_default) {
+function displayGroupMenu($in_name, $in_default, $in_onchange="") {
 	// check the default value of option
 	$tabSelected = array($in_default => " selected='selected' ");
 	$res = "";
-	$res .= "<select name='$in_name' id='$in_name' >";
+	$res .= "<select name='$in_name' id='$in_name' onchange='".$in_onchange."' >";
 	$res .= "<option value='-1'".$tabSelected["-1"].">-- ".get_lang('AllGroups')." --</option>";
 	$res .= "<option value='0'".$tabSelected["0"].">- ".get_lang('NotInAGroup')." -</option>";
 	$tabGroups = GroupManager::get_group_list();

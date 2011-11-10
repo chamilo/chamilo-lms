@@ -228,12 +228,18 @@ $arrques = array();
 $arrans  = array();
 
 $user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($student_id)." ";
-$query = "SELECT attempts.question_id, answer  from ".$TBL_TRACK_ATTEMPT." as attempts
-				INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id
-				INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
-				INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id
+$query = "SELECT attempts.question_id, answer  FROM ".$TBL_TRACK_ATTEMPT." as attempts
+				INNER JOIN ".$TBL_TRACK_EXERCICES." AS stats_exercices ON stats_exercices.exe_id=attempts.exe_id
+				INNER JOIN ".$TBL_EXERCICE_QUESTION." AS quizz_rel_questions 
+				    ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id 
+				    AND quizz_rel_questions.question_id = attempts.question_id
+				    AND quizz_rel_questions.c_id=".api_get_course_int_id()."
+				INNER JOIN ".$TBL_QUESTIONS." AS questions 
+				    ON questions.id=quizz_rel_questions.question_id
+				    AND questions.c_id = ".api_get_course_int_id()."
 		  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
 		  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
+
 			//GROUP BY questions.position, attempts.question_id";
 
 $result = Database::query($query);	
@@ -264,7 +270,7 @@ $counter = 1;
 foreach ($questionList as $questionId) {
 	
 	$choice = $exerciseResult[$questionId];
-		// destruction of the Question object
+	// destruction of the Question object
 	unset($objQuestionTmp);
 	
 	// creates a temporary Question object
@@ -276,7 +282,7 @@ foreach ($questionList as $questionId) {
 	$quesId 			= $objQuestionTmp->selectId();	
 	        	
  	if ($show_results) { 	    
-	    echo $objQuestionTmp->return_header($counter);
+	    echo $objQuestionTmp->return_header("", $counter);
 	}
 	$counter++;
 	

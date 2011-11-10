@@ -988,13 +988,13 @@ function get_exercise_results_by_attempt($exe_id) {
 			$row['attempt_revised'] = 1;
 		}
 		$list[$exe_id] = $row;
-		$sql = "SELECT * FROM $table_track_attempt WHERE exe_id = $exe_id";
+		$sql = "SELECT * FROM $table_track_attempt WHERE exe_id = $exe_id ORDER BY tms ASC";
 		$res_question = Database::query($sql);
 		while ($row_q = Database::fetch_array($res_question,'ASSOC')) {
 			$list[$exe_id]['question_list'][$row_q['question_id']] = $row_q;
 		}
 	}
-	//echo '<pre>'; print_r($list);
+	// echo '<pre>'; print_r($list); echo "</pre>";
 	return $list;
 }
 

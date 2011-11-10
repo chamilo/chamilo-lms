@@ -126,11 +126,13 @@ class Certificate extends Model {
 		if (empty($this->certification_user_path) && $this->force_certificate_generation == false) {
 			return false;
 		}		
+        
 		require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
 		require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 		require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
 		
-		$my_category = Category :: load($this->certificate_data['cat_id']);		
+		$my_category = Category :: load($this->certificate_data['cat_id']);
+                
 		if (isset($my_category[0]) && $my_category[0]->is_certificate_available($this->user_id)) {
 						
 			$user         = api_get_user_info($this->user_id);
@@ -153,6 +155,12 @@ class Certificate extends Model {
 			$certif_text 		= str_replace("\\n","\n", $certif_text);
 	
 			$date = date('d/m/Y', time());
+            
+            //If the gradebook is related to skills we added the skills to the user
+                                
+            $skill = new Skill();
+            $skill->add_skill_to_user($this->user_id, $this->certificate_data['cat_id']);
+            
 	
 			if (is_dir($this->certification_user_path)) {
 				if (!empty($this->certificate_data)) {	
@@ -180,17 +188,10 @@ class Certificate extends Model {
 							$my_new_content_html = mb_convert_encoding($my_new_content_html,'UTF-8', api_get_system_encoding());
 							
 							$result = @file_put_contents($my_path_certificate, $my_new_content_html);
-							if ($result) {						
+							if ($result) {
 								
                                 //Updating the path
-								self::update_user_info_about_certificate($this->certificate_data['cat_id'], $this->user_id, $path_certificate);
-                                
-                                //If the gradebook is related to skills we added the skills to the user
-                                
-                                $skill = new Skill();                                
-                                $skill->add_skill_to_user($this->user_id, $this->certificate_data['cat_id']);
-                                
-                                
+								self::update_user_info_about_certificate($this->certificate_data['cat_id'], $this->user_id, $path_certificate);                                
 								$this->certificate_data['path_certificate'] = $path_certificate;
 								
 								if ($this->html_file_is_generated()) {

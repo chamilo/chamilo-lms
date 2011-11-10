@@ -534,7 +534,7 @@ if (!empty($keyword)) {
 	if (!api_is_allowed_to_edit(true,true)) {
 		$user_id = api_get_user_id();
 	}
-	$category = Category :: load (Security::remove_XSS($_GET['cat_id']));
+	$category = Category :: load ($_GET['cat_id']);
 	if ($category[0]->is_certificate_available($user_id)) {
 		$user= get_user_info_from_id($user_id);
 		$scoredisplay = ScoreDisplay :: instance();

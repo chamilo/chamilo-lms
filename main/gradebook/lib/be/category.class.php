@@ -448,12 +448,14 @@ class Category implements GradebookItem
 	 * @param	integer	User ID
 	 * @return	boolean	True if conditions match, false if fails
 	 */
-	public function is_certificate_available($user_id) {
-		$score = $this->calc_score($user_id);
-        $certification_score = ($score[0]/$score[1])*100; //get a percentage score to compare to minimum certificate score
-		if($certification_score >= $this->certificate_min_score) {
-			return true;
-		}
+	public function is_certificate_available($user_id) {	    
+		$score = $this->calc_score($user_id, $this->course_code);        
+        if (isset($score)) {        
+            $certification_score = ($score[0]/$score[1])*100; //get a percentage score to compare to minimum certificate score
+    		if ($certification_score >= $this->certificate_min_score) {
+    			return true;
+    		}
+        }
 		return false;
 	}
 
@@ -476,11 +478,11 @@ class Category implements GradebookItem
 		// get appropriate subcategories, evaluations and links
 
 		if (!empty($course_code)) {
-			$cats = $this->get_subcategories($stud_id, $course_code, $session_id);
+			$cats  = $this->get_subcategories($stud_id, $course_code, $session_id);
 			$evals = $this->get_evaluations($stud_id, false, $course_code);
 			$links = $this->get_links($stud_id, false, $course_code);		
 		} else {
-			$cats = $this->get_subcategories($stud_id);
+			$cats  = $this->get_subcategories($stud_id);
 			$evals = $this->get_evaluations($stud_id);
 			$links = $this->get_links($stud_id);
 		}

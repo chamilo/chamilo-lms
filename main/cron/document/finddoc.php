@@ -11,14 +11,13 @@ require_once '../../inc/lib/course.lib.php';
 if (empty($_GET['doc'])) {
   echo "To add a document name to search, add ?doc=abc to the URL";
 } else {
-  echo "Received param ".$_GET['doc']."<br />";
+  echo "Received param ".Security::remove_XSS($_GET['doc'])."<br />";
 }
 $courses_list =  CourseManager::get_courses_list();
 foreach ($courses_list as $course) {
-  //echo '<pre>'.print_r($course['db_name'],1).'</pre>';
   $title = Database::escape_string($_GET['doc']);
-  $td = Database::get_course_table(TABLE_DOCUMENT,$course['db_name']);
-  $sql = "SELECT id, path FROM $td WHERE path LIKE '%$title%' or title LIKE '%$title%'";
+  $td = Database::get_course_table(TABLE_DOCUMENT);
+  $sql = "SELECT id, path FROM $td WHERE c_id = ".$course['id']." AND path LIKE '%$title%' OR title LIKE '%$title%'";
   $res = Database::query($sql);
   if (Database::num_rows($res)>0) {
     while ($row = Database::fetch_array($res)) {

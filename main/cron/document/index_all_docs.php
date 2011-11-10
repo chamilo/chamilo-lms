@@ -25,12 +25,12 @@ $specific_fields_values = array();
 foreach ($specific_fields as $sf) {
 	$specific_fields_values[$sf['code']] = '';
 }
+$td = Database::get_course_table(TABLE_DOCUMENT);
 
 foreach ($courses_list as $course) {
   $course_dir = $course['directory'].'/document';
-  $title = Database::escape_string($_GET['doc']);
-  $td = Database::get_course_table(TABLE_DOCUMENT,$course['db_name']);
-  $sql = "SELECT id, path, session_id FROM $td WHERE path LIKE '%$title%' or title LIKE '%$title%'";
+  $title = Database::escape_string($_GET['doc']);  
+  $sql = "SELECT id, path, session_id FROM $td WHERE c_id = ".$course['id']." AND path LIKE '%$title%' or title LIKE '%$title%'";
   $res = Database::query($sql);
   if (Database::num_rows($res)>0) {
     while ($row = Database::fetch_array($res)) {

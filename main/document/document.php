@@ -289,8 +289,9 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
 
 // Is the document tool visible?
 // Check whether the tool is actually visible
-$table_course_tool  = Database::get_course_table(TABLE_TOOL_LIST, $_course['dbName']);
-$tool_sql           = 'SELECT visibility FROM ' . $table_course_tool . ' WHERE name = "'. TOOL_DOCUMENT .'" LIMIT 1';
+$table_course_tool  = Database::get_course_table(TABLE_TOOL_LIST);
+$course_id          = api_get_course_int_id();
+$tool_sql           = 'SELECT visibility FROM ' . $table_course_tool . ' WHERE c_id = '.$course_id.' AND name = "'. TOOL_DOCUMENT .'" LIMIT 1';
 $tool_result        = Database::query($tool_sql);
 $tool_row           = Database::fetch_array($tool_result);
 $tool_visibility    = $tool_row['visibility'];
@@ -599,8 +600,6 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         }
         $document_to_move = DocumentManager::get_document_data_by_id($_POST['move_file'], api_get_course_id());            
         require_once $lib_path.'fileManage.lib.php';
-        // This is needed for the update_db_info function
-        $dbTable = Database::get_course_table(TABLE_DOCUMENT);
         // Security fix: make sure they can't move files that are not in the document table
         if (!empty($document_to_move)) {
 			
@@ -608,12 +607,8 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 			$fileExist=false;
 			if(file_exists($real_path_target)){
 				$fileExist=true;
-			}			
-			
+			}						
             if (move($base_work_dir.$document_to_move['path'], $base_work_dir.$_POST['move_to'])) {
-            //if (1) {
-            //$contents = DocumentManager::replace_urls_inside_content_html_when_moving_file(basename($document_to_move['path']), $base_work_dir.dirname($document_to_move['path']), $base_work_dir.$_POST['move_to']);
-            //exit;
                 update_db_info('update', $document_to_move['path'], $_POST['move_to'].'/'.basename($document_to_move['path']));
                
 			   //update database item property

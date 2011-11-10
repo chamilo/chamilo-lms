@@ -168,8 +168,9 @@ $current_folder_id = $document_id;
 
 // Is the document tool visible?
 // Check whether the tool is actually visible
-$table_course_tool  = Database::get_course_table(TABLE_TOOL_LIST, $_course['dbName']);
-$tool_sql           = 'SELECT visibility FROM ' . $table_course_tool . ' WHERE name = "'. TOOL_DOCUMENT .'" LIMIT 1';
+$table_course_tool  = Database::get_course_table(TABLE_TOOL_LIST);
+$course_id          = api_get_course_int_id();
+$tool_sql           = 'SELECT visibility FROM ' . $table_course_tool . ' WHERE c_id = '.$course_id.' AND name = "'. TOOL_DOCUMENT .'" LIMIT 1';
 $tool_result        = Database::query($tool_sql);
 $tool_row           = Database::fetch_array($tool_result);
 $tool_visibility    = $tool_row['visibility'];
@@ -431,10 +432,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
             }
         }
         $document_to_move = DocumentManager::get_document_data_by_id($_POST['move_file'], api_get_course_id());            
-        require_once $lib_path.'fileManage.lib.php';
-        // This is needed for the update_db_info function
-        //$dbTable = $_course['dbNameGlu'].'document';
-        $dbTable = Database::get_course_table(TABLE_DOCUMENT);
+        require_once $lib_path.'fileManage.lib.php';        
         // Security fix: make sure they can't move files that are not in the document table
         if (!empty($document_to_move)) {
 			

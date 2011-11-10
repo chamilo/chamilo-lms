@@ -17,11 +17,10 @@
  *
  */
 function update_db_info($action, $old_path, $new_path = '') {
-
-	global $dbTable; // Table 'document'
-
+    $dbTable = Database::get_course_table(TABLE_DOCUMENT);
+    $course_id = api_get_course_int_id();
+    
 	/* DELETE */
-
 	if ($action == 'delete') {
 		/*  // RH: metadata, update 2004/08/23
 		    these two lines replaced by new code below:
@@ -29,13 +28,12 @@ function update_db_info($action, $old_path, $new_path = '') {
     		WHERE path='".$old_path."' OR path LIKE '".$old_path."/%'";
         */
         $old_path = Database::escape_string($old_path);
-        $to_delete = "WHERE path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%'";
+        $to_delete = "WHERE c_id = $course_id AND path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%'";
         $query = "DELETE FROM $dbTable " . $to_delete;
 
         $result = Database::query("SELECT id FROM $dbTable " . $to_delete);
 
         if (Database::num_rows($result)) {
-
             require_once api_get_path(INCLUDE_PATH).'../metadata/md_funcs.php';
             $mdStore = new mdstore(TRUE);  // create if needed
 
@@ -67,12 +65,9 @@ function update_db_info($action, $old_path, $new_path = '') {
 		$new_path = Database::escape_string($new_path);
 		$query = "UPDATE $dbTable
 		SET path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
-		WHERE path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%'";
-	}
-	//echo $query;
-	//error_log($query,0);
+		WHERE c_id = $course_id AND path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%'";
+	}	
 	Database::query($query);
-	//Display::display_normal_message("query = $query");
 }
 
 /**

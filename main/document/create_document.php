@@ -172,6 +172,9 @@ if ($is_certificate_mode) {
 
 /*	Constants and variables */
 
+$doc_table = Database::get_course_table(TABLE_DOCUMENT);
+$course_id = api_get_course_int_id();
+
 $document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);    
 if (empty($document_data)) {
     if (api_is_in_group()) {
@@ -422,8 +425,8 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $curr
 					$escaped_folders[$key] = Database::escape_string($val);
 			}
 			$folder_sql = implode("','", $escaped_folders);
-			$doc_table = Database::get_course_table(TABLE_DOCUMENT);
-			$sql = "SELECT * FROM $doc_table WHERE filetype='folder' AND path IN ('".$folder_sql."')";
+			
+			$sql = "SELECT * FROM $doc_table WHERE c_id = $course_id AND filetype='folder' AND path IN ('".$folder_sql."')";
 			$res = Database::query($sql);
 			$folder_titles = array();	
 			while ($obj = Database::fetch_object($res)) {				
@@ -571,13 +574,12 @@ if ($form->validate()) {
 			$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
 			$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
 			if ($new_comment || $new_title) {
-				$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 				$ct = '';
 				if ($new_comment)
 					$ct .= ", comment='$new_comment'";
 				if ($new_title)
 					$ct .= ", title='$new_title'";
-				Database::query("UPDATE $TABLE_DOCUMENT SET".substr($ct, 1)." WHERE id = '$document_id'");
+				Database::query("UPDATE $doc_table SET".substr($ct, 1)." WHERE c_id = $course_id AND id = '$document_id'");
 			}
 			$dir= substr($dir,0,-1);
 			$selectcat = '';

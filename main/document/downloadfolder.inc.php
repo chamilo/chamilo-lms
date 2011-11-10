@@ -37,6 +37,8 @@ $zip_folder     = new PclZip($temp_zip_file);
 $doc_table      = Database::get_course_table(TABLE_DOCUMENT);
 $prop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
+$course_id      = api_get_course_int_id();
+
 //$to_group_id = api_get_group_id(); variable loaded in document.php
 
 
@@ -64,7 +66,7 @@ if (api_is_allowed_to_edit()) {
 					docs.path 			LIKE '".$querypath."/%' AND 
 					docs.filetype		= 'file' AND props.visibility<>'2' AND 
 					props.to_group_id	= ".$to_group_id." AND 
-					docs.c_id 			= ".api_get_course_int_id()." ";
+					docs.c_id 			= ".$course_id." ";
 	$query = Database::query($sql);
 	// Add tem to the zip file
 	while ($not_deleted_file = Database::fetch_assoc($query)) {
@@ -82,8 +84,8 @@ if (api_is_allowed_to_edit()) {
 	// So... I do it in a couple of steps:
 	// 1st: Get all files that are visible in the given path
 	$querypath = Database::escape_string($querypath);
-	$query = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props 
-						      WHERE props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$querypath."/%' AND props.visibility='1' AND docs.filetype='file' AND props.to_group_id=".$to_group_id);
+	$query = Database::query("SELECT path FROM $doc_table AS docs, $prop_table AS props 
+						      WHERE docs.c_id = $course_id AND props.c_id = $course_id AND props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$querypath."/%' AND props.visibility='1' AND docs.filetype='file' AND props.to_group_id=".$to_group_id);
 	// Add them to an array
 	while ($all_visible_files = Database::fetch_assoc($query)) {
 		$all_visible_files_path[] = $all_visible_files['path'];
@@ -91,14 +93,15 @@ if (api_is_allowed_to_edit()) {
 
 	// 2nd: Get all folders that are invisible in the given path
 	$query2 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props 
-							   WHERE props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$querypath."/%' AND props.visibility<>'1' AND docs.filetype='folder'");
+							   WHERE docs.c_id = $course_id AND props.c_id = $course_id AND props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$querypath."/%' AND props.visibility<>'1' AND docs.filetype='folder'");
 	// If we get invisible folders, we have to filter out these results from all visible files we found
 	if (Database::num_rows($query2) > 0) {
 		// Add tem to an array
 		while ($invisible_folders = Database::fetch_assoc($query2)) {
 		//3rd: Get all files that are in the found invisible folder (these are "invisible" too)
 			//echo "<br /><br />invisible folders: ".$sys_course_path.$_course['path'].'/document'.$invisible_folders['path'].'<br />';
-			$query3 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props  WHERE props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$invisible_folders['path']."/%' AND docs.filetype='file' AND props.visibility='1'");
+			$query3 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props  
+			                           WHERE docs.c_id = $course_id AND props.c_id = $course_id AND props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$invisible_folders['path']."/%' AND docs.filetype='file' AND props.visibility='1'");
 			// Add tem to an array
 			while ($files_in_invisible_folder = Database::fetch_assoc($query3)) {
 				$files_in_invisible_folder_path[] = $files_in_invisible_folder['path'];

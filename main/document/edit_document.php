@@ -183,6 +183,7 @@ if (!is_dir($filepath)) {
 }
 
 $dbTable = Database::get_course_table(TABLE_DOCUMENT);
+$course_id = api_get_course_int_id();
 
 if (!empty($_SESSION['_gid'])) {
 	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
@@ -219,7 +220,7 @@ if (isset($_POST['comment'])) {
 	// Fixing the path if it is wrong	
 	$comment 	     = trim(Database::escape_string($_POST['comment']));
 	$title 		     = trim(Database::escape_string($_POST['title'])); 
-	$query = "UPDATE $dbTable SET comment='".$comment."', title='".$title."' WHERE id = ".$document_id;
+	$query = "UPDATE $dbTable SET comment='".$comment."', title='".$title."' WHERE c_id = $course_id AND id = ".$document_id;
 	Database::query($query);	
 	$comments_updated = get_lang('ComMod');
 	$info_message     = get_lang('fileModified');
@@ -238,7 +239,7 @@ if (isset($_POST['renameTo'])) {
 
 /** TODO: Check whether this code is still used **/
 /* Search the old comment */  // RH: metadata: added 'id,'
-$result = Database::query("SELECT id, comment, title FROM $dbTable WHERE id = ".$document_id);
+$result = Database::query("SELECT id, comment, title FROM $dbTable WHERE c_id = $course_id AND id = ".$document_id);
 
 /*
 // Debug info - enable on temporary needs only.

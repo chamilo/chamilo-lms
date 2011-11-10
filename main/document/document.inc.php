@@ -17,6 +17,7 @@
  */
 
 function build_directory_selector($folders, $document_id, $group_dir = '', $change_renderer = false) {
+    $doc_table = Database::get_course_table(TABLE_DOCUMENT);
     $course_id = api_get_course_int_id();
     $folder_titles = array();
     if (api_get_setting('use_document_title') == 'true') {
@@ -26,7 +27,7 @@ function build_directory_selector($folders, $document_id, $group_dir = '', $chan
                 $escaped_folders[$key] = Database::escape_string($val);
             }
             $folder_sql = implode("','", $escaped_folders);
-            $doc_table = Database::get_course_table(TABLE_DOCUMENT);
+            
             $sql = "SELECT * FROM $doc_table WHERE filetype = 'folder' AND c_id = $course_id AND path IN ('".$folder_sql."')";
             $res = Database::query($sql);
             $folder_titles = array();
@@ -702,8 +703,8 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
  * @return the path which should be displayed
  */
 function get_titles_of_path($path) {
-
     global $tmp_folders_titles;
+    $course_id = api_get_course_int_id();
 
     $nb_slashes = substr_count($path, '/');
     $tmp_path = '';
@@ -723,7 +724,8 @@ function get_titles_of_path($path) {
             // If this path has soon been stored here we don't need a new query
             $path_displayed .= $tmp_folders_titles[$tmp_path];
         } else {
-            $sql = 'SELECT title FROM '.Database::get_course_table(TABLE_DOCUMENT).' WHERE path LIKE BINARY "'.$tmp_path.'"';
+            $sql = 'SELECT title FROM '.Database::get_course_table(TABLE_DOCUMENT).' 
+                    WHERE c_id = '.$course_id.' AND path LIKE BINARY "'.$tmp_path.'"';
             $rs = Database::query($sql);
             $tmp_title = '/'.Database::result($rs, 0, 0);
             $path_displayed .= $tmp_title;

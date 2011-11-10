@@ -217,6 +217,7 @@ for ($k = 0; $k < $number_iteration; $k++) {
 echo '</table>';
 
 /*	ONE AT A TIME VIEW */
+$course_id = api_get_course_int_id();
 
 // This is for viewing all the images in the slideshow one at a time.
 if ($slide_id != 'all') {
@@ -239,7 +240,7 @@ if ($slide_id != 'all') {
 		} else {
 			$pathpart = $path.'/';
 		}
-		$sql = "SELECT * FROM $tbl_documents WHERE path='".Database::escape_string($pathpart.$image_files_only[$slide])."'";
+		$sql = "SELECT * FROM $tbl_documents WHERE c_id = $course_id AND path='".Database::escape_string($pathpart.$image_files_only[$slide])."'";
 		$result = Database::query($sql);
 		$row = Database::fetch_array($result);
 

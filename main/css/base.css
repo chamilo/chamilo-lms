@@ -3862,17 +3862,14 @@ form div.error input, form div.error textarea {
 }
 
 
-/* Plumb */
+/* jsPlumb */
 
-.window { 
-    cursor:pointer;
+.window {
     box-shadow: 2px 2px 19px #aaa;
    -o-box-shadow: 2px 2px 19px #aaa;
    -webkit-box-shadow: 2px 2px 19px #aaa;
    -moz-box-shadow: 2px 2px 19px #aaa;
-}
 
-.window {
     background-color: white;
     border: 0.1em dotted #D4E06B;
     color: black;
@@ -3894,14 +3891,17 @@ form div.error input, form div.error textarea {
 
 .first_window {
     border: 1px solid red;
+    cursor:pointer;
 }
 
 .second_window {
-    border: 1px solid black;    
+    border: 1px solid black;
+        
 }
 
 .third_window {    
     border: 1px solid blue;
+    cursor:pointer;
 }
 
 ._jsPlumb_endpoint {
@@ -3962,7 +3962,7 @@ form div.error input, form div.error textarea {
 }
 
 #login_fail {
-/*    margin: 0 6px 6px 6px; */
+    margin-left: 20px;
     padding: 4px;
     border: 1px solid #f00;
     background-color: #fff;

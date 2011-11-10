@@ -46,8 +46,8 @@ body {
 }
 
 #submain {
-    padding:0 10px;
-    border: 1px solid #ddd;
+    padding: 0px 0px 10px;
+    border: 1px solid #ccc;
     
     position: relative; /* to avoid the IE peekabo bug*/
     margin: 0px auto;
@@ -540,10 +540,9 @@ input.link_alike:hover {
 #menu-wrapper {
     display: block;
     float: right;
-    width: 200px;
+    width: 220px;    
     
-    
-     background-color: #F3F4F5;
+    background-color: #F3F4F5;
     border-bottom: 1px solid #CCCCCC;
     border-bottom-left-radius: 5px;
     border-left: 1px solid #CCCCCC;
@@ -574,7 +573,7 @@ input.link_alike:hover {
     font-weight: normal;
     margin-bottom: 8px;
     padding: 7px 10px 7px 15px;
-    width: 185px;
+    //width: 205px;
     display:block;
 }
 .menulist {
@@ -1911,6 +1910,10 @@ Document title
 .actions form {
     margin-right: 10px;
     vertical-align:middle;
+}
+
+.actions fieldset {
+    margin-top:0px;
 }
 /* big actions */
 .actionsbig {

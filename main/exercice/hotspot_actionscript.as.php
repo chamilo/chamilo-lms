@@ -31,11 +31,16 @@ $courseLang = $_course['language'];
 $courseCode = $_course['sysCode'];
 $coursePath = $_course['path'];
 
+
+$course_id = api_get_course_int_id();
+
 // Query db for answers
 if ($answer_type==HOT_SPOT_DELINEATION) {
-	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS WHERE question_id = '".Database::escape_string($questionId)."' AND hotspot_type = 'delineation' ORDER BY id";		
+	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS 
+	        WHERE c_id = $course_id AND question_id = '".Database::escape_string($questionId)."' AND hotspot_type = 'delineation' ORDER BY id";		
 } else {
-	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS WHERE question_id = '".Database::escape_string($questionId)."' ORDER BY id";
+	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS 
+	        WHERE c_id = $course_id AND question_id = '".Database::escape_string($questionId)."' ORDER BY id";
 }
 $result = Database::query($sql);
 // Init
@@ -78,10 +83,8 @@ while ($hotspot = Database::fetch_assoc($result))
 	{
 		$nmbrTries++;
 	}
-
 	$output .= "&hotspot_".$hotspot['id']."_coord=".$hotspot['hotspot_coordinates']."";
 	$i++;
-
 }
 
 // Generate empty

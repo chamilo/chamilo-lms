@@ -11,22 +11,23 @@
 /**
  * Code
  */
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
 if(!defined('ALLOWED_TO_INCLUDE')) {
 	exit();
 }
 
+$course_id = api_get_course_int_id();
+
 // INIT QUESTION
-if(isset($_GET['editQuestion'])) {
+if (isset($_GET['editQuestion'])) {
 	$objQuestion = Question::read ($_GET['editQuestion']);
 	$action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
 
 	if (isset($exerciseId) && !empty($exerciseId)) {
 		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
 		$sql="SELECT max_score FROM $TBL_LP_ITEM
-			  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
+			  WHERE c_id = $course_id AND item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
 		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) {
 			//Display::display_warning_message(get_lang('EditingScoreCauseProblemsToExercisesInLP'));

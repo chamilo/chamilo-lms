@@ -326,7 +326,7 @@ echo Display::form_row(get_lang('Course'), $select_course_html);
 $db_name = "";
 if (empty($selected_course) || $selected_course == '-1') {
     $course_info = api_get_course_info();
-    reset_menu_exo_lvl_type();    // no course selected, reset menu test / difficulté / type de reponse // hub 13-10-2011
+    reset_menu_exo_lvl_type();    // no course selected, reset menu test / difficultï¿½ / type de reponse // hub 13-10-2011
 } 
 else {   
 	$course_info = CourseManager::get_course_information_by_id($selected_course);                
@@ -337,26 +337,22 @@ if ($course_id_changed) {
 }
 $course_id = $course_info['real_id'];
 //Redefining table calls
-$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
-$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
-$TBL_CATEGORY							= Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);		// hub 13-10-2011
+$TBL_EXERCICE_QUESTION      = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+$TBL_EXERCICES              = Database::get_course_table(TABLE_QUIZ_TEST);
+$TBL_QUESTIONS              = Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_REPONSES               = Database::get_course_table(TABLE_QUIZ_ANSWER);
+$TBL_CATEGORY               = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);		// hub 13-10-2011
 $TBL_COURSE_REL_CATEGORY	= Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);  // hub 13-10-2011
 
-
-// ---------------------------------------------
 // Get course categories for the selected course
-// ---------------------------------------------
 
 // get category list for the course $selected_course
 $tabCatList = Testcategory::getCategoriesIdAndName($selected_course);
 $selectCourseCateogry = Display::select('courseCategoryId', $tabCatList, $courseCategoryId, array('class'=>'chzn-select','onchange'=>'submit_form(this);'), false);
 echo Display::form_row(get_lang("QuestionCategory"), $selectCourseCateogry);
 
-// ---------------------------------------------
 // Get exercice list for this course
-// ---------------------------------------------
+
 $exercise_list         = get_all_exercises_for_course_id($course_info, $session_id, $selected_course);
 //Exercise List
 $my_exercise_list = array();
@@ -437,12 +433,11 @@ if ($exerciseId > 0) {
 		$where .= ' AND type='.$answerType;
 	}
 	$sql = "SELECT DISTINCT id,question,type,level FROM $TBL_EXERCICE_QUESTION qt,$TBL_QUESTIONS qu $from WHERE qt.question_id=qu.id AND qt.exercice_id=$exerciseId AND qt.c_id=$selected_course AND qu.c_id=$selected_course $where ORDER BY question_order";
-  $result=Database::query($sql);
-  while($row = Database::fetch_array($result, 'ASSOC')) {
-  	$main_question_list[] = $row;
-  }    
-} 
-elseif ($exerciseId == -1) {
+    $result=Database::query($sql);
+    while($row = Database::fetch_array($result, 'ASSOC')) {
+        $main_question_list[] = $row;
+    }    
+} elseif ($exerciseId == -1) {
 	// ---------------------------------------------------------------------------
 	// if we have selected the option 'Orphan questions' in the list-box 'Filter'
 	// ---------------------------------------------------------------------------

@@ -9,6 +9,7 @@
 
 $dbTable = Database::get_course_table(TABLE_DOCUMENT); // TODO: This is a global variable with too simple name, conflicts are possible. Better eliminate it. Correct the test unit too.
 
+
 /**
  * Creates a hotpotato directory.
  *
@@ -45,9 +46,7 @@ function hotpotatoes_init($base_work_dir) {
  * @return  string    The exercise title
  */
 function GetQuizName($fname, $fpath) {
-
     $title = GetComment($fname);
-
     if (trim($title) == '') {
         if (file_exists($fpath.$fname)) {
             if (!($fp = @fopen($fpath.$fname, 'r'))) {
@@ -74,16 +73,11 @@ function GetQuizName($fname, $fpath) {
  * Added conditional to the table if is empty.
  */
 function GetComment($path, $course_code = '') {
-    global $dbTable;
-
-    if (!empty($course_code)) {
-        $course_info = api_get_course_info($course_code);
-        $dbTable     = Database::get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
-    }
+    global $dbTable;    
+    $course_info = api_get_course_info($course_code);            
     $path = Database::escape_string($path);
-    $query = "SELECT comment FROM $dbTable WHERE path='$path'";
+    $query = "SELECT comment FROM $dbTable WHERE c_id = {$course_info['real_id']} AND path='$path'";
     $result = Database::query($query);
-
     while ($row = Database::fetch_array($result)) {
         return $row[0];
     }
@@ -100,7 +94,8 @@ function SetComment($path, $comment) {
     global $dbTable;
     $path = Database::escape_string($path);
     $comment = Database::escape_string($comment);
-    $query = "UPDATE $dbTable SET comment='$comment' WHERE path='$path'";
+    $course_id = api_get_course_int_id();
+    $query = "UPDATE $dbTable SET comment='$comment' WHERE $course_id AND path='$path'";
     $result = Database::query($query);
     return "$result";
 }

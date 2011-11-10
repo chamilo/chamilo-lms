@@ -34,11 +34,15 @@ $courseCode    = $_course['sysCode'];
 $coursePath    = $_course['path'];
 $answer_type   = $objQuestion->selectType();
 
+$course_id     = api_get_course_int_id();
+
 if ($answer_type==HOT_SPOT_DELINEATION) {
 	// Query db for answers
-	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS WHERE question_id = '".Database::escape_string($questionId)."' AND hotspot_type <> 'noerror' ORDER BY id";
+	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS 
+	        WHERE c_id = $course_id AND question_id = '".Database::escape_string($questionId)."' AND hotspot_type <> 'noerror' ORDER BY id";
 } else {
-	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS WHERE question_id = '".Database::escape_string($questionId)."' ORDER BY id";
+	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS 
+	        WHERE c_id = $course_id AND question_id = '".Database::escape_string($questionId)."' ORDER BY id";
 }
 $result = Database::query($sql);
 // Init

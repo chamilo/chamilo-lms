@@ -16,6 +16,19 @@
 // The initialization class for the online editor is needed here.
 require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
 
+$TBL_EXERCICE_QUESTION      = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+$TBL_EXERCICES              = Database::get_course_table(TABLE_QUIZ_TEST);
+$TBL_QUESTIONS              = Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_REPONSES               = Database::get_course_table(TABLE_QUIZ_ANSWER);
+$TBL_DOCUMENT               = Database::get_course_table(TABLE_DOCUMENT);
+
+$main_user_table        = Database::get_main_table(TABLE_MAIN_USER);
+$main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_ATTEMPT      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+
+
 /**
  * Shows a question
  * 
@@ -77,8 +90,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 		$objAnswerTmp = new Answer($questionId);
         
 		$nbrAnswers   = $objAnswerTmp->selectNbrAnswers();
-        
-        $quiz_question_options = Question::readQuestionOption($questionId);
+        $course_id = api_get_course_int_id();
+        $quiz_question_options = Question::readQuestionOption($questionId, $course_id);
         
 		// For "matching" type here, we need something a little bit special
 		// because the match between the suggestions and the answers cannot be
@@ -1277,7 +1290,7 @@ function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $
     	$session_id  = 0;
     }
     if ($session_id == 0) {
-    	$conditions = array('where'=>array('active = ? AND session_id = ? AND c_id=?'=>array('1', $session_id, $course_id)), 'order'=>'title');
+    	$conditions = array('where'=>array('active = ? AND session_id = ? AND c_id = ?'=>array('1', $session_id, $course_id)), 'order'=>'title');
     } else {
         //All exercises
     	$conditions = array('where'=>array('active = ? AND (session_id = 0 OR session_id = ? ) AND c_id=?' =>array('1', $session_id, $course_id)), 'order'=>'title');

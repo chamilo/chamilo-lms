@@ -69,11 +69,13 @@ class Gradebook extends Model {
      * @param   string  action add, edit
      * @return  obj     form validator obj 
      */
-    public function show_skill_form($gradebook_id, $url) {
+    public function show_skill_form($gradebook_id, $url, $header = null) {
                 
         $form = new FormValidator('gradebook_add_skill', 'POST', $url);
         // Settting the form elements
-        $header = get_lang('Add');        
+        if (!isset($header)) {
+            $header = get_lang('Add');
+        }        
         $form->addElement('header', '', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
         $form->addElement('hidden', 'id', $id);

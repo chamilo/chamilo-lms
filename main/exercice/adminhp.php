@@ -9,14 +9,15 @@
 /**
  * Code
  */
-include 'exercise.class.php';
-include 'question.class.php';
-include 'answer.class.php';
-include 'exercise.lib.php';
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
 // name of the language file that needs to be included
 $language_file='exercice';
 
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
+require_once 'exercise.lib.php';
+
 $this_section=SECTION_COURSES;
 
 if (isset($_REQUEST["cancel"])) {

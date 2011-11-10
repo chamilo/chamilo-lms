@@ -35,9 +35,9 @@ $columns        = array(get_lang('Name'), get_lang('Skills'), get_lang('Actions'
 
 //Column config
 $column_model   = array(
-                        array('name'=>'name',           'index'=>'name',        'width'=>'200',   'align'=>'left'),
-                        array('name'=>'skills',         'index'=>'skills', 'width'=>'300',  'align'=>'left','sortable'=>'false'),
-                        array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
+                        array('name'=>'name',           'index'=>'name',    'width'=>'200', 'align'=>'left'),
+                        array('name'=>'skills',         'index'=>'skills',  'width'=>'300', 'align'=>'left','sortable'=>'false'),
+                        array('name'=>'actions',        'index'=>'actions', 'width'=>'100', 'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
                        );            
 //Autowidth             
 $extra_params['autowidth'] = 'true';
@@ -69,16 +69,16 @@ switch($action) {
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
         $gradebook_info = $gradebook->get($id);
         $url  = api_get_self().'?action='.$action.'&id='.$id;
-        $form =  $gradebook->show_skill_form($id, $url);
+        $form =  $gradebook->show_skill_form($id, $url, $gradebook_info['name']);
         if ($form->validate()) {
             $values = $form->exportValues();
             $res    = $gradebook->update_skills_to_gradebook($values['id'], $values['skill']);            
             if ($res) {
                 Display::display_confirmation_message(get_lang('ItemAdded'));
             }
-        }
-        echo Display::tag('h1',$gradebook_info['name']);
+        }        
         $form->display();
+        //echo Display::tag('h2',$gradebook_info['name']);
         break;
 }
 Display::display_footer();

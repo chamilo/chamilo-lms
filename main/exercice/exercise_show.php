@@ -18,11 +18,11 @@ $language_file = array('exercice');
 
 // including additional libraries
 require_once 'exercise.class.php';
-require_once 'exercise.lib.php';
 require_once 'question.class.php'; //also defines answer type constants
 require_once 'answer.class.php';
 
 require_once '../inc/global.inc.php';
+require_once 'exercise.lib.php';
 
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';

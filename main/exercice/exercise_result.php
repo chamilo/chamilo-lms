@@ -17,7 +17,6 @@
  * Code
  */
 require_once 'exercise.class.php';
-require_once 'exercise.lib.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 
@@ -25,6 +24,7 @@ require_once 'answer.class.php';
 $language_file='exercice';
 
 require_once '../inc/global.inc.php';
+require_once 'exercise.lib.php';
 
 if ($_GET['origin']=='learnpath') {
 	require_once '../newscorm/learnpath.class.php';

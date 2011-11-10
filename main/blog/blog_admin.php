@@ -13,7 +13,7 @@ $language_file = 'blog';
 
 require_once '../inc/global.inc.php';
 
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 $blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 

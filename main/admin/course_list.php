@@ -16,8 +16,6 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once '../gradebook/lib/be/gradebookitem.class.php';
 require_once '../gradebook/lib/be/category.class.php';
 
@@ -238,7 +236,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="search"');
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
     
-    $actions .= '<div style="float: right; margin-top: 5px; margin-right: 5px;">';    
+    $actions .= '<div style="float: right; ">';    
     $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'','32').'</a> ';
     
     if (api_get_setting('course_validation') == 'true') {    

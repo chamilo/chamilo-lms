@@ -121,11 +121,8 @@ $MonthsLong = api_get_months_long();
 
 // Database table definitions
 $TABLEAGENDA 			= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-$TABLE_ITEM_PROPERTY 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 $tbl_user       		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_courseUser 		= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_group      		= Database::get_course_table(TABLE_GROUP);
-$tbl_groupUser  		= Database::get_course_table(TABLE_GROUP_USER);
 
 /* 
   			ACCESS RIGHTS

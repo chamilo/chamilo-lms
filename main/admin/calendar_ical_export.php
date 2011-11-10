@@ -87,8 +87,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				break;
 			case 'course':
 				$TABLEAGENDA 			=Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-				//$TABLE_ITEM_PROPERTY 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-				require_once (api_get_path(SYS_CODE_PATH).'admin/calendar.lib.php');
+				require_once api_get_path(SYS_CODE_PATH).'admin/calendar.lib.php';
 				$ai = get_agenda_item($_GET['id']);
 		        $vevent->setProperty( 'summary', api_convert_encoding($ai['title'],'UTF-8',$charset));
         		if(empty($ai['start_date'])){header('location:'.$_SERVER['REFERER_URI']);}

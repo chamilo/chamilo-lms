@@ -27,7 +27,6 @@ if(isset($_GET['id_session'])) {
 }
 
 $lib_path = api_get_path(LIBRARY_PATH);
-require_once $lib_path.'display.lib.php';
 require_once $lib_path.'blog.lib.php';
 require_once $lib_path.'fckeditor/fckeditor.php';
 

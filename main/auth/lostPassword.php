@@ -69,8 +69,7 @@ if (api_get_setting('use_custom_pages') == 'true') {
 		}
 		$msg = Login::reset_password($_GET["reset"], $_GET["id"], true);
 		CustomPages::displayPage('lostpassword-feedback');
-	}
-	else {
+	} else {
 		CustomPages::displayPage('lostpassword');
 	}
 }
@@ -87,7 +86,7 @@ if (api_get_setting('allow_lostpassword') == 'false') {
 
 if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 	//$msg = Login::reset_password($_GET["reset"], $_GET["id"], true);
-	$msg1= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';	
+	$msg1= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="a_button gray" >'.get_lang('Back').'</a>';	
 	echo '<br /><br /><div class="actions" >'.$msg1.'</div>';
 } else {
 	$form = new FormValidator('lost_password');

@@ -53,7 +53,7 @@ if (!empty($course)) {
 	
 	if (empty($session_id)) {
 		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,t3.status 
-				  FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 
+				  FROM $tbl_user t1,$tbl_chat_connected t2, $tbl_course_user t3 
 				  WHERE t2.c_id = $course_id, 
 				  		t1.user_id=t2.user_id AND 
 				  		t3.user_id=t2.user_id AND 

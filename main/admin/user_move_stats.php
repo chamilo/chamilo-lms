@@ -118,9 +118,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 $TBL_DROPBOX_FILE           = Database::get_course_table(TABLE_DROPBOX_FILE);
                 $TBL_DROPBOX_POST           = Database::get_course_table(TABLE_DROPBOX_POST);
                 $TBL_AGENDA                 = Database::get_course_table(TABLE_AGENDA);
-                
-                //$TBL_DROPBOX_CATEGORY       = Database::get_course_table(TABLE_DROPBOX_CATEGORY, $course_info['dbName']);
-              
+                              
                 $course_code = Database::escape_string($course_code);
                 
                 //1. track_e_exercises
@@ -243,14 +241,14 @@ if (isset($_REQUEST['load_ajax'])) {
                 if (!empty($list))
                 foreach ($list as $id=>$data) {
                     if ($update_database) {
-                        $sql = "UPDATE $TBL_LP_VIEW SET session_id = '$new_session_id' WHERE id = $id ";
+                        $sql = "UPDATE $TBL_LP_VIEW SET session_id = '$new_session_id' WHERE c_id = $course_id AND id = $id ";
                         if ($debug) var_dump($sql); 
                         $res = Database::query($sql);          
                         if ($debug) var_dump($res);   
                           $result_message[$TBL_LP_VIEW]++;
                     } else {
                           //Getting all information of that lp_item_id
-                          $score    = Tracking::get_avg_student_score($user_id, $origin_course_code,       array($data['lp_id']),$origin_session_id);
+                          $score    = Tracking::get_avg_student_score($user_id, $origin_course_code, array($data['lp_id']),$origin_session_id);
                           $progress = Tracking::get_avg_student_progress($user_id, $origin_course_code, array($data['lp_id']),$origin_session_id);                         
                     	  $result_message['LP_VIEW'][$data['lp_id']] = array('score' => $score, 'progress' =>$progress);                          
                     }        
@@ -467,7 +465,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 while($row = Database::fetch_array($res,'ASSOC')) {
                     $id = $row['id'];
                     if ($update_database) {
-                    $sql = "UPDATE $TBL_DROPBOX_FILE SET session_id = '$new_session_id' WHERE id = $id";
+                    $sql = "UPDATE $TBL_DROPBOX_FILE SET session_id = '$new_session_id' WHERE c_id = $course_id AND id = $id";
                     if ($debug) var_dump($sql); 
                     $res = Database::query($sql);
                     if ($debug) var_dump($res);
@@ -482,13 +480,14 @@ if (isset($_REQUEST['load_ajax'])) {
                 
                 //11. Notebook
                 
-                $sql = "SELECT notebook_id FROM $TBL_NOTEBOOK WHERE user_id = $user_id AND session_id = $origin_session_id AND course = '$origin_course_code' AND c_id = $course_id";
+                $sql = "SELECT notebook_id FROM $TBL_NOTEBOOK 
+                        WHERE user_id = $user_id AND session_id = $origin_session_id AND course = '$origin_course_code' AND c_id = $course_id";
                 if ($debug) var_dump($sql); 
                 $res = Database::query($sql);
                 while($row = Database::fetch_array($res,'ASSOC')) {
                     $id = $row['notebook_id'];        
                     if ($update_database) {            
-                        $sql = "UPDATE $TBL_NOTEBOOK SET session_id = '$new_session_id' WHERE notebook_id = $id";                    
+                        $sql = "UPDATE $TBL_NOTEBOOK SET session_id = '$new_session_id' WHERE c_id = $course_id AND notebook_id = $id";                    
                         if ($debug) var_dump($sql); 
                             $res = Database::query($sql);
                         if ($debug) var_dump($res); 

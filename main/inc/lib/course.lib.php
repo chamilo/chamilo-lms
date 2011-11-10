@@ -2472,9 +2472,11 @@ class CourseManager {
             $condition_session = " AND session_id = '$session_id' ";
         }
         if (!empty($course_id)) {
-        	$course_id = intval($course_id);
-        	$condition_session .= " AND c_id = '$course_id' ";
+        	$course_id = intval($course_id);        	
+        } else {
+            $course_id = api_get_course_int_id();
         }
+        $condition_session .= " AND c_id = '$course_id' ";
         
         $sql	= "SELECT COUNT(*) AS n FROM $table WHERE 1=1 $condition_session ";
         $rs 	= Database::query($sql);

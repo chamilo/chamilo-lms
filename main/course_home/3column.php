@@ -22,6 +22,8 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $TABLE_TOOLS = Database::get_main_table(TABLE_MAIN_COURSE_MODULE);
 $TBL_ACCUEIL = Database::get_course_table(TABLE_TOOL_LIST);
 
+$course_id = api_get_course_int_id();
+
 // WORK with data post askable by admin of course
 if (api_is_allowed_to_edit(null, true)) {
 
@@ -59,7 +61,7 @@ if (api_is_allowed_to_edit(null, true)) {
 	 */
 
 	if ($remove) {
-		$sql = "SELECT * FROM $TBL_ACCUEIL WHERE id=$id";
+		$sql = "SELECT * FROM $TBL_ACCUEIL WHERE c_id = $course_id AND id=$id";
 		$result = Database::query($sql);
 		$tool = Database::fetch_array($result);
 		$tool_name = @htmlspecialchars($tool['name'] != '' ? $tool['name'] : $tool['link'], ENT_QUOTES, api_get_system_encoding());
@@ -94,20 +96,20 @@ if (api_is_allowed_to_edit(null, true)) {
  */
 
 elseif ($destroy) {
-	Database::query("UPDATE $TBL_ACCUEIL SET visibility='2' WHERE id=$id");
+	Database::query("UPDATE $TBL_ACCUEIL SET visibility='2' WHERE c_id = $course_id AND id = $id");
 }
 
 /* HIDE */
 
 elseif ($hide) { // visibility 1 -> 0
-	Database::query("UPDATE $TBL_ACCUEIL SET visibility=0 WHERE id=$id");
+	Database::query("UPDATE $TBL_ACCUEIL SET visibility=0 WHERE c_id = $course_id AND id=$id");
 	Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 }
 
 /*	REACTIVATE */
 
 elseif ($restore) { // visibility 0,2 -> 1
-	Database::query("UPDATE $TBL_ACCUEIL SET visibility=1  WHERE id=$id");
+	Database::query("UPDATE $TBL_ACCUEIL SET visibility=1  WHERE c_id = $course_id AND id=$id");
 	Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
 }
 
@@ -117,7 +119,7 @@ elseif ($restore) { // visibility 0,2 -> 1
 
 elseif (isset($update) && $update) {
 
-	$result 	= Database::query("SELECT * FROM $TBL_ACCUEIL WHERE id=$id");
+	$result 	= Database::query("SELECT * FROM $TBL_ACCUEIL WHERE c_id = $course_id AND id=$id");
 	$tool		= Database::fetch_array($result);
 	$racine		= $_configuration['root_sys'].'/'.$currentCourseID.'/images/';
 	$chemin		= $racine;
@@ -198,7 +200,7 @@ if ($is_platformAdmin && api_is_allowed_to_edit(null, true) && !api_is_coach()) 
 	 */
 
 	elseif (isset($delete) && $delete) {
-		Database::query("DELETE FROM $TBL_ACCUEIL WHERE id=$id AND added_tool=1");
+		Database::query("DELETE FROM $TBL_ACCUEIL WHERE c_id = $course_id AND id = $id AND added_tool=1");
 	}
 }
 

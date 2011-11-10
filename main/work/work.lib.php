@@ -324,9 +324,15 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	$work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$iprop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$work_assigment  = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-
+    
 	$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-	$user_id 			= api_get_user_id();
+	$user_id 			= api_get_user_id();	
+	
+    //condition for the session
+    $session_id         = api_get_session_id();
+    $condition_session  = api_get_session_condition($session_id);    
+    $course_id          = api_get_course_int_id();
+    
 	$publications_list = array();
 	$sort_params = array();
 
@@ -358,7 +364,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	}
 
 	$qualification_exists = false;
-	if(!empty($my_folder_data['qualification']) && intval($my_folder_data['qualification']) > 0) {
+	if (!empty($my_folder_data['qualification']) && intval($my_folder_data['qualification']) > 0) {
 		$qualification_exists = true;
 	}
 	$work_dir 		= api_get_path(SYS_COURSE_PATH).$_course['path'].'/work';
@@ -375,11 +381,6 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 		$sub_course_dir = '';
 	}
 
-	//condition for the session
-	$session_id 		= api_get_session_id();
-	$condition_session  = api_get_session_condition($session_id);
-	
-	$course_id 			= api_get_course_int_id();
 	
 	$contains_file_query = '';	
 	$parent_id = isset($my_folder_data['id']) ? $my_folder_data['id'] : 0;	
@@ -387,8 +388,6 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	if (!empty($sub_course_dir)) {		
 		$contains_file_query = "  OR (contains_file = 0 AND parent_id = $parent_id ) ";
 	}
-	
-	
 	
 	//Get list from database
 	if ($is_allowed_to_edit) {
@@ -443,7 +442,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 		}
 	}
 	
-	$table_header[] = array(get_lang('Date'), true, 'style="width:160px"');
+	$table_header[] = array(get_lang('Date'), true, 'style="width:170px"');
 
 	if ($is_allowed_to_edit) {
 		$table_header[] = array(get_lang('Actions'), false, 'style="width:90px"');
@@ -504,7 +503,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				// form edit directory
 				if (isset($clean_edit_dir) && $clean_edit_dir == $mydir) {
 					if (!empty($row['has_properties'])) {
-						$sql = Database::query('SELECT * FROM '.$work_assigment.' WHERE id = "'.$row['has_properties'].'" LIMIT 1');
+						$sql = Database::query('SELECT * FROM '.$work_assigment.' WHERE c_id = '.$course_id.' AND id = "'.$row['has_properties'].'" LIMIT 1');
 						$homework = Database::fetch_array($sql);
 					}
 
@@ -668,22 +667,28 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);	
 								
 							$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? api_get_utc_datetime(get_date_from_group('expires')) : '0000-00-00 00:00:00')."'";
-							Database::query('UPDATE '.$work_assigment.$expires_query.' WHERE id = '."'".$row['has_properties']."'");
-							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+							Database::query('UPDATE '.$work_assigment.$expires_query.' WHERE c_id = '.$course_id.' AND id = '."'".$row['has_properties']."'");
+							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 WHERE c_id = $course_id AND id ='".$row['id']."'";
 							Database::query($sql_add_publication);
 						
 			
 							$ends_query =    ' SET ends_on = '."'".($there_is_a_end_date ? api_get_utc_datetime(get_date_from_group('ends')) : '0000-00-00 00:00:00')."'";
-							Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE id = '."'".$row['has_properties']."'");
-							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+							Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE c_id = '.$course_id.' AND id = '."'".$row['has_properties']."'");
+							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 WHERE c_id = '.$course_id.' AND id ='".$row['id']."'";
 							Database::query($sql_add_publication);
 				
-							Database::query('UPDATE '.$work_table.' SET allow_text_assignment = '."'".intval($_POST['allow_text_assignment'])."'".' , description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'");
+							Database::query('UPDATE '.$work_table.' SET 
+							                     allow_text_assignment = '."'".intval($_POST['allow_text_assignment'])."'".' , 
+							                     description = '."'".Database::escape_string($_POST['description'])."'".', 
+							                     qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',
+							                     weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' 
+							                 WHERE c_id = '.$course_id.' AND id = '.$row['id']);
 								
 							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 							$link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $row['id'], api_get_session_id());
 							if ($link_id !== false) {
-								Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string((float)$_POST['weight']['weight'])."'".' WHERE id = '.$link_id);
+								Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string((float)$_POST['weight']['weight'])."'".' 
+								                WHERE c_id = '.$course_id.' AND id = '.$link_id);
 							}
 
 							//we are changing the current work and we want add them into gradebook
@@ -703,7 +708,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							$display_edit_form = false;
 
 							// gets calendar_id from student_publication_assigment
-							$sql = "SELECT add_to_calendar FROM $work_assigment WHERE publication_id ='".$row['id']."'";
+							$sql = "SELECT add_to_calendar FROM $work_assigment WHERE c_id = $course_id AND publication_id ='".$row['id']."'";
 							$res = Database::query($sql);
 							$calendar_id = Database::fetch_row($res);
 							$dir_name = sprintf(get_lang('HandingOverOfTaskX'), $dir_name);
@@ -721,7 +726,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 											content  = '".Database::escape_string($_POST['description'])."',
 											start_date = '".$end_date."',
 											end_date   = '".$end_date."'
-										WHERE id='".$calendar_id[0]."'";
+										WHERE c_id = $course_id AND id='".$calendar_id[0]."'";
 								Database::query($sql);
 							}
 							Display::display_confirmation_message(get_lang('FolderEdited'));
@@ -1338,7 +1343,7 @@ function update_dir_name($path, $new_name) {
 			$new_dir = $work['url'];
 			$name_with_directory = substr($new_dir, $work_len, strlen($new_dir));
 			$url = $path_to_dir.$new_name.$name_with_directory;
-			$sql = 'UPDATE '.$table.' SET url="/'.$url.'" WHERE c_id = '.$course_id.' AND id= '.$work['id'];
+			$sql = 'UPDATE '.$table.' SET url="/'.$url.'", title = "'.$new_name.'" WHERE c_id = '.$course_id.' AND id= '.$work['id'];
 			Database::query($sql);
 		}
 	}

@@ -30,7 +30,7 @@ $form->addElement('hidden', 'sec_token', $token);
 
 $form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
 $form->applyFilter('title','html_filter');
-$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
+$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150'));
 
 // Adavanced Parameters
 $form->addElement('html', '<div class="row"><div class="label"></div>');
@@ -47,7 +47,5 @@ $form->applyFilter('attendance_weight', 'html_filter');
 $form->addElement('html','</div>');
 
 $form->addElement('html','</div>');
-$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
 $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 $form->display();
-?>

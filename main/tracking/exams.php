@@ -9,9 +9,7 @@
  */
 
 $language_file = array ('registration', 'index', 'tracking', 'exercice','survey');
-
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 
 $this_section = SECTION_TRACKING;
@@ -141,17 +139,19 @@ if ($global) {
 	$html_result .= '<th>'.get_lang('Attempts').'</th>';
 	$html_result .= '</tr>';
 }
+$table = Database::get_course_table(TABLE_TOOL_LIST);
+$t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
 
 $export_array_global = $export_array =  array();
 if(!empty($course_list) && is_array($course_list))
-foreach($course_list as $current_course) {
+foreach ($course_list as $current_course) {
 	$global_row = $row_not_global = array();
+    $course_id = $current_course['real_id'];
     
 	$a_students = CourseManager :: get_student_list_from_course_code($current_course['code'], false);	
 	$total_students = count($a_students);
-	$t_quiz = Database::get_course_table(TABLE_QUIZ_TEST,$current_course['db_name']);
 	
-	$sqlExercices		= "SELECT count(id) as count FROM ".$t_quiz." AS quiz WHERE active='1' AND c_id = {$current_course['real_id']}";
+	$sqlExercices		= "SELECT count(id) as count FROM ".$t_quiz." AS quiz WHERE active='1' AND c_id = $course_id ";
 	$resultExercices 	= Database::query($sqlExercices);
 	$data_exercises  	= Database::store_result($resultExercices);
 	$exercise_count 	= $data_exercises[0]['count'];	
@@ -164,22 +164,21 @@ foreach($course_list as $current_course) {
 		$html_result .= $current_course['title'];
 		$html_result .= "</td>";		
 	}
-
-	$sql='SELECT visibility FROM '.$current_course['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz" ';
+    
+	$sql = "SELECT visibility FROM $table WHERE c_id = $course_id AND name='quiz'";
 	$resultVisibilityQuizz = Database::query($sql);
 	
 	if (Database::result($resultVisibilityQuizz, 0 ,'visibility') == 1) {		
-		$sqlExercices = "	SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE active='1' ORDER BY quiz.title ASC";		
+		$sqlExercices = "	SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE c_id = $course_id  AND active='1' ORDER BY quiz.title ASC";		
 		//Getting the exam list
 		if (!$global) {
 			if (!empty($exercise_id)) {
-				$sqlExercices = "	SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE active='1' AND id = $exercise_id ORDER BY quiz.title ASC";	
+				$sqlExercices = "	SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE c_id = $course_id  AND active='1' AND id = $exercise_id ORDER BY quiz.title ASC";	
 			}
 		}		
 		$resultExercices = Database::query($sqlExercices);
 		$i = 0;
-		if (Database::num_rows($resultExercices) > 0) {
-			
+		if (Database::num_rows($resultExercices) > 0) {			
 			while($a_exercices = Database::fetch_array($resultExercices)) {
 				$global_row[]= $current_course['title'];		
 				if (!$global) {

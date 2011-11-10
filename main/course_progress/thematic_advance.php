@@ -76,7 +76,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	$form->add_html_editor('content', get_lang('Content'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));	
 	//$form->addElement('textarea', 'content', get_lang('Content'));
 	
-	$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
+	//$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
 	
 	if ($action == 'thematic_advance_add') {
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'id="add_button" class="save"');

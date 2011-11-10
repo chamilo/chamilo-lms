@@ -230,7 +230,7 @@ if ($action == 'thematic_list') {
 		
 	$form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
 	$form->add_html_editor('content', get_lang('Content'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));	
-	$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
+	//$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
 	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 	
     $show_form = true;

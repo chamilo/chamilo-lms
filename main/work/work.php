@@ -727,8 +727,8 @@ switch ($action) {
 	    				                    enable_qualification = '".$enable_calification."',
 	    				                    publication_id = '".$id."'";
 					Database::query($sql_add_homework);
-	
-					$sql_add_publication = "UPDATE ".$work_table." SET "."has_properties  = ".Database::insert_id().", view_properties = 0 ".' where id = '.$id;
+	                $inserted_id = Database::insert_id();
+					$sql_add_publication = "UPDATE $work_table SET has_properties  = $inserted_id, view_properties = 0 WHERE id = $id";
 					Database::query($sql_add_publication);	
 				}
 	

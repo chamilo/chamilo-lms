@@ -56,7 +56,7 @@ $form->applyFilter('attendance_weight', 'html_filter');
 $form->addElement('html','</div>');
 
 $form->addElement('html','</div>');
-$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
+//$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
 $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 
 // set default values

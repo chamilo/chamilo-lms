@@ -2811,6 +2811,8 @@ function display_upcoming_events() {
     $mycourse   		= api_get_course_info();
     $myuser     		= api_get_user_info();
     $session_id 		= api_get_session_id();
+    
+    $course_id = $mycourse['real_id'];
 
 
 	$group_memberships = GroupManager :: get_group_ids($mycourse['real_id'], $myuser['user_id']);
@@ -2821,7 +2823,10 @@ function display_upcoming_events() {
 						DISTINCT agenda.*, item_property.*
 						FROM ".$TABLEAGENDA." agenda,
 							 ".$TABLE_ITEMPROPERTY." item_property
-						WHERE agenda.id = item_property.ref
+						WHERE 
+						agenda.c_id = $course_id AND 
+                        item_property.c_id = $course_id AND  
+                        agenda.id = item_property.ref
 						AND item_property.tool='".TOOL_CALENDAR_EVENT."'
 						AND item_property.visibility='1'
 						AND agenda.start_date > NOW()
@@ -2837,7 +2842,10 @@ function display_upcoming_events() {
 							agenda.*, item_property.*
 							FROM ".$TABLEAGENDA." agenda,
 								".$TABLE_ITEMPROPERTY." item_property
-							WHERE agenda.id = item_property.ref
+							WHERE
+							agenda.c_id = $course_id AND 
+                            item_property.c_id = $course_id AND   
+							agenda.id = item_property.ref
 							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
 							AND	( item_property.to_user_id='".$myuser['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 							AND item_property.visibility='1'
@@ -2849,7 +2857,10 @@ function display_upcoming_events() {
 							agenda.*, item_property.*
 							FROM ".$TABLEAGENDA." agenda,
 							".$TABLE_ITEMPROPERTY." item_property
-							WHERE agenda.id = item_property.ref
+							WHERE
+							agenda.c_id = $course_id AND 
+							item_property.c_id = $course_id AND   
+							agenda.id = item_property.ref
 							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
 							AND ( item_property.to_user_id='".$myuser['user_id']."' OR item_property.to_group_id='0')
 							AND item_property.visibility='1'

@@ -11,10 +11,10 @@ require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 api_protect_course_script(true);
 
 $action = $_GET['a'];
+$thematic = new Thematic();
 
 switch ($action) {		
 	case 'save_thematic_plan':
-		$thematic = new Thematic();
 		$title_list         = $_REQUEST['title'];
 		$description_list   = $_REQUEST['desc'];
 		//$description_list   = $_REQUEST['description'];
@@ -35,9 +35,7 @@ switch ($action) {
 		if (!api_is_allowed_to_edit(null, true)) {
 			echo '';
 			exit;
-		}
-		
-		$thematic = new Thematic();		
+        }        
 		if (($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) || (!empty($_REQUEST['duration_in_hours']) && !is_numeric($_REQUEST['duration_in_hours'])) ) {	    			
 			if ($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) {
         		$start_date_error = true;

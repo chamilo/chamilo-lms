@@ -3652,12 +3652,10 @@ function edit_forum_attachment_file($file_comment,$post_id,$id_attach) {
 function get_attachment($post_id) {
     $forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
-    
-
     $row = array();
     $post_id = intval($post_id);
-    $sql = 'SELECT id, path, filename,comment FROM '. $forum_table_attachment.' 
-            WHERE c_id = $course_id AND post_id ="'.$post_id.'"';
+    $sql = "SELECT id, path, filename,comment FROM $forum_table_attachment 
+            WHERE c_id = $course_id AND post_id = $post_id";
     $result = Database::query($sql);
     if (Database::num_rows($result) != 0) {
         $row = Database::fetch_array($result);

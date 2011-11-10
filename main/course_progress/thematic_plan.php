@@ -54,7 +54,7 @@ if ($action == 'thematic_plan_list') {
             $form->add_textfield('title['.$id.']', get_lang('Title'), true, array('size'=>'50'));
             $form->add_html_editor('description['.$id.']', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
             //$form->addElement('textarea', 'description['.$id.']', get_lang('Description'));            
-            $form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');              
+            //$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');              
             if (!empty($thematic_simple_list) && in_array($id, $thematic_simple_list)) {
                 $thematic_plan = $new_thematic_plan_data[$id];                 
                 // set default values
@@ -97,7 +97,7 @@ if ($action == 'thematic_plan_list') {
 
 	$form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
 	$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));	
-	$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
+	//$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
 	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 	
 	if ($description_type < ADD_THEMATIC_PLAN) {

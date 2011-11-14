@@ -12,9 +12,7 @@ $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAd
 $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 $message = '';
 
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-
-if(isset($_POST['activeExtension'])) {
+if (isset($_POST['activeExtension'])) {
 	switch ($_POST['extension_code']) {
 		case 'visio' :
 			$sql = 'UPDATE '.$tbl_settings_current.' SET

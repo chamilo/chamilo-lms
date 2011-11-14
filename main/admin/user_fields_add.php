@@ -8,10 +8,8 @@ $language_file = array('admin','registration');
 $cidReset = true;
 
 // including necessary libraries
-require ('../inc/global.inc.php');
-$libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'usermanager.lib.php';
-require_once $libpath.'formvalidator/FormValidator.class.php';
+require_once '../inc/global.inc.php';
+
 
 // section for the tabs
 $this_section=SECTION_PLATFORM_ADMIN;

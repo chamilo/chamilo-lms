@@ -149,9 +149,9 @@ if ($export && $name) {
 /* FOOTER */
 Display::display_footer();
 
-function form_special_export(){
+function form_special_export() {
     $htlm = get_lang('SelectOptionExport');
-    include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+    
     $form = new FormValidator('special_exports','post');
     $renderer = $form->defaultRenderer();
     $renderer->setElementTemplate('<div>{element}</div> ');

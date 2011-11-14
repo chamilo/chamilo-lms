@@ -54,7 +54,6 @@ $tool_name = get_lang('CreateSubLanguage');
 // setting breadcrumbs
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'languages.php', 'name' => get_lang('PlatformLanguages'));
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $sublanguage_folder_error = false;
 

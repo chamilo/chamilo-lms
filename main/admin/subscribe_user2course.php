@@ -14,14 +14,9 @@
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-require ('../inc/global.inc.php');
-$this_section=SECTION_PLATFORM_ADMIN;
-// including additional libraries
-require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-
+require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
+
 api_protect_admin_script();
 
 /* Global constants and variables */

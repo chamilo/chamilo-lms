@@ -23,8 +23,6 @@ $interbreadcrumb[] = array ("url" => 'index.php', 'name' => get_lang('PlatformAd
 $tool_name = get_lang('MultipleAccessURLs');
 Display :: display_header($tool_name);
 
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'security.lib.php';
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 
 $my_user_url_list = api_get_access_url_from_user(api_get_user_id());

@@ -12,10 +12,8 @@ $language_file='admin';
 
 $cidReset=true;
 
-require('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
-
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 api_protect_admin_script();
 $category = $_GET['category'];

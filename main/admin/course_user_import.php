@@ -158,9 +158,6 @@ api_protect_admin_script();
 // Including additional libraries.
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'import.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $tool_name = get_lang('AddUsersToACourse').' CSV';
 

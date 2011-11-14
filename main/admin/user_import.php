@@ -269,7 +269,6 @@ api_protect_admin_script(true);
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'import.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
 if (is_array($extAuthSource)) {

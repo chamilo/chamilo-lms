@@ -15,7 +15,6 @@ $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
 require_once $libpath.'group_portal_manager.lib.php';
-require_once $libpath.'formvalidator/FormValidator.class.php';
 
 // Section for the tabs
 $this_section = SECTION_PLATFORM_ADMIN;

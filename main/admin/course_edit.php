@@ -12,7 +12,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);

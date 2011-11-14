@@ -16,7 +16,6 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'course_description_controller.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 
 // defining constants

@@ -53,7 +53,6 @@ function show_image(image,width,height) {
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
-require_once $libpath.'formvalidator/FormValidator.class.php';
 require_once $libpath.'mail.lib.inc.php';
 
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);

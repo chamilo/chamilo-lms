@@ -1140,14 +1140,14 @@ class Database {
                         }
                         if (!empty($condition) && $clean_values != '') {
                             $condition = str_replace('%',"'@percentage@'", $condition); //replace "%"
-                            $condition = str_replace("'?'","%s", $condition); //we treat everything as string                            
-                            //just in case
-                            $condition = str_replace("?","%s", $condition); //we treat everything as string
+                            $condition = str_replace("'?'","%s", $condition);
+                            $condition = str_replace("?","%s", $condition);
+                            //Treat conditons as string
+                            $condition = str_replace("%s","'%s'", $condition);
                             $condition = vsprintf($condition, $clean_values);                            
                             $condition = str_replace('@percentage@','%', $condition); //replace "%"
                             $where_return .= $condition;
-                        }
-                    }
+                        }                    }
                     if (!empty($where_return)) {
                         $return_value = " WHERE $where_return" ;
                     }

@@ -1189,7 +1189,7 @@ class Database {
                 continue;
             }
             $type_condition = strtolower($type_condition);
-            switch($type_condition) {
+            switch ($type_condition) {
                 case 'where':                                       
                     foreach ($condition_data as $condition => $value_array) {                        
                         if (is_array($value_array)) {
@@ -1203,11 +1203,12 @@ class Database {
                             $clean_values = $value_array;                            
                         }
                        
-                        if (!empty($condition) && $clean_values != '') {                            
+                        if (!empty($condition) && $clean_values != '') {                                                        
                             $condition = str_replace('%',"'@percentage@'", $condition); //replace "%"
-                            $condition = str_replace("'?'","%s", $condition); //we treat everything as string                            
-                            //just in case
-                            $condition = str_replace("?","%s", $condition); //we treat everything as string
+                            $condition = str_replace("'?'","%s", $condition);
+                            $condition = str_replace("?","%s", $condition);
+                            //Treat conditons as string
+                            $condition = str_replace("%s","'%s'", $condition);
                             $condition = vsprintf($condition, $clean_values);                            
                             $condition = str_replace('@percentage@','%', $condition); //replace "%"
                             $where_return .= $condition;

@@ -281,7 +281,9 @@ foreach ($questionList as $questionId) {
 	$answerType			= $objQuestionTmp->selectType();
 	$quesId 			= $objQuestionTmp->selectId();	
 	        	
- 	if ($show_results) { 	    
+ 	if ($show_results) {
+ 	    // display question category, if any
+ 	    Testcategory::displayCategoryAndTitle($questionId);
 	    echo $objQuestionTmp->return_header("", $counter);
 	}
 	$counter++;

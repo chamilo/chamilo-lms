@@ -133,6 +133,8 @@ if (!empty($question_list)) {
 		$quesId 			= $objQuestionTmp->selectId();	
 		        	
 	 	if ($show_results) { 	    
+            // display question category, if any
+ 	        Testcategory::displayCategoryAndTitle($questionId);	 	    
 		    echo $objQuestionTmp->return_header($objExercise->feedbacktype, $counter);
 		}
 		$counter++;	

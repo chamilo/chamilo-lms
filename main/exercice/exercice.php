@@ -664,8 +664,8 @@ if ($show == 'result') {
 			echo "	    }";
 			echo "        </script>";
 			echo "&nbsp;&nbsp;";
-			echo Display::return_icon('group.gif', '');
-			echo get_lang("FilterByGroup")."&nbsp;".displayGroupMenu("groupFilter", $filterByGroup, "doFilterByGroup()")."&nbsp;";
+			echo Display::return_icon('group.gif', get_lang("FilterByGroup"));
+			echo displayGroupMenu("groupFilter", $filterByGroup, "doFilterByGroup()")."&nbsp;";
 			// -----------------------------    		
 		}
 	}

@@ -133,7 +133,7 @@ class SkillRelSkill extends Model {
             
             foreach ($skills as &$skill) {
                 $skill['data'] = $skill_obj->get($skill['skill_id']);
-                if (isset($skill['data'] )) {
+                if (isset($skill['data']) && !empty($skill['data'])) {
                     if (!empty($done_skills)) {
                         $skill['data']['passed'] =  0;
                         if (in_array($skill['skill_id'], $done_skills)) {

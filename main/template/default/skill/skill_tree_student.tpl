@@ -105,7 +105,7 @@ jsPlumb.bind("ready", function() {
                 //filling the gradebook_id         
                 $("#gradebook_id").html('');
                 jQuery.each(skill.gradebooks, function(index, data) {                    
-                    $("#gradebook_id").append('<span class="label_tag notice">'+data.name+'</div>');
+                    $("#gradebook_id").append('<span class="label_tag gradebook">'+data.name+'</div>');
                 });
             },
         });

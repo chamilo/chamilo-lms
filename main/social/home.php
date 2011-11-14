@@ -109,7 +109,7 @@ echo '<div id="social-content">';
             $lis = '';
             if (!empty($skills)) {
                 foreach($skills as $skill) {
-                    $lis .= Display::tag('li', Display::span($skill['name'], array('class'=>'label_tag success')));
+                    $lis .= Display::tag('li', Display::span($skill['name'], array('class'=>'label_tag skill')));
                 }                
                 echo Display::tag('ul', $lis);
             }

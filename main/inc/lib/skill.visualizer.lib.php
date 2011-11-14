@@ -42,7 +42,7 @@
         if (!empty($skill['gradebooks'])) {
             foreach ($skill['gradebooks'] as $gradebook) {
                 //uncomment this to show the gradebook tags
-                $gradebook_string .= Display::span($gradebook['name'], array('class'=>'label_tag notice','style'=>'width:50px')).'<br />';    
+                $gradebook_string .= Display::span($gradebook['name'], array('class'=>'label_tag gradebook','style'=>'width:50px')).'<br />';    
             }
         }        
         $skill['name'] = Display::url($skill['name'], '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block'));

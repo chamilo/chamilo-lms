@@ -192,10 +192,7 @@ class DisplayGradebook
 			$header .= '<b>'.get_lang('SearchResults').' :</b>';
 		}*/
 		echo $header;
-	}
-
-	
-	
+	}	
 	
 	function display_header_gradebook_per_gradebook($catobj, $showtree, $selectcat, $is_course_admin, $is_platform_admin, $simple_search_form, $show_add_qualification = true, $show_add_link = true) {
 
@@ -237,8 +234,7 @@ class DisplayGradebook
 			$scoreinfo = get_lang('StatsStudent') . ' :<b> '.api_get_person_name($user['firstname'], $user['lastname']).'</b><br />';
 			if ((!$catobj->get_id() == '0') && (!isset ($_GET['studentoverview'])) && (!isset ($_GET['search']))) {
 				$scoreinfo.= '<h2>'.get_lang('Total') . ' : ' . $scorecourse_display . '</h2>';
-			}
-		
+			}		
 			Display :: display_normal_message($scoreinfo, false);
 		}
 		// show navigation tree and buttons?
@@ -302,8 +298,7 @@ class DisplayGradebook
 		
 		if (api_is_allowed_to_edit(null, true)) {
 			if ($selectcat == '0') {
-				if ($show_add_qualification === true) {
-						
+				if ($show_add_qualification === true) {						
 				}
 				if ($show_add_link) {
 					//$header .= '<td><a href="gradebook_add_eval.php?'.api_get_cidreq().'"><img src="../img/filenew.gif" alt="' . get_lang('NewEvaluation') . '" /> ' . get_lang('NewEvaluation') . '</a>';
@@ -354,8 +349,7 @@ class DisplayGradebook
 					//$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $catobj->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'','32').'</a>';
 					if ($catobj->get_name() != api_get_course_id()) {
 						$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $catobj->get_id() . '&amp;selectcat=0&amp;cidReq='.$catobj->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'','32').'</a>';
-					}
-					 
+					}					 
 					$header .= Display::div($modify_icons, array('class'=>'right'));
 						
 				}
@@ -411,26 +405,41 @@ class DisplayGradebook
 			$evals_links = array_merge($allevals, $alllinks);
 			$item_value=0;
 			$item_total=0;
+            
+            //@todo move these in a function            
+            $sum_categories_weight_array = array();     
+            if (isset($catobj) && !empty($catobj)) {            
+                $categories = Category::load(null, null, null, $catobj->get_id());
+                if (!empty($categories)) {
+                    foreach($categories as $category) {                  
+                        $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
+                    }
+                } else {
+                    $sum_categories_weight_array[$catobj->get_id()] = $catobj->get_weight();
+                }
+            }
+                        
+            $item_total_value = 0;            
+           
 			for ($count=0; $count < count($evals_links); $count++) {
-				$item = $evals_links[$count];
-				$score = $item->calc_score($user_id);
-				$my_score_denom=($score[1]==0) ? 1 : $score[1];
-				$item_value +=$score[0]/$my_score_denom*$item->get_weight();
-				$item_total +=$item->get_weight();
-				//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
-				//var_dump($item_value.' - '.$item_total);
+				$item           = $evals_links[$count];
+				$score          = $item->calc_score($user_id);
+                $my_score_denom =($score[1]==0) ? 1 : $score[1];
+				$item_value     = $score[0]/$my_score_denom * $item->get_weight();
+                
+                
+                $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
+                $percentage     = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$catobj->get_weight(), 2);
+                
+                //$item_value     = $percentage*$item_value;                
+                
+				//$item_total         += $percentage*100;
+                $item_total         += $item->get_weight();                
+                $item_total_value   += $item_value;
+				//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);				
 			}
-			$children = $catcourse[0]->get_subcategories(api_get_user_id(), api_get_course_id(), api_get_session_id());
-			
-			$count = 1;
-			if (!empty($children)) {
-				$count = count($children);
-			}
-			
-			$item_value = $item_value/$count;
-			$item_total = $item_total/$count;
-			
-			$item_value = number_format($item_value, 2, '.', ' ');
+            
+			$item_value = number_format($item_total_value, 2);
 			$total_score = array($item_value, $item_total);
 		
 			$scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
@@ -508,8 +517,7 @@ class DisplayGradebook
 			$header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'"><img src="../img/icons/32/new_folder.png" alt="' . get_lang('AddGradebook') . '" /></a></td>';			
 			
 			if ($selectcat == '0') {
-                if ($show_add_qualification === true) {
-				   
+                if ($show_add_qualification === true) {				   
                 }
                 if ($show_add_link) {
 				    //$header .= '<td><a href="gradebook_add_eval.php?'.api_get_cidreq().'"><img src="../img/filenew.gif" alt="' . get_lang('NewEvaluation') . '" /> ' . get_lang('NewEvaluation') . '</a>';

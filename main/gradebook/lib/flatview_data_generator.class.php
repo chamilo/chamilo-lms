@@ -58,25 +58,29 @@ class FlatViewDataGenerator
 		$headers = array();
 		$headers[] = get_lang('LastName');
 		$headers[] = get_lang('FirstName');
+        
 		if (!isset($items_count)) {
 			$items_count = count($this->evals_links) - $items_start;
 		}		
-		
-		$count_categories = 1;
-		
-		if (isset($this->category) && !empty($this->category)) {
-			$categories = Category::load(null, null, null, $this->category->get_id());				
+		//@todo move these in a function
+		$sum_categories_weight_array = array();		
+		if (isset($this->category) && !empty($this->category)) {		    
+			$categories = Category::load(null, null, null, $this->category->get_id());
 			if (!empty($categories)) {
-				$count_categories = count($categories) ;
+			    foreach($categories as $category) {			         
+				    $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
+                }
+			} else {
+			    $sum_categories_weight_array[$this->category->get_id()] = $this->category->get_weight();
 			}
 		}
-		
-		
+        
 		for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
-			$item = $this->evals_links [$count + $items_start];
+			$item = $this->evals_links[$count + $items_start];
 			
 			//$headers[] = $item->get_name().' <br /> '.get_lang('Max').' '.$this->get_max_result_by_link($count + $items_start).' ';
-			$weight = round($item->get_weight()/($count_categories*100), 2)*100;
+			$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
+			$weight = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight() *100, 2);
 			$headers[] = $item->get_name().'  '.$weight.'% ';
 			if ($show_detail) {
 				//$headers[] = $item->get_name().' ('.get_lang('Detail').')';
@@ -182,15 +186,18 @@ class FlatViewDataGenerator
 		if ($ignore_score_color) {
 			$displaytype |= SCORE_IGNORE_SPLIT;
 		}
-		
-		$count_categories = 1;
-		
-		if (isset($this->category) && !empty($this->category)) {			
-			$categories = Category::load(null, null, null, $this->category->get_id());			
-			if (!empty($categories)) {				
-				$count_categories = count($categories);				
-			}			
-		}
+		//@todo move these in a function
+		$sum_categories_weight_array = array();     
+        if (isset($this->category) && !empty($this->category)) {            
+            $categories = Category::load(null, null, null, $this->category->get_id());
+            if (!empty($categories)) {
+                foreach($categories as $category) {                  
+                    $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
+                }
+            } else {
+                $sum_categories_weight_array[$this->category->get_id()] = $this->category->get_weight();
+            }
+        }
 		
 		foreach ($selected_users as $user) {
 			$row = array ();
@@ -198,21 +205,34 @@ class FlatViewDataGenerator
 			$row[] = $user[2];	// last name
 			$row[] = $user[3];	// first name
 
-			$item_value=0;
-			$item_total=0;
+			$item_value = 0;
+            $item_value_total = 0;
+			$item_total = 0;
+            
 
 			for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
-				$item  			= $this->evals_links [$count + $items_start];
+				$item  			= $this->evals_links[$count + $items_start];
+                
 				$score 			= $item->calc_score($user[0]);
+                
 				$divide			= ( ($score[1])==0 ) ? 1 : $score[1];
-				
-				$item_value		+= round($score[0]/$divide*$item->get_weight(),2);				
-				$item_total		+= $item->get_weight();
+                
+                $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
+                
+                $item_value     = round($score[0]/$divide,2)*100;
+                $percentage     = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight(), 2);
+                $item_value     = $percentage*$item_value;
+                
+				$item_total		+= $percentage*100;
 				
 				if (!$show_all) {
 					//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
-					if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {																		
-						$row[] = $score[0];
+					if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {
+					    if (!empty($score[0])) {																		
+                            $row[] = $score[0].' ('.$item_value.'%) ';
+                        } else {
+                            $row[] = '';
+                        }
                         //$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);	
 					} else {
 						//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
@@ -223,12 +243,10 @@ class FlatViewDataGenerator
 					$row[] = $score[0];
 					//$row[] = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
 				}
-			}		
-			
-			$item_value = round($item_value / $count_categories, 2);
-			$item_total = round($item_total / $count_categories, 2);
-			
-			$total_score = array($item_value, $item_total);
+                $item_value_total +=$item_value;              
+			}			
+			$total_score = array($item_value_total, $item_total);
+            
 			
 			if (!$show_all) {				
 				$row[] = $scoredisplay->display_score($total_score);

@@ -96,7 +96,6 @@ if (!empty($keyword)) {
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 $flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset, $addparams);
 
-
 if (isset ($_GET['exportpdf']))	{
 
 	$interbreadcrumb[] = array (

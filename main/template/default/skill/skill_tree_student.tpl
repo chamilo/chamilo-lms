@@ -19,13 +19,6 @@ var block_size              = {$skill_visualizer->block_size};
 //Setting the parent by default 
 var parents = ['block_1'];
 
-/* Clean window block classes*/
-function cleanclass(obj) {
-    obj.removeClass('first_window');
-    obj.removeClass('second_window');
-    obj.removeClass('third_window');
-}
-
 jsPlumb.bind("ready", function() {
     
     //Open dialog
@@ -74,7 +67,7 @@ jsPlumb.bind("ready", function() {
             if (jQuery.inArray(id, parents) == -1) {                              
                 parents.push(id);
             }
-            open_block(id);
+            open_block_student(id);
         }
         
         //Setting class       
@@ -99,11 +92,7 @@ jsPlumb.bind("ready", function() {
     $(".edit_block").live('click',function() {        
         var my_id = $(this).attr('id');
         my_id = my_id.split('_')[2];
-        
-        //Cleaning selected
-        $("#parent_id option:selected").removeAttr('selected');
-        $("#gradebook_id option:selected").removeAttr('selected');
-        
+                
         $.ajax({
             url: url+'&a=get_skill_info&id='+my_id,             
             success: function(json) {
@@ -116,15 +105,10 @@ jsPlumb.bind("ready", function() {
                 //filling the gradebook_id         
                 $("#gradebook_id").html('');
                 jQuery.each(skill.gradebooks, function(index, data) {                    
-                    $("#gradebook_id").append('<span class="label_tag notice">'+data.name+'</div>');   
-                    gradebook_id         
+                    $("#gradebook_id").append('<span class="label_tag notice">'+data.name+'</div>');
                 });
             },
         });
-        
-                
-        
-                
                 
         $("#dialog-form").dialog("open");
         return false;

@@ -84,7 +84,7 @@ jsPlumb.bind("ready", function() {
                             parent_id = $("#parent_id option:selected").attr('value');                            
                         
                             //Great stuff                         
-                            open_block('block_'+parent_id);
+                            open_block('block_'+parent_id, 0);
                                                                      
                             $("#dialog-form").dialog("close");                                      
                         }                           
@@ -136,7 +136,7 @@ jsPlumb.bind("ready", function() {
             if (jQuery.inArray(id, parents) == -1) {                              
                 parents.push(id);
             }
-            open_block(id);
+            open_block(id, 0);
         }
         
         //Setting class       

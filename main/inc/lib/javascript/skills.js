@@ -109,7 +109,7 @@
         @param string block id i.e "block_1" 
      * */
     
-    function open_block(id) {
+    function open_block(id, load_user_data) {
         console.log("open_block id : " + id);      
         var numeric_id = id.split('_')[1];  
         for (var i = 0; i < skills.length; i++) {
@@ -117,14 +117,9 @@
             if (jQuery.inArray(skills[i].element, parents) == -1) {
                  //console.log('deleting this'+ skills[i].element);
                  jsPlumb.deleteEndpoint(skills[i].endp);
-                 $("#"+skills[i].element).remove();
-                 //skills.splice(i,1);
-                 //console.log('Removing '+skills[i].element);
+                 $("#"+skills[i].element).remove();                 
             }
-        }
-        /*if ($('#'+id).length == 0) {
-            $('body').append('<div id="'+id+'" class="open_block window " >'+id+'</div>'); 
-        }*/
+        }        
        
         //Modifying current block position
         pos = $('#'+id).position();        
@@ -142,7 +137,11 @@
         jsPlumb.animate(parents[0], { left: center_x, top:offset_y }, { duration:duration_value });       
         
         top_value = 2*space_between_blocks_y +offset_y ; 
-        load_children(numeric_id, top_value);   
+        load_children(numeric_id, top_value, load_user_data);   
+    }
+    
+    function open_block_student(id) {
+        open_block(id, 1)
     }
     
     /* Loads parent blocks */
@@ -180,11 +179,11 @@
          });
     }
     
-    function load_children(my_id, top_value) {
+    function load_children(my_id, top_value, load_user_data) {
         console.log("load_children call : my_id " + my_id + " top_value:" + top_value);        
         //Loading children
         var ix = 0;
-        $.getJSON(url+'&a=load_children&id='+my_id, {},         
+        $.getJSON(url+'&a=load_children&load_user_data='+load_user_data+'&id='+my_id, {},         
             function(json) {                
                 $.each(json,function(i,item) {                    
                     left_value  = ix*space_between_blocks_x +  center_x/2 - block_size / 2;

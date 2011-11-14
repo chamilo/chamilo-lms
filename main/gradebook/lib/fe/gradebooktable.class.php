@@ -136,7 +136,7 @@ class GradebookTable extends SortableTable {
 		$sortable_data = array();
 		$weight_total_links = 0;		
 		
-		foreach ($data_array as $data) {			
+		foreach ($data_array as $data) {		
 			
             // list of items inside the gradebook (exercises, lps, forums, etc)
 			$row  = array();
@@ -165,7 +165,10 @@ class GradebookTable extends SortableTable {
 			//$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
 			
 			//Weight
-			$row[] = $invisibility_span_open .'<h4>'.$data[3] .'% </h4>'.$invisibility_span_close;			
+			$row[] = $invisibility_span_open .Display::tag('h4', $data[3] .' / '.$this->currentcat->get_weight()).$invisibility_span_close;		
+            
+            $category_weight = $item->get_weight();
+            	
 			if (api_is_allowed_to_edit(null, true)) {
 				$weight_total_links += intval($data[3]);
 			} else {
@@ -194,11 +197,14 @@ class GradebookTable extends SortableTable {
 					}
 				}    
 			}
+            
+            //Category added
 			$sortable_data[] = $row;
 						
 			// Loading childrens
 			
 			if (get_class($item) == 'Category') {
+			    
 				$stud_id		= api_get_user_id();
 				$course_code	= api_get_course_id();
 				$session_id		= api_get_session_id();
@@ -233,7 +239,8 @@ class GradebookTable extends SortableTable {
 					//$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
 					
 					//Weight
-					$row[] = $invisibility_span_open . $data[3] .'%'.$invisibility_span_close;
+					
+					$row[] = $invisibility_span_open . $data[3] .' / '.$category_weight.$invisibility_span_close;
 					
 					if (api_is_allowed_to_edit(null, true)) {						
 						//$weight_total_links += intval($data[3]);

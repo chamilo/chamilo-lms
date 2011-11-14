@@ -822,7 +822,7 @@ switch ($action) {
 										   parent_id 	=  '".$work_id."' ,
                                            session_id	= '".intval($id_session)."' ,
                                            user_id 		= '".$user_id."'";
-				var_dump($sql_add_publication);
+				//var_dump($sql_add_publication);
 				Database::query($sql_add_publication);
 				$id = Database::insert_id();				
 				if ($id) {				

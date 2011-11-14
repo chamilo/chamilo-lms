@@ -20,8 +20,8 @@ $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag
 
 $htmlHeadXtra[] = api_get_jquery_ui_js();
 
-$skill  = new Skill();
-$skill_profile  = new SkillProfile();
+$skill           = new Skill();
+$skill_profile   = new SkillProfile();
 $skill_rel_user  = new SkillRelUser();
 
 $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php';

@@ -114,14 +114,16 @@ jsPlumb.bind("ready", function() {
                 //filling parent_id
                 $("#parent_id option[value='"+skill.extra.parent_id+"']").attr('selected', 'selected');
                 //filling the gradebook_id         
+                $("#gradebook_id").html('');
                 jQuery.each(skill.gradebooks, function(index, data) {                    
-                    $("#gradebook_id option[value='"+data.id+"']").attr('selected', 'selected');            
+                    $("#gradebook_id").append('<span class="label_tag notice">'+data.name+'</div>');   
+                    gradebook_id         
                 });
             },
         });
         
                 
-        $("#gradebook_id").trigger("liszt:updated");
+        
                 
                 
         $("#dialog-form").dialog("open");
@@ -263,16 +265,7 @@ $(document).ready( function() {
                 <span id="name"></span>             
             </div>
         </div>
-        <div class="row">
-            <div class="label">
-                <label for="name">Gradebook</label>
-            </div>      
-            <div class="formw">
-                <select id="gradebook_id" name="gradebook_id[]" multiple="multiple"/>
-                </select>
-            </div>
-        </div>
-        <div class="row">
+         <div class="row">
             <div class="label">
                 <label for="name">Description</label>
             </div>      
@@ -280,5 +273,14 @@ $(document).ready( function() {
                 <span id="description"></span>                
             </div>
         </div>  
+        <div class="row">
+            <div class="label">
+                <label for="name">Gradebook</label>
+            </div>      
+            <div class="formw">
+                <div id="gradebook_id"></div>                
+            </div>
+        </div>
+       
     </form>    
 </div>

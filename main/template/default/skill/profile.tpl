@@ -118,7 +118,7 @@ function checkLength( o, n, min, max ) {
 }    
 </script>
 
-<h1>{"SearchSkills"|get_lang}</h1>
+<h2>{"SearchSkills"|get_lang}</h2>
 
 {$form}
 

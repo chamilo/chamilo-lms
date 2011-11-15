@@ -1163,8 +1163,7 @@ function show_user_group_filter_form()
 	echo "</select>";
 }
 
-function show_add_form($id = '')
-{
+function show_add_form($id = '') {
 	global $MonthsLong;
 
 	$htmlHeadXtra[] = to_javascript();
@@ -1183,7 +1182,6 @@ function show_add_form($id = '')
 		$end_minutes= '00';
         $repeat = false;
 	} else {
-
 		// we are coming from the resource linker so there might already have been some information in the form.
 		// When we clicked on the button to add resources we stored every form information into a session and now we
 		// are doing the opposite thing: getting the information out of the session and putting it into variables to
@@ -1229,9 +1227,11 @@ function show_add_form($id = '')
 
 
 	// if the id is set then we are editing an agenda item
+	
 	if (is_int($id)) {
 		//echo "before get_agenda_item".$_SESSION['allow_individual_calendar'];
 		$item_2_edit=get_agenda_item($id);
+        
 		$title	= $item_2_edit['title'];
 		$content= $item_2_edit['content'];
 		

@@ -287,7 +287,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 				if ($_POST['submit_event']) {
 					store_edited_agenda_item($_REQUEST['id_attach'], $_REQUEST['file_comment']);
 					$action = 'view';
-				} else {
+				} else {				    
 					show_add_form($event_id);
 				}
 			}

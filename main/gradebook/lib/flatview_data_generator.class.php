@@ -228,7 +228,7 @@ class FlatViewDataGenerator
                 
 				$temp_score = $scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
                 
-                $temp_score = $temp_score . ' '.$item_value;
+                $temp_score = $temp_score . ' '.$item_value.' / '.$this->category->get_weight();
                 
 				if (!$show_all) {
 					//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);

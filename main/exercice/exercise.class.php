@@ -819,7 +819,8 @@ class Exercise {
 			</div>');
 
 		// Random questions
-		$form->addElement('html','<div id="options" style="display:none">');
+		// style="" and not "display:none" to avoid #4029 Random and number of attempt menu empty
+		$form->addElement('html','<div id="options" style="">');
 
 		if ($type=='full') {
 
@@ -932,9 +933,10 @@ class Exercise {
 			//Attempts
 			$attempt_option=range(0,10);
 			$attempt_option[0]=get_lang('Infinite');
-
+			
 			$form->addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option, array('id'=>'exerciseAttempts','class'=>'chzn-select'));
-
+			
+			// Exercice time limit
 			$form->addElement('checkbox', 'activate_start_date_check',get_lang('EnableStartTime'),null, array('onclick' => 'activate_start_date()'));
 				
 			$var = Exercise::selectTimeLimit();

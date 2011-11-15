@@ -378,7 +378,7 @@ if ( api_is_allowed_to_edit(null, true)) {
 	echo "<div class=\"actions\">";
 
 	// the action links
-        if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+        if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
             $actions .= '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('user_subscribe_course.png',get_lang("SubscribeUserToCourse"),'','32').'</a> ';
             $actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('teacher_subscribe_course.png', get_lang("SubscribeUserToCourseAsTeacher"),'','32')."</a> ";
         }
@@ -631,11 +631,11 @@ function modify_filter($user_id) {
 	}
 
 	if (api_is_allowed_to_edit(null, true)) {
-        if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
             // edit
             $result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;editMainUserInfo='.$user_id.'" title="'.get_lang('Edit').'" >'.Display::return_icon('edit.png', get_lang('Edit'),'','22').'</a>&nbsp;';
-            // unregister
-            if ($user_id != $_user['user_id']) {
+            if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
+                // unregister
+                if ($user_id != $_user['user_id']) {
                     $result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('unsubscribe_course.png', get_lang('Unreg'),'','22').'</a>&nbsp;';
             } else {
                     $result .= Display::return_icon('unsubscribe_course_na.png', get_lang('Unreg'),'','22').'</a>&nbsp;';

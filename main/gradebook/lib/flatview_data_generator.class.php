@@ -81,16 +81,17 @@ class FlatViewDataGenerator
 			//$headers[] = $item->get_name().' <br /> '.get_lang('Max').' '.$this->get_max_result_by_link($count + $items_start).' ';
 			$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
 			$weight = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight() *100, 2);
-			$headers[] = $item->get_name().'  '.$weight.'% ';
+			$headers[] = $item->get_name().'  '.$weight.' % ';
 			if ($show_detail) {
 				//$headers[] = $item->get_name().' ('.get_lang('Detail').')';
 			}
 		}
 
-		$headers[] = get_lang('GradebookQualificationTotal');
+		$headers[] = get_lang('GradebookQualificationTotal').' 100%';
 		if ($show_detail) {
 			//$headers[] = get_lang('GradebookQualificationTotal').' ('.get_lang('Detail').')';
 		}
+        
 		return $headers;
 	}
 	
@@ -223,28 +224,37 @@ class FlatViewDataGenerator
                 $percentage     = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight(), 2);
                 $item_value     = $percentage*$item_value;
                 
-				$item_total		+= $percentage*100;
-				
+				$item_total		+= $item->get_weight();
+                
+				$temp_score = $scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
+                
+                $temp_score = $temp_score . ' '.$item_value;
+                
 				if (!$show_all) {
 					//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
-					if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {
+					if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, 
+					                                       LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {
+					                                           
+                        
 					    if (!empty($score[0])) {																		
-                            $row[] = $score[0].' ('.$item_value.'%) ';
+                            $row[] = $temp_score.' ';
                         } else {
                             $row[] = '';
                         }
                         //$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);	
 					} else {
 						//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
-                        $row[] = $score[0];                      
+                        //$row[] = $score[0];
+                        $row[] = $temp_score.' ';
 					}					
 				} else {
 					//$row[] = $scoredisplay->display_score($score, SCORE_DECIMAL);
-					$row[] = $score[0];
+					$row[] = $temp_score;
 					//$row[] = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
 				}
                 $item_value_total +=$item_value;              
-			}			
+            }
+
 			$total_score = array($item_value_total, $item_total);
             
 			

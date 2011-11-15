@@ -77,14 +77,17 @@ $columns = array();
 switch ($action) {
     case 'get_gradebooks': 
         $columns = array('name', 'skills', 'actions');                
-        if(!in_array($sidx, $columns)) {
+        if (!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
         $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
         foreach($result as $item) {
             $skills = $obj->get_skills_by_gradebook($item['id']);
-            
+            //Fixes bug when gradebook doesn't have names
+            if (empty($item['name'])) {
+                $item['name'] = $item['course_code'];                 
+            }
             if (!empty($item['certif_min_score']) && !empty($item['document_id'])) {
                 $item['name'] .= '* (with_certificate)'; 
             } else {
@@ -113,9 +116,8 @@ switch ($action) {
             }
             $new_result[] = $item;
         } 
-        $result = $new_result;
-        
-    break;
+        $result = $new_result;        
+        break;
     case 'get_promotions':        
         $columns = array('name', 'career', 'description', 'actions');
         if(!in_array($sidx, $columns)) {
@@ -131,7 +133,7 @@ switch ($action) {
         } 
         $result = $new_result;      
         
-    break;
+        break;
     case 'get_usergroups':
         $columns = array('name', 'users', 'courses','sessions','actions');
         $result     = Database::select('*', $obj->table, array('order'=>"name $sord", 'LIMIT'=> "$start , $limit"));

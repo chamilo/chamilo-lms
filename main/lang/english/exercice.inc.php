@@ -421,7 +421,7 @@ $ReviewQuestions = "Review selected questions";
 $YouTriedToResolveThisExerciseEarlier = "You have tried to resolve this question earlier";
 $ThereAreNoQuestionsForThisExercise = "There are no questions for this exercise";
 // question category
-$QuestionByCategory = "question(s) par catégories";
+$QuestionByCategory = "question(s) by categories";
 $QuestionLowerCase = "question";
 $QuestionUpperCaseFirstLetter = "Question";
 $QuestionsLowerCase = "questions";

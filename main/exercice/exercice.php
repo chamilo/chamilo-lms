@@ -723,7 +723,7 @@ if ($show == 'test') {
             
             if ($is_allowedToEdit) {
                 $headers = array(array('name' => get_lang('ExerciseName')), 
-                                 array('name' => get_lang('QuantityQuestions'), 'params' => array('width'=>'80px')), 
+                                 array('name' => get_lang('QuantityQuestions'), 'params' => array('width'=>'100px')), 
                                  array('name' => get_lang('Actions'), 'params' => array('width'=>'180px')));
             } else {
             	$headers = array(array('name' => get_lang('ExerciseName')), 
@@ -861,19 +861,24 @@ if ($show == 'test') {
 
 					// Number of questions
                     $random_label = '';                    
-                    if ($row['random'] > 0) {
+                    if ($row['random'] > 0 || $row['random'] == -1) {
+                   	    // if random == -1 means use random questions with all questions
+                   	    $random_number_of_question = $row['random'];
+                   	    if ($random_number_of_question == -1) {
+                   	        $random_number_of_question = $rowi;
+                   	    }
 						if ($row['random_by_category'] > 0) {	
 							if (!class_exists("testcategory.class.php")) include_once "testcategory.class.php" ;
-							$nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($exid, $row['random']);
+							$nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($exid, $random_number_of_question);
 							$number_of_questions .= $nbQuestionsTotal." ";
 							$number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase") ;
 							$number_of_questions .= " - ";
-							$number_of_questions .= $row['random'].' '.get_lang('QuestionByCategory');
+							$number_of_questions .= Testcategory::getNumberMaxQuestionByCat($exid).' '.get_lang('QuestionByCategory');
 						} else {
                        		$random_label = ' ('.get_lang('Random').') ';                       	
-                       	    $number_of_questions = $row['random'] . ' ' .$random_label.' '.$textByCategory;
+                       	    $number_of_questions = $random_number_of_question . ' ' .$random_label.' '.$textByCategory;
                        	    //Bug if we set a random value bigger than the real number of questions 
-                       	    if ($row['random'] > $rowi) {
+                       	    if ($random_number_of_question > $rowi) {
     							$number_of_questions = $rowi. ' ' .$random_label;							
                        	    }
                        	}

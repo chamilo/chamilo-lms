@@ -283,7 +283,6 @@ class Exercise {
 	}
 
 
-
 	/**
 	 * tells if questions are selected randomly, and if so returns the draws
 	 *
@@ -301,7 +300,7 @@ class Exercise {
 	 * @return - integer - 0 if not random, otherwise the draws
 	 */
 	function isRandom() {
-		if($this->random > 0){
+		if($this->random > 0 || $this->random == -1) {
 			return true;
 		} else {
 			return false;
@@ -384,29 +383,34 @@ class Exercise {
 	 * @author - Olivier Brouckaert
 	 * @return - array - if the exercise is not set to take questions randomly, returns the question list
 	 *					 without randomizing, otherwise, returns the list with questions selected randomly
+	 * Modified by Hubert Borderiou 15 nov 2011
 	 */
 	function selectRandomList() {
 		$nbQuestions	= $this->selectNbrQuestions();
 		$temp_list		= $this->questionList;
-
+		
 		//Not a random exercise, or if there are not at least 2 questions
 		if($this->random == 0 || $nbQuestions < 2) {
 			return $this->questionList;
 		}
-			
 		if ($nbQuestions != 0) {
 			shuffle($temp_list);
 			$my_random_list = array_combine(range(1,$nbQuestions),$temp_list);
 			$my_question_list = array();
-			$i = 0;
-			foreach ($my_random_list as $item) {
-				if ($i < $this->random) {
-					$my_question_list[$i] = $item;
-				} else {
-					break;
+			// $this->random == -1 if random with all questions
+			if ($this->random > 0) {
+			    $i = 0;
+			    foreach ($my_random_list as $item) {
+    				if ($i < $this->random) {
+					    $my_question_list[$i] = $item;
+				    } else {
+    					break;
+				    }
+				    $i++;
 				}
-				$i++;
-			}
+		    } else {
+		        $my_question_list = $my_random_list;
+		    }
 			return $my_question_list;
 		}
 	}
@@ -740,7 +744,7 @@ class Exercise {
 			return false;
 		} else {
 			if ($this->isRandom()) {
-                if (count($this->questionList) >= $this->random) {
+                if (count($this->questionList) >= $this->random && $this->random > 0) {
     				$this->random -= 1; 
                     $this->save();
                 }
@@ -908,11 +912,12 @@ class Exercise {
 				}
 			}
 			
+            // number of random question			
 			$option = array();
 			$max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
 			$option = range(0,$max);
 			$option[0] = get_lang('No');
-			
+			$option[-1] = get_lang('Everybody');    // #3942
 			$form->addElement('select', 'randomQuestions',array(get_lang('RandomQuestions'), get_lang('RandomQuestionsHelp')), $option, array('id'=>'randomQuestions','class'=>'chzn-select'));			
 
 			//random answers
@@ -3326,10 +3331,14 @@ class Exercise {
 				*/
 				// If test option is Grouped By Categories
 				if ($isRandomByCategory == 2) {
-					$tabCategoryQuestions = Testcategory::sortTabByBracketLabel($tabCategoryQuestions); // 24-02-2011 hub pour projet Bernard Ycard
+					$tabCategoryQuestions = Testcategory::sortTabByBracketLabel($tabCategoryQuestions);
 				}
 				while (list($cat_id, $tabquestion) = each($tabCategoryQuestions)) {
-					$questionList = array_merge($questionList, Testcategory::getNElementsFromArray($tabquestion, $this->random));
+				    $number_of_random_question = $this->random;
+				    if ($this->random == -1) {
+				        $number_of_random_question = count($this->questionList);
+				    }
+					$questionList = array_merge($questionList, Testcategory::getNElementsFromArray($tabquestion, $number_of_random_question));
 				}
 				// shuffle the question list if test is not grouped by categories
 				if ($isRandomByCategory == 1) {

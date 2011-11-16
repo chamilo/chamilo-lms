@@ -417,6 +417,27 @@ class Testcategory {
 		}
 		return $totalcatscore;
 	}
+	
+
+    /**
+     * return the number max of question in a category
+     * count the number of questions in all categories, and return the max
+     * @author - hubert borderiou
+    */
+    public static function getNumberMaxQuestionByCat($in_testid) {
+        $res_num_max = 0;
+        // foreach question
+		$tabcatid = Testcategory::getListOfCategoriesIDForTest($in_testid);
+		for ($i=0; $i < count($tabcatid); $i++) {
+			if ($tabcatid[$i] > 0) {	// 0 = no category for this question
+				$nbQuestionInThisCat = Testcategory::getNumberOfQuestionsInCategoryForTest($in_testid, $tabcatid[$i]);
+                if ($nbQuestionInThisCat > $res_num_max) {
+                    $res_num_max = $nbQuestionInThisCat;
+                }
+			}
+		}
+        return $res_num_max;
+    }
 }
 endif;
 ?>

@@ -659,10 +659,14 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 			api_session_register('is_platformAdmin');
 			api_session_register('is_allowedCreateCourse');
 
-      // If request_uri is settd we have to go further to have course permissions
+      // If request_uri is setted we have to go further to have course permissions
       if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
-        require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';
-        LoginRedirection::redirect();
+        if( $_SESSION['noredirection'] ) {//If we just want to rest information without redirecting user
+          unset($_SESSION['noredirection']);
+        } else {
+          require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';
+          LoginRedirection::redirect();
+        }
       }
 
 		} else {

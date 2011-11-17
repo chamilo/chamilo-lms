@@ -77,7 +77,7 @@ function handle_forum_and_forumcategories($lp_id = null) {
     }
     // Delete a forum category
     if ((isset($_GET['action']) && $_GET['action'] == 'delete') && isset($_GET['content']) && $get_id) {
-        $id_forum = Security::remove_XSS($get_id);
+        $id_forum = intval($get_id);
         $list_threads = get_threads($id_forum);
 
         for ($i = 0; $i < count($list_threads); $i++) {
@@ -1935,7 +1935,7 @@ function store_thread($values) {
                 VALUES (
                 ".$course_id.",
                 '".$clean_post_title."',
-                '".Database::escape_string(stripslashes($values['post_text']))."',
+                '".Database::escape_string($values['post_text'])."',
                 '".Database::escape_string($last_thread_id)."',
                 '".Database::escape_string($values['forum_id'])."',
                 '".Database::escape_string($_user['user_id'])."',
@@ -2381,7 +2381,7 @@ function store_reply($values) {
                 VALUES (
                 		".api_get_course_int_id().",
                 		'".Database::escape_string($values['post_title'])."',
-                        '".Database::escape_string(isset($values['post_text']) ? (api_html_entity_decode($values['post_text'])) : null)."',
+                        '".Database::escape_string(isset($values['post_text']) ? ($values['post_text']) : null)."',
                         '".Database::escape_string($values['thread_id'])."',
                         '".Database::escape_string($values['forum_id'])."',
                         '".api_get_user_id()."',
@@ -2389,9 +2389,9 @@ function store_reply($values) {
                         '".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."',
                         '".Database::escape_string(isset($values['post_parent_id'])?$values['post_parent_id']:null)."',
                         '".Database::escape_string($visible)."')";
-        $result = Database::query($sql);
-        $new_post_id = Database::insert_id();
-        $values['new_post_id'] = $new_post_id;
+        $result                 = Database::query($sql);
+        $new_post_id            = Database::insert_id();
+        $values['new_post_id']  = $new_post_id;
         $message = get_lang('ReplyAdded');
 
         if ($has_attachment) {
@@ -2497,7 +2497,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
     //$form->applyFilter('post_text', 'html_filter');
 
     $form->addElement('html', '<div class="row"><div class="label">');
-    $form->addElement('HTML', '<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).''.get_lang('AdvancedParameters').'</span></a>','');
+    $form->addElement('html', '<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).''.get_lang('AdvancedParameters').'</span></a>','');
     $form->addElement('html', '</div><div class="formw"></div></div>');
     $form->addElement('html', '<div id="id_qualify" style="display:none">');
 
@@ -2548,15 +2548,14 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
         if (empty($form_values) && !isset($_POST['SubmitPost'])) {
             //edit_added_resources('forum_post', $current_post['post_id']);
         }
-        //$form->add_resource_button();
-        $values = $form->exportValues();
+        //$form->add_resource_button();        
     }
 
     $form->addElement('style_submit_button', 'SubmitPost', get_lang('ModifyThread'), 'class="save"');
 
     // Setting the default values for the form elements.
-    $defaults['post_title'] = prepare4display($current_post['post_title']);
-    $defaults['post_text'] = prepare4display($current_post['post_text']);
+    $defaults['post_title'] = $current_post['post_title'];
+    $defaults['post_text']  = $current_post['post_text'];
     if ($current_post['post_notification'] == 1) {
         $defaults['post_notification'] = true;
     }
@@ -2576,7 +2575,8 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 
     // Validation or display
     if ($form->validate()) {
-        $values = $form->exportValues();
+        $values = $form->exportValues();  
+        
         if ($values['thread_qualify_gradebook'] == '1' && empty($values['weight_calification'])) {
             Display::display_error_message(get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.back()">'.get_lang('Back').'</a>', false);
             return false;
@@ -2609,20 +2609,23 @@ function store_edit_post($values) {
     
     // First we check if the change affects the thread and if so we commit the changes (sticky and post_title=thread_title are relevant).
     //if (array_key_exists('is_first_post_of_thread',$values)  AND $values['is_first_post_of_thread']=='1') {
-    $sql = "UPDATE $table_threads SET thread_title='".Database::escape_string($values['post_title'])."',
-                thread_sticky='".Database::escape_string(isset($values['thread_sticky']) ? $values['thread_sticky'] : null)."'," .
-                "thread_title_qualify='".Database::escape_string($values['calification_notebook_title'])."'," .
-                "thread_qualify_max='".Database::escape_string($values['numeric_calification'])."',".
-                "thread_weight='".Database::escape_string($values['weight_calification'])."'".
-                " WHERE c_id = $course_id AND thread_id='".Database::escape_string($values['thread_id'])."'";
+    $sql = "UPDATE $table_threads SET 
+                thread_title            ='".Database::escape_string($values['post_title'])."',
+                thread_sticky           ='".Database::escape_string(isset($values['thread_sticky']) ? $values['thread_sticky'] : null)."'," .
+                "thread_title_qualify   ='".Database::escape_string($values['calification_notebook_title'])."'," .
+                "thread_qualify_max     ='".Database::escape_string($values['numeric_calification'])."',".
+                "thread_weight          ='".Database::escape_string($values['weight_calification'])."'".
+                " WHERE c_id = $course_id AND thread_id='".intval($values['thread_id'])."'";
 
     Database::query($sql);
     //}
     // Update the post_title and the post_text.
-    $sql = "UPDATE $table_posts SET post_title='".Database::escape_string($values['post_title'])."',
-                post_text='".Database::escape_string($values['post_text'])."',
-                post_notification='".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."'
-                WHERE c_id = $course_id AND post_id='".Database::escape_string($values['post_id'])."'";
+    $sql = "UPDATE $table_posts SET 
+                post_title          ='".Database::escape_string($values['post_title'])."',
+                post_text           ='".Database::escape_string($values['post_text'])."',
+                post_notification   ='".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."'
+                WHERE c_id = $course_id AND post_id='".intval($values['post_id'])."'";
+    var_dump($sql);
     Database::query($sql);
 
     if (!empty($values['remove_attach'])) {
@@ -3388,6 +3391,7 @@ function prepare4display($input) {
 
     // TODO: Security should be implemented outside this function.
     // Change this to COURSEMANAGERLOWSECURITY or COURSEMANAGER to lower filtering and allow more styles (see comments of Security::remove_XSS() method to learn about other levels).
+    
     return Security::remove_XSS($input, STUDENT, true);
 }
 

@@ -265,12 +265,12 @@ echo '<div class="actions">';
 	}
 	if (isset($fromExercise) && $fromExercise > 0) {
 		echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
-		$titleAdd = get_lang('addQuestionToTest');
+		$titleAdd = get_lang('AddQuestionToTest');
 	}
 	else {
 		echo '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
 		echo "<a href='admin.php?exerciseId=0'>".Display::return_icon('add_question.gif', get_lang('NewQu'), '', 32)."</a>";
-		$titleAdd = get_lang('manageAllQuestions');
+		$titleAdd = get_lang('ManageAllQuestions');
 	}
 echo '</div>';
 
@@ -580,7 +580,7 @@ if ($fromExercise <= 0) { // NOT IN A TEST - IN THE COURSE
 	}
 	else { // NOT IN A TEST - NOT IN THE COURSE
 		$actionLabel = get_lang('langReuse');
-		$actionIcon1 = get_lang('mustBeInATest');
+		$actionIcon1 = get_lang('MustBeInATest');
 		$actionIcon2 = "";
 		$questionTagA = 0;	// we are not in this course, to messy if we link to the question in another course
 	}

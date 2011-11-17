@@ -929,8 +929,8 @@ class Exercise {
 			//randow by category
 			$form->addElement('html','<div class="clear">&nbsp;</div>');
 			$radiocat = array();
-			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('yesWithCategoriesShuffled'),'1');
-			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('yesWithCategoriesSorted'),'2');
+			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesShuffled'),'1');
+			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesSorted'),'2');
 			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('No'),'0');
 			$form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'));
 			$form->addElement('html','<div class="clear">&nbsp;</div>');

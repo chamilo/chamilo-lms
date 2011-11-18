@@ -796,11 +796,6 @@ switch ($action) {
 					//if we come from the group tools the groupid will be saved in $work_table
 					@move_uploaded_file($_FILES['file']['tmp_name'], $updir.$curdirpath.'/'.$new_file_name);
 					$url = 'work'.$curdirpath.'/'.$new_file_name;
-					$result = Database::query("SHOW FIELDS FROM " . $work_table . " LIKE 'sent_date' WHERE c_id = $course_id  ");
-					
-					if (!Database::num_rows($result)) {
-						Database::query("ALTER TABLE " . $work_table . " ADD sent_date DATETIME NOT NULL WHERE c_id = $course_id ");
-					}
 				}
 				
 				if (empty($title)) {
@@ -849,13 +844,7 @@ switch ($action) {
 	
 				if (!$title) {
 					$title = basename($workUrl);
-				}
-	
-				$result = Database::query("SHOW FIELDS FROM " . $work_table . " LIKE 'sent_date'");
-	
-				if (!Database::num_rows($result)) {
-					Database::query("ALTER TABLE " . $work_table . " ADD sent_date DATETIME NOT NULL");
-				}
+				}	
 				$sql = "INSERT INTO  " . $work_table . " SET
 									c_id = $course_id,
 									url        	= '" . $url . "',

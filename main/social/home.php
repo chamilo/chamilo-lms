@@ -40,8 +40,7 @@ function hide_icon_edit(element_html)  {
 
 </script>';
 //fast upload image
-if (api_get_setting('profile', 'picture') == 'true') {
-	require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+if (api_get_setting('profile', 'picture') == 'true') {	
 	$form = new FormValidator('profile', 'post', 'home.php', null, array());
 
 	//	PICTURE

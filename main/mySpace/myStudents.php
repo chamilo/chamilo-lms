@@ -6,7 +6,7 @@
  */
 
 // name of the language file that needs to be included
-$language_file = array('registration', 'index', 'tracking', 'exercice', 'admin', 'gradebook');
+$language_file = array('registration', 'index', 'tracking', 'exercice', 'admin', 'gradebook', 'survey');
 
 $cidReset = true;
 
@@ -20,6 +20,8 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
 require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
+
+require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 
@@ -560,7 +562,7 @@ if (empty($_GET['details'])) {
 	$attendance = new Attendance();
 
 	foreach ($courses_in_session as $key => $courses) {		
-		$session_id = $key;
+		$session_id   = $key;
 		$session_info = api_get_session_info($session_id);
 		$session_name = $session_info['name'];
 		$date_start = '';
@@ -598,71 +600,72 @@ if (empty($_GET['details'])) {
 				<th>'.get_lang('Details').'</th>					
 			</tr>';
 
-		if (!empty($courses)) {
-		foreach ($courses as $course_code) {
-			if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
-				$course_info = CourseManager :: get_course_information($course_code);
-												
-				$time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($info_user['user_id'], $course_code, $session_id));
-
-				// get average of faults in attendances by student
-				$results_faults_avg = $attendance->get_faults_average_by_course($student_id, $course_code, $session_id);
-				if (!empty($results_faults_avg['total'])) {		
-					if (api_is_drh()) {
-						$attendances_faults_avg = '<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$course_code.'&id_session='.$session_id.'&student_id='.$student_id.'">'.$results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';	
-					} else {
-						$attendances_faults_avg = $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)';
-					}
-				} else {
-					$attendances_faults_avg = '0/0 (0%)';
-				}
-		
-				// get evaluatios by student				
-				
-				$cats = Category::load(null, null, $course_code, null, null, $session_id);
-                
-				$scoretotal = array();
-				if (isset($cats) && isset($cats[0])) {
-					if (!empty($session_id)) {					    
-                        $scoretotal= $cats[0]->calc_score($student_id, $course_code, $session_id);	
-					} else {
-                        $scoretotal= $cats[0]->calc_score($student_id, $course_code);
-					}
-				}
-
-				$scoretotal_display = '0/0 (0%)';
-				if (!empty($scoretotal)) {
-					$scoretotal_display =  round($scoretotal[0],2).'/'.round($scoretotal[1],2).'('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)';
-				}
-	 
-				$progress = Tracking::get_avg_student_progress($info_user['user_id'], $course_code, null, $session_id);
-				$score = Tracking :: get_avg_student_score($info_user['user_id'], $course_code, null, $session_id);
-				$progress = empty($progress) ? '0%' : $progress.'%';
-				$score = empty($score) ? '0%' : $score.'%';
-			
-				$csv_content[] = array (
-    				$session_name,
-    				$course_info['title'],
-    				$time_spent_on_course,
-    				$progress,
-    				$score,
-    				$attendances_faults_avg,
-    				$scoretotal_display
-				);
-
-				echo '<tr>
-				<td align="right">'.$course_info['title'].'</td>
-				<td align="right">'.$time_spent_on_course .'</td>
-				<td align="right">'.$progress.'</td>
-				<td align="right">'.$score.'</td>
-				<td align="right">'.$attendances_faults_avg.'</td>
-                <td align="right">'.$scoretotal_display.'</td>';
-			
-				if (isset ($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-					echo '<td align="center" width="10"><a href="'.api_get_self().'?student='.$info_user['user_id'].'&details=true&course='.$course_info['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
-				} else {
-					echo '<td align="center" width="10"><a href="'.api_get_self().'?student='.$info_user['user_id'].'&details=true&course='.$course_info['code'].'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
-				}
+		if (!empty($courses)) {		    
+            foreach ($courses as $course_code) {
+                 
+                if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
+                    $course_info = CourseManager :: get_course_information($course_code);
+    												
+    				$time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($info_user['user_id'], $course_code, $session_id));
+    
+    				// get average of faults in attendances by student
+    				$results_faults_avg = $attendance->get_faults_average_by_course($student_id, $course_code, $session_id);
+    				if (!empty($results_faults_avg['total'])) {		
+    					if (api_is_drh()) {
+    						$attendances_faults_avg = '<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$course_code.'&id_session='.$session_id.'&student_id='.$student_id.'">'.$results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';	
+    					} else {
+    						$attendances_faults_avg = $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)';
+    					}
+    				} else {
+    					$attendances_faults_avg = '0/0 (0%)';
+    				}
+    		
+    				// get evaluatios by student				
+    				
+    				$cats = Category::load(null, null, $course_code, null, null, $session_id);
+                    
+    				$scoretotal = array();
+    				if (isset($cats) && isset($cats[0])) {
+    					if (!empty($session_id)) {					    
+                            $scoretotal= $cats[0]->calc_score($student_id, $course_code, $session_id);	
+    					} else {
+                            $scoretotal= $cats[0]->calc_score($student_id, $course_code);
+    					}
+    				}
+    
+    				$scoretotal_display = '0/0 (0%)';
+    				if (!empty($scoretotal)) {
+    					$scoretotal_display =  round($scoretotal[0],2).'/'.round($scoretotal[1],2).'('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)';
+    				}
+    	 
+    				$progress = Tracking::get_avg_student_progress($info_user['user_id'], $course_code, null, $session_id);
+    				$score = Tracking :: get_avg_student_score($info_user['user_id'], $course_code, null, $session_id);
+    				$progress = empty($progress) ? '0%' : $progress.'%';
+    				$score = empty($score) ? '0%' : $score.'%';
+    			
+    				$csv_content[] = array (
+        				$session_name,
+        				$course_info['title'],
+        				$time_spent_on_course,
+        				$progress,
+        				$score,
+        				$attendances_faults_avg,
+        				$scoretotal_display
+    				);
+    
+    				echo '<tr>
+    				<td align="right">'.$course_info['title'].'</td>
+    				<td align="right">'.$time_spent_on_course .'</td>
+    				<td align="right">'.$progress.'</td>
+    				<td align="right">'.$score.'</td>
+    				<td align="right">'.$attendances_faults_avg.'</td>
+                    <td align="right">'.$scoretotal_display.'</td>';
+    			
+    				if (isset ($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+    					echo '<td align="center" width="10"><a href="'.api_get_self().'?student='.$info_user['user_id'].'&details=true&course='.$course_info['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
+    				} else {
+    					echo '<td align="center" width="10"><a href="'.api_get_self().'?student='.$info_user['user_id'].'&details=true&course='.$course_info['code'].'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
+    				}
 				echo '</tr>';
 				}
 			}
@@ -675,164 +678,164 @@ if (empty($_GET['details'])) {
 	$csv_content[] = array ();
     $csv_content[] = array (str_replace('&nbsp;', '', $table_title));        
 ?>
-
-<br />
-
-<!-- LPs-->
-<table class="data_table">
-	<tr>
-		<th><?php echo get_lang('Learnpaths');?></th>
-		<th><?php echo get_lang('Time'); Display :: display_icon('info3.gif', get_lang('TotalTimeByCourse'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?></th>
-		<th><?php echo get_lang('AverageScore'); Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInAllAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
-		<th><?php echo get_lang('LatestAttemptAverageScore'); Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInTheLatestAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
-	  	<th><?php echo get_lang('Progress'); Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
-	  	<th><?php echo get_lang('LastConnexion'); Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
-		<?php		
-			echo '<th>'.get_lang('Details').'</th>'; 
-			if (api_is_course_admin()) {
-				echo '<th>'.get_lang('ResetLP').'</th>';
-			}
-		?>
-      </tr>
-<?php
-		$headerLearnpath = array (
-			get_lang('Learnpath'),
-			get_lang('Time'),
-			get_lang('Progress'),
-			get_lang('LastConnexion')
-		);
-
-		$t_lp = Database :: get_course_table(TABLE_LP_MAIN, $info_course['db_name']);
-				
-		// csv export headers
-		$csv_content[] = array ();
-		$csv_content[] = array (
-			get_lang('Learnpath', ''),
-			get_lang('Time', ''),
-			get_lang('AverageScore', ''),
-			get_lang('LatestScore', ''),
-			get_lang('Progress', ''),
-			get_lang('LastConnexion', '')
-		);
-
-        if (empty($session_id)) {
-            $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE session_id = 0 AND c_id = {$info_course['real_id']} ORDER BY lp.display_order";
-        } else {
-        	$sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = {$info_course['real_id']}  ORDER BY lp.display_order";
-        }
-		$rs_lp = Database::query($sql_lp);
-		$token = Security::get_token();        
-		
-		if (Database :: num_rows($rs_lp) > 0) {
-			$i = 0;
-			while ($learnpath = Database :: fetch_array($rs_lp)) {
-				
-				$lp_id = intval($learnpath['id']);
-				$lp_name = $learnpath['name'];
-				$any_result = false;
-				
-				// Get progress in lp				
-				$progress = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
-				
-				if ($progress === null) { 
-					$progress = '0%';
-				}  else { 
-					$any_result = true;
-				}
-				
-				// Get time in lp
-				$total_time = Tracking::get_time_spent_in_lp($student_id, $course_code, array($lp_id),$session_id);				
-				if (!empty($total_time)) $any_result = true;
-				
-				// Get last connection time in lp
-				$start_time = Tracking::get_last_connection_time_in_lp($student_id, $course_code, $lp_id, $session_id);
-                
-                if (!empty($start_time)) {
-                    $start_time = api_convert_and_format_date($start_time, DATE_TIME_FORMAT_LONG);
-                } else {
-                    $start_time =  '-';
+    
+    <br />
+    
+    <!-- LPs-->
+    <table class="data_table">
+    	<tr>
+    		<th><?php echo get_lang('Learnpaths');?></th>
+    		<th><?php echo get_lang('Time'); Display :: display_icon('info3.gif', get_lang('TotalTimeByCourse'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?></th>
+    		<th><?php echo get_lang('AverageScore'); Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInAllAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
+    		<th><?php echo get_lang('LatestAttemptAverageScore'); Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInTheLatestAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
+    	  	<th><?php echo get_lang('Progress'); Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
+    	  	<th><?php echo get_lang('LastConnexion'); Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
+    		<?php		
+    			echo '<th>'.get_lang('Details').'</th>'; 
+    			if (api_is_course_admin()) {
+    				echo '<th>'.get_lang('ResetLP').'</th>';
+    			}
+    		?>
+          </tr>
+    <?php
+    $headerLearnpath = array (
+    	get_lang('Learnpath'),
+    	get_lang('Time'),
+    	get_lang('Progress'),
+    	get_lang('LastConnexion')
+    );
+    
+    $t_lp = Database :: get_course_table(TABLE_LP_MAIN, $info_course['db_name']);
+    		
+    // csv export headers
+    $csv_content[] = array ();
+    $csv_content[] = array (
+    	get_lang('Learnpath', ''),
+    	get_lang('Time', ''),
+    	get_lang('AverageScore', ''),
+    	get_lang('LatestScore', ''),
+    	get_lang('Progress', ''),
+    	get_lang('LastConnexion', '')
+    );
+    
+    if (empty($session_id)) {
+        $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE session_id = 0 AND c_id = {$info_course['real_id']} ORDER BY lp.display_order";
+    } else {
+    	$sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = {$info_course['real_id']}  ORDER BY lp.display_order";
+    }
+    $rs_lp = Database::query($sql_lp);
+    $token = Security::get_token();        
+    
+    if (Database :: num_rows($rs_lp) > 0) {
+    	$i = 0;
+    	while ($learnpath = Database :: fetch_array($rs_lp)) {
+    		
+    		$lp_id = intval($learnpath['id']);
+    		$lp_name = $learnpath['name'];
+    		$any_result = false;
+    		
+    		// Get progress in lp				
+    		$progress = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
+    		
+    		if ($progress === null) { 
+    			$progress = '0%';
+    		}  else { 
+    			$any_result = true;
+    		}
+    		
+    		// Get time in lp
+    		$total_time = Tracking::get_time_spent_in_lp($student_id, $course_code, array($lp_id),$session_id);				
+    		if (!empty($total_time)) $any_result = true;
+    		
+    		// Get last connection time in lp
+    		$start_time = Tracking::get_last_connection_time_in_lp($student_id, $course_code, $lp_id, $session_id);
+            
+            if (!empty($start_time)) {
+                $start_time = api_convert_and_format_date($start_time, DATE_TIME_FORMAT_LONG);
+            } else {
+                $start_time =  '-';
+            }
+            
+    		if (!empty($total_time)) $any_result = true;
+    	
+    		// Quizz in lp                
+    		$score = Tracking::get_avg_student_score($student_id, $course_code, array($lp_id),$session_id);
+    					                
+    		// Latest exercise results in a LP                
+            $score_latest = Tracking :: get_avg_student_score($student_id, $course_code, array($lp_id),$session_id, false, true);
+    
+    		if ($i % 2 == 0) $css_class = "row_even";
+    		else $css_class = "row_odd";
+    
+    		$i++;
+    		
+    		// csv export content
+    		$csv_content[] = array (
+    			api_html_entity_decode(stripslashes($lp_name), ENT_QUOTES, $charset),
+    			api_time_to_hms($total_time),
+    			$score . '%',
+    			$score_latest . '%',
+    			$progress.'%',
+    			$start_time
+    		);				
+    
+    	    echo '<tr class="'.$css_class.'">';					
+    			
+    		echo Display::tag('td', stripslashes($lp_name));
+    		echo Display::tag('td', api_time_to_hms($total_time), array('align'=>'center'));
+    		
+    		if (!is_null($score)) {
+    			if (is_numeric($score)) { 
+                    $score = $score.'%';
                 }
-                
-				if (!empty($total_time)) $any_result = true;
-			
-				// Quizz in lp                
-				$score = Tracking::get_avg_student_score($student_id, $course_code, array($lp_id),$session_id);
-							                
-				// Latest exercise results in a LP                
-                $score_latest = Tracking :: get_avg_student_score($student_id, $course_code, array($lp_id),$session_id, false, true);
-
-				if ($i % 2 == 0) $css_class = "row_even";
-				else $css_class = "row_odd";
-		
-				$i++;
-				
-				// csv export content
-				$csv_content[] = array (
-					api_html_entity_decode(stripslashes($lp_name), ENT_QUOTES, $charset),
-					api_time_to_hms($total_time),
-					$score . '%',
-					$score_latest . '%',
-					$progress.'%',
-					$start_time
-				);				
-
-			    echo '<tr class="'.$css_class.'">';					
-					
-				echo Display::tag('td', stripslashes($lp_name));
-				echo Display::tag('td', api_time_to_hms($total_time), array('align'=>'center'));
-				
-				if (!is_null($score)) {
-					if (is_numeric($score)) { 
-                        $score = $score.'%';
-                    }
-				}
-				echo Display::tag('td', $score, array('align'=>'center'));
-				
-			    if (!is_null($score_latest)) {
-                    if (is_numeric($score_latest)) { 
-                        $score_latest = $score_latest.'%';
-                    }
-                }				
-				echo Display::tag('td', $score_latest, array('align'=>'center'));							
-				 
-				if (is_numeric($progress)) {						
-					$progress = $progress.'%';
-				} else {
-					$progress = '-';
-				}
-				
-				echo Display::tag('td', $progress, array('align'=>'center'));
-			    //Do not change with api_convert_and_format_date, because this value came from the lp_item_view table 
-                //which implies several other changes not a priority right now  
-				echo Display::tag('td', $start_time, array('align'=>'center'));            
-				
-
-				if ($any_result === true) {
-					$from = '';
-					if ($from_myspace) {
-						$from ='&from=myspace';
-					}
-					$link = Display::url('<img src="../img/2rightarrow.gif" border="0" />','lp_tracking.php?course='.Security::remove_XSS($_GET['course']).$from.'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student_id='.$info_user['user_id'].'&id_session='.$session_id);
-                    echo Display::tag('td', $link, array('align'=>'center'));
-				}
-		
-				if (api_is_course_admin()) {					
-					echo '<td align="center">';							
-						if($any_result === true) {											
-							echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student='.$info_user['user_id'].'&details=true&id_session='.Security::remove_XSS($_GET['id_session']).'">';
-							echo Display::return_icon('clean.png',get_lang('Clean'),'','22').'</a>';
-							echo '</a>';
-						}					
-						echo '</td>';						
-					echo '</tr>';
-				}				
-				$data_learnpath[$i][] = $lp_name;
-				$data_learnpath[$i][] = $progress . '%';				
-			}
-		} else {
-			echo '<tr><td colspan="6">'.get_lang('NoLearnpath').'</td></tr>';
-		}
-?>
+    		}
+    		echo Display::tag('td', $score, array('align'=>'center'));
+    		
+    	    if (!is_null($score_latest)) {
+                if (is_numeric($score_latest)) { 
+                    $score_latest = $score_latest.'%';
+                }
+            }				
+    		echo Display::tag('td', $score_latest, array('align'=>'center'));							
+    		 
+    		if (is_numeric($progress)) {						
+    			$progress = $progress.'%';
+    		} else {
+    			$progress = '-';
+    		}
+    		
+    		echo Display::tag('td', $progress, array('align'=>'center'));
+    	    //Do not change with api_convert_and_format_date, because this value came from the lp_item_view table 
+            //which implies several other changes not a priority right now  
+    		echo Display::tag('td', $start_time, array('align'=>'center'));            
+    		
+    
+    		if ($any_result === true) {
+    			$from = '';
+    			if ($from_myspace) {
+    				$from ='&from=myspace';
+    			}
+    			$link = Display::url('<img src="../img/2rightarrow.gif" border="0" />','lp_tracking.php?course='.Security::remove_XSS($_GET['course']).$from.'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student_id='.$info_user['user_id'].'&id_session='.$session_id);
+                echo Display::tag('td', $link, array('align'=>'center'));
+    		}
+    
+    		if (api_is_course_admin()) {					
+    			echo '<td align="center">';							
+    				if($any_result === true) {											
+    					echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student='.$info_user['user_id'].'&details=true&id_session='.Security::remove_XSS($_GET['id_session']).'">';
+    					echo Display::return_icon('clean.png',get_lang('Clean'),'','22').'</a>';
+    					echo '</a>';
+    				}					
+    				echo '</td>';						
+    			echo '</tr>';
+    		}				
+    		$data_learnpath[$i][] = $lp_name;
+    		$data_learnpath[$i][] = $progress . '%';				
+    	}
+    } else {
+    	echo '<tr><td colspan="6">'.get_lang('NoLearnpath').'</td></tr>';
+    }
+    ?>
     </table>
 
 	<!-- line about exercises -->
@@ -853,7 +856,7 @@ if (empty($_GET['details'])) {
 			get_lang('Attempts')
 		);
 
-		$t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST, $info_course['db_name']);
+		$t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
 		$sql_exercices = "SELECT quiz.title, id FROM " . $t_quiz . " AS quiz
 						  WHERE quiz.c_id =  ".$info_course['real_id']." AND
 						  		active='1' AND 
@@ -917,7 +920,52 @@ if (empty($_GET['details'])) {
 			echo '<tr><td colspan="6">'.get_lang('NoExercise').'</td></tr>';
 		}
 		echo '</table>';
-				
+        
+        
+        //@when using sessions we do not show the survey list
+        if (empty($session_id)) {
+            $survey_list = survey_manager::get_surveys($course_code, $session_id);        
+    
+            $survey_data = array();
+            foreach($survey_list as $survey) {
+                $user_list = survey_manager::get_people_who_filled_survey($survey['survey_id'], false, $info_course['real_id']);
+                $survey_done = Display::return_icon("accept_na.png", get_lang('NoAnswer'), array(), 22);            
+                if (in_array($student_id, $user_list)) {
+                     $survey_done = Display::return_icon("accept.png", get_lang('Answered'), array(), 22);    
+                }
+                $data = array('title' => $survey['title'], 'done' => $survey_done);
+                $survey_data[] = $data;       
+            }        
+            
+            if (!empty($survey_list)) {
+                
+                $table = new HTML_Table(array('class' => 'data_table'));
+                $header_names = array(get_lang('Survey'), get_lang('Answered'));
+                $row = 0;
+                $column = 0;
+                foreach ($header_names as $item) {
+                    $table->setHeaderContents($row, $column, $item);
+                    $column++;
+                }
+                $row = 1;
+                if (!empty($survey_data)) {
+                    foreach ($survey_data as $data) {
+                        $column = 0;
+                        $table->setCellContents($row, $column, $data);
+                        //$table->setRowAttributes($row, 'style="text-align:center"');
+                        $class = 'class="row_odd"';
+                        if($row % 2) {
+                            $class = 'class="row_even"';
+                        }
+                        $table->setRowAttributes($row, $class, true);
+                        $column++;
+                        $row++;
+                    }
+                }
+                echo $table->toHtml();  
+            }
+         }
+    				
 	    // line about other tools
 		echo '<table class="data_table">';
 		

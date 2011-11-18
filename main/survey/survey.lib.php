@@ -26,6 +26,17 @@ $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
  * @package chamilo.survey
  */
 class survey_manager {
+    
+    function get_surveys($course_code, $session_id = 0) {
+        $table_survey = Database :: get_course_table(TABLE_SURVEY);
+        $course_info = api_get_course_info($course_code);
+        $session_condition = api_get_session_condition($session_id, true, true);
+        
+        $sql = "SELECT * FROM $table_survey WHERE c_id = {$course_info['real_id']} $session_condition ";
+        $result = Database::query($sql);
+        $result = Database::store_result($result, 'ASSOC');
+        return $result;
+    }
 
 	/***
 	 * SYRVEY FUNCTIONS
@@ -1170,7 +1181,7 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function get_people_who_filled_survey($survey_id, $all_user_info = false) {
+	function get_people_who_filled_survey($survey_id, $all_user_info = false, $course_id = null) {
 		global $_course;
 
 		// Database table definition
@@ -1182,19 +1193,23 @@ class survey_manager {
 
 		// Getting the survey information
 		$survey_data	= survey_manager::get_survey($survey_id);
-		
-		$course_id 		= api_get_course_int_id();
-		
+		if (empty($course_id)) {
+		      $course_id 		= api_get_course_int_id();
+        } else {
+            $course_id = intval($course_id);
+        }
+           
 		if ($all_user_info) {
 			$order_clause = api_sort_by_first_name() ? ' ORDER BY user.firstname, user.lastname' : ' ORDER BY user.lastname, user.firstname';
 			$sql = "SELECT DISTINCT answered_user.user as invited_user, user.firstname, user.lastname, user.user_id
 						FROM $table_survey_answer answered_user
 						LEFT JOIN $table_user as user ON answered_user.user = user.user_id
 						WHERE 	answered_user.c_id = $course_id AND 
-								survey_id= '".Database::escape_string($survey_data['survey_id'])."'".
+								survey_id= '".Database::escape_string($survey_data['survey_id'])."' ".
                         $order_clause;
 		} else {
-			$sql = "SELECT DISTINCT user FROM $table_survey_answer WHERE survey_id= '".Database::escape_string($survey_data['survey_id'])."'";
+			$sql = "SELECT DISTINCT user FROM $table_survey_answer 
+			        WHERE c_id = $course_id AND survey_id= '".Database::escape_string($survey_data['survey_id'])."'  ";
 		}
 		
 		$res = Database::query($sql);
@@ -2570,7 +2585,6 @@ class SurveyUtil {
 				echo get_lang('NextQuestion').' '.Display::return_icon('action_next.png', get_lang('NextQuestion'), array('align' => 'middle'));
 			}
 		}
-		
 
 		echo $question['survey_question'];
 		

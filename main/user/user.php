@@ -99,9 +99,9 @@ if (api_is_allowed_to_edit(null, true)) {
 				$extra_fields = array_keys($extra_fields);
                 
 				if ($sort_by_first_name) {
-					$a_users[0] = array(get_lang('FirstName'), get_lang('LastName'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
+					$a_users[0] = array('id', get_lang('FirstName'), get_lang('LastName'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
 				} else {
-					$a_users[0] = array(get_lang('LastName'), get_lang('FirstName'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
+					$a_users[0] = array('id', get_lang('LastName'), get_lang('FirstName'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
 				}
                 
                 if ($_GET['type'] == 'pdf') {
@@ -140,8 +140,7 @@ if (api_is_allowed_to_edit(null, true)) {
 								foreach($extra_fields as $key => $extra_value) {
 									$user[$key] = $extra_value;
 								}
-							}
-							unset($user['user_id']);
+							}							
 							$data[] = $user;			
                             if ($_GET['type'] == 'pdf') {
                                 if ($is_western_name_order) {
@@ -183,8 +182,7 @@ if (api_is_allowed_to_edit(null, true)) {
 							foreach($extra_fields as $key => $extra_value) {
 								$user[$key] = $extra_value;
 							}
-						}
-						unset($user['user_id']);
+						}						
                         if ($_GET['type'] == 'pdf') {
                             if ($is_western_name_order) {
                                 $user_pdf = array($counter, $user['official_code'], $user['firstname'].', '.$user['lastname'] );

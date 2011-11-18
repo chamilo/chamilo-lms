@@ -2625,7 +2625,7 @@ function store_edit_post($values) {
                 post_text           ='".Database::escape_string($values['post_text'])."',
                 post_notification   ='".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."'
                 WHERE c_id = $course_id AND post_id='".intval($values['post_id'])."'";
-    var_dump($sql);
+    
     Database::query($sql);
 
     if (!empty($values['remove_attach'])) {

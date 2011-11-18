@@ -3791,17 +3791,28 @@ form div.error input, form div.error textarea {
 
 
 .label_tag.important {
-  background-color: #c43c35;
+    background-color: #c43c35;
 }
 .label_tag.warning {
-  background-color: #f89406;
+    background-color: #f89406;
 }
 .label_tag.success {
-  background-color: #46a546;
+    background-color: #46a546;
 }
 .label_tag.notice {
-  background-color: #62cffc;
+    background-color: #62cffc;
 }
+
+.label_tag.skill {
+    background-color: #46a546;
+}
+
+
+.label_tag.course {
+    background-color: #62cffc;
+}
+
+
 
 
 .invisible {

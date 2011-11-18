@@ -151,25 +151,29 @@ if (!empty($return)) {
 }
 ?>
 <form method="post" name="form" action="<?php echo api_get_self(); ?>" style="margin:0px;">
-<input type="hidden" name="formSent" value="1">
+    <input type="hidden" name="formSent" value="1">
 
 <?php
 echo '<div class="actions">';
 echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
 echo '</div>';
-//echo '<div class=row><div class="form_header">';
-//echo $tool_name;
-//echo '</div></div>';
 ?>
 
-<table border="0" cellpadding="5" cellspacing="0" width="650">
-<tr>
-  <td width="40%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>
-  <td width="60%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); ?>"></td>
-</tr>
-<tr>
-  <td width="40%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
-  <td width="60%">
+    <div class="row">
+        <div class="label">
+            <?php echo get_lang('SessionName') ?>
+        </div>
+        <div class="formw">
+            <input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); ?>">
+        </div>        
+    </div>   
+  
+    <div class="row">
+        <div class="label">
+            <?php echo get_lang('CoachName') ?>
+        </div>
+        <div class="formw">
+  
 <?php
 
 $sql = 'SELECT COUNT(1) FROM '.$tbl_user.' WHERE status=1';
@@ -209,43 +213,52 @@ if (intval($count_users)<50) {
 }
 $Categories = SessionManager::get_all_session_category();
 ?>	
-</td>
-</tr>
-<tr>
-  <td width="40%"><?php echo get_lang('SessionCategory') ?></td>
-  <td width="60%">
-  	<select id="session_category" class="chzn-select" name="session_category" style="width:350px;" title="<?php echo get_lang('Select'); ?>">
-		<option value="0"><?php get_lang('None'); ?></option>		
-		<?php 
-		  if (!empty($Categories)) {
-		      foreach($Categories as $Rows) { ?>
-				<option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $id_session_category) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
-			<?php }
-		  }
-		?>
-	</select>
-  </td>
-</tr>
+      
+  
+        </div>        
+    </div>
+  
 
-<tr>
-    <td>&nbsp;
-        
-    </td>
-    <td>
-        <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
+
+    <div class="row">
+        <div class="label">
+            <?php echo get_lang('SessionCategory') ?>
+        </div>
+        <div class="formw">
+           <select id="session_category" class="chzn-select" name="session_category" style="width:350px;" title="<?php echo get_lang('Select'); ?>">
+        <option value="0"><?php get_lang('None'); ?></option>       
+        <?php 
+          if (!empty($Categories)) {
+              foreach($Categories as $Rows) { ?>
+                <option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $id_session_category) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
+            <?php }
+          }
+        ?>
+    </select>
+        </div>        
+    </div>   
+    
+ <div class="row">
+        <div class="label">            
+        </div>
+        <div class="formw">
+            <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
         <div style="display: <?php if($formSent && ($nb_days_acess_before!=0 || $nb_days_acess_after!=0)) echo 'block'; else echo 'none'; ?>;" id="options">
             <br />
             <input type="text" name="nb_days_acess_before" value="<?php echo $nb_days_acess_before; ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysBefore') ?><br /><br />
             <input type="text" name="nb_days_acess_after" value="<?php echo $nb_days_acess_after; ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysAfter') ?>
             <br />
         </div>
-    </td>
-</tr>
+        </div>        
+    </div>   
+    
 
-
-
-  <td width="40%"></td>
-  <td width="60%">
+    
+ <div class="row">
+        <div class="label">            
+        </div>
+        <div class="formw">
+    
   <input id="start_limit" type="checkbox" name="start_limit" onchange="disable_starttime(this)" />
     <label for="start_limit">
     <?php echo get_lang('DateStartSession');?>
@@ -313,11 +326,17 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 ?>
     </select>  
     </div>
-    </td>
-</tr>
-<tr>
-    <td width="40%">&nbsp;&nbsp;</td>
-    <td width="60%">
+       
+        </div>        
+    </div>   
+
+
+    
+ <div class="row">
+        <div class="label">            
+        </div>
+        <div class="formw">
+
     <input id="end_limit" type="checkbox" name="end_limit" onchange="disable_endtime(this)" />
     <label for="end_limit">
         <?php echo get_lang('DateEndSession') ?>
@@ -394,17 +413,19 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
         <?php endforeach; ?>
     </select>    
      </div>  
-  </td>
-</tr>
+       
+        </div>        
+    </div>   
+    
+    
+ <div class="row">
+        <div class="label">            
+        </div>
+        <div class="formw">
+            <button class="save" type="submit" value="<?php echo get_lang('NextStep') ?>"><?php echo get_lang('NextStep') ?></button>
 
-<tr>
-  <td>&nbsp;</td>
-  <td><button class="save" type="submit" value="<?php echo get_lang('NextStep') ?>"><?php echo get_lang('NextStep') ?></button>
- </td>
-</tr>
-
-</table>
-
+        </div>
+</div>
 </form>
 <script type="text/javascript">
 

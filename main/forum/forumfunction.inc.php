@@ -68,7 +68,7 @@ function handle_forum_and_forumcategories($lp_id = null) {
         } else {
             $inputvalues = array();
         }
-        show_add_forum_form($inputvalues,$lp_id);
+        show_add_forum_form($inputvalues, $lp_id);
     }
     // Edit a forum category
     if (($action_forum_cat == 'edit' && $_GET['content'] == 'forumcategory' && isset($_GET['id'])) || (isset($_POST['SubmitEditForumCategory'])) ? true : false ) {
@@ -143,8 +143,7 @@ function show_add_forumcategory_form($inputvalues = array(),$lp_id) {
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
-            $values = $form->exportValues();
-            
+            $values = $form->exportValues();            
             store_forumcategory($values);
         }
         Security::clear_token();
@@ -2518,7 +2517,6 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
         $form->addElement('text', 'weight_calification', get_lang('QualifyWeight'), 'value="'.$current_thread['thread_weight'].'" style="width:40px"');
         $form->applyFilter('weight_calification', 'html_filter');
         $form->addElement('html', '</div>');
-        // Add gradebook.
     }
 
     if ($forum_setting['allow_post_notificiation']) {
@@ -2563,8 +2561,8 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
     if (!empty($form_values)) {
         //$defaults['post_title']=Security::remove_XSS($form_values['post_title']);
         //$defaults['post_text']=Security::remove_XSS($form_values['post_text']);
-        $defaults['post_notification'] = Security::remove_XSS($form_values['post_notification']);
-        $defaults['thread_sticky'] = Security::remove_XSS($form_values['thread_sticky']);
+        $defaults['post_notification']  = Security::remove_XSS($form_values['post_notification']);
+        $defaults['thread_sticky']      = Security::remove_XSS($form_values['thread_sticky']);
     }
 
     $form->setDefaults($defaults);

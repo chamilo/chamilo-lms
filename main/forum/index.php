@@ -53,7 +53,6 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // Including additional library scripts.
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $nameTools = get_lang('Forums');
@@ -102,8 +101,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
 
 Display::display_header('');
 
-//api_display_tool_title($nameTools);
-
 // Tool introduction
 Display::display_introduction_section(TOOL_FORUM);
 
@@ -146,6 +143,7 @@ event_access_tool(TOOL_FORUM);
 $forum_categories = array();
 $forum_categories_list = get_forum_categories();
 
+
 // Step 2: We find all the forums (only the visible ones if it is a student).
 $forum_list	= array();
 $forum_list	= get_forums();
@@ -174,12 +172,12 @@ if (isset($_SESSION['_gid'])) {
 /* ACTION LINKS */
 
 $session_id = isset($_SESSION['id_session']) ? $_SESSION['id_session'] : false;
-//if (api_is_allowed_to_edit() and !$_GET['action'])
+
 echo '<div class="actions">';
 
 //if is called from learning path
 if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){	
-echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-5\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'','32')."</a>";
+    echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-5\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'','32')."</a>";
 }
 if (!empty($forum_list)) {
     echo search_link();
@@ -427,16 +425,11 @@ if (is_array($forum_categories_list)) {
                     }
                 }
             }
-        } else {
-        //if (count($forum_list) == 0) {
-            echo '<tr><td>'.get_lang('NoForumInThisCategory').'</td>'.(api_is_allowed_to_edit(false, true) ? '<td colspan="6"></td>' : '<td colspan="6"></td>').'</tr>';
-        //}
+        } else {     
+            echo '<tr><td>'.get_lang('NoForumInThisCategory').'</td>'.(api_is_allowed_to_edit(false, true) ? '<td colspan="6"></td>' : '<td colspan="6"></td>').'</tr>';     
         }
         echo '</table>';
     }
-
 }
-
-/* FOOTER */
 
 Display :: display_footer();

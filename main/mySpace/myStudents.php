@@ -617,14 +617,16 @@ if (empty($_GET['details'])) {
 					$attendances_faults_avg = '0/0 (0%)';
 				}
 		
-				// get evaluatios by student
+				// get evaluatios by student				
+				
 				$cats = Category::load(null, null, $course_code, null, null, $session_id);
+                
 				$scoretotal = array();
-				if (isset($cats)) {
-					if (!empty($session_id)) {
-				 					$scoretotal= $cats[0]->calc_score($student_id, $course_code, $session_id);	
+				if (isset($cats) && isset($cats[0])) {
+					if (!empty($session_id)) {					    
+                        $scoretotal= $cats[0]->calc_score($student_id, $course_code, $session_id);	
 					} else {
-					$scoretotal= $cats[0]->calc_score($student_id, $course_code);
+                        $scoretotal= $cats[0]->calc_score($student_id, $course_code);
 					}
 				}
 
@@ -639,13 +641,13 @@ if (empty($_GET['details'])) {
 				$score = empty($score) ? '0%' : $score.'%';
 			
 				$csv_content[] = array (
-				$session_name,
-				$course_info['title'],
-				$time_spent_on_course,
-				$progress,
-				$score,
-				$attendances_faults_avg,
-				$scoretotal_display
+    				$session_name,
+    				$course_info['title'],
+    				$time_spent_on_course,
+    				$progress,
+    				$score,
+    				$attendances_faults_avg,
+    				$scoretotal_display
 				);
 
 				echo '<tr>
@@ -654,7 +656,7 @@ if (empty($_GET['details'])) {
 				<td align="right">'.$progress.'</td>
 				<td align="right">'.$score.'</td>
 				<td align="right">'.$attendances_faults_avg.'</td>
-											<td align="right">'.$scoretotal_display.'</td>';
+                <td align="right">'.$scoretotal_display.'</td>';
 			
 				if (isset ($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
 					echo '<td align="center" width="10"><a href="'.api_get_self().'?student='.$info_user['user_id'].'&details=true&course='.$course_info['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';

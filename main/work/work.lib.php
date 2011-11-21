@@ -1288,8 +1288,10 @@ function update_work_url($id, $new_path, $parent_id) {
  */
 function update_dir_name($work_id, $path, $new_name, $title) {    
 	$course_id = api_get_course_int_id();
-	
-	if (!empty($new_name)) {		
+	$work_id = intval($work_id);
+    $title = Database::escape_string($title);
+        
+	if (!empty($new_name)) {
 		global $base_work_dir;
 		
 		$path_to_dir = dirname($path);
@@ -1314,13 +1316,11 @@ function update_dir_name($work_id, $path, $new_name, $title) {
 		while ($work = Database :: fetch_array($rs)) {
 			$new_dir = $work['url'];
 			$name_with_directory = substr($new_dir, $work_len, strlen($new_dir));
-			$sql = 'UPDATE '.$table.' SET url="work/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE c_id = '.$course_id.' AND id= '.$work['id'];
-            
+			$sql = 'UPDATE '.$table.' SET url="work/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE c_id = '.$course_id.' AND id= '.$work['id'];            
 			Database::query($sql);
 		}
         
         $sql = "UPDATE $table SET url= '/".$new_name."' , title = '".$title."' WHERE c_id = $course_id AND id = $work_id";
-        error_log($sql);
         Database::query($sql);
             
 

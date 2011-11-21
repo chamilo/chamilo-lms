@@ -91,16 +91,26 @@ $form->applyFilter('department_url', 'html_filter');
 $form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));
 $form->applyFilter('select_language', 'html_filter');
 
-$form->addElement('checkbox', 'exemplary_content', get_lang('FillWithExemplaryContent'));
+$form->addElement('checkbox', 'exemplary_content', '', get_lang('FillWithExemplaryContent'));
 
-$form->addElement('radio', 'visibility', get_lang('CourseAccess'), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
-$form->addElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
-$form->addElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
-$form->addElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
-$form->addElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
-$form->addElement('radio', 'subscribe', null, get_lang('Denied'), 0);
-$form->addElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
-$form->addElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
+$group = array();
+$group[]= $form->createElement('radio', 'visibility', get_lang('CourseAccess'), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
+$group[]= $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
+$group[]= $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
+$group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
+
+$form->addGroup($group,'', get_lang('CourseAccess'), '<br />');
+
+$group = array();
+$group[]= $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
+$group[]= $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
+$form->addGroup($group,'', get_lang('Subscription'), '<br />');
+
+$group = array();
+$group[]= $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
+$group[]= $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
+$form->addGroup($group,'', get_lang('Unsubscription'), '<br />');
+
 
 $form->add_textfield('disk_quota', get_lang('CourseQuota'));
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');

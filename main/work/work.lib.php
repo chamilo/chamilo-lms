@@ -496,8 +496,9 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			$mydir           = $my_sub_dir.$dir;
 
 			if ($is_allowed_to_edit) {
-				isset($_GET['edit_dir']) ? $clean_edit_dir = Security :: remove_XSS($_GET['edit_dir']) : $clean_edit_dir = '';
-
+			    								
+				$clean_edit_dir = isset($_GET['edit_dir']) ? Security :: remove_XSS($_GET['edit_dir'])  : '';
+                
 				// form edit directory
 				if (isset($clean_edit_dir) && $clean_edit_dir == $mydir) {
 					if (!empty($row['has_properties'])) {

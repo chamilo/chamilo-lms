@@ -427,8 +427,8 @@ class Auth
     public function browse_courses_in_category($category_code, $random_value = null) {
         global $_configuration;        
         $tbl_course               = Database::get_main_table(TABLE_MAIN_COURSE);
-        $TABLE_COURSE_FIELD       = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+        $TABLE_COURSE_FIELD       = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+        $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
         // get course list auto-register
         $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id = tcf.id 
@@ -445,7 +445,7 @@ class Auth
         $without_special_courses = '';
         if (!empty($special_course_list)) {
             $without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';
-        }
+        }        
         
         if (!empty($random_value)) {
             $random_value = intval($random_value);
@@ -459,8 +459,8 @@ class Auth
                         WHERE access_url_id = $url_access_id $without_special_courses ORDER BY RAND() LIMIT $random_value";
             }
             
-            $sql = "SELECT * FROM $tbl_course, (SELECT CEIL(MAX($tbl_course.id) * RAND()) AS randId FROM $tbl_course) AS someRandId 
-                    WHERE $tbl_course.id >= someRandId.randId ";
+            $sql = "SELECT * FROM $tbl_course course, (SELECT CEIL(MAX($tbl_course.id) * RAND()) AS randId FROM $tbl_course) AS someRandId 
+                    WHERE course.id >= someRandId.randId $without_special_courses";
             
         } else {
             $category_code = Database::escape_string($category_code);

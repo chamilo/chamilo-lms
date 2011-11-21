@@ -81,6 +81,8 @@ if (api_is_allowed_to_edit(null, true)) {
 if (api_is_allowed_to_edit(null, true)) {
 	if ( isset ($_GET['action'])) {
 		switch ($_GET['action']) {
+		    case 'import' :
+                break;
 			case 'export' :
 				$table_course_user      = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 				$table_users            = Database::get_main_table(TABLE_MAIN_USER);				
@@ -214,7 +216,8 @@ if (api_is_allowed_to_edit(null, true)) {
 					   $description .= '<tr><td>'.get_lang('Course').': </td><td class="highlight">'.$course_info['name'].'</td>';
 					   $description .= '<tr><td>'.get_lang('Teachers').': </td><td class="highlight">'.CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']).'</td>';
 					   $description .= '<tr><td>'.get_lang('Date').': </td><td class="highlight">'.api_convert_and_format_date(time(), DATE_TIME_FORMAT_LONG).'</td>';
-                       $description .= '</table>';                        
+                       $description .= '</table>';   
+                                            
                        Export::export_table_pdf($a_users, get_lang('UserList'), $header, $description);
                        exit;
 				}
@@ -373,7 +376,7 @@ $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor);
 Display::display_introduction_section(TOOL_USER, 'left');
 $actions = '';
 if ( api_is_allowed_to_edit(null, true)) {
-	echo "<div class=\"actions\">";
+	echo '<div class="actions">';
 
 	// the action links
         if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
@@ -381,7 +384,11 @@ if ( api_is_allowed_to_edit(null, true)) {
             $actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('teacher_subscribe_course.png', get_lang("SubscribeUserToCourseAsTeacher"),'','32')."</a> ";
         }
 		$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a> ';
-	    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a> ';      
+	    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a> ';
+        
+        if (!api_get_session_id()) {
+            $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.Display::return_icon('import_csv.png', get_lang('ImportCSV'),'','32').'</a> ';
+        }      
         
         $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=pdf">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'','32').'</a> ';
         

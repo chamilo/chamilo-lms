@@ -81,8 +81,6 @@ if (api_is_allowed_to_edit(null, true)) {
 if (api_is_allowed_to_edit(null, true)) {
 	if ( isset ($_GET['action'])) {
 		switch ($_GET['action']) {
-		    case 'import' :
-                break;
 			case 'export' :
 				$table_course_user      = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 				$table_users            = Database::get_main_table(TABLE_MAIN_USER);				

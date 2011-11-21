@@ -87,7 +87,6 @@ if ($action == 'display_random_courses' || $action == 'display_courses' ) {
 	$nameTools = get_lang('CourseManagement');
 }
 
-
 // Breadcrumbs.
 $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'user_portal.php', 'name' => get_lang('MyCourses'));
 

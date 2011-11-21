@@ -710,19 +710,19 @@ class IndexManager {
 	* @return array an array containing all the information of the courses of the given user
 		*/
 	function get_courses_of_user($user_id) {
-			$table_course       = Database::get_main_table(TABLE_MAIN_COURSE);
-	    	$table_course_user  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-			// Secondly we select the courses that are in a category (user_course_cat <> 0) and sort these according to the sort of the category
-			$user_id = intval($user_id);
-			$sql_select_courses = "SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
-			course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
-			course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-			FROM    $table_course       course,
-			$table_course_user  course_rel_user
-			WHERE course.code = course_rel_user.course_code
-			AND   course_rel_user.user_id = '".$user_id."'
-	                                AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-	                                ORDER BY course_rel_user.sort ASC";
+		$table_course       = Database::get_main_table(TABLE_MAIN_COURSE);
+    	$table_course_user  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+		// Secondly we select the courses that are in a category (user_course_cat <> 0) and sort these according to the sort of the category
+		$user_id = intval($user_id);
+		$sql_select_courses = "SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
+    		course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
+    		course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+    		FROM    $table_course       course,
+    		$table_course_user  course_rel_user
+    		WHERE course.code = course_rel_user.course_code
+    		AND   course_rel_user.user_id = '".$user_id."'
+                                    AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                                    ORDER BY course_rel_user.sort ASC";
 	    $result = Database::query($sql_select_courses);
 	    $courses = array();
 	    while ($row = Database::fetch_array($result)) {

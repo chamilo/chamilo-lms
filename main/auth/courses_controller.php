@@ -19,10 +19,10 @@ class CoursesController { // extends Controller {
      * Constructor
      */
     public function __construct() {		
-            $this->toolname = 'auth';
-            $actived_theme_path = api_get_template();
-            $this->view = new View($this->toolname, $actived_theme_path);
-            $this->model = new Auth();
+        $this->toolname = 'auth';
+        $actived_theme_path = api_get_template();
+        $this->view = new View($this->toolname, $actived_theme_path);
+        $this->model = new Auth();
     }
 
     /**
@@ -32,25 +32,23 @@ class CoursesController { // extends Controller {
      * @param string    confirmation message(optional)
      */
     public function courses_list($action, $message = '') {
+        $data = array();
+        $user_id = api_get_user_id();
+        
+        $data['user_courses']             = $this->model->get_courses_of_user($user_id);
+        $data['user_course_categories']   = $this->model->get_user_course_categories();
+        $data['courses_in_category']      = $this->model->get_courses_in_category();
+        $data['all_user_categories']      = $this->model->get_user_course_categories();
 
-            $data = array();
-            $user_id = api_get_user_id();
+        $data['action'] = $action;
 
-            //$user_courses = $auth->get_courses_of_user($user_id);
-            $data['user_courses']             = $this->model->get_courses_of_user($user_id);
-            $data['user_course_categories']   = $this->model->get_user_course_categories();
-            $data['courses_in_category']      = $this->model->get_courses_in_category();
-            $data['all_user_categories']      = $this->model->get_user_course_categories();
+        $data['message'] = $message;
 
-            $data['action'] = $action;
-
-            $data['message'] = $message;
-
-            // render to the view
-            $this->view->set_data($data);
-            $this->view->set_layout('layout');
-            $this->view->set_template('courses_list');
-            $this->view->render();
+        // render to the view
+        $this->view->set_data($data);
+        $this->view->set_layout('layout');
+        $this->view->set_template('courses_list');
+        $this->view->render();
 
     }
 
@@ -62,17 +60,17 @@ class CoursesController { // extends Controller {
      * @param string    error message(optional)
      */
     public function categories_list($action, $message='', $error='') {
-            $data = array();            
-            $data['user_course_categories'] = $this->model->get_user_course_categories();
-            $data['action'] = $action;
-            $data['message'] = $message;
-            $data['error'] = $error;
+        $data = array();            
+        $data['user_course_categories'] = $this->model->get_user_course_categories();
+        $data['action'] = $action;
+        $data['message'] = $message;
+        $data['error'] = $error;
 
-            // render to the view
-            $this->view->set_data($data);
-            $this->view->set_layout('layout');
-            $this->view->set_template('categories_list');
-            $this->view->render();
+        // render to the view
+        $this->view->set_data($data);
+        $this->view->set_layout('layout');
+        $this->view->set_template('categories_list');
+        $this->view->render();
     }
 
     /**
@@ -82,41 +80,41 @@ class CoursesController { // extends Controller {
      * @param string    Category code (optional)
      */
     public function courses_categories($action, $category_code = null, $message = '', $error = '') {
-            $data = array();
-            $browse_course_categories = $this->model->browse_course_categories();
-            
-            if ($action == 'display_random_courses') {
-                $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 20);
-            } else {
-                if (!isset($category_code)) {
-                    $category_code = $browse_course_categories[0][1]['code']; // by default first category
-                }            
-                $data['browse_courses_in_category'] = $this->model->browse_courses_in_category($category_code);
+        $data = array();
+        $browse_course_categories = $this->model->browse_course_categories();        
+        
+        if ($action == 'display_random_courses') {
+            $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 20);
+        } else {
+            if (!isset($category_code)) {
+                $category_code = $browse_course_categories[0][1]['code']; // by default first category
+            }            
+            $data['browse_courses_in_category'] = $this->model->browse_courses_in_category($category_code);
+        }
+        $data['browse_course_categories'] = $browse_course_categories;
+        $data['code'] = Security::remove_XSS($category_code);
+
+        // getting all the courses to which the user is subscribed to
+        $curr_user_id = api_get_user_id();
+        $user_courses = $this->model->get_courses_of_user($curr_user_id);            
+        $user_coursecodes = array();
+
+        // we need only the course codes as these will be used to match against the courses of the category
+        if ($user_courses != '') {
+            foreach($user_courses as $key => $value) {
+                $user_coursecodes[] = $value['code'];
             }
-            $data['browse_course_categories'] = $browse_course_categories;
-            $data['code'] = Security::remove_XSS($category_code);
+        }
+        $data['user_coursecodes'] = $user_coursecodes;
+        $data['action']           = $action;
+        $data['message']          = $message;
+        $data['error']            = $error;
 
-            // getting all the courses to which the user is subscribed to
-            $curr_user_id = api_get_user_id();
-            $user_courses = $this->model->get_courses_of_user($curr_user_id);            
-            $user_coursecodes = array();
-
-            // we need only the course codes as these will be used to match against the courses of the category
-            if ($user_courses != '') {
-                foreach($user_courses as $key => $value) {
-                    $user_coursecodes[] = $value['code'];
-                }
-            }
-            $data['user_coursecodes'] = $user_coursecodes;
-            $data['action']           = $action;
-            $data['message']          = $message;
-            $data['error']            = $error;
-
-            // render to the view
-            $this->view->set_data($data);
-            $this->view->set_layout('layout');
-            $this->view->set_template('courses_categories');
-            $this->view->render();
+        // render to the view
+        $this->view->set_data($data);
+        $this->view->set_layout('layout');
+        $this->view->set_template('courses_categories');
+        $this->view->render();
     }
 
     /**

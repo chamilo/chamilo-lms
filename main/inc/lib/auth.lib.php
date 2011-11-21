@@ -27,43 +27,43 @@ class Auth
      * @return  array an array containing all the information of the courses of the given user
     */
     public function get_courses_of_user($user_id) {
-            $TABLECOURS                 = Database::get_main_table(TABLE_MAIN_COURSE);
-            $TABLECOURSUSER             = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-            $TABLE_COURSE_FIELD 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-            $TABLE_COURSE_FIELD_VALUE	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+        $TABLECOURS                 = Database::get_main_table(TABLE_MAIN_COURSE);
+        $TABLECOURSUSER             = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $TABLE_COURSE_FIELD 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+        $TABLE_COURSE_FIELD_VALUE	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
-            // get course list auto-register
-            $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON " .
-                  " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
+        // get course list auto-register
+        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON " .
+              " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
 
-            $special_course_result = Database::query($sql);
-            if (Database::num_rows($special_course_result)>0) {
-                    $special_course_list = array();
-                    while ($result_row = Database::fetch_array($special_course_result)) {
-                            $special_course_list[] = '"'.$result_row['course_code'].'"';
-                    }
+        $special_course_result = Database::query($sql);
+        if (Database::num_rows($special_course_result)>0) {
+            $special_course_list = array();
+            while ($result_row = Database::fetch_array($special_course_result)) {
+                    $special_course_list[] = '"'.$result_row['course_code'].'"';
             }
-            $without_special_courses = '';
-            if (!empty($special_course_list)) {
-                    $without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';
-            }
+        }
+        $without_special_courses = '';
+        if (!empty($special_course_list)) {
+                $without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';
+        }
 
-            // Secondly we select the courses that are in a category (user_course_cat<>0) and sort these according to the sort of the category
-            $user_id = intval($user_id);
-            $sql_select_courses = "SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
-                                          course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
-                                          course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-                                    FROM $TABLECOURS course, $TABLECOURSUSER  course_rel_user
-                                    WHERE course.code = course_rel_user.course_code
-                                    AND   course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                                    AND   course_rel_user.user_id = '".$user_id."' $without_special_courses
-                                    ORDER BY course_rel_user.sort ASC";
-            $result = Database::query($sql_select_courses);
-            while ($row = Database::fetch_array($result)) {
-                //we only need the database name of the course
-                $courses[] = array('db' => $row['db'], 'code' => $row['k'], 'visual_code' => $row['vc'], 'title' => $row['i'], 'directory' => $row['dir'], 'status' => $row['status'], 'tutor' => $row['t'], 'subscribe' => $row['subscr'], 'unsubscribe' => $row['unsubscr'], 'sort' => $row['sort'], 'user_course_category' => $row['user_course_cat']);
-            }
-            return $courses;
+        // Secondly we select the courses that are in a category (user_course_cat<>0) and sort these according to the sort of the category
+        $user_id = intval($user_id);
+        $sql_select_courses = "SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
+                                      course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
+                                      course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+                                FROM $TABLECOURS course, $TABLECOURSUSER  course_rel_user
+                                WHERE course.code = course_rel_user.course_code
+                                AND   course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                                AND   course_rel_user.user_id = '".$user_id."' $without_special_courses
+                                ORDER BY course_rel_user.sort ASC";
+        $result = Database::query($sql_select_courses);
+        while ($row = Database::fetch_array($result)) {
+            //we only need the database name of the course
+            $courses[] = array('db' => $row['db'], 'code' => $row['k'], 'visual_code' => $row['vc'], 'title' => $row['i'], 'directory' => $row['dir'], 'status' => $row['status'], 'tutor' => $row['t'], 'subscribe' => $row['subscr'], 'unsubscribe' => $row['unsubscr'], 'sort' => $row['sort'], 'user_course_category' => $row['user_course_cat']);
+        }
+        return $courses;
     }
 
     /**

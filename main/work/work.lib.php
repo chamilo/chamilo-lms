@@ -454,6 +454,8 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	$my_sub_dir = str_replace('work/', '', $sub_course_dir);
 
 	$course_info = CourseManager::get_course_information(api_get_course_id());
+    
+    $edit_dir = isset($_GET['edit_dir']) ? $_GET['edit_dir'] : '';
 
 	// @todo Since "works" cant have sub works this foreach is useless when selecting the list of works
 
@@ -461,15 +463,13 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	if (is_array($dirs_list)) {
 		foreach ($dirs_list as $dir) {
 				
-			$work_data = get_work_data_by_path('/'.$dir);
-				
 			if ($my_sub_dir == '') {
 				$mydir_temp = '/'.$dir;
 			} else {
 				$mydir_temp = '/'.$my_sub_dir.$dir;
 			}
 
-			$sql_select_directory = "SELECT prop.insert_date, prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight, allow_text_assignment
+			$sql_select_directory = "SELECT title, prop.insert_date, prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight, allow_text_assignment
 									 FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id)
 									 WHERE active IN (0, 1) AND ";
 			
@@ -495,12 +495,9 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			$id2             = $row['id'];
 			$mydir           = $my_sub_dir.$dir;
 
-			if ($is_allowed_to_edit) {
-			    								
-				$clean_edit_dir = isset($_GET['edit_dir']) ? Security :: remove_XSS($_GET['edit_dir'])  : '';
-                
+			if ($is_allowed_to_edit) {                
 				// form edit directory
-				if (isset($clean_edit_dir) && $clean_edit_dir == $mydir) {
+				if (isset($edit_dir) && $edit_dir == $mydir) {
 					if (!empty($row['has_properties'])) {
 						$sql = Database::query('SELECT * FROM '.$work_assigment.' WHERE c_id = '.$course_id.' AND id = "'.$row['has_properties'].'" LIMIT 1');
 						$homework = Database::fetch_array($sql);
@@ -510,13 +507,14 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 
 					$group_name[] = FormValidator :: createElement('text', 'dir_name');
 					$form_folder -> addGroup($group_name, 'my_group', get_lang('Title'));
-
-					$form_folder -> addGroupRule('my_group', get_lang('ThisFieldIsRequired'), 'required');
-					$defaults = array('my_group[dir_name]' => html_entity_decode($dir), 'description' => api_html_entity_decode($row['description']));
+                    
+                    $form_folder->addElement('hidden', 'work_id', $row['id']);
+                    $form_folder -> addGroupRule('my_group', get_lang('ThisFieldIsRequired'), 'required');
+                    
+					$defaults = array('my_group[dir_name]' => Security::remove_XSS($row['title']), 'description' => Security::remove_XSS($row['description']));
 					$form_folder->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'work', 'Width' => '80%', 'Height' => '200'));
 
-					$there_is_a_end_date = false;
-						
+					$there_is_a_end_date = false;						
 					$form_folder -> addElement('html', '<div class="row">
 							 	                         <div class="label">&nbsp;</div>
 						 	  	                         <div class="formw">
@@ -608,8 +606,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 						$form_folder -> addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
 					}					
 					
-					$form_folder -> addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));
-					
+					$form_folder -> addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));					
 						
 					$form_folder -> addElement('html', '</div>');
 
@@ -648,17 +645,20 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							$there_is_a_end_date = false;
 						}							
 						
-						$values = $form_folder -> exportValues();
+						$values = $form_folder->exportValues();
+                        $work_id = $values['work_id'];
 						$values = $values['my_group'];
+                        
 						$dir_name = replace_dangerous_char($values['dir_name']);
 						$dir_name = disable_dangerous_file($dir_name);
 
 						$edit_check = false;
-						if ($dir_name != $dir) {
-							if (!is_work_exist_by_url('/'.$dir_name)) {
-								$edit_check = true;
-							}
-						} else {
+                        
+                        $work_data = get_work_data_by_id($work_id);                        
+                        
+						if (!empty($work_data)) {
+                            $edit_check = true;
+					    } else {
 							$edit_check = true;
 						}
 
@@ -671,23 +671,25 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							Database::query($sql_add_publication);
 						
 			
-							$ends_query =    ' SET ends_on = '."'".($there_is_a_end_date ? api_get_utc_datetime(get_date_from_group('ends')) : '0000-00-00 00:00:00')."'";
+							$ends_query = ' SET ends_on = '."'".($there_is_a_end_date ? api_get_utc_datetime(get_date_from_group('ends')) : '0000-00-00 00:00:00')."'";
 							Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE c_id = '.$course_id.' AND id = '."'".$row['has_properties']."'");
 							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 WHERE c_id = '.$course_id.' AND id ='".$row['id']."'";
 							Database::query($sql_add_publication);
 				
-							Database::query('UPDATE '.$work_table.' SET 
-							                     allow_text_assignment = '."'".intval($_POST['allow_text_assignment'])."'".' , 
-							                     description = '."'".Database::escape_string($_POST['description'])."'".', 
-							                     qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',
-							                     weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' 
-							                 WHERE c_id = '.$course_id.' AND id = '.$row['id']);
+                            $sql = 'UPDATE '.$work_table.' SET 
+                                                 allow_text_assignment = '."'".intval($_POST['allow_text_assignment'])."'".' ,
+                                                 title = '."'".Database::escape_string($_POST['dir_name'])."'".',  
+                                                 description = '."'".Database::escape_string($_POST['description'])."'".', 
+                                                 qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',
+                                                 weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' 
+                                             WHERE c_id = '.$course_id.' AND id = '.$row['id'];
+							Database::query($sql);
 								
 							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 							$link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $row['id'], api_get_session_id());
 							if ($link_id !== false) {
 								Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string((float)$_POST['weight']['weight'])."'".' 
-								                WHERE c_id = '.$course_id.' AND id = '.$link_id);
+								                 WHERE c_id = '.$course_id.' AND id = '.$link_id);
 							}
 
 							//we are changing the current work and we want add them into gradebook
@@ -701,7 +703,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 								add_resource_to_course_gradebook(api_get_course_id(), 3, $row['id'], $resource_name, (float)$_POST['weight']['weight'], (float)$_POST['qualification']['qualification'], $_POST['description'] , time(), 1, api_get_session_id());
 							}
 
-							update_dir_name($mydir, $dir_name);
+							update_dir_name($work_data['id'], $mydir, $dir_name, $values['dir_name']);
 							$mydir = $my_sub_dir.$dir_name;
 							$dir = $dir_name;
 							$display_edit_form = false;
@@ -721,7 +723,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							// update from agenda if it exists
 							if (!empty($calendar_id[0])) {
 								$sql = "UPDATE ".$TABLEAGENDA."
-										SET title='".$dir_name."',
+										SET title='".$values['dir_name']."',
 											content  = '".Database::escape_string($_POST['description'])."',
 											start_date = '".$end_date."',
 											end_date   = '".$end_date."'
@@ -735,6 +737,8 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					}
 				}
 			}
+			
+			$work_data = get_work_data_by_path('/'.$dir);
 			
 			$action = '';
 			$row = array();
@@ -776,7 +780,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 
 			$icon = Display::return_icon('work.png', get_lang('Assignment'), array(), 22);
 				
-			if (!empty($display_edit_form) && isset($clean_edit_dir) && $clean_edit_dir == $mydir) {
+			if (!empty($display_edit_form) && isset($edit_dir) && $edit_dir == $mydir) {
 				$row[] = $icon;
 				$row[] = '<span class="invisible" style="display:none">'.$dir.'</span>'.$form_folder->toHtml(); // form to edit the directory's name
 			} else {
@@ -1282,7 +1286,7 @@ function update_work_url($id, $new_path, $parent_id) {
  * @param	string old path
  * @param	string new path
  */
-function update_dir_name($path, $new_name) {
+function update_dir_name($work_id, $path, $new_name, $title) {    
 	$course_id = api_get_course_int_id();
 	
 	if (!empty($new_name)) {		
@@ -1302,7 +1306,7 @@ function update_dir_name($path, $new_name) {
 		$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 		//update all the files in the other directories according with the next query
-		$sql = 'SELECT id, url FROM '.$table.' WHERE c_id = '.$course_id.' AND url LIKE BINARY "work/'.$path.'/%"'; // like binary (Case Sensitive)
+		$sql = "SELECT id, url FROM $table WHERE c_id = $course_id AND parent_id = $work_id"; // like binary (Case Sensitive)
 
 		$rs = Database::query($sql);
 		$work_len = strlen('work/'.$path);
@@ -1310,11 +1314,18 @@ function update_dir_name($path, $new_name) {
 		while ($work = Database :: fetch_array($rs)) {
 			$new_dir = $work['url'];
 			$name_with_directory = substr($new_dir, $work_len, strlen($new_dir));
-			$sql = 'UPDATE '.$table.' SET c_id = '.$course_id.' AND url="work/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE id= '.$work['id'];
+			$sql = 'UPDATE '.$table.' SET url="work/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE c_id = '.$course_id.' AND id= '.$work['id'];
+            
 			Database::query($sql);
 		}
+        
+        $sql = "UPDATE $table SET url= '/".$new_name."' , title = '".$title."' WHERE c_id = $course_id AND id = $work_id";
+        error_log($sql);
+        Database::query($sql);
+            
 
 		//update all the directory's children according with the next query
+		/*
 		$sql = 'SELECT id, url FROM '.$table.' WHERE c_id = '.$course_id.' AND url LIKE BINARY "/'.$path.'%"';
 		$rs = Database::query($sql);
 		$work_len = strlen('/'.$path);
@@ -1324,7 +1335,7 @@ function update_dir_name($path, $new_name) {
 			$url = $path_to_dir.$new_name.$name_with_directory;
 			$sql = 'UPDATE '.$table.' SET url="/'.$url.'", title = "'.$new_name.'" WHERE c_id = '.$course_id.' AND id= '.$work['id'];
 			Database::query($sql);
-		}
+		}*/
 	}
 }
 

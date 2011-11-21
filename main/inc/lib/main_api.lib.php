@@ -2902,9 +2902,14 @@ function api_get_track_item_property_history($tool, $ref) {
 function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0) {
 
     $course_info    = api_get_course_info_by_id($course_id);
+    if (empty($course_info)) {
+        return false;
+    }
+    
     $tool           = Database::escape_string($tool);
     $ref            = intval($ref);
-
+    $course_id      = intval($course_id);
+    
     // Definition of tables.
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $course_id	 = $course_info['real_id'];

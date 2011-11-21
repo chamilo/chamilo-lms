@@ -64,6 +64,8 @@ require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
 
 $course_id  = api_get_course_int_id();
+$course_info = api_get_course_info();
+
 $user_id 	= api_get_user_id();
 
 // Section (for the tabs)
@@ -409,16 +411,8 @@ switch ($action) {
 			$text_document->freeze();
 		} elseif ($item_id && ($is_allowed_to_edit or $is_author)) {
 			$workUrl = $currentCourseRepositoryWeb . $workUrl;
-			//$form->addElement('hidden', 'id', $edit);
-	
-			$html = '<div class="row">
-									<div class="label">' . get_lang("Document") . '
-									</div>
-									<div class="formw">
-										<a href="' . $workUrl . '">' . get_lang("ClickHereToDownloadTheFile") . '</a>
-									</div>
-						</div>';
-			$form->addElement('html', $html);
+			
+            $form->addElement('html', $html);
 		} else {
 			// else standard upload option
 			$form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
@@ -428,7 +422,7 @@ switch ($action) {
 		if (empty($item_id)) {
 			$form->addElement('checkbox', 'contains_file', null, get_lang('ContainsAfile'), array('id'=>'contains_file_id'));
 		}
-		$form->addElement('text', 'title', get_lang('TitleWork'), 'id="file_upload"  style="width: 350px;"');
+		$form->addElement('text', 'title', get_lang('Title'), 'id="file_upload"  style="width: 350px;"');
 		$form->addElement('textarea', 'description', get_lang("Description"), 'style="width: 350px; height: 60px;"');
 		
 		if ($item_id && !empty($work_item)) {
@@ -680,8 +674,7 @@ switch ($action) {
 					$end_date = '';
 					if (isset($_POST['add_to_calendar']) && $_POST['add_to_calendar'] == 1) {
 						require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
-						require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
-						$course = isset($course_info) ? $course_info : null;
+						require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';						
 							
 						// Setting today date
 						$date = $end_date = $time;
@@ -694,12 +687,12 @@ switch ($action) {
 						$description = isset($_POST['description']) ? $_POST['description'] : '';
 						$content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.api_substr($dir_name_sql, 1).'" >'.$_POST['new_dir'].'</a>'.$description;
 	
-						$agenda_id = agenda_add_item($course, $title, $content, $date, $end_date, array('GROUP:'.$toolgroup), 0);
+						$agenda_id = agenda_add_item($course_info, $title, $content, $date, $end_date, array('GROUP:'.$toolgroup), 0);
 					}
 				}
 					
 				//Folder created
-				api_item_property_update($_course, 'work', $id, 'DirectoryCreated', $user_id);
+				api_item_property_update($course_info, 'work', $id, 'DirectoryCreated', $user_id);
 				Display :: display_confirmation_message(get_lang('DirectoryCreated'), false);
 				
 				// insert into student_publication_assignment	
@@ -1008,14 +1001,12 @@ switch ($action) {
 	case 'move':
 	case 'move_to':
 	case 'list':
-		
-		
 		if ($action == 'mark_work') {
 			
 		}
 		/*	Move file command */
 		
-		if ($action == 'move_to') {	
+		if ($action == 'move_to') {
 			
 			$move_to_path = get_work_path($_REQUEST['move_to_id']);
 		
@@ -1052,7 +1043,7 @@ switch ($action) {
 				$session_id = api_get_session_id();
 				$session_id == 0 ? $withsession = " AND session_id = 0 " : $withsession = " AND session_id='".$session_id."'";
 			
-				$sql = "SELECT id, url FROM $work_table  WHERE url LIKE '/%' AND post_group_id = '".(empty($_SESSION['toolgroup'])?0:intval($_SESSION['toolgroup']))."'".$withsession;
+				$sql = "SELECT id, url FROM $work_table WHERE url LIKE '/%' AND post_group_id = '".(empty($_SESSION['toolgroup'])?0:intval($_SESSION['toolgroup']))."'".$withsession;
 				$res = Database::query($sql);
 				while($folder = Database::fetch_array($res)) {
 					$folders[$folder['id']] = substr($folder['url'], 1, strlen($folder['url']) - 1);
@@ -1077,9 +1068,9 @@ switch ($action) {
 					Database::query($sql);
 					Display::display_confirmation_message(get_lang('AllFilesVisible'));*/
 				} else {
-					$sql = "UPDATE  " . $work_table . "	SET accepted = 1
-									WHERE c_id = $course_id AND id = '" . $item_id . "'";
-					Database::query($sql);
+					$sql = "UPDATE " . $work_table . "	SET accepted = 1 WHERE c_id = $course_id AND id = '" . $item_id . "'";
+					Database::query($sql);                    
+                    api_item_property_update($course_info, 'work', $item_id, 'visible', api_get_user_id());
 					Display::display_confirmation_message(get_lang('FileVisible'));
 				}
 			}
@@ -1104,6 +1095,7 @@ switch ($action) {
 					$sql = "UPDATE  " . $work_table . " SET accepted = 0
 							WHERE c_id = $course_id AND id = '" . $item_id . "'";
 					Database::query($sql);
+                    api_item_property_update($course_info, 'work', $item_id, 'invisible', api_get_user_id());
 					Display::display_confirmation_message(get_lang('FileInvisible'));
 				}
 			}
@@ -1129,16 +1121,16 @@ switch ($action) {
 			}
 			$delete_2 = intval($_REQUEST['delete2']);
 			// gets calendar_id from student_publication_assigment
-			$sql = "SELECT add_to_calendar FROM $TSTDPUBASG WHERE publication_id ='$delete_2'";
+			$sql = "SELECT add_to_calendar FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_2'";
 			$res = Database::query($sql);
 			$calendar_id = Database::fetch_row($res);
 			// delete from agenda if it exists
 			if (!empty($calendar_id[0])) {
 				$t_agenda   = Database::get_course_table(TABLE_AGENDA);
-				$sql = "DELETE FROM $t_agenda WHERE id ='".$calendar_id[0]."'";
+				$sql = "DELETE FROM $t_agenda WHERE c_id = $course_id AND id ='".$calendar_id[0]."'";
 				Database::query($sql);
 			}
-			$sql2 = "DELETE FROM $TSTDPUBASG WHERE publication_id ='$delete_2'";
+			$sql2 = "DELETE FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_2'";
 			$result2 = Database::query($sql2);
 		
 			$link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $delete_2, api_get_session_id());

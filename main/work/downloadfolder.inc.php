@@ -67,8 +67,8 @@ if (api_is_allowed_to_edit()) {
 	$querypath = Database::escape_string($querypath);
 
     $sql = "SELECT url, title FROM $tbl_student_publication AS work, $prop_table AS props  
-            WHERE props.c_id = $course_id AND work.c_id = $course_id AND props.tool='work' AND work.id=props.ref AND work.url LIKE 'work".$querypath."/%' AND work.filetype='file' AND 
-                  props.visibility = '1' AND props.lastedit_user_id='".api_get_user_id()."' ";
+            WHERE props.c_id = $course_id AND work.c_id = $course_id AND props.tool='work' AND work.accepted = 1 AND work.id=props.ref AND work.url LIKE 'work".$querypath."/%' AND work.filetype='file' AND 
+                  props.visibility = '1' AND props.insert_user_id='".api_get_user_id()."' ";
     $query = Database::query($sql);
     //add tem to the zip file
     while ($not_deleted_file = Database::fetch_assoc($query)) {

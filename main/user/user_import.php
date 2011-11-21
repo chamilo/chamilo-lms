@@ -12,7 +12,7 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 $tool_name = get_lang('ImportUsersToACourse');
 $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
-$interbreadcrumb[] = array ("url" => "#", "name" => get_lang("ImportUsers"));
+$interbreadcrumb[] = array ("url" => "#", "name" => get_lang("ImportUsersToACourse"));
 
 $form = new FormValidator('user_import','post','user_import.php');
 $form->addElement('header', '', $tool_name);

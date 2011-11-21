@@ -387,7 +387,7 @@ if ( api_is_allowed_to_edit(null, true)) {
 	    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a> ';
         
         if (!api_get_session_id()) {
-            $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.Display::return_icon('import_csv.png', get_lang('ImportCSV'),'','32').'</a> ';
+            $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'),'','32').'</a> ';
         }      
         
         $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=pdf">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'','32').'</a> ';

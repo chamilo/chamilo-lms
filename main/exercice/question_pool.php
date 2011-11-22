@@ -227,8 +227,6 @@ if (!empty($gradebook) && $gradebook=='view') {
 
 // if admin of course
 if (!$is_allowedToEdit) {
-        echo "HUBC ".__LINE__." ".__FILE__;
-
     api_not_allowed(true);
 }
 
@@ -616,9 +614,6 @@ foreach ($main_question_list as $tabQuestion) {
 	$row[] = get_question_type_for_question($selected_course, $tabQuestion['id']);
 	$row[] = get_question_categorie_for_question($selected_course, $tabQuestion['id']);
 	$row[] = $tabQuestion['level'];
-	
-	echo "HUBC exerciseId=$exerciseId <br/>";
-	
 	$row[] = get_action_icon_for_question($actionIcon1, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], 
                 $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseLevel, 
                 $answerType, $session_id, $exerciseId).

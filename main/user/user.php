@@ -547,6 +547,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					$temp[] = $o_course_user['firstname'];
 				}
 
+                $temp[] = $o_course_user['username'];   // 
 				$temp[] = isset($o_course_user['role']) ? $o_course_user['role'] : null;
 				$temp[] = implode(', ', $groups_name); //Group
 				
@@ -672,6 +673,7 @@ if ($is_western_name_order) {
 	$table->set_header($header_nr++, get_lang('LastName'));
 	$table->set_header($header_nr++, get_lang('FirstName'));
 }
+$table->set_header($header_nr++, get_lang('LoginName'));  // 
 $table->set_header($header_nr++, get_lang('Description'), false);
 $table->set_header($header_nr++, get_lang('GroupSingle'), false);
         
@@ -681,9 +683,9 @@ if (api_is_allowed_to_edit(null, true)) {
 	$table->set_header($header_nr++, get_lang('Status'), false);
 	$table->set_header($header_nr++, get_lang('Active'), false);
     if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-        $table->set_column_filter(8, 'active_filter');
+        $table->set_column_filter(9, 'active_filter');
     } else {
-        $table->set_column_filter(7, 'active_filter');
+        $table->set_column_filter(8, 'active_filter');
     }
 	//actions column
 	$table->set_header($header_nr++, get_lang('Action'), false);

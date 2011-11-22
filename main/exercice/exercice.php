@@ -116,11 +116,11 @@ if (empty ($exerciseId)) {
 if (empty ($file)) {
 	$file = Database :: escape_string($_REQUEST['file']);
 }
-// ------------------------------- hubr
+// 
 // filter display by student group
 // if $_GET['filterByGroup'] = -1 => do not filter
 // else, filter by group_id (0 for no group)
-// -------------------------------
+// 
 $filterByGroup = -1;
 if (isset($_GET['filterByGroup']) && is_numeric($_GET['filterByGroup'])) {
 	$filterByGroup = Security::remove_XSS($_GET['filterByGroup']);
@@ -652,9 +652,9 @@ if ($show == 'result') {
     			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_uncheck.png', get_lang('ShowUnCorrectedOnly'),'','32').'</a>';
     		}
     		echo $view_result;
-			// -----------------------------hubr
+			// 
 			// filter by student group menu
-			// -----------------------------
+			// 
 			$exercice_id = intval($_GET['exerciseId']);
             echo "<script type='text/javascript'>";
 			echo "	    function doFilterByGroup() {";
@@ -666,7 +666,6 @@ if ($show == 'result') {
 			echo "&nbsp;&nbsp;";
 			echo Display::return_icon('group.gif', get_lang("FilterByGroup"));
 			echo displayGroupMenu("groupFilter", $filterByGroup, "doFilterByGroup()")."&nbsp;";
-			// -----------------------------    		
 		}
 	}
 }
@@ -1126,12 +1125,13 @@ if ($show == 'result') {
 			$table->set_header(0, get_lang('LastName'));
 			$table->set_header(1, get_lang('FirstName'));    			
 		}		
-		$table->set_header(2, get_lang('Group'));
-		$table->set_header(3, get_lang('Exercice'));
-    	$table->set_header(4, get_lang('Duration'),false);
-    	$table->set_header(5, get_lang('Date'));
-    	$table->set_header(6, get_lang('Score'),false);
-    	$table->set_header(7, get_lang('CorrectTest'), false);   
+		$table->set_header(2, get_lang('LoginName'));
+		$table->set_header(3, get_lang('Group'),false);
+		$table->set_header(4, get_lang('Exercice'),false);
+    	$table->set_header(5, get_lang('Duration'),false);
+    	$table->set_header(6, get_lang('Date'));
+    	$table->set_header(7, get_lang('Score'),false);
+    	$table->set_header(8, get_lang('CorrectTest'), false);   
     	
     } else {
         $table->set_header(0, get_lang('Exercice'));

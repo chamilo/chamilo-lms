@@ -3307,9 +3307,9 @@ class Exercise {
 				if (!class_exists("Testcategory")) {
 					require_once("testcategory.class.php");
 				}
-				// -----------------------------
-				// USE question categories hub 13-10-2011
-				// -----------------------------
+				// 
+				// USE question categories 
+				// 
 				// get questions by category for this exercice
 				// we have to choice $objExercise->random question in each array values of $tabCategoryQuestions
 				// key of $tabCategoryQuestions are the categopy id (0 for not in a category)

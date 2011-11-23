@@ -40,8 +40,6 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
         $current_course_id          = $keys['currentCourseId'];                
         $current_course_repository  = $keys['currentCourseRepository'];
         
-        $db_name = $keys['currentCourseDbName'];
-        $directory = $keys['currentCourseRepository'];
         $expiration_date = time() + $first_expiration_delay;        
         
         prepare_course_repository($current_course_repository, $current_course_id);
@@ -50,7 +48,6 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
         fill_Db_course($course_id, $current_course_repository, $course_language, $pictures_array, $fill_with_exemplary_content);      
         return $course_id;
     }
-
     return false;
 }
 
@@ -217,6 +214,106 @@ function prepare_course_repository($course_repository, $course_code) {
     return 0;
 };
 
+function get_course_tables() {
+    $tables = array();
+    
+    $tables[]= 'tool';    
+    $tables[]= 'tool_intro';
+
+    // Group tool
+    $tables[]= 'group_info';
+    $tables[]= 'group_category';
+    $tables[]= 'group_rel_user';
+    $tables[]= 'group_rel_tutor';
+
+    $tables[]= 'item_property';
+
+    $tables[]= 'userinfo_content';
+    $tables[]= 'userinfo_def';    
+    $tables[]= 'course_description';
+    $tables[]= 'calendar_event';
+    $tables[]= 'calendar_event_repeat';
+    $tables[]= 'calendar_event_repeat_not';
+    $tables[]= 'calendar_event_attachment';
+    $tables[]= 'announcement';
+    $tables[]= 'announcement_attachment';
+    $tables[]= 'resource';
+    $tables[]= 'student_publication';
+    $tables[]= 'student_publication_assignment';
+    $tables[]= 'document';
+    $tables[]= 'forum_category';
+    $tables[]= 'forum_forum';
+    $tables[]= 'forum_thread';
+    $tables[]= 'forum_post';
+    $tables[]= 'forum_mailcue';
+    $tables[]= 'forum_attachment';
+    $tables[]= 'forum_notification';
+    $tables[]= 'forum_thread_qualify';
+    $tables[]= 'forum_thread_qualify_log';
+    $tables[]= 'link';
+    $tables[]= 'link_category';
+    $tables[]= 'online_connected';
+    $tables[]= 'online_link';
+    $tables[]= 'chat_connected';
+    $tables[]= 'quiz';
+    $tables[]= 'quiz_rel_question';
+    $tables[]= 'quiz_question';
+    $tables[]= 'quiz_answer';
+    $tables[]= 'quiz_question_option';    
+    $tables[]= 'quiz_question_category';
+    $tables[]= 'quiz_question_rel_category';
+    $tables[]= 'dropbox_post';
+    $tables[]= 'dropbox_file';
+    $tables[]= 'dropbox_person';
+    $tables[]= 'dropbox_category';
+    $tables[]= 'dropbox_feedback';
+    $tables[]= 'lp';
+    $tables[]= 'lp_item';
+    $tables[]= 'lp_view';
+    $tables[]= 'lp_item_view';
+    $tables[]= 'lp_iv_interaction';
+    $tables[]= 'lp_iv_objective';
+    $tables[]= 'blog';
+    $tables[]= 'blog_comment';
+    $tables[]= 'blog_post';
+    $tables[]= 'blog_rating';
+    $tables[]= 'blog_rel_user';
+    $tables[]= 'blog_task';
+    $tables[]= 'blog_task_rel_user';
+    $tables[]= 'blog_attachment';
+    $tables[]= 'permission_group';
+    $tables[]= 'permission_user';
+    $tables[]= 'permission_task';
+    $tables[]= 'role';
+    $tables[]= 'role_group';
+    $tables[]= 'role_permissions';
+    $tables[]= 'role_user';
+    $tables[]= 'survey';
+    $tables[]= 'survey_question';
+    $tables[]= 'survey_question_option';
+    $tables[]= 'survey_invitation';
+    $tables[]= 'survey_answer';
+    $tables[]= 'survey_group';
+    $tables[]= 'wiki';
+    $tables[]= 'wiki_conf';
+    $tables[]= 'wiki_discuss';
+    $tables[]= 'wiki_mailcue';
+    $tables[]= 'audiorecorder';
+    $tables[]= 'course_setting';
+    $tables[]= 'glossary';
+    $tables[]= 'notebook';
+    $tables[]= 'attendance';
+    $tables[]= 'attendance_sheet';
+    $tables[]= 'attendance_calendar';
+    $tables[]= 'attendance_result';
+    $tables[]= 'attendance_sheet_log';
+    $tables[]= 'thematic';
+    $tables[]= 'thematic_plan';
+    $tables[]= 'thematic_advance';
+    
+    return $tables;
+    
+}
 /**
  * Creates all the necessary tables for a new course.
  */

@@ -298,7 +298,7 @@ function get_course_tables() {
     $tables[]= 'wiki_conf';
     $tables[]= 'wiki_discuss';
     $tables[]= 'wiki_mailcue';
-    $tables[]= 'audiorecorder';
+    //$tables[]= 'audiorecorder';
     $tables[]= 'course_setting';
     $tables[]= 'glossary';
     $tables[]= 'notebook';
@@ -450,7 +450,7 @@ function update_Db_course($course_db_name = null) {
     $TABLEWIKIMAILCUE           = $course_db_name . 'wiki_mailcue';
 
     // audiorecorder
-    $TABLEAUDIORECORDER         = $course_db_name . 'audiorecorder';
+    //$TABLEAUDIORECORDER         = $course_db_name . 'audiorecorder';
 
     // Course settings
     $TABLESETTING               = $course_db_name . 'course_setting';

@@ -879,7 +879,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                     te.exe_date as exdate, 
                     te.exe_id as exid, 
                     email as exemail, 
-                    te.start_date as col4, 
+                    te.start_date as col6, 
                     steps_counter as exstep, 
                     exe_user_id as excruid,
                     te.exe_duration as exduration, 

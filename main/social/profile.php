@@ -213,13 +213,12 @@ $my_user_id=isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_
 $personal_course_list = UserManager::get_personal_session_course_list($my_user_id);
 $course_list_code = array();
 $i=1;
-//print_r($personal_course_list);
 
 if (is_array($personal_course_list)) {
 	foreach ($personal_course_list as $my_course) {
 		if ($i<=10) {
-			$list[] = SocialManager::get_logged_user_course_html($my_course,$i);
-			$course_list_code[] = array('code'=>$my_course['c'],'dbName'=>$my_course['db']);
+			$list[] = SocialManager::get_logged_user_course_html($my_course, $i);
+			$course_list_code[] = array('code'=>$my_course['k']);
 		} else {
 			break;
 		}
@@ -536,7 +535,7 @@ if ($show_full_profile) {
 	$file_list = '';
 	if (is_array($course_list_code) && count($course_list_code)>0) {
 		foreach ($course_list_code as $course) {
-			$file_list.= UserManager::get_user_upload_files_by_course($user_id,$course['code'],$resourcetype='images');
+			$file_list.= UserManager::get_user_upload_files_by_course($user_id, $course['code'], $resourcetype='images');
 		}
 	}
 

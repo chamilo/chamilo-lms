@@ -400,11 +400,12 @@ class SocialManager extends UserManager {
 		$tbl_session 			 = Database :: get_main_table(TABLE_MAIN_SESSION);
 		
 		$user_id = api_get_user_id();
-		$course_system_code = $my_course['k'];
-		$course_visual_code = $my_course['c'];
-		$course_title = $my_course['i'];
-		$course_directory = $my_course['d'];
-		$course_teacher = $my_course['t'];
+        
+		$course_system_code   = $my_course['k'];
+		$course_visual_code   = $my_course['c'];
+		$course_title         = $my_course['i'];
+		$course_directory     = $my_course['d'];
+		$course_teacher       = $my_course['t'];
 		
 		$course_teacher_email = isset($my_course['email'])?$my_course['email']:'';
 		$course_info = Database :: get_course_info($course_system_code);
@@ -437,6 +438,8 @@ class SocialManager extends UserManager {
 			$course_display_title = $course_title;
 			$course_display_code = $course_visual_code;
 		}
+        
+        /*
 		$s_course_status=$my_course['s'];
 		$s_htlm_status_icon="";
 
@@ -448,7 +451,7 @@ class SocialManager extends UserManager {
 		}
 		if ($s_course_status==5) {
 			$s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
-		}
+		}*/
 		
 		$s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course'));
 
@@ -720,7 +723,7 @@ class SocialManager extends UserManager {
 					foreach ($personal_course_list as $my_course) {
 						if ($i<=10) {
 							$list[] = SocialManager::get_logged_user_course_html($my_course,$i);
-							$course_list_code[] = array('code'=>$my_course['c'],'dbName'=>$my_course['db']);
+							$course_list_code[] = array('code'=>$my_course['k']);
 						} else {
 							break;
 						}

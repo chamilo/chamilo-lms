@@ -965,8 +965,7 @@ function _api_format_user($user) {
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version 21 September 2004
  */
-function api_get_user_info($user_id = '') {
-    global $tbl_user;
+function api_get_user_info($user_id = '') {    
     if ($user_id == '') {
         return _api_format_user($GLOBALS['_user']);
     }
@@ -987,8 +986,7 @@ function api_get_user_info($user_id = '') {
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 function api_get_user_info_from_username($username = '') {
-    if (empty($username)) { return false; }
-    global $tbl_user;
+    if (empty($username)) { return false; }    
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE username='".Database::escape_string($username)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {

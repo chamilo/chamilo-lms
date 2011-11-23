@@ -35,21 +35,19 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
     $keys = define_course_keys($wanted_code, '', $db_prefix);
 
     if (count($keys)) {
-        $visual_code = $keys['currentCourseCode'];
-        $code = $keys['currentCourseId'];
-        $db_name = $keys['currentCourseDbName'];
-        $directory = $keys['currentCourseRepository'];
-        $expiration_date = time() + $first_expiration_delay;
-
-        prepare_course_repository($directory, $code);
-        update_Db_course($db_name);
-        fill_course_repository($directory, $fill_with_exemplary_content);
-        fill_Db_course($db_name, $directory, $course_language, $fill_with_exemplary_content);
-        register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $course_admin_id, $expiration_date);
-
-        return $code;
+        
+        $current_course_code        = $keys['currentCourseCode'];
+        $current_course_id          = $keys['currentCourseId'];                
+        $current_course_repository  = $keys['currentCourseRepository'];
+        
+        $expiration_date = time() + $first_expiration_delay;        
+        
+        prepare_course_repository($current_course_repository, $current_course_id);
+        $pictures_array = fill_course_repository($current_course_repository, $fill_with_exemplary_content);        
+        $course_id = register_course($current_course_id, $current_course_code, $current_course_repository, '', $tutor_name, $category, $title, $course_language, $course_admin_id, $expiration_date);
+        fill_Db_course($course_id, $current_course_repository, $course_language, $pictures_array, $fill_with_exemplary_content);      
+        return $course_id;
     }
-
     return false;
 }
 
@@ -216,6 +214,106 @@ function prepare_course_repository($course_repository, $course_code) {
     return 0;
 };
 
+function get_course_tables() {
+    $tables = array();
+    
+    $tables[]= 'tool';    
+    $tables[]= 'tool_intro';
+
+    // Group tool
+    $tables[]= 'group_info';
+    $tables[]= 'group_category';
+    $tables[]= 'group_rel_user';
+    $tables[]= 'group_rel_tutor';
+
+    $tables[]= 'item_property';
+
+    $tables[]= 'userinfo_content';
+    $tables[]= 'userinfo_def';    
+    $tables[]= 'course_description';
+    $tables[]= 'calendar_event';
+    $tables[]= 'calendar_event_repeat';
+    $tables[]= 'calendar_event_repeat_not';
+    $tables[]= 'calendar_event_attachment';
+    $tables[]= 'announcement';
+    $tables[]= 'announcement_attachment';
+    $tables[]= 'resource';
+    $tables[]= 'student_publication';
+    $tables[]= 'student_publication_assignment';
+    $tables[]= 'document';
+    $tables[]= 'forum_category';
+    $tables[]= 'forum_forum';
+    $tables[]= 'forum_thread';
+    $tables[]= 'forum_post';
+    $tables[]= 'forum_mailcue';
+    $tables[]= 'forum_attachment';
+    $tables[]= 'forum_notification';
+    $tables[]= 'forum_thread_qualify';
+    $tables[]= 'forum_thread_qualify_log';
+    $tables[]= 'link';
+    $tables[]= 'link_category';
+    $tables[]= 'online_connected';
+    $tables[]= 'online_link';
+    $tables[]= 'chat_connected';
+    $tables[]= 'quiz';
+    $tables[]= 'quiz_rel_question';
+    $tables[]= 'quiz_question';
+    $tables[]= 'quiz_answer';
+    $tables[]= 'quiz_question_option';    
+    $tables[]= 'quiz_question_category';
+    $tables[]= 'quiz_question_rel_category';
+    $tables[]= 'dropbox_post';
+    $tables[]= 'dropbox_file';
+    $tables[]= 'dropbox_person';
+    $tables[]= 'dropbox_category';
+    $tables[]= 'dropbox_feedback';
+    $tables[]= 'lp';
+    $tables[]= 'lp_item';
+    $tables[]= 'lp_view';
+    $tables[]= 'lp_item_view';
+    $tables[]= 'lp_iv_interaction';
+    $tables[]= 'lp_iv_objective';
+    $tables[]= 'blog';
+    $tables[]= 'blog_comment';
+    $tables[]= 'blog_post';
+    $tables[]= 'blog_rating';
+    $tables[]= 'blog_rel_user';
+    $tables[]= 'blog_task';
+    $tables[]= 'blog_task_rel_user';
+    $tables[]= 'blog_attachment';
+    $tables[]= 'permission_group';
+    $tables[]= 'permission_user';
+    $tables[]= 'permission_task';
+    $tables[]= 'role';
+    $tables[]= 'role_group';
+    $tables[]= 'role_permissions';
+    $tables[]= 'role_user';
+    $tables[]= 'survey';
+    $tables[]= 'survey_question';
+    $tables[]= 'survey_question_option';
+    $tables[]= 'survey_invitation';
+    $tables[]= 'survey_answer';
+    $tables[]= 'survey_group';
+    $tables[]= 'wiki';
+    $tables[]= 'wiki_conf';
+    $tables[]= 'wiki_discuss';
+    $tables[]= 'wiki_mailcue';
+    //$tables[]= 'audiorecorder';
+    $tables[]= 'course_setting';
+    $tables[]= 'glossary';
+    $tables[]= 'notebook';
+    $tables[]= 'attendance';
+    $tables[]= 'attendance_sheet';
+    $tables[]= 'attendance_calendar';
+    $tables[]= 'attendance_result';
+    $tables[]= 'attendance_sheet_log';
+    $tables[]= 'thematic';
+    $tables[]= 'thematic_plan';
+    $tables[]= 'thematic_advance';
+    
+    return $tables;
+    
+}
 /**
  * Creates all the necessary tables for a new course.
  */
@@ -352,7 +450,7 @@ function update_Db_course($course_db_name = null) {
     $TABLEWIKIMAILCUE           = $course_db_name . 'wiki_mailcue';
 
     // audiorecorder
-    $TABLEAUDIORECORDER         = $course_db_name . 'audiorecorder';
+    //$TABLEAUDIORECORDER         = $course_db_name . 'audiorecorder';
 
     // Course settings
     $TABLESETTING               = $course_db_name . 'course_setting';
@@ -2391,10 +2489,10 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         -----------------------------------------------------------
         */
 
-        Database::query("INSERT INTO $TABLETOOLAGENDA  VALUES ($course_id, NULL, '".lang2db(get_lang('AgendaCreationTitle')) . "', '".lang2db(get_lang('AgendaCreationContenu')) . "', now(), now(), NULL, 0)");
+        Database::query("INSERT INTO $TABLETOOLAGENDA  VALUES ($course_id, NULL, '".lang2db(get_lang('AgendaCreationTitle')) . "', '".lang2db(get_lang('AgendaCreationContenu')) . "', now(), now(), NULL, 0, 0)");
         // We need to add the item properties too!
         $insert_id = Database :: insert_id();
-        $sql = "INSERT INTO $TABLEITEMPROPERTY  ($course_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_CALENDAR_EVENT . "',1,NOW(),NOW(),$insert_id,'AgendaAdded',1,0,NULL,1)";
+        $sql = "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id, '" . TOOL_CALENDAR_EVENT . "',1,NOW(),NOW(),$insert_id,'AgendaAdded',1,0,NULL,1)";
         Database::query($sql);
 
         /*
@@ -2462,7 +2560,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         Database::query("INSERT INTO $TABLEQUIZANSWERSLIST  VALUES ($course_id,  '4', '1', '".lang2db(get_lang('Contradiction')) . "', '1', '".lang2db(get_lang('NotFalse')) . "', '5', '4','','','','')");
         $html=Database::escape_string('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.get_lang('Antique').'</td></tr></table>');
 
-        Database::query('INSERT INTO `'.$TABLEQUIZ . '` (c_id, title, description, type, random, random_answers, active, results_disabled ) 
+        Database::query('INSERT INTO '.$TABLEQUIZ . ' (c_id, title, description, type, random, random_answers, active, results_disabled ) 
         				VALUES ('.$course_id.', "'.lang2db(get_lang('ExerciceEx')) . '", "'.$html.'", "1", "0", "0", "1", "0")');
         Database::query("INSERT INTO $TABLEQUIZQUESTIONLIST  (c_id, id, question, description, ponderation, position, type, picture, level) 
         				VALUES ( '.$course_id.', '1', '".lang2db(get_lang('SocraticIrony')) . "', '".lang2db(get_lang('ManyAnswers')) . "', '10', '1', '2','',1)");
@@ -2479,11 +2577,11 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) 
         				VALUES ($course_id, 'forum_category',1,NOW(),NOW(),$insert_id,'ForumCategoryAdded',1,0,NULL,1)");
 
-        Database::query("INSERT INTO `$TABLEFORUMS` (c_id, forum_title, forum_comment, forum_threads,forum_posts,forum_last_post,forum_category, allow_anonymous, allow_edit,allow_attachments, allow_new_threads,default_view,forum_of_group,forum_group_public_private, forum_order,locked,session_id ) 
+        Database::query("INSERT INTO $TABLEFORUMS (c_id, forum_title, forum_comment, forum_threads,forum_posts,forum_last_post,forum_category, allow_anonymous, allow_edit,allow_attachments, allow_new_threads,default_view,forum_of_group,forum_group_public_private, forum_order,locked,session_id ) 
         				VALUES ($course_id, '".lang2db(get_lang('ExampleForum'))."', '', 0, 0, 0, 1, 0, 1, '0', 1, 'flat','0', 'public', 1, 0,0)");
         $insert_id = Database :: insert_id();
         Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) 
-        				 VALUES ('$course_id, " . TOOL_FORUM . "',1,NOW(),NOW(),$insert_id,'ForumAdded',1,0,NULL,1)");
+        				 VALUES ($course_id, '".TOOL_FORUM."', 1,NOW(),NOW(),$insert_id,'ForumAdded',1,0,NULL,1)");
 
         Database::query("INSERT INTO $TABLEFORUMTHREADS (c_id, thread_id, thread_title, forum_id, thread_replies, thread_poster_id, thread_poster_name, thread_views, thread_last_post, thread_date, locked, thread_qualify_max) 
         				VALUES ($course_id, 1, '".lang2db(get_lang('ExampleThread'))."', 1, 0, 1, '', 0, 1, NOW(), 0, 10)");
@@ -2491,7 +2589,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) 
         				VALUES ($course_id, 'forum_thread',1,NOW(),NOW(),$insert_id,'ForumThreadAdded',1,0,NULL,1)");
 
-        Database::query("INSERT INTO `$TABLEFORUMPOSTS` VALUES ($course_id, 1, '".lang2db(get_lang('ExampleThread'))."', '".lang2db(get_lang('ExampleThreadContent'))."', 1, 1, 1, '', NOW(), 0, 0, 1)");
+        Database::query("INSERT INTO $TABLEFORUMPOSTS VALUES ($course_id, 1, '".lang2db(get_lang('ExampleThread'))."', '".lang2db(get_lang('ExampleThreadContent'))."', 1, 1, 1, '', NOW(), 0, 0, 1)");
 
     }
     

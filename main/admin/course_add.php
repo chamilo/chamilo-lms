@@ -15,6 +15,7 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
+
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
@@ -129,12 +130,12 @@ $form->setDefaults($values);
 
 // Validate the form.
 if ($form->validate()) {
-    $course = $form->exportValues();
-    $code = $course['visual_code'];
-    $tutor_name = $teachers[$course['tutor_id']];
-    $teacher_id = $course['tutor_id'];
+    $course          = $form->exportValues();
+    $code            = $course['visual_code'];
+    $tutor_name      = $teachers[$course['tutor_id']];
+    $teacher_id      = $course['tutor_id'];
     $course_teachers = $course['course_teachers'];
-    $test = false;
+    $test            = false;
 
     // The course tutor has been selected in the teachers list so we must remove him to avoid double records in the database.
     foreach ($course_teachers as $key => $value){
@@ -143,13 +144,14 @@ if ($form->validate()) {
             break;
         }
     }
-    $title = $course['title'];
-    $category = $course['category_code'];
-    $department_name = $course['department_name'];
-    $department_url = $course['department_url'];
-    $course_language = $course['course_language'];
-    $exemplary_content = empty($course['exemplary_content']) ? false : true;
-    $disk_quota = $course['disk_quota'];
+    
+    $title              = $course['title'];
+    $category           = $course['category_code'];
+    $department_name    = $course['department_name'];
+    $department_url     = $course['department_url'];
+    $course_language    = $course['course_language'];
+    $exemplary_content  = empty($course['exemplary_content']) ? false : true;
+    $disk_quota         = $course['disk_quota'];
     if (stripos($department_url, 'http://') === false && stripos($department_url, 'https://') === false) {
         $department_url = 'http://'.$department_url;
     }
@@ -157,14 +159,16 @@ if ($form->validate()) {
         $code = generate_course_code(api_substr($title, 0, $maxlength));
     }
     $keys = define_course_keys($code, '', $_configuration['db_prefix']);
+    
     if (count($keys)) {
         $current_course_code 		= $keys['currentCourseCode'];
         $current_course_id 			= $keys['currentCourseId'];                
         $current_course_repository 	= $keys['currentCourseRepository'];
+        
+        //@todo is not set $firstExpirationDelay
         $expiration_date 			= time() + $firstExpirationDelay;
         
         prepare_course_repository($current_course_repository, $current_course_id);
-        //update_Db_course($current_course_db_name);
         $pictures_array = fill_course_repository($current_course_repository, $exemplary_content);        
         $course_id = register_course($current_course_id, $current_course_code, $current_course_repository, '', $tutor_name, $category, $title, $course_language, $teacher_id, $expiration_date, $course_teachers);
         fill_Db_course($course_id, $current_course_repository, $course_language, $pictures_array, $exemplary_content);
@@ -172,7 +176,7 @@ if ($form->validate()) {
         $sql = "UPDATE $table_course SET disk_quota = '".$disk_quota."', visibility = '".Database::escape_string($course['visibility'])."', subscribe = '".Database::escape_string($course['subscribe'])."', unsubscribe='".Database::escape_string($course['unsubscribe'])."' WHERE code = '".$current_course_id."'";
         Database::query($sql);
         header('Location: course_list.php');
-        exit ();
+        exit;
     }
 }
 

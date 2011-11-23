@@ -35,19 +35,20 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
     $keys = define_course_keys($wanted_code, '', $db_prefix);
 
     if (count($keys)) {
-        $visual_code = $keys['currentCourseCode'];
-        $code = $keys['currentCourseId'];
+        
+        $current_course_code        = $keys['currentCourseCode'];
+        $current_course_id          = $keys['currentCourseId'];                
+        $current_course_repository  = $keys['currentCourseRepository'];
+        
         $db_name = $keys['currentCourseDbName'];
         $directory = $keys['currentCourseRepository'];
-        $expiration_date = time() + $first_expiration_delay;
-
-        prepare_course_repository($directory, $code);
-        update_Db_course($db_name);
-        fill_course_repository($directory, $fill_with_exemplary_content);
-        fill_Db_course($db_name, $directory, $course_language, $fill_with_exemplary_content);
-        register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $course_admin_id, $expiration_date);
-
-        return $code;
+        $expiration_date = time() + $first_expiration_delay;        
+        
+        prepare_course_repository($current_course_repository, $current_course_id);
+        $pictures_array = fill_course_repository($current_course_repository, $fill_with_exemplary_content);        
+        $course_id = register_course($current_course_id, $current_course_code, $current_course_repository, '', $tutor_name, $category, $title, $course_language, $course_admin_id, $expiration_date);
+        fill_Db_course($course_id, $current_course_repository, $course_language, $pictures_array, $fill_with_exemplary_content);      
+        return $course_id;
     }
 
     return false;
@@ -2391,10 +2392,10 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         -----------------------------------------------------------
         */
 
-        Database::query("INSERT INTO $TABLETOOLAGENDA  VALUES ($course_id, NULL, '".lang2db(get_lang('AgendaCreationTitle')) . "', '".lang2db(get_lang('AgendaCreationContenu')) . "', now(), now(), NULL, 0)");
+        Database::query("INSERT INTO $TABLETOOLAGENDA  VALUES ($course_id, NULL, '".lang2db(get_lang('AgendaCreationTitle')) . "', '".lang2db(get_lang('AgendaCreationContenu')) . "', now(), now(), NULL, 0, 0)");
         // We need to add the item properties too!
         $insert_id = Database :: insert_id();
-        $sql = "INSERT INTO $TABLEITEMPROPERTY  ($course_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_CALENDAR_EVENT . "',1,NOW(),NOW(),$insert_id,'AgendaAdded',1,0,NULL,1)";
+        $sql = "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id, '" . TOOL_CALENDAR_EVENT . "',1,NOW(),NOW(),$insert_id,'AgendaAdded',1,0,NULL,1)";
         Database::query($sql);
 
         /*
@@ -2462,7 +2463,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         Database::query("INSERT INTO $TABLEQUIZANSWERSLIST  VALUES ($course_id,  '4', '1', '".lang2db(get_lang('Contradiction')) . "', '1', '".lang2db(get_lang('NotFalse')) . "', '5', '4','','','','')");
         $html=Database::escape_string('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.get_lang('Antique').'</td></tr></table>');
 
-        Database::query('INSERT INTO `'.$TABLEQUIZ . '` (c_id, title, description, type, random, random_answers, active, results_disabled ) 
+        Database::query('INSERT INTO '.$TABLEQUIZ . ' (c_id, title, description, type, random, random_answers, active, results_disabled ) 
         				VALUES ('.$course_id.', "'.lang2db(get_lang('ExerciceEx')) . '", "'.$html.'", "1", "0", "0", "1", "0")');
         Database::query("INSERT INTO $TABLEQUIZQUESTIONLIST  (c_id, id, question, description, ponderation, position, type, picture, level) 
         				VALUES ( '.$course_id.', '1', '".lang2db(get_lang('SocraticIrony')) . "', '".lang2db(get_lang('ManyAnswers')) . "', '10', '1', '2','',1)");
@@ -2479,11 +2480,11 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) 
         				VALUES ($course_id, 'forum_category',1,NOW(),NOW(),$insert_id,'ForumCategoryAdded',1,0,NULL,1)");
 
-        Database::query("INSERT INTO `$TABLEFORUMS` (c_id, forum_title, forum_comment, forum_threads,forum_posts,forum_last_post,forum_category, allow_anonymous, allow_edit,allow_attachments, allow_new_threads,default_view,forum_of_group,forum_group_public_private, forum_order,locked,session_id ) 
+        Database::query("INSERT INTO $TABLEFORUMS (c_id, forum_title, forum_comment, forum_threads,forum_posts,forum_last_post,forum_category, allow_anonymous, allow_edit,allow_attachments, allow_new_threads,default_view,forum_of_group,forum_group_public_private, forum_order,locked,session_id ) 
         				VALUES ($course_id, '".lang2db(get_lang('ExampleForum'))."', '', 0, 0, 0, 1, 0, 1, '0', 1, 'flat','0', 'public', 1, 0,0)");
         $insert_id = Database :: insert_id();
         Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) 
-        				 VALUES ('$course_id, " . TOOL_FORUM . "',1,NOW(),NOW(),$insert_id,'ForumAdded',1,0,NULL,1)");
+        				 VALUES ($course_id, '".TOOL_FORUM."', 1,NOW(),NOW(),$insert_id,'ForumAdded',1,0,NULL,1)");
 
         Database::query("INSERT INTO $TABLEFORUMTHREADS (c_id, thread_id, thread_title, forum_id, thread_replies, thread_poster_id, thread_poster_name, thread_views, thread_last_post, thread_date, locked, thread_qualify_max) 
         				VALUES ($course_id, 1, '".lang2db(get_lang('ExampleThread'))."', 1, 0, 1, '', 0, 1, NOW(), 0, 10)");
@@ -2491,7 +2492,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) 
         				VALUES ($course_id, 'forum_thread',1,NOW(),NOW(),$insert_id,'ForumThreadAdded',1,0,NULL,1)");
 
-        Database::query("INSERT INTO `$TABLEFORUMPOSTS` VALUES ($course_id, 1, '".lang2db(get_lang('ExampleThread'))."', '".lang2db(get_lang('ExampleThreadContent'))."', 1, 1, 1, '', NOW(), 0, 0, 1)");
+        Database::query("INSERT INTO $TABLEFORUMPOSTS VALUES ($course_id, 1, '".lang2db(get_lang('ExampleThread'))."', '".lang2db(get_lang('ExampleThreadContent'))."', 1, 1, 1, '', NOW(), 0, 0, 1)");
 
     }
     

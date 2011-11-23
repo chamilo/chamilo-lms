@@ -388,7 +388,7 @@
         $data_array = array();
         $data_array['attendance_id'] = $attendance_id;
         $data_array['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
-
+        
         $data_array['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id);
 
         if (api_is_allowed_to_edit(null, true) || api_is_drh()) {

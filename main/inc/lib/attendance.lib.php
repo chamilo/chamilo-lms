@@ -449,6 +449,7 @@ class Attendance
 			$value['photo']      = $photo;
 			$value['firstname']  = $user_data['firstname'];
 			$value['lastname']	 = $user_data['lastname'];
+			$value['username']   = $user_data['username'];  // hub
             $value['user_id']    = $uid;
 
 			//Sending only 5 items in the array instead of 60

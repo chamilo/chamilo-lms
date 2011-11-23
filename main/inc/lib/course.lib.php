@@ -3339,12 +3339,18 @@ class CourseManager {
      * @param	bool	add example content or not
      * @param	mixed	false if the course was not created, array with the course info
      */
-    function create_course($title, $wanted_code  = '', $exemplary_content = false) {
+    function create_course($title, $wanted_code = '', $fill_with_exemplary_content = false, 
+                           $tutor_name = '', $category_code = '', $course_language = '', $user_id = '', 
+                           $department_name = '', $department_url = '', $disk_quota = '', 
+                           $subscribe = '', $unsubscribe = '', $visibility = '', $expiration_date = '', $teacher_list = array()
+                           ) {
         require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-        global $_configuration, $firstExpirationDelay, $language_interface;
+        global $_configuration;
+        
         if (empty($title)) {
             return false;
         }        
+        
         if (empty($wanted_code)) {
             $wanted_code = $title;    
             // Check whether the requested course code has already been occupied.       
@@ -3353,27 +3359,29 @@ class CourseManager {
             $maxlength = 40 - $dbnamelength;
             $wanted_code = generate_course_code(api_substr($title, 0, $maxlength));            
         }
- 
-        // Create the course immediately
-        $keys = define_course_keys($wanted_code, '', $_configuration['db_prefix']);
 
+        // Create the course immediately
+        $keys = define_course_keys($wanted_code);
+        
         if (count($keys)) {
-            $visual_code = $keys['currentCourseCode'];
-            $code        = $keys['currentCourseId'];
-            $db_name     = $keys['currentCourseDbName'];
-            $directory   = $keys['currentCourseRepository'];
+            $current_course_code        = $keys['currentCourseCode'];
+            $current_course_id          = $keys['currentCourseId'];                
+            $current_course_repository  = $keys['currentCourseRepository'];
+                            
+            $course_info   = api_get_course_info($current_course_code);
+            
+            if (empty($course_info)) {
+                $course_id = register_course($title, $current_course_id, $current_course_code, $current_course_repository, 
+                                             $tutor_name, $category_code, $course_language, $user_id, $department_name, $department_url, $disk_quota, $subscribe, $unsubscribe, $visibility, $expiration_date, $teacher_list);
+                if (!empty($course_id)) {
+                    prepare_course_repository($current_course_repository, $current_course_id);
+                    $pictures_array = fill_course_repository($current_course_repository, $fill_with_exemplary_content);     
+                    fill_Db_course($course_id, $current_course_repository, $course_language, $pictures_array, $fill_with_exemplary_content);  
+                    $course_info = api_get_course_info_by_id($course_id);
                 
-            $code_info   = api_get_course_info($code);
-            if (empty($code_info)) {            
-                $expiration_date = time() + $firstExpirationDelay;
-                prepare_course_repository($directory, $code);
-                update_Db_course($db_name);
-                $pictures_array = fill_course_repository($directory,  $exemplary_content);
-                fill_Db_course($db_name, $directory, $language_interface, $pictures_array, $exemplary_content);
-                $result = register_course($code, $visual_code, $directory, $db_name, '', '', $title, $language_interface, api_get_user_id(), $expiration_date);
-                $course_info = api_get_course_info($code);
-                if (!empty($course_info)) {
-                    return $course_info;    
+                    if (!empty($course_info)) {
+                        return $course_info;
+                    }
                 }
             }
         }

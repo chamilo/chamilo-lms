@@ -16,41 +16,6 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 /* FUNCTIONS */
 
-/**
-* Top-level function to create a course. Calls other functions to take care of
-* the various parts of the course creation.
-* @param string     Course code requested (might be altered to match possible values)
-* @param string     Course title
-* @param string     Tutor name
-* @param int        Course category code
-* @param string     Course language
-* @param int        Course admin ID
-* @param string     DB prefix
-* @param int        Expiration delay in unix timestamp
-* @param bool/null  A boolean flag to enable filling the created course with exemplary content. If the flag is NULL, then the platform setting 'example_material_course_creation' is taken into account.
-* @return mixed     Course code if course was successfully created, false otherwise
-*/
-function create_course($wanted_code, $title, $tutor_name, $category_code, $course_language, $course_admin_id, $db_prefix, $first_expiration_delay, $fill_with_exemplary_content = null) {
-
-    $keys = define_course_keys($wanted_code, '', $db_prefix);
-
-    if (count($keys)) {
-        
-        $current_course_code        = $keys['currentCourseCode'];
-        $current_course_id          = $keys['currentCourseId'];                
-        $current_course_repository  = $keys['currentCourseRepository'];
-        
-        $expiration_date = time() + $first_expiration_delay;        
-        
-        prepare_course_repository($current_course_repository, $current_course_id);
-        $pictures_array = fill_course_repository($current_course_repository, $fill_with_exemplary_content);        
-        $course_id = register_course($current_course_id, $current_course_code, $current_course_repository, '', $tutor_name, $category, $title, $course_language, $course_admin_id, $expiration_date);
-        fill_Db_course($course_id, $current_course_repository, $course_language, $pictures_array, $fill_with_exemplary_content);      
-        return $course_id;
-    }
-    return false;
-}
-
 // TODO: Such a function might be useful in other places too. It might be moved in the CourseManager class.
 // Also, the function might be upgraded for avoiding code duplications.
 function generate_course_code($course_title, $encoding = null) {
@@ -97,7 +62,7 @@ function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base
     while (!$keys_are_unique) {
 
         $keys_course_id = $prefix_for_all . $unique_prefix . $wanted_code . $final_suffix['CourseId'];
-        $keys_course_db_name = $prefix_for_base_name . $unique_prefix . strtoupper($keys_course_id) . $final_suffix['CourseDb'];
+        //$keys_course_db_name = $prefix_for_base_name . $unique_prefix . strtoupper($keys_course_id) . $final_suffix['CourseDb'];
         $keys_course_repository = $prefix_for_path . $unique_prefix . $wanted_code . $final_suffix['CourseDir'];
         $keys_are_unique = true;
 
@@ -110,7 +75,7 @@ function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base
             $try_new_fsc_id ++;
             $final_suffix['CourseId'] = substr(md5(uniqid(rand())), 0, 4);
         }
-
+        /*
         if ($_configuration['single_database']) {
             $query = "SHOW TABLES FROM ".$_configuration['main_database']." LIKE '".$_configuration['table_prefix'].$keys_course_db_name.$_configuration['db_glue']."%'";
             $result = Database::query($query);
@@ -123,7 +88,7 @@ function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base
             $keys_are_unique = false;
             $try_new_fsc_db ++;
             $final_suffix['CourseDb'] = substr('_'.md5(uniqid(rand())), 0, 4);
-        }
+        }*/
 
         if (file_exists(api_get_path(SYS_COURSE_PATH).$keys_course_repository)) {
             $keys_are_unique = false;
@@ -135,15 +100,15 @@ function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base
             return $keys;
         }
     }
-
+    /*
     // Db name can't begin with a number.
     if (stripos('abcdefghijklmnopqrstuvwxyz', $keys_course_db_name[0]) === false) {
         $keys_course_db_name = $prefixAntiNumber . $keys_course_db_name;
-    }
+    }*/
 
     $keys['currentCourseCode'] = $keys_course_code;
     $keys['currentCourseId'] = $keys_course_id;
-    $keys['currentCourseDbName'] = $keys_course_db_name;
+    //$keys['currentCourseDbName'] = $keys_course_db_name;
     $keys['currentCourseRepository'] = $keys_course_repository;
 
     return $keys;
@@ -2484,9 +2449,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
     if ($fill_with_exemplary_content) {
 
         /*
-        -----------------------------------------------------------
             Agenda tool
-        -----------------------------------------------------------
         */
 
         Database::query("INSERT INTO $TABLETOOLAGENDA  VALUES ($course_id, NULL, '".lang2db(get_lang('AgendaCreationTitle')) . "', '".lang2db(get_lang('AgendaCreationContenu')) . "', now(), now(), NULL, 0, 0)");
@@ -2496,9 +2459,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         Database::query($sql);
 
         /*
-        -----------------------------------------------------------
             Links tool
-        -----------------------------------------------------------
         */
 
         $add_google_link_sql = "INSERT INTO $TABLETOOLLINK  (c_id, url, title, description, category_id, display_order, on_homepage, target)
@@ -2535,9 +2496,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         Database::query($sql);
 
         /*
-        -----------------------------------------------------------
             Introduction text
-        -----------------------------------------------------------
         */
 
         $intro_text='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="middle" align="left"><img src="'.api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" /></td><td valign="middle" align="left">'.lang2db(get_lang('IntroductionText')).'</td></tr></table>';
@@ -2549,9 +2508,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         Database::query("INSERT INTO $TABLEINTROS  VALUES ($course_id, '" . TOOL_WIKI . "','".$intro_wiki. "', 0)");
 
         /*
-        -----------------------------------------------------------
             Exercise tool
-        -----------------------------------------------------------
         */
 
         Database::query("INSERT INTO $TABLEQUIZANSWERSLIST  VALUES ($course_id,  '1', '1', '".lang2db(get_lang('Ridiculise')) . "', '0', '".lang2db(get_lang('NoPsychology')) . "', '-5', '1','','','','')");
@@ -2567,9 +2524,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         Database::query("INSERT INTO $TABLEQUIZQUESTION  (c_id, question_id, exercice_id, question_order) VALUES ('.$course_id.', 1,1,1)");
 
         /*
-        -----------------------------------------------------------
             Forum tool
-        -----------------------------------------------------------
         */
 
         Database::query("INSERT INTO $TABLEFORUMCATEGORIES VALUES ($course_id, 1,'".lang2db(get_lang('ExampleForumCategory'))."', '', 1, 0, 0)");
@@ -2646,8 +2601,10 @@ function string2binary($variable) {
  * @param array                         Optional array of teachers' user ID
  * @return int      0
  */
-function register_course($course_sys_code, $course_screen_code, $course_repository, $course_db_name, $titular, $category, $title, $course_language, $uid_creator, $expiration_date = '', $teachers = array(), $visibility = null) {
-    global $defaultVisibilityForANewCourse, $error_msg;
+function register_course($title, $course_sys_code, $course_screen_code, $course_repository, 
+                        $tutor_name, $category_code, $course_language, $user_id, $department_name, $department_url, $disk_quota, $subscribe, $unsubscribe, $visibility, $expiration_date, $teachers) {
+                            
+    global $defaultVisibilityForANewCourse, $error_msg, $firstExpirationDelay;
 
     $TABLECOURSE		 	= Database :: get_main_table(TABLE_MAIN_COURSE);
     $TABLECOURSUSER 		= Database :: get_main_table(TABLE_MAIN_COURSE_USER);    
@@ -2663,36 +2620,33 @@ function register_course($course_sys_code, $course_screen_code, $course_reposito
         $error_msg[] = 'courseScreenCode is missing';
         $ok_to_register_course = false;
     }
-    
+
+    /*
     if (empty($course_db_name)) {
         $error_msg[] = 'courseDbName is missing';
         //$ok_to_register_course = false;
-    }
+    }*/
     if (empty($course_repository)) {
         $error_msg[] = 'courseRepository is missing';
         $ok_to_register_course = false;
-    }
-    if (empty($titular)) {
-        //$error_msg[] = 'titular is missing';
-        //$ok_to_register_course = false;
     }
     
     if (empty($title)) {
         $error_msg[] = 'title is missing';
         $ok_to_register_course = false;
     }
+    
     if (empty($course_language)) {
-        $error_msg[] = 'language is missing';
-        $ok_to_register_course = false;
+        $course_language = api_get_setting('platformLanguage'); 
     }
 
     if (empty($expiration_date)) {
-        $expiration_date = "NULL";
+        $expiration_date = api_get_utc_datetime(time() + $firstExpirationDelay);
     } else {
-        $expiration_date = "FROM_UNIXTIME(".$expiration_date . ")";
+        $expiration_date = api_get_utc_datetime($expiration_date);
     }
 
-    if ($visibility === null) {
+    if ($visibility == '') {
         $visibility = $defaultVisibilityForANewCourse;
     } else {
         if ($visibility < 0 || $visibility > 3) {
@@ -2700,98 +2654,130 @@ function register_course($course_sys_code, $course_screen_code, $course_reposito
             $ok_to_register_course = false;
         }
     }
+
+    if (empty($disk_quota)) {
+        $disk_quota = api_get_setting('default_document_quotum');
+    }
+       
+    $time = api_get_utc_datetime();
     
-    $course_id = 0;
+    if ($subscribe != '') {
+        $subscribe = 1;
+    }
     
+    if ($unsubscribe != '') {
+        $unsubscribe = 0;
+    }
+    
+    if (stripos($department_url, 'http://') === false && stripos($department_url, 'https://') === false) {
+        $department_url = 'http://'.$department_url;
+    }
+    //just in case
+    if ($department_url = 'http://') {
+        $department_url = '';
+    }
+    
+    if (empty($user_id)) {
+        $user_id = api_get_user_id();
+    }
+    
+    $course_id = 0;   
+   
     if ($ok_to_register_course) {
-        $titular = addslashes($titular);
     
        // Here we must add 2 fields.
        $sql = "INSERT INTO ".$TABLECOURSE . " SET
-                    code = '".Database :: escape_string($course_sys_code) . "',
-                    db_name = '".Database :: escape_string($course_db_name) . "',
-                    directory = '".Database :: escape_string($course_repository) . "',
+                    code            = '".Database :: escape_string($course_sys_code) . "',
+                    directory       = '".Database :: escape_string($course_repository) . "',
                     course_language = '".Database :: escape_string($course_language) . "',
-                    title = '".Database :: escape_string($title) . "',
-                    description = '".lang2db(get_lang('CourseDescription')) . "',
-                    category_code = '".Database :: escape_string($category) . "',
-                    visibility = '".$visibility . "',
-                    show_score = '1',
-                    disk_quota = '".api_get_setting('default_document_quotum') . "',
-                    creation_date = now(),
-                    expiration_date = ".$expiration_date . ",
-                    last_edit = now(),
-                    last_visit = NULL,
-                    tutor_name = '".Database :: escape_string($titular) . "',
-                    visual_code = '".Database :: escape_string($course_screen_code) . "'";
+                    title           = '".Database :: escape_string($title) . "',
+                    description     = '".lang2db(get_lang('CourseDescription')) . "',
+                    category_code   = '".Database :: escape_string($category_code) . "',
+                    visibility      = '".$visibility . "',
+                    show_score      = '1',
+                    disk_quota      = '".intval($disk_quota) . "',
+                    creation_date   = '$time',
+                    expiration_date = '".$expiration_date . "',
+                    last_edit       = '$time',
+                    last_visit      = NULL,
+                    tutor_name      = '".Database :: escape_string($tutor_name) . "',
+                    department_name = '".Database :: escape_string($department_name) . "',
+                    department_url  = '".Database :: escape_string($department_url) . "',
+                    subscribe       = '".intval($subscribe) . "',                     
+                    unsubscribe     = '".intval($unsubscribe) . "',                    
+                    visual_code     = '".Database :: escape_string($course_screen_code) . "'";
         Database::query($sql);
-		$course_id  = Database::get_last_insert_id();
-		
-        $sort = api_max_sort_value('0', api_get_user_id());
         
-        $i_course_sort = CourseManager :: userCourseSort($uid_creator, $course_sys_code);
-
-        $sql = "INSERT INTO ".$TABLECOURSUSER . " SET
-                    course_code = '".addslashes($course_sys_code) . "',
-                    user_id = '".Database::escape_string($uid_creator) . "',
-                    status = '1',
-                    role = '".lang2db(get_lang('Professor')) . "',
-                    tutor_id='0',
-                    sort='". ($i_course_sort) . "',
-                    user_course_cat='0'";
-        Database::query($sql);
-
-        if (count($teachers) > 0) {
-            foreach ($teachers as $key) {
-                $sql = "INSERT INTO ".$TABLECOURSUSER . " SET
-                    course_code = '".Database::escape_string($course_sys_code) . "',
-                    user_id = '".Database::escape_string($key) . "',
-                    status = '1',
-                    role = '',
-                    tutor_id='0',
-                    sort='". ($sort +1) . "',
-                    user_course_cat='0'";
-                Database::query($sql);
+		$course_id  = Database::get_last_insert_id();
+        
+        if ($course_id) {
+		
+            $sort = api_max_sort_value('0', api_get_user_id());
+            
+            $i_course_sort = CourseManager :: userCourseSort($user_id, $course_sys_code);
+    
+            $sql = "INSERT INTO ".$TABLECOURSUSER . " SET
+                        course_code     = '".Database :: escape_string($course_sys_code). "',
+                        user_id         = '".intval($user_id) . "',
+                        status          = '1',
+                        role            = '".lang2db(get_lang('Professor')) . "',
+                        tutor_id        = '0',
+                        sort            = '". ($i_course_sort) . "',
+                        user_course_cat = '0'";
+            Database::query($sql);
+    
+            if (count($teachers) > 0) {
+                foreach ($teachers as $key) {
+                    $sql = "INSERT INTO ".$TABLECOURSUSER . " SET
+                        course_code     = '".Database::escape_string($course_sys_code) . "',
+                        user_id         = '".Database::escape_string($key) . "',
+                        status          = '1',
+                        role            = '',
+                        tutor_id        = '0',
+                        sort            = '". ($sort +1) . "',
+                        user_course_cat = '0'";
+                    Database::query($sql);
+                }
+            }
+    
+            // Adding the course to an URL.
+            global $_configuration;
+            require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
+            if ($_configuration['multiple_access_urls']) {
+                $url_id = 1;
+                if (api_get_current_access_url_id() != -1) {
+                    $url_id = api_get_current_access_url_id();
+                }
+                UrlManager::add_course_to_url($course_sys_code, $url_id);
+            } else {
+                UrlManager::add_course_to_url($course_sys_code, 1);
+            }
+    
+            // Add event to the system log.        
+            $user_id = api_get_user_id();
+            event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $course_sys_code, api_get_utc_datetime(), $user_id, $course_sys_code);
+    
+            $send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
+    
+            // @todo Improve code to send to all current portal administrators.
+            if ($send_mail_to_admin == 'true') {
+                $siteName = api_get_setting('siteName');
+                $recipient_email = api_get_setting('emailAdministrator');
+                $recipient_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'));
+                $urlsite = api_get_path(WEB_PATH);
+                $iname = api_get_setting('Institution');
+                $subject = get_lang('NewCourseCreatedIn').' '.$siteName.' - '.$iname;
+                $message =  get_lang('Dear').' '.$recipient_name.",\n\n".get_lang('MessageOfNewCourseToAdmin').' '.$siteName.' - '.$iname."\n";
+                $message .= get_lang('CourseName').' '.$title."\n";
+                $message .= get_lang('Category').' '.$category."\n";
+                $message .= get_lang('Tutor').' '.$tutor_name."\n";
+                $message .= get_lang('Language').' '.$course_language;
+    
+                @api_mail($recipient_name, $recipient_email, $subject, $message, $siteName, $recipient_email);
             }
         }
-
-        // Adding the course to an URL.
-        global $_configuration;
-        require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-        if ($_configuration['multiple_access_urls']) {
-            $url_id = 1;
-            if (api_get_current_access_url_id() != -1) {
-                $url_id = api_get_current_access_url_id();
-            }
-            UrlManager::add_course_to_url($course_sys_code, $url_id);
-        } else {
-            UrlManager::add_course_to_url($course_sys_code, 1);
-        }
-
-        // Add event to the system log.        
-        $user_id = api_get_user_id();
-        event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $course_sys_code, api_get_utc_datetime(), $user_id, $course_sys_code);
-
-        $send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
-
-        // @todo Improve code to send to all current portal administrators.
-        if ($send_mail_to_admin == 'true') {
-            $siteName = api_get_setting('siteName');
-            $recipient_email = api_get_setting('emailAdministrator');
-            $recipient_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'));
-            $urlsite = api_get_path(WEB_PATH);
-            $iname = api_get_setting('Institution');
-            $subject = get_lang('NewCourseCreatedIn').' '.$siteName.' - '.$iname;
-            $message =  get_lang('Dear').' '.$recipient_name.",\n\n".get_lang('MessageOfNewCourseToAdmin').' '.$siteName.' - '.$iname."\n";
-            $message .= get_lang('CourseName').' '.$title."\n";
-            $message .= get_lang('Category').' '.$category."\n";
-            $message .= get_lang('Tutor').' '.$titular."\n";
-            $message .= get_lang('Language').' '.$course_language;
-
-            @api_mail($recipient_name, $recipient_email, $subject, $message, $siteName, $recipient_email);
-        }
-
     }
+
     return $course_id;
 }
 

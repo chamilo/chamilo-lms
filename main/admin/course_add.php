@@ -146,38 +146,18 @@ if ($form->validate()) {
     }
     
     $title              = $course['title'];
-    $category           = $course['category_code'];
+    $category_code      = $course['category_code'];
     $department_name    = $course['department_name'];
     $department_url     = $course['department_url'];
     $course_language    = $course['course_language'];
     $exemplary_content  = empty($course['exemplary_content']) ? false : true;
-    $disk_quota         = $course['disk_quota'];
-    if (stripos($department_url, 'http://') === false && stripos($department_url, 'https://') === false) {
-        $department_url = 'http://'.$department_url;
-    }
-    if (trim($code) == '') {
-        $code = generate_course_code(api_substr($title, 0, $maxlength));
-    }
-    $keys = define_course_keys($code, '', $_configuration['db_prefix']);
+    $disk_quota         = $course['disk_quota'];    
     
-    if (count($keys)) {
-        $current_course_code 		= $keys['currentCourseCode'];
-        $current_course_id 			= $keys['currentCourseId'];                
-        $current_course_repository 	= $keys['currentCourseRepository'];
-        
-        //@todo is not set $firstExpirationDelay
-        $expiration_date 			= time() + $firstExpirationDelay;
-        
-        prepare_course_repository($current_course_repository, $current_course_id);
-        $pictures_array = fill_course_repository($current_course_repository, $exemplary_content);        
-        $course_id = register_course($current_course_id, $current_course_code, $current_course_repository, '', $tutor_name, $category, $title, $course_language, $teacher_id, $expiration_date, $course_teachers);
-        fill_Db_course($course_id, $current_course_repository, $course_language, $pictures_array, $exemplary_content);
-        
-        $sql = "UPDATE $table_course SET disk_quota = '".$disk_quota."', visibility = '".Database::escape_string($course['visibility'])."', subscribe = '".Database::escape_string($course['subscribe'])."', unsubscribe='".Database::escape_string($course['unsubscribe'])."' WHERE code = '".$current_course_id."'";
-        Database::query($sql);
-        header('Location: course_list.php');
-        exit;
-    }
+    $course_info = CourseManager::create_course($title, '', $exemplary_content,
+                                                $tutor_name, $category_code, $course_language, api_get_user_id(), 
+                                                $department_name, $department_url, $disk_quota, $course['subscribe'], $course['unsubscribe'], $course['visibility'], $course_teachers);
+    header('Location: course_list.php');
+    exit;
 }
 
 // Display the form.

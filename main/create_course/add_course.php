@@ -144,7 +144,7 @@ if ($course_validation_feature) {
 }
 
 // Course language.
-$form->addElement('select_language', 'course_language', get_lang('Ln'));
+$form->addElement('select_language', 'course_language', get_lang('Ln'), null, null, array('id' => 'lang_id'));
 $form->applyFilter('select_language', 'html_filter');
 
 // Exemplary content checkbox.
@@ -197,24 +197,24 @@ if (isset($_user['language']) && $_user['language'] != '') {
     $values['course_language'] = api_get_setting('platformLanguage');
 }
 $values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
-$form->setDefaults($values);
 
+$form->setDefaults($values);
 
 // Validate the form.
 if ($form->validate()) {
     $course_values = $form->exportValues();
-
-    $wanted_code = trim(Security::remove_XSS(stripslashes($course_values['wanted_code'])));
-    $tutor_name = stripslashes($course_values['tutor_name']);
-    $category_code = $course_values['category_code'];
-    $title = Security::remove_XSS(stripslashes($course_values['title']));
-    $course_language = $course_values['course_language'];
-    $exemplary_content = !empty($course_values['exemplary_content']);
+    
+    $wanted_code        = $course_values['wanted_code'];
+    $tutor_name         = $course_values['tutor_name'];
+    $category_code      = $course_values['category_code'];
+    $title              = $course_values['title'];
+    $course_language    = $course_values['course_language'];
+    $exemplary_content  = !empty($course_values['exemplary_content']);
 
     if ($course_validation_feature) {
-        $description = Security::remove_XSS(stripslashes($course_values['description']));
-        $objetives = Security::remove_XSS(stripslashes($course_values['objetives']));
-        $target_audience = Security::remove_XSS(stripslashes($course_values['target_audience']));
+        $description = $course_values['description'];
+        $objetives = $course_values['objetives'];
+        $target_audience = $course_values['target_audience'];
         $status = '0';
     }
 
@@ -230,30 +230,16 @@ if ($form->validate()) {
     }
 
     if ($course_code_ok) {
-
         if (!$course_validation_feature) {
-
-            // Create the course immediately.
-
-            $keys = define_course_keys($wanted_code, '', $_configuration['db_prefix']);
-            if (count($keys)) {
-                $visual_code 	= $keys['currentCourseCode'];
-                $code 			= $keys['currentCourseId'];
-                $db_name 		= $keys['currentCourseDbName'];
-                $directory 		= $keys['currentCourseRepository'];
-                $expiration_date = time() + $firstExpirationDelay;
+            $course_info = CourseManager::create_course($title, $wanted_code, $exemplary_content, $tutor_name, $category_code, $course_language);
+            if (!empty($course_info)) {
                 
-                prepare_course_repository($directory, $code);
-                //update_Db_course($db_name);
-                $pictures_array = fill_course_repository($directory,  $exemplary_content);                
-                $course_id = register_course($code, $visual_code, $directory, '', $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);                                
-                fill_Db_course($course_id, $directory, $course_language, $pictures_array, $exemplary_content);
-                
+                $directory  = $course_info['directory'];          
+                $title      = $course_info['title'];  
 
                 // Preparing a confirmation message.
-                $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
-                $message = get_lang('JustCreated');
-                $message .= ' <a href="'.$link.'">'.$title.'</a>';
+                $link = api_get_path(WEB_COURSE_PATH).$directory.'/';                
+                $message .= get_lang('JustCreated').' '.Display::url($title, $link);                
                 
                 $message = Display :: return_message($message, 'confirmation', false);
                 $message .= '<div style="float: left; margin:0px; padding: 0px;">' .
@@ -263,17 +249,12 @@ if ($form->validate()) {
                 $message = Display :: return_message(get_lang('CourseCreationFailed'), 'error', false);
                 // Display the form.
                 $content = $form->return_form();
-
             }
-
         } else {
-
             // Create a request for a new course.
-
             $request_id = CourseRequestManager::create_course_request($wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, api_get_user_id(), $exemplary_content);
 
             if ($request_id) {
-
                 $course_request_info = CourseRequestManager::get_course_request_info($request_id);
                 $message = (is_array($course_request_info) ? '<strong>'.$course_request_info['code'].'</strong> : ' : '').get_lang('CourseRequestCreated');
                 $message = Display :: return_message($message, 'confirmation', false);
@@ -286,7 +267,6 @@ if ($form->validate()) {
                 $content = $form->return_form();
             }
         }
-
     } else {
         $message = Display :: return_message(get_lang('CourseCodeAlreadyExists'), 'error', false);
         // Display the form.

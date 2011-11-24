@@ -2067,6 +2067,9 @@ class UserManager {
 	 * @return	int		User ID (or false if not found)
 	 */
 	public static function get_user_id_from_username($username) {
+	    if (empty($username)) {
+	        return false;
+	    }
 		$username = Database::escape_string($username);
 		$t_user = Database::get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT user_id FROM $t_user WHERE username = '$username'";

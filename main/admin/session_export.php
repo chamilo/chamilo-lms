@@ -30,25 +30,26 @@ $tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_U
 
 
 $archivePath = api_get_path(SYS_ARCHIVE_PATH);
-$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
+$archiveURL  = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 
-$tool_name = get_lang('ExportSessionListXMLCSV');
+$tool_name   = get_lang('ExportSessionListXMLCSV');
+
+global $_configuration;
+
 
 $interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 
-if ($_POST['formSent'] )
-{
+if ($_POST['formSent']) {
 	$formSent = $_POST['formSent'];
 	$file_type = ($_POST['file_type'] == 'csv')?'csv':'xml';
 	$session_id = $_POST['session_id'];
-	if (empty($session_id))
-	{
+	if (empty($session_id)) {
 		$sql = "SELECT id,name,id_coach,username,date_start,date_end,visibility,session_category_id FROM $tbl_session INNER JOIN $tbl_user
 					ON $tbl_user.user_id = $tbl_session.id_coach ORDER BY id";
 
-		global $_configuration;
+		
 		if ($_configuration['multiple_access_urls']) {
 			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 			$access_url_id = api_get_current_access_url_id();
@@ -248,13 +249,9 @@ if ($_POST['formSent'] )
 // display the header
 Display::display_header($tool_name);
 
-// display the tool title
-// api_display_tool_title($tool_name);
-
-
 //select of sessions
 $sql = "SELECT id, name FROM $tbl_session ORDER BY name";
-global $_configuration;
+
 if ($_configuration['multiple_access_urls']) {
 	$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 	$access_url_id = api_get_current_access_url_id();
@@ -270,25 +267,17 @@ if ($_configuration['multiple_access_urls']) {
 $result=Database::query($sql);
 
 $Sessions=Database::store_result($result);
-?>
 
-<?php
-if(!empty($errorMsg))
-{
-	Display::display_normal_message($errorMsg, false); //main API
-}
-?>
-
-<form method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
-<input type="hidden" name="formSent" value="1">
-<?php
 echo '<div class="actions">';
 echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
 echo '</div>';
-//echo '<div class=row><div class="form_header">';
-//echo $tool_name;
-//echo '</div></div>';
+
+if(!empty($errorMsg)) {
+	Display::display_normal_message($errorMsg, false); //main API
+}
 ?>
+<form method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
+<input type="hidden" name="formSent" value="1">
 <table border="0" cellpadding="5" cellspacing="0">
 <tr>
   <td nowrap="nowrap" valign="top"><?php echo get_lang('OutputFileType'); ?> :</td>
@@ -303,15 +292,12 @@ echo '</div>';
 	<option value=""><?php echo get_lang('AllSessions') ?></option>
 
 <?php
-foreach($Sessions as $enreg)
-{
+foreach($Sessions as $enreg) {
 ?>
-
-	<option value="<?php echo $enreg['id']; ?>" <?php if($session_id == $enreg['id']) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
-
+    <option value="<?php echo $enreg['id']; ?>" <?php if($session_id == $enreg['id']) echo 'selected="selected"'; ?>>
+        <?php echo $enreg['name']; ?></option>
 <?php
 }
-
 unset($Courses);
 ?>
 
@@ -325,7 +311,6 @@ unset($Courses);
 </tr>
 </table>
 </form>
-
 <?php
 /*
 ==============================================================================
@@ -333,4 +318,3 @@ unset($Courses);
 ==============================================================================
 */
 Display::display_footer();
-?>

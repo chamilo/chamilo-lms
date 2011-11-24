@@ -231,7 +231,8 @@ if ($form->validate()) {
 
     if ($course_code_ok) {
         if (!$course_validation_feature) {
-            $course_info = CourseManager::create_course($title, $wanted_code, $exemplary_content, $tutor_name, $category_code, $course_language);
+            $course_info = CourseManager::create_course($title, $wanted_code, '', $exemplary_content, 
+                                                        $tutor_name, $category_code, $course_language);
             if (!empty($course_info)) {
                 
                 $directory  = $course_info['directory'];          

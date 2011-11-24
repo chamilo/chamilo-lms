@@ -15,7 +15,9 @@ require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
+
 $tool_name = get_lang('SessionOverview');
+
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
@@ -48,7 +50,8 @@ if(!api_is_platform_admin() && $session['session_admin_id']!=$_user['user_id']) 
 $sql = 'SELECT name FROM  '.$tbl_session_category.' WHERE id = "'.intval($session['session_category_id']).'"';
 $rs = Database::query($sql);
 $session_category = '';
-if(Database::num_rows($rs)>0) {
+
+if (Database::num_rows($rs)>0) {
 	$rows_session_category = Database::store_result($rs);
 	$rows_session_category = $rows_session_category[0];
 	$session_category = $rows_session_category['name'];

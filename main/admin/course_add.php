@@ -153,7 +153,7 @@ if ($form->validate()) {
     $exemplary_content  = empty($course['exemplary_content']) ? false : true;
     $disk_quota         = $course['disk_quota'];    
     
-    $course_info = CourseManager::create_course($title, '', $exemplary_content,
+    $course_info = CourseManager::create_course($title, '', '', $exemplary_content,
                                                 $tutor_name, $category_code, $course_language, api_get_user_id(), 
                                                 $department_name, $department_url, $disk_quota, $course['subscribe'], $course['unsubscribe'], $course['visibility'], $course_teachers);
     header('Location: course_list.php');

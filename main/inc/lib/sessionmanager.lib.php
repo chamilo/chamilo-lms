@@ -446,7 +446,7 @@ class SessionManager {
 		if ($send_email) {
 		    //global $_configuration;
 			//sending emails only
-			if(is_array($user_list) && count($user_list)>0) {
+			if (is_array($user_list) && count($user_list)>0) {
 				foreach($user_list as $enreg_user) {
 				    if (!in_array($enreg_user,$existingUsers )) {
 					    //send email
@@ -462,17 +462,9 @@ class SessionManager {
 					    $emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
 					    $emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
 					    $emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
-
-					    /*if (api_get_multiple_access_url()) {
-				            $access_url_id = api_get_current_access_url_id();
-				            if ($access_url_id){
-				            	$url 		= api_get_access_url($access_url_id);
-				            	$emailbody	= get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".sprintf(get_lang('YouAreRegisterToSessionX'),$session_name)  ." \n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
-				            }
-					    } else {*/
+		
 					    $emailbody	= get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".sprintf(get_lang('YouAreRegisterToSessionX'), $session_name) ." \n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". api_get_path(WEB_PATH) ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
-					    //}
-
+			
 					    @api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
 
 					}
@@ -516,16 +508,18 @@ class SessionManager {
 			$update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
 			Database::query($update_sql);
 		}
-		// delete users from the session
-		if ($empty_users===true){
+
+		// Delete users from the session
+		if ($empty_users===true) {
 			Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session AND relation_type<>".SESSION_RELATION_TYPE_RRHH."");
 		}
-			// insert missing users into session
-		$nbr_users = 0;
+		
+		// Insert missing users into session
+		$nbr_users = 0;		
 		foreach ($user_list as $enreg_user) {
 	        $enreg_user = Database::escape_string($enreg_user);
 			$nbr_users++;
-			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$enreg_user')";
+			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user (id_session, id_user) VALUES ('$id_session','$enreg_user')";
 			Database::query($insert_sql);
 		}
 
@@ -539,7 +533,6 @@ class SessionManager {
             echo $update_sql = "UPDATE $tbl_session SET nbr_users= nbr_users + $nbr_users WHERE id='$id_session' ";
             Database::query($update_sql);           
         }
-        
 	}
 
 	/**

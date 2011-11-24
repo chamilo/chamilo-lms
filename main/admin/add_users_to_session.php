@@ -5,7 +5,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file=array('admin','registration');
+$language_file = array('admin','registration');
 
 // resetting the course id
 $cidReset = true;
@@ -59,8 +59,7 @@ if (!api_is_platform_admin()) {
 }
 
 //checking for extra field with filter on
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+
 $extra_field_list= UserManager::get_extra_fields();
 $new_field_list = array();
 if (is_array($extra_field_list)) {
@@ -218,24 +217,19 @@ $users=$sessions=array();
 $noPHP_SELF=true;
 
 if($_POST['form_sent']) {
-	$form_sent=$_POST['form_sent'];
-	$firstLetterUser=$_POST['firstLetterUser'];
-	$firstLetterSession=$_POST['firstLetterSession'];
-	$UserList=$_POST['sessionUsersList'];
-	$ClassList=$_POST['sessionClassesList'];
-	if(!is_array($UserList)) {
+	$form_sent             = $_POST['form_sent'];
+	$firstLetterUser       = $_POST['firstLetterUser'];
+	$firstLetterSession    = $_POST['firstLetterSession'];
+	$UserList              = $_POST['sessionUsersList'];
+	$ClassList             = $_POST['sessionClassesList'];
+    
+	if (!is_array($UserList)) {
 		$UserList=array();
 	}
 
 	if ($form_sent == 1) {
-		//added a parameter to send emails when registering a user
+		//added a parameter to send emails when registering a user		
 		SessionManager::suscribe_users_to_session($id_session, $UserList, null, true);
-
-		//adding the session to the access_url_rel_session table
-
-		//if(empty($_GET['add']))
-			//header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
-		//else
 		header('Location: resume_session.php?id_session='.$id_session);
 		exit;
 	}
@@ -247,9 +241,7 @@ Display::display_header($tool_name);
 
 
 $nosessionUsersList = $sessionUsersList = array();
-/*$sql = 'SELECT COUNT(1) FROM '.$tbl_user;
-$rs = Database::query($sql);
-$count_courses = Database::result($rs, 0, 0);*/
+
 $ajax_search = $add_type == 'unique' ? true : false;
 global $_configuration;
 

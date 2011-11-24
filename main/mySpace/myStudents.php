@@ -20,7 +20,6 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
 require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
-
 require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">

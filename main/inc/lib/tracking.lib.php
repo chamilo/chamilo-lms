@@ -3515,11 +3515,12 @@ class TrackingCourseLog {
                 user.lastname       as col1,
                 user.firstname      as col2
                 FROM $tbl_user as user $url_table
-		$condition_user $url_condition";
+		        $condition_user $url_condition";
 
 		if (!in_array($direction, array('ASC','DESC'))) {
 			$direction = 'ASC';
 		}
+		
 		$column = intval($column);
 
 		if ($is_western_name_order) {
@@ -3541,6 +3542,26 @@ class TrackingCourseLog {
 		$users = array ();
 		$t = time();
 		$row = array();
+        
+        $course_info = api_get_course_info($course_code);
+        
+        $total_surveys = 0;
+        
+        if (empty($session_id)) {
+            $survey_user_list = array();
+            $survey_list = survey_manager::get_surveys($course_code, $session_id);
+            
+            $total_surveys = count($survey_list);
+            $survey_data = array();
+            foreach ($survey_list as $survey) {
+                $user_list = survey_manager::get_people_who_filled_survey($survey['survey_id'], false, $course_info['real_id']);
+                
+                foreach ($user_list as $user_id) {
+                    isset($survey_user_list[$user_id]) ? $survey_user_list[$user_id]++ : $survey_user_list[$user_id] = 1;
+                }
+            }
+        }
+        
 		while ($user = Database::fetch_array($res, 'ASSOC')) {
 			//$user['user_id'] = $user['user_id']
 			$user['official_code']  = $user['col0'];
@@ -3551,20 +3572,20 @@ class TrackingCourseLog {
 				$user['lastname']       = $user['col1'];
 				$user['firstname']      = $user['col2'];
 			}
-			$user['time'] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, $session_id));
+			$user['time']                = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, $session_id));
+    
+			$avg_student_score           = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), $session_id);
 
-			$avg_student_score      = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), $session_id);
-
-			$avg_student_progress   = Tracking::get_avg_student_progress($user['user_id'], $course_code, array(), $session_id);
+			$avg_student_progress        = Tracking::get_avg_student_progress($user['user_id'], $course_code, array(), $session_id);
 			if (empty($avg_student_progress)) {
 				$avg_student_progress=0;
 			}
-			$user['average_progress'] = $avg_student_progress.'%';
+			$user['average_progress']   = $avg_student_progress.'%';
 
 			if (is_numeric($avg_student_score)) {
-				$user['student_score'] = $avg_student_score.'%';
+				$user['student_score']  = $avg_student_score.'%';
 			} else {
-				$user['student_score'] = $avg_student_score;
+				$user['student_score']  = $avg_student_score;
 			}
 			$user['count_assignments']  = Tracking::count_student_assignments($user['user_id'], $course_code, $session_id);
 			$user['count_messages']     = Tracking::count_student_messages($user['user_id'], $course_code, $session_id);
@@ -3572,31 +3593,61 @@ class TrackingCourseLog {
 			$user['last_connection']    = Tracking::get_last_connection_date_on_the_course($user['user_id'], $course_code, $session_id);
 
 			// we need to display an additional profile field
-			$user['additional']='';
+			$user['additional'] = '';
+            
 			if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
 				if (isset($additional_user_profile_info[$user['user_id']]) && is_array($additional_user_profile_info[$user['user_id']])) {
 					$user['additional'] = implode(', ', $additional_user_profile_info[$user['user_id']]);
 				}
 			}
+
+            if (empty($session_id)) {
+                $user['survey'] = (isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0) .' / '.$total_surveys;
+            }
+                        
 			$user['link'] = '<center><a href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&course='.$course_code.'&origin=tracking_course&id_session='.$session_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 
 			// store columns in array $users
-			$user_row = array($user['official_code'],
-			$user['lastname'],
-			$user['firstname'],
-			$user['time'],
-			$user['average_progress'],
-			$user['student_score'],
-			$user['count_assignments'],
-			$user['count_messages'],
-			$user['first_connection'],
-			$user['last_connection'],
-			$user['additional'],
-			$user['link']);
-			$users[] = $user_row;
+			
+			$is_western_name_order = api_is_western_name_order();
+            $user_row = array();
+            
+            $user_row[]= $user['official_code'];
+            
+            if ($is_western_name_order) {
+                $user_row[]= $user['lastname'];
+                $user_row[]= $user['firstname'];
+            } else {
+                $user_row[]= $user['firstname'];
+                $user_row[]= $user['lastname'];
+            }
+            $user_row[]= $user['time'];
+            $user_row[]= $user['average_progress'];
+            $user_row[]= $user['student_score'];
+            $user_row[]= $user['count_assignments'];
+            $user_row[]= $user['count_messages'];
+            
+            if (empty($session_id)) {
+                $user_row[]= $user['survey'];
+            }
+            
+            $user_row[]= $user['first_connection'];
+            $user_row[]= $user['last_connection'];
+            $user_row[]= $user['additional'];
+            
+          
+            $user_row[]= $user['link'];
+     
+            $users[] = $user_row;
+            
 			if ($export_csv) {
-				unset($user_row[11]);
-				unset($user_row[12]);
+			    if (empty($session_id)) {
+				    unset($user_row[12]);
+				    unset($user_row[13]);
+                } else {
+                    unset($user_row[11]);
+                    unset($user_row[12]);
+                }
 				$csv_content[] = $user_row;
 			}
 		}

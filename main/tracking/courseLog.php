@@ -46,9 +46,10 @@ require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/scorm.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/scormItem.class.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
+
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
@@ -145,9 +146,7 @@ switch($_GET['studentlist']) {
         break;            
 }
 
-
 echo '<span style="float:right; padding-top:0px;">';
-
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'','32').'</a>';
 
 if ($_GET['studentlist'] == 'false') {
@@ -213,8 +212,7 @@ if ($_GET['studentlist'] == 'false') {
             $lp_avg_progress = 0;
             foreach ($a_students as $student_id => $student) {
                 // get the progress in learning pathes
-                $lp_avg_progress += Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
-                
+                $lp_avg_progress += Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);                
             }
             if ($nbStudents > 0) {
                 $lp_avg_progress = $lp_avg_progress / $nbStudents;
@@ -284,8 +282,7 @@ if ($_GET['studentlist'] == 'false') {
             $temp = array(get_lang('NoExercises', ''), '');
             $csv_content[] = $temp;
         }
-    }
-
+    }    
     echo '</table></div>';
     echo '<div class="clear"></div>';
 
@@ -484,6 +481,10 @@ if ($_GET['studentlist'] == 'false') {
     } else {
         $is_western_name_order = api_is_western_name_order();
     }
+    
+    //PERSON_NAME_DATA_EXPORT is buggy    
+    $is_western_name_order = api_is_western_name_order();
+    
     $sort_by_first_name = api_sort_by_first_name();
 
     $tracking_column = isset($_GET['tracking_column']) ? $_GET['tracking_column'] : 0;
@@ -524,10 +525,20 @@ if ($_GET['studentlist'] == 'false') {
         $table->set_header(5, get_lang('Score').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
         $table->set_header(6, get_lang('Student_publication'), false);
         $table->set_header(7, get_lang('Messages'), false);
-        $table->set_header(8, get_lang('FirstLogin'), false, 'align="center"');
-        $table->set_header(9, get_lang('LatestLogin'), false, 'align="center"');
-        $table->set_header(10, get_lang('AdditionalProfileField'), false);
-        $table->set_header(11, get_lang('Details'), false);        
+        
+        if (empty($session_id)) {
+            $table->set_header(8, get_lang('Survey'), false);
+            $table->set_header(9, get_lang('FirstLogin'), false, 'align="center"');
+            $table->set_header(10, get_lang('LatestLogin'), false, 'align="center"');
+            $table->set_header(11, get_lang('AdditionalProfileField'), false);
+            $table->set_header(12, get_lang('Details'), false);
+        } else {
+            $table->set_header(8, get_lang('FirstLogin'), false, 'align="center"');
+            $table->set_header(9, get_lang('LatestLogin'), false, 'align="center"');
+            $table->set_header(10, get_lang('AdditionalProfileField'), false);
+            $table->set_header(11, get_lang('Details'), false);
+         }
+
         $table->display();
 
     } else {
@@ -536,39 +547,36 @@ if ($_GET['studentlist'] == 'false') {
 
     // Send the csv file if asked.
     if ($export_csv) {
-        if ($is_western_name_order) {
-            $csv_headers = array (
-                get_lang('OfficialCode', ''),
-                get_lang('FirstName', ''),
-                get_lang('LastName', ''),
-                get_lang('TrainingTime', ''),
-                get_lang('CourseProgress', ''),
-                get_lang('Score', ''),
-                get_lang('Student_publication', ''),
-                get_lang('Messages', ''),
-                get_lang('FirstLogin', ''),
-                get_lang('LatestLogin', '')
-            );
+        $csv_headers = array();
+        
+        $csv_headers[] = get_lang('OfficialCode', '');
+        if ($is_western_name_order) {       
+            $csv_headers[] = get_lang('FirstName', '');
+            $csv_headers[] = get_lang('LastName', '');            
         } else {
-            $csv_headers = array (
-                get_lang('OfficialCode', ''),
-                get_lang('LastName', ''),
-                get_lang('FirstName', ''),
-                get_lang('TrainingTime', ''),
-                get_lang('CourseProgress', ''),
-                get_lang('Score', ''),
-                get_lang('Student_publication', ''),
-                get_lang('Messages', ''),
-                get_lang('FirstLogin', ''),
-                get_lang('LatestLogin', '')
-            );
+            $csv_headers[] = get_lang('LastName', '');   
+            $csv_headers[] = get_lang('FirstName', '');            
         }
+        $csv_headers[] = get_lang('TrainingTime', '');
+        $csv_headers[] = get_lang('CourseProgress', '');
+        $csv_headers[] = get_lang('Score', '');
+        $csv_headers[] = get_lang('Student_publication', '');
+        $csv_headers[] = get_lang('Messages', '');
+        
+        if (empty($session_id)) {
+            $csv_headers[] = get_lang('Survey');
+        }
+        
+        $csv_headers[] = get_lang('FirstLogin', '');
+        $csv_headers[] = get_lang('LatestLogin', '');
+    
 
         if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
             $csv_headers[] = get_lang('AdditionalProfileField');
         }
         ob_end_clean();        
-        array_unshift($csv_content, $csv_headers); // Adding headers before the content.        
+        array_unshift($csv_content, $csv_headers); // Adding headers before the content.
+                
         Export::export_table_csv($csv_content, 'reporting_student_list');
         exit;
     }

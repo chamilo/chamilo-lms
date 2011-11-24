@@ -44,8 +44,7 @@ if ($form->validate()) {
         $clean_users    = array();
         $users_in_file  = array();
         
-        if (!empty($users)) {
-            var_dump($users);
+        if (!empty($users)) {            
             foreach ($users as $user) {
                 $user_info = api_get_user_info($user['id']);
                 if (!empty($user_info)) {
@@ -55,7 +54,6 @@ if ($form->validate()) {
                     $invalid_users[] = $user['id'];
                 }
             }
-            //var_dump($clean_users);
             if (empty($invalid_users)) {
                 $type = 'confirmation';
                 $message = get_lang('ListOfUsersSubscribedToCourse');

@@ -43,7 +43,7 @@ if ($_configuration['multiple_access_urls']) {
 
 $res = Database::query($sql);
 $teachers = array();
-$teachers[0] = '-- '.get_lang('NoManager').' --';
+//$teachers[0] = '-- '.get_lang('NoManager').' --';
 while($obj = Database::fetch_object($res)) {
     $teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
@@ -68,10 +68,10 @@ $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 $form->addRule('visual_code', get_lang('Max'), 'maxlength', $maxlength);
 
-$form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_id'));
-$form->applyFilter('tutor_id', 'html_filter');
+//$form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_id'));
+//$form->applyFilter('tutor_id', 'html_filter');
 
-$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, ' id="course_teachers" style="width:350px" multiple="multiple" size="5"');
+$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, ' id="course_teachers" class="chzn-select"  style="width:350px" multiple="multiple" size="5"');
 $form->applyFilter('course_teachers', 'html_filter');
 
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
@@ -125,37 +125,25 @@ $values['visibility'] = COURSE_VISIBILITY_OPEN_PLATFORM;
 $values['subscribe'] = 1;
 $values['unsubscribe'] = 0;
 reset($teachers);
-$values['course_teachers'] = key($teachers);
+//$values['course_teachers'] = key($teachers);
 $form->setDefaults($values);
 
-// Validate the form.
+// Validate the form
 if ($form->validate()) {
     $course          = $form->exportValues();
     $code            = $course['visual_code'];
-    $tutor_name      = $teachers[$course['tutor_id']];
+    //$tutor_name      = $teachers[$course['tutor_id']];
     $teacher_id      = $course['tutor_id'];
     $course_teachers = $course['course_teachers'];
-    $test            = false;
+    
+    $course['exemplary_content']    = empty($course['exemplary_content']) ? false : true;
+    $course['teachers']             = $course_teachers;
+    //$course['tutor_name']           = $tutor_name;
+    $course['user_id']              = $teacher_id;  
+    $course['wanted_code']          = $course['visual_code'];
+    
+    $course_info = CourseManager::create_course($course);
 
-    // The course tutor has been selected in the teachers list so we must remove him to avoid double records in the database.
-    foreach ($course_teachers as $key => $value){
-        if ($value == $teacher_id) {
-            unset($course_teachers[$key]);
-            break;
-        }
-    }
-    
-    $title              = $course['title'];
-    $category_code      = $course['category_code'];
-    $department_name    = $course['department_name'];
-    $department_url     = $course['department_url'];
-    $course_language    = $course['course_language'];
-    $exemplary_content  = empty($course['exemplary_content']) ? false : true;
-    $disk_quota         = $course['disk_quota'];    
-    
-    $course_info = CourseManager::create_course($title, '', '', $exemplary_content,
-                                                $tutor_name, $category_code, $course_language, api_get_user_id(), 
-                                                $department_name, $department_url, $disk_quota, $course['subscribe'], $course['unsubscribe'], $course['visibility'], $course_teachers);
     header('Location: course_list.php');
     exit;
 }

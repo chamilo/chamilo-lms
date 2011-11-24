@@ -116,55 +116,53 @@ $coursesRepositories = $_configuration['root_sys'];
  */
 class CourseManager {
     
+    var $columns = array('code', 'directory', 'db_name', '');
+    
+    
     /**
      * Creates a course
      * @param   string  course title
      * @param   bool    add example content or not
      * @param   mixed   false if the course was not created, array with the course info
      */
-    function create_course($title, $wanted_code = '', $description = '', $fill_with_exemplary_content = false, 
-                           $tutor_name = '', $category_code = '', $course_language = '', $user_id = '', 
-                           $department_name = '', $department_url = '', $disk_quota = '', 
-                           $subscribe = '', $unsubscribe = '', $visibility = '', $expiration_date = '', $teacher_list = array()
-                           ) {        
+    function create_course($params) {           
         global $_configuration;
-                
-        if (empty($title)) {
+        
+        if (empty($params['title'])) {
             return false;
         }        
         
-        if (empty($wanted_code)) {
-            $wanted_code = $title;    
+        if (empty($params['wanted_code'])) {
+            $params['wanted_code'] = $params['title'];    
             // Check whether the requested course code has already been occupied.       
             $dbnamelength = strlen($_configuration['db_prefix']);
             // Ensure the database prefix + database name do not get over 40 characters.
             $maxlength = 40 - $dbnamelength;
-            $wanted_code = generate_course_code(api_substr($title, 0, $maxlength));            
+            $params['wanted_code'] = generate_course_code(api_substr($params['title'], 0, $maxlength));            
         }
 
         // Create the course immediately
-        $keys = define_course_keys($wanted_code);
+        $keys = define_course_keys($params['wanted_code']);
+        
+        $params['exemplary_content'] = isset($params['exemplary_content']) ? $params['exemplary_content'] : false;
         
         if (count($keys)) {
-            $current_course_code        = $keys['currentCourseCode'];
-            $current_course_id          = $keys['currentCourseId'];                
-            $current_course_repository  = $keys['currentCourseRepository'];
-                            
-            $course_info   = api_get_course_info($current_course_code);
+            
+            $params['code']             = $keys['currentCourseCode'];
+            $params['visual_code']      = $keys['currentCourseId'];                
+            $params['directory']        = $keys['currentCourseRepository'];
+       
+            $course_info   = api_get_course_info($params['code']);
             
             if (empty($course_info)) {
-                $course_id = register_course($title, $current_course_id, $current_course_code, $current_course_repository, 
-                                             $tutor_name, $category_code, $course_language, $user_id, $department_name, $department_url, $disk_quota, 
-                                             $subscribe, $unsubscribe, $visibility, $expiration_date, $teacher_list);
-                if (!empty($course_id)) {
-                    prepare_course_repository($current_course_repository, $current_course_id);
-                    $pictures_array = fill_course_repository($current_course_repository, $fill_with_exemplary_content);     
-                    fill_Db_course($course_id, $current_course_repository, $course_language, $pictures_array, $fill_with_exemplary_content);  
-                    $course_info = api_get_course_info_by_id($course_id);
+                $course_id      = register_course($params);                
+                $course_info    = api_get_course_info_by_id($course_id);
                 
-                    if (!empty($course_info)) {
-                        return $course_info;
-                    }
+                if (!empty($course_info)) {
+                    prepare_course_repository($course_info['directory'], $course_info['code']);
+                    $pictures_array = fill_course_repository($course_info['directory'], $params['exemplary_content']);     
+                    fill_Db_course($course_id, $course_info['directory'], $course_info['course_language'], $pictures_array, $params['exemplary_content']);
+                    return $course_info;                    
                 }
             }
         }

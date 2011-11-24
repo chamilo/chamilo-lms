@@ -2600,11 +2600,31 @@ function string2binary($variable) {
  * @param integer                       Expiration date in unix time representation
  * @param array                         Optional array of teachers' user ID
  * @return int      0
+ * @todo use an array called $params instead of lots of params
  */
-function register_course($title, $course_sys_code, $course_screen_code, $course_repository, 
-                        $tutor_name, $category_code, $course_language, $user_id, $department_name, $department_url, $disk_quota, $subscribe, $unsubscribe, $visibility, $expiration_date, $teachers) {
-                            
+function register_course($params) {
     global $defaultVisibilityForANewCourse, $error_msg, $firstExpirationDelay;
+            
+    $title              = $params['title'];
+    $code               = $params['code'];
+    $visual_code        = $params['visual_code'];
+    $directory          = $params['directory'];
+    $tutor_name         = $params['tutor_name'];
+    $description        = $params['description'];
+
+    $category_code      = $params['category_code'];
+    $course_language    = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting('platformLanguage');    
+    $user_id            = empty($params['user_id']) ? api_get_user_id() : intval($params['user_id']);        
+    $department_name    = $params['department_name'];
+    $department_url     = $params['department_url'];
+    $disk_quota         = $params['disk_quota'];
+    $subscribe          = isset($params['subscribe']) ? intval($params['subscribe']) : 0;
+    $unsubscribe        = isset($params['unsubscribe']) ? intval($params['unsubscribe']) : 0;
+    $visibility         = $params['visibility'];
+    $expiration_date    = $params['expiration_date'];
+    $teachers           = $params['teachers'];
+    $status             = $params['status'];
+    
 
     $TABLECOURSE		 	= Database :: get_main_table(TABLE_MAIN_COURSE);
     $TABLECOURSUSER 		= Database :: get_main_table(TABLE_MAIN_COURSE_USER);    
@@ -2612,11 +2632,11 @@ function register_course($title, $course_sys_code, $course_screen_code, $course_
     $ok_to_register_course = true;
 
     // Check whether all the needed parameters are present.
-    if (empty($course_sys_code)) {
+    if (empty($code)) {
         $error_msg[] = 'courseSysCode is missing';
         $ok_to_register_course = false;
     }
-    if (empty($course_screen_code)) {
+    if (empty($visual_code)) {
         $error_msg[] = 'courseScreenCode is missing';
         $ok_to_register_course = false;
     }
@@ -2626,7 +2646,7 @@ function register_course($title, $course_sys_code, $course_screen_code, $course_
         $error_msg[] = 'courseDbName is missing';
         //$ok_to_register_course = false;
     }*/
-    if (empty($course_repository)) {
+    if (empty($directory)) {
         $error_msg[] = 'courseRepository is missing';
         $ok_to_register_course = false;
     }
@@ -2636,9 +2656,6 @@ function register_course($title, $course_sys_code, $course_screen_code, $course_
         $ok_to_register_course = false;
     }
     
-    if (empty($course_language)) {
-        $course_language = api_get_setting('platformLanguage'); 
-    }
 
     if (empty($expiration_date)) {
         $expiration_date = api_get_utc_datetime(time() + $firstExpirationDelay);
@@ -2661,34 +2678,21 @@ function register_course($title, $course_sys_code, $course_screen_code, $course_
        
     $time = api_get_utc_datetime();
     
-    if ($subscribe != '') {
-        $subscribe = 1;
-    }
-    
-    if ($unsubscribe != '') {
-        $unsubscribe = 0;
-    }
-    
     if (stripos($department_url, 'http://') === false && stripos($department_url, 'https://') === false) {
         $department_url = 'http://'.$department_url;
     }
     //just in case
-    if ($department_url = 'http://') {
+    if ($department_url == 'http://') {
         $department_url = '';
-    }
-    
-    if (empty($user_id)) {
-        $user_id = api_get_user_id();
-    }
-    
+    }    
     $course_id = 0;   
    
     if ($ok_to_register_course) {
     
        // Here we must add 2 fields.
-       $sql = "INSERT INTO ".$TABLECOURSE . " SET
-                    code            = '".Database :: escape_string($course_sys_code) . "',
-                    directory       = '".Database :: escape_string($course_repository) . "',
+      $sql = "INSERT INTO ".$TABLECOURSE . " SET
+                    code            = '".Database :: escape_string($code) . "',
+                    directory       = '".Database :: escape_string($directory) . "',
                     course_language = '".Database :: escape_string($course_language) . "',
                     title           = '".Database :: escape_string($title) . "',
                     description     = '".lang2db(get_lang('CourseDescription')) . "',
@@ -2705,7 +2709,7 @@ function register_course($title, $course_sys_code, $course_screen_code, $course_
                     department_url  = '".Database :: escape_string($department_url) . "',
                     subscribe       = '".intval($subscribe) . "',                     
                     unsubscribe     = '".intval($unsubscribe) . "',                    
-                    visual_code     = '".Database :: escape_string($course_screen_code) . "'";
+                    visual_code     = '".Database :: escape_string($visual_code) . "'";
         Database::query($sql);
         
 		$course_id  = Database::get_last_insert_id();
@@ -2714,10 +2718,10 @@ function register_course($title, $course_sys_code, $course_screen_code, $course_
 		
             $sort = api_max_sort_value('0', api_get_user_id());
             
-            $i_course_sort = CourseManager :: userCourseSort($user_id, $course_sys_code);
+            $i_course_sort = CourseManager :: userCourseSort($user_id, $code);
     
             $sql = "INSERT INTO ".$TABLECOURSUSER . " SET
-                        course_code     = '".Database :: escape_string($course_sys_code). "',
+                        course_code     = '".Database :: escape_string($code). "',
                         user_id         = '".intval($user_id) . "',
                         status          = '1',
                         role            = '".lang2db(get_lang('Professor')) . "',
@@ -2726,10 +2730,13 @@ function register_course($title, $course_sys_code, $course_screen_code, $course_
                         user_course_cat = '0'";
             Database::query($sql);
     
-            if (count($teachers) > 0) {
+            if (!empty($teachers)) {
                 foreach ($teachers as $key) {
+                    if (empty($key)) {
+                        continue;
+                    }
                     $sql = "INSERT INTO ".$TABLECOURSUSER . " SET
-                        course_code     = '".Database::escape_string($course_sys_code) . "',
+                        course_code     = '".Database::escape_string($code) . "',
                         user_id         = '".Database::escape_string($key) . "',
                         status          = '1',
                         role            = '',
@@ -2748,14 +2755,14 @@ function register_course($title, $course_sys_code, $course_screen_code, $course_
                 if (api_get_current_access_url_id() != -1) {
                     $url_id = api_get_current_access_url_id();
                 }
-                UrlManager::add_course_to_url($course_sys_code, $url_id);
+                UrlManager::add_course_to_url($code, $url_id);
             } else {
-                UrlManager::add_course_to_url($course_sys_code, 1);
+                UrlManager::add_course_to_url($code, 1);
             }
     
             // Add event to the system log.        
             $user_id = api_get_user_id();
-            event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $course_sys_code, api_get_utc_datetime(), $user_id, $course_sys_code);
+            event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
     
             $send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
     

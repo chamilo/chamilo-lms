@@ -65,10 +65,10 @@ $teachers = array();
 
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
 while ($obj = Database::fetch_object($res)) {
+    
 	if (!array_key_exists($obj->user_id,$course_teachers)) {
 		$teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 	}
-
 
 	if ($course['tutor_name']==$course_teachers[$obj->user_id]) {
 		$course['tutor_name']=$obj->user_id;
@@ -98,15 +98,16 @@ $form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('Only
 
 $form->applyFilter('visual_code','strtoupper');
 $form->applyFilter('visual_code','html_filter');
+
 //$form->add_textfield('tutor_name', get_lang('CourseTitular'));
-$form->addElement('select', 'tutor_name', get_lang('CourseTitular'), $platform_teachers, array('style'=>'width:350px','id'=>'tutor_name_id', 'class'=>'chzn-select'));
-$form->applyFilter('tutor_name','html_filter');
+//$form->addElement('select', 'tutor_name', get_lang('CourseTitular'), $platform_teachers, array('style'=>'width:350px','id'=>'tutor_name_id', 'class'=>'chzn-select'));
+//$form->applyFilter('tutor_name','html_filter');
 
 //$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple size="4" style="width: 150px;"');
 
 $group=array();
-$group[] = FormValidator::createElement('select', 'platform_teachers', '', $teachers,        'id="platform_teachers" multiple=multiple size="4" style="width:280px;"');
-$group[] = FormValidator::createElement('select', 'course_teachers', '',   $course_teachers, 'id="course_teachers" multiple=multiple size="4" style="width:280px;"');
+$group[] = FormValidator::createElement('select', 'platform_teachers', '', $teachers,        ' id="platform_teachers" multiple=multiple size="4" style="width:300px;"');
+$group[] = FormValidator::createElement('select', 'course_teachers', '',   $course_teachers, ' id="course_teachers" multiple=multiple size="4" style="width:300px;"');
 
 $element_template = <<<EOT
 	<div class="row">

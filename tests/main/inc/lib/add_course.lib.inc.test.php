@@ -9,8 +9,7 @@ class TestAddCourse extends UnitTestCase {
     function TestAddCourse() {
         $this->UnitTestCase('Courses creation - main/inc/lib/add_course.lib.inc.test.php');
     }
-
-
+/*
     function TestCreateCourse(){
         global $_configuration;
         $course_datos = array(
@@ -29,7 +28,7 @@ class TestAddCourse extends UnitTestCase {
                              $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
         //should be code string if succeeded (false if failed)
         $this->assertTrue(is_string($res));
-    }
+    }*/
 
     function testRegisterCourse() {
         global $_configuration;

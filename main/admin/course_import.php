@@ -120,8 +120,17 @@ function save_data($courses) {
             $uidCreator = 1;
         }
         
-        $course_info = CourseManager::create_course($course['Title'], $course['Code'], '', false, 
-                                                    $titular, $course['CourseCategory'],  $course_language, $uidCreator);
+        $params = array();
+        $params['title']            = $course['Title'];
+        $params['wanted_code']      = $course['Code'];         
+        $params['tutor_name']       = $titular;
+        $params['course_category']  = $course['CourseCategory'];
+        $params['course_category']  = $course['CourseCategory'];
+        $params['course_language']  = $course_language;
+        $params['user_id']          = $uidCreator;
+         
+         
+        $course_info = CourseManager::create_course($params);
         if (!empty($course_info)) {
             $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/">'.$course_info['title'].'</a> '.get_lang('Created').'<br />';
         }

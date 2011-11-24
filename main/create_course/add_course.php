@@ -230,9 +230,18 @@ if ($form->validate()) {
     }
 
     if ($course_code_ok) {
-        if (!$course_validation_feature) {
-            $course_info = CourseManager::create_course($title, $wanted_code, '', $exemplary_content, 
-                                                        $tutor_name, $category_code, $course_language);
+        if (!$course_validation_feature) {            
+              
+            $params = array();
+            $params['title']                = $title;
+            $params['exemplary_content']    = $exemplary_content;
+            $params['wanted_code']          = $wanted_code;
+            $params['tutor_name']           = $tutor_name;
+            $params['category_code']        = $category_code;
+            $params['course_language']      = $course_language;
+            
+            $course_info = CourseManager::create_course($params); 
+     
             if (!empty($course_info)) {
                 
                 $directory  = $course_info['directory'];          

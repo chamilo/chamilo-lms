@@ -75,8 +75,6 @@ if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create
     $user_can_view_page = true;
 }
 
-
-
 // filter actions
 $actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'unsubscribe', 'display_courses','display_random_courses');
 $action = 'display_random_courses';

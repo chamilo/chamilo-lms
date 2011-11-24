@@ -3333,8 +3333,7 @@ class CourseManager {
     }
         
     /**
-     * Creates a course very fast (the function doesn't need a lot of parameters)
-     * Coded originally found in create_course/add_course.php
+     * Creates a course
      * @param	string	course title
      * @param	bool	add example content or not
      * @param	mixed	false if the course was not created, array with the course info
@@ -3343,10 +3342,9 @@ class CourseManager {
                            $tutor_name = '', $category_code = '', $course_language = '', $user_id = '', 
                            $department_name = '', $department_url = '', $disk_quota = '', 
                            $subscribe = '', $unsubscribe = '', $visibility = '', $expiration_date = '', $teacher_list = array()
-                           ) {
-        require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
+                           ) {        
         global $_configuration;
-        
+                
         if (empty($title)) {
             return false;
         }        

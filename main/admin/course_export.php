@@ -11,7 +11,6 @@ $language_file = array ('admin', 'registration','create_course', 'document');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
@@ -27,8 +26,7 @@ $archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 
 $course_list = CourseManager::get_courses_list();
 
-if($_POST['formSent'])
-{
+if ($_POST['formSent']) {
 	$formSent	=$_POST['formSent'];
 	$select_type=intval($_POST['select_type']);
 	$file_type = 'csv';
@@ -81,9 +79,9 @@ if (!empty($msg)) {
 
 
 <form method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
-<input type="hidden" name="formSent" value="1">
-<div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
-<br />
+    <input type="hidden" name="formSent" value="1">
+    <div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
+    <br />
 <?php if (!empty($course_list)) { ?>
 <div>
 <input id="all-courses" class="checkbox" type="radio" value="1" name="select_type" <?php if(!$formSent || ($formSent && $select_type == 1)) echo 'checked="checked"'; ?> onclick="javascript: if(this.checked){document.getElementById('div-course-list').style.display='none';}"/>
@@ -97,15 +95,17 @@ if (!empty($msg)) {
 <table border="0" cellpadding="5" cellspacing="0">
 <tr>
   <td valign="top"><?php echo get_lang('WhichCoursesToExport'); ?> :</td>
-  <td><select name="course_code[]" multiple="multiple" size="10">
-<?php
-foreach($course_list as $course) {
-?>
-	<option value="<?php echo $course['code']; ?>" <?php if(is_array($selected_courses) && in_array($course['code'],$selected_courses)) echo 'selected="selected"'; ?>><?php echo $course['code'].'-'.$course['title']; ?></option>
-<?php
-}
-?>
-</select></td>
+  <td>
+      <select name="course_code[]" multiple="multiple" size="10">
+        <?php
+        foreach($course_list as $course) {
+        ?>
+        	<option value="<?php echo $course['code']; ?>" <?php if(is_array($selected_courses) && in_array($course['code'],$selected_courses)) echo 'selected="selected"'; ?>><?php echo $course['title'].' ('.$course['code'].') ' ?></option>
+        <?php
+        }
+        ?>
+        </select>
+    </td>
 </tr>
 </table>
 </div>
@@ -115,8 +115,5 @@ foreach($course_list as $course) {
 </div>
 <?php } else { echo get_lang('ThereAreNotCreatedCourses'); }?>
 </form>
-
-
 <?php
 Display :: display_footer();
-?>

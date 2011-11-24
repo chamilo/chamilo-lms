@@ -227,9 +227,9 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	//if(count($sessions)==0 && isset($_POST['keyword'])) {
 	if(count($sessions)==0) {
 		if (isset($_GET['id_category'])) {
-			echo get_lang('NoSession');
+			Display::display_warning_message(get_lang('NoSession'));
 		} else {
-			echo get_lang('NoSearchResults');
+			Display::display_warning_message(get_lang('NoSearchResults'));
 		}
 		echo '	</div>';
 	} else {

@@ -72,6 +72,7 @@ function validate_data($courses) {
             $sql = "SELECT * FROM $category_table WHERE code = '".Database::escape_string($course['CourseCategory'])."'";
             $res = Database::query($sql);
             if (Database::num_rows($res) == 0) {
+                //@todo this is so bad even all lang variables are wrong ...
                 $course['error'] = get_lang('UnkownCategoryCourseCode').' ('.$course['CourseCategory'].')';
                 $errors[] = $course;
             }

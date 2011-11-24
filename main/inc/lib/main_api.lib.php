@@ -1145,6 +1145,7 @@ function api_get_course_info($course_code = null) {
 
             // The real_id is an integer. It is mandatory for future implementations.
             $_course['real_id'     ]          = $course_data['id'              ];
+            $_course['course_language']       = $course_data['course_language'];
         }
         return $_course;
     }
@@ -1190,6 +1191,7 @@ function api_get_course_info_by_id($id = null) {
             $_course['language'     ]         = $course_data['course_language'];
             $_course['extLink'      ]['url' ] = $course_data['department_url' ];
             $_course['extLink'      ]['name'] = $course_data['department_name'];
+            
             $_course['categoryCode' ]         = $course_data['faCode'         ];
             $_course['categoryName' ]         = $course_data['faName'         ];
 
@@ -1199,6 +1201,7 @@ function api_get_course_info_by_id($id = null) {
 
             $_course['real_id'      ]         = $course_data['id'              ];            
             $_course['title'        ]         = $course_data['title'           ];
+            $_course['course_language']       = $course_data['course_language'];
 
         }
         return $_course;

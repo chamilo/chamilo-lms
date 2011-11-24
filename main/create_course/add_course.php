@@ -27,19 +27,15 @@ require_once '../inc/global.inc.php';
 // Section for the tabs.
 $this_section = SECTION_COURSES;
 
-// Include configuration file.
-require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-
 // "Course validation" feature. This value affects the way of a new course creation:
 // true  - the new course is requested only and it is created after approval;
 // false - the new course is created immedialely, after filling this form.
 $course_validation_feature = api_get_setting('course_validation') == 'true';
 
 // Require additional libraries.
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
+
 if ($course_validation_feature) {
     require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
     require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
@@ -96,8 +92,6 @@ $form->addElement('text', 'title', array(get_lang('CourseName'), get_lang('Ex'))
 $form->applyFilter('title', 'html_filter');
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
-
-
 $form -> addElement('html','<div class="row">
     <div class="label">&nbsp;</div>
     <div class="formw">
@@ -144,11 +138,11 @@ if ($course_validation_feature) {
 }
 
 // Course language.
-$form->addElement('select_language', 'course_language', get_lang('Ln'), null, null, array('id' => 'lang_id'));
+$form->addElement('select_language', 'course_language', get_lang('Ln'), array(), array('style'=>'width:150px'));
 $form->applyFilter('select_language', 'html_filter');
 
 // Exemplary content checkbox.
-$form->addElement('checkbox', 'exemplary_content', get_lang('FillWithExemplaryContent'));
+$form->addElement('checkbox', 'exemplary_content', null, get_lang('FillWithExemplaryContent'));
 
 if ($course_validation_feature) {
 
@@ -212,10 +206,10 @@ if ($form->validate()) {
     $exemplary_content  = !empty($course_values['exemplary_content']);
 
     if ($course_validation_feature) {
-        $description = $course_values['description'];
-        $objetives = $course_values['objetives'];
+        $description     = $course_values['description'];
+        $objetives       = $course_values['objetives'];
         $target_audience = $course_values['target_audience'];
-        $status = '0';
+        $status           = '0';
     }
 
     if ($wanted_code == '') {
@@ -233,10 +227,11 @@ if ($form->validate()) {
         if (!$course_validation_feature) {            
               
             $params = array();
+            
             $params['title']                = $title;
             $params['exemplary_content']    = $exemplary_content;
             $params['wanted_code']          = $wanted_code;
-            $params['tutor_name']           = $tutor_name;
+            //$params['tutor_name']           = $tutor_name;
             $params['category_code']        = $category_code;
             $params['course_language']      = $course_language;
             

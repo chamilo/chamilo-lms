@@ -17,8 +17,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
 
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name = get_lang('AddCourse');
@@ -71,7 +69,7 @@ $form->addRule('visual_code', get_lang('Max'), 'maxlength', $maxlength);
 //$form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_id'));
 //$form->applyFilter('tutor_id', 'html_filter');
 
-$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, ' id="course_teachers" class="chzn-select"  style="width:350px" multiple="multiple" size="5"');
+$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, ' id="course_teachers" class="chzn-select"  style="width:350px" multiple="multiple" ');
 $form->applyFilter('course_teachers', 'html_filter');
 
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));

@@ -2063,7 +2063,7 @@ function fill_course_repository($course_repository, $fill_with_exemplary_content
 
     if ($fill_with_exemplary_content) {
 
-        $img_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
+        $img_code_path   = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
         $audio_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/audio/';
         $flash_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/flash/';
         $video_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/video/';
@@ -2245,8 +2245,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
     $TABLETOOLANNOUNCEMENTS = Database::get_course_table(TABLE_ANNOUNCEMENT);
     $TABLEADDEDRESOURCES 	= Database::get_course_table(TABLE_LINKED_RESOURCES);
     $TABLETOOLWORKS 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    //table not found
-    //$TABLETOOLWORKSUSER 	= Database::get_course_table(TABLE_TOOL_LIST)$course_db_name . 'stud_pub_rel_user';
+
     $TABLETOOLDOCUMENT 		= Database::get_course_table(TABLE_DOCUMENT);
     $TABLETOOLWIKI 			= Database::get_course_table(TABLE_WIKI);
 
@@ -2268,6 +2267,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
 
     include api_get_path(SYS_CODE_PATH) . 'lang/english/create_course.inc.php';
     $file_to_include = 'lang/'.$language . '/create_course.inc.php';
+    
     if (file_exists($file_to_include)) {
         include api_get_path(SYS_CODE_PATH) . $file_to_include;
     }
@@ -2719,19 +2719,23 @@ function register_course($params) {
             $sort = api_max_sort_value('0', api_get_user_id());
             
             $i_course_sort = CourseManager :: userCourseSort($user_id, $code);
-    
-            $sql = "INSERT INTO ".$TABLECOURSUSER . " SET
-                        course_code     = '".Database :: escape_string($code). "',
-                        user_id         = '".intval($user_id) . "',
-                        status          = '1',
-                        role            = '".lang2db(get_lang('Professor')) . "',
-                        tutor_id        = '0',
-                        sort            = '". ($i_course_sort) . "',
-                        user_course_cat = '0'";
-            Database::query($sql);
-    
+            if (!empty($user_id)) {
+                $sql = "INSERT INTO ".$TABLECOURSUSER . " SET
+                            course_code     = '".Database :: escape_string($code). "',
+                            user_id         = '".intval($user_id) . "',
+                            status          = '1',
+                            role            = '".lang2db(get_lang('Professor')) . "',
+                            tutor_id        = '0',
+                            sort            = '". ($i_course_sort) . "',
+                            user_course_cat = '0'";
+                Database::query($sql);
+            }        
             if (!empty($teachers)) {
                 foreach ($teachers as $key) {
+                    //just in case
+                    if ($key == $user_id) {
+                        continue;
+                    }
                     if (empty($key)) {
                         continue;
                     }

@@ -116,7 +116,7 @@ $coursesRepositories = $_configuration['root_sys'];
  */
 class CourseManager {
     
-    var $columns = array('code', 'directory', 'db_name', '');
+    var $columns = array();
     
     
     /**

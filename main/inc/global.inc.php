@@ -317,25 +317,6 @@ if (api_get_setting('server_type') == 'test') {
     } else {
         error_reporting(E_ALL & ~E_NOTICE);
     }
-    //error_reporting(E_ALL);
-
-    //Addslashes to all $_GET variables
-    foreach ($_GET as $key => $val) {
-        if (!ini_get('magic_quotes_gpc')) {
-            if (is_string($val)) {
-                $_GET[$key] = addslashes($val);
-            }
-        }
-    }
-
-    //Addslashes to all $_POST variables
-    foreach ($_POST as $key => $val) {
-        if (!ini_get('magic_quotes_gpc')) {
-            if (is_string($val)) {
-                $_POST[$key] = addslashes($val);
-            }
-        }
-    }
 } else {
     /*
     Server type is not test

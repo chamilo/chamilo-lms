@@ -14,7 +14,6 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 include_once $libpath.'specific_fields_manager.lib.php';
-require_once $libpath.'formvalidator/FormValidator.class.php';
 
 // section for the tabs
 $this_section=SECTION_PLATFORM_ADMIN;

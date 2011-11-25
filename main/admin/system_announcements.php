@@ -18,7 +18,6 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 
 // Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';

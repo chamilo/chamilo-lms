@@ -61,12 +61,13 @@ function get_number_of_courses() {
  * Get course data to display
  */
 function get_course_data($from, $number_of_items, $column, $direction) {
-    $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $users_table = Database :: get_main_table(TABLE_MAIN_USER);
+    $course_table       = Database :: get_main_table(TABLE_MAIN_COURSE);
+    $users_table        = Database :: get_main_table(TABLE_MAIN_USER);
     $course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    $sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, tutor_name as col7, code AS col8, visibility AS col9,directory as col10 
+    
+    $sql = "SELECT code AS col0, title AS col1, visual_code AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, 
+            code AS col7, visibility AS col8, directory as col9 
     		FROM $course_table";
-    //$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, tutor_name as col8, code AS col9, visibility AS col10,directory as col11 FROM $course_table";
     global $_configuration;
     
     if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id() != -1) {
@@ -100,12 +101,12 @@ function get_course_data($from, $number_of_items, $column, $direction) {
     $courses = array ();
     while ($course = Database::fetch_row($res)) {
         // Place colour icons in front of courses.
-        //$course[1] = '<nobr>'.get_course_visibility_icon($course[9]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[9].'/index.php">'.$course[1].'</a></nobr>';
-        $course[1] = '<nobr>'.get_course_visibility_icon($course[9]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[10].'/index.php">'.$course[1].'</a></nobr>';
+        $course[1] = '<nobr>'.get_course_visibility_icon($course[8]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[9].'/index.php">'.$course[1].'</a></nobr>';
         $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
         $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 
-        $course_rem = array($course[0], $course[1], $course[2], $course[3], $course[4], $course[5], $course[6], $course[7], $course[8]);
+        $course_rem = array($course[0], $course[1], $course[2], $course[3], $course[4], $course[5], $course[6], $course[7]);
+        
         $courses[] = $course_rem;
     }
     return $courses;
@@ -264,16 +265,16 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $table->set_additional_parameters($parameters);
 
     $table->set_header(0, '', false, 'width="8px"');
-    $table->set_header(1, get_lang('Code'));
-    $table->set_header(2, get_lang('Title'));
+    $table->set_header(1, get_lang('Title'));
+    $table->set_header(2, get_lang('Code'));
     $table->set_header(3, get_lang('Language'), true, 'width="70px"');
     $table->set_header(4, get_lang('Category'));
     $table->set_header(5, get_lang('SubscriptionAllowed'), true, 'width="60px"');
     $table->set_header(6, get_lang('UnsubscriptionAllowed'), false, 'width="50px"');
-    //$table->set_header(7, get_lang('IsVirtualCourse'));
-    $table->set_header(7, get_lang('Teacher'));
-    $table->set_header(8, get_lang('Action'), false, 'width="150px"');
-    $table->set_column_filter(8, 'modify_filter');
+
+    //$table->set_header(7, get_lang('Teacher'));
+    $table->set_header(7, get_lang('Action'), false, 'width="150px"');
+    $table->set_column_filter(7, 'modify_filter');
     $table->set_form_actions(array('delete_courses' => get_lang('DeleteCourse')), 'course');
     $content .= $table->return_table();
 }

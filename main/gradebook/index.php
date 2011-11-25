@@ -697,40 +697,65 @@ if ($category != '0') {
 		if (!api_is_allowed_to_edit()) {
 
 			// generating the total score for a course			
-			$cats_course     = Category :: load ($category_id, null, null, null, null, null, false);			
+			$cats_course     = Category :: load ($category_id, null, null, null, null, null, false);	
+                        		
 			$alleval_course  = $cats_course[0]->get_evaluations($stud_id,true);
 			$alllink_course  = $cats_course[0]->get_links($stud_id,true);
 			
 			$evals_links = array_merge($alleval_course, $alllink_course);
 			$item_value=0;
 			$item_total=0;
-			
+            
+            //@todo move these in a function            
+            $sum_categories_weight_array = array();     
+            if (isset($cats_course) && !empty($cats_course)) {            
+                $categories = Category::load(null, null, null, $category_id);
+                if (!empty($categories)) {
+                    foreach($categories as $category) {                  
+                        $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
+                    }
+                } else {
+                    $sum_categories_weight_array[$category_id] = $cats_course[0]->get_weight();
+                }
+            }
+              
+			$item_total_value = 0;      
+            $item_value = 0;      
+           
 			for ($count=0; $count < count($evals_links); $count++) {
 				$item = $evals_links[$count];
 				$score = $item->calc_score($stud_id);
 				
-				$score_denom=($score[1]==0) ? 1 : $score[1];
-				$item_value+=$score[0]/$score_denom*$item->get_weight();
-				$item_total+=$item->get_weight();
+				$score_denom    = ($score[1]==0) ? 1 : $score[1];
+				$item_value     = $score[0]/$score_denom*$item->get_weight();
+                        
+                $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
+                $percentage     = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$cats_course[0]->get_weight(), 2);
+                
+                $item_total         += $item->get_weight();                
+                $item_total_value   += $item_value;                                
 			}			
-			if (!empty($allcat)) {
-				$count_categories = count($allcat);
-				$item_value = $item_value/$count_categories; 				
-			}
-			$item_value = number_format($item_value, 2, '.', ' ');
+                        
+		    $item_total_value = (float)$item_total_value;
+            
 			
 			$cattotal = Category :: load($category_id);
+            //echo 'start';            
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
+            
+            //echo 'end';            var_dump($scoretotal);
 					
 			//Do not remove this the gradebook/lib/fe/gradebooktable.class.php file load this variable as a global 		
 			$my_score_in_gradebook =  round($scoretotal[0],2);
 			
 			//Show certificate
-			$certificate_min_score = $cats[0]->get_certificate_min_score();			
+			$certificate_min_score = $cats[0]->get_certificate_min_score();	
+            		
 			$scoredisplay = ScoreDisplay :: instance();
 			$scoretotal_display = $scoredisplay->display_score($scoretotal,SCORE_DIV_PERCENT); //a student always sees only the teacher's repartition
-			
-			if (isset($certificate_min_score) && $item_value >= $certificate_min_score) {
+			//var_dump($certificate_min_score, $item_total_value);
+			if (isset($certificate_min_score) && $item_total_value >= $certificate_min_score) {
+			    
 				$my_certificate = get_certificate_by_user_id($cats[0]->get_id(), api_get_user_id());
 								
 				if (empty($my_certificate)) {
@@ -794,8 +819,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 			$alleval = $cat->get_evaluations($stud_id);
 			$alllink = $cat->get_links($stud_id);
 			
-			if ($cat->get_parent_id() != 0 ) {
-			
+			if ($cat->get_parent_id() != 0 ) {			
 				$i++;
 			} else {
 				//This is the father				

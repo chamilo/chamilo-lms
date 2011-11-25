@@ -32,7 +32,9 @@ $doc_url = str_replace('///', '&', $doc_url);
 $doc_url = str_replace(' ', '+', $doc_url);
 $doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
 
-if (!isset($_course)) {
+$course_info = api_get_course_info();
+
+if (empty($course_info)) {
 	api_not_allowed(true);
 }
 
@@ -40,16 +42,19 @@ $full_file_name 		 = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$do
 $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 // launch event
-$doc_url = Database::escape_string($doc_url);
 event_download($doc_url);
 
 if (!empty($_course['real_id'])) {
-	$sql = 'SELECT * FROM '.$tbl_student_publication.'WHERE c_id = '.$_course['real_id'].' AND url LIKE BINARY "'.$doc_url.'"';
+    $doc_url = Database::escape_string($doc_url);
+	$sql = 'SELECT * FROM '.$tbl_student_publication.' WHERE c_id = '.$_course['real_id'].' AND url LIKE BINARY "'.$doc_url.'"';
 	$result = Database::query($sql);
 	if ($result && Database::num_rows($result)) {
 	    $row = Database::fetch_array($result, 'ASSOC');	    
-	    $course_info = CourseManager::get_course_information(api_get_course_id());	    
-	    if (($row['user_id'] == api_get_user_id() || api_is_allowed_to_edit()) || (!empty($course_info) && $course_info['show_score'] == 0)  ) {
+        $item_info = api_get_item_property_info(api_get_course_int_id(), 'work', $row['id']);
+        if (empty($item_info)) {
+            exit;
+        }	    
+	    if ($item_info['visibility'] == 1 && $row['accepted'] == 1 && ($row['user_id'] == api_get_user_id() || api_is_allowed_to_edit())) {
 		    $title = str_replace(' ', '_', $row['title']);
 		    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')) {
 		        DocumentManager::file_send_for_download($full_file_name, true, $title);

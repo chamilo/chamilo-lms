@@ -1,4 +1,6 @@
 <?php
+
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -225,8 +227,6 @@ if (!empty($gradebook) && $gradebook=='view') {
 
 // if admin of course
 if (!$is_allowedToEdit) {
-        echo "HUBC ".__LINE__." ".__FILE__;
-
     api_not_allowed(true);
 }
 
@@ -263,12 +263,12 @@ echo '<div class="actions">';
 	}
 	if (isset($fromExercise) && $fromExercise > 0) {
 		echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
-		$titleAdd = get_lang('addQuestionToTest');
+		$titleAdd = get_lang('AddQuestionToTest');
 	}
 	else {
 		echo '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
-		echo "<a href='admin.php?exerciceId=0'>".Display::return_icon('add_question.gif', get_lang('NewQu'), '', 32)."</a>";
-		$titleAdd = get_lang('manageAllQuestions');
+		echo "<a href='admin.php?exerciseId=0'>".Display::return_icon('add_question.gif', get_lang('NewQu'), '', 32)."</a>";
+		$titleAdd = get_lang('ManageAllQuestions');
 	}
 echo '</div>';
 
@@ -578,7 +578,7 @@ if ($fromExercise <= 0) { // NOT IN A TEST - IN THE COURSE
 	}
 	else { // NOT IN A TEST - NOT IN THE COURSE
 		$actionLabel = get_lang('langReuse');
-		$actionIcon1 = get_lang('mustBeInATest');
+		$actionIcon1 = get_lang('MustBeInATest');
 		$actionIcon2 = "";
 		$questionTagA = 0;	// we are not in this course, to messy if we link to the question in another course
 	}
@@ -616,11 +616,11 @@ foreach ($main_question_list as $tabQuestion) {
 	$row[] = $tabQuestion['level'];
 	$row[] = get_action_icon_for_question($actionIcon1, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], 
                 $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseLevel, 
-                $answerType, $session_id).
+                $answerType, $session_id, $exerciseId).
                 "&nbsp;".
                 get_action_icon_for_question($actionIcon2, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], 
                 $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseLevel, $answerType, 
-                $session_id);
+                $session_id, $exerciseId);
 	$data[] = $row;
 }
 Display :: display_sortable_table($header, $data, '', array('per_page_default'=>999,'per_page'=>999,'page_nr'=>1));
@@ -680,13 +680,14 @@ function get_a_tag_for_question($in_addA, $in_fromex, $in_questionid, $in_questi
 // return the <a> html code for delete, add, clone, edit a question
 // hubert.borderiou 13-10-2011
 function get_action_icon_for_question($in_action, $from_exercice, $in_questionid, $in_questiontype, $in_questionname, 
-    $in_selected_course, $in_courseCategoryId, $in_exerciseLevel, $in_answerType, $in_session_id
+    $in_selected_course, $in_courseCategoryId, $in_exerciseLevel, $in_answerType, $in_session_id, $in_exercice_id
 ) {
 	$res = "";
-	$getParams = "&selected_course=$in_selected_course&courseCategoryId=$in_courseCategoryId&exerciseId=$from_exercice&exerciseLevel=$in_exerciseLevel&answerType=$in_answerType&session_id=$in_session_id";
+	$getParams = "&selected_course=$in_selected_course&courseCategoryId=$in_courseCategoryId&exerciseId=$in_exercice_id&exerciseLevel=$in_exerciseLevel&answerType=$in_answerType&session_id=$in_session_id";
+	
 	switch ($in_action) {
 		case "delete" :	
-			$res = "<a href='".api_get_self()."?".api_get_cidreq()."&exerciseId=$from_exercice&delete=$in_questionid$getParams' onclick='return confirm_your_choice()'>";
+			$res = "<a href='".api_get_self()."?".api_get_cidreq()."&delete=$in_questionid$getParams' onclick='return confirm_your_choice()'>";
 			$res .= Display::return_icon("delete.gif", get_lang('Delete'));
 			$res .= "</a>";
 			break;

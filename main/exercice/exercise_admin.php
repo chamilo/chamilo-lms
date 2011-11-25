@@ -127,16 +127,17 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 		function check_results_disabled() {		
 			document.getElementById(\'exerciseType_2\').checked = true;
 		}
-                   
 		</script>';
 
+    // to correct #4029 Random and number of attempt menu empty added window.onload=advanced_parameters;
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
     $("#exercise_title").focus();
 }
 $(document).ready(function () {
     setFocus();
-});
+}); 
+    window.onload=advanced_parameters;
 </script>';
 
 // INIT EXERCISE

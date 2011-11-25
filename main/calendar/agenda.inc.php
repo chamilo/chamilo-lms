@@ -1103,6 +1103,9 @@ function store_new_agenda_item() {
 	global $_course;
 	$TABLEAGENDA 	 = Database::get_course_table(TABLE_AGENDA);
     $t_agenda_repeat = Database::get_course_Table(TABLE_AGENDA_REPEAT);
+    
+    $course_id = api_get_course_int_id();
+    
 
 	// some filtering of the input data
 	$title		= trim($_POST['title']); // no html allowed in the title
@@ -1121,8 +1124,8 @@ function store_new_agenda_item() {
 	}
 
 	// store in the table calendar_event
-	$sql = "INSERT INTO ".$TABLEAGENDA." (title,content, start_date, end_date)
-			VALUES ('".$title."','".$content."', '".$start_date."','".$end_date."')";
+	$sql = "INSERT INTO ".$TABLEAGENDA." (c_id, title,content, start_date, end_date)
+			VALUES ($course_id, '".$title."','".$content."', '".$start_date."','".$end_date."')";
 	$result 	= Database::query($sql);
 	$last_id 	= Database::insert_id();
 
@@ -1152,6 +1155,7 @@ function store_new_agenda_item() {
 	}
 	// storing the resources
 	store_resources($_SESSION['source_type'],$last_id);
+    $course_id = api_get_course_int_id();
 
     //if repetitive, insert element into agenda_repeat table
     if(!empty($_POST['repeat']) && !empty($_POST['repeat_type'])) {
@@ -1164,8 +1168,8 @@ function store_new_agenda_item() {
             $type = Database::escape_string($_POST['repeat_type']);
 
         	if ($end > $now && in_array($type,array('daily','weekly','monthlyByDate','monthlyByDay','monthlyByDayR','yearly'))) {
-        	   $sql = "INSERT INTO $t_agenda_repeat (cal_id, cal_type, cal_end)" .
-                    " VALUES ($last_id,'$type',$end)";
+        	   $sql = "INSERT INTO $t_agenda_repeat (c_id, cal_id, cal_type, cal_end)" .
+                    " VALUES ($course_id, $last_id,'$type',$end)";
                $res = Database::query($sql);
             }
         }
@@ -1188,12 +1192,14 @@ function store_agenda_item_as_announcement($item_id){
 	$item_id = Database::escape_string($item_id);
 	$sql = "SELECT * FROM $table_agenda WHERE id = ".$item_id;
 	$res = Database::query($sql);
+    $course_id = api_get_course_int_id();
+    
 	if (Database::num_rows($res)>0) {
 		$row = Database::fetch_array($res);
 		
 		//we have the agenda event, copy it
 		//get the maximum value for display order in announcement table
-		$sql_max = "SELECT MAX(display_order) FROM $table_ann";
+		$sql_max = "SELECT MAX(display_order) FROM $table_ann WHERE c_id = $course_id ";
 		$res_max = Database::query($sql_max);
 		$row_max = Database::fetch_array($res_max);
 		$max = intval($row_max[0])+1;		
@@ -1201,8 +1207,10 @@ function store_agenda_item_as_announcement($item_id){
 		$content = $row['content'];
 		//insert announcement
         $session_id = api_get_session_id();
-		$sql_ins = "INSERT INTO $table_ann (title,content,end_date,display_order,session_id) " .
-					"VALUES ('".Database::escape_string($row['title'])."','".Database::escape_string($content)."','".Database::escape_string($row['end_date'])."','$max','$session_id')";
+        
+        
+		$sql_ins = "INSERT INTO $table_ann (c_id, title,content,end_date,display_order,session_id) " .
+					"VALUES ($course_id, '".Database::escape_string($row['title'])."','".Database::escape_string($content)."','".Database::escape_string($row['end_date'])."','$max','$session_id')";
 		$res_ins = Database::query($sql_ins);
 		if ($res > 0) {
 			$ann_id = Database::insert_id();
@@ -1216,12 +1224,12 @@ function store_agenda_item_as_announcement($item_id){
 					//insert into announcement item_property
 					$time = api_get_utc_datetime();
 					$sql_ins_props = "INSERT INTO $table_props " .
-							"(tool, insert_user_id, insert_date, " .
+							"(c_id, tool, insert_user_id, insert_date, " .
 							"lastedit_date, ref, lastedit_type," .
 							"lastedit_user_id, to_group_id, to_user_id, " .
 							"visibility, start_visible, end_visible)" .
 							" VALUES " .
-							"('announcement','".$row_props['insert_user_id']."','".$time."'," .
+							"($course_id, 'announcement','".$row_props['insert_user_id']."','".$time."'," .
 							"'$time','$ann_id','AnnouncementAdded'," .
 							"'".$row_props['last_edit_user_id']."','".$row_props['to_group_id']."','".$row_props['to_user_id']."'," .
 							"'".$row_props['visibility']."','".$row_props['start_visible']."','".$row_props['end_visible']."')";
@@ -1595,8 +1603,9 @@ function get_agenda_item($id)
     } else {
     	$id = (int) $id;
     }
+    $course_id = api_get_course_int_id();
     if(empty($id)){return $item;}
-	$sql 					= "SELECT * FROM ".$TABLEAGENDA." WHERE id='".$id."'";
+	$sql 			    = "SELECT * FROM ".$TABLEAGENDA." WHERE id='".$id."' AND c_id = $course_id ";
 	$result					= Database::query($sql);
 	$entry_to_edit 			= Database::fetch_array($result);
 	$item['title']			= $entry_to_edit["title"];
@@ -4055,10 +4064,14 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     }    
     $end_date   = Database::escape_string($db_end_date);
     $id_session = api_get_session_id();
+    $course_id  = api_get_course_int_id();
 
     // check if exists in calendar_event table and if it is not deleted!
     $sql = "SELECT * FROM $t_agenda agenda, $item_property item_property
-    			WHERE agenda.title  		 = '$title'
+    			WHERE
+    			agenda.c_id = $course_id AND
+    			item_property.c_id = $course_id AND   
+    			agenda.title  		 = '$title'
     			AND agenda.content           = '$content'
     			AND agenda.start_date        = '$start_date'
     			AND agenda.end_date          = '$end_date' ".(!empty($parent_id)? "
@@ -4073,8 +4086,10 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     if ($count > 0) {
     	return false;
     }
-    $sql = "INSERT INTO ".$t_agenda." (title,content, start_date, end_date".(!empty($parent_id)?',parent_event_id':'').", session_id)
-            VALUES('".$title."','".$content."', '".$start_date."','".$end_date."'".(!empty($parent_id)?','.((int)$parent_id):'').", '".$id_session."')";
+    $course_id = api_get_course_int_id();
+    
+    $sql = "INSERT INTO ".$t_agenda." (c_id, title,content, start_date, end_date".(!empty($parent_id)?',parent_event_id':'').", session_id)
+            VALUES($course_id, '".$title."','".$content."', '".$start_date."','".$end_date."'".(!empty($parent_id)?','.((int)$parent_id):'').", '".$id_session."')";
     
     $result  = Database::query($sql);
     $last_id = Database::insert_id();
@@ -4170,10 +4185,11 @@ function add_agenda_attachment_file($file_comment,$last_id) {
 				$safe_file_comment= Database::escape_string($file_comment);
 				$safe_file_name = Database::escape_string($file_name);
 				$safe_new_file_name = Database::escape_string($new_file_name);
+                $course_id = api_get_course_int_id();
 				// Storing the attachments if any
 				if ($result) {
-					$sql='INSERT INTO '.$agenda_table_attachment.'(filename,comment, path,agenda_id,size) '.
-						 "VALUES ( '".$safe_file_name."', '".$safe_file_comment."', '".$safe_new_file_name."' , '".$last_id."', '".intval($_FILES['user_upload']['size'])."' )";
+					$sql='INSERT INTO '.$agenda_table_attachment.'(c_id, filename,comment, path,agenda_id,size) '.
+						 "VALUES ($course_id,  '".$safe_file_name."', '".$safe_file_comment."', '".$safe_new_file_name."' , '".$last_id."', '".intval($_FILES['user_upload']['size'])."' )";
 					$result=Database::query($sql);
 					$message.=' / '.get_lang('FileUploadSucces').'<br />';
 
@@ -4285,10 +4301,10 @@ function agenda_add_repeat_item($course_info, $orig_id, $type, $end, $orig_dest,
                 break;
         }
     }
-    
+    $course_id = api_get_course_int_id();
     if ($end > $now
         && in_array($type,array('daily','weekly','monthlyByDate','monthlyByDay','monthlyByDayR','yearly'))) {
-       $sql = "INSERT INTO $t_agenda_r (cal_id, cal_type, cal_end) VALUES ('$orig_id','$type',$end)";
+       $sql = "INSERT INTO $t_agenda_r (c_id, cal_id, cal_type, cal_end) VALUES ($course_id, '$orig_id','$type',$end)";
        $res = Database::query($sql);
         switch($type) {
             case 'daily':

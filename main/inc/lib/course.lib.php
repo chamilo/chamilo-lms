@@ -115,6 +115,60 @@ $coursesRepositories = $_configuration['root_sys'];
  *	@package chamilo.library
  */
 class CourseManager {
+    
+    var $columns = array();
+    
+    
+    /**
+     * Creates a course
+     * @param   string  course title
+     * @param   bool    add example content or not
+     * @param   mixed   false if the course was not created, array with the course info
+     */
+    function create_course($params) {           
+        global $_configuration;
+        
+        if (empty($params['title'])) {
+            return false;
+        }        
+        
+        if (empty($params['wanted_code'])) {
+            $params['wanted_code'] = $params['title'];    
+            // Check whether the requested course code has already been occupied.       
+            $dbnamelength = strlen($_configuration['db_prefix']);
+            // Ensure the database prefix + database name do not get over 40 characters.
+            $maxlength = 40 - $dbnamelength;
+            $params['wanted_code'] = generate_course_code(api_substr($params['title'], 0, $maxlength));            
+        }
+
+        // Create the course immediately
+        $keys = define_course_keys($params['wanted_code']);
+        
+        $params['exemplary_content'] = isset($params['exemplary_content']) ? $params['exemplary_content'] : false;
+        
+        if (count($keys)) {
+            
+            $params['code']             = $keys['currentCourseCode'];
+            $params['visual_code']      = $keys['currentCourseId'];                
+            $params['directory']        = $keys['currentCourseRepository'];
+       
+            $course_info   = api_get_course_info($params['code']);
+            
+            if (empty($course_info)) {
+                $course_id      = register_course($params);                
+                $course_info    = api_get_course_info_by_id($course_id);
+                
+                if (!empty($course_info)) {
+                    prepare_course_repository($course_info['directory'], $course_info['code']);
+                    $pictures_array = fill_course_repository($course_info['directory'], $params['exemplary_content']);     
+                    fill_Db_course($course_id, $course_info['directory'], $course_info['course_language'], $pictures_array, $params['exemplary_content']);
+                    return $course_info;                    
+                }
+            }
+        }
+        return false;            
+    }
+    
 
     /**
      * Returns all the information of a given coursecode
@@ -1498,32 +1552,34 @@ class CourseManager {
     public static function delete_course($code) {
         global $_configuration;
 
-        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $table_course_class = Database::get_main_table(TABLE_MAIN_COURSE_CLASS);
-        $user_role_table = Database::get_main_table(MAIN_USER_ROLE_TABLE);
-        $location_table = Database::get_main_table(MAIN_LOCATION_TABLE);
-        $role_right_location_table = Database::get_main_table(MAIN_ROLE_RIGHT_LOCATION_TABLE);
-        $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $table_course_survey = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
-        $table_course_survey_question = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
-        $table_course_survey_question_option = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
+        $table_course                       = Database::get_main_table(TABLE_MAIN_COURSE);
+        $table_course_user                  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $table_course_class                 = Database::get_main_table(TABLE_MAIN_COURSE_CLASS);
+        $user_role_table                    = Database::get_main_table(MAIN_USER_ROLE_TABLE);
+        $location_table                     = Database::get_main_table(MAIN_LOCATION_TABLE);
+        $role_right_location_table          = Database::get_main_table(MAIN_ROLE_RIGHT_LOCATION_TABLE);
+        $table_session_course               = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $table_session_course_user          = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $table_course_survey                = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
+        $table_course_survey_question       = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
+        $table_course_survey_question_option= Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
         $stats = false;
-        if (Database::get_statistic_database() != ''){
+        
+        if (Database::get_statistic_database() != '') {
             $stats = true;
-            $table_stats_hotpots = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-            $table_stats_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-            $table_stats_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-            $table_stats_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-            $table_stats_lastaccess = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-            $table_stats_course_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-            $table_stats_online = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-            $table_stats_default = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-            $table_stats_downloads = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-            $table_stats_links = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
-            $table_stats_uploads = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
+            $table_stats_hotpots        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+            $table_stats_attempt        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+            $table_stats_exercises      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+            $table_stats_access         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+            $table_stats_lastaccess     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+            $table_stats_course_access  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $table_stats_online         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+            $table_stats_default        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+            $table_stats_downloads      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+            $table_stats_links          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
+            $table_stats_uploads        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
         }
+
         $code = Database::escape_string($code);
         $sql = "SELECT * FROM $table_course WHERE code='".$code."'";
         $res = Database::query($sql);
@@ -1586,24 +1642,22 @@ class CourseManager {
                 $sql = "DELETE FROM $table_course WHERE code='".$virtual_course['code']."'";
                 Database::query($sql);
             }
+
             $sql = "SELECT * FROM $table_course WHERE code='".$code."'";
             $res = Database::query($sql);
             $course = Database::fetch_array($res);
-            if (!$_configuration['single_database']) {
-                $sql = "DROP DATABASE IF EXISTS ".$course['db_name'];
-                Database::query($sql);
-            } else {
-                //TODO Clean the following code as currently it would probably delete another course
-                //similarly named, by mistake...
-                $db_pattern = $_configuration['table_prefix'].$course['db_name'].$_configuration['db_glue'];
-                $sql = "SHOW TABLES LIKE '$db_pattern%'";
-                $result = Database::query($sql);
-                while (list ($courseTable) = Database::fetch_array($result)) {
-                    Database::query("DROP TABLE $courseTable");
+            $course_tables = get_course_tables();
+            
+            //Cleaning c_x tables
+            if (!empty($course['id'])) {
+                foreach($course_tables as $table) {
+                    $table = Database::get_course_table($table);
+                    $sql = "DELETE FROM $table WHERE c_id = {$course['id']} ";               
+                    Database::query($sql);
                 }
             }
             $course_dir = api_get_path(SYS_COURSE_PATH).$course['directory'];
-            $archive_dir = api_get_path(SYS_ARCHIVE_PATH).$course['directory'].'_'.time();
+            $archive_dir = api_get_path(SYS_ARCHIVE_PATH).$course['directory'].'_'.time();            
             if (is_dir($course_dir)) {
                 rename($course_dir, $archive_dir);
             }
@@ -1728,23 +1782,31 @@ class CourseManager {
             return;
         }
         $sql_dump = '';
-        $course_code = Database::escape_string($course_code);
-        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $course_code    = Database::escape_string($course_code);
+        $table_course   = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "SELECT * FROM $table_course WHERE code = '$course_code'";
         $res = Database::query($sql);
         $course = Database::fetch_array($res);
-        $sql = "SHOW TABLES FROM ".$course['db_name'];
-        $res = Database::query($sql);
-        while ($table = Database::fetch_array($res)) {
-            $sql = "SELECT * FROM ".$course['db_name'].".".$table[0]."";
-            $res3 = Database::query($sql);
-            while ($row = Database::fetch_array($res3)) {
-                foreach ($row as $key => $value) {
-                    $row[$key] = $key."='".addslashes($row[$key])."'";
-                }
-                $sql_dump .= "\nINSERT INTO $table[0] SET ".implode(', ', $row).';';
+        
+        $course_tables = get_course_tables();
+        
+        if (!empty($course['id'])) {
+            //Cleaning c_x tables
+            foreach($course_tables as $table) {
+                $table = Database::get_course_table($table);
+                $sql = "SELECT * FROM $table WHERE c_id = {$course['id']} ";               
+                $res_table = Database::query($sql);
+                
+                while ($row = Database::fetch_array($res_table, 'ASSOC')) {
+                    $row_to_save = array();
+                    foreach ($row as $key => $value) {
+                        $row_to_save[$key] = $key."='".Database::escape_string($row[$key])."'";
+                    }                
+                    $sql_dump .= "\nINSERT INTO $table SET ".implode(', ', $row_to_save).';';
+                }                
             }
         }
+        
         if (is_dir(api_get_path(SYS_COURSE_PATH).$course['directory'])) {
             $file_name = api_get_path(SYS_COURSE_PATH).$course['directory'].'/mysql_dump.sql';
             $handle = fopen($file_name, 'a+');
@@ -3324,53 +3386,7 @@ class CourseManager {
         return $wanted_code;
     }
         
-    /**
-     * Creates a course very fast (the function doesn't need a lot of parameters)
-     * Coded originally found in create_course/add_course.php
-     * @param	string	course title
-     * @param	bool	add example content or not
-     * @param	mixed	false if the course was not created, array with the course info
-     */
-    function create_course($title, $wanted_code  = '', $exemplary_content = false) {
-        require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-        global $_configuration, $firstExpirationDelay, $language_interface;
-        if (empty($title)) {
-            return false;
-        }        
-        if (empty($wanted_code)) {
-            $wanted_code = $title;    
-            // Check whether the requested course code has already been occupied.       
-            $dbnamelength = strlen($_configuration['db_prefix']);
-            // Ensure the database prefix + database name do not get over 40 characters.
-            $maxlength = 40 - $dbnamelength;
-            $wanted_code = generate_course_code(api_substr($title, 0, $maxlength));            
-        }
- 
-        // Create the course immediately
-        $keys = define_course_keys($wanted_code, '', $_configuration['db_prefix']);
-
-        if (count($keys)) {
-            $visual_code = $keys['currentCourseCode'];
-            $code        = $keys['currentCourseId'];
-            $db_name     = $keys['currentCourseDbName'];
-            $directory   = $keys['currentCourseRepository'];
-                
-            $code_info   = api_get_course_info($code);
-            if (empty($code_info)) {            
-                $expiration_date = time() + $firstExpirationDelay;
-                prepare_course_repository($directory, $code);
-                update_Db_course($db_name);
-                $pictures_array = fill_course_repository($directory,  $exemplary_content);
-                fill_Db_course($db_name, $directory, $language_interface, $pictures_array, $exemplary_content);
-                $result = register_course($code, $visual_code, $directory, $db_name, '', '', $title, $language_interface, api_get_user_id(), $expiration_date);
-                $course_info = api_get_course_info($code);
-                if (!empty($course_info)) {
-                    return $course_info;    
-                }
-            }
-        }
-        return false;            
-    } 
+    
 
     function is_user_accepted_legal($user_id, $course_code, $session_id = null) {
         $user_id    = intval($user_id); 

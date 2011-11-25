@@ -171,7 +171,7 @@ class Export {
             $column = 0;
             foreach ($printable_data_row as &$printable_data_cell) {
                 $table->setCellContents($row, $column, $printable_data_cell);
-                $table->updateCellAttributes($row, $column);
+                //$table->updateCellAttributes($row, $column);
                 $column++;
             }
             $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);

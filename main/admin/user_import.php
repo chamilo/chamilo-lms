@@ -15,6 +15,9 @@ $language_file = array ('admin', 'registration');
 $cidReset = true;
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
@@ -266,10 +269,7 @@ function parse_xml_data($file) {
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'import.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
 if (is_array($extAuthSource)) {
@@ -385,10 +385,16 @@ $form = new FormValidator('user_import','post','user_import.php');
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
-$form->addElement('radio', 'file_type', get_lang('FileType'), 'CSV (<a href="example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
-$form->addElement('radio', 'file_type', null, 'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
-$form->addElement('radio', 'sendMail', get_lang('SendMailToUsers'), get_lang('Yes'), 1);
-$form->addElement('radio', 'sendMail', null, get_lang('No'), 0);
+$group = array();
+$group[] = $form->createElement('radio', 'file_type', '', 'CSV (<a href="example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
+$group[] = $form->createElement('radio', 'file_type', null, 'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
+$form->addGroup($group, '', get_lang('FileType'), '<br/>');
+
+$group = array(); 
+$group[] = $form->createElement('radio', 'sendMail', '', get_lang('Yes'), 1);
+$group[] = $form->createElement('radio', 'sendMail', null, get_lang('No'), 0);
+$form->addGroup($group, '', get_lang('SendMailToUsers'), '<br/>');
+
 $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
 $defaults['formSent'] = 1;
 $defaults['sendMail'] = 0;

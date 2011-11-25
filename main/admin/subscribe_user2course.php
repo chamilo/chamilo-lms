@@ -14,14 +14,9 @@
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-require ('../inc/global.inc.php');
-$this_section=SECTION_PLATFORM_ADMIN;
-// including additional libraries
-require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-
+require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
+
 api_protect_admin_script();
 
 /* Global constants and variables */
@@ -273,7 +268,7 @@ if (is_array($extra_field_list)) {
    </tr>
    <tr>
     <td width="40%" align="center">
-     <select name="UserList[]" multiple="multiple" size="20" style="width:230px;">
+     <select name="UserList[]" multiple="multiple" size="20" style="width:300px;">
 <?php
         foreach ($db_users as $user) {
 ?>
@@ -287,7 +282,7 @@ if (is_array($extra_field_list)) {
     <button type="submit" class="add" value="<?php echo get_lang('AddToThatCourse'); ?> &gt;&gt;"><?php echo get_lang('AddToThatCourse'); ?></button>
    </td>
    <td width="40%" align="center">
-    <select name="CourseList[]" multiple="multiple" size="20" style="width:230px;">
+    <select name="CourseList[]" multiple="multiple" size="20" style="width:300px;">
 <?php
         foreach ($db_courses as $course) {
 ?>

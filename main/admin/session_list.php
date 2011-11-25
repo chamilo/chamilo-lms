@@ -7,7 +7,6 @@ $language_file = 'admin';
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -228,9 +227,9 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	//if(count($sessions)==0 && isset($_POST['keyword'])) {
 	if(count($sessions)==0) {
 		if (isset($_GET['id_category'])) {
-			echo get_lang('NoSession');
+			Display::display_warning_message(get_lang('NoSession'));
 		} else {
-			echo get_lang('NoSearchResults');
+			Display::display_warning_message(get_lang('NoSearchResults'));
 		}
 		echo '	</div>';
 	} else {

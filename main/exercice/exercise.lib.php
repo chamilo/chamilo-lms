@@ -811,9 +811,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
 		
         //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
 
-        // -----------------------------
+        // 
         // Filter by test revised or not
-        // -----------------------------
+        // 
         switch ($filter) {
             case 0 :    // filter_by_not_revised
             case 1 :
@@ -831,16 +831,16 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                 break;
         }
 		
-		// -----------------------------
+		// 
 		// Filter by group
-		// -----------------------------
+		// 
 		switch ($filterByGroup) {
 		    case -1 : // no filter
         	    $sql_inner_join_tbl_user = $TBL_USER;    
 		        break;
 		    case 0 : // user not in any group
     		    $sql_inner_join_tbl_user = " 
-                    (SELECT u.user_id, firstname, lastname, email 
+                    (SELECT u.user_id, firstname, lastname, email , username
                     FROM $TBL_USER u 
                     WHERE 
                     u.user_id NOT IN (
@@ -852,7 +852,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
 		        break;
 		    default : // user in group $filterByGroup
     		    $sql_inner_join_tbl_user = " 
-                    (SELECT u.user_id, firstname, lastname, email 
+                    (SELECT u.user_id, firstname, lastname, email  , username
                     FROM $TBL_USER u 
                     INNER JOIN $TBL_GROUP_REL_USER gru ON (
                         gru.user_id=u.user_id 
@@ -865,20 +865,21 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
 		
         $first_and_last_name = api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1";
         
-        // ---------------------------------------------------
+        // 
         // sql for chamilo-type tests for teacher / tutor view
-        // ---------------------------------------------------
+        // 
         $sql="  
                 SELECT
                     user_id, 
                     $first_and_last_name, 
-                    ce.title as col2, 
+                    ce.title as col3, 
+                    username as col2,
                     te.exe_result as exresult , 
                     te.exe_weighting as exweight,
                     te.exe_date as exdate, 
                     te.exe_id as exid, 
                     email as exemail, 
-                    te.start_date as col4, 
+                    te.start_date as col6, 
                     steps_counter as exstep, 
                     exe_user_id as excruid,
                     te.exe_duration as exduration, 
@@ -896,9 +897,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                     AND ce.c_id=".api_get_course_int_id()."
                     $exercise_where ";
 
-        // --------------------------------------------------
+        // 
         // sql for hotpotatoes tests for teacher / tutor view
-        // --------------------------------------------------
+        // 
         $hpsql="
                 SELECT 
                     $first_and_last_name , 
@@ -1026,8 +1027,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                 if ($is_allowedToEdit || $is_tutor) {      
                     $user_first_name = $results[$i]['col0'];
                     $user_last_name = $results[$i]['col1'];
+                    $user_login = $results[$i]['col2'];
                     $user = $results[$i]['col0'] . $results[$i]['col1'];
-                    $test = $results[$i]['col2'];                    
+                    $test = $results[$i]['col3'];                    
                     $user_groups = displayGroupsForUser('<br/>', $results[$i]['user_id']);
                 } else {
                     $user_first_name = $results[$i]['firstname'];
@@ -1137,7 +1139,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                     }
                     $more_details_list = $html_link;
                     if ($is_allowedToEdit || $is_tutor) {
-                        $list_info[] = array($user_first_name,$user_last_name,$user_groups,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
+                        $list_info[] = array($user_first_name,$user_last_name,$user_login,$user_groups,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
                     } else {
                         $list_info[] = array($quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
                     }

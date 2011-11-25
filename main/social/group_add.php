@@ -16,7 +16,6 @@ if (api_get_setting('allow_social_tool') !='true') {
     api_not_allowed();
 }
 
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 if (api_get_setting('allow_students_to_create_groups_in_social') == 'false' && !api_is_allowed_to_edit()) {

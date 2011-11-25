@@ -63,14 +63,18 @@ switch ($action) {
         echo json_encode($skill_info);
         break;        
     case 'load_children':
-        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-        $skills = $skill->get_children($id);
+        $id             = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+        $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
+        $skills = $skill->get_children($id, $load_user_data);
+        
         $return = array();
         foreach($skills as $skill) {
-            $return [$skill['data']['id']] = array(
+            if (isset($skill['data']) && !empty($skill['data'])) {
+                $return[$skill['data']['id']] = array(
                                                     'id'    => $skill['data']['id'],
                                                     'name'  => $skill['data']['name'], 
                                                     'passed'=> $skill['data']['passed']);
+            }
         }
         echo json_encode($return);
         break;

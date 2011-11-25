@@ -1,4 +1,4 @@
-<?php // $Id: index.php 22269 2009-07-21 15:06:15Z juliomontoya $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 *	Index of the admin tools
@@ -9,17 +9,17 @@
 $language_file=array('admin','tracking');
 
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 // including some necessary chamilo files
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'security.lib.php';
 
 // setting the section (for the tabs)
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
 api_protect_admin_script(true);
+
 $nameTools = get_lang('PlatformAdmin');
 
 // setting breadcrumbs

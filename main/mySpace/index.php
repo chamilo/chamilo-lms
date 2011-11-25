@@ -25,6 +25,9 @@ $nameTools   		= get_lang('MySpace');
 
 $user_id 	 		= api_get_user_id();
 $is_coach 			= api_is_coach($_GET['session_id']); // This is used?
+
+$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+
 $is_platform_admin 	= api_is_platform_admin();
 $is_drh 			= api_is_drh();
 $is_session_admin 	= api_is_session_admin();
@@ -122,13 +125,8 @@ if ($is_platform_admin) {
 		$title = get_lang('CoachList');
 		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32), api_get_self().'?view=teacher');
 		$menu_items[] = Display::url(Display::return_icon('star_na.png', get_lang('AdminInterface'), array(), 32), api_get_self().'?view=admin');		
-        $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
-        
-        //$menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('CurrentCoursesReport'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
-        
-        
-        
-        
+        $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/exams.php');        
+        //$menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('CurrentCoursesReport'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');        
 	} else {		
 		$menu_items[] = Display::return_icon('teacher_na.png', get_lang('TeacherInterface'), array(), 32);		
 		$menu_items[] = Display::url(Display::return_icon('star.png', get_lang('AdminInterface'), array(), 32), api_get_self().'?view=admin');
@@ -334,10 +332,11 @@ if (empty($session_id)) {
 		$nb_posts = null;
 	}
 } else {
-	$courses = Tracking::get_courses_followed_by_coach($user_id, $session_id);
+	$courses = Tracking::get_courses_followed_by_coach($user_id, $session_id);	
+	   
+    //Courses for the user
+    $count_courses = count($courses);
 }
-
-
 
 if ($count_courses || $count_sessions) {
 	//If we are in course

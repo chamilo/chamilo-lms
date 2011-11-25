@@ -12,12 +12,6 @@ $cidReset = true;
 // including the global library
 require '../inc/global.inc.php';
 
-// including additional libraries
-$libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'sortabletable.class.php';
-require_once $libpath.'usermanager.lib.php';
-require_once $libpath.'formvalidator/FormValidator.class.php';
-
 // section for the tabs
 $this_section=SECTION_PLATFORM_ADMIN;
 

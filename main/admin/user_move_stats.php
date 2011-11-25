@@ -6,7 +6,6 @@ require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once '../newscorm/learnpathList.class.php';
 
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));

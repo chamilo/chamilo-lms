@@ -121,6 +121,7 @@ class SkillRelSkill extends Model {
         $skills = $this->find('all', array('where'=> array('parent_id = ? '=> $skill_id)));
         $skill_obj = new Skill();
         $skill_rel_user = new SkillRelUser();
+        
         if ($load_user_data) {
             $passed_skills = $skill_rel_user->get_user_skills($user_id);
             $done_skills = array();
@@ -129,13 +130,18 @@ class SkillRelSkill extends Model {
             }              
         }
         if (!empty($skills)) {
+            
             foreach ($skills as &$skill) {
                 $skill['data'] = $skill_obj->get($skill['skill_id']);
-                if (!empty($done_skills)) {
-                    $skill['data']['passed'] =  0;
-                    if (in_array($skill['skill_id'], $done_skills)) {
-                        $skill['data']['passed'] =  1;
-                    }                    
+                if (isset($skill['data']) && !empty($skill['data'])) {
+                    if (!empty($done_skills)) {
+                        $skill['data']['passed'] =  0;
+                        if (in_array($skill['skill_id'], $done_skills)) {
+                            $skill['data']['passed'] =  1;
+                        }                    
+                    }
+                } else {
+                    $skill  = null;
                 }
             }
         }
@@ -344,10 +350,14 @@ class Skill extends Model {
         return $result;
     }
     
-    function get_children($skill_id) {
-        $skill_rel_skill = new SkillRelSkill();
-        $user_id = api_get_user_id();
-        $skills = $skill_rel_skill->get_children($skill_id, true, $user_id);
+    function get_children($skill_id, $load_user_data = false) {
+        $skill_rel_skill = new SkillRelSkill();        
+        if ($load_user_data) {
+            $user_id = api_get_user_id();
+            $skills = $skill_rel_skill->get_children($skill_id, true, $user_id);
+        } else {
+            $skills = $skill_rel_skill->get_children($skill_id);
+        }
         return $skills;
     }    
     

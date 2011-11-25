@@ -7,19 +7,20 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 
 // setting the section (for the tabs)
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
 
 $id = intval($_GET['id']);
 
-$formSent=0;
+$formSent = 0;
 
 // Database Table Definitions
 $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$sql = "SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility FROM $tbl_session WHERE id = $id";
+$sql = "SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility 
+        FROM $tbl_session WHERE id = $id";
 $result = Database::query($sql);
 
 if (!$infos = Database::fetch_array($result)) {
@@ -35,9 +36,9 @@ if (!api_is_platform_admin() && $infos['session_admin_id'] != api_get_user_id())
 
 $tool_name = get_lang('EditSession');
 
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
-$interbreadcrumb[]=array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
+$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
 
 list($year_start,$month_start,$day_start)   = explode('-',$infos['date_start']);
 list($year_end,$month_end,$day_end)         = explode('-',$infos['date_end']);
@@ -105,52 +106,64 @@ if (!empty($return)) {
 ?>
 
 <form method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']) ?>&id=<?php echo $id; ?>" style="margin:0px;">
-<input type="hidden" name="formSent" value="1">
-
-<div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
-
-<table border="0" cellpadding="5" cellspacing="0" width="650">
-<tr>
-  <td width="30%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>
-  <td width="70%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); else echo api_htmlentities($infos['name'],ENT_QUOTES,$charset); ?>"></td>
-</tr>
-<tr>
-	<td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
-	<td width="70%">
-		<select class="chzn-select" name="id_coach" style="width:380px;" title="<?php echo get_lang('Choose'); ?>" >
-			<option value="">----- <?php echo get_lang('None') ?> -----</option>
-			<?php foreach($Coaches as $enreg) { ?>
-			<option value="<?php echo $enreg['user_id']; ?>" <?php if(($enreg['user_id'] == $infos['id_coach']) || ($enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
-			<?php
-			}
-			unset($Coaches);
-			$Categories = SessionManager::get_all_session_category();
-?>
-  		</select>
-	</td>
-</tr>
-<tr>
-  <td width="30%"><?php echo get_lang('SessionCategory') ?></td>
-  <td width="70%">
-  	<select class="chzn-select" id="session_category" name="session_category" style="width:380px;" title="<?php echo get_lang('Select'); ?>">
-		<option value="0"><?php get_lang('None'); ?></option>
-		<?php
-		  if (!empty($Categories)) { 
-		      foreach($Categories as $Rows)  { ?>
-		<option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $infos['session_category_id']) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
-		<?php }
-		  }
-		 ?>
-	</select>
-  </td>
-</tr>
-<tr>
-    <td>
-        &nbsp;
-    </td>
-    <td>
-        <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
-        <div style="display:
+<fieldset>
+    <legend><?php echo $tool_name; ?></legend>    
+    <input type="hidden" name="formSent" value="1">
+    
+    <div class="row">
+        <div class="label">
+            <?php echo get_lang('SessionName') ?>
+        </div>
+        <div class="formw">
+            <input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); else echo api_htmlentities($infos['name'],ENT_QUOTES,$charset); ?>">
+        </div>        
+    </div>
+    <div class="row">
+        <div class="label">
+            <?php echo get_lang('CoachName') ?>
+        </div>
+        <div class="formw">
+            <select class="chzn-select" name="id_coach" style="width:380px;" title="<?php echo get_lang('Choose'); ?>" >
+                <option value="">----- <?php echo get_lang('None') ?> -----</option>
+                <?php foreach($Coaches as $enreg) { ?>
+                <option value="<?php echo $enreg['user_id']; ?>" <?php if(($enreg['user_id'] == $infos['id_coach']) || ($enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
+                <?php
+                }
+                unset($Coaches);
+                $Categories = SessionManager::get_all_session_category();
+            ?>
+        </select>
+        </div>        
+    </div>
+    <div class="row">
+        <div class="label">
+            <?php echo get_lang('SessionCategory') ?>
+        </div>
+        <div class="formw">
+                <select class="chzn-select" id="session_category" name="session_category" style="width:380px;" title="<?php echo get_lang('Select'); ?>">
+        <option value="0"><?php get_lang('None'); ?></option>
+        <?php
+          if (!empty($Categories)) { 
+              foreach($Categories as $Rows)  { ?>
+        <option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $infos['session_category_id']) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
+        <?php }
+          }
+         ?>
+    </select>
+        </div>        
+    </div>
+    <div class="row">
+        <div class="label">
+        </div>
+        <div class="formw">
+            <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
+        </div>        
+    </div>
+    <div class="row">
+        <div class="label">            
+        </div>
+        <div class="formw">            
+            <div style="display:
             <?php
                 if($formSent){
                     if($nb_days_access_before!=0 || $nb_days_access_after!=0)
@@ -165,183 +178,193 @@ if (!empty($return)) {
                 }
             ?>
                 ;" id="options">
-            <br>
-            <input type="text" name="nb_days_access_before" value="<?php if($formSent) echo api_htmlentities($nb_days_access_before,ENT_QUOTES,$charset); else echo api_htmlentities($infos['nb_days_access_before_beginning'],ENT_QUOTES,$charset); ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysBefore') ?><br /><br />
+                            
+            <input type="text" name="nb_days_access_before" value="<?php if($formSent) echo api_htmlentities($nb_days_access_before,ENT_QUOTES,$charset); else echo api_htmlentities($infos['nb_days_access_before_beginning'],ENT_QUOTES,$charset); ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysBefore') ?>
+                <br />
+                <br />                    
             <input type="text" name="nb_days_access_after" value="<?php if($formSent) echo api_htmlentities($nb_days_access_after,ENT_QUOTES,$charset); else echo api_htmlentities($infos['nb_days_access_after_end'],ENT_QUOTES,$charset); ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysAfter') ?>
-            <br>
+                
+            </div>        
         </div>
-    </td>
-</tr>
-
-
-<tr>
-  <td width="30%"></td>
-  <td width="70%">
-    <input id="start_limit" type="checkbox" name="start_limit" onchange="disable_starttime(this)" <?php if ($year_start!="0000") echo "checked"; ?>/>
-    <label for="start_limit">
-    <?php echo get_lang('DateStartSession');?>
-    </label> 
-    <div id="start_date" style="<?php echo ($year_start=="0000") ? "display:none" : "display:block" ; ?>">
-       <br />
+    </div>
     
+    <div class="clear"></div> 
+    <div class="row">
+        <div class="label">
+        </div>
+        <div class="formw">
+            <input id="start_limit" type="checkbox" name="start_limit" onchange="disable_starttime(this)" <?php if ($year_start!="0000") echo "checked"; ?>/>
+            <label for="start_limit">
+            <?php echo get_lang('DateStartSession');?>
+            </label> 
+            <div id="start_date" style="<?php echo ($year_start=="0000") ? "display:none" : "display:block" ; ?>">
+            <br />
+              <select name="day_start">
+                <option value="1">01</option>
+                <option value="2" <?php if($day_start == 2) echo 'selected="selected"'; ?> >02</option>
+                <option value="3" <?php if($day_start == 3) echo 'selected="selected"'; ?> >03</option>
+                <option value="4" <?php if($day_start == 4) echo 'selected="selected"'; ?> >04</option>
+                <option value="5" <?php if($day_start == 5) echo 'selected="selected"'; ?> >05</option>
+                <option value="6" <?php if($day_start == 6) echo 'selected="selected"'; ?> >06</option>
+                <option value="7" <?php if($day_start == 7) echo 'selected="selected"'; ?> >07</option>
+                <option value="8" <?php if($day_start == 8) echo 'selected="selected"'; ?> >08</option>
+                <option value="9" <?php if($day_start == 9) echo 'selected="selected"'; ?> >09</option>
+                <option value="10" <?php if($day_start == 10) echo 'selected="selected"'; ?> >10</option>
+                <option value="11" <?php if($day_start == 11) echo 'selected="selected"'; ?> >11</option>
+                <option value="12" <?php if($day_start == 12) echo 'selected="selected"'; ?> >12</option>
+                <option value="13" <?php if($day_start == 13) echo 'selected="selected"'; ?> >13</option>
+                <option value="14" <?php if($day_start == 14) echo 'selected="selected"'; ?> >14</option>
+                <option value="15" <?php if($day_start == 15) echo 'selected="selected"'; ?> >15</option>
+                <option value="16" <?php if($day_start == 16) echo 'selected="selected"'; ?> >16</option>
+                <option value="17" <?php if($day_start == 17) echo 'selected="selected"'; ?> >17</option>
+                <option value="18" <?php if($day_start == 18) echo 'selected="selected"'; ?> >18</option>
+                <option value="19" <?php if($day_start == 19) echo 'selected="selected"'; ?> >19</option>
+                <option value="20" <?php if($day_start == 20) echo 'selected="selected"'; ?> >20</option>
+                <option value="21" <?php if($day_start == 21) echo 'selected="selected"'; ?> >21</option>
+                <option value="22" <?php if($day_start == 22) echo 'selected="selected"'; ?> >22</option>
+                <option value="23" <?php if($day_start == 23) echo 'selected="selected"'; ?> >23</option>
+                <option value="24" <?php if($day_start == 24) echo 'selected="selected"'; ?> >24</option>
+                <option value="25" <?php if($day_start == 25) echo 'selected="selected"'; ?> >25</option>
+                <option value="26" <?php if($day_start == 26) echo 'selected="selected"'; ?> >26</option>
+                <option value="27" <?php if($day_start == 27) echo 'selected="selected"'; ?> >27</option>
+                <option value="28" <?php if($day_start == 28) echo 'selected="selected"'; ?> >28</option>
+                <option value="29" <?php if($day_start == 29) echo 'selected="selected"'; ?> >29</option>
+                <option value="30" <?php if($day_start == 30) echo 'selected="selected"'; ?> >30</option>
+                <option value="31" <?php if($day_start == 31) echo 'selected="selected"'; ?> >31</option>
+              </select>
+              /
+              <select name="month_start">
+                <option value="1">01</option>
+                <option value="2" <?php if($month_start == 2) echo 'selected="selected"'; ?> >02</option>
+                <option value="3" <?php if($month_start == 3) echo 'selected="selected"'; ?> >03</option>
+                <option value="4" <?php if($month_start == 4) echo 'selected="selected"'; ?> >04</option>
+                <option value="5" <?php if($month_start == 5) echo 'selected="selected"'; ?> >05</option>
+                <option value="6" <?php if($month_start == 6) echo 'selected="selected"'; ?> >06</option>
+                <option value="7" <?php if($month_start == 7) echo 'selected="selected"'; ?> >07</option>
+                <option value="8" <?php if($month_start == 8) echo 'selected="selected"'; ?> >08</option>
+                <option value="9" <?php if($month_start == 9) echo 'selected="selected"'; ?> >09</option>
+                <option value="10" <?php if($month_start == 10) echo 'selected="selected"'; ?> >10</option>
+                <option value="11" <?php if($month_start == 11) echo 'selected="selected"'; ?> >11</option>
+                <option value="12" <?php if($month_start == 12) echo 'selected="selected"'; ?> >12</option>
+              </select>
+              /
+              <select name="year_start">
+            
+            <?php
+            for($i=$thisYear-5;$i <= ($thisYear+5);$i++) { ?>
+                <option value="<?php echo $i; ?>" <?php if($year_start == $i) echo 'selected="selected"'; ?> ><?php echo $i; ?></option>
+            <?php
+            }
+            ?>
+              </select>
+          </div>
+  
+            
+        </div>        
+    </div>
     
-  <select name="day_start">
-	<option value="1">01</option>
-	<option value="2" <?php if($day_start == 2) echo 'selected="selected"'; ?> >02</option>
-	<option value="3" <?php if($day_start == 3) echo 'selected="selected"'; ?> >03</option>
-	<option value="4" <?php if($day_start == 4) echo 'selected="selected"'; ?> >04</option>
-	<option value="5" <?php if($day_start == 5) echo 'selected="selected"'; ?> >05</option>
-	<option value="6" <?php if($day_start == 6) echo 'selected="selected"'; ?> >06</option>
-	<option value="7" <?php if($day_start == 7) echo 'selected="selected"'; ?> >07</option>
-	<option value="8" <?php if($day_start == 8) echo 'selected="selected"'; ?> >08</option>
-	<option value="9" <?php if($day_start == 9) echo 'selected="selected"'; ?> >09</option>
-	<option value="10" <?php if($day_start == 10) echo 'selected="selected"'; ?> >10</option>
-	<option value="11" <?php if($day_start == 11) echo 'selected="selected"'; ?> >11</option>
-	<option value="12" <?php if($day_start == 12) echo 'selected="selected"'; ?> >12</option>
-	<option value="13" <?php if($day_start == 13) echo 'selected="selected"'; ?> >13</option>
-	<option value="14" <?php if($day_start == 14) echo 'selected="selected"'; ?> >14</option>
-	<option value="15" <?php if($day_start == 15) echo 'selected="selected"'; ?> >15</option>
-	<option value="16" <?php if($day_start == 16) echo 'selected="selected"'; ?> >16</option>
-	<option value="17" <?php if($day_start == 17) echo 'selected="selected"'; ?> >17</option>
-	<option value="18" <?php if($day_start == 18) echo 'selected="selected"'; ?> >18</option>
-	<option value="19" <?php if($day_start == 19) echo 'selected="selected"'; ?> >19</option>
-	<option value="20" <?php if($day_start == 20) echo 'selected="selected"'; ?> >20</option>
-	<option value="21" <?php if($day_start == 21) echo 'selected="selected"'; ?> >21</option>
-	<option value="22" <?php if($day_start == 22) echo 'selected="selected"'; ?> >22</option>
-	<option value="23" <?php if($day_start == 23) echo 'selected="selected"'; ?> >23</option>
-	<option value="24" <?php if($day_start == 24) echo 'selected="selected"'; ?> >24</option>
-	<option value="25" <?php if($day_start == 25) echo 'selected="selected"'; ?> >25</option>
-	<option value="26" <?php if($day_start == 26) echo 'selected="selected"'; ?> >26</option>
-	<option value="27" <?php if($day_start == 27) echo 'selected="selected"'; ?> >27</option>
-	<option value="28" <?php if($day_start == 28) echo 'selected="selected"'; ?> >28</option>
-	<option value="29" <?php if($day_start == 29) echo 'selected="selected"'; ?> >29</option>
-	<option value="30" <?php if($day_start == 30) echo 'selected="selected"'; ?> >30</option>
-	<option value="31" <?php if($day_start == 31) echo 'selected="selected"'; ?> >31</option>
-  </select>
-  /
-  <select name="month_start">
-	<option value="1">01</option>
-	<option value="2" <?php if($month_start == 2) echo 'selected="selected"'; ?> >02</option>
-	<option value="3" <?php if($month_start == 3) echo 'selected="selected"'; ?> >03</option>
-	<option value="4" <?php if($month_start == 4) echo 'selected="selected"'; ?> >04</option>
-	<option value="5" <?php if($month_start == 5) echo 'selected="selected"'; ?> >05</option>
-	<option value="6" <?php if($month_start == 6) echo 'selected="selected"'; ?> >06</option>
-	<option value="7" <?php if($month_start == 7) echo 'selected="selected"'; ?> >07</option>
-	<option value="8" <?php if($month_start == 8) echo 'selected="selected"'; ?> >08</option>
-	<option value="9" <?php if($month_start == 9) echo 'selected="selected"'; ?> >09</option>
-	<option value="10" <?php if($month_start == 10) echo 'selected="selected"'; ?> >10</option>
-	<option value="11" <?php if($month_start == 11) echo 'selected="selected"'; ?> >11</option>
-	<option value="12" <?php if($month_start == 12) echo 'selected="selected"'; ?> >12</option>
-  </select>
-  /
-  <select name="year_start">
+    <div class="row">
+        <div class="label">            
+        </div>
+        <div class="formw">
+ 
+            <input id="end_limit" type="checkbox" name="end_limit" onchange="disable_endtime(this)" <?php if ($year_end!="0000") echo "checked"; ?>/>
+            <label for="end_limit">
+            <?php echo get_lang('DateEndSession') ?>
+            </label>
+          <div id="end_date" style="<?php echo ($year_end=="0000") ? "display:none" : "display:block" ; ?>">
+          <br />
+          
+          <select name="day_end" <?php echo $end_day_disabled; ?> >
+        	<option value="1">01</option>
+        	<option value="2" <?php if($day_end == 2) echo 'selected="selected"'; ?> >02</option>
+        	<option value="3" <?php if($day_end == 3) echo 'selected="selected"'; ?> >03</option>
+        	<option value="4" <?php if($day_end == 4) echo 'selected="selected"'; ?> >04</option>
+        	<option value="5" <?php if($day_end == 5) echo 'selected="selected"'; ?> >05</option>
+        	<option value="6" <?php if($day_end == 6) echo 'selected="selected"'; ?> >06</option>
+        	<option value="7" <?php if($day_end == 7) echo 'selected="selected"'; ?> >07</option>
+        	<option value="8" <?php if($day_end == 8) echo 'selected="selected"'; ?> >08</option>
+        	<option value="9" <?php if($day_end == 9) echo 'selected="selected"'; ?> >09</option>
+        	<option value="10" <?php if($day_end == 10) echo 'selected="selected"'; ?> >10</option>
+        	<option value="11" <?php if($day_end == 11) echo 'selected="selected"'; ?> >11</option>
+        	<option value="12" <?php if($day_end == 12) echo 'selected="selected"'; ?> >12</option>
+        	<option value="13" <?php if($day_end == 13) echo 'selected="selected"'; ?> >13</option>
+        	<option value="14" <?php if($day_end == 14) echo 'selected="selected"'; ?> >14</option>
+        	<option value="15" <?php if($day_end == 15) echo 'selected="selected"'; ?> >15</option>
+        	<option value="16" <?php if($day_end == 16) echo 'selected="selected"'; ?> >16</option>
+        	<option value="17" <?php if($day_end == 17) echo 'selected="selected"'; ?> >17</option>
+        	<option value="18" <?php if($day_end == 18) echo 'selected="selected"'; ?> >18</option>
+        	<option value="19" <?php if($day_end == 19) echo 'selected="selected"'; ?> >19</option>
+        	<option value="20" <?php if($day_end == 20) echo 'selected="selected"'; ?> >20</option>
+        	<option value="21" <?php if($day_end == 21) echo 'selected="selected"'; ?> >21</option>
+        	<option value="22" <?php if($day_end == 22) echo 'selected="selected"'; ?> >22</option>
+        	<option value="23" <?php if($day_end == 23) echo 'selected="selected"'; ?> >23</option>
+        	<option value="24" <?php if($day_end == 24) echo 'selected="selected"'; ?> >24</option>
+        	<option value="25" <?php if($day_end == 25) echo 'selected="selected"'; ?> >25</option>
+        	<option value="26" <?php if($day_end == 26) echo 'selected="selected"'; ?> >26</option>
+        	<option value="27" <?php if($day_end == 27) echo 'selected="selected"'; ?> >27</option>
+        	<option value="28" <?php if($day_end == 28) echo 'selected="selected"'; ?> >28</option>
+        	<option value="29" <?php if($day_end == 29) echo 'selected="selected"'; ?> >29</option>
+        	<option value="30" <?php if($day_end == 30) echo 'selected="selected"'; ?> >30</option>
+        	<option value="31" <?php if($day_end == 31) echo 'selected="selected"'; ?> >31</option>
+          </select>
+          /
+          <select name="month_end" <?php echo $end_month_disabled; ?> >
+        	<option value="1">01</option>
+        	<option value="2" <?php if($month_end == 2) echo 'selected="selected"'; ?> >02</option>
+        	<option value="3" <?php if($month_end == 3) echo 'selected="selected"'; ?> >03</option>
+        	<option value="4" <?php if($month_end == 4) echo 'selected="selected"'; ?> >04</option>
+        	<option value="5" <?php if($month_end == 5) echo 'selected="selected"'; ?> >05</option>
+        	<option value="6" <?php if($month_end == 6) echo 'selected="selected"'; ?> >06</option>
+        	<option value="7" <?php if($month_end == 7) echo 'selected="selected"'; ?> >07</option>
+        	<option value="8" <?php if($month_end == 8) echo 'selected="selected"'; ?> >08</option>
+        	<option value="9" <?php if($month_end == 9) echo 'selected="selected"'; ?> >09</option>
+        	<option value="10" <?php if($month_end == 10) echo 'selected="selected"'; ?> >10</option>
+        	<option value="11" <?php if($month_end == 11) echo 'selected="selected"'; ?> >11</option>
+        	<option value="12" <?php if($month_end == 12) echo 'selected="selected"'; ?> >12</option>
+          </select>
+          /
+          <select name="year_end" <?php echo $end_year_disabled; ?>>
+        
+        <?php
+        for($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
+        ?>
+        	<option value="<?php echo $i; ?>" <?php if($year_end == $i) echo 'selected="selected"'; ?> ><?php echo $i; ?></option>
+        <?php
+        }
+        ?>
+          </select>
+           <br />      <br />     
+        
+            <?php echo get_lang('SessionVisibility') ?> <br />     
+            <select name="session_visibility" style="width:250px;">
+                <?php
+                $visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('SessionReadOnly'), SESSION_VISIBLE=>get_lang('SessionAccessible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('SessionNotAccessible')));
+                foreach($visibility_list as $key=>$item): ?>
+                <option value="<?php echo $key; ?>" <?php if($key == $infos['visibility']) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
+                <?php endforeach; ?>
+            </select>    
+                
+    </div>
 
-<?php
-for($i=$thisYear-5;$i <= ($thisYear+5);$i++) { ?>
-	<option value="<?php echo $i; ?>" <?php if($year_start == $i) echo 'selected="selected"'; ?> ><?php echo $i; ?></option>
-<?php
-}
-?>
-  </select>
+    </div>
   </div>
   
-  </td>
-</tr>
-<tr>
-  <td width="30%"></td>
-  <td width="70%">
-    <input id="end_limit" type="checkbox" name="end_limit" onchange="disable_endtime(this)" <?php if ($year_end!="0000") echo "checked"; ?>/>
-    <label for="end_limit">
-    <?php echo get_lang('DateEndSession') ?>
-    </label>
-  <div id="end_date" style="<?php echo ($year_end=="0000") ? "display:none" : "display:block" ; ?>">
-  <br />
-  
-  <select name="day_end" <?php echo $end_day_disabled; ?> >
-	<option value="1">01</option>
-	<option value="2" <?php if($day_end == 2) echo 'selected="selected"'; ?> >02</option>
-	<option value="3" <?php if($day_end == 3) echo 'selected="selected"'; ?> >03</option>
-	<option value="4" <?php if($day_end == 4) echo 'selected="selected"'; ?> >04</option>
-	<option value="5" <?php if($day_end == 5) echo 'selected="selected"'; ?> >05</option>
-	<option value="6" <?php if($day_end == 6) echo 'selected="selected"'; ?> >06</option>
-	<option value="7" <?php if($day_end == 7) echo 'selected="selected"'; ?> >07</option>
-	<option value="8" <?php if($day_end == 8) echo 'selected="selected"'; ?> >08</option>
-	<option value="9" <?php if($day_end == 9) echo 'selected="selected"'; ?> >09</option>
-	<option value="10" <?php if($day_end == 10) echo 'selected="selected"'; ?> >10</option>
-	<option value="11" <?php if($day_end == 11) echo 'selected="selected"'; ?> >11</option>
-	<option value="12" <?php if($day_end == 12) echo 'selected="selected"'; ?> >12</option>
-	<option value="13" <?php if($day_end == 13) echo 'selected="selected"'; ?> >13</option>
-	<option value="14" <?php if($day_end == 14) echo 'selected="selected"'; ?> >14</option>
-	<option value="15" <?php if($day_end == 15) echo 'selected="selected"'; ?> >15</option>
-	<option value="16" <?php if($day_end == 16) echo 'selected="selected"'; ?> >16</option>
-	<option value="17" <?php if($day_end == 17) echo 'selected="selected"'; ?> >17</option>
-	<option value="18" <?php if($day_end == 18) echo 'selected="selected"'; ?> >18</option>
-	<option value="19" <?php if($day_end == 19) echo 'selected="selected"'; ?> >19</option>
-	<option value="20" <?php if($day_end == 20) echo 'selected="selected"'; ?> >20</option>
-	<option value="21" <?php if($day_end == 21) echo 'selected="selected"'; ?> >21</option>
-	<option value="22" <?php if($day_end == 22) echo 'selected="selected"'; ?> >22</option>
-	<option value="23" <?php if($day_end == 23) echo 'selected="selected"'; ?> >23</option>
-	<option value="24" <?php if($day_end == 24) echo 'selected="selected"'; ?> >24</option>
-	<option value="25" <?php if($day_end == 25) echo 'selected="selected"'; ?> >25</option>
-	<option value="26" <?php if($day_end == 26) echo 'selected="selected"'; ?> >26</option>
-	<option value="27" <?php if($day_end == 27) echo 'selected="selected"'; ?> >27</option>
-	<option value="28" <?php if($day_end == 28) echo 'selected="selected"'; ?> >28</option>
-	<option value="29" <?php if($day_end == 29) echo 'selected="selected"'; ?> >29</option>
-	<option value="30" <?php if($day_end == 30) echo 'selected="selected"'; ?> >30</option>
-	<option value="31" <?php if($day_end == 31) echo 'selected="selected"'; ?> >31</option>
-  </select>
-  /
-  <select name="month_end" <?php echo $end_month_disabled; ?> >
-	<option value="1">01</option>
-	<option value="2" <?php if($month_end == 2) echo 'selected="selected"'; ?> >02</option>
-	<option value="3" <?php if($month_end == 3) echo 'selected="selected"'; ?> >03</option>
-	<option value="4" <?php if($month_end == 4) echo 'selected="selected"'; ?> >04</option>
-	<option value="5" <?php if($month_end == 5) echo 'selected="selected"'; ?> >05</option>
-	<option value="6" <?php if($month_end == 6) echo 'selected="selected"'; ?> >06</option>
-	<option value="7" <?php if($month_end == 7) echo 'selected="selected"'; ?> >07</option>
-	<option value="8" <?php if($month_end == 8) echo 'selected="selected"'; ?> >08</option>
-	<option value="9" <?php if($month_end == 9) echo 'selected="selected"'; ?> >09</option>
-	<option value="10" <?php if($month_end == 10) echo 'selected="selected"'; ?> >10</option>
-	<option value="11" <?php if($month_end == 11) echo 'selected="selected"'; ?> >11</option>
-	<option value="12" <?php if($month_end == 12) echo 'selected="selected"'; ?> >12</option>
-  </select>
-  /
-  <select name="year_end" <?php echo $end_year_disabled; ?>>
-
-<?php
-for($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
-?>
-	<option value="<?php echo $i; ?>" <?php if($year_end == $i) echo 'selected="selected"'; ?> ><?php echo $i; ?></option>
-<?php
-}
-?>
-  </select>
-  
-  <br />  <br />
-     <?php echo get_lang('SessionVisibility') ?> 
-    <select name="session_visibility" style="width:250px;">
-        <?php
-        $visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('SessionReadOnly'), SESSION_VISIBLE=>get_lang('SessionAccessible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('SessionNotAccessible')));
-        foreach($visibility_list as $key=>$item): ?>
-        <option value="<?php echo $key; ?>" <?php if($key == $infos['visibility']) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
-        <?php endforeach; ?>
-    </select>
+     
     
-  </div>  
-  </td>
-</tr>
-
-
-<tr>
-    <td>&nbsp;</td>
-    <td>
-        <button class="save" type="submit" value="<?php echo get_lang('ModifyThisSession') ?>"><?php echo get_lang('ModifyThisSession') ?></button>
-    </td>
-</tr>
-
-</table>
-
+   
+    
+    
+    <div class="row">
+        <div class="label">
+        </div>
+        <div class="formw">
+            <button class="save" type="submit" value="<?php echo get_lang('ModifyThisSession') ?>"><?php echo get_lang('ModifyThisSession') ?></button>    
+        </div>        
+    </div>
+</fieldset>
 </form>
+
 <script type="text/javascript">
 
 <?php if($year_start=="0000") echo "setDisable(document.form.nolimit);\r\n"; ?>

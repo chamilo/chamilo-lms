@@ -421,7 +421,7 @@ $ReviewQuestions = "Review selected questions";
 $YouTriedToResolveThisExerciseEarlier = "You have tried to resolve this question earlier";
 $ThereAreNoQuestionsForThisExercise = "There are no questions for this exercise";
 // question category
-$QuestionByCategory = "question(s) par catégories";
+$QuestionByCategory = "question(s) by categories";
 $QuestionLowerCase = "question";
 $QuestionUpperCaseFirstLetter = "Question";
 $QuestionsLowerCase = "questions";
@@ -456,12 +456,12 @@ $FilterByGroup = "Filtrer l'affichage par groupe : ";
 $DoFilter = "Filtrer";
 $CreateQuestionOutsideExercice = "Gestion de question HORS EXERCICE";
 $ByCategory = "par catégorie";
-$yesWithCategoriesShuffled = "Oui avec les catégories mélangées";
-$yesWithCategoriesSorted = "Oui avec les catégories triées par ordre alphabétique";
-$manageAllQuestions	= "Modifier/Supprimer des questions - Créer des questions hors test";
-$pleaseSelectSomeRandomQuestion = "Éditez le test et selectionner le nombre de questions aléatoires à utiliser.";
-$mustBeInATest = "Vous devez être dans un test pour récupérer des questions d'un autre cours.";
+$YesWithCategoriesShuffled = "Oui avec les catégories mélangées";
+$YesWithCategoriesSorted = "Oui avec les catégories triées par ordre alphabétique";
+$ManageAllQuestions	= "Modifier/Supprimer des questions - Créer des questions hors test";
+$PleaseSelectSomeRandomQuestion = "Éditez le test et selectionner le nombre de questions aléatoires à utiliser.";
+$MustBeInATest = "Vous devez être dans un test pour récupérer des questions d'un autre cours.";
 $RemoveFromTest = "Ôter la question du test.";
 $ChoiceQuestionType = "Création d'une question hors test.<br/>Choisissez le type de la question que vous souhaitez ajouter.";
-$addQuestionToTest = "Ajouter des questions au test";
+$AddQuestionToTest = "Ajouter des questions au test";
 ?>

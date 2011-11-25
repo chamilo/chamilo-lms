@@ -58,13 +58,21 @@ if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
 // Section for the tabs.
 $this_section = SECTION_COURSES;
 
-// Acces rights: anonymous users can't do anything usefull here.
+// Access rights: anonymous users can't do anything useful here.
 api_block_anonymous_users();
 
-if (!(api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course())) {
-	if (api_get_setting('allow_students_to_browse_courses') == 'false') {
-		api_not_allowed();
-	}
+$user_can_view_page = false;
+
+//For students
+if (api_get_setting('allow_students_to_browse_courses') == 'false') {
+    $user_can_view_page = false;
+} else {
+    $user_can_view_page = true;
+}
+
+//For teachers/admins
+if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
+    $user_can_view_page = true;
 }
 
 // filter actions
@@ -86,7 +94,6 @@ if ($action == 'subscribe') {
 if ($action == 'display_random_courses' || $action == 'display_courses' ) {
 	$nameTools = get_lang('CourseManagement');
 }
-
 
 // Breadcrumbs.
 $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'user_portal.php', 'name' => get_lang('MyCourses'));
@@ -180,12 +187,18 @@ switch ($action) {
         $courses_controller->categories_list($action);
         break;
     case 'deletecoursecategory':
-    case 'sortmycourses':
         $courses_controller->courses_list($action);
         break;
-    case 'subscribe':
+    case 'sortmycourses':        
+        $courses_controller->courses_list($action);
+        break;
+    case 'subscribe':                
     case 'display_random_courses':
-        $courses_controller->courses_categories($action);
+        if ($user_can_view_page) {
+            $courses_controller->courses_categories($action);
+        } else {
+            api_not_allowed();
+        }            
         break;
     case 'display_courses':
         $courses_controller->courses_categories($action, $_GET['category_code']);

@@ -3,17 +3,14 @@
 
 $language_file = 'admin';
 $cidReset = true;
-require ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $tool_name = get_lang('TermsAndConditions');
 Display :: display_header($tool_name);
 
-require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'security.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'legal.lib.php');
+require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 
 $parameters['sec_token'] = Security::get_token();
 

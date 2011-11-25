@@ -107,7 +107,7 @@ foreach ($categories as $index => $category) {
                 if (!empty($users)) {
             		foreach ($users as $index => $user) {
             			$user_info = api_get_user_info($user);
-            			echo '<li>'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</li>';
+            			echo '<li>'.api_get_person_name($user_info['firstName'], $user_info['lastName']).' ('.$user_info['username'].')</li>';
             		}            	
                 } else {
                     //echo Display::tag('li', get_lang('NoStudents'));            

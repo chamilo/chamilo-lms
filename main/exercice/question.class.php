@@ -1152,9 +1152,9 @@ abstract class Question
 
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw" >{element}</div></div>','questionName');
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionLevel');
-		// -------------------------------
+		// 
 		// Enrich question		
-		// -------------------------------
+		// 
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
 		// default content
@@ -1184,9 +1184,9 @@ abstract class Question
 
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionDescription');
 
-		// -------------------------------
+		// 
 		// Advanced parameters
-		// -------------------------------
+		// 
 		// question level
 		//@todo move levles into a table
 		$select_level = array (1,2,3,4,5);

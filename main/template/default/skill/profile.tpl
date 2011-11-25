@@ -118,7 +118,7 @@ function checkLength( o, n, min, max ) {
 }    
 </script>
 
-<h1>{"SearchSkills"|get_lang}</h1>
+<h2>{"SearchSkills"|get_lang}</h2>
 
 {$form}
 
@@ -164,7 +164,7 @@ function checkLength( o, n, min, max ) {
                         {$user.total_found_skills} / {$total_search_skills}                
                     {foreach $user['skills'] as $skill_data}                 
                         <li>
-                            <span class="label_tag notice">{$skill_list[$skill_data.skill_id].name}</span>
+                            <span class="label_tag skill">{$skill_list[$skill_data.skill_id].name}</span>
                             {if $skill_data.found}
                                  * I have this skill * 
                             {/if} 

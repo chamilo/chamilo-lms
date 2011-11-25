@@ -12,7 +12,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -66,10 +65,10 @@ $teachers = array();
 
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
 while ($obj = Database::fetch_object($res)) {
+    
 	if (!array_key_exists($obj->user_id,$course_teachers)) {
 		$teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 	}
-
 
 	if ($course['tutor_name']==$course_teachers[$obj->user_id]) {
 		$course['tutor_name']=$obj->user_id;
@@ -99,15 +98,16 @@ $form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('Only
 
 $form->applyFilter('visual_code','strtoupper');
 $form->applyFilter('visual_code','html_filter');
+
 //$form->add_textfield('tutor_name', get_lang('CourseTitular'));
-$form->addElement('select', 'tutor_name', get_lang('CourseTitular'), $platform_teachers, array('style'=>'width:350px','id'=>'tutor_name_id', 'class'=>'chzn-select'));
-$form->applyFilter('tutor_name','html_filter');
+//$form->addElement('select', 'tutor_name', get_lang('CourseTitular'), $platform_teachers, array('style'=>'width:350px','id'=>'tutor_name_id', 'class'=>'chzn-select'));
+//$form->applyFilter('tutor_name','html_filter');
 
 //$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple size="4" style="width: 150px;"');
 
 $group=array();
-$group[] = FormValidator::createElement('select', 'platform_teachers', '', $teachers,        'id="platform_teachers" multiple=multiple size="4" style="width:280px;"');
-$group[] = FormValidator::createElement('select', 'course_teachers', '',   $course_teachers, 'id="course_teachers" multiple=multiple size="4" style="width:280px;"');
+$group[] = FormValidator::createElement('select', 'platform_teachers', '', $teachers,        ' id="platform_teachers" multiple=multiple size="4" style="width:300px;"');
+$group[] = FormValidator::createElement('select', 'course_teachers', '',   $course_teachers, ' id="course_teachers" multiple=multiple size="4" style="width:300px;"');
 
 $element_template = <<<EOT
 	<div class="row">
@@ -146,14 +146,26 @@ $form->applyFilter('department_url','trim');
 
 $form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));
 $form->applyFilter('select_language','html_filter');
-$form->addElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
-$form->addElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
-$form->addElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
-$form->addElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
-$form->addElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
-$form->addElement('radio', 'subscribe', null, get_lang('Denied'), 0);
-$form->addElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
-$form->addElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
+
+$group = array();
+$group[]= $form->createElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
+$group[]= $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
+$group[]= $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
+$group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
+$form->addGroup($group,'', get_lang('CourseAccess'), '<br />');
+
+
+$group = array();
+$group[]= $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
+$group[]= $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
+$form->addGroup($group,'', get_lang('Subscription'), '<br />');
+
+$group = array();
+$group[]= $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
+$group[]= $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
+$form->addGroup($group,'', get_lang('Unsubscription'), '<br />');
+
+
 $form->addElement('text','disk_quota',get_lang('CourseQuota'));
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'),'required');
 $form->addRule('disk_quota',get_lang('ThisFieldShouldBeNumeric'),'numeric');

@@ -219,7 +219,7 @@ class Category implements GradebookItem
 			$sql .= ' visible = '.intval($visible);
 			$paramcount ++;
 		}
-		//echo $sql;
+		//echo $sql.'<br />';
 		$result = Database::query($sql);
         $allcat = array();		
 		if (Database::num_rows($result) > 0) {
@@ -488,35 +488,43 @@ class Category implements GradebookItem
 		}
 
 		// calculate score
-		$rescount = 0;
-		$ressum = 0;
-		$weightsum = 0;
+		$rescount     = 0;
+		$ressum       = 0;
+		$weightsum    = 0;
 
 		if (!empty($cats)) {
 			foreach ($cats as $cat) {
-				$catres = $cat->calc_score ($stud_id);     // recursive call
-				if (isset($catres) && $cat->get_weight() != 0) {
-					$catweight = $cat->get_weight();
+				$catres = $cat->calc_score($stud_id);     // recursive call							
+				if ($cat->get_weight() != 0) {
+					$catweight = $cat->get_weight();                    
 					$rescount++;
 					$weightsum += $catweight;
-					$ressum += (($catres[0]/$catres[1]) * $catweight);
 				}
+                if (isset($catres)) {
+                    $ressum += (($catres[0]/$catres[1]) * $catweight);   
+                }
 			}
 		}
+        
+        //var_dump($weightsum);
 		if (!empty($evals)) {
 			foreach ($evals as $eval) {
-				$evalres = $eval->calc_score($stud_id);
+				$evalres = $eval->calc_score($stud_id);                
 				if (isset($evalres) && $eval->get_weight() != 0) {
 					$evalweight = $eval->get_weight();
 					$rescount++;
 					$weightsum += $evalweight;
 					$ressum += (($evalres[0]/$evalres[1]) * $evalweight);
+				} else {
+				    
 				}
 			}
 		}
+        
 		if (!empty($links)) {
 			foreach ($links as $link) {			    
-				$linkres = $link->calc_score($stud_id);				
+				$linkres = $link->calc_score($stud_id);
+                
 				if (isset($linkres) && $link->get_weight() != 0) {
 					$linkweight     = $link->get_weight();
 					$link_res_denom = ($linkres[1]==0) ? 1 : $linkres[1];
@@ -526,6 +534,7 @@ class Category implements GradebookItem
 				}
 			}
 		}
+        
 		if ($rescount == 0) {
 			return null;
 		} else {
@@ -997,10 +1006,11 @@ class Category implements GradebookItem
 		// 1 student
  		if (isset($stud_id)) { 
 			// special case: this is the root
-			if ($this->id == 0) {
+			if ($this->id == 0) {			    
 				return Category::get_root_categories_for_student ($stud_id, $course_code, $session_id);
-			} else {				
-				return Category::load(null,null,$course_code,$this->id, api_is_allowed_to_create_course() ? null : 1, $session_id );
+			} else {
+			    				
+				return Category::load(null,null, $course_code, $this->id, api_is_allowed_to_create_course() ? null : 1, $session_id );
 			}
 		} else {// all students
 			// course admin

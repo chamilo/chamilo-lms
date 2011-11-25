@@ -25,7 +25,6 @@ $nameTools = get_lang('ModifInfo');
 
 /*	Libraries */
 require_once api_get_path(INCLUDE_PATH).'conf/course_info.conf.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
 /*	Constants and variables */
@@ -138,9 +137,13 @@ $form->add_textfield('title', get_lang('Title'), true, array('size' => '60'));
 $form->applyFilter('title', 'trim');
 
 //$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
+
+//the teacher doesn't need to change the trainer only the admin can do that
+/*
 $prof = &$form->addElement('select', 'tutor_name', get_lang('Teacher'), $a_profs, array('style'=>'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_name'));
 $form->applyFilter('tutor_name', 'html_filter');
 $prof -> setSelected($s_selected_tutor);
+ * /
 
 /*$visual_code=$form->addElement('text', 'visual_code', get_lang('Code'));
 $visual_code->freeze();
@@ -154,7 +157,7 @@ $form->add_textfield('department_name', get_lang('Department'), false, array('si
 $form->applyFilter('department_name', 'trim');
 
 $form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array('size' => '60'));
-$form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
+//$form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
 
 
 // Picture
@@ -438,6 +441,7 @@ if ($form->validate() && is_settings_editable()) {
 	}
 	unset($value);
 	//visual_code 		    = '".$update_values['visual_code']."',
+    //tutor_name              = '".$update_values['tutor_name']."',
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "UPDATE $table_course SET
 				title 				    = '".$update_values['title']."',				
@@ -448,7 +452,6 @@ if ($form->validate() && is_settings_editable()) {
 				visibility  		    = '".$update_values['visibility']."',
 				subscribe  			    = '".$update_values['subscribe']."',
 				unsubscribe  		    = '".$update_values['unsubscribe']."',
-				tutor_name     		    = '".$update_values['tutor_name']."',
 				legal                   = '".$update_values['legal']."',
 				activate_legal          = '".$update_values['activate_legal']."',                        
 				registration_code 	    = '".$update_values['course_registration_password']."'

@@ -99,9 +99,9 @@ if (api_is_allowed_to_edit(null, true)) {
 				$extra_fields = array_keys($extra_fields);
                 
 				if ($sort_by_first_name) {
-					$a_users[0] = array(get_lang('FirstName'), get_lang('LastName'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
+					$a_users[0] = array('id', get_lang('FirstName'), get_lang('LastName'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
 				} else {
-					$a_users[0] = array(get_lang('LastName'), get_lang('FirstName'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
+					$a_users[0] = array('id', get_lang('LastName'), get_lang('FirstName'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
 				}
                 
                 if ($_GET['type'] == 'pdf') {
@@ -140,8 +140,7 @@ if (api_is_allowed_to_edit(null, true)) {
 								foreach($extra_fields as $key => $extra_value) {
 									$user[$key] = $extra_value;
 								}
-							}
-							unset($user['user_id']);
+							}							
 							$data[] = $user;			
                             if ($_GET['type'] == 'pdf') {
                                 if ($is_western_name_order) {
@@ -183,8 +182,7 @@ if (api_is_allowed_to_edit(null, true)) {
 							foreach($extra_fields as $key => $extra_value) {
 								$user[$key] = $extra_value;
 							}
-						}
-						unset($user['user_id']);
+						}						
                         if ($_GET['type'] == 'pdf') {
                             if ($is_western_name_order) {
                                 $user_pdf = array($counter, $user['official_code'], $user['firstname'].', '.$user['lastname'] );
@@ -216,7 +214,8 @@ if (api_is_allowed_to_edit(null, true)) {
 					   $description .= '<tr><td>'.get_lang('Course').': </td><td class="highlight">'.$course_info['name'].'</td>';
 					   $description .= '<tr><td>'.get_lang('Teachers').': </td><td class="highlight">'.CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']).'</td>';
 					   $description .= '<tr><td>'.get_lang('Date').': </td><td class="highlight">'.api_convert_and_format_date(time(), DATE_TIME_FORMAT_LONG).'</td>';
-                       $description .= '</table>';                        
+                       $description .= '</table>';   
+                                            
                        Export::export_table_pdf($a_users, get_lang('UserList'), $header, $description);
                        exit;
 				}
@@ -375,7 +374,7 @@ $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor);
 Display::display_introduction_section(TOOL_USER, 'left');
 $actions = '';
 if ( api_is_allowed_to_edit(null, true)) {
-	echo "<div class=\"actions\">";
+	echo '<div class="actions">';
 
 	// the action links
         if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
@@ -383,7 +382,11 @@ if ( api_is_allowed_to_edit(null, true)) {
             $actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('teacher_subscribe_course.png', get_lang("SubscribeUserToCourseAsTeacher"),'','32')."</a> ";
         }
 		$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a> ';
-	    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a> ';      
+	    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a> ';
+        
+        if (!api_get_session_id()) {
+            $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'),'','32').'</a> ';
+        }      
         
         $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=pdf">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'','32').'</a> ';
         
@@ -544,6 +547,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					$temp[] = $o_course_user['firstname'];
 				}
 
+                $temp[] = $o_course_user['username'];   // 
 				$temp[] = isset($o_course_user['role']) ? $o_course_user['role'] : null;
 				$temp[] = implode(', ', $groups_name); //Group
 				
@@ -669,6 +673,7 @@ if ($is_western_name_order) {
 	$table->set_header($header_nr++, get_lang('LastName'));
 	$table->set_header($header_nr++, get_lang('FirstName'));
 }
+$table->set_header($header_nr++, get_lang('LoginName'));  // 
 $table->set_header($header_nr++, get_lang('Description'), false);
 $table->set_header($header_nr++, get_lang('GroupSingle'), false);
         
@@ -678,9 +683,9 @@ if (api_is_allowed_to_edit(null, true)) {
 	$table->set_header($header_nr++, get_lang('Status'), false);
 	$table->set_header($header_nr++, get_lang('Active'), false);
     if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-        $table->set_column_filter(8, 'active_filter');
+        $table->set_column_filter(9, 'active_filter');
     } else {
-        $table->set_column_filter(7, 'active_filter');
+        $table->set_column_filter(8, 'active_filter');
     }
 	//actions column
 	$table->set_header($header_nr++, get_lang('Action'), false);

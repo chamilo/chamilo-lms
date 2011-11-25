@@ -65,46 +65,19 @@ if (api_is_allowed_to_edit()) {
 		$querypath = $path;
 	}
 	$querypath = Database::escape_string($querypath);
-	
-	//big problem: visible files that are in a hidden folder are included when we do a query for visiblity='v'!!!
-	//so... I do it in a couple of steps:
-	//1st: get all files that are visible in the given path
-	$query = Database::query("SELECT url FROM $tbl_student_publication AS work, $prop_table AS props  
-							  WHERE props.tool='work' AND work.id=props.ref AND work.url LIKE 'work".$querypath."/%' AND work.filetype='file' AND props.visibility='1' AND props.lastedit_user_id='".api_get_user_id()."'");
-	//add them to an array
-	$all_visible_files_path = array();
-	while ($all_visible_files = Database::fetch_assoc($query)) {
-		$all_visible_files_path[] = $all_visible_files['url'];
-	}
-	//2nd: get all folders that are invisible in the given path
-	$query2 = Database::query("SELECT url FROM $tbl_student_publication AS work, $prop_table AS props  
-							   WHERE props.tool='work' AND work.id=props.ref AND work.url LIKE 'work".$querypath."/%' AND work.filetype='file' AND props.visibility<>'1' AND props.lastedit_user_id='".api_get_user_id()."'");
-	
-	//if we get invisible folders, we have to filter out these results from all visible files we found
 
-	if (Database::num_rows($query2) > 0) {
-		//add tem to an array
-		while ($invisible_folders = Database::fetch_assoc($query2)) {
-		//3rd: get all files that are in the found invisible folder (these are "invisible" too)
-			$query3 = Database::query("SELECT url FROM $tbl_student_publication AS work, $prop_table AS props  
-									   WHERE props.tool='work' AND work.id=props.ref AND work.url LIKE 'work".Database::escape_string($invisible_folders['path'])."/%' AND work.filetype='file' AND props.visibility='1' AND props.lastedit_user_id='".api_get_user_id()."'");
-			//add tem to an array
-			while ($files_in_invisible_folder = Database::fetch_assoc($query3)) {
-				$files_in_invisible_folder_path[] = $files_in_invisible_folder['url'];
-			}
-		}
-		//compare the array with visible files and the array with files in invisible folders
-		//and keep the difference (= all visible files that are not in an invisible folder)
-		$files_for_zipfile = diff((array) $all_visible_files_path, (array) $files_in_invisible_folder_path);
-	} else {
-		//no invisible folders found, so all visible files can be added to the zipfile
-		$files_for_zipfile = $all_visible_files_path;
-	}
-	//add all files in our final array to the zipfile
-	for ($i=0;$i<count($files_for_zipfile);$i++) {
-		$files[$files_for_zipfile[$i]] = 'julio';
-		//$zip_folder->add($sys_course_path.$_course['path'].'/'.$files_for_zipfile[$i], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/work'.$remove_dir, PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
-	}
+    $sql = "SELECT url, title FROM $tbl_student_publication AS work, $prop_table AS props  
+            WHERE props.c_id = $course_id AND work.c_id = $course_id AND props.tool='work' AND work.accepted = 1 AND work.id=props.ref AND work.url LIKE 'work".$querypath."/%' AND work.filetype='file' AND 
+                  props.visibility = '1' AND props.insert_user_id='".api_get_user_id()."' ";
+    $query = Database::query($sql);
+    //add tem to the zip file
+    while ($not_deleted_file = Database::fetch_assoc($query)) {
+        if (file_exists($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'])) {
+            $files[basename($not_deleted_file['url'])] = $not_deleted_file['title'];
+            $zip_folder->add($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/work', PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
+        }
+    }   
+    
 }//end for other users
 
 //logging
@@ -114,6 +87,7 @@ event_download(basename($path).'.zip (folder)');
 $name = basename($path).'.zip';
 
 if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
+    
     DocumentManager::file_send_for_download($temp_zip_file, true, $name);    
     @unlink($temp_zip_file);    
     exit;    

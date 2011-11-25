@@ -11,9 +11,7 @@ $language_file = array ('registration','admin','userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;

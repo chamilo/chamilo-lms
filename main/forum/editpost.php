@@ -42,14 +42,13 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // Including additional library scripts.
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $nameTools = get_lang('ToolForum');
 
 /* Including necessary files */
-include 'forumconfig.inc.php';
-include 'forumfunction.inc.php';
+require_once 'forumconfig.inc.php';
+require_once 'forumfunction.inc.php';
 
 $origin = '';
 if (isset($_GET['origin'])) {
@@ -58,17 +57,16 @@ if (isset($_GET['origin'])) {
 
 // javascript
 $htmlHeadXtra[] = '<script>
+    function advanced_parameters() {
+        if(document.getElementById(\'id_qualify\').style.display == \'none\') {
+            document.getElementById(\'id_qualify\').style.display = \'block\';
+            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
 
-        function advanced_parameters() {
-            if(document.getElementById(\'id_qualify\').style.display == \'none\') {
-                document.getElementById(\'id_qualify\').style.display = \'block\';
-                document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-
-            } else {
-                document.getElementById(\'id_qualify\').style.display = \'none\';
-                document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-            }
+        } else {
+            document.getElementById(\'id_qualify\').style.display = \'none\';
+            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
         }
+    }
 </script>';
 
 /* MAIN DISPLAY SECTION */
@@ -78,10 +76,10 @@ $htmlHeadXtra[] = '<script>
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-$current_thread = get_thread_information($_GET['thread']); // Note: This has to be validated that it is an existing thread.
-$current_forum = get_forum_information($_GET['forum']); // Note: This has to be validated that it is an existing forum.
+$current_thread         = get_thread_information($_GET['thread']); // Note: This has to be validated that it is an existing thread.
+$current_forum          = get_forum_information($_GET['forum']); // Note: This has to be validated that it is an existing forum.
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
-$current_post = get_post_information($_GET['post']);
+$current_post           = get_post_information($_GET['post']);
 
 /* Header and Breadcrumbs */
 
@@ -115,9 +113,9 @@ if ($origin == 'group') {
 /* Resource Linker */
 
 if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Resources')) {
-    $_SESSION['formelements'] = $_POST;
-    $_SESSION['origin'] = $_SERVER['REQUEST_URI'];
-    $_SESSION['breadcrumbs'] = $interbreadcrumb;
+    $_SESSION['formelements']   = $_POST;
+    $_SESSION['origin']         = $_SERVER['REQUEST_URI'];
+    $_SESSION['breadcrumbs']    = $interbreadcrumb;
     header('Location: ../resourcelinker/resourcelinker.php');
 }
 $table_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -175,8 +173,6 @@ if (!api_is_allowed_to_edit(null, true) AND $current_forum['allow_edit'] == 0 &&
         exit;
     }
 }
-
-
 
 // Action links
 if ($origin != 'learnpath') {

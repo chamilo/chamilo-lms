@@ -15,7 +15,6 @@ $cidReset = true;
 // Including some necessary dokeos files.
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;

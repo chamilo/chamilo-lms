@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+
 /**
 * This class provides some functions for statistics
 * @package chamilo.statistics

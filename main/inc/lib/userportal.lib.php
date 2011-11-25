@@ -394,7 +394,15 @@ class IndexManager {
         $content = '<ul class="menulist">';
         
         $content .= Display::tag('li', Display::url(get_lang('SkillsTree'), api_get_path(WEB_CODE_PATH).'admin/skills.php'));
+        
+        $content .= Display::tag('li', Display::url(get_lang('SkillsProfile'), api_get_path(WEB_CODE_PATH).'admin/skills_profile.php'));
+        
+        $content .= Display::tag('li', Display::url(get_lang('SkillsGradebook'), api_get_path(WEB_CODE_PATH).'admin/skills_gradebook.php'));
+        
         $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_tree.php'));
+        
+        
+        
         $content .= '</ul>';
         
         $html = self::show_right_block(get_lang("Skills"), $content);
@@ -702,19 +710,19 @@ class IndexManager {
 	* @return array an array containing all the information of the courses of the given user
 		*/
 	function get_courses_of_user($user_id) {
-			$table_course       = Database::get_main_table(TABLE_MAIN_COURSE);
-	    	$table_course_user  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-			// Secondly we select the courses that are in a category (user_course_cat <> 0) and sort these according to the sort of the category
-			$user_id = intval($user_id);
-			$sql_select_courses = "SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
-			course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
-			course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-			FROM    $table_course       course,
-			$table_course_user  course_rel_user
-			WHERE course.code = course_rel_user.course_code
-			AND   course_rel_user.user_id = '".$user_id."'
-	                                AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-	                                ORDER BY course_rel_user.sort ASC";
+		$table_course       = Database::get_main_table(TABLE_MAIN_COURSE);
+    	$table_course_user  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+		// Secondly we select the courses that are in a category (user_course_cat <> 0) and sort these according to the sort of the category
+		$user_id = intval($user_id);
+		$sql_select_courses = "SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
+    		course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
+    		course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+    		FROM    $table_course       course,
+    		$table_course_user  course_rel_user
+    		WHERE course.code = course_rel_user.course_code
+    		AND   course_rel_user.user_id = '".$user_id."'
+                                    AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                                    ORDER BY course_rel_user.sort ASC";
 	    $result = Database::query($sql_select_courses);
 	    $courses = array();
 	    while ($row = Database::fetch_array($result)) {
@@ -949,36 +957,33 @@ class IndexManager {
 		}
 	
 		
-		// My account section.
-		if ($show_menu) {
-			$my_account_content = '<ul class="menulist">';
-			if ($show_create_link) {
-				$my_account_content .= '<li><a href="main/create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
-			}
-			if ($show_course_link) {
-				if (!api_is_drh()) {
-					$my_account_content .=  '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
-		
-					$url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
-					$my_account_content .=  Display::url(get_lang('SortMyCourses'), $url);
-		
-					if (api_get_setting('use_session_mode') == 'true') {
-						if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-							$my_account_content .=  '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
-						} else {
-							$my_account_content .=  '<li><a href="user_portal.php?history=1">'.get_lang('HistoryTrainingSessions').'</a></li>';
-						}
-					}
-				} else {
-					$my_account_content .=  '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
-				}
-			}
-			if ($show_digest_link) {
-				//digest never used?
-				//$my_account_content .= Display :: display_digest($toolsList, $digest, $orderKey, $courses);
-			}
-			$my_account_content .= '</ul>';
+		// My account section		
+		$my_account_content = '<ul class="menulist">';
+		if ($show_create_link) {
+			$my_account_content .= '<li><a href="main/create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
 		}
+        
+        //Sort courses
+        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
+        $my_account_content .=  Display::url(get_lang('SortMyCourses'), $url);
+
+        //Course management                
+		if ($show_course_link) {
+			if (!api_is_drh()) {
+				$my_account_content .=  '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
+	
+				if (api_get_setting('use_session_mode') == 'true') {
+					if (isset($_GET['history']) && intval($_GET['history']) == 1) {
+						$my_account_content .=  '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
+					} else {
+						$my_account_content .=  '<li><a href="user_portal.php?history=1">'.get_lang('HistoryTrainingSessions').'</a></li>';
+					}
+				}
+			} else {
+				$my_account_content .=  '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
+			}
+		}
+		$my_account_content .= '</ul>';
 		
 		if (!empty($my_account_content)) {
 			$html =  self::show_right_block(get_lang('MenuUser'), $my_account_content);

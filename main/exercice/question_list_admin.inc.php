@@ -30,7 +30,6 @@ if ($deleteQuestion) {
 		if ($objExercise->removeFromList($deleteQuestion)) {
 			$nbrQuestions--;
 		}		
-		//Random -1 if 
 	}
 	// destruction of the Question object
 	unset($objQuestionTmp);

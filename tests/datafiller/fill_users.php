@@ -7,8 +7,7 @@
 /**
  * Initialisation section
  */
-//require_once '../../main/inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+
 /**
  * Loads the data and injects it into the Chamilo database, using the Chamilo
  * internal functions.

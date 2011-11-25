@@ -965,8 +965,7 @@ function _api_format_user($user) {
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version 21 September 2004
  */
-function api_get_user_info($user_id = '') {
-    global $tbl_user;
+function api_get_user_info($user_id = '') {    
     if ($user_id == '') {
         return _api_format_user($GLOBALS['_user']);
     }
@@ -987,8 +986,7 @@ function api_get_user_info($user_id = '') {
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 function api_get_user_info_from_username($username = '') {
-    if (empty($username)) { return false; }
-    global $tbl_user;
+    if (empty($username)) { return false; }    
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE username='".Database::escape_string($username)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
@@ -1128,6 +1126,7 @@ function api_get_course_info($course_code = null) {
             $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
             $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
             $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
+            $_course['directory'    ]         = $course_data['directory'      ];
             $_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
             $_course['db_name'      ]         = $course_data['db_name'];         // 
             $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
@@ -1146,6 +1145,7 @@ function api_get_course_info($course_code = null) {
 
             // The real_id is an integer. It is mandatory for future implementations.
             $_course['real_id'     ]          = $course_data['id'              ];
+            $_course['course_language']       = $course_data['course_language'];
         }
         return $_course;
     }
@@ -1183,6 +1183,7 @@ function api_get_course_info_by_id($id = null) {
             $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
             $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
             $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
+            $_course['directory'    ]         = $course_data['directory'      ];
             $_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
             $_course['db_name'      ]         = $course_data['db_name'         ];
             $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
@@ -1190,6 +1191,7 @@ function api_get_course_info_by_id($id = null) {
             $_course['language'     ]         = $course_data['course_language'];
             $_course['extLink'      ]['url' ] = $course_data['department_url' ];
             $_course['extLink'      ]['name'] = $course_data['department_name'];
+            
             $_course['categoryCode' ]         = $course_data['faCode'         ];
             $_course['categoryName' ]         = $course_data['faName'         ];
 
@@ -1199,6 +1201,7 @@ function api_get_course_info_by_id($id = null) {
 
             $_course['real_id'      ]         = $course_data['id'              ];            
             $_course['title'        ]         = $course_data['title'           ];
+            $_course['course_language']       = $course_data['course_language'];
 
         }
         return $_course;
@@ -2902,9 +2905,14 @@ function api_get_track_item_property_history($tool, $ref) {
 function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0) {
 
     $course_info    = api_get_course_info_by_id($course_id);
+    if (empty($course_info)) {
+        return false;
+    }
+    
     $tool           = Database::escape_string($tool);
     $ref            = intval($ref);
-
+    $course_id      = intval($course_id);
+    
     // Definition of tables.
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $course_id	 = $course_info['real_id'];

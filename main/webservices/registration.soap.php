@@ -1989,7 +1989,7 @@ $server->register('WSCreateCourse',			// method name
 // Define the method WSCreateCourse
 function WSCreateCourse($params) {
 
-    global $firstExpirationDelay, $_configuration;
+    global $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -2006,15 +2006,16 @@ function WSCreateCourse($params) {
 
     foreach ($courses_params as $course_param) {
 
-        $title = $course_param['title'];
-        $category_code = $course_param['category_code'];
-        $wanted_code = $course_param['wanted_code'];
-        $tutor_name = $course_param['tutor_name'];
-        $course_language = 'english'; // TODO: A hard-coded value.
-        $original_course_id_name = $course_param['original_course_id_name'];
-        $original_course_id_value = $course_param['original_course_id_value'];
-        $orig_course_id_value[] = $course_param['original_course_id_value'];
-        $visibility = null;
+        $title                      = $course_param['title'];
+        $category_code              = $course_param['category_code'];
+        $wanted_code                = $course_param['wanted_code'];
+        $tutor_name                 = $course_param['tutor_name'];
+        $course_language            = 'english'; // TODO: A hard-coded value.
+        $original_course_id_name    = $course_param['original_course_id_name'];
+        $original_course_id_value   = $course_param['original_course_id_value'];
+        $orig_course_id_value[]     = $course_param['original_course_id_value'];        
+        $visibility                 = null;
+        
         if($course_param['visibility'] && $course_param['visibility'] >= 0 && $course_param['visibility'] <= 3) {
             $visibility = $course_param['visibility'];
         }
@@ -2058,10 +2059,6 @@ function WSCreateCourse($params) {
             $course_language = $course_param['course_language'];
         }
 
-        $dbnamelength = strlen($_configuration['db_prefix']);
-        //Ensure the database prefix + database name do not get over 40 characters
-        $maxlength = 40 - $dbnamelength;
-
         // Set default values
         if (isset($_user['language']) && $_user['language'] != '') {
             $values['course_language'] = $_user['language'];
@@ -2070,51 +2067,43 @@ function WSCreateCourse($params) {
         }
 
         $values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
+            
+        $params = array();
+        $params['title']            = $title;
+        $params['wanted_code']      = $wanted_code;
+        $params['category_code']    = $category_code;
+        $params['tutor_name']       = $tutor_name;
+        $params['course_language']  = $course_language;
+        $params['user_id']          = api_get_user_id();
+        $params['visibility']       = $visibility;
+        
+        $course_info = CourseManager::create_course($params);           
+                                    
+        if (!empty($course_info)) {
+            $course_code = $course_info['code'];
+    
+            // Save new fieldlabel into course_field table
+            $field_id = CourseManager::create_course_extra_field($original_course_id_name, 1, $original_course_id_name);
 
-        if (trim($wanted_code) == '') {
-            $wanted_code = generate_course_code(substr($title, 0, $maxlength));
-        }
+            // Save the external system's id into user_field_value table.
+            $res = CourseManager::update_course_extra_field_value($course_code, $original_course_id_name, $original_course_id_value);
 
-        $keys = define_course_keys($wanted_code, '', $_configuration['db_prefix']);
-
-        $sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"',Database :: escape_string($wanted_code));
-        $result_check = Database::query($sql_check); // I don't know why this api function doesn't work...
-        if (Database::num_rows($result_check) < 1) {
-            if (sizeof($keys)) {
-                $visual_code = $keys['currentCourseCode'];
-                $code = $keys['currentCourseId'];
-                $db_name = $keys['currentCourseDbName'];
-                $directory = $keys['currentCourseRepository'];
-                $expiration_date = time() + $firstExpirationDelay;
-                prepare_course_repository($directory, $code);
-                update_Db_course($db_name);
-                $pictures_array = fill_course_repository($directory);
-                fill_Db_course($db_name, $directory, $course_language, $pictures_array);
-                $return = register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date, array(), $visibility);
-
-                // Save new fieldlabel into course_field table.
-                $field_id = CourseManager::create_course_extra_field($original_course_id_name, 1, $original_course_id_name);
-
-                // Save the external system's id into user_field_value table.
-                $res = CourseManager::update_course_extra_field_value($code, $original_course_id_name, $original_course_id_value);
-
-                if (is_array($extra_list) && count($extra_list) > 0) {
-                    foreach ($extra_list as $extra) {
-                        $extra_field_name = $extra['field_name'];
-                        $extra_field_value = $extra['field_value'];
-                        // Save new fieldlabel into course_field table.
-                        $field_id = CourseManager::create_course_extra_field($extra_field_name, 1, $extra_field_name);
-                        // Save the external system's id into course_field_value table.
-                        $res = CourseManager::update_course_extra_field_value($code, $extra_field_name, $extra_field_value);
-                    }
+            if (is_array($extra_list) && count($extra_list) > 0) {
+                foreach ($extra_list as $extra) {
+                    $extra_field_name  = $extra['field_name'];
+                    $extra_field_value = $extra['field_value'];
+                    // Save new fieldlabel into course_field table.
+                    $field_id = CourseManager::create_course_extra_field($extra_field_name, 1, $extra_field_name);
+                    // Save the external system's id into course_field_value table.
+                    $res = CourseManager::update_course_extra_field_value($course_code, $extra_field_name, $extra_field_value);
                 }
             }
-            $results[] = $code;
-            continue;
+            $results[] = $course_code;
         } else {
-            $results[] = 0;
-            continue;
+            $results[] = 0;    
         }
+        continue;
+    }
 
     } // end principal foreach
 

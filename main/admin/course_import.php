@@ -72,6 +72,7 @@ function validate_data($courses) {
             $sql = "SELECT * FROM $category_table WHERE code = '".Database::escape_string($course['CourseCategory'])."'";
             $res = Database::query($sql);
             if (Database::num_rows($res) == 0) {
+                //@todo this is so bad even all lang variables are wrong ...
                 $course['error'] = get_lang('UnkownCategoryCourseCode').' ('.$course['CourseCategory'].')';
                 $errors[] = $course;
             }
@@ -84,16 +85,14 @@ function validate_data($courses) {
  * Saves imported data.
  * @param array   List of courses
  */
-function save_data($courses) {
-    global $_configuration, $firstExpirationDelay;
+function save_data($courses) {    
     global $purification_option_for_usernames;
 
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $msg = '';
+    
     foreach ($courses as $index => $course) {
         $course_language = api_get_valid_language($course['Language']);
-        $keys = define_course_keys($course['Code'], '', $_configuration['db_prefix']);
-
         $titular = $uidCreator = $username = '';
 
         // Get username from name (firstname lastname).
@@ -120,19 +119,23 @@ function save_data($courses) {
             $titular    = $course['Teacher'];
             $uidCreator = 1;
         }
-
-        $visual_code = $keys['currentCourseCode'];
-        $code = $keys['currentCourseId'];
-        $db_name = $keys['currentCourseDbName'];
-        $directory = $keys['currentCourseRepository'];
-        $expiration_date = time() + $firstExpirationDelay;
-        prepare_course_repository($directory, $code);
-        update_Db_course($db_name);
-        fill_course_repository($directory);
-        fill_Db_course($db_name, $directory, $course_language, array());
-        register_course($code, $visual_code, $directory, $db_name, $titular, $course['CourseCategory'], $course['Title'], $course_language, $uidCreator, $expiration_date);
-        $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$directory.'/">'.$code.'</a> '.get_lang('Created').'<br />';
+        
+        $params = array();
+        $params['title']            = $course['Title'];
+        $params['wanted_code']      = $course['Code'];         
+        $params['tutor_name']       = $titular;
+        $params['course_category']  = $course['CourseCategory'];
+        $params['course_category']  = $course['CourseCategory'];
+        $params['course_language']  = $course_language;
+        $params['user_id']          = $uidCreator;
+         
+         
+        $course_info = CourseManager::create_course($params);
+        if (!empty($course_info)) {
+            $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/">'.$course_info['title'].'</a> '.get_lang('Created').'<br />';
+        }
     }
+    
     if (!empty($msg)) {
         Display::display_normal_message($msg, false);
     }
@@ -159,12 +162,8 @@ api_protect_admin_script();
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'import.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
+
 if (is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
@@ -188,7 +187,7 @@ if ($_POST['formSent']) {
         if (!in_array($ext_import_file, $allowed_file_mimetype)) {
             Display :: display_error_message(get_lang('YouMustImportAFileAccordingToSelectedOption'));
         } else {
-            $courses = parse_csv_data($_FILES['import_file']['tmp_name']);
+            $courses = parse_csv_data($_FILES['import_file']['tmp_name']);            
             $errors = validate_data($courses);
             if (count($errors) == 0) {
                 save_data($courses);
@@ -240,5 +239,4 @@ BIO0015;Biology;BIO;username;english
 </blockquote>
 
 <?php
-
 Display :: display_footer();

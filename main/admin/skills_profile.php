@@ -13,15 +13,15 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
-//api_protect_admin_script();
+api_protect_admin_script();
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
 $htmlHeadXtra[] = api_get_jquery_ui_js();
 
-$skill  = new Skill();
-$skill_profile  = new SkillProfile();
+$skill           = new Skill();
+$skill_profile   = new SkillProfile();
 $skill_rel_user  = new SkillRelUser();
 
 $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php';

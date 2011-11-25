@@ -9,7 +9,6 @@
  */
 //require_once '../../main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 /**
  * Loads the data and injects it into the Chamilo database, using the Chamilo
  * internal functions.

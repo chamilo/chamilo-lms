@@ -10,7 +10,6 @@
 $language_file = array ('registration','admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
 
 global $_configuration;
@@ -163,15 +162,11 @@ function courses_of_user($arg) {
     //$newContent = 'werkt het? en met een beetje meer text, wordt dat goed opgelost? ';
     $personal_course_list = UserManager::get_personal_session_course_list($arg);
     $newContent = '';
-    if(count($personal_course_list)>0)
-    {
-	    foreach ($personal_course_list as $key=>$course)
-	    {
+    if(count($personal_course_list)>0) {
+	    foreach ($personal_course_list as $key=>$course) {
 	    	$newContent .= $course['i'].'<br />';
 	    }
-    }
-    else
-    {
+    } else {
     	$newContent .= '- '.get_lang('None').' -<br />';
     }
     $newContent = api_convert_encoding($newContent,'utf-8',api_get_system_encoding());

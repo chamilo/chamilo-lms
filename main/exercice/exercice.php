@@ -116,11 +116,11 @@ if (empty ($exerciseId)) {
 if (empty ($file)) {
 	$file = Database :: escape_string($_REQUEST['file']);
 }
-// ------------------------------- hubr
+// 
 // filter display by student group
 // if $_GET['filterByGroup'] = -1 => do not filter
 // else, filter by group_id (0 for no group)
-// -------------------------------
+// 
 $filterByGroup = -1;
 if (isset($_GET['filterByGroup']) && is_numeric($_GET['filterByGroup'])) {
 	$filterByGroup = Security::remove_XSS($_GET['filterByGroup']);
@@ -652,9 +652,9 @@ if ($show == 'result') {
     			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_uncheck.png', get_lang('ShowUnCorrectedOnly'),'','32').'</a>';
     		}
     		echo $view_result;
-			// -----------------------------hubr
+			// 
 			// filter by student group menu
-			// -----------------------------
+			// 
 			$exercice_id = intval($_GET['exerciseId']);
             echo "<script type='text/javascript'>";
 			echo "	    function doFilterByGroup() {";
@@ -664,9 +664,8 @@ if ($show == 'result') {
 			echo "	    }";
 			echo "        </script>";
 			echo "&nbsp;&nbsp;";
-			echo Display::return_icon('group.gif', '');
-			echo get_lang("FilterByGroup")."&nbsp;".displayGroupMenu("groupFilter", $filterByGroup, "doFilterByGroup()")."&nbsp;";
-			// -----------------------------    		
+			echo Display::return_icon('group.gif', get_lang("FilterByGroup"));
+			echo displayGroupMenu("groupFilter", $filterByGroup, "doFilterByGroup()")."&nbsp;";
 		}
 	}
 }
@@ -723,7 +722,7 @@ if ($show == 'test') {
             
             if ($is_allowedToEdit) {
                 $headers = array(array('name' => get_lang('ExerciseName')), 
-                                 array('name' => get_lang('QuantityQuestions'), 'params' => array('width'=>'80px')), 
+                                 array('name' => get_lang('QuantityQuestions'), 'params' => array('width'=>'100px')), 
                                  array('name' => get_lang('Actions'), 'params' => array('width'=>'180px')));
             } else {
             	$headers = array(array('name' => get_lang('ExerciseName')), 
@@ -861,19 +860,24 @@ if ($show == 'test') {
 
 					// Number of questions
                     $random_label = '';                    
-                    if ($row['random'] > 0) {
+                    if ($row['random'] > 0 || $row['random'] == -1) {
+                   	    // if random == -1 means use random questions with all questions
+                   	    $random_number_of_question = $row['random'];
+                   	    if ($random_number_of_question == -1) {
+                   	        $random_number_of_question = $rowi;
+                   	    }
 						if ($row['random_by_category'] > 0) {	
 							if (!class_exists("testcategory.class.php")) include_once "testcategory.class.php" ;
-							$nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($exid, $row['random']);
+							$nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($exid, $random_number_of_question);
 							$number_of_questions .= $nbQuestionsTotal." ";
 							$number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase") ;
 							$number_of_questions .= " - ";
-							$number_of_questions .= $row['random'].' '.get_lang('QuestionByCategory');
+							$number_of_questions .= Testcategory::getNumberMaxQuestionByCat($exid).' '.get_lang('QuestionByCategory');
 						} else {
                        		$random_label = ' ('.get_lang('Random').') ';                       	
-                       	    $number_of_questions = $row['random'] . ' ' .$random_label.' '.$textByCategory;
+                       	    $number_of_questions = $random_number_of_question . ' ' .$random_label.' '.$textByCategory;
                        	    //Bug if we set a random value bigger than the real number of questions 
-                       	    if ($row['random'] > $rowi) {
+                       	    if ($random_number_of_question > $rowi) {
     							$number_of_questions = $rowi. ' ' .$random_label;							
                        	    }
                        	}
@@ -1121,12 +1125,13 @@ if ($show == 'result') {
 			$table->set_header(0, get_lang('LastName'));
 			$table->set_header(1, get_lang('FirstName'));    			
 		}		
-		$table->set_header(2, get_lang('Group'));
-		$table->set_header(3, get_lang('Exercice'));
-    	$table->set_header(4, get_lang('Duration'),false);
-    	$table->set_header(5, get_lang('Date'));
-    	$table->set_header(6, get_lang('Score'),false);
-    	$table->set_header(7, get_lang('CorrectTest'), false);   
+		$table->set_header(2, get_lang('LoginName'));
+		$table->set_header(3, get_lang('Group'),false);
+		$table->set_header(4, get_lang('Exercice'),false);
+    	$table->set_header(5, get_lang('Duration'),false);
+    	$table->set_header(6, get_lang('Date'));
+    	$table->set_header(7, get_lang('Score'),false);
+    	$table->set_header(8, get_lang('CorrectTest'), false);   
     	
     } else {
         $table->set_header(0, get_lang('Exercice'));

@@ -685,8 +685,6 @@ function get_action_icon_for_question($in_action, $from_exercice, $in_questionid
 	$res = "";
 	$getParams = "&selected_course=$in_selected_course&courseCategoryId=$in_courseCategoryId&exerciseId=$in_exercice_id&exerciseLevel=$in_exerciseLevel&answerType=$in_answerType&session_id=$in_session_id";
 	
-	echo $getParams."<hr/>";
-	
 	switch ($in_action) {
 		case "delete" :	
 			$res = "<a href='".api_get_self()."?".api_get_cidreq()."&delete=$in_questionid$getParams' onclick='return confirm_your_choice()'>";

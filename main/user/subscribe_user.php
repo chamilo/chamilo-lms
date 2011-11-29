@@ -11,11 +11,14 @@
 // name of the language file that needs to be included
 $language_file = array('registration','admin');
 
-// including the global Dokeos file
 require_once '../inc/global.inc.php';
 
 // the section (for the tabs)
 $this_section = SECTION_COURSES;
+
+// notice for unauthorized people.
+api_protect_course_script(true);
+
 // access restriction
 if (!api_is_allowed_to_edit()) {
 	 api_not_allowed(true);
@@ -157,20 +160,19 @@ if (!empty($_SESSION['session_user_name'])) {
  *  * Get the users to display on the current page.
  */
 function get_number_of_users() {
-
 	global $_configuration;
 
 	// Database table definition
-	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-	$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+	$user_table                    = Database::get_main_table(TABLE_MAIN_USER);
+	$course_user_table             = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+	$tbl_session_rel_course_user   = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+	$table_user_field_values 	   = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
 	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
 
 		if (api_get_session_id() != 0) {
 
-			$sql = "SELECT u.user_id
+			$sql = "SELECT COUNT(u.user_id)
 					FROM $user_table u
 					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".api_get_course_id()."' AND id_session ='".api_get_session_id()."'
 					WHERE cu.id_user IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
@@ -179,17 +181,15 @@ function get_number_of_users() {
 				$url_access_id = api_get_current_access_url_id();
 				if ($url_access_id !=-1) {
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
-					$sql = "SELECT	u.user_id	FROM $user_table u
+					$sql = "SELECT	COUNT(u.user_id) FROM $user_table u
 							LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".api_get_course_id()."' AND id_session ='".api_get_session_id()."'
 							INNER JOIN  $tbl_url_rel_user as url_rel_user
 							ON (url_rel_user.user_id = u.user_id)
 							WHERE cu.id_user IS NULL AND access_url_id= $url_access_id AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 				}
 			}
-
 		} else {
-			$sql = "SELECT 	u.user_id FROM $user_table u LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".api_get_course_id()."'
+			$sql = "SELECT COUNT(u.user_id) FROM $user_table u LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".api_get_course_id()."'
 				    WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 
 			if ($_configuration['multiple_access_urls']) {
@@ -197,7 +197,7 @@ function get_number_of_users() {
 				if ($url_access_id !=-1) {
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-					$sql = "SELECT u.user_id FROM $user_table u
+					$sql = "SELECT COUNT(u.user_id) FROM $user_table u
 						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id AND course_code='".api_get_course_id()."'
 						INNER JOIN  $tbl_url_rel_user as url_rel_user
 						ON (url_rel_user.user_id = u.user_id)
@@ -209,7 +209,7 @@ function get_number_of_users() {
 	} else {
 		// students
 		if (api_get_session_id() != 0) {
-			$sql = "SELECT	u.user_id
+			$sql = "SELECT	COUNT(u.user_id)
 					FROM $user_table u
 					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".api_get_course_id()."' AND id_session ='".api_get_session_id()."'
 					WHERE cu.id_user IS NULL AND u.status<>".DRH." AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
@@ -217,7 +217,7 @@ function get_number_of_users() {
 				$url_access_id = api_get_current_access_url_id();
 				if ($url_access_id !=-1) {
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-					$sql = "SELECT	u.user_id
+					$sql = "SELECT	COUTN(u.user_id)
 							FROM $user_table u
 							LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".api_get_course_id()."' AND id_session ='".api_get_session_id()."'
 							INNER JOIN  $tbl_url_rel_user as url_rel_user
@@ -226,8 +226,7 @@ function get_number_of_users() {
 				}
 			}
 		} else {
-
-			$sql = "SELECT 	u.user_id
+			$sql = "SELECT 	COUNT(u.user_id)
 					FROM $user_table u
 					LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 
@@ -251,7 +250,7 @@ function get_number_of_users() {
 
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-					$sql = "SELECT u.user_id
+					$sql = "SELECT COUNT(u.user_id)
 							FROM $user_table u
 							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
 							INNER JOIN  $tbl_url_rel_user as url_rel_user
@@ -284,11 +283,15 @@ function get_number_of_users() {
 	    }
 	}
     $sql .=" AND u.status <> ".ANONYMOUS." "; 
-	$res = Database::query($sql);	
-	while ($user = Database::fetch_row($res)) {
-		$users[] = $user[0];
+	$res = Database::query($sql);
+    $count_user = 0;
+    
+    if ($res) {	
+	   $row = Database::fetch_row($res);
+	   $count_user = $row[0];	   
 	}
-	$result = Database::num_rows($res);
+	
+	/* @todo seems not to be used
 	// we add 1 for every additional user (a user where the keyword matches one of the additional profile fields)
 	// that is not yet in the course and not yet in the search result
 	if (isset ($_REQUEST['keyword']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true') {
@@ -298,7 +301,9 @@ function get_number_of_users() {
 			}
 		}
 	}
-	return $result;
+    */
+    
+	return $count_user;
 }
 /**
  * Get the users to display on the current page.
@@ -307,10 +312,10 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	global $_course, $_configuration;;
 
 	// Database table definitions
-	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-	$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+	$user_table                    = Database::get_main_table(TABLE_MAIN_USER);
+	$course_user_table             = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+	$tbl_session_rel_course_user   = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+	$table_user_field_values 	   = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
 	// adding teachers
 	$is_western_name_order = api_is_western_name_order();
@@ -318,21 +323,21 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		// adding a teacher through a session
 		if (!empty($_SESSION["id_session"])) {
 			$sql = "SELECT
-					u.user_id AS col0,
-					u.official_code AS col1,
+					u.user_id              AS col0,
+					u.official_code        AS col1,
 					".($is_western_name_order
-					? "u.firstname AS col2,
-					u.lastname AS col3,"
-					: "u.lastname AS col2,
-					u.firstname AS col3,")."
-					u.email 	AS col4,
-					u.active 	AS col5,
-					u.user_id   AS col6
+					? "u.firstname         AS col2,
+					u.lastname             AS col3,"
+					: "u.lastname          AS col2,
+					u.firstname            AS col3,")."
+					u.email 	           AS col4,
+					u.active               AS col5,
+					u.user_id              AS col6
 					FROM $user_table u
 					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user AND course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."' ";
 
 			// applying the filter of the additional user profile fields
-			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
+			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true') {
 				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 				$sql .=	"
 					LEFT JOIN $table_user_field_values field_values
@@ -344,7 +349,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$sql .=	"WHERE cu.id_user IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 			}
 		} else {
-		// adding a teacher NOT through a session
+		     // adding a teacher NOT through a session
 			$sql = "SELECT
 					u.user_id AS col0,
 					u.official_code AS col1,

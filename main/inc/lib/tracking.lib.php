@@ -241,6 +241,7 @@ class Tracking {
 				//345600 = 7 days in seconds
 				if ($currentTimestamp - $timestamp > 604800) {
 					if ($convert_date) {
+					    //@todo this is so bad ...
 						return '<span style="color: #F00;">' . api_format_date($last_login_date, DATE_FORMAT_SHORT) . (api_is_allowed_to_edit()?' <a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /></a>':'').'</span>';
 					} else {
 						return $last_login_date;
@@ -412,7 +413,7 @@ class Tracking {
 
 	/**
 	 * Get count student's exercise attempts
-	 * @param     int     Student id
+	 * @param    int     Student id
 	 * @param    string    Course code
 	 * @param    int        Exercise id
 	 * @param    int        Learning path id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
@@ -420,35 +421,69 @@ class Tracking {
 	 * @return  int     count of attempts
 	 */
 	public function count_student_exercise_attempts($student_id, $course_code, $exercise_id, $lp_id = 0, $lp_item_id = 0, $session_id = 0) {
-
 		$course_code = Database::escape_string($course_code);
-		$course_info = CourseManager :: get_course_information($course_code);
 		$student_id  = intval($student_id);
 		$exercise_id = intval($exercise_id);
-		$session_id = intval($session_id);
+		$session_id  = intval($session_id);
 		$count_attempts = 0;
 
 		if (!empty($lp_id)) $lp_id = intval($lp_id);
 		if (!empty($lp_item_id)) $lp_id = intval($lp_item_id);
 
-		if (!empty($course_info['db_name'])) {
-			$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES, $course_info['db_name']);
+		
+		$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
-			$sql = "SELECT COUNT(ex.exe_id) as essais FROM $tbl_stats_exercices AS ex
-                    WHERE  ex.exe_cours_id = '$course_code'
-                    AND ex.exe_exo_id = $exercise_id
-                    AND orig_lp_id = $lp_id
-                    AND orig_lp_item_id = $lp_item_id
-                    AND exe_user_id= $student_id 
-                    AND session_id = $session_id ";
-			
-			$rs = Database::query($sql);
-			$row = Database::fetch_row($rs);
-			$count_attempts = $row[0];
-		}
+		$sql = "SELECT COUNT(ex.exe_id) as essais FROM $tbl_stats_exercices AS ex
+                WHERE  ex.exe_cours_id = '$course_code'
+                AND ex.exe_exo_id = $exercise_id
+                AND orig_lp_id = $lp_id
+                AND orig_lp_item_id = $lp_item_id
+                AND exe_user_id= $student_id 
+                AND session_id = $session_id ";
+		
+		$rs = Database::query($sql);
+		$row = Database::fetch_row($rs);
+		$count_attempts = $row[0];
+		
 		return $count_attempts;
-
 	}
+
+    /**
+     * Get count student's exercise progress
+     * @param    int       user id
+     * @param    string    course code
+     * @param    int       session id
+    */
+   
+    function get_exercise_student_progress($exercise_list, $user_id, $course_code, $session_id) {
+        $course_code    = Database::escape_string($course_code);
+        $user_id        = intval($user_id);
+        $session_id     = intval($session_id);  
+          
+        if (empty($exercise_list)) {
+            return '0%';
+        }    
+        $tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $exercise_list = array_keys($exercise_list);
+        
+        array_map('intval', $exercise_list);
+                
+        $exercise_list = implode("' ,'", $exercise_list);
+        
+        $sql = "SELECT COUNT(ex.exe_exo_id) FROM $tbl_stats_exercices AS ex
+                    WHERE   ex.exe_cours_id = '$course_code' AND
+                            ex.session_id  = $session_id AND
+                            ex.exe_user_id = $user_id AND ex.exe_exo_id IN ('$exercise_list') ";
+                                                                
+        $rs = Database::query($sql);
+        $count = 0;
+        if ($rs) {
+            $row = Database::fetch_row($rs);
+            $count = $row[0];
+        }        
+        $count = ($count != 0 ) ? 100*round(intval($count)/count($exercise_list), 2) .'%' : '0%';
+        return $count;
+    }
 
 	/**
 	 * Returns the average student progress in the learning paths of the given
@@ -3538,15 +3573,17 @@ class TrackingCourseLog {
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
 
-		$res = Database::query($sql);
-		$users = array ();
-		$t = time();
-		$row = array();
+		$res      = Database::query($sql);
+		$users    = array ();
+		$t        = time();
+		$row      = array();
         
         $course_info = api_get_course_info($course_code);
         
         $total_surveys = 0;
         
+        $total_exercises = get_all_exercises($course_info, $session_id);
+                
         if (empty($session_id)) {
             $survey_user_list = array();
             $survey_list = survey_manager::get_surveys($course_code, $session_id);
@@ -3563,7 +3600,6 @@ class TrackingCourseLog {
         }
         
 		while ($user = Database::fetch_array($res, 'ASSOC')) {
-			//$user['user_id'] = $user['user_id']
 			$user['official_code']  = $user['col0'];
 			if ($is_western_name_order) {
 				$user['lastname']       = $user['col2'];
@@ -3581,12 +3617,18 @@ class TrackingCourseLog {
 				$avg_student_progress=0;
 			}
 			$user['average_progress']   = $avg_student_progress.'%';
+            
+            $total_user_exercise = Tracking::get_exercise_student_progress($total_exercises, $user['user_id'], $course_code, $session_id);
+            
+            $user['exercise_progress']  = $total_user_exercise; 
+            
 
 			if (is_numeric($avg_student_score)) {
 				$user['student_score']  = $avg_student_score.'%';
 			} else {
 				$user['student_score']  = $avg_student_score;
 			}
+            
 			$user['count_assignments']  = Tracking::count_student_assignments($user['user_id'], $course_code, $session_id);
 			$user['count_messages']     = Tracking::count_student_messages($user['user_id'], $course_code, $session_id);
 			$user['first_connection']   = Tracking::get_first_connection_date_on_the_course($user['user_id'], $course_code, $session_id);
@@ -3622,7 +3664,11 @@ class TrackingCourseLog {
                 $user_row[]= $user['lastname'];
             }
             $user_row[]= $user['time'];
+            
             $user_row[]= $user['average_progress'];
+            
+            $user_row[]= $user['exercise_progress'];
+            
             $user_row[]= $user['student_score'];
             $user_row[]= $user['count_assignments'];
             $user_row[]= $user['count_messages'];
@@ -3633,21 +3679,21 @@ class TrackingCourseLog {
             
             $user_row[]= $user['first_connection'];
             $user_row[]= $user['last_connection'];
-            $user_row[]= $user['additional'];
-            
+            $user_row[]= $user['additional'];            
           
             $user_row[]= $user['link'];
      
             $users[] = $user_row;
-            
+         
 			if ($export_csv) {
 			    if (empty($session_id)) {
-				    unset($user_row[12]);
 				    unset($user_row[13]);
+				    unset($user_row[14]);
                 } else {
-                    unset($user_row[11]);
                     unset($user_row[12]);
+                    unset($user_row[13]);
                 }
+            
 				$csv_content[] = $user_row;
 			}
 		}

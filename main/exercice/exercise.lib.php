@@ -1258,8 +1258,8 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_dates = 
 	$TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST);
 	$course_id = api_get_course_int_id();
 	
-    if (!empty($course_info) && !empty($course_info['id'])) {
-    	$course_id = $course_info['id'];
+    if (!empty($course_info) && !empty($course_info['real_id'])) {
+    	$course_id = $course_info['real_id'];
     }    
     
     if ($session_id == -1) {
@@ -1270,8 +1270,7 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_dates = 
     } else {
         //All exercises
     	$conditions = array('where'=>array('active = ? AND  (session_id = 0 OR session_id = ? ) AND c_id = ? ' => array('1', $session_id, $course_id)), 'order'=>'title');
-    }
-    //var_dump($conditions);
+    }    
     return Database::select('*',$TBL_EXERCICES, $conditions);
 }
 

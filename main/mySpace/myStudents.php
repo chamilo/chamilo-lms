@@ -868,7 +868,7 @@ if (empty($_GET['details'])) {
 			while ($exercices = Database :: fetch_array($result_exercices)) {					
 				$exercise_id = intval($exercices['id']);
 				
-				$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id, 0, 0, $session_id);				
+				$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id, 0, 0, $session_id);                				
 				$score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $session_id);                
 
 				$csv_content[] = array (

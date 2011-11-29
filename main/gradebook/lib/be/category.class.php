@@ -415,7 +415,7 @@ class Category implements GradebookItem
 			 .' FROM '.$tbl_grade_categories
 			 ." WHERE name = '".Database::escape_string($name)."'";
 
-		if (api_is_allowed_to_create_course()) {
+		if (api_is_allowed_to_edit()) {
 			$parent = Category::load($parent);
 			$code = $parent[0]->get_course_code();
 			if (isset($code) && $code != '0') {
@@ -584,7 +584,7 @@ class Category implements GradebookItem
 		$sql = 'SELECT *'
 				.' FROM '.$tbl_grade_categories
 				.' WHERE parent_id = 0';
-		if (!api_is_allowed_to_create_course()) {
+		if (!api_is_allowed_to_edit()) {
 			$sql .= ' AND visible = 1';
             //proceed with checks on optional parameters course & session
             if (!empty($course_code)) {
@@ -607,7 +607,7 @@ class Category implements GradebookItem
                     .' AND status = '.STUDENT
                     .')';
             }
-        } elseif (api_is_allowed_to_create_course() && !api_is_platform_admin()) {
+        } elseif (api_is_allowed_to_edit() && !api_is_platform_admin()) {
             //proceed with checks on optional parameters course & session
             if (!empty($course_code)) {
                 // TODO: considering it highly improbable that a user would get here
@@ -822,7 +822,7 @@ class Category implements GradebookItem
 		$targets[] = $root;
 
 		// course or platform admin
-		if (api_is_allowed_to_create_course()) {
+		if (api_is_allowed_to_edit()) {
 			$user = (api_is_platform_admin() ? null : api_get_user_id());
 
 			$cats = Category::get_root_categories_for_teacher($user);
@@ -951,7 +951,7 @@ class Category implements GradebookItem
 			return true;
 		} else {
 			$cats = Category::load(null, null, null, $this->id,
-						api_is_allowed_to_create_course() ? null : 1);
+						api_is_allowed_to_edit() ? null : 1);
 			foreach ($cats as $cat) {
 				if ($cat->has_evaluations_with_results_for_student ($stud_id)) {
 					return true;
@@ -970,10 +970,10 @@ class Category implements GradebookItem
 	 * @param $cats optional: if defined, the categories will be added to this array
 	 */
     public function get_independent_categories_with_result_for_student ($cat_id, $stud_id, $cats = array()) {
-    	$creator = (api_is_allowed_to_create_course() && !api_is_platform_admin()) ? api_get_user_id() : null;
+    	$creator = (api_is_allowed_to_edit() && !api_is_platform_admin()) ? api_get_user_id() : null;
 
 		$crsindcats = Category::load(null,$creator,'0',$cat_id,
-						api_is_allowed_to_create_course() ? null : 1);
+						api_is_allowed_to_edit() ? null : 1);
 		
 		if (!empty($crsindcats)) {				
 			foreach ($crsindcats as $crsindcat) {
@@ -1010,11 +1010,11 @@ class Category implements GradebookItem
 				return Category::get_root_categories_for_student ($stud_id, $course_code, $session_id);
 			} else {
 			    				
-				return Category::load(null,null, $course_code, $this->id, api_is_allowed_to_create_course() ? null : 1, $session_id );
+				return Category::load(null,null, $course_code, $this->id, api_is_allowed_to_edit() ? null : 1, $session_id );
 			}
 		} else {// all students
 			// course admin
-			if (api_is_allowed_to_create_course() && !api_is_platform_admin()) {
+			if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
 				// root
 				if ($this->id == 0) {
 					return $this->get_root_categories_for_teacher(api_get_user_id(), $course_code, $session_id, false);
@@ -1055,12 +1055,12 @@ class Category implements GradebookItem
 			if ($this->id == 0) {
 				$evals = Evaluation::get_evaluations_with_result_for_student(0,$stud_id);
 			} else { 
-					$evals = Evaluation::load(null,null,$course_code,$this->id, api_is_allowed_to_create_course() ? null : 1);
+					$evals = Evaluation::load(null,null,$course_code,$this->id, api_is_allowed_to_edit() ? null : 1);
 					
 			}
 		} else {// all students
 			// course admin
-			if ((api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) && !api_is_platform_admin()) {
+			if ((api_is_allowed_to_edit() || api_is_drh() || api_is_session_admin()) && !api_is_platform_admin()) {
 				// root
 				if ($this->id == 0) {
 					$evals = Evaluation::load(null, api_get_user_id(), null, $this->id, null);
@@ -1115,10 +1115,10 @@ class Category implements GradebookItem
 		// 1 student $stud_id
  		elseif (isset($stud_id)) {
 			$links = LinkFactory::load(null,null,null,null,empty($this->course_code)?null:$course_code,$this->id,
-						api_is_allowed_to_create_course() ? null : 1);
+						api_is_allowed_to_edit() ? null : 1);
  		}
 		// all students -> only for course/platform admin
-		elseif (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
+		elseif (api_is_allowed_to_edit() || api_is_drh() || api_is_session_admin()) {
 			$links = LinkFactory::load(null,null,null,null,empty($this->course_code)?null:$this->course_code,$this->id, null);
 		}
 

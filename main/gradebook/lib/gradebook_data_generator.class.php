@@ -96,7 +96,7 @@ class GradebookDataGenerator
 				//$row[] = $this->build_date_column($item);
 			}			
 			if (count($this->evals_links) > 0) {
-				if (!api_is_allowed_to_create_course() || $status_user != 1 ) {
+				if (!api_is_allowed_to_edit() || $status_user != 1 ) {
 					$row[] = $this->build_result_column($item, $ignore_score_color);
 				}
 			}			

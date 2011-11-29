@@ -103,9 +103,9 @@ function add_resource_to_course_gradebook($course_code, $resource_type, $resourc
     return true;
 }
 
-function block_students() {
-	if (!api_is_allowed_to_create_course()) {
-		require_once api_get_path(INCLUDE_PATH).'header.inc.php';
+function block_students() {    
+	//if (!api_is_allowed_to_create_course()) {
+    if (!api_is_allowed_to_edit()) {		
 		api_not_allowed();
 	}
 }

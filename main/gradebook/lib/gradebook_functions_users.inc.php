@@ -97,7 +97,7 @@ function get_all_users ($evals = array(), $links = array()) {
  */
 function find_students($mask= '') {
 	// students shouldn't be here // don't search if mask empty
-	if (!api_is_allowed_to_create_course() || empty ($mask)) {
+	if (!api_is_allowed_to_edit() || empty ($mask)) {
 		return null;
 	}
 	$mask = Database::escape_string($mask);

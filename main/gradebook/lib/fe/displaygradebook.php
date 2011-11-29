@@ -18,7 +18,6 @@ class DisplayGradebook
 	* @param $forpdf only output for pdf file
 	*/
 	function display_header_result($evalobj, $selectcat, $page) {
-		$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		if (api_is_allowed_to_edit(null, true)) {
 			$header = '<div class="actions">';
 			
@@ -36,7 +35,6 @@ class DisplayGradebook
     			if ($evalobj->has_results()) {
     				$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&export=">'.Display::return_icon('export_evaluation.png',get_lang('ExportResult'),'','32') . '</a>';
     				$header .= '<a href="gradebook_edit_result.php?selecteval=' . $evalobj->get_id() .'">'.Display::return_icon('edit.png',get_lang('EditResult'),'','32').'</a>';
-    				
     				$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&deleteall=" onclick="return confirmationall();">'.Display::return_icon('delete.png',get_lang('DeleteResult'),'','32').'</a>';
     			}
     			
@@ -46,6 +44,7 @@ class DisplayGradebook
 			}
 			$header .= '</div>';
 		}
+
 		if ($evalobj->is_visible() == '1') {
 			$visible= get_lang('Yes');
 		} else {
@@ -53,16 +52,23 @@ class DisplayGradebook
 		}
 
 		$scoredisplay = ScoreDisplay :: instance();
+        
+        $student_score = '';
+        
 		if (($evalobj->has_results())){ // TODO this check needed ?
-
 			$score = $evalobj->calc_score();
-			
-			if ($score != null)
-				$average= get_lang('Average') . ' :<b> ' .$scoredisplay->display_score($score, SCORE_AVERAGE) . '</b>';
+        
+			if ($score != null) {
+                $average= get_lang('Average') . ' :<b> ' .$scoredisplay->display_score($score, SCORE_AVERAGE) . '</b>';
+                $student_score = $evalobj->calc_score(api_get_user_id());
+                $student_score = Display::tag('h3', get_lang('Result').': '.$scoredisplay->display_score($student_score, SCORE_DIV_PERCENT));                            
+            }				
 		}
+		
 		if (!$evalobj->get_description() == '') {
 			$description= get_lang('Description') . ' :<b> ' . $evalobj->get_description() . '</b><br>';
 		}
+        
 		if ($evalobj->get_course_code() == null) {
 			$course= get_lang('CourseIndependent');
 		} else {
@@ -70,11 +76,17 @@ class DisplayGradebook
 		}
     
 		$evalinfo= '<table width="100%" border="0"><tr><td>';
-		$evalinfo .= '<h2>'.$evalobj->get_name().'</h2><br />'; 
+		$evalinfo .= '<h2>'.$evalobj->get_name().'</h2>'; 
 		$evalinfo .= $description;
 		$evalinfo .= get_lang('Course') . ' :<b> ' . $course . '</b><br />';
 		//'<br>' . get_lang('Weight') . ' :<b> ' . $evalobj->get_weight() . '</b><br>' . get_lang('Visible') . ' :<b> ' . $visible . '</b>
         $evalinfo .=  get_lang('QualificationNumeric') . ' :<b> ' . $evalobj->get_max() . '</b><br>'.$average;
+        
+        if (!api_is_allowed_to_edit()) {
+            $evalinfo .= $student_score;
+        }
+        
+        
         
 		if (!$evalobj->has_results()) {
 			$evalinfo .= '<br /><i>' . get_lang('NoResultsInEvaluation') . '</i>';
@@ -92,7 +104,7 @@ class DisplayGradebook
         }
         $evalinfo .= '</td><td><img style="float:right; position:relative;" src="../img/tutorial.gif"></img></td></table>';
         
-		Display :: display_normal_message($evalinfo,false);
+		echo $evalinfo;
 		echo $header;
 
 	}

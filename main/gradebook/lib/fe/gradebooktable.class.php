@@ -29,7 +29,7 @@ class GradebookTable extends SortableTable {
     function GradebookTable ($currentcat, $cats = array(), $evals = array(), $links = array(), $addparams = null) {
 
   		$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
-    	parent :: __construct ('gradebooklist', null, null, (api_is_allowed_to_create_course()?1:0));
+    	parent :: __construct ('gradebooklist', null, null, (api_is_allowed_to_edit()?1:0));
 		$this->evals_links = array_merge($evals, $links);
 		$this->currentcat = $currentcat;
 		
@@ -55,7 +55,7 @@ class GradebookTable extends SortableTable {
 		
 		if (api_is_allowed_to_edit(null, true)) {
 			//$this->set_header($column++, get_lang('CreationDate'),true, 'width="100px"');
-		} elseif (($status<>1)  && !api_is_allowed_to_create_course() && (!isset($_GET['selectcat']) || $_GET['selectcat']==0)) {
+		} elseif (($status<>1)  && !api_is_allowed_to_edit() && (!isset($_GET['selectcat']) || $_GET['selectcat']==0)) {
 			//$this->set_header($column++, get_lang('Date'),true, 'width="100px"');
 		}
 		
@@ -68,7 +68,7 @@ class GradebookTable extends SortableTable {
 				'setvisible' => get_lang('SetVisible'),
 				'setinvisible' => get_lang('SetInvisible')));
 		} else {
-	 	    if (empty($_GET['selectcat']) &&  !api_is_allowed_to_create_course()) {
+	 	    if (empty($_GET['selectcat']) &&  !api_is_allowed_to_edit()) {
 			    $this->set_header($column++, get_lang('Certificates'),false);
 	 	    } else {
 	 	    	//$evals_links = array_merge($evals, $links);	 	    	
@@ -96,7 +96,7 @@ class GradebookTable extends SortableTable {
         global $my_score_in_gradebook, $certificate_min_score;
         $scoretotal = 0;
 		// determine sorting type
-		$col_adjust = (api_is_allowed_to_create_course() ? 1 : 0);
+		$col_adjust = (api_is_allowed_to_edit() ? 1 : 0);
 		switch ($this->column) {
 			// Type
 			case (0 + $col_adjust) :
@@ -145,8 +145,8 @@ class GradebookTable extends SortableTable {
 			$id   = $item->get_id();							
 						
 			//if the item is invisible, wrap it in a span with class invisible
-			$invisibility_span_open  = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
-			$invisibility_span_close = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '</span>' : '';
+			$invisibility_span_open  = (api_is_allowed_to_edit() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
+			$invisibility_span_close = (api_is_allowed_to_edit() && $item->is_visible() == '0') ? '</span>' : '';
 
 			if (api_is_allowed_to_edit(null, true)) {
 				$row[] = $this->build_id_column($item);
@@ -224,8 +224,8 @@ class GradebookTable extends SortableTable {
 					$id   = $item->get_id();							
 								
 					//if the item is invisible, wrap it in a span with class invisible
-					$invisibility_span_open  = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
-					$invisibility_span_close = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '</span>' : '';
+					$invisibility_span_open  = (api_is_allowed_to_edit() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
+					$invisibility_span_close = (api_is_allowed_to_edit() && $item->is_visible() == '0') ? '</span>' : '';
 		
 					if (api_is_allowed_to_edit(null, true)) {
 						$row[] = $this->build_id_column($item);
@@ -421,7 +421,7 @@ class GradebookTable extends SortableTable {
 
 				// course/platform admin can go to the view_results page
 
-				if (api_is_allowed_to_create_course() && $show_message===false) {
+				if (api_is_allowed_to_edit() && $show_message===false) {
 					if ($item->get_type() == 'presence') {
 						return '&nbsp;'
 							. '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
@@ -440,7 +440,7 @@ class GradebookTable extends SortableTable {
 						. $item->get_name()
 						. '</a>';
 
-				} elseif ($show_message===false && !api_is_allowed_to_create_course() && !(ScoreDisplay :: instance()->is_custom())) {
+				} elseif ($show_message===false && !api_is_allowed_to_edit() && !(ScoreDisplay :: instance()->is_custom())) {
 					return '&nbsp;'
 						. '<a href="gradebook_statistics.php?selecteval=' . $item->get_id() . '">'
 						. $item->get_name()

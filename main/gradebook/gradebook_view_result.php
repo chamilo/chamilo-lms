@@ -28,11 +28,8 @@ require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 api_block_anonymous_users();
-block_students();
 
-if (!api_is_drh()){
-    block_students();
-}
+block_students();
 
 $interbreadcrumb[]= array (
 	'url' => $_SESSION['gradebook_dest'],
@@ -44,6 +41,7 @@ $select_eval=Security::remove_XSS($_GET['selecteval']);
 if (empty($select_eval)) {
 	api_not_allowed();
 }
+
 $displayscore = Scoredisplay :: instance();
 $eval= Evaluation :: load($select_eval);
 $overwritescore= 0;
@@ -91,6 +89,7 @@ if (isset ($_GET['editres'])) {
 		exit;
 	}
 }
+
 if (isset ($_GET['import'])) {
 	$interbreadcrumb[]= array ('url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']), 'name' => get_lang('ViewResult'));
 	$import_result_form = new DataForm(DataForm :: TYPE_IMPORT, 'import_result_form', null, api_get_self() . '?import=&selecteval=' . Security::remove_XSS($_GET['selecteval']), '_blank', '');
@@ -180,7 +179,8 @@ if (isset ($_GET['import'])) {
 		exit;
 	}
 }
-if (isset ($_GET['export'])) {
+
+if (isset($_GET['export'])) {
     $interbreadcrumb[]= array ('url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),'name' => get_lang('ViewResult'));
     $locked_status = $eval[0]->get_locked();
     $export_result_form= new DataForm(DataForm :: TYPE_EXPORT, 'export_result_form', null, api_get_self() . '?export=&selecteval=' . $_GET['selecteval'], '_blank', $locked_status);
@@ -377,7 +377,8 @@ if (isset ($_GET['print'])) {
 } else {
 	$resulttable= new ResultTable($eval[0], $allresults, $iscourse, $addparams);
 }
-	$htmlHeadXtra[]= '<script type="text/javascript">
+
+$htmlHeadXtra[]= '<script type="text/javascript">
 	
 function confirmationuser() {
     if (confirm("' . get_lang('DeleteUser') . '?"))

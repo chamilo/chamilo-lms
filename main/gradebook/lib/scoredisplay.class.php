@@ -218,11 +218,11 @@ class ScoreDisplay
 		$this->custom_display = $displays;
    		$this->custom_display_conv = $this->convert_displays($this->custom_display);
 
-                if (isset($category_id)) {
-                    $category_id = intval($category_id);
-                } else {
-                    $category_id = $this->get_current_gradebook_category_id();
-                }
+        if (isset($category_id)) {
+            $category_id = intval($category_id);
+        } else {
+            $category_id = $this->get_current_gradebook_category_id();
+        }
 
 		// remove previous settings
         $tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);

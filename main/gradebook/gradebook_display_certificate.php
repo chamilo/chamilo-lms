@@ -62,9 +62,8 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
     if (!empty($cats)) {
         
         //with this fix the teacher only can view 1 gradebook
-        //$stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
         if (api_is_platform_admin()) {
-            $stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
+            $stud_id= (api_is_allowed_to_edit() ? null : api_get_user_id());
         } else {
             $stud_id= api_get_user_id();
         }

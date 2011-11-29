@@ -340,7 +340,7 @@ abstract class AbstractLink implements GradebookItem {
      */
     public function find_links ($name_mask,$selectcat) {
     	$rootcat = Category::load($selectcat);
-		$links = $rootcat[0]->get_links((api_is_allowed_to_create_course() ? null : api_get_user_id()), true);
+		$links = $rootcat[0]->get_links((api_is_allowed_to_edit() ? null : api_get_user_id()), true);
 		$foundlinks = array();
 		foreach ($links as $link) {
 			if (!(api_strpos(api_strtolower($link->get_name()), api_strtolower($name_mask)) === false)) {

@@ -340,7 +340,7 @@ class Evaluation implements GradebookItem
 			 .' FROM '.$tbl_grade_evaluations
 			 ." WHERE name = '".Database::escape_string($name)."'";
 
-		if (api_is_allowed_to_create_course()) {
+		if (api_is_allowed_to_edit()) {
 			$parent = Category::load($parent);
 			$code = $parent[0]->get_course_code();
 			if (isset($code) && $code != '0') {
@@ -517,7 +517,7 @@ class Evaluation implements GradebookItem
 				.' WHERE id IN'
 				.'(SELECT evaluation_id FROM '.$tbl_grade_results
 				.' WHERE user_id = '.intval($stud_id).' AND score IS NOT NULL)';
-		if (!api_is_allowed_to_create_course()) {
+		if (!api_is_allowed_to_edit()) {
 			$sql .= ' AND visible = 1';
 		}
 		if (isset($cat_id)) {

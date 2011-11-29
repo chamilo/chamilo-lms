@@ -541,7 +541,7 @@ if (isset ($move_form)){
 // LOAD DATA & DISPLAY TABLE
 
 $is_platform_admin  = api_is_platform_admin();
-$is_course_admin    = api_is_allowed_to_edit(null, true);// api_is_allowed_to_create_course();
+$is_course_admin    = api_is_allowed_to_edit(null, true);
 
 //load data for category, evaluation and links
 if (empty ($_GET['selectcat'])) {
@@ -575,7 +575,7 @@ else
 if (isset ($_GET['studentoverview'])) {    
     //@todo this code also seems to be deprecated ...    
 	$cats= Category :: load($category);
-	$stud_id= (api_is_allowed_to_create_course() ? null : $stud_id);
+	$stud_id= (api_is_allowed_to_edit() ? null : $stud_id);
 	$allcat= array ();
 	$alleval= $cats[0]->get_evaluations($stud_id, true);
 	$alllink= $cats[0]->get_links($stud_id, true);
@@ -652,9 +652,8 @@ if (isset ($_GET['studentoverview'])) {
     $cats = Category :: load ($category, null, null, null, null, null, false);
 
     //with this fix the teacher only can view 1 gradebook
-	//$stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
     if (api_is_platform_admin()) {
-        $stud_id = (api_is_allowed_to_create_course() ? null : api_get_user_id());
+        $stud_id = (api_is_allowed_to_edit() ? null : api_get_user_id());
     } else {
     	$stud_id = $stud_id;
     }

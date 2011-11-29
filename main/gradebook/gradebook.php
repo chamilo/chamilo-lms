@@ -470,7 +470,7 @@ if (isset ($move_form)) {
 }
 // LOAD DATA & DISPLAY TABLE                             -
 $is_platform_admin= api_is_platform_admin();
-$is_course_admin= api_is_allowed_to_create_course();
+$is_course_admin= api_is_allowed_to_edit();
 //load data for category, evaluation and links
 if (!isset ($_GET['selectcat']) || empty ($_GET['selectcat'])) {
 	$category= 0;
@@ -505,7 +505,7 @@ if (!empty($keyword)) {
 } elseif (isset ($_GET['studentoverview'])) {
     //@todo this code seems to be deprecated because the gradebook tab is off 
 	$cats= Category :: load($category);
-	$stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
+	$stud_id= (api_is_allowed_to_edit() ? null : api_get_user_id());
 	$allcat= array ();
 	$alleval= $cats[0]->get_evaluations($stud_id, true);
 	$alllink= $cats[0]->get_links($stud_id, true);
@@ -576,7 +576,7 @@ if (!empty($keyword)) {
 	exit;
 } else {
 	$cats= Category :: load($category);
-	$stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
+	$stud_id= (api_is_allowed_to_edit() ? null : api_get_user_id());
 	$allcat= $cats[0]->get_subcategories($stud_id);
 	$alleval= $cats[0]->get_evaluations($stud_id);
 	$alllink= $cats[0]->get_links($stud_id);

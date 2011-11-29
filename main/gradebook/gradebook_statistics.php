@@ -31,7 +31,7 @@ if ($eval[0]->get_category_id() < 0) {
 $interbreadcrumb[]= array (
 	'url' => $_SESSION['gradebook_dest'].'?selectcat=' . $currentcat[0]->get_id(), 'name' => get_lang('ToolGradebook'));
 
-if (api_is_allowed_to_create_course()){
+if (api_is_allowed_to_edit()) {
 	$interbreadcrumb[]= array (
 	'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),
 	'name' => get_lang('ViewResult'
@@ -41,11 +41,13 @@ $displayscore = ScoreDisplay :: instance();
 
 Display::display_header(get_lang('EvaluationStatistics'));
 DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 0, 'statistics');
+
 if (!$displayscore->is_custom()) {
     if (api_is_platform_admin() || api_is_course_admin()) {
 	   Display :: display_error_message(get_lang('PleaseEnableScoringSystem'),false);
     }
 } else {
+
     //Bad, Regular, Good  - User definitions
 	$displays = $displayscore->get_custom_score_display_settings();
 	
@@ -80,7 +82,7 @@ if (!$displayscore->is_custom()) {
 
 	// generate table
 
-	$stattable= '<br><table class="data_table" cellspacing="0" cellpadding="3">';
+	$stattable= '<table class="data_table" cellspacing="0" cellpadding="3">';
 	$stattable .= '<tr><th colspan="4">' . get_lang('Statistics') . '</th></tr>';
 	$counter=0;
 	foreach ($keys as $key) {

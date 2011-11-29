@@ -148,6 +148,8 @@ $users[] = array('username' => 'amartin','pass' => 'amartin','firstname' => 'Ang
 $users[] = array('username' => 'mhingis','pass' => 'mhingis','firstname' => 'Marsi','lastname' => 'Hingis','status' => 5,'auth_source' => 'platform','email' => 'mhingis@example.com','creator_id' => 1,'active' => 1);
 $users[] = array('username' => 'jlennon','pass' => 'jlennon','firstname' => 'Johny','lastname' => 'Lennon','status' => 5,'auth_source' => 'platform','email' => 'jlennon@example.com','creator_id' => 1,'active' => 1);
 $users[] = array('username' => 'pchavez','pass' => 'pchavez','firstname' => 'Parol','lastname' => 'Chavez','status' => 5,'auth_source' => 'platform','email' => 'pchavez@example.com','creator_id' => 1,'active' => 1);
+$users[] = array('username' => 'cvallejo','pass' => 'cvallejo','firstname' => 'César','lastname' => 'Vallejo','status' => 5,'auth_source' => 'platform','email' => 'cvallejo@example.com','creator_id' => 1,'active' => 1);
+$users[] = array('username' => 'ftruffaut','pass'=> 'ftruffaut','firstname' => 'François','lastname' => 'Truffaut','status' => 5,'auth_source' => 'platform','email' => 'ftruffaut@example.com','creator_id' => 1,'active' => 1);
 
 
 /*

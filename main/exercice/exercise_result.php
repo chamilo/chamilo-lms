@@ -115,7 +115,6 @@ if (!empty($exercise_stat_info['data_tracking'])) {
 	$question_list		= explode(',', $exercise_stat_info['data_tracking']);
 }
 
-
 $safe_lp_id              = $exercise_stat_info['orig_lp_id'];
 $safe_lp_item_id         = $exercise_stat_info['orig_lp_item_id'];
 $safe_lp_item_view_id    = $exercise_stat_info['orig_lp_item_view_id'];
@@ -153,6 +152,13 @@ if ($show_results || $show_only_score) {
 }
 
 Display :: display_confirmation_message(get_lang('Saved').'<br />',false);
+
+// Display text when test is finished #4074
+echo "<div class='normal-message'>";
+echo $objExercise->selectTextWhenFinished();
+echo "</div>";
+echo "<div class='clear'>&nbsp;</div>";
+//
 
 $counter = 1;
 // Loop over all question to show results for each of them, one by one

@@ -6,6 +6,7 @@
  * @author Olivier Brouckaert
  * @author Julio Montoya Cleaning exercises
  * Modified by Hubert Borderiou 2011-10-21 (question category)
+ * Add text when finished : ALTER TABLE c_quiz ADD text_when_finished TEXT AFTER random_by_category
  */
 /**
  * Code
@@ -51,6 +52,7 @@ class Exercise {
 	public $propagate_neg;
 	public $review_answers; //
 	public $randomByCat;
+	public $text_when_finished; //  
 
 	 
 	/**
@@ -76,6 +78,7 @@ class Exercise {
 		$this->propagate_neg    = 0;
 		$this->review_answers	= false;
 		$this->randomByCat      = 0;	//
+		$this->text_when_finished = ""; // 
 
 		if (!empty($course_id)) {			
 			$course_info        =  api_get_course_info_by_id($course_id);
@@ -116,7 +119,8 @@ class Exercise {
 			$this->attempts 		= $object->max_attempt;
 			$this->feedbacktype 	= $object->feedback_type;
 			$this->propagate_neg    = $object->propagate_neg;
-			$this->randomByCat = $object->random_by_category; //
+			$this->randomByCat      = $object->random_by_category; //
+			$this->text_when_finished = $object->text_when_finished; // 
 		
 			$this->review_answers   = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;  
 			
@@ -235,6 +239,23 @@ class Exercise {
 	 */
 	function selectType() {
 		return $this->type;
+	}
+
+	/**
+	 * @author - hubert borderiou 28-11-11
+	 * @return - html text : the text to display ay the end of the test.
+	 */
+	function selectTextWhenFinished() {
+		return $this->text_when_finished;
+
+	}
+
+	/**
+	 * @author - hubert borderiou 28-11-11
+	 * @return - html text : update the text to display ay the end of the test.
+	 */  
+	function updateTextWhenFinished($in_txt) {
+		$this->text_when_finished = $in_txt;
 	}
 
 
@@ -608,7 +629,8 @@ class Exercise {
 		$active 		= $this->active;
 		$propagate_neg  = $this->propagate_neg;
 		$review_answers = (isset($this->review_answers) && $this->review_answers) ? 1 : 0;
-		$randomByCat = $this->randomByCat; //
+		$randomByCat    = $this->randomByCat; //
+		$text_when_finished = Security::remove_XSS($this->text_when_finished, COURSEMANAGER); // 
 		
 		$session_id 	= api_get_session_id();
 		 
@@ -642,7 +664,8 @@ class Exercise {
      			    expired_time   ='".Database::escape_string($expired_time)."',
          			propagate_neg  ='".Database::escape_string($propagate_neg)."',
          			review_answers  ='".Database::escape_string($review_answers)."',
-        	        random_by_category	='".Database::escape_string($randomByCat)."',
+        	        random_by_category='".Database::escape_string($randomByCat)."',
+        	        text_when_finished = '".Database::escape_string($text_when_finished)."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
 			}
 			
@@ -657,7 +680,7 @@ class Exercise {
 			}
 		} else {
 			// creates a new exercise
-			$sql="INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active, results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category)
+			$sql="INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active, results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category, text_when_finished)
 					VALUES(
 						".$this->course_id.",
 						'$start_time','$end_time',
@@ -674,7 +697,8 @@ class Exercise {
 						'".Database::escape_string($expired_time)."',
 						'".Database::escape_string($session_id)."',
 						'".Database::escape_string($review_answers)."',
-						'".Database::escape_string($randomByCat)."'
+						'".Database::escape_string($randomByCat)."',
+						'".Database::escape_string($text_when_finished)."'
 						)";
 			Database::query($sql);
 			$this->id = Database::insert_id();
@@ -985,9 +1009,14 @@ class Exercise {
 			}
 
 			$form->addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px','id' => 'enabletimercontroltotalminutes'));
+			
+
 			$form->addElement('html','</div>');
 			//$form->addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
-								
+						
+			// add the text_when_finished textbox 
+			$form -> add_html_editor('text_when_finished', get_lang('TextWhenFinished'), false, false, $editor_config);
+											
 			$defaults = array();
 
 			if (api_get_setting('search_enabled') === 'true') {
@@ -1052,7 +1081,8 @@ class Exercise {
 				$defaults['propagate_neg'] = $this->selectPropagateNeg();
 				$defaults['review_answers'] = $this->review_answers;
 				$defaults['randomByCat'] = $this->selectRandomByCat(); //
-
+                $defaults['text_when_finished'] = $this->selectTextWhenFinished(); // 
+                
 				if (($this->start_time!='0000-00-00 00:00:00'))
 				$defaults['activate_start_date_check'] = 1;
 				if ($this->end_time!='0000-00-00 00:00:00')
@@ -1077,6 +1107,7 @@ class Exercise {
 				$defaults['exerciseFeedbackType'] = 0;
 				$defaults['results_disabled'] = 0;
 				$defaults['randomByCat'] = 0;	// 
+				$defaults['text_when_finished'] = ""; // 
 				$defaults['start_time'] = date('Y-m-d 12:00:00');
 				$defaults['end_time']   = date('Y-m-d 12:00:00',time()+84600);
 			}
@@ -1107,6 +1138,7 @@ class Exercise {
 		$this->updateExpiredTime($form->getSubmitValue('enabletimercontroltotalminutes'));
 		$this->updatePropagateNegative($form->getSubmitValue('propagate_neg'));
 		$this->updateRandomByCat($form->getSubmitValue('randomByCat'));			//
+		$this->updateTextWhenFinished($form->getSubmitValue('text_when_finished')); // 
 		$this->updateReviewAnswers($form->getSubmitValue('review_answers'));
 
 		if ($form->getSubmitValue('activate_start_date_check') == 1) {

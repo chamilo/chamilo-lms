@@ -713,6 +713,7 @@ function update_Db_course($course_db_name = null) {
         propagate_neg INT NOT NULL DEFAULT 0,
         review_answers INT NOT NULL DEFAULT 0,
         random_by_category INT NOT NULL DEFAULT 0,
+        text_when_finished TEXT default NULL,
         PRIMARY KEY (c_id, id)
         )" . $charset_clause;
     Database::query($sql);

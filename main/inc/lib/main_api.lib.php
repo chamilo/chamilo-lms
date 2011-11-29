@@ -1127,9 +1127,12 @@ function api_get_course_info($course_code = null) {
             $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
             $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
             $_course['directory'    ]         = $course_data['directory'      ];
+            
+            //@todo should be deprecated
             $_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
             $_course['db_name'      ]         = $course_data['db_name'];         // 
             $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
+            
             $_course['titular'      ]         = $course_data['tutor_name'     ];
             $_course['language'     ]         = $course_data['course_language'];
             $_course['extLink'      ]['url' ] = $course_data['department_url' ];
@@ -1184,9 +1187,12 @@ function api_get_course_info_by_id($id = null) {
             $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
             $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
             $_course['directory'    ]         = $course_data['directory'      ];
+            
+            //@todo should be deprecated
             $_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
-            $_course['db_name'      ]         = $course_data['db_name'         ];
+            $_course['db_name'      ]         = $course_data['db_name'         ];            
             $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
+            
             $_course['titular'      ]         = $course_data['tutor_name'     ];
             $_course['language'     ]         = $course_data['course_language'];
             $_course['extLink'      ]['url' ] = $course_data['department_url' ];

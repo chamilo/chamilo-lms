@@ -17,16 +17,18 @@ $session_name   = api_get_session_name($my_session_id);
 echo '<div id="wrapper">';
 
 echo '<ul id="navigation">';
-if (!empty($help)) { 
-    $help = Security::remove_XSS($help);
-?>
-    <li class="help">                   
-        <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=<?php echo $help; ?>&height=400&width=600" class="thickbox" title="<?php echo get_lang('Help'); ?>">
-        <img src="<?php echo api_get_path(WEB_IMG_PATH);?>help.large.png" alt="<?php echo get_lang('Help');?>" title="<?php echo get_lang('Help');?>" />
-        </a>
-    </li>
-<?php } ?>
-<?php 
+
+if (api_get_setting('enable_help_link') == 'true') { 
+    if (!empty($help)) { 
+        $help = Security::remove_XSS($help);
+    ?>
+        <li class="help">                   
+            <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=<?php echo $help; ?>&height=400&width=600" class="thickbox" title="<?php echo get_lang('Help'); ?>">
+            <img src="<?php echo api_get_path(WEB_IMG_PATH);?>help.large.png" alt="<?php echo get_lang('Help');?>" title="<?php echo get_lang('Help');?>" />
+            </a>
+        </li>
+    <?php } 
+}
 if (api_get_setting('show_link_bug_notification') == 'true') { 
 ?>
     <li class="report">
@@ -35,6 +37,7 @@ if (api_get_setting('show_link_bug_notification') == 'true') {
     </li>
 <?php
 }
+
 echo'</ul>';
 echo '<div id="header">';
 

@@ -851,6 +851,7 @@ VALUES
 ('sessionadmin_autosubscribe', NULL, 'textfield', 'Platform', '', 'SessionadminAutosubscribeTitle', 'SessionadminAutosubscribeComment', NULL, NULL, 0),
 ('scorm_cumulative_session_time', NULL, 'radio', 'Course', 'true', 'ScormCumulativeSessionTimeTitle', 'ScormCumulativeSessionTimeComment', NULL, NULL, 0),
 ('allow_hr_skills_management', NULL, 'radio', 'Gradebook', 'true', 'AllowHRSkillsManagementTitle', 'AllowHRSkillsManagementComment', NULL, NULL, 1),
+('enable_help_link', NULL, 'radio', 'Platform', 'true', 'EnableHelpLinkTitle', 'EnableHelpLinkTitle', NULL, NULL, 0),
 ('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.15858','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 /*
@@ -1149,7 +1150,9 @@ VALUES
 ('scorm_cumulative_session_time','true','Yes'),
 ('scorm_cumulative_session_time','false','No'),
 ('allow_hr_skills_management', 'true', 'Yes'),
-('allow_hr_skills_management', 'false', 'No');
+('allow_hr_skills_management', 'false', 'No'),
+('enable_help_link', 'true', 'Yes'),
+('enable_help_link', 'false', 'No');
 
 /*
 ('use_custom_pages','true','Yes'),

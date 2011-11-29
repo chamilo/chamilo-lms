@@ -110,6 +110,13 @@ ALTER TABLE session_rel_course_rel_user ADD COLUMN legal_agreement INTEGER DEFAU
 ALTER TABLE course ADD COLUMN legal TEXT NOT NULL;
 ALTER TABLE course ADD COLUMN activate_legal INT NOT NULL DEFAULT 0;
 
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enable_help_link', NULL, 'radio', 'Platform', 'true', 'EnableHelpLinkTitle', 'EnableHelpLinkTitle', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_help_link', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_help_link', 'false', 'No');
+
+
+
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
 --CREATE TABLE track_filtered_terms (id int, user_id int, course_id int, session_id int, tool_id char(12), filtered_term varchar(255), created_at datetime);

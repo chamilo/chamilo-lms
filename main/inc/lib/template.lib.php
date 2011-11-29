@@ -275,15 +275,18 @@ class Template extends Smarty {
 		$session_name   = api_get_session_name($my_session_id);
 		
 		$help_content = '';
-		if (!empty($help)) {
-			$help = Security::remove_XSS($help);			
-		    $help_content  = '<li class="help">';                   
-		    $help_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help.'&height=400&width=600" class="thickbox" title="'.get_lang('Help').'">';
-		    $help_content .= '<img src="'.api_get_path(WEB_IMG_PATH).'help.large.png" alt="'.get_lang('Help').'" title="'.get_lang('Help').'" />';
-		    $help_content .= '</a></li>';		
-		}
+        if (api_get_setting('enable_help_link') == 'true') { 
+    		if (!empty($help)) {
+    			$help = Security::remove_XSS($help);			
+    		    $help_content  = '<li class="help">';                   
+    		    $help_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help.'&height=400&width=600" class="thickbox" title="'.get_lang('Help').'">';
+    		    $help_content .= '<img src="'.api_get_path(WEB_IMG_PATH).'help.large.png" alt="'.get_lang('Help').'" title="'.get_lang('Help').'" />';
+    		    $help_content .= '</a></li>';		
+		  }
+        }
 
 		$this->assign('help_content', $help_content);
+        
 		$bug_notification_link = '';
 		if (api_get_setting('show_link_bug_notification') == 'true') {
 			$bug_notification_link = '<li class="report">

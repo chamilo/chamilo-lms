@@ -1563,22 +1563,19 @@ class CourseManager {
         $table_course_survey                = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
         $table_course_survey_question       = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
         $table_course_survey_question_option= Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
-        $stats = false;
         
-        if (Database::get_statistic_database() != '') {
-            $stats = true;
-            $table_stats_hotpots        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-            $table_stats_attempt        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-            $table_stats_exercises      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-            $table_stats_access         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-            $table_stats_lastaccess     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-            $table_stats_course_access  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-            $table_stats_online         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-            $table_stats_default        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-            $table_stats_downloads      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-            $table_stats_links          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
-            $table_stats_uploads        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
-        }
+        $table_stats_hotpots        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+        $table_stats_attempt        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $table_stats_exercises      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $table_stats_access         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        $table_stats_lastaccess     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $table_stats_course_access  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table_stats_online         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $table_stats_default        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $table_stats_downloads      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+        $table_stats_links          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
+        $table_stats_uploads        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
+    
 
         $code = Database::escape_string($code);
         $sql = "SELECT * FROM $table_course WHERE code='".$code."'";
@@ -1613,30 +1610,30 @@ class CourseManager {
                 Database::query($sql);
 
                 // Delete the course from the stats tables
-                if ($stats) {
-                    $sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '".$virtual_course['code']."'";
-                    Database::query($sql);
-                    $sql = "DELETE FROM $table_stats_attempt WHERE course_code = '".$virtual_course['code']."'";
-                    Database::query($sql);
-                    $sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '".$virtual_course['code']."'";
-                    Database::query($sql);
-                    $sql = "DELETE FROM $table_stats_access WHERE access_cours_code = '".$virtual_course['code']."'";
-                    Database::query($sql);
-                    $sql = "DELETE FROM $table_stats_lastaccess WHERE access_cours_code = '".$virtual_course['code']."'";
-                    Database::query($sql);
-                    $sql = "DELETE FROM $table_stats_course_access WHERE course_code = '".$virtual_course['code']."'";
-                    Database::query($sql);
-                    $sql = "DELETE FROM $table_stats_online WHERE course = '".$virtual_course['code']."'";
-                    Database::query($sql);
-                    $sql = "DELETE FROM $table_stats_default WHERE default_cours_code = '".$virtual_course['code']."'";
-                    Database::query($sql);
-                    $sql = "DELETE FROM $table_stats_downloads WHERE down_cours_id = '".$virtual_course['code']."'";
-                    Database::query($sql);
-                    $sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$virtual_course['code']."'";
-                    Database::query($sql);
-                    $sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$virtual_course['code']."'";
-                    Database::query($sql);
-                }
+                
+                $sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '".$virtual_course['code']."'";
+                Database::query($sql);
+                $sql = "DELETE FROM $table_stats_attempt WHERE course_code = '".$virtual_course['code']."'";
+                Database::query($sql);
+                $sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '".$virtual_course['code']."'";
+                Database::query($sql);
+                $sql = "DELETE FROM $table_stats_access WHERE access_cours_code = '".$virtual_course['code']."'";
+                Database::query($sql);
+                $sql = "DELETE FROM $table_stats_lastaccess WHERE access_cours_code = '".$virtual_course['code']."'";
+                Database::query($sql);
+                $sql = "DELETE FROM $table_stats_course_access WHERE course_code = '".$virtual_course['code']."'";
+                Database::query($sql);
+                $sql = "DELETE FROM $table_stats_online WHERE course = '".$virtual_course['code']."'";
+                Database::query($sql);
+                $sql = "DELETE FROM $table_stats_default WHERE default_cours_code = '".$virtual_course['code']."'";
+                Database::query($sql);
+                $sql = "DELETE FROM $table_stats_downloads WHERE down_cours_id = '".$virtual_course['code']."'";
+                Database::query($sql);
+                $sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$virtual_course['code']."'";
+                Database::query($sql);
+                $sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$virtual_course['code']."'";
+                Database::query($sql);
+                
 
                 // Delete the course from the course table
                 $sql = "DELETE FROM $table_course WHERE code='".$virtual_course['code']."'";
@@ -1688,30 +1685,30 @@ class CourseManager {
         }
 
         // Delete the course from the stats tables
-        if ($stats) {
-            $sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '".$code."'";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_attempt WHERE course_code = '".$code."'";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '".$code."'";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_access WHERE access_cours_code = '".$code."'";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_lastaccess WHERE access_cours_code = '".$code."'";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_course_access WHERE course_code = '".$code."'";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_online WHERE course = '".$code."'";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_default WHERE default_cours_code = '".$code."'";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_downloads WHERE down_cours_id = '".$code."'";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$code."'";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$code."'";
-            Database::query($sql);
-        }
+        
+        $sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '".$code."'";
+        Database::query($sql);
+        $sql = "DELETE FROM $table_stats_attempt WHERE course_code = '".$code."'";
+        Database::query($sql);
+        $sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '".$code."'";
+        Database::query($sql);
+        $sql = "DELETE FROM $table_stats_access WHERE access_cours_code = '".$code."'";
+        Database::query($sql);
+        $sql = "DELETE FROM $table_stats_lastaccess WHERE access_cours_code = '".$code."'";
+        Database::query($sql);
+        $sql = "DELETE FROM $table_stats_course_access WHERE course_code = '".$code."'";
+        Database::query($sql);
+        $sql = "DELETE FROM $table_stats_online WHERE course = '".$code."'";
+        Database::query($sql);
+        $sql = "DELETE FROM $table_stats_default WHERE default_cours_code = '".$code."'";
+        Database::query($sql);
+        $sql = "DELETE FROM $table_stats_downloads WHERE down_cours_id = '".$code."'";
+        Database::query($sql);
+        $sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$code."'";
+        Database::query($sql);
+        $sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$code."'";
+        Database::query($sql);
+        
 
         global $_configuration;
         if ($_configuration['multiple_access_urls']) {

@@ -610,7 +610,7 @@ class Exercise {
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function save($type_e='') {
+	function save($type_e = '') {
 		global $_course;
 		$TBL_EXERCICES      = Database::get_course_table(TABLE_QUIZ_TEST);
 		$TBL_QUESTIONS      = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -631,7 +631,7 @@ class Exercise {
 		$review_answers = (isset($this->review_answers) && $this->review_answers) ? 1 : 0;
 		$randomByCat    = $this->randomByCat;
         
-		$text_when_finished = Security::remove_XSS($this->text_when_finished, COURSEMANAGER); // 
+		$text_when_finished = $this->text_when_finished; 
 		
 		$session_id 	= api_get_session_id();
 		 
@@ -643,8 +643,17 @@ class Exercise {
 		}
 
 		$expired_time = intval($this->expired_time);
-		$start_time = Database::escape_string(api_get_utc_datetime($this->start_time));
-		$end_time 	= Database::escape_string(api_get_utc_datetime($this->end_time));
+        
+        if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
+            $start_time = Database::escape_string(api_get_utc_datetime($this->start_time));
+        } else {
+            $start_time = '0000-00-00 00:00:00';
+        }
+        if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
+            $end_time 	= Database::escape_string(api_get_utc_datetime($this->end_time));
+        } else {
+            $end_time = '0000-00-00 00:00:00';
+        }
 
 		// Exercise already exists
 		if ($id) {
@@ -668,9 +677,8 @@ class Exercise {
         	        random_by_category='".Database::escape_string($randomByCat)."',
         	        text_when_finished = '".Database::escape_string($text_when_finished)."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
-			}
-			
-			$sql .= " WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($id)."'";
+			}			
+			$sql .= " WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($id)."'";			
 			Database::query($sql);
 
 			// update into the item_property table
@@ -701,6 +709,7 @@ class Exercise {
 						'".Database::escape_string($randomByCat)."',
 						'".Database::escape_string($text_when_finished)."'
 						)";
+						
 			Database::query($sql);
 			$this->id = Database::insert_id();
 			// insert into the item_property table
@@ -3206,10 +3215,8 @@ class Exercise {
 		$feedback = filter_var($feedback,FILTER_SANITIZE_NUMBER_INT);
 		$sid = api_get_session_id();
 		// Save a new quiz
-		$sql = "INSERT INTO $tbl_quiz (title,type,random,active,results_disabled, ".
-         "max_attempt,start_time,end_time,feedback_type,expired_time, session_id) ".
-         " VALUES('".Database::escape_string($title)."',$type,$random,$active, ".
-         "$results_disabled,$max_attempt,'','',$feedback,$expired_time,$sid)";
+		$sql = "INSERT INTO $tbl_quiz (title,type,random,active,results_disabled, max_attempt,start_time,end_time,feedback_type,expired_time, session_id) ".
+                " VALUES('".Database::escape_string($title)."',$type,$random,$active, $results_disabled,$max_attempt,'','',$feedback,$expired_time,$sid)";
 		$rs = Database::query($sql);
 		$quiz_id = Database::get_last_insert_id();
 		return $quiz_id;

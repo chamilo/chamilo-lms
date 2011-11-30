@@ -854,7 +854,7 @@ VALUES
 ('enable_help_link', NULL, 'radio', 'Platform', 'true', 'EnableHelpLinkTitle', 'EnableHelpLinkTitle', NULL, NULL, 0),
 ('allow_teacher_change_gradebook_grading_model', NULL, 'radio', 'Gradebook', 'false', 'AllowTeacherChangeGradebookGradingModelTitle', 'AllowTeacherChangeGradebookGradingModelComment', NULL, NULL, 1),
 ('grading_model', 'grading_model', 'custom', 'Gradebook', 'false', 'GradingModelTitle', 'GradingModelComment', NULL, NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.15858','DokeosDatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.16233','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('use_custom_pages',NULL,'radio','Platform','false','UseCustomPages','useCustomPagesComment','platform',NULL,0),
@@ -1157,7 +1157,7 @@ VALUES
 ('enable_help_link', 'false', 'No'),
 ('allow_teacher_change_gradebook_grading_model', 'true', 'Yes'),
 ('allow_teacher_change_gradebook_grading_model', 'false', 'No'),
-('grading_model', '1*X+2*X+3*X/4', 'Model 1'),
+('grading_model', '1*X+2*X+3*X/6', 'Model 1'),
 ('grading_model', '1*X+1*X+1*X/3', 'Model 2'),
 ('grading_model', '1*X+1*X+1*X+1*X/4', 'Model 3');
 

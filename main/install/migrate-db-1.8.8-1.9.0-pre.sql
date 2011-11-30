@@ -13,7 +13,7 @@
 -- This first part is for the main database
 
 -- xxMAINxx
-UPDATE settings_current SET selected_value = '1.9.0.15858' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.16233' WHERE variable = 'chamilo_database_version';
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('filter_terms', NULL, 'textarea', 'Security', '', 'FilterTermsTitle', 'FilterTermsComment', NULL, NULL, 0);
 
@@ -100,7 +100,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teac
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('grading_model', 'grading_model', 'custom', 'Gradebook', 'false', 'GradingModelTitle', 'GradingModelComment', NULL, NULL, 1);
 
 
-INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+2*X+3*X/4', 'Model 1');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+2*X+3*X/6', 'Model 1');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+1*X+1*X/3', 'Model 2');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+1*X+1*X+1*X/4', 'Model 3');
 

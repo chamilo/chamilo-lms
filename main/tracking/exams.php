@@ -16,10 +16,8 @@ $this_section = SECTION_TRACKING;
 
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
 
-if(!$is_allowedToTrack) {
-	Display :: display_header(null);
+if(!$is_allowedToTrack) {	
 	api_not_allowed();
-	Display :: display_footer();
 }
 
 $export_to_xls = false;

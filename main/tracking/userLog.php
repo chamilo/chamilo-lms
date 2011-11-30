@@ -78,7 +78,7 @@ $tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_U
 $tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
 $TABLECOURSE_GROUPSUSER 	= Database::get_course_table(TABLE_GROUP_USER);
 
-if(api_get_setting('use_session_mode') == "true") {
+if (api_get_setting('use_session_mode') == "true") {
     $sql = "SELECT 1
             FROM $tbl_session_course_user AS session_course_user
             INNER JOIN $tbl_session AS session

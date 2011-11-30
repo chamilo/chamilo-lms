@@ -79,7 +79,7 @@ if (isset($_POST['new_model']) && isset($_POST['number_evaluations']) && !empty(
 	$array_to_save['variable'] 		= 'grading_model';
 	$array_to_save['display_text'] 	= $_POST['new_model'];
 	$array_to_save['value']		 	= $string_to_save;
-	var_dump($array_to_save);
+	
 	$result = api_set_setting_option($array_to_save);
 }
 

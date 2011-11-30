@@ -852,6 +852,8 @@ VALUES
 ('scorm_cumulative_session_time', NULL, 'radio', 'Course', 'true', 'ScormCumulativeSessionTimeTitle', 'ScormCumulativeSessionTimeComment', NULL, NULL, 0),
 ('allow_hr_skills_management', NULL, 'radio', 'Gradebook', 'true', 'AllowHRSkillsManagementTitle', 'AllowHRSkillsManagementComment', NULL, NULL, 1),
 ('enable_help_link', NULL, 'radio', 'Platform', 'true', 'EnableHelpLinkTitle', 'EnableHelpLinkTitle', NULL, NULL, 0),
+('allow_teacher_change_gradebook_grading_model', NULL, 'radio', 'Gradebook', 'false', 'AllowTeacherChangeGradebookGradingModelTitle', 'AllowTeacherChangeGradebookGradingModelComment', NULL, NULL, 1),
+('grading_model', 'grading_model', 'custom', 'Gradebook', 'false', 'GradingModelTitle', 'GradingModelComment', NULL, NULL, 1),
 ('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.15858','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 /*
@@ -1152,7 +1154,12 @@ VALUES
 ('allow_hr_skills_management', 'true', 'Yes'),
 ('allow_hr_skills_management', 'false', 'No'),
 ('enable_help_link', 'true', 'Yes'),
-('enable_help_link', 'false', 'No');
+('enable_help_link', 'false', 'No'),
+('allow_teacher_change_gradebook_grading_model', 'true', 'Yes'),
+('allow_teacher_change_gradebook_grading_model', 'false', 'No'),
+('grading_model', '1*X+2*X+3*X/4', 'Model 1'),
+('grading_model', '1*X+1*X+1*X/3', 'Model 2'),
+('grading_model', '1*X+1*X+1*X+1*X/4', 'Model 3');
 
 /*
 ('use_custom_pages','true','Yes'),

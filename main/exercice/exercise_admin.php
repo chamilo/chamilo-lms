@@ -18,7 +18,7 @@ require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
 require_once 'exercise.lib.php';
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 if(!api_is_allowed_to_edit(null,true)) {
 	api_not_allowed(true);
@@ -142,7 +142,6 @@ $(document).ready(function () {
 
 // INIT EXERCISE
 
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 $objExercise = new Exercise();
 
 //INIT FORM

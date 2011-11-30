@@ -629,7 +629,8 @@ class Exercise {
 		$active 		= $this->active;
 		$propagate_neg  = $this->propagate_neg;
 		$review_answers = (isset($this->review_answers) && $this->review_answers) ? 1 : 0;
-		$randomByCat    = $this->randomByCat; //
+		$randomByCat    = $this->randomByCat;
+        
 		$text_when_finished = Security::remove_XSS($this->text_when_finished, COURSEMANAGER); // 
 		
 		$session_id 	= api_get_session_id();
@@ -870,7 +871,7 @@ class Exercise {
 				}
 
 				$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2',array('id' =>'exerciseType_2'));
-				$form->addGroup($radios_feedback, null, get_lang('FeedbackType'));
+				$form->addGroup($radios_feedback, null, get_lang('FeedbackType'), '<div></div>');
 
 				//$form->addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
 				// test type
@@ -879,13 +880,13 @@ class Exercise {
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
 
-				$form->addGroup($radios, null, get_lang('QuestionsPerPage'));
+				$form->addGroup($radios, null, get_lang('QuestionsPerPage'), '<div></div>');
 
 				$radios_results_disabled = array();
 				$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
 				$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
 				$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2',array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
-				$form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'<br />');
+				$form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '<div></div>');
 
 			} else {
 				// if is Directfeedback but has not questions we can allow to modify the question type
@@ -913,15 +914,13 @@ class Exercise {
 					$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
 					$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
 					$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2',array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
-					$form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'<br />');
-
+					$form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'<div></div>');
 				} else {
-
 					//Show options freeze
 					$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
 					$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
 					$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2',array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
-					$result_disable_group = $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'<br />');
+					$result_disable_group = $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'<div></div>');
 					$result_disable_group->freeze();
 
 					$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
@@ -966,7 +965,7 @@ class Exercise {
 			$form->addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option, array('id'=>'exerciseAttempts','class'=>'chzn-select'));
 			
 			// Exercice time limit
-			$form->addElement('checkbox', 'activate_start_date_check',get_lang('EnableStartTime'),null, array('onclick' => 'activate_start_date()'));
+			$form->addElement('checkbox', 'activate_start_date_check',null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 				
 			$var = Exercise::selectTimeLimit();
 			if (($this->start_time!='0000-00-00 00:00:00'))
@@ -978,7 +977,7 @@ class Exercise {
 
 			$form->addElement('html','</div>');
 
-			$form->addElement('checkbox', 'activate_end_date_check',  get_lang('EnableEndTime'),  null,array('onclick' => 'activate_end_date()'));
+			$form->addElement('checkbox', 'activate_end_date_check', null , get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));
 			if (($this->end_time!='0000-00-00 00:00:00'))
 			$form->addElement('html','<div id="end_date_div" style="display:block;">');
 			else
@@ -989,16 +988,16 @@ class Exercise {
 
 			//$check_option=$this->selectType();
 			$diplay = 'block';							
-			$form->addElement('checkbox', 'propagate_neg', get_lang('PropagateNegativeResults'), null);			
+			$form->addElement('checkbox', 'propagate_neg', null, get_lang('PropagateNegativeResults'));			
 			$form->addElement('html','<div class="clear">&nbsp;</div>');
-			$form->addElement('checkbox', 'review_answers', get_lang('ReviewAnswers'), null);			
+			$form->addElement('checkbox', 'review_answers', null, get_lang('ReviewAnswers'));			
 				
 			$form->addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');
 
 			//Timer control
 			$time_hours_option = range(0,12);
 			$time_minutes_option = range(0,59);
-			$form->addElement('checkbox', 'enabletimercontrol',get_lang('EnableTimerControl'),null,array('onclick' =>'option_time_expired()','id'=>'enabletimercontrol','onload'=>'check_load_time()'));
+			$form->addElement('checkbox', 'enabletimercontrol', null, get_lang('EnableTimerControl'), array('onclick' =>'option_time_expired()','id'=>'enabletimercontrol','onload'=>'check_load_time()'));
 			$expired_date = (int)$this->selectExpiredTime();
 
 			if(($expired_date!='0')) {
@@ -1020,7 +1019,7 @@ class Exercise {
 			$defaults = array();
 
 			if (api_get_setting('search_enabled') === 'true') {
-				require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+				require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
 				$form->addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
 				$form->addElement ('html','<br /><div class="row">');
@@ -1051,7 +1050,7 @@ class Exercise {
 
 		// submit
 		isset($_GET['exerciseId'])?$text=get_lang('ModifyExercise'):$text=get_lang('ProcedToQuestions');
-		$form->addElement('html', '<br /><br />');
+		
 		$form->addElement('style_submit_button', 'submitExercise', $text, 'class="save"');
 
 		$form->addRule('exerciseTitle', get_lang('GiveExerciseName'), 'required');

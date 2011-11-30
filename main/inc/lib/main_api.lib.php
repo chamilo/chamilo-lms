@@ -5524,7 +5524,7 @@ function api_grading_model_functions($grading_model, $action = 'to_array') {
 	if (empty($grading_model)) {
 		return null;
 	}
-	$elements = array('A','B','C','D','E', 'F', 'G', 'H','I','J', 'K');
+	$elements = array('A','B','C','D','E','F','G','H','I','J','K','L','M');
 	
 	if (in_array($action, array('to_array', 'decorate'))) {	
 		$parts = explode('/', $grading_model);

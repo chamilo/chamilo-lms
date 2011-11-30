@@ -240,9 +240,9 @@ if (isset ($_GET['visiblecat'])) {
 		$filter_confirm_msg = false;
 	}
 }
-if (isset ($_GET['deletecat'])) {
+if (isset($_GET['deletecat'])) {
 	block_students();
-	$cats= Category :: load($_GET['deletecat']);
+	$cats = Category :: load($_GET['deletecat']);
 	//delete all categories,subcategories and results
 	if ($cats[0] != null) {
 		if ($cats[0]->get_id() != 0) {
@@ -251,7 +251,7 @@ if (isset ($_GET['deletecat'])) {
 		}
 	}
 	$confirmation_message = get_lang('CategoryDeleted');
-	$filter_confirm_msg = false;
+	$filter_confirm_msg = false;   
 }
 //parameters for evaluations
 if (isset ($_GET['visibleeval'])) {
@@ -618,11 +618,12 @@ if (isset ($_GET['studentoverview'])) {
         // one) category for this course or for this session.
 
 		//hack for delete a gradebook from inside course
+		/*
 		$clean_deletecat = isset($_GET['deletecat']) ? intval($_GET['deletecat']) : null;
 		if (!empty($clean_deletecat)) {
 			exit;
 		}
-		//end hack
+		//end hack*/
 
 	    $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
         if (empty($cats)) {
@@ -789,6 +790,7 @@ if (api_is_allowed_to_edit(null, true)) {
 		}
 	}
 }
+
 if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
 } else {		
@@ -811,7 +813,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 	
 	if (!empty($cats)) {
 		$items = $grading_contents['items'];
-		$i = 0; 
+		$i = 0;
 		foreach ($cats as $cat) {
 			
 			$allcat  = $cat->get_subcategories($stud_id, $course_code, $session_id);
@@ -823,12 +825,12 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 			} else {
 				//This is the father				
 				//Create gradebook/add gradebook links
-				DisplayGradebook::display_header_gradebook($cat, 0, $cat->get_id(), $is_course_admin, $is_platform_admin, $simple_search_form, false, true);				
+                DisplayGradebook::display_header_gradebook($cat, 0, $cat->get_id(), $is_course_admin, $is_platform_admin, $simple_search_form, false, true);				
 				
 				if (api_is_allowed_to_edit(null,true)) {
 					//Showing the grading system
 					if (!empty($grading_string)) {
-						Display::display_normal_message($grading_string);
+						Display::display_normal_message(get_lang('GradeModel').': '.$grading_string);
 					}
 				}				
 				$gradebooktable = new GradebookTable($cat, $allcat, $alleval, $alllink, $addparams);

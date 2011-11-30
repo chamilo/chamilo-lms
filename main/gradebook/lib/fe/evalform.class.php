@@ -11,7 +11,7 @@ require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
 require_once dirname(__FILE__).'/../gradebook_functions.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php';
+
 /**
  * Extends formvalidator with add&edit forms for evaluations
  * @author Stijn Konings
@@ -375,9 +375,9 @@ class EvalForm extends FormValidator
 									'hid_course_code' => $this->evaluation_object->get_course_code(), 'created_at' => api_get_utc_datetime()));
 		$this->build_basic_form(0);
 		if ($this->evaluation_object->get_course_code() == null) {
-			$this->addElement('checkbox', 'adduser', get_lang('AddUserToEval'));
+			$this->addElement('checkbox', 'adduser', null, get_lang('AddUserToEval'));
 		} else {
-			$this->addElement('checkbox', 'addresult', get_lang('AddResult'));
+			$this->addElement('checkbox', 'addresult', null, get_lang('AddResult'));
 		}
 		$this->addElement('style_submit_button', 'submit', get_lang('AddAssessment'),'class="add"');
 	}
@@ -403,8 +403,8 @@ class EvalForm extends FormValidator
 	 */
 	private function build_basic_form($edit= 0) {
 		$form_title = get_lang('NewEvaluation');
-		if ($_GET['editeval']==1)
-		{
+        
+		if ($_GET['editeval']==1) {
 			$form_title = get_lang('EditEvaluation');
 		}
 
@@ -418,10 +418,36 @@ class EvalForm extends FormValidator
 			'maxlength' => '50',
 			'id' => 'evaluation_title'
 		));
-		$this->add_textfield('weight', get_lang('Weight'), true, array (
+        
+        $select_gradebook = $this->addElement('select', 'hid_category_id', get_lang('SelectGradebook'), array(), array('id' => 'hid_category_id'));
+        
+        $all_categories = Category :: load();
+        
+        $default_weight = 0;
+        
+        if (!empty($all_categories)) {
+            foreach($all_categories as $my_cat) {
+                if ($my_cat->get_course_code() == api_get_course_id()) {
+                    if ($my_cat->get_parent_id() == 0 ) {
+                        $default_weight = $my_cat->get_weight();
+                        $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+                    } else {
+                        $select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+                    }
+                    
+                    if ($this->evaluation_object->get_category_id() == $my_cat->get_id()) {
+                        $default_weight = $my_cat->get_weight();                        
+                    }
+                    
+                }           
+            }
+        }
+
+		$this->add_textfield('weight', array(get_lang('Weight'), null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
 			'size' => '4',
 			'maxlength' => '5'
 		));
+        
 		if ($edit) {
 			if (!$this->evaluation_object->has_results()) {
 				$this->add_textfield('max', get_lang('QualificationNumeric'), true, array (
@@ -441,37 +467,23 @@ class EvalForm extends FormValidator
 				'size' => '4',
 				'maxlength' => '5'
 			));
-		}
+		}       
+        
 		$this->addElement('textarea', 'description', get_lang('Description'), array (
 			'rows' => '3',
 			'cols' => '34'
 		));
-		$this->addElement('checkbox', 'visible', get_lang('Visible'));
+		$this->addElement('checkbox', 'visible', null, get_lang('Visible'));
 		$this->addRule('weight', get_lang('OnlyNumbers'), 'numeric');
 		$this->addRule(array ('weight', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
 		$this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
 		$this->addRule(array ('max', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
-		
-		$select_gradebook = $this->addElement('select', 'hid_category_id', get_lang('SelectGradebook'));
-		
-		$all_categories = Category :: load();
-		
-		if (!empty($all_categories)) {
-			foreach($all_categories as $my_cat) {
-				if ($my_cat->get_course_code() == api_get_course_id()) {
-					if ($my_cat->get_parent_id() == 0 ) {
-						$select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
-					} else {
-						$select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
-					}
-				}			
-			}
-		}
-		
 	}
+
 	function display() {
 		parent :: display();
 	}
+    
 	function setDefaults($defaults= array ()) {
 		parent :: setDefaults($defaults);
 	}

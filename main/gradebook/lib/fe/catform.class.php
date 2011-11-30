@@ -9,7 +9,6 @@
  */
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 /**
  * Extends formvalidator with add&edit forms
@@ -136,6 +135,7 @@ class CatForm extends FormValidator {
    	private function build_basic_form() {
 		$this->addElement('hidden', 'zero', 0);
 		$this->add_textfield('name', get_lang('CategoryName'), true,array('size'=>'54','maxlength'=>'50'));
+        
 		$this->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 		
 		if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {
@@ -163,9 +163,12 @@ class CatForm extends FormValidator {
 			///direct access to one evaluation
 			$cats  = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init			
 			$count = count($cats) - 1;			
-			$value =  intval($grading_contents['items'][$count]['percentage']);
+			$value = intval($grading_contents['items'][$count]['percentage']);
+            if ($value == 0) {
+                //Display::display_warning_message(get_lang('GradingModelBlocks'));
+            }
 			
-			$this->add_textfield('weight', get_lang('TotalWeight'),true,array('value'=>$value,'size'=>'4','maxlength'=>'5'));
+			$this->add_textfield('weight', get_lang('TotalWeight'), true, array('value'=> $value,'size'=>'4','maxlength'=>'5'));
 			//$this->addRule('weight',get_lang('ThisFieldIsRequired'),'required');
 			$this->freeze('weight');			
 		} else {
@@ -200,7 +203,7 @@ class CatForm extends FormValidator {
    		$this->addElement('hidden','hid_user_id');
    		$this->addElement('hidden','hid_parent_id');
 		$this->addElement('textarea', 'description', get_lang('Description'),array('rows'=>'3','cols' => '34'));
-		$this->addElement('checkbox', 'visible',get_lang('Visible'));
+		$this->addElement('checkbox', 'visible', null, get_lang('Visible'));
 		if ($this->form_type == self :: TYPE_ADD) {
 			$this->addElement('style_submit_button', null, get_lang('AddCategory'), 'class="save"');
 		} else {

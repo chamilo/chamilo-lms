@@ -60,6 +60,28 @@ if ($form->validate()) {
 
 $interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$linkcat,'name' => get_lang('Gradebook'));
 
+
+$htmlHeadXtra[] = '<script type="text/javascript">
+$(document).ready( function() {
+
+    $("#hide_category_id").change(function(){
+        
+       $("#hide_category_id option:selected").each(function () {
+           var cat_id = $(this).val();
+            $.ajax({ 
+                url: "'.api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?a=get_gradebook_weight", 
+                data: "cat_id="+cat_id,
+                success: function(return_value) {
+                    if (return_value != 0 ) {
+                        $("#max_weight").html(return_value);                                             
+                    }                    
+                },            
+            });    
+       });
+    });
+});
+</script>';
+
 Display :: display_header(get_lang('EditLink'));
 $form->display();
 Display :: display_footer();

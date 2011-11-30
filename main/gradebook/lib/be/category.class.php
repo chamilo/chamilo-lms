@@ -132,7 +132,7 @@ class Category implements GradebookItem
         return $skills;        
     }
     
-    function get_skills_for_select() {
+    public function get_skills_for_select() {
         $skills = $this->get_skills();
         $skill_select = array();
         if (!empty($skills)) {            
@@ -165,7 +165,7 @@ class Category implements GradebookItem
 		}
 
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-		$sql='SELECT id,name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id FROM '.$tbl_grade_categories;
+		$sql = 'SELECT id, name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id FROM '.$tbl_grade_categories;
 		$paramcount = 0;
 		if (isset($id)) {
 			$id = Database::escape_string($id);
@@ -219,7 +219,7 @@ class Category implements GradebookItem
 			$sql .= ' visible = '.intval($visible);
 			$paramcount ++;
 		}
-		//echo $sql.'<br />';
+       		
 		$result = Database::query($sql);
         $allcat = array();		
 		if (Database::num_rows($result) > 0) {

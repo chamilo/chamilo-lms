@@ -289,6 +289,7 @@ class GradebookTable extends SortableTable {
 				$course_code = $this->build_course_code($category[0]);
 
 				if ($weight_total_links > $weight_category) {
+				    
 					$warning_message = get_lang('TotalWeightMustNotBeMoreThan').'&nbsp;'.$weight_category;
 					Display::display_warning_message($warning_message,false);
 				}

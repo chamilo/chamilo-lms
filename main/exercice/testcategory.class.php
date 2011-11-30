@@ -353,15 +353,20 @@ class Testcategory {
 	}
 	
 	/**
-	 * display the category and the title
+	 * display the category
 	 */
-	function displayCategoryAndTitle($in_questionID) {
-		if (Testcategory::getCategoryNameForQuestion($in_questionID) != "") {
-			echo "<div id=\"question_title\" class=\"sectiontitle\" style='font-size:110%; margin-top:20px; padding-top:10px'>";
-			echo "<div style='font-size:110%;font-weight:normal; margin-bottom:5px; padding:0px 10px 5px 10px;'>";
-			echo get_lang('Category').": ".Testcategory::getCategoryNameForQuestion($in_questionID);
-			echo "</div>";			
-			echo "</div>";
+	public static function displayCategoryAndTitle($in_questionID, $in_display_category_name = 1) {
+        $is_student = !(api_is_allowed_to_edit(null,true) || api_is_session_admin());	
+        $objExercise = $_SESSION['objExercise'];
+        if (!empty($objExercise)) {
+            $in_display_category_name = $objExercise->display_category_name;
+        }
+		if (Testcategory::getCategoryNameForQuestion($in_questionID) != "" && ($in_display_category_name == 1 || !$is_student)) {
+			    echo "<div id=\"question_title\" class=\"sectiontitle\" style='font-size:110%; margin-top:20px; padding-top:10px'>";
+			    echo "<div style='font-size:110%;font-weight:normal; margin-bottom:5px; padding:0px 10px 5px 10px;'>";
+			    echo get_lang('Category').": ".Testcategory::getCategoryNameForQuestion($in_questionID);
+			    echo "</div>";			
+			    echo "</div>";
 		}
 	}
 	

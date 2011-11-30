@@ -63,7 +63,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         
 		if (!$only_questions) {
 			$questionDescription = $objQuestionTmp->selectDescription();
-			
 			if ($show_title) {
 				Testcategory::displayCategoryAndTitle($objQuestionTmp->id);	// 				
 				echo Display::div($current_item.'. '.$objQuestionTmp->selectTitle(), array('class'=>'question_title'));
@@ -517,7 +516,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
 		if (!$only_questions) {
             if ($show_title) {
-								Testcategory::displayCategoryAndTitle($objQuestionTmp->id);	//             	
+				Testcategory::displayCategoryAndTitle($objQuestionTmp->id);	//             	
                 echo '<div class="question_title">'.$current_item.'. '.$questionName.'</div>';
             }
 			//@todo I need to the get the feedback type

@@ -5,8 +5,7 @@
  * @package chamilo.exercise
  * @author Olivier Brouckaert
  * @author Julio Montoya Cleaning exercises
- * Modified by Hubert Borderiou 2011-10-21 (question category)
- * Add text when finished : ALTER TABLE c_quiz ADD text_when_finished TEXT AFTER random_by_category
+ * Modified by Hubert Borderiou #294
  */
 /**
  * Code
@@ -53,6 +52,7 @@ class Exercise {
 	public $review_answers; //
 	public $randomByCat;
 	public $text_when_finished; //  
+	public $display_category_name; // 
 
 	 
 	/**
@@ -79,6 +79,7 @@ class Exercise {
 		$this->review_answers	= false;
 		$this->randomByCat      = 0;	//
 		$this->text_when_finished = ""; // 
+		$this->display_category_name = 0; // 
 
 		if (!empty($course_id)) {			
 			$course_info        =  api_get_course_info_by_id($course_id);
@@ -120,7 +121,8 @@ class Exercise {
 			$this->feedbacktype 	= $object->feedback_type;
 			$this->propagate_neg    = $object->propagate_neg;
 			$this->randomByCat      = $object->random_by_category; //
-			$this->text_when_finished = $object->text_when_finished; // 
+			$this->text_when_finished    = $object->text_when_finished; // 
+			$this->display_category_name = $object->display_category_name; //
 		
 			$this->review_answers   = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;  
 			
@@ -240,6 +242,27 @@ class Exercise {
 	function selectType() {
 		return $this->type;
 	}
+
+
+
+	/**
+	 * @author - hubert borderiou 30-11-11
+	 * @return - integer : do we display the question category name for students
+	 */
+	function selectDisplayCategoryName() {
+		return $this->display_category_name;
+
+	}
+
+	/**
+	 * @author - hubert borderiou 30-11-11
+	 * @return - : modify object to update the switch display_category_name
+	 * $in_txt is an integer 0 or 1
+	 */  
+	function updateDisplayCategoryName($in_txt) {
+		$this->display_category_name = $in_txt;
+	}
+
 
 	/**
 	 * @author - hubert borderiou 28-11-11
@@ -616,7 +639,6 @@ class Exercise {
 		$TBL_QUESTIONS      = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_QUIZ_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
-
 		$id 			= $this->id;
 		$exercise 		= $this->exercise;
 		$description 	= $this->description;
@@ -632,6 +654,7 @@ class Exercise {
 		$randomByCat    = $this->randomByCat;
         
 		$text_when_finished = Security::remove_XSS($this->text_when_finished, COURSEMANAGER); // 
+		$display_category_name = intval($this->display_category_name); // 
 		
 		$session_id 	= api_get_session_id();
 		 
@@ -667,6 +690,7 @@ class Exercise {
          			review_answers  ='".Database::escape_string($review_answers)."',
         	        random_by_category='".Database::escape_string($randomByCat)."',
         	        text_when_finished = '".Database::escape_string($text_when_finished)."',
+        	        display_category_name = '".Database::escape_string($display_category_name)."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
 			}
 			
@@ -681,7 +705,7 @@ class Exercise {
 			}
 		} else {
 			// creates a new exercise
-			$sql="INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active, results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category, text_when_finished)
+			$sql="INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active, results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category, text_when_finished, display_category_name)
 					VALUES(
 						".$this->course_id.",
 						'$start_time','$end_time',
@@ -699,7 +723,8 @@ class Exercise {
 						'".Database::escape_string($session_id)."',
 						'".Database::escape_string($review_answers)."',
 						'".Database::escape_string($randomByCat)."',
-						'".Database::escape_string($text_when_finished)."'
+						'".Database::escape_string($text_when_finished)."',
+						'".Database::escape_string($display_category_name)."'
 						)";
 			Database::query($sql);
 			$this->id = Database::insert_id();
@@ -958,6 +983,12 @@ class Exercise {
 			$form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'));
 			$form->addElement('html','<div class="clear">&nbsp;</div>');
 			
+			// add the radio display the category name for student 
+			$radio_display_cat_name = array();
+			$radio_display_cat_name[] = FormValidator::createElement('radio', 'display_category_name', null, get_lang('Yes'),'1');
+			$radio_display_cat_name[] = FormValidator::createElement('radio', 'display_category_name', null, get_lang('No'),'0');
+            $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'));
+			
 			//Attempts
 			$attempt_option=range(0,10);
 			$attempt_option[0]=get_lang('Infinite');
@@ -1081,6 +1112,7 @@ class Exercise {
 				$defaults['review_answers'] = $this->review_answers;
 				$defaults['randomByCat'] = $this->selectRandomByCat(); //
                 $defaults['text_when_finished'] = $this->selectTextWhenFinished(); // 
+                $defaults['display_category_name'] = $this->selectDisplayCategoryName(); // 
                 
 				if (($this->start_time!='0000-00-00 00:00:00'))
 				$defaults['activate_start_date_check'] = 1;
@@ -1108,6 +1140,7 @@ class Exercise {
 				$defaults['randomByCat'] = 0;	// 
 				$defaults['text_when_finished'] = ""; // 
 				$defaults['start_time'] = date('Y-m-d 12:00:00');
+    			$defaults['display_category_name'] = 1; // 
 				$defaults['end_time']   = date('Y-m-d 12:00:00',time()+84600);
 			}
 		} else {
@@ -1138,6 +1171,7 @@ class Exercise {
 		$this->updatePropagateNegative($form->getSubmitValue('propagate_neg'));
 		$this->updateRandomByCat($form->getSubmitValue('randomByCat'));			//
 		$this->updateTextWhenFinished($form->getSubmitValue('text_when_finished')); // 
+		$this->updateDisplayCategoryName($form->getSubmitValue('display_category_name')); // 
 		$this->updateReviewAnswers($form->getSubmitValue('review_answers'));
 
 		if ($form->getSubmitValue('activate_start_date_check') == 1) {

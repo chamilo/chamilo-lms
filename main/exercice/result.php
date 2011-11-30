@@ -77,6 +77,7 @@ if ($show_headers) {
 
 $show_results           = true;
 $show_only_total_score  = false;
+$display_category_name  = 1;
 
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (!empty($track_exercise_info)) {
@@ -84,6 +85,7 @@ if (!empty($track_exercise_info)) {
 	$exerciseDescription	= $track_exercise_info['description'];
 	// if the results_disabled of the Quiz is 1 when block the script
 	$result_disabled		= $track_exercise_info['results_disabled'];
+	$display_category_name = $track_exercise_info['display_category_name'];
 	
 	if (!(api_is_platform_admin() || api_is_course_admin()) ) {    
 		if ($result_disabled == EXERCISE_FEEDBACK_TYPE_DIRECT) {
@@ -134,7 +136,7 @@ if (!empty($question_list)) {
 		        	
 	 	if ($show_results) { 	    
             // display question category, if any
- 	        Testcategory::displayCategoryAndTitle($questionId);	 	    
+ 	        Testcategory::displayCategoryAndTitle($questionId, $display_category_name );	 	    
 		    echo $objQuestionTmp->return_header($objExercise->feedbacktype, $counter);
 		}
 		$counter++;	

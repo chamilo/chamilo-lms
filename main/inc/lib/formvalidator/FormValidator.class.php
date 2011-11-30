@@ -76,6 +76,11 @@ EOT;
 			</div>
 			<div class="formw">
 				{element}
+				
+				<!-- BEGIN label_3 -->
+                    <span>{label_3}</span>
+                <!-- END label_3 -->
+                
 				<!-- BEGIN label_2 -->
 					<span class="help-block">{label_2}</span>
 				<!-- END label_2 -->

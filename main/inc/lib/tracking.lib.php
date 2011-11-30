@@ -468,12 +468,12 @@ class Tracking {
         
         array_map('intval', $exercise_list);
                 
-        $exercise_list = implode("' ,'", $exercise_list);
+        $exercise_list_imploded = implode("' ,'", $exercise_list);
         
-        $sql = "SELECT COUNT(ex.exe_exo_id) FROM $tbl_stats_exercices AS ex
+        $sql = "SELECT COUNT(DISTINCT ex.exe_exo_id) FROM $tbl_stats_exercices AS ex
                     WHERE   ex.exe_cours_id = '$course_code' AND
                             ex.session_id  = $session_id AND
-                            ex.exe_user_id = $user_id AND ex.exe_exo_id IN ('$exercise_list') ";
+                            ex.exe_user_id = $user_id AND ex.exe_exo_id IN ('$exercise_list_imploded') ";
                                                                 
         $rs = Database::query($sql);
         $count = 0;
@@ -3654,7 +3654,7 @@ class TrackingCourseLog {
 			$is_western_name_order = api_is_western_name_order();
             $user_row = array();
             
-            $user_row[]= $user['official_code'];
+            $user_row[]= $user['official_code']; //0
             
             if ($is_western_name_order) {
                 $user_row[]= $user['lastname'];
@@ -3663,22 +3663,20 @@ class TrackingCourseLog {
                 $user_row[]= $user['firstname'];
                 $user_row[]= $user['lastname'];
             }
-            $user_row[]= $user['time'];
             
-            $user_row[]= $user['average_progress'];
-            
-            $user_row[]= $user['exercise_progress'];
-            
+            $user_row[]= $user['time']; //3           
+            $user_row[]= $user['average_progress'];            
+            $user_row[]= $user['exercise_progress'];            
             $user_row[]= $user['student_score'];
             $user_row[]= $user['count_assignments'];
-            $user_row[]= $user['count_messages'];
+            $user_row[]= $user['count_messages']; //8
             
             if (empty($session_id)) {
                 $user_row[]= $user['survey'];
             }
             
             $user_row[]= $user['first_connection'];
-            $user_row[]= $user['last_connection'];
+            $user_row[]= $user['last_connection']; 
             $user_row[]= $user['additional'];            
           
             $user_row[]= $user['link'];
@@ -3687,9 +3685,13 @@ class TrackingCourseLog {
          
 			if ($export_csv) {
 			    if (empty($session_id)) {
+			        $user_row[10] = strip_tags($user_row[10]);  
+                    $user_row[11] = strip_tags($user_row[11]);
 				    unset($user_row[13]);
 				    unset($user_row[14]);
                 } else {
+                    $user_row[9] = strip_tags($user_row[9]);
+                    $user_row[10] = strip_tags($user_row[10]);
                     unset($user_row[12]);
                     unset($user_row[13]);
                 }

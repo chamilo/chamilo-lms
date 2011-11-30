@@ -145,7 +145,7 @@ $(document).ready(function () {
 $objExercise = new Exercise();
 
 //INIT FORM
-if(isset($_GET['exerciseId'])) {
+if (isset($_GET['exerciseId'])) {
 	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?'.api_get_cidreq().'&exerciseId='.intval($_GET['exerciseId']));
 	$objExercise->read($_GET['exerciseId']);
 	$form->addElement('hidden','edit','true');

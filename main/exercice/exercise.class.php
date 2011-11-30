@@ -713,7 +713,7 @@ class Exercise {
 			}
 		} else {
 			// creates a new exercise
-			$sql="INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active, results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category, text_when_finished, display_category_name)
+			$sql = "INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active, results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category, text_when_finished, display_category_name)
 					VALUES(
 						".$this->course_id.",
 						'$start_time','$end_time',
@@ -733,8 +733,7 @@ class Exercise {
 						'".Database::escape_string($randomByCat)."',
 						'".Database::escape_string($text_when_finished)."',
 						'".Database::escape_string($display_category_name)."'
-						)";
-						
+						)";			
 			Database::query($sql);
 			$this->id = Database::insert_id();
 			// insert into the item_property table
@@ -960,7 +959,7 @@ class Exercise {
 					$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
 					$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
 
-					$type_group = $form->addGroup($radios, null, get_lang('QuestionsPerPage'));
+					$type_group = $form->addGroup($radios, null, get_lang('QuestionsPerPage'), '<div></div>');
 					$type_group->freeze();
 
 					//we force the options to the DirectFeedback exercisetype
@@ -981,7 +980,7 @@ class Exercise {
 			$radios_random_answers = array();
 			$radios_random_answers[] = FormValidator :: createElement ('radio', 'randomAnswers', null, get_lang('Yes'),'1');
 			$radios_random_answers[] = FormValidator :: createElement ('radio', 'randomAnswers', null, get_lang('No'),'0');
-			$form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'));
+			$form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'), '<div></div>');
 
 			//randow by category
 			$form->addElement('html','<div class="clear">&nbsp;</div>');
@@ -989,14 +988,14 @@ class Exercise {
 			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesShuffled'),'1');
 			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesSorted'),'2');
 			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('No'),'0');
-			$form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'));
+			$form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'), '<div></div>');
 			$form->addElement('html','<div class="clear">&nbsp;</div>');
 			
 			// add the radio display the category name for student 
 			$radio_display_cat_name = array();
 			$radio_display_cat_name[] = FormValidator::createElement('radio', 'display_category_name', null, get_lang('Yes'),'1');
 			$radio_display_cat_name[] = FormValidator::createElement('radio', 'display_category_name', null, get_lang('No'),'0');
-            $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'));
+            $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'), '<div></div>');
 			
 			//Attempts
 			$attempt_option=range(0,10);

@@ -149,4 +149,4 @@ ALTER TABLE student_publication ADD COLUMN contains_file INTEGER NOT NULL DEFAUL
 ALTER TABLE student_publication ADD COLUMN allow_text_assignment INTEGER NOT NULL DEFAULT 0;
 ALTER TABLE quiz ADD COLUMN random_by_category INT NOT NULL DEFAULT 0;
 ALTER TABLE quiz ADD text_when_finished TEXT default NULL;
-ALTER TABLE c_quiz ADD display_category_name TINYINT NOT NULL DEFAULT 1;
+ALTER TABLE quiz ADD display_category_name TINYINT NOT NULL DEFAULT 1;

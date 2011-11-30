@@ -1070,17 +1070,18 @@ class Exercise {
 				} else {
 					$defaults['randomQuestions'] = $this->random;
 				}
-				$defaults['randomAnswers'] = $this ->selectRandomAnswers();
-				$defaults['exerciseType'] = $this->selectType();
-				$defaults['exerciseTitle'] = $this->selectTitle();
-				$defaults['exerciseDescription'] = $this->selectDescription();
-				$defaults['exerciseAttempts'] = $this->selectAttempts();
-				$defaults['exerciseFeedbackType'] = $this->selectFeedbackType();
-				$defaults['results_disabled'] = $this->selectResultsDisabled();
-				$defaults['propagate_neg'] = $this->selectPropagateNeg();
-				$defaults['review_answers'] = $this->review_answers;
-				$defaults['randomByCat'] = $this->selectRandomByCat(); //
-                $defaults['text_when_finished'] = $this->selectTextWhenFinished(); // 
+                
+				$defaults['randomAnswers']          = $this ->selectRandomAnswers();
+				$defaults['exerciseType']           = $this->selectType();
+				$defaults['exerciseTitle']          = $this->selectTitle();
+				$defaults['exerciseDescription']    = $this->selectDescription();
+				$defaults['exerciseAttempts']       = $this->selectAttempts();
+				$defaults['exerciseFeedbackType']   = $this->selectFeedbackType();
+				$defaults['results_disabled']       = $this->selectResultsDisabled();
+				$defaults['propagate_neg']          = $this->selectPropagateNeg();
+				$defaults['review_answers']         = $this->review_answers;
+				$defaults['randomByCat']            = $this->selectRandomByCat(); //
+                $defaults['text_when_finished']     = $this->selectTextWhenFinished(); // 
                 
 				if (($this->start_time!='0000-00-00 00:00:00'))
 				$defaults['activate_start_date_check'] = 1;

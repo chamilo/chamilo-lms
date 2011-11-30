@@ -798,26 +798,27 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
         }
 
         if (!isset($_SESSION['login_as'])) {
-
+            
             $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-               if (isset($_configuration['session_lifetime'])) {
-                   $session_lifetime    = $_configuration['session_lifetime'];
+            if (isset($_configuration['session_lifetime'])) {
+                $session_lifetime    = $_configuration['session_lifetime'];
             } else {
-                $session_lifetime    = 3600;
+                $session_lifetime    = 3600; // 1 hour
             }
 
-            $course_code=$_course['sysCode'];
+            $course_code = $_course['sysCode'];
             $time = api_get_datetime();
 
             //We select the last record for the current course in the course tracking table
-            // But only if the login date is < thant now + max_life_time
+            // But only if the login date is < than now + max_life_time
             
-            $sql="SELECT course_access_id FROM $course_tracking_table
-                  WHERE user_id=".intval($_user ['user_id'])."
-                        AND course_code='$course_code' AND session_id = ".api_get_session_id()."
-                        AND login_course_date > now() - INTERVAL $session_lifetime SECOND
+            $sql = "SELECT course_access_id FROM $course_tracking_table
+                    WHERE   user_id     = ".intval($_user ['user_id'])." AND
+                            course_code = '$course_code' AND 
+                            session_id  = ".api_get_session_id()." AND
+                            login_course_date > now() - INTERVAL $session_lifetime SECOND
                         ORDER BY login_course_date DESC LIMIT 0,1";
-                $result=Database::query($sql);
+            $result = Database::query($sql);
                 //error_log($sql);
             if (Database::num_rows($result)>0) {
 

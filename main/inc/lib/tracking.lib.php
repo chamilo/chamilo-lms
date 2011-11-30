@@ -97,13 +97,14 @@ class Tracking {
 
 		$condition_user = "";
 		if (is_array($user_id)) {
+		    $user_id = array_map('intval', $user_id);
 			$condition_user = " AND user_id IN (".implode(',',$user_id).") ";
 		} else {
 			$user_id = intval($user_id);
 			$condition_user = " AND user_id = '$user_id' ";
 		}
 
-		$sql = " SELECT SUM(UNIX_TIMESTAMP(logout_course_date)-UNIX_TIMESTAMP(login_course_date)) as nb_seconds
+		$sql = "SELECT SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
                 FROM $tbl_track_course
                 WHERE course_code='$course_code' AND session_id = '$session_id' $condition_user";
 
@@ -464,9 +465,8 @@ class Tracking {
             return '0%';
         }    
         $tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        $exercise_list = array_keys($exercise_list);
-        
-        array_map('intval', $exercise_list);
+        $exercise_list = array_keys($exercise_list);        
+        $exercise_list = array_map('intval', $exercise_list);
                 
         $exercise_list_imploded = implode("' ,'", $exercise_list);
         

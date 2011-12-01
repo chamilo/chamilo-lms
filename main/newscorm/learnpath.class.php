@@ -7546,8 +7546,6 @@ class learnpath {
      * @return string
      */
     public function display_item_small_form($item_type, $title = '', $data) {
-        global $charset;
-
         $return = '<div class="lp_small_form">';
         $return .= '<p class="lp_title">' . $title . '</p>';
         $return .= '<form method="post">';
@@ -7577,12 +7575,12 @@ class learnpath {
      * @param	integer Item ID
      * @return	string	HTML form
      */
-    public function display_item_prerequisites_form($item_id) {
-        global $charset;
+    public function display_item_prerequisites_form($item_id) {        
+        $course_id = api_get_course_int_id();
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $item_id = intval($item_id);
         /* Current prerequisite */
-        $sql = "SELECT * FROM $tbl_lp_item WHERE c_id = ".$course_id." AND id = " . $item_id;
+        $sql = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND id = " . $item_id;
         $result = Database::query($sql);
         $row    = Database::fetch_array($result);
 
@@ -7611,7 +7609,7 @@ class learnpath {
         $return .= '<label for="idNone">' . get_lang('None') . '</label>';
         $return .= '</tr>';
 
-        $sql 	= "SELECT * FROM " . $tbl_lp_item . " WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        $sql 	= "SELECT * FROM " . $tbl_lp_item . " WHERE c_id = $course_id AND lp_id = " . $this->lp_id;
         $result = Database::query($sql);
         $arrLP = array ();
         while ($row = Database :: fetch_array($result)) {
@@ -7694,20 +7692,19 @@ class learnpath {
      * @param	integer Item ID
      * @return	string	HTML form
      */
-    public function display_lp_prerequisites_list() {
-        global $charset;
+    public function display_lp_prerequisites_list() {        
         $course_id = api_get_course_int_id();
         $lp_id = $this->lp_id;
         $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
 
         // get current prerequisite
-        $sql = "SELECT * FROM $tbl_lp WHERE c_id = ".$course_id." AND id = $lp_id ";
+        $sql = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $lp_id ";
         $result = Database::query($sql);
         $row = Database :: fetch_array($result);
         $preq_id = $row['prerequisite'];
         $session_id = api_get_session_id();
-        $session_condition = api_get_session_condition($session_id, false);
-        $sql 	= "SELECT * FROM $tbl_lp $session_condition ORDER BY display_order ";
+        $session_condition = api_get_session_condition($session_id);
+        echo $sql 	= "SELECT * FROM $tbl_lp WHERE c_id = $course_id $session_condition ORDER BY display_order ";
         $rs = Database::query($sql);
         $return = '';
         $return .= '<select name="prerequisites" >';
@@ -7750,8 +7747,8 @@ class learnpath {
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
 
-        $sql_quiz = "SELECT * FROM $tbl_quiz WHERE c_id = ".$course_id." AND active<>'-1' $condition_session ORDER BY title ASC";
-        $sql_hot  = "SELECT * FROM $tbl_doc  WHERE c_id = ".$course_id." AND path LIKE '" . $uploadPath . "/%/%htm%'  $condition_session ORDER BY id ASC";
+        $sql_quiz = "SELECT * FROM $tbl_quiz WHERE c_id = $course_id AND active<>'-1' $condition_session ORDER BY title ASC";
+        $sql_hot  = "SELECT * FROM $tbl_doc  WHERE c_id = $course_id AND path LIKE '" . $uploadPath . "/%/%htm%'  $condition_session ORDER BY id ASC";
 
         $res_quiz = Database::query($sql_quiz);
         $res_hot  = Database::query($sql_hot);

@@ -45,17 +45,12 @@ if ((! $is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_edit_item_prereq.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
 }
-// From here on, we are admin because of the previous condition, so don't check anymore.
+$course_id = api_get_course_int_id();
 
-$sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
+
+$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
 $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);
-
-//$admin_output = '';
-/*
-    Course admin section
-    - all the functions not available for students - always available in this case (page only shown to admin)
-*/
 
 /* SHOWING THE ADMIN TOOLS */
 
@@ -71,7 +66,6 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
-
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
 
 // Theme calls.

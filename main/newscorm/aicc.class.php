@@ -238,9 +238,11 @@ class aicc extends learnpath {
         if (Database::num_rows($res) < 1) { error_log('New LP - Database for '.$course_code.' not found '.__FILE__.' '.__LINE__, 0); return -1; }
         $row = Database::fetch_array($res);
         
+        $course_id = api_get_course_int_id();
+        
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $get_max = "SELECT MAX(display_order) FROM $new_lp";
+        $get_max = "SELECT MAX(display_order) FROM $new_lp WHERE c_id = $course_id";
         $res_max = Database::query($get_max);
         if (Database::num_rows($res_max) < 1) {
             $dsp = 1;
@@ -253,7 +255,7 @@ class aicc extends learnpath {
 
         $sql = "INSERT INTO $new_lp (c_id, lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib, content_maker,display_order)" .
                 "VALUES " .
-                "($this->course_id, 3, '".$this->course_title."', '".$this->course_id."','".$this->course_description."'," .
+                "($course_id, 3, '".$this->course_title."', '".$this->course_id."','".$this->course_description."'," .
                 "'".$this->subdir."', 0, 'embedded', '".$this->config_encoding."'," .
                 "'aicc_api.php','".$this->course_creator."',$dsp)";
         if ($this->debug > 2) { error_log('New LP - In import_aicc(), inserting path: '. $sql, 0); }
@@ -286,7 +288,7 @@ class aicc extends learnpath {
             //$previous = (!empty($this->au_order_list_new_id[x]) ? $this->au_order_list_new_id[x] : 0); // TODO: Deal with the previous.
             $sql_item = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order) " .
                     "VALUES " .
-                    "($this->course_id, $lp_id, 'au','".$oAu->identifier."','".$title."'," .
+                    "($course_id, $lp_id, 'au','".$oAu->identifier."','".$title."'," .
                     "'$path',0,100, $value_add" .
                     "$parent, $previous, 0, " .
                     "'$prereq', 0" .
@@ -296,7 +298,7 @@ class aicc extends learnpath {
             $item_id = Database::insert_id();
             // Now update previous item to change next_item_id.
             if ($previous != 0) {
-                $upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE id = $previous";
+                $upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE c_id = $course_id AND id = $previous";
                 $upd_res = Database::query($upd);
                 // Update the previous item id.
             }

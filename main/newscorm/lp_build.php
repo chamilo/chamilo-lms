@@ -58,17 +58,18 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 /* The learnpath has been just created, go get the last id. */
 $is_new = false;
 
+$course_id = api_get_course_int_id();
+
 if ($learnpath_id == 0) {
     $is_new = true;
 
-    $sql        = "SELECT id FROM " . $tbl_lp . " ORDER BY id DESC LIMIT 0, 1";
+    $sql        = "SELECT id FROM " . $tbl_lp . " WHERE c_id = $course_id ORDER BY id DESC LIMIT 0, 1";
     $result     = Database::query($sql);
-    $row        = Database::fetch_array($result); 
-
+    $row        = Database::fetch_array($result);
     $learnpath_id = $row['id'];
 }
 
-$sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
+$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
 
 $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);
@@ -110,8 +111,7 @@ function stripslashes(str) {
 }
 function confirmation(name) {
     name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?"))
-    {
+    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
         return true;
     } else {
         return false;
@@ -148,7 +148,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
                 $learnpathadded .= '<a href="lp_controller.php?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("BasicOverview").'">'.Display::return_icon('move_learnpath.png', get_lang('BasicOverview'), array('style' => 'vertical-align: middle;'),'22').' '.get_lang('BasicOverview').'</a>: '.get_lang('BasicOverviewComment').'<br />';
                 $learnpathadded .= '<a href="lp_controller.php?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.Display::return_icon('view_left_right.png', get_lang('Display'),array('style' => 'vertical-align: middle;'),'22').' '.get_lang('Display').'</a>: '.get_lang('DisplayComment').'<br />';
                 $learnpathadded .= '<br /></p>';
-                Display::display_normal_message($learnpathadded, false);
+                echo $learnpathadded;
             }
         echo '</td>';
     echo '</tr>';

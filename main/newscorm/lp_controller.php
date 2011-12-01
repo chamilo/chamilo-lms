@@ -205,6 +205,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $action = (!empty($_REQUEST['action']) ? $_REQUEST['action'] : '');
+
 switch ($action) {
 
     case 'add_item':

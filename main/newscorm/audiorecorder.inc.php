@@ -26,6 +26,8 @@ function getFLVDuration($flv_path) {
     }
 }
 
+$course_id = api_get_course_int_id();
+
 if ($audio_recorder_studentview == 'false') {
     $width = 295;
     $height= 90;
@@ -41,7 +43,7 @@ if ($audio_recorder_studentview == 'false') {
     $cp = api_get_course_path();
     $docs = Database::get_course_table(TABLE_DOCUMENT);
     $select = "SELECT * FROM $docs " .
-            " WHERE path like BINARY '/audio/lpi".Database::escape_string($audio_recorder_item_id)."-%' AND filetype='file' " .
+            " WHERE c_id = $course_id AND path like BINARY '/audio/lpi".Database::escape_string($audio_recorder_item_id)."-%' AND filetype='file' " .
             " ORDER BY path DESC";
     $res = Database::query($select);
     if (Database::num_rows($res) > 0) {

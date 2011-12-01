@@ -27,8 +27,6 @@ $htmlHeadXtra[] = api_get_jquery_ui_js();
 // Access control
 api_protect_course_script(true);
 
-$show = (isset ($_GET['show']) && $_GET['show'] == 'result') ? 'result' : 'test'; // moved down to fix bug: http://www.dokeos.com/forum/viewtopic.php?p=18609#18609
-
 // including additional libraries
 require_once 'exercise.class.php';
 require_once 'exercise.lib.php';
@@ -77,12 +75,7 @@ $exfile         = strtolower($exfile[sizeof($exfile) - 1]);
 $exercicePath   = substr($exercicePath, 0, strpos($exercicePath, $exfile));
 $exercicePath   = $exercicePath . "exercice.php";
 
-if ($show == 'result') {    
-    if (empty($_GET['exerciseId']) && empty($_GET['path']) ) {
-       //header('Location: exercice.php?' . api_get_cidreq());
-    }
-}   
-    
+   
 // Clear the exercise session
 if (isset ($_SESSION['objExercise'])) {
 	api_session_unregister('objExercise');
@@ -116,33 +109,18 @@ if (empty ($exerciseId)) {
 if (empty ($file)) {
 	$file = Database :: escape_string($_REQUEST['file']);
 }
-// 
-// filter display by student group
-// if $_GET['filterByGroup'] = -1 => do not filter
-// else, filter by group_id (0 for no group)
-// 
-$filterByGroup = -1;
-if (isset($_GET['filterByGroup']) && is_numeric($_GET['filterByGroup'])) {
-	$filterByGroup = Security::remove_XSS($_GET['filterByGroup']);
-	api_session_register('filterByGroup');
-}
-else if (isset($_SESSION['filterByGroup'])) {
-	$filterByGroup = $_SESSION['filterByGroup'];
-}
-// -------------------------------
+
 $learnpath_id       = intval($_REQUEST['learnpath_id']);
 $learnpath_item_id  = intval($_REQUEST['learnpath_item_id']);
 $page               = intval($_REQUEST['page']);
 
 $course_info        = api_get_course_info();
+$course_id          = api_get_course_int_id();
 
 if ($page < 0) {
     $page = 1;
 }
 
-if ($origin == 'learnpath') {
-	$show = 'result';
-}
 
 //Deleting an attempt
 if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !empty ($_GET['did']) && $_GET['did'] == strval(intval($_GET['did']))) {
@@ -151,120 +129,6 @@ if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !emp
 	$filter=Security::remove_XSS($_GET['filter']);
 	header('Location: exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '&exerciseId='.$exerciseId.'&filter_by_user='.$_GET['filter_by_user']);
 	exit;
-}
-
-$course_id = api_get_course_int_id();
-
-//Send student email @todo move this code in a class, library
-if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid']== strval(intval($_GET['exeid']))) {
-	$id 		= intval($_GET['exeid']); //filtered by post-condition    
-	$track_exercise_info = get_exercise_track_exercise_info($id);
-    if (empty($track_exercise_info)) {
-    	api_not_allowed();
-    }
-	$test 		       = $track_exercise_info['title'];
-	$student_id        = $track_exercise_info['exe_user_id'];
-//    $course_id         = $track_exercise_info['exe_cours_id'];
-    $session_id        = $track_exercise_info['session_id'];
-    $lp_id             = $track_exercise_info['orig_lp_id'];
-    $lp_item_id        = $track_exercise_info['orig_lp_item_id'];
-    $lp_item_view_id   = $track_exercise_info['orig_lp_item_view_id'];
-    
-    // Teacher data    
-    $teacher_info      = api_get_user_info(api_get_user_id());
-    
-	$user_info         = api_get_user_info($student_id);	
-	$student_email 	   = $user_info['mail'];    
-	$from 		       = $teacher_info['mail'];
-	$from_name         = api_get_person_name($teacher_info['firstname'], $teacher_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-	
-	$url		       = api_get_path(WEB_CODE_PATH) . 'exercice/exercice.php?' . api_get_cidreq() . '&id_session='.$session_id.'&show=result&exerciseId='.$exerciseId;	
-
-	$my_post_info      = array();
-	$post_content_id   = array();
-	$comments_exist    = false;
-	
-	foreach ($_POST as $key_index=>$key_value) {
-		$my_post_info  = explode('_',$key_index);
-		$post_content_id[]=$my_post_info[1];
-		if ($my_post_info[0]=='comments') {
-			$comments_exist=true;
-		}
-	}
-
-	$loop_in_track=($comments_exist===true) ? (count($_POST)/2) : count($_POST);
-	$array_content_id_exe=array();
-	if ($comments_exist===true) {
-		$array_content_id_exe = array_slice($post_content_id,$loop_in_track);
-	} else {
-		$array_content_id_exe = $post_content_id;
-	}
-	
-	for ($i=0;$i<$loop_in_track;$i++) {
-		$my_marks			= Database::escape_string($_POST['marks_'.$array_content_id_exe[$i]]);
-		$contain_comments	= Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
-		if (isset($contain_comments)) {
-			$my_comments	= Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
-		} else {
-			$my_comments	= '';
-		}
-		$my_questionid=$array_content_id_exe[$i];
-		$sql = "SELECT question from $TBL_QUESTIONS WHERE id = '$my_questionid'";
-		$result =Database::query($sql);
-		$ques_name = Database::result($result,0,"question");
-
-		$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks',teacher_comment = '$my_comments' WHERE question_id = ".$my_questionid." AND exe_id=".$id;
-		Database::query($query);
-		
-		//Saving results in the track recording table
-		$recording_changes = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment) VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
-		Database::query($recording_changes);
-	}
-	
-	$qry = 'SELECT DISTINCT question_id, marks FROM ' . $TBL_TRACK_ATTEMPT . ' WHERE exe_id = '.$id .' GROUP BY question_id';
-	$res = Database::query($qry);
-	$tot = 0;
-	while ($row = Database :: fetch_array($res, 'ASSOC')) {
-		$tot += $row['marks'];
-	}
-	
-	$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".floatval($tot)."' WHERE exe_id = ".$id;
-    Database::query($totquery);
-    
-    //@todo move this somewhere else
-	$subject = get_lang('ExamSheetVCC');	
-	
-	$message  = '<p>'.get_lang('DearStudentEmailIntroduction') . '</p><p>'.get_lang('AttemptVCC');
-	$message .= '<h3>'.get_lang('CourseName'). '</h3><p>'.Security::remove_XSS($course_info['name']).'';
-	$message .= '<h3>'.get_lang('Exercise') . '</h3><p>'.Security::remove_XSS($test);
-	
-	//Only for exercises not in a LP
-	if ($lp_id == 0) {	
-	    $message .= '<p>'.get_lang('ClickLinkToViewComment') . ' <a href="#url#">#url#</a><br />';
-	}
-		
-	$message .= '<p>'.get_lang('Regards') . ' </p>';
-	$message .= $from_name;	
-	
-	$message = str_replace("#test#", Security::remove_XSS($test), $message);
-	$message = str_replace("#url#", $url, $message);
-	
-	@api_mail_html($student_email, $student_email, $subject, $message, $from_name, $from, array('charset'=>api_get_system_encoding()));
-	    
-    //Updating LP score here    
-	if (in_array($origin, array ('tracking_course','user_course','correct_exercise_in_lp'))) {   
-        $sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . floatval($tot) . "' WHERE id = " .$lp_item_view_id;
-        Database::query($sql_update_score);
-		if ($origin == 'tracking_course') {
-			//Redirect to the course detail in lp
-            header('location: exercice.php?course=' . Security :: remove_XSS($_GET['course']));            
-			exit;
-		} else {
-			//Redirect to the reporting
-			header('location: ../mySpace/myStudents.php?origin=' . $origin . '&student=' . $student_id . '&details=true&course=' . $course_id.'&session_id='.$session_id);
-			exit;
-		}        
-	}
 }
 
 if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {
@@ -295,9 +159,6 @@ if ($show != 'result') {
 	}
 }
 
-// need functions of statsutils lib to display previous exercices scores
-require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
-
 if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 	require_once 'export/qti2/qti2_export.php';
 	$export = export_exercise($exerciseId, true);
@@ -322,42 +183,7 @@ if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 	rmdir($temp_zip_dir);
 	exit; //otherwise following clicks may become buggy
 }
-if (!empty ($_GET['extra_data'])) {
-	switch ($_GET['extra_data']) {
-		case 'on' :
-			$_SESSION['export_user_fields'] = true;
-			break;		
-		default :
-			$_SESSION['export_user_fields'] = false;
-			break;
-	}
-}
-if (!empty($_GET['export_report']) && $_GET['export_report'] == '1') {
-	if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-		$user_id = null;
-		if (empty($_SESSION['export_user_fields']))
-			$_SESSION['export_user_fields'] = false;
-		if (!$is_allowedToEdit and !$is_tutor) {
-			$user_id = api_get_user_id();
-		}
-		require_once 'exercise_result.class.php';
-		switch ($_GET['export_format']) {
-			case 'xls' :
-				$export = new ExerciseResult();               
-				$export->exportCompleteReportXLS($documentPath, $user_id, $_SESSION['export_user_fields'], $_GET['export_filter'], $_GET['exerciseId'], $_GET['hotpotato_name']);
-				exit;
-				break;
-			case 'csv' :
-			default :
-				$export = new ExerciseResult();
-				$export->exportCompleteReportCSV($documentPath, $user_id, $_SESSION['export_user_fields'], $_GET['export_filter'], $_GET['exerciseId'], $_GET['hotpotato_name']);
-				exit;
-				break;
-		}
-	} else {
-		api_not_allowed(true);
-	}
-}
+
 
 if ($origin != 'learnpath') {
 	//so we are not in learnpath tool
@@ -482,8 +308,6 @@ if ($is_allowedToEdit) {
 // Actions div bar
 if ($is_allowedToEdit) {
     echo '<div class="actions">';
-} elseif ($show == 'result') {
-    echo '<div class="actions">';
 }
 
 
@@ -499,184 +323,71 @@ HotPotGCt($documentPath, 1, api_get_user_id());
 $session_id         = api_get_session_id();
 $condition_session  = api_get_session_condition($session_id,true,true);
 
-if ($show == 'test') {    
-    // Only for administrators
-    if ($is_allowedToEdit) {
-        $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ";
-        $sql = "SELECT * FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ORDER BY title LIMIT ".$from."," .$limit;
-    } else { 
-        // Only for students
-        $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE active = '1' $condition_session ";
-        $sql = "SELECT id, title, type, description, results_disabled, session_id, start_time, end_time, max_attempt FROM $TBL_EXERCICES 
-                WHERE active='1' $condition_session 
-                ORDER BY title LIMIT ".$from."," .$limit;
-    }
-    
-    $result = Database::query($sql);        
-	$exercises_count = Database :: num_rows($result);
-	
-	$result_total = Database::query($total_sql);
-	$total_exercises  = 0;    
-	
-	if (Database :: num_rows($result_total)) {    
-        $result_total = Database::fetch_array($result_total);
-        $total_exercises = $result_total['count'];
-	}
-    
-	//get HotPotatoes files (active and inactive)
-	if ($is_allowedToEdit) {
-        $sql = "SELECT * FROM $TBL_DOCUMENT WHERE path LIKE '" . Database :: escape_string($uploadPath) . "/%/%'";
-        $res = Database::query($sql);
-        $hp_count = Database :: num_rows($res);
-	} else {
-        $res = Database::query("SELECT * FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
-                                WHERE d.id = ip.ref  AND ip.tool = '" . TOOL_DOCUMENT . "'
-                                AND d.path LIKE '" . Database :: escape_string($uploadPath) . "/%/%'
-                                AND ip.visibility='1' AND d.c_id=".api_get_course_int_id()." AND ip.c_id=".api_get_course_int_id());
-        $hp_count = Database :: num_rows($res);    
-	}
-	$total = $total_exercises + $hp_count;		
+
+// Only for administrators
+if ($is_allowedToEdit) {
+    $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ";
+    $sql = "SELECT * FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ORDER BY title LIMIT ".$from."," .$limit;
+} else { 
+    // Only for students
+    $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE active = '1' $condition_session ";
+    $sql = "SELECT id, title, type, description, results_disabled, session_id, start_time, end_time, max_attempt FROM $TBL_EXERCICES 
+            WHERE active='1' $condition_session 
+            ORDER BY title LIMIT ".$from."," .$limit;
 }
+
+$result = Database::query($sql);        
+$exercises_count = Database :: num_rows($result);
+
+$result_total = Database::query($total_sql);
+$total_exercises  = 0;    
+
+if (Database :: num_rows($result_total)) {    
+    $result_total = Database::fetch_array($result_total);
+    $total_exercises = $result_total['count'];
+}
+
+//get HotPotatoes files (active and inactive)
+if ($is_allowedToEdit) {
+    $sql = "SELECT * FROM $TBL_DOCUMENT WHERE path LIKE '" . Database :: escape_string($uploadPath) . "/%/%'";
+    $res = Database::query($sql);
+    $hp_count = Database :: num_rows($res);
+} else {
+    $res = Database::query("SELECT * FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
+                            WHERE d.id = ip.ref  AND ip.tool = '" . TOOL_DOCUMENT . "'
+                            AND d.path LIKE '" . Database :: escape_string($uploadPath) . "/%/%'
+                            AND ip.visibility='1' AND d.c_id=".api_get_course_int_id()." AND ip.c_id=".api_get_course_int_id());
+    $hp_count = Database :: num_rows($res);    
+}
+$total = $total_exercises + $hp_count;		
+
 
 
 if ($is_allowedToEdit && $origin != 'learnpath') {
-	if ($show != 'result') {
-		echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_exercice.png', get_lang('NewEx'),'','32').'</a>';
-		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_question.png', get_lang('AddQ'),'','32').'</a>';
-		// Question category
-		echo '<a href="tests_category.php">';
-		echo Display::return_icon('question_category_show.gif', get_lang('QuestionCategory'));
-		echo '</a>';		
-		echo '<a href="question_pool.php">';
-		echo Display::return_icon('database.png', get_lang('langQuestionPool'), array('style'=>'width:32px'));
-		echo '</a>';
-		// end question category
-		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'),'','32').'</a>';
-		// link to import qti2 ...
-		echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'),'','32') .'</a>';
-        echo '<a href="upload_exercise.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'),'','32') .'</a>';
-	}
+	
+	echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_exercice.png', get_lang('NewEx'),'','32').'</a>';
+	echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_question.png', get_lang('AddQ'),'','32').'</a>';
+	// Question category
+	echo '<a href="tests_category.php">';
+	echo Display::return_icon('question_category_show.gif', get_lang('QuestionCategory'));
+	echo '</a>';		
+	echo '<a href="question_pool.php">';
+	echo Display::return_icon('database.png', get_lang('langQuestionPool'), array('style'=>'width:32px'));
+	echo '</a>';
+	// end question category
+	echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'),'','32').'</a>';
+	// link to import qti2 ...
+	echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'),'','32') .'</a>';
+    echo '<a href="upload_exercise.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'),'','32') .'</a>';
+	
+} 
 
-	// the actions for the statistics
-	if ($show == 'result') {
-		// the form
-		if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-			if ($_SESSION['export_user_fields']) {
-				$alt = get_lang('ExportWithUserFields');
-				$extra_user_fields = '<input type="hidden" name="export_user_fields" value="export_user_fields">';
-			} else {
-				$alt = get_lang('ExportWithoutUserFields');
-				$extra_user_fields = '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
-			}			
-			echo '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';			
-            	
-            echo '<script type="text/javascript">		
-            $(document).ready(function() {
-            			    
-             	$( "#dialog:ui-dialog" ).dialog( "destroy" );
-                    
-                $( "#dialog-confirm" ).dialog({
-                        autoOpen: false,
-                        show: "blind",                
-                        resizable: false,
-                        height:250,
-                        modal: true
-                 });
-            
-                $("#export_opener").click(function() {                
-                    var targetUrl = $(this).attr("href");        
-                    $( "#dialog-confirm" ).dialog({
-                    	width:350,
-                    	height:220,
-                        buttons: {
-                            "'.addslashes(get_lang('Download')).'": function() {
-                            	var export_format = $("input[name=export_format]:checked").val();
-                            	var extra_data  = $("input[name=load_extra_data]:checked").val();                	         
-                                location.href = targetUrl+"&export_format="+export_format+"&extra_data="+extra_data;                
-                                $( this ).dialog( "close" );                    
-                            },                
-                        }
-                    });        
-                    $( "#dialog-confirm" ).dialog("open");
-                    return false;
-                }); 
-                
-            });
-            </script>';
-            
-            echo '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
-                echo Display::tag('p', Display::input('radio', 'export_format', 'csv', array('checked'=>'1', 'id'=>'export_format_csv_label')). Display::tag('label', get_lang('ExportAsCSV'), array('for'=>'export_format_csv_label')));
-                echo Display::tag('p', Display::input('radio', 'export_format', 'xls', array('id'=>'export_format_xls_label')). Display::tag('label', get_lang('ExportAsXLS'), array('for'=>'export_format_xls_label')));   
-                echo Display::tag('p', Display::input('checkbox', 'load_extra_data',  '0',array('id'=>'load_extra_data_id')). Display::tag('label', get_lang('LoadExtraData'), array('for'=>'load_extra_data_id')));
-            echo '</div>';
-            if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
-                $filter = 1;
-            } else {
-            	$filter = 2;
-            }
-			echo '<a id="export_opener" href="'.api_get_self().'?export_report=1&show=result&export_filter='.$filter.'&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval($_GET['exerciseId']).'" >'.
-				  Display::return_icon('save.png',   get_lang('Export'),'',32).'</a>';			
-		}
-	}
-} else {
-	//Student view
-	if ($show == 'result') {
-		echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
-	}
-}
-
-if ($show == 'result') {
-	if (api_is_allowed_to_edit(null,true)) {
-		if (!$_GET['filter']) {
-			$filter_by_not_revised = true;
-			$filter = 1;
-		} else {
-			$filter=Security::remove_XSS($_GET['filter']);
-		}
-		$filter = (int)$_GET['filter'];
-
-		switch ($filter) {
-			case 1 :
-				$filter_by_not_revised = true;
-				break;
-			case 2 :
-				$filter_by_revised = true;
-				break;
-			default :
-				null;
-		}
-		if (!empty($_GET['exerciseId']) && empty($_GET['filter_by_user'])) {
-    		if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
-    			$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_check.png', get_lang('ShowCorrectedOnly'),'','32').'</a>';
-    		} else {
-    			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_uncheck.png', get_lang('ShowUnCorrectedOnly'),'','32').'</a>';
-    		}
-    		echo $view_result;
-			// 
-			// filter by student group menu
-			// 
-			$exercice_id = intval($_GET['exerciseId']);
-            echo "<script type='text/javascript'>";
-			echo "	    function doFilterByGroup() {";
-    		echo "			var IdGroup = document.getElementById('groupFilter').value;";
-    		echo "			var goToUrl = \"".api_get_self()."?".api_get_cidreq()."&show=result&filter=$filter&gradebook=$gradebook&exerciseId=$exercice_id;$quiz_results_per_page&filterByGroup=\"+IdGroup;";
-    		echo "			self.location.href=goToUrl;";
-			echo "	    }";
-			echo "        </script>";
-			echo "&nbsp;&nbsp;";
-			echo Display::return_icon('group.gif', get_lang("FilterByGroup"));
-			echo displayGroupMenu("groupFilter", $filterByGroup, "doFilterByGroup()")."&nbsp;";
-		}
-	}
-}
 
 if ($is_allowedToEdit) {
     echo '</div>'; // closing the actions div
-} elseif ($show == 'result') {
-    echo '</div>'; // closing the actions div
 }
 
-if ($show == 'test') {  
+
     if ($total > $limit) {
         echo '<div style="float:right;height:20px;">';
         //show pages navigation link for previous page
@@ -694,9 +405,7 @@ if ($show == 'test') {
         }
         echo '</div>';
     }
-}
-
-if ($show == 'test') { 
+ 
     $i =1;
     $lis = '';
     $exercise_list = array();
@@ -834,7 +543,7 @@ if ($show == 'test') {
                         //Settings                                                                
                         //$actions  = Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',22), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);                        
                         $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',22), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);                        
-                        $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
+                        $actions .='<a href="exercice_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
                         //Export
                         $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
                         //Clean exercise                    
@@ -849,7 +558,7 @@ if ($show == 'test') {
                         $actions .= Display::url(Display::return_icon('export_qti2.png','IMS/QTI','','22'),        'exercice.php?choice=exportqti2&exerciseId='.$row['id']);
                     } else { // not session resource                
                         $actions = Display::return_icon('edit_na.png', get_lang('ExerciseEditionNotAvailableInSession'));                        
-                        $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
+                        $actions .='<a href="exercice_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
                         $actions .= Display::url(Display::return_icon('cd.gif',   get_lang('CopyExercise')),     '',  array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));                           
                     }
                     
@@ -872,7 +581,8 @@ if ($show == 'test') {
 							$number_of_questions .= $nbQuestionsTotal." ";
 							$number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase") ;
 							$number_of_questions .= " - ";
-							$number_of_questions .= Testcategory::getNumberMaxQuestionByCat($exid).' '.get_lang('QuestionByCategory');
+							//$number_of_questions .= Testcategory::getNumberMaxQuestionByCat($exid).' '.get_lang('QuestionByCategory');
+                            $number_of_questions .= min(Testcategory::getNumberMaxQuestionByCat($exid), $random_number_of_question).' '.get_lang('QuestionByCategory');
 						} else {
                        		$random_label = ' ('.get_lang('Random').') ';                       	
                        	    $number_of_questions = $random_number_of_question . ' ' .$random_label.' '.$textByCategory;
@@ -992,7 +702,7 @@ if ($show == 'test') {
                     $item .=  Display::tag('td', $attempt_text);
                                      
                     //See results
-                    $actions =' '.$num.' <a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">   '.Display::return_icon('test_results.png', get_lang('Results'),'',22).' </a>';
+                    $actions =' '.$num.' <a href="exercice_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">   '.Display::return_icon('test_results.png', get_lang('Results'),'',22).' </a>';
                 }                
                 $class = 'row_even';
                 if ($count % 2) {
@@ -1009,8 +719,7 @@ if ($show == 'test') {
 
 
        
-    //Hotpotatoes results        
-    
+    //Hotpotatoes results            
     
     
     if ($is_allowedToEdit) {
@@ -1067,7 +776,7 @@ if ($show == 'test') {
                 $item .= Display::tag('td','-');
                                  
                 $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',22), 'adminhp.php?'.api_get_cidreq().'&hotpotatoesName='.$path);
-                $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&path='.$path.'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';
+                $actions .='<a href="exercice_report.php?' . api_get_cidreq() . '&path='.$path.'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';
                                         
                 // if active
                 if ($active) {
@@ -1085,9 +794,8 @@ if ($show == 'test') {
                 if ($active == 1) {
                     $nbrActiveTests = $nbrActiveTests +1;
                     $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'"'.(!$active?'class="invisible"':'').'">'.$title.'</a>');
-                    $item .= Display::tag('td', '');                            
-                    //$item .= Display::tag('td', '');
-                    $actions ='<a href="exercice.php?' . api_get_cidreq() . '&show=result&path='.$path.'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';
+                    $item .= Display::tag('td', '');
+                    $actions ='<a href="exercice_report.php?' . api_get_cidreq() . '&path='.$path.'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';
                     $item .= Display::tag('td', $actions);                            
                     echo Display::tag('tr',$item, array('class'=>$class));
                 }                        
@@ -1098,96 +806,8 @@ if ($show == 'test') {
     echo '</table>';    
     Display :: display_footer();    
     exit;
-}
-    
 
-/* Exercise Results (uses tracking tool) */
-
-// if tracking is enabled
-if ($show == 'result') {
-	$parameters = array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'show'=>Security::remove_XSS($_GET['show']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
-	
-    $exercise_id = intval($_GET['exerciseId']);
-    if (!empty($exercise_id))
-        $parameters['exerciseId'] = $exercise_id;
-    if (!empty($_GET['path'])) {
-        $parameters['path'] = Security::remove_XSS($_GET['path']);
-    }
-    
-	$table = new SortableTable('quiz_results', 'get_count_exam_results', 'get_exam_results_data', 1, 10);
-	$table->set_additional_parameters($parameters);
-    
-    if ($is_allowedToEdit || $is_tutor) {
-		if (api_is_western_name_order()) {
-			$table->set_header(0, get_lang('FirstName'));
-			$table->set_header(1, get_lang('LastName'));    			
-		} else {
-			$table->set_header(0, get_lang('LastName'));
-			$table->set_header(1, get_lang('FirstName'));    			
-		}		
-		$table->set_header(2, get_lang('LoginName'));
-		$table->set_header(3, get_lang('Group'),false);
-		$table->set_header(4, get_lang('Exercice'),false);
-    	$table->set_header(5, get_lang('Duration'),false);
-    	$table->set_header(6, get_lang('Date'));
-    	$table->set_header(7, get_lang('Score'),false);
-    	$table->set_header(8, get_lang('CorrectTest'), false);   
-    	
-    } else {
-        $table->set_header(0, get_lang('Exercice'));
-    	$table->set_header(1, get_lang('Duration'),false);
-    	$table->set_header(2, get_lang('Date'));
-    	$table->set_header(3, get_lang('Score'),false);
-    	$table->set_header(4, get_lang('Result'), false);   
-    }	 
-	$table->display();	
-}
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
 	Display :: display_footer();
-}
-
-
-// ===========================================================================
-// some functions
-// ===========================================================================
-
-// ---------------------------------------------------------
-// return the HTML code for a menu with students group
-// @input : $in_name : is the name and the id of the <select>
-//          $in_default : default value for option
-// @return : the html code of the <select>
-// ---------------------------------------------------------
-function displayGroupMenu($in_name, $in_default, $in_onchange="") {
-	// check the default value of option
-	$tabSelected = array($in_default => " selected='selected' ");
-	$res = "";
-	$res .= "<select name='$in_name' id='$in_name' onchange='".$in_onchange."' >";
-	$res .= "<option value='-1'".$tabSelected["-1"].">-- ".get_lang('AllGroups')." --</option>";
-	$res .= "<option value='0'".$tabSelected["0"].">- ".get_lang('NotInAGroup')." -</option>";
-	$tabGroups = GroupManager::get_group_list();
-	$currentCatId = 0;
-	for ($i=0; $i < count($tabGroups); $i++) {
-		$tabCategory = GroupManager::get_category_from_group($tabGroups[$i]["id"]);
-		if ($tabCategory["id"] != $currentCatId) {
-			$res .= "<option value='-1' disabled='disabled'>".$tabCategory["title"]."</option>";
-			$currentCatId = $tabCategory["id"];
-		}
-		$res .= "<option ".$tabSelected[$tabGroups[$i]["id"]]."style='margin-left:40px' value='".$tabGroups[$i]["id"]."'>".$tabGroups[$i]["name"]."</option>";
-	}
-	$res .= "</select>";
-	return $res;
-}
-
-
-// ------------------------------------------------------
-// return a list of group for user with user_id=in_userid
-// separated with in_separator
-// --------------------------------------------------
-function displayGroupsForUser($in_separator, $in_userid) {
-	$res = implode($in_separator, GroupManager::get_user_group_name($in_userid));
-	if ($res == "") {
-		$res = "<div style='text-align:center'>-</div>";
-	}
-	return $res;
 }

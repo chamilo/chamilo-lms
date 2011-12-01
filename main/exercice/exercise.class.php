@@ -3068,7 +3068,7 @@ class Exercise {
 			//this is a problem (it means that there is no admin for this course)
 		}
 
-		$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&show=result&exerciseId='.$this->id;
+		$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercice_report.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$this->id;
 		$user_info = UserManager::get_user_info_by_id(api_get_user_id());
 
 		$mycharset = api_get_system_encoding();

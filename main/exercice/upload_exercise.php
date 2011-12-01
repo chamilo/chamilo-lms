@@ -80,7 +80,7 @@ function lp_upload_quiz_actions() {
 function lp_upload_quiz_secondary_actions() {
  $lp_id = Security::remove_XSS($_GET['lp_id']);
  $return.= '';
- $return.='<a href="exercice.php?show=result&' . api_get_cidreq() . '">' . Display :: return_icon('reporting32.png', get_lang('Tracking')) . get_lang('Tracking') . '</a>';
+ $return.='<a href="exercice_report.php?' . api_get_cidreq() . '">' . Display :: return_icon('reporting32.png', get_lang('Tracking')) . get_lang('Tracking') . '</a>';
  return $return;
 }
 

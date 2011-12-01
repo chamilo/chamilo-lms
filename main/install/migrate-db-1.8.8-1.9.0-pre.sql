@@ -13,7 +13,6 @@
 -- This first part is for the main database
 
 -- xxMAINxx
-UPDATE settings_current SET selected_value = '1.9.0.16233' WHERE variable = 'chamilo_database_version';
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('filter_terms', NULL, 'textarea', 'Security', '', 'FilterTermsTitle', 'FilterTermsComment', NULL, NULL, 0);
 
@@ -115,6 +114,12 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_help_link', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_help_link', 'false', 'No');
 
+ALTER TABLE gradebook_category MODIFY COLUMN weight FLOAT NOT NULL;
+ALTER TABLE gradebook_link MODIFY COLUMN weight FLOAT  NOT NULL;
+
+-- Do not move this query
+UPDATE settings_current SET selected_value = '1.9.0.16241' WHERE variable = 'chamilo_database_version';
+
 
 
 -- xxSTATSxx
@@ -133,9 +138,6 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_skills_management', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_skills_management', 'false', 'No');
-
-
-
 
 -- xxUSERxx
 

@@ -66,7 +66,7 @@ class LinkAddEditForm extends FormValidator
 				}
 			}
 		} else {
-			$this->addElement('static','label',get_lang('Name'), $link->get_name().' ['.$link->get_type_name().']');
+			$this->addElement('static','label',get_lang('Name'),  '<span class="freeze">'.$link->get_name().' ['.$link->get_type_name().']</span>');
 			$this->addElement('hidden','name_link',$link->get_name(),array('id'=>'name_link'));
 		}  
         $select_gradebook = $this->addElement('select', 'select_gradebook', get_lang('SelectGradebook'), array(), array('id' => 'hide_category_id'));

@@ -19,13 +19,13 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
  * Initialization
  */
 $doc_url = str_replace(array('../', '\\', '\\0', '..'), array('', '', '', ''), urldecode($_GET['file']));
-$cid = api_get_course_id();
-$document_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$document_web_path = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document';
-$origin = $_REQUEST['origin'];
-$learnpath_id = $_REQUEST['learnpath_id'];
-$learnpath_item_id = $_REQUEST['learnpath_item_id'];
-$time = $_REQUEST['time'];
+$cid                = api_get_course_id();
+$document_path      = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+$document_web_path  = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document';
+$origin             = $_REQUEST['origin'];
+$learnpath_id       = $_REQUEST['learnpath_id'];
+$learnpath_item_id  = $_REQUEST['learnpath_item_id'];
+$time               = $_REQUEST['time'];
 
 /**
  * Read content
@@ -39,9 +39,9 @@ if ($content == '') {
 	$content = ReadFileCont($full_file_path);
 	$mit = "function Finish(){";
 
-	$js_content = "var SaveScoreVariable = 0; // This variable included by Dokeos System\n".
-				"function mySaveScore() // This function included by Dokeos System\n".
-				"{\n".
+	$js_content = "var SaveScoreVariable = 0; \n".
+				"function mySaveScore()\n".
+				"{\n". 
 				"   if (SaveScoreVariable==0)\n".
 				"		{\n".
 				"			SaveScoreVariable = 1;\n".

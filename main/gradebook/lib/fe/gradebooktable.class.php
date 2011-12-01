@@ -47,7 +47,7 @@ class GradebookTable extends SortableTable {
 		$this->set_header($column++, get_lang('Name'), false);
 
 		if (api_is_allowed_to_edit(null, true)) {
-			$this->set_header($column++, get_lang('Weight'),'','width="50px"');
+			$this->set_header($column++, get_lang('Weight'),'','width="80px"');
 		} else {
 			$this->set_header($column++, get_lang('Weight'), false);
 			$this->set_header($column++, get_lang('Evaluation'), false);
@@ -173,7 +173,7 @@ class GradebookTable extends SortableTable {
             $category_weight = $item->get_weight();
             	
 			if (api_is_allowed_to_edit(null, true)) {
-				$weight_total_links += intval($data[3]);
+				$weight_total_links += $data[3];
 			} else {
 				$cattotal   = Category :: load($_GET['selectcat']);
                 $scoretotal = $cattotal[0]->calc_score(api_get_user_id());                    
@@ -251,7 +251,7 @@ class GradebookTable extends SortableTable {
 						$cattotal   = Category :: load($_GET['selectcat']);
 		                $scoretotal = $cattotal[0]->calc_score(api_get_user_id());                    
 		                $item_value = $scoretotal[0];
-		                $item_value = number_format($item_value, 2, '.', ' ');					   				  			   	
+		                $item_value = number_format($item_value, 2, '.', ' ');                        					   				  			   	
 					}
 					
 					//Date
@@ -288,16 +288,18 @@ class GradebookTable extends SortableTable {
 			if (isset($_GET['selectcat']) && $_GET['selectcat'] > 0 && $view <> 'presence') {
 				$id_cat = intval($_GET['selectcat']);
 				$category = Category :: load($id_cat);
+				//$weight_category = intval($this->build_weight($category[0]));
 				$weight_category = intval($this->build_weight($category[0]));
 				$course_code = $this->build_course_code($category[0]);
-
+                $weight_total_links  = round($weight_total_links);
+                //var_dump($weight_total_links);;
 				if ($weight_total_links > $weight_category) {
 				    
 					$warning_message = get_lang('TotalWeightMustNotBeMoreThan').'&nbsp;'.$weight_category;
 					Display::display_warning_message($warning_message,false);
 				}
 				
-				if ($weight_total_links < $weight_category) {
+				if ($weight_total_links < $weight_category ||$weight_total_links > $weight_category) {
 					$warning_message = sprintf(get_lang('TotalWeightMustBeX'), $weight_category);
 					Display::display_warning_message($warning_message,false);
 				}

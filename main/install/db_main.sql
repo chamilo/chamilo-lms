@@ -854,7 +854,7 @@ VALUES
 ('enable_help_link', NULL, 'radio', 'Platform', 'true', 'EnableHelpLinkTitle', 'EnableHelpLinkTitle', NULL, NULL, 0),
 ('allow_teacher_change_gradebook_grading_model', NULL, 'radio', 'Gradebook', 'false', 'AllowTeacherChangeGradebookGradingModelTitle', 'AllowTeacherChangeGradebookGradingModelComment', NULL, NULL, 1),
 ('grading_model', 'grading_model', 'custom', 'Gradebook', 'false', 'GradingModelTitle', 'GradingModelComment', NULL, NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.16233','DokeosDatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.16241','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('use_custom_pages',NULL,'radio','Platform','false','UseCustomPages','useCustomPagesComment','platform',NULL,0),
@@ -1318,7 +1318,7 @@ CREATE TABLE gradebook_category (
   user_id int NOT NULL,
   course_code varchar(40) default NULL,
   parent_id int default NULL,
-  weight smallint NOT NULL,
+  weight float NOT NULL,
   visible tinyint NOT NULL,
   certif_min_score int DEFAULT NULL,
   session_id int DEFAULT NULL,
@@ -1350,7 +1350,7 @@ CREATE TABLE gradebook_link (
   course_code varchar(40) NOT NULL,
   category_id int NOT NULL,
   created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
-  weight smallint NOT NULL,
+  weight float NOT NULL,
   visible tinyint NOT NULL,
   PRIMARY KEY  (id)
 );

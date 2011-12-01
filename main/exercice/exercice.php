@@ -43,22 +43,13 @@ require_once api_get_path(LIBRARY_PATH)."groupmanager.lib.php"; // for group fil
 $is_allowedToEdit 			= api_is_allowed_to_edit(null,true);
 $is_tutor 					= api_is_allowed_to_edit(true);
 $is_tutor_course 			= api_is_course_tutor();
-$tbl_course_rel_user		= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$TBL_USER 					= Database :: get_main_table(TABLE_MAIN_USER);
+
 $TBL_DOCUMENT 				= Database :: get_course_table(TABLE_DOCUMENT);
 $TBL_ITEM_PROPERTY 			= Database :: get_course_table(TABLE_ITEM_PROPERTY);
-$TBL_EXERCICE_ANSWER 		= Database :: get_course_table(TABLE_QUIZ_ANSWER);
 $TBL_EXERCICE_QUESTION 		= Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES 				= Database :: get_course_table(TABLE_QUIZ_TEST);
-$TBL_QUESTIONS 				= Database :: get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_TRACK_EXERCICES 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TBL_TRACK_HOTPOTATOES 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-$TBL_TRACK_ATTEMPT 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-$TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-$TBL_LP_ITEM_VIEW 			= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
-$TBL_LP_ITEM 				= Database :: get_course_table(TABLE_LP_ITEM);
-$TBL_LP_VIEW 				= Database :: get_course_table(TABLE_LP_VIEW);
-$TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);	
+$table_lp_item              = Database::get_course_table(TABLE_LP_ITEM);
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
@@ -285,7 +276,7 @@ if ($is_allowedToEdit) {
 				break;
 			case 'enable' : // enables an exercise
 				$newVisibilityStatus = "1"; //"visible"
-				$query = "SELECT id FROM $TBL_DOCUMENT WHERE path='" . Database :: escape_string($file) . "'";
+				$query = "SELECT id FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path='" . Database :: escape_string($file) . "'";
 				$res = Database::query($query);
 				$row = Database :: fetch_array($res, 'ASSOC');
 				api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'visible', $_user['user_id']);
@@ -294,7 +285,7 @@ if ($is_allowedToEdit) {
 				break;
 			case 'disable' : // disables an exercise
 				$newVisibilityStatus = "0"; //"invisible"
-				$query = "SELECT id FROM $TBL_DOCUMENT WHERE path='" . Database :: escape_string($file) . "'";
+				$query = "SELECT id FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path='" . Database :: escape_string($file) . "'";
 				$res = Database::query($query);
 				$row = Database :: fetch_array($res, 'ASSOC');
 				api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'invisible', $_user['user_id']);
@@ -326,13 +317,14 @@ $condition_session  = api_get_session_condition($session_id,true,true);
 
 // Only for administrators
 if ($is_allowedToEdit) {
-    $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ";
-    $sql = "SELECT * FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ORDER BY title LIMIT ".$from."," .$limit;
+    $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE c_id = $course_id AND active<>'-1' $condition_session ";
+    $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND active<>'-1' $condition_session ORDER BY title LIMIT ".$from."," .$limit;
 } else { 
     // Only for students
-    $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE active = '1' $condition_session ";
+    $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE c_id = $course_id AND active = '1' $condition_session ";
     $sql = "SELECT id, title, type, description, results_disabled, session_id, start_time, end_time, max_attempt FROM $TBL_EXERCICES 
-            WHERE active='1' $condition_session 
+            WHERE c_id = $course_id AND 
+                  active='1' $condition_session 
             ORDER BY title LIMIT ".$from."," .$limit;
 }
 
@@ -349,19 +341,21 @@ if (Database :: num_rows($result_total)) {
 
 //get HotPotatoes files (active and inactive)
 if ($is_allowedToEdit) {
-    $sql = "SELECT * FROM $TBL_DOCUMENT WHERE path LIKE '" . Database :: escape_string($uploadPath) . "/%/%'";
+    $sql = "SELECT * FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path LIKE '" . Database :: escape_string($uploadPath) . "/%/%'";
     $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);
 } else {
-    $res = Database::query("SELECT * FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
-                            WHERE d.id = ip.ref  AND ip.tool = '" . TOOL_DOCUMENT . "'
-                            AND d.path LIKE '" . Database :: escape_string($uploadPath) . "/%/%'
-                            AND ip.visibility='1' AND d.c_id=".api_get_course_int_id()." AND ip.c_id=".api_get_course_int_id());
+    $sql = "SELECT * FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
+            WHERE   d.id = ip.ref AND 
+                    ip.tool = '" . TOOL_DOCUMENT . "' AND 
+                    d.path LIKE '" . Database :: escape_string($uploadPath) . "/%/%' AND 
+                    ip.visibility ='1' AND 
+                    d.c_id      = ".$course_id." AND 
+                    ip.c_id     = ".$course_id;
+    $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);    
 }
 $total = $total_exercises + $hp_count;		
-
-
 
 if ($is_allowedToEdit && $origin != 'learnpath') {
 	
@@ -448,7 +442,7 @@ if ($is_allowedToEdit) {
             
             $count = 0;
             if (!empty($exercise_list))
-            foreach ($exercise_list as $row) {
+            foreach ($exercise_list as $row) {                
                 //echo '<div  id="tabs-'.$i.'">';
                 $i++;                    
                 //validacion when belongs to a session
@@ -489,7 +483,7 @@ if ($is_allowedToEdit) {
                             }
                         }
                     }                    
-                }  
+                }
                  
 				
  				//Blocking empty start times see BT#2800
@@ -504,9 +498,11 @@ if ($is_allowedToEdit) {
                 // Teacher only                
                 if ($is_allowedToEdit) {                   
                     $show_quiz_edition = true;                
-                    $table_lp_item    = Database::get_course_table(TABLE_LP_ITEM);
+                    
                     $sql="SELECT max_score FROM $table_lp_item
-                          WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($row['id'])."'";
+                          WHERE c_id = $course_id AND 
+                                item_type = '".TOOL_QUIZ."' AND 
+                                path ='".Database::escape_string($row['id'])."'";
                     $result = Database::query($sql);
                     if (Database::num_rows($result) > 0) {
                         $show_quiz_edition = false;
@@ -518,7 +514,7 @@ if ($is_allowedToEdit) {
                     }                    
                                     
                     //Showing exercise title                    
-                    $row['title'] = text_filter(cut($row['title'], EXERCISE_MAX_NAME_SIZE));
+                    $row['title'] = cut($row['title'], EXERCISE_MAX_NAME_SIZE);
                      
                     if ($session_id == $row['session_id']) {
                         //Settings                                                                
@@ -535,15 +531,17 @@ if ($is_allowedToEdit) {
                     $exid = $row['id'];
     
                     //count number exercice - teacher
-                    $sqlquery   = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '" . $exid . "'";
+                    $sqlquery   = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND exercice_id = $exid";
                     $sqlresult  = Database::query($sqlquery);
                     $rowi       = Database :: result($sqlresult, 0);
+                    
+                    $count = count_exercise_result($exid, $course_code, $session_id);                    
                                         
                     if ($session_id == $row['session_id']) {
                         //Settings                                                                
                         //$actions  = Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',22), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);                        
                         $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',22), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);                        
-                        $actions .='<a href="exercice_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
+                        $actions .='<a href="exercice_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">' . $count.' '.Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
                         //Export
                         $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
                         //Clean exercise                    
@@ -556,9 +554,11 @@ if ($is_allowedToEdit) {
                         }                        
                         // Export qti ...                    
                         $actions .= Display::url(Display::return_icon('export_qti2.png','IMS/QTI','','22'),        'exercice.php?choice=exportqti2&exerciseId='.$row['id']);
-                    } else { // not session resource                
+                    } else { 
+                        // not session                 
                         $actions = Display::return_icon('edit_na.png', get_lang('ExerciseEditionNotAvailableInSession'));                        
-                        $actions .='<a href="exercice_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
+                        
+                        $actions .='<a href="exercice_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
                         $actions .= Display::url(Display::return_icon('cd.gif',   get_lang('CopyExercise')),     '',  array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));                           
                     }
                     
@@ -620,7 +620,7 @@ if ($is_allowedToEdit) {
                     $item =  Display::tag('td',$url.' '.$session_img);  
                            
                     //count number exercise questions
-                    $sqlquery   = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = ".$row['id'];
+                    $sqlquery   = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND exercice_id = ".$row['id'];
                     $sqlresult  = Database::query($sqlquery);
                     $rowi       = Database::result($sqlresult, 0);
                     

@@ -904,7 +904,7 @@ function get_all_exercise_results_by_course($course_code, $session_id = 0, $get_
 	if ($get_count) {
 	    $select = 'count(*) as count';    
 	}	
-	$sql = "SELECT $select FROM $table_track_exercises WHERE status = ''  AND exe_cours_id = '$course_code' AND session_id = $session_id  AND orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY exe_id";	
+	$sql = "SELECT $select FROM $table_track_exercises WHERE status = ''  AND exe_cours_id = '$course_code' AND session_id = $session_id  AND orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY exe_id";    	
 	$res = Database::query($sql);	
 	if ($get_count) {
 	    $row = Database::fetch_array($res,'ASSOC');	    
@@ -954,10 +954,6 @@ function get_all_exercise_results_by_user($user_id,  $course_code, $session_id =
     //echo '<pre>'; print_r($list);
 	return $list;
 }
-
-
-
-
 
 /**
 * Gets exercise results (NO Exercises in LPs) from a given exercise id, course, session
@@ -1110,11 +1106,7 @@ function get_best_exercise_results_by_user($exercise_id, $course_code, $session_
 		while($row_q = Database::fetch_array($res_question,'ASSOC')) {
 			$list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
 		}		
-	}
-	/*
-	echo count($list);
-	echo '<br>';
-	echo '<pre>'; print_r($list);*/
+	}	
 	//Getting the best results of every student	
 	$best_score_return = array();
 	
@@ -1125,11 +1117,30 @@ function get_best_exercise_results_by_user($exercise_id, $course_code, $session_
 	    if ($current_best_score[$user_id] > $best_score_return[$user_id]['exe_result']) {
 	        $best_score_return[$user_id] = $student_result;
 	    }
-	}
-	/*
-	echo count($best_score_return);
-	echo '<pre>'; print_r($best_score_return);*/
+    }
 	return $best_score_return;
+}
+
+function count_exercise_result($exercise_id, $course_code, $session_id = 0) {
+    $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    
+    $course_code           = Database::escape_string($course_code);
+    
+    $session_id     = intval($session_id);
+    $exercise_id    = intval($exercise_id);
+    $select = '*';    
+    $sql = "SELECT count(*) as count FROM $table_track_exercises 
+            WHERE   status = ''  AND
+                    exe_exo_id = $exercise_id AND 
+                    exe_cours_id = '$course_code' AND
+                    session_id = $session_id  AND 
+                    orig_lp_id = 0 AND
+                    orig_lp_item_id = 0 ORDER BY exe_id";      
+    $res = Database::query($sql);   
+    
+    $row = Database::fetch_array($res,'ASSOC');     
+    return $row['count'];
+    
 }
 
 

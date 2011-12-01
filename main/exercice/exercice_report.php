@@ -40,6 +40,9 @@ require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH)."groupmanager.lib.php"; // for group filtering
 
+// need functions of statsutils lib to display previous exercices scores
+require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
+
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
 

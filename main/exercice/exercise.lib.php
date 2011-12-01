@@ -768,7 +768,6 @@ function get_count_exam_results() {
 function get_exam_results_data($from, $number_of_items, $column, $direction) {
     //@todo replace all this globals
     global  $is_allowedToEdit, $is_tutor, $filter_by_not_revised, $filter_by_revised, $documentPath, $filter, $filterByGroup;
-            
     
     $is_tutor                   = api_is_allowed_to_edit(true);
     $is_tutor_course            = api_is_course_tutor();
@@ -1162,7 +1161,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
             }
         }
     } else {
+        //echo $hpsql; var_dump($hpsql);
         $hpresults = getManyResultsXCol($hpsql, 6);
+        
    
         // Print HotPotatoes test results.
         if (is_array($hpresults)) {

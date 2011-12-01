@@ -115,6 +115,7 @@ $learnpath_item_id  = intval($_REQUEST['learnpath_item_id']);
 $page               = intval($_REQUEST['page']);
 
 $course_info        = api_get_course_info();
+$course_id          = api_get_course_int_id();
 
 if ($page < 0) {
     $page = 1;
@@ -157,9 +158,6 @@ if ($show != 'result') {
 		$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
 	}
 }
-
-// need functions of statsutils lib to display previous exercices scores
-require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
 
 if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 	require_once 'export/qti2/qti2_export.php';
@@ -583,7 +581,8 @@ if ($is_allowedToEdit) {
 							$number_of_questions .= $nbQuestionsTotal." ";
 							$number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase") ;
 							$number_of_questions .= " - ";
-							$number_of_questions .= Testcategory::getNumberMaxQuestionByCat($exid).' '.get_lang('QuestionByCategory');
+							//$number_of_questions .= Testcategory::getNumberMaxQuestionByCat($exid).' '.get_lang('QuestionByCategory');
+                            $number_of_questions .= min(Testcategory::getNumberMaxQuestionByCat($exid), $random_number_of_question).' '.get_lang('QuestionByCategory');
 						} else {
                        		$random_label = ' ('.get_lang('Random').') ';                       	
                        	    $number_of_questions = $random_number_of_question . ' ' .$random_label.' '.$textByCategory;

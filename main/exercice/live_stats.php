@@ -81,6 +81,50 @@ $headers = array(
 $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
 $interbreadcrumb[] = array ("url" => "admin.php?exerciseId=$exercise_id","name" => $objExercise->name);
 
-$tpl = new Template(get_lang('Stats'));
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+//Add the JS needed to use the jqgrid
+$htmlHeadXtra[] = api_get_jquery_ui_js(true);
+
+// The header.
+Display::display_header($tool_name);
+
+
+//jqgrid will use this URL to do the selects
+
+$url            = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_live_stats&exercise_id='.$objExercise->id;
+
+//The order is important you need to check the the $column variable in the model.ajax.php file 
+$columns        = array(get_lang('Firstname'), get_lang('Lastname'), get_lang('Question'), get_lang('Score'));
+
+//Column config
+$column_model   = array(
+                        array('name'=>'firstname',  'index'=>'firstname',   'width'=>'100', 'align'=>'left'),
+                        array('name'=>'lastname',   'index'=>'lastname',    'width'=>'100', 'align'=>'left','sortable'=>'false'),
+                        array('name'=>'question',   'index'=>'question',    'width'=>'100', 'align'=>'left','sortable'=>'false'),
+                        array('name'=>'score',      'index'=>'score',       'width'=>'100', 'align'=>'left','sortable'=>'false'),
+                       );            
+//Autowidth             
+$extra_params['autowidth'] = 'true';
+//height auto 
+$extra_params['height'] = 'auto'; 
+/*
+//With this function we can add actions to the jgrid (edit, delete, etc)
+$action_links = 'function action_formatter(cellvalue, options, rowObject) {
+                         return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>'.
+                         '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png',get_lang('Copy'),'',22).'</a>'.
+                         '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a>'.
+                         '\'; 
+                 }';
+  */                      
+?>
+<script>
+$(function() {
+<?php 
+    echo Display::grid_js('live_stats',  $url, $columns, $column_model, $extra_params, array(), $action_links,true);       
+?> 
+});
+</script>
+<?php
+
+echo Display::grid_html('live_stats');  
+
+Display::display_footer();

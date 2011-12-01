@@ -11,15 +11,88 @@ require_once '../global.inc.php';
 require_once '../../exercice/exercise.lib.php';
 api_protect_course_script(true);
 $action = $_REQUEST['a'];
+$course_id = api_get_course_int_id();
 
-switch ($action) {    
+switch ($action) {
+    case 'get_live_stats':
+        // 1. Setting variables needed by jqgrid
+        $action= $_GET['a'];
+        $exercise_id = intval($_GET['exercise_id']);
+        $page  = intval($_REQUEST['page']); //page
+        $limit = intval($_REQUEST['rows']); //quantity of rows
+        $sidx  = $_REQUEST['sidx'];         //index to filter         
+        $sord  = $_REQUEST['sord'];         //asc or desc
+        if (!in_array($sord, array('asc','desc'))) {
+            $sord = 'desc'; 
+        }
+        // get index row - i.e. user click to sort $sord = $_GET['sord']; 
+        // get the direction 
+        if (!$sidx) $sidx = 1;
+        
+        $track_exercise        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_attempt         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        $now    = time() - 60*30;
+        $now    = api_get_utc_datetime($now);
+        
+        $where_condition = "WHERE status = 'incomplete' AND exe_exo_id = $exercise_id AND start_date > '$now' ";
+        $sql    = "SELECT COUNT(DISTINCT exe_id) FROM $track_exercise  $where_condition ";
+        $result = Database::query($sql);
+        
+        $count  = Database::fetch_row($result);
+        $count  = $count[0];  
+        
+        //3. Calculating first, end, etc
+                
+        $total_pages = 0;
+        if ($count > 0) { 
+            if (!empty($limit)) {
+                $total_pages = ceil($count/$limit);
+            }
+        }
+        if ($page > $total_pages) { 
+            $page = $total_pages;
+        }     
+        
+        $start = $limit * $page - $limit;
+        if ($start < 0 ) {
+            $start = 0;
+        }        
+        
+        $sql    = "SELECT * FROM $track_exercise $where_condition ";
+        $result = Database::query($sql);
+        $results = array();
+        
+        while ($row = Database::fetch_array($result,'ASSOC')){
+            $results[] = $row;
+        }        
+        $response = new stdClass();           
+        $response->page     = $page; 
+        $response->total    = $total_pages; 
+        $response->records  = $count; 
+        $i=0;
+        if (!empty($results)) {
+            foreach($results as $row) {
+                 //print_r($row);
+                 $response->rows[$i]['id'] = $row['exe_id'];
+                 $array = array();
+                 $array['firstname'] = 'fff';
+                 $array['lastname'] = 'fff';                  
+                                    
+                 $response->rows[$i]['cell'] = $array;
+                 $i++; 
+            }
+        } 
+        echo json_encode($response); 
+        
+        break;            
     case 'update_question_order':
         if (api_is_allowed_to_edit(null, true)) {    
             $new_question_list     = $_POST['question_id_list'];
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);        
             $counter = 1;
             foreach ($new_question_list as $new_order_id) {            
-                Database::update($TBL_QUESTIONS, array('question_order'=>$counter), array('question_id = ? '=>intval($new_order_id)));
+                Database::update($TBL_QUESTIONS, array('question_order'=>$counter), array('question_id = ? AND c_id = ? '=>array(intval($new_order_id), $course_id)));
                 $counter++;
             }
             Display::display_confirmation_message(get_lang('Saved'));

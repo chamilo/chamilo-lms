@@ -99,10 +99,10 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teac
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('grading_model', 'grading_model', 'custom', 'Gradebook', 'false', 'GradingModelTitle', 'GradingModelComment', NULL, NULL, 1);
 
-
-INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+2*X+3*X/6', 'Model 1');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+1*X', 'Model 1');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+1*X+1*X/3', 'Model 2');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+1*X+1*X+1*X/4', 'Model 3');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+2*X+1*X+2*X/6', 'Model 4');
 
 
 ALTER TABLE course_rel_user ADD COLUMN legal_agreement INTEGER DEFAULT 0;

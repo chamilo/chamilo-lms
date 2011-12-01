@@ -1157,9 +1157,10 @@ VALUES
 ('enable_help_link', 'false', 'No'),
 ('allow_teacher_change_gradebook_grading_model', 'true', 'Yes'),
 ('allow_teacher_change_gradebook_grading_model', 'false', 'No'),
-('grading_model', '1*X+2*X+3*X/6', 'Model 1'),
-('grading_model', '1*X+1*X+1*X/3', 'Model 2'),
-('grading_model', '1*X+1*X+1*X+1*X/4', 'Model 3');
+('grading_model', '1*X+1*X', 'Model 1'),
+('grading_model', '1*X+1*X+1*X', 'Model 2'),
+('grading_model', '1*X+1*X+1*X+1*X/4', 'Model 3'),
+('grading_model', '1*X+2*X+1*X+2*X/6', 'Model 4');
 
 /*
 ('use_custom_pages','true','Yes'),

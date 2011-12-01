@@ -238,8 +238,10 @@ class HTML_QuickForm_element extends HTML_Common
         // Modified by Ivan Tcholakov, 16-MAR-2010.
         //return ('' != $value? htmlspecialchars($value): '&nbsp;') .
         //       $this->_getPersistantData();
-        return ('' != $value ? @htmlspecialchars($value, ENT_COMPAT, HTML_Common::charset()): '&nbsp;') .
+        
+        $value =  ('' != $value ? @htmlspecialchars($value, ENT_COMPAT, HTML_Common::charset()): '&nbsp;') .
                $this->_getPersistantData();
+        return '<span class="freeze">'.$value.'</span>';
         //
     } //end func getFrozenHtml
 

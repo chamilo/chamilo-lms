@@ -15,7 +15,6 @@ $course_code 	= api_get_course_id();
 $stud_id        = api_get_user_id();
 $session_id		= api_get_session_id();
 
-
 //make sure the destination for scripts is index.php instead of gradebook.php
 $_SESSION['gradebook_dest'] = 'index.php';
 
@@ -793,8 +792,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
 if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
-} else {		
-	$cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init	
+} else {				
 	$models = api_get_settings_options('grading_model');
 	$course_grading_model_id = api_get_course_setting('course_grading_model');
 	$grading_model = '';
@@ -810,8 +808,11 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 	
 	$grading_contents = api_grading_model_functions($grading_model, 'to_array');
 	$grading_string   = api_grading_model_functions($grading_model, 'decorate');
-	
+    
+    $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
+		
 	if (!empty($cats)) {
+	    
 		$items = $grading_contents['items'];
 		$i = 0;
 		foreach ($cats as $cat) {

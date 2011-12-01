@@ -97,6 +97,9 @@ class GradebookTable extends SortableTable {
         $scoretotal = 0;
 		// determine sorting type
 		$col_adjust = (api_is_allowed_to_edit() ? 1 : 0);
+        // By id        
+        $this->column = 5;
+        
 		switch ($this->column) {
 			// Type
 			case (0 + $col_adjust) :
@@ -113,6 +116,8 @@ class GradebookTable extends SortableTable {
 				break;
 			case (4 + $col_adjust) :
 				$sorting = GradebookDataGenerator :: GDG_SORT_DATE;
+            case (5 + $col_adjust) :                
+                $sorting = GradebookDataGenerator :: GDG_SORT_ID;                
 				break;
 		}
 		
@@ -120,15 +125,13 @@ class GradebookTable extends SortableTable {
 			$sorting |= GradebookDataGenerator :: GDG_SORT_DESC;
 		} else {
 			$sorting |= GradebookDataGenerator :: GDG_SORT_ASC;
-		}		
-		
-		$sorting = GradebookDataGenerator :: GDG_SORT_DATE;
-		$sorting |= GradebookDataGenerator :: GDG_SORT_DESC;
+		}
 		
 		//status of user in course
 	    $user_id     = api_get_user_id();
 		$course_code = api_get_course_id();
 		$status_user = api_get_status_of_user_in_course($user_id, $course_code);
+        
 		$data_array  = $this->datagen->get_data($sorting, $from, $this->per_page);		
 		
 

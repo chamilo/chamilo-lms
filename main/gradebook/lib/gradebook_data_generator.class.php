@@ -14,14 +14,16 @@ class GradebookDataGenerator
 {
 
 	// Sorting types constants
-	const GDG_SORT_TYPE = 1;
-	const GDG_SORT_NAME = 2;
-	const GDG_SORT_DESCRIPTION = 4;
-	const GDG_SORT_WEIGHT = 8;
-	const GDG_SORT_DATE = 16;
+	const GDG_SORT_TYPE            = 1;
+	const GDG_SORT_NAME            = 2;
+	const GDG_SORT_DESCRIPTION     = 4;
+	const GDG_SORT_WEIGHT          = 8;
+	const GDG_SORT_DATE            = 16;
 
-	const GDG_SORT_ASC = 32;
-	const GDG_SORT_DESC = 64;
+	const GDG_SORT_ASC             = 32;
+	const GDG_SORT_DESC            = 64;
+    
+    const GDG_SORT_ID              = 128;
 
 
 	private $items;
@@ -66,6 +68,8 @@ class GradebookDataGenerator
 		// sort array
 		if ($sorting & self :: GDG_SORT_TYPE) {
 			usort($allitems, array('GradebookDataGenerator', 'sort_by_type'));
+        } elseif ($sorting & self :: GDG_SORT_ID) {
+            usort($allitems, array('GradebookDataGenerator', 'sort_by_id'));
 		} elseif ($sorting & self :: GDG_SORT_NAME) {
 			usort($allitems, array('GradebookDataGenerator', 'sort_by_name'));
 		} elseif ($sorting & self :: GDG_SORT_DESCRIPTION) {
@@ -125,6 +129,10 @@ class GradebookDataGenerator
 	function sort_by_name($item1, $item2) {
 		return api_strnatcmp($item1->get_name(), $item2->get_name());
 	}
+    
+    function sort_by_id($item1, $item2) {
+        return api_strnatcmp($item1->get_id(), $item2->get_id());
+    }    
 
 	function sort_by_type($item1, $item2) {
 		if ($item1->get_item_type() == $item2->get_item_type()) {

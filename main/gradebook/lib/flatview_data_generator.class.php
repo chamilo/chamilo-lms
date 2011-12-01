@@ -220,15 +220,16 @@ class FlatViewDataGenerator
                 
                 $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
                 
-                $item_value     = round($score[0]/$divide,2)*100;
+                $item_value     = round($score[0]/$divide,2) * 100;
                 $percentage     = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight(), 2);
                 $item_value     = $percentage*$item_value;
                 
 				$item_total		+= $item->get_weight();
                 
-				$temp_score = $scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
+				$temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
                 
-                $temp_score = $temp_score . ' '.$item_value.' / '.$this->category->get_weight();
+                //$temp_score = $temp_score . ' '.$item_value.' / '.$this->category->get_weight();
+                $temp_score = $temp_score;
                 
 				if (!$show_all) {
 					//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);

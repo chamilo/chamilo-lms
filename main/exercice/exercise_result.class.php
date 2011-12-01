@@ -106,10 +106,13 @@ class ExerciseResult
 		$TBL_TRACK_EXERCISES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 		$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 		$TBL_COURSE_REL_USER 	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+        
         
 
     	$cid             = api_get_course_id();
+        $course_id       = api_get_course_int_id();
     	$user_id         = intval($user_id);
     	$session_id_and  = ' AND te.session_id = ' . api_get_session_id() . ' ';
         $exercise_id     = intval($exercise_id);        
@@ -122,12 +125,20 @@ class ExerciseResult
 		if (empty($user_id)) {		
 			$sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", ce.title as extitle, te.exe_result as exresult , te.exe_weighting as exweight,
                 te.exe_date as exdate, te.exe_id as exid, email as exemail, te.start_date as exstart, steps_counter as exstep, exe_user_id as excruid, te.exe_duration as exduration
-                FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-                WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0";
+                FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  
+                     $TBL_USER  AS user ON (user.user_id = exe_user_id)
+                WHERE   ce.c_id = $course_id AND
+                        te.status != 'incomplete' AND 
+                        te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and  $session_id_and AND 
+                        ce.active <>-1 AND 
+                        orig_lp_id = 0 AND 
+                        orig_lp_item_id = 0";
         
             $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", email, tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
                     FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($cid) . "' AND tth.exe_name = '$hotpotato_name'
+                    WHERE   tu.user_id=tth.exe_user_id AND 
+                            tth.exe_cours_id = '" . Database :: escape_string($cid) . "' AND 
+                            tth.exe_name = '$hotpotato_name'
                     ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
 
 		} else {
@@ -137,16 +148,24 @@ class ExerciseResult
                         "te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
                         "te.start_date as exstart, steps_counter as exstep, exe_user_id as excruid, te.exe_duration as exduration, ce.results_disabled as exdisabled
                         FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-                        WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and $session_id_and AND ce.active <>-1 AND" .
-                        " orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
+                        WHERE   ce.c_id = $course_id AND
+                                te.status != 'incomplete' AND 
+                                te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and $session_id_and AND 
+                                ce.active <>-1 AND 
+                                orig_lp_id = 0 AND 
+                                orig_lp_item_id = 0 
+                        ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
         
             $hpsql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date 
                             FROM $TBL_TRACK_HOTPOTATOES
-                            WHERE exe_user_id = '" . $user_id . "' AND exe_cours_id = '" . Database :: escape_string($cid) . "' AND tth.exe_name = '$hotpotato_name'
+                            WHERE   exe_user_id = '" . $user_id . "' AND 
+                                    exe_cours_id = '" . Database :: escape_string($cid) . "' AND 
+                                    tth.exe_name = '$hotpotato_name'
                             ORDER BY exe_cours_id ASC, exe_date DESC";
 		}
 
-		$results = array();                
+		$results = array();         
+		
 		$resx = Database::query($sql);
 		while ($rowx = Database::fetch_array($resx,'ASSOC')) {
             $results[] = $rowx;
@@ -173,11 +192,12 @@ class ExerciseResult
 
 		//Print the results of tests
 		if (is_array($results) && empty($hotpotato_name)) {
-			for($i = 0; $i < sizeof($results); $i++) {
-
+			for ($i = 0; $i < sizeof($results); $i++) {
 				$revised = false;
-				$sql_exe = 'SELECT exe_id FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING) . '
-							WHERE author != ' . "''" . ' AND exe_id = ' . "'" . Database :: escape_string($results[$i]['exid']) . "'" . ' LIMIT 1';
+				
+				//revised or not
+				$sql_exe = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT_RECORDING
+							WHERE author != '' AND exe_id = ".Database :: escape_string($results[$i]['exid'])." LIMIT 1";							
 				$query = Database::query($sql_exe);
 
 				if (Database :: num_rows($query) > 0) 
@@ -187,11 +207,10 @@ class ExerciseResult
 				if ($filter_by_revised && !$revised) continue;
 
 				$return[$i] = array();
-				//$id         = $results[$i]['exid'];
 				                
 				if (empty($user_id)) {					
-					$return[$i]['last_name']    = $results[$i]['userpart1'];
-					$return[$i]['first_name']   = $results[$i]['userpart2'];
+					$return[$i]['first_name']   = $results[$i]['userpart1'];
+					$return[$i]['last_name']    = $results[$i]['userpart2'];
 					$return[$i]['user_id']      = $results[$i]['excruid'];
 					$return[$i]['email']        = $results[$i]['exemail'];					
 				}
@@ -201,7 +220,6 @@ class ExerciseResult
 				$return[$i]['max']     = $results[$i]['exweight'];
 			}
 		}
-       
 		
 		// Print the Result of Hotpotatoes Tests	
 		if (is_array($hpresults)) {
@@ -213,8 +231,8 @@ class ExerciseResult
 				}
 				if(empty($user_id)) {					
 				    $return[$i]['email'] = $hpresults[$i]['email'];
-					$return[$i]['first_name'] = $hpresults[$i]['userpart2'];
-					$return[$i]['last_name'] = $hpresults[$i]['userpart1'];
+					$return[$i]['first_name'] = $hpresults[$i]['userpart1'];
+					$return[$i]['last_name'] = $hpresults[$i]['userpart2'];
 					//$return[$i]['user_id'] = $results[$i]['userid'];
 				}
 				$return[$i]['title'] = $title;
@@ -241,15 +259,23 @@ class ExerciseResult
 			$filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.csv';
 		}
 		$data = '';
-		
-        $data .= get_lang('Email').';';
 			
-        if(!empty($this->results[0]['last_name'])) {
-			$data .= get_lang('LastName').';';
-		}
-		if(!empty($this->results[0]['first_name'])) {
-			$data .= get_lang('FirstName').';';
-		}
+        if (api_is_western_name_order()) {
+            if(!empty($this->results[0]['first_name'])) {
+                $data .= get_lang('FirstName').';';
+            }  
+            if(!empty($this->results[0]['last_name'])) {
+                $data .= get_lang('LastName').';';
+            }             
+        } else {
+            if(!empty($this->results[0]['last_name'])) {
+                $data .= get_lang('LastName').';';
+            }
+            if(!empty($this->results[0]['first_name'])) {
+                $data .= get_lang('FirstName').';';
+            }            
+        }        
+        $data .= get_lang('Email').';';        
         
 		if ($export_user_fields) {
 			//show user fields section with a big th colspan that spans over all fields
@@ -268,16 +294,24 @@ class ExerciseResult
         
 		//results
 		foreach($this->results as $row) {
-		    $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
-		    
-			if(!empty($row['last_name'])) {
-				$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
-			}
+            if (api_is_western_name_order()) {            
+                if(!empty($row['first_name'])) {
+                    $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+                }    
+    			if(!empty($row['last_name'])) {
+    				$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+    			}
+            } else {
+                if(!empty($row['last_name'])) {
+                    $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+                }
+                if(!empty($row['first_name'])) {
+                    $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+                }
+            }
+            $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
 			
-			if(!empty($row['first_name'])) {
-				$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
-			}
-			if($export_user_fields) {
+			if ($export_user_fields) {
 				//show user fields data, if any, for this user
 				$user_fields_values = UserManager::get_extra_user_data($row['user_id'],false,false, false, true);
 				foreach($user_fields_values as $value) {
@@ -290,6 +324,7 @@ class ExerciseResult
 			$data .= str_replace("\r\n",'  ',$row['max']).';';
 			$data .= "\n";
 		}
+
 		//output the results
 		$len = strlen($data);
 		header('Content-type: application/octet-stream');
@@ -310,6 +345,7 @@ class ExerciseResult
 		echo $data;
 		return true;
 	}
+
 	/**
 	 * Exports the complete report as an XLS file
 	 * @return	boolean		False on error
@@ -346,10 +382,21 @@ class ExerciseResult
 		    
 		    $worksheet->write($line,$column,get_lang('Email'));
 		    $column++;
-		   	$worksheet->write($line,$column,get_lang('LastName'));
-			$column++;
-			$worksheet->write($line,$column,get_lang('FirstName'));
-			$column++;
+            
+            if (api_is_western_name_order()) {         
+		   	
+    			$worksheet->write($line,$column,get_lang('FirstName'));
+    			$column++;
+                
+                $worksheet->write($line,$column,get_lang('LastName'));
+                $column++;
+            } else {
+                $worksheet->write($line,$column,get_lang('LastName'));
+                $column++;
+                
+                $worksheet->write($line,$column,get_lang('FirstName'));
+                $column++;               
+            }
 		}
 
 		if ($export_user_fields) {

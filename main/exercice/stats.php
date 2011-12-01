@@ -1,14 +1,11 @@
 <?php
 
 require_once 'exercise.class.php';
-require_once 'exercise.lib.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
-
 $language_file = 'exercice';
-
-
 require_once '../inc/global.inc.php';
+require_once 'exercise.lib.php';
 $this_section = SECTION_COURSES;
 $exercise_id = (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) ? intval($_GET['exerciseId']) : 0;
 
@@ -80,9 +77,6 @@ $headers = array(
 	get_lang('HighestScore'),
 	get_lang('MaximumScore')
 );
-
-
-
 $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
 $interbreadcrumb[] = array ("url" => "admin.php?exerciseId=$exercise_id","name" => $objExercise->name);
 

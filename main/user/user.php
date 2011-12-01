@@ -166,13 +166,13 @@ if (api_is_allowed_to_edit(null, true)) {
 					if ($_configuration['multiple_access_urls']) {
 						$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
 					}
-					$sql_query .= "WHERE course_code = '$currentCourseID' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_user.user_id = user.user_id ";
+					$sql_query .= " WHERE course_code = '$currentCourseID' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_user.user_id = user.user_id ";
 					
 					if ($_configuration['multiple_access_urls']) {							
 						$sql_query .= " AND user.user_id = au.user_id  AND access_url_id =  $current_access_url_id  ";
 					}
                     
-					$sql_query .= ($sort_by_first_name ? "ORDER BY user.firstname, user.lastname" : "ORDER BY user.lastname, user.firstname");
+					$sql_query .= ($sort_by_first_name ? " ORDER BY user.firstname, user.lastname" : " ORDER BY user.lastname, user.firstname");
 					
 					$rs = Database::query($sql_query);
                     $counter = 1;

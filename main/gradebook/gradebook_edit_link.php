@@ -18,11 +18,11 @@ api_block_anonymous_users();
 block_students();
 $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 //selected name of database
-$course_id 		= get_course_id_by_link_id(Security::remove_XSS($_GET['editlink']));
+$course_id 		= get_course_id_by_link_id($_GET['editlink']);
 $tbl_forum_thread 		= Database :: get_course_table(TABLE_FORUM_THREAD);
 $tbl_work 				= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 $tbl_attendance 		= Database :: get_course_table(TABLE_ATTENDANCE);
-$linkarray 				= LinkFactory :: load(Security::remove_XSS($_GET['editlink']));
+$linkarray 				= LinkFactory :: load($_GET['editlink']);
 $link = $linkarray[0];
 $linkcat  = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']):'';
 $linkedit = isset($_GET['editlink']) ? Security::remove_XSS($_GET['editlink']):'';
@@ -50,6 +50,7 @@ if ($form->validate()) {
 	$sql_t = 'UPDATE '.$tbl_forum_thread.' SET thread_weight='.$values['weight'].' 
 			  WHERE c_id = '.$course_id.' AND thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' WHERE id='.intval($_GET['editlink']).' and type=5 AND c_id = '.$course_id.'  ) ';
 	Database::query($sql_t);
+    
 	//Update weight into student publication(work)
 	$sql_t = 'UPDATE '.$tbl_work.' SET weight='.$values['weight'].' 
 			  WHERE c_id = '.$course_id.' AND id = (SELECT ref_id FROM '.$tbl_grade_links.' WHERE c_id = '.$course_id.' AND id='.intval($_GET['editlink'] ).' AND  type=3 )';

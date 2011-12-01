@@ -98,6 +98,22 @@ if ($_in_course) {
 
 $catadd->set_course_code(api_get_course_id());
 
+$models                  = api_get_settings_options('grading_model');
+$course_grading_model_id = api_get_course_setting('course_grading_model');
+$grading_model = '';
+if (!empty($course_grading_model_id)) {
+    foreach($models as $option) {           
+        if (intval($option['id']) == $course_grading_model_id) {
+        $grading_model = $option['value'];
+        }
+    }
+}       
+
+$grading_contents = api_grading_model_functions($grading_model, 'to_array');
+
+
+
+
 $form = new CatForm(CatForm :: TYPE_ADD, $catadd, 'add_cat_form', null, api_get_self() . '?selectcat='.$get_select_cat);
 
 if ($form->validate()) {
@@ -141,5 +157,20 @@ if ( !$_in_course ) {
 }
 $interbreadcrumb[]= array (	'url' =>'index.php','name' => get_lang('ToolGradebook'));
 Display :: display_header(get_lang('NewCategory'));
-$form->display();
+
+$display_form = true;
+
+if (!empty($grading_contents)) {
+    $count_items = count($grading_contents['items']);
+    $cats  = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
+    $cats_count = count($cats) - 1 ;         
+        
+    if ($cats_count >= $count_items) {
+        Display::display_warning_message(get_lang('CheckYourGradingModelValues'));
+        $display_form = false;
+    }
+}
+if ($display_form)
+    $form->display();
+
 Display :: display_footer();

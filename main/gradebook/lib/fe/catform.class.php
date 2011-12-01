@@ -133,8 +133,9 @@ class CatForm extends FormValidator {
    	}
 
    	private function build_basic_form() {
+   	    
 		$this->addElement('hidden', 'zero', 0);
-		$this->add_textfield('name', get_lang('CategoryName'), true,array('size'=>'54','maxlength'=>'50'));
+		$this->add_textfield('name', get_lang('CategoryName'), true, array('size'=>'54','maxlength'=>'50'));
         
 		$this->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 		
@@ -142,6 +143,7 @@ class CatForm extends FormValidator {
 			//we can't change the root category
 			$this->freeze('name');
 		}
+
 		$models                  = api_get_settings_options('grading_model');
 		$course_grading_model_id = api_get_course_setting('course_grading_model');
 		$grading_model = '';
@@ -163,9 +165,10 @@ class CatForm extends FormValidator {
 			///direct access to one evaluation
 			$cats  = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init			
 			$count = count($cats) - 1;			
-			$value = intval($grading_contents['items'][$count]['percentage']);
-            if ($value == 0) {
-                //Display::display_warning_message(get_lang('GradingModelBlocks'));
+			$value = round((float)$grading_contents['items'][$count]['percentage'], 2);            
+            if ($value == 0) {                
+//                Display::display_warning_message(get_lang('GradingModelBlocks'));
+                //$this->freeze();
             }
 			
 			$this->add_textfield('weight', get_lang('TotalWeight'), true, array('value'=> $value,'size'=>'4','maxlength'=>'5'));
@@ -180,7 +183,7 @@ class CatForm extends FormValidator {
             //the magic should be here
             
             $skills = $this->category_object->get_skills();    
-            $this->addElement('select', 'skills', array(get_lang('SkillsAchievedWhenAchievingThisGradebook')), null, array('id'=>'skills', 'multiple'=>'multiple'));
+            $this->addElement('select', 'skills', array(get_lang('Skills'), get_lang('SkillsAchievedWhenAchievingThisGradebook')), null, array('id'=>'skills', 'multiple'=>'multiple'));
             $content = '';
             if (!empty($skills)) {
                 foreach($skills as $skill) {                    
@@ -192,29 +195,32 @@ class CatForm extends FormValidator {
             );
         }
         
-		if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {						
+		if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {					
 			$this->add_textfield('certif_min_score', get_lang('CertificateMinScore'),false,array('size'=>'4','maxlength'=>'5'));
 			$this->addRule('certif_min_score', get_lang('ThisFieldIsRequired'), 'required');
 			$this->addRule('certif_min_score',get_lang('OnlyNumbers'),'numeric');
-			$this->addRule('certif_min_score',get_lang('NoDecimals'),'nopunctuation');
+			//$this->addRule('certif_min_score',get_lang('NoDecimals'),'nopunctuation');
 			$this->addRule(array('certif_min_score', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
+		} else {
+		    $this->addElement('checkbox', 'visible', null, get_lang('Visible'));
 		}		
 		
    		$this->addElement('hidden','hid_user_id');
    		$this->addElement('hidden','hid_parent_id');
 		$this->addElement('textarea', 'description', get_lang('Description'),array('rows'=>'3','cols' => '34'));
-		$this->addElement('checkbox', 'visible', null, get_lang('Visible'));
+        
+		
+        
 		if ($this->form_type == self :: TYPE_ADD) {
 			$this->addElement('style_submit_button', null, get_lang('AddCategory'), 'class="save"');
 		} else {
-			
 			$this->addElement('hidden','editcat', intval($_GET['editcat']));
 			$this->addElement('style_submit_button', null, get_lang('EditCategory'), 'class="save"');
 		}
         
 		if (!empty($grading_contents)) {
-			$this->addRule('weight',get_lang('OnlyNumbers'),'numeric');
-			$this->addRule('weight',get_lang('NoDecimals'),'nopunctuation');
+			$this->addRule('weight', get_lang('OnlyNumbers'), 'numeric');
+			//$this->addRule('weight',get_lang('NoDecimals'),'nopunctuation');
 			$this->addRule(array ('weight', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
 		}
 		

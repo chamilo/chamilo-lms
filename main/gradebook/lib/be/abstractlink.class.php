@@ -218,7 +218,7 @@ abstract class AbstractLink implements GradebookItem {
 					.','.intval($this->get_user_id())
 					.",'".Database::escape_string($this->get_course_code())."'"
 					.','.intval($this->get_category_id())
-					.','.intval($this->get_weight())
+					.",'".Database::escape_string($this->get_weight())."'"
 					.','.intval($this->is_visible());
 				$sql .= ','.'"'.$date_current=api_get_local_time().'"';
 				$sql .= ")";				
@@ -237,17 +237,18 @@ abstract class AbstractLink implements GradebookItem {
 		$this->save_linked_data();
 
 		$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-		$sql = 'UPDATE '.$tbl_grade_links
-			.' SET type = '.intval($this->get_type())
-				.', ref_id = '.intval($this->get_ref_id())
-				.', user_id = '.intval($this->get_user_id())
-				.", course_code = '".Database::escape_string($this->get_course_code())."'"
-				.', category_id = '.intval($this->get_category_id());
-		$sql .= ', weight = '.intval($this->get_weight())
-				.', visible = '.intval($this->is_visible())
-				.' WHERE id = '.intval($this->id);
+		$sql = "UPDATE $tbl_grade_links SET 
+                    type        = ".intval($this->get_type()).", 
+				    ref_id      = ".intval($this->get_ref_id()).", 
+				    user_id     = ".intval($this->get_user_id()).", 
+				    course_code = '".Database::escape_string($this->get_course_code())."', 
+				    category_id = ".intval($this->get_category_id()).", 
+		            weight      = '".Database::escape_string($this->get_weight())."', 
+				    visible     = ".intval($this->is_visible())."
+			     WHERE id = ".intval($this->id);
 	
 		AbstractLink::add_link_log($this->id);
+        
 		Database::query($sql);
 	}
 
@@ -275,9 +276,7 @@ abstract class AbstractLink implements GradebookItem {
 	 * Delete this link from the database
 	 */
 	public function delete() {
-
 		$this->delete_linked_data();
-
 		$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 		$sql = 'DELETE FROM '.$tbl_grade_links.' WHERE id = '.intval($this->id);
 		Database::query($sql);

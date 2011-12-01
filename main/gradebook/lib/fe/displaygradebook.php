@@ -450,7 +450,7 @@ class DisplayGradebook
                 $item_total_value   += $item_value;
 				//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);				
 			}
-            
+            $item_total = round($item_total);
 			$item_value = number_format($item_total_value, 2);
 			$total_score = array($item_value, $item_total);
 		

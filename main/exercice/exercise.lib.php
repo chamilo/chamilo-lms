@@ -915,6 +915,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     
         $hpsql="SELECT 
                     $first_and_last_name , 
+                    username,
                     tth.exe_name, 
                     tth.exe_result , 
                     tth.exe_weighting, 
@@ -944,8 +945,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
             AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." $user_id_and $session_id_and AND ce.active <>-1 AND" .
             " orig_lp_id = 0 AND orig_lp_item_id = 0 AND cuser.course_code=te.exe_cours_id ORDER BY col1, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";*/
 
-        $sql="
-                SELECT 
+        $sql = "SELECT 
                     ce.title as col0, 
                     ce.title as col1, 
                     te.exe_duration as exduration, 
@@ -975,7 +975,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                     AND ce.c_id= ".api_get_course_int_id()."
                     $exercise_where";
 
-        $hpsql = "SELECT '', '', exe_name, exe_result , exe_weighting, exe_date
+        $hpsql = "SELECT '', '', '', exe_name, exe_result , exe_weighting, exe_date
                   FROM $TBL_TRACK_HOTPOTATOES
                   WHERE exe_user_id = '" . api_get_user_id() . "' AND exe_cours_id = '" . api_get_course_id() . "' $hotpotatoe_where
                   ORDER BY exe_cours_id ASC, exe_date DESC";
@@ -1162,23 +1162,22 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
         }
     } else {
         //echo $hpsql; var_dump($hpsql);
-        $hpresults = getManyResultsXCol($hpsql, 6);
-        
+        $hpresults = getManyResultsXCol($hpsql, 6);        
    
         // Print HotPotatoes test results.
         if (is_array($hpresults)) {
             
-            for ($i = 0; $i < sizeof($hpresults); $i++) {
-               
-                $hp_title = GetQuizName($hpresults[$i][2], $documentPath);
+            for ($i = 0; $i < sizeof($hpresults); $i++) {               
+                $hp_title = GetQuizName($hpresults[$i][3], $documentPath);                
                 if ($hp_title == '') {
-                    $hp_title = basename($hpresults[$i][2]);
+                    $hp_title = basename($hpresults[$i][3]);
                 }
-                //$hp_date = api_convert_and_format_date($hpresults[$i][4], null, date_default_timezone_get());
-                $hp_date = api_get_local_time($hpresults[$i][5], null, date_default_timezone_get());
-                $hp_result = round(($hpresults[$i][3] / ($hpresults[$i][4] != 0 ? $hpresults[$i][4] : 1)) * 100, 2).'% ('.$hpresults[$i][3].' / '.$hpresults[$i][4].')';
+                //var_dump($hpresults[$i]);
+                
+                $hp_date = api_get_local_time($hpresults[$i][6], null, date_default_timezone_get());
+                $hp_result = round(($hpresults[$i][4] / ($hpresults[$i][5] != 0 ? $hpresults[$i][5] : 1)) * 100, 2).'% ('.$hpresults[$i][4].' / '.$hpresults[$i][5].')';
                 if ($is_allowedToEdit || $is_tutor) {                   
-                    $list_info[] = array($hpresults[$i][0], $hpresults[$i][1], $hp_title, '-',  $hp_date , $hp_result , '-');
+                    $list_info[] = array($hpresults[$i][0], $hpresults[$i][1], $hpresults[$i][2], '',  $hp_title, '-',  $hp_date , $hp_result , '-');
                 } else {
                     $list_info[] = array($hp_title, '-', $hp_date , $hp_result , '-');
                 }

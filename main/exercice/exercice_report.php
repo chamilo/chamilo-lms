@@ -225,9 +225,6 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
         }        
     }
 }
-
-
-
 if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
@@ -296,6 +293,13 @@ if (api_is_allowed_to_edit(null,true)) {
     }
 }
 
+$parameters=array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
+$exercise_id = intval($_GET['exerciseId']);
+if (!empty($exercise_id))
+    $parameters['exerciseId'] = $exercise_id;
+if (!empty($_GET['path'])) {
+    $parameters['path'] = Security::remove_XSS($_GET['path']);
+}
 
 $table = new SortableTable('quiz_results', 'get_count_exam_results', 'get_exam_results_data', 1, 10);
 $table->set_additional_parameters($parameters);
@@ -394,6 +398,3 @@ $tpl->display_one_col_template();
 */
 
 Display :: display_footer();
-
-
-

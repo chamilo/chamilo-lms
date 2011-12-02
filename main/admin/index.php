@@ -154,7 +154,7 @@ if (api_is_platform_admin()) {
 
 /* Sessions */
 
-if (api_get_setting('use_session_mode') == 'true') { 
+if (api_get_setting('use_session_mode') == 'true') {
 	
 	$blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), 22);
 	$blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
@@ -239,9 +239,23 @@ if (api_is_platform_admin()) {
 	$items[] = array('url'=>'configure_extensions.php?display=serverstats', 	'label' => get_lang('ServerStatistics'));
 	$items[] = array('url'=>'configure_extensions.php?display=bandwidthstats', 	'label' => get_lang('BandWidthStatistics'));	
 	$blocks['extensions']['items'] = $items;	
+    
+    
+    //Skills
+    
+    $blocks['skills']['icon']  = Display::return_icon('logo.gif', get_lang('Skills'));
+    $blocks['skills']['label'] = get_lang('Skills');
+    
+    $items = array();
+    $items[] = array('url'=>'skills.php',           'label' => get_lang('SkillsTree'));
+    $items[] = array('url'=>'skills_profile.php',   'label' => get_lang('SkillsProfile'));
+    $items[] = array('url'=>'skills_gradebook.php', 'label' => get_lang('SkillsGradebook'));   
+    
+    $blocks['skills']['items'] = $items;
+    
 
 	
-	/* Extensions */
+	/* Chamilo.org */
 	
 	$blocks['chamilo']['icon']  = Display::return_icon('logo.gif', 'Chamilo.org');
 	$blocks['chamilo']['label'] = 'Chamilo.org';
@@ -258,6 +272,9 @@ if (api_is_platform_admin()) {
 	$items[] = array('url'=>'http://www.chamilo.org/extensions', 	'label' => get_lang('ChamiloExtensions'));	
 	
 	$blocks['chamilo']['items'] = $items;
+    
+    
+    
 	
 	// Try to display a maximum before we check the chamilo version and all that.
 	//session_write_close(); //close session to avoid blocking concurrent access

@@ -83,6 +83,9 @@ switch ($action) {
         $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
         foreach($result as $item) {
+            if ($item['parent_id'] != 0) {
+                continue;
+            }
             $skills = $obj->get_skills_by_gradebook($item['id']);
             //Fixes bug when gradebook doesn't have names
             if (empty($item['name'])) {

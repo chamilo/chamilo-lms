@@ -17,67 +17,6 @@ if (!$result) {
 	api_not_allowed(true);	
 }  
 
-$students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), false);
-
-$question_list = $objExercise->get_validated_question_list();
-
-$data = array();
-//Question title 	# of students who tool it 	Lowest score 	Average 	Highest score 	Maximum score
-$headers = array(
-	get_lang('Question'), 
-	get_lang('NumberOfStudentWhoTryTheExercise'),
-	get_lang('LowestScore'), 
-	get_lang('Average'),
-	get_lang('HighestScore'),
-	get_lang('MaximumScore')	
-);
-
-
-if (!empty($question_list)) {
-	foreach($question_list as $question_id) {
-		$question_obj = Question::read($question_id);
-		$exercise_stats = get_student_stats_by_question($question_id, $exercise_id, api_get_course_id(), api_get_session_id());
-		
-		$data[$question_id]['name'] 						= cut($question_obj->question, 100);
-		$data[$question_id]['students_who_try_exercise'] 	= $exercise_stats['users'];
-		$data[$question_id]['lowest_score'] 				= $exercise_stats['min'];
-		$data[$question_id]['average_score'] 				= $exercise_stats['average'];
-		$data[$question_id]['highest_score'] 				= $exercise_stats['max'];
-		$data[$question_id]['max_score'] 					= $question_obj->weighting;
-	}
-}
-
-//Format A table
-$table = new HTML_Table(array('class' => 'data_table'));
-$row = 0;
-$column = 0;
-foreach ($headers as $header) {
-	$table->setHeaderContents($row, $column, $header);
-	$column++;
-}
-$row++;
-foreach ($data as $row_table) {	
-	$column = 0;
-	foreach ($row_table as $cell) {		
-		$table->setCellContents($row, $column, $cell);
-		$table->updateCellAttributes($row, $column, 'align="center"');
-		$column++;
-	}
-	$table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
-	$row++;
-}
-$content = $table->toHtml();
-
-//Format B
-
-$headers = array(
-	get_lang('Question'),
-	get_lang('Answer'),
-	get_lang('Correct'),
-	get_lang('NumberStudentWhoSelect'),
-	get_lang('HighestScore'),
-	get_lang('MaximumScore')
-);
 $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
 $interbreadcrumb[] = array ("url" => "admin.php?exerciseId=$exercise_id","name" => $objExercise->name);
 
@@ -90,16 +29,19 @@ Display::display_header($tool_name);
 
 //jqgrid will use this URL to do the selects
 
-$url            = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_live_stats&exercise_id='.$objExercise->id;
+$minutes = 60;
+
+$url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_live_stats&exercise_id='.$objExercise->id.'&minutes='.$minutes;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file 
-$columns        = array(get_lang('Firstname'), get_lang('Lastname'), get_lang('Question'), get_lang('Score'));
+$columns        = array(get_lang('Firstname'), get_lang('Lastname'), get_lang('Date'), get_lang('QuestionsDone'), get_lang('Score'));
 
 //Column config
 $column_model   = array(
                         array('name'=>'firstname',  'index'=>'firstname',   'width'=>'100', 'align'=>'left'),
-                        array('name'=>'lastname',   'index'=>'lastname',    'width'=>'100', 'align'=>'left','sortable'=>'false'),
-                        array('name'=>'question',   'index'=>'question',    'width'=>'100', 'align'=>'left','sortable'=>'false'),
+                        array('name'=>'lastname',   'index'=>'lastname',    'width'=>'100', 'align'=>'left'),
+                        array('name'=>'start_date', 'index'=>'start_date',   'width'=>'100', 'align'=>'left'),
+                        array('name'=>'question',   'index'=>'count_questions',    'width'=>'100', 'align'=>'left'),
                         array('name'=>'score',      'index'=>'score',       'width'=>'100', 'align'=>'left','sortable'=>'false'),
                        );            
 //Autowidth             
@@ -124,6 +66,8 @@ $(function() {
 });
 </script>
 <?php
+
+echo '<h2>'.$objExercise->name.'</h2>';
 
 echo Display::grid_html('live_stats');  
 

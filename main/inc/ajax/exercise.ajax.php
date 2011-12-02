@@ -16,7 +16,7 @@ $course_id = api_get_course_int_id();
 switch ($action) {
     case 'get_live_stats':
         // 1. Setting variables needed by jqgrid
-        $action= $_GET['a'];
+        $action = $_GET['a'];
         $exercise_id = intval($_GET['exercise_id']);
         $page  = intval($_REQUEST['page']); //page
         $limit = intval($_REQUEST['rows']); //quantity of rows
@@ -30,13 +30,15 @@ switch ($action) {
         if (!$sidx) $sidx = 1;
         
         $track_exercise        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $user_table            = Database::get_main_table(TABLE_MAIN_USER);
         $track_attempt         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
-        $now    = time() - 60*30;
+        
+        $minutes = intval($_REQUEST['minutes']);        
+        $now    = time() - 60*$minutes; //1 hour
         $now    = api_get_utc_datetime($now);
         
-        $where_condition = "WHERE status = 'incomplete' AND exe_exo_id = $exercise_id AND start_date > '$now' ";
-        $sql    = "SELECT COUNT(DISTINCT exe_id) FROM $track_exercise  $where_condition ";
+        $where_condition = " orig_lp_id = 0 AND exe_exo_id = $exercise_id AND start_date > '$now' ";
+        $sql    = "SELECT COUNT(DISTINCT exe_id) FROM $track_exercise WHERE $where_condition ";
         $result = Database::query($sql);
         
         $count  = Database::fetch_row($result);
@@ -59,28 +61,46 @@ switch ($action) {
             $start = 0;
         }        
         
-        $sql    = "SELECT * FROM $track_exercise $where_condition ";
+        
+        
+        $sql = "SELECT count_questions, exe_user_id, firstname, lastname, aa.status, start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id
+                FROM $user_table u INNER JOIN (
+                    SELECT  t.exe_user_id, count(question_id) as count_questions, status,
+                    start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id
+                    FROM  $track_attempt a INNER JOIN $track_exercise  t
+                    WHERE a.exe_id = t.exe_id AND exe_user_id = a.user_id AND $where_condition  
+                group by exe_user_id                    
+                ) as aa 
+                ON aa.exe_user_id = user_id
+                    
+                    ORDER BY $sidx $sord LIMIT  $start ,  $limit 
+                ";
         $result = Database::query($sql);
         $results = array();
         
         while ($row = Database::fetch_array($result,'ASSOC')){
             $results[] = $row;
         }        
+        
         $response = new stdClass();           
         $response->page     = $page; 
         $response->total    = $total_pages; 
         $response->records  = $count; 
         $i=0;
+        
         if (!empty($results)) {
             foreach($results as $row) {
-                 //print_r($row);
-                 $response->rows[$i]['id'] = $row['exe_id'];
-                 $array = array();
-                 $array['firstname'] = 'fff';
-                 $array['lastname'] = 'fff';                  
-                                    
-                 $response->rows[$i]['cell'] = $array;
-                 $i++; 
+                //$user_info = api_get_user_info($row['exe_user_id']);
+                //print_r($row);
+                $response->rows[$i]['id'] = $row['exe_id'];                 
+                $array = array( $row['firstname'], 
+                                $row['lastname'], 
+                                api_format_date($row['start_date'], DATE_TIME_FORMAT_LONG),
+                                $row['count_questions'],                                
+                                round($row['score']*100).'%'
+                               );
+                $response->rows[$i]['cell'] = $array;
+                $i++; 
             }
         } 
         echo json_encode($response); 

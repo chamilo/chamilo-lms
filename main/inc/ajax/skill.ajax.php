@@ -37,19 +37,20 @@ switch ($action) {
         break;
     case 'get_gradebooks':
         $gradebooks = $gradebook_list = $gradebook->get_all();
-        /*$gradebook_list = array();
+        $gradebook_list = array();
+        //only course gradebook
         if (!empty($gradebooks)) {
             foreach($gradebooks as $gradebook) {
                 if ($gradebook['parent_id'] == 0) {
-                    $gradebook['name'] = $gradebook['name'];
+                    //$gradebook['name'] = $gradebook['name'];
                     $gradebook_list[]  = $gradebook;
                 } else {
                   //  $gradebook['name'] = $gradebook_list[$gradebook['parent_id']]['name'].' > '.$gradebook['name'];
-                    $gradebook_list[]  = $gradebook;
+                    //$gradebook_list[]  = $gradebook;
                 }
                
             }
-        }*/
+        }
         echo json_encode($gradebook_list);
         break;    
     case 'get_skills':

@@ -322,7 +322,8 @@ $(document).ready( function() {
 
 </script>
 
-<a class="a_button gray" id="add_item_link" href="#">Add item</a>
+    <h2>Skills</h2>    
+    <a class="a_button gray" id="add_item_link" href="#">Add item</a>
 
 {$html}
 

@@ -152,32 +152,32 @@ function checkLength( o, n, min, max ) {
     {foreach $order_user_list as $count => $user_list}
         <h2> {"Matches"|get_lang} {$count}/{$total_search_skills} </h2>
         {foreach $user_list as $user}
-            <div class="ui-widget">
+            <div class="ui-widget" style="width:400px">
                 <div class="ui-widget-header">                    
                     <h3>
                         <img src="{$user['user'].avatar_small}" /> {$user['user'].complete_name} ({$user['user'].username})
                     </h3>
                 </div>
                 <div class="ui-widget-content ">
-                    <h4>Skills</h4>
+                    <h4>Skills {$user.total_found_skills} / {$total_search_skills}</h4>
                     <ul>    
-                        {$user.total_found_skills} / {$total_search_skills}                
-                    {foreach $user['skills'] as $skill_data}                 
-                        <li>
-                            <span class="label_tag skill">{$skill_list[$skill_data.skill_id].name}</span>
-                            {if $skill_data.found}
-                                 * I have this skill * 
-                            {/if} 
-                            
-                        </li>                    
-                    {/foreach}
+                                        
+                        {foreach $user['skills'] as $skill_data}                 
+                            <li>
+                                <span class="label_tag skill">{$skill_list[$skill_data.skill_id].name}</span>
+                                {if $skill_data.found}
+                                     * I have this skill * 
+                                {/if} 
+                                
+                            </li>                    
+                        {/foreach}
                     </ul>
                 </div>    
             </div>  
         {/foreach}
     {/foreach}        
 {else}
-    {"No results"|get_lang}
+    <div class="warning-message">{"No results"|get_lang}</div>
 {/if}
 
 

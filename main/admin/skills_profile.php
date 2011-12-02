@@ -17,8 +17,9 @@ api_protect_admin_script();
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-
 $htmlHeadXtra[] = api_get_jquery_ui_js();
+
+$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 
 $skill           = new Skill();
 $skill_profile   = new SkillProfile();
@@ -26,18 +27,16 @@ $skill_rel_user  = new SkillRelUser();
 
 $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php';
 
-$tpl = new Template();
+$tpl = new Template(get_lang('Skills'));
 
 $form = new FormValidator('profile_search');
 
 $form->addElement('select', 'skills', null, null, array('id'=>'skills'));
 $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="a_button blue "');
 
-
 $profiles = $skill_profile->get_all();
 
 $tpl->assign('profiles', $profiles);
-
 
 $total_skills_to_search = array();
 

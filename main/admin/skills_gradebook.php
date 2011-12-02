@@ -19,11 +19,22 @@ api_protect_admin_script();
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 
-Display::display_header();
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'display';
+
 
 // setting breadcrumbs
+
+$tool_name = get_lang('SkillGradebook');
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
+if ($action == 'add_skill') {
+    $interbreadcrumb[]=array('url' => 'skills_gradebook.php','name' => get_lang('SkillGradebook'));
+    $tool_name = get_lang('Add');    
+}
+
+
+Display::display_header($tool_name);
+
+
 
 
 //jqgrid will use this URL to do the selects
@@ -60,7 +71,7 @@ $(function() {
 </script>
 <?php
 $gradebook = new Gradebook();
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'display'; 
+ 
 switch($action) {
     case 'display':
         $gradebook->display();

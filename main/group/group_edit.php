@@ -121,6 +121,109 @@ $form->add_textfield('name', get_lang('GroupName'));
 // Description
 $form->addElement('textarea', 'description', get_lang('Description'), array ('cols' => 50, 'rows' => 6));
 
+
+// Search Members of group
+//$form = new FormValidator('search_member', 'get', 'group_edit', '', null, false);
+//$renderer = & $form->defaultRenderer();
+//$renderer->setElementTemplate('<span>{element}</span> ');
+//$form->add_textfield('keyword', get_lang('GroupMembers'), false);
+//$form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
+
+// Getting all the users
+/*
+if (isset($_SESSION['id_session'])) {
+    $complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session']);
+    $complete_user_list2 = CourseManager :: get_coach_list_from_course_code($_course['id'], $_SESSION['id_session']);
+    $complete_user_list = array_merge($complete_user_list, $complete_user_list2);
+    
+} else {
+    $complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id']);
+}
+
+foreach ($complete_user_list as $user_id => $o_course_user) {
+        if ((isset ($_GET['keyword']) && search_members_keyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
+        $groups_name = GroupManager :: get_user_group_name($user_id);
+        
+        if ($is_western_name_order) {
+                    $temp[] = $o_course_user['firstname'];
+                    $temp[] = $o_course_user['lastname'];
+                } else {
+                    $temp[] = $o_course_user['lastname'];
+                    $temp[] = $o_course_user['firstname'];
+                }
+
+                $temp[] = $o_course_user['role'];
+                $temp[] = implode(', ', $groups_name); //Group
+                $temp[] = $o_course_user['official_code'];
+    }
+}*/
+$complete_user_list = GroupManager :: fill_groups_list($current_group['id']);
+usort($complete_user_list, 'sort_users');
+$possible_users = array();
+foreach ($complete_user_list as $index => $user) {
+    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+}
+
+// Group tutors
+$group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
+$selected_users = array();
+$selected_tutors = array();
+foreach ($group_tutor_list as $index => $user) {
+    //$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], .$user['lastname']);
+    $selected_tutors[] = $user['user_id'];
+}
+
+$group_tutors_element = $form->addElement('advmultiselect', 'group_tutors', get_lang('GroupTutors'), $possible_users, 'style="width: 280px;"');
+$group_tutors_element->setElementTemplate('
+{javascript}
+<table{class}>
+<!-- BEGIN label_2 --><tr><th>{label_2}</th><!-- END label_2 -->
+<!-- BEGIN label_3 --><th>&nbsp;</th><th>{label_3}</th></tr><!-- END label_3 -->
+<tr>
+  <td valign="top">{unselected}</td>
+  <td align="center">{add}<br /><br />{remove}</td>
+  <td valign="top">{selected}</td>
+</tr>
+</table>
+');
+
+$group_tutors_element->setButtonAttributes('add', array('class' => 'arrowr'));
+$group_tutors_element->setButtonAttributes('remove', array('class' => 'arrowl'));
+
+// Group members
+$group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
+$selected_users = array ();
+foreach ($group_member_list as $index => $user) {
+    //$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);    
+    $selected_users[] = $user['user_id'];
+}
+
+// possible : number_groups_left > 0 and is group member
+$possible_users = array();
+foreach ($complete_user_list as $index => $user) {
+     if( $user['number_groups_left'] >0 || in_array($user['user_id'],$selected_users) ) 
+    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+}
+
+$group_members_element = $form->addElement('advmultiselect', 'group_members', get_lang('GroupMembers'), $possible_users, 'style="width: 280px;"');
+
+$group_members_element->setElementTemplate('
+{javascript}
+<table{class}>
+<!-- BEGIN label_2 --><tr><th>{label_2}</th><!-- END label_2 -->
+<!-- BEGIN label_3 --><th>&nbsp;</th><th>{label_3}</th></tr><!-- END label_3 -->
+<tr>
+  <td valign="top">{unselected}</td>
+  <td align="center">{add}<br /><br />{remove}</td>
+  <td valign="top">{selected}</td>
+</tr>
+</table>');
+
+$group_members_element->setButtonAttributes('add', array('class' => 'arrowr'));
+$group_members_element->setButtonAttributes('remove', array('class' => 'arrowl'));
+$form->addFormRule('check_group_members');
+
+
 // Tutors: this has been replaced with the new tutors code
 //$tutors = GroupManager :: get_all_tutors();
 //$possible_tutors[0] = get_lang('GroupNoTutor');
@@ -198,106 +301,7 @@ $group[] = $form->createElement('radio', 'chat_state', null, get_lang('Public'),
 $group[] = $form->createElement('radio', 'chat_state', null, get_lang('Private'), TOOL_PRIVATE);
 $form->addGroup($group, '', get_lang('Chat'), '<div></div>', false);
 
-// Search Members of group
-//$form = new FormValidator('search_member', 'get', 'group_edit', '', null, false);
-//$renderer = & $form->defaultRenderer();
-//$renderer->setElementTemplate('<span>{element}</span> ');
-//$form->add_textfield('keyword', get_lang('GroupMembers'), false);
-//$form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
 
-// Getting all the users
-/*
-if (isset($_SESSION['id_session'])) {
-	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session']);
-	$complete_user_list2 = CourseManager :: get_coach_list_from_course_code($_course['id'], $_SESSION['id_session']);
-	$complete_user_list = array_merge($complete_user_list, $complete_user_list2);
-	
-} else {
-	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id']);
-}
-
-foreach ($complete_user_list as $user_id => $o_course_user) {
-		if ((isset ($_GET['keyword']) && search_members_keyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
-		$groups_name = GroupManager :: get_user_group_name($user_id);
-		
-		if ($is_western_name_order) {
-					$temp[] = $o_course_user['firstname'];
-					$temp[] = $o_course_user['lastname'];
-				} else {
-					$temp[] = $o_course_user['lastname'];
-					$temp[] = $o_course_user['firstname'];
-				}
-
-				$temp[] = $o_course_user['role'];
-				$temp[] = implode(', ', $groups_name); //Group
-				$temp[] = $o_course_user['official_code'];
-	}
-}*/
-$complete_user_list = GroupManager :: fill_groups_list($current_group['id']);
-usort($complete_user_list, 'sort_users');
-$possible_users = array();
-foreach ($complete_user_list as $index => $user) {
-    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
-}
-
-// Group tutors
-$group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
-$selected_users = array();
-$selected_tutors = array();
-foreach ($group_tutor_list as $index => $user) {
-	//$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], .$user['lastname']);
-	$selected_tutors[] = $user['user_id'];
-}
-
-$group_tutors_element = $form->addElement('advmultiselect', 'group_tutors', get_lang('GroupTutors'), $possible_users, 'style="width: 280px;"');
-$group_tutors_element->setElementTemplate('
-{javascript}
-<table{class}>
-<!-- BEGIN label_2 --><tr><th>{label_2}</th><!-- END label_2 -->
-<!-- BEGIN label_3 --><th>&nbsp;</th><th>{label_3}</th></tr><!-- END label_3 -->
-<tr>
-  <td valign="top">{unselected}</td>
-  <td align="center">{add}<br /><br />{remove}</td>
-  <td valign="top">{selected}</td>
-</tr>
-</table>
-');
-
-$group_tutors_element->setButtonAttributes('add', array('class' => 'arrowr'));
-$group_tutors_element->setButtonAttributes('remove', array('class' => 'arrowl'));
-
-// Group members
-$group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
-$selected_users = array ();
-foreach ($group_member_list as $index => $user) {
-    //$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);    
-    $selected_users[] = $user['user_id'];
-}
-
-// possible : number_groups_left > 0 and is group member
-$possible_users = array();
-foreach ($complete_user_list as $index => $user) {
-     if( $user['number_groups_left'] >0 || in_array($user['user_id'],$selected_users) ) 
-    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
-}
-
-$group_members_element = $form->addElement('advmultiselect', 'group_members', get_lang('GroupMembers'), $possible_users, 'style="width: 280px;"');
-
-$group_members_element->setElementTemplate('
-{javascript}
-<table{class}>
-<!-- BEGIN label_2 --><tr><th>{label_2}</th><!-- END label_2 -->
-<!-- BEGIN label_3 --><th>&nbsp;</th><th>{label_3}</th></tr><!-- END label_3 -->
-<tr>
-  <td valign="top">{unselected}</td>
-  <td align="center">{add}<br /><br />{remove}</td>
-  <td valign="top">{selected}</td>
-</tr>
-</table>');
-
-$group_members_element->setButtonAttributes('add', array('class' => 'arrowr'));
-$group_members_element->setButtonAttributes('remove', array('class' => 'arrowl'));
-$form->addFormRule('check_group_members');
 
 // submit button
 $form->addElement('style_submit_button', 'submit', get_lang('PropModify'), 'class="save"');

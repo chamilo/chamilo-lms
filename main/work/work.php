@@ -227,7 +227,7 @@ if (!empty($_SESSION['toolgroup'])) {
 	$interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$_SESSION['toolgroup'], 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 
 	$url_dir ='';
-	$interbreadcrumb[] = array ('url' =>'#','name' => get_lang('StudentPublications'));
+	$interbreadcrumb[] = array ('url' =>'work.php?gidReq='.$_SESSION['toolgroup'],'name' => get_lang('StudentPublications'));
 
 
 	$url_dir = 'work.php?&id=' . $work_id;

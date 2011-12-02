@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
     $stopping_error = false;
 
     $s = $_FILES['user_file']['name'];
+     
     // Get name of the zip file without the extension.
     $info = pathinfo($s);
     $filename = $info['basename'];
@@ -43,9 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
     $file_base_name = str_replace('.'.$extension, '', $filename);
 
     $new_dir = replace_dangerous_char(trim($file_base_name), 'strict');
+    
 
     require_once 'learnpath.class.php';
     $type = learnpath::get_package_type($_FILES['user_file']['tmp_name'], $_FILES['user_file']['name']);
+   
     
     $proximity = 'local';
     if (!empty($_REQUEST['content_proximity'])) {
@@ -102,8 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
         default:
             return api_failure::set_failure('not_a_learning_path');
     }
-} // end if is_uploaded_file
-elseif($_SERVER['REQUEST_METHOD'] == 'POST') {
+} elseif($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // end if is_uploaded_file
+    
     // If file name given to get in claroline/upload/, try importing this way.
 
     // A file upload has been detected, now deal with the file...

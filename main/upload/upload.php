@@ -23,10 +23,9 @@ if(empty($_SESSION['my_tool'])){header('location:index.php');}
 // check access permissions (edit permission is needed to add a document or a LP)
 $is_allowed_to_edit = api_is_allowed_to_edit();
 
-if(!$is_allowed_to_edit){
+if (!$is_allowed_to_edit){
 	api_not_allowed(true);
 }
-
 
 /**
  * Redirect to the correct script to handle this type of upload

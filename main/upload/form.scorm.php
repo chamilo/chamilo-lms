@@ -33,13 +33,12 @@ function get_zip_files_in_garbage(){
  * Just display the form needed to upload a SCORM and give its settings
  */
 $nameTools = get_lang("FileUpload");
-$interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang("Learnpath"));
+$interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang("ToolLearnpath"));
 Display::display_header($nameTools,"Path");
 //show the title
 //api_display_tool_title(get_lang("Learnpath")." - ".$nameTools.$add_group_to_title);
 //TODO: Include right language file
 
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once '../newscorm/content_makers.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
@@ -53,6 +52,8 @@ $form->addElement('hidden', 'curdirpath', $path);
 $form->addElement('hidden', 'tool', $my_tool);
 
 $form->addElement('file','user_file',get_lang('FileToUpload'));
+$form->add_real_progress_bar('uploadScorm','user_file');
+$form->addRule('user_file', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 
 /*$select_content_marker = &$form->addElement('select','content_maker',get_lang('ContentMaker'));
 foreach($content_origins as $index => $origin){
@@ -76,7 +77,7 @@ if (api_get_setting('search_enabled')=='true') {
 }
 
 if (api_is_platform_admin()) {
-    $form->addElement('checkbox', 'use_max_score', get_lang('UseMaxScore100'));    
+    $form->addElement('checkbox', 'use_max_score', null, get_lang('UseMaxScore100'));    
 }
 
 $form->addElement('style_submit_button','submit', get_lang('Send'),'class="upload"');
@@ -107,13 +108,13 @@ if(is_dir(api_get_path(PLUGIN_PATH)."/pens")) {
 	}
 }
 
-$form->add_real_progress_bar('uploadScorm','user_file');
-// the rules for the form
-$form->addRule('user_file', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+
 // the default values for the form
 $defaults = array('index_document'=>'checked="checked"','use_max_score'=>1);
 $form->setDefaults($defaults);
-$form->display();Display::display_normal_message(Display::tag('strong', get_lang('SupportedScormContentMakers')).': '.implode(', ', $content_origins), false);
+Display::display_normal_message(Display::tag('strong', get_lang('SupportedScormContentMakers')).': '.implode(', ', $content_origins), false);
+$form->display();
+
 
 // footer
 Display::display_footer();

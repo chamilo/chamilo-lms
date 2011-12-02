@@ -8,15 +8,15 @@
 /**
  * Initialisation section
  */
-global $_configuration;
+
 $courses = array();
 $courses[] = array(
-    'code' => 'ENGLISH101',
-    'title' => 'English for beginners',
-    'tutor' => '',
-    'category' => 'PROJ',
-    'language' => 'english',
-    'admin_id' => 1,
-    'expires' => '2020-09-01 00:00:00',
-    'fill' => true,
+    'code'                  => 'ENGLISH101',
+    'title'                 => 'English for beginners', 
+    'description'           => 'English course',
+    'category_code'         => 'PROJ',
+    'course_language'       => 'english',
+    'user_id'               => 1,
+    'expiration_date'       => '2020-09-01 00:00:00',
+    'exemplary_content'     => true,
 );

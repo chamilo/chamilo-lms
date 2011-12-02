@@ -121,8 +121,7 @@ class CourseManager {
     
     /**
      * Creates a course
-     * @param   string  course title
-     * @param   bool    add example content or not
+     * @param   array   with the columns in the main.course table
      * @param   mixed   false if the course was not created, array with the course info
      */
     function create_course($params) {           
@@ -160,7 +159,7 @@ class CourseManager {
                 
                 if (!empty($course_info)) {
                     prepare_course_repository($course_info['directory'], $course_info['code']);
-                    $pictures_array = fill_course_repository($course_info['directory'], $params['exemplary_content']);     
+                    $pictures_array = fill_course_repository($course_info['directory'], $params['exemplary_content']);                      
                     fill_Db_course($course_id, $course_info['directory'], $course_info['course_language'], $pictures_array, $params['exemplary_content']);
                     return $course_info;                    
                 }

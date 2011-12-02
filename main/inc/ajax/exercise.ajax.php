@@ -15,7 +15,7 @@ $course_id = api_get_course_int_id();
 
 switch ($action) {
     case 'get_live_stats':
-        // 1. Setting variables needed by jqgrid
+        // 1. Setting variables needed by jqgrid 
         $action = $_GET['a'];
         $exercise_id = intval($_GET['exercise_id']);
         $page  = intval($_REQUEST['page']); //page
@@ -71,10 +71,8 @@ switch ($action) {
                     WHERE a.exe_id = t.exe_id AND exe_user_id = a.user_id AND $where_condition  
                 group by exe_user_id                    
                 ) as aa 
-                ON aa.exe_user_id = user_id
-                    
-                    ORDER BY $sidx $sord LIMIT  $start ,  $limit 
-                ";
+                ON aa.exe_user_id = user_id                    
+                ORDER BY $sidx $sord LIMIT  $start ,  $limit ";
         $result = Database::query($sql);
         $results = array();
         

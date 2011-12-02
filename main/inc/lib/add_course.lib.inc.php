@@ -11,7 +11,6 @@
 /**
  * Code
  */
-require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 /* FUNCTIONS */
@@ -280,7 +279,7 @@ function get_course_tables() {
     
 }
 /**
- * Creates all the necessary tables for a new course.
+ * Creates all the necessary tables for a new course 
  */
 function update_Db_course($course_db_name = null) {
     global $_configuration;
@@ -2200,9 +2199,7 @@ function fill_course_repository($course_repository, $fill_with_exemplary_content
 
         }
         $default_document_array['video'] = $video_array;
-
     }
-
     return $default_document_array;
 }
 
@@ -2264,33 +2261,18 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
     $TABLEFORUMTHREADS 		= Database::get_course_table(TABLE_FORUM_THREAD);
     $TABLEFORUMPOSTS 		= Database::get_course_table(TABLE_FORUM_POST);
 
-    $nom 	= $_user['lastName'];
-    $prenom = $_user['firstName'];
-
-    include api_get_path(SYS_CODE_PATH) . 'lang/english/create_course.inc.php';
-    $file_to_include = 'lang/'.$language . '/create_course.inc.php';
+    include api_get_path(SYS_CODE_PATH).'lang/english/create_course.inc.php';
+    $file_to_include = api_get_path(SYS_CODE_PATH).'lang/'.$language.'/create_course.inc.php';
     
-    if (file_exists($file_to_include)) {
-        include api_get_path(SYS_CODE_PATH) . $file_to_include;
+    if (file_exists($file_to_include)) {    
+        include $file_to_include;
     }
-
-    //Database::select_db($course_db_name);
-    /*
-    
-            All course tables are created.
-            Next sections of the script:
-            - insert links to all course tools so they can be accessed on the course homepage
-            - fill the tool tables with examples
-    
-    */
 
     $visible_for_all = 1;
     $visible_for_course_admin = 0;
     $visible_for_platform_admin = 2;
 
-    /*    
-        Course homepage tools    
-    */
+    /*    Course tools  */
 
     Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_COURSE_DESCRIPTION . "','course_description/','info.gif','".string2binary(api_get_setting('course_create_active_tools', 'course_description')) . "','0','squaregrey.gif','NO','_self','authoring','0')");
     Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_CALENDAR_EVENT . "','calendar/agenda.php','agenda.gif','".string2binary(api_get_setting('course_create_active_tools', 'agenda')) . "','0','squaregrey.gif','NO','_self','interaction','0')");
@@ -2357,26 +2339,22 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
     
 
     /*    Course homepage tools for platform admin only */
+   
     /*    Group tool */
 
     Database::query("INSERT INTO $TABLEGROUPCATEGORIES  (c_id,  id , title , description , max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) 
     		VALUES ($course_id, '2', '".lang2db(get_lang('DefaultGroupCategory')) . "', '', '8', '0', '0', '0', '0');");
 
     /*    Example Material  */
-
     global $language_interface;
+    $language_interface = !empty($language_interface) ? $language_interface : api_get_setting('platformLanguage');
+
+    
     // Example material should be in the same language as the course is.
-    $language_interface_tmp = $language_interface;
-    $language_interface = $language;
+    $language_interface_original = $language_interface;
+    $language_interface          = $language;
 
-    /*    
-        Documents    
-    */
-
-    //Database::query("INSERT INTO $TABLETOOLDOCUMENT (path,title,filetype,size) VALUES ('/example_document.html','example_document.html','file','3367')");
-    // We need to add the document properties too!
-    //$example_doc_id = Database :: insert_id();
-    //Database::query("INSERT INTO $TABLEITEMPROPERTY  (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,1)");
+    /*    Documents   */
 
     Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id,path,title,filetype,size) VALUES ($course_id,'/images','".get_lang('Images')."','folder','0')");
     $example_doc_id = Database :: insert_id();
@@ -2448,11 +2426,10 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
             }
         }
     }
+    
     if ($fill_with_exemplary_content) {
 
-        /*
-            Agenda tool
-        */
+        /* Agenda tool */
 
         Database::query("INSERT INTO $TABLETOOLAGENDA  VALUES ($course_id, NULL, '".lang2db(get_lang('AgendaCreationTitle')) . "', '".lang2db(get_lang('AgendaCreationContenu')) . "', now(), now(), NULL, 0, 0)");
         // We need to add the item properties too!
@@ -2460,9 +2437,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         $sql = "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id, '" . TOOL_CALENDAR_EVENT . "',1,NOW(),NOW(),$insert_id,'AgendaAdded',1,0,NULL,1)";
         Database::query($sql);
 
-        /*
-            Links tool
-        */
+        /*  Links tool */
 
         $add_google_link_sql = "INSERT INTO $TABLETOOLLINK  (c_id, url, title, description, category_id, display_order, on_homepage, target)
                 VALUES ($course_id, 'http://www.google.com','Google','".lang2db(get_lang('Google')) . "','0','0','0','_self')";
@@ -2483,9 +2458,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         $sql = "INSERT INTO $TABLEITEMPROPERTY  (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_LINK . "',1,NOW(),NOW(),$insert_id,'LinkAdded',1,0,NULL,1)";
         Database::query($sql);
 
-        /*
-                    Annoucement tool
-        */
+        /* Annoucement tool */
 
         $sql = "INSERT INTO $TABLETOOLANNOUNCEMENTS  (c_id, title,content,end_date,display_order,email_sent) 
         		VALUES ($course_id, '".lang2db(get_lang('AnnouncementExampleTitle')) . "', '".lang2db(get_lang('AnnouncementEx')) . "', NOW(), '1','0')";
@@ -2497,11 +2470,14 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         		VALUES ($course_id, '" . TOOL_ANNOUNCEMENT . "',1,NOW(),NOW(),$insert_id,'AnnouncementAdded',1,0,NULL,1)";
         Database::query($sql);
 
-        /*
-            Introduction text
-        */
+        /* Introduction text */
 
-        $intro_text='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="middle" align="left"><img src="'.api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" /></td><td valign="middle" align="left">'.lang2db(get_lang('IntroductionText')).'</td></tr></table>';
+        $intro_text='<table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td width="110" valign="middle" align="left">
+                        <img src="'.api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" /></td>
+                     <td valign="middle" align="left">'.lang2db(get_lang('IntroductionText')).'</td></tr>
+                     </table>';
         Database::query("INSERT INTO $TABLEINTROS  VALUES ($course_id, '" . TOOL_COURSE_HOMEPAGE . "','".$intro_text. "', 0)");
         Database::query("INSERT INTO $TABLEINTROS  VALUES ($course_id, '" . TOOL_STUDENTPUBLICATION . "','".lang2db(get_lang('IntroductionTwo')) . "', 0)");
 
@@ -2509,9 +2485,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         $intro_wiki='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"></td><td valign="top" align="left">'.lang2db(get_lang('IntroductionWiki')).'</td></tr></table>';
         Database::query("INSERT INTO $TABLEINTROS  VALUES ($course_id, '" . TOOL_WIKI . "','".$intro_wiki. "', 0)");
 
-        /*
-            Exercise tool
-        */
+        /*  Exercise tool */
 
         Database::query("INSERT INTO $TABLEQUIZANSWERSLIST  VALUES ($course_id,  '1', '1', '".lang2db(get_lang('Ridiculise')) . "', '0', '".lang2db(get_lang('NoPsychology')) . "', '-5', '1','','','','')");
         Database::query("INSERT INTO $TABLEQUIZANSWERSLIST  VALUES ($course_id,  '2', '1', '".lang2db(get_lang('AdmitError')) . "', '0', '".lang2db(get_lang('NoSeduction')) . "', '-5', '2','','','','')");
@@ -2565,10 +2539,8 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         }
     }
     //end of installed plugins alterations
-
-    $language_interface = $language_interface_tmp;
-
-    return 0;
+    $language_interface = $language_interface_original;
+    return true;
 };
 
 /**
@@ -2615,7 +2587,7 @@ function register_course($params) {
     $description        = $params['description'];
 
     $category_code      = $params['category_code'];
-    $course_language    = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting('platformLanguage');    
+    $course_language    = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting('platformLanguage');        
     $user_id            = empty($params['user_id']) ? api_get_user_id() : intval($params['user_id']);        
     $department_name    = $params['department_name'];
     $department_url     = $params['department_url'];
@@ -2641,13 +2613,7 @@ function register_course($params) {
     if (empty($visual_code)) {
         $error_msg[] = 'courseScreenCode is missing';
         $ok_to_register_course = false;
-    }
-
-    /*
-    if (empty($course_db_name)) {
-        $error_msg[] = 'courseDbName is missing';
-        //$ok_to_register_course = false;
-    }*/
+    }    
     if (empty($directory)) {
         $error_msg[] = 'courseRepository is missing';
         $ok_to_register_course = false;

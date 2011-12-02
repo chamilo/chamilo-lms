@@ -6,7 +6,7 @@
 *	@package chamilo.admin
 */
 // name of the language file that needs to be included <br />
-$language_file=array('admin','tracking');
+$language_file = array('admin','tracking','create_course');
 
 // resetting the course id
 $cidReset = true;
@@ -32,11 +32,11 @@ $output = array();
 if (!empty($_GET['fill'])) {
     switch ($_GET['fill']) {
     	case 'users':
-        	require api_get_path('SYS_TEST_PATH').'datafiller/fill_users.php';
+        	require api_get_path(SYS_TEST_PATH).'datafiller/fill_users.php';
             $output = fill_users();
             break;
         case 'courses':
-            require api_get_path('SYS_TEST_PATH').'datafiller/fill_courses.php';
+            require api_get_path(SYS_TEST_PATH).'datafiller/fill_courses.php';
             $output = fill_courses();
             break;
         default:

@@ -117,11 +117,11 @@ $form->add_progress_bar();
 $form->addElement('style_submit_button', 'submit', get_lang('CreateCourse'), 'class="add"');
 
 // Set some default values.
-$values['course_language'] = api_get_setting('platformLanguage');
-$values['disk_quota'] = api_get_setting('default_document_quotum');
-$values['visibility'] = COURSE_VISIBILITY_OPEN_PLATFORM;
-$values['subscribe'] = 1;
-$values['unsubscribe'] = 0;
+$values['course_language']  = api_get_setting('platformLanguage');
+$values['disk_quota']       = api_get_setting('default_document_quotum');
+$values['visibility']       = COURSE_VISIBILITY_OPEN_PLATFORM;
+$values['subscribe']        = 1;
+$values['unsubscribe']      = 0;
 reset($teachers);
 //$values['course_teachers'] = key($teachers);
 $form->setDefaults($values);

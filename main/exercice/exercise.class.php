@@ -293,7 +293,7 @@ class Exercise {
 
 	/**
 	 * return 0 if no random by cat
-	 * return 1 if rendom by cat, categories shuffled
+	 * return 1 if random by cat, categories shuffled
 	 * return 2 if random by cat, categories sorted by alphabetic order
 	 * @author - hubert borderiou
 	 * @return - integer - quiz random by category
@@ -801,7 +801,9 @@ class Exercise {
 		if ($pos === false) {
 			return false;
 		} else {
-			if ($this->isRandom()) {
+		    // dont reduce the number of random question if we use random by category option, or if
+		    // random all questions
+			if ($this->isRandom() && $this->isRandomByCat() == 0) {
                 if (count($this->questionList) >= $this->random && $this->random > 0) {
     				$this->random -= 1; 
                     $this->save();

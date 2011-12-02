@@ -1639,19 +1639,20 @@ function get_work_id($path) {
 function get_list_users_without_publication($task_id) {
 	$work_table 			 = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$iprop_table 			 = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	$table_course_user 		 = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$table_user 			 = Database :: get_main_table(TABLE_MAIN_USER);
-	$session_course_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+	$table_course_user 		 = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+	$table_user 			 = Database::get_main_table(TABLE_MAIN_USER);
+	$session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 	//condition for the session
-	$session_id = api_get_session_id();
+	$session_id    = api_get_session_id();
+	$course_id     = api_get_course_int_id(); 
 
 	$task_id = intval($task_id);
 
 	if ($session_id == 0) {
-		$sql = "SELECT user_id as id FROM $work_table WHERE parent_id='$task_id'";
+		$sql = "SELECT user_id as id FROM $work_table WHERE c_id = $course_id AND parent_id='$task_id'";
 	} else {
-		$sql = "SELECT user_id as id FROM $work_table WHERE parent_id='$task_id' and session_id='".$session_id."'";
+		$sql = "SELECT user_id as id FROM $work_table WHERE c_id = $course_id AND parent_id='$task_id' and session_id='".$session_id."'";
 	}
 	$result = Database::query($sql);
 	$users_with_tasks = array();
@@ -1660,14 +1661,37 @@ function get_list_users_without_publication($task_id) {
 	}
 
 	if ($session_id == 0){
-		$sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email FROM $table_course_user AS cu, $table_user AS u WHERE u.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.user_id";
+		$sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email FROM $table_course_user AS cu, $table_user AS u 
+		              WHERE u.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.user_id";
 	} else {
-		$sql_users = "SELECT cu.id_user, u.lastname, u.firstname, u.email FROM $session_course_rel_user AS cu, $table_user AS u WHERE u.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.id_user and cu.id_session='".$session_id."'";
+		$sql_users = "SELECT cu.id_user, u.lastname, u.firstname, u.email FROM $session_course_rel_user AS cu, $table_user AS u 
+		              WHERE u.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.id_user and cu.id_session='".$session_id."'";
 	}
+    
+    $group_id = api_get_group_id();
+    
+    //just in case
+    if (empty($group_id)) {
+        $group_id = isset($_SESSION['toolgroup']) ? $_SESSION['toolgroup'] : 0;
+    }
+
+    if ($group_id) {
+        $group_user_list = GroupManager::get_subscribed_users($group_id);
+        $new_group_user_list = array();
+        if (!empty($group_user_list)) {
+            foreach($group_user_list as $group_user) {
+                $new_group_user_list[] = $group_user['user_id'];
+            }
+        }
+    }   
+    
 	$result_users = Database::query($sql_users);
 	$users_without_tasks = array();
 	while ($row_users = Database::fetch_row($result_users)) {
 		if (in_array($row_users[0], $users_with_tasks)) continue;
+		if ($group_id) {
+            if (!in_array($row_users[0], $new_group_user_list)) continue;
+        }
 		$user_id = array_shift($row_users);
 		$row_users[3] = $row_users[2];
 		$row_users[2] = Display::encrypted_mailto_link($row_users[2], $row_users[2]);

@@ -128,7 +128,7 @@ $currentUserEmail 		= $_user['mail'];
 $delete			= isset($_REQUEST['delete']) ? Database::escape_string($_REQUEST['delete']) : '';
 $description 	= isset($_REQUEST['description']) ? Database::escape_string($_REQUEST['description']) : '';
 
-$item_id 		= isset($_REQUEST['item_id']) ? strval(intval($_REQUEST['item_id'])) : '';
+$item_id 		= isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
 $parent_id 		= isset($_REQUEST['parent_id']) ? Database::escape_string($_REQUEST['parent_id']) : '';
 $origin 		= isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
 
@@ -349,8 +349,7 @@ switch ($action) {
 			api_not_allowed();
 		}
 		
-		if (empty($item_id)) {
-		
+		if (empty($item_id)) {		
 			$parent_data = get_work_data_by_id($work_id);
 			$parent_data['qualification'] = intval($parent_data['qualification']);
 			
@@ -447,11 +446,11 @@ switch ($action) {
 		$form->addElement('hidden', 'item_to_edit', $item_id);
 		$form->addElement('hidden', 'sec_token', $stok);
 		
-		if (isset($item_id)) {
+		if ($item_id) {
 			$text = get_lang('UpdateWork');
 			$class = 'save';
 		} else {
-			$text = get_lang('SendWork');
+			$text = get_lang('Send');
 			$class = 'upload';
 		}
 	

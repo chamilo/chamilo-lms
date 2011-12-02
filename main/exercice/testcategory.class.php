@@ -221,7 +221,8 @@ class Testcategory {
 		$quiz = new Exercise();
 		$quiz->read($in_testid);
 		$tabQuestionList = $quiz->selectQuestionList();
-		for ($i=0; $i < count($tabQuestionList); $i++) {
+		// the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???		
+		for ($i=1; $i <= count($tabQuestionList); $i++) {
 			if (!in_array(Testcategory::getCategoryForQuestion($tabQuestionList[$i]), $tabcat)) {
 				$tabcat[] = Testcategory::getCategoryForQuestion($tabQuestionList[$i]);
 			}
@@ -268,7 +269,8 @@ class Testcategory {
 		$quiz = new Exercise();
 		$quiz->read($in_testid);
 		$tabQuestionList = $quiz->selectQuestionList();
-		for ($i=0; $i < count($tabQuestionList); $i++) {
+		// the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ? ? ?
+		for ($i=1; $i <= count($tabQuestionList); $i++) {
 			if (Testcategory::getCategoryForQuestion($tabQuestionList[$i]) == $in_categoryid) {
 				$nbCatResult++;
 			}

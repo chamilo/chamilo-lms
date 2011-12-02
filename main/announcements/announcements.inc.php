@@ -60,11 +60,12 @@ class AnnouncementManager  {
 			
 		$sql="SELECT DISTINCT announcement.id, announcement.title, announcement.content
 				FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-				WHERE announcement.id = toolitemproperties.ref
-				AND toolitemproperties.tool='announcement'				
-				AND announcement.session_id  = '$session_id' AND
-				c_id = $course_id
-				ORDER BY display_order DESC";
+				WHERE   announcement.id = toolitemproperties.ref AND
+				        toolitemproperties.tool='announcement' AND
+				        announcement.session_id  = '$session_id' AND
+				        announcement.c_id = $course_id AND
+				        toolitemproperties.c_id = $course_id
+				ORDER BY display_order DESC";                
 		$rs = Database::query($sql);
 		$num_rows = Database::num_rows($rs);
 		$result = array();
@@ -111,6 +112,7 @@ class AnnouncementManager  {
 	 */
 	public static function delete_all_announcements($_course) {	
 		$announcements = self::get_all_annoucement_by_course($_course, api_get_session_id());
+        
 		
 		foreach ($announcements  as $annon) {
 			api_item_property_update($_course, TOOL_ANNOUNCEMENT, $annon['id'], 'delete', api_get_user_id());	
@@ -569,8 +571,7 @@ class AnnouncementManager  {
 		foreach ($group_users as $user){
 			echo '<option value="'.$user['user_id'].'">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'.'</option>';
 		}
-		echo '</select>';
-	
+		echo '</select>';	
 		echo "</td>";
 	
 		// the buttons for adding or removing groups/users

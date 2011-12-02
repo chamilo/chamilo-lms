@@ -1037,7 +1037,7 @@ class GroupManager {
 		$group_id = Database::escape_string($group_id);
 		$course_id = api_get_course_int_id();
 		
-		$sql = "SELECT ug.id, u.user_id, u.lastname, u.firstname, u.email 
+		$sql = "SELECT ug.id, u.user_id, u.lastname, u.firstname, u.email, u.username 
 				FROM ".$table_user." u, ".$table_group_user." ug 
 				WHERE 	ug.c_id = $course_id AND
 						ug.group_id='".$group_id."' AND 
@@ -1045,10 +1045,11 @@ class GroupManager {
 		$db_result = Database::query($sql);
 		$users = array ();
 		while ($user = Database::fetch_object($db_result)) {
-			$member['user_id'] = $user->user_id;
+			$member['user_id']   = $user->user_id;
 			$member['firstname'] = $user->firstname;
-			$member['lastname'] = $user->lastname;
-			$member['email'] = $user->email;
+			$member['lastname']  = $user->lastname;
+			$member['email']     = $user->email;
+            $member['username']  = $user->username;
 			$users[] = $member;
 		}
 		return $users;

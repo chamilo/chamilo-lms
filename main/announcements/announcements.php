@@ -779,12 +779,13 @@ if ($display_form) {
 		if ($announcement_to_modify=='') {
 			($email_ann=='1' || !empty($surveyid))?$checked='checked':$checked='';
 			echo '<div class="row">
-				  <div class="label">
-					<input class="checkbox" type="checkbox" value="1" name="email_ann" '.$checked.'>
+				  <div class="label">					
 				  </div>
-				  <div class="formw">'.
-					get_lang('EmailOption').': '.get_lang('MyGroup').'&nbsp;&nbsp;<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</a>';
-			AnnouncementManager::show_to_form_group($_SESSION['toolgroup']);
+				  <div class="formw">
+				  <input class="checkbox" type="checkbox" value="1" name="email_ann" '.$checked.'>
+				  '.get_lang('EmailOption').': '.get_lang('MyGroup').'&nbsp;&nbsp;
+				  <a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</a>';
+			      AnnouncementManager::show_to_form_group($_SESSION['toolgroup']);
 			echo '</div></div>';
 		}
 
@@ -832,10 +833,11 @@ if ($display_form) {
 	//File attachment
 
 	echo '	<div class="row">
-				<div class="label">
-					<a href="javascript://" onclick="return plus_attachment();"><span id="plus"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AddAnAttachment').'</span></a>
+				<div class="label">					
 				</div>
 				<div class="formw">
+				    <a href="javascript://" onclick="return plus_attachment();"><span id="plus"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AddAnAttachment').'</span></a>
+				    <br />
 					<table id="options" style="display: none;">
 					<tr>
 						<td colspan="2">
@@ -928,7 +930,7 @@ if ($display_announcement_list) {
 					ORDER BY display_order DESC";
 
 			}
-		} elseif (api_get_group_id() !=0 ) {
+		} elseif (api_get_group_id() != 0 ) {
 			// A.2. you are a course admin with a GROUP filter
 			// => see only the messages of this specific group
 			$sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
@@ -975,81 +977,80 @@ if ($display_announcement_list) {
 					ORDER BY display_order DESC";
 			}
 		}
-	} else {
-		
+	} else {		
 		//STUDENT
 		
-			if (is_array($group_memberships) && count($group_memberships)>0) {
-				if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-					if (api_get_group_id() == 0) {
-						//No group
-						$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".$_user['user_id']."'" .
-										" OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
-					} else {
-						$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."'
-						OR ip.to_group_id IN (0, ".api_get_group_id()."))";
-					}
-					//$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )) ";
-
+		if (is_array($group_memberships) && count($group_memberships)>0) {
+			if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+				if (api_get_group_id() == 0) {
+					//No group
+					$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".$_user['user_id']."'" .
+									" OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
 				} else {
-					if (api_get_group_id() == 0) {
-						$cond_user_id = " AND (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
-					} else {
-						$cond_user_id = " AND (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".api_get_group_id()."))";
-					}
+					$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."'
+					OR ip.to_group_id IN (0, ".api_get_group_id()."))";
+				}
+				//$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )) ";
+
+			} else {
+				if (api_get_group_id() == 0) {
+					$cond_user_id = " AND (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
+				} else {
+					$cond_user_id = " AND (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".api_get_group_id()."))";
+				}
+			}
+
+			$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
+    				FROM $tbl_announcement announcement, $tbl_item_property ip
+    				WHERE	announcement.c_id = $course_id AND
+							ip.c_id = $course_id AND	 
+	        				announcement.id = ip.ref
+	        				AND ip.tool='announcement'
+	        				$cond_user_id
+	        				$condition_session
+	        				AND ip.visibility='1'
+    				ORDER BY display_order DESC";
+		} else {
+			if ($_user['user_id']) {
+				if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+					$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR (ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')) ";
+				} else {
+					$cond_user_id = " AND (ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0') ";
 				}
 
 				$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
-        				FROM $tbl_announcement announcement, $tbl_item_property ip
-        				WHERE	announcement.c_id = $course_id AND
-								ip.c_id = $course_id AND	 
-		        				announcement.id = ip.ref
-		        				AND ip.tool='announcement'
-		        				$cond_user_id
-		        				$condition_session
-		        				AND ip.visibility='1'
-        				ORDER BY display_order DESC";
-			} else {
-				if ($_user['user_id']) {
-					if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-						$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR (ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')) ";
-					} else {
-						$cond_user_id = " AND (ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0') ";
-					}
-
-					$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
-							FROM $tbl_announcement announcement, $tbl_item_property ip
-    						WHERE
-	    						announcement.c_id = $course_id AND
-								ip.c_id = $course_id AND	 
-	    						announcement.id = ip.ref AND 
-	    						ip.tool='announcement'
-	    						$cond_user_id
-	    						$condition_session
-	    						AND ip.visibility='1'
-	    						AND announcement.session_id IN(0,".api_get_session_id().")
-    						ORDER BY display_order DESC";
-				} else {
-
-					if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-						$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ip.to_group_id='0' ) ";
-					} else {
-						$cond_user_id = " AND ip.to_group_id='0' ";
-					}
-
-					$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
-    						FROM $tbl_announcement announcement, $tbl_item_property ip
-    						WHERE
+						FROM $tbl_announcement announcement, $tbl_item_property ip
+						WHERE
     						announcement.c_id = $course_id AND
 							ip.c_id = $course_id AND	 
-    						announcement.id = ip.ref
-    						AND ip.tool='announcement'
+    						announcement.id = ip.ref AND 
+    						ip.tool='announcement'
     						$cond_user_id
     						$condition_session
     						AND ip.visibility='1'
-    						AND announcement.session_id IN(0,".api_get_session_id().")";
+    						AND announcement.session_id IN(0,".api_get_session_id().")
+						ORDER BY display_order DESC";
+			} else {
+
+				if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+					$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ip.to_group_id='0' ) ";
+				} else {
+					$cond_user_id = " AND ip.to_group_id='0' ";
 				}
+
+				$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
+						FROM $tbl_announcement announcement, $tbl_item_property ip
+						WHERE
+						announcement.c_id = $course_id AND
+						ip.c_id = $course_id AND	 
+						announcement.id = ip.ref
+						AND ip.tool='announcement'
+						$cond_user_id
+						$condition_session
+						AND ip.visibility='1'
+						AND announcement.session_id IN(0,".api_get_session_id().")";
 			}
+		}
 	}
 
 	$result		= Database::query($sql);

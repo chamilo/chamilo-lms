@@ -879,10 +879,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
 		}
 		
         $first_and_last_name = api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1";
-        
-        // 
+         
         // sql for chamilo-type tests for teacher / tutor view
-        // 
+        
         $sql = "SELECT
                     user_id, 
                     $first_and_last_name, 
@@ -913,7 +912,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
 
          // sql for hotpotatoes tests for teacher / tutor view
     
-        $hpsql="SELECT 
+        $hpsql = "SELECT 
                     $first_and_last_name , 
                     username,
                     tth.exe_name, 
@@ -1096,7 +1095,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                     }
                     // Date conversion
                     if ($is_allowedToEdit || $is_tutor) {                        
-                        $date_list = api_get_local_time($results[$i]['col4']). ' / ' . api_get_local_time($results[$i]['exdate']);
+                        $date_list = api_get_local_time($results[$i]['col6']). ' / ' . api_get_local_time($results[$i]['exdate']);
                     } else {                        
                         $date_list = api_get_local_time($results[$i]['col2']). ' / ' . api_get_local_time($results[$i]['exdate']);
                     }
@@ -1137,7 +1136,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                             $html_link.='&nbsp;';
                         }
                     } else {
-                    	
                     	$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$results[$i]['exid'].'&id_session='.api_get_session_id().'&height=500&width=750';
                     	$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'thickbox'))."&nbsp;&nbsp;&nbsp;";
                     	
@@ -1151,7 +1149,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                     }
                     $more_details_list = $html_link;
                     if ($is_allowedToEdit || $is_tutor) {
-                        $list_info[] = array($user_first_name,$user_last_name,$user_login,$user_groups,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
+                        $revised = $revised ? get_lang('Revised') : get_lang('NotRevised');
+                        $list_info[] = array($user_first_name,$user_last_name,$user_login,$user_groups,$quiz_name_list,$duration_list,$date_list,$result_list, $revised, $more_details_list);
                     } else {
                         $list_info[] = array($quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
                     }

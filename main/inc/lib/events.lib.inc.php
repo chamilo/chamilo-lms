@@ -794,6 +794,9 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
 	$lp_view_table         = Database::get_course_table(TABLE_LP_VIEW);
     $lp_item_view_table    = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $course_id 			   = $course['real_id'];
+    if (empty($course_id)) {
+        $course_id = api_get_course_int_id();
+    }
     
     $track_e_exercises     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $track_attempts        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -1122,24 +1125,26 @@ function get_best_exercise_results_by_user($exercise_id, $course_code, $session_
 	return $best_score_return;
 }
 
-function count_exercise_result($exercise_id, $course_code, $session_id = 0) {
+function count_exercise_result_not_validated($exercise_id, $course_code, $session_id = 0) {
     $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    
-    $course_code           = Database::escape_string($course_code);
-    
+    $table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);     
+    $course_code           = Database::escape_string($course_code);    
     $session_id     = intval($session_id);
     $exercise_id    = intval($exercise_id);
-    $select = '*';    
-    $sql = "SELECT count(*) as count FROM $table_track_exercises 
-            WHERE   status = ''  AND
-                    exe_exo_id = $exercise_id AND 
+        
+    $status = Database::escape_string($status);
+        
+    $sql = "SELECT count(e.exe_id) as count FROM $table_track_exercises e LEFT JOIN $table_track_attempt a  ON e.exe_id = a.exe_id 
+            WHERE   exe_exo_id = $exercise_id AND 
                     exe_cours_id = '$course_code' AND
-                    session_id = $session_id  AND 
+                    e.session_id = $session_id  AND 
                     orig_lp_id = 0 AND
-                    orig_lp_item_id = 0 ORDER BY exe_id";      
-    $res = Database::query($sql);   
+                    marks IS NULL AND
+                    status = '' AND
+                    orig_lp_item_id = 0 ORDER BY e.exe_id";                          
+    $res = Database::query($sql);
+    $row = Database::fetch_array($res,'ASSOC');
     
-    $row = Database::fetch_array($res,'ASSOC');     
     return $row['count'];
     
 }

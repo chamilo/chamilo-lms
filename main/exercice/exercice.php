@@ -115,14 +115,6 @@ if ($page < 0) {
 }
 
 
-//Deleting an attempt
-if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !empty ($_GET['did']) && $_GET['did'] == strval(intval($_GET['did']))) {
-	$sql = 'DELETE FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES) . ' WHERE exe_id = ' . $_GET['did']; //_GET[did] filtered by entry condition
-	Database::query($sql);
-	$filter=Security::remove_XSS($_GET['filter']);
-	header('Location: exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '&exerciseId='.$exerciseId.'&filter_by_user='.$_GET['filter_by_user']);
-	exit;
-}
 
 if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {
 	$_SESSION['gradebook']=Security::remove_XSS($_GET['gradebook']);
@@ -456,7 +448,8 @@ if (!empty($exercise_list)) {
         
         $count = 0;
         if (!empty($exercise_list))
-        foreach ($exercise_list as $row) {                
+        foreach ($exercise_list as $row) {
+            $my_exercise_id = $row['id'];                
             //echo '<div  id="tabs-'.$i.'">';
             $i++;                    
             //validacion when belongs to a session
@@ -539,11 +532,13 @@ if (!empty($exercise_list)) {
                     $title = Display::tag('font', $row['title'], array('style'=>'color:grey'));
                 } else {
                     $title = $row['title'];
-                }
-                $count = count_exercise_result($exid, $course_code, $session_id);
+                }            
+                    
+                $count = intval(count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id));
+                
                 $class_tip = '';
-                if ($count) {
-                    $results_text = $count == 1 ? get_lang('Result') : get_lang('Results');
+                if (!empty($count)) {
+                    $results_text = $count == 1 ? get_lang('ResultNotRevised') : get_lang('ResultsNotRevised');
                     $title .= '<span class="tooltip" style="display: none;">'.$count.' '.$results_text.' </span>';
                     $class_tip = 'link_tooltip';
                 }
@@ -551,18 +546,15 @@ if (!empty($exercise_list)) {
                 $url = '<a class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>'.$lp_blocked;
                            
                 $item =  Display::tag('td', $url.' '.$session_img);  
-                $exid = $row['id'];
+                
 
                 //count number exercice - teacher
-                $sqlquery   = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND exercice_id = $exid";
+                $sqlquery   = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND exercice_id = $my_exercise_id";
                 $sqlresult  = Database::query($sqlquery);
-                $rowi       = Database :: result($sqlresult, 0);
-                
-                                    
+                $rowi       = Database :: result($sqlresult, 0);                 
                                     
                 if ($session_id == $row['session_id']) {
-                    //Settings                                                                
-                    //$actions  = Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',22), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);                        
+                    //Settings
                     $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',22), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);                        
                     $actions .='<a href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
                     //Export
@@ -600,12 +592,12 @@ if (!empty($exercise_list)) {
                	    }
 					if ($row['random_by_category'] > 0) {	
 						if (!class_exists("testcategory.class.php")) include_once "testcategory.class.php" ;
-						$nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($exid, $random_number_of_question);
+						$nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($my_exercise_id, $random_number_of_question);
 						$number_of_questions .= $nbQuestionsTotal." ";
 						$number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase") ;
 						$number_of_questions .= " - ";
-						//$number_of_questions .= Testcategory::getNumberMaxQuestionByCat($exid).' '.get_lang('QuestionByCategory');
-                        $number_of_questions .= min(Testcategory::getNumberMaxQuestionByCat($exid), $random_number_of_question).' '.get_lang('QuestionByCategory');
+						//$number_of_questions .= Testcategory::getNumberMaxQuestionByCat($my_exercise_id).' '.get_lang('QuestionByCategory');
+                        $number_of_questions .= min(Testcategory::getNumberMaxQuestionByCat($my_exercise_id), $random_number_of_question).' '.get_lang('QuestionByCategory');
 					} else {
                    		$random_label = ' ('.get_lang('Random').') ';                       	
                    	    $number_of_questions = $random_number_of_question . ' ' .$random_label.' '.$textByCategory;

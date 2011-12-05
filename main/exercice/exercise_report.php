@@ -63,11 +63,16 @@ $TBL_LP_ITEM                = Database :: get_course_table(TABLE_LP_ITEM);
 
 $course_id = api_get_course_int_id();
 
+
+if (empty ($exerciseId)) {
+    $exerciseId = intval($_REQUEST['exerciseId']);
+}
+
 // 
 // filter display by student group
 // if $_GET['filterByGroup'] = -1 => do not filter
 // else, filter by group_id (0 for no group)
-// 
+//
 $filterByGroup = -1;
 if (isset($_GET['filterByGroup']) && is_numeric($_GET['filterByGroup'])) {
     $filterByGroup = Security::remove_XSS($_GET['filterByGroup']);
@@ -167,8 +172,8 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
         } else {
             $my_comments    = '';
         }
-        $my_questionid=$array_content_id_exe[$i];
-        $sql = "SELECT question from $TBL_QUESTIONS WHERE id = '$my_questionid'";
+        $my_questionid = intval($array_content_id_exe[$i]);
+        $sql = "SELECT question from $TBL_QUESTIONS WHERE c_id = $course_id AND id = '$my_questionid'";
         $result =Database::query($sql);
         $ques_name = Database::result($result,0,"question");
 
@@ -176,7 +181,8 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
         Database::query($query);
         
         //Saving results in the track recording table
-        $recording_changes = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment) VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
+        $recording_changes = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment) 
+                              VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
         Database::query($recording_changes);
     }
     
@@ -250,6 +256,20 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 }
 
 
+
+//Deleting an attempt
+if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !empty ($_GET['did']) && $_GET['did'] == strval(intval($_GET['did']))) {
+    $sql = 'DELETE FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = ' . intval($_GET['did']); //_GET[did] filtered by entry condition    
+    Database::query($sql);
+    $sql = 'DELETE FROM ' . $TBL_TRACK_ATTEMPT . ' WHERE exe_id = ' . intval($_GET['did']); //_GET[did] filtered by entry condition
+    Database::query($sql);
+    
+    $filter=Security::remove_XSS($_GET['filter']);
+    header('Location: exercise_report.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&filter=' . $filter . '&exerciseId='.$exerciseId.'&filter_by_user='.$_GET['filter_by_user']);
+    exit;
+}
+
+
 if (api_is_allowed_to_edit(null,true)) {
     if (!$_GET['filter']) {
         $filter_by_not_revised = true;
@@ -316,9 +336,10 @@ if ($is_allowedToEdit || $is_tutor) {
 	$table->set_header(3, get_lang('Group'),false);
 	$table->set_header(4, get_lang('Exercice'),false);
 	$table->set_header(5, get_lang('Duration'),false);
-	$table->set_header(6, get_lang('Date'));
+	$table->set_header(6, get_lang('Date'));    
 	$table->set_header(7, get_lang('Score'),false);
-	$table->set_header(8, get_lang('CorrectTest'), false);   
+    $table->set_header(8, get_lang('Status'), false);
+	$table->set_header(9, get_lang('CorrectTest'), false);   
 	
 } else {
     $table->set_header(0, get_lang('Exercice'));
@@ -329,9 +350,6 @@ if ($is_allowedToEdit || $is_tutor) {
 }	 
 $content = $table->return_table();	
 
-if (empty ($exerciseId)) {
-    $exerciseId = intval($_REQUEST['exerciseId']);
-}
 
 if ($is_allowedToEdit || $is_tutor) {
     $nameTools = get_lang('StudentScore');              

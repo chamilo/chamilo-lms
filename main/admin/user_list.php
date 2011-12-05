@@ -861,6 +861,7 @@ if (isset ($_GET['keyword'])) {
 } elseif (isset ($_GET['keyword_firstname'])) {
 	$parameters['keyword_firstname'] 	= Security::remove_XSS($_GET['keyword_firstname']);
 	$parameters['keyword_lastname']	 	= Security::remove_XSS($_GET['keyword_lastname']);
+	$parameters['keyword_username']	 	= Security::remove_XSS($_GET['keyword_username']);
 	$parameters['keyword_email'] 	 	= Security::remove_XSS($_GET['keyword_email']);
 	$parameters['keyword_officialcode'] = Security::remove_XSS($_GET['keyword_officialcode']);
 	$parameters['keyword_status'] 		= Security::remove_XSS($_GET['keyword_status']);

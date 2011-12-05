@@ -109,7 +109,7 @@ if (isset ($_GET['exportpdf']))	{
 
 		// Beginning of PDF report creation
 
-		$printable_data = get_printable_data($users, $alleval, $alllinks);
+		$printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks);
 		$export = $export_pdf_form->exportValues();
 
 		// Reading report's CSS
@@ -170,11 +170,10 @@ if (isset ($_GET['exportpdf']))	{
 		if (!empty($total)) {			
 			foreach($total as $label => $count) {
 				$total_custom_score = round($count/count($user_results), 2) *100;
-				$html .= Display::tag('tr', Display::tag('td', $label).Display::tag('td', Display::tag('strong', $total_custom_score.' %')));
+				$html .= Display::tag('tr', Display::tag('td', $label).': '.Display::tag('td', Display::tag('strong', $total_custom_score.' %')));
 			}
 		}
-		$html .= '</table></td>';
-		
+		$html .= '</table></td>';		
 		$html .= '<td valign="top"><table align="left" width="33%">';
 		$headers = $printable_data[0];
 		unset($headers[0]);
@@ -182,7 +181,8 @@ if (isset ($_GET['exportpdf']))	{
 		unset($headers[count($headers)+1]);
 		
 		foreach ($headers as $head) {
-			$html .= Display::tag('tr', Display::tag('td', 'P1').Display::tag('td', Display::tag('strong', $head)));		
+			//$html .= Display::tag('tr', Display::tag('td', 'P1').Display::tag('td', Display::tag('strong', $head)));		
+			$html .= Display::tag('tr', Display::tag('td', Display::tag('strong', $head)));
 		}		
 		$html .= '</table></td></table><br />';		
 

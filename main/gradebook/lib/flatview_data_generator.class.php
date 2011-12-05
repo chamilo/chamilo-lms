@@ -54,7 +54,7 @@ class FlatViewDataGenerator
 	/**
 	 * Get array containing column header names (incl user columns)
 	 */
-	public function get_header_names ($items_start = 0, $items_count = null , $show_detail = false) {
+	public function get_header_names($items_start = 0, $items_count = null , $show_detail = false) {
 		$headers = array();
 		$headers[] = get_lang('LastName');
 		$headers[] = get_lang('FirstName');
@@ -80,6 +80,7 @@ class FlatViewDataGenerator
 			
 			//$headers[] = $item->get_name().' <br /> '.get_lang('Max').' '.$this->get_max_result_by_link($count + $items_start).' ';
 			$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
+            
 			$weight = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight() *100, 2);
 			$headers[] = $item->get_name().'  '.$weight.' % ';
 			if ($show_detail) {
@@ -189,6 +190,7 @@ class FlatViewDataGenerator
 		}
 		//@todo move these in a function
 		$sum_categories_weight_array = array();     
+        
         if (isset($this->category) && !empty($this->category)) {            
             $categories = Category::load(null, null, null, $this->category->get_id());
             if (!empty($categories)) {
@@ -202,7 +204,7 @@ class FlatViewDataGenerator
 		
 		foreach ($selected_users as $user) {
 			$row = array ();
-			$row[] = $user[0];	// user id
+			$row[] = $user_id = $user[0];	// user id
 			$row[] = $user[2];	// last name
 			$row[] = $user[3];	// first name
 
@@ -212,18 +214,23 @@ class FlatViewDataGenerator
             
 
 			for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
-				$item  			= $this->evals_links[$count + $items_start];
-                
-				$score 			= $item->calc_score($user[0]);
-                
-				$divide			= ( ($score[1])==0 ) ? 1 : $score[1];
-                
+				$item  			= $this->evals_links[$count + $items_start];       
+                         
+				$score 			= $item->calc_score($user_id);
+				$divide			= ( ($score[1])==0 ) ? 1 : $score[1];                
                 $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
                 
                 $item_value     = round($score[0]/$divide,2) * 100;
-                $percentage     = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight(), 2);
-                $item_value     = $percentage*$item_value;
                 
+                //Fixing total when using one or multiple gradebooks 
+                if ($this->category->get_parent_id() == 0 ) {
+                    $item_value     = $item_value;
+                    $item_value     =round($score[0]/$divide*$item->get_weight(),2);                    
+                } else {
+                    $percentage     = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight(), 2);
+                    $item_value     = $percentage*$item_value;
+                }
+                                
 				$item_total		+= $item->get_weight();
                 
 				$temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
@@ -235,8 +242,6 @@ class FlatViewDataGenerator
 					//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
 					if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, 
 					                                       LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {
-					                                           
-                        
 					    if (!empty($score[0])) {																		
                             $row[] = $temp_score.' ';
                         } else {
@@ -255,8 +260,9 @@ class FlatViewDataGenerator
 				}
                 $item_value_total +=$item_value;              
             }
-
+            $item_total = round($item_total);
 			$total_score = array($item_value_total, $item_total);
+            
             
 			
 			if (!$show_all) {				

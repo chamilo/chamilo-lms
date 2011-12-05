@@ -393,10 +393,14 @@ function get_table_type_course($type,$course) {
 	return Database::get_course_table($table_evaluated[$type][0],$_configuration['db_prefix'].$course);
 }
 
-function get_printable_data($users, $alleval, $alllinks) {
+function get_printable_data($cat, $users, $alleval, $alllinks) {
 	$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks);
 	$offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 	$offset = intval($offset);	
+    
+    // step 2: generate rows: students
+    $datagen->category = $cat;
+        
 	$count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : LIMIT;	
 	$header_names = $datagen->get_header_names($offset, $count, true);	
 	$data_array   = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true,true);

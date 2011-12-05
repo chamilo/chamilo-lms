@@ -5125,8 +5125,7 @@ function api_is_global_platform_admin() {
  * @author Julio Montoya
  */
 function api_protect_global_admin_script() {
-    if (!api_is_global_platform_admin()) {
-        include api_get_path(INCLUDE_PATH).'header.inc.php';
+    if (!api_is_global_platform_admin()) {        
         api_not_allowed();
         return false;
     }

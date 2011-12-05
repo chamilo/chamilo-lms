@@ -167,27 +167,9 @@ class DisplayGradebook
 		} else {
 			$show='';
 		}
-		echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?show='.$show.'">';
-		echo '<input type="hidden" name="export_report" value="export_report">';
-		echo '<input type="hidden" name="selectcat" value="'.$catobj->get_id() .'">';
-
-		echo '<input type="hidden" name="export_format" value="csv">';
-		echo '</form>';
-
-		echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?show='.$show.'">';
-		echo '<input type="hidden" name="export_report" value="export_report">';
-		echo '<input type="hidden" name="selectcat" value="'.$catobj->get_id() .'">';
-		echo '<input type="hidden" name="export_format" value="xls">';
-		echo '</form>';
-		echo '<form id="form1c" name="form1c" method="post" action="'.api_get_self().'?show='.$show.'">';
-		echo '<input type="hidden" name="export_report" value="export_report">';
-		echo '<input type="hidden" name="selectcat" value="'.$catobj->get_id() .'">';
-		echo '<input type="hidden" name="export_format" value="doc">';
-		echo '</form>';
-
-		$header .= '<a  href="javascript: void(0);" onclick="javascript: document.form1a.submit();">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a>';
-		$header .= '<a " href="javascript: void(0);" onclick="javascript: document.form1b.submit();">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a>';
-		$header .= '<a " href="javascript: void(0);" onclick="javascript: document.form1c.submit();">'.Display::return_icon('export_doc.png', get_lang('ExportAsDOC'),'','32').'</a>';
+		$header .= '<a href="' . api_get_self() . '?export_format=csv&export_report=export_report&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a>';
+		$header .= '<a href="' . api_get_self() . '?export_format=xls&export_report=export_report&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a>';
+		$header .= '<a href="' . api_get_self() . '?export_format=doc&export_report=export_report&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('export_doc.png', get_lang('ExportAsDOC'),'','32').'</a>';
 		$header .= '<a href="' . api_get_self() . '?print=&selectcat=' . $catobj->get_id() . '" target="_blank">'.Display::return_icon('printer.png', get_lang('Print'),'','32').'</a>';
 		$header .= '<a href="' . api_get_self() . '?exportpdf=&selectcat=' . $catobj->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'','32').'</a>';
 

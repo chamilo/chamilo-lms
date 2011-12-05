@@ -9,10 +9,8 @@
  */
 
 $language_file = 'gradebook';
-
 require_once '../inc/global.inc.php';
-require_once 'lib/be.inc.php';
-require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/be.inc.php';      
 require_once 'lib/fe/dataform.class.php';
 require_once 'lib/fe/userform.class.php';
 require_once 'lib/flatview_data_generator.class.php';
@@ -23,7 +21,6 @@ require_once 'lib/scoredisplay.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
-if (!class_exists('HTML_Table')) { require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php'; }
 
 api_block_anonymous_users();
 block_students();
@@ -41,7 +38,6 @@ if (($showlink == '0') && ($showeval == '0')) {
 	$showlink = '1';
 	$showeval = '1';
 }
-
 $cat = Category::load($_REQUEST['selectcat']);
 
 if (isset($_GET['userid'])) {
@@ -96,8 +92,7 @@ if (!empty($keyword)) {
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 $flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset, $addparams);
 
-if (isset ($_GET['exportpdf']))	{
-
+if (isset($_GET['exportpdf']))	{
 	$interbreadcrumb[] = array (
 		'url' => api_get_self().'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
 		'name' => get_lang('FlatView')
@@ -258,12 +253,15 @@ if (isset ($_GET['exportpdf']))	{
 }
 
 if (isset ($_GET['print']))	{
-	$printable_data = get_printable_data ($users,$alleval, $alllinks);
+	$printable_data = get_printable_data ($cat[0], $users,$alleval, $alllinks);
 	echo print_table($printable_data[1],$printable_data[0], get_lang('FlatView'), $cat[0]->get_name());
 	exit;
 }
 
-if (!empty($_POST['export_report']) && $_POST['export_report'] == 'export_report') {
+
+        
+        
+if (!empty($_GET['export_report']) && $_GET['export_report'] == 'export_report') {    
 	if (api_is_platform_admin() || api_is_course_admin() || api_is_course_coach()) {
 		$user_id = null;
 
@@ -275,12 +273,12 @@ if (!empty($_POST['export_report']) && $_POST['export_report'] == 'export_report
 		}
 
 		require_once 'gradebook_result.class.php';
-		$printable_data = get_printable_data($users, $alleval, $alllinks);
-		switch($_POST['export_format']) {
+		$printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks);
+        
+		switch($_GET['export_format']) {
 			case 'xls':
 				$export = new GradeBookResult();
 				$export->exportCompleteReportXLS($printable_data);
-				exit;
 				break;
 			case 'doc':
 				$export = new GradeBookResult();
@@ -322,8 +320,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
 	DisplayGradebook :: display_header_reduce_flatview($cat[0], $showeval, $showlink, $simple_search_form);
 	
 	// main graph
-	$flatviewtable->display();
-	
+	$flatviewtable->display();	
 	// @todo this needs a fix
 	//$image_file = $flatviewtable->display_graph();
 	//@todo load images with jquery

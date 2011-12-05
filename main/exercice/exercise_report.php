@@ -137,7 +137,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
     $from              = $teacher_info['mail'];
     $from_name         = api_get_person_name($teacher_info['firstname'], $teacher_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
     
-    $url               = api_get_path(WEB_CODE_PATH) . 'exercice/exercice_report.php?' . api_get_cidreq() . '&id_session='.$session_id.'&exerciseId='.$exerciseId; 
+    $url               = api_get_path(WEB_CODE_PATH) . 'exercice/exercise_report.php?' . api_get_cidreq() . '&id_session='.$session_id.'&exerciseId='.$exerciseId; 
 
     $my_post_info      = array();
     $post_content_id   = array();

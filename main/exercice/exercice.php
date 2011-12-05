@@ -564,7 +564,7 @@ if (!empty($exercise_list)) {
                     //Settings                                                                
                     //$actions  = Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',22), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);                        
                     $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',22), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);                        
-                    $actions .='<a href="exercice_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
+                    $actions .='<a href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
                     //Export
                     $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
                     //Clean exercise                    
@@ -581,7 +581,7 @@ if (!empty($exercise_list)) {
                     // not session                 
                     $actions = Display::return_icon('edit_na.png', get_lang('ExerciseEditionNotAvailableInSession'));                        
                     
-                    $actions .='<a href="exercice_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
+                    $actions .='<a href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
                     $actions .= Display::url(Display::return_icon('cd.gif',   get_lang('CopyExercise')),     '',  array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));                           
                 }
                 
@@ -725,7 +725,7 @@ if (!empty($exercise_list)) {
                 $item .=  Display::tag('td', $attempt_text);
                                  
                 //See results
-                $actions =' '.$num.' <a href="exercice_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">   '.Display::return_icon('test_results.png', get_lang('Results'),'',22).' </a>';
+                $actions =' '.$num.' <a href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">   '.Display::return_icon('test_results.png', get_lang('Results'),'',22).' </a>';
             }                
             $class = 'row_even';
             if ($count % 2) {
@@ -799,7 +799,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
             $item .= Display::tag('td','-');
                              
             $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',22), 'adminhp.php?'.api_get_cidreq().'&hotpotatoesName='.$path);
-            $actions .='<a href="exercice_report.php?' . api_get_cidreq() . '&path='.$path.'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';
+            $actions .='<a href="exercise_report.php?' . api_get_cidreq() . '&path='.$path.'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';
                                     
             // if active
             if ($active) {
@@ -818,7 +818,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 $nbrActiveTests = $nbrActiveTests +1;
                 $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'"'.(!$active?'class="invisible"':'').'">'.$title.'</a>');
                 $item .= Display::tag('td', '');
-                $actions ='<a href="exercice_report.php?' . api_get_cidreq() . '&path='.$path.'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';
+                $actions ='<a href="exercise_report.php?' . api_get_cidreq() . '&path='.$path.'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';
                 $item .= Display::tag('td', $actions);                            
                 echo Display::tag('tr',$item, array('class'=>$class));
             }                        

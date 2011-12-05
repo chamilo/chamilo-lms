@@ -461,7 +461,7 @@ if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GE
 }
 echo '<a href="overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&preview=1">'.Display::return_icon('preview_view.png', get_lang('Preview'),'','32').'</a>';
 
-echo Display::url(Display::return_icon('test_results.png', get_lang('Results'),'','32'), 'exercice_report.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id);
+echo Display::url(Display::return_icon('test_results.png', get_lang('Results'),'','32'), 'exercise_report.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id);
 
 if ($show_quiz_edition) {
     echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'),'','32').'</a>';

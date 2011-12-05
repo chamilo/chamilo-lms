@@ -37,8 +37,8 @@ if(!$is_allowedToEdit){
 	exit;
 }
 
-$interbreadcrumb[]= array ('url' => 'exercice_report.php','name' => get_lang('Exercices'));
-$interbreadcrumb[]= array ('url' => 'exercice_report.php'.'?filter=2','name' => get_lang('StudentScore'));
+$interbreadcrumb[]= array ('url' => 'exercise_report.php','name' => get_lang('Exercices'));
+$interbreadcrumb[]= array ('url' => 'exercise_report.php'.'?filter=2','name' => get_lang('StudentScore'));
 $interbreadcrumb[]= array ('url' => 'exercise_history.php'.'?exe_id='.intval($_GET['exe_id']), 'name' => get_lang('Details'));
 
 $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
@@ -56,7 +56,7 @@ if (isset($_GET['message'])) {
 }
 
 echo '<div class="actions">';
-echo '<a href="exercice_report.php?' . api_get_cidreq() . '&filter=2">' . Display :: return_icon('back.png', get_lang('BackToResultList'),'','32').'</a>';
+echo '<a href="exercise_report.php?' . api_get_cidreq() . '&filter=2">' . Display :: return_icon('back.png', get_lang('BackToResultList'),'','32').'</a>';
 echo '</div>';
 
 ?>

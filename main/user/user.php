@@ -212,7 +212,10 @@ if (api_is_allowed_to_edit(null, true)) {
 					       $description .= '<tr><td>'.get_lang('Session').': </td><td class="highlight">'.api_get_session_name(api_get_session_id()).'</td>';
                        }
 					   $description .= '<tr><td>'.get_lang('Course').': </td><td class="highlight">'.$course_info['name'].'</td>';
-					   $description .= '<tr><td>'.get_lang('Teachers').': </td><td class="highlight">'.CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']).'</td>';
+                       $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);
+                       if (!empty($teachers)) {
+					       $description .= '<tr><td>'.get_lang('Teachers').': </td><td class="highlight">'.$teachers.'</td>';
+                       }
 					   $description .= '<tr><td>'.get_lang('Date').': </td><td class="highlight">'.api_convert_and_format_date(time(), DATE_TIME_FORMAT_LONG).'</td>';
                        $description .= '</table>';   
                                             

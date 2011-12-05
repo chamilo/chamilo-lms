@@ -181,7 +181,7 @@ class Export {
         $html .= $table->toHtml();        
         $html  = api_utf8_encode($html);        
         
-        $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
+        $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).'/print.css';
         $css = file_exists($css_file) ? @file_get_contents($css_file) : '';        
         
         $pdf = new PDF(); 

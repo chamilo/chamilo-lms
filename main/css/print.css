@@ -1,0 +1,932 @@
+body {
+	font-family: arial, verdana, helvetica, sans-serif;
+	font-size: 12px;
+	color: #000;
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+}
+img {
+	border: none;
+}
+#outerframe {
+	position: relative;  /* do not remove, fixes a bug in IE */
+	border: 1px solid #fff;
+	background-color: #fff;
+}
+/* Hides from IE5-mac \*/
+* html #outerframe {
+	height: 1%;
+}
+/* End hide from IE5-mac */
+
+/*****************************************************
+ *  HEADER STYLES                                    *
+ *****************************************************/
+
+
+#my_courses {
+	background-color: #fff;
+	color: #009;
+}
+/*show the institution*/
+#header1 {
+	padding: 2px;
+	float: right;
+}
+#my_courses {
+	display: none;
+}
+#header2 {
+	display: none;
+}
+#header3 {
+	display: none;
+}
+/* show the way to the printed document (breadcrumbs)*/
+#header4 {
+	padding: 2px;
+	border-bottom: 1px solid #4171B5;
+}
+#header4 a {
+	color: #4171b5;
+}
+#toolshortcuts {
+	display:none;
+}
+/*****************************************************
+ *  FOOTER STYLES                                    *
+ *****************************************************/
+#footer {
+	padding: 8px;
+	border-top: 1px solid #4171B5;
+	background-color: #E5EDF9;
+	font-size: 12px;
+}
+#footer .copyright {
+	float: right;
+}
+/*****************************************************
+ *  MAIN STYLES                                      *
+ *****************************************************/
+#main {
+	position: relative; /* to avoid the IE peekabo bug*/
+	margin: 0px auto;
+	margin-top: 10px;
+	width: 98%;
+	padding: 0px 10px 10px 10px;
+	background-color: #fff;
+	min-height: 320px;
+}
+/* for content section in main index.php file */
+.maincontent {
+	float: left;
+	width: 78%;
+	padding: 4px;
+	background-color: #fff;
+}
+/* "menu" doesn't show in printed version*/
+.menu {
+	display: none;
+}
+#lang_form {
+	text-align: left;
+	font-size: 12px;
+	margin: 2px 0 10px 0;
+	padding: 2px;
+}
+#lang_form input, #lang_form select {
+	font-size: 12px;
+}
+#formLogin label {
+	font-size: 12px;
+	margin: 4px 6px;
+}
+#formLogin input {
+	font-size: 13px;
+	margin: 4px 6px;
+}
+#login_fail {
+	margin: 0 6px 6px 6px;
+	padding: 4px;
+	border: 1px solid #f00;
+	background-color: #fff;
+	font-size: 12px;
+	color: #f00;
+}
+/*** layout divs for course and tool pages (being tested in some pages) ****/
+#contentfloatholder {/* also makes the right "sliding" tab  */
+	/*background: url(../pics/sidebar-r.gif) repeat-y 100% 0;
+background: url(../pics/bg_fountain.jpg) no-repeat 100% 0; */
+float: left;
+	width: 100%;
+	position: relative;
+}
+#contentfloatholder:after {
+	/* this is for NN6 to clear floats */
+content: ".";
+	display: block;
+	height: 0px;
+	clear: both;
+	visibility: hidden;
+}
+#centerwrap {
+	float: left;
+	width: 100%;
+	margin-right: -95%;/* this needs to be less than 100% for Moz/Mac which thinks
+         it's empty otherwise. The difference is made up by putting a
+         negative left margin on the left float:
+	   Note IE/Mac doesn't like this method ~ it wants the 100% so it can
+	   be fed in using IE only CSS below becasue IE/Win also works with the 100% method.
+	*/
+}
+/*no navigation options need to be showed in the print version */
+#toolnav {
+	display:none;
+}
+/* Hide from IE5-mac. Only IE-win sees this. \*/
+* html #toolnav {
+	margin-right: 0px;
+}
+* html #center {
+	height: 1%;
+	margin-left: 0;
+}
+/* End hide from IE5/mac */
+
+
+/* various sections in course-home.php file  */
+#toolremove {
+	width: 40%;
+	color: #f00;
+	font-weight: bold;
+	margin: 10px auto;
+	padding: 10px;
+	border: 2px solid #f00;
+}
+#courseintro {
+	clear: both;
+	width: 80%;
+	margin: 10px auto;
+	padding: 10px;
+	border-bottom: 1px solid #4171B5;
+}
+#courseintro_icons {
+	clear: both;
+	width: 80%;
+	margin: 10px auto;
+}
+.everybodyview {
+	position: relative; /* to avoid the IE peekabo bug ?*/
+	width: 80%;
+	margin: 10px auto;
+	padding: 10px;
+}
+.courseadminview, .platformadminview {
+	position: relative;
+	width: 80%;
+	margin: 25px auto 10px;
+	padding: 10px;
+	border: 1px solid #4171B5;
+}
+.viewcaption {
+	position: relative;
+	top: -20px;
+	font-size: 12px;
+	font-weight: bold;
+	color: #4171B5;
+	background-color: #fff;
+	padding: 0 4px;
+}
+/***********************************/
+
+/* ===================================================
+					AGENDA STYLES
+===================================================*/
+
+/* ---------------------------------------------------
+	check if these are still used or not
+-----------------------------------------------------*/
+#agenda {
+	width: 100%;
+	margin: 0 auto;
+	border: 1px solid #4171B5;
+	border-collapse: collapse;
+}
+.agenda_month_divider {
+	background-color: #4171B5;
+	font-weight: bold;
+	font-size: 12px;
+	color: #fff;
+	text-align: center;
+}
+#agenda #title a {
+	color: #fff;
+}
+#agenda .agendaitem {
+	font-size: 12px;
+}
+#smallcalendar .title {
+	background-color: #4171B5;
+	font-weight: bold;
+	padding: 2px;
+	color: #fff;
+	text-align: center;
+	font-size: 11px;
+}
+#smallcalendar .title a {
+	color: #fff;
+}
+/*agenda select not visible on print*/
+#agenda_select {
+	display:none;
+}
+/* ---------------------------------------------------
+	styles for the agenda (day, week, month view)
+-----------------------------------------------------*/
+#agenda_list {
+	width: 100%;
+	margin: 0 auto;
+	border: 1px solid #fff;
+	border-collapse: collapse;
+}
+/*The caption of the calendar (displays the month and the << and >> links*/
+#agenda_list #title {
+	background-color: #4171B5;
+	font-weight: bold;
+	font-size: 12px;
+	color: #fff;
+	text-align: left;
+	padding: 2px 10px;
+	text-align: center;
+	border: 1px solid #264269;
+}
+#agenda_list #title a:link, #agenda_list #title a:visited {
+	background-color: #4171B5;
+	font-weight: bold;
+	font-size: 12px;
+	color: #fff;
+	text-align: left;
+	padding: 2px 10px;
+	text-align: center;
+}
+#agenda_list #title a:hover {
+	background-color: #4171B5;
+	font-weight: bold;
+	font-size: 12px;
+	color: #ff0000;
+	text-align: left;
+	padding: 2px 10px;
+	text-align: center;
+}
+/* The cells with the name of the days of the weeks (mon->sun)*/
+#agenda_list .weekdays {
+	background-color: #D3DFF1;
+	text-align: center;
+	font-weight: bold;
+	border: 1px solid #264269;
+	border-collapse: collapse;
+}
+/* The cells for the days (1->31) */
+#agenda_list .days_week {
+	height: 40px;
+	width: 12%;
+	text-align: left;
+	vertical-align: top;
+	border: 1px solid #264269;
+	border-collapse: collapse;
+	background-color: #f5f5f5;
+}
+#agenda_list .days_weekend {
+	height: 40px;
+	width: 12%;
+	text-align: left;
+	vertical-align: top;
+	border: 1px solid #264269;
+	border-collapse: collapse;
+	background-color: #e6e6e6;
+}
+#agenda_list .days_today {
+	height: 40px;
+	width: 12%;
+	text-align: left;
+	vertical-align: top;
+	border: 1px solid #264269;
+	border-collapse: collapse;
+	background-color: #FFCA8D;
+	color: #CC3300;
+	font-weight: bold;
+}
+/* text in the cells: display of agenda items (visible)*/
+#agenda_list .data {
+	background-color: #eee;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: bold;
+	border: 0px solid #4171B5;
+	border-collapse: collapse;
+}
+#agenda_list .datanotbold {
+	background-color: #eee;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #4171B5;
+	border-collapse: collapse;
+}
+#agenda_list .text {
+	background-color: #fff;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #4171B5;
+	border-collapse: collapse;
+}
+/*text in the cells: display of agenda items (invisible)*/
+#agenda_list .data_hidden {
+	background-color: #eee;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: bold;
+	border: 0px solid #4171B5;
+	border-collapse: collapse;
+	color: #999999;
+}
+#agenda_list .datanotbold_hidden {
+	background-color: #eee;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #4171B5;
+	border-collapse: collapse;
+	color: #999999;
+}
+#agenda_list .text_hidden {
+	background-color: #fff;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #4171B5;
+	border-collapse: collapse;
+	color: #999999;
+}
+/*text in the cells: display of agenda items (highlighted)*/
+#agenda_list .datanow {
+	background-color: #FFCC00;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: bold;
+	border: 0px solid #4171B5;
+	border-collapse: collapse;
+}
+#agenda_list .datanotboldnow {
+	background-color: #FFCC00;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #4171B5;
+	border-collapse: collapse;
+}
+#agenda_list .textnow {
+	background-color: #fff;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #4171B5;
+	border-collapse: collapse;
+}
+/* ---------------------------------------------------
+	styles for the mini agenda
+-----------------------------------------------------*/
+/* mini agenda invisible in print */
+
+#smallcalendar {
+	display:none;
+}
+/*without this the small calendar's space isn't liberated, because the table width is hardcoded in the php*/
+#layoutHulp {
+	display:none;
+}
+/* ---------------------------------------------------
+	styles for the personal agenda
+-----------------------------------------------------*/
+.personal_agenda {
+	color: #008000;
+}
+.personal_agenda a:link, .personal_agenda a:visited {
+	color: #008000;
+}
+a.personal_agenda:link, a.personal_agenda:visited {
+	color: #008000;
+}
+.personal_agenda a:hover, .personal_agenda a:hover {
+	color: #666666;
+}
+a.personal_agenda:hover, a.personal_agenda:hover {
+	color: #666666;
+}
+/* normal and erro message-box */
+.normal-message, .error-message {
+	position: relative;
+	margin: 10px auto;
+	margin-left: -250px;
+	width: 500px;
+	left: 50%;
+	right: 50%;
+	border-width: 1px;
+	border-style: solid;
+	padding: 5px;
+}
+.normal-message {
+	border: 1px solid #FF8001;
+	color: #000;
+	background-color: #FDC77E;
+}
+.error-message {
+	border: 1px solid #3F70AC;
+	color: #000;
+	background-color: #FDC273;
+}
+#message {
+	margin: 0 auto;
+	text-align: center;
+}
+#message select {
+	margin: 10px 0;
+	width: 220px;
+}
+#message textarea {
+	margin: 10px 0;
+}
+#message td {
+	padding: 4px;
+}
+/* styles from the document.php file */
+.comment {
+	margin-left: 30px;
+}
+.invisible {
+	color: #999;
+}
+.invisible a:link, .invisible a:visited {
+	color: #999;
+}
+a.invisible:link, a.invisible:visited {
+	color: #999;
+}
+/* styles from the upload.php file */
+dl.upload_option {
+	margin: 1em 0;
+	padding: 0;
+}
+.upload_option dt {
+	font-weight:bold;
+	margin:0;
+}
+.upload_option dd {
+	margin:0;
+}
+/* styles from dropbox.php file */
+.dropbox_detail {
+	font-size: small
+}
+.dropbox_date {
+	font-style: italic
+}
+.dropbox_person {
+	font-weight: bold
+}
+.dropbox_listTitle {
+	color: #000000;
+}
+.dropbox_feedback {
+	font-size: x-small;
+	height: 50px;
+	width: 200px;
+	overflow: auto
+}
+.dropbox_feedbacks {
+	height: 250px;
+	width: 100%;
+	overflow: auto
+}
+/* styles for chat / conference tools */
+#chat_entermessage {
+	background-color: #D6E5FA;
+	border-top: 1px solid #4171B5;
+	padding: 5px;
+	margin: 0;
+}
+/* styles for general formatting */
+.clear {
+	clear: both;
+	line-height: 0px;
+	height: 0;
+}
+p, blockquote, ol, ul {
+	font-size: 12px;
+}
+h1 {
+	font-size: 21px;
+}
+h2 {
+	font-size: 18px;
+}
+h3 {
+	font-size: 15px;
+	margin-top:0px;
+	padding-top:0px;
+}
+h4 {
+	font-size: 12px;
+}
+h5, h6 {
+	font-family: verdana, arial, helvetica, sans-serif;
+}
+/* the following for regular <a> elements */
+a:link {
+	text-decoration: none;
+	font-weight : bold;
+	color : #4171b5;
+}
+a:visited {
+	text-decoration: none;
+	font-weight : bold;
+	color : #4171b5;
+}
+a:active {
+	text-decoration: none;
+	font-weight : bold;
+	color : #f00;
+}
+input.link_alike {
+	background-color: #FFFFFF;
+	border-width: 0px;
+	color: #4171b5;
+	font-weight: bold;
+	text-align: left;
+	padding: 0px;
+	margin: 0px;
+}
+input.link_alike:hover {
+	background-color: #FFFFFF;
+	border-width: 0px;
+	color: #FF0000;
+	font-weight: bold;
+	text-align: left;
+	padding: 0px;
+	margin: 0px;
+}
+/* the following for the greyed out elements */
+a.nobold:link, a.nobold:visited, a.nobold:active {
+	font-weight: normal;
+	color: #999;
+	margin: 0 0 0 25px;
+}
+a.nobold:hover {
+	font-weight: normal;
+	color: #999;
+	text-decoration: underline;
+	margin: 0 0 0 25px;
+}
+.note {
+	margin: 6px;
+	font-size: 12px;
+	line-height: 14px;
+	font-family: verdana, arial, helvetica, sans-serif;
+	background-color: #FFF089;
+	color: #4171B5;
+	border: 1px solid #4171B5;
+	padding: 4px;
+}
+.alternativeBgLight {
+	background-color: #f5f5f5;
+	border: 1px solid #4171B5;
+	border-collapse: collapse;
+}
+.alternativeBgDark {
+	background-color: #ccf;
+	border: 1px solid #4171B5;
+	border-collapse: collapse;
+}
+.myagendatoday {
+	background-color: #FFCA8D;
+	border-collapse: collapse;
+	font-family: verdana, arial, helvetica, sans-serif;
+	color: #CC3300;
+	font-weight: bold;
+}
+/*****************************************************
+ *  FORM STYLES                                      *
+ *****************************************************/
+div.row {
+	clear: both;
+	padding-top: 5px;
+}
+div.row div.form_header {
+	white-space: nowrap;
+	padding: 2px;
+	background-color: #E5EDF9;
+	border: 1px solid #4271B5;
+}
+div.row div.label {
+	display: inline;
+	float: left;
+	width: 18%;
+	text-align: right;
+}
+div.row div.formw {
+	display: inline;
+	width: 80%;
+}
+[dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
+	float: left;
+	text-align: right;
+}
+[dir=rtl] div.row div.label, [dir=ltr] div.row div.formw {
+	float: right;
+	text-align: left;
+}
+span.form_required {
+	color: #f00;
+}
+span.form_error {
+	color: #f00;
+	font-size: x-small;
+	margin: 2px;
+}
+/* Form elements - some general styling */
+select, textarea {
+	color : #000;
+	border: 1px solid #000;
+}
+input.checkbox {
+	border-width: 0;
+}
+input.mainoption {
+	font-weight : bold;
+}   /* Main submit button      */
+input.liteoption {
+	font-weight : normal;
+} /* None-bold submit button */
+select, input[type=checkbox], input[type=radio], input[type=button], input[type=submit] {
+	cursor:	pointer;
+	font-size: 12px;
+}
+input[text] {
+	font-size: 12px;
+}
+/************************************************************
+  styles below here are not necessarily used in the current
+	release and the CVS files, they are from earlier versions,
+	and have been left untouched for anyone needing them in
+	their own platform ...
+*************************************************************/
+.topBanner a:link, .topBanner a:active, .topBanner a:visited {
+	text-decoration:none;
+	color:white;
+}
+.topBanner table {
+	text-decoration:none;
+}
+.topBanner a:hover {
+	text-decoration:underline;
+}
+.topBanner td {
+	border-top: solid White 1px;
+}
+.alternativeBgLight {
+	background-color: #f5f5f5;
+}
+.alternativeBgDark {
+	background-color: #e6e6e6
+}
+.forms {
+	letter-spacing: normal;
+	text-align: justify;
+	text-indent: 3pt;
+	word-spacing: normal;
+	padding: 2px 5px;
+}
+.formsTips {
+	text-align: justify;
+	text-indent: 15pt;
+	word-spacing: normal;
+}
+/*
+input.forms	{ letter-spacing: normal; text-align: justify; text-indent: 3pt;	word-spacing: normal;
+padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
+*/
+.warn {
+	border: thin double Silver;
+	margin-left: 15px;
+	margin-right: 15px;
+	font-family: serif;
+	color: Red;
+	padding-left: 25px;
+}
+.small {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px
+}
+.xsmall {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px
+}
+.xxsmall {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px
+}
+/*****************************************************
+ *  DATA TABLE STYLES                                *
+ *****************************************************/
+.cell_header {
+	background-color: #EEEEFF;
+	font-weight:bold;
+	text-align:left;
+	padding-left:5px;
+}   /* header cell in data table in tools */
+.data_table {
+	border-collapse: collapse;
+	width: 100%;
+	padding: 5px;
+}
+.data_table th {
+	/*padding-right: 20px;*/
+	border: 1px solid gray;
+	background-color: #E5EDF9;
+	text-align: left;
+}
+.data_table tr.row_odd {
+	background-color: #fafafa;	
+}
+.data_table tr.row_odd:hover, .data_table tr.row_even:hover {
+	background-color: #f0f0f0;
+}
+.data_table tr.row_even {
+	background-color: #fff;	
+}
+.data_table td .highlight {
+    font-weight: bold;
+}
+.data_table td {
+	padding: 5px;	
+	border-bottom: 1px solid #b0b0b0;
+	border-right: 1px dotted #e1e1e1;
+	border-left: 1px dotted #e1e1e1;
+	text-align: left;
+}
+
+
+.data_table_no_border {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 12px;
+    margin-bottom: 15px;
+    margin-top: 8px;
+    text-align: left;
+    width: 100%;    
+}
+
+.data_table_no_border td {
+    line-height: normal;
+    padding: 6px;
+    text-align: left;
+    vertical-align: middle;
+}
+.data_table_no_border .highlight {
+    font-weight: bold;
+}
+
+/* admin page tool list definitions */
+.tool_list dt {
+	font-weight: bold;
+}
+.tool_list dd {
+	margin: 0;
+	padding: 4px 0 0 10px;
+}
+/* divs for category list / platform news on home page */
+.home_cats {
+	width: 45%;
+	float: left;
+	position: relative;
+	margin: 0;
+	padding: 0px;
+	padding-top: 8px;
+	background: #fff;
+}
+.home_news {
+	width: 45%;
+	float: right;
+	position: relative;
+	margin: 0;
+	padding: 0px;
+	padding-top: 8px;
+	background: #fff;
+}
+label.left {
+	float: left;
+	width: 15em;
+	margin: 0 0 0.5em 0;
+}
+form br {
+	clear: both;
+}
+/* Fix for alignment problem in IE-Win browsers  */
+/*  Hide from IE5-mac. Only IE-win sees this. \*/
+* html .label {
+	margin-right: 10px;
+}
+* html .data {
+	height: 1%;
+	margin-left: 0;
+}
+/* End hide from IE5/mac */
+
+.radio, .checkbox {
+	margin: 0;
+	padding: 0;
+	border: none;
+	background-color: transparent;
+}
+.required {
+	color: #f00;
+	font-weight: bold;
+}
+/* Admin section */
+div.admin_section {
+	width: 40%;
+	float: left;
+	padding: 5px;
+	margin: 10px 20px;
+}
+div.admin_section h4 {
+	margin: 0;
+	border-bottom: 1px solid gray;
+	width: 100%;
+}
+.user_course_category {
+	background-color: #efefef;
+	border: 1px solid #666;
+	font-weight: bold;
+	color: #666;
+	list-style-type: none;
+	margin: 5px;
+	padding: 5px;
+}
+/* Styles for the Dokeos Config Settings of the platform admin section*/
+.sectiontitle {
+	background-color: #EFEFEF;
+	border: 1px solid #cccccc;
+	font-weight: bold;
+	color: #666666;
+	list-style-type: none;
+	margin: 5px;
+	padding: 5px;
+	font-size: 11px;
+}
+.sectioncomment {
+	color: #000000;
+	margin: 5px;
+	padding: 5px;
+	font-size: 11px;
+}
+.sectionvalue {
+	list-style-type: none;
+	margin: 5px;
+	padding: 5px;
+}
+/* New Announcements Tool */
+.announcements_datum {
+	font-size: 12px;
+	font-style: italic;
+	color: #666666;
+}
+/* System announcements on homepage */
+div.system_announcements {
+}
+div.system_announcements h3 {
+}
+div.system_announcement {
+	margin: 5px;
+}
+div.system_announcement_title {
+}
+div.system_announcement_content {
+	margin-left: 20px;
+	border-left: 1px solid gray;
+	padding-left: 5px;
+}
+/*****************************************************
+ * special print ccs classes						 *
+ *****************************************************/
+
+ a.full_url_print:after {
+	content: "(" attr(href) ")";
+	font-size: 75%;
+}
+/* to make it in visible in the printed version*/
+.print_invisible {
+	display:none;
+}

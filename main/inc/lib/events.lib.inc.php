@@ -329,27 +329,29 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$
 			$score = 0;		
 	    }
 	    $now = time();
+              
+        /*  start_date wouldn't be updated
+        $start_date_condition = '';        
 	    //Validation in case of wrong start_date
 	    if (isset($_SESSION['exercice_start_date'])) {
 	    	$start_date = $_SESSION['exercice_start_date'];
 	    	$diff  = abs($start_date - $now);
 	    	if ($diff > 14400) { // 14400 = 4h*60*60 more than 4h of diff
 	    		$start_date = $now - 1800; //	Now - 30min
-	    	}
-	    }
+	    	}            
+	    }*/
 	    
 	    if (!isset($status) || empty($status)) {
 	    	$status = '';
 	    } else {
 	    	$status = Database::escape_string($status);
 	    }
-	    
 
 		$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		array_map('intval', $question_list);
+		$question_list = array_map('intval', $question_list);
 		
 		if (!empty($remind_list)) {
-			array_map('intval', $remind_list);
+			$remind_list = array_map('intval', $remind_list);
 			$remind_list = array_filter($remind_list);
 			$remind_list = implode(",", $remind_list);
 		} else {
@@ -367,8 +369,7 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$
 				   exe_duration 		= '".Database::escape_string($duration)."',
 				   exe_date				= '".api_get_utc_datetime()."',
 				   status 				= '".$status."',
-				   questions_to_check 	= '".$remind_list."',
-				   start_date       	= '".api_get_utc_datetime($start_date)."',
+				   questions_to_check 	= '".$remind_list."',				   				   
 				   data_tracking    	= '".implode(',', $question_list)."'
 				 WHERE exe_id = '".Database::escape_string($exeid)."'";
 		$res = Database::query($sql);

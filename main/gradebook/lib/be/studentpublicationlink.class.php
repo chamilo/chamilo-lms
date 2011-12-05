@@ -1,4 +1,4 @@
-	<?php
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * Gradebook link to student publication item
@@ -54,8 +54,7 @@ class StudentPublicationLink extends AbstractLink
 	    	$course_info = Database :: get_course_info($this->get_course_code());
 			//$url = api_get_path(WEB_PATH).'main/gradebook/open_document.php?file='.$course_info['directory'].'/'.$fileurl[0];
 			//return $url;
-            return null;
-      return null;
+            return null;      
 		 } else {
 			return null;
 		}

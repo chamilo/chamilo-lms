@@ -239,43 +239,40 @@ class GradeBookResult
 	 * Exports the complete report as an XLS file
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportXLS($data) {
-	   	$filename = 'gradebook_results_user_'.gmdate('YmdGis').'.xls';
-		//build the results
-		require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
+	public function exportCompleteReportXLS($data) {	    
+	   	$filename = 'gradebook-results-'.date('Y-m-d-h:i:s').'.xls';
+		include api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';        
 		$workbook = new Spreadsheet_Excel_Writer();
-		$workbook->setVersion(8); // BIFF8
-		$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
-
+        $workbook->setVersion(8); // BIFF8
+        $workbook->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
 		$workbook->send($filename);
-		$worksheet =& $workbook->addWorksheet('Report '.gmdate('YmdGis'));
-		$worksheet->setInputEncoding(api_get_system_encoding());
+        
+		$worksheet =& $workbook->addWorksheet('Report');
+        $worksheet->setInputEncoding(api_get_system_encoding());
+          
 		$line = 0;
 		$column = 0; //skip the first column (row titles)
+
 		//headers
-		foreach ($data[0] as $header_col) {
-			$worksheet->write($line,$column,$header_col);
+		foreach ($data[0] as $header_col) {		    
+			$worksheet->write($line, $column, $header_col);
 			$column++;
 		}
-		//$worksheet->write($line,$column,get_lang('Total'));
-		//$column++;
-		$line++;
+		$line++;    
 
 		$cant_students = count($data[1]);
-		//print_r($data);		exit();
-
+		
 		for ($i=0;$i<$cant_students;$i++) {
 			$column = 0;
 			foreach ($data[1][$i] as $col_name) {
-				$worksheet->write($line,$column,strip_tags($col_name));
+				$worksheet->write($line,$column, html_entity_decode(strip_tags($col_name)));
 				$column++;
-
 			}
 			$line++;
 		}
-		//output the results
-		$workbook->close();
-		return true;
+        $workbook->close();
+        exit;
+			
 	}
 	/**
 	 * Exports the complete report as a DOCX file

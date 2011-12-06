@@ -50,12 +50,12 @@ Display::display_header($nameTools);
 $result = '';
 if (count($output)>0) {
     $result = '<div class="filler-report">'."\n";
-    $result .= '<div class="filler-report-title">'.$output[0]['title'].'</div>'."\n";
+    $result .= '<h3>'.$output[0]['title'].'</h3>'."\n";
     $result .= '<table>';
     foreach ($output as $line) {
         $result .= '<tr>';
-	    $result .= '<td class="filler-report-data-init">'.$line['line-init'].'</td><td class="filler-report-data">'.$line['line-info'].'</td>';
-	    $result .= '</tr>'."\n";
+	    $result .= '<td class="filler-report-data-init">'.$line['line-init'].' </td><td class="filler-report-data">'.$line['line-info'].'</td>';
+	    $result .= '</tr>';
     }
     $result .= '</table>';
     $result .= '</div>';

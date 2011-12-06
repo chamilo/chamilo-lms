@@ -213,7 +213,7 @@ if (api_is_allowed_to_edit(null, true)) {
 						Export::export_table_xls($a_users);
 						exit;
 					case 'pdf' :
-					   $header = get_lang('UserList');
+					   $header = get_lang('StudentList');
 					   $description = '<table class="data_table_no_border">';  
                        if (api_get_session_id()) {                     
 					       $description .= '<tr><td>'.get_lang('Session').': </td><td class="highlight">'.api_get_session_name(api_get_session_id()).'</td>';

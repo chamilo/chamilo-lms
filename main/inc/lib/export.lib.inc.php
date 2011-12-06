@@ -152,9 +152,9 @@ class Export {
         unset($data[0]);
         $html = '';
         
-        $headers_in_pdf = '<img src="'.api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/images/header-logo.png">';
+        $headers_in_pdf = '<img width="150px" src="'.api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/images/header-logo.png">';
         
-        $html = '<br/><br/><table width="100%" cellspacing="1" cellpadding="5" border="0">                         
+        $html = '<br/><table width="100%" cellspacing="1" cellpadding="5" border="0">                         
                  <tr><td width="100%" style="text-align: center;" class="title" colspan="4"><h1>'.$header.'</h1></td></tr></table><br />';
         $html .= $description.'<br />';
         

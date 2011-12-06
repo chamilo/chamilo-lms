@@ -361,10 +361,10 @@ class PDF {
         $this->pdf->defaultfooterfontsize = 12;   // in pts
         $this->pdf->defaultfooterfontstyle = B;   // blank, B, I, or BI
         $this->pdf->defaultfooterline = 1;        // 1 to include line below header/above footer
-        $platform_name = api_get_setting('Institution');
+        $platform_name   = api_get_setting('Institution');
         $left_content    = $platform_name;
         $center_content  = '';
-        $right_content   = '{PAGENO}';
+        $right_content   = '{PAGENO} / {nb}';
         
         //@todo remove this and use a simpler way
         $footer = array (
@@ -387,16 +387,17 @@ class PDF {
                 'line' => 1,
               ),
             );       
-        $this->pdf->SetFooter($footer);      // defines footer for Odd and Even Pages - placed at Outer margin http://mpdf1.com/manual/index.php?tid=151&searchstring=setfooter
+        // defines footer for Odd and Even Pages - placed at Outer margin see http://mpdf1.com/manual/index.php?tid=151&searchstring=setfooter
+        $this->pdf->SetFooter($footer);      
     }
     
     
     public function set_header($course_data) {
     	// $pdf->SetBasePath($basehref); 
                 
-        $this->pdf->defaultheaderfontsize = 10;   // in pts
-        $this->pdf->defaultheaderfontstyle = BI;   // blank, B, I, or BI
-        $this->pdf->defaultheaderline = 1;        // 1 to include line below header/above footer              
+        $this->pdf->defaultheaderfontsize   = 10;   // in pts
+        $this->pdf->defaultheaderfontstyle  = BI;   // blank, B, I, or BI
+        $this->pdf->defaultheaderline       = 1;    // 1 to include line below header/above footer              
         
         if (!empty($course_data['code'])) {
             $teacher_list = CourseManager::get_teacher_list_from_course_code($course_data['code']);
@@ -471,9 +472,9 @@ class PDF {
         $pdf->SetSubject('Exported from Chamilo Documents');
         $pdf->SetKeywords('Chamilo Documents');
         */                      
-        $this->pdf->directionality = api_get_text_direction(); // TODO: To be read from the html document.        
-        $this->pdf->useOnlyCoreFonts = true;        
-        $this->pdf->mirrorMargins = 1;            // Use different Odd/Even headers and footers and mirror margins       
+        $this->pdf->directionality      = api_get_text_direction(); // TODO: To be read from the html document.        
+        $this->pdf->useOnlyCoreFonts    = true;        
+        $this->pdf->mirrorMargins       = 1;            // Use different Odd/Even headers and footers and mirror margins       
         
         //Adding watermark
         if (api_get_setting('pdf_export_watermark_enable') == 'true') {
@@ -507,7 +508,8 @@ class PDF {
         if (empty($this->custom_header)) {
             self::set_header($course_data);   
         } else {
-            $this->pdf->SetHTMLHeader($this->custom_header);	
+            $this->pdf->SetHTMLHeader($this->custom_header,'E');
+            $this->pdf->SetHTMLHeader($this->custom_header,'O');
         }
         
         if (empty($this->custom_footer)) {

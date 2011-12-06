@@ -21,7 +21,7 @@ require_once 'question.class.php';
 require_once 'answer.class.php';
 
 // Name of the language file that needs to be included
-$language_file='exercice';
+$language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
 require_once 'exercise.lib.php';
@@ -119,9 +119,8 @@ $safe_lp_id              = $exercise_stat_info['orig_lp_id'];
 $safe_lp_item_id         = $exercise_stat_info['orig_lp_item_id'];
 $safe_lp_item_view_id    = $exercise_stat_info['orig_lp_item_view_id'];
 
-if ($origin == 'learnpath') { 
-		
-	?>
+if ($origin == 'learnpath') {		
+?>
 	<form method="get" action="exercice.php?<?php echo api_get_cidreq() ?>">
 	<input type="hidden" name="origin" 					value="<?php echo $origin; ?>" />
     <input type="hidden" name="learnpath_id" 			value="<?php echo $safe_lp_id; ?>" />
@@ -154,11 +153,11 @@ if ($show_results || $show_only_score) {
 Display :: display_confirmation_message(get_lang('Saved').'<br />',false);
 
 // Display text when test is finished #4074
-echo "<div class='normal-message'>";
-echo $objExercise->selectTextWhenFinished();
-echo "</div>";
-echo "<div class='clear'>&nbsp;</div>";
-//
+$end_of_message = $objExercise->selectTextWhenFinished();
+if (!empty($end_of_message)) {
+    Display::display_message($end_of_message);
+    echo "<div class='clear'>&nbsp;</div>";
+}
 
 $counter = 1;
 // Loop over all question to show results for each of them, one by one

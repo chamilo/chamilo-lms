@@ -26,21 +26,22 @@ jsPlumb.bind("ready", function() {
         autoOpen: false,
         modal   : true, 
         width   : 550, 
-        height  : 480,
+        height  : 450,
     });
     
     //Filling skills select
-    $.getJSON( "{$url}&a=get_skills", {},     
+    /*
+    $.getJSON("{$url}&a=get_skills&parent_id="+parents[0], {},     
         function(data) {
             $.each(data, function(n, parent) {
                 // add a new option with the JSON-specified value and text
                 $("<option />").attr("value", parent.id).text(parent.name).appendTo("#parent_id");
             });
         }
-    );
+    );*/
     
     //Filling gradebook select
-    $.getJSON( "{$url}&a=get_gradebooks", {},     
+    $.getJSON("{$url}&a=get_gradebooks", {},     
         function(data) {
             $.each(data, function(n, gradebook) {
                 // add a new option with the JSON-specified value and text
@@ -53,12 +54,28 @@ jsPlumb.bind("ready", function() {
     
     $("#add_item_link").click(function() {        
         $("#name").attr('value', '');
-        $("#description").attr('value', '');
-        
+        $("#description").attr('value', '');        
         $("#parent_id option:selected").removeAttr('selected');
-        $("#gradebook_id option:selected").removeAttr('selected');       
+        $("#gradebook_id option:selected").removeAttr('selected');               
+        $("#dialog-form").dialog("open");
         
-        $("#dialog-form").dialog("open");                      
+        //Filling skills select
+        var my_id = 1;
+        
+        if (parents.length > 1) {
+            my_id = parents[1].split('_')[1];            
+        }
+        //Remove all options
+        $("#parent_id").find('option').remove();
+
+        $.getJSON("{$url}&a=get_skills&id="+my_id, {},     
+            function(data) {
+                $.each(data, function(n, parent) {
+                    // add a new option with the JSON-specified value and text
+                    $("<option />").attr("value", parent.id).text(parent.name).appendTo("#parent_id");
+                });
+            }
+        );
     });    
     
     var name = $( "#name" ),
@@ -78,8 +95,7 @@ jsPlumb.bind("ready", function() {
                           
                     $.ajax({
                         url: url+'&a=add&'+params,
-                        success:function(data) {
-                            
+                        success:function(data) {                            
                             //new window
                             parent_id = $("#parent_id option:selected").attr('value');                            
                         
@@ -112,13 +128,11 @@ jsPlumb.bind("ready", function() {
                 hidden_parent = parents[0];   
                 //console.log('deleting: '+parents[0]);        
                 //removing father
-                for (var i = 0; i < skills.length; i++) {
-                               
+                for (var i = 0; i < skills.length; i++) {                               
                     if ( skills[i].element == parents[0] ) {
                          //console.log('deleting :'+ skills[i].element + ' here ');                             
                          jsPlumb.deleteEndpoint(skills[i].endp);
                          $("#"+skills[i].element).remove();
-                         //skills.splice(i,1)
                     }
                 }                                
                 parents.splice(0,1);                
@@ -216,7 +230,7 @@ jsPlumb.bind("ready", function() {
         var e = jsPlumb.addEndpoint(elId, endpoint);
         jsPlumbDemo.initjulio(e);        
         skills.push({
-            element:elId, endp:e
+            element: elId, endp:e
         });        
         return e;
     },
@@ -224,14 +238,12 @@ jsPlumb.bind("ready", function() {
     window.jsPlumbDemo = {    
         initjulio :function(e) {
         },      
-        initHover :function(elId) {            
-            
+        initHover :function(elId) {
             $("#" + elId).click(function() {
                 var  all = jsPlumb.getConnections({
                     source:elId
-                });               
-            });
-            
+                });
+            });            
             /*$("#" + elId).hover(
                 function() { $(this).addClass("bigdot-hover"); },
                 function() { $(this).removeClass("bigdot-hover"); }
@@ -244,8 +256,6 @@ jsPlumb.bind("ready", function() {
             jsPlumb.Defaults.EndpointStyle  = { width:20, height:16, strokeStyle:'#666' };
             jsPlumb.Defaults.Endpoint       = "Rectangle";
             jsPlumb.Defaults.Anchors        = ["TopCenter", "TopCenter"];
-
-            
 
             jsPlumb.bind("jsPlumbConnection", function(e) {
                 //updateConnections(e.connection);
@@ -264,7 +274,6 @@ jsPlumb.bind("ready", function() {
 
             var divsWithWindowClass = jsPlumbDemo.getSelector(".window");
             jsPlumb.draggable(divsWithWindowClass);
-
             jsPlumbDemo.attachBehaviour();          
         }
     };
@@ -319,16 +328,14 @@ $(document).ready( function() {
     };
 })();
 
-
 </script>
-
-    <h2>Skills</h2>    
-    <a class="a_button gray" id="add_item_link" href="#">Add item</a>
-
+<div style="z-index: 1000;position: absolute;">
+<h2>Skills</h2>    
+<a s tyle="z-index: 1000"class="a_button gray" id="add_item_link" href="#">{"Add item"|get_lang}</a>
+</div>
 {$html}
 
-<div id="dialog-form" style="display:none;">
-    
+<div id="dialog-form" style="display:none;z-index=10000;">    
     <p class="validateTips"></p>
     <form id="add_item" name="form">
         <input type="hidden" name="id" id="id"/>

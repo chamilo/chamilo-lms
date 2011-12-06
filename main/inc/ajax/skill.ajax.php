@@ -35,15 +35,16 @@ switch ($action) {
         }            
         echo json_encode($return_skills);
         break;
-    case 'get_gradebooks':
+    case 'get_gradebooks':        
         $gradebooks = $gradebook_list = $gradebook->get_all();
         $gradebook_list = array();
         //only course gradebook
         if (!empty($gradebooks)) {
             foreach($gradebooks as $gradebook) {
                 if ($gradebook['parent_id'] == 0) {
-                    //$gradebook['name'] = $gradebook['name'];
                     $gradebook_list[]  = $gradebook;
+                    //$gradebook['name'] = $gradebook['name'];
+                    //$gradebook_list[]  = $gradebook;
                 } else {
                   //  $gradebook['name'] = $gradebook_list[$gradebook['parent_id']]['name'].' > '.$gradebook['name'];
                     //$gradebook_list[]  = $gradebook;
@@ -55,7 +56,9 @@ switch ($action) {
         break;    
     case 'get_skills':
         $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
-        $skills = $skill->get_all($load_user_data);                    
+        //$parent_id = intval($_REQUEST['parent_id']);
+        $id = intval($_REQUEST['id']);
+        $skills = $skill->get_all($load_user_data, false, $id);                    
         echo json_encode($skills);
         break;
     case 'get_skill_info':

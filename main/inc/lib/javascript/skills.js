@@ -124,12 +124,12 @@
         //Modifying current block position
         pos = $('#'+id).position();        
         left_value  = center_x; 
-                
+               
         if (parents.length == 2) { 
             top_value  = space_between_blocks_y + offset_y;
         } else {
-            top_value = pos.left;
-        }
+            top_value = 100;
+        }        
         jsPlumb.animate(id, { left: left_value, top:top_value }, { duration:duration_value });       
         
         //Modifying root block position
@@ -180,17 +180,18 @@
     }
     
     function load_children(my_id, top_value, load_user_data) {
-        console.log("load_children call : my_id " + my_id + " top_value:" + top_value);        
+        console.log("load_children call : my_id " + my_id + " top_value:" + top_value);
+          
         //Loading children
         var ix = 0;
         $.getJSON(url+'&a=load_children&load_user_data='+load_user_data+'&id='+my_id, {},         
             function(json) {                
-                $.each(json,function(i,item) {                    
+                $.each(json,function(i,item) {
+                    console.log('Loading children: #' + item.id + " " +item.name);
                     left_value  = ix*space_between_blocks_x +  center_x/2 - block_size / 2;
                     //top_value   = 300;
                     //Display::url($skill['name'], '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block'))
-                    item.name = '<a href="#" class="edit_block" id="edit_block_'+item.id+'">'+item.name+'</a>'; 
-                    
+                    item.name = '<a href="#" class="edit_block" id="edit_block_'+item.id+'">'+item.name+'</a>';                    
                                         
                     var status_class = ' ';
                     my_edit_point = editEndpoint;
@@ -199,16 +200,32 @@
                         my_edit_point = doneEndpoint;
                         status_class = 'done_window';
                     }
-                    
+                                        
                     $('body').append('<div id="block_'+item.id+ '" class="third_window open_block window '+status_class+'" >'+item.name+'</div>');
                     
+                    $('#block_'+item.id).css( { 
+                        position: 'absolute',
+                        zIndex: 5000,
+                        left: '10', 
+                        top: '10'
+                    } );
+                            
+                    
+                    //console.log('append div id = block_'+item.id);                    
+                    //console.log('preparing = '+item.id);          
+                              
                     var es = prepare("block_" + item.id,  my_edit_point);
+                    
+                    //console.log('preparing = '+my_id);
+                    
                     var e2 = prepare("block_" + my_id,  my_edit_point);
                      
-                    jsPlumb.connect({source: es, target:e2});                    
-                    jsPlumb.animate("block_" + item.id, {
+                    jsPlumb.connect({source: es, target:e2});
+                    //console.log('connect sources');
+                                        
+                    jsPlumb.animate("block_" + item.id, { 
                         left: left_value, top : top_value
-                        }, { duration:duration_value});
+                        }, { duration : duration_value });
                     ix++;   
                 });
             }

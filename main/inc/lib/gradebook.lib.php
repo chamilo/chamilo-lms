@@ -21,8 +21,10 @@ class Gradebook extends Model {
         $this->table_skill_rel_gradebook    = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK);                    
     }
     
-    public function get_all() {
-        $gradebooks = parent::get_all();
+    
+    
+    public function get_all($options = array()) {
+        $gradebooks = parent::get_all($options);
         foreach($gradebooks as &$gradebook) {
             if (empty($gradebook['name'])) {
                 $gradebook['name'] = $gradebook['course_code'];

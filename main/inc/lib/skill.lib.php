@@ -311,9 +311,26 @@ class Skill extends Model {
         return $users;        
     }    
    
-    function get_all($load_user_data = false, $user_id = false) {
+    function get_all($load_user_data = false, $user_id = false, $id = null, $parent_id = null) {
+        $id_condition = '';
+        if (isset($id)) {
+            $id = intval($id);
+            $id_condition = " WHERE id = $id";
+        }
+        
+        if (isset($parent_id)) {
+            $parent_id = intval($parent_id);
+            if (empty($id_condition)) {
+                $id_condition = "WHERE parent_id = $parent_id";    
+            } else {
+                $id_condition = " AND parent_id = $parent_id";
+            }
+            
+        }
+        
         $sql = "SELECT id, name, description, parent_id, relation_type 
-                FROM {$this->table} s INNER JOIN {$this->table_skill_rel_skill} ss ON (s.id = ss.skill_id) ";
+                FROM {$this->table} s INNER JOIN {$this->table_skill_rel_skill} ss ON (s.id = ss.skill_id) 
+                $id_condition";
         $result = Database::query($sql);
         $skills = array();        
         

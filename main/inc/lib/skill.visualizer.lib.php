@@ -38,13 +38,13 @@
         }
         
         $this->html .= '<div id="block_'.$block_id.'" class = " open_block window '.$extra_class.'  '.$class.'" style = "top:' . $position['y'] . 'px; left:' . $position['x'] . 'px;">';
-        $gradebook_string = '';
+        /*$gradebook_string = '';
         if (!empty($skill['gradebooks'])) {
             foreach ($skill['gradebooks'] as $gradebook) {
                 //uncomment this to show the gradebook tags
                 $gradebook_string .= Display::span($gradebook['name'], array('class'=>'label_tag gradebook','style'=>'width:50px')).'<br />';    
             }
-        }        
+        } */       
         $skill['name'] = Display::url($skill['name'], '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block'));
         
         $this->html .= $skill['name'].' '.$gradebook_string;

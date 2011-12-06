@@ -80,7 +80,6 @@ require_once $lib_path.'fileManage.lib.php';
 require_once $lib_path.'fileUpload.lib.php';
 require_once $lib_path.'document.lib.php';
 require_once $lib_path.'groupmanager.lib.php';
-require_once $lib_path.'formvalidator/FormValidator.class.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 
 if (api_is_in_group()) {
@@ -382,7 +381,7 @@ if (file_exists($filepath.$doc)) {
 /*	Display user interface */
 
 // Display the header
-$nameTools = get_lang('EditDocument') . ': '.$oldTitle;
+$nameTools = get_lang('EditDocument') . ': '.Security::remove_XSS($oldTitle);
 Display::display_header($nameTools, 'Doc');
 
 

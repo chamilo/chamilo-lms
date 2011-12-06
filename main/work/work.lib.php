@@ -7,7 +7,7 @@
  * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
  * 	@author Roan Embrechts, code refactoring and virtual course support
  * 	@author Frederic Vauthier, directories management
- *   @author Julio Montoya <gugli100@gmail.com> BeezNest 2011 LOTS of bug fixes
+ *  @author Julio Montoya <gugli100@gmail.com> BeezNest 2011 LOTS of bug fixes
  * 	@todo 	this lib should be convert in a static class and moved to main/inc/lib
  */
 /**
@@ -51,7 +51,7 @@ function display_action_links($id, $cur_dir_path, $always_show_tool_options, $al
 	}
 
 	if (!$always_show_upload_form && api_is_allowed_to_session_edit(false, true) && (isset($cur_dir_path) && (!empty($cur_dir_path) && $cur_dir_path != '/') )) {
-		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;action=upload_form&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">';
+		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$id.'&curdirpath='.$cur_dir_path.'&action=upload_form&origin='.$origin.'&gradebook='.$gradebook.'">';
 		$display_output .= Display::return_icon('upload_file.png', get_lang('UploadADocument'),'','32').'</a>';
 	}
 
@@ -449,7 +449,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	//$table_header[] = array('RealDate', true);
 
 	$table_data = array();
-	$dirs_list = get_subdirs_list($work_dir);
+	$dirs_list = get_subdirs_list($work_dir);    
 
 	$my_sub_dir = str_replace('work/', '', $sub_course_dir);
 

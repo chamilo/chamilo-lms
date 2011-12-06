@@ -194,10 +194,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !sizeof($_POST)) {
 
 //toolgroup comes from group. the but of tis variable is to limit post to the group of the student
 //if (!api_is_course_admin()) {
-	if (!empty ($_GET['toolgroup'])) {
-		$toolgroup = Database::escape_string($_GET['toolgroup']);
-		api_session_register('toolgroup');
-	}
+    
+if (isset($_GET['toolgroup'])) {
+	$toolgroup = Database::escape_string($_GET['toolgroup']);
+	api_session_register('toolgroup');
+}
+
+$toolgroup = isset($_SESSION['toolgroup']) ? $_SESSION['toolgroup'] : api_get_group_id();  
+
 //}
 
 $display_upload_form = false;	
@@ -386,7 +390,7 @@ switch ($action) {
 			}
 		}
 		
-		$form = new FormValidator('form', 'POST', api_get_self() . "?action=upload&id=".$work_id."curdirpath=" . rtrim(Security :: remove_XSS($curdirpath),'/') . "&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', 'enctype="multipart/form-data"');
+		$form = new FormValidator('form', 'POST', api_get_self() . "?action=upload&id=".$work_id."&curdirpath=" . rtrim(Security :: remove_XSS($curdirpath),'/') . "&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', 'enctype="multipart/form-data"');
 	
 		// form title
 		if ($item_id) {
@@ -1303,6 +1307,7 @@ switch ($action) {
 		if (!empty($my_folder_data['description'])) {
 			echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).'</p></div></p>';
 		}
+        
 		if ($display_list_users_without_publication) {
 			display_list_users_without_publication($my_folder_data['id']);
 		} else {			

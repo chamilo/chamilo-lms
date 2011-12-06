@@ -129,6 +129,9 @@ if (api_is_allowed_to_edit(null, true)) {
 							$sql_query .= " AND user.user_id = au.user_id AND access_url_id =  $current_access_url_id  ";
 						}
                         
+                        //only users no coaches/teachers                        
+                        $sql_query .= " AND session_course_user.status = 0 ";
+                        
 						$sql_query .= $sort_by_first_name ? ' ORDER BY user.firstname, user.lastname' : ' ORDER BY user.lastname, user.firstname';
 						
 						$rs = Database::query($sql_query);
@@ -171,6 +174,10 @@ if (api_is_allowed_to_edit(null, true)) {
 					if ($_configuration['multiple_access_urls']) {							
 						$sql_query .= " AND user.user_id = au.user_id  AND access_url_id =  $current_access_url_id  ";
 					}
+                    
+                    //only users no teachers/coaches
+                    $sql_query .= " AND course_user.status = 5 ";
+                    
                     
 					$sql_query .= ($sort_by_first_name ? " ORDER BY user.firstname, user.lastname" : " ORDER BY user.lastname, user.firstname");
 					

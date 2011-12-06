@@ -225,8 +225,9 @@ if (api_is_allowed_to_edit(null, true)) {
                        }
 					   $description .= '<tr><td>'.get_lang('Date').': </td><td class="highlight">'.api_convert_and_format_date(time(), DATE_TIME_FORMAT_LONG).'</td>';
                        $description .= '</table>';   
-                                            
-                       Export::export_table_pdf($a_users, get_lang('UserList'), $header, $description);
+                       $params = array();
+                       //$params = array('top'=>'50');
+                       Export::export_table_pdf($a_users, get_lang('UserList'), $header, $description, $params);
                        exit;
 				}
 		}

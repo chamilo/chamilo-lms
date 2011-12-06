@@ -23,16 +23,22 @@ class PDF {
      * @param   string  format A4 A4-L see  http://mpdf1.com/manual/index.php?tid=184&searchstring=format
      * @param   string  orientation "P" = Portrait "L" = Landscape
      */
-    public function __construct($page_format ='A4', $orientation = 'P') {
+    public function __construct($page_format ='A4', $orientation = 'P', $params = array()) {
         /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF
          * mPDF ([ string $mode [, mixed $format [, float $default_font_size [, string $default_font [, float $margin_left , float $margin_right , float $margin_top , float $margin_bottom , float $margin_header , float $margin_footer [, string $orientation ]]]]]])
          */         
-        if(!in_array($orientation,array('P','L'))) {
+        if (!in_array($orientation, array('P','L'))) {
             $orientation = 'P';
         }
         //$this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', 30, 20, 27, 25, 16, 13, $orientation);
         //left, right, top, bottom, margin_header, margin footer
-        $this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', 15, 15, 20, 15, 8, 8, $orientation); 
+        
+        $params['left']     = isset($params['left']) ? $params['left'] : 15;
+        $params['right']    = isset($params['right']) ? $params['right'] :15;
+        $params['top']      = isset($params['top']) ? $params['top'] : 20;
+        $params['bottom']   = isset($params['bottom']) ? $params['bottom'] : 15;        
+        
+        $this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', $params['left'], $params['right'], $params['top'], $params['bottom'], 8, 8, $orientation); 
     } 
     
     /**

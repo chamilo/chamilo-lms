@@ -147,7 +147,7 @@ class Export {
         return $string;
     }
 
-    public static function export_table_pdf($data, $file_name = 'export', $header, $description) {
+    public static function export_table_pdf($data, $file_name = 'export', $header, $description, $params = array()) {
         $headers = $data[0];
         unset($data[0]);
         $html = '';
@@ -184,7 +184,7 @@ class Export {
         $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).'/print.css';
         $css = file_exists($css_file) ? @file_get_contents($css_file) : '';        
         
-        $pdf = new PDF(); 
+        $pdf = new PDF('A4', 'P', $params); 
         $pdf->set_custom_header($headers_in_pdf);       
         $pdf->content_to_pdf($html, $css, $file_name, api_get_course_id());
         exit;

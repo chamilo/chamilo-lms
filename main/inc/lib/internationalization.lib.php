@@ -21,13 +21,15 @@ define('SPECIAL_OPENING_TAG', '[=');
 define('SPECIAL_CLOSING_TAG', '=]');
 
 // Predefined date formats in Chamilo provided by the language sub-system.
-// To be used as a parameter for the function api_format_date().
-define('TIME_NO_SEC_FORMAT', 0);	// 15:23
-define('DATE_FORMAT_SHORT', 1);		// Aug 25, 09
-define('DATE_FORMAT_LONG', 2);		// Aug 25, 09
-define('DATE_TIME_FORMAT_LONG', 3);	// August 25, 2009 at 03:28 PM
+// To be used as a parameter for the function api_format_date()
 
-define('DATE_FORMAT_NUMBER', 4);	// 25.08.09
+define('TIME_NO_SEC_FORMAT',    0);	// 15:23
+define('DATE_FORMAT_SHORT',     1); // Aug 25, 09 
+define('DATE_FORMAT_LONG',      2);	// Aug 25, 09 
+define('DATE_TIME_FORMAT_LONG', 3);	// August 25, 2009 at 03:28 PM 
+
+define('DATE_FORMAT_NUMBER',        4);	// 25.08.09
+define('DATE_TIME_FORMAT_LONG_24H', 5); // August 25, 2009 at 15:28   
 
 // Formatting person's name.
 define('PERSON_NAME_COMMON_CONVENTION', 0);	// Formatting a person's name using the pattern as it has been
@@ -677,15 +679,13 @@ function api_format_date($time, $format = null, $language = null) {
 
     if (is_int($format)) {
         switch ($format) {
-        	case DATE_FORMAT_NUMBER:
-        		/*
-        		//$date_format = get_lang('dateFormatShortNumber', '', $language);
-        		$date_format = "%b %d, %Y";
+        	case DATE_FORMAT_NUMBER:        		
+        		$date_format = get_lang('dateFormatShortNumber', '', $language);
         		if (IS_PHP_53 && INTL_INSTALLED) {
         			$datetype = IntlDateFormatter::LONG;
         			$timetype = IntlDateFormatter::NONE;
         		}
-        		break;*/
+        		break;
             case TIME_NO_SEC_FORMAT:
                 $date_format = get_lang('timeNoSecFormat', '', $language);
                 if (IS_PHP_53 && INTL_INSTALLED) {
@@ -709,6 +709,13 @@ function api_format_date($time, $format = null, $language = null) {
                 break;
             case DATE_TIME_FORMAT_LONG:
                 $date_format = get_lang('dateTimeFormatLong', '', $language);
+                if (IS_PHP_53 && INTL_INSTALLED) {
+                    $datetype = IntlDateFormatter::FULL;
+                    $timetype = IntlDateFormatter::SHORT;
+                }
+                break;
+            case DATE_TIME_FORMAT_LONG_24H:
+                $date_format = get_lang('dateTimeFormatLong24H', '', $language);
                 if (IS_PHP_53 && INTL_INSTALLED) {
                     $datetype = IntlDateFormatter::FULL;
                     $timetype = IntlDateFormatter::SHORT;

@@ -158,7 +158,7 @@ class Export {
                  <tr><td width="100%" style="text-align: center;" class="title" colspan="4"><h1>'.$header.'</h1></td></tr></table><br />';
         $html .= $description.'<br />';
         
-        $table = new HTML_Table(array('class' => 'data_table'));
+        $table = new HTML_Table(array('class' => 'data_table', 'repeat_header' => '1'));
         $row = 0;
         $column = 0;
         foreach ($headers as $header) {

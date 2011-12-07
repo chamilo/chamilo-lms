@@ -466,10 +466,7 @@ class UniqueAnswerNoOption extends Question {
 	
 	function return_header($feedback_type, $counter = null) {
 	    parent::return_header($feedback_type, $counter);
-	    $header = '<table width="100%" border="0" cellspacing="3" cellpadding="3">
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
+	    $header = '<table width="100%" class="data_table_exercise_result">			
 			<tr>
 				<td><i>'.get_lang("Choice").'</i> </td>
 				<td><i>'. get_lang("ExpectedChoice").'</i></td>
@@ -479,11 +476,7 @@ class UniqueAnswerNoOption extends Question {
 				} else { 
 					$header .= '<td>&nbsp;</td>';
 				}
-        $header .= '
-			</tr>
-			<tr>
-			<td>&nbsp;</td>
-			</tr>';
+        $header .= '</tr>';
         return $header;	
 	}
 }

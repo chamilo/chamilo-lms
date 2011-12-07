@@ -4004,3 +4004,48 @@ input.liteoption {
 }
 
 
+.row_selected { 
+    border-color: #478ced #1f6fe2 #1f6fe2; 
+    background-color: #2d7ceb; 
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#2d7ceb), to(#2978e6)); 
+    background-image: -webkit-linear-gradient(top, #2d7ceb, #2978e6); 
+    background-image: -moz-linear-gradient(top, #2d7ceb, #2978e6); 
+    background-image: -ms-linear-gradient(top, #2d7ceb, #2978e6); 
+    background-image: -o-linear-gradient(top, #2d7ceb, #2978e6); 
+    background-image: linear-gradient(top, #2d7ceb, #2978e6); 
+    /*filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#2d7ceb', EndColorStr='#2978e6');*/ 
+    -moz-box-shadow: 0px 0px 0px transparent; 
+    -webkit-box-shadow: 0px 1px 0px transparent; 
+    box-shadow: 0px 1px 0px transparent;
+}
+
+.row_selected a,  .row_selected .invisible, .row_selected td {
+    color: #FFFFFF !important;
+}    
+
+
+
+.data_table_exercise_result, .data_table_exercise_result_left {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 12px;
+    margin-bottom: 15px;
+    margin-top: 8px;
+    text-align: left;
+    width: 100%;    
+}
+
+.data_table_exercise_result td {
+    line-height: normal;
+    padding: 6px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+.data_table_exercise_result_left td {
+    line-height: normal;
+    padding: 6px;
+    text-align: left;
+    vertical-align: middle;
+}

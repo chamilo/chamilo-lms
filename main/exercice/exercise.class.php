@@ -2270,7 +2270,7 @@ class Exercise {
 							}
 							if ($show_result) {
 								echo '<tr>';
-								echo '<td>'.$s_answer_label.'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b></td>';
+								echo '<td>'.$s_answer_label.'</td><td>'.$user_answer.' <b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b></td>';
 								echo '</tr>';
 							}
 						}

@@ -17,7 +17,6 @@ $help_content = 'exercise_upload';
 // including the global Dokeos file
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH) . 'pear/excelreader/reader.php';
 require_once 'exercise.class.php';
 require_once 'question.class.php';

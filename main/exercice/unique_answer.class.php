@@ -376,10 +376,7 @@ class UniqueAnswer extends Question {
 	
 	function return_header($feedback_type, $counter = null) {
 	    parent::return_header($feedback_type, $counter);
-	    $header = '<table width="100%" border="0" cellspacing="3" cellpadding="3">
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
+	    $header = '<table width="100%" class="data_table_exercise_result">			
 			<tr>
 				<td><i>'.get_lang("Choice").'</i> </td>
 				<td><i>'. get_lang("ExpectedChoice").'</i></td>
@@ -389,13 +386,10 @@ class UniqueAnswer extends Question {
 				} else { 
 					$header .= '<td>&nbsp;</td>';
 				}
-        $header .= '
-			</tr>
-			<tr>
-			<td>&nbsp;</td>
-			</tr>';
+        $header .= '</tr>';
         return $header;	
-	}
+    }
+    
   function create_answer($id, $question_id, $answer_title, $comment, $score = 0, $correct = 0) {
     $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);

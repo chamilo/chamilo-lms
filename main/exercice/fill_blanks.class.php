@@ -203,15 +203,9 @@ class FillBlanks extends Question
 	
 	function return_header($feedback_type, $counter = null) {
 	    parent::return_header($feedback_type, $counter);
-	    $header = '<table width="100%" border="0" cellspacing="3" cellpadding="3">
-				<tr>
-			<td>&nbsp;</td>
-			</tr>
+	    $header = '<table width="100%" class="data_table_exercise_result_left">				
 			<tr>
-			<td><i><?php echo get_lang("Answer"); ?></i> </td>
-			</tr>
-			<tr>
-			<td>&nbsp;</td>
+			<td><i>'.get_lang("Answer").'</i> </td>
 			</tr>';
         return $header;	  
 	}

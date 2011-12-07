@@ -42,8 +42,7 @@ class Matching extends Question {
 		$navigator_info = api_get_navigator();
 
 		$nb_matches = $nb_options = 2;
-		if($form -> isSubmitted())
-		{
+		if($form -> isSubmitted()) {
 			$nb_matches = $form -> getSubmitValue('nb_matches');
 			$nb_options = $form -> getSubmitValue('nb_options');
 			if(isset($_POST['lessMatches']))
@@ -254,18 +253,14 @@ class Matching extends Question {
 		$this->save();
 	}
 	
-		function return_header($feedback_type, $counter = null) {
-    	    parent::return_header($feedback_type, $counter);
-
-            echo '<table width="100%" height="71" border="0" cellspacing="3" cellpadding="3" >';
-            echo '<tr><td colspan="2">&nbsp;</td></tr>';
-            echo '<tr>
-                    <td><span style="font-style: italic;">'.get_lang('ElementList').'</span> </td>
-                    <td><span style="font-style: italic;">'.get_lang('CorrespondsTo').'</span></td>
-                  </tr>';
-            echo '<tr><td colspan="2">&nbsp;</td></tr>';
-                    
-		}
+	function return_header($feedback_type, $counter = null) {
+	    parent::return_header($feedback_type, $counter);
+        echo '<table width="100%" height="71" class="data_table_exercise_result_left">';            
+        echo '<tr>
+                <td><span style="font-style: italic;">'.get_lang('ElementList').'</span> </td>
+                <td><span style="font-style: italic;">'.get_lang('CorrespondsTo').'</span></td>
+              </tr>';
+	}
 
 
 }

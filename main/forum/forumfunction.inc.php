@@ -3724,8 +3724,9 @@ function get_forums_of_group($group_id) {
     $table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
     $course_id              = api_get_course_int_id();
     
-    //-------------- Student -----------------//
+    // Student
     // Select all the forum information of all forums (that are visible to students).
+    
     $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
                 WHERE forum.forum_of_group = '".Database::escape_string($group_id)."' AND
                 forum.c_id = $course_id AND
@@ -3737,7 +3738,7 @@ function get_forums_of_group($group_id) {
     // Select the number of threads of the forums (only the threads that are visible).
     $sql2 = "SELECT count(thread_id) AS number_of_threads, threads.forum_id FROM $table_threads threads, ".$table_item_property." item_properties
                     WHERE threads.thread_id=item_properties.ref AND
-                    forum.c_id = $course_id AND
+                    threads.c_id = $course_id AND
                     item_properties.c_id = $course_id AND 
                     item_properties.visibility=1 AND
                     item_properties.tool='".TOOL_FORUM_THREAD."'

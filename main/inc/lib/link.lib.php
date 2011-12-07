@@ -31,6 +31,9 @@ function addlinkcategory($type) {
 	global $msgErr;
 
 	$ok = true;
+    
+    $course_id = api_get_course_int_id();
+    
 
 	if ($type == 'link') {
 		$tbl_link = Database :: get_course_table(TABLE_LINK);
@@ -65,21 +68,20 @@ function addlinkcategory($type) {
 		// If the URL is invalid, an error occurs.
 		// Ivan, 13-OCT-2010, Chamilo 1.8.8: Let us still tolerate PHP 5.1.x and avoid a specific bug in filter_var(), see http://bugs.php.net/51192
 		//if (!filter_var($urllink, FILTER_VALIDATE_URL)) {
-		if (!api_valid_url($urllink, true)) { // A check against an absolute URL.
-			//
+		if (!api_valid_url($urllink, true)) { // A check against an absolute URL			
 			$msgErr = get_lang('GiveURL');
 			Display :: display_error_message(get_lang('GiveURL'));
 			$ok = false;
 		} else {
 			// Looking for the largest order number for this category.
-			$result = Database :: query("SELECT MAX(display_order) FROM  " . $tbl_link . " WHERE category_id = '" . intval($_POST['selectcategory']) . "'");
+			$result = Database :: query("SELECT MAX(display_order) FROM  " . $tbl_link . " WHERE c_id = $course_id AND category_id = '" . intval($_POST['selectcategory']) . "'");
 			list ($orderMax) = Database :: fetch_row($result);
 			$order = $orderMax +1;
 
 			$session_id = api_get_session_id();
 
 			$sql = "INSERT INTO " . $tbl_link . " (c_id, url, title, description, category_id, display_order, on_homepage, target, session_id)
-			        VALUES (".api_get_course_int_id().", '".Database :: escape_string($urllink) . "','" . Database :: escape_string($title) . "','" . Database :: escape_string($description) . "','" .			        
+			        VALUES (".$course_id.", '".Database :: escape_string($urllink) . "','" . Database :: escape_string($title) . "','" . Database :: escape_string($description) . "','" .			        
 			Database :: escape_string($selectcategory) . "','" . Database :: escape_string($order) . "', '" . Database :: escape_string($onhomepage) . "','" .
 			Database :: escape_string($target) . "','" . Database :: escape_string($session_id) . "')";
 			
@@ -172,13 +174,13 @@ function addlinkcategory($type) {
 			$ok = false;
 		} else {
 			// Looking for the largest order number for this category.
-			$result = Database :: query("SELECT MAX(display_order) FROM  " . $tbl_categories);
+			$result = Database :: query("SELECT MAX(display_order) FROM  " . $tbl_categories." WHERE c_id = $course_id ");
 			list ($orderMax) = Database :: fetch_row($result);
 			$order = $orderMax +1;
 			$order = intval($order);
 			$session_id = api_get_session_id();
 			$sql = "INSERT INTO ".$tbl_categories." (c_id, category_title, description, display_order, session_id) 
-			        VALUES (".api_get_course_int_id().", '" .Database::escape_string($category_title) . "', '" . Database::escape_string($description) . "', '$order', '$session_id')";
+			        VALUES (".$course_id.", '" .Database::escape_string($category_title) . "', '" . Database::escape_string($description) . "', '$order', '$session_id')";
 			Database :: query($sql);
 
 			$catlinkstatus = get_lang('CategoryAdded');
@@ -204,16 +206,18 @@ function addlinkcategory($type) {
 function deletelinkcategory($type) {
 	global $catlinkstatus;
 	global $_course;	
-	$tbl_link = Database :: get_course_table(TABLE_LINK);
-	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
-	$TABLE_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+	$tbl_link              = Database :: get_course_table(TABLE_LINK);
+	$tbl_categories        = Database :: get_course_table(TABLE_LINK_CATEGORY);
+	$TABLE_ITEM_PROPERTY   = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+    
+    $course_id = api_get_course_int_id();
 
 	if ($type == 'link') {
 		global $id;
 		// -> Items are no longer fysically deleted, but the visibility is set to 2 (in item_property).
 		// This will make a restore function possible for the platform administrator.
 		if (isset ($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
-			$sql = "UPDATE $tbl_link SET on_homepage='0' WHERE id='" . intval($_GET['id']) . "'";
+			$sql = "UPDATE $tbl_link SET on_homepage='0' WHERE c_id = $course_id AND id='" . intval($_GET['id']) . "'";
 			Database :: query($sql);
 		}
 		api_item_property_update($_course, TOOL_LINK, $id, 'delete', api_get_user_id());
@@ -227,9 +231,9 @@ function deletelinkcategory($type) {
 		global $id;
 		if (isset ($_GET['id']) && !empty ($_GET['id'])) {
 			// First we delete the category itself and afterwards all the links of this category.
-			$sql = "DELETE FROM " . $tbl_categories . " WHERE id='" . intval($_GET['id']) . "'";
+			$sql = "DELETE FROM " . $tbl_categories . " WHERE c_id = $course_id AND id='" . intval($_GET['id']) . "'";
 			Database :: query($sql);
-			$sql = "DELETE FROM " . $tbl_link . " WHERE category_id='" . intval($_GET['id']) . "'";
+			$sql = "DELETE FROM " . $tbl_link . " WHERE c_id = $course_id AND category_id='" . intval($_GET['id']) . "'";
 			$catlinkstatus = get_lang('CategoryDeleted');
 			unset ($id);
 			Database :: query($sql);
@@ -296,12 +300,14 @@ function editlinkcategory($type) {
 
 	$tbl_link = Database :: get_course_table(TABLE_LINK);
 	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
+    
+    $course_id = api_get_course_int_id();
 
 	if ($type == 'link') {
 
 		// This is used to populate the link-form with the info found in the database.
 		if (!empty ($_GET['id'])) {
-			$sql = "SELECT * FROM " . $tbl_link . " WHERE id='" . intval($_GET['id']) . "'";
+			$sql = "SELECT * FROM " . $tbl_link . " WHERE c_id = $course_id AND id='" . intval($_GET['id']) . "'";
 			$result = Database :: query($sql);
 			if ($myrow = Database :: fetch_array($result)) {
 				$urllink = $myrow['url'];
@@ -352,13 +358,13 @@ function editlinkcategory($type) {
 			$mytarget = ",target='" . $target . "'";
 
 			// Finding the old category_id.
-			$sql = "SELECT * FROM " . $tbl_link . " WHERE id='" . intval($_POST['id']) . "'";
+			$sql = "SELECT * FROM " . $tbl_link . " WHERE c_id = $course_id AND id='" . intval($_POST['id']) . "'";
 			$result = Database :: query($sql);
 			$row = Database :: fetch_array($result);
 			$category_id = $row['category_id'];
 
 			if ($category_id != $_POST['selectcategory']) {
-				$sql = "SELECT MAX(display_order) FROM " . $tbl_link . " WHERE category_id='" . intval($_POST['selectcategory']) . "'";
+				$sql = "SELECT MAX(display_order) FROM " . $tbl_link . " WHERE c_id = $course_id AND category_id='" . intval($_POST['selectcategory']) . "'";
 				$result = Database :: query($sql);
 				list ($max_display_order) = Database :: fetch_row($result);
 				$max_display_order++;
@@ -475,7 +481,7 @@ function editlinkcategory($type) {
 
 		// This is used to populate the category-form with the info found in the database.
 		if (!$submit_category) {
-			$sql = "SELECT * FROM " . $tbl_categories . " WHERE id='" . intval($_GET['id']) . "'";
+			$sql = "SELECT * FROM " . $tbl_categories . " WHERE c_id = $course_id AND id='" . intval($_GET['id']) . "'";
 			$result = Database :: query($sql);
 			if ($myrow = Database :: fetch_array($result)) {
 				$category_title = $myrow['category_title'];
@@ -485,13 +491,12 @@ function editlinkcategory($type) {
 
 		// This is used to put the modified info of the category-form into the database.
 		if ($submit_category) {
-			$sql = "UPDATE " . $tbl_categories . " set category_title='" . Database :: escape_string($_POST['category_title']) . "', description='" . Database :: escape_string($_POST['description']) . "' WHERE id='" . Database :: escape_string($_POST['id']) . "'";
+			$sql = "UPDATE " . $tbl_categories . " SET category_title='" . Database :: escape_string($_POST['category_title']) . "', description='" . Database :: escape_string($_POST['description']) . "' 
+			        WHERE c_id = $course_id AND id='" . Database :: escape_string($_POST['id']) . "'";
 			Database :: query($sql);
 			Display :: display_confirmation_message(get_lang('CategoryModded'));
 		}
-
 	}
-
 	return true; // On errors before this statement, exit from this function by returning false value.
 }
 
@@ -513,7 +518,7 @@ function makedefaultviewcode($locatie) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function change_visibility($id, $scope) {
-	global $_course, $_user;
+	global $_course, $_user;    
 	if ($scope == 'link') {
 		api_item_property_update($_course, TOOL_LINK, $id, $_GET['action'], $_user['user_id']);
 		Display :: display_confirmation_message(get_lang('VisibilityChanged'));
@@ -527,21 +532,24 @@ function change_visibility($id, $scope) {
 function showlinksofcategory($catid) {
 	global $is_allowed, $charset, $urlview, $up, $down, $_user, $token;
 
-	$tbl_link = Database :: get_course_table(TABLE_LINK);
-	$TABLE_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+	$tbl_link              = Database :: get_course_table(TABLE_LINK);
+	$TABLE_ITEM_PROPERTY   = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 	// Condition for the session.
 	$session_id = api_get_session_id();
 	$condition_session = api_get_session_condition($session_id, true, true);
 	$catid = intval($catid);
+    
+    $course_id = api_get_course_int_id();    
 
-	$sqlLinks = "SELECT * FROM " . $tbl_link . " link, " . $TABLE_ITEM_PROPERTY . " itemproperties 
-				 WHERE  itemproperties.tool='" . TOOL_LINK . "' AND 
+	$sqlLinks = "SELECT *, link.id FROM " . $tbl_link . " link, " . $TABLE_ITEM_PROPERTY . " itemproperties 
+				 WHERE  itemproperties.tool='" . TOOL_LINK . "' AND
 						link.id=itemproperties.ref AND 
 						link.category_id='" . $catid . "' AND 
 						(itemproperties.visibility='0' OR itemproperties.visibility='1') 
 						$condition_session AND
-						link.c_id = ".api_get_course_int_id()." 
+						link.c_id = ".$course_id." AND
+						itemproperties.c_id = ".$course_id." 
 						ORDER BY link.display_order DESC";
 	$result = Database :: query($sqlLinks);
 	$numberoflinks = Database :: num_rows($result);
@@ -549,6 +557,7 @@ function showlinksofcategory($catid) {
     	echo '<table class="data_table" width="100%">';
     	$i = 1;
     	while ($myrow = Database :: fetch_array($result)) {
+    	        	    
     
     		// Validacion when belongs to a session.
     		$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
@@ -564,31 +573,31 @@ function showlinksofcategory($catid) {
     		if ($myrow['visibility'] == '1') {
     			echo '<tr class="'.$css_class.'">';
     			echo '<td align="center" valign="middle" width="15">';
-    			echo '<a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="_blank"><img src="../../main/img/link.gif" border="0" alt="', get_lang('Link'), '"/></a></td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="', $myrow['target'], '">';
-    			echo Security :: remove_XSS($myrow[2]);
+    			echo '<a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow['id'], '&amp;link_url=', urlencode($myrow['url']), '" target="_blank">
+    			         <img src="../../main/img/link.gif" border="0" alt="', get_lang('Link'), '"/></a></td>
+    			         <td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow['id'], '&amp;link_url=', urlencode($myrow['url']), '" target="', $myrow['target'], '">';
+    			echo Security :: remove_XSS($myrow['url']);
     			echo '</a>';    			
-    			echo $link_validator;   			
-    		
+    			echo $link_validator;
     			echo $session_img;
-    			echo '<br />', $myrow[3];
+    			echo '<br />', $myrow['title'];
     		} else {
     			if (api_is_allowed_to_edit(null, true)) {
     				echo '<tr class="'.$css_class.'">';
-    				echo '<td align="center" valign="middle" width="15"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], "&amp;link_url=", urlencode($myrow[1]), '" target="_blank" class="invisible">';
+    				echo '<td align="center" valign="middle" width="15"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow['id'], "&amp;link_url=", urlencode($myrow['url']), '" target="_blank" class="invisible">';
     				echo Display :: return_icon('link_na.gif', get_lang('Link')), '</a>';
-    				echo '</td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]),'" target="', $myrow['target'], '"  class="invisible">';
-    				echo Security :: remove_XSS($myrow[2]);
+    				echo '</td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow['id'], '&amp;link_url=', urlencode($myrow['url']),'" target="', $myrow['target'], '"  class="invisible">';
+    				echo Security :: remove_XSS($myrow['url']);
     				echo "</a>";
     			    echo $link_validator;	
-    				echo $session_img, '<br />', $myrow[3];
+    				echo $session_img, '<br />', $myrow['title'];
     			}
     		}
     
     		echo '<td style="text-align:center;">';
     		if (api_is_allowed_to_edit(null, true)) {
-    			if ($session_id == $myrow['session_id']) {
-    
-    				echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;sec_token='.$token.'&amp;action=editlink&amp;category=' . (!empty ($category) ? $category : '') . '&amp;id=' . $myrow[0] . '&amp;urlview=' . $urlview . '" title="' . get_lang('Modify') . '">' . 
+    			if ($session_id == $myrow['session_id']) {    
+    				echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;sec_token='.$token.'&amp;action=editlink&amp;category=' . (!empty ($category) ? $category : '') . '&amp;id=' . $myrow['id'] . '&amp;urlview=' . $urlview . '" title="' . get_lang('Modify') . '">' . 
     						Display :: return_icon('edit.png', get_lang('Modify'), array (), 22) . '</a>';
     				
     				// DISPLAY MOVE UP COMMAND only if it is not the top link.
@@ -607,12 +616,15 @@ function showlinksofcategory($catid) {
     				}*/
     
     				if ($myrow['visibility'] == '1') {
-    					echo '<a href="link.php?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=invisible&amp;id=' . $myrow[0] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Hide') . '">' . Display :: return_icon('visible.png', get_lang('Hide'), array (), 22) . '</a>';
+    					echo '<a href="link.php?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=invisible&amp;id=' . $myrow['id'] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Hide') . '">' . 
+    					Display :: return_icon('visible.png', get_lang('Hide'), array (), 22) . '</a>';
     				}
     				if ($myrow['visibility'] == '0') {
-    					echo ' <a href="link.php?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=visible&amp;id=' . $myrow[0] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Show') . '">' . Display :: return_icon('invisible.png', get_lang('Show'), array (), 22) . '</a>';
+    					echo ' <a href="link.php?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=visible&amp;id=' . $myrow['id'] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Show') . '">' . 
+    					Display :: return_icon('invisible.png', get_lang('Show'), array (), 22) . '</a>';
     				}
-    				echo ' <a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=deletelink&amp;id=', $myrow[0], '&amp;urlview=', $urlview, "\" onclick=\"javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "')) return false;\" title=\"" . get_lang('Delete') . '">' . Display :: return_icon('delete.png', get_lang('Delete'), array (), 22) . '</a>';
+    				echo ' <a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=deletelink&amp;id=', $myrow['id'], '&amp;urlview=', $urlview, "\" onclick=\"javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "')) return false;\" title=\"" . get_lang('Delete') . '">' . 
+    				    Display :: return_icon('delete.png', get_lang('Delete'), array (), 22) . '</a>';
     
     			} else {
     				echo get_lang('EditionNotAvailableFromSession');
@@ -647,11 +659,8 @@ function showcategoryadmintools($categoryid) {
 					' . Display :: return_icon('down.png', get_lang('Down'), array (), 22) . '</a>';
 	} else {
 		echo Display :: return_icon('down_na.png', get_lang('Down'), array (), 22) . '</a>';
-	}
-	
+	}	
 	echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=deletecategory&amp;id=', $categoryid, "&amp;urlview=$urlview\" onclick=\"javascript: if(!confirm('" . get_lang('CategoryDelconfirm') . "')) return false;\">", Display :: return_icon('delete.png', get_lang('Delete'), array (), 22) . '</a>';
-
-
 	$catcounter++;
 }
 
@@ -660,12 +669,12 @@ function showcategoryadmintools($categoryid) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function movecatlink($catlinkid) {
-
 	global $catmove;
 	global $up;
 	global $down;
-	$tbl_link = Database :: get_course_table(TABLE_LINK);
+	$tbl_link       = Database :: get_course_table(TABLE_LINK);
 	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
+    $course_id = api_get_course_int_id();
 
 	if (!empty ($down)) {
 		$thiscatlinkId = intval($down);
@@ -684,7 +693,7 @@ function movecatlink($catlinkid) {
 		$movetable = $tbl_link;
 		// Getting the category of the link.
 		if (!empty ($thiscatlinkId)) {
-			$sql = "SELECT category_id from " . $movetable . " WHERE id='$thiscatlinkId'";
+			$sql = "SELECT category_id FROM " . $movetable . " WHERE c_id = $course_id AND id='$thiscatlinkId'";
 			$result = Database :: query($sql);
 			$catid = Database :: fetch_array($result);
 		}
@@ -692,15 +701,17 @@ function movecatlink($catlinkid) {
 
 	// This code is copied and modified from announcements.php.
 	if (!empty($sortDirection)) {
-		if (!in_array(trim(strtoupper($sortDirection)), array (
-				'ASC',
-				'DESC'
-			)))
-			die('Bad sort direction used.'); // Sanity check of sortDirection var.
+	    
+		if (!in_array(trim(strtoupper($sortDirection)), array ('ASC', 'DESC'))){
+		    $sortDirection = 'ASC';
+		}
+			
 		if ($catmove == 'true') {
-			$sqlcatlinks = "SELECT id, display_order FROM " . $movetable . " ORDER BY display_order $sortDirection";
+			$sqlcatlinks = "SELECT id, display_order FROM " . $movetable . " WHERE c_id = $course_id  ORDER BY display_order $sortDirection";
 		} else {
-			$sqlcatlinks = "SELECT id, display_order FROM " . $movetable . " WHERE category_id='" . $catid[0] . "' ORDER BY display_order $sortDirection";
+			$sqlcatlinks = "SELECT id, display_order FROM " . $movetable . " 
+                			WHERE c_id = $course_id AND category_id='" . $catid[0] . "' 
+                			ORDER BY display_order $sortDirection";
 		}
 		$linkresult = Database :: query($sqlcatlinks);
 		while ($sortrow = Database :: fetch_array($linkresult)) {
@@ -713,11 +724,11 @@ function movecatlink($catlinkid) {
 
 				Database :: query("UPDATE " . $movetable . "
 				                                         SET display_order = '$nextlinkOrdre'
-				                                         WHERE id =  '$thiscatlinkId'");
+				                                         WHERE c_id = $course_id  AND id =  '$thiscatlinkId'");
 
 				Database :: query("UPDATE " . $movetable . "
 				                                         SET display_order = '$thislinkOrdre'
-				                                         WHERE id =  '$nextlinkId'");
+				                                         WHERE c_id = $course_id  AND id =  '$nextlinkId'");
 
 				break;
 			}
@@ -738,7 +749,9 @@ function movecatlink($catlinkid) {
 function get_cat($catname) {
 	// Get category id (existing or make new).
 	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
-	$result = Database :: query("SELECT id FROM " . $tbl_categories . " WHERE category_title='" . Database::escape_string($catname) . "'");
+    $course_id = api_get_course_int_id();
+    
+	$result = Database :: query("SELECT id FROM " . $tbl_categories . " WHERE c_id = $course_id AND category_title='" . Database::escape_string($catname) . "'");
 	if (Database :: num_rows($result) >= 1 && ($row = Database :: fetch_array($result))) {
 		return $row['id']; // Several categories with same name: take the first.
 	}
@@ -746,7 +759,7 @@ function get_cat($catname) {
 	$result = Database :: query("SELECT MAX(display_order) FROM " . $tbl_categories);
 	list ($max_order) = Database :: fetch_row($result);
 	Database :: query("INSERT INTO " . $tbl_categories . " (c_id, category_title, description, display_order) 
-					   VALUES (".api_get_course_int_id().", '" . Database::escape_string($catname) . "','','" . ($max_order +1) . "')");
+					   VALUES (".$course_id.", '" . Database::escape_string($catname) . "','','" . ($max_order +1) . "')");
 	return Database :: insert_id();
 }
 
@@ -756,20 +769,24 @@ function get_cat($catname) {
  */
 function put_link($url, $cat, $title, $description, $on_homepage, $hidden) {
 	$tbl_link = Database :: get_course_table(TABLE_LINK);
+    
+    $course_id = api_get_course_int_id();
+    
 
 	$urleq = "url='" . Database :: escape_string($url) . "'";
 	$cateq = "category_id=" . intval($cat);
 
-	$result = Database :: query("SELECT id FROM $tbl_link WHERE " . $urleq . ' AND ' . $cateq);
+	$result = Database :: query("SELECT id FROM $tbl_link WHERE c_id = $course_id AND " . $urleq . ' AND ' . $cateq);
 
 	if (Database :: num_rows($result) >= 1 && ($row = Database :: fetch_array($result))) {
-		Database :: query("UPDATE $tbl_link set title='" . Database :: escape_string($title) . "', description='" . Database :: escape_string($description) . "' WHERE id='" . Database :: escape_string($row['id']) . "'");
+		Database :: query("UPDATE $tbl_link set title='" . Database :: escape_string($title) . "', description='" . Database :: escape_string($description) . "' 
+		WHERE c_id = $course_id AND  id='" . Database :: escape_string($row['id']) . "'");
 
 		$ipu = 'LinkUpdated';
 		$rv = 1; // 1 = upd
 	} else {
 		// Add new link
-		$result = Database :: query("SELECT MAX(display_order) FROM  $tbl_link WHERE category_id='" . intval($cat) . "'");
+		$result = Database :: query("SELECT MAX(display_order) FROM  $tbl_link WHERE c_id = $course_id AND category_id='" . intval($cat) . "'");
 		list ($max_order) = Database :: fetch_row($result);
 
 		Database :: query("INSERT INTO $tbl_link (c_id, url, title, description, category_id, display_order, on_homepage) 

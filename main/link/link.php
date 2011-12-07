@@ -73,7 +73,7 @@ $nameTools = get_lang('Links');
 
 // Condition for the session
 $session_id = api_get_session_id();
-$condition_session = api_get_session_condition($session_id, false, true);
+$condition_session = api_get_session_condition($session_id, true, true);
 
 if (isset($_GET['action']) && $_GET['action'] == 'addlink') {
 	$nameTools = '';
@@ -96,6 +96,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'editlink') {
 // Database Table definitions
 $tbl_link       = Database::get_course_table(TABLE_LINK);
 $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
+
+$course_id = api_get_course_int_id();
 
 // Statistics
 event_access_tool(TOOL_LINK);
@@ -180,7 +182,6 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 	} else {
 		//echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png', get_lang('BackToLinksOverview'),'','32').'</a>';
 	}	
-	
 	echo '</div>';
 		
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing
@@ -236,7 +237,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 					</div>
 				</div>';
 
-		$sqlcategories = "SELECT * FROM ".$tbl_categories." $condition_session ORDER BY display_order DESC";
+		$sqlcategories = "SELECT * FROM ".$tbl_categories." WHERE c_id = $course_id $condition_session ORDER BY display_order DESC";
 		$resultcategories = Database::query($sqlcategories);
 
 		if (Database::num_rows($resultcategories)) {
@@ -389,9 +390,6 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 
 	/*	Action Links */
 
-	if ((isset($_GET['action']) &&  $_GET['action'] == 'editcategory' && isset($_GET['id'])) || (isset($_GET['action']) && $_GET['action'] == 'addcategory')) {
-			echo '<br /><br /><br />';
-	}
 	echo '<div class="actions">';
 	if (api_is_allowed_to_edit(null, true)) {
 		$urlview = Security::remove_XSS($urlview);
@@ -402,10 +400,11 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 	}
 	// Making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
 	// number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
-	$sqlcategories = "SELECT * FROM ".$tbl_categories." $condition_session ORDER BY display_order DESC";
+	$sqlcategories = "SELECT * FROM ".$tbl_categories." WHERE c_id = $course_id $condition_session ORDER BY display_order DESC";
 	$resultcategories = Database::query($sqlcategories);
 	$aantalcategories = Database::num_rows($resultcategories);
 	if ($aantalcategories > 0) {
+	    $resultcategories = Database::query($sqlcategories);        
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&urlview=';
 		for ($j = 1; $j <= $aantalcategories; $j++) {
 			echo '0';
@@ -418,18 +417,14 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 		echo '">'.Display::return_icon('view_tree.png', $showall,'','32').'</a>';
 	}
 	echo '</div>';
-
-	// Starting the table which contains the categories
-	$sqlcategories = "SELECT * FROM ".$tbl_categories." $condition_session ORDER BY display_order DESC";
-	$resultcategories = Database::query($sqlcategories);
-
 	
 	// Displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
-	$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE category_id=0 OR category_id IS NULL";
+	$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE c_id = $course_id AND category_id=0 OR category_id IS NULL";
 	$result = Database::query($sqlLinks);
 	$numberofzerocategory = Database::num_rows($result);
-	echo '<table class="data_table">';	
-	if ($numberofzerocategory !== 0) {	    
+	
+	if ($numberofzerocategory !== 0) {
+	    echo '<table class="data_table">';	    
 		echo '<tr><th style="font-weight: bold; text-align:left;padding-left: 10px;">'.get_lang('General').'</th></tr>';
 		echo '</table>';
 		showlinksofcategory(0);

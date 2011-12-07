@@ -48,13 +48,9 @@ $current_user_permissions=array();
 $current_user_permissions=get_permissions('user',$user_id);
 
 
-// ==================================================================
 //   INHERITED PERMISSIONS (group permissions, user roles, group roles)
-// ==================================================================
 
-// ------------------------------------------------------------------
 // 			RETRIEVING THE PERMISSIONS OF THE GROUPS OF THE USER
-// ------------------------------------------------------------------
 $groups_of_user=array();
 $groups_of_user=GroupManager::get_group_ids($_course['real_id'],$user_id);
 foreach ($groups_of_user as $group)
@@ -70,11 +66,8 @@ foreach ($groups_of_user as $group)
 }
 $inherited_permissions=$inherited_group_permissions;
 
-// ------------------------------------------------------------------
 // 			RETRIEVING THE PERMISSIONS OF THE ROLES OF THE USER
-// ------------------------------------------------------------------
-if (api_get_setting('user_roles')=='true')
-{
+if (api_get_setting('user_roles')=='true') {
 	// course roles that are assigned to the user
 	$current_user_role_permissions_of_user=get_roles_permissions('user',$user_id);
 	$inherited_permissions=permission_array_merge($inherited_permissions,$current_user_role_permissions_of_user);
@@ -90,9 +83,7 @@ if (api_get_setting('user_roles')=='true')
 	$current_user_role_permissions_of_user=get_roles_permissions('user',$user_id, 'platform');
 	$inherited_permissions=permission_array_merge($inherited_permissions,$current_user_role_permissions_of_user);
 }
-// ------------------------------------------------------------------
 //	RETRIEVING THE PERMISSIONS OF THE ROLES OF THE GROUPS OF THE USER
-// ------------------------------------------------------------------
 if (api_get_setting('group_roles')=='true')
 {
 	// NOTE: DIT MOET NOG VERDER UITGEWERKT WORDEN

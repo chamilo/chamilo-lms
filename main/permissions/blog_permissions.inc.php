@@ -15,7 +15,9 @@ $rights_blog=array("article_add","article_delete","article_edit","article_rate",
 $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 
 // Get all user
-$blog_users = Blog::get_blog_users(Database::escape_string($_GET['blog_id']));
+$blog_users = Blog::get_blog_users($_GET['blog_id']);
+
+$course_id = api_get_course_int_id();
 
 // Remove the blog creater because he has all the rights automatically
 // and we want to keep it that way.
@@ -34,9 +36,7 @@ if ($mainUserInfo['status']==1)
 
 include_once('permissions_functions.inc.php');
 include_once(api_get_path(LIBRARY_PATH) . "/groupmanager.lib.php");
-// ---------------------------------------------------
 // 			ACTIONS
-// ---------------------------------------------------
 if (isset($_GET['do']))
 {
 	if ( isset($_GET['permission']) AND isset($_GET['tool']) AND ($_GET['do']=='grant' OR $_GET['do']=='revoke'))
@@ -59,8 +59,7 @@ if (isset($result_message))
 // ------------------------------------------------------------------
 // 			RETRIEVING THE PERMISSIONS OF THE ROLES OF THE USER
 // ------------------------------------------------------------------
-if (api_get_setting('user_roles')=='true')
-{
+if (api_get_setting('user_roles')=='true') {
 	// course roles that are assigned to the user
 	$current_user_role_permissions_of_user=get_roles_permissions('user',$user_id);
 	$inherited_permissions=permission_array_merge($inherited_permissions,$current_user_role_permissions_of_user);
@@ -167,12 +166,8 @@ foreach ($blog_users as $user_id => $user_name) // $blog_users contains all the 
 echo "</table>\n";
 echo "</form><br />";
 
-// ---------------------------------------------------
 // 			LEGEND
-// ---------------------------------------------------
 echo '<strong>'.get_lang('Legend').'</strong><br />';
 echo '<img src="../img/wrong.gif" /> '.get_lang('UserHasPermissionNot').'<br />';
 echo '<img src="../img/checkbox_on2.gif" /> '.get_lang('UserHasPermission').'<br />';
 echo '<img src="../img/checkbox_on3.gif" /> '.get_lang('UserHasPermissionByRoleGroup').'<br />';
-
-?>

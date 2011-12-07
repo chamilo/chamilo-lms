@@ -34,16 +34,12 @@ if (api_get_setting('allow_message_tool')=='true') {
    		$user_info=api_get_user_info($userfriend_id); ?>
         <div id="display_response_id" style="height:200px;width:400px">
             <div class="row">
-                <div class="label">
-                    <?php echo api_xml_http_response_encode(get_lang('To')); ?>: 
-                </div>
-                <div class="formw">
-                    <div class="tag">
-                        <?php echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); ?>			  		 
-                    </div>
-                </div>
-            </div>
-
+                <div class="label">                    
+                    <?php echo api_xml_http_response_encode(get_lang('To')); ?>:
+                    <?php echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); ?>
+                </div>                
+            </div>    
+            <br />        
             <div class="row">
                 <div class="label">
                    <span style="color:red"> * </span><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :
@@ -52,6 +48,7 @@ if (api_get_setting('allow_message_tool')=='true') {
         	 		 <input id="txt_subject_id" type="text" style="width:400px;">
                 </div>                
             </div>
+            <br />  
             <div class="row">
                 <div class="label">
         	   		 <?php echo api_xml_http_response_encode(get_lang('Message')); ?> :
@@ -60,13 +57,14 @@ if (api_get_setting('allow_message_tool')=='true') {
         	   		 <textarea id="txt_area_invite" rows="5" cols="55"></textarea>		   		 			   		 
                 </div>                
             </div>
+            <br />  
            <div class="row">
                 <div class="label">        	   		
                 </div>
-                <div class="formw">
+            <div class="formw">
                 <button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $userfriend_id;?>')"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>			   		 
-                </div>                
-            </div>
+            </div>                
+          </div>
 </div>
 <?php
 	} else {
@@ -78,6 +76,8 @@ if (api_get_setting('allow_message_tool')=='true') {
 			<button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')); ?>" onclick="action_database_panel('4','<?php echo $userfriend_id;?>')" >
 			<?php echo api_xml_http_response_encode(get_lang('SendInvitation')) ?></button>
 		</div>
-<?php			}
-			} ?>
+<?php			
+        }
+    } 
+?>
 </div>

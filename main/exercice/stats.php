@@ -4,7 +4,7 @@
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
-$language_file = 'exercice';
+$language_file = array('exercice', 'tracking');
 require_once '../inc/global.inc.php';
 require_once 'exercise.lib.php';
 $this_section = SECTION_COURSES;
@@ -25,13 +25,12 @@ $data = array();
 //Question title 	# of students who tool it 	Lowest score 	Average 	Highest score 	Maximum score
 $headers = array(
 	get_lang('Question'), 
-	get_lang('NumberOfStudentWhoTryTheExercise'),
+	get_lang('NumberOfStudentsWhoTryTheExercise'),
 	get_lang('LowestScore'), 
-	get_lang('Average'),
+	get_lang('AverageScore'),
 	get_lang('HighestScore'),
 	get_lang('MaximumScore')	
 );
-
 
 if (!empty($question_list)) {
 	foreach($question_list as $question_id) {

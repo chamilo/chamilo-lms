@@ -2451,19 +2451,21 @@ class learnpath {
      * Return the number of interactions for the given learnpath Item View ID.
      * This method can be used as static.
      * @param	integer	Item View ID
+     * @param   integer course id
      * @return	integer	Number of interactions
      */
-    public function get_interactions_count_from_db($lp_iv_id = 0, $course_code = null) {
-        if (empty ($lp_iv_id)) {
-            return -1;
-        }
-        $course_info = api_get_course_info($course_code);
-        $table = Database :: get_course_table(TABLE_LP_IV_INTERACTION);
-        $course_id = $course_info['real_id'];
+    public function get_interactions_count_from_db($lp_iv_id, $course_id) {        
+        $table = Database :: get_course_table(TABLE_LP_IV_INTERACTION);   
+        $lp_iv_id = intval($lp_iv_id);
+        $course_id = intval($course_id);
+             
         $sql = "SELECT count(*) FROM $table WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id";
         $res = Database::query($sql);
-        $row = Database::fetch_array($res);
-        $num = $row[0];
+        $res = 0;
+        if (Database::num_rows($res)) {
+            $row = Database::fetch_array($res);
+            $num = $row[0];
+        }
         return $num;
     }
 
@@ -2515,17 +2517,17 @@ class learnpath {
      * @param	integer	Item View ID
      * @return	integer	Number of objectives
      */
-    public function get_objectives_count_from_db($lp_iv_id = 0, $course_code = null) {
-        if (empty ($lp_iv_id)) {
-            return -1;
-        }
-        $course_info = api_get_course_info($course_code);
-        $course_id   = $course_info['real_id']; 
+    public function get_objectives_count_from_db($lp_iv_id, $course_id) {     
         $table = Database :: get_course_table(TABLE_LP_IV_OBJECTIVE);
+        $course_id = intval($course_id);
+        $lp_iv_id = intval($lp_iv_id);
         $sql = "SELECT count(*) FROM $table WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id";
         $res = Database::query($sql);
-        $row = Database :: fetch_array($res);
-        $num = $row[0];
+        $res = 0;
+        if (Database::num_rows($res)) {
+            $row = Database :: fetch_array($res);
+            $num = $row[0];
+        }
         return $num;
     }
 

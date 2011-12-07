@@ -91,7 +91,7 @@ $TBL_QUIZ               = Database :: get_course_table(TABLE_QUIZ_TEST);
 $tbl_stats_exercices    = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $tbl_stats_attempts     = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-$sql = "SELECT max(view_count) FROM $TBL_LP_VIEW WHERE lp_id = $lp_id AND user_id = '" . $user_id . "' $session_condition";
+$sql = "SELECT max(view_count) FROM $TBL_LP_VIEW WHERE c_id = $course_id AND lp_id = $lp_id AND user_id = '" . $user_id . "' $session_condition";
 $res = Database::query($sql);
 $view = '';
 $num = 0;
@@ -121,7 +121,7 @@ if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
     $clean_lp_item_id = Database::escape_string($_GET['my_lp_id']);
     $clean_lp_id = Database::escape_string($_GET['lp_id']);
     $clean_course_code = Database :: escape_string($course_code);
-    $sql_path = "SELECT path FROM $TBL_LP_ITEM WHERE id = '$clean_lp_item_id' AND lp_id = '$clean_lp_id'";
+    $sql_path = "SELECT path FROM $TBL_LP_ITEM WHERE c_id = $course_id AND id = '$clean_lp_item_id' AND lp_id = '$clean_lp_id'";
     $res_path = Database::query($sql_path);
     $row_path = Database::fetch_array($res_path);
 
@@ -176,12 +176,11 @@ if (is_array($list) && count($list) > 0) {
             " i.item_type as item_type, iv.view_count as iv_view_count, " .
             " iv.id as iv_id, path as path " .
             " FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v " .
-            " WHERE i.id = iv.lp_item_id
+            " WHERE i.id = iv.lp_item_id AND
             	i.c_id = $course_id AND
             	iv.c_id = $course_id AND
-            	v.c_id = $course_id AND        
-            " .
-            " AND i.id = $my_item_id " .
+            	v.c_id = $course_id AND
+                i.id = $my_item_id " .
             " AND iv.lp_view_id = v.id " .
             " AND i.lp_id = $lp_id " .
             " AND v.user_id = " . $user_id . " " .
@@ -202,7 +201,7 @@ if (is_array($list) && count($list) > 0) {
                 // Check results_disabled in quiz table.
                 $my_path = Database::escape_string($row['path']);
 
-                $sql = "SELECT results_disabled FROM $TBL_QUIZ WHERE id ='".(int)$my_path."'";
+                $sql = "SELECT results_disabled FROM $TBL_QUIZ WHERE c_id = $course_id AND id ='".(int)$my_path."'";
                 $res_result_disabled = Database::query($sql);
                 $row_result_disabled = Database::fetch_row($res_result_disabled);
 
@@ -240,7 +239,7 @@ if (is_array($list) && count($list) > 0) {
                 // Check if there are interactions below.
                 $extend_attempt_link = '';
                 $extend_this_attempt = 0;
-                if ((learnpath :: get_interactions_count_from_db($row['iv_id']) > 0 || learnpath :: get_objectives_count_from_db($row['iv_id']) > 0) && !$extend_all) {
+                if ((learnpath :: get_interactions_count_from_db($row['iv_id'], $course_id) > 0 || learnpath :: get_objectives_count_from_db($row['iv_id'], $course_id) > 0) && !$extend_all) {
                     if (!empty ($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
                         // The extend button for this attempt has been clicked.
                         $extend_this_attempt = 1;
@@ -388,7 +387,7 @@ if (is_array($list) && count($list) > 0) {
                 // Check results_disabled in quiz table.
                 $my_path = Database::escape_string($my_path);
 
-                $sql = "SELECT results_disabled FROM $TBL_QUIZ WHERE id ='".(int)$my_path."'";
+                $sql = "SELECT results_disabled FROM $TBL_QUIZ WHERE c_id = $course_id AND id ='".(int)$my_path."'";
                 $res_result_disabled = Database::query($sql);
                 $row_result_disabled = Database::fetch_row($res_result_disabled);
 
@@ -400,8 +399,9 @@ if (is_array($list) && count($list) > 0) {
             // Check if there are interactions below.
             $extend_attempt_link = '';
             $extend_this_attempt = 0;
-            $inter_num = learnpath::get_interactions_count_from_db($row['iv_id']);
-            $objec_num = learnpath::get_objectives_count_from_db($row['iv_id']);
+            
+            $inter_num = learnpath::get_interactions_count_from_db($row['iv_id'], $course_id);
+            $objec_num = learnpath::get_objectives_count_from_db($row['iv_id'], $course_id);
             if (($inter_num > 0 || $objec_num > 0) && !$extend_all) {
                 if (!empty ($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
                     // The extend button for this attempt has been clicked.
@@ -466,12 +466,14 @@ if (is_array($list) && count($list) > 0) {
                 } else {
                     if ($row['item_type'] == 'quiz') {
                         // Get score and total time from last attempt of a exercise en lp.
-                        $sql = "SELECT score FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'
+                        $sql = "SELECT score FROM $TBL_LP_ITEM_VIEW 
+                                WHERE c_id = $course_id AND lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'
                                 ORDER BY view_count DESC limit 1";
                         $res_score = Database::query($sql);
                         $row_score = Database::fetch_array($res_score);
 
-                        $sql = "SELECT SUM(total_time) as total_time FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'";
+                        $sql = "SELECT SUM(total_time) as total_time FROM $TBL_LP_ITEM_VIEW 
+                                WHERE c_id = $course_id AND lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'";
                         $res_time = Database::query($sql);
                         $row_time = Database::fetch_array($res_time);
 
@@ -486,8 +488,8 @@ if (is_array($list) && count($list) > 0) {
                         //$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
                         // Selecting the max score from an attempt.
                         $sql = "SELECT SUM(t.ponderation) as maxscore FROM ( 
-                        			SELECT distinct question_id, marks,ponderation FROM $tbl_stats_attempts as at INNER JOIN  $tbl_quiz_questions as q 
-                        			ON(q.id = at.question_id) 
+                        			SELECT distinct question_id, marks, ponderation FROM $tbl_stats_attempts as at INNER JOIN  $tbl_quiz_questions as q 
+                        			ON (q.id = at.question_id AND q.c_id = $course_id ) 
                         			WHERE exe_id ='$id_last_attempt' ) as t";
 
                         $result = Database::query($sql);
@@ -687,7 +689,7 @@ if (is_array($list) && count($list) > 0) {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all ) {
                                     $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></td>';
                                 } else {
-                                    $output .= '<td><a href="../exercice/exercise_show.php?origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
+                                    $output .= '<td><a href="../exercice/exercise_show.php?cidReq=' . $course_code.'&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
                                 }
                             }
                             $output .= '</tr>';

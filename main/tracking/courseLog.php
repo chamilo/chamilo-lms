@@ -124,6 +124,7 @@ echo '<div class="actions" style="height:32px">';
 if (empty($_GET['studentlist'])) {
     $_GET['studentlist'] = 'true';
 }
+
 switch($_GET['studentlist']) {
     case 'true':
         echo Display::return_icon('user_na.png', get_lang('StudentsTracking'), array(), 32);        
@@ -166,10 +167,9 @@ echo '</span>';
 echo '</div>';
 
 
-
+//Actions
 if ($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
     echo '<div class="actions">';    
-    
     // Create a search-box.
     $form_search = new FormValidator('search_simple', 'get', api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&studentlist=true', '', 'width=200px', false);
     $renderer =& $form_search->defaultRenderer();
@@ -188,22 +188,23 @@ if ($_GET['studentlist'] == 'false') {
 
     echo'<br /><br />';
 
-    // learning path tracking
-     echo '<div class="report_section">
-            <h2>'.Display::return_icon('scorms.gif',get_lang('AverageProgressInLearnpath')).get_lang('AverageProgressInLearnpath').'</h2>
-            <table class="data_table">';
-
-    $list = new LearnpathList('', $course_code, $session_id);
-    
-    $flat_list = $list->get_flat_list();
-
-    if ($export_csv) {
-        $temp = array(get_lang('AverageProgressInLearnpath', ''), '');
-        $csv_content[] = array('', '');
-        $csv_content[] = $temp;
-    }
-    
     if (count($flat_list) > 0) {
+        
+        // learning path tracking
+        echo '<div class="report_section">
+                <h2>'.Display::return_icon('scorms.gif',get_lang('AverageProgressInLearnpath')).get_lang('AverageProgressInLearnpath').'</h2>
+                <table class="data_table">';
+    
+        $list = new LearnpathList('', $course_code, $session_id);
+        
+        $flat_list = $list->get_flat_list();
+    
+        if ($export_csv) {
+            $temp = array(get_lang('AverageProgressInLearnpath', ''), '');
+            $csv_content[] = array('', '');
+            $csv_content[] = $temp;
+        }
+    
         foreach ($flat_list as $lp_id => $lp) {
             $lp_avg_progress = 0;
             foreach ($a_students as $student_id => $student) {
@@ -227,18 +228,20 @@ if ($_GET['studentlist'] == 'false') {
                 $csv_content[] = $temp;
             }
         }
+        echo '</table></div>';
+        
     } else {
-        echo '<tr><td>'.get_lang('NoLearningPath').'</td></tr>';
+        //echo '<tr><td>'.get_lang('NoLearningPath').'</td></tr>';
         if ($export_csv) {
             $temp = array(get_lang('NoLearningPath', ''), '');
             $csv_content[] = $temp;
         }
     }
-    echo '</table></div>';
-    echo '<div class="clear"></div>';
-    //hiding detail for exercises
-     // Exercices tracking.
-     echo '<div class="report_section">
+
+    
+    
+    // Exercices tracking.
+    echo '<div class="report_section">
                 <h2>'.Display::return_icon('quiz.gif',get_lang('AverageResultsToTheExercices')).get_lang('AverageResultsToTheExercices').'</h2>
             <table class="data_table">';
 
@@ -430,63 +433,65 @@ if ($_GET['studentlist'] == 'false') {
     }
 } elseif ($_GET['studentlist'] == 'true' or $_GET['studentlist'] == '') {
     // BEGIN : form to remind inactives susers
-    $form = new FormValidator('reminder_form', 'get', api_get_path(REL_CODE_PATH).'announcements/announcements.php');
-
-    $renderer = $form->defaultRenderer();
-    $renderer->setElementTemplate('<span>{label} {element}</span>&nbsp;<button class="save" type="submit">'.get_lang('SendNotification').'</button>','since');
-
-    $options = array (
-        2 => '2 '.get_lang('Days'),
-        3 => '3 '.get_lang('Days'),
-        4 => '4 '.get_lang('Days'),
-        5 => '5 '.get_lang('Days'),
-        6 => '6 '.get_lang('Days'),
-        7 => '7 '.get_lang('Days'),
-        15 => '15 '.get_lang('Days'),
-        30 => '30 '.get_lang('Days'),
-        'never' => get_lang('Never')
-    );
-
-    $el = $form -> addElement('select', 'since', '<img width="22" align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.get_lang('RemindInactivesLearnersSince'), $options);
-    $el -> setSelected(7);
-
-    $form -> addElement('hidden', 'action', 'add');
-    $form -> addElement('hidden', 'remindallinactives', 'true');
-    
-    $course_info = api_get_course_info(api_get_course_id());
-    $course_name = get_lang('Course').' '.$course_info['name'];
-    
-    if ($session_id) {    	
-        echo '<h2>'.Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.api_get_session_name($session_id).' '.
-                    Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_name.'</h2>';
-    } else {
-    	echo '<h2>'.Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_info['name'].'</h2>';
-    }
-    
-    $extra_field_select = TrackingCourseLog::display_additional_profile_fields();
-    
-    
-    if (!empty($extra_field_select)) {
-        echo $extra_field_select;
-    }              
-    $form->display();
-    // END : form to remind inactives susers
-
-    if ($export_csv) {
-        $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
-    } else {
-        $is_western_name_order = api_is_western_name_order();
-    }
-    
-    //PERSON_NAME_DATA_EXPORT is buggy    
-    $is_western_name_order = api_is_western_name_order();
-    
-    $sort_by_first_name = api_sort_by_first_name();
-
-    $tracking_column = isset($_GET['tracking_column']) ? $_GET['tracking_column'] : 0;
-    $tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : 'DESC';
-
+        
     if (count($a_students) > 0) {
+        
+        $form = new FormValidator('reminder_form', 'get', api_get_path(REL_CODE_PATH).'announcements/announcements.php');
+    
+        $renderer = $form->defaultRenderer();
+        $renderer->setElementTemplate('<span>{label} {element}</span>&nbsp;<button class="save" type="submit">'.get_lang('SendNotification').'</button>','since');
+    
+        $options = array (
+            2 => '2 '.get_lang('Days'),
+            3 => '3 '.get_lang('Days'),
+            4 => '4 '.get_lang('Days'),
+            5 => '5 '.get_lang('Days'),
+            6 => '6 '.get_lang('Days'),
+            7 => '7 '.get_lang('Days'),
+            15 => '15 '.get_lang('Days'),
+            30 => '30 '.get_lang('Days'),
+            'never' => get_lang('Never')
+        );
+    
+        $el = $form -> addElement('select', 'since', '<img width="22" align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.get_lang('RemindInactivesLearnersSince'), $options);
+        $el -> setSelected(7);
+    
+        $form -> addElement('hidden', 'action', 'add');
+        $form -> addElement('hidden', 'remindallinactives', 'true');
+        
+        $course_info = api_get_course_info(api_get_course_id());
+        $course_name = get_lang('Course').' '.$course_info['name'];
+        
+        if ($session_id) {    	
+            echo '<h2>'.Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.api_get_session_name($session_id).' '.
+                        Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_name.'</h2>';
+        } else {
+        	echo '<h2>'.Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_info['name'].'</h2>';
+        }
+        
+        $extra_field_select = TrackingCourseLog::display_additional_profile_fields();
+        
+        
+        if (!empty($extra_field_select)) {
+            echo $extra_field_select;
+        }              
+        $form->display();
+    
+        // END : form to remind inactives susers
+        /*
+        if ($export_csv) {
+            $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
+        } else {
+            $is_western_name_order = api_is_western_name_order();
+        }*/
+        
+        //PERSON_NAME_DATA_EXPORT is buggy    
+        $is_western_name_order = api_is_western_name_order();
+        
+        //$sort_by_first_name = api_sort_by_first_name();
+    
+        //$tracking_column = isset($_GET['tracking_column']) ? $_GET['tracking_column'] : 0;
+        //$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : 'DESC';
 
         if ($export_csv) {
             $csv_content = array();
@@ -535,12 +540,10 @@ if ($_GET['studentlist'] == 'false') {
             $table->set_header(10, get_lang('LatestLogin'), false, 'align="center"');
             $table->set_header(11, get_lang('AdditionalProfileField'), false);
             $table->set_header(12, get_lang('Details'), false);
-         }
-
+        }
         $table->display();
-
     } else {
-        echo get_lang('NoUsersInCourseTracking');
+        echo Display::display_warning_message(get_lang('NoUsersInCourse'));
     }
 
     // Send the csv file if asked.
@@ -605,9 +608,9 @@ if ($_GET['studentlist'] == 'false') {
     $table->set_header(0, get_lang('Tool'));
     $table->set_header(1, get_lang('EventType'));
     $table->set_header(2, get_lang('Session'), false);
-    $table->set_header(3, get_lang('UserName'));
+    $table->set_header(3, get_lang('UserName'), true, 'width=65px');
     $table->set_header(4, get_lang('Document'), false);
-    $table->set_header(5, get_lang('Date'), true, 'width=160px');
+    $table->set_header(5, get_lang('Date'), true, 'width=190px');
     $table->display();
 }
 

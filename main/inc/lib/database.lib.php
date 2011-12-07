@@ -703,6 +703,7 @@ class Database {
         if (strpos($query, 'c_')) {        	
         	//Check if the table contains inner joins 
         	if (
+        	    strpos($query, 'down_doc_path') === false &&
         		strpos($query, 'INNER JOIN') === false &&  
         		strpos($query, 'inner join') === false &&
         		strpos($query, 'left join') === false &&

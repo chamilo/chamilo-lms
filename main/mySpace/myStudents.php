@@ -905,7 +905,7 @@ if (empty($_GET['details'])) {
 				echo '</td>';
 				
 				echo '<td align="center">';
-				$all_attempt_url = "../exercice/exercice.php?show=result&exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$session_id";
+				$all_attempt_url = "../exercice/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$session_id";
 				echo Display::url(Display::return_icon('test_results.png', get_lang('AllAttempts'), array(), 22), $all_attempt_url );
 				
 				echo '</td></tr>';

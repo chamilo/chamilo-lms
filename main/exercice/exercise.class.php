@@ -102,6 +102,9 @@ class Exercise {
 		$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST);
 		$TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$id  = intval($id);
+        if (empty($this->course_id)) {
+            return false;
+        }
 		$sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = ".$this->course_id." AND id = ".$id;
 		$result = Database::query($sql);
 

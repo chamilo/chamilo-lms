@@ -12,6 +12,7 @@
 *	@author original author (unknown, probably thomas,hugues,moosh)
 *	@author Roan Embrechts, minor modification: virtual courses support
 *	@author Julio Montoya Armas Several fixes
+ *  @todo clean this code
 *	@package chamilo.user
 */
 
@@ -23,7 +24,6 @@
 $language_file = array ('registration', 'userInfo');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 
@@ -97,7 +97,7 @@ $allowedToEditDef = api_is_allowed_to_edit(null, true);
 $is_allowedToTrack = api_is_allowed_to_edit(null, true);
 
 // Library connection
-require_once ("userInfoLib.php");
+require_once "userInfoLib.php";
 
 /**
  *  FUNCTIONS 
@@ -263,7 +263,7 @@ $user_info_viewed = api_get_user_info($userIdViewed);
 $is_session_course_coach = UserManager::is_session_course_coach($userIdViewed, $_course['sysCode'], $current_session_id);
 
 if ($displayMode == "viewDefEdit") {
-	/*>>>>>>>>>>>> CATEGORIES DEFINITIONS : EDIT <<<<<<<<<<<<*/
+	/* CATEGORIES DEFINITIONS : EDIT */
 
 	$catToEdit = get_cat_def($_GET['editDef']);
 	$edit_heading_form = new FormValidator('edit_heading_form');
@@ -281,7 +281,7 @@ if ($displayMode == "viewDefEdit") {
 	$edit_heading_form->display();
 
 } elseif ($displayMode == "viewDefList") {
-	/*>>>>>>>>>>>> CATEGORIES DEFINITIONS : LIST <<<<<<<<<<<<*/
+	/*CATEGORIES DEFINITIONS : LIST */
 
 	$catList = get_cat_def_list();
 

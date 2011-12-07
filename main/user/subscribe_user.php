@@ -32,14 +32,39 @@ if ($_REQUEST['type']=='teacher') {
 
 //extra entries in breadcrumb
 $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("ToolUser"));
-if ($_GET['keyword'])
-{
+if ($_GET['keyword']) {
 	$interbreadcrumb[] = array ("url" => "subscribe_user.php?type=".Security::remove_XSS($_GET['type']), "name" => $tool_name);
 	$tool_name = get_lang('SearchResults');
 }
+
 Display :: display_header($tool_name, "User");
 
 // api_display_tool_title($tool_name);
+
+
+// Build search-form
+echo '<div class="actions">';
+
+if (isset($_GET['keyword'])) {
+    $actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_REQUEST['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';
+}
+if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])) {
+    $actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_REQUEST['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
+}
+if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
+    display_extra_profile_fields_filter();
+}
+
+// Build search-form
+$form = new FormValidator('search_user', 'get', '', '', null, false);
+$renderer = & $form->defaultRenderer();
+$renderer->setElementTemplate('<span>{element}</span> ');
+$form->add_textfield('keyword', '', false);
+$form->addElement('hidden', 'type', Security::remove_XSS($_REQUEST['type']));
+$form->addElement('style_submit_button', 'submit', get_lang('SearchButton'), 'class="search"');
+$form->addElement('static', 'additionalactions', null, $actions);
+$form->display();
+echo '</div>';
 
 /*
 		MAIN SECTION
@@ -153,6 +178,47 @@ if (!empty($_SESSION['session_user_id'])) {
 if (!empty($_SESSION['session_user_name'])) {
 	unset($_SESSION['session_user_name']);
 }
+
+
+
+$is_western_name_order = api_is_western_name_order();
+$sort_by_first_name = api_sort_by_first_name();
+
+
+// Build table
+$table = new SortableTable('subscribe_users', 'get_number_of_users', 'get_user_data', ($is_western_name_order xor $sort_by_first_name) ? 3 : 2);
+$parameters['keyword'] = Security::remove_XSS($_REQUEST['keyword']);
+$parameters ['type'] = Security::remove_XSS($_REQUEST['type']);
+$table->set_additional_parameters($parameters);
+$col = 0;
+$table->set_header($col ++, '', false);
+$table->set_header($col ++, get_lang('OfficialCode'));
+if (api_is_western_name_order()) {
+    $table->set_header($col ++, get_lang('FirstName'));
+    $table->set_header($col ++, get_lang('LastName'));
+} else {
+    $table->set_header($col ++, get_lang('LastName'));
+    $table->set_header($col ++, get_lang('FirstName'));
+}
+$table->set_header($col ++, get_lang('Email'));
+$table->set_column_filter($col -1, 'email_filter');
+$table->set_header($col ++, get_lang('Active'),false);
+$table->set_column_filter($col -1, 'active_filter');
+$table->set_header($col ++, get_lang('Actions'), false);
+$table->set_column_filter($col -1, 'reg_filter');
+$table->set_form_actions(array ('subscribe' => get_lang('reg')), 'user');
+
+if (!empty($_POST['keyword'])) {
+    $keyword_name=Security::remove_XSS($_POST['keyword']);
+    echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
+}
+
+// Display table
+$table->display();
+
+// footer
+Display :: display_footer();
+
 
 /*		SHOW LIST OF USERS  */
 
@@ -577,7 +643,7 @@ function email_filter($email) {
  */
 function reg_filter($user_id) {
 	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') $type='teacher'; else $type='student';
-	$result = "<a href=\"".api_get_self()."?register=yes&amp;type=".$type."&amp;user_id=".$user_id."\">".get_lang("reg")."</a>";
+	$result = '<a class="a_button orange small" href="'.api_get_self().'?register=yes&type='.$type.'&user_id='.$user_id.'">'.get_lang("reg").'</a>';
 	return $result;
 }
 
@@ -608,68 +674,6 @@ function active_filter($active, $url_params, $row) {
 	}
 	return $result;
 }
-
-
-$is_western_name_order = api_is_western_name_order();
-$sort_by_first_name = api_sort_by_first_name();
-
-// Build search-form
-echo '<div class="actions">';
-
-if (isset($_GET['keyword'])) {
-	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_REQUEST['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';
-}
-if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])) {
-	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_REQUEST['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
-}
-if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
-	display_extra_profile_fields_filter();
-}
-
-// Build search-form
-$form = new FormValidator('search_user', 'get', '', '', null, false);
-$renderer = & $form->defaultRenderer();
-$renderer->setElementTemplate('<span>{element}</span> ');
-$form->add_textfield('keyword', '', false);
-$form->addElement('hidden', 'type', Security::remove_XSS($_REQUEST['type']));
-$form->addElement('style_submit_button', 'submit', get_lang('SearchButton'), 'class="search"');
-$form->addElement('static', 'additionalactions', null, $actions);
-$form->display();
-echo '</div>';
-
-// Build table
-$table = new SortableTable('subscribe_users', 'get_number_of_users', 'get_user_data', ($is_western_name_order xor $sort_by_first_name) ? 3 : 2);
-$parameters['keyword'] = Security::remove_XSS($_REQUEST['keyword']);
-$parameters ['type'] = Security::remove_XSS($_REQUEST['type']);
-$table->set_additional_parameters($parameters);
-$col = 0;
-$table->set_header($col ++, '', false);
-$table->set_header($col ++, get_lang('OfficialCode'));
-if (api_is_western_name_order()) {
-	$table->set_header($col ++, get_lang('FirstName'));
-	$table->set_header($col ++, get_lang('LastName'));
-} else {
-	$table->set_header($col ++, get_lang('LastName'));
-	$table->set_header($col ++, get_lang('FirstName'));
-}
-$table->set_header($col ++, get_lang('Email'));
-$table->set_column_filter($col -1, 'email_filter');
-$table->set_header($col ++, get_lang('Active'),false);
-$table->set_column_filter($col -1, 'active_filter');
-$table->set_header($col ++, get_lang('reg'), false);
-$table->set_column_filter($col -1, 'reg_filter');
-$table->set_form_actions(array ('subscribe' => get_lang('reg')), 'user');
-
-if (!empty($_POST['keyword'])) {
-	$keyword_name=Security::remove_XSS($_POST['keyword']);
-	echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
-}
-
-// Display table
-$table->display();
-
-// footer
-Display :: display_footer();
 
 /**
  * Search the additional user profile fields defined by the platform administrator in

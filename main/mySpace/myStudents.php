@@ -676,27 +676,7 @@ if (empty($_GET['details'])) {
 } else {
 	$csv_content[] = array ();
     $csv_content[] = array (str_replace('&nbsp;', '', $table_title));        
-?>
-    
-    <br />
-    
-    <!-- LPs-->
-    <table class="data_table">
-    	<tr>
-    		<th><?php echo get_lang('Learnpaths');?></th>
-    		<th><?php echo get_lang('Time'); Display :: display_icon('info3.gif', get_lang('TotalTimeByCourse'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?></th>
-    		<th><?php echo get_lang('AverageScore'); Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInAllAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
-    		<th><?php echo get_lang('LatestAttemptAverageScore'); Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInTheLatestAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
-    	  	<th><?php echo get_lang('Progress'); Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
-    	  	<th><?php echo get_lang('LastConnexion'); Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
-    		<?php		
-    			echo '<th>'.get_lang('Details').'</th>'; 
-    			if (api_is_course_admin()) {
-    				echo '<th>'.get_lang('ResetLP').'</th>';
-    			}
-    		?>
-          </tr>
-    <?php
+
     $headerLearnpath = array (
     	get_lang('Learnpath'),
     	get_lang('Time'),
@@ -704,7 +684,7 @@ if (empty($_GET['details'])) {
     	get_lang('LastConnexion')
     );
     
-    $t_lp = Database :: get_course_table(TABLE_LP_MAIN, $info_course['db_name']);
+    $t_lp = Database :: get_course_table(TABLE_LP_MAIN);
     		
     // csv export headers
     $csv_content[] = array ();
@@ -726,6 +706,26 @@ if (empty($_GET['details'])) {
     $token = Security::get_token();        
     
     if (Database :: num_rows($rs_lp) > 0) {
+    ?>
+    
+        <!-- LPs-->
+        <table class="data_table">
+            <tr>
+                <th><?php echo get_lang('Learnpaths');?></th>
+                <th><?php echo get_lang('Time'); Display :: display_icon('info3.gif', get_lang('TotalTimeByCourse'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?></th>
+                <th><?php echo get_lang('AverageScore'); Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInAllAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
+                <th><?php echo get_lang('LatestAttemptAverageScore'); Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInTheLatestAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
+                <th><?php echo get_lang('Progress'); Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
+                <th><?php echo get_lang('LastConnexion'); Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
+                <?php       
+                    echo '<th>'.get_lang('Details').'</th>'; 
+                    if (api_is_course_admin()) {
+                        echo '<th>'.get_lang('ResetLP').'</th>';
+                    }
+                ?>
+              </tr>
+        <?php
+        
     	$i = 0;
     	while ($learnpath = Database :: fetch_array($rs_lp)) {
     		
@@ -832,7 +832,7 @@ if (empty($_GET['details'])) {
     		$data_learnpath[$i][] = $progress . '%';				
     	}
     } else {
-    	echo '<tr><td colspan="6">'.get_lang('NoLearnpath').'</td></tr>';
+    	//echo '<tr><td colspan="6">'.get_lang('NoLearnpath').'</td></tr>';
     }
     ?>
     </table>

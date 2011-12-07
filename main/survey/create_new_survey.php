@@ -25,10 +25,7 @@ $this_section = SECTION_COURSES;
 //require_once api_get_path(LIBRARY_PATH).'survey.lib.php';
 require_once 'survey.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
@@ -159,25 +156,25 @@ $form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form
 //$group[] =& HTML_QuickForm::createElement('radio', 'survey_share', null, get_lang('No'), 0);
 
 //$form->addGroup($group, 'survey_share', get_lang('ShareSurvey'), '&nbsp;');
-$form->addElement('checkbox', 'anonymous', get_lang('Anonymous'));
+$form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 
 // Aditional Parameters
 $form->addElement('html', '
 <div class="row">
-	<div class="label">
-		<a href="javascript: void(0);" onclick="javascript: advanced_parameters();" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',null,array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>
+	<div class="label">		
 	</div>
 	<div class="formw">
-		&nbsp;
+		<a href="javascript: void(0);" onclick="javascript: advanced_parameters();" >
+        <span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',null,array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>
 	</div>
 </div>');
 
 $form -> addElement('html', '<div id="options" style="display: none;">');
 
 // An option: Qualify the fact that survey has been answered in the gradebook
-$form->addElement('checkbox', 'survey_qualify_gradebook', '', get_lang('QualifyInGradebook'), 'onclick="javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }"');
+$form->addElement('checkbox', 'survey_qualify_gradebook', null, get_lang('QualifyInGradebook'), 'onclick="javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }"');
 $form->addElement('html', '<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>');
 $form->addElement('text', 'survey_weight', get_lang('QualifyWeight'), 'value="0.00" style="width: 40px;" onfocus="javascript: this.select();"');
 $form->applyFilter('survey_weight', 'html_filter');
@@ -198,14 +195,14 @@ if ($_GET['action'] == 'add') {
 }
 
 if ($survey_data['survey_type'] == 1 || $_GET['action'] == 'add') {
-	$form->addElement('checkbox', 'one_question_per_page', get_lang('OneQuestionPerPage'));
-	$form->addElement('checkbox', 'shuffle', get_lang('ActivateShuffle'));
+	$form->addElement('checkbox', 'one_question_per_page', null, get_lang('OneQuestionPerPage'));
+	$form->addElement('checkbox', 'shuffle', null, get_lang('ActivateShuffle'));
 }
 
 if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id)) {
 	if ($survey_data['anonymous'] == 0) {
 
-		$form->addElement('checkbox', 'show_form_profile', get_lang('ShowFormProfile'), '', 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+		$form->addElement('checkbox', 'show_form_profile', null, get_lang('ShowFormProfile'), 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 
 		if ($survey_data['show_form_profile'] == 1) {
 			$form -> addElement('html', '<div id="options_field" style="display:block">');

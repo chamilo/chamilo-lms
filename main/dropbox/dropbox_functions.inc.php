@@ -488,7 +488,10 @@ function display_add_form() {
 
 			</div>
 			<div class="formw">
-				<input type="checkbox" name="cb_overwrite" id="cb_overwrite" value="true" /><?php echo get_lang('OverwriteFile'); ?>
+				<input type="checkbox" name="cb_overwrite" id="cb_overwrite" value="true" />
+				<label for="cb_overwrite">
+				<?php echo get_lang('OverwriteFile'); ?>
+				</label>
 			</div>
 		</div>
 		<?php

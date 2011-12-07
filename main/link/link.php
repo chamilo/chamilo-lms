@@ -259,16 +259,15 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 					</div>';
 		}
 		echo '	<div class="row">
-					<div class="label">
-						'.get_lang('OnHomepage').'?
+					<div class="label">						
 					</div>
 					<div class="formw">
-						<input class="checkbox" type="checkbox" name="onhomepage" id="onhomepage" value="1"'.$onhomepage.'><label for="onhomepage"> '.get_lang('Yes').'</label>
+						<input class="checkbox" type="checkbox" name="onhomepage" id="onhomepage" value="1"'.$onhomepage.'><label for="onhomepage"> '.get_lang('OnHomepage').'?</label>
 					</div>
 				</div>';
 		echo '	<div class="row" id="div_target">
 					<div class="label">
-						'.get_lang('AddTargetOfLinkOnHomepage').'
+						'.get_lang('LinkTarget').'
 					</div>
 					<div class="formw">
 						<select  name="target_link" id="target_link">';
@@ -281,6 +280,9 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 			echo '    	<option value="'.$target_id.'"'.$selected.'>'.$target.'</option> ';
 		}
 		echo '        </select>
+		<span class="help-block">
+            '.get_lang('AddTargetOfLinkOnHomepage').'
+            </span>
 					</div>
 				</div>';
  

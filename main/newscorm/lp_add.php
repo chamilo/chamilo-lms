@@ -134,13 +134,13 @@ $form->addElement('hidden', 'post_time', time());
 $form->addElement('hidden', 'action', 'add_lp');
 
 //Start date
-$form->addElement('checkbox', 'activate_start_date_check',get_lang('EnableStartTime'),null, array('onclick' => 'activate_start_date()'));
+$form->addElement('checkbox', 'activate_start_date_check', null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 $form->addElement('html','<div id="start_date_div" style="display:block;">');
 $form->addElement('datepicker', 'publicated_on', get_lang('PublicationDate'), array('form_name'=>'exercise_admin'), 5);
 $form->addElement('html','</div>');
 
 //End date
-$form->addElement('checkbox', 'activate_end_date_check',  get_lang('EnableEndTime'),  null,array('onclick' => 'activate_end_date()'));    
+$form->addElement('checkbox', 'activate_end_date_check', null, get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));    
 $form->addElement('html','<div id="end_date_div" style="display:none;">');
 $form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array('form_name'=>'exercise_admin'), 5);
 $form->addElement('html','</div>');

@@ -18,7 +18,16 @@ require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '
+<style>
+.formw {
+    margin-left:200px !important;
+}
+form .label {
+     width: 160px !important;
+}
+</style>
+<script type="text/javascript">
 function InnerDialogLoaded() {
 	/*
 	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);

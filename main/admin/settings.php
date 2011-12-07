@@ -372,7 +372,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             	$group[] = $form->createElement('text',   'new_model', array(get_lang('AddNewModel')));            	
             	$group[] = $form->createElement('select', 'number_evaluations', array(''), $numbers,''); 
             	
-            	$form->addGroup($group, '', get_lang('AddNewModel'), "&nbsp;&nbsp;".get_lang('NumberOfSubEvalidations')."&nbsp;");
+            	$form->addGroup($group, '', get_lang('AddNewModel'), "&nbsp;&nbsp;".get_lang('NumberOfSubEvaluations')."&nbsp;");
             	
             	$form->addElement('style_submit_button', null, get_lang('Add'), 'class="add"');
             	

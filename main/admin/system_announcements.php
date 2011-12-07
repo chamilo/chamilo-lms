@@ -151,21 +151,25 @@ if ($action_todo) {
         $form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'PortalNews', 'Width' => '100%', 'Height' => '300'));
     }
     $form->add_timewindow('start','end',get_lang('StartTimeWindow'),get_lang('EndTimeWindow'));
-    $form->addElement('checkbox', 'visible_teacher', get_lang('Visible'), get_lang('Teacher'));
-    $form->addElement('checkbox', 'visible_student', null, get_lang('Student'));
-    $form->addElement('checkbox', 'visible_guest', null, get_lang('Guest'));
+    $group = array();
+    
+    $group[]= $form->createElement('checkbox', 'visible_teacher', null, get_lang('Teacher'));
+    $group[]= $form->createElement('checkbox', 'visible_student', null, get_lang('Student'));
+    $group[]= $form->createElement('checkbox', 'visible_guest', null, get_lang('Guest'));
+    
+    $form->addGroup($group, null, get_lang('Visible'), '<div></div>');
     
     $form->addElement('hidden', 'id');
 
-  $group_list = GroupPortalManager::get_groups_list();
-  $group_list[0]  = get_lang('AllGroups');
+    $group_list = GroupPortalManager::get_groups_list();
+    $group_list[0]  = get_lang('AllGroups');
 	$form->addElement('select', 'group',get_lang('AnnouncementForGroup'),$group_list);
-  $values['group'] = isset($values['group']) ? $values['group'] : '0';
+    $values['group'] = isset($values['group']) ? $values['group'] : '0';
 
-    $form->addElement('checkbox', 'send_mail', get_lang('SendMail'));    
+    $form->addElement('checkbox', 'send_mail', null, get_lang('SendMail'));    
 
     if (isset($_REQUEST['action']) && $_REQUEST['action']=='add') {
-        $form->addElement('checkbox', 'add_to_calendar', get_lang('AddToCalendar'));
+        $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));
         $text=get_lang('AddNews');
         $class='add';
         $form->addElement('hidden', 'action','add');
@@ -200,9 +204,9 @@ if ($action_todo) {
         }
         switch ($values['action']) {
             case 'add':
-          $announcement_id = SystemAnnouncementManager::add_announcement($values['title'],$values['content'],$values['start'],$values['end'],$values['visible_teacher'],$values['visible_student'],$values['visible_guest'], $values['lang'],$values['send_mail'],  $values['add_to_calendar']);
-          if ($announcement_id !== false )  {
-          SystemAnnouncementManager::announcement_for_groups($announcement_id, array($values['group']));
+                $announcement_id = SystemAnnouncementManager::add_announcement($values['title'],$values['content'],$values['start'],$values['end'],$values['visible_teacher'],$values['visible_student'],$values['visible_guest'], $values['lang'],$values['send_mail'],  $values['add_to_calendar']);
+                if ($announcement_id !== false )  {
+                    SystemAnnouncementManager::announcement_for_groups($announcement_id, array($values['group']));
                     Display :: display_confirmation_message(get_lang('AnnouncementAdded'));
                 } else {
                     $show_announcement_list = false;
@@ -211,7 +215,7 @@ if ($action_todo) {
                 break;
             case 'edit':
                 if (SystemAnnouncementManager::update_announcement($values['id'], $values['title'], $values['content'], $values['start'], $values['end'], $values['visible_teacher'], $values['visible_student'], $values['visible_guest'], $values['lang'], $values['send_mail'])) {
-          SystemAnnouncementManager::announcement_for_groups($values['id'], array($values['group']));
+                    SystemAnnouncementManager::announcement_for_groups($values['id'], array($values['group']));
                     Display :: display_confirmation_message(get_lang('AnnouncementUpdated'));
                 } else {
                     $show_announcement_list = false;

@@ -339,6 +339,7 @@ class SystemAnnouncementManager {
 		
 		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang, access_url_id)
 				VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$langsql.", ".$current_access_url_id.")";
+                
 		if ($send_mail==1) {
 			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang);
 		}
@@ -354,32 +355,32 @@ class SystemAnnouncementManager {
 		}		
 		return Database::insert_id();
 	}
-  /**
+    /**
    * Makes the announcement id visible only for groups in groups_array
    * @param int announcement id
    * @param array array of group id
    **/
-  public static function announcement_for_groups($announcement_id, $group_array){
-    $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
-    //first delete all group associations for this announcement
-    $res = Database::query("DELETE FROM $tbl_announcement_group where announcement_id=".intval($announcement_id));
-    if ($res === false) {
-      Debug::log_s(mysql_error());
-      return false;
-    }
-
-    foreach ($group_array as $group_id) {
-      if (intval($group_id) != 0 ) {
-        $res = Database::query("INSERT into $tbl_announcement_group set announcement_id=".intval($announcement_id)
-          .", group_id=".intval($group_id));
+    public static function announcement_for_groups($announcement_id, $group_array){
+        $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+        //first delete all group associations for this announcement
+        $res = Database::query("DELETE FROM $tbl_announcement_group where announcement_id=".intval($announcement_id));
         if ($res === false) {
           Debug::log_s(mysql_error());
           return false;
         }
-      }
+    
+        foreach ($group_array as $group_id) {
+          if (intval($group_id) != 0 ) {
+            $res = Database::query("INSERT into $tbl_announcement_group set announcement_id=".intval($announcement_id)
+              .", group_id=".intval($group_id));
+            if ($res === false) {
+              Debug::log_s(mysql_error());
+              return false;
+            }
+          }
+        }
+        return true;
     }
-    return true;
-  }
   /**
    * Gets the groups of this announce 
    * @param int announcement id
@@ -518,31 +519,38 @@ class SystemAnnouncementManager {
 		global $_user;
 		global $_setting;
 		global $charset;
+        global $_configuration;
+        $current_access_url_id = 1;
+        
+        if ($_configuration['multiple_access_urls']) {
+            $current_access_url_id = api_get_current_access_url_id();
+            $url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $url_condition = " INNER JOIN $url_rel_user uu ON uu.user_id = u.user_id ";  
+        }
+        
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		
 		if ($teacher <> 0 AND $student == 0) {
-			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '1' AND active = 1";
+			$sql = "SELECT firstname, lastname, email, status FROM $user_table u $url_condition WHERE email<>'' AND status = '1' AND active = 1";
 		}
 		if ($teacher == 0 AND $student <> 0) {
-			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '5' AND active = 1 ";
+			$sql = "SELECT firstname, lastname, email, status FROM $user_table u $url_condition WHERE email<>'' AND status = '5' AND active = 1 ";
 		}
 		if ($teacher<> 0 AND $student <> 0) {
-			$sql = "SELECT firstname, lastname, email FROM $user_table WHERE email<>'' AND active = 1 ";
+			$sql = "SELECT firstname, lastname, email FROM $user_table u $url_condition WHERE email<>'' AND active = 1 ";
 		}
 		if (!empty($language)) { //special condition because language was already treated for SQL insert before
 			$sql .= " AND language = '".Database::escape_string($language)."' ";
 		}
 		
-		global $_configuration;
-		$current_access_url_id = 1;
-		if ($_configuration['multiple_access_urls']) {
-			$current_access_url_id = api_get_current_access_url_id();
-		}		
-		$sql .= " AND access_url_id = '".$current_access_url_id."' ";
+		
+		if ($_configuration['multiple_access_urls']) {		
+		  $sql .= " AND access_url_id = '".$current_access_url_id."' ";
+        }
 		
 		if ((empty($teacher) or $teacher == '0') AND  (empty($student) or $student == '0')) {
 			return true;
-		}
+		}        
 		$result = Database::query($sql);
 		if ($result === false) {
 			return false;

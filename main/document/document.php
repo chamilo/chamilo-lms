@@ -465,6 +465,9 @@ foreach ($docs_and_folders  as $file) {
  
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
+    
+
+    
 	   /*
     $(".yoxview").yoxview({ 
         lang: "'.$lang_yoxview.'",

@@ -24,6 +24,17 @@
 <script>
 $(document).ready( function() {
     $(".chzn-select").chosen();
+    
+    $("form .data_table input:checkbox").click(function() {
+        if ($(this).is(":checked")) {
+            $(this).parentsUntil("tr").parent().addClass("row_selected");
+            
+        } else {
+            $(this).parentsUntil("tr").parent().removeClass("row_selected");
+        }    
+    });
+    
+    
 });
 </script>
 {/literal}

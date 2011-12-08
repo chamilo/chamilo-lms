@@ -392,7 +392,7 @@ if (api_get_setting('use_document_title') == 'true') {
 $current_session_id = api_get_session_id();
 
 // HTML-editor
-$renderer->setElementTemplate('<div class="row"><div class="label" id="frmModel" style="overflow: visible;"></div><div class="formw">{element}</div></div>', 'content');
+$renderer->setElementTemplate('<div class="row"><div class="label" id="frmModel" style="overflow: visible;"></div><div class="formw">{element}</div></div><div class="clear"></div>', 'content');
 
 $form->add_html_editor('content','', false, false, $html_editor_config);
 
@@ -405,8 +405,7 @@ $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is
 if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $current_session_id)) {
 	$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
 	
-	//$parent_select -> addOption(get_lang('HomeDirectory'), '/');
-	$parent_select = $form->addElement('select', 'curdirpath', get_lang('DestinationDirectory'));
+	$parent_select = $form->addElement('select', 'curdirpath', array(null, get_lang('DestinationDirectory')));
 	
 	// Following two conditions copied from document.inc.php::build_directory_selector()
 	$folder_titles = array();

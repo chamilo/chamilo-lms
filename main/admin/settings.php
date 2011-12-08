@@ -134,13 +134,21 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             }
         }
     }
-
+    
+    
+    //Settings to avoid 
+    
+    // Settings to avoid
+    $settings_to_avoid = array(
+        'gradebook_enable', //
+        'use_document_title', // ON by default 
+        'example_material_course_creation', // ON by default - now we have this option when  we create a course 
+    );
+    
+    
     $default_values = array();
     foreach ($settings as $row) {
-    	
-        // Settings to avoid
-        $rows_to_avoid = array('gradebook_enable');
-        if (in_array($row['variable'], $rows_to_avoid)) { continue; }
+    	if (in_array($row['variable'], $settings_to_avoid)) { continue; }
 
         $anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
         $form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");

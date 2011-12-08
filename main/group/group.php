@@ -19,7 +19,6 @@
 $language_file = 'group';
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 $this_section = SECTION_COURSES;
 
 // Notice for unauthorized people.
@@ -37,8 +36,6 @@ $(document).ready( function() {
 $nameTools = get_lang('GroupManagement');
 
 /*	Libraries */
-
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $course_id = api_get_course_int_id();
@@ -178,8 +175,7 @@ if (api_is_allowed_to_edit(false, true)) {
 }
 
 $group_cats = GroupManager :: get_categories();
-if (api_get_setting('allow_group_categories') == 'true' && count($group_cats) > 1) {
-	//echo '<p><a href="?'.api_get_cidreq().'&show_all=1">'.get_lang('ShowAll').'</a></p>';
+if (api_get_setting('allow_group_categories') == 'true' && count($group_cats) > 1) {	
 	echo ' <a href="?'.api_get_cidreq().'&show_all=1">'.Display::return_icon('group.png',get_lang('ShowAll'),'','32').'</a>';
 }
 echo '</div>';
@@ -216,7 +212,7 @@ foreach ($group_cats as $index => $category) {
 		}
 		echo '<p style="margin: 0px;margin-left: 50px;">'.$category['description'].'</p><p/>';
 	} else {
-		$group_list = GroupManager :: get_group_list();
+		$group_list = GroupManager :: get_group_list();        
 		$in_category = true;
 	}
 
@@ -228,6 +224,7 @@ foreach ($group_cats as $index => $category) {
 		$group_data = array();
 		
 		foreach ($group_list as $index => $this_group) {
+		    
 
 			// Validacion when belongs to a session
 			$session_img = api_get_session_image($this_group['session_id'], $_user['status']);
@@ -267,9 +264,7 @@ foreach ($group_cats as $index => $category) {
 				$row[] = $group_name.'<br />'.stripslashes(trim($this_group['description']));
 			} else {
 				$row[] = $this_group['name'].'<br />'.stripslashes(trim($this_group['description']));
-			}
-            
-            
+			}                      
             
             // Tutor name
             $tutor_info = '';

@@ -20,7 +20,7 @@
 <div id="outerframe">
 <div id="main">
 
-<h1>Chamilo 1.9.0 - [version-name], November 2011</h1>
+<h1>Chamilo 1.9.0 - [version-name], December 2011</h1>
 
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.0 is a major stable version with loads of added features.</p>
@@ -28,8 +28,12 @@
 <h3>New Features</h3>
 This version of Chamilo only includes new features:
 <ul>
+  <li>One single database #3910</li>
   <li>Extra reports generation feature by CBlue</li>
   <li>Feature for admin to recover deleted attendances (BT#3002)</li>
+  <li><b>New tool</b> to manage student Skills by gradebook</li>
+  <li>New options in Exercises</li>
+  
 </ul>
 <h3>Debugging</h3>
 <ul>
@@ -41,7 +45,8 @@ This version of Chamilo only includes new features:
     </li>
     <li>
         Announcements
-        <ul>            
+        <ul>          
+            <li>Fixed applied when sending an announcement to a group</li>  
         </ul>
     </li>
     <li>
@@ -60,10 +65,14 @@ This version of Chamilo only includes new features:
     </li>    
 	<li>Exercises
         <ul>
+            <li>Group questions by category added by Hubert Borderiou</li>
+            <li>Save question to review</li>
+            <li>Live exercise stats</li>
         </ul>
     </li>
     <li>Gradebook
         <ul>
+            <li>Multiple gradebooks by course</li>
         </ul>
     </li>    
     <li>Glossary
@@ -87,6 +96,15 @@ This version of Chamilo only includes new features:
      
     <li>Portal administration
         <ul>
+            <li>2 new blocks were added "System" and "Skills"</li>
+            <li>New option to delete files in /archive (only for the super administrator)</li>
+            <li>Data filler: several fixes added</li>
+        </ul>
+    </li>
+    
+    <li>Users
+        <ul>
+            <li>Expot users to a PDF document</li>
         </ul>
     </li>
     <li>User portal/ My courses
@@ -104,12 +122,12 @@ This version of Chamilo only includes new features:
     <li>Survey
         <ul>
         </ul>
-    </li>
-    
+    </li>    
     <li>System
         <ul>
         </ul>
     </li>
+    
     <li>Videoconference
         <ul>
             <li>A fix was applied to avoid a bug in BigBlueButton by which all videoconference rooms are marked as "not running" (BT#3102). Financed by NoSoloRed</li>
@@ -118,6 +136,8 @@ This version of Chamilo only includes new features:
         
     <li>Style changes
         <ul>
+            <li>Styles changed for all forms</li>
+            <li>New top bar added (only for admins)</li>
         </ul>
     </li>
 </ul>

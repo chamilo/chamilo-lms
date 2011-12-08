@@ -97,24 +97,28 @@ echo '<div id="social-content">';
                     <a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
                         '.Display::return_icon('profile_edit.png', get_lang('EditProfile'), array('hspace'=>'6')).get_lang('EditProfile').'
                    </a>
-                  </div>';            
-        echo '</div>';
+                  </div>';
+                  
+            $skill = new Skill();
+            $skills =  $skill->get_user_skills(api_get_user_id(), true);
+            
+            echo '<div class="left" style="width:280px">';            
+                echo '<div class="social-groups-home-title">'.get_lang('Skills').'</div>';
+                $lis = '';
+                if (!empty($skills)) {
+                    foreach($skills as $skill) {
+                        $lis .= Display::tag('li', Display::span($skill['name'], array('class'=>'label_tag skill')));
+                    }                
+                    echo Display::tag('ul', $lis);
+                }
+                $url = api_get_path(WEB_CODE_PATH).'social/skills_tree.php';            
+                echo Display::url(get_lang('ViewSkillsTree'), $url);                
+            echo '</div>';
         
-        $skill = new Skill();
-        $skills =  $skill->get_user_skills(api_get_user_id(), true);
+            
+        echo '</div>'; // end social_user_information
         
-        echo '<div class="left" style="width:280px">';            
-            echo '<div class="social-groups-home-title">'.get_lang('Skills').'</div>';
-            $lis = '';
-            if (!empty($skills)) {
-                foreach($skills as $skill) {
-                    $lis .= Display::tag('li', Display::span($skill['name'], array('class'=>'label_tag skill')));
-                }                
-                echo Display::tag('ul', $lis);
-            }
-            $url = api_get_path(WEB_CODE_PATH).'social/skills_tree.php';            
-            echo Display::url(get_lang('ViewSkillsTree'), $url);                
-        echo '</div>';
+        
                        
             
                  
@@ -179,6 +183,8 @@ echo '<div id="social-content">';
     			}
 
 			echo '</div>';
+            
+                
 		
 	echo '</div>';
 echo '</div>';

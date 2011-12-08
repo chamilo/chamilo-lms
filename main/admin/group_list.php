@@ -10,7 +10,6 @@
 $language_file = array ('registration','admin','userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
@@ -376,7 +375,7 @@ else
 	//$form->addElement('static','search_advanced_link',null,'<a href="user_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
 	echo '<div class="actions" style="width:100%;">';
 	if (api_is_platform_admin()) {
-		echo '<span style="float:right; padding-top:7px;">'.
+		echo '<span style="float:right;">'.
 			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/group_add.php">'.Display::return_icon('create_group_social_network.png',get_lang('AddGroups'),'','32').'</a>'.
 			 '</span>';
 	}

@@ -6,7 +6,6 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
 */
 
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 global $charset;
@@ -126,7 +125,7 @@ $content_proximity_select->addOption(get_lang('Local'), 'local');
 $content_proximity_select->addOption(get_lang('Remote'), 'remote');
 */
 //Hide toc frame
-$hide_toc_frame = &$form->addElement('checkbox', 'hide_toc_frame', get_lang('HideTocFrame'),'', array('onclick' => '$("#lp_layout_column").toggle()' ));
+$hide_toc_frame = &$form->addElement('checkbox', 'hide_toc_frame', null, get_lang('HideTocFrame'),array('onclick' => '$("#lp_layout_column").toggle()' ));
 if (api_get_setting('allow_course_theme') == 'true') {
     $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
     if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1) {
@@ -156,9 +155,9 @@ if (strlen($_SESSION['oLP']->get_preview_image()) > 0) {
     $form->addElement('html', $div .'<br />');
     $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
 }
+$label = ($_SESSION['oLP']->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage'));
+$form->addElement('file', 'lp_preview_image', array($label, get_lang('ImageWillResizeMsg')));
 
-$form->addElement('file', 'lp_preview_image', ($_SESSION['oLP']->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
-$form->addElement('static', null, null, get_lang('ImageWillResizeMsg'));
 $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', array ('jpg', 'jpeg', 'png', 'gif'));
 
 // Search terms (only if search is activated).
@@ -194,12 +193,13 @@ $expired_on     = $_SESSION['oLP'] ->expired_on;
 $publicated_on  = $_SESSION['oLP'] ->publicated_on;
 
 // Prerequisites
-$form->addElement('html', '<div class="row"><div class="label">'.get_lang('Prerequisites').'</div><div class="formw">'.$_SESSION['oLP']->display_lp_prerequisites_list().'</div></div>');
-$form->addElement('static', null, null, get_lang('LpPrerequisiteDescription'));
+$form->addElement('html', '<div class="row"><div class="label">'.get_lang('Prerequisites').'</div>
+<div class="formw">'.$_SESSION['oLP']->display_lp_prerequisites_list().' <span class="help-block">'.get_lang('LpPrerequisiteDescription').'</span></div></div>');
+
 
 
 //Start date
-$form->addElement('checkbox', 'activate_start_date_check', get_lang('EnableStartTime'),null, array('onclick' => 'activate_start_date()'));
+$form->addElement('checkbox', 'activate_start_date_check', null,get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 $display_date = 'none';
 if ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on)) {
 	$display_date = 'block';
@@ -211,7 +211,7 @@ $form->addElement('datepicker', 'publicated_on', get_lang('PublicationDate'), ar
 $form->addElement('html','</div>');
 
 //End date
-$form->addElement('checkbox', 'activate_end_date_check',  get_lang('EnableEndTime'),  null,array('onclick' => 'activate_end_date()'));
+$form->addElement('checkbox', 'activate_end_date_check',  null, get_lang('EnableEndTime'),  array('onclick' => 'activate_end_date()'));
 $display_date = 'none';
 if ($expired_on!='0000-00-00 00:00:00' && !empty($expired_on)) {
 	$display_date = 'block';
@@ -223,7 +223,7 @@ $form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array(
 $form->addElement('html','</div>');
 
 if (api_is_platform_admin()) {
-    $form->addElement('checkbox', 'use_max_score', get_lang('UseMaxScore100'));    
+    $form->addElement('checkbox', 'use_max_score', null, get_lang('UseMaxScore100'));    
     $defaults['use_max_score'] = $_SESSION['oLP']->use_max_score;
 }
 

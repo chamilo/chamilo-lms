@@ -1,3 +1,22 @@
+<style>
+/* just because */
+body {    
+    /* fallback */ 
+    background-color: #eee; 
+    background-image: url(images/radial_bg.png); 
+    background-position: center center; 
+    background-repeat: no-repeat; 
+    
+    /* Safari 4-5, Chrome 1-9 */ /* Can't specify a percentage size? Laaaaaame. */ 
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#eee), to(#666)); 
+    /* Safari 5.1+, Chrome 10+ */ 
+    background: -webkit-radial-gradient(circle, #eee, #666); 
+    /* Firefox 3.6+ */ 
+    background: -moz-radial-gradient(circle, #eee, #666); 
+    /* IE 10 */ 
+    background: -ms-radial-gradient(circle, #eee, #666);
+}
+</style>
 <script type="text/javascript">
 
 //js settings

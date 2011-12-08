@@ -141,18 +141,16 @@ function show_compose_reply_to_message($message_id, $receiver_id) {
 	$row = Database::fetch_array($result,'ASSOC');
 	if (!isset($row['user_sender_id'])) {
 		echo get_lang('InvalidMessageId');
-		die();
+		exit;
 	}
-
 	$pre_html = '<div class="row">
-				<div class="label">'.get_lang('SendMessageTo').'</div>
+				<div class="label">'.get_lang('SendMessageTo').': </div>
 				<div class="formw">';
+                
 	$post = '</div></div>';
 	$multi_select = '<select id="users" name="users">
 					 </select>';
-	echo $pre_html.'<strong>'.GetFullUserName($row['user_sender_id']).'</strong>'.$post;
-	//echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($row['user_sender_id']).'</strong>';
-	//$default['title'] = get_lang('EnterTitle');
+    echo $pre_html.'<strong>'.GetFullUserName($row['user_sender_id']).'</strong>'.$post;
 	$default['users'] = array($row['user_sender_id']);
 	manage_form($default);
 }
@@ -183,8 +181,9 @@ function manage_form ($default, $select_from_user_list = null) {
 			if (empty($default['users'])) {
 				//the magic should be here
 				$pre_html = '<div class="row">
-							<div class="label">'.get_lang('SendMessageTo').'</div>
+							 <div class="label">'.get_lang('SendMessageTo').'</div>
 							<div class="formw">';
+                            
 				$post = '</div></div>';
 				$multi_select = '<select id="users" name="users">
 	      						 </select>';

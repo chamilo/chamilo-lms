@@ -272,9 +272,7 @@ if (api_get_setting('extended_profile') == 'true') {
 
 //	PASSWORD
 if (is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
-
-	$form->addElement('password', 'password0', get_lang('Pass'), array('size' => 40));
-	$form->addElement('static', null, null, '<em>'.get_lang('Enter2passToChange').'</em>');
+	$form->addElement('password', 'password0', array(get_lang('Pass'), get_lang('Enter2passToChange')), array('size' => 40));	
 	$form->addElement('password', 'password1', get_lang('NewPass'), array('size' => 40));
 	$form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));
 	//	user must enter identical password twice so we can prevent some user errors

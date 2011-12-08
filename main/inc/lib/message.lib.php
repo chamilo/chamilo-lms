@@ -1269,7 +1269,7 @@ function inbox_display() {
 	$action=api_xml_http_response_encode(get_lang('Modify'));
 	$table->set_header(1,api_xml_http_response_encode(get_lang('Messages')),false);
 	//$table->set_header(2,$title,true);
-	$table->set_header(2,api_xml_http_response_encode(get_lang('Date')),true, array('style' => 'width:160px;'));
+	$table->set_header(2,api_xml_http_response_encode(get_lang('Date')),true, array('style' => 'width:180px;'));
 	$table->set_header(3,$action,false,array ('style' => 'width:70px;'));
 	
 	if ($_REQUEST['f']=='social') {

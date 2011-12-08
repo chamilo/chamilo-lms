@@ -3620,6 +3620,7 @@ class learnpath {
      */
     public function toggle_publish($lp_id, $set_visibility = 'v') {
         //if ($this->debug > 0) { error_log('New LP - In learnpath::toggle_publish()', 0); }
+        $course_id = api_get_course_int_id();
         $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $tbl_lp where c_id = ".$course_id." AND id=$lp_id";
         $result = Database::query($sql);
@@ -4457,6 +4458,8 @@ class learnpath {
      */
     public function update_display_order() {
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $course_id = api_get_course_int_id();
+        
         $sql = "SELECT * FROM $lp_table WHERE c_id = ".$course_id." ORDER BY display_order";
         $res = Database::query($sql);
         if ($res === false)
@@ -7706,7 +7709,7 @@ class learnpath {
         $preq_id = $row['prerequisite'];
         $session_id = api_get_session_id();
         $session_condition = api_get_session_condition($session_id);
-        echo $sql 	= "SELECT * FROM $tbl_lp WHERE c_id = $course_id $session_condition ORDER BY display_order ";
+        $sql 	= "SELECT * FROM $tbl_lp WHERE c_id = $course_id $session_condition ORDER BY display_order ";
         $rs = Database::query($sql);
         $return = '';
         $return .= '<select name="prerequisites" >';

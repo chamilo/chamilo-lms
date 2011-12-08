@@ -61,4 +61,3 @@ class Link extends Resource
 		echo $this->title.' ('.$this->url.')';
 	}
 }
-?>

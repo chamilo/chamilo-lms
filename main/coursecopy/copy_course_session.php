@@ -311,7 +311,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		$cr = new CourseRestorer($course);
 		//$cr->set_file_option($_POST['same_file_name_option']);
 		$cr->restore($destination_course, $destination_session);
-		Display::display_normal_message(get_lang('CopyFinished'));
+		Display::display_confirmation_message(get_lang('CopyFinished'));
 		display_form();
 	} else {
 
@@ -352,7 +352,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 				$cr->restore($course_destinatination, $destination_session);
 				//}
 			}
-			Display::display_normal_message(get_lang('CopyFinished'));
+			Display::display_confirmation_message(get_lang('CopyFinished'));
 			display_form();
 		} else {
 			Display::display_error_message(get_lang('YouMustSelectACourseFromOriginalSession'));

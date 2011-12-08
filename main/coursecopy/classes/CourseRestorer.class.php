@@ -174,7 +174,7 @@ class CourseRestorer
 						if( Database::num_rows($res) == 0) {
 							// The to_group_id and to_user_id are set to default values as users/groups possibly not exist in the target course
 							$sql = "INSERT INTO $table SET
-									c_id =				= '".$this->destination_course_id."',
+									c_id 				= '".$this->destination_course_id."',
 									tool 				= '".self::DBUTF8escapestring($property['tool'])."',
 									insert_user_id 		= '".self::DBUTF8escapestring($property['insert_user_id'])."',
 									insert_date 		= '".self::DBUTF8escapestring($property['insert_date'])."',
@@ -233,10 +233,8 @@ class CourseRestorer
 	    
 	    $params['category_code']   = $course_info['categoryCode'];
 	    $params['subscribe']       = $course_info['subscribe_allowed'];
-	    $params['unsubscribe']     = $course_info['unubscribe_allowed'];	
-	  
-	    CourseManager::update_attributes($origin_course_info['real_id'], $params);
-	    
+	    $params['unsubscribe']     = $course_info['unubscribe_allowed'];	  
+	    CourseManager::update_attributes($origin_course_info['real_id'], $params);	    
 	}
     
 	/**
@@ -275,7 +273,7 @@ class CourseRestorer
 		    		$new = substr($document->path, 8);
 
 		    		if (!is_dir($path.'document'.$new)) {
-		    			var_dump($path.'document'.$new);
+		    			//var_dump($path.'document'.$new);
 						$created_dir = create_unexisting_directory($course_info, api_get_user_id(), $my_session_id, 0, 0 ,$path.'document', $new, $title, $visibility);
 		    		}                    
 		    	} elseif ($document->file_type == DOCUMENT) {
@@ -511,7 +509,14 @@ class CourseRestorer
                                 }
                             }                            
                             
-							$sql = "INSERT INTO ".$table." SET c_id = ".$this->destination_course_id.", path = '/".substr($document->path, 9)."', comment = '".self::DBUTF8escapestring($document->comment)."', title = '".self::DBUTF8escapestring($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."', session_id = '$my_session_id'";										
+							$sql = "INSERT INTO ".$table." SET 
+							                 c_id = ".$this->destination_course_id.", 
+							                 path = '/".substr($document->path, 9)."', 
+							                 comment = '".self::DBUTF8escapestring($document->comment)."', 
+							                 title = '".self::DBUTF8escapestring($document->title)."' ,
+							                 filetype='".$document->file_type."', 
+							                 size= '".$document->size."', 
+							                 session_id = '$my_session_id'";										
 							Database::query($sql);
 							$document_id = Database::insert_id();
 							$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $document_id;							
@@ -691,8 +696,7 @@ class CourseRestorer
     				}
     			}
 			}
-			$sql = "INSERT INTO ".$forum_cat_table.
-				" SET 
+			$sql = "INSERT INTO ".$forum_cat_table." SET 
 				c_id = ".$this->destination_course_id." ,
 				cat_title = '".self::DBUTF8escapestring($title).
 				"', cat_comment = '".self::DBUTF8escapestring($forum_cat->description).
@@ -797,7 +801,14 @@ class CourseRestorer
     				$condition_session = " , session_id = '$session_id' ";
     			}
 
-				$sql = "INSERT INTO ".$link_table." SET c_id = ".$this->destination_course_id." , url = '".self::DBUTF8escapestring($link->url)."', title = '".self::DBUTF8escapestring($link->title)."', description = '".self::DBUTF8escapestring($link->description)."', category_id='".$cat_id."', on_homepage = '".$link->on_homepage."', display_order='".($max_order+1)."' $condition_session";
+				$sql = "INSERT INTO ".$link_table." SET 
+				            c_id = ".$this->destination_course_id." , 
+				            url = '".self::DBUTF8escapestring($link->url)."', 
+				            title = '".self::DBUTF8escapestring($link->title)."', 
+				            description = '".self::DBUTF8escapestring($link->description)."', 
+				            category_id='".$cat_id."', 
+				            on_homepage = '".$link->on_homepage."', 
+				            display_order='".($max_order+1)."' $condition_session";
 
 				Database::query($sql);
 				$this->course->resources[RESOURCE_LINK][$id]->destination_id = Database::insert_id();
@@ -862,7 +873,12 @@ class CourseRestorer
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
 				$event->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($event->content, $this->course->code, $this->course->destination_path);
 
-				$sql = "INSERT INTO ".$table." SET c_id = ".$this->destination_course_id." , title = '".self::DBUTF8escapestring($event->title)."', content = '".self::DBUTF8escapestring($event->content)."', start_date = '".$event->start_date."', end_date = '".$event->end_date."'";
+				$sql = "INSERT INTO ".$table." SET 
+        				c_id = ".$this->destination_course_id." , 
+        				title = '".self::DBUTF8escapestring($event->title)."', 
+        				content = '".self::DBUTF8escapestring($event->content)."', 
+        				start_date = '".$event->start_date."', 
+        				end_date = '".$event->end_date."'";
 				Database::query($sql);
 				$new_event_id = Database::insert_id();
 				$this->course->resources[RESOURCE_EVENT][$id]->destination_id = $new_event_id;
@@ -1615,74 +1631,70 @@ class CourseRestorer
 	 * @todo I fixed this crappy function jmontoya
 	 */
 	function restore_student_publication() {
-		
-		
 		$work_assignment_table  = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);		
 		$work_table    			= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-		$item_property_table  	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
+		$item_property_table  	= Database :: get_course_table(TABLE_ITEM_PROPERTY);		
 		
-		
-		$my_tbl_db_spa_origin        = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT, $this->course->db_name);
-		$my_tbl_db_spa_destination   = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-
-		$my_tbl_db_origin            = Database :: get_course_table(TABLE_STUDENT_PUBLICATION, $this->course->db_name);
-		$my_tbl_db_destination       = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-
-		$my_tbl_db_item_property_origin      = Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->db_name);
-		$my_tbl_db_item_property_destination = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
 		//query in student publication
 
 	/*	$query_sql_fin_sp='INSERT IGNORE INTO '.$my_tbl_db_destination.' (c_id, id,url,title,description,author,active,accepted,post_group_id,sent_date,' .
 		'filetype,has_properties,view_properties,qualification,date_of_qualification,' .
 		'parent_id,qualificator_id,session_id) ';
 */
-		$sql ='SELECT c_id, id,url,title,description,author,active,accepted,post_group_id,' .
-		'sent_date,filetype,has_properties,view_properties,qualification,date_of_qualification,' .
-		'parent_id,qualificator_id,session_id FROM '.$work_table.' WHERE c_id = '.$this->course_origin_id.' AND filetype="folder" ';
+		$sql = 'SELECT c_id, id, url, title,description,author,active,accepted,post_group_id, sent_date,filetype,has_properties,view_properties,qualification,date_of_qualification,qualificator_id,session_id 
+		      FROM '.$work_table.' 
+		      WHERE c_id = '.$this->course_origin_id.' AND filetype="folder" AND active IN (0, 1) ';
 		
 		$result = Database::query($sql);
 		$folders = Database::store_result($result, 'ASSOC');
-		foreach($folders  as $folder) {
+        
+		foreach ($folders  as $folder) {
+		    $old_id = $folder['id'];
+            
+            unset($folder['id']);    
 			$folder['c_id'] = $this->destination_course_id;
-			Database::insert($work_table, $folder);
+            $folder['parent_id'] = 0;             
+			$new_id = Database::insert($work_table, $folder);
+            
+            if ($new_id) {
+                 //query in item property
+                $sql = 'SELECT tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type, lastedit_user_id,to_group_id,to_user_id,visibility,start_visible, end_visible 
+                           FROM '.$item_property_table.' ip INNER JOIN '.$work_table.' sp ON ip.ref=sp.id 
+                           WHERE  sp.c_id = '.$this->course_origin_id.' AND 
+                                  ip.c_id = '.$this->course_origin_id.' AND
+                                  tool="work" AND sp.id = '.$old_id.'';
+                        
+                $result = Database::query($sql);
+                $sub_folders = Database::store_result($result, 'ASSOC');
+                foreach ($sub_folders  as $sub_folder) {
+                    $sub_folder['c_id'] = $this->destination_course_id;
+                    $sub_folder['ref'] = $new_id;                   
+                    $new_item_id = Database::insert($item_property_table, $sub_folder);
+                }              
+                   
+                $sql = 'SELECT sa.id, sa.expires_on,sa.ends_on,sa.add_to_calendar, sa.enable_qualification, sa.publication_id 
+                          FROM '.$work_assignment_table.' sa INNER JOIN '.$work_table.' sp ON sa.publication_id=sp.id 
+                          WHERE   sp.c_id = '.$this->course_origin_id.' AND 
+                                  sa.c_id = '.$this->course_origin_id.' AND
+                                  filetype="folder" AND sp.id = '.$old_id.'';
+                
+                $result = Database::query($sql);
+                $assing_list = Database::store_result($result, 'ASSOC');
+                foreach($assing_list  as $assign) {
+                    $assign['c_id'] = $this->destination_course_id;
+                    $assign['id'] = $new_id;
+                    Database::insert($work_assignment_table, $assign);
+                }
+            }
 		}
 		
 		$destination='../../courses/'.$this->course->destination_path.'/work/';		
 		$origin='../../courses/'.$this->course->info['path'].'/work/';
 		self::allow_create_all_directory($origin,$destination,false);
 
-		//query in item property
-
-		/*$query_sql_fin_ip='INSERT IGNORE INTO '.$my_tbl_db_item_property_destination.'' .
-		'(tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,' .
-		'to_user_id,visibility,start_visible,end_visible) ';*/
-
-		$query_sql_ini_ip='SELECT tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,' .
-		'lastedit_user_id,to_group_id,to_user_id,visibility,start_visible,
-		end_visible FROM '.$item_property_table.' ip INNER JOIN '.$work_table.' sp' .
-		' ON ip.ref=sp.id WHERE c_id = '.$this->course_origin_id.' AND tool="work" ';
-				
-		$result = Database::query($sql);
-		$folders = Database::store_result($result, 'ASSOC');
-		foreach($folders  as $folder) {
-			$folder['c_id'] = $this->destination_course_id;
-			Database::insert($item_property_table, $folder);
-		}
-		
-		
-		/*$query_sql_fin_sa='INSERT IGNORE INTO '.$my_tbl_db_spa_destination.'' .
-		'(id,expires_on,ends_on,add_to_calendar,enable_qualification,publication_id) ';*/
-
-		$sql = 'SELECT sa.id,sa.expires_on,sa.ends_on,sa.add_to_calendar,sa.enable_qualification,sa.publication_id FROM '.$work_assignment_table.' sa INNER JOIN '.$work_table.' sp
-		ON sa.publication_id=sp.id WHERE c_id = '.$this->course_origin_id.' AND filetype="folder" ';
-		
-		$result = Database::query($sql);
-		$folders = Database::store_result($result, 'ASSOC');
-		foreach($folders  as $folder) {
-			$folder['c_id'] = $this->destination_course_id;
-			Database::insert($work_assignment_table, $folder);
-		}
+	
+	
+	
 
 	}
 

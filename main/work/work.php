@@ -1107,14 +1107,11 @@ switch ($action) {
 		
 		/*	Delete dir command */
 		
-		if (!empty($_REQUEST['delete_dir'])) {
-		
+		if (!empty($_REQUEST['delete_dir'])) {		
 			if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 				api_not_allowed();
-			}		
-			$delete_directory	= $_REQUEST['delete_dir'];
-			$id					= $_REQUEST['delete2'];
-			del_dir($base_work_dir . '/', $delete_directory, $id);		
+			}
+			del_dir($_REQUEST['delete_dir']);		
 			Display :: display_confirmation_message(get_lang('DirDeleted') . ': '.$delete_directory);
 		}
 		

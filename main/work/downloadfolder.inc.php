@@ -7,7 +7,12 @@
  *	@package chamilo.work
  */
 
-$path = $_GET['path'];
+$work_id = $_GET['id'];
+
+$work_data = get_work_data_by_id($work_id);
+if (empty($work_data)) {
+    exit;
+}
 
 //prevent some stuff
 if (empty($path)) {
@@ -38,17 +43,16 @@ $prop_table              = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $files = array();
 $course_id = api_get_course_int_id();
 
-if (api_is_allowed_to_edit()) {
-	//set the path that will be used in the query
-	if ($path == '/') {
-		$querypath = ''; // to prevent ...path LIKE '//%'... in query
-	} else {
-		$querypath = $path;
-	}
+if (api_is_allowed_to_edit()) {	
 	//search for all files that are not deleted => visibility != 2
-    $querypath = Database::escape_string($querypath);
+    
     $sql = "SELECT url, title FROM $tbl_student_publication AS work, $prop_table AS props  
- 			WHERE props.c_id = $course_id AND work.c_id = $course_id AND props.tool='work' AND work.id=props.ref AND work.url LIKE 'work".$querypath."/%' AND work.filetype='file' AND props.visibility<>'2'";
+ 			WHERE   props.c_id = $course_id AND 
+ 			        work.c_id = $course_id AND 
+ 			        props.tool='work' AND 
+ 			        work.id=props.ref AND 
+ 			        work.parent_id = $work_id AND 
+ 			        work.filetype='file' AND props.visibility<>'2'";
 	$query = Database::query($sql);
 	//add tem to the zip file
 	while ($not_deleted_file = Database::fetch_assoc($query)) {
@@ -59,16 +63,14 @@ if (api_is_allowed_to_edit()) {
     }    
 } else {
     //for other users, we need to create a zipfile with only visible files and folders    
-	if ($path == '/') {
-		$querypath = ''; // to prevent ...path LIKE '//%'... in query
-	} else {
-		$querypath = $path;
-	}
-	$querypath = Database::escape_string($querypath);
-
     $sql = "SELECT url, title FROM $tbl_student_publication AS work, $prop_table AS props  
-            WHERE props.c_id = $course_id AND work.c_id = $course_id AND props.tool='work' AND work.accepted = 1 AND work.id=props.ref AND work.url LIKE 'work".$querypath."/%' AND work.filetype='file' AND 
-                  props.visibility = '1' AND props.insert_user_id='".api_get_user_id()."' ";
+            WHERE   props.c_id = $course_id AND work.c_id = $course_id AND 
+                    props.tool='work' AND 
+                    work.accepted = 1 AND 
+                    work.id=props.ref AND 
+                    work.parent_id = $work_id AND
+                    work.filetype='file' AND 
+                    props.visibility = '1' AND props.insert_user_id='".api_get_user_id()."' ";
     $query = Database::query($sql);
     //add tem to the zip file
     while ($not_deleted_file = Database::fetch_assoc($query)) {
@@ -81,13 +83,12 @@ if (api_is_allowed_to_edit()) {
 }//end for other users
 
 //logging
-event_download(basename($path).'.zip (folder)');
+event_download(basename($work_data['title']).'.zip (folder)');
 
 //start download of created file
-$name = basename($path).'.zip';
+$name = basename($work_data['title']).'.zip';
 
-if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
-    
+if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {    
     DocumentManager::file_send_for_download($temp_zip_file, true, $name);    
     @unlink($temp_zip_file);    
     exit;    

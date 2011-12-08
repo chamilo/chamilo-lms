@@ -117,9 +117,9 @@ class GroupManager {
 						COUNT(ug2.id) number_of_members
 					FROM ".$table_group." g
 					LEFT JOIN ".$table_group_user." ug
-					ON ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."'
+					ON ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."' AND ug.c_id = $course_id
 					LEFT JOIN ".$table_group_user." ug2
-					ON ug2.group_id = g.id";
+					ON ug2.group_id = g.id AND ug2.c_id = $course_id";
 		} elseif ($my_status_of_user_in_course==STUDENT || $is_student_in_session===true || $_SESSION['studentview'] == 'studentview') {
 			$sql = "SELECT g.id,
 						g.name,
@@ -134,11 +134,11 @@ class GroupManager {
 						COUNT(ug2.id) number_of_members
 					FROM ".$table_group." g
 					LEFT JOIN ".$table_group_user." ug
-					ON ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."'
-					LEFT JOIN ".$table_group_user." ug2
-					ON ug2.group_id = g.id";
-			$sql .= " AND ug.c_id = $course_id";
-		}		
+					ON ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."' AND ug.c_id = $course_id
+					LEFT JOIN ".$table_group_user." ug2  
+					ON ug2.group_id = g.id AND ug2.c_id = $course_id";			
+		}
+				
 		$sql .= " WHERE 1=1 ";
 		
 		if ($category != null) {
@@ -155,7 +155,7 @@ class GroupManager {
 		if(!empty($session_condition))
 			$sql .= $session_condition;
 		$sql .= " GROUP BY g.id ORDER BY UPPER(g.name)";
-		
+
 		if (!api_is_anonymous()) {
 			$groupList = Database::query($sql);
 		} else {

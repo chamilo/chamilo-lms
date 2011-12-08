@@ -223,7 +223,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
         //copy files to users myfiles
         
         if (api_get_setting('users_copy_files') == 'true' && !api_is_anonymous()){
-            $copy_myfiles_link = ($filetype == 'file') ? api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;action=copytomyfiles&amp;id='.$url_path.$req_gid :api_get_self().'?'.api_get_cidreq();
+            $copy_myfiles_link = ($filetype == 'file') ? api_get_self().'?'.api_get_cidreq().'&action=copytomyfiles&id='.$document_data['id'].$req_gid :api_get_self().'?'.api_get_cidreq();
 
             if ($filetype == 'file') {
                 $copy_to_myfiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array(),22).'&nbsp;&nbsp;</a>';

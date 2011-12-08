@@ -133,7 +133,8 @@ if (api_get_group_id()) {
 $document_id = intval($_REQUEST['id']);
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
- 
+$message = '';
+
 switch ($action) {
 	case 'download':
 		$document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
@@ -183,7 +184,52 @@ switch ($action) {
 		if (api_get_setting('students_export2pdf') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin()) {
 			DocumentManager::export_to_pdf($document_id, $course_code);			
 		}
-		break;
+		break;        
+    case 'copytomyfiles':                   
+        // Copy a file to general my files user's
+        if (api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0 && !api_is_anonymous()) {    
+            $document_info = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
+            $parent_id     = $document_info['parent_id'];
+            $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'system');    
+            $user_folder  = $my_path['dir'].'my_files/';    
+            $my_path = null;
+            
+            if (!file_exists($user_folder)) {
+                $perm = api_get_permissions_for_new_directories();
+                @mkdir($user_folder, $perm, true);
+            }
+        
+            $file = $sys_course_path.$_course['path'].'/document'.$document_info['path'];            
+            $copyfile = $user_folder.basename($document_info['path']);
+            $file_link = Display::url(get_lang('SeeFile'), api_get_path(WEB_CODE_PATH).'social/myfiles.php');
+                    
+            if (file_exists($copyfile)) {
+                $message = get_lang('CopyAlreadyDone').'</p><p>';
+                $message .= '<a class = "a_button white small" href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$parent_id.'">'.get_lang("No").'</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                    <a class = "a_button white small" href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=copytomyfiles&amp;id='.$document_info['id'].'&amp;copy=yes">'.get_lang('Yes').'</a></p>';                    
+                if (!isset($_GET['copy'])) {
+                    $message = Display::return_message($message, 'warning', false);
+                }
+                if (Security::remove_XSS($_GET['copy']) == 'yes') {                    
+                    if (!copy($file, $copyfile)) {
+                        $message = Display::return_message(get_lang('CopyFailed'), 'error');
+                    } else {
+                        $message = Display::return_message(get_lang('OverwritenFile').' '.$file_link, 'confirmation', false);
+                    }
+                }
+            } else {
+                if (!copy($file, $copyfile)) {
+                    $message = Display::return_message(get_lang('CopyFailed'), 'error');
+                } else {
+                    $message = Display::return_message(get_lang('CopyMade').' '.$file_link, 'confirmation', false);
+                     
+                    /*$doc_id = add_document($_course, $copyfile , 'file', filesize($copyfile), $document_info['title']);                    
+                    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], null, null, null, null, $session_id);*/
+                                           
+                }
+            }
+        }        
+        break;
 }
 
 // I'm in the certification module?
@@ -193,7 +239,7 @@ if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
 }
 
 //If no actions we proceed to show the document (Hack in order to use document.php?id=X) 
-if (isset($document_id)) {
+if (isset($document_id) && empty($action)) {
     $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true);
     
     //If the document is not a folder we show the document
@@ -464,10 +510,7 @@ foreach ($docs_and_folders  as $file) {
 }
  
 $htmlHeadXtra[] = '<script type="text/javascript">
-$(document).ready( function() {
-    
-
-    
+$(document).ready( function() {    
 	   /*
     $(".yoxview").yoxview({ 
         lang: "'.$lang_yoxview.'",
@@ -506,42 +549,6 @@ if (!empty($_SESSION['_gid'])) {
 }
 
 // ACTION MENU
-
-// Copy a file to general my files user's
-if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0) {
-
-    $clean_get_id = Security::remove_XSS($_GET['id']);
-    $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'system');
-    $user_folder  = $my_path['dir'].'my_files/';
-    $my_path = null;
-    if (!file_exists($user_folder)) {
-        $perm = api_get_permissions_for_new_directories();
-        @mkdir($user_folder, $perm, true);
-    }
-
-    $file = $sys_course_path.$_course['path'].'/document'.$clean_get_id;
-    $copyfile = $user_folder.basename($clean_get_id);
-
-    if (file_exists($copyfile)) {
-        $message = get_lang('CopyAlreadyDone').'</p><p>'.'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'">'.get_lang("No").'</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'&amp;action=copytomyfiles&amp;id='.$clean_get_id.'&amp;copy=yes">'.get_lang('Yes').'</a></p>';
-        if (!isset($_GET['copy'])){
-            Display::display_warning_message($message,false);
-        }
-        if (Security::remove_XSS($_GET['copy']) == 'yes'){
-            if (!copy($file, $copyfile)) {
-                Display::display_error_message(get_lang('CopyFailed'));
-            } else {
-                Display::display_confirmation_message(get_lang('OverwritenFile'));
-            }
-        }
-    } else {
-        if (!copy($file, $copyfile)) {
-            Display::display_error_message(get_lang('CopyFailed'));
-        } else {
-            Display::display_confirmation_message(get_lang('CopyMade'));
-        }
-    }
-}
 
 /*	MOVE FILE OR DIRECTORY */
 //Only teacher and all users into their group and each user into his/her shared folder
@@ -884,17 +891,17 @@ if ($folders === false) {
 }
 
 echo '<div class="actions">';
-	if (!$is_certificate_mode) {
-		/* BUILD SEARCH FORM */
-	    echo '<span style="display:inline-block;">';
-	    $form = new FormValidator('search_document', 'get', '', '', null, false);
-	    $renderer = & $form->defaultRenderer();
-	    $renderer->setElementTemplate('<span>{element}</span> ');
-	    $form->add_textfield('keyword', '', false);
-	    $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
-	    $form->display();
-	    echo '</span>';
-	}
+if (!$is_certificate_mode) {
+	/* BUILD SEARCH FORM */
+    echo '<span style="display:inline-block;">';
+    $form = new FormValidator('search_document', 'get', '', '', null, false);
+    $renderer = & $form->defaultRenderer();
+    $renderer->setElementTemplate('<span>{element}</span> ');
+    $form->add_textfield('keyword', '', false);
+    $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
+    $form->display();
+    echo '</span>';
+}
 
 /* GO TO PARENT DIRECTORY */
 if ($curdirpath!= '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {
@@ -1124,7 +1131,12 @@ require 'document_slideshow.inc.php';
 if ($image_present && !isset($_GET['keyword'])  ) {
     echo '<a href="slideshow.php?'.api_get_cidreq().'&amp;curdirpath='.$curdirpathurl.'">'.Display::return_icon('slideshow.png', get_lang('ViewSlideshow'),'','32').'</a>';
 }
-echo '</div>';
+echo '</div>'; //end actions
+
+
+if (isset($message)) {
+    echo $message;
+}
 
 if (!$is_certificate_mode) {
     echo build_directory_selector($folders, $document_id, (isset($group_properties['directory']) ? $group_properties['directory'] : array()), true);

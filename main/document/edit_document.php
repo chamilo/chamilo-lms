@@ -87,10 +87,7 @@ if (api_is_in_group()) {
 }
 
 if (isset($_GET['id'])) {
-    $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());    
-    if (empty($document_data)) {
-        api_not_allowed();
-    }
+    $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
     $document_id    = $document_data['id'];
     $file           = $document_data['path'];
     $parent_id      = DocumentManager::get_document_id(api_get_course_info(), dirname($file));    
@@ -98,14 +95,14 @@ if (isset($_GET['id'])) {
     $dir_original   =  $dir;
     
     $doc            = basename($file);
-    $my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);    
-    
-} else {
-    $dir = Security::remove_XSS($_GET['curdirpath']);    
-    $dir_original = $dir;
-    $file = $_GET['file'];
-    $doc = basename($file);    
+    $my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);
 }
+
+if (empty($document_data)) {
+    api_not_allowed();
+}
+  
+
 /*
 //I'm in the certification module?
 if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
@@ -239,14 +236,6 @@ if (isset($_POST['renameTo'])) {
 /** TODO: Check whether this code is still used **/
 /* Search the old comment */  // RH: metadata: added 'id,'
 $result = Database::query("SELECT id, comment, title FROM $dbTable WHERE c_id = $course_id AND id = ".$document_id);
-
-/*
-// Debug info - enable on temporary needs only.
-$message = '<i>Debug info</i><br />directory = '.$dir.'<br />';
-$message .= 'document = '.$file_name.'<br />';
-$message .= 'comments file = '.$file.'<br />';
-Display::display_normal_message($message);
-*/
 
 while ($row = Database::fetch_array($result, 'ASSOC')) {
 	$oldComment = $row['comment'];

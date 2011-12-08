@@ -274,7 +274,8 @@ if ($slide_id != 'all') {
 		if (api_is_allowed_to_edit(null, true)) {
 			echo '<tr>';
 			echo '<td align="center">';
-			echo '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$pathurl.'&amp;origin=slideshow&amp;origin_opt='.$edit_slide_id.'&amp;file='.urlencode($path).'/'.$image_files_only[$slide].'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.get_lang('Modify').'" /></a><br />';
+			echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$row['id'].'&origin=slideshow&amp;origin_opt='.$edit_slide_id.'&amp;">
+			      <img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.get_lang('Modify').'" /></a><br />';
 			$aux = explode('.', htmlspecialchars($image_files_only[$slide]));
 			$ext = $aux[count($aux) - 1];
 			echo $image_files_only[$slide].' <br />';

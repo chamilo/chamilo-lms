@@ -93,15 +93,15 @@ if (!is_dir($filepath)) {
 
 //groups //TODO: clean
 if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
-		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-		$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
-		$noPHP_SELF = true;
-		$to_group_id = $_SESSION['_gid'];
-		$group = GroupManager :: get_group_properties($to_group_id);
-		$path = explode('/', $dir);
-		if ('/'.$path[1] != $group['directory']) {
-			api_not_allowed(true);
-		}
+	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
+	$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
+	$noPHP_SELF = true;
+	$to_group_id = $_SESSION['_gid'];
+	$group = GroupManager :: get_group_properties($to_group_id);
+	$path = explode('/', $dir);
+	if ('/'.$path[1] != $group['directory']) {
+		api_not_allowed(true);
+	}
 }
 
 $interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($dir).$req_gid, "name" => get_lang('Documents'));
@@ -164,9 +164,10 @@ $(document).ready(function(){
 		'displayFormat' : '#input/#max'
 	};
 	$('#textarea').textareaCount(options, function(data){
-		$('#textareaCallBack').html(result);				
-	});
+		$('#textareaCallBack').html(data);				
+	});	
 });
+
 </script>		        
 <style>
 .overview {
@@ -196,80 +197,124 @@ $(document).ready(function(){
 	margin: 10px;
 }
 </style>
-
+<div id="textareaCallBack"></div>
 <?php
-echo '<div align="center">'; 
 
-	Display::display_icon('sound.gif', get_lang('CreateAudio')); echo get_lang('HelpText2Audio'); 
+    downloadMP3_google($filepath, $dir);
+    
+    downloadMP3_pediaphone($filepath, $dir);
+    
+    
+
+    $lang_html = '<div class="row">';                
+    $lang_html .= '<div class="label">'.get_lang('Language').': </div>';        
+    $lang_html .=  '<div class="formw">';
+    
+    $tbl_admin_languages    = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+    $sql_select = "SELECT * FROM $tbl_admin_languages";
+    $result_select = Database::query($sql_select);              
+    $lang_html .=  '<select name="lang" id="select">';
+    while ($row = Database::fetch_array($result_select)) {          
+        if (api_get_setting('platformLanguage')==$row['english_name']){
+            $lang_html .=  '<option value="'.$row['isocode'].'" selected="selected">'.$row['original_name'].' ('.$row['english_name'].')</option>';
+        } else {                   
+            $lang_html .=  '<option value="'.$row['isocode'].'">'.$row['original_name'].' ('.$row['english_name'].')</option>';
+        }   
+    }
+    $lang_html .=  '</select>';
+    $lang_html .=  '</div>';
+    $lang_html .=  '</div>';
+    
+	$icon = Display::return_icon('sound.gif', get_lang('CreateAudio')); 
+	echo Display::tag('h2', $icon.get_lang('HelpText2Audio')); 
 	
 	//Google services
-	echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checktext2voice" onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>&nbsp;<img src="../img/file_sound.gif" title="'.get_lang('HelpGoogleAudio').'" alt="'.get_lang('GoogleAudio').'"/>&nbsp;'.get_lang('GoogleAudio').'';
+	echo '<input type="radio" value="1" id="checktext2voice1" name="checktext2voice" onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display=\'none\'; document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>&nbsp;
+	<img src="../img/file_sound.gif" title="'.get_lang('HelpGoogleAudio').'" alt="'.get_lang('GoogleAudio').'"/><label for="checktext2voice1">'.get_lang('GoogleAudio').'</label>';
 	echo '&nbsp;&nbsp;&nbsp;<span id="msg_error1" style="display:none;color:red"></span>';
+    
+    
+    
+        //Pediaphon services
+    echo '<input type="radio" value="1" id="checktext2voice2" name="checktext2voice" onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display=\'none\'; document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;
+        <img src="../img/file_sound.gif" title="'.get_lang('HelpPediaphon').'" alt="'.get_lang('Pediaphon').'"/>&nbsp;<label for="checktext2voice2">'.get_lang('Pediaphon').'</label>';
+    echo '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';
+    
+    
+    
 	echo '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
-	echo '<form id="form1" name="form1" method="post" action="'.downloadMP3_google($filepath, $dir).'" class="formw">';
-		echo '<br/>';
-		echo '<label>'.get_lang('Language').': ';
-		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-		$sql_select = "SELECT * FROM $tbl_admin_languages";
-		$result_select = Database::query($sql_select);		
-		echo '<select name="lang" id="select">';
-		while ($row = Database::fetch_array($result_select)) {			
-			if (api_get_setting('platformLanguage')==$row['english_name']){
-				echo '<option value="'.$row['isocode'].'" selected="selected">'.$row['original_name'].' ('.$row['english_name'].')</option>';
-			}
-			else{					
-				echo '<option value="'.$row['isocode'].'">'.$row['original_name'].' ('.$row['english_name'].')</option>';
-			}	
-		}
-		echo '</select>';
-		echo '</label>';  
-		echo '<br/><br/>';
-		echo '<div>'.get_lang('InsertText2Audio').'</div>';
-		echo '<br/>';
-		echo '<label>';
-		echo '<textarea name="text" id="textarea" cols="70" rows="2"></textarea>';
-		echo '</label>';  
-		echo '<br/>';
-		echo '<label>'.get_lang('Title').': ';
-		echo '<input name="title" type="text" size="40" maxlength="40" />';
-		echo '</label>';  
-		echo '<br/><br/>';  
-		echo '<button class="save" type="submit" name="SendText2Audio">'.get_lang('SaveMP3').'</button>';
-		echo '<br/>';
+    
+	echo '<form id="form1" name="form1" method="post" action="">';
+        echo '<div class="row">';                
+        echo '<div class="label">'.get_lang('Title').': </div>';        
+        echo '<div class="formw">';
+        echo '<input name="title" type="text" size="40" maxlength="40" />';
+        echo '</div></div>';        
+        
+        echo $lang_html;
+        
+        echo '<div class="row">';                
+        echo '<div class="label">'.get_lang('InsertText2Audio').': </div>';        
+        echo '<div class="formw">';
+		echo '<textarea name="text" id="textarea" cols="70" rows="2"></textarea>';         
+		echo '</div>';
+		echo '</div>';
+        
+        echo '<div class="row">';
+        echo '<div class="formw">';
+        echo '<button class="save" type="submit" name="SendText2Audio">'.get_lang('SaveMP3').'</button>';         
+        echo '</div></div>';
+        
 	echo '</form>';
 	echo '</div>';
 	
-	//Pediaphon services
-	echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checktext2voice" onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;<img src="../img/file_sound.gif" title="'.get_lang('HelpPediaphon').'" alt="'.get_lang('Pediaphon').'"/>&nbsp;'.get_lang('Pediaphon').'';
-	echo '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';
+
+    
 	echo '<div id="option2" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
-	echo '<form id="form2" name="form2" method="post" action="'.downloadMP3_pediaphone($filepath, $dir).'" class="formw">';
-		echo '<br/>';
-		echo '<label>'.get_lang('Language').': ';
+	echo '<form id="form2" name="form2" method="post" action="">';
+    
+        echo '<div class="row">';                
+        echo '<div class="label">'.get_lang('Title').': </div>';        
+        echo '<div class="formw">';
+        echo '<input name="title" type="text" size="40" maxlength="40" />';
+        echo '</div></div>';     
+                   
+        echo '<div class="row">';                
+        echo '<div class="label">'.get_lang('Language').': </div>';        
+        echo '<div class="formw">';
+		
 		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 		$sql_select = "SELECT * FROM $tbl_admin_languages";
 		$result_select = Database::query($sql_select);		
 		echo '<select name="lang" id="select" onClick="update_voices(this.selectedIndex)">';
-		while ($row = Database::fetch_array($result_select)) {
-			
-			if (in_array($row['isocode'], array('de', 'en', 'es', 'fr'))){
-					
+		while ($row = Database::fetch_array($result_select)) {			
+			if (in_array($row['isocode'], array('de', 'en', 'es', 'fr'))){					
 				if (api_get_setting('platformLanguage')==$row['english_name']){
 					echo '<option value="'.$row['isocode'].'" selected="selected">'.$row['original_name'].' ('.$row['english_name'].')</option>';
-				}
-				else{					
+				} else {					
 					echo '<option value="'.$row['isocode'].'">'.$row['original_name'].' ('.$row['english_name'].')</option>';
 				}
 			}
 		}		
 		echo '</select>';
-		echo '</label>';
-		echo '<label>&nbsp;&nbsp;'.get_lang('Voice').': '; 
+        echo '</div></div>';    
+        
+        echo '<div class="row">';                
+        echo '<div class="label">'.get_lang('Voice').': </div>';        
+        echo '<div class="formw">';
 		echo '<select name="voices">';
 		echo '<option selected>'.get_lang('FirstSelectALanguage').'</option>';
 		echo '</select>';
-		echo '</label>';
-		echo '<label>&nbsp;&nbsp;'.get_lang('Speed').': '; 
+        echo '</div></div>';
+        
+        
+        echo '<div class="row">';                
+        echo '<div class="label">'.get_lang('Speed').': </div>';        
+        echo '<div class="formw">';
+        
+        
+		
+		
 		echo '<select name="speed">';
 		echo '<option value="0.75">'.get_lang('GoFaster').'';
 		echo '<option value="0.8">'.get_lang('Fast').'';
@@ -277,22 +322,23 @@ echo '<div align="center">';
 		echo '<option value="1.2">'.get_lang('Slow').'';
 		echo '<option value="1.6">'.get_lang('SlowDown').'';
 		echo '</select>';
-		echo '</label>';
-		echo '<br/><br/>';
-		echo '<div>'.get_lang('InsertText2Audio').'</div>';
-		echo '<br/>';
-		echo '<label>';
-		echo '<textarea name="text" id="textarea" cols="70" rows="10"></textarea>';
-		echo '</label>';  
-		echo '<br/><br/>';
-		echo '<label>'.get_lang('Title').': ';
-		echo '<input name="title" type="text" size="40" maxlength="40" />';
-		echo '</label>';  
-		echo '<br/><br/>';  
-		echo '<button class="save" type="submit" name="SendText2Audio">'.get_lang('SaveMP3').'</button>';
-		echo '<br/>';
+		echo '</div></div>';
+        
+        
+        echo '<div class="row">';                
+        echo '<div class="label">'.get_lang('InsertText2Audio').': </div>';        
+        echo '<div class="formw">';
+        echo '<textarea name="text" id="textarea" cols="70" rows="2"></textarea>';         
+        echo '</div>';
+        echo '</div>';
+        
+        echo '<div class="row">';              
+        
+        echo '<div class="formw">';
+        echo '<button class="save" type="submit" name="SendText2Audio">'.get_lang('SaveMP3').'</button>';         
+        echo '</div></div>';
 	echo '</form>';
-	echo '</div>';	
+	
 	?>
     
     <!-- javascript form name form2 update voices -->
@@ -384,9 +430,9 @@ Display :: display_footer();
   * @author Juan Carlos Raña Trabado <herodoto@telefonica.net>
  * @version january 2011, chamilo 1.8.8
  */
-function downloadMP3_google($filepath, $dir){
+function downloadMP3_google($filepath, $dir) {
 	//security
-	if(!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
+	if (!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
 		return;	
 	}
     global $_course, $_user;
@@ -420,7 +466,7 @@ function downloadMP3_google($filepath, $dir){
     $clean_text = str_replace($search, $replace, $filename);
 	
 	//adding the file
-	if (!file_exists($documentPath)){
+	if (!file_exists($documentPath)) {
 		//add new file to disk
 		file_put_contents($documentPath, file_get_contents("http://translate.google.com/translate_tts?tl=".$clean_lang."&q=".urlencode($clean_text).""));
 		//add document to database
@@ -430,6 +476,7 @@ function downloadMP3_google($filepath, $dir){
 		$relativeUrlPath=$dir;
 		$doc_id = add_document($_course, $relativeUrlPath.$AudioFilename, 'file', filesize($documentPath), $AudioFilename);
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
+        Display::display_confirmation_message(get_lang('DocumentCreated'));
 	}	
 }
 
@@ -501,6 +548,7 @@ function downloadMP3_pediaphone($filepath, $dir){
 		$relativeUrlPath=$dir;
 		$doc_id = add_document($_course, $relativeUrlPath.$AudioFilename, 'file', filesize($documentPath), $AudioFilename);
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
+        Display::display_confirmation_message(get_lang('DocumentCreated'));
 	}	
 }
 

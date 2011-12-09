@@ -6,7 +6,7 @@
  *
  *	@package chamilo.document
  *
- * @author Juan Carlos Raña Trabado
+ * @author Juan Carlos Raï¿½a Trabado
  * @since 5/mar/2011
 */
 /**
@@ -16,7 +16,7 @@ require_once '../../../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 //security. Nanogong need less security because under Firefox, Chrome..., not save user_id...
-if(api_get_setting('enable_nanogong') == 'false'){
+if (api_get_setting('enable_nanogong') == 'false'){
 	api_protect_course_script();
 	api_block_anonymous_users();
 }
@@ -56,10 +56,6 @@ if (!file_exists($documentPath)){
 	$relativeUrlPath=$dir;		
 	$doc_id = add_document($_course, $relativeUrlPath.$filename, 'file', filesize($documentPath), $title);
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
-
-}
-else{
+} else {
 	return get_lang('FileExistRename');
 }
-
-?>

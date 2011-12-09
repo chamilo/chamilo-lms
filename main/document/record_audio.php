@@ -140,8 +140,6 @@ echo '<div class="actions">';
 		echo '<a href="document.php?'.api_get_cidreq().'&id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 echo '</div>';
 
-echo '<br/>';
-
 ?>
 <script language="JavaScript"> 
 function submitVoice() { 

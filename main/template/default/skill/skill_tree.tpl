@@ -350,7 +350,7 @@ $(document).ready( function() {
 </script>
 <div style="z-index: 1000;position: absolute;">
 <h2>Skills</h2>    
-<a s tyle="z-index: 1000"class="a_button gray" id="add_item_link" href="#">{"Add item"|get_lang}</a>
+<a style="z-index: 1000"class="a_button gray" id="add_item_link" href="#">{"Add item"|get_lang}</a>
 </div>
 {$html}
 

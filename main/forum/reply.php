@@ -31,7 +31,6 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // Including additional library scripts.
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 $nameTools = get_lang('ForumCategories');
 
@@ -111,7 +110,8 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Reso
 /* Header */
 
 if ($origin == 'learnpath') {
-    include api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+    //include api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+    Display :: display_reduced_header('');
 } else {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give an empty string.
     Display :: display_header('');

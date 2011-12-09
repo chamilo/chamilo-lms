@@ -43,9 +43,10 @@ $tbl_class							= Database::get_main_table(TABLE_MAIN_CLASS);
 $tbl_class_user						= Database::get_main_table(TABLE_MAIN_CLASS_USER);
 
 // setting the name of the tool
-$tool_name=get_lang('SubscribeUsersToSession');
+$tool_name = get_lang('SubscribeUsersToSession');
 
-$add_type = 'multiple';
+$add_type = 'unique';
+
 if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
@@ -291,6 +292,7 @@ if ($ajax_search) {
 				}
 			}
 		}
+        
 		if ($use_extra_fields) {
 			$final_result = array();
 			if (count($extra_field_result)>1) {
@@ -322,38 +324,38 @@ if ($ajax_search) {
 		}
 
 		if ($use_extra_fields) {
-			$sql="SELECT  user_id, lastname, firstname, username, id_session
-				FROM $tbl_user u
-				LEFT JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-				$where_filter AND u.status<>".DRH."
-			$order_clause";
+			$sql = "SELECT  user_id, lastname, firstname, username, id_session
+    				FROM $tbl_user u
+    				LEFT JOIN $tbl_session_rel_user
+    				ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+    				$where_filter AND u.status<>".DRH."
+    			    $order_clause";
 
 		} else {
-			$sql="SELECT  user_id, lastname, firstname, username, id_session
-				FROM $tbl_user u
-				LEFT JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-				WHERE u.status<>".DRH."
-			$order_clause";
+			$sql = "SELECT  user_id, lastname, firstname, username, id_session
+    				FROM $tbl_user u
+    				LEFT JOIN $tbl_session_rel_user
+    				ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+    				WHERE u.status<>".DRH."
+    			    $order_clause";
 		}
 		if ($_configuration['multiple_access_urls']) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){
-				$sql="SELECT  u.user_id, lastname, firstname, username, id_session
-				FROM $tbl_user u
-				LEFT JOIN $tbl_session_rel_user
-					ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-				WHERE access_url_id = $access_url_id  $where_filter AND u.status<>".DRH."
-			$order_clause";
+				$sql = "SELECT  u.user_id, lastname, firstname, username, id_session
+        				FROM $tbl_user u
+        				LEFT JOIN $tbl_session_rel_user
+        					ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+        				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
+        				WHERE access_url_id = $access_url_id  $where_filter AND u.status<>".DRH."
+        			    $order_clause";
 			}
 		}
 
-		$result=Database::query($sql);
-		$Users=Database::store_result($result);
-		//var_dump($_REQUEST['id_session']);
+		$result   = Database::query($sql);
+		$Users    = Database::store_result($result);
+
 		foreach ($Users as $user) {
 			if($user['id_session'] != $id_session)
 				$nosessionUsersList[$user['user_id']] = $user ;

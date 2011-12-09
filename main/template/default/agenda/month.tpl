@@ -10,13 +10,12 @@ $(document).ready(function() {
 		autoOpen: false,
 		modal	: false, 
 		width	: 550, 
-		height	: 350
+		height	: 400
    	});
 
 	var title = $( "#title" ),
 	content = $( "#content" ),	
-	allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");
-	
+	allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");	
 
 	function checkLength( o, n, min, max ) {
 		if ( o.val().length > max || o.val().length < min ) {
@@ -47,6 +46,8 @@ $(document).ready(function() {
 			
 			var start_date 	= Math.round(start.getTime() / 1000);
 			var end_date 	= Math.round(end.getTime() / 1000);
+			
+			$('#visible_to_input').show();
 			
 			if ({$can_add_events} == 1) {							
 				var url = '{$web_agenda_ajax_url}a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
@@ -102,7 +103,7 @@ $(document).ready(function() {
 			if (event.description) {
 				element.qtip({
 		            content: event.description,
-		            position: { at:'bottom left'},	
+		            position: { at:'top left' , my:'bottom left'},	
 		        });
 			}
 	        
@@ -116,6 +117,8 @@ $(document).ready(function() {
 				} else {			
 					var end_date 	= Math.round(calEvent.end.getTime() / 1000);				
 				}
+				
+				$('#visible_to_input').hide();
 				
 				$('#color_calendar').html('{$type_label}');
 				$('#color_calendar').addClass('label_tag');
@@ -205,7 +208,19 @@ $(document).ready(function() {
 
 <div id="dialog-form" style="display:none;">
 	<div style="width:500px">
-	<form id="add_event_form" name="form">	
+	<form id="add_event_form" name="form">
+	    
+	    {if !empty($visible_to)} 
+    	    <div id="visible_to_input" class="row">      
+                <div class="label">
+                    <label for="date">{"SentTo"|get_lang}</label>
+                </div>
+                <div class="formw">
+                    <div id="visible_to">{$visible_to}</div>
+                </div>                  
+            </div>
+        {/if}
+        	
 		<div class="row">		
 			<div class="label">
 				<label for="date">{"Agenda"|get_lang}</label>

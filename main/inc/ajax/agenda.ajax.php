@@ -14,12 +14,12 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $type   = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ? $_REQUEST['type'] : 'personal';
 
 $agenda = new Agenda();
-$agenda->type = $type;
+
+$agenda->type = $type; //course,admin or personal
 
 switch ($action) {
 	case 'add_event':
-		//For now we only save personal events
-		echo $agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], $_REQUEST['title'], $_REQUEST['content']);
+		echo $agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], $_REQUEST['title'], $_REQUEST['content'], $_REQUEST['users_to_send']);
 		break;		
 	case 'edit_event':
 		$id_list 	= explode('_', $_REQUEST['id']);		

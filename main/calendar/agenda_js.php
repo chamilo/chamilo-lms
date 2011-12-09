@@ -14,6 +14,7 @@ $language_file = array('agenda','group');
 $use_anonymous = true;
 
 require_once '../inc/global.inc.php';
+require_once 'agenda.lib.php';
 
 $htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = api_get_js('qtip2/jquery.qtip.min.js');
@@ -80,9 +81,24 @@ $tpl->assign('can_add_events', $can_add_events);
 $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type.'&';
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 
+$course_code  = api_get_course_id();
+
+if (api_is_allowed_to_edit() && $course_code != '-1') {
+    
+    $user_list  = CourseManager::get_user_list_from_course_code(api_get_course_id());
+    $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
+
+    $agenda = new Agenda();
+    $select = $agenda->construct_not_selected_select_form($group_list, $user_list, 'everyone');
+    $tpl->assign('visible_to', $select);
+}
+
+
 //Loading Agenda template
 $content = $tpl->fetch('default/agenda/month.tpl');
 $tpl->assign('content', $content);
+
+
 
 //Loading main Chamilo 1 col template
 $tpl->display_one_col_template();

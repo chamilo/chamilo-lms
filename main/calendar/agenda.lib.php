@@ -41,7 +41,7 @@ class Agenda {
 	 * @param 	string	agendaDay, agendaWeek, month
 	 * @param	string	personal, course or global (only works for personal by now) 
 	 */
-	function add_event($start, $end, $all_day, $view, $title, $content) {
+	function add_event($start, $end, $all_day, $view, $title, $content, $users_to_send = array()) {
 		
 		$start 		= date('Y-m-d H:i:s', $start);
 		$end 		= date('Y-m-d H:i:s', $end);			
@@ -72,8 +72,35 @@ class Agenda {
 				$attributes['c_id'] 		= $this->course['real_id'];
 				
 				//simple course event
-				$id = Database::insert($this->tbl_course_agenda, $attributes);				
-				api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id,"AgendaAdded", api_get_user_id(), '','',$start, $end);
+				$id = Database::insert($this->tbl_course_agenda, $attributes);
+                
+                if ($id) {			
+    				//api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id, "AgendaAdded", api_get_user_id(), '','',$start, $end);                    
+                    $group_id = api_get_group_id();
+                    if ((!is_null($users_to_send)) or (!empty($group_id))) {
+                    
+                        $send_to = self::separate_users_groups($users_to_send);                 
+                        
+                        if (isset($send_to['everyone']) && $send_to['everyone']) {
+                            api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id,"AgendaAdded", api_get_user_id(), '','',$start,$end);    
+                        } else {                        
+                            // storing the selected groups
+                            if (is_array($send_to['groups'])) {
+                                foreach ($send_to['groups'] as $group) {
+                                    api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id, "AgendaAdded", api_get_user_id(), $group,0,$start, $end);                                    
+                                }
+                            }
+    
+                            // storing the selected users
+                            if (is_array($send_to['users'])) {      
+                                foreach ($send_to['users'] as $my_user_id) {                                     
+                                    api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id, "AgendaAdded", api_get_user_id(), 0, $my_user_id, $start,$end);                                    
+                                }
+                            }
+                        }
+                    }
+                }                              
+                              
 			
 				break;
 			case 'admin':				
@@ -151,16 +178,15 @@ class Agenda {
 	 * @param	int		course id *integer* not the course code 
 	 * 
 	 */
-	function get_events($start, $end, $user_id, $course_id = null) {	
+	function get_events($start, $end, $user_id, $course_id = null, $group_id = null) {	
 					
 		switch ($this->type) {
 			case 'admin':
 				$this->get_platform_events($start, $end);
 				break;
-			case 'course':
-				
+			case 'course':				
 				$course_info = api_get_course_info_by_id($course_id);				
-				$this->get_course_events($start, $end, $course_info);
+				$this->get_course_events($start, $end, $course_info, $group_id);
 				break;
 			case 'personal':
 			default:
@@ -294,44 +320,49 @@ class Agenda {
 	}
 	
 	function get_course_events($start, $end, $course_info, $group_id = 0) {
+        
 		$course_id = $course_info['real_id'];
-		$group_memberships 	= GroupManager::get_group_ids($course_id, api_get_user_id());
-	
+        
+		$group_memberships 	= GroupManager::get_group_ids($course_id, api_get_user_id());	
 		$tlb_course_agenda	= Database::get_course_table(TABLE_AGENDA);
 		$tbl_property 		= Database::get_course_table(TABLE_ITEM_PROPERTY);
 	
 		$user_id = api_get_user_id();
+        
+        if (!empty($group_id)) {
+            $group_memberships = array($group_id);
+        }
 	
-		if (is_array($group_memberships) && count($group_memberships)>0) {
-			$sql = "SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+		if (is_array($group_memberships) && count($group_memberships) >0 ) {
+			$sql = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 					FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
 	                WHERE 	agenda.id 		= ip.ref  AND 
 	                		ip.tool			='".TOOL_CALENDAR_EVENT."' AND 
 	                		( ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) AND 
 	                		ip.visibility	= '1' AND
-	                		agenda.c_id = $course_id AND
-	                		ip.c_id = $course_id";
+	                		agenda.c_id     = $course_id AND
+	                		ip.c_id         = $course_id";
 		} else {
-			if (api_get_user_id()) {
-				$sql="SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
-	                		FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
-	            			WHERE agenda.id = ip.ref 
-	            				AND ip.tool='".TOOL_CALENDAR_EVENT."'
-	            				AND ( ip.to_user_id=$user_id OR ip.to_group_id='0')
-	                            AND ip.visibility='1' AND 
-	                            agenda.c_id = $course_id AND
-	                			ip.c_id = $course_id
-	                        ";
+			if (api_is_allowed_to_edit()) {
+    	         $sql="SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+                                FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
+                                WHERE agenda.id = ip.ref
+                                AND ip.tool='".TOOL_CALENDAR_EVENT."'                                
+                                AND ip.visibility='1' AND 
+                                agenda.c_id = $course_id AND
+                                ip.c_id = $course_id
+                                ";				
 			} else {
-				$sql="SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
-	                                FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
-	                                WHERE agenda.id = ip.ref
-	                                AND ip.tool='".TOOL_CALENDAR_EVENT."'
-	                                AND ip.to_group_id='0'
-	                                AND ip.visibility='1' AND 
-	                                agenda.c_id = $course_id AND
-	                				ip.c_id = $course_id
-	                                ";
+		        $sql="SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+                        FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
+                        WHERE agenda.id = ip.ref 
+                            AND ip.tool='".TOOL_CALENDAR_EVENT."'
+                            AND ( ip.to_user_id=$user_id OR ip.to_group_id='0')
+                            AND ip.visibility='1' AND 
+                            agenda.c_id = $course_id AND
+                            ip.c_id = $course_id ";
+			    
+		
 			}
 		}
 		
@@ -429,9 +460,85 @@ class Agenda {
 		return $my_events;		
 	}
 	
-	//Format needed for the js lib	
+	//Format needed for the Fullcalendar js lib	
 	function format_event_date($utc_time) {		
 		return date('c', api_strtotime(api_get_local_time($utc_time)));
 	}
+    
+    
+    /**
+    * this function shows the form with the user that were not selected
+    * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+    * @return html code
+    */
+    function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array()) {
+        $html = '<select id="users_to_send" name="users_to_send[]" size="5" multiple="multiple" style="width:250px" class="chzn-select">';
+    
+        // adding the groups to the select form
+    
+        if (isset($to_already_selected) && $to_already_selected==='everyone') {
+            $html .=  '<option value="everyone" selected="selected">'.get_lang('Everyone').'</option>';
+        }
+        
+        if (is_array($group_list)) {
+            foreach($group_list as $this_group) {
+                //api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
+                if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
+                    {
+                    $html .=     "<option value=\"GROUP:".$this_group['id']."\">".
+                        "G: ".$this_group['name']." &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
+                        "</option>";
+                }
+            }
+            // a divider
+        }
+        $html .=     "<option value=\"\">--------------------------------------------</option>";
+        // adding the individual users to the select form
+        foreach($user_list as $this_user) {
+            // $to_already_selected is the array containing the users (and groups) that are already selected
+            if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) {
+                $html .= "<option value=\"USER:".$this_user['user_id']."\">".api_get_person_name($this_user['firstname'], $this_user['lastname'])."</option>";
+            }
+        }
+    
+        $html .=  "</select>";
+        return $html; 
+    }
+    
+    /**
+    * This function separates the users from the groups
+    * users have a value USER:XXX (with XXX the dokeos id
+    * groups have a value GROUP:YYY (with YYY the group id)
+    * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+    * @return array
+    */
+    function separate_users_groups($to) {
+        $grouplist = array();
+        $userlist  = array();
+        $send_to = null;
+        
+        $send_to['everyone']= false;
+        if (is_array($to) && count($to)>0) {
+            foreach($to as $to_item) {
+                if ($to_item == 'everyone') {
+                    $send_to['everyone']= true;
+                }
+                list($type, $id) = explode(':', $to_item);
+                switch($type) {
+                    case 'GROUP':
+                        $grouplist[] =$id;
+                    break;
+                    case 'USER':
+                        $userlist[] =$id;
+                    break;
+                }
+            }
+            $send_to['groups']=$grouplist;
+            $send_to['users']=$userlist;
+            
+        }
+        return $send_to;
+    }
+    
 	
 }

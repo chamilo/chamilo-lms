@@ -21,7 +21,6 @@ require_once 'lib/scoredisplay.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
-
 api_block_anonymous_users();
 block_students();
 
@@ -91,6 +90,8 @@ if (!empty($keyword)) {
 
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 $flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset, $addparams);
+$parameters=array('selectcat'=>intval($_GET['selectcat']));
+$flatviewtable->set_additional_parameters($parameters);
 
 if (isset($_GET['exportpdf']))	{
 	$interbreadcrumb[] = array (

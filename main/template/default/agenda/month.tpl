@@ -47,7 +47,19 @@ $(document).ready(function() {
 			var start_date 	= Math.round(start.getTime() / 1000);
 			var end_date 	= Math.round(end.getTime() / 1000);
 			
-			$('#visible_to_input').show();
+			$('#visible_to_input').show();		
+			
+			//Cleans the selected attr 	
+			$('#users_to_send_id')
+                .find('option')
+                .removeAttr('selected')
+                .end();
+                
+            //Sets the 1st item selected by default
+            $('#users_to_send_id option').eq(0).attr('selected', 'selected');
+			
+			//Update chz-select
+			$("#users_to_send_id").trigger("liszt:updated");
 			
 			if ({$can_add_events} == 1) {							
 				var url = '{$web_agenda_ajax_url}a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
@@ -216,7 +228,7 @@ $(document).ready(function() {
                     <label for="date">{"SentTo"|get_lang}</label>
                 </div>
                 <div class="formw">
-                    <div id="visible_to">{$visible_to}</div>
+                    {$visible_to}
                 </div>                  
             </div>
         {/if}

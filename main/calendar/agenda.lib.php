@@ -472,7 +472,7 @@ class Agenda {
     * @return html code
     */
     function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array()) {
-        $html = '<select id="users_to_send" name="users_to_send[]" size="5" multiple="multiple" style="width:250px" class="chzn-select">';
+        $html = '<select id="users_to_send_id" name="users_to_send[]" size="5" multiple="multiple" style="width:250px" class="chzn-select">';
     
         // adding the groups to the select form
     

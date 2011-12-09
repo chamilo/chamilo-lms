@@ -586,13 +586,28 @@ if ($form->validate()) {
 		$_SESSION['is_not_password'] = 'success';
 	}
 
-	if (!check_user_email($user_data['email']) && !empty($user_data['password0']) && !$wrong_current_password) {
-		$changeemail = $user_data['email'];
-	}
+    //$allow_users_to_change_email_with_no_password = api_get_setting('allow_users_to_change_email_with_no_password') == 'true' ? true :false;
+    $allow_users_to_change_email_with_no_password = true;
+    
+    $changeemail = '';
+    
+    if ($allow_users_to_change_email_with_no_password) {
+        $changeemail = '';
+        if (!check_user_email($user_data['email'])) {
+            $changeemail = $user_data['email'];
+            //$_SESSION['change_email'] = 'success';
+        }        
+    } else {
+        //Normal behaviour
+        if (!check_user_email($user_data['email']) && !empty($user_data['password0']) && !$wrong_current_password) {
+            $changeemail = $user_data['email'];
+        }
+        
+        if (!check_user_email($user_data['email']) && empty($user_data['password0'])){
+            $_SESSION['change_email'] = 'success';
+        }        
+    }
 
-	if (!check_user_email($user_data['email']) && empty($user_data['password0'])){
-		$_SESSION['change_email'] = 'success';
-	}
 
 	// Upload picture if a new one is provided
 	if ($_FILES['picture']['size']) {	 
@@ -695,22 +710,39 @@ if ($form->validate()) {
 		}
 	}
 
-	//changue email
-	if (isset($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
-		$sql .= " email = '".Database::escape_string($changeemail)."' ";
-	} elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {
-		$sql .= " email = '".Database::escape_string($changeemail)."', ";
-		$password = api_get_encrypted_password($password);
-		$sql .= " password = '".Database::escape_string($password)."'";
-	} elseif (isset($password) && !isset($changeemail) && in_array('password', $available_values_to_modify)) {
-		$password = api_get_encrypted_password($password);
-		$sql .= " password = '".Database::escape_string($password)."'";
-	} else {
-		// remove trailing , from the query we have so far
-		$sql = rtrim($sql, ',');
-	}	
+	//change email
+	if ($allow_users_to_change_email_with_no_password) {	    
+        if (!empty($changeemail) && in_array('email', $available_values_to_modify)) {
+            $sql .= " email = '".Database::escape_string($changeemail)."',";
+        }
+        if (isset($password) && in_array('password', $available_values_to_modify)) {
+            $password = api_get_encrypted_password($password);
+            $sql .= " password = '".Database::escape_string($password)."'";
+        } else {            
+            // remove trailing , from the query we have so far
+            $sql = rtrim($sql, ',');
+        }	    
+    } else {
+        //normal behaviour
+        if (!empty($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
+            $sql .= " email = '".Database::escape_string($changeemail)."'";
+        } elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {
+            $sql .= " email = '".Database::escape_string($changeemail)."',";
+            $password = api_get_encrypted_password($password);
+            $sql .= " password = '".Database::escape_string($password)."'";
+        } elseif (isset($password) && !isset($changeemail) && in_array('password', $available_values_to_modify)) {
+            $password = api_get_encrypted_password($password);
+            $sql .= " password = '".Database::escape_string($password)."'";
+        } else {
+            // remove trailing , from the query we have so far
+            $sql = rtrim($sql, ',');
+        }        
+    }
+	
+
 	$sql .= " WHERE user_id  = '".api_get_user_id()."'";
 	Database::query($sql);
+    
 
 	// User tag process
 	//1. Deleting all user tags
@@ -733,7 +765,8 @@ if ($form->validate()) {
 	$uidReset = true;
 	include api_get_path(INCLUDE_PATH).'local.inc.php';
 	$_SESSION['profile_update'] = 'success';
-	header("Location: ".api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : ''));
+    $url = api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : '');    
+	header("Location: ".$url);
 	exit;
 }
 

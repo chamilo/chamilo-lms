@@ -104,6 +104,12 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_mo
 INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+2*X+1*X+2*X/6', 'Model 4');
 
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_change_email_with_no_password', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_change_email_with_no_password', 'false', 'No');
+
+
+
 ALTER TABLE course_rel_user ADD COLUMN legal_agreement INTEGER DEFAULT 0;
 ALTER TABLE session_rel_course_rel_user ADD COLUMN legal_agreement INTEGER DEFAULT 0;
 ALTER TABLE course ADD COLUMN legal TEXT NOT NULL;
@@ -118,7 +124,7 @@ ALTER TABLE gradebook_category MODIFY COLUMN weight FLOAT NOT NULL;
 ALTER TABLE gradebook_link MODIFY COLUMN weight FLOAT  NOT NULL;
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.16241' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.16305' WHERE variable = 'chamilo_database_version';
 
 
 

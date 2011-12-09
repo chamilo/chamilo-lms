@@ -586,8 +586,8 @@ if ($form->validate()) {
 		$_SESSION['is_not_password'] = 'success';
 	}
 
-    //$allow_users_to_change_email_with_no_password = api_get_setting('allow_users_to_change_email_with_no_password') == 'true' ? true :false;
-    $allow_users_to_change_email_with_no_password = true;
+    $allow_users_to_change_email_with_no_password = api_get_setting('allow_users_to_change_email_with_no_password') == 'true' ? true :false;
+    //$allow_users_to_change_email_with_no_password = true;
     
     $changeemail = '';
     

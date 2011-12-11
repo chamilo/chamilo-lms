@@ -639,7 +639,6 @@ function delete_grading_model(id) {
 Display :: display_header($tool_name);
 
 
-$action_images['cas'] = 'loginmanager.gif';
 
 // The action images.
 $action_images['platform']      = 'platform.png';
@@ -648,6 +647,7 @@ $action_images['tools']         = 'tools.png';
 $action_images['user']          = 'user.png';
 $action_images['gradebook']     = 'gradebook.png';
 $action_images['ldap']          = 'ldap.png';
+$action_images['cas'] 	        = 'user_access.png';
 $action_images['security']      = 'security.png';
 $action_images['languages']     = 'languages.png';
 $action_images['tuning']        = 'tuning.png';

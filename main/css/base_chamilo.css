@@ -46,7 +46,6 @@ body {
 }
 
 #submain {
-    padding: 0px 0px 10px;
     border: 1px solid #ccc;
     
     position: relative; /* to avoid the IE peekabo bug*/
@@ -695,7 +694,7 @@ input.link_alike:hover {
 
 .confirmation-message img, .error-message img, .normal-message img, .warning-message img {
 	position: relative;
-	margin-top: 10px;
+	margin-top: 5px;
 	margin-bottom: 10px;
 	float:left;
 }

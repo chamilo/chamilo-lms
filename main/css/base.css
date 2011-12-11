@@ -3221,7 +3221,7 @@ div.admin_section h4 {
 
 /* chosen javascript checkbox select width fix */
 .chzn-select {
-    min-width: 200px;   
+    min-width: 173px;   
 }
 #lp_item_list {
     width:90%;
@@ -3970,6 +3970,9 @@ form div.error input, form div.error textarea {
 #lang_form input, #lang_form select {
     font-size: 12px;
     /* width:100%; */
+}
+.menu #lang_form { /* in the menu box, give a bit more space */
+    margin-top: 15px;
 }
 #formLogin label {
     font-size: 12px;

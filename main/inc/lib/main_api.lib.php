@@ -2479,7 +2479,7 @@ function api_is_anonymous($user_id = null, $db_check = false) {
 function api_not_allowed($print_headers = false) {
 	
     $home_url   = api_get_path(WEB_PATH);
-    $user       = api_get_user_id();
+    $user       = api_get_user_id(); //0 if not defined
     $course     = api_get_course_id();
 
     global $this_section;
@@ -2510,7 +2510,7 @@ function api_not_allowed($print_headers = false) {
     }
     $tpl = new Template(null, $show_headers, $show_headers);
     $tpl->assign('content', $msg);	
-    if ((isset($user) && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
+    if (($user!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
         // if the access is not authorized and there is some login information
         // but the cidReq is not found, assume we are missing course data and send the user
         // to the user_portal		
@@ -2520,11 +2520,13 @@ function api_not_allowed($print_headers = false) {
 
     if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
         //only display form and return to the previous URL if there was a course ID included
-        if (!empty($user) && !api_is_anonymous()) {
+        if ($user!=0 && !api_is_anonymous()) {
+            //if there is a user ID, then the user is not allowed but the session is still there. Say so and exit
             $tpl->assign('content', $msg);
             $tpl->display_one_col_template();
             exit;
         }
+        // If the user has no user ID, then his session has expired
         require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
         $form = new FormValidator('formLogin', 'post', api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']), null, array('class'=>'form-stacked'));
         $form->addElement('text', 'login', get_lang('UserName'), array('size' => 17));
@@ -2542,15 +2544,15 @@ function api_not_allowed($print_headers = false) {
         $content .='</div></div>';
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();	
-        die();
+        exit;
     }
 
-    if (!empty($user) && !api_is_anonymous()) {
+    if ($user!=0 && !api_is_anonymous()) {
         $tpl->display_one_col_template();
         exit;
     }    
 
-    //if no course ID was included in the requested URL, redirect to homepage
+    //if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
     $msg = Display::return_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
     $msg = Display::div($msg, array('align'=>'center'));
     $tpl->assign('content', $msg);	

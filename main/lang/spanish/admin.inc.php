@@ -1471,4 +1471,13 @@ $ArchiveDirCleanupProceedButton = "Ejecutar la limpieza";
 $ArchiveDirCleanupSucceeded = "Los contenidos de la carpeta archive/ fueron eliminados exitosamente.";
 $ArchiveDirCleanupFailed = "Por alguna razón, no se pudió limpiar la carpeta archive/, probablemente por razón de permisos. Puede limpiarla manualmente conectándose al servidor y eliminando todos los contenidos de la carpeta chamilo/archive/, excepto el fichero .htaccess.";
 $LocalTimeUsingPortalTimezoneXIsY = "La hora local usando la zona horaria del portal (%s) es %s";
+$AllowTeacherChangeGradebookGradingModelTitle = "Docentes pueden escoger modelo de evaluación";
+$AllowTeacherChangeGradebookGradingModelComment = "Activando esta opción, permitirá a cada docente escoger el modelo de evaluación que se usa en su(s) curso(s). Este cambio se operará dentro de la herramienta de evaluaciones del curso.";
+$NumberOfSubEvaluations = "Número de sub-evaluaciones";
+$AddNewModel = "Añadir nuevo modelo";
+$GroupParentship = "Parentezco del grupo";
+$NoParentship = "Sin parentezco";
+$NoCertificate = "Sin certificado";
+$ShowDocumentPreviewTitle = "Mostrar vista previa de documento";
+$ShowDocumentPreviewComment = "Mostrar vista previa de documentos en la herramienta de documentos. Este modo permite evitar la carga de una nueva página para mostrar un documento, pero puede resultar inestable en antigüos navegadores o poco práctico en pantallas pequeñas.";
 ?>

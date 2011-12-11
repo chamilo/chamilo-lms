@@ -53,4 +53,5 @@ $LinkOpenSelf = "Open self";
 $LinkOpenBlank = "Open blank";
 $LinkOpenParent = "Open parent";
 $LinkOpenTop = "Open top";
+$LinkTarget = "Link target";
 ?>

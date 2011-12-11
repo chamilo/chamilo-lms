@@ -224,4 +224,5 @@ $SumOfActivitiesWeightMustBeEqualToTotalWeight = "La suma de pesos de todas las 
 $TotalSumOfWeights = "La suma de pesos de todos los componentes de esta evaluación tiene que ser igual a este número.";
 $TotalWeightMustBeX = "La suma de todos los pesos de los componentes debe ser de %s";
 $ExportAsDOC = "Exportar como .doc";
+$SelectGradebook = "Seleccionar evaluación";
 ?>

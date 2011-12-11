@@ -127,4 +127,6 @@ $ConfigLearnpath = "Learning path settings";
 $PDFWaterMarkHeader = "Watermark header in PDF exports";
 $RedirectToALearningPath = "Redirect to a selected learning path";
 $RedirectToTheLearningPathList = "Redirect to the learning paths list";
+$ActivateLegal = "Enable legal terms";
+$ShowALegalNoticeWhenEnteringTheCourse = "Show a legal notice when entering the course";
 ?>

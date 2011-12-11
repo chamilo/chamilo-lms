@@ -94,4 +94,7 @@ $IncludedInEvaluation = "Included in the evaluation";
 $DateExpiredNotBeLessDeadLine = "The expiration date cannot be smaller than the deadline.";
 $NotRevised = "Not reviewed";
 $MaxWeightNeedToBeProvided = "Max weight need to be provided";
+$ContainsAfile = "Contains a file";
+$AllowTextAssignments = "Allow assignments handing through online editor";
+$YouAlreadySentAPaperYouCantUpload = "You already sent an assignment, you can't upload a new one";
 ?>

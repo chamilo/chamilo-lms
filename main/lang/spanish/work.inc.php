@@ -94,4 +94,7 @@ $IncludedInEvaluation = "Incluida en la evaluación";
 $DateExpiredNotBeLessDeadLine = "La fecha de caducidad no puede ser menor que la fecha límite";
 $NotRevised = "No se ha revisado";
 $MaxWeightNeedToBeProvided = "Un peso máximo tiene que ser indicado en las opciones de esta evaluación.";
+$ContainsAfile = "Contiene un fichero";
+$AllowTextAssignments = "Permitir tareas de texto en línea";
+$YouAlreadySentAPaperYouCantUpload = "Ya envió una tarea, no puede subir otra.";
 ?>

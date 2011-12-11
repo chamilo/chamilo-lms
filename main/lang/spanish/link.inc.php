@@ -53,4 +53,5 @@ $LinkOpenSelf = "Misma ventana";
 $LinkOpenBlank = "Otra ventana";
 $LinkOpenParent = "Ventana padre";
 $LinkOpenTop = "Parte superior";
+$LinkTarget = "Destino enlace";
 ?>

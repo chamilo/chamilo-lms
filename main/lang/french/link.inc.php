@@ -53,4 +53,5 @@ $LinkOpenSelf = "Ouvrir dans la même fenêtre";
 $LinkOpenBlank = "Ouvrir dans une nouvelle fenêtre";
 $LinkOpenParent = "Ouvrir dans la fenêtre parente";
 $LinkOpenTop = "Ouvrir dans page complète";
+$LinkTarget = "Cible du lien";
 ?>

@@ -127,4 +127,6 @@ $ConfigLearnpath = "Configurar la herramienta lecciones";
 $PDFWaterMarkHeader = "Cabecera filigrana en exportes PDF";
 $RedirectToALearningPath = "Redirigir a un itinerario seleccionado";
 $RedirectToTheLearningPathList = "Redirigir a la lista de itinerarios";
+$ActivateLegal = "Activar términos legales";
+$ShowALegalNoticeWhenEnteringTheCourse = "Mostrar una advertencia legal al entrar al curso";
 ?>

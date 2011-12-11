@@ -95,8 +95,6 @@ $number_decimal_separator = ".";
 $dateFormatShort = "%b %d, %Y";
 $dateFormatLong = "%A %B %d, %Y";
 $dateTimeFormatLong = "%B %d, %Y at %I:%M %p";
-$dateFormatShortNumber = "%m/%d/%Y";
-$dateTimeFormatLong24H = "%B %d, %Y at %H:%M";
 $timeNoSecFormat = "%I:%M %p";
 $langYes = "Yes";
 $langNo = "No";
@@ -1139,13 +1137,31 @@ $NoJavascript = "Your do not have JavaScript support enabled in your browser. Ch
 $NoFlash = "You do not seems to have Flash support enabled in your browser. Chamilo only relies on Flash for a few features and will not lock you out in any way if you don't have it, but if you want to benefit from the complete set of tools from Chamilo, we recommend you install the Flash Plugin and restart your browser.";
 $Attempt = "Attempt";
 $SaveForNow = "Save and continue later";
-$NoQuicktime = "It does not have installed the QuickTime plugin in your browser. You can still use the platform, but to run a larger number of media file types, we recommend  his installation.";
-$NoJavaSun = "It does not have installed a Java Sun plugin in your browser. You can still use the platform, but will lose some of its capabilities.";
+$NoQuicktime = "Your browser does not have the QuickTime plugin installed. You can still use the platform, but to run a larger number of media file types, we suggest you might want to install it.";
+$NoJavaSun = "Your browser doesn't seem to have the Sun Java plugin installed. You can still use the platform, but you will lose a few of its capabilities.";
 $NoJava = "Your browser does not support Java";
 $JavaSun24 = "Your browser has a Java version not supported by this tool.
 To use it you have to install a Java Sun version higher than 24";
-$NoMessageAnywere = "If you do not like see this message again during this session click here";
-
-$SkillsAchievedWhenAchievingThisGradebook = 'Skills Achieved When Achieving This Gradebook';
-
+$NoMessageAnywere = "If you do not want to see this message again during this session, click here";
+$Attempts = "Attempts";
+$SeeResults = "See results";
+$Loading = "Loading";
+$AreYouSureToRestore = "Are you sure you want to restore this element?";
+$ThisIsAutomaticEmailNoReply = "This is an automatic email message. Please do not reply to it.";
+$PersonalCalendar = "Personal Calendar";
+$SkillsTree = "Skills Tree";
+$Skills = "Skills";
+$SkillsProfile = "Skills Profile";
+$WithCertificate = "With Certificate";
+$AdminCalendar = "Admin Calendar";
+$CourseCalendar = "Course Calendar";
+$Reports = "Reports";
+$dateFormatShortNumber = "%m/%d/%Y";
+$dateTimeFormatLong24H = "%B %d, %Y at %H:%M";
+$GradingModelTitle = "Grading model";
+$Discussions = "Discussions";
+$GradeModel = "Grading model";
+$ViewSkillsTree = "View skills tree";
+$MySkills = "My skills";
+$SeeFile = "See file";
 ?>

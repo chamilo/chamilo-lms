@@ -299,4 +299,6 @@ $AverageIsCalculatedBasedInTheLatestAttempts = "El promedio se basa en los últi
 $LatestAttemptAverageScore = "Promedio de los últimos resultados";
 $Untitled = "Sin título";
 $Quantity = "Cantidad";
+$UploadedDocuments = "Documentos enviados";
+$ExerciseProgress = "Progreso ejercicio";
 ?>

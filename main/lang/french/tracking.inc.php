@@ -299,4 +299,6 @@ $AverageIsCalculatedBasedInTheLatestAttempts = "La moyenne est calculée sur bas
 $LatestAttemptAverageScore = "Moyenne des derniers résultats";
 $Untitled = "Sans titre";
 $Quantity = "Quantité";
+$UploadedDocuments = "Documents téléchargés";
+$ExerciseProgress = "Progrés de l'exercice";
 ?>

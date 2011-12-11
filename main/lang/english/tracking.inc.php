@@ -206,7 +206,7 @@ $TeacherInterface = "Trainer View";
 $CoachInterface = "Coach interface";
 $AdminInterface = "Admin view";
 $NumberOfSessions = "Number of sessions";
-$YourCourseList = "Average values for your course";
+$YourCourseList = "Your courses";
 $YourStatistics = "Your statistics";
 $CoachList = "Trainer list";
 $CoachStudents = "Learners of trainer";
@@ -298,4 +298,6 @@ $AverageIsCalculatedBasedInTheLatestAttempts = "Average is calculated based on t
 $LatestAttemptAverageScore = "Latest attempt average score";
 $Untitled = "Untitled";
 $Quantity = "Quantity";
+$UploadedDocuments = "Uploaded documents";
+$ExerciseProgress = "Exercise progress";
 ?>

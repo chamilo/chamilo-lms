@@ -1468,4 +1468,13 @@ $ArchiveDirCleanupProceedButton = "Proceed with cleanup";
 $ArchiveDirCleanupSucceeded = "The archive/ directory cleanup has been executed successfully.";
 $ArchiveDirCleanupFailed = "For some reason, the archive/ directory could not be cleaned up. Please clean it up by manually connecting to the server and deleting the contents of the chamilo/archive/ directory, except the .htaccess file.";
 $LocalTimeUsingPortalTimezoneXIsY = "The local time in the portal timezone (%s) is %s";
+$AllowTeacherChangeGradebookGradingModelTitle = "Allow teachers to change the Gradebook grading model";
+$AllowTeacherChangeGradebookGradingModelComment = "Enabling this option, you will allow each teacher to choose the grading model which will be used in his/her course. This change will have to be made by the teacher from inside the gradebook tool of the course.";
+$NumberOfSubEvaluations = "Number of sub evaluations";
+$AddNewModel = "Add new model";
+$GroupParentship = "Group parentship";
+$NoParentship = "No parentship";
+$NoCertificate = "No certificate";
+$ShowDocumentPreviewTitle = "Show document preview";
+$ShowDocumentPreviewComment = "Showing previews of the documents in the documents tool will avoid loading a new page just to show a document, but can result unstable with some older browsers or smaller width screens.";
 ?>

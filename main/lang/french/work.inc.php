@@ -94,4 +94,7 @@ $IncludedInEvaluation = "Inclus dans le cahier de notes";
 $DateExpiredNotBeLessDeadLine = "La date d'expiration ne peut pas être antérieure à la date de fin.";
 $NotRevised = "Non cotés";
 $MaxWeightNeedToBeProvided = "Un poids maximum doit être indiqué dans les options du cahier de notes";
+$ContainsAfile = "Contient un fichier";
+$AllowTextAssignments = "Permettre la remise de travaux comme texte en ligne";
+$YouAlreadySentAPaperYouCantUpload = "Vous avez déjà envoyé un travail, vous ne pouvez pas en envoyer d'autre.";
 ?>

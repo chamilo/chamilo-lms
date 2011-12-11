@@ -249,7 +249,6 @@ $ModifyHotPotatoes = "Modifier hotpotatoes";
 $SaveHotpotatoes = "Enregistrer hotpotatoes";
 $ReturnToLPList = "Retour liste";
 $LpPrerequisiteDescription = "Sélectionner un autre parcours comme prérequis cachera le parcours actuel jusqu'à ce que celui en prérequis soit complété à 100%";
-$HideTocFrame = "Cacher la table des matières";
 $ExerciseCantBeEditedAfterAddingToTheLP = "Les exercices ne peuvent pas être édités après les avoir inclus dans un parcours. Vous pouvez les copier et modifier leur copie.";
 $EnableTimeLimits = "Activer les limites de disponibilité";
 $PublicationDate = "Date de publication";

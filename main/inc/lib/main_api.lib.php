@@ -2478,14 +2478,14 @@ function api_is_anonymous($user_id = null, $db_check = false) {
  */
 function api_not_allowed($print_headers = false) {
 	
-	$home_url   = api_get_path(WEB_PATH);
-	$user       = api_get_user_id();
-	$course     = api_get_course_id();
-	
-	global $this_section;
-	
-	if (api_get_setting('use_custom_pages') == 'true') {
-    	$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
+    $home_url   = api_get_path(WEB_PATH);
+    $user       = api_get_user_id();
+    $course     = api_get_course_id();
+
+    global $this_section;
+
+    if (api_get_setting('use_custom_pages') == 'true') {
+        $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
         require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
         CustomPages::displayPage('index-unlogged');
         exit;
@@ -2501,64 +2501,60 @@ function api_not_allowed($print_headers = false) {
 	                </style>';
     }
     
-    //$msg = Display::return_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br />', 'error', false);
     $msg = Display::return_message(get_lang('NotAllowedClickBack'), 'error', false);
     $msg = Display::div($msg, array('align'=>'center'));
 	
-	$show_headers = 0;
+    $show_headers = 0;
     if ((!headers_sent() || $print_headers) && $origin != 'learnpath') {
-		$show_headers = 1;
-	}
-	
+        $show_headers = 1;
+    }
+    $tpl = new Template(null, $show_headers, $show_headers);
+    $tpl->assign('content', $msg);	
+    if ((isset($user) && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
+        // if the access is not authorized and there is some login information
+        // but the cidReq is not found, assume we are missing course data and send the user
+        // to the user_portal		
+        $tpl->display_one_col_template();
+        exit;
+    }
 
-	$tpl = new Template(null, $show_headers, $show_headers);
-	$tpl->assign('content', $msg);	
-
-	if ((isset($user) && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
-		// if the access is not authorized and there is some login information
-		// but the cidReq is not found, assume we are missing course data and send the user
-		// to the user_portal		
-		$tpl->display_one_col_template();
-		exit;
-	}
-
-	if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
-		//only display form and return to the previous URL if there was a course ID included
-		if (!empty($user) && !api_is_anonymous()) {
-			$tpl->assign('content', $msg);
-			$tpl->display_one_col_template();
-			exit;
-		}
-		require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-		$form = new FormValidator('formLogin', 'post', api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']), null, array('class'=>'form-stacked'));
+    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
+        //only display form and return to the previous URL if there was a course ID included
+        if (!empty($user) && !api_is_anonymous()) {
+            $tpl->assign('content', $msg);
+            $tpl->display_one_col_template();
+            exit;
+        }
+        require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+        $form = new FormValidator('formLogin', 'post', api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']), null, array('class'=>'form-stacked'));
         $form->addElement('text', 'login', get_lang('UserName'), array('size' => 17));
         $form->addElement('password', 'password', get_lang('Password'), array('size' => 17));
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'),'class="a_button gray"');
 
         $content = Display::return_message(get_lang('NotAllowed').'<br />'.get_lang('PleaseLoginAgainFromFormBelow').'<br />', 'error', false);
 
-		$content .= '<div style="margin: 0 auto; width: 200px;" class="menu-wrapper"><div class="menu" id="menu">';
+        $content .= '<div style="margin: 0 auto; width: 200px;" class="menu-wrapper"><div class="menu" id="menu">';
 		
-		$renderer =& $form->defaultRenderer();
-		//$renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
-		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>');
-		$content .= $form->return_form();
-		$content .='</div></div>';
-		$tpl->assign('content', $content);
-		$tpl->display_one_col_template();	
+        $renderer =& $form->defaultRenderer();
+        //$renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
+        $renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>');
+        $content .= $form->return_form();
+        $content .='</div></div>';
+        $tpl->assign('content', $content);
+        $tpl->display_one_col_template();	
         die();
-	}
-	
-	if (!empty($user) && !api_is_anonymous()) {
-		$tpl->display_one_col_template();
+    }
+
+    if (!empty($user) && !api_is_anonymous()) {
+        $tpl->display_one_col_template();
         exit;
     }    
 
-	//if no course ID was included in the requested URL, redirect to homepage
-	$msg = Display::return_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
-	$msg = Display::div($msg, array('align'=>'center'));
-	$tpl->assign('content', $msg);	
-	$tpl->display_one_col_template();
+    //if no course ID was included in the requested URL, redirect to homepage
+    $msg = Display::return_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
+    $msg = Display::div($msg, array('align'=>'center'));
+    $tpl->assign('content', $msg);	
+    $tpl->display_one_col_template();
     exit;
 }
 

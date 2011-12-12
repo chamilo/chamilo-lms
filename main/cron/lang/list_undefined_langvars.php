@@ -45,6 +45,16 @@ foreach ($files as $file) {
                 }
             }
         }
+        $res = 0;
+        $res = preg_match_all('/\{[\'"](\\w*)[\'"]\|get_lang\}/',$line,$myterms);
+        if ($res > 0) {
+            foreach($myterms[1] as $term) {
+                if (!isset($defined_terms[$term]) && !isset($defined_terms['lang'.$term])) {
+                	$undefined_terms[$term] = $shortfile;
+                    //echo "Undefined: $term<br />";
+                }
+            }
+        }
     }
     flush();
 }
@@ -67,8 +77,9 @@ function get_all_php_files($base_path) {
         	$files = array_merge($files,get_all_php_files($base_path.$item.'/'));
         } else {
             //only analyse php files
-        	if (substr($item,-4) == '.php') {
-                $files[] = $base_path.$item;
+                $sub = substr($item,-4);
+        	if ($sub == '.php' or $sub == '.tpl') {
+                    $files[] = $base_path.$item;
         	}
         } 
     }

@@ -665,6 +665,7 @@ function move(fbox,	tbox)
 		var	no = new Option();
 		no.value = arrLookup[arrFbox[c]];
 		no.text	= arrFbox[c];
+		no.title = no.text;
 		fbox[c]	= no;
 	}
 	for(c =	0; c < arrTbox.length; c++)
@@ -672,6 +673,7 @@ function move(fbox,	tbox)
 		var	no = new Option();
 		no.value = arrLookup[arrTbox[c]];
 		no.text	= arrTbox[c];
+		no.title = no.text;
 		tbox[c]	= no;
 	}
 }
@@ -882,9 +884,9 @@ function get_course_users() {
 	// not 100% if this is necessary, this however prevents a notice
 	if (!isset($courseadmin_filter))
 		{$courseadmin_filter='';}
-
+    // 
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
-	$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstname firstName
+	$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstname firstName, u.username
 			FROM $tbl_user as u, $tbl_courseUser as cu
 			WHERE cu.course_code = '".api_get_course_id()."'
 			AND cu.user_id = u.user_id $courseadmin_filter".$order_clause;
@@ -896,7 +898,7 @@ function get_course_users() {
     $session_id = api_get_session_id();
 	if (!empty($session_id)) {
 	    $users = array();
-		$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstName firstName
+		$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstName firstName, u.username
 				FROM $tbl_session_course_user AS session_course_user
 				INNER JOIN $tbl_user u ON u.user_id = session_course_user.id_user
 				WHERE id_session = ".$session_id."
@@ -954,9 +956,9 @@ function show_to_form($to_already_selected)
 					"value=\"   class=\"arrow\"   \" />";
 */
 ?>
-<button class="arrowr" type="button" onclick="move(document.getElementById('not_selected_form'), document.getElementById('selected_form'))" onclick="move(document.getElementById('not_selected_form'), document.getElementById('selected_form'))"></button>
+<button class="arrowr" type="button" onclick="move(document.getElementById('not_selected_form'), document.getElementById('selected_form'))"></button>
 <br /> <br />
-<button class="arrowl" type="button" onclick="move(document.getElementById('selected_form'), document.getElementById('not_selected_form'))" onclick="move(document.getElementById('selected_form'), document.getElementById('not_selected_form'))"></button>
+<button class="arrowl" type="button" onclick="move(document.getElementById('selected_form'), document.getElementById('not_selected_form'))"></button>
 <?php
 		echo "</td>";
 		echo "<td>";
@@ -976,6 +978,7 @@ function show_to_form($to_already_selected)
 */
 function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array())
 {
+    
 	echo "<select id=\"not_selected_form\" name=\"not_selected_form[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
 
 	// adding the groups to the select form
@@ -988,7 +991,7 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 				//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
 				if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
 					{
-					echo	"<option value=\"GROUP:".$this_group['id']."\">",
+					    echo	"<option value=\"GROUP:".$this_group['id']."\">",
 						"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
 						"</option>";
 				}
@@ -1000,9 +1003,8 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 		foreach($user_list as $this_user) {
 		    // $to_already_selected is the array containing the users (and groups) that are already selected
 			if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) {
-				echo	"<option value=\"USER:",$this_user['uid'],"\">",
-					"",api_get_person_name($this_user['firstName'], $this_user['lastName']),
-					"</option>";
+    		    $user_info = api_get_person_name($this_user['firstName'], $this_user['lastName'])." (".$this_user['username'].") ";
+				echo	"<option title='$user_info' value='USER:".$this_user['uid']."'>$user_info</option>";
 			}
 		}
 	}
@@ -1046,7 +1048,8 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 			}
 			else
 			{
-				$select_options_user[] = "<option value=\"".$groupuser."\">".api_get_person_name($ref_array_users[$id]['firstName'], $ref_array_users[$id]['lastName'])."</option>";
+			    $user_info = api_get_person_name($ref_array_users[$id]['firstName'], $ref_array_users[$id]['lastName'])." (".$ref_array_users[$id]['username'].")";
+				$select_options_user[] = "<option title='$user_info' value='".$groupuser."'>$user_info</option>";
 				//echo "<option value=\"".$groupuser."\">".api_get_person_name($ref_array_users[$id]['firstName'], $ref_array_users[$id]['lastName'])."</option>";
 			}
 		}
@@ -1355,7 +1358,7 @@ function sent_to_form($sent_to_array) {
     		if (is_array($sent_to_array['users'])) {
     			foreach ($sent_to_array['users'] as $user_id) {
     				$user_info= api_get_user_info($user_id);
-    				$output[] = api_get_person_name($user_info['firstName'], $user_info['lastName']);
+    				$output[] = api_get_person_name($user_info['firstName'], $user_info['lastName'])." (".$user_info['username'].")";
                 }
             }
     	}    
@@ -1363,7 +1366,7 @@ function sent_to_form($sent_to_array) {
 	    // there is only one user/group
 		if (is_array($sent_to_array['users'])) {
 			$user_info = api_get_user_info($sent_to_array['users'][0]);
-			$output[]= api_get_person_name($user_info['firstName'], $user_info['lastName']);
+			$output[]= api_get_person_name($user_info['firstName'], $user_info['lastName'])." (".$user_info['username'].")";
 		}
 		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0) {
 			$group_id = $sent_to_array['groups'][0];

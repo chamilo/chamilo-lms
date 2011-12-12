@@ -589,7 +589,7 @@ if ($question_count != 0) {
 	$error = get_lang('ThereAreNoQuestionsForThisExercise');
 	// if we are in the case where user select random by category, but didn't choose the number of random question
 	if ($objExercise->selectRandomByCat() > 0 && $objExercise->random <= 0) {
-		$error .= "<br/>".get_lang('pleaseSelectSomeRandomQuestion');
+		$error .= "<br/>".get_lang('PleaseSelectSomeRandomQuestion');
 	}
 }
 

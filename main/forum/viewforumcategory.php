@@ -300,7 +300,7 @@ if ($action_forums != 'add') {
                 } else {
                     $session_displayed = '';
                 }
-                echo '<td><a href="viewforum.php?'.api_get_cidreq().'&amp;forum='.$forum['forum_id'].'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')).'" '.class_visible_invisible($forum['visibility']).'>'.prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment']).'</td>';
+                echo '<td><a href="viewforum.php?'.api_get_cidreq().'&amp;gidReq='.$forum['forum_of_group'].'&amp;forum='.$forum['forum_id'].'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')).'" '.class_visible_invisible($forum['visibility']).'>'.prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment']).'</td>';
 
                 //$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
                 // the number of topics and posts

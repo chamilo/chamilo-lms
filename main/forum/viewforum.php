@@ -35,7 +35,6 @@ api_protect_course_script(true);
 $this_section = SECTION_COURSES;
 
 // Including additional library scripts.
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $nameTools = get_lang('ToolForum');
@@ -63,12 +62,13 @@ $userinf = api_get_user_info($userid);
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
 
-$my_forum_group = isset($_GET['gidReq']) ? $_GET['gidReq'] : '';
+//$my_forum_group = isset($_GET['gidReq']) ? $_GET['gidReq'] : '';
+$group_id = api_get_group_id();
 $my_forum = isset($_GET['forum']) ? $_GET['forum'] : '';
-$val = GroupManager::user_has_access($userid, $my_forum_group, GROUP_TOOL_FORUM);
+$val = GroupManager::user_has_access($userid, $group_id, GROUP_TOOL_FORUM);
 
-if (!empty($my_forum_group)) {
-    if (api_is_allowed_to_edit(false, true) || $val) {
+if (!empty($group_id)) {    
+    if (api_is_allowed_to_edit(false, true) || $val || GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)) {
         $current_forum = get_forum_information($my_forum); // Note: This has to be validated that it is an existing forum.
         $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
     }
@@ -77,7 +77,6 @@ if (!empty($my_forum_group)) {
     if ($result['forum_of_group'] == 0) {
         $current_forum = get_forum_information($my_forum); // Note: This has to be validated that it is an existing forum.        
         $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
-        
     }
 }
 
@@ -243,6 +242,7 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 
 // If the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
+
 if (!api_is_allowed_to_edit(false, true) AND ($current_forum_category['visibility'] == 0 OR $current_forum['visibility'] == 0)) {	
  	api_not_allowed();
 }

@@ -103,12 +103,11 @@ if (!api_is_allowed_to_edit(false, true) AND ($current_forum['visibility'] == 0 
 
 $group_id = api_get_group_id();
 
-
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
 if ($my_action == 'delete' AND isset($_GET['content']) AND isset($_GET['id']) AND (api_is_allowed_to_edit(false, true) OR GroupManager::is_tutor_of_group(api_get_user_id(), $group_id))) {
-    $message = delete_post($_GET['id']); // Note: This has to be cleaned first.
+    $message = delete_post($_GET['id']); // Note: This has to be cleaned first.    
 }
-if (($my_action == 'invisible' OR $my_action == 'visible') AND isset($_GET['id']) AND api_is_allowed_to_edit(false, true) OR GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)) {
+if (($my_action == 'invisible' OR $my_action == 'visible') AND isset($_GET['id']) AND (api_is_allowed_to_edit(false, true) OR GroupManager::is_tutor_of_group(api_get_user_id(), $group_id))) {
     $message = approve_post($_GET['id'], $_GET['action']); // Note: This has to be cleaned first.
 }
 if ($my_action == 'move' AND isset($_GET['post'])) {

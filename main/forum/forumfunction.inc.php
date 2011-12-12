@@ -723,22 +723,25 @@ function delete_post($post_id) {
     $post_id = intval($post_id);
     $course_id = api_get_course_int_id();
 
-    // Get parent_post_id of deleted post.
+    // Get parent_post_id of deleted post.    
     $tab_post_info = get_post_information($post_id);
-    $post_parent_id_of_deleted_post = $tab_post_info['post_parent_id'];
-    $thread_id_of_deleted_post = $tab_post_info['thread_id'];
-    $forum_if_of_deleted_post = $tab_post_info['forum_id'];
-    $sql = "UPDATE $table_posts SET post_parent_id=$post_parent_id_of_deleted_post 
-            WHERE c_id = $course_id AND post_parent_id=$post_id AND thread_id=$thread_id_of_deleted_post AND forum_id=$forum_if_of_deleted_post;";
-    Database::query($sql);
+    if ($tab_post_info) {
+        $post_parent_id_of_deleted_post = $tab_post_info['post_parent_id'];
+        $thread_id_of_deleted_post      = $tab_post_info['thread_id'];
+        $forum_if_of_deleted_post       = $tab_post_info['forum_id'];
+        $sql = "UPDATE $table_posts SET post_parent_id=$post_parent_id_of_deleted_post 
+                WHERE c_id = $course_id AND post_parent_id=$post_id AND thread_id=$thread_id_of_deleted_post AND forum_id=$forum_if_of_deleted_post;";
+        Database::query($sql);
+    
+        $sql = "DELETE FROM $table_posts WHERE c_id = $course_id AND post_id='".Database::escape_string($post_id)."'"; // Note: This has to be a recursive function that deletes all of the posts in this block.
+        Database::query($sql);
+    
+        // Delete attachment file about this post id.
+        delete_attachment($post_id);
+    }
 
-    $sql = "DELETE FROM $table_posts WHERE c_id = $course_id AND post_id='".Database::escape_string($post_id)."'"; // Note: This has to be a recursive function that deletes all of the posts in this block.
-    Database::query($sql);
-
-    // Delete attachment file about this post id.
-    delete_attachment($post_id);
-
-    $last_post_of_thread = check_if_last_post_of_thread(intval($_GET['thread']));
+    $last_post_of_thread = check_if_last_post_of_thread($_GET['thread']);
+    
 
     if (is_array($last_post_of_thread)) {
         // Decreasing the number of replies for this thread and also changing the last post information.
@@ -755,6 +758,8 @@ function delete_post($post_id) {
         Database::query($sql);
         return 'PostDeletedSpecial';
     }
+    
+    
 }
 
 /**
@@ -4251,15 +4256,17 @@ function get_thread_user_post_limit($course_code, $thread_id, $user_id, $limit =
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function calculate_children($rows) {
-    foreach ($rows as $row) {
-        $rows_with_children[$row['post_id']] = $row;
-        $rows_with_children[$row['post_parent_id']]['children'][] = $row['post_id'];
-    }
-
-    $rows = $rows_with_children;
     $sorted_rows = array(0 => array());
-    _phorum_recursive_sort($rows, $sorted_rows);
-    unset($sorted_rows[0]);
+    if (!empty($rows)) {
+        foreach ($rows as $row) {
+            $rows_with_children[$row['post_id']] = $row;
+            $rows_with_children[$row['post_parent_id']]['children'][] = $row['post_id'];
+        }
+    
+        $rows = $rows_with_children;        
+        _phorum_recursive_sort($rows, $sorted_rows);
+        unset($sorted_rows[0]);
+    }
     return $sorted_rows;
 }
 

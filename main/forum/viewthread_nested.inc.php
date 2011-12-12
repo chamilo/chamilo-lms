@@ -28,6 +28,8 @@ $count=0;
 $clean_forum_id  = intval($_GET['forum']);
 $clean_thread_id = intval($_GET['thread']);
 
+$group_id = api_get_group_id();
+
 foreach ($rows as $post) {
     // The style depends on the status of the message: approved or not.
     if ($post['visible']=='0') {
@@ -60,11 +62,17 @@ foreach ($rows as $post) {
     $id_attach = !empty($attachment_list)?$attachment_list['id']:'';
     // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
     // The course admin him/herself can do this off course always
-    if (($current_forum['allow_edit']==1 AND $post['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
+    //if (($current_forum['allow_edit']==1 AND $post['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
+    if (GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR  ($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
+        
         echo "<a href=\"editpost.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;origin=".$origin."&amp;post=".$post['post_id']."&amp;id_attach=".$id_attach."\">".Display::return_icon('edit.png',get_lang('Edit'), array(), 22)."</a>";
     }
-    if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {
+    
+    if (GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {   
         echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=delete&amp;content=post&amp;id=".$post['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'), array(), 22)."</a>";
+    }
+    
+    if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {    
         display_visible_invisible_icon('post', $post['post_id'], $post['visible'],array('forum'=>$clean_forum_id,'thread'=>$clean_thread_id ));
         echo "";
         if ($count>0) {

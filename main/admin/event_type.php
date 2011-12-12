@@ -8,7 +8,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$tool_name = get_lang('events_title');
+$tool_name = get_lang('EventsTitle');
 
 $action = isset($_POST['action'])?$_POST['action']:null;
 $eventId = isset($_POST['eventId'])?$_POST['eventId']:null;
@@ -165,21 +165,21 @@ Display::display_header($tool_name);
 	}
 </script>
 
-<h3><?php print get_lang('events_title') ?></h3>
+<h3><?php print get_lang('EventsTitle') ?></h3>
 
 <table id="" width="90%">
 	<tr>
 		<td width="5%">
-			<h4><?php print get_lang('events_listTitle'); ?></h4>
+			<h4><?php print get_lang('EventsListTitle'); ?></h4>
 		</td>
 		<td width="5%">
-			<h4><?php print get_lang('events_userListTile'); ?></h4>
+			<h4><?php print get_lang('EventsUserListTile'); ?></h4>
 		</td>
 		<td width="5%">
 			&nbsp;
 		</td>
 		<td width="5%">
-			<h4><?php print get_lang('events_userSubListTile'); ?></h4>
+			<h4><?php print get_lang('EventsUserSubListTile'); ?></h4>
 		</td>
 	</tr>
 	<tr>
@@ -224,17 +224,17 @@ Display::display_header($tool_name);
 	</div>
 	<br />
 	
-	<label for="eventSubject"><h4><?php print get_lang('events_labelSubject'); ?></h4></label>
+	<label for="eventSubject"><h4><?php print get_lang('EventsLabelSubject'); ?></h4></label>
 	<input type="text" id="eventSubject" name="eventSubject" />
 	<br /><br />
-	<label for="eventMessage"><h4><?php print get_lang('events_labelMessage'); ?></h4></label>
+	<label for="eventMessage"><h4><?php print get_lang('EventsLabelMessage'); ?></h4></label>
 	<textarea cols="100" rows="10" name="eventMessage" id="eventMessage">
 	
 	</textarea>
 
 <br /><br />
 
-<input type="submit" value="<?php print get_lang('events_btnMod'); ?>" />
+<input type="submit" value="<?php print get_lang('EventsButtonMod'); ?>" />
 
 </form>
 

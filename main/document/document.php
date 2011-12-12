@@ -1175,9 +1175,7 @@ $default_column = $is_allowed_to_edit ? 2 : 1;
 $tablename = $is_allowed_to_edit ? 'teacher_table' : 'student_table';
 
 //var_dump($column_show,$column_order);
-echo "HUBC<pre>"; print_r($column_order); echo "</pre>";
-//$table = new SortableTableFromArrayConfig($sortable_data, $default_column, 20, $tablename, $column_show, $column_order, 'ASC', true);
-$table = new SortableTableFromArrayConfig($sortable_data, $default_column, 20, $tablename, '', $column_order, 'ASC', true);
+$table = new SortableTableFromArrayConfig($sortable_data, $default_column, 20, $tablename, $column_show, $column_order, 'ASC', true);
 
 if(isset($_GET['keyword'])) {
     $query_vars['keyword'] = Security::remove_XSS($_GET['keyword']);

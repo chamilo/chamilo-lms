@@ -228,7 +228,10 @@ class AnnouncementManager  {
                 echo '<br/>';                
                 echo Display::return_icon('attachment.gif',get_lang('Attachment'));
                 echo '<a href="'.$full_file_name.' "> '.$user_filename.' </a>';
-                echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+                echo ' - <span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+                if (api_is_allowed_to_edit(false,true)) {
+                    echo Display::url(Display::return_icon('delete.png', get_lang('Delete'),'',16), api_get_self()."?".api_get_cidreq()."&action=delete_attachment&id_attach=".$attachment_list['id']."&sec_token=".$stok);
+                }
                 echo '</td></tr>';
             }           
     		echo "</table>";
@@ -1218,7 +1221,7 @@ class AnnouncementManager  {
 		$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 		$id = intval($id);
 		$course_id = api_get_course_int_id();
-		$sql = "DELETE FROM $tbl_announcement_attachment WHERE c_id $course_id AND id = $id";
+		$sql = "DELETE FROM $tbl_announcement_attachment WHERE c_id = $course_id AND id = $id";
 		$result = Database::query($sql);
 		// update item_property
 		//api_item_property_update($_course, 'announcement_attachment',  $id,'AnnouncementAttachmentDeleted', api_get_user_id());

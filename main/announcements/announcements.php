@@ -215,7 +215,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		}
 
 		if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
-			// tooledit : visibility = 2 : only visibile for platform administrator
+			// tooledit : visibility = 2 : only visible for platform administrator
 			if ($ctok == $_GET['sec_token']) {
 				AnnouncementManager::delete_announcement($_course, $id);
 				//delete_added_resource("Ad_Valvas", $delete);
@@ -227,13 +227,19 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			}
 		}
 	}
-	
-    //delete attachment file
-    if (isset($_GET['action']) && $_GET['action'] == 'delete') {
+    
+      //delete attachment file
+    if (isset($_GET['action']) && $_GET['action'] == 'delete_attachment') {
         $id = $_GET['id_attach'];
-        AnnouncementManager::delete_announcement_attachment_file($id);
+        if ($ctok == $_GET['sec_token']) {
+            if (api_is_allowed_to_edit()) {
+                AnnouncementManager::delete_announcement_attachment_file($id);
+            }
+        }
     }    
-
+    
+	
+  
 	/*
 		Delete all announcements
 	*/
@@ -1143,8 +1149,7 @@ if ($display_announcement_list) {
     					$modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&down=".$myrow["id"]."&sec_token=".$stok."\">".Display::return_icon('down.gif', get_lang('Down'))."</a>";
     				} else {
     				    $modify_icons .= Display::return_icon('down_na.gif', get_lang('Down'));
-    				}
-    				    
+    				}    				    
     			    if (api_is_allowed_to_edit(false,true)) {
                         $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".
                             Display::return_icon('delete.png', get_lang('Delete'),'',22).

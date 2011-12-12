@@ -120,7 +120,7 @@ function MM_popupMsg(msg) { //v1.0
 $nameTools = get_lang('Links');
 
 if (isset($_GET['action'])) {
-	$check_token = Security::check_token('request');
+	$check_token = Security::check_token('request');    
 	if ($check_token) {
 		switch ($_GET['action']) {
 			case 'addlink':
@@ -146,9 +146,9 @@ if (isset($_GET['action'])) {
 				deletelinkcategory('link'); // Here we delete a link				
 				break;
 			case 'deletecategory':
-					deletelinkcategory('category'); // Here we delete a category				
+				deletelinkcategory('category'); // Here we delete a category				
 				break;
-			case 'editlink':			
+			case 'editlink':
 				editlinkcategory('link'); // Here we edit a link			
 				break;
 			case 'editcategory':
@@ -196,13 +196,25 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 		echo '</div>';
 		if ($category == '') {
 			$category = 0;
-		}
+		}        
 		echo '<form method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
 		echo '<input type="hidden" name="sec_token" value="'.$token.'" />';
 		if ($_GET['action'] == 'editlink') {
-			echo '<input type="hidden" name="id" value="'.intval($_GET['id']).'" />';
-			
-			$clean_link_id = trim(Security::remove_XSS($_GET['id']));
+		    $clean_link_id = intval($_GET['id']);
+            $link_info = get_link_info($_GET['id']);
+            if ($link_info) {
+                $urllink        = $link_info['url'];
+                $title          = $link_info['title'];
+                $description    = $link_info['description'];
+                $category       = $link_info['category_id'];
+                $onhomepage     = '';
+                if ($link_info['on_homepage'] != 0) {
+                    $onhomepage = 'checked';
+                }
+                $target_link = $link_info['target'];
+            }
+            
+			echo '<input type="hidden" name="id" value="'.$clean_link_id.'" />';
 		}
 		echo '	<div class="row">
 					<div class="label">

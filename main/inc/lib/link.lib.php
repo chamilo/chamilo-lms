@@ -271,7 +271,29 @@ function delete_link_from_search_engine($course_id, $link_id) {
 	}
 }
 
+
 /**
+ * 
+ * Get link info
+ * @param int link id
+ * @return array link info  
+ *    
+ * */
+ 
+function get_link_info($id) {
+     $tbl_link      = Database :: get_course_table(TABLE_LINK);
+     $course_id     = api_get_course_int_id();
+     $sql           = "SELECT * FROM " . $tbl_link . " WHERE c_id = $course_id AND id='" . intval($id) . "' ";
+     $result        = Database::query($sql);
+     
+     if (Database::num_rows($result)) {
+        $data = Database::fetch_array($result);
+     }
+     return $data;
+}
+
+/**
+
  * Used to edit a link or a category
  * @todo Rewrite the whole links tool because it is becoming completely cluttered,
  *       code does not follow the coding conventions, does not use html_quickform, ...
@@ -298,7 +320,7 @@ function editlinkcategory($type) {
 	global $onhomepage;
 	global $target_link;
 
-	$tbl_link = Database :: get_course_table(TABLE_LINK);
+	$tbl_link       = Database :: get_course_table(TABLE_LINK);
 	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
     
     $course_id = api_get_course_int_id();

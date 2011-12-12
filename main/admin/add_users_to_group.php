@@ -401,7 +401,7 @@ if ($add_type == 'multiple') {
 <option value="<?php echo GROUP_USER_PERMISSION_ADMIN ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_ADMIN)?'selected=selected':'') ?> > <?php echo get_lang('Admin') ?></option>
 <option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_PENDING_INVITATION)?'selected=selected':'') ?> > <?php echo get_lang('Reader') ?></option>
 <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_MODERATOR)?'selected=selected':'') ?> > <?php echo get_lang('Moderator') ?></option>
-<option value="<?php echo GROUP_USER_PERMISSION_HRM ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_HRM)?'selected=selected':'') ?> > <?php echo get_lang('HumanResourcesManager') ?></option>
+<option value="<?php echo GROUP_USER_PERMISSION_HRM ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_HRM)?'selected=selected':'') ?> > <?php echo get_lang('Drh') ?></option>
 </select>
 
 <?php

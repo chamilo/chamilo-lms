@@ -29,14 +29,14 @@ require_once('language.php');
 		}?>
 			<form id="registration-form" class="form" action="inscription.php" method="post">
 				<div>
-        <label for="email"><?php echo cblue_get_lang('langEmail');?>*</label>
+        <label for="email"><?php echo get_lang('langEmail');?>*</label>
 					<input name="email" type="text"  value="<?php echo $values['email']?>" /><br />
-					<label for="username"><?php echo cblue_get_lang('Username');?>*</label>
+					<label for="username"><?php echo get_lang('Username');?>*</label>
 					<input name="username" type="text" value="<?php echo $values['username']?>" /><br />
-          <p class="forminfo"><?php echo cblue_get_lang('UsernameWrong')?></p>
-					<label for="pass1"><?php echo cblue_get_lang('Pass');?>*</label>
+          <p class="forminfo"><?php echo get_lang('UsernameWrong')?></p>
+					<label for="pass1"><?php echo get_lang('Pass');?>*</label>
 					<input name="pass1" type="password" value="<?php echo $values['pass1']?>" /><br />
-					<label for="pass2"><?php echo cblue_get_lang('Confirmation');?>*</label>
+					<label for="pass2"><?php echo get_lang('Confirmation');?>*</label>
 					<input name="pass2" type="password"  value="<?php echo $values['pass2']?>" /><br />
 					<!--
 					<label for="phone">*Phone number</label>
@@ -47,10 +47,10 @@ require_once('language.php');
 				</div>
 			</form>
 			<div id="registration-form-submit" class="form-submit" onclick="document.forms['registration-form'].submit();">
-				<span><?php echo cblue_get_lang('Subscribe');?></span>
+				<span><?php echo get_lang('Subscribe');?></span>
 			</div> <!-- #form-submit -->
 			<div id="links">
-      <!--<a href="mailto: support@cblue.be"><?php echo cblue_get_lang('NeedContactAdmin')?></a><br />-->
+      <!--<a href="mailto: <?php echo api_get_setting('emailAdministrator'); ?>"><?php echo get_lang('NeedContactAdmin')?></a><br />-->
 			</div>
 		</div> <!-- #form -->
 		<div id="footer">

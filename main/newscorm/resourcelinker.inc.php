@@ -597,7 +597,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
 
-            if ($myrow["forum_name"]=='') { $type="Forum"; echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('step_deleted2')."</span>"; return(true); }
+            if ($myrow["forum_name"]=='') { $type="Forum"; echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>"; return(true); }
 
             if ($icon == 'nolink') { return(shorten($myrow['forum_name'], $length)); }
             if ($icon == 'icon') { echo "<img src='../img/forum.gif' align=\"absmiddle\" alt='forum'>"; }

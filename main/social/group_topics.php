@@ -36,8 +36,6 @@ if (empty($group_id)) {
 	}
 }
 
-
-
 // save message group
 if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 	
@@ -166,12 +164,11 @@ $(document).ready(function() {
 </script>';
 
 $this_section = SECTION_SOCIAL;
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
-$interbreadcrumb[] = array('url' => 'groups.php','name' => get_lang('Groups'));
-$interbreadcrumb[] = array('url' => '#','name' => get_lang('Thread'));
+$interbreadcrumb[]= array ('url' =>'home.php',      'name' => get_lang('Social'));
+$interbreadcrumb[] = array('url' => 'groups.php',   'name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' => '#',            'name' => get_lang('Thread'));
 
 Display::display_header($tool_name, 'Groups');
-
 
 echo '<div id="social-content">';
     echo '<div id="social-content-left">';  

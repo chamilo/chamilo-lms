@@ -228,6 +228,7 @@ class Display {
      * @param mixed An array with bool values to know which columns show. i.e: $visibility_options= array(true, false) we will only show the first column
      * 				Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
      * @param bool  true for sorting data or false otherwise
+     * @param array grid classes
      * @return 	string   html grid
      */
     public static function return_sortable_grid($name, $header, $content, $paging_options = array(), $query_vars = null, $form_actions = array(), $visibility_options = true, $sort_data = true, $grid_class = array()) {
@@ -235,7 +236,6 @@ class Display {
         $column =  0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
         $table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);
-
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
         }

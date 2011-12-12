@@ -1003,9 +1003,8 @@ class MessageManager
         
         $main_message 	= self::get_message_by_id($topic_id);                
         $group_info		= GroupPortalManager::get_group_data($group_id);
-        $rows 			= self::get_messages_by_group_by_message($group_id, $topic_id);            
-        $rows 			= self::calculate_children($rows, $topic_id);
-        
+        $rows 			= self::get_messages_by_group_by_message($group_id, $topic_id);                    
+        $rows 			= self::calculate_children($rows, $topic_id);        
         
         $current_user_id  = api_get_user_id();
         
@@ -1014,8 +1013,7 @@ class MessageManager
         
         $count_items = 0;
         $html_messages = '';
-        $query_vars = array('id'=>$group_id, 'topic_id'=>$topic_id , 'topics_page_nr'=>0);        
-        
+        $query_vars = array('id' => $group_id, 'topic_id' => $topic_id , 'topics_page_nr' => 0);        
         
         // Main message        
         $html = '';              
@@ -1027,6 +1025,7 @@ class MessageManager
         $items_page_nr = null;
         
         echo Display::tag('h3', Security::remove_XSS($main_message['title'], STUDENT, true));
+        
         $user_sender_info = UserManager::get_user_info_by_id($main_message['user_sender_id']);
         $files_attachments = self::get_links_message_attachment_files($main_message['id']);
         $name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
@@ -1067,7 +1066,8 @@ class MessageManager
         
         if (is_array($rows) && count($rows)> 0) {
             $topics = $rows;            
-            $array_html = array();            
+            $array_html = array();    
+                    
             foreach ($topics as $index => $topic) {
                 if (empty($topic['id'])) {
                     continue;
@@ -1123,12 +1123,12 @@ class MessageManager
                 $array_html_items[] = array($html_items);
             }                   
             // grids for items with paginations
-            $options = array('hide_navigation'=>false, 'per_page' => $items_per_page);
-            $order = array(true, true, true,false);          
+            $options = array('hide_navigation' => false, 'per_page' => $items_per_page);
+            $visibility   = array(true, true, true, false);
             
             $style_class = array('item' => array('class'=>'group_social_item'), 'main' => array('class'=>'group_social_grid'));
             if (!empty($array_html_items)) {
-                $html .= Display::return_sortable_grid('items_'.$topic['id'], array(), $array_html_items, $options, $query_vars, false, $order, false, $style_class);
+                $html .= Display::return_sortable_grid('items_'.$topic['id'], array(), $array_html_items, $options, $query_vars, null, $visibility, false, $style_class);
             }
         }
         $html .= '</div>';                

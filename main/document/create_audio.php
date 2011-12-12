@@ -48,19 +48,21 @@ $htmlHeadXtra[] = '<script src="../inc/lib/javascript/textareacounter/jquery.tex
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 function advanced_parameters() {
 	if(document.getElementById(\'options\').style.display == \'none\') {
-					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+        document.getElementById(\'options\').style.display = \'block\';
+		document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
 	} else {
-					document.getElementById(\'options\').style.display = \'none\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+		document.getElementById(\'options\').style.display = \'none\';
+		document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
 	}
 }
+
 function setFocus(){
 	$("#search_title").focus();
-	}
-	$(document).ready(function () {
+}
+
+$(document).ready(function () {
 	  setFocus();
-	});
+});
 
 </script>';
 
@@ -118,6 +120,7 @@ if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_
 
 /*	Header */
 event_access_tool(TOOL_DOCUMENT);
+
 $display_dir = $dir;
 if (isset ($group)) {
 	$display_dir = explode('/', $dir);
@@ -131,7 +134,6 @@ if (isset ($group)) {
 	$dir_array = explode('/', $dir);
 	$array_len = count($dir_array);
 	
-	
 	$dir_acum = '';
 	for ($i = 0; $i < $array_len; $i++) {
 		$url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
@@ -144,7 +146,7 @@ if (isset ($group)) {
 		}
 		$dir_acum .= $dir_array[$i].'/';
 	}
-//
+
 Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';

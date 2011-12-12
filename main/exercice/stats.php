@@ -73,7 +73,7 @@ $headers = array(
 	get_lang('Question'),
 	get_lang('Answer'),
 	get_lang('Correct'),
-	get_lang('NumberStudentWhoSelect'),
+	get_lang('NumberStudentWhoSelectedIt'),
 	get_lang('HighestScore'),
 	get_lang('MaximumScore')
 );

@@ -481,27 +481,33 @@ class Agenda {
         }
         
         if (is_array($group_list)) {
+            $html .= '<optgroup label="'.get_lang('Groups').'">';
             foreach($group_list as $this_group) {
                 //api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
                 if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
                     {
                     $html .=     "<option value=\"GROUP:".$this_group['id']."\">".
-                        "G: ".$this_group['name']." &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
+                        $this_group['name']." &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
                         "</option>";
                 }
             }
-            // a divider
+            $html .= '</optgroup>';            
         }
-        $html .=     "<option value=\"\">--------------------------------------------</option>";
+        
         // adding the individual users to the select form
+        if (is_array($group_list)) {
+            $html .= '<optgroup label="'.get_lang('Users').'">';
+        }
         foreach($user_list as $this_user) {
             // $to_already_selected is the array containing the users (and groups) that are already selected
             if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) {
                 $html .= "<option value=\"USER:".$this_user['user_id']."\">".api_get_person_name($this_user['firstname'], $this_user['lastname'])."</option>";
             }
         }
-    
-        $html .=  "</select>";
+        if (is_array($group_list)) {
+            $html .= '</optgroup>';     
+            $html .=  "</select>";
+        }
         return $html; 
     }
     

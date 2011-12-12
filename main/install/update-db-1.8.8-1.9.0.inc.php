@@ -338,6 +338,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                                         'lp_iv_objective',
                                         'lp_view',
                                         'notebook',
+                                        'metadata',
                                         'online_connected',
                                         'online_link',
                                         'permission_group',
@@ -384,7 +385,6 @@ if (defined('SYSTEM_INSTALLATION')) {
                     	}
                     	$course_id = $row_course['id'];
                     	$new_table = DB_COURSE_PREFIX.$table;
-                    	
                     	
                     	if (!$singleDbForm) {
                     		// otherwise just use the main one

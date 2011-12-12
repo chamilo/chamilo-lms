@@ -4,7 +4,8 @@
  * 2006/12/15
  * Copyright (C) 2006 rene.haentjens@UGent.be - see note at end of text    -->
  * @package chamilo.metadata
- */
+*/
+
 /**
 *   Chamilo Metadata: common functions and mdstore class
 *
@@ -25,25 +26,26 @@
 *                   assign value to subpath (see also xmd_update_many)
 *
 */
-// FETCH GET/POST-DATA; GENERAL FUNCTIONS ------------------------------------->
+
+// FETCH GET/POST-DATA; GENERAL FUNCTIONS
+
+define('MDS_TABLE', Database::get_course_table(TABLE_METADATA));
+
 
 if (isset($getpostvars) && is_array($getpostvars))
   foreach ($getpostvars as $gpvar)
-    if (is_string($gpvar) && (isset($_POST[$gpvar]) || isset($_GET[$gpvar])))
-    {
+    if (is_string($gpvar) && (isset($_POST[$gpvar]) || isset($_GET[$gpvar]))) {
         $val = isset($_POST[$gpvar]) ? $_POST[$gpvar] : $_GET[$gpvar];
         $GLOBALS[$gpvar] = get_magic_quotes_gpc() ? stripslashes($val) : $val;
     }
 
-function fgc($filename)
-{
+function fgc($filename) {
     $fp = fopen($filename, 'rb'); $buffer = fread($fp, filesize($filename));
     fclose($fp); return $buffer; // file_get_contents: PHP >= 4.3.0
 }
 
 
-function give_up($msg)
-{
+function give_up($msg) {
 	global $charset;
     echo '<p align="center">MetaData:<br /><b>? ',
         htmlspecialchars($msg, ENT_QUOTES, $charset), '</b></p>'; exit;
@@ -62,19 +64,16 @@ function getpar($name, $description, $default = '')
 }
 
 
-function get_course_path()
-{
+function get_course_path() {
     return api_get_path(SYS_COURSE_PATH);
 }
 
-function get_course_web()
-{
+function get_course_web() {
     return api_get_path(WEB_COURSE_PATH);
 }
 
 
-function define_htt($htt_file, $urlp, $course_path)
-{
+function define_htt($htt_file, $urlp, $course_path) {
 	global $charset;
 
     ($htt_file_contents = @fgc($htt_file))
@@ -102,8 +101,7 @@ function define_htt($htt_file, $urlp, $course_path)
 }
 
 
-function make_uri()
-{
+function make_uri() {
     $regs = array(); // for use with ereg()
 
     $uri = strtr(ereg_replace(
@@ -200,10 +198,8 @@ $ieee_dcmap_v = array(
 // maps Dublin Core elements to xmd paths for values (not yet complete)
 
 
-// KEYWORD TREE --------------------------------------------------------------->
-
-function define_kwds($mdo)
-{
+// KEYWORD TREE 
+function define_kwds($mdo) {
     if (!($newtext = trim(@fgc(get_course_path() . $mdo->mdo_course['path'] .
             '/document' . $mdo->mdo_path ))))
     {
@@ -247,216 +243,164 @@ EOD
 }
 
 
-// METADATA STORE ------------------------------------------------------------->
+// METADATA STORE 
 /**
  * mdstore class
  * @package chamilo.metadata
  */
-class mdstore
-{
-
-var $mds_something;
-
-function mds_get($eid, $column = 'mdxmltext', $must_exist = '')  // none: FALSE
-{
-    if (($mdt = Database::fetch_array($this->_query("SELECT " . $column .
-        " FROM " . MDS_TABLE . " WHERE ", $eid)))) return $mdt[$column];
-
-    if ($must_exist) give_up($must_exist . $this->_coldat('eid', $eid));
-
-    return FALSE;
-}
-
-function mds_get_dc_elements($mdo)  // no record: FALSE
-{
-    if (!($mdt = $this->mds_get($mdo->mdo_eid))) return FALSE;
-
-    $xmlDoc = new xmddoc(explode("\n", $mdt)); if ($xmlDoc->error) return FALSE;
-
-    $result = array();
-    foreach ($mdo->mdo_dcmap_v as $dce => $xp)
-    {
-        $result[$dce] = $xmlDoc->xmd_value($xp);
+class mdstore {
+        
+    var $mds_something;    
+    
+    function __construct($allow_create) {
+        global $_course; 
+        $this->course_id = api_get_course_int_id();
+        if (!isset($_course)) return;      
     }
-
-    return $result;
-}
-
-function mds_get_many($columns, $where_clause)
-{
-    $cols = '';
-    foreach (explode(',', $columns) as $col) $cols .= "," . trim($col);
-    if (!$cols) return;
-
-    return $this->_query("SELECT " . api_substr($cols, 1) .
-        " FROM " . MDS_TABLE . " WHERE ". $where_clause);
-}
-
-function mds_put($eid, $data, $column = 'mdxmltext', $exists = TRUE)
-{
-    if ($exists === TRUE)
-        return $this->_query("UPDATE " . MDS_TABLE . " SET " .
-            $this->_coldat($column, $data) . " WHERE ", $eid);
-    elseif ($exists === FALSE)
-        return $this->_query("INSERT INTO " . MDS_TABLE . " SET " .
-            $this->_coldat($column, $data) . ", ", $eid);
-    else  // user doesn't know, check first whether the record exists
-        return $this->mds_put($eid, $data, $column,
-            !($this->mds_get($eid) === FALSE));
-}
-
-function mds_put_dc_elements($mdo, $dcelem)
-{
-    if (($mdt = $this->mds_get($mdo->mdo_eid)) === FALSE)
-    {
-        $mdt = $mdo->mdo_generate_default_xml_metadata(); $exists = FALSE;
+        
+    function mds_get($eid, $column = 'mdxmltext', $must_exist = '') {
+        // none: FALSE
+        if (($mdt = Database::fetch_array(Database::query("SELECT " . $column ." FROM ".MDS_TABLE." WHERE eid = '$eid' AND c_id = {$this->course_id} ")))) 
+            return $mdt[$column];    
+        if ($must_exist) give_up($must_exist . $this->_coldat('eid', $eid));
+    
+        return FALSE;
     }
-    else $exists = TRUE;
-
-    $xmlDoc = new xmddoc(explode("\n", $mdt)); if ($xmlDoc->error) return FALSE;
-
-    foreach ($dcelem as $dce => $value)
+    
+    function mds_get_dc_elements($mdo)  // no record: FALSE
     {
-        $xmlDoc->xmd_update($mdo->mdo_dcmap_v[$dce], (string) $value);
+        if (!($mdt = $this->mds_get($mdo->mdo_eid))) return FALSE;    
+        $xmlDoc = new xmddoc(explode("\n", $mdt)); if ($xmlDoc->error) return FALSE;    
+        $result = array();
+        foreach ($mdo->mdo_dcmap_v as $dce => $xp) {
+            $result[$dce] = $xmlDoc->xmd_value($xp);
+        }    
+        return $result;
     }
-
-    $this->mds_put($mdo->mdo_eid, '', 'md5', $exists);
-
-    return $this->mds_put($mdo->mdo_eid, $xmlDoc->xmd_xml());
-}
-
-function mds_append($eid, $moredata, $column = 'indexabletext')
-{
-    if (($olddata = $this->mds_get($eid, $column)) === FALSE) return FALSE;
-    $this->mds_put($eid, $olddata . $moredata, $column); return $olddata;
-}
-
-function mds_delete($eid)
-{
-    return $this->_query("DELETE FROM " . MDS_TABLE . " WHERE ", $eid);
-}
-
-function mds_delete_offspring($eid, $sep = '.')
-{
-    return $this->_query("DELETE FROM " . MDS_TABLE . " WHERE ", $eid, $sep);
-}
-
-function mds_delete_many($idarray)
-{
-    if (!is_array($idarray) || count($idarray) == 0) return FALSE;
-
-    return $this->_query("DELETE FROM " . MDS_TABLE . " WHERE eid IN ('" .
-        implode("','", array_map('addslashes', $idarray)) . "')");
-}
-
-function mds_update_xml_and_mdt($mdo, &$xmlDoc, $mda, $eid, &$traceinfo,
-        $exists = TRUE)  // note: $xmlDoc and $traceinfo passed by reference
-{
-    foreach (explode("\n",
-           str_replace("\r", "\n", str_replace("\r\n", "\n", $mda))) as $update)
+    
+    function mds_get_many($columns, $where_clause) {
+        $cols = '';
+        foreach (explode(',', $columns) as $col) $cols .= "," . trim($col);
+        if (!$cols) return;    
+        return $this->_query("SELECT " . api_substr($cols, 1) ." FROM " . MDS_TABLE . " WHERE c_id = {$this->course_id} AND ". $where_clause);
+    }
+    
+    function mds_put($eid, $data, $column = 'mdxmltext', $exists = TRUE) {
+        if ($exists === TRUE)
+            return $this->_query("UPDATE " . MDS_TABLE . " SET " .$this->_coldat($column, $data) . " WHERE c_id = {$this->course_id} AND ", $eid);
+        elseif ($exists === FALSE)
+            return $this->_query("INSERT INTO " . MDS_TABLE . " SET c_id = {$this->course_id} , ".$this->_coldat($column, $data).", ", $eid);
+        else  // user doesn't know, check first whether the record exists
+            return $this->mds_put($eid, $data, $column, !($this->mds_get($eid) === FALSE));
+    }
+    
+    function mds_put_dc_elements($mdo, $dcelem) {
+        if (($mdt = $this->mds_get($mdo->mdo_eid)) === FALSE) {
+            $mdt = $mdo->mdo_generate_default_xml_metadata(); $exists = FALSE;
+        } else
+            $exists = TRUE;
+    
+        $xmlDoc = new xmddoc(explode("\n", $mdt)); if ($xmlDoc->error) return FALSE;    
+        foreach ($dcelem as $dce => $value) {
+            $xmlDoc->xmd_update($mdo->mdo_dcmap_v[$dce], (string) $value);
+        }    
+        $this->mds_put($mdo->mdo_eid, '', 'md5', $exists);    
+        return $this->mds_put($mdo->mdo_eid, $xmlDoc->xmd_xml());
+    }
+    
+    function mds_append($eid, $moredata, $column = 'indexabletext') {
+        if (($olddata = $this->mds_get($eid, $column)) === FALSE) return FALSE;
+        $this->mds_put($eid, $olddata . $moredata, $column); return $olddata;
+    }
+    
+    function mds_delete($eid) {
+        return $this->_query("DELETE FROM " . MDS_TABLE . " WHERE c_id = {$this->course_id} AND ", $eid);
+    }
+    
+    function mds_delete_offspring($eid, $sep = '.') {
+        return $this->_query("DELETE FROM " . MDS_TABLE . " WHERE c_id = {$this->course_id} AND ", $eid, $sep);
+    }
+    
+    function mds_delete_many($idarray) {
+        if (!is_array($idarray) || count($idarray) == 0) return FALSE;
+    
+        return $this->_query("DELETE FROM " . MDS_TABLE . " WHERE c_id = {$this->course_id} AND eid IN ('" .
+            implode("','", array_map('addslashes', $idarray)) . "')");
+    }
+    
+    function mds_update_xml_and_mdt($mdo, &$xmlDoc, $mda, $eid, &$traceinfo,
+            $exists = TRUE)  // note: $xmlDoc and $traceinfo passed by reference
     {
-        if (!$update) continue;
-
-        if (($nameLth = strpos($update, '=')))  // e.g. 'gen/tit/str=new'
+        foreach (explode("\n",
+               str_replace("\r", "\n", str_replace("\r\n", "\n", $mda))) as $update)
         {
-            if (($text = api_substr($update, $nameLth + 1)) === FALSE) $text = '';
-
-            if (!($path = trim(api_substr($update, 0, $nameLth)))) continue;
-
-            if (($sc = api_strpos($path, ';')))  // e.g. 'gen/tit,gen/des;str@lang'
-                $xmlDoc->xmd_update_many(api_substr($path, 0, $sc),
-                    api_substr($path, $sc + 1), $text);
-            else
-                $xmlDoc->xmd_update($path, $text);
+            if (!$update) continue;
+    
+            if (($nameLth = strpos($update, '=')))  // e.g. 'gen/tit/str=new'
+            {
+                if (($text = api_substr($update, $nameLth + 1)) === FALSE) $text = '';
+    
+                if (!($path = trim(api_substr($update, 0, $nameLth)))) continue;
+    
+                if (($sc = api_strpos($path, ';')))  // e.g. 'gen/tit,gen/des;str@lang'
+                    $xmlDoc->xmd_update_many(api_substr($path, 0, $sc),
+                        api_substr($path, $sc + 1), $text);
+                else
+                    $xmlDoc->xmd_update($path, $text);
+            }
+            elseif ($nameLth === FALSE)  // e.g. 'gen/tit/str[-1]~'
+            {
+                if ($update == '~~')
+                {
+                    $update = 'DELETE ' . $eid;
+                    if ($exists === FALSE) $update = '';
+                    else $this->mds_delete($eid);
+                    $mda = ''; $exists = TRUE;
+                    foreach ($xmlDoc->children[0] as $key => $child)
+                        unset($xmlDoc->children[0][$key]);
+                }
+                elseif ($update == '!!')
+                {
+                    define_kwds($mdo);
+                    $update = ''; $mda = ''; $exists = TRUE;
+                }
+                else
+                {
+                    $x = $xmlDoc->xmd_update(trim($update), '');
+                }
+            }    
+            if ($update) $traceinfo .= $update . '- ';
         }
-        elseif ($nameLth === FALSE)  // e.g. 'gen/tit/str[-1]~'
+    
+        $mdt = $xmlDoc->xmd_xml();
+    
+        if ($exists === FALSE)
         {
-            if ($update == '~~')
-            {
-                $update = 'DELETE ' . $eid;
-                if ($exists === FALSE) $update = '';
-                else $this->mds_delete($eid);
-                $mda = ''; $exists = TRUE;
-                foreach ($xmlDoc->children[0] as $key => $child)
-                    unset($xmlDoc->children[0][$key]);
-            }
-            elseif ($update == '!!')
-            {
-                define_kwds($mdo);
-                $update = ''; $mda = ''; $exists = TRUE;
-            }
-            else
-            {
-                $x = $xmlDoc->xmd_update(trim($update), '');
-            }
+            $this->mds_put($eid, $mdt, 'mdxmltext', FALSE);
+            $traceinfo .= 'INSERT ' . $eid . '- ';
         }
-
-        if ($update) $traceinfo .= $update . '- ';
+        elseif($mda)
+        {
+            $this->mds_put($eid, $mdt, 'mdxmltext');
+            $traceinfo .= 'UPDATE ' . $eid . '- ';
+        }
+    
+        return $mdt;
+    }
+    
+    
+    function _coldatstart($column, $data) {
+        return $column . " LIKE '" . Database::escape_string($data) . "%'";
+    }
+    
+    function _coldat($column, $data) {
+        return $column . "='" . Database::escape_string($data) . "'";
+    }
+    
+    function _query($sql, $eid = '', $sep = '') {        
+        if ($eid) $sql .= $sep ? $this->_coldatstart('eid', $eid . $sep) :
+            $this->_coldat('eid', $eid);
+        return Database::query($sql);
     }
 
-    $mdt = $xmlDoc->xmd_xml();
-
-    if ($exists === FALSE)
-    {
-        $this->mds_put($eid, $mdt, 'mdxmltext', FALSE);
-        $traceinfo .= 'INSERT ' . $eid . '- ';
-    }
-    elseif($mda)
-    {
-        $this->mds_put($eid, $mdt, 'mdxmltext');
-        $traceinfo .= 'UPDATE ' . $eid . '- ';
-    }
-
-    return $mdt;
 }
-
-function mdstore($allow_create)
-{
-    global $_course; if (!isset($_course)) return;
-    define('MDS_TABLE', Database::get_course_table(TABLE_METADATA));
-    $this->_query("CREATE TABLE IF NOT EXISTS " . MDS_TABLE . " (    " .
-            "eid varchar(250) NOT NULL," .      // entry-id, e.g. doc.1
-            "mdxmltext text default ''," .      // MD-text, XML-formatted
-            "md5 char(32) default ''," .        // hash-validator
-            "htmlcache1 text default ''," .     // cached HTML, part 1
-            "htmlcache2 text default ''," .     // cached HTML, part 2
-            "indexabletext text default ''," .  // indexable for search
-            "PRIMARY KEY (eid)           )");
-  
-}
-
-function _coldatstart($column, $data)
-{
-    return $column . " LIKE '" . addslashes($data) . "%'";
-}
-
-function _coldat($column, $data)
-{
-    return $column . "='" . addslashes($data) . "'";
-}
-
-function _query($sql, $eid = '', $sep = '')
-{
-    if ($eid) $sql .= $sep ? $this->_coldatstart('eid', $eid . $sep) :
-        $this->_coldat('eid', $eid);
-    return Database::query($sql);
-}
-
-}
-
-/*
-<!--
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-  -->
-*/
-
-?>

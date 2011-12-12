@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * Chamilo metadata/index.php
  * 2005/05/19
@@ -14,11 +16,10 @@
  *   - dbg=  debuginfo start number, e.g. 10000
  *
  */
-// PRELIMS -------------------------------------------------------------------->
 
 require_once '../inc/global.inc.php';
 
-require("md_funcs.php");
+require "md_funcs.php";
 
 getpar('EID', 'Entry IDentifier');           // e.g. 'Document.12' or 'Scorm.xx'
 if (!($dotpos = strpos(EID, '.'))) give_up('No . in ' . EID);
@@ -40,27 +41,25 @@ if (DBG)                                    $urlp .= '&dbg=' . urlencode(DBG);
 
 // name of the language file that needs to be included
 $language_file = LFN;
-require("../inc/global.inc.php");
-$this_section=SECTION_COURSES;
+require_once "../inc/global.inc.php";
+
+$this_section = SECTION_COURSES;
 
 $nameTools = get_lang('Tool');
 
-($nameTools && get_lang('Sorry'))
-    or give_up('Language file ' . LFN . " doesn't define 'Tool' and 'Sorry'");
+($nameTools && get_lang('Sorry')) or give_up('Language file ' . LFN . " doesn't define 'Tool' and 'Sorry'");
 
 $_course = api_get_course_info(); isset($_course) or give_up(get_lang('Sorry'));
 
-require(api_get_path(LIBRARY_PATH) . 'xmd.lib.php');
-require(api_get_path(LIBRARY_PATH) . 'xht.lib.php');
+require api_get_path(LIBRARY_PATH) . 'xmd.lib.php';
+require api_get_path(LIBRARY_PATH) . 'xht.lib.php';
 
 $mdObj = new mdobject($_course, EID_ID);  // see 'md_' . EID_TYPE . '.php'
 
 
 // Construct assoclist $langLangs from language table ------------------------->
 
-$result = Database::query("SELECT isocode FROM " .
-    Database :: get_main_table(TABLE_MAIN_LANGUAGE) .
-    " WHERE available='1' ORDER BY isocode ASC");
+$result = Database::query("SELECT isocode FROM " .Database :: get_main_table(TABLE_MAIN_LANGUAGE) ." WHERE available='1' ORDER BY isocode ASC");
 
 $sep = ":"; $langLangs = $sep . "xx" . $sep . "xx";
 
@@ -99,27 +98,24 @@ $xhtDoc->xht_xmldoc = $xhtxmldoc;
 
 if ($is_allowed_to_edit) $xhtDoc->xht_param['isallowedtoedit'] = 'TRUE';
 
-if ($is_allowed_to_edit && isset($_POST['mda']))  // MD updates to Doc and DB
-{
+// MD updates to Doc and DB
+if ($is_allowed_to_edit && isset($_POST['mda'])) {
     $mdt = $mdStore->mds_update_xml_and_mdt($mdObj, $xhtDoc->xht_xmldoc,
         get_magic_quotes_gpc() ? stripslashes($_POST['mda']) : $_POST['mda'],
         EID, $xhtDoc->xht_param['traceinfo'], $mdt_rec !== FALSE);
 
-    if ($mdt_rec !== FALSE)
-    {
+    if ($mdt_rec !== FALSE) {
          if (strpos($xhtDoc->xht_param['traceinfo'], 'DELETE') !== FALSE)
             $xhtDoc->xht_param['dbrecord'] = '';
-    }
-    else if (strpos($xhtDoc->xht_param['traceinfo'], 'INSERT') !== FALSE)
+    } else if (strpos($xhtDoc->xht_param['traceinfo'], 'INSERT') !== FALSE)
             $xhtDoc->xht_param['dbrecord'] = 'TRUE';
 
     if (method_exists($mdObj, 'mdo_storeback'))
         $mdObj->mdo_storeback($xhtDoc->xht_xmldoc);
 
     $mdt_rec = FALSE;  // cached HTML obsolete, must re-apply templates
-}
-elseif ($is_allowed_to_edit && $_POST['mdt'])  // md_editxml.htt
-{
+} elseif ($is_allowed_to_edit && $_POST['mdt']) {
+     // md_editxml.htt 
     $mdStore->mds_put(EID,
         get_magic_quotes_gpc() ? stripslashes($_POST['mdt']) : $_POST['mdt'],
         'mdxmltext', '?');

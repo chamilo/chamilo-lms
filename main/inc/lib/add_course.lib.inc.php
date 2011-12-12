@@ -437,6 +437,8 @@ function update_Db_course($course_db_name = null) {
     $TBL_THEMATIC_PLAN          = $course_db_name . 'thematic_plan';
     $TBL_THEMATIC_ADVANCE       = $course_db_name . 'thematic_advance';
     
+    $TBL_METADATA               = $course_db_name . 'metadata';
+    
     $add_to_all_tables = ' c_id INT NOT NULL, ';
 
     /*  Announcement tool	*/   
@@ -2001,6 +2003,19 @@ function update_Db_course($course_db_name = null) {
     $result = Database::query($sql);
 
     $sql    = "ALTER TABLE `".$TBL_THEMATIC_ADVANCE."` ADD INDEX (thematic_id)";
+    Database::query($sql);
+    
+    
+    $sql = "CREATE TABLE IF NOT EXISTS " . $TBL_METADATA . " (    " .
+            $add_to_all_tables.
+            "eid VARCHAR(250) NOT NULL," .      // entry-id, e.g. doc.1
+            "mdxmltext TEXT default ''," .      // MD-text, XML-formatted
+            "md5 CHART(32) default ''," .        // hash-validator
+            "htmlcache1 TEXT default ''," .     // cached HTML, part 1
+            "htmlcache2 TEXT default ''," .     // cached HTML, part 2
+            "indexabletext TEXT default ''," .  // indexable for search
+            "PRIMARY KEY (c_id, eid)           )".$charset_clause;
+            
     Database::query($sql);
 
     return 0;

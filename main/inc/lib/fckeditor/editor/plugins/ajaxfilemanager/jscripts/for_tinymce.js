@@ -222,8 +222,7 @@ tinyMCEPopup.init();
 
 //tinyMCEPopup.requireLangPack();
 
-function selectFile(url)
-{
+function selectFile(url) {    
 	if(typeof(url) != 'undefined')
 	{
 		

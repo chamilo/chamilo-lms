@@ -1,9 +1,6 @@
-function selectFile(url)
-{
+function selectFile(url) {    
       window.opener.document.getElementById(elementId).value = url;
-      window.close() ;
- 
-
+      window.close();
 }
 
 

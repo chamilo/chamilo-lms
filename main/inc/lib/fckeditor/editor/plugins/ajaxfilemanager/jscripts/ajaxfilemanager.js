@@ -134,9 +134,7 @@ $(elem).each(
 					     
 					   }
 					  
-					   if(typeof(selectFile) != 'undefined')
-					   {
-					   	
+					   if(typeof(selectFile) != 'undefined') {
 					   	 selectFile(files[num].url);
 					   }else
 							generateDownloadIframe(appendQueryString(getUrl('download'), 'path=' + files[num].path, ['path']));					   {
@@ -1732,8 +1730,9 @@ function setDocInfo(type, num) {
 			$('#fileFieldSet').css('display', '');
 			
 		    if (typeof(selectFile) != 'undefined' && $('#fileList input[@type=checkbox][@checked]').length==1 || $('#rightCol dl.thumbnailListing input[@type=checkbox][@checked]').length==1 ) {		    	
-			   	$('#selectCurrentUrl').unbind('click').click(function() {		   			
+			   	$('#selectCurrentUrl').unbind('click').click(function() {			   	    	   	    			   	    		   			
 			   		selectFile(info.url);
+			   		
 			   		}
 			   	);			   	
 			   	$('#returnCurrentUrl').show();		   	 

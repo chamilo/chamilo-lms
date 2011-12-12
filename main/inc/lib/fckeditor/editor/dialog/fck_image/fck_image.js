@@ -33,13 +33,13 @@ var FCKTools	= oEditor.FCKTools ;
 window.document.dir = FCKLang.Dir ;
 
 // We have to avoid javascript errors if some language variables have not been defined.
-FCKLang['UploadSelectFileFirst'] = FCKLang['UploadSelectFileFirst'] ? FCKLang['UploadSelectFileFirst'] : 'Please, select a file before pressing the upload button.' ;
+FCKLang['UploadSelectFileFirst']    = FCKLang['UploadSelectFileFirst'] ? FCKLang['UploadSelectFileFirst'] : 'Please, select a file before pressing the upload button.' ;
 FCKLang['FileSuccessfullyUploaded'] = FCKLang['FileSuccessfullyUploaded'] ? FCKLang['FileSuccessfullyUploaded'] : 'Your file has been successfully uploaded.' ;
-FCKLang['FileRenamed'] = FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
-FCKLang['InvalidFileType'] = FCKLang['InvalidFileType'] ? FCKLang['InvalidFileType'] : 'Invalid file type.' ;
-FCKLang['SecurityError'] = FCKLang['SecurityError'] ? FCKLang['SecurityError'] : 'Security error. You probably don\'t have enough permissions to upload. Please check your server.' ;
-FCKLang['ConnectorDisabled'] = FCKLang['ConnectorDisabled'] ? FCKLang['ConnectorDisabled'] : 'The upload feature (connector) is disabled.' ;
-FCKLang['UploadError'] = FCKLang['UploadError'] ? FCKLang['UploadError'] : 'Error on file upload. Error number: ' ;
+FCKLang['FileRenamed']              = FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
+FCKLang['InvalidFileType']          = FCKLang['InvalidFileType'] ? FCKLang['InvalidFileType'] : 'Invalid file type.' ;
+FCKLang['SecurityError']            = FCKLang['SecurityError'] ? FCKLang['SecurityError'] : 'Security error. You probably don\'t have enough permissions to upload. Please check your server.' ;
+FCKLang['ConnectorDisabled']        = FCKLang['ConnectorDisabled'] ? FCKLang['ConnectorDisabled'] : 'The upload feature (connector) is disabled.' ;
+FCKLang['UploadError']              = FCKLang['UploadError'] ? FCKLang['UploadError'] : 'Error on file upload. Error number: ' ;
 
 var bImageButton = ( document.location.search.length > 0 && document.location.search.substr(1) == 'ImageButton' ) ;
 
@@ -77,13 +77,10 @@ var oLink = dialog.Selection.GetSelection().MoveToAncestorNode( 'A' ) ;
 
 var oImageOriginal ;
 
-function UpdateOriginal( resetSize )
-{
+function UpdateOriginal( resetSize ) {
 	if ( !eImgPreview )
 		return ;
-
-	if ( GetE('txtUrl').value.length == 0 )
-	{
+	if ( GetE('txtUrl').value.length == 0 ) {
 		oImageOriginal = null ;
 		return ;
 	}

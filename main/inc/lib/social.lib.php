@@ -634,7 +634,7 @@ class SocialManager extends UserManager {
 		if (!in_array($show, array('shared_profile', 'groups', 'group_edit', 'member_list','waiting_list','invite_friends'))) {
 			//echo Display::div(get_lang('Actions') ,array('class' => 'social_menu_option'));
 			/*echo '<div align="center" class="social-menu-title">';
-			echo '<span>'.get_lang('Optoi').'</span>';
+			echo '<span>'.get_lang('Option').'</span>';
 			echo '</div>';*/
 
 	        echo '<div class="social_menu_items"><ul>';	        	                	

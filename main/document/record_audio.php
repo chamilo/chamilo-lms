@@ -31,7 +31,7 @@ $nameTools = get_lang('VoiceRecord');
 api_protect_course_script();
 api_block_anonymous_users();
 
-$document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
+$document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     if (api_is_in_group()) {
         $group_properties   = GroupManager::get_group_properties(api_get_group_id());        
@@ -72,22 +72,22 @@ if (!is_dir($filepath)) {
 
 //groups //TODO: clean
 if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
-		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-		$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
-		$noPHP_SELF = true;
-		$to_group_id = $_SESSION['_gid'];
-		$group = GroupManager :: get_group_properties($to_group_id);
-		$path = explode('/', $dir);
-		if ('/'.$path[1] != $group['directory']) {
-			api_not_allowed(true);
-		}
+	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
+	$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
+	$noPHP_SELF = true;
+	$to_group_id = $_SESSION['_gid'];
+	$group = GroupManager :: get_group_properties($to_group_id);
+	$path = explode('/', $dir);
+	if ('/'.$path[1] != $group['directory']) {
+		api_not_allowed(true);
 	}
-	$interbreadcrumb[] = array ("url" => "./document.php?id=".$document_id.$req_gid, "name" => get_lang('Documents'));
+}
+
+$interbreadcrumb[] = array ("url" => "./document.php?id=".$document_id.$req_gid, "name" => get_lang('Documents'));
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
-
 
 if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir),api_get_session_id()))) {
 	api_not_allowed(true);
@@ -96,6 +96,7 @@ if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_
 
 /*	Header */
 event_access_tool(TOOL_DOCUMENT);
+
 $display_dir = $dir;
 if (isset ($group)) {
 	$display_dir = explode('/', $dir);
@@ -105,35 +106,20 @@ if (isset ($group)) {
 }
 
 // Interbreadcrumb for the current directory root path
-	// Copied from document.php
-	$dir_array = explode('/', $dir);
-	$array_len = count($dir_array);
-	
-	/*
-	TODO:check and delete this code
-	if (!$is_certificate_mode) {
-		if ($array_len > 1) {
-			if (empty($_SESSION['_gid'])) {
-				$url_dir = 'document.php?&curdirpath=/';
-				$interbreadcrumb[] = array('url' => $url_dir, 'name' => get_lang('HomeDirectory'));
-			}
-		}
-	}
-	*/
-	
-	$dir_acum = '';
-	for ($i = 0; $i < $array_len; $i++) {
-		$url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
-		//Max char 80
-		$url_to_who = cut($dir_array[$i],80);
-		if ($is_certificate_mode) {
-			$interbreadcrumb[] = array('url' => $url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => $url_to_who);
-		} else {
-			$interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
-		}
-		$dir_acum .= $dir_array[$i].'/';
-	}
-//
+$counter = 0;   
+if (isset($document_data['parents'])) {
+    foreach($document_data['parents'] as $document_sub_data) {
+        //fixing double group folder in breadcrumb
+        if (api_get_group_id()) {
+            if ($counter == 0) {
+                $counter++;
+                continue;  
+            }
+        }
+        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+        $counter++;
+    }
+}
 Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
@@ -157,8 +143,7 @@ function submitVoice() {
 	var filepath="<?php echo urlencode($filepath); ?>";
 	var dir="<?php echo urlencode($dir); ?>";
 	var course_code="<?php echo urlencode($course_code); ?>";
-	var urlnanogong="../inc/lib/nanogong/receiver.php?filename="+filename+"&filepath="+filepath+"&dir="+dir+"&course_code="+course_code;
-	
+	var urlnanogong="../inc/lib/nanogong/receiver.php?filename="+filename+"&filepath="+filepath+"&dir="+dir+"&course_code="+course_code;	
 	
 	//check	
 	var recorder
@@ -178,11 +163,17 @@ function submitVoice() {
 	//	
 	var applet = document.getElementById("nanogong");	
 	var ret = applet.sendGongRequest( "PostToForm", urlnanogong, "voicefile", "", "temp");//'PostToForm', postURL, inputname, cookie, filename
-	if (ret == null) alert(lang_failled_to_submit); else alert(lang_submitted+"\n"+ret);
+	if (ret == null)  { 
+	    alert(lang_failled_to_submit); 
+	} else {
+	    alert(lang_submitted+"\n"+ret);
+	    $("#status").attr('value', '1');
+	}
 }
 </script>
 
 <?php
+
 echo '<div align="center">';
 
 Display::display_icon('microphone.png', get_lang('PressRecordButton'),'','128');
@@ -203,7 +194,7 @@ echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/
 	
 echo '</applet>';
 //check browser support and load form
-$array_browser=api_browser_support('check_browser');
+$array_browser = api_browser_support('check_browser');
 
 if ($array_browser[0]=="Internet Explorer") {	
 	echo '<div style="width:250px; background-color:#FFEFA7">'.get_lang('BrowserNotSupportNanogongSend').'</div>';	
@@ -212,6 +203,7 @@ if ($array_browser[0]=="Internet Explorer") {
 		echo '<input type="text" id="audio_title">';
 		echo '<input type="hidden" name="cidReq" value="'.$_course['id'].'">';
 		echo '<input type="hidden" name="id" value="'.$document_id.'">';
+        echo '<input id="status" type="hidden" name="status" value="0">';
 		echo '<button class="upload" type="submit" value="'.get_lang('Send').'" onClick="submitVoice()" />'.get_lang('Send').'</button>';
 	echo '</form>';
 }

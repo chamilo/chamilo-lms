@@ -485,7 +485,12 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "config.php";
         {
             $output = $value;
         }
-        return "http://" .  addTrailingSlash(backslashToSlash($_SERVER['HTTP_HOST'])) . removeBeginingSlash(backslashToSlash($output));
+        
+        $protocol = "http://";
+        if (isset($_SERVER['HTTPS'])) {
+            $protocol = "https://";    
+        }
+        return $protocol.addTrailingSlash(backslashToSlash($_SERVER['HTTP_HOST'])) . removeBeginingSlash(backslashToSlash($output));
     }
 
 /**

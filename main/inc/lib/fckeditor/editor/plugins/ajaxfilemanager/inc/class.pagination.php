@@ -119,13 +119,17 @@ class pagination
 	 *
 	 * @param string $value the base url
 	 */
-	function setUrl($value="")
-	{
+	function setUrl($value="") {
+	    $protocol = "http://";
+        if (isset($_SERVER['HTTPS'])) {
+            $protocol = "https://";    
+        }
+        
 		if(empty($value))
 		{
 			if($this->friendlyUrl)
 			{
-				$this->url = "http://" . $_SERVER['HTTP_HOST'] . "/";
+				$this->url = $protocol.$_SERVER['HTTP_HOST'] . "/";
 			}else
 			{
 				$this->url = $_SERVER['PHP_SELF'];

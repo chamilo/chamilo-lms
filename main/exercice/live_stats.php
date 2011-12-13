@@ -34,7 +34,7 @@ $minutes = 60;
 $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_live_stats&exercise_id='.$objExercise->id.'&minutes='.$minutes;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file 
-$columns        = array(get_lang('Firstname'), get_lang('Lastname'), get_lang('Date'), get_lang('QuestionsDone'), get_lang('Score'));
+$columns        = array(get_lang('Firstname'), get_lang('Lastname'), get_lang('Date'), get_lang('QuestionsAlreadyAnswered'), get_lang('Score'));
 
 //Column config
 $column_model   = array(

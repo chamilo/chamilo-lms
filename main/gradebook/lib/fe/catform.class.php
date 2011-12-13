@@ -167,7 +167,6 @@ class CatForm extends FormValidator {
 			$count = count($cats) - 1;			
 			$value = round((float)$grading_contents['items'][$count]['percentage'], 2);            
             if ($value == 0) {                
-//                Display::display_warning_message(get_lang('GradingModelBlocks'));
                 //$this->freeze();
             }
 			

@@ -94,7 +94,17 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
     $form = new FormValidator('settings', 'post', 'settings.php?category='.$_GET['category']);
     
     $renderer = & $form->defaultRenderer();
-    $renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 --></div></div>');
+    $renderer->setElementTemplate('<div class="row">
+        <div class="label">{label}</div>
+        <div class="formw">{element}
+           <!-- BEGIN label_3 -->
+                {label_3}            
+            <!-- END label_3 -->            
+            <!-- BEGIN label_2 -->
+                <span class="help-block">{label_2}</span>
+            <!-- END label_2 -->
+            </div>
+        </div>');
     
     /*$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>');
     $renderer->setElementTemplate('<div class="sectionvalue">{element}</div><div class="sectioncomment">{label}</div>'."\n");*/
@@ -192,17 +202,20 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 // There is no else{} statement because we load the default $row['selected_value'] of the main Chamilo site.
             }
         }
-		
-          
         
         switch ($row['type']) {
-            case 'textfield':            	
-                if ($row['variable'] == 'account_valid_duration') {
+            case 'textfield':
+                if (in_array($row['variable'], array('dropbox_max_filesize', 'message_max_upload_filesize'))) {                    
+                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment']), get_lang('MB')), array('maxlength' => '5'));
+                    $form->applyFilter($row['variable'], 'html_filter');
+                    $default_values[$row['variable']] = round($row['selected_value']/1024/1024, 1);
+                    
+                } elseif ($row['variable'] == 'account_valid_duration') {
                     $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), array('maxlength' => '5'));
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
 
-                // For platform character set selection: Conversion of the textfield to a select box with valid values.
+                    // For platform character set selection: Conversion of the textfield to a select box with valid values.
                 } elseif ($row['variable'] == 'platform_charset') {
                     $current_system_encoding = api_refine_encoding_id(trim($row['selected_value']));
                     $valid_encodings = array_flip(api_get_valid_encodings());
@@ -489,6 +502,12 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         }
 
         // Set true for allow_message_tool variable if social tool is actived.
+        
+        
+        $values['dropbox_max_filesize'] = $values['dropbox_max_filesize']*1024*1024;
+        $values['message_max_upload_filesize'] = $values['message_max_upload_filesize']*1024*1024;
+         
+         
         if ($values['allow_social_tool'] == 'true') {
             $values['allow_message_tool'] = 'true';
         }

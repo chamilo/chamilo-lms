@@ -11,10 +11,12 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
+
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
-$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
+$course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
 $course_code = isset($_GET['course_code']) ? $_GET['course_code'] : $_POST['code'];
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyCourseInfo');
@@ -166,7 +168,7 @@ $group[]= $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowe
 $form->addGroup($group,'', get_lang('Unsubscription'), '<br />');
 
 
-$form->addElement('text','disk_quota',get_lang('CourseQuota'));
+$form->addElement('text','disk_quota',array(get_lang('CourseQuota'), null, get_lang('MB')));
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'),'required');
 $form->addRule('disk_quota',get_lang('ThisFieldShouldBeNumeric'),'numeric');
 
@@ -180,8 +182,7 @@ foreach ($list_course_extra_field as $extra_field) {
 			$checked = (array_key_exists('extra_field_value', $extra_field) && $extra_field['extra_field_value'] == 1)? array('checked'=>'checked'): '';
 			$form->addElement('hidden', '_extra_'.$extra_field['field_variable'], 0);
 			$field_display_text=$extra_field['field_display_text'];
-			$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'],get_lang('SpecialCourse') , get_lang($extra_field['field_default_value']).' '.Display::return_icon('synthese_view.gif',get_lang('AllUsersAreAutomaticallyRegistered')), $checked);
-
+			$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(get_lang('SpecialCourse'), get_lang('AllUsersAreAutomaticallyRegistered')) , get_lang($extra_field['field_default_value']), $checked);
 			break;
 		/* case USER_FIELD_TYPE_SELECT_MULTIPLE:
 		case USER_FIELD_TYPE_DATE:
@@ -194,7 +195,9 @@ $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),
 // Set some default values
 
 $course_db_name = $course['db_name'];
+$course['disk_quota'] = round($course['disk_quota']/1024/1024, 1);
 $course['title'] = api_html_entity_decode($course['title'], ENT_QUOTES, $charset);
+
 $form->setDefaults($course);
 // Validate form
 if ($form->validate()) {
@@ -239,6 +242,9 @@ if ($form->validate()) {
 	$department_name = $course['department_name'];
 	$department_url = $course['department_url'];
 	$course_language = $course['course_language'];
+    
+    $course['disk_quota'] = $course['disk_quota']*1024*1024;
+     
 	$disk_quota = $course['disk_quota'];
 	$visibility = $course['visibility'];
 	$subscribe = $course['subscribe'];

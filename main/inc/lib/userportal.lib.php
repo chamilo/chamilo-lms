@@ -1119,27 +1119,29 @@ class IndexManager {
 			}
 		
 			/*  Announcements */
-		
-			$course_database = $my_course['db'];
-			$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST, $course_database);
-			$query = "SELECT visibility FROM $course_tool_table WHERE link = 'announcements/announcements.php' AND visibility = 1";
+			
+            $course_id = $my_course['course_id'];
+            
+			$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
+			$query = "SELECT visibility FROM $course_tool_table WHERE c_id = $course_id AND link = 'announcements/announcements.php' AND visibility = 1";
 			$result = Database::query($query);
+            
 			// Collect from announcements, but only if tool is visible for the course.
 			if ($result && $maxValvas > 0 && Database::num_rows($result) > 0) {
 				// Search announcements table.
 				// Take the entries listed at the top of advalvas/announcements tool.
 				$course_announcement_table = Database::get_course_table(TABLE_ANNOUNCEMENT);
 				$sqlGetLastAnnouncements = "SELECT end_date publicationDate, content
-		                                            FROM ".$course_announcement_table;
+		                                            FROM ".$course_announcement_table." WHERE c_id = $course_id ";
 				switch (CONFVAL_limitPreviewTo) {
 					case SCRIPTVAL_NewEntriesOfTheDay :
-						$sqlGetLastAnnouncements .= "WHERE DATE_FORMAT(end_date,'%Y %m %d') >= '".date('Y m d')."'";
+						$sqlGetLastAnnouncements .= " AND DATE_FORMAT(end_date,'%Y %m %d') >= '".date('Y m d')."'";
 						break;
 					case SCRIPTVAL_NoTimeLimit :
 						break;
 					case SCRIPTVAL_NewEntriesOfTheDayOfLastLogin :
 						// take care mysql -> DATE_FORMAT(time,format) php -> date(format,date)
-						$sqlGetLastAnnouncements .= "WHERE DATE_FORMAT(end_date,'%Y %m %d') >= '".date('Y m d', $_user['lastLogin'])."'";
+						$sqlGetLastAnnouncements .= " AND  DATE_FORMAT(end_date,'%Y %m %d') >= '".date('Y m d', $_user['lastLogin'])."'";
 				}
 				$sqlGetLastAnnouncements .= "ORDER BY end_date DESC LIMIT ".$maxValvas;
 				$resGetLastAnnouncements = Database::query($sqlGetLastAnnouncements);
@@ -1154,11 +1156,9 @@ class IndexManager {
 				}
 			}
 		
-			/* Agenda */
-		
-			$course_database = $my_course['db'];
-			$course_tool_table = Database :: get_course_table(TABLE_TOOL_LIST, $course_database);
-			$query = "SELECT visibility FROM $course_tool_table WHERE link = 'calendar/agenda.php' AND visibility = 1";
+			/* Agenda */		
+			$course_tool_table = Database :: get_course_table(TABLE_TOOL_LIST);
+			$query = "SELECT visibility FROM $course_tool_table WHERE c_id = $course_id AND link = 'calendar/agenda.php' AND visibility = 1";
 			$result = Database::query($query);
 			$thisAgenda = $maxCourse - $nbDigestEntries; // New max entries for agenda.
 			if ($maxAgenda < $thisAgenda) {
@@ -1166,12 +1166,13 @@ class IndexManager {
 			}
 			// Collect from agenda, but only if tool is visible for the course.
 			if ($result && $thisAgenda > 0 && Database::num_rows($result) > 0) {
-				$tableCal = $courseTablePrefix.$thisCourseDbName.$_configuration['db_glue'].'calendar_event';
+				//$tableCal = $courseTablePrefix.$thisCourseDbName.$_configuration['db_glue'].'calendar_event';
+                $course_table_agenda = Database::get_course_table(TABLE_AGENDA);
 				$sqlGetNextAgendaEvent = "SELECT start_date, title content, start_time
-		                                            FROM $tableCal
-		                                            WHERE start_date >= CURDATE()
-		                                            ORDER BY start_date, start_time
-		                                            LIMIT $maxAgenda";
+                                            FROM $course_table_agenda
+                                            WHERE c_id = $course_id AND start_date >= CURDATE()
+                                            ORDER BY start_date, start_time
+                                            LIMIT $maxAgenda";
 				$resGetNextAgendaEvent = Database::query($sqlGetNextAgendaEvent);
 				if ($resGetNextAgendaEvent) {
 					while ($agendaEvent = Database::fetch_array($resGetNextAgendaEvent)) {

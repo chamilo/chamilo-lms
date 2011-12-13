@@ -168,7 +168,13 @@ class Database {
      */
     //public static function get_course_table($short_table_name, $database_name = '') {
     //forces fatal errors so we can debug more easily        
-    public static function get_course_table($short_table_name) {
+    public static function get_course_table($short_table_name, $extra = null) {
+        if (!empty($extra)) {
+            var_dump($extra);
+            //@todo remove this
+            echo "<h3>Dev Message: get_course_table() doesn't have a 2nd parameter</h3>";
+            //exit;
+        }
     	return self::format_table_name(self::get_main_database(), DB_COURSE_PREFIX.$short_table_name);
         //return self::format_glued_course_table_name(self::fix_database_parameter($database_name), $short_table_name);
     }
@@ -700,7 +706,7 @@ class Database {
         }        
         //error_log($query);
         //Check if the table contains a c_ (means a course id)
-        if (strpos($query, 'c_')) {        	
+        if (strpos($query, 'c_')) {      	
         	//Check if the table contains inner joins 
         	if (
         	    strpos($query, 'down_doc_path') === false &&
@@ -717,7 +723,14 @@ class Database {
         		strpos($query, 'CREATE TABLE') === false &&
         		strpos($query, 'AUTO_INCREMENT') === false
         	
-        	) {        		
+        	) {
+        	    //error_log($query);
+                echo '<pre>';
+                //@todo remove this
+                echo '<h4>Dev message: please add the c_id field in this query or report this error in support.chamilo.org </h4>';
+                echo $query;                
+                echo '</pre>';
+        	    /*        		
         		$limit_list = explode('LIMIT', $query);
         		$limit = '';
         		if (isset($limit_list[1])) {
@@ -742,7 +755,8 @@ class Database {
 	        	} else {
 	        		//check if order ?
 	        		$query = $select. ' WHERE 1 AND c_id = '.api_get_course_int_id().' '.$order.$group.$limit;	    
-	        	}	        	        	
+	        	}	        	
+                */        	
         	}
         	//echo ($query);var_dump('d');
         }

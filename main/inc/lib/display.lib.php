@@ -818,7 +818,7 @@ class Display {
 
         $obj->colNames      = $column_names;
         $obj->colModel      = $column_model;
-        $obj->pager         = $div_id.'_pager';
+        $obj->pager         = '#'.$div_id.'_pager';
 
         $obj->datatype  = 'json';
         

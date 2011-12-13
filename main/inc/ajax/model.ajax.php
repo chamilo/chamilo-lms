@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-//@todo this could be integrated in the inc/lib/model.lib.php + try to clean this file, is not very well tested yet!
+//@todo this could be integrated in the inc/lib/model.lib.php + try to clean this file
+
 require_once '../global.inc.php';
 
 api_protect_admin_script(true);
@@ -18,6 +19,46 @@ $sord  = $_REQUEST['sord'];         //asc or desc
 if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc'; 
 }
+
+//Search features
+
+$ops = array(
+    'eq'=>'=', //equal
+    'ne'=>'<>',//not equal
+    'lt'=>'<', //less than
+    'le'=>'<=',//less than or equal
+    'gt'=>'>', //greater than
+    'ge'=>'>=',//greater than or equal
+    'bw'=>'LIKE', //begins with
+    'bn'=>'NOT LIKE', //doesn't begin with
+    'in'=>'LIKE', //is in
+    'ni'=>'NOT LIKE', //is not in
+    'ew'=>'LIKE', //ends with
+    'en'=>'NOT LIKE', //doesn't end with
+    'cn'=>'LIKE', // contains
+    'nc'=>'NOT LIKE'  //doesn't contain
+);
+
+//@todo move this in the display_class
+
+function get_where_clause($col, $oper, $val) {
+    global $ops;
+    if($oper == 'bw' || $oper == 'bn') $val .= '%';
+    if($oper == 'ew' || $oper == 'en' ) $val = '%'.$val;
+    if($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') $val = '%'.$val.'%';
+    $val = Database::escape_string($val);
+    return " $col {$ops[$oper]} '$val' ";
+}
+
+$where_condition = ""; //if there is no search request sent by jqgrid, $where should be empty
+$search_field    = isset($_REQUEST['searchField']) ? $_REQUEST['searchField'] : false;
+$search_oper     = isset($_REQUEST['searchOper']) ? $_REQUEST['searchOper']: false;
+$search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
+
+if ($_REQUEST['_search'] == 'true') {
+    $where_condition = get_where_clause($search_field, $search_oper, $search_string);
+}
+
 // get index row - i.e. user click to sort $sord = $_GET['sord']; 
 // get the direction 
 if (!$sidx) $sidx = 1;
@@ -25,6 +66,10 @@ if (!$sidx) $sidx = 1;
 //2. Selecting the count FIRST
 //@todo rework this
 switch ($action) {
+    case 'get_sessions':
+        require_once $libpath.'sessionmanager.lib.php';        
+        $count = SessionManager::get_count_admin();
+        break;
     case 'get_gradebooks':
         require_once $libpath.'gradebook.lib.php';
         $obj        = new Gradebook();
@@ -49,8 +94,7 @@ switch ($action) {
         exit;   
 }
 
-//3. Calculating first, end, etc
-        
+//3. Calculating first, end, etc       
 $total_pages = 0;
 if ($count > 0) { 
     if (!empty($limit)) {
@@ -74,7 +118,11 @@ if ($_REQUEST['oper'] == 'del') {
 
 //4. Querying the DB for the elements
 $columns = array();
-switch ($action) {
+switch ($action) {    
+    case 'get_sessions':
+        $columns = array('name', 'nbr_courses','category_name', 'date_start','date_end', 'coach_name', 'visibility');        
+        $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));        
+        break;
     case 'get_gradebooks': 
         $columns = array('name', 'skills', 'actions');                
         if (!in_array($sidx, $columns)) {
@@ -163,7 +211,7 @@ switch ($action) {
 //var_dump($result);
 
 //5. Creating an obj to return a json
-if (in_array($action, array('get_careers','get_promotions','get_usergroups','get_gradebooks'))) { 
+if (in_array($action, array('get_careers','get_promotions','get_usergroups','get_gradebooks', 'get_sessions'))) { 
     $response = new stdClass();           
     $response->page     = $page; 
     $response->total    = $total_pages; 

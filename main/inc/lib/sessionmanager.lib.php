@@ -242,8 +242,10 @@ class SessionManager {
         if (Database::num_rows($result)) {
             $sessions   = Database::store_result($result);
             foreach ($sessions as $session) {
-                $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']); 
+                $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
                 
+                $session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=".$session['user_id']);  
+           
                 if ($session['date_start'] == '0000-00-00') {
                     $session['date_start'] = '';
                 }

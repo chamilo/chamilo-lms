@@ -14,7 +14,6 @@ $language_file='exercice';
 require_once '../inc/global.inc.php';
 
 // including additional libraries
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once 'question.class.php';
 require_once 'exercise.class.php';
 
@@ -56,7 +55,7 @@ while ($row = Database :: fetch_array($result)) {
 $form->addElement('select', 'exercice', get_lang('Exercice'), $exercises);
 
 // generate default content
-$form->addElement('checkbox', 'is_content', get_lang('DefaultContent'), null, array('checked' => true));
+$form->addElement('checkbox', 'is_content', null, get_lang('DefaultContent'), array('checked' => true));
 
 // the submit button
 $form->addElement('style_submit_button', 'SubmitCreateQuestion', get_lang('CreateQuestion'), 'class="add"');

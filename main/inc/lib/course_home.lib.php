@@ -18,11 +18,15 @@ class CourseHome {
         $numcols = 3;
         $table = new HTML_Table('width="100%"');
         $all_tools = array();
+        
+        $course_id = api_get_course_int_id();
+        
+        
         switch ($cat) {
             case 'Basic' :
-                $condition_display_tools = ' WHERE a.link=t.link AND t.position="basic" ';
+                $condition_display_tools = ' WHERE t.c_id = '.$course_id.' AND  a.link=t.link AND t.position="basic" ';
                 if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
-                    $condition_display_tools = ' WHERE a.link=t.link AND (t.position="basic" OR a.name = "'.TOOL_TRACKING.'") ';
+                    $condition_display_tools = ' WHERE t.c_id = '.$course_id.' AND a.link=t.link AND (t.position="basic" OR a.name = "'.TOOL_TRACKING.'") ';
                 }
 
                 $sql = "SELECT a.*, t.image img, t.row, t.column  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
@@ -31,23 +35,23 @@ class CourseHome {
             case 'External' :
                 if (api_is_allowed_to_edit()) {
                     $sql = "SELECT a.*, t.image img FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
-                            WHERE (a.link=t.link AND t.position='external')
-                            OR (a.visibility <= 1 AND (a.image = 'external.gif' OR a.image = 'scormbuilder.gif' OR t.image = 'blog.gif') AND a.image=t.image)
+                            WHERE t.c_id = '.$course_id.' AND ((a.link=t.link AND t.position='external')
+                            OR (a.visibility <= 1 AND (a.image = 'external.gif' OR a.image = 'scormbuilder.gif' OR t.image = 'blog.gif') AND a.image=t.image))
                             ORDER BY a.id";
                 } else {
                     $sql = "SELECT a.*, t.image img FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
-                            WHERE a.visibility = 1 AND ((a.link=t.link AND t.position='external')
-                            OR ((a.image = 'external.gif' OR a.image = 'scormbuilder.gif' OR t.image = 'blog.gif') AND a.image=t.image))
+                            WHERE t.c_id = '.$course_id.' AND (a.visibility = 1 AND ((a.link=t.link AND t.position='external')
+                            OR ((a.image = 'external.gif' OR a.image = 'scormbuilder.gif' OR t.image = 'blog.gif') AND a.image=t.image)))
                             ORDER BY a.id";
                 }
                 break;
             case 'courseAdmin' :
                 $sql = "SELECT a.*, t.image img, t.row, t.column  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
-                        WHERE admin=1 AND a.link=t.link ORDER BY t.row, t.column";
+                        WHERE t.c_id = '.$course_id.' AND admin=1 AND a.link=t.link ORDER BY t.row, t.column";
                 break;
 
             case 'platformAdmin' :
-                $sql = "SELECT *, image img FROM $TBL_ACCUEIL WHERE visibility = 2 ORDER BY id";
+                $sql = "SELECT *, image img FROM $TBL_ACCUEIL WHERE t.c_id = '.$course_id.' AND visibility = 2 ORDER BY id";
         }
         $result = Database::query($sql);
 
@@ -428,11 +432,12 @@ class CourseHome {
         $web_code_path      = api_get_path(WEB_CODE_PATH);
         $course_tool_table  = Database::get_course_table(TABLE_TOOL_LIST);
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-        $is_platform_admin = api_is_platform_admin();
+        $is_platform_admin  = api_is_platform_admin();
         $all_tools_list = array();
 
         // Condition for the session
         $session_id 			= api_get_session_id();
+        $course_id              = api_get_course_int_id();
         $condition_session 		= api_get_session_condition($session_id, true, true);
         $course_id_condition 	= api_get_course_table_condition();
         
@@ -442,34 +447,34 @@ class CourseHome {
                     if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
                         $condition_display_tools = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") OR (name = "'.TOOL_TRACKING.'") )   ';
                     }
-                    $sql = "SELECT * FROM $course_tool_table  $condition_display_tools $condition_session ORDER BY id";
+                    $sql = "SELECT * FROM $course_tool_table  $condition_display_tools AND c_id = $course_id $condition_session ORDER BY id";
                     $result = Database::query($sql);
                     $col_link ="##003399";
                     break;
             case TOOL_AUTHORING:
-                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'authoring' $condition_session ORDER BY id";
+                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'authoring' AND c_id = $course_id $condition_session ORDER BY id";
                     $result = Database::query($sql);
                     $col_link ="##003399";
                     break;
             case TOOL_INTERACTION:
-                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'interaction' $condition_session ORDER BY id";
+                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'interaction' AND c_id = $course_id $condition_session ORDER BY id";
                     $result = Database::query($sql);
                     $col_link ="##003399";
                     break;
             case TOOL_ADMIN_VISIBLE:
-                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' AND visibility ='1' $condition_session ORDER BY id";
+                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' AND visibility ='1' AND c_id = $course_id $condition_session ORDER BY id";
                     $result = Database::query($sql);
                     $col_link ="##003399";
                     break;
             case TOOL_ADMIN_PLATFORM:
-                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' $condition_session ORDER BY id";
+                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' AND c_id = $course_id $condition_session ORDER BY id";
                     $result = Database::query($sql);
                     $col_link ="##003399";
                     break;
             case TOOL_COURSE_PLUGIN:
                     //Other queries recover id, name, link, image, visibility, admin, address, added_tool, target, category and session_id
                     // but plugins are not present in the tool table, only globally and inside the course_settings table once configured
-                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'plugin' $condition_session ORDER BY id";
+                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'plugin' AND c_id = $course_id $condition_session ORDER BY id";
                     $result = Database::query($sql);
                     break;
         }

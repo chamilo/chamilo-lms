@@ -10,9 +10,6 @@
 /**
  * Code
  */
-require_once(dirname(__FILE__).'/course.lib.php');
-require_once(dirname(__FILE__).'/database.lib.php');
-
 /**
  * CourseDescription can be used to instanciate objects or as a library to manage course descriptions
  * @package chamilo.course_description
@@ -39,12 +36,14 @@ class CourseDescription
 	 */
 	public static function get_descriptions($course_id) {
 		// Get course code
-		$course_id = (int)$course_id;
-		$course_code = CourseManager::get_course_code_from_course_id($course_id);
-		// Get course info
-		$course_info = CourseManager::get_course_information($course_code);
-		$t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_info['db_name']);
-		$sql = "SELECT * FROM $t_course_desc WHERE session_id = '0';";
+		$course_info = api_get_course_info_by_id($course_id);
+        if (!empty($course_info)) {
+            $course_id = $course_info['real_id'];
+        } else {
+            return array();
+        }		
+		$t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+		$sql = "SELECT * FROM $t_course_desc WHERE c_id = $course_id AND session_id = '0';";
 		$sql_result = Database::query($sql);
 		$results = array();
 		while($row = Database::fetch_array($sql_result)) {
@@ -68,8 +67,9 @@ class CourseDescription
      */
 	public function get_description_data() {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-		$condition_session = api_get_session_condition($this->session_id, false, true);
-		$sql = "SELECT * FROM $tbl_course_description $condition_session ORDER BY id ";
+		$condition_session = api_get_session_condition($this->session_id, true, true);
+        $course_id = api_get_course_int_id();
+		$sql = "SELECT * FROM $tbl_course_description WHERE c_id = $course_id $condition_session ORDER BY id ";
 		$rs = Database::query($sql);
 		$data = array();
 		while ($description = Database::fetch_array($rs)) {
@@ -120,8 +120,8 @@ class CourseDescription
      * @return array
      */
 	public function get_data_by_description_type($description_type, $course_code = '', $session_id = null) {
-
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+		$course_id = api_get_course_int_id();
 		
 		if (!isset($session_id)) {
 			$session_id = $this->session_id;
@@ -132,7 +132,7 @@ class CourseDescription
 			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_info['dbName']);
 		}
 
-		$sql = "SELECT * FROM $tbl_course_description WHERE description_type='$description_type' $condition_session ";
+		$sql = "SELECT * FROM $tbl_course_description WHERE c_id = $course_id AND description_type='$description_type' $condition_session ";
 		$rs = Database::query($sql);
 		$data = array();
 		if ($description = Database::fetch_array($rs)) {
@@ -149,7 +149,9 @@ class CourseDescription
      */
 	public function get_max_description_type() {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-		$sql = "SELECT MAX(description_type) as MAX FROM $tbl_course_description WHERE session_id='".$this->session_id."'";
+        $course_id = api_get_course_int_id();
+        
+		$sql = "SELECT MAX(description_type) as MAX FROM $tbl_course_description WHERE c_id = $course_id AND session_id='".$this->session_id."'";
 		$rs  = Database::query($sql);
 		$max = Database::fetch_array($rs);
 		$description_type = $max['MAX']+1;
@@ -244,7 +246,9 @@ class CourseDescription
 	public function delete($course_db = null) {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);		
 		$description_id = $this->get_id_by_description_type($this->description_type);
-		$sql = "DELETE FROM $tbl_course_description WHERE description_type = '".intval($this->description_type)."' AND session_id = '".intval($this->session_id)."'";
+        
+        $course_id = api_get_course_int_id();
+		$sql = "DELETE FROM $tbl_course_description WHERE c_id = $course_id AND description_type = '".intval($this->description_type)."' AND session_id = '".intval($this->session_id)."'";
 		Database::query($sql);
 		$affected_rows = Database::affected_rows();
 		if ($description_id > 0) {
@@ -261,7 +265,9 @@ class CourseDescription
 	 */
 	public function get_id_by_description_type($description_type) {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-		$sql = "SELECT id FROM $tbl_course_description WHERE description_type = '".intval($description_type)."'";
+        $course_id = api_get_course_int_id();
+        
+		$sql = "SELECT id FROM $tbl_course_description WHERE c_id = $course_id AND description_type = '".intval($description_type)."'";
 		$rs  = Database::query($sql);
 		$row = Database::fetch_array($rs);
 		$description_id = $row['id'];
@@ -278,7 +284,9 @@ class CourseDescription
 	 public function get_progress_porcent($with_icon = false, $description_type = THEMATIC_ADVANCE) {
 	 	$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 	 	$session_id = intval($session_id);
-		$sql = "SELECT progress FROM $tbl_course_description WHERE description_type = '".intval($description_type)."' AND session_id = '".intval($this->session_id)."' ";
+        $course_id = api_get_course_int_id();
+        
+		$sql = "SELECT progress FROM $tbl_course_description WHERE c_id = $course_id AND description_type = '".intval($description_type)."' AND session_id = '".intval($this->session_id)."' ";
 		$rs  = Database::query($sql);
 		$progress = '';
 		$img = '';
@@ -478,5 +486,4 @@ class CourseDescription
 	public function get_progress() {
 		return $this->progress;
 	}
-
 }

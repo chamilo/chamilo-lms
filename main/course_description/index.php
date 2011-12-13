@@ -62,27 +62,26 @@ $course_description_controller = new CourseDescriptionController();
 // distpacher actions to controller
 switch ($action) {	
 	case 'listing':	
-						$course_description_controller->listing();
-						break;	
+    	$course_description_controller->listing();
+    	break;	
 	case 'history':		
-						$course_description_controller->listing(true);
-						break;
+		$course_description_controller->listing(true);
+		break;
 	case 'add'	  :   
-						if (api_is_allowed_to_edit(null,true)) {
-							$course_description_controller->add();
-						}
-						break;
+		if (api_is_allowed_to_edit(null,true)) {
+			$course_description_controller->add();
+		}
+		break;
 	case 'edit'	  :	
-						if (api_is_allowed_to_edit(null,true)) {
-							$course_description_controller->edit($description_type);
-						}
-						break;
+		if (api_is_allowed_to_edit(null,true)) {
+			$course_description_controller->edit($description_type);
+		}
+		break;
 	case 'delete' :	
-						if (api_is_allowed_to_edit(null,true)) {
-							$course_description_controller->destroy($description_type);
-						}
-						break;
+		if (api_is_allowed_to_edit(null,true)) {
+			$course_description_controller->destroy($description_type);
+		}
+		break;
 	default		  :	
-						$course_description_controller->listing();
+		$course_description_controller->listing();
 }
-?>

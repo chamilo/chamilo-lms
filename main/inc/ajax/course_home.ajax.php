@@ -7,13 +7,14 @@
 $action = $_GET['a'];
 $now    = time();
 
+
 switch ($action) {
 	case 'set_visibility':
 		require_once '../global.inc.php';
+        $course_id = api_get_course_int_id();
 		if (api_is_allowed_to_edit(null,true)) {
-			$tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-			$tool_id = Security::remove_XSS($_GET["id"]);
-			$tool_info = api_get_tool_information($tool_id);
+			$tool_table = Database::get_course_table(TABLE_TOOL_LIST);			
+			$tool_info = api_get_tool_information($_GET["id"]);
 			$tool_visibility   = $tool_info['visibility'];
 			$tool_image        = $tool_info['image'];
 			if (api_get_setting('homepage_view') != 'activity_big') {			
@@ -54,7 +55,7 @@ switch ($action) {
 				} else $sql="UPDATE $tool_table SET visibility=$requested_visible WHERE id='".$_GET["id"]."'";
 				*/
 
-				$sql="UPDATE $tool_table SET visibility=$requested_visible WHERE id='".intval($_GET['id'])."'";
+				$sql="UPDATE $tool_table SET visibility=$requested_visible WHERE c_id = $course_id AND id='".intval($_GET['id'])."'";
 				Database::query($sql);
 			}	
 			$response_data = array(

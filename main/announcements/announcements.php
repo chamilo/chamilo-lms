@@ -268,7 +268,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		$id = intval($_GET['id']);
 
 		if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
-			$sql="SELECT * FROM  $tbl_announcement WHERE id = '$id'";
+			$sql="SELECT * FROM  $tbl_announcement WHERE c_id = $course_id AND id = '$id'";
 			$rs 	= Database::query($sql);
 			$myrow  = Database::fetch_array($rs);
 			$last_id = $id;
@@ -332,8 +332,8 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			if ($thisAnnouncementOrderFound) {
 				$nextAnnouncementId = $announcementId;
 				$nextAnnouncementOrder = $announcementOrder;
-				Database::query("UPDATE $tbl_announcement SET display_order = '$nextAnnouncementOrder'  WHERE id =  '$thisAnnouncementId'");
-				Database::query("UPDATE $tbl_announcement  SET display_order = '$thisAnnouncementOrder' WHERE id =  '$nextAnnouncementId.'");
+				Database::query("UPDATE $tbl_announcement SET display_order = '$nextAnnouncementOrder'  WHERE c_id = $course_id AND id =  '$thisAnnouncementId'");
+				Database::query("UPDATE $tbl_announcement  SET display_order = '$thisAnnouncementOrder' WHERE c_id = $course_id AND id =  '$nextAnnouncementId.'");
 				break;
 			}
 			// STEP 1 : FIND THE ORDER OF THE ANNOUNCEMENT
@@ -383,7 +383,8 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			if ($ctok == $_POST['sec_token']) {
 
 				//if (!$surveyid) {
-					$result = Database::query("SELECT MAX(display_order) FROM $tbl_announcement WHERE session_id=".api_get_session_id()." OR session_id=0");
+				    $sql = "SELECT MAX(display_order) FROM $tbl_announcement WHERE c_id = $course_id AND (session_id=".api_get_session_id()." OR session_id=0)";
+					$result = Database::query($sql);
 					list($orderMax) = Database::fetch_row($result);
 					$order = $orderMax + 1;
 					$file = $_FILES['user_upload'];
@@ -472,7 +473,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
                             // send attachment file
                             $data_file = array();
-                            $sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.' WHERE announcement_id = "'.$insert_id.'"';
+                            $sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.' WHERE c_id = '.$course_id.' AND announcement_id = "'.$insert_id.'"';
                             $rs_attach = Database::query($sql);
                             if (Database::num_rows($rs_attach) > 0) {
                             	$row_attach  = Database::fetch_array($rs_attach);

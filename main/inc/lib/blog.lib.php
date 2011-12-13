@@ -25,13 +25,15 @@ class Blog {
 	 * @return String Blog Title
 	 */
 	public static function get_blog_title ($blog_id) {
+	    $course_id = api_get_course_int_id(); 
+        
 		if(is_numeric($blog_id)) {
 			// init
 			$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 
 			$sql = "SELECT blog_name
 					FROM " . $tbl_blogs . "
-					WHERE blog_id = " . intval($blog_id);
+					WHERE c_id = $course_id AND blog_id = " . intval($blog_id);
 
 			$result = Database::query($sql);
 			$blog = Database::fetch_array($result);
@@ -51,7 +53,8 @@ class Blog {
 	public static function get_blog_subtitle ($blog_id) {
 		// init
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
-		$sql = "SELECT blog_subtitle FROM $tbl_blogs WHERE blog_id ='".intval($blog_id)."'";
+          $course_id = api_get_course_int_id(); 
+		$sql = "SELECT blog_subtitle FROM $tbl_blogs WHERE c_id = $course_id AND blog_id ='".intval($blog_id)."'";
 		$result = Database::query($sql);
 		$blog = Database::fetch_array($result);
 		return stripslashes($blog['blog_subtitle']);
@@ -237,12 +240,12 @@ class Blog {
 		
 
 		if(!empty($_FILES['user_upload']['name'])) {
-			require_once('fileUpload.lib.php');
-			$upload_ok = process_uploaded_file($_FILES['user_upload']);
+			require_once 'fileUpload.lib.php';
+			$upload_ok = process_uploaded_file($_FILES['user_upload']);            
 			$has_attachment=true;
 		}
 
-		if($upload_ok) {
+		if ($upload_ok) {
 			// Table Definitions
 			$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 
@@ -264,12 +267,9 @@ class Blog {
 				// user's file name
 				$file_name =$_FILES['user_upload']['name'];
 
-				if (!filter_extension($new_file_name))
-				{
+				if (!filter_extension($new_file_name)) {
 					Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
-				}
-				else
-				{
+				} else {
 					$new_file_name = uniqid('');
 					$new_path=$updir.'/'.$new_file_name;
 					$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
@@ -280,8 +280,7 @@ class Blog {
 						$sql='INSERT INTO '.$blog_table_attachment.'(c_id, filename,comment, path, post_id,size, blog_id,comment_id) '.
 							 "VALUES ($course_id, '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".intval($_FILES['user_upload']['size'])."',  '".$blog_id."', '0' )";
 						$result=Database::query($sql);
-						$message.=' / '.get_lang('AttachmentUpload');
-						exit;
+						$message.=' / '.get_lang('AttachmentUpload');						
 					}
 				}
 			}
@@ -1335,8 +1334,9 @@ class Blog {
 	 */
 	public static function display_task_list ($blog_id) {
 		global $charset;
-		if(api_is_allowed('BLOG_' . $blog_id, 'article_add'))
-		{
+        $course_id = api_get_course_int_id(); 
+        
+		if(api_is_allowed('BLOG_' . $blog_id, 'article_add')) {
 			// Init
 			$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 			$counter = 0;
@@ -1360,8 +1360,7 @@ class Blog {
 				"</tr>\n";
 
 
-			$sql = "
-				SELECT
+			$sql = " SELECT
 					blog_id,
 					task_id,
 					blog_id,
@@ -1370,10 +1369,8 @@ class Blog {
 					color,
 					system_task
 				FROM " . $tbl_blogs_tasks . "
-				WHERE blog_id = " . (int)$blog_id . "
-				ORDER BY
-					system_task,
-					title";
+				WHERE c_id = $course_id AND blog_id = " . (int)$blog_id . "
+				ORDER BY system_task, title";
 			$result = Database::query($sql);
 
 
@@ -1665,8 +1662,7 @@ class Blog {
 		$year	= date("Y");
 		global $MonthsLong;
 		
-		$course_id = api_get_course_int_id();
-		
+		$course_id = api_get_course_int_id();	
 
 		// Get users in this blog / make select list of it
 		$sql = "SELECT user.user_id, user.firstname, user.lastname FROM $tbl_users user
@@ -1693,10 +1689,8 @@ class Blog {
 				color,
 				system_task
 			FROM " . $tbl_blogs_tasks . "
-			WHERE blog_id = " . (int)$blog_id . "
-			ORDER BY
-				system_task,
-				title";
+			WHERE c_id = $course_id AND blog_id = " . (int)$blog_id . "
+			ORDER BY system_task, title";
 		$result = Database::query($sql);
 		$select_task_list = '<select name="task_task_id">';
 
@@ -1815,9 +1809,10 @@ class Blog {
 		$sql = "
 			SELECT target_date
 			FROM $tbl_blogs_tasks_rel_user
-			WHERE blog_id = '".(int)$blog_id."'
-			AND	user_id = '".(int)$user_id."'
-			AND	task_id = '".(int)$task_id."'";
+			WHERE c_id = $course_id AND 
+			      blog_id = '".(int)$blog_id."' AND	
+			      user_id = '".(int)$user_id."' AND	
+			      task_id = '".(int)$task_id."'";
 		$result = Database::query($sql);
 		$row = Database::fetch_assoc($result);
 
@@ -1849,7 +1844,7 @@ class Blog {
 				color,
 				system_task
 			FROM " . $tbl_blogs_tasks . "
-			WHERE blog_id = " . (int)$blog_id . "
+			WHERE c_id = $course_id AND blog_id = " . (int)$blog_id . "
 			ORDER BY system_task, title";
 		$result = Database::query($sql);
 
@@ -1948,7 +1943,8 @@ class Blog {
 		$sql = "
 			SELECT COUNT(*) as 'number'
 			FROM " . $tbl_blogs_tasks_rel_user . "
-			WHERE blog_id = " . (int)$blog_id . "
+			WHERE c_id = $course_id AND 
+			blog_id = " . (int)$blog_id . "
 			AND	user_id = " . (int)$user_id . "
 			AND	task_id = " . (int)$task_id . "
 		";
@@ -1985,6 +1981,7 @@ class Blog {
 		$sql = "SELECT COUNT(*) as 'number'
 			FROM " . $tbl_blogs_tasks_rel_user . "
 			WHERE
+			    c_id = $course_id AND
 				blog_id = " . (int)$blog_id . " AND
 				user_id = " . (int)$user_id . " AND
 				task_id = " . (int)$task_id . "
@@ -2802,25 +2799,23 @@ function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
 	$post_id = Database::escape_string($post_id);
 	$row=array();
 	$where='';
-	if (!empty ($post_id) && is_numeric($post_id))
-	{
+	if (!empty ($post_id) && is_numeric($post_id)) {
 		$where.=' AND post_id ="'.$post_id.'" ';
 	}
 
-	if (!empty ($comment_id) && is_numeric($comment_id) )
-	{
-		if (!empty ($post_id) )
-		{
+	if (!empty ($comment_id) && is_numeric($comment_id)) {
+		if (!empty ($post_id)) {
 			$where.= ' AND ';
 		}
 		$where.=' comment_id ="'.$comment_id.'" ';
 	}
 
-	$sql = 'SELECT path, filename, comment FROM '. $blog_table_attachment.' WHERE blog_id ="'.intval($blog_id).'"  '.$where;
+    $course_id = api_get_course_int_id();
+
+	$sql = 'SELECT path, filename, comment FROM '. $blog_table_attachment.' WHERE c_id = '.$course_id.' AND blog_id ="'.intval($blog_id).'"  '.$where;
 
 	$result=Database::query($sql);
-	if (Database::num_rows($result)!=0)
-	{
+	if (Database::num_rows($result)!=0) {
 		$row=Database::fetch_array($result);
 	}
 	return $row;
@@ -2843,6 +2838,8 @@ function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 	$blog_id = Database::escape_string($blog_id);
 	$comment_id = Database::escape_string($comment_id);
 	$post_id = Database::escape_string($post_id);
+    
+    $course_id = api_get_course_int_id(); 
 
 	// delete files in DB
 	if (!empty ($post_id) && is_numeric($post_id) )
@@ -2864,7 +2861,7 @@ function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);
 	$updir = $sys_course_path.$courseDir;
 
-	$sql= 'SELECT path FROM '.$blog_table_attachment.' WHERE blog_id ="'.intval($blog_id).'"  '.$where;
+	$sql= 'SELECT path FROM '.$blog_table_attachment.' WHERE c_id = '.$course_id.' AND blog_id ="'.intval($blog_id).'"  '.$where;
 	$result=Database::query($sql);
 
 	while ($row=Database::fetch_row($result))
@@ -2875,7 +2872,7 @@ function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 			@ unlink($file);
 		}
 	}
-	$sql = 'DELETE FROM '. $blog_table_attachment.' WHERE blog_id ="'.intval($blog_id).'"  '.$where;
+	$sql = 'DELETE FROM '. $blog_table_attachment.' WHERE c_id = '.$course_id.' AND  blog_id ="'.intval($blog_id).'"  '.$where;
 	Database::query($sql);
 }
 /**

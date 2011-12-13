@@ -157,8 +157,9 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
     exit;
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
+$course_id = api_get_course_int_id();
 
-$sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
+$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
 $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);
 

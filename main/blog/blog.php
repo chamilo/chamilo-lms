@@ -20,7 +20,6 @@ $this_section=SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-
 //session
 if(isset($_GET['id_session'])) {
 	$_SESSION['id_session'] = intval($_GET['id_session']);
@@ -43,16 +42,15 @@ $current_page = $_GET['action'];
 	PROCESSING
 */
 
-$safe_post_title = Security::remove_XSS($_POST['post_title']);
-$safe_post_file_comment = Security::remove_XSS($_POST['post_file_comment']);
-$safe_post_full_text = Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['post_full_text'])), COURSEMANAGERLOWSECURITY);
-$safe_comment_text = Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['comment_text'])), COURSEMANAGERLOWSECURITY);
-$safe_comment_title = Security::remove_XSS($_POST['comment_title']);
-$safe_task_name = Security::remove_XSS($_POST['task_name']);
-$safe_task_description = Security::remove_XSS($_POST['task_description']);
+$safe_post_title            = Security::remove_XSS($_POST['post_title']);
+$safe_post_file_comment     = Security::remove_XSS($_POST['post_file_comment']);
+$safe_post_full_text        = Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['post_full_text'])), COURSEMANAGERLOWSECURITY);
+$safe_comment_text          = Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['comment_text'])), COURSEMANAGERLOWSECURITY);
+$safe_comment_title         = Security::remove_XSS($_POST['comment_title']);
+$safe_task_name             = Security::remove_XSS($_POST['task_name']);
+$safe_task_description      = Security::remove_XSS($_POST['task_description']);
 
-if (!empty($_POST['new_post_submit']) AND !empty($_POST['post_title']))
-{
+if (!empty($_POST['new_post_submit']) AND !empty($_POST['post_title'])) {
 	Blog :: create_post($safe_post_title, $safe_post_full_text, $safe_post_file_comment,$blog_id);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('BlogAdded'));
 }
@@ -352,6 +350,8 @@ if ($flag == '1')
 
 $user_task = false;
 
+$course_id = api_get_course_int_id();
+
 if (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) {
 	$task_id = (int)$_GET['task_id'];
 } else {
@@ -361,6 +361,7 @@ if (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) {
 	$sql = "SELECT COUNT(*) as number
 			FROM ".$tbl_blogs_tasks_rel_user."
 			WHERE
+			    c_id = $course_id AND
 				blog_id = ".$blog_id." AND
 				user_id = ".api_get_user_id()." AND
 				task_id = ".$task_id;

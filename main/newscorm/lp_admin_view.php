@@ -34,7 +34,7 @@ $language_file = "learnpath";
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_lp      = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
@@ -54,7 +54,9 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
-$sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
+$course_id = api_get_course_int_id(); 
+
+$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
 $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);
 
@@ -242,7 +244,7 @@ if (isset($_POST['save_audio'])) {
         }
     }
     if (count($lp_items_to_remove_audio)>0) {
-        $sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE id IN (".$in.")";
+        $sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE c_id = $course_id AND id IN (".$in.")";
         $result = Database::query($sql);
     }           
 
@@ -296,7 +298,8 @@ if (isset($_POST['save_audio'])) {
 
             // Store the mp3 file in the lp_item table.
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-            $sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' WHERE id = '".Database::escape_string($lp_item_id)."'";
+            $sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' 
+                                 WHERE c_id = $course_id AND id = '".Database::escape_string($lp_item_id)."'";
             Database::query($sql_insert_audio);
         }
     }

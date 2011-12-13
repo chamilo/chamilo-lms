@@ -437,9 +437,6 @@ class learnpath {
         $new_item_id = -1;
         $id = $this->escape_string($id);
         
-        $course_id = api_get_course_int_id();
-        
-        
         if ($type == 'quiz') {
             $sql = 'SELECT SUM(ponderation)
 					FROM ' . Database :: get_course_table(TABLE_QUIZ_QUESTION) . ' as quiz_question
@@ -453,7 +450,6 @@ class learnpath {
         } else {
             $max_score = 100;
         }
-        
         
         if ($prerequisites != 0) {
             $sql_ins = "INSERT INTO " . $tbl_lp_item . " (
@@ -1000,7 +996,7 @@ class learnpath {
             error_log('New LP - learnpath::delete_item() - deleted ' . $num . ' children of element ' . $id, 0);
         }
         // Now delete the item.
-        $sql_del = "DELETE FROM $lp_item WHERE id = $id";
+        $sql_del = "DELETE FROM $lp_item WHERE c_id = $course_id AND id = $id";
         if ($this->debug > 2) {
             error_log('New LP - Deleting item: ' . $sql_del, 0);
         }
@@ -2925,8 +2921,6 @@ class learnpath {
         $lp_item_table 		= Database::get_course_table(TABLE_LP_ITEM);
         $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $item_id 			= Database::escape_string($item_id);
-        
-        
 
         $sel = "SELECT l.lp_type as ltype, l.path as lpath, li.item_type as litype, li.path as lipath, li.parameters as liparams 
         		FROM $lp_table l, $lp_item_table li 
@@ -3001,7 +2995,8 @@ class learnpath {
                             if ($type_quiz) {
                                 $lp_item_id = Database :: escape_string($lp_item_id);
                                 $lp_view_id = Database :: escape_string($lp_view_id);
-                                $sql = "SELECT count(*) FROM $lp_item_view_table WHERE lp_item_id='" . (int) $lp_item_id . "' AND lp_view_id ='" . (int) $lp_view_id . "' AND status='completed'";
+                                $sql = "SELECT count(*) FROM $lp_item_view_table 
+                                        WHERE c_id = $course_id AND lp_item_id='" . (int) $lp_item_id . "' AND lp_view_id ='" . (int) $lp_view_id . "' AND status='completed'";
                                 $result = Database::query($sql);
                                 $row_count = Database :: fetch_row($result);
                                 $count_item_view = (int) $row_count[0];
@@ -3271,6 +3266,7 @@ class learnpath {
      * @return	integer	New display order, or false on error
      */
     public function move_item($id, $direction) {
+        $course_id = api_get_course_int_id(); 
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::move_item(' . $id . ',' . $direction . ')', 0);
         }
@@ -3412,6 +3408,7 @@ class learnpath {
      * @param	integer	Learnpath ID
      */
     public function move_up($lp_id) {
+        $course_id = api_get_course_int_id();                        
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table WHERE c_id = ".$course_id." ORDER BY display_order";
         $res = Database::query($sql);
@@ -3452,6 +3449,7 @@ class learnpath {
      * @param	integer	Learnpath ID
      */
     public function move_down($lp_id) {
+        $course_id = api_get_course_int_id(); 
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table ORDER BY display_order";
         $res = Database::query($sql);
@@ -3845,6 +3843,8 @@ class learnpath {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_encoding()', 0);
         }
+        
+        $course_id = api_get_course_int_id();
 
         /* // Deprecated code (Chamilo 1.8.8).
         $enc = strtoupper($enc);
@@ -3900,6 +3900,8 @@ class learnpath {
             error_log('New LP - In learnpath::set_jslib()', 0);
         }
         $lp = $this->get_id();
+        $course_id = api_get_course_int_id();
+        
         if ($lp != 0) {
             $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET js_lib = '$lib' WHERE c_id = ".$course_id." AND id = " . $lp;
@@ -3923,6 +3925,7 @@ class learnpath {
             return false;
         $this->maker = $this->escape_string($name);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $course_id = api_get_course_int_id();
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET content_maker = '" . $this->maker . "' WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) {
@@ -3947,6 +3950,7 @@ class learnpath {
         $this->name = $this->escape_string($name);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
+        $course_id = api_get_course_int_id();
         $sql = "UPDATE $lp_table SET name = '" . $this->name . "' WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new name : ' . $this->name, 0);
@@ -3970,6 +3974,7 @@ class learnpath {
      * @return  boolean False on error, true otherwise
      */
     public function set_terms_by_prefix($terms_string, $prefix) {
+        $course_id = api_get_course_int_id(); 
         if (api_get_setting('search_enabled') !== 'true')
             return false;
             
@@ -3995,7 +4000,7 @@ class learnpath {
         $items_table = Database :: get_course_table(TABLE_LP_ITEM);
         // TODO: Make query secure agains XSS : use member attr instead of post var.
         $lp_id = intval($_POST['lp_id']);
-        $sql = "SELECT * FROM $items_table WHERE lp_id = $lp_id"; 
+        $sql = "SELECT * FROM $items_table WHERE c_id = $course_id AND lp_id = $lp_id"; 
         $result = Database::query($sql);
         $di = new DokeosIndexer();
 
@@ -4048,6 +4053,7 @@ class learnpath {
      * @return   bool    Returns true if theme name is not empty
      */
     public function set_theme($name = '') {
+        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_theme()', 0);
         }
@@ -4069,9 +4075,11 @@ class learnpath {
      * @return bool   Returns true if theme name is not empty
      */
     public function set_preview_image($name = '') {
+        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_preview_image()', 0);
         }
+        
         $this->preview_image = $this->escape_string($name);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
@@ -4089,6 +4097,7 @@ class learnpath {
      * @return   bool    Returns true if author's name is not empty
      */
     public function set_author($name = '') {
+        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_author()', 0);
         }
@@ -4108,24 +4117,24 @@ class learnpath {
 	* @return   bool    Returns true if author's name is not empty
 	*/
 	public function set_hide_toc_frame($hide) {
+	    $course_id = api_get_course_int_id();
 		if ($this->debug > 0) {
 			error_log('New LP - In learnpath::set_hide_toc_frame()', 0);
 		}
-    if (intval($hide) == $hide){
-      $this->hide_toc_frame = $hide;
-      $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
-      $lp_id = $this->get_id();
-      $sql = "UPDATE $lp_table SET hide_toc_frame = '" . $this->hide_toc_frame . "' 
-              WHERE c_id = ".$course_id." AND id = '$lp_id'";
-      if ($this->debug > 2) {
-        error_log('New LP - lp updated with new preview hide_toc_frame : ' . $this->author, 0);
-      }
-      $res = Database::query($sql);
-      return true;
-    }
-    else {
-      return false;
-    }
+        if (intval($hide) == $hide){
+            $this->hide_toc_frame = $hide;
+            $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+            $lp_id = $this->get_id();
+            $sql = "UPDATE $lp_table SET hide_toc_frame = '" . $this->hide_toc_frame . "' 
+            WHERE c_id = ".$course_id." AND id = '$lp_id'";
+            if ($this->debug > 2) {
+                error_log('New LP - lp updated with new preview hide_toc_frame : ' . $this->author, 0);
+            }
+            $res = Database::query($sql);
+            return true;  
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -4134,6 +4143,7 @@ class learnpath {
      * @return 	bool 	returns true if prerequisite is not empty
      */
     public function set_prerequisite($prerequisite) {
+        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_prerequisite()', 0);
         }
@@ -4155,6 +4165,7 @@ class learnpath {
      * @return  boolean True on success / False on error
      */
     public function set_proximity($name = '') {
+        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_proximity()', 0);
         }
@@ -4191,6 +4202,7 @@ class learnpath {
      * @return  boolean True on success / False on error
      */
     public function set_use_max_score($use_max_score = 1) {
+        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_use_max_score()', 0);
         }        
@@ -4213,6 +4225,7 @@ class learnpath {
      * @return   bool    Returns true if author's name is not empty
      */
     public function set_expired_on($expired_on) {
+        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_expired_on()', 0);
         }
@@ -4239,6 +4252,7 @@ class learnpath {
      * @return   bool    Returns true if author's name is not empty
      */
     public function set_publicated_on($publicated_on) {
+        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_expired_on()', 0);
         }
@@ -4391,6 +4405,7 @@ class learnpath {
      * @return	string The current default view mode ('fullscreen' or 'embedded')
      */
     public function update_default_view_mode() {
+        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::update_default_view_mode()', 0);
         }
@@ -4424,6 +4439,7 @@ class learnpath {
      * @return	boolean	True if auto-commit has been set to 'on', false otherwise
      */
     public function update_default_scorm_commit() {
+        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::update_default_scorm_commit()', 0);
         }
@@ -4457,8 +4473,8 @@ class learnpath {
      * @return	bool	True on success, false on failure
      */
     public function update_display_order() {
+        $course_id = api_get_course_int_id();        
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
-        $course_id = api_get_course_int_id();
         
         $sql = "SELECT * FROM $lp_table WHERE c_id = ".$course_id." ORDER BY display_order";
         $res = Database::query($sql);
@@ -4488,6 +4504,7 @@ class learnpath {
      * @return	boolean	True if prevent_reinit has been set to 'on', false otherwise (or 1 or 0 in this case)
      */
     public function update_reinit() {
+        $course_id = api_get_course_int_id();                
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::update_reinit()', 0);
         }
@@ -4547,7 +4564,8 @@ class learnpath {
    * @author ndiechburg <noel@cblue.be>
    **/
   public function set_attempt_mode($mode) {
-    switch ($mode) {
+        $course_id = api_get_course_int_id();
+        switch ($mode) {
     case 'seriousgame' : 
       $sg_mode = 1;
       $prevent_reinit = 1;
@@ -4584,28 +4602,27 @@ class learnpath {
    * @return boolean
    * @author ndiechburg <noel@cblue.be>
    **/
-  public function switch_attempt_mode()
-  {
-    if ($this->debug > 0) {
-      error_log('New LP - In learnpath::switch_attempt_mode()', 0);
+    public function switch_attempt_mode() {
+        if ($this->debug > 0) {
+          error_log('New LP - In learnpath::switch_attempt_mode()', 0);
+        }
+        $mode = $this->get_attempt_mode();
+        switch ($mode) {
+        case 'single' :
+          $next_mode = 'multiple';
+          break;
+        case 'multiple' :
+          $next_mode = 'seriousgame';
+          break;
+        case 'seriousgame' :
+          $next_mode = 'single';
+          break;
+        default : 
+          $next_mode = 'single';
+          break;
+        }
+        $this->set_attempt_mode($next_mode);
     }
-    $mode = $this->get_attempt_mode();
-    switch ($mode) {
-    case 'single' :
-      $next_mode = 'multiple';
-      break;
-    case 'multiple' :
-      $next_mode = 'seriousgame';
-      break;
-    case 'seriousgame' :
-      $next_mode = 'single';
-      break;
-    default : 
-      $next_mode = 'single';
-      break;
-    }
-    $this->set_attempt_mode($next_mode);
-  }
 
   /**
    * Swithc the lp in ktm mode. This is a special scorm mode with unique attempt but possibility to do again a completed item.
@@ -4613,8 +4630,8 @@ class learnpath {
    * @return boolean true if seriousgame_mode has been set to 1, false otherwise
    * @author ndiechburg <noel@cblue.be>
    **/
-  public function set_seriousgame_mode()
-  {
+    public function set_seriousgame_mode() {
+        $course_id = api_get_course_int_id();
 		if ($this->debug > 0) {
 			error_log('New LP - In learnpath::set_seriousgame_mode()', 0);
 		}
@@ -4646,6 +4663,7 @@ class learnpath {
      * @return	boolean	True if scorm_debug has been set to 'on', false otherwise (or 1 or 0 in this case)
      */
     public function update_scorm_debug() {
+        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::update_scorm_debug()', 0);
         }

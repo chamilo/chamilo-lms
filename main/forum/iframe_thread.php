@@ -85,6 +85,8 @@ if (!api_is_allowed_to_edit(false, true) AND ($current_forum['visibility'] == 0 
     }
 }
 
+$course_id = api_get_course_int_id();
+
 /* Display Forum Category and the Forum information */
 
 // We are getting all the information about the current forum and forum category.
@@ -92,7 +94,9 @@ if (!api_is_allowed_to_edit(false, true) AND ($current_forum['visibility'] == 0 
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
 
 $sql = "SELECT * FROM $table_posts posts, $table_users users
-        WHERE posts.thread_id='".$current_thread['thread_id']."'
+        WHERE 
+        posts.c_id = $course_id AND 
+        posts.thread_id='".$current_thread['thread_id']."'
         AND posts.poster_id=users.user_id
         ORDER BY posts.post_id ASC";
 $result = Database::query($sql);

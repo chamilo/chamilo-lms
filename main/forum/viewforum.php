@@ -326,6 +326,8 @@ $threads = get_threads($my_forum); // Note: This has to be cleaned first.
 
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 
+$course_id = api_get_course_int_id();
+
 $counter = 0;
 if (is_array($threads)) {
     foreach ($threads as $row) {
@@ -393,7 +395,7 @@ if (is_array($threads)) {
             $attachment_list = get_attachment($row['post_id']);
             $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';
 
-            $sql_post_id = "SELECT post_id FROM $table_posts WHERE post_title='".Database::escape_string($row['thread_title'])."'";
+            $sql_post_id = "SELECT post_id FROM $table_posts WHERE c_id = $course_id AND post_title='".Database::escape_string($row['thread_title'])."'";
             $result_post_id = Database::query($sql_post_id);
             $row_post_id = Database::fetch_array($result_post_id);
 

@@ -1584,7 +1584,9 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
     $learnpath_id 	= intval($learnpath_id);
     $id_in_path		= intval($id_in_path);
     
-    $sql_item = "SELECT * FROM $tbl_lp_item WHERE lp_id = $learnpath_id AND id = $id_in_path";
+    $course_id = $_course['real_id'];
+    
+    $sql_item = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = $learnpath_id AND id = $id_in_path";
     $res_item = Database::query($sql_item);
     if (Database::num_rows($res_item) < 1) return -1; //exit
     $row_item = Database::fetch_array($res_item);
@@ -1607,16 +1609,16 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
             $link .= $main_dir_path.'announcements/announcements.php?origin='.$origin.'&ann_id='.$id;
             break;
         case TOOL_LINK:
-            $TABLETOOLLINK = Database::get_course_table(TABLE_LINK,$_course['database']);
-            $result= Database::query("SELECT * FROM $TABLETOOLLINK WHERE id=$id");
+            $TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
+            $result= Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
             $myrow=Database::fetch_array($result);
             $thelink=$myrow["url"];
             $link .= $thelink;
             break;
         case TOOL_QUIZ:
             if (!empty($id)) {
-                $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['database']);
-                $sql = "SELECT * FROM $TBL_EXERCICES WHERE id=$id";
+                $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+                $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id";
                 $result= Database::query($sql);
                 $myrow=Database::fetch_array($result);
 
@@ -1627,7 +1629,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
             break;
         case 'hotpotatoes': //lowercase because of strtolower above
             $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-            $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE id=$id");
+            $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND  id=$id");
             $myrow = Database::fetch_array($result);
             $path = $myrow['path'];
             $link .= $main_dir_path.'exercice/showinframes.php?file='.$path.'' .
@@ -1638,9 +1640,9 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
             $link .= $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&origin=learnpath';
             break;
         case TOOL_THREAD:  //forum post
-            $tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD, $_course['database']);
+            $tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD);
             if (!empty($id)) {
-                $sql = "SELECT * FROM $tbl_topics where thread_id=$id";
+                $sql = "SELECT * FROM $tbl_topics WHERE c_id = $course_id AND thread_id=$id";
                 $result = Database::query($sql);
                 $myrow = Database::fetch_array($result);
                 $link .= $main_dir_path.'forum/viewthread.php?origin=learnpath&thread='.$id.'' .
@@ -1648,8 +1650,8 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
             }
             break;
         case TOOL_POST:
-            $tbl_post = Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
-            $result = Database::query("SELECT * FROM $tbl_post where post_id=$id");
+            $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
+            $result = Database::query("SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=$id");
             $myrow = Database::fetch_array($result);
             $title = $myrow['post_title'];
             //$desc = $row_item['description'];
@@ -1664,8 +1666,8 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
                     '&lp=true';
             break;
         case TOOL_DOCUMENT:
-            $tbl_doc = Database::get_course_table(TABLE_DOCUMENT,$_course['database']);
-            $sql = "SELECT * FROM $tbl_doc WHERE id=$id";
+            $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+            $sql = "SELECT * FROM $tbl_doc WHERE c_id = $course_id AND id=$id";
             $result = Database::query($sql);
             $myrow = Database::fetch_array($result);
             $docurl = str_replace('%2F', '/', urlencode($myrow['path']));
@@ -1710,10 +1712,10 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
  */
 function rl_get_resource_name($course_code, $learnpath_id, $id_in_path) {
     $_course = Database::get_course_info($course_code);
+    $course_id = $_course['real_id'];
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
-    $sql_item = "SELECT * FROM $tbl_lp_item " .
-            "WHERE lp_id = $learnpath_id AND id = $id_in_path";
+    $sql_item = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = $learnpath_id AND id = $id_in_path";
     $res_item = Database::query($sql_item);
 
     if (Database::num_rows($res_item) < 1) {
@@ -1726,48 +1728,48 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path) {
 
     switch ($type) {
         case TOOL_CALENDAR_EVENT:
-            $TABLEAGENDA = Database::get_course_table(TABLE_AGENDA,$_course['database']);
-            $result = Database::query("SELECT * FROM $TABLEAGENDA WHERE id=$id");
+            $TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
+            $result = Database::query("SELECT * FROM $TABLEAGENDA WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $output = $myrow['title'];
             break;
         case TOOL_ANNOUNCEMENT:
-            $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT,$_course['database']);
-            $result = Database::query("SELECT * FROM $tbl_announcement WHERE id=$id");
+            $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+            $result = Database::query("SELECT * FROM $tbl_announcement WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $output = $myrow['title'];
             break;
         case TOOL_LINK:
             // Doesn't take $target into account.
-            $TABLETOOLLINK = Database::get_course_table(TABLE_LINK,$_course['database']);
-            $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE id=$id");
+            $TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
+            $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $output = $myrow['title'];
             break;
         case TOOL_QUIZ:
-            $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['database']);
-            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE id=$id");
+            $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $output = $myrow['title'];
             break;
         case TOOL_FORUM:
-            $TBL_FORUMS = Database::get_course_table(TABLE_FORUM,$_course['database']);
-            $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE forum_id=$id");
+            $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
+            $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id=$id");
             $myrow = Database::fetch_array($result);
             $output = $myrow['forum_name'];
             break;
         case TOOL_THREAD:  //=topics
-            $tbl_post = Database::get_course_table(TABLE_FORUM_POST, $_course['database']);
+            $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
             // Grabbing the title of the post.
-            $sql_title = "SELECT * FROM $tbl_post WHERE post_id=".$id;
+            $sql_title = "SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=".$id;
             $result_title = Database::query($sql_title);
             $myrow_title = Database::fetch_array($result_title);
             $output = $myrow_title['post_title'];
             break;
         case TOOL_POST:
-            $tbl_post = Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
+            $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
             //$tbl_post_text = Database::get_course_table(FORUM_POST_TEXT_TABLE);
-            $sql = "SELECT * FROM $tbl_post p WHERE p.post_id = $id";
+            $sql = "SELECT * FROM $tbl_post p WHERE c_id = $course_id AND p.post_id = $id";
             $result = Database::query($sql);
             $post = Database::fetch_array($result);
             $output = $post['post_title'];
@@ -1789,8 +1791,8 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path) {
             }
             break;
         case 'hotpotatoes':
-            $tbl_doc = Database::get_course_table(TABLE_DOCUMENT, $_course['database']);
-            $result = Database::query("SELECT * FROM $tbl_doc WHERE id=$id");
+            $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+            $result = Database::query("SELECT * FROM $tbl_doc WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $pathname = explode('/', $myrow['path']); // Making a correct name for the link.
             $last = count($pathname) - 1;  // Making a correct name for the link.

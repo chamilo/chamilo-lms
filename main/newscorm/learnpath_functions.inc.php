@@ -700,7 +700,7 @@ function is_prereq($learnpath_id) {
     $result_items = Database::query($sql_items);
     while ($ar = Database::fetch_array($result_items)) {
         $c = $ar['id'];
-        $sql_items2 = "SELECT * FROM $tbl_lp_item WHERE lp_id = $learnpath_id AND parent_item_id='$c' ORDER BY display_order ASC";
+        $sql_items2 = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = $learnpath_id AND parent_item_id='$c' ORDER BY display_order ASC";
         $result_items2 = Database::query($sql_items2);
         while ($ar2 = Database::fetch_array($result_items2)) {
             if ($ar2['prerequisite'] != '') {

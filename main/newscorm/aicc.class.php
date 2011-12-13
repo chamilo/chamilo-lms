@@ -227,6 +227,8 @@ class aicc extends learnpath {
      * @return	bool	Returns -1 on error
      */
     function import_aicc($course_code) {
+        $course_id = api_get_course_int_id();
+        
         if ($this->debug > 0) { error_log('New LP - In aicc::import_aicc('.$course_code.')', 0); }
         // Get table names.
         $new_lp = 'lp';
@@ -237,9 +239,7 @@ class aicc extends learnpath {
         $res = Database::query($sql);
         if (Database::num_rows($res) < 1) { error_log('New LP - Database for '.$course_code.' not found '.__FILE__.' '.__LINE__, 0); return -1; }
         $row = Database::fetch_array($res);
-        
-        $course_id = api_get_course_int_id();
-        
+                
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $get_max = "SELECT MAX(display_order) FROM $new_lp WHERE c_id = $course_id";

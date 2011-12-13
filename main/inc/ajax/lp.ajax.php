@@ -8,6 +8,8 @@ require_once '../global.inc.php';
 api_protect_course_script(true);
 $action = $_REQUEST['a'];
 
+$course_id = api_get_course_int_id(); 
+
 switch ($action) {    
     case 'update_lp_item_order':
         if (api_is_allowed_to_edit(null, true)) {
@@ -34,7 +36,7 @@ switch ($action) {
             	$params['previous_item_id']	= isset($new_array[$i-1]) &&  isset($new_array[$i-1]['id']) ? $new_array[$i-1]['id'] : 0;
             	$params['next_item_id']		= isset($new_array[$i+1]) &&  isset($new_array[$i+1]['id']) ? $new_array[$i+1]['id'] : 0;            	
             	$params['parent_item_id']	= $parent_id;            	
-            	Database::update($tbl_lp_item, $params, array('id = ? '=>intval($id)));
+            	Database::update($tbl_lp_item, $params, array('id = ? AND c_id = ? '=> array(intval($id), $course_id)));
                 $counter ++;                
             }
             Display::display_confirmation_message(get_lang('Saved'));

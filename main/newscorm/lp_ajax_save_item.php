@@ -199,6 +199,8 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
    if ($mylp->get_type() == 2) {
            $return .= "update_stats();";
    }
+    //To be sure progress is updated
+    $mylp->save_last();
     return $return;
     //return $objResponse;
 }

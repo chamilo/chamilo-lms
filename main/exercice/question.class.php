@@ -113,11 +113,12 @@ abstract class Question
             global $course;
             $course_info = api_get_course_info();
         }        
+        
         $course_id = $course_info['real_id'];
 
-		$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST,          $course_info['db_name']);
-		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION,      $course_info['db_name']);
-		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION, $course_info['db_name']);
+		$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
+		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
+		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         
 		$sql = "SELECT question,description,ponderation,position,type,picture,level,extra FROM $TBL_QUESTIONS WHERE c_id = $course_id AND id = $id ";
         

@@ -1029,7 +1029,8 @@ switch ($action) {
 				$folders = array();
 				$session_id = api_get_session_id();
 				$session_id == 0 ? $withsession = " AND session_id = 0 " : $withsession = " AND session_id='".$session_id."'";			
-				$sql = "SELECT id, url, title FROM $work_table WHERE active IN (0, 1) AND url LIKE '/%' AND post_group_id = '".(empty($_SESSION['toolgroup'])?0:intval($_SESSION['toolgroup']))."'".$withsession;                
+				$sql = "SELECT id, url, title FROM $work_table 
+				        WHERE c_id = $course_id AND active IN (0, 1) AND url LIKE '/%' AND post_group_id = '".(empty($_SESSION['toolgroup'])?0:intval($_SESSION['toolgroup']))."'".$withsession;                
 				$res = Database::query($sql);
 				while($folder = Database::fetch_array($res)) {
 					$folders[$folder['id']] = $folder['title'];

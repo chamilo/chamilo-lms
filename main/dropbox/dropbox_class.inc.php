@@ -210,15 +210,6 @@ class Dropbox_Work {
 			}
 			$this->feedback2= $feedback2;
 		}
-		/*
-		$result = Database::query("SELECT feedback_date, feedback, cat_id FROM ".
-		    dropbox_cnf('tbl_post')." WHERE dest_user_id='".$_user['user_id'].
-		    "' AND file_id='".$id."'");
-		if ($res = Database::fetch_array($result)) {
-    		$this->feedback_date = $res['feedback_date'];
-    		$this->feedback = $res['feedback'];
-    		$this->category = $res['cat_id'];
-		}  // do not fail if there is no recipient = current user...*/
 	}
 }
 
@@ -321,6 +312,8 @@ class Dropbox_SentWork extends Dropbox_Work
 	 */
 	function _createExistingSentWork ($id) {
 		global $dropbox_cnf;
+		
+		$course_id = api_get_course_int_id(); 
 
 		// Call constructor of Dropbox_Work object
 		$this->Dropbox_Work($id);
@@ -332,7 +325,7 @@ class Dropbox_SentWork extends Dropbox_Work
 		$this->recipients = array();
 		$sql = "SELECT dest_user_id, feedback_date, feedback
 				FROM ".$dropbox_cnf['tbl_post']."
-				WHERE file_id='".Database::escape_string($id)."'";
+				WHERE c_id = $course_id AND file_id='".Database::escape_string($id)."'";
         $result = Database::query($sql);
 		while ($res = Database::fetch_array($result)) {
 			// Check for deleted users
@@ -532,12 +525,14 @@ class Dropbox_Person
 	 */
 	function deleteReceivedWorkFolder($id) {
 		global $dropbox_cnf;
+        $course_id = api_get_course_int_id(); 
+        
 		$id = intval($id);
-		$sql = "DELETE FROM ".$dropbox_cnf['tbl_file']." WHERE cat_id = '".$id."' ";
+		$sql = "DELETE FROM ".$dropbox_cnf['tbl_file']." WHERE c_id = $course_id AND cat_id = '".$id."' ";
 		if (!Database::query($sql)) return false;
-		$sql = "DELETE FROM ".$dropbox_cnf['tbl_category']." WHERE cat_id = '".$id."' ";
+		$sql = "DELETE FROM ".$dropbox_cnf['tbl_category']." WHERE c_id = $course_id AND cat_id = '".$id."' ";
 		if (!Database::query($sql)) return false;
-		$sql = "DELETE FROM ".$dropbox_cnf['tbl_post']." WHERE cat_id = '".$id."' ";
+		$sql = "DELETE FROM ".$dropbox_cnf['tbl_post']." WHERE c_id = $course_id AND cat_id = '".$id."' ";
 		if (!Database::query($sql)) return false;
 		return true;
 	}
@@ -618,6 +613,8 @@ class Dropbox_Person
 	 * @param unknown_type $text
 	 */
 	function updateFeedback($id, $text) {
+	    $course_id = api_get_course_int_id();
+	    
 		global $_course, $dropbox_cnf;
 		$id = intval($id);
 
@@ -641,7 +638,7 @@ class Dropbox_Person
 
 		Database::query("UPDATE ".$dropbox_cnf['tbl_post']." SET feedback_date='".
 		    Database::escape_string($feedback_date)."', feedback='".Database::escape_string($text).
-		    "' WHERE dest_user_id='".$this->userId."' AND file_id='".$id."'");
+		    "' WHERE c_id = $course_id AND dest_user_id='".$this->userId."' AND file_id='".$id."'");
 
 		// Update item_property table
 

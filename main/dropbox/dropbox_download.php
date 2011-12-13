@@ -27,6 +27,7 @@ require_once 'dropbox_class.inc.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 /*	DOWNLOAD A FOLDER */
+$course_id = api_get_course_int_id();
 
 if (isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action'] == 'downloadcategory' AND isset($_GET['sent_received'])) {
 	// step 1: constructingd' the sql statement. Due to the nature off the classes of the dropbox the categories for sent files are stored in the table
@@ -45,7 +46,11 @@ if (isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action'] =
 	}
 	if ($_GET['sent_received'] == 'received') {
 		$sql = "SELECT DISTINCT file.id, file.filename, file.title FROM ".$dropbox_cnf['tbl_file']." file, ".$dropbox_cnf['tbl_person']." person, ".$dropbox_cnf['tbl_post']." post
-				WHERE post.cat_id='".Database::escape_string($_GET['cat_id'])."'
+				WHERE
+                file.c_id = $course_id AND
+                person.c_id = $course_id AND 
+                post.c_id = $course_id AND  
+				post.cat_id='".Database::escape_string($_GET['cat_id'])."'
 				AND person.user_id='".Database::escape_string($_user['user_id'])."'
 				AND person.file_id=file.id
 				AND post.file_id=file.id
@@ -80,7 +85,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $allowed_to_download = false;
 
 // Check if the user has sent or received the file.
-$sql = "SELECT * FROM ".$dropbox_cnf['tbl_person']." WHERE file_id='".intval($_GET['id'])."' AND user_id='".api_get_user_id()."'";
+$sql = "SELECT * FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND file_id='".intval($_GET['id'])."' AND user_id='".api_get_user_id()."'";
 $result = Database::query($sql);
 if (Database::num_rows($result) > 0) {
 	$allowed_to_download = true;

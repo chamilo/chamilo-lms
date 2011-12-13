@@ -299,8 +299,9 @@ function get_work_count_by_student($user_id, $work_id) {
 
 function get_work_assignment_by_id($id) {
 	$id = intval($id);
+    $course_id = api_get_course_int_id();
 	$table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-	$sql = "SELECT * FROM  ".$table." WHERE publication_id = $id";
+	$sql = "SELECT * FROM  ".$table." WHERE c_id = $course_id AND publication_id = $id";
 	$result = Database::query($sql);
 	$return = array();
 	if (Database::num_rows($result)) {
@@ -1072,10 +1073,10 @@ function build_work_directory_selector($folders, $curdirpath, $group_dir = '') {
  * @return string html form
  */
 function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_dir = '') {
-
+    $course_id = api_get_course_int_id(); 
 	$move_file	= intval($move_file);
 	$tbl_work	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql 		= "SELECT title FROM $tbl_work WHERE id ='".$move_file."'";
+	$sql 		= "SELECT title FROM $tbl_work WHERE c_id = $course_id AND id ='".$move_file."'";
 	$result 	= Database::query($sql);
 	$title 		= Database::fetch_row($result);
 	global $gradebook;

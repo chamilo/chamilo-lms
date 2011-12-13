@@ -60,6 +60,7 @@ $column_model   = array(
 $extra_params['autowidth'] = 'true';
 //height auto 
 $extra_params['height'] = 'auto';
+$extra_params['excel'] = 'excel';
 
 $extra_params['rowList'] = array(10, 20 ,30);
 
@@ -86,6 +87,24 @@ $("#sessions").jqGrid('navGrid','#sessions_pager', {edit:false,add:false,del:fal
     {reloadAfterSubmit:false}, // del options 
     {width:500} // search options
 );
+/*
+// add custom button to export the data to excel
+jQuery("#sessions").jqGrid('navButtonAdd','#sessions_pager',{
+       caption:"", 
+       onClickButton : function () { 
+           jQuery("#sessions").excelExport();
+       } 
+});
+
+jQuery('#sessions').jqGrid('navButtonAdd','#sessions_pager',{id:'pager_csv',caption:'',title:'Export To CSV',onClickButton : function(e)
+{
+    try {
+        jQuery("#sessions").jqGrid('excelExport',{tag:'csv', url:'grid.php'});
+    } catch (e) {
+        window.location= 'grid.php?oper=csv';
+    }
+},buttonicon:'ui-icon-document'})
+*/
 
 });
 </script>

@@ -1,4 +1,23 @@
 <script type="text/javascript">
+
+function checkLength( o, n, min, max ) {
+    if ( o.val().length > max || o.val().length < min ) {
+        o.addClass( "ui-state-error" );
+        updateTips( "Length of " + n + " must be between " +
+            min + " and " + max + "." );
+        return false;
+    } else {
+        return true;
+    }
+}
+function clean_user_select() {
+    //Cleans the selected attr     
+    $('#users_to_send_id')
+        .find('option')
+        .removeAttr('selected')
+        .end();
+}
+
 $(document).ready(function() {
 	
 	var date = new Date();
@@ -17,16 +36,14 @@ $(document).ready(function() {
 	content = $( "#content" ),	
 	allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");	
 
-	function checkLength( o, n, min, max ) {
-		if ( o.val().length > max || o.val().length < min ) {
-			o.addClass( "ui-state-error" );
-			updateTips( "Length of " + n + " must be between " +
-				min + " and " + max + "." );
-			return false;
-		} else {
-			return true;
-		}
-	}
+	$('#users_to_send_id').bind('change', function() {	     
+	    //alert($("#users_to_send_id option[value='everyone']").attr('selected'));
+	    if ($("#users_to_send_id option[value='everyone']").attr('selected') == 'selected') {
+            clean_user_select();
+            $('#users_to_send_id option').eq(0).attr('selected', 'selected');
+            $("#users_to_send_id").trigger("liszt:updated");            
+        }
+    });
 	
 	var calendar = $('#calendar').fullCalendar({
 		header: {
@@ -50,10 +67,7 @@ $(document).ready(function() {
 			$('#visible_to_input').show();		
 			
 			//Cleans the selected attr 	
-			$('#users_to_send_id')
-                .find('option')
-                .removeAttr('selected')
-                .end();
+		    clean_user_select();
                 
             //Sets the 1st item selected by default
             $('#users_to_send_id option').eq(0).attr('selected', 'selected');

@@ -22,6 +22,11 @@
 	color: #212121; 
 }
 
+.ui-jqgrid .ui-pg-selbox {    
+    height: 23px;
+}
+    
+
 /* jqgrid: Changes the row style in a table (even, odd) */
 .ui-priority-secondary, .ui-widget-content .ui-priority-secondary,  .ui-widget-header .ui-priority-secondary { 
 	opacity: 1; 

@@ -203,7 +203,7 @@ $form->addGroup($group, '', array(get_lang("Unsubscription")), '<div></div>');
 $form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array('size' => '60'));
 
 $form->addElement('checkbox', 'activate_legal', array(null, get_lang('ShowALegalNoticeWhenEnteringTheCourse')), get_lang('ActivateLegal'));
-$form->addElement('textarea', 'legal', get_lang('CourseLegal'), array('cols'=>75, 'rows' => 10));
+$form->addElement('textarea', 'legal', get_lang('CourseLegalAgreement'), array('cols'=>75, 'rows' => 10));
 
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
@@ -308,7 +308,7 @@ $form->addElement('html', '</div></div>');
 
 
 // LEARNING PATH
-$form->addElement('html', '<div><h3>'.Display::return_icon('scorms.png', addslashes(get_lang('ConfigLearnpath')),'','22').' '.addslashes(get_lang('ConfigLearnpath')).'</h3><div>');
+$form->addElement('html', '<div><h3>'.Display::return_icon('scorms.png', addslashes(get_lang('ConfigLearnpath')),'','22').' '.Security::remove_XSS(get_lang('ConfigLearnpath')).'</h3><div>');
 
 //Auto launch LP
 $group = array();
@@ -325,7 +325,7 @@ if (api_get_setting('allow_course_theme') == 'true') {
     $form->addGroup($group, '', array(get_lang("AllowLearningPathTheme")), '<div></div>');
     
 	$group = array();
-	$group[]=$form->createElement('select_theme', 'course_theme', null);
+	$group[]=$form->createElement('select_theme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));    
     $form->addGroup($group, '', array(get_lang("Stylesheets")), '<div></div>');
 }
 

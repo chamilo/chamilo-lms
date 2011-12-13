@@ -571,8 +571,7 @@ class HTML_QuickForm extends HTML_Common
      * @return    HTML_QuickForm_Element
      * @throws    HTML_QuickForm_Error
      */
-    function &createElement($elementType)
-    {
+    function &createElement($elementType) {
         $args    =  func_get_args();
         $element =& HTML_QuickForm::_loadElement('createElement', $elementType, array_slice($args, 1));
         return $element;
@@ -605,12 +604,14 @@ class HTML_QuickForm extends HTML_Common
         // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$elementObject =& new $className();
         $elementObject = new $className();
-        //
+        
         for ($i = 0; $i < 5; $i++) {
             if (!isset($args[$i])) {
                 $args[$i] = null;
             }
         }
+        
+        
         $err = $elementObject->onQuickFormEvent($event, $args, $this);
         if ($err !== true) {
             return $err;

@@ -10,9 +10,10 @@ class HTML_QuickForm_Select_Theme extends HTML_QuickForm_select
 	/**
 	 * Class constructor
 	 */
-	function HTML_QuickForm_Select_Theme($elementName=null, $elementLabel=null, $options=null, $attributes=null) {
+	function HTML_QuickForm_Select_Theme($elementName=null, $elementLabel=null, $options=null, $attributes=null) {	    
 	    if (!isset($attributes['class'])) {
-            $attributes['class'] = 'chzn-select';
+	        //todo this was comment due a bug in infocours.php with jquery-ui 
+            //$attributes['class'] = 'chzn-select';
         }        
 		parent::HTML_QuickForm_Select($elementName, $elementLabel, $options, $attributes);
 		// Get all languages

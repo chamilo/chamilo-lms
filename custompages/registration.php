@@ -50,7 +50,6 @@ require_once('language.php');
 				<span><?php echo get_lang('Subscribe');?></span>
 			</div> <!-- #form-submit -->
 			<div id="links">
-      <!--<a href="mailto: <?php echo api_get_setting('emailAdministrator'); ?>"><?php echo get_lang('NeedContactAdmin')?></a><br />-->
 			</div>
 		</div> <!-- #form -->
 		<div id="footer">

@@ -177,4 +177,17 @@ $EveryMonth = "Mensal";
 $ReservationForDenied = "Reserva recusada";
 $BookingPeriodTooSmall = "O período de reserva é muito curto.";
 $BookingPeriodTooBig = "O período de reserva é muito longo.";
+$PermissionsStored = "Permissões salvas";
+$PermissionGranted = "Permissão concedida";
+$PermissionRevoked = "Permissão negada";
+$RoleGranted = "Perfil aceito";
+$RoleRevoked = "Perfil negado";
+$ErrorPleaseGiveRoleName = "Favor nomeie o perfil";
+$RoleDeleted = "Perfil excluído";
+$AddRole = "Adicionar perfil";
+$RoleComment = "O perfil é o item que lhe permitirá atribuir direitos a uma pessoa de um grupo.";
+$DefaultRole = "Perfil padrão";
+$PermissionsOfRole = "Permissões do perfil";
+$IsPlatformRoleNotEditable = "A plataforma do perfil não pode ser editada?";
+$UserPermissions = "Permissões do Usuário";
 ?>

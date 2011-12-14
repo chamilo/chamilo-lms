@@ -222,4 +222,6 @@ $BackToEvaluation = "Voltar para a avaliação.";
 $TotalWeight = "Peso total";
 $SumOfActivitiesWeightMustBeEqualToTotalWeight = "A soma de todos os pesos das atividade deve ser igual ao peso total indicado nas configurações de sua avaliação, caso contrário os estudantes não serão capazes de alcançar a pontuação suficiente para conseguir a sua certificação.";
 $TotalSumOfWeights = "A soma de todos os pesos das atividades dentro dessa avaliação tem que ser equivalente a este número.";
+$TotalWeightMustBeX = "A soma de todas as notas de atividades devem ser %s";
+$ExportAsDOC = "Exportar como .doc";
 ?>

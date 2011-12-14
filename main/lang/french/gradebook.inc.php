@@ -225,4 +225,7 @@ $TotalSumOfWeights = "La somme des poids de toutes les évaluations de ce cahier
 $TotalWeightMustBeX = "La somme de tous les poids (pondérations) des éléments doit être %s";
 $ExportAsDOC = "Exporter en .doc";
 $SelectGradebook = "Sélectionner l'évaluation";
+$CheckYourGradingModelValues = "Veuillez vérifier les valeurs de votre modèle d'évaluation";
+$SkillsAchievedWhenAchievingThisGradebook = "Compétences acquises lors de l'obtention de ce certificat";
+$AddGradebook = "Ajouter évaluation";
 ?>

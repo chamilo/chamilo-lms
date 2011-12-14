@@ -93,4 +93,9 @@ $PleaseCheckHomeworkPage = "Lūdzu, pārbaudiet uzdevumu lapu";
 $IncludedInEvaluation = "Iekļauts Novērtējumā";
 $DateExpiredNotBeLessDeadLine = "Derīguma termiņa datums nevar būt mazāks par termiņa beigu datumu";
 $NotRevised = "Nav pārskatīts";
+$MaxWeightNeedToBeProvided = "Ir jāsasniedz maksimālā vērtība.";
+$ContainsAfile = "Satur failu";
+$AllowTextAssignments = "Atļautu uzdevumu iesniegšanu, izmantojot tiešsaistes redaktoru";
+$YouAlreadySentAPaperYouCantUpload = "Jūs jau esat nosūtījis uzdevumu, vēl vienu vairs nevar augšupielādēt";
+$CantUploadDeleteYourPaperFirst = "Jūs nevarat augšupielādēt šo uzdevumu. Lūdzu, izdzēsiet kādu no iepriekšējiem.";
 ?>

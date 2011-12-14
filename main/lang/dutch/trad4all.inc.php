@@ -295,7 +295,6 @@ $DocumentAdded = "Document toegevoegd";
 $DocumentUpdated = "Document aangepast";
 $DocumentInFolderUpdated = "Bestand aangepast in map";
 $Course_description = "Cursusbeschrijving";
-$Calendar_event = "Agenda";
 $Document = "Document";
 $Learnpath = "Leerpad";
 $Link = "Link";

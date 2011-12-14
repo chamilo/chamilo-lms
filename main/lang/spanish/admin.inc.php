@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CasMainActivateComment = "Activar la autentificación CAS permitirá a usuarios autenticarse con sus credenciales CAS";
 $AdminBy = "Administrado por:";
 $AdministrationTools = "Administración";
 $State = "Estado del sistema";
@@ -1480,4 +1481,28 @@ $NoParentship = "Sin parentezco";
 $NoCertificate = "Sin certificado";
 $ShowDocumentPreviewTitle = "Mostrar vista previa de documento";
 $ShowDocumentPreviewComment = "Mostrar vista previa de documentos en la herramienta de documentos. Este modo permite evitar la carga de una nueva página para mostrar un documento, pero puede resultar inestable en antigüos navegadores o poco práctico en pantallas pequeñas.";
+$CasMainActivateTitle = "Activar la autentificación CAS";
+$CasMainServerTitle = "Servidor CAS principal";
+$CasMainServerComment = "Es el servidor CAS principal que estará usado para la autentificación (dirección IP o nombre)";
+$CasMainServerURITitle = "URI del servidor CAS principal";
+$CasMainServerURIComment = "El camino hasta el servicio CAS en el servidor";
+$CasMainPortTitle = "Puerto del servidor CAS principal";
+$CasMainPortComment = "El puerto en el cual uno se puede conectar al servidor CAS principal";
+$CasMainProtocolTitle = "Protócolo servidor CAS principal";
+$CAS1Text = "CAS 1";
+$CAS2Text = "CAS 2";
+$SAMLText = "SAML";
+$CasMainProtocolComment = "El protócolo con el cual nos conectamos al servidor CAS";
+$CasUserAddActivateTitle = "Activar agregado de usuarios por CAS";
+$CasUserAddActivateComment = "Permite crear cuentas de usuarios con CAS";
+$CasUserAddLoginAttributeTitle = "Registrar el nombre de usuario";
+$CasUserAddLoginAttributeComment = "Registrar el nombre de usuario CAS cuando se registra un nuevo usuario por esta via";
+$CasUserAddEmailAttributeTitle = "Registrar el e-mail CAS";
+$CasUserAddEmailAttributeComment = "Registrar el e-mail CAS cuando se registra un nuevo usuario por esta via";
+$CasUserAddFirstnameAttributeTitle = "Registrar el nombre CAS";
+$CasUserAddFirstnameAttributeComment = "Registrar el nombre CAS cuando se registra un nuevo usuario por esta via";
+$CasUserAddLastnameAttributeTitle = "Registrar el apellido CAS";
+$CasUserAddLastnameAttributeComment = "Registrar el apellido CAS cuando se registra un nuevo usuario por esta via";
+$ShowAdminToolbarTitle = "Mostrar barra de administración";
+$ShowAdminToolbarComment = "Muestra una barra global encima de la página a los usuarios de los roles designados. Esta barra, muy similar a las de Wordpress y Google, puede aumentar considerablemente su eficiencia al realizar actividades complejas y aumenta el espacio disponible para el contenido de aprendizaje, pero podría confundir una cierta proporción de sus usuarios.";
 ?>

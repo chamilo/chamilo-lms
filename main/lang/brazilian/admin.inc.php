@@ -1454,4 +1454,16 @@ $DestinySession = "Sessão de destino";
 $CourseDoesNotExistInThisSession = "O Curso não existe na presente sessão. A cópia só funcionará a partir de um curso de uma sessão para o mesmo curso em outra sessão.";
 $UserNotRegistered = "Usuário não registrado.";
 $ViewStats = "Visualizar estatísticas";
+$YouNeedToAddASessionCategoryFirst = "Primeiro, insira uma categoria para a sessão";
+$InstallationGuide = "Guia de Instalação";
+$ChangesInLastVersion = "Mudanças na última versão";
+$ContributorsList = "Lista de Colaboradores";
+$SecurityGuide = "Guia de Segurança";
+$OptimizationGuide = "Guia de Otimização";
+$FreeBusyCalendar = "Agenda";
+$ArchiveDirCleanup = "Limpar diretório de arquivo";
+$ArchiveDirCleanupDescr = "O Chamilo mantém uma cópia da maioria dos arquivos temporários gerados (para backups, exportações, cópias, etc) neste arquivo/diretório. Depois de um tempo, todos esses arquivos podem ocupar uma grande parte do espaço do disco, sem necessidade. Clique no botão abaixo para limpar o arquivo diretório. Esta operação deve ser automatizada por processos cron, mas se não for possível, você pode vir a esta página regularmente para remover todos os arquivos temporários do diretório.";
+$ArchiveDirCleanupProceedButton = "Proceder com a limpeza";
+$ArchiveDirCleanupSucceeded = "A limpeza do arquivo/diretório foi executada com sucesso.";
+$ArchiveDirCleanupFailed = "Por alguma razão, o arquivo/diretório não pode ser limpo.  Tente limpá-lo manualmente conectando ao servidor e excluindo os conteúdos do diretório chamilo/arquive, exceto o arquivo .htaccess.";
 ?>

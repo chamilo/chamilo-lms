@@ -148,4 +148,5 @@ $InsertQualificationCorrespondingToMaxScore = "Insira a qualificação correspon
 $ThreadMoved = "Discussão movida";
 $MigrateForum = "Migrar fórum";
 $YouWillBeNotified = "Você será notificado";
+$ForumCategories = "Categorias de Fórum";
 ?>

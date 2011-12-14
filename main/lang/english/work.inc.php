@@ -38,7 +38,7 @@ $EndsAt = "Ends at (completely closed)";
 $QualificationOfAssignment = "Assignment scoring";
 $MakeQualifiable = "Add to gradebook";
 $QualificationNumberOver = "Score";
-$WeightInTheGradebook = "Weight inside gradebook";
+$WeightInTheGradebook = "Weight inside assessment";
 $DatesAvailables = "Date limits";
 $ExpiresAt = "Expires at";
 $AddToCalendar = "Add assignment handling (or creation) date to calendar";
@@ -97,4 +97,5 @@ $MaxWeightNeedToBeProvided = "Max weight need to be provided";
 $ContainsAfile = "Contains a file";
 $AllowTextAssignments = "Allow assignments handing through online editor";
 $YouAlreadySentAPaperYouCantUpload = "You already sent an assignment, you can't upload a new one";
+$CantUploadDeleteYourPaperFirst = "You cannot upload this assignment. Please delete the previous one first.";
 ?>

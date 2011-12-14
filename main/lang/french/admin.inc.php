@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CasMainActivateComment = "Activer l'authentification CAS permettra aux utilisateurs de s'identifier à l'aide de leur compte CAS";
 $AdminBy = "Administration  par";
 $AdministrationTools = "Administration";
 $State = "Etat du système";
@@ -1480,4 +1481,28 @@ $NoParentship = "Sans parentage";
 $NoCertificate = "Sans certificat";
 $ShowDocumentPreviewTitle = "Montrer pré-visualisation des documents";
 $ShowDocumentPreviewComment = "Activer la pré-visualisation des documents dans l'outil de documents évitera le chargement d'une nouvelle page pour l'affichage d'un document, mais est instable sur les plus anciens navigateurs et peut s'avérer génant sur de petits écrans.";
+$CasMainActivateTitle = "Activer l'authentification CAS";
+$CasMainServerTitle = "Serveur CAS principal";
+$CasMainServerComment = "Il s'agit du serveur CAS principal qui sera utilisé pour l'authentification (adresse IP ou nom d'hôte)";
+$CasMainServerURITitle = "URI du serveur CAS principal";
+$CasMainServerURIComment = "Le chemin vers le service CAS";
+$CasMainPortTitle = "Port du serveur CAS principal";
+$CasMainPortComment = "Le port sur lequel se connecter au serveur CAS principal";
+$CasMainProtocolTitle = "Protocole du serveur CAS principal";
+$CAS1Text = "CAS 1";
+$CAS2Text = "CAS 2";
+$SAMLText = "SAML";
+$CasMainProtocolComment = "Le protocole par lequel on se connecte au serveur CAS";
+$CasUserAddActivateTitle = "Activer la création d'utilisateurs via CAS";
+$CasUserAddActivateComment = "Permet la création de nouveaux utilisateurs via CAS";
+$CasUserAddLoginAttributeTitle = "Ajout du login utilisateur";
+$CasUserAddLoginAttributeComment = "Enregistrer le login CAS de l'utilisateur lors de la création";
+$CasUserAddEmailAttributeTitle = "Ajouter e-mail utilisateur";
+$CasUserAddEmailAttributeComment = "Enregistrer l'e-mail CAS de l'utilisateur lors de la création";
+$CasUserAddFirstnameAttributeTitle = "Ajouter le prénom utilisateur";
+$CasUserAddFirstnameAttributeComment = "Enregistrer le prénom CAS de l'utilisateur lors de la création";
+$CasUserAddLastnameAttributeTitle = "Ajouter le nom de famille de l'utilisateur";
+$CasUserAddLastnameAttributeComment = "Enregistrer le nom de famille CAS de l'utilisateur lors de la création";
+$ShowAdminToolbarTitle = "Afficher la barre d'administration";
+$ShowAdminToolbarComment = "Affiche une barre d'outils globale au sommet de la page aux utilisateurs des rôles désignés. Cette barre d'outils, très similaire à celles de Wordpress et de Google, peut considérablement accélérer certaines opérations complexes et augmente l'espace disponible pour les contenus de cours, mais elle pourrait rendre certains utilisateurs confus.";
 ?>

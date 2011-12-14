@@ -148,4 +148,5 @@ $InsertQualificationCorrespondingToMaxScore = "Ievietot kvalifikāciju atbilsto�
 $ThreadMoved = "Temats pārvietots";
 $MigrateForum = "Pārvietots forums";
 $YouWillBeNotified = "Jums tiks paziņots";
+$ForumCategories = "Foruma Kategorijas";
 ?>

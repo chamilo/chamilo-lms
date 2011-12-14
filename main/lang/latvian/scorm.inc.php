@@ -58,4 +58,5 @@ $AdditionalProfileField = "Pievienot info lauku Lietotāja profilam";
 $ScormUnknownPackageFormat = "Paketei, kuru Jūs mēģinājāt augšupielādēt, ir nezināms paketes formāts. Lūdzu pārbaudiet atbilstību.";
 $ScormNotEnoughSpaceInCourseToInstallPackage = "Nav pietiekami daudz brīvas vietas paketes atvēršanai (uncompressing)";
 $ScormPackageFormatNotScorm = "Pakete, ko jūs augšupielādējat neatbilst SCORM formātam. Lūdzu, pārbaudiet, vai sekojošs fails -<b> imsmanifest.xml </b>- ir ZIP failā, kuru jūs mēģināt augšupielādēt.";
+$HideTocFrame = "Paslēpt tabulas apmales";
 ?>

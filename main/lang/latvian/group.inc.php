@@ -94,4 +94,6 @@ $Group = "Grupa";
 $ForumOfGroup = "Grupas diskusija";
 $BackToGroupList = "Atpakaļ uz Grupu sarakstu";
 $EditGroupCategory = "Rediģēt grupu kategoriju";
+$NoStudents = "Nav Kursantu";
+$NoData = "Dati nav pieejami";
 ?>

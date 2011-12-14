@@ -251,7 +251,6 @@ $DocumentAdded = "Dokumen ditambahkan";
 $DocumentUpdated = "Dokumen di-update";
 $DocumentInFolderUpdated = "Dokumen di-update di folder";
 $Course_description = "Deskripsi Mata Kuliah";
-$Calendar_event = "Agenda";
 $Document = "Dokument";
 $Learnpath = "Learnpath";
 $Link = "Link";

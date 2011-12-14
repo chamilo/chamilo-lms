@@ -5,7 +5,7 @@ for more information: see languages.txt in the lang folder.
 $GeneralDescription = "Kursa satura vispārējs apraksts";
 $GeneralDescriptionQuestions = "<br><b>Informējiet Kursantu :</b><br>Cik svarīgs ir šis kurss kopējā programmas ietvarā? Vai ir kādi priekšnoteikumi? Kā šis kurss ir saistīts ar citiem kursiem?";
 $GeneralDescriptionInformation = "<br><b>Informējiet Kursantu :</b><br>Aprakstiet kursu (stundu skaits, oficiālais kods, auditorijas numurs...) un Lektora (vārds, uzvārds, atrašanās vieta, tālrunis, e-pasts...)";
-$Objectives = "Kursā sasniedzamie mērķii";
+$Objectives = "Kursā sasniedzamie mērķi";
 $ObjectivesInformation = "Kopējo un sīkāk detalizēto kursa mērķu prezentācija.";
 $ObjectivesQuestions = "<br><b>Informējiet Kursantu :</b><br>Ko Kursanti spēs veikt pabeidzot šo kursu? Kas viņiem būtu jāveic šī kursa ietvaros?";
 $Topics = "Kursa tēmu apraksts";

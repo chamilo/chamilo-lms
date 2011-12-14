@@ -6,7 +6,6 @@ $langPgTitle = "ペ〖ジタイトル";
 $langExplanation = "办搀OKをクリックすると、柴的技や徒年、矢今マネ〖ジャ〖烧のサイトが叫丸ます。サイト侯喇荚としてログインすると、サイトを饯赖することが叫丸ます。";
 $langTooBig = "ファイルが络きすぎるので、联买できません。";
 $langCouldNot = "ファイルが流れませんでした。";
-$langNotAllowed = "このコ〖ス减怪が钓材されていません";
 $langAddPageToSite = "ペ〖ジを裁える";
 $langCouldNotSendPage = "このファイルは HTMLフォ〖マットではないので、觅れませんでした。PDF, Word, Power Point, Video, などの矢今を流りたいのであれば肌のリンクを网脱布さい<a href";
 $langSendPage = "ペ〖ジを流る";

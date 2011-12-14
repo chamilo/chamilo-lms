@@ -1463,4 +1463,13 @@ $DestinySession = "Sessione destinazione";
 $CourseDoesNotExistInThisSession = "Il corso non esiste nella sessione. La copia può avvenire tra corsi uguali in sessioni diverse";
 $UserNotRegistered = "Utente non iscritto";
 $ViewStats = "Vedi le statistiche";
+$YouNeedToAddASessionCategoryFirst = "Devi prima aggiungere una categoria per la sessione";
+$InstallationGuide = "Guida all'installazione";
+$ChangesInLastVersion = "Cambiamenti dell'ultima versione";
+$ContributorsList = "Elenco dei collaboratori";
+$SecurityGuide = "Guida alla sicurezza";
+$OptimizationGuide = "Guida all'ottimizzazione";
+$FreeBusyCalendar = "Agenda Libero/Occupato";
+$ExtensionCouldBeLoaded = "L'estensione è disponibile";
+$ArchiveDirCleanup = "Pulizia della cartella Archivio";
 ?>

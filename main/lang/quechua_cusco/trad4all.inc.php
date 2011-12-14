@@ -262,7 +262,6 @@ $DocumentAdded = "Qelqa khipu yapasqa";
 $DocumentUpdated = "Qelqa khipu kunanyachisqa";
 $DocumentInFolderUpdated = "Wayaqapi qelqa khipu kunanyachisqa";
 $Course_description = "Yachachiymanta";
-$Calendar_event = "Ima ruway";
 $Document = "Qelqa khipu";
 $Learnpath = "Yachanakuna";
 $Link = "Waskhana";

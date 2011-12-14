@@ -94,4 +94,6 @@ $Group = "Group";
 $ForumOfGroup = "Forum of group:";
 $BackToGroupList = "Back to Groups list";
 $EditGroupCategory = "Edit group category";
+$NoStudents = "No student";
+$NoData = "No data available";
 ?>

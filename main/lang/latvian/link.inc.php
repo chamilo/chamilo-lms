@@ -53,4 +53,5 @@ $LinkOpenSelf = "Open self";
 $LinkOpenBlank = "Atvērt tukšā logā";
 $LinkOpenParent = "Open parent";
 $LinkOpenTop = "Open top";
+$LinkTarget = "Hipersaites mērķis";
 ?>

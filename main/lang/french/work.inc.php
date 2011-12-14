@@ -97,4 +97,5 @@ $MaxWeightNeedToBeProvided = "Un poids maximum doit être indiqué dans les opti
 $ContainsAfile = "Contient un fichier";
 $AllowTextAssignments = "Permettre la remise de travaux comme texte en ligne";
 $YouAlreadySentAPaperYouCantUpload = "Vous avez déjà envoyé un travail, vous ne pouvez pas en envoyer d'autre.";
+$CantUploadDeleteYourPaperFirst = "Impossible d'envoyer deux travaux. Veuillez tout d'abord éliminer l'antérieur.";
 ?>

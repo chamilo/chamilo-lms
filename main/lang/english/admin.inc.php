@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CasMainActivateComment = "Enabling CAS authentication will allow users to authenticate with their CAS credentials";
 $AdminBy = "Administration by";
 $AdministrationTools = "Administration";
 $State = "Portal status";
@@ -348,7 +349,7 @@ $Chat = "Chat";
 $Quiz = "Tests";
 $Announcements = "Announcements";
 $Links = "Links";
-$LearningPath = "Courses";
+$LearningPath = "Learnpath";
 $Documents = "Documents";
 $UserPicture = "Picture";
 $officialcode = "Code";
@@ -1468,8 +1469,8 @@ $ArchiveDirCleanupProceedButton = "Proceed with cleanup";
 $ArchiveDirCleanupSucceeded = "The archive/ directory cleanup has been executed successfully.";
 $ArchiveDirCleanupFailed = "For some reason, the archive/ directory could not be cleaned up. Please clean it up by manually connecting to the server and deleting the contents of the chamilo/archive/ directory, except the .htaccess file.";
 $LocalTimeUsingPortalTimezoneXIsY = "The local time in the portal timezone (%s) is %s";
-$AllowTeacherChangeGradebookGradingModelTitle = "Allow teachers to change the Gradebook grading model";
-$AllowTeacherChangeGradebookGradingModelComment = "Enabling this option, you will allow each teacher to choose the grading model which will be used in his/her course. This change will have to be made by the teacher from inside the gradebook tool of the course.";
+$AllowTeacherChangeGradebookGradingModelTitle = "Allow teachers to change the assessments grading model";
+$AllowTeacherChangeGradebookGradingModelComment = "Enabling this option, you will allow each teacher to choose the grading model which will be used in his/her course. This change will have to be made by the teacher from inside the assessments tool of the course.";
 $NumberOfSubEvaluations = "Number of sub evaluations";
 $AddNewModel = "Add new model";
 $GroupParentship = "Group parentship";
@@ -1477,4 +1478,28 @@ $NoParentship = "No parentship";
 $NoCertificate = "No certificate";
 $ShowDocumentPreviewTitle = "Show document preview";
 $ShowDocumentPreviewComment = "Showing previews of the documents in the documents tool will avoid loading a new page just to show a document, but can result unstable with some older browsers or smaller width screens.";
+$CasMainActivateTitle = "Enable CAS authentication";
+$CasMainServerTitle = "Main CAS server";
+$CasMainServerComment = "This is the main CAS server which will be used for the authentication (IP address or hostname)";
+$CasMainServerURITitle = "Main CAS server URI";
+$CasMainServerURIComment = "The path to the CAS service";
+$CasMainPortTitle = "Main CAS server port";
+$CasMainPortComment = "The port on which to connect to the main CAS server";
+$CasMainProtocolTitle = "Main CAS server protocol";
+$CAS1Text = "CAS 1";
+$CAS2Text = "CAS 2";
+$SAMLText = "SAML";
+$CasMainProtocolComment = "The protocol with which we connect to the CAS server";
+$CasUserAddActivateTitle = "Enable CAS user addition";
+$CasUserAddActivateComment = "Enable CAS user addition";
+$CasUserAddLoginAttributeTitle = "Add CAS user login";
+$CasUserAddLoginAttributeComment = "Add CAS user login details when registering a new user";
+$CasUserAddEmailAttributeTitle = "Add CAS user email";
+$CasUserAddEmailAttributeComment = "Add CAS user e-mail details when registering a new user";
+$CasUserAddFirstnameAttributeTitle = "Add CAS user firstname";
+$CasUserAddFirstnameAttributeComment = "Add CAS user firstname when registering a new user";
+$CasUserAddLastnameAttributeTitle = "Add CAS user lastname";
+$CasUserAddLastnameAttributeComment = "Add CAS user lastname details when registering a new user";
+$ShowAdminToolbarTitle = "Show admin toolbar";
+$ShowAdminToolbarComment = "Shows a global toolbar on top of the page to the designated user roles. This toolbar, very similar to Wordpress and Google's black toolbars, can really speed up complicated actions and improve the space you have available for the learning content, but it might be confusing for some users";
 ?>

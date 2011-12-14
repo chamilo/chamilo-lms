@@ -79,4 +79,6 @@ $RepeatDate = "Atkārtot datumu";
 $EndDateMustBeMoreThanStartDate = "Beigu datumam ir jābūt lielākam par sākuma datumu";
 $SelectACourse = "Izvēlēties kursu";
 $PleaseSelectACourseOrASessionInTheLeftColumn = "Lūdzu izvēlieties kursu vai sesiju sānjoslā";
+$DisableEndDate = "Atslēgt beigu datumu";
+$AllEvents = "Visi notikumi";
 ?>

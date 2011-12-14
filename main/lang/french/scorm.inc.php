@@ -57,4 +57,5 @@ $AdditionalProfileField = "Ajouter un champ de profil utilisateur";
 $ScormUnknownPackageFormat = "Le paquet que vous tentez d'envoyer au serveur présente un format inconnu. Veuillez vérifier qu'il utilise l'un des formats supportés.";
 $ScormNotEnoughSpaceInCourseToInstallPackage = "Il n'y a plus assez de place dans ce cours pour décomprimer le paquet actuel.";
 $ScormPackageFormatNotScorm = "Le paquet que vous tentez d'envoyer ne semble pas être au format SCORM. Veuillez vérifier que le fichier imsmanifest.xml se trouve bien dans le fichier ZIP que vous tentez d'envoyer.";
+$HideTocFrame = "Cacher la table des matières";
 ?>

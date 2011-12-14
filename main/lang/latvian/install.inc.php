@@ -116,6 +116,7 @@ $FailedConectionDatabase = "Savienojums ar datubāzi nav izdevies. Tas galvenok�
 $EncryptMethodUserPass = "Šifrēšanas metode";
 $UpgradeFromDokeos16x = "Atjauninājums no Chamilo 1.6.x";
 $UpgradeFromDokeos18x = "Atjauninājums no Chamilo 1.8.x";
+$Step7 = "Solis Nr.7";
 $SuggestionOnlyToEnableCSSUploadFeature = "Ieteikums tikai tad, ja jūs vēlaties aktivizēt CSS augšupielādes funkciju";
 $SuggestionOnlyToEnableSubLanguageFeature = "Ieteikums tikai tad, ja jūs vēlaties aktivizēt apakš-valodas funkciju";
 $IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Ja jūs plānojat, lai uzlabotu sistēmu no vecākas Chamilo versijas, jūs varētu vēlēties apskatīt izmaiņu sarakstā lai zinātu, kas jauns un kas ir mainīts";

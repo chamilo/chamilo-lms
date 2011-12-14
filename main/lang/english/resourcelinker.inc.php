@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resource added";
-$LearningPath = "Courses";
+$LearningPath = "Learning paths";
 $LevelUp = "level up";
 $AddIt = "Add it";
 $MainCategory = "main category";

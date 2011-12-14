@@ -411,4 +411,15 @@ $TotalScoreTooBig = "A pontuação total é muito grande";
 $InvalidQuestionType = "Tipo de questão inválida";
 $ShowScoreAndRightAnswer = "Modalidade da auto-avaliação: exibir pontuação e respostas esperadas";
 $DoNotShowScoreNorRightAnswer = "Modo exame: não exibir pontuação e nem respostas";
+$LoadUsersExtraData = "Carregar dados extras dos usuários";
+$StartTest = "Iniciar teste";
+$SaveForNow = "Salvar e continuar";
+$QuestionsToReview = "Questões a serem revisadas";
+$QuestionWithNoAnswer = "Questões sem respostas";
+$ValidateAnswers = "Validar respostas";
+$ReviewQuestions = "Revisar questões selecionadas";
+$YouTriedToResolveThisExerciseEarlier = "Você já tentou resolver este exercício";
+$ThereAreNoQuestionsForThisExercise = "Não há questões neste exercício";
+$ContinueTest = "Continuar com o teste";
+$XQuestionsWithTotalScoreY = "%d questões, do total de %s";
 ?>

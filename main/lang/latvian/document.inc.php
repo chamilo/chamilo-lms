@@ -259,4 +259,6 @@ $UplUploadFailedSizeIsZero = "Radās problēma, augšupielādējot jūsu dokumen
 $NewImage = "Jauns attēls";
 $DirExists = "Darbība nav iespējama, jo direktorija ar šādu nosaukumu jau eksistē";
 $DocMv = "Dokuments ir pārvietots";
+$NoSVGImagesInImagesGalleryPath = "Šeit nav SVG attēlu, Jūsu attēlu galerijas katalogā";
+$NoSVGImages = "Nav SVG attēlu";
 ?>

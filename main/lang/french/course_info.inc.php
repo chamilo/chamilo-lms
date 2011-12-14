@@ -129,4 +129,6 @@ $RedirectToALearningPath = "Rediriger vers un parcours sélectionné";
 $RedirectToTheLearningPathList = "Rediriger vers la liste des parcours";
 $ActivateLegal = "Activer les termes légaux";
 $ShowALegalNoticeWhenEnteringTheCourse = "Montrer un avis légal lors de l'entrée dans le cours";
+$CourseLegalAgreement = "Termes légaux pour ce cours";
+$AcceptLegal = "Accepter les termes légaux";
 ?>

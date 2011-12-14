@@ -225,4 +225,7 @@ $TotalSumOfWeights = "La suma de pesos de todos los componentes de esta evaluaci
 $TotalWeightMustBeX = "La suma de todos los pesos de los componentes debe ser de %s";
 $ExportAsDOC = "Exportar como .doc";
 $SelectGradebook = "Seleccionar evaluación";
+$CheckYourGradingModelValues = "Compruebe sus valores de modelo de evaluación";
+$SkillsAchievedWhenAchievingThisGradebook = "Competencias obtenidas al lograr esta evaluación";
+$AddGradebook = "Añadir evaluación";
 ?>

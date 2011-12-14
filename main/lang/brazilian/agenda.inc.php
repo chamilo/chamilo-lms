@@ -79,4 +79,6 @@ $RepeatDate = "Repetir a data";
 $EndDateMustBeMoreThanStartDate = "Data final dever ser posterior a data de início";
 $SelectACourse = "Selecione um curso";
 $PleaseSelectACourseOrASessionInTheLeftColumn = "Por favor, selecione um curso ou uma sessão na barra lateral.";
+$DisableEndDate = "Desabilitar fim do compromisso";
+$AllEvents = "Todos os eventos";
 ?>

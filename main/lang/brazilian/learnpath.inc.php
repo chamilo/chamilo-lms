@@ -263,4 +263,5 @@ $ViewModeEmbedFrame = "Modo de exibição atual: Embed externo. Use somente para
 $LPNotVisibleToStudent = "Estudantes não podem visualizar estar rota de aprendizagem";
 $EditCurrentModule = "Editar o módulo atual";
 $SearchFeatureTerms = "Condições para a ferramenta de pesquisa";
+$PrerequisiteDeletedError = "Erro: o elemento definido como pré-requisito foi excluído.";
 ?>

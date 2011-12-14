@@ -260,4 +260,5 @@ $ViewModeEmbedFrame = "Patreizējais skata veids: ārēji ievietots (embed). Lie
 $LPNotVisibleToStudent = "Kursanti nevar redzēt šī Mācību kursa saturu";
 $EditCurrentModule = "Rediģēt konkrēto moduli";
 $SearchFeatureTerms = "Noteikumi par meklēšanas funkciju";
+$PrerequisiteDeletedError = "Kļūda: Elements, kas definēts, kā priekšnosacījums ir izdzēsts";
 ?>

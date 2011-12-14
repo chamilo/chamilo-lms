@@ -274,4 +274,6 @@ $UplUploadFailedSizeIsZero = "There was a problem uploading your document: the r
 $NewImage = "New image";
 $DirExists = "The operation is impossible, a directory with this name already exists.";
 $DocMv = "Document moved";
+$NoSVGImagesInImagesGalleryPath = "There are no SVG images in your images gallery directory";
+$NoSVGImages = "No SVG image";
 ?>

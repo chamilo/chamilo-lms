@@ -127,4 +127,8 @@ $ConfigLearnpath = "Kursa mācību norises iestatījumi";
 $PDFWaterMarkHeader = "Ūdenszīmes attēls PDF eksporta dokumenta galvenē";
 $RedirectToALearningPath = "Novirzīt uz izvēlēto apmācības procesu";
 $RedirectToTheLearningPathList = "Novirzīt uz mācību procesa sarakstu";
+$ActivateLegal = "Aktivizēt juridiskos nosacījumus";
+$ShowALegalNoticeWhenEnteringTheCourse = "Rādīt juridisku paziņojumu, kad tiek ieiets Kursā";
+$CourseLegalAgreement = "Kursa juridiskie noteikumi";
+$AcceptLegal = "Apstiprināt noteikumus";
 ?>

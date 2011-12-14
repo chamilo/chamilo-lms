@@ -288,7 +288,6 @@ $DocumentAdded = "Документ добавлен";
 $DocumentUpdated = "Документ обновлен";
 $DocumentInFolderUpdated = "Документ обновлен в папке";
 $Course_description = "Описание курса";
-$Calendar_event = "Повестка дня";
 $Document = "Документ";
 $Learnpath = "План обучения";
 $Link = "Ссылки";

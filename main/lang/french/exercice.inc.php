@@ -471,4 +471,15 @@ $MaximumScore = "Score maximum";
 $NotRevised = "Non révisé";
 $PreviousQuestion = "Question précédente";
 $Options = "Options";
+$RandomQuestionByCategory = "Questions aléatoires par catégorie";
+$QuestionDisplayCategoryName = "Montrer la catégorie de questions";
+$ReviewAnswers = "Réviser mes réponses";
+$TextWhenFinished = "Texte de finalisation du test";
+$Validated = "Validées";
+$NotValidated = "Non validées";
+$Revised = "Révisées";
+$SelectAQuestionToReview = "Sélectionnez une question à réviser";
+$ReviewQuestionLater = "Réviser cette question plus tard";
+$NumberStudentWhoSelectedIt = "Nombre d'étudiants l'ayant sélectionnée";
+$QuestionsAlreadyAnswered = "Questions répondues";
 ?>

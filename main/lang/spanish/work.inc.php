@@ -97,4 +97,5 @@ $MaxWeightNeedToBeProvided = "Un peso máximo tiene que ser indicado en las opci
 $ContainsAfile = "Contiene un fichero";
 $AllowTextAssignments = "Permitir tareas de texto en línea";
 $YouAlreadySentAPaperYouCantUpload = "Ya envió una tarea, no puede subir otra.";
+$CantUploadDeleteYourPaperFirst = "No puede subir esta tarea. Por favor elimine la tarea anterior primero.";
 ?>

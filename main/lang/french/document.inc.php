@@ -265,4 +265,6 @@ $UplUploadFailedSizeIsZero = "Un problème est survenu durant l'envoi du fichier
 $NewImage = "Nouvelle image";
 $DirExists = "Opération impossible, un répertoire du même nom existe déjà (peut-être dans une autre session).";
 $DocMv = "Document déplacé.";
+$NoSVGImagesInImagesGalleryPath = "Il n'y a aucune image SVG dans le répertoire de galerie d'images";
+$NoSVGImages = "Aucune image SVG";
 ?>

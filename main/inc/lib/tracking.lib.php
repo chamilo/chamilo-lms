@@ -339,8 +339,8 @@ class Tracking {
 		$a_course = CourseManager :: get_course_information($course_code);
 		if (!empty($a_course)) {
 			// table definition
-			$tbl_course_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-			$tbl_stats_exercise = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+			$tbl_course_quiz     = Database::get_course_table(TABLE_QUIZ_TEST);
+			$tbl_stats_exercise  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
 			// Compose a filter based on optional exercise given
 			$condition_quiz = "";
@@ -387,22 +387,25 @@ class Tracking {
 				$sql = "SELECT SUM(exe_result/exe_weighting*100) as avg_score, COUNT(*) as num_attempts
                         FROM $tbl_stats_exercise
                         WHERE exe_exo_id IN ('".$exercise_id."')
-				$condition_user
-                        AND orig_lp_id = 0
-                        AND exe_cours_id = '$course_code'
-                        AND orig_lp_item_id = 0 $condition_session
+				        $condition_user AND
+                        orig_lp_id = 0 AND
+                        status = '' AND
+                        exe_cours_id = '$course_code' AND
+                        orig_lp_item_id = 0 $condition_session
                         ORDER BY exe_date DESC";
 
 				$res = Database::query($sql);
 				$row = Database::fetch_array($res);
 				$quiz_avg_score = 0;
-				if (!empty($row['avg_score'])) {
-					$quiz_avg_score = round($row['avg_score'],2);
+				
+				if (!empty($row['avg_score'])) {				 
+					$quiz_avg_score = round($row['avg_score'],2);                    
 				}
-				if(!empty($row['num_attempts'])) {
-					$quiz_avg_score = round($quiz_avg_score / $row['num_attempts'], 2);
+                
+				if(!empty($row['num_attempts'])) {				    
+					$quiz_avg_score = round($quiz_avg_score / $row['num_attempts'], 2);                    
 				}
-				if (is_array($student_id)) {
+				if (is_array($student_id)) {				    
 					$quiz_avg_score = round($quiz_avg_score / count($student_id), 2);
 				}
 				return $quiz_avg_score;
@@ -413,7 +416,7 @@ class Tracking {
 
 
 	/**
-	 * Get count student's exercise attempts
+	 * Get count student's exercise COMPLETED attempts 
 	 * @param    int     Student id
 	 * @param    string    Course code
 	 * @param    int        Exercise id
@@ -437,6 +440,7 @@ class Tracking {
 		$sql = "SELECT COUNT(ex.exe_id) as essais FROM $tbl_stats_exercices AS ex
                 WHERE  ex.exe_cours_id = '$course_code'
                 AND ex.exe_exo_id = $exercise_id
+                AND status = ''
                 AND orig_lp_id = $lp_id
                 AND orig_lp_item_id = $lp_item_id
                 AND exe_user_id= $student_id 
@@ -483,6 +487,23 @@ class Tracking {
         }        
         $count = ($count != 0 ) ? 100*round(intval($count)/count($exercise_list), 2) .'%' : '0%';
         return $count;
+    }
+
+
+    function get_exercise_student_average_best_attempt($exercise_list, $user_id, $course_code, $session_id) {
+        $result = 0;
+        foreach($exercise_list as $exercise_data) {
+            $exercise_id = $exercise_data['id'];            
+            $best_attempt = get_best_attempt_exercise_results_per_user($user_id, $exercise_id , $course_code, $session_id);
+                      
+            if (!empty($best_attempt)) {                
+                $result += $best_attempt['exe_result']/$best_attempt['exe_weighting'];                
+            }
+        }
+        $result = $result/ count($exercise_list);
+        $result = round($result, 2)*100;
+        return $result.'%';        
+        
     }
 
 	/**
@@ -3636,9 +3657,11 @@ class TrackingCourseLog {
 			}
 			$user['average_progress']   = $avg_student_progress.'%';
             
-            $total_user_exercise = Tracking::get_exercise_student_progress($total_exercises, $user['user_id'], $course_code, $session_id);
+            $total_user_exercise = Tracking::get_exercise_student_progress($total_exercises, $user['user_id'], $course_code, $session_id);            
+            $user['exercise_progress']  = $total_user_exercise;
             
-            $user['exercise_progress']  = $total_user_exercise; 
+            $total_user_exercise = Tracking::get_exercise_student_average_best_attempt($total_exercises, $user['user_id'], $course_code, $session_id);
+            $user['exercise_average_best_attempt']  = $total_user_exercise;  
             
 
 			if (is_numeric($avg_student_score)) {
@@ -3684,7 +3707,11 @@ class TrackingCourseLog {
             
             $user_row[]= $user['time']; //3           
             $user_row[]= $user['average_progress'];            
-            $user_row[]= $user['exercise_progress'];            
+            $user_row[]= $user['exercise_progress'];
+            
+            $user_row[]= $user['exercise_average_best_attempt'];  
+
+        
             $user_row[]= $user['student_score'];
             $user_row[]= $user['count_assignments'];
             $user_row[]= $user['count_messages']; //8
@@ -3703,15 +3730,15 @@ class TrackingCourseLog {
          
 			if ($export_csv) {
 			    if (empty($session_id)) {
-			        $user_row[10] = strip_tags($user_row[10]);  
-                    $user_row[11] = strip_tags($user_row[11]);
-				    unset($user_row[13]);
+			        $user_row[11] = strip_tags($user_row[11]);  
+                    $user_row[12] = strip_tags($user_row[12]);
 				    unset($user_row[14]);
+				    unset($user_row[15]);
                 } else {
-                    $user_row[9] = strip_tags($user_row[9]);
                     $user_row[10] = strip_tags($user_row[10]);
-                    unset($user_row[12]);
+                    $user_row[11] = strip_tags($user_row[11]);
                     unset($user_row[13]);
+                    unset($user_row[14]);
                 }
             
 				$csv_content[] = $user_row;

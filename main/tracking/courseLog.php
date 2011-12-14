@@ -525,21 +525,22 @@ if ($_GET['studentlist'] == 'false') {
         $table->set_header(4, get_lang('CourseProgress').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
         
         $table->set_header(5, get_lang('ExerciseProgress'), false);
-        $table->set_header(6, get_lang('Score').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
-        $table->set_header(7, get_lang('Student_publication'), false);
-        $table->set_header(8, get_lang('Messages'), false);
+        $table->set_header(6, get_lang('ExerciseAverage'), false);
+        $table->set_header(7, get_lang('Score').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        $table->set_header(8, get_lang('Student_publication'), false);
+        $table->set_header(9, get_lang('Messages'), false);
         
         if (empty($session_id)) {
-            $table->set_header(9, get_lang('Survey'), false);
+            $table->set_header(10, get_lang('Survey'), false);
+            $table->set_header(11, get_lang('FirstLogin'), false, 'align="center"');
+            $table->set_header(12, get_lang('LatestLogin'), false, 'align="center"');
+            $table->set_header(13, get_lang('AdditionalProfileField'), false);
+            $table->set_header(14, get_lang('Details'), false);
+        } else {
             $table->set_header(10, get_lang('FirstLogin'), false, 'align="center"');
             $table->set_header(11, get_lang('LatestLogin'), false, 'align="center"');
             $table->set_header(12, get_lang('AdditionalProfileField'), false);
             $table->set_header(13, get_lang('Details'), false);
-        } else {
-            $table->set_header(9, get_lang('FirstLogin'), false, 'align="center"');
-            $table->set_header(10, get_lang('LatestLogin'), false, 'align="center"');
-            $table->set_header(11, get_lang('AdditionalProfileField'), false);
-            $table->set_header(12, get_lang('Details'), false);
         }
         $table->display();
     } else {
@@ -561,6 +562,7 @@ if ($_GET['studentlist'] == 'false') {
         $csv_headers[] = get_lang('TrainingTime', '');
         $csv_headers[] = get_lang('CourseProgress', '');
         $csv_headers[] = get_lang('ExerciseProgress','');
+        $csv_headers[] = get_lang('ExerciseAverage','');
         $csv_headers[] = get_lang('Score', '');
         $csv_headers[] = get_lang('Student_publication', '');
         $csv_headers[] = get_lang('Messages', '');

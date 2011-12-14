@@ -895,7 +895,14 @@ if (empty($_GET['details'])) {
 				echo '<td align="center">'.$count_attempts.'</td>';
 				echo '<td align="center">';
 
-				$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="'.$exercise_id.'" AND exe_user_id="'.$student_id.'" AND exe_cours_id="'.$course_code.'" AND orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY exe_date DESC LIMIT 1';
+				$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' 
+				                     WHERE  exe_exo_id="'.$exercise_id.'" AND 
+				                            exe_user_id="'.$student_id.'" AND 
+				                            exe_cours_id="'.$course_code.'" AND
+				                            status = "" AND 
+				                            orig_lp_id = 0 AND 
+				                            orig_lp_item_id = 0				                             
+				                            ORDER BY exe_date DESC LIMIT 1';
 				$result_last_attempt = Database::query($sql_last_attempt);
 				if (Database :: num_rows($result_last_attempt) > 0) {
 					$id_last_attempt = Database :: result($result_last_attempt, 0, 0);

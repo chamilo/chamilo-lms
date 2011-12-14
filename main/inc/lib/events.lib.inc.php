@@ -1090,6 +1090,7 @@ function count_exercise_attempts_by_user($user_id, $exercise_id, $course_code, $
  * @param   string  course code
  * @param   int     session id
  * @return  array   with the results
+ * @todo rename this function
  * 
  */
 function get_best_exercise_results_by_user($exercise_id, $course_code, $session_id = 0) {
@@ -1124,6 +1125,52 @@ function get_best_exercise_results_by_user($exercise_id, $course_code, $session_
     }
 	return $best_score_return;
 }
+
+function get_best_attempt_exercise_results_per_user($user_id, $exercise_id, $course_code, $session_id = 0) {
+    $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $course_code           = Database::escape_string($course_code);
+    $exercise_id           = intval($exercise_id);
+    $session_id            = intval($session_id);
+    $user_id               = intval($user_id);
+    
+    $sql = "SELECT * FROM $table_track_exercises 
+            WHERE   status = ''  AND 
+                    exe_cours_id = '$course_code' AND 
+                    exe_exo_id = '$exercise_id' AND 
+                    session_id = $session_id  AND 
+                    exe_user_id = $user_id AND
+                    orig_lp_id =0 AND 
+                    orig_lp_item_id = 0 
+                    ORDER BY exe_id";
+    
+    $res = Database::query($sql);
+    $list = array();
+    while($row = Database::fetch_array($res,'ASSOC')) {     
+        $list[$row['exe_id']] = $row;  /*     
+        $sql = "SELECT * FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
+        $res_question = Database::query($sql);
+        while($row_q = Database::fetch_array($res_question,'ASSOC')) {
+            $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
+        }       */
+    }   
+    //Getting the best results of every student
+    $best_score_return = array(); 
+    $best_score_return['exe_result'] = 0;
+    
+    foreach($list as $result) {
+        $current_best_score = $result;
+        if ($current_best_score['exe_result'] > $best_score_return['exe_result']) {
+            $best_score_return = $result;
+        }
+    }    
+    if (!isset($best_score_return['exe_weighting'])) {
+        $best_score_return = array();
+    }
+    return $best_score_return;
+}
+
+
 
 function count_exercise_result_not_validated($exercise_id, $course_code, $session_id = 0) {
     $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);

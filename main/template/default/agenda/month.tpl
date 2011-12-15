@@ -36,20 +36,44 @@ $(document).ready(function() {
 	content = $( "#content" ),	
 	allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");	
 
-	$('#users_to_send_id').bind('change', function() {	     
+	$('#users_to_send_id').bind('change', function() {
+	    
+	    var selected_counts = $("#users_to_send_id option:selected").size();
+	    
+	    //alert(selected_counts);        
+       /* if (selected_counts >= 1 && $("#users_to_send_id option[value='everyone']").attr('selected') == 'selected') {        
+            clean_user_select();
+            
+            $('#users_to_send_id option').eq(0).attr('selected', 'selected');
+            //deleting the everyone
+            $("#users_to_send_id").trigger("liszt:updated");
+            deleted_items = true;
+            
+        }*/
+        $("#users_to_send_id").trigger("liszt:updated");    
+     /*
+	    if (selected_counts >= 1) {	        	                
+	        $('#users_to_send_id option').eq(0).removeAttr('selected');            
+            
+            
+	    }
+	    
+	   */ 
+	    //clean_user_select();
+	    //$("#users_to_send_id").trigger("liszt:updated");
 	    //alert($("#users_to_send_id option[value='everyone']").attr('selected'));
 	    if ($("#users_to_send_id option[value='everyone']").attr('selected') == 'selected') {
-            clean_user_select();
-            $('#users_to_send_id option').eq(0).attr('selected', 'selected');
-            $("#users_to_send_id").trigger("liszt:updated");            
+            //clean_user_select();
+            //$('#users_to_send_id option').eq(0).attr('selected', 'selected');
+            //$("#users_to_send_id").trigger("liszt:updated");            
         }
     });
 	
 	var calendar = $('#calendar').fullCalendar({
 		header: {
-			left: '',
+			left: 'today prev,next',
 			center: 'title',
-			right: 'today prev,next month,agendaWeek,agendaDay',	
+			right: 'month,agendaWeek,agendaDay',	
 		},	
 		buttonText: 	{$button_text}, 
 		monthNames: 	{$month_names},
@@ -70,7 +94,7 @@ $(document).ready(function() {
 		    clean_user_select();
                 
             //Sets the 1st item selected by default
-            $('#users_to_send_id option').eq(0).attr('selected', 'selected');
+            //$('#users_to_send_id option').eq(0).attr('selected', 'selected');
 			
 			//Update chz-select
 			$("#users_to_send_id").trigger("liszt:updated");
@@ -234,12 +258,11 @@ $(document).ready(function() {
 
 <div id="dialog-form" style="display:none;">
 	<div style="width:500px">
-	<form id="add_event_form" name="form">
-	    
+	<form id="add_event_form" name="form">	    
 	    {if !empty($visible_to)} 
     	    <div id="visible_to_input" class="row">      
                 <div class="label">
-                    <label for="date">{"SentTo"|get_lang}</label>
+                    <label for="date">{"To"|get_lang}</label>
                 </div>
                 <div class="formw">
                     {$visible_to}
@@ -282,5 +305,5 @@ $(document).ready(function() {
 	</form>
 	</div>
 </div>
-<div id='loading' style='position:absolute; display:none'>{"Loading"|get_lang}...</div>
+<div id='loading' style='left:140px;position:absolute; display:none'>{"Loading"|get_lang}...</div>
 <div id='calendar'></div>

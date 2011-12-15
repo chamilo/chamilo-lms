@@ -22,10 +22,10 @@ if(strstr($id,',')) {
 // setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';
 
-
+$course_id = api_get_course_int_id();
 
 $TABLEAGENDA 	= Database::get_course_table(TABLE_AGENDA);
-$sql 			= "SELECT * FROM $TABLEAGENDA WHERE id IN($id) ORDER BY start_date DESC";
+$sql 			= "SELECT * FROM $TABLEAGENDA WHERE c_id = $course_id AND id IN($id) ORDER BY start_date DESC";
 $result			= Database::query($sql);
 ?>
 

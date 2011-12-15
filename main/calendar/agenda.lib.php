@@ -475,17 +475,18 @@ class Agenda {
         $html = '<select id="users_to_send_id" name="users_to_send[]" size="5" multiple="multiple" style="width:250px" class="chzn-select">';
     
         // adding the groups to the select form
-    
-        if (isset($to_already_selected) && $to_already_selected==='everyone') {
-            $html .=  '<option value="everyone" selected="selected">'.get_lang('Everyone').'</option>';
+        
+        if (isset($to_already_selected) && $to_already_selected==='everyone') {            
         }
+        
+        $html .=  '<option value="everyone">'.get_lang('Everyone').'</option>';
         
         if (is_array($group_list)) {
             $html .= '<optgroup label="'.get_lang('Groups').'">';
             foreach($group_list as $this_group) {
                 //api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
-                if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
-                    {
+                if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) {
+                    // $to_already_selected is the array containing the groups (and users) that are already selected
                     $html .=     "<option value=\"GROUP:".$this_group['id']."\">".
                         $this_group['name']." &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
                         "</option>";

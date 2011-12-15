@@ -651,9 +651,8 @@ abstract class Question
 	 * @param - integer $exerciseId - exercise ID if saving in an exercise
 	 */
 	function save($exerciseId=0) {
-
-		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION, $this->course['db_name']);
-		$TBL_QUESTIONS			= Database::get_course_table(TABLE_QUIZ_QUESTION, $this->course['db_name']);
+		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+		$TBL_QUESTIONS			= Database::get_course_table(TABLE_QUIZ_QUESTION);
 
 		$id				= $this->id;
 		$question		= $this->question;
@@ -663,9 +662,9 @@ abstract class Question
 		$type			= $this->type;
 		$picture		= $this->picture;
 		$level			= $this->level;
-    $extra			= $this->extra;
-    $c_id 			= $this->course['real_id'];
-    $category   = $this->category;	// hub 12-10-2011
+        $extra			= $this->extra;
+        $c_id 			= $this->course['real_id'];
+        $category   = $this->category;	// hub 12-10-2011
      
     
 		// question already exists
@@ -677,9 +676,9 @@ abstract class Question
 					position	='".Database::escape_string($position)."',
 					type		='".Database::escape_string($type)."',
 					picture		='".Database::escape_string($picture)."',
-          extra       ='".Database::escape_string($extra)."',
+                    extra       ='".Database::escape_string($extra)."',
 					level		='".Database::escape_string($level)."'
-				WHERE id='".Database::escape_string($id)."'";
+				WHERE c_id = $c_id  AND id='".Database::escape_string($id)."'";
 			Database::query($sql);
 			$this->saveCategory($category);	// hub 12-10-2011
 			if (!empty($exerciseId)) {
@@ -1275,6 +1274,8 @@ abstract class Question
 	 */
 	static function display_type_menu ($feedbacktype = 0) {
 		global $exerciseId;
+        $course_id = api_get_course_int_id();
+        
 		// 1. by default we show all the question types
 		$question_type_custom_list = self::$questionTypes;
 
@@ -1293,7 +1294,7 @@ abstract class Question
 		if (isset($exerciseId) && !empty($exerciseId)) {
 			$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
 			$sql="SELECT max_score FROM $TBL_LP_ITEM
-				  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
+				  WHERE c_id = $course_id AND item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
 			$result = Database::query($sql);
 			if (Database::num_rows($result) > 0) {
 				$show_quiz_edition = false;

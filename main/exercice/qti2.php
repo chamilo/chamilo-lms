@@ -85,6 +85,9 @@ function ch_qti2_import_file($array_file) {
 	}
 }
 
+// display header
+Display::display_header(get_lang('ImportQtiQuiz'), 'Exercises');
+
 // import file
 if ((api_is_allowed_to_edit(null, true))) {
 	if (isset($_POST['submit'])) {
@@ -92,12 +95,8 @@ if ((api_is_allowed_to_edit(null, true))) {
 	}
 }
 
-// display header
-Display::display_header(get_lang('ImportQtiQuiz'), 'Exercises');
-
 // display qti form
 ch_qti2_display_form();
 
 // display the footer
 Display::display_footer();
-?>

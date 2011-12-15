@@ -143,6 +143,7 @@ $(document).ready(function () {
 // INIT EXERCISE
 
 $objExercise = new Exercise();
+$course_id = api_get_course_int_id();
 
 //INIT FORM
 if (isset($_GET['exerciseId'])) {
@@ -218,7 +219,7 @@ if ($form->validate()) {
 	if (isset($objExercise) && !empty($objExercise->id)) {
 		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
 		$sql="SELECT max_score FROM $TBL_LP_ITEM
-			  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($objExercise->id)."'";			  
+			  WHERE c_id = $course_id AND item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($objExercise->id)."'";			  
 		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) {		
 			$form->freeze();

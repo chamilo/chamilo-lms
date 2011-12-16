@@ -53,7 +53,7 @@ $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 // Setting the name of the tool.
-$tool_name = get_lang('DokeosConfigSettings');
+$tool_name = get_lang('PlatformConfigSettings');
 if (empty($_GET['category'])) {
     $_GET['category'] = 'Platform';
 }

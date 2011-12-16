@@ -47,6 +47,8 @@ foreach ($rows as $post) {
     echo "<table width=\"100%\"  class=\"post\" cellspacing=\"5\" border=\"0\">";
     echo "<tr>";
     echo "<td rowspan=\"3\" class=\"$leftclass\">";
+
+    $username = $post['username']; // 
     if ($post['user_id']=='0') {
         $name=$post['poster_name'];
     } else {
@@ -55,7 +57,7 @@ foreach ($rows as $post) {
     if (api_get_course_setting('allow_user_image_forum')) {
         echo '<br />'.display_user_image($post['user_id'],$name,$origin).'<br />';
     }
-    echo display_user_link($post['user_id'], $name, $origin).'<br />';
+    echo display_user_link($post['user_id'], $name." ($username)", $origin)."<br />";
     echo api_convert_and_format_date($post['post_date']).'<br /><br />';
     // get attach id
     $attachment_list=get_attachment($post['post_id']);

@@ -354,39 +354,47 @@ if (is_array($threads)) {
             echo '<td>';
             echo '<a href="viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;forum='.Security::remove_XSS($my_forum).'&amp;origin='.$origin.'&amp;thread='.$row['thread_id'].$origin_string.'&amp;search='.Security::remove_XSS(urlencode($my_search)).'" '.class_visible_invisible($row['visibility']).'>'.prepare4display($row['thread_title']).'</a></td>';
             echo '<td>'.$row['thread_replies'].'</td>';
-            if ($row['user_id'] == '0') {
-                $name = prepare4display($row['thread_poster_name']);
-            } else {
-                $name = api_get_person_name($row['firstname'], $row['lastname']);
-            }
             echo '<td>'.$row['thread_views'].'</td>';
+            // display the author name
+            $tab_poster_info = api_get_user_info($row['user_id']);
+            $poster_username = " (".$tab_poster_info['username'].")";
+            if ($origin != 'learnpath') {
+                echo '<td>'.display_user_link($row['user_id'], api_get_person_name($row['firstname'], $row['lastname']).$poster_username).'</td>';
+            } else {
+                echo '<td>'.api_get_person_name($row['firstname'], $row['lastname']).'$poster_username</td>';
+            }            
+            // display the last post name
+//            if ($row['user_id'] == '0') {
+//                $name = prepare4display($row['thread_poster_name']);
+//            } else {
+//                $name = api_get_person_name($row['firstname'], $row['lastname']);
+//            } 
+            
             if ($row['last_poster_user_id'] == '0') {
                 $name = $row['poster_name'];
+                $last_poster_username = "";
             } else {
                 $name = api_get_person_name($row['last_poster_firstname'], $row['last_poster_lastname']);
+                $tab_last_poster_info = api_get_user_info($row['last_poster_user_id']);
+                $last_poster_username = " (".$tab_last_poster_info['username'].")";
             }
-
-            if ($origin != 'learnpath') {
-                echo '<td>'.display_user_link($row['user_id'], api_get_person_name($row['firstname'], $row['lastname'])).'</td>';
-            } else {
-                echo '<td>'.api_get_person_name($row['firstname'], $row['lastname']).'</td>';
-            }
-
             // If the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread.
             if (($row['visible'] == '1' OR api_is_allowed_to_edit(false, true)) && $origin != 'learnpath') {
-                $last_post = api_convert_and_format_date($row['thread_date']).' '.get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name);
+                $last_post = api_convert_and_format_date($row['thread_date']).' '.get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name.$last_poster_username);
             } elseif ($origin != 'learnpath') {
-                $last_post_sql = "SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
+                $last_post_sql = "SELECT post.*, user.firstname, user.lastname, user.username FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' AND post.c_id=".api_get_course_int_id()." ORDER BY post_id DESC";
                 $last_post_result = Database::query($last_post_sql);
                 $last_post_row = Database::fetch_array($last_post_result);
                 $name = api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
-                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name);
+                $last_post_info_username = " (".$last_post_row['username'].")";
+                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name.$last_post_info_username);
             } else {
-                $last_post_sql = "SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
+                $last_post_sql = "SELECT post.*, user.firstname, user.lastname, user.username FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' AND post.c_id=".api_get_course_int_id()." ORDER BY post_id DESC";
                 $last_post_result = Database::query($last_post_sql);
                 $last_post_row = Database::fetch_array($last_post_result);
+                $last_post_info_username = " (".$last_post_row['username'].")";
                 $name = api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
-                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.$name;
+                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.$name.$last_post_info_username;
             }
 
             echo '<td>'.$last_post.'</td>';

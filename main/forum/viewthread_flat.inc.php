@@ -38,13 +38,15 @@ if (isset($current_thread['thread_id'])){
         } else {
             $name = api_get_person_name($row['firstname'], $row['lastname']);
         }
+        $username = $row['username'];   // 
+        
         if ($origin!='learnpath') {
             if (api_get_course_setting('allow_user_image_forum')) {
                 echo '<br />'.display_user_image($row['user_id'],$name).'<br />';
             }
-            echo display_user_link($row['user_id'], $name).'<br />';
+            echo display_user_link($row['user_id'], $name." ($username)").'<br />';
         } else {
-            echo $name. '<br />';
+            echo $name. ' ('.$username.')<br />';
         }
 
         $group_id = api_get_group_id();

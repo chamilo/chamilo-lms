@@ -105,12 +105,13 @@ echo "<table width=\"100%\" cellspacing=\"5\" border=\"0\">";
 while ($row = Database::fetch_array($result)) {
     echo "<tr>";
     echo "<td rowspan=\"2\" class=\"forum_message_left\">";
+    $username = $row['username'];
     if ($row['user_id']=='0') {
         $name = $row['poster_name'];
     } else {
         $name = api_get_person_name($row['firstname'], $row['lastname']);
     }
-    echo $name.'<br />';
+    echo $name." ($username)<br />";
     echo api_convert_and_format_date($row['post_date']).'<br /><br />';
 
     echo "</td>";

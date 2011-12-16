@@ -158,6 +158,7 @@ unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id
 echo "<table width=\"100%\"  class=\"forum_table\"  cellspacing=\"5\" border=\"0\">";
 echo "<tr>";
 echo "<td rowspan=\"3\" class=\"$leftclass\">";
+$username = $rows[$display_post_id]['username'];
 if ($rows[$display_post_id]['user_id']=='0') {
     $name=prepare4display($rows[$display_post_id]['poster_name']);
 } else {
@@ -165,7 +166,7 @@ if ($rows[$display_post_id]['user_id']=='0') {
 }
 
 if (api_get_course_setting('allow_user_image_forum')) {echo '<br />'.display_user_image($rows[$display_post_id]['user_id'],$name, $origin).'<br />';	}
-echo display_user_link($rows[$display_post_id]['user_id'], $name, $origin).'<br />';
+echo display_user_link($rows[$display_post_id]['user_id'], $name." ($username)", $origin)."<br />";
 echo api_convert_and_format_date($rows[$display_post_id]['post_date']).'<br /><br />';
 // get attach id
 $attachment_list=get_attachment($display_post_id);

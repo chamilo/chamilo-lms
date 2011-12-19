@@ -120,7 +120,7 @@ if ($_REQUEST['oper'] == 'del') {
 $columns = array();
 switch ($action) {    
     case 'get_sessions':
-        $columns = array('name', 'nbr_courses','category_name', 'date_start','date_end', 'coach_name', 'visibility');        
+        $columns = array('name', 'nbr_courses','category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');        
         $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));        
         break;
     case 'get_gradebooks': 

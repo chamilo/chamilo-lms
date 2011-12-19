@@ -43,7 +43,8 @@ Display::display_header($tool_name);
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file 
-$columns        = array(get_lang('Name'), get_lang('NumberOfCourses'), get_lang('SessionCategoryName'), get_lang('StartDate'), get_lang('EndDate'), get_lang('Coach'),  get_lang('Visibility'), get_lang('Actions'));
+$columns        = array(get_lang('Name'), get_lang('NumberOfCourses'), get_lang('SessionCategoryName'), 
+                        get_lang('StartDate'), get_lang('EndDate'), get_lang('Coach'),  get_lang('Status'), get_lang('Visibility'), get_lang('Actions'));
 
 //Column config
 $column_model   = array(
@@ -52,7 +53,8 @@ $column_model   = array(
                         array('name'=>'category_name',  'index'=>'sc.name',         'width'=>'80',   'align'=>'left', 'search' => 'true'),
                         array('name'=>'date_start',     'index'=>'s.date_start',    'width'=>'40',   'align'=>'left', 'search' => 'true'),
                         array('name'=>'date_end',       'index'=>'s.date_end',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
-                        array('name'=>'coach_name',     'index'=>'coach_name',      'width'=>'80',   'align'=>'left', 'search' => 'false'),                        
+                        array('name'=>'coach_name',     'index'=>'coach_name',      'width'=>'80',   'align'=>'left', 'search' => 'false'),
+                        array('name'=>'status',         'index'=>'session_active',  'width'=>'20',   'align'=>'left', 'search' => 'false'),                        
                         array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),                        
                         array('name'=>'actions',        'index'=>'actions',         'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
                        );            
@@ -67,7 +69,7 @@ $extra_params['rowList'] = array(10, 20 ,30);
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-                         return \'<a href="resume_session.php?id_session=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>'.
+                         return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>'.
                          '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png',get_lang('SubscribeUsersToSession'),'',22).'</a>'.
                          '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('courses_to_session.png',get_lang('SubscribeCoursesToSession'),'',22).'</a>'.
                          '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::return_icon('copy.png',get_lang('Copy'),'',22).'</a>'.

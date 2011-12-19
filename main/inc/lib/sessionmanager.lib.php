@@ -193,11 +193,12 @@ class SessionManager {
         $num = $recorset['total_rows'];
         return $num;    
     }
+    
     /**
      * Gets the admin session list callback of the admin/session_list.php page
      * @param array order and limit keys
      */
-    function get_sessions_admin($options) {
+    public function get_sessions_admin($options) {
         $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);        
         $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);        
@@ -213,13 +214,34 @@ class SessionManager {
         }
         
         $coach_name = " CONCAT (u.lastname , ' ', u.firstname) as coach_name ";
+        
         if (api_is_western_name_order()) {            
             $coach_name = " CONCAT (u.firstname, ' ', u.lastname) as coach_name ";
         }
-        $query = "SELECT s.name, nbr_courses, s.date_start, s.date_end, $coach_name , sc.name as category_name, s.visibility, u.user_id, s.id   ".
-            " FROM $tbl_session s ".
-                " LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id ".
-                " INNER JOIN $tbl_user u ON s.id_coach = u.user_id ".
+        
+        $start_filter  = $year."-".$month."-".$day." 00:00:00";
+        $start_filter  = api_get_utc_datetime($start_filter);
+        $end_filter    = $year."-".$month."-".$day." 23:59:59";
+        $end_filter    = api_get_utc_datetime($end_filter);
+        
+        $today = api_get_utc_datetime();
+        $today = api_strtotime($today);
+        
+        $today = date('Y-m-d', $today);
+        
+        $select = "SELECT 
+                IF ( 
+                    (s.date_start <= '$today' AND '$today' < s.date_end) OR 
+                    (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
+                    (s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
+                    ('$today' < s.date_end AND '0000-00-00' = s.date_start)
+                , 1, 0) 
+                as session_active, 
+                s.name, nbr_courses, s.date_start, s.date_end, $coach_name, sc.name as category_name, s.visibility, u.user_id, s.id";
+                   
+        $query = "$select FROM $tbl_session s 
+                LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id 
+                INNER JOIN $tbl_user u ON s.id_coach = u.user_id ".
              $where;
              
         if ($_configuration['multiple_access_urls']) {
@@ -227,7 +249,7 @@ class SessionManager {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $where.= " AND ar.access_url_id = $access_url_id ";
-                $query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name , s.visibility, u.user_id
+                $query = "$select
                  FROM $tbl_session s
                     LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
@@ -236,22 +258,35 @@ class SessionManager {
             }
         }         
         $query .= "ORDER BY ".$options['order']." LIMIT ".$options['limit'];              
-       
-        $result     = Database::query($query);
+        //echo $query;
+        $result = Database::query($query);
         $formatted_sessions = array();
         if (Database::num_rows($result)) {
             $sessions   = Database::store_result($result);
             foreach ($sessions as $session) {
                 $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
                 
-                $session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=".$session['user_id']);  
+                $session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=".$session['user_id']);
+                
+                if ($session['date_start'] == '0000-00-00' && $session['date_end'] == '0000-00-00') {
+                //    $session['session_active'] = 1;
+                }
+                
+                if ($session['session_active'] == 1) {
+                    $session['session_active'] = Display::return_icon('accept.png', get_lang('Active'), array(), 22);
+                } else {
+                    $session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), 22);
+                }
+                     
            
                 if ($session['date_start'] == '0000-00-00') {
                     $session['date_start'] = '';
                 }
                 if ($session['date_end'] == '0000-00-00') {
                     $session['date_end'] = '';
-                }                
+                }
+                
+                     
                 switch ($session['visibility']) {
                     case SESSION_VISIBLE_READ_ONLY: //1
                         $session['visibility'] =  get_lang('ReadOnly');

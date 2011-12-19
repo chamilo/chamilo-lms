@@ -117,8 +117,7 @@ class ImageManager
 		}
 
 		$user_id = api_get_user_id();
-		while (false !== ($entry = $d->read()))
-		{
+		while (false !== ($entry = $d->read())) {
 			//If it is a directory, and it doesn't start with
 			// a dot, and if is it not the thumbnail directory
 			if(is_dir($base.$entry)
@@ -133,15 +132,14 @@ class ImageManager
 				$relative = Files::fixPath($path.$entry);
 				$fullpath = Files::fixPath($base.$entry);
 
-				if ($in_group && strpos($fullpath, '_groupdocs') !== false && strpos($fullpath, $group_directory) === false)
-				{
+				if ($in_group && strpos($fullpath, '_groupdocs') !== false && strpos($fullpath, $group_directory) === false) {
 					continue;
 				}
 				global $_course;
-				if (isset($_course['dbName']) && $_course<>'-1') {
+				if (!empty($_course)) {
 					$base_dir = substr($fullpath, 0, strpos($fullpath,'/document/')+9); //
 					$new_dir  = substr($fullpath, strlen($base_dir),-1); //
-					$doc_id = DocumentManager::get_document_id($_course, $new_dir );
+					$doc_id = DocumentManager::get_document_id($_course, $new_dir);
 					$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);
 				}
 

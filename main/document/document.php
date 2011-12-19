@@ -57,6 +57,11 @@ unset($_SESSION['paint_dir']);
 DocumentManager::create_directory_certificate_in_course(api_get_course_id());
 
 $course_info 	 = api_get_course_info();
+
+if (empty($course_info)) {
+    api_not_allowed();
+}
+
 $course_dir      = $course_info['path'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir   = $sys_course_path.$course_dir;
@@ -944,7 +949,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         // Size (or total size of a directory)
         $size = $document_data['filetype'] == 'folder' ? get_total_folder_size($document_data['path'], $is_allowed_to_edit) : $document_data['size'];
         
-        // Get the title or the basename depending on what we're using
+        // Get the title or the basename depending on what we're using        
         if ($use_document_title == 'true' && $document_data['title'] != '') {
             $document_name = $document_data['title'];
         } else {

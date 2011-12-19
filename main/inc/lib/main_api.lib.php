@@ -1152,7 +1152,8 @@ function api_get_course_info($course_code = null) {
         }
         return $_course;
     }
-    global $_course;    
+    global $_course;
+    if ($_course == '-1') $_course = array();
     return $_course;
 }
 

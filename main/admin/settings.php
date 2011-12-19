@@ -39,6 +39,14 @@ $_SESSION['this_section'] = $this_section;
 // Access restrictions.
 api_protect_admin_script();
 
+// Settings to avoid
+$settings_to_avoid = array(
+    'gradebook_enable'                  => 'false', 
+    'use_document_title'                => 'true',
+    'example_material_course_creation'  => 'true' // ON by default - now we have this option when  we create a course 
+);
+
+
 // Submit stylesheets.
 if (isset($_POST['submit_stylesheets'])) {
     $message = store_stylesheets();
@@ -87,7 +95,6 @@ if (isset($_GET['action']) &&  $_GET['action'] == 'delete_grading') {
 	$id = intval($_GET['id']);
 	api_delete_setting_option($id);
 }
-
 
 // Build the form.
 if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {
@@ -144,17 +151,6 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             }
         }
     }
-    
-    
-    //Settings to avoid 
-    
-    // Settings to avoid
-    $settings_to_avoid = array(
-        'gradebook_enable', //
-        'use_document_title', // ON by default 
-        'example_material_course_creation', // ON by default - now we have this option when  we create a course 
-    );
-    
     
     $default_values = array();
     foreach ($settings as $row) {
@@ -490,7 +486,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
     if ($form->validate()) {
         $values = $form->exportValues();
         $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
-            
+         
         if (isset($pdf_export_watermark_path) && !empty($pdf_export_watermark_path['name'])) {       
             $pdf_export_watermark_path_result = PDF::upload_watermark($pdf_export_watermark_path['name'], $pdf_export_watermark_path['tmp_name']);  
             if ($pdf_export_watermark_path_result) {
@@ -501,21 +497,20 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             unset($update_values['pdf_export_watermark_path']);
         }
 
-        // Set true for allow_message_tool variable if social tool is actived.
+        // Set true for allow_message_tool variable if social tool is actived       
         
-        
-        $values['dropbox_max_filesize'] = $values['dropbox_max_filesize']*1024*1024;
+        $values['dropbox_max_filesize']        = $values['dropbox_max_filesize']*1024*1024;
         $values['message_max_upload_filesize'] = $values['message_max_upload_filesize']*1024*1024;
-         
          
         if ($values['allow_social_tool'] == 'true') {
             $values['allow_message_tool'] = 'true';
         }
         // quick patch to avoid gradebook_enable's value to be blanked
+        /*
         if ($my_category == 'Gradebook') {
             $gb = 'false';
         	$gb = api_get_setting('gradebook_enable');
-        }
+        }*/
 
         // The first step is to set all the variables that have type=checkbox of the category
         // to false as the checkbox that is unchecked is not in the $_POST data and can
@@ -525,14 +520,21 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         $r = api_set_settings_category($my_category, 'false', $_configuration['access_url'], array('checkbox', 'radio'));
         // quick patch to avoid gradebook_enable's value to be blanked
         if ($my_category == 'Gradebook') {
-            api_set_setting('gradebook_enable', $gb, null, $my_category, $_configuration['access_url']);
+            //api_set_setting('gradebook_enable', $gb, null, $my_category, $_configuration['access_url']);
         }
-        //$sql = "UPDATE $table_settings_current SET selected_value='false' WHERE category='$my_category' AND type='checkbox'";
-        //$result = Database::query($sql);
+        
+        foreach($settings_to_avoid as $key => $value) {
+            api_set_setting($key, $value, null, null, $_configuration['access_url']);    
+        }        
+        
+        
+        
         // Save the settings.
         $keys = array();
-        //$gradebook_score_display_custom_values = array();        
-        foreach ($values as $key => $value) { 	
+               
+        foreach ($values as $key => $value) {
+            if (in_array($key, $settings_to_avoid)) { continue; }
+                      	
             // Treat gradebook values in separate function.
             //if (strpos($key, 'gradebook_score_display_custom_values') === false) {
                 if (!is_array($value)) {
@@ -603,7 +605,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 	                            $keys[] = $key;
 	                            break;
 	                        }
-	                    }	
+	                    }
 	                    foreach ($value as $subkey => $subvalue) {	             
 	                        $result = api_set_setting($key, 'true', $subkey, null, $_configuration['access_url']);	
 	                    }
@@ -615,11 +617,11 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         $user_id = api_get_user_id();
         $category = $_GET['category'];
         event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
-
-
+        
         // Add event configuration settings variable to the system log.
         if (is_array($keys) && count($keys) > 0) {
             foreach ($keys as $variable) {
+                if (in_array($key, $settings_to_avoid)) { continue; }
                 event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_VARIABLE, $variable, api_get_utc_datetime(), $user_id);
             }
         }

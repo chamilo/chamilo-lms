@@ -123,10 +123,20 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_hel
 ALTER TABLE gradebook_category MODIFY COLUMN weight FLOAT NOT NULL;
 ALTER TABLE gradebook_link MODIFY COLUMN weight FLOAT  NOT NULL;
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_hr_skills_management', NULL, 'radio', 'Gradebook', 'true', 'AllowHRSkillsManagementTitle', 'AllowHRSkillsManagementComment', NULL, NULL, 1);
+
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_skills_management', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_skills_management', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_admin_toolbar', NULL, 'radio', 'Platform', 'true', 'ShowAdminToolbarTitle', 'ShowAdminToolbarComment', NULL, NULL, 1);
+
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'do_not_show', 'DoNotShow');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'show_to_admin', 'ShowToAdminsOnly');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'show_to_admin_and_teachers', 'ShowToAdminsAndTeachers');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'show_to_all', 'ShowToAllUsers');
+
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.16305' WHERE variable = 'chamilo_database_version';
-
-
+UPDATE settings_current SET selected_value = '1.9.0.16368' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
@@ -139,11 +149,6 @@ ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
 CREATE TABLE stored_values_stack (user_id INT NOT NULL, sco_id INT NOT NULL, stack_order INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL );
 ALTER TABLE stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
 ALTER TABLE stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
-
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_hr_skills_management', NULL, 'radio', 'Gradebook', 'true', 'AllowHRSkillsManagementTitle', 'AllowHRSkillsManagementComment', NULL, NULL, 1);
-
-INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_skills_management', 'true', 'Yes');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_skills_management', 'false', 'No');
 
 -- xxUSERxx
 

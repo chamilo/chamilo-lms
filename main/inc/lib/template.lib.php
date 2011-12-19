@@ -26,11 +26,14 @@ class Template extends Smarty {
 		$this->cache_lifetime 	= Smarty::CACHING_OFF; // no caching
 		//$this->cache_lifetime 	= 120;
 		
-		//By default we show the header and footer
+		//header and footer are showed by default
 		$this->set_footer($show_footer);
 		$this->set_header($show_header);
 		
-		$this->set_system_parameters();		
+		//Setting system variables
+		$this->set_system_parameters();
+        
+        //Setting user variables 
 		$this->set_user_parameters();
 		
 		//Creating a Smarty modifier - Now we can call the get_lang from a template!!! Just use {"MyString"|get_lang} 
@@ -38,16 +41,20 @@ class Template extends Smarty {
 		$this->registerPlugin("modifier","get_path", "api_get_path");
 		$this->registerPlugin("modifier","get_setting", "api_get_setting");
 		
-		//To load a smarty plugin				
+		//To load a smarty plugin
 		//$this->loadPlugin('smarty_function_get_lang');
+		
+		//To the the smarty installation
 		//$this->testInstall();			
+		
 		$this->set_header_parameters();
-		$this->set_footer_parameters();		
+		$this->set_footer_parameters();
+        
 		$this->assign('style', $this->style);
 	}
 
 	/**
-	 * Shortcut to display a 1 col layout
+	 * Shortcut to display a 1 col layout (index.php)
 	 * */
 	function display_one_col_template() {		
 		$tpl = $this->get_template('layout/layout_1_col.tpl');
@@ -55,7 +62,7 @@ class Template extends Smarty {
 	}
 	
 	/**
-	* Shortcut to display a 2 col layout
+	* Shortcut to display a 2 col layout (userportal.php)
 	* */	
 	function display_two_col_template() {		
 		$tpl = $this->get_template('layout/layout_2_col.tpl');
@@ -77,8 +84,6 @@ class Template extends Smarty {
         $tpl = $this->get_template('layout/no_layout.tpl');
         $this->display($tpl);
     }
-    
-    
 	
 	/**	  
 	 * Sets the footer visibility 
@@ -90,11 +95,33 @@ class Template extends Smarty {
 	}
 	/**
 	 * Sets the header visibility
-	 * 
+	 * @param bool true if we show the header
 	 */
 	function set_header($status) {
 		$this->show_header = $status;
-		$this->assign('show_header', $status);	
+		$this->assign('show_header', $status);
+        
+        $show_admin_toolbar = api_get_setting('show_admin_toolbar');
+        $show_toolbar = 0;
+        
+        switch($show_admin_toolbar) {
+            case 'do_not_show':                
+                break;
+            case 'show_to_admin':
+                if (api_is_platform_admin()) {
+                    $show_toolbar = 1;
+                }
+                break;    
+            case 'show_to_admin_and_teachers':
+                if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+                    $show_toolbar = 1;
+                }
+                break;
+            case 'show_to_all':
+                $show_toolbar = 1;
+                break;                               
+        }        
+        $this->assign('show_toolbar', $show_toolbar);
 	}
 		
 	function get_template($name) {
@@ -107,8 +134,15 @@ class Template extends Smarty {
 		if (api_get_user_id() && !api_is_anonymous()) {
 			$user_info = api_get_user_info();			
 			$user_info['logged'] = 1;
+            
+            $user_info['is_admin'] = 0;
+            if (api_is_platform_admin()) {
+                $user_info['is_admin'] = 1;    
+            }
+            
 			$user_info['messages_count'] = MessageManager::get_new_messages();
 		}		
+        //Setting the $_u array that could be use in any template 
 		$this->assign('_u', $user_info);
 	}	
 	

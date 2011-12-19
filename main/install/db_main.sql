@@ -855,7 +855,8 @@ VALUES
 ('allow_teacher_change_gradebook_grading_model', NULL, 'radio', 'Gradebook', 'false', 'AllowTeacherChangeGradebookGradingModelTitle', 'AllowTeacherChangeGradebookGradingModelComment', NULL, NULL, 1),
 ('grading_model', 'grading_model', 'custom', 'Gradebook', 'false', 'GradingModelTitle', 'GradingModelComment', NULL, NULL, 1),
 ('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.16305','DokeosDatabaseVersion','', NULL, NULL, 0);
+('show_admin_toolbar', NULL, 'radio', 'Platform', 'true', 'ShowAdminToolbarTitle', 'ShowAdminToolbarComment', NULL, NULL, 1)
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.16368','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('use_custom_pages',NULL,'radio','Platform','false','UseCustomPages','useCustomPagesComment','platform',NULL,0),
@@ -1163,7 +1164,11 @@ VALUES
 ('grading_model', '1*X+1*X+1*X+1*X/4', 'Model 3'),
 ('grading_model', '1*X+2*X+1*X+2*X/6', 'Model 4'),
 ('allow_users_to_change_email_with_no_password', 'true', 'Yes'),
-('allow_users_to_change_email_with_no_password', 'false', 'No');
+('allow_users_to_change_email_with_no_password', 'false', 'No'),
+('show_admin_toolbar', 'do_not_show', 'DoNotShow'),
+('show_admin_toolbar', 'show_to_admin', 'ShowToAdminsOnly'), 
+('show_admin_toolbar', 'show_to_admin_and_teachers', 'ShowToAdminsAndTeachers'),
+('show_admin_toolbar', 'show_to_all', 'ShowToAllUsers');
 
 /*
 ('use_custom_pages','true','Yes'),

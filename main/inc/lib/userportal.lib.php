@@ -444,10 +444,7 @@ class IndexManager {
 			}
 		}
 		return '<div id="login_fail">'.$message.'</div>';
-	}
-	
-	
-	
+	}	
 	
 	/**
 	 * Display list of courses in a category.

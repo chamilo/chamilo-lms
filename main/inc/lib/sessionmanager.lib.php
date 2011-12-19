@@ -208,28 +208,19 @@ class SessionManager {
         if (api_is_session_admin()==true) {
             $where.=" AND s.session_admin_id = $user_id ";
         }        
-        
-        if (!empty($options['where'])) {
-           $where .= ' AND '.$options['where']; 
-        }
-        
+      
         $coach_name = " CONCAT (u.lastname , ' ', u.firstname) as coach_name ";
         
         if (api_is_western_name_order()) {            
             $coach_name = " CONCAT (u.firstname, ' ', u.lastname) as coach_name ";
-        }
-        
-        $start_filter  = $year."-".$month."-".$day." 00:00:00";
-        $start_filter  = api_get_utc_datetime($start_filter);
-        $end_filter    = $year."-".$month."-".$day." 23:59:59";
-        $end_filter    = api_get_utc_datetime($end_filter);
-        
+        }        
+
         $today = api_get_utc_datetime();
         $today = api_strtotime($today);
         
         $today = date('Y-m-d', $today);
         
-        $select = "SELECT 
+        $select = "SELECT * FROM (SELECT 
                 IF ( 
                     (s.date_start <= '$today' AND '$today' < s.date_end) OR 
                     (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
@@ -256,9 +247,17 @@ class SessionManager {
                     INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
                  $where";
             }
-        }         
-        $query .= "ORDER BY ".$options['order']." LIMIT ".$options['limit'];              
-        //echo $query;
+        }  
+        $query .= ") AS session_table";   
+        
+          
+        if (!empty($options['where'])) {
+           $query .= ' WHERE '.$options['where']; 
+        }
+            
+        $query .= " ORDER BY ".$options['order']." LIMIT ".$options['limit'];
+                 
+       // echo $query;
         $result = Database::query($query);
         $formatted_sessions = array();
         if (Database::num_rows($result)) {

@@ -43,6 +43,9 @@ $ops = array(
 
 function get_where_clause($col, $oper, $val) {
     global $ops;
+    if (empty($col)){
+        return '';
+    } 
     if($oper == 'bw' || $oper == 'bn') $val .= '%';
     if($oper == 'ew' || $oper == 'en' ) $val = '%'.$val;
     if($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') $val = '%'.$val.'%';
@@ -51,12 +54,29 @@ function get_where_clause($col, $oper, $val) {
 }
 
 $where_condition = ""; //if there is no search request sent by jqgrid, $where should be empty
-$search_field    = isset($_REQUEST['searchField']) ? $_REQUEST['searchField'] : false;
-$search_oper     = isset($_REQUEST['searchOper']) ? $_REQUEST['searchOper']: false;
+
+$search_field    = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
+$search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   : false;
 $search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
 
 if ($_REQUEST['_search'] == 'true') {
-    $where_condition = get_where_clause($search_field, $search_oper, $search_string);
+    $where_condition = ' 1 = 1 ';
+    $where_condition .= get_where_clause($search_field, $search_oper, $search_string);
+    
+    $filters   = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    
+    $where_condition .= ' AND ( ';
+    $counter = 0;
+    foreach ($filters->rules as $key=>$rule) {
+        $where_condition .= get_where_clause($rule->field,$rule->op, $rule->data);
+        
+        if ($counter < count($filters->rules) -1) {     
+            $where_condition .= $filters->groupOp;
+        }
+        $counter++;
+    }
+    $where_condition .= ' ) ';
+        
 }
 
 // get index row - i.e. user click to sort $sord = $_GET['sord']; 

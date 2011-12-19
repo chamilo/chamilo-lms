@@ -57,10 +57,16 @@ $column_model   = array(
                         array('name'=>'coach_name',     'index'=>'coach_name',     'width'=>'80',   'align'=>'left', 'search' => 'false'),                        
                         
                         array('name'=>'status',         'index'=>'session_active',  'width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
-                                //for the top bar 
-                              'editoptions' => array('value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive')),
+                                 
+                              
+                              
                               //for the bottom bar
-                              'searchoptions' => array('value' => '1:'.get_lang('Active').';0:'.get_lang('Inactive'))),
+                              'searchoptions' => array(                                                
+                                                'defaultValue'  => '1', 
+                                                'value'         => '1:'.get_lang('Active').';0:'.get_lang('Inactive')),
+                             
+                              //for the top bar                              
+                              'editoptions' => array('value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))),
                                           
                                    
                         array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),                        
@@ -87,11 +93,30 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
                  }';
 ?>
 <script>
+
+
+function setSearchSelect(columnName) {    
+    $("#sessions").jqGrid('setColProp', columnName,
+    {                   
+       searchoptions:{
+            dataInit:function(el){                            
+                $("option[value='1']",el).attr("selected", "selected");
+                setTimeout(function(){
+                    $(el).trigger('change');
+                },1000);
+            }
+        }
+    });
+}
+
+
 $(function() {
     <?php 
         echo Display::grid_js('sessions', $url,$columns,$column_model,$extra_params, array(), $action_links,true);      
     ?>
-
+    
+    setSearchSelect("status");    
+    
     $("#sessions").jqGrid('navGrid','#sessions_pager', {edit:false,add:false,del:false},
         {height:280,reloadAfterSubmit:false}, // edit options 
         {height:280,reloadAfterSubmit:false}, // add options 
@@ -117,13 +142,18 @@ $(function() {
     },buttonicon:'ui-icon-document'})
     */
    
-   //Adding search options
+    
+    //Adding search options
     var options = {
         'stringResult': true,
         'autosearch' : true,
-        'searchOnEnter':false,
+        'searchOnEnter':false,        
     }
-    jQuery("#sessions").jqGrid('filterToolbar',options);
+    jQuery("#sessions").jqGrid('filterToolbar',options);    
+    var sgrid = $("#sessions")[0];
+    sgrid.triggerToolbar();
+    
+     
 });
 
 </script>

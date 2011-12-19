@@ -72,7 +72,8 @@ $tpl->assign('button_text', 		json_encode(array(	'today'	=> get_lang('Today'),
 //Calendar Type : course, admin, personal
 $tpl->assign('type', $type);
 //Calendar type label
-$tpl->assign('type_label', get_lang($type.'Calendar'));
+
+$tpl->assign('type_label', get_lang(ucfirst($type).'Calendar'));
 
 //Current user can add event?
 $tpl->assign('can_add_events', $can_add_events);

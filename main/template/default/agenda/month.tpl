@@ -305,5 +305,5 @@ $(document).ready(function() {
 	</form>
 	</div>
 </div>
-<div id='loading' style='left:140px;position:absolute; display:none'>{"Loading"|get_lang}...</div>
+<div id='loading' style='left:180px;top:10px;position:absolute; display:none'>{"Loading"|get_lang}...</div>
 <div id='calendar'></div>

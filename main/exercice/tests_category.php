@@ -28,7 +28,9 @@ include('question.class.php');
 include('testcategory.class.php');
 include('../inc/global.inc.php');
 include('exercise.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
+//Library already added in global.inc.php
+//require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 $this_section=SECTION_COURSES;
 
@@ -41,8 +43,7 @@ $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices')
 Display::display_header(get_lang('Category'));
 
 // Action handling: add, edit and remove
-if (isset($_GET['action']) && $_GET['action'] == 'addcategory') 
-{			
+if (isset($_GET['action']) && $_GET['action'] == 'addcategory') {
 	add_category_form(Security::remove_XSS($_GET['action']));
 }
 else if (isset($_GET['action']) && $_GET['action'] == 'editcategory') {
@@ -58,15 +59,10 @@ else {
 
 Display::display_footer();
 
-// **********************************************************************************
 // ******                       FUNCTIONS                        ********************
-// **********************************************************************************
 
-// ------------------------------------------------------------------------
 // form to edit a category
-// ------------------------------------------------------------------------
 function edit_category_form($in_action) {
-	
 	if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
 		$category_id = Security::remove_XSS($_GET['category_id']);
 		$objcat = new Testcategory($category_id);
@@ -203,9 +199,8 @@ function add_category_form($in_action) {
 }
 
 
-// ------------------------------------------------------------------------
 // Display add category button
-// ------------------------------------------------------------------------
+
 function display_add_category() {
 	echo '<div class="actions">';
 	echo '<a href="exercice.php?'.api_get_cidreq().'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',32).'</a>';			
@@ -215,19 +210,19 @@ function display_add_category() {
 }
 
 
-// ------------------------------------------------------------------------
 // Display category list
-// ------------------------------------------------------------------------
+
 function display_categories() {
+    $course_id = api_get_course_int_id();
 	$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-	$sql = "SELECT * FROM $t_cattable ORDER BY title";
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$sql = "SELECT * FROM $t_cattable WHERE c_id = $course_id ORDER BY title";
+	$res = Database::query($sql);
 	while ($row = Database::fetch_array($res)) {
-		// le titre avec le nombre de questions qui sont dans cette catégorie
+		// le titre avec le nombre de questions qui sont dans cette catï¿½gorie
 		$tmpobj = new Testcategory($row['id']);
 		$nb_question = $tmpobj->getCategoryQuestionsNumber();
 		echo '<div class="sectiontitle" id="id_cat'.$row['id'].'">';
-		echo "<span style='float:right'>".$nb_question.get_lang('NbCategory')."</span>";
+		echo "<span style='float:right'>".$nb_question.' '.get_lang('NbCategory')."</span>";
 		echo $row['title'];
 		echo '</div>';
 		echo '<div class="sectioncomment">';
@@ -256,7 +251,7 @@ function display_categories() {
 // ------------------------------------------------------------------------
 function display_goback() {
 	echo '<div class="actions">';
-	echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png', '', 32).' '.get_lang('BackToCategoryList').'</a>';
+	echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('BackToCategoryList'), array(),  32).'</a>';
 	echo '</div>';
 }
 
@@ -270,5 +265,3 @@ function protectJSDialogQuote($in_txt) {
 	$res = str_replace('"', "\'\'", $res);	// super astuce pour afficher les " dans les boite de dialogue
 	return $res;
 }
-
-?>

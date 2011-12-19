@@ -14,7 +14,7 @@ class Testcategory {
 	 If you give an in_id and no in_name, you get info concerning the category of id=in_id
 	 otherwise, you've got an category objet avec your in_id, in_name, in_descr
 	 */
-	function Testcategory($in_id=0, $in_name, $in_description="") {
+	function Testcategory($in_id=0, $in_name = '', $in_description="") {
 		if ($in_id != 0 && $in_name == "") {
 			$tmpobj = new Testcategory();
 			$tmpobj->getCategory($in_id);
@@ -69,9 +69,13 @@ class Testcategory {
 		}		
 	}
 	
-	/** remove catagory with id=in_id from the database if no question use this category
+	/** 
+     * Removes the category with id=in_id from the database if no question use this category
+     * @todo I'm removing the $in_id parameter because it seems that you're using $this->id instead of $in_id after confirmation delete this
+     * jmontoya 
 	 */
-	function removeCategory($in_id) {
+	//function removeCategory($in_id) {
+    function removeCategory($in_id) {
 		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 		$v_id = Database::escape_string($this->id);
 		$sql = "DELETE FROM $t_cattable WHERE id=$v_id AND c_id=".api_get_course_int_id();
@@ -102,17 +106,20 @@ class Testcategory {
 		}
 	}
 	
-	/** get number of question of category id=in_id
+	/** 
+     * Gets the number of question of category id=in_id
+     * @todo I'm removing the $in_id parameter because it seems that you're using $this->id instead of $in_id after confirmation delete this
+     * jmontoya
 	 */
-	function getCategoryQuestionsNumber($in_id) {
+	//function getCategoryQuestionsNumber($in_id) {
+	function getCategoryQuestionsNumber() {
 		$t_reltable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 		$in_id = Database::escape_string($this->id);
 		$sql = "SELECT count(*) AS nb FROM $t_reltable WHERE category_id=$in_id AND c_id=".api_get_course_int_id();
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$row = Database::fetch_array($res);
 		return $row['nb'];
 	}
-	
 	
 	function display($in_color="#E0EBF5") {
 		echo "<textarea style='background-color:$in_color; width:60%; height:100px;'>";

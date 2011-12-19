@@ -61,21 +61,26 @@ $search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] 
 
 if ($_REQUEST['_search'] == 'true') {
     $where_condition = ' 1 = 1 ';
-    $where_condition .= get_where_clause($search_field, $search_oper, $search_string);
+    $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);
+        
+    if (!empty($where_condition_in_form)) {
+        $where_condition .= ' AND '.$where_condition_in_form;
+    }
     
     $filters   = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
-    
-    $where_condition .= ' AND ( ';
-    $counter = 0;
-    foreach ($filters->rules as $key=>$rule) {
-        $where_condition .= get_where_clause($rule->field,$rule->op, $rule->data);
-        
-        if ($counter < count($filters->rules) -1) {     
-            $where_condition .= $filters->groupOp;
+    if (!empty($filters)) {
+        $where_condition .= ' AND ( ';
+        $counter = 0;
+        foreach ($filters->rules as $key=>$rule) {
+            $where_condition .= get_where_clause($rule->field,$rule->op, $rule->data);
+            
+            if ($counter < count($filters->rules) -1) {     
+                $where_condition .= $filters->groupOp;
+            }
+            $counter++;
         }
-        $counter++;
+        $where_condition .= ' ) ';
     }
-    $where_condition .= ' ) ';
         
 }
 

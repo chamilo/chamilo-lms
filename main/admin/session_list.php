@@ -56,8 +56,12 @@ $column_model   = array(
                         array('name'=>'date_end',       'index'=>'date_end',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
                         array('name'=>'coach_name',     'index'=>'coach_name',     'width'=>'80',   'align'=>'left', 'search' => 'false'),                        
                         
-                        array('name'=>'status',         'index'=>'session_active',  'width'=>'40',   'align'=>'left', 'search' => 'true'
-                        ,'stype'=>'select', 'editoptions' =>array('value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))),            
+                        array('name'=>'status',         'index'=>'session_active',  'width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
+                                //for the top bar 
+                              'editoptions' => array('value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive')),
+                              //for the bottom bar
+                              'searchoptions' => array('value' => '1:'.get_lang('Active').';0:'.get_lang('Inactive'))),
+                                          
                                    
                         array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),                        
                         array('name'=>'actions',        'index'=>'actions',         'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')

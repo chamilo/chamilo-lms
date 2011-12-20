@@ -168,11 +168,12 @@ $group[]= $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowe
 $form->addGroup($group,'', get_lang('Unsubscription'), '<br />');
 
 
-$form->addElement('text','disk_quota',array(get_lang('CourseQuota'), null, get_lang('MB')));
+$form->addElement('text','disk_quota',array(get_lang('CourseQuota'),null,  get_lang('MB')));
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'),'required');
 $form->addRule('disk_quota',get_lang('ThisFieldShouldBeNumeric'),'numeric');
 
 $list_course_extra_field = CourseManager::get_course_extra_field_list($course_code);
+//@todo this is wrong
 foreach ($list_course_extra_field as $extra_field) {
 	switch ($extra_field['field_type']) {
 		/* case USER_FIELD_TYPE_TEXT:
@@ -182,7 +183,8 @@ foreach ($list_course_extra_field as $extra_field) {
 			$checked = (array_key_exists('extra_field_value', $extra_field) && $extra_field['extra_field_value'] == 1)? array('checked'=>'checked'): '';
 			$form->addElement('hidden', '_extra_'.$extra_field['field_variable'], 0);
 			$field_display_text=$extra_field['field_display_text'];
-			$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(get_lang('SpecialCourse'), get_lang('AllUsersAreAutomaticallyRegistered')) , get_lang($extra_field['field_default_value']), $checked);
+			//$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(get_lang('SpecialCourse'), get_lang('AllUsersAreAutomaticallyRegistered')) , get_lang($extra_field['field_default_value']), $checked);
+			$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(null, get_lang('AllUsersAreAutomaticallyRegistered')) , get_lang('SpecialCourse'), $checked);
 			break;
 		/* case USER_FIELD_TYPE_SELECT_MULTIPLE:
 		case USER_FIELD_TYPE_DATE:
@@ -192,8 +194,8 @@ foreach ($list_course_extra_field as $extra_field) {
 	}
 }
 $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),'onclick="valide()"; class="save"');
-// Set some default values
 
+// Set some default values
 $course_db_name = $course['db_name'];
 $course['disk_quota'] = round($course['disk_quota']/1024/1024, 1);
 $course['title'] = api_html_entity_decode($course['title'], ENT_QUOTES, $charset);

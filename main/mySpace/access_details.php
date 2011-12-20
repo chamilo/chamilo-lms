@@ -160,6 +160,7 @@ $(function() {
 </script>';
 
 //Changes END
+$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('AccessDetails'));
 
 Display :: display_header('');
 $main_user_info = api_get_user_info($user_id);

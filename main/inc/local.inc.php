@@ -800,11 +800,21 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
         if (!isset($_SESSION['login_as'])) {
             
             $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            
+            /* 
+             * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)
+             * the function Tracking::get_time_spent_on_the_course() returns big values (200h) due the condition: 
+             * login_course_date > now() - INTERVAL $session_lifetime SECOND
+             * 
+            */
+            /*
             if (isset($_configuration['session_lifetime'])) {
                 $session_lifetime    = $_configuration['session_lifetime'];
             } else {
                 $session_lifetime    = 3600; // 1 hour
-            }
+            }*/
+            
+            $session_lifetime    = 3600; // 1 hour
 
             $course_code = $_course['sysCode'];
             $time = api_get_datetime();

@@ -2706,7 +2706,7 @@ class CourseManager {
         }
 
         if (!empty($with_special_courses)) {
-            $sql = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
+            $sql = "SELECT course.id, course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
                                 course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
                                 course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course_rel_user.user_id, course.visibility
                                 FROM $tbl_course course
@@ -2764,11 +2764,8 @@ class CourseManager {
                             echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
                             echo Display::div('', array('id' => 'document_result_'.$course['id'].'_0', 'class'=>'document_preview_container'));
                         }
-                        echo '</div>';
-                        
+                        echo '</div>';                                                
                     }
-
-
 
                     $course_visibility = $course['visibility'];
                     if ($course_visibility != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {

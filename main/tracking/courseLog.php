@@ -269,7 +269,8 @@ if ($_GET['studentlist'] == 'false') {
                 }
             }
             $count_students = ($count_students == 0 || is_null($count_students) || $count_students == '') ? 1 : $count_students;
-            echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.round(($quiz_avg_score / $count_students), 2).'%'.'</td></tr>';
+            $quiz_avg_score = round(($quiz_avg_score / $count_students), 2).'%';
+            echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.$quiz_avg_score.'</td></tr>';
             if ($export_csv) {
                 $temp = array($quiz['title'], $quiz_avg_score);
                 $csv_content[] = $temp;

@@ -32,9 +32,9 @@ $form->addElement('style_submit_button', null, get_lang('Accept'), 'class="save"
 
 if ($form->validate()) {
     $accept_legal = $form->exportValue('accept_legal');
-    
+        
     if ($accept_legal == 1 ) {
-        CourseManager::save_user_legal($user_id, $course_code, $session_id);
+        $result = CourseManager::save_user_legal($user_id, $course_code, $session_id);        
     }
 }
 
@@ -52,11 +52,13 @@ if (empty($session_id)) {
         api_not_allowed();
     }    
 } else {
+    if (api_is_platform_admin()) {
+        header('Location: '.$url);
+    }
     $user_session_status = SessionManager::get_user_status_in_session($user_id, $course_code, $session_id);
     
-    if (isset($user_session_status)) {
-        
-        $user_accepted_legal = CourseManager::is_user_accepted_legal($user_id, $course_code, $session_id);
+    if (isset($user_session_status)) {        
+        $user_accepted_legal = CourseManager::is_user_accepted_legal($user_id, $course_code, $session_id);        
         if ($user_accepted_legal) {
             //Redirect to course session home
             header('Location: '.$url);

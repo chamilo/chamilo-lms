@@ -616,7 +616,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
   unset($_SESSION['_user']['uidReset']);
 	$is_platformAdmin = false; $is_allowedCreateCourse = false;
 
-	if (isset($_user['user_id']) && $_user['user_id'] && $_user['user_id'] != 2) // a uid is given (log in succeeded)
+	if (isset($_user['user_id']) && $_user['user_id'] && ! api_is_anonymous()) // a uid is given (log in succeeded)
 	{
 		$user_table     = Database::get_main_table(TABLE_MAIN_USER);
 		$admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);

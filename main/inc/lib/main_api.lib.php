@@ -732,7 +732,9 @@ function api_protect_admin_script($allow_sessions_admins = false) {
 function api_block_anonymous_users() {
     global $_user;
     if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
+      if (api_get_setting('use_custom_pages') != 'true' ){
         require_once api_get_path(INCLUDE_PATH).'header.inc.php';
+      }
         api_not_allowed();
         return false;
     }

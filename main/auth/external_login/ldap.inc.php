@@ -36,24 +36,40 @@ function extldap_connect()
 {
   global $extldap_config;
 
-  //Trying to connect
-  if (isset($extldap_config['port'])) {
-    $ds = ldap_connect($extldap_config['host'],$extldap_config['port']);
-  } else {
-    $ds = ldap_connect($extldap_config['host']);
+  if (!is_array($extldap_config['host']))
+    $extldap_config['host'] = array($extldap_config['host']);
+
+  foreach($extldap_config['host'] as $host) {
+    //Trying to connect
+    if (isset($extldap_config['port'])) {
+      $ds = ldap_connect($host,$extldap_config['port']);
+    } else {
+      $ds = ldap_connect($host);
+    }
+    if (!$ds) {
+      $port = isset($extldap_config['port']) ? $ldap_config['port'] : 389;
+      error_log('EXTLDAP ERROR : cannot connect to '.$extldap_config['host'].':'. $port);
+    } else
+      break;
   }
-  if (!$ds) {
-    $port = isset($extldap_config['port']) ? $ldap_config['port'] : 389;
-    error_log('EXTLDAP ERROR : cannot connect to '.$extldap_config['host'].':'. $port);
+  if (!$ds) { 
+    error_log('EXTLDAP ERROR : no valid server found');
     return false;
   }
-
   //Setting protocol version
   if (isset($extldap_config['protocol_version'])) {
     if ( ! ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $extldap_config['protocol_version'])) {
       ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 2);
     }
   }
+
+  //Setting protocol version
+  if (isset($extldap_config['referrals'])) {
+    if ( ! ldap_set_option($ds, LDAP_OPT_REFERRALS, $extldap_config['referrals'])) {
+      ldap_set_option($ds, LDAP_OPT_REFERRALS, $extldap_config['referrals']);
+    }
+  }
+  
   return $ds;
 }
 
@@ -86,7 +102,7 @@ function extldap_authenticate($username, $password)
   //Search distinguish name of user
   $sr = ldap_search($ds, $extldap_config['base_dn'], $user_search);
   if ( !$sr ){
-    error_log('EXTLDAP ERROR : ldap_search(ds, '.$extldap_config['base_dn'].", $user_search) failed");
+    error_log('EXTLDAP ERROR : ldap_search('.$ds.', '.$extldap_config['base_dn'].", $user_search) failed");
     return false;
   }
   $entries_count = ldap_count_entries($ds,$sr);

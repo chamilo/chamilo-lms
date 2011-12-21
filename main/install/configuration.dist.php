@@ -106,10 +106,15 @@ $phpMyAdminPath              							= '';
 // $extAuthSource["ldap"]["login"]						= $_configuration['root_sys'].$_configuration['code_append']."auth/ldap/login.php";
 // $extAuthSource["ldap"]["newUser"]					= $_configuration['root_sys'].$_configuration['code_append']."auth/ldap/newUser.php";
 //
-// To fetch external login information, uncomment thoss 2 lines and modify  files auth/external_logininfo/newUser.php and auth/external_logininfo/updateUser.php files
-// $extAuthSource["external_logininfo"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_logininfo/newUser.php";
-// $extAuthSource["external_logininfo"]["updateUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_logininfo/updateUser.php";
-
+// To fetch external login information, uncomment those 2 lines and modify  files auth/external_login/newUser.php and auth/external_login/updateUser.php files
+// $extAuthSource["external_login"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/newUser.php";
+// $extAuthSource["external_login"]["updateUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/updateUser.php";
+//
+//NEW LDAP IMPLEMENTATION BASED ON external_logininfo
+// Please edit main/auth/external_login/ldap.conf.php
+//$extAuthSource["extldap"]["login"]						= $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/login.ldap.php";
+//$extAuthSource["extldap"]["newUser"]					= $_configuration['root_sys'].$_configuration['code_append']."auth/external_ldap/newUser.ldap.php";
+//
 //============================================================================
 //   Misc. settings
 //============================================================================

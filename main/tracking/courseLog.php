@@ -107,13 +107,13 @@ $nbStudents = count($a_students);
 
 // Gettting all the additional information of an additional profile field.
 if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) {
-    //$additional_user_profile_info = get_addtional_profile_information_of_field($_GET['additional_profile_field']);
     $user_array = array();
     foreach ($a_students as $key=>$item) {
         $user_array[] = $key;
     }
     // Fetching only the user that are loaded NOT ALL user in the portal.
     $additional_user_profile_info = TrackingCourseLog::get_addtional_profile_information_of_field_by_user($_GET['additional_profile_field'],$user_array);
+    $extra_info = UserManager::get_extra_field_information($_GET['additional_profile_field']);    
 }
 
 
@@ -472,7 +472,6 @@ if ($_GET['studentlist'] == 'false') {
         
         $extra_field_select = TrackingCourseLog::display_additional_profile_fields();
         
-        
         if (!empty($extra_field_select)) {
             echo $extra_field_select;
         }              
@@ -540,8 +539,13 @@ if ($_GET['studentlist'] == 'false') {
         } else {
             $table->set_header(10, get_lang('FirstLogin'), false, 'align="center"');
             $table->set_header(11, get_lang('LatestLogin'), false, 'align="center"');
-            $table->set_header(12, get_lang('AdditionalProfileField'), false);
-            $table->set_header(13, get_lang('Details'), false);
+            
+            if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {                                
+                $table->set_header(12, $extra_info['field_display_text'], false);
+                $table->set_header(13, get_lang('Details'), false);
+            } else {
+                $table->set_header(12, get_lang('Details'), false);
+            }            
         }
         $table->display();
     } else {
@@ -577,7 +581,7 @@ if ($_GET['studentlist'] == 'false') {
     
 
         if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-            $csv_headers[] = get_lang('AdditionalProfileField');
+            $csv_headers[] = $extra_info['field_display_text'];
         }
         ob_end_clean();        
         array_unshift($csv_content, $csv_headers); // Adding headers before the content.

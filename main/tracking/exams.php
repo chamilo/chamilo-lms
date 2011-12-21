@@ -120,7 +120,7 @@ if (!$export_to_xls) {
 if ($global) {
 	$html_result .= '<table  class="data_table">';
 	$html_result .= '<tr><th>'.get_lang('Courses').'</th>';
-	$html_result .= '<th>'.get_lang('Exercises').'</th>';
+	$html_result .= '<th>'.get_lang('Quiz').'</th>';
 	$html_result .= '<th>'.get_lang('ExamTaken').'</th>';
 	$html_result .= '<th>'.get_lang('ExamNotTaken').'</th>';
 	$html_result .= '<th>'.sprintf(get_lang('ExamPassX'), $filter_score).'%</th>';
@@ -129,7 +129,7 @@ if ($global) {
 	$html_result .= '</tr>';
 } else {	
 	$html_result .= '<table  class="data_table">';	
-	$html_result .= '<tr><th>'.get_lang('Exercises').'</th>';
+	$html_result .= '<tr><th>'.get_lang('Quiz').'</th>';
 	$html_result .= '<th>'.get_lang('User').'</th>';	
 	//$html_result .= '<th>'.sprintf(get_lang('ExamPassX'), $filter_score).'</th>';
 	$html_result .= '<th>'.get_lang('Percentage').' %</th>';

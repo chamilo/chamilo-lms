@@ -12,7 +12,7 @@ $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 // Language files that need to be included.
 $language_file = array('admin', 'tracking','scorm');
 
-// Including the global initialization file.
+// Including the global initialization file
 require_once '../inc/global.inc.php';
 
 $from_myspace = false;
@@ -534,16 +534,21 @@ if ($_GET['studentlist'] == 'false') {
             $table->set_header(10, get_lang('Survey'), false);
             $table->set_header(11, get_lang('FirstLogin'), false, 'align="center"');
             $table->set_header(12, get_lang('LatestLogin'), false, 'align="center"');
-            $table->set_header(13, get_lang('AdditionalProfileField'), false);
-            $table->set_header(14, get_lang('Details'), false);
+            if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+                $table->set_header(13, $extra_info['field_display_text'], false);
+                $table->set_header(14, get_lang('Details'), false);                        
+            } else {
+                $table->set_header(13, get_lang('Details'), false);
+            }
+            
         } else {
             $table->set_header(10, get_lang('FirstLogin'), false, 'align="center"');
             $table->set_header(11, get_lang('LatestLogin'), false, 'align="center"');
             
             if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {                                
                 $table->set_header(12, $extra_info['field_display_text'], false);
-                $table->set_header(13, get_lang('Details'), false);
-            } else {
+                $table->set_header(13, get_lang('Details'), false);                
+            } else {                
                 $table->set_header(12, get_lang('Details'), false);
             }            
         }
@@ -577,8 +582,7 @@ if ($_GET['studentlist'] == 'false') {
         }
         
         $csv_headers[] = get_lang('FirstLogin', '');
-        $csv_headers[] = get_lang('LatestLogin', '');
-    
+        $csv_headers[] = get_lang('LatestLogin', '');    
 
         if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
             $csv_headers[] = $extra_info['field_display_text'];

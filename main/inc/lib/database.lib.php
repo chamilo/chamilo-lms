@@ -378,7 +378,7 @@ class Database {
      * @return int The number of rows in the given table.
      */
     public static function count_rows($table) {
-        $obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table WHERE c_id = ".api_get_course_int_id()));   // 
+        $obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table"));   // 
         return $obj->n;
     }
 

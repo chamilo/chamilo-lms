@@ -135,6 +135,8 @@ function mdo_override(&$xmlDoc)  // by ref!
 
 function mdo_storeback(&$xmlDoc)  // by ref!
 {
+    $course_id = api_get_course_int_id();
+    
     if (!$this->mdo_url) return;  // no record in link table, most probably
 
     if (!($v = $xmlDoc->xmd_value('metadata/lom/technical/location'))) return;
@@ -164,7 +166,7 @@ function mdo_storeback(&$xmlDoc)  // by ref!
 
     $link_table = Database::get_course_table(TABLE_LINK);
     if ($u) Database::query("UPDATE $link_table SET " . substr($u, 2) .
-        " WHERE id='" . addslashes($this->mdo_id) . "'");
+        " WHERE c_id = $course_id AND id='" . addslashes($this->mdo_id) . "'");
 }
 
 
@@ -186,7 +188,8 @@ function mdo_add_breadcrump_nav()
 function mdobject($_course, $id)
 {
     global $ieee_dcmap_e, $ieee_dcmap_v;  // md_funcs
-
+    $course_id = api_get_course_int_id();
+    
     $this->mdo_course = $_course; $this->mdo_type = 'Link';
     $this->mdo_id = $id; $this->mdo_eid = $this->mdo_type . '.' . $id;
 
@@ -194,8 +197,7 @@ function mdobject($_course, $id)
 
     $link_table = Database::get_course_table(TABLE_LINK);
     if (($linkinfo = @Database::fetch_array(Database::query(
-            "SELECT url,title,description,category_id FROM $link_table WHERE id='" .
-            addslashes($id) . "'"))))
+            "SELECT url,title,description,category_id FROM $link_table WHERE c_id = $course_id AND id='" .intval($id) . "'"))))
     {
         $this->mdo_url =         $linkinfo['url'];
         $this->mdo_title =       $linkinfo['title'];
@@ -204,7 +206,7 @@ function mdobject($_course, $id)
 
         $linkcat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
         if (($catinfo = @Database::fetch_array(Database::query(
-                "SELECT category_title FROM $linkcat_table WHERE id='" .
+                "SELECT category_title FROM $linkcat_table WHERE c_id = $course_id AND id='" .
                 addslashes($lci) . "'"))))
             $this->mdo_category_title =    $catinfo['category_title'];
     }

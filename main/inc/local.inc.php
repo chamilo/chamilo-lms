@@ -1070,8 +1070,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 
 if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested
 	if ($gidReq && $_cid ) { // have keys to search data
-		$group_table = Database::get_course_table(TABLE_GROUP);
-		$sql = "SELECT * FROM $group_table WHERE id = '$gidReq'";
+		$group_table = Database::get_course_table(TABLE_GROUP);    
+		$sql = "SELECT * FROM $group_table WHERE c_id = ".$_course['real_id']." AND id = '$gidReq'";
 		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
 			$gpData = Database::fetch_array($result);

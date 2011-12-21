@@ -53,7 +53,7 @@ if ($current_group['doc_state'] != 1 && $current_group['calendar_state'] != 1 &&
 
 /*	Header */
 
-Display::display_header($nameTools.' '.stripslashes($current_group['name']), 'Group');
+Display::display_header($nameTools.' '.Security::remove_XSS($current_group['name']), 'Group');
 
 /*	Introduction section (editable by course admin) */
 

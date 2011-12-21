@@ -24,10 +24,10 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'display';
 
 // setting breadcrumbs
 
-$tool_name = get_lang('SkillGradebook');
+$tool_name = get_lang('SkillsAndGradebooks');
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 if ($action == 'add_skill') {
-    $interbreadcrumb[]=array('url' => 'skills_gradebook.php','name' => get_lang('SkillGradebook'));
+    $interbreadcrumb[]=array('url' => 'skills_gradebook.php','name' => get_lang('SkillsAndGradebooks'));
     $tool_name = get_lang('Add');    
 }
 
@@ -42,13 +42,14 @@ Display::display_header($tool_name);
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_gradebooks';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file 
-$columns        = array(get_lang('Name'), get_lang('Skills'), get_lang('Actions'));
+$columns        = array(get_lang('Name'), get_lang('CertificatesFiles'), get_lang('Skills'), get_lang('Actions'));
 
 //Column config
 $column_model   = array(
-                        array('name'=>'name',           'index'=>'name',    'width'=>'200', 'align'=>'left'),
-                        array('name'=>'skills',         'index'=>'skills',  'width'=>'300', 'align'=>'left','sortable'=>'false'),
-                        array('name'=>'actions',        'index'=>'actions', 'width'=>'100', 'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
+                        array('name'=>'name',           'index'=>'name',        'width'=>'150', 'align'=>'left'),
+                        array('name'=>'certificate',    'index'=>'certificate', 'width'=>'25', 'align'=>'left', 'sortable'=>'false'),
+                        array('name'=>'skills',         'index'=>'skills',      'width'=>'300', 'align'=>'left', 'sortable'=>'false'),
+                        array('name'=>'actions',        'index'=>'actions',     'width'=>'30', 'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
                        );            
 //Autowidth             
 $extra_params['autowidth'] = 'true';
@@ -57,15 +58,19 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-                         return \'<a href="?action=add_skill&id=\'+options.rowId+\'">'.Display::return_icon('addd.gif', get_lang('AddSkill'),'',22).'</a>'.
-                         '\'; 
+                        //certificates
+                        if (rowObject[4] == 1) {            
+                            return \'<a href="?action=add_skill&id=\'+options.rowId+\'">'.Display::return_icon('add.png', get_lang('AddSkill'),'',22).'</a>'.'\';
+                        } else {
+                            return \''.Display::return_icon('add_na.png', get_lang('YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill'),'',22).''.'\';
+                        }
                  }';
 ?>
 <script>
 $(function() {
 <?php 
     // grid definition see the $career->display() function
-    echo Display::grid_js('gradebooks',  $url,$columns,$column_model,$extra_params, array(), $action_links,true);       
+    echo Display::grid_js('gradebooks', $url, $columns, $column_model, $extra_params, array(), $action_links,true);       
 ?> 
 });
 </script>

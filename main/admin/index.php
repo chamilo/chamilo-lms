@@ -249,7 +249,7 @@ if (api_is_platform_admin()) {
     $items = array();
     $items[] = array('url'=>'skills.php',           'label' => get_lang('SkillsTree'));
     $items[] = array('url'=>'skills_profile.php',   'label' => get_lang('SkillsProfile'));
-    $items[] = array('url'=>'skills_gradebook.php', 'label' => get_lang('SkillsGradebook'));   
+    $items[] = array('url'=>'skills_gradebook.php', 'label' => get_lang('SkillsAndGradebooks'));   
     
     $blocks['skills']['items'] = $items;
     

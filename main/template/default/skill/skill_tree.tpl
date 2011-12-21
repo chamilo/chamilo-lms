@@ -349,8 +349,8 @@ $(document).ready( function() {
 
 </script>
 <div style="z-index: 1000;position: absolute;">
-<h2>Skills</h2>    
-<a style="z-index: 1000"class="a_button gray" id="add_item_link" href="#">{"Add item"|get_lang}</a>
+<h3>{'Skills'|get_lang}</h3>    
+<a style="z-index: 1000"class="a_button gray medium" id="add_item_link" href="#">{'AddSkill'|get_lang}</a>
 </div>
 {$html}
 
@@ -360,7 +360,7 @@ $(document).ready( function() {
         <input type="hidden" name="id" id="id"/>
         <div class="row">
             <div class="label">
-                <label for="name">Name</label>
+                <label for="name">{'Name'|get_lang}</label>
             </div>      
             <div class="formw">
                 <input type="text" name="name" id="name" size="40" />             
@@ -368,7 +368,7 @@ $(document).ready( function() {
         </div>        
         <div class="row">
             <div class="label">
-                <label for="name">Parent</label>
+                <label for="name">{'Parent'|get_lang}</label>
             </div>      
             <div class="formw">
                 <select id="parent_id" name="parent_id" />
@@ -377,19 +377,19 @@ $(document).ready( function() {
         </div>                
         <div class="row">
             <div class="label">
-                <label for="name">Gradebook</label>
+                <label for="name">{'Gradebook'|get_lang}</label>
             </div>      
             <div class="formw">
                 <select id="gradebook_id" name="gradebook_id[]" multiple="multiple"/>
                 </select>             
                 <span class="help-block">
-                Gradebook Description
+                {'WithCertificate'|get_lang}
                 </span>           
             </div>
         </div>
         <div class="row">
             <div class="label">
-                <label for="name">Description</label>
+                <label for="name">{'Description'|get_lang}</label>
             </div>      
             <div class="formw">
                 <textarea name="description" id="description" cols="40" rows="7"></textarea>

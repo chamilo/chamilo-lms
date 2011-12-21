@@ -84,7 +84,7 @@ class Model {
      * Get the count of elements
      */
     public function get_count() {        
-        $row = Database::select('count(*) as count', $this->table, array(),'first');
+        $row = Database::select('count(*) as count', $this->table, array('where' => array('parent_id = ?' => '0')),'first');
         return $row['count'];
     }
         

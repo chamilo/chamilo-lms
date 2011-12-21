@@ -391,20 +391,9 @@ class IndexManager {
 	}
     
     function return_skills_links() {
-        $content = '<ul class="menulist">';
-        
-/*        $content .= Display::tag('li', Display::url(get_lang('SkillsTree'), api_get_path(WEB_CODE_PATH).'admin/skills.php'));
-        
-        $content .= Display::tag('li', Display::url(get_lang('SkillsProfile'), api_get_path(WEB_CODE_PATH).'admin/skills_profile.php'));
-        
-        $content .= Display::tag('li', Display::url(get_lang('SkillsGradebook'), api_get_path(WEB_CODE_PATH).'admin/skills_gradebook.php'));
-  */      
+        $content = '<ul class="menulist">';      
         $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_tree.php'));
-        
-        
-        
-        $content .= '</ul>';
-        
+        $content .= '</ul>';        
         $html = self::show_right_block(get_lang("Skills"), $content);
         return $html;
     }

@@ -19,24 +19,34 @@ $agenda->type = $type; //course,admin or personal
 
 switch ($action) {
 	case 'add_event':
-		echo $agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], $_REQUEST['title'], $_REQUEST['content'], $_REQUEST['users_to_send']);
+        if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
+            break;
+        }
+		echo $agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], 
+		                        $_REQUEST['title'], $_REQUEST['content'], $_REQUEST['users_to_send'], $_REQUEST['add_as_annonuncement']);
 		break;		
 	case 'edit_event':
-		$id_list 	= explode('_', $_REQUEST['id']);		
-		//$type 		= $id_list[0];
+        if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
+            break;
+        }
+		$id_list 	= explode('_', $_REQUEST['id']);
 		$id 		= $id_list[1];		
 		$agenda->edit_event($id, $_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], $_REQUEST['title'], $_REQUEST['content']);
 		break;
 	case 'delete_event':
+        if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
+            break;
+        }
 		$id_list 	= explode('_', $_REQUEST['id']);
-		//$type 		= $id_list[0];
 		$id 		= $id_list[1];		
 		$agenda->delete_event($id);		
 		break;
 	case 'move_event':
+        if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
+            break;
+        }
 		$day_delta 		= $_REQUEST['day_delta'];
 		$minute_delta 	= $_REQUEST['minute_delta'];
-		//$type 			= $_REQUEST['type'][0];
 		$id 			= explode('_', $_REQUEST['id']);
 		$id				= $id[1];
 		$agenda->move_event($id, $day_delta, $minute_delta);		

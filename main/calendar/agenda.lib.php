@@ -41,7 +41,7 @@ class Agenda {
 	 * @param 	string	agendaDay, agendaWeek, month
 	 * @param	string	personal, course or global (only works for personal by now) 
 	 */
-	function add_event($start, $end, $all_day, $view, $title, $content, $users_to_send = array()) {
+	function add_event($start, $end, $all_day, $view, $title, $content, $users_to_send = array(), $add_as_announcement = false) {
 		
 		$start 		= date('Y-m-d H:i:s', $start);
 		$end 		= date('Y-m-d H:i:s', $end);			
@@ -74,7 +74,7 @@ class Agenda {
 				//simple course event
 				$id = Database::insert($this->tbl_course_agenda, $attributes);
                 
-                if ($id) {			
+                if ($id) {
     				//api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id, "AgendaAdded", api_get_user_id(), '','',$start, $end);                    
                     $group_id = api_get_group_id();
                     if ((!is_null($users_to_send)) or (!empty($group_id))) {
@@ -99,6 +99,10 @@ class Agenda {
                             }
                         }
                     }
+
+                    if (isset($add_as_announcement) && !empty($add_as_announcement)) {
+                      self::store_agenda_item_as_announcement($id);
+                    }  
                 }                              
                               
 			
@@ -115,6 +119,76 @@ class Agenda {
 		}				
 		return $id;				
 	}
+
+
+    /* copycat of the agenda.inc.php @todo try to fix it */
+      
+    function store_agenda_item_as_announcement($item_id){
+        $table_agenda  = Database::get_course_table(TABLE_AGENDA);
+        $table_ann     = Database::get_course_table(TABLE_ANNOUNCEMENT);
+        $course_id     = api_get_course_int_id();
+        //check params
+        if(empty($item_id) or $item_id != strval(intval($item_id))) {return -1;}
+        //get the agenda item
+    
+        $item_id = Database::escape_string($item_id);
+        $sql = "SELECT * FROM $table_agenda WHERE c_id = $course_id AND id = ".$item_id;
+        $res = Database::query($sql);
+                
+        if (Database::num_rows($res)>0) {
+            $row = Database::fetch_array($res);
+            
+            //we have the agenda event, copy it
+            //get the maximum value for display order in announcement table
+            $sql_max = "SELECT MAX(display_order) FROM $table_ann WHERE c_id = $course_id ";
+            $res_max = Database::query($sql_max);
+            $row_max = Database::fetch_array($res_max);
+            $max = intval($row_max[0])+1;       
+            //build the announcement text
+            $content = $row['content'];
+            //insert announcement
+            $session_id = api_get_session_id();
+            
+            
+            $sql_ins = "INSERT INTO $table_ann (c_id, title,content,end_date,display_order,session_id) " .
+                        "VALUES ($course_id, '".Database::escape_string($row['title'])."','".Database::escape_string($content)."','".Database::escape_string($row['end_date'])."','$max','$session_id')";
+            $res_ins = Database::query($sql_ins);
+            if ($res > 0) {
+                $ann_id = Database::insert_id();
+                //Now also get the list of item_properties rows for this agenda_item (calendar_event)
+                //and copy them into announcement item_properties
+                $table_props = Database::get_course_table(TABLE_ITEM_PROPERTY);
+                $sql_props = "SELECT * FROM $table_props WHERE c_id = $course_id AND tool ='calendar_event' AND ref='$item_id'";
+                $res_props = Database::query($sql_props);
+                if(Database::num_rows($res_props)>0) {
+                    while($row_props = Database::fetch_array($res_props)) {
+                        //insert into announcement item_property
+                        $time = api_get_utc_datetime();
+                        $sql_ins_props = "INSERT INTO $table_props " .
+                                "(c_id, tool, insert_user_id, insert_date, " .
+                                "lastedit_date, ref, lastedit_type," .
+                                "lastedit_user_id, to_group_id, to_user_id, " .
+                                "visibility, start_visible, end_visible)" .
+                                " VALUES " .
+                                "($course_id, 'announcement','".$row_props['insert_user_id']."','".$time."'," .
+                                "'$time','$ann_id','AnnouncementAdded'," .
+                                "'".$row_props['last_edit_user_id']."','".$row_props['to_group_id']."','".$row_props['to_user_id']."'," .
+                                "'".$row_props['visibility']."','".$row_props['start_visible']."','".$row_props['end_visible']."')";
+                        $res_ins_props = Database::query($sql_ins_props);
+                        if($res_ins_props <= 0){
+                            return -1;
+                        } else {
+                            //copy was a success
+                            return $ann_id;
+                        }
+                    }
+                }
+            } else {
+                return -1;
+            }
+        }
+        return -1;
+    }
 	
 	function edit_event($id, $start, $end, $all_day, $view, $title, $content) {		
 		$start 		= date('Y-m-d H:i:s', $start);

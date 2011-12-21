@@ -29,7 +29,7 @@ $(document).ready(function() {
 		autoOpen: false,
 		modal	: false, 
 		width	: 550, 
-		height	: 400
+		height	: 450
    	});
 
 	var title = $( "#title" ),
@@ -88,7 +88,8 @@ $(document).ready(function() {
 			var start_date 	= Math.round(start.getTime() / 1000);
 			var end_date 	= Math.round(end.getTime() / 1000);
 			
-			$('#visible_to_input').show();		
+			$('#visible_to_input').show();
+			$('#add_as_announcement_div').show();		
 			
 			//Cleans the selected attr 	
 		    clean_user_select();
@@ -123,7 +124,7 @@ $(document).ready(function() {
 				
 				$("#dialog-form").dialog({				
 					buttons: {
-						"Add event": function() {
+						{"Add"|get_lang}: function() {
 							var bValid = true;
 							bValid = bValid && checkLength( title, "title", 1, 255 );
 							//bValid = bValid && checkLength( content, "content", 1, 255 );
@@ -169,6 +170,8 @@ $(document).ready(function() {
 				}
 				
 				$('#visible_to_input').hide();
+				$('#add_as_announcement_div').hide();
+				
 				
 				$('#color_calendar').html('{$type_label}');
 				$('#color_calendar').addClass('label_tag');
@@ -191,7 +194,7 @@ $(document).ready(function() {
 				
 				$("#dialog-form").dialog({				
 					buttons: {
-						"Edit" : function() {
+						{"Edit"|get_lang} : function() {
 							
 							var bValid = true;
 							bValid = bValid && checkLength( title, "title", 1, 255 );
@@ -215,7 +218,7 @@ $(document).ready(function() {
 								}							
 							});
 						},
-						"Delete": function() { 
+						{"Delete"|get_lang}: function() { 
 							$.ajax({
 								url: delete_url,
 								success:function() {
@@ -258,8 +261,9 @@ $(document).ready(function() {
 
 <div id="dialog-form" style="display:none;">
 	<div style="width:500px">
-	<form id="add_event_form" name="form">	    
-	    {if !empty($visible_to)} 
+	<form id="add_event_form" name="form">
+	      
+	    {if !empty($visible_to) } 
     	    <div id="visible_to_input" class="row">      
                 <div class="label">
                     <label for="date">{"To"|get_lang}</label>
@@ -269,6 +273,7 @@ $(document).ready(function() {
                 </div>                  
             </div>
         {/if}
+          
         	
 		<div class="row">		
 			<div class="label">
@@ -293,7 +298,8 @@ $(document).ready(function() {
 			<div class="formw">
 				<input type="text" name="title" id="title" size="40" />				
 			</div>
-		</div>		
+		</div>
+				
 		<div class="row">
 			<div class="label">
 				<label for="name">{"Description"|get_lang}</label>
@@ -302,6 +308,19 @@ $(document).ready(function() {
 				<textarea name="content" id="content" cols="40" rows="7"></textarea>
 			</div>
 		</div>	
+		
+		{if $type == 'course'}
+		<div id="add_as_announcement_div">
+    		 <div class="row">
+                <div class="label">                    
+                </div>      
+                <div class="formw">
+                    <input type="checkbox" name="add_as_annonuncement" id="add_as_annonuncement" />
+                    <label for="add_as_annonuncement">{"AddAsAnnouncement"|get_lang}</label>
+                </div>
+            </div>
+        </div>
+		{/if}
 	</form>
 	</div>
 </div>

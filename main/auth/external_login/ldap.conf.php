@@ -11,19 +11,24 @@ require_once(dirname(__FILE__).'/ldap.inc.php');
  **/
 $extldap_config = array(
   //base dommain string
-  'base_dn' => 'dc=cblue,dc=be',
+  'base_dn' => 'DC=cblue,DC=be',
   //admin distinguished name
-  'admin_dn' => 'cn=admin,dc=cblue,dc=be',
+  'admin_dn' => 'CN=admin,dc=cblue,dc=be',
   //admin password
-  'admin_password' => 'Im2ocEGish',
+  'admin_password' => 'pass',
   //ldap host
-  'host' => '192.168.61.1',
+  'host' => array('10.1.2.3', '10.1.2.4', '10.1.2.5'),
+  // filter
+//  'filter' => '', // no () arround the string
   //'port' => , default on 389
   //protocl version (2 or 3)
   'protocol_version' => 3,
+  // set this to 0 to connect to AD server
+  'referrals' => 0,
   //String used to search the user in ldap. %username will ber replaced by the username.
   //See extldap_get_user_search_string() function below
-  'user_search' => 'uid=%username%', 
+//  'user_search' => 'sAMAccountName=%username%',  // no () arround the string
+  'user_search' => 'uid=%username%',  // no () arround the string
   //encoding used in ldap (most common are UTF-8 and ISO-8859-1
   'encoding' => 'UTF-8',
   //Set to true if user info have to be update at each login
@@ -40,7 +45,16 @@ $extldap_config = array(
 function extldap_get_user_search_string($username)
 {
   global $extldap_config;
-  return str_replace('%username%',$username,$extldap_config['user_search']);
+
+  // init
+  $filter = '('.$extldap_config['user_search'].')';
+  // replacing %username% by the actual username
+  $filter = str_replace('%username%',$username,$filter);
+  // append a global filter if needed
+  if (isset($extldap_config['filter']) && $extldap_config['filter'] != "")
+    $filter = '(&'.$filter.'('.$extldap_config['filter'].'))';
+
+  return $filter;
 }
 
 /**
@@ -61,7 +75,7 @@ function extldap_get_user_search_string($username)
  * 
  **/
 $extldap_user_correspondance = array(
-  'firstname' => 'cn',
+  'firstname' => 'givenName',
   'lastname' => 'sn',
   'status' => 'func',
   'admin' => 'func',
@@ -71,7 +85,11 @@ $extldap_user_correspondance = array(
   'language' => '!english',
   'password' => '!PLACEHOLDER',
   'extra' => array(
-    'phone' => 'phone')
+    'title' => 'title',
+    'globalid' => 'employeeID',
+    'department' => 'department',
+    'country' => 'co',
+    'bu' => 'Company')
   );
 /**
  * Please declare here all the function you use in extldap_user_correspondance

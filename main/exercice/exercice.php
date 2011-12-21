@@ -34,6 +34,7 @@ require_once 'exercise.class.php';
 require_once 'exercise.lib.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
+require_once 'testcategory.class.php';
 require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 require_once 'hotpotatoes.lib.php';

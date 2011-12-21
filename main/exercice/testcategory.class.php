@@ -75,15 +75,14 @@ class Testcategory {
      * jmontoya 
 	 */
 	//function removeCategory($in_id) {
-    function removeCategory($in_id) {
+    function removeCategory() {
 		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 		$v_id = Database::escape_string($this->id);
 		$sql = "DELETE FROM $t_cattable WHERE id=$v_id AND c_id=".api_get_course_int_id();
 		$res = Database::query($sql);
 		if (Database::affected_rows() <= 0) {
 			return false;
-		}
-		else {
+		} else {
 			return true;
 		}		
 	}
@@ -91,7 +90,8 @@ class Testcategory {
 
 	/** modify category name or description of category with id=in_id 
 	 */
-	function modifyCategory($in_id, $in_name, $in_description) {
+	//function modifyCategory($in_id, $in_name, $in_description) {
+    function modifyCategory() {
 		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 		$v_id = Database::escape_string($this->id);
 		$v_name = Database::escape_string($this->name);

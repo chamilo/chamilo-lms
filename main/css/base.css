@@ -4050,3 +4050,27 @@ input.liteoption {
     text-align: left;
     vertical-align: middle;
 }
+
+#no-data-view {
+    padding: 20px 0 0px;
+    text-align: center;
+}
+
+div#no-data-view img {
+    margin-bottom: 25px;
+}
+
+
+div#no-data-view h2 {
+    border: 0 none;
+    color: #212121;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 6px;
+    padding: 0;
+}
+
+div#no-data-view div.controls {
+    padding-top: 1px;
+}
+

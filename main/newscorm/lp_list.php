@@ -90,9 +90,9 @@ if ($is_allowed_to_edit) {
     }
 
     echo '<div class="actions">';
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.Display::return_icon('new_learnpath.png', get_lang('_add_learnpath'),'','32').'</a>' .
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.Display::return_icon('add.png', get_lang('_add_learnpath'),'','32').'</a>' .
         str_repeat('&nbsp;', 3).
-        '<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">'.Display::return_icon('import_scorm.png', get_lang('UploadScorm'),'','32').'</a>';
+        '<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">'.Display::return_icon('import.png', get_lang('UploadScorm'),'','32').'</a>';
     if (api_get_setting('service_ppt2lp', 'active') == 'true') {
         echo str_repeat('&nbsp;', 3).'<a href="../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">
 		'.Display::return_icon('import_powerpoint.png', get_lang('PowerPointConvert'),'','32').'</a>';
@@ -101,49 +101,52 @@ if ($is_allowed_to_edit) {
     echo '</div>';
 }
 
-echo '<table width="100%" border="0" cellspacing="2" class="data_table">';
-$is_allowed_to_edit ? $colspan = 9 : $colspan = 3;
 
-if (!empty($curDirPath)) {
-    if (substr($curDirPath, 1, 1) == '/') {
-        $tmpcurDirPath=substr($curDirPath,1,strlen($curDirPath));
-    } else {
-        $tmpcurDirPath = $curDirPath;
-    }
-    ?>
-    <!-- current dir name -->
-    <tr>
-        <td colspan="<?php echo $colspan; ?>" align="left" bgcolor="#4171B5">
-            <img src="../img/opendir.gif" align="absbottom" vspace="2" hspace="3" alt="open_dir" />
-            <font color="#ffffff"><b><?php echo $tmpcurDirPath; ?></b></font>
-        </td>
-    </tr>
-    <?php
-}
-
-/* CURRENT DIRECTORY */
-
-echo '<tr>';
-       
-if ($is_allowed_to_edit) {
-    echo '<th width="50%">'.get_lang('Title').'</th>';
-    echo '<th>'.get_lang('PublicationDate').'</th>';
-    echo '<th>'.get_lang('ExpirationDate').'</th>';
-    echo '<th>'.get_lang('Progress')."</th>";
-    echo '<th width="240px">'.get_lang('AuthoringOptions')."</th>";
-} else {
-    echo '<th width="50%">'.get_lang('Title').'</th>';
-    echo '<th>'.get_lang('Progress')."</th>";
-    echo '<th>'.get_lang('Actions')."</th>";
-}
-echo '</tr>';
 
 /* DISPLAY SCORM LIST */
 $list       = new LearnpathList(api_get_user_id());
 $flat_list  = $list->get_flat_list();
 
-//var_dump($flat_list);
-if (is_array($flat_list)) {
+
+if (!empty($flat_list)) {
+    
+    echo '<table width="100%" border="0" cellspacing="2" class="data_table">';
+    $is_allowed_to_edit ? $colspan = 9 : $colspan = 3;
+
+    if (!empty($curDirPath)) {
+        if (substr($curDirPath, 1, 1) == '/') {
+            $tmpcurDirPath=substr($curDirPath,1,strlen($curDirPath));
+        } else {
+            $tmpcurDirPath = $curDirPath;
+        }
+        ?>
+        <!-- current dir name -->
+        <tr>
+            <td colspan="<?php echo $colspan; ?>" align="left" bgcolor="#4171B5">
+                <img src="../img/opendir.gif" align="absbottom" vspace="2" hspace="3" alt="open_dir" />
+                <font color="#ffffff"><b><?php echo $tmpcurDirPath; ?></b></font>
+            </td>
+        </tr>
+        <?php
+    }
+    
+    /* CURRENT DIRECTORY */
+    
+    echo '<tr>';
+           
+    if ($is_allowed_to_edit) {
+        echo '<th width="50%">'.get_lang('Title').'</th>';
+        echo '<th>'.get_lang('PublicationDate').'</th>';
+        echo '<th>'.get_lang('ExpirationDate').'</th>';
+        echo '<th>'.get_lang('Progress')."</th>";
+        echo '<th width="240px">'.get_lang('AuthoringOptions')."</th>";
+    } else {
+        echo '<th width="50%">'.get_lang('Title').'</th>';
+        echo '<th>'.get_lang('Progress')."</th>";
+        echo '<th>'.get_lang('Actions')."</th>";
+    }
+    echo '</tr>';
+
     $test_mode      = api_get_setting('server_type');
     $max            = count($flat_list);
     $counter        = 0;
@@ -502,8 +505,17 @@ if (is_array($flat_list)) {
         $current ++; //counter for number of elements treated
     } // end foreach ($flat_list)
     // TODO: Erint some user-friendly message if counter is still = 0 to tell nothing can be displayd yet.
-} // end if ( is_array($flat_list)
-echo "</table>";
-echo "<br /><br />";
-/* FOOTER */
+    echo "</table>";
+} else {
+    if ($is_allowed_to_edit) {
+        echo '<div id="no-data-view">';
+        echo '<h2>'.get_lang('LearningPaths').'</h2>';
+        echo Display::return_icon('scorms.png', '', array(), 64);
+        echo '<div class="controls">';    
+        echo Display::url(get_lang('_add_learnpath'), api_get_self().'?'.api_get_cidreq().'&action=add_lp' , array('class' => 'a_button white'));
+        echo '</div>';
+        echo '</div>'; 
+    }
+}
+
 Display::display_footer();

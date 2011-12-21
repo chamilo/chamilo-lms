@@ -1067,7 +1067,19 @@ if ($display_announcement_list) {
 
 	if (!isset($_GET['action']) || !in_array($_GET['action'], array('add', 'modify','view')))
 	if ($num_rows == 0) {
-		Display::display_warning_message(get_lang('NoAnnouncements'));
+		if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
+	        echo '<div id="no-data-view">';
+            echo '<h2>'.get_lang('Announcements').'</h2>';
+            echo Display::return_icon('valves.png', '', array(), 64);
+            echo '<div class="controls">';    
+            echo Display::url(get_lang('AddAnnouncement'), api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin']) , array('class' => 'a_button white'));
+            echo '</div>';
+            echo '</div>';                   
+        } else {
+            //echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'','32')."</a>";
+           Display::display_warning_message(get_lang('NoAnnouncements'));        
+        }
+    
 	} else {    
     	$iterator = 1;
     	$bottomAnnouncement = $announcement_number;

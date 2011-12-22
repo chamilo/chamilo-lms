@@ -38,7 +38,9 @@ $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-$user_info 			= Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
+$user_info 			            = Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
+
+$course_id = api_get_course_int_id();
 
 // Getting the survey information
 $survey_id = Security::remove_XSS($_GET['survey_id']);
@@ -70,7 +72,7 @@ Display::display_header($tool_name,'Survey');
 
 // Checking if there is another survey with this code.
 // If this is the case there will be a language choice
-$sql = "SELECT * FROM $table_survey WHERE code='".Database::escape_string($survey_data['code'])."'";
+$sql = "SELECT * FROM $table_survey WHERE c_id = $course_id AND code='".Database::escape_string($survey_data['code'])."'";
 $result = Database::query($sql);
 if (Database::num_rows($result) > 1) {
 	Display::display_warning_message(get_lang('IdenticalSurveycodeWarning'));
@@ -112,15 +114,13 @@ $users->setElementTemplate('
 $users->setButtonAttributes('add', array('class' => 'arrowr'));
 $users->setButtonAttributes('remove', array('class' => 'arrowl'));
 // Additional users
-$form->addElement('textarea', 'additional_users', get_lang('AdditonalUsers'), array('cols' => 50, 'rows' => 2));
-// Additional users comment
-$form->addElement('static', null, null, get_lang('AdditonalUsersComment'));
+$form->addElement('textarea', 'additional_users', array(get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')), array('cols' => 50, 'rows' => 2));
+
 // The title of the mail
 $form->addElement('text', 'mail_title', get_lang('MailTitle'), array('size' => '80'));
 // The text of the mail
-$form->addElement('html_editor', 'mail_text', get_lang('MailText'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '150'));
-// Some explanation of the mail
-$form->addElement('static', null, null, get_lang('UseLinkSyntax'));
+$form->addElement('html_editor', 'mail_text', array(get_lang('MailText'), get_lang('UseLinkSyntax')), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '150'));
+
 $form->addElement('checkbox', 'send_mail', '', get_lang('SendMail'));
 // You cab send a reminder to unanswered people if the survey is not anonymous
 if ($survey_data['anonymous'] != 1) {

@@ -19,9 +19,7 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 // Including additional libraries
-//require_once api_get_path(LIBRARY_PATH).'survey.lib.php';
 require_once 'survey.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 // Coach can't view this page
@@ -43,6 +41,8 @@ $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $user_info 						= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
 
 $survey_id = intval($_GET['survey_id']);
+
+$course_id = api_get_course_int_id();
 
 // Breadcrumbs
 $interbreadcrumb[] = array ('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
@@ -77,7 +77,8 @@ if ($is_survey_type_1 && $_GET['action'] == 'addgroup' || $_GET['action'] == 'de
 
 	if (($_GET['action'] == 'addgroup')) {
 		if (!empty($_POST['group_id'])) {
-			Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\' WHERE id = \''.Database::escape_string($_POST['group_id']).'\'');
+			Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\' 
+			                 WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
 			$sendmsg = 'GroupUpdatedSuccessfully';
 		} elseif(!empty($_POST['name'])) {
 			Database::query('INSERT INTO '.$table_survey_question_group.' (c_id, name,description,survey_id) values ('.$course_id.', \''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.Database::escape_string($survey_id).'\') ');
@@ -88,7 +89,7 @@ if ($is_survey_type_1 && $_GET['action'] == 'addgroup' || $_GET['action'] == 'de
 	}
 
 	if ($_GET['action'] == 'deletegroup'){
-		Database::query('DELETE FROM '.$table_survey_question_group.' WHERE id = '.Database::escape_string($_GET['gid']).' and survey_id = '.Database::escape_string($survey_id));
+		Database::query('DELETE FROM '.$table_survey_question_group.' WHERE c_id = '.$course_id.' AND id = '.Database::escape_string($_GET['gid']).' and survey_id = '.Database::escape_string($survey_id));
 		$sendmsg = 'GroupDeletedSuccessfully';
 	}
 	header('Location:survey.php?survey_id='.$survey_id.'&sendmsg='.$sendmsg);
@@ -103,6 +104,7 @@ $my_action_survey		= Security::remove_XSS($_GET['action']);
 $my_question_id_survey  = Security::remove_XSS($_GET['question_id']);
 $my_survey_id_survey    = Security::remove_XSS($_GET['survey_id']);
 $message_information    = Security::remove_XSS($_GET['message']);
+
 if (isset($_GET['action'])) {
 	if (($_GET['action'] == 'moveup' || $_GET['action'] == 'movedown') && isset($_GET['question_id'])) {
 		survey_manager::move_survey_question($my_action_survey,$my_question_id_survey,$my_survey_id_survey);
@@ -176,7 +178,7 @@ echo '	</tr>';
 
 // Displaying the table contents with all the questions
 $question_counter = 1;
-$sql = "SELECT * FROM $table_survey_question_group WHERE survey_id = '".Database::escape_string($survey_id)."' ORDER BY id";
+$sql = "SELECT * FROM $table_survey_question_group WHERE c_id = '.$course_id.' AND survey_id = '".Database::escape_string($survey_id)."' ORDER BY id";
 $result = Database::query($sql);
 $groups = array();
 while ($row = Database::fetch_array($result)) {
@@ -185,13 +187,12 @@ while ($row = Database::fetch_array($result)) {
 $sql = "SELECT survey_question.*, count(survey_question_option.question_option_id) as number_of_options
 			FROM $table_survey_question survey_question
 			LEFT JOIN $table_survey_question_option survey_question_option
-			ON survey_question.question_id = survey_question_option.question_id
-			WHERE 
-			survey_question.survey_id 	= '".Database::escape_string($survey_id)."' AND 
-			survey_question.c_id 		= $course_id AND 
-			survey_question_option.c_id = $course_id
+			ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id
+			WHERE    survey_question.survey_id 	= '".Database::escape_string($survey_id)."' AND 
+			         survey_question.c_id 		= $course_id
 			GROUP BY survey_question.question_id
 			ORDER BY survey_question.sort ASC";
+			
 $result = Database::query($sql);
 $question_counter_max = Database::num_rows($result);
 while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -275,7 +276,7 @@ if ($is_survey_type_1) {
 	echo '		<th width="100">'.get_lang('Modify').'</th>';
 	echo '	</tr>';
 
-	$sql = 'SELECT id,name,description FROM '.$table_survey_question_group.' WHERE survey_id = '.Database::escape_string($survey_id).' ORDER BY name';
+	$sql = 'SELECT id,name,description FROM '.$table_survey_question_group.' WHERE c_id = '.$course_id.' AND survey_id = '.Database::escape_string($survey_id).' ORDER BY name';
 
 	$rs = Database::query($sql);
 	while($row = Database::fetch_array($rs,ASSOC)){

@@ -62,16 +62,12 @@ include_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
-
 $course_id      = api_get_course_int_id();
 $course_info    = api_get_course_info();
 $user_id 	    = api_get_user_id();
 
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
-$ctok = $_SESSION['sec_token'];
-$stok = Security::get_token();
-
 $work_id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $my_folder_data = get_work_data_by_id($work_id);
 
@@ -436,7 +432,8 @@ switch ($action) {
 		$form->addElement('hidden', 'active',   1);
 		$form->addElement('hidden', 'accepted', 1);
 		$form->addElement('hidden', 'item_to_edit', $item_id);
-		$form->addElement('hidden', 'sec_token', $stok);
+        $token = Security::get_token();
+		$form->addElement('hidden', 'sec_token', $token);
 		
 		if ($item_id) {
 			$text = get_lang('UpdateWork');
@@ -479,10 +476,11 @@ switch ($action) {
 	case 'downloadfolder':
 		//require 'downloadfolder.inc.php';
 		break;		
-	case 'send_mail': 
-		if ($_GET['sec_token'] == $_SESSION['token']) {
+	case 'send_mail':                
+        var_dump($_SESSION['sec_token'], $_GET['sec_token']);
+		if (Security::check_token('get')) {		    echo 'dd';
 			send_reminder_users_without_publication($my_folder_data);
-			unset($_SESSION['token']);
+            Security::clear_token();			
 		}
 		break;		
 	case 'settings':
@@ -518,12 +516,13 @@ switch ($action) {
 	case 'create_dir':				
 		//show them the form for the directory name
 		if ($is_allowed_to_edit) {
+		    $token = Security::get_token();
 			//create the form that asks for the directory name
 			$new_folder_text = '<form name="form1" method="POST">';
 			$new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateAssignment').'</div></div>';
 			$new_folder_text .= '<input type="hidden" name="action" value="add"/>';
 			$new_folder_text .= '<input type="hidden" name="curdirpath" value="' . Security :: remove_XSS($curdirpath) . '"/>';
-			$new_folder_text .= '<input type="hidden" name="sec_token" value="'.$stok.'" />';
+			$new_folder_text .= '<input type="hidden" name="sec_token" value="'.$token.'" />';
 			$new_folder_text .= '<div class="row">
 										<div class="label">
 											<span class="form_required">*</span> '.get_lang('AssignmentName').'
@@ -616,7 +615,7 @@ switch ($action) {
 		// we insert here the directory in the table $work_table
 		$dir_name_sql = '';
 	
-		if ($is_allowed_to_edit && $ctok == $_POST['sec_token']) {
+		if ($is_allowed_to_edit && Security::check_token('post')) {
 			
 			if (!empty($created_dir)) {
 				if ($curdirpath == '/') {
@@ -730,7 +729,7 @@ switch ($action) {
 			}
 		}
 	case 'upload':
-		if ($student_can_edit_in_session && isset($_POST['sec_token']) && $ctok == $_POST['sec_token']) {
+		if ($student_can_edit_in_session && isset($_POST['sec_token']) && Security::check_token('post')) {
 			
 			//check the token inserted into the form
 			if (isset($_POST['submitWork']) && !empty($is_course_member)) {

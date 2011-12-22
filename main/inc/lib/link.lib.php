@@ -401,7 +401,7 @@ function editlinkcategory($type) {
 			"category_id='" . Database :: escape_string($_POST['selectcategory']) . "', " .
 			"display_order='" . $max_display_order . "', " .
 			"on_homepage='" . Database :: escape_string($onhomepage) . " ' $mytarget " .
-			" WHERE id='" . intval($_POST['id']) . "'";
+			" WHERE c_id = $course_id AND id='" . intval($_POST['id']) . "'";
 			Database :: query($sql);
 
 			// Update search enchine and its values table if enabled.

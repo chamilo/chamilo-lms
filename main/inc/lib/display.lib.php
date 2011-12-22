@@ -1098,7 +1098,7 @@ class Display {
                 // If it's a survey, make sure the user's invited. Otherwise drop it.
                 if ($item_property['tool'] == TOOL_SURVEY) {
                     $survey_info = survey_manager::get_survey($item_property['ref'], 0, $course_code);
-                    $invited_users = SurveyUtil::get_invited_users($survey_info['code'], $course_database);
+                    $invited_users = SurveyUtil::get_invited_users($survey_info['code'], $course_code);
                     if (!in_array($user_id, $invited_users['course_users'])) continue;
                 }
                 // If it's a learning path, ensure it is currently visible to the user

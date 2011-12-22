@@ -73,7 +73,7 @@ function display_action_links($id, $cur_dir_path, $always_show_tool_options, $al
 	}
 
 	if (api_is_allowed_to_edit(null, true)) {
-		global $publication;
+		global $publication, $token;
 			
 		if (!empty($cur_dir_path)) {
 			if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
@@ -82,9 +82,7 @@ function display_action_links($id, $cur_dir_path, $always_show_tool_options, $al
 			} else {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=with">'.
 				Display::return_icon('exercice_check.png', get_lang('ViewUsersWithTask'),'','32')."</a>\n";
-
-				$_SESSION['token'] = time();
-				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without&amp;action=send_mail&amp;sec_token='.$_SESSION['token'].'">'.
+				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without&amp;action=send_mail&amp;sec_token='.$token.'">'.
 				Display::return_icon('mail_send.png', get_lang('ReminderMessage'),'','32')."</a>";
 			}
 		}
@@ -1754,10 +1752,13 @@ function send_reminder_users_without_publication($task_data) {
 	$emailbody_user .= get_lang('WorkName').' : '.$task_title."\n\n".get_lang('Teacher').' : '.api_get_person_name($currentUserFirstName, $currentUserLastName)."\n".get_lang('Email').' : '.$currentUserEmail;
 
 	$list_users = get_list_users_without_publication($task_id);
+    var_dump($list_users);
 	foreach ($list_users as $user) {
 		$name_user = api_get_person_name($user[0], $user[1], null, PERSON_NAME_EMAIL_ADDRESS);
-		@api_mail($name_user, $user[3], $emailsubject, $emailbody_user, $sender_name, $email_admin);
+		$result = api_mail($name_user, $user[3], $emailsubject, $emailbody_user, $sender_name, $email_admin);
+        var_dump($result);
 	}
+    
 }
 
 /**

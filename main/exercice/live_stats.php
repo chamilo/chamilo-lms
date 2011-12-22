@@ -10,6 +10,13 @@ require_once 'exercise.lib.php';
 $this_section = SECTION_COURSES;
 $exercise_id = (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) ? intval($_GET['exerciseId']) : 0;
 
+// Access control
+api_protect_course_script(true);
+
+if (!api_is_allowed_to_edit()) {
+    api_not_allowed();
+}
+
 $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id);
 
@@ -29,20 +36,19 @@ Display::display_header($tool_name);
 
 //jqgrid will use this URL to do the selects
 
-$minutes = 60;
-
-$url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_live_stats&exercise_id='.$objExercise->id.'&minutes='.$minutes;
+$minutes = 30;
+$url     = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_live_stats&exercise_id='.$objExercise->id.'&minutes='.$minutes;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file 
-$columns        = array(get_lang('Firstname'), get_lang('Lastname'), get_lang('Date'), get_lang('QuestionsAlreadyAnswered'), get_lang('Score'));
+$columns        = array(get_lang('FirstName'), get_lang('LastName'), get_lang('Date'), get_lang('QuestionsAlreadyAnswered'), get_lang('Score'));
 
 //Column config
 $column_model   = array(
-                        array('name'=>'firstname',  'index'=>'firstname',   'width'=>'100', 'align'=>'left'),
-                        array('name'=>'lastname',   'index'=>'lastname',    'width'=>'100', 'align'=>'left'),
-                        array('name'=>'start_date', 'index'=>'start_date',   'width'=>'100', 'align'=>'left'),
-                        array('name'=>'question',   'index'=>'count_questions',    'width'=>'100', 'align'=>'left'),
-                        array('name'=>'score',      'index'=>'score',       'width'=>'100', 'align'=>'left','sortable'=>'false'),
+                        array('name'=>'firstname',  'index'=>'firstname',       'width'=>'100', 'align'=>'left'),
+                        array('name'=>'lastname',   'index'=>'lastname',        'width'=>'100', 'align'=>'left'),
+                        array('name'=>'start_date', 'index'=>'start_date',      'width'=>'100', 'align'=>'left'),
+                        array('name'=>'question',   'index'=>'count_questions', 'width'=>'100', 'align'=>'left'),
+                        array('name'=>'score',      'index'=>'score',           'width'=>'100', 'align'=>'left','sortable'=>'false'),
                        );            
 //Autowidth             
 $extra_params['autowidth'] = 'true';
@@ -59,15 +65,29 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
   */                      
 ?>
 <script>
+
+function refreshGrid() {
+    var grid = $("#live_stats");
+    grid.trigger("reloadGrid");
+    t = setTimeout("refreshGrid()", 5000);
+}
+
 $(function() {
-<?php 
-    echo Display::grid_js('live_stats',  $url, $columns, $column_model, $extra_params, array(), $action_links,true);       
-?> 
+    <?php 
+        echo Display::grid_js('live_stats',  $url, $columns, $column_model, $extra_params, array(), $action_links,true);       
+    ?>
+    refreshGrid(); 
+ 
 });
 </script>
 <?php
 
+$actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+echo $actions = Display::div($actions, array('class'=> 'actions'));
+
 echo '<h2>'.$objExercise->name.'</h2>';
+
+echo Display::tag('h4', get_lang('StudentsWhoAreTakingTheExerciseRightNow'));
 
 echo Display::grid_html('live_stats');  
 

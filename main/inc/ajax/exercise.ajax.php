@@ -15,6 +15,10 @@ $course_id = api_get_course_int_id();
 
 switch ($action) {
     case 'get_live_stats':
+        if (!api_is_allowed_to_edit(null, true)) {
+            break;
+        }    
+        
         // 1. Setting variables needed by jqgrid 
         $action = $_GET['a'];
         $exercise_id = intval($_GET['exercise_id']);
@@ -61,18 +65,18 @@ switch ($action) {
             $start = 0;
         }        
         
-        
-        
         $sql = "SELECT count_questions, exe_user_id, firstname, lastname, aa.status, start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id
                 FROM $user_table u INNER JOIN (
                     SELECT  t.exe_user_id, count(question_id) as count_questions, status,
                     start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id
-                    FROM  $track_attempt a INNER JOIN $track_exercise  t
-                    WHERE a.exe_id = t.exe_id AND exe_user_id = a.user_id AND $where_condition  
-                group by exe_user_id                    
-                ) as aa 
+                    FROM  $track_exercise  t LEFT JOIN   $track_attempt a ON (a.exe_id = t.exe_id AND  t.exe_user_id = a.user_id ) 
+                    WHERE t.status = 'incomplete' AND
+                          $where_condition  
+                GROUP BY exe_user_id                    
+                ) as aa
                 ON aa.exe_user_id = user_id                    
-                ORDER BY $sidx $sord LIMIT  $start ,  $limit ";
+                ORDER BY $sidx $sord LIMIT $start, $limit";
+                //echo $sql;
         $result = Database::query($sql);
         $results = array();
         
@@ -101,8 +105,7 @@ switch ($action) {
                 $i++; 
             }
         } 
-        echo json_encode($response); 
-        
+        echo json_encode($response);
         break;            
     case 'update_question_order':
         if (api_is_allowed_to_edit(null, true)) {    

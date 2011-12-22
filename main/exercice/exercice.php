@@ -533,7 +533,7 @@ if (!empty($exercise_list)) {
                     $title = Display::tag('font', $row['title'], array('style'=>'color:grey'));
                 } else {
                     $title = $row['title'];
-                }            
+                }
                     
                 $count = intval(count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id));
                 
@@ -556,8 +556,11 @@ if (!empty($exercise_list)) {
                                     
                 if ($session_id == $row['session_id']) {
                     //Settings
-                    $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',22), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);                        
-                    $actions .='<a href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
+                    $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',22), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
+                    
+                    //Exercise results                        
+                    $actions .='<a href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                    
+                                            
                     //Export
                     $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
                     //Clean exercise                    
@@ -572,9 +575,8 @@ if (!empty($exercise_list)) {
                     $actions .= Display::url(Display::return_icon('export_qti2.png','IMS/QTI','','22'),        'exercice.php?choice=exportqti2&exerciseId='.$row['id']);
                 } else { 
                     // not session                 
-                    $actions = Display::return_icon('edit_na.png', get_lang('ExerciseEditionNotAvailableInSession'));                        
-                    
-                    $actions .='<a href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                        
+                    $actions = Display::return_icon('edit_na.png', get_lang('ExerciseEditionNotAvailableInSession'));                    
+                    $actions .='<a href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'),'',22).'</a>';                                            
                     $actions .= Display::url(Display::return_icon('cd.gif',   get_lang('CopyExercise')),     '',  array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));                           
                 }
                 
@@ -653,7 +655,7 @@ if (!empty($exercise_list)) {
                         WHERE   exe_exo_id      = ".$row['id']." AND 
                                 exe_user_id     = ".api_get_user_id()." AND 
                                 exe_cours_id    = '".api_get_course_id()."' AND 
-                                status         <> 'incomplete' AND 
+                                status          <> 'incomplete' AND 
                                 orig_lp_id      = 0 AND 
                                 orig_lp_item_id = 0 AND 
                                 session_id      =  '" . api_get_session_id() . "'
@@ -710,15 +712,26 @@ if (!empty($exercise_list)) {
                     } else {                            
                         $attempt_text = get_lang('CantShowResults');
                     }
-                }                    
+                }
+                       
+                $class_tip = '';
                 
                 if (empty($num)) {
                     $num = '';
-                }                        
+                } else {
+                    $class_tip = 'link_tooltip';
+                    //@todo use sprintf and show the results validated by the teacher
+                    if ($num == 1 ) {
+                        $num = $num.' '.get_lang('Result');
+                    } else {
+                        $num = $num.' '.get_lang('Results');
+                    }
+                    $num = '<span class="tooltip" style="display: none;">'.$num.'</span>';
+                }                 
                 $item .=  Display::tag('td', $attempt_text);
                                  
                 //See results
-                $actions =' '.$num.' <a href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">   '.Display::return_icon('test_results.png', get_lang('Results'),'',22).' </a>';
+                $actions = '<a class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.$num.Display::return_icon('test_results.png', get_lang('Results'),'',22).' </a>';
             }                
             $class = 'row_even';
             if ($count % 2) {

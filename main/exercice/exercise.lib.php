@@ -27,8 +27,6 @@ $main_course_user_table     = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TBL_TRACK_EXERCICES        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TBL_TRACK_ATTEMPT          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-
-
 /**
  * Shows a question
  * 
@@ -352,8 +350,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 					api_preg_match_all('/\[[^]]+\]/', $user_choice[0]['answer'], $student_answer_list);
 					$student_answer_list = $student_answer_list[0];
 				}
-				
-				//var_dump($teacher_answer_list, $student_answer_list);				
 								
 				if (!empty($teacher_answer_list) && !empty($student_answer_list)) {
 				    $teacher_answer_list = $teacher_answer_list[0];
@@ -756,6 +752,8 @@ function get_count_exam_results() {
     // I know it's bad to add a static integer here... but
     // it factorise function get_exam_results_data
     // and I think it worths it.
+    //This is not bad for the hardcoded value, this is bad because you call 2 times get_exam_results_data()! jm
+    //@todo use a real count select I know the sql constructions are 
     $tabres = get_exam_results_data(0, 9999999, 0, "ASC");
     return count($tabres);
 }
@@ -771,21 +769,13 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     
     $is_tutor                   = api_is_allowed_to_edit(true);
     $is_tutor_course            = api_is_course_tutor();
-    $tbl_course_rel_user        = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);
-    $TBL_DOCUMENT               = Database :: get_course_table(TABLE_DOCUMENT);
-    $TBL_ITEM_PROPERTY          = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-    $TBL_EXERCICE_ANSWER        = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-    $TBL_EXERCICE_QUESTION      = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
-    $TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST);
-    $TBL_QUESTIONS              = Database :: get_course_table(TABLE_QUIZ_QUESTION);
+    
+    $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);    
+    $TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST);    
     $TBL_TRACK_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
     $TBL_TRACK_ATTEMPT          = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-    $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-    $TBL_LP_ITEM_VIEW           = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
-    $TBL_LP_ITEM                = Database :: get_course_table(TABLE_LP_ITEM);
-    $TBL_LP_VIEW                = Database :: get_course_table(TABLE_LP_VIEW);
+    $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);    
     $TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);
     
     $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
@@ -992,7 +982,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
         $number_of_items    = intval($number_of_items);
         $sql               .= " ORDER BY col$column $direction ";
         $sql               .= " LIMIT $from, $number_of_items";
-    
+        
         $results = array();
         
         $resx = Database::query($sql);
@@ -1006,7 +996,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
         $lang_nostartdate = get_lang('NoStartDate') . ' / ';    
         
         if (is_array($results)) {
-            $users_array_id = array ();
+            $users_array_id = array();
             if ($_GET['gradebook'] == 'view') {
                 $filter_by_no_revised = true;
                 $from_gradebook = true;
@@ -1137,12 +1127,12 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                         }
                     } else {
                     	$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$results[$i]['exid'].'&id_session='.api_get_session_id().'&height=500&width=750';
-                    	$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'thickbox'))."&nbsp;&nbsp;&nbsp;";
+                    	$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'thickbox a_button white small'))."&nbsp;&nbsp;&nbsp;";
                     	
                     	$html_link.= $attempt_link;
                     	
                         if ($revised) {
-                        	$html_link.= Display::span(get_lang('Validated'), array('class'=>'label_tag notice'));                            
+                        	$html_link.= Display::span(get_lang('Validated'), array('class'=>'label_tag success'));                            
                         } else {
                         	$html_link.= Display::span(get_lang('NotValidated'), array('class'=>'label_tag notice'));                            
                         }

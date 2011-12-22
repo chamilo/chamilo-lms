@@ -36,7 +36,7 @@ Display::display_header($tool_name);
 
 //jqgrid will use this URL to do the selects
 
-$minutes = 30;
+$minutes = 60;
 $url     = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_live_stats&exercise_id='.$objExercise->id.'&minutes='.$minutes;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file 
@@ -69,15 +69,14 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 function refreshGrid() {
     var grid = $("#live_stats");
     grid.trigger("reloadGrid");
-    t = setTimeout("refreshGrid()", 5000);
+    t = setTimeout("refreshGrid()", 10000);
 }
 
 $(function() {
     <?php 
         echo Display::grid_js('live_stats',  $url, $columns, $column_model, $extra_params, array(), $action_links,true);       
     ?>
-    refreshGrid(); 
- 
+    refreshGrid();
 });
 </script>
 <?php

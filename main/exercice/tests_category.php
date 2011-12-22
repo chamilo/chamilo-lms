@@ -222,7 +222,8 @@ function display_categories() {
 		$tmpobj = new Testcategory($row['id']);
 		$nb_question = $tmpobj->getCategoryQuestionsNumber();
 		echo '<div class="sectiontitle" id="id_cat'.$row['id'].'">';
-		echo "<span style='float:right'>".$nb_question.' '.get_lang('NbCategory')."</span>";
+        $nb_question_label = $nb_question == 1 ? $nb_question.' '.get_lang('Question') : $nb_question.' '.get_lang('Questions'); 
+		echo "<span style='float:right'>".$nb_question_label."</span>";
 		echo $row['title'];
 		echo '</div>';
 		echo '<div class="sectioncomment">';

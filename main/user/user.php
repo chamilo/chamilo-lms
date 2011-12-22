@@ -536,7 +536,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 			$groups_name = GroupManager :: get_user_group_name($user_id);
 			$temp = array();
-			if (api_is_allowed_to_edit(null, true)) {				
+			if (api_is_allowed_to_edit(null, true)) {
 				if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
                 	$temp[] = $user_id;
                 }
@@ -558,7 +558,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					$temp[] = $o_course_user['firstname'];
 				}
 
-                $temp[] = $o_course_user['username'];   // 
+                $temp[] = $o_course_user['username'];
 				$temp[] = isset($o_course_user['role']) ? $o_course_user['role'] : null;
 				$temp[] = implode(', ', $groups_name); //Group
 				
@@ -571,6 +571,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				} else {
 					$temp[] = '-';
 				}
+
 				$temp[] = $o_course_user['active'];
 				$temp[] = $user_id;
 			} else {
@@ -582,7 +583,9 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				} else {
 					$photo= '<center><img src="'.$image_repository.$existing_image.'" alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'"  width="22" height="22" title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" /></center>';
 				}
+                
 				$temp[] = $photo;
+                $temp[] = $o_course_user['official_code'];
 
 				if ($is_western_name_order) {
 					$temp[] = $o_course_user['firstname'];
@@ -590,10 +593,11 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				} else {
 					$temp[] = $o_course_user['lastname'];
 					$temp[] = $o_course_user['firstname'];
-				}
+				}				
+				$temp[] = $o_course_user['username'];
 				$temp[] = $o_course_user['role'];
 				$temp[] = implode(', ', $groups_name);//Group
-				$temp[] = $o_course_user['official_code'];				
+				//$temp[] = $o_course_user['official_code'];				
 			}
 			$a_users[$user_id] = $temp;
 		}

@@ -444,7 +444,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 		}
 	}
 	
-	$table_header[] = array(get_lang('Date'), true, 'style="width:180px"');
+	$table_header[] = array(get_lang('Date'), true, 'style="width:200px"');
 
 	if ($is_allowed_to_edit) {
 		$table_header[] = array(get_lang('Actions'), false, 'style="width:90px"');

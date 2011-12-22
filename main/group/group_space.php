@@ -380,7 +380,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction) {
 						user.firstname 	AS col2 "
 						)."
 						FROM ".$table_user." user, ".$table_group_user." group_rel_user
-						WHERE group_rel_user.user_id = user.user_id
+						WHERE group_rel_user.c_id = $course_id AND  group_rel_user.user_id = user.user_id
 						AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
 			$sql .= " ORDER BY col$column $direction ";
 			$sql .= " LIMIT $from,$number_of_items";

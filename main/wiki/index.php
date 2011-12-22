@@ -527,14 +527,14 @@ if ($_GET['action']=='statistics' && (api_is_allowed_to_edit(false,true) || api_
 	$total_multimedia		= 0;
 	$total_tables			= 0;
 	
-	$sql="SELECT *, COUNT(*) AS TOTAL_VERS, SUM(hits) AS TOTAL_VISITS FROM ".$tbl_wiki." WHERE c_id = '.$course_id.' ".$groupfilter.$condition_session."";
+	$sql="SELECT *, COUNT(*) AS TOTAL_VERS, SUM(hits) AS TOTAL_VISITS FROM ".$tbl_wiki." WHERE c_id = $course_id ".$groupfilter.$condition_session."";
 	$allpages=Database::query($sql);
 	while ($row=Database::fetch_array($allpages)) {
 		$total_versions			= $row['TOTAL_VERS'];
 		$total_visits			= intval($row['TOTAL_VISITS']);
 	}
 	
-	$sql="SELECT * FROM ".$tbl_wiki." WHERE c_id = '.$course_id.' AND ".$groupfilter.$condition_session."";
+	$sql="SELECT * FROM ".$tbl_wiki." WHERE c_id = $course_id AND ".$groupfilter.$condition_session."";
 	$allpages=Database::query($sql);	
 	
     while ($row=Database::fetch_array($allpages)) {		
@@ -768,7 +768,7 @@ $allpages=Database::query($sql);
 //Average score of all wiki pages. (If a page has not scored zero rated)
 
 $media_score =0;
-$sql="SELECT *, SUM(score) AS TOTAL_SCORE FROM ".$tbl_wiki." WHERE c_id = '.$course_id.' ".$groupfilter.$condition_session." GROUP BY reflink ";//group by because mark in all versions, then always is ok. Do not use "count" because using "group by", would give a wrong value
+$sql="SELECT *, SUM(score) AS TOTAL_SCORE FROM ".$tbl_wiki." WHERE c_id = $course_id ".$groupfilter.$condition_session." GROUP BY reflink ";//group by because mark in all versions, then always is ok. Do not use "count" because using "group by", would give a wrong value
 	$allpages=Database::query($sql);
 	while ($row=Database::fetch_array($allpages)) {
 		$total_score=$total_score+$row['TOTAL_SCORE'];
@@ -992,7 +992,7 @@ echo '<br/>';
 
 }
 
-/////////////////////// Most active users /////////////////////// Juan Carlos Raña Trabado
+// Most active users Juan Carlos Raña Trabado
 
 if ($_GET['action']=='mactiveusers') {
     echo '<div class="actions">'.get_lang('MostActiveUsers').'</div>';
@@ -1020,8 +1020,7 @@ if ($_GET['action']=='mactiveusers') {
     }
 }
 
-
-/////////////////////// User contributions /////////////////////// Juan Carlos Raña Trabado
+// User contributions Juan Carlos Raña Trabado
 
 if ($_GET['action']=='usercontrib') {
     $userinfo=Database::get_user_info_from_id($_GET['user_id']);
@@ -1511,9 +1510,9 @@ if ($_GET['action']=='links') {
 
         //table
         if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden 	
-			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE s1.c_id = '.$course_id.' AND linksto LIKE '%".Database::escape_string($page)." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";//add blank space after like '%" " %' to identify each word			
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE s1.c_id = $course_id AND linksto LIKE '%".Database::escape_string($page)." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s2.c_id = $course_id AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";//add blank space after like '%" " %' to identify each word			
         } else {
-            $sql="SELECT * FROM ".$tbl_wiki." s1 WHERE s1.c_id = '.$course_id.' AND visibility=1 AND linksto LIKE '%".Database::escape_string($page)." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";//add blank space after like '%" " %' to identify each word		
+            $sql="SELECT * FROM ".$tbl_wiki." s1 WHERE s1.c_id = $course_id AND visibility=1 AND linksto LIKE '%".Database::escape_string($page)." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s2.c_id = $course_id AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";//add blank space after like '%" " %' to identify each word		
         }
 
         $allpages=Database::query($sql);
@@ -2088,12 +2087,12 @@ if ($_GET['action']=='history' or $_POST['HistoryDifferences']) {
             echo '<button class="search" type="submit" name="HistoryDifferences2" value="HistoryDifferences2">'.get_lang('ShowDifferences').' '.get_lang('WordsDiff').'</button>';
             echo '</ul></form></div>';
         } else { // We show the differences between two versions
-            $sql_old="SELECT * FROM $tbl_wiki WHERE c_id = '.$course_id.' AND id='".Database::escape_string($_POST['old'])."'";
+            $sql_old="SELECT * FROM $tbl_wiki WHERE c_id = $course_id AND id='".Database::escape_string($_POST['old'])."'";
             $result_old=Database::query($sql_old);
             $version_old=Database::fetch_array($result_old);
 
 
-            $sql_new="SELECT * FROM $tbl_wiki WHERE c_id = '.$course_id.' AND id='".Database::escape_string($_POST['new'])."'";
+            $sql_new="SELECT * FROM $tbl_wiki WHERE c_id = $course_id AND id='".Database::escape_string($_POST['new'])."'";
             $result_new=Database::query($sql_new);
             $version_new=Database::fetch_array($result_new);
 
@@ -2427,13 +2426,11 @@ if ($_GET['action']=='discuss') {
                 <form name="form1" method="post" action="">
                 <table>
                     <tr>
-                    <td valign="top" ><?php echo get_lang('Comments');?>:</td>
-                    <?php  echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post ?>
-                    <td><textarea name="comment" cols="80" rows="5" id="comment"></textarea></td>
+                        <td valign="top" ><?php echo get_lang('Comments');?>:</td>
+                        <?php  echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post ?>
+                        <td><textarea name="comment" cols="80" rows="5" id="comment"></textarea></td>
                     </tr>
-
                     <tr>
-
                     <?php
                     //check if rating is allowed
                     if ($row['ratinglock_disc']==1 || api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
@@ -2483,17 +2480,18 @@ if ($_GET['action']=='discuss') {
             echo '<hr noshade size="1">';
             $user_table = Database :: get_main_table(TABLE_MAIN_USER);
 
-            $sql="SELECT * FROM $tbl_wiki_discuss reviews, $user_table user  WHERE reviews.c_id = '.$course_id.' AND reviews.publication_id='".$id."' AND user.user_id='".$firstuserid."' ORDER BY id DESC";
+            $sql="SELECT * FROM $tbl_wiki_discuss reviews, $user_table user  
+                  WHERE reviews.c_id = $course_id AND reviews.publication_id='".$id."' AND user.user_id='".$firstuserid."' ORDER BY id DESC";
             $result=Database::query($sql) or die(Database::error());
 
             $countWPost = Database::num_rows($result);
             echo get_lang('NumComments').": ".$countWPost; //comment's numbers
 
-            $sql="SELECT SUM(p_score) as sumWPost FROM $tbl_wiki_discuss WHERE c_id = '.$course_id.' AND publication_id='".$id."' AND NOT p_score='-' ORDER BY id DESC";
+            $sql="SELECT SUM(p_score) as sumWPost FROM $tbl_wiki_discuss WHERE c_id = $course_id AND publication_id = '".$id."' AND NOT p_score='-' ORDER BY id DESC";
             $result2=Database::query($sql) or die(Database::error());
             $row2=Database::fetch_array($result2);
 
-            $sql="SELECT * FROM $tbl_wiki_discuss WHERE c_id = '.$course_id.' AND publication_id='".$id."' AND NOT p_score='-'";
+            $sql="SELECT * FROM $tbl_wiki_discuss WHERE c_id = $course_id AND publication_id='".$id."' AND NOT p_score='-'";
             $result3=Database::query($sql) or die(Database::error());
             $countWPost_score= Database::num_rows($result3);
 
@@ -2507,9 +2505,10 @@ if ($_GET['action']=='discuss') {
 
             echo ' - '.get_lang('RatingMedia').': '.$avg_WPost_score; // average rating
 
-            $sql='UPDATE '.$tbl_wiki.' SET score="'.Database::escape_string($avg_WPost_score).'" 
-                  WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session;	// check if work ok. TODO:
-                Database::query($sql);
+            $sql = 'UPDATE '.$tbl_wiki.' SET score="'.Database::escape_string($avg_WPost_score).'" 
+                    WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session;	
+            // check if work ok. TODO:
+            Database::query($sql);
 
             echo '<hr noshade size="1">';
             //echo '<div style="overflow:auto; height:170px;">';

@@ -343,7 +343,7 @@ function save_wiki() {
     }
 
     if ($_clean['page_id']	==0) {
-        $sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';
+        $sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE c_id = '.$course_id.' AND id="'.$Id.'"';
         Database::query($sql);
     }
 

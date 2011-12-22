@@ -3,7 +3,7 @@
     <div class="topbar">
         <div class="topbar-inner">
             <div class="container-fluid">
-                <h3><a href="{'WEB_PATH'|get_path}">Chamilo</a></h3>
+                <h3><a href="{'WEB_PATH'|get_path}">{"siteName"|api_get_setting}</a></h3>
                 
                 {if $_u.logged}
                 <ul class="nav">

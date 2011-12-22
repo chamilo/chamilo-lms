@@ -774,16 +774,17 @@ function display_wiki_entry($newtitle) {
     
 
     // second, show the last version
-    $sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.'    	 
-    	  WHERE '.$tbl_wiki_conf.'.c_id 	= '.$course_id.' AND
-    	  		'.$tbl_wiki.'.c_id 			= '.$course_id.' AND
-    			'.$tbl_wiki_conf.'.page_id	= '.$tbl_wiki.'.page_id AND 
-    			'.$tbl_wiki.'.reflink		= "'.Database::escape_string($pageMIX).'" AND 
-    			'.$tbl_wiki.'.session_id	= '.$session_id.' AND 
-    			'.$tbl_wiki.'.'.$groupfilter.' '.$filter.' 
+    $sql='SELECT * FROM '.$tbl_wiki.' w , '.$tbl_wiki_conf.' wc    	 
+    	  WHERE wc.c_id 	  = '.$course_id.' AND
+    	  		w.c_id 		  = '.$course_id.' AND
+    			wc.page_id	  = w.page_id AND 
+    			w.reflink	  = "'.Database::escape_string($pageMIX).'" AND 
+    			w.session_id  = '.$session_id.' AND 
+    			w.'.$groupfilter.' '.$filter.' 
     			ORDER BY id DESC';
-    $result=Database::query($sql);
-    $row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
+    $result = Database::query($sql);
+    $row    = Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
+    
 	
 	//update visits
     if ($row['id']) {
@@ -835,9 +836,11 @@ function display_wiki_entry($newtitle) {
                 $lock_unlock_protect='lock';
             }
         }
-        echo '<span style="float:right;">';
-        echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_protect.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$protect_page.'</a>';
-        echo '</span>';
+        if ($row['id']) {
+            echo '<span style="float:right;">';
+            echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_protect.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$protect_page.'</a>';
+            echo '</span>';
+        }
 
         //page action: visibility
         if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
@@ -856,9 +859,12 @@ function display_wiki_entry($newtitle) {
                 $lock_unlock_visibility='visible';
             }
         }
-        echo '<span style="float:right;">';
-        echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_visibility.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$visibility_page.'</a>';
-        echo '</span>';
+        
+        if ($row['id']) {
+            echo '<span style="float:right;">';
+            echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_visibility.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$visibility_page.'</a>';
+            echo '</span>';
+        }
 
         //page action: notification
         if (api_is_allowed_to_session_edit()) {
@@ -870,28 +876,35 @@ function display_wiki_entry($newtitle) {
                 $lock_unlock_notify_page='locknotify';
             }
         }
+        
         echo '<span style="float:right;">';
         echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_notify_page.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$notify_page.'</a>';
-        echo '</span>';
-
-        //page action: export to pdf
-        echo '<span style="float:right;padding-top:5px;">';
-        echo '<form name="form_export2PDF" method="post" action="index.php">';
-        echo '<input type="hidden" name="action" value="export_to_pdf">';
-        echo '<input type="hidden" name="wiki_id" value="'.$row['id'].'">';
-        echo '<input type="image" src="../img/icons/22/pdf.png" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" border:none; margin-top: -9px">';
-        echo '</form>';
-        echo '</span>';
-
-        //page action: copy last version to doc area
-        if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
-            echo '<span style="float:right;">';
-            echo '<form name="form_export2DOC" method="post" action="index.php" >';
-            echo '<input type=hidden name="export2DOC" value="export2doc">';
-            echo '<input type=hidden name="doc_id" value="'.$row['id'].'">';            
-            echo '<input type="image" src="../img/icons/22/export_to_documents.png" border ="0" title="'.get_lang('ExportToDocArea').'" alt="'.get_lang('ExportToDocArea').'" style=" border:none; margin-top: -6px">';
+        echo '</span>';      
+            
+            
+         //ONly available if row['id'] is set
+        if ($row['id']) {
+            
+        
+            //page action: export to pdf
+            echo '<span style="float:right;padding-top:5px;">';
+            echo '<form name="form_export2PDF" method="post" action="index.php">';
+            echo '<input type="hidden" name="action" value="export_to_pdf">';
+            echo '<input type="hidden" name="wiki_id" value="'.$row['id'].'">';
+            echo '<input type="image" src="../img/icons/22/pdf.png" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" border:none; margin-top: -9px">';
             echo '</form>';
             echo '</span>';
+    
+            //page action: copy last version to doc area
+            if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+                echo '<span style="float:right;">';
+                echo '<form name="form_export2DOC" method="post" action="index.php" >';
+                echo '<input type=hidden name="export2DOC" value="export2doc">';
+                echo '<input type=hidden name="doc_id" value="'.$row['id'].'">';            
+                echo '<input type="image" src="../img/icons/22/export_to_documents.png" border ="0" title="'.get_lang('ExportToDocArea').'" alt="'.get_lang('ExportToDocArea').'" style=" border:none; margin-top: -6px">';
+                echo '</form>';
+                echo '</span>';
+            }
         }
         //export to print
         ?>
@@ -1662,11 +1675,12 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='') {
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function export2doc($doc_id) {
+    
 	global $_course;
 	$groupId 	= api_get_group_id();
-    $session_id	= api_get_session_id();
+    $session_id	= api_get_session_id();    
+    $data       = get_wiki_data($doc_id);
     
-    $data       	= get_wiki_data($doc_id);
     if (empty($data)) {
     	return false;
     }    

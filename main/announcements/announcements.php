@@ -427,24 +427,25 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 				    	// send to the created 'userlist'
 					    $sqlmail = "SELECT user_id, lastname, firstname, email
 									FROM $tbl_user
-						       		WHERE user_id IN (".$userlist.")";
+						       		WHERE active = 1 AND user_id IN (".$userlist.")";
 				    } else if (empty($_POST['not_selected_form'])) {
 			    		if(empty($_SESSION['id_session']) || api_get_setting('use_session_mode')=='false') {
 				    		// send to everybody
 				    		$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
 					                    FROM $tbl_course_user, $tbl_user
-					                    WHERE course_code='".Database::escape_string($_course['sysCode'])."'
-					                    AND course_rel_user.user_id = user.user_id AND relation_type <>".COURSE_RELATION_TYPE_RRHH." ";
+					                    WHERE  active = 1 AND 
+					                           course_code='".Database::escape_string($_course['sysCode'])."' AND
+					                           course_rel_user.user_id = user.user_id AND 
+					                           relation_type <>".COURSE_RELATION_TYPE_RRHH." ";
 			    		} else {
 			    			$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
-					                    FROM $tbl_user
-										INNER JOIN $tbl_session_course_user
-										ON $tbl_user.user_id = $tbl_session_course_user.id_user
-										AND $tbl_session_course_user.course_code = '".$_course['id']."'
-										AND $tbl_session_course_user.id_session = ".api_get_session_id();
+					                    FROM $tbl_user INNER JOIN $tbl_session_course_user
+										ON $tbl_user.user_id = $tbl_session_course_user.id_user AND
+										active = 1 AND
+										$tbl_session_course_user.course_code = '".$_course['id']."' AND
+										$tbl_session_course_user.id_session = ".api_get_session_id();
 			    		}
 			    	}
-
 					if ($sqlmail != '') {
 						$rs_mail = Database::query($sqlmail);
 
@@ -482,7 +483,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                             	$data_file = array('path' => $path_attach,'filename' => $filename_attach);
                             }
                             @api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file, true);
+                            
                             //@todo who uses the $table_reminder??
+                            
+                            /*
 							if ($_REQUEST['reminder']=="1") {
 								$time=getdate();
 								$time = $time['yday'];
@@ -501,7 +505,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 								$time = $time+30;
 								$sql="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$mailid','".addslashes($emailSubject)."','".addslashes($mail_body)."','1','$time','$end_date')";
 								Database::query($sql);
-							}
+							}*/
 						}
 						AnnouncementManager::update_mail_sent($insert_id);
 						$message = $added_and_sent;

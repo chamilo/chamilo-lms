@@ -122,8 +122,8 @@ if (isset ($_GET['action']) && $_GET['action'] == 'edit') {
     $values['visible_guest'] 	= $announcement->visible_guest ;
     $values['lang'] 			= $announcement->lang;
     $values['action']			= 'edit';
-  $groups = SystemAnnouncementManager :: get_announcement_groups($announcement->id);
-  $values['group'] = isset($groups[0]['group_id']) ? $groups[0]['group_id'] : 0;
+    $groups = SystemAnnouncementManager :: get_announcement_groups($announcement->id);
+    $values['group'] = isset($groups[0]['group_id']) ? $groups[0]['group_id'] : 0;
     $action_todo = true;
 }
 

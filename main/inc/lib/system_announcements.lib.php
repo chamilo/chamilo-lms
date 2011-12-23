@@ -531,14 +531,17 @@ class SystemAnnouncementManager {
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		
 		if ($teacher <> 0 AND $student == 0) {
-			$sql = "SELECT firstname, lastname, email, status FROM $user_table u $url_condition WHERE email<>'' AND status = '1' AND active = 1";
+			$sql = "SELECT firstname, lastname, email, status FROM $user_table u $url_condition WHERE status = '1' ";
 		}
+        
 		if ($teacher == 0 AND $student <> 0) {
-			$sql = "SELECT firstname, lastname, email, status FROM $user_table u $url_condition WHERE email<>'' AND status = '5' AND active = 1 ";
+			$sql = "SELECT firstname, lastname, email, status FROM $user_table u $url_condition WHERE status = '5' ";
 		}
+        
 		if ($teacher<> 0 AND $student <> 0) {
-			$sql = "SELECT firstname, lastname, email FROM $user_table u $url_condition WHERE email<>'' AND active = 1 ";
+			$sql = "SELECT firstname, lastname, email FROM $user_table u $url_condition WHERE 1=1 ";
 		}
+        
 		if (!empty($language)) { //special condition because language was already treated for SQL insert before
 			$sql .= " AND language = '".Database::escape_string($language)."' ";
 		}
@@ -547,10 +550,14 @@ class SystemAnnouncementManager {
 		if ($_configuration['multiple_access_urls']) {		
 		  $sql .= " AND access_url_id = '".$current_access_url_id."' ";
         }
+        
+        //Sent to active users
+        $sql .= " AND email <>'' AND active = 1 ";
 		
 		if ((empty($teacher) or $teacher == '0') AND  (empty($student) or $student == '0')) {
 			return true;
 		}        
+        
 		$result = Database::query($sql);
 		if ($result === false) {
 			return false;

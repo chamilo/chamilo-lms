@@ -643,7 +643,7 @@ function email_filter($email) {
  */
 function reg_filter($user_id) {
 	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') $type='teacher'; else $type='student';
-	$result = '<a class="a_button orange small" href="'.api_get_self().'?register=yes&type='.$type.'&user_id='.$user_id.'">'.get_lang("reg").'</a>';
+	$result = '<a class="a_button white small" href="'.api_get_self().'?register=yes&type='.$type.'&user_id='.$user_id.'">'.get_lang("reg").'</a>';
 	return $result;
 }
 

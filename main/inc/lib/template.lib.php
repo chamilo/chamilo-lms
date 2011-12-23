@@ -53,6 +53,19 @@ class Template extends Smarty {
 		$this->assign('style', $this->style);
 	}
 
+    /*
+     * Use smarty to parse the actions menu
+     * @todo finish it!
+     * */
+    function set_actions($actions) {
+        $action_string = '';
+        if (!empty($actions)) {
+            foreach($actions as $action) {                
+            }
+        }
+        $this->assign('actions', $actions);        
+    }
+
 	/**
 	 * Shortcut to display a 1 col layout (index.php)
 	 * */

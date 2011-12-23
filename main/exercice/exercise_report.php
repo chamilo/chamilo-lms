@@ -60,13 +60,18 @@ $TBL_LP_ITEM_VIEW           = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 $TBL_LP_ITEM                = Database :: get_course_table(TABLE_LP_ITEM);
 
 
-$course_id = api_get_course_int_id();
-$exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
+$course_id      = api_get_course_int_id();
+$exercise_id    = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
 
 if (empty($exercise_id)) {
     api_not_allowed();
 }
 
+if (!empty($exercise_id))
+    $parameters['exerciseId'] = $exercise_id;
+if (!empty($_GET['path'])) {
+    $parameters['path'] = Security::remove_XSS($_GET['path']);
+}
 
 // filter display by student group
 // if $_GET['filterByGroup'] = -1 => do not filter
@@ -266,7 +271,6 @@ if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !emp
     exit;
 }
 
-
 if (api_is_allowed_to_edit(null,true)) {
     if (!$_GET['filter']) {
         $filter_by_not_revised = true;
@@ -286,6 +290,13 @@ if (api_is_allowed_to_edit(null,true)) {
         default :
             null;
     }
+    
+    //Report by question
+    $actions .= Display::url(Display::return_icon('statistics_admin.gif', get_lang("ReportByQuestion")), 'stats.php?exerciseId='.$exercise_id);
+    
+    //Live results
+    $actions .='<a href="live_stats.php?' . api_get_cidreq() . '&exerciseId='.$exercise_id.'">'.Display :: return_icon('activity_monitor.png', get_lang('LiveResults'),'',32).'</a>';
+    
     if (!empty($_GET['exerciseId']) && empty($_GET['filter_by_user'])) {
         if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
             $view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&filter=2&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_check.png', get_lang('ShowCorrectedOnly'),'','32').'</a>';
@@ -293,14 +304,12 @@ if (api_is_allowed_to_edit(null,true)) {
             $view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&filter=1&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_uncheck.png', get_lang('ShowUnCorrectedOnly'),'','32').'</a>';
         }
         $actions .= $view_result;
-        // 
+         
         // filter by student group menu
-        // 
-        $exercice_id = intval($_GET['exerciseId']);
         $actions .= "<script type='text/javascript'>";
         $actions .= "      function doFilterByGroup() {";
         $actions .= "          var IdGroup = document.getElementById('groupFilter').value;";
-        $actions .= "          var goToUrl = \"".api_get_self()."?".api_get_cidreq()."&filter=$filter&gradebook=$gradebook&exerciseId=$exercice_id;$quiz_results_per_page&filterByGroup=\"+IdGroup;";
+        $actions .= "          var goToUrl = \"".api_get_self()."?".api_get_cidreq()."&filter=$filter&gradebook=$gradebook&exerciseId=$exercise_id;$quiz_results_per_page&filterByGroup=\"+IdGroup;";
         $actions .= "          self.location.href=goToUrl;";
         $actions .= "      }";
         $actions .= "        </script>";
@@ -308,19 +317,11 @@ if (api_is_allowed_to_edit(null,true)) {
         $actions .= Display::return_icon('group.gif', get_lang("FilterByGroup"));
         $actions .= displayGroupMenu("groupFilter", $filterByGroup, "doFilterByGroup()")."&nbsp;";
     }
-    //Live results
-    $actions .='<a href="live_stats.php?' . api_get_cidreq() . '&exerciseId='.$exercise_id.'">'.Display :: return_icon('activity_monitor.png', get_lang('LiveResults'),'',32).'</a>';
+    
 }
-
-
 
 $parameters=array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
 
-if (!empty($exercise_id))
-    $parameters['exerciseId'] = $exercise_id;
-if (!empty($_GET['path'])) {
-    $parameters['path'] = Security::remove_XSS($_GET['path']);
-}
 
 $table = new SortableTable('quiz_results', 'get_count_exam_results', 'get_exam_results_data', 1, 10);
 $table->set_additional_parameters($parameters);

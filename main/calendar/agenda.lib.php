@@ -441,7 +441,7 @@ class Agenda {
                     FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
                     WHERE   agenda.id       = ip.ref  AND 
                             ip.tool         ='".TOOL_CALENDAR_EVENT."' AND 
-                            $where_condition  AND
+                            $where_condition AND
                             ip.visibility   = '1' AND
                             agenda.c_id     = $course_id AND
                             ip.c_id         = $course_id";
@@ -452,13 +452,13 @@ class Agenda {
 		    if (api_is_allowed_to_edit()) {
 		        $where_condition = "";                
             } else {
-                $where_condition = "( ip.to_user_id=$user_id OR ip.to_group_id='0')";
+                $where_condition = "( ip.to_user_id=$user_id OR ip.to_group_id='0') AND ";
             }         
             $sql="SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
                     FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
                     WHERE agenda.id = ip.ref AND
                     ip.tool='".TOOL_CALENDAR_EVENT."' AND
-                    $where_condition AND                                 
+                    $where_condition
                     ip.visibility='1' AND 
                     agenda.c_id = $course_id AND
                     ip.c_id = $course_id";  

@@ -256,7 +256,7 @@ else {
 		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
 		echo '
 		<tr>
-			<td>'.$course['title'].' ('.$course['visual_code'].')</td>
+			<td>'.Display::url($course['title'].' ('.$course['visual_code'].')', api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session),'</td>
 			<td>'.$coach.'</td>
 			<td>'.$course['nbr_users'].'</td>
 			<td>

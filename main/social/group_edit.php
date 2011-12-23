@@ -36,16 +36,7 @@ function textarea_maxlength(){
       textarea = document.forms[0].description.value;
    }
 }
-</script>
-
-<style>
-div.row div.label {
-    width:15%;
-}
-div.row div.formw {
-    width:80%;
-}
-</style>';
+</script>';
 
 $group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);
 $tool_name = get_lang('GroupEdit');

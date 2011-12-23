@@ -494,27 +494,30 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		$direction = 'ASC';
 	}
 
-	// order by
-	if (api_is_allowed_to_edit()) {
-		$column--;
-	}
+    if (api_is_allowed_to_edit()) {
+        $column--;
+    }
+
 	switch ($column) {
-		case 1:
-			if ($is_western_name_order) {
-				$order_by = 'ORDER BY user.firstname '.$direction.', user.lastname '.$direction;
-			} else {
-				$order_by = 'ORDER BY user.lastname '.$direction.', user.firstname '.$direction;
-			}
-			break;
+	    case 1:
+            $order_by = 'ORDER BY user.official_code '.$direction;
+            break;
 		case 2:
 			if ($is_western_name_order) {
+				$order_by = 'ORDER BY user.firstname '.$direction.', user.lastname '.$direction;
+			} else {
+				$order_by = 'ORDER BY user.lastname '.$direction.', user.firstname '.$direction;
+			}
+			break;
+		case 3:
+			if ($is_western_name_order) {
 				$order_by = 'ORDER BY user.lastname '.$direction.', user.firstname '.$direction;
 			} else {
 				$order_by = 'ORDER BY user.firstname '.$direction.', user.lastname '.$direction;
 			}
 			break;
-		case 5:
-			$order_by = 'ORDER BY user.official_code '.$direction;
+		case 4:
+			$order_by = 'ORDER BY user.username '.$direction;
 			break;
 		default:
 			if ($sort_by_first_name) {

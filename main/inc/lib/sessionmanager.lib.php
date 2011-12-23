@@ -1120,11 +1120,16 @@ class SessionManager {
 	public static function delete_session_category($id_checked, $delete_session = false,$from_ws = false){
 		$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-		if(is_array($id_checked)) {
-			$id_checked=Database::escape_string(implode(',',$id_checked));
+		if (is_array($id_checked)) {
+			$id_checked = Database::escape_string(implode(',',$id_checked));
 		} else {
-			$id_checked=intval($id_checked);
+			$id_checked = intval($id_checked);
 		}
+		
+		//Setting session_category_id to 0
+		$sql = "UPDATE $tbl_session SET session_category_id = 0 WHERE session_category_id IN (".$id_checked.")";
+        $result = Database::query($sql);
+        
 		$sql = "SELECT id FROM $tbl_session WHERE session_category_id IN (".$id_checked.")";
 		$result = @Database::query($sql);
 		while ($rows = Database::fetch_array($result)) {
@@ -1143,6 +1148,7 @@ class SessionManager {
 
 		// Add event to system log		
 		$user_id = api_get_user_id();
+        
 		event_system(LOG_SESSION_CATEGORY_DELETE, LOG_SESSION_CATEGORY_ID, $id_checked, api_get_utc_datetime(), $user_id);
 
 

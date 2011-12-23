@@ -5,12 +5,11 @@ $language_file='admin';
 $cidReset=true;
 
 require_once  '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 api_protect_admin_script(true);
+
 // setting the section (for the tabs)
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 $htmlHeadXtra[] = '<script language="javascript">
 				function selectAll(idCheck,numRows,action) {
 					for(i=0;i<numRows;i++) {
@@ -24,8 +23,8 @@ $htmlHeadXtra[] = '<script language="javascript">
 				}
 				</script>';
 
-$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+$tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
 
 $page=intval($_GET['page']);
 $action= Security::remove_XSS($_REQUEST['action']);

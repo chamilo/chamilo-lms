@@ -82,6 +82,7 @@ $(document).ready(function() {
 		dayNamesShort: 	{$day_names_short},		
 		selectable	: true,
 		selectHelper: true,
+		//add event
 		select: function(start, end, allDay, jsEvent, view) {
 			/* When selecting one day or several days */
 			
@@ -89,7 +90,9 @@ $(document).ready(function() {
 			var end_date 	= Math.round(end.getTime() / 1000);
 			
 			$('#visible_to_input').show();
-			$('#add_as_announcement_div').show();		
+			$('#add_as_announcement_div').show();
+			
+			$('#visible_to_read_only').hide();
 			
 			//Cleans the selected attr 	
 		    clean_user_select();
@@ -116,7 +119,8 @@ $(document).ready(function() {
 					$('#end_date').html(' - ' + end.toDateString());					
 				}
 				$('#color_calendar').html('{$type_label}');
-				$('#color_calendar').addClass('label_tag');
+				$('#color_calendar').removeClass('group_event');
+				$('#color_calendar').addClass('label_tag');				
 				$('#color_calendar').addClass('{$type}_event');
 				
 				allFields.removeClass( "ui-state-error" );		
@@ -160,7 +164,7 @@ $(document).ready(function() {
 	        
 	    },
 		eventClick: function(calEvent, jsEvent, view) {
-			
+			//edit event
 			if (calEvent.editable) {									
 				var start_date 	= Math.round(calEvent.start.getTime() / 1000);
 				if (calEvent.allDay == 1) {				
@@ -170,12 +174,19 @@ $(document).ready(function() {
 				}
 				
 				$('#visible_to_input').hide();
+				$('#visible_to_read_only').show();				
 				$('#add_as_announcement_div').hide();
 				
+				$("#visible_to_read_only_users").html(calEvent.sent_to);
 				
 				$('#color_calendar').html('{$type_label}');
 				$('#color_calendar').addClass('label_tag');
-				$('#color_calendar').addClass('{$type}_event');
+								
+				$('#color_calendar').removeClass('course_event');
+				$('#color_calendar').removeClass('personal_event');
+				$('#color_calendar').removeClass('group_event');
+				
+				$('#color_calendar').addClass(calEvent.type+'_event');
 				
 				$('#start_date').html(calEvent.start.getDate() +"/"+ calEvent.start.getMonth() +"/"+calEvent.start.getFullYear());
 				
@@ -206,9 +217,10 @@ $(document).ready(function() {
 								success:function() {
 									calEvent.title 			= $("#title").val();
 									calEvent.start 			= calEvent.start;
-									calEvent.end 			= calEvent.end;
+									calEvent.end 			= calEvent.end;									
 									calEvent.allDay 		= calEvent.allDay;
-									calEvent.description 	= $("#content").val();								
+									calEvent.description 	= $("#content").val();
+																	
 									calendar.fullCalendar('updateEvent', 
 											calEvent,
 											true // make the event "stick"
@@ -269,10 +281,20 @@ $(document).ready(function() {
                     <label for="date">{"To"|get_lang}</label>
                 </div>
                 <div class="formw">
-                    {$visible_to}
+                    {$visible_to}                    
                 </div>                  
             </div>
         {/if}
+        
+         <div id="visible_to_read_only" class="row" style="display:none">      
+                <div class="label">
+                    <label for="date">{"To"|get_lang}</label>
+                </div>
+                <div class="formw">
+                    <div id="visible_to_read_only_users"></div>                  
+                </div>                  
+         </div>
+        
           
         	
 		<div class="row">		

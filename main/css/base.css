@@ -3790,9 +3790,16 @@ form div.error input, form div.error textarea {
 .label_tag.admin_event { 
      background:red;
 }
+
 .label_tag.course_event { 
      background:#458B00;
 }
+
+.label_tag.group_event { 
+     background:#A0522D;
+}
+
+
 
 
 .label_tag.important {

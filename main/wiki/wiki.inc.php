@@ -1749,9 +1749,10 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
     $exportDir = api_get_path(SYS_COURSE_PATH).api_get_course_path(). '/document'.$groupPath;
     $exportFile = replace_dangerous_char($wikiTitle, 'strict') . $groupPart;
 
-    $clean_wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
-	$array_clean_wikiContents= explode('|', $clean_wikiContents);
-    $wikiContents= $array_clean_wikiContents[1];
+    //$clean_wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
+    //$array_clean_wikiContents= explode('|', $clean_wikiContents);
+    $wikiContents = trim(preg_replace("/\[[\[]?([^\]|]*)[|]?([^|\]]*)\][\]]?/", "$1", $wikiContents));
+    //TODO: put link instead of title
 
     $wikiContents = str_replace('{CONTENT}', $wikiContents, $template);
 
@@ -1784,10 +1785,8 @@ function export_to_pdf($id, $course_code) {
     $content_pdf = api_html_entity_decode($data['content'], ENT_QUOTES, api_get_system_encoding());
 	
 	//clean wiki links
-	$clean_pdf_content=trim(preg_replace("/\[\[|\]\]/", " ", $content_pdf));
-    $array_clean_pdf_content= explode('|', $clean_pdf_content);
-    $content_pdf= $array_clean_pdf_content[1];
-		
+    $content_pdf=trim(preg_replace("/\[[\[]?([^\]|]*)[|]?([^|\]]*)\][\]]?/", "$1", $content_pdf));
+    //TODO: It should be better to display the link insted of the tile but it is hard for [[title]] links
     $title_pdf   = api_html_entity_decode($data['title'], ENT_QUOTES, api_get_system_encoding());
 
     $title_pdf   = api_utf8_encode($title_pdf, api_get_system_encoding());

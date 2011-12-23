@@ -953,7 +953,7 @@ class MessageManager
 				$html .= '<div class="topic_div">';
 				
 				    $items = $topic['count'];				    
-				    $reply_label = ($items == 1) ? get_lang('Reply'): get_lang('Replies');
+				    $reply_label = ($items == 1) ? get_lang('GroupReply'): get_lang('GroupReplies');
 				    $html .= '<table width="100%"><tr><td width="20px" valign="top">'; 
 				    $html .= Display::div(Display::tag('span', $items).$reply_label, array('class' =>'group_discussions_replies'));
 				    $html .= '</td><td width="150px"  valign="top">';

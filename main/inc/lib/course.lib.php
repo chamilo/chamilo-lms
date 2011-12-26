@@ -3591,6 +3591,15 @@ class CourseManager {
             Database::delete($table_user_course_vote, array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
         }
     }
+    
+    function return_hot_courses($limit = 5) {
+        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);        
+        $params['url_id'] = api_get_current_access_url_id();
+        
+        $result = Database::select('c_id, accesses, points, users', $table_course_ranking, array('where' => array('url_id = ?' => $params), 'order' => array('accesses DESC, users DESC, points DESC'), 'limit' => $limit), 'all', true);
+        return $result;
+        
+    }
 
     
 } //end class CourseManager

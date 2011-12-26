@@ -16,13 +16,25 @@
 		{$message}
 		{$content}
 		{$announcements_block}
+
+                {if !(empty($hot_courses)) }	
+                     <h3>Hottest courses</h3>
+                    {foreach $hot_courses as $hot_course}
+                        <div class="categories-block-course">
+                            <div class="categories-content-course">
+                                Course id: {$hot_course.c_id}
+                            </div>
+                        </div>
+                    {/foreach}
+                {/if}
 	</div>
 	
 	<div id="menu-wrapper">
 	    
 		{if $_u.logged == 0}
 			{include file="default/layout/login_form.tpl"}
-		{/if}			
+		{/if}
+
 		{$profile_block}			
 		{$account_block}		
 		{$teacher_block}

@@ -1170,7 +1170,7 @@ class Database {
         }
 
         $sql    = "SELECT $clean_columns FROM $table_name $conditions";
-	    //echo $sql.'<br />';
+	//echo $sql.'<br />';
         $result = self::query($sql);
         $array = array();
         //if (self::num_rows($result) > 0 ) {
@@ -1237,28 +1237,47 @@ class Database {
                         $return_value = " WHERE $where_return" ;
                     }
                     break;
-                case 'order':
-                    $order_array = explode(' ', $condition_data);
-                    if (!empty($order_array)) {
-                        if (count($order_array) > 1 && !empty($order_array[0])) {                            
-                            $order_array[0] = self::escape_string($order_array[0]);
-                            if (!empty($order_array[1])) {
-                                $order_array[1] = strtolower($order_array[1]);
-                                $order = 'desc';
-                                if (in_array($order_array[1], array('desc', 'asc'))) {
-                                    $order = $order_array[1];
+                case 'order':                    
+                    $order_array = $condition_data;                
+                    
+                    if (!empty($order_array)) {                           
+                        if (count($order_array) >= 1 && !empty($order_array[0])) {                            
+                            $order_array = self::escape_string($order_array[0]);
+                            
+                            $new_order_array = explode(',', $order_array);
+                            
+                            $temp_value = array();
+                 
+                            foreach($new_order_array as $element) {
+                                $element = explode(' ', $element);
+                                $element = array_filter($element);
+                                $element = array_values($element);
+                                
+                                if (!empty($element[1])) {
+                                    $element[1] = strtolower($element[1]);
+                                    $order = 'DESC';
+                                    if (in_array($element[1], array('desc', 'asc'))) {
+                                        $order = $element[1];
+                                    }                            
+                                    $temp_value[]= $element[0].' '.$order.' ';                                       
+                                } else {
+                                    //by default DESC
+                                    $temp_value[]= $element[0].' DESC ';                                       
                                 }
                             }
-                            $return_value .= ' ORDER BY '.$order_array[0].'  '.$order;
-                        }  else {
-                            $return_value .= ' ORDER BY '.$order_array[0].' DESC ';                            
+                            if (!empty($temp_value)) {
+                                $return_value .= ' ORDER BY '.implode(', ', $temp_value);                                
+                            } else {
+                                //$return_value .= '';
+                            }
                         }
                     }                    
                     break;
                 case 'limit':
                     $limit_array = explode(',', $condition_data);
+                    
                     if (!empty($limit_array)) {
-                        if (count($limit_array) > 1) {
+                        if (count($limit_array) > 1) {                            
                             $return_value .= ' LIMIT '.intval($limit_array[0]).' , '.intval($limit_array[1]);
                         }  else {
                             $return_value .= ' LIMIT '.intval($limit_array[0]);

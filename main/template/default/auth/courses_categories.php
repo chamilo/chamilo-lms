@@ -33,7 +33,7 @@ $stok = Security::get_token();
            $.ajax({
                url: $(this).attr('rel'),
                success: function(data) {
-                   if(data == 'added') {
+                   if(data == 'added') {                                                
                         //$('#vote_label_' + id).html('Saved');
                         $('#vote_label2_' + id).html("<?php echo get_lang('Saved')?>");
                    }

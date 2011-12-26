@@ -224,7 +224,9 @@ if (stripos("flash_yes", $_SESSION['sniff_check_some_activex'])===0 || stripos("
 	
 	//js verification - To annoying of redirecting every time the page
 	//$controller->tpl->assign('sniff_notification',  $sniff_notification);
-}
+}    
+
+$controller->tpl->assign('hot_courses',                 $controller->return_hot_courses());
 
 $controller->tpl->assign('plugin_courses_block', 		$controller->return_courses_main_plugin());
 $controller->tpl->assign('profile_block', 				$controller->return_profile_block());

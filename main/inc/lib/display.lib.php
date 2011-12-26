@@ -1286,11 +1286,11 @@ class Display {
         }
         $html = '<ul id = "'.$id.'" class="star-rating">
             <li class="current-rating" style="width:'.$percentage.'px;"></li>
-            <li><a href="javascript:void(0)" rel="'.$url.'&star=1" title="1 star out of 5"  class="one-star">1</a></li>
-            <li><a href="javascript:void(0)" rel="'.$url.'&star=2" title="2 stars out of 5" class="two-stars">2</a></li>
-            <li><a href="javascript:void(0)" rel="'.$url.'&star=3" title="3 stars out of 5" class="three-stars">3</a></li>
-            <li><a href="javascript:void(0)" rel="'.$url.'&star=4" title="4 stars out of 5" class="four-stars">4</a></li>
-            <li><a href="javascript:void(0)" rel="'.$url.'&star=5" title="5 stars out of 5" class="five-stars">5</a></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=1" title="'.get_lang('OneStarOutOf5').'"  class="one-star">1</a></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=2" title="'.get_lang('TwoStarsOutOf5').'" class="two-stars">2</a></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=3" title="'.get_lang('ThreeStarsOutOf5').'" class="three-stars">3</a></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=4" title="'.get_lang('FourStarsOutOf5').'" class="four-stars">4</a></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=5" title="'.get_lang('FiveStarsOutOf5').'" class="five-stars">5</a></li>
         </ul>';
         
         //if (!isset($number_of_users_who_voted)) {

@@ -1324,4 +1324,8 @@ class IndexManager {
 			}
 		}
 	}
+
+    function return_hot_courses() {
+        Course::manager
+    }
 }

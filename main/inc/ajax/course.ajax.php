@@ -11,16 +11,12 @@ $action = $_REQUEST['a'];
 $user_id = api_get_user_id();
 
 switch ($action) {    
-    case 'course_vote':
+    case 'add_course_vote':
         if (!api_is_anonymous()) {
      	    $course_id = intval($_REQUEST['course_id']);
             $star      = intval($_REQUEST['star']);
-            
-            if (!in_array($star, array(1,2,3,4,5))) {
-                //trying to hack the star rating ...
-                exit;
-            }
-            CourseManager::add_course_vote($user_id, $course_id, 0);
+            $result    = CourseManager::add_course_vote($user_id, $star, $course_id, 0);
+            echo $result;            
         }
         break;
     default:

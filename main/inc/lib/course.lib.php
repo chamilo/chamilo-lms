@@ -172,67 +172,6 @@ class CourseManager {
     }
 
     /**
-     * 
-     * Updates the course ranking 
-     * @param int   course id
-     * @param int   session id
-     * @param id    url id
-     * 
-     **/    
-    public function update_course_ranking($course_id = null, $session_id = null, $url_id = null) {        
-        //Course catalog stats modifications see #4191
-        
-        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
-        $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
-        
-        
-        $now = api_get_utc_datetime();
-        
-        $course_id  = empty($course_id)     ? api_get_course_int_id() : intval($course_id);
-        $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
-        $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
-        
-        $params = array(
-            'c_id'          => $course_id,
-            'session_id'    => $session_id,
-            'url_id'        => $url_id,
-            'creation_date' => $now,
-        );
-         
-        $result = Database::select('*', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');        
-        
-        // Problem here every thime we load the courses/XXXX/index.php course home page we update the access 
-        
-        if (empty($result)) {
-            $params['accesses'] = 1;
-            $result = Database::insert($table_course_ranking, $params);
-        } else {        
-            $params['accesses'] = intval($result['accesses']) + 1;
-            $result = Database::update($table_course_ranking, $params, array('c_id = ? AND session_id = ? AND url_id = ?' => $params));        
-        }
-        return $result;
-    }
-
-    public function remove_course_ranking($course_id, $session_id, $url_id = null) {
-        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
-        $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
-        if (!empty($course_id) && isset($session_id)) {
-            
-            $url_id     = empty($url_id) ? api_get_current_access_url_id() : intval($url_id);
-            $params = array(
-                'c_id'          => $course_id,
-                'session_id'    => $session_id,
-                'url_id'        => $url_id,                
-            );
-         
-            
-            Database::delete($table_course_ranking,   array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
-            Database::delete($table_user_course_vote, array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
-        }
-    }
-    
-
-    /**
      * Returns all the information of a given coursecode
      * @param string $course_code, the course code
      * @return an array with all the fields of the course table
@@ -3493,5 +3432,165 @@ class CourseManager {
             $result = Database::query($sql);            
         }
     }
+    
+    public function get_course_ranking($course_id, $session_id = null, $url_id = null) {
+        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
+        
+        $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
+        $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
+        
+        $params = array(
+            'c_id'          => $course_id,
+            'session_id'    => $session_id,
+            'url_id'        => $url_id,
+            'creation_date' => $now,
+        );
+         
+        $result = Database::select('id, accesses, points, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
+        return $result;
+    }
+    
+    /**
+     * 
+     * Updates the course ranking 
+     * @param int   course id
+     * @param int   session id
+     * @param id    url id
+     * 
+     **/    
+    public function update_course_ranking($course_id = null, $session_id = null, $url_id = null, $points_to_add = null, $add_access = true, $add_user = true) {        
+        //Course catalog stats modifications see #4191        
+        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
+                
+        $now = api_get_utc_datetime();
+        
+        $course_id  = empty($course_id)     ? api_get_course_int_id() : intval($course_id);
+        $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
+        $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
+        
+        $params = array(
+            'c_id'          => $course_id,
+            'session_id'    => $session_id,
+            'url_id'        => $url_id,
+            'creation_date' => $now,
+        );
+         
+        $result = Database::select('id, accesses, points, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');        
+        
+        // Problem here every thime we load the courses/XXXX/index.php course home page we update the access 
+        
+        if (empty($result)) {
+            if ($add_access) {
+                $params['accesses'] = 1;    
+            }            
+            //The votes and users are empty
+            if (isset($points_to_add) && !empty($points_to_add)) {
+               $params['points'] = intval($points_to_add);
+            }
+            if ($add_user) {
+                $params['users'] = 1;
+            }
+            $result = Database::insert($table_course_ranking, $params);
+        } else {
+            $my_params = array();
+            
+            if ($add_access) {        
+                $my_params['accesses'] = intval($result['accesses']) + 1;
+            }
+            if (isset($points_to_add) && !empty($points_to_add)) {                
+               $my_params['points'] = $result['points'] + $points_to_add;               
+            }
+            if ($add_user) {
+                $my_params['users']  = $result['users'] + 1;
+            }
+
+            if (!empty($my_params)) {
+                $result = Database::update($table_course_ranking, $my_params, array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
+            }        
+        }
+        return $result;
+    }
+
+
+    /**
+     * Add user vote to a course
+     * 
+     * @param   int user id
+     * @param   int vote [1..5]
+     * @param   int course id
+     * @param   int session id
+     * @param   int url id 
+     *  
+     */
+    
+    public function add_course_vote($user_id, $vote, $course_id, $session_id = null, $url_id = null) {
+        $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
+        
+        $course_id  = empty($course_id)     ? api_get_course_int_id() : intval($course_id);
+        $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
+        $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
+        $vote       = intval($vote);
+        
+        if (!in_array($vote, array(1,2,3,4,5))) {
+            return false;
+        }
+        
+        $params = array(
+            'user_id'       => intval($user_id),
+            'c_id'          => $course_id,
+            'session_id'    => $session_id,
+            'url_id'        => $url_id,
+            'vote'          => $vote
+        );
+        
+        $action_done = false;
+        
+        $result = Database::select('id, vote', $table_user_course_vote, array('where' => array('user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
+
+        if (empty($result)) {            
+            $result = Database::insert($table_user_course_vote, $params);
+            $points_to_add = $vote;
+            $add_user = true;
+            $action_done = 'added';
+        } else {            
+            $my_params = array('vote' => $vote);
+            $points_to_add = $vote - $result['vote'];
+            $add_user = false;
+            $result = Database::update($table_user_course_vote, $my_params, array('user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params));
+            $action_done = 'updated';
+        }
+        //Current points 
+        
+        if (!empty($points_to_add)) {
+            self::update_course_ranking($course_id, $session_id, $url_id, $points_to_add, false, $add_user);
+        }
+        return $action_done;
+        
+    }
+    
+    /**
+     * Remove course ranking + user votes
+     * 
+     * @param   int course id
+     * @param   int session id
+     * @param   int url id 
+     * 
+     */
+    public function remove_course_ranking($course_id, $session_id, $url_id = null) {
+        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
+        $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
+        if (!empty($course_id) && isset($session_id)) {
+            
+            $url_id     = empty($url_id) ? api_get_current_access_url_id() : intval($url_id);
+            $params = array(
+                'c_id'          => $course_id,
+                'session_id'    => $session_id,
+                'url_id'        => $url_id,                
+            );
+            Database::delete($table_course_ranking,   array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
+            Database::delete($table_user_course_vote, array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
+        }
+    }
+
     
 } //end class CourseManager

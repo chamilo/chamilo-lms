@@ -1271,4 +1271,34 @@ class Display {
         }
         return $output;
     }
+
+    /**
+     * 
+     * 
+     * @param   int     id of the class
+     * @param   int     percentage 0-100 %
+     * @param   string  url that will be added (for the jquery stuff)
+     **/
+    public function return_rating_system($id, $percentage, $url, $number_of_users_who_voted = null) {
+        $percentage = intval($percentage);
+        if (!empty($percentage)) {
+            $percentage = $percentage*125/100;
+        }
+        $html = '<ul id = "'.$id.'" class="star-rating">
+            <li class="current-rating" style="width:'.$percentage.'px;"></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=1" title="1 star out of 5"  class="one-star">1</a></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=2" title="2 stars out of 5" class="two-stars">2</a></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=3" title="3 stars out of 5" class="three-stars">3</a></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=4" title="4 stars out of 5" class="four-stars">4</a></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=5" title="5 stars out of 5" class="five-stars">5</a></li>
+        </ul>';
+        
+        //if (!isset($number_of_users_who_voted)) {
+            $label = $number_of_users_who_voted == 1 ? get_lang('Vote') : get_lang('Votes'); 
+            $html .= Display::span($number_of_users_who_voted.' '.$label, array('id' =>  'vote_label_'.$id));
+            $html .= ' '.Display::span(' ', array('id' =>  'vote_label2_'.$id));
+        //}
+        return $html;
+        
+    }
 } //end class Display

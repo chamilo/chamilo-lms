@@ -429,6 +429,8 @@ class Auth
         $tbl_course               = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLE_COURSE_FIELD       = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
+        
 
         // get course list auto-register
         $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id = tcf.id 
@@ -449,22 +451,24 @@ class Auth
         
         if (!empty($random_value)) {
             $random_value = intval($random_value);
-            $sql = "SELECT * FROM $tbl_course WHERE 1 $without_special_courses ORDER BY RAND() LIMIT $random_value";
+            $sql = "SELECT * FROM $tbl_course course, (SELECT CEIL(MAX($tbl_course.id) * RAND()) AS randId FROM $tbl_course ) AS someRandId 
+            WHERE course.id >= someRandId.randId $without_special_courses";
         
             if ($_configuration['multiple_access_urls']) {
                 $url_access_id = api_get_current_access_url_id();                
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
-                        ON (url_rel_course.course_code=course.code)
-                        WHERE access_url_id = $url_access_id $without_special_courses ORDER BY RAND() LIMIT $random_value";
+                
+                //$table_course_ranking ranking
+                //AND ranking.c_id
+                $sql = "SELECT * FROM $tbl_course course, (SELECT CEIL(MAX($tbl_course.id) * RAND()) AS randId FROM $tbl_course INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.course_code=$tbl_course.code) WHERE access_url_id = $url_access_id ) AS someRandId
+                        WHERE course.id AND course.id >= someRandId.randId $without_special_courses $without_special_courses";
             }
             
-            $sql = "SELECT * FROM $tbl_course course, (SELECT CEIL(MAX($tbl_course.id) * RAND()) AS randId FROM $tbl_course) AS someRandId 
-                    WHERE course.id >= someRandId.randId $without_special_courses";
+            
             
         } else {
             $category_code = Database::escape_string($category_code);
-            //$my_category = (empty($category) ? " IS NULL" : "='".$category."'");
             $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title ";
             
             //showing only the courses of the current Chamilo access_url_id
@@ -487,7 +491,20 @@ class Auth
                 if ($row['tutor_name'] == '0') {
                     $row['tutor_name'] = get_lang('NoManager');
                 }
+                
+                $point_info = CourseManager::get_course_ranking($row['id'], 0);
+                
+                $points = 0;
+                $users_who_voted = 0;
+                if (!empty($point_info['users'])) {
+                    $users_who_voted = $point_info['users'];
+                    $points = $point_info['points']/$point_info['users'] * 100 / 5;    
+                }
+                
                 $courses[] = array(
+                                    'real_id'           => $row['id'],
+                                    'point_average'     => $points,
+                                    'users_who_voted'   => $users_who_voted,                                    
                                     'code'              => $row['code'],
                                     'directory'         => $row['directory'],
                                     'db'                => $row['db_name'],

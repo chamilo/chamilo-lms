@@ -2818,35 +2818,34 @@ CREATE TABLE skill_rel_profile (
 
 
 
+CREATE TABLE track_course_ranking (
+ id   int unsigned not null PRIMARY KEY AUTO_INCREMENT,
+ c_id  int unsigned not null,
+ session_id  int unsigned not null default 0,
+ url_id  int unsigned not null default 0, 
+ accesses int unsigned not null default 0,
+ points int unsigned not null default 0,
+ users int unsigned not null default 0,
+ creation_date datetime not null
+);
+
+ALTER TABLE track_course_ranking ADD INDEX idx_tcc_cid (c_id);
+ALTER TABLE track_course_ranking ADD INDEX idx_tcc_sid (session_id);
+ALTER TABLE track_course_ranking ADD INDEX idx_tcc_urlid (url_id);
+ALTER TABLE track_course_ranking ADD INDEX idx_tcc_creation_date (creation_date);
+
+CREATE TABLE user_course_vote(
+  id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
+  c_id int unsigned not null,
+  user_id int unsigned not null,  
+  session_id int unsigned not null default 0,
+  url_id int unsigned not null default 0,
+  vote int unsigned not null default 0
+);
+
+ALTER TABLE user_course_vote ADD INDEX idx_ucv_cid (c_id);
+ALTER TABLE user_course_vote ADD INDEX idx_ucv_uid (user_id);
+ALTER TABLE user_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
 
 
---
--- Table structure for event alert sending
--- Pending check and approval
--- CREATE TABLE event_type (
---   id int unsigned NOT NULL AUTO_INCREMENT,
---   name varchar(50) NOT NULL,
---   name_lang_var varchar(40) NOT NULL,
---   desc_lang_var varchar(50) NOT NULL,
---   PRIMARY KEY (id)
--- );
--- 
--- CREATE TABLE event_type_message (
---   id int unsigned NOT NULL AUTO_INCREMENT,
---   event_type_id int NOT NULL,
---   language_id int NOT NULL,
---   message varchar(200) NOT NULL,
---   subject varchar(60) NOT NULL,
---   PRIMARY KEY (id)
--- );
--- 
--- CREATE TABLE user_rel_event_type (
---   id int NOT NULL AUTO_INCREMENT,
---   user_id int unsigned NOT NULL,
---   event_type_id int unsigned NOT NULL,
---   PRIMARY KEY (id)
--- );
--- 
--- INSERT INTO event_type VALUES (1, 'course_deleted','courseDeletedTitle','courseDeletedComment'),(2,'course_created','courseCreatedTitle','courseCreatedComment'),(3,'user_deleted','userDeletedTitle','userDeletedComment'),(4,'user_created','userCreatedTitle','userCreatedComment'), (5, 'session_created','sessionCreatedTitle','sessionCreatedComment'), (6,'session_deleted','sessionDeletedTitle','sessionDeletedComment'), (7,'session_category_created','sessionCategoryCreatedTitle','sessionCategoryCreatedComment'),(8,'session_category_deleted','sessionCategoryDeletedTitle','sessionCategoryDeletedComment'),(9,'settings_changed','settingsChangedTitle','settingsChangedComment'),(10,'user_subscribed','userSubscribedTitle','userSubscribedComment'), (11,'user_unsubscribed','userUnsubscribedTitle','userUnsubscribedComment');
--- 
--- INSERT INTO event_type_message (id,event_type_id,language_id,message,subject) VALUES (1,4,10,'ReportMessageUserCreated',''),(2,1,10,'DeleteCourse',''),(3,2,10,'CreateCourse',''),(4,3,10,'ReportMessageUserDeleted',''),(6,5,10,'CreateSessionTest',''),(7,6,10,'DeleteSession',''),(8,7,10,'CreateSessionCategory',''),(9,8,10,'DeleteSessionCategory',''),(10,9,10,'ChangeSetting',''),(11,10,10,'Subscribe',''),(12,11,10,'Unsubscribe','');
+

@@ -76,16 +76,15 @@ switch ($action) {
             exit;
         }		
 		
-		// Get the name of the database course.
-		$database_course        = CourseManager::get_name_database_course($_GET['code']);
-		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $database_course);		
+		// Get the name of the database course.		
+		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 		
 		$course_info = api_get_course_info($_GET['code']);
 		
 		echo Display::tag('h2', $course_info['name']);
 		echo '<br />';
 	
-		$sql = "SELECT * FROM $tbl_course_description WHERE session_id = 0 ORDER BY id";
+		$sql = "SELECT * FROM $tbl_course_description WHERE c_id = ".$course_info['real_id']." AND session_id = 0 ORDER BY id";
 		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0 ) {		        
 		    while ($description = Database::fetch_object($result)) {

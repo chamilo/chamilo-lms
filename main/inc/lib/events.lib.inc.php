@@ -107,7 +107,7 @@ function event_login() {
  * @desc Record information for access event for courses
  */
 function event_access_course() {
-	global $_user, $TABLETRACK_ACCESS,  $TABLETRACK_LASTACCESS, $table_course_ranking, $table_user_course_vote;
+	global $_user, $TABLETRACK_ACCESS,  $TABLETRACK_LASTACCESS;
 	
 	$id_session = api_get_session_id();	
 	$now        = api_get_utc_datetime();    

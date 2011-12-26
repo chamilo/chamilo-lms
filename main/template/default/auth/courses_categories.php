@@ -20,7 +20,33 @@ $stok = Security::get_token();
     <?php } ?>
 */
 
-if (intval($_GET['hidden_links']) != 1) { ?>
+?>
+
+<script>
+    $(document).ready( function() {
+       $('.star-rating li a').click(function(){
+           
+           var id = $(this).parents('ul').attr('id');
+                      
+           $('#vote_label2_' + id).html('<?php echo Display::return_icon('loading1.gif');?>');
+           
+           $.ajax({
+               url: $(this).attr('rel'),
+               success: function(data) {
+                   if(data == 'added') {
+                        //$('#vote_label_' + id).html('Saved');
+                        $('#vote_label2_' + id).html("<?php echo get_lang('Saved')?>");
+                   }
+                   if(data == 'updated') {
+                        $('#vote_label2_' + id).html("<?php echo get_lang('Saved')?>");
+                   }
+               },
+           })
+       });
+    });
+</script>
+
+<?php if (intval($_GET['hidden_links']) != 1) { ?>
 
 <div id="actions" class="actions">
 	<span id="categories-search">
@@ -110,6 +136,9 @@ if (intval($_GET['hidden_links']) != 1) { ?>
         if (!empty($search_term)) {
             echo "<p><strong>".get_lang('SearchResultsFor')." ".Security::remove_XSS($_POST['search_term'])."</strong><br />";
         }
+        
+        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+      
 
         if (!empty($browse_courses_in_category)) {
 
@@ -128,13 +157,18 @@ if (intval($_GET['hidden_links']) != 1) { ?>
                 } else {
                     $course_medium_image = api_get_path(WEB_IMG_PATH).'without_picture.png'; // without picture
                 }
+                
+                $rating = Display::return_rating_system($course['code'].'_rating', $course['point_average'], $ajax_url.'&course_id='.$course['real_id'], $course['users_who_voted']);
 
+                //<div class="course-block-main-item"><div class="left">'.get_lang('Teacher').'</div><div class="course-block-teacher right">'.$tutor_name.'</div></div>
+                //<div class="course-block-main-item"><div class="left">'.get_lang('CreationDate').'</div><div class="course-block-date">'.api_format_date($creation_date,DATE_FORMAT_SHORT).'</div></div>
                 echo '<div class="categories-block-course">
                         <div class="categories-content-course">
                             <div class="categories-course-description">
-                                <div class="course-block-title">'.$title.'</div>
-                                <div class="course-block-main-item"><div class="left">'.get_lang('Teacher').'</div><div class="course-block-teacher right">'.$tutor_name.'</div></div>
-                                <div class="course-block-main-item"><div class="left">'.get_lang('CreationDate').'</div><div class="course-block-date">'.api_format_date($creation_date,DATE_FORMAT_SHORT).'</div></div>
+                                <div class="course-block-title">'.cut($title, 60).'</div>
+                                '.$rating.'        
+                                
+                                
                             </div>';
                 
                 echo '<div class="categories-course-picture"><center>';

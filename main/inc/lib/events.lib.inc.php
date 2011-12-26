@@ -26,6 +26,7 @@ $TABLETRACK_EXERCICES 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK
 $TABLETRACK_LASTACCESS 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS); //for "what's new" notification
 $TABLETRACK_DEFAULT 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 
+
 /* FUNCTIONS */
 /**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
@@ -106,32 +107,36 @@ function event_login() {
  * @desc Record information for access event for courses
  */
 function event_access_course() {
-	global $_user;
-	global $_cid;
-	global $TABLETRACK_ACCESS;
-	global $TABLETRACK_LASTACCESS; //for "what's new" notification
-
+	global $_user, $TABLETRACK_ACCESS,  $TABLETRACK_LASTACCESS, $table_course_ranking, $table_user_course_vote;
+	
 	$id_session = api_get_session_id();	
-	$reallyNow = api_get_utc_datetime();
+	$now        = api_get_utc_datetime();    
+    $_cid       = api_get_course_id();    
+    
 	if ($_user['user_id']) {
 		$user_id = "'".$_user['user_id']."'";
 	} else {
 		$user_id = "0"; // no one
 	}
 	$sql = "INSERT INTO ".$TABLETRACK_ACCESS."  (access_user_id, access_cours_code, access_date, access_session_id) VALUES
-		    (".$user_id.", '".$_cid."', '".$reallyNow."','".$id_session."')";
+		    (".$user_id.", '".$_cid."', '".$now."','".$id_session."')";
 	$res = Database::query($sql);
+	
 	// added for "what's new" notification
-	$sql = "UPDATE $TABLETRACK_LASTACCESS  SET access_date = '$reallyNow' 
+	$sql = "UPDATE $TABLETRACK_LASTACCESS  SET access_date = '$now' 
 			WHERE access_user_id = $user_id AND access_cours_code = '$_cid' AND access_tool IS NULL AND access_session_id=".$id_session;
 	$res = Database::query($sql);
+    
 	if (Database::affected_rows() == 0) {
 		$sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id, access_cours_code, access_date, access_session_id)
-				VALUES (".$user_id.", '".$_cid."', '$reallyNow', '".$id_session."')";
+				VALUES (".$user_id.", '".$_cid."', '$now', '".$id_session."')";
 		$res = Database::query($sql);
 	}
 	// end "what's new" notification
-	return 1;
+	
+    //Course catalog stats modifications see #4191    
+    CourseManager::update_course_ranking();
+    return 1;
 }
 
 /**

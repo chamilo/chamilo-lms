@@ -135,6 +135,10 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'show_to_admin_and_teachers', 'ShowToAdminsAndTeachers');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'show_to_all', 'ShowToAllUsers');
 
+
+
+
+
 -- Do not move this query
 UPDATE settings_current SET selected_value = '1.9.0.16368' WHERE variable = 'chamilo_database_version';
 

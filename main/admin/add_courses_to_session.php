@@ -15,7 +15,6 @@ require_once '../inc/global.inc.php';
 
 // including additonal libraries
 
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'add_courses_to_session_functions.lib.php';
 
 $id_session = intval($_GET['id_session']);
@@ -134,7 +133,11 @@ if ($_POST['formSent']) {
 		}
 		if(!$exists) {
 			$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code) VALUES('$id_session','$enreg_course')";
-			Database::query($sql_insert_rel_course );
+			Database::query($sql_insert_rel_course);
+            
+            $course_info = api_get_course_info($enreg_course);
+            CourseManager::update_course_ranking($course_info['real_id'], $id_session);
+            
 			//We add in the existing courses table the current course, to not try to add another time the current course
 			$existingCourses[]=array('course_code'=>$enreg_course);
 			$nbr_users=0;
@@ -152,10 +155,12 @@ if ($_POST['formSent']) {
 	}
 
 	foreach($existingCourses as $existingCourse) {
-		if(!in_array($existingCourse['course_code'], $CourseList)){
+		if(!in_array($existingCourse['course_code'], $CourseList)) {
+		    $course_info = api_get_course_info($existingCourse['course_code']);
+            CourseManager::remove_course_ranking($course_info['real_id'], $id_session);
 			Database::query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
 			Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
-
+            
 		}
 	}
 	$nbr_courses=count($CourseList);

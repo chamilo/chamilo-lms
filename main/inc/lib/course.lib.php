@@ -161,11 +161,74 @@ class CourseManager {
                     prepare_course_repository($course_info['directory'], $course_info['code']);
                     $pictures_array = fill_course_repository($course_info['directory'], $params['exemplary_content']);                      
                     fill_Db_course($course_id, $course_info['directory'], $course_info['course_language'], $pictures_array, $params['exemplary_content']);
+                    
+                    self::update_course_ranking($course_info['real_id'], 0);
+                    
                     return $course_info;                    
                 }
             }
         }
         return false;            
+    }
+
+    /**
+     * 
+     * Updates the course ranking 
+     * @param int   course id
+     * @param int   session id
+     * @param id    url id
+     * 
+     **/    
+    public function update_course_ranking($course_id = null, $session_id = null, $url_id = null) {        
+        //Course catalog stats modifications see #4191
+        
+        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
+        $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
+        
+        
+        $now = api_get_utc_datetime();
+        
+        $course_id  = empty($course_id)     ? api_get_course_int_id() : intval($course_id);
+        $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
+        $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
+        
+        $params = array(
+            'c_id'          => $course_id,
+            'session_id'    => $session_id,
+            'url_id'        => $url_id,
+            'creation_date' => $now,
+        );
+         
+        $result = Database::select('*', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');        
+        
+        // Problem here every thime we load the courses/XXXX/index.php course home page we update the access 
+        
+        if (empty($result)) {
+            $params['accesses'] = 1;
+            $result = Database::insert($table_course_ranking, $params);
+        } else {        
+            $params['accesses'] = intval($result['accesses']) + 1;
+            $result = Database::update($table_course_ranking, $params, array('c_id = ? AND session_id = ? AND url_id = ?' => $params));        
+        }
+        return $result;
+    }
+
+    public function remove_course_ranking($course_id, $session_id, $url_id = null) {
+        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
+        $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
+        if (!empty($course_id) && isset($session_id)) {
+            
+            $url_id     = empty($url_id) ? api_get_current_access_url_id() : intval($url_id);
+            $params = array(
+                'c_id'          => $course_id,
+                'session_id'    => $session_id,
+                'url_id'        => $url_id,                
+            );
+         
+            
+            Database::delete($table_course_ranking,   array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
+            Database::delete($table_user_course_vote, array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
+        }
     }
     
 

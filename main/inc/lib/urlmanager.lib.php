@@ -535,12 +535,11 @@ class UrlManager
 	 * @param array user list
 	 * @param int access_url_id
 	 * */
-	public static function update_urls_rel_course($course_list,$access_url_id)
-	{
+	public static function update_urls_rel_course($course_list,$access_url_id) {
 		$table_course			= Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_url_rel_course	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
-		$sql = "SELECT course_code FROM $table_url_rel_course WHERE access_url_id=".Database::escape_string($access_url_id);
+		$sql = "SELECT course_code FROM $table_url_rel_course WHERE access_url_id=".intval($access_url_id);
 		$result = Database::query($sql);
 		$existing_courses = array();
 
@@ -549,9 +548,11 @@ class UrlManager
 		}
 
 		//adding courses
-		foreach($course_list as $course) {
-			if(!in_array($course, $existing_courses)) {
-				UrlManager::add_course_to_url($course,$access_url_id);
+		foreach($course_list as $course_code) {
+			if(!in_array($course_code, $existing_courses)) {
+				UrlManager::add_course_to_url($course_code, $access_url_id);
+                $course_info = api_get_course_info($course_code);
+                CourseManager::update_course_ranking($course_info['real_id'], 0, $access_url_id);
 			}
 		}
 
@@ -559,6 +560,8 @@ class UrlManager
 		foreach($existing_courses as $existing_course) {
 			if(!in_array($existing_course, $course_list)) {
 				UrlManager::delete_url_rel_course($existing_course,$access_url_id);
+                $course_info = api_get_course_info($existing_course);
+                CourseManager::update_course_ranking($course_info['real_id'], 0, $access_url_id);
 			}
 		}
 	}

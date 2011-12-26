@@ -2818,6 +2818,37 @@ CREATE TABLE skill_rel_profile (
 
 
 
+CREATE TABLE track_course_ranking (
+ id   int unsigned not null PRIMARY KEY AUTO_INCREMENT,
+ c_id  int unsigned not null,
+ session_id  int unsigned not null default 0,
+ url_id  int unsigned not null default 0, 
+ accesses int unsigned not null default 0,
+ votes int unsigned not null default 0,
+ users int unsigned not null default 0,
+ creation_date datetime not null,
+);
+
+ALTER TABLE track_course_ranking ADD INDEX idx_tcc_cid (c_id);
+ALTER TABLE track_course_ranking ADD INDEX idx_tcc_sid (session_id);
+ALTER TABLE track_course_ranking ADD INDEX idx_tcc_urlid (url_id);
+ALTER TABLE track_course_ranking ADD INDEX idx_tcc_creation_date (creation_date);
+
+CREATE TABLE user_course_vote(
+  id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
+  c_id int unsigned not null,
+  user_id int unsigned not null,  
+  session_id int unsigned not null default 0,
+  url_id int unsigned not null default 0
+);
+
+ALTER TABLE user_course_vote ADD INDEX idx_ucv_cid (c_id);
+ALTER TABLE user_course_vote ADD INDEX idx_ucv_uid (user_id);
+ALTER TABLE user_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
+
+
+
+
 
 
 --

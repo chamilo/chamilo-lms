@@ -19,8 +19,8 @@
 */
 class SessionManager {    
 	private function __construct() {
-
 	}
+    
     /**
      * Fetches a session from the database
      * @param   int     Session ID
@@ -135,18 +135,19 @@ class SessionManager {
 							   VALUES('".$name."','$date_start','$date_end','$id_coach',".api_get_user_id().",".$nb_days_acess_before.", ".$nb_days_acess_after.", ".$id_session_category.", ".$id_visibility.")";
 				Database::query($sql_insert);
 				$session_id = Database::insert_id();
-				
-				//Adding to the correct URL				
-				require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';				
                 
-                $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-                $access_url_id = api_get_current_access_url_id();
-                UrlManager::add_session_to_url($session_id,$access_url_id);            
-
-				// add event to system log				
-				$user_id = api_get_user_id();
-				event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), $user_id);
-
+                if (!empty($session_id)) {                	
+    				//Adding to the correct URL				
+    				require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';				
+                    
+                    $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+                    $access_url_id = api_get_current_access_url_id();
+                    UrlManager::add_session_to_url($session_id,$access_url_id);            
+    
+    				// add event to system log				
+    				$user_id = api_get_user_id();
+    				event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), $user_id);
+    		    }
 				return $session_id;
 			}
 		}

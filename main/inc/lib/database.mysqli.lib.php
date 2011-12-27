@@ -1159,7 +1159,7 @@ class Database {
                     $order_array = $condition_data;                
                     
                     if (!empty($order_array)) {                           
-                        if (count($order_array) >= 1 && !empty($order_array[0])) {                            
+                        if (is_array($order_array) && count($order_array) >= 1 && !empty($order_array[0])) {                            
                             $order_array = self::escape_string($order_array[0]);
                             
                             $new_order_array = explode(',', $order_array);

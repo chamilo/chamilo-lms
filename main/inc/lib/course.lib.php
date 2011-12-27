@@ -3591,15 +3591,40 @@ class CourseManager {
             Database::delete($table_user_course_vote, array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
         }
     }
+	
+	//Stats functions
     
-    function return_hot_courses($limit = 5) {
-        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);        
-        $params['url_id'] = api_get_current_access_url_id();
-        
-        $result = Database::select('c_id, accesses, points, users', $table_course_ranking, array('where' => array('url_id = ?' => $params), 'order' => array('accesses DESC, users DESC, points DESC'), 'limit' => $limit), 'all', true);
-        return $result;
-        
+    function return_hot_courses($days = 30, $limit = 5) {
+		$limit  = intval($limit);
+        $table_course_access	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);                
+		$today					= api_get_utc_datetime();
+		$today_diff				= time() -intval($days)*24*60*60;
+		$today_diff				= api_get_utc_datetime($today_diff);
+		//WHERE login_course_date <= '$today' AND login_course_date >= '$today_diff'
+		
+		//$table_course_access table uses the now() and interval ... 
+		
+        $sql = "SELECT COUNT(course_access_id) course_count, course_code FROM $table_course_access 
+				WHERE login_course_date <= now() AND login_course_date > DATE_SUB(now(), INTERVAL $days DAY)
+				GROUP BY course_code
+				ORDER BY course_count DESC 
+				LIMIT $limit";
+		$result = Database::query($sql);
+		$courses = array();
+		if (Database::num_rows($result)) {
+			$courses = Database::store_result($result, 'ASSOC');
+			foreach ($courses as &$my_course) {
+				$my_course['extra_info'] = api_get_course_info($my_course['course_code']);				
+			}
+		}		
+		return $courses;
     }
-
-    
+	
+	function return_most_accessed_courses($limit = 5) {
+		$table_course_ranking	= Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);        
+        $params['url_id']		= api_get_current_access_url_id();
+        
+        $result = Database::select('c_id, accesses, points, users', $table_course_ranking, array('where' => array('url_id = ?' => $params), 'order' => array('accesses DESC'), 'limit' => $limit), 'all', true);
+        return $result;
+	}    
 } //end class CourseManager

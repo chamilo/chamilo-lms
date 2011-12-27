@@ -35,6 +35,8 @@ if (isset($_SESSION['this_section']))
 require_once './main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
 
+$htmlHeadXtra[] = api_get_jquery_ui_js();
+
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
 /* Constants and CONFIGURATION parameters */
@@ -226,7 +228,7 @@ if (stripos("flash_yes", $_SESSION['sniff_check_some_activex'])===0 || stripos("
 	//$controller->tpl->assign('sniff_notification',  $sniff_notification);
 }    
 
-$controller->tpl->assign('hot_courses',                 $controller->return_hot_courses());
+//$controller->tpl->assign('hot_courses',                 $controller->return_hot_courses());
 
 $controller->tpl->assign('plugin_courses_block', 		$controller->return_courses_main_plugin());
 $controller->tpl->assign('profile_block', 				$controller->return_profile_block());

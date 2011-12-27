@@ -1154,7 +1154,7 @@ class Database {
      * @todo known issues, it doesn't work when using LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
     */
 
-    public static function select($columns = '*' , $table_name,  $conditions = array(), $type_result = 'all', $option = 'ASSOC') {
+    public static function select($columns, $table_name,  $conditions = array(), $type_result = 'all', $option = 'ASSOC') {
         $conditions = self::parse_conditions($conditions);
         
         //@todo we could do a describe here to check the columns ...

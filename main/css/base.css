@@ -1810,8 +1810,8 @@ button:hover {
     float:left;
     margin:10px;
     padding:12px;
-    width:250px;
-    min-height:294px;
+    width:95%;
+    /* min-height:294px; */
     color: #BBBBBB; 
 }
 
@@ -1843,10 +1843,15 @@ button:hover {
 }
 
 .categories-course-description {
-    margin-left:10px;
+    margin-left:18px;
     font-family:arial;
     font-size:11px;
     margin-bottom: 10px;
+	float:left;
+}
+
+.categories-course-links div {
+	padding-left:10px;
 }
 
 .categories-course-description .course-block-title {

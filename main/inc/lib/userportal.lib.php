@@ -1325,7 +1325,7 @@ class IndexManager {
 		}
 	}
 
-        function return_hot_courses() {
-            return CourseManager::return_hot_courses();
-        }
+	function return_hot_courses() {
+		return CourseManager::return_hot_courses();		
+	}
 }

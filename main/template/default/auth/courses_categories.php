@@ -163,13 +163,7 @@ $stok = Security::get_token();
                 //<div class="course-block-main-item"><div class="left">'.get_lang('Teacher').'</div><div class="course-block-teacher right">'.$tutor_name.'</div></div>
                 //<div class="course-block-main-item"><div class="left">'.get_lang('CreationDate').'</div><div class="course-block-date">'.api_format_date($creation_date,DATE_FORMAT_SHORT).'</div></div>
                 echo '<div class="categories-block-course">
-                        <div class="categories-content-course">
-                            <div class="categories-course-description">
-                                <div class="course-block-title">'.cut($title, 60).'</div>
-                                '.$rating.'        
-                                
-                                
-                            </div>';
+                        <div class="categories-content-course">';
                 
                 echo '<div class="categories-course-picture"><center>';
                 if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
@@ -178,18 +172,24 @@ $stok = Security::get_token();
                     echo '</a>';
                 } else {
                     echo '<img src="'.$course_medium_image.'" />';
-                }
-                
-                echo '</center>
-                            </div>
-                            <div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>';
+                }                
+                echo '</center></div>';
+				
+				
+				echo '<div class="categories-course-description">
+						<div class="course-block-title">'.cut($title, 60).'</div>
+						'.$rating.'
+					 </div>';
+				
+				echo '<div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>';
                 echo '</div>';
                 
                 echo '<div class="categories-course-links">';
                     // we display the icon to subscribe or the text already subscribed
                     if (!in_array($course['code'], $user_coursecodes)) {
                         if ($course['subscribe'] == SUBSCRIBE_ALLOWED) {
-                            echo '<div class="course-link-desc left"><a class="a_button orange medium" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a></div>';
+                            echo '<div class="course-link-desc right">
+								<a class="a_button gray small" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a></div>';
                         }
                     }
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {

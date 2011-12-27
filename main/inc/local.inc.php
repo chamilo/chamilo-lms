@@ -928,7 +928,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 				$result = Database::query($sql);
                 $row 	= Database::store_result($result);
            
-                if (isset($row) && $row[0]['id_coach'] == $_user['user_id']) {
+                if (isset($row) && isset($row[0]) && $row[0]['id_coach'] == $_user['user_id']) {
 					$_courseUser['role'] = 'Professor';
 	                $is_courseMember     = true;
 	                $is_courseTutor      = true;
@@ -941,7 +941,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 	                	$is_courseAdmin = false;
 					}
 					api_session_register('_courseUser');
-	            } elseif(isset($row) && $row[0]['session_admin_id']==$_user['user_id']) { 
+	            } elseif( isset($row) && isset($row[0]) && $row[0]['session_admin_id']==$_user['user_id']) { 
 					$_courseUser['role'] = 'Professor';
 	                $is_courseMember     = false;
 	                $is_courseTutor      = false;

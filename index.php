@@ -26,6 +26,7 @@ if (!api_is_anonymous()) {
 	$header_title = " ";
 }
 
+$htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('bxslider'));
 $htmlHeadXtra[] ='
 <script type="text/javascript">
@@ -180,6 +181,8 @@ if (!api_is_anonymous()) {
 		$controller->tpl->assign('teacher_block', 			$controller->return_teacher_link());
 	}
 }
+
+$controller->tpl->assign('hot_courses',             $controller->return_hot_courses());
 
 $controller->tpl->assign('announcements_block', 	$controller->return_announcements());
 $controller->tpl->assign('home_page_block', 		$controller->return_home_page());

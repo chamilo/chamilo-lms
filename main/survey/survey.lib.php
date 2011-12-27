@@ -1179,6 +1179,25 @@ class survey_manager {
 		Database::query("DELETE FROM $table_survey_answer WHERE c_id = $course_id AND survey_id=$survey_id");
 		return true;
 	}
+	
+	function is_user_filled_survey($user_id, $survey_id, $course_id) {		
+		$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER);
+		
+		$user_id	= intval($user_id);
+		$course_id	= intval($course_id);
+		$survey_id	= intval($survey_id);
+		
+		$sql = "SELECT DISTINCT user FROM $table_survey_answer 
+			        WHERE	c_id		= $course_id AND 
+							user		= $user_id AND 
+							survey_id	= $survey_id";
+		$result = Database::query($sql);
+		if (Database::num_rows($result)) {
+			return true;
+		}
+		return false;
+		
+	}
 
 	/**
 	 * This function gets all the persons who have filled the survey
@@ -1191,6 +1210,7 @@ class survey_manager {
 	 */
 	function get_people_who_filled_survey($survey_id, $all_user_info = false, $course_id = null) {
 		global $_course;
+		api_get_path(SYS_COURSE_PATH);
 
 		// Database table definition
 		$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER);

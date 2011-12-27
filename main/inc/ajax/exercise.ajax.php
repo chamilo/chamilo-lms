@@ -9,7 +9,9 @@ require_once '../../exercice/question.class.php';
 require_once '../../exercice/answer.class.php';
 require_once '../global.inc.php';
 require_once '../../exercice/exercise.lib.php';
+
 api_protect_course_script(true);
+
 $action = $_REQUEST['a'];
 $course_id = api_get_course_int_id();
 

@@ -152,10 +152,7 @@ $(function() {
     jQuery("#sessions").jqGrid('filterToolbar',options);    
     var sgrid = $("#sessions")[0];
     sgrid.triggerToolbar();
-    
-     
 });
-
 </script>
 <div class="actions">
 <?php 

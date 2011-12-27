@@ -134,7 +134,7 @@ function get_specific_field_values_list_by_prefix($prefix, $course_code, $tool_i
   $table_sf = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
   $table_sfv = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
   $sql = 'SELECT sfv.value FROM %s sf LEFT JOIN %s sfv ON sf.id = sfv.field_id' .
-         ' WHERE sf.code = \'%s\' AND sfv.course_code = \'%s\' AND tool_id = \'%s\' AND sfv.ref_id = %s';
+         ' WHERE sf.code = \'%s\' AND sfv.c_id = \'%s\' AND tool_id = \'%s\' AND sfv.ref_id = %s';
   $sql = sprintf($sql, $table_sf, $table_sfv, $prefix, $course_code, $tool_id, $ref_id);
   $sql_result = Database::query($sql);
   while ($result = Database::fetch_array($sql_result)) {

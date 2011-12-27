@@ -314,7 +314,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 			foreach ($specific_fields as $specific_field) {
 				$default_values = '';
 				if ($_GET['action'] == 'editlink') {
-					$filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => Security::remove_XSS($_GET['id']), 'tool_id' => '\''. TOOL_LINK .'\'');
+					$filter = array('c_id'=> "'". api_get_course_int_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => Security::remove_XSS($_GET['id']), 'tool_id' => '\''. TOOL_LINK .'\'');
 					$values = get_specific_field_values_list($filter, array('value'));
 					if (!empty($values)) {
 						$arr_str_values = array();

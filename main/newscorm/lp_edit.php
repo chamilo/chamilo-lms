@@ -165,7 +165,7 @@ if (api_get_setting('search_enabled') === 'true') {
     $specific_fields = get_specific_field_list();
     foreach ($specific_fields as $specific_field) {
         $form -> addElement ('text', $specific_field['code'], $specific_field['name']);
-        $filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $_SESSION['oLP']->lp_id, 'tool_id' => '\''. TOOL_LEARNPATH .'\'');
+        $filter = array('c_id'=> "'". api_get_course_int_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $_SESSION['oLP']->lp_id, 'tool_id' => '\''. TOOL_LEARNPATH .'\'');
         $values = get_specific_field_values_list($filter, array('value'));
         if (!empty($values)) {
             $arr_str_values = array();

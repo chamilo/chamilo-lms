@@ -857,7 +857,7 @@ class learnpath {
         // Delete lp item id.
         foreach ($this->items as $id => $dummy) {
             //$this->items[$id]->delete();
-            $sql_del_view = "DELETE FROM $lp_item_view WHERE lp_item_id = '" . $id . "'";
+            $sql_del_view = "DELETE FROM $lp_item_view WHERE c_id = $course_id AND lp_item_id = '" . $id . "'";
             $res_del_item_view = Database::query($sql_del_view);
         }
 
@@ -3424,7 +3424,7 @@ class learnpath {
             while ($row = Database :: fetch_array($res)) {
                 if ($row['display_order'] != $i) { // If we find a gap in the order, we need to fix it.
                     $need_fix = true;
-                    $sql_u = "UPDATE $lp_table SET display_order = $i WHERE id = " . $row['id'];
+                    $sql_u = "UPDATE $lp_table SET display_order = $i WHERE c_id = ".$course_id." AND id = " . $row['id'];
                     $res_u = Database::query($sql_u);
                 }
                 $row['display_order'] = $i;
@@ -3451,7 +3451,7 @@ class learnpath {
     public function move_down($lp_id) {
         $course_id = api_get_course_int_id(); 
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT * FROM $lp_table ORDER BY display_order";
+        $sql = "SELECT * FROM $lp_table WHERE c_id = ".$course_id." ORDER BY display_order";
         $res = Database::query($sql);
         if ($res === false)
             return false;

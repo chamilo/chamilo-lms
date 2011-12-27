@@ -20,7 +20,33 @@ $stok = Security::get_token();
     <?php } ?>
 */
 
-if (intval($_GET['hidden_links']) != 1) { ?>
+?>
+
+<script>
+    $(document).ready( function() {
+       $('.star-rating li a').click(function(){
+           
+           var id = $(this).parents('ul').attr('id');
+                      
+           $('#vote_label2_' + id).html('<?php echo Display::return_icon('loading1.gif');?>');
+           
+           $.ajax({
+               url: $(this).attr('rel'),
+               success: function(data) {
+                   if(data == 'added') {                                                
+                        //$('#vote_label_' + id).html('Saved');
+                        $('#vote_label2_' + id).html("<?php echo get_lang('Saved')?>");
+                   }
+                   if(data == 'updated') {
+                        $('#vote_label2_' + id).html("<?php echo get_lang('Saved')?>");
+                   }
+               },
+           })
+       });
+    });
+</script>
+
+<?php if (intval($_GET['hidden_links']) != 1) { ?>
 
 <div id="actions" class="actions">
 	<span id="categories-search">
@@ -110,6 +136,9 @@ if (intval($_GET['hidden_links']) != 1) { ?>
         if (!empty($search_term)) {
             echo "<p><strong>".get_lang('SearchResultsFor')." ".Security::remove_XSS($_POST['search_term'])."</strong><br />";
         }
+        
+        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+      
 
         if (!empty($browse_courses_in_category)) {
 
@@ -128,14 +157,13 @@ if (intval($_GET['hidden_links']) != 1) { ?>
                 } else {
                     $course_medium_image = api_get_path(WEB_IMG_PATH).'without_picture.png'; // without picture
                 }
+                
+                $rating = Display::return_rating_system($course['code'].'_rating', $course['point_average'], $ajax_url.'&course_id='.$course['real_id'], $course['users_who_voted']);
 
+                //<div class="course-block-main-item"><div class="left">'.get_lang('Teacher').'</div><div class="course-block-teacher right">'.$tutor_name.'</div></div>
+                //<div class="course-block-main-item"><div class="left">'.get_lang('CreationDate').'</div><div class="course-block-date">'.api_format_date($creation_date,DATE_FORMAT_SHORT).'</div></div>
                 echo '<div class="categories-block-course">
-                        <div class="categories-content-course">
-                            <div class="categories-course-description">
-                                <div class="course-block-title">'.$title.'</div>
-                                <div class="course-block-main-item"><div class="left">'.get_lang('Teacher').'</div><div class="course-block-teacher right">'.$tutor_name.'</div></div>
-                                <div class="course-block-main-item"><div class="left">'.get_lang('CreationDate').'</div><div class="course-block-date">'.api_format_date($creation_date,DATE_FORMAT_SHORT).'</div></div>
-                            </div>';
+                        <div class="categories-content-course">';
                 
                 echo '<div class="categories-course-picture"><center>';
                 if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
@@ -144,18 +172,24 @@ if (intval($_GET['hidden_links']) != 1) { ?>
                     echo '</a>';
                 } else {
                     echo '<img src="'.$course_medium_image.'" />';
-                }
-                
-                echo '</center>
-                            </div>
-                            <div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>';
+                }                
+                echo '</center></div>';
+				
+				
+				echo '<div class="categories-course-description">
+						<div class="course-block-title">'.cut($title, 60).'</div>
+						'.$rating.'
+					 </div>';
+				
+				echo '<div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>';
                 echo '</div>';
                 
                 echo '<div class="categories-course-links">';
                     // we display the icon to subscribe or the text already subscribed
                     if (!in_array($course['code'], $user_coursecodes)) {
                         if ($course['subscribe'] == SUBSCRIBE_ALLOWED) {
-                            echo '<div class="course-link-desc left"><a class="a_button orange medium" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a></div>';
+                            echo '<div class="course-link-desc right">
+								<a class="a_button gray small" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a></div>';
                         }
                     }
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {

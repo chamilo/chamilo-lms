@@ -800,11 +800,21 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
         if (!isset($_SESSION['login_as'])) {
             
             $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            
+            /* 
+             * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)
+             * the function Tracking::get_time_spent_on_the_course() returns big values (200h) due the condition: 
+             * login_course_date > now() - INTERVAL $session_lifetime SECOND
+             * 
+            */
+            /*
             if (isset($_configuration['session_lifetime'])) {
                 $session_lifetime    = $_configuration['session_lifetime'];
             } else {
                 $session_lifetime    = 3600; // 1 hour
-            }
+            }*/
+            
+            $session_lifetime    = 3600; // 1 hour
 
             $course_code = $_course['sysCode'];
             $time = api_get_datetime();
@@ -883,7 +893,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
             if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
                 $cuData = Database::fetch_array($result);                
                 
-                if ($_course['activate_legal'] == 1) {                    
+                if ($_course['activate_legal'] == 1 && !api_is_platform_admin()) {                    
                     $user_is_subscribed = CourseManager::is_user_accepted_legal($_user['user_id'], $_course['id'], $session_id);                    
                     if (!$user_is_subscribed) {
                         $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;
@@ -918,7 +928,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 				$result = Database::query($sql);
                 $row 	= Database::store_result($result);
            
-                if (isset($row) && $row[0]['id_coach'] == $_user['user_id']) {
+                if (isset($row) && isset($row[0]) && $row[0]['id_coach'] == $_user['user_id']) {
 					$_courseUser['role'] = 'Professor';
 	                $is_courseMember     = true;
 	                $is_courseTutor      = true;
@@ -931,7 +941,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 	                	$is_courseAdmin = false;
 					}
 					api_session_register('_courseUser');
-	            } elseif(isset($row) && $row[0]['session_admin_id']==$_user['user_id']) { 
+	            } elseif( isset($row) && isset($row[0]) && $row[0]['session_admin_id']==$_user['user_id']) { 
 					$_courseUser['role'] = 'Professor';
 	                $is_courseMember     = false;
 	                $is_courseTutor      = false;
@@ -1060,8 +1070,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 
 if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested
 	if ($gidReq && $_cid ) { // have keys to search data
-		$group_table = Database::get_course_table(TABLE_GROUP);
-		$sql = "SELECT * FROM $group_table WHERE id = '$gidReq'";
+		$group_table = Database::get_course_table(TABLE_GROUP);    
+		$sql = "SELECT * FROM $group_table WHERE c_id = ".$_course['real_id']." AND id = '$gidReq'";
 		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
 			$gpData = Database::fetch_array($result);

@@ -65,7 +65,7 @@ $user_list = array();
 $count_skills = count($skills);
 
 $users  = $skill_rel_user->get_user_by_skills($skills);
-    
+
 if (!empty($users)) {
     foreach($users as $user) {            
         $user_info = api_get_user_info($user['user_id']);
@@ -74,6 +74,7 @@ if (!empty($users)) {
         $user_skills = array();
         $found_counts = 0 ;
         foreach($my_user_skills as $my_skill) {
+            
             $found = false;
             if (in_array($my_skill['skill_id'], $skills)) {
                 $found = true;
@@ -94,7 +95,7 @@ if (!empty($users)) {
     }
 }
 
-//var_dump($user_list);
+
 
 //$tpl->assign('user_list', $user_list);
 $tpl->assign('order_user_list', $ordered_user_list);
@@ -116,11 +117,9 @@ if (!empty($skills)) {
 
 $total_skills_to_search = $skill->get_skills_info($total_skills_to_search);
 $skill_list = array();
-foreach($total_skills_to_search as &$skill_info) {
+foreach($total_skills_to_search as $skill_info) {
     $skill_list[$skill_info['id']] = $skill_info;        
 }
-
-
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $id     = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;

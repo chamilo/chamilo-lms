@@ -12,7 +12,7 @@ $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 // Language files that need to be included.
 $language_file = array('admin', 'tracking','scorm');
 
-// Including the global initialization file.
+// Including the global initialization file
 require_once '../inc/global.inc.php';
 
 $from_myspace = false;
@@ -107,13 +107,13 @@ $nbStudents = count($a_students);
 
 // Gettting all the additional information of an additional profile field.
 if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) {
-    //$additional_user_profile_info = get_addtional_profile_information_of_field($_GET['additional_profile_field']);
     $user_array = array();
     foreach ($a_students as $key=>$item) {
         $user_array[] = $key;
     }
     // Fetching only the user that are loaded NOT ALL user in the portal.
     $additional_user_profile_info = TrackingCourseLog::get_addtional_profile_information_of_field_by_user($_GET['additional_profile_field'],$user_array);
+    $extra_info = UserManager::get_extra_field_information($_GET['additional_profile_field']);    
 }
 
 
@@ -269,7 +269,8 @@ if ($_GET['studentlist'] == 'false') {
                 }
             }
             $count_students = ($count_students == 0 || is_null($count_students) || $count_students == '') ? 1 : $count_students;
-            echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.round(($quiz_avg_score / $count_students), 2).'%'.'</td></tr>';
+            $quiz_avg_score = round(($quiz_avg_score / $count_students), 2).'%';
+            echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.$quiz_avg_score.'</td></tr>';
             if ($export_csv) {
                 $temp = array($quiz['title'], $quiz_avg_score);
                 $csv_content[] = $temp;
@@ -471,7 +472,6 @@ if ($_GET['studentlist'] == 'false') {
         
         $extra_field_select = TrackingCourseLog::display_additional_profile_fields();
         
-        
         if (!empty($extra_field_select)) {
             echo $extra_field_select;
         }              
@@ -534,13 +534,23 @@ if ($_GET['studentlist'] == 'false') {
             $table->set_header(10, get_lang('Survey'), false);
             $table->set_header(11, get_lang('FirstLogin'), false, 'align="center"');
             $table->set_header(12, get_lang('LatestLogin'), false, 'align="center"');
-            $table->set_header(13, get_lang('AdditionalProfileField'), false);
-            $table->set_header(14, get_lang('Details'), false);
+            if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+                $table->set_header(13, $extra_info['field_display_text'], false);
+                $table->set_header(14, get_lang('Details'), false);                        
+            } else {
+                $table->set_header(13, get_lang('Details'), false);
+            }
+            
         } else {
             $table->set_header(10, get_lang('FirstLogin'), false, 'align="center"');
             $table->set_header(11, get_lang('LatestLogin'), false, 'align="center"');
-            $table->set_header(12, get_lang('AdditionalProfileField'), false);
-            $table->set_header(13, get_lang('Details'), false);
+            
+            if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {                                
+                $table->set_header(12, $extra_info['field_display_text'], false);
+                $table->set_header(13, get_lang('Details'), false);                
+            } else {                
+                $table->set_header(12, get_lang('Details'), false);
+            }            
         }
         $table->display();
     } else {
@@ -572,11 +582,10 @@ if ($_GET['studentlist'] == 'false') {
         }
         
         $csv_headers[] = get_lang('FirstLogin', '');
-        $csv_headers[] = get_lang('LatestLogin', '');
-    
+        $csv_headers[] = get_lang('LatestLogin', '');    
 
         if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-            $csv_headers[] = get_lang('AdditionalProfileField');
+            $csv_headers[] = $extra_info['field_display_text'];
         }
         ob_end_clean();        
         array_unshift($csv_content, $csv_headers); // Adding headers before the content.

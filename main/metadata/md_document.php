@@ -149,9 +149,9 @@ function mdo_add_breadcrump_nav()
 }
 
 
-function mdobject($_course, $id)
-{
+function mdobject($_course, $id) {
     global $ieee_dcmap_e, $ieee_dcmap_v;  // md_funcs
+    $course_id = api_get_course_int_id();
 
     $this->mdo_course = $_course; $this->mdo_type = 'Document';
     $this->mdo_id = $id; $this->mdo_eid = $this->mdo_type . '.' . $id;
@@ -159,10 +159,9 @@ function mdobject($_course, $id)
     $this->mdo_dcmap_e = $ieee_dcmap_e; $this->mdo_dcmap_v = $ieee_dcmap_v;
 
     $document_table = Database::get_course_table(TABLE_DOCUMENT);
-    if (($docinfo = @Database::fetch_array(Database::query(
-            "SELECT path,title,comment,filetype FROM $document_table WHERE id='" .
-            addslashes($id) . "'"))))
-    {
+    $sql = "SELECT path,title,comment,filetype FROM $document_table WHERE c_id = $course_id AND id='" .intval($id) . "'";
+    
+    if (($docinfo = Database::fetch_array(Database::query($sql)))) {
         $this->mdo_path =     $docinfo['path'];
         $this->mdo_title =    $docinfo['title'];
         $this->mdo_comment =  $docinfo['comment'];
@@ -170,8 +169,8 @@ function mdobject($_course, $id)
         $this->mdo_group =    '';  // 2005-05-30: find group_id, if any
 
         $group_info = Database::get_course_table(TABLE_GROUP);
-        if (($result = Database::query(
-                "SELECT id,secret_directory FROM $group_info")))
+        $sql = "SELECT id,secret_directory FROM $group_info WHERE c_id = $course_id";
+        if (($result = Database::query($sql)))
             while (($row = Database::fetch_array($result)))
                 if (($secdir = $row['secret_directory'] . '/') ==
                         substr($this->mdo_path, 0, strlen($secdir)))

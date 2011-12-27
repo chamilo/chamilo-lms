@@ -41,14 +41,14 @@ class HotSpot extends Question {
 		global $text, $class;
 		if(!isset($_GET['editQuestion'])) {
 			$renderer = $form->defaultRenderer();
-			$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">'.get_lang('UploadJpgPicture').'</div></div>');
-			$form->addElement('file','imageUpload','<span class="form_required">*</span><img src="../img/hotspots.png" />');
+			//$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">'.get_lang('UploadJpgPicture').'</div></div>');
+			$form->addElement('file','imageUpload',array('<span class="form_required">*</span><img src="../img/hotspots.png" />', get_lang('UploadJpgPicture')) );
 
 			// setting the save button here and not in the question class.php
 			// Saving a question
 			$form->addElement('style_submit_button','submitQuestion',get_lang('GoToQuestion'), 'class="'.$class.'"');
 
-			$renderer->setElementTemplate('<div class="row"><div class="label" style="margin-top:-30px;">{label}</div><div class="formw" >{element}</div></div>','imageUpload');
+			$renderer->setElementTemplate('<div class="row"><div class="label" style="margin-top:-30px;">{label}</div><div class="formw" >{element}<span class="help-block">{label_2}</div></div>','imageUpload');
 			$form->addRule('imageUpload', get_lang('OnlyImagesAllowed'), 'filetype', array ('jpg', 'jpeg', 'png', 'gif'));
 			$form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
 		} else {

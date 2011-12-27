@@ -853,7 +853,7 @@ if (!empty($error)) {
                         data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,                                 
                         success: function(return_value) {
                         	if (return_value == "ok") {
-                        		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('accept.png', get_lang('Ok'), array(), 22)).'");
+                        		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), 22)).'");
                         	} else if (return_value == "error") {
                         		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('error.png', get_lang('Error'), array(), 22)).'");
                         	} else if (return_value == "one_per_page") {

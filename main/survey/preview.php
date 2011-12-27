@@ -27,6 +27,8 @@ $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUEST
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
+$course_id = api_get_course_int_id();
+
 // We exit here if ther is no valid $_GET parameter
 if (!isset($_GET['survey_id']) || !is_numeric($_GET['survey_id'])){
 	Display :: display_header(get_lang('SurveyPreview'));
@@ -94,29 +96,30 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 		$questions_displayed = array();
 		$paged_questions = array();
 		$counter = 0;
-		$sql = "SELECT * FROM $table_survey_question
-			WHERE survey_id = '".Database::escape_string($survey_id)."'
+		$sql = "SELECT * FROM $table_survey_question 
+		        WHERE c_id = $course_id AND survey_id = '".Database::escape_string($survey_id)."'
 				ORDER BY sort ASC";
 		$result = Database::query($sql);
-
-		while ($row = Database::fetch_array($result)) {
-			if ($row['type'] == 'pagebreak') {
-				$counter++;
-			} else {
-				$paged_questions[$counter][] = $row['question_id'];
-			}
-		}
-		
-		$course_id = api_get_course_int_id();
+        $questions_exists = true;
+        if (Database::num_rows($result)) {
+    		while ($row = Database::fetch_array($result)) {
+    			if ($row['type'] == 'pagebreak') {
+    				$counter++;
+    			} else {
+    				$paged_questions[$counter][] = $row['question_id'];
+    			}
+    		}
+        } else {
+            $questions_exists = false;
+        }
 		
 		if (array_key_exists($_GET['show'], $paged_questions)) {
 			$sql = "SELECT survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
 							survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
 					FROM $table_survey_question survey_question LEFT JOIN $table_survey_question_option survey_question_option
-					ON survey_question.question_id = survey_question_option.question_id
+					ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id 
 					WHERE 	survey_question.survey_id = '".Database::escape_string($survey_id)."' AND 
-							survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']])).") AND
-							survey_question_option.c_id = $course_id AND
+							survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']])).") AND							
 							survey_question.c_id =  $course_id 
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
@@ -143,7 +146,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 		}
 	}
 	// Selecting the maximum number of pages
-	$sql = "SELECT * FROM $table_survey_question WHERE type='".Database::escape_string('pagebreak')."' AND survey_id='".Database::escape_string($survey_id)."'";
+	$sql = "SELECT * FROM $table_survey_question WHERE c_id = $course_id AND type='".Database::escape_string('pagebreak')."' AND survey_id='".Database::escape_string($survey_id)."'";
 	$result = Database::query($sql);
 	$numberofpages = Database::num_rows($result) + 1;
 	// Displaying the form with the questions
@@ -166,7 +169,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 		echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('NextQuestion').'   </button>';
 	}
 	if ($show >= $numberofpages && $_GET['show'] || (isset($_GET['show']) && count($questions) == 0)) {
-		if (count($questions) == 0) {
+		if ($questions_exists == false) {
 			echo '<p>'.get_lang('ThereAreNotQuestionsForthisSurvey').'</p>';
 		}
 		echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'  </button>';

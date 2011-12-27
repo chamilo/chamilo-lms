@@ -46,8 +46,30 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
 {$favico}
 
 <script type="text/javascript">
-$(document).ready(function(){	
-	$('.topbar').dropdown();	
+$(document).ready(function(){
+	$('.topbar').dropdown();
+
+	$('.ajax').live('click', function() {
+		var url     = this.href;
+		var dialog  = $("#dialog");
+		if ($("#dialog").length == 0) {
+			dialog  = $('<div id="dialog" style="display:hidden"></div>').appendTo('body');
+		}
+
+		// load remote content
+		dialog.load(
+				url,                    
+				{},
+				function(responseText, textStatus, XMLHttpRequest) {
+					dialog.dialog({
+						modal	: true, 
+						width	: 540, 
+						height	: 400,              
+					});	                    
+		});
+		//prevent the browser to follow the link
+		return false;
+	});
 });
 </script>
 

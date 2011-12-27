@@ -36,16 +36,7 @@ function text_longitud(){
       textarea = document.forms[0].description.value;
    }
 }
-</script>
-
-<style>
-div.row div.label {
-    width:15%;
-}
-div.row div.formw {
-    width:80%;
-}
-</style>';
+</script>';
 
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 

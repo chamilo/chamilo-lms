@@ -216,7 +216,7 @@ if ($_configuration['multiple_access_urls']) {
     $url_list= UrlManager::get_access_url_from_user($user['user_id']);
     if (count($url_list) > 0) {
         $header = array();
-        $header[] = array (get_lang('URL'), true);
+        $header[] = array ('URL', true);
         $data = array ();
         foreach ($url_list as $url) {
             $row = array();

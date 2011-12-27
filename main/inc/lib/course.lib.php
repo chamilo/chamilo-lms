@@ -161,13 +161,15 @@ class CourseManager {
                     prepare_course_repository($course_info['directory'], $course_info['code']);
                     $pictures_array = fill_course_repository($course_info['directory'], $params['exemplary_content']);                      
                     fill_Db_course($course_id, $course_info['directory'], $course_info['course_language'], $pictures_array, $params['exemplary_content']);
+                    
+                    self::update_course_ranking($course_info['real_id'], 0);
+                    
                     return $course_info;                    
                 }
             }
         }
         return false;            
     }
-    
 
     /**
      * Returns all the information of a given coursecode
@@ -2706,7 +2708,7 @@ class CourseManager {
         }
 
         if (!empty($with_special_courses)) {
-            $sql = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
+            $sql = "SELECT course.id, course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
                                 course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
                                 course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course_rel_user.user_id, course.visibility
                                 FROM $tbl_course course
@@ -2764,11 +2766,8 @@ class CourseManager {
                             echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),22).'</a>';
                             echo Display::div('', array('id' => 'document_result_'.$course['id'].'_0', 'class'=>'document_preview_container'));
                         }
-                        echo '</div>';
-                        
+                        echo '</div>';                                                
                     }
-
-
 
                     $course_visibility = $course['visibility'];
                     if ($course_visibility != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
@@ -3434,4 +3433,198 @@ class CourseManager {
         }
     }
     
+    public function get_course_ranking($course_id, $session_id = null, $url_id = null) {
+        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
+        
+        $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
+        $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
+        
+        $params = array(
+            'c_id'          => $course_id,
+            'session_id'    => $session_id,
+            'url_id'        => $url_id,
+            'creation_date' => $now,
+        );
+         
+        $result = Database::select('id, accesses, points, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
+        return $result;
+    }
+    
+    /**
+     * 
+     * Updates the course ranking 
+     * @param int   course id
+     * @param int   session id
+     * @param id    url id
+     * 
+     **/    
+    public function update_course_ranking($course_id = null, $session_id = null, $url_id = null, $points_to_add = null, $add_access = true, $add_user = true) {        
+        //Course catalog stats modifications see #4191        
+        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
+                
+        $now = api_get_utc_datetime();
+        
+        $course_id  = empty($course_id)     ? api_get_course_int_id() : intval($course_id);
+        $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
+        $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
+        
+        $params = array(
+            'c_id'          => $course_id,
+            'session_id'    => $session_id,
+            'url_id'        => $url_id,
+            'creation_date' => $now,
+        );
+         
+        $result = Database::select('id, accesses, points, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');        
+        
+        // Problem here every thime we load the courses/XXXX/index.php course home page we update the access 
+        
+        if (empty($result)) {
+            if ($add_access) {
+                $params['accesses'] = 1;    
+            }            
+            //The votes and users are empty
+            if (isset($points_to_add) && !empty($points_to_add)) {
+               $params['points'] = intval($points_to_add);
+            }
+            if ($add_user) {
+                $params['users'] = 1;
+            }
+            $result = Database::insert($table_course_ranking, $params);
+        } else {
+            $my_params = array();
+            
+            if ($add_access) {        
+                $my_params['accesses'] = intval($result['accesses']) + 1;
+            }
+            if (isset($points_to_add) && !empty($points_to_add)) {                
+               $my_params['points'] = $result['points'] + $points_to_add;               
+            }
+            if ($add_user) {
+                $my_params['users']  = $result['users'] + 1;
+            }
+
+            if (!empty($my_params)) {
+                $result = Database::update($table_course_ranking, $my_params, array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
+            }        
+        }
+        return $result;
+    }
+
+
+    /**
+     * Add user vote to a course
+     * 
+     * @param   int user id
+     * @param   int vote [1..5]
+     * @param   int course id
+     * @param   int session id
+     * @param   int url id 
+     *  
+     */
+    
+    public function add_course_vote($user_id, $vote, $course_id, $session_id = null, $url_id = null) {
+        $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
+        
+        $course_id  = empty($course_id)     ? api_get_course_int_id() : intval($course_id);
+        $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
+        $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
+        $vote       = intval($vote);
+        
+        if (!in_array($vote, array(1,2,3,4,5))) {
+            return false;
+        }
+        
+        $params = array(
+            'user_id'       => intval($user_id),
+            'c_id'          => $course_id,
+            'session_id'    => $session_id,
+            'url_id'        => $url_id,
+            'vote'          => $vote
+        );
+        
+        $action_done = false;
+        
+        $result = Database::select('id, vote', $table_user_course_vote, array('where' => array('user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
+
+        if (empty($result)) {            
+            $result = Database::insert($table_user_course_vote, $params);
+            $points_to_add = $vote;
+            $add_user = true;
+            $action_done = 'added';
+        } else {            
+            $my_params = array('vote' => $vote);
+            $points_to_add = $vote - $result['vote'];
+            $add_user = false;
+            $result = Database::update($table_user_course_vote, $my_params, array('user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params));
+            $action_done = 'updated';
+        }
+        //Current points 
+        
+        if (!empty($points_to_add)) {
+            self::update_course_ranking($course_id, $session_id, $url_id, $points_to_add, false, $add_user);
+        }
+        return $action_done;
+        
+    }
+    
+    /**
+     * Remove course ranking + user votes
+     * 
+     * @param   int course id
+     * @param   int session id
+     * @param   int url id 
+     * 
+     */
+    public function remove_course_ranking($course_id, $session_id, $url_id = null) {
+        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
+        $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
+        if (!empty($course_id) && isset($session_id)) {
+            
+            $url_id     = empty($url_id) ? api_get_current_access_url_id() : intval($url_id);
+            $params = array(
+                'c_id'          => $course_id,
+                'session_id'    => $session_id,
+                'url_id'        => $url_id,                
+            );
+            Database::delete($table_course_ranking,   array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
+            Database::delete($table_user_course_vote, array('c_id = ? AND session_id = ? AND url_id = ?' => $params));
+        }
+    }
+	
+	//Stats functions
+    
+    function return_hot_courses($days = 30, $limit = 5) {
+		$limit  = intval($limit);
+        $table_course_access	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);                
+		$today					= api_get_utc_datetime();
+		$today_diff				= time() -intval($days)*24*60*60;
+		$today_diff				= api_get_utc_datetime($today_diff);
+		//WHERE login_course_date <= '$today' AND login_course_date >= '$today_diff'
+		
+		//$table_course_access table uses the now() and interval ... 
+		
+        $sql = "SELECT COUNT(course_access_id) course_count, course_code FROM $table_course_access 
+				WHERE login_course_date <= now() AND login_course_date > DATE_SUB(now(), INTERVAL $days DAY)
+				GROUP BY course_code
+				ORDER BY course_count DESC 
+				LIMIT $limit";
+		$result = Database::query($sql);
+		$courses = array();
+		if (Database::num_rows($result)) {
+			$courses = Database::store_result($result, 'ASSOC');
+			foreach ($courses as &$my_course) {
+				$my_course['extra_info'] = api_get_course_info($my_course['course_code']);				
+			}
+		}		
+		return $courses;
+    }
+	
+	function return_most_accessed_courses($limit = 5) {
+		$table_course_ranking	= Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);        
+        $params['url_id']		= api_get_current_access_url_id();
+        
+        $result = Database::select('c_id, accesses, points, users', $table_course_ranking, array('where' => array('url_id = ?' => $params), 'order' => array('accesses DESC'), 'limit' => $limit), 'all', true);
+        return $result;
+	}    
 } //end class CourseManager

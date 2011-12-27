@@ -114,9 +114,9 @@ if (!empty($attempts)) {
 		$counter--;
 		$score = show_score($attempt_result['exe_result'], $attempt_result['exe_weighting']);
 		$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$attempt_result['exe_id'].'&id_session='.api_get_session_id().'&height=500&width=750';
-		$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'thickbox'));
+		$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'thickbox a_button white small'));
 		
-		$teacher_revised = Display::span(get_lang('Validated'), array('class'=>'label_tag notice'));
+		$teacher_revised = Display::span(get_lang('Validated'), array('class'=>'label_tag success'));
 			//$attempt_link = get_lang('NoResult');
 			//$attempt_link = Display::return_icon('quiz_na.png', get_lang('NoResult'), array(), 22);
 		if ($attempt_result['attempt_revised'] == 0) {

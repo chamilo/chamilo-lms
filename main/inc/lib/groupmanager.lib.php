@@ -434,11 +434,12 @@ class GroupManager {
 	 * @return array All properties. Array-keys are name, tutor_id, description, maximum_number_of_students, directory and visibility of tools
 	 */
 	public static function get_group_properties ($group_id) {
+	    $course_id = api_get_course_int_id();
 		if (empty($group_id) or !is_integer(intval($group_id)) ) {
 			return null;
 		}
 		$table_group = Database :: get_course_table(TABLE_GROUP);
-		$sql = 'SELECT   *  FROM '.$table_group.' WHERE id = '.Database::escape_string($group_id);
+		$sql = "SELECT * FROM $table_group WHERE c_id = $course_id AND id = ".Database::escape_string($group_id);
 		$db_result = Database::query($sql);
 
 			$db_object = Database::fetch_object($db_result);
@@ -730,10 +731,7 @@ class GroupManager {
 		$sql = "UPDATE $table_group_cat SET display_order=$cat1->display_order WHERE id = $cat2->id AND c_id = $course_id ";
 		Database::query($sql);
 	}
-
-
-
-
+    
 	//GROUP USERS FUNCTIONS
 	
 	/**

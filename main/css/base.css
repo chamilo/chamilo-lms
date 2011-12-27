@@ -1368,9 +1368,9 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     font-size: 0.8em;
     margin-right: 10px;
     overflow: hidden;
-    padding: 7px 10px;
+    padding: 13px;
     text-align: center;
-    width: 40px;
+    width: 47px;
     margin-bottom: 65px;
 }
 
@@ -1810,8 +1810,8 @@ button:hover {
     float:left;
     margin:10px;
     padding:12px;
-    width:250px;
-    min-height:294px;
+    width:95%;
+    /* min-height:294px; */
     color: #BBBBBB; 
 }
 
@@ -1843,19 +1843,24 @@ button:hover {
 }
 
 .categories-course-description {
-    margin-left:10px;
+    margin-left:18px;
     font-family:arial;
     font-size:11px;
     margin-bottom: 10px;
+	float:left;
+}
+
+.categories-course-links div {
+	padding-left:10px;
 }
 
 .categories-course-description .course-block-title {
     font-family: arial;
-    font-size: large;
+    font-size: medium;
     margin-bottom: 10px;
     color: #222222;
-    min-height:60px;
 }
+
 .categories-course-description .course-block-teacher {
     font-size: large;
     font-style: italic;
@@ -3781,7 +3786,7 @@ form div.error input, form div.error textarea {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-  width:120px;
+    width:134px;
 }
 
 .label_tag.personal_event { 
@@ -3790,9 +3795,16 @@ form div.error input, form div.error textarea {
 .label_tag.admin_event { 
      background:red;
 }
+
 .label_tag.course_event { 
      background:#458B00;
 }
+
+.label_tag.group_event { 
+     background:#A0522D;
+}
+
+
 
 
 .label_tag.important {
@@ -4050,3 +4062,111 @@ input.liteoption {
     text-align: left;
     vertical-align: middle;
 }
+
+#no-data-view {
+    padding: 20px 0 0px;
+    text-align: center;
+}
+
+div#no-data-view img {
+    margin-bottom: 25px;
+}
+
+
+div#no-data-view h2 {
+    border: 0 none;
+    color: #212121;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 6px;
+    padding: 0;
+}
+
+div#no-data-view div.controls {
+    padding-top: 1px;
+}
+
+
+
+
+    /*             styles for the star rater                */  
+    .star-rating{
+        list-style:none;
+        margin: 0px;
+        padding:0px;
+        width: 125px;
+        height: 25px;
+        position: relative;
+        overflow:hidden;
+        background: url(../img/alt_star.gif) top left repeat-x;        
+    }
+    .star-rating li{
+        padding:0px;
+        margin:0px;
+        width:25px;
+        height:25px;
+        /*\*/
+        float: left;
+        /* */
+    }
+    .star-rating li a{
+        display:block;
+        width:25px;
+        height: 25px;
+        line-height:25px;       
+        text-decoration: none;
+        text-indent: -9000px;
+        z-index: 20;
+        position: absolute;
+        padding: 0px;
+        overflow:hidden;
+    }
+    .star-rating li a:hover{
+        background: url(../img/alt_star.gif) left bottom;
+        z-index: 2;
+        left: 0px;
+        border:none;
+    }
+    .star-rating a.one-star{
+        left: 0px;
+    }
+    .star-rating a.one-star:hover{
+        width:25px;
+    }
+    .star-rating a.two-stars{
+        left:25px;
+    }
+    .star-rating a.two-stars:hover{
+        width: 50px;
+    }
+    .star-rating a.three-stars{
+        left: 50px;
+    }
+    .star-rating a.three-stars:hover{
+        width: 75px;
+    }
+    .star-rating a.four-stars{
+        left: 75px;
+    }   
+    .star-rating a.four-stars:hover{
+        width: 100px;
+    }
+    .star-rating a.five-stars{
+        left: 100px;
+    }
+    .star-rating a.five-stars:hover{
+        width: 125px;
+    }
+    .star-rating li.current-rating{
+        background: url(../img/alt_star.gif) left center;
+        position: absolute;
+        height: 25px;
+        display: block;
+        text-indent: -9000px;
+        z-index: 1;
+    }
+    
+    /* remove halo effect in firefox   */
+    a:active{
+        outline: none;
+    }       

@@ -218,7 +218,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 		}
 		echo '	<div class="row">
 					<div class="label">
-						<span class="form_required">*</span> '.get_lang('Url').'
+						<span class="form_required">*</span> URL
 					</div>
 					<div class="formw">
 						<input type="text" name="urllink" size="50" value="' . (empty($urllink) ? 'http://' : Security::remove_XSS($urllink)) . '" />

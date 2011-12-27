@@ -1,9 +1,11 @@
 <!-- Topbar -->
-{if $_u.status == 1}
+{if $show_toolbar == 1}
     <div class="topbar">
         <div class="topbar-inner">
             <div class="container-fluid">
-                <h3><a href="{'WEB_PATH'|get_path}">Chamilo</a></h3>
+                <h3><a href="{'WEB_PATH'|get_path}">{"siteName"|api_get_setting}</a></h3>
+                
+                {if $_u.logged}
                 <ul class="nav">
                     <li class="active"><a href="{'WEB_PATH'|get_path}/user_portal.php">{"MyCourses"|get_lang}</a></li>
                     <li class="dropdown">
@@ -23,6 +25,7 @@
                             <li><a href="{'WEB_CODE_PATH'|get_path}dashboard/">{"Dashboard"|get_lang}</a></li>
                         </ul>
                     </li>
+                    {if $_u.is_admin == 1}
                     <li class="dropdown">
                         <a class="dropdown-toggle" href="#">{'Administration'|get_lang}</a>
                         <ul class="dropdown-menu">
@@ -33,10 +36,17 @@
                             <li><a href="{'WEB_CODE_PATH'|get_path}admin/settings.php">{"Settings"|get_lang}</a></li>
                         </ul>
                     </li>
-                 </ul>
-                    <form action="{'WEB_CODE_PATH'|get_path}admin/user_list.php" method="get">
-                    <input type="text" placeholder="{'SearchUsers'|get_lang}" name="keyword">
-                    </form>
+                    {/if}
+                </ul>
+                {/if}
+                
+                {if $_u.is_admin == 1}
+                <form action="{'WEB_CODE_PATH'|get_path}admin/user_list.php" method="get">
+                <input type="text" placeholder="{'SearchUsers'|get_lang}" name="keyword">
+                </form>
+                {/if}
+                
+                {if $_u.logged}
                     <ul class="nav secondary-nav">
                         <li><a href="{'WEB_CODE_PATH'|get_path}social/home.php"><img src="{$_u.avatar_small}"/></a></li>
                         <li class="dropdown">
@@ -52,6 +62,7 @@
                         </li>
                         <li><a href="{'WEB_PATH'|get_path}index.php?logout=logout">Logout</a></li>
                     </ul>
+                {/if}
             </div>
         </div><!-- /topbar-inner -->
     </div><!-- /topbar -->
@@ -68,5 +79,3 @@
 
 {* menu *}
 {$header3}
-
-

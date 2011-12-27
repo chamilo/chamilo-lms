@@ -1098,7 +1098,7 @@ class Display {
                 // If it's a survey, make sure the user's invited. Otherwise drop it.
                 if ($item_property['tool'] == TOOL_SURVEY) {
                     $survey_info = survey_manager::get_survey($item_property['ref'], 0, $course_code);
-                    $invited_users = SurveyUtil::get_invited_users($survey_info['code'], $course_database);
+                    $invited_users = SurveyUtil::get_invited_users($survey_info['code'], $course_code);
                     if (!in_array($user_id, $invited_users['course_users'])) continue;
                 }
                 // If it's a learning path, ensure it is currently visible to the user
@@ -1270,5 +1270,35 @@ class Display {
             $output = $session;
         }
         return $output;
+    }
+
+    /**
+     * 
+     * 
+     * @param   int     id of the class
+     * @param   int     percentage 0-100 %
+     * @param   string  url that will be added (for the jquery stuff)
+     **/
+    public function return_rating_system($id, $percentage, $url, $number_of_users_who_voted = null) {
+        $percentage = intval($percentage);
+        if (!empty($percentage)) {
+            $percentage = $percentage*125/100;
+        }
+        $html = '<ul id = "'.$id.'" class="star-rating">
+            <li class="current-rating" style="width:'.$percentage.'px;"></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=1" title="'.get_lang('OneStarOutOf5').'"  class="one-star">1</a></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=2" title="'.get_lang('TwoStarsOutOf5').'" class="two-stars">2</a></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=3" title="'.get_lang('ThreeStarsOutOf5').'" class="three-stars">3</a></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=4" title="'.get_lang('FourStarsOutOf5').'" class="four-stars">4</a></li>
+            <li><a href="javascript:void(0)" rel="'.$url.'&star=5" title="'.get_lang('FiveStarsOutOf5').'" class="five-stars">5</a></li>
+        </ul>';
+        
+        //if (!isset($number_of_users_who_voted)) {
+            $label = $number_of_users_who_voted == 1 ? get_lang('Vote') : get_lang('Votes'); 
+            $html .= Display::span($number_of_users_who_voted.' '.$label, array('id' =>  'vote_label_'.$id));
+            $html .= ' '.Display::span(' ', array('id' =>  'vote_label2_'.$id));
+        //}
+        return $html;
+        
     }
 } //end class Display

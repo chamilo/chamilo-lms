@@ -331,6 +331,7 @@ class Skill extends Model {
         $sql = "SELECT id, name, description, parent_id, relation_type 
                 FROM {$this->table} s INNER JOIN {$this->table_skill_rel_skill} ss ON (s.id = ss.skill_id) 
                 $id_condition";
+                
         $result = Database::query($sql);
         $skills = array();        
         
@@ -507,11 +508,10 @@ class Skill extends Model {
    
     public function get_user_skills($user_id, $get_skill_data = false) {
         $user_id = intval($user_id);        
-        //$sql = 'SELECT skill.*, user.* FROM '.$this->table_skill_rel_user.' user INNER JOIN '.$this->table_skill.' skill
-        
         $sql = 'SELECT DISTINCT s.id, s.name FROM '.$this->table_skill_rel_user.' u INNER JOIN '.$this->table.' s 
                 ON u.skill_id = s.id
                 WHERE user_id = '.$user_id;
+                
         $result = Database::query($sql);
         $skills = Database::store_result($result, 'ASSOC');
         $clean_skill = array();        

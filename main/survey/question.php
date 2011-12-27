@@ -12,10 +12,9 @@
 $language_file = 'survey';
 
 // Including the global initialization file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // Including additional libraries
-//require_once api_get_path(LIBRARY_PATH).'survey.lib.php';
 require_once 'survey.lib.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -49,8 +48,11 @@ if ($request_index != $is_valid_request) {
 $table_survey 					= Database :: get_course_table(TABLE_SURVEY);
 $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+
+$course_id = api_get_course_int_id();
 
 // Getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
@@ -68,7 +70,7 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 }
 
 if ($survey_data['survey_type'] == 1) {
-	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP).' WHERE survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
+	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP).' WHERE c_id = '.$course_id.' AND survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
 	$rs = Database::query($sql);
 	if(Database::num_rows($rs)===0) {
 		header('Location: survey.php?survey_id='.(int)$_GET['survey_id'].'&message='.'YouNeedToCreateGroups');

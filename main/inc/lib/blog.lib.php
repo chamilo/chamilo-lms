@@ -357,8 +357,7 @@ class Blog {
 		$current_date		= date('Y-m-d H:i:s',time());
 		$course_id 			= api_get_course_int_id();
 
-		if(!empty($_FILES['user_upload']['name']))
-		{
+		if(!empty($_FILES['user_upload']['name'])) {
 			require_once('fileUpload.lib.php');
 			$upload_ok = process_uploaded_file($_FILES['user_upload']);
 			$has_attachment=true;
@@ -379,8 +378,7 @@ class Blog {
 
 			$last_id=Database::insert_id();
 
-			if ($has_attachment)
-			{
+			if ($has_attachment) {
 				$courseDir   = $_course['path'].'/upload/blog';
 				$sys_course_path = api_get_path(SYS_COURSE_PATH);
 				$updir = $sys_course_path.$courseDir;
@@ -461,7 +459,7 @@ class Blog {
 	 */
 	public static function create_task ($blog_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color) {
 		// Init
-		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
+		$tbl_blogs_tasks       = Database::get_course_table(TABLE_BLOGS_TASKS);
 		$tbl_tasks_permissions = Database::get_course_table(TABLE_BLOGS_TASKS_PERMISSIONS);
 		
 		$course_id = api_get_course_int_id();
@@ -518,7 +516,7 @@ class Blog {
 	 */
 	public static function edit_task($blog_id, $task_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color) {
 		// Init
-		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
+		$tbl_blogs_tasks       = Database::get_course_table(TABLE_BLOGS_TASKS);
 		$tbl_tasks_permissions = Database::get_course_table(TABLE_BLOGS_TASKS_PERMISSIONS);
         
         $course_id = api_get_course_int_id();
@@ -2611,8 +2609,7 @@ class Blog {
 					</div>
 				</div>
 			</form>
-			<div style="clear: both; margin-bottom:10px;"></div>
-			';
+			<div style="clear: both; margin-bottom:10px;"></div>';
 
 	}
 
@@ -2621,10 +2618,10 @@ class Blog {
 	 *
 	 */
 	public static function display_edit_blog_form ($blog_id) {
-		// Init
+	    $course_id = api_get_course_int_id();		
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 
-		$sql = "SELECT blog_id, blog_name, blog_subtitle FROM $tbl_blogs WHERE blog_id = '".(int)$blog_id."'";
+		$sql = "SELECT blog_id, blog_name, blog_subtitle FROM $tbl_blogs WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."'";
 		$result = Database::query($sql);
 		$blog = Database::fetch_array($result);
 
@@ -2679,6 +2676,7 @@ class Blog {
 	 */
 	public static function display_blog_list () {
 		global $charset, $_user;
+        $course_id = api_get_course_int_id();
 		// Init
 		$counter = 0;
 
@@ -2688,7 +2686,7 @@ class Blog {
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id, false);
 
-		$sql = 'SELECT blog_name,blog_subtitle,visibility,blog_id FROM '.$tbl_blogs.' ORDER BY date_creation DESC ';
+		$sql = "SELECT blog_name,blog_subtitle,visibility,blog_id FROM $tbl_blogs WHERE c_id = $course_id ORDER BY date_creation DESC";
 		$result = Database::query($sql);
 		if (Database::num_rows($result)) {
 			while ($row_project=Database::fetch_row($result)) {
@@ -2742,35 +2740,6 @@ class Blog {
 			$table->set_header(2, get_lang('Modify'));
 			$table->display();
 		}
-
-		/*$sql = "SELECT blog_id, blog_name, blog_subtitle, visibility FROM $tbl_blogs ORDER BY blog_name";
-		$result = Database::query($sql);
-
-		while($blog = Database::fetch_array($result))
-		{
-			$counter++;
-			$css_class = (($counter % 2)==0) ? "row_odd" : "row_even";
-			$visibility_icon = ($blog['visibility'] == '0') ? "invisible.gif" : "visible.gif";
-			$visibility_class = ($blog['visibility'] == '0') ? ' class="invisible"' : "";
-			$visibility_set  = ($blog['visibility'] == '0') ? 1 : 0;
-
-			echo	'<tr class="' . $css_class . '" valign="top">',
-						 '<td width="290"' . $visibility_class . '>'.stripslashes($blog['blog_name']) . '</td>',
-						 '<td' . $visibility_class . '>'.stripslashes($blog['blog_subtitle']) . '</td>',
-						 '<td width="200">',
-						 	'<a href="' .api_get_self(). '?action=edit&amp;blog_id=' . $blog['blog_id'] . '">',
-							'<img src="../img/edit.gif" border="0" title="' . get_lang('EditBlog') . '" />',
-							"</a>\n",
-							'<a href="' .api_get_self(). '?action=delete&amp;blog_id=' . $blog['blog_id'] . '" ',
-							'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;" >',
-							'<img src="../img/delete.gif" border="0" title="' . get_lang('DeleteBlog') . '" />',
-							"</a>\n",
-							'<a href="' .api_get_self(). '?action=visibility&amp;blog_id=' . $blog['blog_id'] . '">',
-							'<img src="../img/' . $visibility_icon . '" border="0" title="' . get_lang('Visible') . '" />',
-							"</a>\n",
-						 '</td>',
-					'</tr>';
-		}*/
 	}
 
 }

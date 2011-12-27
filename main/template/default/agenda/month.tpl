@@ -29,7 +29,7 @@ $(document).ready(function() {
 		autoOpen: false,
 		modal	: false, 
 		width	: 550, 
-		height	: 400
+		height	: 450
    	});
 
 	var title = $( "#title" ),
@@ -82,13 +82,17 @@ $(document).ready(function() {
 		dayNamesShort: 	{$day_names_short},		
 		selectable	: true,
 		selectHelper: true,
+		//add event
 		select: function(start, end, allDay, jsEvent, view) {
 			/* When selecting one day or several days */
 			
 			var start_date 	= Math.round(start.getTime() / 1000);
 			var end_date 	= Math.round(end.getTime() / 1000);
 			
-			$('#visible_to_input').show();		
+			$('#visible_to_input').show();
+			$('#add_as_announcement_div').show();
+			
+			$('#visible_to_read_only').hide();
 			
 			//Cleans the selected attr 	
 		    clean_user_select();
@@ -115,7 +119,8 @@ $(document).ready(function() {
 					$('#end_date').html(' - ' + end.toDateString());					
 				}
 				$('#color_calendar').html('{$type_label}');
-				$('#color_calendar').addClass('label_tag');
+				$('#color_calendar').removeClass('group_event');
+				$('#color_calendar').addClass('label_tag');				
 				$('#color_calendar').addClass('{$type}_event');
 				
 				allFields.removeClass( "ui-state-error" );		
@@ -123,7 +128,7 @@ $(document).ready(function() {
 				
 				$("#dialog-form").dialog({				
 					buttons: {
-						"Add event": function() {
+						{"Add"|get_lang}: function() {
 							var bValid = true;
 							bValid = bValid && checkLength( title, "title", 1, 255 );
 							//bValid = bValid && checkLength( content, "content", 1, 255 );
@@ -159,7 +164,7 @@ $(document).ready(function() {
 	        
 	    },
 		eventClick: function(calEvent, jsEvent, view) {
-			
+			//edit event
 			if (calEvent.editable) {									
 				var start_date 	= Math.round(calEvent.start.getTime() / 1000);
 				if (calEvent.allDay == 1) {				
@@ -169,10 +174,19 @@ $(document).ready(function() {
 				}
 				
 				$('#visible_to_input').hide();
+				$('#visible_to_read_only').show();				
+				$('#add_as_announcement_div').hide();
+				
+				$("#visible_to_read_only_users").html(calEvent.sent_to);
 				
 				$('#color_calendar').html('{$type_label}');
 				$('#color_calendar').addClass('label_tag');
-				$('#color_calendar').addClass('{$type}_event');
+								
+				$('#color_calendar').removeClass('course_event');
+				$('#color_calendar').removeClass('personal_event');
+				$('#color_calendar').removeClass('group_event');
+				
+				$('#color_calendar').addClass(calEvent.type+'_event');
 				
 				$('#start_date').html(calEvent.start.getDate() +"/"+ calEvent.start.getMonth() +"/"+calEvent.start.getFullYear());
 				
@@ -191,7 +205,7 @@ $(document).ready(function() {
 				
 				$("#dialog-form").dialog({				
 					buttons: {
-						"Edit" : function() {
+						{"Edit"|get_lang} : function() {
 							
 							var bValid = true;
 							bValid = bValid && checkLength( title, "title", 1, 255 );
@@ -203,9 +217,10 @@ $(document).ready(function() {
 								success:function() {
 									calEvent.title 			= $("#title").val();
 									calEvent.start 			= calEvent.start;
-									calEvent.end 			= calEvent.end;
+									calEvent.end 			= calEvent.end;									
 									calEvent.allDay 		= calEvent.allDay;
-									calEvent.description 	= $("#content").val();								
+									calEvent.description 	= $("#content").val();
+																	
 									calendar.fullCalendar('updateEvent', 
 											calEvent,
 											true // make the event "stick"
@@ -215,7 +230,7 @@ $(document).ready(function() {
 								}							
 							});
 						},
-						"Delete": function() { 
+						{"Delete"|get_lang}: function() { 
 							$.ajax({
 								url: delete_url,
 								success:function() {
@@ -258,17 +273,29 @@ $(document).ready(function() {
 
 <div id="dialog-form" style="display:none;">
 	<div style="width:500px">
-	<form id="add_event_form" name="form">	    
-	    {if !empty($visible_to)} 
+	<form id="add_event_form" name="form">
+	      
+	    {if !empty($visible_to) } 
     	    <div id="visible_to_input" class="row">      
                 <div class="label">
                     <label for="date">{"To"|get_lang}</label>
                 </div>
                 <div class="formw">
-                    {$visible_to}
+                    {$visible_to}                    
                 </div>                  
             </div>
         {/if}
+        
+         <div id="visible_to_read_only" class="row" style="display:none">      
+                <div class="label">
+                    <label for="date">{"To"|get_lang}</label>
+                </div>
+                <div class="formw">
+                    <div id="visible_to_read_only_users"></div>                  
+                </div>                  
+         </div>
+        
+          
         	
 		<div class="row">		
 			<div class="label">
@@ -293,7 +320,8 @@ $(document).ready(function() {
 			<div class="formw">
 				<input type="text" name="title" id="title" size="40" />				
 			</div>
-		</div>		
+		</div>
+				
 		<div class="row">
 			<div class="label">
 				<label for="name">{"Description"|get_lang}</label>
@@ -302,8 +330,21 @@ $(document).ready(function() {
 				<textarea name="content" id="content" cols="40" rows="7"></textarea>
 			</div>
 		</div>	
+		
+		{if $type == 'course'}
+		<div id="add_as_announcement_div">
+    		 <div class="row">
+                <div class="label">                    
+                </div>      
+                <div class="formw">
+                    <input type="checkbox" name="add_as_annonuncement" id="add_as_annonuncement" />
+                    <label for="add_as_annonuncement">{"AddAsAnnouncement"|get_lang}</label>
+                </div>
+            </div>
+        </div>
+		{/if}
 	</form>
 	</div>
 </div>
-<div id='loading' style='left:140px;position:absolute; display:none'>{"Loading"|get_lang}...</div>
+<div id='loading' style='left:180px;top:10px;position:absolute; display:none'>{"Loading"|get_lang}...</div>
 <div id='calendar'></div>

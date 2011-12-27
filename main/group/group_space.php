@@ -53,7 +53,7 @@ if ($current_group['doc_state'] != 1 && $current_group['calendar_state'] != 1 &&
 
 /*	Header */
 
-Display::display_header($nameTools.' '.stripslashes($current_group['name']), 'Group');
+Display::display_header($nameTools.' '.Security::remove_XSS($current_group['name']), 'Group');
 
 /*	Introduction section (editable by course admin) */
 
@@ -302,14 +302,14 @@ $table->display();
  */
 function get_number_of_group_users() {
 	global $current_group;
+    $course_id = api_get_course_int_id();
 
 	// Database table definition
 	$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 
 	// Query
-	$sql = "SELECT count(id) AS number_of_users
-				FROM ".$table_group_user."
-				WHERE group_id='".Database::escape_string($current_group['id'])."'";
+	$sql = "SELECT count(id) AS number_of_users FROM ".$table_group_user."
+				WHERE c_id = $course_id AND group_id='".Database::escape_string($current_group['id'])."'";
 	$result = Database::query($sql);
 	$return = Database::fetch_array($result,'ASSOC');
 	return $return['number_of_users'];
@@ -338,8 +338,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction) {
 
 	// Query
 	if (api_get_setting('show_email_addresses') == 'true') {
-		$sql = "SELECT
-					user.user_id 	AS col0,
+		$sql = "SELECT user.user_id 	AS col0,
 				".(api_is_western_name_order() ?
 				"user.firstname 	AS col1,
 				user.lastname 	AS col2,"
@@ -349,7 +348,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction) {
 				)."
 					user.email		AS col3
 					FROM ".$table_user." user, ".$table_group_user." group_rel_user
-					WHERE group_rel_user.c_id = $course_id group_rel_user.user_id = user.user_id
+					WHERE group_rel_user.c_id = $course_id AND group_rel_user.user_id = user.user_id
 					AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
@@ -366,7 +365,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction) {
 						)."
 						user.email		AS col3
 						FROM ".$table_user." user, ".$table_group_user." group_rel_user
-						WHERE group_rel_user.user_id = user.user_id
+						WHERE group_rel_user.c_id = $course_id AND group_rel_user.user_id = user.user_id
 						AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
 			$sql .= " ORDER BY col$column $direction ";
 			$sql .= " LIMIT $from,$number_of_items";
@@ -381,7 +380,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction) {
 						user.firstname 	AS col2 "
 						)."
 						FROM ".$table_user." user, ".$table_group_user." group_rel_user
-						WHERE group_rel_user.user_id = user.user_id
+						WHERE group_rel_user.c_id = $course_id AND  group_rel_user.user_id = user.user_id
 						AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
 			$sql .= " ORDER BY col$column $direction ";
 			$sql .= " LIMIT $from,$number_of_items";

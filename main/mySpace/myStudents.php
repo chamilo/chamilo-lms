@@ -511,11 +511,11 @@ if (!empty($student_id)) {
 						<td align="left"><?php echo  $time_spent_on_the_course ?></td>
 					</tr>
 					<tr>
-						<td align="right"><?php echo get_lang('Progress'); Display :: display_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px'));?></td>
+						<td align="right"><?php echo get_lang('Progress').' '; Display :: display_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px'));?></td>
 						<td align="left"><?php echo $avg_student_progress.'%' ?></td>
 					</tr>
 					<tr>
-						<td align="right"><?php echo get_lang('Score'); Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?>
+						<td align="right"><?php echo get_lang('Score').' '; Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?>
 						</td>
 						<td align="left"><?php if (is_numeric($avg_student_score)) { echo $avg_student_score.'%';} else { echo $avg_student_score ;}  ?></td>
 					</tr>
@@ -634,7 +634,7 @@ if (empty($_GET['details'])) {
     
     				$scoretotal_display = '0/0 (0%)';
     				if (!empty($scoretotal)) {
-    					$scoretotal_display =  round($scoretotal[0],2).'/'.round($scoretotal[1],2).'('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)';
+    					$scoretotal_display =  round($scoretotal[0],1).'/'.round($scoretotal[1],1).' ('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)';
     				}
     	 
     				$progress = Tracking::get_avg_student_progress($info_user['user_id'], $course_code, null, $session_id);
@@ -712,11 +712,11 @@ if (empty($_GET['details'])) {
         <table class="data_table">
             <tr>
                 <th><?php echo get_lang('Learnpaths');?></th>
-                <th><?php echo get_lang('Time'); Display :: display_icon('info3.gif', get_lang('TotalTimeByCourse'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?></th>
-                <th><?php echo get_lang('AverageScore'); Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInAllAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
-                <th><?php echo get_lang('LatestAttemptAverageScore'); Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInTheLatestAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
-                <th><?php echo get_lang('Progress'); Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
-                <th><?php echo get_lang('LastConnexion'); Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
+                <th><?php echo get_lang('Time').' '; Display :: display_icon('info3.gif', get_lang('TotalTimeByCourse'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?></th>
+                <th><?php echo get_lang('AverageScore').' '; Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInAllAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
+                <th><?php echo get_lang('LatestAttemptAverageScore').' '; Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInTheLatestAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
+                <th><?php echo get_lang('Progress').' '; Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
+                <th><?php echo get_lang('LastConnexion').' '; Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
                 <?php       
                     echo '<th>'.get_lang('Details').'</th>'; 
                     if (api_is_course_admin()) {
@@ -841,7 +841,7 @@ if (empty($_GET['details'])) {
 		<table class="data_table">
 			<tr>
 				<th><?php echo get_lang('Exercices'); ?></th>
-				<th><?php echo get_lang('AverageScore').Display :: return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
+				<th><?php echo get_lang('AverageScore').' '.Display :: return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
 				<th><?php echo get_lang('Attempts'); ?></th>
 				<th><?php echo get_lang('LatestAttempt'); ?></th>
 				<th><?php echo get_lang('AllAttempts'); ?></th>

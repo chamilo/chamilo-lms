@@ -19,8 +19,8 @@
 */
 class SessionManager {    
 	private function __construct() {
-
 	}
+    
     /**
      * Fetches a session from the database
      * @param   int     Session ID
@@ -135,18 +135,19 @@ class SessionManager {
 							   VALUES('".$name."','$date_start','$date_end','$id_coach',".api_get_user_id().",".$nb_days_acess_before.", ".$nb_days_acess_after.", ".$id_session_category.", ".$id_visibility.")";
 				Database::query($sql_insert);
 				$session_id = Database::insert_id();
-				
-				//Adding to the correct URL				
-				require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';				
                 
-                $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-                $access_url_id = api_get_current_access_url_id();
-                UrlManager::add_session_to_url($session_id,$access_url_id);            
-
-				// add event to system log				
-				$user_id = api_get_user_id();
-				event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), $user_id);
-
+                if (!empty($session_id)) {                	
+    				//Adding to the correct URL				
+    				require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';				
+                    
+                    $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+                    $access_url_id = api_get_current_access_url_id();
+                    UrlManager::add_session_to_url($session_id,$access_url_id);            
+    
+    				// add event to system log				
+    				$user_id = api_get_user_id();
+    				event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), $user_id);
+    		    }
 				return $session_id;
 			}
 		}
@@ -193,11 +194,12 @@ class SessionManager {
         $num = $recorset['total_rows'];
         return $num;    
     }
+    
     /**
      * Gets the admin session list callback of the admin/session_list.php page
      * @param array order and limit keys
      */
-    function get_sessions_admin($options) {
+    public function get_sessions_admin($options) {
         $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);        
         $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);        
@@ -207,19 +209,31 @@ class SessionManager {
         if (api_is_session_admin()==true) {
             $where.=" AND s.session_admin_id = $user_id ";
         }        
-        
-        if (!empty($options['where'])) {
-           $where .= ' AND '.$options['where']; 
-        }
-        
+      
         $coach_name = " CONCAT (u.lastname , ' ', u.firstname) as coach_name ";
+        
         if (api_is_western_name_order()) {            
             $coach_name = " CONCAT (u.firstname, ' ', u.lastname) as coach_name ";
-        }
-        $query = "SELECT s.name, nbr_courses, s.date_start, s.date_end, $coach_name , sc.name as category_name, s.visibility, u.user_id, s.id   ".
-            " FROM $tbl_session s ".
-                " LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id ".
-                " INNER JOIN $tbl_user u ON s.id_coach = u.user_id ".
+        }        
+
+        $today = api_get_utc_datetime();
+        $today = api_strtotime($today);
+        
+        $today = date('Y-m-d', $today);
+        
+        $select = "SELECT * FROM (SELECT 
+                IF ( 
+                    (s.date_start <= '$today' AND '$today' < s.date_end) OR 
+                    (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
+                    (s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
+                    ('$today' < s.date_end AND '0000-00-00' = s.date_start)
+                , 1, 0) 
+                as session_active, 
+                s.name, nbr_courses, s.date_start, s.date_end, $coach_name, sc.name as category_name, s.visibility, u.user_id, s.id";
+                   
+        $query = "$select FROM $tbl_session s 
+                LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id 
+                INNER JOIN $tbl_user u ON s.id_coach = u.user_id ".
              $where;
              
         if ($_configuration['multiple_access_urls']) {
@@ -227,31 +241,52 @@ class SessionManager {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $where.= " AND ar.access_url_id = $access_url_id ";
-                $query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name , s.visibility, u.user_id
+                $query = "$select
                  FROM $tbl_session s
                     LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
                     INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
                  $where";
             }
-        }         
-        $query .= "ORDER BY ".$options['order']." LIMIT ".$options['limit'];              
-       
-        $result     = Database::query($query);
+        }  
+        $query .= ") AS session_table";   
+        
+          
+        if (!empty($options['where'])) {
+           $query .= ' WHERE '.$options['where']; 
+        }
+            
+        $query .= " ORDER BY ".$options['order']." LIMIT ".$options['limit'];
+                 
+       // echo $query;
+        $result = Database::query($query);
         $formatted_sessions = array();
         if (Database::num_rows($result)) {
             $sessions   = Database::store_result($result);
             foreach ($sessions as $session) {
                 $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
                 
-                $session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=".$session['user_id']);  
+                $session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=".$session['user_id']);
+                
+                if ($session['date_start'] == '0000-00-00' && $session['date_end'] == '0000-00-00') {
+                //    $session['session_active'] = 1;
+                }
+                
+                if ($session['session_active'] == 1) {
+                    $session['session_active'] = Display::return_icon('accept.png', get_lang('Active'), array(), 22);
+                } else {
+                    $session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), 22);
+                }
+                     
            
                 if ($session['date_start'] == '0000-00-00') {
                     $session['date_start'] = '';
                 }
                 if ($session['date_end'] == '0000-00-00') {
                     $session['date_end'] = '';
-                }                
+                }
+                
+                     
                 switch ($session['visibility']) {
                     case SESSION_VISIBLE_READ_ONLY: //1
                         $session['visibility'] =  get_lang('ReadOnly');
@@ -1086,11 +1121,16 @@ class SessionManager {
 	public static function delete_session_category($id_checked, $delete_session = false,$from_ws = false){
 		$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-		if(is_array($id_checked)) {
-			$id_checked=Database::escape_string(implode(',',$id_checked));
+		if (is_array($id_checked)) {
+			$id_checked = Database::escape_string(implode(',',$id_checked));
 		} else {
-			$id_checked=intval($id_checked);
+			$id_checked = intval($id_checked);
 		}
+		
+		//Setting session_category_id to 0
+		$sql = "UPDATE $tbl_session SET session_category_id = 0 WHERE session_category_id IN (".$id_checked.")";
+        $result = Database::query($sql);
+        
 		$sql = "SELECT id FROM $tbl_session WHERE session_category_id IN (".$id_checked.")";
 		$result = @Database::query($sql);
 		while ($rows = Database::fetch_array($result)) {
@@ -1109,6 +1149,7 @@ class SessionManager {
 
 		// Add event to system log		
 		$user_id = api_get_user_id();
+        
 		event_system(LOG_SESSION_CATEGORY_DELETE, LOG_SESSION_CATEGORY_ID, $id_checked, api_get_utc_datetime(), $user_id);
 
 

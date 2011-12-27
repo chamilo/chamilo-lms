@@ -61,11 +61,12 @@ if (api_is_allowed_to_edit()) {
 	$querypath = Database::escape_string($querypath);
 	// Search for all files that are not deleted => visibility != 2
 	$sql = "SELECT path FROM $doc_table AS docs, $prop_table AS props  
-			WHERE 	props.tool='".TOOL_DOCUMENT."' AND 
+			WHERE 	props.tool          ='".TOOL_DOCUMENT."' AND 
 					docs.id				= props.ref 	AND 
 					docs.path 			LIKE '".$querypath."/%' AND 
 					docs.filetype		= 'file' AND props.visibility<>'2' AND 
 					props.to_group_id	= ".$to_group_id." AND 
+					props.c_id          = ".$course_id." AND
 					docs.c_id 			= ".$course_id." ";
 	$query = Database::query($sql);
 	// Add tem to the zip file

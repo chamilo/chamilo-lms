@@ -16,12 +16,13 @@ define('FRAME', 'hidden');
 $language_file = array('chat');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once 'chat_functions.lib.php';
 
 $tbl_user 				= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_chat_connected 	= Database::get_course_chat_connected_table();
+$tbl_chat_connected 	= Database::get_course_table(CHAT_CONNECTED_TABLE);
+
+$course_id = api_get_course_int_id();
 
 $query = "SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 $result = Database::query($query);
@@ -30,10 +31,6 @@ list($pseudo_user) = Database::fetch_row($result);
 
 $isAllowed = !(empty($pseudo_user) || !$_cid);
 $isMaster = (bool)$is_courseAdmin;
-
-/*if(!$isAllowed) {
-	exit();
-}*/
 
 $date_now = date('Y-m-d');
 
@@ -48,6 +45,8 @@ if (!empty($group_id)) {
 } else {
 	$extra_condition = $session_condition;
 }
+
+$extra_condition.= " AND c_id = $course_id";
 
 // get chat path
 $chat_path = '';
@@ -83,9 +82,9 @@ $result = Database::query($sql);
 // The user_id exists so we must do an UPDATE and not a INSERT
 $current_time = date('Y-m-d H:i:s');
 if (Database::num_rows($result) == 0) {
-	$query = "INSERT INTO $tbl_chat_connected(user_id,last_connection,session_id,to_group_id) VALUES('".$_user['user_id']."','$current_time','$session_id','$group_id')";
+	$query = "INSERT INTO $tbl_chat_connected(c_id, user_id,last_connection,session_id,to_group_id) VALUES($course_id, '".$_user['user_id']."','$current_time','$session_id','$group_id')";
 } else {
-	$query = "UPDATE $tbl_chat_connected set last_connection='".$current_time."' WHERE user_id='".$_user['user_id']."' AND session_id='$session_id' AND to_group_id='$group_id'";
+	$query = "UPDATE $tbl_chat_connected set last_connection='".$current_time."' WHERE c_id = $course_id AND user_id='".$_user['user_id']."' AND session_id='$session_id' AND to_group_id='$group_id'";
 }
 
 Database::query($query);
@@ -112,12 +111,10 @@ if (api_get_setting('show_navigation_menu') != 'false') {
    }
 }
 ?>
-
 <form name="formHidden" method="post" action="<?php echo api_get_self().'?cidReq='.$_GET['cidReq']; ?>">
 <input type="hidden" name="chat_size_old" value="<?php echo $chat_size_new; ?>">
 <input type="hidden" name="connected_old" value="<?php echo $connected_new; ?>">
 </form>
-
 <?php
 
 if ($_SESSION["origin"] == 'whoisonline') {  //check if our target has denied our request or not
@@ -132,5 +129,4 @@ if ($_SESSION["origin"] == 'whoisonline') {  //check if our target has denied ou
 		$result = Database::query($sql);
 	}
 }
-
 require 'footer_frame.inc.php';

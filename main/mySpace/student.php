@@ -280,6 +280,9 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 			$row[] = $string_date;
 
 			if ($export_csv) {
+			    
+			    $row[count($row) - 1] = strip_tags($row[count($row) - 1]);
+                $row[count($row) - 2] = strip_tags($row[count($row) - 2]);
 				$csv_content[] = $row;
 			}
 

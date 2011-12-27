@@ -26,6 +26,7 @@ if (!api_is_anonymous()) {
 	$header_title = " ";
 }
 
+$htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('bxslider'));
 $htmlHeadXtra[] ='
 <script type="text/javascript">
@@ -181,6 +182,8 @@ if (!api_is_anonymous()) {
 	}
 }
 
+$controller->tpl->assign('hot_courses',             $controller->return_hot_courses());
+
 $controller->tpl->assign('announcements_block', 	$controller->return_announcements());
 $controller->tpl->assign('home_page_block', 		$controller->return_home_page());
 $controller->tpl->assign('notice_block',			$controller->return_notice());
@@ -189,8 +192,5 @@ $controller->tpl->assign('plugin_campushomepage', 	$controller->return_plugin_ca
 if (api_is_platform_admin() || api_is_drh()) {
     $controller->tpl->assign('skills_block',            $controller->return_skills_links());
 }
-
-
-
 
 $controller->tpl->display_two_col_template();

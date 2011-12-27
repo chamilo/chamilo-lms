@@ -132,14 +132,15 @@ define('TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY',     'track_e_item_property');
 define('TABLE_STATISTIC_TRACK_E_OPEN',              'track_e_open');
 
 define('TABLE_STATISTIC_TRACK_FILTERED_TERMS',      'track_filtered_terms');
-
-
 define('TABLE_STATISTIC_TRACK_C_BROWSERS',          'track_c_browsers');
 define('TABLE_STATISTIC_TRACK_C_COUNTRIES',         'track_c_countries');
 define('TABLE_STATISTIC_TRACK_C_OS',                'track_c_os');
 define('TABLE_STATISTIC_TRACK_C_PROVIDERS',         'track_c_providers');
 define('TABLE_STATISTIC_TRACK_C_REFERERS',          'track_c_referers');
 
+//Course catalog stats see #4191
+define('TABLE_STATISTIC_TRACK_COURSE_RANKING',      'track_course_ranking');
+define('TABLE_MAIN_USER_REL_COURSE_VOTE',           'user_course_vote');
 
 
 // SCORM database tables

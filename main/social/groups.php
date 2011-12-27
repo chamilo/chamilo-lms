@@ -274,9 +274,9 @@ if ($group_id != 0 ) {
 			$content = MessageManager::display_messages_for_group($group_id);
 			if ($is_group_member) {
     			if (empty($content)) {		
-    				$create_thread_link =  '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="a_button orange medium thickbox" title="'.get_lang('ComposeMessage').'">'.get_lang('YouShouldCreateATopic').'</a></li>';
+    				$create_thread_link =  '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="a_button white medium thickbox" title="'.get_lang('ComposeMessage').'">'.get_lang('YouShouldCreateATopic').'</a></li>';
     			} else {
-    			    $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="a_button orange medium thickbox" title="'.get_lang('ComposeMessage').'">'.get_lang('NewTopic').'</a>';
+    			    $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="a_button white medium thickbox" title="'.get_lang('ComposeMessage').'">'.get_lang('NewTopic').'</a>';
     			     			    
     			}			
 			}
@@ -478,11 +478,11 @@ if ($group_id != 0 ) {
 	        			$my_group_content = Display::return_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));
 	        		}
         	   		if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
-    	        	    $create_group_item =  '<a class="a_button orange medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
+    	        	    $create_group_item =  '<a class="a_button white medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
     	        	    //$my_group_content = $create_group_item. $my_group_content;
         	        } else {        	           
     	            	if (api_is_allowed_to_edit(null,true)) {
-    	            	    $create_group_item =  '<a class="a_button orange medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
+    	            	    $create_group_item =  '<a class="a_button white medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
     	        	        //$my_group_content = $create_group_item. $my_group_content;
     	            	}
         	        }
@@ -514,11 +514,11 @@ if ($group_id != 0 ) {
 	        	$my_group_content = Display::return_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));           
 	        }
    	        if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
-                $create_group_item =  '<a class="a_button orange medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
+                $create_group_item =  '<a class="a_button white medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
                 //$my_group_content = $create_group_item. $my_group_content;
             } else {
                 if (api_is_allowed_to_edit(null,true)) {
-                    $create_group_item =  '<a class="a_button orange medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
+                    $create_group_item =  '<a class="a_button white medium" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.get_lang('CreateASocialGroup').'</a>';
                     //$my_group_content  = $create_group_item. $my_group_content;
                 }
             }

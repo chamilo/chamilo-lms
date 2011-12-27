@@ -3,6 +3,8 @@
 
 //@todo this could be integrated in the inc/lib/model.lib.php + try to clean this file
 
+$language_file = array('admin');
+
 require_once '../global.inc.php';
 
 api_protect_admin_script(true);
@@ -43,6 +45,9 @@ $ops = array(
 
 function get_where_clause($col, $oper, $val) {
     global $ops;
+    if (empty($col)){
+        return '';
+    } 
     if($oper == 'bw' || $oper == 'bn') $val .= '%';
     if($oper == 'ew' || $oper == 'en' ) $val = '%'.$val;
     if($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') $val = '%'.$val.'%';
@@ -51,12 +56,34 @@ function get_where_clause($col, $oper, $val) {
 }
 
 $where_condition = ""; //if there is no search request sent by jqgrid, $where should be empty
-$search_field    = isset($_REQUEST['searchField']) ? $_REQUEST['searchField'] : false;
-$search_oper     = isset($_REQUEST['searchOper']) ? $_REQUEST['searchOper']: false;
+
+$search_field    = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
+$search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   : false;
 $search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
 
 if ($_REQUEST['_search'] == 'true') {
-    $where_condition = get_where_clause($search_field, $search_oper, $search_string);
+    $where_condition = ' 1 = 1 ';
+    $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);
+        
+    if (!empty($where_condition_in_form)) {
+        $where_condition .= ' AND '.$where_condition_in_form;
+    }
+    
+    $filters   = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    if (!empty($filters)) {
+        $where_condition .= ' AND ( ';
+        $counter = 0;
+        foreach ($filters->rules as $key=>$rule) {
+            $where_condition .= get_where_clause($rule->field,$rule->op, $rule->data);
+            
+            if ($counter < count($filters->rules) -1) {     
+                $where_condition .= $filters->groupOp;
+            }
+            $counter++;
+        }
+        $where_condition .= ' ) ';
+    }
+        
 }
 
 // get index row - i.e. user click to sort $sord = $_GET['sord']; 
@@ -120,11 +147,11 @@ if ($_REQUEST['oper'] == 'del') {
 $columns = array();
 switch ($action) {    
     case 'get_sessions':
-        $columns = array('name', 'nbr_courses','category_name', 'date_start','date_end', 'coach_name', 'visibility');        
+        $columns = array('name', 'nbr_courses','category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');        
         $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));        
         break;
     case 'get_gradebooks': 
-        $columns = array('name', 'skills', 'actions');                
+        $columns = array('name', 'certificates','skills', 'actions', 'has_certificates');                
         if (!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
@@ -135,21 +162,33 @@ switch ($action) {
                 continue;
             }
             $skills = $obj->get_skills_by_gradebook($item['id']);
+            
             //Fixes bug when gradebook doesn't have names
             if (empty($item['name'])) {
                 $item['name'] = $item['course_code'];                 
-            }
-            if (!empty($item['certif_min_score']) && !empty($item['document_id'])) {
-                $item['name'] .= '* (with_certificate)'; 
             } else {
-                $item['name'] .= ' (No certificate)';
+                //$item['name'] =  $item['name'].' ['.$item['course_code'].']';
             }
+                 
+            $item['name'] = Display::url($item['name'], api_get_path(WEB_CODE_PATH).'gradebook/index.php?id_session=0&cidReq='.$item['course_code']);
+                         
+            if (!empty($item['certif_min_score']) && !empty($item['document_id'])) {
+                $item['certificates'] = Display::return_icon('accept.png', get_lang('WithCertificate'), array(), 22);
+                 $item['has_certificates'] = '1'; 
+            } else {
+                $item['certificates'] = Display::return_icon('warning.png', get_lang('NoCertificate'), array(), 22);
+                $item['has_certificates'] = '0';
+            }
+            
             $skills_string = '';
             if (!empty($skills)) {
                 foreach($skills as $skill) {
                     $item['skills'] .= Display::span($skill['name'], array('class' => 'label_tag skill'));  
                 }
-            }          
+            }
+            
+           
+                    
             $new_result[] = $item;
         } 
         $result = $new_result;

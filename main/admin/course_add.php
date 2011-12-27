@@ -110,20 +110,21 @@ $group[]= $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'
 $group[]= $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 $form->addGroup($group,'', get_lang('Unsubscription'), '<br />');
 
-
-$form->add_textfield('disk_quota', get_lang('CourseQuota'));
+$form->addElement('text','disk_quota',array(get_lang('CourseQuota'), null, get_lang('MB')));
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 $form->add_progress_bar();
 $form->addElement('style_submit_button', 'submit', get_lang('CreateCourse'), 'class="add"');
 
 // Set some default values.
 $values['course_language']  = api_get_setting('platformLanguage');
-$values['disk_quota']       = api_get_setting('default_document_quotum');
+$values['disk_quota']       = round(api_get_setting('default_document_quotum')/1024/1024, 1);
+
 $values['visibility']       = COURSE_VISIBILITY_OPEN_PLATFORM;
 $values['subscribe']        = 1;
 $values['unsubscribe']      = 0;
 reset($teachers);
 //$values['course_teachers'] = key($teachers);
+
 $form->setDefaults($values);
 
 // Validate the form
@@ -133,6 +134,8 @@ if ($form->validate()) {
     //$tutor_name      = $teachers[$course['tutor_id']];
     $teacher_id      = $course['tutor_id'];
     $course_teachers = $course['course_teachers'];
+    
+    $course['disk_quota'] = $course['disk_quota']*1024*1024;
     
     $course['exemplary_content']    = empty($course['exemplary_content']) ? false : true;
     $course['teachers']             = $course_teachers;

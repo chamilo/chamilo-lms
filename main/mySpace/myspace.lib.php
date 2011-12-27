@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 class MySpace {
 
@@ -1346,7 +1345,7 @@ class MySpace {
 		// database table definition
 		$access_url_id = api_get_current_access_url_id();
 	 	$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-		$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
+		$main_user_table = Database::get_main_table(TABLE_MAIN_USER);
 
 		if ($_configuration['multiple_access_urls']) {
 			$condition_multi_url = ", $tbl_url_rel_user as url_user WHERE user.user_id=url_user.user_id AND access_url_id='$access_url_id'";

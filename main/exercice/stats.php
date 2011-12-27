@@ -8,6 +8,7 @@ $language_file = array('exercice', 'tracking');
 require_once '../inc/global.inc.php';
 require_once 'exercise.lib.php';
 $this_section = SECTION_COURSES;
+
 $exercise_id = (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) ? intval($_GET['exerciseId']) : 0;
 
 $objExercise = new Exercise();
@@ -29,7 +30,7 @@ $headers = array(
 	get_lang('LowestScore'), 
 	get_lang('AverageScore'),
 	get_lang('HighestScore'),
-	get_lang('MaximumScore')	
+	get_lang('Weighting')	
 );
 
 if (!empty($question_list)) {
@@ -39,10 +40,10 @@ if (!empty($question_list)) {
 		
 		$data[$question_id]['name'] 						= cut($question_obj->question, 100);
 		$data[$question_id]['students_who_try_exercise'] 	= $exercise_stats['users'];
-		$data[$question_id]['lowest_score'] 				= $exercise_stats['min'];
-		$data[$question_id]['average_score'] 				= $exercise_stats['average'];
-		$data[$question_id]['highest_score'] 				= $exercise_stats['max'];
-		$data[$question_id]['max_score'] 					= $question_obj->weighting;
+		$data[$question_id]['lowest_score'] 				= round($exercise_stats['min'], 2);
+		$data[$question_id]['average_score'] 				= round($exercise_stats['average'], 2);
+		$data[$question_id]['highest_score'] 				= round($exercise_stats['max'], 2);
+		$data[$question_id]['max_score'] 					= round($question_obj->weighting, 2);
 	}
 }
 
@@ -80,6 +81,14 @@ $headers = array(
 $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
 $interbreadcrumb[] = array ("url" => "admin.php?exerciseId=$exercise_id","name" => $objExercise->name);
 
-$tpl = new Template(get_lang('Stats'));
+$tpl = new Template(get_lang('ReportByQuestion'));
+
+//$actions = array();
+//$actions[]= array(get_lang('Back'), Display::return_icon('back.png', get_lang('Back'), 'exercise_report.php?'.$exercise_id));
+//$tpl->set_actions($actions);
+
+$actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+$actions = Display::div($actions, array('class'=> 'actions'));
+$content = $actions.$content;
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

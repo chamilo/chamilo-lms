@@ -37,25 +37,7 @@ $(document).ready( function() {
                       
                 $.ajax({
                     url: '{$url}?a=save_profile&'+params,
-                    success:function(data) {
-                             
-                        /*jsPlumb.connect({
-                            source : "block_2", 
-                            target : "block_1",
-                            overlays : overlays            
-                        });*/
-                        
-                        /*
-                        calEvent.title          = $("#name").val();
-                        calEvent.start          = calEvent.start;
-                        calEvent.end            = calEvent.end;
-                        calEvent.allDay         = calEvent.allDay;
-                        calEvent.description    = $("#content").val();                              
-                        calendar.fullCalendar('updateEvent', 
-                                calEvent,
-                                true // make the event "stick"
-                        );*/
-                        
+                    success:function(data) {    
                         $("#dialog-form").dialog("close");                                      
                     }                           
                 });
@@ -67,16 +49,11 @@ $(document).ready( function() {
         }
     });
 
-    $("#add_profile").click(function() { 
-        
+    $("#add_profile").click(function() {
         $("#name").attr('value', '');
-        $("#description").attr('value', '');
-            
+        $("#description").attr('value', '');            
         $("#dialog-form").dialog("open");
-                      
-    });  
-    
-    
+    });
 });
 
 function check_skills() {
@@ -147,7 +124,6 @@ function checkLength( o, n, min, max ) {
     </ul>    
 {/if}
 
-
 {if !empty($order_user_list) }
     {foreach $order_user_list as $count => $user_list}
         <h2> {"Matches"|get_lang} {$count}/{$total_search_skills} </h2>
@@ -159,16 +135,18 @@ function checkLength( o, n, min, max ) {
                     </h3>
                 </div>
                 <div class="ui-widget-content ">
-                    <h4>Skills {$user.total_found_skills} / {$total_search_skills}</h4>
-                    <ul>    
-                                        
+                    <h4>{"Skills"|get_lang} {$user.total_found_skills} / {$total_search_skills}</h4>
+                    <ul>                
                         {foreach $user['skills'] as $skill_data}                 
                             <li>
-                                <span class="label_tag skill">{$skill_list[$skill_data.skill_id].name}</span>
-                                {if $skill_data.found}
-                                     * I have this skill * 
-                                {/if} 
-                                
+                                {if !empty({$skill_list[$skill_data.skill_id].name})}
+                                    <span class="label_tag skill">{$skill_list[$skill_data.skill_id].name}</span>
+                                {else}
+                                    {"SkillNotFound"|get_lang}
+                                {/if}
+                                {if $skill_data.found}                                     
+                                     *{"IHaveThisSkill"|get_lang}*
+                                {/if}
                             </li>                    
                         {/foreach}
                     </ul>
@@ -177,15 +155,13 @@ function checkLength( o, n, min, max ) {
         {/foreach}
     {/foreach}        
 {else}
-    <div class="warning-message">{"No results"|get_lang}</div>
+    <div class="warning-message">{"NoResults"|get_lang}</div>
 {/if}
-
-
 <div id="dialog-form" style="display:none;">    
     <form id="save_profile_form" name="form">        
         <div class="row">
             <div class="label">
-                <label for="name">Name</label>
+                <label for="name">{"Name"|get_lang}</label>
             </div>      
             <div class="formw">
                 <input type="text" name="name" id="name" size="40" />             
@@ -193,7 +169,7 @@ function checkLength( o, n, min, max ) {
         </div>        
         <div class="row">
             <div class="label">
-                <label for="name">Description</label>
+                <label for="name">{"Description"|get_lang}</label>
             </div>      
             <div class="formw">
                 <textarea name="description" id="description" cols="40" rows="7"></textarea>

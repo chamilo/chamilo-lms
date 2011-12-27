@@ -1053,6 +1053,14 @@ return 'application/octet-stream';
             
             $row['url'] 			= api_get_path(WEB_CODE_PATH).'document/showinframes.php?cidReq='.$course_code.'&id='.$id;
             $row['document_url'] 	= api_get_path(WEB_CODE_PATH).'document/document.php?cidReq='.$course_code.'&id='.$id;
+            
+            $row['absolute_path']   = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
+
+            $pathinfo = pathinfo($row['path']);
+            
+            $row['absolute_parent_path']   = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$pathinfo['dirname'].'/';
+        
+
             $row['direct_url'] 		= $www.$path;
             
             if (dirname($row['path']) == '.') { 
@@ -2192,7 +2200,7 @@ return 'application/octet-stream';
                         if (!empty($comment)) {
                         	$params['comment'] = trim($comment);
                         }         
-                        Database::update($table_document, $params, array('id = ?' =>$docid));                                           
+                        Database::update($table_document, $params, array('id = ? AND c_id = ? ' => array($docid, $course_info['real_id'])));                                           
                     }
 
                     // Showing message when sending zip files

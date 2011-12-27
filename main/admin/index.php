@@ -24,6 +24,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 $nameTools = get_lang('PlatformAdmin');
+$htmlHeadXtra[] = api_get_jquery_ui_js();
 
 // Displaying the header
 $message = '';
@@ -249,7 +250,7 @@ if (api_is_platform_admin()) {
     $items = array();
     $items[] = array('url'=>'skills.php',           'label' => get_lang('SkillsTree'));
     $items[] = array('url'=>'skills_profile.php',   'label' => get_lang('SkillsProfile'));
-    $items[] = array('url'=>'skills_gradebook.php', 'label' => get_lang('SkillsGradebook'));   
+    $items[] = array('url'=>'skills_gradebook.php', 'label' => get_lang('SkillsAndGradebooks'));   
     
     $blocks['skills']['items'] = $items;
     
@@ -271,10 +272,7 @@ if (api_is_platform_admin()) {
 	$items[] = array('url'=>'../../documentation/optimization.html', 	'label' => get_lang('OptimizationGuide'));
 	$items[] = array('url'=>'http://www.chamilo.org/extensions', 	'label' => get_lang('ChamiloExtensions'));	
 	
-	$blocks['chamilo']['items'] = $items;
-    
-    
-    
+	$blocks['chamilo']['items'] = $items;    
 	
 	// Try to display a maximum before we check the chamilo version and all that.
 	//session_write_close(); //close session to avoid blocking concurrent access

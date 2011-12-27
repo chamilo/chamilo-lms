@@ -3,13 +3,14 @@
 
 //@todo this could be integrated in the inc/lib/model.lib.php + try to clean this file
 
-$language_file = array('admin');
+$language_file = array('admin','exercice');
 
 require_once '../global.inc.php';
 
-api_protect_admin_script(true);
+
 
 $libpath = api_get_path(LIBRARY_PATH);
+
 require_once $libpath.'array.lib.php';
 
 // 1. Setting variables needed by jqgrid
@@ -21,6 +22,9 @@ $sord  = $_REQUEST['sord'];         //asc or desc
 if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc'; 
 }
+
+if ($action != 'get_exercise_results')
+	api_protect_admin_script(true);
 
 //Search features
 
@@ -92,7 +96,13 @@ if (!$sidx) $sidx = 1;
  
 //2. Selecting the count FIRST
 //@todo rework this
-switch ($action) {
+
+switch ($action) {	
+	case 'get_exercise_results':
+		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+		require_once $libpath.'groupmanager.lib.php';
+		$count = get_count_exam_results();
+		break;
     case 'get_sessions':
         require_once $libpath.'sessionmanager.lib.php';        
         $count = SessionManager::get_count_admin();
@@ -135,8 +145,7 @@ if ($page > $total_pages) {
 $start = $limit * $page - $limit;
 if ($start < 0 ) {
 	$start = 0;
-}
- 
+} 
 
 //4. Deleting an element if the user wants to
 if ($_REQUEST['oper'] == 'del') {
@@ -146,6 +155,22 @@ if ($_REQUEST['oper'] == 'del') {
 //4. Querying the DB for the elements
 $columns = array();
 switch ($action) {    
+	case 'get_exercise_results':	
+		
+		
+		
+		$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
+		$is_tutor                   = api_is_allowed_to_edit(true);
+		$documentPath				= api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
+		
+		if ($is_allowedToEdit || $is_tutor) {
+			$columns = array('firstname', 'lastname', 'username', 'groups', 'exe_duration', 'start_date', 'exe_date', 'score','status','actions');
+		} else {
+			$columns = array('exe_duration', 'start_date', 'exe_date', 'score','status');
+		}
+		$result = get_exam_results_data($start, $limit, $sidx, $sord, $where_condition);
+		
+		break;
     case 'get_sessions':
         $columns = array('name', 'nbr_courses','category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');        
         $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));        
@@ -186,9 +211,6 @@ switch ($action) {
                     $item['skills'] .= Display::span($skill['name'], array('class' => 'label_tag skill'));  
                 }
             }
-            
-           
-                    
             $new_result[] = $item;
         } 
         $result = $new_result;
@@ -250,7 +272,7 @@ switch ($action) {
 //var_dump($result);
 
 //5. Creating an obj to return a json
-if (in_array($action, array('get_careers','get_promotions','get_usergroups','get_gradebooks', 'get_sessions'))) { 
+if (in_array($action, array('get_careers','get_promotions','get_usergroups','get_gradebooks', 'get_sessions','get_exercise_results'))) { 
     $response = new stdClass();           
     $response->page     = $page; 
     $response->total    = $total_pages; 

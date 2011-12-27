@@ -13,7 +13,7 @@
  * Code
  */
 // name of the language file that needs to be included
-$language_file = array('exercice','tracking');
+$language_file = array('exercice');
 
 // including the global library
 require_once '../inc/global.inc.php';
@@ -22,7 +22,7 @@ require_once '../gradebook/lib/be.inc.php';
 // Setting the tabs
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
+$htmlHeadXtra[] = api_get_jquery_ui_js(true);
 
 // Access control
 api_protect_course_script(true);
@@ -316,8 +316,7 @@ if (api_is_allowed_to_edit(null,true)) {
         $actions .= "&nbsp;&nbsp;";
         $actions .= Display::return_icon('group.gif', get_lang("FilterByGroup"));
         $actions .= displayGroupMenu("groupFilter", $filterByGroup, "doFilterByGroup()")."&nbsp;";
-    }
-    
+    }    
 }
 
 $parameters=array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
@@ -400,6 +399,9 @@ $extra =  '<script type="text/javascript">
     });
     </script>';
 
+
+
+
 $extra .= '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
 $extra .= Display::tag('p', Display::input('radio', 'export_format', 'csv', array('checked'=>'1', 'id'=>'export_format_csv_label')). Display::tag('label', get_lang('ExportAsCSV'), array('for'=>'export_format_csv_label')));
 $extra .= Display::tag('p', Display::input('radio', 'export_format', 'xls', array('id'=>'export_format_xls_label')). Display::tag('label', get_lang('ExportAsXLS'), array('for'=>'export_format_xls_label')));   
@@ -415,5 +417,115 @@ $tpl = new Template($nameTools);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
 */
+
+
+
+
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results';
+
+//$activeurl = '?sidx=session_active';
+//
+if ($is_allowedToEdit || $is_tutor) {
+	
+	//The order is important you need to check the the $column variable in the model.ajax.php file 
+	$columns        = array(get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), 
+                        get_lang('Group'), get_lang('Duration'), get_lang('StartDate'),  get_lang('EndDate'), get_lang('Score'), get_lang('Status'), get_lang('Actions'));
+
+//Column config
+	$column_model   = array(
+                        array('name'=>'firstname',      'index'=>'firstname',		'width'=>'50',   'align'=>'left', 'search' => 'true'),                        
+                        array('name'=>'lastname',		'index'=>'lastname',		'width'=>'50',   'align'=>'left', 'search' => 'true'),
+                        array('name'=>'login',			'index'=>'username',		'width'=>'40',   'align'=>'left', 'search' => 'true'),
+                        array('name'=>'group',			'index'=>'s',				'width'=>'40',   'align'=>'left', 'search' => 'false'),
+                        array('name'=>'duration',       'index'=>'exe_duration',	'width'=>'30',   'align'=>'left', 'search' => 'true'),
+                        array('name'=>'start_date',		'index'=>'start_date',		'width'=>'60',   'align'=>'left', 'search' => 'true'),                        
+						array('name'=>'exe_date',		'index'=>'exe_date',		'width'=>'60',   'align'=>'left', 'search' => 'true'),                        
+						array('name'=>'score',			'index'=>'exe_result',	    'width'=>'50',   'align'=>'left', 'search' => 'true'),
+                        array('name'=>'status',         'index'=>'revised',			'width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',					          
+                              //for the bottom bar
+                              'searchoptions' => array(                                                
+                                                'defaultValue'  => '1', 
+                                                'value'         => ':'.get_lang('All').';1:'.get_lang('Revised').';0:'.get_lang('NotRevised')),
+                             
+                              //for the top bar                              
+                              'editoptions' => array('value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))),
+//issue fixed in jqgrid                         
+//                      array('name'=>'actions',        'index'=>'actions',         'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
+						array('name'=>'actions',        'index'=>'actions',         'width'=>'60',  'align'=>'left', 'search' => 'false')
+                       );            
+} else {
+	
+	//The order is important you need to check the the $column variable in the model.ajax.php file 
+	$columns        = array(get_lang('Duration'), get_lang('StartDate'),  get_lang('EndDate'), get_lang('Score'), get_lang('Status'));
+	
+	//Column config
+	$column_model   = array(                        
+                        array('name'=>'duration',       'index'=>'exe_duration',	'width'=>'40',   'align'=>'left', 'search' => 'true'),
+                        array('name'=>'start_date',		'index'=>'start_date',		'width'=>'80',   'align'=>'left', 'search' => 'true'),                        
+						array('name'=>'exe_date',		'index'=>'exe_date',		'width'=>'80',   'align'=>'left', 'search' => 'true'),                        
+						array('name'=>'score',			'index'=>'exe_result',		'width'=>'40',   'align'=>'left', 'search' => 'true'),	
+                        array('name'=>'status',         'index'=>'revised',			'width'=>'40',   'align'=>'left', 'search' => 'false')
+						
+                       );   	
+}
+//Autowidth             
+$extra_params['autowidth'] = 'true';
+
+//height auto 
+$extra_params['height'] = 'auto';
+$extra_params['excel'] = 'excel';
+
+$extra_params['rowList'] = array(10, 20 ,30);
+
+?>
+<script>
+$(function() {
+    <?php 
+        echo Display::grid_js('results', $url,$columns,$column_model,$extra_params, array(), $action_links, true);      
+    ?>
+    
+    //setSearchSelect("status");    
+    
+    $("#results").jqGrid('navGrid','#results_pager', {edit:false,add:false,del:false},
+        {height:280,reloadAfterSubmit:false}, // edit options 
+        {height:280,reloadAfterSubmit:false}, // add options 
+        {reloadAfterSubmit:false}, // del options 
+        {width:500} // search options
+    );
+    /*
+    // add custom button to export the data to excel
+    jQuery("#sessions").jqGrid('navButtonAdd','#sessions_pager',{
+           caption:"", 
+           onClickButton : function () { 
+               jQuery("#sessions").excelExport();
+           } 
+    });
+    
+    jQuery('#sessions').jqGrid('navButtonAdd','#sessions_pager',{id:'pager_csv',caption:'',title:'Export To CSV',onClickButton : function(e)
+    {
+        try {
+            jQuery("#sessions").jqGrid('excelExport',{tag:'csv', url:'grid.php'});
+        } catch (e) {
+            window.location= 'grid.php?oper=csv';
+        }
+    },buttonicon:'ui-icon-document'})
+    */
+   
+    
+    //Adding search options
+    var options = {
+        'stringResult': true,
+        'autosearch' : true,
+        'searchOnEnter':false,        
+    }
+    jQuery("#results").jqGrid('filterToolbar',options);    
+    var sgrid = $("#results")[0];
+    sgrid.triggerToolbar();
+});
+</script>
+<?php
+
+echo Display::grid_html('results');
+
 
 Display :: display_footer();

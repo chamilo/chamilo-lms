@@ -31,7 +31,6 @@ require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 
-
 $debug = 1; //debug value is set in the exercise.class.php file
 
 // name of the language file that needs to be included

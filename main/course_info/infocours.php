@@ -109,7 +109,7 @@ $linebreak = '<div class="row"><div class="label"></div><div class="formw" style
 $form = new FormValidator('update_course');
 
 // COURSE SETTINGS
-$form->addElement('html', '<div><h3>'.Display::return_icon('settings.png', addslashes(get_lang('CourseSettings')),'','22').' '.addslashes(get_lang('CourseSettings')).'</h3><div>');
+$form->addElement('html', '<div><h3>'.Display::return_icon('settings.png', Security::remove_XSS(get_lang('CourseSettings')),'','22').' '.Security::remove_XSS(get_lang('CourseSettings')).'</h3><div>');
 
 $image_html = '';
 
@@ -181,7 +181,7 @@ $form->addElement('html', '</div></div>');
 
 // COURSE ACCESS
 
-$form->addElement('html', '<div> <h3>'.Display::return_icon('course.png', addslashes(get_lang('CourseAccess')),'','22').' '.addslashes(get_lang('CourseAccess')).'</h3><div>');
+$form->addElement('html', '<div> <h3>'.Display::return_icon('course.png', Security::remove_XSS(get_lang('CourseAccess')),'','22').' '.Security::remove_XSS(get_lang('CourseAccess')).'</h3><div>');
 
 $group = array();
 $group[]= $form->createElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
@@ -211,7 +211,7 @@ $form->addElement('html', '</div></div>');
 
 
 // EMAIL NOTIFICATIONS
-$form->addElement('html', '<div> <h3>'.Display::return_icon('mail.png', addslashes(get_lang('EmailNotifications')),'','22').' '.addslashes(get_lang('EmailNotifications')).'</h3><div>');
+$form->addElement('html', '<div> <h3>'.Display::return_icon('mail.png', Security::remove_XSS(get_lang('EmailNotifications')),'','22').' '.Security::remove_XSS(get_lang('EmailNotifications')).'</h3><div>');
 
 $group = array();
 $group[]=$form->createElement('radio', 'email_alert_to_teacher_on_new_user_in_course', get_lang('NewUserEmailAlert'), get_lang('NewUserEmailAlertEnable'), 1);
@@ -246,7 +246,7 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 $form->addElement('html', '</div></div>');
 
 // Gradebook SETTINGS
-$form->addElement('html', '<div><h3>'.Display::return_icon('gradebook.png', addslashes(get_lang('Gradebook')),'','22').' '.addslashes(get_lang('Gradebook')).'</h3><div>');
+$form->addElement('html', '<div><h3>'.Display::return_icon('gradebook.png', Security::remove_XSS(get_lang('Gradebook')),'','22').' '.Security::remove_XSS(get_lang('Gradebook')).'</h3><div>');
 
 $group = array();
 $models = api_get_settings_options('grading_model');
@@ -262,13 +262,13 @@ $element = $form->createElement('radio', 'course_grading_model', '', get_lang('N
 $group[] = $element;
 
 
-$form->addGroup($group, '', array(get_lang('GradingModelTitle')), '', 'li', false); //julio
+$form->addGroup($group, '', array(get_lang('GradingModelTitle')), '', 'li', false);
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 $form->addElement('html', '</div></div>');
 
 // USER RIGHTS
-$form->addElement('html', '<div> <h3>'.Display::return_icon('user.png', addslashes(get_lang('UserRights')),'','22').' '.addslashes(get_lang('UserRights')).'</h3><div>');
+$form->addElement('html', '<div> <h3>'.Display::return_icon('user.png', Security::remove_XSS(get_lang('UserRights')),'','22').' '.Security::remove_XSS(get_lang('UserRights')).'</h3><div>');
 
 $group = array();
 $group[]=$form->createElement('radio', 'allow_user_edit_agenda', get_lang('AllowUserEditAgenda'), get_lang('AllowUserEditAgendaActivate'), 1);
@@ -296,7 +296,7 @@ $form->addElement('html', '</div></div>');
 
 
 // CHAT SETTINGS
-$form->addElement('html', '<div><h3>'.Display::return_icon('chat.png', addslashes(get_lang('ConfigChat')),'','22').' '.addslashes(get_lang('ConfigChat')).'</h3><div>');
+$form->addElement('html', '<div><h3>'.Display::return_icon('chat.png', Security::remove_XSS(get_lang('ConfigChat')),'','22').' '.Security::remove_XSS(get_lang('ConfigChat')).'</h3><div>');
 
 $group = array();
 $group[]=$form->createElement('radio', 'allow_open_chat_window', get_lang('AllowOpenchatWindow'), get_lang('AllowOpenChatWindowActivate'), 1);
@@ -308,7 +308,7 @@ $form->addElement('html', '</div></div>');
 
 
 // LEARNING PATH
-$form->addElement('html', '<div><h3>'.Display::return_icon('scorms.png', addslashes(get_lang('ConfigLearnpath')),'','22').' '.Security::remove_XSS(get_lang('ConfigLearnpath')).'</h3><div>');
+$form->addElement('html', '<div><h3>'.Display::return_icon('scorms.png', get_lang('ConfigLearnpath'),'','22').' '.Security::remove_XSS(get_lang('ConfigLearnpath')).'</h3><div>');
 
 //Auto launch LP
 $group = array();
@@ -342,7 +342,7 @@ if (is_settings_editable()) {
 $form->addElement('html', '</div></div>');
 
 // THEMATIC ADVANCE SETTINGS
-$form->addElement('html', '<div><h3>'.Display::return_icon('course_progress.png', addslashes(get_lang('ThematicAdvanceConfiguration')),'','22').' '.addslashes(get_lang('ThematicAdvanceConfiguration')).'</h3><div>');
+$form->addElement('html', '<div><h3>'.Display::return_icon('course_progress.png', Security::remove_XSS(get_lang('ThematicAdvanceConfiguration')),'','22').' '.Security::remove_XSS(get_lang('ThematicAdvanceConfiguration')).'</h3><div>');
 
 $group = array();
 $group[]=$form->createElement('radio', 'display_info_advance_inside_homecourse', get_lang('InfoAboutAdvanceInsideHomeCourse'), get_lang('DisplayAboutLastDoneAdvance'), 1);

@@ -448,7 +448,7 @@ if ($encryptPassForm == '1') {
 <div id="wrapper">
 
 	<div id="header">
-		<div id="header1">	
+		<div id="header1" style="margin-bottom:10px;">	
 			<div id="logo">	   
 	        	<img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />        
 			</div>	

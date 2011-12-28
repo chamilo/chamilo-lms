@@ -196,7 +196,6 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 					</ul>
 					<div style="clear: both;" class="clear"></div>
 				</div>
-				<div id="header4">&nbsp;</div>
 			</div>
 			<div class="clear"> </div>
 

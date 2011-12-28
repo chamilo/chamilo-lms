@@ -349,8 +349,11 @@ $(document).ready( function() {
 
 </script>
 <div style="z-index: 1000;position: absolute;">
-<h3>{'Skills'|get_lang}</h3>    
-<a style="z-index: 1000"class="a_button gray medium" id="add_item_link" href="#">{'AddSkill'|get_lang}</a>
+<h3>{'Skills'|get_lang}</h3>
+<ul style="list-style-type:none; margin:0;">
+<li><a style="z-index: 1000"class="a_button gray medium" id="add_item_link" href="#">{'AddSkill'|get_lang}</a></li>
+<li><a style="z-index: 1000"class="a_button gray medium" id="return_to_admin" href="/main/admin/">{'BackToAdmin'|get_lang}</a></li>
+</ul>
 </div>
 {$html}
 

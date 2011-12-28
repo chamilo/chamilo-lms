@@ -745,13 +745,8 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 			}
 
             if (!isset($_SESSION['login_as'])) {
-                //We add a new record in the course tracking table
-                $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-                $time = api_get_datetime();
-                $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
-                     "VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1', '".api_get_session_id()."')";
-                //error_log($sql);
-                Database::query($sql);
+				//Course login
+				event_course_login($_course['sysCode'], $_user['user_id'], api_get_session_id());
             }
         } else {
             //exit("WARNING UNDEFINED CID !! ");

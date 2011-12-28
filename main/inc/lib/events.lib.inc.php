@@ -18,6 +18,7 @@
 $TABLETRACK_LOGIN           = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 $TABLETRACK_OPEN 		    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_OPEN);
 $TABLETRACK_ACCESS          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+$course_tracking_table		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 $TABLETRACK_DOWNLOADS	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
 $TABLETRACK_UPLOADS 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
 $TABLETRACK_LINKS 		    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
@@ -132,10 +133,7 @@ function event_access_course() {
 				VALUES (".$user_id.", '".$_cid."', '$now', '".$id_session."')";
 		$res = Database::query($sql);
 	}
-	// end "what's new" notification
-	
-    //Course catalog stats modifications see #4191    
-    CourseManager::update_course_ranking();
+	// end "what's new" notification	
     return 1;
 }
 
@@ -1288,7 +1286,6 @@ function get_comments($id,$question_id) {
 }
 
 
-
 function get_all_exercise_event_by_exe_id($exe_id) {
 	$table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 	$exe_id = intval($exe_id);
@@ -1302,7 +1299,6 @@ function get_all_exercise_event_by_exe_id($exe_id) {
 	}
 	return $list;
 }
-
 
 
 function delete_attempt($exe_id, $user_id, $course_code, $session_id, $question_id) {
@@ -1329,5 +1325,27 @@ function delete_attempt_hotspot($exe_id, $user_id, $course_code, $question_id) {
 
 	$sql = "DELETE FROM $table_track_attempt WHERE hotspot_exe_id = $exe_id AND hotspot_user_id = $user_id AND hotspot_course_code = '$course_code' AND hotspot_question_id = $question_id ";
 	Database::query($sql);
+}
+
+/**
+ * User logs in for the first time to a course
+ */
+function event_course_login($course_code, $user_id, $session_id) {
+	global $course_tracking_table;
+	
+	//@todo use api_get_utc_datetime
+	$time		 = api_get_datetime();
+	
+	$course_code = Database::escape_string($course_code);
+	$user_id	 = Database::escape_string($user_id);
+	$session_id  = Database::escape_string($session_id);
+	
+	$sql	= "INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id) 
+			  VALUES('".$course_code."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";
+	Database::query($sql);
+	
+	
+    //Course catalog stats modifications see #4191    
+    CourseManager::update_course_ranking();
 }
 

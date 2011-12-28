@@ -3432,6 +3432,32 @@ class CourseManager {
             $result = Database::query($sql);            
         }
     }
+	
+	public function get_user_course_vote($user_id, $course_id, $session_id = null, $url_id = null) {
+		$table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
+		
+		$session_id = !isset($session_id)   ? api_get_session_id()				: intval($session_id);
+        $url_id     = empty($url_id)        ? api_get_current_access_url_id()	: intval($url_id);
+		
+		$user_id = intval($user_id);
+		
+		if (empty($user_id)) {
+			return false;
+		}
+		
+		$params = array(
+			'user_id'		=> $user_id,
+            'c_id'          => $course_id,
+            'session_id'    => $session_id,
+            'url_id'        => $url_id            
+        );		
+		
+		$result = Database::select('vote', $table_user_course_vote, array('where' => array('user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
+		if (!empty($result)) {
+			return $result['vote'];	
+		}
+		return false;
+	}
     
     public function get_course_ranking($course_id, $session_id = null, $url_id = null) {
         $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
@@ -3445,8 +3471,29 @@ class CourseManager {
             'url_id'        => $url_id,
             'creation_date' => $now,
         );
-         
-        $result = Database::select('id, accesses, points, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
+
+        $result = Database::select('c_id, accesses, points, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
+		      
+		$point_average_in_percentage = 0;
+		$point_average_in_star = 0;
+		$users_who_voted = 0;
+		
+		if (!empty($result['users'])) {			
+			$users_who_voted				= $result['users'];
+			$point_average_in_percentage	= round($result['points']/$result['users'] * 100 / 5, 2);    
+			$point_average_in_star			= round($result['points']/$result['users'], 1);    
+		}	
+		
+		$result['user_vote'] = false;
+		
+		if (!api_is_anonymous()) {			
+			$result['user_vote'] = self::get_user_course_vote(api_get_user_id(), $course_id, $session_id,$url_id);			
+		}
+		
+		$result['point_average']		= $point_average_in_percentage;
+		$result['point_average_star']   = $point_average_in_star;
+		$result['users_who_voted']		= $users_who_voted;
+
         return $result;
     }
     
@@ -3524,16 +3571,22 @@ class CourseManager {
      */
     
     public function add_course_vote($user_id, $vote, $course_id, $session_id = null, $url_id = null) {
-        $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
-        
+        $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);        
         $course_id  = empty($course_id)     ? api_get_course_int_id() : intval($course_id);
+		
+		if (empty($course_id) || empty($user_id)) {
+			return false;
+		}
+		
+		if (!in_array($vote, array(1,2,3,4,5))) {
+            return false;
+        }
+		
         $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
         $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
         $vote       = intval($vote);
         
-        if (!in_array($vote, array(1,2,3,4,5))) {
-            return false;
-        }
+        
         
         $params = array(
             'user_id'       => intval($user_id),
@@ -3546,7 +3599,7 @@ class CourseManager {
         $action_done = false;
         
         $result = Database::select('id, vote', $table_user_course_vote, array('where' => array('user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
-
+		
         if (empty($result)) {            
             $result = Database::insert($table_user_course_vote, $params);
             $points_to_add = $vote;
@@ -3556,11 +3609,12 @@ class CourseManager {
             $my_params = array('vote' => $vote);
             $points_to_add = $vote - $result['vote'];
             $add_user = false;
+			
             $result = Database::update($table_user_course_vote, $my_params, array('user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params));
             $action_done = 'updated';
-        }
-        //Current points 
-        
+        }		
+		
+        //Current points         
         if (!empty($points_to_add)) {
             self::update_course_ranking($course_id, $session_id, $url_id, $points_to_add, false, $add_user);
         }
@@ -3596,10 +3650,15 @@ class CourseManager {
     
     function return_hot_courses($days = 30, $limit = 5) {
 		$limit  = intval($limit);
-        $table_course_access	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);                
+        $table_course_access	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);   
+		
+		//@todo all dates in the tracking_course_access, last_access are in the DB time (NOW) not UTC
+		/*
 		$today					= api_get_utc_datetime();
 		$today_diff				= time() -intval($days)*24*60*60;
 		$today_diff				= api_get_utc_datetime($today_diff);
+		 * */
+		 
 		//WHERE login_course_date <= '$today' AND login_course_date >= '$today_diff'
 		
 		//$table_course_access table uses the now() and interval ... 
@@ -3609,12 +3668,18 @@ class CourseManager {
 				GROUP BY course_code
 				ORDER BY course_count DESC 
 				LIMIT $limit";
+		
 		$result = Database::query($sql);
 		$courses = array();
 		if (Database::num_rows($result)) {
 			$courses = Database::store_result($result, 'ASSOC');
 			foreach ($courses as &$my_course) {
-				$my_course['extra_info'] = api_get_course_info($my_course['course_code']);				
+				$course_info = api_get_course_info($my_course['course_code']);			
+				$my_course['extra_info'] = $course_info;
+				$ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';				
+				
+				$point_info = self::get_course_ranking($course_info['real_id'], 0);				
+				$my_course['extra_info']['rating_html'] = Display::return_rating_system($course_info['code'].'_rating', $ajax_url.'&course_id='.$course_info['real_id'], $point_info);
 			}
 		}		
 		return $courses;

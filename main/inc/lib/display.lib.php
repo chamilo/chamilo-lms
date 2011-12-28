@@ -1273,29 +1273,40 @@ class Display {
     }
 
     /**
+     * Return the five star HTML
      * 
-     * 
-     * @param   int     id of the class
+     * @param   string  id of the rating ul
      * @param   int     percentage 0-100 %
      * @param   string  url that will be added (for the jquery stuff)
+	 * @param	string	show number of persons who voted for that item
+	 * @todo	use smarty
      **/
-    public function return_rating_system($id, $percentage, $url, $number_of_users_who_voted = null) {
-        $percentage = intval($percentage);
-        if (!empty($percentage)) {
+    public function return_rating_system($id, $url, $point_info = array()) {
+		$number_of_users_who_voted =  isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;		
+		$percentage =  isset($point_info['point_average']) ? $point_info['point_average'] : 0;
+		
+		if (!empty($percentage)) {
             $percentage = $percentage*125/100;
         }
+		$accesses =  isset($point_info['accesses']) ? $point_info['accesses'] : null;		
+		
         $html = '<ul id = "'.$id.'" class="star-rating">
-            <li class="current-rating" style="width:'.$percentage.'px;"></li>
-            <li><a href="javascript:void(0)" rel="'.$url.'&star=1" title="'.get_lang('OneStarOutOf5').'"  class="one-star">1</a></li>
-            <li><a href="javascript:void(0)" rel="'.$url.'&star=2" title="'.get_lang('TwoStarsOutOf5').'" class="two-stars">2</a></li>
-            <li><a href="javascript:void(0)" rel="'.$url.'&star=3" title="'.get_lang('ThreeStarsOutOf5').'" class="three-stars">3</a></li>
-            <li><a href="javascript:void(0)" rel="'.$url.'&star=4" title="'.get_lang('FourStarsOutOf5').'" class="four-stars">4</a></li>
-            <li><a href="javascript:void(0)" rel="'.$url.'&star=5" title="'.get_lang('FiveStarsOutOf5').'" class="five-stars">5</a></li>
-        </ul>';
+					<li class="current-rating" style="width:'.$percentage.'px;"></li>
+					<li><a href="javascript:void(0)" rel="'.$url.'&star=1" title="'.get_lang('OneStarOutOf5').'"  class="one-star">1</a></li>
+					<li><a href="javascript:void(0)" rel="'.$url.'&star=2" title="'.get_lang('TwoStarsOutOf5').'" class="two-stars">2</a></li>
+					<li><a href="javascript:void(0)" rel="'.$url.'&star=3" title="'.get_lang('ThreeStarsOutOf5').'" class="three-stars">3</a></li>
+					<li><a href="javascript:void(0)" rel="'.$url.'&star=4" title="'.get_lang('FourStarsOutOf5').'" class="four-stars">4</a></li>
+					<li><a href="javascript:void(0)" rel="'.$url.'&star=5" title="'.get_lang('FiveStarsOutOf5').'" class="five-stars">5</a></li>
+				</ul>';
         
         //if (!isset($number_of_users_who_voted)) {
-            $label = $number_of_users_who_voted == 1 ? get_lang('Vote') : get_lang('Votes'); 
-            $html .= Display::span($number_of_users_who_voted.' '.$label, array('id' =>  'vote_label_'.$id));
+            $label			= $number_of_users_who_voted == 1 ? get_lang('Vote') : get_lang('Votes');
+			$label_accesses = $accesses == 1 ? get_lang('Visite') : get_lang('Visites');
+			$label_average	= $point_info['point_average_star'].' '.get_lang('Average');
+			$label_user		= $point_info['user_vote']  ? get_lang('YouAlreadyVoted').' '.$point_info['user_vote'] : '';
+			
+            $html .= Display::span($number_of_users_who_voted.' '.$label.' '.$accesses.' '.$label_accesses.' '.$label_average.' '.$label_user, array('id' =>  'vote_label_'.$id));
+			
             $html .= ' '.Display::span(' ', array('id' =>  'vote_label2_'.$id));
         //}
         return $html;

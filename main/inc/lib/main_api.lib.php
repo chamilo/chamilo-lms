@@ -1149,6 +1149,14 @@ function api_get_course_info($course_code = null) {
             // The real_id is an integer. It is mandatory for future implementations.
             $_course['real_id'     ]          = $course_data['id'              ];
             $_course['course_language']       = $course_data['course_language'];
+			
+			//I know this is bad, but this reflects that it was a bad decistion to not add a flag in the DB if an image exists			
+			if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
+				$url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
+			} else {
+				$url_image = api_get_path(WEB_IMG_PATH).'without_picture.png';
+			}
+			$_course['course_image'] = $url_image;
         }
         return $_course;
     }
@@ -1209,6 +1217,13 @@ function api_get_course_info_by_id($id = null) {
             $_course['real_id'      ]         = $course_data['id'              ];            
             $_course['title'        ]         = $course_data['title'           ];
             $_course['course_language']       = $course_data['course_language'];
+			
+			if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
+				$url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
+			} else {
+				$url_image = api_get_path(WEB_IMG_PATH).'without_picture.png';
+			}
+			$_course['course_image'] = $url_image;
 
         }
         return $_course;

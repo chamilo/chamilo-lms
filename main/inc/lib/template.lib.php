@@ -21,7 +21,7 @@ class Template extends Smarty {
 		$this->setConfigDir(api_get_path(SYS_ARCHIVE_PATH));
 		
 		//Caching settings
-		$this->caching 			= true;
+		$this->caching 			= false;
 		//$this->caching = Smarty::CACHING_LIFETIME_CURRENT;		
 		$this->cache_lifetime 	= Smarty::CACHING_OFF; // no caching
 		//$this->cache_lifetime 	= 120;
@@ -38,6 +38,8 @@ class Template extends Smarty {
 		
 		//Creating a Smarty modifier - Now we can call the get_lang from a template!!! Just use {"MyString"|get_lang} 
 		$this->registerPlugin("modifier","get_lang", "get_lang");
+		
+		//Not recomended to use get_path, use {$_p['xxx']} see set_system_parameters(functions)
 		$this->registerPlugin("modifier","get_path", "api_get_path");
 		$this->registerPlugin("modifier","get_setting", "api_get_setting");
 		

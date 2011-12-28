@@ -464,9 +464,6 @@ class Auth
                         ON (url_rel_course.course_code=$tbl_course.code) WHERE access_url_id = $url_access_id ) AS someRandId
                         WHERE course.id AND course.id >= someRandId.randId $without_special_courses $without_special_courses";
             }
-            
-            
-            
         } else {
             $category_code = Database::escape_string($category_code);
             $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title ";
@@ -492,19 +489,11 @@ class Auth
                     $row['tutor_name'] = get_lang('NoManager');
                 }
                 
-                $point_info = CourseManager::get_course_ranking($row['id'], 0);
-                
-                $points = 0;
-                $users_who_voted = 0;
-                if (!empty($point_info['users'])) {
-                    $users_who_voted = $point_info['users'];
-                    $points = $point_info['points']/$point_info['users'] * 100 / 5;    
-                }
+                $point_info = CourseManager::get_course_ranking($row['id'], 0);        
                 
                 $courses[] = array(
                                     'real_id'           => $row['id'],
-                                    'point_average'     => $points,
-                                    'users_who_voted'   => $users_who_voted,                                    
+                                    'point_info'		=> $point_info,                                    
                                     'code'              => $row['code'],
                                     'directory'         => $row['directory'],
                                     'db'                => $row['db_name'],

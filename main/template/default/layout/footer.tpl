@@ -21,7 +21,7 @@
 </div> <!-- end of #footer -->
 {$footer_extra_content}
 {literal}
-<script>
+<script type="text/javascript">
 $(document).ready( function() {
     $(".chzn-select").chosen();
     

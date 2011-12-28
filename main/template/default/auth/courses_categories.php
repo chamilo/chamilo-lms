@@ -21,14 +21,13 @@ $stok = Security::get_token();
 */
 
 ?>
-
-<script>
+<script type="text/javascript">
     $(document).ready( function() {
        $('.star-rating li a').click(function(){
            
            var id = $(this).parents('ul').attr('id');
                       
-           $('#vote_label2_' + id).html('<?php echo Display::return_icon('loading1.gif');?>');
+           $('#vote_label2_' + id).html('<?php echo get_lang('Loading');?>');
            
            $.ajax({
                url: $(this).attr('rel'),
@@ -40,7 +39,7 @@ $stok = Security::get_token();
                    if(data == 'updated') {
                         $('#vote_label2_' + id).html("<?php echo get_lang('Saved')?>");
                    }
-               },
+               }
            })
        });
     });
@@ -139,7 +138,6 @@ $stok = Security::get_token();
         
         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
       
-
         if (!empty($browse_courses_in_category)) {
 
             foreach ($browse_courses_in_category as $course) {
@@ -151,14 +149,13 @@ $stok = Security::get_token();
 
                 $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];   // course path
 
-                if (file_exists($course_path.'/course-pic85x85.png')) {
-                    $course_web_path = api_get_path(WEB_COURSE_PATH).$course['directory'];   // course web path
-                    $course_medium_image = $course_web_path.'/course-pic85x85.png'; // redimensioned image 85x85
+                if (file_exists($course_path.'/course-pic85x85.png')) {                    
+                    $course_medium_image = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic85x85.png'; // redimensioned image 85x85
                 } else {
                     $course_medium_image = api_get_path(WEB_IMG_PATH).'without_picture.png'; // without picture
                 }
                 
-                $rating = Display::return_rating_system($course['code'].'_rating', $course['point_average'], $ajax_url.'&course_id='.$course['real_id'], $course['users_who_voted']);
+                $rating = Display::return_rating_system($course['code'].'_rating', $ajax_url.'&course_id='.$course['real_id'], $course['point_info']);
 
                 //<div class="course-block-main-item"><div class="left">'.get_lang('Teacher').'</div><div class="course-block-teacher right">'.$tutor_name.'</div></div>
                 //<div class="course-block-main-item"><div class="left">'.get_lang('CreationDate').'</div><div class="course-block-date">'.api_format_date($creation_date,DATE_FORMAT_SHORT).'</div></div>

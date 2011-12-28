@@ -1,3 +1,4 @@
+{* This template is NOT used in chamilo 1.9 *}
 {extends file="default/layout/main.tpl"}
 
 {block name=header}

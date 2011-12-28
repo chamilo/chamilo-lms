@@ -281,11 +281,13 @@ class Template extends Smarty {
 		foreach($css_files  as $css_file) {
 			$css_file_to_string .= api_get_css($css_file);
 		}
-		
+	
+		global $this_section, $nameTools;	
 		$this->assign('css_file_to_string', $css_file_to_string);
 		$this->assign('js_file_to_string',  $js_file_to_string);		
-		$this->assign('text_direction',	 	api_get_text_direction());			
-		$this->assign('style_print', 		$style_print);
+		$this->assign('text_direction',	    api_get_text_direction());			
+		$this->assign('style_print',        $style_print);
+		$this->assign('section_name',       'section-'.$this_section);
 		
 		$extra_headers = '';		
 		if (isset($htmlHeadXtra) && $htmlHeadXtra) {

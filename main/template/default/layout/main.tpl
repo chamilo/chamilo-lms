@@ -6,7 +6,7 @@
 {include file="default/layout/head.tpl"}
 </head>
 
-<body dir="{$text_direction}">
+<body dir="{$text_direction}" class="{$section_name}">
 
 <div class="skip">
 	<ul>

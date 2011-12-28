@@ -287,6 +287,10 @@ require_once $lib_path.'formvalidator/Rule/allowed_tags.inc.php';
 // Load HTMLPurifier.
 //require_once $lib_path.'htmlpurifier/library/HTMLPurifier.auto.php'; // It will be loaded later, in a lazy manner.
 
+// Before we call local.inc.php, let's define a global $this_section variable 
+// which will then be usable from the banner and header scripts
+$this_section = SECTION_GLOBAL;
+
 // include the local (contextual) parameters of this course or section
 require $includePath.'/local.inc.php';
 

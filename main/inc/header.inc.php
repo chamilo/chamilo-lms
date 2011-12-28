@@ -22,7 +22,7 @@ if (api_is_platform_admin()) {
 }*/
 header('Content-Type: text/html; charset='.api_get_system_encoding());
 //show the X-Powered-By header so that parsers can find it
-global $_configuration;
+global $_configuration, $this_section;
 header('X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'],0,1));
 
 $navigator_info = api_get_navigator();
@@ -204,8 +204,10 @@ if (!api_is_platform_admin()) {
 ?>
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>" <?php
-if (defined('CHAMILO_HOMEPAGE') && CHAMILO_HOMEPAGE)
- echo 'onload="javascript: if(document.formLogin) { document.formLogin.login.focus(); }"'; ?>>
+if (defined('CHAMILO_HOMEPAGE') && CHAMILO_HOMEPAGE) {
+  echo 'onload="javascript: if(document.formLogin) { document.formLogin.login.focus(); }"';
+}
+echo 'class="'.(!empty($this_section)?$this_section:'').'"';?>>
 <div class="skip">
 <ul>
 <li><a href="#menu"><?php echo get_lang('WCAGGoMenu'); ?></a></li>

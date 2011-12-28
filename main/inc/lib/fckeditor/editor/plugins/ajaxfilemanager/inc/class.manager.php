@@ -96,35 +96,31 @@ class manager {
 			$folderInfo = $file->getFileInfo();
 			if(sizeof($folderInfo)) {
 				//for Chamilo in a name folder, replace num user by user names
-				if(preg_match('/sf_user_/',basename($this->getCurrentFolderPath())))
-				{
+				if(preg_match('/sf_user_/',basename($this->getCurrentFolderPath()))) {
 					$userinfo=Database::get_user_info_from_id(substr(basename($this->getCurrentFolderPath()), 8));
 					$this->currentFolderInfo['name']=api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
-				}
-				else
-				{
+				} else {
 					$this->currentFolderInfo['name']=str_replace('_',' ',basename($this->getCurrentFolderPath()));//for Chamilo. Prevent long directory name
 				}				
-				if(preg_match('/shared_folder/', basename($this->getCurrentFolderPath())))
-				{
+				if(preg_match('/shared_folder/', basename($this->getCurrentFolderPath()))) {
 					$this->currentFolderInfo['name']=get_lang('UserFolders');
 				}
-				if(preg_match('/shared_folder_session_/',basename($this->getCurrentFolderPath())))
-				{
+				
+				if(preg_match('/shared_folder_session_/',basename($this->getCurrentFolderPath()))) {
 					$session = explode('_', basename($this->getCurrentFolderPath()));
 					$session = strtolower($session[sizeof($session) - 1]);
 					$this->currentFolderInfo['name']=get_lang('UserFolders').' ('.api_get_session_name($session).')*';
 				}
 			
 				//end Chamilo
-				$this->currentFolderInfo['subdir']=0;
-				$this->currentFolderInfo['file']=0;
-				$this->currentFolderInfo['ctime']=$folderInfo['ctime'];
-				$this->currentFolderInfo['mtime']=$folderInfo['mtime'];
-				$this->currentFolderInfo['is_readable']=$folderInfo['is_readable'];
-				$this->currentFolderInfo['is_writable']=$folderInfo['is_writable'];
-				$this->currentFolderInfo['path']  		 = $this->getCurrentFolderPath();
-				$this->currentFolderInfo['path_base64']  = base64_encode($this->getCurrentFolderPath());
+				$this->currentFolderInfo['subdir']			= 0;
+				$this->currentFolderInfo['file']			= 0;
+				$this->currentFolderInfo['ctime']			= $folderInfo['ctime'];
+				$this->currentFolderInfo['mtime']			= $folderInfo['mtime'];
+				$this->currentFolderInfo['is_readable']		= $folderInfo['is_readable'];
+				$this->currentFolderInfo['is_writable']		= $folderInfo['is_writable'];
+				$this->currentFolderInfo['path']			= $this->getCurrentFolderPath();
+				$this->currentFolderInfo['path_base64']		= base64_encode($this->getCurrentFolderPath());
 				
 				$this->currentFolderInfo['friendly_path'] = transformFilePath($this->getCurrentFolderPath());
 				$this->currentFolderInfo['type'] = "folder";
@@ -166,7 +162,7 @@ class manager {
 		$files = array();
 		$folders = array();
 		$tem = array();
-		//var_dump($this->getCurrentFolderPath());
+		
 		$dirHandler = @opendir($this->getCurrentFolderPath());
 		if ($dirHandler) {
 			while(false !== ($file = readdir($dirHandler))) {
@@ -185,6 +181,7 @@ class manager {
 					}				
 						
 					$path = $this->getCurrentFolderPath().$file;
+					
 					if (is_dir($path) && isListingDocument($path) ) {
 						$this->currentFolderInfo['subdir']++;
 						//fix count left folders for Chamilo
@@ -196,23 +193,19 @@ class manager {
 						//show group's directory only if I'm member. Or if I'm a teacher. TODO: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder). Teachers can access to all groups ?
 						$group_folder='_groupdocs';
 						$hide_doc_group=false;
-						if(ereg($group_folder, $path))
-						{
+						if(ereg($group_folder, $path)) {
 							$hide_doc_group=true;
-							if($is_user_in_group ||( $to_group_id!=0 && api_is_allowed_to_edit()))
-							{
+							if($is_user_in_group ||( $to_group_id!=0 && api_is_allowed_to_edit())) {
 								$hide_doc_group=false;
 							}
-
 						}
 
-						if(ereg($deleted_by_Chamilo_folder, $path)|| ereg($css_folder_Chamilo, $path) || ereg($hotpotatoes_folder_Chamilo, $path) || ereg($chat_files_Chamilo, $path) || ereg($certificates_Chamilo, $path) || $hide_doc_group || $file[0]=='.')
-						{
+						if(ereg($deleted_by_Chamilo_folder, $path)|| ereg($css_folder_Chamilo, $path) || ereg($hotpotatoes_folder_Chamilo, $path) || ereg($chat_files_Chamilo, $path) || ereg($certificates_Chamilo, $path) || $hide_doc_group || $file[0]=='.') {
 							$this->currentFolderInfo['subdir']=$this->currentFolderInfo['subdir']-1;
 						}
 						//end fix for Chamilo						
 
-						if(!$this->calculateSubdir) {			
+						if (!$this->calculateSubdir) {			
 						} else  {							
 							$folder = $this->getFolderInfo($path);
 							$folder['flag'] = $flag;
@@ -222,24 +215,37 @@ class manager {
 					} elseif(is_file($path) && isListingDocument($path)) {
 						$obj = new file($path);
 						$tem = $obj->getFileInfo();
+						
+						
 						if (sizeof($tem)) {
 							$fileType = $this->getFileType($file);
-							foreach($fileType as $k=>$v)
-							{
+							foreach($fileType as $k=>$v) {
 								$tem[$k] = $v;
 							}
+							
 							$this->currentFolderInfo['size'] += $tem['size'];
 							$this->currentFolderInfo['file']++;
+							
 							//fix count left files for Chamilo
 							$deleted_by_Chamilo_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
-							if(ereg($deleted_by_Chamilo_file, $tem['name']) || $tem['name'][0]=='.')
-							{
-								$this->currentFolderInfo['file']=$this->currentFolderInfo['file']-1;
+							if(ereg($deleted_by_Chamilo_file, $tem['name']) || $tem['name'][0]=='.') {
+								$this->currentFolderInfo['file'] = $this->currentFolderInfo['file']-1;
 							}
 							///end fix for Chamilo
+							
+							//Try a course file
 							$tem['path'] = backslashToSlash($path);
 							$pos = strpos($this->getCurrentFolderPath(), 'courses/');
-							$tem['public_path'] = api_get_path(WEB_PATH).substr($this->getCurrentFolderPath(), $pos, strlen($this->getCurrentFolderPath())).$file;
+							
+							if ($pos === false) {							
+								//try my_files
+								$pos = strpos($this->getCurrentFolderPath(), 'main/');	
+								$tem['public_path'] = api_get_path(WEB_PATH).substr($this->getCurrentFolderPath(), $pos, strlen($this->getCurrentFolderPath())).$file;								
+								//var_dump($this->getCurrentFolderPath());
+							} else {
+								$tem['public_path'] = api_get_path(WEB_PATH).substr($this->getCurrentFolderPath(), $pos, strlen($this->getCurrentFolderPath())).$file;
+							}
+							
 							//error_log($tem['public_path'] );
 							$tem['type'] = "file";
 							$tem['flag'] = $flag;

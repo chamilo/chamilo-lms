@@ -3472,7 +3472,7 @@ class CourseManager {
             'creation_date' => $now,
         );
 
-        $result = Database::select('c_id, accesses, points, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
+        $result = Database::select('c_id, accesses, total_score, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
 		      
 		$point_average_in_percentage = 0;
 		$point_average_in_star = 0;
@@ -3480,8 +3480,8 @@ class CourseManager {
 		
 		if (!empty($result['users'])) {			
 			$users_who_voted				= $result['users'];
-			$point_average_in_percentage	= round($result['points']/$result['users'] * 100 / 5, 2);    
-			$point_average_in_star			= round($result['points']/$result['users'], 1);    
+			$point_average_in_percentage	= round($result['total_score']/$result['users'] * 100 / 5, 2);    
+			$point_average_in_star			= round($result['total_score']/$result['users'], 1);    
 		}	
 		
 		$result['user_vote'] = false;
@@ -3522,7 +3522,7 @@ class CourseManager {
             'creation_date' => $now,
         );
          
-        $result = Database::select('id, accesses, points, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');        
+        $result = Database::select('id, accesses, total_score, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');        
         
         // Problem here every thime we load the courses/XXXX/index.php course home page we update the access 
         
@@ -3532,7 +3532,7 @@ class CourseManager {
             }            
             //The votes and users are empty
             if (isset($points_to_add) && !empty($points_to_add)) {
-               $params['points'] = intval($points_to_add);
+               $params['total_score'] = intval($points_to_add);
             }
             if ($add_user) {
                 $params['users'] = 1;
@@ -3545,7 +3545,7 @@ class CourseManager {
                 $my_params['accesses'] = intval($result['accesses']) + 1;
             }
             if (isset($points_to_add) && !empty($points_to_add)) {                
-               $my_params['points'] = $result['points'] + $points_to_add;               
+               $my_params['total_score'] = $result['total_score'] + $points_to_add;               
             }
             if ($add_user) {
                 $my_params['users']  = $result['users'] + 1;
@@ -3567,6 +3567,7 @@ class CourseManager {
      * @param   int course id
      * @param   int session id
      * @param   int url id 
+	 * @return	mixed 'added', 'updated' or 'nothing'
      *  
      */
     
@@ -3586,8 +3587,6 @@ class CourseManager {
         $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
         $vote       = intval($vote);
         
-        
-        
         $params = array(
             'user_id'       => intval($user_id),
             'c_id'          => $course_id,
@@ -3596,7 +3595,7 @@ class CourseManager {
             'vote'          => $vote
         );
         
-        $action_done = false;
+        $action_done = 'nothing';
         
         $result = Database::select('id, vote', $table_user_course_vote, array('where' => array('user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
 		
@@ -3618,7 +3617,15 @@ class CourseManager {
         if (!empty($points_to_add)) {
             self::update_course_ranking($course_id, $session_id, $url_id, $points_to_add, false, $add_user);
         }
-        return $action_done;
+		
+		$point_info = CourseManager::get_course_ranking($course_id, 0); 
+		
+		$ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+		
+	    $rating = Display::return_rating_system('star_'.$course_id, $ajax_url.'&course_id='.$course_id, $point_info, false);
+
+        //return $action_done;
+		return $rating;
         
     }
     
@@ -3679,7 +3686,7 @@ class CourseManager {
 				$ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';				
 				
 				$point_info = self::get_course_ranking($course_info['real_id'], 0);				
-				$my_course['extra_info']['rating_html'] = Display::return_rating_system($course_info['code'].'_rating', $ajax_url.'&course_id='.$course_info['real_id'], $point_info);
+				$my_course['extra_info']['rating_html'] = Display::return_rating_system('star_'.$course_info['real_id'], $ajax_url.'&course_id='.$course_info['real_id'], $point_info);
 			}
 		}		
 		return $courses;
@@ -3689,7 +3696,7 @@ class CourseManager {
 		$table_course_ranking	= Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);        
         $params['url_id']		= api_get_current_access_url_id();
         
-        $result = Database::select('c_id, accesses, points, users', $table_course_ranking, array('where' => array('url_id = ?' => $params), 'order' => array('accesses DESC'), 'limit' => $limit), 'all', true);
+        $result = Database::select('c_id, accesses, total_score, users', $table_course_ranking, array('where' => array('url_id = ?' => $params), 'order' => array('accesses DESC'), 'limit' => $limit), 'all', true);
         return $result;
 	}    
 } //end class CourseManager

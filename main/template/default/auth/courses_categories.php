@@ -23,7 +23,7 @@ $stok = Security::get_token();
 ?>
 <script type="text/javascript">
     $(document).ready( function() {
-       $('.star-rating li a').click(function(){
+       $('.star-rating li a').live('click', function(event) {
            
            var id = $(this).parents('ul').attr('id');
                       
@@ -32,12 +32,13 @@ $stok = Security::get_token();
            $.ajax({
                url: $(this).attr('rel'),
                success: function(data) {
+				   $("#rating_wrapper_"+id).html(data);
                    if(data == 'added') {                                                
                         //$('#vote_label_' + id).html('Saved');
-                        $('#vote_label2_' + id).html("<?php echo get_lang('Saved')?>");
+                        //$('#vote_label2_' + id).html("<?php echo get_lang('Saved')?>");
                    }
                    if(data == 'updated') {
-                        $('#vote_label2_' + id).html("<?php echo get_lang('Saved')?>");
+                        //$('#vote_label2_' + id).html("<?php echo get_lang('Saved')?>");
                    }
                }
            })
@@ -155,7 +156,7 @@ $stok = Security::get_token();
                     $course_medium_image = api_get_path(WEB_IMG_PATH).'without_picture.png'; // without picture
                 }
                 
-                $rating = Display::return_rating_system($course['code'].'_rating', $ajax_url.'&course_id='.$course['real_id'], $course['point_info']);
+                $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&course_id='.$course['real_id'], $course['point_info']);
 
                 //<div class="course-block-main-item"><div class="left">'.get_lang('Teacher').'</div><div class="course-block-teacher right">'.$tutor_name.'</div></div>
                 //<div class="course-block-main-item"><div class="left">'.get_lang('CreationDate').'</div><div class="course-block-date">'.api_format_date($creation_date,DATE_FORMAT_SHORT).'</div></div>

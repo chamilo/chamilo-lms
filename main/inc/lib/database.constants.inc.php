@@ -140,7 +140,7 @@ define('TABLE_STATISTIC_TRACK_C_REFERERS',          'track_c_referers');
 
 //Course catalog stats see #4191
 define('TABLE_STATISTIC_TRACK_COURSE_RANKING',      'track_course_ranking');
-define('TABLE_MAIN_USER_REL_COURSE_VOTE',           'user_course_vote');
+define('TABLE_MAIN_USER_REL_COURSE_VOTE',           'user_rel_course_vote');
 
 
 // SCORM database tables

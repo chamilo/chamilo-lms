@@ -1,19 +1,22 @@
 <script type="text/javascript">
 $(document).ready( function() {
-	$('.star-rating li a').click(function(){
-           
-           var id = $(this).parents('ul').attr('id');
+	
+	$('.star-rating li a').live('click', function(event) {	
+
+        var id = $(this).parents('ul').attr('id');
                       
            $('#vote_label2_' + id).html("{'Loading'|get_lang}");
            
            $.ajax({
                url: $(this).attr('rel'),
                success: function(data) {
+				 $("#rating_wrapper_"+id).html(data);
+
                    if(data == 'added') {                                                                        
-                        $('#vote_label2_' + id).html("{'Saved'|get_lang}");
+                        //$('#vote_label2_' + id).html("{'Saved'|get_lang}");
                    }
                    if(data == 'updated') {
-                        $('#vote_label2_' + id).html("{'Saved'|get_lang}");
+                        //$('#vote_label2_' + id).html("{'Saved'|get_lang}");
                    }
                }
            })

@@ -1281,7 +1281,7 @@ class Display {
 	 * @param	string	show number of persons who voted for that item
 	 * @todo	use smarty
      **/
-    public function return_rating_system($id, $url, $point_info = array()) {
+    public function return_rating_system($id, $url, $point_info = array(), $add_div_wrapper = true) {
 		$number_of_users_who_voted =  isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;		
 		$percentage =  isset($point_info['point_average']) ? $point_info['point_average'] : 0;
 		
@@ -1309,6 +1309,9 @@ class Display {
 			
             $html .= ' '.Display::span(' ', array('id' =>  'vote_label2_'.$id));
         //}
+		if ($add_div_wrapper) {
+			$html = Display::div($html, array('id' => 'rating_wrapper_'.$id));
+		}
         return $html;
         
     }

@@ -2824,7 +2824,7 @@ CREATE TABLE track_course_ranking (
  session_id  int unsigned not null default 0,
  url_id  int unsigned not null default 0, 
  accesses int unsigned not null default 0,
- points int unsigned not null default 0,
+ total_score int unsigned not null default 0,
  users int unsigned not null default 0,
  creation_date datetime not null
 );
@@ -2834,7 +2834,7 @@ ALTER TABLE track_course_ranking ADD INDEX idx_tcc_sid (session_id);
 ALTER TABLE track_course_ranking ADD INDEX idx_tcc_urlid (url_id);
 ALTER TABLE track_course_ranking ADD INDEX idx_tcc_creation_date (creation_date);
 
-CREATE TABLE user_course_vote(
+CREATE TABLE user_rel_course_vote(
   id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
   c_id int unsigned not null,
   user_id int unsigned not null,  

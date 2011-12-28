@@ -128,7 +128,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_skills_management', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_skills_management', 'false', 'No');
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_admin_toolbar', NULL, 'radio', 'Platform', 'true', 'ShowAdminToolbarTitle', 'ShowAdminToolbarComment', NULL, NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_admin_toolbar', NULL, 'radio', 'Platform', 'show_to_admin', 'ShowAdminToolbarTitle', 'ShowAdminToolbarComment', NULL, NULL, 1);
 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'do_not_show', 'DoNotShow');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'show_to_admin', 'ShowToAdminsOnly');
@@ -136,11 +136,8 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'show_to_all', 'ShowToAllUsers');
 
 
-
-
-
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.16368' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.16427' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';

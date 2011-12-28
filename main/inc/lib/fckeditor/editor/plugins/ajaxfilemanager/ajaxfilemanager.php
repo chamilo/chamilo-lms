@@ -15,6 +15,7 @@ api_block_anonymous_users();// from Chamilo
 
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php";
 //$session->gc(); // Disabled for integration with Chamilo
+
 require_once CLASS_SESSION_ACTION;
 $sessionAction = new SessionAction();
 
@@ -89,7 +90,7 @@ if(!empty($_GET['view'])) {
 	<!-- Chamilo hack for breadcrumb into shared folders -->
 	var shared_folder = '<?php echo get_lang('UserFolders');?>';
 	
-	<?php 
+	<?php	
 	$course_session = explode('_', basename($currentPath));
 	$course_session = strtolower($course_session[sizeof($course_session) - 1]);
 	?>

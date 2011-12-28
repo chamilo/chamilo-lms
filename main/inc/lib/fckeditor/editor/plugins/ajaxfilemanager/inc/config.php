@@ -17,9 +17,10 @@
 require_once '../../../../../../inc/global.inc.php';
 
 // Loading document repositories settings.
+
 require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php' ;
 
-//FILESYSTEM CONFIG	<br>
+//FILESYSTEM CONFIG
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.auth.php");
 define('CONFIG_QUERY_STRING_ENABLE', true); //Enable passed query string to setting the system configuration
 
@@ -66,7 +67,9 @@ if(CONFIG_QUERY_STRING_ENABLE && !empty($_GET['config']) && file_exists(dirname(
 {
 	$configBaseFileName = 'config.' . secureFileName($_GET['config']) . ".php";
 }
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . $configBaseFileName);
+
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . $configBaseFileName; 
+
 
 // Loading the selected language file.
 require_once(DIR_AJAX_LANGS . CONFIG_LANG_DEFAULT . ".php");
@@ -77,9 +80,9 @@ if (CONFIG_LANG_DEFAULT != "en")
 	require_once(DIR_AJAX_LANGS . "en.php");
 }
 
-require_once(DIR_AJAX_INC . "function.base.php");
+require_once DIR_AJAX_INC . "function.base.php";
 
-require_once(dirname(__FILE__) .  DIRECTORY_SEPARATOR . "class.session.php");
+require_once dirname(__FILE__) .  DIRECTORY_SEPARATOR . "class.session.php";
 
 $auth = new Auth();
 

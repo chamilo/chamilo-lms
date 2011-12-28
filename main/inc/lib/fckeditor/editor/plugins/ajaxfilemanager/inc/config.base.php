@@ -76,7 +76,7 @@ these two paths accept relative path only, don't use absolute path
 //define('CONFIG_SYS_DEFAULT_PATH', '../uploaded/'); //accept relative path only
 //define('CONFIG_SYS_ROOT_PATH', '../uploaded/');	//accept relative path only
 
-/////////////// Integration for Chamilo
+// Integration for Chamilo
 
 if(!empty($_course['path'])) {
 	if(!empty($group_properties['directory'])) {
@@ -99,16 +99,15 @@ if(!empty($_course['path'])) {
 		$PathChamiloAjaxFileManager='../../../../../../../home/default_platform_document/';
 	} else {
 		//my profile
-		$my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'none');
-		$PathChamiloAjaxFileManager='../../../../../../../main/'.$my_path['dir'].'my_files/';
+		$my_path					= UserManager::get_user_picture_path_by_id(api_get_user_id(),'none');
+		$PathChamiloAjaxFileManager	= '../../../../../../../main/'.$my_path['dir'].'my_files/';
 	}
-
 }
 
-define('CONFIG_SYS_DEFAULT_PATH', $PathChamiloAjaxFileManager);
-define('CONFIG_SYS_ROOT_PATH', $PathChamiloAjaxFileManager);
+define('CONFIG_SYS_DEFAULT_PATH',	$PathChamiloAjaxFileManager);
+define('CONFIG_SYS_ROOT_PATH',		$PathChamiloAjaxFileManager);
 
-////////////// end chamilo
+// end chamilo
 
 
 

@@ -94,11 +94,11 @@ function checkLength( o, n, min, max ) {
     }
 }    
 </script>
-
 <h2>{"SearchSkills"|get_lang}</h2>
 
 {$form}
 
+<div class="skills-skills">
 {if !empty($search_skill_list) }
     <h3>{"Skills"|get_lang}</h3>
      <ul class="holder">
@@ -111,8 +111,8 @@ function checkLength( o, n, min, max ) {
     </ul>
     <a id="add_profile" class="a_button gray small" href="#"> {"SaveThisSearch"|get_lang}</a>
 {/if}
-
-
+</div>
+<div class="skills-profiles">
 {if !empty($profiles) }
     <h3>{"SkillProfiles"|get_lang}</h3>
     <ul class="holder">
@@ -123,7 +123,8 @@ function checkLength( o, n, min, max ) {
         {/foreach}
     </ul>    
 {/if}
-
+</div>
+<div class="skills-users">
 {if !empty($order_user_list) }
     {foreach $order_user_list as $count => $user_list}
         <h2> {"Matches"|get_lang} {$count}/{$total_search_skills} </h2>
@@ -157,6 +158,7 @@ function checkLength( o, n, min, max ) {
 {else}
     <div class="warning-message">{"NoResults"|get_lang}</div>
 {/if}
+</div>
 <div id="dialog-form" style="display:none;">    
     <form id="save_profile_form" name="form">        
         <div class="row">

@@ -4171,3 +4171,10 @@ a:active{
   outline: none;
 }
 
+.skills-profiles, .skills-users, .skills-skills {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.skills-skills ul.holder {
+  margin-bottom: 8px;
+}

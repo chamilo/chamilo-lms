@@ -108,7 +108,14 @@ class WSCM {
 	 * @return mixed WSError in case of failure, null in case of success
 	 */
 	protected function verifyKey($secret_key) {
-		$security_key = $_SERVER['REMOTE_ADDR'].$this->_configuration['security_key'];
+		$ip = trim($_SERVER['REMOTE_ADDR']);
+		// if we are behind a reverse proxy, assume it will send the 
+		// HTTP_X_FORWARDED_FOR header and use this IP instead
+		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		  list($ip1,$ip2) = split(',',$_SERVER['HTTP_X_FORWARDED_FOR']);
+		  $ip = trim($ip1);
+		}
+		$security_key = $ip.$this->_configuration['security_key'];
 
 		if(!api_is_valid_secret_key($secret_key, $security_key)) {
 			return new WSCMError(1, "API key is invalid");

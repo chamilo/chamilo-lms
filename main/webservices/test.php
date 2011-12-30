@@ -1,4 +1,5 @@
 <?php
+die(); //remove to enable - incomplete script anyway
 require_once '../inc/lib/nusoap/nusoap.php';
 require_once '../inc/conf/configuration.php';
 ?>

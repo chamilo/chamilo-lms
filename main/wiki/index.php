@@ -1197,6 +1197,9 @@ if ($_GET['action']=='wanted') {
     $allpages=Database::query($sql);
 
     while ($row=Database::fetch_array($allpages)) {
+		if ($row['reflink']=='index'){
+			$row['reflink']=str_replace(' ','_',get_lang('DefaultTitle'));
+		}
         $pages[] = $row['reflink'];
     }
 
@@ -1327,7 +1330,10 @@ if ($_GET['action']=='mostlinked') {
     $allpages=Database::query($sql);
 
     while ($row=Database::fetch_array($allpages)) {
-        $pages[] = $row['reflink'];
+		if ($row['reflink']=='index'){
+			$row['reflink']=str_replace(' ','_',get_lang('DefaultTitle'));
+		}
+		$pages[] = $row['reflink'];	
     }
 
     //get name refs in last pages
@@ -1341,12 +1347,8 @@ if ($_GET['action']=='mostlinked') {
 		
 		// Find linksto into reflink. If found ->page is linked
 		foreach ($refs as $v) {
-	
 			if (in_array($v, $pages)) {
 				if (trim($v)!="") {
-					if ($v=='index'){
-					 $v=str_replace('_',' ',get_lang('DefaultTitle'));
-					}					
 					$linked[]=$v;
 				}
 			}
@@ -1515,6 +1517,7 @@ if ($_GET['action']=='links') {
         echo '</div>';
 
         //fix index to title Main page into linksto
+		
         if ($page=='index') {
             $page=str_replace(' ','_',get_lang('DefaultTitle'));
         }

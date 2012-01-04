@@ -1261,9 +1261,12 @@ if ($_GET['action']=='orphaned') {
 
     $allpages=Database::query($sql);
     while ($row=Database::fetch_array($allpages)) {
-        $row['linksto']= str_replace($row["reflink"], " ", trim($row["linksto"])); //remove self reference
+        $row['linksto']= str_replace($row["reflink"], " ", trim($row["linksto"])); //remove self reference		
 		$refs = explode(" ", trim($row["linksto"]));
 		foreach ($refs as $ref_linked){
+			if ($ref_linked==str_replace(' ','_',get_lang('DefaultTitle'))) {
+				$ref_linked='index';
+			}
 			$array_refs_linked[]= $ref_linked;
 		}
     }

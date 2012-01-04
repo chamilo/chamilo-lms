@@ -512,47 +512,117 @@ if ($_GET['studentlist'] == 'false') {
         $parameters['from'] 		= isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
         $table->set_additional_parameters($parameters);
-
+        $tab_table_header = array();    // tab of header texts
         $table->set_header(0, get_lang('OfficialCode'), true, 'align="center"');
+        $tab_table_header[] = get_lang('OfficialCode');
         if ($is_western_name_order) {
             $table->set_header(1, get_lang('FirstName'), true, 'align="center"');
+            $tab_table_header[] = get_lang('FirstName');
             $table->set_header(2, get_lang('LastName'),  true, 'align="center"');
+            $tab_table_header[] = get_lang('LastName');
         } else {
             $table->set_header(1, get_lang('LastName'),  true, 'align="center"');
+            $tab_table_header[] = get_lang('LastName');
             $table->set_header(2, get_lang('FirstName'), true, 'align="center"');
+            $tab_table_header[] = get_lang('FirstName');
         }
-        $table->set_header(3, get_lang('TrainingTime'), false);
-        $table->set_header(4, get_lang('CourseProgress').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        $table->set_header(3, get_lang('Login'), false, 'align="center"');  // hubr
+        $tab_table_header[] = get_lang('Login');
         
-        $table->set_header(5, get_lang('ExerciseProgress'), false);
-        $table->set_header(6, get_lang('ExerciseAverage'), false);
-        $table->set_header(7, get_lang('Score').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
-        $table->set_header(8, get_lang('Student_publication'), false);
-        $table->set_header(9, get_lang('Messages'), false);
+        $table->set_header(4, get_lang('TrainingTime'), false);
+        $tab_table_header[] = get_lang('TrainingTime');
+        $table->set_header(5, get_lang('CourseProgress').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        $tab_table_header[] = get_lang('CourseProgress');
+        
+        $table->set_header(6, get_lang('ExerciseProgress'), false);
+        $tab_table_header[] = get_lang('ExerciseProgress');
+        $table->set_header(7, get_lang('ExerciseAverage'), false);
+        $tab_table_header[] = get_lang('ExerciseAverage');
+        $table->set_header(8, get_lang('Score').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        $tab_table_header[] = get_lang('Score');
+        $table->set_header(9, get_lang('Student_publication'), false);
+        $tab_table_header[] = get_lang('Student_publication');
+        $table->set_header(10, get_lang('Messages'), false);
+        $tab_table_header[] = get_lang('Messages');
         
         if (empty($session_id)) {
-            $table->set_header(10, get_lang('Survey'), false);
-            $table->set_header(11, get_lang('FirstLogin'), false, 'align="center"');
-            $table->set_header(12, get_lang('LatestLogin'), false, 'align="center"');
+            $table->set_header(11, get_lang('Survey'), false);
+            $tab_table_header[] = get_lang('Survey');
+            $table->set_header(12, get_lang('FirstLogin'), false, 'align="center"');
+            $tab_table_header[] = get_lang('FirstLogin');
+            $table->set_header(13, get_lang('LatestLogin'), false, 'align="center"');
+            $tab_table_header[] = get_lang('LatestLogin');
             if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-                $table->set_header(13, $extra_info['field_display_text'], false);
-                $table->set_header(14, get_lang('Details'), false);                        
+                $table->set_header(14, $extra_info['field_display_text'], false);
+                $tab_table_header[] = $extra_info['field_display_text'];
+                $table->set_header(15, get_lang('Details'), false);                        
+                $tab_table_header[] = get_lang('Details');
             } else {
-                $table->set_header(13, get_lang('Details'), false);
+                $table->set_header(14, get_lang('Details'), false);
+                $tab_table_header[] = get_lang('Details');
             }
             
         } else {
-            $table->set_header(10, get_lang('FirstLogin'), false, 'align="center"');
-            $table->set_header(11, get_lang('LatestLogin'), false, 'align="center"');
+            $table->set_header(11, get_lang('FirstLogin'), false, 'align="center"');
+            $tab_table_header[] = get_lang('FirstLogin');
+            $table->set_header(12, get_lang('LatestLogin'), false, 'align="center"');
+            $tab_table_header[] = get_lang('LatestLogin');
             
             if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {                                
-                $table->set_header(12, $extra_info['field_display_text'], false);
-                $table->set_header(13, get_lang('Details'), false);                
+                $table->set_header(13, $extra_info['field_display_text'], false);
+                $tab_table_header[] = $extra_info['field_display_text'];
+                $table->set_header(14, get_lang('Details'), false);                
+                $tab_table_header[] = get_lang('Details');
             } else {                
-                $table->set_header(12, get_lang('Details'), false);
+                $table->set_header(13, get_lang('Details'), false);
+                $tab_table_header[] = get_lang('Details');
             }            
         }
+        // display buttons to unhide hidden columns
+        echo "<br/><br/><div id='unhideButtons'>";
+        for ($i=0; $i < count($tab_table_header); $i++) {
+            $index = $i + 1;
+            echo "<span title='".get_lang('DisplayColumn')." ".$tab_table_header[$i]."' class='unhide_button hide' onclick='foldup($index)'>".Display :: return_icon('move.png', get_lang('DisplayColumn'), array('align'=>'absmiddle', 'hspace'=>'3px'), 16)." ".$tab_table_header[$i]."</span>";
+        }
+        echo "</div>";
+        // display the table
+        echo "<div id='reporting_table'>";
         $table->display();
+        echo "</div>";
+        // some scripts and style
+        echo "<script type='text/javascript'>";
+        echo "function foldup(in_id) {\n";
+        echo "  $('div#reporting_table table tr td:nth-child('+in_id+')').fadeToggle();\n";
+        echo "  $('div#reporting_table table tr th:nth-child('+in_id+')').fadeToggle();\n";
+        echo "  $('div#unhideButtons span:nth-child('+in_id+')').fadeToggle();\n";
+        echo "}\n";
+        echo "function init_hide() {\n";
+        echo "    $('div#reporting_table table tr th').each(\n";
+        echo "        function(index) {\n";
+        echo "            num_index = index + 1;\n";
+        echo "            $(this).prepend('<span style=\"cursor:pointer\" onclick=\"foldup('+num_index+')\">".Display :: return_icon('delete.png', get_lang('HideColumn'), array('align' => 'absmiddle', 'hspace' => '3px'), 16)."</span><br/>');\n";
+        echo "        }\n";
+        echo "    );\n";
+        echo "}\n";
+        echo "$(document).ready( function() {";
+        echo "  init_hide();\n";
+        // hide several column at startup
+        echo "  foldup(1);foldup(9);foldup(10);foldup(11);foldup(12);\n";            
+        echo "});\n";
+        echo "</script>";
+        echo "<style type='text/css'>";
+        echo ".unhide_button {";
+        echo "    cursor : pointer;";
+        echo "    border:1px solid black;";
+        echo "    background-color: #FAFAFA;";
+        echo "    padding: 5px;";
+        echo "    border-radius : 3px;";
+        echo "    margin-right:3px;";
+        echo "}";
+        echo "div#reporting_table table th {";
+        echo "  vertical-align:top;";
+        echo "}";
+        echo "</style>";  
     } else {
         echo Display::display_warning_message(get_lang('NoUsersInCourse'));
     }
@@ -569,6 +639,7 @@ if ($_GET['studentlist'] == 'false') {
             $csv_headers[] = get_lang('LastName', '');   
             $csv_headers[] = get_lang('FirstName', '');            
         }
+        $csv_headers[] = get_lang('Login', ''); // hubr
         $csv_headers[] = get_lang('TrainingTime', '');
         $csv_headers[] = get_lang('CourseProgress', '');
         $csv_headers[] = get_lang('ExerciseProgress','');

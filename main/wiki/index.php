@@ -1245,6 +1245,7 @@ if ($_GET['action']=='orphaned') {
 
     $pages = array();
     $refs = array();
+	$list_refs = array();
     $orphaned = array();
 
     //get name pages
@@ -1262,16 +1263,19 @@ if ($_GET['action']=='orphaned') {
     while ($row=Database::fetch_array($allpages)) {
         $row['linksto']= str_replace($row["reflink"], " ", trim($row["linksto"])); //remove self reference
 		$refs = explode(" ", trim($row["linksto"]));
-        $refs = array_unique($refs);
+		foreach ($refs as $ref_linked){
+			$array_refs_linked[]= $ref_linked;
+		}
     }
 
+	$array_refs_linked = array_unique($array_refs_linked);
+	
     //search each name of list linksto into list reflink
     foreach ($pages as $v) {
-        if (!in_array($v, $refs)) {
+        if (!in_array($v, $array_refs_linked)) {
             $orphaned[] = $v;
         }
     }
-
 
     foreach ($orphaned as $orphaned_show) {
 		// get visibility status and title

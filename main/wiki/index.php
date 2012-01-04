@@ -1344,6 +1344,9 @@ if ($_GET['action']=='mostlinked') {
 	
 			if (in_array($v, $pages)) {
 				if (trim($v)!="") {
+					if ($v=='index'){
+					 $v=str_replace('_',' ',get_lang('DefaultTitle'));
+					}					
 					$linked[]=$v;
 				}
 			}

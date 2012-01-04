@@ -763,7 +763,7 @@ function display_wiki_entry($newtitle) {
     if ($_GET['view']) {
         $_clean['view']=(int)Database::escape_string($_GET['view']);
 
-        $filter=' AND '.$tbl_wiki.'.id="'.$_clean['view'].'"';
+        $filter=' AND w.id="'.$_clean['view'].'"';
     }
 
     //first, check page visibility in the first page version
@@ -781,8 +781,9 @@ function display_wiki_entry($newtitle) {
     			wc.page_id	  = w.page_id AND 
     			w.reflink	  = "'.Database::escape_string($pageMIX).'" AND 
     			w.session_id  = '.$session_id.' AND 
-    			w.'.$groupfilter.' '.$filter.' 
+    			w.'.$groupfilter.'  '.$filter.' 
     			ORDER BY id DESC';
+				
     $result = Database::query($sql);
     $row    = Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
     

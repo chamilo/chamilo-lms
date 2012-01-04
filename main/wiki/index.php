@@ -527,7 +527,8 @@ if ($_GET['action']=='statistics' && (api_is_allowed_to_edit(false,true) || api_
 	$total_multimedia		= 0;
 	$total_tables			= 0;
 	
-	$sql="SELECT *, COUNT(*) AS TOTAL_VERS, SUM(hits) AS TOTAL_VISITS FROM ".$tbl_wiki." WHERE c_id = $course_id ".$groupfilter.$condition_session."";
+	$sql="SELECT *, COUNT(*) AS TOTAL_VERS, SUM(hits) AS TOTAL_VISITS FROM ".$tbl_wiki." WHERE c_id = $course_id AND ".$groupfilter.$condition_session."";
+	
 	$allpages=Database::query($sql);
 	while ($row=Database::fetch_array($allpages)) {
 		$total_versions			= $row['TOTAL_VERS'];
@@ -587,7 +588,7 @@ if ($_GET['action']=='statistics' && (api_is_allowed_to_edit(false,true) || api_
 	$total_tables_lv		= 0;
 
 
-	$sql='SELECT  * FROM  '.$tbl_wiki.' s1 WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
+	$sql='SELECT * FROM  '.$tbl_wiki.' s1 WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
 	$allpages=Database::query($sql);	
 
     while ($row=Database::fetch_array($allpages)) {		
@@ -734,7 +735,7 @@ $allpages=Database::query($sql);
 
 //Current Wiki status add new pages
 
-$sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' '.$groupfilter.$condition_session.' GROUP BY addlock';//group by because mark 0 in all vers, then always is ok
+$sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY addlock';//group by because mark 0 in all vers, then always is ok
     $allpages=Database::query($sql);
 while ($row=Database::fetch_array($allpages)) {
 		$wiki_add_lock=$row['addlock'];		
@@ -750,7 +751,7 @@ else{
 //Creation date of the oldest wiki page and version
 
 $first_wiki_date='0000-00-00 00:00:00';
-$sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.'  '.$groupfilter.$condition_session.' ORDER BY dtime ASC LIMIT 1'; 
+$sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' ORDER BY dtime ASC LIMIT 1'; 
 $allpages=Database::query($sql);
 	while ($row=Database::fetch_array($allpages)) {
 		$first_wiki_date=$row['dtime'];
@@ -759,7 +760,7 @@ $allpages=Database::query($sql);
 //Date of publication of the latest wiki version
 
 $last_wiki_date='0000-00-00 00:00:00';
-$sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.'  '.$groupfilter.$condition_session.' ORDER BY dtime DESC LIMIT 1'; 
+$sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' ORDER BY dtime DESC LIMIT 1'; 
 $allpages=Database::query($sql);
 	while ($row=Database::fetch_array($allpages)) {
 		$last_wiki_date=$row['dtime'];
@@ -768,7 +769,7 @@ $allpages=Database::query($sql);
 //Average score of all wiki pages. (If a page has not scored zero rated)
 
 $media_score =0;
-$sql="SELECT *, SUM(score) AS TOTAL_SCORE FROM ".$tbl_wiki." WHERE c_id = $course_id ".$groupfilter.$condition_session." GROUP BY reflink ";//group by because mark in all versions, then always is ok. Do not use "count" because using "group by", would give a wrong value
+$sql="SELECT *, SUM(score) AS TOTAL_SCORE FROM ".$tbl_wiki." WHERE c_id = $course_id AND ".$groupfilter.$condition_session." GROUP BY reflink ";//group by because mark in all versions, then always is ok. Do not use "count" because using "group by", would give a wrong value
 	$allpages=Database::query($sql);
 	while ($row=Database::fetch_array($allpages)) {
 		$total_score=$total_score+$row['TOTAL_SCORE'];
@@ -795,7 +796,7 @@ if (!empty($total_pages)) {
 //Total users that have participated in the Wiki
 
 $total_users=0;
- $sql='SELECT * FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' '.$groupfilter.$condition_session.' GROUP BY user_id';//as the mark of user it in all versions of the page, I can use group by to see the first
+ $sql='SELECT * FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY user_id';//as the mark of user it in all versions of the page, I can use group by to see the first
     $allpages=Database::query($sql);
 while ($row=Database::fetch_array($allpages)) {
 		$total_users	= $total_users+1;
@@ -804,7 +805,7 @@ while ($row=Database::fetch_array($allpages)) {
 //Total of different IP addresses that have participated in the wiki
 
 $total_ip=0;
- $sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.'  '.$groupfilter.$condition_session.' GROUP BY user_ip';
+ $sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY user_ip';
     $allpages=Database::query($sql);
 while ($row=Database::fetch_array($allpages)) {
 		$total_ip	= $total_ip+1;
@@ -997,7 +998,7 @@ echo '<br/>';
 if ($_GET['action']=='mactiveusers') {
     echo '<div class="actions">'.get_lang('MostActiveUsers').'</div>';
 
-    $sql='SELECT *, COUNT(*) AS NUM_EDIT FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.'  '.$groupfilter.$condition_session.' GROUP BY user_id';
+    $sql='SELECT *, COUNT(*) AS NUM_EDIT FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY user_id';
     $allpages=Database::query($sql);
 
     //show table
@@ -1029,9 +1030,9 @@ if ($_GET['action']=='usercontrib') {
 
 
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden 
-        $sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.'  '.$groupfilter.$condition_session.' AND user_id="'.Database::escape_string($_GET['user_id']).'"';
+        $sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' AND user_id="'.Database::escape_string($_GET['user_id']).'"';
     } else {
-        $sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.'  '.$groupfilter.$condition_session.' AND user_id="'.Database::escape_string($_GET['user_id']).'" AND visibility=1';
+        $sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' AND user_id="'.Database::escape_string($_GET['user_id']).'" AND visibility=1';
     }
 
     $allpages=Database::query($sql);
@@ -1104,9 +1105,9 @@ if ($_GET['action']=='mostchanged') {
 
 
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden
-        $sql='SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.'  '.$groupfilter.$condition_session.' GROUP BY reflink';//TODO:check MAX and group by return last version
+        $sql='SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY reflink';//TODO:check MAX and group by return last version
     } else {
-        $sql='SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.'  '.$groupfilter.$condition_session.' AND visibility=1 GROUP BY reflink'; //TODO:check MAX and group by return last version
+        $sql='SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' AND visibility=1 GROUP BY reflink'; //TODO:check MAX and group by return last version
     }
 
     $allpages=Database::query($sql);
@@ -1146,9 +1147,9 @@ if ($_GET['action']=='mvisited') {
     echo '<div class="actions">'.get_lang('MostVisitedPages').'</div>';
 
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden
-        $sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.'  '.$groupfilter.$condition_session.' GROUP BY reflink';
+        $sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY reflink';
     } else {
-        $sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.'  '.$groupfilter.$condition_session.' AND visibility=1 GROUP BY reflink';
+        $sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' AND visibility=1 GROUP BY reflink';
     }
 
     $allpages=Database::query($sql);
@@ -1192,7 +1193,7 @@ if ($_GET['action']=='wanted') {
 	$wanted = array();
 	
     //get name pages
-    $sql='SELECT * FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.'  '.$groupfilter.$condition_session.' GROUP BY reflink ORDER BY reflink ASC';
+    $sql='SELECT * FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY reflink ORDER BY reflink ASC';
     $allpages=Database::query($sql);
 
     while ($row=Database::fetch_array($allpages)) {
@@ -1247,7 +1248,7 @@ if ($_GET['action']=='orphaned') {
     $orphaned = array();
 
     //get name pages
-    $sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.$condition_session.' GROUP BY reflink ORDER BY reflink ASC';
+    $sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY reflink ORDER BY reflink ASC';
     $allpages=Database::query($sql);
     while ($row=Database::fetch_array($allpages)) {
         $pages[] = $row['reflink'];
@@ -1274,7 +1275,7 @@ if ($_GET['action']=='orphaned') {
 
     foreach ($orphaned as $orphaned_show) {
 		// get visibility status and title
-		$sql='SELECT  *  FROM   '.$tbl_wiki.' WHERE c_id = '.$course_id.' '.$groupfilter.$condition_session.' AND reflink="'.Database::escape_string($orphaned_show).'" GROUP BY reflink';
+		$sql='SELECT  *  FROM   '.$tbl_wiki.' WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' AND reflink="'.Database::escape_string($orphaned_show).'" GROUP BY reflink';
         $allpages=Database::query($sql);
 		while ($row=Database::fetch_array($allpages)) {
 			$orphaned_title=$row['title'];
@@ -1315,7 +1316,7 @@ if ($_GET['action']=='mostlinked') {
 	$linked = array();
 	
     //get name pages
-    $sql='SELECT * FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' '.$groupfilter.$condition_session.' GROUP BY reflink ORDER BY reflink ASC';
+    $sql='SELECT * FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY reflink ORDER BY reflink ASC';
     $allpages=Database::query($sql);
 
     while ($row=Database::fetch_array($allpages)) {
@@ -2187,7 +2188,7 @@ if ($_GET['action']=='recentchanges') {
         				'.$tbl_wiki.'.'.$groupfilter.$condition_session.' 
         		ORDER BY dtime DESC'; // new version
     } else {
-        $sql='SELECT * FROM '.$tbl_wiki.' WHERE c_id = '.$course_id.' '.$groupfilter.$condition_session.' AND visibility=1 ORDER BY dtime DESC';	// old version TODO: Replace by the bottom line
+        $sql='SELECT * FROM '.$tbl_wiki.' WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' AND visibility=1 ORDER BY dtime DESC';	// old version TODO: Replace by the bottom line
     }
 
     $allpages=Database::query($sql);

@@ -394,12 +394,13 @@ function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group
 **/
 function delete_wiki() {
     global $tbl_wiki, $tbl_wiki_conf, $tbl_wiki_discuss, $tbl_wiki_mailcue, $groupfilter, $condition_session;
-    
+	
+    $course_id = api_get_course_int_id();
+	
     //identify the first id by group = identify wiki
     $sql = 'SELECT * FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' ORDER BY id DESC';
     $allpages = Database::query($sql);
     
-    $course_id = api_get_course_int_id();
 
     while ($row=Database::fetch_array($allpages))	{
         $id 		= $row['id'];

@@ -6,8 +6,8 @@
 @import url('../chamilo/default.css');
 @import url(http://fonts.googleapis.com/css?family=Chelsea+Market&subset=latin,latin-ext);
 
-body {
-    font-size: 1.2em; /* base was 12px, made relative */
+* {
+    font-size: 1em; /* base was 12px, made relative */
     font-family: 'Chelsea Market', Arial, Helvetica, sans-serif;
 }
 

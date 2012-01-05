@@ -37,6 +37,7 @@
 }
 
 #header3 input.logout {
+    padding: 2px 10px 0;
     font-size: 120%;
     font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
 }

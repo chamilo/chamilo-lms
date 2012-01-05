@@ -58,17 +58,56 @@ if ($export_csv) {
     ob_start();
 }
 $csv_content = array();
-
+// Scripts for reporting array hide / unhide columns
+$js = "
+    <script type='text/javascript'>
+        // hide column and display the button to unhide it
+        function foldup(in_id) {
+            $('div#reporting_table table tr td:nth-child('+in_id+')').fadeToggle();
+            $('div#reporting_table table tr th:nth-child('+in_id+')').fadeToggle();
+            $('div#unhideButtons span:nth-child('+in_id+')').fadeToggle();
+        }
+        // add the red cross on top of each column
+        function init_hide() {
+            $('div#reporting_table table tr th').each(
+                function(index) {
+                    num_index = index + 1;
+                    $(this).prepend('<div style=\"cursor:pointer\" onclick=\"foldup('+num_index+')\">".Display :: return_icon('delete.png', get_lang('HideColumn'), array('align' => 'absmiddle', 'hspace' => '3px'), 16)."</div>');                    
+                 }
+               )
+             }
+        // hide some column at startup
+        // be sure that these columns always exists
+        // see $tab_table_header = array();    // tab of header texts
+        $(document).ready( function() {
+            init_hide();
+            foldup(1);foldup(9);foldup(10);foldup(11);foldup(12);
+        })
+    </script>";
+        
 $htmlHeadXtra[] = "<style type='text/css'>
 /*<![CDATA[*/
 .secLine {background-color : #E6E6E6;}
 .content {padding-left : 15px;padding-right : 15px; }
 .specialLink{color : #0000FF;}
 /*]]>*/
+/* Style for reporting array hide / unhide columns */
+.unhide_button {
+    cursor : pointer;
+    border:1px solid black;
+    background-color: #FAFAFA;
+    padding: 5px;
+    border-radius : 3px;
+    margin-right:3px;
+}
+div#reporting_table table th {
+  vertical-align:top;
+}
 </style>
 <style media='print' type='text/css'>
 
 </style>";
+$htmlHeadXtra[] .= $js;
 
 // Database table definitions.
 $TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
@@ -526,7 +565,7 @@ if ($_GET['studentlist'] == 'false') {
             $table->set_header(2, get_lang('FirstName'), true, 'align="center"');
             $tab_table_header[] = get_lang('FirstName');
         }
-        $table->set_header(3, get_lang('Login'), false, 'align="center"');  // hubr
+        $table->set_header(3, get_lang('Login'), false, 'align="center"');  // 
         $tab_table_header[] = get_lang('Login');
         
         $table->set_header(4, get_lang('TrainingTime'), false);
@@ -589,40 +628,7 @@ if ($_GET['studentlist'] == 'false') {
         echo "<div id='reporting_table'>";
         $table->display();
         echo "</div>";
-        // some scripts and style
-        echo "<script type='text/javascript'>";
-        echo "function foldup(in_id) {\n";
-        echo "  $('div#reporting_table table tr td:nth-child('+in_id+')').fadeToggle();\n";
-        echo "  $('div#reporting_table table tr th:nth-child('+in_id+')').fadeToggle();\n";
-        echo "  $('div#unhideButtons span:nth-child('+in_id+')').fadeToggle();\n";
-        echo "}\n";
-        echo "function init_hide() {\n";
-        echo "    $('div#reporting_table table tr th').each(\n";
-        echo "        function(index) {\n";
-        echo "            num_index = index + 1;\n";
-        echo "            $(this).prepend('<span style=\"cursor:pointer\" onclick=\"foldup('+num_index+')\">".Display :: return_icon('delete.png', get_lang('HideColumn'), array('align' => 'absmiddle', 'hspace' => '3px'), 16)."</span><br/>');\n";
-        echo "        }\n";
-        echo "    );\n";
-        echo "}\n";
-        echo "$(document).ready( function() {";
-        echo "  init_hide();\n";
-        // hide several column at startup
-        echo "  foldup(1);foldup(9);foldup(10);foldup(11);foldup(12);\n";            
-        echo "});\n";
-        echo "</script>";
-        echo "<style type='text/css'>";
-        echo ".unhide_button {";
-        echo "    cursor : pointer;";
-        echo "    border:1px solid black;";
-        echo "    background-color: #FAFAFA;";
-        echo "    padding: 5px;";
-        echo "    border-radius : 3px;";
-        echo "    margin-right:3px;";
-        echo "}";
-        echo "div#reporting_table table th {";
-        echo "  vertical-align:top;";
-        echo "}";
-        echo "</style>";  
+
     } else {
         echo Display::display_warning_message(get_lang('NoUsersInCourse'));
     }
@@ -639,7 +645,7 @@ if ($_GET['studentlist'] == 'false') {
             $csv_headers[] = get_lang('LastName', '');   
             $csv_headers[] = get_lang('FirstName', '');            
         }
-        $csv_headers[] = get_lang('Login', ''); // hubr
+        $csv_headers[] = get_lang('Login', ''); // 
         $csv_headers[] = get_lang('TrainingTime', '');
         $csv_headers[] = get_lang('CourseProgress', '');
         $csv_headers[] = get_lang('ExerciseProgress','');

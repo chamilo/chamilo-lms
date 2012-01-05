@@ -1,0 +1,217 @@
+/*
+ * Special CSS styles for the chamilo_XXX themes
+ */
+
+@import url('../base_chamilo.css');
+@import url('../chamilo/default.css');
+@import url(http://fonts.googleapis.com/css?family=Chelsea+Market&subset=latin,latin-ext);
+
+body {
+    font-size: 1.2em; /* base was 12px, made relative */
+    font-family: 'Chelsea Market', Arial, Helvetica, sans-serif;
+}
+
+.courseadminview table td a, .Authoringview table td a {
+    font-size:120%;
+}
+
+#header1 {
+    font-size:100%;
+    font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
+}
+#header1 a {
+    font-size:100%;
+    font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
+}
+
+#header2 {
+    font-size: 120%;
+}
+#Header2Right ul li {
+    font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
+    font-size:100%;
+}
+#Header2Right ul li a {
+    font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
+    font-size:100%;
+}
+
+#header3 input.logout {
+    font-size: 120%;
+    font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
+}
+
+.menucaption {
+    font-size: 100%;
+}
+.menusectioncaption {
+    font-size: 110%;
+}
+
+#toolnavbox dl {
+    font-size: 100%;
+}
+
+#toolnavbox dt {
+    font-size: 100%;
+}
+
+.bottom-link {
+    font-size:100%;
+}
+.viewcaption {
+    font-size: 100%;
+}
+
+.dropbox_detail {
+    font-size: 70%
+}
+.dropbox_feedback {
+    font-size: 50%;
+}
+.data_table {
+    font-size: 100%;
+}
+.sectiontitle {
+    font-size: 120%;
+}
+.sectioncomment {
+    font-size: 90%;
+}
+.announcements_datum {
+    font-size: 100%;
+}
+.system_announcement_title {
+    font-size: 120%;
+}
+.forum_message_post_title {
+    font-size:180%;
+}
+.forum_description {
+    font-size: 90%;
+}
+.forum_description p{
+    font-size: 90%;
+}
+.forum_title {
+    font-size: 130%;
+}
+span.blog_title {
+    font-size: 180%;
+}
+span.blog_subttitle {
+    font-size: 100%;
+}
+td.blog_menu_title {
+    font-size: 90%;
+}
+span.blogpost_title {
+    font-size: 160%;
+}
+span.blogpost_date {
+    font-size: 100%;
+}
+span.blogpost_comment_title {
+    font-size: 120%;
+}
+span.blogpost_comment_date {
+    font-size: 80%;
+}
+span.blogpost_comment_info {
+    font-size: 80%;
+}
+.warn {
+    font-family: serif;
+}
+.small {
+    font-size: 90%;
+}
+.xsmall {
+    font-size: 80%;
+}
+.xxsmall {
+    font-size: 70%;
+}
+.count_down{
+  font-size: 200%;
+}
+.glossary-term-title {
+    font-size: 120%;
+}
+.glossary-term-edit-desc {
+    font-size: 120%;
+}
+.glossary-term-edit-title {
+    font-size: 120%;
+}
+.glossary-add-form {
+    font-size: 120%;
+}
+.glossary-msg-error {
+    font-size: 80%;
+}
+.notebook-title-list {
+    font-size: 120%;
+}
+.notebook-date-information {
+    font-size: 120%;
+}
+.actions-title {
+    font-size:120%;
+}
+#question_title {
+    font-size: 150%;
+}
+#question_score {
+    font-size:130%;
+}
+
+button {
+    font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
+    font-size: 100%;
+}
+button.arrowr {
+    font-size: 100%;
+}
+/* button << */
+button.arrowl {
+    font-size: 100%;
+}
+input.arrowr {
+    font-size: 100%;
+}
+
+/* input << */
+input.arrowl {
+    font-size: 100%;
+}
+.actions-title {
+    font-size:120%;
+}
+.session_box_title span {
+    font-size: 130%;
+}
+.sub_session_box_title span {
+    font-size: 130%;
+}
+#session_category_title {
+    font-size: 140%;
+}
+.userportal-catalog-item .catalog_box li span {
+    font-size:130%;
+}
+.forum_table .forum_head{
+    font-size:120%;
+}
+.reset_font {
+    font-size: 120%;
+}
+.increase_font {
+    font-size: 180%;
+}
+.decrease_font {
+    font-size: 70%;
+}
+#header3 {    
+    font-size: 120%;
+}

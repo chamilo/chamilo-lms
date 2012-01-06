@@ -699,7 +699,7 @@ class Blog {
 		$course_id = api_get_course_int_id();
 
 		// Get posts and authors
-		$sql = "SELECT post.*, user.lastname, user.firstname FROM $tbl_blogs_posts post
+		$sql = "SELECT post.*, user.lastname, user.firstname, user.username FROM $tbl_blogs_posts post
 					INNER JOIN $tbl_users user ON post.author_id = user.user_id
 				WHERE 	post.blog_id = '".(int)$blog_id."' AND
 						post.c_id = $course_id AND
@@ -758,7 +758,7 @@ class Blog {
 					echo ' "> '.$file_name_array['filename'].' </a><br />';
 					echo '</span>';
 				}
-				echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . api_get_person_name($blog_post['firstname'], $blog_post['lastname']) . ' - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
+				echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . api_get_person_name($blog_post['firstname'], $blog_post['lastname']) . ' ('.$blog_post['username'].') - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
 				echo '</div>';
 			}
 		} else {
@@ -829,7 +829,7 @@ class Blog {
 		
 
 		// Get posts and author
-		$sql = "SELECT post.*, user.lastname, user.firstname FROM $tbl_blogs_posts post
+		$sql = "SELECT post.*, user.lastname, user.firstname, user.username FROM $tbl_blogs_posts post
 					INNER JOIN $tbl_users user ON post.author_id = user.user_id
 					WHERE
 						post.c_id = $course_id AND 
@@ -884,7 +884,7 @@ class Blog {
 			echo '<br />';
 		}
 
-		echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . api_get_person_name($blog_post['firstname'], $blog_post['lastname']) . ' - ' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('post',$blog_id,$post_id) . $rating_select . '</span>';
+		echo '<span class="blogpost_info">'.get_lang('Author').': ' .api_get_person_name($blog_post['firstname'], $blog_post['lastname']).' ('.$blog_post['username'].') - '.get_lang('Comments').': '.$blog_post_comments['number_of_comments'].' - '.get_lang('Rating').': '.Blog::display_rating('post',$blog_id,$post_id).$rating_select.'</span>';
 		echo '<span class="blogpost_actions">' . $blog_post_actions . '</span>';
 		echo '</div>';
 
@@ -1039,7 +1039,7 @@ class Blog {
 
 		// Select top level comments
 		$next_level = $current_level + 1;		
-        $sql = "SELECT comments.*, user.lastname, user.firstname, task.color
+        $sql = "SELECT comments.*, user.lastname, user.firstname, user.username, task.color
 					FROM $tbl_blogs_comments comments
 						INNER JOIN $tbl_users user ON comments.author_id = user.user_id
 						LEFT JOIN $tbl_blogs_tasks task ON comments.task_id = task.task_id AND task.c_id = $course_id  
@@ -1051,7 +1051,7 @@ class Blog {
 
 		while($comment = Database::fetch_array($result)) {
 			// Select the children recursivly
-			$tmp = "SELECT comments.*, user.lastname, user.firstname FROM $tbl_blogs_comments comments
+			$tmp = "SELECT comments.*, user.lastname, user.firstname, user.username FROM $tbl_blogs_comments comments
 					INNER JOIN $tbl_users user ON comments.author_id = user.user_id
 					WHERE
 						comments.c_id = $course_id AND 
@@ -1095,8 +1095,7 @@ class Blog {
 					echo $file_name_array['comment'];
 					echo '</span><br />';
 				}
-
-				echo '<span class="blogpost_comment_info">' . get_lang('Author') . ': ' . api_get_person_name($comment['firstname'], $comment['lastname']) . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']) . $rating_select . '</span>';
+				echo '<span class="blogpost_comment_info">'.get_lang('Author').': '.api_get_person_name($comment['firstname'], $comment['lastname']).' ('.$comment['username'].') - '.get_lang('Rating').': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']).$rating_select.'</span>';
 				echo '<span class="blogpost_actions">' . $blog_comment_actions . '</span>';
 			echo '</div>';
 
@@ -1662,8 +1661,8 @@ class Blog {
 		
 		$course_id = api_get_course_int_id();	
 
-		// Get users in this blog / make select list of it
-		$sql = "SELECT user.user_id, user.firstname, user.lastname FROM $tbl_users user
+		// Get users in this blog / make select list of it 
+		$sql = "SELECT user.user_id, user.firstname, user.lastname, user.username FROM $tbl_users user
 				INNER JOIN $tbl_blogs_rel_user blogs_rel_user
 				ON user.user_id = blogs_rel_user.user_id
 				WHERE blogs_rel_user.c_id = $course_id AND blogs_rel_user.blog_id = '".(int)$blog_id."'";
@@ -1671,7 +1670,7 @@ class Blog {
 		$select_user_list = '<select name="task_user_id">';
 		while($user = Database::fetch_array($result))
 		{
-			$select_user_list .= '<option value="' . $user['user_id'] . '">' . api_get_person_name($user['firstname'], $user['lastname']) . '</option>';
+			$select_user_list .= '<option value="' . $user['user_id'] . '">' . api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') </option>';
 		}
 		$select_user_list .= '</select>';
 
@@ -2022,11 +2021,12 @@ class Blog {
 		
 				
 		$sql = "SELECT title, description FROM $tbl_blogs_tasks
-				WHERE task_id = '".(int)$task_id."'";
+				WHERE task_id = '".(int)$task_id."'
+				AND c_id = $course_id";
 		$result = Database::query($sql);
 		$row = Database::fetch_assoc($result);
 		// Get posts and authors
-		$sql = "SELECT post.*, user.lastname, user.firstname
+		$sql = "SELECT post.*, user.lastname, user.firstname, user.username
 				FROM $tbl_blogs_posts post
 				INNER JOIN $tbl_users user ON post.author_id = user.user_id
 				WHERE post.blog_id = '".(int)$blog_id."' AND post.c_id = $course_id
@@ -2040,7 +2040,7 @@ class Blog {
 
 		if(Database::num_rows($result) > 0) {
 			while($blog_post = Database::fetch_array($result)) {
-				echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $blog_id . '&amp;task_id=' . $task_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment">'.stripslashes($blog_post['title']) . '</a>, ' . get_lang('WrittenBy') . ' ' . stripslashes(api_get_person_name($blog_post['firstname'], $blog_post['lastname'])) . '<br />';
+				echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $blog_id . '&amp;task_id=' . $task_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment">'.stripslashes($blog_post['title']) . '</a>, ' . get_lang('WrittenBy') . ' ' . stripslashes(api_get_person_name($blog_post['firstname'], $blog_post['lastname']).' ('.$blog_post['username'].')') . '<br />';
 			}
 		} else 
 			echo get_lang('NoArticles');
@@ -2136,7 +2136,8 @@ class Blog {
 			$column_header[] = array (get_lang('LastName'), true, '');
 			$column_header[] = array (get_lang('FirstName'), true, '');
 		}
-		$column_header[] = array (get_lang('Email'), true, '');
+		$column_header[] = array (get_lang('LoginName'), true, '');
+		$column_header[] = array (get_lang('Email'), false, '');
 		$column_header[] = array (get_lang('Register'), false, '');
 		
 		if(isset($_SESSION['session_id'])){
@@ -2165,7 +2166,9 @@ class Blog {
 					$row[] = $a_infosUser["lastname"];
 					$row[] = $a_infosUser["firstname"];
 				}
-				$row[] = Display::encrypted_mailto_link($a_infosUser["email"]);
+				$row[] = $a_infosUser["username"];
+				$row[] = Display::icon_mailto_link($a_infosUser["email"]);
+				
 				//Link to register users
 				if($a_infosUser["user_id"] != $_SESSION['_user']['user_id'])
 				{
@@ -2229,13 +2232,14 @@ class Blog {
 			$column_header[] = array (get_lang('LastName'), true, '');
 			$column_header[] = array (get_lang('FirstName'), true, '');
 		}
-		$column_header[] = array (get_lang('Email'), true, '');
+		$column_header[] = array (get_lang('LoginName'), true, '');
+		$column_header[] = array (get_lang('Email'), false, '');
 		$column_header[] = array (get_lang('TaskManager'), true, '');
 		$column_header[] = array (get_lang('UnRegister'), false, '');
 		
 		$course_id = api_get_course_int_id();
 		
-		$sql_query = "SELECT user.user_id, user.lastname, user.firstname, user.email
+		$sql_query = "SELECT user.user_id, user.lastname, user.firstname, user.email, user.username
 			FROM $tbl_users user INNER JOIN $tbl_blogs_rel_user blogs_rel_user
 			ON user.user_id = blogs_rel_user.user_id
 			WHERE blogs_rel_user.c_id = $course_id AND  blogs_rel_user.blog_id = '".(int)$blog_id."'";
@@ -2256,7 +2260,8 @@ class Blog {
 				$row[] = $myrow["lastname"];
 				$row[] = $myrow["firstname"];
 			}
-			$row[] = Display::encrypted_mailto_link($myrow["email"]);
+			$row[] = $myrow["username"];
+			$row[] = Display::icon_mailto_link($myrow["email"]);
 
 			$sql = "SELECT bt.title task
 			FROM " . Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER) . " btu

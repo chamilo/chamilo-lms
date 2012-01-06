@@ -404,6 +404,36 @@ class Display {
         // Return encrypted mailto hyperlink
         return '<a href="'.$hmail.'"'.$style_class.' name="clickable_email_link">'.$hclickable_text.'</a>';
     }
+    
+    /**
+     * Returns an mailto icon hyperlink
+     *
+     * @param string  e-mail
+     * @param string  icon source file from the icon lib
+     * @param integer  icon size from icon lib
+     * @param string  optional, class from stylesheet
+     * @return string encrypted mailto hyperlink
+     */
+    public static function icon_mailto_link ($email, $icon_file = "mail.png", $icon_size = 22, $style_class = '') {
+        // "mailto:" already present?
+        if (substr($email, 0, 7) != 'mailto:') {
+            $email = 'mailto:'.$email;
+        }
+        // Class (stylesheet) defined?
+        if ($style_class != '') {
+            $style_class = ' class="'.$style_class.'"';
+        }
+        // Encrypt email
+        $hmail = '';
+        for ($i = 0; $i < strlen($email); $i ++) {
+            $hmail .= '&#'.ord($email {
+            $i }).';';
+        }
+        // icon html code
+        $icon_html_source = Display::return_icon($icon_file, $hmail, '', $icon_size);
+        // Return encrypted mailto hyperlink
+        return '<a href="'.$hmail.'"'.$style_class.' name="clickable_email_link">'.$icon_html_source.'</a>';
+    }
 
     /**
      *	Creates a hyperlink to the platform homepage.

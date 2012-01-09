@@ -243,9 +243,7 @@ class manager {
 								
 							} else {
 								$tem['public_path'] = api_get_path(WEB_PATH).substr($this->getCurrentFolderPath(), $pos, strlen($this->getCurrentFolderPath())).$file;								
-							}
-							
-							//error_log($tem['public_path'] );
+							}							
 							$tem['type'] = "file";
 							$tem['flag'] = $flag;
 							$files[$file] = $tem;

@@ -131,6 +131,7 @@ function LoadSelection() {
 
 //#### The OK button was hit.
 function Ok() {
+	
 	if ( GetE('txtUrl').value.length == 0 )
 	{
 		dialog.SetSelectedTab( 'Info' ) ;
@@ -220,15 +221,10 @@ function BrowseServer()
 	OpenFileBrowser( FCKConfig.MP3BrowserURL, FCKConfig.MP3BrowserWindowWidth, FCKConfig.MP3BrowserWindowHeight ) ;
 }
 
-function SetUrl( url )
-{
-	//url = FCK.GetSelectedUrl( url ) ;
+function SetUrl( url ) {	
 	url = FCK.GetUrl( url, FCK.SEMI_ABSOLUTE_URL ) ;
-
 	GetE('txtUrl').value = url ;
-
 	UpdatePreview() ;
-
 	dialog.SetSelectedTab( 'Info' ) ;
 }
 

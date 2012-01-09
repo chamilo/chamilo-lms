@@ -38,6 +38,7 @@
  * @param Function callback fn invoked for each matched element after conversion
  * @cat Plugins/media
  */
+
 $.fn.media = function(options, f1, f2) {
     return this.each(function() {
         if (typeof options == 'function') {
@@ -418,8 +419,7 @@ function generate(el, opts, player) {
         var o = document.createElement(a.join(''));
         for (var i=0; i < p.length; i++)
             o.appendChild(document.createElement(p[i]));
-    }
-    else {
+    } else {		
         var a = ['<embed width="' + opts.width + '" height="' + opts.height + '" style="display:block"'];
         if (opts.src) a.push(' src="' + opts.src + '" ');
         for (var key in opts.attrs)
@@ -439,6 +439,5 @@ function generate(el, opts, player) {
     if (opts.caption) $('<div>').appendTo($div).html(opts.caption);
     return $div;
 };
-
 
 })(jQuery);

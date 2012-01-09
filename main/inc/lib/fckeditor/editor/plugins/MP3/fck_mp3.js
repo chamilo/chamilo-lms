@@ -123,6 +123,7 @@ function LoadSelection()
 //#### The OK button was hit.
 function Ok()
 {
+	
 	if ( GetE('mpUrl').value.length == 0 )
 	{
 		window.parent.SetSelectedTab( 'Info' ) ;

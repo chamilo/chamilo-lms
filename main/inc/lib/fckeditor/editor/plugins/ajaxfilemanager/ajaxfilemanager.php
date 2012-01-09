@@ -135,10 +135,10 @@ if(!empty($_GET['view'])) {
 	var newFile = {'num':1, 'label':'<?php echo FILE_LABEL_SELECT; ?>', 'upload':'<?php echo FILE_LBL_UPLOAD; ?>'};
 	var counts = {'new_file':1};
 	var thickbox = {'width':'<?php echo CONFIG_THICKBOX_MAX_WIDTH; ?>', 
-									'height':'<?php echo CONFIG_THICKBOX_MAX_HEIGHT; ?>',
-									'next':'<img src="theme/default/images/next.png" title="<?php echo THICKBOX_NEXT; ?>" style="float:right;">',
-									'previous':'<img src="theme/default/images/prev.png" title="<?php echo THICKBOX_PREVIOUS; ?>" style="float:left">',
-									'close':'<img src="theme/default/images/flagno.png"title="<?php echo THICKBOX_CLOSE; ?>"><?php echo THICKBOX_CLOSE; ?>' 
+					'height':'<?php echo CONFIG_THICKBOX_MAX_HEIGHT; ?>',
+					'next':'<img src="theme/default/images/next.png" title="<?php echo THICKBOX_NEXT; ?>" style="float:right;">',
+					'previous':'<img src="theme/default/images/prev.png" title="<?php echo THICKBOX_PREVIOUS; ?>" style="float:left">',
+					'close':'<img src="theme/default/images/flagno.png"title="<?php echo THICKBOX_CLOSE; ?>"><?php echo THICKBOX_CLOSE; ?>' 
 		
 	};
 	
@@ -336,9 +336,6 @@ if(!empty($_GET['view'])) {
       </div> 
       
       <div id="leftCol">
-      
- 
-
 				<fieldset id="folderFieldSet" >
 					
 				<legend><?php echo LBL_FOLDER_INFO; ?></legend>

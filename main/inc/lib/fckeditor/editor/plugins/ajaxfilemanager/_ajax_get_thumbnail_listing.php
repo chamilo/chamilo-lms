@@ -57,9 +57,9 @@ foreach ($fileList as $file) {
 			}
 			switch($file['cssClass']) {			
 				case 'filePicture':
-						echo '<a id="thumbUrl' . $count . '" rel="thumbPhotos" href="' . $file['public_path'] . '">';
-						echo '<img src="' . appendQueryString($thumbnailBaseUrl, ' path=' . base64_encode($file['path'])) . '" id="thumbImg' . $count . '"></a>' . "\n";
-						break;
+					echo '<a id="thumbUrl' . $count . '" rel="thumbPhotos" href="' . $file['public_path'] . '">';
+					echo '<img src="' . appendQueryString($thumbnailBaseUrl, ' path=' . base64_encode($file['path'])) . '" id="thumbImg' . $count . '"></a>' . "\n";
+					break;
 				case 'fileFlash':
 				case 'fileVideo':
 				case 'fileMusic':
@@ -78,7 +78,9 @@ foreach ($fileList as $file) {
 		<dd id="dd<?php echo $count; ?>" class="thumbnailListing_info">
 			<span id="flag<?php echo $count; ?>" class="<?php echo $file['flag']; ?>">&nbsp;</span>
 			<input id="cb<?php echo $count; ?>" type="checkbox" name="check[]" <?php echo ($file['is_writable']?'':'disabled'); ?> class="radio" value="<?php echo $file['path']; ?>" />
-			<a <?php echo ($file['cssClass']== 'filePicture'?'rel="orgImg"':''); ?> href="<?php echo $path_chamilo_file;// fix for Chamilo ?>" title="<?php echo $file['name']; ?>" id="a<?php echo $count; ?>"><?php echo shortenFileName($file['name']); ?></a>
+			<a <?php echo ($file['cssClass']== 'filePicture'?'rel="orgImg"':''); ?> href="<?php echo $path_chamilo_file;// fix for Chamilo ?>" title="<?php echo $file['name']; ?>" id="a<?php echo $count; ?>">
+				<?php echo shortenFileName($file['name']); ?>
+			</a>
 		</dd>
         </dl>
         <?php

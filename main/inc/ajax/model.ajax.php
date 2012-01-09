@@ -7,8 +7,6 @@ $language_file = array('admin','exercice');
 
 require_once '../global.inc.php';
 
-
-
 $libpath = api_get_path(LIBRARY_PATH);
 
 require_once $libpath.'array.lib.php';
@@ -86,8 +84,7 @@ if ($_REQUEST['_search'] == 'true') {
             $counter++;
         }
         $where_condition .= ' ) ';
-    }
-        
+    }        
 }
 
 // get index row - i.e. user click to sort $sord = $_GET['sord']; 
@@ -155,9 +152,7 @@ if ($_REQUEST['oper'] == 'del') {
 //4. Querying the DB for the elements
 $columns = array();
 switch ($action) {    
-	case 'get_exercise_results':	
-		
-		
+	case 'get_exercise_results':
 		
 		$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
 		$is_tutor                   = api_is_allowed_to_edit(true);

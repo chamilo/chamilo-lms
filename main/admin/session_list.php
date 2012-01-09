@@ -1,13 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-//@todo fix sort in this table or use jqgrid
-
 $language_file = 'admin';
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
@@ -15,31 +12,25 @@ api_protect_admin_script(true);
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 
-$action=$_REQUEST['action'];
+$action = $_REQUEST['action'];
 $idChecked = $_REQUEST['idChecked'];
 
 if ($action == 'delete') {
 	SessionManager::delete_session($idChecked);
-	header('Location: '.api_get_self());
+	header('Location: session_list.php');
 	exit();
 } elseif ($action == 'copy') {
 	SessionManager::copy_session($idChecked);
-    header('Location: '.api_get_self());
+    header('Location: session_list.php');
     exit();
 }
 
 $interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'));
 
-
-//table for the search
-
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
 
-
-
 //jqgrid will use this URL to do the selects
-
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file 
@@ -54,12 +45,9 @@ $column_model   = array(
                         array('name'=>'category_name',  'index'=>'category_name', 'width'=>'70',   'align'=>'left', 'search' => 'true'),
                         array('name'=>'date_start',     'index'=>'date_start',    'width'=>'40',   'align'=>'left', 'search' => 'true'),
                         array('name'=>'date_end',       'index'=>'date_end',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
-                        array('name'=>'coach_name',     'index'=>'coach_name',     'width'=>'80',   'align'=>'left', 'search' => 'false'),                        
-                        
-                        array('name'=>'status',         'index'=>'session_active',  'width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
+                        array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'80',   'align'=>'left', 'search' => 'false'),                        
+                        array('name'=>'status',         'index'=>'session_active','width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
                                  
-                              
-                              
                               //for the bottom bar
                               'searchoptions' => array(                                                
                                                 'defaultValue'  => '1', 
@@ -77,7 +65,7 @@ $extra_params['autowidth'] = 'true';
 
 //height auto 
 $extra_params['height'] = 'auto';
-$extra_params['excel'] = 'excel';
+//$extra_params['excel'] = 'excel';
 
 $extra_params['rowList'] = array(10, 20 ,30);
 
@@ -147,7 +135,7 @@ $(function() {
     var options = {
         'stringResult': true,
         'autosearch' : true,
-        'searchOnEnter':false,        
+        'searchOnEnter':false      
     }
     jQuery("#sessions").jqGrid('filterToolbar',options);    
     var sgrid = $("#sessions")[0];

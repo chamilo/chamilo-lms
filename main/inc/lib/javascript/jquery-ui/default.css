@@ -22,8 +22,8 @@
 	color: #212121; 
 }
 
-.ui-jqgrid .ui-pg-selbox {    
-    height: 23px;
+.ui-jqgrid .ui-pg-selbox {   
+    height: 23px !important;
 }
     
 

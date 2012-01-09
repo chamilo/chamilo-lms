@@ -103,8 +103,7 @@ $(elem).each(
 								case 'fileFlash':																											
 									$('#playGround').html('<a id="playGround' + num + '" href="' + files[num].path + '"><div id="player">&nbsp;this is mine</div></a> ');
 									$('#playGround' + num).html('');																		
-									$('#playGround' + num).media({ width: 255, height: 210,  autoplay: true  });		
-									//alert($('#playGround' + num).html());																	
+									$('#playGround' + num).media({ width: 255, height: 210,  autoplay: true  });																										
 									showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250'  + '&width=256' + '&inlineId=winPlay&modal=true'));						
 									break;
 								default:

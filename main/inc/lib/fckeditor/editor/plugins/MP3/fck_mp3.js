@@ -47,7 +47,7 @@ if ( oFakeImage )
 }
 
 function window_onload(tab_to_select)
-{
+{ 
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document) ;
 
@@ -199,8 +199,7 @@ function updateMovie(e)
 }
 
 var ePreview ;
-function SetPreviewElement( previewEl )
-{
+function SetPreviewElement( previewEl ) {
 	ePreview = previewEl ;
 
 	if ( GetE('mpUrl').value.length > 0 )

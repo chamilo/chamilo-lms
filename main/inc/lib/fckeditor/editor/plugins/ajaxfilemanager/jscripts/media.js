@@ -340,7 +340,7 @@ $.fn.media.swf = function(el, opts) {
 // map flv and mp3 files to the swf player by default
 $.fn.media.flv = $.fn.media.mp3 = function(el, opts) {
     var src = opts.src;
-    var player = /\.mp3\b/i.test(src) ? $.fn.media.defaults.mp3Player : $.fn.media.defaults.flvPlayer;
+    var player = /\.mp3\b/i.test(src) ? $.fn.media.defaults.mp3Player : $.fn.media.defaults.flvPlayer;	
     opts.src = player;
     opts.src = opts.src + '?file=' + src;
     opts.flashvars = $.extend({}, { file: src }, opts.flashvars );

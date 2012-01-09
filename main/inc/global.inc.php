@@ -289,6 +289,7 @@ require_once $lib_path.'formvalidator/Rule/allowed_tags.inc.php';
 
 // Before we call local.inc.php, let's define a global $this_section variable 
 // which will then be usable from the banner and header scripts
+define('SECTION_GLOBAL', 'section_global');
 $this_section = SECTION_GLOBAL;
 
 // include the local (contextual) parameters of this course or section

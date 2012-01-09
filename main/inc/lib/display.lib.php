@@ -1305,14 +1305,15 @@ class Display {
     /**
      * Return the five star HTML
      * 
-     * @param   string  id of the rating ul
-     * @param   int     percentage 0-100 %
-     * @param   string  url that will be added (for the jquery stuff)
-	 * @param	string	show number of persons who voted for that item
+     * @param  string  id of the rating ul element     
+     * @param  string  url that will be added (for jquery see hot_courses.tpl)
+	 * @param	string	point info array see function CourseManager::get_course_ranking()
+	 * @param	bool	add a div wrapper
 	 * @todo	use smarty
      **/
     public function return_rating_system($id, $url, $point_info = array(), $add_div_wrapper = true) {
 		$number_of_users_who_voted =  isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;		
+		
 		$percentage =  isset($point_info['point_average']) ? $point_info['point_average'] : 0;
 		
 		if (!empty($percentage)) {
@@ -1327,19 +1328,23 @@ class Display {
 					<li><a href="javascript:void(0)" rel="'.$url.'&star=3" title="'.get_lang('ThreeStarsOutOf5').'" class="three-stars">3</a></li>
 					<li><a href="javascript:void(0)" rel="'.$url.'&star=4" title="'.get_lang('FourStarsOutOf5').'" class="four-stars">4</a></li>
 					<li><a href="javascript:void(0)" rel="'.$url.'&star=5" title="'.get_lang('FiveStarsOutOf5').'" class="five-stars">5</a></li>
-				</ul>';
+				</ul>';        
         
-        //if (!isset($number_of_users_who_voted)) {
-            $label			= $number_of_users_who_voted == 1 ? get_lang('Vote') : get_lang('Votes');
-			$label_accesses = $accesses == 1 ? get_lang('Visite') : get_lang('Visites');
-			$label_average	= $point_info['point_average_star'].' '.get_lang('Average');
-			$label_user		= $point_info['user_vote']  ? get_lang('YouAlreadyVoted').' '.$point_info['user_vote'] : '';
+		$labels = array();
+		
+		$labels[]= $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
+		$labels[]= $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
+		$labels[]= $point_info['point_average_star'].' '.get_lang('Average');
+		$labels[]= $point_info['user_vote']  ? get_lang('YouAlreadyVoted').' '.$point_info['user_vote'] : '';		
+		
+		if (!$add_div_wrapper && api_is_anonymous()) {  
+			$labels[]= get_lang('LoginToVote');
+		}
 			
-            $html .= Display::span($number_of_users_who_voted.' '.$label.' '.$accesses.' '.$label_accesses.' '.$label_average.' '.$label_user, array('id' =>  'vote_label_'.$id));
-			
-            $html .= ' '.Display::span(' ', array('id' =>  'vote_label2_'.$id));
-        //}
-		if ($add_div_wrapper) {
+        $html .= Display::span(implode(' ', $labels) , array('id' =>  'vote_label_'.$id));			
+        $html .= ' '.Display::span(' ', array('id' =>  'vote_label2_'.$id));
+		
+        if ($add_div_wrapper) {
 			$html = Display::div($html, array('id' => 'rating_wrapper_'.$id));
 		}
         return $html;

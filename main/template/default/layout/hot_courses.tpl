@@ -1,12 +1,10 @@
 <script type="text/javascript">
 $(document).ready( function() {
 	
-	$('.star-rating li a').live('click', function(event) {	
-
-        var id = $(this).parents('ul').attr('id');
-                      
-           $('#vote_label2_' + id).html("{'Loading'|get_lang}");
-           
+		
+	$('.star-rating li a').live('click', function(event) {
+        var id = $(this).parents('ul').attr('id');                      
+           $('#vote_label2_' + id).html("{'Loading'|get_lang}");           
            $.ajax({
                url: $(this).attr('rel'),
                success: function(data) {
@@ -21,6 +19,7 @@ $(document).ready( function() {
                }
            })
        });
+	
 });
 </script>
 

@@ -3617,16 +3617,7 @@ class CourseManager {
         if (!empty($points_to_add)) {
             self::update_course_ranking($course_id, $session_id, $url_id, $points_to_add, false, $add_user);
         }
-		
-		$point_info = CourseManager::get_course_ranking($course_id, 0); 
-		
-		$ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-		
-	    $rating = Display::return_rating_system('star_'.$course_id, $ajax_url.'&course_id='.$course_id, $point_info, false);
-
-        //return $action_done;
-		return $rating;
-        
+        return $action_done;
     }
     
     /**

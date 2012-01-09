@@ -91,7 +91,7 @@ function enablePreview(elem, num) {
 								case 'fileVideo':
 								case 'fileMusic':
 								case 'fileFlash':																											
-									$('#playGround').html('<a id="playGround' + num + '" href="' + files[num].path + '"><div id="player">&nbsp;this is mine</div></a> ');
+									$('#playGround').html('<a id="playGround' + num + '" href="' + files[num].public_path + '"><div id="player">&nbsp;this is mine</div></a> ');
 									$('#playGround' + num).html('');																		
 									$('#playGround' + num).media({ width: 255, height: 210,  autoplay: true  });																										
 									showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250'  + '&width=256' + '&inlineId=winPlay&modal=true'));						
@@ -628,7 +628,7 @@ function enableContextMenu(jquerySelectors) {
 				'menuPlay':function(t)
 				{
 					var num = (getNum($(t).attr('id')));							
-					$('#playGround').html('<a id="playGround' + num + '" href="' + files[num].path + '"><div id="player">&nbsp;this is mine</div></a> ');
+					$('#playGround').html('<a id="playGround' + num + '" href="' + files[num].public_path + '"><div id="player">&nbsp;this is mine</div></a> ');
 					$('#playGround' + num).html('');																		
 					$('#playGround' + num).media({ width: 255, height: 210,  autoplay: true  });													
 					showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250'  + '&width=258' + '&inlineId=winPlay&modal=true'));

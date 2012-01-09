@@ -6,12 +6,11 @@
 }
 
 .chatboxhead {
-	background-color: #f99d39;
+	background-color: #222;
 	padding:7px;
 	color: #ffffff;
-
-	border-right:1px solid #f99d39;
-	border-left:1px solid #f99d39;
+	border-right:1px solid #222;
+	border-left:1px solid #222;
 }
 
 .chatboxblink {
@@ -88,5 +87,7 @@
 }
 
 .chatboxtitle {
+	font-weight: bold;
 	float: left;
+	font-size: 13px;
 }

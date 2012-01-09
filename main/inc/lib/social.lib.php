@@ -607,8 +607,7 @@ class SocialManager extends UserManager {
 		  	echo '</div>';
 		  	
 	  	} else {
-	  		$img_array = UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
-	  		
+	  		$img_array = UserManager::get_user_picture_path_by_id($user_id,'web',true,true);	  		
 			$big_image = UserManager::get_picture_user($user_id, $img_array['file'],'', USER_IMAGE_SIZE_BIG);
 			$big_image = $big_image['file'].'?'.uniqid();
 			$normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();
@@ -684,7 +683,11 @@ class SocialManager extends UserManager {
 
 	  		if ($user_id != api_get_user_id()) {
 	  			echo  '<li><a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?height=300&width=470&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">';
-	  			echo  Display::return_icon('compose_message.png',get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';
+	  			echo  Display::return_icon('compose_message.png',get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';				
+				
+				$user_info = api_get_user_info($user_id);
+				$user_name  =$user_info['complete_name'];				
+				echo  Display::tag('li', Display::url(Display::return_icon('chat.gif').get_lang('chat'), 'javascript:void(0);', array('onclick' => "javascript:chatWith('".$user_id."', '".$user_name."')")));
 	  		}
 
 	  		//check if I already sent an invitation message

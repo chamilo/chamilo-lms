@@ -143,6 +143,11 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 <meta name="Generator" content="<?php echo $_configuration['software_name'].' '.substr($_configuration['system_version'],0,1);?>" />
 <script src= "<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/jquery.menu.js" type="text/javascript"></script>
 
+
+<script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/chat/js/chat.js" type="text/javascript" ></script>
+<link rel="stylesheet" href="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/chat/css/chat.css" type="text/css" media="projection, screen" />
+<link rel="stylesheet" href="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/chat/css/screen.css" type="text/css" media="projection, screen" />
+
 <script type="text/javascript">
 //<![CDATA[
 // This is a patch for the "__flash__removeCallback" bug, see FS#4378.
@@ -158,6 +163,9 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
             } ;
 	});
 }
+
+var ajax_url = '<?php echo api_get_path(WEB_AJAX_PATH).'chat.ajax.php'; ?>';
+
 //]]>
 </script>
 <?php

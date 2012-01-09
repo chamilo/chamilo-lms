@@ -448,44 +448,37 @@ Media.prototype.setAttribute = function( attr, val )
     }
 } ;
 
-Media.prototype.getInnerHTML = function ( objectId )
-{
+Media.prototype.getInnerHTML = function ( objectId ) {
+	
     var embeddingMethod = FCKConfig[ 'FlashEmbeddingMethod' ];
-
     var randomnumber = Math.floor( Math.random() * 1000001 ) ;
     var thisWidth = this.width ;
     var thisHeight = this.height ;
 
     var thisMediaType = 'single' ;
-    if ( !GetE( 'rbFileType' ).checked )
-    {
+    if ( !GetE( 'rbFileType' ).checked ) {
         thisMediaType = 'mpl' ;
     }
 
     // Alignment
     var cssalign = '' ;
     var cssfloat = '' ;
-    if ( this.align == 'center' )
-    {
+    if ( this.align == 'center') {
         cssalign = 'margin-left: auto;margin-right: auto;' ;
-    }
-    else if ( this.align == 'right' )
-    {
+    } else if ( this.align == 'right' ) {
         cssfloat = 'float: right;' ;
-    }
-    else if ( this.align == 'left' )
-    {
+    } else if ( this.align == 'left' ) {
         cssfloat = 'float: left;' ;
     }
 
-    var s = '' ;
+    var s = '';
 
-    s += '\n' ;
+    s += '\n';
+	
     s += '<div id="player' + randomnumber + '-parent" style="text-align: center;' + cssfloat + '">\n';
     s += '<div style="border-style: none; height: ' + thisHeight + 'px; width: ' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220, 220); ' + cssalign + '">' ;
-
-    if (embeddingMethod == 'swfobject')
-    {
+	
+    if (embeddingMethod == 'swfobject') {
         s += '<script src="' + FCKConfig.ScriptSWFObject + '" type="text/javascript"></script>\n' ;
     }
 
@@ -493,28 +486,26 @@ Media.prototype.getInnerHTML = function ( objectId )
 
     // A hidden div containing setting, added width, height, overflow for MSIE7
     s += '<div id="player' + randomnumber + '-config" style="display: none; visibility: hidden; width: 0px; height: 0px; overflow: hidden;">' ;
-    // Save settings.
-    for ( var i in this )
-    {
+	
+    // Save settings
+	 
+	//this prints extra params see #4217
+    for ( var i in this ) {
         if ( !i || !this[i] ) continue ;
-            if ( !i.match( /(set|get)/ ) )
-            {
-                s += i + '=' + this[i] + ' ' ;
-            }
+            if ( !i.match( /(set|get)/ ) ) {
+                //s += i + '=' + this[i] + ' ' ;
+			}
     }
-    s += '</div>' ;
+    s += '</div>' ;	
 
     // The player's area.
     s += '<div id="player' + randomnumber + '">' ;
 
-    if ( embeddingMethod == 'swfobject' )
-    {
+    if ( embeddingMethod == 'swfobject' ) {
         s += '<a href="http://www.macromedia.com/go/getflashplayer" target="_blank">Get the Flash Player</a> to see this video.' ;
-
     }
 
-    if ( embeddingMethod == 'object' || embeddingMethod == 'adobe' )
-    {
+    if (embeddingMethod == 'object' || embeddingMethod == 'adobe' ) {
         var p = '' ; // Parameters.
         var v = '' ; // Variables.
 
@@ -525,105 +516,71 @@ Media.prototype.getInnerHTML = function ( objectId )
         p += '<param name="allowfullscreen" value="' + this.fullscreen + '" />' ;
 
         v += 'width=' + thisWidth + '&amp;' ;
-        v += 'height=' + thisHeight + '&amp;' ;
-        v += 'autostart=' + this.play + '&amp;' ;
+        v += 'height=' + thisHeight + '&amp;';
+        v += 'autostart=' + this.play + '&amp;';
 
-        if ( thisMediaType == 'mpl' )
-        {
-            v += 'file=' + this.purl + '&amp;' ;
-            v += 'autoscroll=true&amp;' ;
-            p += 'allowscriptaccess="always" ' ;
+        if ( thisMediaType == 'mpl' ) {
+            v += 'file=' + this.purl + '&amp;';
+            v += 'autoscroll=true&amp;';
+            p += 'allowscriptaccess="always" ';
             p += '<param name="allowscriptaccess" value="always" />' ;
 
             var dispWidth = thisWidth ;
             var dispHeight = thisHeight ;
             var dispThumbs = false ;
 
-            if ( this.dispPlaylist != 'none' )
-            {
-                if ( this.dispPlaylist == 'right' )
-                {
-                    if ( this.playlistDim.length > 0 )
-                    {
+            if ( this.dispPlaylist != 'none' ) {
+                if ( this.dispPlaylist == 'right' ) {
+                    if ( this.playlistDim.length > 0 ) {
                         dispWidth = thisWidth - this.playlistDim ;
-                        if ( this.playlistDim < 100 )
-                        {
+                        if ( this.playlistDim < 100 ) {
                             dispThumbs = false ;
-                        }
-                        else
-                        {
+						} else {
                             dispThumbs = true ;
                         }
-                    }
-                    else
-                    {
-                        if ( thisWidth >= 550 )
-                        {
+                    } else {
+                        if ( thisWidth >= 550 ) {
                             dispWidth = thisWidth - 200 ;
                             dispThumbs = true ;
-                        }
-                        else if ( thisWidth >= 450 )
-                        {
+                        } else if ( thisWidth >= 450 ) {
                             dispWidth = thisWidth - 100 ;
                             dispThumbs = false ;
-                        }
-                        else if ( thisWidth >= 350 )
-                        {
+                        } else if ( thisWidth >= 350 ) {
                             dispWidth = thisWidth - 50 ;
                             dispThumbs = false ;
                         }
                     }
-
                     v += 'displaywidth=' + dispWidth + '&amp;' ;
-                }
-                else if ( this.dispPlaylist == 'below' )
-                {
+                } else if ( this.dispPlaylist == 'below' ) {
                     dispThumbs = true ;
-
-                    if ( this.playlistDim.length > 0 )
-                    {
+                    if ( this.playlistDim.length > 0 ) {
                         dispHeight = thisWidth - this.playlistDim ;
-                    }
-                    else
-                    {
-                        if ( thisHeight >= 550 )
-                        {
+                    } else {
+                        if ( thisHeight >= 550 ) {
                             dispHeight = thisWidth - 200 ;
-                        }
-                        else if ( thisHeight >= 450 )
-                        {
+                        } else if ( thisHeight >= 450 ) {
                             dispHeight = thisHeight - 150 ;
-                        }
-                        else if ( thisHeight >= 350 )
-                        {
+                        } else if ( thisHeight >= 350 ) {
                             dispHeight = thisHeight - 100 ;
                         }
                     }
-
                     v += 'displayheight=' + dispHeight + '&amp;' ;
                 }
 
-                if ( this.playlistThumbs == 'false' )
-                {
+                if ( this.playlistThumbs == 'false' ) {
                     dispThumbs = false ;
                 }
-
                 v += 'thumbsinplaylist=' + dispThumbs + '&amp;' ;
             }
 
             v += 'shuffle=false&amp;' ;
-            if (this.loop)
-            {
+            if (this.loop) {
                 v += 'repeat=list&amp;' ;
-            }
-            else
-            {
+            } else {
                 v += 'repeat=' + this.loop + '&amp;' ;
             }
             //v += 'transition=bgfade&amp;' ;
-        }
-        else
-        {
+        } else {
             v += 'file=' + this.url + '&amp;' ;
             v += 'repeat=' + this.loop + '&amp;' ;
             v += 'image=' + this.iurl + '&amp;' ;
@@ -633,41 +590,36 @@ Media.prototype.getInnerHTML = function ( objectId )
         v += 'link=' + this.url + '&amp;' ;
 
         v += 'showdigits=' + this.displayDigits + '&amp;' ;
-        v += 'shownavigation=' + this.displayNavigation + '&amp;' ;
-
+        v += 'shownavigation=' + this.displayNavigation + '&amp;';		
 
         // SET THE COLOR OF THE TOOLBAR
         var colorChoice1 = this.toolcolor ;
-        if ( colorChoice1.length > 0 )
-        {
+        if ( colorChoice1.length > 0 ) {
             colorChoice1 = colorChoice1.replace( '#', '0x' ) ;
             v += 'backcolor=' + colorChoice1 + '&amp;' ;
         }
         // SET THE COLOR OF THE TOOLBARS TEXT AND BUTTONS
         var colorChoice2 = this.tooltcolor ;
-        if ( colorChoice2.length > 0 )
-        {
+        if ( colorChoice2.length > 0 ) {
             colorChoice2 = colorChoice2.replace( '#', '0x' ) ;
             v += 'frontcolor=' + colorChoice2 + '&amp;' ;
         }
         // SET COLOR OF ROLLOVER TEXT AND BUTTONS
         var colorChoice3 = this.tooltrcolor ;
-        if ( colorChoice3.length > 0 )
-        {
+        if ( colorChoice3.length > 0 ) {
             colorChoice3 = colorChoice3.replace( '#', '0x' ) ;
             v += 'lightcolor=' + colorChoice3 + '&amp;' ;
         }
+		
         // SET COLOR OF BACKGROUND
         var colorChoice4 = this.bgcolor ;
-        if ( colorChoice4.length > 0 )
-        {
+        if ( colorChoice4.length > 0 ) {
             colorChoice4 = colorChoice4.replace( '#', '0x' ) ;
             v += 'screencolor=' + colorChoice4 + '&amp;' ;
         }
 
         v += 'logo=' + this.wmurl + '&amp;' ;
-        if ( this.rurl.length > 0 )
-        {
+        if ( this.rurl.length > 0 ) {
             v += 'recommendations=' + this.rurl + '&amp;' ;
         }
 

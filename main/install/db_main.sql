@@ -2800,8 +2800,6 @@ CREATE TABLE skill_rel_user (
   PRIMARY KEY (id)
 );
 
-
-
 CREATE TABLE skill_profile (
   id INTEGER  NOT NULL AUTO_INCREMENT,
   name VARCHAR(255)  NOT NULL,
@@ -2817,6 +2815,7 @@ CREATE TABLE skill_rel_profile (
 );
 
 
+-- Course ranking
 
 CREATE TABLE track_course_ranking (
  id   int unsigned not null PRIMARY KEY AUTO_INCREMENT,
@@ -2834,7 +2833,7 @@ ALTER TABLE track_course_ranking ADD INDEX idx_tcc_sid (session_id);
 ALTER TABLE track_course_ranking ADD INDEX idx_tcc_urlid (url_id);
 ALTER TABLE track_course_ranking ADD INDEX idx_tcc_creation_date (creation_date);
 
-CREATE TABLE user_rel_course_vote(
+CREATE TABLE user_rel_course_vote (
   id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
   c_id int unsigned not null,
   user_id int unsigned not null,  
@@ -2846,6 +2845,3 @@ CREATE TABLE user_rel_course_vote(
 ALTER TABLE user_course_vote ADD INDEX idx_ucv_cid (c_id);
 ALTER TABLE user_course_vote ADD INDEX idx_ucv_uid (user_id);
 ALTER TABLE user_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
-
-
-

@@ -261,7 +261,7 @@ class Template extends Smarty {
 			'bootstrap/bootstrap-dropdown.js'			
 		);
 		
-		if (1) {
+		if (api_get_setting('allow_global_chat') == 'true') {
 			$js_files[] = 'chat/js/chat.js';
 		}
 		
@@ -291,10 +291,9 @@ class Template extends Smarty {
 			$css_files[] = api_get_path(WEB_CSS_PATH).$my_style.'/learnpath.css';
 		}
 		
-		if (1) {
+		if (api_get_setting('allow_global_chat') == 'true') {
 			$css_files[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
 		}
-		
 		
 		$css_file_to_string = '';
 		foreach($css_files  as $css_file) {

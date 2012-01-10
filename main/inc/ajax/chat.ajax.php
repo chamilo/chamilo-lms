@@ -14,6 +14,10 @@ if (api_is_anonymous()) {
 	exit;
 }
 
+if (api_get_setting('allow_global_chat') == 'false') {
+	exit;	
+}
+
 $to_user_id = intval($_REQUEST['to']);
 $message = $_REQUEST['message'];
 

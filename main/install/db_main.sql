@@ -856,6 +856,7 @@ VALUES
 ('grading_model', 'grading_model', 'custom', 'Gradebook', 'false', 'GradingModelTitle', 'GradingModelComment', NULL, NULL, 1),
 ('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0),
 ('show_admin_toolbar', NULL, 'radio', 'Platform', 'show_to_admin', 'ShowAdminToolbarTitle', 'ShowAdminToolbarComment', NULL, NULL, 1),
+('allow_global_chat', NULL, 'radio', 'Platform', 'true', 'AllowGlobalChatTitle', 'AllowGlobalChatComment', NULL, NULL, 1),
 ('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.16427','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 /*
@@ -1168,7 +1169,9 @@ VALUES
 ('show_admin_toolbar', 'do_not_show', 'DoNotShow'),
 ('show_admin_toolbar', 'show_to_admin', 'ShowToAdminsOnly'), 
 ('show_admin_toolbar', 'show_to_admin_and_teachers', 'ShowToAdminsAndTeachers'),
-('show_admin_toolbar', 'show_to_all', 'ShowToAllUsers');
+('show_admin_toolbar', 'show_to_all', 'ShowToAllUsers'),
+('allow_global_chat', 'true', 'Yes'),
+('allow_global_chat', 'false', 'No');
 
 /*
 ('use_custom_pages','true','Yes'),

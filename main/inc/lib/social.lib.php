@@ -700,9 +700,11 @@ class SocialManager extends UserManager {
 	  		}
 			
 			//@todo check if user is online to show the chat link
-			if ($user_id != api_get_user_id()) {
-				$user_name  =$user_info['complete_name'];				
-				echo  Display::tag('li', Display::url(Display::return_icon('chat.gif').get_lang('Chat'), 'javascript:void(0);', array('onclick' => "javascript:chatWith('".$user_id."', '".Security::remove_XSS($user_name)."')")));
+			if (api_get_setting('allow_global_chat') == 'true') {
+				if ($user_id != api_get_user_id()) {
+					$user_name  = $user_info['complete_name'];				
+					echo  Display::tag('li', Display::url(Display::return_icon('chat.gif').get_lang('Chat'), 'javascript:void(0);', array('onclick' => "javascript:chatWith('".$user_id."', '".Security::remove_XSS($user_name)."')")));
+				}
 			}
 	  		echo '</ul></div>';
 

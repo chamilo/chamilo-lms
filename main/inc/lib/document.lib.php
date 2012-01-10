@@ -853,6 +853,7 @@ return 'application/octet-stream';
      * @todo now only files/folders in a folder get visibility 2, we should rename them too.
      */
     public static function delete_document($_course, $path, $base_work_dir) {
+        
         $TABLE_DOCUMENT 	= Database :: get_course_table(TABLE_DOCUMENT);
         $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
         
@@ -883,7 +884,7 @@ return 'application/octet-stream';
                         api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'delete', api_get_user_id(), null, null, null, null, $current_session_id);
 
                         //query to delete from document table
-                        $remove_from_document_sql = "DELETE FROM ".$TABLE_DOCUMENT." WHERE id = ".$row['id'];
+                        $remove_from_document_sql = "DELETE FROM ".$TABLE_DOCUMENT." WHERE c_id = $course_id AND id = ".$row['id'];
                         self::unset_document_as_template($row['id'], $_course, api_get_user_id());
                         Database::query($remove_from_document_sql);
 
@@ -930,7 +931,7 @@ return 'application/octet-stream';
                                          rename($base_work_dir.$old_item_path, $base_work_dir.$new_item_path);
                                          */
                                         self::unset_document_as_template($deleted_items['id'], api_get_course_id(), api_get_user_id());
-                                        $sql = "UPDATE $TABLE_DOCUMENT set path = '".$new_item_path."' WHERE id = ".$deleted_items['id'];
+                                        $sql = "UPDATE $TABLE_DOCUMENT set path = '".$new_item_path."' WHERE c_id = $course_id AND id = ".$deleted_items['id'];
 
                                         Database::query($sql);
                                     }
@@ -962,7 +963,7 @@ return 'application/octet-stream';
                             $sqlipd = "DELETE FROM $TABLE_ITEMPROPERTY WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
                             $resipd = Database::query($sqlipd);
                             self::unset_document_as_template($row['id'],api_get_course_id(), api_get_user_id());
-                            $sqldd = "DELETE FROM $TABLE_DOCUMENT WHERE id = ".$row['id'];
+                            $sqldd = "DELETE FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND id = ".$row['id'];
                             $resdd = Database::query($sqldd);
                         }
                     }

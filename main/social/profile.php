@@ -234,8 +234,8 @@ $user_online_count = count($user_online_list);
 echo '<div id="social-content">';
 
 echo '<div id="social-content-left">';
-    //this include the social menu div
-    SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
+//this include the social menu div
+SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
 echo '</div>';
 
 echo '<div id="social-content-right">';
@@ -388,8 +388,8 @@ if ($show_full_profile) {
 
 		$j=1;
 		for ($k=0;$k<$number_friends;$k++) {
-
 			if ($j > $number_of_images) break;
+			
 			if (isset($friends[$k])) {
 				$friend = $friends[$k];
 				$name_user	= api_get_person_name($friend['firstName'], $friend['lastName']);

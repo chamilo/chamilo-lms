@@ -7,73 +7,83 @@
 *	@package chamilo.library
 */
 
-class Chat {
-	function __construct() {
-		
-	}
+class Chat extends Model {
 	
-	function heartbeat() {
+	var $table;
+    var $columns = array('id', 'from_user','to_user','message','sent','recd');
+    
+	public function __construct() {
+        $this->table =  Database::get_main_table(TABLE_MAIN_CHAT);
+	}    
+	
+	function heartbeat() {		
 		$to_user_id = api_get_user_id();
-	
-		$sql = "select * from chat where (chat.to = '".intval($to_user_id)."' AND recd = 0) order by id ASC";
+		$my_user_info  = api_get_user_info();
+		
+		$sql = "SELECT * FROM ".$this->table." WHERE (to_user = '".intval($to_user_id)."' AND recd = 0) ORDER BY id ASC";
 		$result = Database::query($sql);
-		$items = '';
-
-		$chatBoxes = array();
+		
+		$chatBoxes = array();		
 		$items = array();
+		$_SESSION['chatHistory'] = null;
+		
 		while ($chat = Database::fetch_array($result,'ASSOC')) {
-			if (!isset($_SESSION['openChatBoxes'][$chat['from']]) && isset($_SESSION['chatHistory'][$chat['from']])) {
-				$items = $_SESSION['chatHistory'][$chat['from']];
+			if (!isset($_SESSION['openChatBoxes'][$chat['from_user']]) && isset($_SESSION['chatHistory'][$chat['from_user']])) {				
+				$items = $_SESSION['chatHistory'][$chat['from_user']];				
 			}
-			$chat['message'] = sanitize($chat['message']);
-			$item = array('s' => '0', 'f' => $chat['from'], 'm' => $chat['message'] );
-			$items[] = $item;
-
-			if (!isset($_SESSION['chatHistory'][$chat['from']])) {
-				$_SESSION['chatHistory'][$chat['from']] = '';
+			$user_info = api_get_user_info($chat['from_user'], true);			
+			
+			//$chat['message'] = self::sanitize($chat['message']);
+			$chat['message'] = Security::remove_XSS($chat['message']);
+			$item = array('s' => '0', 'f' => $chat['from_user'], 'm' => $chat['message'], 'online' => $user_info['user_is_online'], 'username' => $user_info['complete_name']);
+			$items []= $item;
+			
+			
+			if (!isset($_SESSION['chatHistory'][$chat['from_user']])) {
+				$_SESSION['chatHistory'][$chat['from_user']] = array();				
 			}
+			$_SESSION['chatHistory'][$chat['from_user']][] = $item;
 
-			$_SESSION['chatHistory'][$chat['from']] .= json_encode($item);
-
-
-			unset($_SESSION['tsChatBoxes'][$chat['from']]);
-			$_SESSION['openChatBoxes'][$chat['from']] = $chat['sent'];
+			unset($_SESSION['tsChatBoxes'][$chat['from_user']]);
+			$_SESSION['openChatBoxes'][$chat['from_user']] = $chat['sent'];
 		}
 
 		if (!empty($_SESSION['openChatBoxes'])) {
 			foreach ($_SESSION['openChatBoxes'] as $chatbox => $time) {
 				if (!isset($_SESSION['tsChatBoxes'][$chatbox])) {
-					$now = time()-strtotime($time);
+					$now = time() - strtotime($time);
 					$time = date('g:iA M dS', strtotime($time));
 
-					$message = "Sent at $time";
+					$message = get_lang('SentAt')." ".$time;
 					if ($now > 180) {
-
-						$item = array('s' => '2', 'f' => $chatbox, 'm' => $message);
-						$items[] = $item;
+						$user_info = api_get_user_info($chatbox, true);
+						$item = array('s' => '2', 'f' => $chatbox, 'm' => $message, 'online' => $user_info['user_is_online'], 'username' => $user_info['complete_name']);
+						$items [] = ($item);
 						if (!isset($_SESSION['chatHistory'][$chatbox])) {
 							$_SESSION['chatHistory'][$chatbox] = '';
 						}
 
-						$_SESSION['chatHistory'][$chatbox] .= json_encode($item);
+						$_SESSION['chatHistory'][$chatbox][] = ($item);
 						$_SESSION['tsChatBoxes'][$chatbox] = 1;
 					}			
 				}
 			}
 		}
 
-
-		$sql = "update chat set recd = 1 where chat.to = '".mysql_real_escape_string($to_user_id)."' and recd = 0";
+		$sql = "UPDATE ".$this->table." SET recd = 1 WHERE to_user = '".$to_user_id."' AND recd = 0";
 		$query = Database::query($sql);
+		
 		if ($items != '') {
 			//$items = substr($items, 0, -1);
-		}	
-	
+		}		
 		echo json_encode(array('items' => $items));
 	}
 	
-	function chatBoxSession($chatbox) {
-		$items = '';
+	/* 
+	 * chatBoxSession
+	 */
+	function box_session($chatbox) {
+		$items = array();
 		if (isset($_SESSION['chatHistory'][$chatbox])) {
 			$items = $_SESSION['chatHistory'][$chatbox];
 		}
@@ -82,47 +92,53 @@ class Chat {
 
 	function start_session() {
 		$items = '';
+		
 		if (!empty($_SESSION['openChatBoxes'])) {
 			foreach ($_SESSION['openChatBoxes'] as $chatbox => $void) {
-				$items .= chatBoxSession($chatbox);
+				$items = self::box_session($chatbox);
 			}
-		}
-		
+		}		
 		if ($items != '') {
-			$items = substr($items, 0, -1);
-		}
-		
-		$return = array('username' => api_get_user_id(), 'items' => $items);
+			//$items = substr($items, 0, -1);
+		}		
+		$return = array('username' => get_lang('Me'), 'user_id' => api_get_user_id(), 'items' => $items);
 		echo json_encode($return);
 		exit;
 	}
 
 	function send($from_user_id, $to_user_id, $message) {
-		$from = $_SESSION['username'];
-		$to = $_POST['to'];
-		$message = $_POST['message'];
+	
+		$_SESSION['openChatBoxes'][$to_user_id] = api_get_utc_datetime();
 
-		$_SESSION['openChatBoxes'][$_POST['to']] = date('Y-m-d H:i:s', time());
+		$messagesan = self::sanitize($message);
 
-		$messagesan = sanitize($message);
-
-		if (!isset($_SESSION['chatHistory'][$_POST['to']])) {
-			$_SESSION['chatHistory'][$_POST['to']] = '';
+		if (!isset($_SESSION['chatHistory'][$to_user_id])) {
+			$_SESSION['chatHistory'][$to_user_id] = array();
 		}
+		$user_info = api_get_user_info($to);
+		
+		$complete_name = $user_info['complete_name'];
 
-		$_SESSION['chatHistory'][$_POST['to']] .= <<<EOD
-						   {
-				"s": "1",
-				"f": "{$to}",
-				"m": "{$messagesan}"
-		   },
-EOD;
+		$_SESSION['chatHistory'][$to_user_id][] = (
+												array(	"s" => "1", 
+														"f" => $to,
+														"m" => $messagesan,
+														"username" => $complete_name
+														)
+												);
 
 
-		unset($_SESSION['tsChatBoxes'][$_POST['to']]);
-
-		$sql = "insert into chat (chat.from,chat.to,message,sent) values ('".mysql_real_escape_string($from)."', '".mysql_real_escape_string($to)."','".mysql_real_escape_string($message)."',NOW())";
-		$query = mysql_query($sql);
+		unset($_SESSION['tsChatBoxes'][$to_user_id]);
+		
+		$params = array();
+		$params['from_user']	= $from_user_id;
+		$params['to_user']		= $to_user_id;
+		$params['message']		= $message;
+		$params['sent']			= api_get_utc_datetime();
+		
+		if (!empty($from_user_id) && !empty($to_user_id)) {		
+			$this->save($params);
+		}
 		echo "1";
 		exit;
 	}

@@ -165,6 +165,9 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
 }
 
 var ajax_url = '<?php echo api_get_path(WEB_AJAX_PATH).'chat.ajax.php'; ?>';
+var online_button = '<?php  echo Security::remove_XSS(Display::return_icon('online.png')); ?>';
+var offline_button = '<?php echo Security::remove_XSS(Display::return_icon('offline.png')); ?>';
+
 
 //]]>
 </script>

@@ -20,11 +20,11 @@
 	/*<![CDATA[*/
 	{$css_style_print}
 	/*]]>*/
-</style>	
-{literal}
+</style>
 <script type="text/javascript">
 //<![CDATA[
 // This is a patch for the "__flash__removeCallback" bug, see FS#4378.
+{literal}
 if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf( 'opera' ) == -1 ) ) {
     window.attachEvent( 'onunload', function() {
             window['__flash__removeCallback'] = function ( instance, name ) {
@@ -37,9 +37,14 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
             } ;
     });
 }
-//]]>
-</script>
 {/literal}
+//]]>
+	
+var ajax_url = '{$_p.web_ajax}chat.ajax.php';
+var online_button = '{$online_button}';
+var offline_button ='{$offline_button}';
+
+</script>
 {$js_file_to_string}
 {$css_file_to_string}
 {$extra_headers}

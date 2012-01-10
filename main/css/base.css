@@ -3781,12 +3781,12 @@ form div.error input, form div.error textarea {
   background-color: #bfbfbf;
   font-size: 9.75px;
   font-weight: bold;
-  color: #ffffff;
-  text-transform: uppercase;
+  color: #ffffff;  
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-    width:134px;
+  text-align: center;
+  width: 155px;
 }
 
 .label_tag.personal_event { 

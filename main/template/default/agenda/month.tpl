@@ -293,10 +293,7 @@ $(document).ready(function() {
                 <div class="formw">
                     <div id="visible_to_read_only_users"></div>                  
                 </div>                  
-         </div>
-        
-          
-        	
+         </div>        	
 		<div class="row">		
 			<div class="label">
 				<label for="date">{"Agenda"|get_lang}</label>
@@ -335,7 +332,7 @@ $(document).ready(function() {
 		<div id="add_as_announcement_div">
     		 <div class="row">
                 <div class="label">                    
-                </div>      
+                </div>
                 <div class="formw">
                     <input type="checkbox" name="add_as_annonuncement" id="add_as_annonuncement" />
                     <label for="add_as_annonuncement">{"AddAsAnnouncement"|get_lang}</label>
@@ -346,5 +343,6 @@ $(document).ready(function() {
 	</form>
 	</div>
 </div>
+
 <div id='loading' style='left:180px;top:10px;position:absolute; display:none'>{"Loading"|get_lang}...</div>
 <div id='calendar'></div>

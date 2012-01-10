@@ -1544,15 +1544,22 @@ function change_visibility($tool,$id,$visibility)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
 function display_courseadmin_links() {
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".api_get_group_id()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'),'','32')."</a>";
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=importical&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'),'','32')."</a>";
+	if (!isset($_GET['action'])) {
+		$actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar_na.png', get_lang('Agenda'),'','32')."</a>";
+	} else {
+		$actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar.png', get_lang('Agenda'),'','32')."</a>";
+	}
+	$actions .= "<a href='agenda.php?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".api_get_group_id()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'),'','32')."</a>";
+	$actions .= "<a href='agenda.php?".api_get_cidreq()."&action=importical&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'),'','32')."</a>";
 	
+	return $actions;
+	/*
 	if (empty ($_SESSION['toolgroup'])) {
 		echo get_lang('SentTo');
 		echo "&nbsp;&nbsp;<form name=\"filter\" style=\"display:inline;\">";
 		show_user_group_filter_form();
 		echo "</form> ";
-	}
+	}*/
 }
 
 
@@ -2455,7 +2462,7 @@ function show_add_form($id = '') {
 	echo 	'	</div>
 			</div>';
 	
-	echo 	'<div class="row">
+	/*echo 	'<div class="row">
 	<div class="label">
 	</div><div class="formw">';
 	if ($default_no_empty_end_date) {
@@ -2463,9 +2470,9 @@ function show_add_form($id = '') {
 	} else {
 		$params = array('id'=>'empty_end_date');
 	}
-	echo Display::input('checkbox', 'empty_end_date', 0, $params).' '.get_lang('DisableEndDate');
+	//echo Display::input('checkbox', 'empty_end_date', 0, $params).' '.get_lang('DisableEndDate');
 	
-	echo 	'</div></div>';
+	echo 	'</div></div>';*/
 	echo '<script>
 				$(function() {				
 					$("#empty_end_date").click(function(){
@@ -4259,10 +4266,12 @@ function edit_agenda_attachment_file($file_comment, $agenda_id, $id_attach) {
  * @return  boolean False if error, True otherwise
  */
 function agenda_add_repeat_item($course_info, $orig_id, $type, $end, $orig_dest, $file_comment='') {
-	$t_agenda   = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
-    $t_agenda_r = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_info['dbName']);
+	$t_agenda   = Database::get_course_table(TABLE_AGENDA);
+    $t_agenda_r = Database::get_course_table(TABLE_AGENDA_REPEAT);
+	
+	$course_id = $course_info['real_id'];
 
-    $sql = 'SELECT title, content, start_date as sd, end_date as ed FROM '. $t_agenda.' WHERE id ="'.intval($orig_id).'" ';
+    $sql = 'SELECT title, content, start_date as sd, end_date as ed FROM '. $t_agenda.' WHERE c_id = '.$course_id.' AND id ="'.intval($orig_id).'" ';
     $res = Database::query($sql);
     if(Database::num_rows($res)!==1){return false;}
     $row = Database::fetch_array($res);
@@ -4300,7 +4309,7 @@ function agenda_add_repeat_item($course_info, $orig_id, $type, $end, $orig_dest,
                 break;
         }
     }
-    $course_id = api_get_course_int_id();
+    
     if ($end > $now
         && in_array($type,array('daily','weekly','monthlyByDate','monthlyByDay','monthlyByDayR','yearly'))) {
        $sql = "INSERT INTO $t_agenda_r (c_id, cal_id, cal_type, cal_end) VALUES ($course_id, '$orig_id','$type',$end)";

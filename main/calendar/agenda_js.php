@@ -16,6 +16,8 @@ $use_anonymous = true;
 require_once '../inc/global.inc.php';
 require_once 'agenda.lib.php';
 
+require_once 'agenda.inc.php';
+
 $htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = api_get_js('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_js('fullcalendar/fullcalendar.min.js');
@@ -69,6 +71,13 @@ $tpl->assign('button_text', 		json_encode(array(	'today'	=> get_lang('Today'),
 														'month'	=> get_lang('Month'), 
 														'week'	=> get_lang('Week'), 
 														'day'	=> get_lang('Day'))));
+
+if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false,true)) {
+	$actions = display_courseadmin_links();
+
+	$tpl->assign('actions', $actions);
+}
+
 //Calendar Type : course, admin, personal
 $tpl->assign('type', $type);
 //Calendar type label
@@ -99,8 +108,6 @@ if (api_is_allowed_to_edit() && $course_code != '-1' && $type == 'course') {
 //Loading Agenda template
 $content = $tpl->fetch('default/agenda/month.tpl');
 $tpl->assign('content', $content);
-
-
 
 //Loading main Chamilo 1 col template
 $tpl->display_one_col_template();

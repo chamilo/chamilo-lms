@@ -459,15 +459,6 @@ function store_new_agenda_item() {
 	return $last_id;
 }
 
-/**
-* The links that allows the student AND course administrator to show all agenda items and sort up/down
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*/
-function display_courseadmin_links() {
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('new_platform_event.png', get_lang('AgendaAdd'),'','32')."</a>";
-
-}
-
 function display_student_links() {
 	if ($_SESSION['view'] <> 'month') {
 		echo '<a href="'.api_get_self().'?action=view&amp;view=month">'.

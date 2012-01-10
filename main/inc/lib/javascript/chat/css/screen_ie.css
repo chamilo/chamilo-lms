@@ -10,8 +10,10 @@
  */
 html, body {
 	margin:0px;
-	overflow:hidden; /* hide browser's main scrollbar */
-	height:100%; /* make sure we'll use 100% of the page's height */
+	/* hide browser's main scrollbar */
+	/*overflow:hidden; */
+	/* make sure we'll use 100% of the page's height */
+	/*height:100%; */
 }
 
 #main_container {

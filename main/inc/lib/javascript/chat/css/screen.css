@@ -6,9 +6,10 @@
  */
  
 html, body {
-	margin:0px; /* FF hack: or we'll have double scrollbar showing on the browser */
-	overflow:hidden; /* hide browser's main scrollbar */
-
+	/* FF hack: or we'll have double scrollbar showing on the browser */
+	/*margin:0px; */
+	 /* hide browser's main scrollbar */
+	/*overflow:hidden;*/
 }
 
 #main_container {

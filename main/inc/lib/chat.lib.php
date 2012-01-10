@@ -52,9 +52,9 @@ class Chat extends Model {
 			foreach ($_SESSION['openChatBoxes'] as $chatbox => $time) {
 				if (!isset($_SESSION['tsChatBoxes'][$chatbox])) {
 					$now = time() - strtotime($time);
-					$time = date('g:iA M dS', strtotime($time));
-
-					$message = get_lang('SentAt')." ".$time;
+					$time = api_convert_and_format_date($time, DATE_TIME_FORMAT_SHORT_TIME_FIRST);
+					$message = sprintf(get_lang('SentAtX'), $time);
+					
 					if ($now > 180) {
 						$user_info = api_get_user_info($chatbox, true);
 						$item = array('s' => '2', 'f' => $chatbox, 'm' => $message, 'online' => $user_info['user_is_online'], 'username' => $user_info['complete_name']);

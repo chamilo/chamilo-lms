@@ -11,21 +11,16 @@
 
 // Returns true if the passed value is found in the
 // array. Returns false if it is not.
-Array.prototype.inArray = function (value,caseSensitive)
-{
+Array.prototype.inArray = function (value,caseSensitive) {
 	var i;
-	for (i=0; i < this.length; i++) 
-	{
+	for (i=0; i < this.length; i++) {
 		// use === to check for Matches. ie., identical (===),
 		if(caseSensitive){ //performs match even the string is case sensitive
-		if (this[i].toLowerCase() == value.toLowerCase()) 
-		{
-			return true;
-		}
-		}else
-		{
-			if (this[i] == value) 
-			{
+			if (this[i].toLowerCase() == value.toLowerCase()) 		{
+				return true;
+			}
+		} else {
+			if (this[i] == value) {
 				return true;
 			}
 		}
@@ -41,16 +36,14 @@ Array.prototype.inArray = function (value,caseSensitive)
  var linkElem = null;
  
  
- function hadDoubleClick() 
- {
-   var d = new Date();
-   var now = d.getTime();
-   if ((now - dcAt) < dcDelay) 
-   {
-     return true;
-   }
-   return false;
- };
+function hadDoubleClick() {
+	var d = new Date();
+	var now = d.getTime();
+	if ((now - dcAt) < dcDelay) {
+		return true;
+	}
+	return false;
+};
 
  
 /**
@@ -79,8 +72,7 @@ function enablePreview(elem, num) {
 						var isSupportedExt = false;
 						for (i in supportedExts) {
 							var typeOf = typeof(supportedExts[i]);							
-							if(typeOf.toLowerCase() == 'string' && supportedExts[i].toLowerCase() == ext.toLowerCase())
-							{
+							if(typeOf.toLowerCase() == 'string' && supportedExts[i].toLowerCase() == ext.toLowerCase()) {
 								isSupportedExt = true;
 								break;
 							}
@@ -97,7 +89,7 @@ function enablePreview(elem, num) {
 									showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250'  + '&width=256' + '&inlineId=winPlay&modal=true'));						
 									break;
 								default:
-									showThickBox(linkElem, appendQueryString(path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));	
+									showThickBox(linkElem, appendQueryString(path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));
 							}
 						}
 					}
@@ -531,30 +523,36 @@ function parseCurrentFolder()
 	var url = getUrl('view', true, true);
 
 	var parentPath = '';
-	for(var i = 0; i < folders.length; i++)
-	{
-		if(i == 0)
-		{
+	for(var i = 0; i < folders.length; i++) {
+		if (i == 0) {
 			parentPath += paths.root;
-			str += '/<a href="' + appendQueryString(url, 'path='+ parentPath, ['path']) + '"><span class="folderRoot">' + paths.root_title + '</span></a>'
-			
-		}else
-		{
-			if(folders[i] != '')
-			{
-				
+			str += '/<a href="' + appendQueryString(url, 'path='+ parentPath, ['path']) + '"><span class="folderRoot">' + paths.root_title + '</span></a>'			
+		} else {
+			//hack for Chamilo: rename breadcrumbs into shared folders
+			if(folders[i]=='shared_folder') {
+				parentPath+=folders[i]+'/';str+='/<a href="'+appendQueryString(url,'path='+parentPath,['path'])+'"><span class="folderSub">'+shared_folder+'</span></a>';
+			} else if (folders[i].indexOf('shared_folder_session_')!=-1) {
+				parentPath+=folders[i]+'/';str+='/<a href="'+appendQueryString(url,'path='+parentPath,['path'])+'"><span class="folderSub">'+shared_folder_session+'</span></a>';
+			} else if (folders[i].indexOf('sf_user_')!=-1) {
+				parentPath+=folders[i]+'/';str+='/<a href="'+appendQueryString(url,'path='+parentPath,['path'])+'"><span class="folderSub">'+shared_user_folder+'</span></a>';
+			} else {
+				parentPath+=folders[i]+'/';str+='/<a href="'+appendQueryString(url,'path='+parentPath,['path'])+'"><span class="folderSub">'+folders[i]+'</span></a>';
+			}
+
+			/*if(folders[i] != '') {				
 				parentPath += folders[i] + '/';
 				str += '/<a href="' + appendQueryString(url, 'path='+ parentPath , ['path']) + '"><span class="folderSub">' + folders[i] + '</span></a>';
-			}
+			}*/
+			//end hack
 		}
 	}
 	$('#currentFolderPath').empty().append(str);
 	$('#currentFolderPath a').each(
-																 function()
-																 {
-																	 doEnableFolderBrowsable(this, $(this).attr('href'));
-																 }
-																 );
+		function()
+		{
+		 doEnableFolderBrowsable(this, $(this).attr('href'));
+		}
+		);
 };
 /**
 *	enable pagination as ajax function call
@@ -933,13 +931,10 @@ function addMoreFile()
 *   remove hidden upload frame
 *   remove hidden upload form
 */
-function cancelFileUpload(elementId)
-{
+function cancelFileUpload(elementId) {
 	$('div#TB_window #' + elementId).parent().parent().remove();
-
 	//ensure there is at least one visible upload element
-	while($('div#TB_window #fileUploadBody tr').length < 2)
-	{
+	while($('div#TB_window #fileUploadBody tr').length < 2) {
 		addMoreFile();
 	}
 	return false;	
@@ -948,75 +943,80 @@ function cancelFileUpload(elementId)
 *	upload file
 */
 function uploadFile(elementId) {
-		var ext = getFileExtension($('#' + elementId).val());
-		if(ext == '')
-		{
-			alert(noFileSelected );
-			return false;
-		}
-		var supportedExts = supportedUploadExts.split(",");
-		var isSupportedExt = false;
-		
-		for (i in supportedExts)
-		{
-			//alert(typeof(supportedExts[i]));
-			if(typeof(supportedExts[i]) == 'string')
-			{
-				isSupportedExt = true;
-				break;				
-			}
-		}	
-		
-		if(!isSupportedExt)
-		{
-			alert(msgInvalidExt);
-			return false;
-		}
+	var ext = getFileExtension($('#' + elementId).val());
+	var only_name_file=$('#'+elementId).val();// hack for Chamilo
 	
-		$('#ajax' + elementId).hide();
-		$('#ajax' + elementId).show();
-		
-		$.ajaxFileUpload ( {			
-			
-				url: appendQueryString(getUrl('upload', false, false), 'folder=' + currentFolder.path_base64, ['folder']), 
-				secureuri:false,
-				fileElementId:elementId,
-				dataType: 'json',
-				success: function (data, status)
-				{
-					
-					if(typeof(data.error) != 'undefined')
-					{
-						if(data.error != '')
-						{
-							alert(data.error);
-							$('#ajax' + elementId).hide();
-						}else
-						{
-							//remove the file type of input
-							cancelFileUpload(elementId);
-							numRows++;
-							files[numRows] = {};
+	/*if(ext == '') {
+		alert(noFileSelected );
+		return false;
+	}*/
+	
+	// hack for Chamilo
+	if(ext=='' && only_name_file!=''){alert(noFileSelected+'\n\n'+ only_name_file);return false;}// Chamilo replace the above line
+	
+	var supportedExts = supportedUploadExts.split(",");
+	var isSupportedExt = false;
 
-							for(var i in data)
-							{
-								if(i != 'error')
-								{
-									files[numRows][i] =  data[i];
-								}
-							}
-							addDocumentHtml(numRows);
-						}
-					}
-					
-				},
-				error: function (data, status, e)
+	for (i in supportedExts)
+	{
+		//alert(typeof(supportedExts[i]));
+		if(typeof(supportedExts[i]) == 'string')
+		{
+			isSupportedExt = true;
+			break;				
+		}
+	}	
+
+	if(!isSupportedExt)
+	{
+		alert(msgInvalidExt);
+		return false;
+	}
+
+	$('#ajax' + elementId).hide();
+	$('#ajax' + elementId).show();
+
+	$.ajaxFileUpload ( {			
+
+			url: appendQueryString(getUrl('upload', false, false), 'folder=' + currentFolder.path_base64, ['folder']), 
+			secureuri:false,
+			fileElementId:elementId,
+			dataType: 'json',
+			success: function (data, status)
+			{
+
+				if(typeof(data.error) != 'undefined')
 				{
-					$('#ajax' + elementId).hide();
-					alert(e);
+					if(data.error != '')
+					{
+						alert(data.error);
+						$('#ajax' + elementId).hide();
+					}else
+					{
+						//remove the file type of input
+						cancelFileUpload(elementId);
+						numRows++;
+						files[numRows] = {};
+
+						for(var i in data)
+						{
+							if(i != 'error')
+							{
+								files[numRows][i] =  data[i];
+							}
+						}
+						addDocumentHtml(numRows);
+					}
 				}
+
+			},
+			error: function (data, status, e)
+			{
+				$('#ajax' + elementId).hide();
+				alert(e);
 			}
-		)	
+		}
+	)	
 	
 	return false;
 };
@@ -1673,36 +1673,51 @@ function setDocInfo(type, num) {
 			} else {
 				$('#fileWritable').html("<span class=\"flagNo\">&nbsp;</span>");
 			}	
+			/*
 			$('#folderFieldSet').css('display', 'none');
 			$('#fileFieldSet').css('display', '');
 			
-		    if (typeof(selectFile) != 'undefined' && $('#fileList input[@type=checkbox][@checked]').length==1 || $('#rightCol dl.thumbnailListing input[@type=checkbox][@checked]').length==1 ) {		    	
-			   	$('#selectCurrentUrl').unbind('click').click(function() {			   	    	   	    			   	    		   			
-			   		selectFile(info.url);
-			   		
-			   		}
-			   	);			   	
+		    if (typeof(selectFile) != 'undefined' && $('#fileList input[@type=checkbox][@checked]').length==1 || $('#rightCol dl.thumbnailListing input[@type=checkbox][@checked]').length==1 ) {
+			   	$('#selectCurrentUrl').unbind('click').click(function() {
+					selectFile(info.url);			   		
+			   	});			   	
 			   	$('#returnCurrentUrl').show();		   	 
 		    } else {
 			   $('#returnCurrentUrl').hide();
 		    }
 		}	
+		};
+		*/
+
+		//hack for Chamilo replace this line below for insert/select in browse mode
+ 
+		$('#folderFieldSet').css('display','none');
+		$('#fileFieldSet').css('display','');
+
+		if(typeof(selectFile)!='undefined' && $('#fileList input[@type=checkbox][@checked]').length==1 || $('#rightCol dl.thumbnailListing input[@type=checkbox][@checked]').length==1){
+			$('#selectCurrentUrl').unbind('click').click(function(){
+			selectFile(info.url);
+			});
+			$('#returnCurrentUrl').show();
+		} else { 
+			$('#returnCurrentUrl').hide();
+		}
+	}
 };
 
-function search()
-{
+function search() {
 	searchRequired = true;			
 	var url = getUrl('view', true, true, true);		
 
-$('#rightCol').empty();
-ajaxStart('#rightCol');		
+	$('#rightCol').empty();
+	ajaxStart('#rightCol');		
 
-$('#rightCol').load(url, 
-			{},
-			function(){
-					ajaxStop('#rightCol img.ajaxLoadingImg');
-					initAfterListingLoaded();
-				});			
+	$('#rightCol').load(url, 
+				{},
+				function(){
+						ajaxStop('#rightCol img.ajaxLoadingImg');
+						initAfterListingLoaded();
+					});			
 	return false;
 };
 

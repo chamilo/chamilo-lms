@@ -9,7 +9,7 @@
  * IE hack 
  */
 html, body {
-	margin:0px;
+	/*margin:0px;*/
 	/* hide browser's main scrollbar */
 	/*overflow:hidden; */
 	/* make sure we'll use 100% of the page's height */

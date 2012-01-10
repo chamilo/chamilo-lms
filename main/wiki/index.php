@@ -280,7 +280,7 @@ if ($_GET['view']) {
 
                         $userinfo=Database::get_user_info_from_id($last_row['is_editing']);
 
-                        $is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
+                        $is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).' ('.$userinfo['username'].')</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
                         Display::display_normal_message($is_being_edited, false);
 
                     } else {
@@ -1008,7 +1008,7 @@ if ($_GET['action']=='mactiveusers') {
             $userinfo=Database::get_user_info_from_id($obj->user_id);
             $row = array ();
 
-            $row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).'</a><a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($row['user_id']).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"></a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
+            $row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).' ('.$userinfo['username'].')</a><a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($row['user_id']).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"></a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
             $row[] ='<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($obj->user_id).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.$obj->NUM_EDIT.'</a>';
             $rows[] = $row;
         }
@@ -1026,7 +1026,7 @@ if ($_GET['action']=='mactiveusers') {
 if ($_GET['action']=='usercontrib') {
     $userinfo=Database::get_user_info_from_id($_GET['user_id']);
 
-    echo '<div class="actions">'.get_lang('UserContributions').': <a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).'</a><a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($row['user_id']).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"></a></div>';
+    echo '<div class="actions">'.get_lang('UserContributions').': <a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).' ('.$userinfo['username'].')</a><a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($row['user_id']).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"></a></div>';
 
 
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden 
@@ -1558,7 +1558,7 @@ if ($_GET['action']=='links') {
                 $row = array ();
                 $row[] =$ShowAssignment;
                 $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
-                $row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
+                $row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).' ('.$userinfo['username'].')</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
                 $row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
                 $rows[] = $row;
             }
@@ -1810,7 +1810,7 @@ if ($_GET['action']=='edit') {
 
                     $userinfo=Database::get_user_info_from_id($row['is_editing']);
 
-                    $is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
+                    $is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).' ('.$userinfo['username'].')</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
                     Display::display_normal_message($is_being_edited, false);
                     exit;
                 }
@@ -2076,7 +2076,7 @@ if ($_GET['action']=='history' or $_POST['HistoryDifferences']) {
                 echo ' ('.get_lang('Version').' '.$row['version'].')';
                 echo ' '.get_lang('By').' ';
                 if ($row['user_id']<>0) {
-                    echo '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).'</a>';
+                    echo '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).' ('.$userinfo['username'].')</a>';
                 } else {
                     echo get_lang('Anonymous').' ('.api_htmlentities($row[user_ip]).')';
                 }
@@ -2235,7 +2235,7 @@ if ($_GET['action']=='recentchanges') {
             $row[] = $ShowAssignment.$icon_task;
             $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&amp;view='.$obj->id.'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
             $row[] = $obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');
-            $row[] = $obj->user_id <> 0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).'</a>' : get_lang('Anonymous').' ('.api_htmlentities($obj->user_ip).')';
+            $row[] = $obj->user_id <> 0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).' ('.$userinfo['username'].')</a>' : get_lang('Anonymous').' ('.api_htmlentities($obj->user_ip).')';
             $rows[] = $row;
         }
 
@@ -2300,7 +2300,7 @@ if ($_GET['action']=='allpages') {
             $row = array ();
             $row[] =$ShowAssignment.$icon_task;
             $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
-            $row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).'</a>' : get_lang('Anonymous').' ('.api_htmlentities($obj->user_ip).')';
+            $row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).' ('.$userinfo['username'].')</a>' : get_lang('Anonymous').' ('.api_htmlentities($obj->user_ip).')';
             $row[] = api_get_local_time($obj->dtime, null, date_default_timezone_get());
 
             if (api_is_allowed_to_edit(false,true)|| api_is_platform_admin()) {
@@ -2431,7 +2431,7 @@ if ($_GET['action']=='discuss') {
 
             echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.api_htmlentities($row['title']);
 
-            echo ' ('.get_lang('MostRecentVersionBy').' <a href="../user/userInfo.php?uInfo='.$lastuserinfo['user_id'].'">'.api_htmlentities(api_get_person_name($lastuserinfo['firstname'], $lastuserinfo['lastname'])).'</a> '.$lastversiondate.$countWPost.')'.$avg_WPost_score.' '; //TODO: read average score
+            echo ' ('.get_lang('MostRecentVersionBy').' <a href="../user/userInfo.php?uInfo='.$lastuserinfo['user_id'].'">'.api_htmlentities(api_get_person_name($lastuserinfo['firstname'], $lastuserinfo['lastname'])).' ('.$lastuserinfo['username'].')</a> '.$lastversiondate.$countWPost.')'.$avg_WPost_score.' '; //TODO: read average score
 
             echo '</div>';
 
@@ -2536,7 +2536,7 @@ if ($_GET['action']=='discuss') {
                 }
                 
                 $user_id=$row['userc_id'];
-                $name = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+                $name = api_get_person_name($userinfo['firstname'], $userinfo['lastname']).' ('.$userinfo['username'].')';
                 $attrb=array();
                 if ($user_id<>0) {
                     $image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);
@@ -2588,7 +2588,7 @@ if ($_GET['action']=='discuss') {
                 echo '<p><table>';
                 echo '<tr>';
                 echo '<td rowspan="2">'.$author_photo.'</td>';
-                echo '<td style=" color:#999999"><a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).'</a> ('.$author_status.') '.api_get_local_time($row['dtime'], null, date_default_timezone_get()).' - '.get_lang('Rating').': '.$row['p_score'].' '.$imagerating.' </td>';
+                echo '<td style=" color:#999999"><a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).' ('.$userinfo['username'].')</a> ('.$author_status.') '.api_get_local_time($row['dtime'], null, date_default_timezone_get()).' - '.get_lang('Rating').': '.$row['p_score'].' '.$imagerating.' </td>';
                 echo '</tr>';
                 echo '<tr>';
                 echo '<td>'.api_htmlentities($row['comment']).'</td>';

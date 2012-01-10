@@ -955,7 +955,10 @@ function _api_format_user($user) {
 	}    
 	
     $result['avatar'] = $avatar;
-    $result['avatar_small'] = $avatar_small;    
+    $result['avatar_small'] = $avatar_small;
+	if (isset($user['user_is_online'])) {
+		$result['user_is_online'] = $user['user_is_online'] == true ? 1 : 0;
+	}	
     return $result;
 }
 
@@ -966,7 +969,7 @@ function _api_format_user($user) {
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version 21 September 2004
  */
-function api_get_user_info($user_id = '') {    
+function api_get_user_info($user_id = '', $check_if_user_is_online = false) {    
     if ($user_id == '') {
         return _api_format_user($GLOBALS['_user']);
     }
@@ -974,9 +977,12 @@ function api_get_user_info($user_id = '') {
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
+		if ($check_if_user_is_online) {
+			$result_array['user_is_online'] = user_is_online($user_id);
+		}
         return _api_format_user($result_array);
-
     }
+	
     return false;
 }
 

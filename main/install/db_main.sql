@@ -2845,3 +2845,16 @@ CREATE TABLE user_rel_course_vote (
 ALTER TABLE user_course_vote ADD INDEX idx_ucv_cid (c_id);
 ALTER TABLE user_course_vote ADD INDEX idx_ucv_uid (user_id);
 ALTER TABLE user_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
+
+
+CREATE TABLE chat (
+	id			INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	from_user	INTEGER,
+	to_user		INTEGER,
+	message		TEXT NOT NULL,
+	sent		DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+	recd		INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	PRIMARY KEY (id),
+	INDEX to (to),
+ INDEX from (from)
+);

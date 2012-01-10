@@ -35,7 +35,7 @@ switch ($action) {
 		$chat->close();
 		break;		
 	case 'sendchat':		
-		$chat->send();
+		$chat->send(api_get_user_id(), $_POST['to'], $_POST['message']);
 		break;		
 	case 'startchatsession':
 		$chat->start_session();

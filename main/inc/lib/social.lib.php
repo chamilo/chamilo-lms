@@ -677,17 +677,15 @@ class SocialManager extends UserManager {
 	        	echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('zoom.png',get_lang('Search'),array('hspace'=>'6')).'<span class="'.($show=='search'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Search').'</span></a></li>';
 				echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.Display::return_icon('briefcase.png',get_lang('MyFiles'),array('hspace'=>'6'),16).'<span class="'.($show=='myfiles'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MyFiles').'</span></a></li>';
     	  	}
-
+			
+			$user_info = api_get_user_info($user_id);
+			
     	  	// My friend profile
     	  	$html_actions = '';
 
 	  		if ($user_id != api_get_user_id()) {
 	  			echo  '<li><a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?height=300&width=470&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">';
-	  			echo  Display::return_icon('compose_message.png',get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';				
-				
-				$user_info = api_get_user_info($user_id);
-				$user_name  =$user_info['complete_name'];				
-				echo  Display::tag('li', Display::url(Display::return_icon('chat.gif').get_lang('chat'), 'javascript:void(0);', array('onclick' => "javascript:chatWith('".$user_id."', '".$user_name."')")));
+	  			echo  Display::return_icon('compose_message.png',get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';						
 	  		}
 
 	  		//check if I already sent an invitation message
@@ -700,6 +698,12 @@ class SocialManager extends UserManager {
 	  				echo  '<li><a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=230&width=500&user_friend='.$user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
 	  			}
 	  		}
+			
+			//@todo check if user is online to show the chat link
+			if ($user_id != api_get_user_id()) {
+				$user_name  =$user_info['complete_name'];				
+				echo  Display::tag('li', Display::url(Display::return_icon('chat.gif').get_lang('Chat'), 'javascript:void(0);', array('onclick' => "javascript:chatWith('".$user_id."', '".Security::remove_XSS($user_name)."')")));
+			}
 	  		echo '</ul></div>';
 
         	/*

@@ -310,19 +310,21 @@ define('TABLE_USERGROUP_REL_SESSION',   'usergroup_rel_session');
 // Mail notifications
 define('TABLE_NOTIFICATION',               'notification');
 
-
 //Custom reports table
 define('TABLE_MAIN_REPORTS_KEYS',			'reports_keys');
 define('TABLE_MAIN_REPORTS_VALUES', 			'reports_values');
 
 //Storage api tables
 define('TABLE_MAIN_STORED_VALUES',			'stored_values');
-define('TABLE_MAIN_STORED_VALUES_STACK',	'stored_values_stack');
+define('TABLE_MAIN_STORED_VALUES_STACK',		'stored_values_stack');
+
 
 //Event tables
-define('TABLE_MAIN_EVENT_TYPE','event_type');
-define('TABLE_MAIN_EVENT_TYPE_MESSAGE','event_type_message');
-define('TABLE_MAIN_EVENT_TYPE_REL_USER','user_rel_event_type');
+/*
+define('TABLE_MAIN_EVENT_TYPE',				'event_type');
+define('TABLE_MAIN_EVENT_TYPE_MESSAGE',		'event_type_message');
+define('TABLE_MAIN_EVENT_TYPE_REL_USER',		'user_rel_event_type');
+*/
 
 define('TABLE_MAIN_SKILL',                  'skill');
 define('TABLE_MAIN_SKILL_REL_SKILL',        'skill_rel_skill');
@@ -330,7 +332,6 @@ define('TABLE_MAIN_SKILL_REL_GRADEBOOK',    'skill_rel_gradebook');
 define('TABLE_MAIN_SKILL_REL_USER',         'skill_rel_user');
 
 define('TABLE_MAIN_SKILL_PROFILE',          'skill_profile');
-define('TABLE_MAIN_SKILL_REL_PROFILE',         'skill_rel_profile');
+define('TABLE_MAIN_SKILL_REL_PROFILE',      'skill_rel_profile');
 
-
-
+define('TABLE_MAIN_CHAT',					'chat');

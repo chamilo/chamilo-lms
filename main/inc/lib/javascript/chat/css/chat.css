@@ -5,9 +5,24 @@
 	display:none;
 }
 
+.user_status {
+	width:16px;
+	display:inline;
+	float:left;
+	padding: 0px 4px 0px 4px;	
+}
+
+.chatboxtitle {
+	font-weight: bold;
+	float: left;
+	font-size: 13px;
+	width: 160px;
+	cursor:pointer;
+}
+
 .chatboxhead {
 	background-color: #222;
-	padding:7px;
+	padding:7px 7px 7px 0px;
 	color: #ffffff;
 	border-right:1px solid #222;
 	border-left:1px solid #222;
@@ -64,7 +79,6 @@
 .chatboxinfo {
 	margin-left:-1em;
 	color:#666666;
-
 }
 
 .chatboxmessagefrom {
@@ -86,8 +100,6 @@
 	font-family:Verdana,Arial,"Bitstream Vera Sans",sans-serif;
 }
 
-.chatboxtitle {
-	font-weight: bold;
-	float: left;
-	font-size: 13px;
+.chatboxoptions a:hover {
+	background-color: #aaa;
 }

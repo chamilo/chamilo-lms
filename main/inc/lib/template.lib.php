@@ -26,20 +26,20 @@ class Template extends Smarty {
 		$this->cache_lifetime 	= Smarty::CACHING_OFF; // no caching
 		//$this->cache_lifetime 	= 120;
 		
+		//Setting system variables
+		$this->set_system_parameters();	
+		
+		//Setting user variables 
+		$this->set_user_parameters();
+		
 		//header and footer are showed by default
 		$this->set_footer($show_footer);
 		$this->set_header($show_header);
 		
-		//Setting system variables
-		$this->set_system_parameters();
-        
-        //Setting user variables 
-		$this->set_user_parameters();
-		
 		//Creating a Smarty modifier - Now we can call the get_lang from a template!!! Just use {"MyString"|get_lang} 
 		$this->registerPlugin("modifier","get_lang", "get_lang");
 		
-		//Not recomended to use get_path, use {$_p['xxx']} see set_system_parameters(functions)
+		//Not recomended to use get_path, use {$_p.'xxx'} see the set_system_parameters()
 		$this->registerPlugin("modifier","get_path", "api_get_path");
 		$this->registerPlugin("modifier","get_setting", "api_get_setting");
 		
@@ -47,8 +47,7 @@ class Template extends Smarty {
 		//$this->loadPlugin('smarty_function_get_lang');
 		
 		//To the the smarty installation
-		//$this->testInstall();			
-		
+		//$this->testInstall();					
 		$this->set_header_parameters();
 		$this->set_footer_parameters();
         
@@ -200,6 +199,9 @@ class Template extends Smarty {
 			}
 		}
 		
+		 $this->assign('online_button', Security::remove_XSS(Display::return_icon('online.png')));
+		 $this->assign('offline_button', Security::remove_XSS(Display::return_icon('offline.png')));
+		
 		// Get language iso-code for this page - ignore errors		
 		
 		$this->assign('document_language', api_get_language_isocode());
@@ -229,11 +231,13 @@ class Template extends Smarty {
 		$my_style 		= api_get_visual_theme();	
 		
 		$style = '';
+		
 		//Base CSS
 		$style = '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
-		//Default CSS
+		
+		//Default theme CSS
 		$style .= '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css";';
-		//Course CSS
+		//Course theme CSS
 		$style .= '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/course.css";';
 		
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
@@ -245,6 +249,8 @@ class Template extends Smarty {
 		$style_print =  '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/print.css";';
 		$this->assign('css_style_print', $style_print);
 		
+		//Extra JS files
+		
 		$js_files = array(
 			'jquery.min.js',
 			'chosen/chosen.jquery.min.js',
@@ -252,8 +258,12 @@ class Template extends Smarty {
 			'jquery.menu.js',
 			'dtree/dtree.js',
 			'email_links.lib.js.php',
-			'bootstrap/bootstrap-dropdown.js'
+			'bootstrap/bootstrap-dropdown.js'			
 		);
+		
+		if (1) {
+			$js_files[] = 'chat/js/chat.js';
+		}
 		
 		if (api_get_setting('accessibility_font_resize') == 'true') {
 			$js_files[] = 'fontresize.js';
@@ -269,6 +279,8 @@ class Template extends Smarty {
 			$js_file_to_string .= api_get_js($js_file);
 		}
 		
+		//Extra CSS files
+		
 		$css_files = array (
 			api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css',
 			api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css',
@@ -279,12 +291,17 @@ class Template extends Smarty {
 			$css_files[] = api_get_path(WEB_CSS_PATH).$my_style.'/learnpath.css';
 		}
 		
+		if (1) {
+			$css_files[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
+		}
+		
+		
 		$css_file_to_string = '';
 		foreach($css_files  as $css_file) {
 			$css_file_to_string .= api_get_css($css_file);
 		}
 	
-		global $this_section, $nameTools;	
+		global $this_section, $nameTools;
 		$this->assign('css_file_to_string', $css_file_to_string);
 		$this->assign('js_file_to_string',  $js_file_to_string);		
 		$this->assign('text_direction',	    api_get_text_direction());			

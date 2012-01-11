@@ -212,12 +212,12 @@ class BlockStudent extends Block {
 	 				$course_code = $course['code'];
 	 				$cats = Category::load(null, null, $course_code, null, null, null, false);
 	 				$scoretotal = array();
-	 				if (isset($cats)) {		 				
+	 				if (isset($cats) && isset($cats[0])) {		 				
 		 				$scoretotal= $cats[0]->calc_score($student_id, $course_code);		 				
 	 				} 
 
 	 				if (!empty($scoretotal)) {
-	 					$score += $scoretotal[0];
+	 					$score  += $scoretotal[0];
 	 					$weight += $scoretotal[1];	
 	 				} 
 	 			}
@@ -256,8 +256,5 @@ class BlockStudent extends Block {
 	 */
 	function get_number_of_students() {
 		return count($this->students);
-	}
-    
+	}    
 }
-
-?>

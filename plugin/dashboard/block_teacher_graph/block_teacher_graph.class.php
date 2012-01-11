@@ -198,5 +198,3 @@ class BlockTeacherGraph extends Block {
 	}
     
 }
-
-?>

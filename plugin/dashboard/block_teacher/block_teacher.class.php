@@ -216,5 +216,3 @@ class BlockTeacher extends Block {
 	}
     
 }
-
-?>

@@ -211,4 +211,3 @@ class BlockStudentGraph extends Block {
 		return count($this->students);
 	}    
 }
-?>

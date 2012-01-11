@@ -2849,7 +2849,7 @@ ALTER TABLE user_course_vote ADD INDEX idx_ucv_cid (c_id);
 ALTER TABLE user_course_vote ADD INDEX idx_ucv_uid (user_id);
 ALTER TABLE user_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
 
-
+-- Global chat
 CREATE TABLE chat (
 	id			INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 	from_user	INTEGER,
@@ -2857,7 +2857,8 @@ CREATE TABLE chat (
 	message		TEXT NOT NULL,
 	sent		DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
 	recd		INTEGER UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (id),
-	INDEX to (to),
- INDEX from (from)
+	PRIMARY KEY (id)	
 );
+
+ALTER TABLE chat ADD INDEX idx_chat_to_user (to_user);
+ALTER TABLE chat ADD INDEX idx_chat_from_user (from_user);

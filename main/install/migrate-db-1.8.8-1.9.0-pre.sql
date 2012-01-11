@@ -108,13 +108,10 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_change_email_with_no_password', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_change_email_with_no_password', 'false', 'No');
 
-
-
 ALTER TABLE course_rel_user ADD COLUMN legal_agreement INTEGER DEFAULT 0;
 ALTER TABLE session_rel_course_rel_user ADD COLUMN legal_agreement INTEGER DEFAULT 0;
 ALTER TABLE course ADD COLUMN legal TEXT NOT NULL;
 ALTER TABLE course ADD COLUMN activate_legal INT NOT NULL DEFAULT 0;
-
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enable_help_link', NULL, 'radio', 'Platform', 'true', 'EnableHelpLinkTitle', 'EnableHelpLinkTitle', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_help_link', 'true', 'Yes');
@@ -140,6 +137,9 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_glob
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_global_chat', 'false', 'No');
 
 
+CREATE TABLE chat (id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, from_user INTEGER, to_user INTEGER, message TEXT NOT NULL, sent DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', recd INTEGER UNSIGNED NOT NULL DEFAULT 0, PRIMARY KEY (id));
+ALTER TABLE chat ADD INDEX idx_chat_to_user (to_user);
+ALTER TABLE chat ADD INDEX idx_chat_from_user (from_user);
 
 -- Course ranking
 

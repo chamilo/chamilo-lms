@@ -1220,6 +1220,7 @@ class MySpace {
 	 * @return array
 	 */
 	function get_course_data($from, $number_of_items, $column, $direction) {
+		
 
 		global $courses, $csv_content, $charset, $session_id;
 
@@ -1240,6 +1241,7 @@ class MySpace {
 		$sql = "SELECT course.code as col1, course.title as col2
 				FROM $tbl_course course
 				WHERE course.code IN (".implode(',',$courses_code).")";
+		
 		if (!in_array($direction, array('ASC','DESC'))) $direction = 'ASC';
 
 	    $column = intval($column);

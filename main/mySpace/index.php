@@ -361,7 +361,7 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 		
 		echo Display::tag('h2', $title);		
 		
-		$table = new SortableTable('courses', 'get_number_of_courses' ,array('MySpace','get_course_data'));
+		$table = new SortableTable('courses_my_space', 'get_number_of_courses', array('MySpace','get_course_data'));
 		$parameters['view'] = 'teacher';
 		$parameters['class'] = 'data_table';
 		$table->set_additional_parameters($parameters);
@@ -385,13 +385,13 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 			get_lang('AvgMessages', ''),
 			get_lang('AvgAssignments', '')
 		);
-        $table->display();
+		$table->display();
 	}
 
 	// Display list of sessions
 	if ($count_sessions > 0 && !isset($_GET['session_id'])) {
 		echo '<h2><img src="'.api_get_path(WEB_IMG_PATH).'session.png">&nbsp;'.get_lang('Sessions').' ('.$count_sessions.')'.'</h2>';
-		$table = new SortableTable('tracking_sessions', 'count_sessions_coached');
+		$table = new SortableTable('tracking_sessions_myspace', 'count_sessions_coached');
 		$table->set_header(0, get_lang('Title'), false);
 		$table->set_header(1, get_lang('Date'), false);
 		$table->set_header(2, get_lang('NbCoursesPerSession'), false);
@@ -545,7 +545,7 @@ if ($is_platform_admin && $view == 'admin' && $display != 'yourstudents') {
 		} else {
 			$order = array(0 => 'lastname', 1 => 'firstname', 2 => ($sort_by_first_name ? 'firstname' : 'lastname'), 3 => 'login_date', 4 => ($sort_by_first_name ? 'firstname' : 'lastname'), 5 => ($sort_by_first_name ? 'firstname' : 'lastname'));
 		}
-		$table = new SortableTable('tracking_list_coaches', 'count_coaches', null, ($is_western_name_order xor $sort_by_first_name) ? 1 : 0);
+		$table = new SortableTable('tracking_list_coaches_myspace', 'count_coaches', null, ($is_western_name_order xor $sort_by_first_name) ? 1 : 0);
 		$parameters['view'] = 'admin';
 		$table->set_additional_parameters($parameters);
 		if ($is_western_name_order) {

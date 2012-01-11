@@ -55,8 +55,9 @@ if (isset($action) && $action == 'calendar_add') {
 		$defaults['date_time'] = date('Y-m-d H:i',api_strtotime(api_get_local_time()));
 
         $form->addElement('html','<br /><br />');
-
-        $form->addElement('html', '<div id="repeat_check">&nbsp;'. get_lang('RepeatDate').'<input type="checkbox" name="repeat" '.($repeat?'checked="checked"':'').' onclick="javascript: if(this.checked){document.getElementById(\'repeat-date-attendance\').style.display=\'block\';}else{document.getElementById(\'repeat-date-attendance\').style.display=\'none\';}"/>');
+		
+        $form->addElement('html', '<div id="repeat_check"><input id="repeat_id" type="checkbox" name="repeat" '.($repeat?'checked="checked"':'').' onclick="javascript: if(this.checked){document.getElementById(\'repeat-date-attendance\').style.display=\'block\';}else{document.getElementById(\'repeat-date-attendance\').style.display=\'none\';}"/> <label for="repeat_id">'. get_lang('RepeatDate').'</label>');
+		
         if ($repeat) {
             $form->addElement('html', '<div id="repeat-date-attendance" style="display:block">');
         } else {

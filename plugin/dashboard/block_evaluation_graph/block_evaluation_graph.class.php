@@ -137,9 +137,9 @@ class BlockEvaluationGraph extends Block {
 		$graphs = array();		
 		if (!empty($this->courses)) {
 			$courses_code = array_keys($this->courses);		
-			foreach ($courses_code as $course_code) {						
-				$cats = Category::load(null, null, $course_code, null, null, null, false);	
-				if (isset($cats)) {
+			foreach ($courses_code as $course_code) {										
+				$cats = Category::load(null, null, $course_code, null, null, null, false);					
+				if (isset($cats) && isset($cats[0])) {
 					$alleval = $cats[0]->get_evaluations(null, true, $course_code);
 					$alllinks = $cats[0]->get_links(null, true);
 					$users = get_all_users($alleval, $alllinks);				
@@ -228,7 +228,7 @@ class BlockEvaluationGraph extends Block {
 				$courses_graph = array();
 				foreach ($courses_code as $course_code) {
 					$cats = Category::load(null, null, $course_code, null, null, $session_id);
-					if (isset($cats)) {
+					if (isset($cats) && isset($cats[0])) {
 						$alleval = $cats[0]->get_evaluations(null, true, $course_code);												
 						$alllinks = $cats[0]->get_links(null, true);
 						$users = get_all_users($alleval, $alllinks);

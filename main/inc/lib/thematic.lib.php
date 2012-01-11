@@ -1068,11 +1068,13 @@ class Thematic
 	 * @return 	float	Average of thematic advances
 	 */
 	public function get_total_average_of_thematic_advances($course_code = null, $session_id = null) {
-        
+        if (empty($course_code)) {
+			$course_code = api_get_course_id();
+		}
 	    if (api_get_session_id()) {
-		    $thematic_data = $this->get_thematic_list(null, api_get_course_id());
+		    $thematic_data = $this->get_thematic_list(null, $course_code );
 	    } else {
-	        $thematic_data = $this->get_thematic_list(null, api_get_course_id(), 0);	        
+	        $thematic_data = $this->get_thematic_list(null, $course_code, 0);	        
 	    }	    
 		$new_thematic_data = array();
 		if (!empty($thematic_data)) {

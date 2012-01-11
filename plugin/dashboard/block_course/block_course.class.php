@@ -177,6 +177,7 @@ class BlockCourse extends Block {
 			}
 
 			$tematic_advance_progress = 0;			
+			
 			$tematic_advance = $thematic->get_total_average_of_thematic_advances($course_code, 0);
 
 			if (!empty($tematic_advance)) {

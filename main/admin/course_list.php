@@ -100,8 +100,8 @@ function get_course_data($from, $number_of_items, $column, $direction) {
     $res = Database::query($sql);
     $courses = array ();
     while ($course = Database::fetch_row($res)) {
-        // Place colour icons in front of courses.
-        $course[1] = '<nobr>'.get_course_visibility_icon($course[8]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[9].'/index.php">'.$course[1].'</a></nobr>';
+        // Place colour icons in front of courses.		
+        $course[1] = get_course_visibility_icon($course[8]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[9].'/index.php">'.$course[1].'</a>';
         $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
         $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 
@@ -265,7 +265,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $table->set_additional_parameters($parameters);
 
     $table->set_header(0, '', false, 'width="8px"');
-    $table->set_header(1, get_lang('Title'));
+    $table->set_header(1, get_lang('Title'), true, 'width="360px"');
     $table->set_header(2, get_lang('Code'));
     $table->set_header(3, get_lang('Language'), true, 'width="70px"');
     $table->set_header(4, get_lang('Category'));
@@ -273,7 +273,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $table->set_header(6, get_lang('UnsubscriptionAllowed'), false, 'width="50px"');
 
     //$table->set_header(7, get_lang('Teacher'));
-    $table->set_header(7, get_lang('Action'), false, 'width="150px"');
+    $table->set_header(7, get_lang('Action'), false, 'width="160px"');
     $table->set_column_filter(7, 'modify_filter');
     $table->set_form_actions(array('delete_courses' => get_lang('DeleteCourse')), 'course');
     $content .= $table->return_table();

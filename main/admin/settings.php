@@ -46,6 +46,9 @@ $settings_to_avoid = array(
     'example_material_course_creation'  => 'true' // ON by default - now we have this option when  we create a course 
 );
 
+$convert_byte_to_mega_list = array('dropbox_max_filesize', 'message_max_upload_filesize', 'default_document_quotum', 'default_group_quotum');
+
+
 
 // Submit stylesheets.
 if (isset($_POST['submit_stylesheets'])) {
@@ -197,12 +200,13 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 }
                 // There is no else{} statement because we load the default $row['selected_value'] of the main Chamilo site.
             }
-        }
+        }		
+		
         
         switch ($row['type']) {
             case 'textfield':
-                if (in_array($row['variable'], array('dropbox_max_filesize', 'message_max_upload_filesize'))) {                    
-                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment']), get_lang('MB')), array('maxlength' => '5'));
+                if (in_array($row['variable'], $convert_byte_to_mega_list)) {                    
+                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment']), get_lang('MB')), array('maxlength' => '8'));
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = round($row['selected_value']/1024/1024, 1);
                     
@@ -498,9 +502,14 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         }
 
         // Set true for allow_message_tool variable if social tool is actived       
-        
-        $values['dropbox_max_filesize']        = $values['dropbox_max_filesize']*1024*1024;
-        $values['message_max_upload_filesize'] = $values['message_max_upload_filesize']*1024*1024;
+        foreach ($convert_byte_to_mega_list as $item) {
+			if (isset($values[$item])) {
+				$values[$item]        = round($values[$item]*1024*1024);
+			}
+		}
+		
+        /*$values['dropbox_max_filesize']        = $values['dropbox_max_filesize']*1024*1024;
+        $values['message_max_upload_filesize'] = $values['message_max_upload_filesize']*1024*1024;*/
          
         if ($values['allow_social_tool'] == 'true') {
             $values['allow_message_tool'] = 'true';
@@ -525,9 +534,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         
         foreach($settings_to_avoid as $key => $value) {
             api_set_setting($key, $value, null, null, $_configuration['access_url']);    
-        }        
-        
-        
+        }
         
         // Save the settings.
         $keys = array();

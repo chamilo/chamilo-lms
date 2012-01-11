@@ -168,7 +168,7 @@ $group[]= $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowe
 $form->addGroup($group,'', get_lang('Unsubscription'), '<br />');
 
 
-$form->addElement('text','disk_quota',array(get_lang('CourseQuota'),null,  get_lang('MB')));
+$form->addElement('text','disk_quota',array(get_lang('CourseQuota'), null, get_lang('MB')));
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'),'required');
 $form->addRule('disk_quota',get_lang('ThisFieldShouldBeNumeric'),'numeric');
 

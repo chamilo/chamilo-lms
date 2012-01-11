@@ -1719,7 +1719,7 @@ function xajax_switch_item_toc(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,nex
         data: params,
         url: "lp_ajax_switch_item_toc.php",
         dataType: "script",
-        async: true
+        async: false
     });
 }
 /**

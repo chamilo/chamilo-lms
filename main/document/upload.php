@@ -86,15 +86,15 @@ $(function () {
         uploadTable:   $('.files'),
         downloadTable: $('.files'),
         buildUploadRow: function (files, index) {
+			$('.files').show();
             return $('<tr><td>' + files[index].name + '<\/td>' +
-                    '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
+					'<td class=\"file_upload_progress\"><div><\/div><\/td>' +                    
                     '<td class=\"file_upload_cancel\">' +
-                    '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' +
-                    '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +
-                    '<\/button><\/td><\/tr>');
+                    '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' + '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +'<\/button>'+
+					'<\/td><\/tr>');
         },
         buildDownloadRow: function (file) {
-            return $('<tr><td>' + file.name + '<\/td> <td>' + file.size + '<\/td>  <td>' + file.result + '<\/td> <\/tr>');
+            return $('<tr><td>' + file.name + '<\/td> <td> ' + file.size + ' <\/td>  <td>&nbsp;' + file.result + ' <\/td> <\/tr>');
         }
     });    
     $('#tabs').tabs();
@@ -188,8 +188,6 @@ if (empty($document_data['parents'])) {
 	}
 }
 
-
-
 $this_section = SECTION_COURSES;
 
 // Display the header
@@ -227,7 +225,7 @@ if (!$is_certificate_mode) {
 $form = new FormValidator('upload', 'POST', api_get_self(), '', 'enctype="multipart/form-data"');
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
-$label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.(round(DocumentManager::get_course_quota()/1000000)-round(DocumentManager::documents_total_space($_course)/1000000)).' M';
+$label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.(round(DocumentManager::get_course_quota()/1000000)-round(DocumentManager::documents_total_space($_course)/1000000)).'M';
 
 $form->addElement('file', 'file', array(get_lang('File'), $label), 'id="user_upload" size="45"');
 
@@ -292,7 +290,13 @@ $multiple_form .=  '
     	'.get_lang('UploadFiles').' 
 	</form>
 	</center>
-	<table class="files"></table>';
+	<table style="display:none; width:50%" class="files data_table">
+		<tr>
+			<th>'.get_lang('FileName').'</th>
+			<th>'.get_lang('Size').'</th>
+			<th>'.get_lang('Status').'</th>
+		</tr>
+	</table>';
 
 $nav_info = api_get_navigator();
 if ($nav_info ['name'] == 'Internet Explorer') {

@@ -155,7 +155,7 @@ Display :: display_confirmation_message(get_lang('Saved').'<br />',false);
 // Display text when test is finished #4074
 $end_of_message = $objExercise->selectTextWhenFinished();
 if (!empty($end_of_message)) {
-    Display::display_message($end_of_message);
+    Display::display_normal_message($end_of_message, false);
     echo "<div class='clear'>&nbsp;</div>";
 }
 

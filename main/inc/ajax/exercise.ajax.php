@@ -71,14 +71,14 @@ switch ($action) {
                 FROM $user_table u INNER JOIN (
                     SELECT  t.exe_user_id, count(question_id) as count_questions, status,
                     start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id
-                    FROM  $track_exercise  t LEFT JOIN   $track_attempt a ON (a.exe_id = t.exe_id AND  t.exe_user_id = a.user_id ) 
+                    FROM  $track_exercise  t LEFT JOIN $track_attempt a ON (a.exe_id = t.exe_id AND  t.exe_user_id = a.user_id ) 
                     WHERE t.status = 'incomplete' AND
                           $where_condition  
                 GROUP BY exe_user_id                    
                 ) as aa
                 ON aa.exe_user_id = user_id                    
                 ORDER BY $sidx $sord LIMIT $start, $limit";
-                //echo $sql;
+        //echo $sql;
         $result = Database::query($sql);
         $results = array();
         

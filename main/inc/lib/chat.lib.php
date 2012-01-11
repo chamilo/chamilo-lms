@@ -19,8 +19,12 @@ class Chat extends Model {
 	function heartbeat() {		
 		$to_user_id = api_get_user_id();
 		$my_user_info  = api_get_user_info();
-		
-		$sql = "SELECT * FROM ".$this->table." WHERE (to_user = '".intval($to_user_id)."' AND recd = 0) ORDER BY id ASC";
+		$minutes = 60;
+		$now = time() - $minutes*60;
+		$now = api_get_utc_datetime($now);
+		//OR  sent > '$now'
+		$sql = "SELECT from_user, recd, sent, message FROM ".$this->table." 
+				WHERE to_user = '".intval($to_user_id)."' AND (recd = 0 ) ORDER BY id ASC";
 		$result = Database::query($sql);
 		
 		$chatBoxes = array();		

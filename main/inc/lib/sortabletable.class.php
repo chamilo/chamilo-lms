@@ -118,7 +118,7 @@ class SortableTable extends HTML_Table {
 		$this->page_nr = isset ($_GET[$this->param_prefix.'page_nr']) 	  ? intval($_GET[$this->param_prefix.'page_nr']) : $this->page_nr;
 		$this->column  = isset ($_SESSION[$this->param_prefix.'column'])  ? intval($_SESSION[$this->param_prefix.'column']) : $default_column;
 		$this->column  = isset ($_GET[$this->param_prefix.'column']) 	  ? intval($_GET[$this->param_prefix.'column']) : $this->column;
-
+		
 		//$this->direction = isset ($_SESSION[$this->param_prefix.'direction']) ? $_SESSION[$this->param_prefix.'direction'] : $default_order_direction;
 
 
@@ -838,7 +838,7 @@ class SortableTable extends HTML_Table {
 	 * or DESC)
 	 */
 	public function get_table_data ($from = null, $per_page = null, $column = null, $direction = null) {
-		if (!is_null($this->get_data_function)) {
+		if (!is_null($this->get_data_function)) {			
 			return call_user_func($this->get_data_function, $from, $this->per_page, $this->column, $this->direction);
 		}
 		return array ();

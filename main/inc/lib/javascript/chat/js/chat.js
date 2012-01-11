@@ -29,13 +29,12 @@ var chatHeartbeatTime = minChatHeartbeat;
 var originalTitle;
 var blinkOrder = 0;
 
-var chatboxFocus = new Array();
-var newMessages = new Array();
-var newMessagesWin = new Array();
-var chatBoxes = new Array();
+var chatboxFocus	= new Array();
+var newMessages		= new Array();
+var newMessagesWin	= new Array();
+var chatBoxes		= new Array();
 
-
-//var ajax_url = 'chat.php'; // This variable is loaded in header.inc.php
+//var ajax_url = 'chat.php'; // This variable is loaded in header.inc.php/ template/layout/head.tpl
 
 $(document).ready(function(){
 	originalTitle = document.title;

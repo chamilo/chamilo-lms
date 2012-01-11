@@ -783,7 +783,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     $TBL_TRACK_ATTEMPT          = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);    
     
-    
     $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
     
     $exercise_id = intval($_GET['exerciseId']);
@@ -799,17 +798,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     }  
     
     if ($is_allowedToEdit || $is_tutor) {
-        /*
-        $user_id_and = '';
-        if (!empty ($_REQUEST['filter_by_user'])) {
-            if ($_REQUEST['filter_by_user'] == 'all') {
-                $user_id_and = " AND user_id LIKE '%'";
-            } else {
-                $user_id_and = " AND user_id = '" . intval($_REQUEST['filter_by_user']) . "' ";
-            }
-        }*/
-        
-          
+		
         if ($_GET['gradebook'] == 'view') {
             $exercise_where_query = ' te.exe_exo_id = ce.id AND ';
         }

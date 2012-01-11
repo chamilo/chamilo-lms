@@ -47,12 +47,16 @@ $.fn.media = function(options, f1, f2) {
             options = {};
         }
         var o = getSettings(this, options);
+		
         // pre-conversion callback, passes original element and fully populated options
         if (typeof f1 == 'function') f1(this, o);
         
         var r = getTypesRegExp();
-        var m = r.exec(o.src) || [''];
-        o.type ? m[0] = o.type : m.shift();
+		
+		//var m = r.exec(o.src) || [''];	
+		var m = r.exec(o.src.toLowerCase()) || [''];		
+	    o.type ? m[0] = o.type : m.shift();
+		
         for (var i=0; i < m.length; i++) {
             fn = m[i].toLowerCase();
             if (isDigit(fn[0])) fn = 'fn' + fn; // fns can't begin with numbers
@@ -276,6 +280,7 @@ function isDigit(c) {
 
 // flatten all possible options: global defaults, meta, option obj
 function getSettings(el, options) {
+	
     options = options || {};
     var $el = $(el);
     
@@ -398,7 +403,7 @@ $.fn.media.xaml = function(el, opts) {
 // generate object/embed markup
 //
 function generate(el, opts, player) {
-    var $el = $(el);
+    var $el = $(el);	
     var o = $.fn.media.defaults.players[player];
     
     if (player == 'iframe') {

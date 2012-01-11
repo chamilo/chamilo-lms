@@ -1694,6 +1694,10 @@ button:hover {
 
 /* Warning and error messages to the user */
 
+.error {
+	color: red;
+}
+
 .confirmation-message, .error-message, .normal-message, .warning-message {
     min-height: 15px;
     position: relative;
@@ -3653,12 +3657,10 @@ form div.error textarea:focus {
     box-shadow: 0 0 3px rgba(171, 41, 32, 0.25);  
 }
 
-
-
 form div.error {
-    background: none repeat scroll 0 0 #FAE5E3;
-    border-radius: 4px 4px 4px 4px;
-    padding: 10px 0;
+	color: #b94a48;
+	border-color: #ee5f5b;
+    
 }
 
 

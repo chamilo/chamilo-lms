@@ -1343,7 +1343,7 @@ class Display {
 		$labels[]= $point_info['user_vote']  ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : '';		
 		
 		if (!$add_div_wrapper && api_is_anonymous()) {  
-			$labels[]= get_lang('LoginToVote');
+			$labels[]= Display::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
 		}
 			
         $html .= Display::span(implode(' ', $labels) , array('id' =>  'vote_label_'.$id));			

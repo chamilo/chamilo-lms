@@ -131,7 +131,7 @@ function restructureChatBoxes() {
 }
 
 function chatWith(user_id, user_name) {
-	createChatBox(user_id, user_name, 0, 1);
+	createChatBox(user_id, user_name, 0, 0);
 	$("#chatbox_"+user_id+" .chatboxtextarea").focus();
 }
 

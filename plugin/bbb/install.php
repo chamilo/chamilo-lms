@@ -45,7 +45,7 @@ $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
 $sql = "SELECT id, code, db_name FROM $t_courses ORDER BY id";
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
-    $t_course = Database::get_course_table(TABLE_COURSE_SETTING,$row['db_name']);
+    $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
     $course_id = $row['id'];
     $sql = "SELECT value FROM $t_course WHERE c_id = $course_id AND variable = 'big_blue_button_meeting_name' ";
     $result = Database::query($sql);
@@ -75,7 +75,7 @@ while ($row = Database::fetch_assoc($res)) {
         $r = Database::query($sql_course);
     }    
     
-    $t_tool = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
+    $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
     $sql = "SELECT name FROM $t_tool WHERE c_id = $course_id AND name = 'videoconference' ";
     $result = Database::query($sql);
     if (!Database::num_rows($result)) {

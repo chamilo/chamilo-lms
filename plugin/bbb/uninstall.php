@@ -9,7 +9,7 @@
  * Queries
  */
 $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-$t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
+$t_options  = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
 $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin'";
 Database::query($sql);
 $sql = "DELETE FROM $t_options WHERE variable = 'bbb_plugin'";
@@ -25,16 +25,16 @@ $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
 $sql = "SELECT id, code, db_name FROM $t_courses ORDER BY id";
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
-    $t_course = Database::get_course_table(TABLE_COURSE_SETTING,$row['db_name']);
-    $sql_course = "DELETE FROM $t_course  WHERE variable = 'big_blue_button_meeting_name'";
+    $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
+    $sql_course = "DELETE FROM $t_course  WHERE c_id = ".$row['id']." AND variable = 'big_blue_button_meeting_name'";
     $r = Database::query($sql_course);
-    $sql_course = "DELETE FROM $t_course  WHERE variable = 'big_blue_button_attendee_password'";
+    $sql_course = "DELETE FROM $t_course  WHERE c_id = ".$row['id']." AND variable = 'big_blue_button_attendee_password'";
     $r = Database::query($sql_course);
-    $sql_course = "DELETE FROM $t_course  WHERE variable = 'big_blue_button_moderator_password'";
+    $sql_course = "DELETE FROM $t_course  WHERE c_id = ".$row['id']." AND variable = 'big_blue_button_moderator_password'";
     $r = Database::query($sql_course);
-    $sql_course = "DELETE FROM $t_course  WHERE variable = 'big_blue_button_welcome_message'";
+    $sql_course = "DELETE FROM $t_course  WHERE c_id = ".$row['id']." AND variable = 'big_blue_button_welcome_message'";
     $r = Database::query($sql_course);
-    $t_tool = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
-    $sql_course = "DELETE FROM $t_tool WHERE link = '../../plugin/bbb/start.php'";
+    $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
+    $sql_course = "DELETE FROM $t_tool WHERE  c_id = ".$row['id']." AND link = '../../plugin/bbb/start.php'";
     $r = Database::query($sql_course);
 }

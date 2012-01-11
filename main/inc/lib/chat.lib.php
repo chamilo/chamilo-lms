@@ -128,8 +128,6 @@ class Chat extends Model {
 		var_dump($items);
 		*/
 		//print_r($_SESSION['chatHistory']);
-
-
 		$sql = "UPDATE ".$this->table." SET recd = 1 WHERE to_user = '".$to_user_id."' AND recd = 0";
 		$query = Database::query($sql);
 		
@@ -175,10 +173,7 @@ class Chat extends Model {
 						"username"	=> get_lang('Me')
 					);
 		$_SESSION['chatHistory'][$to_user_id][] = $item;	
-		
-		print_r($_SESSION['chatHistory']);
-		
-		//print_r($_SESSION['chatHistory']);
+				
 		unset($_SESSION['tsChatBoxes'][$to_user_id]);
 		
 		$params = array();
@@ -196,6 +191,8 @@ class Chat extends Model {
 
 	function close() {
 		unset($_SESSION['openChatBoxes'][$_POST['chatbox']]);
+		unset($_SESSION['chatHistory'][$_POST['chatbox']]);
+		
 		echo "1";
 		exit;
 	}

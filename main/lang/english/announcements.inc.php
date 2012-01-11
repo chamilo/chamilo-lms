@@ -8,7 +8,7 @@ $AnnouncementModified = "Announcement has been modified";
 $AnnouncementAdded = "Announcement has been added";
 $AnnouncementDeleted = "Announcement has been deleted";
 $AnnouncementPublishedOn = "Published on";
-$AddAnnouncement = "Add as an announcement";
+$AddAnnouncement = "Add an announcement";
 $langContent = "Content";
 $AnnouncementDeleteAll = "Clear list of announcements";
 $professorMessage = "Message from the trainer";
@@ -59,4 +59,5 @@ $ButtonPublishAnnouncement = "Send announcement";
 $YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Dear user, 
 
 Your account has now been activated on the platform. Please login and enjoy your courses.";
+$AddAsAnnouncement = "Add as an announcement";
 ?>

@@ -721,14 +721,15 @@ class Attendance
 		foreach ($courses as $course) {
 			//$course_code = $course['code'];
 			//$course_info = api_get_course_info($course_code);
+			$course_id = $course['real_id'];
 			$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT);
 
-			$attendances_by_course = $this->get_attendances_list($course['real_id']);
+			$attendances_by_course = $this->get_attendances_list($course_id);
 
 			foreach ($attendances_by_course as $attendance) {
 				// get total faults and total weight
 				$total_done_attendance 	= $attendance['attendance_qualify_max'];
-				$sql = "SELECT score FROM $tbl_attendance_result WHERE user_id=$user_id AND attendance_id=".$attendance['id'];
+				$sql = "SELECT score FROM $tbl_attendance_result WHERE c_id = $course_id AND user_id = $user_id AND attendance_id = ".$attendance['id'];
 				$rs = Database::query($sql);
 				$score = 0;
 				if (Database::num_rows($rs) > 0) {

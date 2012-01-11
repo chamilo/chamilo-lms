@@ -2711,7 +2711,6 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
     }
     
     $course_id	 = $_course['real_id'];
-
     $filter = "c_id = $course_id AND tool='$tool' AND ref='$item_id' $condition_session ";
 
     if ($item_id == '*') {
@@ -2766,7 +2765,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
             if (!empty($session_id)) {
 
                 // Check whether session id already exist into itemp_properties for updating visibility or add it.
-                $sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
+                $sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY WHERE c_id=$course_id AND tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -2788,7 +2787,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
             if (!empty($session_id)) {
 
                 // Check whether session id already exist into itemp_properties for updating visibility or add it
-                $sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
+                $sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY WHERE c_id=$course_id AND tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $sql = "UPDATE $TABLE_ITEMPROPERTY

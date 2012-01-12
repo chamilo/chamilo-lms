@@ -90,19 +90,15 @@ ALTER TABLE group_rel_group ADD INDEX ( group_id );
 ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
 ALTER TABLE group_rel_group ADD INDEX ( relation_type );
 
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_teacher_change_gradebook_grading_model', NULL, 'radio', 'Gradebook', 'false', 'AllowTeacherChangeGradebookGradingModelTitle', 'AllowTeacherChangeGradebookGradingModelComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teacher_change_gradebook_grading_model', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teacher_change_gradebook_grading_model', 'false', 'No');
 
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('grading_model', 'grading_model', 'custom', 'Gradebook', 'false', 'GradingModelTitle', 'GradingModelComment', NULL, NULL, 1);
-
 INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+1*X', 'Model 1');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+1*X+1*X/3', 'Model 2');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+1*X+1*X+1*X/4', 'Model 3');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+2*X+1*X+2*X/6', 'Model 4');
-
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_change_email_with_no_password', 'true', 'Yes');
@@ -125,17 +121,14 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_s
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_skills_management', 'false', 'No');
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_admin_toolbar', NULL, 'radio', 'Platform', 'show_to_admin', 'ShowAdminToolbarTitle', 'ShowAdminToolbarComment', NULL, NULL, 1);
-
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'do_not_show', 'DoNotShow');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'show_to_admin', 'ShowToAdminsOnly');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'show_to_admin_and_teachers', 'ShowToAdminsAndTeachers');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_admin_toolbar', 'show_to_all', 'ShowToAllUsers');
 
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_global_chat', NULL, 'radio', 'Platform', 'true', 'AllowGlobalChatTitle', 'AllowGlobalChatComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_global_chat', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_global_chat', 'false', 'No');
-
 
 CREATE TABLE chat (id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, from_user INTEGER, to_user INTEGER, message TEXT NOT NULL, sent DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', recd INTEGER UNSIGNED NOT NULL DEFAULT 0, PRIMARY KEY (id));
 ALTER TABLE chat ADD INDEX idx_chat_to_user (to_user);
@@ -155,6 +148,8 @@ CREATE TABLE user_rel_course_vote ( id int unsigned not null AUTO_INCREMENT PRIM
 ALTER TABLE user_course_vote ADD INDEX idx_ucv_cid (c_id);
 ALTER TABLE user_course_vote ADD INDEX idx_ucv_uid (user_id);
 ALTER TABLE user_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
+
+ALTER TABLE track_e_default  MODIFY COLUMN default_value TEXT;
 
 -- Do not move this query
 UPDATE settings_current SET selected_value = '1.9.0.16427' WHERE variable = 'chamilo_database_version';

@@ -459,7 +459,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	if (is_array($work_parents)) {
 	   
 		foreach ($work_parents as $work_parent) {	            
-			$sql_select_directory = "SELECT title, prop.insert_date, prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight, allow_text_assignment
+			$sql_select_directory = "SELECT title, url, prop.insert_date, prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight, allow_text_assignment
 									 FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id AND prop.c_id = $course_id  )
 									 WHERE active IN (0, 1) AND ";
 			
@@ -505,7 +505,9 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
                     $form_folder->addElement('hidden', 'work_id', $id2);
                     $form_folder -> addGroupRule('my_group', get_lang('ThisFieldIsRequired'), 'required');
                     
-					$defaults = array('my_group[dir_name]' => Security::remove_XSS($row['title']), 'description' => Security::remove_XSS($row['description']));
+                    $my_title = !empty($row['title']) ? $row['title'] : basename($row['url']);
+                    
+					$defaults = array('my_group[dir_name]' => Security::remove_XSS($my_title), 'description' => Security::remove_XSS($row['description']));
 					$form_folder->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'work', 'Width' => '80%', 'Height' => '200'));
 
 					$there_is_a_end_date = false;						
@@ -1286,7 +1288,7 @@ function update_dir_name($work_data, $new_name, $title) {
     
     if ($work_data['title'] == $title) {
         return true;
-    }    
+    }     
     $title = Database::escape_string($title);
         
 	if (!empty($new_name)) {

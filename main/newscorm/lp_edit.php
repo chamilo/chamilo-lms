@@ -14,7 +14,9 @@ $show_description_field = false; //for now
 $nameTools = get_lang('Doc');
 $this_section = SECTION_COURSES;
 event_access_tool(TOOL_LEARNPATH);
-if (! $is_allowed_in_course) api_not_allowed();
+
+api_protect_course_script();
+//if (! $is_allowed_in_course) api_not_allowed();
 
 if (isset($_SESSION['gradebook'])) {
     $gradebook = $_SESSION['gradebook'];

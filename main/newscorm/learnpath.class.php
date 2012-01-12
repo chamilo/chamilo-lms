@@ -2581,15 +2581,14 @@ class learnpath {
             }
             // TODO: Change this link generation and use new function instead.
             $toc[] = array (
-                'id' => $item_id,
-                'title' => $this->items[$item_id]->get_title(),
+                'id'            => $item_id,
+                'title'         => $this->items[$item_id]->get_title(),
                 //'link' => get_addedresource_link_in_learnpath('document', $item_id, 1),
-                'status' => $this->items[$item_id]->get_status(),
-                'level' => $this->items[$item_id]->get_level(),
-                'type' => $this->items[$item_id]->get_type(),
-                'description' => $this->items[$item_id]->get_description(),
-                'path' => $this->items[$item_id]->get_path(),
-
+                'status'        => $this->items[$item_id]->get_status(),
+                'level'         => $this->items[$item_id]->get_level(),
+                'type'          => $this->items[$item_id]->get_type(),
+                'description'   => $this->items[$item_id]->get_description(),
+                'path'          => $this->items[$item_id]->get_path(),
             );
         }
         if ($this->debug > 2) {
@@ -2699,8 +2698,8 @@ class learnpath {
      * @return	string	HTML TOC ready to display
      */
     public function get_html_toc() {
-        $course_id = api_get_course_int_id();
-        $course_code = api_get_course_id();
+        $course_id      = api_get_course_int_id();
+        $course_code    = api_get_course_id();
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
         $charset = api_get_system_encoding();

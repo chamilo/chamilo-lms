@@ -54,7 +54,9 @@ $dialogbox = '';
 
 $course_id = api_get_course_int_id();
 
-if (! $is_allowed_in_course) api_not_allowed();
+api_protect_course_script();
+
+//if (! $is_allowed_in_course) api_not_allowed();
 $is_allowedToUnzip = $is_courseAdmin;
 
 /* Main code */

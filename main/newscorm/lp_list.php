@@ -39,7 +39,8 @@ function confirmation(name) {
 $nameTools = get_lang('LearningPaths');
 event_access_tool(TOOL_LEARNPATH);
 
-if (!$is_allowed_in_course) api_not_allowed();
+api_protect_course_script();
+//if (!$is_allowed_in_course) api_not_allowed();
 
 /**
  * Display

@@ -31,7 +31,8 @@ require_once 'scorm.lib.php';
 require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
 
-if (!$is_allowed_in_course) api_not_allowed();
+api_protect_course_script();
+//if (!$is_allowed_in_course) api_not_allowed(); 
 
 $oLearnpath     = false;
 $course_code    = api_get_course_id();
@@ -342,27 +343,27 @@ if ($_SESSION['oLP']->mode == 'embedframe' ||$_SESSION['oLP']->get_hide_toc_fram
         <div id="media"  <?php echo $style_media; ?>>
             <?php echo (!empty($mediaplayer)) ? $mediaplayer : '&nbsp;' ?>
         </div>
-        <!-- end media player layaout -->
+        <!-- end media player layout -->
 
-        <!-- toc layout -->
+        <!-- TOC layout -->
         <!-- hub 26-05-2010 remove height for lp toc height resizable
         <div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;height:60%;width:100%">
         -->
         <div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;width:100%">
-            <div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
+            <div id="learning_path_toc" style="font-size:9pt;margin:0;">
+                <?php echo $_SESSION['oLP']->get_html_toc(); ?>
 
-        <?php if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log
-        ?>
-            <!-- log message layout -->
-            <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
-                <div id="log_content"></div>
-                <div id="log_content_cleaner" style="color: white;">.</div>
-            </div>
-            <!-- end log message layout -->
-       <?php } ?>
+                <?php  if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log  ?>
+                <!-- log message layout -->
+                <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
+                    <div id="log_content"></div>
+                    <div id="log_content_cleaner" style="color: white;">.</div>
+                </div>
+                <!-- end log message layout -->
+                <?php } ?>
             </div>
         </div>
-        <!-- end toc layout -->
+        <!-- end TOC layout -->
     </div>
     <!-- end left Zone -->
 

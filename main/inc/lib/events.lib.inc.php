@@ -1346,6 +1346,6 @@ function event_course_login($course_code, $user_id, $session_id) {
 	
 	
     //Course catalog stats modifications see #4191    
-    CourseManager::update_course_ranking();
+    CourseManager::update_course_ranking(null, null, null, null, true, false);
 }
 

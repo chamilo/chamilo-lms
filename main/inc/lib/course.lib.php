@@ -3573,7 +3573,7 @@ class CourseManager {
     
     public function add_course_vote($user_id, $vote, $course_id, $session_id = null, $url_id = null) {
         $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);        
-        $course_id  = empty($course_id)     ? api_get_course_int_id() : intval($course_id);
+        $course_id  = empty($course_id) ? api_get_course_int_id() : intval($course_id);
 		
 		if (empty($course_id) || empty($user_id)) {
 			return false;

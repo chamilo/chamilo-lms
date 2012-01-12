@@ -18,8 +18,8 @@ if (api_get_setting('allow_global_chat') == 'false') {
 	exit;	
 }
 
-$to_user_id = intval($_REQUEST['to']);
-$message = $_REQUEST['message'];
+$to_user_id = $_REQUEST['to'];
+$message	= $_REQUEST['message'];
 
 if (!isset($_SESSION['chatHistory'])) {
 	$_SESSION['chatHistory'] = array();	
@@ -39,7 +39,7 @@ switch ($action) {
 		$chat->close();
 		break;		
 	case 'sendchat':		
-		$chat->send(api_get_user_id(), $_POST['to'], $_POST['message']);
+		$chat->send(api_get_user_id(), $to_user_id, $message);
 		break;		
 	case 'startchatsession':
 		$chat->start_session();

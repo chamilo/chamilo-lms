@@ -955,20 +955,14 @@ function get_youtube_video_id($url) {
 
 	// The ID string starts after "v=", which is usually right after
 	// "youtube.com/watch?" in the URL    
-	$pos = strpos($url, "?v=");
-
-	// In case the "v=" is NOT right after the "?" (not likely, but I like to keep my
-	// bases covered), it will be after an "&":
-	if ($pos === false) {
-		$pos = strpos($url, "&v=");
-	}
+	$pos = strpos($url, "v=");
+           
 	// If still FALSE, URL doesn't have a vid ID
 	if ($pos === false) {
-		//die("YouTube video ID not found. Please double-check your URL.");
-		api_not_allowed();
+		return '';
 	}
 	// Offset the start location to match the beginning of the ID string
-	$pos += 3;
+	$pos += 2;
 	// Get the ID string and return it
 	$ytvID = substr($url, $pos, $len);
 	return $ytvID;

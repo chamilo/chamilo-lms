@@ -19,15 +19,4 @@ require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $tool_name = get_lang('Statistics');
 Display::display_header($tool_name);
-
-//api_display_tool_title($tool_name);
-
-/*
-		MAIN CODE
-*/
-
-/*
-		FOOTER
-*/
 Display::display_footer();
-?>

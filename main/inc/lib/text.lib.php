@@ -709,3 +709,18 @@ function substrwords($text,$maxchar,$end='...')
 	}
 	return $output.$end;
 }
+
+function implode_with_key($glue, $array) {    
+    if (!empty($array)) {
+        $string = '';
+        foreach($array as $key => $value) {
+            if (empty($value)) {
+                $value = 'null';
+            }
+            $string .= $key." : ".$value." $glue ";
+        }
+        return $string;
+    }
+    return '';
+    
+}

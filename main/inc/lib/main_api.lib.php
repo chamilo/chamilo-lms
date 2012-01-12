@@ -141,14 +141,15 @@ define('LOG_CAREER_CREATE', 	'career_created');
 define('LOG_CAREER_DELETE', 	'career_deleted');
 
 // event logs data types
-define('LOG_COURSE_CODE', 					  'course_code');
-define('LOG_USER_ID', 						  'user_id');
-define('LOG_SESSION_ID', 					  'session_id');
-define('LOG_SESSION_CATEGORY_ID', 			  'session_category_id');
-define('LOG_CONFIGURATION_SETTINGS_CATEGORY', 'settings_category');
-define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
-define('LOG_CAREER_ID', 					  'career_id');
-define('LOG_PROMOTION_ID', 					  'promotion_id');
+define('LOG_COURSE_CODE',                       'course_code');
+define('LOG_USER_ID',                           'user_id');
+define('LOG_USER_OBJECT',                       'user_object');
+define('LOG_SESSION_ID',                        'session_id');
+define('LOG_SESSION_CATEGORY_ID',               'session_category_id');
+define('LOG_CONFIGURATION_SETTINGS_CATEGORY',   'settings_category');
+define('LOG_CONFIGURATION_SETTINGS_VARIABLE',   'settings_variable');
+define('LOG_CAREER_ID',                         'career_id');
+define('LOG_PROMOTION_ID',                      'promotion_id');
 
 // Specification for usernames:
 // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.

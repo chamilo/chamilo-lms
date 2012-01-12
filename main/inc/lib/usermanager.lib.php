@@ -13,11 +13,11 @@
 define('USER_FIELD_TYPE_TEXT',		 		1);
 define('USER_FIELD_TYPE_TEXTAREA',			2);
 define('USER_FIELD_TYPE_RADIO',				3);
-define('USER_FIELD_TYPE_SELECT',			4);
+define('USER_FIELD_TYPE_SELECT',             4);
 define('USER_FIELD_TYPE_SELECT_MULTIPLE',	5);
 define('USER_FIELD_TYPE_DATE', 				6);
 define('USER_FIELD_TYPE_DATETIME', 			7);
-define('USER_FIELD_TYPE_DOUBLE_SELECT', 	8);
+define('USER_FIELD_TYPE_DOUBLE_SELECT',      8);
 define('USER_FIELD_TYPE_DIVIDER', 			9);
 define('USER_FIELD_TYPE_TAG', 				10);
 define('USER_FIELD_TYPE_TIMEZONE', 			11);
@@ -214,13 +214,14 @@ class UserManager {
 		$table_admin                  = Database :: get_main_table(TABLE_MAIN_ADMIN);
 		$table_session_user           = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 		$table_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
+        $table_group                  = Database :: get_course_table(TABLE_GROUP_USER);
+        
 		// Unsubscribe the user from all groups in all his courses
-		$sql = "SELECT * FROM $table_course c, $table_course_user cu WHERE cu.user_id = '".$user_id."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND c.code = cu.course_code";
+		$sql = "SELECT c.id FROM $table_course c, $table_course_user cu 
+                WHERE cu.user_id = '".$user_id."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND c.code = cu.course_code";
 		$res = Database::query($sql);
-		while ($course = Database::fetch_object($res)) {
-			$table_group = Database :: get_course_table(TABLE_GROUP_USER, $course->db_name);
-			$sql = "DELETE FROM $table_group WHERE user_id = '".$user_id."'";
+		while ($course = Database::fetch_object($res)) {		            
+			$sql = "DELETE FROM $table_group WHERE c_id = {$course->id} AND user_id = $user_id";
 			Database::query($sql);
 		}
 
@@ -292,7 +293,7 @@ class UserManager {
 			$group_list = GroupPortalManager::get_groups_by_user($user_id);
 			if (!empty($group_list)) {
 			    foreach($group_list as $group_id => $data) {
-                                GroupPortalManager::delete_user_rel_group($user_id, $group_id);
+                    GroupPortalManager::delete_user_rel_group($user_id, $group_id);
 			    }
 			}
 						
@@ -301,7 +302,16 @@ class UserManager {
 		}
 		// Add event to system log		
 		$user_id_manager = api_get_user_id();
-		event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager,null,$user_info);
+		event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager, null, $user_info);
+        
+        unset($user_info['password']);
+        unset($user_info['complete_name']);
+        unset($user_info['firstName']);
+        unset($user_info['lastName']);
+        unset($user_info['lastLogin']);
+        unset($user_info['avatar']);
+        unset($user_info['avatar_small']);        
+        event_system(LOG_USER_DELETE, LOG_USER_OBJECT, serialize($user_info), api_get_utc_datetime(), $user_id_manager, null, $user_info);
 		return true;
 	}
 

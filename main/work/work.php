@@ -423,10 +423,12 @@ switch ($action) {
 			// Get qualification from parent_id that'll allow the validation qualification over
 			$sql = "SELECT qualification FROM $work_table WHERE c_id = $course_id AND id ='$parent_id' ";
 			$result = Database::query($sql);
-			$row = Database::fetch_array($result);			
-			$form->addElement('text', 'qualification', array(get_lang('Qualification'), null, " / ".$row['qualification']) , 'size="10"');
-			//$form->addElement('html', '<div class="row"><div class="formw">'.get_lang('QualificationNumeric').'&nbsp;:&nbsp;'.$row['qualification'].'</div></div>');
-			$form->addElement('hidden', 'qualification_over', $row['qualification']);
+			$row = Database::fetch_array($result);
+            $qualification_over = $row['qualification'];
+            if (!empty($qualification_over) && intval($qualification_over) > 0) {
+                $form->addElement('text', 'qualification', array(get_lang('Qualification'),  null, " / ".$qualification_over), 'size="10"');			
+                $form->addElement('hidden', 'qualification_over', $qualification_over);
+            }
 		}	
 		
 		$form->addElement('hidden', 'active',   1);

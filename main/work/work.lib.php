@@ -356,7 +356,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
     $qualification_exists = false;
     if (!empty($my_folder_data['qualification']) && intval($my_folder_data['qualification']) > 0) {
         $qualification_exists = true;
-    }
+    }    
     
     $work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/work';                    
     if (!empty($my_folder_data)) {
@@ -843,7 +843,6 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			$is_author = false;
 			$item_property_data = api_get_item_property_info(api_get_course_int_id(), 'work', $work->id, api_get_session_id());
             
-						
 			if (!$is_allowed_to_edit && $item_property_data['insert_user_id'] == api_get_user_id()) {
 				$is_author = true;
 			}			
@@ -851,7 +850,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			$user_info = api_get_user_info($item_property_data['insert_user_id']);
 				
 			//display info depending on the permissions
-			if ($is_author && $work->accepted == '1' || $is_allowed_to_edit) {
+			if ($is_author && $work->accepted == '1' || $is_allowed_to_edit || CourseManager::is_course_teacher($item_property_data['insert_user_id'], $_course['code'])) {
 					
 				$row = array();
 				if ($work->accepted == '0') {
@@ -896,7 +895,10 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					if ($qualification_exists) {
 						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&origin='.$origin.'&gradebook='.$gradebook.'&amp;action=mark_work&item_id='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  >'.
 						Display::return_icon('rate_work.png', get_lang('CorrectAndRate'),array(), 22).'</a>';
-					}
+					} else {
+                        $action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&origin='.$origin.'&gradebook='.$gradebook.'&amp;action=mark_work&item_id='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  >'.
+						Display::return_icon('edit.png', get_lang('Comment'),array(), 22).'</a>';
+                    }
 					if ($work->contains_file) {
 						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&origin='.$origin.'&gradebook='.$gradebook.'&amp;action=move&item_id='.$work->id.'" title="'.get_lang('Move').'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
 					}

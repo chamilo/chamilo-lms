@@ -370,8 +370,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
     			if (intval($my_folder_data['qualification']) == 0) {
     				Display::display_warning_message(get_lang('MaxWeightNeedToBeProvided'));
     			}
-    	}
-        
+    	}        
     	
     	$contains_file_query = '';    	
     	
@@ -458,10 +457,10 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	// List of all folders if no id was provided
 	
 	if (is_array($work_parents)) {
-	    
-		foreach ($work_parents as $work_parent) {		    		
+	   
+		foreach ($work_parents as $work_parent) {	            
 			$sql_select_directory = "SELECT title, prop.insert_date, prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight, allow_text_assignment
-									 FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id)
+									 FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id AND prop.c_id = $course_id  )
 									 WHERE active IN (0, 1) AND ";
 			
 			if (!empty($_SESSION['toolgroup'])) {
@@ -469,13 +468,15 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			} else {
 				$sql_select_directory .= " work.post_group_id = '0' ";
 			}            
-			$sql_select_directory .= "  AND  prop.c_id = $course_id AND 
+			$sql_select_directory .= "  AND  
 			                             work.c_id = $course_id AND 
 			                             work.id  = ".$work_parent->id." AND 
 			                             work.filetype = 'folder' AND 
-			                             prop.tool='work' $condition_session";                                                     
+			                             prop.tool='work' $condition_session";    
+            
 			$result = Database::query($sql_select_directory);
 			$row    = Database::fetch_array($result, 'ASSOC');
+            
 			
 			if (!$row) {
 				// the folder belongs to another session
@@ -489,7 +490,9 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 
 			if ($is_allowed_to_edit) {
 			    // form edit directory
-				if (!empty($edit_dir) && $edit_dir == $id2) {				    
+                
+				if (!empty($edit_dir) && $edit_dir == $id2) {
+                    
 					if (!empty($row['has_properties'])) {
 						$sql = Database::query('SELECT * FROM '.$work_assigment.' WHERE c_id = '.$course_id.' AND id = "'.$row['has_properties'].'" LIMIT 1');
 						$homework = Database::fetch_array($sql);
@@ -728,7 +731,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			}
 			
 			$work_data = get_work_data_by_id($work_parent->id);
-			
+		
 			$action = '';
 			$row = array();
 			$class = '';
@@ -804,7 +807,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			if ($count_files != 0) {
 				$row[] = '';
 			}
-
+	
 			if ($direc_date != '' && $direc_date != '0000-00-00 00:00:00') {
 				$direc_date_local = api_get_local_time($direc_date);
 				$row[] = date_to_str_ago($direc_date_local).'<br /><span class="dropbox_date">'.api_format_date($direc_date_local).'</span>';
@@ -1283,19 +1286,12 @@ function update_dir_name($work_data, $new_name, $title) {
     
     if ($work_data['title'] == $title) {
         return true;
-    }
-    
+    }    
     $title = Database::escape_string($title);
         
 	if (!empty($new_name)) {
-		global $base_work_dir;
-		
-		$path_to_dir = dirname($path);
-		if ($path_to_dir == '.') {
-			$path_to_dir = '';
-		} else {
-			$path_to_dir .= '/';
-		}
+		global $base_work_dir;		
+
 		$new_name = Security::remove_XSS($new_name);
 		$new_name = replace_dangerous_char($new_name);
 		$new_name = disable_dangerous_file($new_name);
@@ -1310,27 +1306,14 @@ function update_dir_name($work_data, $new_name, $title) {
 
 		while ($work = Database :: fetch_array($rs)) {
 			$new_dir = $work['url'];
-			$name_with_directory = substr($new_dir, $work_len, strlen($new_dir));
-			$sql = 'UPDATE '.$table.' SET url="work/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE c_id = '.$course_id.' AND id= '.$work['id'];            
+			$name_with_directory = substr($new_dir, $work_len, strlen($new_dir)); 
+            $name = Database::escape_string('work/'.$new_name.'/'.$name_with_directory);
+			$sql = 'UPDATE '.$table.' SET url= "'.$name.'" WHERE c_id = '.$course_id.' AND id= '.$work['id'];            
 			Database::query($sql);
 		}
         
         $sql = "UPDATE $table SET url= '/".$new_name."' , title = '".$title."' WHERE c_id = $course_id AND id = $work_id";
         Database::query($sql);
-            
-
-		//update all the directory's children according with the next query
-		/*
-		$sql = 'SELECT id, url FROM '.$table.' WHERE c_id = '.$course_id.' AND url LIKE BINARY "/'.$path.'%"';
-		$rs = Database::query($sql);
-		$work_len = strlen('/'.$path);
-		while ($work = Database :: fetch_array($rs)) {
-			$new_dir = $work['url'];
-			$name_with_directory = substr($new_dir, $work_len, strlen($new_dir));
-			$url = $path_to_dir.$new_name.$name_with_directory;
-			$sql = 'UPDATE '.$table.' SET url="/'.$url.'", title = "'.$new_name.'" WHERE c_id = '.$course_id.' AND id= '.$work['id'];
-			Database::query($sql);
-		}*/
 	}
 }
 

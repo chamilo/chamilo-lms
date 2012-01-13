@@ -173,12 +173,13 @@ $(document).ready(function() {
 					var end_date 	= Math.round(calEvent.end.getTime() / 1000);				
 				}
 				
-				$('#visible_to_input').hide();
-				$('#visible_to_read_only').show();				
-				$('#add_as_announcement_div').hide();
-				
-				$("#visible_to_read_only_users").html(calEvent.sent_to);
-				
+				$('#visible_to_input').hide();                
+                $('#add_as_announcement_div').hide();
+                			
+                {if $type != 'admin'}
+                    $('#visible_to_read_only').show();
+                    $("#visible_to_read_only_users").html(calEvent.sent_to);
+				{/if}
 				$('#color_calendar').html('{$type_label}');
 				$('#color_calendar').addClass('label_tag');
 								
@@ -218,7 +219,7 @@ $(document).ready(function() {
 									calEvent.title 			= $("#title").val();
 									calEvent.start 			= calEvent.start;
 									calEvent.end 			= calEvent.end;									
-									calEvent.allDay 		= calEvent.allDay;
+									calEvent.allDay         = calEvent.allDay;
 									calEvent.description 	= $("#content").val();
 																	
 									calendar.fullCalendar('updateEvent', 

@@ -73,7 +73,9 @@ $tpl->assign('button_text', 		json_encode(array(	'today'	=> get_lang('Today'),
 														'day'	=> get_lang('Day'))));
 
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false,true)) {
-	$actions = display_courseadmin_links();
+    if ($type == 'course') {
+        $actions = display_courseadmin_links();
+    }
 
 	$tpl->assign('actions', $actions);
 }

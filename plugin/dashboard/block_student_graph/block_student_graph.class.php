@@ -13,9 +13,6 @@
  * required files for getting data
  */
  
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
@@ -108,8 +105,7 @@ class BlockStudentGraph extends Block {
 	
  		// get data 		
  		$attendances_faults_avg = array();
- 		if (is_array($students) && count($students) > 0) {
- 			
+ 		if (is_array($students) && count($students) > 0) { 			
 	 		foreach ($students as $student) {	 			
 	 			$student_id = $student['user_id'];
 	 			//$student_info = api_get_user_info($student_id); 			 			

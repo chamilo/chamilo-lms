@@ -9,10 +9,6 @@
 /**
  * required files for getting data
  */
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';

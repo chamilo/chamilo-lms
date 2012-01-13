@@ -9,9 +9,6 @@
 /**
  * required files for getting data
  */
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
 /**
  * This class is used like controller for teacher block plugin, 

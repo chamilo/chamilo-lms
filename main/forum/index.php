@@ -148,11 +148,13 @@ $forum_categories_list = get_forum_categories();
 $forum_list	= array();
 $forum_list	= get_forums();
 
+$user_id = api_get_user_id();
+
 /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */
 
 // The groups of the user.
 $groups_of_user = array();
-$groups_of_user = GroupManager::get_group_ids($_course['real_id'], $_user['user_id']);
+$groups_of_user = GroupManager::get_group_ids($_course['real_id'], $user_id);
 // All groups in the course (and sorting them as the id of the group = the key of the array).
 if (!api_is_anonymous()) {
     $all_groups = GroupManager::get_group_list();
@@ -200,7 +202,7 @@ if (is_array($forum_categories_list)) {
 
          // The forums in this category.
         $forums_in_category = get_forums_in_category($forum_category['cat_id']);
-
+        
         echo '<table class="forum_table">';
 
         // Validacion when belongs to a session.
@@ -262,8 +264,8 @@ if (is_array($forum_categories_list)) {
                 }
 
                 // Note: This can be speeded up if we transform the $forum_list to an array that uses the forum_category as the key.
-                if ($forum['forum_category'] == $forum_category['cat_id']) {
-                // The forum has to be showed if
+                if ($forum['forum_category'] == $forum_category['cat_id']) {                    
+                    // The forum has to be showed if
                     // 1.v it is a not a group forum (teacher and student)
                     // 2.v it is a group forum and it is public (teacher and student)
                     // 3. it is a group forum and it is private (always for teachers only if the user is member of the forum
@@ -286,6 +288,9 @@ if (is_array($forum_categories_list)) {
                             //echo '-gewoon forum';
                             $show_forum = true;
                         } else {
+                            $show_forum = GroupManager::user_has_access($user_id, $forum['forum_of_group'], GROUP_TOOL_FORUM);                                   
+                            //var_dump($forum['forum_id'].' -  '.$show_forum);
+                            /*
                             // it is a group forum
                             //echo '-groepsforum';
                             // it is a group forum but it is public => show
@@ -305,7 +310,7 @@ if (is_array($forum_categories_list)) {
                                 }
                             } else {
                                 $show_forum = false;
-                            }
+                            }*/
 
                         }
                     }

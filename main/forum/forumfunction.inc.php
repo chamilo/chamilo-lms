@@ -1103,7 +1103,7 @@ function get_forum_categories($id = '') {
     $condition_session .= "AND forum_categories.c_id = $course_id ";
 
     if ($id == '') {
-        $sql = "SELECT * FROM".$table_categories." forum_categories, ".$table_item_property." item_properties
+       $sql = "SELECT * FROM".$table_categories." forum_categories, ".$table_item_property." item_properties
                     WHERE forum_categories.cat_id=item_properties.ref
                     AND item_properties.visibility=1
                     AND item_properties.tool='".TOOL_FORUM_CATEGORY."' $condition_session
@@ -1193,8 +1193,7 @@ function get_forums($id='', $course_code = '') {
     $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
     $table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
-
-    // GETTING ALL THE FORUMS //
+    // GETTING ALL THE FORUMS
 
     // Condition for the session
     $session_id = api_get_session_id();
@@ -1713,11 +1712,11 @@ function get_thread_users_qualify($thread_id, $course_id = null) {
  * @version octubre 2008, dokeos 1.8
  */
 function get_thread_users_not_qualify($thread_id, $course_id = null) {
-    $t_posts = Database :: get_course_table(TABLE_FORUM_POST);
-    $t_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
-    $t_users = Database :: get_main_table(TABLE_MAIN_USER);
-    $t_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_session_rel_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $t_posts            = Database :: get_course_table(TABLE_FORUM_POST);
+    $t_qualify          = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
+    $t_users            = Database :: get_main_table(TABLE_MAIN_USER);
+    $t_course_user      = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+    $t_session_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
     $is_western_name_order = api_is_western_name_order();
     if ($is_western_name_order) {
@@ -1730,9 +1729,7 @@ function get_thread_users_not_qualify($thread_id, $course_id = null) {
         $course_id = api_get_course_int_id();
     } else {
         $course_id = intval($course_id);
-    }    
-
-
+    }
 
     $sql1 = "select user_id FROM  $t_qualify WHERE thread_id = '".$thread_id."'";
     $result1 = Database::query($sql1);
@@ -1796,7 +1793,6 @@ function get_forum_information($forum_id) {
             		item_properties.ref		= '".Database::escape_string($forum_id)."' AND 
     				forums.forum_id			= '".Database::escape_string($forum_id)."' AND
     				forums.c_id = ".api_get_course_int_id()."
-    				
    			";
     
     $result = Database::query($sql);

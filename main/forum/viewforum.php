@@ -63,20 +63,49 @@ $userinf = api_get_user_info($userid);
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
 
 //$my_forum_group = isset($_GET['gidReq']) ? $_GET['gidReq'] : '';
-$group_id = api_get_group_id();
-$my_forum = isset($_GET['forum']) ? $_GET['forum'] : '';
-$val = GroupManager::user_has_access($userid, $group_id, GROUP_TOOL_FORUM);
 
-if (!empty($group_id)) {    
-    if (api_is_allowed_to_edit(false, true) || $val || GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)) {
-        $current_forum = get_forum_information($my_forum); // Note: This has to be validated that it is an existing forum.
-        $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
+$group_id = api_get_group_id();
+
+$my_forum = isset($_GET['forum']) ? $_GET['forum'] : '';
+
+$current_forum = get_forum_information($my_forum); // Note: This has to be validated that it is an existing forum.
+
+if (empty($current_forum)) {
+    api_not_allowed();
+}
+
+$current_forum_category = get_forumcategory_information($current_forum['forum_category']);
+
+if ($group_id) {
+    //Group info & group category info
+    $group_properties           = GroupManager::get_group_properties($group_id);
+    //$group_cat_info             = GroupManager::get_category(GroupManager::get_category_from_group($group_id));
+    
+    //User has access in the group?
+    $user_has_access_in_group   = GroupManager::user_has_access($userid, $group_id, GROUP_TOOL_FORUM);
+    
+    
+    //User is a tutor in the group? the function GroupManager::user_has_access already contains the is_tutor_of_group()
+    //$is_tutor_group             = GroupManager::is_tutor_of_group($userid, $group_id);
+    //
+    // the function GroupManager::user_has_access already contains the is_tutor_of_group()
+    //$is_my_forum                = GroupManager::is_user_in_group($userid, $group_id);
+    
+    //$group_cat_forum_visibility = $group_cat_info['forum_state'];
+    //$group_forum_visibility     = $group_properties['forum_state'];
+    
+    //Course
+    if (!api_is_allowed_to_edit(false, true) AND  //is a student
+        ($current_forum_category['visibility'] == 0 OR $current_forum['visibility'] == 0 OR !$user_has_access_in_group)            
+    ) {
+        api_not_allowed();
     }
 } else {
-    $result = get_forum_information($my_forum);    
-    if ($result['forum_of_group'] == 0) {
-        $current_forum = get_forum_information($my_forum); // Note: This has to be validated that it is an existing forum.        
-        $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
+    //Course
+    if (!api_is_allowed_to_edit(false, true) AND  //is a student
+        ($current_forum_category['visibility'] == 0 OR $current_forum['visibility'] == 0) //forum category or forum visibility is false
+    ) {
+        api_not_allowed();
     }
 }
 
@@ -103,7 +132,7 @@ if (!empty($_GET['gidReq'])) {
 
 if ($origin == 'group') {
     $_clean['toolgroup'] = (int)$_SESSION['toolgroup'];
-    $group_properties = GroupManager :: get_group_properties($_clean['toolgroup']);
+    
     $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array('url'=>'../group/group_space.php?gidReq='.$_SESSION['toolgroup'], 'name'=> get_lang('GroupSpace').' '.$group_properties['name']);
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Forum').' '.Security::remove_XSS($current_forum['forum_title']));
@@ -235,16 +264,6 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
     } else {
         $table_list .= get_lang('NoParticipation');
     }
-}
-
-
-/* Is the user allowed here? */
-
-// If the user is not a course administrator and the forum is hidden
-// then the user is not allowed here.
-
-if (!api_is_allowed_to_edit(false, true) AND ($current_forum_category['visibility'] == 0 OR $current_forum['visibility'] == 0)) {	
- 	api_not_allowed();
 }
 
 if ($origin == 'learnpath') {

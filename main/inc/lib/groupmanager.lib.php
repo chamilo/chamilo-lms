@@ -550,17 +550,19 @@ class GroupManager {
 	 * @param string $course_code The course (default = current course)
 	 */
 	public static function get_category ($id, $course_code = null) {
+        if (empty($id)) {
+            return array();
+        }
 		$course_info = api_get_course_info($course_code);
-		$course_id	 = $course_info['real_id'];
-		
-		$id = Database::escape_string($id);
+		$course_id	 = $course_info['real_id'];		
+		$id = Database::escape_string($id);        
 		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
-		$sql = "SELECT * FROM $table_group_cat WHERE c_id = $course_id AND id = $id";
+		$sql = "SELECT * FROM $table_group_cat WHERE c_id = $course_id AND id = $id LIMIT 1";
 		$res = Database::query($sql);
 		return Database::fetch_array($res);
 	}
 	/**
-	 * Get the category of a given group
+	 * Get the unique category of a given group
 	 * @param int $group_id The id of the group
 	 * @param string $course_code The course in which the group is (default =
 	 * current course)
@@ -569,6 +571,10 @@ class GroupManager {
 	public static function get_category_from_group ($group_id, $course_code = null) {	
 		$table_group 		= Database :: get_course_table(TABLE_GROUP);
 		$table_group_cat 	= Database :: get_course_table(TABLE_GROUP_CATEGORY);
+        
+        if (empty($group_id)) {
+            return array();
+        }
 		
 		$course_info = api_get_course_info($course_code);
 		$course_id	 = $course_info['real_id'];
@@ -577,9 +583,12 @@ class GroupManager {
 		$sql = "SELECT gc.* FROM $table_group_cat gc, $table_group g 
 				WHERE 	gc.c_id = $course_id AND 
 						g.c_id = $course_id AND
-						gc.id = g.category_id AND g.id=$group_id";
+						gc.id = g.category_id AND g.id= $group_id LIMIT 1";
 		$res = Database::query($sql);
-		$cat = Database::fetch_array($res);
+        $cat = array();
+        if (Database::num_rows($res)) {
+            $cat = Database::fetch_array($res);
+        }
 		return $cat;
 	}
 	/**
@@ -1008,7 +1017,7 @@ class GroupManager {
 			$category['groups_per_user'] = INFINITE;
 		}
 		$result &= (self :: user_in_number_of_groups($user_id, $category['id']) < $category['groups_per_user']);
-		$result &= !self :: is_tutor($user_id);
+		$result &= !self :: is_tutor_of_group($user_id, $group_id);
 		return $result;
 	}
 	/**
@@ -1199,6 +1208,7 @@ class GroupManager {
 	 * @param $user_id the id of the user
 	 * @param $group_id the id of the group
 	 * @return boolean true/false
+     * @todo use the function user_has_access that includes this function 
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 */
 	public static function is_tutor_of_group ($user_id,$group_id) {
@@ -1245,7 +1255,7 @@ class GroupManager {
 	 *               tutors in the current course.
 	 * @deprecated this function uses the old tutor implementation
 	 */
-	public static function get_all_tutors () {
+	public static function get_all_tutors() {
 		global $_course;
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1320,9 +1330,7 @@ class GroupManager {
 		return $groups;
 	}
 	/*	
-	Group functions
-	these take virtual/linked courses into account when necessary
-	-----------------------------------------------------------
+        Group functions - these take virtual/linked courses into account when necessary
 	*/
 	/**
 	*	Get a combined list of all users of the real course $course_code
@@ -1406,10 +1414,8 @@ class GroupManager {
 		$total_number = count($user_array_in);
 		$user_array_out[0] = $user_array_in[0];
 		$count_out = 0;
-		for ($count_in = 1; $count_in < $total_number; $count_in ++)
-		{
-			if ($user_array_in[$count_in][$compare_field] != $user_array_out[$count_out][$compare_field])
-			{
+		for ($count_in = 1; $count_in < $total_number; $count_in ++) {
+			if ($user_array_in[$count_in][$compare_field] != $user_array_out[$count_out][$compare_field]) {
 				$count_out ++;
 				$user_array_out[$count_out] = $user_array_in[$count_in];
 			}
@@ -1420,12 +1426,9 @@ class GroupManager {
 	*	Filters from the array $user_array_in the users already in the group $group_id.
 	*/
 	public static function filter_users_already_in_group ($user_array_in, $group_id) {
-
-		foreach ($user_array_in as $this_user)
-		{
-			if (!self :: is_subscribed($this_user['user_id'], $group_id))
-			{
-				$user_array_out[] = $this_user;
+		foreach ($user_array_in as $this_user) {
+			if (!self :: is_subscribed($this_user['user_id'], $group_id)) {				
+                $user_array_out[] = $this_user;
 			}
 		}
 		return $user_array_out;
@@ -1460,9 +1463,8 @@ class GroupManager {
 	 * @return bool True if the given user has access to the given tool in the
 	 * given course.
 	 */
-	public static function user_has_access ($user_id, $group_id, $tool) {
-		switch ($tool)
-		{
+	public static function user_has_access($user_id, $group_id, $tool) {
+		switch ($tool) {
 			case GROUP_TOOL_FORUM :
 				$state_key = 'forum_state';
 				break;
@@ -1487,26 +1489,38 @@ class GroupManager {
 			default:
 				return false;
 		}
-		$group = self :: get_group_properties($group_id);
-		if ($group[$state_key] == TOOL_NOT_AVAILABLE)
-		{
+        
+        $user_is_in_group = self :: is_user_in_group($user_id, $group_id);     
+        
+        //Check group properties
+		$group_info = self :: get_group_properties($group_id);
+        
+        //Check group category if exists
+        $category_group_info = self::get_category_from_group($group_id);
+        
+        if (!empty($category_group_info)) {
+            //if exists check the category group status first        
+            if ($category_group_info[$state_key] == TOOL_NOT_AVAILABLE) {
+                return false;                
+            } elseif($category_group_info[$state_key] == TOOL_PRIVATE && !$user_is_in_group) {                
+                return false;
+            }
+        }
+        
+        //is_user_in_group() is more complete that  the  is_subscribed() function        
+        
+		if ($group_info[$state_key] == TOOL_NOT_AVAILABLE) {
 			return false;
-		}
-		elseif ($group[$state_key] == TOOL_PUBLIC)
-		{
+		} elseif ($group_info[$state_key] == TOOL_PUBLIC) {
 			return true;
-		}
-		elseif (api_is_allowed_to_edit(false,true))
-		{
+		} elseif (api_is_allowed_to_edit(false,true)) {
 			return true;
-		}
-		elseif($group['tutor_id'] == $user_id)
-		{
-			return true;
-		}
-		else
-		{
-			return self :: is_subscribed($user_id, $group_id);
+		} elseif($group_info['tutor_id'] == $user_id) { //this tutor implementation was dropped
+			return true;		
+        } elseif($group_info[$state_key] == TOOL_PRIVATE && !$user_is_in_group) {
+            return false;
+        } else {		
+            return $user_is_in_group;
 		}
 	}
 	/**

@@ -1,15 +1,12 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 
 $language_file = array ('registration', 'index', 'tracking', 'exercice','admin');
-
+$cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
 
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 
@@ -28,29 +25,27 @@ $session_id = 0;
 
 if (!empty($my_courses)) {
 	foreach ($my_courses as $course) {
-		$course_info = api_get_course_info($course['course_code']);
+        $course_code    = $course['course_code'];
+        $course_id      = $course['real_id'];
+		$course_info    = api_get_course_info($course_code);
+        
 		//Only show open courses 
 		if ($course_info['visibility'] == 0) {
 			continue;
-		}		
-		//$array[$i]['course'] = $course;
-		
-		$course_code = $course['course_code'];
-		$course_info = api_get_course_info($course_code);
-		
-		
-		//$teachers = CourseManager::get_teacher_list_from_course_code($course_code);
-		$teacher_list = array($course_info['titular']);
-		
-		
-/*
+		}
+        
+		$teachers = CourseManager::get_teacher_list_from_course_code($course_code);
+        $teacher_list =  array();
+        
+		//$teacher_list = array($course_info['titular']);                
+
 		if (!empty($teachers)) {
 			foreach($teachers as $teacher) {
 				$teacher_list[]= $teacher['firstname'].' '.$teacher['lastname'];
-			}					
+			}		
 		}
-*/		
-		$tmp_students = CourseManager :: get_student_list_from_course_code($course['course_code'], false);
+		
+		$tmp_students = CourseManager :: get_student_list_from_course_code($course_code, false);
 		
 		//Cleaning students only REAL students
 		$students = array();
@@ -60,14 +55,13 @@ if (!empty($my_courses)) {
 				continue;
 			}
 			$students[] = $student['user_id'];
-		}
+		}		
 		
-		
-		$t_lp 	= Database :: get_course_table(TABLE_LP_MAIN, $course_info['dbName']);
-		$sql_lp = "SELECT lp.name, lp.id FROM $t_lp lp WHERE lp.session_id = 0";
+		$t_lp 	= Database :: get_course_table(TABLE_LP_MAIN);
+		$sql_lp = "SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = $course_id AND lp.session_id = 0";
 		$rs_lp 	= Database::query($sql_lp);
-		$t_lpi 	= Database :: get_course_table(TABLE_LP_ITEM, $course_info['dbName']);
-		$t_news = Database :: get_course_table(TABLE_ANNOUNCEMENT, $course_info['dbName']);
+		$t_lpi 	= Database :: get_course_table(TABLE_LP_ITEM);
+		$t_news = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 		
 		
 		//No needed 
@@ -88,7 +82,7 @@ if (!empty($my_courses)) {
 				$lp_id = $learnpath['id'];
 				
 				$lp_items = 
-				$array[$i]['lp'] 		  = '<a href="'.api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$course_code.'&amp;action=view&amp;lp_id='.$lp_id.'" target="_blank">'.$learnpath['name'].'</a>';
+				$array[$i]['lp'] = '<a href="'.api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$course_code.'&amp;action=view&amp;lp_id='.$lp_id.'" target="_blank">'.$learnpath['name'].'</a>';
 				
 				$array[$i]['teachers'] = '';
 				if (!empty($teacher_list)) {
@@ -148,7 +142,7 @@ if (!empty($my_courses)) {
 
 				//registering the number of each category of
 				//items in learning path
-				$sql_lpi = "SELECT lpi.item_type FROM $t_lpi lpi WHERE lpi.lp_id = $lp_id ORDER BY item_type";
+				$sql_lpi = "SELECT lpi.item_type FROM $t_lpi lpi WHERE c_id = $course_id AND lpi.lp_id = $lp_id ORDER BY item_type";
 				$res_lpi = Database::query($sql_lpi);
 				while ($row_lpi = Database::fetch_array($res_lpi)) {
 					switch($row_lpi['item_type']) {
@@ -172,7 +166,7 @@ if (!empty($my_courses)) {
 				}
 				// Count announcements
 				$array[$i]['total_announcements'] = 0;
-				$sql_news = "SELECT count(id) FROM $t_news";
+				$sql_news = "SELECT count(id) FROM $t_news WHERE c_id = $course_id ";
 				$res_news = Database::query($sql_news);
 				while ($row_news = Database::fetch_array($res_news)) {
 					$array[$i]['total_announcements'] = $row_news[0];
@@ -198,8 +192,7 @@ if (!empty($my_courses)) {
 				}
 				$i++;
 			}
-		}
-		
+		}		
 	}
 }
 
@@ -223,8 +216,6 @@ $headers = array(
 	get_lang('NumberOfAssignmentsInLearnpath'),
 	get_lang('NumberOfAnnouncementsInCourse'),
 );
-	
-
 
 if (isset($_GET['export'])) {
 	global $charset;
@@ -257,7 +248,9 @@ if (isset($_GET['export'])) {
 	exit;
 }
 
-Display::display_header();
+$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('MySpace'));
+
+Display::display_header(get_lang('CurrentCourses'));
 
 if (!class_exists('HTML_Table')) {
 	require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php';

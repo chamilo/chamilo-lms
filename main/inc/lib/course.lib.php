@@ -765,7 +765,7 @@ class CourseManager {
         $user_id = intval($user_id);
         $data = array();
 
-        $sql_nb_cours = "SELECT course_rel_user.course_code, course.title, course.id, course.db_name
+        $sql_nb_cours = "SELECT course_rel_user.course_code, course.title, course.id, course.db_name, course.id as real_id 
             FROM $tbl_course_user as course_rel_user
             INNER JOIN $tbl_course as course
                 ON course.code = course_rel_user.course_code
@@ -776,7 +776,7 @@ class CourseManager {
             $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $sql_nb_cours = "	SELECT course_rel_user.course_code, course.title, course.id, course.db_name
+                $sql_nb_cours = "	SELECT course_rel_user.course_code, course.title, course.id, course.db_name, course.id as real_id
                     FROM $tbl_course_user as course_rel_user
                     INNER JOIN $tbl_course as course
                         ON course.code = course_rel_user.course_code

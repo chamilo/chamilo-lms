@@ -1236,7 +1236,9 @@ function api_get_course_info_by_id($id = null) {
         }
         return $_course;
     }
+    //global $_course;
     global $_course;
+    if ($_course == '-1') $_course = array();
     return $_course;
 }
 

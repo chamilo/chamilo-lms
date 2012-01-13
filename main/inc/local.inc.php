@@ -1064,8 +1064,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 /*  GROUP INIT */
 
 if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested
-	if ($gidReq && $_cid ) { // have keys to search data
-		$group_table = Database::get_course_table(TABLE_GROUP);    
+	if ($gidReq && $_cid && !empty($_course['real_id'])) { // have keys to search data
+		$group_table = Database::get_course_table(TABLE_GROUP);            
 		$sql = "SELECT * FROM $group_table WHERE c_id = ".$_course['real_id']." AND id = '$gidReq'";
 		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
@@ -1079,7 +1079,7 @@ if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // ses
 		api_session_unregister('_gid');
 	}
 } elseif (isset($_SESSION['_gid'])) { // continue with the previous values
-	$_gid             = $_SESSION ['_gid'            ];
+	$_gid = $_SESSION ['_gid'];
 } else { //if no previous value, assign caracteristic undefined value
 	$_gid = -1;
 }

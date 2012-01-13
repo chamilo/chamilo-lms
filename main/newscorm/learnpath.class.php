@@ -4833,7 +4833,7 @@ class learnpath {
             $return .= '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&action=view&lp_id=' . $this->lp_id . '">' . Display :: return_icon('view_left_right.png', get_lang('Display'),'','32').'</a>';
             $return .= ' '.Display :: return_icon('i.gif');	
             $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewStep') . '">
-			 '. Display :: return_icon('new_learnigpath_object.png', get_lang('NewStep'),'','32').'</a>';
+			 '. Display :: return_icon('add.png', get_lang('NewStep'),'','32').'</a>';
             $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewChapter') . '">
 			'. Display :: return_icon('add_learnpath_section.png', get_lang('NewChapter'),'','32').'</a>';
             if ($update_audio == 'true') {            
@@ -5084,8 +5084,8 @@ class learnpath {
         echo '<a href="' . api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('BasicOverview') . '">' . Display :: return_icon('move_learnpath.png', get_lang('BasicOverview'),'','32').'</a>';
         echo '<a href="lp_controller.php?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&action=view&lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('view_left_right.png', get_lang('Display'),'','32').'</a> ';
         Display :: display_icon('i.gif');
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewStep') . '">' . Display :: return_icon('new_learnigpath_object.png', get_lang('NewStep'),'','32').'</a>';        
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewChapter') . '">' . Display :: return_icon('add_learnpath_section.png', get_lang('NewChapter'),'','32').'</a>';
+        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewStep') . '">' . Display :: return_icon('add.png', get_lang('NewStep'),'','32').'</a>';        
+//		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewChapter') . '">' . Display :: return_icon('add_learnpath_section.png', get_lang('NewChapter'),'','32').'</a>';
         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '&amp;updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'','32').'</a>';
         echo '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=edit&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'','32').'</a>';
         echo '</div>';
@@ -5514,11 +5514,6 @@ class learnpath {
     public function display_resources() {
         global $_course; // TODO: Don't use globals.
         $course_code = api_get_course_id();
-
-        /*$return .= '<div class="sectiontitle">' . get_lang('CreateNewStep') . '</div>';
-        $return .= '<div class="sectioncomment"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">' . '<img title="Nuevo documento" src="../img/new_doc.gif" alt="Nuevo documento"/> ' . get_lang('NewDocument') . '</a></div>';
-        $return .= '<div class="sectiontitle">' . get_lang('UseAnExistingResource') . '</div>';*/
-       
      
         //Get all the docs
         $documents = $this->get_documents();
@@ -5540,9 +5535,11 @@ class learnpath {
                             Display::return_icon('links.png', get_lang('Links'), array(), 64),
                             Display::return_icon('works.png', get_lang('Works'), array(), 64),
                             Display::return_icon('forum.png', get_lang('Forums'), array(), 64),
+                            Display::return_icon('add_learnpath_section.png', get_lang('NewChapter'), array(), 64)
                         );
         
-        echo Display::tabs($headers, array($documents, $exercises, $links, $works, $forums), 'resource_tab');
+        $chapter = $_SESSION['oLP']->display_item_form('chapter', get_lang('EnterDataNewChapter'));        
+        echo Display::tabs($headers, array($documents, $exercises, $links, $works, $forums, $chapter), 'resource_tab');
         return true;
     }
 
@@ -6439,7 +6436,7 @@ class learnpath {
         }
 
         $return = '<div class="row">
-                                <div class="form_header">';
+                        <div class="form_header">';
 
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
@@ -6458,19 +6455,19 @@ class learnpath {
 
         while ($row = Database :: fetch_array($result)) {
             $arrLP[] = array (
-                'id' => $row['id'],
-                'item_type' => $row['item_type'],
-                'title' => $row['title'],
-                'path' => $row['path'],
-                'description' => $row['description'],
-                'parent_item_id' => $row['parent_item_id'],
-                'previous_item_id' => $row['previous_item_id'],
-                'next_item_id' => $row['next_item_id'],
-                'max_score' => $row['max_score'],
-                'min_score' => $row['min_score'],
-                'mastery_score' => $row['mastery_score'],
-                'prerequisite' => $row['prerequisite'],
-                'display_order' => $row['display_order']
+                'id'                => $row['id'],
+                'item_type'         => $row['item_type'],
+                'title'             => $row['title'],
+                'path'              => $row['path'],
+                'description'       => $row['description'],
+                'parent_item_id'    => $row['parent_item_id'],
+                'previous_item_id'  => $row['previous_item_id'],
+                'next_item_id'      => $row['next_item_id'],
+                'max_score'         => $row['max_score'],
+                'min_score'         => $row['min_score'],
+                'mastery_score'     => $row['mastery_score'],
+                'prerequisite'      => $row['prerequisite'],
+                'display_order'     => $row['display_order']
             );
         }
 
@@ -6479,10 +6476,10 @@ class learnpath {
         unset ($this->arrMenu);
 
         $return .= $title;
+        
         $return .= '</div>
                             </div>';
 
-        require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
         $form = new FormValidator('form', 'POST', api_get_self() . '?' . $_SERVER['QUERY_STRING']);
 
         $defaults['title'] = api_html_entity_decode($item_title, ENT_QUOTES, $charset);
@@ -6538,7 +6535,7 @@ class learnpath {
             reset($arrLP);
         }
 
-        $arrHide = array ();
+        $arrHide = array();
 
         // POSITION
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -6573,6 +6570,10 @@ class learnpath {
 
         if ($item_type == 'module' || $item_type == 'dokeos_module') {
             $form->addElement('hidden', 'parent', '0');
+        }
+        //fix in order to use the tab
+        if ($item_type == 'chapter') {
+            $form->addElement('hidden', 'type', 'chapter');   
         }
 
         $extension = null;
@@ -7869,12 +7870,7 @@ class learnpath {
     public function get_forums() {
         require_once '../forum/forumfunction.inc.php';
         require_once '../forum/forumconfig.inc.php';
-        global $table_forums, $table_threads, $table_posts, $table_item_property, $table_users;
-        $table_forums = Database :: get_course_table(TABLE_FORUM);
-        $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
-        $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
-        $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-        $table_users = Database :: get_main_table(TABLE_MAIN_USER);
+        
         $a_forums = get_forums();
 
         //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('forums').style.display == 'block') {document.getElementById('forums').style.display = 'none';} else {document.getElementById('forums').style.display = 'block';}\"" . '><img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />' . get_lang('Forums') . '</div>';
@@ -7888,22 +7884,24 @@ class learnpath {
         foreach ($a_forums as $forum) {
             $return .= '<div class="lp_resource_element_no_link">';
             $return .= '<script type="text/javascript">
-                                    function toggle_forum(forum_id){
-                                        if(document.getElementById("forum_"+forum_id+"_content").style.display == "none"){
-                                            document.getElementById("forum_"+forum_id+"_content").style.display = "block";
-                                            document.getElementById("forum_"+forum_id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'remove.gif";
-                                        }
-                                        else {
-                                            document.getElementById("forum_"+forum_id+"_content").style.display = "none";
-                                            document.getElementById("forum_"+forum_id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'add.gif";
-                                        }
-                                    }
-                                    </script>';
+                            function toggle_forum(forum_id){
+                                if(document.getElementById("forum_"+forum_id+"_content").style.display == "none"){
+                                    document.getElementById("forum_"+forum_id+"_content").style.display = "block";
+                                    document.getElementById("forum_"+forum_id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'remove.gif";
+                                } else {
+                                    document.getElementById("forum_"+forum_id+"_content").style.display = "none";
+                                    document.getElementById("forum_"+forum_id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'add.gif";
+                                }
+                            }
+                        </script>';
 
             if (!empty($forum['forum_id'])) {
                 $return .= '<img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
-                $return .= '<a style="cursor:hand" onclick="javascript: toggle_forum(' . $forum['forum_id'] . ')" style="vertical-align:middle"><img src="' . api_get_path(WEB_IMG_PATH) . 'add.gif" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" /></a>
-                        <a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . Security :: remove_XSS($forum['forum_title']) . '</a><ul style="display:none" id="forum_' . $forum['forum_id'] . '_content">';
+                $return .= '<a style="cursor:hand" onclick="javascript: toggle_forum(' . $forum['forum_id'] . ')" style="vertical-align:middle">
+                                <img src="' . api_get_path(WEB_IMG_PATH) . 'add.gif" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" />
+                            </a>
+                            <a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . Security :: remove_XSS($forum['forum_title']) . '</a>
+                                <ul style="display:none" id="forum_' . $forum['forum_id'] . '_content">';
             }
 
             $a_threads = get_threads($forum['forum_id']);
@@ -7914,6 +7912,7 @@ class learnpath {
             }
             $return .= '</ul></div>';
         }
+        $return .= '</div>';
         return $return;
     }
 

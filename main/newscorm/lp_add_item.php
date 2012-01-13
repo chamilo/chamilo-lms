@@ -262,7 +262,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
         if (isset($new_item_id) && is_numeric($new_item_id)) {
             switch($_GET['type']) {
                 case 'chapter':
-                    echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+                    echo $_SESSION['oLP']->display_manipulate($new_item_id, $_POST['type']);
                     Display::display_confirmation_message(get_lang('NewChapterCreated'));
                     break;
                 case TOOL_LINK:

@@ -626,7 +626,7 @@ class Agenda {
         foreach($user_list as $this_user) {
             // $to_already_selected is the array containing the users (and groups) that are already selected
             if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) {
-                $html .= "<option value=\"USER:".$this_user['user_id']."\">".api_get_person_name($this_user['firstname'], $this_user['lastname'])."</option>";
+                $html .= "<option value=\"USER:".$this_user['user_id']."\">".api_get_person_name($this_user['firstname'], $this_user['lastname'])." (".$this_user['username'].")</option>";
             }
         }
         if (is_array($group_list)) {

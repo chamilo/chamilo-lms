@@ -30,7 +30,8 @@ $(document).ready( function() {
 			<div class="categories-content-course">
 				
 				<div class="categories-course-picture">
-					{html_image file=$hot_course.extra_info.course_image}
+					<img src="{$hot_course.extra_info.course_image}" />
+                         {* html_image file=$hot_course.extra_info.course_image *}
 				</div>
 				
 				<div class="categories-course-description">

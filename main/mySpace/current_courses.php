@@ -60,7 +60,8 @@ if (!empty($my_courses)) {
 				continue;
 			}
 			$students[] = $student['user_id'];
-		}		
+		}
+		
 		
 		$t_lp 	= Database :: get_course_table(TABLE_LP_MAIN, $course_info['dbName']);
 		$sql_lp = "SELECT lp.name, lp.id FROM $t_lp lp WHERE lp.session_id = 0";
@@ -68,19 +69,26 @@ if (!empty($my_courses)) {
 		$t_lpi 	= Database :: get_course_table(TABLE_LP_ITEM, $course_info['dbName']);
 		$t_news = Database :: get_course_table(TABLE_ANNOUNCEMENT, $course_info['dbName']);
 		
-		/*			
-		$total_tools_list 		= Tracking::get_tools_most_used_by_course($course_code, $session_id);		
+		
+		//No needed 
+		/*$nb_assignments 		= Tracking::count_student_assignments($students, $course_code, $session_id);
+		$messages 				= Tracking::count_student_messages($students, $course_code, $session_id);
+		$links 					= Tracking::count_student_visited_links($students, $course_code, $session_id);
+		$chat_last_connection 	= Tracking::chat_last_connection($students, $course_code, $session_id);
+		$documents				= Tracking::count_student_downloaded_documents($students, $course_code, $session_id);*/			
+		$total_tools_list 		= Tracking::get_tools_most_used_by_course($course_code, $session_id);
+		
 		$total_tools = 0;
 		foreach($total_tools_list as $tool) {
 			$total_tools += $tool['count_access_tool'];			
-		}*/		
+		}		
 		
 		if (Database :: num_rows($rs_lp) > 0) {	
 			while ($learnpath = Database :: fetch_array($rs_lp)) {
 				$lp_id = $learnpath['id'];
 				
 				$lp_items = 
-				$array[$i]['lp'] = '<a href="'.api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$course_code.'&amp;action=view&amp;lp_id='.$lp_id.'" target="_blank">'.$learnpath['name'].'</a>';
+				$array[$i]['lp'] 		  = '<a href="'.api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$course_code.'&amp;action=view&amp;lp_id='.$lp_id.'" target="_blank">'.$learnpath['name'].'</a>';
 				
 				$array[$i]['teachers'] = '';
 				if (!empty($teacher_list)) {
@@ -115,7 +123,8 @@ if (!empty($my_courses)) {
 						if (!empty($time_spent)) {
 							$count_students_accessing++;
 						}
-					}						
+					}	
+					//$total_tools += $nb_assignments +  $messages + $links + $chat_last_connection + $documents;						
 				}
 					
 				$student_count = count($students);
@@ -185,6 +194,7 @@ if (!empty($my_courses)) {
 						$array[$i]['total_time_spent'] = api_time_to_hms($total_time_spent);
 						$array[$i]['average_time_spent_per_student'] = api_time_to_hms($total_time_spent / $student_count);
 					}
+					//$array[$i]['tools_used'] = $total_tools;
 				}
 				$i++;
 			}
@@ -278,5 +288,5 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace"><img align="absbottom" sr
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php?export=1"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('CurrentCoursesReport').'</a> ';
 echo '</div>';
 echo $table->toHtml();
-
+ 
 Display::display_footer();

@@ -14,7 +14,7 @@
  */
 class CourseDescriptionController { // extends Controller {	
 		
-	private $toolname;
+	private $toolname;    
 	private $view; 
 	
 	/**
@@ -31,19 +31,14 @@ class CourseDescriptionController { // extends Controller {
 	 * @param boolean   	true for listing history (optional)
 	 * @param array 	message for showing by action['edit','add','destroy'] (optional) 
 	 */
-	public function listing($history=false,$messages=array()) {
+	public function listing($history=false, $messages=array()) {
 		$course_description = new CourseDescription();
 		$session_id = api_get_session_id();
 		$course_description->set_session_id($session_id);        
 		$data = array();		
 
-		if ($history) {
-			$course_description_data = $course_description->get_description_history(THEMATIC_ADVANCE);	
-			$data['history'] = true;		
-		} else {
-			$course_description_data = $course_description->get_description_data();	
-		}
-		
+		$course_description_data = $course_description->get_description_data();	
+        	
 		$data['descriptions'] = $course_description_data['descriptions'];
 		$data['default_description_titles'] = $course_description->get_default_description_title();
 		$data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
@@ -62,7 +57,7 @@ class CourseDescriptionController { // extends Controller {
 	 * render to listing or edit view
 	 * @param int description type
 	 */
-	public function edit($description_type) {
+	public function edit($id, $description_type) {
 		$course_description = new CourseDescription();
 		$session_id = api_get_session_id();
 		$course_description->set_session_id($session_id);		
@@ -79,36 +74,20 @@ class CourseDescriptionController { // extends Controller {
 						$content = $_POST['contentDescription'];
 					}        	
 		        	$description_type = $_POST['description_type'];
-		        	$progress		  = $_POST['progress'];
+                    $id         = $_POST['id'];
+		        	$progress   = $_POST['progress'];
+                    
 					$course_description->set_description_type($description_type);
 		    		$course_description->set_title($title);
 		    		$course_description->set_content($content);
-		    		$course_description->set_progress($progress);		
-		        	if ($description_type >= ADD_BLOCK) {      		        		  		        		
-		        		$thematic_advance = $course_description->get_data_by_description_type($description_type);		        		
-		        		if (!empty($thematic_advance)) {
-		        			$affected_rows = $course_description->update();	
-		        		} else {
-		        			$affected_rows = $course_description->insert();
-		        		}
-		        	} else {	        			        		
-		        		$thematic_advance = $course_description->get_data_by_description_type($description_type);			        		        		
-		        		if (!empty($thematic_advance)) {
-		        			if ($description_type == THEMATIC_ADVANCE) {
-		        				// if is thematic advance type save in history
-		        				$course_description->set_title($thematic_advance['description_title']);
-		        				$course_description->set_content($thematic_advance['description_content']);
-		        				$course_description->set_progress($thematic_advance['progress']);
-		        				$course_description->insert_stats($description_type);
-		        			}
-		        			$course_description->set_title($title);
-		        			$course_description->set_content($content);
-		        			$course_description->set_progress($progress);	        			
-		        			$affected_rows = $course_description->update();	        			
-		        		} else {
-		        			$affected_rows = $course_description->insert();
-		        		}	        		
-		        	}
+		    		$course_description->set_progress($progress);                   
+		           			        		
+		        	$thematic_advance = $course_description->get_data_by_id($id);			        		        		
+                    if (!empty($thematic_advance)) {		   		        			
+                        $affected_rows = $course_description->update();	        			
+                    } else {
+                        $affected_rows = $course_description->insert();
+                    }
 		        	Security::clear_token();		        		        		
         		}
         		
@@ -128,7 +107,7 @@ class CourseDescriptionController { // extends Controller {
         		$data['description_content'] = $_POST['contentDescription'];
         		$data['description_type'] = $_POST['description_type'];
         		$data['progress'] = $_POST['progress'];
-        		$data['descriptions'] = $course_description->get_data_by_description_type($_POST['description_type']);
+        		$data['descriptions'] = $course_description->get_data_by_id($_POST['id']);
         		// render to the view
 				$this->view->set_data($data);
 				$this->view->set_layout('layout');
@@ -136,20 +115,24 @@ class CourseDescriptionController { // extends Controller {
 				$this->view->render();        		
         	}
         } else {
-
-			if (!empty($description_type)) {				
+            
+            $data['default_description_titles'] = $course_description->get_default_description_title();
+            $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
+            $data['default_description_icon'] = $course_description->get_default_description_icon();
+            $data['question'] = $course_description->get_default_question();
+            $data['information'] = $course_description->get_default_information();
+            
+            $data['description_type'] = $description_type;
+            
+			if (!empty($id)) {				
 				if (isset($_GET['id_session'])) {
 					$session_id = intval($_GET['id_session']);
 				}				
-        		$course_description_data = $course_description->get_data_by_description_type($description_type, null, $session_id);        		        		
-        		$data['default_description_titles'] = $course_description->get_default_description_title();
-				$data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
-				$data['default_description_icon'] = $course_description->get_default_description_icon();
-				$data['question'] = $course_description->get_default_question();
-				$data['information'] = $course_description->get_default_information();
+        		$course_description_data = $course_description->get_data_by_id($id, null, $session_id);        		        		
+            
 				$data['description_title'] = $course_description_data['description_title'];
         		$data['description_content'] = $course_description_data['description_content'];
-        		$data['description_type'] = $description_type;
+        		
         		$data['progress'] = $course_description_data['progress'];        		
         		$data['descriptions'] = $course_description->get_data_by_description_type($description_type, null, $session_id);
         	}
@@ -230,19 +213,17 @@ class CourseDescriptionController { // extends Controller {
 	 * render to listing view
 	 * @param int description type
 	 */
-	public function destroy($description_type) {		
+	public function destroy($id) {		
 		$course_description = new CourseDescription();
 		$session_id = api_get_session_id();
 		$course_description->set_session_id($session_id);		
-		if (!empty($description_type)) {
-			$course_description->set_description_type($description_type);
+		if (!empty($id)) {
+			$course_description->set_id($id);
 			$affected_rows = $course_description->delete();
 		}		
 		if ($affected_rows) {        			
 			$message['destroy'] = true;        			
 		}
-		$this->listing(false,$message);		
+		$this->listing(false, $message);		
 	}
-
 }
-?>

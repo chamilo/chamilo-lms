@@ -72,13 +72,10 @@ class CourseDescription
 		$sql = "SELECT * FROM $tbl_course_description WHERE c_id = $course_id $condition_session ORDER BY id ";
 		$rs = Database::query($sql);
 		$data = array();
-		while ($description = Database::fetch_array($rs)) {
-			if ($description['description_type'] == THEMATIC_ADVANCE) {
-				$description['progress_icon'] = $this->get_progress_porcent();
-			}
-			$data['descriptions'][$description['description_type']] = Security::remove_XSS($description, STUDENT);
+		while ($description = Database::fetch_array($rs)) {			
+			$data['descriptions'][$description['id']] = Security::remove_XSS($description, STUDENT);
 			//reload titles to ensure we have the last version (after edition)
-			$data['default_description_titles'][$description['description_type']] = Security::remove_XSS($description['title'], STUDENT);
+			//$data['default_description_titles'][$description['id']] = Security::remove_XSS($description['title'], STUDENT);
 		}
 		return $data;
 	}
@@ -128,10 +125,10 @@ class CourseDescription
 		}		
 		$condition_session = api_get_session_condition($session_id);		
 		if (!empty($course_code)) {
-			$course_info = api_get_course_info($course_code);
-			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_info['dbName']);
+			$course_info = api_get_course_info($course_code);	
+            $course_id = $course_info['real_id'];
 		}
-
+        $description_type = intval($description_type);
 		$sql = "SELECT * FROM $tbl_course_description WHERE c_id = $course_id AND description_type='$description_type' $condition_session ";
 		$rs = Database::query($sql);
 		$data = array();
@@ -142,6 +139,32 @@ class CourseDescription
 		}
 		return $data;
 	}
+    
+   
+    public function get_data_by_id($id, $course_code = '', $session_id = null) {
+		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+		$course_id = api_get_course_int_id();
+		
+		if (!isset($session_id)) {
+			$session_id = $this->session_id;
+		}		
+		$condition_session = api_get_session_condition($session_id);		
+		if (!empty($course_code)) {
+			$course_info = api_get_course_info($course_code);	
+            $course_id = $course_info['real_id'];
+		}
+        $id = intval($id);
+		$sql = "SELECT * FROM $tbl_course_description WHERE c_id = $course_id AND id='$id' $condition_session ";
+		$rs = Database::query($sql);
+		$data = array();
+		if ($description = Database::fetch_array($rs)) {
+			$data['description_title']	 = $description['title'];
+			$data['description_content'] = $description['content'];
+			$data['progress'] 			 = $description['progress'];
+		}
+		return $data;
+	}
+    
 
 	/**
      * Get maximum description type by session id, first you must set session_id properties with the object CourseDescription
@@ -219,22 +242,22 @@ class CourseDescription
      * and session_id properties with the object CourseDescription
      * @return int	affected rows
      */
-	public function update($course_db = null) {		
-		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);		
+	public function update() {		
+		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);	
 		$sql = "UPDATE $tbl_course_description SET  
-						title = '".Database::escape_string($this->title)."', 
-						content = '".Database::escape_string($this->content)."', 
-						progress = '".$this->progress."' 
-				WHERE 	description_type='".intval($this->description_type)."' AND 
-						session_id = '".$this->session_id."' AND
+						title       = '".Database::escape_string($this->title)."', 
+						content     = '".Database::escape_string($this->content)."', 
+						progress    = '".$this->progress."' 
+				WHERE 	id          = '".intval($this->id)."' AND 
+						session_id  = '".$this->session_id."' AND
 						c_id = ".api_get_course_int_id()."
 						";
 		Database::query($sql);
 		$affected_rows = Database::affected_rows();
-		$description_id = $this->get_id_by_description_type($this->description_type);
-		if ($description_id > 0) {
+		
+		if ($this->id > 0) {
 			//insert into item_property
-			api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $description_id, 'CourseDescriptionUpdated', api_get_user_id());
+			api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $this->id, 'CourseDescriptionUpdated', api_get_user_id());
 		}
 		return $affected_rows;
 	}
@@ -243,17 +266,15 @@ class CourseDescription
      * Delete a description, first you must set description_type and session_id properties with the object CourseDescription
      * @return int	affected rows
      */
-	public function delete($course_db = null) {
+	public function delete() {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);		
-		$description_id = $this->get_id_by_description_type($this->description_type);
-        
-        $course_id = api_get_course_int_id();
-		$sql = "DELETE FROM $tbl_course_description WHERE c_id = $course_id AND description_type = '".intval($this->description_type)."' AND session_id = '".intval($this->session_id)."'";
+		$course_id = api_get_course_int_id();
+		$sql = "DELETE FROM $tbl_course_description WHERE c_id = $course_id AND id = '".intval($this->id)."' AND session_id = '".intval($this->session_id)."'";
 		Database::query($sql);
 		$affected_rows = Database::affected_rows();
-		if ($description_id > 0) {
+		if ($this->id > 0) {
 			//insert into item_property
-			api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $description_id, 'CourseDescriptionDeleted', api_get_user_id());
+			api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $this->id, 'CourseDescriptionDeleted', api_get_user_id());
 		}
 		return $affected_rows;
 	}
@@ -317,7 +338,7 @@ class CourseDescription
 		$default_description_titles[5]= get_lang('CourseMaterial');
 		$default_description_titles[6]= get_lang('HumanAndTechnicalResources');
 		$default_description_titles[7]= get_lang('Assessment');
-		//$default_description_titles[8]= get_lang('ThematicAdvance');
+		
 		$default_description_titles[8]= get_lang('Other');
 		return $default_description_titles;
 	}

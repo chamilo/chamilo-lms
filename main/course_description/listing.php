@@ -49,46 +49,19 @@ if (isset($descriptions) && count($descriptions) > 0) {
 		echo '<div class="sectiontitle">';
 		
 		if (api_is_allowed_to_edit(null,true) && !$history) {
-
 			if (api_get_session_id() == $description['session_id']) {
 				//delete
-				echo '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=delete&description_type='.$description['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
+				echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=delete&description_type='.$description['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
 				echo Display::return_icon('delete.png', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'),22);
 				echo '</a> ';
-			}
-			
+			}			
 			//edit
-			echo '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=edit&description_type='.$description['description_type'].'">';
+			echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=edit&description_type='.$description['description_type'].'">';
 			echo Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'),22);
-			echo '</a> ';
-			
-			/*
-			if ($description['description_type'] == THEMATIC_ADVANCE) {
-				// thematic advance history link				
-				echo '<a href="index.php?action=history&description_type='.$description['description_type'].'">';
-				echo Display::return_icon('lp_dir.png',get_lang('ThematicAdvanceHistory'),array('style'=>'vertical-align:middle;float:right;padding-right:4px;'));
-				echo '</a> ';					
-			}
-			*/
+			echo '</a> ';	
 		}
-		
-		/*
-		$progress = (isset($description['progress'])?$description['progress'].'%':'');		
-		if ($description['description_type'] == THEMATIC_ADVANCE) {
-			echo '<a name="thematic_advance"></a>';
-			echo get_lang('ThematicAdvance').' : '.$description['title'].' - '.$progress;
-		} else {
-			echo $description['title'];
-		}	*/
 		
 		echo $description['title'];
-
-		/*
-		if ($history) {
-			echo ' - '.$progress.' ('.$description['lastedit_date'].') ';
-		}
-		*/
-
 		echo '</div>';
 		echo '<div class="sectioncomment">';
 		echo text_filter($description['content']);
@@ -97,4 +70,3 @@ if (isset($descriptions) && count($descriptions) > 0) {
 } else {
 	echo '<em>'.get_lang('ThisCourseDescriptionIsEmpty').'</em>';
 }
-?>

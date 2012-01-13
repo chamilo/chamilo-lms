@@ -20,7 +20,6 @@ require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 
 // defining constants
 define('ADD_BLOCK', 8);
-//define('THEMATIC_ADVANCE', 8);
 
 // current section
 $this_section = SECTION_COURSES;
@@ -38,6 +37,11 @@ if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {
 $description_type = '';
 if (isset($_GET['description_type'])) {
 	$description_type = intval($_GET['description_type']);
+}
+
+$id = null;
+if (isset($_GET['id'])) {
+	$id = intval($_GET['id']);
 }
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
@@ -74,12 +78,12 @@ switch ($action) {
 		break;
 	case 'edit'	  :	
 		if (api_is_allowed_to_edit(null,true)) {
-			$course_description_controller->edit($description_type);
+			$course_description_controller->edit($id, $description_type);
 		}
 		break;
 	case 'delete' :	
 		if (api_is_allowed_to_edit(null,true)) {
-			$course_description_controller->destroy($description_type);
+			$course_description_controller->destroy($id);
 		}
 		break;
 	default		  :	

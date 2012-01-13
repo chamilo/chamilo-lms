@@ -273,12 +273,12 @@ foreach ($group_cats as $index => $category) {
                 foreach ($tutorsids_of_group as $tutor_id) {
                     $tutor = api_get_user_info($tutor_id);
                     if (api_get_setting('show_email_addresses') == 'true') {
-                        $tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])).', ';
+                        $tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName']).' ('.$tutor['username'].')').', ';
                     } else {
                         if (api_is_allowed_to_edit()) {
-                            $tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])).', ';
+                            $tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName']).' ('.$tutor['username'].')').', ';
                         } else {
-                            $tutor_info .= api_get_person_name($tutor['firstName'], $tutor['lastName']).', ';
+                            $tutor_info .= api_get_person_name($tutor['firstName'], $tutor['lastName']).' ('.$tutor['username'].'), ';
                         }
                     }
                 }

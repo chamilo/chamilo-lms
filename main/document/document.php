@@ -378,6 +378,8 @@ if (!$is_allowed_to_edit && api_is_coach()) {
 }
 
 /*	Create shared folders */
+$userinfo = Database::get_user_info_from_id(api_get_user_id());
+$username = $userinfo['username'];
 if ($session_id == 0) {
     //Create shared folder. Necessary for courses recycled. Allways session_id should be zero. Allway should be created from a base course, never from a session.
     if (!file_exists($base_work_dir.'/shared_folder')) {
@@ -389,7 +391,7 @@ if ($session_id == 0) {
     }
     // Create dynamic user shared folder
     if (!file_exists($base_work_dir.'/shared_folder/sf_user_'.api_get_user_id())) {
-            $usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']);
+            $usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']).' ('.$username.')';
             $usf_dir_name = '/shared_folder/sf_user_'.api_get_user_id();
             $to_group_id = 0;
             $visibility = 1;
@@ -406,7 +408,7 @@ if ($session_id == 0) {
     }
     //Create dynamic user shared folder into a shared folder session
     if (!file_exists($base_work_dir.'/shared_folder_session_'.$session_id.'/sf_user_'.api_get_user_id())) {
-        $usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']).' ('.api_get_session_name($session_id).')';
+        $usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']).' ('.$username.')('.api_get_session_name($session_id).')';
         $usf_dir_name = '/shared_folder_session_'.$session_id.'/sf_user_'.api_get_user_id();
         $to_group_id = 0;
         $visibility = 1;
@@ -987,7 +989,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
             if (!empty($document_data['insert_user_id'])) {
                 $user_info = UserManager::get_user_info_by_id($document_data['insert_user_id']);
-                $user_name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
+                $user_name = api_get_person_name($user_info['firstname'], $user_info['lastname']).' ('.$user_info['username'].')';
                 $user_link = '<div class="document_owner">'.get_lang('Owner').': '.display_user_link_document($document_data['insert_user_id'], $user_name).'</div>';
             }
         }

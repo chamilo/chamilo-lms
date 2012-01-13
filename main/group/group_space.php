@@ -243,11 +243,13 @@ if (count($tutors) == 0) {
 } else {
 	isset($origin)?$my_origin = $origin:$my_origin='';
 	foreach($tutors as $index => $tutor) {
+	    $tab_user_info = Database::get_user_info_from_id($tutor['user_id']);
+	    $username = $tab_user_info['username'];
 		$image_path = UserManager::get_user_picture_path_by_id($tutor['user_id'], 'web', false, true);
 		$image_repository = $image_path['dir'];
 		$existing_image = $image_path['file'];
-		$photo= '<img src="'.$image_repository.$existing_image.'" align="absbottom" alt="'.api_get_person_name($tutor['firstname'], $tutor['lastname']).'" width="32" height="32" title="'.api_get_person_name($tutor['firstname'], $tutor['lastname']).'" />';
-		$tutor_info .= '<div style="margin-bottom: 5px;"><a href="../user/userInfo.php?origin='.$my_origin.'&amp;uInfo='.$tutor['user_id'].'">'.$photo.'&nbsp;'.api_get_person_name($tutor['firstname'], $tutor['lastname']).'</a></div>';
+		$photo= '<img src="'.$image_repository.$existing_image.'" align="absbottom" alt="'.api_get_person_name($tutor['firstname'], $tutor['lastname']).' ('.$username.')" width="32" height="32" title="'.api_get_person_name($tutor['firstname'], $tutor['lastname']).' ('.$username.')" />';
+		$tutor_info .= '<div style="margin-bottom: 5px;"><a href="../user/userInfo.php?origin='.$my_origin.'&amp;uInfo='.$tutor['user_id'].'">'.$photo.'&nbsp;'.api_get_person_name($tutor['firstname'], $tutor['lastname']).' ('.$username.')</a></div>';
 	}
 }
 
@@ -276,14 +278,14 @@ if (api_is_western_name_order()) {
 	$table->set_header(1, get_lang('LastName'));
 	$table->set_header(2, get_lang('FirstName'));
 }
-
+$table->set_header(3, get_lang('LoginName'));
 if (api_get_setting('show_email_addresses') == 'true') {
-	$table->set_header(3, get_lang('Email'));
-	$table->set_column_filter(3, 'email_filter');
+	$table->set_header(4, get_lang('Email'));
+	$table->set_column_filter(4, 'email_filter');
 } else {
 	if (api_is_allowed_to_edit() == 'true') {
-		$table->set_header(3, get_lang('Email'));
-		$table->set_column_filter(3, 'email_filter');
+		$table->set_header(4, get_lang('Email'));
+		$table->set_column_filter(4, 'email_filter');
 	}
 }
 //the order of these calls is important
@@ -346,10 +348,11 @@ function get_group_user_data($from, $number_of_items, $column, $direction) {
 				"user.lastname 	AS col1,
 				user.firstname 	AS col2,"
 				)."
-					user.email		AS col3
-					FROM ".$table_user." user, ".$table_group_user." group_rel_user
-					WHERE group_rel_user.c_id = $course_id AND group_rel_user.user_id = user.user_id
-					AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
+			    user.username      AS col3,
+				user.email		AS col4
+				FROM ".$table_user." user, ".$table_group_user." group_rel_user
+				WHERE group_rel_user.c_id = $course_id AND group_rel_user.user_id = user.user_id
+				AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
 	} else {
@@ -363,7 +366,8 @@ function get_group_user_data($from, $number_of_items, $column, $direction) {
 						"user.lastname 	AS col1,
 						user.firstname 	AS col2,"
 						)."
-						user.email		AS col3
+						user.username		AS col3,
+						user.email		AS col4
 						FROM ".$table_user." user, ".$table_group_user." group_rel_user
 						WHERE group_rel_user.c_id = $course_id AND group_rel_user.user_id = user.user_id
 						AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
@@ -378,7 +382,8 @@ function get_group_user_data($from, $number_of_items, $column, $direction) {
 						:
 						"user.lastname 	AS col1,
 						user.firstname 	AS col2 "
-						)."
+						).",
+						user.username   AS col3
 						FROM ".$table_user." user, ".$table_group_user." group_rel_user
 						WHERE group_rel_user.c_id = $course_id AND  group_rel_user.user_id = user.user_id
 						AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";

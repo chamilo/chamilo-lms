@@ -393,13 +393,27 @@ if ($show_full_profile) {
 			if (isset($friends[$k])) {
 				$friend = $friends[$k];
 				$name_user	= api_get_person_name($friend['firstName'], $friend['lastName']);
-				$friend_html.='<div id=div_'.$friend['friend_user_id'].' class="image_friend_network" ><span><center>';
+                $user_info = api_get_user_info($friend['friend_user_id'], true);
+                
+                         
+                if ($user_info['user_is_online']) {
+                    $status_icon = Display::div('', array('class' => 'online_user'));
+                } else {
+                    $status_icon = Display::div('', array('class' => 'offline_user'));
+                }
+                
+				$friend_html.= '<div id=div_'.$friend['friend_user_id'].' class="image_friend_network" >';
+                $friend_html.= $status_icon.'<span><center>';
 
 				// the height = 92 must be the sqme in the image_friend_network span style in default.css
 				$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92, USER_IMAGE_SIZE_MEDIUM , 'width="85" height="90" ');
+       
 
-				$friend_html.='<a href="profile.php?u='.$friend['friend_user_id'].'&amp;'.$link_shared.'">';
-				$friend_html.='<img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" />';
+				$friend_html.= '<a href="profile.php?u='.$friend['friend_user_id'].'&amp;'.$link_shared.'">';
+                
+            
+                
+				$friend_html.= '<img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" />';
 				$friend_html.= '</center></span>';
 				$friend_html.= '<center class="friend">'.$name_user.'</a></center>';
 				$friend_html.= '</div>';
@@ -640,9 +654,6 @@ if ($show_full_profile) {
 	}	
 	echo '</div>'; // close social-box-main1
 }
-
-//echo '<form id="id_reload" name="id_reload" action="profile.php"></form>';
 echo '</div>';
 echo '</div>';
-
 Display :: display_footer();

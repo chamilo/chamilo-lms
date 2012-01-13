@@ -558,10 +558,10 @@ class SocialManager extends UserManager {
 	 *
 	 */
 	public static function show_social_menu($show = '', $group_id = 0, $user_id = 0, $show_full_profile = false) {
-
-		if (empty($user_id)) {
+        if (empty($user_id)) {
 			$user_id = api_get_user_id();
-		}
+		}       
+        $user_info = api_get_user_info($user_id, true);        
 
 		$show_groups      = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list', 'browse_groups');
 		$show_messages    = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');
@@ -678,8 +678,6 @@ class SocialManager extends UserManager {
 				echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.Display::return_icon('briefcase.png',get_lang('MyFiles'),array('hspace'=>'6'),16).'<span class="'.($show=='myfiles'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MyFiles').'</span></a></li>';
     	  	}
 			
-			$user_info = api_get_user_info($user_id);
-			
     	  	// My friend profile
     	  	$html_actions = '';
 
@@ -702,8 +700,10 @@ class SocialManager extends UserManager {
 			//@todo check if user is online to show the chat link
 			if (api_get_setting('allow_global_chat') == 'true') {
 				if ($user_id != api_get_user_id()) {
-					$user_name  = $user_info['complete_name'];				
-					echo  Display::tag('li', Display::url(Display::return_icon('chat.gif').get_lang('Chat'), 'javascript:void(0);', array('onclick' => "javascript:chatWith('".$user_id."', '".Security::remove_XSS($user_name)."')")));
+					$user_name  = $user_info['complete_name'];                    
+                    $options = array('onclick' => "javascript:chatWith('".$user_id."', '".Security::remove_XSS($user_name)."', '".$user_info['user_is_online']."')");
+                    $chat_icon = $user_info['user_is_online'] ? Display::return_icon('online.png', get_lang('Online')) : Display::return_icon('offline.png', get_lang('Offline'));
+					echo  Display::tag('li', Display::url($chat_icon.'&nbsp;&nbsp;'.get_lang('Chat'),  'javascript:void(0);', $options));
 				}
 			}
 	  		echo '</ul></div>';
@@ -802,14 +802,16 @@ class SocialManager extends UserManager {
 				$image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
 				
 				// reduce image
-                $name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
+                $name = $user_info['complete_name'];
                 
                 if ($image_array['file'] == 'unknown.jpg' || !file_exists($image_array['dir'].$image_array['file'])) {
-                    $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg'; 
-                    $table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" class="social-home-anonymous-online" alt="'.$name.'" src="'.$friends_profile['file'].'"></a>';
-                } else {
-                    $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);
+                    $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
+                    $status_icon = Display::span('', array('class' => 'online_user'));                    
+                    //$img = $status_icon.$img;
                     
+                    $table_row[] = '<a href="'.$url.'">'.$status_icon.'<img title = "'.$name.'" class="social-home-anonymous-online" alt="'.$name.'" src="'.$friends_profile['file'].'"></a>';
+                } else {
+                    $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);                    
                     
                     $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
                     
@@ -821,7 +823,10 @@ class SocialManager extends UserManager {
                     //A really tiny image                    
                     if ($friends_profile['original_height'] < 50 || $friends_profile['original_height']< 50) {
                         $clip = '';   
-                    }
+                    }                    
+                    //$status_icon = Display::span($status_icon, array('class' => 'online_user'));                    
+                    //$img = $status_icon.$img;
+                    
                     $table_row[] = Display::url(Display::div(Display::div($img, array('class'=>$clip)), array('class'=>'clip-wrapper')) , $url);
                         
                 }				

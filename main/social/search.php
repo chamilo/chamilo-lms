@@ -22,7 +22,6 @@ $this_section = SECTION_SOCIAL;
 $tool_name 	  = get_lang('Search');
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 
-
 $query_vars = array();
 
 $query  = isset($_GET['q']) ? $_GET['q'] : null;
@@ -52,6 +51,7 @@ echo '<div id="social-content">';
 			if (is_array($users) && count($users)> 0) {
 				echo '<h2>'.get_lang('Users').'</h2>';			
 				foreach($users as $user) {
+                    $user_info = api_get_user_info($user['user_id'], true);
 					$url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
 					    
 					if (empty($user['picture_uri'])) {
@@ -66,8 +66,14 @@ echo '<div id="social-content">';
                         	$clip = 'clip_horizontal';    
                         }                    
                         $img = Display::url(Display::div(Display::div($img, array('class'=>$clip)), array('class'=>'clip-wrapper')) , $url);
-                    }                           
-              
+                    }                             
+                    if ($user_info['user_is_online']) {
+                        $status_icon = Display::span('', array('class' => 'online_user'));
+                    } else {
+                        $status_icon = Display::span('', array('class' => 'offline_user'));    
+                    }                    
+                    $img = $status_icon.$img;
+                    
 					$user['firstname'] = Display::url($user['firstname'], $url);
 					$user['lastname'] = Display::url($user['lastname'], $url);
 					$user['tag'] = isset($user['tag']) ? $user['tag'] : null;

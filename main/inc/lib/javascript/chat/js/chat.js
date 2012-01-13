@@ -261,8 +261,8 @@ function restructureChatBoxes() {
  * @param string	user's firstname + lastname
  *
  **/
-function chatWith(user_id, user_name) {
-	createChatBox(user_id, user_name, 0, 0);
+function chatWith(user_id, user_name, status) {
+	createChatBox(user_id, user_name, 0, status);
 	$("#chatbox_"+user_id+" .chatboxtextarea").focus();	
 }
 

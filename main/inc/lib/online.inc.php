@@ -116,18 +116,19 @@ function LoginDelete($user_id) {
 }
 
 function user_is_online($user_id) {
-	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);	
 	$table_user			= Database::get_main_table(TABLE_MAIN_USER);
 	
 	$current_date		= date('Y-m-d H:i:s',time());	
-	$access_url_id		= api_get_current_access_url_id();
-	
+	$access_url_id		= api_get_current_access_url_id();	
 	$time_limit			= api_get_setting('time_limit_whosonline');
-	$time_limit = 1;
+	//$time_limit = 1;
 	
-	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." track INNER JOIN ".$table_user ." u ON (u.user_id=track.login_user_id)
-			  WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."'  AND u.user_id =  $user_id LIMIT 1  ";
+	$query = " SELECT login_user_id,login_date FROM ".$track_online_table ." track INNER JOIN ".$table_user ." u ON (u.user_id=track.login_user_id)
+               WHERE track.access_url_id =  $access_url_id AND 
+                    DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."'  AND 
+                    u.user_id =  $user_id 
+               LIMIT 1 ";
 	
 	$result = Database::query($query);
 	if (Database::num_rows($result)) {

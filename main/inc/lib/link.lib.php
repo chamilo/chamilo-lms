@@ -951,33 +951,44 @@ function is_youtube_link($url) {
 }
 
 function get_youtube_video_id($url) {
-	// This is the length of YouTube's video IDs
+    // This is the length of YouTube's video IDs
 	$len = 11;
 
 	// The ID string starts after "v=", which is usually right after
 	// "youtube.com/watch?" in the URL    
-	$pos = strpos($url, "v=");
+	$pos = strpos($url, "v=");    
     
-    //try the youtube URL shortener
-    //http://youtu.be/gD0qDugOs7k
-    if ($pos === false) {                
+    $id = '';
+    
+    //If false try other options
+    if ($pos === false) {         
+        $url_parsed = parse_url($url);        
+        
+        
+        //Youtube shortener
+        //http://youtu.be/ID   
         $pos = strpos($url, "youtu.be");
+        
         if ($pos == false) {
-            return '';
-        } else {
-            $path_info = pathinfo($url);            
-            return $path_info['basename'];
-        }        
-    }
+            $id = '';
+        } else {                        
+            return substr($url_parsed['path'], 1);
+        }    
            
-	// If still FALSE, URL doesn't have a vid ID
-	if ($pos === false) {
-		return '';
-	}    
-    
-	// Offset the start location to match the beginning of the ID string
-	$pos += 2;
-	// Get the ID string and return it
-	$id = substr($url, $pos, $len);
-	return $id;
+        //if empty try the youtube.com/embed/ID
+        if (empty($id)) {
+            $pos = strpos($url, "embed");
+            if ($pos === false) {
+                return '';
+            } else {                
+                return substr($url_parsed['path'], 7);
+            }	 
+        }    
+    } else {
+        // Offset the start location to match the beginning of the ID string
+        $pos += 2;
+        // Get the ID string and return it
+        $id = substr($url, $pos, $len);
+        return $id;
+    }
 }

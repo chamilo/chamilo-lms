@@ -27,6 +27,7 @@ if (!api_is_allowed_to_edit()) {
 if (function_exists('ini_set')) {
 	ini_set('memory_limit', '256M');
 	ini_set('max_execution_time', 1800);
+    //ini_set('post_max_size', "512M");     
 }
 
 // Breadcrumbs
@@ -48,17 +49,19 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 	} else {
 		$cb = new CourseBuilder();
 		$course = $cb->build();
-	}	
+	}
 	$cr = new CourseRestorer($course);
+
 	$cr->set_file_option($_POST['same_file_name_option']);
 	$cr->restore($_POST['destination_course']);
 	Display::display_normal_message(get_lang('CopyFinished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.$_POST['destination_course'].'</a>',false);
 } elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
 	$cb = new CourseBuilder();
 	$course = $cb->build();	
-
+    
+    $hidden_fields = array();
 	$hidden_fields['same_file_name_option'] = $_POST['same_file_name_option'];
-	$hidden_fields['destination_course'] = $_POST['destination_course'];
+	$hidden_fields['destination_course']    = $_POST['destination_course'];
 	CourseSelectForm :: display_form($course, $hidden_fields, true);
 } else {
 	$table_c = Database :: get_main_table(TABLE_MAIN_COURSE);

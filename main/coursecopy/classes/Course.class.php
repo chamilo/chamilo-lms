@@ -22,19 +22,18 @@ class Course
 	/**
 	 * Create a new Course-object
 	 */
-	function Course()
-	{
-		$this->resources = array ();
-		$this->code = '';
-		$this->path = '';
-		$this->backup_path = '';
-		$this->encoding = api_get_system_encoding();
+	function __construct() {
+		$this->resources    = array ();
+		$this->code         = '';
+		$this->path         = '';
+		$this->backup_path  = '';
+		$this->encoding     = api_get_system_encoding();
 	}
+    
 	/**
 	 * Check if a resource links to the given resource
 	 */
-	function is_linked_resource(& $resource_to_check)
-	{
+	function is_linked_resource(& $resource_to_check) {
 		foreach($this->resources as $type => $resources) {
 			if (is_array($resources)) {
 				foreach($resources as $id => $resource) {
@@ -51,13 +50,14 @@ class Course
 		}
 		return false;
 	}
+    
 	/**
 	 * Add a resource from a given type to this course
 	 */
-	function add_resource(& $resource)
-	{
+	function add_resource(& $resource) {
 		$this->resources[$resource->get_type()][$resource->get_id()] = $resource;
 	}
+    
 	/**
 	 * Does this course has resources?
 	 * @param const $resource_type Check if this course has resources of the
@@ -73,19 +73,10 @@ class Course
 	/**
 	 * Show this course resources
 	 */
-	function show()
-	{
+	function show()	{
 		echo '<pre>';
 		print_r($this);
 		echo '</pre>';
-
-//		foreach ($this->resources as $id => $resources)
-//		{
-//			foreach ($resources as $type => $resource)
-//			{
-//				$resource->show();
-//			}
-//		}
 	}
 
 	/**
@@ -96,31 +87,25 @@ class Course
 	public function get_sample_text() {
 
 		$sample_text = '';
-
 		foreach ($this->resources as $type => & $resources) {
 			if (count($resources) > 0) {
 				foreach ($resources as $id => & $resource) {
-
 					$title = '';
 					$description = '';
-
+                    
 					switch ($type) {
-
 						case RESOURCE_ANNOUNCEMENT:
 							$title = $resource->title;
 							$description = $resource->content;
 							break;
-
 						case RESOURCE_DOCUMENT:
 							$title = $resource->title;
 							$description = $resource->comment;
 							break;
-
 						case RESOURCE_EVENT:
 							$title = $resource->title;
 							$description = $resource->content;
 							break;
-
 						case RESOURCE_FORUM:
 							$title = $resource->title;
 							$description = $resource->description;
@@ -130,50 +115,40 @@ class Course
 							$title = $resource->title;
 							$description = $resource->description;
 							break;
-
 						case RESOURCE_FORUMPOST:
 							$title = $resource->title;
 							$description = $resource->text;
 							break;
-
 						case RESOURCE_FORUMTOPIC:
 							$title = $resource->title;
 							break;
-
 						case RESOURCE_GLOSSARY:
 							$title = $resource->name;
 							$description = $resource->description;
 							break;
-
 						case RESOURCE_LEARNPATH:
 							$title = $resource->name;
 							$description = $resource->description;
 							break;
-
 						case RESOURCE_LINK:
 							$title = $resource->title;
 							$description = $resource->description;
 							break;
-
 						case RESOURCE_LINKCATEGORY:
 							$title = $resource->title;
 							$description = $resource->description;
 							break;
-
 						case RESOURCE_QUIZ:
 							$title = $resource->title;
 							$description = $resource->description;
 							break;
-
 						case RESOURCE_QUIZQUESTION:
 							$title = $resource->question;
 							$description = $resource->description;
 							break;
-
 						case RESOURCE_SCORM:
 							$title = $resource->title;
 							break;
-
 						case RESOURCE_SURVEY:
 							$title = $resource->title;
 							$description = $resource->subtitle;
@@ -193,8 +168,7 @@ class Course
 							$title 			= $resource->title;
 							$description 	= $resource->content;
 							break;
-						case RESOURCE_ATTENDANCE:
-							
+						case RESOURCE_ATTENDANCE:							
 							$title 			= $resource->params['name'];
 							$description 	= $resource->params['description'];
 							break;
@@ -217,7 +191,6 @@ class Course
 				}
 			}
 		}
-
 		return $sample_text;
 	}
 
@@ -345,8 +318,6 @@ class Course
 				}
 			}
 		}
-
 		$this->encoding = api_get_system_encoding();
 	}
-
 }

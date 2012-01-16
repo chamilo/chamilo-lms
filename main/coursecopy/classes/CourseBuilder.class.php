@@ -37,21 +37,21 @@ class CourseBuilder {
 	/**
 	 * Create a new CourseBuilder
 	 */
-	function CourseBuilder($type='', $course = null) {
+	function __construct($type='', $course = null) {
 		global $_course;
 		
 		if (!empty($course['official_code'])){
 			$_course = $course;
 		}	
 		
-		$this->course = new Course();
-		$this->course->code = $_course['official_code'];
-		$this->course->type = $type;
-		$this->course->path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
-		$this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];
-		$this->course->encoding = api_get_system_encoding(); //current platform encoding
-		$this->course->db_name  = $_course['dbName'];
-		$this->course->info     = $_course;
+		$this->course               = new Course();
+		$this->course->code         = $_course['official_code'];
+		$this->course->type         = $type;
+		$this->course->path         = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
+		$this->course->backup_path  = api_get_path(SYS_COURSE_PATH).$_course['path'];
+		$this->course->encoding     = api_get_system_encoding(); //current platform encoding
+		$this->course->db_name      = $_course['dbName'];
+		$this->course->info         = $_course;
 	}
 	/**
 	 * Get the created course
@@ -70,15 +70,13 @@ class CourseBuilder {
 	 *                 in the session, (session_id = 0 or session_id = X) 
 	 */
 	function build($session_id = 0, $course_code = '', $with_base_content = false) {
-		$course_info	= api_get_course_info($course_code);
-		
-		$course_id 		= $course_info['real_id'];
-		
-		$table_link       = Database :: get_course_table(TABLE_LINKED_RESOURCES);
+        $table_link       = Database :: get_course_table(TABLE_LINKED_RESOURCES);
 		$table_properties = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+        
+		$course_info      = api_get_course_info($course_code);		
+		$course_id        = $course_info['real_id'];		
 		
-		if (!empty($session_id) && !empty($course_code)) {
-			
+		if (!empty($session_id) && !empty($course_code)) {			
 			$this->build_documents($session_id, $course_code, $with_base_content);
 			$this->build_quizzes($session_id, $course_code,   $with_base_content);
 			$this->build_glossary($session_id, $course_code,  $with_base_content);
@@ -90,7 +88,6 @@ class CourseBuilder {
 			$this->build_thematic();			
 			$this->build_attendance();
 		} else {			
-
 			$this->build_events();
 			$this->build_announcements();
 			$this->build_links();
@@ -403,8 +400,8 @@ class CourseBuilder {
 		
 		$db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result)) {
-			$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level, $obj->extra);
-			$sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->id;
+			$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture, $obj->level, $obj->extra);
+			$sql = 'SELECT * FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id = '.$obj->id;
 			$db_result2 = Database::query($sql);
 			while ($obj2 = Database::fetch_object($db_result2)) {
 				$question->add_answer($obj2->id, $obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
@@ -417,9 +414,9 @@ class CourseBuilder {
 		$sql = "SELECT * FROM $table_que as questions LEFT JOIN $table_rel as quizz_questions 
 				ON questions.id=quizz_questions.question_id LEFT JOIN $table_qui as exercices 
 				ON exercice_id=exercices.id 
-				WHERE	questions.c_id = $course_id  AND 
-						quizz_questions.c_id = $course_id  AND
-						exercices.c_id = $course_id  AND
+				WHERE	questions.c_id          = $course_id  AND 
+						quizz_questions.c_id    = $course_id  AND
+						exercices.c_id          = $course_id  AND
 						quizz_questions.exercice_id IS NULL OR 
 						exercices.active = -1"; // active = -1 means "deleted" test.
 		$db_result = Database::query($sql);

@@ -62,7 +62,7 @@ class CourseRestorer
 	/**
 	 * Create a new CourseRestorer
 	 */
-	function CourseRestorer($course) {
+	function __construct($course) {
 		$this->course							= $course;		
 		$course_info 							= api_get_course_info($this->course->code);
 		$this->course_origin_id 				= $course_info['real_id'];		
@@ -98,11 +98,16 @@ class CourseRestorer
 		}		
 		
 		$this->destination_course_id = $course_info['real_id'];
+        
+        if (empty($this->course)) {
+            return false;
+        }
 
 		// Source platform encoding - reading/detection
-		// The correspondent data field has been added as of version 1.8.6.1.
+		// The correspondent data field has been added as of version 1.8.6.1     
+        
 		if (empty($this->course->encoding)) {
-			// The archive has been created by a system wich is prior to 1.8.6.1 version.
+			// The archive has been created by a system which is prior to 1.8.6.1 version.
 			// In this case we have to detect the encoding.
 			$sample_text = $this->course->get_sample_text()."\n";
 			// Let us exclude ASCII lines, probably they are English texts.
@@ -152,7 +157,6 @@ class CourseRestorer
 		if ($update_course_settings) {
 		    $this->restore_course_settings($destination_course_code);
 		}
-
 
 		// Restore the item properties
 		$table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -802,13 +806,13 @@ class CourseRestorer
     			}
 
 				$sql = "INSERT INTO ".$link_table." SET 
-				            c_id = ".$this->destination_course_id." , 
-				            url = '".self::DBUTF8escapestring($link->url)."', 
-				            title = '".self::DBUTF8escapestring($link->title)."', 
-				            description = '".self::DBUTF8escapestring($link->description)."', 
-				            category_id='".$cat_id."', 
-				            on_homepage = '".$link->on_homepage."', 
-				            display_order='".($max_order+1)."' $condition_session";
+				            c_id            = ".$this->destination_course_id." , 
+				            url             = '".self::DBUTF8escapestring($link->url)."', 
+				            title           = '".self::DBUTF8escapestring($link->title)."', 
+				            description     = '".self::DBUTF8escapestring($link->description)."', 
+				            category_id     = '".$cat_id."', 
+				            on_homepage     = '".$link->on_homepage."', 
+				            display_order   = '".($max_order+1)."' $condition_session";
 
 				Database::query($sql);
 				$this->course->resources[RESOURCE_LINK][$id]->destination_id = Database::insert_id();
@@ -1907,10 +1911,8 @@ class CourseRestorer
 		}
 	}
 	
-	function DBUTF8escapestring($str)
-	{
+	function DBUTF8escapestring($str) {
 		if (UTF8_CONVERT) $str = utf8_encode($str);
 		return Database::escape_string($str);
-	}
-	
+	}	
 }

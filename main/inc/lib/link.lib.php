@@ -946,7 +946,8 @@ function import_csvfile() {
  * @version 1.0
  */
 function is_youtube_link($url) {
-	return strrpos($url, "youtube");
+	$is_youtube_link = strrpos($url, "youtube") || strrpos($url, "youtu.be");
+    return $is_youtube_link;
 }
 
 function get_youtube_video_id($url) {
@@ -956,14 +957,27 @@ function get_youtube_video_id($url) {
 	// The ID string starts after "v=", which is usually right after
 	// "youtube.com/watch?" in the URL    
 	$pos = strpos($url, "v=");
+    
+    //try the youtube URL shortener
+    //http://youtu.be/gD0qDugOs7k
+    if ($pos === false) {                
+        $pos = strpos($url, "youtu.be");
+        if ($pos == false) {
+            return '';
+        } else {
+            $path_info = pathinfo($url);            
+            return $path_info['basename'];
+        }        
+    }
            
 	// If still FALSE, URL doesn't have a vid ID
 	if ($pos === false) {
 		return '';
-	}
+	}    
+    
 	// Offset the start location to match the beginning of the ID string
 	$pos += 2;
 	// Get the ID string and return it
-	$ytvID = substr($url, $pos, $len);
-	return $ytvID;
+	$id = substr($url, $pos, $len);
+	return $id;
 }

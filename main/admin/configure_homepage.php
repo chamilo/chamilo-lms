@@ -698,7 +698,7 @@ switch ($action) {
 		
 		$target_blank_checkbox = & $form->addElement('checkbox', 'target_blank', null, get_lang('OpenInNewWindow'), 1);
         
-        $form->addElement('checkbox', 'add_in_tab', null, get_lang('AddInTab'), 1);        
+        $form->addElement('checkbox', 'add_in_tab', null, get_lang('AddInMenu'), 1);        
         $default['add_in_tab'] = $add_in_tab;
         
         

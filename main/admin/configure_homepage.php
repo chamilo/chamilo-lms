@@ -13,7 +13,9 @@ api_protect_admin_script();
 
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+
+
+global $_configuration;
 
 $action = Security::remove_XSS($_GET['action']);
 $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -141,8 +143,6 @@ if (!empty($_GET['link'])) {
 	}
 }
 
-global $_configuration;
-
 // Start analysing requested actions
 if (!empty($action)) {
 	if ($_POST['formSent']) {
@@ -253,17 +253,19 @@ if (!empty($action)) {
 			case 'edit_tabs':            
 			case 'insert_link':
 			case 'edit_link':
-				$link_index = intval($_POST['link_index']);
-
-				$insert_where = intval($_POST['insert_where']);
-				$link_name = trim(stripslashes($_POST['link_name']));
-				$link_url = trim(stripslashes($_POST['link_url']));
+				$link_index     = intval($_POST['link_index']);
+				$insert_where   = intval($_POST['insert_where']);
+				$link_name      = trim(stripslashes($_POST['link_name']));
+				$link_url       = trim(stripslashes($_POST['link_url']));
+                $add_in_tab     = intval($_POST['add_in_tab']);
+                
 				// WCAG
 				if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
 					$link_html = WCAG_Rendering::prepareXHTML();
 				} else {
 					$link_html = trim(stripslashes($_POST['link_html']));
-				}
+				}                
+                
 				$filename = trim(stripslashes($_POST['filename']));
 				$target_blank = $_POST['target_blank'] ? true : false;
 
@@ -333,6 +335,12 @@ if (!empty($action)) {
 							 fclose($fp);
 						  }                       
 					}
+                    
+                    $class_add_in_tab = '';
+                    if (!$add_in_tab) {
+                        $class_add_in_tab = 'class="hide_menu"';
+                    }                    
+                    
 					// If the requested action is to create a link, make some room
 					// for the new link in the home_menu array at the requested place
 					// and insert the new link there
@@ -344,10 +352,12 @@ if (!empty($action)) {
 								break;
 							}
 						}
-						$home_menu[$insert_where + 1] = '<li><a href="'.$link_url.'" target="'.($target_blank ? '_blank' : '_self').'"><span>'.$link_name.'</span></a></li>';
+                    
+                        
+						$home_menu[$insert_where + 1] = '<li '.$class_add_in_tab.'><a href="'.$link_url.'" target="'.($target_blank ? '_blank' : '_self').'"><span>'.$link_name.'</span></a></li>';
 					} else {
 						// If the request is about a link edition, change the link
-						$home_menu[$link_index]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'"><span>'.$link_name.'</span></a></li>';
+						$home_menu[$link_index]='<li '.$class_add_in_tab.'><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'"><span>'.$link_name.'</span></a></li>';
 					}
 					// Re-build the file from the home_menu array
 					$home_menu = implode("\n", $home_menu);
@@ -546,6 +556,7 @@ if (!empty($action)) {
 
 				// For each line of the home_menu file
 				foreach ($home_menu as $key => $enreg) {
+                    
 					// Check if the current item is the one we want to update
 					if ($key == $link_index) {
 						// This is the link we want to update
@@ -553,6 +564,13 @@ if (!empty($action)) {
 						if (strstr($enreg, 'target="_blank"')) {
 							$target_blank = true;
 						}
+                        
+                        if (strstr($enreg, 'hide_menu')) {
+							$add_in_tab = false;
+						} else {
+                            $add_in_tab = true;
+                        }
+                        
 						// Remove dangerous HTML tags from the link itself (this is an
 						// additional measure in case a link previously contained
 						// unsecure tags)
@@ -645,73 +663,66 @@ switch ($action) {
 		if (!empty($errorMsg)) {
 			Display::display_normal_message($errorMsg);
 		}
-
 		$default = array();
 		$form = new FormValidator('configure_homepage_'.$action, 'post', api_get_self().'?action='.$action, '', array('style' => 'margin: 0px;'));
 		$renderer =& $form->defaultRenderer();
-		$renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
-		$renderer->setElementTemplate('{element}');
-		$renderer->setRequiredNoteTemplate('');
+		
 		$form->addElement('header', '', $tool_name);
 		$form->addElement('hidden', 'formSent', '1');
 		$form->addElement('hidden', 'link_index', ($action == 'edit_link' || $action == 'edit_tabs') ? $link_index : '0');
 		$form->addElement('hidden', 'filename', ($action == 'edit_link' || $action == 'edit_tabs') ? $filename : '');
-
-		$form->addElement('html', '<tr><td nowrap="nowrap" style="width: 15%;">'.get_lang('LinkName').' :</td><td>');
-		$default['link_name'] = $link_name;
+				
 		$form->addElement('text', 'link_name', get_lang('LinkName'), array('size' => '30', 'maxlength' => '50'));
-		$form->addElement('html', '</td></tr>');
-
-		$form->addElement('html', '<tr><td nowrap="nowrap">'.get_lang('LinkURL').' ('.get_lang('Optional').') :</td><td>');
+        $default['link_name'] = $link_name;
+        		
 		$default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES);
-		$form->addElement('text', 'link_url', get_lang('LinkName'), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
-		$form->addElement('html', '</td></tr>');
-
+		$form->addElement('text', 'link_url', array(get_lang('LinkURL'), get_lang('Optional')), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
+        
+        $options = array('-1' => get_lang('FirstPlace'));
+        
+		$selected = '';
+		
 		if ($action == 'insert_link' || $action == 'insert_tabs') {
-			$form->addElement('html', '<tr><td nowrap="nowrap">'.get_lang('InsertThisLink').' :</td>');
-			$form->addElement('html', '<td><select name="insert_where"><option value="-1">'.get_lang('FirstPlace').'</option>');
+            $add_in_tab = 1;
 			if (is_array($home_menu)){
 				foreach ($home_menu as $key => $enreg) {
 					if (strlen($enreg = trim(strip_tags($enreg))) > 0) {
-						$form->addElement('html', '<option value="'.$key.'" '.($formSent && $insert_where == $key ? 'selected="selected"' : '').' >'.get_lang('After').' &quot;'.$enreg.'&quot;</option>');
+                        $options[$key] = get_lang('After').' &quot;'.$enreg.'&quot;';
+                        $selected = $formSent && $insert_where == $key ? $key : '';						
 					}
 				}
-			}
-			$form->addElement('html', '</select></td></tr>');
-		}
-
-		$form->addElement('html', '<tr><td nowrap="nowrap">'.get_lang('OpenInNewWindow').'</td><td>');
-		$target_blank_checkbox = & $form->addElement('checkbox', 'target_blank', '', '&nbsp;'.get_lang('Yes'), 1);
+			}            
+            $default['insert_link'] = $selected;
+            $form->addElement('select', 'insert_where', get_lang('InsertThisLink') , $options);
+		}        
+		
+		$target_blank_checkbox = & $form->addElement('checkbox', 'target_blank', null, get_lang('OpenInNewWindow'), 1);
+        
+        $form->addElement('checkbox', 'add_in_tab', null, get_lang('AddInTab'), 1);        
+        $default['add_in_tab'] = $add_in_tab;
+        
+        
 		if ($target_blank) $target_blank_checkbox->setChecked(true);
-		$form->addElement('html', '</td></tr>');
-
-		//if($action == 'edit_link' && empty($link_url))
-		if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://')) {
-			$form->addElement('html', '</table><table border="0" cellpadding="5" cellspacing="0" width="100%"><tr><td>');
-			$form->addElement('html', '</td></tr><tr><td>');
+		
+		if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://')) {			
 			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 				$form->addElement('html', WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html));
 			} else {
 				$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : $link_html;
-				$form->add_html_editor('link_html', '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
-			}
-			$form->addElement('html', '</td></tr><tr><td>');
-			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
-			$form->addElement('html', '</td></tr>');
+				$form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
+			}			
+			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');			
 		} else {
             if (in_array($action, array('edit_tabs','insert_tabs'))) {
-                $form->addElement('html', '<tr><td valign="top">'.get_lang('Content').' ('.get_lang('Optional').')</td><td>');
                 if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+                    $form->addElement('html', get_lang('Content').' ('.get_lang('Optional').')');
                     $form->addElement('html', WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html));
                 } else {
                     $default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : $link_html;
-                    $form->add_html_editor('link_html', '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
+                    $form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
                 }
-            } else {
-            	$form->addElement('html', '<tr><td valign="top"></td><td>');
-            }            
-			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
-			$form->addElement('html', '</td></tr>');
+            }         
+			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');			
 		}
 
 		$form->setDefaults($default);
@@ -870,16 +881,21 @@ switch ($action) {
                 $home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
                 $home_menu = explode("\n", $home_menu);
             }
-            $lis = '';
+            $link_list = '';
             $tab_counter = 0;            
             foreach ($home_menu as $enreg) {
                 $enreg = trim($enreg);
                 if (!empty($enreg)) {
                     $edit_link   = ' <a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
                     $delete_link = ' <a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
-                    $tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'), $enreg);
-                    $tab_string = str_replace(array('<li>', '</li>'), '', $tab_string );                
-                    $lis .= Display::tag('tr', Display::tag('td', $tab_string));
+                    
+                    
+                    $tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), 
+                                              array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'), 
+                                              $enreg);
+                    $tab_string = str_replace(array('<li>', '</li>','class="hide_menu"', 'hide_menu'), '', $tab_string);  
+                    
+                    $link_list .= Display::tag('tr', Display::tag('td', $tab_string));
                     $tab_counter++;
                 }
             }            
@@ -890,7 +906,7 @@ switch ($action) {
             <?php 
             
             echo '<table class="data_table">';            
-            echo $lis;			
+            echo $link_list;			
             echo '</table>';
             
 			?>
@@ -899,9 +915,7 @@ switch ($action) {
 		  <td width="20%" rowspan="3" valign="top">
 		    <div id="menu-wrapper">
 			<div id="menu" class="menu">
-			<?php
-			api_display_language_form();
-			?>
+			<?php api_display_language_form(); ?>
 			<form id="formLogin">
 				<div><label><?php echo get_lang('LoginName'); ?></label></div>
 				<div><input type="text" id="login" size="15" value="" disabled="disabled" /></div>

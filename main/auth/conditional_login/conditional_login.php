@@ -18,15 +18,14 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
   Please implements the functions of the $dc_conditions array. Each of these fucntion will take a user array (user_id, username, password (crypted), auth_sourcen, active, expiration_date)
  */
 function dc_check_phone_number($user){
-  $uInfo = UserManager::get_user_info_by_id($user['user_id']);
-  if ( empty($uInfo['phone'])) {
-    return true;
-  }
-  return false;
+    $uInfo = UserManager::get_user_info_by_id($user['user_id']);
+    if ( empty($uInfo['phone'])) {
+        return true;
+    }
+    return false;
 }
 
 function dc_check_first_login($user){
-  $uInfo = UserManager::get_user_info_by_id($user['user_id']);
-  return(($uInfo['extra']['already_logged_in'] === 'false'));
+    $uInfo = UserManager::get_user_info_by_id($user['user_id']);
+    return(($uInfo['extra']['already_logged_in'] === 'false'));
 }
-?>

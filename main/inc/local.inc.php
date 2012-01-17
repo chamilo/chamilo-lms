@@ -249,7 +249,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 
 		//lookup the user in the main database
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
-		$sql = "SELECT user_id, username, password, auth_source, active, expiration_date FROM $user_table
+		$sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status FROM $user_table
 			    WHERE username = '".Database::escape_string($login)."'";
 		$result = Database::query($sql);
 
@@ -369,11 +369,12 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 										}
 									}
 								}
-                            } else {                                
+                            } else {
 								ConditionalLogin::check_conditions($uData);
                                 $_user['user_id'] = $uData['user_id'];
                                 $_user['status']  = $uData['status'];
-                                session_regenerate_id();                                
+                                
+                                session_regenerate_id();                                                           
                                 api_session_register('_user');
                                 event_login();                                
 							}

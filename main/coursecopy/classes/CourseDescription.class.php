@@ -28,8 +28,7 @@ class CourseDescription extends Resource
 	 * @param string $title
 	 * @param string $content
 	 */
-	function CourseDescription($id,$title,$content,$description_type)
-	{
+	function __construct($id,$title,$content,$description_type) {
 		parent::Resource($id,RESOURCE_COURSEDESCRIPTION);
 		$this->title = $title;
 		$this->content = $content;
@@ -38,10 +37,8 @@ class CourseDescription extends Resource
 	/**
 	 * Show this Event
 	 */
-	function show()
-	{
+	function show() {
 		parent::show();
 		echo $this->title;
 	}
 }
-?>

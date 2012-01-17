@@ -80,10 +80,13 @@ class CourseDescriptionController { // extends Controller {
 					$course_description->set_description_type($description_type);
 		    		$course_description->set_title($title);
 		    		$course_description->set_content($content);
+                    
 		    		$course_description->set_progress($progress);                   
 		           			        		
 		        	$thematic_advance = $course_description->get_data_by_id($id);			        		        		
+                    
                     if (!empty($thematic_advance)) {		   		        			
+                        $course_description->set_id($id);
                         $affected_rows = $course_description->update();	        			
                     } else {
                         $affected_rows = $course_description->insert();
@@ -128,13 +131,12 @@ class CourseDescriptionController { // extends Controller {
 				if (isset($_GET['id_session'])) {
 					$session_id = intval($_GET['id_session']);
 				}				
-        		$course_description_data = $course_description->get_data_by_id($id, null, $session_id);        		        		
-            
-				$data['description_title'] = $course_description_data['description_title'];
-        		$data['description_content'] = $course_description_data['description_content'];
-        		
-        		$data['progress'] = $course_description_data['progress'];        		
-        		$data['descriptions'] = $course_description->get_data_by_description_type($description_type, null, $session_id);
+        		$course_description_data        = $course_description->get_data_by_id($id, null, $session_id);        		        		
+                $data['description_type']       = $course_description_data['description_type'];
+				$data['description_title']      = $course_description_data['description_title'];
+        		$data['description_content']    = $course_description_data['description_content'];        		
+        		$data['progress']               = $course_description_data['progress'];        		
+        		$data['descriptions']           = $course_description->get_data_by_description_type($description_type, null, $session_id);
         	}
         	// render to the view        					
 			$this->view->set_data($data);

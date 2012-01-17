@@ -9,6 +9,7 @@
 
 // protect a course script
 api_protect_course_script(true);
+$original_id = $id;
 
 if (!$error) {
 	$token = Security::get_token();
@@ -49,10 +50,10 @@ if ($description_type >= ADD_BLOCK) {
 }
 
 // display form
-$form = new FormValidator('course_description','POST','index.php?action=edit&id='.$id.'&description_type='.$description_type.'&'.api_get_cidreq(),'','style="width: 100%;"');
+$form = new FormValidator('course_description','POST','index.php?action=edit&id='.$original_id.'&description_type='.$description_type.'&'.api_get_cidreq(),'','style="width: 100%;"');
 
 $form->addElement('header','',$header);
-$form->addElement('hidden', 'id', $id);
+$form->addElement('hidden', 'id', $original_id);
 $form->addElement('hidden', 'description_type',$description_type);
 $form->addElement('hidden', 'sec_token',$token);
 $form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));

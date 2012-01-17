@@ -158,6 +158,7 @@ class CourseDescription
 		$rs = Database::query($sql);
 		$data = array();
 		if ($description = Database::fetch_array($rs)) {
+            $data['description_type']	 = $description['description_type'];
 			$data['description_title']	 = $description['title'];
 			$data['description_content'] = $description['content'];
 			$data['progress'] 			 = $description['progress'];

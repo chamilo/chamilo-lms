@@ -150,6 +150,7 @@ function who_is_online($valid, $friends = false) {
 	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 	$table_user			= Database::get_main_table(TABLE_MAIN_USER);
 	$query = '';
+    
 	if ($friends) {
 		// 	who friends from social network is online
 		$query = "SELECT DISTINCT login_user_id,login_date
@@ -161,8 +162,7 @@ function who_is_online($valid, $friends = false) {
 		$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." e INNER JOIN ".$table_user ." u ON (u.user_id=e.login_user_id)  WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' ORDER BY picture_uri DESC";
 	}
 	
-	if (api_get_multiple_access_url()) {
-		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+	if (api_get_multiple_access_url()) {		
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {
 			if ($friends) {
@@ -177,11 +177,10 @@ function who_is_online($valid, $friends = false) {
 						  WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' ORDER BY picture_uri DESC  ";
 			}
 		}
-	}
-	
+	}	
 	
 	//This query will show all registered users. Only for dev purposes.
-	//$query = "SELECT DISTINCT u.user_id as login_user_id, login_date FROM ".$track_online_table ."  e , $table_user u GROUP by u.user_id  ORDER BY picture_uri DESC";
+	$query = "SELECT DISTINCT u.user_id as login_user_id, login_date FROM ".$track_online_table ."  e , $table_user u GROUP by u.user_id  ORDER BY picture_uri DESC";
 	
 	$result = Database::query($query);
 	if ($result) {

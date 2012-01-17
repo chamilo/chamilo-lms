@@ -775,7 +775,7 @@ class SocialManager extends UserManager {
 	 * Displays a sortable table with the list of online users.
 	 * @param array $user_list
 	 */
-	public static function display_user_list($user_list) {
+	public static function display_user_list($user_list, $query_vars = array()) {
 		global $charset;
 		if ($_GET['id'] == '') {
 			$extra_params = array();
@@ -784,7 +784,6 @@ class SocialManager extends UserManager {
 				$extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
 				$course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
 			}
-
 			foreach ($user_list as $user) {
 				$uid = $user[0];
 				$user_info = api_get_user_info($uid);
@@ -803,13 +802,11 @@ class SocialManager extends UserManager {
 				
 				// reduce image
                 $name = $user_info['complete_name'];
+                $status_icon = Display::span('', array('class' => 'online_user_in_text'));
                 
                 if ($image_array['file'] == 'unknown.jpg' || !file_exists($image_array['dir'].$image_array['file'])) {
-                    $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
-                    $status_icon = Display::span('', array('class' => 'online_user'));                    
-                    //$img = $status_icon.$img;
-                    
-                    $table_row[] = '<a href="'.$url.'">'.$status_icon.'<img title = "'.$name.'" class="social-home-anonymous-online" alt="'.$name.'" src="'.$friends_profile['file'].'"></a>';
+                    $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';                                                                             
+                    $table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" class="social-home-anonymous-online" alt="'.$name.'" src="'.$friends_profile['file'].'"></a>';
                 } else {
                     $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);                    
                     
@@ -824,14 +821,9 @@ class SocialManager extends UserManager {
                     if ($friends_profile['original_height'] < 50 || $friends_profile['original_height']< 50) {
                         $clip = '';   
                     }                    
-                    //$status_icon = Display::span($status_icon, array('class' => 'online_user'));                    
-                    //$img = $status_icon.$img;
-                    
-                    $table_row[] = Display::url(Display::div(Display::div($img, array('class'=>$clip)), array('class'=>'clip-wrapper')) , $url);
-                        
-                }				
-				$table_row[] = '<a href="'.$url.'">'.(cut($user_info['firstName'],16)).'<br />'.cut($user_info['lastName'],18).'</a>';
-				
+                    $table_row[] = Display::url(Display::div(Display::div($img, array('class'=>$clip)), array('class'=>'clip-wrapper')) , $url);                        
+                }                
+				$table_row[] = Display::div($status_icon).'<a href="'.$url.'">'.$name.'</a><br><br><a class="a_button medium white">Send message</a>';
 				$table_data[] = $table_row;
 			}
 			$table_header[] = array(get_lang('UserPicture'), false, 'width="90"');
@@ -839,7 +831,13 @@ class SocialManager extends UserManager {
 			if (api_get_setting('show_email_addresses') == 'true') {
 				//$table_header[] = array(get_lang('Email'), true);
 			}
-			echo Display::return_sortable_grid('online', $table_header, $table_data, array('per_page' => 20));
+            
+            $params = array();
+            if (!isset($params['per_page'])) {
+                $params['per_page'] = 10;                
+            }            
+            $params['hide_navigation'] = true;
+			echo Display::return_sortable_grid('online', $table_header, $table_data, $params, $query_vars);
 			//Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 10), $extra_params, array(),'grid');
 		}
 	}

@@ -16,6 +16,8 @@ if (!isset($_GET['cidReq'])) {
 require_once './main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
+$htmlHeadXtra[] = api_get_js('jquery.endless-scroll.js');
+
 //social tab
 $this_section = SECTION_SOCIAL;
 // table definitions
@@ -102,6 +104,33 @@ function hide_icon_edit(element_html)  {
     ident="#edit_image";
     $(ident).hide();
 }       
+
+
+$(document).ready(function() {
+    $(document).endlessScroll({
+        fireOnce: false,
+        fireDelay: false,
+        loader: "<div class=\'loading\'>Loading<div>",
+        callback: function(page) {    
+        page = page + 1;
+          $.ajax({                
+                beforeSend: function(objeto) {
+                    $("#display_response_id").html("Loading"); },
+                type: "GET",
+                    url: "main/inc/ajax/online.ajax.php?a=load_online_user",
+                data: "online_page_nr="+page,
+                success: function(data) {   
+                    if (data != "end") {
+                        var last = $(".online_grid_container .online_grid_item:last");
+                        last.after(data);
+                    }
+                }
+            });
+        }
+    });
+});
+
+
         
 </script>';
 
@@ -124,7 +153,7 @@ if ($_GET['chatid'] != '') {
 if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || ((api_get_setting('showonline', 'users') == 'true' || api_get_setting('showonline', 'course') == 'true') && $_user['user_id'])) {
 
 	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
-		$user_list = who_is_online_in_this_course($_user['user_id'], api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
+		$user_list = who_is_online_in_this_course(api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
 	} else {
 		$user_list = who_is_online(api_get_setting('time_limit_whosonline'));		
 	}
@@ -179,6 +208,4 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 	Display::display_header(get_lang('UsersOnLineList'));
 	Display::display_error_message(get_lang('AccessNotAllowed'));
 }
-$referer = empty($_GET['referer']) ? 'index.php' : api_htmlentities(strip_tags($_GET['referer']), ENT_QUOTES);
-
 Display::display_footer();

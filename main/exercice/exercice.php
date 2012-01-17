@@ -502,9 +502,15 @@ if (!empty($exercise_list)) {
                 	$is_actived_time = false;
                 }
 			}
-                  
+            
+            $cut_title = cut($row['title'], EXERCISE_MAX_NAME_SIZE);
+            $alt_title = '';
+            if ($cut_title != $row['title']) {
+                $alt_title = ' title = "'.$row['title'].'" ';
+            }
+            
             // Teacher only                
-            if ($is_allowedToEdit) {                   
+            if ($is_allowedToEdit) {
                 $show_quiz_edition = true;                
                 
                 $sql="SELECT max_score FROM $table_lp_item
@@ -522,17 +528,16 @@ if (!empty($exercise_list)) {
                 }                    
                                 
                 //Showing exercise title                    
-                $row['title'] = cut($row['title'], EXERCISE_MAX_NAME_SIZE);
-                 
+                
                 if ($session_id == $row['session_id']) {
                     //Settings                                                                
                     //echo Display::url(Display::return_icon('settings.png',get_lang('Edit'), array('width'=>'22px'))." ".get_lang('Edit'), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
                 }                                                      
 
                 if ($row['active'] == 0) {
-                    $title = Display::tag('font', $row['title'], array('style'=>'color:grey'));
+                    $title = Display::tag('font', $cut_title, array('style'=>'color:grey'));
                 } else {
-                    $title = $row['title'];
+                    $title = $cut_title;
                 }
                     
                 $count = intval(count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id));
@@ -543,8 +548,8 @@ if (!empty($exercise_list)) {
                     $title .= '<span class="tooltip" style="display: none;">'.$count.' '.$results_text.' </span>';
                     $class_tip = 'link_tooltip';
                 }
-                       
-                $url = '<a class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>'.$lp_blocked;
+                
+                $url = '<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>'.$lp_blocked;
                            
                 $item =  Display::tag('td', $url.' '.$session_img);  
                 
@@ -620,18 +625,17 @@ if (!empty($exercise_list)) {
                 $item .=  Display::tag('td', $number_of_questions);
                     
             } else {                     
-                // --- Student only
-                $row['title'] = cut($row['title'], EXERCISE_MAX_NAME_SIZE);  
+                // --- Student only                 
                 
                 // if time is actived show link to exercise
                 if ($time_limits) {                 
                     if ($is_actived_time) {
-                        $url =  '<a href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';
+                        $url =  '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$cut_title.'</a>';
                     } else {
                         $url = $row['title'];                            
                     }                       
                 } else {
-                    $url = '<a href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';                       
+                    $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$cut_title.'</a>';                       
                 }                   
                 
                 //Link of the exercise             

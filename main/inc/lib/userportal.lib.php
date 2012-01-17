@@ -327,7 +327,7 @@ class IndexManager {
 		return $html;		
 	}
 	
-	function return_notice() {
+	function return_notice() { 
 		$sys_path               = api_get_path(SYS_PATH);
 		$user_selected_language = api_get_interface_language();
 		
@@ -340,7 +340,8 @@ class IndexManager {
 		
 		if (!empty($home_notice)) {
 			$home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
-			echo self::show_right_block('', $home_notice, 'note');
+            $home_notice = Display::div($home_notice, array('class'  => 'homepage_notice'));
+			$html = self::show_right_block(get_lang('Notice'), $home_notice, '');
 		}
 		
 		if (isset($_SESSION['_user']['user_id']) && $_SESSION['_user']['user_id'] != 0) {

@@ -1271,16 +1271,20 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 
 .online_grid_item {
     float:left;
-    margin:10px;
-    text-align:center;    
+    margin:10px;               
+    width: 100%;
 }
 .online_grid_element_0 {    
-    width: 100px; 
-    height: 100px; 
-    overflow: hidden;
+    display: inline;
+    float: left;
+    height: 100px;
+    overflow: hidden;    
+    width: 100px;
 }
 .online_grid_element_1, .online_grid_element_2 {    
-    font-size:10px;
+    font-size:13px;
+    float: left;
+    margin: 25px 0px 0px 10px;
 }
 
 /* input values to crop the image: top, right, bottom, left */
@@ -4196,4 +4200,16 @@ a:active{
     width: 20px;
     position:absolute;
     background: url("online.png") no-repeat scroll right center transparent;
+}
+
+
+.hide_menu{
+    display:none;
+}
+
+
+.homepage_notice {
+    width:90%;
+    margin-left: 14px;    
+    margin-bottom: 10px;
 }

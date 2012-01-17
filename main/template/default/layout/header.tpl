@@ -78,4 +78,9 @@
 </div>    
 
 {* menu *}
-{$header3}
+
+{if $header3}
+<div id="header3">
+    {$header3}
+</div>
+{/if}

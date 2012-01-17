@@ -43,7 +43,10 @@ echo '<div id="header">';
 
 show_header_1($language_file, $nameTools);
 show_header_2();
-$menu_navigation = show_header_3();
+
+echo '<div id="header3">';
+echo show_header_3();
+echo '</div>';
     
 if (isset($database_connection)) {
     // connect to the main database.

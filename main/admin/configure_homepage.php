@@ -14,7 +14,6 @@ api_protect_admin_script();
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
-
 global $_configuration;
 
 $action = Security::remove_XSS($_GET['action']);
@@ -336,7 +335,7 @@ if (!empty($action)) {
 						  }                       
 					}
                     
-                    $class_add_in_tab = '';
+                    $class_add_in_tab = 'show_menu';
                     if (!$add_in_tab) {
                         $class_add_in_tab = 'class="hide_menu"';
                     }                    
@@ -628,15 +627,11 @@ switch ($action) {
 		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
 		<div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
 		<input type="hidden" name="formSent" value="1"/>
-
 		<?php
 		if (!empty($errorMsg)) {
-			//echo '<tr><td colspan="2">';
-			Display::display_normal_message($errorMsg);
-			//echo '</td></tr>';
+			Display::display_normal_message($errorMsg);			
 		}
 		?>
-
 		<table border="0" cellpadding="5" cellspacing="0">
 		<tr><td colspan="2"><?php echo '<span style="font-style: italic;">'.get_lang('LetThoseFieldsEmptyToHideTheNotice').'</span>'; ?></tr>
 		<tr>
@@ -697,10 +692,11 @@ switch ($action) {
 		}        
 		
 		$target_blank_checkbox = & $form->addElement('checkbox', 'target_blank', null, get_lang('OpenInNewWindow'), 1);
-        
-        $form->addElement('checkbox', 'add_in_tab', null, get_lang('AddInMenu'), 1);        
-        $default['add_in_tab'] = $add_in_tab;
-        
+                
+        if ($action == 'insert_tabs' || $action == 'edit_tabs') {
+            $form->addElement('checkbox', 'add_in_tab', null, get_lang('AddInMenu'), 1);                
+            $default['add_in_tab'] = $add_in_tab;
+        }        
         
 		if ($target_blank) $target_blank_checkbox->setChecked(true);
 		
@@ -915,7 +911,7 @@ switch ($action) {
 		  <td width="20%" rowspan="3" valign="top">
 		    <div id="menu-wrapper">
 			<div id="menu" class="menu">
-			<?php api_display_language_form(); ?>
+			<?php echo api_display_language_form(); ?>
 			<form id="formLogin">
 				<div><label><?php echo get_lang('LoginName'); ?></label></div>
 				<div><input type="text" id="login" size="15" value="" disabled="disabled" /></div>
@@ -937,12 +933,15 @@ switch ($action) {
 			</div>
 			
 			<div id="menu" class="menu">
-            <br />                    
-            <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php echo get_lang('EditNotice'); ?></a>
             
-            <div class="menusection note">
-                    
+            <div class="menusection">
+                <span class="menusectioncaption">
+                    <?php echo get_lang('Notice'); ?>
+                    <a href="<?php echo api_get_self(); ?>?action=edit_notice">
+                        <?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a>                    
+                </span>                    
             <?php
+            
             $home_notice = '';
             if (file_exists($homep.$noticef.'_'.$lang.$ext)) {
                 $home_notice = @(string)file_get_contents($homep.$noticef.'_'.$lang.$ext);
@@ -950,10 +949,12 @@ switch ($action) {
                 $home_notice = @(string)file_get_contents($homep.$noticef.$ext);
             }
             $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
+            echo '<div class="homepage_notice">';
             echo $home_notice;          
+            echo '</div>';
             ?>
             </div>
-            <br />
+            
             </div>
             
 			

@@ -379,11 +379,7 @@ class Template extends Smarty {
 		$header2 = ob_get_contents();
 		ob_clean();
 		
-		ob_start();
-		$menu_navigation = show_header_3();
-		$header3 = ob_get_contents();
-		ob_clean();
-		
+		$header3 = show_header_3();
 		$header4 = show_header_4($interbreadcrumb, $language_file, $nameTools);
 		
 		$this->assign('header1', $header1);

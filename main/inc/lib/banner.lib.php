@@ -252,8 +252,9 @@ function show_header_2() {
 
 function show_header_3() {
     
-    $navigation = $menu_navigation = array();
-    $possible_tabs = get_tabs();
+    $navigation         = array();
+    $menu_navigation    = array();
+    $possible_tabs      = get_tabs();
         
     // Campus Homepage
     if (api_get_setting('show_tabs', 'campus_homepage') == 'true') {
@@ -334,6 +335,7 @@ function show_header_3() {
                 $menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];
             }
         }
+        
 		// Reports
 		if (api_get_setting('show_tabs', 'reports') == 'true') {
 			if ((api_is_platform_admin() || api_is_drh() || api_is_session_admin()) && Rights::hasRight('show_tabs:reports')) {
@@ -393,7 +395,7 @@ function show_header_3() {
     } elseif (is_file($homep.$menutabs.$lang.$ext) && is_readable($homep.$menutabs.$lang.$ext)) {
         $home_top = @(string)file_get_contents($homep.$menutabs.$lang.$ext);
     } else {
-        $errorMsg = get_lang('HomePageFilesNotReadable');
+        //$errorMsg = get_lang('HomePageFilesNotReadable');
     }
         
     $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
@@ -403,46 +405,20 @@ function show_header_3() {
     $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
     
     $lis = '';
+    $show_bar = false;
+    
     if (!empty($open)) {
-        $lis .= Display::tag('li', $open);
+        if (strpos($open, 'show_menu') === false) {
+            if (api_is_anonymous()) {
+                $navigation[SECTION_CAMPUS]  = null;               
+            }
+        } else {
+            $lis .= Display::tag('li', $open);    
+        }
         $show_bar = true;
     }
-    //} else {     
-    //This code was moved in the admin/configure_homepage.php file  
-        /*  
-        $home_menu = '';
-        if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
-            $home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
-        } else {
-            $home_menu = @file($homep.$menutabs.$ext);
-        }
-        if (empty($home_menu)) {
-            $home_menu = array();
-        }
-        if (!empty($home_menu)) {
-            $home_menu = implode("\n", $home_menu);
-            $home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
-            $home_menu = explode("\n", $home_menu);
-        }
-        $tab_counter = 0;
-        if (!empty($home_menu)) {
-            $show_bar = true;    
-        }        
-        foreach ($home_menu as $enreg) {
-            $enreg = trim($enreg);
-            if (!empty($enreg)) {
-                $edit_link = '<a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
-                $delete_link = '<a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
-                $tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'), $enreg);                
-                $lis .= $tab_string;
-                $tab_counter++;
-            }
-        }
-        $lis .= '<li id="insert-link"><a href="'.api_get_self().'?action=insert_tabs" style="padding-right:0px;"><span>'. Display::return_icon('addd.gif', get_lang('InsertLink'), array('style' => 'vertical-align:middle')).' '.get_lang('InsertLink').'</span></a></li>';
-        */
-    //}
     
-    if (count($navigation) > 1 || !empty($lis)) {        
+    if (count($navigation) > 1 || !empty($lis)) {     
         $pre_lis = '';
         foreach ($navigation as $section => $navigation_info) {
             if (isset($GLOBALS['this_section'])) {
@@ -450,17 +426,18 @@ function show_header_3() {
             } else {
                 $current = '';
             }
-            $pre_lis .= '<li'.$current.'><a  href="'.$navigation_info['url'].'" target="_top"><span id="tab_active">'.$navigation_info['title'].'</span></a></li>';
+            if (!empty($navigation_info['title'])) {
+                $pre_lis .= '<li'.$current.'><a  href="'.$navigation_info['url'].'" target="_top"><span id="tab_active">'.$navigation_info['title'].'</span></a></li>';
+            }
         }
         $lis = $pre_lis.$lis;
         $show_bar = true;
     }
-    
+        
+    $header3 = '';
     
     // Logout    
     if ($show_bar) {
-        echo '<div id="header3">';
-    
         if (api_get_user_id()) {
             $login = '';
             if (api_is_anonymous()) {
@@ -471,19 +448,19 @@ function show_header_3() {
             }
             
             //start user section line with name, my course, my profile, scorm info, etc            
-            echo '<ul id="logout">';
+            $header3 .= '<ul id="logout">';
                 //echo '<li><span>'.get_lang('LoggedInAsX').' '.$login.'</span></li>';
                 //echo '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php" target="_top"><span>'.get_lang('Profile').'</span></a></li>';
-                echo '<li><a href="'.api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id().'" target="_top"><span>'.get_lang('Logout').' ('.$login.')</span></a></li>';
-            echo '</ul>';    
+                $header3 .= '<li><a href="'.api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id().'" target="_top"><span>'.get_lang('Logout').' ('.$login.')</span></a></li>';
+            $header3 .= '</ul>';    
         }   
-      
-        echo '<ul>';
-        echo $lis;
-        echo '</ul>';
-        echo '</div>';
+        if (!empty($lis)) {
+            $header3 .= '<ul>';
+            $header3 .= $lis;
+            $header3 .= '</ul>';
+        }
     }    
-    return $menu_navigation;
+    return $header3;
 }
 
 //Header 4

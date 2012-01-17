@@ -2059,11 +2059,13 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
 
     $form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
     //$form->applyFilter('post_title', 'html_filter');
-    $form->addElement('html_editor', 'post_text', get_lang('Text'), null,
+    $form->addElement('html_editor', 'post_text', get_lang('Text'), true,
         api_is_allowed_to_edit(null, true)
             ? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '300')
             : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
     );
+    
+    $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
     //$form->applyFilter('post_text', 'html_filter');
 
     $form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">');
@@ -2495,6 +2497,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
             : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
     );
     //$form->applyFilter('post_text', 'html_filter');
+    $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
 
     $form->addElement('html', '<div class="row"><div class="label">');
     $form->addElement('html', '<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).''.get_lang('AdvancedParameters').'</span></a>','');

@@ -61,7 +61,8 @@ class CourseDescriptionController { // extends Controller {
 		$course_description = new CourseDescription();
 		$session_id = api_get_session_id();
 		$course_description->set_session_id($session_id);		
-		$data = array();            
+		$data = array();      
+        $data['id'] = $id;
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {    	
         	if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
         		

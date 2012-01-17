@@ -588,13 +588,12 @@ class CourseBuilder {
 	 * Build the course-descriptions
 	 */
 	function build_course_descriptions($session_id = 0,$course_code = '', $with_base_content = false) {
-		$course_info = api_get_course_info($course_code);
+		$course_info    = api_get_course_info($course_code);
 		$course_id 		= $course_info['real_id'];
 		
 		$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
 		
-		if (!empty($session_id) && !empty($course_code)) {
-			
+		if (!empty($session_id) && !empty($course_code)) {			
 			$session_id = intval($session_id);
             if ($with_base_content) {
                 $session_condition = api_get_session_condition($session_id, true, true);                

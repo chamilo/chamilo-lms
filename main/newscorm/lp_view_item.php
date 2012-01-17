@@ -33,6 +33,7 @@ require_once 'resourcelinker.inc.php';
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
+
 api_protect_course_script();
 
 if (isset($_GET['lp_item_id'])) {
@@ -66,7 +67,7 @@ $_SESSION['whereami'] = 'lp/build';
 if (isset($_SESSION['oLP']) && isset($_GET['id'])) {
     $_SESSION['oLP'] -> current = intval($_GET['id']);
 }
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 /* Libraries */
 

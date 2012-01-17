@@ -100,17 +100,18 @@ unset($_SESSION['questionList']);
 
 if (!isset($src)) {
     $src = '';
+    
     switch($lp_type) {
         case 1:
             $_SESSION['oLP']->stop_previous_item();
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-            if ($prereq_check === true) {            	
-                $src = $_SESSION['oLP']->get_link('http', $lp_item_id);                
+            if ($prereq_check === true) {         	
+                $src = $_SESSION['oLP']->get_link('http', $lp_item_id);                                
                 
                 //Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
                 $file_info = parse_url($src); 
-                $file_info = pathinfo($file_info['path']);                
+                $file_info = pathinfo($file_info['path']);                 
                 if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {                	
                     //$src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?src='.$src;
                     $src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?lp_item_id='.$lp_item_id;
@@ -369,8 +370,6 @@ if ($_SESSION['oLP']->mode == 'embedframe' ||$_SESSION['oLP']->get_hide_toc_fram
 
     <!-- right Zone -->
     <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
-
-
     <?php
         // hub 26-05-2010 Fullscreen or not fullscreen
         if ($_SESSION['oLP']->mode == 'fullscreen') {

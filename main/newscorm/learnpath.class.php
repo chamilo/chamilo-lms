@@ -4834,8 +4834,9 @@ class learnpath {
             $return .= ' '.Display :: return_icon('i.gif');	
             $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewStep') . '">
 			 '. Display :: return_icon('add.png', get_lang('NewStep'),'','32').'</a>';
-            $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewChapter') . '">
-			'. Display :: return_icon('add_learnpath_section.png', get_lang('NewChapter'),'','32').'</a>';
+            
+            /*$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewChapter') . '">
+			'. Display :: return_icon('add_learnpath_section.png', get_lang('NewChapter'),'','32').'</a>';*/
             if ($update_audio == 'true') {            
                 $return .= Display::url(Display :: return_icon('upload_audio_na.png', get_lang('UpdateAllAudioFragments'),'','32'),'#');
             } else {
@@ -5360,11 +5361,11 @@ class learnpath {
         $return = '';
         if (is_numeric($item_id)) {
             $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-            $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
+            $tbl_doc     = Database :: get_course_table(TABLE_DOCUMENT);
             $sql = "SELECT lp.* FROM " . $tbl_lp_item . " as lp
                     WHERE c_id = ".$course_id." AND lp.id = " . Database :: escape_string($item_id);
             $result = Database::query($sql);
-            while ($row = Database :: fetch_array($result)) {
+            while ($row = Database :: fetch_array($result,'ASSOC')) {
                 $_SESSION['parent_item_id'] = ($row['item_type'] == 'dokeos_chapter' || $row['item_type'] == 'dokeos_module' || $row['item_type'] == 'dir') ? $item_id : 0;
 
                 // Prevents wrong parent selection for document, see Bug#1251.
@@ -5374,27 +5375,26 @@ class learnpath {
 
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
                 $return .= '<div style="padding:10px;">';
+                
                 if ($msg != '')
                     $return .= $msg;
-                $return .= '<p class="lp_title">' . $row['title'] . '</p>';
-                //$return .= '<p class="lp_text">' . ((trim($row['description']) == '') ? 'no description' : stripslashes($row['description'])) . '</p>';
-                //$return .= '<hr />';
+                
+                $return .= '<h3>'.$row['title'].'</h3>';
+                //var_dump($row);
                 switch ($row['item_type']) {
                     case TOOL_QUIZ:
                         if (!empty($row['path'])) {
                             require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
                             $exercise = new Exercise();
-                            $exercise->read($row['path']);  
-                            // $exercise_url = api_get_path(WEB_CODE_PATH).'exercice/admin.php?exerciseId='.$exercise->id.'&'.api_get_cidReq().'&id_session='.api_get_session_id();           
-                            $return     .=$exercise->description.'<br />';
-                            //$return     .=Display::url($exercise_url, $exercise_url).'<br />';*/
+                            $exercise->read($row['path']);                              
+                            $return .= $exercise->description.'<br />';                            
                         }
                         break;
                     case TOOL_DOCUMENT:
                         $tbl_doc      = Database :: get_course_table(TABLE_DOCUMENT);
                         $sql_doc      = "SELECT path FROM " . $tbl_doc . " WHERE c_id = ".$course_id." AND id = " . Database :: escape_string($row['path']);
                         $result       = Database::query($sql_doc);
-                        $path_file    = Database :: result($result, 0, 0);
+                        $path_file    = Database::result($result, 0, 0);
                         $path_parts   = pathinfo($path_file);
                         // TODO: Correct the following naive comparisons, also, htm extension is missing.
                         if (in_array($path_parts['extension'], array (
@@ -5538,7 +5538,7 @@ class learnpath {
                             Display::return_icon('add_learnpath_section.png', get_lang('NewChapter'), array(), 64)
                         );
         
-        $chapter = $_SESSION['oLP']->display_item_form('chapter', get_lang('EnterDataNewChapter'));        
+        $chapter = $_SESSION['oLP']->display_item_form('chapter', get_lang('EnterDataNewChapter'), 'add_item');        
         echo Display::tabs($headers, array($documents, $exercises, $links, $works, $forums, $chapter), 'resource_tab');
         return true;
     }
@@ -6417,7 +6417,7 @@ class learnpath {
      * @param	mixed	Extra info
      * @return	string 	HTML form
      */
-    public function display_item_form($item_type, $title = '', $action = 'add', $id = 0, $extra_info = 'new') {
+    public function display_item_form($item_type, $title = '', $action = 'add_item', $id = 0, $extra_info = 'new') {
         $course_id = api_get_course_int_id();
         global $_course;
         global $charset;
@@ -6479,8 +6479,13 @@ class learnpath {
         
         $return .= '</div>
                             </div>';
-
-        $form = new FormValidator('form', 'POST', api_get_self() . '?' . $_SERVER['QUERY_STRING']);
+        
+        
+        $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
+        $url = api_get_self() . '?' .api_get_cidreq().'&gradeboook='.$gradebook.'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;        
+        //var_dump(api_get_self() . '?' . $_SERVER['QUERY_STRING']);
+        
+        $form = new FormValidator('form', 'POST',  $url);
 
         $defaults['title'] = api_html_entity_decode($item_title, ENT_QUOTES, $charset);
         $defaults['description'] = $item_description;
@@ -7776,28 +7781,28 @@ class learnpath {
         $res_quiz = Database::query($sql_quiz);
         $res_hot  = Database::query($sql_hot);
 
-        //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' ><img align="left" alt="" src="../img/lp_' . TOOL_QUIZ . '.gif" style="margin-right:5px;" title="" />' . get_lang('Quiz') . '</div>';
         $return = '<div class="lp_resource">';
         
         $return .= '<div class="lp_resource_element">';
+        //$return .= Display::return_icon('new_exercice.png', '', array(), 32); //'<img alt="" src="../img/icons/22/exercise.gif" style="margin-right:5px;" title="" />';
         $return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
         $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'exercice/exercise_admin.php?lp_id=' . $this->lp_id . '">' . get_lang('NewExercise') . '</a>';
-        $return .= '</div>';
-        
+        $return .= '</div>';        
 
         while ($row_hot = Database :: fetch_array($res_hot)) {
             $return .= '<div class="lp_resource_element">';
             // Display quizhotpotatoes.
             $return .= '<img alt="hp" src="../img/hotpotatoes_s.png" style="margin-right:5px;" title="" width="18px" height="18px" />';
             $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">' . ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security :: remove_XSS($row_hot['title'])) . '</a>';
-            //$return .= $row_quiz['title'];
             $return .= '</div>';
         }
 
         while ($row_quiz = Database :: fetch_array($res_quiz)) {
             $return .= '<div class="lp_resource_element">';
             $return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
-            $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . Security :: remove_XSS($row_quiz['title']) . '</a>';
+            //$return .= Display::return_icon('quiz.png', '', array(), 32); //'<img alt="" src="../img/icons/22/exercise.gif" style="margin-right:5px;" title="" />';
+            $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . 
+                    Security :: remove_XSS(cut($row_quiz['title'], 80)).'</a>';
             //$return .= $row_quiz['title'];
             $return .= '</div>';
         }

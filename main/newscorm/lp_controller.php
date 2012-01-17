@@ -247,10 +247,9 @@ switch ($action) {
                     } else {
                         // For all other item types than documents, load the item using the item type and path rather than its ID.
                         $new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['prerequisites'], $_POST['maxTimeAllowed']);
-                    }
-
+                    }                  
                     // Display.
-                    require 'lp_add_item.php';
+                    require 'lp_add_item.php';                    
                 }
             } else {
                 require 'lp_add_item.php';

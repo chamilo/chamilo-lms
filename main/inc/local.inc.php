@@ -601,7 +601,7 @@ if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) &
 }
 
 // if the requested group is different from the group in session
-$gid = isset($_SESSION['_gid'])?$_SESSION['_gid']:'';
+$gid = isset($_SESSION['_gid']) ? $_SESSION['_gid'] : '';
 if ($gidReq && $gidReq != $gid) {
 	$gidReset = true;
 }

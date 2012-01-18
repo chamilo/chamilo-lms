@@ -66,8 +66,7 @@ class Resource
 	 * @param int $id The id of this resource in the source course.
 	 * @param constant $type The type of this resource.
 	 */
-	function Resource($id, $type)
-	{
+	function __construct($id, $type) {
 		$this->source_id = $id;
 		$this->type = $type;
 		$this->destination_id = -1;

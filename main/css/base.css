@@ -1285,6 +1285,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     font-size:13px;
     float: left;
     margin: 25px 0px 0px 10px;
+    width:70%;
 }
 
 /* input values to crop the image: top, right, bottom, left */
@@ -2988,7 +2989,7 @@ input.maininput:focus {
 
 div.lp_resource {
     padding:5px 10px;
-    width:380px;    
+    /* width:380px;     */
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -3004,8 +3005,25 @@ div.lp_resource {
     text-decoration: none;
     text-shadow: 0 1px 1px #F6F6F6;
     margin:5px;
-    padding:5px;
+    padding:5px;    
 }   
+
+/*LP changes
+.lp_resource_element img {
+        float: left;
+    margin-bottom: 0;
+    margin-left: 43px;
+    margin-right: 43px;
+    margin-top: 7px;
+}
+.lp_resource_element a {
+       float: left;
+    margin-bottom: 12px;
+    margin-left: 33px;
+    margin-right: auto;
+    margin-top: 15px;
+    width: 100%;
+}*/
 
 .doc_resource {
     margin:6px;
@@ -4202,11 +4220,20 @@ a:active{
     background: url("online.png") no-repeat scroll right center transparent;
 }
 
+.online_user_in_text {
+    background: url("online.png") no-repeat scroll right center transparent;
+    float: left;
+    height: 16px;
+    left: 0;
+    width: 17px;
+    display:block;
+    margin-right: 4px;    
+}
+
 
 .hide_menu{
     display:none;
 }
-
 
 .homepage_notice {
     width:90%;

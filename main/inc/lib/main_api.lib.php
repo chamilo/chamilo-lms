@@ -31,11 +31,11 @@ define('COURSEMANAGERLOWSECURITY', 10);
 
 
 // Table of status
-$_status_list[COURSEMANAGER] = 'teacher'; // 1
-$_status_list[SESSIONADMIN] = 'session_admin'; // 3
-$_status_list[DRH] = 'drh'; // 4
-$_status_list[STUDENT] = 'user'; // 5
-$_status_list[ANONYMOUS] = 'anonymous'; // 6
+$_status_list[COURSEMANAGER]    = 'teacher';        // 1
+$_status_list[SESSIONADMIN]     = 'session_admin';  // 3
+$_status_list[DRH]              = 'drh';            // 4
+$_status_list[STUDENT]          = 'user';           // 5
+$_status_list[ANONYMOUS]        = 'anonymous';      // 6
 
 
 // COURSE VISIBILITY CONSTANTS

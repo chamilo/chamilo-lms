@@ -288,13 +288,13 @@ foreach ($group_cats as $index => $category) {
             
 		
             // Max number of members in group
-            $max_members = ($this_group['maximum_number_of_members'] == MEMBER_PER_GROUP_NO_LIMIT ? '-' : $this_group['maximum_number_of_members']);
+            $max_members = ($this_group['maximum_number_of_members'] == MEMBER_PER_GROUP_NO_LIMIT ? ' ' : ' / '.$this_group['maximum_number_of_members']);
             
             
 			// Number of members in group
-			$row[] = $this_group['number_of_members'].'/'.$max_members;
+			$row[] = $this_group['number_of_members'].$max_members;
 			
-                // Self-registration / unregistration
+            // Self-registration / unregistration
             if (!api_is_allowed_to_edit(false, true)) {
                 if (GroupManager :: is_self_registration_allowed($_user['user_id'], $this_group['id'])) {
                     $row[] = '<a class = "a_button gray small" href="group.php?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=self_reg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfRegInf').'</a>';

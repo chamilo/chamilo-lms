@@ -2669,7 +2669,7 @@ return 'application/octet-stream';
     	
     	$return = '';
     	if (count($resources_sorted) > 0) {
-    		foreach ($resources_sorted as $key => $resource) {    	
+    		foreach ($resources_sorted as $key => $resource) {              
     			$title = isset($resource['title']) ? $resource['title'] : null;
     			if (empty($title)) {
     				$title = $key;
@@ -2712,7 +2712,7 @@ return 'application/octet-stream';
     					$return .= '<img style="cursor: pointer;" src="'.$img_path.'nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '"  '.$onclick.' >';
     				} else {
     					$return .= '<span style="margin-left:16px">&nbsp;</span>';
-    				}
+    				}                      
     				$return .= '<img alt="" src="'.$img_path.'lp_folder.gif" title="" align="absmiddle" />&nbsp;';    				
     				$return .= '<span '.$onclick.' style="cursor: pointer;" >'.$title.'</span>';    				
     				$return .= '</div>
@@ -2732,8 +2732,12 @@ return 'application/octet-stream';
     					$position 	= strrpos($icon, '.');
     					$icon 		= substr($icon, 0, $position) . '_small.gif';
     					$file_info	= explode('|@j@|', $resource);
-    					$my_file_title = $file_info[0];
-    					$my_file_name  = $file_info[1];
+    					$my_file_title = $file_info[0];                        
+                        
+                        //If title is empty we try to use the path
+                        if (empty($my_file_title)) {
+                            $my_file_title  = $file_info[1];
+                        }
 
     					// Show the "image name" not the filename of the image.
     					if ($lp_id) {

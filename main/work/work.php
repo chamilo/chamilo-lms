@@ -41,7 +41,7 @@
 
 /*		INIT SECTION */
 
-$language_file = array('exercice', 'work', 'document', 'admin');
+$language_file = array('exercice', 'work', 'document', 'admin', 'group', 'userInfo');
 
 require_once '../inc/global.inc.php';
 
@@ -186,13 +186,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !sizeof($_POST)) {
 		exit ();
 	}
 }
-
+/*
 if (isset($_GET['toolgroup'])) {
 	$toolgroup = Database::escape_string($_GET['toolgroup']);
 	api_session_register('toolgroup');
 }
-
 $toolgroup = isset($_SESSION['toolgroup']) ? $_SESSION['toolgroup'] : api_get_group_id();
+*/
+$group_id = api_get_group_id();
   
 $display_upload_form = false;	
 if ($action == 'upload_form') {
@@ -287,6 +288,10 @@ if ($origin == 'learnpath') {
 }
 
 /*	Display links to upload form and tool options */
+
+if ($action != 'send_mail') {
+    $token = Security::get_token();
+}
 
 if ($is_special) {
 	$homework = get_work_assignment_by_id($my_folder_data['id']);
@@ -478,10 +483,14 @@ switch ($action) {
 	case 'downloadfolder':
 		//require 'downloadfolder.inc.php';
 		break;		
-	case 'send_mail':                
-        var_dump($_SESSION['sec_token'], $_GET['sec_token']);
-		if (Security::check_token('get')) {		    echo 'dd';
-			send_reminder_users_without_publication($my_folder_data);
+	case 'send_mail':        
+		if (Security::check_token('get')) {
+			$mails_sent_to = send_reminder_users_without_publication($my_folder_data);
+            if (empty($mails_sent_to)) {
+                Display::display_warning_message(get_lang('NoStudents'));
+            } else {
+                Display::display_confirmation_message(get_lang('MessageOutboxComment').' '.implode(', ', $mails_sent_to));
+            }            
             Security::clear_token();			
 		}
 		break;		
@@ -637,7 +646,7 @@ switch ($action) {
 										   active			= '0',
 										   accepted			= '1',
 										   filetype 		= 'folder',
-										   post_group_id 	= '".$toolgroup."',
+										   post_group_id 	= '".$group_id."',
 										   sent_date		= '".$today."',
 										   qualification	= '".(($_POST['qualification_value']!='') ? Database::escape_string($_POST['qualification_value']) : '') ."',
 										   parent_id		= '',
@@ -672,7 +681,7 @@ switch ($action) {
 						$description = isset($_POST['description']) ? $_POST['description'] : '';
 						$content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.api_substr($dir_name_sql, 1).'" >'.$_POST['new_dir'].'</a>'.$description;
 	
-						$agenda_id = agenda_add_item($course_info, $title, $content, $date, $end_date, array('GROUP:'.$toolgroup), 0);
+						$agenda_id = agenda_add_item($course_info, $title, $content, $date, $end_date, array('GROUP:'.$group_id), 0);
 					}
 				}
 					
@@ -1261,7 +1270,7 @@ switch ($action) {
 			$curdirpath = isset($_REQUEST['curdirpath']) ? Security::remove_XSS($_REQUEST['curdirpath']) : '';
 			$filter = isset($_REQUEST['filter']) ? (int)$_REQUEST['filter'] : '';
 		
-			if ($origin != 'learnpath') {
+			if ($origin != 'learnpath' && $display_list_users_without_publication != 'without' ) {
 				$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.$cidreq.'&id='.$work_id.'&curdirpath='.$curdirpath.'&gradebook='.$gradebook.'">';
 				$form_filter .= make_select('filter', array(0 => get_lang('SelectAFilter'), 1 => get_lang('FilterByNotRevised'), 2 => get_lang('FilterByRevised'), 3 => get_lang('FilterByNotExpired')), $filter).'&nbsp&nbsp';
 				$form_filter .= '<button type="submit" class="save" value="'.get_lang('FilterAssignments').'">'.get_lang('FilterAssignments').'</button></form>';
@@ -1271,8 +1280,7 @@ switch ($action) {
 		
 		if (!empty($my_folder_data['description'])) {
 			echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).'</p></div></p>';
-		}
-        
+		}        
 		if ($display_list_users_without_publication) {
 			display_list_users_without_publication($my_folder_data['id']);
 		} else {			

@@ -82,8 +82,12 @@ function display_action_links($id, $cur_dir_path, $always_show_tool_options, $al
 			} else {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=with">'.
 				Display::return_icon('exercice_check.png', get_lang('ViewUsersWithTask'),'','32')."</a>\n";
-				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without&amp;action=send_mail&amp;sec_token='.$token.'">'.
-				Display::return_icon('mail_send.png', get_lang('ReminderMessage'),'','32')."</a>";
+                if (!isset($_GET['action']) || (isset($_GET['action']) && $_GET['action'] != 'send_mail')) {
+                    $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without&amp;action=send_mail&amp;sec_token='.$token.'">'.
+                    Display::return_icon('mail_send.png', get_lang('ReminderMessage'),'','32')."</a>";
+                } else {
+                    $display_output .= Display::return_icon('mail_send_na.png', get_lang('ReminderMessage'),'','32');
+                }
 			}
 		}
 	}
@@ -256,8 +260,9 @@ function create_group_date_select($prefix = '') {
 
 function get_work_data_by_path($path) {
 	$path = Database::escape_string($path);
+    $course_id 	= api_get_course_int_id();
 	$work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "SELECT *  FROM  ".$work_table." WHERE url = '$path'";
+	$sql = "SELECT *  FROM  ".$work_table." WHERE url = '$path' AND c_id = $course_id ";
 	$result = Database::query($sql);
 	$return = array();
 	if (Database::num_rows($result)) {
@@ -270,7 +275,7 @@ function get_work_data_by_id($id) {
 	$id = intval($id);
 	$course_id 	= api_get_course_int_id();
 	$work_table	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "SELECT * FROM  ".$work_table." WHERE id = $id AND c_id = $course_id";
+	$sql = "SELECT * FROM  $work_table WHERE id = $id AND c_id = $course_id";
 	$result = Database::query($sql);
 	$return = array();
 	if (Database::num_rows($result)) {
@@ -282,10 +287,11 @@ function get_work_data_by_id($id) {
 function get_work_count_by_student($user_id, $work_id) {
 	$user_id = intval($user_id);
 	$work_id = intval($work_id);
-	$course_id = api_get_course_id();
+	$course_id = api_get_course_int_id();
 	
 	$work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "SELECT COUNT(*) as count FROM  $work_table WHERE parent_id = $work_id AND user_id = $user_id AND active = 1 ";
+	$sql = "SELECT COUNT(*) as count FROM  $work_table 
+            WHERE c_id = $course_id AND parent_id = $work_id AND user_id = $user_id AND active = 1 ";
 	$result = Database::query($sql);
 	$return = 0;
 	if (Database::num_rows($result)) {
@@ -299,7 +305,7 @@ function get_work_assignment_by_id($id) {
 	$id = intval($id);
     $course_id = api_get_course_int_id();
 	$table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-	$sql = "SELECT * FROM  ".$table." WHERE c_id = $course_id AND publication_id = $id";
+	$sql = "SELECT * FROM  $table WHERE c_id = $course_id AND publication_id = $id";
 	$result = Database::query($sql);
 	$return = array();
 	if (Database::num_rows($result)) {
@@ -1615,8 +1621,7 @@ function get_work_id($path) {
  * @author Julio Montoya <gugli100@gmail.com> Fixing query
  */
 function get_list_users_without_publication($task_id) {
-	$work_table 			 = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$iprop_table 			 = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	$work_table 			 = Database::get_course_table(TABLE_STUDENT_PUBLICATION);	
 	$table_course_user 		 = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$table_user 			 = Database::get_main_table(TABLE_MAIN_USER);
 	$session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -1651,29 +1656,32 @@ function get_list_users_without_publication($task_id) {
     //just in case
     if (empty($group_id)) {
         $group_id = isset($_SESSION['toolgroup']) ? $_SESSION['toolgroup'] : 0;
-    }
-
+    }    
+    
+    $new_group_user_list = array();
+    
     if ($group_id) {
-        $group_user_list = GroupManager::get_subscribed_users($group_id);
-        $new_group_user_list = array();
+        $group_user_list = GroupManager::get_subscribed_users($group_id);        
         if (!empty($group_user_list)) {
             foreach($group_user_list as $group_user) {
                 $new_group_user_list[] = $group_user['user_id'];
             }
         }
-    }   
+    }
     
 	$result_users = Database::query($sql_users);
 	$users_without_tasks = array();
 	while ($row_users = Database::fetch_row($result_users)) {
+        
 		if (in_array($row_users[0], $users_with_tasks)) continue;
-		if ($group_id) {
-            if (!in_array($row_users[0], $new_group_user_list)) continue;
+		if ($group_id && !in_array($row_users[0], $new_group_user_list)) {            
+            continue;
         }
-		$user_id = array_shift($row_users);
-		$row_users[3] = $row_users[2];
-		$row_users[2] = Display::encrypted_mailto_link($row_users[2], $row_users[2]);
-
+		//$user_id = array_shift($row_users);
+        $row_users[0] = $row_users[1];
+        $row_users[1] = $row_users[2];
+		$row_users[2] = Display::encrypted_mailto_link($row_users[3]);
+        
 		$users_without_tasks[] = $row_users;
 	}
 	return $users_without_tasks;
@@ -1739,12 +1747,17 @@ function send_reminder_users_without_publication($task_data) {
 	$emailbody_user .= get_lang('WorkName').' : '.$task_title."\n\n".get_lang('Teacher').' : '.api_get_person_name($currentUserFirstName, $currentUserLastName)."\n".get_lang('Email').' : '.$currentUserEmail;
 
 	$list_users = get_list_users_without_publication($task_id);
-    var_dump($list_users);
+    
+    $mails_sent_to = array();
 	foreach ($list_users as $user) {
-		$name_user = api_get_person_name($user[0], $user[1], null, PERSON_NAME_EMAIL_ADDRESS);
-		$result = api_mail($name_user, $user[3], $emailsubject, $emailbody_user, $sender_name, $email_admin);
-        var_dump($result);
-	}
+		$name_user = api_get_person_name($user[1], $user[0], null, PERSON_NAME_EMAIL_ADDRESS);
+		$result = api_mail($name_user, $user[2], $emailsubject, $emailbody_user, $sender_name, $email_admin);      
+        if ($result) {
+            $mails_sent_to[] = $name_user;
+        }
+        $mails_sent_to[] = $name_user;
+	}    
+    return $mails_sent_to;
     
 }
 

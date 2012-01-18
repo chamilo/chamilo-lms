@@ -45,7 +45,7 @@ jsPlumb.bind("ready", function() {
         autoOpen: false,
         modal   : true, 
         width   : 550, 
-        height  : 450,
+        height  : 480
     });
     
     //Filling skills select
@@ -105,7 +105,7 @@ jsPlumb.bind("ready", function() {
     
     $("#dialog-form").dialog({              
         buttons: {
-            "Add" : function() {                
+            "{"Add"|get_lang}" : function() {                
                 var bValid = true;
                 bValid = bValid && checkLength( name, "name", 1, 255 );
                 
@@ -125,7 +125,7 @@ jsPlumb.bind("ready", function() {
                         }                           
                     });
                 }
-            },            
+            }
         },              
         close: function() {     
             $("#name").attr('value', '');
@@ -211,7 +211,7 @@ jsPlumb.bind("ready", function() {
                 jQuery.each(skill.gradebooks, function(index, data) {                    
                     $("#gradebook_id option[value='"+data.id+"']").attr('selected', 'selected');            
                 });
-            },
+            }
         });        
                 
         $("#gradebook_id").trigger("liszt:updated");
@@ -348,16 +348,16 @@ $(document).ready( function() {
 })();
 
 </script>
-<div style="z-index: 1000;position: absolute;">
+<div style="z-index: 1000; position: absolute;">
 <h3>{'Skills'|get_lang}</h3>
 <ul style="list-style-type:none; margin:0;">
-<li><a style="z-index: 1000"class="a_button gray medium" id="add_item_link" href="#">{'AddSkill'|get_lang}</a></li>
-<li><a style="z-index: 1000"class="a_button gray medium" id="return_to_admin" href="/main/admin/">{'BackToAdmin'|get_lang}</a></li>
+<li><a style="z-index: 1000" class="a_button gray medium" id="add_item_link" href="#">{'AddSkill'|get_lang}</a></li>
+<li><a style="z-index: 1000" class="a_button gray medium" id="return_to_admin" href="{$_p.web_main}admin">{'BackToAdmin'|get_lang}</a></li>
 </ul>
 </div>
 {$html}
 
-<div id="dialog-form" style="display:none;z-index=10000;">    
+<div id="dialog-form" style="display:none; z-index:6000;">    
     <p class="validateTips"></p>
     <form id="add_item" name="form">
         <input type="hidden" name="id" id="id"/>

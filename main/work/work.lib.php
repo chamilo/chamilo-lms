@@ -1748,14 +1748,11 @@ function send_reminder_users_without_publication($task_data) {
 
 	$list_users = get_list_users_without_publication($task_id);
     
-    $mails_sent_to = array();
+    $mails_sent_to = array();    
 	foreach ($list_users as $user) {
 		$name_user = api_get_person_name($user[1], $user[0], null, PERSON_NAME_EMAIL_ADDRESS);
-		$result = api_mail($name_user, $user[2], $emailsubject, $emailbody_user, $sender_name, $email_admin);      
-        if ($result) {
-            $mails_sent_to[] = $name_user;
-        }
-        $mails_sent_to[] = $name_user;
+		$result = api_mail($name_user, $user[3], $emailsubject, $emailbody_user, $sender_name, $email_admin);              
+        $mails_sent_to[] = $name_user;                
 	}    
     return $mails_sent_to;
     

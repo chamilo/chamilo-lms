@@ -41,7 +41,7 @@
 
 /*		INIT SECTION */
 
-$language_file = array('exercice', 'work', 'document', 'admin', 'group', 'userInfo');
+$language_file = array('exercice', 'work', 'document', 'admin');
 
 require_once '../inc/global.inc.php';
 
@@ -487,9 +487,9 @@ switch ($action) {
 		if (Security::check_token('get')) {
 			$mails_sent_to = send_reminder_users_without_publication($my_folder_data);
             if (empty($mails_sent_to)) {
-                Display::display_warning_message(get_lang('NoStudents'));
+                Display::display_warning_message(get_lang('NoResults'));
             } else {
-                Display::display_confirmation_message(get_lang('MessageOutboxComment').' '.implode(', ', $mails_sent_to));
+                Display::display_confirmation_message(get_lang('MessageHasBeenSent').' '.implode(', ', $mails_sent_to));
             }            
             Security::clear_token();			
 		}

@@ -227,7 +227,7 @@ class GroupManager {
 		$my_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document';
 		$unique_name = create_unexisting_directory($_course,$_user['user_id'], api_get_session_id(), $lastId,NULL,$my_path, $desired_dir_name);
 		/* Stores the directory path into the group table */
-		$sql = "UPDATE ".$table_group." SET   name = '".Database::escape_string($name)."', secret_directory = '".$unique_name."' 
+		$sql = "UPDATE ".$table_group." SET name = '".Database::escape_string($name)."', secret_directory = '".$unique_name."' 
 				WHERE c_id = $course_id AND id ='".$lastId."'";
 
 		Database::query($sql);
@@ -305,7 +305,9 @@ class GroupManager {
 		self :: delete_category(VIRTUAL_COURSE_CATEGORY);
 		$id = self :: create_category(get_lang('GroupsFromVirtualCourses'), '', TOOL_NOT_AVAILABLE, TOOL_NOT_AVAILABLE, 0, 0, 1, 1);
 		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
-		$sql = "UPDATE ".$table_group_cat." SET id=".VIRTUAL_COURSE_CATEGORY." WHERE id=$id";
+        $course_id = api_get_course_int_id();
+        
+		$sql = "UPDATE ".$table_group_cat." SET id=".VIRTUAL_COURSE_CATEGORY." WHERE c_id = $course_id AND id=$id";
 		Database::query($sql);
 		$course = api_get_course_info();
 		$course['code'] = $course['sysCode'];
@@ -314,14 +316,11 @@ class GroupManager {
 		$group_courses = $virtual_courses;
 		$group_courses[] = $course;
 		$ids = array ();
-		foreach ($group_courses as $index => $group_course)
-		{
+		foreach ($group_courses as $index => $group_course) {
 			$users = CourseManager :: get_user_list_from_course_code($group_course['code']);
 			$members = array ();
-			foreach ($users as $index => $user)
-			{
-				if ($user['status'] == 5 && $user['tutor_id'] == 0)
-				{
+			foreach ($users as $index => $user) {
+				if ($user['status'] == 5 && $user['tutor_id'] == 0) {
 					$members[] = $user['user_id'];
 				}
 			}
@@ -498,7 +497,7 @@ class GroupManager {
 					max_student=".Database::escape_string($maximum_number_of_students).",
 					self_registration_allowed='".Database::escape_string($self_registration_allowed)."',
 					self_unregistration_allowed='".Database::escape_string($self_unregistration_allowed)."'
-					WHERE id=".$group_id;
+					WHERE c_id = $course_id AND id=".$group_id;
 		$result = Database::query($sql);
 		//Here we are updating a field in the table forum_forum that perhaps duplicates the table group_info.forum_state cvargas
 		$forum_state = (int) $forum_state;
@@ -1135,7 +1134,7 @@ class GroupManager {
 		foreach ($user_ids as $index => $user_id) {			
 			$user_id = Database::escape_string($user_id);
 			$group_id = Database::escape_string($group_id);
-			echo $sql = "INSERT INTO ".$table_group_tutor." (c_id, user_id, group_id) VALUES ('$course_id', '".$user_id."', '".$group_id."')";
+			$sql = "INSERT INTO ".$table_group_tutor." (c_id, user_id, group_id) VALUES ('$course_id', '".$user_id."', '".$group_id."')";
 			$result &= Database::query($sql);
 		}
 		return $result;

@@ -667,7 +667,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			
 							$ends_query = ' SET ends_on = '."'".($there_is_a_end_date ? api_get_utc_datetime(get_date_from_group('ends')) : '0000-00-00 00:00:00')."'";
 							Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE c_id = '.$course_id.' AND id = '."'".$row['has_properties']."'");
-							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 WHERE c_id = '.$course_id.' AND id ='".$row['id']."'";
+							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 WHERE c_id = $course_id AND id ='".$row['id']."'";
 							Database::query($sql_add_publication);
 				
                             $sql = 'UPDATE '.$work_table.' SET 

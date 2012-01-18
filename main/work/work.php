@@ -691,10 +691,11 @@ switch ($action) {
 	    								    expires_on       		= '".((isset($_POST['type1']) && $_POST['type1']==1) ? api_get_utc_datetime(get_date_from_select('expires')) : '0000-00-00 00:00:00'). "',
 	    							        ends_on        	 		= '".((isset($_POST['type2']) && $_POST['type2']==1) ? api_get_utc_datetime(get_date_from_select('ends')) : '0000-00-00 00:00:00')."',
 	    				                    add_to_calendar  		= '$agenda_id',
-	    				                    enable_qualification 	= '".$enable_calification."',
-	    				                    publication_id 			= '".$id."'";
+	    				                    enable_qualification 	= '$enable_calification',
+	    				                    publication_id 			= '$id'";
 					Database::query($sql_add_homework);	
-					$sql_add_publication = "UPDATE ".$work_table." SET "."has_properties  = ".Database::insert_id().", view_properties = 1 ".' where id = '.$id;
+                    $my_last_id = Database::insert_id();
+					$sql_add_publication = "UPDATE $work_table SET has_properties  = $my_last_id , view_properties = 1  WHERE c_id = $course_id AND id = $id";
 					Database::query($sql_add_publication);
 				} else {
 					$sql_add_homework = "INSERT INTO $TSTDPUBASG SET

@@ -727,7 +727,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 			api_session_register('_real_cid');
 
 			// if a session id has been given in url, we store the session
-			if (api_get_setting('use_session_mode')=='true') {
+			if (api_get_setting('use_session_mode') == 'true') {
 				// Database Table Definitions
 				$tbl_session                 = Database::get_main_table(TABLE_MAIN_SESSION);
 				$tbl_user                    = Database::get_main_table(TABLE_MAIN_USER);
@@ -1074,7 +1074,7 @@ if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // ses
 			$_gid = $gpData ['id'];
 			api_session_register('_gid');
 		} else {
-			exit("WARNING UNDEFINED GID !! ");
+            api_session_unregister('_gid');			
 		}
 	} elseif (isset($_SESSION['_gid']) or isset($_gid)) { // Keys missing => not anymore in the group - course relation
 		api_session_unregister('_gid');
@@ -1084,6 +1084,7 @@ if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // ses
 } else { //if no previous value, assign caracteristic undefined value
 	$_gid = -1;
 }
+
 //set variable according to student_view_enabled choices
 if (api_get_setting('student_view_enabled') == "true") {
 	if (isset($_GET['isStudentView'])) {
@@ -1117,7 +1118,7 @@ if (isset($_cid)) {
 	Database::query($sql);
 }
 if (!empty($_SESSION['request_uri'])){
-  $req= $_SESSION['request_uri'];
-  unset($_SESSION['request_uri']);
-  header('Location: '.$req);
+    $req= $_SESSION['request_uri'];
+    unset($_SESSION['request_uri']);
+    header('Location: '.$req);
 }

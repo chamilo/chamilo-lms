@@ -1089,7 +1089,9 @@ function api_get_anonymous_id() {
  * @return  string  Course & session references to add to a URL
  */
 function api_get_cidreq() {
-    return empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']).(api_get_session_id() == 0 ? '&amp;id_session=0' : '&amp;id_session='.api_get_session_id());
+    return empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']).
+            (api_get_session_id() == 0 ? '&amp;id_session=0' : '&amp;id_session='.api_get_session_id()).
+            (api_get_group_id() == 0 ? '&amp;gidReq=0' : '&amp;gidReq='.api_get_group_id());
 }
 /**
  * Returns the current course info array.
@@ -5584,5 +5586,5 @@ function api_grading_model_functions($grading_model, $action = 'to_array') {
 			$return = ' ('.$return_value.') / '.$return['denominator'];
 		}
 	}
-	return $return;	
+	return $return;
 }

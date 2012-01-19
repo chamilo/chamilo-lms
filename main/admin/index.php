@@ -131,7 +131,7 @@ if (api_is_platform_admin()) {
     $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));
     
     $items = array();
-    $items[] = array('url'=>'settings.php', 				'label' => get_lang('DokeosConfigSettings'));
+    $items[] = array('url'=>'settings.php', 				'label' => get_lang('PlatformConfigSettings'));
     $items[] = array('url'=>'system_announcements.php', 	'label' => get_lang('SystemAnnouncements'));
     $items[] = array('url'=>api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin', 'label' => get_lang('GlobalAgenda'));
     $items[] = array('url'=>'configure_homepage.php', 		'label' => get_lang('ConfigureHomePage'));

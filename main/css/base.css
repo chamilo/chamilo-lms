@@ -4196,11 +4196,17 @@ a:active{
 }
 
 .skills-profiles, .skills-users, .skills-skills {
-  margin-top: 10px;
-  margin-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding:10px;
+    border: 1px solid #ccc;
 }
-.skills-skills ul.holder {
-  margin-bottom: 8px;
+.skills-skills ul.holder,
+.skills-users ul.holder,
+.skills-profiles ul.holder
+{
+    margin-bottom: 8px;
+    border: 0px;
 }
 
 

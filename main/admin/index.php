@@ -304,8 +304,6 @@ function version_check() {
     $row = Database::fetch_array($result, 'ASSOC');
 
     // The site has not been registered yet.
-    //if (api_get_setting('registered') == 'false')
-
     $return = '';
     if ($row['selected_value'] == 'false') {
         $return .= '<form action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
@@ -314,18 +312,8 @@ function version_check() {
         $return .= '<button type="submit" class="save" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" />'.get_lang('EnableVersionCheck').'</button>';
         $return .= '</form>';
     } else {
-        // The site has been registered already but is seriously out of date (registration date + 15552000 seconds).
-        /*
-        if ((api_get_setting('registered') + 15552000) > mktime()) {
-            $return = 'It has been a long time since about your campus has been updated on chamilo.org';
-            $return .= '<form action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
-            $return .= '<input type="submit" name="Register" value="Enable Version Check" id="register" />';
-            $return .= '</form>';
-        } else {
-        */
         $return = 'site registered. ';
         $return .= check_system_version();
-        //}
     }
     return $return;
 }

@@ -136,12 +136,5 @@ if ($form->validate())
 	}
 }
 Display :: display_header($tool_name);
-//api_display_tool_title($tool_name);
 $form->display();
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display :: display_footer();
-?>

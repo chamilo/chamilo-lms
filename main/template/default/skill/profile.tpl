@@ -38,7 +38,8 @@ $(document).ready( function() {
                 $.ajax({
                     url: '{$url}?a=save_profile&'+params,
                     success:function(data) {    
-                        $("#dialog-form").dialog("close");                                      
+                        $("#dialog-form").dialog("close");
+                        alert("{"Saved"|get_lang}");
                     }                           
                 });
             },            

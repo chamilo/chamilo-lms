@@ -205,14 +205,16 @@ class Template extends Smarty {
 			}
 		}
 		
-		 $this->assign('online_button', Security::remove_XSS(Display::return_icon('online.png')));
-		 $this->assign('offline_button', Security::remove_XSS(Display::return_icon('offline.png')));
+        $this->assign('online_button',  Security::remove_XSS(Display::return_icon('online.png')));
+		$this->assign('offline_button', Security::remove_XSS(Display::return_icon('offline.png')));
 		
-		// Get language iso-code for this page - ignore errors		
-		
+		// Get language iso-code for this page - ignore errors				
 		$this->assign('document_language', api_get_language_isocode());
 		
 		$course_title = $_course['name'];
+        
+        $title_list = array();
+        
 		$title_list[] = api_get_setting('Institution');
 		$title_list[] = api_get_setting('siteName');
 		if (!empty($course_title)) {
@@ -306,7 +308,7 @@ class Template extends Smarty {
 			$css_file_to_string .= api_get_css($css_file);
 		}
 	
-		global $this_section, $nameTools;
+		global $this_section;
 		$this->assign('css_file_to_string', $css_file_to_string);
 		$this->assign('js_file_to_string',  $js_file_to_string);		
 		$this->assign('text_direction',	    api_get_text_direction());			
@@ -339,8 +341,7 @@ class Template extends Smarty {
 		}
 		$this->assign('favico', $favico);
 		
-		//old banner.inc.php
-		
+		//old banner.inc.php		
 		require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 		
 		global $my_session_id;

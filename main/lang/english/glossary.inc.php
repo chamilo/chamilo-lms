@@ -25,4 +25,10 @@ $GlossaryManagement = "Glossary management";
 $TermMoved = "The term has moved";
 $ShowGlossaryInExtraToolsTitle = "Show the glossary terms in extra tools";
 $ShowGlossaryInExtraToolsComment = "From here you can configure how to add the glossary terms in extra tools as learning path and exercice tool";
+$ImportGlossary = "Import glossary";
+$ReplaceGlossary = "Replace glossary";
+$CannotDeleteGlossary = "Cannot delete glossary";
+$TermsImported = "Terms imported";
+$TermsNotImported = "Terms not imported";
+$ExportGlossaryAsCSV = "Export glossary as a CSV file";
 ?>

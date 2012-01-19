@@ -1203,4 +1203,9 @@ $HottestCourses = "Hottest courses";
 $SentAtX = "Sent at: %s";
 $dateTimeFormatShort = "%b %d, %Y at %I:%M %p";
 $dateTimeFormatShortTimeFirst = "%I:%M %p, %b %d %Y";
+$LoginToVote = "Login to vote";
+$DoNotShow = "Do not show";
+$ShowToAdminsOnly = "Show to admins only";
+$ShowToAdminsAndTeachers = "Show to admins and teachers";
+$ShowToAllUsers = "Show to all  users";
 ?>

@@ -340,6 +340,15 @@ if ($encryptPassForm == '1') {
     			$("#is_executable").attr("value",'step6');
         	});    		
 	 	});
+        
+        /*
+        function check_db() {
+            var status = ($('#db_status').attr('class'));
+            if (status == 'confirmation-message') {
+                return true;    
+            }
+            return false;
+        }*/
 
 		function show_hide_tracking_and_user_db (my_option) {
 			if (my_option=='singleDb1') {
@@ -630,6 +639,27 @@ if ($_POST['step2']) {
 	</div><br />
 	
 	<blockquote>
+        
+    <?php if ($installType == 'new'): ?>
+	<?php echo get_lang('AdminLogin').' : <strong>'.$loginForm; ?></strong><br />
+	<?php echo get_lang('AdminPass').' : <strong>'.$passForm; /* TODO: Maybe this password should be hidden too? */ ?></strong><br /><br />
+	<?php else: ?>	
+	<?php endif; ?>
+    
+    
+	<?php
+	if (api_is_western_name_order()) {
+		echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
+	} else {
+		echo get_lang('AdminLastName').' : '.$adminLastName, '<br />', get_lang('AdminFirstName').' : '.$adminFirstName, '<br />';
+	}
+	?>
+    
+    <?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
+    
+	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
+    
+    
 
 	<?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
 	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
@@ -664,25 +694,10 @@ if ($_POST['step2']) {
   	echo $encryptPassForm;
 	?><br /><br />
 
-	<?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
-	<?php
-	if (api_is_western_name_order()) {
-		echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
-	} else {
-		echo get_lang('AdminLastName').' : '.$adminLastName, '<br />', get_lang('AdminFirstName').' : '.$adminFirstName, '<br />';
-	}
-	?>
-	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
-
-	<?php if ($installType == 'new'): ?>
-	<?php echo get_lang('AdminLogin').' : <strong>'.$loginForm; ?></strong><br />
-	<?php echo get_lang('AdminPass').' : <strong>'.$passForm; /* TODO: Maybe this password should be hidden too? */ ?></strong><br /><br />
-	<?php else: ?>	
-	<?php endif; ?>
 	<?php echo get_lang('CampusName').' : '.$campusForm; ?><br />
 	<?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br />
 	<?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br />
-	<?php echo get_lang('ChamiloURL').' : '.$urlForm; ?><br />
+	<?php echo get_lang('ChamiloURL').' : <>'.$urlForm; ?><br />
 
 	</blockquote>
 

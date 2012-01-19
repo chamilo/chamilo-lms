@@ -620,14 +620,20 @@ function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFor
     if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
         $check_user_can_create_databases = true;
         //Checking if single database exist 
-        if ($singleDbForm) {            
+        
+        /*if ($singleDbForm) {
             if (database_exists($dbPrefixForm.$dbNameForm)) {                        
                 $check_user_can_create_databases = false;                
                 $dbConnect = 1;    
             }            
-        } 
+        }*/
         
+        $dbConnect = 1;
+        
+        //this is not neeeded for chamilo 1.9 
+        //
         //Checking database creation
+        /*
         if ($check_user_can_create_databases) {
             @Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)        
             //$multipleDbCheck = @Database::query("CREATE DATABASE ".$dbPrefixForm."test_chamilo_connection");
@@ -643,7 +649,7 @@ function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFor
             } else {
                 $dbConnect = 0;
             }
-        }
+        }*/
     } else {
         $dbConnect = -1;
     }    
@@ -1720,12 +1726,15 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     </tr>   */
     ?>
     <tr>
-        <td><button type="submit" class="login" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" ><?php echo get_lang('CheckDatabaseConnection'); ?></button></td>
+        <td>
+            <button type="submit" class="login" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" >
+                <?php echo get_lang('CheckDatabaseConnection'); ?></button>
+        </td>
         <?php
-        $dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm);
+        $dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm);        
         if ($dbConnect == 1): ?>
         <td colspan="2">
-            <div class="confirmation-message">                
+            <div id="db_status" class="confirmation-message">                
                 Database host: <strong><?php echo Database::get_host_info(); ?></strong><br />
                 Database server version: <strong><?php echo Database::get_server_info(); ?></strong><br />
                 Database client version: <strong><?php echo Database::get_client_info(); ?></strong><br />
@@ -1735,7 +1744,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         </td>
         <?php else: ?>
         <td colspan="2">
-            <div style="float:left;" class="error-message">                
+            <div id="db_status" style="float:left;" class="error-message">                
                 <div style="float:left;">
 	                <strong>Database error: <?php echo Database::errno(); ?></strong><br />
 	                <?php echo Database::error().'<br />'; ?>
@@ -1746,9 +1755,18 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         <?php endif; ?>
     </tr>
     <tr>
-      <td><button type="submit" name="step2" class="back" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button></td>
+      <td>
+          <button type="submit" name="step2" class="back" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
+      </td>
       <td>&nbsp;</td>
-      <td align="right"><input type="hidden" name="is_executable" id="is_executable" value="-" /><button type="submit" class="next" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" /><?php echo get_lang('Next'); ?></button></td>
+      <td align="right">
+          <input type="hidden" name="is_executable" id="is_executable" value="-" />
+           <?php if ($dbConnect == 1) { ?>          
+            <button type="submit"  class="next" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" /><?php echo get_lang('Next'); ?></button>
+          <?php } else { ?>
+            <button disabled="disabled" type="submit" class="next disabled" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" /><?php echo get_lang('Next'); ?></button>
+          <?php } ?>  
+      </td>
     </tr>
     </table>
     <?php
@@ -1785,7 +1803,24 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 
     echo "</td></tr> <tr><td>";
     echo '<table class="data_table_no_border">';
+    
+    //Parameter 7: administrator's login
+    display_configuration_parameter($installType, get_lang('AdminLogin'), 'loginForm', $loginForm, $installType == 'update');
 
+    //Parameter 8: administrator's password
+    if ($installType != 'update') {
+        display_configuration_parameter($installType, get_lang('AdminPass'), 'passForm', $passForm, false);
+    }    
+    
+    //Parameters 4 and 5: administrator's names
+    if (api_is_western_name_order()) {
+        display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
+        display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
+    } else {
+        display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
+        display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
+    }
+    
     //First parameter: language
     echo "<tr>";
     echo '<td>'.get_lang('MainLang')."&nbsp;&nbsp;</td>";
@@ -1813,25 +1848,10 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
     //Parameter 3: administrator's email
     display_configuration_parameter($installType, get_lang('AdminEmail'), 'emailForm', $emailForm);
 
-    //Parameters 4 and 5: administrator's names
-    if (api_is_western_name_order()) {
-        display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
-        display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
-    } else {
-        display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
-        display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
-    }
-
     //Parameter 6: administrator's telephone
     display_configuration_parameter($installType, get_lang('AdminPhone'), 'adminPhoneForm', $adminPhoneForm);
 
-    //Parameter 7: administrator's login
-    display_configuration_parameter($installType, get_lang('AdminLogin'), 'loginForm', $loginForm, $installType == 'update');
 
-    //Parameter 8: administrator's password
-    if ($installType != 'update') {
-        display_configuration_parameter($installType, get_lang('AdminPass'), 'passForm', $passForm, false);
-    }
 
     //Parameter 9: campus name
     display_configuration_parameter($installType, get_lang('CampusName'), 'campusForm', $campusForm);

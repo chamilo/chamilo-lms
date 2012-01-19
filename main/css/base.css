@@ -1436,6 +1436,11 @@ button:hover {
 
 /* Nice buttons v2 */
 
+button.next.disabled, .a_button.disabled {
+    cursor: default;
+    opacity: 0.65;
+}
+
 .a_button {
     cursor: pointer;
     display: inline-block;

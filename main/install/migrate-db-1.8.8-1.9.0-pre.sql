@@ -109,7 +109,7 @@ ALTER TABLE session_rel_course_rel_user ADD COLUMN legal_agreement INTEGER DEFAU
 ALTER TABLE course ADD COLUMN legal TEXT NOT NULL;
 ALTER TABLE course ADD COLUMN activate_legal INT NOT NULL DEFAULT 0;
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enable_help_link', NULL, 'radio', 'Platform', 'true', 'EnableHelpLinkTitle', 'EnableHelpLinkTitle', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enable_help_link', NULL, 'radio', 'Platform', 'true', 'EnableHelpLinkTitle', 'EnableHelpLinkComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_help_link', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_help_link', 'false', 'No');
 

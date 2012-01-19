@@ -107,7 +107,7 @@ if ($_GET['f']=='social') {
 } else {
 	$this_section = SECTION_MYPROFILE;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
-	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Inbox'));
+	//$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Inbox'));
 }
 
 //Display::display_header('');
@@ -165,6 +165,8 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('layout/social_layout.tpl');
     $content = $tpl->fetch($social_layout);
+} else {
+    $content = $social_right_content;
 }
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $show_message);

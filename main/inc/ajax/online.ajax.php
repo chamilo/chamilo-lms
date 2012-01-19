@@ -14,7 +14,7 @@ switch($action) {
         
         $max_page = round(who_is_online_count()/10);
         
-        if (!in_array($page, $_SESSION['online_user_items']) && $page <= $max_page) {                          
+        if (!isset($_SESSION['online_user_items']) || (isset($_SESSION['online_user_items']) && !in_array($page, $_SESSION['online_user_items']) && $page <= $max_page)) {                          
             if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
                 $user_list = who_is_online_in_this_course($page_rows, $page_rows + 10, api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
             } else {

@@ -165,10 +165,6 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 				//this include the social menu div
 				$social_left_content = SocialManager::show_social_menu('whoisonline');				
 			}			
-		} else {
-			$social_right_content .= '<div class="actions-title">';
-			$social_right_content .= get_lang('UsersOnLineList');
-			$social_right_content .= '</div>';
 		}
 	}
 

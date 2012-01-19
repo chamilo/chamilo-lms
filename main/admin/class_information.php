@@ -50,22 +50,21 @@ if (count($users) > 0) {
         $table_header[] = array (get_lang('LastName'), true);
         $table_header[] = array (get_lang('FirstName'), true);
     }
-    $table_header[] = array (get_lang('LoginName'), true);
     $table_header[] = array (get_lang('Email'), true);
     $table_header[] = array (get_lang('Status'), true);
     $table_header[] = array ('', false);
     $data = array();
     foreach($users as $index => $user) {
+        $username = sprintf(get_lang('LoginX'), $user['username']);
         $row = array ();
         $row[] = $user['official_code'];
         if ($is_western_name_order) {
             $row[] = $user['firstname'];
-            $row[] = $user['lastname'];
+            $row[] = "<span title='$username'>".$user['lastname']."</span>";
         } else {
-            $row[] = $user['lastname'];
+            $row[] = "<span title='$username'>".$user['lastname']."</span>";
             $row[] = $user['firstname'];
         }
-        $row[] = $user['username'];
         $row[] = Display :: encrypted_mailto_link($user['email'], $user['email']);
         $row[] = $user['status'] == 5 ? get_lang('Student') : get_lang('Teacher');
         $row[] = '<a href="user_information.php?user_id='.$user['user_id'].'">'.Display::return_icon('synthese_view.gif').'</a>';

@@ -106,18 +106,21 @@ function hide_icon_edit(element_html)  {
 }       
 
 
-$(document).ready(function() {
+
+$(document).ready(function() {    
     $(document).endlessScroll({
         fireOnce: false,
         fireDelay: false,
         loader: "<div class=\'loading\'>Loading<div>",
         callback: function(page) {    
-        page = page + 1;
-          $.ajax({                
+            page = page;            
+                
+            $.ajax({                
                 beforeSend: function(objeto) {
-                    $("#display_response_id").html("Loading"); },
+                    $("#display_response_id").html("Loading"); 
+                },
                 type: "GET",
-                    url: "main/inc/ajax/online.ajax.php?a=load_online_user",
+                url: "main/inc/ajax/online.ajax.php?a=load_online_user",
                 data: "online_page_nr="+page,
                 success: function(data) {   
                     if (data != "end") {
@@ -126,12 +129,10 @@ $(document).ready(function() {
                     }
                 }
             });
-        }
+          
+       }    
     });
-});
-
-
-        
+});        
 </script>';
 
 if ($_GET['chatid'] != '') {
@@ -155,57 +156,57 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
 		$user_list = who_is_online_in_this_course(api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
 	} else {
-		$user_list = who_is_online(api_get_setting('time_limit_whosonline'));		
+		$user_list = who_is_online(0, 10);		
 	}
-
-	$total = count($user_list);
-	if (!isset($_GET['id'])) {
-	    $header_title  = get_lang('UsersOnLineList');
-        if (!api_get_user_id()) { 
-            $header_title = null;
-        }
-		Display::display_header($header_title);
+    
+	if (!isset($_GET['id'])) {	    		
 		if (api_get_setting('allow_social_tool') == 'true') {
-			if (!api_is_anonymous()) {
-				echo '<div id="social-content-left">';
+			if (!api_is_anonymous()) {				
 				//this include the social menu div
-				SocialManager::show_social_menu('whoisonline');
-				echo '</div>';
+				$social_left_content = SocialManager::show_social_menu('whoisonline');				
 			}			
 		} else {
-			echo '<div class="actions-title">';
-			echo get_lang('UsersOnLineList');
-			echo '</div>';
+			$social_right_content .= '<div class="actions-title">';
+			$social_right_content .= get_lang('UsersOnLineList');
+			$social_right_content .= '</div>';
 		}
 	}
 
 	if ($user_list) {
 		if (!isset($_GET['id'])) {
-			if (api_get_setting('allow_social_tool') == 'true') {
-				echo '<div id="social-content-right">';			
-				//this include the social menu div
+			if (api_get_setting('allow_social_tool') == 'true') {				
 				if (!api_is_anonymous()) {
 				    $query = isset($_GET['q']) ? $_GET['q']: null;				    
-					echo UserManager::get_search_form($query);
+					$social_right_content .= UserManager::get_search_form($query);
 				}
 			}
-			echo Display::tag('h2', get_lang('UsersOnLineList'));
-			SocialManager::display_user_list($user_list);			
-			if (api_get_setting('allow_social_tool') == 'true') {				
-				echo '</div>';
-			}			
-		} else {
-			//individual user information - also displays header info
-			SocialManager::display_individual_user($_GET['id']);
+			$social_right_content .= Display::tag('h2', get_lang('UsersOnLineList'));
+			$social_right_content .= SocialManager::display_user_list($user_list);							
 		}
-	} elseif (isset($_GET['id'])) {
-		Display::display_header(get_lang('UsersOnLineList'));
-		echo '<div class="actions-title">';
-		echo get_lang('UsersOnLineList');
-		echo '</div>';
 	}
-} else {
-	Display::display_header(get_lang('UsersOnLineList'));
-	Display::display_error_message(get_lang('AccessNotAllowed'));
+    
+    if (isset($_GET['id'])) {
+        //SocialManager::display_individual_user($_GET['id']);
+        header("Location: ".api_get_path(WEB_CODE_PATH)."social/profile.php?u=?".$_GET['id']);
+        exit;            
+    }
+} else {	
+	api_not_allowed();
+    exit;
 }
-Display::display_footer();
+
+$tpl = new Template(get_lang('UsersOnLineList'));
+if (api_get_setting('allow_social_tool') == 'true') {
+    $tpl->assign('social_left_content', $social_left_content);
+    $tpl->assign('social_left_menu', $social_left_menu);
+    $tpl->assign('social_right_content', $social_right_content);
+    $social_layout = $tpl->get_template('layout/social_layout.tpl');
+    $content = $tpl->fetch($social_layout);
+} else {
+    $content = $social_right_content;
+}
+
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

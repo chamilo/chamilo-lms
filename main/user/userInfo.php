@@ -446,17 +446,11 @@ elseif ($displayMode == "viewContentEdit") {
 		echo '<input type="image" src="'.$image_array['dir'].$image_array['file'].'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 		}
 
-		// is the user online ?			
-		$users_online = who_is_online(30);
-		foreach ($users_online as $online) {
-			if (in_array($userIdViewed, $online)) {	
-				$online = Display::return_icon('online.gif', get_lang('OnLine'),array('style'=>'with="8"; height="8"'));
-				break;
-			} else {
-				$online ='';
-			}
-				
-		}
+		// is the user online?		
+        $online ='';
+        if (user_is_online($userIdViewed)) {
+            $online = Display::return_icon('online.gif', get_lang('OnLine'),array('style'=>'with="8"; height="8"'));
+        }
 
 		//DISPLAY TABLE HEADING
 		if ($origin == 'learnpath') { $allowedToEditDef=false; $is_allowedToTrack=false; }

@@ -2823,7 +2823,7 @@ class UserManager {
 	 *
 	 */
 	public static function get_search_form($query) {
-		echo'<div class="social-groups-home-title"><b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')</div>
+		return '<div class="social-groups-home-title"><b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')</div>
 		<form method="GET" action="'.api_get_path(WEB_PATH).'main/social/search.php">
 		<table cellspacing="0" cellpadding="0">
 		<tr>

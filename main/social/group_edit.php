@@ -127,8 +127,6 @@ if ( $form->validate()) {
 	exit();
 }
 
-Display::display_header($tool_name);
-
 // Group picture
 $image_path = GroupPortalManager::get_group_picture_path_by_id($group_id,'web');
 $image_dir = $image_path['dir'];
@@ -143,19 +141,18 @@ $big_image_width = $big_image_size['width'];
 $big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
 
-//Shows left column
-//echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
+$social_left_content = SocialManager::show_social_menu('group_edit',$group_id);
+$social_right_content = $form->return_form();						
 
-echo '<div id="social-content">';
-	echo '<div id="social-content-left">';
-	//this include the social menu div
-	SocialManager::show_social_menu('group_edit',$group_id);
-	echo '</div>';
-	echo '<div id="social-content-right">';
-	// Display form
-	$form->display();						
-	echo '</div>';
-echo '</div>';
 
-// Footer
-Display::display_footer();
+$tpl = new Template($tool_name);
+$tpl->set_help('Groups');
+$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_left_menu', $social_left_menu);
+$tpl->assign('social_right_content', $social_right_content);
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$content = $tpl->fetch($social_layout);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

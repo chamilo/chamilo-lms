@@ -1025,8 +1025,8 @@ class GroupPortalManager {
 	 *
 	 */
 	public static function show_group_column_information($group_id, $user_id, $show = '') {
-
 		global $relation_group_title, $my_group_role;
+        $html = '';
 
 		$group_info 	= GroupPortalManager::get_group_data($group_id);
 		$picture		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,GROUP_IMAGE_SIZE_MEDIUM);
@@ -1039,7 +1039,7 @@ class GroupPortalManager {
 		$my_group_role = self::get_user_group_role($user_id, $group_id);
 
 		//@todo this must be move to default.css for dev use only
-		echo '<style>
+		$html .= '<style>
 				#group_members { width:270px; height:300px; overflow-x:none; overflow-y: auto;}
 				.group_member_item { width:100px; height:130px; float:left; margin:5px 5px 15px 5px; }
 				.group_member_picture { display:block;
@@ -1067,7 +1067,7 @@ class GroupPortalManager {
 				$links .=  '<li><a href="group_edit.php?id='.$group_id.'">'.			Display::return_icon('group_edit.png', get_lang('EditGroup'), array('hspace'=>'6')).'<span class="'.($show=='group_edit'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('EditGroup').'</span></a></li>';
 				//$links .=  '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('member_list.png', get_lang('MemberList'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MemberList').'</span></a></li>';
 				//if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
-					$links .=  '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('waiting_list.png', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="'.($show=='waiting_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('WaitingList').'</span></a></li>';
+				$links .=  '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('waiting_list.png', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="'.($show=='waiting_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('WaitingList').'</span></a></li>';
 				//}
 				$links .=  '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('invitation_friend.png', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';
 				break;
@@ -1101,13 +1101,13 @@ class GroupPortalManager {
 		}
 
 		if (!empty($links)) {
-			echo '<ul class="social-menu-groups">';
+			$html .= '<ul class="social-menu-groups">';
 			if (!empty($group_info['description'])) {
-				echo Display::tag('li', Security::remove_XSS($group_info['description'], STUDENT, true), array('class'=>'group_description'));
+				$html .= Display::tag('li', Security::remove_XSS($group_info['description'], STUDENT, true), array('class'=>'group_description'));
 			}
-			echo $links;
-			echo '</ul>';
-		}
-		
+			$html .= $links;
+			$html .= '</ul>';
+		}		
+        return $html;
 	}
 }

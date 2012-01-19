@@ -24,7 +24,6 @@ if (isset($_GET['messages_page_nr'])) {
 if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();	
 }
-//jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[]='<script language="javascript">
 
@@ -81,13 +80,13 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 		}
 		if (isset($user_reply) && !is_null($user_id_by_email) && strlen($info_reply[0]) >0) {
 			MessageManager::send_message($user_id_by_email, $title, $content);
-			MessageManager::display_success_message($user_id_by_email);
-			inbox_display();
+			$show_message .= MessageManager::return_message($user_id_by_email,'confirmation');
+			$social_right_content .= inbox_display();
 			exit;
 		} elseif (is_null($user_id_by_email)) {
 			$message_box=get_lang('ErrorSendingMessage');
-			Display::display_error_message(api_xml_http_response_encode($message_box),false);
-			inbox_display();
+			$show_message .= Display::return_message(api_xml_http_response_encode($message_box),'error');
+			$social_right_content .= inbox_display();
 			exit;
 		}
 	} elseif (trim($info_delete[0])=='delete' ) {
@@ -95,18 +94,12 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $info_delete[$i]);
 		}
 		$message_box=get_lang('SelectedMessagesDeleted');
-		Display::display_normal_message(api_xml_http_response_encode($message_box),false);
-	   	inbox_display();
+		$show_message .= Display::return_message(api_xml_http_response_encode($message_box));
+	   	$social_right_content .= inbox_display();
 	    exit;
 	}
 }
 
-
-$link_ref="new_message.php";
-$table_message = Database::get_main_table(TABLE_MESSAGE);
-
-
-//api_display_tool_title(api_xml_http_response_encode(get_lang('Inbox')));
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
@@ -117,63 +110,63 @@ if ($_GET['f']=='social') {
 	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Inbox'));
 }
 
-Display::display_header('');
+//Display::display_header('');
 $social_parameter = '';
 
 if ($_GET['f']=='social' || api_get_setting('allow_social_tool') == 'true') {
 	$social_parameter = '?f=social';	
 } else {
     
-	//Comes from normal profile	
-	echo '<div class="actions">';
+	//Comes from normal profile		
 	if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
-		echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
+		$actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
 	}
 	
-	if (api_get_setting('allow_message_tool') == 'true') {
-		//echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';		
-		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>';
-		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>';
-        echo '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>';            
+	if (api_get_setting('allow_message_tool') == 'true') {		
+		$actions .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>';
+		$actions .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>';
+        $actions .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>';            
 	}	
-	echo '</div>';
+}	
+
+//LEFT CONTENT			
+if (api_get_setting('allow_social_tool') == 'true') { 		
+    $social_left_content = SocialManager::show_social_menu('messages');
 }
 
-echo '<div id="social-content">';
-	$id_content_right = '';
-	//LEFT CONTENT			
-	if (api_get_setting('allow_social_tool') != 'true') { 
-		$id_content_right = 'inbox';		
-	} else {		
-		$id_content_right = 'social-content-right';
-		echo '<div id="social-content-left">';	
-			//this include the social menu div
-			SocialManager::show_social_menu('messages');
-		echo '</div>';		
-	}
+//Right content
 
-	echo '<div id="'.$id_content_right.'">';    
-    if (api_get_setting('allow_social_tool') == 'true') {
-    	echo '<div class="actions">';				
-    		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
-            echo '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array(), 32).'</a>';                        
-    	echo '</div>';
-    		
-    }	
-    //MAIN CONTENT
-    if (!isset($_GET['del_msg'])) {
-    	inbox_display();
-    } else {
-    	$num_msg = intval($_POST['total']);
-    	for ($i=0;$i<$num_msg;$i++) {
-    		if($_POST[$i]) {
-    			//the user_id was necesarry to delete a message??
-    			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
-    		}
-    	}
-    	inbox_display();
-    }    
-	echo '</div>';	
-echo '</div>';
+if (api_get_setting('allow_social_tool') == 'true') {
+    $social_right_content .=  '<div class="actions">';				
+        $social_right_content .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
+        $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array(), 32).'</a>';                        
+    $social_right_content .=  '</div>';
 
-Display::display_footer();
+}	
+//MAIN CONTENT
+if (!isset($_GET['del_msg'])) {
+    $social_right_content .= inbox_display();
+} else {
+    $num_msg = intval($_POST['total']);
+    for ($i=0;$i<$num_msg;$i++) {
+        if($_POST[$i]) {
+            //the user_id was necesarry to delete a message??
+            $show_message .= MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
+        }
+    }
+    $social_right_content .= inbox_display();
+}    
+$social_right_content .=  '</div>';	
+
+$tpl = new Template($tool_name);
+if (api_get_setting('allow_social_tool') == 'true') {
+    $tpl->assign('social_left_content', $social_left_content);
+    $tpl->assign('social_left_menu', $social_left_menu);
+    $tpl->assign('social_right_content', $social_right_content);
+    $social_layout = $tpl->get_template('layout/social_layout.tpl');
+    $content = $tpl->fetch($social_layout);
+}
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

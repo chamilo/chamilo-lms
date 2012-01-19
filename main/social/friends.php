@@ -85,20 +85,12 @@ function clear_form () {
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Friends'));
 
-Display :: display_header($tool_name, 'Groups');
+//Display :: display_header($tool_name, 'Groups');
 
-echo '<div id="social-content">';
-
-	echo '<div id="social-content-left">';	
-		//this include the social menu div
-		SocialManager::show_social_menu('friends');	
-	echo '</div>';
-	echo '<div id="social-content-right">';
+$social_left_content = SocialManager::show_social_menu('friends');	
 	
-$language_variable	= api_xml_http_response_encode(get_lang('Contacts'));
 $user_id	= api_get_user_id();
 
-$list_path_friends	= array();
 $user_id	    = api_get_user_id();
 $name_search = isset($_POST['search_name_q']) ? $_POST['search_name_q']: null;
 $number_friends = 0;
@@ -109,14 +101,13 @@ if (isset($name_search) && $name_search!='undefined') {
 	$friends = SocialManager::get_friends($user_id);
 }
 
-
 if (count($friends) == 0 ) {
-	echo get_lang('NoFriendsInYourContactList').'<br /><br />';
-	echo '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';	
+	$social_right_content = get_lang('NoFriendsInYourContactList').'<br /><br />';
+	$social_right_content .= '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';	
 } else {
-	echo get_lang('Search') .'&nbsp;&nbsp; : &nbsp;&nbsp;'; ?>
-	<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" onkeyup="search_image_social()" />
-	<?php				
+	$social_right_content = get_lang('Search') .'&nbsp;&nbsp; : &nbsp;&nbsp;';
+	$social_right_content .= '<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" onkeyup="search_image_social()" />';
+    
 		$friend_html = '';
 		$number_of_images = 8;
 		
@@ -141,8 +132,19 @@ if (count($friends) == 0 ) {
 			$friend_html.='</td></tr>';
 		}
 		$friend_html.='<br/></table>';
-		echo $friend_html;
+		$social_right_content .=  $friend_html;
 	}
-	echo '</div>';
-	echo '</div>';	
-Display :: display_footer();
+	$social_right_content .=  '</div>';
+	$social_right_content .=  '</div>';	
+    $social_right_content .=  '</div>';	
+
+$tpl = new Template(get_lang('Social'));
+$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_left_menu', $social_left_menu);
+$tpl->assign('social_right_content', $social_right_content);
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$content = $tpl->fetch($social_layout);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

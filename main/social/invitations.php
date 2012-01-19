@@ -67,7 +67,7 @@ function register_friend(element_input) {
 </script>';
 
 api_block_anonymous_users();
-Display :: display_header($tool_name, 'Groups');
+//Display :: display_header($tool_name, 'Groups');
 
 // easy links
 if (is_array($_GET) && count($_GET)>0) {
@@ -92,25 +92,11 @@ if (is_array($_GET) && count($_GET)>0) {
 		}		
 	}
 }
+$social_left_content = SocialManager::show_social_menu('invitations');
 
-$language_variable = get_lang('PendingInvitations');
-$language_comment  = get_lang('SocialInvitesComment');
+$social_right_content =  '<div id="id_response" align="center"></div>';
 
-echo '<div id="social-content">';
-
-	echo '<div id="social-content-left">';	
-		//this include the social menu div
-		SocialManager::show_social_menu('invitations');
-	echo '</div>';
-
-	echo '<div id="social-content-right">';
-    
-		if (!empty($show_message)) {
-			Display :: display_normal_message($show_message);
-		}		
-		
-		echo '<div id="id_response" align="center"></div>';
-		$list_get_invitation=array();
+		$list_get_invitation = array();
 		$user_id = api_get_user_id();
 		
 		$list_get_invitation		= SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
@@ -121,11 +107,11 @@ echo '<div id="social-content">';
 		$total_invitations = $number_loop + count($list_get_invitation_sent) + count($pending_invitations);
 		
 		if ($total_invitations == 0 && count($_GET) <= 0) {
-			echo '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a><br /><br />';
+			$social_right_content .= '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a><br /><br />';
 		} 		
 		
 		if ($number_loop != 0) {
-			echo '<h2>'.get_lang('InvitationReceived').'</h2>';	
+			$social_right_content .= '<h2>'.get_lang('InvitationReceived').'</h2>';	
 			
 			foreach ($list_get_invitation as $invitation) {				
 				$sender_user_id = $invitation['user_sender_id']
@@ -209,7 +195,7 @@ echo '<div id="social-content">';
 		}
 		
 		if (count($pending_invitations) > 0) {					
-			echo '<h2>'.get_lang('GroupsWaitingApproval').'</h2>';
+			$social_right_content .= '<h2>'.get_lang('GroupsWaitingApproval').'</h2>';
 			$new_invitation = array();				
 			foreach ($pending_invitations as $invitation) {					
 				$picture = GroupPortalManager::get_picture_group($invitation['id'], $invitation['picture_uri'],80);							
@@ -222,8 +208,18 @@ echo '<div id="social-content">';
 				$invitation['description'] = cut($invitation['description'],220,true);
 				$new_invitation[]=$invitation;
 			}
-			Display::display_sortable_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));
+			$social_right_content .= Display::display_return_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));
 		}		
-	echo '</div>';
-echo '</div>';
-Display::display_footer();
+	$social_right_content .= '</div>';
+
+
+$tpl = new Template($tool_name);
+$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_left_menu', $social_left_menu);
+$tpl->assign('social_right_content', $social_right_content);
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$content = $tpl->fetch($social_layout);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

@@ -140,12 +140,13 @@ if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 	}
 }
 
-Display :: display_header($tool_name, 'Groups');
+//Display :: display_header($tool_name, 'Groups');
 
 // getting group information
 $group_id	= isset($_GET['id']) ? intval($_GET['id']) : null;
 $relation_group_title = '';
 $my_group_role = 0;
+
 if ($group_id != 0 ) {
 	$user_leave_message = false;
 	$user_added_group_message = false;
@@ -177,21 +178,15 @@ if ($group_id != 0 ) {
 }
 $create_thread_link = '';
 
-echo '<div id="social-content">';
-	echo '<div id="social-content-left">';
-		//this include the social menu div
-		if ($group_id != 0 ) {									
-			SocialManager::show_social_menu('groups',$group_id);
-		} else {
-			$show_menu = 'browse_groups';
-			if (isset($_GET['view']) && $_GET['view'] == 'mygroups') {
-				$show_menu = $_GET['view'];
-			}
-			SocialManager::show_social_menu($show_menu);
-		}
-	echo '</div>';
-
-	echo '<div id="social-content-right">';
+if ($group_id != 0 ) {									
+    $social_left_content = SocialManager::show_social_menu('groups',$group_id);
+} else {
+    $show_menu = 'browse_groups';
+    if (isset($_GET['view']) && $_GET['view'] == 'mygroups') {
+        $show_menu = $_GET['view'];
+    }
+    $social_left_content = SocialManager::show_social_menu($show_menu);
+}
 
 if ($group_id != 0 ) {
 
@@ -199,47 +194,47 @@ if ($group_id != 0 ) {
 
 	//Loading group information
 	if (isset($_GET['status']) && $_GET['status']=='sent') {
-		Display::display_confirmation_message(get_lang('MessageHasBeenSent'), false);
+		$social_right_content .= Display::return_message(get_lang('MessageHasBeenSent'), 'confirmation', false);
 	}
 
 	if ($user_leave_message) {
-		Display::display_confirmation_message(get_lang('UserIsNotSubscribedToThisGroup'), false);
+		$social_right_content .= Display::return_message(get_lang('UserIsNotSubscribedToThisGroup'), 'confirmation', false);
 	}
 
 	if ($user_added_group_message) {
-		Display::display_confirmation_message(get_lang('UserIsSubscribedToThisGroup'), false);
+		$social_right_content .= Display::return_message(get_lang('UserIsSubscribedToThisGroup'), 'confirmation', false);
 	}
 	
     if ($user_invitation_sent) {
-        Display::display_confirmation_message(get_lang('InvitationSent'), false);
+        $social_right_content .= Display::return_message(get_lang('InvitationSent'), 'confirmation', false);
     }
     
     $is_group_member = GroupPortalManager::is_group_member($group_id);    
 
 	// details about the current group
-	echo '<div class="head_group">';    
-		echo '<div id="social-group-details">';
+	$social_right_content = '<div class="head_group">';    
+		$social_right_content .=  '<div id="social-group-details">';
 				//Group's title
-				echo Display::tag('h2', Security::remove_XSS($group_info['name'], STUDENT, true));
+				$social_right_content .=  Display::tag('h2', Security::remove_XSS($group_info['name'], STUDENT, true));
 				
 				//echo '<div class="social-group-details-info"><a target="_blank" href="'.$group_info['url'].'">'.$group_info['url'].'</a></div>';
 				
 				//Privacy
 				if (!$is_group_member) {
-    				echo '<div class="social-group-details-info">';
-    					echo '<span>'.get_lang('Privacy').' : </span>';
+    				$social_right_content .=  '<div class="social-group-details-info">';
+    					$social_right_content .=  '<span>'.get_lang('Privacy').' : </span>';
     					if ($group_info['visibility']== GROUP_PERMISSION_OPEN) {
-    						echo get_lang('ThisIsAnOpenGroup');
+    						$social_right_content .=  get_lang('ThisIsAnOpenGroup');
     					} elseif ($group_info['visibility']== GROUP_PERMISSION_CLOSED) {
-    						echo get_lang('ThisIsACloseGroup');
+    						$social_right_content .=  get_lang('ThisIsACloseGroup');
     					}
-    				echo '</div>';
+    				$social_right_content .=  '</div>';
 				}
 				
 				if (!$is_group_member && $group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
 				    $role = GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);				    
 				    if ($role == GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER) {
-				        echo Display::display_normal_message(get_lang('YouAlreadySentAnInvitation'));
+				        $social_right_content .=  Display::return_message(get_lang('YouAlreadySentAnInvitation'));
 				    }
 				}
 				 
@@ -252,23 +247,23 @@ if ($group_id != 0 ) {
 				}
 				//Group's tags
 				if (!empty($tags)) {
-					echo '<div id="social-group-details-info"><span>'.get_lang('Tags').' : </span>'.$tags.'</div>';
+					$social_right_content .=  '<div id="social-group-details-info"><span>'.get_lang('Tags').' : </span>'.$tags.'</div>';
 				}
-		echo '</div>';
-	echo '</div>';
-	echo '<div class="clear"></div>';
+		$social_right_content .=  '</div>';
+	$social_right_content .=  '</div>';
+	$social_right_content .=  '<div class="clear"></div>';
 
 	//-- Show message groups
-	echo '<div class="messages" style="width:700px">';	    
+	$social_right_content .=  '<div class="messages" style="width:700px">';	    
 	     
 		if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
 		    if (!$is_group_member) {		        
     		    if (!in_array($my_group_role, array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION))) {
-                    echo '<a class="a_button white medium" href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';
+                    $social_right_content .=  '<a class="a_button white medium" href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';
                 } elseif ($my_group_role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-                    echo '<a class="a_button white medium" href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('YouHaveBeenInvitedJoinNow').'</a>';
+                    $social_right_content .=  '<a class="a_button white medium" href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('YouHaveBeenInvitedJoinNow').'</a>';
                 }
-                echo '<br /><br />';
+                $social_right_content .=  '<br /><br />';
 		    }            
 			
 			$content = MessageManager::display_messages_for_group($group_id);
@@ -276,11 +271,10 @@ if ($group_id != 0 ) {
     			if (empty($content)) {		
     				$create_thread_link =  '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="a_button white medium thickbox" title="'.get_lang('ComposeMessage').'">'.get_lang('YouShouldCreateATopic').'</a></li>';
     			} else {
-    			    $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="a_button white medium thickbox" title="'.get_lang('ComposeMessage').'">'.get_lang('NewTopic').'</a>';
-    			     			    
+    			    $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="a_button white medium thickbox" title="'.get_lang('ComposeMessage').'">'.get_lang('NewTopic').'</a>';    			     			    
     			}			
 			}
-			$members		= GroupPortalManager::get_users_by_group($group_id);
+			$members = GroupPortalManager::get_users_by_group($group_id);
             $member_content = '';
             
     		//Members
@@ -318,16 +312,16 @@ if ($group_id != 0 ) {
     		//$updates = 
     		//get_lang('Updates'), 
     		$headers = array(get_lang('Discussions'), get_lang('Members'));
-			echo Display::tabs($headers, array($create_thread_link.$content, $member_content),'tabs');			
+			$social_right_content .= Display::tabs($headers, array($create_thread_link.$content, $member_content),'tabs');			
 		} else {
 			// if I already sent an invitation message
 			if (!in_array($my_group_role, array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION))) {
-				echo '<a class="a_button white medium" href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';
+				$social_right_content .=  '<a class="a_button white medium" href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';
 			} elseif ($my_group_role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-				echo '<a class="a_button white medium" href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('YouHaveBeenInvitedJoinNow').'</a>';
+				$social_right_content .=  '<a class="a_button white medium" href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('YouHaveBeenInvitedJoinNow').'</a>';
 			}
 		}
-	echo '</div>'; // end layout messages
+	$social_right_content .=  '</div>'; // end layout messages
 
 } else {
 		// My groups -----
@@ -531,11 +525,24 @@ if ($group_id != 0 ) {
 	   	}
 	   	
 	   	if (!empty($create_group_item)) {
-	   		echo Display::div($create_group_item, array('style'=>'padding-top:12px;height:30px'));
+	   		$social_right_content .=  Display::div($create_group_item, array('style'=>'padding-top:12px;height:30px'));
 	   	}	   	
-	   	$headers = array(get_lang('MyGroups'), get_lang('Newest'), get_lang('Popular'));	   	
-		echo Display::tabs($headers, array($my_group_content, $newest_content, $popular_content),'tab_browse');
+	   	$headers = array(get_lang('Newest'), get_lang('Popular'), get_lang('MyGroups'));	   	
+		$social_right_content .=  Display::tabs($headers, array($newest_content, $popular_content, $my_group_content),'tab_browse');
     }
-	echo '</div>';
-echo '</div>';
-Display :: display_footer();
+	$social_right_content .=  '</div>';
+
+//Display :: display_footer();
+
+
+$tpl = new Template($tool_name);
+$tpl->set_help('Groups');
+$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_left_menu', $social_left_menu);
+$tpl->assign('social_right_content', $social_right_content);
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$content = $tpl->fetch($social_layout);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

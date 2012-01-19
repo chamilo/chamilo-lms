@@ -9,6 +9,7 @@ class Template extends Smarty {
 	var $style = 'default'; //see the template folder 
 	var $show_header;
 	var $show_footer;
+    var $help;
 	
 	function __construct($title = '', $show_header = true, $show_footer = true) {
 		$this->title = $title;
@@ -53,6 +54,10 @@ class Template extends Smarty {
         
 		$this->assign('style', $this->style);
 	}
+    
+    function set_help($help) {
+        $this->help = $help;
+    }
 
     /*
      * Use smarty to parse the actions menu
@@ -183,8 +188,9 @@ class Template extends Smarty {
 		
 	}
 
-	private function set_header_parameters($help = null) {
-		$nameTools = $this->title;
+	private function set_header_parameters() {
+        $help       = $this->help;
+		$nameTools  = $this->title;
 		global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
 		global $httpHeadXtra, $htmlHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, 
 				$_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;		

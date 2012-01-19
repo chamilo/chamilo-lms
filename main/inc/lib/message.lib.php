@@ -31,10 +31,11 @@ define('MESSAGE_STATUS_INVITATION_DENIED',	'7');
  */
 class MessageManager
 {
-	public static function get_online_user_list($current_user_id) {
-		$min=30;
+	public static function get_online_user_list($current_user_id) {		
 		global $_configuration;
-		$userlist = who_is_online($min, true);
+        //@todo this is a bad idea to parse all users online
+        $count = who_is_online_count();
+		$userlist = who_is_online(0, $count, null, null, 30, true);
 		$online_user_list = array();
 		foreach($userlist as $row) {
 			$receiver_id = $row[0];
@@ -67,7 +68,7 @@ class MessageManager
 				GetFullUserName($uid).
 				"</b>";
 		}
-		Display::display_confirmation_message(api_xml_http_response_encode($success), false);
+		return Display::return_message(api_xml_http_response_encode($success), 'confirmation', false);
 	}
 
 	/**
@@ -95,10 +96,10 @@ class MessageManager
 	/**
 	* Get the list of user_ids of users who are online.
 	*/
-	public static function users_connected_by_id() {
-		global $_configuration, $_user;
-		$minute=30;
-		$user_connect = who_is_online($minute, true);
+	public static function users_connected_by_id() {		
+		$count = who_is_online_count();
+		$user_connect = who_is_online(0, $count, null, null, 30, true);
+        $user_id_list = array(); 
 		for ($i=0; $i<count($user_connect); $i++) {
 			$user_id_list[$i]=$user_connect[$i][0];
 		}
@@ -1016,7 +1017,7 @@ class MessageManager
         $query_vars = array('id' => $group_id, 'topic_id' => $topic_id , 'topics_page_nr' => 0);        
         
         // Main message        
-        $html = '';              
+                    
         $user_link = '';
         $links = '';
         $main_content  = '';
@@ -1024,7 +1025,9 @@ class MessageManager
         //$items_page_nr = intval($_GET['items_'.$topic['id'].'_page_nr']);
         $items_page_nr = null;
         
-        echo Display::tag('h3', Security::remove_XSS($main_message['title'], STUDENT, true));
+        $html = '';
+        
+        $html .= Display::tag('h3', Security::remove_XSS($main_message['title'], STUDENT, true));
         
         $user_sender_info = UserManager::get_user_info_by_id($main_message['user_sender_id']);
         $files_attachments = self::get_links_message_attachment_files($main_message['id']);
@@ -1058,8 +1061,6 @@ class MessageManager
         $main_content.= '<div class="message-group-content">'.$links.$user_link.' '.$date.$main_message['content'].$attachment.'</div>';
         $main_content = Security::remove_XSS($main_content, STUDENT, true);
 
-        $html = '';   
-        
         $html .= Display::div(Display::div(Display::div($main_content, array('class'=>'group_social_sub_item', 'style'=>'background-color:#fff;')), array('class' => 'group_social_item')), array('class' => 'group_social_grid'));
         
         $topic_id = $main_message['id'];
@@ -1241,9 +1242,9 @@ class MessageManager
 //@todo this functions should be in the message class
 
 function inbox_display() {
-	global $charset;
-	$table_message = Database::get_main_table(TABLE_MESSAGE);
+	global $charset;	
     $success = get_lang('SelectedMessagesDeleted');
+    $html = '';
     
 	if (isset ($_REQUEST['action'])) {
 		switch ($_REQUEST['action']) {
@@ -1252,23 +1253,21 @@ function inbox_display() {
     			foreach ($_POST['id'] as $index => $message_id) {
     				MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);
     			}
-    			Display::display_normal_message(api_xml_http_response_encode($success),false);
+    			$html .= Display::return_message(api_xml_http_response_encode($success), 'normal', false);
     			break;
 			case 'deleteone' :
     			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
-    			Display::display_confirmation_message(api_xml_http_response_encode($success),false);
-    			echo '<br />';
+    			$html .= Display::return_message(api_xml_http_response_encode($success),'confirmation', false);    			
     			break;
 		}
 	}
-	// display sortable table with messages of the current user
-	//$table = new SortableTable('messages', 'get_number_of_messages_mask', 'get_message_data_mask', 3, get_number_of_messages_mask(),'DESC');
+    
+	// display sortable table with messages of the current user	
 	$table = new SortableTable('message_inbox', array('MessageManager','get_number_of_messages'), array('MessageManager','get_message_data'),3,20,'DESC');
 	$table->set_header(0, '', false,array ('style' => 'width:15px;'));
 	$title=api_xml_http_response_encode(get_lang('Title'));
 	$action=api_xml_http_response_encode(get_lang('Modify'));
-	$table->set_header(1,api_xml_http_response_encode(get_lang('Messages')),false);
-	//$table->set_header(2,$title,true);
+	$table->set_header(1,api_xml_http_response_encode(get_lang('Messages')),false);	
 	$table->set_header(2,api_xml_http_response_encode(get_lang('Date')),true, array('style' => 'width:180px;'));
 	$table->set_header(3,$action,false,array ('style' => 'width:70px;'));
 	
@@ -1277,8 +1276,8 @@ function inbox_display() {
 		$table->set_additional_parameters($parameters);
 	}    
 	$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
-
-	$table->display();
+    $html .= $table->return_table();
+	return $html;
 	
 }
 
@@ -1294,8 +1293,7 @@ function get_message_data_mask($from, $number_of_items, $column, $direction) {
 	return MessageManager::get_message_data($from, $number_of_items, $column, $direction);
 }
 
-function outbox_display() {
-	$table_message = Database::get_main_table(TABLE_MESSAGE);
+function outbox_display() {	
 	$request=api_is_xml_http_request();
 	global $charset;
 
@@ -1303,7 +1301,7 @@ function outbox_display() {
 	if ($_REQUEST['f']=='social') {
 		$social_link ='f=social';
 	}
-	$success= get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php?'.$social_link.'">'.get_lang('BackToOutbox').'</a>';
+	$success = get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php?'.$social_link.'">'.get_lang('BackToOutbox').'</a>';
 	
 	if (isset ($_REQUEST['action'])) {
 		switch ($_REQUEST['action']) {
@@ -1314,18 +1312,17 @@ function outbox_display() {
     					MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);
     				}
     			}
-    			Display::display_normal_message(api_xml_http_response_encode($success),false);
+    			$html .= Display::return_message(api_xml_http_response_encode($success),'normal', false);
     			break;
 			case 'deleteone' :
     			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
-    			Display::display_confirmation_message(api_xml_http_response_encode($success),false);
-                echo '<br/>';
+    			$html .=Display::return_message(api_xml_http_response_encode($success), 'normal', false);
+                $html .= '<br/>';
 			 break;
 		}
 	}
 
-	// display sortable table with messages of the current user
-	//$table = new SortableTable('messages', 'get_number_of_messages_send_mask', 'get_message_data_send_mask', 3, get_number_of_messages_send_mask(), 'DESC');
+	// display sortable table with messages of the current user	
 	$table = new SortableTable('message_outbox', array('MessageManager','get_number_of_messages_sent'), array('MessageManager','get_message_data_sent'),3,20,'DESC');
 
 	$parameters['f'] = Security::remove_XSS($_GET['f']);
@@ -1341,21 +1338,22 @@ function outbox_display() {
 
 	
 	if ($request===true) {
-		echo '<form name="form_send_out" id="form_send_out" action="" method="post">';
-		echo '<input type="hidden" name="action" value="delete" />';
-		$table->display();
-		echo '</form>';
+		$html .=  '<form name="form_send_out" id="form_send_out" action="" method="post">';
+		$html .=  '<input type="hidden" name="action" value="delete" />';
+		$html .= $table->return_table();
+		$html .=  '</form>';
 		if (get_number_of_messages_send_mask() > 0) {
-			echo '<a href="javascript:void(0)" onclick="selectall_cheks()">'.api_xml_http_response_encode(get_lang('SelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
-			echo '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.api_xml_http_response_encode(get_lang('UnSelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
-			echo '<button class="save" name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'outbox\')">'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'</button>';
+			$html .=  '<a href="javascript:void(0)" onclick="selectall_cheks()">'.api_xml_http_response_encode(get_lang('SelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
+			$html .=  '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.api_xml_http_response_encode(get_lang('UnSelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
+			$html .=  '<button class="save" name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'outbox\')">'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'</button>';
 		}
 	} else {
 		$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
-		$table->display();
+		$html .= $table->return_table();
 	}
-	
+    return $html;	
 }
+
 function get_number_of_messages_send_mask() {
 	return MessageManager::get_number_of_messages_sent();
 }

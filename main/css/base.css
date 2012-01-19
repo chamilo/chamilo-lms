@@ -4230,6 +4230,17 @@ a:active{
     margin-right: 4px;    
 }
 
+.offline_user_in_text {
+    background: url("offline.png") no-repeat scroll right center transparent;
+    float: left;
+    height: 16px;
+    left: 0;
+    width: 17px;
+    display:block;
+    margin-right: 4px;    
+}
+
+
 
 .hide_menu{
     display:none;

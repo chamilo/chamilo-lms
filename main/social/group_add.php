@@ -102,15 +102,24 @@ $this_section = SECTION_SOCIAL;
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));
 $interbreadcrumb[]= array ('url' =>'#','name' => $nameTools);
-Display :: display_header($tool_name, 'Groups');
+//Display :: display_header($tool_name, 'Groups');
 
-echo '<div id="social-content">';
-	echo '<div id="social-content-left">';
-		//show the action menu
-		SocialManager::show_social_menu('group_add');
-	echo '</div>';
-	echo '<div id="social-content-right">';	
-    $form->display();	
-    echo '</div>';
-echo '</div>';
-Display :: display_footer();
+$social_left_content = SocialManager::show_social_menu('group_add');
+
+$social_right_content .= $form->return_form();	
+
+
+
+
+
+$tpl = new Template($tool_name);
+$tpl->set_help('Groups');
+$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_left_menu', $social_left_menu);
+$tpl->assign('social_right_content', $social_right_content);
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$content = $tpl->fetch($social_layout);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

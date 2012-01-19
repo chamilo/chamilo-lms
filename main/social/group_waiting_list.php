@@ -41,9 +41,6 @@ if (empty($group_id)) {
 	}
 }
 
-
-Display :: display_header($tool_name, 'Groups');
-
 // Group information
 $admins		= GroupPortalManager::get_users_by_group($group_id, true, array(GROUP_USER_PERMISSION_ADMIN), 0, 1000);
 $show_message = ''; 
@@ -82,37 +79,37 @@ if (isset($_GET['action']) && $_GET['action']=='set_moderator') {
 $users	= GroupPortalManager::get_users_by_group($group_id, true, array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER), 0, 1000);
 $new_member_list = array();
 
-//Shows left column
-//echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());	
-echo '<div id="social-content">';
-	echo '<div id="social-content-left">';	
-	//this include the social menu div
-	SocialManager::show_social_menu('waiting_list',$group_id);	
-	echo '</div>';
-	echo '<div id="social-content-right">';			
-		if (!empty($show_message)){
-			Display :: display_normal_message($show_message);
-		}		
-		// Display form
-		foreach($users as $user) {	 
-			switch ($user['relation_type']) {			
-				case  GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
-				$user['link']  = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=accept">'.Display::return_icon('invitation_friend.png', get_lang('AddNormalUser')).'</a>';
-				$user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.Display::return_icon('social_moderator_add.png', get_lang('AddModerator')).'</a>';
-				$user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=deny">'.Display::return_icon('user_delete.png', get_lang('DenyEntry')).'</a>';
-				break;				
-			}
-			$new_member_list[] = $user;
-		}
-		
-		if (count($new_member_list) > 0) {			
-			Display::display_sortable_grid('search_users', array(), $new_member_list, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true,false,true,true));		
-		} else {
-			Display :: display_normal_message(get_lang('ThereAreNotUsersInTheWaitingList'));
-		}				
-	echo '</div>';
-echo '</div>';
+$social_left_content = SocialManager::show_social_menu('waiting_list',$group_id);	
 
-	
-Display :: display_footer();
-?>
+if (!empty($show_message)){
+    $social_right_content .= Display :: return_message($show_message);
+}		
+// Display form
+foreach($users as $user) {	 
+    switch ($user['relation_type']) {			
+        case  GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
+        $user['link']  = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=accept">'.Display::return_icon('invitation_friend.png', get_lang('AddNormalUser')).'</a>';
+        $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.Display::return_icon('social_moderator_add.png', get_lang('AddModerator')).'</a>';
+        $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=deny">'.Display::return_icon('user_delete.png', get_lang('DenyEntry')).'</a>';
+        break;				
+    }
+    $new_member_list[] = $user;
+}
+
+if (count($new_member_list) > 0) {			
+    $social_right_content .= Display::return_sortable_grid('search_users', array(), $new_member_list, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true,false,true,true));		
+} else {
+    $social_right_content .= Display :: return_message(get_lang('ThereAreNotUsersInTheWaitingList'));
+}				
+
+$tpl = new Template($tool_name);
+$tpl->set_help('Groups');
+$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_left_menu', $social_left_menu);
+$tpl->assign('social_right_content', $social_right_content);
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$content = $tpl->fetch($social_layout);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

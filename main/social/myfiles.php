@@ -67,7 +67,7 @@ function register_friend(element_input) {
 </script>';
 
 
-Display :: display_header($tool_name, 'Groups');
+//Display :: display_header($tool_name, 'Groups');
 
 // easy links
 if (is_array($_GET) && count($_GET)>0) {
@@ -93,19 +93,22 @@ if (is_array($_GET) && count($_GET)>0) {
 	}
 }
 
-$language_variable = get_lang('PendingInvitations');
-$language_comment  = get_lang('SocialInvitesComment');
+$social_left_content = SocialManager::show_social_menu('myfiles');
+		$social_right_content .=  '<a href=""></a>';//TODO: hack and delete this line
+		$social_right_content .= '<br />';								
+        $social_right_content .= '<table><tr><td><iframe name="fileManager" id="fileManager" src="'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=stand_alone" scrolling="no" noresize="noresize" frameborder="no" style="height:450px; width:700px; float:left"></iframe></td></tr></table>';
+	$social_right_content .= '</div>';
+$social_right_content .=  '</div>';	
 
-echo '<div id="social-content">';
-	echo '<div id="social-content-left">';	
-		//this include the social menu div
-		SocialManager::show_social_menu('myfiles');
-	echo '</div>';
 
-	echo '<div id="social-content-right>';
-		echo '<a href=""></a>';//TODO: hack and delete this line
-		echo '<br />';								
-        echo '<table><tr><td><iframe name="fileManager" id="fileManager" src="'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=stand_alone" scrolling="no" noresize="noresize" frameborder="no" style="height:450px; width:700px; float:left"></iframe></td></tr></table>';
-	echo '</div>';
-echo '</div>';	
-Display::display_footer();
+
+$tpl = new Template(get_lang('Social'));
+$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_left_menu', $social_left_menu);
+$tpl->assign('social_right_content', $social_right_content);
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$content = $tpl->fetch($social_layout);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

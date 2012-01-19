@@ -21,7 +21,6 @@ $this_section = SECTION_SOCIAL;
 unset($_SESSION['this_section']);//for hmtl editor repository
 
 api_block_anonymous_users();
-
 if (api_get_setting('allow_social_tool') !='true' ){
     api_not_allowed();
 }
@@ -66,27 +65,16 @@ if (api_get_setting('profile', 'picture') == 'true') {
 	}
 }
 
-Display :: display_header(get_lang('Social'));
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
-$user_online_list = who_is_online(api_get_setting('time_limit_whosonline'),true);
-$user_online_count = count($user_online_list);
 
-echo '<div id="social-content">';
-
-	echo '<div id="social-content-left">';
-	//this include the social menu div
-	SocialManager::show_social_menu('home');
-	echo '</div>';
-    
-    
-	echo '<div id="social-content-right">';
-		
-        echo '<div class="social_user_information" style="width:280px">';
+$social_left_content = SocialManager::show_social_menu('home');
+	
+        $social_right_content .= '<div class="social_user_information" style="width:280px">';
             
-            echo '<div class="social-groups-home-title">'.get_lang('ContactInformation').'</div>';
+            $social_right_content .= '<div class="social-groups-home-title">'.get_lang('ContactInformation').'</div>';
 			
 		    // information current user		       
-            echo '<div>
+            $social_right_content .= '<div>
                     <p><strong>'.get_lang('Name').'</strong><br />
                     <span class="social-groups-text4">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</span></p>
                   </div>
@@ -102,31 +90,26 @@ echo '<div id="social-content">';
             $skill = new Skill();
             $skills =  $skill->get_user_skills(api_get_user_id(), true);
             
-            echo '<div class="left" style="width:280px">';            
-                echo '<div class="social-groups-home-title">'.get_lang('Skills').'</div>';
+            $social_right_content .= '<div class="left" style="width:280px">';            
+                $social_right_content .= '<div class="social-groups-home-title">'.get_lang('Skills').'</div>';
                 $lis = '';
                 if (!empty($skills)) {
                     foreach($skills as $skill) {
                         $lis .= Display::tag('li', Display::span($skill['name'], array('class'=>'label_tag skill')));
                     }                
-                    echo Display::tag('ul', $lis);
+                    $social_right_content .= Display::tag('ul', $lis);
                 }
                 $url = api_get_path(WEB_CODE_PATH).'social/skills_tree.php';            
-                echo Display::url(get_lang('ViewSkillsTree'), $url);                
-            echo '</div>';
+                $social_right_content .= Display::url(get_lang('ViewSkillsTree'), $url);                
+            $social_right_content .= '</div>';
+        $social_right_content .= '</div>'; // end social_user_information
         
-            
-        echo '</div>'; // end social_user_information
-        
-        
-                       
-            
                  
             //Search box
-			echo '<div class="social-box-right">';	
+			$social_right_content .= '<div class="social-box-right">';	
 					
-    			echo UserManager::get_search_form('');
-    			echo '<br />';
+    			$social_right_content .= UserManager::get_search_form('');
+    			$social_right_content .= '<br />';
     			
     			//Group box by age
     			$results = GroupPortalManager::get_groups_by_age(1,false);
@@ -171,22 +154,25 @@ echo '<div id="social-content">';
     				$actions = '<div class="box_description_group_actions" ><a href="groups.php?#tab_browse-3">'.get_lang('SeeMore').'</a></div>';
     				$groups_pop[]= array(Display::url($result['picture_uri'], $group_url) , $result['name'], cut($result['description'],120,true).$actions);
     			}
-    
+                
     			if (count($groups_newest) > 0) {
-    				echo '<div class="social-groups-home-title">'.get_lang('Newest').'</div>';
-    				Display::display_sortable_grid('home_group', array(), $groups_newest, array('hide_navigation'=>true, 'per_page' => 100), array(), false, array(true, true, true,false));				
+    				$social_right_content .= '<div class="social-groups-home-title">'.get_lang('Newest').'</div>';
+    				$social_right_content .= Display::return_sortable_grid('home_group', array(), $groups_newest, array('hide_navigation'=>true, 'per_page' => 100), array(), false, array(true, true, true,false));				
     			}
     
     			if (count($groups_pop) > 0) {
-    				echo '<div class="social-groups-home-title">'.get_lang('Popular').'</div>';
-    				Display::display_sortable_grid('home_group', array(), $groups_pop, array('hide_navigation'=>true, 'per_page' => 100), array(), false, array(true, true, true,true,true));
+    				$social_right_content .= '<div class="social-groups-home-title">'.get_lang('Popular').'</div>';
+    				$social_right_content .= Display::return_sortable_grid('home_group', array(), $groups_pop, array('hide_navigation'=>true, 'per_page' => 100), array(), false, array(true, true, true,true,true));
     			}
-
-			echo '</div>';
+			$social_right_content .= '</div>';
             
-                
-		
-	echo '</div>';
-echo '</div>';
-
-Display :: display_footer();
+$tpl = new Template(get_lang('Social'));
+$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_left_menu', $social_left_menu);
+$tpl->assign('social_right_content', $social_right_content);
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$content = $tpl->fetch($social_layout);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

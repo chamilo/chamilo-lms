@@ -267,8 +267,8 @@ switch ($action) {
 //var_dump($result);
 
 //5. Creating an obj to return a json
-if (in_array($action, array('get_careers','get_promotions','get_usergroups','get_gradebooks', 'get_sessions','get_exercise_results'))) { 
-    $response = new stdClass();           
+if (in_array($action, array('get_careers', 'get_promotions', 'get_usergroups', 'get_gradebooks', 'get_sessions', 'get_exercise_results'))) { 
+    $response           = new stdClass();           
     $response->page     = $page; 
     $response->total    = $total_pages; 
     $response->records  = $count; 

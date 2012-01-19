@@ -45,7 +45,6 @@ function validate(form,list) {
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function () {
     $("#users").fcbkcomplete({
@@ -130,7 +129,8 @@ function show_compose_to_any ($user_id) {
 	$online_user_list = MessageManager::get_online_user_list($user_id);
 	$default['user_list'] = 0;
 	$online_user_list=null;
-	manage_form($default, $online_user_list);
+	$html = manage_form($default, $online_user_list);
+    return $html;
 }
 
 function show_compose_reply_to_message($message_id, $receiver_id) {
@@ -140,31 +140,29 @@ function show_compose_reply_to_message($message_id, $receiver_id) {
 	$result = Database::query($query);
 	$row = Database::fetch_array($result,'ASSOC');
 	if (!isset($row['user_sender_id'])) {
-		echo get_lang('InvalidMessageId');
-		exit;
+		$html = get_lang('InvalidMessageId');
+		return $html;
 	}
 	$pre_html = '<div class="row">
 				<div class="label">'.get_lang('SendMessageTo').': </div>
-				<div class="formw">';
-                
+				<div class="formw">';                
 	$post = '</div></div>';
-	$multi_select = '<select id="users" name="users">
-					 </select>';
-    echo $pre_html.'<strong>'.GetFullUserName($row['user_sender_id']).'</strong>'.$post;
+    $sent_to = $pre_html.'<strong>'.GetFullUserName($row['user_sender_id']).'</strong>'.$post;
 	$default['users'] = array($row['user_sender_id']);
-	manage_form($default);
+	$html .= manage_form($default, null, $sent_to);
+    return $html;
 }
 
 function show_compose_to_user ($receiver_id) {
 	global $charset;
-	echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($receiver_id).'</strong>';
+	$html = get_lang('To').':&nbsp;<strong>'.GetFullUserName($receiver_id).'</strong>';
 	$default['title'] = api_xml_http_response_encode(get_lang('EnterTitle'));
 	$default['users'] = array($receiver_id);
-	manage_form($default);
+	$html .= manage_form($default);
+    return $html;
 }
 
-function manage_form ($default, $select_from_user_list = null) {
-	$table_message = Database::get_main_table(TABLE_MESSAGE);
+function manage_form($default, $select_from_user_list = null, $sent_to = null) {	
 
 	$group_id 		= isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
 	$message_id 	= isset($_GET['message_id'])  ?  intval($_GET['message_id']) : null;	
@@ -178,12 +176,14 @@ function manage_form ($default, $select_from_user_list = null) {
 			$form->addElement('html','<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
 			$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 		} else {
+            if (!empty($sent_to)) {
+                $form->addElement('html',$sent_to);
+            }
 			if (empty($default['users'])) {
 				//the magic should be here
 				$pre_html = '<div class="row">
 							 <div class="label">'.get_lang('SendMessageTo').'</div>
-							<div class="formw">';
-                            
+							<div class="formw">';                            
 				$post = '</div></div>';
 				$multi_select = '<select id="users" name="users">
 	      						 </select>';
@@ -231,7 +231,7 @@ function manage_form ($default, $select_from_user_list = null) {
 		$default['title'] = get_lang('Re:').$message_info['title'];
 	}
 	$form->setDefaults($default);
-
+    $html = '';
 	if ($form->validate()) {
 		$check = Security::check_token('post');		
 		if ($check) {			
@@ -247,9 +247,9 @@ function manage_form ($default, $select_from_user_list = null) {
 					$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);				
 					if ($res) {
 						if (is_string($res)) {
-							Display::display_error_message($res);
+							$html .= Display::return_message($res, 'error');
 						} else {
-							MessageManager::display_success_message($user);
+							$html .= MessageManager::display_success_message($user);
 						}
 					}
 				}       
@@ -262,8 +262,9 @@ function manage_form ($default, $select_from_user_list = null) {
 		$token = Security::get_token();
 		$form->addElement('hidden','sec_token');
 		$form->setConstants(array('sec_token' => $token));
-		$form->display();
+		$html .= $form->return_form();
 	}
+    return $html;
 }
 
 /* MAIN SECTION */
@@ -272,101 +273,96 @@ if ($_GET['f']=='social') {
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));	
 } else {
 	$this_section = SECTION_MYPROFILE;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
-	//$interbreadcrumb[]= array ('url' => '#','name' => get_lang('ComposeMessage'));
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));	
 }
 
-Display::display_header(get_lang('ComposeMessage'));
+//Display::display_header(get_lang('ComposeMessage'));
 
 $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
 
 if ($group_id != 0) {
-	echo '<div class=actions>';
-	echo '<a href="'.api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id.'">'.Display::return_icon('back.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('BackToGroup')).'</a>';
-	echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
-	echo '</div>';
+	$social_right_content .= '<div class=actions>';
+	$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id.'">'.Display::return_icon('back.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('BackToGroup')).'</a>';
+	$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
+	$social_right_content .= '</div>';
 } else {
 	if ($_GET['f']=='social') {
-                
-
 	} else {
-		echo '<div class=actions>';
+		$social_right_content .= '<div class=actions>';
 		if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
-			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
+			$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
 		}
 		if (api_get_setting('allow_message_tool') == 'true') {
-			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>';
-			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>';
-            echo '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>';		    
+			$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>';
+			$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>';
+            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>';		    
 		}
-		echo '</div>';
+		$social_right_content .= '</div>';
 	}
 }
 
-echo '<div id="social-content">';
-	$id_content_right = '';
-	//LEFT COLUMN
-	if (api_get_setting('allow_social_tool') != 'true') {
-		$id_content_right = 'inbox';		
-	} else {		
-		echo '<div id="social-content-left">';
-		//this include the social menu div
-		SocialManager::show_social_menu('messages');
-		echo '</div>';
-		$id_content_right = 'social-content-right';
-	}
-
-	echo '<div id="'.$id_content_right.'">';
 	
-		//MAIN CONTENT
-		if (api_get_setting('allow_social_tool') == 'true') {			
-            echo '<div class="actions">';              
-            echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
-            echo '</div>';
-		}
-		if (!isset($_POST['compose'])) {
-			if(isset($_GET['re_id'])) {
-				show_compose_reply_to_message($_GET['re_id'], api_get_user_id());
-			} elseif(isset($_GET['send_to_user'])) {
-				show_compose_to_user($_GET['send_to_user']);
-			} else {
-				show_compose_to_any($_user['user_id']);
-		  	}
-		} else {
-			$restrict = false;
-			if (isset($_POST['users'])) {
-				$restrict = true;
-			} elseif (isset($_POST['group_id'])) {
-				$restrict = true;
-			} elseif(isset($_POST['hidden_user'])) {
-				$restrict = true;
-			}
+//LEFT COLUMN	
 
-			$default['title']	= $_POST['title'];
-			$default['content'] = $_POST['content'];
+if (api_get_setting('allow_social_tool') == 'true') {			
+    $social_left_content = SocialManager::show_social_menu('messages');				
+    $social_right_content .= '<div class="actions">';              
+    $social_right_content .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
+    $social_right_content .=  '</div>';
+}
+//MAIN CONTENT
+if (!isset($_POST['compose'])) {
+    if(isset($_GET['re_id'])) {
+        $social_right_content .= show_compose_reply_to_message($_GET['re_id'], api_get_user_id());
+    } elseif(isset($_GET['send_to_user'])) {
+        $social_right_content .= show_compose_to_user($_GET['send_to_user']);
+    } else {
+        $social_right_content .= show_compose_to_any($_user['user_id']);
+    }
+} else {
+    $restrict = false;
+    if (isset($_POST['users'])) {
+        $restrict = true;
+    } elseif (isset($_POST['group_id'])) {
+        $restrict = true;
+    } elseif(isset($_POST['hidden_user'])) {
+        $restrict = true;
+    }
 
-			// comes from a reply button
-			if (isset($_GET['re_id'])) {
-				manage_form($default);
-			} else {
-				// post
-				if ($restrict) {
-					if (!isset($_POST['group_id'])) {
-						$default['users']	 = $_POST['users'];
-					} else {
-						$default['group_id'] = $_POST['group_id'];
-					}
-					if (isset($_POST['hidden_user'])) {
-						$default['users']	 = array($_POST['hidden_user']);
-					}					
-					manage_form($default);
-				} else {
-					Display::display_error_message(get_lang('ErrorSendingMessage'));
-				}
-			}
-		}
-	echo '</div>';
-echo '</div>';
+    $default['title']	= $_POST['title'];
+    $default['content'] = $_POST['content'];
 
-/*		FOOTER */
-Display::display_footer();
+    // comes from a reply button
+    if (isset($_GET['re_id'])) {
+        $social_right_content .= manage_form($default);
+    } else {
+        // post
+        if ($restrict) {
+            if (!isset($_POST['group_id'])) {
+                $default['users']	 = $_POST['users'];
+            } else {
+                $default['group_id'] = $_POST['group_id'];
+            }
+            if (isset($_POST['hidden_user'])) {
+                $default['users']	 = array($_POST['hidden_user']);
+            }					
+            $social_right_content .= manage_form($default);
+        } else {
+            $social_right_content .= Display::return_message(get_lang('ErrorSendingMessage'),'error');
+        }
+    }
+}
+$social_right_content .=  '</div>';
+
+$tpl = new Template(get_lang('ComposeMessage'));
+if (api_get_setting('allow_social_tool') == 'true') {
+    $tpl->assign('social_left_content', $social_left_content);
+    $tpl->assign('social_left_menu', $social_left_menu);
+    $tpl->assign('social_right_content', $social_right_content);
+    $social_layout = $tpl->get_template('layout/social_layout.tpl');
+    $content = $tpl->fetch($social_layout);
+}
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

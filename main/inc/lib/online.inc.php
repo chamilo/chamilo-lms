@@ -143,23 +143,53 @@ function user_is_online($user_id) {
  * @param   bool		optionally if it's set to true shows who friends from social network is online otherwise just shows all users online
  * @return  array       For each line, a list of user IDs and login dates, or FALSE on error or empty results
  */
-function who_is_online($valid, $friends = false) {
-	$valid = (int) $valid;
+function who_is_online($from, $number_of_items, $column = null, $direction = null, $time_limit = null, $friends = false) {
+    
+    if (empty($time_limit)) {
+        $time_limit = api_get_setting('time_limit_whosonline');
+    } else {
+        $time_limit = intval($time_limit);
+    }
+    
+    $from            = intval($from);
+    $number_of_items = intval($number_of_items);
+    
+    if (empty($column)) {
+        $column = 'picture_uri';
+        if ($friends) {
+            $column = 'login_date';    
+        }
+        
+    }
+    
+    if (empty($direction)) {
+        $direction = 'DESC';
+    } else {
+        if (!in_array(strtolower($direction), array('asc', 'desc'))) {
+            $direction = 'DESC';
+        }
+    }
+    
 	$current_date		= date('Y-m-d H:i:s',time());
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 	$table_user			= Database::get_main_table(TABLE_MAIN_USER);
-	$query = '';
+	$query              = '';    
     
 	if ($friends) {
 		// 	who friends from social network is online
-		$query = "SELECT DISTINCT login_user_id,login_date
+		$query = "SELECT DISTINCT login_user_id, login_date
 				  FROM $track_online_table INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
-				  WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."'  AND relation_type='".USER_RELATION_TYPE_FRIEND."' AND user_id = '".api_get_user_id()."' ";
+				  WHERE DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."' AND user_id = '".api_get_user_id()."' 
+                  ORDER BY $column $direction 
+                  LIMIT $from, $number_of_items";
 	} else {
 		// all users online
-		//$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  "; //WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'
-		$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." e INNER JOIN ".$table_user ." u ON (u.user_id=e.login_user_id)  WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' ORDER BY picture_uri DESC";
+		//$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."'  "; //WHERE DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."'
+		$query = "SELECT login_user_id, login_date FROM ".$track_online_table ." e INNER JOIN ".$table_user ." u ON (u.user_id=e.login_user_id)  
+                  WHERE DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' 
+                  ORDER BY $column $direction 
+                  LIMIT $from, $number_of_items";
 	}
 	
 	if (api_get_multiple_access_url()) {		
@@ -168,25 +198,31 @@ function who_is_online($valid, $friends = false) {
 			if ($friends) {
 				// 	friends from social network is online
 				$query = "SELECT distinct login_user_id,login_date
-							FROM $track_online_table track
-							INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
-							WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."'  ";
+							FROM $track_online_table track INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
+							WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."'  
+                            ORDER BY $column $direction 
+                            LIMIT $from, $number_of_items";                        
 			} else {
 				// all users online
 				$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." track  INNER JOIN ".$table_user ." u ON (u.user_id=track.login_user_id)
-						  WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' ORDER BY picture_uri DESC  ";
+						  WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' 
+                          ORDER BY $column $direction  
+                          LIMIT $from, $number_of_items";
 			}
 		}
 	}	
 	
 	//This query will show all registered users. Only for dev purposes.
-	$query = "SELECT DISTINCT u.user_id as login_user_id, login_date FROM ".$track_online_table ."  e , $table_user u GROUP by u.user_id  ORDER BY picture_uri DESC";
-	
+	/*$query = "SELECT DISTINCT u.user_id as login_user_id, login_date FROM ".$track_online_table ."  e , $table_user u             
+            GROUP by u.user_id  
+            ORDER BY $column $direction  
+            LIMIT $from, $number_of_items";	
+    */
 	$result = Database::query($query);
 	if ($result) {
 		$rtime = time();
 		$rdate = date("Y-m-d H:i:s",$rtime);
-		$validtime = mktime(date("H"),date("i")-$valid,date("s"),date("m"),date("d"),date("Y"));
+		$validtime = mktime(date("H"),date("i")-$time_limit,date("s"),date("m"),date("d"),date("Y"));
 		$rarray = array();
 
 		while(list($login_user_id,$login_date)= Database::fetch_row($result)) {
@@ -214,8 +250,12 @@ function who_is_online($valid, $friends = false) {
 	}
 }
 
-function who_is_online_count($valid, $friends = false) {
-	$valid = (int) $valid;
+function who_is_online_count($valid = null, $friends = false) {	
+    if (empty($valid)) {
+        $valid = api_get_setting('time_limit_whosonline');        
+    } else {
+        $valid = intval($valid);
+    }
 	$current_date		= date('Y-m-d H:i:s',time());
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
@@ -231,8 +271,7 @@ function who_is_online_count($valid, $friends = false) {
 		$query = "SELECT count(login_id) as count  FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  "; //WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'
 	}
 	
-	if (api_get_multiple_access_url()) {
-		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+	if (api_get_multiple_access_url()) {		
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {
 			if ($friends) {
@@ -248,6 +287,10 @@ function who_is_online_count($valid, $friends = false) {
 			}
 		}
 	}
+    
+    //dev purposes    
+    //$query = "SELECT count(u.user_id)  as count FROM ".$track_online_table ."  e , $table_user u    ";
+    
 	$result = Database::query($query);
 	if (Database::num_rows($result) > 0) {
 		$row = Database::fetch_array($result);

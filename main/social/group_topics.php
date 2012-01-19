@@ -60,7 +60,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 
 		// display error messages
 		if (!$res) {
-			Display::display_error_message(get_lang('Error'));
+			$social_right_content .= Display::return_message(get_lang('Error'),'error');
 		}
 		$topic_id = intval($_GET['topic_id']);
 		if ($_POST['action'] == 'add_message_group') {
@@ -164,26 +164,26 @@ $(document).ready(function() {
 </script>';
 
 $this_section = SECTION_SOCIAL;
-$interbreadcrumb[]= array ('url' =>'home.php',      'name' => get_lang('Social'));
+$interbreadcrumb[] = array ('url' =>'home.php',      'name' => get_lang('Social'));
 $interbreadcrumb[] = array('url' => 'groups.php',   'name' => get_lang('Groups'));
 $interbreadcrumb[] = array('url' => '#',            'name' => get_lang('Thread'));
 
-Display::display_header($tool_name, 'Groups');
-
-echo '<div id="social-content">';
-    echo '<div id="social-content-left">';  
-    //this include the social menu div
-    SocialManager::show_social_menu('member_list', $group_id);
-    echo '</div>';
-    echo '<div id="social-content-right">';
-         echo '<h2><a href="groups.php?id='.$group_id.'">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</a> &raquo; <a href="groups.php?id='.$group_id.'#tabs_2">'.get_lang('Discussions').'</a></h2>';
+$social_left_content = SocialManager::show_social_menu('member_list', $group_id);    
+$social_right_content .= '<h2><a href="groups.php?id='.$group_id.'">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</a> &raquo; <a href="groups.php?id='.$group_id.'#tabs_2">'.get_lang('Discussions').'</a></h2>';
          
-        if (!empty($show_message)){
-            Display::display_confirmation_message($show_message);
-        }
-        $content = MessageManager::display_message_for_group($group_id, $topic_id, $is_member, $message_id);
-        echo $content;
-    echo '</div>';
-echo '</div>';
+if (!empty($show_message)){
+    $social_right_content .= Display::return_message($show_message, 'confirmation');
+}
+$social_right_content .= MessageManager::display_message_for_group($group_id, $topic_id, $is_member, $message_id);
 
-Display :: display_footer();
+$tpl = new Template($tool_name);
+$tpl->set_help('Groups');
+$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_left_menu', $social_left_menu);
+$tpl->assign('social_right_content', $social_right_content);
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$content = $tpl->fetch($social_layout);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

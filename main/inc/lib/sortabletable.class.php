@@ -166,9 +166,9 @@ class SortableTable extends HTML_Table {
 		$this->column_filters                      = array();
 		$this->form_actions                        = array();
 		$this->checkbox_name                       = null;
-		$this->td_attributes = array ();
-		$this->th_attributes = array ();
-		$this->other_tables = array();
+		$this->td_attributes                       = array();
+		$this->th_attributes                       = array();
+		$this->other_tables                        = array();
 	}
 
 	/**
@@ -482,7 +482,7 @@ class SortableTable extends HTML_Table {
 		}
 
 		if ($hide_navigation) {
-			$items = $this->table_data; // This is a faster way to get what we want			
+			$items = $this->table_data; // This is a faster way to get what we want			            
 		} else {		    
 			// The normal way			
 			$items = $this->get_clean_html($sort_data); // Getting the items of the table						
@@ -532,19 +532,19 @@ class SortableTable extends HTML_Table {
 	 * data-pages.
 	 */
 	public function get_navigation_html () {
-		$pager = $this->get_pager();
-		$pager_links = $pager->getLinks();
-		$showed_items = $pager->getOffsetByPageId();
-		$nav = $pager_links['first'].' '.$pager_links['back'];
-		$nav .= ' '.$pager->getCurrentPageId().' / '.$pager->numPages().' ';
-		$nav .= $pager_links['next'].' '.$pager_links['last'];
+		$pager          = $this->get_pager();
+		$pager_links    = $pager->getLinks();
+		$showed_items   = $pager->getOffsetByPageId();
+		$nav            = $pager_links['first'].' '.$pager_links['back'];
+		$nav            .= ' '.$pager->getCurrentPageId().' / '.$pager->numPages().' ';
+		$nav            .= $pager_links['next'].' '.$pager_links['last'];
 		return $nav;
 	}
 
 	/**
 	 * Get the HTML-code with the data-table.
 	 */
-	public function get_table_html () {
+	public function get_table_html() {
 		$pager    = $this->get_pager();
 		$val      = $pager->getOffsetByPageId();
 		$offset   = $pager->getOffsetByPageId();

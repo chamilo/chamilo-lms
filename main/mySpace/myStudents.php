@@ -297,16 +297,11 @@ if (!empty($student_id)) {
 	echo '</div>';	
 
 	// is the user online ?
-	$student_online = intval($_GET['student']);
-	$users_online = who_is_online(30);
-	foreach ($users_online as $online) {
-		if (in_array($_GET['student'], $online)) {
-			$online = get_lang('Yes');
-			break;
-		} else {
-			$online = get_lang('No');
-		}
-	}
+    if (user_is_online($_GET['student'])) {
+        $online = get_lang('Yes');
+    } else {
+        $online = get_lang('No');
+    }
 		
 	// get average of score and average of progress by student
 	$avg_student_progress = $avg_student_score = $nb_courses = 0;

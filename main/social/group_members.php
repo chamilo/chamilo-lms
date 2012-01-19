@@ -39,11 +39,6 @@ if (empty($group_id)) {
 	}
 }
 
-
-Display :: display_header($tool_name, 'Groups');
-$user_online_list = who_is_online(api_get_setting('time_limit_whosonline'), true);
-$user_online_count = count($user_online_list); 
-
 $show_message	= ''; 
 //if i'm a moderator
 if (isset($_GET['action']) && $_GET['action']=='add') {
@@ -91,54 +86,60 @@ if (isset($_GET['action']) && $_GET['action']=='delete_moderator') {
 $users	= GroupPortalManager::get_users_by_group($group_id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000);
 $new_member_list = array();
 
-echo '<div id="social-content">';
-	echo '<div id="social-content-left">';	
-	//this include the social menu div
-	SocialManager::show_social_menu('member_list',$group_id);
-	echo '</div>';
-	echo '<div id="social-content-right">';
-	
-	     echo '<h2>'.$group_info['name'].'</h2>';
-	 
-		echo '<div style="width:90%">';
-			
-		if (! empty($show_message)){
-			Display :: display_confirmation_message($show_message);
-		}	
-		foreach($users as $user) {		
-				switch ($user['relation_type']) {
-					case  GROUP_USER_PERMISSION_ADMIN:
-						$user['link'] = Display::return_icon('social_group_admin.png', get_lang('Admin'));
-					break;
-					case  GROUP_USER_PERMISSION_READER:
-						if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
-						$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete">'.Display::return_icon('delete.png', get_lang('DeleteFromGroup')).'</a>'.
-										'<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.Display::return_icon('social_moderator_add.png', get_lang('AddModerator')).'</a>';
-						}
-					break;		
-					case  GROUP_USER_PERMISSION_PENDING_INVITATION:
-						$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=add">'.Display::return_icon('pending_invitation.png', get_lang('PendingInvitation')).'</a>';					
-					break;
-					case  GROUP_USER_PERMISSION_MODERATOR:
-						$user['link'] = Display::return_icon('social_group_moderator.png', get_lang('Moderator'));
-						//only group admin can manage moderators 
-						if ($user_role == GROUP_USER_PERMISSION_ADMIN) {
-							$user['link'] .='<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete_moderator">'.Display::return_icon('social_moderator_delete.png', get_lang('DeleteModerator')).'</a>';
-						}
-					break;				
-				}
-				
-				$image_path = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);												
-				$picture = UserManager::get_picture_user($user['user_id'], $image_path['file'],80);										
-				$user['image'] = '<img src="'.$picture['file'].'"  width="50px" height="50px"  />';
-				
-			$new_member_list[] = $user;
-		}		
-		if (count($new_member_list) > 0) {			
-			Display::display_sortable_grid('list_members', array(), $new_member_list, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true,false,true,true));		
-		}
-	echo '</div>';	
-	echo '</div>';
-echo '</div>';
+$social_left_content = SocialManager::show_social_menu('member_list',$group_id);
 
-Display :: display_footer();
+$social_right_content = '<h2>'.$group_info['name'].'</h2>';
+	 
+$social_right_content .= '<div style="width:90%">';
+
+if (! empty($show_message)){
+    $social_right_content .= Display :: return_message($show_message,'confirmation', false);
+}
+
+foreach($users as $user) {		
+    switch ($user['relation_type']) {
+        case  GROUP_USER_PERMISSION_ADMIN:
+            $user['link'] = Display::return_icon('social_group_admin.png', get_lang('Admin'));
+        break;
+        case  GROUP_USER_PERMISSION_READER:
+            if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
+            $user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete">'.Display::return_icon('delete.png', get_lang('DeleteFromGroup')).'</a>'.
+                            '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.Display::return_icon('social_moderator_add.png', get_lang('AddModerator')).'</a>';
+            }
+        break;		
+        case  GROUP_USER_PERMISSION_PENDING_INVITATION:
+            $user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=add">'.Display::return_icon('pending_invitation.png', get_lang('PendingInvitation')).'</a>';					
+        break;
+        case  GROUP_USER_PERMISSION_MODERATOR:
+            $user['link'] = Display::return_icon('social_group_moderator.png', get_lang('Moderator'));
+            //only group admin can manage moderators 
+            if ($user_role == GROUP_USER_PERMISSION_ADMIN) {
+                $user['link'] .='<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete_moderator">'.Display::return_icon('social_moderator_delete.png', get_lang('DeleteModerator')).'</a>';
+            }
+        break;				
+    }
+
+    $image_path = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);												
+    $picture = UserManager::get_picture_user($user['user_id'], $image_path['file'],80);										
+    $user['image'] = '<img src="'.$picture['file'].'"  width="50px" height="50px"  />';
+
+    $new_member_list[] = $user;
+}		
+if (count($new_member_list) > 0) {			
+    $social_right_content .= Display::return_sortable_grid('list_members', array(), $new_member_list, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true,false,true,true));		
+}
+$social_right_content .= '</div>';
+
+
+
+$tpl = new Template($tool_name);
+$tpl->set_help('Groups');
+$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_left_menu', $social_left_menu);
+$tpl->assign('social_right_content', $social_right_content);
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$content = $tpl->fetch($social_layout);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

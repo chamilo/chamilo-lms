@@ -13,15 +13,10 @@
  *	@package chamilo.course_home
  */
 
-require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
-
 $hide = isset($_GET['hide']) && $_GET['hide'] == 'yes' ? 'yes' : null;
 $restore = isset($_GET['restore']) && $_GET['restore'] == 'yes' ? 'yes' : null;
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
-
-$TABLE_TOOLS = Database::get_main_table(TABLE_MAIN_COURSE_MODULE);
 $TBL_ACCUEIL = Database::get_course_table(TABLE_TOOL_LIST);
-
 $course_id = api_get_course_int_id();
 
 // WORK with data post askable by admin of course
@@ -103,22 +98,19 @@ elseif ($destroy) {
 
 elseif ($hide) { // visibility 1 -> 0
 	Database::query("UPDATE $TBL_ACCUEIL SET visibility=0 WHERE c_id = $course_id AND id=$id");
-	Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
+	$show_message .= Display::return_message(get_lang('ToolIsNowHidden'), 'confirmation');
 }
 
 /*	REACTIVATE */
 
 elseif ($restore) { // visibility 0,2 -> 1
 	Database::query("UPDATE $TBL_ACCUEIL SET visibility=1  WHERE c_id = $course_id AND id=$id");
-	Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
+	$show_message .= Display::return_message(get_lang('ToolIsNowVisible'), 'confirmation');
 }
-
 /*
  * Editing "apparance" of  a tools  on the course Home Page.
  */
-
 elseif (isset($update) && $update) {
-
 	$result 	= Database::query("SELECT * FROM $TBL_ACCUEIL WHERE c_id = $course_id AND id=$id");
 	$tool		= Database::fetch_array($result);
 	$racine		= $_configuration['root_sys'].'/'.$currentCourseID.'/images/';
@@ -126,46 +118,46 @@ elseif (isset($update) && $update) {
 	$name		= $tool[1];
 	$image		= $tool[3];
 
-	echo "<tr>\n",
-		"<td colspan=\"4\">\n",
-		"<table>\n",
-		"<tr>\n",
-		"<td>\n",
-		"<form method=\"post\" action=\"".api_get_self()."\">\n",
-		"<input type=\"hidden\" name=\"id\" value=\"$id\">\n",
-		"Image : ".Display::return_icon($image)."\n",
-		"</td>\n",
-		"<td>\n",
-		"<select name=\"image\">\n",
-		"<option selected>", $image, "</option>\n";
+	$content .= "<tr>\n".
+		"<td colspan=\"4\">\n".
+		"<table>\n".
+		"<tr>\n".
+		"<td>\n".
+		"<form method=\"post\" action=\"".api_get_self()."\">\n".
+		"<input type=\"hidden\" name=\"id\" value=\"$id\">\n".
+		"Image : ".Display::return_icon($image)."\n".
+		"</td>\n".
+		"<td>\n".
+		"<select name=\"image\">\n".
+		"<option selected>". $image. "</option>\n";
 
 	if ($dir = @opendir($chemin)) {
 		while ($file = readdir($dir)) {
 			if ($file == '..' || $file == '.') {
 				unset($file);
 			}
-			echo "<option>", $file, "</option>\n";
+			$content .= "<option>". $file. "</option>\n";
 		}
 		closedir($dir);
 	}
 
-	echo "</select>\n",
-		"</td>\n",
-		"</tr>\n",
-		"<tr>\n",
-		"<td>", get_lang('NameOfTheLink'), " : </td>\n",
-		"<td><input type=\"text\" name=\"name\" value=\"", $name, "\"></td>\n",
-		"</tr>\n",
-		"<tr>\n",
-		"<td>Lien :</td>\n",
-		"<td><input type=\"text\" name=\"link\" value=\"", $link, "\"></td>\n",
-		"</tr>\n",
-		"<tr>\n",
-		"<td colspan=\"2\"><input type=\"submit\" name=\"submit\" value=\"", get_lang('Ok'), "\"></td>\n",
-		"</tr>\n",
-		"</form>\n",
-		"</table>\n",
-		"</td>\n",
+	$content .= "</select>\n".
+		"</td>\n".
+		"</tr>\n".
+		"<tr>\n".
+		"<td>". get_lang('NameOfTheLink'). " : </td>\n".
+		"<td><input type=\"text\" name=\"name\" value=\"". $name. "\"></td>\n".
+		"</tr>\n".
+		"<tr>\n".
+		"<td>Lien :</td>\n".
+		"<td><input type=\"text\" name=\"link\" value=\"". $link. "\"></td>\n".
+		"</tr>\n".
+		"<tr>\n".
+		"<td colspan=\"2\"><input type=\"submit\" name=\"submit\" value=\"". get_lang('Ok'). "\"></td>\n".
+		"</tr>\n".
+		"</form>\n".
+		"</table>\n".
+		"</td>\n".
 		"</tr>\n";
 	}
 }
@@ -177,21 +169,17 @@ if ($is_platformAdmin && api_is_allowed_to_edit(null, true) && !api_is_coach()) 
 	// Show message to confirm that a tools must be hide  from aivailable tools
 	// visibility 0,1->2
 	if ($askDelete) {
-		echo "<table align=\"center\"><tr>\n",
-			"<td colspan=\"4\">\n",
-			"<br /><br />\n",
-			"<font color=\"#ff0000\">",
-			"&nbsp;&nbsp;&nbsp;",
-			"<strong>",get_lang('DelLk'),"</strong>",
-			"<br />&nbsp;&nbsp;&nbsp;\n",
-			"<a href=\"".api_get_self()."\">",get_lang('No'),"</a>\n",
-			"&nbsp;|&nbsp;\n",
-			"<a href=\"".api_get_self()."?delete=yes&amp;id=$id\">",get_lang('Yes'),"</a>\n",
-			"</font>\n",
-			"<br /><br /><br />\n",
-			"</td>\n",
-			"</tr>",
-			"</table>\n";
+		$content .= "<table align=\"center\"><tr><td colspan=\"4\">
+            <br /><br /><font color=\"#ff0000\">&nbsp;&nbsp;&nbsp;<strong>".get_lang('DelLk')."</strong>
+			<br />&nbsp;&nbsp;&nbsp;
+			<a href=\"".api_get_self()."\">".get_lang('No')."</a>
+			&nbsp;|&nbsp;
+			<a href=\"".api_get_self()."?delete=yes&amp;id=$id\">".get_lang('Yes')."</a>
+			</font>
+			<br /><br /><br />
+			</td>
+			</tr>
+			</table>\n";
 	} // if remove
 
 	/*
@@ -204,44 +192,43 @@ if ($is_platformAdmin && api_is_allowed_to_edit(null, true) && !api_is_coach()) 
 	}
 }
 
-echo "<table class=\"item\" align=\"center\" border=\"0\" width=\"95%\">\n";
+$content .= "<table class=\"item\" align=\"center\" border=\"0\" width=\"95%\">\n";
 
 /*	TOOLS  FOR  EVERYBODY */
 
-echo "<tr>\n<td colspan=\"6\">&nbsp;</td>\n</tr>\n";
-echo "<tr>\n<td colspan=\"6\">";
+$content .= "<tr>\n<td colspan=\"6\">&nbsp;</td>\n</tr>\n";
+$content .= "<tr>\n<td colspan=\"6\">";
 
-CourseHome::show_tool_3column('Basic');
-CourseHome::show_tool_3column('External');
+$content .= CourseHome::show_tool_3column('Basic');
+$content .= CourseHome::show_tool_3column('External');
 
-echo "</td>\n</tr>\n";
+$content .= "</td>\n</tr>\n";
 
 
 /*	PROF ONLY VIEW */
 
 if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
-	echo "<tr><td colspan=\"6\"><hr noshade size=\"1\" /></td></tr>\n",
-		"<tr>\n","<td colspan=\"6\">\n",
-		"<font color=\"#F66105\">\n", get_lang('CourseAdminOnly'), "</font>\n",
-		"</td>\n","</tr>\n";
-	echo "<tr>\n<td colspan=\"6\">";
-	CourseHome::show_tool_3column('courseAdmin');
-	echo "</td>\n</tr>\n";
+	$content .= "<tr><td colspan=\"6\"><hr noshade size=\"1\" /></td></tr>\n".
+		"<tr><td colspan=\"6\"><font color=\"#F66105\">\n".get_lang('CourseAdminOnly')."</font>
+		</td></tr>\n";
+	$content .= "<tr>\n<td colspan=\"6\">";
+	$content .=CourseHome::show_tool_3column('courseAdmin');
+	$content .= "</td>\n</tr>\n";
 }
 
 
 /*	TOOLS FOR PLATFORM ADMIN ONLY */
 
 if ($is_platformAdmin && api_is_allowed_to_edit(null, true) && !api_is_coach()) {
-	echo "<tr>","<td colspan=\"6\">",
-		"<hr noshade size=\"1\" />",
-		"</td>","</tr>\n",
-		"<tr>\n","<td colspan=\"6\">\n",
-		"<font color=\"#F66105\" >", get_lang('PlatformAdminOnly'), "</font>\n",
-		"</td>\n","</tr>\n";
-	echo "<tr>\n<td colspan=\"6\">";
-	CourseHome::show_tool_3column('platformAdmin');
-	echo "</td>\n</tr>\n";
+	$content .=  "<tr>"."<td colspan=\"6\">".
+		"<hr noshade size=\"1\" />".
+		"</td>"."</tr>\n".
+		"<tr>\n"."<td colspan=\"6\">\n".
+		"<font color=\"#F66105\" >". get_lang('PlatformAdminOnly'). "</font>\n".
+		"</td>\n"."</tr>\n";
+	$content .=  "<tr>\n<td colspan=\"6\">";
+	$content .= CourseHome::show_tool_3column('platformAdmin');
+	$content .=  "</td>\n</tr>\n";
 }
 
-echo "</table>\n";
+$content .=  "</table>\n";

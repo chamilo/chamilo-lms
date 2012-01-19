@@ -31,6 +31,8 @@ $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
 $intro_editAllowed = $is_allowed_to_edit;
 $session_id = api_get_session_id();
 
+$introduction_section = '';
+
 global $charset;
 $intro_cmdEdit = empty($_GET['intro_cmdEdit']) ? '' : $_GET['intro_cmdEdit'];
 $intro_cmdUpdate = isset($_POST['intro_cmdUpdate']);
@@ -106,7 +108,7 @@ if ($intro_editAllowed) {
 	/* Delete Command */
 	if ($intro_cmdDel) {
 		Database::query("DELETE FROM $TBL_INTRODUCTION WHERE c_id = $course_id AND id='".$moduleId."' AND session_id='".intval($session_id)."'");
-		Display::display_confirmation_message(get_lang('IntroductionTextDeleted'));
+		$introduction_section .= Display::return_message(get_lang('IntroductionTextDeleted'),'confirmation');
 	}
 }
 
@@ -116,7 +118,7 @@ if ($intro_editAllowed) {
 /* Retrieves the module introduction text, if exist */
 
 $sql = "SELECT intro_text FROM $TBL_INTRODUCTION 
-        WHERE c_id = $course_id AND id='".Database::escape_string($moduleId)."' AND session_id='".intval($session_id)."'";
+        WHERE c_id = $course_id AND id='".Database::escape_string($moduleId)."' AND session_id = '".intval($session_id)."'";
 $intro_dbQuery = Database::query($sql);
 if (Database::num_rows($intro_dbQuery) > 0) {
 	$intro_dbResult = Database::fetch_array($intro_dbQuery);
@@ -128,13 +130,10 @@ if (Database::num_rows($intro_dbQuery) > 0) {
 /* Determines the correct display */
 
 if ($intro_cmdEdit || $intro_cmdAdd) {
-
 	$intro_dispDefault = false;
 	$intro_dispForm = true;
 	$intro_dispCommand = false;
-
 } else {
-
 	$intro_dispDefault = true;
 	$intro_dispForm = false;
 
@@ -151,11 +150,10 @@ if ($intro_cmdEdit || $intro_cmdAdd) {
 if ($intro_dispForm) {
 	$default['intro_content'] = $intro_content;
 	$form->setDefaults($default);
-	echo '<div id="courseintro" style="width: 98%">';
-	$form->display();
-	echo '</div>';
+	$introduction_section .= '<div id="courseintro" style="width: 98%">';
+	$introduction_section .= $form->return_form();
+	$introduction_section .= '</div>';
 }
-
 
 $thematic_description_html = '';
 
@@ -208,6 +206,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 		$thematic_description_html .= '<div>'.$thematic_advance_info['content'].'</div>';
 		$thematic_description_html .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].'</div>';
 		$thematic_description_html .= '<br />';
+        
 		if (!empty($thematic_advance_info2)){
 			$thematic_info2 = $thematic->get_thematic_list($thematic_advance_info2['thematic_id']);
 		
@@ -227,44 +226,43 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 	} 
 }
 $style_introduction_section = 'style="margin-left:10%; margin-right:10%;"';
-echo '<div '.$style_introduction_section.'>';
+$introduction_section .= '<div '.$style_introduction_section.'>';
 if ($intro_dispDefault) {
 	//$intro_content = make_clickable($intro_content); // make url in text clickable
 	$intro_content = text_filter($intro_content); // parse [tex] codes
 	if (!empty($intro_content))	{
-		echo "<table align=\"center\"><tr><td>$intro_content</td></tr></table>";
+		$introduction_section .=  "<table align=\"center\"><tr><td>$intro_content</td></tr></table>";
 	}
 }
 
 if ($intro_dispCommand) {    
 	if (empty($intro_content)) {
 		// Displays "Add intro" commands
-		echo "<div id=\"courseintro_empty\">";
+		$introduction_section .=  "<div id=\"courseintro_empty\">";
 		if (!empty ($GLOBALS['_cid'])) {			
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdAdd=1\">";
-			echo Display::return_icon('introduction_add.gif', get_lang('AddIntro')).' ';
-			echo get_lang('AddIntro');
-			
-			echo "</a>";
+			$introduction_section .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdAdd=1\">";
+			$introduction_section .=  Display::return_icon('introduction_add.gif', get_lang('AddIntro')).' ';
+			$introduction_section .=  get_lang('AddIntro');			
+			$introduction_section .=  "</a>";
 		} else {
-			echo "<a href=\"".api_get_self()."?intro_cmdAdd=1\">\n".get_lang('AddIntro')."</a>";
+			$introduction_section .= "<a href=\"".api_get_self()."?intro_cmdAdd=1\">\n".get_lang('AddIntro')."</a>";
 		}
-		echo "</div>";
+		$introduction_section .= "</div>";
 
 	} else {
-
 		// Displays "edit intro && delete intro" commands
-		echo "<div id=\"courseintro_icons\"><p>";
+		$introduction_section .=  "<div id=\"courseintro_icons\"><p>";
 		if (!empty ($GLOBALS['_cid'])) {
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdEdit=1\">".Display::return_icon('edit.png',get_lang('Modify'),'',22)."</a>";			
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'),'',22)."</a>";
+			$introduction_section .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdEdit=1\">".Display::return_icon('edit.png',get_lang('Modify'),'',22)."</a>";			
+			$introduction_section .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'),'',22)."</a>";
 		} else {
-			echo "<a href=\"".api_get_self()."?intro_cmdEdit=1\">".Display::return_icon('edit.png',get_lang('Modify'),'',22)."</a>";			
-			echo "<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'),'',22)."</a>";
+			$introduction_section .=  "<a href=\"".api_get_self()."?intro_cmdEdit=1\">".Display::return_icon('edit.png',get_lang('Modify'),'',22)."</a>";			
+			$introduction_section .=  "<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'),'',22)."</a>";
 		}
-		echo "</p></div>";
+		$introduction_section .=  "</p></div>";
 	}
 }
-echo '</div>';
-echo $thematic_description_html;
-echo '<div class="clear"></div>';
+$introduction_section .=  '</div>';
+$introduction_section .=  $thematic_description_html;
+$introduction_section .=  '<div class="clear"></div>';
+

@@ -121,26 +121,23 @@ if (isset($_SESSION['_gid'])) {
 // The section for the tabs
 $this_section = SECTION_COURSES;
 
-// Libraries
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-
 /*	Constants */
 
-define('TOOL_PUBLIC', 				'Public');
-define('TOOL_PUBLIC_BUT_HIDDEN', 	'PublicButHide');
-define('TOOL_COURSE_ADMIN', 		'courseAdmin');
-define('TOOL_PLATFORM_ADMIN', 		'platformAdmin');
-define('TOOL_AUTHORING', 			'toolauthoring');
-define('TOOL_INTERACTION',			'toolinteraction');
-define('TOOL_COURSE_PLUGIN',		'toolcourseplugin'); //all plugins that can be enabled in courses
-define('TOOL_ADMIN', 				'tooladmin');
-define('TOOL_ADMIN_PLATFORM', 		'tooladminplatform');
+define('TOOL_PUBLIC',                   'Public');
+define('TOOL_PUBLIC_BUT_HIDDEN',        'PublicButHide');
+define('TOOL_COURSE_ADMIN',             'courseAdmin');
+define('TOOL_PLATFORM_ADMIN',           'platformAdmin');
+define('TOOL_AUTHORING',                'toolauthoring');
+define('TOOL_INTERACTION',              'toolinteraction');
+define('TOOL_COURSE_PLUGIN',            'toolcourseplugin'); //all plugins that can be enabled in courses
+define('TOOL_ADMIN',                    'tooladmin');
+define('TOOL_ADMIN_PLATFORM',           'tooladminplatform');
 
 //define('TOOL_ADMIN_PLATFORM_VISIBLE', 'tooladminplatformvisible');
 //define('TOOL_ADMIN_PLATFORM_INVISIBLE', 'tooladminplatforminvisible');
 //define('TOOL_ADMIN_COURS_INVISIBLE', 'tooladmincoursinvisible');
-define('TOOL_STUDENT_VIEW', 		'toolstudentview');
-define('TOOL_ADMIN_VISIBLE', 		'tooladminvisible');
+define('TOOL_STUDENT_VIEW',              'toolstudentview');
+define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
 
 
 /*	Virtual course support code	*/
@@ -240,9 +237,6 @@ if (!empty($auto_lunch)) {
     }
 }
 
-Display::display_header(null, 'Home');
-
-
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 
 $temps = time();
@@ -253,10 +247,9 @@ $reqdate = "&reqdate=$temps";
 //display course title for course home page (similar to toolname for tool pages)
 //echo '<h3>'.api_display_tool_title($nameTools) . '</h3>';
 
-/*	Introduction section
-	(editable by course admins) */
+/*	Introduction section (editable by course admins) */
 
-Display::display_introduction_section(TOOL_COURSE_HOMEPAGE, array(
+$content = Display::return_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 		'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
 		'CreateDocumentDir'    => 'document/',
 		'BaseHref'             => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
@@ -267,9 +260,10 @@ Display::display_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 	the setting homepage_view is adjustable through
 	the platform administration section */
     
+require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 
 if ($show_autolunch_lp_warning) {    
-    Display::display_warning_message(get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'));
+    $show_message = Display::return_message(get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'),'warning');
 }
 if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_view') == 'activity_big') {
 	require 'activity.php';
@@ -281,6 +275,9 @@ if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_
 	require 'vertical_activity.php';
 }
 
-/*	FOOTER */
 
-Display::display_footer();
+$tpl = new Template($tool_name);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

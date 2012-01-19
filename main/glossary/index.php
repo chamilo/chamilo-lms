@@ -1,9 +1,9 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * @package chamilo.glossary
  * @author Christian Fasanando, initial version
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium, refactoring and tighter integration in Dokeos
+ * @author Bas Wijnen import/export to CSV
  */
 
 // The language file that needs to be included.
@@ -12,15 +12,14 @@ $language_file = array('glossary');
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
+require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 
 // The section (tabs).
 $this_section = SECTION_COURSES;
 
 // Notification for unauthorized people.
 api_protect_course_script(true);
-
-// Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 // Additional javascripts.
 $htmlHeadXtra[] = GlossaryManager::javascript_glossary();
@@ -38,11 +37,28 @@ $tool = TOOL_GLOSSARY;
 // Tracking
 event_access_tool(TOOL_GLOSSARY);
 
+function sorter($item1, $item2) {
+	if ($item1[2] == $item2[2])
+		return 0;
+	return $item1[2] < $item2[2] ? -1 : 1;
+}
+
 // Displaying the header
 
 if (isset($_GET['action']) && ($_GET['action'] == 'addglossary' || $_GET['action'] == 'edit_glossary')) {
     $tool='GlossaryManagement';
     $interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('ToolGlossary'));
+}
+
+if (isset($_GET['action']) && $_GET['action'] == 'export') {	
+	$data = GlossaryManager::get_glossary_data(0, GlossaryManager::get_number_glossary_terms (api_get_session_id()), 0, 'ASC');
+    usort($data, "sorter");
+    $list = array();
+    foreach($data as $line) {
+        $list[] = array ($line[0], $line[1]);
+    }
+    $filename = 'glossary_course_'.api_get_course_id();
+	Export::export_table_csv($list,$filename);
 }
 
 Display::display_header(get_lang(ucfirst($tool)));
@@ -58,96 +74,144 @@ if (isset($_GET['action']) && $_GET['action'] == 'changeview' AND in_array($_GET
   }
 }
 
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+
 if (api_is_allowed_to_edit(null, true)) {
-    // Adding a glossary
-    if (isset($_GET['action']) && $_GET['action'] == 'addglossary') {
-        // initiate the object
-        $form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
-        // settting the form elements
-        $form->addElement('header', '', get_lang('TermAddNew'));
-        $form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'80', 'id'=>'glossary_title'));
-        //$form->applyFilter('glossary_title', 'html_filter');
-        $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));
-        $form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="save"');
-        // setting the rules
-        $form->addRule('glossary_title',get_lang('ThisFieldIsRequired'), 'required');
-        // The validation or display
-        if ($form->validate()) {
-            $check = Security::check_token('post');
-            if ($check) {
-                   $values = $form->exportValues();
-                   GlossaryManager::save_glossary($values);
+    switch ($action) {
+        case 'addglosary':
+            
+            $form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
+            // settting the form elements
+            $form->addElement('header', '', get_lang('TermAddNew'));
+            $form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'80', 'id'=>'glossary_title'));
+            //$form->applyFilter('glossary_title', 'html_filter');
+            $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));
+            $form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="save"');
+            // setting the rules
+            $form->addRule('glossary_title',get_lang('ThisFieldIsRequired'), 'required');
+            // The validation or display
+            if ($form->validate()) {
+                $check = Security::check_token('post');
+                if ($check) {
+                    $values = $form->exportValues();
+                    GlossaryManager::save_glossary($values);
+                }
+                Security::clear_token();
+                GlossaryManager::display_glossary();
+            } else {
+                $token = Security::get_token();
+                $form->addElement('hidden','sec_token');
+                $form->setConstants(array('sec_token' => $token));
+                $form->display();
             }
-            Security::clear_token();
-            GlossaryManager::display_glossary();
-        } else {
-            $token = Security::get_token();
-            $form->addElement('hidden','sec_token');
-            $form->setConstants(array('sec_token' => $token));
-            $form->display();
-        }
-    }	else if (isset($_GET['action']) && $_GET['action'] == 'edit_glossary' && is_numeric($_GET['glossary_id']))  { // Editing a glossary
-        // initiate the object
-        $form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&glossary_id='.Security::remove_XSS($_GET['glossary_id']));
-        // settting the form elements
-        $form->addElement('header', '', get_lang('TermEdit'));
-        $form->addElement('hidden', 'glossary_id');
-        $form->addElement('text', 'glossary_title', get_lang('TermName'),array('size'=>'80'));
-        //$form->applyFilter('glossary_title', 'html_filter');
-        $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));        
-        $element = $form->addElement('text', 'insert_date', get_lang('CreationDate'),array('size'=>'100'));
-        $element ->freeze();        
-        $element = $form->addElement('text', 'update_date', get_lang('UpdateDate'),array('size'=>'100'));
-        $element ->freeze();       
-        $form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermUpdateButton'), 'class="save"');
+            break;
+        case 'edit_glossary':
+            if (is_numeric($_GET['glossary_id'])) {
+                // initiate the object
+                $form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&glossary_id='.Security::remove_XSS($_GET['glossary_id']));
+                // settting the form elements
+                $form->addElement('header', '', get_lang('TermEdit'));
+                $form->addElement('hidden', 'glossary_id');
+                $form->addElement('text', 'glossary_title', get_lang('TermName'),array('size'=>'80'));
+                //$form->applyFilter('glossary_title', 'html_filter');
+                $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));        
+                $element = $form->addElement('text', 'insert_date', get_lang('CreationDate'),array('size'=>'100'));
+                $element ->freeze();        
+                $element = $form->addElement('text', 'update_date', get_lang('UpdateDate'),array('size'=>'100'));
+                $element ->freeze();       
+                $form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermUpdateButton'), 'class="save"');
 
-        // setting the defaults
-        $glossary_data = GlossaryManager::get_glossary_information($_GET['glossary_id']);
-        
-        // Date treatment for timezones
-        if (!empty($glossary_data['insert_date'])  && $glossary_data['insert_date'] != '0000-00-00 00:00:00:') {
-            $glossary_data['insert_date'] = api_get_local_time($glossary_data['insert_date']);
-        } else {
-            $glossary_data['insert_date']  = '';
-        }
-        
-        if (!empty($glossary_data['update_date'])  && $glossary_data['update_date'] != '0000-00-00 00:00:00:') {
-            $glossary_data['update_date'] = api_get_local_time($glossary_data['update_date']);
-        } else {
-            $glossary_data['update_date']  = '';
-        }
-        
-        $form->setDefaults($glossary_data);
+                // setting the defaults
+                $glossary_data = GlossaryManager::get_glossary_information($_GET['glossary_id']);
 
-        // setting the rules
-        $form->addRule('glossary_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+                // Date treatment for timezones
+                if (!empty($glossary_data['insert_date'])  && $glossary_data['insert_date'] != '0000-00-00 00:00:00:') {
+                    $glossary_data['insert_date'] = api_get_local_time($glossary_data['insert_date']);
+                } else {
+                    $glossary_data['insert_date']  = '';
+                }
 
-        // The validation or display
-        if ($form->validate()) {
-            $check = Security::check_token('post');
-            if ($check) {
-               $values = $form->exportValues();
-               GlossaryManager::update_glossary($values);
+                if (!empty($glossary_data['update_date'])  && $glossary_data['update_date'] != '0000-00-00 00:00:00:') {
+                    $glossary_data['update_date'] = api_get_local_time($glossary_data['update_date']);
+                } else {
+                    $glossary_data['update_date']  = '';
+                }
+
+                $form->setDefaults($glossary_data);
+
+                // setting the rules
+                $form->addRule('glossary_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+
+                // The validation or display
+                if ($form->validate()) {
+                    $check = Security::check_token('post');
+                    if ($check) {
+                    $values = $form->exportValues();
+                    GlossaryManager::update_glossary($values);
+                    }
+                    Security::clear_token();
+                    GlossaryManager::display_glossary();
+                } else {
+                    $token = Security::get_token();
+                    $form->addElement('hidden', 'sec_token');
+                    $form->setConstants(array('sec_token' => $token));
+                    $form->display();
+                }                
             }
-            Security::clear_token();
+            break;
+        case 'delete_glossary':
+            GlossaryManager::delete_glossary($_GET['glossary_id']);
             GlossaryManager::display_glossary();
-        } else {
-            $token = Security::get_token();
-            $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
-            $form->display();
-        }
-    } else if (isset($_GET['action']) && $_GET['action'] == 'delete_glossary' && is_numeric($_GET['glossary_id'])) 	{// deleting a glossary
-        GlossaryManager::delete_glossary(Security::remove_XSS($_GET['glossary_id']));
-        GlossaryManager::display_glossary();
-    } else if (isset($_GET['action']) && $_GET['action'] == 'moveup' && is_numeric($_GET['glossary_id'])) {	// moving a glossary term up
-        GlossaryManager::move_glossary('up',$_GET['glossary_id']);
-        GlossaryManager::display_glossary();
-    } else if (isset($_GET['action']) && $_GET['action'] == 'movedown' && is_numeric($_GET['glossary_id'])) { // moving a glossary term down
-        GlossaryManager::move_glossary('down',$_GET['glossary_id']);
-        GlossaryManager::display_glossary();
-    } else {
-        GlossaryManager::display_glossary();
+            break;
+        case 'moveup':
+            GlossaryManager::move_glossary('up',$_GET['glossary_id']);
+            GlossaryManager::display_glossary();
+            break;
+        case 'movedown':
+            GlossaryManager::move_glossary('down',$_GET['glossary_id']);
+            GlossaryManager::display_glossary();
+            break;
+        case 'import':
+            $form = new FormValidator('glossary','post', api_get_self().'?action=import');
+            $form->addElement('header', '', get_lang('ImportGlossary'));
+            $form->addElement('checkbox', 'replace', get_lang('ReplaceGlossary'));
+            $form->addElement('file', 'file');
+            $form->addElement('style_submit_button', 'SubmitImport', get_lang('ImportGlossaryButton'), 'class="save"');
+            $form->display();       
+            
+            if ($form->validate()) {
+                if (isset($_POST['replace']) && $_POST['replace']) {
+                    foreach (GlossaryManager::get_glossary_terms () as $term) {
+                        if (!GlossaryManager::delete_glossary ($term['id'], false)) {
+                            Display::display_error_message (get_lang ("CannotDeleteGlossary") . ':' . $term['id']);
+                        }
+                    }
+                }                
+                $data = Import::csv_to_array($_FILES['file']['tmp_name']);
+                
+                if (!empty($data[0])) {
+                    $data = $data[0];
+                    $good = 0;
+                    $bad = 0;                    
+                    foreach($data as $key => $term) {                        
+                        if (GlossaryManager::save_glossary(array('glossary_title' => $key, 'glossary_comment' => $term), false)) 
+                            $good++;
+                        else
+                            $bad++;
+                    }
+                }
+                
+                Display::display_confirmation_message (get_lang ("TermsImported") . ':' . $good);
+                
+                if ($bad)
+                    Display::display_error_message (get_lang ("TermsNotImported") . ':' . $bad);
+                
+                GlossaryManager::display_glossary();                
+            }
+            break;        
+        default:
+            GlossaryManager::display_glossary();
+            break;        
     }
 } else {
     GlossaryManager::display_glossary();

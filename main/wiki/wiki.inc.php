@@ -963,13 +963,13 @@ function word_count($document) {
     $document = preg_replace($search, '', $document);
 
       # strip all html tags
-      $wc = strip_tags($document);	  
-      $wc = html_entity_decode(utf8_encode($wc)); //html_entity_decode($wc,ENT_NOQUOTES, 'UTF-8') does not work ok
+      $wc = strip_tags($document);	   
+	  $wc = html_entity_decode($wc, ENT_NOQUOTES, 'UTF-8');// TODO:test also old html_entity_decode(utf8_encode($wc))
 	  
-	  # remove 'words' that don't consist of alphanumerical characters or punctuation
- 	  $pattern = "#[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]+#";	
+	  # remove 'words' that don't consist of alphanumerical characters or punctuation. And fix accents and some letters
+ 	  $pattern = "#[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@|á|é|í|ó|ú|à|è|ì|ò|ù|ä|ë|ï|ö|ü|Á|É|Í|Ó|Ú|À|È|Ò|Ù|Ä|Ë|Ï|Ö|Ü|â|ê|î|ô|û|Â|Ê|Î|Ô|Û|ñ|Ñ|ç|Ç)]+#";	 
       $wc = trim(preg_replace($pattern, " ", $wc));
-	  	  
+	 		  
 	  # remove one-letter 'words' that consist only of punctuation
       $wc = trim(preg_replace("#\s*[(\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]\s*#", " ", $wc));
 	  

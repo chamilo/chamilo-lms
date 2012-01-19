@@ -623,8 +623,8 @@ class AnnouncementManager  {
 				if (is_array($to_already_selected)) {
 					if (!in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 					{
-						echo "<option value=\"USER:".$this_user['user_id']."\" title='".sprintf(get_lang('LoginX'), $user['username'])."'>",
-							"", api_get_person_name($this_user['firstname'], $this_user['lastname'])." (".$this_user['username'].")",
+						echo "<option value=\"USER:".$this_user['user_id']."\" title='".sprintf(get_lang('LoginX'), $this_user['username'])."'>",
+							"", api_get_person_name($this_user['firstname'], $this_user['lastname']),
 							"</option>";
 					}
 				}
@@ -664,7 +664,7 @@ class AnnouncementManager  {
 				} else {
 					foreach($ref_array_users as $key=>$value){
 						if($value['user_id']==$id){
-							echo "<option value=\"".$groupuser."\">".api_get_person_name($value['firstname'], $value['lastname'])." (".$value['username'].")</option>";
+							echo "<option value=\"".$groupuser."\" title='".sprintf(get_lang('LoginX'), $value['username'])."'>".api_get_person_name($value['firstname'], $value['lastname'])."</option>";
 							break;
 						}
 					}
@@ -689,7 +689,7 @@ class AnnouncementManager  {
 					if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 					{
 						echo	"<option value=\"USER:",$this_user['user_id'],"\"  title='".sprintf(get_lang('LoginX'), $user['username'])."'>",
-							"", api_get_person_name($this_user['firstname'], $this_user['lastname'])." (".$this_user['username'].")",
+							"", api_get_person_name($this_user['firstname'], $this_user['lastname']),
 							"</option>";
 					}
 				}

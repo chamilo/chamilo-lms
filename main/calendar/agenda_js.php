@@ -15,7 +15,6 @@ $use_anonymous = true;
 
 require_once '../inc/global.inc.php';
 require_once 'agenda.lib.php';
-
 require_once 'agenda.inc.php';
 
 $htmlHeadXtra[] = api_get_jquery_ui_js();
@@ -105,7 +104,6 @@ if (api_is_allowed_to_edit() && $course_code != '-1' && $type == 'course') {
     $select = $agenda->construct_not_selected_select_form($group_list, $user_list);
     $tpl->assign('visible_to', $select);
 }
-
 
 //Loading Agenda template
 $content = $tpl->fetch('default/agenda/month.tpl');

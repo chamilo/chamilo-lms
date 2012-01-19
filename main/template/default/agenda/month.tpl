@@ -90,8 +90,7 @@ $(document).ready(function() {
 			var end_date 	= Math.round(end.getTime() / 1000);
 			
 			$('#visible_to_input').show();
-			$('#add_as_announcement_div').show();
-			
+			$('#add_as_announcement_div').show();			
 			$('#visible_to_read_only').hide();
 			
 			//Cleans the selected attr 	
@@ -177,9 +176,10 @@ $(document).ready(function() {
                 $('#add_as_announcement_div').hide();
                 			
                 {if $type != 'admin'}
-                    $('#visible_to_read_only').show();
+                    $('#visible_to_read_only').show();                    
                     $("#visible_to_read_only_users").html(calEvent.sent_to);
 				{/if}
+                    
 				$('#color_calendar').html('{$type_label}');
 				$('#color_calendar').addClass('label_tag');
 								

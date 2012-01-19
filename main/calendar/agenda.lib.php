@@ -406,7 +406,7 @@ class Agenda {
         
 		$course_id = $course_info['real_id'];
         
-        $group_list = GroupManager::get_group_list(null, $course_info['code']);        
+        $group_list = GroupManager::get_group_list(null, $course_info['code']);            
         $group_name_list = array();
         
         if (!empty($group_list)) {
@@ -417,7 +417,7 @@ class Agenda {
         
         if (!api_is_allowed_to_edit()) {
             $group_memberships 	= GroupManager::get_group_ids($course_id, api_get_user_id());
-        } else {
+        } else {            
             $group_memberships = array_keys($group_name_list);            
         }
         
@@ -430,23 +430,23 @@ class Agenda {
             $group_memberships = array($group_id);
         }
 	
-		if (is_array($group_memberships) && count($group_memberships) >0 ) {
+		if (is_array($group_memberships) && count($group_memberships) >0) {
 		    if (api_is_allowed_to_edit()) {
 		        $where_condition = "( ip.to_group_id is null OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
             } else {
                 $where_condition = "( ip.to_user_id = $user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
             }
             
-            $sql = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+            $sql = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref, to_user_id
                     FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
                     WHERE   agenda.id       = ip.ref  AND 
                             ip.tool         ='".TOOL_CALENDAR_EVENT."' AND 
                             $where_condition AND
                             ip.visibility   = '1' AND
                             agenda.c_id     = $course_id AND
-                            ip.c_id         = $course_id";
-                            
-		    
+                            ip.c_id         = $course_id
+                    GROUP BY id
+                    ";
 			
 		} else {
 		    if (api_is_allowed_to_edit()) {
@@ -454,7 +454,7 @@ class Agenda {
             } else {
                 $where_condition = "( ip.to_user_id=$user_id OR ip.to_group_id='0') AND ";
             }         
-            $sql="SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+            $sql = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref, to_user_id
                     FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
                     WHERE agenda.id = ip.ref AND
                     ip.tool='".TOOL_CALENDAR_EVENT."' AND
@@ -469,6 +469,27 @@ class Agenda {
 		$events = array();
 		if (Database::num_rows($result)) {
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
+                                 
+                //session_id = {$row['ref']} AND
+                //to gather sent_tos
+                $sql = "SELECT to_user_id, to_group_id
+                    FROM ".$tbl_property." ip
+                    WHERE   ip.tool         ='".TOOL_CALENDAR_EVENT."' AND 
+                            ref = {$row['ref']} AND
+                            ip.visibility   = '1' AND  
+                            ip.c_id         = $course_id";
+                $sent_to_result = Database::query($sql);
+                $user_to_array = array();
+                $group_to_array = array();
+                while ($row_send_to = Database::fetch_array($sent_to_result, 'ASSOC')) {
+                    if (!empty($row_send_to['to_group_id'])) {
+                        $group_to_array[] = $row_send_to['to_group_id'];
+                    }
+                    if (!empty($row_send_to['to_user_id'])) {
+                        $user_to_array[]  = $row_send_to['to_user_id'];
+                    }
+                }
+            
 				//Only show events from the session
 				if (api_get_course_int_id()) {
 					if ($row['session_id'] != api_get_session_id()) {
@@ -505,18 +526,33 @@ class Agenda {
 				}	
                 
                 $event['sent_to'] = '';
-                $event['type']    = $this->type;
-                
+                $event['type']    = $this->type;                
                 
                 //Event Sent to a group?
-                if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {                    
-                    $event['sent_to'] = $group_name_list[$row['to_group_id']];
+                if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
+                    if (!empty($group_to_array)) {
+                        $sent_to = array();
+                        foreach($group_to_array as $group_item) {
+                            $sent_to[] = $group_name_list[$group_item];        
+                        }
+                    }
+                    $event['sent_to'] = implode(', ', $sent_to);
                     $event['type']    = 'group';    
                 }
 
                 //Event sent to a user?
+                //var_dump($row);
                 if (isset($row['to_user_id'])) {
-                    $event['sent_to'] = $row['to_user_id'];
+                    
+                    if (!empty($user_to_array)) {
+                        $sent_to = array();
+                        foreach($user_to_array as $item) {
+                            $user_info = api_get_user_info($item);   
+                            $sent_to[] = $user_info['complete_name'];        
+                        }
+                    }
+                    $event['sent_to'] = implode(', ', $sent_to);
+//                    $event['sent_to'] = $row['to_user_id'];
                 }
                 
                 //Event sent to everyone!

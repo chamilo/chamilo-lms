@@ -176,7 +176,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $form->addElement('header', '', get_lang('ImportGlossary'));
             $form->addElement('checkbox', 'replace', get_lang('ReplaceGlossary'));
             $form->addElement('file', 'file');
-            $form->addElement('style_submit_button', 'SubmitImport', get_lang('ImportGlossaryButton'), 'class="save"');
+            $form->addElement('style_submit_button', 'SubmitImport', get_lang('Import'), 'class="save"');
             $form->display();       
             
             if ($form->validate()) {

@@ -154,7 +154,7 @@ if ($_GET['chatid'] != '') {
 if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || ((api_get_setting('showonline', 'users') == 'true' || api_get_setting('showonline', 'course') == 'true') && $_user['user_id'])) {
 
 	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
-		$user_list = who_is_online_in_this_course(api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
+		$user_list = who_is_online_in_this_course(0, 10, api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
 	} else {
 		$user_list = who_is_online(0, 10);		
 	}

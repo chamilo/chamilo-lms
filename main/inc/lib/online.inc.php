@@ -158,8 +158,7 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
         $column = 'picture_uri';
         if ($friends) {
             $column = 'login_date';    
-        }
-        
+        }        
     }
     
     if (empty($direction)) {
@@ -305,9 +304,9 @@ function who_is_online_count($valid = null, $friends = false) {
  * Gets the full user name for a given user ID
  * @param   int User ID
  * @return  string  The full username, elements separated by an HTML space
+ * @deprecated user api_get_user_info($user_id)
  */
-function GetFullUserName($uid)
-{
+function GetFullUserName($uid) {
 	$uid = (int) $uid;
 	$uid = Database::escape_string($uid);
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -382,14 +381,19 @@ function chatcall() {
 * @param    string  Course code (could be empty, but then the function returns false)
 * @return   array   Each line gives a user id and a login time
 */
-function who_is_online_in_this_course($uid, $valid, $coursecode=null)
-{
+function who_is_online_in_this_course($from, $number_of_items, $uid, $valid, $coursecode) {
 	if(empty($coursecode)) return false;
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$coursecode = Database::escape_string($coursecode);
-	$valid = Database::escape_string($valid);
+	$coursecode         = Database::escape_string($coursecode);
+	$valid              = Database::escape_string($valid);
+    
+    $from            = intval($from);
+    $number_of_items = intval($number_of_items);
 
-	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";
+	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." 
+              WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() 
+              LIMIT $from, $number_of_items
+             ";
 	$result = Database::query($query);
 	if (count($result)>0) {
 		$rtime = time();
@@ -411,8 +415,7 @@ function who_is_online_in_this_course($uid, $valid, $coursecode=null)
 			$year = substr($login_date,0,4);
 			// db timestamp
 			$dbtime = mktime($hour,$minute,$secund,$month,$day,$year);
-			if ($dbtime >= $validtime)
-			{
+			if ($dbtime >= $validtime) {
 				array_push($rarray,$barray);
 			}
 		}
@@ -422,8 +425,7 @@ function who_is_online_in_this_course($uid, $valid, $coursecode=null)
 	}
 }
 
-function who_is_online_in_this_course_count($uid, $valid, $coursecode=null)
-{
+function who_is_online_in_this_course_count($uid, $valid, $coursecode=null) {
 	if(empty($coursecode)) return false;
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$coursecode = Database::escape_string($coursecode);

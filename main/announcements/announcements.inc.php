@@ -572,7 +572,7 @@ class AnnouncementManager  {
 		echo "<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>";
 		$group_users = GroupManager::get_subscribed_users($group_id);
 		foreach ($group_users as $user){
-			echo '<option value="'.$user['user_id'].'">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'.'</option>';
+			echo '<option value="'.$user['user_id'].'" title="'.sprintf(get_lang('LoginX'), $user['username']).'" >'.api_get_person_name($user['firstname'], $user['lastname']).'</option>';
 		}
 		echo '</select>';	
 		echo "</td>";
@@ -623,7 +623,7 @@ class AnnouncementManager  {
 				if (is_array($to_already_selected)) {
 					if (!in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 					{
-						echo "<option value=\"USER:".$this_user['user_id']."\">",
+						echo "<option value=\"USER:".$this_user['user_id']."\" title='".sprintf(get_lang('LoginX'), $user['username'])."'>",
 							"", api_get_person_name($this_user['firstname'], $this_user['lastname'])." (".$this_user['username'].")",
 							"</option>";
 					}
@@ -688,7 +688,7 @@ class AnnouncementManager  {
 				foreach($ref_array_users as $this_user) {
 					if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 					{
-						echo	"<option value=\"USER:",$this_user['user_id'],"\">",
+						echo	"<option value=\"USER:",$this_user['user_id'],"\"  title='".sprintf(get_lang('LoginX'), $user['username'])."'>",
 							"", api_get_person_name($this_user['firstname'], $this_user['lastname'])." (".$this_user['username'].")",
 							"</option>";
 					}
@@ -991,7 +991,7 @@ class AnnouncementManager  {
 				if (is_array($sent_to_array['users'])) {
 					foreach ($sent_to_array['users'] as $user_id) {
 						$user_info = api_get_user_info($user_id);
-						$output[] = api_get_person_name($user_info['firstname'], $user_info['lastname'])." (".$user_info['username'].")";
+						$output[] = '<span title="'.sprintf(get_lang('LoginX'), $user_info).'"'.api_get_person_name($user_info['firstname'], $user_info['lastname'])." (".$user_info['username'].")";
 					}
 				}
 			}			

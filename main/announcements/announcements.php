@@ -1136,8 +1136,10 @@ if ($display_announcement_list) {
     		    $title = Display::url($title.$attachment_icon, '?action=view&id='.$myrow['id']);
                 echo Display::tag('td', Security::remove_XSS($title), array('class' => $style));                
                 	
-                $user_info		= api_get_user_info($myrow['insert_user_id']);    						
-    			echo Display::tag('td', api_get_person_name($user_info['firstName'], $user_info['lastName']).' ('.$user_info['username'].')');
+                $user_info		= api_get_user_info($myrow['insert_user_id']);
+                $username = sprintf(get_lang("LoginX"), $user_info['username']);
+                $username_span = Display::tag('span', api_get_person_name($user_info['firstName'], $user_info['lastName']), array('title'=>$username));
+    			echo Display::tag('td', $username_span);
                 echo Display::tag('td', api_convert_and_format_date($myrow['insert_date'], DATE_TIME_FORMAT_LONG));                			
 
     			// we can edit if : we are the teacher OR the element belongs to the session we are coaching OR the option to allow users to edit is on

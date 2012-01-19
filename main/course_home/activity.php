@@ -80,7 +80,6 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 
 
 	if (api_get_setting('show_session_data') == 'true' && $id_session > 0) {
-
         $content .= '<div class="courseadminview">
             <span class="viewcaption">'.get_lang('SessionData').'</span>
             <table class="course_activity_home">'.CourseHome::show_session_data($id_session).'
@@ -88,8 +87,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
         </div>';
 	}
 
-	$content .= '<div class="courseadminview">
-		<span class="viewcaption">'.get_lang('Authoring').'</span>';
+	$content .= '<div class="courseadminview"><span class="viewcaption">'.get_lang('Authoring').'</span>';
     $my_list = CourseHome::get_tools_category(TOOL_AUTHORING);    
 	$content .= CourseHome::show_tools_category($my_list).'</div>';
     
@@ -99,10 +97,9 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
     $list2 = CourseHome::get_tools_category(TOOL_COURSE_PLUGIN);
     $my_list = array_merge($my_list,$list2);
     $content .= CourseHome::show_tools_category($my_list);
-
 	$content .= '</div>
-	<div class="courseadminview">
-		<span class="viewcaption">'.get_lang('Administration').'</span>';
+        
+	<div class="courseadminview"><span class="viewcaption">'.get_lang('Administration').'</span>';
         $theme = api_get_setting('homepage_view');
         $rows = false;
         if ($theme  == 'activity_big') {
@@ -124,8 +121,8 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
     $content .=  '<div class="Authoringview">';
 				$my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
 				$content .= CourseHome::show_tools_category($my_list);
-    $content .= '		</div>';
-//	TOOLS AUTHORING
+    $content .= '</div>';
+    //	TOOLS AUTHORING
 
 } else {
 	$my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);

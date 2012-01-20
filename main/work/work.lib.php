@@ -1734,25 +1734,28 @@ function display_list_users_without_publication($task_id) {
  * @author cvargas carlos.vargas@beeznest.com cfasanando, christian.fasanado@beeznest.com
  */
 function send_reminder_users_without_publication($task_data) {
-	global $_course, $currentUserFirstName, $currentUserLastName, $currentUserEmail;
+	global $_course;
     $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 
 	$task_id = $task_data['id'];
 	$task_title = !empty($task_data['title']) ? $task_data['title'] : basename($task_data['url']);
 
-	$emailsubject = '[' . api_get_setting('siteName') . '] ';
+	$subject = '[' . api_get_setting('siteName') . '] ';
     
 	// The body can be as long as you wish, and any combination of text and variables
-    $emailbody_user = get_lang('Dear')." ".$currentUserFirstName .' '.$currentUserLastName .", \n\n";            
-	$emailbody_user .= get_lang('ReminderToSubmitPendingTask')."\n".get_lang('CourseName').' : '.$_course['name']."\n";
-	$emailbody_user .= get_lang('WorkName').' : '.$task_title."\n";
+    
+	$content = get_lang('ReminderToSubmitPendingTask')."\n".get_lang('CourseName').' : '.$_course['name']."\n";
+	$content .= get_lang('WorkName').' : '.$task_title."\n";
 
 	$list_users = get_list_users_without_publication($task_id);
     
     $mails_sent_to = array();    
 	foreach ($list_users as $user) {
-		$name_user = api_get_person_name($user[1], $user[0], null, PERSON_NAME_EMAIL_ADDRESS);
-		$result = api_mail($name_user, $user[3], $emailsubject, $emailbody_user, $sender_name, $email_admin);              
+		$name_user = api_get_person_name($user[1], $user[0], null, PERSON_NAME_EMAIL_ADDRESS);        
+        $dear_line = get_lang('Dear')." ".api_get_person_name($user[1], $user[0]) .", \n\n";            
+        $body      = $dear_line.$content;        
+        
+		api_mail($name_user, $user[3], $subject, $body, $sender_name, $email_admin);              
         $mails_sent_to[] = $name_user;                
 	}    
     return $mails_sent_to;    

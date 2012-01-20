@@ -66,6 +66,7 @@ $userinf = api_get_user_info($userid);
 
 $group_id = api_get_group_id();
 
+
 $my_forum = isset($_GET['forum']) ? $_GET['forum'] : '';
 
 $current_forum = get_forum_information($my_forum); // Note: This has to be validated that it is an existing forum.
@@ -76,15 +77,15 @@ if (empty($current_forum)) {
 
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 
-if ($group_id) {
+
+if (!empty($group_id)) {
     //Group info & group category info
     $group_properties           = GroupManager::get_group_properties($group_id);
     //$group_cat_info             = GroupManager::get_category(GroupManager::get_category_from_group($group_id));
     
     //User has access in the group?
     $user_has_access_in_group   = GroupManager::user_has_access($userid, $group_id, GROUP_TOOL_FORUM);
-    
-    
+        
     //User is a tutor in the group? the function GroupManager::user_has_access already contains the is_tutor_of_group()
     //$is_tutor_group             = GroupManager::is_tutor_of_group($userid, $group_id);
     //
@@ -96,14 +97,14 @@ if ($group_id) {
     
     //Course
     if (!api_is_allowed_to_edit(false, true) AND  //is a student
-        ($current_forum_category['visibility'] == 0 OR $current_forum['visibility'] == 0 OR !$user_has_access_in_group)            
+        (($current_forum_category && $current_forum_category['visibility'] == 0) OR $current_forum['visibility'] == 0 OR !$user_has_access_in_group)            
     ) {
         api_not_allowed();
     }
 } else {
     //Course
     if (!api_is_allowed_to_edit(false, true) AND  //is a student
-        ($current_forum_category['visibility'] == 0 OR $current_forum['visibility'] == 0) //forum category or forum visibility is false
+        (($current_forum_category && $current_forum_category['visibility'] == 0) OR $current_forum['visibility'] == 0) //forum category or forum visibility is false
     ) {
         api_not_allowed();
     }

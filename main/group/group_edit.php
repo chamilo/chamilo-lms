@@ -249,21 +249,21 @@ $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callb
 $group = array();
 $group[] = $form->createElement('checkbox', 'self_registration_allowed', get_lang('GroupSelfRegistration'), get_lang('GroupAllowStudentRegistration'), 1);
 $group[] = $form->createElement('checkbox', 'self_unregistration_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1);
-$form->addGroup($group, '', get_lang('GroupSelfRegistration'), '<div></div>', false);
+$form->addGroup($group, '', Display::return_icon('user.png', get_lang('GroupSelfRegistration') , array(), 22).' '.get_lang('GroupSelfRegistration'), '<div></div>', false);
 
 // Documents settings
 $group = array();
 $group[] = $form->createElement('radio', 'doc_state', get_lang('GroupDocument'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'doc_state', null, get_lang('Public'), TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'doc_state', null, get_lang('Private'), TOOL_PRIVATE);
-$form->addGroup($group, '', get_lang('GroupDocument'), '<div></div>', false);
+$form->addGroup($group, '', Display::return_icon('folder.png', get_lang('GroupDocument') , array(), 22).' '.get_lang('GroupDocument'), '<div></div>', false);
 
 // Work settings
 $group = array();
 $group[] = $form->createElement('radio', 'work_state', get_lang('GroupWork'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'work_state', null, get_lang('Public'), TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'work_state', null, get_lang('Private'), TOOL_PRIVATE);
-$form->addGroup($group, '', get_lang('GroupWork'), '<div></div>', false);
+$form->addGroup($group, '', Display::return_icon('work.png', get_lang('GroupWork') , array(), 22).' '.get_lang('GroupWork'), '<div></div>', false);
 
 
 // Calendar settings
@@ -271,37 +271,35 @@ $group = array();
 $group[] = $form->createElement('radio', 'calendar_state', get_lang('GroupCalendar'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'calendar_state', null, get_lang('Public'), TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'calendar_state', null, get_lang('Private'), TOOL_PRIVATE);
-$form->addGroup($group, '', get_lang('GroupCalendar'), '<div></div>', false);
+$form->addGroup($group, '', Display::return_icon('agenda.png', get_lang('GroupCalendar') , array(), 22).' '.get_lang('GroupCalendar'), '<div></div>', false);
 
 // Announcements settings
 $group = array();
 $group[] = $form->createElement('radio', 'announcements_state', get_lang('GroupAnnouncements'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'announcements_state', null, get_lang('Public'), TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'announcements_state', null, get_lang('Private'), TOOL_PRIVATE);
-$form->addGroup($group, '', get_lang('GroupAnnouncements'), '<div></div>', false);
+$form->addGroup($group, '', Display::return_icon('announce.png', get_lang('GroupAnnouncements') , array(), 22).' '.get_lang('GroupAnnouncements'), '<div></div>', false);
 
 //Forum settings
 $group = array();
 $group[] = $form->createElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'forum_state', null, get_lang('Public'), TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'forum_state', null, get_lang('Private'), TOOL_PRIVATE);
-$form->addGroup($group, '', get_lang('GroupForum'), '<div></div>', false);
+$form->addGroup($group, '', Display::return_icon('forum.png', get_lang('GroupForum') , array(), 22).' '.get_lang('GroupForum'), '<div></div>', false);
 
 // Wiki settings
 $group = array();
 $group[] = $form->createElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'wiki_state', null, get_lang('Public'), TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'wiki_state', null, get_lang('Private'), TOOL_PRIVATE);
-$form->addGroup($group, '', get_lang('GroupWiki'), '<div></div>', false);
+$form->addGroup($group, '', Display::return_icon('wiki.png', get_lang('GroupWiki') , array(), 22).' '.get_lang('GroupWiki'), '<div></div>', false);
 
 // Chat settings
 $group = array();
 $group[] = $form->createElement('radio', 'chat_state', get_lang('Chat'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'chat_state', null, get_lang('Public'), TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'chat_state', null, get_lang('Private'), TOOL_PRIVATE);
-$form->addGroup($group, '', get_lang('Chat'), '<div></div>', false);
-
-
+$form->addGroup($group, '', Display::return_icon('chat.png', get_lang('Chat') , array(), 22).' '.get_lang('Chat'), '<div></div>', false);
 
 // submit button
 $form->addElement('style_submit_button', 'submit', get_lang('PropModify'), 'class="save"');
@@ -313,7 +311,7 @@ if ($form->validate()) {
 	} else {
 		$max_member = $values['max_member'];
 	}
-	$self_registration_allowed = isset($values['self_registration_allowed']) ? 1 : 0;
+	$self_registration_allowed   = isset($values['self_registration_allowed']) ? 1 : 0;
 	$self_unregistration_allowed = isset($values['self_unregistration_allowed']) ? 1 : 0;
 	GroupManager :: set_group_properties($current_group['id'], strip_tags($values['name']), strip_tags($values['description']), $max_member, $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $values['wiki_state'], $values['chat_state'], $self_registration_allowed, $self_unregistration_allowed);
 
@@ -330,8 +328,13 @@ if ($form->validate()) {
 	}
 
 	// Returning to the group area (note: this is inconsistent with the rest of chamilo)
-	$cat = GroupManager :: get_category_from_group($current_group['id']);
-	header('Location: '.$values['referer'].'?action=show_msg&msg='.get_lang('GroupSettingsModified').'&category='.$cat['id']);
+    //var_dump(count($_POST['group_members']), $max_member, MEMBER_PER_GROUP_NO_LIMIT);
+	$cat = GroupManager :: get_category_from_group($current_group['id']);      
+    if (isset($_POST['group_members']) && count($_POST['group_members']) > $max_member && $max_member != MEMBER_PER_GROUP_NO_LIMIT) {
+        header('Location:group_edit.php?show_message='.get_lang('GroupTooMuchMembers'));
+    } else {
+        header('Location: '.$values['referer'].'?action=show_msg&msg='.get_lang('GroupSettingsModified').'&category='.$cat['id']);
+    }
 }
 
 $defaults = $current_group;
@@ -349,13 +352,6 @@ $referer = parse_url($_SERVER['HTTP_REFERER']);
 $referer = basename($referer['path']);
 if ($referer != 'group_space.php' && $referer != 'group.php') {
 	$referer = 'group.php';
-}
-if (isset($_POST['group_members'])) {
-	if (count($_POST['group_members']) <= $defaults['max_member']) {
-		//
-	} else {
-		header('Location:group_edit.php?show_message='.get_lang('GroupTooMuchMembers'));
-	}
 }
 
 if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {

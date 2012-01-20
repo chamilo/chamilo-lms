@@ -8,6 +8,8 @@
  */
 
 $work_id = $_GET['id'];
+require_once '../inc/global.inc.php';
+require_once 'work.lib.php';
 
 $work_data = get_work_data_by_id($work_id);
 if (empty($work_data)) {
@@ -43,7 +45,7 @@ $prop_table              = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $files = array();
 $course_id = api_get_course_int_id();
 
-if (api_is_allowed_to_edit()) {	
+if (api_is_allowed_to_edit()) {
 	//search for all files that are not deleted => visibility != 2
     
     $sql = "SELECT url, title FROM $tbl_student_publication AS work, $prop_table AS props  
@@ -56,7 +58,7 @@ if (api_is_allowed_to_edit()) {
 	$query = Database::query($sql);
 	//add tem to the zip file
 	while ($not_deleted_file = Database::fetch_assoc($query)) {
-		if (file_exists($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'])) {
+		if (file_exists($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'])) {            
 			$files[basename($not_deleted_file['url'])] = $not_deleted_file['title'];
 		    $zip_folder->add($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/work', PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
 		}
@@ -78,20 +80,23 @@ if (api_is_allowed_to_edit()) {
             $files[basename($not_deleted_file['url'])] = $not_deleted_file['title'];
             $zip_folder->add($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/work', PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
         }
-    }   
-    
+    }
 }//end for other users
 
-//logging
-event_download(basename($work_data['title']).'.zip (folder)');
+if (!empty($files)) {
+    //logging
+    event_download(basename($work_data['title']).'.zip (folder)');
 
-//start download of created file
-$name = basename($work_data['title']).'.zip';
-
-if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {    
-    DocumentManager::file_send_for_download($temp_zip_file, true, $name);    
-    @unlink($temp_zip_file);    
-    exit;    
+    //start download of created file
+    $name = basename($work_data['title']).'.zip';
+    
+    if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {    
+        DocumentManager::file_send_for_download($temp_zip_file, true, $name);    
+        @unlink($temp_zip_file);    
+        exit;    
+    }
+} else {
+    exit;
 }
 
 /*	Extra function (only used here) */

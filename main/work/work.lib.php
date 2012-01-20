@@ -40,7 +40,7 @@ function display_action_links($id, $cur_dir_path, $always_show_tool_options, $al
 	if (!$always_show_tool_options && api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
 		// Create dir
 		if (empty($cur_dir_path)) {
-			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;action=create_dir&origin='.$origin.'&gradebook='.$gradebook.'">';
+			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=create_dir&origin='.$origin.'&gradebook='.$gradebook.'">';
 			$display_output .= Display::return_icon('new_work.png', get_lang('CreateAssignment'),'','32').'</a>';
 		}
 		if (empty($cur_dir_path)) {
@@ -330,14 +330,13 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	$work_assigment  = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     
 	$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+    
 	$user_id 			= api_get_user_id();	
-	
-    //condition for the session
-    $session_id         = api_get_session_id();
+	$session_id         = api_get_session_id();
     $condition_session  = api_get_session_condition($session_id);    
     $course_id          = api_get_course_int_id();
+    $group_id           = api_get_group_id();
     
-	$publications_list = array();
 	$sort_params = array();
 
 	if (isset($_GET['column'])) {
@@ -379,6 +378,8 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
     	}        
     	
     	$contains_file_query = '';    	
+        
+        
     	
     	//Get list from database
     	if ($is_allowed_to_edit) {
@@ -389,8 +390,8 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
     									  		$contains_file_query                   				
     									  		ORDER BY sent_date DESC";
     	} else {		
-    		if (!empty($_SESSION['toolgroup'])) {
-    			$group_query = " WHERE c_id = $course_id AND post_group_id = '".intval($_SESSION['toolgroup'])."' "; // set to select only messages posted by the user's group
+    		if (!empty($group_id)) {
+    			$group_query = " WHERE c_id = $course_id AND post_group_id = '".$group_id."' "; // set to select only messages posted by the user's group
     			$subdirs_query = "AND parent_id = 0";
     		} else {
     			$group_query = " WHERE c_id = $course_id AND  post_group_id = '0' ";
@@ -410,11 +411,11 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
                 }
             }
         }
-    } else {        
+    } else {
         $parent_id = isset($my_folder_data['id']) ? $my_folder_data['id'] : 0;
         
-        if (!empty($_SESSION['toolgroup'])) {
-            $group_query = " WHERE c_id = $course_id AND post_group_id = '".intval($_SESSION['toolgroup'])."' "; // set to select only messages posted by the user's group            
+        if (!empty($group_id)) {
+            $group_query = " WHERE c_id = $course_id AND post_group_id = '".intval($group_id)."' "; // set to select only messages posted by the user's group            
         } else {
             $group_query = " WHERE c_id = $course_id AND  post_group_id = '0' ";            
         }
@@ -461,6 +462,8 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	$table_data = array();
 
 	// List of all folders if no id was provided
+    
+    $group_id = api_get_group_id();
 	
 	if (is_array($work_parents)) {
 	   
@@ -469,8 +472,8 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 									 FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id AND prop.c_id = $course_id  )
 									 WHERE active IN (0, 1) AND ";
 			
-			if (!empty($_SESSION['toolgroup'])) {
-				$sql_select_directory .= " work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
+			if (!empty($group_id)) {
+				$sql_select_directory .= " work.post_group_id = '".$group_id."' "; // set to select only messages posted by the user's group
 			} else {
 				$sql_select_directory .= " work.post_group_id = '0' ";
 			}            
@@ -803,10 +806,11 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				$work_title = !empty($work_data['title']) ? $work_data['title'] : basename($work_data['url']);
 				
 				//Work name							    
-				if (api_is_allowed_to_edit()) {
-					$zip = '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&gradebook='.$gradebook.'&action=downloadfolder&id='.$work_data['id'].'">
-					'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), 22).'</a>';
-				}                
+				//if (api_is_allowed_to_edit()) {                    
+                    if ($cant_files > 0 ) {
+                        $zip = '<a href="downloadfolder.inc.php?id='.$work_data['id'].'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), 22).'</a>';
+                    }
+				//}         
 				$url = $zip.'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&id='.$work_data['id'].'"'.$class.'>'.
 						$work_title.'</a>'.					
 						$add_to_name.'<br />'.$cant_files.' '.$text_file.$dirtext;							
@@ -1390,6 +1394,8 @@ function insert_all_directory_in_course_table($base_work_dir) {
 		$only_dir[] = substr($dir_to_array[$i], strlen($base_work_dir), strlen($dir_to_array[$i]));
 	}
 	$course_id = api_get_course_int_id();
+    $group_id  = api_get_group_id();
+    
 	for($i = 0; $i < count($only_dir); $i++) {
 		global $work_table;
 		$sql_insert_all= "INSERT INTO " . $work_table . " SET
@@ -1401,7 +1407,7 @@ function insert_all_directory_in_course_table($base_work_dir) {
 							   active		= '0',
 							   accepted		= '1',
 							   filetype		= 'folder',
-							   post_group_id = '".intval($_GET['toolgroup'])."',
+							   post_group_id = '".$group_id."',
 							   sent_date	= '0000-00-00 00:00:00' ";
 		Database::query($sql_insert_all);
 	}
@@ -1652,12 +1658,7 @@ function get_list_users_without_publication($task_id) {
 	}
     
     $group_id = api_get_group_id();
-    
-    //just in case
-    if (empty($group_id)) {
-        $group_id = isset($_SESSION['toolgroup']) ? $_SESSION['toolgroup'] : 0;
-    }    
-    
+        
     $new_group_user_list = array();
     
     if ($group_id) {
@@ -1734,28 +1735,31 @@ function display_list_users_without_publication($task_id) {
  * @author cvargas carlos.vargas@beeznest.com cfasanando, christian.fasanado@beeznest.com
  */
 function send_reminder_users_without_publication($task_data) {
-	global $_course, $currentUserFirstName, $currentUserLastName, $currentUserEmail;
+	global $_course;
+    $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 
 	$task_id = $task_data['id'];
 	$task_title = !empty($task_data['title']) ? $task_data['title'] : basename($task_data['url']);
 
-	$emailsubject = '[' . api_get_setting('siteName') . '] ';
-	$sender_name = api_get_person_name($currentUserFirstName, $currentUserLastName, null, PERSON_NAME_EMAIL_ADDRESS);
-	$email_admin = $currentUserEmail;
+	$subject = '[' . api_get_setting('siteName') . '] ';
+    
 	// The body can be as long as you wish, and any combination of text and variables
-	$emailbody_user .= get_lang('ReminderToSubmitPendingTask')."\n".get_lang('CourseName').' : '.$_course['name']."\n";
-	$emailbody_user .= get_lang('WorkName').' : '.$task_title."\n\n".get_lang('Teacher').' : '.api_get_person_name($currentUserFirstName, $currentUserLastName)."\n".get_lang('Email').' : '.$currentUserEmail;
+    
+	$content = get_lang('ReminderToSubmitPendingTask')."\n".get_lang('CourseName').' : '.$_course['name']."\n";
+	$content .= get_lang('WorkName').' : '.$task_title."\n";
 
 	$list_users = get_list_users_without_publication($task_id);
     
     $mails_sent_to = array();    
 	foreach ($list_users as $user) {
-		$name_user = api_get_person_name($user[1], $user[0], null, PERSON_NAME_EMAIL_ADDRESS);
-		$result = api_mail($name_user, $user[3], $emailsubject, $emailbody_user, $sender_name, $email_admin);              
+		$name_user = api_get_person_name($user[1], $user[0], null, PERSON_NAME_EMAIL_ADDRESS);        
+        $dear_line = get_lang('Dear')." ".api_get_person_name($user[1], $user[0]) .", \n\n";            
+        $body      = $dear_line.$content;        
+        
+		api_mail($name_user, $user[3], $subject, $body, $sender_name, $email_admin);              
         $mails_sent_to[] = $name_user;                
 	}    
-    return $mails_sent_to;
-    
+    return $mails_sent_to;    
 }
 
 /**

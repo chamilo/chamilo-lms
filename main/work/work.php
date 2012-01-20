@@ -45,13 +45,6 @@ $language_file = array('exercice', 'work', 'document', 'admin');
 
 require_once '../inc/global.inc.php';
 
-// @todo why is this needed?
-//session
-if (isset ($_GET['id_session'])) {
-	$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
-}
-isset($_SESSION['id_session']) ? $id_session = $_SESSION['id_session'] : $id_session = null;
-
 // Including necessary files
 require_once 'work.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
@@ -186,20 +179,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !sizeof($_POST)) {
 		exit ();
 	}
 }
-/*
-if (isset($_GET['toolgroup'])) {
-	$toolgroup = Database::escape_string($_GET['toolgroup']);
-	api_session_register('toolgroup');
-}
-$toolgroup = isset($_SESSION['toolgroup']) ? $_SESSION['toolgroup'] : api_get_group_id();
-*/
+
 $group_id = api_get_group_id();
   
 $display_upload_form = false;	
 if ($action == 'upload_form') {
 	$display_upload_form = true;
 }
-
 
 /*	Header */
 
@@ -215,14 +201,13 @@ if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array ('url' => '../gradebook/' . $_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));    
 }
 
-if (!empty($_SESSION['toolgroup'])) {
-	$_clean['toolgroup'] = (int)$_SESSION['toolgroup'];
-	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
+if (!empty($group_id)) {	
+	$group_properties  = GroupManager :: get_group_properties($group_id);
 	$interbreadcrumb[] = array ('url' => '../group/group.php', 'name' => get_lang('Groups'));
-	$interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$_SESSION['toolgroup'], 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+	$interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 
 	$url_dir ='';
-	$interbreadcrumb[] = array ('url' =>'work.php?gidReq='.$_SESSION['toolgroup'],'name' => get_lang('StudentPublications'));
+	$interbreadcrumb[] = array ('url' =>'work.php?gidReq='.$group_id,'name' => get_lang('StudentPublications'));
 
 	$url_dir = 'work.php?&id=' . $work_id;
 	$interbreadcrumb[] = array ('url' => $url_dir,'name' =>  $my_folder_data['title']);	
@@ -289,7 +274,7 @@ if ($origin == 'learnpath') {
 
 /*	Display links to upload form and tool options */
 
-if ($action != 'send_mail') {
+if (!in_array($action, array('send_mail','add', 'upload'))) {
     $token = Security::get_token();
 }
 
@@ -343,8 +328,8 @@ if ($is_special) {
 
 switch ($action) {
 	case 'mark_work':
-	case 'upload_form':
-		if (empty($item_id)) {		
+	case 'upload_form': //can be add or edit work
+		if (empty($item_id)) {
 			$parent_data = get_work_data_by_id($work_id);
 			$parent_data['qualification'] = intval($parent_data['qualification']);
 			
@@ -380,6 +365,7 @@ switch ($action) {
 				$is_author = true;
 			}
 		}      
+        
 		$form = new FormValidator('form', 'POST', api_get_self() . "?action=upload&id=".$work_id."&curdirpath=" . rtrim(Security :: remove_XSS($curdirpath),'/') . "&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', 'enctype="multipart/form-data"');
 	
 		// form title
@@ -478,10 +464,6 @@ switch ($action) {
 		} else {
 		    Display::display_error_message(get_lang('ActionNotAllowed'));
 		}
-		break;		
-		//download of an completed folder
-	case 'downloadfolder':
-		//require 'downloadfolder.inc.php';
 		break;		
 	case 'send_mail':        
 		if (Security::check_token('get')) {
@@ -684,9 +666,9 @@ switch ($action) {
 						$agenda_id = agenda_add_item($course_info, $title, $content, $date, $end_date, array('GROUP:'.$group_id), 0);
 					}
 				}
-					
+				
 				//Folder created
-				api_item_property_update($course_info, 'work', $id, 'DirectoryCreated', $user_id);
+				api_item_property_update($course_info, 'work', $id, 'DirectoryCreated', $user_id, $group_id);
 				Display :: display_confirmation_message(get_lang('DirectoryCreated'), false);
 				
 				// insert into student_publication_assignment	
@@ -716,7 +698,7 @@ switch ($action) {
 	    				                    publication_id = '".$id."'";
 					Database::query($sql_add_homework);
 	                $inserted_id = Database::insert_id();
-					$sql_add_publication = "UPDATE $work_table SET has_properties  = $inserted_id, view_properties = 0 WHERE id = $id";
+					$sql_add_publication = "UPDATE $work_table SET has_properties  = $inserted_id, view_properties = 0 WHERE c_id = $course_id AND id = $id";
 					Database::query($sql_add_publication);	
 				}
 	
@@ -775,12 +757,7 @@ switch ($action) {
 					
 					// Compose a unique file name to avoid any conflict
 					$new_file_name = api_get_unique_id();
-					if (isset ($_SESSION['toolgroup'])) {
-						$post_group_id = $_SESSION['toolgroup'];
-					} else {
-						$post_group_id = '0';
-					}
-					
+								
 					//if we come from the group tools the groupid will be saved in $work_table
 					@move_uploaded_file($_FILES['file']['tmp_name'], $updir.$curdirpath.'/'.$new_file_name);
 					$url = 'work'.$curdirpath.'/'.$new_file_name;
@@ -798,9 +775,9 @@ switch ($action) {
 						                   description	= '" . Database::escape_string($description) . "',
 						                   author      	= '" . Database::escape_string($authors) . "',
 						                   contains_file = '".intval($_POST['contains_file'])."',  
-										   active		= '" . $active . "',
+										   active		= '" . $active . "',                                           
 										   accepted		= '1',
-										   post_group_id = '".$post_group_id."',
+										   post_group_id = '".$group_id."',
 										   sent_date	=  '".api_get_utc_datetime()."',
 										   parent_id 	=  '".$work_id."' ,
                                            session_id	= '".intval($id_session)."' ,
@@ -809,25 +786,11 @@ switch ($action) {
 				Database::query($sql_add_publication);
 				$id = Database::insert_id();				
 				if ($id) {				
-					api_item_property_update($_course, 'work', $id, 'DocumentAdded', $user_id);
+					api_item_property_update($course_info, 'work', $id, 'DocumentAdded', $user_id, api_get_group_id());
 					$succeed = true;
-				}
-				
-				// update all the parents in the table item property
-				//no need to add this
-				/*
-				$list_id = get_parent_directories($id);
-				for ($i = 0; $i < count($list_id); $i++) {
-					api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);
-				}*/														
+				}														
 			} elseif ($newWorkUrl) {
-		
-				if (isset ($_SESSION['toolgroup'])) {
-					$post_group_id = $_SESSION['toolgroup'];
-				} else {
-					$post_group_id = '0';
-				}
-	
+			
 				// SPECIAL CASE ! For a work coming from another area (i.e. groups)
 	
 				$url = str_replace('../../' . $_course['path'] . '/', '', $newWorkUrl);
@@ -841,7 +804,7 @@ switch ($action) {
 						            title       	= '" . Database::escape_string($title) . "',
 						            description 	= '" . Database::escape_string($description) . "',
 						            author      	= '" . Database::escape_string($authors) . "',
-								    post_group_id   = '".$post_group_id."',
+								    post_group_id   = '".$group_id."',
 						            sent_date    	= '".api_get_utc_datetime()."',
 						            session_id 		= '".intval($id_session)."',
 						            user_id 		= '".$user_id."'";
@@ -849,14 +812,8 @@ switch ($action) {
 				Database::query($sql);
 	
 				$insertId = Database::insert_id();
-				api_item_property_update($_course, 'work', $insertId, 'DocumentAdded', $user_id);
+				api_item_property_update($_course, 'work', $insertId, 'DocumentAdded', $user_id, $group_id);
 				$succeed = true;
-	
-				/*// update all the parents in the table item propery
-				 $list_id=get_parent_directories($my_cur_dir_path);
-				for ($i = 0; $i < count($list_id); $i++) {
-				api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);
-				}*/
 			} elseif (isset($_POST['editWork'])) {
 				
 				/*
@@ -942,9 +899,9 @@ switch ($action) {
 					//coach of the course
 					$sql_resp = 'SELECT user.email as myemail
 								FROM ' . $table_session_course_user . ' scu
-													INNER JOIN ' . $table_user . ' user
-														ON user.user_id = scu.id_user AND scu.status=2
-													WHERE scu.id_session = ' . intval($id_session);
+                                INNER JOIN ' . $table_user . ' user
+                                    ON user.user_id = scu.id_user AND scu.status=2
+                                WHERE scu.id_session = ' . intval($id_session);
 					$res_resp = Database::query($sql_resp);
 					while ($row_email = Database :: fetch_array($res_resp)) {
 						if (!empty ($row_email['myemail'])) {
@@ -953,11 +910,8 @@ switch ($action) {
 					}
 				}
 			
-				if (count($emailto) > 0) {
-			
-					$emailto = implode(',', $emailto);
-					$emailfromaddr = api_get_setting('emailAdministrator');
-					$emailfromname = api_get_setting('siteName');
+				if (count($emailto) > 0) {			
+					$emailto = implode(',', $emailto);				
 					$emailsubject = "[" . api_get_setting('siteName') . "] ";
 					$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
 					$email_admin = api_get_setting('emailAdministrator');
@@ -969,11 +923,12 @@ switch ($action) {
 					$emailbody .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
 					$emailbody .= get_lang('FileName')." : ".$title."\n\n".get_lang('DownloadLink')."\n";
 					$emailbody .= api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path."\n\n" . api_get_setting('administratorName') . " " . api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');
-							// Here we are forming one large header line
+                    
+				    // Here we are forming one large header line
 					// Every header must be followed by a \n except the last
 					@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
 				
-					$emailbody_user = get_lang('Dear')." ".$currentUserFirstName .' '.$currentUserLastName ."\n";
+					$emailbody_user = get_lang('Dear')." ".$currentUserFirstName .' '.$currentUserLastName .", \n\n";
 					$emailbody_user .= get_lang('MessageConfirmSendingOfTask')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
 					$emailbody_user .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
 					$emailbody_user .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
@@ -1041,7 +996,7 @@ switch ($action) {
 				$session_id = api_get_session_id();
 				$session_id == 0 ? $withsession = " AND session_id = 0 " : $withsession = " AND session_id='".$session_id."'";			
 				$sql = "SELECT id, url, title FROM $work_table 
-				        WHERE c_id = $course_id AND active IN (0, 1) AND url LIKE '/%' AND post_group_id = '".(empty($_SESSION['toolgroup'])?0:intval($_SESSION['toolgroup']))."'".$withsession;                
+				        WHERE c_id = $course_id AND active IN (0, 1) AND url LIKE '/%' AND post_group_id = '".$group_id."'".$withsession;                
 				$res = Database::query($sql);
 				while($folder = Database::fetch_array($res)) {
 					$folders[$folder['id']] = $folder['title'];

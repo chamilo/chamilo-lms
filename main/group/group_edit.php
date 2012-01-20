@@ -328,9 +328,9 @@ if ($form->validate()) {
 	}
 
 	// Returning to the group area (note: this is inconsistent with the rest of chamilo)
-	$cat = GroupManager :: get_category_from_group($current_group['id']);  
-    
-    if (isset($_POST['group_members']) && count($_POST['group_members']) > $max_member) {
+    //var_dump(count($_POST['group_members']), $max_member, MEMBER_PER_GROUP_NO_LIMIT);
+	$cat = GroupManager :: get_category_from_group($current_group['id']);      
+    if (isset($_POST['group_members']) && count($_POST['group_members']) > $max_member && $max_member != MEMBER_PER_GROUP_NO_LIMIT) {
         header('Location:group_edit.php?show_message='.get_lang('GroupTooMuchMembers'));
     } else {
         header('Location: '.$values['referer'].'?action=show_msg&msg='.get_lang('GroupSettingsModified').'&category='.$cat['id']);

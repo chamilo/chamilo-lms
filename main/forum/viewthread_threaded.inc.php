@@ -213,7 +213,7 @@ if (api_is_allowed_to_edit(null,true)) {
 }
 //echo '<br /><br />';
 //if (($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0) OR api_is_allowed_to_edit())
-if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true)) {
+if (($current_forum_category && $current_forum_category['locked']==0) AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true)) {
     if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
         if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
             echo '<a href="reply.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=replymessage&amp;origin='. $origin .'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>";
@@ -221,7 +221,7 @@ if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $cu
         }
     }
 } else {
-    if ($current_forum_category['locked']==1) {
+    if ($current_forum_category && $current_forum_category['locked']==1) {
         echo get_lang('ForumcategoryLocked').'<br />';
     }
     if ($current_forum['locked']==1) {

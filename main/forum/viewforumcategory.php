@@ -109,11 +109,8 @@ $whatsnew_post_info = $_SESSION['whatsnew_post_info'];
 
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit(false,true) AND $current_forum_category['visibility']==0) {
-    $forum_allow = forum_not_allowed_here();
-    if ($forum_allow === false) {
-        exit;
-    }
+if (!api_is_allowed_to_edit(false,true) AND ($current_forum_category && $current_forum_category['visibility']==0)) {
+    api_not_allowed();
 }
 
 /* Action Links */

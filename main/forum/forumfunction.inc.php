@@ -2967,7 +2967,7 @@ function send_notification_mails($thread_id, $reply_info) {
     $current_thread	= get_thread_information($thread_id);
     $current_forum	= get_forum_information($current_thread['forum_id']);
     $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
-    if ($current_thread['visibility'] == '1' && $current_forum['visibility'] == '1' && $current_forum_category['visibility'] == '1' && $current_forum['approval_direct_post'] != '1') {
+    if ($current_thread['visibility'] == '1' && $current_forum['visibility'] == '1' && ($current_forum_category && $current_forum_category['visibility'] == '1') && $current_forum['approval_direct_post'] != '1') {
         $send_mails = true;
     } else {
         $send_mails = false;

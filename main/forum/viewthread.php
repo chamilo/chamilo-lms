@@ -147,7 +147,7 @@ if ($my_message != 'PostDeletedSpecial') {
     }
     // The reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
     // If one of the three levels is locked then the link should not be displayed.
-    if ($current_forum_category['locked'] == 0 AND $current_forum['locked'] == 0 AND $current_thread['locked'] == 0 OR api_is_allowed_to_edit(false, true)) {
+    if (($current_forum_category && $current_forum_category['locked'] == 0) AND $current_forum['locked'] == 0 AND $current_thread['locked'] == 0 OR api_is_allowed_to_edit(false, true)) {
         // The link should only appear when the user is logged in or when anonymous posts are allowed.
         if ($_user['user_id'] OR ($current_forum['allow_anonymous'] == 1 AND !$_user['user_id'])) {
             // reply link

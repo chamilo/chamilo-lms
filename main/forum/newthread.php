@@ -101,11 +101,11 @@ if (!empty($_GET['gidReq'])) {
 // 4. anonymous posts are not allowed and the user is not logged in
 // I have split this is several pieces for clarity.
 
-if (!api_is_allowed_to_edit(false, true) && (($current_forum_category['visibility'] == 0 || $current_forum['visibility'] == 0))) {
+if (!api_is_allowed_to_edit(false, true) && (($current_forum_category['visibility'] && $current_forum_category['visibility'] == 0) || $current_forum['visibility'] == 0)) {
     api_not_allowed();
 }
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
-if (!api_is_allowed_to_edit(false, true) AND ($current_forum_category['locked'] <> 0 OR $current_forum['locked'] <> 0)) {
+if (!api_is_allowed_to_edit(false, true) AND (($current_forum_category['visibility'] && $current_forum_category['locked'] <> 0) OR $current_forum['locked'] <> 0)) {
     api_not_allowed();
 }
 // 3. new threads are not allowed and the user is not a course manager

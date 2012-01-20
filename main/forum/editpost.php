@@ -131,8 +131,7 @@ if (isset($_GET['origin'])) {
 if ($origin == 'learnpath') {
     include api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 } else {
-    Display :: display_header(null);
-    //api_display_tool_title($nameTools);
+    Display :: display_header(null);    
 }
 
 /* Is the user allowed here? */
@@ -145,14 +144,14 @@ if ($origin == 'learnpath') {
 // The only exception is the course manager
 // I have split this is several pieces for clarity.
 //if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility'] == 0 OR $current_forum['visibility'] == 0) OR ($current_forum_category['locked'] <> 0 OR $current_forum['locked'] <> 0 OR $current_thread['locked'] <> 0))) {
-if (!api_is_allowed_to_edit(null, true) AND (($current_forum_category['visibility'] == 0 OR $current_forum['visibility'] == 0))) {
+if (!api_is_allowed_to_edit(null, true) AND (($current_forum_category && $current_forum_category['visibility'] == 0) OR $current_forum['visibility'] == 0)) {
     $forum_allow = forum_not_allowed_here();
     if ($forum_allow === false) {
         exit;
     }
 }
  
-if (!api_is_allowed_to_edit(null, true) AND ($current_forum_category['locked'] <> 0 OR $current_forum['locked'] <> 0 OR $current_thread['locked'] <> 0)) {
+if (!api_is_allowed_to_edit(null, true) AND (($current_forum_category && $current_forum_category['locked'] <> 0 ) OR $current_forum['locked'] <> 0 OR $current_thread['locked'] <> 0)) {
     $forum_allow = forum_not_allowed_here();
     if ($forum_allow === false) {
         exit;

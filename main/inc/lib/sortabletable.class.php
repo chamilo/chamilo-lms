@@ -248,17 +248,22 @@ class SortableTable extends HTML_Table {
 			
 			if (count($this->form_actions) > 0) {
 				$html .= '<script language="JavaScript" type="text/javascript">
-																/*<![CDATA[*/
-																function setCheckbox(value) {
-													 				d = document.form_'.$this->table_name.';
-													 				for (i = 0; i < d.elements.length; i++) {
-													   					if (d.elements[i].type == "checkbox") {
-																		     d.elements[i].checked = value;
-													   					}
-													 				}
-																}
-																/*]]>*/
-															</script>';
+                            /*<![CDATA[*/
+                            function setCheckbox(value) {
+                                d = document.form_'.$this->table_name.';
+                                for (i = 0; i < d.elements.length; i++) {
+                                    if (d.elements[i].type == "checkbox") {
+                                        d.elements[i].checked = value;
+                                        if (value) {
+                                            $(d.elements[i]).parentsUntil("tr").parent().addClass("row_selected");
+                                        } else {
+                                            $(d.elements[i]).parentsUntil("tr").parent().removeClass("row_selected");
+                                        }
+                                    }
+                                }
+                            }
+                            /*]]>*/
+                        </script>';
 				$params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
 				$html .= '<form method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
 			}
@@ -359,6 +364,11 @@ class SortableTable extends HTML_Table {
 				   					if (d.elements[i].type == "checkbox") {
 									     d.elements[i].checked = value;
 				   					}
+                                    if (value) {
+                                        $(d.elements[i]).parentsUntil("tr").parent().addClass("row_selected");
+                                    } else {
+                                        $(d.elements[i]).parentsUntil("tr").parent().removeClass("row_selected");
+                                    }
 				 				}
 							}
 							/*]]>*/
@@ -472,6 +482,11 @@ class SortableTable extends HTML_Table {
 				   					if (d.elements[i].type == "checkbox") {
 									     d.elements[i].checked = value;
 				   					}
+                                    if (value) {
+                                        $(d.elements[i]).parentsUntil("tr").parent().addClass("row_selected");
+                                    } else {
+                                        $(d.elements[i]).parentsUntil("tr").parent().removeClass("row_selected");
+                                    }
 				 				}
 							}
 							/*]]>*/

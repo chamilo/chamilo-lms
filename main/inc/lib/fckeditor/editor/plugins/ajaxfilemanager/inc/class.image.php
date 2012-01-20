@@ -220,9 +220,6 @@ class ImageAjaxFileManager
             case 'jpg':
                 $saved = $func($this->_imgFinal, $filename, $quality);
                 break;
-			case 'jpeg':
-				$saved = $func($this->_imgFinal, $filename, $quality);//hack for Chamilo fix thumbnail of jpeg files 
-			break;
         }
 
         if ($saved === false) 
@@ -275,6 +272,9 @@ class ImageAjaxFileManager
                 $func($this->_imgFinal);
                 break;
             case 'jpg':
+                $func($this->_imgFinal, '', $quality);
+                break;
+			case 'jpeg':
                 $func($this->_imgFinal, '', $quality);
                 break;
         }

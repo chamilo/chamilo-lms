@@ -942,9 +942,9 @@ switch ($action) {
 					//coach of the course
 					$sql_resp = 'SELECT user.email as myemail
 								FROM ' . $table_session_course_user . ' scu
-													INNER JOIN ' . $table_user . ' user
-														ON user.user_id = scu.id_user AND scu.status=2
-													WHERE scu.id_session = ' . intval($id_session);
+                                INNER JOIN ' . $table_user . ' user
+                                    ON user.user_id = scu.id_user AND scu.status=2
+                                WHERE scu.id_session = ' . intval($id_session);
 					$res_resp = Database::query($sql_resp);
 					while ($row_email = Database :: fetch_array($res_resp)) {
 						if (!empty ($row_email['myemail'])) {
@@ -953,11 +953,8 @@ switch ($action) {
 					}
 				}
 			
-				if (count($emailto) > 0) {
-			
-					$emailto = implode(',', $emailto);
-					$emailfromaddr = api_get_setting('emailAdministrator');
-					$emailfromname = api_get_setting('siteName');
+				if (count($emailto) > 0) {			
+					$emailto = implode(',', $emailto);				
 					$emailsubject = "[" . api_get_setting('siteName') . "] ";
 					$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
 					$email_admin = api_get_setting('emailAdministrator');
@@ -969,11 +966,12 @@ switch ($action) {
 					$emailbody .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
 					$emailbody .= get_lang('FileName')." : ".$title."\n\n".get_lang('DownloadLink')."\n";
 					$emailbody .= api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path."\n\n" . api_get_setting('administratorName') . " " . api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');
-							// Here we are forming one large header line
+                    
+				    // Here we are forming one large header line
 					// Every header must be followed by a \n except the last
 					@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
 				
-					$emailbody_user = get_lang('Dear')." ".$currentUserFirstName .' '.$currentUserLastName ."\n";
+					$emailbody_user = get_lang('Dear')." ".$currentUserFirstName .' '.$currentUserLastName .", \n\n";
 					$emailbody_user .= get_lang('MessageConfirmSendingOfTask')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
 					$emailbody_user .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
 					$emailbody_user .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";

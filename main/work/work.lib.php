@@ -1735,16 +1735,17 @@ function display_list_users_without_publication($task_id) {
  */
 function send_reminder_users_without_publication($task_data) {
 	global $_course, $currentUserFirstName, $currentUserLastName, $currentUserEmail;
+    $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 
 	$task_id = $task_data['id'];
 	$task_title = !empty($task_data['title']) ? $task_data['title'] : basename($task_data['url']);
 
 	$emailsubject = '[' . api_get_setting('siteName') . '] ';
-	$sender_name = api_get_person_name($currentUserFirstName, $currentUserLastName, null, PERSON_NAME_EMAIL_ADDRESS);
-	$email_admin = $currentUserEmail;
+    
 	// The body can be as long as you wish, and any combination of text and variables
+    $emailbody_user = get_lang('Dear')." ".$currentUserFirstName .' '.$currentUserLastName .", \n\n";            
 	$emailbody_user .= get_lang('ReminderToSubmitPendingTask')."\n".get_lang('CourseName').' : '.$_course['name']."\n";
-	$emailbody_user .= get_lang('WorkName').' : '.$task_title."\n\n".get_lang('Teacher').' : '.api_get_person_name($currentUserFirstName, $currentUserLastName)."\n".get_lang('Email').' : '.$currentUserEmail;
+	$emailbody_user .= get_lang('WorkName').' : '.$task_title."\n";
 
 	$list_users = get_list_users_without_publication($task_id);
     
@@ -1754,8 +1755,7 @@ function send_reminder_users_without_publication($task_data) {
 		$result = api_mail($name_user, $user[3], $emailsubject, $emailbody_user, $sender_name, $email_admin);              
         $mails_sent_to[] = $name_user;                
 	}    
-    return $mails_sent_to;
-    
+    return $mails_sent_to;    
 }
 
 /**

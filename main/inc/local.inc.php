@@ -681,8 +681,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 
 /*  COURSE INIT */
 
-if (isset($cidReset) && $cidReset) { // course session data refresh requested or empty data
-
+if (isset($cidReset) && $cidReset) { // course session data refresh requested or empty data    
 	if ($cidReq) {
 		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -693,7 +692,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 			WHERE course.code = '$cidReq'";
 		$result = Database::query($sql);
 
-		if (Database::num_rows($result)>0) {
+		if (Database::num_rows($result) > 0) {
 			$course_data = Database::fetch_array($result);
 			//@TODO real_cid should be cid, for working with numeric course id
 			$_real_cid                      = $course_data['id'];
@@ -708,9 +707,9 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 			$_course['sysCode']             = $course_data['code']; // use as key in db
 			$_course['path']                = $course_data['directory']; // use as key in path
 			$_course['dbName']              = $course_data['db_name']; // use as key in db list
-			$_course['db_name']             = $course_data['db_name']; // 
-			$_course['dbNameGlu']           = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // use in all queries
-			$_course['titular']             = $course_data['tutor_name'];
+			$_course['db_name']             = $course_data['db_name']; // not needed in Chamilo 1.8
+			$_course['dbNameGlu']           = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // use in all queries //not needed in Chamilo 1.8
+			$_course['titular']             = $course_data['tutor_name'];// this should be deprecated and use the table course_rel_user
 			$_course['language']            = $course_data['course_language'];
 			$_course['extLink']['url' ]     = $course_data['department_url'];
 			$_course['extLink']['name']     = $course_data['department_name'];
@@ -729,8 +728,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 			// if a session id has been given in url, we store the session
 			if (api_get_setting('use_session_mode') == 'true') {
 				// Database Table Definitions
-				$tbl_session                 = Database::get_main_table(TABLE_MAIN_SESSION);
-				$tbl_user                    = Database::get_main_table(TABLE_MAIN_USER);
+				$tbl_session                 = Database::get_main_table(TABLE_MAIN_SESSION);				
 				$tbl_session_course          = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 				$tbl_session_course_user     = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 

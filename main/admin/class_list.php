@@ -63,20 +63,19 @@ function get_class_data($from, $number_of_items, $column, $direction) {
 function modify_filter($class_id) {
     $class_id = Security::remove_XSS($class_id);
     $result = '<a href="class_information.php?id='.$class_id.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>';
-    $result .= '<a href="class_edit.php?idclass='.$class_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-    $result .= '<a href="class_list.php?action=delete_class&amp;class_id='.$class_id.'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-    $result .= '<a href="subscribe_user2class.php?idclass='.$class_id.'">'.Display::return_icon('add_multiple_users.gif', get_lang('AddUsersToAClass')).'</a>';
+    $result .= ' <a href="class_edit.php?idclass='.$class_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+    $result .= ' <a href="subscribe_user2class.php?idclass='.$class_id.'">'.Display::return_icon('add_multiple_users.gif', get_lang('AddUsersToAClass')).'</a>';
+    $result .= ' <a href="class_list.php?action=delete_class&amp;class_id='.$class_id.'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
     return $result;
 }
 
 require api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $tool_name = get_lang('ClassList');
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
-Display :: display_header($tool_name);
+//Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
 
 if (isset($_POST['action'])) {
@@ -88,7 +87,7 @@ if (isset($_POST['action'])) {
                 foreach ($classes as $index => $class_id) {
                     ClassManager :: delete_class($class_id);
                 }
-                Display :: display_normal_message(get_lang('ClassesDeleted'));
+                $message = Display :: return_message(get_lang('ClassesDeleted'));
             }
             break;
     }
@@ -98,10 +97,10 @@ if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'delete_class':
             ClassManager :: delete_class($_GET['class_id']);
-            Display :: display_normal_message(get_lang('ClassDeleted'));
+            $message = Display :: return_message(get_lang('ClassDeleted'));
             break;
         case 'show_message':
-            Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));
+            $message = Display :: return_message(Security::remove_XSS(stripslashes($_GET['message'])));
             break;
     }
 }
@@ -112,7 +111,7 @@ $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->addElement('text', 'keyword', get_lang('keyword'));
 $form->addElement('submit', 'submit', get_lang('Search'));
-$form->display();
+$content .= $form->return_form();
 
 // Create the sortable table with class information
 $table = new SortableTable('classes', 'get_number_of_classes', 'get_class_data', 1);
@@ -123,7 +122,15 @@ $table->set_header(2, get_lang('NumberOfUsers'));
 $table->set_header(3, '', false);
 $table->set_column_filter(3, 'modify_filter');
 $table->set_form_actions(array ('delete_classes' => get_lang('DeleteSelectedClasses')), 'class');
-$table->display();
 
-// Displaying the footer.
-Display :: display_footer();
+$content .= $table->return_table();
+
+$actions .= Display::url(Display::return_icon('add.png', get_lang('Add'), array(), 32), 'class_add.php');
+$actions .= Display::url(Display::return_icon('import_csv.png', get_lang('AddUsersToAClass'), array(), 32), 'class_user_import.php');
+$actions .= Display::url(Display::return_icon('import_csv.png', get_lang('ImportClassListCSV'), array(), 32), 'class_import.php');
+
+$tpl = new Template($tool_name);
+$tpl->assign('content', $content);
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $message);
+$tpl->display_one_col_template();

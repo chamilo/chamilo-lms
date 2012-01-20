@@ -24,6 +24,7 @@ api_protect_admin_script();
 
 // Setting breadcrumbs.
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ('url' => 'class_list.php', 'name' => get_lang('Classes'));
 
 // Setting the name of the tool.
 $tool_name = get_lang("AddClasses");

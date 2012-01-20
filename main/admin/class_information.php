@@ -13,12 +13,12 @@ $language_file = 'admin';
 
 $cidReset = true;
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-require api_get_path(LIBRARY_PATH).'classmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
 
 if (!isset($_GET['id'])) {
     api_not_allowed();
@@ -38,7 +38,6 @@ Display::display_header($tool_name);
  * Show all users subscribed in this class.
  */
 echo '<h4>'.get_lang('Users').'</h4>';
-echo '<blockquote>';
 $users = ClassManager::get_users($class_id);
 if (count($users) > 0) {
     $is_western_name_order = api_is_western_name_order();
@@ -67,14 +66,13 @@ if (count($users) > 0) {
         }
         $row[] = Display :: encrypted_mailto_link($user['email'], $user['email']);
         $row[] = $user['status'] == 5 ? get_lang('Student') : get_lang('Teacher');
-        $row[] = '<a href="user_information.php?user_id='.$user['user_id'].'">'.Display::return_icon('synthese_view.gif').'</a>';
+        $row[] = '<a href="user_information.php?user_id='.$user['user_id'].'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>';
         $data[] = $row;
     }
     Display::display_sortable_table($table_header,$data,array(),array(),array('id'=>$_GET['id']));
 } else {
     echo get_lang('NoUsersInClass');
 }
-echo '</blockquote>';
 
 /**
  * Show all courses in which this class is subscribed.

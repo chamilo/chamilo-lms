@@ -57,7 +57,6 @@ include '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'import.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -67,6 +66,7 @@ api_protect_admin_script();
 
 // setting breadcrumbs
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ('url' => 'class_list.php', 'name' => get_lang('Classes'));
 
 // Database Table Definitions
 
@@ -103,10 +103,9 @@ if ($form->validate()) {
 }
 
 $form->display();
-
 ?>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-<blockquote>
+
  <pre>
   <b>ClassName</b>
   <b>1A</b>
@@ -114,7 +113,6 @@ $form->display();
   <b>2A group 1</b>
   <b>2A group 2</b>
  </pre>
-</blockquote>
 <?php
 
 // Displaying the footer.

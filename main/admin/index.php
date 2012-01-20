@@ -187,8 +187,7 @@ if (api_get_setting('use_session_mode') == 'true') {
 
 } elseif (api_is_platform_admin()) {
 
-	$blocks['classes']['items'] = $items;
-	
+	$blocks['classes']['items'] = $items;	
 	$blocks['classes']['icon']  = Display::return_icon('group.gif', get_lang('AdminClasses'));
 	$blocks['classes']['label'] = api_ucfirst(get_lang('AdminClasses'));
 	

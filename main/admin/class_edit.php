@@ -13,9 +13,8 @@ $language_file = 'admin';
 $cidReset = true;
 
 // Including some necessary dokeos files.
-include '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -26,6 +25,7 @@ api_protect_admin_script();
 // Setting breadcrumbs.
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'class_list.php', 'name' => get_lang('AdminClasses'));
+
 
 // Setting the name of the tool.
 $tool_name = get_lang('AddClasses');

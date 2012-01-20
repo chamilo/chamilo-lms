@@ -36,7 +36,7 @@ class manager {
 	var $calculateSubdir = true;
 	var $fileTypes = array(
 			array(array("exe", "com"), "fileExe", SEARCH_TYPE_EXE, 0),
-			array(array("gif", "jpg", "png", "bmp", "tif"), "filePicture", SEARCH_TYPE_IMG, 1),
+			array(array("gif", "jpg", "jpeg","png", "bmp", "tif", "tiff"), "filePicture", SEARCH_TYPE_IMG, 1),
 			array(array("zip", "sit", "rar", "gz", "tar"), "fileZip", SEARCH_TYPE_ARCHIVE, 0),
 			array(array("htm", "html", "php", "jsp", "asp", 'js', 'css'), "fileCode", SEARCH_TYPE_HTML, 1),
 			array(array("mov", "ram", "rm", "asx", "dcr", "wmv"), "fileVideo", SEARCH_TYPE_VIDEO, 1),

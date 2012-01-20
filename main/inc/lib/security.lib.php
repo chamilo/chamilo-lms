@@ -49,8 +49,8 @@ class Security {
         if (empty($checker_path)) { return false; } // The checker path must be set.
 
         $true_path = str_replace("\\", '/', realpath($abs_path));
-
         $found = strpos($true_path.'/', $checker_path);
+        
         if ($found === 0) {
             return true;
         } else {

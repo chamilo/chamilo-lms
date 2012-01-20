@@ -9,6 +9,8 @@
  * Code
  */
 set_time_limit(0);
+
+require_once '../inc/global.inc.php';
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
 $path          = $document_data['path'];
  
@@ -130,11 +132,11 @@ event_download(($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip
 // Start download of created file
 $name = ($path == '/') ? 'documents.zip' : $document_data['title'].'.zip';
 
-//if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
-    DocumentManager::file_send_for_download($temp_zip_file, true, $name);
-    @unlink($temp_zip_file);    
-    exit;
-//}
+if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
+   DocumentManager::file_send_for_download($temp_zip_file, true, $name);
+   @unlink($temp_zip_file);    
+   exit;
+}
 
 /**
  * Returns the difference between two arrays, as an array of those key/values

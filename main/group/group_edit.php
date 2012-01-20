@@ -311,7 +311,7 @@ if ($form->validate()) {
 	} else {
 		$max_member = $values['max_member'];
 	}
-	$self_registration_allowed = isset($values['self_registration_allowed']) ? 1 : 0;
+	$self_registration_allowed   = isset($values['self_registration_allowed']) ? 1 : 0;
 	$self_unregistration_allowed = isset($values['self_unregistration_allowed']) ? 1 : 0;
 	GroupManager :: set_group_properties($current_group['id'], strip_tags($values['name']), strip_tags($values['description']), $max_member, $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $values['wiki_state'], $values['chat_state'], $self_registration_allowed, $self_unregistration_allowed);
 
@@ -328,8 +328,13 @@ if ($form->validate()) {
 	}
 
 	// Returning to the group area (note: this is inconsistent with the rest of chamilo)
-	$cat = GroupManager :: get_category_from_group($current_group['id']);
-	header('Location: '.$values['referer'].'?action=show_msg&msg='.get_lang('GroupSettingsModified').'&category='.$cat['id']);
+	$cat = GroupManager :: get_category_from_group($current_group['id']);  
+    
+    if (isset($_POST['group_members']) && count($_POST['group_members']) > $max_member) {
+        header('Location:group_edit.php?show_message='.get_lang('GroupTooMuchMembers'));
+    } else {
+        header('Location: '.$values['referer'].'?action=show_msg&msg='.get_lang('GroupSettingsModified').'&category='.$cat['id']);
+    }
 }
 
 $defaults = $current_group;
@@ -347,13 +352,6 @@ $referer = parse_url($_SERVER['HTTP_REFERER']);
 $referer = basename($referer['path']);
 if ($referer != 'group_space.php' && $referer != 'group.php') {
 	$referer = 'group.php';
-}
-if (isset($_POST['group_members'])) {
-	if (count($_POST['group_members']) <= $defaults['max_member']) {
-		//
-	} else {
-		header('Location:group_edit.php?show_message='.get_lang('GroupTooMuchMembers'));
-	}
 }
 
 if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {

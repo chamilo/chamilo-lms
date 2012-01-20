@@ -98,7 +98,8 @@ switch ($action) {
 	case 'get_exercise_results':
 		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 		require_once $libpath.'groupmanager.lib.php';
-		$count = get_count_exam_results();
+        $exercise_id = $_REQUEST['exerciseId'];
+		$count = get_count_exam_results($exercise_id);
 		break;
     case 'get_sessions':
         require_once $libpath.'sessionmanager.lib.php';        
@@ -153,17 +154,17 @@ if ($_REQUEST['oper'] == 'del') {
 $columns = array();
 switch ($action) {    
 	case 'get_exercise_results':
-		
+		$course                     = api_get_course_info();
 		$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
 		$is_tutor                   = api_is_allowed_to_edit(true);
-		$documentPath				= api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
+		$documentPath				= api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
 		
 		if ($is_allowedToEdit || $is_tutor) {
 			$columns = array('firstname', 'lastname', 'username', 'groups', 'exe_duration', 'start_date', 'exe_date', 'score','status','actions');
 		} else {
 			$columns = array('exe_duration', 'start_date', 'exe_date', 'score','status');
-		}
-		$result = get_exam_results_data($start, $limit, $sidx, $sord, $where_condition);
+		}        
+		$result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
 		
 		break;
     case 'get_sessions':

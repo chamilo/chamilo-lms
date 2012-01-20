@@ -748,13 +748,13 @@ function get_session_time_control_key($exercise_id) {
  * @todo this function should be moved in a library  + no global calls 
  * Modified by hubert borderiou 08-11-2011
  */
-function get_count_exam_results() {
+function get_count_exam_results($exercise_id) {
     // I know it's bad to add a static integer here... but
     // it factorise function get_exam_results_data
     // and I think it worths it.
     //This is not bad for the hardcoded value, this is bad because you call 2 times get_exam_results_data()! jm
     //@todo use a real count select I know the sql constructions are 
-    $tabres = get_exam_results_data(0, 9999999, 0, "ASC");
+    $tabres = get_exam_results_data(0, 9999999, 0, "ASC", $exercise_id);
     return count($tabres);
 }
 
@@ -763,13 +763,15 @@ function get_count_exam_results() {
  * Gets the exam'data results
  * @todo this function should be moved in a library  + no global calls 
  */
-function get_exam_results_data($from, $number_of_items, $column, $direction, $extra_where_conditions = null) {
+function get_exam_results_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null) {
     //@todo replace all this globals
-    global $documentPath, $filter, $filterByGroup;
+    global $documentPath, $filter;
 	
 	if (empty($extra_where_conditions)) {
 		$extra_where_conditions = "1 = 1 ";
 	}
+    //@todo fix the filter by group
+    $filter_by_group = -1;
     
    	$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
 	$is_tutor                   = api_is_allowed_to_edit(true);
@@ -779,13 +781,12 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
 	$TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);
 	
     $TBL_TRACK_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-    $TBL_TRACK_ATTEMPT          = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);    
     $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);    
     
     $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
     
-    $exercise_id = intval($_GET['exerciseId']);
+    $exercise_id = intval($exercise_id);
     
     $exercise_where = '';
     if (!empty($exercise_id)) {
@@ -799,22 +800,22 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     
     if ($is_allowedToEdit || $is_tutor) {
 		
-        if ($_GET['gradebook'] == 'view') {
-            $exercise_where_query = ' te.exe_exo_id = ce.id AND ';
+        if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
+            //$exercise_where_query = ' te.exe_exo_id = ce.id AND ';
         }
 
 		$sqlFromOption = "";
 		$sqlWhereOption = "";           // for hpsql
 	    $sql_inner_join_tbl_user = "";    
 	    $sql_inner_join_tbl_track_exercices = "";
-		$filterByGroup = intval($filterByGroup);
+		$filter_by_group = intval($filter_by_group);
 		
         //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
 
 
-		// Filter by group
+		// Filter by group        
 		
-		switch ($filterByGroup) {
+		switch ($filter_by_group) {
 		    case -1 : // no filter
         	    $sql_inner_join_tbl_user = $TBL_USER;    
 		        break;
@@ -830,16 +831,16 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     			$sqlFromOption = " ,$TBL_GROUP_REL_USER AS gru ";
     			$sqlWhereOption = " AND user.user_id NOT IN	( SELECT user_id FROM $TBL_GROUP_REL_USER WHERE c_id=".api_get_course_int_id().") ";
 		        break;
-		    default : // user in group $filterByGroup
+		    default : // user in group $filter_by_group
     		    $sql_inner_join_tbl_user = " 
                     (SELECT u.user_id, firstname, lastname, email, username
                     FROM $TBL_USER u 
                     INNER JOIN $TBL_GROUP_REL_USER gru ON (
                         gru.user_id=u.user_id 
-                        AND gru.group_id=$filterByGroup 
+                        AND gru.group_id=$filter_by_group 
                         AND gru.c_id=".api_get_course_int_id()."))";
     			$sqlFromOption = " ,$TBL_GROUP_REL_USER AS gru ";
-    			$sqlWhereOption = "  AND gru.c_id=".api_get_course_int_id()." AND gru.user_id=user.user_id AND gru.group_id=".Database :: escape_string($filterByGroup);
+    			$sqlWhereOption = "  AND gru.c_id=".api_get_course_int_id()." AND gru.user_id=user.user_id AND gru.group_id=".Database :: escape_string($filter_by_group);
 		        break;
 		}
 		
@@ -965,17 +966,14 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         if (is_array($results)) {
 			
             $users_array_id = array();
-            if ($_GET['gradebook'] == 'view') {
-                $filter_by_no_revised = true;
+            if ($_GET['gradebook'] == 'view') {                
                 $from_gradebook = true;
             }
             $sizeof = count($results);
     
-            $user_list_id = array ();            
-            $quiz_name_list = '';
+            $user_list_id = array ();                        
             $duration_list = '';
-            $date_list = '';
-            $result_list = '';
+            $date_list = '';            
             $more_details_list = '';
 			
             for ($i = 0; $i < $sizeof; $i++) {

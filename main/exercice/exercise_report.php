@@ -37,7 +37,7 @@ require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 require_once 'hotpotatoes.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH)."groupmanager.lib.php"; // for group filtering
+require_once api_get_path(LIBRARY_PATH) . "groupmanager.lib.php"; // for group filtering
 
 // need functions of statsutils lib to display previous exercices scores
 require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
@@ -49,16 +49,12 @@ $documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
 /*	Constants and variables */
 $is_allowedToEdit           = api_is_allowed_to_edit(null,true);
 $is_tutor                   = api_is_allowed_to_edit(true);
-$is_tutor_course            = api_is_course_tutor();
-
  
 $TBL_QUESTIONS              = Database :: get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_TRACK_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TBL_TRACK_ATTEMPT          = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 $TBL_LP_ITEM_VIEW           = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
-$TBL_LP_ITEM                = Database :: get_course_table(TABLE_LP_ITEM);
-
 
 $course_id      = api_get_course_int_id();
 $exercise_id    = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
@@ -121,6 +117,7 @@ if (!empty($_GET['export_report']) && $_GET['export_report'] == '1') {
         api_not_allowed(true);
     }
 }
+
 
 
 //Send student email @todo move this code in a class, library
@@ -235,6 +232,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
         }        
     }
 }
+
 if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
@@ -270,86 +268,6 @@ if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !emp
     header('Location: exercise_report.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&filter=' . $filter . '&exerciseId='.$exercise_id.'&filter_by_user='.$_GET['filter_by_user']);
     exit;
 }
-
-if (api_is_allowed_to_edit(null,true)) {
-    if (!$_GET['filter']) {
-        $filter_by_not_revised = true;
-        $filter = 1;
-    } else {
-        $filter=Security::remove_XSS($_GET['filter']);
-    }
-    $filter = (int)$_GET['filter'];
-
-    switch ($filter) {
-        case 1 :
-            $filter_by_not_revised = true;
-            break;
-        case 2 :
-            $filter_by_revised = true;
-            break;
-        default :
-            null;
-    }
-    
-    //Report by question
-    $actions .= Display::url(Display::return_icon('statistics_admin.gif', get_lang("ReportByQuestion")), 'stats.php?exerciseId='.$exercise_id);
-    
-    //Live results
-    $actions .='<a href="live_stats.php?' . api_get_cidreq() . '&exerciseId='.$exercise_id.'">'.Display :: return_icon('activity_monitor.png', get_lang('LiveResults'),'',32).'</a>';
-    
-    if (!empty($_GET['exerciseId']) && empty($_GET['filter_by_user'])) {
-        if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
-            $view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&filter=2&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_check.png', get_lang('ShowCorrectedOnly'),'','32').'</a>';
-        } else {
-            $view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&filter=1&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_uncheck.png', get_lang('ShowUnCorrectedOnly'),'','32').'</a>';
-        }
-        $actions .= $view_result;
-         
-        // filter by student group menu
-        $actions .= "<script type='text/javascript'>";
-        $actions .= "      function doFilterByGroup() {";
-        $actions .= "          var IdGroup = document.getElementById('groupFilter').value;";
-        $actions .= "          var goToUrl = \"".api_get_self()."?".api_get_cidreq()."&filter=$filter&gradebook=$gradebook&exerciseId=$exercise_id;$quiz_results_per_page&filterByGroup=\"+IdGroup;";
-        $actions .= "          self.location.href=goToUrl;";
-        $actions .= "      }";
-        $actions .= "        </script>";
-        $actions .= "&nbsp;&nbsp;";
-        $actions .= Display::return_icon('group.gif', get_lang("FilterByGroup"));
-        $actions .= displayGroupMenu("groupFilter", $filterByGroup, "doFilterByGroup()")."&nbsp;";
-    }    
-}
-
-$parameters=array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
-
-
-$table = new SortableTable('quiz_results', 'get_count_exam_results', 'get_exam_results_data', 1, 10);
-$table->set_additional_parameters($parameters);
-
-if ($is_allowedToEdit || $is_tutor) {
-	if (api_is_western_name_order()) {
-		$table->set_header(0, get_lang('FirstName'));
-		$table->set_header(1, get_lang('LastName'));    			
-	} else {
-		$table->set_header(0, get_lang('LastName'));
-		$table->set_header(1, get_lang('FirstName'));    			
-	}		
-	$table->set_header(2, get_lang('LoginName'));
-	$table->set_header(3, get_lang('Group'),false);
-	$table->set_header(4, get_lang('Exercice'),false);
-	$table->set_header(5, get_lang('Duration'),false);
-	$table->set_header(6, get_lang('Date'));    
-	$table->set_header(7, get_lang('Score'),false);
-    $table->set_header(8, get_lang('Status'), false);
-	$table->set_header(9, get_lang('Actions'), false);   
-	
-} else {
-    $table->set_header(0, get_lang('Exercice'));
-	$table->set_header(1, get_lang('Duration'),false);
-	$table->set_header(2, get_lang('Date'));
-	$table->set_header(3, get_lang('Score'),false);
-	$table->set_header(4, get_lang('Result'), false);   
-}	 
-$content = $table->return_table();	
 
 if ($is_allowedToEdit || $is_tutor) {
     $nameTools = get_lang('StudentScore');              
@@ -421,7 +339,7 @@ $tpl->display_one_col_template();
 
 
 
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results';
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results&exerciseId='.$exercise_id;
 
 //$activeurl = '?sidx=session_active';
 //

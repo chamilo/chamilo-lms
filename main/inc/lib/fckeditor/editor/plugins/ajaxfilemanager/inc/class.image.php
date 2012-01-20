@@ -274,6 +274,9 @@ class ImageAjaxFileManager
             case 'jpg':
                 $func($this->_imgFinal, '', $quality);
                 break;
+			case 'jpeg':
+                $func($this->_imgFinal, '', $quality);
+                break;
         }
         return true;
     }    

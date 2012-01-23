@@ -352,8 +352,8 @@ if ($is_allowedToEdit || $is_tutor) {
 //Column config
 	$column_model   = array(
                         array('name'=>'firstname',      'index'=>'firstname',		'width'=>'50',   'align'=>'left', 'search' => 'true'),                        
-                        array('name'=>'lastname',		'index'=>'lastname',		'width'=>'50',   'align'=>'left', 'search' => 'true'),
-                        array('name'=>'login',			'index'=>'username',		'width'=>'40',   'align'=>'left', 'search' => 'true'),
+                        array('name'=>'lastname',		'index'=>'lastname',		'width'=>'50',   'align'=>'left', 'formatter'=>'action_formatter', 'search' => 'true'),
+                        array('name'=>'login',          'hidden'=> 'true',          'index'=>'username',        'width'=>'40',   'align'=>'left', 'search' => 'true'),
                         array('name'=>'group',			'index'=>'s',				'width'=>'40',   'align'=>'left', 'search' => 'false'),
                         array('name'=>'duration',       'index'=>'exe_duration',	'width'=>'30',   'align'=>'left', 'search' => 'true'),
                         array('name'=>'start_date',		'index'=>'start_date',		'width'=>'60',   'align'=>'left', 'search' => 'true'),                        
@@ -394,6 +394,20 @@ $extra_params['height'] = 'auto';
 $extra_params['excel'] = 'excel';
 
 $extra_params['rowList'] = array(10, 20 ,30);
+
+$action_links = '
+    // add username as title in lastname filed - ref 4226
+    function action_formatter(cellvalue, options, rowObject) {
+        // rowObject is firstname,lastname,login,... get the third word
+        var loginx = "'.api_htmlentities(sprintf(get_lang("LoginX"),":::"), ENT_QUOTES).'";
+        var tabLoginx = loginx.split(/:::/);
+        // tabLoginx[0] is before and tabLoginx[1] is after :::
+        // may be empty string but is defined
+        return "<span title=\""+tabLoginx[0]+rowObject[2]+tabLoginx[1]+"\">"+cellvalue+"</span>";
+    }
+';
+
+
 
 ?>
 <script>

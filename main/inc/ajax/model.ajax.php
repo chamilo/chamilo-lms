@@ -276,8 +276,14 @@ if (in_array($action, array('get_careers', 'get_promotions', 'get_usergroups', '
     $i=0;
     if (!empty($result)) {
         foreach($result as $row) {
-             //print_r($row);
-             $response->rows[$i]['id']=$row['id'];
+            //print_r($row);
+            // if results tab give not id, set id to $i otherwise id="null" for all <tr> of the jqgrid - ref #4235
+            if ($row['id'] == "") {
+                $response->rows[$i]['id']=$i;
+            }
+            else {
+                $response->rows[$i]['id']=$row['id'];
+            }             
              $array = array();
              foreach($columns as $col) {
              	$array[] = $row[$col];

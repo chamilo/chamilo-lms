@@ -54,7 +54,7 @@ if (count($users) > 0) {
     $table_header[] = array ('', false);
     $data = array();
     foreach($users as $index => $user) {
-        $username = sprintf(get_lang('LoginX'), $user['username']);
+        $username = api_htmlentities(sprintf(get_lang('LoginX'), $user['username']), ENT_QUOTES);
         $row = array ();
         $row[] = $user['official_code'];
         if ($is_western_name_order) {

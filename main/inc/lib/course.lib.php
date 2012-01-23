@@ -3687,7 +3687,7 @@ class CourseManager {
 		$table_course_ranking	= Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);        
         $params['url_id']		= api_get_current_access_url_id();
         
-        $result = Database::select('c_id, accesses, total_score, users', $table_course_ranking, array('where' => array('url_id = ?' => $params), 'order' => array('accesses DESC'), 'limit' => $limit), 'all', true);
+        $result = Database::select('c_id, accesses, total_score, users', $table_course_ranking, array('where' => array('url_id = ?' => $params), 'order' => 'accesses DESC', 'limit' => $limit), 'all', true);
         return $result;
 	}    
 } //end class CourseManager

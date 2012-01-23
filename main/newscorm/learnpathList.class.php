@@ -49,7 +49,7 @@ class learnpathList {
         $condition_session = api_get_session_condition($session_id, true, true);
         $order = "ORDER BY display_order ASC, name ASC";
         if (isset($order_by)) {
-            $order =  Database::parse_conditions(array('order'=>$order_by));            
+           $order =  Database::parse_conditions(array('order'=>$order_by));           
         }
         $sql = "SELECT * FROM $lp_table WHERE c_id = $course_id $condition_session $order";
         $res = Database::query($sql);

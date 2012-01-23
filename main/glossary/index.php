@@ -77,9 +77,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'changeview' AND in_array($_GET
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 if (api_is_allowed_to_edit(null, true)) {
+    
     switch ($action) {
-        case 'addglosary':
-            
+        case 'addglossary':            
             $form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
             // settting the form elements
             $form->addElement('header', '', get_lang('TermAddNew'));
@@ -102,7 +102,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 $token = Security::get_token();
                 $form->addElement('hidden','sec_token');
                 $form->setConstants(array('sec_token' => $token));
-                $form->display();
+                $form->display();                
             }
             break;
         case 'edit_glossary':
@@ -164,11 +164,11 @@ if (api_is_allowed_to_edit(null, true)) {
             GlossaryManager::display_glossary();
             break;
         case 'moveup':
-            GlossaryManager::move_glossary('up',$_GET['glossary_id']);
+            //GlossaryManager::move_glossary('up',$_GET['glossary_id']); //actions not available
             GlossaryManager::display_glossary();
             break;
         case 'movedown':
-            GlossaryManager::move_glossary('down',$_GET['glossary_id']);
+            //GlossaryManager::move_glossary('down',$_GET['glossary_id']); //actions not available
             GlossaryManager::display_glossary();
             break;
         case 'import':

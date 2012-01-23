@@ -65,15 +65,17 @@ if (!empty($new_session_list)) {
 				$course['name'] = $course_info['name'];
 				$course['id']   = $course_info['real_id'];
 				if (!empty($exercise_list)) {
-					foreach($exercise_list as $exercise_item) {
+					foreach($exercise_list as $exercise_item) { 
 						//Loading the exercise
 						$exercise = new Exercise($course_info['real_id']);
 						$exercise->read($exercise_item['id']);
-						//$exercise_course_list[$exercise_item['id']] = $exercise;
-						//Reading all Exercise results by user, exercise_id, code, and session
-						$user_results = get_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);
-						$course['exercises'][$exercise_item['id']]['data']['exercise_data'] =  $exercise;
-						$course['exercises'][$exercise_item['id']]['data']['results']       =  $user_results;
+                        if ($exercise->is_visible()) {
+                            //$exercise_course_list[$exercise_item['id']] = $exercise;
+                            //Reading all Exercise results by user, exercise_id, code, and session
+                            $user_results = get_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);
+                            $course['exercises'][$exercise_item['id']]['data']['exercise_data'] =  $exercise;
+                            $course['exercises'][$exercise_item['id']]['data']['results']       =  $user_results;
+                        }
 					}
 					$final_array[$my_session_id]['data'][$my_course['code']] = $course;
 				}
@@ -169,9 +171,7 @@ foreach($final_array as $session_data) {
                         $start_date = $exercise_info->start_time;
                     }                 
                     if (!empty($result_list)) { 
-                        foreach ($result_list as $exercise_result) {
-                            //$my_exercise_result = array($exercise_info->exercise, $exercise_result['exe_id']);
-                            $column = 1;   
+                        foreach ($result_list as $exercise_result) {                            
                             $platform_score = show_score($exercise_result['exe_result'], $exercise_result['exe_weighting']);
                             $my_score = 0;
                             if(!empty($exercise_result['exe_weighting']) && intval($exercise_result['exe_weighting']) != 0) {                        
@@ -288,14 +288,15 @@ $column_week        = array(get_lang('PeriodWeek'), get_lang('PublicationDate'),
 $column_week_model  = array (
                           array('name'=>'week',     'index'=>'week',    'width'=>'50',  'align'=>'left', 'sortable'=>'false'),       
                           array('name'=>'date',     'index'=>'date',    'width'=>'113', 'align'=>'left', 'sortable'=>'false'),
-                          array('name'=>'course',   'index'=>'course',  'width'=>'282', 'align'=>'left', 'sortable'=>'false'),
-                          array('name'=>'lp',       'index'=>'lp',      'width'=>'416', 'align'=>'left', 'sortable'=>'false'));
+                          array('name'=>'course',   'index'=>'course',  'width'=>'282', 'align'=>'left', 'sortable'=>'true'),
+                          array('name'=>'lp',       'index'=>'lp',      'width'=>'416', 'align'=>'left', 'sortable'=>'true'));
                           
 $extra_params_week['grouping'] = 'true';
 //For more details see http://www.trirand.com/jqgridwiki/doku.php?id=wiki:grouping
-$extra_params_week['groupingView'] = array('groupCollapse'     => true,
-										   'groupDataSorted'   => true,
+$extra_params_week['groupingView'] = array('groupCollapse'     => false,
+										   'groupDataSorted'   => false,
 										   'groupField'        => array('week'),
+                                           'groupOrder'        => array('desc'),
                                            'groupColumnShow'   => 'false',
                                            'groupText'         => array('<b>'.get_lang('PeriodWeek').' {0}</b>'));
 //$extra_params_week['autowidth'] = 'true'; //use the width of the parent

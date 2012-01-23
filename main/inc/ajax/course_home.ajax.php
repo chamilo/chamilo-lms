@@ -225,7 +225,8 @@ switch ($action) {
         
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
-        $sidx  = intval($_REQUEST['sidx']);    //index to filter         
+        $sidx  = $_REQUEST['sidx'];    //index to filter    
+        if (empty($sidx)) $sidx = 'course';
         $sord  = $_REQUEST['sord'];    //asc or desc
         if (!in_array($sord, array('asc','desc'))) {
             $sord = 'desc';
@@ -245,13 +246,9 @@ switch ($action) {
             if (!in_array($session_id, $my_session_list)) {
                 break;
             }
-        }       
-               
-                
-        if(!$sidx) $sidx =1;
+        }        
         
-        $start = $limit*$page - $limit; 
-        
+        $start = $limit*$page - $limit;         
         $course_list    = SessionManager::get_course_list_by_session_id($session_id);
                         
         $count = 0;
@@ -268,7 +265,7 @@ switch ($action) {
             $lps[$item['code']] = $flat_list;
             $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,array('target'=>SESSION_LINK_TARGET));
             
-            foreach($flat_list as $lp_id => $lp_item) {                                                    
+            foreach($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id']= $lp_id;
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
                 
@@ -309,11 +306,15 @@ switch ($action) {
                     }
                 }
             
-                $temp[$count]['cell'] = array($week_data, $date, $item['title'], Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET)));
+                $temp[$count]['cell']   = array($week_data, $date, $item['title'], Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET)));
+                $temp[$count]['course'] = strip_tags($item['title']);
+                $temp[$count]['lp']     = $lp_item['lp_name'];
                 $count++;     
             }              
-        }     
-           
+        }
+        
+        $temp = msort($temp, $sidx, $sord);
+            
         $response = new stdClass(); 
         $i =0;        
         foreach($temp as $key=>$row) {   

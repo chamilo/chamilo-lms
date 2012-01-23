@@ -191,8 +191,7 @@ class Chat extends Model {
 
 	function close() {
 		unset($_SESSION['openChatBoxes'][$_POST['chatbox']]);
-		unset($_SESSION['chatHistory'][$_POST['chatbox']]);
-		
+		unset($_SESSION['chatHistory'][$_POST['chatbox']]);		
 		echo "1";
 		exit;
 	}

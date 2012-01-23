@@ -4,6 +4,8 @@
  * Responses to AJAX calls
  */
 
+$_dont_save_user_course_access  = true;
+
 require_once '../global.inc.php';
 
 require_once api_get_path(LIBRARY_PATH).'chat.lib.php';

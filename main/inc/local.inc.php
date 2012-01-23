@@ -790,54 +790,62 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
             $rs = Database::query($sql);
             list($_SESSION['session_name']) = Database::fetch_array($rs);
         }
-
-        if (!isset($_SESSION['login_as'])) {
+        
+        if (!isset($_SESSION['login_as'])) {            
+            $save_course_access = true;
             
-            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-            
-            /* 
-             * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)
-             * the function Tracking::get_time_spent_on_the_course() returns big values (200h) due the condition: 
-             * login_course_date > now() - INTERVAL $session_lifetime SECOND
-             * 
-            */
-            /*
-            if (isset($_configuration['session_lifetime'])) {
-                $session_lifetime    = $_configuration['session_lifetime'];
-            } else {
-                $session_lifetime    = 3600; // 1 hour
-            }*/
-            
-            $session_lifetime    = 3600; // 1 hour
-
-            $course_code = $_course['sysCode'];
-            $time = api_get_datetime();
-
-            //We select the last record for the current course in the course tracking table
-            // But only if the login date is < than now + max_life_time
-            
-            $sql = "SELECT course_access_id FROM $course_tracking_table
-                    WHERE   user_id     = ".intval($_user ['user_id'])." AND
-                            course_code = '$course_code' AND 
-                            session_id  = ".api_get_session_id()." AND
-                            login_course_date > now() - INTERVAL $session_lifetime SECOND
-                        ORDER BY login_course_date DESC LIMIT 0,1";
-            $result = Database::query($sql);
-                //error_log($sql);
-            if (Database::num_rows($result)>0) {
-
-                $i_course_access_id = Database::result($result,0,0);
-                //We update the course tracking table
-                $sql="UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1 ".
-                     "WHERE course_access_id=".intval($i_course_access_id)." AND session_id = ".api_get_session_id();
-                //error_log($sql);
-                Database::query($sql);
-            } else {
-                $sql="INSERT INTO $course_tracking_table (course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
-                     "VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1','".api_get_session_id()."')";
-                //error_log($sql);
-                Database::query($sql);
+            //The value  $_dont_save_user_course_access should be added before the call of global.inc.php see the main/inc/chat.ajax.php file
+            //Disables the updates in the TRACK_E_COURSE_ACCESS table
+            if (isset($_dont_save_user_course_access) && $_dont_save_user_course_access == true) {
+                $save_course_access = false;
             }
+            
+            if ($save_course_access) {
+                $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+                
+                /* 
+                * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)
+                * the function Tracking::get_time_spent_on_the_course() returns big values (200h) due the condition: 
+                * login_course_date > now() - INTERVAL $session_lifetime SECOND
+                * 
+                */
+                /*
+                if (isset($_configuration['session_lifetime'])) {
+                    $session_lifetime    = $_configuration['session_lifetime'];
+                } else {
+                    $session_lifetime    = 3600; // 1 hour
+                }*/
+                
+                $session_lifetime    = 3600; // 1 hour
+
+                $course_code = $_course['sysCode'];
+                $time = api_get_datetime();
+
+                //We select the last record for the current course in the course tracking table
+                //But only if the login date is < than now + max_life_time            
+                $sql = "SELECT course_access_id FROM $course_tracking_table
+                        WHERE   user_id     = ".intval($_user ['user_id'])." AND
+                                course_code = '$course_code' AND 
+                                session_id  = ".api_get_session_id()." AND
+                                login_course_date > now() - INTERVAL $session_lifetime SECOND
+                            ORDER BY login_course_date DESC LIMIT 0,1";
+                $result = Database::query($sql);
+
+                if (Database::num_rows($result) > 0) {
+                    $i_course_access_id = Database::result($result,0,0);
+                    //We update the course tracking table
+                    $sql="UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1 ".
+                        "WHERE course_access_id=".intval($i_course_access_id)." AND session_id = ".api_get_session_id();
+                    //error_log($sql);
+                    Database::query($sql);
+                } else {
+                    $sql="INSERT INTO $course_tracking_table (course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
+                        "VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1','".api_get_session_id()."')";
+                    //error_log($sql);
+                    Database::query($sql);
+                }
+            }
+            
         }
     }
 }

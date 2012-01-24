@@ -252,7 +252,7 @@ echo $dates.'<br />';
 $new_course_list = array();
 if (!empty($course_list)) {
     foreach($course_list as $course_data) {
-        $course_data['title'] = Display::url($course_data['title'], api_get_path(WEB_CODE_PATH).'session/?session_id='.$session_id.'&course_id='.$course_data['id'].'#tabs-2');
+        $course_data['title'] = Display::url($course_data['title'], api_get_course_url($course_data['code'], $session_id));
         $new_course_list[] = array('title'=>$course_data['title']); 
     }
 }
@@ -260,7 +260,7 @@ if (!empty($course_list)) {
 //All Learnpaths grid settings (First tab, first subtab)
 $columns_courses        = array(get_lang('Title'));
 $column_model_courses   = array(array('name'=>'title',  'index'=>'title',   'width'=>'880px',  'align'=>'left',  'sortable'=>'false'));
-
+$extra_params_courses   = array();
 $extra_params_courses['autowidth'] = 'false'; //use the width of the parent                             
                         
 $url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id.'&course_id='.$course_id;
@@ -275,6 +275,7 @@ $extra_params = array();
                         
 //Per course grid settings
 $url_by_course = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_course&session_id='.$session_id.'&course_id='.$course_id;
+$extra_params_course = array();
 $extra_params_course['grouping'] = 'true';
 $extra_params_course['groupingView'] = array('groupCollapse'    => false,
 											 'groupField'       => array('course'),
@@ -290,7 +291,8 @@ $column_week_model  = array (
                           array('name'=>'date',     'index'=>'date',    'width'=>'113', 'align'=>'left', 'sortable'=>'false'),
                           array('name'=>'course',   'index'=>'course',  'width'=>'282', 'align'=>'left', 'sortable'=>'true'),
                           array('name'=>'lp',       'index'=>'lp',      'width'=>'416', 'align'=>'left', 'sortable'=>'true'));
-                          
+
+$extra_params_week = array();            
 $extra_params_week['grouping'] = 'true';
 //For more details see http://www.trirand.com/jqgridwiki/doku.php?id=wiki:grouping
 $extra_params_week['groupingView'] = array('groupCollapse'     => false,

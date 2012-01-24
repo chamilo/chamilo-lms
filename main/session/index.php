@@ -265,9 +265,9 @@ $extra_params_courses['autowidth'] = 'false'; //use the width of the parent
                         
 $url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id.'&course_id='.$course_id;
 $columns        = array(get_lang('PublicationDate'),get_lang('Course'), get_lang('LearningPaths'));
-$column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'120', 'align'=>'left', 'sortable'=>'false'),
-                        array('name'=>'course', 'index'=>'course', 'width'=>'300', 'align'=>'left', 'sortable'=>'false'),
-                        array('name'=>'lp',     'index'=>'lp',     'width'=>'440', 'align'=>'left', 'sortable'=>'false'));
+$column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'120', 'align'=>'left', 'sortable'=>'true'),
+                        array('name'=>'course', 'index'=>'course', 'width'=>'300', 'align'=>'left', 'sortable'=>'true'),
+                        array('name'=>'lp',     'index'=>'lp',     'width'=>'440', 'align'=>'left', 'sortable'=>'true'));
 $extra_params = array();                        
 //$extra_params['autowidth'] = 'true'; //use the width of the parent
 //$extra_params['forceFit'] = 'true'; //use the width of the parent
@@ -276,7 +276,7 @@ $extra_params = array();
 //Per course grid settings
 $url_by_course = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_course&session_id='.$session_id.'&course_id='.$course_id;
 $extra_params_course['grouping'] = 'true';
-$extra_params_course['groupingView'] = array('groupCollapse'    => true,
+$extra_params_course['groupingView'] = array('groupCollapse'    => false,
 											 'groupField'       => array('course'),
                                              'groupColumnShow'  => array('false'),
                                              'groupText'        => array('<b>'.get_lang('Course').' {0}</b>'));

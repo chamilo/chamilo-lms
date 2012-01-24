@@ -106,8 +106,7 @@ switch ($action) {
     case 'session_courses_lp_default':        
         
         require_once '../global.inc.php';                
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-        
+        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';        
         
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
@@ -143,12 +142,13 @@ switch ($action) {
                 if ($course_id != $item['id']) {
                     continue;
                 }
-            }        
+            }
             $list               = new LearnpathList(api_get_user_id(), $item['code'], $session_id);
             $flat_list          = $list->get_flat_list(); 
             $lps[$item['code']] = $flat_list;
             $course_url         = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
             $item['title']      = Display::url($item['title'], $course_url, array('target'=>SESSION_LINK_TARGET));
+            
             foreach($flat_list as $lp_id => $lp_item) {                                                    
                 $temp[$count]['id']= $lp_id;                
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
@@ -186,9 +186,14 @@ switch ($action) {
                 }
                 
                 $temp[$count]['cell']=array($date, $item['title'], Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET)));
+                $temp[$count]['course'] = strip_tags($item['title']);
+                $temp[$count]['lp']     = $lp_item['lp_name'];
+                $temp[$count]['date']   = $lp_item['publicated_on'];
                 $count++;     
             }              
         } 
+        
+        $temp = msort($temp, $sidx, $sord);
         
         $i =0;
         $response = new stdClass(); 
@@ -351,7 +356,7 @@ switch ($action) {
         
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
-        $sidx  = intval($_REQUEST['sidx']);    //index to filter         
+        $sidx  = $_REQUEST['sidx'];    //index to filter         
         $sord  = $_REQUEST['sord'];    //asc or desc
         if (!in_array($sord, array('asc','desc'))) {
             $sord = 'desc';
@@ -424,10 +429,17 @@ switch ($action) {
                         continue;
                     }
                 }                
-                $temp[$count]['cell']=array($date, $item['title'], Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET)));
+                $temp[$count]['cell'] = array($date, $item['title'], Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET)));
+                $temp[$count]['course'] = strip_tags($item['title']);
+                $temp[$count]['lp']     = $lp_item['lp_name'];
+                $temp[$count]['date']   = $lp_item['publicated_on'];
+                
                 $count++;     
             }              
-        } 
+        }
+        
+        $temp = msort($temp, $sidx, $sord);
+        
         $response = new stdClass(); 
         $i =0;
         foreach($temp as $key=>$row) {   

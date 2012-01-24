@@ -99,34 +99,39 @@ function checkLength( o, n, min, max ) {
 
 {$form}
 
-<div class="skills-skills">
+
 {if !empty($search_skill_list) }
-    <h3>{"Skills"|get_lang}</h3>
-     <ul class="holder">
-        {foreach $search_skill_list as $search_skill_id}        
-            <li class="bit-box">
-                {$skill_list[$search_skill_id].name}
-                <a class="closebutton" href="?a=remove_skill&id={$search_skill_id}"></a>
-            </li>        
-        {/foreach}
-    </ul>
-    <a id="add_profile" class="a_button gray small" href="#"> {"SaveThisSearch"|get_lang}</a>
+    <div class="skills-skills">
+        <h3>{"Skills"|get_lang}</h3>
+        <ul class="holder">
+            {foreach $search_skill_list as $search_skill_id}        
+                <li class="bit-box">
+                    {$skill_list[$search_skill_id].name}
+                    <a class="closebutton" href="?a=remove_skill&id={$search_skill_id}"></a>
+                </li>        
+            {/foreach}
+        </ul>
+        <a id="add_profile" class="a_button gray small" href="#"> {"SaveThisSearch"|get_lang}</a>
+    </div>
 {/if}
-</div>
-<div class="skills-profiles">
+
+
 {if !empty($profiles) }
-    <h3>{"SkillProfiles"|get_lang}</h3>
-    <ul class="holder">
-        {foreach $profiles as $profile}        
-            <li class="bit-box">
-                <a href="?a=load_profile&id={$profile.id}">{$profile.name}</a>                
-            </li>        
-        {/foreach}
-    </ul>    
+    <div class="skills-profiles">
+        <h3>{"SkillProfiles"|get_lang}</h3>
+        <ul class="holder">
+            {foreach $profiles as $profile}        
+                <li class="bit-box">
+                    <a href="?a=load_profile&id={$profile.id}">{$profile.name}</a>                
+                </li>        
+            {/foreach}
+        </ul>    
+    </div>
 {/if}
-</div>
-<div class="skills-users">
+
+
 {if !empty($order_user_list) }
+    <div class="skills-users">
     {foreach $order_user_list as $count => $user_list}
         <h2> {"Matches"|get_lang} {$count}/{$total_search_skills} </h2>
         {foreach $user_list as $user}
@@ -156,10 +161,11 @@ function checkLength( o, n, min, max ) {
             </div>  
         {/foreach}
     {/foreach}        
+    </div>
 {else}
     <div class="warning-message">{"NoResults"|get_lang}</div>
 {/if}
-</div>
+
 <div id="dialog-form" style="display:none;">    
     <form id="save_profile_form" name="form">        
         <div class="row">

@@ -203,11 +203,15 @@ switch ($action) {
                 $perm = api_get_permissions_for_new_directories();
                 @mkdir($user_folder, $perm, true);
             }
-        
+
             $file = $sys_course_path.$_course['path'].'/document'.$document_info['path'];            
             $copyfile = $user_folder.basename($document_info['path']);
-            $file_link = Display::url(get_lang('SeeFile'), api_get_path(WEB_CODE_PATH).'social/myfiles.php');
-                    
+			$cidReq = Security::remove_XSS($_GET['cidReq']);
+			$id_session= Security::remove_XSS($_GET['id_session']);
+			$gidReq= Security::remove_XSS($_GET['gidReq']);
+			$id= Security::remove_XSS($_GET['id']);
+            $file_link = Display::url(get_lang('SeeFile'), api_get_path(WEB_CODE_PATH).'social/myfiles.php?cidReq='.$cidReq.'&amp;id_session='.$id_session.'&amp;gidReq='.$gidReq.'&amp;parent_id='.$parent_id);
+			
             if (file_exists($copyfile)) {
                 $message = get_lang('CopyAlreadyDone').'</p><p>';
                 $message .= '<a class = "a_button white small" href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$parent_id.'">'.get_lang("No").'</a>&nbsp;&nbsp;|&nbsp;&nbsp;

@@ -2010,7 +2010,7 @@ function update_Db_course($course_db_name = null) {
             $add_to_all_tables.
             "eid VARCHAR(250) NOT NULL," .      // entry-id, e.g. doc.1
             "mdxmltext TEXT default ''," .      // MD-text, XML-formatted
-            "md5 CHART(32) default ''," .        // hash-validator
+            "md5 CHAR(32) default ''," .        // hash-validator
             "htmlcache1 TEXT default ''," .     // cached HTML, part 1
             "htmlcache2 TEXT default ''," .     // cached HTML, part 2
             "indexabletext TEXT default ''," .  // indexable for search

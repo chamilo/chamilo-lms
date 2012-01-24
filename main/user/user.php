@@ -659,11 +659,16 @@ function modify_filter($user_id) {
                 // unregister
                 if ($user_id != $_user['user_id']) {
                     $result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('unsubscribe_course.png', get_lang('Unreg'),'','22').'</a>&nbsp;';
-            } else {
+                } else {
                     $result .= Display::return_icon('unsubscribe_course_na.png', get_lang('Unreg'),'','22').'</a>&nbsp;';
+                }
             }
-        }
 	}
+        //if platform admin, show the login_as icon (this drastically shortens
+        // time taken by support to test things out)
+        if (api_is_platform_admin()) {
+            $result .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
+        }
 	$result .= "</div>";
 	return $result;
 }

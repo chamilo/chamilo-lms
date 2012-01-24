@@ -63,7 +63,7 @@ class Answer {
 		$this->cancel();
         
         if (!empty($course_id)) {            
-            $course_info            =  api_get_course_info_by_id($course_id);
+            $course_info = api_get_course_info_by_id($course_id);
         } else {            
             $course_info = api_get_course_info();
         }
@@ -153,8 +153,6 @@ class Answer {
 		$sql = "SELECT type FROM $TBL_QUIZ WHERE c_id = {$this->course_id} AND id = $questionId";
 		$result_question=Database::query($sql);
 		$question_type=Database::fetch_array($result_question);
-		$remove_doubt_answer = ''; //
-	
 		
 		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto " .
 				"FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id='".$questionId."'   " .
@@ -199,8 +197,7 @@ class Answer {
 	 * @author - Juan Carlos Ra�a
 	 * @return - integer - answer num
 	 */
-	function selectAutoId($id)
-	{
+	function selectAutoId($id) {
 		return $this->autoId[$id];
 	}
 
@@ -211,8 +208,7 @@ class Answer {
 	 * @author - Olivier Brouckaert
 	 * @return - integer - number of answers
 	 */
-	function selectNbrAnswers()
-	{
+	function selectNbrAnswers() {
 		return $this->nbrAnswers;
 	}
 
@@ -222,8 +218,7 @@ class Answer {
 	 * @author - Olivier Brouckaert
 	 * @return - integer - the question ID
 	 */
-	function selectQuestionId()
-	{
+	function selectQuestionId() {
 		return $this->questionId;
 	}
 
@@ -233,8 +228,7 @@ class Answer {
 	 * @author - Julio Montoya
 	 * @return - integer - the question ID
 	 */
-	function selectDestination($id)
-	{
+	function selectDestination($id) {
 		return $this->destination[$id];
 	}
 
@@ -245,8 +239,7 @@ class Answer {
 	 * @param - integer $id - answer ID
 	 * @return - string - answer title
 	 */
-	function selectAnswer($id)
-	{
+	function selectAnswer($id) {
 		return $this->answer[$id];
 	}
 
@@ -299,10 +292,10 @@ class Answer {
 	 			}
 	        	
 	 			$list[] = array(
-						'id'=>$i,
-						'answer'=>$this->answer[$i],
-						'comment'=>$this->comment[$i],
-						'grade' => $this->weighting[$i],
+						'id'            => $i,
+						'answer'        => $this->answer[$i],
+						'comment'       => $this->comment[$i],
+						'grade'         => $this->weighting[$i],
 						'hotspot_coord' => $this->hotspot_coordinates[$i],
 						'hotspot_type'	=> $this->hotspot_type[$i],
 						'correct'		=> $this->correct[$i],
@@ -317,8 +310,7 @@ class Answer {
 	 * @author Yannick Warnier <ywarnier@beeznest.org>
 	 * @return array	List of grades where grade=weighting (?)
 	 */
-	 function getGradesList()
-	 {
+	 function getGradesList() {
 	 	$list = array();
 	 	for($i = 0; $i<$this->nbrAnswers;$i++){
 	 		if(!empty($this->answer[$i])){
@@ -429,8 +421,7 @@ class Answer {
 	 * @param coordinates 	Coordinates for hotspot exercises (optional)
 	 * @param integer		Type for hotspot exercises (optional)
 	 */
-	function createAnswer($answer,$correct,$comment,$weighting,$position,$new_hotspot_coordinates = NULL, $new_hotspot_type = NULL,$destination='')
-	{
+	function createAnswer($answer,$correct,$comment,$weighting,$position,$new_hotspot_coordinates = NULL, $new_hotspot_type = NULL,$destination='') {
 		$this->new_nbrAnswers++;
 		$id=$this->new_nbrAnswers;
 		$this->new_answer[$id]=$answer;

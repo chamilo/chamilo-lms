@@ -246,15 +246,12 @@ class Exercise {
 		return $this->type;
 	}
 
-
-
 	/**
 	 * @author - hubert borderiou 30-11-11
 	 * @return - integer : do we display the question category name for students
 	 */
 	function selectDisplayCategoryName() {
 		return $this->display_category_name;
-
 	}
 
 	/**
@@ -273,7 +270,6 @@ class Exercise {
 	 */
 	function selectTextWhenFinished() {
 		return $this->text_when_finished;
-
 	}
 
 	/**
@@ -542,8 +538,7 @@ class Exercise {
 	function updateSound($sound,$delete) {
 		global $audioPath, $documentPath;
 		$TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-		$TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
+        
 		if ($sound['size'] && (strstr($sound['type'],'audio') || strstr($sound['type'],'video'))) {
 			$this->sound=$sound['name'];
 
@@ -753,7 +748,6 @@ class Exercise {
 
 	/* Updates question position */
 	function update_question_positions() {
-
 		$quiz_question_table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		//Fixes #3483 when updating order
 		$question_list = $this->selectQuestionList(true);
@@ -814,7 +808,6 @@ class Exercise {
 			}
 			// deletes the position from the array containing the wanted question ID
 			unset($this->questionList[$pos]);
-
 			return true;
 		}
 	}
@@ -825,8 +818,7 @@ class Exercise {
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function delete() {
-		global $_course;
+	function delete() {		
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 		$sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($this->id)."'";
 		Database::query($sql);
@@ -3504,11 +3496,8 @@ class Exercise {
 						$result .= $value;
 					}
 			}
-		}
-		
+		}		
 		return $result;
-	}
-	
-	
+	}	
 }
 endif;

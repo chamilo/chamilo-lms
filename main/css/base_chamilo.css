@@ -95,7 +95,7 @@ ul#navigation li a {
     border:1px solid #AFAFAF;
     -moz-border-radius:10px 0px 0px 10px;
     -webkit-border-bottom-right-radius: 10px;
-    -webkit-border-top-right-radius: 10x;
+    -webkit-border-top-right-radius: 10px;
     -khtml-border-bottom-right-radius: 10px;
     -khtml-border-top-right-radius: 10px;
     -moz-box-shadow: 0px 4px 3px #000;
@@ -203,7 +203,7 @@ ul#navigation .student-connect a {
     width: 60%;
     float: left;
      padding: 0 20px 0 20px;
-    //padding: 0px;
+    /* padding: 0px;*/
     min-height: 333px;
     margin-top:8px;
     margin-bottom:30px;
@@ -572,7 +572,7 @@ input.link_alike:hover {
     font-weight: normal;
     margin-bottom: 8px;
     padding: 7px 10px 7px 15px;
-    //width: 205px;
+    /*width: 205px;*/
     display:block;
 }
 .menulist {

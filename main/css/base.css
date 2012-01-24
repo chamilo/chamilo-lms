@@ -101,8 +101,8 @@ section {
 }
 audio, canvas, video {
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
+  display: inline;
+  zoom: 1;
 }
 audio:not([controls]) {
   display: none;
@@ -695,7 +695,7 @@ a.menu:after, .dropdown-toggle:after {
   display: table;
   content: "";
   zoom: 1;
-  *display: inline;
+  display: inline;
 }
 .tabs:after, .pills:after {
   clear: both;
@@ -2097,7 +2097,7 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
     cellspacing:0;
     cellpadding:0;
     background-color:#dbeaf5;
- border=0;
+    border:0;
     border-collapse: collapse;
     width: 100%;
 }
@@ -2197,7 +2197,7 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
     background-color:#F2F2F2;
     width:600px;
     border-bottom:1px solid #CCCCCC;
- margin:left:5px;
+    margin-left:5px;
 }
 .message-bottom-title {
     height:22px;
@@ -3590,7 +3590,7 @@ div.row div.form_header {
 }*/
 
 span.form_required {
-    color: #f00;header2
+    color: #f00;
 }
 span.form_error {
     color: #f00;
@@ -3740,7 +3740,7 @@ form div.error input, form div.error textarea {
   display: table;
   content: "";
   zoom: 1;
-  *display: inline;
+  display: inline;
 }
 .container:after {
   clear: both;
@@ -3755,7 +3755,7 @@ form div.error input, form div.error textarea {
   display: table;
   content: "";
   zoom: 1;
-  *display: inline;
+  display: inline;
 }
 .container-fluid:after {
   clear: both;
@@ -3770,6 +3770,7 @@ form div.error input, form div.error textarea {
   max-width: 1180px;
   margin-left: 20px;
 }
+
 .hide {
   display: none;
 }
@@ -4250,8 +4251,6 @@ a:active{
     display:block;
     margin-right: 4px;    
 }
-
-
 
 .hide_menu{
     display:none;

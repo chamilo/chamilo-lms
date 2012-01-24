@@ -8,7 +8,7 @@
  * Copyright(c) 2010 Alexis Deveria
  *
  * Integrate svg-edit with Chamilo
- * @author Juan Carlos Ra�a Trabado
+ * @author Juan Carlos Raña Trabado
  * @since 25/september/2010
 */
 
@@ -81,6 +81,8 @@ if ($suffix!= 'svg' && $suffix!= 'png'){
 }
 
 //a bit mime security
+//comment because finfo seems stopping the save process files in some php vers.
+/*
 if (phpversion() >= '5.3') {
 	$finfo = new finfo(FILEINFO_MIME);
 	$current_mime=$finfo->buffer($contents);
@@ -89,11 +91,12 @@ if (phpversion() >= '5.3') {
 	$mime_svg='image/svg+xml';
 	$mime_xml='application/xml';//hack for svg-edit because original code return application/xml; charset=us-ascii. See	  
 	if(strpos($current_mime, $mime_png)===false && $extension=='png') {
-		//die();//File extension does not match its content //disabled to check into chamilo dev campus TODO:check 
+		die();//File extension does not match its content
 	} elseif(strpos($current_mime, $mime_svg)===false && strpos($current_mime, $mime_xml)===false && $extension=='svg') {
-		//die();//File extension does not match its content //disabled to check into chamilo dev campus TODO:check 
+		die();//File extension does not match its content
 	}
 }
+*/
 
 //checks if the file exists, then rename the new
 if (file_exists($saveDir.'/'.$filename.$i.'.'.$extension) && $currentTool=='document/createdraw'){

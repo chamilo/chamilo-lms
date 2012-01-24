@@ -351,10 +351,7 @@ $(function() {
     $("#tabs").bind('tabsselect', function(event, ui) {
 		window.location.href=ui.tab;
     });
-    
-    //Generate tabs with jquery-ui
-    $('#tabs').tabs();
-    $( "#sub_tab" ).tabs();     
+   
          
 <?php 
 
@@ -365,6 +362,11 @@ $(function() {
      echo Display::grid_js('list_week',     $url_week,      $column_week,     $column_week_model, $extra_params_week,array(),'');     
      echo Display::grid_js('exercises',      '',            $column_exercise, $column_exercise_model, $extra_params_exercise, $my_real_array);        
 ?>
+        
+            
+    //Generate tabs with jquery-ui
+    $('#tabs').tabs();
+    $( "#sub_tab" ).tabs();  
 });
 </script>
 

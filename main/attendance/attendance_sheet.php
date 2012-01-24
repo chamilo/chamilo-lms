@@ -128,7 +128,7 @@ if (api_is_allowed_to_edit(null, true)) {
     <form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_gradebook.$param_filter ?>&attendance_id=<?php echo $attendance_id?>" >
     
     <div class="attendance-sheet-content" style="width:100%;background-color:#E1E1E1;margin-top:20px;">
-        <div class="divTableWithFloatingHeader attendance-users-table" style="width:55%;float:left;margin:0px;padding:0px;">
+        <div class="divTableWithFloatingHeader attendance-users-table" style="width:45%;float:left;margin:0px;padding:0px;">
             <table class="tableWithFloatingHeader data_table" width="100%">
                 <thead>
                 <tr class="tableFloatingHeader" style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px" >   
@@ -136,7 +136,6 @@ if (api_is_allowed_to_edit(null, true)) {
                     <th width="10px"><?php echo get_lang('Photo')?></th>
                     <th width="100px"><?php echo get_lang('LastName')?></th>
                     <th width="100px"><?php echo get_lang('FirstName')?></th>
-                    <th width="100px"><?php echo get_lang('LoginName')?></th>
                     <th width="100px"><?php echo get_lang('AttendancesFaults')?></th>
                 </tr>
                 <tr class="tableFloatingHeaderOriginal" >   
@@ -144,7 +143,6 @@ if (api_is_allowed_to_edit(null, true)) {
                     <th width="10px"><?php echo get_lang('Photo')?></th>
                     <th width="150px"><?php echo get_lang('LastName')?></th>
                     <th width="140px"><?php echo get_lang('FirstName')?></th>
-                    <th width="100px"><?php echo get_lang('LoginName')?></th>
                     <th width="100px"><?php echo get_lang('AttendancesFaults')?></th>
                 </tr>
                 </thead>
@@ -158,13 +156,13 @@ if (api_is_allowed_to_edit(null, true)) {
                     $faults = 0;
                     if ($i%2 == 0) {$class='row_odd';}
                     else {$class='row_even';}
+                    $username = api_htmlentities(sprintf(get_lang('LoginX'), $data['username']), ENT_QUOTES);
                 ?>
                     <tr class="<?php echo $class ?>">
                     <td><center><?php echo $i ?></center></td>
                     <td><?php echo $data['photo'] ?></td>
-                    <td><?php echo $data['lastname'] ?></td>
+                    <td><span title="<?php echo $username ?>"><?php echo $data['lastname'] ?></span></td>
                     <td><?php echo $data['firstname'] ?></td>
-                    <td><?php echo $data['username'] ?></td>
                     <td>
                         <div style="height:28px">
                         <center>
@@ -182,7 +180,7 @@ if (api_is_allowed_to_edit(null, true)) {
             </table>
         </div>
 
-        <div class="divTableWithFloatingHeader attendance-calendar-table" style="margin:0px;padding:0px;float:left;width:45%;overflow:auto;overflow-y:hidden;">
+        <div class="divTableWithFloatingHeader attendance-calendar-table" style="margin:0px;padding:0px;float:left;width:55%;overflow:auto;overflow-y:hidden;">
             <table class="tableWithFloatingHeader data_table" width="100%">
                 <thead>         
                 <?php

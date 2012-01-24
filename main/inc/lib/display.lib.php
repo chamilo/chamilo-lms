@@ -775,7 +775,7 @@ class Display {
      * @param   array   attributes for the ul
      *
      */
-    public static function tabs($header_list, $content_list, $id = 'tabs', $ul_attributes = array()) {
+    public static function tabs($header_list, $content_list, $id = 'tabs', $attributes = array(), $ul_attributes = array()) {
 
         if (empty($header_list) || count($header_list) == 0 ) {
             return '';
@@ -798,7 +798,8 @@ class Display {
             $divs .=self::tag('div', $content, array('id'=>$id.'-'.$i));
             $i++;
         }
-        $main_div = self::tag('div',$ul.$divs, array('id'=>$id));
+        $attributes['id'] = $id;
+        $main_div = self::tag('div',$ul.$divs, $attributes);
         return $main_div ;
     }
 

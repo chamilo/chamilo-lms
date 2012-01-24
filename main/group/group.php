@@ -272,13 +272,14 @@ foreach ($group_cats as $index => $category) {
             if (count($tutorsids_of_group) > 0) {
                 foreach ($tutorsids_of_group as $tutor_id) {
                     $tutor = api_get_user_info($tutor_id);
+                    $username = api_htmlentities(sprintf(get_lang('LoginX'), $tutor['username']), ENT_QUOTES);
                     if (api_get_setting('show_email_addresses') == 'true') {
-                        $tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName']).' ('.$tutor['username'].')').', ';
+                        $tutor_info .= Display::tag('span', Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])), array('title'=>$username)).', ';
                     } else {
                         if (api_is_allowed_to_edit()) {
-                            $tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName']).' ('.$tutor['username'].')').', ';
+                            $tutor_info .= Display::tag('span', Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])), array('title'=>$username)).', ';
                         } else {
-                            $tutor_info .= api_get_person_name($tutor['firstName'], $tutor['lastName']).' ('.$tutor['username'].'), ';
+                            $tutor_info .= Display::tag('span', api_get_person_name($tutor['firstName'], $tutor['lastName']), array('title'=>$username)).', ';
                         }
                     }
                 }

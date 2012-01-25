@@ -1765,34 +1765,6 @@ function api_get_session_visibility($session_id) {
 }
 
 /**
- * Gets the visibility of an session of a course that a student have
- * @param int       session id
- * @param string    Chamilo course code
- * @param int       user id
- * @return int      0= Session available (in date), SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
- * @deprecated
- */
-function api_get_session_visibility_by_user($session_id, $course_code, $user_id) {
-    $visibility = 0; // Means that the session is still available.
-    if (!empty($session_id) && !empty($user_id)){
-        $session_id      = intval($session_id);
-        $user_id        = intval(Database::escape_string($user_id));
-        $course_code    = Database::escape_string($course_code);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION_REL_COURSE_REL_USER);
-        $sql = "SELECT visibility FROM $tbl_session
-                WHERE id_session = $session_id AND id_user = $user_id AND course_code = '$course_code'"; // session old
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_array($result, 'ASSOC');
-            $visibility = $row['visibility'];
-        } else {
-            $visibility = 0;
-        }
-    }
-    return $visibility;
-}
-
-/**
  * This function returns a (star) session icon if the session is not null and 
  * the user is not a student 
  * @param int       Session id
@@ -5425,7 +5397,7 @@ function api_get_jquery_js() {
  * 
  */
 function api_get_jquery_ui_js($include_jqgrid = false) {
-    $libraries[]='jquery-ui';
+    $libraries = array('jquery-ui');    
 	if ($include_jqgrid) {
 	   $libraries[]='jqgrid';	
 	}

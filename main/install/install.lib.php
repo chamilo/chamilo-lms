@@ -1740,12 +1740,14 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         <?php
         
         $dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm);        
-                        
+        
+        $database_exists_text = '';
+        
         if (database_exists($dbNameForm)) {
             $database_exists_text = '<div class="normal-message">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
-        } else {
-            if (!$dbConnect) {
-                 $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('UserXCantHaveAccessInTheDatabaseX'), $dbNameForm, $dbUsernameForm).'</div>';                 
+        } else {            
+            if ($dbConnect == -1) {
+                 $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('UserXCantHaveAccessInTheDatabaseX'), $dbUsernameForm, $dbNameForm).'</div>';                 
             } else {
                  //Try to create the database
                 $user_can_create_databases = false;            
@@ -1759,7 +1761,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
                     $database_exists_text = '<div class="normal-message">'.sprintf(get_lang('DatabaseXWillBeCreated'), $dbNameForm, $dbUsernameForm).'</div>';
                 } else {
                     $dbConnect = 0;
-                    $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('DatabaseXCantBeCreatedUserXDoestHaveEnoughtPermissions'), $dbNameForm, $dbUsernameForm).'</div>';                
+                    $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions'), $dbNameForm, $dbUsernameForm).'</div>';                
                 }
             }       
         }         

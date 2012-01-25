@@ -287,8 +287,7 @@ class SessionManager {
 				if ($session['date_end'] == '0000-00-00') {
 					$session['date_end'] = '';
 				}
-
-
+                
 				switch ($session['visibility']) {
 					case SESSION_VISIBLE_READ_ONLY: //1
 						$session['visibility'] =  get_lang('ReadOnly');

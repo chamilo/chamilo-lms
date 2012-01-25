@@ -34,12 +34,16 @@ $session_info   = SessionManager::fetch($session_id);
 $session_list   = SessionManager::get_sessions_by_coach(api_get_user_id());
 $course_list    = SessionManager::get_course_list_by_session_id($session_id);
 
-
 //Getting all sessions where I'm subscribed
 $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
 
+$user_course_list = array();
+foreach($new_session_list as $session_item) {
+    $user_course_list[] = $session_item['k'];
+}
+
 $my_session_list = array();
-$final_array = array();
+$final_array     = array();
 
 if (!empty($new_session_list)) {
 	foreach($new_session_list as $item) {
@@ -48,7 +52,7 @@ if (!empty($new_session_list)) {
 			$final_array[$my_session_id]['name'] = $item['session_name'];
 
 			//Get all courses by session where I'm subscribed
-			$my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id);
+			$my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id);            
 			 
 			foreach ($my_course_list as $my_course) {
 				$course = array();
@@ -100,7 +104,6 @@ if (!api_is_allowed_to_session_edit()) {
 		
 Display::display_header(get_lang('Session'));
 
-
 $session_select = array();
 foreach ($session_list as $item) {
     $session_select[$item['id']] =  $item['name'];
@@ -116,24 +119,10 @@ if (count($session_select) > 1) {
     $form->display();
 }
 
-//Listing LPs from all courses
-/*
-$lps = array();
-if (!empty($course_list)) {
-    foreach ($course_list as $item) {    
-        $list       = new LearnpathList(api_get_user_id(),$item['code']);
-        $flat_list  = $list->get_flat_list();        
-        $lps[$item['code']] = $flat_list;
-        foreach ($flat_list as $item) {        
-            //var_dump(get_week_from_day($item['publicated_on']));	
-        }    
-    }
-}*/
-
 if (empty($session_id)) {
     $user_list  = UserManager::get_user_list();
 } else {        
-    $user_list = SessionManager::get_users_by_session($session_id);        
+    $user_list  = SessionManager::get_users_by_session($session_id);        
 }
 
 //Final data to be show
@@ -217,7 +206,8 @@ foreach($final_array as $session_data) {
             }
         }
     }
-}  
+}
+
 $my_real_array = msort($my_real_array, 'date','asc');
 
 if (!empty($new_exercises)) {
@@ -252,8 +242,10 @@ echo $dates.'<br />';
 $new_course_list = array();
 if (!empty($course_list)) {
     foreach($course_list as $course_data) {
-        $course_data['title'] = Display::url($course_data['title'], api_get_course_url($course_data['code'], $session_id));
-        $new_course_list[] = array('title'=>$course_data['title']); 
+        if (in_array($course_data['code'], $user_course_list)) {
+            $course_data['title'] = Display::url($course_data['title'], api_get_course_url($course_data['code'], $session_id));
+            $new_course_list[] = array('title'=> $course_data['title']); 
+        }        
     }
 }
 

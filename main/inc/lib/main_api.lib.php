@@ -28,8 +28,6 @@ define('ANONYMOUS', 6);
  * the teacher through HTMLPurifier */
 define('COURSEMANAGERLOWSECURITY', 10);
 
-
-
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
 $_status_list[SESSIONADMIN]     = 'session_admin';  // 3
@@ -52,7 +50,9 @@ define('COURSE_VISIBILITY_OPEN_WORLD', 3);
 // SESSION VISIBILITY CONSTANTS
 define('SESSION_VISIBLE_READ_ONLY', 1);
 define('SESSION_VISIBLE', 2);
-define('SESSION_INVISIBLE', 3);
+define('SESSION_INVISIBLE', 3); // not available
+define('SESSION_AVAILABLE', 4);
+
 
 define('SUBSCRIBE_ALLOWED', 1);
 define('SUBSCRIBE_NOT_ALLOWED', 0);
@@ -1685,13 +1685,13 @@ function api_get_session_name($session_id) {
 function api_get_session_info($session_id) {
     $data = array();
     if (!empty($session_id)) {
-        $sesion_id = intval(Database::escape_string($session_id));
+        $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $sql = "SELECT * FROM $tbl_session WHERE id = $session_id";
         $result = Database::query($sql);
 
-        if (Database::num_rows($result)>0) {
-            $data = Database::fetch_array($result, 'ASSOC');
+        if (Database::num_rows($result)>0) {            
+            $data = Database::fetch_array($result, 'ASSOC');            
         }
     }
     return $data;
@@ -1705,28 +1705,60 @@ function api_get_session_info($session_id) {
 function api_get_session_visibility($session_id) {
     $visibility = 0; //means that the session is still available
     if (!empty($session_id)) {
-        $sesion_id = intval(Database::escape_string($session_id));
+        $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $is_coach = api_is_coach();
-
         $condition_date_end = "";
+        
         if ($is_coach) {
+            //@todo use api_get_utc_datetime()
             $condition_date_end = " AND (CURDATE() > (SELECT adddate(date_end,nb_days_access_after_end) FROM $tbl_session WHERE id = $session_id) AND date_end != '0000-00-00') ";
         } else {
-            $condition_date_end = " AND (date_end < CURDATE() AND date_end != '0000-00-00') ";
+            $condition_date_end = " ";
         }
 
-        $sql = "SELECT visibility FROM $tbl_session
-                WHERE id = $session_id $condition_date_end "; // session is old and is not unlimited
-
+        $sql = "SELECT visibility, date_start, date_end FROM $tbl_session
+                WHERE id = $session_id $condition_date_end ";
         $result = Database::query($sql);
 
-        if (Database::num_rows($result)>0) {
+        if (Database::num_rows($result) > 0 ) {
             $row = Database::fetch_array($result, 'ASSOC');
             $visibility = $row['visibility'];
+            
+            //I don't care the field visibility
+            if ($row['date_start'] == '0000-00-00' && $row['date_end'] == '0000-00-00') {
+                $visibility = SESSION_AVAILABLE;    
+            } else {
+                $time = time();
+                
+                //If datestart is set
+                if (!empty($row['date_start']) && $row['date_start'] != '0000-00-00') {
+                    $row['date_start'] = $row['date_start'].' 00:00:00';   
+                    if ($time > api_strtotime($row['date_start'])) {
+                        $visibility = SESSION_AVAILABLE;
+                    } else {
+                        $visibility = SESSION_INVISIBLE;
+                    }
+                }
+                
+                //if date_end is set
+                if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {                    
+                    $row['date_end'] = $row['date_end'].' 00:00:00';
+                    //only if date_start said that it was ok
+                    if ($visibility == SESSION_AVAILABLE) {
+                        $visibility = $row['visibility'];
+                        /*
+                        if ($time < api_strtotime($row['date_end'])) {
+                            $visibility = $row['visibility'];
+                        } else {
+                            $visibility = $row['visibility'];
+                        }*/                 
+                    }
+                }                
+            }
         } else {
-            $visibility = 0;
+            $visibility = SESSION_INVISIBLE;
         }
     }
     return $visibility;
@@ -1738,11 +1770,12 @@ function api_get_session_visibility($session_id) {
  * @param string    Chamilo course code
  * @param int       user id
  * @return int      0= Session available (in date), SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
+ * @deprecated
  */
 function api_get_session_visibility_by_user($session_id, $course_code, $user_id) {
     $visibility = 0; // Means that the session is still available.
     if (!empty($session_id) && !empty($user_id)){
-        $sesion_id      = intval(Database::escape_string($session_id));
+        $session_id      = intval($session_id);
         $user_id        = intval(Database::escape_string($user_id));
         $course_code    = Database::escape_string($course_code);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION_REL_COURSE_REL_USER);
@@ -1795,7 +1828,6 @@ function api_get_session_condition($session_id, $and = true, $with_base_content 
     } else {
         $condition_session = $condition_add." session_id = $session_id ";
     }
-
     return $condition_session;
 }
 
@@ -2368,23 +2400,24 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
             // I'm in a session and I'm a student
             $session_id = api_get_session_id();
             // Get the session visibility
-            $session_visibility = api_get_session_visibility($session_id);  // if 0 the session is still available.
-            if ($session_visibility != 0) {
+            $session_visibility = api_get_session_visibility($session_id);  // if 5 the session is still available.
+            
                 //@todo We could load the session_rel_course_rel_user permission to increase the level of detail.
                 //echo api_get_user_id();
                 //echo api_get_course_id();
 
-                switch ($session_visibility) {
-                    case SESSION_VISIBLE_READ_ONLY: // 1
-                        return false;
-                    case SESSION_VISIBLE:           // 2
-                        return true;
-                    case SESSION_INVISIBLE:         // 3
-                        return false;
-                }
-            } else {
-                return true;
+            switch ($session_visibility) {
+                case SESSION_VISIBLE_READ_ONLY: // 1
+                    return false;
+                case SESSION_VISIBLE:           // 2
+                    return true;
+                case SESSION_INVISIBLE:         // 3
+                    return false;
+                case SESSION_AVAILABLE:         //5
+                    return true;
+                    
             }
+            
         }
     }
 }

@@ -1028,20 +1028,26 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 		else $is_allowed_in_course = false;
 	}
 
-	// requires testing!!!
 	// check the session visibility
 	if (!empty($is_allowed_in_course)) {        
 		$my_session_id = api_get_session_id();
+        
 		//if I'm in a session
 		//var_dump($is_platformAdmin, $is_courseTutor,api_is_coach());
-		if ($my_session_id!=0)
+		if ($my_session_id != 0) {
 			if (!$is_platformAdmin) {
 				// admin and session coach are *not* affected to the invisible session mode
 				// the coach is not affected because he can log in some days after the end date of a session
-				$session_visibility = api_get_session_visibility($my_session_id);
-				if ($session_visibility==SESSION_INVISIBLE)
-					$is_allowed_in_course =false;
+				$session_visibility = api_get_session_visibility($my_session_id);                  
+                
+                switch ($session_visibility) {                    
+                    case SESSION_INVISIBLE:
+                        $is_allowed_in_course =false;
+                        break;                    
+                }
+                //checking date
 			}
+        }
 
 	}
 

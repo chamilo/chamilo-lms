@@ -705,16 +705,9 @@ class Thematic
 			$condition .= " AND description_type = $description_type ";
 		}
 	
-		$items = $elements_to_show = $elements_to_show_values = array();
-		
 		$items_from_course  = api_get_item_property_by_tool('thematic_plan', api_get_course_id(), 0);		
 	    $items_from_session = api_get_item_property_by_tool('thematic_plan', api_get_course_id(), api_get_session_id());
-	    
-	 	$elements_to_show = array();
-		foreach($items as $value) {
-		    $elements_to_show[$value['ref']] = $value;
-		}
-		$elements_to_show_values = array_keys($elements_to_show);
+	    	 	
 		$thematic_plan_complete_list  = array();
 		$thematic_plan_id_list = array();
 		
@@ -734,8 +727,8 @@ class Thematic
 		}
 		if (!empty($thematic_plan_id_list)) {		
 			$sql = "SELECT tp.id, thematic_id, tp.title, description, description_type, t.session_id
-			        FROM $tbl_thematic_plan tp INNER JOIN $tbl_thematic t ON (t.id=tp.thematic_id) 
-			        WHERE c_id = $course_id $condition  AND tp.id IN (".implode(', ', $thematic_plan_id_list).") ";
+			        FROM $tbl_thematic_plan tp INNER JOIN $tbl_thematic t ON (t.id=tp.thematic_id) 			        
+                    WHERE  t.c_id = $course_id AND tp.c_id = $course_id  $condition  AND tp.id IN (".implode(', ', $thematic_plan_id_list).") ";
 			
 			$rs = Database::query($sql);
 			

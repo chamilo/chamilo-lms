@@ -52,7 +52,7 @@ require_once 'question.class.php';
 require_once 'answer.class.php';
 
 // Name of the language file that needs to be included
-$language_file='exercice';
+$language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
 require_once 'exercise.lib.php';
@@ -489,8 +489,7 @@ else {
 	// If we are in question_poolbut not in an test, go back to question create in pool
 	echo '<div class="actions">';
 	echo '<a href="question_pool.php">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
-	echo '</div>';
-	
+	echo '</div>';	
 }
 
 if (isset($_GET['message'])) {

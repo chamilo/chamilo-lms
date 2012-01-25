@@ -1,6 +1,4 @@
 <?php
-
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -10,13 +8,13 @@
 *	@package chamilo.exercise
 * 	@author Olivier Brouckaert
 *   @author Julio Montoya adding support to query all questions from all session, courses, exercises  
-*   Modify by hubert borderiou 2011-10-21 Question's category
+*   @author Modify by hubert borderiou 2011-10-21 Question's category
 */
 /**
  * Code
  */
 // name of the language file that needs to be included
-$language_file='exercice';
+$language_file = 'exercice';
 
 require_once 'exercise.class.php';
 require_once 'question.class.php';
@@ -89,31 +87,31 @@ $displayMessage = "";	// messag to be displayed if actions succesfull
 if ($is_allowedToEdit) {
 	//Duplicating a Question
 	if (!isset($_POST['recup']) && $copy_question != 0 && isset($fromExercise)) {
-    $origin_course_id   = intval($_GET['course_id']);
-    $origin_course_info = api_get_course_info_by_id($origin_course_id);
-    $current_course     = api_get_course_info();
-    $old_question_id    = $copy_question;       
-    //Reading the source question
+        $origin_course_id   = intval($_GET['course_id']);
+        $origin_course_info = api_get_course_info_by_id($origin_course_id);
+        $current_course     = api_get_course_info();
+        $old_question_id    = $copy_question;       
+        //Reading the source question
 		$old_question_obj = Question::read($old_question_id, $origin_course_id);
 		if ($old_question_obj) {
 			$old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));     
-      //Duplicating the source question, in the current course
+        //Duplicating the source question, in the current course
 			$new_id = $old_question_obj->duplicate($current_course);
-      //Reading new question
+        //Reading new question
 			$new_question_obj = Question::read($new_id);
 			$new_question_obj->addToList($fromExercise);
-      //Reading Answers obj of the current course 
+        //Reading Answers obj of the current course 
 			$new_answer_obj = new Answer($old_question_id, $origin_course_id);
 			$new_answer_obj->read();
-      //Duplicating the Answers in the current course
+        //Duplicating the Answers in the current course
 			$new_answer_obj->duplicate($new_id, $current_course);		
 			// destruction of the Question object
 			unset($new_question_obj);
 			unset($old_question_obj);
-      if (!$objExcercise instanceOf Exercise) {
-      	$objExercise = new Exercise();
-          $objExercise->read($fromExercise);
-      }
+            if (!$objExcercise instanceOf Exercise) {
+                $objExercise = new Exercise();
+                $objExercise->read($fromExercise);
+            }
 			api_session_register('objExercise');
 		}
 		$displayMessage = get_lang('ItemAdded');
@@ -124,15 +122,13 @@ if ($is_allowedToEdit) {
 	if ($delete) {
 		// construction of the Question object
 		// if the question exists
-		if($objQuestionTmp = Question::read($delete))
-		{
+		if($objQuestionTmp = Question::read($delete)) {
 			// deletes the question from all exercises
 			$objQuestionTmp->delete();
 		}
 		// destruction of the Question object
 		unset($objQuestionTmp);
-	} 
-	elseif($recup && $fromExercise) {
+	} elseif($recup && $fromExercise) {
 		// gets an existing question and copies it into a new exercise
 		$objQuestionTmp = Question :: read($recup);
 		// if the question exists
@@ -287,9 +283,7 @@ if (isset($type)) {
 }    
 echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 
-// ----------------------------------------------------
 // Session list, if sessions are used.
-// ----------------------------------------------------
 $session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
 $tabAttrParam = array('class'=>'chzn-select', 'onchange'=>'submit_form(this)');	// when sessions are used
 $labelFormRow = get_lang('Session');
@@ -304,9 +298,7 @@ foreach($session_list as $item) {
 $select_session_html =  Display::select('session_id', $session_select_list, $session_id, $tabAttrParam);
 echo Display::form_row($labelFormRow, $select_session_html);	// hub 13-10-2011
 
-// -----------------------------------------------------------------------------
 // Course list, get course list of session, or for course where user is admin
-// -----------------------------------------------------------------------------
 if (!empty($session_id) && $session_id != '-1') {
 	$course_list = SessionManager::get_course_list_by_session_id($session_id);
 } else {        
@@ -323,7 +315,7 @@ foreach ($course_list as $item) {
 
 $select_course_html =  Display::select('selected_course', $course_select_list, $selected_course, array('class'=>'chzn-select','onchange'=>'mark_course_id_changed(); submit_form(this);'));
 echo Display::form_row(get_lang('Course'), $select_course_html);    
-$db_name = "";
+
 if (empty($selected_course) || $selected_course == '-1') {
     $course_info = api_get_course_info();
     reset_menu_exo_lvl_type();    // no course selected, reset menu test / difficult� / type de reponse // hub 13-10-2011
@@ -374,15 +366,14 @@ if ($exercice_id_changed == 1) {
 $select_exercise_html =  Display::select('exerciseId', $my_exercise_list, $exerciseId, array('class'=>'chzn-select','onchange'=>'mark_exercice_id_changed(); submit_form(this);'), false);
 echo Display::form_row(get_lang('Exercise'), $select_exercise_html);
 
-// 
 // Difficulty list (only from 0 to 5)                
-// 
+ 
 $select_difficulty_html = Display::select('exerciseLevel', array(-1 => get_lang('All'), 0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5), $exerciseLevel, array('class'=>'chzn-select', 'onchange'=>'submit_form(this);'), false);
 echo Display::form_row(get_lang('Difficulty'), $select_difficulty_html);
 
-// 
+ 
 // Answer type
-// 
+ 
 $question_list = Question::get_types_information();
 $new_question_list = array();
 $new_question_list['-1']  = get_lang('All');
@@ -416,9 +407,9 @@ echo "<input type='hidden' id='exercice_id_changed' name='exercice_id_changed' v
 <?php
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
 
-// 
+
 // if we have selected an exercise in the list-box 'Filter'
-// 
+ 
 if ($exerciseId > 0) {
 	$where = '';
 	$from = '';
@@ -565,7 +556,7 @@ else {
 }
 
 $nbrQuestions = count($main_question_list);
-// 
+
 // build the line of the array to display questions
 // Actions are different if you launch the question_pool page
 // They are different too if you have displayed questions from your course
@@ -654,9 +645,7 @@ Display::display_footer();
 
 
 
-// =========================================================================
 // Some functions here, just for question_pool to ease the code
-// =========================================================================
 
 /*
 	Put the menu entry for level and type to default "Choice"
@@ -771,7 +760,6 @@ function get_action_icon_for_question($in_action, $from_exercice, $in_questionid
 	return $res;
 }
 
-//
 // return the icon for the question type
 // hubert.borderiou 13-10-2011
 function get_question_type_for_question($in_selectedcourse, $in_questionid) {
@@ -782,7 +770,6 @@ function get_question_type_for_question($in_selectedcourse, $in_questionid) {
 	return $questionType;
 }
 
-//
 // return the name of the category for the question in a course
 // hubert.borderiou 13-10-2011
 function get_question_categorie_for_question($in_courseid, $in_questionid) {

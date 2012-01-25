@@ -161,10 +161,6 @@ $users[] = array('username' => 'acostea','pass'=> 'acostea','firstname' => 'Andr
 $users[] = array('username' => 'telera','pass'=> 'telera','firstname' => 'Tania','lastname' => 'Helera','status' => 5,'auth_source' => 'platform','email' => 'telera@example.com','creator_id' => 1,'active' => 1);
 $users[] = array('username' => 'dstrauss','pass'=> 'dstrauss','firstname' => 'Domingo','lastname' => 'Strauss','status' => 5,'auth_source' => 'platform','email' => 'dstrauss@example.com','creator_id' => 1,'active' => 1);
 $users[] = array('username' => 'helena','pass'=> 'helena','firstname' => 'Helena','lastname' => 'Duarte','status' => 5,'auth_source' => 'platform','email' => 'helena@example.com','creator_id' => 1,'active' => 1);
-$users[] = array('username' => 'acostea','pass'=> 'acostea','firstname' => 'Andreea','lastname' => 'Costea','status' => 5,'auth_source' => 'platform','email' => 'acostea@example.com','creator_id' => 1,'active' => 1);
 $users[] = array('username' => 'cgonzales','pass'=> 'cgonzales','firstname' => 'Cecilia','lastname' => 'Gonzales','status' => 5,'auth_source' => 'platform','email' => 'cgonzales@example.com','creator_id' => 1,'active' => 1);
 $users[] = array('username' => 'amann','pass'=> 'amann','firstname' => 'Aimee','lastname' => 'Mann','status' => 5,'auth_source' => 'platform','email' => 'amann@example.com','creator_id' => 1,'active' => 1);
 $users[] = array('username' => 'zazup','pass'=> 'zazup','firstname' => 'Zazup','lastname' => 'Zazupar','status' => 5,'auth_source' => 'platform','email' => 'zazup@example.com','creator_id' => 1,'active' => 1);
-
-
-

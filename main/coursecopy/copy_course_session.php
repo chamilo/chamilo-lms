@@ -18,7 +18,6 @@ $language_file = array('coursebackup', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
 
 require_once 'classes/CourseBuilder.class.php';
@@ -85,7 +84,7 @@ function make_select_session_list($name, $sessions, $attr = array()) {
 
 function display_form() {
 	$html  = '';
-	$sessions = SessionManager::get_sessions_list();
+	$sessions = SessionManager::get_sessions_list(null, array('name ASC'));
 	
 	// Actions
 	$html .= '<div class="actions">';
@@ -95,10 +94,7 @@ function display_form() {
 
     $html .= Display::return_message(get_lang('CopyCourseFromSessionToSessionExplanation'));
     
-	$html .= '<form name="formulaire" method="post" action="'.api_get_self().'" >';
-	
-
-    
+	$html .= '<form name="formulaire" method="post" action="'.api_get_self().'" >';    
 	$html .= '<table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">';
     
 	//left
@@ -130,9 +126,7 @@ function display_form() {
 
 function search_courses($id_session, $type) {	
 	global $tbl_course, $tbl_session_rel_course, $course_list;
-
 	$xajax_response = new XajaxResponse();
-	$return_origin = '';
 	$select_destination = '';
 	if (!empty($type)) {
 
@@ -158,7 +152,7 @@ function search_courses($id_session, $type) {
 			// Build select for destination sessions where is not included current session from select origin
 			if (!empty($id_session)) {
 			    
-			    $sessions = SessionManager::get_sessions_list();
+			    $sessions = SessionManager::get_sessions_list(null, array('name ASC'));
 
 				$select_destination .= '<select name="sessions_list_destination" width="380px" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
 				$select_destination .= '<option value = "0">-- '.get_lang('SelectASession').' --</option>';
@@ -404,7 +398,5 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 } else {
 	display_form();
 }
-
-/*  FOOTER  */
 
 Display::display_footer();

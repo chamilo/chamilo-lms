@@ -146,36 +146,35 @@ unset($_SESSION['less_answer']);
 $inATest = isset($exerciseId) && $exerciseId > 0;
 if (!$inATest) {
 	echo "<p class='warning-message'>".get_lang("ChoiceQuestionType")."</p>";
-}
-else {
-	echo '<div id="question_list">';
+} else {
+    echo '<div id="question_list">';
 	if ($nbrQuestions) {
-	  $my_exercise = new Exercise();
-	  //forces the query to the database
-	  $my_exercise->read($_GET['exerciseId']);
-		$questionList=$my_exercise->selectQuestionList();    
-	  // -----------------------
-	  // Style for columns
-	  // -----------------------
-	  $styleQuestion = "width:50%; float:left;";
-	  $styleType = "width:4%; float:left; padding-top:4px; text-align:center;";
-	  $styleCat = "width:22%; float:left; padding-top:8px; text-align:center;";
-	  $styleLevel = "width:6%; float:left; padding-top:8px; text-align:center;";
-	  $styleScore = "width:4%; float:left; padding-top:8px; text-align:center;";
-	  $styleAction = "width:10%; float:left; padding-top:8px;";
-	  // -------------
-	  // Title line
-	  // -------------
-	  echo "<div>";
-	  echo "<div style='font-weight:bold; width:50%; float:left; padding:10px 0px; text-align:center;'><span style='padding-left:50px;'>&nbsp;</span>".get_lang('Questions')."</div>";
-	  echo "<div style='font-weight:bold; width:4%; float:left; padding:10px 0px; text-align:center;'>".get_lang('Type')."</div>";
-	  echo "<div style='font-weight:bold; width:22%; float:left; padding:10px 0px; text-align:center;'>".get_lang('Category')."</div>";
-	  echo "<div style='font-weight:bold; width:6%; float:left; padding:10px 0px; text-align:center;'>".get_lang('Difficulty')."</div>";  
-	  echo "<div style='font-weight:bold; width:4%; float:left; padding:10px 0px; text-align:center;'>".get_lang('Score')."</div>";
-	  echo "</div>";
-	  echo "<div style='clear:both'>&nbsp;</div>";
-	  // -------------        
-		if (is_array($questionList)) {		
+        $my_exercise = new Exercise();
+        //forces the query to the database
+        $my_exercise->read($_GET['exerciseId']);
+        $questionList=$my_exercise->selectQuestionList();    
+
+        // Style for columns
+
+        $styleQuestion = "width:50%; float:left;";
+        $styleType = "width:4%; float:left; padding-top:4px; text-align:center;";
+        $styleCat = "width:22%; float:left; padding-top:8px; text-align:center;";
+        $styleLevel = "width:6%; float:left; padding-top:8px; text-align:center;";
+        $styleScore = "width:4%; float:left; padding-top:8px; text-align:center;";
+        $styleAction = "width:10%; float:left; padding-top:8px;";
+
+        // Title line
+
+        echo "<div>";
+        echo "<div style='font-weight:bold; width:50%; float:left; padding:10px 0px; text-align:center;'><span style='padding-left:50px;'>&nbsp;</span>".get_lang('Questions')."</div>";
+        echo "<div style='font-weight:bold; width:4%; float:left; padding:10px 0px; text-align:center;'>".get_lang('Type')."</div>";
+        echo "<div style='font-weight:bold; width:22%; float:left; padding:10px 0px; text-align:center;'>".get_lang('Category')."</div>";
+        echo "<div style='font-weight:bold; width:6%; float:left; padding:10px 0px; text-align:center;'>".get_lang('Difficulty')."</div>";  
+        echo "<div style='font-weight:bold; width:4%; float:left; padding:10px 0px; text-align:center;'>".get_lang('Score')."</div>";
+        echo "</div>";
+        echo "<div style='clear:both'>&nbsp;</div>";
+	  
+        if (is_array($questionList)) {		
 			foreach($questionList as $id) {
 				//To avoid warning messages
 				if (!is_numeric($id)) {
@@ -195,67 +194,65 @@ else {
 				$delete_link = Display::tag('div',$delete_link, array('style'=>'float:left; padding:0px; margin:0px'));
 				$actions     = Display::tag('div',$edit_link.$clone_link.$delete_link, array('class'=>'edition','style'=>'width:100px; right:10px;     margin-top: 0px;     position: absolute;     top: 10%;'));
 	
-	      $title = Security::remove_XSS($objQuestionTmp->selectTitle());
-	      $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
-	      // ---------------------
-	      // Question name
-	      // ---------------------
+                $title = Security::remove_XSS($objQuestionTmp->selectTitle());
+                $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
+             
+                // Question name
+	      
 				$questionName = Display::tag('div', '<a href="#" title = "'.$title.'">'.$move.' '.cut($title, 60).'</a>', array('style'=>$styleQuestion));
-				// ---------------------
+				
 				// Question type
-				// ---------------------
+				
 				$tabQuestionList = Question::get_types_information();
 				list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
 				$questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), 32), array('style'=>$styleType));
-				// ---------------------
+				
 				// Question category 
-				// ---------------------
+				
 				$txtQuestionCat = Security::remove_XSS(Testcategory::getCategoryNameForQuestion($objQuestionTmp->id));
 				if (empty($txtQuestionCat)) {
 					$txtQuestionCat = "-";
 				}
 				$questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;" title="'.$txtQuestionCat.'">'.cut($txtQuestionCat, 55).'</a>', array('style'=>$styleCat));
-				// ---------------------
+				
 				// Question level
-				// ---------------------
+				
 				$txtQuestionLevel = $objQuestionTmp->level;
-	      if (empty($objQuestionTmp->level)) {
-	      	$txtQuestionLevel = '-';
-	      }
-	      $questionLevel = Display::tag('div', $txtQuestionLevel, array('style'=>$styleLevel));
-	      // ---------------------
-	      // Question score
-	      // ---------------------
-	      $questionScore = Display::tag('div', $objQuestionTmp->selectWeighting(), array('style'=>$styleScore));
-	      // ---------------------
-	      echo '<div id="question_id_list_'.$id.'" >';            
-		      echo '<div class="header_operations">';               
-		        echo $questionName;
-		        echo $questionType;
-		        echo $questionCategory;
-		        echo $questionLevel;
-		        echo $questionScore;
-			      echo $actions;
-		      echo '</div>';
-		      echo '<div class="question-list-description-block">';
-			      echo '<p>';                        
-			      //echo get_lang($question_class.$label);
-			      echo get_lang($question_class);
-			      echo '<br />';
-			      //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
-			      echo '<br />';
-			      showQuestion($id, false, '', '',false, true);                   
-			      echo '</p>';                        
-		      echo '</div>';                 
-	      echo '</div>';            
-	      unset($objQuestionTmp);
-			}
-	        echo '</div>';
+                if (empty($objQuestionTmp->level)) {
+                    $txtQuestionLevel = '-';
+                }
+                $questionLevel = Display::tag('div', $txtQuestionLevel, array('style'=>$styleLevel));
+	      
+                // Question score
+                
+                $questionScore = Display::tag('div', $objQuestionTmp->selectWeighting(), array('style'=>$styleScore));
+	      
+                echo '<div id="question_id_list_'.$id.'" >';            
+                    echo '<div class="header_operations">';               
+                        echo $questionName;
+                        echo $questionType;
+                        echo $questionCategory;
+                        echo $questionLevel;
+                        echo $questionScore;
+                        echo $actions;
+                    echo '</div>';
+                    echo '<div class="question-list-description-block">';
+                        echo '<p>';                        
+                        //echo get_lang($question_class.$label);
+                        echo get_lang($question_class);
+                        echo '<br />';
+                        //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
+                        echo '<br />';
+                        showQuestion($id, false, '', '',false, true);                   
+                        echo '</p>';                        
+                    echo '</div>';                 
+                echo '</div>';            
+                unset($objQuestionTmp);
+			}	        
 		}
 	}
 	if(!$nbrQuestions) {	
 	  	echo Display::display_warning_message(get_lang('NoQuestion'));
-	}
-	
-	echo '</div>';
+	}	
+	echo '</div>'; //question list div
 }

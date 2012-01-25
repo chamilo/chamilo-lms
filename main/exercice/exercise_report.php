@@ -336,9 +336,6 @@ $tpl->assign('content', $content);
 $tpl->display_one_col_template();
 */
 
-
-
-
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results&exerciseId='.$exercise_id;
 
 //$activeurl = '?sidx=session_active';

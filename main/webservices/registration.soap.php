@@ -1998,7 +1998,7 @@ function WSCreateCourse($params) {
 
     global $_configuration;
 
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return -1;
     }
 
@@ -2109,9 +2109,6 @@ function WSCreateCourse($params) {
         } else {
             $results[] = 0;    
         }
-        continue;
-    }
-
     } // end principal foreach
 
     $count_results = count($results);

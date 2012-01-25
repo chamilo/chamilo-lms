@@ -203,15 +203,11 @@ switch ($action) {
                 $perm = api_get_permissions_for_new_directories();
                 @mkdir($user_folder, $perm, true);
             }
-
+        
             $file = $sys_course_path.$_course['path'].'/document'.$document_info['path'];            
             $copyfile = $user_folder.basename($document_info['path']);
-			$cidReq = Security::remove_XSS($_GET['cidReq']);
-			$id_session= Security::remove_XSS($_GET['id_session']);
-			$gidReq= Security::remove_XSS($_GET['gidReq']);
-			$id= Security::remove_XSS($_GET['id']);
-            $file_link = Display::url(get_lang('SeeFile'), api_get_path(WEB_CODE_PATH).'social/myfiles.php?cidReq='.$cidReq.'&amp;id_session='.$id_session.'&amp;gidReq='.$gidReq.'&amp;parent_id='.$parent_id);
-			
+            $file_link = Display::url(get_lang('SeeFile'), api_get_path(WEB_CODE_PATH).'social/myfiles.php');
+                    
             if (file_exists($copyfile)) {
                 $message = get_lang('CopyAlreadyDone').'</p><p>';
                 $message .= '<a class = "a_button white small" href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$parent_id.'">'.get_lang("No").'</a>&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -382,8 +378,6 @@ if (!$is_allowed_to_edit && api_is_coach()) {
 }
 
 /*	Create shared folders */
-$userinfo = Database::get_user_info_from_id(api_get_user_id());
-$username = $userinfo['username'];
 if ($session_id == 0) {
     //Create shared folder. Necessary for courses recycled. Allways session_id should be zero. Allway should be created from a base course, never from a session.
     if (!file_exists($base_work_dir.'/shared_folder')) {
@@ -395,7 +389,7 @@ if ($session_id == 0) {
     }
     // Create dynamic user shared folder
     if (!file_exists($base_work_dir.'/shared_folder/sf_user_'.api_get_user_id())) {
-            $usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']).' ('.$username.')';
+            $usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']);
             $usf_dir_name = '/shared_folder/sf_user_'.api_get_user_id();
             $to_group_id = 0;
             $visibility = 1;
@@ -412,7 +406,7 @@ if ($session_id == 0) {
     }
     //Create dynamic user shared folder into a shared folder session
     if (!file_exists($base_work_dir.'/shared_folder_session_'.$session_id.'/sf_user_'.api_get_user_id())) {
-        $usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']).' ('.$username.')('.api_get_session_name($session_id).')';
+        $usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']).'('.api_get_session_name($session_id).')';
         $usf_dir_name = '/shared_folder_session_'.$session_id.'/sf_user_'.api_get_user_id();
         $to_group_id = 0;
         $visibility = 1;
@@ -993,7 +987,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
             if (!empty($document_data['insert_user_id'])) {
                 $user_info = UserManager::get_user_info_by_id($document_data['insert_user_id']);
-                $user_name = api_get_person_name($user_info['firstname'], $user_info['lastname']).' ('.$user_info['username'].')';
+                $user_name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
                 $user_link = '<div class="document_owner">'.get_lang('Owner').': '.display_user_link_document($document_data['insert_user_id'], $user_name).'</div>';
             }
         }

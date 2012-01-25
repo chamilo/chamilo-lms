@@ -73,7 +73,7 @@ if (api_is_in_course()) {
 		}
 		// Create dynamic user shared folder
 		if (!file_exists($base_work_dir.'/shared_folder/sf_user_'.api_get_user_id())) {
-				$usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']).' ('.$userinfo['username'].')';
+				$usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']);
 				$usf_dir_name = '/shared_folder/sf_user_'.api_get_user_id();
 				$to_group_id = 0;
 				$visibility = 1;
@@ -91,7 +91,7 @@ if (api_is_in_course()) {
 			}
 			//Create dynamic user shared folder into a shared folder session
 			if (!file_exists($base_work_dir.'/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id())) {
-				$usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']).' ('.$userinfo['username'].')('.api_get_session_name($current_session_id).')';
+				$usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']).'('.api_get_session_name($current_session_id).')';
 				$usf_dir_name = '/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id();
 				$to_group_id = 0;
 				$visibility = 1;

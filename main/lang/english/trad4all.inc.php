@@ -1208,4 +1208,6 @@ $DoNotShow = "Do not show";
 $ShowToAdminsOnly = "Show to admins only";
 $ShowToAdminsAndTeachers = "Show to admins and teachers";
 $ShowToAllUsers = "Show to all  users";
+$SelectAnAction = "Select an action";
+$LoginX = "Login: %s";
 ?>

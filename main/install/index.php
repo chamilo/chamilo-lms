@@ -742,11 +742,12 @@ if ($_POST['step2']) {
 		$perm_file = api_get_permissions_for_new_files();
 
 		if (empty($my_old_version)) { $my_old_version = '1.8.6.2'; } //we guess
+        
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
-        	error_log('Starting migration process from '.$my_old_version.' ('.time().')', 0);
+        error_log('Starting migration process from '.$my_old_version.' ('.time().')', 0);
 
-    		if ($userPasswordCrypted == '1') {
+    	if ($userPasswordCrypted == '1') {
 			$userPasswordCrypted = 'md5';
 		} elseif ($userPasswordCrypted == '0') {
 			$userPasswordCrypted = 'none';
@@ -822,7 +823,8 @@ if ($_POST['step2']) {
             default:
 				break;
 		}
-	} else {	
+	} else {        
+        
 		set_file_folder_permissions();
 		database_server_connect();
 

@@ -132,6 +132,7 @@ if (!defined('CLI_INSTALLATION')) {
 /**
  * Creating the tables of the main database
  */
+
 Database::select_db($mysqlMainDb) or die(Database::error());
 
 $installation_settings['{ORGANISATIONNAME}'] = $institutionForm;
@@ -149,13 +150,13 @@ $installation_settings['{ADMINPHONE}'] = $adminPhoneForm;
 $installation_settings['{PLATFORM_AUTH_SOURCE}'] = PLATFORM_AUTH_SOURCE;
 $installation_settings['{ADMINLANGUAGE}'] = $languageForm;
 $installation_settings['{HASHFUNCTIONMODE}'] = $encryptPassForm;
-load_main_database($installation_settings);
 
+load_main_database($installation_settings);
 
 //Adds the c_XXX courses tables see #3910
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php'; 
-update_Db_course();
 
+update_Db_course();
 
 /**
  * Creating the tables of the tracking database

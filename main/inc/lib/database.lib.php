@@ -1338,7 +1338,7 @@ class Database {
             }
         }
         return false;
-    }
+    }    
 
      /*
         DEPRECATED METHODS

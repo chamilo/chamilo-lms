@@ -597,12 +597,19 @@ function database_server_connect() {
     @Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
 }
 
+/**
+ * Database exists for the MYSQL user
+ * @param type $database_name
+ * @return boolean 
+ */
 function database_exists($database_name) {
+    $select_database = Database::select_db($database_name);
+    $show_database = false;
     $result = @Database::query("SHOW DATABASES LIKE '".Database::escape_string($database_name)."' ");
     if (Database::num_rows($result)) {
-        return true;
-    }
-    return false;
+        $show_database = true;
+    }    
+    return $select_database || $show_database;
 }
 
 /**
@@ -618,7 +625,7 @@ function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFor
     $dbConnect = -1;
     //Checking user credentials
     if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
-        $check_user_can_create_databases = true;
+        //$check_user_can_create_databases = true;
         //Checking if single database exist 
         
         /*if ($singleDbForm) {
@@ -653,7 +660,7 @@ function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFor
     } else {
         $dbConnect = -1;
     }    
-    return $dbConnect; //return "1"if no problems, "0" if, in case we can't create a new DB and "-1" if there is no connection.
+    return $dbConnect; //return 1, if no problems, "0" if, in case we can't create a new DB and "-1" if there is no connection.
 }
 
 /**
@@ -1731,9 +1738,35 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
                 <?php echo get_lang('CheckDatabaseConnection'); ?></button>
         </td>
         <?php
+        
         $dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm);        
+                        
+        if (database_exists($dbNameForm)) {
+            $database_exists_text = '<div class="normal-message">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
+        } else {
+            if (!$dbConnect) {
+                 $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('UserXCantHaveAccessInTheDatabaseX'), $dbNameForm, $dbUsernameForm).'</div>';                 
+            } else {
+                 //Try to create the database
+                $user_can_create_databases = false;            
+                $multipleDbCheck = @Database::query("CREATE DATABASE test_chamilo_connection");            
+                if ($multipleDbCheck !== false) {
+                    $multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS test_chamilo_connection");                
+                    $user_can_create_databases = true;
+                }             
+
+                if ($user_can_create_databases) {
+                    $database_exists_text = '<div class="normal-message">'.sprintf(get_lang('DatabaseXWillBeCreated'), $dbNameForm, $dbUsernameForm).'</div>';
+                } else {
+                    $dbConnect = 0;
+                    $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('DatabaseXCantBeCreatedUserXDoestHaveEnoughtPermissions'), $dbNameForm, $dbUsernameForm).'</div>';                
+                }
+            }       
+        }         
+            
         if ($dbConnect == 1): ?>
         <td colspan="2">
+            <?php echo $database_exists_text ?>
             <div id="db_status" class="confirmation-message">                
                 Database host: <strong><?php echo Database::get_host_info(); ?></strong><br />
                 Database server version: <strong><?php echo Database::get_server_info(); ?></strong><br />
@@ -1742,13 +1775,15 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
                 <div style="clear:both;"></div>
             </div>
         </td>
-        <?php else: ?>
+        <?php else: ?>        
         <td colspan="2">
+            <?php echo $database_exists_text ?>
             <div id="db_status" style="float:left;" class="error-message">                
                 <div style="float:left;">
+                    <strong><?php echo get_lang('FailedConectionDatabase'); ?></strong><br />
 	                <strong>Database error: <?php echo Database::errno(); ?></strong><br />
 	                <?php echo Database::error().'<br />'; ?>
-	                <strong><?php echo get_lang('Details').': '. get_lang('FailedConectionDatabase'); ?></strong><br />
+	                
                 </div>
             </div>
         </td>

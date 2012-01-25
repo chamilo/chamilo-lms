@@ -48,13 +48,6 @@ $(window).load(function () {
 });
 </script>';
 
-// Storage API
-$htmlHeadXtra[] = '<script type="text/javascript">
-var sv_user = \''.api_get_user_id().'\';
-var sv_course = \''.api_get_course_id().'\';
-var sv_sco = \''.$_REQUEST['lp_id'].'\';
-</script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 

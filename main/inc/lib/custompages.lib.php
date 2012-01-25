@@ -7,7 +7,7 @@ require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 
 class CustomPages {
 	
-	public static function displayPage($page_name) {
+	public static function displayPage($page_name, $content=array()) {
 		$pages_dir = api_get_path(SYS_PATH).'custompages/';
 		$file_name = $pages_dir.$page_name.'.php';
 		if (file_exists($file_name)) {

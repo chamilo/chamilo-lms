@@ -1,16 +1,8 @@
 <?php
-/*
- Template to automatically create a new user with information from anywhere.
- This file is loaded by main/inc/local.inc.php
- To use it please add this line to main/inc/conf/configuration.php :
-   $extAuthSource["external_logininfo"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_logininfo/newUser.php";
- 
- You also have to implements the external_get_user_info function in this file.
- */
-	require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-	require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
-  define('USERINFO_TABLE', 'userinfo');
-  define('DEFAULT_PASSWORD', 'boumbalah');
+require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+//define('USERINFO_TABLE', 'danone_userinfo');
+//define('DEFAULT_PASSWORD', 'danonelearning');
 
 //TODO : Please implements this function for this module to work.
 /**
@@ -29,9 +21,6 @@
 function external_get_user_info($login, $password){
   //Those are the mandatory fields for user creation.
   //See external_add_user function for all the fields you can have.
-  if ($password != DEFAULT_PASSWORD) {
-    return false;
-  }
   $table = USERINFO_TABLE;
   $sql = "SELECT * from $table where username='".Database::escape_string($login)."'";
   $result = Database::query($sql);
@@ -68,6 +57,9 @@ function external_get_user_info($login, $password){
     $language = 'english';
     break;
   }
+  //Can Send Message ?
+  $can_send_message = ($user_info['can_send_message'] == 1) ? 'yes' : 'no';
+
 
   $u = array(
     'firstname' => $user_info['firstname'],
@@ -75,18 +67,21 @@ function external_get_user_info($login, $password){
     'status' => $status,
     'admin' => $admin,
     'email' => $user_info['email'],
-    'login' => $user_info['username'],
+    'username' => $user_info['username'],
     'language' => $language,
     'password' => DEFAULT_PASSWORD,
     'courses' => $user_info['courses'],
     'profile_link' => $user_info['profile_link'],
     'worldwide_bu' => $user_info['worlwide_bu'],
     'manager' => $user_info['manager'],
-    'country_bu' => $user_info['country_bu'],
     'extra' => array(
       'position_title' => $user_info['position_title'],
       'country' => $user_info['country'],
       'job_family' => $user_info['job_family'],
+      'country_bu' => $user_info['country_bu'],
+      'worldwide_bu' => $user_info['worldwide_bu'],
+      'profile_link' => $user_info['profile_link'],
+      'can_send_message' => $can_send_message,
       'update_type' => 'external_logininfo')
     );
 
@@ -123,43 +118,57 @@ function external_add_user($u){
   if (! isset($u['encrypt_method']) )
     $u['encrypt_method'] = '';
   
-  $chamilo_uid = UserManager::create_user($u['firstname'], $u['lastname'],$u['status'], $u['email'], $u['login'], $u['password'], $u['official_code'], $u['language'], $u['phone'],$u['picture_uri'], $u['auth_source'], $u['expiration_date'], $u['active'], $u['hr_dept_id'], $u['extra'], $u['encrypt_method']);
+  $chamilo_uid = UserManager::create_user($u['firstname'], $u['lastname'],$u['status'], $u['email'], $u['username'], $u['password'], $u['official_code'], $u['language'], $u['phone'],$u['picture_uri'], $u['auth_source'], $u['expiration_date'], $u['active'], $u['hr_dept_id'], $u['extra'], $u['encrypt_method']);
   return $chamilo_uid;
 }
-
-
-//MAIN CODE
-
-//$login and $password variables are setted in main/inc/local.inc.php
-
-$user = external_get_user_info($login, $password);
-
-if ($user !== false && ($chamilo_uid = external_add_user($user)) !== false) {
-    //log in the user
-    $loginFailed = false;
-    $_user['user_id'] = $chamilo_uid;
-    api_session_register('_user');
-    //Autosubscribe to courses
-    if(!empty($user['courses'])){
-      $autoSubscribe = explode('|', $user['courses']);
-      foreach ($autoSubscribe as $code) {
-        if (CourseManager::course_exists($code)) { 
-          CourseManager::subscribe_user($_user['user_id'], $code);
-        }
+/**
+* Update the user in chamilo database. It upgrade only info that is present in the 
+ * new_user array
+ *
+ * @param $new_user associative array with the value to upgrade
+ *    WARNING user_id key is MANDATORY
+ *    Possible keys are :
+ *      - firstname
+ *      - lastname
+ *      - username
+ *      - auth_source
+ *      - email
+ *      - status
+ *      - official_code
+ *      - phone
+ *      - picture_uri
+ *      - expiration_date
+ *      - active
+ *      - creator_id
+ *      - hr_dept_id
+ *      - extra : array of custom fields
+ *      - language
+ *      - courses : string of all courses code separated by '|'
+ *      - admin : boolean 
+ * @return boolean
+ * @author ndiechburg <noel@cblue.be>
+ **/
+function external_update_user($new_user){
+  $old_user = UserManager::get_user_info_by_id($new_user['user_id']);
+  $u = array_merge($old_user, $new_user);
+  $updated = UserManager::update_user($u['user_id'], $u['firstname'], $u['lastname'], $u['username'], null, $u['auth_source'], $u['email'], $u['status'], $u['official_code'], $u['phone'], $u['picture_uri'], $u['expiration_date'], $u['active'], $u['creator_id'], $u['hr_dept_id'], $u['extra'], $u['language'],'');
+  if(isset($u['courses']) && !empty($u['courses'])){
+    $autoSubscribe = explode('|', $u['courses']);
+    foreach ($autoSubscribe as $code) {
+      if (CourseManager::course_exists($code)) { 
+        CourseManager::subscribe_user($u['user_id'], $code);
       }
     }
-    // Is User Admin ?
-    if ($user['admin']){
-			$is_platformAdmin           = true;
-      Database::query("INSERT INTO admin values ('$chamilo_uid')");
-    }
-    // Can user create course
-    $is_allowedCreateCourse     = (bool) (($user['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $user['status'] == SESSIONADMIN));
+  }
+  // Is User Admin ?
+  //TODO decomments and check that user_is is not already in admin table
+  /*
+  if (isset($u['admin']) && $u['admin']){
+  
+    $table = Database::get_main_table(TABLE_MAIN_ADMIN);
+    $res = Database::query("SELECT * from $table WHERE user_id = ".$u['user_id']);
+  }*/
 
-    event_login();
-} else {
-	$loginFailed = true;
-	unset($_user['user_id']);
-	$uidReset = false;
 }
+
 ?>

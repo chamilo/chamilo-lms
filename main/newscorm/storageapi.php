@@ -5,6 +5,14 @@
 
 require_once('../inc/global.inc.php');
 
+// variable cleaning...
+foreach (Array("svkey", "svvalue") as $key)
+	//FIXME use chamilo api
+	$_REQUEST[$key] = mysql_escape_string($_REQUEST[$key]);
+
+foreach (Array("svuser", "svcourse", "svsco", "svlength", "svasc") as $key)
+	$_REQUEST[$key] = intval($_REQUEST[$key]);
+
 switch ($_REQUEST['action']) {
 	case "get":
 		print storage_get($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
@@ -36,10 +44,19 @@ switch ($_REQUEST['action']) {
 		}
 		break;
 	case "stackgetall":
-		print storage_stack_getall($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
+		if (storage_can_set($_REQUEST['svuser'])) 
+			print storage_stack_getall($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
+		break;
+	case "getposition":
+		print storage_get_position($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey'], $_REQUEST['svasc']);
+		break;
+	case "getleaders":
+		print storage_get_leaders($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey'], $_REQUEST['svasc'], $_REQUEST['svlength']);
 		break;
 	case "usersgetall":
-		print storage_get_all_users();
+// security issue
+		print "NOT allowed, security issue, see sources";
+//		print storage_get_all_users();
 		break;
 	default:
 		// Do nothing
@@ -70,6 +87,63 @@ function storage_get($sv_user, $sv_course, $sv_sco, $sv_key) {
 		else {
 			return $row['sv_value'];
 		}
+	}
+	else {
+		return null;
+	}
+}
+			
+function storage_get_leaders($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $sv_length) {
+
+	// get leaders
+	$sql_leaders = "select u.user_id, firstname, lastname, email, username, sv_value as value
+		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES)." sv,
+			".Database::get_main_table(TABLE_MAIN_USER)." u
+		where u.user_id=sv.user_id
+		and sco_id = '$sv_sco'
+		and course_id = '$sv_course'
+		and sv_key = '$sv_key'
+		order by sv_value ".($sv_asc ? "ASC": "DESC")." limit $sv_length";
+//	$sql_data = "select sv.user_id as user_id, sv_key as variable, sv_value as value
+//		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES)." sv
+//		where sv.user_id in (select u2.user_id from ($sql_leaders) u2)
+//		and sco_id = '$sv_sco'
+//		and course_id = '$sv_course'";
+//	$resData = Database::query($sql_data);
+//	$data = Array();
+//	while($row = Database::fetch_assoc($resData))
+//		$data[] = $row; // fetching all data
+//
+	$resLeaders = Database::query($sql_leaders);
+	$result = array();
+	while ($row = Database::fetch_assoc($resLeaders)) {
+		$row["values"] = array();
+//		foreach($data as $dataRow) {
+//			if ($dataRow["user_id"] = $row["user_id"])
+//				$row["values"][$dataRow["variable"]] = $dataRow["value"];
+//		}
+		$result[] = $row;
+	} 
+	return json_encode($result);
+}
+
+function storage_get_position($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $sv_length) {
+	$sql = "select count(list.user_id) as position 
+		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES)." search,
+			".Database::get_main_table(TABLE_MAIN_STORED_VALUES)." list
+		where search.user_id= '$sv_user'
+		and search.sco_id = '$sv_sco'
+		and search.course_id = '$sv_course'
+		and search.sv_key = '$sv_key'
+		and list.sv_value ".($sv_asc ? "<=": ">=")." search.sv_value
+		and list.sco_id = search.sco_id
+		and list.course_id = search.course_id
+		and list.sv_key = search.sv_key
+		order by list.sv_value" ;
+	$res = Database::query($sql);
+	if (mysql_num_rows($res) > 0) {
+		$row = Database::fetch_assoc($res);
+		return $row['position'];
 	}
 	else {
 		return null;

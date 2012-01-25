@@ -1719,7 +1719,7 @@ function xajax_switch_item_toc(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,nex
         data: params,
         url: "lp_ajax_switch_item_toc.php",
         dataType: "script",
-        async: true
+        async: false
     });
 }
 /**
@@ -1819,9 +1819,9 @@ function attach_glossary_into_scorm(type) {
                             $.ajax({
                                 contentType: "application/x-www-form-urlencoded",
                                 beforeSend: function(content_object) {
-                                $("iframe").contents().find("div#"+div_content_id).html("<img src="+my_protocol+"//"+location.host+work_path+"/main/inc/lib/javascript/indicator.gif />"); },
+                                $("iframe").contents().find("div#"+div_content_id).html("<img src='<?php echo api_get_path(WEB_PATH); ?>main/inc/lib/javascript/indicator.gif' />"); },
                                 type: "POST",
-                                url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
+                                url: "<?php echo api_get_path(WEB_PATH); ?>/main/glossary/glossary_ajax_request.php",
                                 data: "glossary_id="+my_glossary_id,
                                 success: function(data) {
                                     $("iframe").contents().find("div#"+div_content_id).html(data);
@@ -1855,9 +1855,9 @@ function attach_glossary_into_scorm(type) {
                 $.ajax({
                     contentType: "application/x-www-form-urlencoded",
                     beforeSend: function(objeto) {
-                     $("iframe").contents().find("div#"+div_content_id).html("<img src="+my_protocol+"//"+location.host+work_path+"/main/inc/lib/javascript/indicator.gif />"); },
+                     $("iframe").contents().find("<img src='<?php echo api_get_path(WEB_PATH); ?>main/inc/lib/javascript/indicator.gif' />"); },
                     type: "POST",
-                    url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
+                    url: "<?php echo api_get_path(WEB_PATH); ?>/main/glossary/glossary_ajax_request.php",
                     data: "glossary_name="+is_glossary_name,
                     success: function(data) {
                          $("iframe").contents().find("div#"+div_content_id).html(data);

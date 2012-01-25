@@ -782,6 +782,7 @@ function api_block_anonymous_users($print_headers = true) {
     global $_user;
     if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {        
         api_not_allowed($print_headers);
+      }
         return false;
     }
     return true;
@@ -2511,8 +2512,7 @@ function api_not_allowed($print_headers = false) {
     $course     = api_get_course_id();
 
     global $this_section;
-
-    if (api_get_setting('use_custom_pages') == 'true') {
+    if (api_get_setting('use_custom_pages') == 'true' && !isset($_SESSION['_user']['user_id'])) {
         $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
         require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
         CustomPages::displayPage('index-unlogged');

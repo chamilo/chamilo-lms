@@ -76,7 +76,7 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-				$("#id_content_message").html("<div class=\"normal-message\"><img src=\'/main/inc/lib/javascript/indicator.gif\' /></div>");
+				$("#id_content_message").html("<div class=\"normal-message\"><img src='.api_get_path(WEB_PATH).'main/inc/lib/javascript/indicator.gif\' /></div>");
 
 			},
 			type: "POST",

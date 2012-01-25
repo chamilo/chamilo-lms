@@ -184,6 +184,11 @@ $login = isset($_POST["login"]) ? $_POST["login"] : '';
 if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 	// uid is in session => login already done, continue with this value
 	$_user['user_id'] = $_SESSION['_user']['user_id'];
+  //Check if we have to reset user data
+  //This param can be used to reload user data if user has been logged by external script
+  if (isset($_SESSION['_user']['uidReset']) && $_SESSION['_user']['uidReset']){
+    $uidReset=true;
+  }
 } else {
 	if (isset($_user['user_id'])) {
 		unset($_user['user_id']);
@@ -608,12 +613,13 @@ if ($gidReq && $gidReq != $gid) {
 
 
 /* USER INIT */
+  
+  if (isset($uidReset) && $uidReset) {    // session data refresh requested
+      unset($_SESSION['_user']['uidReset']);
+      $is_platformAdmin = false; 
+      $is_allowedCreateCourse = false;
 
-if (isset($uidReset) && $uidReset) {    // session data refresh requested
-    $is_platformAdmin       = false; 
-    $is_allowedCreateCourse = false;
-
-    if (isset($_user['user_id']) && $_user['user_id']) {
+	if (isset($_user['user_id']) && $_user['user_id'] && ! api_is_anonymous()) // a uid is given (log in succeeded)
         // a uid is given (log in succeeded)
 		$user_table     = Database::get_main_table(TABLE_MAIN_USER);
 		$admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -656,10 +662,14 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 			api_session_register('is_platformAdmin');
 			api_session_register('is_allowedCreateCourse');
 
-      // If request_uri is settd we have to go further to have course permissions
+      // If request_uri is setted we have to go further to have course permissions
       if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
-        require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';
-        LoginRedirection::redirect();
+        if( $_SESSION['noredirection'] ) {//If we just want to rest information without redirecting user
+          unset($_SESSION['noredirection']);
+        } else {
+          require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';
+          LoginRedirection::redirect();
+        }
       }
 
 		} else {
@@ -1123,8 +1133,9 @@ if (isset($_cid)) {
 	$sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";
 	Database::query($sql);
 }
-if (!empty($_SESSION['request_uri'])){
+if (isset($_SESSION['request_uri']) && !empty($_SESSION['request_uri'])){
     $req= $_SESSION['request_uri'];
     unset($_SESSION['request_uri']);
     header('Location: '.$req);
+  exit;
 }

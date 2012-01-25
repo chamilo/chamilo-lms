@@ -278,7 +278,7 @@ if (is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
 	//	user must enter identical password twice so we can prevent some user errors
 	$form->addRule(array('password1', 'password2'), get_lang('PassTwo'), 'compare');
 	if (CHECK_PASS_EASY_TO_FIND) {
-		$form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
+		$form->addRule('password1', get_lang('CurrentPasswordEmptyOrIncorrect'), 'callback', 'api_check_password');
 	}
 }
 
@@ -762,12 +762,12 @@ if ($form->validate()) {
 	}
 
 	// re-init the system to take new settings into account
-	$uidReset = true;
-	include api_get_path(INCLUDE_PATH).'local.inc.php';
-	$_SESSION['profile_update'] = 'success';
-    $url = api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : '');    
-	header("Location: ".$url);
-	exit;
+  $_SESSION['_user']['uidReset'] = true;
+  $_SESSION['noredirection'] = true;
+  $_SESSION['profile_update'] = 'success';
+  $url = api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : '');    
+  header("Location: ".$url);
+  exit;
 }
 
 

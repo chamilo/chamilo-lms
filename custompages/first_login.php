@@ -67,7 +67,10 @@ if ($_GET['invalid'] == 2) {
 		<div id="header">
 			<img src="/custompages/images/header.png" alt="Logo" />
 		</div> <!-- #header -->
+    <h2> <?php echo cblue_get_lang('FirstLogin');?> </h2>
+        
 		<div id="changepassword-form-box" class="form-box">
+      <div class="info"> <?php echo cblue_get_lang('FirstLoginChangePassword');?> </div>
 		<?php if (isset($error_message)) {
 			echo '<div id="changepassword-form-error" class="form-error">'.$error_message.'</div>';
 		}?> 

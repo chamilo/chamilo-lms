@@ -74,10 +74,12 @@ if (!array_key_exists($install_language, get_language_folder_list())) {
 
 // Loading language files.
 require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
+require api_get_path(SYS_LANG_PATH).'english/admin.inc.php';
 require api_get_path(SYS_LANG_PATH).'english/install.inc.php';
 if ($install_language != 'english') {
 	include_once api_get_path(SYS_LANG_PATH).$install_language.'/trad4all.inc.php';
 	include_once api_get_path(SYS_LANG_PATH).$install_language.'/install.inc.php';
+    include_once api_get_path(SYS_LANG_PATH).$install_language.'/admin.inc.php';
 }
 
 // These global variables must be set for proper working of the function get_lang(...) during the installation.
@@ -638,8 +640,7 @@ if ($_POST['step2']) {
 		<?php echo get_lang('HereAreTheValuesYouEntered'); ?>
 	</div><br />
 	
-	<blockquote>
-        
+	<blockquote>        
     <?php if ($installType == 'new'): ?>
 	<?php echo get_lang('AdminLogin').' : <strong>'.$loginForm; ?></strong><br />
 	<?php echo get_lang('AdminPass').' : <strong>'.$passForm; /* TODO: Maybe this password should be hidden too? */ ?></strong><br /><br />
@@ -653,14 +654,9 @@ if ($_POST['step2']) {
 	} else {
 		echo get_lang('AdminLastName').' : '.$adminLastName, '<br />', get_lang('AdminFirstName').' : '.$adminFirstName, '<br />';
 	}
-	?>
-    
-    <?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
-    
+	?>    
+    <?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br />    
 	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
-    
-    
-
 	<?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
 	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
 	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
@@ -697,7 +693,7 @@ if ($_POST['step2']) {
 	<?php echo get_lang('CampusName').' : '.$campusForm; ?><br />
 	<?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br />
 	<?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br />
-	<?php echo get_lang('ChamiloURL').' : <>'.$urlForm; ?><br />
+	<?php echo get_lang('ChamiloURL').' : '.$urlForm; ?><br />
 
 	</blockquote>
 

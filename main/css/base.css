@@ -3914,10 +3914,16 @@ form div.error input, form div.error textarea {
     line-height: 16px;
 }
 
+#install_form .data_table_no_border td {
+    width:30%;
+}
+
 .lp_content_type_label {
     font-style: italic;
     color:#999;
 }
+
+
 
 
 /* jsPlumb */

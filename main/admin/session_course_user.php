@@ -13,9 +13,6 @@ $cidReset=true;
 // including some necessary dokeos files
 require_once '../inc/global.inc.php';
 
-// including additonal libraries
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -87,9 +84,9 @@ if ($_POST['formSent']) {
 		if(!$exists) {
 			$enreg_course = Database::escape_string($enreg_course);
 			$sql_delete = "DELETE FROM $tbl_session_rel_course_rel_user
-							WHERE id_user='".$id_user."'  AND course_code='".$enreg_course."' AND id_session=$id_session";
+							WHERE id_user='".$id_user."' AND course_code='".$enreg_course."' AND id_session=$id_session";
 			Database::query($sql_delete);
-			if(Database::affected_rows()) {
+			if (Database::affected_rows()) {
 				//update session rel course table
 				$sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users - 1 WHERE id_session='$id_session' AND course_code='$enreg_course'";
 				Database::query($sql_update);
@@ -110,7 +107,6 @@ if ($_POST['formSent']) {
 
 		}
 	}
-	//header('Location: session_course_user.php?id_user='.$id_user.'&id_session='.$id_session);
 	header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user.'&msg='.get_lang('CoursesUpdated'));
 	exit;
 }
@@ -124,15 +120,10 @@ if (!empty($_GET['msg'])) {
 
 // the form header
 $session_info = SessionManager::fetch($id_session);
-echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info['name'].')</div></div><br />';
-$nosessionCourses = $sessionCourses = array();
+$user_info = api_get_user_info($id_user);
+echo '<div class="row"><div class="form_header">'.$tool_name.': '.$session_info['name'].' - '.$user_info['complete_name'].'</div></div><br />';
 
-/*$sql="SELECT distinct code, title, visual_code, session_rel_course.id_session
-FROM $tbl_course course LEFT JOIN $tbl_session_rel_course session_rel_course
-ON course.code = session_rel_course.course_code inner join $tbl_session_rel_course_rel_user as srcru
-ON (srcru.id_session =  session_rel_course.id_session)
-WHERE id_user = $id_user and session_rel_course.id_session = $id_session";
-*/
+$nosessionCourses = $sessionCourses = array();
 // actual user
 $sql="SELECT code, title, visual_code, srcru.id_session " .
 			"FROM $tbl_course course inner JOIN $tbl_session_rel_course_rel_user   as srcru  " .
@@ -142,32 +133,6 @@ $sql="SELECT code, title, visual_code, srcru.id_session " .
 $sql_all="SELECT code, title, visual_code, src.id_session " .
 			"FROM $tbl_course course inner JOIN $tbl_session_rel_course  as src  " .
 			"ON course.code = src.course_code AND id_session = $id_session";
-
-
-/*
-	echo $sql="SELECT code, title, visual_code, id_session
-			FROM $tbl_course course
-			LEFT JOIN $tbl_session_rel_course session_rel_course
-				ON course.code = session_rel_course.course_code
-				AND session_rel_course.id_session = ".intval($id_session)."
-			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
-	*/
-/*global $_configuration;
-if ($_configuration['multiple_access_urls']) {
-	$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-	$access_url_id = api_get_current_access_url_id();
-	if ($access_url_id != -1){
-		$sql="SELECT code, title, visual_code, id_session
-			FROM $tbl_course course
-			LEFT JOIN $tbl_session_rel_course session_rel_course
-				ON course.code = session_rel_course.course_code
-				AND session_rel_course.id_session = ".intval($id_session)."
-			INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.course_code=course.code)
-			WHERE access_url_id = $access_url_id
-			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
-	}
-}*/
-
 $result=Database::query($sql);
 $Courses=Database::store_result($result);
 
@@ -208,8 +173,7 @@ if(!empty($errorMsg)) {
   <td width="45%" align="center">
 	<div id="ajax_list_courses_multiple">
 	<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:320px;"> <?php
-	foreach($nosessionCourses as $enreg)
-	{
+	foreach($nosessionCourses as $enreg) {
 		?>
 		<option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
 		<?php
@@ -230,11 +194,9 @@ unset($nosessionCourses);
   </td>
   <td width="45%" align="center"><select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:320px;">
 <?php
-foreach($sessionCourses as $enreg)
-{
+foreach($sessionCourses as $enreg) {
 ?>
 	<option value="<?php echo $enreg['code']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>"><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
-
 <?php
 }
 unset($sessionCourses);
@@ -300,10 +262,4 @@ function valide(){
 
 </script>
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display::display_footer();
-?>

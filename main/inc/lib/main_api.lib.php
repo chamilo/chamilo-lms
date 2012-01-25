@@ -782,7 +782,6 @@ function api_block_anonymous_users($print_headers = true) {
     global $_user;
     if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {        
         api_not_allowed($print_headers);
-      }
         return false;
     }
     return true;

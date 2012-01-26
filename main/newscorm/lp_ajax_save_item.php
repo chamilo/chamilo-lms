@@ -56,7 +56,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             if ($debug > 2) { error_log('////Building new lp', 0); }
             unset($oLP);
             $code = api_get_course_id();
-            $mylp = & new learnpath($code, $lp_id, $user_id);
+            $mylp = new learnpath($code, $lp_id, $user_id);
         } else {
             if ($debug > 2) { error_log('////Reusing session lp', 0); }
             $mylp = & $oLP;
@@ -88,7 +88,8 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             if ($debug > 1) { error_log('Done calling set_status from xajax - now '.$mylpi->get_status(false), 0); }
         }
         // Hack to set status to completed for hotpotatoes if score > 80%.
-        if ($mylpi->get_type() == 'hotpotatoes') {
+        $my_type = $mylpi->get_type();
+        if ($my_type == 'hotpotatoes') {
             if ((empty($status) || $status == 'undefined' || $status == 'not attempted') && $max > 0) {
                 if (($score/$max) > 0.8) {
                     $mystatus = 'completed';

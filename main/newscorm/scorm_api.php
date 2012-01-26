@@ -1133,11 +1133,10 @@ function logit_lms(message,priority){
  * @param	string	Action to be taken
  * @param	integer	Item id to update
  */
-function update_toc(update_action,update_id,change_ids)
-{
+function update_toc(update_action, update_id, change_ids) {
         if (!change_ids || change_ids != 'no') {
             change_ids = 'yes';
-        }
+        }        
         var myelem = $("#toc_"+update_id);
         var myelemimg = $("#toc_img_"+update_id);
         logit_lms('update_toc("'+update_action+'",'+update_id+')',2);

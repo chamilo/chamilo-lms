@@ -530,6 +530,7 @@ if (!empty($keyword)) {
 		exit;
 	}
 } elseif (!empty($_GET['export_certificate'])){
+    //@todo this code seems not to be used
 	$user_id = strval(intval($_GET['user']));
 	if (!api_is_allowed_to_edit(true,true)) {
 		$user_id = api_get_user_id();
@@ -561,7 +562,8 @@ if (!empty($keyword)) {
 		$pdf->line(50,50,790,50);
 		$pdf->line(50,550,790,550);
 		$pdf->ezSetY(450);
-		$pdf->ezImage(api_get_path(SYS_CODE_PATH).'img/dokeos_logo_certif.png',1,400,'','center','');
+        //@todo replace image
+		//$pdf->ezImage(api_get_path(SYS_CODE_PATH).'img/dokeos_logo_certif.png',1,400,'','center','');
 		$pdf->ezSetY(480);
 		$pdf->ezText($certif_text,28,array('justification'=>'center'));
 		//$pdf->ezSetY(750);

@@ -210,6 +210,9 @@ switch ($action) {
             $id_session= Security::remove_XSS($_GET['id_session']);
             $gidReq= Security::remove_XSS($_GET['gidReq']);
             $id= Security::remove_XSS($_GET['id']);
+			if(empty($parent_id)){
+				$parent_id=0;
+			}
             $file_link = Display::url(get_lang('SeeFile'), api_get_path(WEB_CODE_PATH).'social/myfiles.php?cidReq='.$cidReq.'&amp;id_session='.$id_session.'&amp;gidReq='.$gidReq.'&amp;parent_id='.$parent_id);
                     
             if (file_exists($copyfile)) {

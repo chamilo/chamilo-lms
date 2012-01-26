@@ -1216,7 +1216,7 @@ class Database {
     public static function delete($table_name, $where_conditions) {
         $result = false;
         $where_return = self::parse_where_conditions($where_conditions);
-        $sql    = "DELETE FROM $table_name $where_return ";
+        $sql    = "DELETE FROM $table_name $where_return ";        
         $result = self::query($sql);
         $affected_rows = self::affected_rows();
         //@todo should return affected_rows for

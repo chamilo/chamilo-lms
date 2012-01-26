@@ -230,10 +230,8 @@ class CourseSelectForm
 		$table_prop 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 		
 		$course_id 		= $course_info['real_id'];
-		
 
 		// Searching the documents resource that have been set to null because $avoid_serialize is true in the display_form() function
-
 		if ($from == 'copy_course') {
 			if (is_array($resource)) {
 				$resource = array_keys($resource);

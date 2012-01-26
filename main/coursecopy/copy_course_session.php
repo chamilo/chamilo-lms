@@ -24,7 +24,6 @@ require_once 'classes/CourseBuilder.class.php';
 require_once 'classes/CourseRestorer.class.php';
 require_once 'classes/CourseSelectForm.class.php';
 
-
 $xajax = new xajax();
 $xajax->registerFunction('search_courses');
 
@@ -113,11 +112,13 @@ function display_form() {
 	$html .= '<select id="destination" name="SessionCoursesListDestination[]" multiple="multiple" size="20" style="width:380px;" ></select></div></td>';
 	$html .= '</tr></table>';
 	
-	   $html .= '<h3>'.get_lang('TypeOfCopy').'</h3>';
-    $html .= '<input type="radio" class="checkbox" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
+	$html .= '<h3>'.get_lang('TypeOfCopy').'</h3>';
+    $html .= '<input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
     $html .= '<label for="copy_option_1"> '.get_lang('FullCopy').'</label><br/>';
-    $html .= '<input type="radio" class="checkbox" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
-    $html .= '<label for="copy_option_2"><span id="title_option2" style="color:#aaa"> '.get_lang('LetMeSelectItems').'</span></label><br/><br/>';
+    $html .= '<input type="radio" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
+    $html .= '<label for="copy_option_2"><span id="title_option2" style="color:#aaa"> '.get_lang('LetMeSelectItems').'</span></label><br/>';
+    
+    $html .= '<input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" checked="checked" /><label for="copy_base_content_id">'.get_lang('CopyOnlySessionItems').'</label><br /><br/>';
 	
 	$html .= '<button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.get_lang('CopyCourse').'</button>';
     $html .= '</form>';
@@ -284,7 +285,12 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 
 Display::display_header($nameTools);
 
+$with_base_content = true;
+if (isset($_POST['copy_only_session_items']) && $_POST['copy_only_session_items']) {
+    $with_base_content = false;
+}
 
+        
 /*  MAIN CODE  */
 
 if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')) {
@@ -299,8 +305,6 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		$origin_session 		= $_POST['origin_session'];
 		
 		$course = CourseSelectForm :: get_posted_course('copy_course', $origin_session, $origin_course);
-		
-		//print_r($course);		
 		
 		$cr = new CourseRestorer($course);
 		//$cr->set_file_option($_POST['same_file_name_option']);
@@ -326,7 +330,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		if (isset($_POST['sessions_list_origin'])) {
 			$origin_session 		= $_POST['sessions_list_origin'];
 		}
-
+  
 		if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
 			//We need only one value			
 			if (count($arr_course_origin) > 1 || count($arr_course_destination) > 1) {
@@ -340,7 +344,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 				
 				$course_origin = api_get_course_info($course_code);				
 				$cb = new CourseBuilder('', $course_origin);
-				$course = $cb->build($origin_session, $course_code);
+				$course = $cb->build($origin_session, $course_code, $with_base_content);
 				$cr = new CourseRestorer($course);
 				//$cr->set_file_option($_POST['same_file_name_option']);
 				$cr->restore($course_destinatination, $destination_session);
@@ -382,7 +386,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		Display::display_normal_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
 		$course_origin = api_get_course_info($arr_course_origin[0]);		
 		$cb = new CourseBuilder('', $course_origin);
-		$course = $cb->build($origin_session, $arr_course_origin[0]);
+		$course = $cb->build($origin_session, $arr_course_origin[0], $with_base_content);
 		//$hidden_fields['same_file_name_option'] = $_POST['same_file_name_option'];
 		$hidden_fields['destination_course'] 	= $arr_course_destination[0];
 		$hidden_fields['origin_course'] 		= $arr_course_origin[0];

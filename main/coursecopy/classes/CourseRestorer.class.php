@@ -154,16 +154,12 @@ class CourseRestorer
 		// Encoding conversion of the course, if it is needed.
 		$this->course->to_system_encoding();
         
-        /*foreach ($this->tools_to_restore as $tool) {
-            $function_build = 'restore_'.$tool;        
-            switch($tool) {
-                case 'documents':
-                    $this->$function_build($session_id, $destination_course_code);    
-                default:
-                    $this->$function_build($session_id, $respect_base_content);    
-            }
+        foreach ($this->tools_to_restore as $tool) {
+            $function_build = 'restore_'.$tool;
+            $this->$function_build($session_id, $respect_base_content, $destination_course_code);
         }
-*/
+        
+        /*
 		$this->restore_links($session_id);
 		$this->restore_documents($session_id, $destination_course_code);
 		$this->restore_quizzes($session_id, $respect_base_content);
@@ -192,7 +188,7 @@ class CourseRestorer
 			//$this->restore_wiki();
 			//$this->restore_thematic();
 			//$this->restore_attendance();
-		}
+		}*/
 		
 		if ($update_course_settings) {
 		    $this->restore_course_settings($destination_course_code);
@@ -286,7 +282,7 @@ class CourseRestorer
      * @param   int session id
      * 
 	 */
-	function restore_documents($session_id = 0, $destination_course_code = '') {
+	function restore_documents($session_id = 0, $respect_base_content = false, $destination_course_code = '') {
 		$perm 			= api_get_permissions_for_new_directories();		
         $course_info 	= api_get_course_info($destination_course_code);
         
@@ -607,8 +603,7 @@ class CourseRestorer
 	 * Restore scorm documents
 	 * TODO @TODO check that the restore function with renaming doesn't break the scorm structure!
 	 */
-	function restore_scorm_documents()
-	{
+	function restore_scorm_documents() {
 		$perm = api_get_permissions_for_new_directories();
 
 		if ($this->course->has_resources(RESOURCE_SCORM)) {
@@ -723,8 +718,7 @@ class CourseRestorer
 	/**
 	 * Restore forum-categories
 	 */
-	function restore_forum_category($id)
-	{
+	function restore_forum_category($id) {
 		$forum_cat_table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
 		$resources = $this->course->resources;
 		$forum_cat = $resources[RESOURCE_FORUMCATEGORY][$id];
@@ -755,8 +749,7 @@ class CourseRestorer
 	/**
 	 * Restore a forum-topic
 	 */
-	function restore_topic($id, $forum_id)
-	{
+	function restore_topic($id, $forum_id) {
 		$table = Database :: get_course_table(TABLE_FORUM_THREAD);
 		$resources = $this->course->resources;
 		$topic = $resources[RESOURCE_FORUMTOPIC][$id];
@@ -803,8 +796,7 @@ class CourseRestorer
 	 * Restore a forum-post
 	 * @TODO Restore tree-structure of posts. For example: attachments to posts.
 	 */
-	function restore_post($id, $topic_id, $forum_id)
-	{
+	function restore_post($id, $topic_id, $forum_id) {
 		$table_post = Database :: get_course_table(TABLE_FORUM_POST);
 		$resources = $this->course->resources;
 		$post = $resources[RESOURCE_FORUMPOST][$id];
@@ -1075,7 +1067,7 @@ class CourseRestorer
 						$doc = str_replace('/audio/', '', $doc->path);
 					}
 				}
-				if ($id != -1) {				   
+				if ($id != -1) {		   
                     if ($respect_base_content) {
                         $my_session_id = $quiz->session_id; 
                         if (!empty($quiz->session_id)) {
@@ -1562,13 +1554,16 @@ class CourseRestorer
 					//local resource
 					$path = self::DBUTF8escapestring($item['path']);
                     
-					if (strval(intval($path)) === $path) {
+                    //@todo Check this validation, why if is session we leave the path the same?
+					/*if (strval(intval($path)) === $path) {
 						if (!empty($session_id)) {
 							$path = intval($path);
 						} else {
 							$path = $this->get_new_id($item['item_type'], $path);
 						}
-					}
+					}*/
+                    
+                    $path = $this->get_new_id($item['item_type'], $path);
 
 					$sql = "INSERT INTO ".$table_item." SET
 							c_id = ".$this->destination_course_id." ,                                                                           	 
@@ -1791,6 +1786,7 @@ class CourseRestorer
 		//transform $tool into one backup/restore constant
         
         //just in case you copy the tool in the same course
+        //error_log($this->course_origin_id .' - '.$this->destination_course_id);
         if ($this->course_origin_id == $this->destination_course_id) {
             return $ref;
         }

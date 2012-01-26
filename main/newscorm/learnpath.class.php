@@ -7941,6 +7941,8 @@ class learnpath {
      */
     public  function scorm_export() {
         global $_course;
+        
+        $course_id = api_get_course_int_id();
 
         // Remove memory and time limits as much as possible as this might be a long process...
         if (function_exists('ini_set')) {
@@ -8327,7 +8329,7 @@ class learnpath {
                     }
 
                     $my_file_path = 'link_'.$item->get_id().'.html';
-                    $sql = 'SELECT url, title FROM '.Database :: get_course_table(TABLE_LINK).' WHERE id='.$item->path;
+                    $sql = 'SELECT url, title FROM '.Database :: get_course_table(TABLE_LINK).' WHERE c_id = '.$course_id.' AND id='.$item->path;
                     $rs = Database::query($sql);
                     if ($link = Database :: fetch_array($rs)) {
                         $url = $link['url'];

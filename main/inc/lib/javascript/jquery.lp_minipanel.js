@@ -1,12 +1,17 @@
-/*******************************************
+/* For licensing terms, see /license.txt */
+/*
  Learning Path minipanel - Chamilo 1.8.8
  Adding mini panel to browse Learning Paths
  Requirements: JQuery 1.4.4, JQuery UI 1.8.7
- Alberto Torreblanca @albert1t0
- *******************************************/
- function display_hide_toc(){
+ @author Alberto Torreblanca @albert1t0
+ @author Julio Montoya Cleaning/fixing some code
+ @todo this doesn't work due recent changes in this file I partially fixed now we can see the vertical bar 
+        but the minipanel was removed
+ **/
+
 // Copy little progress bar in <tr></tr>
 function minipb() {
+    
     $('#learning_path_main #control tr').after('<tr></tr>');
 	$('#learning_path_main #control tr:eq(1)').append($('#progress_bar').html());
 	$('#learning_path_main #control tr:eq(1) #progress_img_limit_left').attr('height','5');
@@ -18,8 +23,7 @@ function minipb() {
 	$('#learning_path_main #control tr:eq(1) div').css('width','');
 }
   
-(function($){
-  $(document).ready(function() {
+$(document).ready(function() {
 
    //Adding div to hide panel
     $('#learning_path_right_zone').before('<div id="hide_bar" style="float: left; width: 10px; height: 100%;">' +
@@ -32,8 +36,7 @@ function minipb() {
     	if($('#hide_bar').position().left == 280)
     		$(this).css('backgroundImage','url(../img/hide1.png)').css('backgroundColor','#888888');
     	else if($('#hide_bar').position().left == 0)
-    		$(this).css('backgroundImage','url(../img/hide3.png)').css('backgroundColor','#888888');
-    	
+    		$(this).css('backgroundImage','url(../img/hide3.png)').css('backgroundColor','#888888');    	
         },function (){
             if($('#hide_bar').position().left == 280)
               $(this).css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
@@ -43,57 +46,56 @@ function minipb() {
     );
 
     // Adding funcionality
-    $('#hide_bar table').toggle(function(){
-
-
-
-      if($('#hide_bar').position().left == 280){
-      // Construct mini panel
-      var panel = $('#lp_navigation_elem div:first').clone();
-      $(panel).attr('id','control');
-      $('#learning_path_main').append(panel);
-      minipb();      
-      $('#learning_path_main #control .buttons').attr('align','center');
+    $('#hide_bar table').toggle(function() {
+        
+        if ($('#hide_bar').position().left == 280) {
       
-      $('#learning_path_main  #control').css({
-    	  margin: "auto",
-          width: "132px",
-          height: "34px",
-          position: "absolute",
-          top: "5px",
-          left:"15px",
-          backgroundColor: "white",
-          backgroundImage: "url(../img/minipanelback.png)",
-          paddingTop: "8px",
-          paddingBottom: "8px",
-          borderRadius: "4px 4px 4px 4px",
-          opacity: "0.8",
-          cursor: "move"
-      });
-      
-      $('#learning_path_main  #control table').attr('align','center');
-      $('#learning_path_main  #control').draggable({ 
-    	  iframeFix: true,
-    	  stack: "#learning_path_right_zone",
-    	  cursor: "move"
-      });
-      
-      $('#learning_path_main #control .buttons img').click(function(){ 
-    	  $('#learning_path_main #control tr:eq(1)').remove();
-    	  minipb();
-      });
-      
-      // Hiding navigation left zone
-      $('#learning_path_left_zone').hide(50);
-      $('#learning_path_right_zone').css('margin-left','10px');
-      $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
+            // Construct mini panel
+            var panel = $('#lp_navigation_elem div:first').clone();
+            $(panel).attr('id','control');
+            $('#learning_path_main').append(panel);
+            minipb();      
+            $('#learning_path_main #control .buttons').attr('align','center');
 
-    },function(){
+            $('#learning_path_main  #control').css({
+                margin: "auto",
+                width: "132px",
+                height: "34px",
+                position: "absolute",
+                top: "5px",
+                left:"15px",
+                backgroundColor: "white",
+                backgroundImage: "url(../img/minipanelback.png)",
+                paddingTop: "8px",
+                paddingBottom: "8px",
+                borderRadius: "4px 4px 4px 4px",
+                opacity: "0.8",
+                cursor: "move"
+            });
+
+            $('#learning_path_main  #control table').attr('align','center');
+            $('#learning_path_main  #control').draggable({ 
+                iframeFix: true,
+                stack: "#learning_path_right_zone",
+                cursor: "move"
+            });
+
+            $('#learning_path_main #control .buttons img').click(function(){ 
+                $('#learning_path_main #control tr:eq(1)').remove();
+                minipb();
+            });
+            // Hiding navigation left zone
+            $('#learning_path_left_zone').hide(50);
+            $('#learning_path_right_zone').css('margin-left','10px');
+            $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
+        }
+    },    
+    function(){
       // Show navigation left zone
       $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
       $('#learning_path_right_zone').css('marginLeft','290px');
       $('#learning_path_left_zone').show(50);
       $('#learning_path_main  #control').remove();
-    });
-  });
-})(jQuery);
+    }
+    );
+});

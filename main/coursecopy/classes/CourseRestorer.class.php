@@ -74,7 +74,7 @@ class CourseRestorer
                             'attendance',
                             'scorm_documents');
     
-    /** Copy setting per tool */
+    /** Setting per tool */
     var $tool_copy_settings = array();
     
     /**
@@ -105,10 +105,9 @@ class CourseRestorer
 	}
     function set_add_text_in_items($status) {
         $this->add_text_in_items = $status;        
-    }
-    
-    function set_tool_copy_settings($status) {
-        $this->tool_copy_settings = $status;        
+    }    
+    function set_tool_copy_settings($array) {
+        $this->tool_copy_settings = $array;        
     }
 
 	/**
@@ -1482,6 +1481,14 @@ class CourseRestorer
                 if ($this->add_text_in_items) {
                     $lp->name = $lp->name.' '.get_lang('Copy');
                 }
+                                
+                if (isset($this->tool_copy_settings['learnpaths'])) {
+                    if (isset($this->tool_copy_settings['learnpaths']['reset_dates']) && $this->tool_copy_settings['learnpaths']['reset_dates']) {
+                        $lp->created_on     = api_get_utc_datetime();
+                        $lp->modified_on    = api_get_utc_datetime();
+                        $lp->publicated_on  = null;                    
+                    }
+                }
 
 				$sql = "INSERT INTO ".$table_main." SET
 						c_id 				= ".$this->destination_course_id." ,								                                                                               
@@ -1518,6 +1525,8 @@ class CourseRestorer
 				
 				if ($new_lp_id) {
 					api_item_property_update($this->destination_course_info, TOOL_LEARNPATH, $new_lp_id, 'LearnpathAdded', api_get_user_id(), 0, 0, 0, 0, $session_id);					
+                    //Set the new LP to visible
+                    api_item_property_update($this->destination_course_info, TOOL_LEARNPATH, $new_lp_id, 'invisible', api_get_user_id(), 0, 0, 0, 0, $session_id);					
 				}
 
 				$new_item_ids 		= array();

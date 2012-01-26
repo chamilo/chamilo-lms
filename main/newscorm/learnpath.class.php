@@ -8966,7 +8966,7 @@ EOD;
         //Course restorer
         $course_restorer = new CourseRestorer($course);        
         $course_restorer->set_add_text_in_items(true);
-        //$course_restorer->set_tool_copy_settings(array('learnpaths' => array('reset_dates')));        
+        $course_restorer->set_tool_copy_settings(array('learnpaths' => array('reset_dates' => true)));        
         $course_restorer->restore(api_get_course_id(), api_get_session_id(), false, false);        
     }
     

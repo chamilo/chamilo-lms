@@ -54,11 +54,35 @@ class CourseRestorer
 	 * What to do with files with same name (FILE_SKIP, FILE_RENAME or
 	 * FILE_OVERWRITE)
 	 */
-	var $file_option;
-	
+	var $file_option;	
 	var $set_tools_invisible_by_default;
-
 	var $skip_content;
+    
+    var $tools_to_restore = array(
+                            'events',
+                            'announcements',
+                            'tool_intro',
+                            'surveys',
+                            'documents', 
+                            'quizzes', 
+                            'glossary',
+                            'learnpaths',
+                            'links', 
+                            'course_descriptions',
+                            'wiki',
+                            'thematic',
+                            'attendance',
+                            'scorm_documents');
+    
+    /** Copy setting per tool */
+    var $tool_copy_settings = array();
+    
+    /**
+     * If true adds the text "copy" in the title of an item (only for LPs right now)
+     * 
+     **/    
+    var $add_text_in_items = false;
+    
 	/**
 	 * Create a new CourseRestorer
 	 */
@@ -70,6 +94,7 @@ class CourseRestorer
 		$this->set_tools_invisible_by_default 	= false;
 		$this->skip_content 					= array();
 	}
+    
 	/**
 	 * Set the file-option
 	 * @param constant $options What to do with files with same name (FILE_SKIP,
@@ -78,6 +103,13 @@ class CourseRestorer
 	function set_file_option($option) {
 		$this->file_option = $option;
 	}
+    function set_add_text_in_items($status) {
+        $this->add_text_in_items = $status;        
+    }
+    
+    function set_tool_copy_settings($status) {
+        $this->tool_copy_settings = $status;        
+    }
 
 	/**
 	 * Restore a course.
@@ -96,7 +128,6 @@ class CourseRestorer
 			$this->destination_course_info = $course_info;			
 			$this->course->destination_path = $course_info['path'];
 		}		
-		
 		$this->destination_course_id = $course_info['real_id'];
         
         if (empty($this->course)) {
@@ -123,7 +154,17 @@ class CourseRestorer
 
 		// Encoding conversion of the course, if it is needed.
 		$this->course->to_system_encoding();
-
+        
+        /*foreach ($this->tools_to_restore as $tool) {
+            $function_build = 'restore_'.$tool;        
+            switch($tool) {
+                case 'documents':
+                    $this->$function_build($session_id, $destination_course_code);    
+                default:
+                    $this->$function_build($session_id, $respect_base_content);    
+            }
+        }
+*/
 		$this->restore_links($session_id);
 		$this->restore_documents($session_id, $destination_course_code);
 		$this->restore_quizzes($session_id, $respect_base_content);
@@ -328,7 +369,7 @@ class CourseRestorer
 								$obj = Database::fetch_object($res);
 								$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;
 								$sql = "UPDATE ".$table." SET comment = '".self::DBUTF8escapestring($document->comment)."', title='".self::DBUTF8escapestring($document->title)."', size='".$document->size."' 
-										WHERE id = '".$obj->id."'";
+										WHERE c_id = ".$this->destination_course_id." AND id = '".$obj->id."'";
 								Database::query($sql);
 								break;
 							case FILE_SKIP :
@@ -630,10 +671,8 @@ class CourseRestorer
 	/**
 	 * Restore forums
 	 */
-	function restore_forums()
-	{
-		if ($this->course->has_resources(RESOURCE_FORUM))
-		{
+	function restore_forums() {
+		if ($this->course->has_resources(RESOURCE_FORUM)) {
 			$table_forum 	= Database::get_course_table(TABLE_FORUM);
 			$table_topic 	= Database::get_course_table(TABLE_FORUM_THREAD);
 			$table_post 	= Database::get_course_table(TABLE_FORUM_POST);
@@ -1294,16 +1333,11 @@ class CourseRestorer
 
 							$new_id = Database::insert_id();
 							$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
-							foreach ($survey->question_ids as $index => $question_id)
-							{
+							foreach ($survey->question_ids as $index => $question_id) {
 								$qid = $this->restore_survey_question($question_id, $new_id);
-								$sql = "UPDATE ".$table_que." " .
-										"SET survey_id = ".$new_id." WHERE " .
-										"question_id = ".$qid."";
+								$sql = "UPDATE $table_que SET survey_id = $new_id WHERE c_id = ".$this->destination_course_id." AND question_id = $qid";
 								Database::query($sql);
-								$sql = "UPDATE ".$table_ans." ".
-										"SET survey_id = ".$new_id." WHERE " .
-										"question_id = ".$qid."";
+								$sql = "UPDATE $table_ans SET survey_id = $new_id WHERE c_id = ".$this->destination_course_id." AND question_id = $qid";
 								Database::query($sql);
 							}
 							break;
@@ -1400,11 +1434,11 @@ class CourseRestorer
 
 		return $new_id;
 	}
+    
 	/**
 	 * Restore learnpaths
 	 */
-	function restore_learnpaths($session_id = 0, $respect_base_content = false)
-	{
+	function restore_learnpaths($session_id = 0, $respect_base_content = false) {
 		if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
 			$table_main 	= Database::get_course_table(TABLE_LP_MAIN);
 			$table_item 	= Database::get_course_table(TABLE_LP_ITEM);
@@ -1444,6 +1478,10 @@ class CourseRestorer
 						}
 					}
 				}
+                
+                if ($this->add_text_in_items) {
+                    $lp->name = $lp->name.' '.get_lang('Copy');
+                }
 
 				$sql = "INSERT INTO ".$table_main." SET
 						c_id 				= ".$this->destination_course_id." ,								                                                                               
@@ -1514,11 +1552,12 @@ class CourseRestorer
 					//Dealing with path the same way as ref as some data has been put into path when it's a
 					//local resource
 					$path = self::DBUTF8escapestring($item['path']);
-					if(strval(intval($path)) === $path) {
+                    
+					if (strval(intval($path)) === $path) {
 						if (!empty($session_id)) {
 							$path = intval($path);
 						} else {
-							$path = $this->get_new_id($item['item_type'],$path);
+							$path = $this->get_new_id($item['item_type'], $path);
 						}
 					}
 
@@ -1543,6 +1582,7 @@ class CourseRestorer
 							"launch_data = '".		self::DBUTF8escapestring($item['launch_dataprereq_type'])."'";
 					
 					Database::query($sql);
+                    
 					$new_item_id = Database::insert_id();
 					//save a link between old and new item IDs
 					$new_item_ids[$item['id']] = $new_item_id;
@@ -1566,8 +1606,8 @@ class CourseRestorer
 						if ($lp->lp_type =='2') {
 							// if is an sco
 							$old_refs[$new_item_id]= $ref;
-						} else {
-							$old_refs[$new_item_id]= $new_item_ids[$ref];
+						} else {                                                        
+                            $old_refs[$new_item_id]= $new_item_ids[$ref];
 						}
 					}
 
@@ -1577,7 +1617,7 @@ class CourseRestorer
 				// updating prerequisites
 				foreach ($old_prerequisite  as $key=>$my_old_prerequisite) {
 					if($my_old_prerequisite != ''){
-						$sql = "UPDATE ".$table_item." SET prerequisite = '".$my_old_prerequisite."' WHERE id = '".$key."'  ";
+						$sql = "UPDATE ".$table_item." SET prerequisite = '".$my_old_prerequisite."' WHERE c_id = ".$this->destination_course_id." AND id = '".$key."'  ";
 						Database::query($sql);
 					}
 				}
@@ -1585,7 +1625,7 @@ class CourseRestorer
 				//updating refs
 				foreach ($old_refs  as $key=>$my_old_ref) {
 					if ($my_old_ref != '') {
-						$sql = "UPDATE ".$table_item." SET ref = '".$my_old_ref."' WHERE id = '".$key."'  ";
+						$sql = "UPDATE ".$table_item." SET ref = '".$my_old_ref."' WHERE c_id = ".$this->destination_course_id." AND id = '".$key."'  ";
 						Database::query($sql);
 					}
 				}
@@ -1595,7 +1635,7 @@ class CourseRestorer
 					if($parent_item_old_id != 0){
 						$parent_new_id = $new_item_ids[$parent_item_old_id];
 					}
-					$sql = "UPDATE ".$table_item." SET parent_item_id = '".$parent_new_id."' WHERE id = '".$new_item_id."'";
+					$sql = "UPDATE ".$table_item." SET parent_item_id = '".$parent_new_id."' WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
 					Database::query($sql);
 				}
 				foreach ($previous_item_ids as $new_item_id => $previous_item_old_id) {
@@ -1603,7 +1643,7 @@ class CourseRestorer
 					if($previous_item_old_id != 0){
 						$previous_new_id = $new_item_ids[$previous_item_old_id];
 					}
-					$sql = "UPDATE ".$table_item." SET previous_item_id = '".$previous_new_id."' WHERE id = '".$new_item_id."'";
+					$sql = "UPDATE ".$table_item." SET previous_item_id = '".$previous_new_id."' WHERE  c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
 					Database::query($sql);
 				}
 
@@ -1612,7 +1652,7 @@ class CourseRestorer
 					if($next_item_old_id != 0){
 						$next_new_id = $new_item_ids[$next_item_old_id];
 					}
-					$sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."' WHERE id = '".$new_item_id."'";
+					$sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."' WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
 					Database::query($sql);
 				}
 
@@ -1621,10 +1661,9 @@ class CourseRestorer
 					if($prerequisite_old_id != 0){
 						$prerequisite_new_id = $new_item_ids[$prerequisite_old_id];
 					}
-					$sql = "UPDATE ".$table_item." SET prerequisite = '".$prerequisite_new_id."' WHERE id = '".$new_item_id."'";
+					$sql = "UPDATE ".$table_item." SET prerequisite = '".$prerequisite_new_id."' WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
 					Database::query($sql);
 				}
-
 				$this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
 			}
 
@@ -1713,7 +1752,6 @@ class CourseRestorer
    		if(!is_dir($dest)) {
    			mkdir($dest, api_get_permissions_for_new_directories());
    		}
-
 	    if ($handle = opendir($source)) {        // if the folder exploration is sucsessful, continue
 	        while (false !== ($file = readdir($handle))) { // as long as storing the next file to $file is successful, continue
 	            if ($file != '.' && $file != '..') {
@@ -1740,11 +1778,16 @@ class CourseRestorer
 	 * @param	integer	Old ID
 	 * @return	integer	New ID
 	 */
-	function get_new_id($tool,$ref)
-	{
+	function get_new_id($tool,$ref) {
 		//transform $tool into one backup/restore constant
-		if($tool == 'hotpotatoes'){$tool = 'document';}
-		if(!empty($this->course->resources[$tool][$ref]->destination_id)){
+        
+        //just in case you copy the tool in the same course
+        if ($this->course_origin_id == $this->destination_course_id) {
+            return $ref;
+        }
+                
+		if ($tool == 'hotpotatoes') { $tool = 'document'; }
+		if (!empty($this->course->resources[$tool][$ref]->destination_id)) {
 			return $this->course->resources[$tool][$ref]->destination_id;
 		}
 		return '';
@@ -1752,8 +1795,7 @@ class CourseRestorer
 	/**
 	 * Restore glossary
 	 */
-	function restore_glossary($session_id = 0)
-	{
+	function restore_glossary($session_id = 0) {
 		if ($this->course->has_resources(RESOURCE_GLOSSARY)) {
 			$table_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 			$t_item_propery = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -1779,10 +1821,8 @@ class CourseRestorer
 		}
 	}
 
-	function restore_wiki($session_id = 0)
-	{
-		if ($this->course->has_resources(RESOURCE_WIKI))
-		{
+	function restore_wiki($session_id = 0) {
+		if ($this->course->has_resources(RESOURCE_WIKI)) {
 			// wiki table of the target course
 			$table_wiki 		= Database :: get_course_table('wiki');
 			$table_wiki_conf 	= Database :: get_course_table('wiki_conf');
@@ -1790,8 +1830,7 @@ class CourseRestorer
 			// storing all the resources that have to be copied in an array
 			$resources = $this->course->resources;
 
-			foreach ($resources[RESOURCE_WIKI] as $id => $wiki)
-			{
+			foreach ($resources[RESOURCE_WIKI] as $id => $wiki) {
 				//$wiki = new Wiki($obj->page_id, $obj->reflink, $obj->title, $obj->content, $obj->user_id, $obj->group_id, $obj->dtime);
 				// the sql statement to insert the groups from the old course to the new course
 
@@ -1813,7 +1852,7 @@ class CourseRestorer
 				$rs2 = Database::query($sql);
 				$new_id = Database::insert_id();
 				$this->course->resources[RESOURCE_WIKI][$id]->destination_id = $new_id;
-				$sql = "UPDATE $table_wiki set page_id = '$new_id' WHERE id = '$new_id'";
+				$sql = "UPDATE $table_wiki set page_id = '$new_id' WHERE c_id = ".$this->destination_course_id." AND id = '$new_id'";
 				Database::query($sql);
 
 				// we also add an entry in wiki_conf

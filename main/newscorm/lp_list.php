@@ -430,13 +430,16 @@ if (!empty($flat_list)) {
              /* Export */
 
             if ($details['lp_type'] == 1) {
-                $dsp_disk = Display::url(Display::return_icon('cd.gif', get_lang('Export'), array(), 22), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id");
+                $dsp_disk = Display::url(Display::return_icon('dock.png', get_lang('Export'), array(), 22), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id");
                 
             } elseif ($details['lp_type'] == 2) {
-                $dsp_disk = Display::url(Display::return_icon('cd.gif', get_lang('Export'), array(), 22), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name, 'strict').".zip");                
+                $dsp_disk = Display::url(Display::return_icon('dock.png', get_lang('Export'), array(), 22), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name, 'strict').".zip");                
             } else {
-                $dsp_disk = Display::return_icon('cd_gray.gif', get_lang('Export'), array(), 22);                
+                $dsp_disk = Display::return_icon('dock_na.png', get_lang('Export'), array(), 22);                
             }
+            
+            //Copy            
+            $copy = Display::url(Display::return_icon('cd.gif', get_lang('Copy'), array(), 22), api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id");
             
             /* Auto Lunch LP code*/
             $lp_auto_lunch_icon = '';            
@@ -500,7 +503,7 @@ if (!empty($flat_list)) {
         } 
         
         echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$dsp_reinit.
-             $dsp_default_view.$dsp_debug.$dsp_disk.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
+             $dsp_default_view.$dsp_debug.$dsp_disk.$copy.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
 
         echo "</tr>";
         $current ++; //counter for number of elements treated

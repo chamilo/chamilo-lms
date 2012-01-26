@@ -30,10 +30,27 @@ require_once 'Attendance.class.php';
  * @package chamilo.backup
  */
 class CourseBuilder {
-	/**
-	 * The course
-	 */
+	/** Course */
 	var $course;
+    
+    /* With this array you can filter the tools you want to be parsed by default all tools are included*/
+    var $tools_to_build = array('events',
+                                'announcements',
+                                'tool_intro',
+                                'surveys',
+                                'documents', 
+                                'quizzes', 
+                                'glossary',
+                                'learnpaths',
+                                'links', 
+                                'course_descriptions',
+                                'wiki',
+                                'thematic',
+                                'attendance');
+    
+    /* With this array you can filter wich elements of the tools are going to be added in the course obj (only works with LPs) */
+    var $specific_id_list = array();
+    
 	/**
 	 * Create a new CourseBuilder
 	 */
@@ -53,6 +70,23 @@ class CourseBuilder {
 		$this->course->db_name      = $_course['dbName'];
 		$this->course->info         = $_course;
 	}
+    
+    /**
+     * 
+     * @param type $array 
+     */
+    function set_tools_to_build($array) {
+        $this->tools_to_build = $array;
+    }
+    
+    /**
+     * 
+     * @param type $array 
+     */
+    function set_tools_specific_id_list($array) {
+        $this->specific_id_list = $array;
+    }
+    
 	/**
 	 * Get the created course
 	 * @return course The course
@@ -75,9 +109,14 @@ class CourseBuilder {
         
 		$course_info      = api_get_course_info($course_code);		
 		$course_id        = $course_info['real_id'];		
+        
+        foreach ($this->tools_to_build as $tool) {
+            $function_build = 'build_'.$tool;
+            $this->$function_build($session_id, $course_code, $with_base_content, $this->specific_id_list[$tool]);
+        }
 		
-		if (!empty($session_id) && !empty($course_code)) {			
-			$this->build_documents($session_id, $course_code, $with_base_content);
+		if (!empty($session_id) && !empty($course_code)) {            
+			/*$this->build_documents($session_id, $course_code, $with_base_content);
 			$this->build_quizzes($session_id, $course_code,   $with_base_content);
 			$this->build_glossary($session_id, $course_code,  $with_base_content);
 			$this->build_learnpaths($session_id, $course_code,$with_base_content);
@@ -86,21 +125,22 @@ class CourseBuilder {
 			$this->build_wiki($session_id, $course_code, $with_base_content);
 			//$this->build_thematic($session_id, $course_code, $with_base_content);
 			$this->build_thematic();			
-			$this->build_attendance();
-		} else {			
-			$this->build_events();
-			$this->build_announcements();
-			$this->build_links();
-			$this->build_tool_intro();
-			$this->build_documents();
-			$this->build_course_descriptions();
-			$this->build_wiki();
-			$this->build_quizzes();
-			$this->build_learnpaths();
-			$this->build_surveys();
-			$this->build_glossary();
-			$this->build_thematic();
-			$this->build_attendance();
+			$this->build_attendance();*/
+		} else {
+            /*$this->build_events();
+            $this->build_announcements();
+            $this->build_links();
+            $this->build_tool_intro();
+            $this->build_documents();
+            $this->build_course_descriptions();
+            $this->build_wiki();
+            $this->build_quizzes();
+            $this->build_learnpaths();
+            $this->build_surveys();
+            $this->build_glossary();
+            $this->build_thematic();
+            $this->build_attendance();*/
+            
 		}
 
 		//TABLE_LINKED_RESOURCES is the "resource" course table, which is deprecated, apparently
@@ -116,15 +156,13 @@ class CourseBuilder {
 		}
 
 		foreach ($this->course->resources as $type => $resources) {
-			foreach ($resources as $id => $resource)
-			{
+			foreach ($resources as $id => $resource){
 				$tool = $resource->get_tool();
 				if ($tool != null) {
 					$sql = "SELECT * FROM $table_properties WHERE c_id = $course_id AND TOOL = '".$tool."' AND ref='".$resource->get_id()."'";
 					$res = Database::query($sql);
 					$all_properties = array ();
-					while ($item_property = Database::fetch_array($res))
-					{
+					while ($item_property = Database::fetch_array($res)) {
 						$all_properties[] = $item_property;
 					}
 					$this->course->resources[$type][$id]->item_properties = $all_properties;
@@ -137,7 +175,7 @@ class CourseBuilder {
 	/**
 	 * Build the documents
 	 */
-	function build_documents($session_id = 0, $course_code = '', $with_base_content = false) {
+	function build_documents($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 
 		$course_info 	= api_get_course_info($course_code);
 		$course_id 		= $course_info['real_id'];
@@ -201,7 +239,7 @@ class CourseBuilder {
 	/**
 	 * Build the forums
 	 */
-	function build_forums() {
+	function build_forums($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		$table = Database :: get_course_table(TABLE_FORUM);
 		$course_id = api_get_course_int_id();		
 		$sql = "SELECT * FROM $table WHERE c_id = $course_id ";
@@ -247,8 +285,7 @@ class CourseBuilder {
 	 * Build the forum-posts
 	 * TODO: All tree structure of posts should be built, attachments for example.
 	 */
-	function build_forum_posts()
-	{
+	function build_forum_posts() {
 		$table = Database :: get_course_table(TABLE_FORUM_POST);
 		$course_id = api_get_course_int_id();		
 		$sql = "SELECT * FROM $table WHERE c_id = $course_id ";
@@ -262,7 +299,7 @@ class CourseBuilder {
 	/**
 	 * Build the links
 	 */
-	function build_links($session_id = 0, $course_code = '', $with_base_content = false) {
+	function build_links($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		$course_info = api_get_course_info($course_code);
 		$course_id 		= $course_info['real_id'];
 		
@@ -307,8 +344,7 @@ class CourseBuilder {
 	/**
 	 * Build tool intro
 	 */
-	function build_tool_intro()
-	{
+	function build_tool_intro($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		$table = Database :: get_course_table(TABLE_TOOL_INTRO);
 		$course_id = api_get_course_int_id();		
 		$sql = "SELECT * FROM $table WHERE c_id = $course_id ";
@@ -339,7 +375,7 @@ class CourseBuilder {
 	/**
 	 * Build the Quizzes
 	 */
-	function build_quizzes($session_id = 0, $course_code = '', $with_base_content = false) {
+	function build_quizzes($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		$course_info = api_get_course_info($course_code);
 		$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
 		$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -436,18 +472,17 @@ class CourseBuilder {
 			//$this->course->add_resource(new Quiz(-1, get_lang('OrphanQuestions', ''), '', 0, 0, 1, '', 0));
 		}
 	}
+    
 	/**
 	 * Build the orphan questions
 	 */
-	function build_quiz_orphan_questions()
-	{
+	function build_quiz_orphan_questions() {
 		$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
 		$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$table_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
 		$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 		
-		$course_id = api_get_course_int_id();
-		
+		$course_id = api_get_course_int_id();		
 
 		$sql = 'SELECT * FROM '.$table_que.' as questions LEFT JOIN '.$table_rel.' as quizz_questions 
 				ON questions.id=quizz_questions.question_id LEFT JOIN '.$table_qui.' as exercices 
@@ -477,25 +512,23 @@ class CourseBuilder {
 	/**
 	 * Build the Surveys
 	 */
-	function build_surveys() {
+	function build_surveys($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		$table_survey = Database :: get_course_table(TABLE_SURVEY);
 		$table_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$course_id = api_get_course_int_id();
 		
 		$sql = 'SELECT * FROM '.$table_survey.' WHERE c_id = '.$course_id.' AND session_id = 0 ';
 		$db_result = Database::query($sql);
-		while ($obj = Database::fetch_object($db_result))
-		{
+		while ($obj = Database::fetch_object($db_result)) {
 			$survey = new Survey($obj->survey_id, $obj->code,$obj->title,
 								$obj->subtitle, $obj->author, $obj->lang,
 								$obj->avail_from, $obj->avail_till, $obj->is_shared,
 								$obj->template, $obj->intro, $obj->surveythanks,
 								$obj->creation_date, $obj->invited, $obj->answered,
 								$obj->invite_mail, $obj->reminder_mail);
-			$sql = 'SELECT * FROM '.$table_question.' WHERE survey_id = '.$obj->survey_id;
+			$sql = 'SELECT * FROM '.$table_question.' WHERE c_id = '.$course_id.' AND survey_id = '.$obj->survey_id;
 			$db_result2 = Database::query($sql);
-			while ($obj2 = Database::fetch_object($db_result2))
-			{
+			while ($obj2 = Database::fetch_object($db_result2)){
 				$survey->add_question($obj2->question_id);
 			}
 			$this->course->add_resource($survey);
@@ -505,8 +538,7 @@ class CourseBuilder {
 	/**
 	 * Build the Survey Questions
 	 */
-	function build_survey_questions()
-	{
+	function build_survey_questions() {
 		$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_opt = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 		
@@ -514,25 +546,24 @@ class CourseBuilder {
 		
 		$sql = 'SELECT * FROM '.$table_que.' WHERE c_id = '.$course_id.'  ';
 		$db_result = Database::query($sql);
-		while ($obj = Database::fetch_object($db_result))
-		{
+		while ($obj = Database::fetch_object($db_result)){
 			$question = new SurveyQuestion($obj->question_id, $obj->survey_id,
 											$obj->survey_question, $obj->survey_question_comment,
 											$obj->type, $obj->display, $obj->sort,
 											$obj->shared_question_id, $obj->max_value);
-			$sql = 'SELECT * FROM '.$table_opt.' WHERE c_id = '.$course_id.' AND question_id = '."'".$obj->question_id."'";
+			$sql = 'SELECT * FROM '.$table_opt.' WHERE c_id = '.$course_id.' AND question_id = '.$obj->question_id;
 			$db_result2 = Database::query($sql);
-			while ($obj2 = Database::fetch_object($db_result2))
-			{
+			while ($obj2 = Database::fetch_object($db_result2)) {
 				$question->add_answer($obj2->option_text, $obj2->sort);
 			}
 			$this->course->add_resource($question);
 		}
 	}
+    
 	/**
 	 * Build the announcements
 	 */
-	function build_announcements() {
+	function build_announcements($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		$table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 		$course_id = api_get_course_int_id();
 		
@@ -558,8 +589,7 @@ class CourseBuilder {
 	/**
 	 * Build the events
 	 */
-	function build_events()
-	{
+	function build_events($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		$table = Database :: get_course_table(TABLE_AGENDA);
 		$course_id = api_get_course_int_id();
 		
@@ -587,7 +617,7 @@ class CourseBuilder {
 	/**
 	 * Build the course-descriptions
 	 */
-	function build_course_descriptions($session_id = 0,$course_code = '', $with_base_content = false) {
+	function build_course_descriptions($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		$course_info    = api_get_course_info($course_code);
 		$course_id 		= $course_info['real_id'];
 		
@@ -599,8 +629,7 @@ class CourseBuilder {
                 $session_condition = api_get_session_condition($session_id, true, true);                
             } else {
                 $session_condition = api_get_session_condition($session_id, true);
-            }  
-           
+            }           
 			$sql = 'SELECT * FROM '.$table. ' WHERE c_id = '.$course_id.' '.$session_condition;
 		} else {
 			$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
@@ -616,7 +645,7 @@ class CourseBuilder {
 	/**
 	 * Build the learnpaths
 	 */
-	function build_learnpaths($session_id = 0,$course_code = '', $with_base_content = false) {
+	function build_learnpaths($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		
 		$course_info 	= api_get_course_info($course_code);
 		$course_id 		= $course_info['real_id'];
@@ -634,7 +663,13 @@ class CourseBuilder {
 			$sql = 'SELECT * FROM '.$table_main.' WHERE c_id = '.$course_id.'  '.$session_condition;
 		} else {			
 			$sql = 'SELECT * FROM '.$table_main.' WHERE c_id = '.$course_id.' AND session_id = 0';
-		}		 
+		}	
+        
+        if (!empty($id_list)) {
+            array_map('intval', $id_list);
+            $sql .=" AND id IN (".implode(', ', $id_list).") ";
+        }
+        
 		$db_result = Database::query($sql);
 		if ($db_result)
 		while ($obj = Database::fetch_object($db_result)) {
@@ -717,7 +752,7 @@ class CourseBuilder {
 	/**
 	 * Build the glossarys
 	 */
-	function build_glossary($session_id = 0, $course_code = '', $with_base_content = false) {
+	function build_glossary($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		$course_info 	= api_get_course_info($course_code);
 		$table_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 		$course_id 		= $course_info['real_id'];		
@@ -780,7 +815,7 @@ class CourseBuilder {
 		return $list;
 	}
 
-	function build_wiki($session_id = 0, $course_code = 0, $with_base_content = false) {
+	function build_wiki($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		$course_info 	= api_get_course_info($course_code);
 		$tbl_wiki 		= Database::get_course_table(TABLE_WIKI);
 		
@@ -808,7 +843,7 @@ class CourseBuilder {
 	/**
 	* Build the Surveys
 	*/
-	function build_thematic() {
+	function build_thematic($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		$table_thematic			= Database :: get_course_table(TABLE_THEMATIC);
 		$table_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE);
 		$table_thematic_plan    = Database :: get_course_table(TABLE_THEMATIC_PLAN);
@@ -839,7 +874,7 @@ class CourseBuilder {
 	/**
 	* Build the Surveys
 	*/
-	function build_attendance() {
+	function build_attendance($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		$table_attendance			= Database :: get_course_table(TABLE_ATTENDANCE);
 		$table_attendance_calendar  = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		
@@ -858,6 +893,5 @@ class CourseBuilder {
 			}
 			$this->course->add_resource($obj);
 		}
-	}
-	
+	}	
 }

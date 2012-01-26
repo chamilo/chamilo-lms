@@ -24,7 +24,6 @@ require_once 'back_compat.inc.php';
 require_once 'scorm.lib.php';
 require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
-
 require_once 'learnpath_functions.inc.php';
 //include '../resourcelinker/resourcelinker.inc.php';
 require_once 'resourcelinker.inc.php';

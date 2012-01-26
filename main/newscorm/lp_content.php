@@ -40,13 +40,13 @@ foreach ($list as $toc) {
 
 if ($dokeos_chapter) {
     $src = 'blank.php';
-} else {
+} else {    
     switch ($lp_type) {
         case 1:
             $_SESSION['oLP']->stop_previous_item();
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {
-                $src = $_SESSION['oLP']->get_link('http',$lp_item_id);
+                $src = $_SESSION['oLP']->get_link('http', $lp_item_id);                
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
@@ -82,7 +82,7 @@ if ($debug > 0) { error_log('New lp - In lp_content.php - File url is '.$src, 0)
 $_SESSION['oLP']->set_previous_item($lp_item_id);
 
 if (isset($_SESSION['gradebook'])) {
-    $gradebook =	$_SESSION['gradebook'];
+    $gradebook = $_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
@@ -99,4 +99,5 @@ $save_setting = api_get_setting('show_navigation_menu');
 global $_setting;
 $_setting['show_navigation_menu'] = false;
 if ($debug > 0) { error_log('New LP - In lp_content.php - Loading '.$src, 0); }
+
 header("Location: ".urldecode($src));

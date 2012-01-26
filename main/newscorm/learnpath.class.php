@@ -8909,7 +8909,7 @@ EOD;
         //Setting everything to autolunch = 0
         $attributes['autolunch'] = 0;
         $where = array('session_id = ? AND c_id = ? '=> array(api_get_session_id(), $course_id));
-        Database::update($lp_table, $attributes,$where);
+        Database::update($lp_table, $attributes, $where);
         if ($status == 1) {
             //Setting my lp_id to autolunch = 1
             $attributes['autolunch'] = 1;
@@ -8932,18 +8932,44 @@ EOD;
     	$table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
     
     	// Get the max order of the items
-    	$sql_max_order = "SELECT max(display_order) AS display_order FROM $table_lp_item  WHERE c_id = ".$course_id." AND lp_id = '" . $this->lp_id . "'";
+    	$sql_max_order = "SELECT max(display_order) AS display_order FROM $table_lp_item  WHERE c_id = $course_id AND lp_id = '" . $this->lp_id . "'";
     	$rs_max_order = Database::query($sql_max_order);
     	$row_max_order = Database::fetch_object($rs_max_order);
     	$max_order = $row_max_order->display_order;
     	// Get the previous item ID
-    	$sql_max = "SELECT id as previous FROM $table_lp_item WHERE c_id = ".$course_id." AND lp_id = '" . $this->lp_id . "' AND display_order = '".$max_order."' ";
+    	$sql_max = "SELECT id as previous FROM $table_lp_item WHERE c_id = $course_id AND lp_id = '" . $this->lp_id . "' AND display_order = '".$max_order."' ";
     	$rs_max = Database::query($sql_max, __FILE__, __LINE__);
     	$row_max = Database::fetch_object($rs_max);
     
     	// Return the previous item ID
     	return $row_max->previous;
     }
+    
+    function copy() {
+        $main_path = api_get_path(SYS_CODE_PATH);
+        require_once $main_path.'coursecopy/classes/CourseBuilder.class.php';
+        require_once $main_path.'coursecopy/classes/CourseArchiver.class.php';
+        require_once $main_path.'coursecopy/classes/CourseRestorer.class.php';
+        require_once $main_path.'coursecopy/classes/CourseSelectForm.class.php';
+        
+        //Course builder
+        $cb = new CourseBuilder();
+        
+        //Setting tools that will be copied
+        $cb->set_tools_to_build(array('learnpaths'));
+        
+        //Setting elements that will be copied
+        $cb->set_tools_specific_id_list(array('learnpaths' => array($this->lp_id)));
+        
+        $course = $cb->build();
+        
+        //Course restorer
+        $course_restorer = new CourseRestorer($course);        
+        $course_restorer->set_add_text_in_items(true);
+        //$course_restorer->set_tool_copy_settings(array('learnpaths' => array('reset_dates')));        
+        $course_restorer->restore(api_get_course_id(), api_get_session_id(), false, false);        
+    }
+    
 }
 
 if (!function_exists('trim_value')) {

@@ -19,13 +19,12 @@
 $_SESSION['whereami'] = 'lp/view';
 $this_section = SECTION_COURSES;
 
-if ($lp_controller_touched != 1) {
+if ($lp_controller_touched != 1) {    
     header('location: lp_controller.php?action=view&item_id='.$_REQUEST['item_id']);
     exit;
 }
 
 /* Libraries */
-
 require_once 'back_compat.inc.php';
 require_once 'scorm.lib.php';
 require_once 'learnpath.class.php';
@@ -100,14 +99,14 @@ unset($_SESSION['questionList']);
 
 if (!isset($src)) {
     $src = '';
-    
+       
     switch($lp_type) {
         case 1:
             $_SESSION['oLP']->stop_previous_item();
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {         	
-                $src = $_SESSION['oLP']->get_link('http', $lp_item_id);                                
+                $src = $_SESSION['oLP']->get_link('http', $lp_item_id);                     
                 
                 //Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
                 $file_info = parse_url($src); 
@@ -371,11 +370,12 @@ if ($_SESSION['oLP']->mode == 'embedframe' ||$_SESSION['oLP']->get_hide_toc_fram
     <!-- right Zone -->
     <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
     <?php
+    
         // hub 26-05-2010 Fullscreen or not fullscreen
         if ($_SESSION['oLP']->mode == 'fullscreen') {
             echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:600px" ></iframe>';
-        } else {
-            echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>';
+        } else {            
+            echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" style="width:100%;height:600px"></iframe>';
         }
     ?>
     </div>

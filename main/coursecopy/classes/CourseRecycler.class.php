@@ -56,8 +56,8 @@ class CourseRecycler
             foreach ($resources as $id => $resource) {
                 $sql = "DELETE FROM ".$table_linked_resources." WHERE c_id = ".$this->course_id." AND  (source_type = '".$type."' AND source_id = '".$id."') OR (resource_type = '".$type."' AND resource_id = '".$id."')  ";
                 Database::query($sql);
-                if(is_numeric($id)) {
-                    $sql = "DELETE FROM ".$table_item_properties." WHERE c_id = ".$this->course_id." AND  tool ='".$resource->get_tool()."' AND ref=".$id;
+                if (is_numeric($id)) {
+                    $sql = "DELETE FROM ".$table_item_properties." WHERE c_id = ".$this->course_id." AND tool ='".$resource->get_tool()."' AND ref=".$id;
                     Database::query($sql);
                 } elseif ($type == RESOURCE_TOOL_INTRO) {
                     $sql = "DELETE FROM $table_tool_intro WHERE c_id = ".$this->course_id." AND  id='$id'";
@@ -70,16 +70,14 @@ class CourseRecycler
     /**
      * Delete documents
      */
-    function recycle_documents()
-    {
-        if ($this->course->has_resources(RESOURCE_DOCUMENT))
-        {
+    function recycle_documents() {
+        if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
             $table = Database :: get_course_table(TABLE_DOCUMENT);
             foreach ($this->course->resources[RESOURCE_DOCUMENT] as $id => $document) {            	
                 rmdirr($this->course->backup_path.'/'.$document->path);
             }
             $ids = implode(',', (array_keys($this->course->resources[RESOURCE_DOCUMENT])));
-            $sql = "DELETE FROM ".$table." WHERE id IN(".$ids.")";
+            $sql = "DELETE FROM ".$table." WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
             Database::query($sql);
         }
     }
@@ -91,8 +89,8 @@ class CourseRecycler
         if ($this->course->has_resources(RESOURCE_WIKI)) {
             $table_wiki 		= Database::get_course_table(TABLE_WIKI);
             $table_wiki_conf 	= Database::get_course_table(TABLE_WIKI_CONF);
-            $table_wiki_discuss = Database::get_course_table(TABLE_WIKI_DISCUSS);
-            $table_wiki_mailcue = Database::get_course_table(TABLE_WIKI_MAILCUE);
+            //$table_wiki_discuss = Database::get_course_table(TABLE_WIKI_DISCUSS);
+            //$table_wiki_mailcue = Database::get_course_table(TABLE_WIKI_MAILCUE);
 
             $pages = array();
             foreach ($this->course->resources[RESOURCE_WIKI] as $resource) {
@@ -101,9 +99,9 @@ class CourseRecycler
             $wiki_ids = implode(',', (array_keys($this->course->resources[RESOURCE_WIKI])));
             $page_ids = implode(',', $pages);
 
-            $sql = "DELETE FROM ".$table_wiki." WHERE id IN(".$wiki_ids.")";
+            $sql = "DELETE FROM ".$table_wiki." WHERE c_id = ".$this->course_id." AND id IN(".$wiki_ids.")";
             Database::query($sql);
-            $sql = "DELETE FROM ".$table_wiki_conf." WHERE page_id IN(".$page_ids.")";
+            $sql = "DELETE FROM ".$table_wiki_conf." WHERE c_id = ".$this->course_id." AND page_id IN(".$page_ids.")";
             Database::query($sql);
         }
     }
@@ -115,7 +113,7 @@ class CourseRecycler
         if ($this->course->has_resources(RESOURCE_GLOSSARY)) {
             $table_glossary	= Database::get_course_table(TABLE_GLOSSARY);
             $ids = implode(',', (array_keys($this->course->resources[RESOURCE_GLOSSARY])));
-            $sql = "DELETE FROM ".$table_glossary." WHERE glossary_id IN(".$ids.")";
+            $sql = "DELETE FROM ".$table_glossary." WHERE c_id = ".$this->course_id." AND glossary_id IN(".$ids.")";
             Database::query($sql);
         }
     }
@@ -131,13 +129,13 @@ class CourseRecycler
             Database::query($sql);
         }
     }
+    
     /**
      * Delete forums
      */
-    function recycle_forums()
-    {
+    function recycle_forums() {
         if ($this->course->has_resources(RESOURCE_FORUM)) {
-            $table_category = Database :: get_course_table(TABLE_FORUM_CATEGORY);
+            //$table_category = Database :: get_course_table(TABLE_FORUM_CATEGORY);
             $table_forum = Database :: get_course_table(TABLE_FORUM);
             $table_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
             $table_post = Database :: get_course_table(TABLE_FORUM_POST);
@@ -197,8 +195,7 @@ class CourseRecycler
      * Delete forum-categories
      * Deletes all forum-categories from current course without forums
      */
-    function recycle_forum_categories()
-    {
+    function recycle_forum_categories() {
         $table_forum = Database :: get_course_table(TABLE_FORUM);
         $table_forumcat = Database :: get_course_table(TABLE_FORUM_CATEGORY);
         $sql = "SELECT fc.cat_id FROM ".$table_forumcat." fc LEFT JOIN ".$table_forum." f ON fc.cat_id=f.forum_category 
@@ -213,8 +210,7 @@ class CourseRecycler
      * Delete link-categories
      * Deletes all empty link-categories (=without links) from current course
      */
-    function recycle_link_categories()
-    {
+    function recycle_link_categories() {
         $link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY);
         $link_table = Database :: get_course_table(TABLE_LINK);
         $sql = "SELECT lc.id FROM ".$link_cat_table." lc LEFT JOIN ".$link_table." l ON lc.id=l.category_id 
@@ -226,6 +222,7 @@ class CourseRecycler
             Database::query($sql);
         }
     }
+    
     /**
      * Delete events
      */
@@ -313,10 +310,8 @@ class CourseRecycler
     /**
      * Recycle surveys - removes everything
      */
-    function recycle_surveys()
-    {
-        if ($this->course->has_resources(RESOURCE_SURVEY))
-        {
+    function recycle_surveys() {
+        if ($this->course->has_resources(RESOURCE_SURVEY)) {
             $table_survey = Database :: get_course_table(TABLE_SURVEY);
             $table_survey_q = Database :: get_course_table(TABLE_SURVEY_QUESTION);
             $table_survey_q_o = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -338,8 +333,7 @@ class CourseRecycler
     /**
      * Recycle learnpaths
      */
-    function recycle_learnpaths()
-    {
+    function recycle_learnpaths() {
         if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
             $table_main = Database :: get_course_table(TABLE_LP_MAIN);
             $table_item = Database :: get_course_table(TABLE_LP_ITEM);
@@ -449,7 +443,7 @@ class CourseRecycler
                 if (is_numeric($last_id)) {
                     
                     foreach($obj->attendance_calendar as $attendance_calendar) {
-                        $cond = array('id = ?'=>$attendance_calendar['id']);
+                        $cond = array('id = ?'=>$attendance_calendar['id'], 'c_id' =>$this->course_id);
                         $my_id = Database::delete($table_attendance_calendar, $cond);
                     }
                     $cond = array('id = ?'=>$last_id);

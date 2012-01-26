@@ -216,8 +216,7 @@ class CourseRecycler
         $sql = "SELECT lc.id FROM ".$link_cat_table." lc LEFT JOIN ".$link_table." l ON lc.id=l.category_id 
         		WHERE l.id IS NULL";
         $res = Database::query($sql);
-        while ($obj = Database::fetch_object($res))
-        {
+        while ($obj = Database::fetch_object($res)) {
             $sql = "DELETE FROM ".$link_cat_table." WHERE c_id = ".$this->course_id." AND id = ".$obj->id;
             Database::query($sql);
         }
@@ -439,14 +438,13 @@ class CourseRecycler
            
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_ATTENDANCE] as $last_id => $obj) {
-                print_r($obj);
-                if (is_numeric($last_id)) {
-                    
+                //print_r($obj);
+                if (is_numeric($last_id)) {                    
                     foreach($obj->attendance_calendar as $attendance_calendar) {
-                        $cond = array('id = ?'=>$attendance_calendar['id'], 'c_id' =>$this->course_id);
-                        $my_id = Database::delete($table_attendance_calendar, $cond);
+                        $cond = array('id = ? AND c_id = ? '=>array($attendance_calendar['id'], $this->course_id));
+                        Database::delete($table_attendance_calendar, $cond);
                     }
-                    $cond = array('id = ?'=>$last_id);
+                    $cond = array('id = ? AND c_id = ?'=>array($last_id, $this->course_id));
                     Database::delete($table_attendance, $cond);
                     api_item_property_update($this->destination_course_info, TOOL_ATTENDANCE, $last_id,'AttendanceDeleted', api_get_user_id());
                 }

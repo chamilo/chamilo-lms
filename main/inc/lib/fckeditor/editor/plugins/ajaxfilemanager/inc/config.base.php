@@ -36,7 +36,7 @@ define('CONFIG_SYS_THUMBNAIL_VIEW_ENABLE', true);//REMOVE THE thumbnail view if 
 
 //User Permissions
 //Hack by Juan Carlos Raña Trabado
-if(empty($_course['path'])) {
+if(empty($_course['path']) || Security::remove_XSS($_GET['editor'])=="stand_alone") {
 	define('CONFIG_OPTIONS_DELETE', true);
 	define('CONFIG_OPTIONS_CUT', true);
 	define('CONFIG_OPTIONS_COPY', true);
@@ -78,7 +78,7 @@ these two paths accept relative path only, don't use absolute path
 
 // Integration for Chamilo
 
-if(!empty($_course['path'])) {
+if(!empty($_course['path']) && Security::remove_XSS($_GET['editor'])!="stand_alone") {
 	if(!empty($group_properties['directory'])) {
 		$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document'.$group_properties['directory'].'/';
 	} else {

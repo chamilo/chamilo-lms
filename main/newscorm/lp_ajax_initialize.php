@@ -75,7 +75,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
         $mylpi = & $mylp->items[$next_item];
     } else {
         if ($debug > 1) { error_log('In initialize_item - generating new item object '.$next_item, 0); }
-        $mylpi =& new learnpathItem($next_item, $user_id);
+        $mylpi = new learnpathItem($next_item, $user_id);
         $mylpi->set_lp_view($view_id);
     }
     /*

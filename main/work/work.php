@@ -58,6 +58,7 @@ require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 $course_id      = api_get_course_int_id();
 $course_info    = api_get_course_info();
 $user_id 	    = api_get_user_id();
+$id_session     = api_get_session_id();
 
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
@@ -94,7 +95,6 @@ $TSTDPUBASG			= Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMEN
 $table_course_user	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user			= Database :: get_main_table(TABLE_MAIN_USER);
 $table_session		= Database :: get_main_table(TABLE_MAIN_SESSION);
-$table_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 /*	Constants and variables */
@@ -127,38 +127,27 @@ $uploadvisibledisabled  = isset($_REQUEST['uploadvisibledisabled']) ? Database::
 
 // get data for publication assignment
 $has_expired = false;
-$has_ended = false;
+$has_ended   = false;
 
 //directories management
 $sys_course_path 	= api_get_path(SYS_COURSE_PATH);
 $course_dir 		= $sys_course_path . $_course['path'];
 $base_work_dir 		= $course_dir . '/work';
 
-$cur_dir_path = '';
-if (isset($curdirpath) && $curdirpath != '') {
-	//now using common security approach with security lib
-	$in_course = Security :: check_abs_path($base_work_dir.$curdirpath, $base_work_dir);	
-	if (!$in_course) {
-		$curdirpath = "/";
-	}	
-}
-if ($curdirpath == '.') {
-	$curdirpath = '/';
-}
-
 /*	Configuration settings */
 
-$link_target_parameter = ""; //or e.g. "target=\"_blank\"";
+api_protect_course_script(true);
+
+$link_target_parameter = ""; // e.g. "target=\"_blank\"";
 
 $display_list_users_without_publication = isset($_GET['list']) && Security::remove_XSS($_GET['list']) == 'without';
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
 
+//Download folder
 if ($action == 'downloadfolder') {
 	require 'downloadfolder.inc.php';
 }
-
-api_protect_course_script(true);
 
 /*	More init stuff */
 
@@ -212,16 +201,15 @@ if (!empty($group_id)) {
 	$url_dir = 'work.php?&id=' . $work_id;
 	$interbreadcrumb[] = array ('url' => $url_dir,'name' =>  $my_folder_data['title']);	
 
-	if ($display_upload_form) {
+	if ($action == 'upload_form') {
 		$interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('UploadADocument'));
 	}
-
+    
+    //???
 	if ($display_tool_options) {
-		$interbreadcrumb[] = array (
-			'url' => 'work.php',
-			'name' => get_lang('EditToolOptions'));
+		$interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('EditToolOptions'));
 	}
-
+    
 	if ($action == 'create_dir') {
 		$interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('CreateAssignment'));
 	}
@@ -238,10 +226,9 @@ if (!empty($group_id)) {
         $url_dir = 'work.php?id=' . $work_id;
 		$interbreadcrumb[] = array ('url' => $url_dir,'name' =>  $my_folder_data['title']);	
 		
-		if ($display_upload_form) {
+		if ($action == 'upload_form') {
 			$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('UploadADocument'));
 		}
-
 		if ($action == 'settings') {
 			$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditToolOptions'));
 		}
@@ -278,11 +265,13 @@ if (!in_array($action, array('send_mail','add', 'upload'))) {
     $token = Security::get_token();
 }
 
-if ($is_special) {
-	$homework = get_work_assignment_by_id($my_folder_data['id']);
-	$has_expired = $has_ended = false;
-	$has_expiry_date = false;
+$show_tool_options = $action == 'list' ? true : false;
 
+$display_upload_link = $action == 'upload_form' ? false : true;
+
+if ($is_special) {    
+	$homework = get_work_assignment_by_id($my_folder_data['id']);    
+	
 	if ($homework['expires_on'] != '0000-00-00 00:00:00' || $homework['ends_on'] != '0000-00-00 00:00:00') {
 		$time_now		= time();
 
@@ -290,10 +279,14 @@ if ($is_special) {
 			$time_expires 	= api_strtotime($homework['expires_on']);
 			$difference 	= $time_expires - $time_now;
 			if ($difference < 0) {
-				$has_expired = true;
-				$has_expiry_date = true;
+				$has_expired = true;				
 			}
 		}
+        
+        if (empty($homework['expires_on']) || $homework['expires_on'] == '0000-00-00 00:00:00') {
+			$has_expired = false;
+		}
+        
 		if (!empty($homework['ends_on']) && $homework['ends_on'] != '0000-00-00 00:00:00') {
 			$time_ends 		= api_strtotime($homework['ends_on']);
 			$difference2 	= $time_ends - $time_now;
@@ -301,35 +294,43 @@ if ($is_special) {
 				$has_ended = true;
 			}
 		}
-		if (empty($homework['expires_on']) || $homework['expires_on'] == '0000-00-00 00:00:00') {
-			$has_expiry_date = false;
-		}
+		
 		$ends_on 	= api_convert_and_format_date($homework['ends_on']);
 		$expires_on = api_convert_and_format_date($homework['expires_on']);
 
-		if ($has_ended) {
-			display_action_links($work_id, $curdirpath, $always_show_tool_options, $display_upload_form);
-			Display :: display_error_message(get_lang('EndDateAlreadyPassed').' '.$ends_on);
-		} elseif ($has_expired) {
-			display_action_links($work_id,$curdirpath, $always_show_tool_options, $display_upload_form);
-			Display :: display_warning_message(get_lang('ExpiryDateAlreadyPassed').' '.$expires_on);
-		} else {
-			display_action_links($work_id,$curdirpath, $always_show_tool_options, $display_upload_form);
-			if ($has_expiry_date) {
-				Display :: display_normal_message(get_lang('ExpiryDateToSendWorkIs').' '.$expires_on);
+		if ($has_ended) {                                  
+            if (!api_is_allowed_to_edit()) {                
+                $display_upload_link = false;
+            }
+			$message = Display::return_message(get_lang('EndDateAlreadyPassed').' '.$ends_on, 'error');
+		} elseif ($has_expired) {            
+            $display_upload_link = true;                       	
+			$message = Display::return_message(get_lang('ExpiryDateAlreadyPassed').' '.$expires_on, 'warning');
+		} else {	
+			if ($has_expired) {
+				$message = Display::return_message(get_lang('ExpiryDateToSendWorkIs').' '.$expires_on);
 			}
-		}
-	} else {
-		display_action_links($work_id,$curdirpath, $always_show_tool_options, $display_upload_form);
+		}        
 	}
-} else {
-	display_action_links($work_id, $curdirpath, $always_show_tool_options, $display_upload_form);
 }
+
+display_action_links($work_id, $curdirpath, $show_tool_options, $display_upload_link, $action);
+echo $message;
+
+//for teachers
 
 switch ($action) {
 	case 'mark_work':
+        if (!api_is_allowed_to_edit()) {
+            echo Display::return_message(get_lang('ActionNotAllowed'), 'error');
+            Display::display_footer();
+					
+        }
 	case 'upload_form': //can be add or edit work
+        $is_author = false;
+        
 		if (empty($item_id)) {
+            
 			$parent_data = get_work_data_by_id($work_id);
 			$parent_data['qualification'] = intval($parent_data['qualification']);
 			
@@ -345,10 +346,7 @@ switch ($action) {
 					exit;
 				}
 			}
-		}
-		
-		$is_author = false;
-		if ($item_id) {
+		} else {
 			//we found the current user is the author
 			$sql = "SELECT * FROM  $work_table WHERE c_id = $course_id AND id = $item_id";
 			$result = Database::query($sql);
@@ -457,13 +455,19 @@ switch ($action) {
 			$form->add_real_progress_bar('uploadWork', 'file');
 		}
 		$form->setDefaults($defaults);
-		//fixes bug when showing modification form
-		
-		if ($student_can_edit_in_session && (empty($item_id) || (!empty($item_id) && ($is_allowed_to_edit or $is_author)))) {
-			$form->display();
-		} else {
-		    Display::display_error_message(get_lang('ActionNotAllowed'));
-		}
+		//fixes bug when showing modification form		
+        if (!empty($work_id)) {
+            if ( $is_allowed_to_edit or $is_author) {
+                $form->display();
+            } elseif ($student_can_edit_in_session && $has_ended == false) {          
+                $form->display();
+            } else {
+                Display::display_error_message(get_lang('ActionNotAllowed'));
+            }
+        } else {
+            Display::display_error_message(get_lang('ActionNotAllowed'));
+        }
+        
 		break;		
 	case 'send_mail':        
 		if (Security::check_token('get')) {

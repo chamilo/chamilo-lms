@@ -53,7 +53,7 @@ echo '<div class="copyright">';
 		echo '<div align="right">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))).'</div>';
 	}
 	echo '<div align="right">'.get_lang('Platform').' <a href="', $_configuration['software_url'], '" target="_blank">', $_configuration['software_name'], ' ', $_configuration['system_version'], '</a>';
-	echo '&copy; ', date('Y');
+	echo ' &copy; ', date('Y');
 	echo '</div>';
 	
 echo '</div>'; //copyright div

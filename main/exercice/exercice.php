@@ -549,9 +549,9 @@ if (!empty($exercise_list)) {
                     $class_tip = 'link_tooltip';
                 }
                 
-                $url = '<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>'.$lp_blocked;
+                $url = '<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>';
                            
-                $item =  Display::tag('td', $url.' '.$session_img);  
+                $item =  Display::tag('td', $url.' '.$session_img.$lp_blocked);  
                 
 
                 //count number exercice - teacher

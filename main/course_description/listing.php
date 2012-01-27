@@ -44,21 +44,29 @@ if (api_is_allowed_to_edit(null,true)) {
 if ($history) {
 	echo '<div><table width="100%"><tr><td><h3>'.get_lang('ThematicAdvanceHistory').'</h3></td><td align="right"><a href="index.php?action=listing">'.Display::return_icon('info.png',get_lang('BackToCourseDesriptionList'),array('style'=>'vertical-align:middle;'),22).' '.get_lang('BackToCourseDesriptionList').'</a></td></tr></table></div>';
 }
+$user_info = api_get_user_info();
+
 if (isset($descriptions) && count($descriptions) > 0) {
 	foreach ($descriptions as $id => $description) {
 		echo '<div class="sectiontitle">';
 		
 		if (api_is_allowed_to_edit(null,true) && !$history) {
 			if (api_get_session_id() == $description['session_id']) {
+                $description['title'] = $description['title'].' '.api_get_session_image(api_get_session_id(), $user_info['status']);
+                
 				//delete
 				echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=delete&description_type='.$description['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
 				echo Display::return_icon('delete.png', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'),22);
 				echo '</a> ';
-			}			
-			//edit
-			echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=edit&description_type='.$description['description_type'].'">';
-			echo Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'),22);
-			echo '</a> ';	
+                
+                //edit
+                echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=edit&description_type='.$description['description_type'].'">';
+                echo Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'),22);                	
+                echo '</a> ';
+			} else {                
+                echo Display::return_icon('edit_na.png', get_lang('EditionNotAvailableFromSession'), array('style' => 'vertical-align:middle;float:right;'),22);
+                
+            }
 		}
 		
 		echo $description['title'];

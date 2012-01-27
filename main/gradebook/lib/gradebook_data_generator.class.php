@@ -164,7 +164,7 @@ class GradebookDataGenerator
 		} else {
 		    $date = $item1->get_date();
             if (!empty($date)) {
-			 $timestamp1 = api_strtotime($date);
+			 $timestamp1 = api_strtotime($date, 'UTC');
             } else {
                 $timestamp1 = null;
             }
@@ -173,7 +173,7 @@ class GradebookDataGenerator
 		if(is_int($item2->get_date())) {
 			$timestamp2 = $item2->get_date();
 		} else {
-			$timestamp2 = api_strtotime($item2->get_date());
+			$timestamp2 = api_strtotime($item2->get_date(), 'UTC');
 		}
 		
 		if ($timestamp1 == $timestamp2) {

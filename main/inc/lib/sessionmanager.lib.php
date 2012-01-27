@@ -220,7 +220,7 @@ class SessionManager {
 		}        
 
 		$today = api_get_utc_datetime();
-		$today = api_strtotime($today);
+		$today = api_strtotime($today, 'UTC');
 		$today = date('Y-m-d', $today);
 
 		$select = "SELECT * FROM (SELECT 

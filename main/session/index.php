@@ -185,7 +185,7 @@ foreach($final_array as $session_data) {
                     } else {
                         //We check the date validation of the exercise if the user can make it
                         if ($exercise_info->start_time != '0000-00-00 00:00:00') {
-                            $allowed_time = api_strtotime($exercise_info->start_time);                                     
+                            $allowed_time = api_strtotime($exercise_info->start_time, 'UTC');                                     
                             if ($now < $allowed_time) {
                                   continue;
                             }

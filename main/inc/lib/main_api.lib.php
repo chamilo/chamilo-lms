@@ -1735,7 +1735,7 @@ function api_get_session_visibility($session_id) {
                 //If datestart is set
                 if (!empty($row['date_start']) && $row['date_start'] != '0000-00-00') {
                     $row['date_start'] = $row['date_start'].' 00:00:00';   
-                    if ($time > api_strtotime($row['date_start'])) {
+                    if ($time > api_strtotime($row['date_start'], 'UTC')) {
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
@@ -1749,7 +1749,7 @@ function api_get_session_visibility($session_id) {
                     if ($visibility == SESSION_AVAILABLE) {
                         $visibility = $row['visibility'];
                         /*
-                        if ($time < api_strtotime($row['date_end'])) {
+                        if ($time < api_strtotime($row['date_end'], 'UTC')) {
                             $visibility = $row['visibility'];
                         } else {
                             $visibility = $row['visibility'];

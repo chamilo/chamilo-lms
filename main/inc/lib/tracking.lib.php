@@ -2287,7 +2287,7 @@ class Tracking {
 									}
 									//$user_results[] = 100;
 									$user_results[] = $score;
-									$time = api_strtotime($exercise_data['start_time']) ? api_strtotime($exercise_data['start_time']) : 0;
+									$time = api_strtotime($exercise_data['start_time']) ? api_strtotime($exercise_data['start_time'], 'UTC') : 0;
 									$all_exercise_start_time[] = $time ;
 									$all_user_results[] = $score;
 									if (count($exercise_list)<=10) {

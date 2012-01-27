@@ -26,7 +26,7 @@
 $language_file = 'forum';
 
 // Including the global initialization file.
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
     $(document).ready(function(){ $(\'.hide-me\').slideUp() });
@@ -54,7 +54,7 @@ api_protect_course_script(true);
 // Including additional library scripts.
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-$nameTools=get_lang('ToolForum');
+$nameTools = get_lang('ToolForum');
 
 // Including necessary files
 require 'forumconfig.inc.php';
@@ -203,7 +203,7 @@ if ($action_forums != 'add') {
     // Step 3: The interim headers (for the forum).
     echo '<tr class="forum_header">';
     echo '<td colspan="2">'.get_lang('Forum').'</td>';
-    echo '<td>'.get_lang('Topics').'</td>';
+    echo '<td>'.get_lang('Threads').'</td>';
     echo '<td>'.get_lang('Posts').'</td>';
     echo '<td>'.get_lang('LastPosts').'</td>';
     echo '<td>'.get_lang('Actions').'</td>';
@@ -302,6 +302,7 @@ if ($action_forums != 'add') {
                 //$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
                 // the number of topics and posts
                 $my_number_threads = isset($forum['number_of_threads']) ? $forum['number_of_threads'] : '';
+                
                 $my_number_posts = isset($forum['number_of_posts']) ? $forum['number_of_posts'] : '';
                 echo '<td>'.$my_number_threads.'</td>';
                 echo '<td>'.$my_number_posts.'</td>';

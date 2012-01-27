@@ -1200,9 +1200,8 @@ function get_forums($id='', $course_code = '') {
     $condition_session = api_get_session_condition($session_id);
     $course_id = $course_info['real_id'];
     
-    $condition_course = " AND forum.c_id = $course_id";
-
     $forum_list = array();
+    
     if ($id == '') {
         // Student 
         // Select all the forum information of all forums (that are visible to students).
@@ -1210,14 +1209,14 @@ function get_forums($id='', $course_code = '') {
                         WHERE forum.forum_id=item_properties.ref
                         AND item_properties.visibility=1
                         AND item_properties.tool='".TOOL_FORUM."'
-                        $condition_session AND forum.c_id = $course_id
+                        $condition_session AND forum.c_id = $course_id AND item_properties.c_id = $course_id
                         ORDER BY forum.forum_order ASC";
 
         // Select the number of threads of the forums (only the threads that are visible).
         $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id FROM $table_threads threads, ".$table_item_property." item_properties
                         WHERE threads.thread_id=item_properties.ref
                         AND item_properties.visibility=1
-                        AND item_properties.tool='".TOOL_FORUM_THREAD."' AND threads.c_id = $course_id
+                        AND item_properties.tool='".TOOL_FORUM_THREAD."' AND threads.c_id = $course_id AND item_properties.c_id = $course_id
                         GROUP BY threads.forum_id";
 
         // Select the number of posts of the forum (post that are visible and that are in a thread that is visible).
@@ -1226,7 +1225,7 @@ function get_forums($id='', $course_code = '') {
                         AND posts.thread_id=threads.thread_id
                         AND threads.thread_id=item_properties.ref
                         AND item_properties.visibility=1
-                        AND item_properties.tool='".TOOL_FORUM_THREAD."' AND posts.c_id = $course_id
+                        AND item_properties.tool='".TOOL_FORUM_THREAD."' AND threads.c_id = $course_id AND posts.c_id = $course_id AND item_properties.c_id = $course_id
                         GROUP BY threads.forum_id";
 
         //-------------- Course Admin  -----------------//
@@ -1236,14 +1235,14 @@ function get_forums($id='', $course_code = '') {
                             WHERE forum.forum_id=item_properties.ref
                             AND item_properties.visibility<>2
                             AND item_properties.tool='".TOOL_FORUM."'
-                            $condition_session AND forum.c_id = $course_id
+                            $condition_session AND forum.c_id = $course_id AND item_properties.c_id = $course_id
                             ORDER BY forum_order ASC";
             //echo $sql.'<hr />';
             // Select the number of threads of the forums (only the threads that are not deleted).
             $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id FROM $table_threads threads, ".$table_item_property." item_properties
                             WHERE threads.thread_id=item_properties.ref
                             AND item_properties.visibility<>2
-                            AND item_properties.tool='".TOOL_FORUM_THREAD."' AND threads.c_id = $course_id
+                            AND item_properties.tool='".TOOL_FORUM_THREAD."' AND threads.c_id = $course_id AND item_properties.c_id = $course_id
                             GROUP BY threads.forum_id";
             //echo $sql2.'<hr />';
             // Select the number of posts of the forum.
@@ -1251,47 +1250,47 @@ function get_forums($id='', $course_code = '') {
                             WHERE posts.thread_id=threads.thread_id
                             AND threads.thread_id=item_properties.ref
                             AND item_properties.visibility=1
-                            AND item_properties.tool='".TOOL_FORUM_THREAD."' AND posts.c_id = $course_id
+                            AND item_properties.tool='".TOOL_FORUM_THREAD."' AND posts.c_id = $course_id AND threads.c_id = $course_id AND item_properties.c_id = $course_id
                             GROUP BY threads.forum_id";
             //echo $sql3.'<hr />';
         }
+    } else {
+        // GETTING ONE SPECIFIC FORUM 
+    
+        // We could do the splitup into student and course admin also but we want to have as much as information about a certain forum as possible
+        // so we do not take too much information into account. This function (or this section of the function) is namely used to fill the forms
+        // when editing a forum (and for the moment it is the only place where we use this part of the function)
+        // 
+        // Select all the forum information of the given forum (that is not deleted).
+        $sql = "SELECT * FROM $table_forums forum , ".$table_item_property." item_properties
+                            WHERE forum.forum_id=item_properties.ref
+                            AND forum_id='".Database::escape_string($id)."'
+                            AND item_properties.visibility<>2
+                            AND item_properties.tool='".TOOL_FORUM."'
+                            $condition_session  AND forum.c_id = $course_id AND item_properties.c_id = $course_id
+                            ORDER BY forum_order ASC";
+
+        // Select the number of threads of the forum.
+        $sql2 = "SELECT count(*) AS number_of_threads, forum_id FROM $table_threads
+                    WHERE forum_id=".Database::escape_string($id)." AND c_id = $course_id
+                    GROUP BY forum_id";
+
+        // Select the number of posts of the forum.
+        $sql3 = "SELECT count(*) AS number_of_posts, forum_id FROM $table_posts
+                            WHERE forum_id=".Database::escape_string($id)."  AND c_id = $course_id
+                            GROUP BY forum_id";
+
+        // Select the last post and the poster (note: this is probably no longer needed).
+        $sql4 = "SELECT  post.post_id, post.forum_id, post.poster_id, post.poster_name, post.post_date, users.lastname, users.firstname
+                            FROM $table_posts post, $table_users users
+                            WHERE forum_id=".Database::escape_string($id)."
+                            AND post.poster_id=users.user_id  AND post.c_id = $course_id 
+                            GROUP BY post.forum_id
+                            ORDER BY post.post_id ASC";
     }
-    
-    // GETTING ONE SPECIFIC FORUM 
-    
-    // We could do the splitup into student and course admin also but we want to have as much as information about a certain forum as possible
-    // so we do not take too much information into account. This function (or this section of the function) is namely used to fill the forms
-    // when editing a forum (and for the moment it is the only place where we use this part of the function)
-        else {
-            // Select all the forum information of the given forum (that is not deleted).
-            $sql = "SELECT * FROM $table_forums forum , ".$table_item_property." item_properties
-                                WHERE forum.forum_id=item_properties.ref
-                                AND forum_id='".Database::escape_string($id)."'
-                                AND item_properties.visibility<>2
-                                AND item_properties.tool='".TOOL_FORUM."'
-                                $condition_session  AND forum.c_id = $course_id
-                                ORDER BY forum_order ASC";
-
-            // Select the number of threads of the forum.
-            $sql2 = "SELECT count(*) AS number_of_threads, forum_id FROM $table_threads
-						WHERE forum_id=".Database::escape_string($id)." AND c_id = $course_id
-                    	GROUP BY forum_id";
-
-            // Select the number of posts of the forum.
-            $sql3 = "SELECT count(*) AS number_of_posts, forum_id FROM $table_posts
-                                WHERE forum_id=".Database::escape_string($id)."  AND c_id = $course_id
-                                GROUP BY forum_id";
-
-            // Select the last post and the poster (note: this is probably no longer needed).
-            $sql4 = "SELECT  post.post_id, post.forum_id, post.poster_id, post.poster_name, post.post_date, users.lastname, users.firstname
-                                FROM $table_posts post, $table_users users
-                                WHERE forum_id=".Database::escape_string($id)."
-                                AND post.poster_id=users.user_id  AND post.c_id = $course_id
-                                GROUP BY post.forum_id
-                                ORDER BY post.post_id ASC";
-        }
 
     // Handling all the forum information.
+    
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
         if ($id == '') {

@@ -95,4 +95,3 @@ class SurveyQuestion extends Resource
 		echo $this->survey_question;
 	}
 }
-?>

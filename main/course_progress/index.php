@@ -18,8 +18,6 @@ require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'thematic_controller.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 //require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 // current section
@@ -76,7 +74,6 @@ if (!empty($thematic_id)) {
 
 // get default thematic plan title
 $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
-
 
 $htmlHeadXtra[] = api_get_jquery_ui_js();
 

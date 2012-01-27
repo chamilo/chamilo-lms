@@ -268,15 +268,14 @@ if (!in_array($action, array('send_mail','add', 'upload'))) {
 $show_tool_options = $action == 'list' ? true : false;
 
 $display_upload_link = $action == 'upload_form' ? false : true;
-
 if ($is_special) {    
 	$homework = get_work_assignment_by_id($my_folder_data['id']);    
 	
 	if ($homework['expires_on'] != '0000-00-00 00:00:00' || $homework['ends_on'] != '0000-00-00 00:00:00') {
 		$time_now		= time();
 
-		if (!empty($homework['expires_on']) && $homework['expires_on'] != '0000-00-00 00:00:00') {
-			$time_expires 	= api_strtotime($homework['expires_on']);
+		if (!empty($homework['expires_on']) && $homework['expires_on'] != '0000-00-00 00:00:00') {            
+			$time_expires 	= api_strtotime($homework['expires_on'], 'UTC');
 			$difference 	= $time_expires - $time_now;
 			if ($difference < 0) {
 				$has_expired = true;				
@@ -288,7 +287,7 @@ if ($is_special) {
 		}
         
 		if (!empty($homework['ends_on']) && $homework['ends_on'] != '0000-00-00 00:00:00') {
-			$time_ends 		= api_strtotime($homework['ends_on']);
+			$time_ends 		= api_strtotime($homework['ends_on'], 'UTC');
 			$difference2 	= $time_ends - $time_now;
 			if ($difference2 < 0) {
 				$has_ended = true;
@@ -298,10 +297,11 @@ if ($is_special) {
 		$ends_on 	= api_convert_and_format_date($homework['ends_on']);
 		$expires_on = api_convert_and_format_date($homework['expires_on']);
 
-		if ($has_ended) {                                  
-            if (!api_is_allowed_to_edit()) {                
+		if ($has_ended) {
+            
+            //if (!api_is_allowed_to_edit()) {                
                 $display_upload_link = false;
-            }
+            //}
 			$message = Display::return_message(get_lang('EndDateAlreadyPassed').' '.$ends_on, 'error');
 		} elseif ($has_expired) {            
             $display_upload_link = true;                       	

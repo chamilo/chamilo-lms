@@ -862,21 +862,23 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					$class = '';
 				}
 
-				$qualification_string = '';
-				$add_string = '';
-
+				$qualification_string = '';                
 				if ($qualification_exists) {
 					if ($work->qualification == '') {
 						$qualification_string = '<b style="color:orange"> - </b>';
 					} else {
 						$qualification_string = '<b style="color:blue">'.$work->qualification.'</b>';
 					}
-						
-					$time_expires 	= api_strtotime($my_assignment['expires_on']);
-					if (!empty($my_assignment['expires_on']) && $my_assignment['expires_on'] != '0000-00-00 00:00:00' && $time_expires < api_strtotime($work->sent_date)) {
-						$add_string = ' <b style="color:red">'.get_lang('Expired').'</b>';
-					}
-				}
+                }
+                
+                $add_string = '';		
+                $time_expires = api_strtotime($my_assignment['expires_on'], 'UTC');
+                if (!empty($my_assignment['expires_on']) && $my_assignment['expires_on'] != '0000-00-00 00:00:00' && $time_expires < api_strtotime($work->sent_date, 'UTC')) {
+                    $add_string = ' <b style="color:red">'.get_lang('Expired').'</b>';
+                }
+                
+//				}
+                
 				$row[] = '<a href="download.php?id='.$work->id.'">'.build_document_icon_tag('file', substr(basename($work->url), 13)).'</a>';
 				if ($work->contains_file) {
 					$row[] = '<a href="download.php?id='.$work->id.'"'.$class.'>'.Display::return_icon('save.png', get_lang('Save'),array('style' => 'float:right;'), 22).' '.$work->title.'</a><br />'.$work->description;

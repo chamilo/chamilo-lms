@@ -142,14 +142,27 @@ if (api_is_western_name_order()) {
     $order = array('firstname');	
 }
 
-if (!empty($first_letter_user)) {    
-    $user_list = UserManager::get_user_list_like(array('lastname' => $first_letter_user), $order, true);
-} else {
-    $user_list = UserManager::get_user_list(array(),$order);
+$elements_not_in = $elements_in = array();
+$complete_user_list = UserManager::get_user_list(array(), $order);
+if (!empty($complete_user_list)) {
+    foreach($complete_user_list as $item) {
+        if ($use_extra_fields) {
+            if (!in_array($item['user_id'], $final_result)) {
+                continue;
+            }
+        }
+        if ($item['status'] == 6 ) continue; //avoid anonymous users
+        
+        if (in_array($item['user_id'], $list_in)) {       
+            $person_name = api_get_person_name($item['firstname'], $item['lastname']).' ('.$item['username'].')';
+            $elements_in[$item['user_id']] = $person_name;             
+        }        
+    }
 }
 
-//api_display_tool_title($tool_name.' ('.$session_info['name'].')');
-$elements_not_in = $elements_in = array();
+//if (!empty($first_letter_user)) {    
+    $user_list = UserManager::get_user_list_like(array('lastname' => $first_letter_user), $order, true);
+//}
 
 if (!empty($user_list)) {
     foreach($user_list as $item) {
@@ -159,9 +172,9 @@ if (!empty($user_list)) {
             }
         }
         if ($item['status'] == 6 ) continue; //avoid anonymous users
-        $person_name = api_get_person_name($item['firstname'], $item['lastname']);        
+        $person_name = api_get_person_name($item['firstname'], $item['lastname']).' ('.$item['username'].')';
         if (in_array($item['user_id'], $list_in)) {                        
-            $elements_in[$item['user_id']] = $person_name;             
+            //$elements_in[$item['user_id']] = $person_name;             
         } else {
             $elements_not_in[$item['user_id']] = $person_name;
         }

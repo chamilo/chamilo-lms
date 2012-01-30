@@ -1342,16 +1342,11 @@ class CourseRestorer
 					Database::query($sql);
 					$new_id = Database::insert_id();
 					$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
-					foreach ($survey->question_ids as $index => $question_id)
-					{
+					foreach ($survey->question_ids as $index => $question_id) {
 						$qid = $this->restore_survey_question($question_id, $new_id);
-						$sql = "UPDATE ".$table_que." " .
-								"SET survey_id = ".$new_id." WHERE " .
-								"question_id = ".$qid."";
+						$sql = "UPDATE $table_que SET survey_id = $new_id WHERE c_id = ".$this->destination_course_id." AND question_id = $qid";
 						Database::query($sql);
-						$sql = "UPDATE ".$table_ans." ".
-								"SET survey_id = ".$new_id." WHERE " .
-								"question_id = ".$qid."";
+						$sql = "UPDATE $table_ans SET survey_id = $new_id WHERE c_id = ".$this->destination_course_id." AND question_id = $qid";
 						Database::query($sql);
 					}
 				}
@@ -1363,8 +1358,7 @@ class CourseRestorer
 	/**
 	 * Check availability of a survey code
 	 */
-	function is_survey_code_available($survey_code)
-	{
+	function is_survey_code_available($survey_code)	{
 		$table_sur = Database :: get_course_table(TABLE_SURVEY);
 		$sql = "SELECT * FROM $table_sur WHERE c_id = ".$this->destination_course_id." AND code='".self::DBUTF8escapestring($survey_code)."'";
 		$result = Database::query($sql);
@@ -1375,8 +1369,7 @@ class CourseRestorer
 	/**
 	 * Restore survey-questions
 	 */
-	function restore_survey_question($id, $survey_id)
-	{
+	function restore_survey_question($id, $survey_id) {
 		$resources = $this->course->resources;
 		$question = $resources[RESOURCE_SURVEYQUESTION][$id];
 
@@ -1738,11 +1731,6 @@ class CourseRestorer
 		$destination='../../courses/'.$this->course->destination_path.'/work/';		
 		$origin='../../courses/'.$this->course->info['path'].'/work/';
 		self::allow_create_all_directory($origin,$destination,false);
-
-	
-	
-	
-
 	}
 
 /**
@@ -1888,7 +1876,7 @@ class CourseRestorer
 				$last_id = Database::insert($table_thematic, $thematic->params, false);
 				
 				if (is_numeric($last_id)) {
-					api_item_property_update($this->destination_course_info, 'thematic', $last_id,"ThematicAdded", api_get_user_id());
+					api_item_property_update($this->destination_course_info, 'thematic', $last_id, "ThematicAdded", api_get_user_id());
 					
 					foreach($thematic->thematic_advance_list as $thematic_advance) {						
 						unset($thematic_advance['id']);						

@@ -3505,7 +3505,7 @@ class CourseManager {
      * @param id    url id
      * 
      **/    
-    public function update_course_ranking($course_id = null, $session_id = null, $url_id = null, $points_to_add = null, $add_access = true, $add_user = true) {        
+    public static function update_course_ranking($course_id = null, $session_id = null, $url_id = null, $points_to_add = null, $add_access = true, $add_user = true) {        
         //Course catalog stats modifications see #4191        
         $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
                 

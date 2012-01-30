@@ -847,11 +847,17 @@ class CourseBuilder {
 		$table_thematic			= Database :: get_course_table(TABLE_THEMATIC);
 		$table_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE);
 		$table_thematic_plan    = Database :: get_course_table(TABLE_THEMATIC_PLAN);
+        
+        $session_id = intval($session_id);
+        if ($with_base_content) {
+            $session_condition = api_get_session_condition($session_id, true, true);                
+        } else {
+            $session_condition = api_get_session_condition($session_id, true);
+        }
 		
 		$course_id = api_get_course_int_id();
 		
-		
-		$sql = 'SELECT * FROM '.$table_thematic.' WHERE c_id = '.$course_id.' AND session_id = 0 ';
+		$sql = "SELECT * FROM $table_thematic WHERE c_id = $course_id $session_condition ";
 		$db_result = Database::query($sql);
 		while ($row = Database::fetch_array($db_result,'ASSOC')) {
 			$thematic = new Thematic($row);
@@ -860,8 +866,24 @@ class CourseBuilder {
 			$result = Database::query($sql);
 			while ($sub_row = Database::fetch_array($result,'ASSOC')) {				
 				$thematic->add_thematic_advance($sub_row);
-			}			
-			$sql = 'SELECT * FROM '.$table_thematic_plan.' WHERE c_id = '.$course_id.' AND thematic_id = '.$row['id'];
+			}
+            
+            $items  = api_get_item_property_by_tool('thematic_plan', api_get_course_id(), $session_id);		
+            //$items_from_session = api_get_item_property_by_tool('thematic_plan', api_get_course_id(), api_get_session_id());
+            
+            $thematic_plan_id_list = array();
+            if (!empty($items)) {
+                foreach($items as $item) {				
+                    $thematic_plan_id_list[] = $item['ref'];
+                    //$thematic_plan_complete_list[$item['ref']] = $item;
+                }
+            }
+            //$sql = 'SELECT * FROM '.$table_thematic_plan.' WHERE c_id = '.$course_id.' AND thematic_id = '.$row['id'];
+            
+            $sql = "SELECT tp.*
+                FROM $table_thematic_plan tp INNER JOIN $table_thematic t ON (t.id=tp.thematic_id) 			        
+                WHERE  t.c_id = $course_id AND tp.c_id = $course_id  AND thematic_id = {$row['id']}  AND tp.id IN (".implode(', ', $thematic_plan_id_list).") ";
+
 				
 			$result = Database::query($sql);
 			while ($sub_row = Database::fetch_array($result,'ASSOC')) {

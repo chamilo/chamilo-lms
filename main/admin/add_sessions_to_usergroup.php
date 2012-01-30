@@ -14,7 +14,6 @@ $cidReset=true;
 require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 $xajax = new xajax();
 

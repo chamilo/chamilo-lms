@@ -5,16 +5,15 @@
 */
 
 // name of the language file that needs to be included
-$language_file=array('admin','registration');
+$language_file = array('admin','registration');
 
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 // including some necessary files
 require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -74,7 +73,6 @@ function validate_filter() {
 
 $form_sent  = 0;
 $errorMsg   = '';
-$sessions   = array();
 
 $extra_field_list= UserManager::get_extra_fields();
 $new_field_list = array();
@@ -110,8 +108,7 @@ if ($_POST['form_sent']) {
 //Filter by Extra Fields
 $use_extra_fields = false;
 if (is_array($extra_field_list)) {
-    if (is_array($new_field_list) && count($new_field_list)>0 ) {
-        $result_list=array();
+    if (is_array($new_field_list) && count($new_field_list)>0 ) {        
         foreach ($new_field_list as $new_field) {
             $varname = 'field_'.$new_field['variable'];
             if (Usermanager::is_extra_field_available($new_field['variable'])) {
@@ -146,9 +143,9 @@ if (api_is_western_name_order()) {
 }
 
 if (!empty($first_letter_user)) {    
-    $user_list = UserManager::get_user_list_like(array('firstname'=>$first_letter_user), $order);
+    $user_list = UserManager::get_user_list_like(array('lastname' => $first_letter_user), $order, true);
 } else {
-    $user_list  = UserManager::get_user_list(array(),$order);
+    $user_list = UserManager::get_user_list(array(),$order);
 }
 
 //api_display_tool_title($tool_name.' ('.$session_info['name'].')');
@@ -235,7 +232,7 @@ if(!empty($errorMsg)) {
 <?php if ($add_type=='multiple') { ?>
 <tr>
 <td align="center">
-<?php echo get_lang('FirstLetterSessions'); ?> :
+<?php echo get_lang('FirstLetterUser'); ?> :
      <select name="firstLetterUser" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
       <option value = "%">--</option>
       <?php

@@ -650,7 +650,7 @@ class UserManager {
     * @return array An array with all users of the platform.
     * @todo optional course code parameter, optional sorting parameters...
     */
-    public static function get_user_list_like($conditions = array(), $order_by = array()) {
+    public static function get_user_list_like($conditions = array(), $order_by = array(), $simple_like = false) {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $return_array = array();
         $sql_query = "SELECT * FROM $user_table";
@@ -659,7 +659,11 @@ class UserManager {
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
-                $sql_query .= $field.' LIKE \'%'.$value.'%\'';
+                if ($simple_like) {
+                    $sql_query .= $field." LIKE '$value%'";
+                } else {
+                    $sql_query .= $field.' LIKE \'%'.$value.'%\'';
+                }
             }
         }
         if (count($order_by) > 0) {

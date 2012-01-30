@@ -68,6 +68,21 @@ function validate_filter() {
         document.formulaire.form_sent.value=0;
         document.formulaire.submit();
 }
+
+function checked_in_no_group(checked) {    
+    $("#first_letter_user")
+    .find("option")
+    .attr("selected", false);    
+        document.formulaire.form_sent.value="2"; 
+    document.formulaire.submit();
+}
+
+function change_select(val) {
+    $("#user_with_any_group_id").attr("checked", false);
+    document.formulaire.form_sent.value="2"; 
+    document.formulaire.submit();
+}
+
 </script>';
 
 
@@ -88,6 +103,7 @@ if (is_array($extra_field_list)) {
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
 $first_letter_user = '';
+
 if ($_POST['form_sent']) {
     $form_sent              = $_POST['form_sent'];    
     $elements_posted        = $_POST['elements_in_name'];
@@ -137,6 +153,8 @@ if ($use_extra_fields) {
 $data       = $usergroup->get($id);
 $list_in    = $usergroup->get_users_by_usergroup($id);
 
+$list_all    = $usergroup->get_users_by_usergroup();
+
 $order = array('lastname');
 if (api_is_western_name_order()) {
     $order = array('firstname');	
@@ -144,6 +162,7 @@ if (api_is_western_name_order()) {
 
 $elements_not_in = $elements_in = array();
 $complete_user_list = UserManager::get_user_list(array(), $order);
+
 if (!empty($complete_user_list)) {
     foreach($complete_user_list as $item) {
         if ($use_extra_fields) {
@@ -159,10 +178,21 @@ if (!empty($complete_user_list)) {
         }        
     }
 }
+  
+$user_with_any_group = isset($_REQUEST['user_with_any_group']) && !empty($_REQUEST['user_with_any_group']) ? true : false;
 
-//if (!empty($first_letter_user)) {    
+if ($user_with_any_group) {
     $user_list = UserManager::get_user_list_like(array('lastname' => $first_letter_user), $order, true);
-//}
+    $new_user_list = array();
+    foreach($user_list as $item) {
+        if (!in_array($item['user_id'], $list_all)) {
+            $new_user_list[] = $item;
+        }        
+    }
+    $user_list = $new_user_list;        
+} else {    
+    $user_list = UserManager::get_user_list_like(array('lastname' => $first_letter_user), $order, true);
+}
 
 if (!empty($user_list)) {
     foreach($user_list as $item) {
@@ -246,7 +276,7 @@ if(!empty($errorMsg)) {
 <tr>
 <td align="center">
 <?php echo get_lang('FirstLetterUser'); ?> :
-     <select name="firstLetterUser" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
+     <select id="first_letter_user" name="firstLetterUser" onchange="change_select();">
       <option value = "%">--</option>
       <?php
         echo Display :: get_alphabet_options($first_letter_user);
@@ -260,6 +290,10 @@ if(!empty($errorMsg)) {
   <td align="center">
   <div id="content_source">      
         <?php echo Display::select('elements_not_in_name', $elements_not_in, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
+      <br />
+        <input type="checkbox" <?php if ($user_with_any_group) echo 'checked="checked"';?> onchange="checked_in_no_group(this.checked);" name="user_with_any_group" id="user_with_any_group_id"> 
+        <label for="user_with_any_group_id"><?php echo get_lang('UsersRegisteredInNoGroup'); ?></label>
+        
   </div>
   </td>
   <td width="10%" valign="middle" align="center">

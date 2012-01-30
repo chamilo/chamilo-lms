@@ -6,8 +6,9 @@
 
 
 // name of the language file that needs to be included
-$language_file='admin';
-$cidReset=true;
+$language_file = 'admin';
+$cidReset = true;
+
 require_once '../inc/global.inc.php';
 
 // setting the section (for the tabs)
@@ -21,19 +22,24 @@ $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-$id_session=intval($_GET['id_session']);
-$page=intval($_GET['page']);
-$action=$_REQUEST['action'];
-$sort=in_array($_GET['sort'],array('title','nbr_users'))?$_GET['sort']:'title';
+$id_session = intval($_GET['id_session']);
 
-$result=Database::query("SELECT name FROM $tbl_session WHERE id='$id_session'");
-
-if(!list($session_name)=Database::fetch_row($result)) {
-	header('Location: session_list.php');
-	exit();
+if (empty($id_session)) {
+    api_not_allowed();
 }
 
-if($action == 'delete') {
+$page   = intval($_GET['page']);
+$action = $_REQUEST['action'];
+$sort   = in_array($_GET['sort'],array('title','nbr_users'))?$_GET['sort']:'title';
+
+$result = Database::query("SELECT name FROM $tbl_session WHERE id='$id_session'");
+
+if (!list($session_name)=Database::fetch_row($result)) {
+	header('Location: session_list.php');
+	exit;
+}
+
+if ($action == 'delete') {
 	$idChecked = $_REQUEST['idChecked'];
 	if(is_array($idChecked) && count($idChecked)>0) {
 		$my_temp = array();
@@ -53,16 +59,16 @@ if($action == 'delete') {
 	exit();
 }
 
-$limit=20;
-$from=$page * $limit;
+$limit  = 20;
+$from   = $page * $limit;
 
-$result=Database::query("SELECT code,title,nbr_users FROM $tbl_session_rel_course,$tbl_course WHERE course_code=code AND id_session='$id_session' ORDER BY $sort LIMIT $from,".($limit+1));
+$result=Database::query("SELECT code,title,nbr_users FROM $tbl_session_rel_course, $tbl_course WHERE course_code=code AND id_session='$id_session' ORDER BY $sort LIMIT $from,".($limit+1));
 $Courses=Database::store_result($result);
-$nbr_results=sizeof($Sessions);
 $tool_name = api_htmlentities($session_name,ENT_QUOTES,$charset).' : '.get_lang('CourseListInSession');
 
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
+$interbreadcrumb[]=array('url' => "resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']),"name" => get_lang('SessionOverview'));
 
 Display::display_header($tool_name);
 api_display_tool_title($tool_name);
@@ -96,4 +102,3 @@ echo '<select name="action">
 	<button class="save" type="submit">'.get_lang('Ok').'</button>
 	</form>';
 Display::display_footer();
-?>

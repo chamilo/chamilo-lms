@@ -1194,7 +1194,7 @@ class Database {
      * @param   array
      * @todo lot of stuff to do here
     */
-    public function parse_conditions($conditions) {        
+    private static function parse_conditions($conditions) {        
         if (empty($conditions)) {
             return '';
         }
@@ -1286,7 +1286,7 @@ class Database {
         return $return_value;
     }
 
-    private function parse_where_conditions($coditions) {
+    public static function parse_where_conditions($coditions) {
         return self::parse_conditions(array('where'=>$coditions));
     }
 

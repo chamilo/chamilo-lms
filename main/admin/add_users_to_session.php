@@ -76,8 +76,14 @@ function search_users($needle, $type) {
 	global $tbl_user,$tbl_session_rel_user,$id_session;
 	$xajax_response = new XajaxResponse();
 	$return = '';
-
+    
 	if (!empty($needle) && !empty($type)) {
+        
+        //normal behaviour
+        if ($type == 'any_session' && $needle == 'false')  {
+            $type = 'multiple';
+            $needle = '';            
+        }
 
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_system_encoding();
@@ -87,6 +93,9 @@ function search_users($needle, $type) {
 
 		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 		$cond_user_id = '';
+        
+        //Only for single & multiple
+        if (in_array($type, array('single','multiple')))
 		if (!empty($id_session)) {
 		    $id_session = intval($id_session);
 			// check id_user from session_rel_user table
@@ -98,46 +107,65 @@ function search_users($needle, $type) {
 					$user_ids[] = (int)$row[0];
 				}
 			}
-			if (count($user_ids) > 0){
+			if (count($user_ids) > 0) {
 				$cond_user_id = ' AND user.user_id NOT IN('.implode(",",$user_ids).')';
 			}
 		}
 
-		if ($type == 'single') {
-			// search users where username or firstname or lastname begins likes $needle
-			$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-					WHERE (username LIKE "'.$needle.'%"
-					OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'"   AND user.status<>'.DRH.''.
-				$order_clause.
-				' LIMIT 11';
-		} else {
-			$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-					WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
-					$order_clause;
-		}
-
+		switch($type) {
+            case 'single':
+                // search users where username or firstname or lastname begins likes $needle
+                $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
+                        WHERE (username LIKE "'.$needle.'%" OR firstname LIKE "'.$needle.'%"
+                            OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'" AND user.status<>'.DRH.''.
+                            $order_clause.
+                            ' LIMIT 11';
+                break;
+            case 'multiple':
+                $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
+                        WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+                        $order_clause;
+                break;
+            case 'any_session':
+                $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user LEFT OUTER JOIN '.$tbl_session_rel_user.' s ON (s.id_user = user.user_id)
+                        WHERE   s.id_user IS null AND user.status<>'.DRH.' AND 
+                                user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+                        $order_clause;
+                break;
+		}   
+    
 		global $_configuration;
 		if ($_configuration['multiple_access_urls']) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1){
-				if ($type == 'single') {
-					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-					WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
-					OR firstname LIKE "'.$needle.'%"
-					OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'" AND user.status<>'.DRH.' '.
-					$order_clause.
-					' LIMIT 11';
-				} else {
-					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-					WHERE access_url_id = '.$access_url_id.'
-					AND '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
-					$order_clause;
+			if ($access_url_id != -1) {              
+                switch($type) {
+                    case 'single':
+                        $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
+                        INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+                        WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
+                        OR firstname LIKE "'.$needle.'%"
+                        OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'" AND user.status<>'.DRH.' '.
+                        $order_clause.
+                        ' LIMIT 11';
+                        break;
+                    case 'multiple':
+                        $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
+                        INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+                        WHERE access_url_id = '.$access_url_id.' AND 
+                                '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+                        $order_clause;
+                        break;
+                    case 'any_session' :
+                        $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user LEFT OUTER JOIN '.$tbl_session_rel_user.' s ON (s.id_user = user.user_id)
+                        INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+                        WHERE   access_url_id = '.$access_url_id.' AND 
+                                s.id_user IS null AND
+                                user.status<>'.DRH.' AND 
+                                user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+                        $order_clause;
+                        break;
 				}
-
 			}
 		}
 
@@ -155,7 +183,6 @@ function search_users($needle, $type) {
 			}
 
 			$xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
-
 		} else {
 			global $nosessionUsersList;
 			$return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
@@ -167,7 +194,6 @@ function search_users($needle, $type) {
 			$xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
 		}
 	}
-
 	return $xajax_response;
 }
 
@@ -177,7 +203,6 @@ $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function add_user_to_session (code, content) {
-
 	document.getElementById("user_to_add").value = "";
 	document.getElementById("ajax_list_users_single").innerHTML = "";
 
@@ -188,12 +213,11 @@ function add_user_to_session (code, content) {
 				return false;
 		}
 	}
-
 	destination.options[destination.length] = new Option(content,code);
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-
 }
+
 function remove_item(origin) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -208,13 +232,26 @@ function validate_filter() {
 		document.formulaire.form_sent.value=0;
 		document.formulaire.submit();
 }
+
+function checked_in_no_session(checked) {    
+    $("#first_letter_user")
+    .find("option")
+    .attr("selected", false);
+    xajax_search_users(checked, "any_session");
+}
+
+function change_select(val) {
+    $("#user_with_any_session_id").attr("checked", false);
+    xajax_search_users(val,"multiple");
+}
+
 </script>';
 
 
 $form_sent=0;
 $errorMsg=$firstLetterUser=$firstLetterSession='';
 $UserList=$SessionList=array();
-$users=$sessions=array();
+$sessions=array();
 $noPHP_SELF=true;
 
 if($_POST['form_sent']) {
@@ -222,7 +259,6 @@ if($_POST['form_sent']) {
 	$firstLetterUser       = $_POST['firstLetterUser'];
 	$firstLetterSession    = $_POST['firstLetterSession'];
 	$UserList              = $_POST['sessionUsersList'];
-	$ClassList             = $_POST['sessionClassesList'];
     
 	if (!is_array($UserList)) {
 		$UserList=array();
@@ -238,8 +274,6 @@ if($_POST['form_sent']) {
 
 $session_info = SessionManager::fetch($id_session);
 Display::display_header($tool_name);
-//api_display_tool_title($tool_name.' ('.$session_info['name'].')');
-
 
 $nosessionUsersList = $sessionUsersList = array();
 
@@ -357,15 +391,17 @@ if ($ajax_search) {
 		$Users    = Database::store_result($result);
 
 		foreach ($Users as $user) {
-			if($user['id_session'] != $id_session)
-				$nosessionUsersList[$user['user_id']] = $user ;
+			if ($user['id_session'] != $id_session)
+				$nosessionUsersList[$user['user_id']] = $user ;            
 		}
+        
 		$user_anonymous=api_get_anonymous_id();
 		foreach($nosessionUsersList as $key_user_list =>$value_user_list) {
 			if ($nosessionUsersList[$key_user_list]['user_id']==$user_anonymous) {
 				unset($nosessionUsersList[$key_user_list]);
 			}
 		}
+        
 		//filling the correct users in list
 		$sql="SELECT  user_id, lastname, firstname, username, id_session
 			FROM $tbl_user u
@@ -392,16 +428,16 @@ if ($ajax_search) {
 	foreach($Users as $key_user_list =>$value_user_list) {
 		if ($Users[$key_user_list]['user_id']==$user_anonymous) {
 			unset($Users[$key_user_list]);
-			}
-		}
+        }
+    }
 
 	foreach ($Users as $user) {
 		if($user['id_session'] == $id_session){
 			$sessionUsersList[$user['user_id']] = $user;
-			if (array_key_exists($user['user_id'],$nosessionUsersList))
+			if (array_key_exists($user['user_id'],$nosessionUsersList)) {
                 unset($nosessionUsersList[$user['user_id']]);
+            }
 		}
-
 	}
 }
 
@@ -413,10 +449,7 @@ if ($add_type == 'multiple') {
 	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&amp;add='.Security::remove_XSS($_GET['add']).'&amp;add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 	$link_add_group = '<a href="usergroups.php">'.Display::return_icon('multiple.gif',get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>';
-
-
 ?>
-
 <div class="actions">
 	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
 </div>
@@ -473,21 +506,19 @@ if(!empty($errorMsg)) {
 
 <?php if ($add_type=='multiple') { ?>
 <tr>
-<td align="center">
+    <td align="center">
 
-<?php echo get_lang('FirstLetterUser'); ?> :
-     <select name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')" >
-      <option value = "%">--</option>
-      <?php
-        echo Display :: get_alphabet_options();
-      ?>
-     </select>
-</td>
-<td align="center">&nbsp;</td>
+    <?php echo get_lang('FirstLetterUser'); ?> :
+        <select id="first_letter_user" name="firstLetterUser" onchange = "change_select(this.value);" >
+        <option value = "%">--</option>
+        <?php
+            echo Display :: get_alphabet_options();
+        ?>
+        </select>
+    </td>
+    <td align="center">&nbsp;</td>
 </tr>
 <?php } ?>
-
-
 <tr>
   <td align="center">
   <div id="content_source">
@@ -510,10 +541,13 @@ if(!empty($errorMsg)) {
 		?>
 	  </select>
 	  </div>
+        <input type="checkbox" onchange="checked_in_no_session(this.checked);" name="user_with_any_session" id="user_with_any_session_id"> 
+        <label for="user_with_any_session_id"><?php echo get_lang('UsersRegisteredInNoSession'); ?></label>
 	<?php
   	  }
   	  unset($nosessionUsersList);
   	 ?>
+  
   </div>
   </td>
   <td width="10%" valign="middle" align="center">

@@ -677,7 +677,7 @@ class SessionManager {
             $update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
             Database::query($update_sql);
         } else {
-            echo $update_sql = "UPDATE $tbl_session SET nbr_users= nbr_users + $nbr_users WHERE id='$id_session' ";
+            $update_sql = "UPDATE $tbl_session SET nbr_users= nbr_users + $nbr_users WHERE id='$id_session' ";
             Database::query($update_sql);           
         }
 	}

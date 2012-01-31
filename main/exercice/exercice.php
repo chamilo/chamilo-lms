@@ -409,10 +409,11 @@ if ($total > $limit) {
  
     $i =1;
     $lis = '';
-$exercise_list = array();
+
 $online_icon  = Display::return_icon('online.png', get_lang('Visible'),array('width'=>'12px'));
 $offline_icon = Display::return_icon('offline.png',get_lang('Invisible'),array('width'=>'12px'));
 
+$exercise_list = array();
 while ($row = Database :: fetch_array($result,'ASSOC')) {
     $exercise_list[] = $row;
 } 

@@ -57,7 +57,9 @@ class learnpathList {
         if ($check_publication_dates) {
             $time_conditions = " AND ( (publicated_on <> '0000-00-00 00:00:00' AND publicated_on < '$now'  AND expired_on <> '0000-00-00 00:00:00'  AND expired_on > '$now' )  OR 
                         (publicated_on <> '0000-00-00 00:00:00'  AND publicated_on < '$now'  AND expired_on = '0000-00-00 00:00:00') OR
-                        (publicated_on = '0000-00-00 00:00:00'   AND expired_on <> '0000-00-00 00:00:00'  AND expired_on > '$now')) ";
+                        (publicated_on = '0000-00-00 00:00:00'   AND expired_on <> '0000-00-00 00:00:00' AND expired_on > '$now') OR                        
+                        (publicated_on = '0000-00-00 00:00:00'   AND expired_on = '0000-00-00 00:00:00' )) 
+            ";
         }
         
         $sql = "SELECT * FROM $lp_table WHERE c_id = $course_id $time_conditions $condition_session $order";

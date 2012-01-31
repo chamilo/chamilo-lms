@@ -2678,14 +2678,15 @@ function store_edit_post($values) {
  * This function displays the firstname and lastname of the user as a link to the user tool.
  *
  * @param string names
+ * @ in_title : title tootip
  * @return string HTML
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function display_user_link($user_id, $name, $origin = '') {
+function display_user_link($user_id, $name, $origin = '', $in_title = '') {
     if ($user_id != 0) {
-        return '<a href="../user/userInfo.php?uInfo='.$user_id.'" '. (!empty($origin)? 'target="_self"': '') .'>'.$name.'</a>';
+        return '<a title="'.api_htmlentities($in_title, ENT_QUOTES).'" href="../user/userInfo.php?uInfo='.$user_id.'" '. (!empty($origin)? 'target="_self"': '') .'>'.$name.'</a>';
     } else {
         return $name.' ('.get_lang('Anonymous').')';
     }

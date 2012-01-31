@@ -377,11 +377,11 @@ if (is_array($threads)) {
             echo '<td>'.$row['thread_views'].'</td>';
             // display the author name
             $tab_poster_info = api_get_user_info($row['user_id']);
-            $poster_username = " (".$tab_poster_info['username'].")";
+            $poster_username = sprintf(get_lang('LoginX'), $tab_poster_info['username']);
             if ($origin != 'learnpath') {
-                echo '<td>'.display_user_link($row['user_id'], api_get_person_name($row['firstname'], $row['lastname']).$poster_username).'</td>';
+                echo '<td>'.display_user_link($row['user_id'], api_get_person_name($row['firstname'], $row['lastname']), '', $poster_username).'</td>';
             } else {
-                echo '<td>'.api_get_person_name($row['firstname'], $row['lastname']).'$poster_username</td>';
+                echo '<td>'.Display::tag('span', api_get_person_name($row['firstname'], $row['lastname']), array("title"=>api_htmlentities($poster_username, ENT_QUOTES))).'</td>';
             }            
             // display the last post name
 //            if ($row['user_id'] == '0') {
@@ -396,25 +396,25 @@ if (is_array($threads)) {
             } else {
                 $name = api_get_person_name($row['last_poster_firstname'], $row['last_poster_lastname']);
                 $tab_last_poster_info = api_get_user_info($row['last_poster_user_id']);
-                $last_poster_username = " (".$tab_last_poster_info['username'].")";
+                $last_poster_username = sprintf(get_lang('LoginX'), $tab_last_poster_info['username']);
             }
             // If the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread.
             if (($row['visible'] == '1' OR api_is_allowed_to_edit(false, true)) && $origin != 'learnpath') {
-                $last_post = api_convert_and_format_date($row['thread_date']).' '.get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name.$last_poster_username);
+                $last_post = api_convert_and_format_date($row['thread_date']).' '.get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name, '', $last_poster_username);
             } elseif ($origin != 'learnpath') {
                 $last_post_sql = "SELECT post.*, user.firstname, user.lastname, user.username FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' AND post.c_id=".api_get_course_int_id()." ORDER BY post_id DESC";
                 $last_post_result = Database::query($last_post_sql);
                 $last_post_row = Database::fetch_array($last_post_result);
                 $name = api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
-                $last_post_info_username = " (".$last_post_row['username'].")";
-                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name.$last_post_info_username);
+                $last_post_info_username = sprintf(get_lang('LoginX'), $last_post_row['username']);
+                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name, '', $last_post_info_username);
             } else {
                 $last_post_sql = "SELECT post.*, user.firstname, user.lastname, user.username FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' AND post.c_id=".api_get_course_int_id()." ORDER BY post_id DESC";
                 $last_post_result = Database::query($last_post_sql);
                 $last_post_row = Database::fetch_array($last_post_result);
-                $last_post_info_username = " (".$last_post_row['username'].")";
+                $last_post_info_username = sprintf(get_lang('LoginX'), $last_post_row['username']);
                 $name = api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
-                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.$name.$last_post_info_username;
+                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.Display::tag('span', $name, array("title"=>api_htmlentities($last_post_info_username, ENT_QUOTES)));
             }
 
             echo '<td>'.$last_post.'</td>';

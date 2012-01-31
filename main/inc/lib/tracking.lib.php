@@ -2689,14 +2689,13 @@ class Tracking {
 				$html .= '</table>';
 				
 				
-				//LP table results
-				
+				//LP table results				
 				$html .='<table class="data_table" width="100%">';
-				$html .= Display::tag('th', get_lang('Learnpaths'),    array('class'=>'head', 'style'=>'color:#000'));
-				$html .= Display::tag('th', get_lang('LatencyTimeSpent'),          array('class'=>'head', 'style'=>'color:#000'));
-				$html .= Display::tag('th', get_lang('Progress'),      array('class'=>'head', 'style'=>'color:#000'));
-				$html .= Display::tag('th', get_lang('Score'),         array('class'=>'head', 'style'=>'color:#000'));
-				$html .= Display::tag('th', get_lang('LastConnexion'), array('class'=>'head', 'style'=>'color:#000'));
+				$html .= Display::tag('th', get_lang('Learnpaths'),         array('class'=>'head', 'style'=>'color:#000'));
+				$html .= Display::tag('th', get_lang('LatencyTimeSpent'),   array('class'=>'head', 'style'=>'color:#000'));
+				$html .= Display::tag('th', get_lang('Progress'),           array('class'=>'head', 'style'=>'color:#000'));
+				$html .= Display::tag('th', get_lang('Score'),              array('class'=>'head', 'style'=>'color:#000'));
+				$html .= Display::tag('th', get_lang('LastConnexion'),      array('class'=>'head', 'style'=>'color:#000'));
 				$html .= '</tr>';
 
                 $list = new LearnpathList(api_get_user_id(), $course_info['code'], $session_id, 'publicated_on ASC', true);  

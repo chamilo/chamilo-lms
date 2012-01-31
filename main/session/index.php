@@ -9,7 +9,7 @@
  * Code
  */
 // Language files that should be included.
-$language_file = array('courses', 'index','tracking','exercice', 'admin');
+$language_file = array('learnpath', 'courses', 'index','tracking','exercice', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';

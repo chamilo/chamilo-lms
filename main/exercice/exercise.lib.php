@@ -1023,8 +1023,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     }
                     
                     if ($start_date != "0000-00-00 00:00:00") {
-                        $start_date_timestamp   = api_strtotime($start_date);
-                        $exe_date_timestamp     = api_strtotime($results[$i]['exe_date']);                                                
+                        $start_date_timestamp   = api_strtotime($start_date, 'UTC');
+                        $exe_date_timestamp     = api_strtotime($results[$i]['exe_date'], 'UTC');                                                
     
                         $my_duration = ceil((($exe_date_timestamp - $start_date_timestamp) / 60));
                         //var_dump($start_date .' - '.$results[$i]['exdate'].' - '.$my_duration);

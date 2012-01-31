@@ -2276,7 +2276,8 @@ class Tracking {
 							foreach($exercise_list as $exercise_data) {							    
 								$exercise_obj = new Exercise($course_data['id']);
 								$exercise_obj->read($exercise_data['id']);
-								if ($exercise_obj->is_visible()) {
+                                $visible_return = $exercise_obj->is_visible();
+								if ($visible_return['value'] == true) {
 									$best_average = intval(get_best_average_score_by_exercise($exercise_data['id'], $course_data['code'], $my_session_id, $user_count));
 									$exercise_graph_list[] 		= $best_average;
 									$all_exercise_graph_list[] 	= $best_average;
@@ -2606,9 +2607,10 @@ class Tracking {
                         
                         $exercise_obj = new Exercise($course_info['real_id']);
                         $exercise_obj->read($exercices['id']);
+                        $visible_return = $exercise_obj->is_visible();
                         
                         //just in case
-                        if (!$exercise_obj->is_visible()) {
+                        if ($visible_return['value'] == false) {
                             continue;
                         }
                         						

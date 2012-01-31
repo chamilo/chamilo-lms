@@ -45,49 +45,57 @@ foreach($new_session_list as $session_item) {
 $my_session_list = array();
 $final_array     = array();
 
-if (!empty($new_session_list)) {
-	foreach($new_session_list as $item) {
-		$my_session_id = isset($item['id_session']) ? $item['id_session'] : null;
-		if (isset($my_session_id) && !in_array($my_session_id, $my_session_list) && $session_id == $my_session_id) {
-			$final_array[$my_session_id]['name'] = $item['session_name'];
+if (!empty($course_list)) {
+    foreach($course_list as $course_data) {
+        if (in_array($course_data['code'], $user_course_list)) {
+            $course_data['title'] = Display::url($course_data['title'], api_get_course_url($course_data['code'], $session_id));            
+        } else {
+            continue;
+        }
+        
+        $list           = new LearnpathList(api_get_user_id(),$course_data['code'], $session_id, 'publicated_on ASC', true);  
+        $lp_list        = $list->get_flat_list();
+        $lp_count       = count($lp_list); 
+        $course_info    = api_get_course_info($course_data['code']);
+        $exercise_count = count(get_all_exercises($course_info, $session_id, true));
+        
+        $max_mutation_date = '';
+        
+        $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(), $course_data['code'], $session_id, false);
+        $icons = '';
+        foreach($lp_list as $item) {
+        
+            if ($item['modified_on'] == '0000-00-00 00:00:00' || empty($item['modified_on'])) {        
+                $lp_date_original = $item['created_on'];
+                $image = 'new.gif';
+                $label      = get_lang('LearnpathAdded');
+            } else {
+                $lp_date_original = $item['modified_on'];
+                $image      = 'moderator_star.png';
+                $label      = get_lang('LearnpathUpdated');
+            }
+            
+            $mutation_date = api_strtotime($item['publicated_on']) > api_strtotime($lp_date_original) ? $item['publicated_on'] : $lp_date_original;
+            
+            if (api_strtotime($mutation_date) > api_strtotime($max_mutation_date)) {
+                $max_mutation_date = $mutation_date;
+            }
+            
 
-			//Get all courses by session where I'm subscribed
-			$my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id);            
-			 
-			foreach ($my_course_list as $my_course) {
-				$course = array();
-
-				$course_info   = api_get_course_info($my_course['code']);
-				//Getting all exercises from the current course
-				$exercise_list = get_all_exercises($course_info, $my_session_id);
-				 
-				//Exercises we skip
-				/*if (empty($exercise_list)) {
-				continue;
-				} */
-				//$exercise_course_list = array();
-				$course['name'] = $course_info['name'];
-				$course['id']   = $course_info['real_id'];
-				if (!empty($exercise_list)) {
-					foreach($exercise_list as $exercise_item) { 
-						//Loading the exercise
-						$exercise = new Exercise($course_info['real_id']);
-						$exercise->read($exercise_item['id']);
-                        if ($exercise->is_visible()) {
-                            //$exercise_course_list[$exercise_item['id']] = $exercise;
-                            //Reading all Exercise results by user, exercise_id, code, and session
-                            $user_results = get_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);
-                            $course['exercises'][$exercise_item['id']]['data']['exercise_data'] =  $exercise;
-                            $course['exercises'][$exercise_item['id']]['data']['results']       =  $user_results;
-                        }
-					}
-					$final_array[$my_session_id]['data'][$my_course['code']] = $course;
-				}
-			}
-		}
-		$my_session_list[] =  $my_session_id;
-	}
+            if (strtotime($last_date) < strtotime($lp_date_original)) {
+                if (empty($icons)) {
+                    $icons .= ' '.Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date_original).' ';                    
+                }
+            }           
+        }        
+        $new_course_list[] = array( 'title'=> $course_data['title'].$icons,
+      //                                 'recent_lps' => $icons,
+                                       //'max_mutation_date' => substr(api_get_local_time($max_mutation_date),0,10),
+                                       'exercise_count' => $exercise_count,
+                                       'lp_count'       => $lp_count); 
+    }
 }
+
 
 //echo '<pre>';print_r($final_array);
 //If the requested session does not exist in my list we stop the script
@@ -238,22 +246,28 @@ if (!empty($start) && !empty($end)) {
 echo Display::tag('h1', $back_url.' '.$session_info['name']);
 echo $dates.'<br />';
 
-//echo '<pre>';print_r($course_list);
-$new_course_list = array();
-if (!empty($course_list)) {
-    foreach($course_list as $course_data) {
-        if (in_array($course_data['code'], $user_course_list)) {
-            $course_data['title'] = Display::url($course_data['title'], api_get_course_url($course_data['code'], $session_id));
-            $new_course_list[] = array('title'=> $course_data['title']); 
-        }        
-    }
-}
-
 //All Learnpaths grid settings (First tab, first subtab)
-$columns_courses        = array(get_lang('Title'));
-$column_model_courses   = array(array('name'=>'title',  'index'=>'title',   'width'=>'880px',  'align'=>'left',  'sortable'=>'false'));
+
+$columns_courses        = array(get_lang('Title'), get_lang('NumberOfPublishedExercises'), get_lang('NumberOfPublishedLps'));
+$column_model_courses   = array(
+    array('name'=>'title',              'index'=>'title',               'width'=>'120px',  'align'=>'left',  'sortable'=>'true'),
+    //array('name'=>'recent_lps',         'index'=>'recent_lps',          'width'=>'10px',  'align'=>'left',  'sortable'=>'false'),
+//    array('name'=>'max_mutation_date',  'index'=>'max_mutation_date',   'width'=>'120px',  'align'=>'left',  'sortable'=>'true'),
+    array('name'=>'exercise_count',     'index'=>'exercise_count',      'width'=>'50px',  'align'=>'left',  'sortable'=>'true'),
+    array('name'=>'lp_count',           'index'=>'lp_count',            'width'=>'50px',  'align'=>'left',  'sortable'=>'true')
+);
+
 $extra_params_courses   = array();
+$extra_params_courses['gridview'] = "false";
+$extra_params_courses['rowNum'] = 9000;
+//$extra_params_courses['scroll'] = 1;
+$extra_params_courses['height'] = "100%";
 $extra_params_courses['autowidth'] = 'false'; //use the width of the parent                             
+$extra_params_courses['recordtext'] = '';
+$extra_params_courses['pgtext'] = '';
+$extra_params_courses['pgbuttons'] = false;
+$extra_params_courses['width'] = '90%';
+$extra_params_courses['autowidth'] = 'true';                     
                         
 $url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id.'&course_id='.$course_id;
 $columns        = array(get_lang('PublicationDate'),get_lang('Course'), get_lang('LearningPaths'));

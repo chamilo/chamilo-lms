@@ -1232,10 +1232,12 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
     
     $now = api_get_utc_datetime();
     $time_conditions = '';
-    if ($check_publication_dates) {
-        $time_conditions = " AND ((start_time <> '0000-00-00 00:00:00' AND start_time < '$now'  AND end_time <> '0000-00-00 00:00:00'  AND end_time > '$now' )  OR 
-                            (start_time <> '0000-00-00 00:00:00'  AND start_time < '$now'  AND end_time = '0000-00-00 00:00:00') OR
-                            (start_time = '0000-00-00 00:00:00'   AND end_time <> '0000-00-00 00:00:00'  AND end_time > '$now')) ";
+    
+    if ($check_publication_dates) {        
+        $time_conditions = " AND ((start_time <> '0000-00-00 00:00:00' AND start_time < '$now'  AND end_time <> '0000-00-00 00:00:00' AND end_time > '$now' )  OR "; //start and end are set
+        $time_conditions .= " (start_time <> '0000-00-00 00:00:00' AND start_time < '$now'  AND end_time = '0000-00-00 00:00:00') OR "; // only start is set
+        $time_conditions .= " (start_time = '0000-00-00 00:00:00'   AND end_time <> '0000-00-00 00:00:00'  AND end_time > '$now') OR   "; // only end is set
+        $time_conditions .= " (start_time = '0000-00-00 00:00:00'   AND end_time =  '0000-00-00 00:00:00'))  "; // nothing is set                           
     }
     
     if ($session_id == 0) {       

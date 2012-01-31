@@ -3310,15 +3310,16 @@ class Exercise {
 		
 		if ($limit_time_exists) {
 			$time_now 				= time();
+            //Do not add the UTC parameter in the api_strtotime because the $this->start_time was converted in the read() function
 		
 			if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {				
-				$permission_to_start = (($time_now - api_strtotime($this->start_time, 'UTC')) > 0) ? true : false;
+				$permission_to_start = (($time_now - api_strtotime($this->start_time)) > 0) ? true : false;
 			} else {
 				$permission_to_start = true;
 			}
 			
 			if ($this->end_time != '0000-00-00 00:00:00') {
-				$exercise_timeover = (($time_now - api_strtotime($this->end_time, 'UTC')) > 0) ? true : false;
+				$exercise_timeover = (($time_now - api_strtotime($this->end_time)) > 0) ? true : false;
 			} else {
 				$exercise_timeover = false;
 			}

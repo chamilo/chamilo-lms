@@ -1731,12 +1731,13 @@ function api_get_session_visibility($session_id) {
                 $visibility = SESSION_AVAILABLE;    
             } else {
                 $time = time();
-                
+                     
                 //If datestart is set
                 if (!empty($row['date_start']) && $row['date_start'] != '0000-00-00') {
                     $row['date_start'] = $row['date_start'].' 00:00:00';   
-                    if ($time > api_strtotime($row['date_start'], 'UTC')) {
-                        $visibility = SESSION_AVAILABLE;
+                  
+                    if ($time > api_strtotime($row['date_start'], 'UTC')) {                          
+                        $visibility = SESSION_AVAILABLE;                        
                     } else {
                         $visibility = SESSION_INVISIBLE;
                     }
@@ -1746,14 +1747,17 @@ function api_get_session_visibility($session_id) {
                 if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {                    
                     $row['date_end'] = $row['date_end'].' 00:00:00';
                     //only if date_start said that it was ok
+                    
                     if ($visibility == SESSION_AVAILABLE) {
                         $visibility = $row['visibility'];
-                        /*
+                        
                         if ($time < api_strtotime($row['date_end'], 'UTC')) {
-                            $visibility = $row['visibility'];
+                            //date still available
+                            $visibility = SESSION_AVAILABLE;
                         } else {
+                            //session ends
                             $visibility = $row['visibility'];
-                        }*/                 
+                        }
                     }
                 }                
             }
@@ -2374,9 +2378,9 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
             // Get the session visibility
             $session_visibility = api_get_session_visibility($session_id);  // if 5 the session is still available.
             
-                //@todo We could load the session_rel_course_rel_user permission to increase the level of detail.
-                //echo api_get_user_id();
-                //echo api_get_course_id();
+            //@todo We could load the session_rel_course_rel_user permission to increase the level of detail.
+            //echo api_get_user_id();
+            //echo api_get_course_id();
 
             switch ($session_visibility) {
                 case SESSION_VISIBLE_READ_ONLY: // 1

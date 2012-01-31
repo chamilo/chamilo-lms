@@ -758,7 +758,8 @@ class Blog {
 					echo ' "> '.$file_name_array['filename'].' </a><br />';
 					echo '</span>';
 				}
-				echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . api_get_person_name($blog_post['firstname'], $blog_post['lastname']) . ' ('.$blog_post['username'].') - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
+				$username = api_htmlentities(sprintf(get_lang('LoginX'), $blog_post['username']), ENT_QUOTES);
+				echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . Display::tag('span', api_get_person_name($blog_post['firstname'], $blog_post['lastname']), array('title'=>$username)) .' - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
 				echo '</div>';
 			}
 		} else {
@@ -883,8 +884,8 @@ class Blog {
 			echo '</span>';
 			echo '<br />';
 		}
-
-		echo '<span class="blogpost_info">'.get_lang('Author').': ' .api_get_person_name($blog_post['firstname'], $blog_post['lastname']).' ('.$blog_post['username'].') - '.get_lang('Comments').': '.$blog_post_comments['number_of_comments'].' - '.get_lang('Rating').': '.Blog::display_rating('post',$blog_id,$post_id).$rating_select.'</span>';
+        $username = api_htmlentities(sprintf(get_lang('LoginX'), $blog_post['username']), ENT_QUOTES);
+		echo '<span class="blogpost_info">'.get_lang('Author').': ' .Display::tag('span', api_get_person_name($blog_post['firstname'], $blog_post['lastname']), array('title'=>$username)).' - '.get_lang('Comments').': '.$blog_post_comments['number_of_comments'].' - '.get_lang('Rating').': '.Blog::display_rating('post',$blog_id,$post_id).$rating_select.'</span>';
 		echo '<span class="blogpost_actions">' . $blog_post_actions . '</span>';
 		echo '</div>';
 
@@ -1095,7 +1096,8 @@ class Blog {
 					echo $file_name_array['comment'];
 					echo '</span><br />';
 				}
-				echo '<span class="blogpost_comment_info">'.get_lang('Author').': '.api_get_person_name($comment['firstname'], $comment['lastname']).' ('.$comment['username'].') - '.get_lang('Rating').': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']).$rating_select.'</span>';
+                $username = api_htmlentities(sprintf(get_lang('LoginX'), $comment['username']), ENT_QUOTES);				
+				echo '<span class="blogpost_comment_info">'.get_lang('Author').': '.Display::tag('span', api_get_person_name($comment['firstname'], $comment['lastname']), array('title'=>$username)).' - '.get_lang('Rating').': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']).$rating_select.'</span>';
 				echo '<span class="blogpost_actions">' . $blog_comment_actions . '</span>';
 			echo '</div>';
 
@@ -1425,7 +1427,7 @@ class Blog {
 		
 		$course_id = api_get_course_int_id();
 
-		$sql = "SELECT task_rel_user.*, task.title, user.firstname, user.lastname, task.description, task.system_task, task.blog_id, task.task_id 
+		$sql = "SELECT task_rel_user.*, task.title, user.firstname, user.lastname, user.username, task.description, task.system_task, task.blog_id, task.task_id 
 				FROM $tbl_blogs_tasks_rel_user task_rel_user
 				INNER JOIN $tbl_blogs_tasks task ON task_rel_user.task_id = task.task_id
 				INNER JOIN $tbl_users user ON task_rel_user.user_id = user.user_id
@@ -1442,9 +1444,11 @@ class Blog {
 			$delete_title = ($assignment['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
 			$delete_link = ($assignment['system_task'] == '1') ? '#' : api_get_self() . '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=delete&amp;task_id=' . $assignment['task_id'];
 			$delete_confirm = ($assignment['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"';
-
+			
+            $username = api_htmlentities(sprintf(get_lang('LoginX'), $assignment['username']), ENT_QUOTES);
+            
 			echo	'<tr class="' . $css_class . '" valign="top">',
-						 '<td width="240">' . api_get_person_name($assignment['firstname'], $assignment['lastname']) . '</td>',
+						 '<td width="240">' . Display::tag('span', api_get_person_name($assignment['firstname'], $assignment['lastname']), array('title'=>$username)) . '</td>',
 						 '<td>'.stripslashes($assignment['title']) . '</td>',
 						 '<td>'.stripslashes($assignment['description']) . '</td>',
 						 '<td>' . $assignment['target_date'] . '</td>',
@@ -1668,9 +1672,11 @@ class Blog {
 				WHERE blogs_rel_user.c_id = $course_id AND blogs_rel_user.blog_id = '".(int)$blog_id."'";
 		$result = Database::query($sql);
 		$select_user_list = '<select name="task_user_id">';
+		
 		while($user = Database::fetch_array($result))
 		{
-			$select_user_list .= '<option value="' . $user['user_id'] . '">' . api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') </option>';
+            $username = api_htmlentities(sprintf(get_lang('LoginX'), $user['username']), ENT_QUOTES);		    
+			$select_user_list .= '<option title="'.$username.'" value="' . $user['user_id'] . '">' . api_get_person_name($user['firstname'], $user['lastname']).'</option>';
 		}
 		$select_user_list .= '</select>';
 
@@ -1818,7 +1824,7 @@ class Blog {
 
 		// Get users in this blog / make select list of it
 		$sql = "
-			SELECT user.user_id, user.firstname, user.lastname
+			SELECT user.user_id, user.firstname, user.lastname, user.username
 			FROM $tbl_users user
 			INNER JOIN $tbl_blogs_rel_user blogs_rel_user ON user.user_id = blogs_rel_user.user_id
 			WHERE blogs_rel_user.c_id = $course_id AND blogs_rel_user.blog_id = '".(int)$blog_id."'";
@@ -1826,7 +1832,8 @@ class Blog {
 
 		$select_user_list = '<select name="task_user_id">';
 		while($user = Database::fetch_array($result)) {
-			$select_user_list .= '<option ' . (($user_id == $user['user_id']) ? 'selected="selected "' : ' ') . 'value="' . $user['user_id'] . '">' . api_get_person_name($user['firstname'], $user['lastname']) . '</option>';
+            $username = api_htmlentities(sprintf(get_lang('LoginX'), $user['username']), ENT_QUOTES);
+			$select_user_list .= '<option title="'.$username.'"' . (($user_id == $user['user_id']) ? 'selected="selected "' : ' ') . 'value="' . $user['user_id'] . '">' . api_get_person_name($user['firstname'], $user['lastname']) . '</option>';
 		}
 		
 		$select_user_list .= '</select>';
@@ -2040,7 +2047,8 @@ class Blog {
 
 		if(Database::num_rows($result) > 0) {
 			while($blog_post = Database::fetch_array($result)) {
-				echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $blog_id . '&amp;task_id=' . $task_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment">'.stripslashes($blog_post['title']) . '</a>, ' . get_lang('WrittenBy') . ' ' . stripslashes(api_get_person_name($blog_post['firstname'], $blog_post['lastname']).' ('.$blog_post['username'].')') . '<br />';
+			    $username = api_htmlentities(sprintf(get_lang('LoginX'), $blog_post['username']), ENT_QUOTES);
+				echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $blog_id . '&amp;task_id=' . $task_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment">'.stripslashes($blog_post['title']) . '</a>, ' . get_lang('WrittenBy') . ' ' . stripslashes(Display::tag('span', api_get_person_name($blog_post['firstname'], $blog_post['lastname']), array('title'=>$username))) . '<br />';
 			}
 		} else 
 			echo get_lang('NoArticles');
@@ -2136,7 +2144,6 @@ class Blog {
 			$column_header[] = array (get_lang('LastName'), true, '');
 			$column_header[] = array (get_lang('FirstName'), true, '');
 		}
-		$column_header[] = array (get_lang('LoginName'), true, '');
 		$column_header[] = array (get_lang('Email'), false, '');
 		$column_header[] = array (get_lang('Register'), false, '');
 		
@@ -2159,14 +2166,14 @@ class Blog {
 				$a_infosUser = UserManager :: get_user_info_by_id($user['user_id']);
 				$row = array ();
 				$row[] = '<input type="checkbox" name="user[]" value="' . $a_infosUser['user_id'] . '" '.(($_GET['selectall'] == "subscribe") ? ' checked="checked" ' : '') . '/>';
+				$username = api_htmlentities(sprintf(get_lang('LoginX'), $a_infosUser["username"]), ENT_QUOTES);
 				if ($is_western_name_order) {
 					$row[] = $a_infosUser["firstname"];
-					$row[] = $a_infosUser["lastname"];
+					$row[] = Display::tag('span', $a_infosUser["lastname"], array('title'=>$username));
 				} else {
-					$row[] = $a_infosUser["lastname"];
+					$row[] = Display::tag('span', $a_infosUser["lastname"], array('title'=>$username));
 					$row[] = $a_infosUser["firstname"];
 				}
-				$row[] = $a_infosUser["username"];
 				$row[] = Display::icon_mailto_link($a_infosUser["email"]);
 				
 				//Link to register users
@@ -2232,7 +2239,6 @@ class Blog {
 			$column_header[] = array (get_lang('LastName'), true, '');
 			$column_header[] = array (get_lang('FirstName'), true, '');
 		}
-		$column_header[] = array (get_lang('LoginName'), true, '');
 		$column_header[] = array (get_lang('Email'), false, '');
 		$column_header[] = array (get_lang('TaskManager'), true, '');
 		$column_header[] = array (get_lang('UnRegister'), false, '');
@@ -2253,14 +2259,14 @@ class Blog {
 		while($myrow = Database::fetch_array($sql_result)) {
 			$row = array ();
 			$row[] = '<input type="checkbox" name="user[]" value="' . $myrow['user_id'] . '" '.(($_GET['selectall'] == "unsubscribe") ? ' checked="checked" ' : '') . '/>';
+			$username = api_htmlentities(sprintf(get_lang('LoginX'), $myrow["username"]), ENT_QUOTES);
 			if ($is_western_name_order) {
 				$row[] = $myrow["firstname"];
-				$row[] = $myrow["lastname"];
+				$row[] = Display::tag('span', $myrow["lastname"], array('title'=>$username));
 			} else {
-				$row[] = $myrow["lastname"];
+				$row[] = Display::tag('span', $myrow["lastname"], array('title'=>$username));
 				$row[] = $myrow["firstname"];
 			}
-			$row[] = $myrow["username"];
 			$row[] = Display::icon_mailto_link($myrow["email"]);
 
 			$sql = "SELECT bt.title task

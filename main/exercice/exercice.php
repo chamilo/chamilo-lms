@@ -460,7 +460,8 @@ if (!empty($exercise_list)) {
             $time_limits = false;                            
             if ($row['start_time'] != '0000-00-00 00:00:00' || $row['end_time'] != '0000-00-00 00:00:00') {
                 $time_limits = true;    
-            }                        
+            }
+            
             if ($time_limits) {
                 // check if start time
                 $start_time = false;
@@ -471,12 +472,12 @@ if (!empty($exercise_list)) {
                 if ($row['end_time'] != '0000-00-00 00:00:00') {
                     $end_time   = api_strtotime($row['end_time'],'UTC');  
                 }                                    
-                $now        = time();
+                $now             = time();
                 $is_actived_time = false;
                 
                 //If both "clocks" are enable
                 if ($start_time && $end_time) {                  
-                    if ($now > $start_time && $end_time > $now ) {
+                    if ($now > $start_time && $end_time > $now ) {                        
                         $is_actived_time = true;
                     }
                 } else {
@@ -493,8 +494,7 @@ if (!empty($exercise_list)) {
                     }
                 }                    
             }
-             
-			
+             			
 			//Blocking empty start times see BT#2800
         	global $_custom; 
 			if (isset($_custom['exercises_hidden_when_no_start_date']) && $_custom['exercises_hidden_when_no_start_date']) { 
@@ -629,6 +629,7 @@ if (!empty($exercise_list)) {
                 // --- Student only                 
                 
                 // if time is actived show link to exercise
+                
                 if ($time_limits) {                 
                     if ($is_actived_time) {
                         $url =  '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$cut_title.'</a>';
@@ -691,6 +692,8 @@ if (!empty($exercise_list)) {
                         }
                     } else {
                         //Quiz not ready due to time limits
+                        
+                        //@todo use the is_visible function                        
                         if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
                             $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
                         } else {

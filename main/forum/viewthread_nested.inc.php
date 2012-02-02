@@ -48,7 +48,7 @@ foreach ($rows as $post) {
     echo "<tr>";
     echo "<td rowspan=\"3\" class=\"$leftclass\">";
 
-    $username = $post['username']; // 
+    $username = sprintf(get_lang('LoginX'), $post['username']);
     if ($post['user_id']=='0') {
         $name=$post['poster_name'];
     } else {
@@ -57,7 +57,7 @@ foreach ($rows as $post) {
     if (api_get_course_setting('allow_user_image_forum')) {
         echo '<br />'.display_user_image($post['user_id'],$name,$origin).'<br />';
     }
-    echo display_user_link($post['user_id'], $name." ($username)", $origin)."<br />";
+    echo display_user_link($post['user_id'], $name, $origin, $username)."<br />";
     echo api_convert_and_format_date($post['post_date']).'<br /><br />';
     // get attach id
     $attachment_list=get_attachment($post['post_id']);

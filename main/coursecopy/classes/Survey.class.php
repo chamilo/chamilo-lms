@@ -140,4 +140,3 @@ class Survey extends Resource
 		echo $this->code.' - '.$this->title;
 	}
 }
-?>

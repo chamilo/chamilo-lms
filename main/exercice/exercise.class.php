@@ -130,10 +130,10 @@ class Exercise {
 			$this->review_answers   = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;  
 			
 			if ($object->end_time != '0000-00-00 00:00:00') {
-				$this->end_time 	= api_get_local_time($object->end_time);
+				$this->end_time 	= $object->end_time;
 			}
 			if ($object->start_time != '0000-00-00 00:00:00') {
-				$this->start_time 	= api_get_local_time($object->start_time);
+				$this->start_time 	= $object->start_time;
 			}
 			$this->expired_time 	= $object->expired_time; //control time
 
@@ -1121,12 +1121,12 @@ class Exercise {
                 $defaults['display_category_name'] = $this->selectDisplayCategoryName(); // 
                 
 				if (($this->start_time!='0000-00-00 00:00:00'))
-				$defaults['activate_start_date_check'] = 1;
+                    $defaults['activate_start_date_check'] = 1;
 				if ($this->end_time!='0000-00-00 00:00:00')
-				$defaults['activate_end_date_check'] = 1;
+                    $defaults['activate_end_date_check'] = 1;
 
-				$defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00')? $this->start_time : date('Y-m-d 12:00:00');
-				$defaults['end_time']   = ($this->end_time!='0000-00-00 00:00:00')?$this->end_time : date('Y-m-d 12:00:00',time()+84600);
+				$defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00') ? $this->start_time : date('Y-m-d 12:00:00');
+				$defaults['end_time']   = ($this->end_time!='0000-00-00 00:00:00') ? $this->end_time : date('Y-m-d 12:00:00',time()+84600);
 
 				//Get expired time
 				if($this->expired_time != '0') {					
@@ -3290,57 +3290,60 @@ class Exercise {
 		
 	 public function is_visible($lp_id = 0, $lp_item_id = 0 , $lp_item_view_id = 0) {
 		//1. By default the exercise is visible
-		$is_visible = true;
-		
+		$is_visible = true;		
 		
 		//1.1 Admins and teachers can access to the exercise
 		
 		if (api_is_platform_admin() || api_is_course_admin()) {
-			$is_visible = true;
+			return array('value' => true, 'message' => '');            
 		}
-		
 		
 		//2. If the exercise is not active 
 		if ($this->active == 0) {
-			return false;
-		}
+			return array('value' => false, 'message' => Display::return_message(get_lang('ExerciseNotAvailable'), 'warning', false));            
+		}        
 		
 		//3. We check if the time limits are on
 		$limit_time_exists = ((!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') || (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00')) ? true : false;
-		
+        
 		if ($limit_time_exists) {
-			$time_now 				= time();
-		
+			$time_now = time();            
+                       
 			if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {				
-				$permission_to_start = (($time_now - api_strtotime($this->start_time, 'UTC')) > 0) ? true : false;
-			} else {
-				$permission_to_start = true;
-			}
-			
-			if ($this->end_time != '0000-00-00 00:00:00') {
-				$exercise_timeover = (($time_now - api_strtotime($this->end_time, 'UTC')) > 0) ? true : false;
-			} else {
-				$exercise_timeover = false;
-			}
-		
-			if (!$permission_to_start || $exercise_timeover) {
-				$is_visible = false;
-			}
+				$is_visible = (($time_now - api_strtotime($this->start_time, 'UTC')) > 0) ? true : false;
+			}            
+            
+            if ($is_visible == false) {
+                $message = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($this->start_time));
+            }
+            
+            if ($is_visible == true) {		
+                if ($this->end_time != '0000-00-00 00:00:00') {
+                    $is_visible = ((api_strtotime($this->end_time, 'UTC') > $time_now) > 0) ? true : false;
+                    if ($is_visible == false) {
+                        $message = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($this->end_time));     
+                    }
+                }
+            }
+            if ($is_visible == false && $this->start_time != '0000-00-00 00:00:00' && $this->end_time != '0000-00-00 00:00:00') {
+                $message =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($this->start_time), api_convert_and_format_date($this->end_time));
+            } 
 		}
 		
 		// 4. We check if the student have attempts
 		if ($is_visible) {
-			if ($this->selectAttempts()) {
+			if ($this->selectAttempts() > 0) {
 				$attempt_count = get_attempt_count_not_finished(api_get_user_id(), $this->id, $lp_id, $lp_item_id, $lp_item_view_id);
-				if ($attempt_count >= $this->selectAttempts()) {
-					//Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);
+				if ($attempt_count >= $this->selectAttempts()) {					
+                    $message = sprintf(get_lang('ReachedMaxAttempts'), $this->name, $this->selectAttempts());
 					$is_visible = false;
 				}
 			}
 		}
-		
-	
-		return $is_visible;
+        if (!empty($message)){
+            $message = Display :: return_message($message, 'warning', false);
+        }
+		return array('value' => $is_visible, 'message' => $message);
 	}
 	
 	function save_attempt() {
@@ -3498,6 +3501,6 @@ class Exercise {
 			}
 		}		
 		return $result;
-	}	
+    }
 }
 endif;

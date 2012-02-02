@@ -548,7 +548,9 @@ class Agenda {
                         $sent_to = array();
                         foreach($user_to_array as $item) {
                             $user_info = api_get_user_info($item);   
-                            $sent_to[] = $user_info['complete_name'];        
+                            // add username as tooltip for $event['sent_to'] - ref #4226
+                            $username = api_htmlentities(sprintf(get_lang('LoginX'), $user_info['username']), ENT_QUOTES);                            
+                            $sent_to[] = "<span title='".$username."'>".$user_info['complete_name']."</span>";        
                         }
                     }
                     $event['sent_to'] = implode(', ', $sent_to);
@@ -662,7 +664,10 @@ class Agenda {
         foreach($user_list as $this_user) {
             // $to_already_selected is the array containing the users (and groups) that are already selected
             if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) {
-                $html .= "<option value=\"USER:".$this_user['user_id']."\">".api_get_person_name($this_user['firstname'], $this_user['lastname'])." (".$this_user['username'].")</option>";
+                $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
+                // @todo : add title attribute $username in the jqdialog window. wait for a chosen version to inherit title attribute
+                // from <option> to <li>
+                $html .= "<option title='".$username."' value=\"USER:".$this_user['user_id']."\">".api_get_person_name($this_user['firstname'], $this_user['lastname'])."</option>";
             }
         }
         if (is_array($group_list)) {

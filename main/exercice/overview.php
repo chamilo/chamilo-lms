@@ -90,17 +90,16 @@ if (!empty($attempt_list)) {
 $html .= $message;
 $exercise_url_button = Display::url($label, $exercise_url, array('class'=>'a_button blue bigger round'));
 
-if (!$objExercise->is_visible($learnpath_id, $learnpath_item_id)) {
+$visible_return = $objExercise->is_visible($learnpath_id, $learnpath_item_id);
+        
+if ($visible_return['value'] == false) {
 	$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id;	
-	//$exercise_url_button = Display::url(get_lang('SeeResults'), $exercise_url, array('class'=>'a_button white bigger round no_link'));
-	if ($origin == 'learnpath') {
-		$exercise_url_button = Display::return_message(sprintf(get_lang('ReachedMaxAttempts'), $objExercise->title, $objExercise->selectAttempts()), 'warning');
-	}
-	$exercise_url_button = sprintf(get_lang('ReachedMaxAttempts'), $objExercise->title, $objExercise->selectAttempts());
+	$exercise_url_button = $visible_return['message'];    
 }
+
 $options  = Display::div('', array('class'=>'left_option'));
 if (!empty($exercise_url_button)) {
-	$options .= Display::div($exercise_url_button, array('class'=>'center_option'));
+	$options .= $exercise_url_button;
 }
 
 $attempts = get_exercise_results_by_user(api_get_user_id(), $objExercise->id, api_get_course_id(), api_get_session_id(), $learnpath_id, $learnpath_item_id, 'desc');

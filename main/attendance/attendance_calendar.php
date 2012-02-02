@@ -52,7 +52,7 @@ if (isset($action) && $action == 'calendar_add') {
 	echo '<h4>'.get_lang('AddADateTime').'</h4>';
 		$form = new FormValidator('attendance_calendar_add','POST','index.php?action=calendar_add&attendance_id='.$attendance_id.$param_gradebook.'&'.api_get_cidreq(),'');
 		$form->addElement('datepicker', 'date_time', '', array('form_name'=>'attendance_calendar_add'), 5);
-		$defaults['date_time'] = date('Y-m-d H:i',api_strtotime(api_get_local_time()));
+		$defaults['date_time'] = date('Y-m-d H:i', api_strtotime(api_get_local_time()));
 
         $form->addElement('html','<br /><br />');
 		

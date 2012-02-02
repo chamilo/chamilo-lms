@@ -401,13 +401,13 @@ if (is_array($forum_categories_list)) {
                         } else {
                             $name = api_get_person_name($forum['last_poster_firstname'], $forum['last_poster_lastname']);
                             $poster_id = $forum['last_poster_id'];
-                            $userinfo = api_get_user_info($poster_id);  // 
-                            $username = " (".$userinfo['username'].")";  // 
+                            $userinfo = api_get_user_info($poster_id);
+                            $username = sprintf(get_lang('LoginX'), $userinfo['username']);
                         }
                         echo '<td nowrap="nowrap">';
 
                         if (!empty($forum['last_post_id'])) {
-                            echo api_convert_and_format_date($forum['last_post_date']).'<br /> '.get_lang('By').' '.display_user_link($poster_id, $name.$username); // 
+                            echo api_convert_and_format_date($forum['last_post_date']).'<br /> '.get_lang('By').' '.display_user_link($poster_id, $name, '', $username);
                         }
                         echo '</td>';
                         echo '<td nowrap="nowrap" align="center">';

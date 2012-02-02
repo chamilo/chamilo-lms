@@ -93,7 +93,7 @@ class Chat extends Model {
 								'id'		=> $chat['id']								
 							);
 				$items[$from_user_id][] = $item;				
-				$_SESSION['openChatBoxes'][$from_user_id] = api_strtotime($chat['sent']);				
+				$_SESSION['openChatBoxes'][$from_user_id] = api_strtotime($chat['sent'],'UTC');				
 			}
 			$_SESSION['chatHistory'][$from_user_id][] = $item;					
 			
@@ -106,7 +106,7 @@ class Chat extends Model {
 					$time = api_convert_and_format_date($time, DATE_TIME_FORMAT_SHORT_TIME_FIRST);
 					$message = sprintf(get_lang('SentAtX'), $time);
 					
-					if ($now > 180) {						
+					if ($now > 180) {		
 						$item = array('s' => '2', 'f' => $user_id, 'm' => $message);			
 						
 						if (isset($_SESSION['chatHistory'][$user_id])) {

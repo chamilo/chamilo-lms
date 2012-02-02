@@ -80,7 +80,7 @@ class IndexManager {
 				foreach($exercises as $exercise_item) {
 					$exercise_item['course_code'] 	= $course_code;
 					$exercise_item['session_id'] 	= $session_id;
-					$exercise_item['tms'] 	= api_strtotime($exercise_item['end_time']);
+					$exercise_item['tms'] 	= api_strtotime($exercise_item['end_time'], 'UTC');
 						
 					$exercise_list[] = $exercise_item;
 				}

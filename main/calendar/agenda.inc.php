@@ -589,14 +589,18 @@ $(function() {
 
 function move(fbox,	tbox)
 {
+    // @todo : change associative arrays arrLookup and arrLookupTitle that use firstname/lastnam as key
+    // so, pb with homonyms
 	var	arrFbox	= new Array();
 	var	arrTbox	= new Array();
 	var	arrLookup =	new	Array();
+	var	arrLookupTitle =	new	Array();
 
 	var	i;
 	for	(i = 0;	i <	tbox.options.length; i++)
 	{
 		arrLookup[tbox.options[i].text]	= tbox.options[i].value;
+		arrLookupTitle[tbox.options[i].text] = tbox.options[i].title;
 		arrTbox[i] = tbox.options[i].text;
 	}
 
@@ -606,6 +610,7 @@ function move(fbox,	tbox)
 	for(i =	0; i < fbox.options.length;	i++)
 	{
 		arrLookup[fbox.options[i].text]	= fbox.options[i].value;
+		arrLookupTitle[fbox.options[i].text] = fbox.options[i].title;
 
 		if (fbox.options[i].selected &&	fbox.options[i].value != \"\")
 		{
@@ -665,7 +670,7 @@ function move(fbox,	tbox)
 		var	no = new Option();
 		no.value = arrLookup[arrFbox[c]];
 		no.text	= arrFbox[c];
-		no.title = no.text;
+		no.title = arrLookupTitle[arrFbox[c]];
 		fbox[c]	= no;
 	}
 	for(c =	0; c < arrTbox.length; c++)
@@ -673,7 +678,7 @@ function move(fbox,	tbox)
 		var	no = new Option();
 		no.value = arrLookup[arrTbox[c]];
 		no.text	= arrTbox[c];
-		no.title = no.text;
+		no.title = arrLookupTitle[arrTbox[c]];
 		tbox[c]	= no;
 	}
 }
@@ -1003,8 +1008,9 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 		foreach($user_list as $this_user) {
 		    // $to_already_selected is the array containing the users (and groups) that are already selected
 			if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) {
-    		    $user_info = api_get_person_name($this_user['firstName'], $this_user['lastName'])." (".$this_user['username'].") ";
-				echo	"<option title='$user_info' value='USER:".$this_user['uid']."'>$user_info</option>";
+                $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
+    		    $user_info = api_get_person_name($this_user['firstName'], $this_user['lastName']);
+				echo	"<option title='$username' value='USER:".$this_user['uid']."'>$user_info</option>";
 			}
 		}
 	}
@@ -1048,8 +1054,9 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 			}
 			else
 			{
-			    $user_info = api_get_person_name($ref_array_users[$id]['firstName'], $ref_array_users[$id]['lastName'])." (".$ref_array_users[$id]['username'].")";
-				$select_options_user[] = "<option title='$user_info' value='".$groupuser."'>$user_info</option>";
+                $username = api_htmlentities(sprintf(get_lang('LoginX'), $ref_array_users[$id]['username']), ENT_QUOTES);
+			    $user_info = api_get_person_name($ref_array_users[$id]['firstName'], $ref_array_users[$id]['lastName']);
+				$select_options_user[] = "<option title='$username' value='".$groupuser."'>$user_info</option>";
 				//echo "<option value=\"".$groupuser."\">".api_get_person_name($ref_array_users[$id]['firstName'], $ref_array_users[$id]['lastName'])."</option>";
 			}
 		}
@@ -1357,16 +1364,20 @@ function sent_to_form($sent_to_array) {
     	if (isset($sent_to_array['users'])) {
     		if (is_array($sent_to_array['users'])) {
     			foreach ($sent_to_array['users'] as $user_id) {
-    				$user_info= api_get_user_info($user_id);
-    				$output[] = api_get_person_name($user_info['firstName'], $user_info['lastName'])." (".$user_info['username'].")";
+    			    // @todo add username as tooltip - is this fucntion still used ?
+    				// $user_info= api_get_user_info($user_id);
+                    // $username = api_htmlentities(sprintf(get_lang('LoginX'), $user_info['username']), ENT_QUOTES);
+    				$output[] = api_get_person_name($user_info['firstName'], $user_info['lastName']);
                 }
             }
     	}    
 	} else {
 	    // there is only one user/group
 		if (is_array($sent_to_array['users'])) {
-			$user_info = api_get_user_info($sent_to_array['users'][0]);
-			$output[]= api_get_person_name($user_info['firstName'], $user_info['lastName'])." (".$user_info['username'].")";
+		    // @todo add username as tooltip - is this fucntion still used ?
+			// $user_info = api_get_user_info($sent_to_array['users'][0]);
+            // $username = api_htmlentities(sprintf(get_lang('LoginX'), $user_info['username']), ENT_QUOTES);
+			$output[]= api_get_person_name($user_info['firstName'], $user_info['lastName']);
 		}
 		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0) {
 			$group_id = $sent_to_array['groups'][0];

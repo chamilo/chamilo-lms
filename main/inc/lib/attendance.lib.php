@@ -941,8 +941,7 @@ class Attendance
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$attendance_id = intval($attendance_id);		
         $course_id = api_get_course_int_id();
-		$sql = "SELECT * FROM $tbl_attendance_calendar WHERE c_id = $course_id AND attendance_id = '$attendance_id' ";		
-		$filter_where = '';
+		$sql = "SELECT * FROM $tbl_attendance_calendar WHERE c_id = $course_id AND attendance_id = '$attendance_id' ";				
 		if (!in_array($type, array('today', 'all', 'all_done', 'all_not_done','calendar_id'))) {
 			$type = 'all';
 		}		
@@ -976,10 +975,10 @@ class Attendance
                 $row['date_time']       = api_get_local_time($row['date_time']);
                 $row['date']            = api_format_date($row['date_time'], DATE_FORMAT_SHORT);
                 $row['time']            = api_format_date($row['date_time'], TIME_NO_SEC_FORMAT);              
-                if ($type == 'today') {
-                    if (date('d-m-Y', api_strtotime($row['date_time'])) == date('d-m-Y', api_strtotime(api_get_local_time()))) {
+                if ($type == 'today') {                    
+                    if (date('d-m-Y', api_strtotime($row['date_time'], 'UTC')) == date('d-m-Y', time())) {
                         $data[] = $row;                        
-                    }                
+                    }
                 } else {
                 	$data[] = $row;
                 }
@@ -1147,24 +1146,7 @@ class Attendance
                         $this->set_date_time($datetimezone);
                         $res = $this->attendance_calendar_add($attendance_id);
                         $j++;
-                    }
-                
-                    //$next_start = $this->add_month($start_date);
-                    /*
-                    $next_start = api_strtotime(api_get_utc_date_add(api_get_utc_datetime($start_date), 0 , 1),'UTC');
-                    error_log('22-->$start_date '.$start_date);
-                    error_log('$next_start '.$next_start);
-                    error_log('$end_date '.$end_date);
-                    while($next_start <= $end_date) {
-                        //$datetime = date('Y-m-d H:i:s', $next_start);
-                        $datetimezone = api_get_utc_datetime($next_start);
-                        error_log('$datetimezone n loop '.$datetimezone);
-                        $this->set_date_time($datetimezone);
-                        $res = $this->attendance_calendar_add($attendance_id);
-                        //$next_start = $this->add_month($next_start);
-                        $next_start = api_strtotime(api_get_utc_date_add(api_get_utc_datetime($next_start), 0 , 1),'UTC');
-                        error_log('$next_start in loop '.$next_start);
-                    }*/
+                    }                
                     break;
             }
         }

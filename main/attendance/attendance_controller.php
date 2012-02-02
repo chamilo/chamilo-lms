@@ -299,18 +299,16 @@
 			if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {	
 				if (!isset($_POST['cancel'])) {
                     if (isset($_POST['repeat'])) {
-                       error_log($attendance->build_datetime_from_array($_POST['date_time']));
-                       //$start_datetime = api_strtotime($attendance->build_datetime_from_array($_POST['date_time']));
-                       
+                        //@todo  check this error_logs
                         $start_datetime = api_strtotime(api_get_utc_datetime($attendance->build_datetime_from_array($_POST['date_time'])),'UTC');
-                        error_log('$start_datetime '.$start_datetime);
+                        //error_log('$start_datetime '.$start_datetime);
                         
                         $_POST['end_date_time']['H'] = $_POST['date_time']['H'];
                         $_POST['end_date_time']['i'] = $_POST['date_time']['i'];
-                        error_log($attendance->build_datetime_from_array($_POST['end_date_time']));
+                        //error_log($attendance->build_datetime_from_array($_POST['end_date_time']));
                         
                         $end_datetime = api_strtotime(api_get_utc_datetime($attendance->build_datetime_from_array($_POST['end_date_time'])),'UTC');
-                        error_log('$end_datetime '.$end_datetime);
+                        //error_log('$end_datetime '.$end_datetime);
                         $checkdate = checkdate($_POST['end_date_time']['F'], $_POST['end_date_time']['d'], $_POST['end_date_time']['Y']);
 
                         $repeat_type = $_POST['repeat_type'];

@@ -649,7 +649,7 @@ function showlinksofcategory($catid) {
     				    Display :: return_icon('delete.png', get_lang('Delete'), array (), 22) . '</a>';
     
     			} else {
-    				echo get_lang('EditionNotAvailableFromSession');
+    				echo Display :: return_icon('edit_na.png', get_lang('EditionNotAvailableFromSession'), array (), 22); //get_lang('EditionNotAvailableFromSession');
     			}
     		}
     		echo '</td></tr>';

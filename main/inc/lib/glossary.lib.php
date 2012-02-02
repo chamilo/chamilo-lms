@@ -307,10 +307,7 @@ class GlossaryManager {
 			//$table->set_header(0, '', false);
 			$table->set_header(0, get_lang('TermName'), true);
 			$table->set_header(1, get_lang('TermDefinition'), true);			
-			if (api_is_allowed_to_edit(null,true)) {
-			    
-			    /*$table->set_header(2, get_lang('CreationDate'), false);
-                $table->set_header(3, get_lang('UpdateDate'), false);*/            
+			if (api_is_allowed_to_edit(null,true)) {			         
 				$table->set_header(2, get_lang('Actions'), false, 'width=90px');
 				$table->set_column_filter(2, array('GlossaryManager','actions_filter'));
 			}
@@ -448,19 +445,21 @@ class GlossaryManager {
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function actions_filter($glossary_id, $url_params, $row) {   
+	function actions_filter($glossary_id, $url_params, $row) {           
 		$glossary_id = $row[2];
 		$return = '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$glossary_id.'&'.api_get_cidreq().'&msg=edit">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
 		$glossary_data = GlossaryManager::get_glossary_information($glossary_id);		
+        
 		$glossary_term = $glossary_data['glossary_title'];
 
-		$return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>';
-		
 		if (api_is_allowed_to_edit(null, true)) {
-		    if ($glossary_data['session_id'] != api_get_session_id()) {
-		        $return  = get_lang('EditionNotAvailableFromSession');
-		    }
+		    if ($glossary_data['session_id'] == api_get_session_id()) {
+                $return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>';
+		    } else {
+                $return  = get_lang('EditionNotAvailableFromSession');
+            }
 		}
+        
 		return $return;
 	}
 

@@ -6,7 +6,7 @@
 Class LoginRedirection {
 
   //checks user status and redirect him through custom page if setting is enabled
-  public function redirect(){
+  public static function redirect(){
 
     global $param;
     $param = isset($param) ? $param : '';
@@ -59,4 +59,3 @@ Class LoginRedirection {
     exit();
   }
 }
-?>

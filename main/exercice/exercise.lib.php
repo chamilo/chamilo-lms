@@ -1023,8 +1023,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     }
                     
                     if ($start_date != "0000-00-00 00:00:00") {
-                        $start_date_timestamp   = api_strtotime($start_date);
-                        $exe_date_timestamp     = api_strtotime($results[$i]['exe_date']);                                                
+                        $start_date_timestamp   = api_strtotime($start_date, 'UTC');
+                        $exe_date_timestamp     = api_strtotime($results[$i]['exe_date'], 'UTC');                                                
     
                         $my_duration = ceil((($exe_date_timestamp - $start_date_timestamp) / 60));
                         //var_dump($start_date .' - '.$results[$i]['exdate'].' - '.$my_duration);
@@ -1218,8 +1218,8 @@ function convert_score($score, $weight) {
  * @param   int     session id
  * @return  array   array with exercise data
  */
-function get_all_exercises($course_info = null, $session_id = 0, $check_dates = false) {
-	$TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST);
+function get_all_exercises($course_info = null, $session_id = 0, $check_publication_dates = false) {
+	$TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
 	$course_id = api_get_course_int_id();
 	
     if (!empty($course_info) && !empty($course_info['real_id'])) {
@@ -1229,11 +1229,22 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_dates = 
     if ($session_id == -1) {
     	$session_id  = 0;
     }
-    if ($session_id == 0) {
-    	$conditions = array('where'=>array('active = ? AND session_id = ? AND c_id = ? '=>array('1', $session_id, $course_id)), 'order'=>'title');
+    
+    $now = api_get_utc_datetime();
+    $time_conditions = '';
+    
+    if ($check_publication_dates) {        
+        $time_conditions = " AND ((start_time <> '0000-00-00 00:00:00' AND start_time < '$now'  AND end_time <> '0000-00-00 00:00:00' AND end_time > '$now' )  OR "; //start and end are set
+        $time_conditions .= " (start_time <> '0000-00-00 00:00:00' AND start_time < '$now'  AND end_time = '0000-00-00 00:00:00') OR "; // only start is set
+        $time_conditions .= " (start_time = '0000-00-00 00:00:00'   AND end_time <> '0000-00-00 00:00:00'  AND end_time > '$now') OR   "; // only end is set
+        $time_conditions .= " (start_time = '0000-00-00 00:00:00'   AND end_time =  '0000-00-00 00:00:00'))  "; // nothing is set                           
+    }
+    
+    if ($session_id == 0) {       
+    	$conditions = array('where'=>array('active = ? AND session_id = ? AND c_id = ? '.$time_conditions => array('1', $session_id, $course_id)), 'order'=>'title');        
     } else {
         //All exercises
-    	$conditions = array('where'=>array('active = ? AND  (session_id = 0 OR session_id = ? ) AND c_id = ? ' => array('1', $session_id, $course_id)), 'order'=>'title');
+    	$conditions = array('where'=>array('active = ? AND  (session_id = 0 OR session_id = ? ) AND c_id = ? '.$time_conditions => array('1', $session_id, $course_id)), 'order'=>'title');        
     }    
     return Database::select('*',$TBL_EXERCICES, $conditions);
 }
@@ -1541,7 +1552,7 @@ function get_exercises_to_be_taken($course_code, $session_id) {
 	$result = array();
 	$now = time() + 15*24*60*60;
 	foreach($exercises as $exercise_item) {
-		if (isset($exercise_item['end_time'])  && !empty($exercise_item['end_time']) && $exercise_item['end_time'] != '0000-00-00 00:00:00' && api_strtotime($exercise_item['end_time']) < $now) {
+		if (isset($exercise_item['end_time'])  && !empty($exercise_item['end_time']) && $exercise_item['end_time'] != '0000-00-00 00:00:00' && api_strtotime($exercise_item['end_time'], 'UTC') < $now) {
 			$result[] = $exercise_item;
 		}
 	}

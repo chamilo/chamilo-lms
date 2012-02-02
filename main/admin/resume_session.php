@@ -11,8 +11,10 @@ $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
+require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
+
 // setting the section (for the tabs)
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
 
@@ -69,11 +71,9 @@ if($_GET['action'] == 'delete') {
 		$idChecked="'".implode("','",$idChecked)."'";
 
 		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)");
-
 		$nbr_affected_rows=Database::affected_rows();
 
 		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)");
-
 		Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
 	}
 
@@ -86,6 +86,7 @@ if($_GET['action'] == 'delete') {
 	if (!empty($_GET['user'])) {
 		Database::query("DELETE FROM $tbl_session_rel_user WHERE relation_type<>".SESSION_RELATION_TYPE_RRHH." AND id_session='$id_session' AND id_user=".intval($_GET['user']));
 		$nbr_affected_rows=Database::affected_rows();
+        
 		Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'");
 
 		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']));
@@ -161,7 +162,6 @@ echo Display::tag('h1', Display::return_icon('session.png', get_lang('Session'))
 		<?php echo intval($session['nb_days_access_after_end']) ?>
 	</td>
 </tr>
-
 <tr>
 	<td>
 		<?php echo api_ucfirst(get_lang('SessionVisibility')) ?> :
@@ -172,7 +172,6 @@ echo Display::tag('h1', Display::return_icon('session.png', get_lang('Session'))
 </tr>
 
 <?php 
-require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 
 if (api_get_multiple_access_url()) {
     echo '<tr><td>';   
@@ -204,13 +203,12 @@ if (api_get_multiple_access_url()) {
 </tr>
 </tr>
 <?php
-if($session['nbr_courses']==0){
+if ($session['nbr_courses']==0){
 	echo '
 		<tr>
 			<td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
 		</tr>';
-}
-else {
+} else {
 	// select the courses
 	$sql = "SELECT code,title,visual_code, nbr_users
 			FROM $tbl_course,$tbl_session_rel_course
@@ -261,6 +259,7 @@ else {
 			<td>'.$course['nbr_users'].'</td>
 			<td>
                 <a href="'.api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>   
+                <a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$course['code'].'">'.Display::return_icon('user.png', get_lang('Edit'), '', 22).'</a>
 				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;                
 				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'">'.Display::return_icon('edit.png', get_lang('Edit'), '', 22).'</a>
 				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
@@ -270,9 +269,7 @@ else {
 }
 ?>
 </table>
-
 <br />
-
 <!--List of courses -->
 <table class="data_table" width="100%">
 <tr>
@@ -287,9 +284,9 @@ if($session['nbr_users']==0){
 		<tr>
 			<td colspan="2">'.get_lang('NoUsersForThisSession').'</td>
 		</tr>';
-}
-else {
+} else {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
+    
 	$sql = 'SELECT '.$tbl_user.'.user_id, lastname, firstname, username '.
 			' FROM '.$tbl_user.
 			' INNER JOIN '.$tbl_session_rel_user.

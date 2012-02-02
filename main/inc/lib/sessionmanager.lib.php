@@ -220,7 +220,7 @@ class SessionManager {
 		}        
 
 		$today = api_get_utc_datetime();
-		$today = api_strtotime($today);
+		$today = api_strtotime($today, 'UTC');
 		$today = date('Y-m-d', $today);
 
 		$select = "SELECT * FROM (SELECT 
@@ -635,7 +635,9 @@ class SessionManager {
 					}
 				}
 			}
-			
+            
+			//Replace with this new function
+            //
 			// insert new users into session_rel_course_rel_user and ignore if they already exist
 			foreach ($user_list as $enreg_user) {
 				if(!in_array($enreg_user, $existingUsers)) {
@@ -677,10 +679,43 @@ class SessionManager {
             $update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
             Database::query($update_sql);
         } else {
-            echo $update_sql = "UPDATE $tbl_session SET nbr_users= nbr_users + $nbr_users WHERE id='$id_session' ";
+            $update_sql = "UPDATE $tbl_session SET nbr_users= nbr_users + $nbr_users WHERE id='$id_session' ";
             Database::query($update_sql);           
         }
 	}
+    
+    function subscribe_users_to_session_course($user_list, $session_id, $course_code, $session_visibility = SESSION_VISIBLE_READ_ONLY ) {
+           	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+            $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+            
+            if (empty($user_list) || empty($session_id) || empty($course_code)) {
+                return false;                
+            }
+            
+            $session_id = intval($session_id);
+            $course_code = Database::escape_string($course_code);
+            $session_visibility = intval($session_visibility);                      
+    
+            $nbr_users = 0;
+			foreach ($user_list as $enreg_user) {
+				//if (!in_array($enreg_user, $existingUsers)) {
+	                $enreg_user = intval($enreg_user);
+					$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user,visibility) 
+                                   VALUES ('$session_id','$course_code','$enreg_user','$session_visibility')";
+					Database::query($insert_sql);
+					if (Database::affected_rows()) {
+						$nbr_users++;
+					}
+				//}
+			}
+			// count users in this session-course relation
+			$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND status<>2";
+			$rs = Database::query($sql);
+			list($nbr_users) = Database::fetch_array($rs);
+			// update the session-course relation to add the users total
+			$update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
+			Database::query($update_sql);
+    }
 
 	/**
 	 * Unsubscribe user from session
@@ -1564,6 +1599,7 @@ class SessionManager {
     
     function suscribe_sessions_to_promotion($promotion_id, $list) {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
+        $params = array();
         $params['promotion_id'] = 0;             
         Database::update($t, $params, array('promotion_id = ?'=>$promotion_id));
         

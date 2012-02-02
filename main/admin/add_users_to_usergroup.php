@@ -5,16 +5,15 @@
 */
 
 // name of the language file that needs to be included
-$language_file=array('admin','registration');
+$language_file = array('admin','registration');
 
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 // including some necessary files
 require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -69,12 +68,26 @@ function validate_filter() {
         document.formulaire.form_sent.value=0;
         document.formulaire.submit();
 }
+
+function checked_in_no_group(checked) {    
+    $("#first_letter_user")
+    .find("option")
+    .attr("selected", false);    
+        document.formulaire.form_sent.value="2"; 
+    document.formulaire.submit();
+}
+
+function change_select(val) {
+    $("#user_with_any_group_id").attr("checked", false);
+    document.formulaire.form_sent.value="2"; 
+    document.formulaire.submit();
+}
+
 </script>';
 
 
 $form_sent  = 0;
 $errorMsg   = '';
-$sessions   = array();
 
 $extra_field_list= UserManager::get_extra_fields();
 $new_field_list = array();
@@ -90,6 +103,7 @@ if (is_array($extra_field_list)) {
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
 $first_letter_user = '';
+
 if ($_POST['form_sent']) {
     $form_sent              = $_POST['form_sent'];    
     $elements_posted        = $_POST['elements_in_name'];
@@ -110,8 +124,7 @@ if ($_POST['form_sent']) {
 //Filter by Extra Fields
 $use_extra_fields = false;
 if (is_array($extra_field_list)) {
-    if (is_array($new_field_list) && count($new_field_list)>0 ) {
-        $result_list=array();
+    if (is_array($new_field_list) && count($new_field_list)>0 ) {        
         foreach ($new_field_list as $new_field) {
             $varname = 'field_'.$new_field['variable'];
             if (Usermanager::is_extra_field_available($new_field['variable'])) {
@@ -140,19 +153,46 @@ if ($use_extra_fields) {
 $data       = $usergroup->get($id);
 $list_in    = $usergroup->get_users_by_usergroup($id);
 
+$list_all    = $usergroup->get_users_by_usergroup();
+
 $order = array('lastname');
 if (api_is_western_name_order()) {
     $order = array('firstname');	
 }
 
-if (!empty($first_letter_user)) {    
-    $user_list = UserManager::get_user_list_like(array('firstname'=>$first_letter_user), $order);
-} else {
-    $user_list  = UserManager::get_user_list(array(),$order);
-}
-
-//api_display_tool_title($tool_name.' ('.$session_info['name'].')');
 $elements_not_in = $elements_in = array();
+$complete_user_list = UserManager::get_user_list(array(), $order);
+
+if (!empty($complete_user_list)) {
+    foreach($complete_user_list as $item) {
+        if ($use_extra_fields) {
+            if (!in_array($item['user_id'], $final_result)) {
+                continue;
+            }
+        }
+        if ($item['status'] == 6 ) continue; //avoid anonymous users
+        
+        if (in_array($item['user_id'], $list_in)) {       
+            $person_name = api_get_person_name($item['firstname'], $item['lastname']).' ('.$item['username'].')';
+            $elements_in[$item['user_id']] = $person_name;             
+        }        
+    }
+}
+  
+$user_with_any_group = isset($_REQUEST['user_with_any_group']) && !empty($_REQUEST['user_with_any_group']) ? true : false;
+
+if ($user_with_any_group) {
+    $user_list = UserManager::get_user_list_like(array('lastname' => $first_letter_user), $order, true);
+    $new_user_list = array();
+    foreach($user_list as $item) {
+        if (!in_array($item['user_id'], $list_all)) {
+            $new_user_list[] = $item;
+        }        
+    }
+    $user_list = $new_user_list;        
+} else {    
+    $user_list = UserManager::get_user_list_like(array('lastname' => $first_letter_user), $order, true);
+}
 
 if (!empty($user_list)) {
     foreach($user_list as $item) {
@@ -162,9 +202,9 @@ if (!empty($user_list)) {
             }
         }
         if ($item['status'] == 6 ) continue; //avoid anonymous users
-        $person_name = api_get_person_name($item['firstname'], $item['lastname']);        
+        $person_name = api_get_person_name($item['firstname'], $item['lastname']).' ('.$item['username'].')';
         if (in_array($item['user_id'], $list_in)) {                        
-            $elements_in[$item['user_id']] = $person_name;             
+            //$elements_in[$item['user_id']] = $person_name;             
         } else {
             $elements_not_in[$item['user_id']] = $person_name;
         }
@@ -235,8 +275,8 @@ if(!empty($errorMsg)) {
 <?php if ($add_type=='multiple') { ?>
 <tr>
 <td align="center">
-<?php echo get_lang('FirstLetterSessions'); ?> :
-     <select name="firstLetterUser" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
+<?php echo get_lang('FirstLetterUser'); ?> :
+     <select id="first_letter_user" name="firstLetterUser" onchange="change_select();">
       <option value = "%">--</option>
       <?php
         echo Display :: get_alphabet_options($first_letter_user);
@@ -250,6 +290,10 @@ if(!empty($errorMsg)) {
   <td align="center">
   <div id="content_source">      
         <?php echo Display::select('elements_not_in_name', $elements_not_in, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
+      <br />
+        <input type="checkbox" <?php if ($user_with_any_group) echo 'checked="checked"';?> onchange="checked_in_no_group(this.checked);" name="user_with_any_group" id="user_with_any_group_id"> 
+        <label for="user_with_any_group_id"><?php echo get_lang('UsersRegisteredInNoGroup'); ?></label>
+        
   </div>
   </td>
   <td width="10%" valign="middle" align="center">

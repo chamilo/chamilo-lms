@@ -5,10 +5,10 @@
 */
 
 // name of the language file that needs to be included
-$language_file=array('admin','registration');
+$language_file = array('admin','registration');
 
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 // including some necessary files
 require_once '../inc/global.inc.php';
@@ -96,7 +96,7 @@ if($_POST['form_sent']) {
 }
 $data               = $usergroup->get($id);
 $course_list_in     = $usergroup->get_courses_by_usergroup($id);
-$course_list        = CourseManager::get_courses_list();
+$course_list        = CourseManager::get_courses_list(0,0,'title');
 
 //api_display_tool_title($tool_name.' ('.$session_info['name'].')');
 $elements_not_in = $elements_in= array();
@@ -104,9 +104,9 @@ $elements_not_in = $elements_in= array();
 if (!empty($course_list)) {
     foreach($course_list as $item) {        
         if (in_array($item['id'], $course_list_in)) {            
-            $elements_in[$item['id']] = $item['title'];             
+            $elements_in[$item['id']] = $item['title']." (".$item['code'].")";
         } else {
-            $elements_not_in[$item['id']] = $item['title'];
+            $elements_not_in[$item['id']] = $item['title']." (".$item['code'].")";
         }
     }
 }
@@ -134,7 +134,7 @@ function search($needle,$type) {
                 $order_clause.
                 ' LIMIT 11';*/
         } else {
-            $list = CourseManager::get_courses_list(0, 0, 1, 'ASC', -1, $needle);
+            $list = CourseManager::get_courses_list(0, 0, 2, 'ASC', -1, $needle);
         }     
         $i=0;        
         if ($type=='single') {
@@ -154,7 +154,7 @@ function search($needle,$type) {
             
             foreach ($list as $row ) {         
                 if (!in_array($row['id'], array_keys($elements_in))) {       
-                    $return .= '<option value="'.$row['id'].'">'.$row['title'].'</option>';
+                    $return .= '<option value="'.$row['id'].'">'.$row['title'].' ('.$row['code'].')</option>';
                 }
             }
             $return .= '</select>';
@@ -229,7 +229,7 @@ if(!empty($errorMsg)) {
 <?php if ($add_type=='multiple') { ?>
 <tr>
 <td align="center">
-<?php echo get_lang('FirstLetterSessions'); ?> :
+<?php echo get_lang('FirstLetterCourseTitle'); ?> :
      <select name="firstLetterUser" onchange = "xajax_search(this.value,'multiple')" >
       <option value = "%">--</option>
       <?php

@@ -230,7 +230,6 @@ if ($debug) { error_log("4. Setting the exe_id $exe_id");} ;
 //var_dump($safe_lp_id.' - '.$safe_lp_item_id.' - '.$safe_lp_item_view_id);
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);
 
-
 if (empty($exercise_stat_info)) {
 	$total_weight = 0;
 	$questionList = $objExercise->get_validated_question_list();	
@@ -638,19 +637,27 @@ if (!empty($exercise_description)) {
 }
 echo Display::div($exercise_header, array('class'=>'exercise_header'));*/
 
+$is_visible_return = $objExercise->is_visible($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
+if ($is_visible_return['value'] == false) {
+    echo $is_visible_return['message'];    
+    if ($origin != 'learnpath') {
+        Display :: display_footer();
+    }
+    exit;
+}
 
 $limit_time_exists = (($objExercise->start_time != '0000-00-00 00:00:00') || ($objExercise->end_time != '0000-00-00 00:00:00')) ? true : false;
 
-if ($limit_time_exists) {	
-    $exercise_start_time 	= api_strtotime($objExercise->start_time,'UTC');
-    $exercise_end_time 		= api_strtotime($objExercise->end_time,'UTC');
+if ($limit_time_exists) {	    
+    $exercise_start_time 	= api_strtotime($objExercise->start_time, 'UTC');
+    $exercise_end_time 		= api_strtotime($objExercise->end_time, 'UTC');
     $time_now 				= time();
     
     if ($objExercise->start_time != '0000-00-00 00:00:00') {
         $permission_to_start = (($time_now - $exercise_start_time) > 0) ? true : false;
     } else {
         $permission_to_start = true;
-    }         
+    }
     if ($_SERVER['REQUEST_METHOD'] != 'POST') {
         if ($objExercise->end_time != '0000-00-00 00:00:00') {
             $exercise_timeover = (($time_now - $exercise_end_time) > 0) ? true : false;

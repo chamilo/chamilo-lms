@@ -30,7 +30,7 @@ class learnpathList {
      * @param	int			Optional session id (otherwise we use api_get_session_id())
      * @return	void
      */
-    function __construct($user_id, $course_code = '', $session_id = null, $order_by = null) {
+    function __construct($user_id, $course_code = '', $session_id = null, $order_by = null, $check_publication_dates = false) {
         $course_info = api_get_course_info($course_code);
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
@@ -49,9 +49,21 @@ class learnpathList {
         $condition_session = api_get_session_condition($session_id, true, true);
         $order = "ORDER BY display_order ASC, name ASC";
         if (isset($order_by)) {
-           $order =  Database::parse_conditions(array('order'=>$order_by));           
+           $order = Database::parse_conditions(array('order'=>$order_by));           
         }
-        $sql = "SELECT * FROM $lp_table WHERE c_id = $course_id $condition_session $order";
+        $now = api_get_utc_datetime();
+        $time_conditions = '';
+        
+        if ($check_publication_dates) {
+            $time_conditions = " AND ( (publicated_on <> '0000-00-00 00:00:00' AND publicated_on < '$now'  AND expired_on <> '0000-00-00 00:00:00'  AND expired_on > '$now' )  OR 
+                        (publicated_on <> '0000-00-00 00:00:00'  AND publicated_on < '$now'  AND expired_on = '0000-00-00 00:00:00') OR
+                        (publicated_on = '0000-00-00 00:00:00'   AND expired_on <> '0000-00-00 00:00:00' AND expired_on > '$now') OR                        
+                        (publicated_on = '0000-00-00 00:00:00'   AND expired_on = '0000-00-00 00:00:00' )) 
+            ";
+        }
+        
+        $sql = "SELECT * FROM $lp_table WHERE c_id = $course_id $time_conditions $condition_session $order";
+        
         $res = Database::query($sql);
         $names = array();
         while ($row = Database::fetch_array($res,'ASSOC')) {

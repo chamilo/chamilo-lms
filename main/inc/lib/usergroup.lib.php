@@ -74,8 +74,13 @@ class UserGroup extends Model {
      * @param   int     user group id
      * @return  array   with a list of user ids
      */
-    public function get_users_by_usergroup($id) {
-        $results = Database::select('user_id',$this->usergroup_rel_user_table, array('where'=>array('usergroup_id = ?'=>$id)));
+    public function get_users_by_usergroup($id = null) {
+        if (empty($id)) {
+            $conditions = array();
+        } else {
+            $conditions = array('where'=>array('usergroup_id = ?'=>$id));
+        }
+        $results = Database::select('user_id', $this->usergroup_rel_user_table, $conditions, true);
         $array = array();
         if (!empty($results)) {    
             foreach($results as $row) {

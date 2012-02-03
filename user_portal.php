@@ -44,6 +44,8 @@ api_block_anonymous_users(); // Only users who are logged in can proceed.
 
 //$load_dirs = api_get_setting('courses_list_document_dynamic_dropdown');
 $load_dirs = true;
+// Get the courses list
+$personal_course_list 	= UserManager::get_personal_session_course_list(api_get_user_id());
 
 // Check if a user is enrolled only in one course for going directly to the course after the login.
 if (api_get_setting('go_to_course_after_login') == 'true') {
@@ -202,7 +204,6 @@ $controller = new IndexManager(get_lang('MyCourses'));
 //@todo all this could be moved in the IndexManager
 
 $courses_list 			= $controller->return_courses_main_plugin();
-$personal_course_list 	= UserManager::get_personal_session_course_list(api_get_user_id());
 
 
 // Main courses and session list

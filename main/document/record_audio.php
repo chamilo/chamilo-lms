@@ -147,7 +147,7 @@ function submitVoice() {
 	
 	//check	
 	var recorder
-	if (!(recorder = document.getElementById("nanogong")) || !(recorder.sendGongRequest)) {
+	if (!(recorder = document.getElementById("nanogong"))) {
     	alert(lang_no_applet)
 	  	return
 	}
@@ -193,19 +193,14 @@ echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/
 	//echo '<param name="SoundFileURL" value="http://somewhere.com/mysoundfile.wav" />';//load a file |(default "")
 	
 echo '</applet>';
-//check browser support and load form
-$array_browser = api_browser_support('check_browser');
+ 
+echo '<form name="form_nanogong">';	
+	echo '<input type="text" id="audio_title">';
+	echo '<input type="hidden" name="cidReq" value="'.$_course['id'].'">';
+	echo '<input type="hidden" name="id" value="'.$document_id.'">';
+	echo '<input id="status" type="hidden" name="status" value="0">';
+	echo '<button class="upload" type="submit" value="'.get_lang('Send').'" onClick="submitVoice()" />'.get_lang('Send').'</button>';
+echo '</form>';
 
-if ($array_browser[0]=="Internet Explorer") {	
-	echo '<div style="width:250px; background-color:#FFEFA7">'.get_lang('BrowserNotSupportNanogongSend').'</div>';	
-} else {   
-	echo '<form name="form_nanogong">';	
-		echo '<input type="text" id="audio_title">';
-		echo '<input type="hidden" name="cidReq" value="'.$_course['id'].'">';
-		echo '<input type="hidden" name="id" value="'.$document_id.'">';
-        echo '<input id="status" type="hidden" name="status" value="0">';
-		echo '<button class="upload" type="submit" value="'.get_lang('Send').'" onClick="submitVoice()" />'.get_lang('Send').'</button>';
-	echo '</form>';
-}
 echo '</div>';
 Display :: display_footer();

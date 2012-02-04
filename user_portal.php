@@ -183,17 +183,19 @@ if ($load_dirs) {
 
 /* Sniffing system */
 
-
 //store posts to sessions
-$_SESSION['sniff_screen_size_w']=Security::remove_XSS($_POST['sniff_navigator_screen_size_w']);
-$_SESSION['sniff__screen_size_h']=Security::remove_XSS($_POST['sniff_navigator_screen_size_h']);
-$_SESSION['sniff_type_mimetypes']=Security::remove_XSS($_POST['sniff_navigator_type_mimetypes']);
-$_SESSION['sniff_suffixes_mimetypes']=Security::remove_XSS($_POST['sniff_navigator_suffixes_mimetypes']);
-$_SESSION['sniff_list_plugins']=Security::remove_XSS($_POST['sniff_navigator_list_plugins']);
-$_SESSION['sniff_check_some_activex']=Security::remove_XSS($_POST['sniff_navigator_check_some_activex']);
-$_SESSION['sniff_check_some_plugins']=Security::remove_XSS($_POST['sniff_navigator_check_some_plugins']);
-$_SESSION['sniff_java']=Security::remove_XSS($_POST['sniff_navigator_java']);
-$_SESSION['sniff_java_sun_ver']=Security::remove_XSS($_POST['sniff_navigator_java_sun_ver']);
+if($_SESSION['sniff_navigator']!="checked") {
+	$_SESSION['sniff_navigator']=Security::remove_XSS($_POST['sniff_navigator']);
+	$_SESSION['sniff_screen_size_w']=Security::remove_XSS($_POST['sniff_navigator_screen_size_w']);
+	$_SESSION['sniff__screen_size_h']=Security::remove_XSS($_POST['sniff_navigator_screen_size_h']);
+	$_SESSION['sniff_type_mimetypes']=Security::remove_XSS($_POST['sniff_navigator_type_mimetypes']);
+	$_SESSION['sniff_suffixes_mimetypes']=Security::remove_XSS($_POST['sniff_navigator_suffixes_mimetypes']);
+	$_SESSION['sniff_list_plugins']=Security::remove_XSS($_POST['sniff_navigator_list_plugins']);
+	$_SESSION['sniff_check_some_activex']=Security::remove_XSS($_POST['sniff_navigator_check_some_activex']);
+	$_SESSION['sniff_check_some_plugins']=Security::remove_XSS($_POST['sniff_navigator_check_some_plugins']);
+	$_SESSION['sniff_java']=Security::remove_XSS($_POST['sniff_navigator_java']);
+	$_SESSION['sniff_java_sun_ver']=Security::remove_XSS($_POST['sniff_navigator_java_sun_ver']);
+}
 
 /* MAIN CODE */
 
@@ -213,17 +215,24 @@ $courses_and_sessions = ob_get_contents();
 ob_get_clean();
 
 //
+
 $controller->tpl->assign('content', 					$courses_and_sessions);
 
-$controller->tpl->assign('show_sniff', 					0);
+if($_SESSION['sniff_navigator']!="checked") {
+	$controller->tpl->assign('show_sniff', 					1);
+}
+else{
+	$controller->tpl->assign('show_sniff', 					0);
+}
 
-$sniff_notification = '';
+
 //check for flash and message
+$sniff_notification = '';
+
 if (stripos("flash_yes", $_SESSION['sniff_check_some_activex'])===0 || stripos("flash_yes", $_SESSION['sniff_check_some_plugins'])===0){
 	$sniff_notification = Display::return_message(get_lang('NoFlash'), 'warning', false);
-	
 	//js verification - To annoying of redirecting every time the page
-	//$controller->tpl->assign('sniff_notification',  $sniff_notification);
+	$controller->tpl->assign('sniff_notification',  $sniff_notification);
 }    
 
 //$controller->tpl->assign('hot_courses',                 $controller->return_hot_courses());

@@ -229,11 +229,11 @@ else{
 //check for flash and message
 $sniff_notification = '';
 
-if (stripos($_SESSION['sniff_check_some_activex'],"flash_yes")===0 || stripos($_SESSION['sniff_check_some_plugins'],"flash_yes")===0){
-	$sniff_notification = Display::return_message(get_lang('NoFlash'), 'warning', true);
+if (! preg_match("/flash_yes/", $_SESSION['sniff_check_some_activex']) && ! preg_match("/flash_yes/", $_SESSION['sniff_check_some_plugins'])) {
+    $sniff_notification = Display::return_message(get_lang('NoFlash'), 'warning', true);
 	//js verification - To annoying of redirecting every time the page
 	$controller->tpl->assign('sniff_notification',  $sniff_notification);
-}    
+}  
 
 //$controller->tpl->assign('hot_courses',                 $controller->return_hot_courses());
 

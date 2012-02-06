@@ -99,9 +99,8 @@ class IndexManager {
 	function return_announcements($show_slide = true) {	
 		// Display System announcements
 		$announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;
-		$announcement = intval($announcement);
-		
-		if (isset($_user['user_id'])) {
+		$announcement = intval($announcement);		
+		if (isset($this->user_id)) {
 			$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
 			if ($show_slide) {
 				$announcements = SystemAnnouncementManager :: display_announcements_slider($visibility, $announcement);

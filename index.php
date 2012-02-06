@@ -38,37 +38,20 @@ $htmlHeadXtra[] ='
 			pause			: 10000
 		});
 	});
-	
-	if(navigator.cookieEnabled==false){
-        document.writeln("'.addslashes(Display::return_message(get_lang("NoCookies"), 'error')).'");
-	}
-	
+
 </script>
 
 <noscript>
-	'.addslashes(Display::return_message(get_lang("NoJavascript"), 'error')).'
+	'.Display::return_message(get_lang("NoJavascript"), 'error').'
 </noscript>
-
 ';
 
-//@todo add this in the template
-
-//check if javascript is enabled
-/*
-echo '<noscript>';
-echo Display::display_error_message(get_lang("NoJavascript"));
-echo '</noscript>';
-*/
-//check if cookies are enabled
-/*
-?>
-<script language="JavaScript">
-if(navigator.cookieEnabled==false){
-        document.writeln('<?php Display::display_error_message(get_lang("NoCookies")); ?>');
+//check cookies
+setcookie("TestCookie", "cookies_yes", time()+3600);
+if( !isset($_COOKIE["TestCookie"]) && empty($_COOKIE["TestCookie"]) ) {
+	Display::display_error_message(get_lang("NoCookies"));
 }
-</script>
-<?php
-*/
+
 $controller = new IndexManager($header_title);
 
 //Actions

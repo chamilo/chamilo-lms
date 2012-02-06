@@ -190,14 +190,16 @@ function handle_stylesheets() {
         $values = $form->exportValues();
         $picture_element = & $form->getElement('new_stylesheet');
         $picture = $picture_element->getValue();
-        upload_stylesheet($values, $picture);
+        $result = upload_stylesheet($values, $picture);
 
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
         event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
-
-        Display::display_confirmation_message(get_lang('StylesheetAdded'));
+        
+        if ($result) {
+            Display::display_confirmation_message(get_lang('StylesheetAdded'));
+        }
     } else {
         if (!is_writable(api_get_path(SYS_CODE_PATH).'css/')) {
             Display::display_error_message(api_get_path(SYS_CODE_PATH).'css/'.get_lang('IsNotWritable'));
@@ -291,6 +293,7 @@ function handle_stylesheets() {
  * @since Dokeos 1.8.5
  */
 function upload_stylesheet($values, $picture) {
+    $result = false;
     // Valid name for the stylesheet folder.
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
 
@@ -336,6 +339,7 @@ function upload_stylesheet($values, $picture) {
                 if (!$single_directory) {
                     // Extract zip file.
                     $zip->extractTo(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/');
+                    $result = true;
                 } else {
                     $extraction_path = api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/';
                     for ($i = 0; $i < $num_files; $i++) {
@@ -353,26 +357,28 @@ function upload_stylesheet($values, $picture) {
                         }
 
                         $fp = $zip->getStream($entry);
-                        $ofp = fopen( $extraction_path. dirname($entry_without_first_dir).'/'.basename($entry), 'w');
+                        $ofp = fopen($extraction_path.dirname($entry_without_first_dir).'/'.basename($entry), 'w');
 
                         while (!feof($fp)) {
                             fwrite($ofp, fread($fp, 8192));
                         }
 
                         fclose($fp);
-                        fclose($ofp);
+                        fclose($ofp);                        
                     }
+                    $result = true;
                 }
             }
             $zip->close();
-
         } else {
             Display::display_error_message(get_lang('ErrorReadingZip').$info['extension'], false);
         }
     } else {
         // Simply move the file.
         move_uploaded_file($picture['tmp_name'], api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'.$picture['name']);
+        $result = true;
     }
+    return $result;
 }
 
 /**

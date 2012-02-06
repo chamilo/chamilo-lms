@@ -1064,9 +1064,7 @@ abstract class Question
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
 	function createForm (&$form,$fck_config=0) {
-		echo '	<style>
-					div.row div.label{ width: 8%; }
-					div.row div.formw{ width: 88%; }
+		echo '	<style>					
 					.media { display:none;}
 				</style>';
 

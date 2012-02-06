@@ -98,12 +98,13 @@ class IndexManager {
 	
 	function return_announcements($show_slide = true) {	
 		// Display System announcements
-		$announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;
-		$announcement = intval($announcement);		
-		if (isset($this->user_id)) {
+		$announcement = isset($_GET['announcement']) ? $_GET['announcement'] : null;
+		$announcement = intval($announcement);	
+        
+		if (!api_is_anonymous() && $this->user_id) {
 			$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
 			if ($show_slide) {
-				$announcements = SystemAnnouncementManager :: display_announcements_slider($visibility, $announcement);
+				$announcements = SystemAnnouncementManager :: display_announcements_slider($visibility, $announcement);                
 			} else {
 				$announcements = SystemAnnouncementManager :: display_all_announcements($visibility, $announcement);
 			}

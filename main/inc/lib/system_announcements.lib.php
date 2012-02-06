@@ -575,9 +575,11 @@ class SystemAnnouncementManager {
 	* @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
 	* @param int $id The identifier of the announcement to display
 	*/
-	public static function display_announcements_slider($visible, $id = -1) {
+	public static function display_announcements_slider($visible, $id = null) {
 		$user_selected_language = Database::escape_string(api_get_interface_language());
 		$db_table 				= Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        
+        $cut_size = 500;
 		
 		$now  = api_get_utc_datetime();
 		
@@ -595,27 +597,29 @@ class SystemAnnouncementManager {
 				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}
-		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
-	
+        
+        if (isset($id) && !empty($id)) {
+            $id = intval($id);
+            $sql .= " AND id = $id ";            
+        }
+        
+		$sql .= " ORDER BY date_start DESC";            	    
 		$announcements = Database::query($sql);
 		$html = '';
-		if (Database::num_rows($announcements) > 0) {
-			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
-			$query_string = ereg_replace('&$', '', $query_string);
-			$url = api_get_self();
-	
+		if (Database::num_rows($announcements) > 0) {				
 			$html .= '<div class="system_announcements">';
 			$html .=  '<h3>'.get_lang('SystemAnnouncements').'</h3>';
-			//echo '<div style="margin:10px;text-align:right;"><a href="news_list.php">'.get_lang('More').'</a></div>';
-			
 			$html .=  '<div id="container-slider">
 					<ul id="slider">';
-			while ($announcement = Database::fetch_object($announcements)) {				
-				if ($id != $announcement->id) {
-					$html .=  '<li><h1>'.$announcement->title.'</h1>'.$announcement->content.'</li>';
-				} else {
-					$html .=  '<li><h1>'.$announcement->title.'</h1>'.$announcement->content.'</li>';
-				}
+			while ($announcement = Database::fetch_object($announcements)) {                
+                $content = $announcement->content;
+                $url = api_get_path(WEB_PATH).'news_list.php?id='.$announcement->id;
+                if (empty($id)) { 
+                    if (api_strlen(strip_tags($content)) > $cut_size) {
+                        $content = cut($announcement->content, $cut_size).' '.Display::url(get_lang('More'), $url);
+                    }
+                }
+                $html .=  '<li><h1>'.$announcement->title.'</h1>'.$content.'</li>';                
 			}
 			$html .=  '</ul></div></div>';			
 		}

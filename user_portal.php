@@ -226,13 +226,15 @@ else{
 
 //check for flash and message
 $sniff_notification = '';
-
-if (! preg_match("/flash_yes/", $_SESSION['sniff_check_some_activex']) && ! preg_match("/flash_yes/", $_SESSION['sniff_check_some_plugins'])) {
-    $sniff_notification = Display::return_message(get_lang('NoFlash'), 'warning', true);
-	//js verification - To annoying of redirecting every time the page
-	$controller->tpl->assign('sniff_notification',  $sniff_notification);
-}  
-
+$some_activex=$_SESSION['sniff_check_some_activex'];
+$some_plugins=$_SESSION['sniff_check_some_plugins'];
+if(!empty($some_activex) || !empty($some_plugins)){
+	if (! preg_match("/flash_yes/", $some_activex) && ! preg_match("/flash_yes/", $some_plugins)) {
+		$sniff_notification = Display::return_message(get_lang('NoFlash'), 'warning', true);
+		//js verification - To annoying of redirecting every time the page
+		$controller->tpl->assign('sniff_notification',  $sniff_notification);
+	}  
+}
 //$controller->tpl->assign('hot_courses',                 $controller->return_hot_courses());
 
 $controller->tpl->assign('plugin_courses_block', 		$controller->return_courses_main_plugin());

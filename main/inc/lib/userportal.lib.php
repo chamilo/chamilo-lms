@@ -214,7 +214,7 @@ class IndexManager {
 	 * @todo does $_plugins need to be global?
 	 */
 	function display_anonymous_right_menu() {
-		global $loginFailed, $_plugins, $_user, $menu_navigation;
+		global $loginFailed, $_plugins, $_user;
 	
 		$platformLanguage       	= api_get_setting('platformLanguage');		
 		$display_add_course_link	= api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');	
@@ -347,12 +347,12 @@ class IndexManager {
 		if (isset($_SESSION['_user']['user_id']) && $_SESSION['_user']['user_id'] != 0) {
 			// Deleting the myprofile link.
 			if (api_get_setting('allow_social_tool') == 'true') {
-				unset($menu_navigation['myprofile']);
+				unset($this->tpl->menu_navigation['myprofile']);
 			}
 		
-			if (!empty($menu_navigation)) {
+			if (!empty($this->tpl->menu_navigation)) {
 				$content = '<ul class="menulist">';
-				foreach ($menu_navigation as $section => $navigation_info) {
+				foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
 					$current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
 					$content .='<li'.$current.'><a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a></li>';
 				}
@@ -889,20 +889,20 @@ class IndexManager {
 		return $html;
 	}
 	
-	function return_navigation_course_links($menu_navigation) {
+	function return_navigation_course_links() {
 		$html = '';
 		
 		// Deleting the myprofile link.
 		if (api_get_setting('allow_social_tool') == 'true') {
-			unset($menu_navigation['myprofile']);
+			unset($this->tpl->menu_navigation['myprofile']);
 		}
 		
 		// Main navigation section.
 		// Tabs that are deactivated are added here.
-		if (!empty($menu_navigation)) {
+		if (!empty($this->tpl->menu_navigation)) {
 			$main_navigation_content .= '<ul class="menulist">';
 		
-			foreach ($menu_navigation as $section => $navigation_info) {
+			foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
 				$current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
 				$main_navigation_content .= '<li'.$current.'>';
 				$main_navigation_content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';

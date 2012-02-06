@@ -3,6 +3,7 @@
 
 // Load Smarty library
 require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
+require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 
 class Template extends Smarty {
 	
@@ -10,6 +11,7 @@ class Template extends Smarty {
 	var $show_header;
 	var $show_footer;
     var $help;
+    var $navigation = null;
 	
 	function __construct($title = '', $show_header = true, $show_footer = true) {
 		$this->title = $title;
@@ -194,7 +196,10 @@ class Template extends Smarty {
 		global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
 		global $httpHeadXtra, $htmlHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, 
 				$_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;		
-		global $menu_navigation;
+		        
+        $navigation            = return_navigation_array();
+        $this->menu_navigation = $navigation['menu_navigation'];
+         
 		global $_configuration, $show_learn_path;
 		
 		$this->assign('system_charset', api_get_system_encoding());
@@ -340,10 +345,7 @@ class Template extends Smarty {
 		    }
 		}
 		$this->assign('favico', $favico);
-		
-		//old banner.inc.php		
-		require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
-		
+				
 		global $my_session_id;
 		$session_id     = api_get_session_id();
 		$session_name   = api_get_session_name($my_session_id);

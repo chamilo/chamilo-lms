@@ -176,7 +176,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
         $my_questionid = intval($array_content_id_exe[$i]);
         $sql = "SELECT question from $TBL_QUESTIONS WHERE c_id = $course_id AND id = '$my_questionid'";
         $result =Database::query($sql);
-        $ques_name = Database::result($result,0,"question");
+        Database::result($result,0,"question");
 
         $query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks',teacher_comment = '$my_comments' WHERE question_id = ".$my_questionid." AND exe_id=".$id;
         Database::query($query);
@@ -219,7 +219,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
         
     //Updating LP score here    
     if (in_array($origin, array ('tracking_course','user_course','correct_exercise_in_lp'))) {   
-        $sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . floatval($tot) . "' WHERE id = " .$lp_item_view_id;
+        $sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . floatval($tot) . "' WHERE c_id = ".$course_id." AND id = " .$lp_item_view_id;
         Database::query($sql_update_score);
         if ($origin == 'tracking_course') {
             //Redirect to the course detail in lp
@@ -317,16 +317,15 @@ $extra =  '<script type="text/javascript">
     });
     </script>';
 
-
-
-
 $extra .= '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
 $extra .= Display::tag('p', Display::input('radio', 'export_format', 'csv', array('checked'=>'1', 'id'=>'export_format_csv_label')). Display::tag('label', get_lang('ExportAsCSV'), array('for'=>'export_format_csv_label')));
 $extra .= Display::tag('p', Display::input('radio', 'export_format', 'xls', array('id'=>'export_format_xls_label')). Display::tag('label', get_lang('ExportAsXLS'), array('for'=>'export_format_xls_label')));   
 $extra .= Display::tag('p', Display::input('checkbox', 'load_extra_data',  '0',array('id'=>'load_extra_data_id')). Display::tag('label', get_lang('LoadExtraData'), array('for'=>'load_extra_data_id')));
 $extra .= '</div>';
+
 if ($is_allowedToEdit) 
     echo $extra;
+
 echo $actions;
 echo $content;
 /*
@@ -339,7 +338,8 @@ $tpl->display_one_col_template();
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results&exerciseId='.$exercise_id;
 
 //$activeurl = '?sidx=session_active';
-//
+$action_links = '';
+
 if ($is_allowedToEdit || $is_tutor) {
 	
 	//The order is important you need to check the the $column variable in the model.ajax.php file 
@@ -367,7 +367,18 @@ if ($is_allowedToEdit || $is_tutor) {
 //issue fixed in jqgrid                         
 //                      array('name'=>'actions',        'index'=>'actions',         'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
 						array('name'=>'actions',        'index'=>'actions',         'width'=>'60',  'align'=>'left', 'search' => 'false')
-                       );            
+                       );          
+    
+    $action_links = '
+    // add username as title in lastname filed - ref 4226
+    function action_formatter(cellvalue, options, rowObject) {
+        // rowObject is firstname,lastname,login,... get the third word
+        var loginx = "'.api_htmlentities(sprintf(get_lang("LoginX"),":::"), ENT_QUOTES).'";
+        var tabLoginx = loginx.split(/:::/);
+        // tabLoginx[0] is before and tabLoginx[1] is after :::
+        // may be empty string but is defined
+        return "<span title=\""+tabLoginx[0]+rowObject[2]+tabLoginx[1]+"\">"+cellvalue+"</span>";
+    }';
 } else {
 	
 	//The order is important you need to check the the $column variable in the model.ajax.php file 
@@ -375,10 +386,10 @@ if ($is_allowedToEdit || $is_tutor) {
 	
 	//Column config
 	$column_model   = array(                        
-                        array('name'=>'duration',       'index'=>'exe_duration',	'width'=>'40',   'align'=>'left', 'search' => 'true'),
-                        array('name'=>'start_date',		'index'=>'start_date',		'width'=>'80',   'align'=>'left', 'search' => 'true'),                        
-						array('name'=>'exe_date',		'index'=>'exe_date',		'width'=>'80',   'align'=>'left', 'search' => 'true'),                        
-						array('name'=>'score',			'index'=>'exe_result',		'width'=>'40',   'align'=>'left', 'search' => 'true'),	
+                        array('name'=>'duration',       'index'=>'exe_duration',	'width'=>'40',   'align'=>'left', 'search' => 'false'),
+                        array('name'=>'start_date',		'index'=>'start_date',		'width'=>'80',   'align'=>'left', 'search' => 'false'),                        
+						array('name'=>'exe_date',		'index'=>'exe_date',		'width'=>'80',   'align'=>'left', 'search' => 'false'),                        
+						array('name'=>'score',			'index'=>'exe_result',		'width'=>'40',   'align'=>'left', 'search' => 'false'),	
                         array('name'=>'status',         'index'=>'revised',			'width'=>'40',   'align'=>'left', 'search' => 'false')
 						
                        );   	
@@ -388,23 +399,9 @@ $extra_params['autowidth'] = 'true';
 
 //height auto 
 $extra_params['height'] = 'auto';
-$extra_params['excel'] = 'excel';
+//$extra_params['excel'] = 'excel';
 
 $extra_params['rowList'] = array(10, 20 ,30);
-
-$action_links = '
-    // add username as title in lastname filed - ref 4226
-    function action_formatter(cellvalue, options, rowObject) {
-        // rowObject is firstname,lastname,login,... get the third word
-        var loginx = "'.api_htmlentities(sprintf(get_lang("LoginX"),":::"), ENT_QUOTES).'";
-        var tabLoginx = loginx.split(/:::/);
-        // tabLoginx[0] is before and tabLoginx[1] is after :::
-        // may be empty string but is defined
-        return "<span title=\""+tabLoginx[0]+rowObject[2]+tabLoginx[1]+"\">"+cellvalue+"</span>";
-    }
-';
-
-
 
 ?>
 <script>
@@ -415,41 +412,44 @@ $(function() {
     
     //setSearchSelect("status");    
     
-    $("#results").jqGrid('navGrid','#results_pager', {edit:false,add:false,del:false},
-        {height:280,reloadAfterSubmit:false}, // edit options 
-        {height:280,reloadAfterSubmit:false}, // add options 
-        {reloadAfterSubmit:false}, // del options 
-        {width:500} // search options
-    );
-    /*
-    // add custom button to export the data to excel
-    jQuery("#sessions").jqGrid('navButtonAdd','#sessions_pager',{
-           caption:"", 
-           onClickButton : function () { 
-               jQuery("#sessions").excelExport();
-           } 
-    });
+    <?php  if ($is_allowedToEdit || $is_tutor) { ?>       
     
-    jQuery('#sessions').jqGrid('navButtonAdd','#sessions_pager',{id:'pager_csv',caption:'',title:'Export To CSV',onClickButton : function(e)
-    {
-        try {
-            jQuery("#sessions").jqGrid('excelExport',{tag:'csv', url:'grid.php'});
-        } catch (e) {
-            window.location= 'grid.php?oper=csv';
+        $("#results").jqGrid('navGrid','#results_pager', {edit:false,add:false,del:false},
+            {height:280,reloadAfterSubmit:false}, // edit options 
+            {height:280,reloadAfterSubmit:false}, // add options 
+            {reloadAfterSubmit:false}, // del options 
+            {width:500} // search options
+        );
+        /*
+        // add custom button to export the data to excel
+        jQuery("#sessions").jqGrid('navButtonAdd','#sessions_pager',{
+            caption:"", 
+            onClickButton : function () { 
+                jQuery("#sessions").excelExport();
+            } 
+        });
+
+        jQuery('#sessions').jqGrid('navButtonAdd','#sessions_pager',{id:'pager_csv',caption:'',title:'Export To CSV',onClickButton : function(e)
+        {
+            try {
+                jQuery("#sessions").jqGrid('excelExport',{tag:'csv', url:'grid.php'});
+            } catch (e) {
+                window.location= 'grid.php?oper=csv';
+            }
+        },buttonicon:'ui-icon-document'})
+        */
+
+
+        //Adding search options
+        var options = {
+            'stringResult': true,
+            'autosearch' : true,
+            'searchOnEnter':false,        
         }
-    },buttonicon:'ui-icon-document'})
-    */
-   
-    
-    //Adding search options
-    var options = {
-        'stringResult': true,
-        'autosearch' : true,
-        'searchOnEnter':false,        
-    }
-    jQuery("#results").jqGrid('filterToolbar',options);    
-    var sgrid = $("#results")[0];
-    sgrid.triggerToolbar();
+        jQuery("#results").jqGrid('filterToolbar',options);    
+        var sgrid = $("#results")[0];
+        sgrid.triggerToolbar();
+    <?php } ?>
 });
 </script>
 <?php

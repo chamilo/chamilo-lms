@@ -202,10 +202,18 @@ if (isset($_POST['comment'])) {
 	// Fixing the path if it is wrong	
 	$comment 	     = trim(Database::escape_string($_POST['comment']));
 	$title 		     = trim(Database::escape_string($_POST['title'])); 
-	$query = "UPDATE $dbTable SET comment='".$comment."', title='".$title."' WHERE c_id = $course_id AND id = ".$document_id;
-	Database::query($query);	
-	$comments_updated = get_lang('ComMod');
-	$info_message     = get_lang('fileModified');
+    //Just in case see BT#3525
+    if (empty($title)) {
+		$title = $documen_data['title'];
+	}
+	if (empty($title)) {
+		$title = get_document_title($_POST['filename']);		
+	}
+    if (!empty($document_id)) {
+        $query = "UPDATE $dbTable SET comment='".$comment."', title='".$title."' WHERE c_id = $course_id AND id = ".$document_id;
+        Database::query($query);		
+        $info_message     = get_lang('fileModified');
+    }
 }
 
 /*	Code to rename the file name */

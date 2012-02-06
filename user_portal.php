@@ -214,8 +214,6 @@ $controller->return_courses_and_sessions($personal_course_list);
 $courses_and_sessions = ob_get_contents();
 ob_get_clean();
 
-//
-
 $controller->tpl->assign('content', 					$courses_and_sessions);
 
 if($_SESSION['sniff_navigator']!="checked") {
@@ -240,7 +238,7 @@ if (! preg_match("/flash_yes/", $_SESSION['sniff_check_some_activex']) && ! preg
 $controller->tpl->assign('plugin_courses_block', 		$controller->return_courses_main_plugin());
 $controller->tpl->assign('profile_block', 				$controller->return_profile_block());
 $controller->tpl->assign('account_block',				$controller->return_account_block());
-$controller->tpl->assign('navigation_course_links', 	$controller->return_navigation_course_links($menu_navigation));
+$controller->tpl->assign('navigation_course_links', 	$controller->return_navigation_course_links());
 $controller->tpl->assign('plugin_courses_right_block', 	$controller->return_plugin_courses_block());
 $controller->tpl->assign('reservation_block', 			$controller->return_reservation_block());
 $controller->tpl->assign('search_block', 				$controller->return_search_block());

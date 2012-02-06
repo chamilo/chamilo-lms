@@ -358,8 +358,7 @@ function return_navigation_array() {
     return array('menu_navigation' => $menu_navigation, 'navigation' => $navigation, 'possible_tabs' => $possible_tabs);    
 }
 function show_header_3() {
-    $navigation         = return_navigation_array();
-    
+    $navigation         = return_navigation_array();    
     //$menu_navigation    = $navigation['menu_navigation'];
     $navigation         = $navigation['navigation'];
     //$possible_tabs      = $navigation['possible_tabs'];    

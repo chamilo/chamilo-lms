@@ -11,7 +11,7 @@ class Template extends Smarty {
 	var $show_header;
 	var $show_footer;
     var $help;
-    var $navigation = null;
+    var $menu_navigation = array();
 	
 	function __construct($title = '', $show_header = true, $show_footer = true) {
         parent::__construct();
@@ -198,7 +198,7 @@ class Template extends Smarty {
 		global $httpHeadXtra, $htmlHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, 
 				$_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;		
 		        
-        $navigation            = return_navigation_array();
+        $navigation            = return_navigation_array();        
         $this->menu_navigation = $navigation['menu_navigation'];
          
 		global $_configuration, $show_learn_path;

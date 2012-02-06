@@ -18,9 +18,10 @@ class IndexManager {
 		if ($load_template) {			
 			$this->tpl = new Template($title);					
 		}
-		$this->home = api_get_home_path();
-		$this->user_id = api_get_user_id();
+		$this->home     = api_get_home_path();
+		$this->user_id  = api_get_user_id();
 		$this->load_directories_preview = false;
+        
 		if (api_get_setting('show_documents_preview') == 'true') {
 			$this->load_directories_preview = true;
 		}		
@@ -896,11 +897,12 @@ class IndexManager {
 		if (api_get_setting('allow_social_tool') == 'true') {
 			unset($this->tpl->menu_navigation['myprofile']);
 		}
-		
+        
 		// Main navigation section.
 		// Tabs that are deactivated are added here.
 		if (!empty($this->tpl->menu_navigation)) {
 			$main_navigation_content .= '<ul class="menulist">';
+            
 		
 			foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
 				$current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';

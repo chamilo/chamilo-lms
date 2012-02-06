@@ -960,11 +960,11 @@ return 'application/octet-stream';
                         self::delete_document_from_search_engine(api_get_course_id(), $document_id);
 
                         while ($row = Database::fetch_array($res)) {
-                            $sqlipd = "DELETE FROM $TABLE_ITEMPROPERTY WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
-                            $resipd = Database::query($sqlipd);
+                            $sqlipd = "DELETE FROM $TABLE_ITEMPROPERTY WHERE c_id = $course_id AND ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
+                            Database::query($sqlipd);
                             self::unset_document_as_template($row['id'],api_get_course_id(), api_get_user_id());
                             $sqldd = "DELETE FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND id = ".$row['id'];
-                            $resdd = Database::query($sqldd);
+                            Database::query($sqldd);
                         }
                     }
                 }
@@ -1015,9 +1015,9 @@ return 'application/octet-stream';
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $course_id = $course_info['real_id'];
         $path = Database::escape_string($path);
-        $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND path LIKE BINARY '$path'";
+        $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND path LIKE BINARY '$path' LIMIT 1";
         $result = Database::query($sql);
-        if ($result && Database::num_rows($result) == 1) {
+        if ($result && Database::num_rows($result)) {
             $row = Database::fetch_array($result);
             return intval($row[0]);
         }
@@ -2188,15 +2188,17 @@ return 'application/octet-stream';
             if ($upload_ok) {
                 // File got on the server without problems, now process it
                 $new_path = handle_uploaded_document($course_info, $files['file'], $base_work_dir, $path, api_get_user_id(), api_get_group_id(), null, $max_filled_space, $unzip, $if_exists, $show_output);
+                
                 if ($new_path) {
                     $docid = DocumentManager::get_document_id($course_info, $new_path);
+                    
                     if (!empty($docid)) {
                     	$table_document = Database::get_course_table(TABLE_DOCUMENT);
 						$params = array();
                         if (!empty($title)) {                        	
-                        	$params['title'] = trim($title);
+                        	$params['title'] = get_document_title($title);
                         } else {
-                        	$params['title']  = $files['file']['name'];
+                        	$params['title']  = get_document_title($files['file']['name']);
                         }
                         if (!empty($comment)) {
                         	$params['comment'] = trim($comment);

@@ -14,14 +14,15 @@ class Template extends Smarty {
     var $navigation = null;
 	
 	function __construct($title = '', $show_header = true, $show_footer = true) {
+        parent::__construct();
 		$this->title = $title;
 		
 		//Smarty 3 configuration
-		$this->setPluginsDir(api_get_path(LIBRARY_PATH).'smarty/plugins');
+        $this->setTemplateDir(api_get_path(SYS_CODE_PATH).'template/');
+        $this->setCompileDir(api_get_path(SYS_ARCHIVE_PATH));
+        $this->setConfigDir(api_get_path(SYS_ARCHIVE_PATH));		
 		$this->setCacheDir(api_get_path(SYS_ARCHIVE_PATH));
-		$this->setCompileDir(api_get_path(SYS_ARCHIVE_PATH));
-		$this->setTemplateDir(api_get_path(SYS_CODE_PATH).'template/');
-		$this->setConfigDir(api_get_path(SYS_ARCHIVE_PATH));
+        $this->setPluginsDir(api_get_path(LIBRARY_PATH).'smarty/plugins');		
 		
 		//Caching settings
 		$this->caching 			= false;

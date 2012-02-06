@@ -310,7 +310,7 @@ if ($displayMode == "viewDefEdit") {
 			"<center>\n";
 }
 elseif ($displayMode == "viewContentEdit") {
-	/*>>>>>>>>>>>> CATEGORIES CONTENTS : EDIT <<<<<<<<<<<<*/
+	/* CATEGORIES CONTENTS : EDIT */
 
 	$catToEdit = get_cat_content($userIdViewed, $_GET['editContent']);
 	$content_heading_form = new FormValidator('content_heading_form');
@@ -331,7 +331,7 @@ elseif ($displayMode == "viewContentEdit") {
 	$content_heading_form->display();
 } elseif ($displayMode == "viewMainInfoEdit") {
 
-	/*>>>>>>>>>>>> CATEGORIES MAIN INFO : EDIT <<<<<<<<<<<<*/
+	/* CATEGORIES MAIN INFO : EDIT */
 
 	$mainUserInfo = get_main_user_info($userIdViewed, $courseCode);
 

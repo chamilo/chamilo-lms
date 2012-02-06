@@ -20,11 +20,13 @@ switch ($action) {
                 echo '';
                 exit;
             }
+            
             // set URL and other appropriate options            
             $defaults = array(
                 CURLOPT_URL => $url,
+                CURLOPT_FOLLOWLOCATION => true,         // follow redirects accept youtube.com                
                 CURLOPT_HEADER => 0,
-                CURLOPT_RETURNTRANSFER => TRUE,
+                CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_TIMEOUT => 4
             );
             //create a new cURL resource
@@ -38,7 +40,7 @@ switch ($action) {
             // close cURL resource, and free up system resources
             curl_close($ch);
             
-            if($result) {
+            if ($result) {
                 echo Display::return_icon('accept.png', get_lang('Ok'));
             } else {
                 echo Display::return_icon('wrong.gif', get_lang('Wrong'));

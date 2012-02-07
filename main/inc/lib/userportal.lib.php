@@ -15,7 +15,7 @@ class IndexManager {
 	
 	function __construct($title, $load_template = true) {
 		
-		if ($load_template) {			
+		if ($load_template) {		
 			$this->tpl = new Template($title);					
 		}
 		$this->home     = api_get_home_path();

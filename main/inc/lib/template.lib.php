@@ -8,6 +8,7 @@ require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 class Template extends Smarty {
 	
 	var $style = 'default'; //see the template folder 
+    var $title =  null;
 	var $show_header;
 	var $show_footer;
     var $help;
@@ -51,7 +52,8 @@ class Template extends Smarty {
 		//$this->loadPlugin('smarty_function_get_lang');
 		
 		//To the the smarty installation
-		//$this->testInstall();					
+		//$this->testInstall();
+        
 		$this->set_header_parameters();
 		$this->set_footer_parameters();
         
@@ -115,6 +117,7 @@ class Template extends Smarty {
 		$this->show_footer = $status;
 		$this->assign('show_footer', $status);
 	}
+    
 	/**
 	 * Sets the header visibility
 	 * @param bool true if we show the header

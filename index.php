@@ -43,8 +43,7 @@ $htmlHeadXtra[] ='
 
 <noscript>
 	'.Display::return_message(get_lang("NoJavascript"), 'error').'
-</noscript>
-';
+</noscript>';
 
 //check cookies
 setcookie("TestCookie", "cookies_yes", time()+3600);
@@ -165,7 +164,6 @@ if (!api_is_anonymous()) {
 }
 
 $controller->tpl->assign('hot_courses',             $controller->return_hot_courses());
-
 $controller->tpl->assign('announcements_block', 	$controller->return_announcements());
 $controller->tpl->assign('home_page_block', 		$controller->return_home_page());
 $controller->tpl->assign('notice_block',			$controller->return_notice());

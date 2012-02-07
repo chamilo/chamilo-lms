@@ -4548,7 +4548,7 @@ function replace_dangerous_char($filename, $strict = 'loose') {
         //$filename = str_replace('-', '_', $filename); // See task #1848.
         //$filename = preg_replace('/[^0-9A-Za-z_.\-]/', '', $filename);
         //Removing "_" character see BT#3628
-        $filename = preg_replace('/[^0-9A-Za-z.\-]/', '', $filename);
+        $filename = preg_replace('/[^0-9A-Za-z.\-_]/', '', $filename);        
     }
 
     // Length is to be limited, so the file name to be acceptable by some operating systems.

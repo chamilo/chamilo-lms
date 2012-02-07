@@ -1672,11 +1672,11 @@ class learnpathItem {
 		} else {
 			// Restart current element is allowed (because it's not finished yet),
 			// reinit current.
-			$this->current_score = 0;
+			//$this->current_score = 0;
 			$this->current_start_time = 0;
 			$this->current_stop_time = 0;
-			$this->current_data = '';
-			$this->status = $this->possible_status[0];
+			//$this->current_data = '';
+			//$this->status = $this->possible_status[0];
 			$this->interactions_count = $this->get_interactions_count(true);
       if ($this->type == 'sco') 
         $this->scorm_init_time();

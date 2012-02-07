@@ -58,4 +58,5 @@ $ModifyAnnouncement = "Modificar anuncio";
 $ButtonPublishAnnouncement = "Enviar anuncio";
 $YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Estimado usuario <br><br>
 Usted no esta activo en la plataforma, por favor inicie sesión nuevamente y revise sus cursos";
+$AddAsAnnouncement = "Agregar como un anuncio";
 ?>

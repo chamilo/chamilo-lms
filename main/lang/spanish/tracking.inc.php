@@ -316,4 +316,6 @@ $NumberOfForumsInLearnpath = "Número de foros en la lección";
 $NumberOfAssignmentsInLearnpath = "Número de tareas en la lección";
 $NumberOfAnnouncementsInCourse = "Número de anuncios en el curso";
 $CurrentCoursesReport = "Reportes de cursos actuales";
+$NumberOfPublishedExercises = "Nro de ejercicios publicados";
+$NumberOfPublishedLps = "Nro de Lecciones publicadas";
 ?>

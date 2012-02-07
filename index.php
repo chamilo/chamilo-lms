@@ -45,11 +45,8 @@ $htmlHeadXtra[] ='
 	'.Display::return_message(get_lang("NoJavascript"), 'error').'
 </noscript>';
 
-//check cookies
+//set cookie for check if client browser are cookies enabled
 setcookie("TestCookie", "cookies_yes", time()+3600);
-if( !isset($_COOKIE["TestCookie"]) && empty($_COOKIE["TestCookie"]) ) {
-	Display::display_error_message(get_lang("NoCookies"));
-}
 
 $controller = new IndexManager($header_title);
 

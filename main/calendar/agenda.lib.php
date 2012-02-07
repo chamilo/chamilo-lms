@@ -333,14 +333,14 @@ class Agenda {
 		$event = null;
 		switch ($this->type) {
 			case 'personal':				
-				$sql = " SELECT * FROM ".$this->tbl_personal_agenda." WHERE id=".$id." AND user = ".api_get_user_id();
+				$sql = " SELECT * FROM ".$this->tbl_personal_agenda." WHERE id = $id AND user = ".api_get_user_id();
 				$result = Database::query($sql);				
 				if (Database::num_rows($result)) {
 					$event = Database::fetch_array($result, 'ASSOC');
 				}
 				break;
 			case 'course':
-				$sql = " SELECT * FROM ".$this->tbl_course_agenda." WHERE id=".$id;
+				$sql = " SELECT * FROM ".$this->tbl_course_agenda." WHERE c_id = ".$this->course['real_id']." AND id = ".$id;
 				$result = Database::query($sql);
 				if (Database::num_rows($result)) {
 					$event = Database::fetch_array($result, 'ASSOC');
@@ -469,8 +469,6 @@ class Agenda {
 		$events = array();
 		if (Database::num_rows($result)) {
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
-                                 
-                //session_id = {$row['ref']} AND
                 //to gather sent_tos
                 $sql = "SELECT to_user_id, to_group_id
                     FROM ".$tbl_property." ip
@@ -498,6 +496,20 @@ class Agenda {
 				}
 				$event = array();
 				$event['id'] 	  		= 'course_'.$row['id'];
+                
+                $attachment = get_attachment($row['id'], $course_id);
+                
+                $has_attachment = '';
+                
+                if (!empty($attachment)) {
+                    $has_attachment =  Display::return_icon('attachment.gif',get_lang('Attachment'));
+                    $user_filename  = $attachment['filename'];                    
+                    $full_file_name = 'download.php?file='.$attachment['path'].'&course_id='.$course_id;                    
+                    $event['attachment'] = $has_attachment.Display::url($user_filename, $full_file_name);                                           
+                } else {
+                    $event['attachment'] = '';
+                }
+                
 				$event['title'] 		= $row['title'];
 				$event['className'] 	= 'course';
 				$event['allDay'] 	  	= 'false';
@@ -571,9 +583,9 @@ class Agenda {
 				
 				$event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;					
 	
-				$my_events[] = $event;	
+				//$my_events[] = $event;
 	
-				$this->events[] = $event;
+				$this->events[] = $event;                
 			}
 		}
 		return $events;

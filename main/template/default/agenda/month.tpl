@@ -29,7 +29,9 @@ $(document).ready(function() {
 		autoOpen: false,
 		modal	: false, 
 		width	: 550, 
-		height	: 450
+		height	: 450,
+        zIndex: 20000 // added because of qtip2
+
    	});
 
 	var title = $( "#title" ),
@@ -154,6 +156,19 @@ $(document).ready(function() {
 			}
 		},	
 		eventRender: function(event, element) {
+        
+            if (event.attachment) {
+                element.qtip({
+                    show: {
+                        event: false, // Don't specify a show event...
+                        ready: true // ... but show the tooltip when ready
+                    },
+                    hide: false, // Don't specify a hide event either!
+		            content: event.attachment,
+		            position: { at:'top right' , my:'bottom right'},	
+		        }).removeData('qtip'); // this is an special hack to add multipl qtip in the same target!
+            }
+            
 			if (event.description) {
 				element.qtip({
 		            content: event.description,
@@ -253,7 +268,7 @@ $(document).ready(function() {
 			}
 		},
 		editable: true,		
-		events: "{$web_agenda_ajax_url}a=get_events",		
+		events: "{$web_agenda_ajax_url}a=get_events",
 		eventDrop: function(event, day_delta, minute_delta, all_day, revert_func) {		
 			$.ajax({
 				url: '{$web_agenda_ajax_url}',

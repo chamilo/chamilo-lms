@@ -2016,11 +2016,16 @@ function display_agenda_items($agenda_items, $day = false) {
  * @version November 2008, dokeos 1.8.6
  */
 
-function get_attachment($agenda_id) {
+function get_attachment($agenda_id, $course_id = null) {
 	$agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
+    if (empty($course_id)) {
+        $course_id = api_get_course_int_id();
+    } else {
+        $course_id = intval($course_id);
+    }
 	$agenda_id=Database::escape_string($agenda_id);
 	$row=array();
-	$sql = 'SELECT id,path, filename,comment FROM '. $agenda_table_attachment.' WHERE agenda_id = '.(int)$agenda_id.'';
+	$sql = 'SELECT id,path, filename,comment FROM '. $agenda_table_attachment.' WHERE c_id = '.$course_id.' AND agenda_id = '.(int)$agenda_id.'';
 	$result=Database::query($sql);
 	if (Database::num_rows($result)!=0) {
 		$row=Database::fetch_array($result);

@@ -993,9 +993,15 @@ class CourseManager {
      * @param	bool	True for checking inside sessions too, by default is not checked
      * @return 	bool 	true if the user is registered in the course, false otherwise
      */
-    public static function is_user_subscribed_in_course($user_id, $course_code = null, $in_a_session = false) {
+    public static function is_user_subscribed_in_course($user_id, $course_code = null, $in_a_session = false, $session_id = null) {
 
         $user_id = intval($user_id);
+        
+        if (empty($session_id)) {
+            $session_id = api_get_session_id();
+        } else {
+            $session_id = intval($session_id);
+        }
 
         $condition_course = '';
         if (isset($course_code)) {
@@ -1005,10 +1011,11 @@ class CourseManager {
 
         $result = Database::fetch_array(Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                 WHERE user_id = $user_id AND relation_type<>".COURSE_RELATION_TYPE_RRHH." $condition_course "));
+        
         if (!empty($result)) {
             return true; // The user has been registered in this course.
         }
-
+        
         if (!$in_a_session) {
             return false; // The user has not been registered in this course.
         }
@@ -1024,7 +1031,7 @@ class CourseManager {
         }
 
         if (Database::num_rows(Database::query('SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).
-                ' WHERE id='.intval($_SESSION['id_session']).' AND id_coach='.$user_id)) > 0) {
+                ' WHERE id='.$session_id.' AND id_coach='.$user_id)) > 0) {
             return true;
         }
 

@@ -3806,7 +3806,7 @@ form div.error input, form div.error textarea {
 
 .label_tag {
   padding: 1px 3px 2px;
-  margin-right:3px; 
+  margin:2px 3px 2px 0px; 
   /* padding:5px;*/
   background-color: #bfbfbf;
   font-size: 9.75px;

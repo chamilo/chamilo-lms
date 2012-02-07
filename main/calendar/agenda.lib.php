@@ -536,7 +536,9 @@ class Agenda {
                             $sent_to[] = $group_name_list[$group_item];        
                         }
                     }
-                    $event['sent_to'] = implode(', ', $sent_to);
+                    $sent_to = implode('@@', $sent_to);                    
+                    $sent_to =  str_replace('@@', '</div><div class="label_tag notice">', $sent_to);
+                    $event['sent_to'] = '<div class="label_tag notice">'.$sent_to.'</div>';
                     $event['type']    = 'group';    
                 }
 
@@ -552,14 +554,16 @@ class Agenda {
                             $username = api_htmlentities(sprintf(get_lang('LoginX'), $user_info['username']), ENT_QUOTES);                            
                             $sent_to[] = "<span title='".$username."'>".$user_info['complete_name']."</span>";        
                         }
-                    }
-                    $event['sent_to'] = implode(', ', $sent_to);
-//                    $event['sent_to'] = $row['to_user_id'];
+                    }                    
+                    $sent_to = implode('@@', $sent_to);                    
+                    $sent_to =  str_replace('@@', '</div><div class="label_tag notice">', $sent_to);
+                    $event['sent_to'] = '<div class="label_tag notice">'.$sent_to.'</div>';
+
                 }
                 
                 //Event sent to everyone!
                 if (empty($event['sent_to'])) {
-                    $event['sent_to'] = get_lang('Everyone');
+                    $event['sent_to'] = '<div class="label_tag notice">'.get_lang('Everyone').'</div>';
                 }
                 
                 

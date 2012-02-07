@@ -981,8 +981,7 @@ function show_to_form($to_already_selected)
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return html code
 */
-function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array())
-{
+function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array()) {
     
 	echo "<select id=\"not_selected_form\" name=\"not_selected_form[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
 
@@ -992,6 +991,7 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 		echo "<option value=\"\">--------------------------------------------</option>";
 	} else {
 		if (is_array($group_list)) {
+            
 			foreach($group_list as $this_group) {
 				//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
 				if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
@@ -2473,17 +2473,6 @@ function show_add_form($id = '') {
 	echo 	'	</div>
 			</div>';
 	
-	/*echo 	'<div class="row">
-	<div class="label">
-	</div><div class="formw">';
-	if ($default_no_empty_end_date) {
-		$params = array('id'=>'empty_end_date', 'checked'=>'checked');
-	} else {
-		$params = array('id'=>'empty_end_date');
-	}
-	//echo Display::input('checkbox', 'empty_end_date', 0, $params).' '.get_lang('DisableEndDate');
-	
-	echo 	'</div></div>';*/
 	echo '<script>
 				$(function() {				
 					$("#empty_end_date").click(function(){
@@ -2665,12 +2654,12 @@ function show_add_form($id = '') {
 	    }//only show repeat fields if adding, not if editing
 	    
 	// the main area of the agenda item: the wysiwyg editor
-	echo '	<div>
+	echo '	<div class="row">
 				<div class="label" >
 					<span class="form_required">*</span>'.get_lang('Description').'
 				</div>
 				<div class="formw">';
-			require_once api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php";
+			/*require_once api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php";
 			$oFCKeditor = new FCKeditor('content') ;
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Height		= '200';
@@ -2681,7 +2670,8 @@ function show_add_form($id = '') {
 			}
 			$oFCKeditor->Value		= $content;
 			$return =	$oFCKeditor->CreateHtml();
-			echo $return;
+			echo $return;*/
+            echo '<textarea cols="50" rows="4" name="content">'.$content.'</textarea>';
 	echo '</div>
 			</div>';
 
@@ -2703,21 +2693,12 @@ function show_add_form($id = '') {
 			*/
 
 	// File attachment
-	echo '	<div>
-				<div class="label">					
-				</div>
-				<div class="formw">
-					<table id="options">
-					<tr>
-						<td colspan="2">
-					        <label for="file_name">'.get_lang('AddAnAttachment').'&nbsp;</label>
-					        <input type="file" name="user_upload"/>					        
-					         '.get_lang('Comment').' <input name="file_comment" type="text" size="20" />
-					    </td>
-					 </tr>			
-			    </table>
-			 </div>
-			</div>';
+	echo '	<div class="row">
+				<div class="label"><label for="file_name">'.get_lang('AddAnAttachment').'&nbsp;</label></div>
+				<div class="formw">							      
+                    <input type="file" name="user_upload"/>  '.get_lang('Comment').' <input name="file_comment" type="text" size="20" />
+                </div>
+             </div>';
 
 
 	

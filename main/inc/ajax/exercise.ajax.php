@@ -183,8 +183,7 @@ switch ($action) {
                 
                 //Getting the list of attempts
                 $attempt_list  = get_all_exercise_event_by_exe_id($exe_id);
-            }
-            
+            }           
             
             //Updating Reminder algorythm
             if ($objExercise->type == ONE_PER_PAGE) {

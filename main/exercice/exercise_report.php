@@ -118,8 +118,6 @@ if (!empty($_GET['export_report']) && $_GET['export_report'] == '1') {
     }
 }
 
-
-
 //Send student email @todo move this code in a class, library
 if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid']== strval(intval($_GET['exeid']))) {
     $id         = intval($_GET['exeid']); //filtered by post-condition    
@@ -136,8 +134,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
     $lp_item_view_id   = $track_exercise_info['orig_lp_item_view_id'];
     
     // Teacher data    
-    $teacher_info      = api_get_user_info(api_get_user_id());
-    
+    $teacher_info      = api_get_user_info(api_get_user_id());    
     $user_info         = api_get_user_info($student_id);    
     $student_email     = $user_info['mail'];    
     $from              = $teacher_info['mail'];
@@ -149,7 +146,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
     $post_content_id   = array();
     $comments_exist    = false;
     
-    foreach ($_POST as $key_index=>$key_value) {
+    foreach ($_POST as $key_index => $key_value) {
         $my_post_info  = explode('_',$key_index);
         $post_content_id[]=$my_post_info[1];
         if ($my_post_info[0]=='comments') {
@@ -270,20 +267,25 @@ if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !emp
 }
 
 if ($is_allowedToEdit || $is_tutor) {
-    $nameTools = get_lang('StudentScore');              
+    $nameTools = get_lang('StudentScore');
     $interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
     $objExerciseTmp = new Exercise();        
     if ($objExerciseTmp->read($exercise_id)) {
         $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exercise_id, "name" => $objExerciseTmp->name);    
-    }
+    }    
 } else {
-    $nameTools = get_lang('YourScore');
-    $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
+    
+    $interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
+    $objExerciseTmp = new Exercise();        
+    if ($objExerciseTmp->read($exercise_id)) {
+        $nameTools = get_lang('Results').': '.$objExerciseTmp->name; 
+    }
 }
 
 Display :: display_header($nameTools);
 
 $actions = Display::div($actions, array('class'=> 'actions'));
+
 $extra =  '<script type="text/javascript">       
     $(document).ready(function() {
                     
@@ -327,7 +329,7 @@ if ($is_allowedToEdit)
     echo $extra;
 
 echo $actions;
-echo $content;
+//echo $content;
 /*
 
 $tpl = new Template($nameTools);
@@ -340,6 +342,15 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results&exerci
 //$activeurl = '?sidx=session_active';
 $action_links = '';
 
+$group_list = GroupManager::get_group_list();
+$group_parameters = array(':'.get_lang('All'));
+foreach ($group_list as $group) {
+    $group_parameters[] = $group['id'].':'.$group['name'];    
+}
+if (!empty($group_parameters)) {
+    $group_parameters = implode(';', $group_parameters);
+}
+
 if ($is_allowedToEdit || $is_tutor) {
 	
 	//The order is important you need to check the the $column variable in the model.ajax.php file 
@@ -350,8 +361,15 @@ if ($is_allowedToEdit || $is_tutor) {
 	$column_model   = array(
                         array('name'=>'firstname',      'index'=>'firstname',		'width'=>'50',   'align'=>'left', 'search' => 'true'),                        
                         array('name'=>'lastname',		'index'=>'lastname',		'width'=>'50',   'align'=>'left', 'formatter'=>'action_formatter', 'search' => 'true'),
-                        array('name'=>'login',          'hidden'=> 'true',          'index'=>'username',        'width'=>'40',   'align'=>'left', 'search' => 'true'),
-                        array('name'=>'group',			'index'=>'s',				'width'=>'40',   'align'=>'left', 'search' => 'false'),
+                        array('name'=>'login',          'hidden'=>'true',          'index'=>'username',        'width'=>'40',   'align'=>'left', 'search' => 'true'),
+                        array('name'=>'group_name',		'index'=>'group_id',    'width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=> 'select',
+                            //for the bottom bar
+                            'searchoptions' => array(                                                
+                                            'defaultValue'  => '', 
+                                            'value'         => $group_parameters),
+                              //for the top bar                              
+                              'editoptions' => array('value' => $group_parameters)),
+                            
                         array('name'=>'duration',       'index'=>'exe_duration',	'width'=>'30',   'align'=>'left', 'search' => 'true'),
                         array('name'=>'start_date',		'index'=>'start_date',		'width'=>'60',   'align'=>'left', 'search' => 'true'),                        
 						array('name'=>'exe_date',		'index'=>'exe_date',		'width'=>'60',   'align'=>'left', 'search' => 'true'),                        
@@ -359,11 +377,11 @@ if ($is_allowedToEdit || $is_tutor) {
                         array('name'=>'status',         'index'=>'revised',			'width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',					          
                               //for the bottom bar
                               'searchoptions' => array(                                                
-                                                'defaultValue'  => '1', 
-                                                'value'         => ':'.get_lang('All').';1:'.get_lang('Revised').';0:'.get_lang('NotRevised')),
+                                                'defaultValue'  => '', 
+                                                'value'         => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated')),
                              
                               //for the top bar                              
-                              'editoptions' => array('value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))),
+                              'editoptions' => array('value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated'))),
 //issue fixed in jqgrid                         
 //                      array('name'=>'actions',        'index'=>'actions',         'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
 						array('name'=>'actions',        'index'=>'actions',         'width'=>'60',  'align'=>'left', 'search' => 'false')
@@ -382,16 +400,16 @@ if ($is_allowedToEdit || $is_tutor) {
 } else {
 	
 	//The order is important you need to check the the $column variable in the model.ajax.php file 
-	$columns        = array(get_lang('Duration'), get_lang('StartDate'),  get_lang('EndDate'), get_lang('Score'), get_lang('Status'));
+	$columns        = array(get_lang('Duration'), get_lang('StartDate'),  get_lang('EndDate'), get_lang('Score'), get_lang('Status'), get_lang('Actions'));
 	
 	//Column config
 	$column_model   = array(                        
-                        array('name'=>'duration',       'index'=>'exe_duration',	'width'=>'40',   'align'=>'left', 'search' => 'false'),
-                        array('name'=>'start_date',		'index'=>'start_date',		'width'=>'80',   'align'=>'left', 'search' => 'false'),                        
-						array('name'=>'exe_date',		'index'=>'exe_date',		'width'=>'80',   'align'=>'left', 'search' => 'false'),                        
+                        array('name'=>'duration',       'index'=>'exe_duration',	'width'=>'20',   'align'=>'left', 'search' => 'false'),
+                        array('name'=>'start_date',		'index'=>'start_date',		'width'=>'50',   'align'=>'left', 'search' => 'false'),                        
+						array('name'=>'exe_date',		'index'=>'exe_date',		'width'=>'50',   'align'=>'left', 'search' => 'false'),                        
 						array('name'=>'score',			'index'=>'exe_result',		'width'=>'40',   'align'=>'left', 'search' => 'false'),	
-                        array('name'=>'status',         'index'=>'revised',			'width'=>'40',   'align'=>'left', 'search' => 'false')
-						
+                        array('name'=>'status',         'index'=>'revised',			'width'=>'40',   'align'=>'left', 'search' => 'false'),
+                        array('name'=>'actions',        'index'=>'actions',			'width'=>'40',   'align'=>'left', 'search' => 'false')						
                        );   	
 }
 //Autowidth             
@@ -405,21 +423,37 @@ $extra_params['rowList'] = array(10, 20 ,30);
 
 ?>
 <script>
+    
+function setSearchSelect(columnName) {    
+    $("#results").jqGrid('setColProp', columnName,
+    {                   
+       searchoptions:{
+            dataInit:function(el){                            
+                $("option[value='1']",el).attr("selected", "selected");
+                setTimeout(function(){
+                    $(el).trigger('change');
+                },1000);
+            }
+        }
+    });
+}
+
 $(function() {
+    
     <?php 
-        echo Display::grid_js('results', $url,$columns,$column_model,$extra_params, array(), $action_links, true);      
+        echo Display::grid_js('results', $url,$columns,$column_model, $extra_params, array(), $action_links, true);      
     ?>
     
-    //setSearchSelect("status");    
-    
     <?php  if ($is_allowedToEdit || $is_tutor) { ?>       
-    
+        //setSearchSelect("status"); 
+        
         $("#results").jqGrid('navGrid','#results_pager', {edit:false,add:false,del:false},
             {height:280,reloadAfterSubmit:false}, // edit options 
             {height:280,reloadAfterSubmit:false}, // add options 
             {reloadAfterSubmit:false}, // del options 
             {width:500} // search options
         );
+            
         /*
         // add custom button to export the data to excel
         jQuery("#sessions").jqGrid('navButtonAdd','#sessions_pager',{
@@ -444,17 +478,17 @@ $(function() {
         var options = {
             'stringResult': true,
             'autosearch' : true,
-            'searchOnEnter':false,        
+            'searchOnEnter':false   
         }
         jQuery("#results").jqGrid('filterToolbar',options);    
         var sgrid = $("#results")[0];
         sgrid.triggerToolbar();
+        
+        
     <?php } ?>
 });
 </script>
 <?php
 
 echo Display::grid_html('results');
-
-
 Display :: display_footer();

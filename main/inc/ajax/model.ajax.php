@@ -27,20 +27,20 @@ if ($action != 'get_exercise_results')
 //Search features
 
 $ops = array(
-    'eq'=>'=', //equal
-    'ne'=>'<>',//not equal
-    'lt'=>'<', //less than
-    'le'=>'<=',//less than or equal
-    'gt'=>'>', //greater than
-    'ge'=>'>=',//greater than or equal
-    'bw'=>'LIKE', //begins with
-    'bn'=>'NOT LIKE', //doesn't begin with
-    'in'=>'LIKE', //is in
-    'ni'=>'NOT LIKE', //is not in
-    'ew'=>'LIKE', //ends with
-    'en'=>'NOT LIKE', //doesn't end with
-    'cn'=>'LIKE', // contains
-    'nc'=>'NOT LIKE'  //doesn't contain
+    'eq' => '=',        //equal
+    'ne' => '<>',       //not equal
+    'lt' => '<',        //less than
+    'le' => '<=',       //less than or equal
+    'gt' => '>',        //greater than
+    'ge' => '>=',       //greater than or equal
+    'bw' => 'LIKE',     //begins with
+    'bn' => 'NOT LIKE', //doesn't begin with
+    'in' => 'LIKE',     //is in
+    'ni' => 'NOT LIKE', //is not in
+    'ew' => 'LIKE',     //ends with
+    'en' => 'NOT LIKE', //doesn't end with
+    'cn' => 'LIKE',     //contains
+    'nc' => 'NOT LIKE'  //doesn't contain
 );
 
 //@todo move this in the display_class
@@ -157,18 +157,18 @@ switch ($action) {
 		$course                     = api_get_course_info();
 		$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
 		$is_tutor                   = api_is_allowed_to_edit(true);
-		$documentPath				= api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
+		$documentPath				= api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document"; //used inside get_exam_results_data()
 		
 		if ($is_allowedToEdit || $is_tutor) {
-			$columns = array('firstname', 'lastname', 'username', 'groups', 'exe_duration', 'start_date', 'exe_date', 'score','status','actions');
+			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score','status','actions');
 		} else {
-			$columns = array('exe_duration', 'start_date', 'exe_date', 'score','status');
+			$columns = array('exe_duration', 'start_date', 'exe_date', 'score', 'status', 'actions');
 		}        
 		$result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
 		
 		break;
     case 'get_sessions':
-        $columns = array('name', 'nbr_courses','category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');        
+        $columns = array('name', 'nbr_courses','category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');            
         $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));        
         break;
     case 'get_gradebooks': 

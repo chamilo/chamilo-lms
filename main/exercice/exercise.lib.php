@@ -779,6 +779,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);    
     $TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST);    
 	$TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);
+    $TBL_GROUP                  = Database :: get_course_table(TABLE_GROUP);
 	
     $TBL_TRACK_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);    
@@ -797,58 +798,39 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         $hotpotatoe_path = Database::escape_string($_GET['path']);
         $hotpotatoe_where .= ' AND exe_name = "'.$hotpotatoe_path.'"  ';
     }  
-    
+         
+    // sql for chamilo-type tests for teacher / tutor view		
+    $sql_inner_join_tbl_track_exercices = "(SELECT ttte.*, if(tr.exe_id,1, 0) as revised FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr ON (ttte.exe_id = tr.exe_id) )";
+    	
     if ($is_allowedToEdit || $is_tutor) {
-		
+        //Teacher view		
         if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
             //$exercise_where_query = ' te.exe_exo_id = ce.id AND ';
         }
 
-		$sqlFromOption = "";
-		$sqlWhereOption = "";           // for hpsql
-	    $sql_inner_join_tbl_user = "";    
-	    $sql_inner_join_tbl_track_exercices = "";
-		$filter_by_group = intval($filter_by_group);
+		$sqlFromOption                      = "";
+		$sqlWhereOption                     = "";           // for hpsql
+	    $sql_inner_join_tbl_user            = "";    
+	    
+		$filter_by_group                    = intval($filter_by_group);
 		
         //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
 
 
-		// Filter by group        
-		
-		switch ($filter_by_group) {
-		    case -1 : // no filter
-        	    $sql_inner_join_tbl_user = $TBL_USER;    
-		        break;
-		    case 0 : // user not in any group
-    		    $sql_inner_join_tbl_user = " 
-                    (SELECT u.user_id, firstname, lastname, email , username
-                    FROM $TBL_USER u 
-                    WHERE 
-                    u.user_id NOT IN (
-                        SELECT user_id 
-                        FROM $TBL_GROUP_REL_USER
-                        WHERE c_id=".api_get_course_int_id()."))";
-    			$sqlFromOption = " ,$TBL_GROUP_REL_USER AS gru ";
-    			$sqlWhereOption = " AND user.user_id NOT IN	( SELECT user_id FROM $TBL_GROUP_REL_USER WHERE c_id=".api_get_course_int_id().") ";
-		        break;
-		    default : // user in group $filter_by_group
-    		    $sql_inner_join_tbl_user = " 
-                    (SELECT u.user_id, firstname, lastname, email, username
-                    FROM $TBL_USER u 
-                    INNER JOIN $TBL_GROUP_REL_USER gru ON (
-                        gru.user_id=u.user_id 
-                        AND gru.group_id=$filter_by_group 
-                        AND gru.c_id=".api_get_course_int_id()."))";
-    			$sqlFromOption = " ,$TBL_GROUP_REL_USER AS gru ";
-    			$sqlWhereOption = "  AND gru.c_id=".api_get_course_int_id()." AND gru.user_id=user.user_id AND gru.group_id=".Database :: escape_string($filter_by_group);
-		        break;
-		}
+		// Filter by group                
+        $sql_inner_join_tbl_user = " 
+            (SELECT u.user_id, firstname, lastname, email, username, g.name as group_name, g.id as group_id
+            FROM $TBL_USER u 
+            INNER JOIN $TBL_GROUP_REL_USER gru ON (
+                gru.user_id = u.user_id                 
+                AND gru.c_id=".api_get_course_int_id().")
+            INNER JOIN $TBL_GROUP g ON (gru.group_id = g.id)
+            )";
+        $sqlFromOption = " ,$TBL_GROUP_REL_USER AS gru ";
+        $sqlWhereOption = "  AND gru.c_id=".api_get_course_int_id()." AND gru.user_id=user.user_id";
 		
         $first_and_last_name = api_is_western_name_order() ? "firstname, lastname" : "lastname, firstname";
-         
-        // sql for chamilo-type tests for teacher / tutor view		
-		$sql_inner_join_tbl_track_exercices = "(SELECT ttte.*, if(tr.exe_id,1, 0) as revised FROM $TBL_TRACK_EXERCICES  ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr ON (ttte.exe_id = tr.exe_id) )";
-		        
+                
         $sql = "SELECT DISTINCT
                     user_id, 
                     $first_and_last_name, 
@@ -864,8 +846,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     exe_user_id,
                     te.exe_duration, 
                     propagate_neg,
-					revised
-                FROM 
+					revised, group_name
+                FROM
                     $TBL_EXERCICES  AS ce 
                 INNER JOIN $sql_inner_join_tbl_track_exercices AS te ON (te.exe_exo_id = ce.id) 
                 INNER JOIN $sql_inner_join_tbl_user  AS user ON (user.user_id = exe_user_id)
@@ -901,7 +883,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     tth.exe_cours_id ASC, 
                     tth.exe_date DESC";
     } else {
-        // get only this user's results
+        //any view is proposed to the student, they should see the results in the overview.php page
+        exit;
+        // Student view
         
         $sql = "SELECT DISTINCT                           
                     te.exe_duration, 
@@ -916,19 +900,20 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     steps_counter, 
                     exe_user_id,  
                     ce.results_disabled, 
-                    propagate_neg
+                    propagate_neg,
+                    revised
                 FROM 
-                    $TBL_EXERCICES  AS ce 
-                    INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) 
+                    $TBL_EXERCICES  AS ce                     
+                    INNER JOIN $sql_inner_join_tbl_track_exercices AS te ON (te.exe_exo_id = ce.id) 
                     INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
                 WHERE $extra_where_conditions AND
                     te.status != 'incomplete' 
-                    AND te.exe_cours_id='" . api_get_course_id() . "'  
-                    AND te.exe_user_id = ".api_get_user_id() . " $session_id_and 
-                    AND ce.active <>-1 
-                    AND orig_lp_id = 0 
+                    AND te.exe_cours_id = '".api_get_course_id()."'  
+                    AND te.exe_user_id  = ".api_get_user_id()." $session_id_and 
+                    AND ce.active       <>-1 
+                    AND orig_lp_id      = 0 
                     AND orig_lp_item_id = 0  
-                    AND ce.c_id= ".api_get_course_int_id()."
+                    AND ce.c_id         = ".api_get_course_int_id()."
                     $exercise_where";
 
         $hpsql = "SELECT '', '', '', exe_name, exe_result , exe_weighting, exe_date
@@ -944,6 +929,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     }    
     
     if (empty($hotpotatoe_where)) {
+        
         $column             = empty($column) ? : Database::escape_string($column);
         $from               = intval($from);
         $number_of_items    = intval($number_of_items);
@@ -977,13 +963,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             $more_details_list = '';
 			
             for ($i = 0; $i < $sizeof; $i++) {
-                $revised = $results[$i]['revised'];
-				
-                /*$sql_exe = 'SELECT exe_id FROM ' . $TBL_TRACK_ATTEMPT_RECORDING . ' WHERE author != "" AND exe_id = ' . Database :: escape_string($results[$i]['exe_id']) .' LIMIT 1';            
-                $query = Database::query($sql_exe);
-                if (Database :: num_rows($query) > 0) {
-                    $revised = true;
-                }*/
+                $revised = $results[$i]['revised'];	
                 if ($from_gradebook && ($is_allowedToEdit || $is_tutor)) {
                     if (in_array($results[$i]['username'] . $results[$i]['firstname'] . $results[$i]['lastname'], $users_array_id)) {
                         continue;
@@ -1004,7 +984,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 //$quiz_name_list = $test;
                 $dt = api_convert_and_format_date($results[$i]['exe_weighting']);
                 $res = $results[$i]['exe_result'];	
-    
                 
                 // we filter the results if we have the permission to
                 if (isset ($results[$i]['results_disabled']))
@@ -1057,52 +1036,49 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     }
                     $score = show_score($my_res, $my_total);
                     
-                    $html_link = '';
+                    $actions = '';
                     if ($is_allowedToEdit || $is_tutor) {
                     	if (in_array($results[$i]['exe_user_id'], $teacher_id_list)) {
-                    		$html_link.= Display::return_icon('teachers.gif', get_lang('Teacher'));
+                    		$actions .= Display::return_icon('teachers.gif', get_lang('Teacher'));
                     	}
                         if ($revised) {
-                            $html_link.= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".Display :: return_icon('edit.png', get_lang('Edit'), array(), 22);
-                            $html_link.= '&nbsp;';
+                            $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".Display :: return_icon('edit.png', get_lang('Edit'), array(), 22);
+                            $actions .= '&nbsp;';
                         } else {
-                            $html_link.="<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".Display :: return_icon('quiz.gif', get_lang('Qualify'));
-                            $html_link.='&nbsp;';
+                            $actions .="<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".Display :: return_icon('quiz.gif', get_lang('Qualify'));
+                            $actions .='&nbsp;';
                         }
-                        $html_link.="</a>";                     
+                        $actions .="</a>";                     
                         if ($is_allowedToEdit) {
                             if ($filter==2){
-                                $html_link.=' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
+                                $actions .=' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
                             }
                         }
                         if (api_is_platform_admin() || $is_tutor) {                        	
-                            $html_link.=' <a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';                            
-                            $html_link.='&nbsp;';
+                            $actions .=' <a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';                            
+                            $actions .='&nbsp;';
                         }
                     } else {
                     	$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$results[$i]['exe_id'].'&id_session='.api_get_session_id().'&height=500&width=750';
-                    	$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'thickbox a_button white small'))."&nbsp;&nbsp;&nbsp;";
-                    	
-                    	$html_link.= $attempt_link;
-                    	
-                       
+                    	$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'thickbox a_button white small'));                    	
+                    	$actions .= $attempt_link;
+                    }                    
+                    
+                    if ($revised) {
+                        $revised = Display::span(get_lang('Validated'), array('class'=>'label_tag success'));                            
+                    } else {
+                        $revised = Display::span(get_lang('NotValidated'), array('class'=>'label_tag notice'));                            
                     }
-                    $more_details_list = $html_link;
-                    if ($is_allowedToEdit || $is_tutor) {                        
-						if ($revised) {
-                        	$revised = Display::span(get_lang('Validated'), array('class'=>'label_tag success'));                            
-                        } else {
-                        	$revised = Display::span(get_lang('NotValidated'), array('class'=>'label_tag notice'));                            
-                        }
-						
-                        //$list_info[] = array($user_first_name,$user_last_name,$user_login,$user_groups,$quiz_name_list,$duration_list,$date_list,$result_list, $revised, $more_details_list);
+                    
+                    if ($is_allowedToEdit || $is_tutor) {                        					
 						$results[$i]['status'] =  $revised;
 						$results[$i]['score'] =  $score;
-						$results[$i]['actions'] =  $more_details_list;
-						$list_info[] = $results[$i];
+						$results[$i]['actions'] =  $actions;
+						$list_info[] = $results[$i];                        
                     } else {
                         $results[$i]['status'] =  $revised;
 						$results[$i]['score'] =  $score;							
+                        $results[$i]['actions'] =  $actions;                        
 						$list_info[] = $results[$i];
                     }
                 }

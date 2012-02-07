@@ -35,12 +35,12 @@ require_once 'exercise.lib.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once 'testcategory.class.php';
-require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once 'hotpotatoes.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH)."groupmanager.lib.php"; // for group filtering
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php'; // for group filtering
 
 /*	Constants and variables */
 $is_allowedToEdit 			= api_is_allowed_to_edit(null,true);
@@ -52,7 +52,7 @@ $TBL_ITEM_PROPERTY 			= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $TBL_EXERCICE_QUESTION 		= Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES 				= Database :: get_course_table(TABLE_QUIZ_TEST);
 $TBL_TRACK_EXERCICES 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$table_lp_item              = Database::get_course_table(TABLE_LP_ITEM);
+$table_lp_item              = Database :: get_course_table(TABLE_LP_ITEM);
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
@@ -419,7 +419,7 @@ while ($row = Database :: fetch_array($result,'ASSOC')) {
 } 
 
 echo '<table class="data_table">';    
-if (!empty($exercise_list)) {     
+if (!empty($exercise_list)) {  
     /*  Listing exercises  */
     
     if ($origin != 'learnpath') {
@@ -438,7 +438,7 @@ if (!empty($exercise_list)) {
         } else {
         	$headers = array(array('name' => get_lang('ExerciseName')), 
                              array('name' => get_lang('Status')), 
-                             array('name' => get_lang('Results')));
+                             );
         }
         
         $header_list = '';
@@ -739,13 +739,15 @@ if (!empty($exercise_list)) {
                 $item .=  Display::tag('td', $attempt_text);
                                  
                 //See results
-                $actions = '<a class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.$num.Display::return_icon('test_results.png', get_lang('Results'),'',22).' </a>';
+                //$actions = '<a class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.$num.Display::return_icon('test_results.png', get_lang('Results'),'',22).' </a>';
             }                
             $class = 'row_even';
             if ($count % 2) {
                 $class = 'row_odd';
-            }                                        
-            $item .=  Display::tag('td', $actions);                    
+            }
+            
+            if ($is_allowedToEdit)
+                $item .=  Display::tag('td', $actions);                    
             echo Display::tag('tr',$item, array('class'=>$class));
                    
             $count++;

@@ -48,7 +48,7 @@ api_protect_course_script(true);
 
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 
-$htmlHeadXtra[] = api_get_jquery_js();
+$htmlHeadXtra[] = api_get_jquery_ui_js();
 
 if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
     $htmlHeadXtra[] = api_get_js('glossary.js'); //Glossary
@@ -64,12 +64,9 @@ $learnpath_id 			= isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpat
 $learnpath_item_id 		= isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
 $learnpath_item_view_id	= isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : 0;
 $origin 				= isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
-
 $reminder 				= isset($_REQUEST['reminder']) ? intval($_REQUEST['reminder']) : 0;
 $remind_question_id 	= isset($_REQUEST['remind_question_id']) ? intval($_REQUEST['remind_question_id']) : 0;
-
 $exerciseId				= isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
-
 
 if (empty ($formSent)) {
     $formSent = $_REQUEST['formSent'];

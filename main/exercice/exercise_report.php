@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	Exercise list: This script shows the list of exercises for administrators and students.
-*	@package chamilo.exercise
-*	@author Olivier Brouckaert, original author
-*	@author Denes Nagy, HotPotatoes integration
-*	@author Wolfgang Schneider, code/html cleanup
-*	@author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
-* Modified by hubert.borderiou (question category)
-*/
+ *	Exercise list: This script shows the list of exercises for administrators and students.
+ *	@package chamilo.exercise
+ *	@author Julio Montoya <gugli100@gmail.com> jqgrid integration
+ *   Modified by hubert.borderiou (question category)
+ * 
+ *  @todo fix excel export
+ * 
+ */
 /**
  * Code
  */
@@ -69,18 +69,6 @@ if (!empty($_GET['path'])) {
     $parameters['path'] = Security::remove_XSS($_GET['path']);
 }
 
-// filter display by student group
-// if $_GET['filterByGroup'] = -1 => do not filter
-// else, filter by group_id (0 for no group)
-
-$filterByGroup = -1;
-if (isset($_GET['filterByGroup']) && is_numeric($_GET['filterByGroup'])) {
-    $filterByGroup = Security::remove_XSS($_GET['filterByGroup']);
-    api_session_register('filterByGroup');
-} else if (isset($_SESSION['filterByGroup'])) {
-    $filterByGroup = $_SESSION['filterByGroup'];
-}
-
 if (!empty ($_GET['extra_data'])) {
     switch ($_GET['extra_data']) {
         case 'on' :
@@ -91,6 +79,7 @@ if (!empty ($_GET['extra_data'])) {
             break;
     }
 }
+
 if (!empty($_GET['export_report']) && $_GET['export_report'] == '1') {
     if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
         $user_id = null;
@@ -239,16 +228,13 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
         } else {
             $alt = get_lang('ExportWithoutUserFields');
             $extra_user_fields = '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
-        }           
+        }    
+        
         $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';        
-    
-        if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
-            $filter = 1;
-        } else {
-            $filter = 2;
-        }
-        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&export_filter='.$filter.'&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval($_GET['exerciseId']).'" >'.
-              Display::return_icon('save.png',   get_lang('Export'),'',32).'</a>';          
+        $actions .='<a href="live_stats.php?' . api_get_cidreq() . '&exerciseId='.$exercise_id.'">'.Display :: return_icon('activity_monitor.png', get_lang('LiveResults'),'',32).'</a>';
+
+        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval($_GET['exerciseId']).'" >'.
+                     Display::return_icon('save.png',   get_lang('Export'),'',32).'</a>';          
     }
 } else {
     $actions .= '<a href="exercice.php">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
@@ -256,13 +242,11 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 
 //Deleting an attempt
 if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !empty ($_GET['did']) && $_GET['did'] == strval(intval($_GET['did']))) {
-    $sql = 'DELETE FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = ' . intval($_GET['did']); //_GET[did] filtered by entry condition    
+    $sql = 'DELETE FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = ' . intval($_GET['did']);
     Database::query($sql);
-    $sql = 'DELETE FROM ' . $TBL_TRACK_ATTEMPT . ' WHERE exe_id = ' . intval($_GET['did']); //_GET[did] filtered by entry condition
-    Database::query($sql);
-    
-    $filter=Security::remove_XSS($_GET['filter']);
-    header('Location: exercise_report.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&filter=' . $filter . '&exerciseId='.$exercise_id.'&filter_by_user='.$_GET['filter_by_user']);
+    $sql = 'DELETE FROM ' . $TBL_TRACK_ATTEMPT . ' WHERE exe_id = ' . intval($_GET['did']);
+    Database::query($sql);    
+    header('Location: exercise_report.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&exerciseId='.$exercise_id);
     exit;
 }
 
@@ -483,6 +467,9 @@ $(function() {
         jQuery("#results").jqGrid('filterToolbar',options);    
         var sgrid = $("#results")[0];
         sgrid.triggerToolbar();
+        
+        
+        
         
         
     <?php } ?>

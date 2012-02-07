@@ -33,7 +33,6 @@ $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 // The header.
 Display::display_header($tool_name);
 
-
 //jqgrid will use this URL to do the selects
 
 $minutes = 60;

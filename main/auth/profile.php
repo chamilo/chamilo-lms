@@ -250,7 +250,7 @@ if (api_get_setting('extended_profile') == 'true') {
 	if (!isset($_GET['type']) || (isset($_GET['type']) && $_GET['type'] == 'extended')) {
 		$width_extended_profile = 500;
 		//$form->addElement('html', '<a href="javascript: void(0);" onclick="javascript: show_extend();"> show_extend_profile</a>');
-		$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
+		//$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
 		//	MY COMPETENCES
 		$form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
 		//	MY DIPLOMAS
@@ -855,9 +855,8 @@ $url_big_image      = $big_image.'?rnd='.time();
 if (api_get_setting('allow_social_tool') == 'true') {
 	echo '<div id="social-content">';
 		echo '<div id="social-content-left">';
-		SocialManager::show_social_menu('home', null, api_get_user_id(), false);
+		echo SocialManager::show_social_menu('home', null, api_get_user_id(), false);
 		echo '</div>';
-
 		echo '<div id="social-content-right">';
         $form->display();			
 	echo '</div>';

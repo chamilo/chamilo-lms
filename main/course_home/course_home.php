@@ -37,9 +37,12 @@ $use_anonymous = true;
 // Inlcuding the global initialization file.
 require dirname(__FILE__).'/../inc/global.inc.php';
 
-// Delete LP sessions
-unset($_SESSION['oLP']);
-unset($_SESSION['lpobject']);
+// Delete LP sessions - commented out after seeing that normal
+// users in their first learnpath step (1st SCO of a SCORM)
+// cannot have their data saved if they "Return to course homepage"
+// before any LMSFinish()
+//unset($_SESSION['oLP']);
+//unset($_SESSION['lpobject']);
 
 $htmlHeadXtra[] ='<script type="text/javascript">
 $(document).ready(function() {

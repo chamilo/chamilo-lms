@@ -2589,8 +2589,13 @@ function api_not_allowed($print_headers = false) {
         exit;
     }    
 
-    //if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
-    $msg = Display::return_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
+    // Check if the cookies are enabled. If are enabled and if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
+	if( !isset($_COOKIE["TestCookie"]) && empty($_COOKIE["TestCookie"]) ) {
+		$msg = Display::return_message(get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error', false);
+	}
+	else {
+		$msg = Display::return_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
+	}
     $msg = Display::div($msg, array('align'=>'center'));
     $tpl->assign('content', $msg);	
     $tpl->display_one_col_template();

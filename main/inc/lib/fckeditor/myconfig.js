@@ -54,7 +54,7 @@ FCKConfig.AvailableLanguages = 'en,af,ar,ast,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca
 // would be shown for plugins, if they are not provided with the requiested language files.
 LoadScript( ( window.document.location.toString().indexOf('fckeditor.original.html') != -1 ) // Please, do not disable this script.
 	? ( FCKConfig.PluginsPath + 'customizations/fckplugin_load.js' )
-	: ( FCKConfig.PluginsPath + 'customizations/fckplugin_load_compressed.js' ) ) ;
+	: ( FCKConfig.PluginsPath + 'customizations/fckplugin_load.js' ) ) ;
 // Reading the list of the enabled in myconfig.php plugins.
 FCKConfig.LoadPlugin = eval( '(' + FCKConfig.PageConfig.LoadPlugin + ')' ) ;
 // Loading the enabled plugins.

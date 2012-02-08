@@ -5,10 +5,10 @@
   <Constants>
     <Constant name="" value="" />
   </Constants>
-  <PackageFile path="fckplugin_compressed.js">
+  <PackageFile path="fckplugin.js">
   <File path="fckplugin.js" />
   </PackageFile>
-  <PackageFile path="fckplugin_load_compressed.js">
+  <PackageFile path="fckplugin_load.js">
   <File path="fckplugin_load.js" />
   </PackageFile>
 </Package>

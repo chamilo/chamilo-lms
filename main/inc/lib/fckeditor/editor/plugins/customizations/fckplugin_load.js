@@ -81,8 +81,7 @@ FCKPlugin.prototype.Load = function()
     // Logic-modification about loading compressed version of some plugins.
     //LoadScript( this.Path + 'fckplugin.js' ) ;
     var file;
-    switch ( this.Name )
-    {
+    switch ( this.Name ) {
         case 'asciimath':
         case 'asciisvg':
         case 'audio':
@@ -101,11 +100,11 @@ FCKPlugin.prototype.Load = function()
         case 'youtube':
             file = ( window.document.location.toString().indexOf('fckeditor.original.html') != -1 )
                 ? 'fckplugin.js'
-                : 'fckplugin_compressed.js';
+                : 'fckplugin.js';
             break;
         default:
             file = 'fckplugin.js';
-    }
+    }    
     LoadScript( this.Path + file ) ;
     // End of logic-modification.
 }

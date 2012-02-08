@@ -31,9 +31,11 @@ $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_class							= Database::get_main_table(TABLE_MAIN_CLASS);
-$tbl_class_rel_user					= Database::get_main_table(TABLE_MAIN_CLASS_USER);
 $tbl_session_category				= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+
+$table_access_url_session           = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+$table_access_url_user           = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
 
 $id_session = (int)$_GET['id_session'];
 
@@ -41,11 +43,11 @@ $sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start
 		FROM '.$tbl_session.' LEFT JOIN '.$tbl_user.' ON id_coach = user_id
 		WHERE '.$tbl_session.'.id='.$id_session;
 
-$rs = Database::query($sql);
+$rs      = Database::query($sql);
 $session = Database::store_result($rs);
 $session = $session[0];
 
-if(!api_is_platform_admin() && $session['session_admin_id']!=$_user['user_id']) {
+if(!api_is_platform_admin() && $session['session_admin_id'] != $_user['user_id']) {
 	api_not_allowed(true);
 }
 
@@ -59,41 +61,53 @@ if (Database::num_rows($rs)>0) {
 	$session_category = $rows_session_category['name'];
 }
 
-if($_GET['action'] == 'delete') {
-	$idChecked = $_GET['idChecked'];
-	if(is_array($idChecked)) {
-		$my_temp = array();
-		foreach ($idChecked as $id){
-			$my_temp[]= Database::escape_string($id);// forcing the escape_string
-		}
-		$idChecked = $my_temp;
+$action = $_GET['action'];
 
-		$idChecked="'".implode("','",$idChecked)."'";
+switch($action) {
+    case 'add_user_to_url':        
+        $user_id = $_REQUEST['user_id'];
+        $result = UrlManager::add_user_to_url($user_id);
+        $user_info = api_get_user_info($user_id);
+        if ($result) {
+            $message = Display::return_message(get_lang('UserAdded').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']), 'confirm');
+        }
+        break;
+    case 'delete':
+        $idChecked = $_GET['idChecked'];
+        if(is_array($idChecked)) {
+            $my_temp = array();
+            foreach ($idChecked as $id){
+                $my_temp[]= Database::escape_string($id);// forcing the escape_string
+            }
+            $idChecked = $my_temp;
 
-		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)");
-		$nbr_affected_rows=Database::affected_rows();
+            $idChecked="'".implode("','",$idChecked)."'";
 
-		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)");
-		Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
-	}
+            Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)");
+            $nbr_affected_rows=Database::affected_rows();
 
-	if(!empty($_GET['class'])){
-		Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']));
-		$nbr_affected_rows=Database::affected_rows();
-		Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'");
-	}
+            Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)");
+            Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
+        }
 
-	if (!empty($_GET['user'])) {
-		Database::query("DELETE FROM $tbl_session_rel_user WHERE relation_type<>".SESSION_RELATION_TYPE_RRHH." AND id_session='$id_session' AND id_user=".intval($_GET['user']));
-		$nbr_affected_rows=Database::affected_rows();
-        
-		Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'");
+        if(!empty($_GET['class'])){
+            Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']));
+            $nbr_affected_rows=Database::affected_rows();
+            Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'");
+        }
 
-		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']));
-		$nbr_affected_rows=Database::affected_rows();
-        
-		Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'");
-	}
+        if (!empty($_GET['user'])) {
+            Database::query("DELETE FROM $tbl_session_rel_user WHERE relation_type<>".SESSION_RELATION_TYPE_RRHH." AND id_session='$id_session' AND id_user=".intval($_GET['user']));
+            $nbr_affected_rows=Database::affected_rows();
+
+            Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'");
+
+            Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']));
+            $nbr_affected_rows=Database::affected_rows();
+
+            Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'");
+        }
+        break;
 }
 
 Display::display_header($tool_name);
@@ -101,14 +115,20 @@ if (!empty($_GET['warn'])) {
     Display::display_warning_message(urldecode($_GET['warn']));
 }
 
+if (!empty($message)) {
+    echo $message;
+}
+
 echo Display::tag('h1', Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
-//echo Display::tag('h3', $tool_name);
 ?>
 <!-- General properties -->
 <table class="data_table" width="100%">
 <tr>
-  <th colspan="2"><?php echo get_lang('GeneralProperties'); ?>
-  	<a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a>
+  <th colspan="2">
+      <?php echo get_lang('GeneralProperties'); ?>
+      <a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>">
+          <?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?>
+      </a>
   </th>
 </tr>
 <tr>
@@ -173,7 +193,9 @@ echo Display::tag('h1', Display::return_icon('session.png', get_lang('Session'))
 
 <?php 
 
-if (api_get_multiple_access_url()) {
+$multiple_url_is_on = api_get_multiple_access_url();
+
+if ($multiple_url_is_on) {
     echo '<tr><td>';   
     echo 'URL';    
     echo '</td>';
@@ -191,21 +213,19 @@ if (api_get_multiple_access_url()) {
 <table class="data_table" width="100%">
 <tr>
   <th colspan="4"><?php echo get_lang('CourseList'); ?>
-  	<a href="add_courses_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a></th>
+  	<a href="add_courses_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>">
+        <?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a>  
   </th>
 </tr>
 <tr>
-  <tr>
   <th width="35%"><?php echo get_lang('CourseTitle'); ?></th>
   <th width="30%"><?php echo get_lang('CourseCoach'); ?></th>
   <th width="20%"><?php echo get_lang('UsersNumber'); ?></th>
   <th width="15%"><?php echo get_lang('Actions'); ?></th>
 </tr>
-</tr>
 <?php
-if ($session['nbr_courses']==0){
-	echo '
-		<tr>
+if ($session['nbr_courses'] == 0){
+	echo '<tr>
 			<td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
 		</tr>';
 } else {
@@ -215,10 +235,9 @@ if ($session['nbr_courses']==0){
 			WHERE course_code = code
 			AND	id_session='$id_session'
 			ORDER BY title";
-
 	$result=Database::query($sql);
 	$courses=Database::store_result($result);
-	foreach($courses as $course){
+	foreach($courses as $course) {
 		//select the number of users
 
 		$sql = " SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
@@ -274,43 +293,67 @@ if ($session['nbr_courses']==0){
 <table class="data_table" width="100%">
 <tr>
   <th colspan="4"><?php echo get_lang('UserList'); ?>
-  	<a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a></th>
+  	<a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>">
+        <?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?>
+    </a></th>
   </th>
 </tr>
 </tr>
 <?php
-if($session['nbr_users']==0){
-	echo '
-		<tr>
+
+if ($session['nbr_users']==0) {
+	echo '<tr>
 			<td colspan="2">'.get_lang('NoUsersForThisSession').'</td>
 		</tr>';
-} else {
+} else {    
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
     
-	$sql = 'SELECT '.$tbl_user.'.user_id, lastname, firstname, username '.
-			' FROM '.$tbl_user.
-			' INNER JOIN '.$tbl_session_rel_user.
-			' ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user AND '.$tbl_session_rel_user.'.relation_type<>'.SESSION_RELATION_TYPE_RRHH.
-			' AND '.$tbl_session_rel_user.'.id_session = '.$id_session.$order_clause;
+    if ($multiple_url_is_on) {
+        $url_id = api_get_current_access_url_id();        
+        $sql = "SELECT u.user_id, lastname, firstname, username, access_url_id
+                FROM $tbl_user u
+                INNER JOIN $tbl_session_rel_user su
+                ON u.user_id = su.id_user AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                LEFT OUTER JOIN $table_access_url_user uu ON (uu.user_id = u.user_id)
+                WHERE su.id_session = $id_session AND (access_url_id = $url_id OR access_url_id is null )
+                $order_clause";
+    } else {
+        $sql = "SELECT u.user_id, lastname, firstname, username
+                FROM $tbl_user u
+                INNER JOIN $tbl_session_rel_user su
+                ON u.user_id = su.id_user AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                AND su.id_session = ".$id_session.$order_clause;
+    }
 
-	$result=Database::query($sql);
-	$users=Database::store_result($result);
+	$result = Database::query($sql);
+	$users  = Database::store_result($result);
 	$orig_param = '&origin=resume_session&id_session='.$id_session; // change breadcrumb in destination page
-	foreach($users as $user){
+	foreach ($users as $user){
         $user_link = '';
         if (!empty($user['user_id'])) {
             $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.api_htmlentities(api_get_person_name($user['firstname'], $user['lastname']),ENT_QUOTES,$charset).' ('.$user['username'].')</a>';
         }
+        
+        $link_to_add_user_in_url = '';
+        
+        if ($multiple_url_is_on) {
+            if ($user['access_url_id'] != $url_id) {            
+                $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), array(), 22);
+                $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), array(), 22);
+                $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
+            }                
+        }
 		echo '<tr>
-					<td width="90%">
-						<b>'.$user_link.'</b>
-					</td>
-					<td>
-						<a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
-						<a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'</a>&nbsp;
-						<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
-					</td>
-				  </tr>';
+                <td width="90%">
+                    <b>'.$user_link.'</b>
+                </td>
+                <td>               
+                    <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
+                    <a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'</a>&nbsp;
+                    <a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
+                    '.$link_to_add_user_in_url.'
+                </td>
+                </tr>';
 	}
 }
 ?>

@@ -959,11 +959,10 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     
             $user_list_id = array ();                        
             $duration_list = '';
-            $date_list = '';            
-            $more_details_list = '';
-			
-            for ($i = 0; $i < $sizeof; $i++) {
+            			
+            for ($i = 0; $i < $sizeof; $i++) {                
                 $revised = $results[$i]['revised'];	
+                
                 if ($from_gradebook && ($is_allowedToEdit || $is_tutor)) {
                     if (in_array($results[$i]['username'] . $results[$i]['firstname'] . $results[$i]['lastname'], $users_array_id)) {
                         continue;
@@ -971,19 +970,16 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     $users_array_id[] = $results[$i]['username'] . $results[$i]['firstname'] . $results[$i]['lastname'];
                 }
                 if ($is_allowedToEdit || $is_tutor) {                    
-                    $user = $results[$i]['firstname'] . $results[$i]['lastname'];
-                    //$test = $results[$i]['col3'];                    
+                    $user = $results[$i]['firstname'] . $results[$i]['lastname'];                    
                     $user_groups = displayGroupsForUser('<br/>', $results[$i]['user_id']);
                 } else {                    
                     $user = $results[$i]['firstname'] . $results[$i]['lastname'];
-                    //$test = $results[$i]['col0'];                
+                              
                 }
                 $user_list_id[] = $results[$i]['exe_user_id'];
                 $id = $results[$i]['exe_id'];   
                
-                //$quiz_name_list = $test;
-                $dt = api_convert_and_format_date($results[$i]['exe_weighting']);
-                $res = $results[$i]['exe_result'];	
+                $dt = api_convert_and_format_date($results[$i]['exe_weighting']);                
                 
                 // we filter the results if we have the permission to
                 if (isset ($results[$i]['results_disabled']))
@@ -991,8 +987,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 else
                     $result_disabled = 0;
     
-                if ($result_disabled == 0) {
-                    $add_start_date = $lang_nostartdate;
+                if ($result_disabled == 0) {         
     
                     if ($is_allowedToEdit || $is_tutor) {                        
                         $user = $results[$i]['firstname'] . $results[$i]['lastname'];
@@ -1015,14 +1010,12 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                         if ($results[$i]['exstep'] > 1) {                            
                             $duration_list = ' ( ' . $results[$i]['steps_counter'] . ' ' . get_lang('Steps') . ' )';
                         }
-                        //$add_start_date = api_convert_and_format_date($start_date) . ' / ';
                     } else {
-                        $duration_list = get_lang('NoLogOfDuration');
-                        //echo get_lang('NoLogOfDuration');
+                        $duration_list = get_lang('NoLogOfDuration');                        
                     }
                     // Date conversion
 					
-					$date_list = api_get_local_time($results[$i]['start_date']). ' / ' . api_get_local_time($results[$i]['exe_date']);
+					
                     
                     // there are already a duration test period calculated??
                     //echo '<td>'.sprintf(get_lang('DurationFormat'), $duration).'</td>';
@@ -1031,6 +1024,10 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     
                     $my_res     = $results[$i]['exe_result'];
                     $my_total   = $results[$i]['exe_weighting'];
+                    
+                    $results[$i]['start_date']  =   api_get_local_time($results[$i]['start_date']);
+                    $results[$i]['exe_date']    =   api_get_local_time($results[$i]['exe_date']);                    
+                    
                     if (!$results[$i]['propagate_neg'] && $my_res < 0) {
                         $my_res = 0;
                     }
@@ -1071,13 +1068,13 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     }
                     
                     if ($is_allowedToEdit || $is_tutor) {                        					
-						$results[$i]['status'] =  $revised;
-						$results[$i]['score'] =  $score;
+						$results[$i]['status']  =  $revised;
+						$results[$i]['score']   =  $score;
 						$results[$i]['actions'] =  $actions;
 						$list_info[] = $results[$i];                        
                     } else {
-                        $results[$i]['status'] =  $revised;
-						$results[$i]['score'] =  $score;							
+                        $results[$i]['status']  =  $revised;
+						$results[$i]['score']   =  $score;							
                         $results[$i]['actions'] =  $actions;                        
 						$list_info[] = $results[$i];
                     }

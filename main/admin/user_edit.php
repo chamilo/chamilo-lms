@@ -234,7 +234,7 @@ if (!$user_data['platform_admin']) {
 
 // EXTRA FIELDS
 
-$extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+$extra = UserManager::get_extra_fields(0, 50, 5, 'ASC', true, true);
 foreach ($extra as $id => $field_details) {
 	if ($field_details[6] == 0) {
 		continue;

@@ -32,19 +32,18 @@ require_once 'exercise.class.php';
 require_once 'exercise.lib.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
-require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once 'hotpotatoes.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH) . "groupmanager.lib.php"; // for group filtering
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH)."groupmanager.lib.php"; // for group filtering
 
 // need functions of statsutils lib to display previous exercices scores
 require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
-
 
 /*	Constants and variables */
 $is_allowedToEdit           = api_is_allowed_to_edit(null,true);
@@ -69,36 +68,24 @@ if (!empty($_GET['path'])) {
     $parameters['path'] = Security::remove_XSS($_GET['path']);
 }
 
-if (!empty ($_GET['extra_data'])) {
-    switch ($_GET['extra_data']) {
-        case 'on' :
-            $_SESSION['export_user_fields'] = true;
-            break;      
-        default :
-            $_SESSION['export_user_fields'] = false;
-            break;
-    }
-}
-
-if (!empty($_GET['export_report']) && $_GET['export_report'] == '1') {
+if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
     if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-        $user_id = null;
-        if (empty($_SESSION['export_user_fields']))
-            $_SESSION['export_user_fields'] = false;
-        if (!$is_allowedToEdit and !$is_tutor) {
-            $user_id = api_get_user_id();
-        }
+        
+        $load_extra_data = false;
+        if (isset($_REQUEST['extra_data'])) {
+            $load_extra_data = true;   
+        }        
         require_once 'exercise_result.class.php';
         switch ($_GET['export_format']) {
             case 'xls' :
                 $export = new ExerciseResult();               
-                $export->exportCompleteReportXLS($documentPath, $user_id, $_SESSION['export_user_fields'], $_GET['export_filter'], $_GET['exerciseId'], $_GET['hotpotato_name']);
+                $export->exportCompleteReportXLS($documentPath, null, $load_extra_data, null, $_GET['exerciseId'], $_GET['hotpotato_name']);
                 exit;
                 break;
             case 'csv' :
             default :
                 $export = new ExerciseResult();
-                $export->exportCompleteReportCSV($documentPath, $user_id, $_SESSION['export_user_fields'], $_GET['export_filter'], $_GET['exerciseId'], $_GET['hotpotato_name']);
+                $export->exportCompleteReportCSV($documentPath, null, $load_extra_data, null, $_GET['exerciseId'], $_GET['hotpotato_name']);
                 exit;
                 break;
         }
@@ -195,7 +182,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
         $message .= '<p>'.get_lang('ClickLinkToViewComment') . ' <a href="#url#">#url#</a><br />';
     }
         
-    $message .= '<p>'.get_lang('Regards') . ' </p>';
+    $message .= '<p>'.get_lang('Regards').'</p>';
     $message .= $from_name; 
     
     $message = str_replace("#test#", Security::remove_XSS($test), $message);
@@ -219,17 +206,10 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
     }
 }
 
+
 if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
-    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-        if ($_SESSION['export_user_fields']) {
-            $alt = get_lang('ExportWithUserFields');
-            $extra_user_fields = '<input type="hidden" name="export_user_fields" value="export_user_fields">';
-        } else {
-            $alt = get_lang('ExportWithoutUserFields');
-            $extra_user_fields = '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
-        }    
-        
+    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {        
         $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';        
         $actions .='<a href="live_stats.php?' . api_get_cidreq() . '&exerciseId='.$exercise_id.'">'.Display :: return_icon('activity_monitor.png', get_lang('LiveResults'),'',32).'</a>';
 
@@ -241,13 +221,16 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 }
 
 //Deleting an attempt
-if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !empty ($_GET['did']) && $_GET['did'] == strval(intval($_GET['did']))) {
-    $sql = 'DELETE FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = ' . intval($_GET['did']);
-    Database::query($sql);
-    $sql = 'DELETE FROM ' . $TBL_TRACK_ATTEMPT . ' WHERE exe_id = ' . intval($_GET['did']);
-    Database::query($sql);    
-    header('Location: exercise_report.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&exerciseId='.$exercise_id);
-    exit;
+if ( ($is_allowedToEdit || $is_tutor || api_is_coach()) && $_GET['delete'] == 'delete' && !empty ($_GET['did'])) {
+    $exe_id = intval($_GET['did']);
+    if (!empty($exe_id)) {    
+        $sql = 'DELETE FROM '.$TBL_TRACK_EXERCICES.' WHERE exe_id = '.$exe_id;
+        Database::query($sql);
+        $sql = 'DELETE FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$exe_id;
+        Database::query($sql);    
+        header('Location: exercise_report.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&exerciseId='.$exercise_id);
+        exit;
+    }
 }
 
 if ($is_allowedToEdit || $is_tutor) {
@@ -270,7 +253,7 @@ Display :: display_header($nameTools);
 
 $actions = Display::div($actions, array('class'=> 'actions'));
 
-$extra =  '<script type="text/javascript">       
+$extra =  '<script type="text/javascript">
     $(document).ready(function() {
                     
         $( "#dialog:ui-dialog" ).dialog( "destroy" );
@@ -325,6 +308,8 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results&exerci
 
 //$activeurl = '?sidx=session_active';
 $action_links = '';
+
+//Generating group list 
 
 $group_list = GroupManager::get_group_list();
 $group_parameters = array(':'.get_lang('All'));
@@ -382,7 +367,9 @@ if ($is_allowedToEdit || $is_tutor) {
         return "<span title=\""+tabLoginx[0]+rowObject[2]+tabLoginx[1]+"\">"+cellvalue+"</span>";
     }';
 } else {
-	
+    
+	api_not_allowed(); //view not available for students
+    //
 	//The order is important you need to check the the $column variable in the model.ajax.php file 
 	$columns        = array(get_lang('Duration'), get_lang('StartDate'),  get_lang('EndDate'), get_lang('Score'), get_lang('Status'), get_lang('Actions'));
 	
@@ -409,7 +396,7 @@ $extra_params['rowList'] = array(10, 20 ,30);
 <script>
     
 function setSearchSelect(columnName) {    
-    $("#results").jqGrid('setColProp', columnName,
+    $("#results").jqGrid('setColProp', columnName,  
     {                   
        searchoptions:{
             dataInit:function(el){                            
@@ -422,31 +409,59 @@ function setSearchSelect(columnName) {
     });
 }
 
+function exportExcel() {
+    var mya=new Array();
+    mya=$("#results").getDataIDs();  // Get All IDs
+    var data=$("#results").getRowData(mya[0]);     // Get First row to get the labels
+    var colNames=new Array(); 
+    var ii=0;
+    for (var i in data){colNames[ii++]=i;}    // capture col names
+    var html="";
+    
+    for(i=0;i<mya.length;i++) {
+        data=$("#results").getRowData(mya[i]); // get each row
+        for(j=0;j<colNames.length;j++) {
+            html=html+data[colNames[j]]+","; // output each column as tab delimited
+        }
+        html=html+"\n";  // output each row with end of line
+    }
+    html = html+"\n";  // end of line at the end
+    
+    var form = $("#export_report_form");
+    
+    $("#csvBuffer").attr('value', html);
+    form.target='_blank';
+    form.submit();
+}
+
 $(function() {
     
     <?php 
         echo Display::grid_js('results', $url,$columns,$column_model, $extra_params, array(), $action_links, true);      
     ?>
     
-    <?php  if ($is_allowedToEdit || $is_tutor) { ?>       
-        //setSearchSelect("status"); 
+    <?php if ($is_allowedToEdit || $is_tutor) { ?>       
         
-        $("#results").jqGrid('navGrid','#results_pager', {edit:false,add:false,del:false},
-            {height:280,reloadAfterSubmit:false}, // edit options 
-            {height:280,reloadAfterSubmit:false}, // add options 
-            {reloadAfterSubmit:false}, // del options 
+        //setSearchSelect("status"); 
+        //
+        //view:true, del:false, add:false, edit:false, excel:true}
+        $("#results").jqGrid('navGrid','#results_pager', {view:true, edit:false, add:false, del:false, excel:false},
+            {height:280, reloadAfterSubmit:false}, // view options 
+            {height:280, reloadAfterSubmit:false}, // edit options 
+            {height:280, reloadAfterSubmit:false}, // add options 
+            {reloadAfterSubmit: false}, // del options            
             {width:500} // search options
         );
-            
-        /*
+                  /*
         // add custom button to export the data to excel
-        jQuery("#sessions").jqGrid('navButtonAdd','#sessions_pager',{
-            caption:"", 
+        jQuery("#results").jqGrid('navButtonAdd','#results_pager',{
+            caption:"",            
             onClickButton : function () { 
-                jQuery("#sessions").excelExport();
+                 //exportExcel();
             } 
-        });
-
+        });*/
+        
+        /*
         jQuery('#sessions').jqGrid('navButtonAdd','#sessions_pager',{id:'pager_csv',caption:'',title:'Export To CSV',onClickButton : function(e)
         {
             try {
@@ -466,15 +481,17 @@ $(function() {
         }
         jQuery("#results").jqGrid('filterToolbar',options);    
         var sgrid = $("#results")[0];
-        sgrid.triggerToolbar();
-        
-        
-        
-        
+        sgrid.triggerToolbar();        
         
     <?php } ?>
 });
 </script>
+<form id="export_report_form" method="post" action="exercise_report.php">
+    <input type="hidden" name="csvBuffer" id="csvBuffer" value="" />
+    <input type="hidden" name="export_report" id="export_report" value="1" />    
+    <input type="hidden" name="exerciseId" id="exerciseId" value="<?php echo $exercise_id ?>" /> 
+</form>
+
 <?php
 
 echo Display::grid_html('results');

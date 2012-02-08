@@ -24,20 +24,7 @@ class ExerciseResult
 	/**
 	 * constructor of the class
 	 */
-	public function ExerciseResult($get_questions=false,$get_answers=false)
-	{
-		//nothing to do
-		/*
-		$this->exercise_list = array();
-		$this->readExercisesList();
-		if($get_questions)
-		{
-			foreach($this->exercises_list as $exe)
-			{
-				$this->exercises_list['questions'] = $this->getExerciseQuestionList($exe['id']);
-			}
-		}
-		*/
+	public function ExerciseResult($get_questions=false,$get_answers=false) {
 	}
 
 	/**
@@ -90,6 +77,7 @@ class ExerciseResult
 		}
 		return true;
 	}
+    
 	/**
 	 * Gets the results of all students (or just one student if access is limited)
 	 * @param	string		The document path (for HotPotatoes retrieval)
@@ -97,13 +85,14 @@ class ExerciseResult
 	 */
 	function _getExercisesReporting($document_path, $user_id = null, $filter=0, $exercise_id = 0, $hotpotato_name = null) {
 		$return = array();
+        
     	$TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
     	$TBL_EXERCISE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     	$TBL_QUESTIONS 			= Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
 		$TBL_DOCUMENT          	= Database::get_course_table(TABLE_DOCUMENT);
 		$TBL_ITEM_PROPERTY      = Database::get_course_table(TABLE_ITEM_PROPERTY);
-		$TBL_TRACK_EXERCISES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+		$TBL_TRACK_EXERCISES    	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 		$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
@@ -215,9 +204,10 @@ class ExerciseResult
 					$return[$i]['email']        = $results[$i]['exemail'];					
 				}
 				$return[$i]['title']   = $results[$i]['extitle'];
-				$return[$i]['time']    = api_convert_and_format_date($results[$i]['exdate'], null, date_default_timezone_get());
+				$return[$i]['time']    = api_convert_and_format_date($results[$i]['exdate']);
 				$return[$i]['result']  = $results[$i]['exresult'];
 				$return[$i]['max']     = $results[$i]['exweight'];
+                $return[$i]['status']  = $revised ? get_lang('Validated') : get_lang('NotValidated');
 			}
 		}
 		
@@ -233,10 +223,9 @@ class ExerciseResult
 				    $return[$i]['email'] = $hpresults[$i]['email'];
 					$return[$i]['first_name'] = $hpresults[$i]['userpart1'];
 					$return[$i]['last_name'] = $hpresults[$i]['userpart2'];
-					//$return[$i]['user_id'] = $results[$i]['userid'];
 				}
 				$return[$i]['title'] = $title;
-				$return[$i]['time'] = api_convert_and_format_date($hpresults[$i]['exdate'], null, date_default_timezone_get());
+				$return[$i]['time'] = api_convert_and_format_date($hpresults[$i]['exdate']);
 				$return[$i]['result'] = $hpresults[$i]['exe_result'];
 				$return[$i]['max'] = $hpresults[$i]['exe_weighting'];
 			}
@@ -283,13 +272,14 @@ class ExerciseResult
 			$num = count($extra_user_fields);			
 			foreach($extra_user_fields as $field) {
 				$data .= '"'.str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES, $charset)).'";';
-			}
-			$display_extra_user_fields = true;
+			}			
 		}
+        
 		$data .= get_lang('Title').';';
-		$data .= get_lang('Date').';';
+		$data .= get_lang('StartDate').';';
 		$data .= get_lang('Score').';';
 		$data .= get_lang('Total').';';
+        $data .= get_lang('Status').';';
 		$data .= "\n";
         
 		//results
@@ -322,6 +312,7 @@ class ExerciseResult
 			$data .= str_replace("\r\n",'  ',$row['time']).';';
 			$data .= str_replace("\r\n",'  ',$row['result']).';';
 			$data .= str_replace("\r\n",'  ',$row['max']).';';
+            $data .= str_replace("\r\n",'  ',$row['status']).';';
 			$data .= "\n";
 		}
 
@@ -352,7 +343,7 @@ class ExerciseResult
 	 */
 	public function exportCompleteReportXLS($document_path='',$user_id = null, $export_user_fields= false, $export_filter = 0, $exercise_id=0, $hotpotato_name = null) {
 		global $charset;		
-		$this->_getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id,$hotpotato_name);
+		$this->_getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
 		$filename = 'exercise_results_'.date('YmdGis').'.xls';
 		if(!empty($user_id)) {
 			$filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.xls';
@@ -383,17 +374,14 @@ class ExerciseResult
 		    $worksheet->write($line,$column,get_lang('Email'));
 		    $column++;
             
-            if (api_is_western_name_order()) {         
-		   	
+            if (api_is_western_name_order()) {		   	
     			$worksheet->write($line,$column,get_lang('FirstName'));
-    			$column++;
-                
+    			$column++;                
                 $worksheet->write($line,$column,get_lang('LastName'));
                 $column++;
             } else {
                 $worksheet->write($line,$column,get_lang('LastName'));
-                $column++;
-                
+                $column++;                
                 $worksheet->write($line,$column,get_lang('FirstName'));
                 $column++;               
             }
@@ -412,11 +400,13 @@ class ExerciseResult
 		
 		$worksheet->write($line,$column,get_lang('Title'));
 		$column++;
-		$worksheet->write($line,$column,get_lang('Date'));
+		$worksheet->write($line,$column,get_lang('StartDate'));
 		$column++;
 		$worksheet->write($line,$column,get_lang('Score'));
 		$column++;
 		$worksheet->write($line,$column,get_lang('Total'));
+		$column++;
+        $worksheet->write($line,$column,get_lang('Status'));
 		$line++;
 
 		foreach($this->results as $row) {
@@ -432,8 +422,7 @@ class ExerciseResult
 			
 			if ($export_user_fields) {			
 				//show user fields data, if any, for this user
-				$user_fields_values = UserManager::get_extra_user_data($row['user_id'],false,false, false, true);
-								
+				$user_fields_values = UserManager::get_extra_user_data($row['user_id'],false,false, false, true);								
 				foreach($user_fields_values as $value) {	
 					$worksheet->write($line,$column, api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset));
 					$column++;
@@ -446,6 +435,8 @@ class ExerciseResult
 			$worksheet->write($line,$column,$row['result']);
 			$column++;
 			$worksheet->write($line,$column,$row['max']);
+			$column++;
+            $worksheet->write($line,$column,$row['status']);
 			$line++;
 		}
 		//output the results

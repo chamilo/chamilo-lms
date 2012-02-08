@@ -528,11 +528,11 @@ function check_user_password($password){
  * @return	bool true o false
  * @uses Gets user ID from global variable
  */
-function check_user_email($email){
-	global $_user;
+function check_user_email($email) {
 	$user_id = api_get_user_id();
 	if ($user_id != strval(intval($user_id)) || empty($email)) { return false; }
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+    $email = Database::escape_string($email);
 	$sql_password = "SELECT * FROM $table_user WHERE user_id='".$user_id."' AND email='".$email."'";
 	$result = Database::query($sql_password);
 	return Database::num_rows($result) != 0;
@@ -670,17 +670,25 @@ if ($form->validate()) {
 	$available_values_to_modify = array();
 	foreach($profile_list as $key => $status) {	    
 	    if ($status == 'true') {
-            if ($key == 'name') {
-               $available_values_to_modify[] = 'firstname';
-               $available_values_to_modify[] = 'lastname'; 
-            } elseif ($key == 'picture') {
-               $available_values_to_modify[] = 'picture_uri';               
-            } else {
-    	       $available_values_to_modify[] = $key;
-    	    } 
+            switch($key) {
+                case 'login':
+                    $available_values_to_modify[] = 'username';
+                    break;
+                case 'name':
+                    $available_values_to_modify[] = 'firstname';
+                    $available_values_to_modify[] = 'lastname'; 
+                    break;
+                case 'picture':
+                    $available_values_to_modify[] = 'picture_uri';
+                    break;
+                default:
+                    $available_values_to_modify[] = $key;
+                    break;
+            }            
 	    }
-	}	
-	//Fixing missing variables
+	}
+    
+	//Fixing missing variables    
     $available_values_to_modify = array_merge($available_values_to_modify, array('competences', 'diplomas', 'openarea', 'teach', 'openid'));
     
 	// build SQL query

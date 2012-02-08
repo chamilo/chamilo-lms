@@ -106,9 +106,9 @@ class Tracking {
 
 		$sql = "SELECT SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
                 FROM $tbl_track_course
-                WHERE course_code='$course_code' AND session_id = '$session_id' $condition_user";
-
-		$rs = Database::query($sql);
+                WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) AND course_code='$course_code' AND session_id = '$session_id' $condition_user";
+        
+        $rs = Database::query($sql);
 		$row = Database::fetch_array($rs);
 		return $row['nb_seconds'];
 	}

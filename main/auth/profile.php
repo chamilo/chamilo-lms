@@ -770,11 +770,8 @@ if ($form->validate()) {
 	}
 
 	// re-init the system to take new settings into account
-	$uidReset = true;
-	include api_get_path(INCLUDE_PATH).'local.inc.php';
-	$_SESSION['profile_update'] = 'success';
-    $url = api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : '');    
-	header("Location: ".$url);
+	$uidReset = true;    
+	include api_get_path(INCLUDE_PATH).'local.inc.php';	
 	exit;
 }
 

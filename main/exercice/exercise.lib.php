@@ -770,9 +770,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
 	if (empty($extra_where_conditions)) {
 		$extra_where_conditions = "1 = 1 ";
 	}
-    //@todo fix the filter by group
-    $filter_by_group = -1;
-    
+        
    	$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
 	$is_tutor                   = api_is_allowed_to_edit(true);
     
@@ -792,7 +790,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     $exercise_where = '';
     if (!empty($exercise_id)) {
         $exercise_where .= ' AND te.exe_exo_id = '.$exercise_id.'  ';
-    }  
+    } 
+    
     $hotpotatoe_where = '';
     if (!empty($_GET['path'])) {
         $hotpotatoe_path = Database::escape_string($_GET['path']);
@@ -811,23 +810,54 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
 		$sqlFromOption                      = "";
 		$sqlWhereOption                     = "";           // for hpsql
 	    $sql_inner_join_tbl_user            = "";    
-	    
-		$filter_by_group                    = intval($filter_by_group);
-		
+	    		
         //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
-
-
-		// Filter by group                
-        $sql_inner_join_tbl_user = " 
-            (SELECT u.user_id, firstname, lastname, email, username, g.name as group_name, g.id as group_id
-            FROM $TBL_USER u 
-            INNER JOIN $TBL_GROUP_REL_USER gru ON (
-                gru.user_id = u.user_id                 
-                AND gru.c_id=".api_get_course_int_id().")
-            INNER JOIN $TBL_GROUP g ON (gru.group_id = g.id)
+        
+        //Hack in order to filter groups
+        $sql_inner_join_tbl_user = '';
+                
+        if (strpos($extra_where_conditions, 'group_id')) {
+            $sql_inner_join_tbl_user = " 
+            (
+                SELECT u.user_id, firstname, lastname, email, username, g.name as group_name, g.id as group_id
+                FROM $TBL_USER u 
+                INNER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=".api_get_course_int_id().")
+                INNER JOIN $TBL_GROUP g ON (gru.group_id = g.id)
             )";
-        $sqlFromOption = " ,$TBL_GROUP_REL_USER AS gru ";
-        $sqlWhereOption = "  AND gru.c_id=".api_get_course_int_id()." AND gru.user_id=user.user_id";
+        }        
+                
+        if (strpos($extra_where_conditions, 'group_all')) {
+            $extra_where_conditions = str_replace("AND (  group_id = 'group_all'  )", '', $extra_where_conditions);
+            $sql_inner_join_tbl_user = " 
+            (
+                SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name
+                FROM $TBL_USER u                 
+            )";
+        }
+        
+        if (strpos($extra_where_conditions, 'group_none')) {
+            $extra_where_conditions = str_replace("AND (  group_id = 'group_none'  )", "AND (  group_id is null  )", $extra_where_conditions);
+            $sql_inner_join_tbl_user = " 
+            (
+                SELECT u.user_id, firstname, lastname, email, username, g.name as group_name, g.id as group_id
+                FROM $TBL_USER u
+                LEFT OUTER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=".api_get_course_int_id()." ) 
+                LEFT OUTER JOIN $TBL_GROUP g ON (gru.group_id = g.id AND g.c_id = ".api_get_course_int_id().")
+            )";
+        }
+        
+        //All
+        if (empty($sql_inner_join_tbl_user)) {
+             $sql_inner_join_tbl_user = " 
+            (
+                SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name
+                FROM $TBL_USER u                 
+            )";
+        }
+
+        
+        $sqlFromOption = " , $TBL_GROUP_REL_USER AS gru ";
+        $sqlWhereOption = "  AND gru.c_id = ".api_get_course_int_id()." AND gru.user_id = user.user_id ";
 		
         $first_and_last_name = api_is_western_name_order() ? "firstname, lastname" : "lastname, firstname";
                 
@@ -859,7 +889,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     AND orig_lp_item_id = 0
                     AND ce.c_id=".api_get_course_int_id()."					
                     $exercise_where ";
-
+         //var_dump($sql );
          // sql for hotpotatoes tests for teacher / tutor view
     
         $hpsql = "SELECT 

@@ -131,6 +131,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
     }
 
     $loop_in_track=($comments_exist===true) ? (count($_POST)/2) : count($_POST);
+    
     $array_content_id_exe=array();
     if ($comments_exist===true) {
         $array_content_id_exe = array_slice($post_content_id,$loop_in_track);
@@ -312,7 +313,8 @@ $action_links = '';
 //Generating group list 
 
 $group_list = GroupManager::get_group_list();
-$group_parameters = array(':'.get_lang('All'));
+$group_parameters = array('group_all:'.get_lang('All'),'group_none:'.get_lang('None'));
+
 foreach ($group_list as $group) {
     $group_parameters[] = $group['id'].':'.$group['name'];    
 }
@@ -334,7 +336,7 @@ if ($is_allowedToEdit || $is_tutor) {
                         array('name'=>'group_name',		'index'=>'group_id',    'width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=> 'select',
                             //for the bottom bar
                             'searchoptions' => array(                                                
-                                            'defaultValue'  => '', 
+                                            'defaultValue'  => 'group_all', 
                                             'value'         => $group_parameters),
                               //for the top bar                              
                               'editoptions' => array('value' => $group_parameters)),

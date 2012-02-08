@@ -98,6 +98,11 @@
 }
 
 
+/** Removes a border-bottom black line in the jqgrids */
+.ui-jqgrid .ui-jqgrid-htable {
+    border-collapse: separate !important;
+}
+
 
 /*  cupertino */
 

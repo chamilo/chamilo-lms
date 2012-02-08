@@ -29,13 +29,14 @@ $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
 $table_access_url_user              = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
+$url_id                             = api_get_current_access_url_id();
 
 $action = $_GET['action'];
 
 switch($action) {
     case 'add_user_to_url':        
         $user_id = $_REQUEST['user_id'];
-        $result = UrlManager::add_user_to_url($user_id);
+        $result = UrlManager::add_user_to_url($user_id, $url_id);
         $user_info = api_get_user_info($user_id);
         if ($result) {
             $message = Display::return_message(get_lang('UserAdded').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']), 'confirm');
@@ -54,7 +55,7 @@ $multiple_url_is_on = api_get_multiple_access_url();
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 
 $session_list = SessionManager::get_sessions_list();
-$url_id = api_get_current_access_url_id();
+
 
 $html = '';
 $show_users_with_problems = isset($_REQUEST['show_users_with_problems']) && $_REQUEST['show_users_with_problems'] == 1 ? true : false;

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 // $Id: testcategory.class.php 2010-12-06 hubert.borderiou 
 
 if(!class_exists('Testcategory')):
@@ -55,13 +56,13 @@ class Testcategory {
 		$v_description = Database::escape_string($v_description);
 		// check if name already exists
 		$sql_verif = "SELECT count(*) AS nb FROM $t_cattable WHERE title = '$v_name' AND c_id=".api_get_course_int_id();
-		$result_verif = Database::query($sql_verif, __FILE__, __LINE__);
+		$result_verif = Database::query($sql_verif);
 		$data_verif = Database::fetch_array($result_verif);
 		// lets add in BDD if not the same name
 		if ($data_verif['nb'] <= 0) {
 			$c_id = api_get_course_int_id();
 			$sql = "INSERT INTO $t_cattable VALUES ('$c_id', '', '$v_name', '$v_description')";
-			$res = Database::query($sql, __FILE__, __LINE__);
+			$res = Database::query($sql);
 			return true;
 		}
 		else {
@@ -337,7 +338,9 @@ class Testcategory {
 		$TBL_EXERCICE = Database::get_course_table(TABLE_QUIZ_TEST);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-		$sql = "SELECT qrc.question_id, qrc.category_id FROM $TBL_QUESTION_REL_CATEGORY qrc, $TBL_EXERCICE_QUESTION eq WHERE exercice_id=$in_exerciceId AND eq.question_id=qrc.question_id AND eq.c_id=".api_get_course_int_id()." AND eq.c_id=qrc.c_id ORDER BY category_id, question_id";
+        $in_exerciceId = intval($in_exerciceId);
+		$sql = "SELECT qrc.question_id, qrc.category_id FROM $TBL_QUESTION_REL_CATEGORY qrc, $TBL_EXERCICE_QUESTION eq 
+                WHERE exercice_id=$in_exerciceId AND eq.question_id=qrc.question_id AND eq.c_id=".api_get_course_int_id()." AND eq.c_id=qrc.c_id ORDER BY category_id, question_id";
 		$res = Database::query($sql);
 		while ($data = Database::fetch_array($res)) {
 			if (!is_array($tabres[$data['category_id']])) {
@@ -423,7 +426,12 @@ class Testcategory {
 	public static function getCatScoreForExeidForUserid($in_cat_id, $in_exe_id, $in_user_id) {
 		$tbl_track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		$tbl_question_rel_category = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-		$query = "SELECT DISTINCT marks, exe_id, user_id, ta.question_id, category_id FROM $tbl_track_attempt ta , $tbl_question_rel_category qrc WHERE ta.question_id=qrc.question_id AND qrc.category_id=$in_cat_id AND exe_id=$in_exe_id AND user_id=$in_user_id";
+        $in_cat_id = intval($in_cat_id);
+        $in_exe_id = intval($in_exe_id);
+        $in_user_id = intval($in_user_id);
+        
+		$query = "SELECT DISTINCT marks, exe_id, user_id, ta.question_id, category_id FROM $tbl_track_attempt ta , $tbl_question_rel_category qrc 
+                  WHERE ta.question_id=qrc.question_id AND qrc.category_id=$in_cat_id AND exe_id=$in_exe_id AND user_id=$in_user_id";
 		$res = Database::query($query);
 		$totalcatscore = "";
 		while ($data = Database::fetch_array($res)) {
@@ -454,4 +462,3 @@ class Testcategory {
     }
 }
 endif;
-?>

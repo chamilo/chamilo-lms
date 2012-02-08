@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
 	hubert.borderiou 
 	Manage tests category page
@@ -59,20 +61,18 @@ else {
 
 Display::display_footer();
 
-// ******                       FUNCTIONS                        ********************
+// FUNCTIONS
 
 // form to edit a category
 function edit_category_form($in_action) {
 	if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
 		$category_id = Security::remove_XSS($_GET['category_id']);
 		$objcat = new Testcategory($category_id);
-		// --------------------
-		// initiate the object
-		// --------------------
+		
+		// initiate the object		
 		$form = new FormValidator('note','post', api_get_self().'?action='.$in_action.'&category_id='.$category_id);
-		// --------------------
-		// settting the form elements	
-		// --------------------
+		
+		// settting the form elements			
 		$form->addElement('header', '', get_lang('EditCategory'));
 		$form->addElement('hidden', 'category_id');
 		$form->addElement('text', 'category_name', get_lang('CategoryName'),array('size'=>'95'));
@@ -97,17 +97,16 @@ function edit_category_form($in_action) {
 		{
 			$check = Security::check_token('post');	
 			if ($check) {
-	   		$values = $form->exportValues();
-	   		$v_id = Security::remove_XSS($values['category_id']);
+                $values = $form->exportValues();
+                $v_id = Security::remove_XSS($values['category_id']);
 				$v_name = Security::remove_XSS($values['category_name'], COURSEMANAGER);
 				$v_description = Security::remove_XSS($values['category_description'], COURSEMANAGER);
-	   		$objcat = new Testcategory($v_id, $v_name, $v_description);
-	   		if ($objcat->modifyCategory()) {
-	   			Display::display_confirmation_message(get_lang('MofidfyCategoryDone'));
-	   		}
-	   		else {
-	   			Display::display_confirmation_message(get_lang('ModifyCategoryError'));
-	   		}
+                $objcat = new Testcategory($v_id, $v_name, $v_description);
+                if ($objcat->modifyCategory()) {
+                    Display::display_confirmation_message(get_lang('MofidfyCategoryDone'));
+                } else {
+                    Display::display_confirmation_message(get_lang('ModifyCategoryError'));
+                }
 			}
 			Security::clear_token();		
 			display_add_category();
@@ -128,9 +127,7 @@ function edit_category_form($in_action) {
 	}
 }
 
-// ------------------------------------------------------------------------
 // process to delete a category
-// ------------------------------------------------------------------------
 function delete_category_form($in_action) {
 	if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
 		$category_id = Security::remove_XSS($_GET['category_id']);
@@ -154,9 +151,7 @@ function delete_category_form($in_action) {
 	display_categories();
 }
 
-// ------------------------------------------------------------------------
 // form to add a category
-// ------------------------------------------------------------------------
 function add_category_form($in_action) {
 	// initiate the object
 	$form = new FormValidator('note','post', api_get_self().'?action='.$in_action);

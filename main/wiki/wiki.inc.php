@@ -1870,7 +1870,8 @@ function auto_add_page_users($assignment_type) {
 
     //data about teacher
     $userinfo=Database::get_user_info_from_id(api_get_user_id());
-    $name = api_get_person_name($userinfo['firstname'], $userinfo['lastname']).' ('.$userinfo['username'].')';    
+    $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username'], ENT_QUOTES));
+    $name = api_get_person_name($userinfo['firstname'], $userinfo['lastname'])." . ".$username;
     if (api_get_user_id()<>0) {
         $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',false, true);
         $image_repository = $image_path['dir'];
@@ -1888,8 +1889,7 @@ function auto_add_page_users($assignment_type) {
 
     //first: teacher name, photo, and assignment description (original content)
    // $content_orig_A='<div align="center" style="background-color: #F5F8FB;  border:double">'.$photo.'<br />'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'<br />('.get_lang('Teacher').')</div><br/><div>';
-
-    $content_orig_A='<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6"><table border="0"><tr><td style="font-size:24px">'.get_lang('AssignmentDesc').'</td></tr><tr><td>'.$photo.'<br />'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).' ('.$userinfo['username'].')</td></tr></table></div>';
+    $content_orig_A='<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6"><table border="0"><tr><td style="font-size:24px">'.get_lang('AssignmentDesc').'</td></tr><tr><td>'.$photo.'<br />'.Display::tag('span', api_get_person_name($userinfo['firstname'], $userinfo['lastname']), array('title'=>$username)).'</td></tr></table></div>';
 
     $content_orig_B='<br/><div align="center" style="font-size:24px">'.get_lang('AssignmentDescription').': '.$title_orig.'</div><br/>'.$_POST['content'];
 
@@ -1905,7 +1905,8 @@ function auto_add_page_users($assignment_type) {
             $image_path = UserManager::get_user_picture_path_by_id($assig_user_id,'web',false, true);
             $image_repository = $image_path['dir'];
             $existing_image = $image_path['file'];
-            $name = api_get_person_name($o_user_to_add['firstname'], $o_user_to_add['lastname']).' ('.$o_user_to_add['username'].')';
+            $username = api_htmlentities(sprintf(get_lang('LoginX'), $o_user_to_add['username'], ENT_QUOTES));
+            $name = api_get_person_name($o_user_to_add['firstname'], $o_user_to_add['lastname'])." . ".$username;
             $photo= '<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="40" height="50" align="bottom" title="'.$name.'"  />';
 
             $is_tutor_of_group = GroupManager :: is_tutor_of_group($assig_user_id,$_clean['group_id']); //student is tutor
@@ -1935,7 +1936,9 @@ function auto_add_page_users($assignment_type) {
                 $_POST['content']='<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6"><table border="0"><tr><td style="font-size:24px">'.get_lang('AssignmentWork').'</td></tr><tr><td>'.$photo.'<br />'.$name.'</td></tr></table></div>[['.$link2teacher.' | '.get_lang('AssignmentLinktoTeacherPage').']] '; //If $content_orig_B is added here, the task written by the professor was copied to the page of each student. TODO: config options
 
                 //AssignmentLinktoTeacherPage
-                 $all_students_pages[] = '<li>'.strtoupper($o_user_to_add['lastname']).', '.$o_user_to_add['firstname'].' ('.$o_user_to_add['username'].') [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>'; //don't change this line without guaranteeing that users will be ordered by last names in the following format (surname, name)
+                 $all_students_pages[] = '<li>'.
+                 Display::tag('span', strtoupper($o_user_to_add['lastname']).', '.$o_user_to_add['firstname'], array('title'=>$username)).
+                 ' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>'; //don't change this line without guaranteeing that users will be ordered by last names in the following format (surname, name)
 
                 //$all_students_pages[] = '<li><table border="0"><tr><td width="200">'.api_get_person_name($o_user_to_add['lastname'], $o_user_to_add['firstname']).'</td><td>[['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</td></tr></table></li>';
 

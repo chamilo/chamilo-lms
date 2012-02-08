@@ -527,6 +527,10 @@ class UrlManager
                 }
 			}
 		}
+        
+        if (empty($users_added) && empty($users_deleted)) {
+            return false;
+        }
         return array('users_added' => $users_added, 'users_deleted' => $users_deleted);
 	}
 

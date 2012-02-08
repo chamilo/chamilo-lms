@@ -34,7 +34,7 @@ $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_C
 $tbl_session_category				= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
 $table_access_url_session           = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-$table_access_url_user           = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+$table_access_url_user              = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
 
 $id_session = (int)$_GET['id_session'];
@@ -63,10 +63,13 @@ if (Database::num_rows($rs)>0) {
 
 $action = $_GET['action'];
 
+$url_id = api_get_current_access_url_id();     
+
+
 switch($action) {
     case 'add_user_to_url':        
         $user_id = $_REQUEST['user_id'];
-        $result = UrlManager::add_user_to_url($user_id);
+        $result = UrlManager::add_user_to_url($user_id, $url_id);
         $user_info = api_get_user_info($user_id);
         if ($result) {
             $message = Display::return_message(get_lang('UserAdded').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']), 'confirm');
@@ -308,8 +311,7 @@ if ($session['nbr_users']==0) {
 } else {    
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
     
-    if ($multiple_url_is_on) {
-        $url_id = api_get_current_access_url_id();        
+    if ($multiple_url_is_on) {           
         $sql = "SELECT u.user_id, lastname, firstname, username, access_url_id
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user su

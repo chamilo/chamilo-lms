@@ -317,7 +317,7 @@ class Template extends Smarty {
 			$css_file_to_string .= api_get_css($css_file);
 		}
 	
-		global $this_section;
+		global $this_section;        
 		$this->assign('css_file_to_string', $css_file_to_string);
 		$this->assign('js_file_to_string',  $js_file_to_string);		
 		$this->assign('text_direction',	    api_get_text_direction());			
@@ -350,10 +350,11 @@ class Template extends Smarty {
 		}
 		$this->assign('favico', $favico);
 				
-		global $my_session_id;
+		/*global $my_session_id;
 		$session_id     = api_get_session_id();
 		$session_name   = api_get_session_name($my_session_id);
-		
+		*/
+        
 		$help_content = '';
         if (api_get_setting('enable_help_link') == 'true') { 
     		if (!empty($help)) {

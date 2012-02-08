@@ -362,6 +362,7 @@ class Display {
                break;
             case 'confirmation':
             case 'confirm':
+            case 'success':
                 $class .= 'confirmation-message';
                break;
             case 'normal':

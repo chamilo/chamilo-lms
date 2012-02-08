@@ -12,14 +12,12 @@
 $language_file = array('registration', 'tracking', 'exercice', 'admin', 'learnpath');
 
 $cidReset = true;
-
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
       
 $this_section = SECTION_TRACKING;
+
 $nameTools = get_lang('MyProgress');
 
 api_block_anonymous_users();
@@ -47,23 +45,19 @@ $(function() {
 });
 </script>';
 
-Display :: display_header($nameTools);
-
-// Database table definitions
-$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
-$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
-
-
-$user_progress = Tracking::show_user_progress(api_get_user_id());
-if (!empty($user_progress)) {
-    $user_progress .= '<br /><br />';
+$content = Tracking::show_user_progress(api_get_user_id());
+if (!empty($content)) {
+    $content .= '<br /><br />';
 }
-$user_progress .= Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
-if (!empty($user_progress)) {
-    echo $user_progress;
-} else {
-    Display::display_warning_message(get_lang('NoDataAvailable'));
+$content .= Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
+
+if (empty($content)) {
+    $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');
 }
     
-Display :: display_footer();
+$tpl = new Template($tool_name);
+
+//$tpl->assign('actions', $actions);
+$tpl->assign('message', $message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

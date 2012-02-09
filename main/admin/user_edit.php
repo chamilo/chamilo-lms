@@ -234,11 +234,11 @@ if (!$user_data['platform_admin']) {
 
 // EXTRA FIELDS
 
-$extra = UserManager::get_extra_fields(0, 50, 5, 'ASC', true, true);
+$extra = UserManager::get_extra_fields(0, 50, 5, 'ASC', true);
 foreach ($extra as $id => $field_details) {
-	if ($field_details[6] == 0) {
+	/*if ($field_details[6] == 0) {
 		continue;
-	}
+	}*/
 	switch ($field_details[2]) {
 		case USER_FIELD_TYPE_TEXT:
 			$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));

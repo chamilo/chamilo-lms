@@ -12,8 +12,6 @@ require_once '../inc/global.inc.php';
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
 require_once api_get_path(INCLUDE_PATH).'lib/legal.lib.php';
@@ -75,15 +73,17 @@ if ($_configuration['multiple_access_urls']) {
     if ($access_url_id != -1) {
         $url_info = api_get_access_url($access_url_id);
         $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
+        
         $clean_url = replace_dangerous_char($url);
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
+        
 
         $homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
         $homep_new = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path added the url
         $new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;
         //we create the new dir for the new sites
-        if (!is_dir($new_url_dir)){
+        if (!is_dir($new_url_dir)) {
             mkdir($new_url_dir, api_get_permissions_for_new_directories());
         }
     }
@@ -109,6 +109,10 @@ foreach ($homef as $my_file) {
     }
 }
 
+if (!empty($homep_new)) {
+    $homep = $homep_new;
+}
+
 if (!empty($action)) {
     if ($_POST['formSent']) {
         switch ($action) {
@@ -121,6 +125,7 @@ if (!empty($action)) {
                     $home_top = trim(stripslashes($_POST['register_top']));
                 }
                 // Write
+                
                 if (file_exists($homep.$topf.'_'.$lang.$ext)) {
                     if (is_writable($homep.$topf.'_'.$lang.$ext)) {
                         $fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');

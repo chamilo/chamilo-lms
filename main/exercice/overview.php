@@ -197,7 +197,7 @@ $html.=  Display::div($options, array('class'=>'exercise_overview_options'));
 
 $html .= $table_content;
 
-echo Display::div($html, array('class'=>'rounded_div', 'style'=>'width:92%'));
+echo Display::div($html, array('class'=>'rounded_div', 'style'=>'width:96%'));
 
 if ($origin != 'learnpath') {
 	Display::display_footer();

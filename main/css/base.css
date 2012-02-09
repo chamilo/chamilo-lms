@@ -3614,10 +3614,22 @@ form .label {
     line-height: 18px;
     padding-top: 6px;
     text-align: right;
-    width: 130px;    
+    width: 150px;    
 }
 form .formw {
-    margin-left: 150px;
+    margin-left: 170px;
+}
+
+/* disabled inputs */
+input[disabled],
+select[disabled],
+textarea[disabled],
+input[readonly],
+select[readonly],
+textarea[readonly] {
+  background-color: #f5f5f5;
+  border-color: #ddd;
+  cursor: not-allowed;
 }
 
 .formw iframe {

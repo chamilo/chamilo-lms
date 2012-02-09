@@ -300,21 +300,26 @@ class Agenda {
 		$delta = intval($delta);
 		
 		$event = $this->get_event($id);
+        
+        $all_day = 0;
+        if ($day_delta == 0 && $minute_delta == 0) {
+            $all_day = 1;
+        }        
 		
 		if (!empty($event)) {
 			switch($this->type) {
 				case 'personal':
-					$sql = "UPDATE $this->tbl_personal_agenda SET date = DATE_ADD(date, INTERVAL $delta MINUTE), enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE) 
+					$sql = "UPDATE $this->tbl_personal_agenda SET all_day = $all_day, date = DATE_ADD(date, INTERVAL $delta MINUTE), enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE) 
 							WHERE id=".intval($id);					
 					$result = Database::query($sql);				
 					break;
 				case 'course':
-					$sql = "UPDATE $this->tbl_course_agenda SET start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE), end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
+					$sql = "UPDATE $this->tbl_course_agenda SET all_day = $all_day, start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE), end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
 							WHERE c_id = ".$this->course['real_id']." AND id=".intval($id);
 					$result = Database::query($sql);					
 					break;
 				case 'admin':
-					$sql = "UPDATE $this->tbl_global_agenda SET start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE), end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
+					$sql = "UPDATE $this->tbl_global_agenda SET all_day = $all_day, start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE), end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
 							WHERE id=".intval($id);
 					$result = Database::query($sql);
 					break;

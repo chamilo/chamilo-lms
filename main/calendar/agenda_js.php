@@ -89,7 +89,7 @@ $tpl->assign('type_label', get_lang(ucfirst($type).'Calendar'));
 $tpl->assign('can_add_events', $can_add_events);
 
 //Setting AJAX caller
-$agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type.'&';
+$agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type;
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 
 $course_code  = api_get_course_id();

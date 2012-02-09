@@ -105,7 +105,7 @@ $(document).ready(function() {
 			$("#users_to_send_id").trigger("liszt:updated");
 			
 			if ({$can_add_events} == 1) {							
-				var url = '{$web_agenda_ajax_url}a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
+				var url = '{$web_agenda_ajax_url}&a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
 				
 				$('#start_date').html(start.toDateString() + " " +  start.toTimeString().substr(0, 8));
 				if (view.name != 'month') {
@@ -216,8 +216,8 @@ $(document).ready(function() {
 				
 				$("#dialog-form").dialog("open");
 	
-				var url = '{$web_agenda_ajax_url}a=edit_event&id='+calEvent.id+'&start='+start_date+'&end='+end_date+'&all_day='+calEvent.allDay+'&view='+view.name;
-				var delete_url = '{$web_agenda_ajax_url}a=delete_event&id='+calEvent.id;
+				var url = '{$web_agenda_ajax_url}&a=edit_event&id='+calEvent.id+'&start='+start_date+'&end='+end_date+'&all_day='+calEvent.allDay+'&view='+view.name;
+				var delete_url = '{$web_agenda_ajax_url}&a=delete_event&id='+calEvent.id;
 				
 				$("#dialog-form").dialog({				
 					buttons: {
@@ -268,12 +268,12 @@ $(document).ready(function() {
 			}
 		},
 		editable: true,		
-		events: "{$web_agenda_ajax_url}a=get_events",
+		events: "{$web_agenda_ajax_url}&a=get_events",
 		eventDrop: function(event, day_delta, minute_delta, all_day, revert_func) {		
 			$.ajax({
 				url: '{$web_agenda_ajax_url}',
 				data: {
-					a: 'move_event', id: event.id, day_delta: day_delta, minute_delta: minute_delta
+					a:'move_event', id: event.id, day_delta: day_delta, minute_delta: minute_delta
 				}
 			});
 		},

@@ -1,3 +1,38 @@
+.chatboxmain {
+	position: fixed;
+	position:expression("absolute");
+	width: 225px;	
+	z-index: 9000;
+    bottom: 0px; 
+    right: 20px; 
+    display: block;
+}
+.chatboxheadmain {	
+	padding:7px 7px 7px 0px;
+	color: #333333;		
+	background-color: #EBEEF4;		
+    border-top: 1px solid rgba(29, 49, 91, 0.3);
+    border-left: 1px solid rgba(29, 49, 91, 0.3);
+    border-right: 1px solid rgba(29, 49, 91, 0.3);
+}
+
+#chatboxtitlemain {
+    font-weight: bold;
+	float: left;
+	font-size: 13px;
+	width: 160px;
+	cursor:pointer;
+}
+
+
+.user_status_main {
+	width:16px;
+	display:inline;
+	float:left;
+	padding: 0px 4px 0px 4px;	
+}
+
+
 .chatbox {
 	position: fixed;
 	position:expression("absolute");

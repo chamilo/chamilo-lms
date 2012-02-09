@@ -216,7 +216,7 @@ class Template extends Smarty {
 		
         $this->assign('online_button',  Security::remove_XSS(Display::return_icon('online.png')));
 		$this->assign('offline_button', Security::remove_XSS(Display::return_icon('offline.png')));
-		
+   	
 		// Get language iso-code for this page - ignore errors				
 		$this->assign('document_language', api_get_language_isocode());
 		
@@ -279,7 +279,10 @@ class Template extends Smarty {
 		);
 		
 		if (api_get_setting('allow_global_chat') == 'true') {
-			$js_files[] = 'chat/js/chat.js';
+            
+            if (!api_is_anonymous()) {
+                $js_files[] = 'chat/js/chat.js';
+            }
 		}
 		
 		if (api_get_setting('accessibility_font_resize') == 'true') {

@@ -39,10 +39,13 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
 }
 {/literal}
 //]]>
-	
+
+/* global chat variables */
 var ajax_url = '{$_p.web_ajax}chat.ajax.php';
-var online_button = '{$online_button}';
-var offline_button ='{$offline_button}';
+var online_button   = '{$online_button}';
+var offline_button  = '{$offline_button}';
+var	connect_lang    = '{"ChatConnected"|get_lang}';
+var	disconnect_lang = '{"ChatDisconnected"|get_lang}';
 
 </script>
 {$js_file_to_string}

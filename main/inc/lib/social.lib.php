@@ -561,7 +561,8 @@ class SocialManager extends UserManager {
         if (empty($user_id)) {
 			$user_id = api_get_user_id();
 		}       
-        $user_info = api_get_user_info($user_id, true);        
+        $user_info = api_get_user_info($user_id, true);  
+        
 
 		$show_groups      = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list', 'browse_groups');
 		$show_messages    = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');
@@ -697,10 +698,11 @@ class SocialManager extends UserManager {
 			
 			//@todo check if user is online to show the chat link
 			if (api_get_setting('allow_global_chat') == 'true') {
-				if ($user_id != api_get_user_id()) {
-					$user_name  = $user_info['complete_name'];                    
-                    $options = array('onclick' => "javascript:chatWith('".$user_id."', '".Security::remove_XSS($user_name)."', '".$user_info['user_is_online']."')");
-                    $chat_icon = $user_info['user_is_online'] ? Display::return_icon('online.png', get_lang('Online')) : Display::return_icon('offline.png', get_lang('Offline'));
+				if ($user_id != api_get_user_id()) {                    
+					$user_name  = $user_info['complete_name'];        
+                    
+                    $options = array('onclick' => "javascript:chatWith('".$user_id."', '".Security::remove_XSS($user_name)."', '".$user_info['user_is_online_in_chat']."')");
+                    $chat_icon = $user_info['user_is_online_in_chat'] ? Display::return_icon('online.png', get_lang('Online')) : Display::return_icon('offline.png', get_lang('Offline'));
 					$html .=   Display::tag('li', Display::url($chat_icon.'&nbsp;&nbsp;'.get_lang('Chat'),  'javascript:void(0);', $options));
 				}
 			}

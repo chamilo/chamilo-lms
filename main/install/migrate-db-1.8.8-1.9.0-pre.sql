@@ -15,7 +15,6 @@
 -- xxMAINxx
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('filter_terms', NULL, 'textarea', 'Security', '', 'FilterTermsTitle', 'FilterTermsComment', NULL, NULL, 0);
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('header_extra_content', NULL, 'textarea', 'Tracking', '', 'HeaderExtraContentTitle', 'HeaderExtraContentComment', NULL, NULL, 1),('footer_extra_content', NULL, 'textarea', 'Tracking', '', 'FooterExtraContentTitle', 'FooterExtraContentComment', NULL, NULL,1);
 
 ALTER TABLE personal_agenda ADD COLUMN all_day INTEGER NOT NULL DEFAULT 0;
@@ -29,6 +28,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('htmlpurifier_wiki', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('htmlpurifier_wiki', 'false', 'No');
+
 -- CAS feature
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('cas_activate', NULL, 'radio', 'CAS', 'false', 'CasMainActivateTitle', 'CasMainActivateComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) values ('cas_activate', 'true', 'Yes');
@@ -150,6 +150,9 @@ ALTER TABLE user_course_vote ADD INDEX idx_ucv_uid (user_id);
 ALTER TABLE user_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
 
 ALTER TABLE track_e_default  MODIFY COLUMN default_value TEXT;
+
+--User chat status
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'user_chat_status','User chat status', 0, 0);
 
 -- Do not move this query
 UPDATE settings_current SET selected_value = '1.9.0.16427' WHERE variable = 'chamilo_database_version';

@@ -122,7 +122,7 @@ function user_is_online($user_id) {
 	$current_date		= date('Y-m-d H:i:s',time());	
 	$access_url_id		= api_get_current_access_url_id();	
 	$time_limit			= api_get_setting('time_limit_whosonline');
-	//$time_limit = 1;
+	//$time_limit = 1; changing this value there is no time limit 
 	
 	$query = " SELECT login_user_id,login_date FROM ".$track_online_table ." track INNER JOIN ".$table_user ." u ON (u.user_id=track.login_user_id)
                WHERE track.access_url_id =  $access_url_id AND 

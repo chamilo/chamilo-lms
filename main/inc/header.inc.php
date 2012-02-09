@@ -8,18 +8,6 @@
 
 /*  HEADERS SECTION */
 
-// Server mode indicator.
-/*
-if (api_is_platform_admin()) {
-    if (api_get_setting('server_type') == 'test') {
-        error_reporting(E_ALL);
-        $mtime = microtime();
-        $mtime = explode(" ",$mtime);
-        $mtime = $mtime[1] + $mtime[0];
-        $starttime = $mtime;
-        $_SESSION['page_start_time_execution'] = $starttime;
-    }
-}*/
 header('Content-Type: text/html; charset='.api_get_system_encoding());
 //show the X-Powered-By header so that parsers can find it
 global $_configuration, $this_section;
@@ -143,7 +131,7 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 <meta name="Generator" content="<?php echo $_configuration['software_name'].' '.substr($_configuration['system_version'],0,1);?>" />
 <script src= "<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/jquery.menu.js" type="text/javascript"></script>
 
-<?php if (api_get_setting('allow_global_chat') == 'true') { ?>
+<?php if ((api_get_setting('allow_global_chat') == 'true' && !api_is_anonymous()) { ?>
 	<script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/chat/js/chat.js" type="text/javascript" ></script>
 	<link rel="stylesheet" href="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/chat/css/chat.css" type="text/css" media="projection, screen" />
 	<link rel="stylesheet" href="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/chat/css/screen.css" type="text/css" media="projection, screen" />
@@ -165,9 +153,13 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
 	});
 }
 
+/* Global chat variables */
 var ajax_url = '<?php echo api_get_path(WEB_AJAX_PATH).'chat.ajax.php'; ?>';
 var online_button = '<?php  echo Security::remove_XSS(Display::return_icon('online.png')); ?>';
 var offline_button = '<?php echo Security::remove_XSS(Display::return_icon('offline.png')); ?>';
+
+var	connect_lang = '<?php echo get_lang('ChatConnected');?>';
+var	disconnect_lang = '<?php echo get_lang('ChatDisconnected');?>';
 
 
 //]]>

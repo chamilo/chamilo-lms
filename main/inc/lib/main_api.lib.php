@@ -904,11 +904,11 @@ function _api_format_user($user) {
     $result['lastName'] 		= $lastname;
 
     if (isset($user['email'])) {
-        $result['mail'] = $user['email'];
+        $result['mail']         = $user['email'];
     } else {
-        $result['mail'] = $user['mail'];
+        $result['mail']         = $user['mail'];
     }
-    $user_id = intval($user['user_id']);
+    $user_id                    = intval($user['user_id']);
     $result['picture_uri']      = $user['picture_uri'];
     $result['user_id']          = $user_id;
     $result['official_code']    = $user['official_code'];
@@ -921,6 +921,7 @@ function _api_format_user($user) {
     
     $result['theme']            = $user['theme'];
     $result['language']         = $user['language'];
+    
     if (!isset($user['lastLogin']) && !isset($user['last_login'])) {
         require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
         $timestamp = Tracking::get_last_connection_date($result['user_id'], false, true);
@@ -940,15 +941,17 @@ function _api_format_user($user) {
     
     //Getting user avatar
     
-	$picture_filename = trim($user['picture_uri']);
-	$avatar = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
-	$avatar_small = api_get_path(WEB_CODE_PATH).'img/unknown_22.jpg';
-	$dir = 'upload/users/'.$user_id.'/';
+	$picture_filename   = trim($user['picture_uri']);
+	$avatar             = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
+	$avatar_small       = api_get_path(WEB_CODE_PATH).'img/unknown_22.jpg';
+	$dir                = 'upload/users/'.$user_id.'/';
+    
 	if (!empty($picture_filename) && api_is_anonymous() ) {
 		if (api_get_setting('split_users_upload_directory') === 'true') {			
 			$dir = 'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';			
 		}
 	}
+    
 	$image_sys_path = api_get_path(SYS_CODE_PATH).$dir.$picture_filename;
 	if (file_exists($image_sys_path) && !is_dir($image_sys_path)) {
 		$avatar = api_get_path(WEB_CODE_PATH).$dir.$picture_filename;
@@ -957,9 +960,14 @@ function _api_format_user($user) {
 	
     $result['avatar'] = $avatar;
     $result['avatar_small'] = $avatar_small;
+    
 	if (isset($user['user_is_online'])) {
 		$result['user_is_online'] = $user['user_is_online'] == true ? 1 : 0;
 	}	
+    if (isset($user['user_is_online_in_chat'])) {
+		$result['user_is_online_in_chat'] = intval($user['user_is_online_in_chat']);
+	}	
+    
     return $result;
 }
 
@@ -979,11 +987,22 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false) {
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
 		if ($check_if_user_is_online) {
-			$result_array['user_is_online'] = user_is_online($user_id);
+            $use_status_in_platform = user_is_online($user_id);
+            
+			$result_array['user_is_online'] = $use_status_in_platform;
+            $user_online_in_chat = 0;
+            
+            if ($use_status_in_platform) {
+                $user_status = UserManager::get_extra_user_data_by_field($user_id, 'chat_user_status', false, true);                                                
+                if (intval($user_status['chat_user_status']) == 1) {
+                    $user_online_in_chat = 1;
+                }                
+            }            
+            $result_array['user_is_online_in_chat'] = $user_online_in_chat;
 		}
-        return _api_format_user($result_array);
-    }
-	
+        $user =  _api_format_user($result_array);        
+        return $user;
+    }	
     return false;
 }
 

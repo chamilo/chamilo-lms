@@ -10,50 +10,45 @@
 class Chat extends Model {
 	
 	var $table;
-    var $columns = array('id', 'from_user','to_user','message','sent','recd');
-	
+    var $columns = array('id', 'from_user','to_user','message','sent','recd');	
 	var $window_list = array();
-    
+        
 	public function __construct() {
         $this->table =  Database::get_main_table(TABLE_MAIN_CHAT);
 		$this->window_list = $_SESSION['window_list'] = isset($_SESSION['window_list']) ? $_SESSION['window_list'] : array();
 	}    
+    
+    function get_user_status() {
+        $status = UserManager::get_extra_user_data_by_field(api_get_user_id(), 'chat_user_status', false, true);
+        return $status['chat_user_status'];        
+        //return isset($_SESSION['chat_user_status']) ? intval($_SESSION['chat_user_status']) : 0;
+        
+    }
+    
+    function set_user_status($status) {
+        //$_SESSION['chat_user_status'] = intval($status);
+        UserManager::update_extra_field_value(api_get_user_id(), 'chat_user_status', $status);
+    }
 	
 	public function start_session() {				
 		$items = array();		
-		
-		//unset($_SESSION['openChatBoxes']); unset($_SESSION['tsChatBoxes']); unset($_SESSION['chatHistory']);
-		/*$items = array();		
-		if (!empty($_SESSION['openChatBoxes'])) {
-			foreach ($_SESSION['openChatBoxes'] as $user_id => $void) {				
-				$item = self::box_session($user_id);			
-				if (!empty($item)) {
-					$items[$user_id] = $item;
-				}
-			}
-		}*/	
 		if (isset($_SESSION['chatHistory'])) {
 			$items = $_SESSION['chatHistory'];
-		}
-		$return = array('me' => get_lang('Me'), 'items' => $items);		
-		echo json_encode($return);
+		}                
+		$return = array('user_status' => $this->get_user_status(),  'me' => get_lang('Me'), 'items' => $items);		
+		echo json_encode($return);           
 		exit;
 	}
-
-	
+    
 	public function heartbeat() {		
-		
-		$to_user_id		= api_get_user_id();
-		$my_user_info   = api_get_user_info();
-		
-		$minutes = 60;
-		$now = time() - $minutes*60;
-		$now = api_get_utc_datetime($now);
-		
+		$to_user_id	= api_get_user_id();				
+		$minutes    = 60;
+		$now        = time() - $minutes*60;
+		$now        = api_get_utc_datetime($now);	
 		
 		//OR  sent > '$now'
 		$sql = "SELECT * FROM ".$this->table." 
-					WHERE	to_user = '".intval($to_user_id)."' AND ( recd  = 0 ) ORDER BY id ASC";
+                WHERE to_user = '".intval($to_user_id)."' AND ( recd  = 0 ) ORDER BY id ASC";
 		$result = Database::query($sql);
 		
 		$chat_list = array();
@@ -61,9 +56,6 @@ class Chat extends Model {
 		while ($chat = Database::fetch_array($result,'ASSOC')) {	
 			$chat_list[$chat['from_user']]['items'][] = $chat;
 		}		
-		//var_dump($chat_list);
-		
-		$chatBoxes = array();	
 		
 		$items = array();
 		

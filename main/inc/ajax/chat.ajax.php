@@ -7,7 +7,6 @@
 $_dont_save_user_course_access  = true;
 
 require_once '../global.inc.php';
-
 require_once api_get_path(LIBRARY_PATH).'chat.lib.php';
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
@@ -46,8 +45,11 @@ switch ($action) {
 	case 'startchatsession':
 		$chat->start_session();
 		break;		
+    case 'set_status':
+        $status = isset($_REQUEST['status']) ? intval($_REQUEST['status']) : 0;
+		$chat->set_user_status($status);
+		break;
 	default:
-        echo '';
-	
+        echo '';	
 }
 exit;

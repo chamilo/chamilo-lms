@@ -163,7 +163,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         $form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");
 
         ($countsetting['0'] % 10) < 5 ? $b = $countsetting['0'] - 10 : $b = $countsetting['0'];
-        if ($i % 10 == 0 and $i < $b) {
+        if ($i % 10 == 0 and $i < $b AND $i != 0) {
             $form->addElement('html', '<div align="right">');
             $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
             $form->addElement('html', '</div>');

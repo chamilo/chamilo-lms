@@ -131,7 +131,7 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 <meta name="Generator" content="<?php echo $_configuration['software_name'].' '.substr($_configuration['system_version'],0,1);?>" />
 <script src= "<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/jquery.menu.js" type="text/javascript"></script>
 
-<?php if ((api_get_setting('allow_global_chat') == 'true' && !api_is_anonymous()) { ?>
+<?php if ( api_get_setting('allow_global_chat') == 'true' && !api_is_anonymous() ) { ?>
 	<script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/chat/js/chat.js" type="text/javascript" ></script>
 	<link rel="stylesheet" href="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/chat/css/chat.css" type="text/css" media="projection, screen" />
 	<link rel="stylesheet" href="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/chat/css/screen.css" type="text/css" media="projection, screen" />

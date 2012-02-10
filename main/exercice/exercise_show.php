@@ -258,6 +258,13 @@ if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info
 	}		
 }
 
+// Display the text when finished message if we are on a LP #4227
+$end_of_message = $objExercise->selectTextWhenFinished();
+if (!empty($end_of_message) && ($origin == 'learnpath')) {
+    Display::display_normal_message($end_of_message, false);
+    echo "<div class='clear'>&nbsp;</div>";
+}
+
 // for each question
 $total_weighting = 0;
 foreach ($questionList as $questionId) {

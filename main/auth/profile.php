@@ -727,10 +727,11 @@ if ($form->validate()) {
         if (!empty($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."'";
         } elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {
+
             $sql .= " email = '".Database::escape_string($changeemail)."',";
             $password = api_get_encrypted_password($password);
             $sql .= " password = '".Database::escape_string($password)."'";
-        } elseif (isset($password) && !isset($changeemail) && in_array('password', $available_values_to_modify)) {
+        } elseif (isset($password) && in_array('password', $available_values_to_modify)) {
             $password = api_get_encrypted_password($password);
             $sql .= " password = '".Database::escape_string($password)."'";
         } else {
@@ -829,7 +830,7 @@ if (!empty($msg_is_not_password)){
 $image_syspath = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system', false, true);
 $image_syspath['dir'].$image_syspath['file'];
 
-$image_size = api_getimagesize($image_syspath['dir'].$image_syspath['file']);
+//$image_size = api_getimagesize($image_syspath['dir'].$image_syspath['file']);
 
 //Web path
 $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', false, true);

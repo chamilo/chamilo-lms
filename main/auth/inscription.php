@@ -1,140 +1,22 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *	This script displays a form for registering new users.
  *	@package	 chamilo.auth
  */
-/**
- * Code
- */
+
 $language_file = array('registration', 'admin');
 if (!empty($_POST['language'])) { //quick hack to adapt the registration form result to the selected registration language
     $_GET['language'] = $_POST['language'];
 }
 require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
-
-// Load terms & conditions from the current lang
-if (api_get_setting('allow_terms_conditions') == 'true') {
-    $get = array_keys($_GET);
-    if (isset($get)) {
-        if ($get[0] == 'legal'){
-            $language = api_get_interface_language();
-            $language = api_get_language_id($language);
-            $term_preview = LegalManager::get_last_condition($language);
-            if (!$term_preview) {
-                //look for the default language
-                $language = api_get_setting('platformLanguage');
-                $language = api_get_language_id($language);
-                $term_preview = LegalManager::get_last_condition($language);
-            }
-            $tool_name = get_lang('TermsAndConditions');
-            Display :: display_header('');
-            echo '<div class="actions-title">';
-            echo $tool_name;
-            echo '</div>';
-            if (!empty($term_preview['content'])) {
-                echo $term_preview['content'];
-            } else {
-                echo get_lang('ComingSoon');
-            }
-            Display :: display_footer();
-            exit;
-        }
-    }
-}
-
-// Custom pages
-if (api_get_setting('use_custom_pages') == 'true') {
-	if (isset($_POST['username'])) {
-		$values = array();
-		$values['firstname'] = $_POST['firstname'];
-		$values['lastname'] = $_POST['lastname'];
-		$values['status'] = $_POST['status'];
-		$values['email'] = $_POST['email'];
-		$values['username'] = $_POST['username'];
-		$values['pass1'] = $_POST['pass1'];
-		$values['official_code'] = '';
-		$values['language'] = $_POST['language'];
-		$values['phone'] = $_POST['phone'];
-		$picture_uri = null;
-		$user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'], $values['email'], $values['username'], $values['pass1'], $values['official_code'], $values['language'], $values['phone'], $picture_uri);
-		if ($user_id) {
-			/*
-					  SESSION REGISTERING
-			 */
-			$_user['firstName'] = stripslashes($values['firstname']);
-			$_user['lastName'] 	= stripslashes($values['lastname']);
-			$_user['mail'] 		= $values['email'];
-			$_user['language'] 	= $values['language'];
-			$_user['user_id']	= $user_id;
-			$is_allowedCreateCourse = $values['status'] == 1;
-			api_session_register('_user');
-			api_session_register('is_allowedCreateCourse');
-
-			//stats
-			event_login();
-			// last user login date is now
-			$user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970
-
-			api_session_register('user_last_login_datetime');
-
-			/*
-						 EMAIL NOTIFICATION
-			 */
-
-			if (strpos($values['email'], '@') !== false) {
-				// Let us predefine some variables. Be sure to change the from address!
-				$recipient_name = api_get_person_name($values['firstname'], $values['lastname']);
-				$email = $values['email'];
-				$emailfromaddr = api_get_setting('emailAdministrator');
-				$emailfromname = api_get_setting('siteName');
-				$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg',null,$_user['language']).' '.api_get_setting('siteName');
-
-				// The body can be as long as you wish, and any combination of text and variables
-				$portal_url = $_configuration['root_web'];
-				if ($_configuration['multiple_access_urls']) {
-					$access_url_id = api_get_current_access_url_id();
-					if ($access_url_id != -1 ){
-						$url = api_get_access_url($access_url_id);
-						$portal_url = $url['url'];
-					}
-				}
-
-				$emailbody = get_lang('Dear',null,$_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).",\n\n".get_lang('YouAreReg',null,$_user['language']).' '.api_get_setting('siteName').' '.get_lang('WithTheFollowingSettings',null,$_user['language'])."\n\n".get_lang('Username',null,$_user['language']).' : '.$values['username']."\n".get_lang('Pass',null,$_user['language']).' : '.stripslashes($values['pass1'])."\n\n".get_lang('Address',null,$_user['language']).' '.api_get_setting('siteName').' '.get_lang('Is',null,$_user['language']).' : '.$portal_url."\n\n".get_lang('Problem',null,$_user['language'])."\n\n".get_lang('Formula',null,$_user['language']).",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager',null,$_user['language']).' '.api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email',null,$_user['language']).' : '.api_get_setting('emailAdministrator');
-
-				// Here we are forming one large header line
-				// Every header must be followed by a \n except the last
-				$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-				$email_admin = api_get_setting('emailAdministrator');
-				@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
-			}
-			CustomPages::displayPage('registration-feedback');
-		}
-	} else {
-		CustomPages::displayPage('registration');
-	}
-}
-$tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
-Display :: display_header($tool_name);
-
-
-$home = api_get_path(SYS_PATH).'home/';
-if ($_configuration['multiple_access_urls']) {
-    $access_url_id = api_get_current_access_url_id();
-    if ($access_url_id != -1) {
-        $url_info = api_get_access_url($access_url_id);
-        $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-        $clean_url = replace_dangerous_char($url);
-        $clean_url = str_replace('/', '-', $clean_url);
-        $clean_url .= '/';
-        $home_old  = api_get_path(SYS_PATH).'home/';
-        $home = api_get_path(SYS_PATH).'home/'.$clean_url;
-    }
-}
 
 if (!empty($_SESSION['user_language_choice'])) {
     $user_selected_language = $_SESSION['user_language_choice'];
@@ -143,33 +25,7 @@ if (!empty($_SESSION['user_language_choice'])) {
 } else {
     $user_selected_language = get_setting('platformLanguage');
 }
-
-if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
-    $home_top_temp = @(string)file_get_contents($home.'register_top_'.$user_selected_language.'.html');
-    $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
-    $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-    if (!empty($open)) {
-        echo '<div style="border:1px solid #E1E1E1; padding:2px;">'.$open.'</div>';
-    }
-}
-
-// Forbidden to self-register
-if (api_get_setting('allow_registration') == 'false') {
-    api_not_allowed();
-}
-
-//api_display_tool_title($tool_name);
-if (api_get_setting('allow_registration') == 'approval') {
-    Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
-}
-//if openid was not found
-if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
-    Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
-}
-
 $form = new FormValidator('registration');
-$form->addElement('header', '', $tool_name);
-
 if (api_get_setting('allow_terms_conditions') == 'true') {
     $display_all_form = !isset($_SESSION['update_term_and_condition'][1]);
 } else {
@@ -317,7 +173,7 @@ if ($display_all_form) {
                 if ($get_lang_variables) {
                     $field_details[3] = get_lang($field_details[3]);
                 }
-                $form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, array('class'=>'chzn-select', 'id'=>'extra_'.$field_details[1]));
+                $form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');
                 break;
             case USER_FIELD_TYPE_SELECT_MULTIPLE:
                 $options = array();
@@ -383,6 +239,111 @@ if ($display_all_form) {
     }
 
 }
+$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), 'class="save"');
+
+if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
+    $defaults['language'] = $_SESSION['user_language_choice'];
+} else {
+    $defaults['language'] = api_get_setting('platformLanguage');
+}
+if (!empty($_GET['username'])) {
+    $defaults['username'] = Security::remove_XSS($_GET['username']);
+}
+if (!empty($_GET['email'])) {
+    $defaults['email'] = Security::remove_XSS($_GET['email']);
+}
+
+if (!empty($_GET['phone'])) {
+    $defaults['phone'] = Security::remove_XSS($_GET['phone']);
+}
+
+if (api_get_setting('openid_authentication') == 'true' && !empty($_GET['openid'])) {
+    $defaults['openid'] = Security::remove_XSS($_GET['openid']);
+}
+$defaults['status'] = STUDENT;
+
+if (is_array($extra_data)) {
+    $defaults = array_merge($defaults, $extra_data);
+}
+
+$form->setDefaults($defaults);
+
+if (api_get_setting('use_custom_pages') != 'true') {
+  // Load terms & conditions from the current lang
+  if (api_get_setting('allow_terms_conditions') == 'true') {
+    $get = array_keys($_GET);
+    if (isset($get)) {
+      if ($get[0] == 'legal'){
+        $language = api_get_interface_language();
+        $language = api_get_language_id($language);
+        $term_preview = LegalManager::get_last_condition($language);
+        if (!$term_preview) {
+          //look for the default language
+          $language = api_get_setting('platformLanguage');
+          $language = api_get_language_id($language);
+          $term_preview = LegalManager::get_last_condition($language);
+        }
+        $tool_name = get_lang('TermsAndConditions');
+        Display :: display_header('');
+        echo '<div class="actions-title">';
+        echo $tool_name;
+        echo '</div>';
+        if (!empty($term_preview['content'])) {
+          echo $term_preview['content'];
+        } else {
+          echo get_lang('ComingSoon');
+        }
+        Display :: display_footer();
+        exit;
+      }
+    }
+  }
+
+  $tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
+  Display :: display_header($tool_name);
+
+  echo Display::tag('h1', $tool_name);
+
+  $home = api_get_path(SYS_PATH).'home/';
+  if ($_configuration['multiple_access_urls']) {
+    $access_url_id = api_get_current_access_url_id();
+    if ($access_url_id != -1) {
+      $url_info = api_get_access_url($access_url_id);
+      $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
+      $clean_url = replace_dangerous_char($url);
+      $clean_url = str_replace('/', '-', $clean_url);
+      $clean_url .= '/';
+      $home_old  = api_get_path(SYS_PATH).'home/';
+      $home = api_get_path(SYS_PATH).'home/'.$clean_url;
+    }
+  }
+
+
+  if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
+    $home_top_temp = @(string)file_get_contents($home.'register_top_'.$user_selected_language.'.html');
+    $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
+    $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+    if (!empty($open)) {
+      echo '<div style="border:1px solid #E1E1E1; padding:2px;">'.$open.'</div>';
+    }
+  }
+
+  // Forbidden to self-register
+  if (api_get_setting('allow_registration') == 'false') {
+    api_not_allowed();
+  }
+
+  //api_display_tool_title($tool_name);
+  if (api_get_setting('allow_registration') == 'approval') {
+    Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
+  }
+  //if openid was not found
+  if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
+    Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
+  }
+}
+
+
 
 // Terms and conditions
 if (api_get_setting('allow_terms_conditions') == 'true') {
@@ -426,34 +387,6 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
-$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), 'class="a_button gray"');
-
-if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
-    $defaults['language'] = $_SESSION['user_language_choice'];
-} else {
-    $defaults['language'] = api_get_setting('platformLanguage');
-}
-if (!empty($_GET['username'])) {
-    $defaults['username'] = Security::remove_XSS($_GET['username']);
-}
-if (!empty($_GET['email'])) {
-    $defaults['email'] = Security::remove_XSS($_GET['email']);
-}
-
-if (!empty($_GET['phone'])) {
-    $defaults['phone'] = Security::remove_XSS($_GET['phone']);
-}
-
-if (api_get_setting('openid_authentication') == 'true' && !empty($_GET['openid'])) {
-    $defaults['openid'] = Security::remove_XSS($_GET['openid']);
-}
-$defaults['status'] = STUDENT;
-
-if (is_array($extra_data)) {
-    $defaults = array_merge($defaults, $extra_data);
-}
-
-$form->setDefaults($defaults);
 
 if ($form->validate()) {
     /*
@@ -582,7 +515,10 @@ if ($form->validate()) {
             }
             // 3. exit the page
             unset($user_id);
-            Display :: display_footer();
+            
+            if (api_get_setting('use_custom_pages') != 'true') {
+              Display :: display_footer();
+            }
             exit;
         }
 
@@ -637,15 +573,15 @@ if ($form->validate()) {
         }
     }
 
-    echo '<p>'.get_lang('Dear',null,$_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings',null,$_user['language']).".</p>\n";
+    $display_text =  '<p>'.get_lang('Dear',null,$_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings',null,$_user['language']).".</p>\n";
 
     if (!empty ($values['email'])) {
-        echo '<p>'.get_lang('MailHasBeenSent',null,$_user['language']).'.</p>';
+        $display_text.= '<p>'.get_lang('MailHasBeenSent',null,$_user['language']).'.</p>';
     }
-
     $button_text = '';
     if ($is_allowedCreateCourse) {
-        echo '<p>', get_lang('NowGoCreateYourCourse',null,$_user['language']), ".</p>\n";
+        
+        $display_text .= '<p>'. get_lang('NowGoCreateYourCourse',null,$_user['language']). ".</p>\n";
         $action_url = '../create_course/add_course.php';
         $button_text = api_get_setting('course_validation') == 'true'
             ? get_lang('CreateCourseRequest', null, $_user['language'])
@@ -655,15 +591,36 @@ if ($form->validate()) {
             $action_url = 'courses.php?action=subscribe';
         else
             $action_url = api_get_path(WEB_PATH).'user_portal.php';
-        echo '<p>', get_lang('NowGoChooseYourCourses',null,$_user['language']), ".</p>\n";
+        $display_text.='<p>'. get_lang('NowGoChooseYourCourses',null,$_user['language']). ".</p>\n";
 
         $button_text = get_lang('Next',null,$_user['language']);
     }
     // ?uidReset=true&uidReq=$_user['user_id']
 
-    echo '<form action="', $action_url, '"  method="post">', "\n", '<button type="submit" class="next" name="next" value="', get_lang('Next',null,$_user['language']), '" validationmsg=" ', get_lang('Next',null,$_user['language']), ' ">', $button_text, '</button>', "\n", '</form><br />', "\n";
-
+    $display_text .= '<form action="'. $action_url. '"  method="post">'. "\n". '<button type="submit" class="next" name="next" value="'. get_lang('Next',null,$_user['language']). '" validationmsg=" '. get_lang('Next',null,$_user['language']). ' ">'. $button_text. '</button>'. "\n". '</form><br />'. "\n";
+  if (api_get_setting('use_custom_pages') == 'true') {
+    CustomPages::displayPage('registration-feedback', array('info' => $display_text));
+  }
+    echo $display_text;
 } else {
+  // Custom pages
+  if (api_get_setting('use_custom_pages') == 'true') {
+    CustomPages::displayPage('registration', array('form' => $form));
+  } else {
     $form->display();
+  }
+}
+?>
+<br />
+<?php
+if (!isset($_POST['username'])) {
+/*    
+    <div class="actions">
+<a href="<?php echo api_get_path(WEB_PATH); ?>" class="fake_button_back" ><?php echo get_lang('Back'); ?></a>
+</div>
+*/
+?>
+
+<?php
 }
 Display :: display_footer();

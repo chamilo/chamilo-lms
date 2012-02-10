@@ -69,7 +69,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
     
     	$content .=  '<div class="courseadminview" style="border:0px; margin-top: 0px;padding:5px;">
 		<div class="normal-message" id="id_normal_message" style="display:none">';
-			$content .=  '<img src="'.$server_protocol.$current_host.'/'.$path_work.'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';
+			$content .=  '<img src="'.api_get_path(WEB_PATH).'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';
 			$content .=  get_lang('PleaseStandBy');
 
 		$content .=  '</div>

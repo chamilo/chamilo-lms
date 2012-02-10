@@ -93,6 +93,20 @@ if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
 unset($_SESSION['objExercise']);
 unset($_SESSION['questionList']);
 
+///// additional APIs
+$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
+chamilo_courseCode = "'.$course_code.'";
+</script>';
+// Document API
+$htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" language="javascript"></script>';
+// Storage API
+$htmlHeadXtra[] = '<script type="text/javascript">
+var sv_user = \''.api_get_user_id().'\';
+var sv_course = chamilo_courseCode;
+var sv_sco = \''.$_REQUEST['lp_id'].'\';
+</script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
+$htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
+
 /**
  * Get a link to the corresponding document.
  */

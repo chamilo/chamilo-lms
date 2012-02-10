@@ -68,7 +68,6 @@ $exfile         = explode('/', $exercicePath);
 $exfile         = strtolower($exfile[sizeof($exfile) - 1]);
 $exercicePath   = substr($exercicePath, 0, strpos($exercicePath, $exfile));
 $exercicePath   = $exercicePath . "exercice.php";
-
    
 // Clear the exercise session
 if (isset ($_SESSION['objExercise'])) {

@@ -15,7 +15,7 @@
  */
 // The initialization class for the online editor is needed here.
 require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
-
+/*
 $TBL_EXERCICE_QUESTION      = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES              = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_QUESTIONS              = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -25,7 +25,7 @@ $TBL_DOCUMENT               = Database::get_course_table(TABLE_DOCUMENT);
 $main_user_table            = Database::get_main_table(TABLE_MAIN_USER);
 $main_course_user_table     = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TBL_TRACK_EXERCICES        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TBL_TRACK_ATTEMPT          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+$TBL_TRACK_ATTEMPT          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);*/
 
 /**
  * Shows a question
@@ -103,8 +103,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 		if ($answerType == MATCHING) {
 			$x = 1; //iterate through answers
 			$letter = 'A'; //mark letters for each answer
-			$answer_matching = $cpt1 = array();
-			$answer_suggestions = $nbrAnswers;
+			$answer_matching = $cpt1 = array();			
 
 			for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
 				$answerCorrect = $objAnswerTmp->isCorrect($answerId);
@@ -138,9 +137,9 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
 			
 			$oFCKeditor->ToolbarSet = 'TestFreeAnswer';
-			$oFCKeditor->Width  = '100%';
-			$oFCKeditor->Height = '200';
-			$oFCKeditor->Value	= $fck_content;
+			$oFCKeditor->Width      = '100%';
+			$oFCKeditor->Height     = '200';
+			$oFCKeditor->Value      = $fck_content;
             $s .= '<tr><td colspan="3">';
             $s .= $oFCKeditor->CreateHtml();
             $s .= '</td></tr>';
@@ -149,8 +148,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 		// Now navigate through the possible answers, using the max number of
 		// answers for the question as a limiter
 		$lines_count = 1; // a counter for matching-type answers
-        $question_list = array();
-            
+                    
         if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {            
             $header = '';
             $header .= Display::tag('th', get_lang('Options'));   
@@ -383,8 +381,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 					// only show elements to be answered (not the contents of
 					// the select boxes, who are corrrect = 0)
 					$s .= '<tr><td width="45%" valign="top">';
-					$parsed_answer = $answer;
-                    //$question_list[] = $parsed_answer;
+					$parsed_answer = $answer;                    
 					//left part questions
 					$s .= ' <span style="float:left; width:8%;"><b>'.$lines_count.'</b>.&nbsp;</span>
 						 	<span style="float:left; width:92%;">'.$parsed_answer.'</span></td>';
@@ -512,7 +509,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
 		if (!$only_questions) {
             if ($show_title) {
-				Testcategory::displayCategoryAndTitle($objQuestionTmp->id);	//             	
+				Testcategory::displayCategoryAndTitle($objQuestionTmp->id);
                 echo '<div class="question_title">'.$current_item.'. '.$questionName.'</div>';
             }
 			//@todo I need to the get the feedback type

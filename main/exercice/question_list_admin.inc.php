@@ -243,7 +243,7 @@ if (!$inATest) {
                         echo '<br />';
                         //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
                         echo '<br />';
-                        showQuestion($id, false, '', '',false, true);                   
+                        showQuestion($id, false, '', '',false, true);
                         echo '</p>';                        
                     echo '</div>';                 
                 echo '</div>';            

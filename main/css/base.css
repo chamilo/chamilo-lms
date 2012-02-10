@@ -4279,3 +4279,9 @@ a:active{
     margin-left: 14px;    
     margin-bottom: 10px;
 }
+
+
+/* Portal administration input text width */
+#settings input[type="text"] {
+    width:250px;
+}

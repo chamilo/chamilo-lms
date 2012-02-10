@@ -4,7 +4,7 @@
  * Please edit this file to match with your LDAP settings
  **/
 
-require_once(dirname(__FILE__).'/ldap.inc.php');
+require_once dirname(__FILE__).'/ldap.inc.php';
 
 /** 
  * Array of connection parameters

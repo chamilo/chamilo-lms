@@ -177,16 +177,6 @@ class CourseHome {
                     $link['name'] = Display::return_icon('add.gif', get_lang('Activate'), array('style' => 'vertical-align: middle;'));
                     $link['cmd'] = "restore=yes";
                     $lnk[] = $link;
-
-                    /*if ($tool['img'] == api_get_path(WEB_IMG_PATH).'external.gif') {
-                        $link['name'] = get_lang('Remove');
-                        $link['cmd']  = 'remove=yes';
-                        if ($tool['visibility'] == 2 && $cat == 'platformAdmin') {
-                            $link['name'] = get_lang('Delete');
-                            $link['cmd'] = 'askDelete=yes';
-                            $lnk[] = $link;
-                        }
-                    }*/
                 }                
                 if (is_array($lnk)) {
                     foreach ($lnk as & $this_lnk) {
@@ -196,12 +186,6 @@ class CourseHome {
                             $cell_content .= '<a href="'.api_get_self().'?id='.$tool['id'].'&amp;'.$this_lnk['cmd'].'">'.$this_lnk['name'].'</a>';
                         }
                     }
-                }
-
-                // RH: Allow editing of invisible homepage links (modified external_module)
-                if ($tool['added_tool'] == 1 && api_is_allowed_to_edit() && !$tool['visibility']
-                        && $tool['image'] != 'scormbuilder.gif' && $tool['image'] != 'scormbuilder_na.gif') {
-                    $cell_content .= '<a class="nobold" href="'.api_get_path(WEB_CODE_PATH).'external_module/external_module.php?id='.$tool['id'].'">'.get_lang('Edit').'</a>';
                 }
             }
             $table->setCellContents($cell_number / $numcols, ($cell_number) % $numcols, $cell_content);
@@ -391,12 +375,7 @@ class CourseHome {
                             $html .=  '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
                         }
                     }
-                }
-                // Allow editing of invisible homepage links (modified external_module)
-                if ($tool['added_tool'] == 1 && api_is_allowed_to_edit(null, true) && !$tool['visibility']
-                        && $tool['image'] != 'scormbuilder.gif' && $tool['image'] != 'scormbuilder_na.gif') {
-                    $html .=  '<a class="nobold" href="'.api_get_path(WEB_CODE_PATH).'external_module/external_module.php?'.api_get_cidreq().'&amp;id='.$tool['id'].'">'.get_lang('Edit').'</a>';
-                }
+                }   
                 $html .=  "</td>";
 
                 if ($i % 2) {

@@ -45,11 +45,13 @@ $saveDir=$dirBaseDocuments.$_SESSION['paint_dir'];
 $contents = file_get_contents($urlcontents);
 
 //Verify that the URL is pointing to a file @ pixlr.com domain or an ip @ pixlr.com
-if (strpos($urlcontents, "pixlr.com") == 0 && strpos($urlcontents, "69.164.195.250") == 0 && strpos($urlcontents, "173.255.196.130") == 0
-&& strpos($urlcontents, "173.255.196.177") == 0) {
-  echo "Invalid referrer";
-  exit;
-}
+/*
+$urlcontents1='http://pixlr.com/';
+$urlcontents2 = strstr($urlcontents, '_temp');
+$urlcontents_to_save=$urlcontents1.$urlcontents2;
+$contents = file_get_contents($urlcontents_to_save);//replace line 45.
+*/
+
 //Verify that the file is an image
 $headers = get_headers($urlcontents, 1);
 $content_type = explode("/", $headers['Content-Type']);

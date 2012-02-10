@@ -936,42 +936,10 @@ function get_course_groups() {
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return html code
 */
-function show_to_form($to_already_selected)
-{
+function show_to_form($to_already_selected) {
 	$user_list     = get_course_users();
 	$group_list    = get_course_groups();
-
-	echo "<table id=\"recipient_list\" style=\"display: none;\">";
-		echo "<tr>";
-		// the form containing all the groups and all the users of the course
-		echo "<td>";
-		echo "<strong>".get_lang('Users')."</strong><br />";
-			construct_not_selected_select_form($group_list, $user_list, $to_already_selected);
-		echo "</td>";
-		// the buttons for adding or removing groups/users
-		echo "<td valign=\"middle\">";
-	/*	echo "<input type=\"button\" ",
-					"onclick=\"move(document.getElementById('not_selected_form'),document.getElementById('selected_form'))\" ",
-					"value=\"   &gt;&gt;   \" />",
-
-					"<p>&nbsp;</p>",
-
-					"<input type=\"button\" ",
-					"onclick=\"move(document.getElementById('selected_form'),document.getElementById('not_selected_form'))\" ",
-					"value=\"   class=\"arrow\"   \" />";
-*/
-?>
-<button class="arrowr" type="button" onclick="move(document.getElementById('not_selected_form'), document.getElementById('selected_form'))"></button>
-<br /> <br />
-<button class="arrowl" type="button" onclick="move(document.getElementById('selected_form'), document.getElementById('not_selected_form'))"></button>
-<?php
-		echo "</td>";
-		echo "<td>";
-		echo "<strong>".get_lang('DestinationUsers')."</strong><br />";
-			construct_selected_select_form($group_list,$user_list,$to_already_selected);
-		echo "</td>";
-		echo "</tr>";
-	echo "</table>";
+    construct_not_selected_select_form($group_list, $user_list, $to_already_selected);
 }
 
 
@@ -981,21 +949,20 @@ function show_to_form($to_already_selected)
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return html code
 */
-function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array()) {
-    
-	echo "<select id=\"not_selected_form\" name=\"not_selected_form[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
+function construct_not_selected_select_form($group_list=null, $user_list=null, $to_already_selected=array()) {    
+	echo '<select data-placeholder="'.get_lang('Select').'" style="width:350px;" class="chzn-select" id="selected_form_id" name="selected_form[]" multiple="multiple">';
 
 	// adding the groups to the select form
-
-	if (isset($to_already_selected) && $to_already_selected==='everyone') {
-		echo "<option value=\"\">--------------------------------------------</option>";
+  echo	'<option value="everyone">'.get_lang('Everyone').'</option>';
+  
+	if (isset($to_already_selected) && $to_already_selected==='everyone') {		
 	} else {
 		if (is_array($group_list)) {
-            
+            echo '<optgroup label="'.get_lang('Groups').'">';
 			foreach($group_list as $this_group) {
 				//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
-				if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
-					{
+				if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) {
+                     // $to_already_selected is the array containing the groups (and users) that are already selected
 					    echo	"<option value=\"GROUP:".$this_group['id']."\">",
 						"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
 						"</option>";
@@ -1003,18 +970,22 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 			}
 			// a divider
 		}
-		echo	"<option value=\"\">--------------------------------------------</option>";
+		echo	"</optgroup>";
 		// adding the individual users to the select form
-		foreach($user_list as $this_user) {
-		    // $to_already_selected is the array containing the users (and groups) that are already selected
-			if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) {
-                $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
-    		    $user_info = api_get_person_name($this_user['firstName'], $this_user['lastName']);
-				echo	"<option title='$username' value='USER:".$this_user['uid']."'>$user_info</option>";
-			}
-		}
+        if (!empty($user_list)) {
+            echo '<optgroup label="'.get_lang('Users').'">';
+            foreach($user_list as $this_user) {
+                // $to_already_selected is the array containing the users (and groups) that are already selected
+                if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) {
+                    $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
+                    $user_info = api_get_person_name($this_user['firstName'], $this_user['lastName']).' ('.$this_user['username'].')';
+                    echo "<option title='$username' value='USER:".$this_user['uid']."'>$user_info</option>";
+                }            
+            }
+            echo "</optgroup>";
+        }
 	}
-		echo "</select>";
+    echo "</select>";
 }
 
 /**
@@ -1026,19 +997,17 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 {
 	// we separate the $to_already_selected array (containing groups AND users into
 	// two separate arrays
-	if (is_array($to_already_selected))
-	{
+	if (is_array($to_already_selected)) {
 		 $groupuser=separate_users_groups($to_already_selected);
 	}
 	$groups_to_already_selected=$groupuser['groups'];
 	$users_to_already_selected=$groupuser['users'];
 
 	// we load all the groups and all the users into a reference array that we use to search the name of the group / user
-	$ref_array_groups=get_course_groups();
-
-	$ref_array_users=get_course_users();
+	$ref_array_groups   = get_course_groups();
+	$ref_array_users    = get_course_users();
 	// we construct the form of the already selected groups / users
-	echo "<select id=\"selected_form\" name=\"selectedform[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
+	echo "<select id=\"selected_form2\" name=\"selectedform2[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
 	if(is_array($to_already_selected))
 	{
 		$select_options_group = array();
@@ -1110,8 +1079,7 @@ function store_new_agenda_item() {
 	$TABLEAGENDA 	 = Database::get_course_table(TABLE_AGENDA);
     $t_agenda_repeat = Database::get_course_Table(TABLE_AGENDA_REPEAT);
     
-    $course_id = api_get_course_int_id();
-    
+    $course_id = api_get_course_int_id();    
 
 	// some filtering of the input data
 	$title		= trim($_POST['title']); // no html allowed in the title
@@ -1266,23 +1234,26 @@ function separate_users_groups($to) {
 	$grouplist = array();
     $userlist  = array();
     $send_to = null;
-	if(is_array($to) && count($to)>0)
-    {
-        foreach($to as $to_item)
-    	{
-    	list($type, $id) = explode(':', $to_item);
-    	switch($type)
-    		{
-    		case 'GROUP':
-    			$grouplist[] =$id;
-    			break;
-    		case 'USER':
-    			$userlist[] =$id;
-    			break;
-    		}
-    	}
-        $send_to['groups']=$grouplist;
-        $send_to['users']=$userlist;
+    
+    $send_to['everyone']  = false;
+    
+	if (is_array($to) && count($to)>0) {
+        foreach ($to as $to_item) {
+         
+            list($type, $id) = explode(':', $to_item);
+            switch($type) {
+                case 'everyone':
+                    $send_to['everyone']  = true;
+                case 'GROUP':
+                    $grouplist[] =$id;
+                    break;
+                case 'USER':
+                    $userlist[] =$id;
+                    break;
+            }
+        }
+        $send_to['groups']  = $grouplist;
+        $send_to['users']   = $userlist;
     }
     return $send_to;
 }
@@ -2298,8 +2269,7 @@ function show_add_form($id = '') {
 	// if the id is set then we are editing an agenda item
 	if (!empty($id)) { 
 		//echo "before get_agenda_item".$_SESSION['allow_individual_calendar'];
-		$item_2_edit = get_agenda_item($id);
-		
+		$item_2_edit = get_agenda_item($id);		
 
 		$title	= $item_2_edit['title'];
 		$content= $item_2_edit['content'];
@@ -2371,22 +2341,23 @@ function show_add_form($id = '') {
 	
 	
 	// selecting the users / groups
-	if (isset ($_SESSION['toolgroup'])) {
-		echo '<input type="hidden" name="selectedform[0]" value="GROUP:'.intval($_SESSION['toolgroup']).'"/>' ;
+    $group_id = api_get_group_id();
+	if (isset ($group_id) && !empty($group_id)) {
+		echo '<input type="hidden" name="selected_form[0]" value="GROUP:'.$group_id.'"/>' ;
 		echo '<input type="hidden" name="To" value="true"/>' ;
 	} else {
 		echo '<div class="row">
 					<div class="label">
-						<a href="javascript: void(0);" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.Display::return_icon('group.png', get_lang('SentTo'), array ('align' => 'absmiddle'),22).' '.get_lang('SentTo').'</a>
+						'.Display::return_icon('group.png', get_lang('To'), array ('align' => 'absmiddle'),22).' '.get_lang('To').'</a>
 					</div>
 					<div class="formw">';
-		if ((isset($_GET['id'])  && $to=='everyone') || !isset($_GET['id'])) {
+		/*if ((isset($_GET['id'])  && $to=='everyone') || !isset($_GET['id'])) {
 			echo get_lang('Everybody').'&nbsp;';
-		}
+		}*/
 		show_to_form($to);
-		if (isset($_GET['id']) && $to!='everyone') {
+		/*if (isset($_GET['id']) && $to!='everyone') {
 			echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
-		}
+		}*/
 		echo '</div>
 				</div>';
 	}
@@ -4053,39 +4024,39 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     $user_id    = api_get_user_id();
 
     // database table definitions
-    $t_agenda                = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
-    $agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
+    $t_agenda                = Database::get_course_table(TABLE_AGENDA);    
     $item_property 			 = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
     // some filtering of the input data    
-	$title      = Database::escape_string($title);
-	$content    = Database::escape_string($content);
-	$db_start_date = api_get_utc_datetime($db_start_date);
-    $start_date = Database::escape_string($db_start_date);
+	$title          = Database::escape_string($title);
+	$content        = Database::escape_string($content);
+	$db_start_date  = api_get_utc_datetime($db_start_date);
+    $start_date     = Database::escape_string($db_start_date);
     if (!empty($db_end_date)) {
         $db_end_date = api_get_utc_datetime($db_end_date);        
     }    
-    $end_date   = Database::escape_string($db_end_date);
-    $id_session = api_get_session_id();
-    $course_id  = api_get_course_int_id();
+    $end_date       = Database::escape_string($db_end_date);
+    $id_session     = api_get_session_id();
+    $course_id      = api_get_course_int_id();
+    $group_id       = api_get_group_id();
 
     // check if exists in calendar_event table and if it is not deleted!
     $sql = "SELECT * FROM $t_agenda agenda, $item_property item_property
     			WHERE
-    			agenda.c_id = $course_id AND
-    			item_property.c_id = $course_id AND   
-    			agenda.title  		 = '$title'
+    			agenda.c_id                  = $course_id AND
+    			item_property.c_id           = $course_id AND   
+    			agenda.title                 = '$title'
     			AND agenda.content           = '$content'
     			AND agenda.start_date        = '$start_date'
     			AND agenda.end_date          = '$end_date' ".(!empty($parent_id)? "
     			AND agenda.parent_event_id   = '$parent_id'":"")."
     			AND agenda.session_id        = '$id_session'
     			AND item_property.tool       = '".TOOL_CALENDAR_EVENT."'
-    			AND item_property.ref = agenda.id
+    			AND item_property.ref        = agenda.id
     			AND item_property.visibility <> 2";
     
     $result = Database::query($sql);
-    $count = Database::num_rows($result);
+    $count  = Database::num_rows($result);
     if ($count > 0) {
     	return false;
     }
@@ -4099,17 +4070,16 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 
     // add a attachment file in agenda
 
-    add_agenda_attachment_file($file_comment,$last_id);
+    add_agenda_attachment_file($file_comment, $last_id);
 
     // store in last_tooledit (first the groups, then the users
-    $done = false;
-    if ((!is_null($to))or (!empty($_SESSION['toolgroup']))) {
-        // !is_null($to): when no user is selected we send it to everyone
-        $send_to = separate_users_groups($to);
+    
+    if (!empty($to)) {        
+        $send_to = separate_users_groups($to);        
         // storing the selected groups
         if (is_array($send_to['groups'])) {
             foreach ($send_to['groups'] as $group) {
-                api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id, $group,0,$start_date, $end_date);
+                api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id, $group, 0, $start_date, $end_date);
                 $done = true;
             }
         }
@@ -4120,15 +4090,14 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
                 $done = true;
             }
         }
+        if (isset($send_to['everyone']) && $send_to['everyone']) {
+            api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id, 0, 0, $start_date, $end_date);    
+        }
     }
 
-    if(!$done) {
-    	// the message is sent to everyone, so we set the group to 0
-        api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id,0,0, $start_date,$end_date);
-    }
     // storing the resources
     if (!empty($_SESSION['source_type']) && !empty($last_id)) {
-    store_resources($_SESSION['source_type'],$last_id);
+        store_resources($_SESSION['source_type'], $last_id);
     }
     return $last_id;
 }

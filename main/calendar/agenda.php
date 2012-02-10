@@ -26,7 +26,6 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $origin = isset($_GET['origin']) ? $_GET['origin'] : null; 
 
 $this_section = SECTION_COURSES;
-
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 if (empty($action)) {
@@ -202,7 +201,7 @@ $course_info = api_get_course_info();
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false,true))) {
 	switch($action) {
 		case 'add':
-			if (isset($_POST['submit_event']) && $_POST['submit_event']) {				
+			if (isset($_POST['submit_event']) && $_POST['submit_event']) {			
 				$event_start 		= (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
 				$event_stop   		= (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
 				$safe_title 		= Security::remove_XSS($_POST['title']);
@@ -210,14 +209,14 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		
 				if ($_POST['empty_end_date'] == 'on' ) {
 					$event_stop = '0000-00-00 00:00:00';
-				}
-				$id = agenda_add_item($course_info,$safe_title,$_POST['content'],$event_start,$event_stop,$_POST['selectedform'],false,$safe_file_comment);
+				}                
+				$id = agenda_add_item($course_info,$safe_title,$_POST['content'],$event_start,$event_stop,$_POST['selected_form'],false,$safe_file_comment);
 				if (!empty($_POST['repeat'])) {
 					$end_y = intval($_POST['repeat_end_year']);
 					$end_m = intval($_POST['repeat_end_month']);
 					$end_d = intval($_POST['repeat_end_day']);
 					$end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
-					$res   = agenda_add_repeat_item($course_info,$id, $_POST['repeat_type'], $end,$_POST['selectedform'], $safe_file_comment);
+					$res   = agenda_add_repeat_item($course_info,$id, $_POST['repeat_type'], $end,$_POST['selected_form'], $safe_file_comment);
 				}
 				
 				Display::display_confirmation_message(get_lang('AddSuccess'));

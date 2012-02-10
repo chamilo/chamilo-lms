@@ -655,7 +655,7 @@ class Agenda {
     * @return html code
     */
     function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array()) {
-        $html = '<select id="users_to_send_id" name="users_to_send[]" size="5" multiple="multiple" style="width:250px" class="chzn-select">';
+        $html = '<select id="users_to_send_id" data-placeholder="'.get_lang('Select').'" name="users_to_send[]" multiple="multiple" style="width:250px" class="chzn-select">';
     
         // adding the groups to the select form
         
@@ -688,7 +688,7 @@ class Agenda {
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
                 // @todo : add title attribute $username in the jqdialog window. wait for a chosen version to inherit title attribute
                 // from <option> to <li>
-                $html .= "<option title='".$username."' value=\"USER:".$this_user['user_id']."\">".api_get_person_name($this_user['firstname'], $this_user['lastname'])."</option>";
+                $html .= '<option title="'.$username.'" value="USER:'.$this_user['user_id'].'">'.api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].') </option>';
             }
         }
         if (is_array($group_list)) {

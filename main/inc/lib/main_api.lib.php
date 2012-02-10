@@ -5458,6 +5458,10 @@ function api_get_jquery_libraries_js($libraries) {
         $js .= api_get_js('jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.min.js');
     }
     
+    if (in_array('jquery-ui-i18n', $libraries)) {
+        $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
+    }
+    
     //jqgrid js and css
     if (in_array('jqgrid', $libraries)) { 
         $languaje   = 'en';

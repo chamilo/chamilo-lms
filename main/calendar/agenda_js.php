@@ -17,7 +17,7 @@ require_once '../inc/global.inc.php';
 require_once 'agenda.lib.php';
 require_once 'agenda.inc.php';
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
+$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui','jquery-ui-i18n'));
 $htmlHeadXtra[] = api_get_js('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_js('fullcalendar/fullcalendar.min.js');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/fullcalendar/fullcalendar.css');
@@ -70,6 +70,10 @@ $tpl->assign('button_text', 		json_encode(array(	'today'	=> get_lang('Today'),
 														'month'	=> get_lang('Month'), 
 														'week'	=> get_lang('Week'), 
 														'day'	=> get_lang('Day'))));
+
+//see http://docs.jquery.com/UI/Datepicker/$.datepicker.formatDate
+
+$tpl->assign('js_format_date', 	'D d M yy');
 
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false,true)) {
     if ($type == 'course') {

@@ -18,7 +18,7 @@ function clean_user_select() {
         .end();
 }
 
-var reg = 'fr';
+var region_value = '{$region_value}';
 $(document).ready(function() {
 
     /*$("body").delegate(".datetime", "focusin", function(){
@@ -81,7 +81,7 @@ $(document).ready(function() {
         }
     });
     
-    $.datepicker.setDefaults( $.datepicker.regional["fr"] );
+    $.datepicker.setDefaults( $.datepicker.regional[region_value] );
 	
 	var calendar = $('#calendar').fullCalendar({
 		header: {

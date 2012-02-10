@@ -74,6 +74,13 @@ $tpl->assign('button_text', 		json_encode(array(	'today'	=> get_lang('Today'),
 //see http://docs.jquery.com/UI/Datepicker/$.datepicker.formatDate
 
 $tpl->assign('js_format_date', 	'D d M yy');
+$region_value = api_get_language_isocode();
+
+if ($region_value == 'en') {
+    $region_value = 'en-GB';
+}
+$tpl->assign('region_value', 	$region_value);
+
 
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false,true)) {
     if ($type == 'course') {

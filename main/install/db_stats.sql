@@ -130,7 +130,8 @@ CREATE TABLE track_e_attempt (
   course_code varchar(40) NOT NULL default '',
   position int default 0,
   tms datetime NOT NULL default '0000-00-00 00:00:00',
-  session_id INT NOT NULL DEFAULT 0
+  session_id INT NOT NULL DEFAULT 0,
+  filename VARCHAR(255) DEFAULT NULL
 );
 ALTER TABLE track_e_attempt ADD INDEX (exe_id);
 ALTER TABLE track_e_attempt ADD INDEX (user_id); 

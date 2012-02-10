@@ -71,8 +71,7 @@ class GroupManager {
 	 * @param string $course_code Default is current course
 	 * @return array An array with all information about the groups.
 	 */
-	public static function get_group_list ($category = null, $course_code = null) {
-		$course_db  = '';
+	public static function get_group_list ($category = null, $course_code = null) {		
 		$my_user_id = api_get_user_id();
 		$my_status_of_user_in_course = '';
 		
@@ -85,8 +84,7 @@ class GroupManager {
 		}
 		*/
 		$course_info 		= api_get_course_info($course_code);		
-		$course_id 			= $course_info['real_id'];						
-		$table_user 		= Database :: get_main_table(TABLE_MAIN_USER);
+		$course_id 			= $course_info['real_id'];								
 		$table_course 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_group_user 	= Database :: get_course_table(TABLE_GROUP_USER);
 		$table_group 		= Database :: get_course_table(TABLE_GROUP);
@@ -1611,5 +1609,7 @@ class GroupManager {
         $complete_user_list = self :: filter_only_students($complete_user_list);
         //now sort by # of group left
         $complete_user_list = TableSort :: sort_table($complete_user_list, 'number_groups_left', SORT_DESC);           
-        return $complete_user_list;    }		
+        return $complete_user_list;    
+        
+    }
 }

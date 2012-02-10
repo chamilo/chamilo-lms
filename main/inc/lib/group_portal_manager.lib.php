@@ -1110,4 +1110,12 @@ class GroupPortalManager {
 		}		
         return $html;
 	}
+       
+    function delete_topic($group_id, $topic_id) {
+        $table_message = Database::get_main_table(TABLE_MESSAGE);
+        $topic_id = intval($topic_id);
+        $group_id = intval($group_id);
+        $sql = "UPDATE $table_message SET msg_status=3 WHERE group_id = $group_id AND (id = '$topic_id' OR parent_id = $topic_id) ";
+        Database::query($sql);
+    }
 }

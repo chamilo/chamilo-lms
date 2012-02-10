@@ -534,10 +534,9 @@ class MessageManager
 	 */
 	public static function get_messages_by_group($group_id) {
 		if ($group_id != strval(intval($group_id))) return false;
-	 	$table_message = Database::get_main_table(TABLE_MESSAGE);
-	 	$current_uid = api_get_user_id();
+	 	$table_message = Database::get_main_table(TABLE_MESSAGE);	 	
 	 	$group_id = intval($group_id);
-		$query = "SELECT * FROM $table_message WHERE group_id=$group_id AND msg_status <> ".MESSAGE_STATUS_OUTBOX." ORDER BY id";
+		$query = "SELECT * FROM $table_message WHERE group_id= $group_id AND msg_status NOT IN ('".MESSAGE_STATUS_OUTBOX."', '".MESSAGE_STATUS_DELETED."')  ORDER BY id";
 		$rs = Database::query($query);
 		$data = array();
 		if (Database::num_rows($rs) > 0) {
@@ -556,10 +555,10 @@ class MessageManager
      */
     public static function get_messages_by_group_by_message($group_id, $message_id) {
         if ($group_id != strval(intval($group_id))) return false;
-        $table_message = Database::get_main_table(TABLE_MESSAGE);
-        $current_uid = api_get_user_id();
+        $table_message = Database::get_main_table(TABLE_MESSAGE);        
         $group_id = intval($group_id);
-        $query = "SELECT * FROM $table_message WHERE group_id = $group_id AND msg_status <> ".MESSAGE_STATUS_OUTBOX." ORDER BY id ";
+        $query = "SELECT * FROM $table_message WHERE group_id = $group_id AND msg_status NOT IN ('".MESSAGE_STATUS_OUTBOX."', '".MESSAGE_STATUS_DELETED."')  ORDER BY id ";
+        
         $rs = Database::query($query);
         $data = array();
         $parents = array();
@@ -905,12 +904,7 @@ class MessageManager
 	public static function display_messages_for_group($group_id) {
 		global $my_group_role;
 		$rows = self::get_messages_by_group($group_id);		 
-		//$rows = self::calculate_children($rows, 1);
-		$group_info = GroupPortalManager::get_group_data($group_id);
-		$current_user_id = api_get_user_id();
 		$topics_per_page  = 10;
-		
-		$count_items = 0;
 		$html_messages = '';
 		$query_vars = array('id'=>$group_id, 'topics_page_nr'=>0);
 
@@ -918,8 +912,7 @@ class MessageManager
    
 			// prepare array for topics with its items
 			$topics = array();
-			$x = 0;
-            $my_items = array();
+			$x = 0;            
 			foreach($rows as $index => $value) {			         			    
 				if (empty($value['parent_id'])) {
 					$topics[$value['id']] = $value;
@@ -1000,20 +993,20 @@ class MessageManager
      * @param int group id
      */
     public static function display_message_for_group($group_id, $topic_id, $is_member, $message_id ) {
-        global $my_group_role;
-        
-        $main_message 	= self::get_message_by_id($topic_id);                
-        $group_info		= GroupPortalManager::get_group_data($group_id);
-        $rows 			= self::get_messages_by_group_by_message($group_id, $topic_id);                    
-        $rows 			= self::calculate_children($rows, $topic_id);        
-        
+        global $my_group_role;        
+        $main_message 	= self::get_message_by_id($topic_id);       
+        if (empty($main_message)) {
+            return false;
+        }
+        $rows 			= self::get_messages_by_group_by_message($group_id, $topic_id);              
+        $rows 			= self::calculate_children($rows, $topic_id);                
         $current_user_id  = api_get_user_id();
         
-        $topics_per_page  = 5;
+        //$topics_per_page  = 5;
         $items_per_page   = 50;
         
-        $count_items = 0;
-        $html_messages = '';
+        //$count_items = 0;
+        //$html_messages = '';
         $query_vars = array('id' => $group_id, 'topic_id' => $topic_id , 'topics_page_nr' => 0);        
         
         // Main message        
@@ -1027,7 +1020,11 @@ class MessageManager
         
         $html = '';
         
-        $html .= Display::tag('h3', Security::remove_XSS($main_message['title'], STUDENT, true));
+        $delete_button = '';
+         if (api_is_platform_admin()) {
+            $delete_button =  Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), 22), 'group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic_id);
+        }
+        $html .= Display::tag('h3', Security::remove_XSS($main_message['title'].$delete_button, STUDENT, true));
         
         $user_sender_info = UserManager::get_user_info_by_id($main_message['user_sender_id']);
         $files_attachments = self::get_links_message_attachment_files($main_message['id']);
@@ -1067,7 +1064,6 @@ class MessageManager
         
         if (is_array($rows) && count($rows)> 0) {
             $topics = $rows;            
-            $array_html = array();    
                     
             foreach ($topics as $index => $topic) {
                 if (empty($topic['id'])) {
@@ -1228,7 +1224,7 @@ class MessageManager
 	public static function get_message_by_id($message_id) {
 		$tbl_message = Database::get_main_table(TABLE_MESSAGE);
 		$message_id = intval($message_id);
-		$sql = "SELECT * FROM $tbl_message WHERE id = '$message_id'";
+		$sql = "SELECT * FROM $tbl_message WHERE id = '$message_id' AND msg_status <> '".MESSAGE_STATUS_DELETED."' ";
 		$res = Database::query($sql);
 		$item = array();
 		if (Database::num_rows($res)>0) {

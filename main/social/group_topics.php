@@ -36,6 +36,13 @@ if (empty($group_id)) {
 	}
 }
 
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
+    if (api_is_platform_admin()) {        
+        GroupPortalManager::delete_topic($group_id, $topic_id);
+        header("Location: groups.php?id=$group_id&action=show_message&msg=topic_deleted");
+    }    
+}
+
 // save message group
 if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 	
@@ -168,13 +175,14 @@ $interbreadcrumb[] = array ('url' =>'home.php',      'name' => get_lang('Social'
 $interbreadcrumb[] = array('url' => 'groups.php',   'name' => get_lang('Groups'));
 $interbreadcrumb[] = array('url' => '#',            'name' => get_lang('Thread'));
 
-$social_left_content = SocialManager::show_social_menu('member_list', $group_id);    
-$social_right_content .= '<h2><a href="groups.php?id='.$group_id.'">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</a> &raquo; <a href="groups.php?id='.$group_id.'#tabs_2">'.get_lang('Discussions').'</a></h2>';
+$social_right_content = '<a href="groups.php?id='.$group_id.'">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</a> &raquo; <a href="groups.php?id='.$group_id.'#tabs_2">'.get_lang('Discussions').'</a>';
+$social_left_content .= SocialManager::show_social_menu('member_list', $group_id);
          
-if (!empty($show_message)){
+if (!empty($show_message)) {
     $social_right_content .= Display::return_message($show_message, 'confirmation');
 }
 $social_right_content .= MessageManager::display_message_for_group($group_id, $topic_id, $is_member, $message_id);
+
 
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');

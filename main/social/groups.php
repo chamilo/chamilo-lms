@@ -213,42 +213,42 @@ if ($group_id != 0 ) {
 
 	// details about the current group
 	$social_right_content = '<div class="head_group">';    
-		$social_right_content .=  '<div id="social-group-details">';
-				//Group's title
-				$social_right_content .=  Display::tag('h2', Security::remove_XSS($group_info['name'], STUDENT, true));
-				
-				//echo '<div class="social-group-details-info"><a target="_blank" href="'.$group_info['url'].'">'.$group_info['url'].'</a></div>';
-				
-				//Privacy
-				if (!$is_group_member) {
-    				$social_right_content .=  '<div class="social-group-details-info">';
-    					$social_right_content .=  '<span>'.get_lang('Privacy').' : </span>';
-    					if ($group_info['visibility']== GROUP_PERMISSION_OPEN) {
-    						$social_right_content .=  get_lang('ThisIsAnOpenGroup');
-    					} elseif ($group_info['visibility']== GROUP_PERMISSION_CLOSED) {
-    						$social_right_content .=  get_lang('ThisIsACloseGroup');
-    					}
-    				$social_right_content .=  '</div>';
-				}
-				
-				if (!$is_group_member && $group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
-				    $role = GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);				    
-				    if ($role == GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER) {
-				        $social_right_content .=  Display::return_message(get_lang('YouAlreadySentAnInvitation'));
-				    }
-				}
-				 
-				if (!empty($relation_group_title)) {
-				    /*
-					echo '<div class="social-group-details-info">';
-					echo '<span>'.get_lang('StatusInThisGroup').' : </span>';
-					echo $relation_group_title;
-					echo '</div>';*/
-				}
-				//Group's tags
-				if (!empty($tags)) {
-					$social_right_content .=  '<div id="social-group-details-info"><span>'.get_lang('Tags').' : </span>'.$tags.'</div>';
-				}
+	$social_right_content .=  '<div id="social-group-details">';
+            //Group's title
+            $social_right_content .=  Display::tag('h2', Security::remove_XSS($group_info['name'], STUDENT, true));
+
+            //echo '<div class="social-group-details-info"><a target="_blank" href="'.$group_info['url'].'">'.$group_info['url'].'</a></div>';
+
+            //Privacy
+            if (!$is_group_member) {
+                $social_right_content .=  '<div class="social-group-details-info">';
+                    $social_right_content .=  '<span>'.get_lang('Privacy').' : </span>';
+                    if ($group_info['visibility']== GROUP_PERMISSION_OPEN) {
+                        $social_right_content .=  get_lang('ThisIsAnOpenGroup');
+                    } elseif ($group_info['visibility']== GROUP_PERMISSION_CLOSED) {
+                        $social_right_content .=  get_lang('ThisIsACloseGroup');
+                    }
+                $social_right_content .=  '</div>';
+            }
+
+            if (!$is_group_member && $group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
+                $role = GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);				    
+                if ($role == GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER) {
+                    $social_right_content .=  Display::return_message(get_lang('YouAlreadySentAnInvitation'));
+                }
+            }
+
+            if (!empty($relation_group_title)) {
+                /*
+                echo '<div class="social-group-details-info">';
+                echo '<span>'.get_lang('StatusInThisGroup').' : </span>';
+                echo $relation_group_title;
+                echo '</div>';*/
+            }
+            //Group's tags
+            if (!empty($tags)) {
+                $social_right_content .=  '<div id="social-group-details-info"><span>'.get_lang('Tags').' : </span>'.$tags.'</div>';
+            }
 		$social_right_content .=  '</div>';
 	$social_right_content .=  '</div>';
 	$social_right_content .=  '<div class="clear"></div>';
@@ -264,8 +264,7 @@ if ($group_id != 0 ) {
                     $social_right_content .=  '<a class="a_button white medium" href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('YouHaveBeenInvitedJoinNow').'</a>';
                 }
                 $social_right_content .=  '<br /><br />';
-		    }            
-			
+		    }			
 			$content = MessageManager::display_messages_for_group($group_id);
 			if ($is_group_member) {
     			if (empty($content)) {		
@@ -533,7 +532,9 @@ if ($group_id != 0 ) {
 	$social_right_content .=  '</div>';
 
 //Display :: display_footer();
-
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'show_message' && $_REQUEST['msg'] == 'topic_deleted') {
+    $show_message = Display::return_message(get_lang('Deleted'), 'success');
+}
 
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');

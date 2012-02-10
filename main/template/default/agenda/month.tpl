@@ -98,6 +98,15 @@ $(document).ready(function() {
         firstDay: 1, 
 		selectable	: true,
 		selectHelper: true,
+        
+        viewDisplay: function(view) {
+            /* When changing the view update the qtips */            
+            var api = $('.qtip').qtip('api'); // Access the API of the first tooltip on the page
+            if (api) {
+                api.destroy();
+                //api.render();
+            }
+        },
 		//add event
 		select: function(start, end, allDay, jsEvent, view) {
 			/* When selecting one day or several days */			
@@ -172,25 +181,26 @@ $(document).ready(function() {
 				calendar.fullCalendar('unselect');
 			}
 		},	
-		eventRender: function(event, element) {
-        
+		eventRender: function(event, element) {        
             if (event.attachment) {
-                element.qtip({
-                    show: {
-                        event: false, // Don't specify a show event...
-                        ready: true // ... but show the tooltip when ready
+                element.qtip({            
+                    hide: {
+                        delay: 2000
                     },
-                    hide: false, // Don't specify a hide event either!
 		            content: event.attachment,
 		            position: { at:'top right' , my:'bottom right'},	
 		        }).removeData('qtip'); // this is an special hack to add multipl qtip in the same target!
+                
             }
             
 			if (event.description) {
 				element.qtip({
+                    hide: {
+                        delay: 2000
+                    },
 		            content: event.description,
 		            position: { at:'top left' , my:'bottom left'},	
-		        });
+		        });                
 			}
 	        
 	    },

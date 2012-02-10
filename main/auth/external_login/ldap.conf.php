@@ -17,7 +17,7 @@ $extldap_config = array(
   //admin password
   'admin_password' => 'pass',
   //ldap host
-  'host' => array('10.1.2.3', '10.1.2.4', '10.1.2.5'),
+  'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'),
   // filter
 //  'filter' => '', // no () arround the string
   //'port' => , default on 389

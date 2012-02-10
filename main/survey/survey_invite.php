@@ -93,7 +93,7 @@ $form = new FormValidator('publish_form', 'post', api_get_self().'?survey_id='.$
 $form->addElement('header', '', $tool_name);
 
 // Course users
-$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session'], '', api_sort_by_first_name() ? 'ORDER BY firstname' : 'ORDER BY lastname');
+$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], $_SESSION['id_session'], '', api_sort_by_first_name() ? 'ORDER BY firstname' : 'ORDER BY lastname');
 $possible_users = array();
 foreach ($complete_user_list as $index => & $user) {
 	$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);

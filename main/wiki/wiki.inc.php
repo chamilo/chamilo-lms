@@ -1843,11 +1843,11 @@ function auto_add_page_users($assignment_type) {
       {
           //extract course members
         if(!empty($session_id)){
-            $a_users_to_add = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $session_id);
+            $a_users_to_add = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], $session_id);
         }
         else
         {
-            $a_users_to_add = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
+            $a_users_to_add = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], 0);
         }
     }
     else

@@ -340,9 +340,9 @@ function get_number_of_users() {
 
 		// getting all the users of the course (to make sure that we do not display users that are already in the course)
 		if (!empty($_SESSION["id_session"])) {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
+			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], $_SESSION['id_session']);
 		} else {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
+			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], 0);
 	    }
 		foreach ($a_course_users as $user_id=>$course_user) {
 			$users_of_course[] = $course_user['user_id'];
@@ -590,9 +590,9 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 		// getting all the users of the course (to make sure that we do not display users that are already in the course)
 		if (!empty($_SESSION["id_session"])) {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
+			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], $_SESSION['id_session']);
 		} else {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
+			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], 0);
 	    }
 		foreach ($a_course_users as $user_id=>$course_user) {
 			$users_of_course[] = $course_user['user_id'];

@@ -406,9 +406,9 @@ class Attendance
 		$current_session_id = api_get_session_id();
 		$current_course_id  = api_get_course_id();
 		if (!empty($current_session_id)) {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($current_course_id, true, $current_session_id,'','lastname');
+			$a_course_users = CourseManager :: get_user_list_from_course_code($current_course_id, $current_session_id,'','lastname');
 		} else {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($current_course_id, false, 0, '','lastname');
+			$a_course_users = CourseManager :: get_user_list_from_course_code($current_course_id, 0, '','lastname');
 		}
 		// get registered users inside current course
 		$a_users = array();

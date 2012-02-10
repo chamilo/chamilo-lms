@@ -1126,7 +1126,7 @@ class CourseManager {
      * @param string $order_by the field to order the users by. Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement that starts with ORDER BY ...
      *  @return array
      */
-    public static function get_user_list_from_course_code($course_code, $with_session = true, $session_id = 0, $limit = '', $order_by = '') {        
+    public static function get_user_list_from_course_code($course_code, $session_id = 0, $limit = '', $order_by = '') {        
         // variable initialisation
         $session_id 	= intval($session_id);        
         $course_code 	= Database::escape_string($course_code);
@@ -1381,7 +1381,7 @@ class CourseManager {
         $virtual_course_list = self::get_virtual_courses_linked_to_real_course($course_code);
 
         //get users from real course
-        $user_list = self::get_user_list_from_course_code($course_code, $with_sessions, $session_id);
+        $user_list = self::get_user_list_from_course_code($course_code, $session_id);
         foreach ($user_list as $this_user) {
             $complete_user_list[] = $this_user;
         }
@@ -1389,7 +1389,7 @@ class CourseManager {
         //get users from linked courses
         foreach ($virtual_course_list as $this_course) {
             $course_code = $this_course['code'];
-            $user_list = self::get_user_list_from_course_code($course_code, $with_sessions, $session_id);
+            $user_list = self::get_user_list_from_course_code($course_code, $session_id);
             foreach ($user_list as $this_user) {
                 $complete_user_list[] = $this_user;
             }

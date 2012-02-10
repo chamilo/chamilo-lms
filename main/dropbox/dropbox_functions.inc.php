@@ -514,13 +514,13 @@ function display_add_form() {
 	if (api_get_session_id()) {	    
 		$complete_user_list_for_dropbox = array();
 		if (api_get_setting('dropbox_allow_student_to_student')=='true' || $_user['status'] != STUDENT) {
-			$complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'], true, api_get_session_id());
+			$complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'], api_get_session_id());
 		}
 		$complete_user_list2 = CourseManager::get_coach_list_from_course_code($course_info['code'], api_get_session_id());
 		$complete_user_list_for_dropbox = array_merge($complete_user_list_for_dropbox, $complete_user_list2);
 	} else {
 		if (api_get_setting('dropbox_allow_student_to_student') == 'true' || $_user['status'] != STUDENT) {		    
-			$complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'], false, api_get_session_id());
+			$complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'], api_get_session_id());
 		} else {
 			$complete_user_list_for_dropbox = CourseManager :: get_teacher_list_from_course_code($course_info['code'], false);
 		}

@@ -454,10 +454,10 @@ if (CourseManager::has_virtual_courses_from_code($course_id, $user_id)) {
 function get_number_of_users() {
 	$counter = 0;
 	if (!empty($_SESSION["id_session"])){
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], $_SESSION['id_session']);
 
 	} else {
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], false);
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], 0);
 	}
 	foreach ($a_course_users as $user_id => $o_course_user) {
 		if ((isset($_GET['keyword']) && search_keyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
@@ -529,9 +529,9 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	}
 
 	if (!empty($_SESSION["id_session"])) {
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session'], $limit, $order_by);
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], $_SESSION['id_session'], $limit, $order_by);
 	} else {
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], false, 0, $limit, $order_by);
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], 0, $limit, $order_by);
 	}
 
 	foreach ($a_course_users as $user_id => $o_course_user) {

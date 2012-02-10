@@ -330,7 +330,7 @@ class WSCourse extends WS {
 				}
 
 				// Determining number of students registered in course
-				$user_list = CourseManager::get_user_list_from_course_code($course['code'], false);
+				$user_list = CourseManager::get_user_list_from_course_code($course['code'], 0);
 				$course_tmp['number_students'] = count($user_list);
 
 				// Determining external course id - this code misses the external course id field name

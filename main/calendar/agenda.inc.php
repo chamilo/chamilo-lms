@@ -937,8 +937,16 @@ function get_course_groups() {
 * @return html code
 */
 function show_to_form($to_already_selected) {
-	$user_list     = get_course_users();
-	$group_list    = get_course_groups();
+	/*$user_list     = get_course_users();
+	$group_list    = get_course_groups();*/
+    $order = 'lastname';
+    if (api_is_western_name_order) {
+        $order = 'firstname';    
+    } 
+    
+    $user_list  = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id(), null, $order);    
+    $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
+    
     construct_not_selected_select_form($group_list, $user_list, $to_already_selected);
 }
 
@@ -976,10 +984,10 @@ function construct_not_selected_select_form($group_list=null, $user_list=null, $
             echo '<optgroup label="'.get_lang('Users').'">';
             foreach($user_list as $this_user) {
                 // $to_already_selected is the array containing the users (and groups) that are already selected
-                if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) {
+                if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) {
                     $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
-                    $user_info = api_get_person_name($this_user['firstName'], $this_user['lastName']).' ('.$this_user['username'].')';
-                    echo "<option title='$username' value='USER:".$this_user['uid']."'>$user_info</option>";
+                    $user_info = api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].')';
+                    echo "<option title='$username' value='USER:".$this_user['user_id']."'>$user_info</option>";
                 }            
             }
             echo "</optgroup>";

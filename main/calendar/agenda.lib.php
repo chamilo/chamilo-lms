@@ -682,7 +682,7 @@ class Agenda {
         if (is_array($group_list)) {
             $html .= '<optgroup label="'.get_lang('Users').'">';
         }
-        foreach($user_list as $this_user) {
+        foreach ($user_list as $this_user) {
             // $to_already_selected is the array containing the users (and groups) that are already selected
             if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) {
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);

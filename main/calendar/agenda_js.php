@@ -96,8 +96,11 @@ $course_code  = api_get_course_id();
 
 
 if (api_is_allowed_to_edit() && $course_code != '-1' && $type == 'course') {
-    
-    $user_list  = CourseManager::get_user_list_from_course_code(api_get_course_id());
+    $order = 'lastname';
+    if (api_is_western_name_order) {
+        $order = 'firstname';    
+    }    
+    $user_list  = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id(), null, $order);
     $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
 
     $agenda = new Agenda();

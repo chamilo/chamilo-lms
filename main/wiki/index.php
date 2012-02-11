@@ -2106,7 +2106,7 @@ if ($_GET['action']=='history' or $_POST['HistoryDifferences']) {
                 echo ' '.get_lang('By').' ';
                 if ($row['user_id']<>0) {
                     echo '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-                    Displat::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
+                    Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
                     '</a>';
                 } else {
                     echo get_lang('Anonymous').' ('.api_htmlentities($row[user_ip]).')';

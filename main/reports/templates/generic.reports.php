@@ -1,17 +1,17 @@
 <?php
 
-$reports_template['SGCIB'] = array(
-	'description' => 'SGCIB',
-	'getSQL' => 'reports_template_SGCIB_getSQL',
+$reports_template['Generic'] = array(
+	'description' => 'Generic',
+	'getSQL' => 'reports_template_Generic_getSQL',
 	'wizard' => 
 '
-<span id="SGCIB" class="step">
+<span id="Generic" class="step">
 	<span class="font_normal_07em_black">This report does not need any particular settings</span><br />
 	<input type="hidden" class="link" value="format" />
 </span>
 ');
 
-function reports_template_SGCIB_getSQL() {
+function reports_template_Generic_getSQL() {
 	// settings
 
 

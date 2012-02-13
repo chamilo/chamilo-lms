@@ -140,7 +140,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         return $return;
     }
     $mystatus_in_db = $mylpi->get_status(true);
-    if ($mystatus_in_db != 'completed' && $mystatus_in_db != 'passed' && $mystatus_in_db != 'browsed') {
+    if ($mystatus_in_db != 'completed' && $mystatus_in_db != 'passed' && $mystatus_in_db != 'browsed' && $mystatus_in_db != 'failed') {
          $mystatus_in_memory = $mylpi->get_status(false);
          if ($mystatus_in_memory != $mystatus_in_db) {
              $mystatus = $mystatus_in_memory;

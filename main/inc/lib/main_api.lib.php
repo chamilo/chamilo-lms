@@ -5165,9 +5165,13 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
  *
  * @author Julio Montoya
  */
-function api_is_global_platform_admin() {
+function api_is_global_platform_admin($user_id = null) {
+    $user_id = intval($user_id);
+    if (empty($user_id)) {
+        $user_id = api_get_user_id();
+    }
     if (api_is_platform_admin()) {
-        $my_url_list = api_get_access_url_from_user(api_get_user_id());
+        $my_url_list = api_get_access_url_from_user($user_id);
         // The admin is registered in the first "main" site with access_url_id = 1
         if (in_array(1, $my_url_list)) {
             return true;

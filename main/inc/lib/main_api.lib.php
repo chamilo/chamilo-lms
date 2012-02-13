@@ -1935,6 +1935,17 @@ function api_is_platform_admin($allow_sessions_admins = false) {
     return $allow_sessions_admins && $_user['status'] == SESSIONADMIN;
 }
 
+function api_is_platform_admin_by_id($user_id = null) {
+    $user_id = intval($user_id);
+    if (empty($user_id)) {
+        $user_id = api_get_user_id();
+    }
+    $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
+    $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
+    $res = Database::query($sql);
+    return Database::num_rows($res) === 1;
+}
+
 /**
  * Checks whether current user is allowed to create courses
  * @return boolean True if the user has course creation rights,
@@ -5170,7 +5181,7 @@ function api_is_global_platform_admin($user_id = null) {
     if (empty($user_id)) {
         $user_id = api_get_user_id();
     }
-    if (api_is_platform_admin()) {
+    if (api_is_platform_admin_by_id($user_id)) {
         $my_url_list = api_get_access_url_from_user($user_id);
         // The admin is registered in the first "main" site with access_url_id = 1
         if (in_array(1, $my_url_list)) {
@@ -5182,6 +5193,37 @@ function api_is_global_platform_admin($user_id = null) {
     return false;
 }
 
+function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null) {
+    if (empty($my_user_id)) {
+        $my_user_id = api_get_user_id();
+    }
+    $iam_a_global_admin     = api_is_global_platform_admin($my_user_id);  
+    $user_is_global_admin   = api_is_global_platform_admin($admin_id_to_check);
+    
+    if ($iam_a_global_admin) {
+        //global admin can edit everything
+        return true;
+    } else {
+        //If i'm a simple admin
+        if (api_is_platform_admin_by_id($my_user_id)) {
+            if ($user_is_global_admin) {
+                return false;
+            } else {
+                return true;
+            }        
+        } else {
+            return false;
+        }
+    }    
+}
+
+function api_protect_super_admin($admin_id_to_check, $my_user_id = null) {
+    if (api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id)) {
+        return true;
+    } else {
+        api_not_allowed();
+    }    
+}
 
 /**
  * Function used to protect a global admin script.
@@ -5562,8 +5604,6 @@ function api_get_unique_id() {
     $id = md5(time().uniqid().api_get_user_id().api_get_course_id().api_get_session_id());    
     return $id;
 }
-
-
 
 function api_get_home_path() {
 	$home = 'home/';	

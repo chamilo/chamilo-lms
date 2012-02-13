@@ -46,15 +46,18 @@ switch ($action) {
 			</div>
 			<?php			
 		}
-	break;
+        break;
 	case 'active_user':
-		if (api_is_platform_admin()) {			
+		if (api_is_platform_admin() && api_global_admin_can_edit_admin($_GET['user_id'])) {
+            
 			$user_id = intval($_GET['user_id']);
 			$status  = intval($_GET['status']);
+            
 			if (!empty($user_id)) {
 				$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-				$sql="UPDATE $user_table SET active='".$status."' WHERE user_id='".Database::escape_string($user_id)."'";
+				$sql="UPDATE $user_table SET active='".$status."' WHERE user_id='".$user_id."'";
 				$result = Database::query($sql);
+                
 				//Send and email if account is active
 				if ($status == 1) {
 					$user_info = api_get_user_info($user_id);					
@@ -70,12 +73,13 @@ switch ($action) {
 					//$emailbody.=get_lang('Problem'). "\n\n". get_lang('Formula');
 					$emailbody.=api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 					$result = api_mail($recipient_name, $user_info['mail'], $emailsubject, $emailbody, $sender_name, $email_admin);					
-				}				
-			}						
+				}
+                echo $status;
+            }				
 		} else {
-			echo '';
+			echo '-1';
 		}
-	break;
+        break;
 	default:
 		echo '';
 }

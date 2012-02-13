@@ -15,6 +15,10 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
+$user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
+
+api_protect_super_admin($user_id);
+
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 <!--
@@ -55,7 +59,6 @@ require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
 require_once $libpath.'mail.lib.inc.php';
 
-$user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyUserInfo');
 

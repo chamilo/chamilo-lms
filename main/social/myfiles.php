@@ -100,10 +100,9 @@ if (isset($_GET['cidReq'])){
 	$social_right_content .= '</div>';
 }
 else{
-	$social_right_content .=  '<a href=""></a>';//TODO: hack and delete this line
 	$social_right_content .= '<br />';
 }							
-$social_right_content .= '<table><tr><td><iframe name="fileManager" id="fileManager" src="'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=stand_alone" scrolling="no" noresize="noresize" frameborder="no" style="height:450px; width:700px; float:left"></iframe></td></tr></table>';
+$social_right_content .= '<iframe name="fileManager" id="fileManager" src="'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=stand_alone" scrolling="no" noresize="noresize" frameborder="no" style="height:450px; width:100%; float:left"></iframe>';
 $social_right_content .= '</div>';
 $social_right_content .=  '</div>';	
 

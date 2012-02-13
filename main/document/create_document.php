@@ -265,6 +265,12 @@ $html_editor_config = array(
 	'BaseHref'             => api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir
 );
 
+if ($is_certificate_mode) {
+    $html_editor_config['CreateDocumentDir']    = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
+    $html_editor_config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
+    $html_editor_config['BaseHref']             = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
+}
+
 $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
         
 if (!is_dir($filepath)) {

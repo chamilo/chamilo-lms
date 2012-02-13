@@ -111,6 +111,7 @@ if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
 
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
+
 //Call from
 $call_from_tool = Security::remove_XSS($_GET['origin']);
 $slide_id = Security::remove_XSS($_GET['origin_opt']);
@@ -145,6 +146,12 @@ $html_editor_config = array(
 		: api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/',
 	'BaseHref' =>  api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir
 );
+
+if ($is_certificate_mode) {
+    $html_editor_config['CreateDocumentDir']    = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
+    $html_editor_config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
+    $html_editor_config['BaseHref']             = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
+}
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
 
@@ -364,8 +371,7 @@ $document_info  = api_get_item_property_info(api_get_course_int_id(),'document',
 $owner_id       = $document_info['insert_user_id'];
 $last_edit_date = $document_info['lastedit_date'];
 
-if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id() )) {
-	$get_cur_path = $dir;	
+if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id() )) {	
 	$action = api_get_self().'?sourceFile='.urlencode($file_name).'&id='.$document_data['id'];
 	$form = new FormValidator('formEdit', 'post', $action);
 

@@ -105,21 +105,22 @@ if ($_POST['form_sent']) {
 		if ($access_url_id==0) {
 			header('Location: access_url_edit_users_to_url.php?action=show_message&message='.get_lang('SelectURL'));
 		} elseif (is_array($UserList)) {
-			$result = UrlManager::update_urls_rel_user($UserList, $access_url_id);
-            $url_info = UrlManager::get_url_data_from_id($access_url_id);
-            
+			$result     = UrlManager::update_urls_rel_user($UserList, $access_url_id);
+            $url_info   = UrlManager::get_url_data_from_id($access_url_id);            
             if (!empty($result)) {
                 $message .= 'URL: '.$url_info['url'].'<br />';
             }
-            
+                        
             if (!empty($result['users_added'])) {
                 $message .=  '<h4>'.get_lang('UsersAdded').':</h4>';
                 $i = 1;
                 $user_added_list = array();
                 foreach($result['users_added'] as $user) {
                     $user_info = api_get_user_info($user);
-                    $user_added_list[] = $i.'. '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
-                    $i++;
+                    if (!empty($user_info)) {
+                        $user_added_list[] = $i.'. '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
+                        $i++;
+                    }
                 }
                 if (!empty($user_added_list)) {
                     $message .= implode(', ', $user_added_list);
@@ -132,10 +133,12 @@ if ($_POST['form_sent']) {
                 $i = 1;
                 foreach($result['users_deleted'] as $user) {
                     $user_info = api_get_user_info($user);
-                    $user_deleted_list [] = $i.'. '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
-                    $i++;
+                    if (!empty($user_info)) {
+                        $user_deleted_list [] = $i.'. '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
+                        $i++;
+                    }
                 }
-                 if (!empty($user_deleted_list)) {
+                if (!empty($user_deleted_list)) {
                     $message .= implode(', ', $user_deleted_list);
                 }
             }

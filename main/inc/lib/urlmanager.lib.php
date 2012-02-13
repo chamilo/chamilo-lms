@@ -453,8 +453,11 @@ class UrlManager
 	* */
 	public static function delete_url_rel_user($user_id, $url_id) {
 		$table_url_rel_user= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-		$sql= "DELETE FROM $table_url_rel_user WHERE user_id = ".Database::escape_string($user_id)." AND access_url_id = ".Database::escape_string($url_id);
-		$result = Database::query($sql);
+        $result = true;
+        if (!empty($user_id) && !empty($url_id)) {
+            $sql= "DELETE FROM $table_url_rel_user WHERE user_id = ".Database::escape_string($user_id)." AND access_url_id = ".Database::escape_string($url_id);
+            $result = Database::query($sql);
+        }
 		return $result;
 	}
 

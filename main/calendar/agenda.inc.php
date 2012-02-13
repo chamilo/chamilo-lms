@@ -2571,8 +2571,10 @@ function show_add_form($id = '') {
 		?>
 						<table id="options2" style="display: none;">
 						<tr>
-							<td><label for="repeat"><?php echo get_lang('RepeatEvent');?></label></td>
-							<td><input type="checkbox" name="repeat" <?php echo ($repeat?'checked="checked"':'');?>/></td>
+							<td><input id="repeat_id" type="checkbox" name="repeat" <?php echo ($repeat?'checked="checked"':'');?>/>
+                                <label for="repeat_id"><?php echo get_lang('RepeatEvent');?></label></td>
+							<td>                                
+                            </td>
 				    	</tr>
 				    	<tr>
 				    		<td><label for="repeat_type"><?php echo get_lang('RepeatType');?></label></td>

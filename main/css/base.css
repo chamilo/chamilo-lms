@@ -4285,3 +4285,21 @@ a:active{
 #settings input[type="text"] {
     width:250px;
 }
+
+.welcome_course li {
+    float:left;
+    list-style-type: none;
+    width: 175px
+}
+
+.welcome_course li p {
+    margin-left: auto;
+    margin-right: auto;
+    width: 88px;
+}
+
+.welcome_course li a {
+    margin-left: auto;
+    margin-right: auto;
+    width: 120px;
+}

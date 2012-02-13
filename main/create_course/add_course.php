@@ -16,7 +16,7 @@
  */
 
 // Name of the language file that needs to be included.
-$language_file = 'create_course';
+$language_file = array('create_course', 'registration','admin','exercice', 'course_description', 'course_info');
 
 // Flag forcing the "current course" reset.
 $cidReset = true;
@@ -65,6 +65,8 @@ $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'user_portal.php', 'n
 
 // Displaying the header.
 $tool_name = $course_validation_feature ? get_lang('CreateCourseRequest') : get_lang('CreateSite');
+
+$tpl = new Template($tool_name);
 
 if (api_get_setting('allow_users_to_create_courses') == 'false' && !api_is_platform_admin()) {
     api_not_allowed(true);
@@ -195,6 +197,8 @@ $values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastNam
 
 $form->setDefaults($values);
 
+ 
+
 // Validate the form.
 if ($form->validate()) {
     $course_values = $form->exportValues();
@@ -244,13 +248,14 @@ if ($form->validate()) {
                 $title      = $course_info['title'];  
 
                 // Preparing a confirmation message.
-                $link = api_get_path(WEB_COURSE_PATH).$directory.'/';                
-                $message .= get_lang('JustCreated').' '.Display::url($title, $link);                
+                $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
+             
+                $tpl->assign('course_url', $link);                
+                $tpl->assign('course_title', Display::url($title, $link));   
+                $tpl->assign('course_id', $course_info['code']);
+                $add_course_tpl = $tpl->get_template('create_course/add_course.tpl');
+                $message = $tpl->fetch($add_course_tpl);    
                 
-                $message = Display :: return_message($message, 'confirmation', false);
-                $message .= '<div style="float: left; margin:0px; padding: 0px;">' .
-                    '<a class="a_button gray medium" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>' .
-                    '</div>';
             } else {                
                 $message = Display :: return_message(get_lang('CourseCreationFailed'), 'error', false);
                 // Display the form.
@@ -287,7 +292,8 @@ if ($form->validate()) {
     $content = $form->return_form();    
 }
 
-$tpl = new Template($tool_name);
+      
+                
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);

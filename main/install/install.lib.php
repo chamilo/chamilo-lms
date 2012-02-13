@@ -603,7 +603,7 @@ function database_server_connect() {
  * @return boolean 
  */
 function database_exists($database_name) {
-    $select_database = Database::select_db($database_name);
+    $select_database = @Database::select_db($database_name);
     $show_database = false;
     $result = @Database::query("SHOW DATABASES LIKE '".Database::escape_string($database_name)."' ");
     if (Database::num_rows($result)) {

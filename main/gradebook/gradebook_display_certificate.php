@@ -57,7 +57,6 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
 
 	//@todo replace all this code with something like get_total_weight()
     $cats = Category :: load ($cat_id, null, null, null, null, null, false);
-
     
     if (!empty($cats)) {
         
@@ -97,8 +96,7 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
         }
     }
     
-	$certificate_list = get_list_users_certificates($cat_id);
-	
+	$certificate_list = get_list_users_certificates($cat_id);	
 	
 	if (count($certificate_list)==0) {
 		echo Display::display_warning_message(get_lang('NoResultsAvailable'));
@@ -106,7 +104,8 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
 		foreach ($certificate_list as $index=>$value) {
 	?>
 		<tr>
-		<td width="100%" class="actions"><?php echo get_lang('Student').' : '.api_get_person_name($value['firstname'], $value['lastname']) ?>
+		<td width="100%" class="actions">
+            <?php echo get_lang('Student').' : '.api_get_person_name($value['firstname'], $value['lastname']).' ( '.$value['username'].')' ?>
 		</td>		
 		</tr>
 	<tr>
@@ -114,7 +113,7 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
 	<table class="data_table" width="100%" >
 		<?php
 		$list_certificate = get_list_gradebook_certificates_by_user_id ($value['user_id'], $cat_id);		
-		foreach ($list_certificate as $index_certificate => $value_certificate) {
+		foreach ($list_certificate as $value_certificate) {
 			?>
 			<tr >
 			<td width="50%"><?php echo get_lang('Score').' : '.$value_certificate['score_certificate'] ?></td>
@@ -127,7 +126,8 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
     			echo $certificates;
             ?>
 			 <a onclick="return confirmation();" href="gradebook_display_certificate.php?action=delete&cat_id=<?php echo $cat_id; ?>&certificate_id=<?php echo $value_certificate['id'] ?>">
-			       <?php echo Display::return_icon('delete.png',get_lang('Delete')); ?></a>
+                <?php echo Display::return_icon('delete.png',get_lang('Delete')); ?>
+             </a>
 			 </td>
 			</tr>
 			<?php

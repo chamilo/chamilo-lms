@@ -1329,8 +1329,8 @@ return 'application/octet-stream';
      * @return int The default certificate id
      */
     function get_default_certificate_id($course_id) {
-        $tbl_category=Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $session_id=api_get_session_id();
+        $tbl_category   = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $session_id     = api_get_session_id();
         if ($session_id==0 || is_null($session_id)) {
             $sql_session='AND (session_id='.Database::escape_string($session_id).' OR isnull(session_id)) ';
         } elseif ($session_id>0) {
@@ -1338,9 +1338,9 @@ return 'application/octet-stream';
         } else {
             $sql_session='';
         }
-        $sql='SELECT document_id FROM '.$tbl_category.' WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
-        $rs=Database::query($sql);
-        $row=Database::fetch_array($rs);
+        $sql    = 'SELECT document_id FROM '.$tbl_category.' WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
+        $rs     = Database::query($sql);
+        $row    = Database::fetch_array($rs);
         return $row['document_id'];
     }
 
@@ -1355,10 +1355,9 @@ return 'application/octet-stream';
         $tbl_document 	= Database::get_course_table(TABLE_DOCUMENT);
         $course_id 		= $course_info['real_id']; 
         $document_id 	= self::get_default_certificate_id($course_code);
-        if ($document_id) {
-    
-            $sql = "SELECT path FROM $tbl_document WHERE c_id = $course_id AND id = $document_id";
-    
+        
+        if ($document_id) {    
+            $sql = "SELECT path FROM $tbl_document WHERE c_id = $course_id AND id = $document_id";    
             $rs = Database::query($sql);
             $new_content = '';
             $all_user_info = array();

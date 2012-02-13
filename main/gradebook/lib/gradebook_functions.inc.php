@@ -572,7 +572,7 @@ function get_list_gradebook_certificates_by_user_id ($user_id,$cat_id=null) {
 function get_user_certificate_content($user_id, $course_code, $is_preview = false) {
     //generate document HTML    
     $content_html       = DocumentManager::replace_user_info_into_html($user_id, $course_code, $is_preview);
-        
+            
     $new_content        = explode('</head>', $content_html['content']);    
     $new_content_html   = $new_content[1];                    
     $path_image         = api_get_path(WEB_COURSE_PATH).api_get_course_path($course_code).'/document/images/gallery';

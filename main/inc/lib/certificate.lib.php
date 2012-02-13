@@ -23,7 +23,8 @@ class Certificate extends Model {
     var $user_id;
     
     //If true every time we enter to the certificate URL we would generate a new certificate
-    var $force_certificate_generation = true; 
+    // (good thing because we can edit the certificate and all users will have the latest certificate bad because we load everytime)
+    var $force_certificate_generation = true;  //default true
     
 	public function __construct($certificate_id = null) {
         $this->table 			=  Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
@@ -125,8 +126,7 @@ class Certificate extends Model {
 		//The user directory should be set
 		if (empty($this->certification_user_path) && $this->force_certificate_generation == false) {
 			return false;
-		}		
-        
+		}        
 		require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
 		require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 		require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
@@ -140,21 +140,21 @@ class Certificate extends Model {
 			$scorecourse  = $my_category[0]->calc_score($this->user_id);
 	
 			$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
-			$cattotal = Category :: load($this->certificate_data['cat_id']);
-			$scoretotal= $cattotal[0]->calc_score($this->user_id);
-			$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
+			//$cattotal = Category :: load($this->certificate_data['cat_id']);
+			//$scoretotal= $cattotal[0]->calc_score($this->user_id);
+			//$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
 	
 			//Prepare all necessary variables:
 			$organization_name 	= api_get_setting('Institution');
-			$portal_name 		= api_get_setting('siteName');
+			//$portal_name 		= api_get_setting('siteName');
 			$stud_fn 			= $user['firstname'];
 			$stud_ln 			= $user['lastname'];
 				
 			//@todo this code is not needed
 			$certif_text 		= sprintf(get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'), $organization_name, $stud_fn.' '.$stud_ln, $my_category[0]->get_name(), $scorecourse_display);
 			$certif_text 		= str_replace("\\n","\n", $certif_text);
-	
-			$date = date('d/m/Y', time());
+            
+			//$date = date('d/m/Y', time());
             
             //If the gradebook is related to skills we added the skills to the user
                                 
@@ -164,7 +164,7 @@ class Certificate extends Model {
 			if (is_dir($this->certification_user_path)) {
 				if (!empty($this->certificate_data)) {	
 					$new_content_html = get_user_certificate_content($this->user_id, $my_category[0]->get_course_code(), false);
-                    
+                                        
 					if ($my_category[0]->get_id() == strval(intval($this->certificate_data['cat_id']))) {
 						$name = $this->certificate_data['path_certificate'];
 						$my_path_certificate = $this->certification_user_path.basename($name);
@@ -180,6 +180,7 @@ class Certificate extends Model {
 							//Getting QR filename
 							$file_info = pathinfo($path_certificate);
 							$qr_code_filename = $this->certification_user_path.$file_info['filename'].'_qr.png';							
+                 
 							$new_content_html['content'] = str_replace('((certificate_barcode))', Display::img($this->certification_web_user_path.$file_info['filename'].'_qr.png', 'QR'), $new_content_html['content']);
 							
 							$my_new_content_html = $new_content_html['content'];
@@ -187,8 +188,7 @@ class Certificate extends Model {
 							$my_new_content_html = mb_convert_encoding($my_new_content_html,'UTF-8', api_get_system_encoding());
 							
 							$result = @file_put_contents($my_path_certificate, $my_new_content_html);
-							if ($result) {
-								
+							if ($result) {								
                                 //Updating the path
 								self::update_user_info_about_certificate($this->certificate_data['cat_id'], $this->user_id, $path_certificate);                                
 								$this->certificate_data['path_certificate'] = $path_certificate;
@@ -314,6 +314,5 @@ class Certificate extends Model {
 			Display :: display_warning_message(get_lang('NoCertificateAvailable'));
 		}
 		exit;
-	}
-	
+	}	
 }

@@ -2292,6 +2292,7 @@ function api_display_tool_view_option() {
  * @param array $info_array An array with the messages to show
  */
 function api_display_array($info_array) {
+    $message = '';
     if(is_array($info_array)) {
         foreach ($info_array as $element) {
             $message .= $element.'<br />';
@@ -2922,7 +2923,6 @@ function api_get_item_property_id($course_code, $tool, $ref) {
     return $item_property_id;
 }
 
-
 /**
  *
  * Inserts a record in the track_e_item_property table (No update)
@@ -3102,6 +3102,7 @@ function api_get_languages() {
     $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     $sql = "SELECT * FROM $tbl_language WHERE available='1' ORDER BY original_name ASC";
     $result = Database::query($sql);
+    $language_list = array();
     while ($row = Database::fetch_array($result)) {
         $language_list['name'][] = $row['original_name'];
         $language_list['folder'][] = $row['dokeos_folder'];
@@ -3135,32 +3136,32 @@ function api_get_language_id($language) {
  * @param return language of the requested type or false if the language is not available
  **/
 function api_get_language_from_type($lang_type){
-  global $_user;
-  global $_course;
-  $toreturn = false;
-  switch ($lang_type) {
-  case 'platform_lang' : 
-    $temp_lang = api_get_setting('platformLanguage');
-    if (!empty($temp_lang))
-      $toreturn = $temp_lang;
-    break;
-  case 'user_profil_lang' : 
-    if (isset($_user['language']) && !empty($_user['language']) ) 
-      $toreturn = $_user['language'];
-    break;
-  case 'user_selected_lang' : 
-    if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice']) ) 
-      $toreturn = ($_SESSION['user_language_choice']);
-    break;
-  case 'course_lang' : 
-    if ($_course['language'] && !empty($_course['language']) )  
-      $toreturn = $_course['language'];
-    break;
-  default : 
+    global $_user;
+    global $_course;
     $toreturn = false;
-    break;
-  }
-  return $toreturn;
+    switch ($lang_type) {
+        case 'platform_lang' : 
+            $temp_lang = api_get_setting('platformLanguage');
+            if (!empty($temp_lang))
+                $toreturn = $temp_lang;
+            break;
+        case 'user_profil_lang' : 
+            if (isset($_user['language']) && !empty($_user['language']) ) 
+                $toreturn = $_user['language'];
+            break;
+        case 'user_selected_lang' : 
+            if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice']) ) 
+                $toreturn = ($_SESSION['user_language_choice']);
+            break;
+        case 'course_lang' : 
+            if ($_course['language'] && !empty($_course['language']) )  
+                $toreturn = $_course['language'];
+            break;
+        default : 
+            $toreturn = false;
+        break;
+    }
+    return $toreturn;
 }
 
 function api_get_language_info($language_id) {
@@ -3180,9 +3181,7 @@ function api_get_language_info($language_id) {
  * @return string   The visual theme's name, it is the name of a folder inside .../chamilo/main/css/
  */
 function api_get_visual_theme() {
-
     static $visual_theme;
-
     if (!isset($visual_theme)) {
 
         $platform_theme = api_get_setting('stylesheets');   // Plataform's theme.
@@ -3851,11 +3850,11 @@ function api_status_key($status) {
  */
 function api_get_status_langvars() {
     return array(
-        COURSEMANAGER => get_lang('Teacher', ''),
-        SESSIONADMIN => get_lang('SessionsAdmin', ''),
-        DRH => get_lang('Drh', ''),
-        STUDENT => get_lang('Student', ''),
-        ANONYMOUS => get_lang('Anonymous', '')
+        COURSEMANAGER   => get_lang('Teacher', ''),
+        SESSIONADMIN    => get_lang('SessionsAdmin', ''),
+        DRH             => get_lang('Drh', ''),
+        STUDENT         => get_lang('Student', ''),
+        ANONYMOUS       => get_lang('Anonymous', '')
     );
 }
 
@@ -3866,6 +3865,7 @@ function api_get_status_langvars() {
 */
 function api_get_settings_options($var) {
 	$table_settings_options = Database :: get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
+    $var = Database::escape_string($var);
 	$sql = "SELECT * FROM $table_settings_options WHERE variable = '$var' ORDER BY id";
 	$result = Database::query($sql);
     $settings_options_array = array();
@@ -5401,12 +5401,16 @@ function api_check_browscap() {
     return false;	    
 }
 
-
-
+/**
+ * Returns the <script> HTML tag
+ */
 function api_get_js($file) {    
     return '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'"></script>';
 }
 
+/**
+ * Returns the <link> HTML tag
+ */
 function api_get_css($file) {
 	$media = '';
 	return '<link rel="stylesheet" href="'.$file.'" type="text/css" media="'.$media.'" />';	

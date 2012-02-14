@@ -323,7 +323,7 @@ $Everybody = "todos los usuarios del curso";
 $SentTo = "Dirigido a";
 $Export = "Exportar";
 $Tools = "Módulos";
-$Everyone = "Cada uno";
+$Everyone = "Todos";
 $SelectGroupsUsers = "Seleccionar grupos/usuarios";
 $Student = "Estudiante";
 $Teacher = "Profesor";
@@ -1214,4 +1214,7 @@ $ShowToAdminsAndTeachers = "Mostrar a los administradores y profesores";
 $ShowToAllUsers = "Mostrar a todos los usuarios";
 $SelectAnAction = "Seleccionar una acción";
 $LoginX = "Nombre de usuario: %s";
+$ChatConnected = "Chat (Conectado)";
+$ChatDisconnected = "Chat (Desconectado)";
+$ThingsToDo = "Actividades por realizar";
 ?>

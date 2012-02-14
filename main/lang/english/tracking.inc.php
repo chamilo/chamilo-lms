@@ -315,4 +315,6 @@ $NumberOfForumsInLearnpath = "Number of forums in learning path";
 $NumberOfAssignmentsInLearnpath = "Number of assignments in learning path";
 $NumberOfAnnouncementsInCourse = "Number of announcements in course";
 $CurrentCoursesReport = "Current courses report";
+$NumberOfPublishedExercises = "# of published exercises";
+$NumberOfPublishedLps = "# of published Learning Paths";
 ?>

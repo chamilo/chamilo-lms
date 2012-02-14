@@ -1210,4 +1210,7 @@ $ShowToAdminsAndTeachers = "Show to admins and teachers";
 $ShowToAllUsers = "Show to all  users";
 $SelectAnAction = "Select an action";
 $LoginX = "Login: %s";
+$ChatConnected = "Chat (Connected)";
+$ChatDisconnected = "Chat (Disconnected)";
+$ThingsToDo = "Things to do next";
 ?>

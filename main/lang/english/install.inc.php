@@ -126,7 +126,7 @@ $ExtensionSessionsNotAvailable = "Sessions extension not available";
 $ExtensionZlibNotAvailable = "Zlib extension not available";
 $ExtensionPCRENotAvailable = "PCRE extension not available";
 $DatabaseXWillBeCreated = "Database <b>%s</b> will be created";
-$ADatabaseWithTheSameNameAlreadyExists = "A database with the same name <b>already exists</b>. The contents in the database will be lost.";
-$UserXCantHaveAccessInTheDatabaseX = "User <b>%s</b> can't have access in the database <b>%s</b>";
+$ADatabaseWithTheSameNameAlreadyExists = "A database with the same name <b>already exists</b>.";
+$UserXCantHaveAccessInTheDatabaseX = "User <b>%s</b> doesn't have access in the database <b>%s</b>";
 $DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "Database <b>%s</b> can't be created, user <b>%s</b> doesn't have enough permissions";
 ?>

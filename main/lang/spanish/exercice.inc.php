@@ -485,4 +485,9 @@ $QuestionsAlreadyAnswered = "Preguntas ya respondidas";
 $StudentsWhoAreTakingTheExerciseRightNow = "Estudiantes que realizan el ejercicio en este momento";
 $ReportByQuestion = "Reporte por pregunta";
 $LiveResults = "Resultados en vivo";
+$RecordAnswer = "Grabar respuesta";
+$UseTheMessageBelowToAddSomeComments = "Utilizar el siguiente campo de texto para escribir un comentario al profesor";
+$SendRecord = "Enviar grabación";
+$DownloadLatestRecord = "Descargar grabación";
+$OralExpression = "Expresión Oral";
 ?>

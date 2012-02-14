@@ -1516,4 +1516,5 @@ $FooterExtraContentTitle = "Extra content in footer";
 $AllowGlobalChatComment = "Users can chat with each other";
 $FooterExtraContentComment = "You can add HTML code like meta tags";
 $CopyOnlySessionItems = "Copy only session items";
+$FirstLetterCourseTitle = "First letter of course title";
 ?>

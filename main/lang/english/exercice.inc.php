@@ -485,4 +485,9 @@ $QuestionsAlreadyAnswered = "Questions already answered";
 $StudentsWhoAreTakingTheExerciseRightNow = "Students who're taking the exercise right now";
 $ReportByQuestion = "Report by question";
 $LiveResults = "Live results";
+$RecordAnswer = "Record answer";
+$UseTheMessageBelowToAddSomeComments = "Use the message below to add a comment";
+$SendRecord = "Send record";
+$DownloadLatestRecord = "Download record";
+$OralExpression = "Oral expression";
 ?>

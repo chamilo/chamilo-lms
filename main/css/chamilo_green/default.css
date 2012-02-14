@@ -28,17 +28,17 @@ a:active {
 }
 
 #header3 li a {
-    background-color: #A1D80B;    
-    color:#fff;
+    /*background-color: #A1D80B;    
+    color:#fff;*/
 }
 
 #header3 li a:hover {
-    background: none repeat scroll 0 0 #81B031;
-    color: #FFFFFF;
+   /* background: none repeat scroll 0 0 #81B031;
+    color: #FFFFFF;*/
 }
 
 #header3 #current a {
-    background: none repeat scroll 0 0 #81B031;        
+    /*background: none repeat scroll 0 0 #81B031;        */
 }
 
 

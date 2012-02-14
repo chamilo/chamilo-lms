@@ -81,6 +81,8 @@
 
 {if $header3}
 <div id="header3">
+    <div class="subnav">
     {$header3}
+    </div>
 </div>
 {/if}

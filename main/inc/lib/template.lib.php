@@ -446,4 +446,14 @@ class Template extends Smarty {
 	
 		$this->assign('execution_stats', $stats);		
 	}
+    
+    function show_header() {        
+		$tpl = $this->get_template('layout/show_header.tpl');
+		$this->display($tpl);	
+    }
+    
+    function show_footer() {
+        $tpl = $this->get_template('layout/show_footer.tpl');
+		$this->display($tpl);	
+    }
 }

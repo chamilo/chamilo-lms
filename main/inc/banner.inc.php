@@ -45,18 +45,11 @@ show_header_1($language_file, $nameTools);
 show_header_2();
 
 echo '<div id="header3">';
+echo '<div id="subnav">';
 echo show_header_3();
 echo '</div>';
+echo '</div>';
     
-if (isset($database_connection)) {
-    // connect to the main database.
-    // if single database, don't pefix table names with the main database name in SQL queries
-    // (ex. SELECT * FROM table)
-    // if multiple database, prefix table names with the course database name in SQL queries (or no prefix if the table is in
-    // the main database)
-    // (ex. SELECT * FROM table_from_main_db  -  SELECT * FROM courseDB.table_from_course_db)
-    Database::select_db($_configuration['main_database'], $database_connection);
-}
 
 echo '</div>'; // <!-- end of the whole #header section -->
   

@@ -26,6 +26,7 @@ define('MAX_LENGTH_BREADCRUMB', 100);
  */
 
 class Display {
+    static $global_template;
 
     private function __construct() {
 
@@ -72,86 +73,6 @@ class Display {
             include ($default_file_name);
         }
     }
-
-    /**
-     *	Display simple html header of table.
-     *  @deprecated use the HTML_table class
-     */
-    /*public static function display_table_header() {
-        $bgcolor = 'bgcolor="white"';
-        echo '<table border="0" cellspacing="0" cellpadding="4" width="85%"><tbody>';
-        return $bgcolor;
-    }*/
-
-    /**
-     *	Display html header of table with several options.
-     *
-     *	@param $properties, array with elements, all of which have defaults
-     *	"width" - the table width, e.g. "100%", default is 85%
-     *	"class"	 - the class to use for the table, e.g. "class=\"data_table\""
-     *   "cellpadding"  - the extra border in each cell, e.g. "8",default is 4
-     *   "cellspacing"  - the extra space between cells, default = 0
-     *	@param column_header, array with the header elements.
-     *	@author Roan Embrechts
-     *	@version 1.01
-     *  @todo remove this function, is only use in user.php
-     *  @deprecated use the HTML_table class
-     *	@return return type string, bgcolor
-     *//*
-    public static function display_complex_table_header($properties, $column_header) {
-        $width = $properties['width'];
-        if (!isset($width)) {
-            $width = '85%';
-        }
-        $class = $properties['class'];
-        if (!isset($class)) {
-            $class = 'class="data_table"';
-        }
-        $cellpadding = $properties['cellpadding'];
-        if (!isset($cellpadding)) {
-            $cellpadding = '4';
-        }
-        $cellspacing = $properties['cellspacing'];
-        if (!isset ($cellspacing)) {
-            $cellspacing = '0';
-        }
-        //... add more properties as you see fit
-        //api_display_debug_info("Light grey is " . DOKEOSLIGHTGREY);
-        $bgcolor = 'bgcolor="'.DOKEOSLIGHTGREY.'"';
-        echo '<table '.$class.' border="0" cellspacing="$cellspacing" cellpadding="'.$cellpadding.'" width="'.$width.'">'."\n";
-        echo '<thead><tr '.$bgcolor.'>';
-        foreach ($column_header as & $table_element) {
-            echo '<th>'.$table_element.'</th>';
-        }
-        echo "</tr></thead>\n";
-        echo "<tbody>\n";
-        $bgcolor = 'bgcolor="'.HTML_WHITE.'"';
-        return $bgcolor;
-    }*/
-
-    /**
-     *	Displays a table row.
-     *
-     *	@param $bgcolor the background colour for the table
-     *	@param $table_row an array with the row elements
-     *	@param $is_alternating true: the row colours alternate, false otherwise
-     *  @todo remove this function, is only use in user.php
-     */
-    /*public static function display_table_row($bgcolor, $table_row, $is_alternating = true) {
-        echo '<tr '.$bgcolor.'>';
-        foreach ($table_row as & $table_element) {
-            echo '<td>'.$table_element.'</td>';
-        }
-        echo "</tr>\n";
-        if ($is_alternating) {
-            if ($bgcolor == 'bgcolor="'.HTML_WHITE.'"') {
-                $bgcolor = 'bgcolor="'.DOKEOSLIGHTGREY.'"';
-            } elseif ($bgcolor == 'bgcolor="'.DOKEOSLIGHTGREY.'"') {
-                $bgcolor = 'bgcolor="'.HTML_WHITE.'"';
-            }
-        }
-        return $bgcolor;
-    }*/
 
     /**
      * Displays a table
@@ -465,7 +386,10 @@ class Display {
         global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
         global $menu_navigation;        
 		global $htmlCSSXtra;
-        require api_get_path(INCLUDE_PATH).'header.inc.php';
+        require_once api_get_path(LIBRARY_PATH).'template.lib.php';
+        self::$global_template = new Template($tool_name);
+        echo self::$global_template ->show_header();
+
     }
 
     /**
@@ -475,15 +399,18 @@ class Display {
         global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
         global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF, $language_interface;
         global $menu_navigation;
-        require api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+        //require api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+        self::$global_template = new Template($tool_name);
+        self::$global_template->show_header = false;
+        echo self::$global_template ->show_header();        
     }
 
     /**
      * Display the page footer
      */
     public static function display_footer () {
-        global $_plugins;
-        require api_get_path(INCLUDE_PATH).'footer.inc.php';
+        global $_plugins, $global_tpl;
+        echo self::$global_template ->show_footer();        
     }
 
     /**

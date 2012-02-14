@@ -26,11 +26,58 @@ define('MAX_LENGTH_BREADCRUMB', 100);
  */
 
 class Display {
+    
+    /* The main template*/
     static $global_template;
-
+    static $preview_style = null;
+        
     private function __construct() {
+    }
+    
+     /**
+     * Displays the page header
+     * @param string The name of the page (will be showed in the page title)
+     * @param string Optional help file name
+     */
+    public static function display_header($tool_name ='', $help = null) {
+        $nameTools = $tool_name;
+        global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
+        global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
+        global $menu_navigation;        
+		global $htmlCSSXtra;
+        require_once api_get_path(LIBRARY_PATH).'template.lib.php';
+        self::$global_template = new Template($tool_name);
+        
+        if (!empty(self::$preview_style)) {                        
+            self::$global_template->preview_theme = self::$preview_style;
+            self::$global_template->set_theme();
+        }
+        echo self::$global_template->show_header_template();
 
     }
+
+    /**
+     * Displays the reduced page header (without banner)
+     */
+    public static function display_reduced_header () {
+        global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
+        global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF, $language_interface;
+        global $menu_navigation;
+        //require api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+        self::$global_template = new Template($tool_name, false);
+        self::$global_template->show_header = false;
+        echo self::$global_template ->show_header_template();        
+    }
+
+    /**
+     * Display the page footer
+     */
+    public static function display_footer () {
+        global $_plugins, $global_tpl;
+        echo self::$global_template ->show_footer_template();        
+    }
+    
+    
 
     /**
      * Displays the tool introduction of a tool.
@@ -375,43 +422,7 @@ class Display {
         return '<a href="'.api_get_path(WEB_PATH).'index.php">'.$name.'</a>';
     }
 
-    /**
-     * Displays the page header
-     * @param string The name of the page (will be showed in the page title)
-     * @param string Optional help file name
-     */
-    public static function display_header($tool_name ='', $help = null) {
-        $nameTools = $tool_name;
-        global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
-        global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
-        global $menu_navigation;        
-		global $htmlCSSXtra;
-        require_once api_get_path(LIBRARY_PATH).'template.lib.php';
-        self::$global_template = new Template($tool_name);
-        echo self::$global_template ->show_header();
-
-    }
-
-    /**
-     * Displays the reduced page header (without banner)
-     */
-    public static function display_reduced_header () {
-        global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
-        global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF, $language_interface;
-        global $menu_navigation;
-        //require api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
-        self::$global_template = new Template($tool_name);
-        self::$global_template->show_header = false;
-        echo self::$global_template ->show_header();        
-    }
-
-    /**
-     * Display the page footer
-     */
-    public static function display_footer () {
-        global $_plugins, $global_tpl;
-        echo self::$global_template ->show_footer();        
-    }
+   
 
     /**
      * Prints an <option>-list with all letters (A-Z).

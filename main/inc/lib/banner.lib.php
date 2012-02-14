@@ -110,64 +110,45 @@ function get_tabs() {
 	return $navigation;
 }
 
-function show_header_1($language_file, $nameTools) {
-    global $noPHP_SELF;
-    $_course = api_get_course_info();        
+function show_header_1($language_file, $nameTools, $theme) {
+    global $noPHP_SELF;    
+    $_course = api_get_course_info();      
     echo '<div id="header1">';               
-            $logo = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';            
-            $site_name = api_get_setting('siteName');
-            if (file_exists($logo)) {
-                $site_name = api_get_setting('Institution').' - '.$site_name;
-                echo '<div id="logo">';
-                    $image_url = api_get_path(WEB_CSS_PATH).api_get_visual_theme().'/images/header-logo.png';           
-                    $logo = Display::img($image_url, $site_name, array('title'=>$site_name));
-                    echo Display::url($logo, api_get_path(WEB_PATH).'index.php');
-                echo '</div>';
-            } else {         
-                echo '<a href="'.api_get_path(WEB_PATH).'index.php" target="_top">'.$site_name.'</a>';                    
-                $iurl  = api_get_setting('InstitutionUrl');
-                $iname = api_get_setting('Institution');
-                
-                if (!empty($iname)) {
-                   echo '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
-                }           
-                // External link section a.k.a Department - Department URL          
-                if (isset($_course['extLink']) && $_course['extLink']['name'] != '') {
-                    echo '<span class="extLinkSeparator"> - </span>';
-                    if ($_course['extLink']['url'] != '') {
-                        echo '<a class="extLink" href="'.$_course['extLink']['url'].'" target="_top">';
-                        echo $_course['extLink']['name'];
-                        echo '</a>';
-                    } else {
-                        echo $_course['extLink']['name'];
-                    }
-                }
-            }        
-        
-    /*  Course title section */
+    $logo = api_get_path(SYS_CODE_PATH).'css/'.$theme.'/images/header-logo.png';            
     
+    $site_name = api_get_setting('siteName');
+    if (file_exists($logo)) {
+        $site_name = api_get_setting('Institution').' - '.$site_name;
+        echo '<div id="logo">';
+            $image_url = api_get_path(WEB_CSS_PATH).$theme.'/images/header-logo.png';           
+            $logo = Display::img($image_url, $site_name, array('title'=>$site_name));
+            echo Display::url($logo, api_get_path(WEB_PATH).'index.php');
+        echo '</div>';
+    } else {         
+        echo '<a href="'.api_get_path(WEB_PATH).'index.php" target="_top">'.$site_name.'</a>';                    
+        $iurl  = api_get_setting('InstitutionUrl');
+        $iname = api_get_setting('Institution');
+
+        if (!empty($iname)) {
+            echo '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
+        }           
+        // External link section a.k.a Department - Department URL          
+        if (isset($_course['extLink']) && $_course['extLink']['name'] != '') {
+            echo '<span class="extLinkSeparator"> - </span>';
+            if ($_course['extLink']['url'] != '') {
+                echo '<a class="extLink" href="'.$_course['extLink']['url'].'" target="_top">';
+                echo $_course['extLink']['name'];
+                echo '</a>';
+            } else {
+                echo $_course['extLink']['name'];
+            }
+        }
+    }        
+        
+    /*  Course title section */    
     if (!empty($_cid) and $_cid != -1 and isset($_course)) {
         //Put the name of the course in the header  
-        echo '<div id="my_courses">';
-        /* <div id="my_courses"><a href="<?php echo api_get_path(WEB_COURSE_PATH).$_course['path']; ?>/index.php" target="_top">&nbsp;  
-        echo $_course['name'].' ';
-        
-        if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-            echo $_course['official_code'];
-        }
-        
-        if (api_get_setting('use_session_mode') == 'true' && isset($_SESSION['session_name'])) {
-            echo '&nbsp;('.$_SESSION['session_name'].')&nbsp;';
-        }
-        
-        if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
-            echo ' - ';
-        }   
-        if (api_get_setting('display_teacher_in_courselist') == 'true') {
-            //This is still necessary? There is the course teacher in the footer
-            echo stripslashes($_course['titular']);
-        }   
-        echo '</a>';*/        
+        echo '<div id="my_courses">';     
         echo '</div>';        
     } elseif (isset($nameTools) && $language_file != 'course_home') {
         //Put the name of the user-tools in the header
@@ -178,16 +159,12 @@ function show_header_1($language_file, $nameTools) {
         } else {
             echo '<div id="my_courses">'.$nameTools.'</div>';
         }   
-    } else {        
-        //echo '<div id="my_courses"></div>';
     }
     
     echo '<div id="plugin-header">';
     api_plugin('header');
     echo '</div>';
     
-    //Don't let the header disappear if there's nothing on the left
-    //echo '<div class="clear">&nbsp;</div>';
     echo '</div>';
 }
 

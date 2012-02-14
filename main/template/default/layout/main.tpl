@@ -2,7 +2,7 @@
 
 {include file="default/layout/main_pre_content.tpl"}       
 
-{block name="body"}{/block}			
+{block name="body"}{/block}
 
 {include file="default/layout/main_post_content.tpl"}
 

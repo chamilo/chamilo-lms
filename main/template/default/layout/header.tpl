@@ -60,7 +60,7 @@
                                 <li><a href="{$_p.web_main}social/invitations.php">{"PendingInvitations"|get_lang}</a></li>
                             </ul>
                         </li>
-                        <li><a href="{$_p.web}index.php?logout=logout">Logout</a></li>
+                        <li><a href="{$_p.web}index.php?logout=logout">{"Logout"|get_lang}</a></li>
                     </ul>
                 {/if}
             </div>

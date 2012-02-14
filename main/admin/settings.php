@@ -57,6 +57,11 @@ if (isset($_POST['submit_stylesheets'])) {
     exit;
 }
 
+if (isset($_POST['style'])) {
+    Display::$preview_style = $_POST['style'];
+}
+
+
 // Database table definitions.
 $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 

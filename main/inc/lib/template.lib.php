@@ -1,5 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+/* 
+ * @author Julio Montoya <gugli100@gmail.com>
+ * 
+ **/
+
+ /* @todo order class */
 
 // Load Smarty library
 require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
@@ -8,6 +14,8 @@ require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 class Template extends Smarty {
 	
 	var $style = 'default'; //see the template folder 
+    var $preview_theme = null; 
+    var $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
     var $title =  null;
 	var $show_header;
 	var $show_footer;
@@ -122,7 +130,7 @@ class Template extends Smarty {
 	 * Sets the header visibility
 	 * @param bool true if we show the header
 	 */
-	function set_header($status) {
+	function set_header($status) {        
 		$this->show_header = $status;
 		$this->assign('show_header', $status);
         
@@ -191,14 +199,53 @@ class Template extends Smarty {
 				'site_name'			=> api_get_setting('siteName'),
 				'institution'		=> api_get_setting('Institution'),		
 		);
-		$this->assign('_s', $_s);		
-		
+		$this->assign('_s', $_s);	
 	}
+    
+    function set_theme() {
+        //$platform_theme = api_get_setting('stylesheets');
+		$this->theme = api_get_visual_theme();
+        
+        if (!empty($this->preview_theme)) {
+            $this->theme = $this->preview_theme;    
+        }
+		
+		//Base CSS
+		$style_html = '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
+		
+		//Default theme CSS
+		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/default.css";';
+        
+		//Course theme CSS
+		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/course.css";';
+		
+		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
+			$style_html .= 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } ';
+		}
+		
+		$this->assign('css_style', $style_html);
+		
+		$style_print =  '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/print.css";';
+		$this->assign('css_style_print', $style_print);
+        $this->assign('style_print',     $style_print);
+        
+        
+        // Header 1
+        ob_start();
+		show_header_1($language_file, $nameTools, $this->theme);
+		$header1 = ob_get_contents();        
+		ob_clean();
+        
+        $this->assign('header1', $header1);	        
+        
+    }
+    
+    
 
 	private function set_header_parameters() {
         $help       = $this->help;
 		$nameTools  = $this->title;
-		global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
+		global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme;
 		global $httpHeadXtra, $htmlHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, 
 				$_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;		
 		        
@@ -244,29 +291,10 @@ class Template extends Smarty {
 		}
 		
 		$this->assign('title_string', $title_string);
-				
-		$platform_theme = api_get_setting('stylesheets');
-		$my_style 		= api_get_visual_theme();	
-		
-		$style = '';
-		
-		//Base CSS
-		$style = '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
-		
-		//Default theme CSS
-		$style .= '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css";';
-		//Course theme CSS
-		$style .= '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/course.css";';
-		
-		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
-			$style .= 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } ';
-		}
-		
-		$this->assign('css_style', $style);
-		
-		$style_print =  '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/print.css";';
-		$this->assign('css_style_print', $style_print);
-		
+        
+        //Setting the theme
+        $this->set_theme();        
+        
 		//Extra JS files
 		
 		$js_files = array(
@@ -279,8 +307,7 @@ class Template extends Smarty {
 			'bootstrap/bootstrap-dropdown.js'			
 		);
 		
-		if (api_get_setting('allow_global_chat') == 'true') {
-            
+		if (api_get_setting('allow_global_chat') == 'true') {            
             if (!api_is_anonymous()) {
                 $js_files[] = 'chat/js/chat.js';
             }
@@ -309,7 +336,7 @@ class Template extends Smarty {
 		);
 		
 		if ($show_learn_path) {
-			$css_files[] = api_get_path(WEB_CSS_PATH).$my_style.'/learnpath.css';
+			$css_files[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';
 		}
 		
 		if (api_get_setting('allow_global_chat') == 'true') {
@@ -317,15 +344,15 @@ class Template extends Smarty {
 		}
 		
 		$css_file_to_string = '';
-		foreach($css_files  as $css_file) {
+		foreach ($css_files  as $css_file) {
 			$css_file_to_string .= api_get_css($css_file);
 		}
 	
 		global $this_section;        
+        
 		$this->assign('css_file_to_string', $css_file_to_string);
 		$this->assign('js_file_to_string',  $js_file_to_string);		
-		$this->assign('text_direction',	    api_get_text_direction());			
-		$this->assign('style_print',        $style_print);
+		$this->assign('text_direction',	    api_get_text_direction());					
 		$this->assign('section_name',       'section-'.$this_section);
 		
 		$extra_headers = '';		
@@ -352,13 +379,8 @@ class Template extends Smarty {
 		        }
 		    }
 		}
-		$this->assign('favico', $favico);
-				
-		/*global $my_session_id;
-		$session_id     = api_get_session_id();
-		$session_name   = api_get_session_name($my_session_id);
-		*/
         
+		$this->assign('favico', $favico);
 		$help_content = '';
         if (api_get_setting('enable_help_link') == 'true') { 
     		if (!empty($help)) {
@@ -381,17 +403,7 @@ class Template extends Smarty {
 		}
 		
 		$this->assign('bug_notification_link', $bug_notification_link);
-		
-		if (isset($database_connection)) {
-			// connect to the main database.
-			Database::select_db($_configuration['main_database'], $database_connection);
-		}
-		
-		ob_start();
-		show_header_1($language_file, $nameTools);
-		$header1 = ob_get_contents();
-		ob_clean();
-		
+
 		ob_start();
 		show_header_2();
 		$header2 = ob_get_contents();
@@ -400,7 +412,7 @@ class Template extends Smarty {
 		$header3 = show_header_3();
 		$header4 = show_header_4($interbreadcrumb, $language_file, $nameTools);
 		
-		$this->assign('header1', $header1);
+		
 		$this->assign('header2', $header2);
 		$this->assign('header3', $header3);        
 		$this->assign('header4', $header4);
@@ -447,12 +459,12 @@ class Template extends Smarty {
 		$this->assign('execution_stats', $stats);		
 	}
     
-    function show_header() {        
-		$tpl = $this->get_template('layout/show_header.tpl');
+    function show_header_template() {        
+		$tpl = $this->get_template('layout/show_header.tpl');        
 		$this->display($tpl);	
     }
     
-    function show_footer() {
+    function show_footer_template() {
         $tpl = $this->get_template('layout/show_footer.tpl');
 		$this->display($tpl);	
     }

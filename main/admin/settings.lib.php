@@ -221,18 +221,14 @@ function handle_stylesheets() {
         }
     }
 
-    // Preview of the stylesheet.
-    echo '<div><iframe src="style_preview.php" width="100%" height="300" name="preview"></iframe></div>';
-
 ?>
     <script type="text/javascript">
-    function load_preview(selectobj){
-        var style_dir = selectobj.options[selectobj.selectedIndex].value;
-         parent.preview.location='style_preview.php?style=' + style_dir;
+    function load_preview(){
+        $('#stylesheets_id').submit();        
     }
     </script>
 <?php
-    echo '<form name="stylesheets" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
+    echo '<form id="stylesheets_id" name="stylesheets" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<br /><select name="style" onChange="load_preview(this)" >';
 
     $list_of_styles = array();
@@ -245,12 +241,17 @@ function handle_stylesheets() {
                 continue;
             }
             $dirpath = api_get_path(SYS_PATH).'main/css/'.$style_dir;
+            
             if (is_dir($dirpath)) {
                 if ($style_dir != '.' && $style_dir != '..') {
-                    if ($currentstyle == $style_dir || ($style_dir == 'chamilo' && !$currentstyle)) {
+                    if (isset($_POST['style']) && $_POST['style'] == $style_dir) {
                         $selected = 'selected="true"';
                     } else {
-                        $selected = '';
+                        if (!isset($_POST['style'])  && ($currentstyle == $style_dir || ($style_dir == 'chamilo' && !$currentstyle))) {
+                            $selected = 'selected="true"';
+                        } else {
+                            $selected = '';
+                        }
                     }
                     $show_name = ucwords(str_replace('_', ' ', $style_dir));
 
@@ -269,6 +270,7 @@ function handle_stylesheets() {
         }
         @closedir($handle);
     }
+    
     //Sort styles in alphabetical order
     asort($list_of_names);
     foreach($list_of_names as $style_dir=>$item) {
@@ -452,16 +454,8 @@ function store_stylesheets() {
 
     // Insert the stylesheet.
     $style = Database::escape_string($_POST['style']);
+    
     if (is_style($style)) {
-        /*
-        $sql = 'UPDATE '.$table_settings_current.' SET
-                selected_value = "'.$style.'"
-                WHERE variable = "stylesheets"
-                AND category = "stylesheets"';
-
-        Database::query($sql);
-        */
-
         api_set_setting('stylesheets', $style, null, 'stylesheets', $_configuration['access_url']);
     }
 

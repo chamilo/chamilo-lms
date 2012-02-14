@@ -3,8 +3,8 @@
     <ul id="navigation">
         {$help_content}
         {$bug_notification_link}
-    </ul>	
-    {block name="header"}{/block}
+    </ul>    
+    {include file="default/layout/header.tpl"}
 
     <div id="main">
         {* breadcrumb *}

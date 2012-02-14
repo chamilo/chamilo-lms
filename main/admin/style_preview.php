@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /chamilo_license.txt */
-
+exit;
 $language_file = array('create_course', 'courses', 'admin');
 
 require_once '../inc/global.inc.php';

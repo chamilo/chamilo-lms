@@ -26,31 +26,19 @@ a:active {
 #header1 {
     background-image:url(images/bg-header1.gif);
 }
-#header3 {
-    /* background-image:url(images/bg-header4.png); */
+
+#header3 li a:hover {
+    background: none repeat scroll 0 0 #8ECB50;
+    color: #FFFFFF;
 }
-#header4 {
-    /* background-image:url(images/bg-header4.png); */
+#header3 #current a {
+    background: none repeat scroll 0 0 #FFFFFF;        
+}
+#header3 #current a:hover {
+    color: #277098;
 }
 
-#header3  a {
-    //background:transparent url(images/tab_left.gif) no-repeat scroll left top;
-}
 
-#header3 li a span {
-//    background:transparent url(images/tab_right.gif) no-repeat scroll right top;
-}
-
-#current a {
-//    background:transparent url(images/tab_left-active.gif) no-repeat scroll left top;
-}
-#current {
-    //background:transparent url(images/tab_center-active.gif) no-repeat scroll right top;
-}	
-
-#current #tab_active {
-    //background:transparent url(images/tab_right-active.gif) no-repeat scroll right top;
-}
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/

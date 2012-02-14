@@ -2608,6 +2608,8 @@ abbr {
     margin: 0 auto 35px auto;
 }
 
+/* Main tabs */
+
 #header3 ul {
     margin: 0px;
 }
@@ -2622,19 +2624,19 @@ abbr {
     background: none repeat scroll 0 0 #D9E4F0;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    color: #277098;
+    /*color: #277098;*/
     display: block;
     padding: 8px 12px 9px;
     text-decoration: none;
 }
 
 #header3 li a:hover {
-    background: none repeat scroll 0 0 #8ECB50;
+    background: none repeat scroll 0 0 #ddd;
     color: #FFFFFF;
 }
 #header #current a {
-    background: none repeat scroll 0 0 #FFFFFF;        
+    background: none repeat scroll 0 0 #ccc;        
 }
 #header #current a:hover {
-    color: #277098;
+    color: #fff;
 }

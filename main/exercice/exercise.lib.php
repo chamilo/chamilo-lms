@@ -143,7 +143,43 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             $s .= '<tr><td colspan="3">';
             $s .= $oFCKeditor->CreateHtml();
             $s .= '</td></tr>';
-		}  
+		} elseif ($answerType == ORAL_EXPRESSION) {
+			//Add nanog
+			if (api_get_setting('enable_nanogong') == 'true') {				
+				
+				require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
+				
+				//@todo pass this as a parameter
+				global $exercise_stat_info, $exerciseId,$exe_id;
+				
+				if (!empty($exercise_stat_info)) {
+					$params = array(					
+						'exercise_id' 	=> $exercise_stat_info['exe_exo_id'],
+						'exe_id' 		=> $exercise_stat_info['exe_id'],
+						'question_id'   => $questionId
+					);				
+				} else {
+					$params = array(
+						'exercise_id' 	=> $exerciseId,
+						'exe_id' 		=> 'temp_exe',
+						'question_id'   => $questionId
+					);
+				}
+				
+				$nano = new Nanogong($params);
+				echo $nano->show_button();				
+			}
+			
+			$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;			
+			$oFCKeditor->ToolbarSet = 'TestFreeAnswer';
+			$oFCKeditor->Width  = '100%';
+			$oFCKeditor->Height = '150';
+			$oFCKeditor->ToolbarStartExpanded = false;			
+			$oFCKeditor->Value	= '' ;
+			$s .= '<tr><td colspan="3">';
+			$s .= $oFCKeditor->CreateHtml();
+			$s .= '</td></tr>';
+		} 
     
 		// Now navigate through the possible answers, using the max number of
 		// answers for the question as a limiter

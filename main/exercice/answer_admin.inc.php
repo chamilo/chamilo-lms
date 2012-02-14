@@ -86,6 +86,13 @@ if($modifyIn)
         $weighting=unserialize($weighting);
 
 	}
+	elseif($answerType == ORAL_EXPRESSION )
+	{
+		$reponse=unserialize($reponse);
+		$comment=unserialize($comment);
+		$free_comment=$comment;
+		$weighting=unserialize($weighting);
+	}
 	elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER || $answerType == HOT_SPOT_DELINEATION)
     {
         $color=unserialize($color);

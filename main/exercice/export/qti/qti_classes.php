@@ -36,6 +36,7 @@ define('FIB',				3);
 define('MATCHING',			4);
 define('FREE_ANSWER', 		5);
 define('HOTSPOT',			6);
+define('ORAL_EXPRESSION', 		13);
 /**
  *
  * @package chamilo.exercise

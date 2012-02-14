@@ -448,7 +448,7 @@ function create_event_exercice($exo_id) {
  * @param	integer	Position
  * @return	boolean	Result of the insert query
  */
-function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0) {	
+function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0, $nano = null) {	
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 	$score 	= Database::escape_string($score);
 	$answer = Database::escape_string($answer);
@@ -472,9 +472,14 @@ function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0
 	} else {
 		// anonymous
 		$user_id = api_get_anonymous_id();
+	}		
+	$file = '';
+	
+	if (isset($nano)) {	
+		$file = basename($nano->load_filename_if_exists(false));
 	}
     
-	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT (exe_id, user_id, question_id, answer, marks, course_code, session_id, position, tms )
+	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT (exe_id, user_id, question_id, answer, marks, course_code, session_id, position, tms, filename)
 			  VALUES (
 			  ".$exeId.",
 			  ".$user_id.",
@@ -484,8 +489,9 @@ function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0
 			   '".api_get_course_id()."',
 			   '".api_get_session_id()."',
 			   '".$j."',
-			   '".$reallyNow."'
-			  )";
+			   '".$reallyNow."',
+			   '".$file."'
+			)";		
     //error_log($sql);
 	if (!empty($quesId) && !empty($exeId) && !empty($user_id)) {
 		$res = Database::query($sql);		

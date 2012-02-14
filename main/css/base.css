@@ -4303,3 +4303,24 @@ a:active{
     margin-right: auto;
     width: 120px;
 }
+
+/* Nanogong - exercise player*/
+
+.nanogong_player_container {
+	width:370px;
+	margin: 0 auto;
+	
+}
+
+.nanogong_player {    
+    float:left;
+}
+
+.action_player {
+    float:right;
+    width:120px;	
+}
+
+.audio_preview_container {
+    margin-left: 50px;	
+}

@@ -26,6 +26,7 @@ define('MULTIPLE_ANSWER_COMBINATION', 	9);
 define('UNIQUE_ANSWER_NO_OPTION',       10);
 define('MULTIPLE_ANSWER_TRUE_FALSE',    11);
 define('MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE',    12);
+define('ORAL_EXPRESSION', 		13);
 
 if (!class_exists('Category')) include_once("testcategory.class.php");	// hub 12-10-2011
 
@@ -61,13 +62,13 @@ abstract class Question
                                 FILL_IN_BLANKS => 				array('fill_blanks.class.php' , 	'FillBlanks'),
                                 MATCHING => 					array('matching.class.php' , 		'Matching'),
                                 FREE_ANSWER => 					array('freeanswer.class.php' , 		'FreeAnswer'),
+                                ORAL_EXPRESSION => 				array('oral_expression.class.php' , 'OralExpression'),
                                 HOT_SPOT => 					array('hotspot.class.php' , 		'HotSpot'),
                                 HOT_SPOT_DELINEATION =>         array('hotspot.class.php' , 'HotspotDelineation'),
                                 MULTIPLE_ANSWER_COMBINATION =>	array('multiple_answer_combination.class.php' , 'MultipleAnswerCombination'),
                                 UNIQUE_ANSWER_NO_OPTION =>      array('unique_answer_no_option.class.php' ,   'UniqueAnswerNoOption'),
                                 MULTIPLE_ANSWER_TRUE_FALSE =>   array('multiple_answer_true_false.class.php' , 'MultipleAnswerTrueFalse'),
-                                MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE =>   array('multiple_answer_combination_true_false.class.php' , 'MultipleAnswerCombinationTrueFalse'),
-                            
+                                MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE =>   array('multiple_answer_combination_true_false.class.php' , 'MultipleAnswerCombinationTrueFalse')                            
 							);
 
 	/**
@@ -115,7 +116,6 @@ abstract class Question
         
         $course_id = $course_info['real_id'];
 
-		$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
 		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         
@@ -127,29 +127,31 @@ abstract class Question
 		if ($object = Database::fetch_object($result)) {
 			
 			$objQuestion 				= Question::getInstance($object->type);
+            if (!empty($objQuestion)) {
 			
-			$objQuestion->id			= $id;
-			$objQuestion->question		= $object->question;
-			$objQuestion->description	= $object->description;
-			$objQuestion->weighting		= $object->ponderation;
-			$objQuestion->position		= $object->position;
-			$objQuestion->type			= $object->type;
-			$objQuestion->picture		= $object->picture;
-			$objQuestion->level			= (int) $object->level;
-            $objQuestion->extra         = $object->extra;
-            $objQuestion->course        = $course_info;
-            $objQuestion->category	    = Testcategory::getCategoryForQuestion($id);	// hub 12-10-2011
-                    
-			$sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
-			$result_exercise_list = Database::query($sql);
+                $objQuestion->id			= $id;
+                $objQuestion->question		= $object->question;
+                $objQuestion->description	= $object->description;
+                $objQuestion->weighting		= $object->ponderation;
+                $objQuestion->position		= $object->position;
+                $objQuestion->type			= $object->type;
+                $objQuestion->picture		= $object->picture;
+                $objQuestion->level			= (int) $object->level;
+                $objQuestion->extra         = $object->extra;
+                $objQuestion->course        = $course_info;
+                $objQuestion->category	    = Testcategory::getCategoryForQuestion($id);	// hub 12-10-2011
 
-			// fills the array with the exercises which this question is in
-			if ($result_exercise_list) {
-				while ($obj = Database::fetch_object($result_exercise_list)) {
-					$objQuestion->exerciseList[] = $obj->exercice_id;
-				}
-			}
-			return $objQuestion;
+                $sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
+                $result_exercise_list = Database::query($sql);
+
+                // fills the array with the exercises which this question is in
+                if ($result_exercise_list) {
+                    while ($obj = Database::fetch_object($result_exercise_list)) {
+                        $objQuestion->exerciseList[] = $obj->exercice_id;
+                    }
+                }
+                return $objQuestion;
+            }
 		}
 		// question not found
 		return false;
@@ -1039,23 +1041,39 @@ abstract class Question
 		$this->exportPicture($new_question_id, $course_info);
 		return $new_question_id;
 	}
+    function get_question_type($type) {
+        if ($type == ORAL_EXPRESSION && api_get_setting('enable_nanogong') != 'true') {
+            return null;
+        }        
+        return self::$questionTypes[$type];
+    }
+    
+    function get_question_type_list() {
+        if (api_get_setting('enable_nanogong') != 'true') {
+            self::$questionTypes[ORAL_EXPRESSION] = null;
+            unset(self::$questionTypes[ORAL_EXPRESSION]);
+        }   
+        return self::$questionTypes;
+    }
 
 	/**
 	 * Returns an instance of the class corresponding to the type
 	 * @param integer $type the type of the question
 	 * @return an instance of a Question subclass (or of Questionc class by default)
 	 */
-	static function getInstance ($type) {
-		if (!is_null($type)) {
-			list($file_name,$class_name) = self::$questionTypes[$type];
-			include_once($file_name);
-			if (class_exists($class_name)) {
-				return new $class_name();
-			} else {
-				echo 'Can\'t instanciate class '.$class_name.' of type '.$type;
-				return null;
-			}
+	static function getInstance($type) {
+		if (!is_null($type)) {            
+			list($file_name, $class_name) = self::get_question_type($type);
+            if (!empty($file_name)) {
+                include_once $file_name;
+                if (class_exists($class_name)) {
+                    return new $class_name();
+                } else {
+                    echo 'Can\'t instanciate class '.$class_name.' of type '.$type;                   
+                }
+            }
 		}
+        return null;
 	}
 
 	/**
@@ -1254,7 +1272,7 @@ abstract class Question
         $course_id = api_get_course_int_id();
         
 		// 1. by default we show all the question types
-		$question_type_custom_list = self::$questionTypes;
+		$question_type_custom_list = self::get_question_type_list();
 
 		if (!isset($feedbacktype)) $feedbacktype=0;
 		if ($feedbacktype==1) {
@@ -1319,14 +1337,6 @@ abstract class Question
 		echo '</a>';
 		echo '</div></li>';
 		echo '</ul>';
-	}
-
-	static function get_types_information(){
-		return self::$questionTypes;
-	}
-
-	static function updateId() {
-		return self::$questionTypes;
 	}
     
     static function saveQuestionOption($question_id, $name, $course_id, $position = 0) {
@@ -1419,9 +1429,10 @@ abstract class Question
      *
     */
     public function get_type_icon_html() {
-    	$type = $this->selectType();
-    	$tabQuestionList = Question::get_types_information(); // [0]=file to include [1]=type name
-    	require_once($tabQuestionList[$type][0]);
+    	$type            = $this->selectType();        
+    	$tabQuestionList = Question::get_question_type_list(); // [0]=file to include [1]=type name
+        
+    	require_once $tabQuestionList[$type][0];
 			eval('$img = '.$tabQuestionList[$type][1].'::$typePicture;');
 			eval('$explanation = get_lang('.$tabQuestionList[$type][1].'::$explanationLangVar);');
 			return array($img, $explanation);

@@ -1867,9 +1867,33 @@ class Exercise {
 		if ($debug) error_log('$answerType : '.$answerType);
 
 
-		if ($answerType == FREE_ANSWER) {
+		if ($answerType == FREE_ANSWER || $answerType == ORAL_EXPRESSION) {
 			$nbrAnswers = 1;
 		}
+		
+		$nano = null;
+		
+		if ($answerType == ORAL_EXPRESSION) {
+			require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
+			$exe_info = get_exercise_results_by_attempt($exeId);
+			$exe_info = $exe_info[$exeId];		
+				
+			$params = array();
+			$params['course_id'] 	= api_get_course_int_id();
+			$params['session_id'] 	= api_get_session_id();
+			$params['user_id'] 		= isset($exe_info['exe_user_id'])? $exe_info['exe_user_id'] : api_get_user_id();			
+			$params['exercise_id']  = isset($exe_info['exe_exo_id'])? $exe_info['exe_exo_id'] : $this->id;
+			$params['question_id'] 	= $questionId;
+			$params['exe_id'] 		= isset($exe_info['exe_id']) ? $exe_info['exe_id'] : $exeId;
+						
+			$nano = new Nanogong($params);
+			
+			//probably this attempt came in an exercise all question by page			
+			if ($feedback_type == 0) {
+				$nano->replace_with_real_exe($exeId);
+			}			
+		}
+		
 		$user_answer = '';
 
 		// Get answer list for matching
@@ -2012,7 +2036,6 @@ class Exercise {
 							$real_answers[$answerId] = false;
 						}
 					}
-
 					break;
 				case MULTIPLE_ANSWER_COMBINATION:
 					if ($from_database) {
@@ -2218,6 +2241,31 @@ class Exercise {
 						}
 					}
 					break;
+				case ORAL_EXPRESSION :
+					if ($from_database) {
+						$query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
+						$resq   = Database::query($query);
+						$choice = Database::result($resq,0,'answer');
+						$choice = str_replace('\r\n', '', $choice);
+						$choice = stripslashes($choice);
+						$questionScore = Database::result($resq,0,"marks");
+						if ($questionScore==-1) {
+							$totalScore+=0;
+						} else {
+							$totalScore+=$questionScore;
+						}
+						$arrques[] = $questionName;
+						$arrans[]  = $choice;
+					} else {
+						$studentChoice = $choice;
+						if ($studentChoice) {
+							//Fixing negative puntation see #2193
+							$questionScore = 0;
+							$totalScore += 0;
+						}
+					}
+					break;						
+					
 					// for matching
 				case MATCHING :
 					if ($from_database) {
@@ -2383,6 +2431,13 @@ class Exercise {
 							$arrans[]  = $choice;
 							if($origin != 'learnpath') {
 								ExerciseShowFunctions::display_free_answer($choice,0,0);
+							}
+						} elseif($answerType == ORAL_EXPRESSION) {
+							// to store the details of open questions in an array to be used in mail
+							$arrques[] = $questionName;
+							$arrans[]  = $choice;
+							if($origin != 'learnpath') {								
+								ExerciseShowFunctions::display_oral_expression_answer($choice, 0, 0, $nano);
 							}
 						} elseif($answerType == HOT_SPOT) {
 							if ($origin != 'learnpath') {
@@ -2592,6 +2647,12 @@ class Exercise {
                             <td valign="top">'.ExerciseShowFunctions::display_free_answer($choice, $exeId, $questionId).'</td>
                             </tr>
                             </table>';
+							break;
+						case ORAL_EXPRESSION:
+							echo '<tr>
+		                            <td valign="top">'.ExerciseShowFunctions::display_oral_expression_answer($choice, $exeId, $questionId, $nano).'</td>
+		                            </tr>
+		                            </table>';
 							break;
 						case HOT_SPOT:
 							ExerciseShowFunctions::display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
@@ -2999,6 +3060,10 @@ class Exercise {
 			} elseif ($answerType == FREE_ANSWER) {
 				$answer = $choice;
 				exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+			} elseif ($answerType == ORAL_EXPRESSION) {
+				$answer = $choice;				
+				exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);			
+				
 			} elseif ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
 				$answer = $choice;
 				exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);

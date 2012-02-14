@@ -69,8 +69,8 @@ $form->addRule('question_type_hidden', get_lang('InvalidQuestionType'), 'validqu
 
 if ($form->validate()) {
 	$values = $form->exportValues();
-
-	foreach (Question::$questionTypes as $question_type_id => $question_type_class_and_name) {
+    $question_list = Question::get_question_type_list();
+	foreach ($question_list as $question_type_id => $question_type_class_and_name) {
 		if (get_lang($question_type_class_and_name[1]) == $values['question_type_hidden']) {
 			$answer_type = $question_type_id;
 		}
@@ -125,8 +125,10 @@ $pictures_question_types[9] = 'mcmac.gif';
 $pictures_question_types[10] = 'mcuao.gif';
 $pictures_question_types[11] = 'mcmao.gif';
 $pictures_question_types[12] = 'mcmaco.gif';
+$pictures_question_types[13] = 'audio_question.png';
+$question_list = Question::get_question_type_list();
 
-foreach (Question::$questionTypes as $key=>$value) {
+foreach ($question_list as $key=>$value) {
 	if ($key != HOT_SPOT_DELINEATION ) { // DELINEATION hide
 		?>
 		ddlObj1.addItem('<table width="100%"><tr><td style="width: 37px;" valign="top"><?php Display::display_icon($pictures_question_types[$key],addslashes(get_lang($value[1])),array('height'=>'40px;', 'style' => 'vertical-align:top; cursor:hand;')); ?></td><td><span class="thistext" style="cursor:hand"><?php echo addslashes(get_lang($value[1])); ?></span><br/><sub><?php /*echo addslashes(get_lang($value[1].'Comment'));*/ ?></sub></td></tr></table>','');
@@ -137,7 +139,8 @@ foreach (Question::$questionTypes as $key=>$value) {
 </script>
 <?php
 function check_question_type($parameter) {
-	foreach (Question::$questionTypes as $key=>$value) {
+    $question_list = Question::get_question_type_list();    
+	foreach ($question_list as $key=>$value) {
 		$valid_question_types[] = get_lang($value[1]);
 		//$valid_question_types[] = trim($value[1]);
 	}

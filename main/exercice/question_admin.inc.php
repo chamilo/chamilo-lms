@@ -54,7 +54,7 @@ if(is_object($objQuestion)) {
 		$type = $_REQUEST['answerType'];
 	}
 
-	$types_information = $objQuestion->get_types_information();
+	$types_information = $objQuestion->get_question_type_list();
 	$form_title_extra = get_lang($types_information[$type][1]);
 
 	// form title

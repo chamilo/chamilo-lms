@@ -21,6 +21,7 @@ define(MATCHING,		4);
 define(FREE_ANSWER,     5);
 define(HOT_SPOT, 		6);
 define(HOT_SPOT_ORDER, 	7);
+define('ORAL_EXPRESSION', 		13);
 /**
  * A SCORM item. It corresponds to a single question.
  * This class allows export from Dokeos SCORM 1.2 format of a single question.

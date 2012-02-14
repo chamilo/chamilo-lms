@@ -36,6 +36,7 @@ define('HOTSPOT',			6);
 define('HOT_SPOT_ORDER', 	7);
 define('HOT_SPOT_DELINEATION', 		8);
 define('MULTIPLE_ANSWER_COMBINATION', 	9);
+define('ORAL_EXPRESSION', 		13);
 
 
 /**

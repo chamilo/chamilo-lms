@@ -203,7 +203,6 @@ if (!$inATest) {
 				
 				// Question type
 				
-				$tabQuestionList = Question::get_types_information();
 				list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
 				$questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), 32), array('style'=>$styleType));
 				

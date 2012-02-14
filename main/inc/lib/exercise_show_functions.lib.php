@@ -87,6 +87,42 @@ class ExerciseShowFunctions {
 			echo '</tr>';
         }
 	}
+	
+	function display_oral_expression_answer($answer,$id,$questionId, $nano = null) {
+		global $feedback_type;
+		
+		if (isset($nano)) {
+			echo $nano->show_audio_file();
+		}
+		
+		if (empty($id)) {
+		
+			echo '<tr>';
+			echo Display::tag('td',nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)), array('width'=>'55%'));
+			echo '</tr>';
+			if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+				echo '<tr>';
+				echo Display::tag('td',get_lang('notCorrectedYet'), array('width'=>'45%'));
+				echo '</tr>';
+			} else {
+				echo '<tr><td>&nbsp;</td></tr>';
+			}
+		} else {
+			echo '<tr>';
+			echo '<td>';
+			if (!empty($answer)) {
+				echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY));
+			}
+			echo '</td>';
+				
+			if(!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+				echo '<td>';
+				$comm = get_comments($id,$questionId);
+				echo '</td>';
+			}
+			echo '</tr>';
+		}
+	}
 
 	/**
 	 * Displays the answer to a hotspot question

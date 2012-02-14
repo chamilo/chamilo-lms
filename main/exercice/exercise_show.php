@@ -318,6 +318,11 @@ foreach ($questionList as $questionId) {
         $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
+	} elseif ($answerType == ORAL_EXPRESSION) {
+		$answer = $str;
+		$question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+		$questionScore   = $question_result['score'];
+		$totalScore     += $question_result['score'];
 	} elseif ($answerType == MATCHING) {            
         $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
         $questionScore   = $question_result['score'];
@@ -500,7 +505,7 @@ foreach ($questionList as $questionId) {
 			<br />
 			<a href="javascript://" onclick="showfck('<?php echo $name; ?>','<?php echo $marksname; ?>');">
 			<?php
-			if ($answerType == FREE_ANSWER) {
+			if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION))) {
 				echo get_lang('EditCommentsAndMarks');
 			} else {
 				if ($action=='edit') {
@@ -543,7 +548,7 @@ foreach ($questionList as $questionId) {
 		}
 		
 		if ($is_allowedToEdit) {
-			if ($answerType == FREE_ANSWER) {
+			if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION))) {
 				$marksname = "marksName".$questionId;
 				?>
 				<div id="<?php echo $marksname; ?>" style="display:none">

@@ -30,6 +30,7 @@ define('FILL_IN_BLANKS',	3);
 define('MATCHING',		4);
 define('FREE_ANSWER', 5);
 define('MULTIPLE_ANSWER_COMBINATION', 9);
+define('ORAL_EXPRESSION', 		13);
 
 //debug param. 0: no display - 1: debug display
 $debug=0;

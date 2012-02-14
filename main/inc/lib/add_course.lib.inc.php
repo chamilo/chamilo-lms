@@ -147,6 +147,8 @@ function prepare_course_repository($course_repository, $course_code) {
     mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/work', $perm);
     mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/upload/announcements', $perm);
     mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/upload/announcements/images', $perm);
+    //Oral expression question type
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/exercises', $perm);
 
     // Create .htaccess in the dropbox directory.
     $fp = fopen(api_get_path(SYS_COURSE_PATH).$course_repository . '/dropbox/.htaccess', 'w');

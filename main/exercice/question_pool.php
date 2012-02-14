@@ -374,7 +374,8 @@ echo Display::form_row(get_lang('Difficulty'), $select_difficulty_html);
  
 // Answer type
  
-$question_list = Question::get_types_information();
+$question_list = Question::get_question_type_list();
+
 $new_question_list = array();
 $new_question_list['-1']  = get_lang('All');
 $objExercise = new Exercise();
@@ -617,8 +618,16 @@ $data = array();
 
 foreach ($main_question_list as $tabQuestion) {
 	$row = array();
+    
+    //This function checks if the question can be read
+    $question_type = get_question_type_for_question($selected_course, $tabQuestion['id']);
+    
+    if (empty($question_type)) {
+        continue;
+    }
+    
 	$row[] = get_a_tag_for_question($questionTagA, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], $tabQuestion['question']);
-	$row[] = get_question_type_for_question($selected_course, $tabQuestion['id']);
+	$row[] = $question_type;
 	$row[] = get_question_categorie_for_question($selected_course, $tabQuestion['id']);
 	$row[] = $tabQuestion['level'];
 	$row[] = get_action_icon_for_question($actionIcon1, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], 
@@ -763,10 +772,13 @@ function get_action_icon_for_question($in_action, $from_exercice, $in_questionid
 // return the icon for the question type
 // hubert.borderiou 13-10-2011
 function get_question_type_for_question($in_selectedcourse, $in_questionid) {
-	$myObjQuestion = Question::read($in_questionid, $in_selectedcourse);
-	list($typeImg, $typeExpl) = $myObjQuestion->get_type_icon_html();
-	$questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), 32), array());
-	unset($myObjQuestion);
+	$myObjQuestion = Question::read($in_questionid, $in_selectedcourse);    
+    $questionType = null;
+    if (!empty($myObjQuestion)) {        
+        list($typeImg, $typeExpl) = $myObjQuestion->get_type_icon_html();
+        $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), 32), array());
+        unset($myObjQuestion);
+    }
 	return $questionType;
 }
 

@@ -1154,7 +1154,7 @@ class learnpathItem {
 	 * @return	bool	True if the item is done ('completed','passed','succeeded'), false otherwise
 	 */
 	function is_done(){
-   		if ($this->status_is(array('completed', 'passed', 'succeeded'))) {
+   		if ($this->status_is(array('completed', 'passed', 'succeeded', 'failed'))) {
    			if (self::debug > 2) { error_log('New LP - In learnpath::is_done() - Item '.$this->get_id().' is complete', 0); }
    			return true;
    		}else{
@@ -2197,7 +2197,7 @@ class learnpathItem {
         $this->last_scorm_session_time = $total_sec;
       }
       //Step 3 update db only if status != completed, passed, browsed or seriousgamemode not activated
-      $case_completed=array('completed','passed','browsed'); //TODO COMPLETE
+      $case_completed=array('completed','passed','browsed','failed'); //TODO COMPLETE
       if ($this->seriousgame_mode!=1 || !in_array($row['status'], $case_completed)){
         $update_view_sql='UPDATE '.$item_view_table." SET total_time =$total_time".' 
                           WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
@@ -2422,7 +2422,7 @@ class learnpathItem {
 		 			} else {
 		 				$my_type_lp = learnpath::get_type_static($this->lp_id);
 		 				// This is a array containing values finished
-		 				$case_completed = array('completed', 'passed', 'browsed');
+		 				$case_completed = array('completed', 'passed', 'browsed', 'failed');
 
 	     				//is not multiple attempts
               if ($this->seriousgame_mode==1 && $this->type=='sco') {

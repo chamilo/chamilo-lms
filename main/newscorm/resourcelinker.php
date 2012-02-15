@@ -95,7 +95,7 @@ if (!empty ($_POST['add_chapter']) && !empty ($_POST['title'])) {
 
     // Get max display_order so far in this parent chapter.
     $sql = "SELECT MAX(display_order) as maxi FROM $tbl_lp_item " .
-            "WHERE lp_id = $learnpath_id ".
+            "WHERE c_id = $course_id AND lp_id = $learnpath_id ".
             " AND parent_item_id = $chapter_id";
     $res = Database::query($sql);
     $row = Database::fetch_array($res);
@@ -181,7 +181,7 @@ if ($add) {
         $i = 0;
         // Calculating the last order of the items of this chapter.
         $sql = "SELECT MAX(display_order) as maxi FROM $tbl_lp_item " .
-                "WHERE lp_id = $learnpath_id AND parent_item_id=$chapter_id";
+                "WHERE c_id = $course_id AND lp_id = $learnpath_id AND parent_item_id=$chapter_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $lastorder_item = $row['maxi'];

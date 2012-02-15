@@ -78,7 +78,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 	$a_courses = array_keys($courses);
 
 	if (!api_is_session_admin()) {		
-		$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',32),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
+		$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
 		$menu_items[] = Display::url(Display::return_icon('user.png', get_lang('Students'), array(), 32), "index.php?view=drh_students&amp;display=yourstudents");
 		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), 32), 'teachers.php');
 		$menu_items[] = Display::return_icon('course_na.png', get_lang('Courses'), array(), 32);

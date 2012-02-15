@@ -89,7 +89,7 @@ function lp_upload_quiz_main() {
     $lp_id = Security::remove_XSS($_GET['lp_id']);
     
     $form = new FormValidator('upload', 'POST', api_get_self() . '?' . api_get_cidreq() . '&lp_id=' . $lp_id, '', 'enctype="multipart/form-data"');
-    $form->addElement('html', '<div><h3>' .Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), array('style'=>'margin-bottom:-2px;'),32). get_lang('ImportExcelQuiz') . '</h3></div>');
+    $form->addElement('html', '<div><h3>' .Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), array('style'=>'margin-bottom:-2px;'),ICON_SIZE_MEDIUM). get_lang('ImportExcelQuiz') . '</h3></div>');
     $form->addElement('file', 'user_upload_quiz', '');
     //button send document
     $form->addElement('style_submit_button', 'submit_upload_quiz', get_lang('Send'), 'class="upload"');

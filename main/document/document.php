@@ -1088,7 +1088,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 		if (api_get_setting('enable_nanogong') == 'true') {
 		?>
 			<a href="record_audio.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id.$req_gid; ?>">
-		   	<?php Display::display_icon('new_recording.png', get_lang('RecordMyVoice'),'',32); ?></a>
+		   	<?php Display::display_icon('new_recording.png', get_lang('RecordMyVoice'),'',ICON_SIZE_MEDIUM); ?></a>
 		<?php
 		}		
 		

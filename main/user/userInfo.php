@@ -228,31 +228,31 @@ if ($allowedToEditContent) {
 if (api_is_allowed_to_edit(null, true)) {
 	echo '<div class="actions">';
 	if($origin=='users'){
-		echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser'),'',32).'</a>';
+		echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser'),'',ICON_SIZE_MEDIUM).'</a>';
 	}
 	else{
-		echo '<a href="javascript:history.back(1)">'.Display::return_icon('back.png',get_lang('Back'),'',32).'</a>';
+		echo '<a href="javascript:history.back(1)">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
 	}
 	
 	if (!is_numeric($_GET['editMainUserInfo'])) {
 		if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-                    echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;editMainUserInfo='.$userIdViewed.'">'.Display::return_icon('edit.png',get_lang('EditUser'),'',32).'</a>';
+                    echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;editMainUserInfo='.$userIdViewed.'">'.Display::return_icon('edit.png',get_lang('EditUser'),'',ICON_SIZE_MEDIUM).'</a>';
                 }
 	} else {
                 if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-                    echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$userIdViewed.'">'.Display::return_icon('user.png',get_lang('ViewUser'),'',32).'</a>';
+                    echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$userIdViewed.'">'.Display::return_icon('user.png',get_lang('ViewUser'),'',ICON_SIZE_MEDIUM).'</a>';
                 }
 	}	
-	echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&amp;origin=user_course&amp;student='.$userIdViewed.'&amp;details=true&amp;course='.$_course['id'].'">'.Display::return_icon('stats.png',get_lang('UserStatistics'),'',32).'</a>';
+	echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&amp;origin=user_course&amp;student='.$userIdViewed.'&amp;details=true&amp;course='.$_course['id'].'">'.Display::return_icon('stats.png',get_lang('UserStatistics'),'',ICON_SIZE_MEDIUM).'</a>';
 	echo '</div>';
 } else {
 	if ($tool_info['visibility'] == 1 ) {
 		echo '<div class="actions">';
 		if($origin=='users'){
-			echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser'),'',32).'</a>';
+			echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser'),'',ICON_SIZE_MEDIUM).'</a>';
 		}
 		else{
-			echo '<a href="javascript:history.back(1)">'.Display::return_icon('back.png',get_lang('Back'),'',32).'</a>';
+			echo '<a href="javascript:history.back(1)">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
 		}
 		echo '</div>';	
 	}	

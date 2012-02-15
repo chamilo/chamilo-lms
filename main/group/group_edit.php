@@ -362,7 +362,7 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
 Display :: display_header($nameTools, 'Group');
 ?>
 <div class="actions">
-<a href="group_space.php"><?php echo Display::return_icon('back.png', get_lang('ReturnTo').' '.get_lang('GroupSpace'),'',32); ?></a>
+<a href="group_space.php"><?php echo Display::return_icon('back.png', get_lang('ReturnTo').' '.get_lang('GroupSpace'),'',ICON_SIZE_MEDIUM); ?></a>
 </div>
 <?php
 

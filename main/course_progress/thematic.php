@@ -128,7 +128,7 @@ if ($action == 'thematic_list') {
 			//if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {
 			if (api_is_allowed_to_edit(null, true)) {
 				echo '<div style="text-align:right"><a class="thickbox" href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_plan_list&thematic_id='.$thematic['id'].'&width=700&height=500">'.
-				Display::return_icon('edit.png', get_lang('EditThematicPlan'), array('style'=>'vertical-align:middle'),32).'</a></div><br />';
+				Display::return_icon('edit.png', get_lang('EditThematicPlan'), array('style'=>'vertical-align:middle'),ICON_SIZE_MEDIUM).'</a></div><br />';
 			}			
 			
 			if (empty($thematic_plan_div[$thematic['id']])) {

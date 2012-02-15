@@ -25,7 +25,7 @@ if (api_is_drh() || api_is_platform_admin()) {
 
 	// followed teachers by drh
 	$formateurs = UserManager::get_users_followed_by_drh($_user['user_id'], COURSEMANAGER);
-	$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',32),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );	 
+	$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );	 
 	$menu_items[] = Display::url(Display::return_icon('user.png', get_lang('Students'), array(), 32), "index.php?view=drh_students&amp;display=yourstudents");
 	$menu_items[] = Display::return_icon('teacher_na.png', get_lang('Trainers'), array(), 32);
 	$menu_items[] = Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), 32), 'course.php');

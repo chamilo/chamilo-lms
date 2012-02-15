@@ -198,7 +198,7 @@ function add_category_form($in_action) {
 
 function display_add_category() {
 	echo '<div class="actions">';
-	echo '<a href="exercice.php?'.api_get_cidreq().'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',32).'</a>';			
+	echo '<a href="exercice.php?'.api_get_cidreq().'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';			
 	echo '<a href="'.api_get_self().'?action=addcategory">'.Display::return_icon('question_category.gif').'</a>';
 	echo '</div>';
 	echo "<br/>";

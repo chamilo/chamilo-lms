@@ -345,7 +345,7 @@ document.getElementById("menuwiki").style.border=b+"px solid #cccccc";
 
 echo '<div id="menuwiki">';
 
-echo '&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('show').'>'.Display::return_icon('wiki.png',get_lang('HomeWiki'),'','32').'</a>&nbsp;';
+echo '&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('show').'>'.Display::return_icon('wiki.png',get_lang('HomeWiki'),'',ICON_SIZE_MEDIUM).'</a>&nbsp;';
 
 echo '&nbsp;<a href="javascript:void(0)" onClick="menu_wiki()">'.Display::return_icon('menu.png',get_lang('Menu'),'',ICON_SIZE_SMALL).'</a>';
 ///menu home
@@ -393,24 +393,24 @@ if (!in_array($_GET['action'], array('addnew', 'searchpages', 'allpages', 'recen
     echo '<div class="actions">';
 
     //menu show page
-    echo '&nbsp;&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('showpage').'>'.Display::return_icon('page.png',get_lang('ShowThisPage'),'','32').'</a>';
+    echo '&nbsp;&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('showpage').'>'.Display::return_icon('page.png',get_lang('ShowThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
 
     if (api_is_allowed_to_session_edit(false,true) ) {
         //menu edit page
-        echo '<a href="index.php?cidReq='.$_course['id'].'&action=edit&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('edit').'>'.Display::return_icon('edit.png',get_lang('EditThisPage'),'','32').'</a>';
+        echo '<a href="index.php?cidReq='.$_course['id'].'&action=edit&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('edit').'>'.Display::return_icon('edit.png',get_lang('EditThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
 
         //menu discuss page
-        echo '<a href="index.php?action=discuss&amp;title='.api_htmlentities(urlencode($page)).'"'.is_active_navigation_tab('discuss').'>'.Display::return_icon('discuss.png',get_lang('DiscussThisPage'),'','32').'</a>';
+        echo '<a href="index.php?action=discuss&amp;title='.api_htmlentities(urlencode($page)).'"'.is_active_navigation_tab('discuss').'>'.Display::return_icon('discuss.png',get_lang('DiscussThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
      }
 
     //menu history
-    echo '<a href="index.php?cidReq='.$_course['id'].'&action=history&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('history').'>'.Display::return_icon('history.png',get_lang('ShowPageHistory'),'','32').'</a>';
+    echo '<a href="index.php?cidReq='.$_course['id'].'&action=history&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('history').'>'.Display::return_icon('history.png',get_lang('ShowPageHistory'),'',ICON_SIZE_MEDIUM).'</a>';
     //menu linkspages
-    echo '<a href="index.php?action=links&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('links').'>'.Display::return_icon('what_link_here.png',get_lang('LinksPages'),'','32').'</a>';
+    echo '<a href="index.php?action=links&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('links').'>'.Display::return_icon('what_link_here.png',get_lang('LinksPages'),'',ICON_SIZE_MEDIUM).'</a>';
 
     //menu delete wikipage
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
-        echo '<a href="index.php?action=delete&amp;title='.api_htmlentities(urlencode($page)).'"'.is_active_navigation_tab('delete').'>'.Display::return_icon('delete.png',get_lang('DeleteThisPage'),'','32').'</a>';
+        echo '<a href="index.php?action=delete&amp;title='.api_htmlentities(urlencode($page)).'"'.is_active_navigation_tab('delete').'>'.Display::return_icon('delete.png',get_lang('DeleteThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
     }
     echo '</div>';
 }

@@ -18,7 +18,7 @@ if (api_is_allowed_to_edit(null, true)) {
     }   
     if (!$is_locked_attendance || api_is_platform_admin()) {
         echo '<div class="actions" style="margin-bottom:30px">';
-        echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'','32').'</a>';
+        echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
     }
     $message_information = get_lang('AttendanceSheetDescription');
@@ -209,7 +209,7 @@ if (api_is_allowed_to_edit(null, true)) {
                          }                  
                     } else {
                         $result  = '<th width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">';
-                        $result .= Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'','32').' '.get_lang('GoToAttendanceCalendar').'</a></span></th>';
+                        $result .= Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).' '.get_lang('GoToAttendanceCalendar').'</a></span></th>';
                     }
                     ?>
                     

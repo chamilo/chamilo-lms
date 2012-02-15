@@ -91,12 +91,12 @@ if ($is_allowed_to_edit) {
     }
 
     echo '<div class="actions">';
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.Display::return_icon('add.png', get_lang('_add_learnpath'),'','32').'</a>' .
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.Display::return_icon('add.png', get_lang('_add_learnpath'),'',ICON_SIZE_MEDIUM).'</a>' .
         str_repeat('&nbsp;', 3).
-        '<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">'.Display::return_icon('import.png', get_lang('UploadScorm'),'','32').'</a>';
+        '<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">'.Display::return_icon('import.png', get_lang('UploadScorm'),'',ICON_SIZE_MEDIUM).'</a>';
     if (api_get_setting('service_ppt2lp', 'active') == 'true') {
         echo str_repeat('&nbsp;', 3).'<a href="../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">
-		'.Display::return_icon('import_powerpoint.png', get_lang('PowerPointConvert'),'','32').'</a>';
+		'.Display::return_icon('import_powerpoint.png', get_lang('PowerPointConvert'),'',ICON_SIZE_MEDIUM).'</a>';
            //echo  str_repeat('&nbsp;', 3).'<a href="../upload/upload_word.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/word.gif" border="0" alt="'.get_lang('WordConvert').'" align="absmiddle">&nbsp;'.get_lang('WordConvert').'</a>';
     }
     echo '</div>';

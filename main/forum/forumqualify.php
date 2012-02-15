@@ -165,7 +165,7 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
             if (api_is_allowed_to_edit(false,true) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
                 if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
                     echo '&nbsp;&nbsp;';
-                    /*echo '<a href="newthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('new_thread.png','','','32').'</a>';*/
+                    /*echo '<a href="newthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('new_thread.png','','',ICON_SIZE_MEDIUM).'</a>';*/
                 } else {
                     echo get_lang('ForumLocked');
                 }

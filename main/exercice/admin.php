@@ -455,19 +455,19 @@ $inATest = isset($exerciseId) && $exerciseId > 0;
 if ($inATest) {
 echo '<div class="actions">';
 if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
-    echo '<a href="admin.php?exerciseId='.$exerciseId.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+    echo '<a href="admin.php?exerciseId='.$exerciseId.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 
 if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['myid']) &&  !isset($_GET['editQuestion'])) {
-    echo '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
+    echo '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
 }
-echo '<a href="overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&preview=1">'.Display::return_icon('preview_view.png', get_lang('Preview'),'','32').'</a>';
+echo '<a href="overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&preview=1">'.Display::return_icon('preview_view.png', get_lang('Preview'),'',ICON_SIZE_MEDIUM).'</a>';
 
-echo Display::url(Display::return_icon('test_results.png', get_lang('Results'),'','32'), 'exercise_report.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id);
+echo Display::url(Display::return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_MEDIUM), 'exercise_report.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id);
 
 if ($show_quiz_edition) {
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'),'','32').'</a>';
+    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {
-    echo '<a href="">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'','32').'</a>';
+    echo '<a href="">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
 $maxScoreAllQuestions = 0;
@@ -482,13 +482,13 @@ echo '</div>';
 else if (isset($_GET['newQuestion'])) {
 	// we are in create a new question from question pool not in a test
 	echo '<div class="actions">';
-	echo '<a href="admin.php?'.api_get_cidreq().'">.'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+	echo '<a href="admin.php?'.api_get_cidreq().'">.'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 	echo '</div>';
 }
 else {
 	// If we are in question_poolbut not in an test, go back to question create in pool
 	echo '<div class="actions">';
-	echo '<a href="question_pool.php">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+	echo '<a href="question_pool.php">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 	echo '</div>';	
 }
 

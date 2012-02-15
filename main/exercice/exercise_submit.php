@@ -618,12 +618,12 @@ $show_quiz_edition = $objExercise->added_in_lp();
 // I'm in a preview mode
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';
-    //echo '<a href="exercice.php?show=test&id_session='.api_get_session_id().'">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
+    //echo '<a href="exercice.php?show=test&id_session='.api_get_session_id().'">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     if ($show_quiz_edition == false) {
-    	echo '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">'.Display :: return_icon('settings.png', get_lang('ModifyExercise'),'','32').'</a>';
+    	echo '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">'.Display :: return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
         //echo Display :: return_icon('wizard.gif', get_lang('QuestionList')) . '<a href="exercice/admin.php?' . api_get_cidreq() . '&exerciseId=' . $objExercise->id . '">' . get_lang('QuestionList') . '</a>';
     } else {
-    	echo '<a href="#">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'','32').'</a>';
+    	echo '<a href="#">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
     }
     echo '</div>';
 }

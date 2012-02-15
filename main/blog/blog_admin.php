@@ -51,7 +51,7 @@ if (api_is_allowed_to_edit()) {
 	} else {		
 	}	
 	echo '<div class="actions">';
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>",Display::return_icon('new_blog.png',get_lang('AddBlog'),'','32')."</a>";
+	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>",Display::return_icon('new_blog.png',get_lang('AddBlog'),'',ICON_SIZE_MEDIUM)."</a>";
 	echo '</div>';
 
 	/*

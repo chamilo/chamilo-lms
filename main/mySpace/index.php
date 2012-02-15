@@ -152,11 +152,11 @@ if ($display == 'useroverview' || $display == 'sessionoverview' || $display == '
     echo Display::return_icon("export_csv.png", get_lang('ExportAsCSV'),array(), 32);
     echo '</a>';        
 }
-echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.Display::return_icon('printer.png', get_lang('Print'),'','32').'</a>';
+echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</span>';
     
 if (!empty($session_id)) {
-	echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('Back'),'','32').'</a>';
+	echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {
 	echo Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',32),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
 } 

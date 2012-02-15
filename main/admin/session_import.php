@@ -805,7 +805,7 @@ if (count($inserted_in_course) > 1) {
 <input type="hidden" name="formSent" value="1">
 <?php
 echo '<div class="actions">';
-echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
+echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 //echo '<div class=row><div class="form_header">';
 //echo $tool_name;

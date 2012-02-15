@@ -178,11 +178,11 @@ if ($origin != 'learnpath') {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
     if ($origin == 'group') {
-        echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('Groups'), '', '32').'</a>';
+        echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('Groups'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
-        echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', '32').'</a>';
+        echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM).'</a>';
     }
-    echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;origin='.$origin.'">'.Display::return_icon('forum.png', get_lang('BackToForum'), '', '32').'</a>';
+    echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;origin='.$origin.'">'.Display::return_icon('forum.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 }
 

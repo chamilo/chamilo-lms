@@ -166,14 +166,14 @@ function handle_stylesheets() {
         if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
             $is_style_changeable = true;
             echo '<div class="actions" id="stylesheetuploadlink">';
-            	Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'','32');
+            	Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'',ICON_SIZE_MEDIUM);
             	echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
             echo '</div>';
         }
     } else {
         $is_style_changeable = true;
         echo '<div class="actions" id="stylesheetuploadlink">';
-			Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'','32');
+			Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'',ICON_SIZE_MEDIUM);
         	echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
         echo '</div>';
     }
@@ -670,7 +670,7 @@ function handle_search() {
 function handle_templates() {
     if ($_GET['action'] != 'add') {
         echo '<div class="actions" style="margin-left: 1px;">';
-        echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'),'','32').'</a>';
+        echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
     }
 
@@ -914,7 +914,7 @@ function add_edit_template() {
 
                // Display a feedback message.
                Display::display_confirmation_message(get_lang('TemplateAdded'));
-               echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'),'','32').'</a>';
+               echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'),'',ICON_SIZE_MEDIUM).'</a>';
            } else {
                $content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
                $sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."', content = '".$content_template."'";

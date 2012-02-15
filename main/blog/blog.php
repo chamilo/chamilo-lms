@@ -250,10 +250,10 @@ if (!empty($return_message))
 // actions
 echo '<div class=actions>';
 ?>
-	<a href="<?php echo api_get_self(); ?>?blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('Home') ?>"><?php echo Display::return_icon('blog.png', get_lang('Home'),'','32'); ?></a>
-	<?php if(api_is_allowed('BLOG_'.$blog_id, 'article_add')) { ?><a href="<?php echo api_get_self(); ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('NewPost') ?>"><?php echo Display::return_icon('new_article.png', get_lang('NewPost'),'','32'); ?></a><?php } ?>
-	<?php if(api_is_allowed('BLOG_'.$blog_id, 'task_management')) { ?><a href="<?php echo api_get_self(); ?>?action=manage_tasks&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageTasks') ?>"><?php echo Display::return_icon('blog_tasks.png', get_lang('TaskManager'),'','32'); ?></a><?php } ?>
-	<?php if(api_is_allowed('BLOG_'.$blog_id, 'member_management')) { ?><a href="<?php echo api_get_self(); ?>?action=manage_members&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageMembers') ?>"><?php echo Display::return_icon('blog_admin_users.png', get_lang('MemberManager'),'','32'); ?></a><?php } ?>
+	<a href="<?php echo api_get_self(); ?>?blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('Home') ?>"><?php echo Display::return_icon('blog.png', get_lang('Home'),'',ICON_SIZE_MEDIUM); ?></a>
+	<?php if(api_is_allowed('BLOG_'.$blog_id, 'article_add')) { ?><a href="<?php echo api_get_self(); ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('NewPost') ?>"><?php echo Display::return_icon('new_article.png', get_lang('NewPost'),'',ICON_SIZE_MEDIUM); ?></a><?php } ?>
+	<?php if(api_is_allowed('BLOG_'.$blog_id, 'task_management')) { ?><a href="<?php echo api_get_self(); ?>?action=manage_tasks&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageTasks') ?>"><?php echo Display::return_icon('blog_tasks.png', get_lang('TaskManager'),'',ICON_SIZE_MEDIUM); ?></a><?php } ?>
+	<?php if(api_is_allowed('BLOG_'.$blog_id, 'member_management')) { ?><a href="<?php echo api_get_self(); ?>?action=manage_members&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageMembers') ?>"><?php echo Display::return_icon('blog_admin_users.png', get_lang('MemberManager'),'',ICON_SIZE_MEDIUM); ?></a><?php } ?>
 <?php
 echo '</div>';
 

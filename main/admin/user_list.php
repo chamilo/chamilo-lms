@@ -813,7 +813,7 @@ $form->addElement('static','search_advanced_link',null,'<a href="javascript://" 
 $actions  = '';
 if (api_is_platform_admin()) {
 	$actions .= '<span style="float:right;">'.
-		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('new_user.png',get_lang('AddUsers'),'','32').'</a>'.
+		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>'.
 		 '</span>';
 }
 $actions .=$form->return_form();

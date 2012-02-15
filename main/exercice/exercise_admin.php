@@ -187,7 +187,7 @@ if ($form->validate()) {
 	echo '<div class="actions">';
 	
 	if ($objExercise->id != 0) {
-	    echo '<a href="admin.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id.'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+	    echo '<a href="admin.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id.'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 	} else {
 		if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){		
 			if (!empty($_POST['lp_id'])){			
@@ -197,11 +197,11 @@ if ($form->validate()) {
 				$lp_id=Security::remove_XSS($_GET['lp_id']);
 			}
 			
-			echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'','32')."</a>";		
+			echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";		
 		}	
 		else{
 			
-	    	echo '<a href="exercice.php">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
+	    	echo '<a href="exercice.php">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
 		}
 	}
 	echo '</div>';	

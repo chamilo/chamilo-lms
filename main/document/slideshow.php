@@ -129,16 +129,16 @@ if ($slide_id != 'all') {
 }
 
 // Exit the slideshow
-echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 
 // Show thumbnails
 if ($slide_id != 'all') {
-	echo '<a href="slideshow.php?slide_id=all&curdirpath='.$pathurl.'">'.Display::return_icon('thumbnails.png',get_lang('_show_thumbnails'),'','32').'</a>';
+	echo '<a href="slideshow.php?slide_id=all&curdirpath='.$pathurl.'">'.Display::return_icon('thumbnails.png',get_lang('_show_thumbnails'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {
-	echo Display::return_icon('thumbnails_na.png',get_lang('_show_thumbnails'),'','32');
+	echo Display::return_icon('thumbnails_na.png',get_lang('_show_thumbnails'),'',ICON_SIZE_MEDIUM);
 }
 // Slideshow options
-echo '<a href="slideshowoptions.php?curdirpath='.$pathurl.'">'.Display::return_icon('settings.png',get_lang('_set_slideshow_options'),'','32').'</a>';
+echo '<a href="slideshowoptions.php?curdirpath='.$pathurl.'">'.Display::return_icon('settings.png',get_lang('_set_slideshow_options'),'',ICON_SIZE_MEDIUM).'</a>';
 
 ?>
 </div>

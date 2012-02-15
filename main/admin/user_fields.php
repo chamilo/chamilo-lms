@@ -133,7 +133,7 @@ if(1)
 	//$form->addElement('text','title',get_lang('FieldTitle'));
 	//$form->addElement('text','default',get_lang('FieldDefaultValue'));
 	//$form->addElement('submit','submit',get_lang('Search'));
-	$form->addElement('static','search_advanced_link',null,'<a href="user_fields_add.php?action=fill">'.Display::return_icon('add_user_fields.png', get_lang('AddUserField'),'','32').'</a>');
+	$form->addElement('static','search_advanced_link',null,'<a href="user_fields_add.php?action=fill">'.Display::return_icon('add_user_fields.png', get_lang('AddUserField'),'',ICON_SIZE_MEDIUM).'</a>');
 	echo '<div class="actions">';
 	$form->display();
 	echo '</div>';

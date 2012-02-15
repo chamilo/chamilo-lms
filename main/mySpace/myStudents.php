@@ -262,7 +262,7 @@ while ($row = Database :: fetch_array($rs)) {
 
 if (empty($courses_in_session)) {
 	echo '<div class="actions">';
-	echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'','32').'</a>';
+	echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
 	echo '</div>';
 	Display::display_warning_message(get_lang('NoDataAvailable'));
 	Display::display_footer();
@@ -281,18 +281,18 @@ if (!empty($student_id)) {
 
 	// Actions bar
 	echo '<div class="actions">';
-    echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'','32').'</a>';
+    echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
     
-	echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'','32').'</a>';
-	echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a> ';
+	echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
+	echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
 	if (!empty ($info_user['email'])) {
-		$send_mail = '<a href="mailto:'.$info_user['email'].'">'.Display :: return_icon('mail_send.png', get_lang('SendMail'),'','32').'</a>';
+		$send_mail = '<a href="mailto:'.$info_user['email'].'">'.Display :: return_icon('mail_send.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM).'</a>';
 	} else {
-		$send_mail = Display :: return_icon('mail_send_na.png', get_lang('SendMail'),'','32');
+		$send_mail = Display :: return_icon('mail_send_na.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM);
 	}
 	echo $send_mail;
 	if (!empty($student_id) && !empty ($_GET['course'])) { //only show link to connection details if course and student were defined in the URL
-		echo '<a href="access_details.php?student=' . $student_id . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$session_id.'">' . Display :: return_icon('statistics.png', get_lang('AccessDetails'),'','32').'</a>';
+		echo '<a href="access_details.php?student=' . $student_id . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$session_id.'">' . Display :: return_icon('statistics.png', get_lang('AccessDetails'),'',ICON_SIZE_MEDIUM).'</a>';
 	}
 	echo '</div>';	
 

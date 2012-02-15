@@ -146,7 +146,7 @@ if ($my_api_cidreq=='') {
 }
 ?>
 <div class="actions">
-<a href="<?php echo Security::remove_XSS($_SESSION['gradebook_dest']).'?id_session='.api_get_session_id().'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"> <?php echo Display::return_icon('back.png',get_lang('FolderView'),'','32'); ?></a>
+<a href="<?php echo Security::remove_XSS($_SESSION['gradebook_dest']).'?id_session='.api_get_session_id().'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"> <?php echo Display::return_icon('back.png',get_lang('FolderView'),'',ICON_SIZE_MEDIUM); ?></a>
 </div>
 <?php
 $warning_message = sprintf(get_lang('TotalWeightMustBeX'), $my_category['weight']);

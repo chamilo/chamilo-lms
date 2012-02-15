@@ -183,7 +183,7 @@ if ($add_type == 'multiple') {
 }
 
 echo '<div class="actions">';
-echo '<a href="promotions.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';       
+echo '<a href="promotions.php">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';       
 echo '</div>';
 
 echo '<div class="row"><div class="form_header">'.$tool_name.' '.$promotion_data['name'].'</div></div><br/>'; ?>

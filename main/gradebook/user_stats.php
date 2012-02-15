@@ -93,7 +93,7 @@ $actions = '<div class="actions">';
 
 if (isset ($_GET['selectcat'])) {
 	$interbreadcrumb[]= array ('url' => 'gradebook_flatview.php?selectcat=' . Security::remove_XSS($_GET['selectcat']), 'name' => get_lang('FlatView'));
-	$actions.= '<a href=gradebook_flatview.php?selectcat=' .Security::remove_XSS($_GET['selectcat']) . '>' . Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('FlatView'),'','32').'</a>';
+	$actions.= '<a href=gradebook_flatview.php?selectcat=' .Security::remove_XSS($_GET['selectcat']) . '>' . Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('FlatView'),'',ICON_SIZE_MEDIUM).'</a>';
 
 }
 if (isset ($_GET['selecteval'])) {
@@ -102,10 +102,10 @@ if (isset ($_GET['selecteval'])) {
 		'name' => get_lang('ViewResult'
 	));
 	$actions.= '<a href=gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '>
-	'.Display::return_icon('back.png', get_lang('BackToEvaluation'),'','32').'</a>';
+	'.Display::return_icon('back.png', get_lang('BackToEvaluation'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 $actions.= '<a href="' . api_get_self() . '?exportpdf=&userid='.Security::remove_XSS($_GET['userid']).'&selectcat=' . $category[0]->get_id() . '" target="_blank">
-' . Display::return_icon('pdf.png', get_lang('ExportPDF'),'','32').'</a>';
+' . Display::return_icon('pdf.png', get_lang('ExportPDF'),'',ICON_SIZE_MEDIUM).'</a>';
 
 $actions.='</div>';
 

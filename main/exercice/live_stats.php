@@ -80,7 +80,7 @@ $(function() {
 </script>
 <?php
 
-$actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+$actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 echo $actions = Display::div($actions, array('class'=> 'actions'));
 
 echo '<h2>'.$objExercise->name.'</h2>';

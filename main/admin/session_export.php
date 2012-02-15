@@ -269,7 +269,7 @@ $result=Database::query($sql);
 $Sessions=Database::store_result($result);
 
 echo '<div class="actions">';
-echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
+echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if(!empty($errorMsg)) {

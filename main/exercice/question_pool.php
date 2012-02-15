@@ -258,11 +258,11 @@ echo '<div class="actions">';
 		$url = api_get_self();
 	}
 	if (isset($fromExercise) && $fromExercise > 0) {
-		echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+		echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 		$titleAdd = get_lang('AddQuestionToTest');
 	}
 	else {
-		echo '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
+		echo '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
 		echo "<a href='admin.php?exerciseId=0'>".Display::return_icon('add_question.gif', get_lang('NewQu'), '', 32)."</a>";
 		$titleAdd = get_lang('ManageAllQuestions');
 	}

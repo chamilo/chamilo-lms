@@ -125,7 +125,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $usergroup->display();
     } else {
         echo '<div class="actions">';
-        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
+        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -164,7 +164,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET[
         $usergroup->display();
     } else {
         echo '<div class="actions">';
-        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
+        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');

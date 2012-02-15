@@ -178,9 +178,9 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 		} else {
 			$lp_id = Security::remove_XSS($_GET['lp_id']);
 		}		
-		echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-3\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'','32')."</a>";		
+		echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-3\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";		
 	} else {
-		//echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png', get_lang('BackToLinksOverview'),'','32').'</a>';
+		//echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png', get_lang('BackToLinksOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 	}	
 	echo '</div>';
 		
@@ -405,8 +405,8 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 	echo '<div class="actions">';
 	if (api_is_allowed_to_edit(null, true)) {
 		$urlview = Security::remove_XSS($urlview);
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=addlink&amp;category='.(!empty($category) ? $category : '').'&amp;urlview='.$urlview.'">'.Display::return_icon('new_link.png', get_lang('LinkAdd'),'','32').'</a>';		
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=addcategory&amp;urlview='.$urlview.'">'.Display::return_icon('new_folder.png', get_lang('CategoryAdd'),'','32').'</a>';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=addlink&amp;category='.(!empty($category) ? $category : '').'&amp;urlview='.$urlview.'">'.Display::return_icon('new_link.png', get_lang('LinkAdd'),'',ICON_SIZE_MEDIUM).'</a>';		
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=addcategory&amp;urlview='.$urlview.'">'.Display::return_icon('new_folder.png', get_lang('CategoryAdd'),'',ICON_SIZE_MEDIUM).'</a>';
 			
 		   /* "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
 	}
@@ -421,12 +421,12 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 		for ($j = 1; $j <= $aantalcategories; $j++) {
 			echo '0';
 		}
-		echo '">'.Display::return_icon('view_remove.png', $shownone,'','32').'</a>';
+		echo '">'.Display::return_icon('view_remove.png', $shownone,'',ICON_SIZE_MEDIUM).'</a>';
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&urlview=';
 		for ($j = 1; $j <= $aantalcategories; $j++) {
 			echo '1';
 		}
-		echo '">'.Display::return_icon('view_tree.png', $showall,'','32').'</a>';
+		echo '">'.Display::return_icon('view_tree.png', $showall,'',ICON_SIZE_MEDIUM).'</a>';
 	}
 	echo '</div>';
 	

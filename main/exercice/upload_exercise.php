@@ -72,7 +72,7 @@ echo '</div>';
 function lp_upload_quiz_actions() {
     $lp_id = Security::remove_XSS($_GET['lp_id']);
     $return = "";
-    $return .= '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
+    $return .= '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     return $return;
 }
 

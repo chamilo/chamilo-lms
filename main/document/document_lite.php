@@ -887,7 +887,7 @@ if (!is_null($docs_and_folders)) {
 
 		//for student does not show icon into other shared folder, and does not show into main path (root)
 		if (is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id) && $curdirpath!='/' || api_is_allowed_to_edit() || api_is_platform_admin()) {
-			$link =  '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=downloadfolder&amp;id='.$document_id.'">'.Display::return_icon('save_pack.png', get_lang('Save').' (ZIP)','','32').'</a>';
+			$link =  '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=downloadfolder&amp;id='.$document_id.'">'.Display::return_icon('save_pack.png', get_lang('Save').' (ZIP)','',ICON_SIZE_MEDIUM).'</a>';
 		}
 	}
 }

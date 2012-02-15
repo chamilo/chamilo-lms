@@ -135,12 +135,12 @@ if (!empty($survey_data['survey_version'])) echo '<b>'.get_lang('Version').': '.
 SurveyUtil::check_first_last_question($_GET['survey_id']);
 
 // Action links
-$survey_actions = '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.png', get_lang('EditSurvey'),'','32').'</a>';
-$survey_actions .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('DeleteSurvey').'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('DeleteSurvey'),'','32').'</a>';
+$survey_actions = '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.png', get_lang('EditSurvey'),'',ICON_SIZE_MEDIUM).'</a>';
+$survey_actions .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('DeleteSurvey').'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('DeleteSurvey'),'',ICON_SIZE_MEDIUM).'</a>';
 //$survey_actions .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
-$survey_actions .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('preview_view.png', get_lang('Preview'),'','32').'</a>';
-$survey_actions .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('mail_send.png', get_lang('Publish'),'','32').'</a>';
-$survey_actions .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('stats.png', get_lang('Reporting'),'','32').'</a>';
+$survey_actions .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('preview_view.png', get_lang('Preview'),'',ICON_SIZE_MEDIUM).'</a>';
+$survey_actions .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('mail_send.png', get_lang('Publish'),'',ICON_SIZE_MEDIUM).'</a>';
+$survey_actions .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('stats.png', get_lang('Reporting'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '<div class="actions">'.$survey_actions.'</div>';
 
 if ($survey_data['survey_type'] == 0) {

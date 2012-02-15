@@ -376,7 +376,7 @@ else
 	echo '<div class="actions" style="width:100%;">';
 	if (api_is_platform_admin()) {
 		echo '<span style="float:right;">'.
-			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/group_add.php">'.Display::return_icon('create_group_social_network.png',get_lang('AddGroups'),'','32').'</a>'.
+			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/group_add.php">'.Display::return_icon('create_group_social_network.png',get_lang('AddGroups'),'',ICON_SIZE_MEDIUM).'</a>'.
 			 '</span>';
 	}
 	$form->display();

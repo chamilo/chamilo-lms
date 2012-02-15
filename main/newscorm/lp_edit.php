@@ -56,20 +56,20 @@ Display::display_header(get_lang('CourseSettings'), 'Path');
 // Action links
 echo '<div class="actions">';
 $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
-echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=build&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('Build').'">'.Display::return_icon('build_learnpath.png', get_lang('Build'),'','32').'</a>';
-echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('BasicOverview').'">'.Display::return_icon('move_learnpath.png', get_lang('BasicOverview'),'','32').'</a>';
-echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=view&lp_id='.Security::remove_XSS($_GET['lp_id']).'">'.Display::return_icon('view_remove.png', get_lang('Display'),'','32').'</a>';
+echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=build&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('Build').'">'.Display::return_icon('build_learnpath.png', get_lang('Build'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('BasicOverview').'">'.Display::return_icon('move_learnpath.png', get_lang('BasicOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=view&lp_id='.Security::remove_XSS($_GET['lp_id']).'">'.Display::return_icon('view_remove.png', get_lang('Display'),'',ICON_SIZE_MEDIUM).'</a>';
 echo ' '.Display::return_icon('i.gif');
 echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('NewStep').'">
-'.Display::return_icon('add.png', get_lang('NewStep'),'','32').'</a>';
+'.Display::return_icon('add.png', get_lang('NewStep'),'',ICON_SIZE_MEDIUM).'</a>';
 
 /*echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=chapter&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('NewChapter').'">
-'.Display::return_icon('add_learnpath_section.png', get_lang('NewChapter'),'','32').'</a>';*/
+'.Display::return_icon('add_learnpath_section.png', get_lang('NewChapter'),'',ICON_SIZE_MEDIUM).'</a>';*/
 
-echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.Display::return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'','32').'</a>';
+echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.Display::return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'',ICON_SIZE_MEDIUM).'</a>';
 
-echo Display::url(Display::return_icon('settings_na.png', get_lang('CourseSettings'),'','32'), '#');
-//echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('scorms_na.png',get_lang('ReturnToLearningPaths'),'','32').'</a>';
+echo Display::url(Display::return_icon('settings_na.png', get_lang('CourseSettings'),'',ICON_SIZE_MEDIUM), '#');
+//echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('scorms_na.png',get_lang('ReturnToLearningPaths'),'',ICON_SIZE_MEDIUM).'</a>';
 
 echo '</div>';
 

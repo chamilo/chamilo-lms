@@ -705,12 +705,12 @@ $resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 
 
 echo "<div class=\"actions\">";
 foreach ($resultcategories as $row) {
-    echo "<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], api_ucfirst(get_lang($row['category'])),'','32')."</a>";
+    echo "<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], api_ucfirst(get_lang($row['category'])),'',ICON_SIZE_MEDIUM)."</a>";
 }
-echo "<a href=\"".api_get_self()."?category=Search\">".Display::return_icon($action_images['search'], api_ucfirst(get_lang('Search')),'','32')."</a>";
-echo "<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets'], api_ucfirst(get_lang('Stylesheets')),'','32')."</a>";
-echo "<a href=\"".api_get_self()."?category=Templates\">".Display::return_icon($action_images['templates'], api_ucfirst(get_lang('Templates')),'','32')."</a>";
-echo "<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins'], api_ucfirst(get_lang('Plugins')),'','32')."</a>";
+echo "<a href=\"".api_get_self()."?category=Search\">".Display::return_icon($action_images['search'], api_ucfirst(get_lang('Search')),'',ICON_SIZE_MEDIUM)."</a>";
+echo "<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets'], api_ucfirst(get_lang('Stylesheets')),'',ICON_SIZE_MEDIUM)."</a>";
+echo "<a href=\"".api_get_self()."?category=Templates\">".Display::return_icon($action_images['templates'], api_ucfirst(get_lang('Templates')),'',ICON_SIZE_MEDIUM)."</a>";
+echo "<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins'], api_ucfirst(get_lang('Plugins')),'',ICON_SIZE_MEDIUM)."</a>";
 echo "</div>";
 
 

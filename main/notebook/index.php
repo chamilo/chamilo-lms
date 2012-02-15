@@ -100,7 +100,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
 		NotebookManager::display_notes();
 	} else {
 		echo '<div class="actions">';
-		echo '<a href="index.php">'.Display::return_icon('back.png',get_lang('BackToNotesList'),'','32').'</a>';
+		echo '<a href="index.php">'.Display::return_icon('back.png',get_lang('BackToNotesList'),'',ICON_SIZE_MEDIUM).'</a>';
 		echo '</div>';
 		$token = Security::get_token();
 		$form->addElement('hidden', 'sec_token');
@@ -152,7 +152,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_
 		NotebookManager::display_notes();
 	} else {
 		echo '<div class="actions">';
-		echo '<a href="index.php">'.Display::return_icon('back.png',get_lang('BackToNotesList'),'','32').'</a>';
+		echo '<a href="index.php">'.Display::return_icon('back.png',get_lang('BackToNotesList'),'',ICON_SIZE_MEDIUM).'</a>';
 		echo '</div>';
 		$token = Security::get_token();
 		$form->addElement('hidden', 'sec_token');

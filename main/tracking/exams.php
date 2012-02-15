@@ -81,12 +81,12 @@ if (!$export_to_xls) {
 	if ($global) {
 	    		
 	    echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
-        Display::return_icon('stats.png', get_lang('MyStats'),'','32');
+        Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM);
         echo '</a>';
         
         echo '<span style="float:right">';
-        echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">'.Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'','32').'</a>';
-        echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.Display::return_icon('printer.png',get_lang('Print'),'','32').'</a>';        
+        echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">'.Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.Display::return_icon('printer.png',get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';        
         echo '</span>';
 	
         $menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher');

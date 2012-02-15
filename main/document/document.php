@@ -918,14 +918,14 @@ if (!$is_certificate_mode) {
 /* GO TO PARENT DIRECTORY */
 if ($curdirpath!= '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'">';
-    echo Display::display_icon('folder_up.png', get_lang('Up'),'','32');
+    echo Display::display_icon('folder_up.png', get_lang('Up'),'',ICON_SIZE_MEDIUM);
     echo '</a>';
 }
 
 if ($is_certificate_mode && $curdirpath != '/certificates') {
 ?>
     <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&amp;curdirpath=<?php echo urlencode((dirname($curdirpath) == '\\') ? '/' : dirname($curdirpath)).$req_gid; ?>">
-        <?php Display::display_icon('folder_up.png', get_lang('Up'),'','32'); ?></a>
+        <?php Display::display_icon('folder_up.png', get_lang('Up'),'',ICON_SIZE_MEDIUM); ?></a>
 <?php
 }
 $table_footer = '';
@@ -1061,7 +1061,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     if (!$is_certificate_mode) {
         ?>
         <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id.$req_gid; ?>">
-            <?php Display::display_icon('new_document.png', get_lang('CreateDoc'),'','32'); ?></a>
+            <?php Display::display_icon('new_document.png', get_lang('CreateDoc'),'',ICON_SIZE_MEDIUM); ?></a>
         <?php
 
         // Create new draw
@@ -1069,10 +1069,10 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
             if (api_browser_support('svg')) {
             ?>
                 <a href="create_draw.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id.$req_gid; ?>">
-            <?php Display::display_icon('new_draw.png', get_lang('Draw'),'','32'); ?></a>&nbsp;
+            <?php Display::display_icon('new_draw.png', get_lang('Draw'),'',ICON_SIZE_MEDIUM); ?></a>&nbsp;
             <?php
             } else {
-                Display::display_icon('new_draw_na.png', get_lang('BrowserDontSupportsSVG'),'','32');
+                Display::display_icon('new_draw_na.png', get_lang('BrowserDontSupportsSVG'),'',ICON_SIZE_MEDIUM);
             }
         }
 		
@@ -1080,7 +1080,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 		if (api_get_setting('enabled_support_pixlr') == 'true'){
 		?>
 			<a href="create_paint.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id.$req_gid; ?>">
-		   <?php Display::display_icon('new_paint.png', get_lang('PhotoRetouching'),'','32'); ?></a>
+		   <?php Display::display_icon('new_paint.png', get_lang('PhotoRetouching'),'',ICON_SIZE_MEDIUM); ?></a>
 		<?php
 		}		
 		
@@ -1096,7 +1096,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 		if (api_get_setting('enabled_text2audio') == 'true'){
 		?>
 			<a href="create_audio.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id.$req_gid; ?>">
-		   <?php Display::display_icon('new_sound.png', get_lang('CreateAudio'),'','32'); ?></a>
+		   <?php Display::display_icon('new_sound.png', get_lang('CreateAudio'),'',ICON_SIZE_MEDIUM); ?></a>
 		<?php
 		}		
     }    
@@ -1105,22 +1105,22 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     if ($is_certificate_mode) {
 ?>
     <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id.$req_gid; ?>&certificate=true&selectcat=<?php echo $selectcat; ?>">
-        <?php Display::display_icon('new_certificate.png', get_lang('CreateCertificate'),'','32'); ?></a>
+        <?php Display::display_icon('new_certificate.png', get_lang('CreateCertificate'),'',ICON_SIZE_MEDIUM); ?></a>
 <?php
     }
     // File upload link
 	if ($is_certificate_mode) {
         echo '<a href="upload.php?'.api_get_cidreq().'&id='.$current_folder_id.$req_gid.'">';
-        echo Display::display_icon('upload_certificate.png', get_lang('UploadCertificate'),'','32').'</a>';
+        echo Display::display_icon('upload_certificate.png', get_lang('UploadCertificate'),'',ICON_SIZE_MEDIUM).'</a>';
 	} else {
         echo '<a href="upload.php?'.api_get_cidreq().'&id='.$current_folder_id.$req_gid.'">';
-        echo Display::display_icon('upload_file.png', get_lang('UplUploadDocument'),'','32').'</a>';
+        echo Display::display_icon('upload_file.png', get_lang('UplUploadDocument'),'',ICON_SIZE_MEDIUM).'</a>';
 	}
     // Create directory
     if (!$is_certificate_mode) {
     ?>
     <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id.$req_gid; ?>&createdir=1">
-        <?php Display::display_icon('new_folder.png', get_lang('CreateDir'),'','32'); ?></a>
+        <?php Display::display_icon('new_folder.png', get_lang('CreateDir'),'',ICON_SIZE_MEDIUM); ?></a>
 <?php
     }
 }
@@ -1133,7 +1133,7 @@ if (!is_null($docs_and_folders)) {
 
         //for student does not show icon into other shared folder, and does not show into main path (root)
         if (is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id) && $curdirpath!='/' || api_is_allowed_to_edit() || api_is_platform_admin()) {
-            echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=downloadfolder&amp;id='.$document_id.'">'.Display::return_icon('save_pack.png', get_lang('Save').' (ZIP)','','32').'</a>';
+            echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=downloadfolder&amp;id='.$document_id.'">'.Display::return_icon('save_pack.png', get_lang('Save').' (ZIP)','',ICON_SIZE_MEDIUM).'</a>';
         }
     }
 }
@@ -1141,7 +1141,7 @@ if (!is_null($docs_and_folders)) {
 // Slideshow by Patrick Cool, May 2004
 require 'document_slideshow.inc.php';
 if ($image_present && !isset($_GET['keyword'])  ) {
-    echo '<a href="slideshow.php?'.api_get_cidreq().'&amp;curdirpath='.$curdirpathurl.'">'.Display::return_icon('slideshow.png', get_lang('ViewSlideshow'),'','32').'</a>';
+    echo '<a href="slideshow.php?'.api_get_cidreq().'&amp;curdirpath='.$curdirpathurl.'">'.Display::return_icon('slideshow.png', get_lang('ViewSlideshow'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 echo '</div>'; //end actions
 

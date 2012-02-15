@@ -110,7 +110,7 @@ if(empty($action)) {
 if($action == 'add' || $action == 'edit') {
 	?>
 	<div class="actions">
-	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>"><?php echo Display::return_icon('folder_up.png',get_lang("Back"),'','32'); if(!empty($category)) echo ' ('.Security::remove_XSS($category).')'; ?></a>
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>"><?php echo Display::return_icon('folder_up.png',get_lang("Back"),'',ICON_SIZE_MEDIUM); if(!empty($category)) echo ' ('.Security::remove_XSS($category).')'; ?></a>
 	</div>
 	<?php
 	$form_title = ($action == 'add')?get_lang('AddACategory'):get_lang('EditNode');
@@ -188,7 +188,7 @@ if(!empty($category) && empty($action))  {
 	$parent_id['parent_id']?$link=' ('.$parent_id['parent_id'].')':$link='';
 	?>
 
-	<a href="<?php echo api_get_self(); ?>?category=<?php echo $parent_id['parent_id']; ?>"><?php echo Display::return_icon('folder_up.png',get_lang("Back"),'','32'); if(!empty($parent_id)) echo $link ?></a>
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo $parent_id['parent_id']; ?>"><?php echo Display::return_icon('folder_up.png',get_lang("Back"),'',ICON_SIZE_MEDIUM); if(!empty($parent_id)) echo $link ?></a>
 
 	<?php
 }
@@ -201,7 +201,7 @@ else{
 	$CategoryInto='';
 }
 ?>
-<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=add"><?php echo Display::return_icon('new_folder.png',get_lang("AddACategory").$CategoryInto,'','32'); ?></a>
+<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=add"><?php echo Display::return_icon('new_folder.png',get_lang("AddACategory").$CategoryInto,'',ICON_SIZE_MEDIUM); ?></a>
 </div>
 <ul>
 

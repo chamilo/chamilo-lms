@@ -181,7 +181,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
     Display::display_header($nameTools, get_lang('Exercise'));
 
     echo '<div class="actions">';
-    echo '<a href="exercice.php?show=test">'.Display :: return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
+    echo '<a href="exercice.php?show=test">'.Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 
     if ($finish==2) { // If we are in the img upload process.

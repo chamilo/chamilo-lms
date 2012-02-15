@@ -1535,12 +1535,12 @@ function change_visibility($tool,$id,$visibility)
 */
 function display_courseadmin_links() {
 	if (!isset($_GET['action'])) {
-		$actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar_na.png', get_lang('Agenda'),'','32')."</a>";
+		$actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar_na.png', get_lang('Agenda'),'',ICON_SIZE_MEDIUM)."</a>";
 	} else {
-		$actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar.png', get_lang('Agenda'),'','32')."</a>";
+		$actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar.png', get_lang('Agenda'),'',ICON_SIZE_MEDIUM)."</a>";
 	}
-	$actions .= "<a href='agenda.php?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".api_get_group_id()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'),'','32')."</a>";
-	$actions .= "<a href='agenda.php?".api_get_cidreq()."&action=importical&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'),'','32')."</a>";
+	$actions .= "<a href='agenda.php?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".api_get_group_id()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'),'',ICON_SIZE_MEDIUM)."</a>";
+	$actions .= "<a href='agenda.php?".api_get_cidreq()."&action=importical&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'),'',ICON_SIZE_MEDIUM)."</a>";
 	
 	return $actions;
 	/*
@@ -1566,9 +1566,9 @@ function display_student_links() {
 	
     $day_url = '&month='.$month.'&year='.$year;
 	if ($_SESSION['view'] <> 'month') {	    
-		echo "<a href=\"".api_get_self()."?action=view".$day_url."&toolgroup=".api_get_group_id()."&amp;view=month\">".Display::return_icon('month_empty.png', get_lang('MonthView'),'','32')."</a> ";
+		echo "<a href=\"".api_get_self()."?action=view".$day_url."&toolgroup=".api_get_group_id()."&amp;view=month\">".Display::return_icon('month_empty.png', get_lang('MonthView'),'',ICON_SIZE_MEDIUM)."</a> ";
 	} else {
-		echo "<a href=\"".api_get_self()."?action=view".$day_url."&toolgroup=".api_get_group_id()."&amp;view=list\">".Display::return_icon('week.png', get_lang('ListView'),'','32')."</a> ";
+		echo "<a href=\"".api_get_self()."?action=view".$day_url."&toolgroup=".api_get_group_id()."&amp;view=list\">".Display::return_icon('week.png', get_lang('ListView'),'',ICON_SIZE_MEDIUM)."</a> ";
 	}	
 	$day_url = '&month='.date('m').'&year='.date('Y').'&view='.Security::remove_XSS($_GET['view']);
 	$today_url = api_get_self()."?action=view".$day_url."&toolgroup=".api_get_group_id();

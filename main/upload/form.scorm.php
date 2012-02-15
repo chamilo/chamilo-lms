@@ -43,7 +43,7 @@ require_once '../newscorm/content_makers.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
 echo '<div class="actions">';
-echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('back.png',get_lang('ReturnToLearningPaths'),'','32').'</a>';
+echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('back.png',get_lang('ReturnToLearningPaths'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 $form = new FormValidator('','POST','upload.php','','id="upload_form" enctype="multipart/form-data" style="background-image: url(\'../img/scorm.jpg\'); background-repeat: no-repeat; background-position: 620px;"');

@@ -664,15 +664,15 @@ $show_actions = false;
 if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
 	echo '<div class="actions">';
 	if (isset($_GET['action']) && in_array($_GET['action'], array('add', 'modify','view'))) {
-        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('back.png',get_lang('Back'),'','32')."</a>";
+        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM)."</a>";
 	} else {
-	   echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'','32')."</a>";
+	   echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'',ICON_SIZE_MEDIUM)."</a>";
 	}
 	$show_actions = true;
 } else {
     if (in_array($_GET['action'], array('view'))) {
         echo '<div class="actions">';
-        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('back.png',get_lang('Back'),'','32')."</a>";    
+        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM)."</a>";    
         echo '</div>';
     }
 }
@@ -682,7 +682,7 @@ if (api_is_allowed_to_edit() && $announcement_number > 1) {
 		if (!$show_actions) 
 			echo '<div class="actions">';
 			if (!in_array($_GET['action'], array('add', 'modify','view')))		    
-                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('delete_announce.png',get_lang('AnnouncementDeleteAll'),'','32')."</a>";	
+                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('delete_announce.png',get_lang('AnnouncementDeleteAll'),'',ICON_SIZE_MEDIUM)."</a>";	
     	}	// if announcementNumber > 1    
 }
 
@@ -1080,7 +1080,7 @@ if ($display_announcement_list) {
             echo '</div>';
             echo '</div>';                   
         } else {
-            //echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'','32')."</a>";
+            //echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'',ICON_SIZE_MEDIUM)."</a>";
            Display::display_warning_message(get_lang('NoAnnouncements'));        
         }
     

@@ -77,7 +77,7 @@ if (!empty($_GET['selfUnReg']) && GroupManager :: is_self_unregistration_allowed
 	Display::display_normal_message(get_lang('StudentDeletesHimself'));
 }
 echo '<div class="actions">';
-echo '<a href="group.php">'.Display::return_icon('back.png',get_lang('BackToGroupList'),'','32').'</a>';
+echo '<a href="group.php">'.Display::return_icon('back.png',get_lang('BackToGroupList'),'',ICON_SIZE_MEDIUM).'</a>';
 
 /*
  * Register to group

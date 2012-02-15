@@ -39,7 +39,7 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 function ch_qti2_display_form() {
 	$name_tools = get_lang('ImportQtiQuiz');
 	$form  = '<div class="actions">';
-	$form .= '<a href="exercice.php?show=test">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
+	$form .= '<a href="exercice.php?show=test">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
 	$form .= '</div>';
 	$form .= '<form action='.api_get_self()."?".api_get_cidreq().' method="post" enctype="multipart/form-data">';
 	$form .= '<div class="row"><div class="form_header">'.$name_tools.'</div></div>';

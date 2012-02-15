@@ -183,11 +183,11 @@ switch($_GET['studentlist']) {
 }
 
 echo '<span style="float:right; padding-top:0px;">';
-echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'','32').'</a>';
+echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 
 if ($_GET['studentlist'] == 'false') {
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv&studentlist=false">
-	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a>';	
+	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';	
 } elseif ($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
     $addional_param = '';
     if (isset($_GET['additional_profile_field'])) {
@@ -198,7 +198,7 @@ if ($_GET['studentlist'] == 'false') {
         $users_tracking_per_page= '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
     }
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
-	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a>';
+	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
 echo '</span>';

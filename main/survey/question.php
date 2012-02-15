@@ -95,7 +95,7 @@ $possible_types = array('personality', 'yesno', 'multiplechoice', 'multiplerespo
 
 // Actions
 $actions = '<div class="actions">';
-$actions .= '<a href="survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png', get_lang('BackToSurvey'),'','32').'</a>';
+$actions .= '<a href="survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png', get_lang('BackToSurvey'),'',ICON_SIZE_MEDIUM).'</a>';
 $actions .= '</div>';
 // Checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types)) {

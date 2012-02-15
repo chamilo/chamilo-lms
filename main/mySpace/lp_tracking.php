@@ -93,11 +93,11 @@ $sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).' WHERE c_i
 $rs  = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
 echo '<div class ="actions">';
-echo '<a href="javascript:window.back();">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
+echo '<a href="javascript:window.back();">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">
-'.Display::return_icon('printer.png',get_lang('Print'),'','32').'</a>';
+'.Display::return_icon('printer.png',get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="'.api_get_self().'?export=csv&'.Security::remove_XSS($_SERVER['QUERY_STRING']).'">
-'.Display::return_icon('export_csv.png',get_lang('ExportAsCSV'),'','32').'</a>';
+'.Display::return_icon('export_csv.png',get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 echo '<div class="clear"></div>';

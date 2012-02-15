@@ -123,7 +123,7 @@ SurveyUtil::handle_reporting_actions();
 
 // Actions bar
 echo '<div class="actions">';
-echo '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('back.png', get_lang('BackToSurvey'),'','32').'</a>';
+echo '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('back.png', get_lang('BackToSurvey'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 // Content

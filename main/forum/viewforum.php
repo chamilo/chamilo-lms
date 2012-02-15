@@ -284,10 +284,10 @@ echo '<div class="actions">';
 if ($origin != 'learnpath') {
     
     if ($origin=='group') {
-        echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'','32').'</a>';
+        echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'',ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<span style="float:right;">'.search_link().'</span>';
-        echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', '32').'</a>';
+        echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM).'</a>';
     }    
 }
 
@@ -300,10 +300,10 @@ if (api_is_allowed_to_edit(false, true) OR ($current_forum['allow_new_threads'] 
 	if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
 		if (!api_is_anonymous()) {
 			if ($my_forum == strval(intval($my_forum))) {
-				echo '<a href="newthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.Security::remove_XSS($my_forum).$origin_string.'">'.Display::return_icon('new_thread.png',get_lang('NewTopic'),'','32').'</a>';
+				echo '<a href="newthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.Security::remove_XSS($my_forum).$origin_string.'">'.Display::return_icon('new_thread.png',get_lang('NewTopic'),'',ICON_SIZE_MEDIUM).'</a>';
 		    } else {
 		    	$my_forum = strval(intval($my_forum));
-				echo '<a href="newthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.$my_forum.$origin_string.'">'.Display::return_icon('new_thread.png',get_lang('NewTopic'),'','32').'</a>';
+				echo '<a href="newthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.$my_forum.$origin_string.'">'.Display::return_icon('new_thread.png',get_lang('NewTopic'),'',ICON_SIZE_MEDIUM).'</a>';
 			}
 		}
 	} else {

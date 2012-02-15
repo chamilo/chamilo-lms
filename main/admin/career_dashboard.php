@@ -52,9 +52,9 @@ $form->addElement('style_submit_button', 'submit', get_lang('Filter'), 'class="s
 
 // action links
 echo '<div class="actions" style="margin-bottom:20px">';
-    echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
-    echo '<a href="careers.php">'.Display::return_icon('career.png',get_lang('Careers'),'','32').'</a>';
-    echo '<a href="promotions.php">'.Display::return_icon('promotion.png',get_lang('Promotions'),'','32').'</a>'; 
+    echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="careers.php">'.Display::return_icon('career.png',get_lang('Careers'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="promotions.php">'.Display::return_icon('promotion.png',get_lang('Promotions'),'',ICON_SIZE_MEDIUM).'</a>'; 
 echo '</div>';
 
 $form->display();

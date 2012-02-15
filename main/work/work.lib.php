@@ -38,26 +38,26 @@ function display_action_links($id, $cur_dir_path, $show_tool_options, $display_u
     
 	
 	if (!empty($cur_dir_path)) {		
-		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&id='.$my_back_id.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'','32').'</a>';
+		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&id='.$my_back_id.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
 	}
 
 	if ($show_tool_options && api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
 		// Create dir
 		if (empty($cur_dir_path)) {
 			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=create_dir&origin='.$origin.'&gradebook='.$gradebook.'">';
-			$display_output .= Display::return_icon('new_work.png', get_lang('CreateAssignment'),'','32').'</a>';
+			$display_output .= Display::return_icon('new_work.png', get_lang('CreateAssignment'),'',ICON_SIZE_MEDIUM).'</a>';
 		}
 		if (empty($cur_dir_path)) {
 			// Options
 			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=settings&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">';
-			$display_output .= Display::return_icon('settings.png', get_lang('EditToolOptions'),'','32').'</a>';
+			$display_output .= Display::return_icon('settings.png', get_lang('EditToolOptions'),'',ICON_SIZE_MEDIUM).'</a>';
 		}
 	}
 
 
     if ($display_upload_link && api_is_allowed_to_session_edit(false, true) && (isset($cur_dir_path) && (!empty($cur_dir_path) && $cur_dir_path != '/') )) {
         $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$id.'&curdirpath='.$cur_dir_path.'&action=upload_form&origin='.$origin.'&gradebook='.$gradebook.'">';
-        $display_output .= Display::return_icon('upload_file.png', get_lang('UploadADocument'),'','32').'</a>';
+        $display_output .= Display::return_icon('upload_file.png', get_lang('UploadADocument'),'',ICON_SIZE_MEDIUM).'</a>';
     }
 
 
@@ -76,15 +76,15 @@ function display_action_links($id, $cur_dir_path, $show_tool_options, $display_u
 		if (!empty($cur_dir_path)) {
 			if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without">'.
-				Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'),'','32')."</a>\n";
+				Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'),'',ICON_SIZE_MEDIUM)."</a>\n";
 			} else {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=with">'.
-				Display::return_icon('exercice_check.png', get_lang('ViewUsersWithTask'),'','32')."</a>\n";
+				Display::return_icon('exercice_check.png', get_lang('ViewUsersWithTask'),'',ICON_SIZE_MEDIUM)."</a>\n";
                 if (!isset($_GET['action']) || (isset($_GET['action']) && $_GET['action'] != 'send_mail')) {
                     $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without&amp;action=send_mail&amp;sec_token='.$token.'">'.
-                    Display::return_icon('mail_send.png', get_lang('ReminderMessage'),'','32')."</a>";
+                    Display::return_icon('mail_send.png', get_lang('ReminderMessage'),'',ICON_SIZE_MEDIUM)."</a>";
                 } else {
-                    $display_output .= Display::return_icon('mail_send_na.png', get_lang('ReminderMessage'),'','32');
+                    $display_output .= Display::return_icon('mail_send_na.png', get_lang('ReminderMessage'),'',ICON_SIZE_MEDIUM);
                 }
 			}
 		}

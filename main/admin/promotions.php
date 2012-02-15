@@ -112,7 +112,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $promotion->display();
     } else {
         echo '<div class="actions">';        
-        echo Display::url(Display::return_icon('back.png',get_lang('Back'),'','32'), api_get_self());
+        echo Display::url(Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM), api_get_self());
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -141,7 +141,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $promotion->display();
     } else {
         echo '<div class="actions">';        
-        echo Display::url(Display::return_icon('back.png',get_lang('Back'),'','32'), api_get_self());
+        echo Display::url(Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM), api_get_self());
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');

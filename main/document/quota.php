@@ -43,7 +43,7 @@ Display::display_header($nameTools,'Doc');
 // Actions
 echo '<div class="actions">';
 // link back to the documents overview
-echo '<a href="document.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+echo '<a href="document.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 // Getting the course quota

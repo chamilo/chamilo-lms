@@ -107,9 +107,9 @@ event_access_tool(TOOL_DOCUMENT);
 
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
-		echo '<a href="document.php?id='.$parent_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+		echo '<a href="document.php?id='.$parent_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 		
-		echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&origin=editdraw">'.Display::return_icon('edit.png',get_lang('Rename').'/'.get_lang('Comments'),'','32').'</a>';
+		echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&origin=editdraw">'.Display::return_icon('edit.png',get_lang('Rename').'/'.get_lang('Comments'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (api_browser_support('svg')) {	

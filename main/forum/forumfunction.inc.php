@@ -3529,7 +3529,7 @@ function search_link() {
     if ($origin != 'learnpath') {
     	
         $return = '<a href="forumsearch.php?'.api_get_cidreq().'&amp;gidReq='.api_get_group_id().'&amp;action=search&amp;origin='.$origin.'"> '; 
-        $return .= Display::return_icon('search.png', get_lang('Search'),'','32').'</a>';
+        $return .= Display::return_icon('search.png', get_lang('Search'),'',ICON_SIZE_MEDIUM).'</a>';
         
         if (!empty($_GET['search'])) {
             $return .= ': '.Security::remove_XSS($_GET['search']).' ';
@@ -4184,7 +4184,7 @@ function get_all_post_from_user($user_id, $course_code) {
                          $post_counter = count($post_list);
                          if (is_array($post_list) && count($post_list) > 0) {
                              $hand_forums.= '<div id="social-thread">';
-                             $hand_forums.= Display::return_icon('thread.png', get_lang('Thread'), '', '32');
+                             $hand_forums.= Display::return_icon('thread.png', get_lang('Thread'), '', ICON_SIZE_MEDIUM);
                              $hand_forums.= '&nbsp;'.Security::remove_XSS($thread['thread_title'], STUDENT);
                              $hand_forums.= '</div>';
 

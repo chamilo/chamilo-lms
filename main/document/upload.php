@@ -204,15 +204,15 @@ if (!empty($_FILES)) {
 echo '<div class="actions">';
 // Link back to the documents overview
 if ($is_certificate_mode) {
-	echo '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'','32').'</a>';
+	echo '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {
-	echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+	echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
 // Link to create a folder
 /*
 if (!isset($_GET['createdir']) && !is_my_shared_folder($_user['user_id'], $path, api_get_session_id()) && !$is_certificate_mode) {
-	echo '<a href="'.api_get_self().'?path='.$path.'&amp;createdir=1">'.Display::return_icon('new_folder.png', get_lang('CreateDir'),'','32').'</a>';
+	echo '<a href="'.api_get_self().'?path='.$path.'&amp;createdir=1">'.Display::return_icon('new_folder.png', get_lang('CreateDir'),'',ICON_SIZE_MEDIUM).'</a>';
 }*/
 echo '</div>';
 

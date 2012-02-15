@@ -2434,15 +2434,15 @@ class SurveyUtil {
 
 		// Actions bar
 		echo '<div class="actions">';
-		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview'),'','32').'</a>';
+		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 		if (isset($_GET['user'])) {
 
 			// The delete link
-			echo '<a href="reporting.php?action=deleteuserreport&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;user='.Security::remove_XSS($_GET['user']).'" >'.Display::return_icon('delete.png', get_lang('Delete'),'','32').'</a>';
+			echo '<a href="reporting.php?action=deleteuserreport&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;user='.Security::remove_XSS($_GET['user']).'" >'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_MEDIUM).'</a>';
 
 			// Export the user report
-			echo '<a href="javascript: void(0);" onclick="document.form1a.submit();">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a> ';
-			echo '<a href="javascript: void(0);" onclick="document.form1b.submit();">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a> ';
+			echo '<a href="javascript: void(0);" onclick="document.form1a.submit();">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
+			echo '<a href="javascript: void(0);" onclick="document.form1b.submit();">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
 			echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user_id='.Security::remove_XSS($_GET['user']).'">';
 			echo '<input type="hidden" name="export_report" value="export_report">';
 			echo '<input type="hidden" name="export_format" value="csv">';
@@ -2581,7 +2581,7 @@ class SurveyUtil {
 		}
 
 		echo '<div class="actions">';
-		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview'),'','32').'</a>';
+		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
         
 		if ($survey_data['number_of_questions'] > 0) {
@@ -2806,11 +2806,11 @@ class SurveyUtil {
 		// Actions bar
 		echo '<div class="actions">';
 		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">
-		'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview'),'','32').'</a>';
+		'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 		echo '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1a.submit();">
-		'.Display::return_icon('export_csv.png',get_lang('ExportAsCSV'),'','32').'</a>';		
+		'.Display::return_icon('export_csv.png',get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';		
 		echo '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1b.submit();">
-		'.Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'','32').'</a>';
+		'.Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a>';
 		echo '</div>';
 
 		// The form
@@ -3480,7 +3480,7 @@ class SurveyUtil {
 
 		// Actions bar
 		echo '<div class="actions">';
-		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ReportingOverview'),'','32').'</a>';
+		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ReportingOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 		echo '</div>';
 
 		// Displaying an information message that only the questions with predefined answers can be used in a comparative report

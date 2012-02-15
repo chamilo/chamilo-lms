@@ -368,8 +368,8 @@ if ($is_allowedToEdit) {
 $total = $total_exercises + $hp_count;		
 
 if ($is_allowedToEdit && $origin != 'learnpath') {	
-	echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_exercice.png', get_lang('NewEx'),'','32').'</a>';
-	echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_question.png', get_lang('AddQ'),'','32').'</a>';
+	echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_exercice.png', get_lang('NewEx'),'',ICON_SIZE_MEDIUM).'</a>';
+	echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_question.png', get_lang('AddQ'),'',ICON_SIZE_MEDIUM).'</a>';
 	// Question category
 	echo '<a href="tests_category.php">';
 	echo Display::return_icon('question_category_show.gif', get_lang('QuestionCategory'));
@@ -378,10 +378,10 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 	echo Display::return_icon('database.png', get_lang('langQuestionPool'), array('style'=>'width:32px'));
 	echo '</a>';
 	// end question category
-	echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'),'','32').'</a>';
+	echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'),'',ICON_SIZE_MEDIUM).'</a>';
 	// link to import qti2 ...
-	echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'),'','32') .'</a>';
-    echo '<a href="upload_exercise.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'),'','32') .'</a>';	
+	echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'),'',ICON_SIZE_MEDIUM) .'</a>';
+    echo '<a href="upload_exercise.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'),'',ICON_SIZE_MEDIUM) .'</a>';	
 } 
 
 if ($is_allowedToEdit) {

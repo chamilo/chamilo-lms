@@ -123,7 +123,7 @@ if (isset($document_data['parents'])) {
 Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
-		echo '<a href="document.php?'.api_get_cidreq().'&id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+		echo '<a href="document.php?'.api_get_cidreq().'&id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 ?>

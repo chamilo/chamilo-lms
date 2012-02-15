@@ -99,8 +99,8 @@ foreach($session_list  as $session_item) {
 
             if ($multiple_url_is_on) {
                 if ($user['access_url_id'] != $url_id) {            
-                    $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), array(), 22);
-                    $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), array(), 22);                    
+                    $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), array(), ICON_SIZE_MEDIUM);
+                    $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), array(), ICON_SIZE_MEDIUM);                    
                     $link_to_add_user_in_url = '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
                 }                
             }

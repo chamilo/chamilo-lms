@@ -114,7 +114,7 @@ if($_POST['form_sent']) {
 Display::display_header($tool_name);
 
 echo '<div class="actions" style="height:22px;">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_add_courses_to_url.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddUserToURL'),'').' '.get_lang('AddCoursesToURL').'</a>';
+echo Display::url( Display::return_icon('view_more_stats.gif',get_lang('AddUserToURL'),''), api_get_path(WEB_CODE_PATH).'admin/access_url_add_courses_to_url.php');
 echo '</div>';
 
 api_display_tool_title($tool_name);

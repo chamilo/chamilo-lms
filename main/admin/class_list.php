@@ -125,9 +125,9 @@ $table->set_form_actions(array ('delete_classes' => get_lang('DeleteSelectedClas
 
 $content .= $table->return_table();
 
-$actions .= Display::url(Display::return_icon('add.png', get_lang('Add'), array(), 32), 'class_add.php');
-$actions .= Display::url(Display::return_icon('import_csv.png', get_lang('AddUsersToAClass'), array(), 32), 'class_user_import.php');
-$actions .= Display::url(Display::return_icon('import_csv.png', get_lang('ImportClassListCSV'), array(), 32), 'class_import.php');
+$actions .= Display::url(Display::return_icon('add.png', get_lang('Add'), array(), ICON_SIZE_MEDIUM), 'class_add.php');
+$actions .= Display::url(Display::return_icon('import_csv.png', get_lang('AddUsersToAClass'), array(), ICON_SIZE_MEDIUM), 'class_user_import.php');
+$actions .= Display::url(Display::return_icon('import_csv.png', get_lang('ImportClassListCSV'), array(), ICON_SIZE_MEDIUM), 'class_import.php');
 
 $tpl = new Template($tool_name);
 $tpl->assign('content', $content);

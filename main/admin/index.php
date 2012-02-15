@@ -127,7 +127,7 @@ if (api_is_platform_admin()) {
     
     /* Platform */ 
     
-    $blocks['platform']['icon']  = Display::return_icon('platform.png', get_lang('Platform'), array(), 32);
+    $blocks['platform']['icon']  = Display::return_icon('platform.png', get_lang('Platform'), array(), ICON_SIZE_MEDIUM);
     $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));
     
     $items = array();

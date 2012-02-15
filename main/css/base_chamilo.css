@@ -2623,7 +2623,7 @@ li {
 }
 .nav > li > a:hover {
   text-decoration: none;
-  background-color: #eeeeee;
+  /*background-color: #eeeeee; */
 }
 
 .nav {
@@ -2658,6 +2658,7 @@ li {
   margin-left: 10px;
   margin-right: 0;
 }
+
 .nav.secondary-nav .menu-dropdown,
 .nav.secondary-nav .dropdown-menu {
   right: 0;

@@ -432,7 +432,7 @@ function show_header_3() {
             }
             
             //start user section line with name, my course, my profile, scorm info, etc            
-            $header3 .= '<ul class="nav secondary-nav">';
+            $header3 .= '<ul class="nav nav-pills secondary-nav">';
                 //echo '<li><span>'.get_lang('LoggedInAsX').' '.$login.'</span></li>';
                 //echo '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php" target="_top"><span>'.get_lang('Profile').'</span></a></li>';
                 $header3 .= '<li><a href="'.api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id().'" target="_top"><span>'.get_lang('Logout').' ('.$login.')</span></a></li>';

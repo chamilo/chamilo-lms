@@ -17,6 +17,15 @@
  * Code
  */
 define('MAX_LENGTH_BREADCRUMB', 100);
+
+define('ICON_SIZE_TINY',    16);
+define('ICON_SIZE_SMALL',   22);
+define('ICON_SIZE_MEDIUM',  32);
+//define('ICON_SIZE_XXXX',  48); ??
+define('ICON_SIZE_BIG',     64);
+define('ICON_SIZE_HUGE',    128);
+
+        
 /**
  * Display class
  * contains several public functions dealing with the display of
@@ -528,34 +537,39 @@ class Display {
      * @return string  An HTML string of the right <img> tag
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University 2006
-     * @author Julio Montoya 2010 Function improved
+     * @author Julio Montoya 2010 Function improved, adding image constants
      * @author Yannick Warnier 2011 Added size handler
      * @version Feb 2011
     */
-    public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size=null) {
+    public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size = ICON_SIZE_MEDIUM) {
+        
         $code_path   = api_get_path(SYS_CODE_PATH);
         $w_code_path = api_get_path(WEB_CODE_PATH);
         
         $image = trim($image);
-
         $theme = 'css/'.api_get_visual_theme().'/icons/';
         $icon = '';
         $size_extra = '';
+        
         if (isset($size)) {
             $size = intval($size);
-            if (in_array($size,array(16,22,32,48,64,128))) {
+            /*if (in_array($size,array(16, 22, 32, 48, 64,128))) {
                 $size_extra = $size.'/';
-            }
+            }*/
+            $size_extra = $size.'/';
         }
+        
+        //Checking the theme icons folder example: main/css/chamilo/icons/XXX
         if (is_file($code_path.$theme.$size_extra.$image)) {
             $icon = $w_code_path.$theme.$size_extra.$image;
         } elseif (is_file($code_path.'img/icons/'.$size_extra.$image)) {
+            //Checking the main/img/icons/XXX/ folder
             $icon = $w_code_path.'img/icons/'.$size_extra.$image;
         } else {
+            //Checking the img/ folder
             $icon = $w_code_path.'img/'.$image;
         }
-
-        return self::img($icon, $alt_text,$additional_attributes);
+        return self::img($icon, $alt_text, $additional_attributes);
     }
 
     /**

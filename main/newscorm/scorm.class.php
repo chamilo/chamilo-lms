@@ -263,18 +263,13 @@ class scorm extends learnpath {
      * @return	bool	Returns -1 on error
      */
     function import_manifest($course_code, $use_max_score = 1) {
-        if ($this->debug > 0) { error_log('New LP - Entered import_manifest('.$course_code.')', 0); }
-
-        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE code='$course_code'";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) < 1) { error_log('Database for '.$course_code.' not found '.__FILE__.' '.__LINE__, 0); return -1; }
-        $row = Database::fetch_array($res);
-        $dbname = $row['db_name'];
-        $course_id  = $row['id'];
+        if ($this->debug > 0) { error_log('New LP - Entered import_manifest('.$course_code.')', 0); }        
+        $course_info = api_get_course_info($course_code);
+        $course_id = $course_info['real_id'];        
 
         // Get table names.
-        $new_lp = Database::get_course_table(TABLE_LP_MAIN, $dbname);
-        $new_lp_item = Database::get_course_table(TABLE_LP_ITEM, $dbname);
+        $new_lp = Database::get_course_table(TABLE_LP_MAIN);
+        $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $use_max_score = intval($use_max_score);
         foreach ($this->organizations as $id => $dummy) {
             $is_session = api_get_session_id();
@@ -285,7 +280,7 @@ class scorm extends learnpath {
             // -for learnpath
             // -for items
             // -for views?
-            $get_max = "SELECT MAX(display_order) FROM $new_lp";
+            $get_max = "SELECT MAX(display_order) FROM $new_lp WHERE c_id = $course_id ";
             $res_max = Database::query($get_max);
             $dsp = 1;
             if (Database::num_rows($res_max) > 0) {
@@ -386,7 +381,7 @@ class scorm extends learnpath {
                 if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting item : '.$sql_item.' : '.mysql_error(), 0); }
                 $item_id = Database::insert_id();
                 // Now update previous item to change next_item_id.
-                $upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE id = $previous";
+                $upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE c_id = $course_id AND id = $previous";
                 $upd_res = Database::query($upd);
                 // Update previous item id.
                 $previous = $item_id;

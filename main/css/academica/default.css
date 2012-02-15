@@ -4,6 +4,7 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
+/* the sticky effect */
 html {
 	height: 100%;
 }
@@ -112,11 +113,10 @@ input[type=button], input[type=submit] {
 /* header 3 styles */
 #header3 {
 	border-bottom: 1px solid #aeaeae;
-	height:auto;
+	height:26px;
 	font-weight: bold;
 	margin: 0;
-	padding: 0;
-	float:left;
+	padding: 0;	
     width:100%;        
 }
 
@@ -137,8 +137,7 @@ input[type=button], input[type=submit] {
 	PADDING-TOP: 0px;/*border-bottom: 1px solid #dcdcdc;*/
 	cursor: pointer;
 }
-#header3 a {
-	color: #d6e3f5;
+#header3 a {	
 	float:left;
 	text-decoration:none;
 	cursor: pointer;
@@ -161,8 +160,7 @@ input[type=button], input[type=submit] {
 	float:left;
 	cursor: pointer;
 }
-#header3 #current a {
-	color: #fff;
+#header3 #current a {	
 	float:left;
 	text-decoration:none;
 }
@@ -183,7 +181,6 @@ input[type=button], input[type=submit] {
 
 /* header 4 styles */
 #header4 {
-	float:left;
     width:100%;
 	background-color: #fff;	
 }
@@ -1145,11 +1142,11 @@ div.system_announcement {
 }
 /* Specific forms: profile,add course,advanced search,advanced course search,etc.. */
 #add_course, #profile, #advanced_course_search, #advanced_search, #category, #course_user_import, #export_users, #update_course, #user_add, #user_import {
-	border: 1px solid #0049AF;
-	background: transparent url("images/headerform.jpg") no-repeat top left;
+/*	border: 1px solid #0049AF;
+	background: transparent url("images/headerform.jpg") no-repeat top left; */
 	width: 550px;
 	position: relative;
-	padding: 60px 0 1em 0;
+ /*	padding: 60px 0 1em 0;*/
 }
 /* Glossary tool */
 .glossary-term {

@@ -186,12 +186,10 @@ input[type=button], input[type=submit] {
 }
 /* header 4 styles */
 #header4 {
-	   background-color: #fff;
+    background-color: #fff;
     color: #fff;
     margin-bottom: 2px;
-    clear:right;    
     width:100%;
-    float:left; 
 }
 
 /* The tool shortcuts */
@@ -1183,17 +1181,17 @@ div.system_announcement_content {
 }
 /* Specific forms: profile,add course,advanced search,advanced course search,etc.. */
 #add_course, #profile, #advanced_course_search, #advanced_search, #category, #course_user_import, #export_users, #update_course, #user_add, #user_import {
-	border: 1px solid #EE4C03;
+	/*border: 1px solid #EE4C03;
 	background: transparent url("images/headerform.jpg") no-repeat top left;
 	width: 550px;
 	position: relative;
-	padding: 60px 0 1em 0;
+	padding: 60px 0 1em 0;*/
 }
 #advanced_search, #category, #course_user_import {
-	background: transparent url("images/headerform2.jpg") no-repeat top left;
+/*	background: transparent url("images/headerform2.jpg") no-repeat top left;*/
 }
 #export_users, #update_course, #user_add, #user_import {
-	background: transparent url("images/headerform3.jpg") no-repeat top left;
+/*	background: transparent url("images/headerform3.jpg") no-repeat top left;*/
 }
 /* Glossary tool */
 .glossary-term {

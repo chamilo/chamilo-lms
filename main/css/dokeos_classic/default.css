@@ -40,12 +40,11 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 /* End hide from IE5-mac */
 
 #main {
-	position: relative; /* to avoid the IE peekabo bug*/
+	float: left;
 	margin: 0px auto;
-	margin-top: 10px;
-	width: 98%;
+	margin-top: 5x;
+	width: 96%;
 	padding: 0px 10px 10px 10px;
-	background-color: #fff;
 	min-height: 320px;
 }
 
@@ -406,8 +405,6 @@ input[text] {
 	position: relative; /* to avoid the IE peekabo bug*/
 	font-size: 1.0em;
 	font-weight: normal;
-	padding:  0.2em 0.5em;
-	padding-bottom: 0.2em;
 	background: #4271b5;
 	color: #fff;
 	height:20px;
@@ -552,9 +549,8 @@ input[text] {
 	   background-color: #fff;
     color: #fff;
     margin-bottom: 2px;
-    clear:right;    
     width:100%;
-    float:left; 
+
 }
 /* Special hack for IE7 using the html>body hack - 
 otherwise the breadcrumb jumps to the right */

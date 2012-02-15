@@ -201,9 +201,7 @@ input[type=button], input[type=submit] {
 	background-color: #fff;
     color: #fff;
     margin-bottom: 2px;
-    clear:right;    
     width:100%;
-    float:left;
 }
 
 /* The tool shortcuts */

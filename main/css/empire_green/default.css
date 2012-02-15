@@ -36,10 +36,10 @@ body {
 /* End hide from IE5-mac */
 
 #main {
-	position: relative; /* to avoid the IE peekabo bug*/
+	float: left;
 	margin: 0px auto;
-	margin-top: 10px;
-	width: 98%;
+	margin-top: 10x;
+	width: 96%;
 	padding: 0px 10px 10px 10px;
 	min-height: 320px;
 }
@@ -201,8 +201,7 @@ a.invisible:link, a.invisible:visited {
 }
 .clear {
 	clear: both;
-	line-height:
- 0px;
+	line-height:0px;
 	height: 0;
 }
 
@@ -517,9 +516,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
     background-color: #fff;
     color: #fff;
     margin-bottom: 2px;
-    clear:right;    
     width:100%;
-    float:left; 
 }
 
 #header4 a:hover {

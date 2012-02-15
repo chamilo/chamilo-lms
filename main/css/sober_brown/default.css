@@ -39,14 +39,12 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 /* End hide from IE5-mac */
 
 #main {
-    position: relative; /* to avoid the IE peekabo bug*/
-    margin: 0px auto;
-    margin-top: 10px;
-    width: 98%;
-    padding: 0px 10px 10px 10px;
-    background-color: transparent;
-    min-height: 320px;
-    background-repeat: no-repeat;
+	float: left;
+	margin: 0px auto;
+	margin-top: 5x;
+	width: 96%;
+	padding: 0px 10px 10px 10px;
+	min-height: 320px;
 }
 
 /*
@@ -462,12 +460,11 @@ input[text] {
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/
 #header3 {
-    font-size: 1.0em;
     padding: 0em 0.3em 0.2em 0.5em;
     background: #fff;
     color: #006;
     border-bottom: 1px solid #aeaeae;
-    height:20px;
+    height:41px;
     margin-bottom: 1px;
 	float:left;
     width:100%;
@@ -557,10 +554,7 @@ input[text] {
 #header4 {
     background-color: #fff;
     color: #fff;
-    margin-bottom: 2px;
-    clear:right;    
     width:100%;
-    float:left; 
 }
 #header4 a {
     color: #666;

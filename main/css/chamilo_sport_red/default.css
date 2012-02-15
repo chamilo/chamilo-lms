@@ -19,8 +19,13 @@ div#header3 ul#logout {
   margin-right: -2px;
 }
 #header3 {
-    border-bottom: 0px;
+    border-bottom: 0px;        
 }
+.subnav {
+    background: none;
+}
+
+
 #current #tab_active {
     color: #EDDD00;
 }

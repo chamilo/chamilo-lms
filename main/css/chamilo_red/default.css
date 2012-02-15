@@ -26,20 +26,59 @@ a:active {
 #header1 {
     background-image:url(images/bg-header1.gif);
 }
+
+
+.subnav-fixed {
+    position: fixed;
+    top: 38px;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    border-color: #d5d5d5;
+    border-width: 0 0 1px; /* drop the border on the fixed edges */
+    -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+            border-radius: 0;
+    -webkit-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+        -moz-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+            box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+}
+
+.subnav {  
+  background-color: #79AA0B; /* Old browsers */
+  background-repeat: repeat-x; /* Repeat the gradient */
+  background-image: -moz-linear-gradient(top, #D60B19 0%, #E8222F 100%); /* FF3.6+ */
+  
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9BD10A), color-stop(100%,#79AA0B)); /* Chrome,Safari4+ */
+  background-image: -webkit-linear-gradient(top, #9BD10A 0%, #79AA0B 100%); /* Chrome 10+,Safari 5.1+ */
+  background-image: -ms-linear-gradient(top, #9BD10A 0%,#79AA0B 100%); /* IE10+ */
+  background-image: -o-linear-gradient(top, #9BD10A 0%,#79AA0B 100%); /* Opera 11.10+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9BD10A', endColorstr='#79AA0B',GradientType=0 ); /* IE6-9 */
+  background-image: linear-gradient(top, #9BD10A 0%,#79AA0B 100%); /* W3C */
+  border: 1px solid #D60B19;
+}
+
+.subnav .nav > li > a {
+    border-left: 1px solid #D60B19;
+    border-right: 1px solid #D60B19;
+}
+
+.subnav .nav > #current > a,
+.subnav .nav > #current > a:hover {  
+  color: #fff;
+  background-color: #D60B19;
+  border-right-color: #D60B19;  
+}
+
 #header3 li a {
-    background-color: #D60B19;    
     color:#fff;
 }
 
+/* Green hover */
 #header3 li a:hover {
-    background: none repeat scroll 0 0 #D60B19;
-    color: #FFFFFF;
+    background: none repeat scroll 0 0 #E8222F;
+    color: #fff;
 }
-
-#header3 #current a {
-    background: none repeat scroll 0 0 #D2424C;        
-}
-
 
 /*****************************************************
  *  FOOTER STYLES                                    *

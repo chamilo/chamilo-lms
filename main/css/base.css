@@ -467,29 +467,30 @@ pre {
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
-.topbar div > ul, .nav {
+
+.topbar div > ul{
   display: block;
   float: left;
   margin: 0 10px 0 0;
   position: relative;
   left: 0;
 }
-.topbar div > ul > li, .nav > li {
+.topbar div > ul > li{
   display: block;
   float: left;
 }
-.topbar div > ul a, .nav a {
+.topbar div > ul a{
   display: block;
   float: none;
   padding: 10px 10px 11px;
   line-height: 19px;
   text-decoration: none;
 }
-.topbar div > ul a:hover, .nav a:hover {
+.topbar div > ul a:hover {
   color: #ffffff;
   text-decoration: none;
 }
-.topbar div > ul .active > a, .nav .active > a {
+.topbar div > ul .active > a{
   background-color: #222;
   background-color: rgba(0, 0, 0, 0.5);
 }
@@ -499,61 +500,41 @@ pre {
   margin-right: 0;
 }
 .topbar div > ul.secondary-nav .menu-dropdown,
-.nav.secondary-nav .menu-dropdown,
-.topbar div > ul.secondary-nav .dropdown-menu,
-.nav.secondary-nav .dropdown-menu {
+.topbar div > ul.secondary-nav .dropdown-menu {
   right: 0;
   border: 0;
 }
 .topbar div > ul a.menu:hover,
-.nav a.menu:hover,
 .topbar div > ul li.open .menu,
-.nav li.open .menu,
 .topbar div > ul .dropdown-toggle:hover,
-.nav .dropdown-toggle:hover,
-.topbar div > ul .dropdown.open .dropdown-toggle,
-.nav .dropdown.open .dropdown-toggle {
+.topbar div > ul .dropdown.open .dropdown-toggle{
   background: #444;
   background: rgba(255, 255, 255, 0.05);
 }
 .topbar div > ul .menu-dropdown,
-.nav .menu-dropdown,
-.topbar div > ul .dropdown-menu,
-.nav .dropdown-menu {
+.topbar div > ul .dropdown-menu {
   background-color: #333;
 }
 .topbar div > ul .menu-dropdown a.menu,
-.nav .menu-dropdown a.menu,
 .topbar div > ul .dropdown-menu a.menu,
-.nav .dropdown-menu a.menu,
 .topbar div > ul .menu-dropdown .dropdown-toggle,
-.nav .menu-dropdown .dropdown-toggle,
-.topbar div > ul .dropdown-menu .dropdown-toggle,
-.nav .dropdown-menu .dropdown-toggle {
+.topbar div > ul .dropdown-menu .dropdown-toggle {
   color: #ffffff;
 }
 .topbar div > ul .menu-dropdown a.menu.open,
-.nav .menu-dropdown a.menu.open,
 .topbar div > ul .dropdown-menu a.menu.open,
-.nav .dropdown-menu a.menu.open,
 .topbar div > ul .menu-dropdown .dropdown-toggle.open,
-.nav .menu-dropdown .dropdown-toggle.open,
-.topbar div > ul .dropdown-menu .dropdown-toggle.open,
-.nav .dropdown-menu .dropdown-toggle.open {
+.topbar div > ul .dropdown-menu .dropdown-toggle.open {
   background: #444;
   background: rgba(255, 255, 255, 0.05);
 }
 .topbar div > ul .menu-dropdown li a,
-.nav .menu-dropdown li a,
-.topbar div > ul .dropdown-menu li a,
-.nav .dropdown-menu li a {
+.topbar div > ul .dropdown-menu li a {
   color: #999;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 .topbar div > ul .menu-dropdown li a:hover,
-.nav .menu-dropdown li a:hover,
-.topbar div > ul .dropdown-menu li a:hover,
-.nav .dropdown-menu li a:hover {
+.topbar div > ul .dropdown-menu li a:hover {
   background-color: #191919;
   background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, left bottom, from(#292929), to(#191919));
@@ -567,15 +548,11 @@ pre {
   color: #ffffff;
 }
 .topbar div > ul .menu-dropdown .active a,
-.nav .menu-dropdown .active a,
-.topbar div > ul .dropdown-menu .active a,
-.nav .dropdown-menu .active a {
+.topbar div > ul .dropdown-menu .active a {
   color: #ffffff;
 }
 .topbar div > ul .menu-dropdown .divider,
-.nav .menu-dropdown .divider,
-.topbar div > ul .dropdown-menu .divider,
-.nav .dropdown-menu .divider {
+.topbar div > ul .dropdown-menu .divider {
   background-color: #222;
   border-color: #444;
 }
@@ -819,12 +796,49 @@ footer {
 }
 
 
+.actions {	
+	background:#efefef;
+    border:1px solid #ccc; 
+    margin-bottom: 5px;
+    height:32px;
+    padding:2px;     
+    vertical-align:middle;
+}
+.actions a img {
+    padding-right:0px;
+}
 
+.actions img {	
+	padding-right:10px;
+    border: none;
+    text-decoration: none;    
+    vertical-align:middle;
+}
+.actions a {
+    display:inline-block;
+    margin-right: 10px;
+    vertical-align:middle;
+}
+.actions span {
+    margin-right: 10px;
+    vertical-align:middle;
+}
+.actions form {
+    margin-right: 10px;
+    vertical-align:middle;
+}
 
+.actions fieldset {
+    margin-top:0px;
+}
 
 
 /* Begin of proper */
 
+#header3 {
+    float:none;
+    position:relative;
+}
 
 #header4 {
     height: 26px !important; /* breadcrumb fix */

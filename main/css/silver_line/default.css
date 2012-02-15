@@ -150,15 +150,12 @@ ul#navigation .help a{
 }
 
 #main {
-    font-size: 89%;
-    width: 96%;
-    padding: 0 1% 15px 3%;
-    /* min-height hack for ie6 or older*/
-    min-height: 400px;
-    height: auto !important;
-    height: 320px;
-    clear: both;
-    float: left;
+	float: left;
+	margin: 0px auto;
+	margin-top: 5x;
+	width: 96%;
+	padding: 0px 10px 10px 10px;
+	min-height: 320px;
 }
 
 /*
@@ -302,8 +299,7 @@ ul#navigation .student-connect a {
 .maincontent {
     margin: 0 0 1em 1em;
     width: 69%;
-    float: right;
-    clear: right;
+    float: left;
 }
 #outerframe {
     background-color: #fff;
@@ -446,8 +442,7 @@ ul#navigation .student-connect a {
     margin: 5;
     padding: 0;
     float: left;
-    clear: both;
-    height:20px;
+    height:41px;
 }
 #header3 input.logout {
     /* makes an input appear like a link in this header */
@@ -510,9 +505,7 @@ ul#navigation .student-connect a {
     background-color: #fff;
     color: #fff;
     margin-bottom: 2px;
-    clear:right;    
     width:100%;
-    float:left; 
 }
 
 /*
@@ -540,6 +533,7 @@ ul#navigation .student-connect a {
 */
 #footer {
     font-family: Arial, sans-serif, sans;
+	background-repeat:repeat-x;
     font-weight: bold;
     font-size: 12px;
     color:#000;
@@ -556,6 +550,8 @@ ul#navigation .student-connect a {
     float: right;
     padding-top:25px;
     margin-right:10px;
+	background-image: url(images/tab-repeat.png);
+	background-repeat:repeat-x;
 }
 .footer_emails{
     float: left;
@@ -705,23 +701,18 @@ float:right;
     padding:0;
     width:180px;
 }
+
 * html #center {
     height: 1%;
     margin-left: 0;
 }
- /* End hide from IE5/mac */
-*/ /*
-==============================================================================
-    DOCUMENT MODULE AND DATA TABLES
-==============================================================================
-*/
+
 
 /* Data tables */
 .data_table {
- margin: 0 auto;
- width: 98%;
- clear: both;
- font: bold 100% Arial, sans, sans-serif;
+    margin: 0 auto;
+    font: bold 100% Arial, sans, sans-serif;
+    width: 100%;
 }
 .data_table a {
     font: bold 100% Arial, sans, sans-serif;
@@ -815,18 +806,18 @@ div.row div.label {
 }
 /* Specific forms: profile,add course,advanced search,advanced course search,etc.. */
 #add_course, #profile, #advanced_course_search, #advanced_search, #category, #course_user_import, #export_users, #update_course, #user_add, #user_import {
-    border: 1px solid #ddd;
+    /*border: 1px solid #ddd;
     background: transparent url("images/headerform.jpg") no-repeat top left;
     width: 550px;
     position: relative;
-    padding: 60px 0 1em 0;
+    padding: 60px 0 1em 0;*/
 }
 #add_course, #advanced_course_search, #advanced_search, #course_user_import, #export_users, #update_course, #user_add, #user_import {
-    width: 650px;
+/*    width: 650px;
     float: left;
     clear: left;
     padding-top: 50px;
-    margin-bottom: 1em;
+    margin-bottom: 1em;*/
 }
 #add_course .label, #advanced_course_search .label, #advanced_search .label, #category .label, #course_user_import .label, #export_users .label, #user_import .label {
     text-align: left;

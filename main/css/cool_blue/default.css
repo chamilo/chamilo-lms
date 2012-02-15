@@ -36,12 +36,12 @@ body {
 /* End hide from IE5-mac */
 
 #main {
-    float: left;
-    margin: 0px auto;
-    margin-top: 5x;
-    width: 95%;
-    padding: 0px 0px 10px 10px;
-    min-height: 320px;
+	float: left;
+	margin: 0px auto;
+	margin-top: 10x;
+	width: 96%;
+	padding: 0px 10px 10px 10px;
+	min-height: 320px;
 }
 
 /*
@@ -181,7 +181,7 @@ ul#navigation .student-connect a {
 /* for content section in main index.php file */
 .maincontent {
 	float: left;
-	width: 75%;
+	width: 78%;
 	padding: 4px;
 	background-color: #fff;
 }
@@ -201,8 +201,7 @@ a.invisible:link, a.invisible:visited {
 }
 .clear {
 	clear: both;
-	line-height:
- 0px;
+	line-height:0px;
 	height: 0;
 }
 
@@ -430,16 +429,16 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-position: 0px 0px;
 	background-repeat: repeat-x;/*border: 1px solid green;*/
 	height:41px;
-	float:left;
     width:100%;
+    float:left;
 }
 #header3 a {
 	DISPLAY: block;
 	PADDING-RIGHT: 15px;
 	PADDING-LEFT: 6px;
 	COLOR: #fff;
+    float:left;
 	PADDING-TOP: 10px;
-	float: left;
 }
 #header3 a:hover {
 	color: #a8a7a7;
@@ -517,9 +516,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-color: #fff;
 	color: #fff;
 	margin-bottom: 2px;
-	clear:right;	
-	width:100%;
-    float:left;    
+	width:100%;    
 }
 
 #header4 a:hover {
@@ -568,7 +565,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-color: #434343;
 }
 #footer #platformmanager {
-	float: left;
+
 	margin-left:10px;
 }
 #footer a {

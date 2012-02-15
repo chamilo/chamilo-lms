@@ -26,18 +26,58 @@ a:active {
 #header1 {
     background-image:url(images/bg-header1.gif);
 }
+
+
+.subnav-fixed {
+    position: fixed;
+    top: 38px;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    border-color: #d5d5d5;
+    border-width: 0 0 1px; /* drop the border on the fixed edges */
+    -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+            border-radius: 0;
+    -webkit-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+        -moz-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+            box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+}
+
+.subnav {  
+  background-color: #79AA0B; /* Old browsers */
+  background-repeat: repeat-x; /* Repeat the gradient */
+  background-image: -moz-linear-gradient(top, #0015E2 0%, #3446EE 100%); /* FF3.6+ */
+  
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0015E2), color-stop(100%,#3446EE)); /* Chrome,Safari4+ */
+  background-image: -webkit-linear-gradient(top, #0015E2 0%, #3446EE 100%); /* Chrome 10+,Safari 5.1+ */
+  background-image: -ms-linear-gradient(top, #0015E2 0%,#3446EE 100%); /* IE10+ */
+  background-image: -o-linear-gradient(top, #0015E2 0%,#3446EE 100%); /* Opera 11.10+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0015E2', endColorstr='#3446EE',GradientType=0 ); /* IE6-9 */
+  background-image: linear-gradient(top, #0015E2 0%,#3446EE 100%); /* W3C */
+  border: 1px solid #0015E2;
+}
+
+.subnav .nav > li > a {
+    border-left: 1px solid #0015E2;
+    border-right: 1px solid #0015E2;
+}
+
+.subnav .nav > #current > a,
+.subnav .nav > #current > a:hover {  
+  color: #fff;
+  background-color: #0015E2;
+  border-right-color: #0015E2;  
+}
+
 #header3 li a {
-    background-color: #0015E2;    
     color:#fff;
 }
 
+/* Green hover */
 #header3 li a:hover {
     background: none repeat scroll 0 0 #0015E2;
-    color: #FFFFFF;
-}
-
-#header3 #current a {
-    background: none repeat scroll 0 0 #3134B0;        
+    color: #fff;
 }
 
 /*****************************************************

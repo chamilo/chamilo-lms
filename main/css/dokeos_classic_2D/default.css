@@ -146,12 +146,12 @@ ul#navigation .help a{
 /* End hide from IE5-mac */
 
 #main {
-	background-color: #fff;
+	float: left;
 	margin: 0px auto;
-	margin-top: 10px;
+	margin-top: 10x;
+	width: 96%;
+	padding: 0px 10px 10px 10px;
 	min-height: 320px;
-	position: relative; /* to avoid the IE peekabo bug*/
-	width: 98%;
 }
 
 /*
@@ -424,11 +424,11 @@ ul#navigation .student-connect a {
 */
 
 #header3 {
-	background: #E5EDF9;
+	background: #E5EDF9; 
+    height:auto;
 	border-bottom: 1px solid #4171b5;
 	color: #006;
 	font-size: 1.0em;
-	height:auto;
 	margin: 0px;
 	margin-bottom: 1px;
 	padding: 0em 0em 0.4em 0em;
@@ -519,9 +519,7 @@ ul#navigation .student-connect a {
 	background-color: #fff;
     color: #fff;
     margin-bottom: 2px;
-    clear:right;    
     width:100%;
-    float:left; 
 }
 #header4 a {
 	color: #4171b5;

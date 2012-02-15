@@ -36,9 +36,9 @@ body {
 /* End hide from IE5-mac */
 
 #main {
-	position: relative; /* to avoid the IE peekabo bug*/
+	float: left;
 	margin: 0px auto;
-	margin-top: 10px;
+	margin-top: 10x;
 	width: 96%;
 	padding: 0px 10px 10px 10px;
 	min-height: 320px;
@@ -181,7 +181,7 @@ ul#navigation .student-connect a {
 /* for content section in main index.php file */
 .maincontent {
 	float: left;
-	width: 78%;
+	width: 66%;
 	padding: 4px;
 	background-color: #fff;
 }
@@ -201,8 +201,7 @@ a.invisible:link, a.invisible:visited {
 }
 .clear {
 	clear: both;
-	line-height:
- 0px;
+	line-height: 0px;
 	height: 0;
 }
 
@@ -396,6 +395,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 #header2 {
 	position: relative; /* to avoid the IE peekabo bug*/
 	color: #636363;/*border: 1px solid red;*/
+	min-height: 25px;
 }
 #header2 a {
 	color: #636363;
@@ -431,7 +431,10 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-repeat: repeat-x;/*border: 1px solid green;*/
 	height:41px;
 	float:left;
-    width:100%;
+    padding-left:0px;
+    padding-right:0px; 
+    width: 100%;
+    float:left;
 }
 #header3 a {
 	DISPLAY: block;
@@ -476,8 +479,8 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 #header3 input.logout {
 	/* makes an input appear like a link in this header */
-	margin: 0 0 0 0;
-	padding: 0;
+	margin: 0px;
+	padding: 0px;
 	background-color: transparent;
 	border: none;
 	COLOR: rgb(39,84,175);
@@ -485,7 +488,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	display: inline;
 	background:  url(../../img/tab_right.gif) no-repeat right top;
 	PADDING-RIGHT: 10px;
-	PADDING-TOP: 3px;
+	PADDING-TOP: 3px;    
 }
 #header3 input:hover {
 	color: #333;
@@ -513,18 +516,10 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 /*****************************************************
  *  HEADER 3: 
  *****************************************************/
-#header4 {
-	   background-color: #fff;
-    color: #fff;
-    margin-bottom: 2px;
-    clear:right;    
-    width:100%;
-    float:left; 
-}
-
-#header4 a:hover {
-	text-decoration: none;
-	color: #a8a7a7;
+#header4 {	
+	background-color: #fff;
+	color: #fff;
+	width:100%;
 }
 /* The tool shortcuts */
 #toolshortcuts {
@@ -543,9 +538,9 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-repeat:repeat-x;
 	font-size: 12px;
 	color:#ffffff;
-	min-height: 50px;	
-	overflow:hidden;
-	width: 100%;	
+	//height: 4em;	 /* Do not change this value */ 
+	overflow:hidden;	
+	width: 100%;
 	padding-bottom:10px;
 }
 .push {
@@ -565,11 +560,15 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-color: #434343;
 	background-image: url(images/tab-repeat.png);
 	background-repeat:repeat-x;
-	padding-top:18px;	
+	padding-top:20px;	
 }
 #footer #platformmanager {
 	float: left;
 	margin-left:10px;
+}
+#footer #coursemanager {
+	float: left;
+	margin-left: 10px;
 }
 #footer a {
 	color:#fff;
@@ -588,12 +587,11 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 /*****************************************************
  *  NAVIGATION MENU                                  *
  *****************************************************/
-.menu {		
+.menu {
 	float: right;
 	width: 20%;
-	padding: 10px 0 6px 0;
-	margin: 10px 0 6px 0; 
-	border: 1px solid #ccc;
+	padding: 0 0 6px 0;
+	border: 1px solid #636363;
 }
 .menucaption {
 	font-weight: bold;
@@ -1185,6 +1183,23 @@ div.row div.form_header {
 	background-position:bottom;
 	color: #FFFFFF;
 	font-weight: bold;
+}
+div.row div.label {
+	float: left;
+	width: 18%;
+	text-align: right;
+}
+div.row div.formw {
+	width: 80%;
+	float:left;
+}
+[dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
+	float: left;
+	text-align: right;
+}
+[dir=rtl] div.row div.label, [dir=ltr] div.row div.formw {
+	float: right;
+	text-align: left;
 }
 span.form_required {
 	color: #f00;

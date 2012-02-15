@@ -4,6 +4,7 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
+/* the sticky effect */
 html {
 	height: 100%;
 }
@@ -36,9 +37,9 @@ body {
 /* End hide from IE5-mac */
 
 #main {
-	position: relative; /* to avoid the IE peekabo bug*/
+	float: left;
 	margin: 0px auto;
-	margin-top: 10px;
+	margin-top: 5x;
 	width: 96%;
 	padding: 0px 10px 10px 10px;
 	min-height: 320px;
@@ -475,8 +476,8 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 #header3 input.logout {
 	/* makes an input appear like a link in this header */
-	margin: 0 0 0 0;
-	padding: 0;
+	margin: 0px;
+	padding: 0px;
 	background-color: transparent;
 	border: none;
 	COLOR: rgb(39,84,175);
@@ -515,10 +516,8 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 #header4 {
     background-color: #fff;
     color: #fff;
-    margin-bottom: 2px;
-    clear:right;    
+    margin-bottom: 2px; 
     width:100%;
-    float:left; 
 }
 
 #header4 a:hover {

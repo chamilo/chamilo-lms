@@ -217,17 +217,17 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
 	echo '	<td>'.$tool_name.'</td>';
 	echo '	<td>'.$row['number_of_options'].'</td>';
 	echo '	<td>';
-	echo '		<a href="question.php?'.api_get_cidreq().'&amp;action=edit&amp;type='.$row['type'].'&amp;survey_id='.$survey_id.'&amp;question_id='.$row['question_id'].'">'.Display::return_icon('edit.png', get_lang('Edit'),'',22).'</a>';
-	echo '		<a href="survey.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'&amp;question_id='.$row['question_id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurveyQuestion").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>';
+	echo '		<a href="question.php?'.api_get_cidreq().'&amp;action=edit&amp;type='.$row['type'].'&amp;survey_id='.$survey_id.'&amp;question_id='.$row['question_id'].'">'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';
+	echo '		<a href="survey.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'&amp;question_id='.$row['question_id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurveyQuestion").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
 	if ($question_counter > 1) {
-		echo '		<a href="survey.php?'.api_get_cidreq().'&amp;action=moveup&amp;survey_id='.$survey_id.'&amp;question_id='.$row['question_id'].'">'.Display::return_icon('up.png', get_lang('MoveUp'),'',22).'</a>';
+		echo '		<a href="survey.php?'.api_get_cidreq().'&amp;action=moveup&amp;survey_id='.$survey_id.'&amp;question_id='.$row['question_id'].'">'.Display::return_icon('up.png', get_lang('MoveUp'),'',ICON_SIZE_SMALL).'</a>';
 	} else {
-		Display::display_icon('up_na.png','&nbsp;','',22);
+		Display::display_icon('up_na.png','&nbsp;','',ICON_SIZE_SMALL);
 	}
 	if ($question_counter < $question_counter_max) {
-		echo '		<a href="survey.php?'.api_get_cidreq().'&amp;action=movedown&amp;survey_id='.$survey_id.'&amp;question_id='.$row['question_id'].'">'.Display::return_icon('down.png', get_lang('MoveDown'),'',22).'</a>';
+		echo '		<a href="survey.php?'.api_get_cidreq().'&amp;action=movedown&amp;survey_id='.$survey_id.'&amp;question_id='.$row['question_id'].'">'.Display::return_icon('down.png', get_lang('MoveDown'),'',ICON_SIZE_SMALL).'</a>';
 	} else {
-		Display::display_icon('down_na.png','&nbsp;','',22);
+		Display::display_icon('down_na.png','&nbsp;','',ICON_SIZE_SMALL);
 	}
 	echo '	</td>';
 	$question_counter++;
@@ -282,9 +282,9 @@ if ($is_survey_type_1) {
 	while($row = Database::fetch_array($rs,ASSOC)){
 		$grouplist .= '<tr><td>'.$row['name'].'</td><td>'.$row['description'].'</td><td>'.
 		'<a href="survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=editgroup">'.
-		Display::return_icon('edit.png', get_lang('Edit'),'',22).'</a> '.
+		Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a> '.
 		'<a href="survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=deletegroup" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('DeleteSurveyGroup'),$row['name']).'?',ENT_QUOTES)).'\')) return false;">'.
-		Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>'.
+		Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
 		'</td></tr>';
 	}
 	echo $grouplist.'</table>';

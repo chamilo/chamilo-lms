@@ -180,7 +180,7 @@ class AnnouncementManager  {
     		echo "<tr><td><h2>".$title."</h2></td></tr>";   	
     		
     		if (api_is_allowed_to_edit(false,true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-    		    $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$announcement_id."\">".Display::return_icon('edit.png', get_lang('Edit'),'',22)."</a>";
+    		    $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$announcement_id."\">".Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL)."</a>";
                 if ($result['visibility'] == 1) {
                     $image_visibility = "visible";
                     $alt_visibility = get_lang('Hide');
@@ -191,11 +191,11 @@ class AnnouncementManager  {
                 global $stok;
                 
     		    $modify_icons .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin'])?Security::remove_XSS($_GET['origin']):'')."&action=showhide&id=".$announcement_id."&sec_token=".$stok."\">".
-                            Display::return_icon($image_visibility.'.png', $alt_visibility,'',22)."</a>";    		    		
+                            Display::return_icon($image_visibility.'.png', $alt_visibility,'',ICON_SIZE_SMALL)."</a>";    		    		
                     
                 if (api_is_allowed_to_edit(false,true)) {
                     $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$announcement_id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".
-                        Display::return_icon('delete.png', get_lang('Delete'),'',22).
+                        Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).
                         "</a>";
                 }                            
                 echo "<tr><th style='text-align:right'>$modify_icons</th></tr>";

@@ -727,7 +727,7 @@ if ($display_form) {
 	if (empty($_SESSION['toolgroup'])) {
 		echo '	<div class="row">
 					<div class="label">'.
-						Display::return_icon('group.png', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle'),22).'<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('SentTo').'</a>
+						Display::return_icon('group.png', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle'),ICON_SIZE_SMALL).'<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('SentTo').'</a>
 					</div>
 					<div class="formw">';
 		if (isset($_GET['id']) && is_array($to)) {
@@ -1147,7 +1147,7 @@ if ($display_announcement_list) {
     			if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $myrow['id'])) 
     			     OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
     
-    				$modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">".Display::return_icon('edit.png', get_lang('Edit'),'',22)."</a>";
+    				$modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">".Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL)."</a>";
     				if ($myrow['visibility']==1) {
     					$image_visibility="visible";
     					$alt_visibility=get_lang('Hide');
@@ -1156,7 +1156,7 @@ if ($display_announcement_list) {
     					$alt_visibility=get_lang('Visible');
     				}    
     				$modify_icons .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin'])?Security::remove_XSS($_GET['origin']):'')."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
-    						Display::return_icon($image_visibility.'.png', $alt_visibility,'',22)."</a>";
+    						Display::return_icon($image_visibility.'.png', $alt_visibility,'',ICON_SIZE_SMALL)."</a>";
     
     				// DISPLAY MOVE UP COMMAND only if it is not the top announcement
     				if ($iterator != 1) {
@@ -1171,7 +1171,7 @@ if ($display_announcement_list) {
     				}    				    
     			    if (api_is_allowed_to_edit(false,true)) {
                         $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".
-                            Display::return_icon('delete.png', get_lang('Delete'),'',22).
+                            Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).
                             "</a>";
                     }    	 
     				$iterator ++;

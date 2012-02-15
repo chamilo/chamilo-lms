@@ -60,9 +60,9 @@ $extra_params['height'] = 'auto';
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
                         //certificates
                         if (rowObject[4] == 1) {            
-                            return \'<a href="?action=add_skill&id=\'+options.rowId+\'">'.Display::return_icon('add.png', get_lang('AddSkill'),'',22).'</a>'.'\';
+                            return \'<a href="?action=add_skill&id=\'+options.rowId+\'">'.Display::return_icon('add.png', get_lang('AddSkill'),'',ICON_SIZE_SMALL).'</a>'.'\';
                         } else {
-                            return \''.Display::return_icon('add_na.png', get_lang('YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill'),'',22).''.'\';
+                            return \''.Display::return_icon('add_na.png', get_lang('YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill'),'',ICON_SIZE_SMALL).''.'\';
                         }
                  }';
 ?>

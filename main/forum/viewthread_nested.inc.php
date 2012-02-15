@@ -78,7 +78,7 @@ foreach ($rows as $post) {
         display_visible_invisible_icon('post', $post['post_id'], $post['visible'],array('forum'=>$clean_forum_id,'thread'=>$clean_thread_id ));
         echo "";
         if ($count>0) {
-            echo "<a href=\"viewthread.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=move&amp;origin=".$origin."&amp;post=".$post['post_id']."\">".Display::return_icon('move.png',get_lang('MovePost'), array(),22)."</a>";
+            echo "<a href=\"viewthread.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=move&amp;origin=".$origin."&amp;post=".$post['post_id']."\">".Display::return_icon('move.png',get_lang('MovePost'), array(),ICON_SIZE_SMALL)."</a>";
         }
     }
     $userinf=api_get_user_info($post['user_id']);

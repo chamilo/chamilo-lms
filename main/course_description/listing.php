@@ -42,7 +42,7 @@ if (api_is_allowed_to_edit(null,true)) {
 
 // display course description list
 if ($history) {
-	echo '<div><table width="100%"><tr><td><h3>'.get_lang('ThematicAdvanceHistory').'</h3></td><td align="right"><a href="index.php?action=listing">'.Display::return_icon('info.png',get_lang('BackToCourseDesriptionList'),array('style'=>'vertical-align:middle;'),22).' '.get_lang('BackToCourseDesriptionList').'</a></td></tr></table></div>';
+	echo '<div><table width="100%"><tr><td><h3>'.get_lang('ThematicAdvanceHistory').'</h3></td><td align="right"><a href="index.php?action=listing">'.Display::return_icon('info.png',get_lang('BackToCourseDesriptionList'),array('style'=>'vertical-align:middle;'),ICON_SIZE_SMALL).' '.get_lang('BackToCourseDesriptionList').'</a></td></tr></table></div>';
 }
 $user_info = api_get_user_info();
 
@@ -56,15 +56,15 @@ if (isset($descriptions) && count($descriptions) > 0) {
                 
 				//delete
 				echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=delete&description_type='.$description['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
-				echo Display::return_icon('delete.png', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'),22);
+				echo Display::return_icon('delete.png', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'),ICON_SIZE_SMALL);
 				echo '</a> ';
                 
                 //edit
                 echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=edit&description_type='.$description['description_type'].'">';
-                echo Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'),22);                	
+                echo Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'),ICON_SIZE_SMALL);                	
                 echo '</a> ';
 			} else {                
-                echo Display::return_icon('edit_na.png', get_lang('EditionNotAvailableFromSession'), array('style' => 'vertical-align:middle;float:right;'),22);
+                echo Display::return_icon('edit_na.png', get_lang('EditionNotAvailableFromSession'), array('style' => 'vertical-align:middle;float:right;'),ICON_SIZE_SMALL);
                 
             }
 		}

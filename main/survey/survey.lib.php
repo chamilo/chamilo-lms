@@ -4141,7 +4141,7 @@ class SurveyUtil {
 
 		// Coach can see that only if the survey is in his session
 		if (api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id)) {
-			$return .= '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.png', get_lang('Edit'),'',22).'</a>';			
+			$return .= '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';			
 			$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('clean.png', get_lang('EmptySurvey'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 		}
 		//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
@@ -4150,7 +4150,7 @@ class SurveyUtil {
 		$return .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('mail_send.png', get_lang('Publish'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 		$return .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('stats.png', get_lang('Reporting'),'',ICON_SIZE_SMALL).'</a>';
 		if (api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id)) {
-            $return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>&nbsp;';		    
+            $return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>&nbsp;';		    
 		}
 		return $return;
 	}
@@ -4162,9 +4162,9 @@ class SurveyUtil {
 		//$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 		//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
 		//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
-		$return .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('preview_view.png', get_lang('Preview'),'',22).'</a>&nbsp;';
-		$return .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('mail_send.png', get_lang('Publish'),'',22).'</a>&nbsp;';
-		$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('clean.png', get_lang('EmptySurvey'),'',22).'</a>&nbsp;';
+		$return .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('preview_view.png', get_lang('Preview'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+		$return .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('mail_send.png', get_lang('Publish'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+		$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('clean.png', get_lang('EmptySurvey'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 		//$return .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
 		return $return;
 	}

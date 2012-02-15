@@ -15,7 +15,7 @@ require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 $parameters['sec_token'] = Security::get_token();
 
 // action menu
-echo '<div class="actions" style="height:22px;">';
+echo '<div class="actions">';
 echo '<div style="float:right;">
 		<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_add.php">'.Display::return_icon('edit.gif',get_lang('EditTermsAndConditions'),'').get_lang('EditTermsAndConditions').'</a>&nbsp;&nbsp;
 	  </div><br />';

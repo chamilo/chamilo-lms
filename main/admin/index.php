@@ -157,7 +157,7 @@ if (api_is_platform_admin()) {
 
 if (api_get_setting('use_session_mode') == 'true') {
 	
-	$blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), 22);
+	$blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL);
 	$blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
 	
 	$search_form = ' <form method="POST" action="session_list.php">

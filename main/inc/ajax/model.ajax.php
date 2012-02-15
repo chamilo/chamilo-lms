@@ -194,10 +194,10 @@ switch ($action) {
             $item['name'] = Display::url($item['name'], api_get_path(WEB_CODE_PATH).'gradebook/index.php?id_session=0&cidReq='.$item['course_code']);
                          
             if (!empty($item['certif_min_score']) && !empty($item['document_id'])) {
-                $item['certificates'] = Display::return_icon('accept.png', get_lang('WithCertificate'), array(), 22);
+                $item['certificates'] = Display::return_icon('accept.png', get_lang('WithCertificate'), array(), ICON_SIZE_SMALL);
                  $item['has_certificates'] = '1'; 
             } else {
-                $item['certificates'] = Display::return_icon('warning.png', get_lang('NoCertificate'), array(), 22);
+                $item['certificates'] = Display::return_icon('warning.png', get_lang('NoCertificate'), array(), ICON_SIZE_SMALL);
                 $item['has_certificates'] = '0';
             }
             

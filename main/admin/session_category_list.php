@@ -171,10 +171,10 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		  <td><?php echo api_htmlentities($enreg['date_end'],ENT_QUOTES,$charset); ?></td>
 		  <td>
 			<a href="session_category_edit.php?&id=<?php echo $enreg['id']; ?>">
-                <?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?>
+                <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>
 			</a>
 			<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete_off_session&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
-			 <?php Display::display_icon('delete.png', get_lang('Delete'), array(), 22); ?>
+			 <?php Display::display_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL); ?>
 			</a>
 		  </td>
 		</tr>

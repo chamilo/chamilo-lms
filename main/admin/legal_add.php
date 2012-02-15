@@ -183,7 +183,7 @@ function sendlang(){
 </script>';
 
 // action menu
-echo '<div class="actions" style="height:22px;">';
+echo '<div class="actions">';
 echo '<div style="float:right;">
 		<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_list.php">'.Display::return_icon('search.gif',get_lang('EditTermsAndConditions'),'').get_lang('AllVersions').'</a>&nbsp;&nbsp;
 	  </div><br />';

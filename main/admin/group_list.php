@@ -180,8 +180,8 @@ function modify_filter($group_id,$url_params,$row)
 	global $_admins_list;
 	if (api_is_platform_admin()) {
 		$result .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_users_to_group.php?id='.$group_id.'">'.Display::return_icon('subscribe_users_social_network.png',get_lang('AddUsersToGroup'),'',ICON_SIZE_SMALL).'</a>';
-		$result .= '<a href="group_edit.php?id='.$group_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), 22).'</a>&nbsp;&nbsp;';
-		$result .= '<a href="group_list.php?action=delete_group&amp;group_id='.$group_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), 22).'</a>';
+		$result .= '<a href="group_edit.php?id='.$group_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;&nbsp;';
+		$result .= '<a href="group_list.php?action=delete_group&amp;group_id='.$group_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
 	}
 	return $result;
 }

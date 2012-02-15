@@ -165,7 +165,7 @@ foreach ($Users as $key=>$enreg) {
             </a>
         <?php } else  { ?>
             <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=add&idChecked[]=<?php echo $enreg['user_id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
-                <?php Display::display_icon('add.png', get_lang('Add'), array(), 22); ?>
+                <?php Display::display_icon('add.png', get_lang('Add'), array(), ICON_SIZE_SMALL); ?>
             </a>
         <?php }  ?>
             

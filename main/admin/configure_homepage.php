@@ -938,7 +938,7 @@ switch ($action) {
                 <span class="menusectioncaption">
                     <?php echo get_lang('Notice'); ?>
                     <a href="<?php echo api_get_self(); ?>?action=edit_notice">
-                        <?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a>                    
+                        <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>                    
                 </span>                    
             <?php
             

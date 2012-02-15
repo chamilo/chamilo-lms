@@ -177,7 +177,7 @@ if (intval($_POST['formSent']) == 1) {
 Display::display_header($tool_name);
 
 // actions
-echo '<div class="actions" style="height:22px;">
+echo '<div class="actions">
 <span style="float: right;margin:0px;padding:0px;">
 <a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a>
 <a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>

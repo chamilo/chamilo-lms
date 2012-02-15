@@ -200,11 +200,11 @@ function display_mymonthcalendar($user_id, $agendaitems, $month, $year, $weekday
 				        switch($value['calendar_type']) {
                             case 'personal':
                                 $bg_color = '#D0E7F4';                                          
-                                $icon = Display::return_icon('user.png', get_lang('MyAgenda'), array(), 22);          
+                                $icon = Display::return_icon('user.png', get_lang('MyAgenda'), array(), ICON_SIZE_SMALL);          
                                 break;
                             case 'global':
                                 $bg_color = '#FFBC89';
-                                $icon = Display::return_icon('view_remove.png', get_lang('GlobalEvent'), array(), 22);
+                                $icon = Display::return_icon('view_remove.png', get_lang('GlobalEvent'), array(), ICON_SIZE_SMALL);
                                 break;
                             case 'course':
                                 $bg_color = '#CAFFAA';
@@ -213,9 +213,9 @@ function display_mymonthcalendar($user_id, $agendaitems, $month, $year, $weekday
                                 	$icon_name = 'session.png';
                                 }
                                 if ($show_content) {
-                                    $icon = Display::url(Display::return_icon($icon_name, $value['course_name'].' '.get_lang('Course'), array(), 22), $value['url']);
+                                    $icon = Display::url(Display::return_icon($icon_name, $value['course_name'].' '.get_lang('Course'), array(), ICON_SIZE_SMALL), $value['url']);
                                 } else {
-                                    $icon = Display::return_icon($icon_name, $value['course_name'].' '.get_lang('Course'), array(), 22);
+                                    $icon = Display::return_icon($icon_name, $value['course_name'].' '.get_lang('Course'), array(), ICON_SIZE_SMALL);
                                 }                                                                                  
                                 break;              
                             default:
@@ -813,8 +813,8 @@ function show_personal_agenda() {
 
 			/* display: the edit / delete icons */
 			echo "<td>";
-			echo "<a href=\"myagenda.php?action=edit_personal_agenda_item&amp;id=".$myrow['id']."\">".Display::return_icon('edit.png', get_lang('Edit'), array(), 22)."</a> ";
-			echo "<a href=\"".api_get_self()."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), 22)."</a>";
+			echo "<a href=\"myagenda.php?action=edit_personal_agenda_item&amp;id=".$myrow['id']."\">".Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL)."</a> ";
+			echo "<a href=\"".api_get_self()."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL)."</a>";
 			echo "</td></tr>";
 			$counter++;
 		}

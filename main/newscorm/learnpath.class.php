@@ -7425,14 +7425,14 @@ class learnpath {
         //$return .= $lang.': ';
         $url = api_get_self() . '?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
          
-        $return .= Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), 22), $url.'&action=edit_item&path_item=' . $row['path']);
-        $return .= Display::url(Display::return_icon('move.png', get_lang('Move'), array(), 22), $url.'&action=move_item');
+        $return .= Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), $url.'&action=edit_item&path_item=' . $row['path']);
+        $return .= Display::url(Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_SMALL), $url.'&action=move_item');
         
         // Commented for now as prerequisites cannot be added to chapters.
         if ($item_type != 'dokeos_chapter' && $item_type != 'chapter') {
-            $return .= Display::url(Display::return_icon('accept.png', get_lang('Prerequisites'), array(), 22), $url.'&action=edit_item_prereq');
+            $return .= Display::url(Display::return_icon('accept.png', get_lang('Prerequisites'), array(), ICON_SIZE_SMALL), $url.'&action=edit_item_prereq');
         }
-        $return .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), 22), $url.'&action=delete_item');
+        $return .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), $url.'&action=delete_item');
 /*
         // Get the audiorecorder. Use of ob_* functions since there are echos in the file.
         ob_start();
@@ -7784,7 +7784,7 @@ class learnpath {
         $return = '<div class="lp_resource">';
         
         $return .= '<div class="lp_resource_element">';
-        //$return .= Display::return_icon('new_exercice.png', '', array(), 32); //'<img alt="" src="../img/icons/22/exercise.gif" style="margin-right:5px;" title="" />';
+        //$return .= Display::return_icon('new_exercice.png', '', array(), 32); //'<img alt="" src="../img/icons/ICON_SIZE_SMALL/exercise.gif" style="margin-right:5px;" title="" />';
         $return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
         $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'exercice/exercise_admin.php?lp_id=' . $this->lp_id . '">' . get_lang('NewExercise') . '</a>';
         $return .= '</div>';        

@@ -275,9 +275,9 @@ class SessionManager {
 				}
 
 				if ($session['session_active'] == 1) {
-					$session['session_active'] = Display::return_icon('accept.png', get_lang('Active'), array(), 22);
+					$session['session_active'] = Display::return_icon('accept.png', get_lang('Active'), array(), ICON_SIZE_SMALL);
 				} else {
-					$session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), 22);
+					$session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), ICON_SIZE_SMALL);
 				}
 
 

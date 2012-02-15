@@ -493,7 +493,7 @@ if ($_GET['studentlist'] == 'false') {
             'never' => get_lang('Never')
         );
     
-        $el = $form -> addElement('select', 'since', '<img width="22" align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.get_lang('RemindInactivesLearnersSince'), $options);
+        $el = $form -> addElement('select', 'since', '<img width="ICON_SIZE_SMALL" align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.get_lang('RemindInactivesLearnersSince'), $options);
         $el -> setSelected(7);
     
         $form -> addElement('hidden', 'action', 'add');
@@ -503,10 +503,10 @@ if ($_GET['studentlist'] == 'false') {
         $course_name = get_lang('Course').' '.$course_info['name'];
         
         if ($session_id) {    	
-            echo '<h2>'.Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.api_get_session_name($session_id).' '.
-                        Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_name.'</h2>';
+            echo '<h2>'.Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.api_get_session_name($session_id).' '.
+                        Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_name.'</h2>';
         } else {
-        	echo '<h2>'.Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_info['name'].'</h2>';
+        	echo '<h2>'.Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_info['name'].'</h2>';
         }
         
         $extra_field_select = TrackingCourseLog::display_additional_profile_fields();

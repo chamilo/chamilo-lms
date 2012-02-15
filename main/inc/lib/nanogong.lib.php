@@ -305,11 +305,11 @@ class Nanogong {
 		
 		if (!empty($file_path)) {
 			$url = $this->get_public_url(true);
-			$actions = Display::url(Display::return_icon('save.png', get_lang('Download'), array(), 22), $url, array('target'=>'_blank'));
+			$actions = Display::url(Display::return_icon('save.png', get_lang('Download'), array(), ICON_SIZE_SMALL), $url, array('target'=>'_blank'));
 			$download_button = Display::url(get_lang('Download'), $url, array('class' =>'a_button gray medium'));
 			
 			if ($show_delete_button) {				
-				$actions .= ' '.Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), 22), "#", array('onclick'=>'delete_file();'));
+				$actions .= ' '.Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), "#", array('onclick'=>'delete_file();'));
 			}
 							
 			$basename = basename($file_path);

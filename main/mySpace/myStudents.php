@@ -396,7 +396,7 @@ if (!empty($student_id)) {
     } // end
  
     $info_course  = CourseManager :: get_course_information($get_course_code);
-    $table_title = Display::return_icon('user.png', get_lang('User'), array(), 22).api_get_person_name($info_user['firstname'], $info_user['lastname']);
+    $table_title = Display::return_icon('user.png', get_lang('User'), array(), ICON_SIZE_SMALL).api_get_person_name($info_user['firstname'], $info_user['lastname']);
     
     echo '<h2>'.$table_title.'</h2>';
 
@@ -532,10 +532,10 @@ $table_title = '';
 
 if (!empty($session_id)) {
 	$session_name = api_get_session_name($session_id);
-	$table_title  = ($session_name? Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.$session_name.' ':'');
+	$table_title  = ($session_name? Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.' ':'');
 }
 if (!empty($info_course['title'])) {
-	$table_title .= ($info_course ? Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$info_course['title'].'  ':'');
+	$table_title .= ($info_course ? Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$info_course['title'].'  ':'');
 }
 
 echo Display::tag('h2', $table_title);
@@ -574,9 +574,9 @@ if (empty($_GET['details'])) {
 		}
 		$title = '';
 		if (empty($session_id)) {
-			$title = Display::return_icon('course.png', get_lang('Courses'), array(), 22).' '.get_lang('Courses');
+			$title = Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_SMALL).' '.get_lang('Courses');
 		} else {
-			$title = Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.$session_name.($date_session?' ('.$date_session.')':'');
+			$title = Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.($date_session?' ('.$date_session.')':'');
 		}
 			
 		// Courses
@@ -908,7 +908,7 @@ if (empty($_GET['details'])) {
 				
 				echo '<td align="center">';
 				$all_attempt_url = "../exercice/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$session_id";
-				echo Display::url(Display::return_icon('test_results.png', get_lang('AllAttempts'), array(), 22), $all_attempt_url );
+				echo Display::url(Display::return_icon('test_results.png', get_lang('AllAttempts'), array(), ICON_SIZE_SMALL), $all_attempt_url );
 				
 				echo '</td></tr>';
 				$data_exercices[$i][] = $exercices['title'];
@@ -930,9 +930,9 @@ if (empty($_GET['details'])) {
             $survey_data = array();
             foreach($survey_list as $survey) {
                 $user_list = survey_manager::get_people_who_filled_survey($survey['survey_id'], false, $info_course['real_id']);
-                $survey_done = Display::return_icon("accept_na.png", get_lang('NoAnswer'), array(), 22);            
+                $survey_done = Display::return_icon("accept_na.png", get_lang('NoAnswer'), array(), ICON_SIZE_SMALL);            
                 if (in_array($student_id, $user_list)) {
-                     $survey_done = Display::return_icon("accept.png", get_lang('Answered'), array(), 22);    
+                     $survey_done = Display::return_icon("accept.png", get_lang('Answered'), array(), ICON_SIZE_SMALL);    
                 }
                 $data = array('title' => $survey['title'], 'done' => $survey_done);
                 $survey_data[] = $data;       

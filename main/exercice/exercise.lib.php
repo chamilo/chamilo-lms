@@ -1104,7 +1104,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     		$actions .= Display::return_icon('teachers.gif', get_lang('Teacher'));
                     	}
                         if ($revised) {
-                            $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".Display :: return_icon('edit.png', get_lang('Edit'), array(), 22);
+                            $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".Display :: return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
                             $actions .= '&nbsp;';
                         } else {
                             $actions .="<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".Display :: return_icon('quiz.gif', get_lang('Qualify'));

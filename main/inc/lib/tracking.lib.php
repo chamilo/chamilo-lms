@@ -2188,7 +2188,7 @@ class Tracking {
 			
 			if ($show_courses) {
 				if (!empty($courses)) {
-					$html .= Display::tag('h2', Display::return_icon('course.png', get_lang('MyCourses'), array(), 22).' '.get_lang('MyCourses'));
+					$html .= Display::tag('h2', Display::return_icon('course.png', get_lang('MyCourses'), array(), ICON_SIZE_SMALL).' '.get_lang('MyCourses'));
 					$html .= '<table class="data_table" width="100%">';
 					$html .= '<tr>
                               '.Display::tag('th', get_lang('Course'),          		array('width'=>'300px')).'
@@ -2337,7 +2337,7 @@ class Tracking {
 				}
 				
 				
-				$html .= Display::tag('h2',Display::return_icon('session.png', get_lang('Sessions'), array(), 22).' '.get_lang('Sessions'));
+				$html .= Display::tag('h2',Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL).' '.get_lang('Sessions'));
 				
 				$html .= '<table class="data_table" width="100%">';
 				//'.Display::tag('th', get_lang('DoneExercises'),            array('class'=>'head')).'

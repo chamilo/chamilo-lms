@@ -1801,7 +1801,7 @@ function api_get_session_image($session_id, $status_id) {
     $session_img = '';
     if ((int)$status_id != 5) { //check whether is not a student
         if ($session_id > 0) {
-            $session_img = "&nbsp;&nbsp;".Display::return_icon('star.png', get_lang('SessionSpecificResource'), array('align' => 'absmiddle'), 22);
+            $session_img = "&nbsp;&nbsp;".Display::return_icon('star.png', get_lang('SessionSpecificResource'), array('align' => 'absmiddle'), ICON_SIZE_SMALL);
         }
     }
     return $session_img;

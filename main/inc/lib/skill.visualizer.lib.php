@@ -50,12 +50,12 @@
         $this->html .= $skill['name'].' '.$gradebook_string;
         
         if ($this->type == 'edit' && $skill['parent_id'] != 0) {
-            //$this->html .= Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), 22), '#', array('id'=>'edit_block_'.$block_id,'class'=>'edit_block'));
-            //$this->html .= Display::url(Display::return_icon('add.png', get_lang('Add'), array(), 22), '#', array('id'=>'edit_block_'.$block_id,'class'=>'edit_block'));
-            //$this->html .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), 22), '#', array('id=>"edit_block_'.$block_id,'class'=>'edit_block'));            
-            //$this->html .= Display::url(Display::return_icon('up.png', get_lang('Close'), array(), 22), '#', array('id'=>'close_block_'.$block_id,'class'=>'close_block'));
+            //$this->html .= Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), '#', array('id'=>'edit_block_'.$block_id,'class'=>'edit_block'));
+            //$this->html .= Display::url(Display::return_icon('add.png', get_lang('Add'), array(), ICON_SIZE_SMALL), '#', array('id'=>'edit_block_'.$block_id,'class'=>'edit_block'));
+            //$this->html .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), '#', array('id=>"edit_block_'.$block_id,'class'=>'edit_block'));            
+            //$this->html .= Display::url(Display::return_icon('up.png', get_lang('Close'), array(), ICON_SIZE_SMALL), '#', array('id'=>'close_block_'.$block_id,'class'=>'close_block'));
             
-            //$this->html .= Display::url(Display::return_icon('down.png', get_lang('Open'), array(), 22), '#', array('id'=>'open_block_'.$block_id,'class'=>'open_block'));
+            //$this->html .= Display::url(Display::return_icon('down.png', get_lang('Open'), array(), ICON_SIZE_SMALL), '#', array('id'=>'open_block_'.$block_id,'class'=>'open_block'));
         }
         $this->html .= '</div>';   
     }

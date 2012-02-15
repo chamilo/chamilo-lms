@@ -347,7 +347,7 @@ if ($count_courses || $count_sessions) {
 	} else {
 		//If we are in Course Session
 		$session_name = api_get_session_name($session_id);
-		$title = Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.$session_name;
+		$title = Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name;
 		$menu_items[] = '<a href="'.api_get_self().'?view=teacher">'.get_lang('TeacherInterface').'</a>';
 	}
 }

@@ -807,7 +807,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
                 echo $key.'='.$value.'&amp;';
             }
         }
-        echo 'action=invisible&amp;content='.$content.'&amp;id='.$id.'&gradebook='.$gradebook.'&amp;origin='.$origin.'">'.Display::return_icon('visible.png', get_lang('MakeInvisible'), array(), 22).'</a>';
+        echo 'action=invisible&amp;content='.$content.'&amp;id='.$id.'&gradebook='.$gradebook.'&amp;origin='.$origin.'">'.Display::return_icon('visible.png', get_lang('MakeInvisible'), array(), ICON_SIZE_SMALL).'</a>';
     }
     if ($current_visibility_status == '0') {
         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;';
@@ -816,7 +816,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
                 echo $key.'='.$value.'&amp;';
             }
         }
-        echo 'action=visible&amp;content='.$content.'&amp;id='.$id.'&gradebook='.$gradebook.'&amp;origin='.$origin.'">'.Display::return_icon('invisible.png', get_lang('MakeVisible'), array(), 22).'</a>';
+        echo 'action=visible&amp;content='.$content.'&amp;id='.$id.'&gradebook='.$gradebook.'&amp;origin='.$origin.'">'.Display::return_icon('invisible.png', get_lang('MakeVisible'), array(), ICON_SIZE_SMALL).'</a>';
     }
 }
 
@@ -840,7 +840,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
                 echo $key.'='.$value.'&amp;';
             }
         }
-        echo 'action=unlock&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('lock.png', get_lang('Unlock'), array(), 22).'</a>';
+        echo 'action=unlock&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('lock.png', get_lang('Unlock'), array(), ICON_SIZE_SMALL).'</a>';
     }
     if ($current_lock_status == '0') {
         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.api_get_group_id().'&amp;';
@@ -849,7 +849,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
                 echo $key.'='.$value.'&amp;';
             }
         }
-        echo 'action=lock&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('unlock.png', get_lang('Lock'), array(), 22).'</a>';
+        echo 'action=lock&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('unlock.png', get_lang('Lock'), array(), ICON_SIZE_SMALL).'</a>';
     }
 }
 
@@ -881,15 +881,15 @@ function display_up_down_icon($content, $id, $list) {
         }
     }
     if ($position > 1) {
-        $return_value = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&action=move&amp;direction=up&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveUp').'">'.Display::return_icon('up.png', get_lang('MoveUp'), array(), 22).'</a>';
+        $return_value = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&action=move&amp;direction=up&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveUp').'">'.Display::return_icon('up.png', get_lang('MoveUp'), array(), ICON_SIZE_SMALL).'</a>';
     } else {
-        $return_value = Display::return_icon('up_na.png', '-', array(), 22);
+        $return_value = Display::return_icon('up_na.png', '-', array(), ICON_SIZE_SMALL);
     }
 
     if ($position<$total_items) {
-        $return_value .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&action=move&amp;direction=down&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" >'.Display::return_icon('down.png', get_lang('MoveDown'), array(), 22).'</a>';
+        $return_value .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&action=move&amp;direction=down&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" >'.Display::return_icon('down.png', get_lang('MoveDown'), array(), ICON_SIZE_SMALL).'</a>';
     } else {
-      $return_value .= Display::return_icon('down_na.png', '-', array(), 22);
+      $return_value .= Display::return_icon('down_na.png', '-', array(), ICON_SIZE_SMALL);
     }
     echo $return_value;
 }

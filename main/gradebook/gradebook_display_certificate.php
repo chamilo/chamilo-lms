@@ -122,7 +122,7 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
 			<?php			
                 //$url = "index.php?export_certificate=yes&cat_id=".$cat_id."&user=".$value['user_id'];
                 $url = api_get_path(WEB_PATH).'certificates/?id='.$value_certificate['id'];
-    			$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 22), $url, array('target'=>'_blank'));
+    			$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), ICON_SIZE_SMALL), $url, array('target'=>'_blank'));
     			echo $certificates;
             ?>
 			 <a onclick="return confirmation();" href="gradebook_display_certificate.php?action=delete&cat_id=<?php echo $cat_id; ?>&certificate_id=<?php echo $value_certificate['id'] ?>">

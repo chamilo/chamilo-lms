@@ -620,36 +620,36 @@ function showlinksofcategory($catid) {
     		if (api_is_allowed_to_edit(null, true)) {
     			if ($session_id == $myrow['session_id']) {    
     				echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;sec_token='.$token.'&amp;action=editlink&amp;category=' . (!empty ($category) ? $category : '') . '&amp;id=' . $myrow['id'] . '&amp;urlview=' . $urlview . '" title="' . get_lang('Modify') . '">' . 
-    						Display :: return_icon('edit.png', get_lang('Modify'), array (), 22) . '</a>';
+    						Display :: return_icon('edit.png', get_lang('Modify'), array (), ICON_SIZE_SMALL) . '</a>';
     				
     				// DISPLAY MOVE UP COMMAND only if it is not the top link.
     				/*
     				if ($i != 1) {
-    					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;urlview=' . $urlview . '&amp;up=', $myrow[0], '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), 22) . '', "</a>\n";
+    					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;urlview=' . $urlview . '&amp;up=', $myrow[0], '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), ICON_SIZE_SMALL) . '', "</a>\n";
     				} else {
-    					echo Display :: return_icon('up_na.png', get_lang('Up'), array (), 22) . '</a>';
+    					echo Display :: return_icon('up_na.png', get_lang('Up'), array (), ICON_SIZE_SMALL) . '</a>';
     				}
     
     				// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
     				if ($i < $numberoflinks) {
-    					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;urlview=' . $urlview . '&amp;down=' . $myrow[0] . '" title="' . get_lang('Down') . '">' . Display :: return_icon('down.png', get_lang('Down'), array (), 22) . '', "</a>\n";
+    					echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;urlview=' . $urlview . '&amp;down=' . $myrow[0] . '" title="' . get_lang('Down') . '">' . Display :: return_icon('down.png', get_lang('Down'), array (), ICON_SIZE_SMALL) . '', "</a>\n";
     				} else {
-    					echo Display :: return_icon('down_na.png', get_lang('Down'), array (), 22) . '', "</a>\n";
+    					echo Display :: return_icon('down_na.png', get_lang('Down'), array (), ICON_SIZE_SMALL) . '', "</a>\n";
     				}*/
     
     				if ($myrow['visibility'] == '1') {
     					echo '<a href="link.php?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=invisible&amp;id=' . $myrow['id'] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Hide') . '">' . 
-    					Display :: return_icon('visible.png', get_lang('Hide'), array (), 22) . '</a>';
+    					Display :: return_icon('visible.png', get_lang('Hide'), array (), ICON_SIZE_SMALL) . '</a>';
     				}
     				if ($myrow['visibility'] == '0') {
     					echo ' <a href="link.php?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=visible&amp;id=' . $myrow['id'] . '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Show') . '">' . 
-    					Display :: return_icon('invisible.png', get_lang('Show'), array (), 22) . '</a>';
+    					Display :: return_icon('invisible.png', get_lang('Show'), array (), ICON_SIZE_SMALL) . '</a>';
     				}
     				echo ' <a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=deletelink&amp;id=', $myrow['id'], '&amp;urlview=', $urlview, "\" onclick=\"javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "')) return false;\" title=\"" . get_lang('Delete') . '">' . 
-    				    Display :: return_icon('delete.png', get_lang('Delete'), array (), 22) . '</a>';
+    				    Display :: return_icon('delete.png', get_lang('Delete'), array (), ICON_SIZE_SMALL) . '</a>';
     
     			} else {
-    				echo Display :: return_icon('edit_na.png', get_lang('EditionNotAvailableFromSession'), array (), 22); //get_lang('EditionNotAvailableFromSession');
+    				echo Display :: return_icon('edit_na.png', get_lang('EditionNotAvailableFromSession'), array (), ICON_SIZE_SMALL); //get_lang('EditionNotAvailableFromSession');
     			}
     		}
     		echo '</td></tr>';
@@ -666,23 +666,23 @@ function showlinksofcategory($catid) {
 function showcategoryadmintools($categoryid) {
 
 	global $urlview, $aantalcategories, $catcounter, $token;
-	echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=editcategory&amp;id=' . $categoryid . '&amp;urlview=' . $urlview . '" title=' . get_lang('Modify') . '">' . Display :: return_icon('edit.png', get_lang('Modify'), array (), 22) . '</a>';
+	echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=editcategory&amp;id=' . $categoryid . '&amp;urlview=' . $urlview . '" title=' . get_lang('Modify') . '">' . Display :: return_icon('edit.png', get_lang('Modify'), array (), ICON_SIZE_SMALL) . '</a>';
 	
 	// DISPLAY MOVE UP COMMAND only if it is not the top link.
 	if ($catcounter != 1) {
-		echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;sec_token='.$token.'&amp;catmove=true&amp;up=', $categoryid, '&amp;urlview=' . $urlview . '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), 22) . '</a>';
+		echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;sec_token='.$token.'&amp;catmove=true&amp;up=', $categoryid, '&amp;urlview=' . $urlview . '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), ICON_SIZE_SMALL) . '</a>';
 	} else {
-		echo Display :: return_icon('up_na.png', get_lang('Up'), array (), 22) . '</a>';
+		echo Display :: return_icon('up_na.png', get_lang('Up'), array (), ICON_SIZE_SMALL) . '</a>';
 	}
 	
 	// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
 	if ($catcounter < $aantalcategories) {
 		echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .'&amp;sec_token='.$token.'&amp;catmove=true&amp;down=' . $categoryid . '&amp;urlview=' . $urlview . '">
-					' . Display :: return_icon('down.png', get_lang('Down'), array (), 22) . '</a>';
+					' . Display :: return_icon('down.png', get_lang('Down'), array (), ICON_SIZE_SMALL) . '</a>';
 	} else {
-		echo Display :: return_icon('down_na.png', get_lang('Down'), array (), 22) . '</a>';
+		echo Display :: return_icon('down_na.png', get_lang('Down'), array (), ICON_SIZE_SMALL) . '</a>';
 	}	
-	echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=deletecategory&amp;id=', $categoryid, "&amp;urlview=$urlview\" onclick=\"javascript: if(!confirm('" . get_lang('CategoryDelconfirm') . "')) return false;\">", Display :: return_icon('delete.png', get_lang('Delete'), array (), 22) . '</a>';
+	echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=deletecategory&amp;id=', $categoryid, "&amp;urlview=$urlview\" onclick=\"javascript: if(!confirm('" . get_lang('CategoryDelconfirm') . "')) return false;\">", Display :: return_icon('delete.png', get_lang('Delete'), array (), ICON_SIZE_SMALL) . '</a>';
 	$catcounter++;
 }
 

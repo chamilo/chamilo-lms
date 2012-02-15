@@ -61,7 +61,7 @@ $html = '';
 $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 $edit_link = '';
 if ($is_allowed_to_edit ) {
-	$edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), 22), api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id);
+	$edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id);
 }
 
 $html .= Display::tag('h1', $objExercise->name .' '.$edit_link);
@@ -117,7 +117,7 @@ if (!empty($attempts)) {
 		
 		$teacher_revised = Display::span(get_lang('Validated'), array('class'=>'label_tag success'));
 			//$attempt_link = get_lang('NoResult');
-			//$attempt_link = Display::return_icon('quiz_na.png', get_lang('NoResult'), array(), 22);
+			//$attempt_link = Display::return_icon('quiz_na.png', get_lang('NoResult'), array(), ICON_SIZE_SMALL);
 		if ($attempt_result['attempt_revised'] == 0) {
 			$teacher_revised = Display::span(get_lang('NotValidated'), array('class'=>'label_tag notice'));
 		}

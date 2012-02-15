@@ -103,11 +103,11 @@ echo '</div>';
 echo '<div class="clear"></div>';
 
 $session_name = api_get_session_name($session_id);
-$table_title = ($session_name? Display::return_icon('session.png', get_lang('Session'), array(), 22).' '.$session_name.' ':' ').
-                Display::return_icon('course.png', get_lang('Course'), array(), 22).' '.$course_info['name'].' '.
-                Display::return_icon('user.png', get_lang('User'), array(), 22).' '.$name;
+$table_title = ($session_name? Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.' ':' ').
+                Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_info['name'].' '.
+                Display::return_icon('user.png', get_lang('User'), array(), ICON_SIZE_SMALL).' '.$name;
 echo '<h2>'.$table_title.'</h2>';
-echo '<h3>'.Display::return_icon('learnpath.png', get_lang('ToolLearnpath'), array(), 22).' '.$lp_title.'</h3>';
+echo '<h3>'.Display::return_icon('learnpath.png', get_lang('ToolLearnpath'), array(), ICON_SIZE_SMALL).' '.$lp_title.'</h3>';
     
 $list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $course_info['real_id']);
 $origin = 'tracking';

@@ -191,8 +191,8 @@ if ($action_forums != 'add') {
 
     if (api_is_allowed_to_edit(false, true) && !($forum_category['session_id'] == 0 && intval($my_session) != 0)) {
         echo '<th style="vertical-align: top;" align="center">';
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=edit&amp;content=forumcategory&amp;id='.$forum_category['cat_id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), 22).'</a>';
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=delete&amp;content=forumcategory&amp;amp;id='.$forum_category['cat_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeleteForumCategory'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), 22).'</a>';
+        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=edit&amp;content=forumcategory&amp;id='.$forum_category['cat_id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=delete&amp;content=forumcategory&amp;amp;id='.$forum_category['cat_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeleteForumCategory'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
         display_visible_invisible_icon('forumcategory', $forum_category['cat_id'], $forum_category['visibility'], array('forumcategory' => $_GET['forumcategory']));
         display_lock_unlock_icon('forumcategory', $forum_category['cat_id'], $forum_category['locked'], array('forumcategory' => $_GET['forumcategory']));
         display_up_down_icon('forumcategory', $forum_category['cat_id'], $forum_categories_list);
@@ -322,8 +322,8 @@ if ($action_forums != 'add') {
                 echo '<td nowrap align="center">';
 
                 if (api_is_allowed_to_edit(false, true) && !($forum['session_id'] == 0 && intval(isset($_SESSION['id_session']) ? $_SESSION['id_session'] : null) != 0)) {
-                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=edit&amp;content=forum&amp;id='.$forum['forum_id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), 22).'</a>';
-                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=delete&amp;content=forum&amp;id='.$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeleteForum'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), 22).'</a>';
+                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=edit&amp;content=forum&amp;id='.$forum['forum_id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=delete&amp;content=forum&amp;id='.$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeleteForum'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
                     display_visible_invisible_icon('forum', $forum['forum_id'], $forum['visibility'], array('forumcategory' => $_GET['forumcategory']));
                     display_lock_unlock_icon('forum', $forum['forum_id'], $forum['locked'], array('forumcategory' => $_GET['forumcategory']));
                     display_up_down_icon('forum', $forum['forum_id'], $forums_in_category);

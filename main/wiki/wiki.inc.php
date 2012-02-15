@@ -922,7 +922,7 @@ function display_wiki_entry($newtitle) {
         </script>
         <?php
         echo '<span style="float:right; cursor: pointer;">';		
-	    echo Display::return_icon('printer.png', get_lang('Print'),array('onclick' => "javascript: goprint();"),'22');
+	    echo Display::return_icon('printer.png', get_lang('Print'),array('onclick' => "javascript: goprint();"),ICON_SIZE_SMALL);
         echo '</span>';
 
 

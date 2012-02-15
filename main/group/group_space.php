@@ -119,7 +119,7 @@ $is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course
 $edit_url = '';
 if (api_is_allowed_to_edit(false, true) or GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id())) {
     $my_origin = isset($origin) ? $origin : '';
-    $edit_url =  '<a href="group_edit.php?origin='.$my_origin.'&gidReq='.api_get_group_id().'">'.Display::return_icon('edit.png', get_lang('EditGroup'),'','22').'</a>';
+    $edit_url =  '<a href="group_edit.php?origin='.$my_origin.'&gidReq='.api_get_group_id().'">'.Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
 }
 
 echo Display::tag('h2', Security::remove_XSS($current_group['name']).' '.$edit_url.' '.$subscribe_group.' '.$unsubscribe_group);

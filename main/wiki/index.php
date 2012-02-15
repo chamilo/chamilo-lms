@@ -347,7 +347,7 @@ echo '<div id="menuwiki">';
 
 echo '&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('show').'>'.Display::return_icon('wiki.png',get_lang('HomeWiki'),'','32').'</a>&nbsp;';
 
-echo '&nbsp;<a href="javascript:void(0)" onClick="menu_wiki()">'.Display::return_icon('menu.png',get_lang('Menu'),'','22').'</a>';
+echo '&nbsp;<a href="javascript:void(0)" onClick="menu_wiki()">'.Display::return_icon('menu.png',get_lang('Menu'),'',ICON_SIZE_SMALL).'</a>';
 ///menu home
 echo '<ul>';
 if ( api_is_allowed_to_session_edit(false,true) ) {

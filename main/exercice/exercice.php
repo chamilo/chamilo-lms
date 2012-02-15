@@ -577,7 +577,7 @@ if (!empty($exercise_list)) {
                         $actions .= Display::url(Display::return_icon('invisible.png', get_lang('Activate'),'',22) , 'exercice.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);                      
                     }                        
                     // Export qti ...                    
-                    $actions .= Display::url(Display::return_icon('export_qti2.png','IMS/QTI','','22'),        'exercice.php?choice=exportqti2&exerciseId='.$row['id']);
+                    $actions .= Display::url(Display::return_icon('export_qti2.png','IMS/QTI','',ICON_SIZE_SMALL),        'exercice.php?choice=exportqti2&exerciseId='.$row['id']);
                 } else { 
                     // not session                 
                     $actions = Display::return_icon('edit_na.png', get_lang('ExerciseEditionNotAvailableInSession'));                    

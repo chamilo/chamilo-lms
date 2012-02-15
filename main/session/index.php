@@ -222,7 +222,7 @@ foreach($final_array as $session_data) {
                             $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/result.php?cidReq=$my_course_code&id={$exercise_result['exe_id']}&id_session=$session_id&show_headers=1", array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link'));
                             
                             $my_real_array[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']),
-                            							'status'      => Display::return_icon('quiz.gif', get_lang('Attempted'),'','22'), 
+                            							'status'      => Display::return_icon('quiz.gif', get_lang('Attempted'),'',ICON_SIZE_SMALL), 
                             							'date'        => $start_date,
                             							'course'      => $course_data['name'], 
                             						    'exercise'    => $exercise_info->exercise,
@@ -243,7 +243,7 @@ foreach($final_array as $session_data) {
                         }
                         $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id", array('target'=>SESSION_LINK_TARGET));
                         $new_exercises[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']), 
-                       							'status'      => Display::return_icon('star.png', get_lang('New'), array('width'=>'22')),
+                       							'status'      => Display::return_icon('star.png', get_lang('New'), array('width'=>ICON_SIZE_SMALL)),
                     							'date'        => $start_date,
                     							'course'      => $course_data['name'], 
                     						    'exercise'    => $exercise_info->exercise,

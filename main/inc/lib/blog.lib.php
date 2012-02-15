@@ -1345,7 +1345,7 @@ class Blog {
 			echo '<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=add"><img src="../img/blog_newtasks.gif" border="0" align="middle" alt="'.get_lang('AddTasks').'" />' . get_lang('AddTasks') . '</a> ';
 			echo '<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=assign"><img src="../img/blog_task.gif" border="0" align="middle" alt="'.get_lang('AssignTasks').'" />' . get_lang('AssignTasks') . '</a>';
 			?>
-				<a href="<?php echo api_get_self(); ?>?action=manage_rights&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageRights') ?>"><?php echo Display::return_icon('blog_admin_users.png', get_lang('RightsManager'),'','22'). get_lang('RightsManager') ?></a>
+				<a href="<?php echo api_get_self(); ?>?action=manage_rights&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageRights') ?>"><?php echo Display::return_icon('blog_admin_users.png', get_lang('RightsManager'),'',ICON_SIZE_SMALL). get_lang('RightsManager') ?></a>
 			<?php
 			echo '</div>';
 

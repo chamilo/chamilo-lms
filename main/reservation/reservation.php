@@ -25,7 +25,7 @@ if (isset($_GET['cat'])) {
 echo '<div class="actions">';
 ///		echo '<a href="m_reservation.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewBookingPeriod').'</a>';
 //echo '&nbsp;&nbsp;&nbsp;<a href="m_reservation.php?action=overviewsubscriptions">'.get_lang('OverviewReservedPeriods').'</a>';
-echo '<div style="float: right;"><a href="mysubscriptions.php">'.Display::return_icon('file_txt.gif',get_lang('BookingListView'),array('width'=>'22')).'&nbsp;'.get_lang('GoToListView').'</a></div>';
+echo '<div style="float: right;"><a href="mysubscriptions.php">'.Display::return_icon('file_txt.gif',get_lang('BookingListView'),array('width'=>ICON_SIZE_SMALL)).'&nbsp;'.get_lang('GoToListView').'</a></div>';
 echo '<a href="m_item.php?view=calendar">'.Display::return_icon('cube.png',get_lang('Resources')).'&nbsp;'.get_lang('Resources').'</a>';
 echo '&nbsp;&nbsp;<a href="m_reservation.php?view=calendar">'.Display::return_icon('calendar_day.gif',get_lang('BookingPeriods')).'&nbsp;'.get_lang('BookingPeriods').'</a>';
 echo '&nbsp;&nbsp;<a href="m_reservation.php?action=add&view=calendar">'.Display::return_icon('calendar_add.gif',get_lang('BookIt')).'&nbsp;'.get_lang('BookIt').'</a>';

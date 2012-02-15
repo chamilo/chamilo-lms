@@ -644,7 +644,7 @@ function modify_filter($user_id, $url_params, $row) {
 		}*/
 	} else {
 		if ($row['7'] == $statusname[DRH] || UserManager::is_admin($row[0])) {
-			$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('user_subscribe_course.png', get_lang('AssignUsers'),'','22').'</a>';
+			$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('user_subscribe_course.png', get_lang('AssignUsers'),'',ICON_SIZE_SMALL).'</a>';
 			$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses')).'</a>&nbsp;&nbsp;';
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		} else if ($row['7'] == $statusname[SESSIONADMIN]) {

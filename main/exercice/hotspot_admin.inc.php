@@ -589,7 +589,7 @@ $hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercice/admin.php?' . api_g
 							foreach ($question_list as $key=>$questionid) {
 								$selected='';				
 								$question = Question::read($questionid);
-								$val='Q'.$key.' :'.substrwords($question->selectTitle(),'22');							
+								$val='Q'.$key.' :'.substrwords($question->selectTitle(),ICON_SIZE_SMALL);							
 								$select_lp_id[$id] = $details['lp_name'];							
 						 		if ($questionid==$select_question[$i]){
 						 			$selected='selected="selected"';					 			
@@ -891,7 +891,7 @@ $hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercice/admin.php?' . api_g
 			{
 				$selected='';				
 				$question = Question::read($questionid);
-				$val='Q'.$key.' :'.substrwords($question->selectTitle(),'22');							
+				$val='Q'.$key.' :'.substrwords($question->selectTitle(),ICON_SIZE_SMALL);							
 				$select_lp_id[$id] = $details['lp_name'];							
 		 		if ($questionid==$select_question_noerror){ 
 		 			$selected='selected="selected"';					 			

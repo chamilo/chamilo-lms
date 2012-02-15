@@ -74,11 +74,13 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			}
 		}
 		
-		echo '<div class="question_options">';
+		
         
-        if ($answerType == FREE_ANSWER && $freeze) {
+        if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION)) && $freeze) {
             return '';
         }
+        
+        echo '<div class="question_options">';
         
 		//$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;">';
 		$s = '';

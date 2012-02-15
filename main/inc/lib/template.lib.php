@@ -5,7 +5,7 @@
  * 
  **/
 
- /* @todo order class */
+ /* @todo better organization of the class methods and variables */
 
 // Load Smarty library
 require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
@@ -68,8 +68,24 @@ class Template extends Smarty {
 		$this->assign('style', $this->style);
 	}
     
-    function set_help($help) {
-        $this->help = $help;
+    function set_help($help_input = null) {        
+        if (!empty($help_input)) {
+            $help = $help_input;
+        } else {
+            $help = $this->help;
+        }
+        
+        $help_content = '';
+        if (api_get_setting('enable_help_link') == 'true') { 
+    		if (!empty($help)) {
+    			$help = Security::remove_XSS($help);			
+    		    $help_content  = '<li class="help">';                   
+    		    $help_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help.'&height=400&width=600" class="thickbox" title="'.get_lang('Help').'">';
+    		    $help_content .= '<img src="'.api_get_path(WEB_IMG_PATH).'help.large.png" alt="'.get_lang('Help').'" title="'.get_lang('Help').'" />';
+    		    $help_content .= '</a></li>';		
+		  }
+        }
+		$this->assign('help_content', $help_content);
     }
 
     /*
@@ -236,10 +252,8 @@ class Template extends Smarty {
 		$header1 = ob_get_contents();        
 		ob_clean();
         
-        $this->assign('header1', $header1);	        
-        
-    }
-    
+        $this->assign('header1', $header1);
+    }    
     
 
 	private function set_header_parameters() {
@@ -381,18 +395,8 @@ class Template extends Smarty {
 		}
         
 		$this->assign('favico', $favico);
-		$help_content = '';
-        if (api_get_setting('enable_help_link') == 'true') { 
-    		if (!empty($help)) {
-    			$help = Security::remove_XSS($help);			
-    		    $help_content  = '<li class="help">';                   
-    		    $help_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help.'&height=400&width=600" class="thickbox" title="'.get_lang('Help').'">';
-    		    $help_content .= '<img src="'.api_get_path(WEB_IMG_PATH).'help.large.png" alt="'.get_lang('Help').'" title="'.get_lang('Help').'" />';
-    		    $help_content .= '</a></li>';		
-		  }
-        }
-
-		$this->assign('help_content', $help_content);
+        
+        $this->set_help();
         
 		$bug_notification_link = '';
 		if (api_get_setting('show_link_bug_notification') == 'true') {

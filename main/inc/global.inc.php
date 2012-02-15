@@ -93,6 +93,7 @@ ini_set('auto_detect_line_endings', '1');
 
 // Include the libraries that are necessary everywhere
 require_once $lib_path.'database.lib.php';
+require_once $lib_path.'template.lib.php';
 require_once $lib_path.'display.lib.php';
 require_once $lib_path.'text.lib.php';
 require_once $lib_path.'image.lib.php';
@@ -115,7 +116,7 @@ require_once $lib_path.'tracking.lib.php';
 require_once $lib_path.'formvalidator/FormValidator.class.php';
 require_once $lib_path.'online.inc.php';
 
-require_once $lib_path.'template.lib.php';
+
 
 /*  DATABASE CONNECTION  */
 

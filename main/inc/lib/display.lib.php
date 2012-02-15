@@ -53,10 +53,9 @@ class Display {
         global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
         global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
         global $menu_navigation;        
-		global $htmlCSSXtra;
-        require_once api_get_path(LIBRARY_PATH).'template.lib.php';
-        self::$global_template = new Template($tool_name);
-        
+		global $htmlCSSXtra;        
+        self::$global_template = new Template($tool_name);      
+        self::$global_template->set_help($help);
         if (!empty(self::$preview_style)) {                        
             self::$global_template->preview_theme = self::$preview_style;
             self::$global_template->set_theme();
@@ -541,7 +540,7 @@ class Display {
      * @author Yannick Warnier 2011 Added size handler
      * @version Feb 2011
     */
-    public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size = ICON_SIZE_MEDIUM) {
+    public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size = ICON_SIZE_SMALL) {
         
         $code_path   = api_get_path(SYS_CODE_PATH);
         $w_code_path = api_get_path(WEB_CODE_PATH);

@@ -9,6 +9,11 @@
  *  @package chamilo.include
  */
 
+
+/* This page is now unused use check the template.lib.php */
+
+exit;
+
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 
 global $my_session_id;

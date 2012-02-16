@@ -381,7 +381,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
         if (!empty($this->_groupWrap)) {
             $html = str_replace('{content}', $html, $this->_groupWrap);
         }
-        $this->_html   .= str_replace('{element}', $html, $this->_groupTemplate);
+        $this->_html   .= str_replace('{element}', $html, $this->_groupTemplate);        
         $this->_inGroup = false;
     } // end func finishGroup
 

@@ -39,7 +39,7 @@ require_once 'HTML/QuickForm/static.php';
  * @since       3.0
  * @deprecated  Please use the templates rather than add raw HTML via this element
  */
-class HTML_QuickForm_html extends HTML_QuickForm_static
+class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
 {
     // {{{ constructor
 
@@ -50,7 +50,7 @@ class HTML_QuickForm_html extends HTML_QuickForm_static
     * @access public
     * @return void
     */
-    function HTML_QuickForm_html($text = null)
+    function HTML_QuickForm_advanced_settings($text = null)
     {
         $this->HTML_QuickForm_static(null, null, $text);
         $this->_type = 'html';
@@ -72,9 +72,15 @@ class HTML_QuickForm_html extends HTML_QuickForm_static
     } // end func accept
     
     
-    function toHtml()
-    {
-         return HTML_QuickForm_static::toHtml();
+    function toHtml() {
+         return '<div class="control-group ">
+                    <label class="control-label"></label>
+                    <div class="controls">
+                    '.HTML_QuickForm_static::toHtml().'
+                        </div>
+                 </div>
+                                        
+                ';
     } //end func toHtml
 
     
